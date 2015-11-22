@@ -14,13 +14,16 @@
         <include>org.ums:ums-api</include>
         <include>org.ums:ums-core</include>
         <include>org.springframework:spring-core</include>
+        <include>org.springframework:spring-beans</include>
         <include>org.springframework:spring-web</include>
         <include>org.springframework:spring-context</include>
+        <include>org.springframework:spring-expression</include>
         <include>org.springframework:spring-jdbc</include>
         <include>org.springframework:spring-tx</include>
         <include>ch.qos.logback:logback-classic</include>
         <include>ch.qos.logback:logback-core</include>
         <include>org.slf4j:slf4j-api</include>
+        <include>commons-logging:commons-logging</include>
       </includes>
       <outputDirectory>lib</outputDirectory>
     </dependencySet>
