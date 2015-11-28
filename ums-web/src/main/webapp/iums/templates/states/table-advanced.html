@@ -1,0 +1,25 @@
+
+<div id="table-advanced" class="row">
+  <div class="col-lg-12">
+    <ul id="tableadvancedTab" ng-tab="" class="nav nav-tabs">
+      <li class="active"><a href="#table-sorter-tab" data-toggle="tab">Sorter</a></li>
+      <li><a href="#table-color-tab" data-toggle="tab">Header Colors</a></li>
+      <li><a href="#table-size-tab" data-toggle="tab">Size</a></li>
+      <li><a href="#table-sticky-tab" data-toggle="tab">Sticky Header</a></li>
+    </ul>
+    <div id="tableadvancedTabContent" class="tab-content">
+      <div id="table-sorter-tab" class="tab-pane fade in active">
+        <ng-include src="'templates/states/_table-advanced/table-advanced-sorter-tab.html'" onload="table_advanced_update()"></ng-include>
+      </div>
+      <div id="table-color-tab" class="tab-pane fade">
+        <ng-include src="'templates/states/_table-advanced/table-advanced-color-tab.html'" onload="table_advanced_update()"></ng-include>
+      </div>
+      <div id="table-size-tab" class="tab-pane fade">
+        <ng-include src="'templates/states/_table-advanced/table-advanced-size-tab.html'" onload="table_advanced_update()"></ng-include>
+      </div>
+      <div id="table-sticky-tab" class="tab-pane fade">
+        <ng-include src="'templates/states/_table-advanced/table-advanced-sticky-tab.html'" onload="table_advanced_update()"></ng-include>
+      </div>
+    </div>
+  </div>
+</div>

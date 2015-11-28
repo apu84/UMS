@@ -1,0 +1,221 @@
+
+<div class="row mbl">
+  <div class="col-lg-3">
+    <h3>Basic markup</h3>
+    <div id="tree1">
+      <ul>
+        <li>Root node 1</li>
+        <li>Root node 2</li>
+      </ul>
+    </div>
+  </div>
+  <div class="col-lg-3">
+    <h3>Nodes with children</h3>
+    <div id="tree2">
+      <ul>
+        <li>Root node 1
+          <ul>
+            <li>Child node 1</li>
+            <li><a href="#">Child node 2</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="col-lg-3">
+    <h3>Setting initial state with classes</h3>
+    <div id="tree3">
+      <ul>
+        <li class="jstree-open">Root
+          <ul>
+            <li><a href="#" class="stree-clicked">Child</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="col-lg-3">
+    <h3>Setting initial state with data attribute</h3>
+    <div id="tree4">
+      <ul>
+        <li data-jstree="{&quot;opened&quot;:true,&quot;selected&quot;:true}">Root
+          <ul>
+            <li data-jstree="{&quot;disabled&quot;:true}">Child</li>
+            <li data-jstree="{&quot;icon&quot;:&quot;http://jstree.com/tree.png&quot;}">Child</li>
+            <li data-jstree="{&quot;icon&quot;:&quot;glyphicon glyphicon-leaf&quot;}">Child</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="row mbl">
+  <div class="col-lg-3">
+    <h3>Loading with AJAX</h3>
+    <div id="tree5">
+      <ul>
+        <li>Node 1</li>
+        <li class="jstree-closed">Node 2</li>
+      </ul>
+    </div>
+  </div>
+  <div class="col-lg-3">
+    <h3>Custom 1</h3>
+    <div id="tree6">
+      <ul>
+        <li>Root node 1
+          <ul>
+            <li data-jstree="{ &quot;selected&quot; : true }"><a href="#"><em>initially</em> <strong>selected</strong></a></li>
+            <li data-jstree="{ &quot;icon&quot; : &quot;http://jstree.com/tree-icon.png&quot; }">custom icon URL</li>
+            <li data-jstree="{ &quot;opened&quot; : true }">initially open
+              <ul>
+                <li>Another node</li>
+              </ul>
+            </li>
+            <li data-jstree="{ &quot;icon&quot; : &quot;glyphicon glyphicon-leaf&quot; }">Custom icon class (bootstrap)</li>
+          </ul>
+        </li>
+        <li><a href="http://www.jstree.com">Root node 2</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="col-lg-3">
+    <h3>Custom 2</h3>
+    <div id="tree7"></div>
+  </div>
+  <div class="col-lg-3">
+    <h3>Checkbox plugin</h3>
+    <div id="tree8">
+      <ul>
+        <li data-jstree="{&quot;opened&quot;:true}">Root node
+          <ul>
+            <li>Child node 1</li>
+            <li>Child node 2</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="row mbl">
+  <div class="col-lg-3">
+    <h3>Contextmenu plugin</h3>
+    <div id="tree9">
+      <ul>
+        <li data-jstree="{&quot;opened&quot;:true}">Root node
+          <ul>
+            <li>Context click me</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="col-lg-3">
+    <h3>Drag & drop plugin</h3>
+    <div id="tree10">
+      <ul>
+        <li data-jstree="{&quot;opened&quot;:true}">Root node
+          <ul>
+            <li>Child node 1</li>
+            <li>Child node 2</li>
+          </ul>
+          <li>Root node 2</li>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="col-lg-3">
+    <h3>Search plugin</h3>
+    <div class="input-icon right"><i class="fa fa-search"></i>
+      <input id="input-tree11" type="text" value="" placeholder="Search here..." class="form-control input-sm mbm"/>
+    </div>
+    <div id="tree11">
+      <ul>
+        <li data-jstree="{&quot;opened&quot;:true}">Root node
+          <ul>
+            <li>Child node 1</li>
+            <li>Child node 2</li>
+          </ul>
+        </li>
+        <li>Root node 2</li>
+      </ul>
+    </div>
+  </div>
+  <div class="col-lg-3">
+    <h3>Sort plugin</h3>
+    <div id="tree12">
+      <ul>
+        <li data-jstree="{&quot;opened&quot;:true}">Root node
+          <ul>
+            <li>2</li>
+            <li>1</li>
+            <li>3</li>
+            <li>0</li>
+          </ul>
+          <li>Root node 2</li>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="row mbl">
+  <div class="col-lg-3">
+    <h3>State plugin</h3>
+    <div id="tree13">
+      <ul>
+        <li data-jstree="{&quot;opened&quot;:true}">Root node
+          <ul>
+            <li>A</li>
+            <li>few</li>
+            <li>more</li>
+            <li>nodes</li>
+          </ul>
+          <li>Root node 2</li>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="col-lg-3">
+    <h3>Types plugin</h3>
+    <div id="tree14">
+      <ul>
+        <li data-jstree="{&quot;opened&quot;:true, &quot;type&quot;:&quot;demo&quot;}">Root node
+          <ul>
+            <li>Node</li>
+          </ul>
+          <li>Root node 2</li>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="col-lg-3">
+    <h3>Unique plugin</h3>
+    <div id="tree15">
+      <ul>
+        <li data-jstree="{&quot;opened&quot;:true}">Root node
+          <ul>
+            <li>Node</li>
+          </ul>
+          <li>Root node 2
+            <ul>
+              <li>Node</li>
+            </ul>
+          </li>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="col-lg-3">
+    <h3>Wholerow plugin</h3>
+    <div id="tree16">
+      <ul>
+        <li data-jstree="{&quot;opened&quot;:true}">Root node
+          <ul>
+            <li data-jstree="{&quot;selected&quot;:true}">Node</li>
+          </ul>
+          <li>Root node 2</li>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

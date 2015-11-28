@@ -1,0 +1,17 @@
+
+<div class="page-header">
+  <div class="page-title mrm">Title & Subtitle & Breadcrumb Inline Left</div>
+  <div class="page-subtitle">Lorem ipsum dolor sit amet</div>
+</div>
+<hr/>
+<ol class="breadcrumb page-breadcrumb">
+  <li><i class="fa fa-home"></i>&nbsp;<a href="index.html">Home</a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i></li>
+  <li ng-repeat="(k,v) in data.breadcrumb" ng-class="{active:$last}">
+    &nbsp;&nbsp;
+    {{v}}
+    &nbsp;&nbsp;<i ng-if="!$last" class="fa fa-angle-right"></i>
+  </li>
+  <li class="active">
+  </li>
+</ol>
+<div class="clearfix"></div>

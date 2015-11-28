@@ -1,0 +1,28 @@
+
+<div class="page-header pull-right">
+  <div class="page-toolbar">
+    <button type="button" data-hover="tooltip" title="Download" class="btn btn-blue"><i class="fa fa-download"></i></button>&nbsp;
+    <button type="button" data-hover="tooltip" title="Send Message" class="btn btn-yellow"><i class="fa fa-envelope-o"></i></button>&nbsp;
+    <div class="btn-group">
+      <button type="button" data-toggle="dropdown" class="btn btn-orange dropdown-toggle">
+        Setting
+        &nbsp;<span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu pull-right">
+        <li><a href="#">Dropdown link</a></li>
+        <li><a href="#">Dropdown link</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+<ol class="breadcrumb page-breadcrumb pull-left">
+  <li><i class="fa fa-home"></i>&nbsp;<a href="index.html">Home</a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i></li>
+  <li ng-repeat="(k,v) in data.breadcrumb" ng-class="{active:$last}">
+    &nbsp;&nbsp;
+    {{v}}
+    &nbsp;&nbsp;<i ng-if="!$last" class="fa fa-angle-right"></i>
+  </li>
+  <li class="active">
+  </li>
+</ol>
+<div class="clearfix"></div>
