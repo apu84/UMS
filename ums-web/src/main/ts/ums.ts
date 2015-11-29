@@ -10,8 +10,8 @@ module ums {
     //
     // Now set up the states
     $stateProvider
-        .state('index', {
-          url: "/index",
+        .state('dashBaord', {
+          url: "/dashBaord",
           templateUrl: 'templates/states/main.html',
           controller: 'MainController',
           resolve: {
@@ -27,6 +27,19 @@ module ums {
                   'vendors/flot-chart/jquery.flot.fillbetween.js',
                   'vendors/flot-chart/jquery.flot.stack.js',
                   'vendors/flot-chart/jquery.flot.spline.js']
+              });
+            }]
+          }
+        })
+        .state('userHome', {
+          url: "/userHome",
+          templateUrl: 'views/user-home.html',
+          controller: 'MainController',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: ['vendors/bootstrap-datepicker/css/datepicker.css',
+                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js']
               });
             }]
           }
