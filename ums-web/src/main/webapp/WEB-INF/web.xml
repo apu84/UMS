@@ -8,14 +8,19 @@
     <param-name>parentContextKey</param-name>
     <param-value>sharedContext</param-value>
   </context-param>
-
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>
+      /WEB-INF/applicationContext.xml
+    </param-value>
+  </context-param>
   <listener>
     <listener-class>
       org.springframework.web.context.ContextLoaderListener
     </listener-class>
   </listener>
 
-<!--  <servlet>
+  <servlet>
     <description>DummyServlet from its parent ApplicationContext</description>
     <display-name>DummyServlet</display-name>
     <servlet-name>DummyServlet</servlet-name>
@@ -25,6 +30,6 @@
   <servlet-mapping>
     <servlet-name>DummyServlet</servlet-name>
     <url-pattern>/dummyServlet</url-pattern>
-  </servlet-mapping>-->
+  </servlet-mapping>
 
 </web-app>

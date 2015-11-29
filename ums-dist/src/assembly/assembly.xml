@@ -21,6 +21,11 @@
         <include>org.springframework:spring-jdbc</include>
         <include>org.springframework:spring-tx</include>
         <include>org.springframework:spring-aop</include>
+        <include>org.glassfish.jersey.ext:jersey-spring3</include>
+        <include>org.glassfish.jersey.core:jersey-common</include>
+        <include>org.glassfish.jersey.containers:jersey-container-servlet</include>
+        <include>org.glassfish.jersey.bundles.repackaged:jersey-guava</include>
+        <include>org.glassfish.hk2:spring-bridge</include>
         <include>ch.qos.logback:logback-classic</include>
         <include>ch.qos.logback:logback-core</include>
         <include>org.slf4j:slf4j-api</include>
@@ -28,6 +33,8 @@
         <include>aopalliance:aopalliance</include>
       </includes>
       <outputDirectory>lib</outputDirectory>
+      <useTransitiveDependencies>true</useTransitiveDependencies>
+      <useTransitiveFiltering>true</useTransitiveFiltering>
     </dependencySet>
     <dependencySet>
       <includes>

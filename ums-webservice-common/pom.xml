@@ -10,56 +10,12 @@
   <version>trunk-SNAPSHOT</version>
   <packaging>war</packaging>
 
-<dependencies>
+  <dependencies>
     <dependency>
       <groupId>org.ums</groupId>
       <artifactId>ums-core</artifactId>
       <version>trunk-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
-    <!-- &lt;!&ndash; Jersey-Spring http://mvnrepository.com/artifact/org.glassfish.jersey.ext/jersey-spring3/2.4.1 &ndash;&gt;-->
-  <!-- <dependency>
-     <groupId>org.glassfish.jersey.ext</groupId>
-     <artifactId>jersey-spring3</artifactId>
-     <version>${jersey.version}</version>
-     <exclusions>
-       <exclusion>
-         <groupId>org.springframework</groupId>
-         <artifactId>spring-core</artifactId>
-       </exclusion>
-       <exclusion>
-         <groupId>org.springframework</groupId>
-         <artifactId>spring-web</artifactId>
-       </exclusion>
-       <exclusion>
-         <groupId>org.springframework</groupId>
-         <artifactId>spring-beans</artifactId>
-       </exclusion>
-     </exclusions>
-   </dependency>-->
-   <!--<dependency>
-     <groupId>org.glassfish.jersey.media</groupId>
-     <artifactId>jersey-media-multipart</artifactId>
-     <version>${jersey.version}</version>
-   </dependency>
-   <dependency>
-     <groupId>org.glassfish.jersey.ext</groupId>
-     <artifactId>jersey-entity-filtering</artifactId>
-     <version>${jersey.version}</version>
-   </dependency>
-
-   &lt;!&ndash;&lt;!&ndash; Jersey-client &ndash;&gt;&ndash;&gt;
-   <dependency>
-     <groupId>org.glassfish.jersey.core</groupId>
-     <artifactId>jersey-client</artifactId>
-     <version>${jersey.version}</version>
-   </dependency>
-
-   <dependency>
-     <groupId>org.glassfish.jersey.test-framework.providers</groupId>
-     <artifactId>jersey-test-framework-provider-external</artifactId>
-     <version>2.5.1</version>
-     <scope>test</scope>
-   </dependency>-->
- </dependencies>
+  </dependencies>
 </project>
