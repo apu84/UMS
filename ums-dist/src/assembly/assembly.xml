@@ -20,10 +20,12 @@
         <include>org.springframework:spring-expression</include>
         <include>org.springframework:spring-jdbc</include>
         <include>org.springframework:spring-tx</include>
+        <include>org.springframework:spring-aop</include>
         <include>ch.qos.logback:logback-classic</include>
         <include>ch.qos.logback:logback-core</include>
         <include>org.slf4j:slf4j-api</include>
         <include>commons-logging:commons-logging</include>
+        <include>aopalliance:aopalliance</include>
       </includes>
       <outputDirectory>lib</outputDirectory>
     </dependencySet>

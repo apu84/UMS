@@ -1,4 +1,4 @@
-package org.ums.dummy;
+package org.ums.dummy.shared;
 
 public interface DummyService {
   public String getMessage();

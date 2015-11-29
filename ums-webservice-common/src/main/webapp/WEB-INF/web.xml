@@ -6,7 +6,7 @@
 
   <context-param>
     <param-name>parentContextKey</param-name>
-    <param-value>ear.context</param-value>
+    <param-value>sharedContext</param-value>
   </context-param>
 
   <listener>
@@ -19,7 +19,7 @@
     <description>DummyServlet from its parent ApplicationContext</description>
     <display-name>DummyServlet</display-name>
     <servlet-name>DummyServlet</servlet-name>
-    <servlet-class>org.ums.dummy.DummyServlet</servlet-class>
+    <servlet-class>org.ums.dummy.webservice.DummyServlet</servlet-class>
   </servlet>
 
   <servlet-mapping>
@@ -30,4 +30,5 @@
   <welcome-file-list>
     <welcome-file>dummyServlet</welcome-file>
   </welcome-file-list>
+
 </web-app>
