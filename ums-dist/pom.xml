@@ -157,6 +157,18 @@
     </dependency>
 
     <dependency>
+      <groupId>org.glassfish.jersey.media</groupId>
+      <artifactId>jersey-media-json-processing</artifactId>
+      <version>${jersey.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.jersey</groupId>
+      <artifactId>jersey-bundle</artifactId>
+      <version>1.18</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
       <groupId>aopalliance</groupId>
       <artifactId>aopalliance</artifactId>
       <version>${aopalliance.version}</version>
@@ -167,6 +179,14 @@
       <artifactId>commons-logging</artifactId>
       <version>1.2</version>
     </dependency>
+
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>5.1.26</version>
+      <scope>compile</scope>
+    </dependency>
+
     <!-- Logback dependencies -->
     <dependency>
       <groupId>org.slf4j</groupId>
