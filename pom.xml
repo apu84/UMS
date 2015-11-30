@@ -185,7 +185,20 @@
       <scope>provided</scope>
     </dependency>
 
+    <dependency>
+      <groupId>org.glassfish.jersey.media</groupId>
+      <artifactId>jersey-media-json-processing</artifactId>
+      <version>${jersey.version}</version>
+      <scope>provided</scope>
+    </dependency>
 
+    <!--database-->
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>5.1.26</version>
+      <scope>provided</scope>
+    </dependency>
 
     <!-- testing -->
     <dependency>
