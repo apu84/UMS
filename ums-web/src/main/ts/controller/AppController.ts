@@ -14,10 +14,10 @@ module ums {
       boxed:'',
       layout_menu:'',
       theme_style:'style1',
-      header_topbar:'header-fixed',
-      menu_style:'sidebar-colors',
+      header_topbar:'static',
+      menu_style:'sidebar-default',
       menu_collapse: '',
-      menu_style_restore: 'sidebar-colors',
+      menu_style_restore: 'sidebar-default',
       layout_horizontal_menu:'',
 
       toggle: function(k){

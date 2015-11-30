@@ -44,5 +44,15 @@ module ums {
             }]
           }
         })
+        .state('createSemester', {
+          url: "/createSemester",
+          controller: 'MainController',
+          templateUrl: 'views/registrar-office/new-semester.html'
+        })
+        .state('createStudent', {
+          url: "/createStudent",
+          controller: 'MainController',
+          templateUrl: 'views/registrar-office/new-student.html'
+        })
   });
 }
