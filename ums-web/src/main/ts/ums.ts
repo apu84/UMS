@@ -10,8 +10,8 @@ module ums {
     //
     // Now set up the states
     $stateProvider
-        .state('dashBaord', {
-          url: "/dashBaord",
+        .state('dashBoard', {
+          url: "/dashBoard",
           templateUrl: 'templates/states/main.html',
           controller: 'MainController',
           resolve: {
@@ -46,13 +46,25 @@ module ums {
         })
         .state('createSemester', {
           url: "/createSemester",
-          controller: 'MainController',
-          templateUrl: 'views/registrar-office/new-semester.html'
+          controller: 'NewSemesterController',
+          templateUrl: 'views/registrar-office/new-semester.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: ['vendors/jquery-validate/jquery.validate.min.js' ]
+              });
+            }]
+          }
         })
         .state('createStudent', {
           url: "/createStudent",
           controller: 'MainController',
           templateUrl: 'views/registrar-office/new-student.html'
+        })
+        .state('changePassword', {
+          url: "/changePassword",
+          controller: 'MainController',
+          templateUrl: 'views/common/change-password.html'
         })
   });
 }
