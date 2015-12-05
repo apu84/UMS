@@ -8,6 +8,7 @@
 
 
 /// <reference path='ums.ts'/>
+/// <reference path='data.ts'/>
 /// <reference path='controller/AppController.ts'/>
 /// <reference path='controller/MainController.ts'/>
 
