@@ -51,20 +51,120 @@ module ums {
           resolve: {
             loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
               return $ocLazyLoad.load({
-                files: ['vendors/jquery-validate/jquery.validate.min.js' ]
+                files: [
+                  'vendors/bootstrap-switch/css/bootstrap-switch.css',
+                  'vendors/bootstrap-datepicker/css/datepicker.css',
+                  'vendors/jquery-validate/jquery.validate.min.js' ,
+                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                  'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
+                ]
+              });
+            }]
+          }
+        })
+        .state('createSyllabus', {
+          url: "/createSyllabus",
+          controller: 'NewSyllabusController',
+          templateUrl: 'views/syllabus/new-syllabus.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: [
+                  'vendors/bootstrap-switch/css/bootstrap-switch.css',
+                  'vendors/bootstrap-datepicker/css/datepicker.css',
+                  'vendors/jquery-validate/jquery.validate.min.js' ,
+                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                  'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
+                ]
+              });
+            }]
+          }
+        })
+        .state('showSyllabusList', {
+          url: "/showSyllabusList",
+          templateUrl: 'views/syllabus/list-syllabus.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: [
+                  'vendors/bootstrap-switch/css/bootstrap-switch.css',
+                  'vendors/bootstrap-datepicker/css/datepicker.css',
+                  'vendors/jquery-validate/jquery.validate.min.js' ,
+                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                  'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
+                ]
+              });
+            }]
+          }
+        })
+        .state('viewFullSyllabus', {
+          url: "/viewFullSyllabus",
+          controller: 'FullSyllabusController',
+          templateUrl: 'views/syllabus/view-full-syllabus.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: [
+                  'vendors/bootstrap-switch/css/bootstrap-switch.css',
+                  'vendors/bootstrap-datepicker/css/datepicker.css',
+                  'vendors/jquery-validate/jquery.validate.min.js' ,
+                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                  'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
+                ]
               });
             }]
           }
         })
         .state('createStudent', {
           url: "/createStudent",
-          controller: 'MainController',
-          templateUrl: 'views/registrar-office/new-student.html'
+          controller: 'NewStudentController',
+          templateUrl: 'views/student/new-student.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: [
+                  'vendors/bootstrap-switch/css/bootstrap-switch.css',
+                  'vendors/bootstrap-datepicker/css/datepicker.css',
+                  'vendors/jquery-validate/jquery.validate.min.js' ,
+                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                  'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
+                  'vendors/jquery-uploadPreview/jquery.uploadPreview.min.js'
+                ]
+              });
+            }]
+          }
+        })
+        .state('createCourse', {
+          url: "/createCourse",
+          controller: 'NewCourseController',
+          templateUrl: 'views/course/new-course.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: [
+                  'vendors/bootstrap-switch/css/bootstrap-switch.css',
+                  'vendors/bootstrap-datepicker/css/datepicker.css',
+                  'vendors/jquery-validate/jquery.validate.min.js' ,
+                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                  'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
+                ]
+              });
+            }]
+          }
         })
         .state('changePassword', {
           url: "/changePassword",
-          controller: 'MainController',
-          templateUrl: 'views/common/change-password.html'
+          controller: 'ChangePassword',
+          templateUrl: 'views/common/change-password.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: [
+                  'vendors/jquery-validate/jquery.validate.min.js' ,
+                ]
+              });
+            }]
+          }
         })
   });
 }

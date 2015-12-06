@@ -5,6 +5,7 @@
 /// <reference path='lib/jqueryui.d.ts'/>
 /// <reference path='lib/jquery.slimScroll.d.ts'/>
 /// <reference path='lib/zabuto_calendar.d.ts'/>
+/// <reference path='lib/bootstrap-switch.d.ts'/>
 
 
 /// <reference path='ums.ts'/>
