@@ -26,10 +26,17 @@
         <include>org.glassfish.jersey.containers:jersey-container-servlet</include>
         <include>org.glassfish.jersey.bundles.repackaged:jersey-guava</include>
         <include>org.glassfish.hk2:spring-bridge</include>
+        <include>org.apache.shiro:shiro-core</include>
+        <include>org.apache.shiro:shiro-web</include>
+        <include>org.apache.shiro:shiro-spring</include>
+        <include>org.apache.shiro:shiro-aspectj</include>
+        <include>commons-beanutils:commons-beanutils</include>
+        <include>cglib:cglib</include>
         <include>org.glassfish.jersey.media:jersey-media-json-processing</include>
         <include>ch.qos.logback:logback-classic</include>
         <include>ch.qos.logback:logback-core</include>
         <include>org.slf4j:slf4j-api</include>
+        <include>org.slf4j:slf4j-jdk14</include>
         <include>commons-logging:commons-logging</include>
         <include>aopalliance:aopalliance</include>
         <include>mysql:mysql-connector-java</include>

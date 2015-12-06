@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface UserDao {
   public User get(int userId);
+  public User getByName(String userName);
+  public User getByEmail(String email);
   public List<User> getAll();
   public void remove(User user);
   public void update(User user);

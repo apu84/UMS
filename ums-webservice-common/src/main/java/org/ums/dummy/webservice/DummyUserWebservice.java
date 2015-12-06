@@ -1,5 +1,9 @@
 package org.ums.dummy.webservice;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.UnauthorizedException;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.dummy.shared.dao.UserDao;
@@ -23,14 +27,19 @@ public class DummyUserWebservice {
   @GET
   @Path("/all")
   public JsonObject getAll() {
-    List<User> users = userDao.getAll();
-    JsonObjectBuilder object = Json.createObjectBuilder();
-    JsonArrayBuilder children = Json.createArrayBuilder();
-    for (User user : users) {
-      children.add(toJson(user));
-    }
-    object.add("users", children);
-    return object.build();
+//    if(SecurityUtils.getSubject().isAuthenticated()){
+      List<User> users = userDao.getAll();
+      JsonObjectBuilder object = Json.createObjectBuilder();
+      JsonArrayBuilder children = Json.createArrayBuilder();
+      for (User user : users) {
+        children.add(toJson(user));
+      }
+      object.add("users", children);
+      return object.build();
+  /*  }else {
+      throw new UnauthorizedException("You need to login for this operation");
+    }*/
+
   }
 
   @GET
@@ -43,10 +52,7 @@ public class DummyUserWebservice {
   protected JsonObject toJson(User pUser) {
     JsonObjectBuilder builder = Json.createObjectBuilder();
     builder.add("userId", pUser.getUserId());
-    builder.add("firstName", pUser.getFirstName());
-    builder.add("lastName", pUser.getLastName());
-    builder.add("gender", pUser.getGender());
-    builder.add("employmentStatus", pUser.getEmploymentStatus());
+    builder.add("email", pUser.getEmail());
     return builder.build();
   }
 }

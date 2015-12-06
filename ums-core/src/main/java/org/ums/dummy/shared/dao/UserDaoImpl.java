@@ -1,9 +1,8 @@
 package org.ums.dummy.shared.dao;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Component;
 import org.ums.dummy.shared.model.User;
 
 import javax.sql.DataSource;
@@ -15,18 +14,31 @@ public class UserDaoImpl implements UserDao {
 
   private DataSource dataSource;
 
-  static String SELECT_ALL = "select user_id, first_name, last_name, user_name, gender, employment_status from dummy_user";
+  static String SELECT_ALL = "select id, username, email, password, salt from USER";
 
   public UserDaoImpl(DataSource pDataSource) {
     this.dataSource = pDataSource;
   }
 
   public User get(final int userId) {
-    String query = SELECT_ALL + " where user_id = ?";
+    String query = SELECT_ALL + " where id = ?";
     JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
     return jdbcTemplate.queryForObject(query, new Object[]{userId}, new UserRowMapper());
   }
 
+  public User getByName(final String userName) {
+    String query = SELECT_ALL + " where username = ?";
+    JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+    return jdbcTemplate.queryForObject(query, new Object[]{userName}, new UserRowMapper());
+  }
+
+  public User getByEmail(final String email) {
+    String query = SELECT_ALL + " where email = ?";
+    JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+    return jdbcTemplate.queryForObject(query, new Object[]{email}, new UserRowMapper());
+  }
+
+  @RequiresPermissions("filesystem:read")
   public List<User> getAll() {
     String query = SELECT_ALL;
     JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
@@ -59,11 +71,11 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User mapRow(ResultSet resultSet, int i) throws SQLException {
       User user = new User();
-      user.setUserId(resultSet.getInt("user_id"));
-      user.setFirstName(resultSet.getString("first_name"));
-      user.setLastName(resultSet.getString("last_name"));
-      user.setEmploymentStatus(resultSet.getString("employment_status"));
-      user.setGender(resultSet.getString("gender"));
+      user.setUserId(resultSet.getInt("id"));
+      user.setEmail(resultSet.getString("email"));
+      user.setUserName(resultSet.getString("username"));
+      user.setPassword(resultSet.getString("password"));
+      user.setSalt(resultSet.getString("salt"));
       return user;
     }
   }

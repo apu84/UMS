@@ -19,4 +19,60 @@
     <property name="password" value="admin"/>
   </bean>
 
+  <!--<bean id="passwordService" class="org.apache.shiro.authc.credential.DefaultPasswordService"/>
+  <bean id="passwordMatcher" class="org.apache.shiro.authc.credential.SimpleCredentialsMatcher"/>-->
+
+  <bean id="credentialMatcher" class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+    <property name="hashAlgorithmName" value="SHA-512"/>
+    <property name="hashIterations" value="1024"/>
+    <property name="storedCredentialsHexEncoded" value="true"/>
+    <property name="hashSalted" value="true"/>
+  </bean>
+
+  <!-- security datasource: -->
+  <bean id="jdbcRealm" class="org.ums.dummy.shared.authentication.DummyRealm">
+    <property name="dataSource" ref="dataSource"/>
+    <property name="permissionsLookupEnabled" value="true"/>
+    <property name="authenticationQuery" value="SELECT password, salt FROM User WHERE email = ?"/>
+    <property name="userRolesQuery" value="select roleName from UserRole where email = ?"/>
+    <property name="permissionsQuery" value="select permission from RolesPermission where roleName = ?"/>
+    <property name="credentialsMatcher" ref="credentialMatcher"/>
+    <property name="cacheManager" ref="memoryConstrainedCacheManager"/>
+    <property name="authenticationCachingEnabled" value="true"/>
+  </bean>
+  <bean id="memoryConstrainedCacheManager" class="org.apache.shiro.cache.MemoryConstrainedCacheManager"/>
+  <!--  <bean id="iniRealm" class="org.apache.shiro.realm.text.IniRealm">
+      <property name="resourcePath" value="classpath:shiro.ini" />
+    </bean>-->
+
+  <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+    <!-- Single realm app.  If you have multiple realms, use the 'realms' property instead. -->
+    <property name="realm" ref="jdbcRealm"/>
+<!--
+    <property name="sessionManager" ref="sessionManager"/>
+-->
+  </bean>
+
+  <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+    <property name="securityManager" ref="securityManager"/>
+    <property name="filterChainDefinitions">
+      <value>
+        /** = ssl[8443],noSessionCreation,authcBasic
+      </value>
+    </property>
+  </bean>
+
+  <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+
+  <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
+        depends-on="lifecycleBeanPostProcessor"/>
+
+  <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+    <property name="securityManager" ref="securityManager"/>
+  </bean>
+
+<!--  <bean name="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+    <property name="globalSessionTimeout" value="60000"/>
+  </bean>-->
+
 </beans>

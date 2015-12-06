@@ -17,6 +17,7 @@
     <github.global.server>github</github.global.server>
     <slf4j.version>1.6.4</slf4j.version>
     <aopalliance.version>1.0</aopalliance.version>
+    <apache-shiro-version>1.2.4</apache-shiro-version>
   </properties>
 
  <!-- <repositories>
@@ -191,6 +192,27 @@
       <version>${jersey.version}</version>
       <scope>provided</scope>
     </dependency>
+
+    <!--Apache Shiro-->
+    <dependency>
+      <groupId>org.apache.shiro</groupId>
+      <artifactId>shiro-core</artifactId>
+      <version>${apache-shiro-version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.shiro</groupId>
+      <artifactId>shiro-spring</artifactId>
+      <version>${apache-shiro-version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>commons-beanutils</groupId>
+      <artifactId>commons-beanutils</artifactId>
+      <version>1.9.2</version>
+      <scope>provided</scope>
+    </dependency>
+
 
     <!--database-->
     <dependency>
