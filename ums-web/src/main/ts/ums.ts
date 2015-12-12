@@ -47,7 +47,7 @@ module ums {
         .state('createSemester', {
           url: "/createSemester",
           controller: 'NewSemesterController',
-          templateUrl: 'views/registrar-office/new-semester.html',
+          templateUrl: 'views/semester/new-semester.html',
           resolve: {
             loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
               return $ocLazyLoad.load({
@@ -127,8 +127,7 @@ module ums {
                   'vendors/bootstrap-datepicker/css/datepicker.css',
                   'vendors/jquery-validate/jquery.validate.min.js' ,
                   'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
-                  'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
-                  'vendors/jquery-uploadPreview/jquery.uploadPreview.min.js'
+                  'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
                 ]
               });
             }]
@@ -138,6 +137,24 @@ module ums {
           url: "/createCourse",
           controller: 'NewCourseController',
           templateUrl: 'views/course/new-course.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: [
+                  'vendors/bootstrap-switch/css/bootstrap-switch.css',
+                  'vendors/bootstrap-datepicker/css/datepicker.css',
+                  'vendors/jquery-validate/jquery.validate.min.js' ,
+                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                  'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
+                ]
+              });
+            }]
+          }
+        })
+        .state('semesterSyllabusMap', {
+          url: "/semesterSyllabusMap",
+          controller: 'SemesterSyllabusMapController',
+          templateUrl: 'views/semester/semester-syllabus-map.html',
           resolve: {
             loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
               return $ocLazyLoad.load({

@@ -13,6 +13,9 @@
     '/viewFullSyllabus': {title:'Syllabus', 'breadcrumb':['Syllabus']},
     '/createStudent': {title:'Create New Student', 'breadcrumb':['Student']},
     '/changePassword': {title:'Change Password', 'breadcrumb':['Password']},
+    '/createCourse': {title:'Create Course', 'breadcrumb':['Course']},
+    '/semesterSyllabusMap': {title:'Semester Syllabus Map', 'breadcrumb':['Semester-Syllabus Map']},
+
   };
 
   $.fn.Data.get = function(id){

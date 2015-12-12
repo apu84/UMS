@@ -2,109 +2,126 @@
     <div class="col-lg-2"></div>
     <div class="col-lg-8">
         <div class="panel panel-blue">
-            <div class="panel-heading">New Student Create Form</div>
+            <div class="panel-heading">New Course Create Form</div>
             <div class="panel-body pan">
                 <form action="" class="form-horizontal">
                     <div class="form-body pal">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="col-md-4 control-label">Full Name</label>
+                                    <label class="col-md-4 control-label">Course Number</label>
                                     <div class="col-md-8">
-                                        <input name="studentName" type="text" class="form-control required"/>
+                                        <input name="courseNumber" type="text" class="form-control required"/>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-4 control-label">Dept./School</label>
+                                    <label class="col-md-4 control-label">Credit Hour</label>
                                     <div class="col-md-8">
-                                        <input name="department" type="text" placeholder="" class="form-control required"/>
+                                        <input name="creditHour" type="text" placeholder="" class="form-control required"/>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label  class="col-md-4 control-label">Father Name</label>
+                                    <label  class="col-md-4 control-label">Course Category</label>
                                     <div class="col-md-8">
-                                        <input name="fatherName" type="text" class="form-control required"/>
+                                        <select name="courseCategory"  class="form-control required">
+                                            <option value="">Select Course Category</option>
+                                            <option value="M">Mandatory</option>
+                                            <option value="F">Optional</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label  class="col-md-4 control-label">Birth Date</label>
+                                    <label  class="col-md-4 control-label">Year</label>
                                     <div class="col-md-8">
-                                        <div class="input-icon right"><i class="fa fa-calendar"></i>
-                                            <input type="text" name="birthDate"  data-date-format="dd-mm-yyyy" placeholder="DD-MM-YYYY" class="datepicker-default form-control required"/>
-                                        </div>
+                                        <select name="courseYear"  class="form-control required">
+                                            <option value="">Select Course Year</option>
+                                            <option value="M">1st Year</option>
+                                            <option value="F">2nd Year</option>
+                                            <option value="F">3rd Year</option>
+                                            <option value="F">4th Year</option>
+                                        </select>
+                                    </div>
+                                </div>
 
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">View Order</label>
+                                    <div class="col-md-8">
+                                        <input name="viewOrder" type="text"  class="form-control required"/>
                                     </div>
                                 </div>
 
-                                <div class="form-group">
-                                    <label class="col-md-4 control-label">Mobile Number</label>
-                                    <div class="col-md-8">
-                                        <input name="mobileNumber" type="text"  class="form-control required"/>
-                                    </div>
-                                </div>
 
                                 <div class="form-group">
-                                    <label class="col-md-4 control-label">Present Address</label>
+                                    <label class="col-md-4 control-label">Offered For</label>
                                     <div class="col-md-8">
-                                        <textarea class="form-control" rows="3"></textarea>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-4 control-label">Guardian Name</label>
-                                    <div class="col-md-8">
-                                        <input name="guardianName" type="text" class="form-control required"/>
+                                        <select name="offeredFor"  class="form-control required">
+                                            <option value="">Select Offered For Dept./School</option>
+                                            <option value="M">CSE</option>
+                                            <option value="F">EEE</option>
+                                        </select>
                                     </div>
                                 </div>
 
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="inputName" class="col-md-4 control-label">Student Id</label>
+                                    <label class="col-md-4 control-label">Course Title</label>
                                     <div class="col-md-8">
-                                        <input id="inputName" type="text" placeholder="" class="form-control"/>
+                                        <input id="courseTitle" type="text" placeholder="" class="form-control required"/>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-4 control-label">Semester</label>
+                                    <label class="col-md-4 control-label">Course Type</label>
                                     <div class="col-md-8">
-                                        <input name="semester" type="text" placeholder="" class="form-control required"/>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label  class="col-md-4 control-label">Mother Name</label>
-                                    <div class="col-md-8">
-                                        <input id="motherName" type="text" class="form-control required"/>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label  class="col-md-4 control-label ">Gender</label>
-                                    <div class="col-md-8">
-                                        <select name="gender"  class="form-control required">
-                                            <option value="">Select Gender</option>
-                                            <option value="M">Male</option>
-                                            <option value="F">Female</option>
+                                        <select name="courseType"  class="form-control required">
+                                            <option value="">Select Course Type</option>
+                                            <option value="M">Theory</option>
+                                            <option value="F">Sessional</option>
+                                            <option value="F">Theory</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-4 control-label">Phone Number</label>
+                                    <label  class="col-md-4 control-label">Offer By</label>
                                     <div class="col-md-8">
-                                        <input id="phoneNumber" type="text" placeholder="" class="form-control"/>
+                                        <select name="offredBy"  class="form-control required">
+                                            <option value="">Select Offered For Dept./School</option>
+                                            <option value="M">CSE</option>
+                                            <option value="F">EEE</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-4 control-label">Permanent Address</label>
+                                    <label  class="col-md-4 control-label ">Semester</label>
                                     <div class="col-md-8">
-                                        <textarea name="permanentAddress" class="form-control" rows="3"></textarea>
+                                        <select name="courseSemester"  class="form-control required">
+                                            <option value="">Select Course Semester</option>
+                                            <option value="M">1st Semester</option>
+                                            <option value="F">2nd Semester</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">Optional Group</label>
+                                    <div class="col-md-8">
+                                        <select name="optionalGroup"  class="form-control required">
+                                            <option value="">Select Optional Group</option>
+                                            <option value="M">Management</option>
+                                            <option value="F">Accounting</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">Syllabus</label>
+                                    <div class="col-md-8">
+                                        <select name="courseSyllabus"  class="form-control required">
+                                            <option value="">Select Syllabus</option>
+                                            <option value="M">CSE</option>
+                                            <option value="F">EEE</option>
+                                        </select>
                                     </div>
                                 </div>
 
-                                <div class="form-group">
-                                    <label class="col-md-4 control-label">Guardian Email</label>
-                                    <div class="col-md-8">
-                                        <input id="guardianEmail" type="text" class="form-control"/>
-                                    </div>
-                                </div>
 
                             </div>
 
@@ -112,7 +129,7 @@
                         </div>
                     </div>
                     <div class="form-actions text-right pal">
-                        <button type="submit" class="btn btn-success">Save Student Info</button>
+                        <button type="submit" class="btn btn-success">Save New Course</button>
                     </div>
                 </form>
             </div>
