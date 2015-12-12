@@ -1,0 +1,5 @@
+sqlplus /nolog
+connect / as sysdba
+
+create user DB_IUMS identified by ig100;
+grant all privileges to DB_IUMS;
