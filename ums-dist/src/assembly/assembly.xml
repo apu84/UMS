@@ -21,6 +21,7 @@
         <include>org.springframework:spring-jdbc</include>
         <include>org.springframework:spring-tx</include>
         <include>org.springframework:spring-aop</include>
+        <include>org.springframework:spring-aspect</include>
         <include>org.glassfish.jersey.ext:jersey-spring3</include>
         <include>org.glassfish.jersey.core:jersey-common</include>
         <include>org.glassfish.jersey.containers:jersey-container-servlet</include>

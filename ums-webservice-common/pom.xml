@@ -17,5 +17,11 @@
       <version>trunk-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>org.ums</groupId>
+      <artifactId>ums-api</artifactId>
+      <version>trunk-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
 </project>

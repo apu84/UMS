@@ -1,4 +1,4 @@
-package org.ums.dummy.webservice.exception;
+package org.ums.common.exception;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;

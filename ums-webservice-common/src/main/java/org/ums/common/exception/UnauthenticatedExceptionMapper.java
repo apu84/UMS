@@ -1,4 +1,4 @@
-package org.ums.dummy.webservice.exception;
+package org.ums.common.exception;
 
 import org.apache.shiro.authz.UnauthenticatedException;
 

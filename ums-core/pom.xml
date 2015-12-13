@@ -9,4 +9,12 @@
   <artifactId>ums-core</artifactId>
   <version>trunk-SNAPSHOT</version>
   <packaging>jar</packaging>
+  <dependencies>
+    <dependency>
+      <groupId>org.ums</groupId>
+      <artifactId>ums-api</artifactId>
+      <version>trunk-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
 </project>

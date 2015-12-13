@@ -177,7 +177,7 @@ module ums {
             loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
               return $ocLazyLoad.load({
                 files: [
-                  'vendors/jquery-validate/jquery.validate.min.js' ,
+                  'vendors/jquery-validate/jquery.validate.min.js'
                 ]
               });
             }]
