@@ -3,3 +3,6 @@ connect / as sysdba
 
 create user DB_IUMS identified by ig100;
 grant all privileges to DB_IUMS;
+
+
+exp DB_IUMS/ig100@XE  STATISTICS=NONE FILE='F:\IUMS-Source\UMS\ums-dist\src\main\resources\misc\database\DB_IUMS.dmp' log=e:\backuplog.txt 
