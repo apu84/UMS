@@ -3,15 +3,17 @@ package org.ums.domain.model;
 import java.io.Serializable;
 import java.util.Date;
 
-public interface Semester extends Serializable {
+public interface Semester extends Serializable, EditType<MutableSemester> {
 
-  String getId();
+  int getId() throws Exception;
 
-  String getName();
+  String getName() throws Exception;
 
-  Date getStartDate();
+  Date getStartDate() throws Exception;
 
-  boolean getStatus();
+  Date getEndDate() throws Exception;
 
-  MutableSemester edit() throws Exception;
+  ProgramType getProgramType() throws Exception;
+
+  boolean getStatus() throws Exception;
 }

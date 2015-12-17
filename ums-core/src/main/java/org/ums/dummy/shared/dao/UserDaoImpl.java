@@ -14,7 +14,7 @@ public class UserDaoImpl implements UserDao {
 
   private DataSource dataSource;
 
-  static String SELECT_ALL = "select id, username, email, password, salt from USER";
+  static String SELECT_ALL = "select user_id, password, salt from USERS";
 
   public UserDaoImpl(DataSource pDataSource) {
     this.dataSource = pDataSource;
@@ -26,16 +26,10 @@ public class UserDaoImpl implements UserDao {
     return jdbcTemplate.queryForObject(query, new Object[]{userId}, new UserRowMapper());
   }
 
-  public User getByName(final String userName) {
-    String query = SELECT_ALL + " where username = ?";
+  public User getByName(final String pUserName) {
+    String query = SELECT_ALL + " where user_id = ?";
     JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-    return jdbcTemplate.queryForObject(query, new Object[]{userName}, new UserRowMapper());
-  }
-
-  public User getByEmail(final String email) {
-    String query = SELECT_ALL + " where email = ?";
-    JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-    return jdbcTemplate.queryForObject(query, new Object[]{email}, new UserRowMapper());
+    return jdbcTemplate.queryForObject(query, new Object[]{pUserName}, new UserRowMapper());
   }
 
   @RequiresPermissions("filesystem:read")
@@ -71,9 +65,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User mapRow(ResultSet resultSet, int i) throws SQLException {
       User user = new User();
-      user.setUserId(resultSet.getInt("id"));
-      user.setEmail(resultSet.getString("email"));
-      user.setUserName(resultSet.getString("username"));
+      user.setUserName(resultSet.getString("user_id"));
       user.setPassword(resultSet.getString("password"));
       user.setSalt(resultSet.getString("salt"));
       return user;

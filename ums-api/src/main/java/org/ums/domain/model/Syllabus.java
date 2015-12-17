@@ -2,13 +2,11 @@ package org.ums.domain.model;
 
 import java.io.Serializable;
 
-public interface Syllabus extends Serializable {
+public interface Syllabus extends Serializable, EditType<MutableSyllabus> {
 
   String getId();
 
-  String getName();
+  Semester getSemester() throws Exception;
 
-  Semester getSemester();
-
-  MutableSyllabus edit() throws Exception;
+  Program getProgram() throws Exception;
 }

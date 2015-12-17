@@ -2,41 +2,52 @@ package org.ums.academic.model;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.ums.domain.model.MutableProgramType;
 import org.ums.domain.model.MutableSemester;
-import org.ums.manager.SemesterManager;
+import org.ums.domain.model.ProgramType;
+import org.ums.domain.model.Semester;
+import org.ums.manager.ContentManager;
+import org.ums.util.Constants;
 
 import java.util.Date;
 
 public class PersistentSemester implements MutableSemester {
 
-  private static SemesterManager sManager;
+  private static ContentManager<Semester, MutableSemester, Integer> sSemesterManager;
+  private static ContentManager<ProgramType, MutableProgramType, Integer> sProgramTypeManager;
 
   static {
-    ApplicationContext applicationContext = new ClassPathXmlApplicationContext("services-context.xml");
-    sManager = applicationContext.getBean(SemesterManager.class);
+    ApplicationContext applicationContext = new ClassPathXmlApplicationContext(Constants.SERVICE_CONTEXT);
+    sSemesterManager = (ContentManager<Semester, MutableSemester, Integer>)applicationContext.getBean("semesterManager");
+    sProgramTypeManager = (ContentManager<ProgramType, MutableProgramType, Integer>)applicationContext.getBean("programTypeManager");
   }
 
-  private String mId;
+  private int mId;
   private String mName;
   private Date mStartDate;
+  private Date mEndDate;
   private boolean mStatus;
+  private ProgramType mProgramType;
+
+  private int mProgramTypeId;
 
   public PersistentSemester() {
 
   }
 
-  public PersistentSemester(final PersistentSemester pOriginal) {
+  public PersistentSemester(final PersistentSemester pOriginal) throws Exception {
     mId = pOriginal.getId();
     mName = pOriginal.getName();
     mStartDate = pOriginal.getStartDate();
     mStatus = pOriginal.getStatus();
+    mProgramType = pOriginal.getProgramType();
   }
 
-  public String getId() {
+  public int getId() {
     return mId;
   }
 
-  public void setId(final String pId) {
+  public void setId(final int pId) {
     mId = pId;
   }
 
@@ -56,6 +67,14 @@ public class PersistentSemester implements MutableSemester {
     mStartDate = pStartDate;
   }
 
+  public Date getEndDate() {
+    return mEndDate;
+  }
+
+  public void setEndDate(final Date pEndDate) {
+    mEndDate = pEndDate;
+  }
+
   public boolean getStatus() {
     return mStatus;
   }
@@ -64,15 +83,27 @@ public class PersistentSemester implements MutableSemester {
     mStatus = pStatus;
   }
 
+  public ProgramType getProgramType() throws Exception {
+    return mProgramType != null ? mProgramType : sProgramTypeManager.get(mProgramTypeId);
+  }
+
+  public void setProgramType(final ProgramType pProgram) {
+    mProgramType = pProgram;
+  }
+
+  public void setProgramTypeId(final int pProgramTypeId) {
+    mProgramTypeId = pProgramTypeId;
+  }
+
   public void delete() throws Exception {
-    sManager.delete(this);
+    sSemesterManager.delete(this);
   }
 
   public void commit(final boolean update) throws Exception {
     if (update) {
-      sManager.update(this);
+      sSemesterManager.update(this);
     } else {
-      sManager.create(this);
+      sSemesterManager.create(this);
     }
   }
 

@@ -4,8 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.common.Resource;
-import org.ums.domain.model.MutableSemester;
-import org.ums.domain.model.Semester;
+import org.ums.domain.model.Mutable;
+import org.ums.domain.model.MutableProgram;
+import org.ums.domain.model.Program;
 import org.ums.manager.ContentManager;
 
 import javax.json.Json;
@@ -16,22 +17,25 @@ import javax.ws.rs.*;
 import java.util.List;
 
 @Component
-@Path("/academic/semester")
+@Path("/academic/program")
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
-public class SemesterResource extends MutableSemesterResource {
+public class ProgramResource extends Resource {
   @Autowired
-  @Qualifier("semesterManager")
-  ContentManager<Semester, MutableSemester, Integer> mManager;
+  ResourceHelper<Program, MutableProgram, Integer> mResourceHelper;
+
+  @Autowired
+  @Qualifier("programManager")
+  ContentManager<Program, MutableProgram, Integer> mManager;
 
   @GET
   @Path("/all")
   public JsonObject getAll() throws Exception {
-    List<Semester> semesters = mManager.getAll();
+    List<Program> programs = mManager.getAll();
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
-    for (Semester semester : semesters) {
-      children.add(mResourceHelper.toJson(semester, mUriInfo));
+    for (Program program : programs) {
+      children.add(mResourceHelper.toJson(program, mUriInfo));
     }
     object.add("entries", children);
     return object.build();
@@ -39,8 +43,8 @@ public class SemesterResource extends MutableSemesterResource {
 
   @GET
   @Path(PATH_PARAM_OBJECT_ID)
-  public JsonObject get(final @PathParam("object-id") String pObjectId) throws Exception {
-    Semester semester = mManager.get(Integer.parseInt(pObjectId));
-    return mResourceHelper.toJson(semester, mUriInfo);
+  public JsonObject get(final @PathParam("object-id") int pObjectId) throws Exception {
+    Program program = mManager.get(pObjectId);
+    return mResourceHelper.toJson(program, mUriInfo);
   }
 }

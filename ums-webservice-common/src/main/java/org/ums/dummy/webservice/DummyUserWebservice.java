@@ -51,8 +51,7 @@ public class DummyUserWebservice {
 
   protected JsonObject toJson(User pUser) {
     JsonObjectBuilder builder = Json.createObjectBuilder();
-    builder.add("userId", pUser.getUserId());
-    builder.add("email", pUser.getEmail());
+    builder.add("userName", pUser.getUserName());
     return builder.build();
   }
 }

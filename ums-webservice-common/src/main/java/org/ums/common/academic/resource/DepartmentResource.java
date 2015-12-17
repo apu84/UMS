@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.common.Resource;
-import org.ums.domain.model.MutableSemester;
-import org.ums.domain.model.Semester;
+import org.ums.domain.model.Department;
+import org.ums.domain.model.MutableDepartment;
 import org.ums.manager.ContentManager;
 
 import javax.json.Json;
@@ -16,22 +16,25 @@ import javax.ws.rs.*;
 import java.util.List;
 
 @Component
-@Path("/academic/semester")
+@Path("/academic/department")
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
-public class SemesterResource extends MutableSemesterResource {
+public class DepartmentResource extends Resource {
   @Autowired
-  @Qualifier("semesterManager")
-  ContentManager<Semester, MutableSemester, Integer> mManager;
+  ResourceHelper<Department, MutableDepartment, Integer> mResourceHelper;
+
+  @Autowired
+  @Qualifier("departmentManager")
+  ContentManager<Department, MutableDepartment, Integer> mManager;
 
   @GET
   @Path("/all")
   public JsonObject getAll() throws Exception {
-    List<Semester> semesters = mManager.getAll();
+    List<Department> departments = mManager.getAll();
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
-    for (Semester semester : semesters) {
-      children.add(mResourceHelper.toJson(semester, mUriInfo));
+    for (Department department : departments) {
+      children.add(mResourceHelper.toJson(department, mUriInfo));
     }
     object.add("entries", children);
     return object.build();
@@ -39,8 +42,8 @@ public class SemesterResource extends MutableSemesterResource {
 
   @GET
   @Path(PATH_PARAM_OBJECT_ID)
-  public JsonObject get(final @PathParam("object-id") String pObjectId) throws Exception {
-    Semester semester = mManager.get(Integer.parseInt(pObjectId));
-    return mResourceHelper.toJson(semester, mUriInfo);
+  public JsonObject get(final @PathParam("object-id") int pObjectId) throws Exception {
+    Department department = mManager.get(pObjectId);
+    return mResourceHelper.toJson(department, mUriInfo);
   }
 }

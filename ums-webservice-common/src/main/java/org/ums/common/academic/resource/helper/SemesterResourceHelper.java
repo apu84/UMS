@@ -2,44 +2,44 @@ package org.ums.common.academic.resource.helper;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.academic.builder.Builder;
 import org.ums.academic.model.PersistentSemester;
 import org.ums.common.academic.resource.ResourceHelper;
+import org.ums.common.academic.resource.SemesterResource;
 import org.ums.domain.model.MutableSemester;
 import org.ums.domain.model.Semester;
-import org.ums.manager.SemesterManager;
+import org.ums.manager.ContentManager;
 
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.net.URI;
 import java.util.List;
 
 @Component
-public class SemesterResourceHelper extends ResourceHelper<Semester> {
+public class SemesterResourceHelper extends ResourceHelper<Semester, MutableSemester, Integer> {
   @Autowired
-  private SemesterManager mManager;
+  @Qualifier("semesterManager")
+  private ContentManager<Semester, MutableSemester, Integer> mManager;
 
   @Autowired
   private List<Builder<Semester, MutableSemester>> mBuilders;
 
-  public Semester load(final String pSemesterId) throws Exception {
-    return mManager.get(pSemesterId);
+  @Override
+  public ContentManager<Semester, MutableSemester, Integer> getContentManager() {
+    return mManager;
   }
 
-  public JsonObject toJson(final Semester pSemester, final UriInfo pUriInfo) throws Exception {
-    JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
-    for (Builder<Semester, MutableSemester> builder : mBuilders) {
-      builder.build(jsonObjectBuilder, pSemester, pUriInfo);
-    }
-    return jsonObjectBuilder.build();
+  @Override
+  public List<Builder<Semester, MutableSemester>> getBuilders() {
+    return mBuilders;
   }
 
-  public void delete(final Semester pSemester) throws Exception {
-    pSemester.edit().delete();
-  }
-
+  @Override
   public void put(final Semester pSemester, final JsonObject pJsonObject) throws Exception {
     MutableSemester mutableSemester = pSemester.edit();
     for (Builder<Semester, MutableSemester> builder : mBuilders) {
@@ -48,12 +48,19 @@ public class SemesterResourceHelper extends ResourceHelper<Semester> {
     mutableSemester.commit(true);
   }
 
-  public void post(final JsonObject pJsonObject) throws Exception {
+  @Override
+  public Response post(final JsonObject pJsonObject, final UriInfo pUriInfo) throws Exception {
     MutableSemester mutableSemester = new PersistentSemester();
     for (Builder<Semester, MutableSemester> builder : mBuilders) {
       builder.build(mutableSemester, pJsonObject);
     }
     mutableSemester.commit(false);
+
+    URI contextURI = pUriInfo.getBaseUriBuilder().path(SemesterResource.class).path(SemesterResource.class, "get").build(mutableSemester.getId());
+    Response.ResponseBuilder builder = Response.created(contextURI);
+    builder.status(Response.Status.CREATED);
+
+    return builder.build();
   }
 
 

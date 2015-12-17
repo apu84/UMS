@@ -26,7 +26,7 @@ public class DummyRealm extends JdbcRealm {
     }
 
     // read password hash and salt from db
-    final User user = userDao.getByEmail(username);
+    final User user = userDao.getByName(username);
 
     if (user == null) {
       throw new AuthenticationException("Can not find user");

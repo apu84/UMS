@@ -3,17 +3,17 @@ package org.ums.domain.model;
 
 import java.util.Date;
 
-public interface MutableSemester extends Semester {
+public interface MutableSemester extends Semester, Mutable {
 
-  void setId(final String pId);
+  void setId(final int pId);
 
   void setName(final String pName);
 
   void setStartDate(final Date pDate);
 
+  void setEndDate(final Date pDate);
+
   void setStatus(final boolean pStatus);
 
-  void commit(final boolean update) throws Exception;
-
-  void delete() throws Exception;
+  void setProgramType(final ProgramType pProgram);
 }

@@ -14,10 +14,14 @@
 
   <bean id="dataSource"
         class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-    <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+    <!--<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
     <property name="url" value="jdbc:mysql://localhost:3306/dummy_data"/>
     <property name="username" value="root"/>
-    <property name="password" value="admin"/>
+    <property name="password" value="admin"/>-->
+    <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
+    <property name="url" value="jdbc:oracle:thin:@Apu:1521:xe"/>
+    <property name="username" value="DB_IUMS"/>
+    <property name="password" value="ig100"/>
   </bean>
 
   <!--<bean id="passwordService" class="org.apache.shiro.authc.credential.DefaultPasswordService"/>
@@ -31,16 +35,18 @@
   </bean>
 
   <!-- security datasource: -->
-  <bean id="jdbcRealm" class="org.ums.dummy.shared.authentication.DummyRealm">
+  <bean id="jdbcRealm" class="org.apache.shiro.realm.jdbc.JdbcRealm">
     <property name="dataSource" ref="dataSource"/>
     <property name="permissionsLookupEnabled" value="true"/>
-    <property name="authenticationQuery" value="SELECT password, salt FROM User WHERE email = ?"/>
-    <property name="userRolesQuery" value="select roleName from UserRole where email = ?"/>
-    <property name="permissionsQuery" value="select permission from RolesPermission where roleName = ?"/>
+    <property name="authenticationQuery" value="SELECT password, salt FROM Users WHERE user_id = ?"/>
+    <property name="userRolesQuery" value="select role_id from Users where user_id = ?"/>
+    <property name="permissionsQuery" value="select permissions from permissions where role_id = ?"/>
     <property name="credentialsMatcher" ref="credentialMatcher"/>
+    <property name="saltStyle" value="COLUMN"/>
     <property name="cacheManager" ref="memoryConstrainedCacheManager"/>
     <property name="authenticationCachingEnabled" value="true"/>
   </bean>
+
   <bean id="memoryConstrainedCacheManager" class="org.apache.shiro.cache.MemoryConstrainedCacheManager"/>
   <!--  <bean id="iniRealm" class="org.apache.shiro.realm.text.IniRealm">
       <property name="resourcePath" value="classpath:shiro.ini" />

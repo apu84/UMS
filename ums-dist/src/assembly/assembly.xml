@@ -40,7 +40,8 @@
         <include>org.slf4j:slf4j-jdk14</include>
         <include>commons-logging:commons-logging</include>
         <include>aopalliance:aopalliance</include>
-        <include>mysql:mysql-connector-java</include>
+        <!--<include>mysql:mysql-connector-java</include>-->
+        <include>com.oracle:ojdbc6</include>
       </includes>
       <outputDirectory>lib</outputDirectory>
       <useTransitiveDependencies>true</useTransitiveDependencies>
