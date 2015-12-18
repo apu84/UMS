@@ -47,16 +47,19 @@ public abstract class ResourceHelper<R extends EditType<M>, M extends Mutable, I
     return jsonObjectBuilder.build();
   }
 
-  protected void delete(final Mutable pObject) throws Exception {
-    pObject.delete();
+  protected Response delete(final I pObjectId) throws Exception {
+    R readOnly = load(pObjectId);
+    readOnly.edit().delete();
+    return Response.noContent().build();
   }
 
-  protected Response put(final R pObject, final Request pRequest,
+  protected Response put(final I pObjectId, final Request pRequest,
                          final String pIfMatch, final JsonObject pJsonObject) throws Exception {
     if (pIfMatch == null) {
       return Response.status(Response.Status.BAD_REQUEST).entity("No If-Match header found.").build();
     }
-    EntityTag etag = new EntityTag(getEtag(pObject));
+    R readOnly = load(pObjectId);
+    EntityTag etag = new EntityTag(getEtag(readOnly));
 
     Response.ResponseBuilder preconditionResponse = pRequest.evaluatePreconditions(etag);
     // client is not up to date (send back 412)
@@ -64,7 +67,7 @@ public abstract class ResourceHelper<R extends EditType<M>, M extends Mutable, I
       return preconditionResponse.build();
     }
 
-    M mutable = pObject.edit();
+    M mutable = readOnly.edit();
     for (Builder<R, M> builder : getBuilders()) {
       builder.build(mutable, pJsonObject);
     }

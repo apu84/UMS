@@ -27,22 +27,12 @@ public class MutableSemesterResource extends Resource {
                                  final @Context Request pRequest,
                                  final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader,
                                  final JsonObject pJsonObject) throws Exception {
-    Semester semester = mResourceHelper.load(Integer.parseInt(pObjectId));
-    if (semester != null) {
-      mResourceHelper.put(semester, pRequest, pIfMatchHeader, pJsonObject);
-    }
-    Response.ResponseBuilder builder = Response.ok();
-    return builder.build();
+    return mResourceHelper.put(Integer.parseInt(pObjectId), pRequest, pIfMatchHeader, pJsonObject);
   }
 
   @DELETE
   @Path(PATH_PARAM_OBJECT_ID)
   public Response deleteSemester(final @PathParam("object-id") String pObjectId) throws Exception {
-    Semester semester = mResourceHelper.load(Integer.parseInt(pObjectId));
-    if (semester != null) {
-      mResourceHelper.delete(semester.edit());
-    }
-    Response.ResponseBuilder builder = Response.ok();
-    return builder.build();
+    return mResourceHelper.delete(Integer.parseInt(pObjectId));
   }
 }

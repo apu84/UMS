@@ -27,22 +27,12 @@ public class MutableSyllabusResource extends Resource {
                                  final @Context Request pRequest,
                                  final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader,
                                  final JsonObject pJsonObject) throws Exception {
-    Syllabus syllabus = mResourceHelper.load(pObjectId);
-    if (syllabus != null) {
-      return mResourceHelper.put(syllabus, pRequest, pIfMatchHeader, pJsonObject);
-    }
-    Response.ResponseBuilder builder = Response.ok();
-    return builder.build();
+    return mResourceHelper.put(pObjectId, pRequest, pIfMatchHeader, pJsonObject);
   }
 
   @DELETE
   @Path(PATH_PARAM_OBJECT_ID)
   public Response deleteSemester(final @PathParam("object-id") String pObjectId) throws Exception {
-    Syllabus syllabus = mResourceHelper.load(pObjectId);
-    if (syllabus != null) {
-      mResourceHelper.delete(syllabus.edit());
-    }
-    Response.ResponseBuilder builder = Response.ok();
-    return builder.build();
+    return mResourceHelper.delete(pObjectId);
   }
 }

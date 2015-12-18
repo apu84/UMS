@@ -29,22 +29,13 @@ public class MutableProgramTypeResource extends Resource {
                                     final @Context Request pRequest,
                                     final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader,
                                     final JsonObject pJsonObject) throws Exception {
-    ProgramType programType = mResourceHelper.load(pObjectId);
-    if (programType != null) {
-      mResourceHelper.put(programType, pRequest, pIfMatchHeader, pJsonObject);
-    }
-    Response.ResponseBuilder builder = Response.ok();
-    return builder.build();
+
+    return mResourceHelper.put(pObjectId, pRequest, pIfMatchHeader, pJsonObject);
   }
 
   @DELETE
   @Path(PATH_PARAM_OBJECT_ID)
   public Response deleteProgramType(final @PathParam("object-id") int pObjectId) throws Exception {
-    ProgramType programType = mResourceHelper.load(pObjectId);
-    if (programType != null) {
-      mResourceHelper.delete(programType.edit());
-    }
-    Response.ResponseBuilder builder = Response.ok();
-    return builder.build();
+    return mResourceHelper.delete(pObjectId);
   }
 }
