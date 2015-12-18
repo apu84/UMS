@@ -10,6 +10,7 @@ import org.ums.domain.model.Syllabus;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentSyllabusDao extends ContentDaoDecorator<Syllabus, MutableSyllabus, String> {
   static String SELECT_ALL = "SELECT SYLLABUS_ID, SEMESTER_ID, PROGRAM_ID FROM MST_SYLLABUS ";
@@ -60,7 +61,8 @@ public class PersistentSyllabusDao extends ContentDaoDecorator<Syllabus, Mutable
       syllabus.setId(resultSet.getString("SYLLABUS_ID"));
       syllabus.setProgramId(resultSet.getInt("PROGRAM_ID"));
       syllabus.setSemesterId(resultSet.getInt("SEMESTER_ID"));
-      return syllabus;
+      AtomicReference<Syllabus> atomicReference = new AtomicReference<>(syllabus);
+      return atomicReference.get();
     }
   }
 }

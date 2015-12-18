@@ -10,6 +10,7 @@ import org.ums.domain.model.ProgramType;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class ProgramTypeDao extends ContentDaoDecorator<ProgramType, MutableProgramType, Integer> {
   static String SELECT_ALL = "SELECT TYPE_ID, TYPE_NAME FROM MST_PROGRAM_TYPE ";
@@ -53,7 +54,8 @@ public class ProgramTypeDao extends ContentDaoDecorator<ProgramType, MutableProg
       PersistentProgramType programType = new PersistentProgramType();
       programType.setId(resultSet.getInt("TYPE_ID"));
       programType.setName(resultSet.getString("TYPE_NAME"));
-      return programType;
+      AtomicReference<ProgramType> atomicReference = new AtomicReference<>(programType);
+      return atomicReference.get();
     }
   }
 }

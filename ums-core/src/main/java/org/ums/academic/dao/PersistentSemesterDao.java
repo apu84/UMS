@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentSemesterDao extends ContentDaoDecorator<Semester, MutableSemester, Integer> {
 
@@ -77,7 +78,8 @@ public class PersistentSemesterDao extends ContentDaoDecorator<Semester, Mutable
       semester.setEndDate(resultSet.getDate("END_DATE"));
       semester.setProgramTypeId(resultSet.getInt("PROGRAM_TYPE"));
       semester.setStatus(resultSet.getBoolean("STATUS"));
-      return semester;
+      AtomicReference<Semester> atomicReference = new AtomicReference<>(semester);
+      return atomicReference.get();
     }
   }
 }
