@@ -81,4 +81,9 @@ public class PersistentDepartment implements MutableDepartment {
   public void setType(int pType) {
     mType = pType;
   }
+
+  @Override
+  public MutableDepartment edit() throws Exception {
+    return new PersistentDepartment(this);
+  }
 }

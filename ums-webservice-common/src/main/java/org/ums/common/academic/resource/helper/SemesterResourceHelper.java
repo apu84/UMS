@@ -12,9 +12,7 @@ import org.ums.domain.model.MutableSemester;
 import org.ums.domain.model.Semester;
 import org.ums.manager.ContentManager;
 
-import javax.json.Json;
 import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
@@ -40,15 +38,6 @@ public class SemesterResourceHelper extends ResourceHelper<Semester, MutableSeme
   }
 
   @Override
-  public void put(final Semester pSemester, final JsonObject pJsonObject) throws Exception {
-    MutableSemester mutableSemester = pSemester.edit();
-    for (Builder<Semester, MutableSemester> builder : mBuilders) {
-      builder.build(mutableSemester, pJsonObject);
-    }
-    mutableSemester.commit(true);
-  }
-
-  @Override
   public Response post(final JsonObject pJsonObject, final UriInfo pUriInfo) throws Exception {
     MutableSemester mutableSemester = new PersistentSemester();
     for (Builder<Semester, MutableSemester> builder : mBuilders) {
@@ -63,5 +52,8 @@ public class SemesterResourceHelper extends ResourceHelper<Semester, MutableSeme
     return builder.build();
   }
 
-
+  @Override
+  protected String getEtag(Semester pReadonly) {
+    return "";
+  }
 }

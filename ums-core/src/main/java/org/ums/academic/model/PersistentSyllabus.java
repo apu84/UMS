@@ -16,6 +16,7 @@ public class PersistentSyllabus implements MutableSyllabus {
   private Program mProgram;
   private int mSemesterId;
   private int mProgramId;
+  private String mLastModified;
 
   static {
     ApplicationContext applicationContext = new ClassPathXmlApplicationContext(Constants.SERVICE_CONTEXT);
@@ -32,6 +33,7 @@ public class PersistentSyllabus implements MutableSyllabus {
     mId = pPersistentSyllabus.getId();
     mSemester = pPersistentSyllabus.getSemester();
     mProgram = pPersistentSyllabus.getProgram();
+    mLastModified = pPersistentSyllabus.getLastModified();
   }
 
   @Override
@@ -89,5 +91,15 @@ public class PersistentSyllabus implements MutableSyllabus {
   @Override
   public MutableSyllabus edit() throws Exception {
     return new PersistentSyllabus(this);
+  }
+
+  @Override
+  public void setLastModified(final String pLastModified) {
+    mLastModified = pLastModified;
+  }
+
+  @Override
+  public String getLastModified() {
+    return mLastModified;
   }
 }

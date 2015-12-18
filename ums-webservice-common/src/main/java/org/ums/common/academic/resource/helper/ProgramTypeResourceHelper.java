@@ -36,14 +36,6 @@ public class ProgramTypeResourceHelper extends ResourceHelper<ProgramType, Mutab
     return mBuilders;
   }
 
-  public void put(final ProgramType pProgramType, final JsonObject pJsonObject) throws Exception {
-    MutableProgramType mutableProgramType = pProgramType.edit();
-    for (Builder<ProgramType, MutableProgramType> builder : mBuilders) {
-      builder.build(mutableProgramType, pJsonObject);
-    }
-    mutableProgramType.commit(true);
-  }
-
   public Response post(final JsonObject pJsonObject, final UriInfo pUriInfo) throws Exception {
     MutableProgramType mutableProgramType = new PersistentProgramType();
     for (Builder<ProgramType, MutableProgramType> builder : mBuilders) {
@@ -57,5 +49,10 @@ public class ProgramTypeResourceHelper extends ResourceHelper<ProgramType, Mutab
     builder.status(Response.Status.CREATED);
 
     return builder.build();
+  }
+
+  @Override
+  protected String getEtag(ProgramType pReadonly) {
+    return "";
   }
 }

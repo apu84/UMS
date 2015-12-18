@@ -13,6 +13,9 @@ import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Request;
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 @Component
@@ -39,9 +42,8 @@ public class SyllabusResource extends MutableSyllabusResource {
 
   @GET
   @Path(PATH_PARAM_OBJECT_ID)
-  public JsonObject get(final @PathParam("object-id") String pObjectId) throws Exception {
-    Syllabus syllabus = mManager.get(pObjectId);
-    return mResourceHelper.toJson(syllabus, mUriInfo);
+  public Response get(final @Context Request pRequest, final @PathParam("object-id") String pObjectId) throws Exception {
+    return mResourceHelper.get(pObjectId, pRequest, mUriInfo);
   }
 }
 

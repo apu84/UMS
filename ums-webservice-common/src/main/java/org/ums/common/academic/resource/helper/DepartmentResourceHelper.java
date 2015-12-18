@@ -33,11 +33,12 @@ public class DepartmentResourceHelper extends ResourceHelper<Department, Mutable
     return mBuilders;
   }
 
-  public void put(final Department pDepartment, final JsonObject pJsonObject) throws Exception {
-
-  }
-
   public Response post(final JsonObject pJsonObject, final UriInfo pUriInfo) throws Exception {
     return null;
+  }
+
+  @Override
+  protected String getEtag(Department pReadonly) {
+    return "";
   }
 }

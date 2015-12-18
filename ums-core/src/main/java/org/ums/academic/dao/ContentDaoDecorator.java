@@ -35,4 +35,8 @@ public class ContentDaoDecorator<R, M, I> implements ContentManager<R, M, I> {
   public void create(final M pMutable) throws Exception {
     mManager.create(pMutable);
   }
+
+  protected static String getLastModifiedSql() {
+    return "to_char(sysdate,'YYYYMMDDHHMISS')";
+  }
 }

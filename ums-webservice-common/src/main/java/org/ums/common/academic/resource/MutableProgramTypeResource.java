@@ -8,6 +8,8 @@ import org.ums.domain.model.ProgramType;
 
 import javax.json.JsonObject;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 
 
@@ -23,10 +25,13 @@ public class MutableProgramTypeResource extends Resource {
 
   @PUT
   @Path(PATH_PARAM_OBJECT_ID)
-  public Response updateProgramType(final @PathParam("object-id") int pObjectId, final JsonObject pJsonObject) throws Exception {
+  public Response updateProgramType(final @PathParam("object-id") int pObjectId,
+                                    final @Context Request pRequest,
+                                    final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader,
+                                    final JsonObject pJsonObject) throws Exception {
     ProgramType programType = mResourceHelper.load(pObjectId);
     if (programType != null) {
-      mResourceHelper.put(programType, pJsonObject);
+      mResourceHelper.put(programType, pRequest, pIfMatchHeader, pJsonObject);
     }
     Response.ResponseBuilder builder = Response.ok();
     return builder.build();

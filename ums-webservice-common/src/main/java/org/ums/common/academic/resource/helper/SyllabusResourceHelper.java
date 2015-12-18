@@ -36,14 +36,6 @@ public class SyllabusResourceHelper extends ResourceHelper<Syllabus, MutableSyll
     return mBuilders;
   }
 
-  public void put(final Syllabus pSyllabus, final JsonObject pJsonObject) throws Exception {
-    MutableSyllabus mutableSyllabus = pSyllabus.edit();
-    for (Builder<Syllabus, MutableSyllabus> builder : mBuilders) {
-      builder.build(mutableSyllabus, pJsonObject);
-    }
-    mutableSyllabus.commit(true);
-  }
-
   public Response post(final JsonObject pJsonObject, final UriInfo pUriInfo) throws Exception {
     MutableSyllabus mutableSyllabus = new PersistentSyllabus();
     for (Builder<Syllabus, MutableSyllabus> builder : mBuilders) {
@@ -56,6 +48,11 @@ public class SyllabusResourceHelper extends ResourceHelper<Syllabus, MutableSyll
     builder.status(Response.Status.CREATED);
 
     return builder.build();
+  }
+
+  @Override
+  protected String getEtag(Syllabus pReadonly) {
+    return pReadonly.getLastModified();
   }
 }
 

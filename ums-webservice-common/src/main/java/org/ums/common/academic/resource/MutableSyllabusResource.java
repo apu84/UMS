@@ -8,6 +8,8 @@ import org.ums.domain.model.Syllabus;
 
 import javax.json.JsonObject;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 
 public class MutableSyllabusResource extends Resource {
@@ -21,10 +23,13 @@ public class MutableSyllabusResource extends Resource {
 
   @PUT
   @Path(PATH_PARAM_OBJECT_ID)
-  public Response updateSyllabus(final @PathParam("object-id") String pObjectId, final JsonObject pJsonObject) throws Exception {
+  public Response updateSyllabus(final @PathParam("object-id") String pObjectId,
+                                 final @Context Request pRequest,
+                                 final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader,
+                                 final JsonObject pJsonObject) throws Exception {
     Syllabus syllabus = mResourceHelper.load(pObjectId);
     if (syllabus != null) {
-      mResourceHelper.put(syllabus, pJsonObject);
+      return mResourceHelper.put(syllabus, pRequest, pIfMatchHeader, pJsonObject);
     }
     Response.ResponseBuilder builder = Response.ok();
     return builder.build();

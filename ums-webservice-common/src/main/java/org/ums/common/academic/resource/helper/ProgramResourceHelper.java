@@ -34,11 +34,12 @@ public class ProgramResourceHelper extends ResourceHelper<Program, MutableProgra
     return mBuilders;
   }
 
-  public void put(final Program pProgram, final JsonObject pJsonObject) throws Exception {
-
-  }
-
   public Response post(final JsonObject pJsonObject, final UriInfo pUriInfo) throws Exception {
     return null;
+  }
+
+  @Override
+  protected String getEtag(Program pReadonly) {
+    return "";
   }
 }

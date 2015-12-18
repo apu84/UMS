@@ -13,10 +13,11 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentSyllabusDao extends ContentDaoDecorator<Syllabus, MutableSyllabus, String> {
-  static String SELECT_ALL = "SELECT SYLLABUS_ID, SEMESTER_ID, PROGRAM_ID FROM MST_SYLLABUS ";
-  static String UPDATE_ONE = "UPDATE MST_SYLLABUS SET SEMESTER_ID = ?, PROGRAM_ID = ? ";
+  static String SELECT_ALL = "SELECT SYLLABUS_ID, SEMESTER_ID, PROGRAM_ID, LAST_MODIFIED FROM MST_SYLLABUS ";
+  static String UPDATE_ONE = "UPDATE MST_SYLLABUS SET SEMESTER_ID = ?, PROGRAM_ID = ?, LAST_MODIFIED = " + getLastModifiedSql() + " ";
   static String DELETE_ONE = "DELETE FROM MST_SYLLABUS ";
-  static String INSERT_ONE = "INSERT INTO MST_SYLLABUS(SYLLABUS_ID, SEMESTER_ID, PROGRAM_ID) VALUES(?, ?, ?)";
+  static String INSERT_ONE = "INSERT INTO MST_SYLLABUS(SYLLABUS_ID, SEMESTER_ID, PROGRAM_ID, LAST_MODIFIED) " +
+      "VALUES(?, ?, ?, " + getLastModifiedSql() + ")";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -61,6 +62,7 @@ public class PersistentSyllabusDao extends ContentDaoDecorator<Syllabus, Mutable
       syllabus.setId(resultSet.getString("SYLLABUS_ID"));
       syllabus.setProgramId(resultSet.getInt("PROGRAM_ID"));
       syllabus.setSemesterId(resultSet.getInt("SEMESTER_ID"));
+      syllabus.setLastModified(resultSet.getString("LAST_MODIFIED"));
       AtomicReference<Syllabus> atomicReference = new AtomicReference<>(syllabus);
       return atomicReference.get();
     }

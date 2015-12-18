@@ -8,6 +8,8 @@ import org.ums.domain.model.Semester;
 
 import javax.json.JsonObject;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 
 public class MutableSemesterResource extends Resource {
@@ -21,10 +23,13 @@ public class MutableSemesterResource extends Resource {
 
   @PUT
   @Path(PATH_PARAM_OBJECT_ID)
-  public Response updateSemester(final @PathParam("object-id") String pObjectId, final JsonObject pJsonObject) throws Exception {
+  public Response updateSemester(final @PathParam("object-id") String pObjectId,
+                                 final @Context Request pRequest,
+                                 final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader,
+                                 final JsonObject pJsonObject) throws Exception {
     Semester semester = mResourceHelper.load(Integer.parseInt(pObjectId));
     if (semester != null) {
-      mResourceHelper.put(semester, pJsonObject);
+      mResourceHelper.put(semester, pRequest, pIfMatchHeader, pJsonObject);
     }
     Response.ResponseBuilder builder = Response.ok();
     return builder.build();
