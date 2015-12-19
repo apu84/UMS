@@ -1,12 +1,13 @@
+///<reference path="constants.ts"/>
 module ums {
   export var UMS = angular.module('UMS', [
     'ngRoute', 'ui.bootstrap', 'ui.router', 'oc.lazyLoad'
-  ]);
+  ]).constant("appConstant", Constants.Default);
 
   UMS.config(($stateProvider, $urlRouterProvider) => {
     //
     // For any unmatched url, redirect to /state1
-    $urlRouterProvider.otherwise("/index");
+    $urlRouterProvider.otherwise("/userHome");
     //
     // Now set up the states
     $stateProvider

@@ -1,5 +1,6 @@
 module ums {
-    UMS.controller('ChangePassword', function ($scope, $routeParams){
+    UMS.controller('ChangePassword', function (appConstant,$scope, $routeParams){
+       console.log(appConstant.gender);
         $(".form-horizontal").validate({
             errorPlacement: function(error, element){
                 error.insertAfter(element);
