@@ -4,5 +4,13 @@ connect / as sysdba
 create user DB_IUMS identified by ig100;
 grant all privileges to DB_IUMS;
 
+Ifti
+-----
+exp DB_IUMS/ig100@XE  STATISTICS=NONE FILE='F:\IUMS-Source\UMS\ums-dist\src\main\resources\misc\database\DB_IUMS.dmp' log=F:\backuplog.txt
+imp  DB_IUMS/ig100@XE   STATISTICS=NONE FILE='F:\IUMS-Source\UMS\ums-dist\src\main\resources\misc\database\DB_IUMS.dmp' log=F:\backuplog.txt 
 
-exp DB_IUMS/ig100@XE  STATISTICS=NONE FILE='F:\IUMS-Source\UMS\ums-dist\src\main\resources\misc\database\DB_IUMS.dmp' log=e:\backuplog.txt�
+
+Apu
+-----
+exp DB_IUMS/ig100@XE  STATISTICS=NONE FILE='E:\Projects\UMS\ums-dist\src\main\resources\misc\database\DB_IUMS.dmp' log=F:\backuplog.txt
+imp  DB_IUMS/ig100@XE   STATISTICS=NONE FILE='E:\Projects\UMS\ums-dist\src\main\resources\misc\database\DB_IUMS.dmp' log=F:\backuplog.txt 
