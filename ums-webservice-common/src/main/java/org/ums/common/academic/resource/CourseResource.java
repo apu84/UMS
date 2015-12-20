@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.common.Resource;
-import org.ums.domain.model.MutableSyllabus;
-import org.ums.domain.model.Syllabus;
+import org.ums.domain.model.Course;
+import org.ums.domain.model.MutableCourse;
 import org.ums.manager.ContentManager;
 
 import javax.json.JsonObject;
@@ -15,13 +15,16 @@ import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 
 @Component
-@Path("/academic/syllabus")
+@Path("/academic/course")
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
-public class SyllabusResource extends MutableSyllabusResource {
+public class CourseResource extends Resource {
   @Autowired
-  @Qualifier("syllabusManager")
-  ContentManager<Syllabus, MutableSyllabus, String> mManager;
+  ResourceHelper<Course, MutableCourse, String> mResourceHelper;
+
+  @Autowired
+  @Qualifier("courseManager")
+  ContentManager<Course, MutableCourse, String> mManager;
 
   @GET
   @Path("/all")
@@ -35,4 +38,3 @@ public class SyllabusResource extends MutableSyllabusResource {
     return mResourceHelper.get(pObjectId, pRequest, mUriInfo);
   }
 }
-

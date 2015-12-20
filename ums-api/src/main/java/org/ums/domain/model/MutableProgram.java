@@ -1,7 +1,6 @@
 package org.ums.domain.model;
 
-public interface MutableProgram extends Program, Mutable {
-  void setId(final int pId) throws Exception;
+public interface MutableProgram extends Program, Mutable, MutableLastModifier, MutableIdentifier<Integer> {
 
   void setShortName(final String pShortName) throws Exception;
 
@@ -9,5 +8,9 @@ public interface MutableProgram extends Program, Mutable {
 
   void setDepartment(final Department pDepartment) throws Exception;
 
+  void setDepartmentId(final int pDepartmentId);
+
   void setProgramType(final ProgramType pProgramType) throws Exception;
+
+  void setProgramTypeId(final int pProgramTypeId);
 }

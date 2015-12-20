@@ -1,6 +1,8 @@
 sqlplus /nolog
 connect / as sysdba
 
+drop user DB_IUMS cascade;
+
 create user DB_IUMS identified by ig100;
 grant all privileges to DB_IUMS;
 

@@ -28,11 +28,11 @@ public class PersistentProgramType implements MutableProgramType {
     mName = pProgramType.getName();
   }
 
-  public int getId() {
+  public Integer getId() {
     return mId;
   }
 
-  public void setId(final int pId) {
+  public void setId(final Integer pId) {
     mId = pId;
   }
 
@@ -59,4 +59,5 @@ public class PersistentProgramType implements MutableProgramType {
   public MutableProgramType edit() throws Exception {
     return new PersistentProgramType(this);
   }
+
 }

@@ -2,11 +2,13 @@ package org.ums.common.academic.resource;
 
 
 import org.ums.academic.builder.Builder;
+import org.ums.cache.LocalCache;
 import org.ums.domain.model.EditType;
 import org.ums.domain.model.Mutable;
 import org.ums.manager.ContentManager;
 
 import javax.json.Json;
+import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.*;
@@ -27,8 +29,10 @@ public abstract class ResourceHelper<R extends EditType<M>, M extends Mutable, I
     builder = pRequest.evaluatePreconditions(etag);
 
     if (builder == null) {
-      builder = Response.ok(toJson(readOnly, pUriInfo));
+      LocalCache localCache = new LocalCache();
+      builder = Response.ok(toJson(readOnly, pUriInfo, localCache));
       builder.tag(etag);
+      localCache.invalidate();
     }
 
     CacheControl cacheControl = new CacheControl();
@@ -39,10 +43,23 @@ public abstract class ResourceHelper<R extends EditType<M>, M extends Mutable, I
     return builder.build();
   }
 
-  protected JsonObject toJson(final R pObject, final UriInfo pUriInfo) throws Exception {
+  protected JsonObject getAll(final UriInfo pUriInfo) throws Exception {
+    List<R> readOnlys = getContentManager().getAll();
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+    for (R readOnly : readOnlys) {
+      children.add(toJson(readOnly, pUriInfo, localCache));
+    }
+    object.add("entries", children);
+    localCache.invalidate();
+    return object.build();
+  }
+
+  protected JsonObject toJson(final R pObject, final UriInfo pUriInfo, final LocalCache pLocalCache) throws Exception {
     JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
     for (Builder<R, M> builder : getBuilders()) {
-      builder.build(jsonObjectBuilder, pObject, pUriInfo);
+      builder.build(jsonObjectBuilder, pObject, pUriInfo, pLocalCache);
     }
     return jsonObjectBuilder.build();
   }
@@ -68,10 +85,12 @@ public abstract class ResourceHelper<R extends EditType<M>, M extends Mutable, I
     }
 
     M mutable = readOnly.edit();
+    LocalCache localCache = new LocalCache();
     for (Builder<R, M> builder : getBuilders()) {
-      builder.build(mutable, pJsonObject);
+      builder.build(mutable, pJsonObject, localCache);
     }
     mutable.commit(true);
+    localCache.invalidate();
 
     return Response.noContent().build();
   }

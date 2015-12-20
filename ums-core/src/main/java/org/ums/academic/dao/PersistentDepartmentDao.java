@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentDepartmentDao extends ContentDaoDecorator<Department, MutableDepartment, Integer> {
-  static String SELECT_ALL = "SELECT DEPT_ID, SHORT_NAME, LONG_NAME, TYPE FROM MST_DEPT_OFFICE ";
+  static String SELECT_ALL = "SELECT DEPT_ID, SHORT_NAME, LONG_NAME, TYPE, LAST_MODIFIED FROM MST_DEPT_OFFICE ";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -40,6 +40,7 @@ public class PersistentDepartmentDao extends ContentDaoDecorator<Department, Mut
       department.setLongName(resultSet.getString("LONG_NAME"));
       department.setShortName(resultSet.getString("SHORT_NAME"));
       department.setType(resultSet.getInt("TYPE"));
+      department.setLastModified(resultSet.getString("LAST_MODIFIED"));
       AtomicReference<Department> atomicReference = new AtomicReference<>(department);
       return atomicReference.get();
     }

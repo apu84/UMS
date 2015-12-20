@@ -17,23 +17,23 @@ public class ContentDaoDecorator<R, M, I> implements ContentManager<R, M, I> {
   }
 
   public List<R> getAll() throws Exception {
-    return mManager.getAll();
+    return getManager().getAll();
   }
 
   public R get(final I pId) throws Exception {
-    return mManager.get(pId);
+    return getManager().get(pId);
   }
 
   public void update(final M pMutable) throws Exception {
-    mManager.update(pMutable);
+    getManager().update(pMutable);
   }
 
   public void delete(final M pMutable) throws Exception {
-    mManager.delete(pMutable);
+    getManager().delete(pMutable);
   }
 
   public void create(final M pMutable) throws Exception {
-    mManager.create(pMutable);
+    getManager().create(pMutable);
   }
 
   protected static String getLastModifiedSql() {

@@ -4,17 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.common.Resource;
-import org.ums.domain.model.Mutable;
 import org.ums.domain.model.MutableProgram;
 import org.ums.domain.model.Program;
 import org.ums.manager.ContentManager;
 
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
 import javax.ws.rs.*;
-import java.util.List;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Request;
+import javax.ws.rs.core.Response;
 
 @Component
 @Path("/academic/program")
@@ -31,20 +29,12 @@ public class ProgramResource extends Resource {
   @GET
   @Path("/all")
   public JsonObject getAll() throws Exception {
-    List<Program> programs = mManager.getAll();
-    JsonObjectBuilder object = Json.createObjectBuilder();
-    JsonArrayBuilder children = Json.createArrayBuilder();
-    for (Program program : programs) {
-      children.add(mResourceHelper.toJson(program, mUriInfo));
-    }
-    object.add("entries", children);
-    return object.build();
+    return mResourceHelper.getAll(mUriInfo);
   }
 
   @GET
   @Path(PATH_PARAM_OBJECT_ID)
-  public JsonObject get(final @PathParam("object-id") int pObjectId) throws Exception {
-    Program program = mManager.get(pObjectId);
-    return mResourceHelper.toJson(program, mUriInfo);
+  public Response get(final @Context Request pRequest, final @PathParam("object-id") int pObjectId) throws Exception {
+    return mResourceHelper.get(pObjectId, pRequest, mUriInfo);
   }
 }

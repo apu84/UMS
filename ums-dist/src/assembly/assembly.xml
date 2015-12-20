@@ -42,6 +42,8 @@
         <include>aopalliance:aopalliance</include>
         <!--<include>mysql:mysql-connector-java</include>-->
         <include>com.oracle:ojdbc6</include>
+        <include>com.jolbox:bonecp</include>
+        <include>com.google.guava:guava</include>
       </includes>
       <outputDirectory>lib</outputDirectory>
       <useTransitiveDependencies>true</useTransitiveDependencies>

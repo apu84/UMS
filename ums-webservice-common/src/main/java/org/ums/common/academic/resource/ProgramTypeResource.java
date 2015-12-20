@@ -13,6 +13,9 @@ import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Request;
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 @Component
@@ -27,20 +30,12 @@ public class ProgramTypeResource extends MutableProgramTypeResource {
   @GET
   @Path("/all")
   public JsonObject getAll() throws Exception {
-    List<ProgramType> programTypes = mManager.getAll();
-    JsonObjectBuilder object = Json.createObjectBuilder();
-    JsonArrayBuilder children = Json.createArrayBuilder();
-    for (ProgramType programType : programTypes) {
-      children.add(mResourceHelper.toJson(programType, mUriInfo));
-    }
-    object.add("entries", children);
-    return object.build();
+    return mResourceHelper.getAll(mUriInfo);
   }
 
   @GET
   @Path(PATH_PARAM_OBJECT_ID)
-  public JsonObject get(final @PathParam("object-id") int pObjectId) throws Exception {
-    ProgramType programType = mManager.get(pObjectId);
-    return mResourceHelper.toJson(programType, mUriInfo);
+  public Response get(final @Context Request pRequest, final @PathParam("object-id") int pObjectId) throws Exception {
+    return mResourceHelper.get(pObjectId, pRequest, mUriInfo);
   }
 }

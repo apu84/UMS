@@ -3,9 +3,7 @@ package org.ums.domain.model;
 
 import java.util.Date;
 
-public interface MutableSemester extends Semester, Mutable {
-
-  void setId(final int pId);
+public interface MutableSemester extends Semester, Mutable, MutableLastModifier, MutableIdentifier<Integer> {
 
   void setName(final String pName);
 
@@ -16,4 +14,6 @@ public interface MutableSemester extends Semester, Mutable {
   void setStatus(final boolean pStatus);
 
   void setProgramType(final ProgramType pProgram);
+
+  void setProgramTypeId(final int pProgramTypeId);
 }

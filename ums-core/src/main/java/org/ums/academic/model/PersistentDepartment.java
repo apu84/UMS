@@ -20,6 +20,7 @@ public class PersistentDepartment implements MutableDepartment {
   private String mShortName;
   private String mLongName;
   private int mType;
+  private String mLastModified;
 
   public PersistentDepartment() {
 
@@ -46,12 +47,12 @@ public class PersistentDepartment implements MutableDepartment {
     sDepartmentManager.delete(this);
   }
 
-  public int getId() {
+  public Integer getId() {
     return mId;
   }
 
   @Override
-  public void setId(int pId) {
+  public void setId(Integer pId) {
     mId = pId;
   }
 
@@ -85,5 +86,15 @@ public class PersistentDepartment implements MutableDepartment {
   @Override
   public MutableDepartment edit() throws Exception {
     return new PersistentDepartment(this);
+  }
+
+  @Override
+  public String getLastModified() {
+    return mLastModified;
+  }
+
+  @Override
+  public void setLastModified(String pLastModified) {
+    mLastModified = pLastModified;
   }
 }

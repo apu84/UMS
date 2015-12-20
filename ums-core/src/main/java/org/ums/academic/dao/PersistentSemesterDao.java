@@ -16,12 +16,12 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentSemesterDao extends ContentDaoDecorator<Semester, MutableSemester, Integer> {
 
-  static String SELECT_ALL = "SELECT SEMESTER_ID, SEMESTER_NAME, START_DATE, END_DATE, PROGRAM_TYPE, STATUS FROM MST_SEMESTER ";
+  static String SELECT_ALL = "SELECT SEMESTER_ID, SEMESTER_NAME, START_DATE, END_DATE, PROGRAM_TYPE, STATUS, LAST_MODIFIED FROM MST_SEMESTER ";
   static String UPDATE_ONE = "UPDATE MST_SEMESTER SET SEMESTER_NAME = ?,START_DATE = TO_DATE(?, '" + Constants.DATE_FORMAT + "'), " +
-      "END_DATE= TO_DATE(?, '" + Constants.DATE_FORMAT + "'), PROGRAM_TYPE = ?, STATUS = ? ";
+      "END_DATE= TO_DATE(?, '" + Constants.DATE_FORMAT + "'), PROGRAM_TYPE = ?, STATUS = ?, LAST_MODIFIED = " + getLastModifiedSql() + " ";
   static String DELETE_ONE = "DELETE FROM MST_SEMESTER ";
-  static String INSERT_ONE = "INSERT INTO MST_SEMESTER(SEMESTER_ID, SEMESTER_NAME, START_DATE, END_DATE, PROGRAM_TYPE, STATUS) " +
-      "VALUES(?, ?, TO_DATE(?, '" + Constants.DATE_FORMAT + "'), TO_DATE(?, '" + Constants.DATE_FORMAT + "'), ?, ?)";
+  static String INSERT_ONE = "INSERT INTO MST_SEMESTER(SEMESTER_ID, SEMESTER_NAME, START_DATE, END_DATE, PROGRAM_TYPE, STATUS, LAST_MODIFIED) " +
+      "VALUES(?, ?, TO_DATE(?, '" + Constants.DATE_FORMAT + "'), TO_DATE(?, '" + Constants.DATE_FORMAT + "'), ?, ?, " + getLastModifiedSql() + ")";
 
   private JdbcTemplate mJdbcTemplate;
   private DateFormat mDateFormat;
@@ -78,6 +78,7 @@ public class PersistentSemesterDao extends ContentDaoDecorator<Semester, Mutable
       semester.setEndDate(resultSet.getDate("END_DATE"));
       semester.setProgramTypeId(resultSet.getInt("PROGRAM_TYPE"));
       semester.setStatus(resultSet.getBoolean("STATUS"));
+      semester.setLastModified(resultSet.getString("LAST_MODIFIED"));
       AtomicReference<Semester> atomicReference = new AtomicReference<>(semester);
       return atomicReference.get();
     }

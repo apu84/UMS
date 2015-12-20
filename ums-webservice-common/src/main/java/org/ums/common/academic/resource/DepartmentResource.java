@@ -8,12 +8,11 @@ import org.ums.domain.model.Department;
 import org.ums.domain.model.MutableDepartment;
 import org.ums.manager.ContentManager;
 
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
 import javax.ws.rs.*;
-import java.util.List;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Request;
+import javax.ws.rs.core.Response;
 
 @Component
 @Path("/academic/department")
@@ -30,20 +29,12 @@ public class DepartmentResource extends Resource {
   @GET
   @Path("/all")
   public JsonObject getAll() throws Exception {
-    List<Department> departments = mManager.getAll();
-    JsonObjectBuilder object = Json.createObjectBuilder();
-    JsonArrayBuilder children = Json.createArrayBuilder();
-    for (Department department : departments) {
-      children.add(mResourceHelper.toJson(department, mUriInfo));
-    }
-    object.add("entries", children);
-    return object.build();
+    return mResourceHelper.getAll(mUriInfo);
   }
 
   @GET
   @Path(PATH_PARAM_OBJECT_ID)
-  public JsonObject get(final @PathParam("object-id") int pObjectId) throws Exception {
-    Department department = mManager.get(pObjectId);
-    return mResourceHelper.toJson(department, mUriInfo);
+  public Response get(final @Context Request pRequest, final @PathParam("object-id") int pObjectId) throws Exception {
+    return mResourceHelper.get(pObjectId, pRequest, mUriInfo);
   }
 }

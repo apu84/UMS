@@ -1,8 +1,6 @@
 package org.ums.domain.model;
 
-public interface MutableDepartment extends Mutable, Department {
-  void setId(final int pId) throws Exception;
-
+public interface MutableDepartment extends Mutable, Department, MutableLastModifier, MutableIdentifier<Integer> {
   void setLongName(final String pLongName) throws Exception;
 
   void setShortName(final String pShortName) throws Exception;

@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.common.Resource;
-import org.ums.domain.model.MutableSyllabus;
-import org.ums.domain.model.Syllabus;
+import org.ums.domain.model.CourseGroup;
+import org.ums.domain.model.MutableCourseGroup;
 import org.ums.manager.ContentManager;
 
 import javax.json.JsonObject;
@@ -15,13 +15,16 @@ import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 
 @Component
-@Path("/academic/syllabus")
+@Path("/academic/courseGroup")
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
-public class SyllabusResource extends MutableSyllabusResource {
+public class CourseGroupResource extends Resource {
   @Autowired
-  @Qualifier("syllabusManager")
-  ContentManager<Syllabus, MutableSyllabus, String> mManager;
+  ResourceHelper<CourseGroup, MutableCourseGroup, Integer> mResourceHelper;
+
+  @Autowired
+  @Qualifier("courseGroupManager")
+  ContentManager<CourseGroup, MutableCourseGroup, Integer> mManager;
 
   @GET
   @Path("/all")
@@ -31,8 +34,7 @@ public class SyllabusResource extends MutableSyllabusResource {
 
   @GET
   @Path(PATH_PARAM_OBJECT_ID)
-  public Response get(final @Context Request pRequest, final @PathParam("object-id") String pObjectId) throws Exception {
+  public Response get(final @Context Request pRequest, final @PathParam("object-id") int pObjectId) throws Exception {
     return mResourceHelper.get(pObjectId, pRequest, mUriInfo);
   }
 }
-

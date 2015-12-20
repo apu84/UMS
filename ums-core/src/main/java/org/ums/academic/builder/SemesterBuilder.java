@@ -1,6 +1,7 @@
 package org.ums.academic.builder;
 
 
+import org.ums.cache.LocalCache;
 import org.ums.domain.model.MutableProgramType;
 import org.ums.domain.model.MutableSemester;
 import org.ums.domain.model.ProgramType;
@@ -22,21 +23,24 @@ public class SemesterBuilder implements Builder<Semester, MutableSemester> {
     mProgramTypeManager = pProgramTypeManager;
   }
 
-  public void build(final JsonObjectBuilder pBuilder, final Semester pSemester, final UriInfo pUriInfo) throws Exception {
+  public void build(final JsonObjectBuilder pBuilder, final Semester pSemester, final UriInfo pUriInfo, final LocalCache pLocalCache) throws Exception {
     pBuilder.add("id", pSemester.getId());
     pBuilder.add("name", pSemester.getName());
     pBuilder.add("startDate", mDateFormat.format(pSemester.getStartDate()));
     if (pSemester.getEndDate() != null) {
       pBuilder.add("endDate", mDateFormat.format(pSemester.getEndDate()));
     }
-    pBuilder.add("program", pUriInfo.getBaseUriBuilder().path("academic").path("programtype")
-        .path(String.valueOf(pSemester.getProgramType().getId())).build().toString());
+    ProgramType programType = (ProgramType) pLocalCache.cache(() -> pSemester.getProgramType(),
+        pSemester.getProgramTypeId(), ProgramType.class);
+
+    pBuilder.add("programType", pUriInfo.getBaseUriBuilder().path("academic").path("programtype")
+        .path(String.valueOf(programType.getId())).build().toString());
     pBuilder.add("status", pSemester.getStatus());
     pBuilder.add("self", pUriInfo.getBaseUriBuilder().path("academic").path("semester")
         .path(String.valueOf(pSemester.getId())).build().toString());
   }
 
-  public void build(final MutableSemester pMutableSemester, JsonObject pJsonObject) throws Exception {
+  public void build(final MutableSemester pMutableSemester, JsonObject pJsonObject, final LocalCache pLocalCache) throws Exception {
     int id = pJsonObject.getInt("id");
     String name = pJsonObject.getString("name");
     String startDate = pJsonObject.getString("startDate");

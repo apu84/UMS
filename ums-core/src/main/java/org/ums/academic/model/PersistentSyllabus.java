@@ -80,8 +80,23 @@ public class PersistentSyllabus implements MutableSyllabus {
     mProgram = pProgram;
   }
 
+  @Override
+  public MutableSyllabus edit() throws Exception {
+    return new PersistentSyllabus(this);
+  }
+
+  @Override
+  public int getSemesterId() {
+    return mSemesterId;
+  }
+
   public void setSemesterId(int pSemesterId) {
     mSemesterId = pSemesterId;
+  }
+
+  @Override
+  public int getProgramId() {
+    return mProgramId;
   }
 
   public void setProgramId(int pProgramId) {
@@ -89,17 +104,12 @@ public class PersistentSyllabus implements MutableSyllabus {
   }
 
   @Override
-  public MutableSyllabus edit() throws Exception {
-    return new PersistentSyllabus(this);
+  public String getLastModified() {
+    return mLastModified;
   }
 
   @Override
   public void setLastModified(final String pLastModified) {
     mLastModified = pLastModified;
-  }
-
-  @Override
-  public String getLastModified() {
-    return mLastModified;
   }
 }

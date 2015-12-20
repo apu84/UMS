@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.academic.builder.Builder;
 import org.ums.academic.model.PersistentProgramType;
+import org.ums.cache.LocalCache;
 import org.ums.common.academic.resource.ProgramTypeResource;
 import org.ums.common.academic.resource.ResourceHelper;
 import org.ums.domain.model.MutableProgramType;
@@ -38,8 +39,9 @@ public class ProgramTypeResourceHelper extends ResourceHelper<ProgramType, Mutab
 
   public Response post(final JsonObject pJsonObject, final UriInfo pUriInfo) throws Exception {
     MutableProgramType mutableProgramType = new PersistentProgramType();
+    LocalCache localCache = new LocalCache();
     for (Builder<ProgramType, MutableProgramType> builder : mBuilders) {
-      builder.build(mutableProgramType, pJsonObject);
+      builder.build(mutableProgramType, pJsonObject, localCache);
     }
     mutableProgramType.commit(false);
 

@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentProgramDao extends ContentDaoDecorator<Program, MutableProgram, Integer> {
-  static String SELECT_ALL = "SELECT PROGRAM_ID, TYPE_ID, PROGRAM_SHORT_NAME, PROGRAM_LONG_NAME, DEPT_ID FROM MST_PROGRAM ";
+  static String SELECT_ALL = "SELECT PROGRAM_ID, TYPE_ID, PROGRAM_SHORT_NAME, PROGRAM_LONG_NAME, DEPT_ID, LAST_MODIFIED FROM MST_PROGRAM ";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -40,6 +40,7 @@ public class PersistentProgramDao extends ContentDaoDecorator<Program, MutablePr
       program.setDepartmentId(resultSet.getInt("DEPT_ID"));
       program.setShortName(resultSet.getString("PROGRAM_SHORT_NAME"));
       program.setLongName(resultSet.getString("PROGRAM_LONG_NAME"));
+      program.setLastModified(resultSet.getString("LAST_MODIFIED"));
       AtomicReference<Program> atomicReference = new AtomicReference<>(program);
       return atomicReference.get();
     }

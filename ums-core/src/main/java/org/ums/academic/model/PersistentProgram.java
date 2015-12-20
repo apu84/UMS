@@ -24,6 +24,7 @@ public class PersistentProgram implements MutableProgram {
   private String mLongName;
   private Department mDepartment;
   private ProgramType mProgramType;
+  private String mLastModified;
 
   private int mDepartmentId;
   private int mProgramTypeId;
@@ -40,17 +41,13 @@ public class PersistentProgram implements MutableProgram {
     mProgramType = pPersistentProgram.getProgramType();
   }
 
-  public int getId() {
+  public Integer getId() {
     return mId;
   }
 
   @Override
-  public void setId(int pId) {
+  public void setId(Integer pId) {
     mId = pId;
-  }
-
-  public void setDepartmentId(int pDepartmentId) {
-    mDepartmentId = pDepartmentId;
   }
 
   public Department getDepartment() throws Exception {
@@ -90,10 +87,23 @@ public class PersistentProgram implements MutableProgram {
     mProgramType = pProgramType;
   }
 
+  @Override
+  public int getProgramTypeId() {
+    return mProgramTypeId;
+  }
+
   public void setProgramTypeId(int pProgramTypeId) {
     mProgramTypeId = pProgramTypeId;
   }
 
+  @Override
+  public int getDepartmentId() {
+    return mDepartmentId;
+  }
+
+  public void setDepartmentId(int pDepartmentId) {
+    mDepartmentId = pDepartmentId;
+  }
 
   public void delete() throws Exception {
     sProgramManager.delete(this);
@@ -109,5 +119,15 @@ public class PersistentProgram implements MutableProgram {
 
   public MutableProgram edit() throws Exception {
     return new PersistentProgram(this);
+  }
+
+  @Override
+  public String getLastModified() {
+    return mLastModified;
+  }
+
+  @Override
+  public void setLastModified(String pLastModified) {
+    mLastModified = pLastModified;
   }
 }

@@ -28,7 +28,7 @@ public class PersistentSemester implements MutableSemester {
   private Date mEndDate;
   private boolean mStatus;
   private ProgramType mProgramType;
-
+  private String mLastModified;
   private int mProgramTypeId;
 
   public PersistentSemester() {
@@ -43,11 +43,11 @@ public class PersistentSemester implements MutableSemester {
     mProgramType = pOriginal.getProgramType();
   }
 
-  public int getId() {
+  public Integer getId() {
     return mId;
   }
 
-  public void setId(final int pId) {
+  public void setId(final Integer pId) {
     mId = pId;
   }
 
@@ -91,6 +91,11 @@ public class PersistentSemester implements MutableSemester {
     mProgramType = pProgram;
   }
 
+  @Override
+  public int getProgramTypeId() {
+    return mProgramTypeId;
+  }
+
   public void setProgramTypeId(final int pProgramTypeId) {
     mProgramTypeId = pProgramTypeId;
   }
@@ -109,5 +114,15 @@ public class PersistentSemester implements MutableSemester {
 
   public MutableSemester edit() throws Exception {
     return new PersistentSemester(this);
+  }
+
+  @Override
+  public String getLastModified() {
+    return mLastModified;
+  }
+
+  @Override
+  public void setLastModified(String pLastModified) {
+    mLastModified = pLastModified;
   }
 }

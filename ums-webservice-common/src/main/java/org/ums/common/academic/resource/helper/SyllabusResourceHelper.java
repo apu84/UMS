@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.academic.builder.Builder;
 import org.ums.academic.model.PersistentSyllabus;
+import org.ums.cache.LocalCache;
 import org.ums.common.academic.resource.ResourceHelper;
 import org.ums.common.academic.resource.SyllabusResource;
 import org.ums.domain.model.MutableSyllabus;
@@ -38,8 +39,9 @@ public class SyllabusResourceHelper extends ResourceHelper<Syllabus, MutableSyll
 
   public Response post(final JsonObject pJsonObject, final UriInfo pUriInfo) throws Exception {
     MutableSyllabus mutableSyllabus = new PersistentSyllabus();
+    LocalCache localCache = new LocalCache();
     for (Builder<Syllabus, MutableSyllabus> builder : mBuilders) {
-      builder.build(mutableSyllabus, pJsonObject);
+      builder.build(mutableSyllabus, pJsonObject, localCache);
     }
     mutableSyllabus.commit(false);
 

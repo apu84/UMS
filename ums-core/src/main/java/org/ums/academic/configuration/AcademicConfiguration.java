@@ -8,6 +8,7 @@ import org.ums.academic.builder.*;
 import org.ums.academic.dao.*;
 import org.ums.domain.model.*;
 import org.ums.manager.ContentManager;
+import org.ums.manager.CourseGroupManager;
 import org.ums.util.Constants;
 
 import javax.sql.DataSource;
@@ -47,18 +48,6 @@ public class AcademicConfiguration {
   }
 
   @Bean
-  Builder<Semester, MutableSemester> getSemesterBuilder() {
-    return new SemesterBuilder(getGenericDateFormat(), programTypeManager());
-  }
-
-  @Bean
-  List<Builder<Semester, MutableSemester>> getSemesterBuilders() {
-    List<Builder<Semester, MutableSemester>> builders = new ArrayList<>();
-    builders.add(new SemesterBuilder(getGenericDateFormat(), programTypeManager()));
-    return builders;
-  }
-
-  @Bean
   DateFormat getGenericDateFormat() {
     return new SimpleDateFormat(Constants.DATE_FORMAT);
   }
@@ -66,16 +55,6 @@ public class AcademicConfiguration {
   @Bean
   ContentManager<ProgramType, MutableProgramType, Integer> programTypeManager() {
     return new ProgramTypeDao(new JdbcTemplate(mDataSource));
-  }
-
-  @Bean
-  Builder<ProgramType, MutableProgramType> getProgramTypeBuilder() {
-    return new ProgramTypeBuilder();
-  }
-
-  @Bean
-  List<Builder<ProgramType, MutableProgramType>> getProgramTypeBuilders() {
-    return Arrays.asList(new ProgramTypeBuilder());
   }
 
   @Bean
@@ -91,6 +70,16 @@ public class AcademicConfiguration {
   @Bean
   ContentManager<Syllabus, MutableSyllabus, String> syllabusManager() {
     return new PersistentSyllabusDao(new JdbcTemplate(mDataSource));
+  }
+
+  @Bean
+  CourseGroupManager courseGroupManager() {
+    return new PersistentCourseGroupDao(new JdbcTemplate(mDataSource));
+  }
+
+  @Bean
+  ContentManager<Course, MutableCourse, String> courseManager() {
+    return new PersistentCourseDao(new JdbcTemplate(mDataSource));
   }
 
   @Bean
@@ -121,5 +110,47 @@ public class AcademicConfiguration {
   @Bean
   List<Builder<Syllabus, MutableSyllabus>> getSyllabusBuilders() {
     return Arrays.asList(new SyllabusBuilder());
+  }
+
+  @Bean
+  Builder<ProgramType, MutableProgramType> getProgramTypeBuilder() {
+    return new ProgramTypeBuilder();
+  }
+
+  @Bean
+  List<Builder<ProgramType, MutableProgramType>> getProgramTypeBuilders() {
+    return Arrays.asList(new ProgramTypeBuilder());
+  }
+
+  @Bean
+  Builder<Semester, MutableSemester> getSemesterBuilder() {
+    return new SemesterBuilder(getGenericDateFormat(), programTypeManager());
+  }
+
+  @Bean
+  List<Builder<Semester, MutableSemester>> getSemesterBuilders() {
+    List<Builder<Semester, MutableSemester>> builders = new ArrayList<>();
+    builders.add(new SemesterBuilder(getGenericDateFormat(), programTypeManager()));
+    return builders;
+  }
+
+  @Bean
+  Builder<CourseGroup, MutableCourseGroup> getCourseGroupBuilder() {
+    return new CourseGroupBuilder();
+  }
+
+  @Bean
+  List<Builder<CourseGroup, MutableCourseGroup>> getCourseGroupBuilders() {
+    return Arrays.asList(new CourseGroupBuilder());
+  }
+
+  @Bean
+  Builder<Course, MutableCourse> getCourseBuilder() {
+    return new CourseBuilder();
+  }
+
+  @Bean
+  List<Builder<Course, MutableCourse>> getCourseBuilders() {
+    return Arrays.asList(new CourseBuilder());
   }
 }
