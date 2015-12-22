@@ -27,7 +27,7 @@ public abstract class ResourceHelper<R extends EditType<M>, M extends Mutable, I
     EntityTag etag = new EntityTag(getEtag(readOnly));
     //Verify if it matched with etag available in http request
     builder = pRequest.evaluatePreconditions(etag);
-
+    builder = null;
     if (builder == null) {
       LocalCache localCache = new LocalCache();
       builder = Response.ok(toJson(readOnly, pUriInfo, localCache));
@@ -35,10 +35,10 @@ public abstract class ResourceHelper<R extends EditType<M>, M extends Mutable, I
       localCache.invalidate();
     }
 
-    CacheControl cacheControl = new CacheControl();
-    cacheControl.setMaxAge(86400);
-    cacheControl.setPrivate(true);
-    builder.cacheControl(cacheControl);
+//    CacheControl cacheControl = new CacheControl();
+//    cacheControl.setMaxAge(86400);
+//    cacheControl.setPrivate(true);
+//    builder.cacheControl(cacheControl);
 
     return builder.build();
   }

@@ -97,5 +97,5 @@
 <!--  <bean name="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
     <property name="globalSessionTimeout" value="60000"/>
   </bean>-->
-
+  <bean class="org.ums.cache.LocalCacheManager" id="localCache"/>
 </beans>

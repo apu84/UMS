@@ -8,7 +8,7 @@ public class LocalCache {
   private Map<String, Object> mLocalCopy;
 
   public LocalCache() {
-    mLocalCopy = new HashMap();
+    mLocalCopy = new HashMap<String, Object>();
   }
 
   public Object cache(Callable<Object> func, Object pCacheId, Class pObjectClass) throws Exception {

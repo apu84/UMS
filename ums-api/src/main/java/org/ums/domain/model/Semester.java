@@ -3,7 +3,7 @@ package org.ums.domain.model;
 import java.io.Serializable;
 import java.util.Date;
 
-public interface Semester extends Serializable, EditType<MutableSemester>, LastModifier, Cacheable<Integer> {
+public interface Semester extends Serializable, EditType<MutableSemester>, LastModifier, Identifier<Integer> {
   String getName() throws Exception;
 
   Date getStartDate() throws Exception;

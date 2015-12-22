@@ -1,12 +1,14 @@
 package org.ums.academic.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.ums.academic.builder.*;
 import org.ums.academic.dao.*;
 import org.ums.domain.model.*;
+import org.ums.manager.CacheManager;
 import org.ums.manager.ContentManager;
 import org.ums.manager.CourseGroupManager;
 import org.ums.util.Constants;
@@ -23,12 +25,17 @@ public class AcademicConfiguration {
   @Autowired
   DataSource mDataSource;
 
+  @Autowired
+  @Qualifier("localCache")
+  CacheManager mLocalCacheManager;
+
   ContentManager<Semester, MutableSemester, Integer> getPersistentSemesterDao() {
     return new PersistentSemesterDao(new JdbcTemplate(mDataSource), getGenericDateFormat());
   }
 
+  @Bean
   ContentManager<Semester, MutableSemester, Integer> getSemesterCache() {
-    ContentCache<Semester, MutableSemester, Integer> semesterCache = new ContentCache<>();
+    ContentCache<Semester, MutableSemester, Integer> semesterCache = new SemesterCache(mLocalCacheManager);
     semesterCache.setManager(getPersistentSemesterDao());
     return semesterCache;
   }

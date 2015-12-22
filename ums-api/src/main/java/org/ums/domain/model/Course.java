@@ -6,7 +6,7 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
-public interface Course extends Serializable, LastModifier, EditType<MutableCourse>, Cacheable<String> {
+public interface Course extends Serializable, LastModifier, EditType<MutableCourse>, Identifier<String> {
 
   String getNo();
 

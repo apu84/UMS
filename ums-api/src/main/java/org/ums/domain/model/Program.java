@@ -3,7 +3,7 @@ package org.ums.domain.model;
 
 import java.io.Serializable;
 
-public interface Program extends Serializable, EditType<MutableProgram>, LastModifier, Cacheable<Integer> {
+public interface Program extends Serializable, EditType<MutableProgram>, LastModifier, Identifier<Integer> {
 
   ProgramType getProgramType() throws Exception;
 
