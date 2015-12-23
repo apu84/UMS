@@ -1,63 +1,68 @@
 <div class="row">
-    <div class="col-lg-3"></div>
-    <div class="col-lg-6">
-        <div class="panel panel-blue">
-            <div class="panel-heading">New Syllabus Create Form
+  <div class="col-lg-3"></div>
+  <div class="col-lg-6">
+    <div class="panel panel-blue">
+      <div class="panel-heading">New Syllabus Create Form
 
-                <span style='float:right;'><a class="btn btn-white btn-sm" href="#/showSyllabusList"><i class="fa fa-list"></i>&nbsp;
-                    List</a>&nbsp;
+                <span style='float:right;'><a class="btn btn-white btn-sm" href="#/showSyllabusList"><i
+                    class="fa fa-list"></i>&nbsp;
+                  List</a>&nbsp;
                 </span>
-            </div>
-            <div class="panel-body pan">
-                <form action="" class="form-horizontal">
-                    <div class="form-body pal">
-                        <div class="form-group">
-                            <label  class="col-md-3 control-label">Dept./School</label>
-                            <div class="col-md-9">
-                                <select name="dept"  class="form-control required">
-                                    <option value="">Select Dept./School</option>
-                                    <option value="11">CSE</option>
-                                    <option value="22">EEE</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label  class="col-md-3 control-label">Program Type</label>
-                            <div class="col-md-9">
-                                <select name="programType"  class="form-control required">
-                                    <option value="">Select Program Type</option>
-                                    <option value="11">Undergraduate</option>
-                                    <option value="22">PostGraduate</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label  class="col-md-3 control-label">Semester</label>
-                            <div class="col-md-9">
-                                <select name="semesterName"  class="col-md-5 form-control required">
-                                    <option value="">Select Semester</option>
-                                    <option value="2015">Spring, 2015</option>
-                                    <option value="2014">Fall, 2015</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label  class="col-md-3 control-label">Program Name</label>
-                            <div class="col-md-9">
-                                <select name="programName"  class="col-md-5 form-control required">
-                                    <option value="">Select Program Name</option>
-                                    <option value="2015">BSc. In CSE</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-actions text-right pal">
-                        <button type="submit" class="btn btn-success">Create Syllabus</button>
-                    </div>
+      </div>
+      <div class="panel-body pan">
+        <form action="" class="form-horizontal" data-validate="">
+          <div class="form-body pal">
+            <div class="form-group">
+              <label class="col-md-3 control-label">Dept./School</label>
 
-                </form>
+              <div class="col-md-9">
+                <select name="dept" class="form-control required">
+                  <option value="">Select Dept./School</option>
+                  <option value="11">CSE</option>
+                  <option value="22">EEE</option>
+                </select>
+              </div>
             </div>
-        </div>
+            <div class="form-group">
+              <label class="col-md-3 control-label">Program Type</label>
+
+              <div class="col-md-9">
+                <select name="programType" class="form-control required">
+                  <option value="">Select Program Type</option>
+                  <option value="11">Undergraduate</option>
+                  <option value="22">PostGraduate</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-md-3 control-label">Semester</label>
+
+              <div class="col-md-9">
+                <select name="semesterName" class="col-md-5 form-control required">
+                  <option value="">Select Semester</option>
+                  <option value="2015">Spring, 2015</option>
+                  <option value="2014">Fall, 2015</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-md-3 control-label">Program Name</label>
+
+              <div class="col-md-9">
+                <select name="programName" class="col-md-5 form-control required">
+                  <option value="">Select Program Name</option>
+                  <option value="2015">BSc. In CSE</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="form-actions text-right pal">
+            <button type="button" class="btn btn-success" onclick="validate(submit)">Create Syllabus</button>
+          </div>
+
+        </form>
+      </div>
     </div>
-    <div class="col-lg-3"></div>
+  </div>
+  <div class="col-lg-3"></div>
 </div>

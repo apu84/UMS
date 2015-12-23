@@ -2,7 +2,9 @@
 module ums {
   export var UMS = angular.module('UMS', [
     'ngRoute', 'ui.bootstrap', 'ui.router', 'oc.lazyLoad'
-  ]).constant("appConstant", Constants.Default);
+  ]);
+
+  UMS.constant("Constants", Constants.Default);
 
   UMS.config(($stateProvider, $urlRouterProvider) => {
     //
@@ -47,15 +49,15 @@ module ums {
         })
         .state('createSemester', {
           url: "/createSemester",
-          controller: 'NewSemesterController',
+          controller: 'NewSemester',
           templateUrl: 'views/semester/new-semester.html',
           resolve: {
-            loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
               return $ocLazyLoad.load({
                 files: [
                   'vendors/bootstrap-switch/css/bootstrap-switch.css',
                   'vendors/bootstrap-datepicker/css/datepicker.css',
-                  'vendors/jquery-validate/jquery.validate.min.js' ,
+                  'vendors/jquery-validate/jquery.validate.min.js',
                   'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
                   'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
                 ]
@@ -65,15 +67,15 @@ module ums {
         })
         .state('createSyllabus', {
           url: "/createSyllabus",
-          controller: 'NewSyllabusController',
+          controller: 'NewSyllabus',
           templateUrl: 'views/syllabus/new-syllabus.html',
           resolve: {
-            loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
               return $ocLazyLoad.load({
                 files: [
                   'vendors/bootstrap-switch/css/bootstrap-switch.css',
                   'vendors/bootstrap-datepicker/css/datepicker.css',
-                  'vendors/jquery-validate/jquery.validate.min.js' ,
+                  'vendors/jquery-validate/jquery.validate.min.js',
                   'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
                   'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
                 ]
@@ -85,12 +87,12 @@ module ums {
           url: "/showSyllabusList",
           templateUrl: 'views/syllabus/list-syllabus.html',
           resolve: {
-            loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
               return $ocLazyLoad.load({
                 files: [
                   'vendors/bootstrap-switch/css/bootstrap-switch.css',
                   'vendors/bootstrap-datepicker/css/datepicker.css',
-                  'vendors/jquery-validate/jquery.validate.min.js' ,
+                  'vendors/jquery-validate/jquery.validate.min.js',
                   'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
                   'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
                 ]
@@ -100,15 +102,15 @@ module ums {
         })
         .state('viewFullSyllabus', {
           url: "/viewFullSyllabus",
-          controller: 'FullSyllabusController',
+          controller: 'FullSyllabus',
           templateUrl: 'views/syllabus/view-full-syllabus.html',
           resolve: {
-            loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
               return $ocLazyLoad.load({
                 files: [
                   'vendors/bootstrap-switch/css/bootstrap-switch.css',
                   'vendors/bootstrap-datepicker/css/datepicker.css',
-                  'vendors/jquery-validate/jquery.validate.min.js' ,
+                  'vendors/jquery-validate/jquery.validate.min.js',
                   'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
                   'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
                 ]
@@ -118,15 +120,15 @@ module ums {
         })
         .state('createStudent', {
           url: "/createStudent",
-          controller: 'NewStudentController',
+          controller: 'NewStudent',
           templateUrl: 'views/student/new-student.html',
           resolve: {
-            loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
               return $ocLazyLoad.load({
                 files: [
                   'vendors/bootstrap-switch/css/bootstrap-switch.css',
                   'vendors/bootstrap-datepicker/css/datepicker.css',
-                  'vendors/jquery-validate/jquery.validate.min.js' ,
+                  'vendors/jquery-validate/jquery.validate.min.js',
                   'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
                   'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
                 ]
@@ -136,15 +138,15 @@ module ums {
         })
         .state('createCourse', {
           url: "/createCourse",
-          controller: 'NewCourseController',
+          controller: 'NewCourse',
           templateUrl: 'views/course/new-course.html',
           resolve: {
-            loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
               return $ocLazyLoad.load({
                 files: [
                   'vendors/bootstrap-switch/css/bootstrap-switch.css',
                   'vendors/bootstrap-datepicker/css/datepicker.css',
-                  'vendors/jquery-validate/jquery.validate.min.js' ,
+                  'vendors/jquery-validate/jquery.validate.min.js',
                   'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
                   'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
                 ]
@@ -154,15 +156,15 @@ module ums {
         })
         .state('semesterSyllabusMap', {
           url: "/semesterSyllabusMap",
-          controller: 'SemesterSyllabusMapController',
+          controller: 'SemesterSyllabusMap',
           templateUrl: 'views/semester/semester-syllabus-map.html',
           resolve: {
-            loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
               return $ocLazyLoad.load({
                 files: [
                   'vendors/bootstrap-switch/css/bootstrap-switch.css',
                   'vendors/bootstrap-datepicker/css/datepicker.css',
-                  'vendors/jquery-validate/jquery.validate.min.js' ,
+                  'vendors/jquery-validate/jquery.validate.min.js',
                   'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
                   'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
                 ]
@@ -175,7 +177,7 @@ module ums {
           controller: 'ChangePassword',
           templateUrl: 'views/common/change-password.html',
           resolve: {
-            loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
               return $ocLazyLoad.load({
                 files: [
                   'vendors/jquery-validate/jquery.validate.min.js'

@@ -1,154 +1,159 @@
 module ums {
-  UMS.controller('AppController', ($scope, $rootScope, $routeParams, $location) => {
-    $rootScope.style = 'style1';
-    $rootScope.theme = 'pink-blue';
-    $scope.data = {};
-    $scope.effect = '';
-    $scope.header = {
-      form: false,
-      chat: false,
-      theme: false,
-      footer: true,
-      history:false,
-      animation:'',
-      boxed:'',
-      layout_menu:'',
-      theme_style:'style1',
-      header_topbar:'static',
-      menu_style:'sidebar-default',
-      menu_collapse: '',
-      menu_style_restore: 'sidebar-default',
-      layout_horizontal_menu:'',
+  export class AppController {
+    public static $inject = ['$scope', '$rootScope'];
 
-      toggle: function(k){
-        switch(k){
-          case 'chat':
-            $scope.header.chat = !$scope.header.chat;
-            break;
-          case 'form':
-            $scope.header.form = !$scope.header.form;
-            break;
-          case 'sitebar':
-            $scope.header.menu_style = $scope.header.menu_style ? '' : (($scope.header.layout_menu === '') ? 'sidebar-collapsed' : 'right-side-collapsed');
-            break;
-          case 'theme':
-            $scope.header.theme = !$scope.header.theme;
-            break;
-          case 'history':
-            $scope.header.history = !$scope.header.history;
-            $scope.header.menu_style = $scope.header.history ? 'sidebar-collapsed' : 'sidebar-default';
-            break;
-        }
-      },
+    constructor(private $scope:any,
+                private $rootScope:any) {
+      this.$rootScope.style = 'style1';
+      this.$rootScope.theme = 'pink-blue';
+      this.$scope.data = {};
+      this.$scope.effect = '';
+      this.$scope.header = {
+        form: false,
+        chat: false,
+        theme: false,
+        footer: true,
+        history: false,
+        animation: '',
+        boxed: '',
+        layout_menu: '',
+        theme_style: 'style1',
+        header_topbar: 'static',
+        menu_style: 'sidebar-default',
+        menu_collapse: '',
+        menu_style_restore: 'sidebar-default',
+        layout_horizontal_menu: '',
 
-      collapse: function(c) {
-        if (c === 'change') {
-          $scope.header.menu_collapse = '';
-        } else {
-          if ($scope.header.menu_style) {
-            $scope.header.menu_style = '';
-            $scope.header.menu_collapse = $scope.header.menu_collapse ? '' : 'sidebar-collapsed';
-          } else {
-            $scope.header.menu_collapse = $scope.header.menu_collapse ? '' : 'sidebar-collapsed';
-            $scope.header.menu_style = $scope.header.menu_style_restore;
+        toggle: function (k) {
+          switch (k) {
+            case 'chat':
+              this.$scope.header.chat = !$scope.header.chat;
+              break;
+            case 'form':
+              this.$scope.header.form = !$scope.header.form;
+              break;
+            case 'sitebar':
+              this.$scope.header.menu_style = this.$scope.header.menu_style ? '' : (($scope.header.layout_menu === '') ? 'sidebar-collapsed' : 'right-side-collapsed');
+              break;
+            case 'theme':
+              this.$scope.header.theme = !$scope.header.theme;
+              break;
+            case 'history':
+              this.$scope.header.history = !$scope.header.history;
+              this.$scope.header.menu_style = this.$scope.header.history ? 'sidebar-collapsed' : 'sidebar-default';
+              break;
           }
+        },
+
+        collapse: (c) => {
+          if (c === 'change') {
+            this.$scope.header.menu_collapse = '';
+          } else {
+            if ($scope.header.menu_style) {
+              this.$scope.header.menu_style = '';
+              this.$scope.header.menu_collapse = this.$scope.header.menu_collapse ? '' : 'sidebar-collapsed';
+            } else {
+              this.$scope.header.menu_collapse = this.$scope.header.menu_collapse ? '' : 'sidebar-collapsed';
+              this.$scope.header.menu_style = this.$scope.header.menu_style_restore;
+            }
+          }
+
+        }
+      };
+
+      this.$scope.$on('$stateChangeSuccess', (event, toState, toParams, fromState, fromParams) => {
+        this.$scope.header.animation = 'fadeInUp';
+        setTimeout(function () {
+          this.$scope.header.animation = '';
+        }, 100);
+
+        $('.sidebar-collapse').removeClass('in').addClass('collapse');
+
+        this.$scope.data = $.fn.Data.get(toState.url);
+        if (-1 == $.inArray(toState.url, ['/extra-500', '/extra-404', '/extra-lock-screen', '/extra-signup', '/extra-signin'])) {
+          $('body').removeClass('bounceInLeft');
+          $("body>.default-page").show();
+          $("body>.extra-page").hide();
+        }
+        else {
+          window.scrollTo(0, 0);
         }
 
-      }
-    };
+        this.$scope.header.boxed = '';
+        this.$scope.header.footer = true;
 
-    $scope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams){
-      $scope.header.animation = 'fadeInUp';
-      setTimeout(function(){
-        $scope.header.animation = '';
-      }, 100);
+        this.$rootScope.style = 'style1';
+        this.$rootScope.theme = 'pink-blue';
 
-      $('.sidebar-collapse').removeClass('in').addClass('collapse');
+        if ('/layout-left-sidebar' === toState.url) {
+          this.$scope.header.layout_menu = '';
+          this.$scope.header.header_topbar = '';
+          this.$scope.header.layout_horizontal_menu = '';
+        }
+        else if ('/layout-left-sidebar-collapsed' === toState.url) {
+          this.$scope.header.layout_menu = '';
+          this.$scope.header.header_topbar = 'sidebar-collapsed';
+          this.$scope.header.layout_horizontal_menu = '';
+        }
+        else if ('/layout-right-sidebar' === toState.url) {
+          this.$scope.header.layout_menu = 'right-sidebar';
+          this.$scope.header.header_topbar = '';
+          this.$scope.header.layout_horizontal_menu = '';
+        }
+        else if ('/layout-right-sidebar-collapsed' === toState.url) {
+          this.$scope.header.layout_menu = 'right-sidebar';
+          this.$scope.header.header_topbar = 'right-side-collapsed';
+          this.$scope.header.layout_horizontal_menu = '';
+        }
+        else if ('/layout-horizontal-menu' === toState.url) {
+          this.$scope.header.layout_menu = '';
+          this.$scope.header.header_topbar = 'horizontal-menu-page';
+          this.$scope.header.layout_horizontal_menu = 'horizontal-menu hidden-sm hidden-xs';
+        }
+        else if ('/layout-horizontal-menu-sidebar' === toState.url) {
+          this.$scope.header.layout_horizontal_menu = 'horizontal-menu hidden-sm hidden-xs';
+        }
+        else if ('/layout-fixed-topbar' === toState.url) {
+          this.$scope.header.layout_menu = '';
+          this.$scope.header.header_topbar = 'fixed-topbar';
+          this.$scope.header.layout_horizontal_menu = '';
+        }
+        else if ('/layout-boxed' === toState.url) {
+          this.$scope.header.boxed = 'container';
+        }
+        else if ('/layout-hidden-footer' == toState.url) {
+          this.$scope.header.footer = false;
+        }
+        else if ($.inArray(toState.url, ['/extra-500', '/extra-404']) >= 0) {
+          this.$rootScope.style = 'style1';
+          this.$rootScope.theme = 'pink-violet';
+        }
+      });
 
-      $scope.data = $.fn.Data.get(toState.url);
-      if(-1 == $.inArray(toState.url, ['/extra-500', '/extra-404', '/extra-lock-screen', '/extra-signup', '/extra-signin'])){
-        $('body').removeClass('bounceInLeft');
-        $("body>.default-page").show();
-        $("body>.extra-page").hide();
-      }
-      else{
-        window.scrollTo(0,0);
-      }
+      this.$scope.style_change = () => {
+        this.$rootScope.style = this.$scope.header.theme_style;
+      };
 
-      $scope.header.boxed = '';
-      $scope.header.footer = true;
+      this.$scope.theme_change = (t) => {
+        this.$rootScope.theme = t;
+      };
 
-      $rootScope.style = 'style1';
-      $rootScope.theme = 'pink-blue';
-
-      if('/layout-left-sidebar' === toState.url){
-        $scope.header.layout_menu = '';
-        $scope.header.header_topbar = '';
-        $scope.header.layout_horizontal_menu = '';
-      }
-      else if('/layout-left-sidebar-collapsed' === toState.url){
-        $scope.header.layout_menu = '';
-        $scope.header.header_topbar = 'sidebar-collapsed';
-        $scope.header.layout_horizontal_menu = '';
-      }
-      else if('/layout-right-sidebar' === toState.url){
-        $scope.header.layout_menu = 'right-sidebar';
-        $scope.header.header_topbar = '';
-        $scope.header.layout_horizontal_menu = '';
-      }
-      else if('/layout-right-sidebar-collapsed' === toState.url){
-        $scope.header.layout_menu = 'right-sidebar';
-        $scope.header.header_topbar = 'right-side-collapsed';
-        $scope.header.layout_horizontal_menu = '';
-      }
-      else if('/layout-horizontal-menu' === toState.url){
-        $scope.header.layout_menu = '';
-        $scope.header.header_topbar = 'horizontal-menu-page';
-        $scope.header.layout_horizontal_menu = 'horizontal-menu hidden-sm hidden-xs';
-      }
-      else if('/layout-horizontal-menu-sidebar' === toState.url){
-        $scope.header.layout_horizontal_menu = 'horizontal-menu hidden-sm hidden-xs';
-      }
-      else if('/layout-fixed-topbar' === toState.url){
-        $scope.header.layout_menu = '';
-        $scope.header.header_topbar = 'fixed-topbar';
-        $scope.header.layout_horizontal_menu = '';
-      }
-      else if('/layout-boxed' === toState.url){
-        $scope.header.boxed = 'container';
-      }
-      else if('/layout-hidden-footer' == toState.url){
-        $scope.header.footer = false;
-      }
-      else if($.inArray(toState.url, ['/extra-500', '/extra-404'])>=0){
-        $rootScope.style = 'style1';
-        $rootScope.theme = 'pink-violet';
-      }
-    });
-
-    $scope.style_change = function(){
-      $rootScope.style = $scope.header.theme_style;
-    };
-
-    $scope.theme_change = function(t){
-      $rootScope.theme = t;
-    };
-
-    $(window).scroll(function(){
-      if ($(this).scrollTop() > 0) {
-        $('.quick-sidebar').css('top','0');
-      } else {
-        $('.quick-sidebar').css('top','50px');
-      }
-    });
-/*    $('.quick-sidebar > .header-quick-sidebar').slimScroll({
-      "height": $(window).height() - 50,
-      'width': '280px',
-      "wheelStep": 30
-    });*/
-    $('#news-ticker-close').click(function(e){
-      $('.news-ticker').remove();
-    });
-
-  });
+      $(window).scroll(function () {
+        if ($(this).scrollTop() > 0) {
+          $('.quick-sidebar').css('top', '0');
+        } else {
+          $('.quick-sidebar').css('top', '50px');
+        }
+      });
+      /*    $('.quick-sidebar > .header-quick-sidebar').slimScroll({
+       "height": $(window).height() - 50,
+       'width': '280px',
+       "wheelStep": 30
+       });*/
+      $('#news-ticker-close').click(function (e) {
+        $('.news-ticker').remove();
+      });
+    }
+  }
+  UMS.controller('AppController', AppController);
 }
