@@ -14,6 +14,6 @@
 /// <reference path='controller/MainController.ts'/>
 
 
-/// <reference path='directive/LeftNavigation.ts'/>
+/// <reference path='directive/LeftMenu.ts'/>
 /// <reference path='directive/DisableOperation.ts'/>
 /// <reference path='directive/Validate.ts'/>
