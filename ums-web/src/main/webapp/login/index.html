@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <title>IUMS</title>
+  <link type="text/css" rel="stylesheet" href="../resources/css/bootstrap.css"/>
+  <link type="text/css" rel="stylesheet" href="../resources/css/layout.css"/>
+  <script type="text/javascript" src="../resources/js/jquery-1.11.3.min.js"></script>
+  <script type="text/javascript" src="../resources/js/bootstrap.js"></script>
+  <script type="text/javascript" src="../resources/js/site.js"></script>
+  <script type="text/javascript" src="../resources/js/login.js"></script>
+  <script type="text/javascript">
+    $('#loginForm').submit(function (event) {
+      event.preventDefault();
+    });
+    function authenticate() {
+      var authenticationHelper = new Authentication();
+      authenticationHelper.authenticate();
+    }
+  </script>
+</head>
+<body>
+<div class="container login-wrapper">
+  <div class="row">
+    <div class="col-md-7 col-sm-7 hidden-xs login-left"></div>
+    <div class="col-sm-12 login-right">
+      <div class="row">
+        <h2 class="login-head-title">Integrated University Management System</h2>
+
+        <div class="col-sm-3 col-xs-2 text-center branding"><img src="../App_Style/images/branding.jpg" title="IUMS"
+                                                                 alt="IUMS" height="92"></div>
+        <div class="col-sm-9 col-xs-10">
+          <blockquote>
+            <p class="IUMS-title">IUMS <span>for</span></p>
+            <span class="IUMS-slogan">Ahsanullah University of Science and Technology (AUST)</span></blockquote>
+        </div>
+      </div>
+      <div class="IUMS-sub-head">Sign in with your IUMS Id</div>
+      <form id='loginForm' action='' method='post'>
+        <div class="contact-wrap">
+          <div class="contact-sec">
+            <label for="userName" class="contact-label">User ID</label>
+            <input name="userName" type="text" class="contact-input" id="userName"/>
+          </div>
+          <div class="contact-sec">
+            <label for="password" class="contact-label">Password</label>
+            <input name="password" type="text" class="contact-input" id="password"/>
+          </div>
+          <br/>
+          <br/>
+
+          <div class="text-center">
+            <input type="button" class="btns" value="Sign In" onclick="window.location.href = '../'"/>
+          </div>
+        </div>
+      </form>
+      <div class="login-forgotpassword"><a href="">Can’t access your account?</a></div>
+      <p class="copy-right">Your work account can be used anywhere you see this symbol. <br/>
+        © 2015 IUMS Terms of use Privacy & Cookies</p>
+    </div>
+  </div>
+</div>
+</body>
+</html>
