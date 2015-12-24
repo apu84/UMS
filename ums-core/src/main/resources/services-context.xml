@@ -76,11 +76,13 @@
 -->
   </bean>
 
+  <bean id="umsAuthBasic" class="org.ums.filter.UMSHttpAuthenticationFilter"/>
+
   <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
     <property name="securityManager" ref="securityManager"/>
     <property name="filterChainDefinitions">
       <value>
-        /** = ssl[8443],noSessionCreation,authcBasic
+        /** = ssl[8443],noSessionCreation,umsAuthBasic
       </value>
     </property>
   </bean>

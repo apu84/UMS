@@ -1,6 +1,5 @@
 module ums {
   export class Unauthorized {
-    public static $inject = ['$q', 'BaseUri'];
 
     constructor(private $q:ng.IQService,
                 private baseUri:BaseUri) {
@@ -22,6 +21,7 @@ module ums {
     }
   }
 
+  Unauthorized.$inject = ['$q', 'BaseURI'];
   UMS.factory('UnauthorizedInterceptor', Unauthorized);
 
   UMS.config(['$httpProvider', function ($httpProvider:ng.IHttpProvider) {

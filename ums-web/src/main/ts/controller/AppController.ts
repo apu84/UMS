@@ -63,7 +63,7 @@ module ums {
 
       this.$scope.$on('$stateChangeSuccess', (event, toState, toParams, fromState, fromParams) => {
         this.$scope.header.animation = 'fadeInUp';
-        setTimeout(function () {
+        setTimeout( () => {
           this.$scope.header.animation = '';
         }, 100);
 
@@ -138,7 +138,7 @@ module ums {
         this.$rootScope.theme = t;
       };
 
-      $(window).scroll(function () {
+      $(window).scroll( () => {
         if ($(this).scrollTop() > 0) {
           $('.quick-sidebar').css('top', '0');
         } else {

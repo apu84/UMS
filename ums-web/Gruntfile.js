@@ -15,7 +15,7 @@ module.exports = function (grunt) {
                 livereload: true
             },
             static_resource: {
-                files: ['**/*.html', '**/*.css', '**/*.jpg', '**/*.gif', '**/*.png'],
+                files: ['**/*.*'],
                 tasks: ['sync']
             },
             ts: {
@@ -41,9 +41,9 @@ module.exports = function (grunt) {
         sync: {
             main: {
                 files: [{
-                    cwd: 'src/main/webapp/iums/',
-                    src: ['**/*.html', '**/*.css', '**/*.jpg', '**/*.gif', '**/*.png'],
-                    dest: '<%= pack.dest %>/iums/'
+                    cwd: 'src/main/webapp/',
+                    src: ['**/*.*'],
+                    dest: '<%= pack.dest %>/'
                 }// makes all src relative to cwd
                 ]
             }

@@ -1,7 +1,6 @@
 package org.ums.common.login;
 
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Component;
 import org.ums.common.Resource;
@@ -9,10 +8,8 @@ import org.ums.common.Resource;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Response;
 
 @Component
 @Path("/login")
@@ -23,12 +20,12 @@ public class UMSLogin {
   @GET
   public JsonObject login() throws Exception {
     Subject currentUser = SecurityUtils.getSubject();
-    Session session = currentUser.getSession(false);
-    String userName = session.getAttribute("currentUser").toString();
+    String userName = currentUser.getPrincipal().toString();
     final JsonObjectBuilder builder = Json.createObjectBuilder();
     builder.add("firstName", userName);
     builder.add("surName", userName);
     builder.add("username", userName);
     return builder.build();
   }
+
 }

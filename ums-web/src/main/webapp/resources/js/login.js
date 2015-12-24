@@ -8,17 +8,21 @@ var Authentication = (function () {
   Authentication.prototype.authenticate = function () {
     eraseAllCookies();
     var userName = document.getElementById('userName').value;
+    console.debug("userName: " + userName);
     var password = document.getElementById('password').value;
 
     var credentials = "Basic " + btoa(userName + ":" + password);
-
+    console.debug(credentials);
     $.ajax({
+      crossDomain: true,
       type: "GET",
       async: true,
       url: endpointUrl,
       dataType: 'json',
+      withCredentials: true,
       headers: {
-        "Authorization": credentials
+        "Authorization": credentials,
+        "Accept": "application/json"
       },
       success: function (user) {
         console.log("submitting the form !!");
@@ -30,13 +34,14 @@ var Authentication = (function () {
         console.log("failed....");
       },
       error: (function (httpObj, textStatus) {
+
         if (httpObj.status == 200)
           startApplication();
         else if (httpObj.status == 401) {
           presentErrorMessage("Incorrect username or password!");
         }
         else {
-          presentErrorMessage("Login Failed! " + " " + httpObj.status + " " + textStatus);
+          presentErrorMessage("Login Failed! " + "Incorrect username or password!");
         }
       })
     });

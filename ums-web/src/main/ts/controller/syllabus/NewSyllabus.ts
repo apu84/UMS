@@ -4,6 +4,6 @@ module ums {
       
     }
   }
-  UMS.controller('NewSyllabusController', NewSyllabus);
+  UMS.controller('NewSyllabus', NewSyllabus);
 }
 
