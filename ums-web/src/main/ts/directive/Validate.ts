@@ -5,7 +5,9 @@ module ums {
     }
 
     public restrict:string = 'A';
-    public scope = false;
+    public scope = {
+      onvalidate: "&"
+    };
 
     public link = ($scope:any, element:JQuery, attributes) => {
       $(element).validate({
@@ -14,11 +16,11 @@ module ums {
         }
       });
 
-      $scope.validate = (submit:Function) => {
-        if ($(element).valid()) {
-          submit();
+      $(element).find('button').on('click', function(){
+        if($(element).valid()){
+          $scope.onvalidate();
         }
-      }
+      });
     }
   }
 

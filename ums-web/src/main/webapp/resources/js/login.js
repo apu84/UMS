@@ -35,8 +35,9 @@ var Authentication = (function () {
       },
       error: (function (httpObj, textStatus) {
 
-        if (httpObj.status == 200)
+        if (httpObj.status == 200) {
           startApplication();
+        }
         else if (httpObj.status == 401) {
           presentErrorMessage("Incorrect username or password!");
         }
