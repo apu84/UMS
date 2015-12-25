@@ -1,7 +1,8 @@
 ///<reference path="constants.ts"/>
+
 module ums {
   export var UMS = angular.module('UMS', [
-    'ngRoute', 'ui.bootstrap', 'ui.router', 'oc.lazyLoad'
+    'ngRoute', 'ui.bootstrap', 'ui.router', 'oc.lazyLoad', 'LocalStorageModule', 'ngCookies'
   ]);
 
   UMS.constant("Constants", Constants.Default);
@@ -46,6 +47,10 @@ module ums {
               });
             }]
           }
+        })
+        .state('logout', {
+          url: "/logout",
+          controller: 'Logout'
         })
         .state('createSemester', {
           url: "/createSemester",

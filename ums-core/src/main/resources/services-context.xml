@@ -82,7 +82,7 @@
     <property name="securityManager" ref="securityManager"/>
     <property name="filterChainDefinitions">
       <value>
-        /** = ssl[8443],noSessionCreation,umsAuthBasic
+        /** = noSessionCreation,umsAuthBasic
       </value>
     </property>
   </bean>

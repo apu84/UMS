@@ -7,17 +7,23 @@
 /// <reference path='lib/zabuto_calendar.d.ts'/>
 /// <reference path='lib/bootstrap-switch.d.ts'/>
 /// <reference path='lib/uri.d.ts'/>
+/// <reference path='lib/angular-cookies.d.ts'/>
 
 
 /// <reference path='ums.ts'/>
 /// <reference path='data.ts'/>
 /// <reference path='controller/AppController.ts'/>
 /// <reference path='controller/MainController.ts'/>
+
 /// <reference path='controller/student/NewStudent.ts'/>
 /// <reference path='controller/semester/NewSemester.ts'/>
 /// <reference path='controller/semester/SemesterSyllabusMap.ts'/>
+
 /// <reference path='controller/course/NewCourse.ts'/>
+
 /// <reference path='controller/common/ChangePassword.ts'/>
+/// <reference path='controller/common/Logout.ts'/>
+
 /// <reference path='controller/syllabus/FullSyllabus.ts'/>
 /// <reference path='controller/syllabus/NewSyllabus.ts'/>
 
