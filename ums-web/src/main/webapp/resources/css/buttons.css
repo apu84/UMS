@@ -1,0 +1,140 @@
+
+
+/* Common button styles */
+.btn {
+	float: left;
+	margin-top:20px;
+	margin-right:10px;
+	padding: 14px 40px;
+	border: none;
+	background: none;
+	color: inherit;
+	vertical-align: middle;
+	position: relative;
+	z-index: 1;
+	-webkit-backface-visibility: hidden;
+	-moz-osx-font-smoothing: grayscale;
+	background-color: #018002;
+	font-size: 16px;
+	color: #ffffff;
+}
+.btn:focus {
+	outline: none;
+}
+.btn > span {
+	vertical-align: middle;
+}
+
+
+/* Naira */
+.btn-signin {
+	padding: 0;
+	overflow: hidden;
+	-webkit-transition: background-color 0.3s;
+	transition: background-color 0.3s;
+}
+.btn-signin::before {
+	content: '';
+	position: absolute;
+	left: -50%;
+	width: 200%;
+	height: 200%;
+	background: #079209;
+	top: -50%;
+	z-index: -1;
+	-webkit-transform: translate3d(0, -100%, 0) rotate3d(0, 0, 1, -10deg);
+	transform: translate3d(0, -100%, 0) rotate3d(0, 0, 1, -10deg);
+}
+.btn-signin > span {
+	display: block;
+}
+.btn-signin .button__icon {
+	position: absolute;
+	top: 0;
+	width: 100%;
+	left: 0;
+	color: #fff;
+	-webkit-transform: translate3d(0, -100%, 0);
+	transform: translate3d(0, -100%, 0);
+}
+.btn-signin > span,
+.btn-signin .button__icon {
+	padding: 14px 40px;
+	-webkit-transition: -webkit-transform 0.3s;
+	transition: transform 0.3s;
+	-webkit-transition-timing-function: cubic-bezier(0.75, 0, 0.125, 1);
+	transition-timing-function: cubic-bezier(0.75, 0, 0.125, 1);
+}
+.btn-signin:hover::before {
+	-webkit-animation: anim-naira-1 0.3s forwards ease-in;
+	animation: anim-naira-1 0.3s forwards ease-in;
+}
+@-webkit-keyframes anim-naira-1 {
+	50% {
+		-webkit-transform: translate3d(0, -50%, 0) rotate3d(0, 0, 1, -10deg);
+		transform: translate3d(0, -50%, 0) rotate3d(0, 0, 1, -10deg);
+		-webkit-animation-timing-function: ease-out;
+		animation-timing-function: ease-out;
+	}
+	100% {
+		-webkit-transform: translate3d(0, 0%, 0) rotate3d(0, 0, 1, 0deg);
+		transform: translate3d(0, 0%, 0) rotate3d(0, 0, 1, 0deg);
+	}
+}
+@keyframes anim-naira-1 {
+	50% {
+		-webkit-transform: translate3d(0, -50%, 0) rotate3d(0, 0, 1, -10deg);
+		transform: translate3d(0, -50%, 0) rotate3d(0, 0, 1, -10deg);
+		-webkit-animation-timing-function: ease-out;
+		animation-timing-function: ease-out;
+	}
+	100% {
+		-webkit-transform: translate3d(0, 0%, 0) rotate3d(0, 0, 1, 0deg);
+		transform: translate3d(0, 0%, 0) rotate3d(0, 0, 1, 0deg);
+	}
+}
+@-webkit-keyframes anim-naira-2 {
+	50% {
+		-webkit-transform: translate3d(0, 50%, 0) rotate3d(0, 0, 1, 10deg);
+		transform: translate3d(0, 50%, 0) rotate3d(0, 0, 1, 10deg);
+		-webkit-animation-timing-function: ease-out;
+		animation-timing-function: ease-out;
+	}
+	100% {
+		-webkit-transform: translate3d(0, 0%, 0) rotate3d(0, 0, 1, 0deg);
+		transform: translate3d(0, 0%, 0) rotate3d(0, 0, 1, 0deg);
+	}
+}
+@keyframes anim-naira-2 {
+	50% {
+		-webkit-transform: translate3d(0, 50%, 0) rotate3d(0, 0, 1, 10deg);
+		transform: translate3d(0, 50%, 0) rotate3d(0, 0, 1, 10deg);
+		-webkit-animation-timing-function: ease-out;
+		animation-timing-function: ease-out;
+	}
+	100% {
+		-webkit-transform: translate3d(0, 0%, 0) rotate3d(0, 0, 1, 0deg);
+		transform: translate3d(0, 0%, 0) rotate3d(0, 0, 1, 0deg);
+	}
+}
+.btn-signin:hover {
+	background-color: #37474f;
+	-webkit-transition: background-color 0s 0.3s;
+	transition: background-color 0s 0.3s;
+}
+.btn-signin:hover .button__icon {
+	-webkit-transform: translate3d(0, 0, 0);
+	transform: translate3d(0, 0, 0);
+}
+.btn-signin:hover > span {
+	opacity: 0;
+	-webkit-transform: translate3d(0, 100%, 0);
+	transform: translate3d(0, 100%, 0);
+}
+
+
+
+
+
+
+

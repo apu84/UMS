@@ -19,7 +19,7 @@ module ums {
         layout_menu: '',
         theme_style: 'style1',
         header_topbar: 'static',
-        menu_style: 'sidebar-default',
+        menu_style: 'sidebar-colors',
         menu_collapse: '',
         menu_style_restore: 'sidebar-default',
         layout_horizontal_menu: '',

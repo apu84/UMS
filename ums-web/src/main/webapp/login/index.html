@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -11,10 +11,10 @@
 
   <title>IUMS</title>
   <link type="text/css" rel="stylesheet" href="../resources/css/bootstrap.css"/>
+  <link type="text/css" rel="stylesheet" href="../resources/css/buttons.css" />
   <link type="text/css" rel="stylesheet" href="../resources/css/layout.css"/>
   <script type="text/javascript" src="../resources/js/jquery-1.11.3.min.js"></script>
   <script type="text/javascript" src="../resources/js/bootstrap.js"></script>
-  <script type="text/javascript" src="../resources/js/site.js"></script>
   <script type="text/javascript" src="../resources/js/login.js"></script>
   <script type="text/javascript">
     $('#loginForm').submit(function (event) {
@@ -45,25 +45,23 @@
       <div class="IUMS-sub-head">Sign in with your IUMS Id</div>
       <form id='loginForm' action='' method='post'>
         <div class="contact-wrap">
-          <div class="contact-sec">
+          <div class="form-group">
             <label for="userName" class="contact-label">User ID</label>
-            <input name="userName" type="text" class="contact-input" id="userName"/>
+            <input name="userName" type="text" class="form-control" id="userName" placeholder="Enter your User ID"/>
           </div>
-          <div class="contact-sec">
+          <div class="form-group">
             <label for="password" class="contact-label">Password</label>
-            <input name="password" type="password" class="contact-input" id="password"/>
+            <input name="password" type="password" class="form-control" id="password" placeholder="Enter your password"/>
           </div>
-          <br/>
-          <br/>
+          <div id="messages" style="height: 15px;color: red;"></div>
 
           <div class="text-center">
-            <input type="button" class="btns" value="Sign In" onclick="authenticate(); return false;"/>
+            <button type="button" class="btn btn-signin" onclick="authenticate(); return false;"><i class="button__icon glyphicon glyphicon-arrow-right" > </i><span>Sign in</span></button>
           </div>
-          <div id="messages"></div>
         </div>
       </form>
       <div class="login-forgotpassword"><a href="">Can’t access your account?</a></div>
-      <p class="copy-right">Your work account can be used anywhere you see this symbol. <br/>
+      <p class="copy-right"><!--Your work account can be used anywhere you see this symbol. --><br/>
         © 2015 IUMS Terms of use Privacy & Cookies</p>
     </div>
   </div>
