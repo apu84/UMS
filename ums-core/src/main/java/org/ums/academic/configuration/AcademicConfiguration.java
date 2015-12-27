@@ -1,5 +1,6 @@
 package org.ums.academic.configuration;
 
+import org.apache.shiro.authc.credential.PasswordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -28,6 +29,9 @@ public class AcademicConfiguration {
   @Autowired
   @Qualifier("localCache")
   CacheManager mLocalCacheManager;
+
+  @Autowired
+  PasswordService mPasswordService;
 
   ContentManager<Semester, MutableSemester, Integer> getPersistentSemesterDao() {
     return new PersistentSemesterDao(new JdbcTemplate(mDataSource), getGenericDateFormat());
@@ -61,7 +65,7 @@ public class AcademicConfiguration {
 
   @Bean
   ContentManager<ProgramType, MutableProgramType, Integer> programTypeManager() {
-    return new ProgramTypeDao(new JdbcTemplate(mDataSource));
+    return new PersistentProgramTypeDao(new JdbcTemplate(mDataSource));
   }
 
   @Bean
@@ -87,6 +91,16 @@ public class AcademicConfiguration {
   @Bean
   ContentManager<Course, MutableCourse, String> courseManager() {
     return new PersistentCourseDao(new JdbcTemplate(mDataSource));
+  }
+
+  @Bean
+  ContentManager<Role, MutableRole, Integer> roleManager() {
+    return new PersistentRoleDao(new JdbcTemplate(mDataSource));
+  }
+
+  @Bean
+  ContentManager<User, MutableUser, String> userManager() {
+    return new PersistentUserDao(new JdbcTemplate(mDataSource));
   }
 
   @Bean

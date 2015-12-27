@@ -1,9 +1,10 @@
 module ums {
   export class AppController {
-    public static $inject = ['$scope', '$rootScope'];
+    public static $inject = ['$scope', '$rootScope', 'CookieService'];
 
     constructor(private $scope:any,
-                private $rootScope:any) {
+                private $rootScope:any,
+                private cookieService: CookieService) {
       this.$rootScope.style = 'style1';
       this.$rootScope.theme = 'pink-blue';
       this.$scope.data = {};
@@ -153,6 +154,8 @@ module ums {
       $('#news-ticker-close').click(function (e) {
         $('.news-ticker').remove();
       });
+
+      $scope.user = JSON.parse(cookieService.getCookieByKey(CookieService.USER_KEY));
     }
   }
   UMS.controller('AppController', AppController);

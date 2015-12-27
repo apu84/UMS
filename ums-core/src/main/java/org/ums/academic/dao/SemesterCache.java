@@ -18,6 +18,7 @@ public class SemesterCache extends ContentCache<Semester, MutableSemester, Integ
     return mCacheManager;
   }
 
+  @Override
   protected String getCacheKey(Integer pId) {
     return CacheUtil.getCacheKey(Semester.class, pId);
   }

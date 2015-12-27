@@ -10,70 +10,64 @@
   <context:component-scan base-package="org.ums.dummy.shared, org.ums.academic"/>
   <context:annotation-config/>
   <context:spring-configured/>
-  <context:property-placeholder location="jdbc.properties"/>
-  <!--<bean id="dummyService" class="org.ums.dummy.DummyServiceImpl" />-->
-
-<!--  <bean id="dataSource" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close">
-    <property name="driverClass" value="${jdbc.driverClass}"/>
-    <property name="jdbcUrl" value="${jdbc.url}"/>
-    <property name="username" value="${jdbc.username}"/>
-    <property name="password" value="${jdbc.password}"/>
-    <property name="idleConnectionTestPeriodInMinutes" value="60"/>
-    <property name="idleMaxAgeInMinutes" value="240"/>
-    <property name="maxConnectionsPerPartition" value="30"/>
-    <property name="minConnectionsPerPartition" value="10"/>
-    <property name="partitionCount" value="5"/>
-    <property name="acquireIncrement" value="5"/>
-    <property name="statementsCacheSize" value="100"/>
-    <property name="connectionTimeoutInMs" value="5000"/>
-  </bean>-->
 
   <bean id="dataSource"
         class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-    <!--<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-    <property name="url" value="jdbc:mysql://localhost:3306/dummy_data"/>
-    <property name="username" value="root"/>
-    <property name="password" value="admin"/>-->
     <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
     <property name="url" value="jdbc:oracle:thin:@Apu:1521:xe"/>
     <property name="username" value="DB_IUMS"/>
     <property name="password" value="ig100"/>
   </bean>
 
-  <!--<bean id="passwordService" class="org.apache.shiro.authc.credential.DefaultPasswordService"/>
-  <bean id="passwordMatcher" class="org.apache.shiro.authc.credential.SimpleCredentialsMatcher"/>-->
 
-  <bean id="credentialMatcher" class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+  <bean id="common"
+        class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+    <property name="properties">
+      <props>
+        <prop key="salt">c2VjcmV0</prop>
+      </props>
+    </property>
+  </bean>
+
+  <bean id="saltBytes" class="org.apache.shiro.util.SimpleByteSource">
+    <constructor-arg value="${salt}"/>
+  </bean>
+
+  <bean id="hashService" class="org.apache.shiro.crypto.hash.DefaultHashService">
     <property name="hashAlgorithmName" value="SHA-512"/>
     <property name="hashIterations" value="1024"/>
-    <property name="storedCredentialsHexEncoded" value="true"/>
-    <property name="hashSalted" value="true"/>
+    <property name="generatePublicSalt" value="true"/>
+    <property name="privateSalt" ref="saltBytes"/>
+  </bean>
+
+  <bean id="hashFormat" class="org.apache.shiro.crypto.hash.format.Shiro1CryptFormat"/>
+
+  <bean id="passwordService" class="org.apache.shiro.authc.credential.DefaultPasswordService">
+    <property name="hashService" ref="hashService"/>
+    <property name="hashFormat" ref="hashFormat"/>
+  </bean>
+
+  <bean id="credentialMatcher" class="org.apache.shiro.authc.credential.PasswordMatcher">
+    <property name="passwordService" ref="passwordService"/>
   </bean>
 
   <!-- security datasource: -->
-  <bean id="jdbcRealm" class="org.apache.shiro.realm.jdbc.JdbcRealm">
+  <bean id="jdbcRealm" class="org.ums.authentication.UMSAuthenticationRealm">
     <property name="dataSource" ref="dataSource"/>
     <property name="permissionsLookupEnabled" value="true"/>
-    <property name="authenticationQuery" value="SELECT password, salt FROM Users WHERE user_id = ?"/>
+    <property name="authenticationQuery" value="SELECT password FROM Users WHERE user_id = ?"/>
     <property name="userRolesQuery" value="select role_id from Users where user_id = ?"/>
     <property name="permissionsQuery" value="select permissions from permissions where role_id = ?"/>
     <property name="credentialsMatcher" ref="credentialMatcher"/>
-    <property name="saltStyle" value="COLUMN"/>
+    <property name="saltStyle" value="EXTERNAL"/>
     <property name="cacheManager" ref="memoryConstrainedCacheManager"/>
     <property name="authenticationCachingEnabled" value="true"/>
   </bean>
 
   <bean id="memoryConstrainedCacheManager" class="org.apache.shiro.cache.MemoryConstrainedCacheManager"/>
-  <!--  <bean id="iniRealm" class="org.apache.shiro.realm.text.IniRealm">
-      <property name="resourcePath" value="classpath:shiro.ini" />
-    </bean>-->
 
   <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
-    <!-- Single realm app.  If you have multiple realms, use the 'realms' property instead. -->
     <property name="realm" ref="jdbcRealm"/>
-<!--
-    <property name="sessionManager" ref="sessionManager"/>
--->
   </bean>
 
   <bean id="umsAuthBasic" class="org.ums.filter.UMSHttpAuthenticationFilter"/>
@@ -96,8 +90,7 @@
     <property name="securityManager" ref="securityManager"/>
   </bean>
 
-<!--  <bean name="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
-    <property name="globalSessionTimeout" value="60000"/>
-  </bean>-->
   <bean class="org.ums.cache.LocalCacheManager" id="localCache"/>
+
+  <context:property-placeholder properties-ref="common"/>
 </beans>

@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class ProgramTypeDao extends ContentDaoDecorator<ProgramType, MutableProgramType, Integer> {
+public class PersistentProgramTypeDao extends ContentDaoDecorator<ProgramType, MutableProgramType, Integer> {
   static String SELECT_ALL = "SELECT TYPE_ID, TYPE_NAME FROM MST_PROGRAM_TYPE ";
   static String UPDATE_ONE = "UPDATE MST_PROGRAM_TYPE SET TYPE_NAME = ? ";
   static String DELETE_ONE = "DELETE FROM MST_PROGRAM_TYPE ";
@@ -20,7 +20,7 @@ public class ProgramTypeDao extends ContentDaoDecorator<ProgramType, MutableProg
 
   private JdbcTemplate mJdbcTemplate;
 
-  public ProgramTypeDao(final JdbcTemplate pJdbcTemplate) {
+  public PersistentProgramTypeDao(final JdbcTemplate pJdbcTemplate) {
     mJdbcTemplate = pJdbcTemplate;
   }
 

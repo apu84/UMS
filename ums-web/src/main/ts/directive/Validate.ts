@@ -6,7 +6,7 @@ module ums {
 
     public restrict:string = 'A';
     public scope = {
-      onvalidate: "&"
+      onvalidate: "="
     };
 
     public link = ($scope:any, element:JQuery, attributes) => {

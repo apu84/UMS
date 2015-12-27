@@ -9,18 +9,14 @@ module ums {
 
     public static $inject = [
       '$http',
-      'BaseURI',
+      'BaseUri',
       'CookieService'
     ];
 
     constructor(private $http:ng.IHttpService,
-                private $upload:upload.Upload,
                 private baseURI:BaseUri,
                 private cookieService:CookieService) {
-      this.credentials = cookieService.getUserCredential();
-      if (this.credentials != null && this.credentials != '') {
-        $http.defaults.headers.common.Authorization = this.credentials;
-      }
+      this.resetAuthenticationHeader();
     }
 
     public get(url:string,
@@ -46,7 +42,7 @@ module ums {
         'Content-Type': contentType
       };
 
-      return this.$upload.http({
+      return this.$http({
         url: this.baseURI.toAbsolute(url),
         method: 'POST',
         data: data,
@@ -79,6 +75,13 @@ module ums {
 
     public static offline(status:number):boolean {
       return status == 0 || (status >= 502 && status <= 504);
+    }
+
+    public resetAuthenticationHeader(authetication?: string) {
+      this.credentials = !authetication ? this.cookieService.getCookieByKey(CookieService.CREDENTIAL_KEY) : authetication;
+      if (this.credentials != null && this.credentials != '') {
+        this.$http.defaults.headers.common.Authorization = this.credentials;
+      }
     }
   }
 

@@ -58,9 +58,8 @@ var Authentication = (function () {
   }
 
   function startApplication(credentials, user) {
-    //localStorage.setItem("LC.credentials", credentials);
     document.cookie = "UMS.credentials=" + credentials + "; path=/";
-    localStorage.setItem("UMS.user", JSON.stringify(user));
+    document.cookie = "UMS.user=" + JSON.stringify(user) + "; path=/";
     var params = getQueryParams();
     if (isValidRedirectTo()) {
       window.location.href = decodeURIComponent(params.redirectTo);
