@@ -4,19 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.common.Resource;
-import org.ums.domain.model.MutableSemester;
-import org.ums.domain.model.Semester;
-import org.ums.manager.ContentManager;
+import org.ums.manager.SemesterManager;
 
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
-import java.util.List;
 
 @Component
 @Path("/academic/semester")
@@ -25,12 +19,19 @@ import java.util.List;
 public class SemesterResource extends MutableSemesterResource {
   @Autowired
   @Qualifier("semesterManager")
-  ContentManager<Semester, MutableSemester, Integer> mManager;
+  SemesterManager mManager;
 
   @GET
   @Path("/all")
   public JsonObject getAll() throws Exception {
     return mResourceHelper.getAll(mUriInfo);
+  }
+
+  @GET
+  @Path("/program-type/{program-type}/limit/{list-limit}")
+  public JsonObject getSemesterList(final @Context Request pRequest, final @PathParam("program-type") int pProgramType, final @PathParam("list-limit") int pListLimit)
+      throws Exception {
+    return mResourceHelper.buildSemesters(mManager.getSemesters(pProgramType, pListLimit), mUriInfo);
   }
 
   @GET

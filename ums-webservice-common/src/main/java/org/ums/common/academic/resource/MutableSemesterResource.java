@@ -3,6 +3,7 @@ package org.ums.common.academic.resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.ums.common.Resource;
+import org.ums.common.academic.resource.helper.SemesterResourceHelper;
 import org.ums.domain.model.MutableSemester;
 import org.ums.domain.model.Semester;
 
@@ -14,7 +15,7 @@ import javax.ws.rs.core.Response;
 
 public class MutableSemesterResource extends Resource {
   @Autowired
-  ResourceHelper<Semester, MutableSemester, Integer> mResourceHelper;
+  SemesterResourceHelper mResourceHelper;
 
   @POST
   public Response createSemester(final JsonObject pJsonObject) throws Exception {

@@ -16,10 +16,20 @@
                   </div>
                 </div>
                 <div class="form-group">
-                  <label class="col-md-4 control-label">Dept./School</label>
-
+                  <label class="col-md-4 control-label">Program Type</label>
                   <div class="col-md-8">
-                    <input name="department" type="text" placeholder="" class="form-control required"/>
+                    <select name="programType" class="form-control required" data-ng-model="selectedProgramType"  data-ng-change="getDepts(selectedProgramType)">
+                      <option data-ng-repeat="programType in data.programTypeOptions" value="{{programType.id}}">{{programType.name}}</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="col-md-4 control-label">Program Name</label>
+                  <div class="col-md-8">
+                    <select name="programName" class="form-control required" data-ng-model="selectedProgram">
+                      <option data-ng-repeat="program in programs" value="{{program.id}}">{{program.longName}}</option>
+                    </select>
                   </div>
                 </div>
                 <div class="form-group">
@@ -34,8 +44,11 @@
 
                   <div class="col-md-8">
                     <div class="input-icon right"><i class="fa fa-calendar"></i>
+                      <!--
                       <input type="text" name="birthDate" data-date-format="dd-mm-yyyy" placeholder="DD-MM-YYYY"
                              class="datepicker-default form-control required"/>
+                             -->
+                      <input id="birthDate" placeholder="__/__/____" class="form-control required"/>
                     </div>
 
                   </div>
@@ -74,6 +87,14 @@
                   </div>
                 </div>
                 <div class="form-group">
+                  <label class="col-md-4 control-label">Dept./School</label>
+                  <div class="col-md-8">
+                    <select name="department" class="form-control required"  data-ng-model="selectedDept" data-ng-change="getPrograms(selectedDept)">
+                      <option data-ng-repeat="dept in depts" value="{{dept.id}}">{{dept.name}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
                   <label class="col-md-4 control-label">Semester</label>
 
                   <div class="col-md-8">
@@ -92,9 +113,7 @@
 
                   <div class="col-md-8">
                     <select name="gender" class="form-control required">
-                      <option value="">Select Gender</option>
-                      <option value="M">Male</option>
-                      <option value="F">Female</option>
+                      <option ng-repeat="gender in data.genderOptions" value="{{gender.id}}">{{gender.name}}</option>
                     </select>
                   </div>
                 </div>
@@ -117,7 +136,7 @@
                   <label class="col-md-4 control-label">Guardian Email</label>
 
                   <div class="col-md-8">
-                    <input id="guardianEmail" type="text" class="form-control"/>
+                    <input id="guardianEmail" type="email" class="form-control"/>
                   </div>
                 </div>
 
@@ -128,8 +147,8 @@
                   <div class="text-center mbl">
                     <center>
                       <div
-                          style="border: 5px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0.25);height: 135px;width: 135px"
-                          id="image-holder"/>
+                              style="border: 5px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0.25);height: 165px;width: 145px"
+                              id="image-holder"/>
                     </center>
                   </div>
                 </div>
@@ -137,21 +156,22 @@
                   <label class="col-md-4 control-label" id="image-label"></label>
 
                   <div class="col-md-8">
-                    <input type="file" name="studentPhoto" class="btn btn-success btn-outlined" id="fileUpload"/>
+                    <input type="file" name="studentPhoto" class="btn btn-success btn-outlined" id="fileUpload" style="width:280px;"/>
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="col-md-4 control-label">Blood Group</label>
-
                   <div class="col-md-8">
-                    <input name="bloodGroup" type="text" class="form-control"/>
+                    <select name="bloodGroup" class="form-control">
+                      <option ng-repeat="bGroup in data.bloodGroupOptions" value="{{bGroup.id}}">{{bGroup.name}}</option>
+                    </select>
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="col-md-4 control-label">Email Address</label>
 
                   <div class="col-md-8">
-                    <input id="emailAddress" type="text" class="form-control"/>
+                    <input id="emailAddress" type="email" class="form-control"/>
                   </div>
                 </div>
                 <div class="form-group">

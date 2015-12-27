@@ -9,21 +9,17 @@
                         <div class="form-group">
                             <label  class="col-md-3 control-label">Program Type</label>
                             <div class="col-md-9">
-                                <select name="programType"  class="form-control required">
-                                    <option value="">Select Program Type</option>
-                                    <option value="11">Undergraduate</option>
-                                    <option value="22">Postgraduate</option>
+                                <select class="form-control required" >
+                                    <option data-ng-repeat="programType in data.programTypeOptions" value="{{programType.id}}">{{programType.name}}</option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group">
                             <label  class="col-md-3 control-label">Semester</label>
                             <div class="col-md-9">
-                                    <select name="semester"  class="form-control required">
-                                        <option value="">Select Semester</option>
-                                        <option value="01">Fall</option>
-                                        <option value="02">Spring</option>
-                                    </select>
+                                <select class="form-control required" >
+                                    <option data-ng-repeat="semester in data.semesterOptions" value="{{semester.id}}">{{semester.name}}</option>
+                                </select>
                             </div>
                         </div>
                         <div class="form-group">
@@ -49,7 +45,7 @@
                             <label  class="col-md-3 control-label">Start Date</label>
                             <div class="col-md-9">
                                     <div class="input-icon right"><i class="fa fa-calendar"></i>
-                                        <input type="text" name="semesterStartDate"  data-date-format="dd-mm-yyyy" placeholder="DD-MM-YYYY" class="datepicker-default form-control required"/>
+                                        <input type="text" name="semesterStartDate"  data-date-format="dd-mm-yyyy" placeholder="DD-MM-YYYY" class="datepicker-default form-control required" autocomplete="off"/>
                                    </div>
                             </div>
                         </div>
@@ -57,7 +53,7 @@
                             <label  class="col-md-3 control-label">End Date</label>
                             <div class="col-md-9">
                                    <div class="input-icon right"><i class="fa fa-calendar"></i>
-                                       <input type="text" name="semesterEndDate"  data-date-format="dd-mm-yyyy" placeholder="DD-MM-YYYY" class="datepicker-default form-control required"/>
+                                       <input type="text" name="semesterEndDate"  data-date-format="dd-mm-yyyy" placeholder="DD-MM-YYYY" class="datepicker-default form-control required" autocomplete="off"/>
                             </div>
                         </div>
 

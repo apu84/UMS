@@ -5,7 +5,7 @@ module ums {
     'ngRoute', 'ui.bootstrap', 'ui.router', 'oc.lazyLoad', 'LocalStorageModule', 'ngCookies'
   ]);
 
-  UMS.constant("Constants", Constants.Default);
+  UMS.constant("appConstants", Constants.Default());
 
   UMS.config(($stateProvider, $urlRouterProvider) => {
     //
@@ -135,7 +135,8 @@ module ums {
                   'vendors/bootstrap-datepicker/css/datepicker.css',
                   'vendors/jquery-validate/jquery.validate.min.js',
                   'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
-                  'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
+                  'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
+                  'vendors/jquery-maskedinput/jquery-maskedinput.js'
                 ]
               });
             }]

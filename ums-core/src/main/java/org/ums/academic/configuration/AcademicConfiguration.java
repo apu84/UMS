@@ -12,6 +12,7 @@ import org.ums.domain.model.*;
 import org.ums.manager.CacheManager;
 import org.ums.manager.ContentManager;
 import org.ums.manager.CourseGroupManager;
+import org.ums.manager.SemesterManager;
 import org.ums.util.Constants;
 
 import javax.sql.DataSource;
@@ -33,7 +34,7 @@ public class AcademicConfiguration {
   @Autowired
   PasswordService mPasswordService;
 
-  ContentManager<Semester, MutableSemester, Integer> getPersistentSemesterDao() {
+  SemesterManager getPersistentSemesterDao() {
     return new PersistentSemesterDao(new JdbcTemplate(mDataSource), getGenericDateFormat());
   }
 

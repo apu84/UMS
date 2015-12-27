@@ -1,6 +1,13 @@
 module ums {
   export class NewSemester {
-    constructor() {
+    public static $inject = ['appConstants','$scope'];
+    constructor(private appConstants:any,private $scope:any) {
+
+      $scope.data = {
+        programTypeOptions:appConstants.programType,
+        semesterOptions:appConstants.semester
+      };
+
       setTimeout(function () {
         $('.make-switch').bootstrapSwitch();
         $('#TheCheckBox').bootstrapSwitch();

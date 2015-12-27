@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.ums.academic.model.PersistentSemester;
 import org.ums.domain.model.MutableSemester;
 import org.ums.domain.model.Semester;
+import org.ums.manager.SemesterManager;
 import org.ums.util.Constants;
 
 import java.sql.ResultSet;
@@ -14,7 +15,7 @@ import java.text.DateFormat;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class PersistentSemesterDao extends ContentDaoDecorator<Semester, MutableSemester, Integer> {
+public class PersistentSemesterDao extends SemesterDaoDecorator {
 
   static String SELECT_ALL = "SELECT SEMESTER_ID, SEMESTER_NAME, START_DATE, END_DATE, PROGRAM_TYPE, STATUS, LAST_MODIFIED FROM MST_SEMESTER ";
   static String UPDATE_ONE = "UPDATE MST_SEMESTER SET SEMESTER_NAME = ?,START_DATE = TO_DATE(?, '" + Constants.DATE_FORMAT + "'), " +
@@ -68,7 +69,13 @@ public class PersistentSemesterDao extends ContentDaoDecorator<Semester, Mutable
         pSemester.getStatus());
   }
 
-  class SemesterRowMapper implements RowMapper<Semester> {
+    @Override
+    public List<Semester> getSemesters(Integer pProgramType, Integer pLimit) throws Exception {
+        String query = SELECT_ALL + "WHERE PROGRAM_TYPE = ?";
+        return mJdbcTemplate.query(query, new Object[]{pProgramType}, new SemesterRowMapper());
+    }
+
+    class SemesterRowMapper implements RowMapper<Semester> {
     @Override
     public Semester mapRow(ResultSet resultSet, int i) throws SQLException {
       PersistentSemester semester = new PersistentSemester();

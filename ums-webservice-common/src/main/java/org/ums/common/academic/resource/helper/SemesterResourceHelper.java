@@ -13,7 +13,10 @@ import org.ums.domain.model.MutableSemester;
 import org.ums.domain.model.Semester;
 import org.ums.manager.ContentManager;
 
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
@@ -57,5 +60,17 @@ public class SemesterResourceHelper extends ResourceHelper<Semester, MutableSeme
   @Override
   protected String getEtag(Semester pReadonly) {
     return "";
+  }
+
+  public JsonObject buildSemesters(final List<Semester> pSemesters, final UriInfo pUriInfo) throws Exception {
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+    for (Semester readOnly : pSemesters) {
+      children.add(toJson(readOnly, pUriInfo, localCache));
+    }
+    object.add("entries", children);
+    localCache.invalidate();
+    return object.build();
   }
 }
