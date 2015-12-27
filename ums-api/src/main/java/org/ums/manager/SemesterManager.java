@@ -1,9 +1,7 @@
 package org.ums.manager;
 
-import org.ums.domain.model.CourseGroup;
 import org.ums.domain.model.MutableSemester;
 import org.ums.domain.model.Semester;
-
 import java.util.List;
 
 /**

@@ -1,7 +1,8 @@
+///<reference path="../../service/HttpClient.ts"/>
 module ums {
   export class NewSyllabus {
-    public static $inject = ['appConstants','$scope'];
-    constructor(private appConstants:any,private $scope:any) {
+    public static $inject = ['appConstants','$scope', '$http'];
+    constructor(private appConstants:any,private $scope:any,private $http:any) {
       $scope.data = {
         programTypeOptions:appConstants.programType,
         ugPrograms:appConstants.ugPrograms
@@ -12,20 +13,29 @@ module ums {
       $scope.selectedProgramType="";
       $scope.selectedDept="";
       $scope.selectedProgram="";
-      $scope.getDepts=function(programType){
+      $scope.getDepts=function(programType) {
         $scope.programs = [{id: '', longName: 'Select a Program'}];
         $scope.selectedProgram = "";
 
-        if(programType=="11")
-          $scope.depts= appConstants.ugDept;
-        else if(programType=="22")
-          $scope.depts= appConstants.pgDept;
+        if (programType == "11")
+          $scope.depts = appConstants.ugDept;
+        else if (programType == "22")
+          $scope.depts = appConstants.pgDept;
         else
-          $scope.depts= [{id:'',name:'Select Dept./School'}];
+          $scope.depts = [{id: '', name: 'Select Dept./School'}];
 
         $scope.selectedDept = "";
+        /**--------Semester Load----------------**/
+        $http.get('/ums-webservice-common/academic/semester/program-type/'+$scope.selectedProgramType+'/limit/0')
+            .then(function (response) {
+              console.log(response.data.entries);
+              $scope.semesterOptions=response.data.entries;
+            }, function (error) {
+              alert(error);
+              console.log(error);
+            });
+
       }
-      var abc:any;
       $scope.getPrograms=function(deptId){
         if(deptId !="" && $scope.selectedProgramType=="11") {
           var ugProgramsArr:any=appConstants.ugPrograms;

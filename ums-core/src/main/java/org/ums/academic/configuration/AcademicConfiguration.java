@@ -53,10 +53,10 @@ public class AcademicConfiguration {
 
 
   @Bean
-  ContentManager<Semester, MutableSemester, Integer> semesterManager() {
-    ContentTransaction<Semester, MutableSemester, Integer> semesterTransaction = new ContentTransaction<>();
-    semesterTransaction.setManager(getSemesterAccessControl());
-    return semesterTransaction;
+  SemesterManager semesterManager() {
+/*    ContentTransaction<Semester, MutableSemester, Integer> semesterTransaction = new ContentTransaction<>();
+    semesterTransaction.setManager(getSemesterAccessControl());*/
+    return getPersistentSemesterDao();
   }
 
   @Bean

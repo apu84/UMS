@@ -46,8 +46,7 @@
               <div class="col-md-9">
                 <select name="semesterName" class="col-md-5 form-control required">
                   <option value="">Select Semester</option>
-                  <option value="2015">Spring, 2015</option>
-                  <option value="2014">Fall, 2015</option>
+                  <option data-ng-repeat="semester in semesterOptions" value="{{semester.id}}">{{semester.name}}</option>
                 </select>
               </div>
             </div>
