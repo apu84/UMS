@@ -28,11 +28,14 @@ public class SyllabusBuilder implements Builder<Syllabus, MutableSyllabus> {
         pReadOnly.getSemesterId(), Semester.class);
     pBuilder.add("semester", pUriInfo.getBaseUriBuilder().path("academic").path("semester")
         .path(String.valueOf(semester.getId())).build().toString());
+    pBuilder.add("semester_name", semester.getName());
 
     Program program = (Program) pLocalCache.cache(() -> pReadOnly.getProgram(),
         pReadOnly.getProgramId(), Program.class);
     pBuilder.add("program", pUriInfo.getBaseUriBuilder().path("academic").path("program")
         .path(String.valueOf(program.getId())).build().toString());
+    pBuilder.add("program_name", program.getShortName());
+
 
     pBuilder.add("self", pUriInfo.getBaseUriBuilder().path("academic").path("syllabus")
         .path(pReadOnly.getId()).build().toString());
