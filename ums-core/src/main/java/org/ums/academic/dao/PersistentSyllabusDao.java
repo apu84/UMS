@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.academic.model.PersistentSyllabus;
 import org.ums.domain.model.MutableSyllabus;
+import org.ums.domain.model.Semester;
 import org.ums.domain.model.Syllabus;
 
 import java.sql.ResultSet;
@@ -29,7 +30,11 @@ public class PersistentSyllabusDao extends SyllabusDaoDecorator {
     String query = SELECT_ALL + "WHERE SYLLABUS_ID = ?";
     return mJdbcTemplate.queryForObject(query, new Object[]{pSyllabusId}, new SyllabusRowMapper());
   }
-
+  @Override
+  public List<Syllabus> getSyllabusList(final Integer pProgramId) throws Exception {
+    String query = SELECT_ALL + "WHERE PROGRAM_ID = ?";
+    return mJdbcTemplate.query(query, new Object[]{pProgramId}, new SyllabusRowMapper());
+  }
   public List<Syllabus> getAll() throws Exception {
     String query = SELECT_ALL;
     return mJdbcTemplate.query(query, new SyllabusRowMapper());
