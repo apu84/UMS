@@ -6,7 +6,7 @@ module ums {
                 private $rootScope:any,
                 private cookieService: CookieService) {
       this.$rootScope.style = 'style1';
-      this.$rootScope.theme = 'pink-blue';
+      this.$rootScope.theme = 'orange-blue';
       this.$scope.data = {};
       this.$scope.effect = '';
       this.$scope.header = {
@@ -84,7 +84,7 @@ module ums {
         this.$scope.header.footer = true;
 
         this.$rootScope.style = 'style1';
-        this.$rootScope.theme = 'pink-blue';
+        this.$rootScope.theme = 'orange-blue';
 
         if ('/layout-left-sidebar' === toState.url) {
           this.$scope.header.layout_menu = '';

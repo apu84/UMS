@@ -2,6 +2,29 @@ module ums {
   export class Constants {
     static  Default():any {
       return {
+        courseType:[
+          {id:'',name:'Select Course Type'},
+          {id:'1',name:'Theory'},
+          {id:'2',name:'Sessional'},
+          {id:'3',name:'Thesis/Project'}
+        ],
+        courseCategory:[
+          {id:'',name:'Select Course Category'},
+          {id:'1',name:'Mandatory'},
+          {id:'2',name:'Optional'}
+        ],
+        academicYear:[
+          {id:'',name:'Select Year'},
+          {id:'1',name:'1st Year'},
+          {id:'2',name:'2nd Year'},
+          {id:'3',name:'3rd Year'},
+          {id:'4',name:'4th Year'}
+        ],
+        academicSemester:[
+          {id:'',name:'Select Semester'},
+          {id:'1',name:'1st Semester'},
+          {id:'2',name:'2nd Semester'}
+        ],
         semester:[
           {id:'',name:'Select Semester'},
           {id:'01',name:'Spring'},
@@ -52,15 +75,6 @@ module ums {
           '84': "Office of the Advisor of Student''s Welfare",
           '85': 'Proctor Office'
         },
-        courseType: {
-          '1': 'Theory',
-          '2': 'Sessional',
-          '3': 'Thesis/Project'
-        },
-        courseCategory: {
-          '1': 'Mandatory',
-          '2': 'Optional'
-        },
         status: {
           '0': 'Inactive',
           '1': 'Active'
@@ -110,7 +124,7 @@ module ums {
               shortName: "BBA",
               longName: "Bachelor in Business Administration"
             }
-          ],
+          ]
         },
           {
           deptId: "03",

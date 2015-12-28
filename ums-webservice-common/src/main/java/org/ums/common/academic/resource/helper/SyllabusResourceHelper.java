@@ -9,10 +9,14 @@ import org.ums.cache.LocalCache;
 import org.ums.common.academic.resource.ResourceHelper;
 import org.ums.common.academic.resource.SyllabusResource;
 import org.ums.domain.model.MutableSyllabus;
+import org.ums.domain.model.Semester;
 import org.ums.domain.model.Syllabus;
 import org.ums.manager.ContentManager;
 
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
@@ -51,7 +55,17 @@ public class SyllabusResourceHelper extends ResourceHelper<Syllabus, MutableSyll
 
     return builder.build();
   }
-
+  public JsonObject buildSyllabuses(final List<Syllabus> pSyllabuses, final UriInfo pUriInfo) throws Exception {
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+    for (Syllabus readOnly : pSyllabuses) {
+      children.add(toJson(readOnly, pUriInfo, localCache));
+    }
+    object.add("entries", children);
+    localCache.invalidate();
+    return object.build();
+  }
   @Override
   protected String getEtag(Syllabus pReadonly) {
     return pReadonly.getLastModified();

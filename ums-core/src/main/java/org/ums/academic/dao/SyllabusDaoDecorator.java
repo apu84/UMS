@@ -1,0 +1,26 @@
+package org.ums.academic.dao;
+
+import org.ums.domain.model.MutableSemester;
+import org.ums.domain.model.Semester;
+import org.ums.domain.model.Syllabus;
+import org.ums.manager.SemesterManager;
+import org.ums.manager.SyllabusManager;
+
+import java.util.List;
+
+/**
+ * Created by Ifti on 28-Dec-15.
+ */
+public class SyllabusDaoDecorator extends ContentDaoDecorator<Syllabus, MutableSemester, Integer> implements SyllabusManager {
+  private SyllabusManager mManager;
+
+  @Override
+  public SyllabusManager getManager() {
+    return mManager;
+  }
+
+  @Override
+  public List<Syllabus> getSyllabusList(Integer pProgramId) throws Exception {
+    return getManager().getSyllabusList(pProgramId);
+  }
+}

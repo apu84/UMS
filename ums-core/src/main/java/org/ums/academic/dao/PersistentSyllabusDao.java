@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class PersistentSyllabusDao extends ContentDaoDecorator<Syllabus, MutableSyllabus, String> {
+public class PersistentSyllabusDao extends SyllabusDaoDecorator {
   static String SELECT_ALL = "SELECT SYLLABUS_ID, SEMESTER_ID, PROGRAM_ID, LAST_MODIFIED FROM MST_SYLLABUS ";
   static String UPDATE_ONE = "UPDATE MST_SYLLABUS SET SEMESTER_ID = ?, PROGRAM_ID = ?, LAST_MODIFIED = " + getLastModifiedSql() + " ";
   static String DELETE_ONE = "DELETE FROM MST_SYLLABUS ";

@@ -1,0 +1,156 @@
+<div class="row">
+    <div class="col-lg-3">
+        <div id="sum_box" class="row mbl">
+            <div class="col-sm-12 col-md-12">
+                <div class="panel profit db mbm" style="background:#0a819c none repeat scroll 0 0; color:#fff;">
+                    <div class="panel-body"><p class="icon"><i class="icon fa fa-ellipsis-h"></i></p><h4
+                            class="value"><span>Undergraduate</span></h4>
+
+                        <p class="description">UG Course</p>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-12 col-md-12">
+                <div class="panel profit db mbm" onclick="window.location='#/createPgCourse'" style="cursor: pointer">
+                    <div class="panel-body"><p class="icon"><i class="icon fa fa-ellipsis-v"></i></p><h4
+                            class="value"><span>Postgraduate</span></h4>
+
+                        <p class="description">PG Course</p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-9">
+        <div class="panel panel-blue">
+            <div class="panel-heading">Undergraduate Course Create Form</div>
+            <div class="panel-body pan">
+                <form action="" class="form-horizontal" data-validate="">
+                    <div class="form-body pal">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">Course Number</label>
+                                    <div class="col-md-8">
+                                        <input name="courseNumber" type="text" class="form-control required"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">Credit Hour</label>
+                                    <div class="col-md-8">
+                                        <input name="creditHour" type="text" placeholder="" class="form-control required"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">Course Type</label>
+                                    <div class="col-md-8">
+                                        <select class="form-control required">
+                                            <option data-ng-repeat="courseType in data.courseTypeOptions" value="{{courseType.id}}">{{courseType.name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label  class="col-md-4 control-label">Year</label>
+                                    <div class="col-md-8">
+                                        <select class="form-control required">
+                                            <option data-ng-repeat="year in data.academicYearOptions" value="{{year.id}}">{{year.name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label  class="col-md-4 control-label">Offer By</label>
+                                    <div class="col-md-8">
+                                        <select class="form-control required">
+                                            <option data-ng-repeat="dept in data.ugDeptOptions" value="{{dept.id}}">{{dept.name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">Program Name</label>
+                                    <div class="col-md-8">
+                                        <select name="programName" class="form-control required" data-ng-model="selectedProgram">
+                                            <option data-ng-repeat="program in programs" value="{{program.id}}">{{program.longName}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">Optional Group</label>
+                                    <div class="col-md-8">
+                                        <select name="optionalGroup"  class="form-control required">
+                                            <option value="">Select Optional Group</option>
+                                            <option value="M">Management</option>
+                                            <option value="F">Accounting</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">Course Title</label>
+                                    <div class="col-md-8">
+                                        <input id="courseTitle" type="text" placeholder="" class="form-control required"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">View Order</label>
+                                    <div class="col-md-8">
+                                        <input name="viewOrder" type="text"  class="form-control required"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label  class="col-md-4 control-label">Course Category</label>
+                                    <div class="col-md-8">
+                                        <select class="form-control required">
+                                            <option data-ng-repeat="courseCategory in data.courseCategoryOptions" value="{{courseCategory.id}}">{{courseCategory.name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label  class="col-md-4 control-label ">Semester</label>
+                                    <div class="col-md-8">
+                                        <select class="form-control required">
+                                            <option data-ng-repeat="semester in data.academicSemesterOptions" value="{{semester.id}}">{{semester.name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label  class="col-md-4 control-label">Offer To</label>
+                                    <div class="col-md-8">
+                                        <select class="form-control required" data-ng-model="selectedDept" data-ng-change="getPrograms(selectedDept)" >
+                                            <option data-ng-repeat="dept in data.ugDeptOptions" value="{{dept.id}}">{{dept.name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">Syllabus</label>
+                                    <div class="col-md-8">
+
+                                        <select class="form-control required">
+                                            <option data-ng-repeat="dept in data.ugDeptOptions" value="{{dept.id}}">{{dept.name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="form-actions text-right pal">
+                        <button type="button" class="btn btn-success" onclick="validate(submit)">Save New Course</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--<div class="col-lg-2"></div>-->
+</div>

@@ -146,24 +146,34 @@ var ums;
                     }]
             }
         })
-            .state('createCourse', {
-            url: "/createCourse",
-            controller: 'NewCourseController',
-            templateUrl: 'views/course/new-course.html',
-            resolve: {
-                loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+            .state('createUgCourse', {
+                url: "/createUgCourse",
+                controller: 'NewCourseUgController',
+                templateUrl: 'views/course/new-course-ug.html',
+                resolve: {
+                    loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
                         return $ocLazyLoad.load({
                             files: [
-                                'vendors/bootstrap-switch/css/bootstrap-switch.css',
-                                'vendors/bootstrap-datepicker/css/datepicker.css',
-                                'vendors/jquery-validate/jquery.validate.min.js',
-                                'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
-                                'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
+                                'vendors/jquery-validate/jquery.validate.min.js'
                             ]
                         });
                     }]
-            }
-        })
+                }
+            })
+            .state('createPgCourse', {
+                url: "/createPgCourse",
+                controller: 'NewCoursePg',
+                templateUrl: 'views/course/new-course-ug.html',
+                resolve: {
+                    loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                        return $ocLazyLoad.load({
+                            files: [
+                                'vendors/jquery-validate/jquery.validate.min.js'
+                            ]
+                        });
+                    }]
+                }
+            })
             .state('semesterSyllabusMap', {
             url: "/semesterSyllabusMap",
             controller: 'SemesterSyllabusMapController',

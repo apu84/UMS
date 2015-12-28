@@ -1,8 +1,9 @@
 ///<reference path="../../lib/jquery-maskedinput.d.ts"/>
+///<reference path="../../service/HttpClient.ts"/>
 module ums {
   export class NewStudent {
-    public static $inject = ['appConstants','$scope'];
-    constructor(private appConstants:any,private $scope:any) {
+    public static $inject = ['appConstants','$scope', '$http'];
+    constructor(private appConstants:any,private $scope:any,private $http:any) {
 
       $scope.data = {
         genderOptions: appConstants.gender,
@@ -29,6 +30,16 @@ module ums {
           $scope.depts= [{id:'',name:'Select Dept./School'}];
 
         $scope.selectedDept = "";
+
+        /**--------Semester Load----------------**/
+        $http.get('/ums-webservice-common/academic/semester/program-type/'+$scope.selectedProgramType+'/limit/0')
+            .then(function (response) {
+              console.log(response.data.entries);
+              $scope.semesterOptions=response.data.entries;
+            }, function (error) {
+              alert(error);
+              console.log(error);
+            });
       }
       var abc:any;
       $scope.getPrograms=function(deptId){

@@ -13,7 +13,8 @@
     '/viewFullSyllabus': {title: 'Syllabus', 'breadcrumb': ['Syllabus']},
     '/createStudent': {title: 'Create New Student', 'breadcrumb': ['Student']},
     '/changePassword': {title: 'Change Password', 'breadcrumb': ['Password']},
-    '/createCourse': {title: 'Create Course', 'breadcrumb': ['Course']},
+    '/createUgCourse': {title: 'Create UG Course', 'breadcrumb': ['Course']},
+    '/createPgCourse': {title: 'Create PG Course', 'breadcrumb': ['Course']},
     '/semesterSyllabusMap': {title: 'Semester Syllabus Map', 'breadcrumb': ['Semester-Syllabus Map']},
 
   };
