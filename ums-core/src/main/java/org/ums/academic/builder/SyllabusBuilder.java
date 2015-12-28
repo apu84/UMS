@@ -36,7 +36,6 @@ public class SyllabusBuilder implements Builder<Syllabus, MutableSyllabus> {
         .path(String.valueOf(program.getId())).build().toString());
     pBuilder.add("program_name", program.getShortName());
 
-
     pBuilder.add("self", pUriInfo.getBaseUriBuilder().path("academic").path("syllabus")
         .path(pReadOnly.getId()).build().toString());
   }
