@@ -21,7 +21,7 @@ module ums {
     }
   }
 
-  Unauthorized.$inject = ['$q', 'BaseURI'];
+  Unauthorized.$inject = ['$q', 'BaseUri'];
   UMS.factory('UnauthorizedInterceptor', Unauthorized);
 
   UMS.config(['$httpProvider', function ($httpProvider:ng.IHttpProvider) {

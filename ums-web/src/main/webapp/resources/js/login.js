@@ -8,11 +8,9 @@ var Authentication = (function () {
   Authentication.prototype.authenticate = function () {
     eraseAllCookies();
     var userName = document.getElementById('userName').value;
-    console.debug("userName: " + userName);
     var password = document.getElementById('password').value;
 
     var credentials = "Basic " + btoa(userName + ":" + password);
-    console.debug(credentials);
     $.ajax({
       crossDomain: true,
       type: "GET",
@@ -42,7 +40,7 @@ var Authentication = (function () {
           presentErrorMessage("Incorrect username or password!");
         }
         else {
-          presentErrorMessage("Login Failed! " + "Incorrect username or password!");
+          presentErrorMessage("Login Failed! " + textStatus);
         }
       })
     });
