@@ -1,6 +1,7 @@
 package org.ums.academic.dao;
 
 import org.ums.domain.model.MutableSemester;
+import org.ums.domain.model.MutableSyllabus;
 import org.ums.domain.model.Semester;
 import org.ums.domain.model.Syllabus;
 import org.ums.manager.SemesterManager;
@@ -11,7 +12,7 @@ import java.util.List;
 /**
  * Created by Ifti on 28-Dec-15.
  */
-public class SyllabusDaoDecorator extends ContentDaoDecorator<Syllabus, MutableSemester, Integer> implements SyllabusManager {
+public class SyllabusDaoDecorator extends ContentDaoDecorator<Syllabus, MutableSyllabus, String> implements SyllabusManager {
   private SyllabusManager mManager;
 
   @Override
