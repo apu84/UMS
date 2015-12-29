@@ -15,7 +15,9 @@ module ums {
       $scope.selectedProgramType="11";
       $scope.selectedDept="";
       $scope.programs = [{id: '', longName: 'Select a Program'}];
+      $scope.syllabusOptions=[{id: '', semester_name: 'Select a ',program_name:'Syllabus'}];
       $scope.selectedProgram="";
+      $scope.selectedSyllabus="";
 
       $scope.getPrograms=function(deptId){
         if(deptId !="" && $scope.selectedProgramType=="11") {
@@ -32,6 +34,20 @@ module ums {
       }
 
 
+      $scope.$watch('selectedProgram', function() {
+        $scope.syllabusOptions=[{id: '', semester_name: 'Select a ',program_name:'Syllabus'}];
+        /**--------Program Load----------------**/
+        $http.get('/ums-webservice-common/academic/syllabus/program-id/'+$scope.selectedProgram)
+            .then(function (response) {
+              var entries:any = response.data.entries;
+              $scope.syllabusOptions=entries;
+              $scope.selectedSyllabus=entries[0].id;
+            }, function (error) {
+              $scope.selectedSyllabus="";
+              console.log(error);
+            });
+
+      });
     }
   }
   UMS.controller('NewCourseUg',NewCourseUg);

@@ -129,10 +129,10 @@
                                 <div class="form-group">
                                     <label class="col-md-4 control-label">Syllabus</label>
                                     <div class="col-md-8">
-
-                                        <select class="form-control required">
-                                            <option data-ng-repeat="dept in data.ugDeptOptions" value="{{dept.id}}">{{dept.name}}</option>
+                                        <select class="form-control required" data-ng-model="selectedSyllabus">
+                                            <option data-ng-repeat="syllabus in syllabusOptions" value="{{syllabus.id}}">{{syllabus.semester_name}} ({{syllabus.program_name}})</option>
                                         </select>
+
                                     </div>
                                 </div>
                                 <div class="form-group">
