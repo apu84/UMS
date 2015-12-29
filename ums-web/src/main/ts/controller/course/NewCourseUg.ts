@@ -37,15 +37,16 @@ module ums {
       $scope.$watch('selectedProgram', function() {
         $scope.syllabusOptions=[{id: '', semester_name: 'Select a ',program_name:'Syllabus'}];
         /**--------Program Load----------------**/
-        httpClient.get('academic/syllabus/program-id/'+$scope.selectedProgram, 'application/json',
-            function(json:any, etag:string) {
-              var entries:any = json.entries;
-              $scope.syllabusOptions=entries;
-              $scope.selectedSyllabus=entries[0].id;
-            },function(response:ng.IHttpPromiseCallbackArg<any>){
+        if($scope.selectedProgram!="") {
+          httpClient.get('academic/syllabus/program-id/' + $scope.selectedProgram, 'application/json',
+              function (json:any, etag:string) {
+                var entries:any = json.entries;
+                $scope.syllabusOptions = entries;
+                $scope.selectedSyllabus = entries[0].id;
+              }, function (response:ng.IHttpPromiseCallbackArg<any>) {
                 alert(response);
-            });
-
+              });
+        }
 
       });
     }
