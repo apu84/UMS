@@ -27,6 +27,7 @@
 
 /// <reference path='controller/syllabus/FullSyllabus.ts'/>
 /// <reference path='controller/syllabus/NewSyllabus.ts'/>
+/// <reference path='controller/syllabus/GridSyllabus.ts'/>
 
 
 /// <reference path='directive/LeftMenu.ts'/>
