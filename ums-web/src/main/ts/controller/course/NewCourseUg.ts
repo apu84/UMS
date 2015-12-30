@@ -2,8 +2,8 @@
 module ums {
   export class NewCourseUg {
 
-    public static $inject = ['appConstants','$scope', '$http'];
-    constructor(private appConstants:any,private $scope:any,private $http:any) {
+    public static $inject = ['appConstants','$scope', 'HttpClient'];
+    constructor(private appConstants:any,private $scope:any,private httpClient:HttpClient) {
       $scope.data = {
         courseTypeOptions: appConstants.courseType,
         courseCategoryOptions: appConstants.courseCategory,
@@ -37,18 +37,20 @@ module ums {
       $scope.$watch('selectedProgram', function() {
         $scope.syllabusOptions=[{id: '', semester_name: 'Select a ',program_name:'Syllabus'}];
         /**--------Program Load----------------**/
-        $http.get('/ums-webservice-common/academic/syllabus/program-id/'+$scope.selectedProgram)
-            .then(function (response) {
-              var entries:any = response.data.entries;
-              $scope.syllabusOptions=entries;
-              $scope.selectedSyllabus=entries[0].id;
-            }, function (error) {
-              $scope.selectedSyllabus="";
-              console.log(error);
-            });
+        if($scope.selectedProgram!="") {
+          httpClient.get('academic/syllabus/program-id/' + $scope.selectedProgram, 'application/json',
+              function (json:any, etag:string) {
+                var entries:any = json.entries;
+                $scope.syllabusOptions = entries;
+                $scope.selectedSyllabus = entries[0].id;
+              }, function (response:ng.IHttpPromiseCallbackArg<any>) {
+                alert(response);
+              });
+        }
 
       });
     }
+
   }
   UMS.controller('NewCourseUg',NewCourseUg);
 }
