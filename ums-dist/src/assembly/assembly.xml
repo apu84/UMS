@@ -56,6 +56,7 @@
       <outputDirectory>webapps</outputDirectory>
       <outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
     </dependencySet>
+
     <dependencySet>
       <includes>
         <include>org.ums:ums-web</include>
@@ -63,6 +64,7 @@
       <outputDirectory>webapps</outputDirectory>
       <outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
     </dependencySet>
+
   </dependencySets>
 
 </assembly>

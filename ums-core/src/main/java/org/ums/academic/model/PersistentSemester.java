@@ -100,6 +100,16 @@ public class PersistentSemester implements MutableSemester {
     mProgramTypeId = pProgramTypeId;
   }
 
+  @Override
+  public String getLastModified() {
+    return mLastModified;
+  }
+
+  @Override
+  public void setLastModified(String pLastModified) {
+    mLastModified = pLastModified;
+  }
+
   public void delete() throws Exception {
     sSemesterManager.delete(this);
   }
@@ -114,15 +124,5 @@ public class PersistentSemester implements MutableSemester {
 
   public MutableSemester edit() throws Exception {
     return new PersistentSemester(this);
-  }
-
-  @Override
-  public String getLastModified() {
-    return mLastModified;
-  }
-
-  @Override
-  public void setLastModified(String pLastModified) {
-    mLastModified = pLastModified;
   }
 }

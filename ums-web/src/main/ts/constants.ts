@@ -2,6 +2,7 @@ module ums {
   export class Constants {
     static  Default():any {
       return {
+        Empty:"",
         courseType: [
           {id: '', name: 'Select Course Type'},
           {id: '1', name: 'Theory'},
@@ -25,7 +26,7 @@ module ums {
           {id: '1', name: '1st Semester'},
           {id: '2', name: '2nd Semester'}
         ],
-        semester: [
+        semesterType: [
           {id: '', name: 'Select Semester'},
           {id: '01', name: 'Spring'},
           {id: '02', name: 'Fall'}

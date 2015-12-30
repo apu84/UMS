@@ -3,6 +3,9 @@ package org.ums.academic.builder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.ums.academic.model.PersistentProgram;
+import org.ums.academic.model.PersistentSemester;
+import org.ums.academic.model.PersistentSyllabus;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.*;
 import org.ums.manager.ContentManager;
@@ -42,11 +45,21 @@ public class SyllabusBuilder implements Builder<Syllabus, MutableSyllabus> {
 
   @Override
   public void build(MutableSyllabus pMutable, JsonObject pJsonObject, final LocalCache pLocalCache) throws Exception {
-    String id = pJsonObject.getString("id");
-    int semesterId = pJsonObject.getInt("semester");
-    int programId = pJsonObject.getInt("program");
+    String id = pJsonObject.getString("syllabusId");
+    int semesterId = Integer.parseInt(pJsonObject.getString("semesterId"));
+    int programId = Integer.parseInt(pJsonObject.getString("programId"));
     pMutable.setId(id);
-    pMutable.setSemester(mSemesterManager.get(semesterId));
-    pMutable.setProgram(mProgramManager.get(programId));
+
+    PersistentSemester pSemester=new PersistentSemester();
+    pSemester.setId(semesterId);
+    pMutable.setSemester(pSemester);
+    PersistentProgram persistentProgram=new PersistentProgram();
+    persistentProgram.setId(programId);
+    pMutable.setSemester(pSemester);
+    pMutable.setProgram(persistentProgram);
+
+    //Unnecessary. No use of it in any Use Case. If any Use case need this then we will open it again
+    //pMutable.setSemester(mSemesterManager.get(semesterId));
+    //pMutable.setProgram(mProgramManager.get(programId));
   }
 }

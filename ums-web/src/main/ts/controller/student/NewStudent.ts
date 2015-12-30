@@ -2,8 +2,8 @@
 ///<reference path="../../service/HttpClient.ts"/>
 module ums {
   export class NewStudent {
-    public static $inject = ['appConstants','$scope', '$http'];
-    constructor(private appConstants:any,private $scope:any,private $http:any) {
+    public static $inject = ['appConstants','$scope', 'HttpClient'];
+    constructor(private appConstants:any,private $scope:any,private httpClient:HttpClient) {
 
       $scope.data = {
         genderOptions: appConstants.gender,
@@ -32,14 +32,22 @@ module ums {
         $scope.selectedDept = "";
 
         /**--------Semester Load----------------**/
-        $http.get('/ums-webservice-common/academic/semester/program-type/'+$scope.selectedProgramType+'/limit/0')
-            .then(function (response) {
-              console.log(response.data.entries);
-              $scope.semesterOptions=response.data.entries;
-            }, function (error) {
-              alert(error);
-              console.log(error);
-            });
+        $scope.semesterOptions = [{id: '', name: 'Select a Semester'}];
+        $scope.selectedSemester="";
+        $scope.$watch('selectedProgramType', function() {
+          $scope.semesterOptions = [{id: '', name: 'Select a Semester'}];
+          if ($scope.selectedProgramType != "") {
+            httpClient.get('academic/semester/program-type/' + $scope.selectedProgramType+"/limit/0", 'application/json',
+                function (json:any, etag:string) {
+                  var entries:any = json.entries;
+                  $scope.semesterOptions = entries;
+                  $scope.selectedSemester = entries[0].id;
+                }, function (response:ng.IHttpPromiseCallbackArg<any>) {
+                  alert(response);
+                });
+          }
+        });
+
       }
       var abc:any;
       $scope.getPrograms=function(deptId){

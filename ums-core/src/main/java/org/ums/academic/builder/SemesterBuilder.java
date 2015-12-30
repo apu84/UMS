@@ -41,11 +41,11 @@ public class SemesterBuilder implements Builder<Semester, MutableSemester> {
   }
 
   public void build(final MutableSemester pMutableSemester, JsonObject pJsonObject, final LocalCache pLocalCache) throws Exception {
-    int id = pJsonObject.getInt("id");
-    String name = pJsonObject.getString("name");
+    int id = pJsonObject.getInt("semesterId");
+    String name = pJsonObject.getString("semesterName");
     String startDate = pJsonObject.getString("startDate");
-    int program = pJsonObject.getInt("program");
-    boolean status = pJsonObject.getBoolean("status");
+    int program = Integer.parseInt(pJsonObject.getString("programTypeId"));
+    boolean status = pJsonObject.getInt("statusId")==1?Boolean.TRUE:Boolean.FALSE;
     pMutableSemester.setId(id);
     pMutableSemester.setName(name);
     pMutableSemester.setStartDate(mDateFormat.parse(startDate));

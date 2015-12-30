@@ -3,23 +3,45 @@
   <div class="col-lg-6">
     <div class="panel panel-blue">
       <div class="panel-heading">New Syllabus Create Form
-
                 <span style='float:right;'><a class="btn btn-white btn-sm" href="#/showSyllabusList"><i
                     class="fa fa-list"></i>&nbsp;
                   List</a>&nbsp;
                 </span>
       </div>
       <div class="panel-body pan">
-        <form action="" class="form-horizontal" data-validate="">
+        <form action="" class="form-horizontal" data-validate="" data-onvalidate="submit" data-ng-hide="response.status">
           <div class="form-body pal">
 
             <div data-program-selctor data-model="model"/>
+
+            <div class="form-group">
+              <label class="col-md-3 control-label">Program Type</label>
+              <div class="col-md-9">
+                <select class="form-control required" name="programType" data-ng-model="syllabus.programTypeId" data-ng-change="getDepts(syllabus.programTypeId)" ng-init="syllabus.programTypeId=''">
+                  <option data-ng-repeat="programType in data.programTypeOptions" value="{{programType.id}}">{{programType.name}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-md-3 control-label">Dept./School</label>
+              <div class="col-md-9">
+                <select class="form-control required"  data-ng-model="syllabus.deptId" data-ng-change="getPrograms(selectedDept)" ng-init="syllabus.deptId=''">
+                  <option data-ng-repeat="dept in depts" value="{{dept.id}}">{{dept.name}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-md-3 control-label">Program Name</label>
+              <div class="col-md-9">
+                <select class="form-control required" data-ng-model="syllabus.programId" ng-init="syllabus.programId=''">
+                  <option data-ng-repeat="program in programs" value="{{program.id}}">{{program.longName}}</option>
+                </select>
+              </div>
+            </div>
             <div class="form-group">
               <label class="col-md-3 control-label">Semester</label>
-
               <div class="col-md-9">
-                <select name="semesterName" class="col-md-5 form-control required">
-                  <option value="">Select Semester</option>
+                <select class="form-control required" data-ng-model="syllabus.semesterId" ng-init="syllabus.semesterId=''">
                   <option data-ng-repeat="semester in semesterOptions" value="{{semester.id}}">{{semester.name}}</option>
                 </select>
               </div>
@@ -27,7 +49,7 @@
 
           </div>
           <div class="form-actions text-right pal">
-            <button type="button" class="btn btn-success" onclick="validate(submit)">Create Syllabus</button>
+            <button type="button" class="btn btn-success">Create Syllabus</button>
           </div>
 
         </form>
