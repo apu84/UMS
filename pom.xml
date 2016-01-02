@@ -50,7 +50,7 @@
     <module>ums-api</module>
     <module>ums-core</module>
     <module>ums-webservice-common</module>
-    <module>ums-web</module>
+<!--    <module>ums-web</module>-->
     <module>ums-dist</module>
   </modules>
 

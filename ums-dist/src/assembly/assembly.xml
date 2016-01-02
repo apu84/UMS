@@ -57,13 +57,13 @@
       <outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
     </dependencySet>
 
-    <dependencySet>
+  <!--  <dependencySet>
       <includes>
         <include>org.ums:ums-web</include>
       </includes>
       <outputDirectory>webapps</outputDirectory>
       <outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
-    </dependencySet>
+    </dependencySet>-->
 
   </dependencySets>
 
