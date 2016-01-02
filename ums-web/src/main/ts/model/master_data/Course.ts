@@ -1,5 +1,5 @@
 module ums {
-  export interface Semester {
+  export interface Course {
     semesterId:number;
     semesterName:string;
     programTypeId: string;
