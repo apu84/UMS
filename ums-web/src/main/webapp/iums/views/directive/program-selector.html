@@ -1,6 +1,6 @@
 <div class="form-group">
-  <label class="col-md-3 control-label">Program Type</label>
-  <div class="col-md-9">
+  <label class="col-md-4 control-label">Program Type</label>
+  <div class="col-md-8">
     <select class="form-control required" name="programType" data-ng-model="model.programTypeId"
             data-ng-change="model.getDepartments()">
       <option data-ng-repeat="programType in model.programTypes" value="{{programType.id}}">{{programType.name}}
@@ -9,16 +9,16 @@
   </div>
 </div>
 <div class="form-group">
-  <label class="col-md-3 control-label">Dept./School</label>
-  <div class="col-md-9">
+  <label class="col-md-4 control-label">Dept./School</label>
+  <div class="col-md-8">
     <select class="form-control required" data-ng-model="model.departmentId" data-ng-change="model.getPrograms()">
       <option data-ng-repeat="department in model.departments" value="{{department.id}}">{{department.name}}</option>
     </select>
   </div>
 </div>
 <div class="form-group">
-  <label class="col-md-3 control-label">Program Name</label>
-  <div class="col-md-9">
+  <label class="col-md-4 control-label">Program Name</label>
+  <div class="col-md-8">
     <select class="form-control required" data-ng-model="model.programId">
       <option data-ng-repeat="program in model.programs" value="{{program.id}}">{{program.longName}}</option>
     </select>

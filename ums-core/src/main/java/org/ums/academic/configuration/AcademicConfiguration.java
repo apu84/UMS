@@ -61,6 +61,11 @@ public class AcademicConfiguration {
   }
 
   @Bean
+  ContentManager<Student, MutableStudent, String> studentManager() {
+    return new PersistentStudentDao(new JdbcTemplate(mDataSource), getGenericDateFormat());
+  }
+
+  @Bean
   DateFormat getGenericDateFormat() {
     return new SimpleDateFormat(Constants.DATE_FORMAT);
   }
@@ -175,5 +180,15 @@ public class AcademicConfiguration {
   @Bean
   List<Builder<Course, MutableCourse>> getCourseBuilders() {
     return Arrays.asList(new CourseBuilder());
+  }
+
+  @Bean
+  Builder<Student, MutableStudent> getStudentBuilder() {
+    return new StudentBuilder(getGenericDateFormat());
+  }
+
+  @Bean
+  List<Builder<Student, MutableStudent>> getStudentBuilders() {
+    return Arrays.asList(new StudentBuilder(getGenericDateFormat()));
   }
 }

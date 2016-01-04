@@ -16,7 +16,7 @@ public class PersistentUserDao extends ContentDaoDecorator<User, MutableUser, St
   static String UPDATE_ALL = "UPDATE USERS SET PASSWORD = ?, ROLE_ID = ?, STATUS = ? ";
   static String DELETE_ALL = "DELETE FROM USERS ";
   static String INSERT_ALL = "INSERT INTO USERS(USER_ID, PASSWORD, ROLE_ID, STATUS) VALUES " +
-      "(?, ?, ?, ?, ?)";
+      "(?, ?, ?, ?)";
 
   private JdbcTemplate mJdbcTemplate;
 

@@ -1,68 +1,20 @@
 ///<reference path="../../lib/jquery-maskedinput.d.ts"/>
 ///<reference path="../../service/HttpClient.ts"/>
+///<reference path="../../service/FileUpload.ts"/>
+///<reference path="../../model/NewStudentModel.ts"/>
 module ums {
+  interface NewStudentScope extends ng.IScope {
+    newStudentModel: NewStudentModel;
+    submit: Function;
+  }
   export class NewStudent {
-    public static $inject = ['appConstants','$scope', 'HttpClient'];
-    constructor(private appConstants:any,private $scope:any,private httpClient:HttpClient) {
+    public static $inject = ['appConstants', '$scope', 'HttpClient', 'FileUpload', 'BaseUri'];
 
-      $scope.data = {
-        genderOptions: appConstants.gender,
-        deptOptions: appConstants.deptShort,
-        bloodGroupOptions: appConstants.bloodGroup,
-        programTypeOptions:appConstants.programType,
-        ugPrograms:appConstants.ugPrograms
-      };
-      $scope.depts= [{id:'',name:'Select Dept./School'}];
-      $scope.programs = [{id: '', longName: 'Select a Program'}];
-      $scope.selectedProgramType="";
-      $scope.selectedDept="";
-      $scope.selectedProgram="";
-      $scope.getDepts=function(programType){
+    constructor(private appConstants:any, private $scope:NewStudentScope, private httpClient:HttpClient,
+                private fileUpload:FileUpload, private baseUri:BaseUri) {
 
-        $scope.programs = [{id: '', longName: 'Select a Program'}];
-        $scope.selectedProgram = "";
-
-        if(programType=="11")
-          $scope.depts= appConstants.ugDept;
-        else if(programType=="22")
-          $scope.depts= appConstants.pgDept;
-        else
-          $scope.depts= [{id:'',name:'Select Dept./School'}];
-
-        $scope.selectedDept = "";
-
-        /**--------Semester Load----------------**/
-        $scope.semesterOptions = [{id: '', name: 'Select a Semester'}];
-        $scope.selectedSemester="";
-        $scope.$watch('selectedProgramType', function() {
-          $scope.semesterOptions = [{id: '', name: 'Select a Semester'}];
-          if ($scope.selectedProgramType != "") {
-            httpClient.get('academic/semester/program-type/' + $scope.selectedProgramType+"/limit/0", 'application/json',
-                function (json:any, etag:string) {
-                  var entries:any = json.entries;
-                  $scope.semesterOptions = entries;
-                  $scope.selectedSemester = entries[0].id;
-                }, function (response:ng.IHttpPromiseCallbackArg<any>) {
-                  alert(response);
-                });
-          }
-        });
-
-      }
-      var abc:any;
-      $scope.getPrograms=function(deptId){
-        if(deptId !="" && $scope.selectedProgramType=="11") {
-           var ugProgramsArr:any=appConstants.ugPrograms;
-           var ugProgramsJson = $.map(ugProgramsArr, function(el) { return el });
-           var resultPrograms:any = $.grep(ugProgramsJson, function(e:any){ return e.deptId ==$scope.selectedDept; });
-           $scope.programs= resultPrograms[0].programs;
-           $scope.selectedProgram = $scope.programs[0].id;
-        }
-        else {
-          $scope.programs = [{id: '', longName: 'Select a Program'}];
-          $scope.selectedProgram = "";
-        }
-      }
+      $scope.newStudentModel = new NewStudentModel(appConstants, httpClient);
+      $scope.submit = this.submit.bind(this);
 
       //$('.datepicker-default').datepicker();
       $("#birthDate").mask("99/99/9999");
@@ -85,9 +37,30 @@ module ums {
           var thisObject:any = $(this)[0];
           reader.readAsDataURL(thisObject.files[0]);
         } else {
-          alert("This browser does not support FileReader.");
+          console.error("This browser does not support FileReader.");
         }
       });
+    }
+
+    private submit():void {
+      console.debug("upload file....%o", this.$scope.newStudentModel.picture);
+      var fileReader = new FileReader();
+      console.debug("upload file....%o", fileReader);
+      fileReader.onload = () => {
+        console.debug("onload.....");
+        var dataURL = fileReader.result;
+        console.debug("data....%o", dataURL);
+        this.$scope.newStudentModel.imageData = dataURL; console.debug("%o", this.$scope.newStudentModel);
+        this.httpClient.post(this.baseUri.toAbsolute('academic/student'), this.$scope.newStudentModel, this.appConstants.mimeTypeJson)
+            .success((data, status, headers) => {
+              console.debug("Student created, resource location : " + headers('location'));
+            }).error((data) => {
+              console.error(data);
+            });
+
+        //this.fileUpload.uploadFile(dataURL, $scope.fileUpload.type, $scope.fileUpload.name, this.baseUri.toAbsolute('academic/student/upload'));
+      };
+      fileReader.readAsDataURL(this.$scope.newStudentModel.picture);
     }
   }
   UMS.controller('NewStudent', NewStudent);
