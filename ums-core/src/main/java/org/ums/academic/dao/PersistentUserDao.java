@@ -39,8 +39,9 @@ public class PersistentUserDao extends ContentDaoDecorator<User, MutableUser, St
   @Override
   public void update(MutableUser pMutable) throws Exception {
     String query = UPDATE_ALL + "WHERE USER_ID = ?";
-    mJdbcTemplate.update(query, String.valueOf(pMutable.getPassword()),
-        pMutable.getRole().getId(), pMutable.isActive(), pMutable.getTemporaryPassword(), pMutable.getId());
+    mJdbcTemplate.update(query, pMutable.getPassword() == null ? "" : String.valueOf(pMutable.getPassword()),
+        pMutable.getRole().getId(), pMutable.isActive(),
+        pMutable.getTemporaryPassword() == null ? "" : String.valueOf(pMutable.getPassword()), pMutable.getId());
   }
 
   @Override
@@ -51,8 +52,8 @@ public class PersistentUserDao extends ContentDaoDecorator<User, MutableUser, St
 
   @Override
   public void create(MutableUser pMutable) throws Exception {
-    mJdbcTemplate.update(INSERT_ALL, pMutable.getId(), String.valueOf(pMutable.getPassword()),
-        pMutable.getRole().getId(), pMutable.isActive(), pMutable.getTemporaryPassword());
+    mJdbcTemplate.update(INSERT_ALL, pMutable.getId(), pMutable.getPassword() == null ? "" : String.valueOf(pMutable.getPassword()),
+        pMutable.getRole().getId(), pMutable.isActive(), pMutable.getTemporaryPassword() == null ? "" : String.valueOf(pMutable.getTemporaryPassword()));
   }
 
   class UserRowMapper implements RowMapper<User> {

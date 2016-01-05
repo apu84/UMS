@@ -1,6 +1,7 @@
 package org.ums.authentication;
 
 import org.apache.shiro.authc.*;
+import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.authc.credential.PasswordMatcher;
 import org.apache.shiro.realm.jdbc.JdbcRealm;
 import org.apache.shiro.util.ByteSource;
@@ -14,7 +15,7 @@ import org.ums.manager.ContentManager;
 public class UMSAuthenticationRealm extends JdbcRealm {
   private String mSalt;
   private PasswordMatcher mPlainPasswordMatcher;
-
+  private CredentialsMatcher mHashCredentialsMatcher;
   @Autowired
   @Qualifier("userManager")
   private ContentManager<User, MutableUser, String> mUserManager;
@@ -51,6 +52,8 @@ public class UMSAuthenticationRealm extends JdbcRealm {
     }
 
     try {
+      setCredentialsMatcher(mHashCredentialsMatcher);
+
       User user = mUserManager.get(username);
 
       if (user.getPassword() == null) {
@@ -63,7 +66,6 @@ public class UMSAuthenticationRealm extends JdbcRealm {
         }
 
       } else {
-
         info = new SimpleAuthenticationInfo(username, user.getPassword(), getName());
         if (mSalt != null) {
           info.setCredentialsSalt(ByteSource.Util.bytes(mSalt));
@@ -77,5 +79,8 @@ public class UMSAuthenticationRealm extends JdbcRealm {
     return info;
   }
 
+  public void setHashCredentialsMatcher(CredentialsMatcher pHashCredentialsMatcher) {
+    mHashCredentialsMatcher = pHashCredentialsMatcher;
+  }
   //TODO: Implement AuthorizationInfo and Permissions also
 }

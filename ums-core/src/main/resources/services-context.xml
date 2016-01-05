@@ -60,11 +60,12 @@
     <property name="userRolesQuery" value="select role_id from Users where user_id = ?"/>
     <property name="permissionsQuery" value="select permissions from permissions where role_id = ?"/>
     <property name="credentialsMatcher" ref="credentialMatcher"/>
+    <property name="hashCredentialsMatcher" ref="credentialMatcher"/>
     <property name="plainPasswordMatcher" ref="plainPasswordMatcher"/>
     <property name="saltStyle" value="EXTERNAL"/>
     <!--Trying to implement temporary password solution for new user. So application cache rather shiro cache -->
     <!--<property name="cacheManager" ref="memoryConstrainedCacheManager"/>-->
-    <property name="authenticationCachingEnabled" value="true"/>
+    <!--<property name="authenticationCachingEnabled" value="true"/>-->
   </bean>
 
   <bean id="memoryConstrainedCacheManager" class="org.apache.shiro.cache.MemoryConstrainedCacheManager"/>
@@ -77,6 +78,7 @@
 
   <bean id="newUser" class="org.ums.filter.NewUserFilter">
     <property name="changePasswordUrl" value="/changePassword"/>
+    <property name="loginUrl" value="/login"/>
   </bean>
 
   <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
