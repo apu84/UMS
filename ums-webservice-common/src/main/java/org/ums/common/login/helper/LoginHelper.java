@@ -48,8 +48,9 @@ public class LoginHelper {
     if (mPasswordService.passwordsMatch(currentPassword, String.valueOf(currentUser.getPassword()))) {
       MutableUser mutableUser = currentUser.edit();
       mutableUser.setPassword(mPasswordService.encryptPassword(newPassword).toCharArray());
+      mutableUser.setTemporaryPassword(null);
       mutableUser.commit(true);
-      mAuthenticationRealm.getAuthenticationCache().remove(SecurityUtils.getSubject().getPrincipal());
+//      mAuthenticationRealm.getAuthenticationCache().remove(SecurityUtils.getSubject().getPrincipal());
       return Response.ok().build();
     }
 

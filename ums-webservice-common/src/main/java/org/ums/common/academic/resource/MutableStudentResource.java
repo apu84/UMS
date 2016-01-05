@@ -24,38 +24,10 @@ public class MutableStudentResource extends Resource {
   @Autowired
   StudentResourceHelper mResourceHelper;
 
-  @Autowired
-  @Qualifier("roleManager")
-  ContentManager<Role, MutableRole, Integer> mRoleManager;
-
   @POST
   public Response create(final JsonObject pJsonObject) throws Exception {
 
-    Response response = mResourceHelper.post(pJsonObject, mUriInfo);
-
-    String UPLOAD_PATH = "F:/temp/";
-    try {
-
-      String encodingPrefix = "base64,", data = pJsonObject.getString("imageData");
-      int contentStartIndex = data.indexOf(encodingPrefix) + encodingPrefix.length();
-      byte[] imageData = Base64.getDecoder().decode(data.substring(contentStartIndex));
-
-      FileOutputStream fileOutputStream = new FileOutputStream(UPLOAD_PATH + pJsonObject.getString("id"));
-      fileOutputStream.write(imageData);
-      fileOutputStream.flush();
-      fileOutputStream.close();
-
-    } catch (IOException e) {
-      throw new WebApplicationException("Error while uploading file. Please try again !!");
-    }
-
-    MutableUser studentUser = new PersistentUser();
-    studentUser.setId(pJsonObject.getString("id"));
-    studentUser.setPassword("testPassword".toCharArray());
-    studentUser.setRole(mRoleManager.get(11));
-    studentUser.setActive(true);
-    studentUser.commit(false);
-    return response;
+    return  mResourceHelper.post(pJsonObject, mUriInfo);
   }
 
   @PUT

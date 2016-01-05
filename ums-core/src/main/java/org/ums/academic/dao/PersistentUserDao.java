@@ -12,11 +12,11 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentUserDao extends ContentDaoDecorator<User, MutableUser, String> {
-  static String SELECT_ALL = "SELECT USER_ID, PASSWORD, ROLE_ID, STATUS FROM USERS ";
-  static String UPDATE_ALL = "UPDATE USERS SET PASSWORD = ?, ROLE_ID = ?, STATUS = ? ";
+  static String SELECT_ALL = "SELECT USER_ID, PASSWORD, ROLE_ID, STATUS, TEMP_PASSWORD FROM USERS ";
+  static String UPDATE_ALL = "UPDATE USERS SET PASSWORD = ?, ROLE_ID = ?, STATUS = ?, TEMP_PASSWORD = ? ";
   static String DELETE_ALL = "DELETE FROM USERS ";
-  static String INSERT_ALL = "INSERT INTO USERS(USER_ID, PASSWORD, ROLE_ID, STATUS) VALUES " +
-      "(?, ?, ?, ?)";
+  static String INSERT_ALL = "INSERT INTO USERS(USER_ID, PASSWORD, ROLE_ID, STATUS, TEMP_PASSWORD) VALUES " +
+      "(?, ?, ?, ?, ?)";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -40,7 +40,7 @@ public class PersistentUserDao extends ContentDaoDecorator<User, MutableUser, St
   public void update(MutableUser pMutable) throws Exception {
     String query = UPDATE_ALL + "WHERE USER_ID = ?";
     mJdbcTemplate.update(query, String.valueOf(pMutable.getPassword()),
-        pMutable.getRole().getId(), pMutable.isActive(), pMutable.getId());
+        pMutable.getRole().getId(), pMutable.isActive(), pMutable.getTemporaryPassword(), pMutable.getId());
   }
 
   @Override
@@ -52,7 +52,7 @@ public class PersistentUserDao extends ContentDaoDecorator<User, MutableUser, St
   @Override
   public void create(MutableUser pMutable) throws Exception {
     mJdbcTemplate.update(INSERT_ALL, pMutable.getId(), String.valueOf(pMutable.getPassword()),
-        pMutable.getRole().getId(), pMutable.isActive());
+        pMutable.getRole().getId(), pMutable.isActive(), pMutable.getTemporaryPassword());
   }
 
   class UserRowMapper implements RowMapper<User> {
@@ -60,9 +60,10 @@ public class PersistentUserDao extends ContentDaoDecorator<User, MutableUser, St
     public User mapRow(ResultSet rs, int rowNum) throws SQLException {
       MutableUser user = new PersistentUser();
       user.setId(rs.getString("USER_ID"));
-      user.setPassword(rs.getString("PASSWORD").toCharArray());
+      user.setPassword(rs.getString("PASSWORD") == null ? null : rs.getString("PASSWORD").toCharArray());
       user.setRoleId(rs.getInt("ROLE_ID"));
       user.setActive(rs.getBoolean("STATUS"));
+      user.setTemporaryPassword((rs.getString("TEMP_PASSWORD") == null ? null : rs.getString("TEMP_PASSWORD").toCharArray()));
       AtomicReference<User> atomicReference = new AtomicReference<>(user);
       return atomicReference.get();
     }

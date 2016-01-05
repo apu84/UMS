@@ -22,6 +22,7 @@ public class PersistentUser implements MutableUser {
 
   private String mId;
   private char[] mPassword;
+  private char[] mTemporaryPassword;
   private Role mRole;
   private Integer mRoleId;
   private boolean mActive;
@@ -33,6 +34,7 @@ public class PersistentUser implements MutableUser {
   public PersistentUser(final PersistentUser pPersistentUser) throws Exception {
     mId = pPersistentUser.getId();
     mPassword = pPersistentUser.getPassword();
+    mTemporaryPassword = pPersistentUser.getTemporaryPassword();
     mRoleId = pPersistentUser.getRoleId();
     mRole = pPersistentUser.getRole();
     mActive = pPersistentUser.isActive();
@@ -105,5 +107,15 @@ public class PersistentUser implements MutableUser {
   @Override
   public void setId(String pId) {
     mId = pId;
+  }
+
+  @Override
+  public void setTemporaryPassword(char[] pPassword) {
+    mTemporaryPassword = pPassword;
+  }
+
+  @Override
+  public char[] getTemporaryPassword() {
+    return mTemporaryPassword;
   }
 }
