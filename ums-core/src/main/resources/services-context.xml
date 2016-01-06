@@ -13,24 +13,14 @@
 
   <bean id="dataSource"
         class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-    <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
-    <property name="url" value="jdbc:oracle:thin:@localhost:1521:xe"/>
-    <property name="username" value="DB_IUMS"/>
-    <property name="password" value="ig100"/>
-  </bean>
-
-
-  <bean id="common"
-        class="org.springframework.beans.factory.config.PropertiesFactoryBean">
-    <property name="properties">
-      <props>
-        <prop key="salt">c2VjcmV0</prop>
-      </props>
-    </property>
+    <property name="driverClassName" value="${jdbc.driverClass}"/>
+    <property name="url" value="${jdbc.username}"/>
+    <property name="username" value="${jdbc.username}"/>
+    <property name="password" value="${jdbc.password}"/>
   </bean>
 
   <bean id="saltBytes" class="org.apache.shiro.util.SimpleByteSource">
-    <constructor-arg value="${salt}"/>
+    <constructor-arg value="${authentication.salt}"/>
   </bean>
 
   <bean id="hashService" class="org.apache.shiro.crypto.hash.DefaultHashService">
@@ -102,8 +92,16 @@
   <bean class="org.ums.cache.LocalCacheManager" id="localCache"/>
 
   <bean class="org.ums.manager.FileContentManager" id="fileContentManager">
-    <property name="storageRoot" value="F:/temp/"/>
+    <property name="storageRoot" value="${binary.storageRoot}"/>
   </bean>
 
-  <context:property-placeholder properties-ref="common"/>
+  <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <property name="locations">
+      <list>
+        <value>${ums.properties.dir:classpath:}/jdbc.properties</value>
+        <value>${ums.properties.dir:classpath:}/common.properties</value>
+      </list>
+    </property>
+    <property name="ignoreUnresolvablePlaceholders" value="true"/>
+  </bean>
 </beans>

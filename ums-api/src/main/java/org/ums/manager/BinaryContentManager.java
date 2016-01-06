@@ -6,7 +6,7 @@ import java.util.Map;
 
 public interface BinaryContentManager<T> {
 
-  T get(final String pId, Domain pDomain);
+  T get(final String pId, Domain pDomain) throws Exception;
 
   void put(T pData, String pId, Domain pDomain) throws Exception;
 
