@@ -49,16 +49,11 @@ public class StudentResourceHelper extends ResourceHelper<Student, MutableStuden
     }
     mutableStudent.commit(false);
 
-    String UPLOAD_PATH = "F:/temp/";
     try {
-
       String encodingPrefix = "base64,", data = pJsonObject.getString("imageData");
       int contentStartIndex = data.indexOf(encodingPrefix) + encodingPrefix.length();
       byte[] imageData = Base64.getDecoder().decode(data.substring(contentStartIndex));
-
       mBinaryContentManager.create(imageData, pJsonObject.getString("id"), BinaryContentManager.Domain.PICTURE);
-
-
 
     } catch (IOException e) {
       throw new WebApplicationException("Error while uploading file. Please try again !!");
