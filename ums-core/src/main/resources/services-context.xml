@@ -101,5 +101,9 @@
 
   <bean class="org.ums.cache.LocalCacheManager" id="localCache"/>
 
+  <bean class="org.ums.manager.FileContentManager" id="fileContentManager">
+    <property name="storageRoot" value="F:/temp/"/>
+  </bean>
+
   <context:property-placeholder properties-ref="common"/>
 </beans>

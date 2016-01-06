@@ -10,6 +10,7 @@ import org.ums.cache.LocalCache;
 import org.ums.common.academic.resource.ResourceHelper;
 import org.ums.common.academic.resource.StudentResource;
 import org.ums.domain.model.*;
+import org.ums.manager.BinaryContentManager;
 import org.ums.manager.ContentManager;
 
 import javax.json.JsonObject;
@@ -33,6 +34,9 @@ public class StudentResourceHelper extends ResourceHelper<Student, MutableStuden
   ContentManager<Role, MutableRole, Integer> mRoleManager;
 
   @Autowired
+  BinaryContentManager<byte[]> mBinaryContentManager;
+
+  @Autowired
   private List<Builder<Student, MutableStudent>> mBuilders;
 
   @Override
@@ -52,10 +56,9 @@ public class StudentResourceHelper extends ResourceHelper<Student, MutableStuden
       int contentStartIndex = data.indexOf(encodingPrefix) + encodingPrefix.length();
       byte[] imageData = Base64.getDecoder().decode(data.substring(contentStartIndex));
 
-      FileOutputStream fileOutputStream = new FileOutputStream(UPLOAD_PATH + pJsonObject.getString("id"));
-      fileOutputStream.write(imageData);
-      fileOutputStream.flush();
-      fileOutputStream.close();
+      mBinaryContentManager.create(imageData, pJsonObject.getString("id"), BinaryContentManager.Domain.PICTURE);
+
+
 
     } catch (IOException e) {
       throw new WebApplicationException("Error while uploading file. Please try again !!");

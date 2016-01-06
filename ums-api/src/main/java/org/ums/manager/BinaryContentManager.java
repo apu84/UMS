@@ -6,13 +6,13 @@ import java.util.Map;
 
 public interface BinaryContentManager<T> {
 
-  T get(final String pId);
+  T get(final String pId, Domain pDomain);
 
-  void put(T pData, String pId) throws Exception;
+  void put(T pData, String pId, Domain pDomain) throws Exception;
 
-  void delete(String pId) throws Exception;
+  void delete(String pId, Domain pDomain) throws Exception;
 
-  String create(T pData, String pIdentifier) throws Exception;
+  String create(T pData, String pIdentifier, Domain pDomain) throws Exception;
 
   enum Domain {
     PICTURE(1);
