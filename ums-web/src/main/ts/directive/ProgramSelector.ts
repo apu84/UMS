@@ -22,7 +22,7 @@ module ums {
       //scope.getDepartments = this.getDepartments.bind(scope);
     };
 
-    public templateUrl:"/views/directive/program-selector.html";
+ //   public templateUrl:"/views/directive/program-selector.html";
 
 /*    private getDepartments(programType:string, scope:ProgramSelectorScope) {
       scope.model.programs = [{id: '', longName: 'Select a Program'}];
@@ -69,7 +69,8 @@ module ums {
       }
     }*/
   }
-
+/*
   UMS.directive("programSelector", ['appConstants', 'httpClient', (appConstants, httpClient)
       => new ProgramSelector(appConstants, httpClient)]);
+*/
 }

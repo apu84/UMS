@@ -1,0 +1,37 @@
+CREATE TABLE DB_IUMS.Semester_Syllabus_Map
+(
+  PROGRAM_ID   NUMBER                           NOT NULL,
+  YEAR         NUMBER                           NOT NULL,
+  SEMESTER     NUMBER                           NOT NULL,
+  SEMESTER_ID  NUMBER                           NOT NULL,
+  syllabus_id  VARCHAR2(25 BYTE)                NOT NULL
+)
+RESULT_CACHE (MODE DEFAULT)
+STORAGE    (
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+LOGGING
+NOCOMPRESS
+NOCACHE
+NOPARALLEL
+NOMONITORING;
+
+COMMENT ON TABLE DB_IUMS.Semester_Syllabus_Map IS 'This table holds assigned semester for each program (For each Year-Semester)';
+
+COMMENT ON COLUMN DB_IUMS.Semester_Syllabus_Map.PROGRAM_ID IS 'Program Id';
+
+COMMENT ON COLUMN DB_IUMS.Semester_Syllabus_Map.YEAR IS 'Year. 1st Year, 2nd Year, 3rd Year, 4th Year ';
+
+COMMENT ON COLUMN DB_IUMS.Semester_Syllabus_Map.SEMESTER IS '1st Semester and 2nd Semester';
+
+COMMENT ON COLUMN DB_IUMS.Semester_Syllabus_Map.SEMESTER_ID IS 'Semester Id';
+
+
+
+ALTER TABLE DB_IUMS.Semester_Syllabus_Map ADD (
+  CONSTRAINT Semester_Syllabus_Map_PK
+  PRIMARY KEY
+  (PROGRAM_ID, YEAR, SEMESTER, SEMESTER_ID)
+  ENABLE VALIDATE);

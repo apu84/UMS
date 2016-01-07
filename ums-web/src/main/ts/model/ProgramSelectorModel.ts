@@ -2,10 +2,11 @@ module ums {
   export interface ProgramSelectorModel {
     programTypes: Array<GenericProperty>;
     departments: Array<GenericProperty>;
-    programs: [{
+    /*programs: [{
       id: string,
       longName: string;
-    }];
+    }];*/
+    programs:any;
     semesters: Array<GenericProperty>;
 
     selectedProgram: string;

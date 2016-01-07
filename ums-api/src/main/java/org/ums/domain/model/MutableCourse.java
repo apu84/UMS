@@ -15,6 +15,8 @@ public interface MutableCourse extends Course, Mutable, MutableLastModifier, Mut
 
   void setOfferedBy(final Department pDepartment);
 
+  void setOfferedTo(final Department pDepartment);
+
   void setYear(final int pYear);
 
   void setSemester(final int pSemester);

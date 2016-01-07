@@ -17,13 +17,12 @@ module ums {
         ugPrograms:appConstants.ugPrograms
       };
 
-        $scope.depts= [{id:'',name:'Select Dept./School'}];
-        $scope.programs = [{id: '', longName: 'Select a Program'}];
-        $scope.semesterOptions = [{id: '', name: 'Select a Semester'}];
+        $scope.depts= appConstants.initDept;
+        $scope.programs = appConstants.initProgram;
+        $scope.semesterOptions = appConstants.initSemester;
 
-
-      $scope.getDepts=function(programType) {
-        $scope.programs = [{id: '', longName: 'Select a Program'}];
+        $scope.getDepts=function(programType) {
+        $scope.programs = appConstants.initProgram;
         $scope.syllabus.programId = appConstants.Empty;
 
         if (programType == "11")
@@ -31,7 +30,7 @@ module ums {
         else if (programType == "22")
           $scope.depts = appConstants.pgDept;
         else
-          $scope.depts = [{id: '', name: 'Select Dept./School'}];
+          $scope.depts = appConstants.initDept;
 
         $scope.syllabus.deptId = appConstants.Empty;
         /**--------Semester Load----------------**/
@@ -55,7 +54,7 @@ module ums {
           $scope.syllabus.programId = $scope.programs[0].id;
         }
         else {
-          $scope.programs = [{id: '', longName: 'Select a Program'}];
+          $scope.programs = appConstants.initProgram;
           $scope.syllabus.programId=appConstants.Empty;
         }
       }
@@ -67,7 +66,6 @@ module ums {
           .success(() => {
           }).error((data) => {
           });
-
     }
   }
   UMS.controller('NewSyllabus', NewSyllabus);

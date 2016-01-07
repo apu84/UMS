@@ -16,8 +16,6 @@ module ums {
         programTypeOptions:appConstants.programType,
         semesterTypeOptions:appConstants.semesterType
       };
-   //   $scope. semester.programTypeId=appConstants.Empty;
-   //   $scope. semester.semesterTypeId=appConstants.Empty;
 
       setTimeout(function () {
         $('.make-switch').bootstrapSwitch();

@@ -9,14 +9,14 @@ import org.ums.manager.ContentManager;
 import org.ums.util.Constants;
 
 public class PersistentDepartment implements MutableDepartment {
-  private static ContentManager<Department, MutableDepartment, Integer> sDepartmentManager;
+  private static ContentManager<Department, MutableDepartment, String> sDepartmentManager;
 
   static {
     ApplicationContext applicationContext = new ClassPathXmlApplicationContext(Constants.SERVICE_CONTEXT);
     sDepartmentManager = (ContentManager) applicationContext.getBean("departmentManager");
   }
 
-  private int mId;
+  private String mId;
   private String mShortName;
   private String mLongName;
   private int mType;
@@ -47,12 +47,12 @@ public class PersistentDepartment implements MutableDepartment {
     sDepartmentManager.delete(this);
   }
 
-  public Integer getId() {
+  public String getId() {
     return mId;
   }
 
   @Override
-  public void setId(Integer pId) {
+  public void setId(String pId) {
     mId = pId;
   }
 

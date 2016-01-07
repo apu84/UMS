@@ -1,6 +1,6 @@
 ///<reference path="GenericProperty.ts"/>
 
-module ums {
+module ums {/*
   export class ProgramSelectorModelImpl implements ProgramSelectorModel {
     private programTypes:Array<GenericProperty>;
     private departments:Array<GenericProperty>;
@@ -32,5 +32,5 @@ module ums {
     public getPrograms(deparment:string):void {
 
     }
-  }
+  }*/
 }

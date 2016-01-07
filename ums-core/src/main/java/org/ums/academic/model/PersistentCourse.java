@@ -27,6 +27,7 @@ public class PersistentCourse implements MutableCourse {
   private String mTitle;
   private float mCrHr;
   private Department mOfferedBy;
+  private Department mOfferedTo;
   private Course.CourseType mCourseType;
   private Course.CourseCategory mCourseCategory;
   private CourseGroup mCourseGroup;
@@ -104,8 +105,18 @@ public class PersistentCourse implements MutableCourse {
   }
 
   @Override
+  public Department getOfferedTo() throws Exception {
+    return mOfferedBy == null && mDepartmentId > 0 ? sDepartmentManager.get(mDepartmentId) : mOfferedBy;
+  }
+
+  @Override
   public void setOfferedBy(Department pDepartment) {
     mOfferedBy = pDepartment;
+  }
+
+  @Override
+  public void setOfferedTo(Department pDepartment) {
+    mOfferedTo = pDepartment;
   }
 
   @Override
