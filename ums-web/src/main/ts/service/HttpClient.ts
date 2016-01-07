@@ -41,6 +41,10 @@ module ums {
       var requestHeaders = {
         'Content-Type': contentType
       };
+      if(fileName) {
+        requestHeaders['X-ums-media-filename'] = fileName;
+      }
+      console.debug("in http client %o", data);
 
       return this.$http({
         url: this.baseURI.toAbsolute(url),

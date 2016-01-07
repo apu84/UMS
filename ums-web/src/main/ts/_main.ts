@@ -33,3 +33,8 @@
 /// <reference path='directive/LeftMenu.ts'/>
 /// <reference path='directive/DisableOperation.ts'/>
 /// <reference path='directive/Validate.ts'/>
+/// <reference path='directive/ProgramSelector.ts'/>
+/// <reference path='directive/FileModel.ts'/>
+
+
+/// <reference path='interceptor/Unauthorized.ts'/>

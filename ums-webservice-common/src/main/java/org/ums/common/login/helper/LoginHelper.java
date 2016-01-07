@@ -44,15 +44,24 @@ public class LoginHelper {
         || !newPassword.equals(confirmNewPassword)) {
       return Response.notModified().build();
     }
-
-    if (mPasswordService.passwordsMatch(currentPassword, String.valueOf(currentUser.getPassword()))) {
-      MutableUser mutableUser = currentUser.edit();
-      mutableUser.setPassword(mPasswordService.encryptPassword(newPassword).toCharArray());
-      mutableUser.commit(true);
-      mAuthenticationRealm.getAuthenticationCache().remove(SecurityUtils.getSubject().getPrincipal());
+    if (currentUser.getTemporaryPassword() != null) {
+      if (String.valueOf(String.valueOf(currentUser.getTemporaryPassword())).equals(currentPassword)) {
+        changePassword(currentUser, newPassword);
+        return Response.ok().build();
+      }
+    } else if (mPasswordService.passwordsMatch(currentPassword, String.valueOf(currentUser.getPassword()))) {
+      changePassword(currentUser, newPassword);
+//      mAuthenticationRealm.getAuthenticationCache().remove(SecurityUtils.getSubject().getPrincipal());
       return Response.ok().build();
     }
 
     return Response.notModified().build();
+  }
+
+  protected void changePassword(User pCurrentUser, final String pNewPassword) throws Exception {
+    MutableUser mutableUser = pCurrentUser.edit();
+    mutableUser.setPassword(mPasswordService.encryptPassword(pNewPassword).toCharArray());
+    mutableUser.setTemporaryPassword(null);
+    mutableUser.commit(true);
   }
 }

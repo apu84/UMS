@@ -4,7 +4,7 @@
     <div class="panel panel-blue">
       <div class="panel-heading">New Student Create Form</div>
       <div class="panel-body pan">
-        <form action="" class="form-horizontal" data-validate="">
+        <form action="" class="form-horizontal" data-validate="" data-onvalidate="submit">
           <div class="form-body pal">
             <div class="row">
               <div class="col-md-4">
@@ -12,31 +12,22 @@
                   <label class="col-md-4 control-label">Full Name</label>
 
                   <div class="col-md-8">
-                    <input type="text" class="form-control required"/>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="col-md-4 control-label">Program Type</label>
-                  <div class="col-md-8">
-                    <select class="form-control required" data-ng-model="selectedProgramType"  data-ng-change="getDepts(selectedProgramType)">
-                      <option data-ng-repeat="programType in data.programTypeOptions" value="{{programType.id}}">{{programType.name}}</option>
-                    </select>
+                    <input type="text" class="form-control required" data-ng-model="newStudentModel.fullName"/>
                   </div>
                 </div>
 
-                <div class="form-group">
-                  <label class="col-md-4 control-label">Program Name</label>
-                  <div class="col-md-8">
-                    <select class="form-control required" data-ng-model="selectedProgram">
-                      <option data-ng-repeat="program in programs" value="{{program.id}}">{{program.longName}}</option>
-                    </select>
-                  </div>
-                </div>
                 <div class="form-group">
                   <label class="col-md-4 control-label">Father Name</label>
 
                   <div class="col-md-8">
-                    <input type="text" class="form-control required"/>
+                    <input type="text" class="form-control required" data-ng-model="newStudentModel.fatherName"/>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-md-4 control-label">Mother Name</label>
+
+                  <div class="col-md-8">
+                    <input type="text" class="form-control required" data-ng-model="newStudentModel.motherName"/>
                   </div>
                 </div>
                 <div class="form-group">
@@ -48,17 +39,27 @@
                       <input type="text" name="birthDate" data-date-format="dd-mm-yyyy" placeholder="DD-MM-YYYY"
                              class="datepicker-default form-control required"/>
                              -->
-                      <input id="birthDate" placeholder="__/__/____" class="form-control required"/>
+                      <input id="birthDate" placeholder="__/__/____" class="form-control required" data-ng-model="newStudentModel.dateOfBirth"/>
                     </div>
 
                   </div>
                 </div>
+                <div class="form-group">
+                  <label class="col-md-4 control-label ">Gender</label>
+
+                  <div class="col-md-8">
+                    <select class="form-control required" data-ng-model="newStudentModel.gender">
+                      <option ng-repeat="gender in newStudentModel.genders" value="{{gender.id}}">{{gender.name}}</option>
+                    </select>
+                  </div>
+                </div>
+
 
                 <div class="form-group">
                   <label class="col-md-4 control-label">Mobile Number</label>
 
                   <div class="col-md-8">
-                    <input type="text" class="form-control required"/>
+                    <input type="text" class="form-control required" data-ng-model="newStudentModel.mobileNo"/>
                   </div>
                 </div>
 
@@ -66,14 +67,14 @@
                   <label class="col-md-4 control-label">Present Address</label>
 
                   <div class="col-md-8">
-                    <textarea class="form-control" rows="3"></textarea>
+                    <textarea class="form-control" rows="3" data-ng-model="newStudentModel.presentAddress"></textarea>
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="col-md-4 control-label">Guardian Name</label>
 
                   <div class="col-md-8">
-                    <input type="text" class="form-control required"/>
+                    <input type="text" class="form-control required" data-ng-model="newStudentModel.guardianName"/>
                   </div>
                 </div>
 
@@ -83,54 +84,34 @@
                   <label  class="col-md-4 control-label">Student Id</label>
 
                   <div class="col-md-8">
-                    <input type="text" placeholder="" class="form-control"/>
+                    <input type="text" placeholder="" class="form-control" data-ng-model="newStudentModel.id"/>
                   </div>
                 </div>
-                <div class="form-group">
-                  <label class="col-md-4 control-label">Dept./School</label>
-                  <div class="col-md-8">
-                  <select class="form-control required"  data-ng-model="selectedDept" data-ng-change="getPrograms(selectedDept)">
-                    <option data-ng-repeat="dept in depts" value="{{dept.id}}">{{dept.name}}</option>
-                  </select>
-                </div>
-                </div>
+
+                <div data-program-selector="" data-model="newStudentModel"></div>
+
                 <div class="form-group">
                   <label class="col-md-4 control-label">Semester</label>
 
                   <div class="col-md-8">
-                    <select class="form-control required" data-ng-model="selectedSemester">
-                      <option data-ng-repeat="semester in semesterOptions" value="{{semester.id}}">{{semester.name}}</option>
+                    <select class="form-control required" data-ng-model="newStudentModel.semesterId">
+                      <option data-ng-repeat="semester in newStudentModel.semesters" value="{{semester.id}}">{{semester.name}}</option>
                     </select>
                   </div>
                 </div>
-                <div class="form-group">
-                  <label class="col-md-4 control-label">Mother Name</label>
 
-                  <div class="col-md-8">
-                    <input type="text" class="form-control required"/>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="col-md-4 control-label ">Gender</label>
-
-                  <div class="col-md-8">
-                    <select class="form-control required">
-                      <option ng-repeat="gender in data.genderOptions" value="{{gender.id}}">{{gender.name}}</option>
-                    </select>
-                  </div>
-                </div>
                 <div class="form-group">
                   <label class="col-md-4 control-label">Phone Number</label>
 
                   <div class="col-md-8">
-                    <input id="phoneNumber" type="text" placeholder="" class="form-control"/>
+                    <input id="phoneNumber" type="text" placeholder="" class="form-control" data-ng-model="newStudentModel.phoneNo"/>
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="col-md-4 control-label">Permanent Address</label>
 
                   <div class="col-md-8">
-                    <textarea class="form-control" rows="3"></textarea>
+                    <textarea class="form-control" rows="3" data-ng-model="newStudentModel.permanentAddress"></textarea>
                   </div>
                 </div>
 
@@ -138,7 +119,7 @@
                   <label class="col-md-4 control-label">Guardian Email</label>
 
                   <div class="col-md-8">
-                    <input type="email" class="form-control"/>
+                    <input type="email" class="form-control" data-ng-model="newStudentModel.guardianEmail"/>
                   </div>
                 </div>
 
@@ -158,14 +139,15 @@
                   <label class="col-md-4 control-label" id="image-label"></label>
 
                   <div class="col-md-8">
-                    <input type="file" class="btn btn-success btn-outlined" id="fileUpload" style="width:280px;"/>
+                    <input type="file" class="btn btn-success btn-outlined" id="fileUpload" style="width:280px;"
+                           data-file-model="newStudentModel.picture"/>
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="col-md-4 control-label">Blood Group</label>
                   <div class="col-md-8">
-                    <select class="form-control">
-                      <option ng-repeat="bGroup in data.bloodGroupOptions" value="{{bGroup.id}}">{{bGroup.name}}</option>
+                    <select class="form-control" data-ng-model="newStudentModel.bloodGroup">
+                      <option ng-repeat="bGroup in newStudentModel.bloodGroups" value="{{bGroup.id}}">{{bGroup.name}}</option>
                     </select>
                   </div>
                 </div>
@@ -173,21 +155,21 @@
                   <label class="col-md-4 control-label">Email Address</label>
 
                   <div class="col-md-8">
-                    <input id="emailAddress" type="email" class="form-control"/>
+                    <input id="emailAddress" type="email" class="form-control" data-ng-model="newStudentModel.email"/>
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="col-md-4 control-label">Guardian Phone</label>
 
                   <div class="col-md-8">
-                    <input id="guardianPhone" type="text" class="form-control"/>
+                    <input id="guardianPhone" type="text" class="form-control" data-ng-model="newStudentModel.guardianPhoneNo"/>
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="col-md-4 control-label">Guardian Mobile</label>
 
                   <div class="col-md-8">
-                    <input  type="text" placeholder="" class="form-control required"/>
+                    <input  type="text" placeholder="" class="form-control required" data-ng-model="newStudentModel.guardianMobileNo"/>
                   </div>
                 </div>
               </div>
@@ -195,7 +177,7 @@
             </div>
           </div>
           <div class="form-actions text-right pal">
-            <button type="button" class="btn btn-success" onclick="validate(submit)">Save Student Info</button>
+            <button type="button" class="btn btn-success">Save Student Info</button>
           </div>
         </form>
       </div>

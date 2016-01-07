@@ -1,19 +1,19 @@
+/// <reference path="GenericModel.ts"/>
 module ums {
+  export interface ProgramModel extends GenericModel {
+    longName: string;
+  }
   export interface ProgramSelectorModel {
-    programTypes: Array<GenericProperty>;
-    departments: Array<GenericProperty>;
-    /*programs: [{
-      id: string,
-      longName: string;
-    }];*/
-    programs:any;
-    semesters: Array<GenericProperty>;
+    programTypes: Array<GenericModel>;
+    departments: Array<GenericModel>;
+    programs: Array<ProgramModel>;
+    semesters: Array<GenericModel>;
 
-    selectedProgram: string;
-    selectedDepartment: string;
-    selectedProgramType: string;
+    programId: string;
+    departmentId: string;
+    programTypeId: string;
 
-    getDepartments(programType:string): void;
-    getPrograms(deparment:string): void;
+    getDepartments(): void;
+    getPrograms(): void;
   }
 }
