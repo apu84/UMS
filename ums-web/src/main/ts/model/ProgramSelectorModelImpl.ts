@@ -1,7 +1,7 @@
 ///<reference path="GenericModel.ts"/>
 ///<reference path="ProgramSelectorModel.ts"/>
 
-module ums {/*
+module ums {
   export class ProgramSelectorModelImpl implements ProgramSelectorModel {
     programTypes:Array<GenericModel>;
     departments:Array<GenericModel>;
@@ -64,5 +64,5 @@ module ums {/*
       }
 
     }
-  }*/
+  }
 }
