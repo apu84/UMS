@@ -31,6 +31,9 @@ public class AcademicConfiguration {
   @Autowired
   PasswordService mPasswordService;
 
+  @Autowired
+  JdbcTemplate mJdbcTemplate;
+
   SemesterManager getPersistentSemesterDao() {
     return new PersistentSemesterDao(new JdbcTemplate(mDataSource), getGenericDateFormat());
   }
@@ -62,7 +65,7 @@ public class AcademicConfiguration {
 
   @Bean
   ContentManager<Student, MutableStudent, String> studentManager() {
-    return new PersistentStudentDao(new JdbcTemplate(mDataSource), getGenericDateFormat());
+    return new PersistentStudentDao(mJdbcTemplate, getGenericDateFormat());
   }
 
   @Bean
@@ -107,7 +110,7 @@ public class AcademicConfiguration {
 
   @Bean
   ContentManager<User, MutableUser, String> userManager() {
-    return new PersistentUserDao(new JdbcTemplate(mDataSource));
+    return new PersistentUserDao(mJdbcTemplate);
   }
 
   @Bean
