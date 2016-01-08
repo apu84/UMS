@@ -1,10 +1,7 @@
 package org.ums.academic.dao;
 
-import org.ums.domain.model.MutableSemester;
-import org.ums.domain.model.MutableSyllabus;
-import org.ums.domain.model.Semester;
-import org.ums.domain.model.Syllabus;
-import org.ums.manager.SemesterManager;
+import org.ums.domain.model.mutable.MutableSyllabus;
+import org.ums.domain.model.regular.Syllabus;
 import org.ums.manager.SyllabusManager;
 
 import java.util.List;

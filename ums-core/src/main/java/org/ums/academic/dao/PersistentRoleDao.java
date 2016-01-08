@@ -3,8 +3,8 @@ package org.ums.academic.dao;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.academic.model.PersistentRole;
-import org.ums.domain.model.MutableRole;
-import org.ums.domain.model.Role;
+import org.ums.domain.model.mutable.MutableRole;
+import org.ums.domain.model.regular.Role;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

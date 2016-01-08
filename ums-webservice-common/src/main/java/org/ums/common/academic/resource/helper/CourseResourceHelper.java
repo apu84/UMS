@@ -5,14 +5,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.academic.builder.Builder;
 import org.ums.academic.model.PersistentCourse;
-import org.ums.academic.model.PersistentSemester;
 import org.ums.cache.LocalCache;
 import org.ums.common.academic.resource.ResourceHelper;
 import org.ums.common.academic.resource.SemesterResource;
-import org.ums.domain.model.Course;
-import org.ums.domain.model.MutableCourse;
-import org.ums.domain.model.MutableSemester;
-import org.ums.domain.model.Semester;
+import org.ums.domain.model.regular.Course;
+import org.ums.domain.model.mutable.MutableCourse;
 import org.ums.manager.ContentManager;
 
 import javax.json.Json;

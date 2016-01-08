@@ -4,9 +4,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.ums.academic.model.PersistentDepartment;
-import org.ums.academic.model.PersistentProgram;
 import org.ums.cache.LocalCache;
-import org.ums.domain.model.*;
+import org.ums.domain.model.mutable.MutableCourse;
+import org.ums.domain.model.mutable.MutableDepartment;
+import org.ums.domain.model.mutable.MutableSyllabus;
+import org.ums.domain.model.regular.Course;
+import org.ums.domain.model.regular.CourseGroup;
+import org.ums.domain.model.regular.Department;
+import org.ums.domain.model.regular.Syllabus;
+import org.ums.enums.CourseCategory;
+import org.ums.enums.CourseType;
 import org.ums.manager.ContentManager;
 import org.ums.manager.CourseGroupManager;
 
@@ -80,8 +87,8 @@ public class CourseBuilder implements Builder<Course, MutableCourse> {
     pMutable.setNo(pJsonObject.getString("courseNumber"));
     pMutable.setTitle(pJsonObject.getString("courseTitle"));
     pMutable.setCrHr(Float.parseFloat(pJsonObject.getString("creditHour")));
-    pMutable.setCourseType(Course.CourseType.values()[Integer.parseInt(pJsonObject.getString("courseTypeId"))]);
-    pMutable.setCourseCategory(Course.CourseCategory.values()[Integer.parseInt(pJsonObject.getString("courseCategoryId"))]);
+    pMutable.setCourseType(CourseType.values()[Integer.parseInt(pJsonObject.getString("courseTypeId"))]);
+    pMutable.setCourseCategory(CourseCategory.values()[Integer.parseInt(pJsonObject.getString("courseCategoryId"))]);
     pMutable.setYear(Integer.parseInt(pJsonObject.getString("academicYearId")));
     pMutable.setSemester(Integer.parseInt(pJsonObject.getString("academicSemesterId")));
 

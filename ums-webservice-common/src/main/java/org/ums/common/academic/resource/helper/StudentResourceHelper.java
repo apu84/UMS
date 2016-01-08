@@ -12,7 +12,11 @@ import org.ums.academic.model.PersistentUser;
 import org.ums.cache.LocalCache;
 import org.ums.common.academic.resource.ResourceHelper;
 import org.ums.common.academic.resource.StudentResource;
-import org.ums.domain.model.*;
+import org.ums.domain.model.mutable.MutableRole;
+import org.ums.domain.model.mutable.MutableStudent;
+import org.ums.domain.model.mutable.MutableUser;
+import org.ums.domain.model.regular.Role;
+import org.ums.domain.model.regular.Student;
 import org.ums.manager.BinaryContentManager;
 import org.ums.manager.ContentManager;
 

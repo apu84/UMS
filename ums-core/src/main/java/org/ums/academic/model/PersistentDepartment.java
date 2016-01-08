@@ -3,8 +3,8 @@ package org.ums.academic.model;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.ums.domain.model.Department;
-import org.ums.domain.model.MutableDepartment;
+import org.ums.domain.model.regular.Department;
+import org.ums.domain.model.mutable.MutableDepartment;
 import org.ums.manager.ContentManager;
 import org.ums.util.Constants;
 

@@ -4,9 +4,8 @@ package org.ums.academic.dao;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.academic.model.PersistentSyllabus;
-import org.ums.domain.model.MutableSyllabus;
-import org.ums.domain.model.Semester;
-import org.ums.domain.model.Syllabus;
+import org.ums.domain.model.mutable.MutableSyllabus;
+import org.ums.domain.model.regular.Syllabus;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

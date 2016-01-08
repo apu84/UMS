@@ -4,9 +4,8 @@ package org.ums.academic.dao;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.academic.model.PersistentSemester;
-import org.ums.domain.model.MutableSemester;
-import org.ums.domain.model.Semester;
-import org.ums.manager.SemesterManager;
+import org.ums.domain.model.mutable.MutableSemester;
+import org.ums.domain.model.regular.Semester;
 import org.ums.util.Constants;
 
 import java.sql.ResultSet;

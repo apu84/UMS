@@ -1,8 +1,8 @@
 package org.ums.academic.dao;
 
 
-import org.ums.domain.model.MutableSemester;
-import org.ums.domain.model.Semester;
+import org.ums.domain.model.mutable.MutableSemester;
+import org.ums.domain.model.regular.Semester;
 import org.ums.manager.CacheManager;
 import org.ums.util.CacheUtil;
 

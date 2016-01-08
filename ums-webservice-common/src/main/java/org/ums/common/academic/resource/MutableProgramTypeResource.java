@@ -3,8 +3,8 @@ package org.ums.common.academic.resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.ums.common.Resource;
-import org.ums.domain.model.MutableProgramType;
-import org.ums.domain.model.ProgramType;
+import org.ums.domain.model.mutable.MutableProgramType;
+import org.ums.domain.model.regular.ProgramType;
 
 import javax.json.JsonObject;
 import javax.ws.rs.*;

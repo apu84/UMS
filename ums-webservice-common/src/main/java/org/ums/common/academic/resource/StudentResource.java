@@ -4,8 +4,8 @@ package org.ums.common.academic.resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import org.ums.domain.model.MutableStudent;
-import org.ums.domain.model.Student;
+import org.ums.domain.model.mutable.MutableStudent;
+import org.ums.domain.model.regular.Student;
 import org.ums.manager.ContentManager;
 
 import javax.json.JsonObject;

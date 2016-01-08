@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.common.Resource;
-import org.ums.domain.model.Course;
-import org.ums.domain.model.MutableCourse;
+import org.ums.domain.model.regular.Course;
+import org.ums.domain.model.mutable.MutableCourse;
 import org.ums.manager.ContentManager;
 
 import javax.json.JsonObject;

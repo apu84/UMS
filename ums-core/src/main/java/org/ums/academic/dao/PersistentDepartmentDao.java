@@ -4,9 +4,8 @@ package org.ums.academic.dao;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.academic.model.PersistentDepartment;
-import org.ums.domain.model.Department;
-import org.ums.domain.model.MutableDepartment;
-import org.ums.domain.model.Program;
+import org.ums.domain.model.regular.Department;
+import org.ums.domain.model.mutable.MutableDepartment;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

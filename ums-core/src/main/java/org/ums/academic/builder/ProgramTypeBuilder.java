@@ -2,8 +2,8 @@ package org.ums.academic.builder;
 
 
 import org.ums.cache.LocalCache;
-import org.ums.domain.model.MutableProgramType;
-import org.ums.domain.model.ProgramType;
+import org.ums.domain.model.mutable.MutableProgramType;
+import org.ums.domain.model.regular.ProgramType;
 
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;

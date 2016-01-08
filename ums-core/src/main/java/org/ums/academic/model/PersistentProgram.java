@@ -2,7 +2,12 @@ package org.ums.academic.model;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.ums.domain.model.*;
+import org.ums.domain.model.mutable.MutableDepartment;
+import org.ums.domain.model.mutable.MutableProgram;
+import org.ums.domain.model.mutable.MutableProgramType;
+import org.ums.domain.model.regular.Department;
+import org.ums.domain.model.regular.Program;
+import org.ums.domain.model.regular.ProgramType;
 import org.ums.manager.ContentManager;
 import org.ums.util.Constants;
 

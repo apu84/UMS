@@ -1,8 +1,11 @@
 package org.ums.academic.builder;
 
 import org.ums.cache.LocalCache;
-import org.ums.domain.model.*;
-import org.ums.manager.ContentManager;
+import org.ums.domain.model.mutable.MutableStudent;
+import org.ums.domain.model.regular.Department;
+import org.ums.domain.model.regular.Program;
+import org.ums.domain.model.regular.Semester;
+import org.ums.domain.model.regular.Student;
 
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;

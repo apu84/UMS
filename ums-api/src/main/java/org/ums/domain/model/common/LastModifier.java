@@ -1,4 +1,4 @@
-package org.ums.domain.model;
+package org.ums.domain.model.common;
 
 
 public interface LastModifier {
