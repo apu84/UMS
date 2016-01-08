@@ -18,7 +18,7 @@ import javax.ws.rs.core.Response;
 @Path("/academic/course")
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
-public class CourseResource extends Resource {
+public class CourseResource extends MutableCourseResource {
   @Autowired
   ResourceHelper<Course, MutableCourse, String> mResourceHelper;
 

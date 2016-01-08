@@ -7,7 +7,6 @@
                             class="value"><span>Undergraduate</span></h4>
 
                         <p class="description">UG Course</p>
-
                     </div>
                 </div>
             </div>
@@ -28,26 +27,29 @@
         <div class="panel panel-blue">
             <div class="panel-heading">Undergraduate Course Create Form</div>
             <div class="panel-body pan">
-                <form action="" class="form-horizontal" data-validate="">
+                <form action="" class="form-horizontal" data-validate="" data-onvalidate="submit">
                     <div class="form-body pal">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="col-md-4 control-label">Course Number</label>
+                                    <label class="col-md-4 control-label">Course Number
+                                    <div  ng-click="pdfDownloadTest()">AAA</div>
+                                    </label>
                                     <div class="col-md-8">
-                                        <input name="courseNumber" type="text" class="form-control required"/>
+                                        <input type="text"  name="courseNumber" data-ng-model="course.courseNumber"  class="form-control required"/>
+                                        <input type="hidden" name="programType" data-ng-model="course.programTypeId" ng-init="course.programTypeId='11'">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-4 control-label">Credit Hour</label>
                                     <div class="col-md-8">
-                                        <input name="creditHour" type="text" placeholder="" class="form-control required"/>
+                                        <input type="text"  name="creditHour" data-ng-model="course.creditHour"  class="form-control required"/>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-4 control-label">Course Type</label>
                                     <div class="col-md-8">
-                                        <select class="form-control required">
+                                        <select name="courseType" data-ng-model="course.courseTypeId"  ng-init="course.courseTypeId=''" class="form-control required">
                                             <option data-ng-repeat="courseType in data.courseTypeOptions" value="{{courseType.id}}">{{courseType.name}}</option>
                                         </select>
                                     </div>
@@ -55,15 +57,15 @@
                                 <div class="form-group">
                                     <label  class="col-md-4 control-label">Year</label>
                                     <div class="col-md-8">
-                                        <select class="form-control required">
-                                            <option data-ng-repeat="year in data.academicYearOptions" value="{{year.id}}">{{year.name}}</option>
-                                        </select>
+                                        <select name="academicYear" data-ng-model="course.academicYearId"  ng-init="course.academicYearId=''" class="form-control required">
+                                                <option data-ng-repeat="year in data.academicYearOptions" value="{{year.id}}">{{year.name}}</option>
+                                            </select>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label  class="col-md-4 control-label">Offer By</label>
                                     <div class="col-md-8">
-                                        <select class="form-control required">
+                                        <select name="offerByDept" data-ng-model="course.offerByDeptId"  ng-init="course.offerByDeptId=''" class="form-control required">
                                             <option data-ng-repeat="dept in data.ugDeptOptions" value="{{dept.id}}">{{dept.name}}</option>
                                         </select>
                                     </div>
@@ -72,7 +74,7 @@
                                 <div class="form-group">
                                     <label class="col-md-4 control-label">Program Name</label>
                                     <div class="col-md-8">
-                                        <select name="programName" class="form-control required" data-ng-model="selectedProgram">
+                                        <select name="program" data-ng-model="course.programId"  data-ng-model="programId" ng-init="course.programId=''"  class="form-control required">
                                             <option data-ng-repeat="program in programs" value="{{program.id}}">{{program.longName}}</option>
                                         </select>
                                     </div>
@@ -80,10 +82,10 @@
                                 <div class="form-group">
                                     <label class="col-md-4 control-label">Optional Group</label>
                                     <div class="col-md-8">
-                                        <select name="optionalGroup"  class="form-control required">
+                                        <select name="optionalGroup" data-ng-model="course.optionalGroupId"  data-ng-model="optionalGroupId" ng-init="course.optionalGroupId=''"  class="form-control required">
                                             <option value="">Select Optional Group</option>
-                                            <option value="M">Management</option>
-                                            <option value="F">Accounting</option>
+                                            <option value="1">Management</option>
+                                            <option value="2">Accounting</option>
                                         </select>
                                     </div>
                                 </div>
@@ -93,19 +95,19 @@
                                 <div class="form-group">
                                     <label class="col-md-4 control-label">Course Title</label>
                                     <div class="col-md-8">
-                                        <input id="courseTitle" type="text" placeholder="" class="form-control required"/>
+                                        <input type="text"  name="courseTitle" data-ng-model="course.courseTitle"  class="form-control required"/>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-4 control-label">View Order</label>
                                     <div class="col-md-8">
-                                        <input name="viewOrder" type="text"  class="form-control required"/>
+                                        <input type="text"  name="viewOrder" data-ng-model="course.viewOrder"  class="form-control required"/>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label  class="col-md-4 control-label">Course Category</label>
                                     <div class="col-md-8">
-                                        <select class="form-control required">
+                                        <select name="courseCategory" data-ng-model="course.courseCategoryId"  ng-init="course.courseCategoryId=''" class="form-control required">
                                             <option data-ng-repeat="courseCategory in data.courseCategoryOptions" value="{{courseCategory.id}}">{{courseCategory.name}}</option>
                                         </select>
                                     </div>
@@ -113,7 +115,7 @@
                                 <div class="form-group">
                                     <label  class="col-md-4 control-label ">Semester</label>
                                     <div class="col-md-8">
-                                        <select class="form-control required">
+                                        <select name="academicSemester" data-ng-model="course.academicSemesterId"  ng-init="course.academicSemesterId=''" class="form-control required">
                                             <option data-ng-repeat="semester in data.academicSemesterOptions" value="{{semester.id}}">{{semester.name}}</option>
                                         </select>
                                     </div>
@@ -121,7 +123,7 @@
                                 <div class="form-group">
                                     <label  class="col-md-4 control-label">Offer To</label>
                                     <div class="col-md-8">
-                                        <select class="form-control required" data-ng-model="selectedDept" data-ng-change="getPrograms(selectedDept)" >
+                                        <select name="offerToDept" data-ng-model="course.offerToDeptId" data-ng-change="getPrograms(course.offerToDeptId)"  ng-init="course.offerToDeptId=''" class="form-control required">
                                             <option data-ng-repeat="dept in data.ugDeptOptions" value="{{dept.id}}">{{dept.name}}</option>
                                         </select>
                                     </div>
@@ -129,7 +131,7 @@
                                 <div class="form-group">
                                     <label class="col-md-4 control-label">Syllabus</label>
                                     <div class="col-md-8">
-                                        <select class="form-control required" data-ng-model="selectedSyllabus">
+                                        <select name="syllabus" data-ng-model="course.syllabusId"  data-ng-model="syllabusId" ng-init="course.syllabusId=''"  class="form-control required">
                                             <option data-ng-repeat="syllabus in syllabusOptions" value="{{syllabus.id}}">{{syllabus.semester_name}} ({{syllabus.program_name}})</option>
                                         </select>
 
@@ -146,7 +148,7 @@
                         </div>
                     </div>
                     <div class="form-actions text-right pal">
-                        <button type="button" class="btn btn-success" onclick="validate(submit)">Save New Course</button>
+                        <button type="button" class="btn btn-success">Save New Course</button>
                     </div>
                 </form>
             </div>

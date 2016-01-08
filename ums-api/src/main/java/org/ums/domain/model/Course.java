@@ -18,6 +18,8 @@ public interface Course extends Serializable, LastModifier, EditType<MutableCour
 
   Department getOfferedBy() throws Exception;
 
+  Department getOfferedTo() throws Exception;
+
   int getYear();
 
   int getSemester();

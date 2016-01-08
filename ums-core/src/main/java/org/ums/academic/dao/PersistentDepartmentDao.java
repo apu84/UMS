@@ -36,7 +36,7 @@ public class PersistentDepartmentDao extends ContentDaoDecorator<Department, Mut
     @Override
     public Department mapRow(ResultSet resultSet, int i) throws SQLException {
       PersistentDepartment department = new PersistentDepartment();
-      department.setId(resultSet.getInt("DEPT_ID"));
+      department.setId(resultSet.getString("DEPT_ID"));
       department.setLongName(resultSet.getString("LONG_NAME"));
       department.setShortName(resultSet.getString("SHORT_NAME"));
       department.setType(resultSet.getInt("TYPE"));
