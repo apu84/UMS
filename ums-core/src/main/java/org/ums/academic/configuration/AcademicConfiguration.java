@@ -8,7 +8,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.ums.academic.builder.*;
 import org.ums.academic.dao.*;
-import org.ums.domain.model.*;
+import org.ums.domain.model.mutable.*;
+import org.ums.domain.model.regular.*;
 import org.ums.manager.*;
 import org.ums.util.Constants;
 
@@ -37,6 +38,9 @@ public class AcademicConfiguration {
   SemesterManager getPersistentSemesterDao() {
     return new PersistentSemesterDao(new JdbcTemplate(mDataSource), getGenericDateFormat());
   }
+  SemesterSyllabusMapManager getPersistentSemesterSyllabusMapDao() {
+    return new PersistentSemesterSyllabusMapDao(new JdbcTemplate(mDataSource));
+  }
 
   SyllabusManager getPersistentSyllabusDao() {
     return new PersistentSyllabusDao(new JdbcTemplate(mDataSource));
@@ -64,9 +68,14 @@ public class AcademicConfiguration {
   }
 
   @Bean
+  SemesterSyllabusMapManager semesterSyllabusMapManager(){
+    return getPersistentSemesterSyllabusMapDao();
+  }
+  @Bean
   ContentManager<Student, MutableStudent, String> studentManager() {
     return new PersistentStudentDao(mJdbcTemplate, getGenericDateFormat());
   }
+
 
   @Bean
   DateFormat getGenericDateFormat() {
@@ -162,6 +171,18 @@ public class AcademicConfiguration {
   List<Builder<Semester, MutableSemester>> getSemesterBuilders() {
     List<Builder<Semester, MutableSemester>> builders = new ArrayList<>();
     builders.add(new SemesterBuilder(getGenericDateFormat(), programTypeManager()));
+    return builders;
+  }
+
+  @Bean
+  Builder<SemesterSyllabusMap, MutableSemesterSyllabusMap> getSemesterSyllabusMapBuilder() {
+    return new SemesterSyllabusMapBuilder(semesterSyllabusMapManager());
+  }
+
+  @Bean
+  List<Builder<SemesterSyllabusMap, MutableSemesterSyllabusMap>> getSemesterSyllabusMapBuilders() {
+    List<Builder<SemesterSyllabusMap, MutableSemesterSyllabusMap>> builders = new ArrayList<>();
+    builders.add(new SemesterSyllabusMapBuilder(semesterSyllabusMapManager()));
     return builders;
   }
 

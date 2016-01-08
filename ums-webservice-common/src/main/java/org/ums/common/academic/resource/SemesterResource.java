@@ -39,15 +39,6 @@ public class SemesterResource extends MutableSemesterResource {
   public Response get(final @Context Request pRequest, final @PathParam("object-id") int pObjectId) throws Exception {
     return mResourceHelper.get(pObjectId, pRequest, mUriInfo);
   }
-  
-  /*
-  @GET
-  @Path("/program-type/{program-type}/limit/{list-limit}")
-  public JsonObject getSyllabusMap(final @Context Request pRequest, final @PathParam("program-type") int pProgramType, 
-		  						   final @PathParam("dept") String pDeptId, final @PathParam("year") int pYear,
-		  						   final @PathParam("year") int pSemester)
-      throws Exception {
-    return mResourceHelper.buildSemesters(mManager.getSemesters(pProgramType, pDeptId), mUriInfo);
-  }
-  */
+
+
 }
