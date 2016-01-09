@@ -3,6 +3,7 @@ package org.ums.academic.model;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.ums.context.AppContext;
 import org.ums.domain.model.*;
 import org.ums.manager.ContentManager;
 import org.ums.manager.CourseGroupManager;
@@ -15,7 +16,7 @@ public class PersistentCourse implements MutableCourse {
   private static ContentManager<Course, MutableCourse, String> sCourseManager;
 
   static {
-    ApplicationContext applicationContext = new ClassPathXmlApplicationContext(Constants.SERVICE_CONTEXT);
+    ApplicationContext applicationContext = AppContext.getApplicationContext();
     sSyllabusManager = (ContentManager) applicationContext.getBean("syllabusManager");
     sCourseGroupManager = (CourseGroupManager) applicationContext.getBean("courseGroupManager");
     sDepartmentManager = (ContentManager) applicationContext.getBean("departmentManager");

@@ -2,6 +2,7 @@ package org.ums.academic.model;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.ums.context.AppContext;
 import org.ums.domain.model.MutableProgramType;
 import org.ums.domain.model.MutableSemester;
 import org.ums.domain.model.ProgramType;
@@ -17,7 +18,7 @@ public class PersistentSemester implements MutableSemester {
   private static ContentManager<ProgramType, MutableProgramType, Integer> sProgramTypeManager;
 
   static {
-    ApplicationContext applicationContext = new ClassPathXmlApplicationContext(Constants.SERVICE_CONTEXT);
+    ApplicationContext applicationContext = AppContext.getApplicationContext();
     sSemesterManager = (ContentManager<Semester, MutableSemester, Integer>)applicationContext.getBean("semesterManager");
     sProgramTypeManager = (ContentManager<ProgramType, MutableProgramType, Integer>)applicationContext.getBean("programTypeManager");
   }

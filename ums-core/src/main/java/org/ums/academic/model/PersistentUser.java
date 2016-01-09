@@ -3,6 +3,7 @@ package org.ums.academic.model;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.ums.context.AppContext;
 import org.ums.domain.model.MutableRole;
 import org.ums.domain.model.MutableUser;
 import org.ums.domain.model.Role;
@@ -15,7 +16,7 @@ public class PersistentUser implements MutableUser {
   private static ContentManager<Role, MutableRole, Integer> sRoleManager;
 
   static {
-    ApplicationContext applicationContext = new ClassPathXmlApplicationContext(Constants.SERVICE_CONTEXT);
+    ApplicationContext applicationContext = AppContext.getApplicationContext();
     sUserManager = (ContentManager<User, MutableUser, String>) applicationContext.getBean("userManager");
     sRoleManager = (ContentManager<Role, MutableRole, Integer>) applicationContext.getBean("roleManager");
   }

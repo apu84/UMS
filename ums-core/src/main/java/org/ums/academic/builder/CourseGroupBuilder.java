@@ -14,7 +14,6 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
 
-@Configurable
 public class CourseGroupBuilder implements Builder<CourseGroup, MutableCourseGroup> {
   @Autowired
   @Qualifier("syllabusManager")

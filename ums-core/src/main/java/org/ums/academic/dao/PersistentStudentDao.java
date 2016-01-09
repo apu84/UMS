@@ -83,6 +83,7 @@ public class PersistentStudentDao extends ContentDaoDecorator<Student, MutableSt
       ") VALUES (?,?,?,?,?,?,TO_DATE(?, '" + Constants.DATE_FORMAT + "'),?,?,?,?,?,?,?,?,?,?,?,?," + getLastModifiedSql() + ")";
 
   private JdbcTemplate mJdbcTemplate;
+
   private DateFormat mDateFormat;
 
 
@@ -185,7 +186,7 @@ public class PersistentStudentDao extends ContentDaoDecorator<Student, MutableSt
       student.setGuardianEmail("GUARDIAN_EMAIL");
       student.setProgramId(rs.getInt("PROGRAM_ID"));
       student.setLastModified(rs.getString("LAST_MODIFIED"));
-      return null;
+      return student;
     }
   }
 }

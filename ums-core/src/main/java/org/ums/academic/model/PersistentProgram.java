@@ -2,6 +2,7 @@ package org.ums.academic.model;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.ums.context.AppContext;
 import org.ums.domain.model.*;
 import org.ums.manager.ContentManager;
 import org.ums.util.Constants;
@@ -13,7 +14,7 @@ public class PersistentProgram implements MutableProgram {
   private static ContentManager<ProgramType, MutableProgramType, Integer> sProgramTypeManager;
 
   static {
-    ApplicationContext applicationContext = new ClassPathXmlApplicationContext(Constants.SERVICE_CONTEXT);
+    ApplicationContext applicationContext = AppContext.getApplicationContext();
     sDepartmentManger = (ContentManager) applicationContext.getBean("departmentManager");
     sProgramManager = (ContentManager) applicationContext.getBean("programManager");
     sProgramTypeManager = (ContentManager) applicationContext.getBean("programTypeManager");

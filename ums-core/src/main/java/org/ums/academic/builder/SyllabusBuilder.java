@@ -14,7 +14,6 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
 
-@Configurable
 public class SyllabusBuilder implements Builder<Syllabus, MutableSyllabus> {
   @Autowired
   @Qualifier("semesterManager")

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "UMS Web",
   "repository": "http://swlabs.co",
-  "dest": "target/ums-web-trunk-SNAPSHOT/",
+  "dest": "E:/Projects/htdocs/ums-web",
   "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-contrib-watch": "*",

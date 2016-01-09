@@ -3,6 +3,7 @@ package org.ums.academic.model;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.ums.context.AppContext;
 import org.ums.domain.model.Department;
 import org.ums.domain.model.MutableDepartment;
 import org.ums.manager.ContentManager;
@@ -12,7 +13,7 @@ public class PersistentDepartment implements MutableDepartment {
   private static ContentManager<Department, MutableDepartment, Integer> sDepartmentManager;
 
   static {
-    ApplicationContext applicationContext = new ClassPathXmlApplicationContext(Constants.SERVICE_CONTEXT);
+    ApplicationContext applicationContext = AppContext.getApplicationContext();
     sDepartmentManager = (ContentManager) applicationContext.getBean("departmentManager");
   }
 

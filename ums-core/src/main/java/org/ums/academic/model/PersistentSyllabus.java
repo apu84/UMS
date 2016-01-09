@@ -2,6 +2,7 @@ package org.ums.academic.model;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.ums.context.AppContext;
 import org.ums.domain.model.*;
 import org.ums.manager.ContentManager;
 import org.ums.util.Constants;
@@ -19,7 +20,7 @@ public class PersistentSyllabus implements MutableSyllabus {
   private String mLastModified;
 
   static {
-    ApplicationContext applicationContext = new ClassPathXmlApplicationContext(Constants.SERVICE_CONTEXT);
+    ApplicationContext applicationContext = AppContext.getApplicationContext();
     sSemesterManager = (ContentManager<Semester, MutableSemester, Integer>) applicationContext.getBean("semesterManager");
     sProgramManager = (ContentManager<Program, MutableProgram, Integer>) applicationContext.getBean("programManager");
     sSyllabusManager = (ContentManager<Syllabus, MutableSyllabus, String>) applicationContext.getBean("syllabusManager");

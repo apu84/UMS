@@ -31,12 +31,15 @@ public class AcademicConfiguration {
   @Autowired
   PasswordService mPasswordService;
 
+  @Autowired
+  JdbcTemplate mJdbcTemplate;
+
   SemesterManager getPersistentSemesterDao() {
-    return new PersistentSemesterDao(new JdbcTemplate(mDataSource), getGenericDateFormat());
+    return new PersistentSemesterDao(mJdbcTemplate, getGenericDateFormat());
   }
 
   SyllabusManager getPersistentSyllabusDao() {
-    return new PersistentSyllabusDao(new JdbcTemplate(mDataSource));
+    return new PersistentSyllabusDao(mJdbcTemplate);
   }
 
   @Bean
@@ -61,28 +64,23 @@ public class AcademicConfiguration {
   }
 
   @Bean
-  ContentManager<Student, MutableStudent, String> studentManager() {
-    return new PersistentStudentDao(new JdbcTemplate(mDataSource), getGenericDateFormat());
-  }
-
-  @Bean
   DateFormat getGenericDateFormat() {
     return new SimpleDateFormat(Constants.DATE_FORMAT);
   }
 
   @Bean
   ContentManager<ProgramType, MutableProgramType, Integer> programTypeManager() {
-    return new PersistentProgramTypeDao(new JdbcTemplate(mDataSource));
+    return new PersistentProgramTypeDao(mJdbcTemplate);
   }
 
   @Bean
   ContentManager<Program, MutableProgram, Integer> programManager() {
-    return new PersistentProgramDao(new JdbcTemplate(mDataSource));
+    return new PersistentProgramDao(mJdbcTemplate);
   }
 
   @Bean
   ContentManager<Department, MutableDepartment, Integer> departmentManager() {
-    return new PersistentDepartmentDao(new JdbcTemplate(mDataSource));
+    return new PersistentDepartmentDao(mJdbcTemplate);
   }
 
   @Bean
@@ -92,22 +90,27 @@ public class AcademicConfiguration {
 
   @Bean
   CourseGroupManager courseGroupManager() {
-    return new PersistentCourseGroupDao(new JdbcTemplate(mDataSource));
+    return new PersistentCourseGroupDao(mJdbcTemplate);
   }
 
   @Bean
   ContentManager<Course, MutableCourse, String> courseManager() {
-    return new PersistentCourseDao(new JdbcTemplate(mDataSource));
+    return new PersistentCourseDao(mJdbcTemplate);
   }
 
   @Bean
   ContentManager<Role, MutableRole, Integer> roleManager() {
-    return new PersistentRoleDao(new JdbcTemplate(mDataSource));
+    return new PersistentRoleDao(mJdbcTemplate);
   }
 
-  @Bean
+  @Bean(name = "studentManager")
+  ContentManager<Student, MutableStudent, String> studentManager() {
+    return new PersistentStudentDao(mJdbcTemplate, getGenericDateFormat());
+  }
+
+  @Bean(name = "userManager")
   ContentManager<User, MutableUser, String> userManager() {
-    return new PersistentUserDao(new JdbcTemplate(mDataSource));
+    return new PersistentUserDao(mJdbcTemplate);
   }
 
   @Bean
