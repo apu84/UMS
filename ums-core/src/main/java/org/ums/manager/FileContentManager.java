@@ -38,7 +38,7 @@ public class FileContentManager implements BinaryContentManager<byte[]> {
     createIfNotExist(pDomain);
     Path newFilePath = getQualifiedPath(pIdentifier, pDomain);
     Files.createFile(newFilePath);
-    Files.copy(new ByteArrayInputStream(pData), newFilePath);
+    Files.copy(new ByteArrayInputStream(pData), newFilePath, StandardCopyOption.REPLACE_EXISTING);
     return newFilePath.toString();
   }
 
