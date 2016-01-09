@@ -10,9 +10,9 @@ module ums {
   }
   export class NewSyllabus {
     public static $inject = ['appConstants', 'HttpClient','$scope'];
-      constructor(private appConstants:any,private httpClient:HttpClient,private $scope:INewSyllabusScope) {
-        $scope.newSyllabusModel = new NewSyllabusModelImpl(this.appConstants, this.httpClient);
-        $scope.submit = this.submit.bind(this);
+    constructor(private appConstants:any,private httpClient:HttpClient,private $scope:INewSyllabusScope) {
+      $scope.newSyllabusModel = new NewSyllabusModelImpl(this.appConstants, this.httpClient);
+      $scope.submit = this.submit.bind(this);
     }
     private submit():void {
       this.$scope.newSyllabusModel.syllabusId

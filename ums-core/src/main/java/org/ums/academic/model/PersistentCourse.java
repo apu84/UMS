@@ -2,9 +2,16 @@ package org.ums.academic.model;
 
 
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.ums.context.AppContext;
-import org.ums.domain.model.*;
+import org.ums.domain.model.mutable.MutableCourse;
+import org.ums.domain.model.mutable.MutableDepartment;
+import org.ums.domain.model.mutable.MutableSyllabus;
+import org.ums.domain.model.regular.Course;
+import org.ums.domain.model.regular.CourseGroup;
+import org.ums.domain.model.regular.Department;
+import org.ums.domain.model.regular.Syllabus;
+import org.ums.enums.CourseCategory;
+import org.ums.enums.CourseType;
 import org.ums.manager.ContentManager;
 import org.ums.manager.CourseGroupManager;
 import org.ums.util.Constants;
@@ -28,8 +35,9 @@ public class PersistentCourse implements MutableCourse {
   private String mTitle;
   private float mCrHr;
   private Department mOfferedBy;
-  private Course.CourseType mCourseType;
-  private Course.CourseCategory mCourseCategory;
+  private Department mOfferedTo;
+  private CourseType mCourseType;
+  private CourseCategory mCourseCategory;
   private CourseGroup mCourseGroup;
   private Syllabus mSyllabus;
   private int mViewOrder;
@@ -105,8 +113,18 @@ public class PersistentCourse implements MutableCourse {
   }
 
   @Override
+  public Department getOfferedTo() throws Exception {
+    return mOfferedBy == null && mDepartmentId > 0 ? sDepartmentManager.get(mDepartmentId) : mOfferedBy;
+  }
+
+  @Override
   public void setOfferedBy(Department pDepartment) {
     mOfferedBy = pDepartment;
+  }
+
+  @Override
+  public void setOfferedTo(Department pDepartment) {
+    mOfferedTo = pDepartment;
   }
 
   @Override

@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.academic.builder.Builder;
 import org.ums.common.academic.resource.ResourceHelper;
-import org.ums.domain.model.MutableProgram;
-import org.ums.domain.model.Program;
+import org.ums.domain.model.mutable.MutableProgram;
+import org.ums.domain.model.regular.Program;
 import org.ums.manager.ContentManager;
 
 import javax.json.JsonObject;

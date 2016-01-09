@@ -1,8 +1,7 @@
 package org.ums.academic.dao;
 
-import org.ums.domain.model.MutableSemester;
-import org.ums.domain.model.Semester;
-import org.ums.manager.ContentManager;
+import org.ums.domain.model.mutable.MutableSemester;
+import org.ums.domain.model.regular.Semester;
 import org.ums.manager.SemesterManager;
 
 import java.util.List;

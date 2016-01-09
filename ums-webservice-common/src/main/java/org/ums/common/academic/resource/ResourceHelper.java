@@ -3,8 +3,8 @@ package org.ums.common.academic.resource;
 
 import org.ums.academic.builder.Builder;
 import org.ums.cache.LocalCache;
-import org.ums.domain.model.EditType;
-import org.ums.domain.model.Mutable;
+import org.ums.domain.model.common.EditType;
+import org.ums.domain.model.common.Mutable;
 import org.ums.manager.ContentManager;
 
 import javax.json.Json;

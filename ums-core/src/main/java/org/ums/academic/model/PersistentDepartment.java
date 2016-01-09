@@ -2,22 +2,21 @@ package org.ums.academic.model;
 
 
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.ums.context.AppContext;
-import org.ums.domain.model.Department;
-import org.ums.domain.model.MutableDepartment;
+import org.ums.domain.model.regular.Department;
+import org.ums.domain.model.mutable.MutableDepartment;
 import org.ums.manager.ContentManager;
 import org.ums.util.Constants;
 
 public class PersistentDepartment implements MutableDepartment {
-  private static ContentManager<Department, MutableDepartment, Integer> sDepartmentManager;
+  private static ContentManager<Department, MutableDepartment, String> sDepartmentManager;
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sDepartmentManager = (ContentManager) applicationContext.getBean("departmentManager");
   }
 
-  private int mId;
+  private String mId;
   private String mShortName;
   private String mLongName;
   private int mType;
@@ -48,12 +47,12 @@ public class PersistentDepartment implements MutableDepartment {
     sDepartmentManager.delete(this);
   }
 
-  public Integer getId() {
+  public String getId() {
     return mId;
   }
 
   @Override
-  public void setId(Integer pId) {
+  public void setId(String pId) {
     mId = pId;
   }
 

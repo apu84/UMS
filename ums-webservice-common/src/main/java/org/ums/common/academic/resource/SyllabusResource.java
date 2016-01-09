@@ -4,9 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.common.Resource;
-import org.ums.domain.model.MutableSyllabus;
-import org.ums.domain.model.Syllabus;
-import org.ums.manager.ContentManager;
 import org.ums.manager.SyllabusManager;
 
 import javax.json.JsonObject;

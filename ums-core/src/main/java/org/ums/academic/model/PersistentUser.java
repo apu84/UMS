@@ -2,12 +2,11 @@ package org.ums.academic.model;
 
 
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.ums.context.AppContext;
-import org.ums.domain.model.MutableRole;
-import org.ums.domain.model.MutableUser;
-import org.ums.domain.model.Role;
-import org.ums.domain.model.User;
+import org.ums.domain.model.mutable.MutableRole;
+import org.ums.domain.model.mutable.MutableUser;
+import org.ums.domain.model.regular.Role;
+import org.ums.domain.model.regular.User;
 import org.ums.manager.ContentManager;
 import org.ums.util.Constants;
 

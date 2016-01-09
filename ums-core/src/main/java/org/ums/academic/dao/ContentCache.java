@@ -1,6 +1,6 @@
 package org.ums.academic.dao;
 
-import org.ums.domain.model.Identifier;
+import org.ums.domain.model.common.Identifier;
 import org.ums.manager.CacheManager;
 
 import java.util.List;

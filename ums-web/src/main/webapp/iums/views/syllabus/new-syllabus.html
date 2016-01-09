@@ -15,8 +15,8 @@
             <div data-program-selector="" data-model="newSyllabusModel"></div>
 
             <div class="form-group">
-              <label class="col-md-3 control-label">Semester</label>
-              <div class="col-md-9">
+              <label class="col-md-4 control-label">Semester</label>
+              <div class="col-md-8">
                 <select class="form-control required" data-ng-model="newSyllabusModel.semesterId" ng-init="newSyllabusModel.semesterId=''">
                   <option data-ng-repeat="semester in newSyllabusModel.semesters" value="{{semester.id}}">{{semester.name}}</option>
                 </select>

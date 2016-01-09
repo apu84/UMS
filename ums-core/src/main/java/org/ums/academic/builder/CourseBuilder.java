@@ -3,8 +3,17 @@ package org.ums.academic.builder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.ums.academic.model.PersistentDepartment;
 import org.ums.cache.LocalCache;
-import org.ums.domain.model.*;
+import org.ums.domain.model.mutable.MutableCourse;
+import org.ums.domain.model.mutable.MutableDepartment;
+import org.ums.domain.model.mutable.MutableSyllabus;
+import org.ums.domain.model.regular.Course;
+import org.ums.domain.model.regular.CourseGroup;
+import org.ums.domain.model.regular.Department;
+import org.ums.domain.model.regular.Syllabus;
+import org.ums.enums.CourseCategory;
+import org.ums.enums.CourseType;
 import org.ums.manager.ContentManager;
 import org.ums.manager.CourseGroupManager;
 
@@ -70,21 +79,41 @@ public class CourseBuilder implements Builder<Course, MutableCourse> {
 
   @Override
   public void build(final MutableCourse pMutable, final JsonObject pJsonObject, final LocalCache pLocalCache) throws Exception {
-    pMutable.setId(pJsonObject.getString("id"));
-    pMutable.setNo(pJsonObject.getString("no"));
-    pMutable.setTitle(pJsonObject.getString("title"));
-    pMutable.setCrHr(Float.parseFloat(pJsonObject.getString("crhr")));
-    pMutable.setCourseType(Course.CourseType.values()[pJsonObject.getInt("type")]);
-    pMutable.setCourseCategory(Course.CourseCategory.values()[pJsonObject.getInt("category")]);
-    pMutable.setYear(pJsonObject.getInt("year"));
-    pMutable.setSemester(pJsonObject.getInt("semester"));
+
+    //pMutable.setId(pJsonObject.getString("courseId"));
+    String couseIdMiddle=(pJsonObject.getString("syllabusId").substring(4,8)).equalsIgnoreCase("01")?"S":"F"+pJsonObject.getString("syllabusId").substring(4,8);
+    pMutable.setId(pJsonObject.getString("courseNumber").trim()+"_"+couseIdMiddle+"_"+pJsonObject.getString("programId"));
+    pMutable.setNo(pJsonObject.getString("courseNumber"));
+    pMutable.setTitle(pJsonObject.getString("courseTitle"));
+    pMutable.setCrHr(Float.parseFloat(pJsonObject.getString("creditHour")));
+    pMutable.setCourseType(CourseType.values()[Integer.parseInt(pJsonObject.getString("courseTypeId"))]);
+    pMutable.setCourseCategory(CourseCategory.values()[Integer.parseInt(pJsonObject.getString("courseCategoryId"))]);
+    pMutable.setYear(Integer.parseInt(pJsonObject.getString("academicYearId")));
+    pMutable.setSemester(Integer.parseInt(pJsonObject.getString("academicSemesterId")));
+
+    PersistentDepartment persistentDepartment=new PersistentDepartment();
+    persistentDepartment.setId(pJsonObject.getString("offerByDeptId"));
+    pMutable.setOfferedBy(persistentDepartment);
+
+    persistentDepartment=new PersistentDepartment();
+    persistentDepartment.setId(pJsonObject.getString("offerToDeptId"));
+    pMutable.setOfferedTo(persistentDepartment);
+
+    pMutable.setSyllabusId(pJsonObject.getString("syllabusId"));
+    pMutable.setViewOrder(Integer.parseInt(pJsonObject.getString("viewOrder")));
+
+    pMutable.setCourseGroupId(Integer.parseInt(pJsonObject.getString("optionalGroupId")));
+
+    //Unnecessary. No use of it in any Use Case. If any Use case need this then we will open it again
+    /*
     if (pJsonObject.containsKey("offerdBy")) {
       pMutable.setOfferedBy(mDepartmentManager.get(pJsonObject.getInt("offeredBy")));
     }
     if (pJsonObject.containsKey("group")) {
       pMutable.setCourseGroup(mCourseGroupManager.get(pJsonObject.getInt("group")));
     }
-    pMutable.setSyllabus(mSyllabusManager.get(pJsonObject.getString("syllabus")));
-    pMutable.setViewOrder(pJsonObject.getInt("viewOrder"));
+        pMutable.setSyllabus(mSyllabusManager.get(pJsonObject.getString("syllabus")));
+    */
+
   }
 }

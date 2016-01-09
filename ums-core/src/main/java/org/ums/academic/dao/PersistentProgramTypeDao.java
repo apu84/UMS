@@ -4,8 +4,8 @@ package org.ums.academic.dao;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.academic.model.PersistentProgramType;
-import org.ums.domain.model.MutableProgramType;
-import org.ums.domain.model.ProgramType;
+import org.ums.domain.model.mutable.MutableProgramType;
+import org.ums.domain.model.regular.ProgramType;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

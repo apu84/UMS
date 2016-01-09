@@ -39,4 +39,6 @@ public class SemesterResource extends MutableSemesterResource {
   public Response get(final @Context Request pRequest, final @PathParam("object-id") int pObjectId) throws Exception {
     return mResourceHelper.get(pObjectId, pRequest, mUriInfo);
   }
+
+
 }

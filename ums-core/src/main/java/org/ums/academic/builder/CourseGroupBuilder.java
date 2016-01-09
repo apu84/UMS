@@ -4,10 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.ums.cache.LocalCache;
-import org.ums.domain.model.CourseGroup;
-import org.ums.domain.model.MutableCourseGroup;
-import org.ums.domain.model.MutableSyllabus;
-import org.ums.domain.model.Syllabus;
+import org.ums.domain.model.regular.CourseGroup;
+import org.ums.domain.model.mutable.MutableCourseGroup;
+import org.ums.domain.model.mutable.MutableSyllabus;
+import org.ums.domain.model.regular.Syllabus;
 import org.ums.manager.ContentManager;
 
 import javax.json.JsonObject;

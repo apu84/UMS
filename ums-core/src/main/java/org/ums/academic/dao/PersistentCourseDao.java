@@ -4,8 +4,10 @@ package org.ums.academic.dao;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.academic.model.PersistentCourse;
-import org.ums.domain.model.Course;
-import org.ums.domain.model.MutableCourse;
+import org.ums.domain.model.regular.Course;
+import org.ums.domain.model.mutable.MutableCourse;
+import org.ums.enums.CourseCategory;
+import org.ums.enums.CourseType;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -66,8 +68,8 @@ public class PersistentCourseDao extends ContentDaoDecorator<Course, MutableCour
         pCourse.getNo(),
         pCourse.getTitle(),
         pCourse.getCrHr(),
-        pCourse.getSyllabus().getId(),
-        pCourse.getCourseGroup(pCourse.getSyllabus().getId()).getId(),
+        pCourse.getSyllabusId(),
+        pCourse.getCourseGroupId(),
         pCourse.getOfferedBy().getId(),
         pCourse.getViewOrder(),
         pCourse.getYear(),
@@ -92,9 +94,9 @@ public class PersistentCourseDao extends ContentDaoDecorator<Course, MutableCour
       course.setViewOrder(resultSet.getInt("VIEW_ORDER"));
       course.setYear(resultSet.getInt("YEAR"));
       course.setSemester(resultSet.getInt("SEMESTER"));
-      course.setCourseType(Course.CourseType.get(resultSet.getInt("COURSE_TYPE")));
+      course.setCourseType(CourseType.get(resultSet.getInt("COURSE_TYPE")));
       if (resultSet.getObject("COURSE_CATEGORY") != null) {
-        course.setCourseCategory(Course.CourseCategory.get(resultSet.getInt("COURSE_CATEGORY")));
+        course.setCourseCategory(CourseCategory.get(resultSet.getInt("COURSE_CATEGORY")));
       }
       course.setLastModified(resultSet.getString("LAST_MODIFIED"));
       AtomicReference<Course> atomicReference = new AtomicReference<>(course);

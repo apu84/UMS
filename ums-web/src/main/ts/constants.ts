@@ -3,6 +3,10 @@ module ums {
     static  Default():any {
       return {
         Empty:"",
+        initDept: [{id:'',name:'Select Dept./School'}],
+        initProgram: [{id: '', longName: 'Select a Program'}],
+        initSemester: [{id: '', name: 'Select a Semester'}],
+        initSyllabus: [{id: '', semester_name: 'Select a ',program_name:'Syllabus'}],
         courseType: [
           {id: '', name: 'Select Course Type'},
           {id: '1', name: 'Theory'},
@@ -184,7 +188,8 @@ module ums {
             ]
           }
         ],
-        mimeTypeJson : 'application/json'
+        mimeTypeJson : 'application/json',
+        mimeTypePdf : 'application/pdf',
       };
     }
   }
