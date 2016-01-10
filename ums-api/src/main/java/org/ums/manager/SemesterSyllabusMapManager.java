@@ -12,5 +12,5 @@ import java.util.List;
  */
 public interface SemesterSyllabusMapManager extends ContentManager<SemesterSyllabusMap, MutableSemesterSyllabusMap, Integer> {
   public List<SemesterSyllabusMap> getMapsByProgramSemester(final Integer pProgramId,final Integer pSemesterId) throws Exception;
-  public SemesterSyllabusMap getMapsByYearSemester(final Integer pProgramId,final Integer pSemesterId,final Integer pYear,final Integer pSemester) throws Exception;
+  public  SemesterSyllabusMap getMapById(final Integer pMapId) throws Exception;
 }
