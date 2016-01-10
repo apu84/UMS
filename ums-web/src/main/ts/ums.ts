@@ -205,5 +205,19 @@ module ums {
             }]
           }
         })
+        .state('passwordReport', {
+          url: "/passwordReport",
+          controller: 'PasswordReport',
+          templateUrl: 'views/common/password-report.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: [
+                  'vendors/jquery-validate/jquery.validate.min.js'
+                ]
+              });
+            }]
+          }
+        })
   });
 }

@@ -283,6 +283,105 @@
       <scope>compile</scope>
     </dependency>
 
+    <!--Reporting-->
+    <dependency>
+      <groupId>pentaho-reporting-engine</groupId>
+      <artifactId>pentaho-reporting-engine-classic-core</artifactId>
+      <version>5.0.1-stable</version>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>pentaho-library</groupId>
+      <artifactId>libbase</artifactId>
+      <version>${pentaho-version}</version>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>pentaho-library</groupId>
+      <artifactId>libdocbundle</artifactId>
+      <version>${pentaho-version}</version>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>pentaho-library</groupId>
+      <artifactId>libfonts</artifactId>
+      <version>${pentaho-version}</version>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>pentaho-library</groupId>
+      <artifactId>libformat</artifactId>
+      <version>${pentaho-version}</version>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>pentaho-library</groupId>
+      <artifactId>libformula</artifactId>
+      <version>${pentaho-version}</version>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>pentaho-library</groupId>
+      <artifactId>libloader</artifactId>
+      <version>${pentaho-version}</version>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>pentaho-library</groupId>
+      <artifactId>librepository</artifactId>
+      <version>${pentaho-version}</version>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>pentaho-library</groupId>
+      <artifactId>libserializer</artifactId>
+      <version>${pentaho-version}</version>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>pentaho-library</groupId>
+      <artifactId>libxml</artifactId>
+      <version>${pentaho-version}</version>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>pentaho-library</groupId>
+      <artifactId>libswing</artifactId>
+      <version>${pentaho-version}</version>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>pentaho-library</groupId>
+      <artifactId>flute</artifactId>
+      <version>${pentaho-version}</version>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.lowagie</groupId>
+      <artifactId>itext-rtf</artifactId>
+      <version>${itext-version}</version>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.lowagie</groupId>
+      <artifactId>itext</artifactId>
+      <version>${itext-version}</version>
+    </dependency>
+
+
 
   </dependencies>
 

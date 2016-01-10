@@ -15,8 +15,7 @@
     '/changePassword': {title: 'Change Password', 'breadcrumb': ['Password']},
     '/createUgCourse': {title: 'Create UG Course', 'breadcrumb': ['Course']},
     '/createPgCourse': {title: 'Create PG Course', 'breadcrumb': ['Course']},
-    '/semesterSyllabusMap': {title: 'Semester Syllabus Map', 'breadcrumb': ['Semester-Syllabus Map']},
-
+    '/semesterSyllabusMap': {title: 'Semester Syllabus Map', 'breadcrumb': ['Semester-Syllabus Map']}
   };
 
   $.fn.Data.get = function (id) {
