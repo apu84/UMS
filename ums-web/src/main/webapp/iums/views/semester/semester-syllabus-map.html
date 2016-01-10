@@ -1,32 +1,100 @@
 <div class="row">
     <div class="col-lg-4">
         <div class="panel panel-white">
-            <div class="panel-heading">Semester</div>
-            <div class="panel-body">
-                <div data-program-selector="" data-model="newSyllabusModel"></div>
-            </div>
-        </div>
-
-   </div>
-
-    <div class="col-lg-4">
-        <div class="panel panel-white">
-            <div class="panel-heading">Semester</div>
-            <div class="panel-body">
-                <select class="form-control">
-                    <option value="Month">Select Semester</option>
-                </select>
+            <div class="panel-heading">Selection</div>
+            <div class="panel-body pan">
+                <form action="" class="form-horizontal" >
+                    <div class="form-body pal">
+                        <div data-program-selector="" data-model="semesterSyllabusMapModel"></div>
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Semester</label>
+                            <div class="col-md-8">
+                                <select class="form-control required" data-ng-model="semesterSyllabusMapModel.semesterId" ng-init="semesterSyllabusMapModel.semesterId=''">
+                                    <option data-ng-repeat="semester in semesterSyllabusMapModel.semesters" value="{{semester.id}}">{{semester.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-actions text-right pal">
+                            <button type="button" class="btn btn-success" ng-click="goNext()">Next</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 
     <div class="col-lg-4">
         <div class="panel panel-white">
-            <div class="panel-heading">Syllabus</div>
+            <div class="panel-heading">Saved Mapping</div>
             <div class="panel-body">
-                <select class="form-control">
-                    <option value="Month">Select Syllabus</option>
-                </select>
+
+                <table class="table table-hover" width="100%">
+                    <thead>
+                    <tr>
+                        <th width="40%">Year-Semester</th>
+                        <th width="40%">Syllabus</th>
+                        <th width="20%">View</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <tr ng-repeat="entry in maps">
+                        <td>{{entry.year}} Year -{{entry.semester}} Semester</td>
+                        <td>{{entry.syllabusName}}</td>
+                        <td>
+                            <a href="javascript:void(0)" ng-click="fetchSSmap(entry.id)">View</a>
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="panel panel-white">
+            <div class="panel-heading">View/Edit Mapping</div>
+            <div class="panel-body">
+                <form role="form" class="form-horizontal form-separated">
+                    <div class="form-body">
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">Year- Sem</label>
+                            <div class="col-md-9">
+                                <input class="form-control" disabled value="{{single.year}} Year - {{single.semester}} Semester"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">Semester</label>
+                            <div class="col-md-9">
+                                <input class="form-control" disabled ng-model="single.academicSemester"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">Dept/School</label>
+                            <div class="col-md-9">
+                                <input class="form-control" disabled ng-model="single.deptName"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">Program</label>
+                            <div class="col-md-9">
+                                <input class="form-control" disabled ng-model="single.programName"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">Syllabus</label>
+                            <div class="col-md-9">
+                                <input class="form-control" disabled ng-model="single.syllabusName"/>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <div class="col-md-offset-3 col-md-9">
+                                <button type="submit" class="btn btn-primary">Submit</button>&nbsp;
+                                <button type="button" class="btn btn-default">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

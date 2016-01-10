@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.academic.builder.Builder;
+import org.ums.academic.model.PersistentSemesterSyllabusMap;
 import org.ums.cache.LocalCache;
 import org.ums.common.academic.resource.ResourceHelper;
 import org.ums.domain.model.mutable.MutableSemester;
@@ -44,7 +45,18 @@ public class SemesterSyllabusMapResourceHelper extends ResourceHelper<SemesterSy
     return mManager;
   }
 
+  public Response put(final JsonObject pJsonObject) throws Exception {
+    MutableSemesterSyllabusMap mutable =new PersistentSemesterSyllabusMap();
 
+    for (Builder<SemesterSyllabusMap, MutableSemesterSyllabusMap> builder : getBuilders()) {
+      builder.build(mutable, pJsonObject, null);
+    }
+    SemesterSyllabusMap readOnly = load(mutable.getId());
+    System.out.println(readOnly.getAcademicSemester().getStatus());
+
+    mutable.commit(true);
+    return Response.noContent().build();
+  }
   @Override
   protected List<Builder<SemesterSyllabusMap, MutableSemesterSyllabusMap>> getBuilders() {
     return mBuilders;
@@ -61,6 +73,7 @@ public class SemesterSyllabusMapResourceHelper extends ResourceHelper<SemesterSy
     localCache.invalidate();
     return object.build();
   }
+
   @Override
   protected String getEtag(SemesterSyllabusMap pReadonly) {
     return "";

@@ -31,4 +31,15 @@ public class SemesterSyllabusMapResource extends MutableSemesterSyllabusMapResou
       throws Exception {
         return mResourceHelper.buildMaps(mManager.getMapsByProgramSemester(pProgramId, pSemesterId), mUriInfo);
   }
+
+
+  @GET
+  @Path("/{map-id}")
+  public JsonObject get(final @Context Request pRequest, final @PathParam("map-id") int pMapId)
+      throws Exception {
+
+    return mResourceHelper.toJson(mManager.get(pMapId), null,null);
+  }
+
+
 }

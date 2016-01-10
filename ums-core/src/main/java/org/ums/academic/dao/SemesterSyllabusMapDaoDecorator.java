@@ -25,9 +25,9 @@ public class SemesterSyllabusMapDaoDecorator extends ContentDaoDecorator<Semeste
   public List<SemesterSyllabusMap> getMapsByProgramSemester(final Integer pProgramId,final Integer pSemesterId) throws Exception {
     return getManager().getMapsByProgramSemester(pProgramId, pSemesterId);
   }
-  @Override
-  public SemesterSyllabusMap getMapsByYearSemester(final Integer pProgramId,final Integer pSemesterId,final Integer pYear,final Integer pSemester) throws Exception {
-    return getManager().getMapsByYearSemester(pProgramId, pSemesterId, pYear,pSemester);
+
+  public  SemesterSyllabusMap get(final Integer pMapId) throws Exception {
+    return getManager().get(pMapId);
   }
 
 

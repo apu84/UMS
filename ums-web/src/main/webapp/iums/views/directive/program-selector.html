@@ -19,7 +19,7 @@
 <div class="form-group">
   <label class="col-md-4 control-label">Program Name</label>
   <div class="col-md-8">
-    <select class="form-control required" data-ng-model="model.programId">
+    <select class="form-control required" data-ng-model="model.programId" id="dirProgram">
       <option data-ng-repeat="program in model.programs" value="{{program.id}}">{{program.longName}}</option>
     </select>
   </div>
