@@ -10,6 +10,9 @@ var Authentication = (function () {
     var userName = document.getElementById('userName').value;
     var password = document.getElementById('password').value;
 
+    $(".loaderDiv").show();
+    $("#login_btn").hide();
+
     var credentials = "Basic " + btoa(userName + ":" + password);
     $.ajax({
       crossDomain: true,
@@ -42,6 +45,8 @@ var Authentication = (function () {
         else {
           presentErrorMessage("Login Failed! " + textStatus);
         }
+        $(".loaderDiv").hide();
+        $("#login_btn").show();
       })
     });
   };
