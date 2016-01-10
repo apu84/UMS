@@ -176,8 +176,8 @@ public class PersistentStudentDao extends ContentDaoDecorator<Student, MutableSt
       student.setGender(rs.getString("GENDER"));
       student.setPresentAddress(rs.getString("PRESENT_ADDRESS"));
       student.setPermanentAddress(rs.getString("PERMANENT_ADDRESS"));
-      student.setMobileNo(rs.getString("MOBILE_NO"));
-      student.setPhoneNo(rs.getString("PHONE_NO"));
+      student.setMobileNo(rs.getString("MOBILE_NUMBER"));
+      student.setPhoneNo(rs.getString("PHONE_NUMBER"));
       student.setBloodGroup(rs.getString("BLOOD_GROUP"));
       student.setEmail(rs.getString("EMAIL_ADDRESS"));
       student.setGuardianName(rs.getString("GUARDIAN_NAME"));

@@ -10,7 +10,7 @@
     http://www.springframework.org/schema/tx/spring-tx-4.0.xsd"
        xmlns:tx="http://www.springframework.org/schema/tx">
 
-  <context:component-scan base-package="org.ums.dummy.webservice,org.ums.common.academic.resource,org.ums.common.login" />
+  <context:component-scan base-package="org.ums.dummy.webservice,org.ums.common.academic.resource,org.ums.common.login,org.ums.common.report" />
   <context:annotation-config/>
     <!-- Define beans specific to the SampleWeb2 project here. 
          Beans used by all WARs should be defined in the SampleServices project instead. -->

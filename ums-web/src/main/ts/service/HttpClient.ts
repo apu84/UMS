@@ -22,17 +22,25 @@ module ums {
     public get(url:string,
                contentType:string,
                success:(json:any, etag:string) => void,
-               error?:(response:ng.IHttpPromiseCallbackArg<any>) => void):void {
-      var promise = this.$http.get(this.baseURI.toAbsolute(url), {
+               error?:(response:ng.IHttpPromiseCallbackArg<any>) => void,
+               responseType?: string):void {
+
+      var config: ng.IRequestShortcutConfig = {
         headers: {
           'Accept': contentType
         }
-      });
+      };
+
+      if(responseType) {
+        config.responseType = responseType;
+      }
+
+      var promise = this.$http.get(this.baseURI.toAbsolute(url), config);
+
       promise.then((response:ng.IHttpPromiseCallbackArg<any>) => {
         success(response.data, response.headers('Etag'));
       }, error);
     }
-
 
     public post(url:string,
                 data:any,
