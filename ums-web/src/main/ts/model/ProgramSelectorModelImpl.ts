@@ -14,9 +14,10 @@ module ums {
 
     constructor(private appConstants:any, private httpClient:HttpClient) {
       this.programTypes = this.appConstants.programType;
-      this.departments = [];
-      this.programs = this.appConstants.ugPrograms;
-      this.semesters = [];
+      this.departments =this.appConstants.initDept;
+      this.programs = this.appConstants.initProgram;
+      this.semesters = this.appConstants.initSemester;
+
 
       this.programId = '';
       this.departmentId = '';
@@ -24,6 +25,9 @@ module ums {
     }
 
     public getDepartments():void {
+      this.programs = this.appConstants.initProgram;
+      this.programId = '';
+
       if (this.programTypeId == "11") {
         this.departments = this.appConstants.ugDept;
       }
@@ -33,6 +37,7 @@ module ums {
       else {
         this.departments = [{id: '', name: 'Select Dept./School'}];
       }
+      this.departmentId = '';
 
       if (this.programTypeId != this.appConstants.Empty) {
         this.httpClient.get('academic/semester/program-type/' + this.programTypeId + "/limit/0", 'application/json',
