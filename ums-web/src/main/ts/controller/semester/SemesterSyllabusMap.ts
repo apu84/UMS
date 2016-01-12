@@ -30,6 +30,20 @@ module ums {
 
       $scope.mapTableVisibility=false;
 
+      $scope.$watch(
+          // This function returns the value being watched. It is called for each turn of the $digest loop
+          () => {
+            return $scope.semesterSyllabusMapModel.departmentId;
+          },
+          // This is the change listener, called when the value returned from the above function changes
+          (newValue, oldValue) => {
+            if (newValue !== oldValue) {
+              // Only increment the counter if the value changed
+              console.debug("deparmentId changed to: %o", newValue);
+            }
+          }
+      );
+
     }
 
     private goNext():void {
