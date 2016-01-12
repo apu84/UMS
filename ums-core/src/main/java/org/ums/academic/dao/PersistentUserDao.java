@@ -5,13 +5,14 @@ import org.springframework.jdbc.core.RowMapper;
 import org.ums.academic.model.PersistentUser;
 import org.ums.domain.model.mutable.MutableUser;
 import org.ums.domain.model.regular.User;
+import org.ums.manager.ContentManager;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class PersistentUserDao extends ContentDaoDecorator<User, MutableUser, String> {
+public class PersistentUserDao extends ContentDaoDecorator<User, MutableUser, String, ContentManager<User, MutableUser, String>> {
   static String SELECT_ALL = "SELECT USER_ID, PASSWORD, ROLE_ID, STATUS, TEMP_PASSWORD FROM USERS ";
   static String UPDATE_ALL = "UPDATE USERS SET PASSWORD = ?, ROLE_ID = ?, STATUS = ?, TEMP_PASSWORD = ? ";
   static String DELETE_ALL = "DELETE FROM USERS ";

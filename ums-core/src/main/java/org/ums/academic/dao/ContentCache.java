@@ -1,11 +1,15 @@
 package org.ums.academic.dao;
 
+import org.springframework.util.StringUtils;
 import org.ums.domain.model.common.Identifier;
+import org.ums.domain.model.common.LastModifier;
 import org.ums.manager.CacheManager;
+import org.ums.manager.ContentManager;
+import org.ums.manager.SemesterManager;
 
 import java.util.List;
 
-public abstract class ContentCache<R extends Identifier<I>, M extends R, I> extends ContentDaoDecorator<R, M, I> {
+public abstract class ContentCache<R extends Identifier<I> & LastModifier, M extends R, I, C extends ContentManager<R,M,I>> extends ContentDaoDecorator<R, M, I, C> {
 
   @Override
   public List<R> getAll() throws Exception {
@@ -31,12 +35,28 @@ public abstract class ContentCache<R extends Identifier<I>, M extends R, I> exte
   @Override
   public R get(I pId) throws Exception {
     String cacheKey = getCacheKey(pId);
-    R pReadonly = (R) getCacheManager().get(cacheKey);
+    R pReadonly = getCacheManager().get(cacheKey);
     if (pReadonly == null) {
       pReadonly = super.get(pId);
       getCacheManager().put(cacheKey, pReadonly);
     }
     return pReadonly;
+  }
+
+  @Override
+  public R validate(R pReadonly) throws Exception {
+    String cacheKey = getCacheKey(pReadonly.getId());
+    String lastModified = getCacheManager().getLastModified(cacheKey);
+
+    if (StringUtils.isEmpty(lastModified) || (!StringUtils.isEmpty(lastModified)
+        && lastModified.compareTo(pReadonly.getLastModified()) > 0)) {
+      R readOnly = super.get(pReadonly.getId());
+      getCacheManager().invalidate(cacheKey);
+      getCacheManager().put(getCacheKey(pReadonly.getId()), readOnly);
+      pReadonly = readOnly;
+    }
+    return pReadonly;
+
   }
 
   protected void invalidate(final R pReadonly) throws Exception {

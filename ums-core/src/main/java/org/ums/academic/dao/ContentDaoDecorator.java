@@ -5,14 +5,18 @@ import org.ums.manager.ContentManager;
 
 import java.util.List;
 
-public class ContentDaoDecorator<R, M, I> implements ContentManager<R, M, I> {
-  private ContentManager<R, M, I> mManager;
+public class ContentDaoDecorator<R, M, I, C extends ContentManager<R, M, I>> implements ContentManager<R, M, I> {
+  private C mManager;
 
-  public ContentManager<R, M, I> getManager() {
+  protected static String getLastModifiedSql() {
+    return "to_char(sysdate,'YYYYMMDDHHMISS')";
+  }
+
+  public C getManager() {
     return mManager;
   }
 
-  public void setManager(ContentManager<R, M, I> pManager) {
+  public void setManager(C pManager) {
     mManager = pManager;
   }
 
@@ -22,6 +26,11 @@ public class ContentDaoDecorator<R, M, I> implements ContentManager<R, M, I> {
 
   public R get(final I pId) throws Exception {
     return getManager().get(pId);
+  }
+
+  @Override
+  public R validate(R pReadonly) throws Exception {
+    return getManager().validate(pReadonly);
   }
 
   public void update(final M pMutable) throws Exception {
@@ -34,9 +43,5 @@ public class ContentDaoDecorator<R, M, I> implements ContentManager<R, M, I> {
 
   public void create(final M pMutable) throws Exception {
     getManager().create(pMutable);
-  }
-
-  protected static String getLastModifiedSql() {
-    return "to_char(sysdate,'YYYYMMDDHHMISS')";
   }
 }

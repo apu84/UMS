@@ -5,13 +5,14 @@ import org.springframework.jdbc.core.RowMapper;
 import org.ums.academic.model.PersistentRole;
 import org.ums.domain.model.mutable.MutableRole;
 import org.ums.domain.model.regular.Role;
+import org.ums.manager.ContentManager;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class PersistentRoleDao extends ContentDaoDecorator<Role, MutableRole, Integer> {
+public class PersistentRoleDao extends ContentDaoDecorator<Role, MutableRole, Integer, ContentManager<Role, MutableRole, Integer>> {
   static String SELECT_ALL = "SELECT ROLE_ID, ROLE_NAME FROM MST_ROLE ";
   static String UPDATE_ALL = "UPDATE MST_ROLE set ROLE_NAME=? ";
   static String DELETE_ALL = "DELETE FROM MST_ROLE ";

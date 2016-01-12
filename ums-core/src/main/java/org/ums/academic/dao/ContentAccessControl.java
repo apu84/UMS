@@ -1,5 +1,7 @@
 package org.ums.academic.dao;
 
 
-public class ContentAccessControl<R, M, I> extends ContentDaoDecorator<R, M, I> {
+import org.ums.manager.ContentManager;
+
+public class ContentAccessControl<R, M, I, C extends ContentManager<R, M, I>> extends ContentDaoDecorator<R, M, I, C> {
 }

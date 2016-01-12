@@ -8,7 +8,6 @@ import org.ums.domain.model.mutable.MutableUser;
 import org.ums.domain.model.regular.Role;
 import org.ums.domain.model.regular.User;
 import org.ums.manager.ContentManager;
-import org.ums.util.Constants;
 
 public class PersistentUser implements MutableUser {
   private static ContentManager<User, MutableUser, String> sUserManager;
@@ -76,7 +75,7 @@ public class PersistentUser implements MutableUser {
 
   @Override
   public Role getRole() throws Exception {
-    return mRole == null ? sRoleManager.get(mRoleId) : mRole;
+    return mRole == null ? sRoleManager.get(mRoleId) : sRoleManager.validate(mRole);
   }
 
   @Override
@@ -110,12 +109,12 @@ public class PersistentUser implements MutableUser {
   }
 
   @Override
-  public void setTemporaryPassword(char[] pPassword) {
-    mTemporaryPassword = pPassword;
+  public char[] getTemporaryPassword() {
+    return mTemporaryPassword;
   }
 
   @Override
-  public char[] getTemporaryPassword() {
-    return mTemporaryPassword;
+  public void setTemporaryPassword(char[] pPassword) {
+    mTemporaryPassword = pPassword;
   }
 }

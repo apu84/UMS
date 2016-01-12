@@ -109,12 +109,12 @@ public class PersistentCourse implements MutableCourse {
 
   @Override
   public Department getOfferedBy() throws Exception {
-    return mOfferedBy == null && mDepartmentId > 0 ? sDepartmentManager.get(mDepartmentId) : mOfferedBy;
+    return mOfferedBy == null && mDepartmentId > 0 ? sDepartmentManager.get(mDepartmentId) : sDepartmentManager.validate(mOfferedBy);
   }
 
   @Override
   public Department getOfferedTo() throws Exception {
-    return mOfferedBy == null && mDepartmentId > 0 ? sDepartmentManager.get(mDepartmentId) : mOfferedBy;
+    return mOfferedBy == null && mDepartmentId > 0 ? sDepartmentManager.get(mDepartmentId) : sDepartmentManager.validate(mOfferedBy);
   }
 
   @Override
@@ -159,7 +159,7 @@ public class PersistentCourse implements MutableCourse {
 
   @Override
   public CourseGroup getCourseGroup(final String pSyllabusId) throws Exception {
-    return mCourseGroup == null && mCourseGroupId > 0 ? sCourseGroupManager.getBySyllabus(mCourseGroupId, pSyllabusId) : mCourseGroup;
+    return mCourseGroup == null && mCourseGroupId > 0 ? sCourseGroupManager.getBySyllabus(mCourseGroupId, pSyllabusId) : sCourseGroupManager.validate(mCourseGroup);
   }
 
   @Override
@@ -169,7 +169,7 @@ public class PersistentCourse implements MutableCourse {
 
   @Override
   public Syllabus getSyllabus() throws Exception {
-    return mSyllabus == null ? sSyllabusManager.get(mSyllabusId) : mSyllabus;
+    return mSyllabus == null ? sSyllabusManager.get(mSyllabusId) : sSyllabusManager.validate(mSyllabus);
   }
 
   @Override

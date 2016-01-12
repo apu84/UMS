@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.ums.academic.model.PersistentStudent;
 import org.ums.domain.model.mutable.MutableStudent;
 import org.ums.domain.model.regular.Student;
+import org.ums.manager.ContentManager;
 import org.ums.util.Constants;
 
 import java.sql.ResultSet;
@@ -13,7 +14,7 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.util.List;
 
-public class PersistentStudentDao extends ContentDaoDecorator<Student, MutableStudent, String> {
+public class PersistentStudentDao extends ContentDaoDecorator<Student, MutableStudent, String, ContentManager<Student, MutableStudent, String>> {
   static String SELECT_ALL = "SELECT" +
       "  STUDENT_ID," +
       "  FULL_NAME," +

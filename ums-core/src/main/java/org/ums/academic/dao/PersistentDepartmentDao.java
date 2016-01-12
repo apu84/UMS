@@ -6,13 +6,14 @@ import org.springframework.jdbc.core.RowMapper;
 import org.ums.academic.model.PersistentDepartment;
 import org.ums.domain.model.regular.Department;
 import org.ums.domain.model.mutable.MutableDepartment;
+import org.ums.manager.ContentManager;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class PersistentDepartmentDao extends ContentDaoDecorator<Department, MutableDepartment, Integer> {
+public class PersistentDepartmentDao extends ContentDaoDecorator<Department, MutableDepartment, Integer, ContentManager<Department, MutableDepartment, Integer>> {
   static String SELECT_ALL = "SELECT DEPT_ID, SHORT_NAME, LONG_NAME, TYPE, LAST_MODIFIED FROM MST_DEPT_OFFICE ";
 
   private JdbcTemplate mJdbcTemplate;

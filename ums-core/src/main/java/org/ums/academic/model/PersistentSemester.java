@@ -84,7 +84,7 @@ public class PersistentSemester implements MutableSemester {
   }
 
   public ProgramType getProgramType() throws Exception {
-    return mProgramType != null ? mProgramType : sProgramTypeManager.get(mProgramTypeId);
+    return mProgramType != null ? sProgramTypeManager.validate(mProgramType) : sProgramTypeManager.get(mProgramTypeId);
   }
 
   public void setProgramType(final ProgramType pProgram) {

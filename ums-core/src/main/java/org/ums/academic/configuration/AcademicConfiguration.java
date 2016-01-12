@@ -35,6 +35,9 @@ public class AcademicConfiguration {
   @Autowired
   JdbcTemplate mJdbcTemplate;
 
+  @Autowired
+  BinaryContentManager<byte[]> mBinaryContentManager;
+
   SemesterManager getPersistentSemesterDao() {
     return new PersistentSemesterDao(mJdbcTemplate, getGenericDateFormat());
   }
@@ -48,13 +51,13 @@ public class AcademicConfiguration {
 
   @Bean
   ContentManager<Semester, MutableSemester, Integer> getSemesterCache() {
-    ContentCache<Semester, MutableSemester, Integer> semesterCache = new SemesterCache(mLocalCacheManager);
+    SemesterCache semesterCache = new SemesterCache(mLocalCacheManager);
     semesterCache.setManager(getPersistentSemesterDao());
     return semesterCache;
   }
 
   ContentManager<Semester, MutableSemester, Integer> getSemesterAccessControl() {
-    ContentAccessControl<Semester, MutableSemester, Integer> semesterAccessControl = new ContentAccessControl<>();
+    ContentAccessControl semesterAccessControl = new ContentAccessControl<>();
     semesterAccessControl.setManager(getSemesterCache());
     return semesterAccessControl;
   }
@@ -64,7 +67,9 @@ public class AcademicConfiguration {
   SemesterManager semesterManager() {
 /*    ContentTransaction<Semester, MutableSemester, Integer> semesterTransaction = new ContentTransaction<>();
     semesterTransaction.setManager(getSemesterAccessControl());*/
-    return getPersistentSemesterDao();
+    SemesterCache semesterCache = new SemesterCache(mLocalCacheManager);
+    semesterCache.setManager(getPersistentSemesterDao());
+    return semesterCache;
   }
 
   @Bean
@@ -208,11 +213,11 @@ public class AcademicConfiguration {
 
   @Bean
   Builder<Student, MutableStudent> getStudentBuilder() {
-    return new StudentBuilder(getGenericDateFormat());
+    return new StudentBuilder(getGenericDateFormat(), mBinaryContentManager);
   }
 
   @Bean
   List<Builder<Student, MutableStudent>> getStudentBuilders() {
-    return Arrays.asList(new StudentBuilder(getGenericDateFormat()));
+    return Arrays.asList(new StudentBuilder(getGenericDateFormat(), mBinaryContentManager));
   }
 }

@@ -56,7 +56,7 @@ public class PersistentProgram implements MutableProgram {
   }
 
   public Department getDepartment() throws Exception {
-    return mDepartment == null ? sDepartmentManger.get(mDepartmentId) : mDepartment;
+    return mDepartment == null ? sDepartmentManger.get(mDepartmentId) : sDepartmentManger.validate(mDepartment);
   }
 
   @Override
@@ -84,7 +84,7 @@ public class PersistentProgram implements MutableProgram {
 
   @Override
   public ProgramType getProgramType() throws Exception {
-    return mProgramType == null ? sProgramTypeManager.get(mProgramTypeId) : mProgramType;
+    return mProgramType == null ? sProgramTypeManager.get(mProgramTypeId) : sProgramTypeManager.validate(mProgramType);
   }
 
   @Override

@@ -6,13 +6,14 @@ import org.springframework.jdbc.core.RowMapper;
 import org.ums.academic.model.PersistentProgramType;
 import org.ums.domain.model.mutable.MutableProgramType;
 import org.ums.domain.model.regular.ProgramType;
+import org.ums.manager.ContentManager;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class PersistentProgramTypeDao extends ContentDaoDecorator<ProgramType, MutableProgramType, Integer> {
+public class PersistentProgramTypeDao extends ContentDaoDecorator<ProgramType, MutableProgramType, Integer, ContentManager<ProgramType, MutableProgramType, Integer>> {
   static String SELECT_ALL = "SELECT TYPE_ID, TYPE_NAME FROM MST_PROGRAM_TYPE ";
   static String UPDATE_ONE = "UPDATE MST_PROGRAM_TYPE SET TYPE_NAME = ? ";
   static String DELETE_ONE = "DELETE FROM MST_PROGRAM_TYPE ";

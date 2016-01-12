@@ -67,7 +67,7 @@ public class PersistentSyllabus implements MutableSyllabus {
 
   @Override
   public Semester getSemester() throws Exception {
-    return mSemester == null ? sSemesterManager.get(mSemesterId) : mSemester;
+    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager.validate(mSemester);
   }
 
   @Override
@@ -77,7 +77,7 @@ public class PersistentSyllabus implements MutableSyllabus {
 
   @Override
   public Program getProgram() throws Exception {
-    return mProgram == null ? sProgramManager.get(mProgramId) : mProgram;
+    return mProgram == null ? sProgramManager.get(mProgramId) : sProgramManager.validate(mProgram);
   }
 
   @Override

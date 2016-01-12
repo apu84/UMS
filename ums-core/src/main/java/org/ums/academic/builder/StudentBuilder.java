@@ -6,6 +6,7 @@ import org.ums.domain.model.regular.Department;
 import org.ums.domain.model.regular.Program;
 import org.ums.domain.model.regular.Semester;
 import org.ums.domain.model.regular.Student;
+import org.ums.manager.BinaryContentManager;
 
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
@@ -13,10 +14,12 @@ import javax.ws.rs.core.UriInfo;
 import java.text.DateFormat;
 
 public class StudentBuilder implements Builder<Student, MutableStudent> {
-  DateFormat mDateFormat;
+  private DateFormat mDateFormat;
+  private BinaryContentManager<byte[]> mBinaryContentManager;
 
-  public StudentBuilder(final DateFormat pDateFormat) {
+  public StudentBuilder(final DateFormat pDateFormat, final BinaryContentManager<byte[]> pBinaryContentManager) {
     mDateFormat = pDateFormat;
+    mBinaryContentManager = pBinaryContentManager;
   }
 
   public void build(final JsonObjectBuilder pBuilder,
@@ -56,6 +59,7 @@ public class StudentBuilder implements Builder<Student, MutableStudent> {
     pBuilder.add("guardianMobileNo", pStudent.getGuardianMobileNo());
     pBuilder.add("guardianPhoneNo", pStudent.getGuardianPhoneNo());
     pBuilder.add("guardianEmail", pStudent.getGuardianEmail());
+    pBuilder.add("photo", "data:image/jpeg;base64," + new String(mBinaryContentManager.get(pStudent.getId(), BinaryContentManager.Domain.PICTURE)));
   }
 
   public void build(final MutableStudent pMutableStudent,

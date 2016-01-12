@@ -6,5 +6,7 @@ public interface CacheManager<R> {
 
   R get(String pCacheId) throws Exception;
 
+  String getLastModified(String pCacheId) throws Exception;
+
   void invalidate(String pCacheId) throws Exception;
 }

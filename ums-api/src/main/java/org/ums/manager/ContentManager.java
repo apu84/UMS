@@ -8,6 +8,8 @@ public interface ContentManager<R, M, I> {
 
   R get(final I pId) throws Exception;
 
+  R validate(final R pReadonly) throws Exception;
+
   void update(final M pMutable) throws Exception;
 
   void delete(final M pMutable) throws Exception;

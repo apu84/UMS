@@ -126,7 +126,7 @@ public class PersistentStudent implements MutableStudent {
 
   @Override
   public Department getDepartment() throws Exception {
-    return mDepartment == null ? sDepartmentManager.get(mDepartmentId) : mDepartment;
+    return mDepartment == null ? sDepartmentManager.get(mDepartmentId) : sDepartmentManager.validate(mDepartment);
   }
 
   @Override
@@ -146,7 +146,7 @@ public class PersistentStudent implements MutableStudent {
 
   @Override
   public Semester getSemester() throws Exception {
-    return mSemester == null ? sSemesterManager.get(mSemesterId) : mSemester;
+    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager.validate(mSemester);
   }
 
   @Override
@@ -166,7 +166,7 @@ public class PersistentStudent implements MutableStudent {
 
   @Override
   public Program getProgram() throws Exception {
-    return mProgram == null ? sProgramManager.get(mProgramId) : mProgram;
+    return mProgram == null ? sProgramManager.get(mProgramId) : sProgramManager.validate(mProgram);
   }
 
   @Override

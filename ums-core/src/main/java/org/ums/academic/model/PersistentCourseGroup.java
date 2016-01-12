@@ -57,7 +57,7 @@ public class PersistentCourseGroup implements MutableCourseGroup {
 
   @Override
   public Syllabus getSyllabus() throws Exception {
-    return mSyllabus == null ? sSyllabusManager.get(mSyllabusId) : mSyllabus;
+    return mSyllabus == null ? sSyllabusManager.get(mSyllabusId) : sSyllabusManager.validate(mSyllabus);
   }
 
   @Override

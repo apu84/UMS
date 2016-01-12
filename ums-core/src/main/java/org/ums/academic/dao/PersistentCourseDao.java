@@ -8,13 +8,14 @@ import org.ums.domain.model.regular.Course;
 import org.ums.domain.model.mutable.MutableCourse;
 import org.ums.enums.CourseCategory;
 import org.ums.enums.CourseType;
+import org.ums.manager.ContentManager;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class PersistentCourseDao extends ContentDaoDecorator<Course, MutableCourse, String> {
+public class PersistentCourseDao extends ContentDaoDecorator<Course, MutableCourse, String, ContentManager<Course, MutableCourse, String>> {
   static String SELECT_ALL = "SELECT COURSE_ID, COURSE_NO, COURSE_TITLE, CRHR, SYLLABUS_ID, OPT_GROUP_ID, OFFER_BY," +
       "VIEW_ORDER, YEAR, SEMESTER, COURSE_TYPE, COURSE_CATEGORY, LAST_MODIFIED FROM MST_COURSE ";
   static String UPDATE_ONE = "UPDATE MST_COURSE SET COURSE_NO = ?, COURSE_TITLE = ?, CRHR = ?, SYLLABUS_ID = ?, " +
