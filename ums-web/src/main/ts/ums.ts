@@ -10,7 +10,10 @@ module ums {
   UMS.config(($stateProvider, $urlRouterProvider) => {
     //
     // For any unmatched url, redirect to /state1
+
+    $urlRouterProvider.when('/passwordReport','/passwordReport/singleUserPassword');
     $urlRouterProvider.otherwise("/userHome");
+
     //
     // Now set up the states
     $stateProvider
@@ -218,6 +221,14 @@ module ums {
               });
             }]
           }
+        })
+        .state('passwordReport.singleUserPassword', {
+          url: "/singleUserPassword",
+          templateUrl: "views/user-management/single-user-password.html"
+        })
+        .state('passwordReport.bulkUserPassword', {
+          url: "/bulkUserPassword",
+          templateUrl: "views/user-management/bulk-user-password.html"
         })
   });
 }

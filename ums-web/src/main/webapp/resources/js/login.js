@@ -137,7 +137,8 @@ var Authentication = (function () {
   }
 
   function presentErrorMessage(msg) {
-    document.getElementById("messages").textContent = msg;
+    document.getElementById("login_msg").textContent = msg;
+    $("#login_msg").show();
   }
 
   function getBaseAppUrl() {

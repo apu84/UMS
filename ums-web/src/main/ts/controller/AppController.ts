@@ -63,11 +63,14 @@ module ums {
       };
 
       this.$scope.$on('$stateChangeSuccess', (event, toState, toParams, fromState, fromParams) => {
+        /*
+        //Commented by Ifti
         this.$scope.header.animation = 'fadeInUp';
+
         setTimeout( () => {
           this.$scope.header.animation = '';
         }, 100);
-
+        */
         $('.sidebar-collapse').removeClass('in').addClass('collapse');
 
         this.$scope.data = $.fn.Data.get(toState.url);

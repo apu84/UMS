@@ -17,44 +17,79 @@
             <div class="clearfix"></div>
         </li>
 
-        <li><a ui-sref="userHome"><i class="fa fa-tachometer fa-fw">
+        <li><a ui-sref="userHome"><i class="fa fa-home fa-fw">
             <div class="icon-bg bg-orange"></div>
         </i><span class="menu-title">User Home</span></a>
         </li>
-        <li><a href="javascript:void(0);"><i class="fa fa-laptop fa-fw">
-            <div class="icon-bg bg-pink"></div>
-        </i><span class="menu-title">Student</span><span class="fa arrow"></span></a>
+
+        <li>
+            <a href="javascript:void(0);">
+                <i class="fa fa-check-square-o fa-fw"><div class="icon-bg bg-pink"></div></i>
+                <span class="menu-title">Semester Initialization</span><span class="fa arrow"></span>
+            </a>
             <ul class="nav nav-second-level">
-                <li><a ui-sref="createStudent"><i class="fa fa-rocket"></i><span
-                        class="submenu-title">New Student Entry</span></a></li>
-            </ul>
-        </li>
-        <li><a href="javascript:void(0);"><i class="fa fa-laptop fa-fw">
-            <div class="icon-bg bg-pink"></div>
-        </i><span class="menu-title">Settings</span><span class="fa arrow"></span></a>
-            <ul class="nav nav-second-level">
-                <li><a ui-sref="createSyllabus"><i class="fa fa-rocket"></i><span
-                        class="submenu-title">Create Syllabus</span></a></li>
-                <li><a ui-sref="showSyllabusList"><i class="fa fa-list"></i><span
-                        class="submenu-title">Syllabus List</span></a></li>
-                <li><a ui-sref="createUgCourse"><i class="fa fa-book"></i><span
-                        class="submenu-title">Create Course</span></a></li>
-            </ul>
-        </li>
-        <li><a href="javascript:void(0);"><i class="fa fa-laptop fa-fw">
-            <div class="icon-bg bg-pink"></div>
-        </i><span class="menu-title">New Semester Initialization</span><span class="fa arrow"></span></a>
-            <ul class="nav nav-second-level">
-                <li><a ui-sref="createSemester"><i class="fa fa-rocket"></i><span class="submenu-title">Semester</span></a>
+                <li>
+                    <a ui-sref="createSyllabus">
+                        <i class="fa fa-plus-square-o"></i>
+                        <span class="submenu-title">New Semester</span>
+                    </a>
                 </li>
-                <li><a ui-sref="semesterSyllabusMap"><i class="fa fa-rocket"></i><span class="submenu-title">Semester-Syllabus Map</span></a>
+                <li>
+                    <a ui-sref="semesterSyllabusMap">
+                        <i class="fa fa-arrows-alt"></i>
+                        <span class="submenu-title">Semester-Syllabus map</span>
+                    </a>
+                </li>
+                <li>
+                    <a ui-sref="createStudent">
+                        <i class="fa fa-graduation-cap"></i>
+                        <span class="submenu-title">New Student</span>
+                    </a>
                 </li>
             </ul>
         </li>
-        <li><a ui-sref="passwordReport"><i class="fa fa-tachometer fa-fw">
-            <div class="icon-bg bg-orange"></div>
-        </i><span class="menu-title">Password Report</span></a>
+
+        <li>
+            <a href="javascript:void(0);">
+                <i class="fa fa-book fa-fw"><div class="icon-bg bg-green"></div></i>
+                <span class="menu-title">Syllabus Bank</span><span class="fa arrow"></span>
+            </a>
+            <ul class="nav nav-second-level">
+                <li>
+                    <a ui-sref="showSyllabusList">
+                        <i class="fa fa-list"></i>
+                        <span class="submenu-title">Syllabus List</span>
+                    </a>
+                </li>
+                <li>
+                    <a ui-sref="createSyllabus">
+                        <i class="fa fa-plus-square-o"></i>
+                        <span class="submenu-title">Create New Syllabus</span>
+                    </a>
+                </li>
+                <li>
+                    <a ui-sref="createUgCourse">
+                        <i class="fa fa-plus-square"></i>
+                        <span class="submenu-title">Create Course</span>
+                    </a>
+                </li>
+            </ul>
         </li>
+        <li>
+            <a href="javascript:void(0);">
+                <i class="fa fa-user fa-fw"><div class="icon-bg bg-violet"></div></i>
+                <span class="menu-title">User Management</span><span class="fa arrow"></span>
+            </a>
+            <ul class="nav nav-second-level">
+                <li>
+                    <a ui-sref="passwordReport">
+                        <i class="fa fa-lock"></i>
+                        <span class="submenu-title">Reset User Password</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
 
     </ul>
 </div>

@@ -43,6 +43,7 @@ module ums {
         this.httpClient.get('academic/semester/program-type/' + this.programTypeId + "/limit/0", 'application/json',
             (json:any, etag:string) => {
               this.semesters = json.entries;
+              this.semesters.splice(0, 0, this.appConstants.initSemester[0]);
             },
             (response:ng.IHttpPromiseCallbackArg<any>) => {
               console.error(response);
