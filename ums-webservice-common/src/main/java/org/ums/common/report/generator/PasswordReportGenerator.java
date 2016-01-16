@@ -59,6 +59,9 @@ public class PasswordReportGenerator extends AbstractReportGenerator {
       parameters.put("user name", student.getFullName());
       parameters.put("role name", user.getRole().getName());
       parameters.put("created on", new Date());
+      parameters.put("department", student.getDepartment().getShortName());
+      parameters.put("semester", "1st year, 1st semester");
+      parameters.put("role", user.getRole().getName());
     }
     return parameters;
   }
