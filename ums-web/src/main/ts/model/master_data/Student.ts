@@ -1,11 +1,11 @@
 module ums {
   export interface Student {
-    studentName:string;
-    studentId:string;
+    fullName:string;
+    id:string;
     programTypeId: string;
     programTypeName: string;
     deptId: string;
-    deptName: string;
+    department: string;
     programName: string;
     programId: string;
     semesterId: string;

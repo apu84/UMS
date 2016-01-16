@@ -59,7 +59,6 @@ public class StudentBuilder implements Builder<Student, MutableStudent> {
     pBuilder.add("guardianMobileNo", pStudent.getGuardianMobileNo());
     pBuilder.add("guardianPhoneNo", pStudent.getGuardianPhoneNo());
     pBuilder.add("guardianEmail", pStudent.getGuardianEmail());
-    pBuilder.add("photo", "data:image/jpeg;base64," + new String(mBinaryContentManager.get(pStudent.getId(), BinaryContentManager.Domain.PICTURE)));
   }
 
   public void build(final MutableStudent pMutableStudent,

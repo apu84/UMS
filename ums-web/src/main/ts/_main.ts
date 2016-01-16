@@ -36,6 +36,7 @@
 /// <reference path='directive/Validate.ts'/>
 /// <reference path='directive/ProgramSelector.ts'/>
 /// <reference path='directive/FileModel.ts'/>
+/// <reference path='directive/Image.ts'/>
 
 
 /// <reference path='interceptor/Unauthorized.ts'/>
