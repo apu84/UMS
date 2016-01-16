@@ -4,6 +4,7 @@
 /// <reference path='lib/jquery.validate.d.ts'/>
 /// <reference path='lib/jqueryui.d.ts'/>
 /// <reference path='lib/jquery.slimScroll.d.ts'/>
+/// <reference path='lib/jquery.notific8.d.ts'/>
 /// <reference path='lib/zabuto_calendar.d.ts'/>
 /// <reference path='lib/bootstrap-switch.d.ts'/>
 /// <reference path='lib/uri.d.ts'/>
@@ -24,7 +25,7 @@
 
 /// <reference path='controller/common/ChangePassword.ts'/>
 /// <reference path='controller/common/Logout.ts'/>
-/// <reference path='controller/common/PasswordReport.ts'/>
+//// <reference path='controller/common/PasswordReport.ts'/>
 
 /// <reference path='controller/syllabus/FullSyllabus.ts'/>
 /// <reference path='controller/syllabus/NewSyllabus.ts'/>
@@ -36,7 +37,6 @@
 /// <reference path='directive/Validate.ts'/>
 /// <reference path='directive/ProgramSelector.ts'/>
 /// <reference path='directive/FileModel.ts'/>
-/// <reference path='directive/Image.ts'/>
 
 
 /// <reference path='interceptor/Unauthorized.ts'/>

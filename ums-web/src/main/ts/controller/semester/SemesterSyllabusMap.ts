@@ -1,6 +1,7 @@
 ///<reference path="../../service/HttpClient.ts"/>
 ///<reference path="../../service/FileUpload.ts"/>
 ///<reference path="../../model/SemesterSyllabusMapModel.ts"/>
+///<reference path="../../lib/jquery.notific8.d.ts"/>
 
 module ums {
   interface SemesterSyllabusMapScope extends ng.IScope {
@@ -11,6 +12,10 @@ module ums {
     map:any;
     maps:any;
     single:any;
+    mapMessage:any;
+    copyDivVisiblity:boolean;
+    copySemesterId:string;
+    copyMapping:Function;
     syllabusOptions: any;
     loadingVisibility1:boolean;
     loadingVisibility2:boolean;
@@ -27,6 +32,7 @@ module ums {
       $scope.semesterSyllabusMapModel = new SemesterSyllabusMapModel(appConstants, httpClient);
 //      $scope.semesterSyllabusMapModel.programTypes.pop();
       $scope.goNext= this.goNext.bind(this);
+      $scope.copySemesterId= this.copySemesterId.bind(this);
       $scope.fetchSSmap= this.fetchSSmap.bind(this);
 
       $scope.mapTableVisibility=false;
@@ -53,16 +59,29 @@ module ums {
       this.$scope.loadingVisibility1=true;
       this.$scope.mapTableVisibility=false;
       this.$scope.mapDetailVisiblity=false;
-        this.httpClient.get('academic/ssmap/program/110500/semester/11012015', 'application/json',
+        this.httpClient.get('academic/ssmap/program/'+this.$scope.semesterSyllabusMapModel.programId+'/semester/'+this.$scope.semesterSyllabusMapModel.semesterId+'', 'application/json',
             (json:any, etag:string) => {
               this.$scope.loadingVisibility1=false;
               this.$scope.maps = json.entries;
-              this.$scope.mapTableVisibility=true;
+              this.$scope.mapTableVisibility=this.$scope.maps.length==0?false:true;
+              this.$scope.mapMessage=this.$scope.maps.length==0?"No Mapping Found.":"";
+              this.$scope.copyDivVisiblity=this.$scope.maps.length==0?true:false;
             },
             (response:ng.IHttpPromiseCallbackArg<any>) => {
               console.error(response);
               this.$scope.loadingVisibility1=false;
             });
+
+
+    }
+
+    private copySemesterId():void{
+
+      //var abc={"sourceSemesterId":'';"targetSemesterId":'',programId=''};
+      this.httpClient.post('academic/ssmap/',{}, 'application/json')
+          .success(() => {
+          }).error((data) => {
+          });
 
 
     }

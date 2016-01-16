@@ -2,6 +2,7 @@
 ///<reference path="../../model/NewSyllabusModel.ts"/>
 ///<reference path="../../model/NewSyllabusModelImpl.ts"/>
 ///<reference path="../../service/HttpClient.ts"/>
+///<reference path="../../lib/jquery.notific8.d.ts"/>
 
 module ums {
   interface INewSyllabusScope extends ng.IScope {
@@ -20,7 +21,8 @@ module ums {
 
       this.httpClient.post('academic/syllabus/', this.$scope.newSyllabusModel, 'application/json')
           .success((data, status, headers) => {
-            console.debug("Syllabus created, resource location : " + headers('location'));
+            //console.debug("Syllabus created, resource location : " + headers('location'));
+            $.notific8('Successfully created a new Syllabus.');
           }).error((data) => {
             console.error(data);
           });
