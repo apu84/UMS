@@ -1,6 +1,18 @@
 module ums {
+  interface Course {
+    id: string;
+    no: string;
+    title: string;
+    crhr: string;
+    type: string;
+    category: string;
+    year: string;
+    semester: string;
+  }
   export class FullSyllabus {
-    constructor() {
+    public static $inject = ['$scope', 'HttpClient'];
+
+    constructor(private $scope: any, private httpClient: HttpClient) {
       $(".portlet").each(function (index, element) {
         var me = $(this);
         $(">.portlet-header>.tools>i", me).click(function (e) {
@@ -27,6 +39,59 @@ module ums {
           }
         });
       });
+
+      this.httpClient.get('academic/course/syllabus/11012009_110300', 'application/json',
+          (data: any, etag: string) => {
+            var courses: Array<Course> = data.entries;
+            this.$scope.courseMap = this.formatCourses(courses);
+            console.debug(this.$scope.courseMap);
+          });
+    }
+
+    private formatCourses(courses: Array<Course>): {[key: string]:{[key: string]: Array<Course>}} {
+      var courseMap: {[key: string]:{[key: string]: Array<Course>}} = {};
+      var optionalCourses: Array<Course> = [];
+      for (var i = 0; i < courses.length; i++) {
+        if (courses[i].semester == '0') {
+          optionalCourses[optionalCourses.length] = courses[i];
+        } else {
+          var year: string = FullSyllabus.getSuffix(courses[i].year);
+          var semester: string = FullSyllabus.getSuffix(courses[i].semester);
+
+          if (!courseMap[year]) {
+            courseMap[year] = {};
+          }
+          if (!courseMap[year][semester]) {
+            courseMap[year][semester] = [];
+          }
+          courseMap[year][semester][courseMap[year][semester].length] = courses[i];
+        }
+      }
+      if (optionalCourses.length > 0) {
+        courseMap['Optional courses']= {};
+        courseMap['Optional courses'][''] = optionalCourses;
+      }
+      return courseMap;
+    }
+
+    private static getSuffix(n: string): string {
+      var suffix: string = "th";
+      switch (parseInt(n)) {
+        case 1:
+          suffix = "st";
+          break;
+        case 2:
+          suffix = "nd";
+          break;
+        case 3:
+          suffix = "rd";
+          break;
+        default :
+          suffix = "th";
+          break;
+      }
+
+      return n + "" + suffix;
     }
   }
   UMS.controller('FullSyllabus', FullSyllabus);

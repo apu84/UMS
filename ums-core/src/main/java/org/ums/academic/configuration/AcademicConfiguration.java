@@ -111,7 +111,9 @@ public class AcademicConfiguration {
 
   @Bean
   ContentManager<Course, MutableCourse, String> courseManager() {
-    return new PersistentCourseDao(mJdbcTemplate);
+    CourseCache courseCache = new CourseCache(mLocalCacheManager);
+    courseCache.setManager(new PersistentCourseDao(mJdbcTemplate));
+    return courseCache;
   }
 
   @Bean
