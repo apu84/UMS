@@ -1,10 +1,8 @@
 package org.ums.academic.dao;
 
-import org.ums.domain.model.mutable.MutableSemester;
+import org.ums.domain.model.dto.SemesterSyllabusMapDto;
 import org.ums.domain.model.mutable.MutableSemesterSyllabusMap;
-import org.ums.domain.model.regular.Semester;
 import org.ums.domain.model.regular.SemesterSyllabusMap;
-import org.ums.manager.SemesterManager;
 import org.ums.manager.SemesterSyllabusMapManager;
 
 import java.util.List;
@@ -20,5 +18,10 @@ public class SemesterSyllabusMapDaoDecorator extends ContentDaoDecorator<Semeste
 
   public  SemesterSyllabusMap get(final Integer pMapId) throws Exception {
     return getManager().get(pMapId);
+  }
+
+  @Override
+  public void copySyllabus(SemesterSyllabusMapDto pSemesterSyllabusMapDto) throws Exception {
+    getManager().copySyllabus(pSemesterSyllabusMapDto);
   }
 }

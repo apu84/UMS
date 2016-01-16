@@ -37,4 +37,11 @@ public class MutableSemesterSyllabusMapResource extends Resource {
     return mResourceHelper.put(pJsonObject);
   }
 
+  @POST
+  public Response updateSemesterSyllabusMap(final @Context Request pRequest,
+                                 final JsonObject pJsonObject) throws Exception {
+
+    return mResourceHelper.post(pJsonObject, mUriInfo);
+  }
+
 }

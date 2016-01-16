@@ -4,6 +4,7 @@
     import org.springframework.jdbc.core.RowMapper;
     import org.ums.academic.model.*;
     import org.ums.domain.model.common.MutableIdentifier;
+    import org.ums.domain.model.dto.SemesterSyllabusMapDto;
     import org.ums.domain.model.mutable.MutableSemester;
     import org.ums.domain.model.mutable.MutableSemesterSyllabusMap;
     import org.ums.domain.model.regular.Semester;
@@ -56,6 +57,16 @@ public class PersistentSemesterSyllabusMapDao  extends SemesterSyllabusMapDaoDec
     mJdbcTemplate.update(query,
         pSSMap.getSyllabus().getId(),
         pSSMap.getId());
+  }
+
+  public void copySyllabus(final SemesterSyllabusMapDto pSemesterSyllabusMapDto) throws Exception {
+
+    String query = "insert into SEMESTER_SYLLABUS_MAP(mapping_id, program_id, year, semester, semester_id, syllabus_id)" +
+        " select SQN_SEMESTER_SYLLABUS_ID.nextVal, program_id, year, semester, ? , syllabus_id from SEMESTER_SYLLABUS_MAP t1 where semester_id = ? and program_id = ?";
+    mJdbcTemplate.update(query,
+        pSemesterSyllabusMapDto.getAcademicSemester().getId(),
+        pSemesterSyllabusMapDto.getCopySemester().getId(),
+        pSemesterSyllabusMapDto.getProgram().getId());
   }
   class SemesterSyllabusRowMapper implements RowMapper<SemesterSyllabusMap> {
     @Override

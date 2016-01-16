@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.ums.academic.builder.*;
 import org.ums.academic.dao.*;
+import org.ums.domain.model.dto.MutableSemesterSyllabusMapDto;
+import org.ums.domain.model.dto.SemesterSyllabusMapDto;
 import org.ums.domain.model.mutable.*;
 import org.ums.domain.model.regular.*;
 import org.ums.manager.*;
@@ -219,5 +221,17 @@ public class AcademicConfiguration {
   @Bean
   List<Builder<Student, MutableStudent>> getStudentBuilders() {
     return Arrays.asList(new StudentBuilder(getGenericDateFormat(), mBinaryContentManager));
+  }
+
+  @Bean
+  Builder<SemesterSyllabusMapDto, MutableSemesterSyllabusMapDto> getSemesterSyllabusMapsBuilder() {
+    return new SemesterSyllabusMapsBuilder();
+  }
+
+  @Bean
+  List<Builder<SemesterSyllabusMapDto, MutableSemesterSyllabusMapDto>> getSemesterSyllabusMapsBuilders() {
+    List<Builder<SemesterSyllabusMapDto, MutableSemesterSyllabusMapDto>> builders = new ArrayList<>();
+    builders.add(new SemesterSyllabusMapsBuilder());
+    return builders;
   }
 }

@@ -7,12 +7,13 @@ import org.ums.academic.builder.Builder;
 import org.ums.academic.model.PersistentSemesterSyllabusMap;
 import org.ums.cache.LocalCache;
 import org.ums.common.academic.resource.ResourceHelper;
-import org.ums.domain.model.mutable.MutableSemester;
+import org.ums.common.academic.resource.SemesterResource;
+import org.ums.domain.model.dto.MutableSemesterSyllabusMapDto;
+import org.ums.domain.model.dto.SemesterSyllabusMapDto;
 import org.ums.domain.model.mutable.MutableSemesterSyllabusMap;
-import org.ums.domain.model.regular.Semester;
 import org.ums.domain.model.regular.SemesterSyllabusMap;
-import org.ums.domain.model.regular.Syllabus;
 import org.ums.manager.ContentManager;
+import org.ums.manager.SemesterSyllabusMapManager;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
@@ -20,6 +21,7 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.net.URI;
 import java.util.List;
 
 /**
@@ -30,14 +32,30 @@ import java.util.List;
 public class SemesterSyllabusMapResourceHelper extends ResourceHelper<SemesterSyllabusMap, MutableSemesterSyllabusMap, Integer> {
   @Autowired
   @Qualifier("semesterSyllabusMapManager")
-  private ContentManager<SemesterSyllabusMap, MutableSemesterSyllabusMap, Integer> mManager;
+  private SemesterSyllabusMapManager mManager;
 
   @Autowired
   private List<Builder<SemesterSyllabusMap, MutableSemesterSyllabusMap>> mBuilders;
 
+  @Autowired
+  private List<Builder<SemesterSyllabusMapDto, MutableSemesterSyllabusMapDto>> mMapBuilders;
+
   @Override
-  protected Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
-    return null;
+  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+    MutableSemesterSyllabusMapDto mutableSemesterSyllabusMap = new org.ums.academic.model.dto.SemesterSyllabusMap();
+    LocalCache localCache = new LocalCache();
+    for (Builder<SemesterSyllabusMapDto, MutableSemesterSyllabusMapDto> builder : mMapBuilders) {
+      builder.build(mutableSemesterSyllabusMap, pJsonObject, localCache);
+    }
+
+    mManager.copySyllabus(mutableSemesterSyllabusMap);
+
+    URI contextURI = pUriInfo.getBaseUriBuilder().path(SemesterResource.class).path(SemesterResource.class, "get")
+        .build(mutableSemesterSyllabusMap.getAcademicSemester().getId());
+    Response.ResponseBuilder builder = Response.created(contextURI);
+    builder.status(Response.Status.CREATED);
+
+    return builder.build();
   }
 
   @Override
