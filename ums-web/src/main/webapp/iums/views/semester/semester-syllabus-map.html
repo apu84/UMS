@@ -141,6 +141,9 @@
                             <label class="col-md-3 control-label">Syllabus</label>
                             <div class="col-md-9">
                                 <input class="form-control" disabled ng-model="single.syllabusName"/>
+                                <select class="form-control required" data-ng-model="semesterSyllabusMapModel.semesterId" data-ng-disabled="syllabusSelectBoxVisibility">
+                                    <option data-ng-repeat="syllabus in semesterSyllabusMapModel.syllabuses" value="{{syllabus.id}}">{{syllabus.name}}</option>
+                                </select>
                             </div>
                         </div>
                         <div class="form-actions">

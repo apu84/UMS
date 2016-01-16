@@ -16,6 +16,7 @@ module ums {
     loadingVisibility2:boolean;
     mapTableVisibility:boolean;
     mapDetailVisiblity:boolean;
+    syllabusSelectBoxVisibility:boolean;
 
   }
   export class SemesterSyllabusMap {
@@ -24,28 +25,30 @@ module ums {
     constructor(private appConstants:any, private $scope:SemesterSyllabusMapScope, private httpClient:HttpClient) {
 
       $scope.semesterSyllabusMapModel = new SemesterSyllabusMapModel(appConstants, httpClient);
-      $scope.semesterSyllabusMapModel.programTypes.pop();
+//      $scope.semesterSyllabusMapModel.programTypes.pop();
       $scope.goNext= this.goNext.bind(this);
       $scope.fetchSSmap= this.fetchSSmap.bind(this);
 
       $scope.mapTableVisibility=false;
+      $scope.syllabusSelectBoxVisibility=false;
 
       $scope.$watch(
-          // This function returns the value being watched. It is called for each turn of the $digest loop
-          () => {
-            return $scope.semesterSyllabusMapModel.departmentId;
-          },
-          // This is the change listener, called when the value returned from the above function changes
-          (newValue, oldValue) => {
-            if (newValue !== oldValue) {
-              // Only increment the counter if the value changed
-              console.debug("deparmentId changed to: %o", newValue);
-            }
-          }
+          () => {return $scope.semesterSyllabusMapModel.departmentId;},
+          (newValue, oldValue) => {if (newValue !== oldValue) {this.clearMap();}}
       );
 
+      $scope.$watch(
+          () => {return $scope.semesterSyllabusMapModel.programId;},
+          (newValue, oldValue) => {if (newValue !== oldValue) {this.clearMap();}}
+      );
+      $scope.$watch('semesterSyllabusMapModel.semesters', function() { $scope.semesterSyllabusMapModel.semesterId=appConstants.Empty; }, true);
     }
 
+    private clearMap():void{
+      this.$scope.maps=null;
+      this.$scope.mapTableVisibility=false;
+      this.$scope.mapDetailVisiblity=false;
+    }
     private goNext():void {
       this.$scope.loadingVisibility1=true;
       this.$scope.mapTableVisibility=false;
@@ -73,6 +76,9 @@ module ums {
             this.$scope.loadingVisibility2=false;
             this.$scope.single=json;
             this.$scope.mapDetailVisiblity=true;
+
+            //Should be removed from here :
+            this.$scope.semesterSyllabusMapModel.syllabuses=this.appConstants.ugDept;
           },
           (response:ng.IHttpPromiseCallbackArg<any>) => {
             this.$scope.loadingVisibility2=false;

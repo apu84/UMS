@@ -15,7 +15,9 @@
     '/changePassword': {title: 'Change Password', 'breadcrumb': ['Password']},
     '/createUgCourse': {title: 'Create UG Course', 'breadcrumb': ['Course']},
     '/createPgCourse': {title: 'Create PG Course', 'breadcrumb': ['Course']},
-    '/semesterSyllabusMap': {title: 'Semester Syllabus Map', 'breadcrumb': ['Semester-Syllabus Map']}
+    '/semesterSyllabusMap': {title: 'Semester Syllabus Map', 'breadcrumb': ['Semester-Syllabus Map']},
+    '/singleUserPassword': {title: 'User Management', 'breadcrumb': ['User Management','Single']},
+    '/bulkUserPassword': {title: 'User Management ', 'breadcrumb': ['User Management','Bulk']}
   };
 
   $.fn.Data.get = function (id) {
