@@ -5,7 +5,6 @@ import org.ums.domain.model.common.Identifier;
 import org.ums.domain.model.common.LastModifier;
 import org.ums.manager.CacheManager;
 import org.ums.manager.ContentManager;
-import org.ums.manager.SemesterManager;
 
 import java.util.List;
 
@@ -48,13 +47,14 @@ public abstract class ContentCache<R extends Identifier<I> & LastModifier, M ext
     String cacheKey = getCacheKey(pReadonly.getId());
     String lastModified = getCacheManager().getLastModified(cacheKey);
 
-//    if (StringUtils.isEmpty(lastModified) || StringUtils.isEmpty(pReadonly.getLastModified()) || (!StringUtils.isEmpty(lastModified)
-//        && lastModified.compareTo(pReadonly.getLastModified()) > 0)) {
+    if (StringUtils.isEmpty(lastModified)
+        || StringUtils.isEmpty(pReadonly.getLastModified())
+        || (!StringUtils.isEmpty(lastModified) && lastModified.compareTo(pReadonly.getLastModified()) > 0)) {
       R readOnly = super.get(pReadonly.getId());
       getCacheManager().invalidate(cacheKey);
       getCacheManager().put(getCacheKey(pReadonly.getId()), readOnly);
       pReadonly = readOnly;
-//    }
+    }
     return pReadonly;
 
   }

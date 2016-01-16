@@ -30,7 +30,7 @@ public class ContentDaoDecorator<R, M, I, C extends ContentManager<R, M, I>> imp
 
   @Override
   public R validate(R pReadonly) throws Exception {
-    return pReadonly;
+    return getManager() == null ? pReadonly : getManager().validate(pReadonly);
   }
 
   public void update(final M pMutable) throws Exception {
