@@ -223,6 +223,7 @@ module ums {
           }
         })
         .state('passwordReport.singleUserPassword', {
+          controller: 'PasswordReport',
           url: "/singleUserPassword",
           templateUrl: "views/user-management/single-user-password.html"
         })
