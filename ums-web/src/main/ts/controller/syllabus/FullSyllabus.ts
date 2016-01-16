@@ -10,9 +10,10 @@ module ums {
     semester: string;
   }
   export class FullSyllabus {
-    public static $inject = ['$scope', 'HttpClient'];
+    public static $inject = ['$scope', 'HttpClient', '$stateParams'];
 
-    constructor(private $scope: any, private httpClient: HttpClient) {
+    constructor(private $scope: any, private httpClient: HttpClient,
+                private $stateParams) {
       $(".portlet").each(function (index, element) {
         var me = $(this);
         $(">.portlet-header>.tools>i", me).click(function (e) {
@@ -40,7 +41,7 @@ module ums {
         });
       });
 
-      this.httpClient.get('academic/course/syllabus/11012009_110300', 'application/json',
+      this.httpClient.get('academic/course/syllabus/' + this.$stateParams.syllabusId, 'application/json',
           (data: any, etag: string) => {
             var courses: Array<Course> = data.entries;
             this.$scope.courseMap = this.formatCourses(courses);
