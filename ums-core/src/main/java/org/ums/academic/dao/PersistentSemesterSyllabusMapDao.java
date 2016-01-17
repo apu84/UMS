@@ -17,7 +17,7 @@
 
 public class PersistentSemesterSyllabusMapDao  extends SemesterSyllabusMapDaoDecorator {
 
-  static String SELECT_BY_SEMESTER_PROGRAM= "Select tmp1.*,dept.short_name,semester.semester_name Syllabus From ( " +
+  static String SELECT_BY_SEMESTER_PROGRAM= "Select tmp1.*,dept.short_name,semester.semester_name Syllabus,SEMESTER.SEMESTER_ID syllabus_semester_id From ( " +
       "Select MAPPING_ID,year,semester,program.dept_id,program.program_id,program.program_short_name,semester.semester_id,semester.semester_name,syllabus.syllabus_id " +
       "From SEMESTER_SYLLABUS_MAP ssmap,MST_PROGRAM program,MST_SEMESTER semester,MST_SYLLABUS syllabus " +
       "Where ssmap.PROGRAM_ID=program.PROGRAM_ID And ssmap.SEMESTER_ID=semester.SEMESTER_ID And ssmap.SYLLABUS_ID=syllabus.SYLLABUS_ID " +
@@ -25,7 +25,7 @@ public class PersistentSemesterSyllabusMapDao  extends SemesterSyllabusMapDaoDec
       "Where tmp1.syllabus_id=+ syllabus.syllabus_id and semester.semester_id=syllabus.semester_id  And dept.dept_id=tmp1.dept_id  " +
       "Order by Year,Semester ";
 
-  static String SELECT_SINGLE= "Select tmp1.*,dept.short_name,semester.semester_name Syllabus From (  " +
+  static String SELECT_SINGLE= "Select tmp1.*,dept.short_name,semester.semester_name Syllabus,SEMESTER.SEMESTER_ID syllabus_semester_id  From (  " +
       "Select MAPPING_ID,year,semester,program.dept_id,program.program_id,program.program_short_name,semester.semester_id,semester.semester_name,syllabus.syllabus_id  " +
       "From SEMESTER_SYLLABUS_MAP ssmap,MST_PROGRAM program,MST_SEMESTER semester,MST_SYLLABUS syllabus  " +
       "Where ssmap.PROGRAM_ID=program.PROGRAM_ID And ssmap.SEMESTER_ID=semester.SEMESTER_ID And ssmap.SYLLABUS_ID=syllabus.SYLLABUS_ID  " +
@@ -62,7 +62,7 @@ public class PersistentSemesterSyllabusMapDao  extends SemesterSyllabusMapDaoDec
   public void copySyllabus(final SemesterSyllabusMapDto pSemesterSyllabusMapDto) throws Exception {
 
     String query = "insert into SEMESTER_SYLLABUS_MAP(mapping_id, program_id, year, semester, semester_id, syllabus_id)" +
-        " select SQN_SEMESTER_SYLLABUS_ID.nextVal, program_id, year, semester, ? , syllabus_id from SEMESTER_SYLLABUS_MAP t1 where semester_id = ? and program_id = ?";
+                          " select SQN_SSMAP_ID.nextVal, program_id, year, semester, ? , syllabus_id from SEMESTER_SYLLABUS_MAP t1 where semester_id = ? and program_id = ?";
     mJdbcTemplate.update(query,
         pSemesterSyllabusMapDto.getAcademicSemester().getId(),
         pSemesterSyllabusMapDto.getCopySemester().getId(),
@@ -76,6 +76,11 @@ public class PersistentSemesterSyllabusMapDao  extends SemesterSyllabusMapDaoDec
       pSSMap.setYear(resultSet.getInt("YEAR"));
       pSSMap.setSemester(resultSet.getInt("SEMESTER"));
 
+      PersistentSemester semester=new PersistentSemester();
+      semester.setId(resultSet.getInt("SEMESTER_ID"));
+      semester.setName(resultSet.getString("SEMESTER_NAME"));
+      pSSMap.setAcademicSemester(semester);
+
       PersistentDepartment dept=new PersistentDepartment();
       dept.setId(resultSet.getString("DEPT_ID"));
       dept.setShortName(resultSet.getString("SHORT_NAME"));
@@ -85,10 +90,10 @@ public class PersistentSemesterSyllabusMapDao  extends SemesterSyllabusMapDaoDec
       program.setId(resultSet.getInt("PROGRAM_ID"));
       program.setShortName(resultSet.getString("PROGRAM_SHORT_NAME"));
 
-      PersistentSemester semester=new PersistentSemester();
+      semester=new PersistentSemester();
       PersistentSyllabus syllabus=new PersistentSyllabus() ;
       semester.setName(resultSet.getString("SYLLABUS"));
-      semester.setId(resultSet.getInt("SEMESTER_ID"));
+      semester.setId(resultSet.getInt("syllabus_semester_id"));
       syllabus.setSemester(semester);
       syllabus.setId(resultSet.getString("SYLLABUS_ID"));
 

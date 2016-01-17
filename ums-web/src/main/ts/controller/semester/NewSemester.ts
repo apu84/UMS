@@ -1,5 +1,6 @@
 ///<reference path="../../model/master_data/Semester.ts"/>
 ///<reference path="../../service/HttpClient.ts"/>
+///<reference path="../../lib/jquery.notific8.d.ts"/>
 module ums {
 
   interface INewSemesterScope extends ng.IScope {
@@ -37,9 +38,9 @@ module ums {
       this.$scope.semester.statusId=1;
       this.httpClient.post('academic/semester/', this.$scope.semester, 'application/json')
           .success(() => {
-      }).error((data) => {
-      });
-
+            $.notific8('Successfully created a new semester.');
+          }).error((data) => {
+      })
     }
 
   }

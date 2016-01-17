@@ -36,7 +36,7 @@ public class SemesterSyllabusMapBuilder  implements Builder<SemesterSyllabusMap,
     pBuilder.add("deptName", pSSMap.getProgram().getDepartment().getShortName());
     pBuilder.add("programName", pSSMap.getProgram().getShortName());
     pBuilder.add("syllabusId", pSSMap.getSyllabus().getId());
-    pBuilder.add("syllabusName", pSSMap.getSyllabus().getSemester().getName());
+    pBuilder.add("syllabusName", (pSSMap.getSyllabus()).getSemester().getName());
 
   }
 
