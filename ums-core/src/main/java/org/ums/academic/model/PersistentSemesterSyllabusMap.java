@@ -2,6 +2,7 @@ package org.ums.academic.model;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.ums.context.AppContext;
 import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.mutable.MutableProgramType;
 import org.ums.domain.model.mutable.MutableSemester;
@@ -19,7 +20,7 @@ public class PersistentSemesterSyllabusMap implements MutableSemesterSyllabusMap
 
   private static ContentManager<SemesterSyllabusMap, MutableSemesterSyllabusMap, Integer> sSemesterSyllabusMapManager;
   static {
-    ApplicationContext applicationContext = new ClassPathXmlApplicationContext(Constants.SERVICE_CONTEXT);
+    ApplicationContext applicationContext = AppContext.getApplicationContext();
     sSemesterSyllabusMapManager = (ContentManager<SemesterSyllabusMap, MutableSemesterSyllabusMap, Integer>)applicationContext.getBean("semesterSyllabusMapManager");
   }
 
