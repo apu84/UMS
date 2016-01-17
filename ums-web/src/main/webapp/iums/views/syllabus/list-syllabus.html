@@ -1,5 +1,15 @@
-<h4 class="box-heading">Search Filter</h4>
-<div class="table-container">
+<div class="row mbl">
+    <div class="col-md-12">
+        <div class="spinner" ng-show="data.loadingVisibility">
+            <div class="bounce1"></div>
+            <div class="bounce2"></div>
+            <div class="bounce3"></div>
+        </div>
+        </div>
+    </div>
+<div class="row mbl" data-ng-show="data.listVisibility">
+    <h4 class="box-heading">Search Filter</h4>
+<div class="table-container" >
     <div class="row mbl">
         <div class="col-lg-6">
             <div class="input-group input-group-sm mbs"><span class="input-group-btn">
@@ -41,7 +51,8 @@
         </div>
     </div>
     <div class="table-responsive">
-        <table class="table table-hover table-striped table-bordered table-advanced tablesorter">
+
+        <table class="table table-hover table-striped table-bordered table-advanced tablesorter" >
             <thead>
             <tr>
                 <th width="5%">Serial</th>
@@ -113,3 +124,4 @@
         </div>
     </div>
 </div>
+    </div>
