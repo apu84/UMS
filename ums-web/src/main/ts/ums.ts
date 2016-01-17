@@ -228,6 +228,7 @@ module ums {
           templateUrl: "views/user-management/single-user-password.html"
         })
         .state('passwordReport.bulkUserPassword', {
+          controller: 'PasswordReport',
           url: "/bulkUserPassword",
           templateUrl: "views/user-management/bulk-user-password.html"
         })

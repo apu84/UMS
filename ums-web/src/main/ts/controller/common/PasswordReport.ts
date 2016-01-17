@@ -1,5 +1,6 @@
 ///<reference path="../../model/master_data/Student.ts"/>
 ///<reference path="../../model/PasswordReset.ts"/>
+///<reference path="../../model/ProgramSelectorModel.ts"/>
 module ums {
   interface UserInfo {
     userId: string;
@@ -11,6 +12,7 @@ module ums {
     submit: Function;
     passwordReset:PasswordReset;
     passwordResetUser: UserInfo;
+    bulkUserPasswordModel:ProgramSelectorModel;
     passwordResetUserError: string;
     generatePdf: Function;
     viewTypeSingle: boolean;

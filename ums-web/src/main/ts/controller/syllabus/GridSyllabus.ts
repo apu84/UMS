@@ -2,8 +2,11 @@
 module ums {
   export class GridSyllabus {
     public static $inject = ['appConstants', '$scope', 'HttpClient'];
-
     constructor(private appConstants: any, private $scope: any, private httpClient: HttpClient) {
+      $scope.data = {
+        loadingVisibility: true,
+        listVisibility:false
+      };
 
       $(".tablesorter").tablesorter({
         headers: {
@@ -16,6 +19,8 @@ module ums {
       httpClient.get("academic/syllabus/all", 'application/json',
           (data: any, etag: string) => {
             this.$scope.syllabuses = data.entries;
+            this.$scope.data.loadingVisibility=false;
+            this.$scope.data.listVisibility=true;
           });
 
     }
