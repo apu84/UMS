@@ -169,7 +169,7 @@ public class PersistentStudentDao extends ContentDaoDecorator<Student, MutableSt
       MutableStudent student = new PersistentStudent();
       student.setId(rs.getString("STUDENT_ID"));
       student.setFullName(rs.getString("FULL_NAME"));
-      student.setDepartmentId(rs.getInt("DEPT_ID"));
+      student.setDepartmentId(rs.getString("DEPT_ID"));
       student.setSemesterId(rs.getInt("SEMESTER_ID"));
       student.setFatherName(rs.getString("FATHER_NAME"));
       student.setMotherName(rs.getString("MOTHER_NAME"));

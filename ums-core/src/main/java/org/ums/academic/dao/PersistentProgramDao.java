@@ -38,7 +38,7 @@ public class PersistentProgramDao extends ContentDaoDecorator<Program, MutablePr
       PersistentProgram program = new PersistentProgram();
       program.setId(resultSet.getInt("PROGRAM_ID"));
       program.setProgramTypeId(resultSet.getInt("TYPE_ID"));
-      program.setDepartmentId(resultSet.getInt("DEPT_ID"));
+      program.setDepartmentId(resultSet.getString("DEPT_ID"));
       program.setShortName(resultSet.getString("PROGRAM_SHORT_NAME"));
       program.setLongName(resultSet.getString("PROGRAM_LONG_NAME"));
       program.setLastModified(resultSet.getString("LAST_MODIFIED"));

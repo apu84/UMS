@@ -14,7 +14,7 @@ public interface MutableProgram extends Program, Mutable, MutableLastModifier, M
 
   void setDepartment(final Department pDepartment) throws Exception;
 
-  void setDepartmentId(final int pDepartmentId);
+  void setDepartmentId(final String pDepartmentId);
 
   void setProgramType(final ProgramType pProgramType) throws Exception;
 

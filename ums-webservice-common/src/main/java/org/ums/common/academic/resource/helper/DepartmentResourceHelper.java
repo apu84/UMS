@@ -15,16 +15,16 @@ import javax.ws.rs.core.UriInfo;
 import java.util.List;
 
 @Component
-public class DepartmentResourceHelper extends ResourceHelper<Department, MutableDepartment, Integer> {
+public class DepartmentResourceHelper extends ResourceHelper<Department, MutableDepartment, String> {
   @Autowired
   @Qualifier("departmentManager")
-  private ContentManager<Department, MutableDepartment, Integer> mManager;
+  private ContentManager<Department, MutableDepartment, String> mManager;
 
   @Autowired
   private List<Builder<Department, MutableDepartment>> mBuilders;
 
   @Override
-  public ContentManager<Department, MutableDepartment, Integer> getContentManager() {
+  public ContentManager<Department, MutableDepartment, String> getContentManager() {
     return mManager;
   }
 

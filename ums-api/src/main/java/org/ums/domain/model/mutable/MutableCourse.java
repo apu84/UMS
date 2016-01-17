@@ -39,5 +39,5 @@ public interface MutableCourse extends Course, Mutable, MutableLastModifier, Mut
 
   void setSyllabusId(final String pSyllabusId);
 
-  void setOfferedDepartmentId(final int pDepartmentId);
+  void setOfferedDepartmentId(final String pDepartmentId);
 }

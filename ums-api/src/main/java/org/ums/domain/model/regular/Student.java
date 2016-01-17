@@ -13,7 +13,7 @@ public interface Student extends Serializable, EditType<MutableStudent>, Identif
 
   String getFullName();
 
-  Integer getDepartmentId();
+  String getDepartmentId();
 
   Department getDepartment() throws Exception;
 

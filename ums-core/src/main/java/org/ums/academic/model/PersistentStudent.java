@@ -8,12 +8,11 @@ import org.ums.domain.model.mutable.MutableStudent;
 import org.ums.domain.model.regular.*;
 import org.ums.manager.ContentManager;
 import org.ums.manager.SemesterManager;
-import org.ums.util.Constants;
 
 import java.util.Date;
 
 public class PersistentStudent implements MutableStudent {
-  private static ContentManager<Department, MutableDepartment, Integer> sDepartmentManager;
+  private static ContentManager<Department, MutableDepartment, String> sDepartmentManager;
   private static SemesterManager sSemesterManager;
   private static ContentManager<Program, MutableProgram, Integer> sProgramManager;
   private static ContentManager<Student, MutableStudent, String> sStudentManager;
@@ -29,7 +28,7 @@ public class PersistentStudent implements MutableStudent {
   private String mId;
   private User mUser;
   private String mFullName;
-  private Integer mDepartmentId;
+  private String mDepartmentId;
   private Department mDepartment;
   private Integer mSemesterId;
   private Semester mSemester;
@@ -115,12 +114,12 @@ public class PersistentStudent implements MutableStudent {
   }
 
   @Override
-  public Integer getDepartmentId() {
+  public String getDepartmentId() {
     return mDepartmentId;
   }
 
   @Override
-  public void setDepartmentId(Integer pDepartmentId) {
+  public void setDepartmentId(String pDepartmentId) {
     mDepartmentId = pDepartmentId;
   }
 
@@ -331,7 +330,7 @@ public class PersistentStudent implements MutableStudent {
 
   @Override
   public String getLastModified() {
-    return mLastModified;
+    return mLastModified == null ? "" : mLastModified;
   }
 
   @Override

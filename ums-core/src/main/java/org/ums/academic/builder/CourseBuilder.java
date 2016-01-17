@@ -3,6 +3,7 @@ package org.ums.academic.builder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.util.StringUtils;
 import org.ums.academic.model.PersistentDepartment;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.mutable.MutableCourse;
@@ -25,7 +26,7 @@ public class CourseBuilder implements Builder<Course, MutableCourse> {
 
   @Autowired
   @Qualifier("departmentManager")
-  ContentManager<Department, MutableDepartment, Integer> mDepartmentManager;
+  ContentManager<Department, MutableDepartment, String> mDepartmentManager;
 
   @Autowired
   @Qualifier("courseGroupManager")
@@ -49,7 +50,7 @@ public class CourseBuilder implements Builder<Course, MutableCourse> {
     pBuilder.add("year", pReadOnly.getYear());
     pBuilder.add("semester", pReadOnly.getSemester());
 
-    if (pReadOnly.getOfferedDepartmentId() > 0) {
+    if (!StringUtils.isEmpty(pReadOnly.getOfferedDepartmentId())) {
       Department offeredBy = (Department) pLocalCache.cache(() -> pReadOnly.getOfferedBy(),
           pReadOnly.getOfferedDepartmentId(), Department.class);
       if (offeredBy != null) {

@@ -20,5 +20,5 @@ public interface Program extends Serializable, EditType<MutableProgram>, LastMod
 
   Department getDepartment() throws Exception;
 
-  int getDepartmentId();
+  String getDepartmentId();
 }

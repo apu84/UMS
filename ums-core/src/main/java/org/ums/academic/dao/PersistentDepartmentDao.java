@@ -13,7 +13,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class PersistentDepartmentDao extends ContentDaoDecorator<Department, MutableDepartment, Integer, ContentManager<Department, MutableDepartment, Integer>> {
+public class PersistentDepartmentDao extends ContentDaoDecorator<Department, MutableDepartment, String, ContentManager<Department, MutableDepartment, String>> {
   static String SELECT_ALL = "SELECT DEPT_ID, SHORT_NAME, LONG_NAME, TYPE, LAST_MODIFIED FROM MST_DEPT_OFFICE ";
 
   private JdbcTemplate mJdbcTemplate;
@@ -22,11 +22,13 @@ public class PersistentDepartmentDao extends ContentDaoDecorator<Department, Mut
     mJdbcTemplate = pJdbcTemplate;
   }
 
-  public Department get(final Integer pId) throws Exception {
+  @Override
+  public Department get(final String pId) throws Exception {
     String query = SELECT_ALL + "WHERE DEPT_ID = ?";
     return mJdbcTemplate.queryForObject(query, new Object[]{pId}, new DepartmentRowMapper());
   }
 
+  @Override
   public List<Department> getAll() throws Exception {
     String query = SELECT_ALL;
     return mJdbcTemplate.query(query, new DepartmentRowMapper());

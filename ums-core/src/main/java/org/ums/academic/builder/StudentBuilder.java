@@ -66,7 +66,7 @@ public class StudentBuilder implements Builder<Student, MutableStudent> {
                     final LocalCache pLocalCache) throws Exception {
     pMutableStudent.setId(pJsonObject.getString("id"));
     pMutableStudent.setFullName(pJsonObject.getString("fullName"));
-    pMutableStudent.setDepartmentId(Integer.parseInt(pJsonObject.getString("departmentId")));
+    pMutableStudent.setDepartmentId(pJsonObject.getString("departmentId"));
     pMutableStudent.setSemesterId(Integer.parseInt(pJsonObject.getString("semesterId")));
     pMutableStudent.setProgramId(Integer.parseInt(pJsonObject.getString("programId")));
     pMutableStudent.setFatherName(pJsonObject.getString("fatherName"));

@@ -17,7 +17,7 @@ public interface Course extends Serializable, LastModifier, EditType<MutableCour
 
   float getCrHr();
 
-  int getOfferedDepartmentId();
+  String getOfferedDepartmentId();
 
   Department getOfferedBy() throws Exception;
 

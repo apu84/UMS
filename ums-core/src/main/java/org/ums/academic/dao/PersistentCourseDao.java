@@ -95,7 +95,7 @@ public class PersistentCourseDao extends CourseDaoDecorator {
       course.setSyllabusId(resultSet.getString("SYLLABUS_ID"));
       course.setCourseGroupId(resultSet.getInt("OPT_GROUP_ID"));
       if (resultSet.getObject("OFFER_BY") != null) {
-        course.setOfferedDepartmentId(resultSet.getInt("OFFER_BY"));
+        course.setOfferedDepartmentId(resultSet.getString("OFFER_BY"));
       }
       course.setViewOrder(resultSet.getInt("VIEW_ORDER"));
       course.setYear(resultSet.getInt("YEAR"));

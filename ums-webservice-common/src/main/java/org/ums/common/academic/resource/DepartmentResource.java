@@ -20,11 +20,11 @@ import javax.ws.rs.core.Response;
 @Consumes(Resource.MIME_TYPE_JSON)
 public class DepartmentResource extends Resource {
   @Autowired
-  ResourceHelper<Department, MutableDepartment, Integer> mResourceHelper;
+  ResourceHelper<Department, MutableDepartment, String> mResourceHelper;
 
   @Autowired
   @Qualifier("departmentManager")
-  ContentManager<Department, MutableDepartment, Integer> mManager;
+  ContentManager<Department, MutableDepartment, String> mManager;
 
   @GET
   @Path("/all")
@@ -34,7 +34,7 @@ public class DepartmentResource extends Resource {
 
   @GET
   @Path(PATH_PARAM_OBJECT_ID)
-  public Response get(final @Context Request pRequest, final @PathParam("object-id") int pObjectId) throws Exception {
+  public Response get(final @Context Request pRequest, final @PathParam("object-id") String pObjectId) throws Exception {
     return mResourceHelper.get(pObjectId, pRequest, mUriInfo);
   }
 }

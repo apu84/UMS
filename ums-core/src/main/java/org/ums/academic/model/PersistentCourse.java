@@ -2,6 +2,7 @@ package org.ums.academic.model;
 
 
 import org.springframework.context.ApplicationContext;
+import org.springframework.util.StringUtils;
 import org.ums.context.AppContext;
 import org.ums.domain.model.mutable.MutableCourse;
 import org.ums.domain.model.mutable.MutableDepartment;
@@ -19,7 +20,7 @@ import org.ums.util.Constants;
 public class PersistentCourse implements MutableCourse {
   private static ContentManager<Syllabus, MutableSyllabus, String> sSyllabusManager;
   private static CourseGroupManager sCourseGroupManager;
-  private static ContentManager<Department, MutableDepartment, Integer> sDepartmentManager;
+  private static ContentManager<Department, MutableDepartment, String> sDepartmentManager;
   private static ContentManager<Course, MutableCourse, String> sCourseManager;
 
   static {
@@ -44,7 +45,7 @@ public class PersistentCourse implements MutableCourse {
   private int mYear;
   private int mSemester;
   private String mLastModified;
-  private int mDepartmentId;
+  private String mDepartmentId;
   private String mSyllabusId;
   private int mCourseGroupId;
 
@@ -109,12 +110,12 @@ public class PersistentCourse implements MutableCourse {
 
   @Override
   public Department getOfferedBy() throws Exception {
-    return mOfferedBy == null && mDepartmentId > 0 ? sDepartmentManager.get(mDepartmentId) : sDepartmentManager.validate(mOfferedBy);
+    return mOfferedBy == null && !StringUtils.isEmpty(mDepartmentId) ? sDepartmentManager.get(mDepartmentId) : mOfferedBy;
   }
 
   @Override
   public Department getOfferedTo() throws Exception {
-    return mOfferedBy == null && mDepartmentId > 0 ? sDepartmentManager.get(mDepartmentId) : sDepartmentManager.validate(mOfferedBy);
+    return mOfferedTo == null && !StringUtils.isEmpty(mDepartmentId) ? sDepartmentManager.get(mDepartmentId) : mOfferedTo;
   }
 
   @Override
@@ -213,11 +214,11 @@ public class PersistentCourse implements MutableCourse {
   }
 
   @Override
-  public int getOfferedDepartmentId() {
+  public String getOfferedDepartmentId() {
     return mDepartmentId;
   }
 
-  public void setOfferedDepartmentId(int pDepartmentId) {
+  public void setOfferedDepartmentId(String pDepartmentId) {
     mDepartmentId = pDepartmentId;
   }
 

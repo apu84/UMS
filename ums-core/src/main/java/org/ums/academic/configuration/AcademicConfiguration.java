@@ -95,7 +95,7 @@ public class AcademicConfiguration {
   }
 
   @Bean
-  ContentManager<Department, MutableDepartment, Integer> departmentManager() {
+  ContentManager<Department, MutableDepartment, String> departmentManager() {
     return new PersistentDepartmentDao(mJdbcTemplate);
   }
 
@@ -129,6 +129,11 @@ public class AcademicConfiguration {
   @Bean(name = "userManager")
   ContentManager<User, MutableUser, String> userManager() {
     return new PersistentUserDao(mJdbcTemplate);
+  }
+
+  @Bean
+  TeacherManager teacherManager() {
+    return new PersistentTeacherDao(mJdbcTemplate);
   }
 
   @Bean
@@ -234,6 +239,18 @@ public class AcademicConfiguration {
   List<Builder<SemesterSyllabusMapDto, MutableSemesterSyllabusMapDto>> getSemesterSyllabusMapsBuilders() {
     List<Builder<SemesterSyllabusMapDto, MutableSemesterSyllabusMapDto>> builders = new ArrayList<>();
     builders.add(new SemesterSyllabusMapsBuilder());
+    return builders;
+  }
+
+  @Bean
+  Builder<Teacher, MutableTeacher> getTeacherBuilder() {
+    return new TeacherBuilder();
+  }
+
+  @Bean
+  List<Builder<Teacher, MutableTeacher>> getTeacherBuilders() {
+    List<Builder<Teacher, MutableTeacher>> builders = new ArrayList<>();
+    builders.add(new TeacherBuilder());
     return builders;
   }
 }

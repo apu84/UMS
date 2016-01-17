@@ -11,7 +11,7 @@ public interface MutableStudent extends Student, Mutable, MutableIdentifier<Stri
 
   void setFullName(final String pFullName);
 
-  void setDepartmentId(final Integer pDepartmentId);
+  void setDepartmentId(final String pDepartmentId);
 
   void setDepartment(final Department pDepartment) throws Exception;
 

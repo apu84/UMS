@@ -13,7 +13,7 @@ import org.ums.util.Constants;
 
 public class PersistentProgram implements MutableProgram {
 
-  private static ContentManager<Department, MutableDepartment, Integer> sDepartmentManger;
+  private static ContentManager<Department, MutableDepartment, String> sDepartmentManger;
   private static ContentManager<Program, MutableProgram, Integer> sProgramManager;
   private static ContentManager<ProgramType, MutableProgramType, Integer> sProgramTypeManager;
 
@@ -31,7 +31,7 @@ public class PersistentProgram implements MutableProgram {
   private ProgramType mProgramType;
   private String mLastModified;
 
-  private int mDepartmentId;
+  private String mDepartmentId;
   private int mProgramTypeId;
 
   public PersistentProgram() {
@@ -102,11 +102,11 @@ public class PersistentProgram implements MutableProgram {
   }
 
   @Override
-  public int getDepartmentId() {
+  public String getDepartmentId() {
     return mDepartmentId;
   }
 
-  public void setDepartmentId(int pDepartmentId) {
+  public void setDepartmentId(String pDepartmentId) {
     mDepartmentId = pDepartmentId;
   }
 
