@@ -232,5 +232,10 @@ module ums {
           url: "/bulkUserPassword",
           templateUrl: "views/user-management/bulk-user-password.html"
         })
+        .state('courseTeacher', {
+          url: "/courseTeacher",
+          controller: 'CourseTeacher',
+          templateUrl: 'views/dept/course-teacher.html'
+        })
   });
 }

@@ -1,0 +1,44 @@
+<div class="row">
+    <div class="col-md-4">
+        <div class="panel panel-green">
+            <div class="panel-heading">
+                <h3 class="panel-title">Select </h3>
+            </div>
+            <div class="panel-body pan">
+                <form action="" class="form-horizontal">
+                    <div class="form-body pal">
+                        <div data-program-selector="" data-model="courseTeacherSearchParamModel"></div>
+
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Year</label>
+                            <div class="col-md-8">
+                                <select class="form-control required" data-ng-model="courseTeacherSearchParamModel.academicYearId" ng-init="courseTeacherSearchParamModel.academicYearId=''">
+                                    <option data-ng-repeat="year in data.academicYearOptions" value="{{year.id}}">{{year.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Semester</label>
+                            <div class="col-md-8">
+                                <select class="form-control required" data-ng-model="courseTeacherSearchParamModel.academicSemesterId" ng-init="courseTeacherSearchParamModel.academicSemesterId=''">
+                                    <option data-ng-repeat="semester in data.academicSemesterOptions" value="{{semester.id}}">{{semester.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Category</label>
+                            <div class="col-md-8">
+                                <select class="form-control required" data-ng-model="courseTeacherSearchParamModel.courseCategoryId" ng-init="courseTeacherSearchParamModel.courseCategoryId=''">
+                                    <option data-ng-repeat="courseCategory in data.courseCategoryOptions" value="{{courseCategory.id}}">{{courseCategory.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+    </div>
+</div>

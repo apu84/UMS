@@ -17,7 +17,8 @@
     '/createPgCourse': {title: 'Create PG Course', 'breadcrumb': ['Course']},
     '/semesterSyllabusMap': {title: 'Semester Syllabus Map', 'breadcrumb': ['Semester-Syllabus Map']},
     '/singleUserPassword': {title: 'User Management', 'breadcrumb': ['User Management','Single']},
-    '/bulkUserPassword': {title: 'User Management ', 'breadcrumb': ['User Management','Bulk']}
+    '/bulkUserPassword': {title: 'User Management ', 'breadcrumb': ['User Management','Bulk']},
+    '/courseTeacher': {title: 'Course Teacher Assign ', 'breadcrumb': ['Course Teacher']}
   };
 
   $.fn.Data.get = function (id) {
