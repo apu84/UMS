@@ -189,7 +189,7 @@ module ums {
           }
         ],
         mimeTypeJson : 'application/json',
-        mimeTypePdf : 'application/pdf',
+        mimeTypePdf : 'application/pdf'
       };
     }
   }
