@@ -8,7 +8,21 @@ module ums {
     category: string;
     year: string;
     semester: string;
+    groupName: string;
   }
+
+  interface GroupMap {
+    [optionalGroup: string] : Array<Course>
+  }
+
+  interface SemesterCourseMap {
+    [semester: string]: GroupMap
+  }
+
+  interface CourseMap {
+    [year: string] : SemesterCourseMap
+  }
+
   export class FullSyllabus {
     public static $inject = ['$scope', 'HttpClient', '$stateParams'];
 
@@ -49,26 +63,40 @@ module ums {
           });
     }
 
-    private formatCourses(courses: Array<Course>): {[key: string]:{[key: string]: Array<Course>}} {
-      var courseMap: {[key: string]:{[key: string]: Array<Course>}} = {};
-      var optionalCourses: Array<Course> = [];
-      for (var i = 0; i < courses.length; i++) {
-        if (courses[i].semester == '0') {
-          optionalCourses[optionalCourses.length] = courses[i];
-        } else {
-          var year: string = FullSyllabus.getSuffix(courses[i].year);
-          var semester: string = FullSyllabus.getSuffix(courses[i].semester);
+    private formatCourses(courses: Array<Course>): CourseMap {
+      var courseMap: CourseMap = {};
+      var optionalCourses: GroupMap;
 
+      for (var i = 0; i < courses.length; i++) {
+
+        var year: string = FullSyllabus.getSuffix(courses[i].year);
+        var semester: string = FullSyllabus.getSuffix(courses[i].semester);
+        var optionalGroup: string = courses[i].groupName ? courses[i].groupName : " "+courses[i].category;
+
+        if (courses[i].semester == '0') {
+          if (!optionalCourses) {
+            optionalCourses = {};
+          }
+          if (!optionalCourses[optionalGroup]) {
+            optionalCourses[optionalGroup] = [];
+          }
+          optionalCourses[optionalGroup][optionalCourses[optionalGroup].length] = courses[i];
+        }
+        else {
           if (!courseMap[year]) {
             courseMap[year] = {};
           }
           if (!courseMap[year][semester]) {
-            courseMap[year][semester] = [];
+            courseMap[year][semester] = {};
           }
-          courseMap[year][semester][courseMap[year][semester].length] = courses[i];
+          if (!courseMap[year][semester][optionalGroup]) {
+            courseMap[year][semester][optionalGroup] = [];
+          }
+
+          courseMap[year][semester][optionalGroup][courseMap[year][semester][optionalGroup].length] = courses[i];
         }
       }
-      if (optionalCourses.length > 0) {
+      if (optionalCourses) {
         courseMap['Optional courses']= {};
         courseMap['Optional courses'][''] = optionalCourses;
       }

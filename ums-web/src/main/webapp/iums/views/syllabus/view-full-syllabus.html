@@ -1,5 +1,5 @@
-<div class="row" data-ng-repeat="(year,value) in courseMap">
-    <div class="col-md-6" data-ng-repeat="(semester,courses) in value">
+<div class="row" data-ng-repeat="(year,yearValue) in courseMap">
+    <div class="col-md-6" data-ng-repeat="(semester,semesterValue) in yearValue">
         <div class="portlet box portlet-blue">
             <div class="portlet-header">
                 <div class="caption" data-ng-if="year != 'Optional courses'">{{year}} Year {{semester}} Semester</div>
@@ -23,7 +23,10 @@
                             <th scope="col">Action<span class="column-sorter"></span></th>
                         </tr>
                         </thead>
-                        <tbody class="media-thumb">
+                        <tbody class="media-thumb" data-ng-repeat="(group,courses) in semesterValue">
+                        <tr data-ng-if="group != ' MANDATORY'">
+                            <td colspan="5"><b>{{group}}</b></td>
+                        </tr>
                         <tr data-ng-repeat="course in courses">
                             <td><a href="javascript:void(0)">
                                 <h6 class="media-heading">{{course.no}}</h6></a>

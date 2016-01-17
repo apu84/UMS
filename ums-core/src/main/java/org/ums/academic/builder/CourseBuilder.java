@@ -69,6 +69,7 @@ public class CourseBuilder implements Builder<Course, MutableCourse> {
       if (courseGroup != null) {
         pBuilder.add("group", pUriInfo.getBaseUriBuilder().path("academic")
             .path("courseGroup").path(String.valueOf(courseGroup.getId())).build().toString());
+        pBuilder.add("groupName", courseGroup.getName());
       }
     }
 

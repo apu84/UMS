@@ -23,7 +23,7 @@ public class PersistentCourseDao extends CourseDaoDecorator {
   static String INSERT_ONE = "INSERT INTO MST_COURSE(COURSE_ID, COURSE_NO, COURSE_TITLE, CRHR, SYLLABUS_ID, OPT_GROUP_ID, OFFER_BY," +
       "VIEW_ORDER, YEAR, SEMESTER, COURSE_TYPE, COURSE_CATEGORY, LAST_MODIFIED) " +
       "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, " + getLastModifiedSql() + ")";
-  static String ORDER_BY = " ORDER BY VIEW_ORDER";
+  static String ORDER_BY = " ORDER BY YEAR, SEMESTER, COURSE_CATEGORY, VIEW_ORDER";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -80,7 +80,7 @@ public class PersistentCourseDao extends CourseDaoDecorator {
 
   @Override
   public List<Course> getBySyllabus(String pSyllabusId) {
-    String query = SELECT_ALL + "WHERE SYLLABUS_ID = ? ";
+    String query = SELECT_ALL + "WHERE SYLLABUS_ID = ? "+ ORDER_BY;
     return mJdbcTemplate.query(query, new Object[]{pSyllabusId}, new CourseRowMapper());
   }
 
