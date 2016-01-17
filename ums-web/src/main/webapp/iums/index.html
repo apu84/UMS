@@ -15,8 +15,6 @@
     <meta http-equiv="pragma" content="no-cache" />
 
     <!-- Loading core css-->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,700"/>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald:400,700,300"/>
     <link rel="stylesheet" href="vendors/jquery-ui-1.10.4.custom/css/ui-lightness/jquery-ui-1.10.4.custom.min.css"/>
     <link rel="stylesheet" href="vendors/font-awesome/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="vendors/bootstrap/css/bootstrap.min.css"/>
@@ -31,6 +29,7 @@
     <link rel="stylesheet" data-ng-href="css/themes/style1/orange-blue.css"/>
     <link rel="stylesheet" data-ng-href="css/themes/{{style}}/{{theme}}.css"/>
     <link rel="stylesheet" href="css/style-responsive.css"/>
+    <link rel="stylesheet" data-ng-href="css/custom.css"/>
     <!-- Loading library javascript-->
     <script src="vendors/jquery-1.10.2.min.js"></script>
     <script src="js/lib/angular.js"></script>
@@ -75,7 +74,7 @@
             <div ng-include="'templates/states/_includes/quick-sidebar.html'" ng-class="{show:header.history}" class="quick-sidebar"></div>
             <!--END CONTENT QUICK SIDEBAR-->
         </div>
-        <!--<div id="footer" ng-include="'templates/states/footer.html'" ng-show="header.footer"></div>-->
+        <div id="footer" ng-include="'templates/states/footer.html'" ng-show="header.footer"></div>
     </div>
 </div>
 <div hide="hide" class="extra-page"></div>

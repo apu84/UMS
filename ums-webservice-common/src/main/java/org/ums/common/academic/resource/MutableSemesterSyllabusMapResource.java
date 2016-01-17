@@ -29,16 +29,15 @@ public class MutableSemesterSyllabusMapResource extends Resource {
 
   @PUT
   @Path(PATH_PARAM_OBJECT_ID)
-  public Response updateSemester(final @PathParam("object-id") int pObjectId,
+  public Response updateMap(final @PathParam("object-id") int pObjectId,
                                  final @Context Request pRequest,
-                                 final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader,
                                  final JsonObject pJsonObject) throws Exception {
 
     return mResourceHelper.put(pJsonObject);
   }
 
   @POST
-  public Response updateSemesterSyllabusMap(final @Context Request pRequest,
+  public Response copyMapping(final @Context Request pRequest,
                                  final JsonObject pJsonObject) throws Exception {
 
     return mResourceHelper.post(pJsonObject, mUriInfo);
