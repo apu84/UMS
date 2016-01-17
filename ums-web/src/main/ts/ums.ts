@@ -112,7 +112,7 @@ module ums {
           }
         })
         .state('viewFullSyllabus', {
-          url: "/viewFullSyllabus",
+          url: "/viewFullSyllabus/:syllabusId",
           controller: 'FullSyllabus',
           templateUrl: 'views/syllabus/view-full-syllabus.html',
           resolve: {

@@ -8,14 +8,16 @@ import org.ums.academic.model.PersistentCourse;
 import org.ums.cache.LocalCache;
 import org.ums.common.academic.resource.ResourceHelper;
 import org.ums.common.academic.resource.SemesterResource;
-import org.ums.domain.model.regular.Course;
 import org.ums.domain.model.mutable.MutableCourse;
-import org.ums.manager.ContentManager;
+import org.ums.domain.model.regular.Course;
+import org.ums.manager.CourseManager;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
+import javax.ws.rs.core.EntityTag;
+import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
@@ -25,13 +27,13 @@ import java.util.List;
 public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, String> {
   @Autowired
   @Qualifier("courseManager")
-  private ContentManager<Course, MutableCourse, String> mManager;
+  private CourseManager mManager;
 
   @Autowired
   private List<Builder<Course, MutableCourse>> mBuilders;
 
   @Override
-  public ContentManager<Course, MutableCourse, String> getContentManager() {
+  public CourseManager getContentManager() {
     return mManager;
   }
 
@@ -70,6 +72,21 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
     }
     object.add("entries", children);
     localCache.invalidate();
+    return object.build();
+  }
+
+  public JsonObject getBySyllabus(final String pSyllabusId, final Request pRequest, final UriInfo pUriInfo) throws Exception {
+    List<Course> courses = getContentManager().getBySyllabus(pSyllabusId);
+
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+    for (Course course : courses) {
+      children.add(toJson(course, pUriInfo, localCache));
+    }
+    object.add("entries", children);
+    localCache.invalidate();
+
     return object.build();
   }
 }

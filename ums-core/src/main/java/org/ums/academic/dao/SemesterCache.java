@@ -11,7 +11,6 @@ import java.util.List;
 
 public class SemesterCache extends ContentCache<Semester, MutableSemester, Integer, SemesterManager> implements SemesterManager {
   private CacheManager<Semester> mCacheManager;
-  private SemesterManager mSemesterManager;
 
   public SemesterCache(final CacheManager<Semester> pCacheManager) {
     mCacheManager = pCacheManager;
@@ -25,14 +24,6 @@ public class SemesterCache extends ContentCache<Semester, MutableSemester, Integ
   @Override
   protected String getCacheKey(Integer pId) {
     return CacheUtil.getCacheKey(Semester.class, pId);
-  }
-
-  public SemesterManager getManager() {
-    return mSemesterManager;
-  }
-
-  public void setManager(SemesterManager pManager) {
-    mSemesterManager = pManager;
   }
 
   @Override

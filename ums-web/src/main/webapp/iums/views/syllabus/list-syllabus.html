@@ -18,13 +18,16 @@
                       Sales</a></li>
               </ul></span>
                 <input type="text" placeholder="Enter here..." class="form-control"/><span class="input-group-btn">
-              <button type="button" data-toggle="dropdown" class="btn btn-success dropdown-toggle">Search</button></span>
+              <button type="button" data-toggle="dropdown" class="btn btn-success dropdown-toggle">Search
+              </button></span>
             </div>
         </div>
         <div class="col-lg-6">
-            <div class="actions" style="text-align: right;"><a href="#/createSyllabus" class="btn btn-info btn-sm"><i class="fa fa-plus"></i>&nbsp;
+            <div class="actions" style="text-align: right;"><a href="#/createSyllabus" class="btn btn-info btn-sm"><i
+                    class="fa fa-plus"></i>&nbsp;
                 New Syllabus</a>&nbsp;
-                <div class="btn-group"><a href="javascript:void(0);" data-toggle="dropdown" class="btn btn-warning btn-sm dropdown-toggle"><i class="fa fa-wrench"></i>&nbsp;
+                <div class="btn-group"><a href="javascript:void(0);" data-toggle="dropdown"
+                                          class="btn btn-warning btn-sm dropdown-toggle"><i class="fa fa-wrench"></i>&nbsp;
                     Tools</a>
                     <ul class="dropdown-menu pull-right">
                         <li><a href="#">Export to Excel</a></li>
@@ -43,19 +46,17 @@
             <tr>
                 <th width="5%">Serial</th>
                 <th width="15%">Dept./School</th>
-                <th width="10%">Program Type</th>
                 <th width="30%">Program Name</th>
                 <th width="10%">Semester</th>
                 <th width="10%">Status</th>
                 <th width="20%">Actions</th>
             </tr>
             <tbody>
-            <tr>
-                <td>1</td>
-                <td>CSE</td>
-                <td>Undergraduate</td>
-                <td>BSc. in Computer Science and Engineering</td>
-                <td>Spring, 2015</td>
+            <tr data-ng-repeat="syllabus in syllabuses track by $index">
+                <td>{{$index+1}}</td>
+                <td>{{syllabus.department_name}}</td>
+                <td>{{syllabus.program_name}}</td>
+                <td>{{syllabus.semester_name}}</td>
                 <td><span class="label label-sm label-success">Running</span></td>
                 <td>
                     <button type="button" class="btn btn-default btn-xs"><i class="fa fa-edit"></i>&nbsp;
@@ -65,202 +66,13 @@
                         Delete
                     </button>
 
-                    <a href="#/viewFullSyllabus" class="btn btn-default btn-xs"><i class="fa fa-book"></i>&nbsp;
+                    <a href="#/viewFullSyllabus/{{syllabus.id}}" class="btn btn-default btn-xs"><i class="fa fa-book"></i>&nbsp;
                         Show Courses</a>
                     </button>
 
                 </td>
             </tr>
-            <tr>
-                <td>1</td>
-                <td>CSE</td>
-                <td>Undergraduate</td>
-                <td>BSc. in Computer Science and Engineering</td>
-                <td>Spring, 2015</td>
-                <td><span class="label label-sm label-success">Running</span></td>
-                <td>
-                    <button type="button" class="btn btn-default btn-xs"><i class="fa fa-edit"></i>&nbsp;
-                        Edit
-                    </button>
-                    <button type="button" class="btn btn-default btn-xs"><i class="fa fa-times"></i>&nbsp;
-                        Delete
-                    </button>
-                    <button type="button" class="btn btn-default btn-xs"><i class="fa fa-book"></i>&nbsp;
-                        Show Courses
-                    </button>
-                </td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>CSE</td>
-                <td>Undergraduate</td>
-                <td>BSc. in Computer Science and Engineering</td>
-                <td>Spring, 2015</td>
-                <td><span class="label label-sm label-success">Running</span></td>
-                <td>
-                    <button type="button" class="btn btn-default btn-xs"><i class="fa fa-edit"></i>&nbsp;
-                        Edit
-                    </button>
-                    <button type="button" class="btn btn-default btn-xs"><i class="fa fa-times"></i>&nbsp;
-                        Delete
-                    </button>
-                    <button type="button" class="btn btn-default btn-xs"><i class="fa fa-book"></i>&nbsp;
-                        Show Courses
-                    </button>
-                </td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>CSE</td>
-                <td>Undergraduate</td>
-                <td>BSc. in Computer Science and Engineering</td>
-                <td>Spring, 2015</td>
-                <td><span class="label label-sm label-danger">Running</span></td>
-                <td>
-                    <button type="button" class="btn btn-default btn-xs"><i class="fa fa-edit"></i>&nbsp;
-                        Edit
-                    </button>
-                    <button type="button" class="btn btn-default btn-xs"><i class="fa fa-times"></i>&nbsp;
-                        Delete
-                    </button>
-                    <button type="button" class="btn btn-default btn-xs"><i class="fa fa-book"></i>&nbsp;
-                        Show Courses
-                    </button>
-                </td>
-            </tr>
-            <tr>
-                <td>4</td>
-                <td>CSE</td>
-                <td>Undergraduate</td>
-                <td>BSc. in Computer Science and Engineering</td>
-                <td>Spring, 2015</td>
-                <td><span class="label label-sm label-danger">Running</span></td>
-                <td>
-                    <button type="button" class="btn btn-default btn-xs"><i class="fa fa-edit"></i>&nbsp;
-                        Edit
-                    </button>
-                    <button type="button" class="btn btn-default btn-xs"><i class="fa fa-times"></i>&nbsp;
-                        Delete
-                    </button>
-                    <button type="button" class="btn btn-default btn-xs"><i class="fa fa-book"></i>&nbsp;
-                        Show Courses
-                    </button>
-                </td>
-            </tr>
-            <tr>
-                <td>5</td>
-                <td>CSE</td>
-                <td>Undergraduate</td>
-                <td>BSc. in Computer Science and Engineering</td>
-                <td>Spring, 2015</td>
-                <td><span class="label label-sm label-danger">Running</span></td>
-                <td>
-                    <button type="button" class="btn btn-default btn-xs"><i class="fa fa-edit"></i>&nbsp;
-                        Edit
-                    </button>
-                    <button type="button" class="btn btn-default btn-xs"><i class="fa fa-times"></i>&nbsp;
-                        Delete
-                    </button>
-                    <button type="button" class="btn btn-default btn-xs"><i class="fa fa-book"></i>&nbsp;
-                        Show Courses
-                    </button>
-                </td>
-            </tr>
-            <tr>
-                <td>6</td>
-                <td>CSE</td>
-                <td>Undergraduate</td>
-                <td>BSc. in Computer Science and Engineering</td>
-                <td>Spring, 2015</td>
-                <td><span class="label label-sm label-danger">Running</span></td>
-                <td>
-                    <button type="button" class="btn btn-default btn-xs"><i class="fa fa-edit"></i>&nbsp;
-                        Edit
-                    </button>
-                    <button type="button" class="btn btn-default btn-xs"><i class="fa fa-times"></i>&nbsp;
-                        Delete
-                    </button>
-                    <button type="button" class="btn btn-default btn-xs"><i class="fa fa-book"></i>&nbsp;
-                        Show Courses
-                    </button>
-                </td>
-            </tr>
-            <tr>
-                <td>7</td>
-                <td>CSE</td>
-                <td>Undergraduate</td>
-                <td>BSc. in Computer Science and Engineering</td>
-                <td>Spring, 2015</td>
-                <td><span class="label label-sm label-danger">Running</span></td>
-                <td>
-                    <button type="button" class="btn btn-default btn-xs"><i class="fa fa-edit"></i>&nbsp;
-                        Edit
-                    </button>
-                    <button type="button" class="btn btn-default btn-xs"><i class="fa fa-times"></i>&nbsp;
-                        Delete
-                    </button>
-                    <button type="button" class="btn btn-default btn-xs"><i class="fa fa-book"></i>&nbsp;
-                        Show Courses
-                    </button>
-                </td>
-            </tr>
-            <tr>
-                <td>8</td>
-                <td>CSE</td>
-                <td>Undergraduate</td>
-                <td>BSc. in Computer Science and Engineering</td>
-                <td>Spring, 2015</td>
-                <td><span class="label label-sm label-danger">Running</span></td>
-                <td>
-                    <button type="button" class="btn btn-default btn-xs"><i class="fa fa-edit"></i>&nbsp;
-                        Edit
-                    </button>
-                    <button type="button" class="btn btn-default btn-xs"><i class="fa fa-times"></i>&nbsp;
-                        Delete
-                    </button>
-                    <button type="button" class="btn btn-default btn-xs"><i class="fa fa-book"></i>&nbsp;
-                        Show Courses
-                    </button>
-                </td>
-            </tr>
-            <tr>
-                <td>9</td>
-                <td>CSE</td>
-                <td>Undergraduate</td>
-                <td>BSc. in Computer Science and Engineering</td>
-                <td>Spring, 2015</td>
-                <td><span class="label label-sm label-danger">Running</span></td>
-                <td>
-                    <button type="button" class="btn btn-default btn-xs"><i class="fa fa-edit"></i>&nbsp;
-                        Edit
-                    </button>
-                    <button type="button" class="btn btn-default btn-xs"><i class="fa fa-times"></i>&nbsp;
-                        Delete
-                    </button>
-                    <button type="button" class="btn btn-default btn-xs"><i class="fa fa-book"></i>&nbsp;
-                        Show Courses
-                    </button>
-                </td>
-            </tr>
-            <tr>
-                <td>10</td>
-                <td>CSE</td>
-                <td>Undergraduate</td>
-                <td>BSc. in Computer Science and Engineering</td>
-                <td>Spring, 2015</td>
-                <td><span class="label label-sm label-danger">Running</span></td>
-                <td>
-                    <button type="button" class="btn btn-default btn-xs"><i class="fa fa-edit"></i>&nbsp;
-                        Edit
-                    </button>
-                    <button type="button" class="btn btn-default btn-xs"><i class="fa fa-times"></i>&nbsp;
-                        Delete
-                    </button>
-                    <button type="button" class="btn btn-default btn-xs"><i class="fa fa-book"></i>&nbsp;
-                        Show Courses
-                    </button>
-                </td>
-            </tr>
+
 
             </tbody>
             </thead>
@@ -272,7 +84,9 @@
         <div class="pagination-panel">
             Page
             &nbsp;<a href="javascript:void(0);" class="btn btn-sm btn-default btn-prev"><i class="fa fa-angle-left"></i></a>&nbsp;
-            <input type="text" maxlenght="5" value="1" class="pagination-panel-input form-control input-mini input-inline input-sm text-center"/>&nbsp;<a href="javascript:void(0);" class="btn btn-sm btn-default btn-prev"><i class="fa fa-angle-right"></i></a>&nbsp;
+            <input type="text" maxlenght="5" value="1"
+                   class="pagination-panel-input form-control input-mini input-inline input-sm text-center"/>&nbsp;<a
+                href="javascript:void(0);" class="btn btn-sm btn-default btn-prev"><i class="fa fa-angle-right"></i></a>&nbsp;
             of 6 | View
             &nbsp;
             <select class="form-control input-xsmall input-sm input-inline">
