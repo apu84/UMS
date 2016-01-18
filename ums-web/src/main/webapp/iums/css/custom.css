@@ -63,7 +63,6 @@ body.sidebar-colors #wrapper #sidebar ul#side-menu li ul.nav-second-level li.act
     background: linear-gradient(left, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.25) 50%, rgba(0, 0, 0, 0) 100%);
 }
 
-#sidebar div ul  li:last-child:after { background:none}
 /*CSS Loading Start*/
 .spinner {
     margin: 100px auto 0;
@@ -126,3 +125,13 @@ body.sidebar-colors #wrapper #sidebar ul#side-menu li ul.nav-second-level li.act
 .label-padding{
     padding-top: 15px;
 }
+
+/* Global  Font Color Start*/
+.form-control {
+    border-color: #adadad !important;
+}
+
+body {
+    color: #575757 !important;
+}
+/* Global  Font Color  End*/
