@@ -1,6 +1,7 @@
 ///<reference path="../../model/master_data/Student.ts"/>
 ///<reference path="../../model/PasswordReset.ts"/>
 ///<reference path="../../model/ProgramSelectorModel.ts"/>
+///<reference path="../../model/ProgramSelectorModelImpl.ts"/>
 module ums {
   interface UserInfo {
     userId: string;
@@ -14,19 +15,23 @@ module ums {
     passwordResetUser: UserInfo;
     bulkUserPasswordModel:ProgramSelectorModel;
     passwordResetUserError: string;
-    generatePdf: Function;
+    generateSinglePdf: Function;
+    generateBulkPdf: Function;
     viewTypeSingle: boolean;
     toggle: Function;
   }
 
 
   export class PasswordReport {
-    public static $inject = ['$scope', 'HttpClient', '$window', '$sce'];
+    public static $inject = ['appConstants', '$scope', 'HttpClient', '$window', '$sce'];
 
-    constructor(private $scope: IPasswordReset, private httpClient: HttpClient,
+    constructor(private appConstants:any,private $scope: IPasswordReset, private httpClient: HttpClient,
                 private $window: ng.IWindowService, private $sce: ng.ISCEService) {
+
+      $scope.bulkUserPasswordModel = new ProgramSelectorModelImpl(this.appConstants, this.httpClient);
       $scope.submit = this.submit.bind(this);
-      $scope.generatePdf = this.generatePdf.bind(this);
+      $scope.generateSinglePdf = this.generateSinglePdf.bind(this);
+      $scope.generateBulkPdf = this.generateBulkPdf.bind(this);
       $scope.viewTypeSingle = true;
       $scope.toggle = this.toggle.bind(this);
     }
@@ -62,8 +67,19 @@ module ums {
           });
     }
 
-    private generatePdf(user: UserInfo): void {
-      this.httpClient.get('credentialReport/' + user.userId, 'application/pdf',
+    private generateSinglePdf(user: UserInfo): void {
+      this.httpClient.get('credentialReport/single/' + user.userId, 'application/pdf',
+          (data: any, etag: string) => {
+            var file = new Blob([data], {type: 'application/pdf'});
+            var fileURL = this.$sce.trustAsResourceUrl(URL.createObjectURL(file));
+            this.$window.open(fileURL);
+          },
+          (response: ng.IHttpPromiseCallbackArg<any>) => {
+            console.error(response);
+          }, 'arraybuffer');
+    }
+    private generateBulkPdf(): void {
+      this.httpClient.get('credentialReport/bulk/' + this.$scope.bulkUserPasswordModel.programId, 'application/pdf',
           (data: any, etag: string) => {
             var file = new Blob([data], {type: 'application/pdf'});
             var fileURL = this.$sce.trustAsResourceUrl(URL.createObjectURL(file));

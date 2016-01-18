@@ -38,8 +38,7 @@ public class PasswordReportGenerator extends AbstractReportGenerator {
   public MasterReport getReportDefinition() throws Exception {
     // Using the classloader, get the URL to the reportDefinition file
     final ClassLoader classloader = this.getClass().getClassLoader();
-    //final URL reportDefinitionURL = classloader.getResource("report/password/generatedPassword.prpt");
-    final URL reportDefinitionURL = classloader.getResource("report/password/generatedPassword1.prpt");
+    final URL reportDefinitionURL = classloader.getResource("report/password/generatedPassword.prpt");
 
     // Parse the report file
     final ResourceManager resourceManager = new ResourceManager();
