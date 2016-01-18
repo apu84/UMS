@@ -39,3 +39,4 @@ public class PasswordReport extends Resource {
     };
   }
 }
+ 
