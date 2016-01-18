@@ -74,7 +74,7 @@ public abstract class AbstractReportGenerator {
    *
    * @return the data factory used by this report generator
    */
-  public abstract DataFactory getDataFactory() throws Exception;
+  public abstract DataFactory getDataFactory(String reportQuery) throws Exception;
 
   /**
    * Returns the set of parameters that will be passed to the report generation process. If there are no parameters
@@ -95,7 +95,7 @@ public abstract class AbstractReportGenerator {
    * @throws java.io.IOException                                                 indicates an error opening the file for writing
    * @throws org.pentaho.reporting.engine.classic.core.ReportProcessingException indicates an error generating the report
    */
-  public void generateReport(final OutputType outputType, File outputFile,  final Object... pParameter)
+  public void generateReport(final OutputType outputType, File outputFile,String reportQuery)
       throws Exception {
     if (outputFile == null) {
       throw new IllegalArgumentException("The output file was not specified");
@@ -107,7 +107,7 @@ public abstract class AbstractReportGenerator {
       outputStream = new BufferedOutputStream(new FileOutputStream(outputFile));
 
       // Generate the report to this output stream
-      generateReport(outputType, outputStream, pParameter);
+      generateReport(outputType, outputStream,reportQuery);
     } finally {
       if (outputStream != null) {
         outputStream.close();
@@ -127,7 +127,7 @@ public abstract class AbstractReportGenerator {
    * @throws IllegalArgumentException                                            indicates the required parameters were not provided
    * @throws org.pentaho.reporting.engine.classic.core.ReportProcessingException indicates an error generating the report
    */
-  public void generateReport(final OutputType outputType, OutputStream outputStream, final Object... pParameter)
+  public void generateReport(final OutputType outputType, OutputStream outputStream,String reportQuery)
       throws Exception {
     if (outputStream == null) {
       throw new IllegalArgumentException("The output stream was not specified");
@@ -135,7 +135,7 @@ public abstract class AbstractReportGenerator {
 
     // Get the report and data factory
     final MasterReport report = getReportDefinition();
-    final DataFactory dataFactory = getDataFactory();
+    final DataFactory dataFactory = getDataFactory(reportQuery);
 
     // Set the data factory for the report
     if (dataFactory != null) {
@@ -143,7 +143,7 @@ public abstract class AbstractReportGenerator {
     }
 
     // Add any parameters to the report
-    final Map<String, Object> reportParameters = getReportParameters(pParameter);
+    final Map<String, Object> reportParameters = getReportParameters();
     if (null != reportParameters) {
       for (String key : reportParameters.keySet()) {
         report.getParameterValues().put(key, reportParameters.get(key));

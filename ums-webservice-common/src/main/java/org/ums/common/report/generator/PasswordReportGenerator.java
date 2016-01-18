@@ -3,6 +3,8 @@ package org.ums.common.report.generator;
 
 import org.pentaho.reporting.engine.classic.core.DataFactory;
 import org.pentaho.reporting.engine.classic.core.MasterReport;
+import org.pentaho.reporting.engine.classic.core.modules.misc.datafactory.sql.DriverConnectionProvider;
+import org.pentaho.reporting.engine.classic.core.modules.misc.datafactory.sql.SQLReportDataFactory;
 import org.pentaho.reporting.libraries.resourceloader.Resource;
 import org.pentaho.reporting.libraries.resourceloader.ResourceManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +32,14 @@ public class PasswordReportGenerator extends AbstractReportGenerator {
   @Qualifier("studentManager")
   ContentManager<Student, MutableStudent, String> mStudentManager;
 
+  private static final String QUERY_NAME = "ReportQuery";
+
   @Override
   public MasterReport getReportDefinition() throws Exception {
     // Using the classloader, get the URL to the reportDefinition file
     final ClassLoader classloader = this.getClass().getClassLoader();
-    final URL reportDefinitionURL = classloader.getResource("report/password/generatedPassword.prpt");
+    //final URL reportDefinitionURL = classloader.getResource("report/password/generatedPassword.prpt");
+    final URL reportDefinitionURL = classloader.getResource("report/password/generatedPassword1.prpt");
 
     // Parse the report file
     final ResourceManager resourceManager = new ResourceManager();
@@ -42,12 +47,29 @@ public class PasswordReportGenerator extends AbstractReportGenerator {
     return (MasterReport) directly.getResource();
   }
 
-  @Override
-  public DataFactory getDataFactory() {
-    return null;
+
+
+  public DataFactory getDataFactory(String reportQuery)
+  {
+    final DriverConnectionProvider sampleDriverConnectionProvider = new DriverConnectionProvider();
+    sampleDriverConnectionProvider.setDriver("oracle.jdbc.OracleDriver");
+    sampleDriverConnectionProvider.setUrl("jdbc:oracle:thin:@localhost:1521:XE");
+    sampleDriverConnectionProvider.setProperty("user", "DB_IUMS");
+    sampleDriverConnectionProvider.setProperty("password", "ig100");
+
+    final SQLReportDataFactory dataFactory = new SQLReportDataFactory(sampleDriverConnectionProvider);
+    dataFactory.setQuery(QUERY_NAME,reportQuery);
+
+    return dataFactory;
   }
 
   @Override
+  public Map<String, Object> getReportParameters(Object... pParameter)
+  {
+    return null;
+  }
+
+  /*
   public Map<String, Object> getReportParameters(Object... pParameter) throws Exception {
     final Map<String, Object> parameters = new HashMap<>();
     if (pParameter.length > 0) {
@@ -64,6 +86,6 @@ public class PasswordReportGenerator extends AbstractReportGenerator {
       parameters.put("role", user.getRole().getName());
     }
     return parameters;
-  }
+  }*/
 
 }

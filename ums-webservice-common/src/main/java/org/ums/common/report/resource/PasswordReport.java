@@ -26,7 +26,12 @@ public class PasswordReport extends Resource {
     return new StreamingOutput() {
       public void write(OutputStream output) throws IOException, WebApplicationException {
         try {
-          mPasswordReportGenerator.generateReport(AbstractReportGenerator.OutputType.PDF, output, pObjectId);
+          String query="Select User_Id,Temp_Password,Full_Name,'Student' Role,Long_Name Dept_Name,'1st year, 1st semester' Semester from USERS,Students,Mst_Program,Mst_Dept_Office Where  " +
+                  "User_Id='1234' " +
+                  "And USERS.USER_ID=STUDENTS.STUDENT_ID " +
+                  "And MST_PROGRAM.PROGRAM_ID=STUDENTS.PROGRAM_ID " +
+                  "And MST_PROGRAM.DEPT_ID=MST_DEPT_OFFICE.DEPT_ID ";
+          mPasswordReportGenerator.generateReport(AbstractReportGenerator.OutputType.PDF, output, query);
         } catch (Exception e) {
           throw new WebApplicationException(e);
         }
