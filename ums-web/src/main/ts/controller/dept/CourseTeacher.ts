@@ -1,5 +1,6 @@
 ///<reference path="../../service/HttpClient.ts"/>
 ///<reference path="../../lib/jquery.notific8.d.ts"/>
+///<reference path="../../lib/bootstrap.selectpicker.d.ts"/>
 ///<reference path="../../model/CourseTeacherSearchParamModel.ts"/>
 ///<reference path="../../model/CourseTeacherSearchParamModelImp.ts"/>
 module ums {
@@ -23,6 +24,12 @@ module ums {
       };
       $scope.loadingVisibility=false;
       $scope.fetchCourseTeacherInfo = this.fetchCourseTeacherInfo.bind(this);
+
+      $('.selectpicker').selectpicker({
+        iconBase: 'fa',
+        tickIcon: 'fa-check'
+      });
+
     }
 
 

@@ -235,7 +235,19 @@ module ums {
         .state('courseTeacher', {
           url: "/courseTeacher",
           controller: 'CourseTeacher',
-          templateUrl: 'views/dept/course-teacher.html'
+          templateUrl: 'views/dept/course-teacher.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: ['vendors/select2/select2-madmin.css',
+                  'vendors/bootstrap-select/bootstrap-select.min.css',
+                  'vendors/multi-select/css/multi-select-madmin.css',
+                  'vendors/select2/select2.min.js',
+                  'vendors/bootstrap-select/bootstrap-select.min.js',
+                  'vendors/multi-select/js/jquery.multi-select.js']
+              });
+            }]
+          }
         })
   });
 }
