@@ -10,6 +10,14 @@
                         <div data-program-selector="" data-model="courseTeacherSearchParamModel"></div>
 
                         <div class="form-group">
+                            <label class="col-md-4 control-label">Semester</label>
+                            <div class="col-md-8">
+                                <select class="form-control required" data-ng-model="courseTeacherSearchParamModel.academicYearId" ng-init="courseTeacherSearchParamModel.academicYearId=''">
+                                    <option data-ng-repeat="year in data.academicYearOptions" value="{{year.id}}">{{year.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label class="col-md-4 control-label">Year</label>
                             <div class="col-md-8">
                                 <select class="form-control required" data-ng-model="courseTeacherSearchParamModel.academicYearId" ng-init="courseTeacherSearchParamModel.academicYearId=''">
@@ -34,11 +42,27 @@
                             </div>
                         </div>
                     </div>
-
+                    <div class="form-actions text-right pal">
+                        <button type="button" class="btn btn-success" data-ng-click="fetchCourseTeacherInfo()">Search</button>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
     <div class="col-md-8">
+        <div class="col-md-12">
+            <div class="panel" style="min-height: 490px;;">
+                <div class="panel-heading">Course List For<span class="subtitle"></span></div>
+                <div class="panel-body">
+
+                    <div class="spinner" ng-show="loadingVisibility">
+                        <div class="bounce1"></div>
+                        <div class="bounce2"></div>
+                        <div class="bounce3"></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
     </div>
 </div>
