@@ -10,9 +10,15 @@ import org.ums.domain.model.regular.Teacher;
 public interface MutableCourseTeacher extends CourseTeacher, Mutable, MutableLastModifier, MutableIdentifier<String> {
   void setSemester(final Semester pSemester);
 
+  void setSemesterId(final Integer pSemesterId);
+
   void setCourse(final Course pCourse);
 
+  void setCourseId(final String pCourseId);
+
   void setTeacher(final Teacher pTeacher);
+
+  void setTeacherId(final String pTeacherId);
 
   void setSection(final String pSection);
 }

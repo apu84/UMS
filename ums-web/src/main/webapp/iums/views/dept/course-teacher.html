@@ -1,234 +1,248 @@
-
 <div class="row">
-    <div class="orgLeftClass pull-left panel panel-green" id="leftDiv">
-        <div class="panel-heading">
-            <h3 class="panel-title">Select </h3>
-        </div>
-        <div class="panel-body pan">
-            <form action="" class="form-horizontal">
-                <div class="form-body pal">
-                    <div data-program-selector="" data-model="courseTeacherSearchParamModel"></div>
-
-                    <div class="form-group">
-                        <label class="col-md-4 control-label">Semester</label>
-                        <div class="col-md-8">
-                            <select class="form-control required" data-ng-model="courseTeacherSearchParamModel.academicYearId" ng-init="courseTeacherSearchParamModel.academicYearId=''">
-                                <option data-ng-repeat="year in data.academicYearOptions" value="{{year.id}}">{{year.name}}</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-4 control-label">Year</label>
-                        <div class="col-md-8">
-                            <select class="form-control required" data-ng-model="courseTeacherSearchParamModel.academicYearId" ng-init="courseTeacherSearchParamModel.academicYearId=''">
-                                <option data-ng-repeat="year in data.academicYearOptions" value="{{year.id}}">{{year.name}}</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-4 control-label">Semester</label>
-                        <div class="col-md-8">
-                            <select class="form-control required" data-ng-model="courseTeacherSearchParamModel.academicSemesterId" ng-init="courseTeacherSearchParamModel.academicSemesterId=''">
-                                <option data-ng-repeat="semester in data.academicSemesterOptions" value="{{semester.id}}">{{semester.name}}</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-4 control-label">Category</label>
-                        <div class="col-md-8">
-                            <select class="form-control required" data-ng-model="courseTeacherSearchParamModel.courseCategoryId" ng-init="courseTeacherSearchParamModel.courseCategoryId=''">
-                                <option data-ng-repeat="courseCategory in data.courseCategoryOptions" value="{{courseCategory.id}}">{{courseCategory.name}}</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-actions text-right pal">
-                    <button type="button" class="btn btn-success" onclick="fetchCourseTeacherInfo()">Search</button>
-                </div>
-            </form>
-        </div>
+  <div class="orgLeftClass pull-left panel panel-green" id="leftDiv">
+    <div class="panel-heading">
+      <h3 class="panel-title">Select </h3>
     </div>
-    <div class="arrowClass pull-left" onclick="resetDivs()" id="arrowDiv"> <i class="fa fa-angle-double-right fa-4x"></i></i> </div>
-    <div class="orgRightClass pull-left" id="rightDiv">
+    <div class="panel-body pan">
+      <form action="" class="form-horizontal">
+        <div class="form-body pal">
+          <div data-program-selector="" data-model="courseTeacherSearchParamModel"></div>
 
-        <div class="panel" style="min-height: 490px;">
-            <div class="panel-heading">Course Teacher List For "Bsc in CSE" Program of CSE Department -  Spring, 2015<span class="subtitle"></span></div>
-            <div class="panel-body">
+          <div class="form-group">
+            <label class="col-md-4 control-label">Semester</label>
 
-                <div class="spinner" ng-show="loadingVisibility">
-                    <div class="bounce1"></div>
-                    <div class="bounce2"></div>
-                    <div class="bounce3"></div>
-                </div>
-
-                <div class="alert alert-success" style="color: #3c763d;font-weight: bold;padding: 5px;">
-                    1st Year-1st Semester : All Courses/Mandatory Courses/Optional Courses
-                </div>
-                <table class="table table-hover table-bordered table-advanced">
-                    <thead>
-                    <tr role="row" class="heading">
-                        <th width="10%" class="sorting">CourseNo</th>
-                        <th width="35%" class="sorting_asc">Course Title</th>
-                        <th width="4%" class="sorting">CrHr</th>
-                        <th width="40%" class="sorting">Course Teacher</th>
-                        <th width="8%" class="sorting">Actions</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>CSE-1234</td>
-                        <td>Basic Computer Programming</td>
-                        <td>3.0</td>
-                        <td>
-
-
-                            <table width='100%' style="border:0px;" border="0">
-                                <tr>
-                                    <td>
-                                        <div class="input-group">
-                                            <div class="input-group-addon"><i class="fa fa-user"></i></div>
-                                            <select class="select2-size form-control">
-                                                <option value="Category 1">Category 1</option>
-                                                <option value="Category 2">Category 2</option>
-                                                <option value="Category 3">Category 3</option>
-                                                <option value="Category 4">Category 4</option>
-                                            </select>
-                                        </div>
-                                    </td>
-                                    <td width="4px;">&nbsp;</td>
-                                    <td width="85px;">
-                                        <select multiple="multiple" data-style="btn-white" class="selectpicker form-control" style="width:30px;">
-                                            <option>A</option>
-                                            <option>B</option>
-                                            <option>C</option>
-                                        </select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="input-group">
-                                            <div class="input-group-addon"><i class="fa fa-user"></i></div>
-                                            <select class="select2-size form-control">
-                                                <option value="Category 1">Category 1</option>
-                                                <option value="Category 2">Category 2</option>
-                                                <option value="Category 3">Category 3</option>
-                                                <option value="Category 4">Category 4</option>
-                                            </select>
-                                        </div>
-                                    </td>
-                                    <td width="4px;">&nbsp;</td>
-                                    <td width="85px;">
-                                        <select multiple="multiple" data-style="btn-white" class="selectpicker form-control" style="width:30px;">
-                                            <option>A</option>
-                                            <option>B</option>
-                                            <option>C</option>
-                                        </select>
-                                    </td>
-                                </tr>
-                            </table>
-
-
-
-
-                        </td>
-                        <td>
-                            <div class="mbs">
-                                <button class="btn btn-xs btn-success filter-submit">
-                                    <i class="fa fa-plus-square-o"></i>
-                                    Add More
-                                </button>
-                            </div>
-                            <div class="mbs">
-                                <a href="javascript:;" class="btn btn-xs btn-default"><i class="fa fa-save"></i>&nbsp;
-                                    Save
-                                </a>
-                            </div>
-
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>CSE-1</td>
-                        <td>Basic Computer Programming</td>
-                        <td>3.0</td>
-                        <td></td>
-                        <td><a href="javascript:;" class="btn btn-xs btn-default"><i class="fa fa-search"></i>&nbsp;
-                            View</a></td>
-                    </tr>
-                    <tr>
-                        <td>CSE-1</td>
-                        <td>Basic Computer Programming</td>
-                        <td>3.0</td>
-                        <td></td>
-                        <td><a href="javascript:;" class="btn btn-xs btn-default"><i class="fa fa-plus"></i>&nbsp;
-                            Add More</a></td>
-                    </tr>
-
-                    </tbody>
-                </table>
-
-
-
+            <div class="col-md-8">
+              <select class="form-control required" data-ng-model="courseTeacherSearchParamModel.academicYearId"
+                      ng-init="courseTeacherSearchParamModel.academicYearId=''">
+                <option data-ng-repeat="year in data.academicYearOptions" value="{{year.id}}">{{year.name}}</option>
+              </select>
             </div>
-            <div class="form-actions text-right pal"   style="margin-top:25px;">
-                <button type="button" class="btn btn-success" onclick="fetchCourseTeacherInfo()">Save Course-Teacher Info</button>
+          </div>
+          <div class="form-group">
+            <label class="col-md-4 control-label">Year</label>
+
+            <div class="col-md-8">
+              <select class="form-control required" data-ng-model="courseTeacherSearchParamModel.academicYearId"
+                      ng-init="courseTeacherSearchParamModel.academicYearId=''">
+                <option data-ng-repeat="year in data.academicYearOptions" value="{{year.id}}">{{year.name}}</option>
+              </select>
             </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-4 control-label">Semester</label>
+
+            <div class="col-md-8">
+              <select class="form-control required" data-ng-model="courseTeacherSearchParamModel.academicSemesterId"
+                      ng-init="courseTeacherSearchParamModel.academicSemesterId=''">
+                <option data-ng-repeat="semester in data.academicSemesteNrOptions" value="{{semester.id}}">
+                  {{semester.name}}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-4 control-label">Category</label>
+
+            <div class="col-md-8">
+              <select class="form-control required" data-ng-model="courseTeacherSearchParamModel.courseCategoryId"
+                      ng-init="courseTeacherSearchParamModel.courseCategoryId=''">
+                <option data-ng-repeat="courseCategory in data.courseCategoryOptions" value="{{courseCategory.id}}">
+                  {{courseCategory.name}}
+                </option>
+              </select>
+            </div>
+          </div>
         </div>
+        <div class="form-actions text-right pal">
+          <button type="button" class="btn btn-success" onclick="fetchCourseTeacherInfo()">Search</button>
+        </div>
+      </form>
     </div>
+  </div>
+  <div class="arrowClass pull-left" onclick="resetDivs()" id="arrowDiv"><i
+      class="fa fa-angle-double-right fa-4x"></i></i> </div>
+  <div class="orgRightClass pull-left" id="rightDiv">
+
+    <div class="panel" style="min-height: 490px;">
+      <div class="panel-heading">Course Teacher List For "Bsc in CSE" Program of CSE Department - Spring, 2015<span
+          class="subtitle"></span></div>
+      <div class="panel-body">
+
+        <div class="spinner" ng-show="loadingVisibility">
+          <div class="bounce1"></div>
+          <div class="bounce2"></div>
+          <div class="bounce3"></div>
+        </div>
+
+        <div class="alert alert-success" style="color: #3c763d;font-weight: bold;padding: 5px;">
+          1st Year-1st Semester : All Courses/Mandatory Courses/Optional Courses
+        </div>
+        <table class="table table-hover table-bordered table-advanced">
+          <thead>
+          <tr role="row" class="heading">
+            <th width="10%" class="sorting">CourseNo</th>
+            <th width="35%" class="sorting_asc">Course Title</th>
+            <th width="4%" class="sorting">CrHr</th>
+            <th width="40%" class="sorting">Course Teacher</th>
+            <th width="8%" class="sorting">Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>CSE-1234</td>
+            <td>Basic Computer Programming</td>
+            <td>3.0</td>
+            <td>
+
+
+              <table width='100%' style="border:0px;" border="0">
+                <tr>
+                  <td>
+                    <div class="input-group">
+                      <div class="input-group-addon"><i class="fa fa-user"></i></div>
+                      <select class="select2-size form-control">
+                        <option value="Category 1">Category 1</option>
+                        <option value="Category 2">Category 2</option>
+                        <option value="Category 3">Category 3</option>
+                        <option value="Category 4">Category 4</option>
+                      </select>
+                    </div>
+                  </td>
+                  <td width="4px;">&nbsp;</td>
+                  <td width="85px;">
+                    <select multiple="multiple" data-style="btn-white" class="selectpicker form-control"
+                            style="width:30px;">
+                      <option>A</option>
+                      <option>B</option>
+                      <option>C</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="input-group">
+                      <div class="input-group-addon"><i class="fa fa-user"></i></div>
+                      <select class="select2-size form-control">
+                        <option value="Category 1">Category 1</option>
+                        <option value="Category 2">Category 2</option>
+                        <option value="Category 3">Category 3</option>
+                        <option value="Category 4">Category 4</option>
+                      </select>
+                    </div>
+                  </td>
+                  <td width="4px;">&nbsp;</td>
+                  <td width="85px;">
+                    <select multiple="multiple" data-style="btn-white" class="selectpicker form-control"
+                            style="width:30px;">
+                      <option>A</option>
+                      <option>B</option>
+                      <option>C</option>
+                    </select>
+                  </td>
+                </tr>
+              </table>
+
+
+            </td>
+            <td>
+              <div class="mbs">
+                <button class="btn btn-xs btn-success filter-submit">
+                  <i class="fa fa-plus-square-o"></i>
+                  Add More
+                </button>
+              </div>
+              <div class="mbs">
+                <a href="javascript:;" class="btn btn-xs btn-default"><i class="fa fa-save"></i>&nbsp;
+                  Save
+                </a>
+              </div>
+
+            </td>
+          </tr>
+          <tr>
+            <td>CSE-1</td>
+            <td>Basic Computer Programming</td>
+            <td>3.0</td>
+            <td></td>
+            <td><a href="javascript:;" class="btn btn-xs btn-default"><i class="fa fa-search"></i>&nbsp;
+              View</a></td>
+          </tr>
+          <tr>
+            <td>CSE-1</td>
+            <td>Basic Computer Programming</td>
+            <td>3.0</td>
+            <td></td>
+            <td><a href="javascript:;" class="btn btn-xs btn-default"><i class="fa fa-plus"></i>&nbsp;
+              Add More</a></td>
+          </tr>
+
+          </tbody>
+        </table>
+
+
+      </div>
+      <div class="form-actions text-right pal" style="margin-top:25px;">
+        <button type="button" class="btn btn-success" onclick="fetchCourseTeacherInfo()">Save Course-Teacher Info
+        </button>
+      </div>
+    </div>
+  </div>
 
 
 </div>
 <style type="text/css">
 
-    .orgLeftClass{
-        width: 30%;
+  .orgLeftClass {
+    width: 30%;
 
-    }
+  }
 
-    .orgRightClass{
-        width: 66%;
-    }
+  .orgRightClass {
+    width: 66%;
+  }
 
-    .arrowClass{
-        display: none;
-        cursor: pointer;
-    }
+  .arrowClass {
+    display: none;
+    cursor: pointer;
+  }
 
-    .orgLeftClass, .arrowClass{
-        margin-right:25px;
-        margin-left:8px;"
+  .orgLeftClass, .arrowClass {
+    margin-right: 25px;
+    margin-left: 8px;
+  "
 
-    }
+  }
 
-    .newRightClass{
-        width: 94%;
-    }
+  .newRightClass {
+    width: 94%;
+  }
 
-    .bootstrap-select.btn-group:not(.input-group-btn), .bootstrap-select.btn-group[class*="span"] {
-        margin-bottom: 0px !important;
-    }
-    .table tbody tr td {
-        border-top: none !important;
-    }
-    td,
+  .bootstrap-select.btn-group:not(.input-group-btn), .bootstrap-select.btn-group[class*="span"] {
+    margin-bottom: 0px !important;
+  }
+
+  .table tbody tr td {
+    border-top: none !important;
+  }
 </style>
 <script type="text/javascript">
-    function fetchCourseTeacherInfo(){
-        $("#leftDiv").hide();
-        $("#arrowDiv").show();
+  function fetchCourseTeacherInfo() {
+    $("#leftDiv").hide();
+    $("#arrowDiv").show();
 
-        $("#rightDiv").removeClass( "orgRightClass" );
-        $("#rightDiv").addClass( "newRightClass" );
+    $("#rightDiv").removeClass("orgRightClass");
+    $("#rightDiv").addClass("newRightClass");
 
-    }
+  }
 
-    function resetDivs(){
-        $("#arrowDiv").hide();
+  function resetDivs() {
+    $("#arrowDiv").hide();
 
-        $("#leftDiv").show();
+    $("#leftDiv").show();
 
-        $("#rightDiv").removeClass( "newRightClass" );
-        $("#rightDiv").addClass( "orgRightClass" );
+    $("#rightDiv").removeClass("newRightClass");
+    $("#rightDiv").addClass("orgRightClass");
 
 
-    }
+  }
 </script>

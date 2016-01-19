@@ -8,12 +8,22 @@ import java.util.List;
 
 public class CourseTeacherDaoDecorator extends ContentDaoDecorator<CourseTeacher, MutableCourseTeacher, String, CourseTeacherManager> implements CourseTeacherManager {
   @Override
-  public List<CourseTeacher> getCourseTeacher(String pCourseId, String pSemesterId) {
-    return getManager().getCourseTeacher(pCourseId, pSemesterId);
+  public List<CourseTeacher> getCourseTeachers(String pCourseId, String pSemesterId) {
+    return getManager().getCourseTeachers(pCourseId, pSemesterId);
   }
 
   @Override
-  public List<CourseTeacher> getCourseTeacher(String pCourseId, String pSemesterId, Integer pYear, int pSemester) {
-    return getManager().getCourseTeacher(pCourseId, pSemesterId, pYear, pSemester);
+  public List<CourseTeacher> getCourseTeachers(String pCourseId, String pSemesterId, Integer pYear, int pSemester) {
+    return getManager().getCourseTeachers(pCourseId, pSemesterId, pYear, pSemester);
+  }
+
+  @Override
+  public List<CourseTeacher> getCourseTeachers(Integer pSemesterId, String pSyllabusId) {
+    return getManager().getCourseTeachers(pSemesterId, pSyllabusId);
+  }
+
+  @Override
+  public List<CourseTeacher> getCourseTeachers(Integer pSemesterId, String pSyllabusId, Integer pYear, Integer pSemester) {
+    return getManager().getCourseTeachers(pSemesterId, pSyllabusId, pYear, pSemester);
   }
 }

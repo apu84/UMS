@@ -48,8 +48,8 @@ public class PasswordReportGenerator extends AbstractReportGenerator {
 
 
 
-  public DataFactory getDataFactory(String reportQuery)
-  {
+  public DataFactory getDataFactory(String reportQuery) {
+    // TODO : Refactor this connection to use the common connection used for the application
     final DriverConnectionProvider sampleDriverConnectionProvider = new DriverConnectionProvider();
     sampleDriverConnectionProvider.setDriver("oracle.jdbc.OracleDriver");
     sampleDriverConnectionProvider.setUrl("jdbc:oracle:thin:@localhost:1521:XE");

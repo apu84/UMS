@@ -43,8 +43,9 @@ public class AcademicConfiguration {
   SemesterManager getPersistentSemesterDao() {
     return new PersistentSemesterDao(mJdbcTemplate, getGenericDateFormat());
   }
+
   SemesterSyllabusMapManager getPersistentSemesterSyllabusMapDao() {
-    return new PersistentSemesterSyllabusMapDao(new JdbcTemplate(mDataSource));
+    return new PersistentSemesterSyllabusMapDao(new JdbcTemplate(mDataSource), syllabusManager());
   }
 
   SyllabusManager getPersistentSyllabusDao() {
@@ -75,10 +76,10 @@ public class AcademicConfiguration {
   }
 
   @Bean
-  SemesterSyllabusMapManager semesterSyllabusMapManager(){
+  SemesterSyllabusMapManager semesterSyllabusMapManager() {
     return getPersistentSemesterSyllabusMapDao();
   }
-  
+
   @Bean
   DateFormat getGenericDateFormat() {
     return new SimpleDateFormat(Constants.DATE_FORMAT);
@@ -110,7 +111,7 @@ public class AcademicConfiguration {
   }
 
   @Bean
-  ContentManager<Course, MutableCourse, String> courseManager() {
+  CourseManager courseManager() {
     CourseCache courseCache = new CourseCache(mLocalCacheManager);
     courseCache.setManager(new PersistentCourseDao(mJdbcTemplate));
     return courseCache;
@@ -180,7 +181,7 @@ public class AcademicConfiguration {
   Builder<Semester, MutableSemester> getSemesterBuilder() {
     return new SemesterBuilder(getGenericDateFormat(), programTypeManager());
   }
-  
+
   @Bean
   List<Builder<Semester, MutableSemester>> getSemesterBuilders() {
     List<Builder<Semester, MutableSemester>> builders = new ArrayList<>();
@@ -251,6 +252,18 @@ public class AcademicConfiguration {
   List<Builder<Teacher, MutableTeacher>> getTeacherBuilders() {
     List<Builder<Teacher, MutableTeacher>> builders = new ArrayList<>();
     builders.add(new TeacherBuilder());
+    return builders;
+  }
+
+  @Bean
+  Builder<CourseTeacher, MutableCourseTeacher> getCourseTeacherBuilder() {
+    return new CourseTeacherBuilder(courseManager(), teacherManager(), semesterManager());
+  }
+
+  @Bean
+  List<Builder<CourseTeacher, MutableCourseTeacher>> getCourseTeacherBuilders() {
+    List<Builder<CourseTeacher, MutableCourseTeacher>> builders = new ArrayList<>();
+    builders.add(new CourseTeacherBuilder(courseManager(), teacherManager(), semesterManager()));
     return builders;
   }
 }

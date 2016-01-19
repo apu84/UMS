@@ -10,9 +10,15 @@ import java.io.Serializable;
 public interface CourseTeacher extends Serializable, LastModifier, EditType<MutableCourseTeacher>, Identifier<String> {
   Semester getSemester() throws Exception;
 
+  Integer getSemesterId();
+
   Course getCourse() throws Exception;
 
+  String getCourseId();
+
   Teacher getTeacher() throws Exception;
+
+  String getTeacherId();
 
   String getSection();
 }
