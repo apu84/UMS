@@ -3,16 +3,14 @@ package org.ums.common.academic.resource.helper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.academic.builder.Builder;
+import org.ums.academic.model.PersistentCourseTeacher;
 import org.ums.cache.LocalCache;
 import org.ums.common.academic.resource.ResourceHelper;
 import org.ums.domain.model.mutable.MutableCourseTeacher;
 import org.ums.domain.model.regular.CourseTeacher;
 import org.ums.manager.CourseTeacherManager;
 
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
+import javax.json.*;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.List;
@@ -27,7 +25,9 @@ public class CourseTeacherResourceHelper extends ResourceHelper<CourseTeacher, M
 
   @Override
   protected Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
-    return null;
+    modifyContent(pJsonObject, pUriInfo);
+    Response.ResponseBuilder builder = Response.ok();
+    return builder.build();
   }
 
   @Override
@@ -67,5 +67,32 @@ public class CourseTeacherResourceHelper extends ResourceHelper<CourseTeacher, M
     localCache.invalidate();
 
     return object.build();
+  }
+
+  protected void modifyContent(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+    MutableCourseTeacher mutableCourseTeacher = new PersistentCourseTeacher();
+    LocalCache localCache = new LocalCache();
+    JsonArray entries = pJsonObject.getJsonArray("entries");
+    for (int i = 0; i < entries.size(); i++) {
+      JsonObject jsonObject = entries.getJsonObject(i);
+      String updateType = jsonObject.getString("updateType");
+
+      for (Builder<CourseTeacher, MutableCourseTeacher> builder : mBuilders) {
+        builder.build(mutableCourseTeacher, pJsonObject, localCache);
+      }
+
+      switch (updateType) {
+        case "create":
+          mutableCourseTeacher.commit(false);
+          break;
+        case "update":
+          mutableCourseTeacher.commit(true);
+          break;
+        case "delete":
+          mutableCourseTeacher.delete();
+          break;
+      }
+    }
+
   }
 }

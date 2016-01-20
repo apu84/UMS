@@ -3,7 +3,6 @@ package org.ums.academic.dao;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.academic.model.PersistentCourseTeacher;
-import org.ums.domain.model.mutable.MutableCourse;
 import org.ums.domain.model.mutable.MutableCourseTeacher;
 import org.ums.domain.model.regular.CourseTeacher;
 
@@ -20,8 +19,9 @@ public class PersistentCourseTeacherDao extends CourseTeacherDaoDecorator {
   static String INSERT_ONE = "INSERT INTO COURSE_TEACHER(SEMESTER_ID, TEACHER_ID, COURSE_ID, SECTION, LAST_MODIFIED, ID) VALUES" +
       "(?, ?, ?, ?," + getLastModifiedSql() + ", SQN_COURSE_TEACHER_ID.nextVal)";
 
-  static String SELECT_BY_SYLLABUS = "SELECT COURSE.COURSE_ID, SEMESTER_ID, TEACHER_ID, SECTION, LAST_MODIFIED, ID FROM COURSE " +
-      "LEFT JOIN COURSE_TEACHER COURSE.COURSE_ID = COURSE_TEACHER.COURSE_ID ";
+  static String SELECT_BY_SYLLABUS = "SELECT t1.* FROM (SELECT COURSE.COURSE_ID, COURSE.SYLLABUS_ID, COURSE.YEAR, COURSE.SEMESTER, COURSE_TEACHER.SEMESTER_ID, COURSE_TEACHER.TEACHER_ID, SECTION, LAST_MODIFIED, ID FROM COURSE " +
+      "LEFT JOIN COURSE_TEACHER COURSE.COURSE_ID = COURSE_TEACHER.COURSE_ID) t1, SEMESTER_SYALLABUS_MAP WHERE t1.SYLLABUS_ID = SEMESTER_SYALLABUS_MAP.SYALLABUS_ID " +
+      "AND t1.YEAR = SEMESTER_SYALLABUS_MAP.YEAR AND t1.SEMESTER = SEMESTER_SYALLABUS_MAP.SEMESTER AND t1.SEMESTER_ID = SEMESTER_SYALLABUS_MAP.SYLLABUS_ID ";
 
   static String ORDER_BY = " ORDER BY COURSE.SYLLABUS_ID, COURSE.YEAR, COURSE.SEMESTER, COURSE.COURSE_CATEGORY, COURSE.VIEW_ORDER, COURSE_TEACHER.TEACHER_ID, COURSE_TEACHER_SECTION";
 
@@ -83,13 +83,13 @@ public class PersistentCourseTeacherDao extends CourseTeacherDaoDecorator {
 
   @Override
   public List<CourseTeacher> getCourseTeachers(Integer pSemesterId, String pSyllabusId) {
-    String query = SELECT_BY_SYLLABUS + "WHERE COURSE.SYLLABUS_ID = ? AND COURSE_TEACHER.SEMESTER_ID = ?" + ORDER_BY;
+    String query = SELECT_BY_SYLLABUS + "WHERE t1.SYLLABUS_ID = ? AND t1.SEMESTER_ID = ?" + ORDER_BY;
     return mJdbcTemplate.query(query, new Object[]{pSyllabusId, pSemesterId}, new CourseTeacherRowMapper());
   }
 
   @Override
   public List<CourseTeacher> getCourseTeachers(Integer pSemesterId, String pSyllabusId, Integer pYear, Integer pSemester) {
-    String query = SELECT_BY_SYLLABUS + "WHERE COURSE.SYLLABUS_ID = ? AND COURSE.YEAR = ? AND COURSE.SEMESTER = ? AND COURSE_TEACHER.SEMESTER_ID = ?" + ORDER_BY;
+    String query = SELECT_BY_SYLLABUS + "WHERE t1.SYLLABUS_ID = ? AND t1.YEAR = ? AND t1.SEMESTER = ? AND t1.SEMESTER_ID = ?" + ORDER_BY;
     return mJdbcTemplate.query(query, new Object[]{pSyllabusId, pYear, pSemester, pSemesterId}, new CourseTeacherRowMapper());
   }
 
