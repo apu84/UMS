@@ -17,6 +17,7 @@ module ums {
   interface ITeacher {
     id: string;
     name: string;
+    sections?: Array<{id: string; name: string}>;
   }
 
   interface ICourseTeacher {
@@ -34,7 +35,8 @@ module ums {
     courseOfferedByDepartmentId: string;
     courseOfferedByDepartmentName: string;
     teachers: Array<ITeacher>;
-    selectedTeachers: Array<ITeacher>;
+    selectedTeachers: {[key: string]: ITeacher};
+    sections:Array<{id: string; name: string}>;
   }
 
   interface ICourseTeachers {
@@ -90,7 +92,7 @@ module ums {
       $("#rightDiv").addClass("newRightClass");
 
       this.$scope.loadingVisibility = true;
-
+      this.formattedMap = {};
       this.httpClient.get("academic/courseTeacher/programId/" + this.$scope.courseTeacherSearchParamModel.programId
           + "/semesterId/" + this.$scope.courseTeacherSearchParamModel.semesterId + "/year/"
           + this.$scope.courseTeacherSearchParamModel.academicYearId + "/semester/" + this.$scope.courseTeacherSearchParamModel.academicSemesterId,
@@ -107,13 +109,22 @@ module ums {
       for (var i = 0; i < courseTeachers.length; i++) {
         if (!this.formattedMap[courseTeachers[i].courseId]) {
           this.formattedMap[courseTeachers[i].courseId] = courseTeachers[i];
-          this.formattedMap[courseTeachers[i].courseId].selectedTeachers = [];
+          this.formattedMap[courseTeachers[i].courseId].selectedTeachers = {};
         }
-        var teacher: ITeacher = {
-          id: courseTeachers[i].teacherId,
-          name: courseTeachers[i].teacherName
-        };
-        this.formattedMap[courseTeachers[i].courseId].selectedTeachers.push(teacher);
+        if (courseTeachers[i].teacherId) {
+          var teacher: ITeacher = {
+            id: courseTeachers[i].teacherId,
+            name: courseTeachers[i].teacherName,
+            sections: []
+          };
+          if (!this.formattedMap[courseTeachers[i].courseId].selectedTeachers[courseTeachers[i].teacherId]) {
+            this.formattedMap[courseTeachers[i].courseId].selectedTeachers[courseTeachers[i].teacherId] = teacher;
+          }
+
+          this.formattedMap[courseTeachers[i].courseId].selectedTeachers[courseTeachers[i].teacherId].sections.push(courseTeachers[i].section);
+
+        }
+
       }
       console.debug("%o",this.formattedMap);
       this.$scope.entries = this.formattedMap;
@@ -129,6 +140,7 @@ module ums {
 
     private getTeachers(courseTeacher: ICourseTeacher): ng.IPromise<any> {
       var defer = this.$q.defer();
+      courseTeacher.sections = this.appConstants.theorySections;
       if (this.teachersList[courseTeacher.courseOfferedByDepartmentId]) {
         courseTeacher.teachers = this.teachersList[courseTeacher.courseOfferedByDepartmentId];
         defer.resolve(null);

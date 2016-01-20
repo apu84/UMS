@@ -111,11 +111,8 @@
                   </td>
                   <td width="4px;">&nbsp;</td>
                   <td width="85px;">
-                    <select multiple="multiple" data-style="btn-white" class="selectpicker form-control"
-                            style="width:30px;">
-                      <option>A</option>
-                      <option>B</option>
-                      <option>C</option>
+                    <select multiple="multiple" data-style="btn-white" class="selectpicker form-control" data-ng-model="selectedTeacher.sections"
+                            style="width:50px;" data-ng-options="sections.id as sections.name for sections in courseTeacher.sections">
                     </select>
                   </td>
                 </tr>
