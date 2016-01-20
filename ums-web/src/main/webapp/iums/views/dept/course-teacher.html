@@ -7,17 +7,19 @@
       <form action="" class="form-horizontal">
         <div class="form-body pal">
           <div data-program-selector="" data-model="courseTeacherSearchParamModel"></div>
-
           <div class="form-group">
             <label class="col-md-4 control-label">Semester</label>
 
             <div class="col-md-8">
-              <select class="form-control required" data-ng-model="courseTeacherSearchParamModel.academicYearId"
-                      ng-init="courseTeacherSearchParamModel.academicYearId=''">
-                <option data-ng-repeat="year in data.academicYearOptions" value="{{year.id}}">{{year.name}}</option>
+              <select class="form-control required" data-ng-model="courseTeacherSearchParamModel.semesterId"
+                      ng-init="courseTeacherSearchParamModel.academicSemesterId=''">
+                <option data-ng-repeat="semester in courseTeacherSearchParamModel.semesters" value="{{semester.id}}">
+                  {{semester.name}}
+                </option>
               </select>
             </div>
           </div>
+
           <div class="form-group">
             <label class="col-md-4 control-label">Year</label>
 
@@ -28,18 +30,20 @@
               </select>
             </div>
           </div>
+
           <div class="form-group">
             <label class="col-md-4 control-label">Semester</label>
 
             <div class="col-md-8">
               <select class="form-control required" data-ng-model="courseTeacherSearchParamModel.academicSemesterId"
-                      ng-init="courseTeacherSearchParamModel.academicSemesterId=''">
-                <option data-ng-repeat="semester in data.academicSemesteNrOptions" value="{{semester.id}}">
+                      ng-init="courseTeacherSearchParamModel.academicYearId=''">
+                <option data-ng-repeat="semester in data.academicSemesterOptions" value="{{semester.id}}">
                   {{semester.name}}
                 </option>
               </select>
             </div>
           </div>
+
           <div class="form-group">
             <label class="col-md-4 control-label">Category</label>
 
@@ -54,7 +58,7 @@
           </div>
         </div>
         <div class="form-actions text-right pal">
-          <button type="button" class="btn btn-success" onclick="fetchCourseTeacherInfo()">Search</button>
+          <button type="button" class="btn btn-success" data-ng-click="fetchCourseTeacherInfo()">Search</button>
         </div>
       </form>
     </div>
@@ -88,45 +92,20 @@
           </tr>
           </thead>
           <tbody>
-          <tr>
-            <td>CSE-1234</td>
-            <td>Basic Computer Programming</td>
-            <td>3.0</td>
+          <tr data-ng-repeat="(courseId, courseTeacher) in entries">
+            <td>{{courseTeacher.courseNo}}</td>
+            <td>{{courseTeacher.courseTitle}}</td>
+            <td>{{courseTeacher.courseCrHr}}</td>
             <td>
 
 
               <table width='100%' style="border:0px;" border="0">
-                <tr>
+                <tr data-ng-repeat="selectedTeacher in courseTeacher.selectedTeachers">
                   <td>
                     <div class="input-group">
                       <div class="input-group-addon"><i class="fa fa-user"></i></div>
-                      <select class="select2-size form-control">
-                        <option value="Category 1">Category 1</option>
-                        <option value="Category 2">Category 2</option>
-                        <option value="Category 3">Category 3</option>
-                        <option value="Category 4">Category 4</option>
-                      </select>
-                    </div>
-                  </td>
-                  <td width="4px;">&nbsp;</td>
-                  <td width="85px;">
-                    <select multiple="multiple" data-style="btn-white" class="selectpicker form-control"
-                            style="width:30px;">
-                      <option>A</option>
-                      <option>B</option>
-                      <option>C</option>
-                    </select>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="input-group">
-                      <div class="input-group-addon"><i class="fa fa-user"></i></div>
-                      <select class="select2-size form-control">
-                        <option value="Category 1">Category 1</option>
-                        <option value="Category 2">Category 2</option>
-                        <option value="Category 3">Category 3</option>
-                        <option value="Category 4">Category 4</option>
+                      <select class="select2-size form-control" data-ng-model="selectedTeacher.id"
+                              data-ng-options="teacher.id as teacher.name for teacher in courseTeacher.teachers">
                       </select>
                     </div>
                   </td>
@@ -159,23 +138,6 @@
 
             </td>
           </tr>
-          <tr>
-            <td>CSE-1</td>
-            <td>Basic Computer Programming</td>
-            <td>3.0</td>
-            <td></td>
-            <td><a href="javascript:;" class="btn btn-xs btn-default"><i class="fa fa-search"></i>&nbsp;
-              View</a></td>
-          </tr>
-          <tr>
-            <td>CSE-1</td>
-            <td>Basic Computer Programming</td>
-            <td>3.0</td>
-            <td></td>
-            <td><a href="javascript:;" class="btn btn-xs btn-default"><i class="fa fa-plus"></i>&nbsp;
-              Add More</a></td>
-          </tr>
-
           </tbody>
         </table>
 
@@ -226,14 +188,14 @@
   }
 </style>
 <script type="text/javascript">
-  function fetchCourseTeacherInfo() {
+  /* function fetchCourseTeacherInfo() {
     $("#leftDiv").hide();
     $("#arrowDiv").show();
 
     $("#rightDiv").removeClass("orgRightClass");
     $("#rightDiv").addClass("newRightClass");
 
-  }
+   }*/
 
   function resetDivs() {
     $("#arrowDiv").hide();

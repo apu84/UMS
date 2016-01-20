@@ -28,6 +28,8 @@
 /// <reference path='controller/common/Logout.ts'/>
 /// <reference path='controller/common/PasswordReport.ts'/>
 
+/// <reference path='controller/dept/CourseTeacher.ts'/>
+
 /// <reference path='controller/syllabus/FullSyllabus.ts'/>
 /// <reference path='controller/syllabus/NewSyllabus.ts'/>
 /// <reference path='controller/syllabus/GridSyllabus.ts'/>
