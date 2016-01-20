@@ -45,14 +45,14 @@ public class CourseTeacherResourceHelper extends ResourceHelper<CourseTeacher, M
     return pReadonly.getLastModified();
   }
 
-  public JsonObject getCourseTeachers(final String pSemesterId, final String pSyllabusId, final UriInfo pUriInfo) throws Exception {
-    List<CourseTeacher> courseTeachers = getContentManager().getCourseTeachers(pSemesterId, pSyllabusId);
+  public JsonObject getCourseTeachers(final Integer pProgramId, final Integer pSemesterId, final UriInfo pUriInfo) throws Exception {
+    List<CourseTeacher> courseTeachers = getContentManager().getCourseTeachers(pProgramId, pSemesterId);
     return buildJsonResponse(courseTeachers, pUriInfo);
   }
 
-  public JsonObject getCourseTeachers(final String pSemesterId, final String pSyllabusId,
+  public JsonObject getCourseTeachers(final Integer pProgramId, final Integer pSemesterId,
                                       final Integer pYear, final Integer pSemester, final UriInfo pUriInfo) throws Exception {
-    List<CourseTeacher> courseTeachers = getContentManager().getCourseTeachers(pSemesterId, pSyllabusId, pYear, pSemester);
+    List<CourseTeacher> courseTeachers = getContentManager().getCourseTeachers(pProgramId, pSemesterId, pYear, pSemester);
     return buildJsonResponse(courseTeachers, pUriInfo);
   }
 

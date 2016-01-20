@@ -19,11 +19,28 @@ public class PersistentCourseTeacherDao extends CourseTeacherDaoDecorator {
   static String INSERT_ONE = "INSERT INTO COURSE_TEACHER(SEMESTER_ID, TEACHER_ID, COURSE_ID, SECTION, LAST_MODIFIED, ID) VALUES" +
       "(?, ?, ?, ?," + getLastModifiedSql() + ", SQN_COURSE_TEACHER_ID.nextVal)";
 
-  static String SELECT_BY_SYLLABUS = "SELECT t1.* FROM (SELECT COURSE.COURSE_ID, COURSE.SYLLABUS_ID, COURSE.YEAR, COURSE.SEMESTER, COURSE_TEACHER.SEMESTER_ID, COURSE_TEACHER.TEACHER_ID, SECTION, LAST_MODIFIED, ID FROM COURSE " +
-      "LEFT JOIN COURSE_TEACHER COURSE.COURSE_ID = COURSE_TEACHER.COURSE_ID) t1, SEMESTER_SYALLABUS_MAP WHERE t1.SYLLABUS_ID = SEMESTER_SYALLABUS_MAP.SYALLABUS_ID " +
-      "AND t1.YEAR = SEMESTER_SYALLABUS_MAP.YEAR AND t1.SEMESTER = SEMESTER_SYALLABUS_MAP.SEMESTER AND t1.SEMESTER_ID = SEMESTER_SYALLABUS_MAP.SYLLABUS_ID ";
-
-  static String ORDER_BY = " ORDER BY COURSE.SYLLABUS_ID, COURSE.YEAR, COURSE.SEMESTER, COURSE.COURSE_CATEGORY, COURSE.VIEW_ORDER, COURSE_TEACHER.TEACHER_ID, COURSE_TEACHER_SECTION";
+  static String SELECT_BY_SEMESTER_PROGRAM =
+      "SELECT t3.*,\n" +
+          "       t4.teacher_id,\n" +
+          "       t4.section,\n" +
+          "       t4.last_modified,\n" +
+          "       t4.id\n" +
+          "  FROM    (  SELECT t1.SEMESTER_ID,\n" +
+          "                    T2.COURSE_ID\n" +
+          "               FROM semester_syllabus_map t1, mst_course t2\n" +
+          "              WHERE     t1.program_id = ?\n" +
+          "                    AND t1.semester_id = ?\n" +
+          "                    AND t1.syllabus_id = t2.syllabus_id\n" +
+          "                    AND t1.year = t2.year\n" +
+          "                    AND T1.SEMESTER = t2.semester\n" +
+          "%s" +
+          "           ORDER BY t2.syllabus_id,\n" +
+          "                    t2.syllabus_id,\n" +
+          "                    t2.year,\n" +
+          "                    t2.semester) t3\n" +
+          "       LEFT JOIN\n" +
+          "          course_teacher t4\n" +
+          "       ON t3.course_id = t4.course_id";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -82,15 +99,15 @@ public class PersistentCourseTeacherDao extends CourseTeacherDaoDecorator {
   }
 
   @Override
-  public List<CourseTeacher> getCourseTeachers(Integer pSemesterId, String pSyllabusId) {
-    String query = SELECT_BY_SYLLABUS + "WHERE t1.SYLLABUS_ID = ? AND t1.SEMESTER_ID = ?" + ORDER_BY;
-    return mJdbcTemplate.query(query, new Object[]{pSyllabusId, pSemesterId}, new CourseTeacherRowMapper());
+  public List<CourseTeacher> getCourseTeachers(Integer pProgramId, Integer pSemesterId) {
+    String query = String.format(SELECT_BY_SEMESTER_PROGRAM, "");
+    return mJdbcTemplate.query(query, new Object[]{pProgramId, pSemesterId}, new CourseTeacherRowMapper());
   }
 
   @Override
-  public List<CourseTeacher> getCourseTeachers(Integer pSemesterId, String pSyllabusId, Integer pYear, Integer pSemester) {
-    String query = SELECT_BY_SYLLABUS + "WHERE t1.SYLLABUS_ID = ? AND t1.YEAR = ? AND t1.SEMESTER = ? AND t1.SEMESTER_ID = ?" + ORDER_BY;
-    return mJdbcTemplate.query(query, new Object[]{pSyllabusId, pYear, pSemester, pSemesterId}, new CourseTeacherRowMapper());
+  public List<CourseTeacher> getCourseTeachers(Integer pProgramId, Integer pSemesterId, Integer pYear, Integer pSemester) {
+    String query = String.format(SELECT_BY_SEMESTER_PROGRAM, " AND t2.year = ? AND T2.SEMESTER = ? ");
+    return mJdbcTemplate.query(query, new Object[]{pProgramId, pSemesterId, pYear, pSemester}, new CourseTeacherRowMapper());
   }
 
   class CourseTeacherRowMapper implements RowMapper<CourseTeacher> {

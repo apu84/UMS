@@ -18,12 +18,12 @@ public class CourseTeacherDaoDecorator extends ContentDaoDecorator<CourseTeacher
   }
 
   @Override
-  public List<CourseTeacher> getCourseTeachers(Integer pSemesterId, String pSyllabusId) {
-    return getManager().getCourseTeachers(pSemesterId, pSyllabusId);
+  public List<CourseTeacher> getCourseTeachers(Integer pProgramId, Integer pSemesterId) {
+    return getManager().getCourseTeachers(pProgramId, pSemesterId);
   }
 
   @Override
-  public List<CourseTeacher> getCourseTeachers(Integer pSemesterId, String pSyllabusId, Integer pYear, Integer pSemester) {
-    return getManager().getCourseTeachers(pSemesterId, pSyllabusId, pYear, pSemester);
+  public List<CourseTeacher> getCourseTeachers(Integer pProgramId, Integer pSemesterId, Integer pYear, Integer pSemester) {
+    return getManager().getCourseTeachers(pProgramId, pSemesterId, pYear, pSemester);
   }
 }

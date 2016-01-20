@@ -138,6 +138,11 @@ public class AcademicConfiguration {
   }
 
   @Bean
+  CourseTeacherManager courseTeacherManager() {
+    return new PersistentCourseTeacherDao(mJdbcTemplate);
+  }
+
+  @Bean
   Builder<Program, MutableProgram> getProgramBuilder() {
     return new ProgramBuilder();
   }
