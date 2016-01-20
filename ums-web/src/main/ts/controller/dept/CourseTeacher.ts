@@ -12,12 +12,13 @@ module ums {
     loadingVisibility:boolean;
     fetchCourseTeacherInfo:Function;
     entries: IFormattedCourseTeacherMap;
+    addTeacher: Function;
   }
 
   interface ITeacher {
     id: string;
     name: string;
-    sections?: Array<{id: string; name: string}>;
+    sections?: Array<string>;
   }
 
   interface ICourseTeacher {
@@ -36,7 +37,7 @@ module ums {
     courseOfferedByDepartmentName: string;
     teachers: Array<ITeacher>;
     selectedTeachers: {[key: string]: ITeacher};
-    sections:Array<{id: string; name: string}>;
+    sections:Array<string>;
   }
 
   interface ICourseTeachers {
@@ -72,6 +73,7 @@ module ums {
 
       $scope.loadingVisibility=false;
       $scope.fetchCourseTeacherInfo = this.fetchCourseTeacherInfo.bind(this);
+      $scope.addTeacher = this.addTeacher.bind(this);
       $('.selectpicker').selectpicker({
         iconBase: 'fa',
         tickIcon: 'fa-check'
@@ -154,6 +156,10 @@ module ums {
       }
 
       return defer.promise;
+    }
+
+    private addTeacher(courseId: string): void {
+      this.formattedMap[courseId].selectedTeachers = {"": {id: "-1", name: "-1"}};
     }
   }
   UMS.controller('CourseTeacher', CourseTeacher);
