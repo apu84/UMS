@@ -104,16 +104,27 @@
                   <td>
                     <div class="input-group">
                       <div class="input-group-addon"><i class="fa fa-user"></i></div>
-                      <select class="select2-size form-control" data-ng-model="selectedTeacher.id"
+                      <select class="select2-size form-control" data-ng-if="courseTeacher.editMode"
+                              data-ng-model="selectedTeacher.id"
                               data-ng-options="teacher.id as teacher.name for teacher in courseTeacher.teachers">
                       </select>
+                      <span data-ng-if="!courseTeacher.editMode">{{selectedTeacher.name}}</span>
                     </div>
                   </td>
                   <td width="4px;">&nbsp;</td>
                   <td width="85px;">
-                    <select multiple="multiple" data-style="btn-white" class="selectpicker form-control" data-ng-model="selectedTeacher.sections"
-                            style="width:50px;" data-ng-options="sections.id as sections.name for sections in courseTeacher.sections">
+                    <select multiple="multiple" data-ng-if="courseTeacher.editMode" data-style="btn-white"
+                            class="selectpicker form-control" data-ng-model="selectedTeacher.sections"
+                            style="width:50px;"
+                            data-ng-options="sections.id as sections.name for sections in courseTeacher.sections">
                     </select>
+                    <span data-ng-if="!courseTeacher.editMode" data-ng-repeat="section in selectedTeacher.sections">{{section.name}}</span>
+                  </td>
+                  <td width="60px">
+                    <a href="javascript:;" class="btn btn-xs btn-default" data-ng-click="removeCourseTeacher(courseId, selectedTeacher)">
+                      <i class="fa remove"></i>&nbsp;
+                      Remove
+                    </a>
                   </td>
                 </tr>
               </table>
@@ -122,13 +133,20 @@
             </td>
             <td>
               <div class="mbs">
+                <button class="btn btn-xs btn-success filter-submit" data-ng-click="editCourserTeacher(courseId)">
+                  <i class="fa fa-plus-square-o"></i>
+                  Edit
+                </button>
+              </div>
+              <div class="mbs">
                 <button class="btn btn-xs btn-success filter-submit" data-ng-click="addTeacher(courseId)">
                   <i class="fa fa-plus-square-o"></i>
                   Add More
                 </button>
               </div>
               <div class="mbs">
-                <a href="javascript:;" class="btn btn-xs btn-default"><i class="fa fa-save"></i>&nbsp;
+                <a href="javascript:;" class="btn btn-xs btn-default" data-ng-click="saveCourseTeacher(courseId)">
+                  <i class="fa fa-save"></i>&nbsp;
                   Save
                 </a>
               </div>
@@ -186,11 +204,11 @@
 </style>
 <script type="text/javascript">
   /* function fetchCourseTeacherInfo() {
-    $("#leftDiv").hide();
-    $("#arrowDiv").show();
+   $("#leftDiv").hide();
+   $("#arrowDiv").show();
 
-    $("#rightDiv").removeClass("orgRightClass");
-    $("#rightDiv").addClass("newRightClass");
+   $("#rightDiv").removeClass("orgRightClass");
+   $("#rightDiv").addClass("newRightClass");
 
    }*/
 

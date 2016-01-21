@@ -25,7 +25,7 @@ public class CourseTeacherResourceHelper extends ResourceHelper<CourseTeacher, M
 
   @Override
   protected Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
-    modifyContent(pJsonObject, pUriInfo);
+    modifyContent(pJsonObject);
     Response.ResponseBuilder builder = Response.ok();
     return builder.build();
   }
@@ -69,7 +69,7 @@ public class CourseTeacherResourceHelper extends ResourceHelper<CourseTeacher, M
     return object.build();
   }
 
-  protected void modifyContent(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+  protected void modifyContent(JsonObject pJsonObject) throws Exception {
     MutableCourseTeacher mutableCourseTeacher = new PersistentCourseTeacher();
     LocalCache localCache = new LocalCache();
     JsonArray entries = pJsonObject.getJsonArray("entries");
