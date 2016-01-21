@@ -2,7 +2,7 @@
 ///<reference path="CourseTeacherSearchParamModel.ts"/>
 module ums {
   export class CourseTeacherSearchParamModelImp extends ProgramSelectorModelImpl implements CourseTeacherSearchParamModel {
-    semesterId: string;
+    semesterId: number;
     academicYearId:string;
     academicSemesterId:string;
     courseCategoryId:string;

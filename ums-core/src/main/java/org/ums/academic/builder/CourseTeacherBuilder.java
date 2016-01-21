@@ -69,7 +69,10 @@ public class CourseTeacherBuilder implements Builder<CourseTeacher, MutableCours
     }
     pMutable.setCourse(mCourseManager.get(pJsonObject.getString("courseId")));
     pMutable.setTeacher(mTeacherManager.get(pJsonObject.getString("teacherId")));
-    pMutable.setSemester(mSemesterManager.get(pJsonObject.getInt("semesterId")));
-    pMutable.setSection(pJsonObject.getString("section"));
+    pMutable.setSemester(mSemesterManager.get(Integer.parseInt(pJsonObject.getString("semesterId"))));
+    if (pJsonObject.containsKey("section") && !StringUtils.isEmpty(pJsonObject.getString("section"))) {
+      pMutable.setSection(pJsonObject.getString("section"));
+    }
+
   }
 }
