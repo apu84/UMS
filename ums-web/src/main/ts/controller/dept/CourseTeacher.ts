@@ -16,6 +16,9 @@ module ums {
     editCourseTeacher: Function;
     removeCourseTeacher: Function;
     saveCourseTeacher: Function;
+    programName: string;
+    departmentName: string;
+    semesterName: string;
   }
 
   interface ITeacher {
@@ -115,8 +118,28 @@ module ums {
       $("#rightDiv").removeClass("orgRightClass");
       $("#rightDiv").addClass("newRightClass");
 
+
       this.$scope.loadingVisibility = true;
       this.formattedMap = {};
+
+      for (var i = 0; i < this.$scope.courseTeacherSearchParamModel.programs.length; i++) {
+        if (this.$scope.courseTeacherSearchParamModel.programs[i].id == this.$scope.courseTeacherSearchParamModel.programId) {
+          this.$scope.programName = this.$scope.courseTeacherSearchParamModel.programs[i].longName;
+        }
+      }
+
+      for (var i = 0; i < this.$scope.courseTeacherSearchParamModel.semesters.length; i++) {
+        if (this.$scope.courseTeacherSearchParamModel.semesters[i].id == this.$scope.courseTeacherSearchParamModel.semesterId) {
+          this.$scope.semesterName = this.$scope.courseTeacherSearchParamModel.semesters[i].name;
+        }
+      }
+
+      for (var i = 0; i < this.$scope.courseTeacherSearchParamModel.departments.length; i++) {
+        if (this.$scope.courseTeacherSearchParamModel.departments[i].id == this.$scope.courseTeacherSearchParamModel.departmentId) {
+          this.$scope.departmentName = this.$scope.courseTeacherSearchParamModel.departments[i].name;
+        }
+      }
+
       this.httpClient.get("academic/courseTeacher/programId/" + this.$scope.courseTeacherSearchParamModel.programId
           + "/semesterId/" + this.$scope.courseTeacherSearchParamModel.semesterId + "/year/"
           + this.$scope.courseTeacherSearchParamModel.academicYearId + "/semester/" + this.$scope.courseTeacherSearchParamModel.academicSemesterId,
