@@ -21,6 +21,7 @@ import org.ums.manager.CourseGroupManager;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
+import java.sql.Types;
 
 public class CourseBuilder implements Builder<Course, MutableCourse> {
 
@@ -103,8 +104,8 @@ public class CourseBuilder implements Builder<Course, MutableCourse> {
 
     pMutable.setSyllabusId(pJsonObject.getString("syllabusId"));
     pMutable.setViewOrder(Integer.parseInt(pJsonObject.getString("viewOrder")));
-
-    pMutable.setCourseGroupId(Integer.parseInt(pJsonObject.getString("optionalGroupId")));
+    Integer groupId = StringUtils.isEmpty(pJsonObject.getString("optionalGroupId")) ? Types.NULL: Integer.parseInt(pJsonObject.getString("optionalGroupId"));
+    pMutable.setCourseGroupId(groupId);
 
     //Unnecessary. No use of it in any Use Case. If any Use case need this then we will open it again
     /*

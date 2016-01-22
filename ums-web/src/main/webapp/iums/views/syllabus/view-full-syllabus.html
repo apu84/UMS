@@ -32,7 +32,11 @@
                                                 <h6 class="media-heading">{{course.no}}</h6></a>
                                             </td>
                                             <td>{{course.title}}</td>
-                                            <td><span class="label label-success">{{course.type}}</span></td>
+                                            <td>
+                                                <span class="label" data-ng-class="{'label-blue':course.type=='THEORY','label-success':course.type=='SESSIONAL','label-primary':course.type=='THESIS_PROJECT'}">
+                                                    {{course.type}}
+                                                </span>
+                                            </td>
                                             <td><strong class="user-list-ip">{{course.crhr}}</strong></td>
                                             <td></td>
                                         </tr>
