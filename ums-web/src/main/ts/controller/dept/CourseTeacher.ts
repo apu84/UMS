@@ -69,7 +69,7 @@ module ums {
   }
 
   interface IPostCourseTeacherModel {
-    semesterId: number;
+    semesterId: string;
     courseId: string;
     teacherId: string;
     section?: string;
