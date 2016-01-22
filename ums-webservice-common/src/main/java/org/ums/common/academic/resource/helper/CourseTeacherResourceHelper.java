@@ -8,6 +8,7 @@ import org.ums.cache.LocalCache;
 import org.ums.common.academic.resource.ResourceHelper;
 import org.ums.domain.model.mutable.MutableCourseTeacher;
 import org.ums.domain.model.regular.CourseTeacher;
+import org.ums.enums.CourseCategory;
 import org.ums.manager.CourseTeacherManager;
 
 import javax.json.*;
@@ -51,8 +52,33 @@ public class CourseTeacherResourceHelper extends ResourceHelper<CourseTeacher, M
   }
 
   public JsonObject getCourseTeachers(final Integer pProgramId, final Integer pSemesterId,
+                                      final Integer pYear, final UriInfo pUriInfo) throws Exception {
+    List<CourseTeacher> courseTeachers = getContentManager().getCourseTeachers(pProgramId, pSemesterId, pYear);
+    return buildJsonResponse(courseTeachers, pUriInfo);
+  }
+
+  public JsonObject getCourseTeachers(final Integer pProgramId, final Integer pSemesterId,
                                       final Integer pYear, final Integer pSemester, final UriInfo pUriInfo) throws Exception {
     List<CourseTeacher> courseTeachers = getContentManager().getCourseTeachers(pProgramId, pSemesterId, pYear, pSemester);
+    return buildJsonResponse(courseTeachers, pUriInfo);
+  }
+
+  public JsonObject getCourseTeachers(final Integer pProgramId, final Integer pSemesterId,
+                                      final CourseCategory pCourseCategory, final UriInfo pUriInfo) throws Exception {
+    List<CourseTeacher> courseTeachers = getContentManager().getCourseTeachers(pProgramId, pSemesterId, pCourseCategory);
+    return buildJsonResponse(courseTeachers, pUriInfo);
+  }
+
+  public JsonObject getCourseTeachers(final Integer pProgramId, final Integer pSemesterId, final Integer pYear,
+                                      final CourseCategory pCourseCategory, final UriInfo pUriInfo) throws Exception {
+    List<CourseTeacher> courseTeachers = getContentManager().getCourseTeachers(pProgramId, pSemesterId, pYear, pCourseCategory);
+    return buildJsonResponse(courseTeachers, pUriInfo);
+  }
+
+  public JsonObject getCourseTeachers(final Integer pProgramId, final Integer pSemesterId, final Integer pYear,
+                                      final Integer pSemester, final CourseCategory pCourseCategory,
+                                      final UriInfo pUriInfo) throws Exception {
+    List<CourseTeacher> courseTeachers = getContentManager().getCourseTeachers(pProgramId, pSemesterId, pYear, pSemester, pCourseCategory);
     return buildJsonResponse(courseTeachers, pUriInfo);
   }
 

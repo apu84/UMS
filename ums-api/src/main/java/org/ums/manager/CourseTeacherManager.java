@@ -2,6 +2,7 @@ package org.ums.manager;
 
 import org.ums.domain.model.mutable.MutableCourseTeacher;
 import org.ums.domain.model.regular.CourseTeacher;
+import org.ums.enums.CourseCategory;
 
 import java.util.List;
 
@@ -12,5 +13,17 @@ public interface CourseTeacherManager extends ContentManager<CourseTeacher, Muta
 
   List<CourseTeacher> getCourseTeachers(final Integer pProgramId, final Integer pSemesterId);
 
-  List<CourseTeacher> getCourseTeachers(final Integer pProgramId, final Integer pSemesterId, final Integer pYear, final Integer pSemester);
+  List<CourseTeacher> getCourseTeachers(final Integer pProgramId, final Integer pSemesterId,
+                                        final CourseCategory pCourseCategory);
+
+  List<CourseTeacher> getCourseTeachers(final Integer pProgramId, final Integer pSemesterId, final Integer pYear);
+
+  List<CourseTeacher> getCourseTeachers(final Integer pProgramId, final Integer pSemesterId, final Integer pYear,
+                                        final CourseCategory pCourseCategory);
+
+  List<CourseTeacher> getCourseTeachers(final Integer pProgramId, final Integer pSemesterId, final Integer pYear,
+                                        final Integer pSemester);
+
+  List<CourseTeacher> getCourseTeachers(final Integer pProgramId, final Integer pSemesterId, final Integer pYear,
+                                        final Integer pSemester, final CourseCategory pCourseCategory);
 }

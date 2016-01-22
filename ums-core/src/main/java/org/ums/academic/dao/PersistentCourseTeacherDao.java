@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.ums.academic.model.PersistentCourseTeacher;
 import org.ums.domain.model.mutable.MutableCourseTeacher;
 import org.ums.domain.model.regular.CourseTeacher;
+import org.ums.enums.CourseCategory;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -33,6 +34,7 @@ public class PersistentCourseTeacherDao extends CourseTeacherDaoDecorator {
           "                    AND t1.syllabus_id = t2.syllabus_id\n" +
           "                    AND t1.year = t2.year\n" +
           "                    AND T1.SEMESTER = t2.semester\n" +
+          "%s" +
           "%s" +
           "           ORDER BY t2.syllabus_id,\n" +
           "                    t2.syllabus_id,\n" +
@@ -100,14 +102,38 @@ public class PersistentCourseTeacherDao extends CourseTeacherDaoDecorator {
 
   @Override
   public List<CourseTeacher> getCourseTeachers(Integer pProgramId, Integer pSemesterId) {
-    String query = String.format(SELECT_BY_SEMESTER_PROGRAM, "");
+    String query = String.format(SELECT_BY_SEMESTER_PROGRAM, "", "");
     return mJdbcTemplate.query(query, new Object[]{pProgramId, pSemesterId}, new CourseTeacherRowMapper());
   }
 
   @Override
   public List<CourseTeacher> getCourseTeachers(Integer pProgramId, Integer pSemesterId, Integer pYear, Integer pSemester) {
-    String query = String.format(SELECT_BY_SEMESTER_PROGRAM, " AND t2.year = ? AND T2.SEMESTER = ? ");
+    String query = String.format(SELECT_BY_SEMESTER_PROGRAM, " AND t2.year = ? AND T2.SEMESTER = ? ", "");
     return mJdbcTemplate.query(query, new Object[]{pProgramId, pSemesterId, pYear, pSemester}, new CourseTeacherRowMapper());
+  }
+
+  @Override
+  public List<CourseTeacher> getCourseTeachers(Integer pProgramId, Integer pSemesterId, Integer pYear) {
+    String query = String.format(SELECT_BY_SEMESTER_PROGRAM, " AND t2.year = ? ", "");
+    return mJdbcTemplate.query(query, new Object[]{pProgramId, pSemesterId, pYear}, new CourseTeacherRowMapper());
+  }
+
+  @Override
+  public List<CourseTeacher> getCourseTeachers(Integer pProgramId, Integer pSemesterId, Integer pYear, CourseCategory pCourseCategory) {
+    String query = String.format(SELECT_BY_SEMESTER_PROGRAM, " AND t2.year = ? ", " AND t2.COURSE_CATEGORY = ? ");
+    return mJdbcTemplate.query(query, new Object[]{pProgramId, pSemesterId, pYear, pCourseCategory.getValue()}, new CourseTeacherRowMapper());
+  }
+
+  @Override
+  public List<CourseTeacher> getCourseTeachers(Integer pProgramId, Integer pSemesterId, Integer pYear, Integer pSemester, CourseCategory pCourseCategory) {
+    String query = String.format(SELECT_BY_SEMESTER_PROGRAM, " AND t2.year = ? ", " AND t2.COURSE_CATEGORY = ? ");
+    return mJdbcTemplate.query(query, new Object[]{pProgramId, pSemesterId, pYear, pSemester, pCourseCategory.getValue()}, new CourseTeacherRowMapper());
+  }
+
+  @Override
+  public List<CourseTeacher> getCourseTeachers(Integer pProgramId, Integer pSemesterId, CourseCategory pCourseCategory) {
+    String query = String.format(SELECT_BY_SEMESTER_PROGRAM, "", " AND t2.COURSE_CATEGORY = ? ");
+    return mJdbcTemplate.query(query, new Object[]{pProgramId, pSemesterId, pCourseCategory.getValue()}, new CourseTeacherRowMapper());
   }
 
   class CourseTeacherRowMapper implements RowMapper<CourseTeacher> {

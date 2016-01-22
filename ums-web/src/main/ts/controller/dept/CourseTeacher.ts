@@ -140,9 +140,22 @@ module ums {
         }
       }
 
-      this.httpClient.get("academic/courseTeacher/programId/" + this.$scope.courseTeacherSearchParamModel.programId
-          + "/semesterId/" + this.$scope.courseTeacherSearchParamModel.semesterId + "/year/"
-          + this.$scope.courseTeacherSearchParamModel.academicYearId + "/semester/" + this.$scope.courseTeacherSearchParamModel.academicSemesterId,
+      var fetchUri:string = "academic/courseTeacher/programId/" + this.$scope.courseTeacherSearchParamModel.programId
+          + "/semesterId/" + this.$scope.courseTeacherSearchParamModel.semesterId;
+
+      if (this.$scope.courseTeacherSearchParamModel.academicYearId) {
+        fetchUri = fetchUri + "/year/" + this.$scope.courseTeacherSearchParamModel.academicYearId;
+      }
+
+      if (this.$scope.courseTeacherSearchParamModel.academicSemesterId) {
+        fetchUri = fetchUri + "/semester/" + this.$scope.courseTeacherSearchParamModel.academicSemesterId;
+      }
+
+      if (this.$scope.courseTeacherSearchParamModel.courseCategoryId) {
+        fetchUri = fetchUri + "/category/" + this.$scope.courseTeacherSearchParamModel.courseCategoryId;
+      }
+
+      this.httpClient.get(fetchUri,
           this.appConstants.mimeTypeJson,
           (data:ICourseTeachers, etag:string)=> {
             this.formatCourseTeacher(data.entries);
@@ -222,7 +235,7 @@ module ums {
       this.formattedMap[courseId].selectedTeachers[this.newTeacherId].id = this.newTeacherId + "";
     }
 
-    private editCourseTeacher(courseId: string): void {
+    private editCourseTeacher(courseId:string):void {
       console.debug("edit");
       this.$scope.entries[courseId].editMode = true;
       //console.debug("%o", this.$scope.entries[courseId].editMode);
@@ -238,7 +251,7 @@ module ums {
       savedCourseTeacher.entries = [];
 
       var saved:ICourseTeacher = this.savedCopy[courseId];
-      var modified: ICourseTeacher = this.formattedMap[courseId];
+      var modified:ICourseTeacher = this.formattedMap[courseId];
       console.debug("%o", modified);
 
       for (var teacherId in saved.selectedTeachers) {
@@ -274,7 +287,7 @@ module ums {
               }
             }
             for (var i = 0; i < savedTeacher.selectedSections.length; i++) {
-              var sectionFound: boolean = false;
+              var sectionFound:boolean = false;
               for (var j = 0; j < modifiedTeacher.sections.length; j++) {
                 if (savedTeacher.selectedSections[i].id == modifiedTeacher.sections[j]) {
                   sectionFound = true;
@@ -300,7 +313,7 @@ module ums {
       for (var teacherId in modified.selectedTeachers) {
         if (modified.selectedTeachers.hasOwnProperty(teacherId)) {
           if (!saved.selectedTeachers.hasOwnProperty(teacherId)) {
-            var modifiedSelectedSections: Array<string> = modified.selectedTeachers[teacherId].sections;
+            var modifiedSelectedSections:Array<string> = modified.selectedTeachers[teacherId].sections;
             for (var i = 0; i < modifiedSelectedSections.length; i++) {
               console.debug("insert 1");
               savedCourseTeacher.entries.push({
@@ -313,11 +326,11 @@ module ums {
             }
 
           } else {
-            var modifiedTeacher: ITeacher = modified.selectedTeachers[teacherId];
-            var savedTeacher: ITeacher = saved.selectedTeachers[teacherId];
+            var modifiedTeacher:ITeacher = modified.selectedTeachers[teacherId];
+            var savedTeacher:ITeacher = saved.selectedTeachers[teacherId];
 
             if (teacherId != modifiedTeacher.id) {
-              var modifiedSelectedSections: Array<string> = modified.selectedTeachers[teacherId].sections;
+              var modifiedSelectedSections:Array<string> = modified.selectedTeachers[teacherId].sections;
               for (var i = 0; i < modifiedSelectedSections.length; i++) {
                 console.debug("insert 2");
                 savedCourseTeacher.entries.push({
@@ -331,7 +344,7 @@ module ums {
             }
 
             for (var i = 0; i < modifiedTeacher.sections.length; i++) {
-              var sectionFound: boolean = false;
+              var sectionFound:boolean = false;
               for (var j = 0; j < savedTeacher.selectedSections.length; j++) {
                 if (modifiedTeacher.sections[i] == savedTeacher.selectedSections[j].id) {
                   sectionFound = true;
@@ -360,8 +373,8 @@ module ums {
             console.debug("saved");
             this.fetchCourseTeacherInfo();
           }).error((error) => {
-            console.error(error);
-          });
+        console.error(error);
+      });
     }
   }
   UMS.controller('CourseTeacher', CourseTeacher);
