@@ -135,12 +135,12 @@
             </td>
             <td>
               <div class="mbs">
-                <button class="btn btn-xs btn-success filter-submit" data-ng-click="editCourseTeacher(courseId)">
+                <button class="btn btn-xs btn-success filter-submit" data-ng-click="editCourseTeacher(courseId)" data-ng-if="!courseTeacher.editMode">
                   <i class="fa fa-plus-square-o"></i>
                   Edit
                 </button>
               </div>
-              <div class="mbs" data-ng-if="courseTeacher.editMode || courseTeacher.selectedTeachers.length == 0">
+              <div class="mbs" data-ng-if="courseTeacher.editMode || isEmpty(courseTeacher.selectedTeachers)">
                 <button class="btn btn-xs btn-success filter-submit" data-ng-click="addTeacher(courseId)">
                   <i class="fa fa-plus-square-o"></i>
                   Add More

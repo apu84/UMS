@@ -57,7 +57,7 @@ public class CourseTeacherResource extends Resource {
   }
 
   @GET
-  @Path("/programId" + "/{program-id}" + "/semesterId" + "/{semester-id}" + "/category" + "{category}")
+  @Path("/programId" + "/{program-id}" + "/semesterId" + "/{semester-id}" + "/category" + "/{category}")
   public JsonObject get(final @Context Request pRequest,
                         final @PathParam("program-id") Integer pProgramId,
                         final @PathParam("semester-id") Integer pSemesterId,
@@ -67,7 +67,7 @@ public class CourseTeacherResource extends Resource {
   }
 
   @GET
-  @Path("/programId" + "/{program-id}" + "/semesterId" + "/{semester-id}" + "/year" + "/{year}" + "/category" + "{category}")
+  @Path("/programId" + "/{program-id}" + "/semesterId" + "/{semester-id}" + "/year" + "/{year}" + "/category" + "/{category}")
   public JsonObject get(final @Context Request pRequest,
                         final @PathParam("program-id") Integer pProgramId,
                         final @PathParam("semester-id") Integer pSemesterId,
@@ -77,7 +77,7 @@ public class CourseTeacherResource extends Resource {
   }
 
   @GET
-  @Path("/programId" + "/{program-id}" + "/semesterId" + "/{semester-id}" + "/year" + "/{year}" + "/semester" + "/{semester}" + "/category" + "{category}")
+  @Path("/programId" + "/{program-id}" + "/semesterId" + "/{semester-id}" + "/year" + "/{year}" + "/semester" + "/{semester}" + "/category" + "/{category}")
   public JsonObject get(final @Context Request pRequest,
                         final @PathParam("program-id") Integer pProgramId,
                         final @PathParam("semester-id") Integer pSemesterId,
