@@ -10,6 +10,7 @@ module ums {
     courseTeacherSearchParamModel:CourseTeacherSearchParamModelImp;
     data:any;
     loadingVisibility:boolean;
+    contentVisibility:boolean;
     fetchCourseTeacherInfo:Function;
     entries: IFormattedCourseTeacherMap;
     addTeacher: Function;
@@ -98,6 +99,7 @@ module ums {
       };
 
       $scope.loadingVisibility = false;
+      $scope.contentVisibility=false;
       $scope.fetchCourseTeacherInfo = this.fetchCourseTeacherInfo.bind(this);
       $scope.addTeacher = this.addTeacher.bind(this);
       $scope.editCourseTeacher = this.editCourseTeacher.bind(this);
@@ -108,6 +110,8 @@ module ums {
         iconBase: 'fa',
         tickIcon: 'fa-check'
       });
+
+
 
       this.teachersList = {};
       this.formattedMap = {};
@@ -123,6 +127,7 @@ module ums {
 
 
       this.$scope.loadingVisibility = true;
+      this.$scope.contentVisibility = false;
 
       this.renderHeader();
 
@@ -153,6 +158,7 @@ module ums {
             this.populateTeachers(this.$scope.entries);
             //this.$scope.entries = data.entries;
             this.$scope.loadingVisibility = false;
+            this.$scope.contentVisibility = true;
           });
     }
 
@@ -231,12 +237,24 @@ module ums {
       this.newTeacherId = this.newTeacherId - 1;
       this.formattedMap[courseId].selectedTeachers[this.newTeacherId] = {};
       this.formattedMap[courseId].selectedTeachers[this.newTeacherId].id = this.newTeacherId + "";
+
+      setTimeout(function(){ $('.selectpicker').selectpicker({
+        iconBase: 'fa',
+        tickIcon: 'fa-check'
+      }); }, 50);
+
+
     }
 
     private editCourseTeacher(courseId:string):void {
       console.debug("edit");
       this.$scope.entries[courseId].editMode = true;
       //console.debug("%o", this.$scope.entries[courseId].editMode);
+      setTimeout(function(){ $('.selectpicker').selectpicker({
+        iconBase: 'fa',
+        tickIcon: 'fa-check'
+      }); }, 50);
+
     }
 
     private removeCourseTeacher(courseId:string, teacherId:string):void {

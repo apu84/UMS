@@ -78,7 +78,7 @@
           <div class="bounce2"></div>
           <div class="bounce3"></div>
         </div>
-
+        <div data-ng-if="contentVisibility">
         <div class="alert alert-success" style="color: #3c763d;font-weight: bold;padding: 5px;">
           {{academicYear}} -{{academicSemester}} : {{courseCategory}} Courses
         </div>
@@ -121,11 +121,10 @@
                     </select>
                     <span data-ng-if="!courseTeacher.editMode" data-ng-repeat="section in selectedTeacher.sections">{{section}}</span>
                   </td>
-                  <td width="60px">
+                  <td width="60px;" style="padding-left: 5px;">
                     <a href="javascript:;" class="btn btn-xs btn-default" data-ng-if="courseTeacher.editMode"
                        data-ng-click="removeCourseTeacher(courseId, selectedTeacher.id)">
-                      <i class="fa remove"></i>&nbsp;
-                      X
+                      <i class="fa fa-times" style="color: red;"></i>
                     </a>
                   </td>
                 </tr>
@@ -158,10 +157,10 @@
           </tr>
           </tbody>
         </table>
-
+        </div>
 
       </div>
-      <div class="form-actions text-right pal" style="margin-top:25px;">
+      <div class="form-actions text-right pal" style="margin-top:25px;display: none;">
         <button type="button" class="btn btn-success" onclick="fetchCourseTeacherInfo()">Save Course-Teacher Info
         </button>
       </div>
