@@ -19,6 +19,9 @@ module ums {
     programName: string;
     departmentName: string;
     semesterName: string;
+    academicYear: string;
+    academicSemester: string;
+    courseCategory: string
   }
 
   interface ITeacher {
@@ -120,38 +123,26 @@ module ums {
 
 
       this.$scope.loadingVisibility = true;
+
+      this.renderHeader();
+
       this.formattedMap = {};
-
-      for (var i = 0; i < this.$scope.courseTeacherSearchParamModel.programs.length; i++) {
-        if (this.$scope.courseTeacherSearchParamModel.programs[i].id == this.$scope.courseTeacherSearchParamModel.programId) {
-          this.$scope.programName = this.$scope.courseTeacherSearchParamModel.programs[i].longName;
-        }
-      }
-
-      for (var i = 0; i < this.$scope.courseTeacherSearchParamModel.semesters.length; i++) {
-        if (this.$scope.courseTeacherSearchParamModel.semesters[i].id == this.$scope.courseTeacherSearchParamModel.semesterId) {
-          this.$scope.semesterName = this.$scope.courseTeacherSearchParamModel.semesters[i].name;
-        }
-      }
-
-      for (var i = 0; i < this.$scope.courseTeacherSearchParamModel.departments.length; i++) {
-        if (this.$scope.courseTeacherSearchParamModel.departments[i].id == this.$scope.courseTeacherSearchParamModel.departmentId) {
-          this.$scope.departmentName = this.$scope.courseTeacherSearchParamModel.departments[i].name;
-        }
-      }
 
       var fetchUri:string = "academic/courseTeacher/programId/" + this.$scope.courseTeacherSearchParamModel.programId
           + "/semesterId/" + this.$scope.courseTeacherSearchParamModel.semesterId;
 
-      if (this.$scope.courseTeacherSearchParamModel.academicYearId) {
+      if (this.$scope.courseTeacherSearchParamModel.academicYearId
+          && this.$scope.courseTeacherSearchParamModel.academicYearId != '') {
         fetchUri = fetchUri + "/year/" + this.$scope.courseTeacherSearchParamModel.academicYearId;
       }
 
-      if (this.$scope.courseTeacherSearchParamModel.academicSemesterId) {
+      if (this.$scope.courseTeacherSearchParamModel.academicSemesterId
+          && this.$scope.courseTeacherSearchParamModel.academicSemesterId != '') {
         fetchUri = fetchUri + "/semester/" + this.$scope.courseTeacherSearchParamModel.academicSemesterId;
       }
 
-      if (this.$scope.courseTeacherSearchParamModel.courseCategoryId) {
+      if (this.$scope.courseTeacherSearchParamModel.courseCategoryId
+          && this.$scope.courseTeacherSearchParamModel.courseCategoryId != '') {
         fetchUri = fetchUri + "/category/" + this.$scope.courseTeacherSearchParamModel.courseCategoryId;
       }
 
@@ -213,7 +204,13 @@ module ums {
 
     private getTeachers(courseTeacher:ICourseTeacher):ng.IPromise<any> {
       var defer = this.$q.defer();
-      courseTeacher.sections = this.appConstants.theorySections;
+
+      var sectionArray = [];
+      sectionArray.push.apply(sectionArray, this.appConstants.theorySections);
+      sectionArray.push.apply(sectionArray, this.appConstants.sessionalSections);
+
+      courseTeacher.sections = sectionArray;
+
       if (this.teachersList[courseTeacher.courseOfferedByDepartmentId]) {
         courseTeacher.teachers = this.teachersList[courseTeacher.courseOfferedByDepartmentId];
         defer.resolve(null);
@@ -230,6 +227,7 @@ module ums {
     }
 
     private addTeacher(courseId:string):void {
+      this.$scope.entries[courseId].editMode = true;
       this.newTeacherId = this.newTeacherId - 1;
       this.formattedMap[courseId].selectedTeachers[this.newTeacherId] = {};
       this.formattedMap[courseId].selectedTeachers[this.newTeacherId].id = this.newTeacherId + "";
@@ -259,7 +257,6 @@ module ums {
           if (!modified.selectedTeachers.hasOwnProperty(teacherId)) {
             var selectedSections = saved.selectedTeachers[teacherId].selectedSections;
             for (var i = 0; i < selectedSections.length; i++) {
-              console.debug("delete 1");
               savedCourseTeacher.entries.push({
                 id: selectedSections[i].uniqueId,
                 courseId: courseId,
@@ -276,7 +273,6 @@ module ums {
             if (teacherId != modifiedTeacher.id) {
               var selectedSections = saved.selectedTeachers[teacherId].selectedSections;
               for (var i = 0; i < selectedSections.length; i++) {
-                console.debug("delete 2");
                 savedCourseTeacher.entries.push({
                   id: selectedSections[i].uniqueId,
                   courseId: courseId,
@@ -295,7 +291,6 @@ module ums {
               }
 
               if (!sectionFound) {
-                console.debug("delete 3");
                 savedCourseTeacher.entries.push({
                   id: savedTeacher.selectedSections[i].uniqueId,
                   courseId: courseId,
@@ -315,7 +310,6 @@ module ums {
           if (!saved.selectedTeachers.hasOwnProperty(teacherId)) {
             var modifiedSelectedSections:Array<string> = modified.selectedTeachers[teacherId].sections;
             for (var i = 0; i < modifiedSelectedSections.length; i++) {
-              console.debug("insert 1");
               savedCourseTeacher.entries.push({
                 courseId: courseId,
                 semesterId: this.$scope.courseTeacherSearchParamModel.semesterId,
@@ -332,7 +326,6 @@ module ums {
             if (teacherId != modifiedTeacher.id) {
               var modifiedSelectedSections:Array<string> = modified.selectedTeachers[teacherId].sections;
               for (var i = 0; i < modifiedSelectedSections.length; i++) {
-                console.debug("insert 2");
                 savedCourseTeacher.entries.push({
                   courseId: courseId,
                   semesterId: this.$scope.courseTeacherSearchParamModel.semesterId,
@@ -350,9 +343,7 @@ module ums {
                   sectionFound = true;
                 }
               }
-              console.debug("sectionFound: %o", sectionFound);
               if (!sectionFound) {
-                console.debug("insert 3");
                 savedCourseTeacher.entries.push({
                   courseId: courseId,
                   semesterId: this.$scope.courseTeacherSearchParamModel.semesterId,
@@ -375,6 +366,44 @@ module ums {
           }).error((error) => {
         console.error(error);
       });
+    }
+
+    private renderHeader():void {
+      for (var i = 0; i < this.$scope.courseTeacherSearchParamModel.programs.length; i++) {
+        if (this.$scope.courseTeacherSearchParamModel.programs[i].id == this.$scope.courseTeacherSearchParamModel.programId) {
+          this.$scope.programName = this.$scope.courseTeacherSearchParamModel.programs[i].longName;
+        }
+      }
+
+      for (var i = 0; i < this.$scope.courseTeacherSearchParamModel.semesters.length; i++) {
+        if (this.$scope.courseTeacherSearchParamModel.semesters[i].id == this.$scope.courseTeacherSearchParamModel.semesterId) {
+          this.$scope.semesterName = this.$scope.courseTeacherSearchParamModel.semesters[i].name;
+        }
+      }
+
+      for (var i = 0; i < this.$scope.courseTeacherSearchParamModel.departments.length; i++) {
+        if (this.$scope.courseTeacherSearchParamModel.departments[i].id == this.$scope.courseTeacherSearchParamModel.departmentId) {
+          this.$scope.departmentName = this.$scope.courseTeacherSearchParamModel.departments[i].name;
+        }
+      }
+
+      for (var i = 0; i < this.$scope.data.academicYearOptions.length; i++) {
+        if (this.$scope.data.academicYearOptions[i].id == this.$scope.courseTeacherSearchParamModel.academicYearId) {
+          this.$scope.academicYear = this.$scope.data.academicYearOptions[i].name;
+        }
+      }
+
+      for (var i = 0; i < this.$scope.data.academicSemesterOptions.length; i++) {
+        if (this.$scope.data.academicSemesterOptions[i].id == this.$scope.courseTeacherSearchParamModel.academicSemesterId) {
+          this.$scope.academicSemester = this.$scope.data.academicSemesterOptions[i].name;
+        }
+      }
+
+      for (var i = 0; i < this.$scope.data.courseCategoryOptions.length; i++) {
+        if (this.$scope.data.courseCategoryOptions[i].id == this.$scope.courseTeacherSearchParamModel.courseCategoryId) {
+          this.$scope.courseCategory = this.$scope.data.courseCategoryOptions[i].name;
+        }
+      }
     }
   }
   UMS.controller('CourseTeacher', CourseTeacher);

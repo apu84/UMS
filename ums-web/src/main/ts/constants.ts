@@ -194,6 +194,16 @@ module ums {
           {id: "C", name: "C"},
           {id: "D", name: "D"}
         ],
+        sessionalSections: [
+          {id: "A1", name: "A1"},
+          {id: "B1", name: "B1"},
+          {id: "C1", name: "C1"},
+          {id: "D1", name: "D1"},
+          {id: "A2", name: "A2"},
+          {id: "B2", name: "B2"},
+          {id: "C2", name: "C2"},
+          {id: "D2", name: "D2"}
+        ],
         mimeTypeJson : 'application/json',
         mimeTypePdf : 'application/pdf'
       };
