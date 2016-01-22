@@ -67,7 +67,8 @@ module ums {
                   'vendors/bootstrap-datepicker/css/datepicker.css',
                   'vendors/jquery-validate/jquery.validate.min.js',
                   'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
-                  'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
+                  'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
+                  'vendors/jquery-notify/jquery.notify.js'
                 ]
               });
             }]
@@ -245,6 +246,19 @@ module ums {
                   'vendors/select2/select2.min.js',
                   'vendors/bootstrap-select/bootstrap-select.min.js',
                   'vendors/multi-select/js/jquery.multi-select.js']
+              });
+            }]
+          }
+        })
+        .state('classRoutine', {
+          url: "/classRoutine",
+          templateUrl: 'views/dept/class-routine.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: ['vendors/jquery-file-upload/css/jquery.fileupload.css',
+                  'vendors/jquery-file-upload/css/jquery.fileupload-ui.css',
+                  'vendors/jquery-file-upload/css/blueimp-gallery.min.css']
               });
             }]
           }

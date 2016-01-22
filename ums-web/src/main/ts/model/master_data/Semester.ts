@@ -6,7 +6,7 @@ module ums {
     programTypeName: string;
     semesterTypeId: string;
     semesterTypeName: string;
-    year: number;
+    year: any;
     statusId: number;
     statusName: string;
     startDate:string;

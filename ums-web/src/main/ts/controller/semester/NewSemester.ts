@@ -1,6 +1,7 @@
 ///<reference path="../../model/master_data/Semester.ts"/>
 ///<reference path="../../service/HttpClient.ts"/>
 ///<reference path="../../lib/jquery.notific8.d.ts"/>
+///<reference path="../../lib/jquery.notify.d.ts"/>
 module ums {
 
   interface INewSemesterScope extends ng.IScope {
@@ -30,8 +31,14 @@ module ums {
       });
       $scope.submit = this.submit.bind(this);
 
+
+
     }
     private submit():void {
+      $.notify.defaults({
+        className: 'success'
+      });
+      //$.notify("Access granted", { position:"top",autoHide:false });
       this.$scope. semester.semesterName=$("#semesterType option:selected").text()+","+this.$scope.semester.year;
       var semesterId=this.$scope.semester.programTypeId+this.$scope.semester.semesterTypeId+this.$scope.semester.year;
       this.$scope. semester.semesterId=+semesterId;
@@ -39,8 +46,14 @@ module ums {
       this.httpClient.post('academic/semester/', this.$scope.semester, 'application/json')
           .success(() => {
             $.notific8('Successfully created a new semester.');
+            this.$scope. semester.programTypeId="";
+            this.$scope. semester.semesterTypeId="";
+            this.$scope. semester.year="";
+            this.$scope. semester.startDate="";
+            this.$scope. semester.endDate="";
           }).error((data) => {
       })
+
     }
 
   }

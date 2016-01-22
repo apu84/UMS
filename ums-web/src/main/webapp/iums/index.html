@@ -69,12 +69,14 @@
         <div id="chat-form" ng-include="'templates/states/_includes/chat-form.html'" ng-class="{show:header.chat}" class="fixed"></div>
         <div id="page-wrapper" ng-class="header.animation" class="animated">
             <div id="title-breadcrumb-option-demo" ng-include="'templates/states/breadcrumb.html'" class="page-title-breadcrumb"></div>
-            <div ui-view="" class="page-content"></div>
+            <div ui-view="" class="page-content">
+            </div>
             <!--BEGIN CONTENT QUICK SIDEBAR-->
             <div ng-include="'templates/states/_includes/quick-sidebar.html'" ng-class="{show:header.history}" class="quick-sidebar"></div>
             <!--END CONTENT QUICK SIDEBAR-->
+            <div id="footer" ng-include="'templates/states/footer.html'" ng-show="header.footer"></div>
         </div>
-        <div id="footer" ng-include="'templates/states/footer.html'" ng-show="header.footer"></div>
+
     </div>
 </div>
 <div hide="hide" class="extra-page"></div>

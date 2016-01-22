@@ -6,11 +6,11 @@
   "dest": "target/ums-web-trunk-SNAPSHOT/",
   "devDependencies": {
     "grunt": "~0.4.1",
-    "grunt-contrib-watch": "*",
-    "load-grunt-tasks": "*",
     "grunt-concurrent": "*",
+    "grunt-contrib-watch": "^0.1.18",
     "grunt-sync": "*",
-    "grunt-ts": "~5.2.0"
+    "grunt-ts": "~5.2.0",
+    "load-grunt-tasks": "*"
   },
   "engines": {
     "node": ">=0.8.0"

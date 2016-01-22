@@ -131,7 +131,15 @@ body.sidebar-colors #wrapper #sidebar ul#side-menu li ul.nav-second-level li.act
     border-color: #adadad !important;
 }
 
-body {
-    color: #575757 !important;
+body{
+    color:#474747 !important;
+    /*color: #575757 !important;*/
+}
+
+.shadowPanel{
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+    border-color:#e4e4e4;
+    transition:box-shadow 0.2s ease-in 0s;
+    border-radius:2px;
 }
 /* Global  Font Color  End*/

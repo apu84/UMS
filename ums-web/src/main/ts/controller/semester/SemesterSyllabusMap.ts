@@ -47,6 +47,10 @@ module ums {
       $scope.syllabusTextBoxVisibility=true;
       $scope.syllabusSelectBoxVisibility=false;
       $scope.noRecordVisibility=false;
+      $scope.loadingVisibility1=false;
+      $scope.loadingVisibility2=false;
+      $scope.mapTableVisibility=false;
+      $scope.mapDetailVisiblity=false;
 
       $scope.$watch(
           () => {return $scope.semesterSyllabusMapModel.departmentId;},

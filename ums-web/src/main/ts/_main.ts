@@ -5,6 +5,8 @@
 /// <reference path='lib/jqueryui.d.ts'/>
 /// <reference path='lib/jquery.slimScroll.d.ts'/>
 /// <reference path='lib/jquery.notific8.d.ts'/>
+/// <reference path='lib/jquery.notify.d.ts'/>
+/// <reference path='lib/select2.d.ts'/>
 /// <reference path='lib/bootstrap.selectpicker.d.ts'/>
 /// <reference path='lib/zabuto_calendar.d.ts'/>
 /// <reference path='lib/bootstrap-switch.d.ts'/>
