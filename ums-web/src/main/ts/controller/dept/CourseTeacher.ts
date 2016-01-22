@@ -203,10 +203,7 @@ module ums {
       if (this.$scope.entries.hasOwnProperty(courseId)) {
         this.getTeachers(this.$scope.entries[courseId]).then(()=> {
             //do nothing
-          /*$('.select2-size').select2({
-           placeholder: "Select an option",
-           allowClear: true
-           });*/
+
           });
       }
     }
@@ -242,11 +239,14 @@ module ums {
       this.formattedMap[courseId].selectedTeachers[this.newTeacherId] = {};
       this.formattedMap[courseId].selectedTeachers[this.newTeacherId].id = this.newTeacherId + "";
 
+      setTimeout(function(){ $('.select2-size').select2({
+        placeholder: "Select an option",
+        allowClear: true
+      });}, 50);
       setTimeout(function(){ $('.selectpicker').selectpicker({
         iconBase: 'fa',
         tickIcon: 'fa-check'
       }); }, 50);
-
 
     }
 
@@ -254,11 +254,14 @@ module ums {
       this.populateTeachers(courseId);
       this.$scope.entries[courseId].editMode = true;
       //console.debug("%o", this.$scope.entries[courseId].editMode);
+      setTimeout(function(){ $('.select2-size').select2({
+        placeholder: "Select an option",
+        allowClear: true
+      }); }, 50);
       setTimeout(function(){ $('.selectpicker').selectpicker({
         iconBase: 'fa',
         tickIcon: 'fa-check'
       }); }, 50);
-
     }
 
     private removeCourseTeacher(courseId:string, teacherId:string):void {

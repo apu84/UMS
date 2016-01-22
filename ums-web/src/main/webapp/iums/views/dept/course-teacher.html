@@ -109,7 +109,7 @@
                               data-ng-model="selectedTeacher.id"
                               data-ng-options="teacher.id as teacher.name for teacher in courseTeacher.teachers">
                       </select>
-                      <span data-ng-if="!courseTeacher.editMode">{{selectedTeacher.name}}</span>
+                      <div style="padding-left:5px;padding-top:5px;" data-ng-if="!courseTeacher.editMode">{{selectedTeacher.name}}</div>
                     </div>
                   </td>
                   <td width="4px;">&nbsp;</td>
