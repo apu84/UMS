@@ -18,8 +18,8 @@ module ums {
   }
 
   interface ITeacher {
-    id: string;
-    name: string;
+    id?: string;
+    name?: string;
     sections?: Array<string>;
   }
 
@@ -185,7 +185,7 @@ module ums {
 
     private addTeacher(courseId:string):void {
       this.newTeacherId = this.newTeacherId - 1;
-      this.formattedMap[courseId].selectedTeachers[this.newTeacherId] = {id: this.newTeacherId};
+      this.formattedMap[courseId].selectedTeachers[this.newTeacherId] = {id: this.newTeacherId + ""};
     }
 
     private editCourserTeacher(courseId:string):void {
