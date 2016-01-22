@@ -42,7 +42,8 @@ public class PersistentCourseTeacherDao extends CourseTeacherDaoDecorator {
           "                    t2.semester) t3\n" +
           "       LEFT JOIN\n" +
           "          course_teacher t4\n" +
-          "       ON t3.course_id = t4.course_id";
+          "       ON t3.course_id = t4.course_id "+
+          "ORDER BY t3.COURSE_ID, t4.TEACHER_ID, t4.SECTION";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -126,7 +127,7 @@ public class PersistentCourseTeacherDao extends CourseTeacherDaoDecorator {
 
   @Override
   public List<CourseTeacher> getCourseTeachers(Integer pProgramId, Integer pSemesterId, Integer pYear, Integer pSemester, CourseCategory pCourseCategory) {
-    String query = String.format(SELECT_BY_SEMESTER_PROGRAM, " AND t2.year = ? ", " AND t2.COURSE_CATEGORY = ? ");
+    String query = String.format(SELECT_BY_SEMESTER_PROGRAM, " AND t2.year = ? AND t2.semester = ? ", " AND t2.COURSE_CATEGORY = ? ");
     return mJdbcTemplate.query(query, new Object[]{pProgramId, pSemesterId, pYear, pSemester, pCourseCategory.getValue()}, new CourseTeacherRowMapper());
   }
 

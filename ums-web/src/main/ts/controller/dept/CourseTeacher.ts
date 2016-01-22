@@ -22,7 +22,8 @@ module ums {
     semesterName: string;
     academicYear: string;
     academicSemester: string;
-    courseCategory: string
+    courseCategory: string;
+    isEmpty: Function;
   }
 
   interface ITeacher {
@@ -105,11 +106,7 @@ module ums {
       $scope.editCourseTeacher = this.editCourseTeacher.bind(this);
       $scope.removeCourseTeacher = this.removeCourseTeacher.bind(this);
       $scope.saveCourseTeacher = this.saveCourseTeacher.bind(this);
-
-      $('.selectpicker').selectpicker({
-        iconBase: 'fa',
-        tickIcon: 'fa-check'
-      });
+      $scope.isEmpty = this.isEmpty.bind(this);
 
 
 
@@ -155,7 +152,11 @@ module ums {
           this.appConstants.mimeTypeJson,
           (data:ICourseTeachers, etag:string)=> {
             this.formatCourseTeacher(data.entries);
-            this.populateTeachers(this.$scope.entries);
+
+            $('.selectpicker').selectpicker({
+              iconBase: 'fa',
+              tickIcon: 'fa-check'
+            });
             //this.$scope.entries = data.entries;
             this.$scope.loadingVisibility = false;
             this.$scope.contentVisibility = true;
@@ -198,13 +199,15 @@ module ums {
       this.$scope.entries = this.formattedMap;
     }
 
-    private populateTeachers(courseTeachers:IFormattedCourseTeacherMap):void {
-      for (var courseId in courseTeachers) {
-        if (courseTeachers.hasOwnProperty(courseId)) {
-          this.getTeachers(courseTeachers[courseId]).then(()=> {
+    private populateTeachers(courseId: string): void {
+      if (this.$scope.entries.hasOwnProperty(courseId)) {
+        this.getTeachers(this.$scope.entries[courseId]).then(()=> {
             //do nothing
+          /*$('.select2-size').select2({
+           placeholder: "Select an option",
+           allowClear: true
+           });*/
           });
-        }
       }
     }
 
@@ -233,6 +236,7 @@ module ums {
     }
 
     private addTeacher(courseId:string):void {
+      this.populateTeachers(courseId);
       this.$scope.entries[courseId].editMode = true;
       this.newTeacherId = this.newTeacherId - 1;
       this.formattedMap[courseId].selectedTeachers[this.newTeacherId] = {};
@@ -247,7 +251,7 @@ module ums {
     }
 
     private editCourseTeacher(courseId:string):void {
-      console.debug("edit");
+      this.populateTeachers(courseId);
       this.$scope.entries[courseId].editMode = true;
       //console.debug("%o", this.$scope.entries[courseId].editMode);
       setTimeout(function(){ $('.selectpicker').selectpicker({
@@ -407,21 +411,25 @@ module ums {
 
       for (var i = 0; i < this.$scope.data.academicYearOptions.length; i++) {
         if (this.$scope.data.academicYearOptions[i].id == this.$scope.courseTeacherSearchParamModel.academicYearId) {
-          this.$scope.academicYear = this.$scope.data.academicYearOptions[i].name;
+          this.$scope.academicYear = this.$scope.data.academicYearOptions[i].name.indexOf('Select') == 0 ? "" : this.$scope.data.academicYearOptions[i].name;
         }
       }
 
       for (var i = 0; i < this.$scope.data.academicSemesterOptions.length; i++) {
         if (this.$scope.data.academicSemesterOptions[i].id == this.$scope.courseTeacherSearchParamModel.academicSemesterId) {
-          this.$scope.academicSemester = this.$scope.data.academicSemesterOptions[i].name;
+          this.$scope.academicSemester = this.$scope.data.academicSemesterOptions[i].name.indexOf('Select') == 0 ? "" : this.$scope.data.academicSemesterOptions[i].name;
         }
       }
 
       for (var i = 0; i < this.$scope.data.courseCategoryOptions.length; i++) {
         if (this.$scope.data.courseCategoryOptions[i].id == this.$scope.courseTeacherSearchParamModel.courseCategoryId) {
-          this.$scope.courseCategory = this.$scope.data.courseCategoryOptions[i].name;
+          this.$scope.courseCategory = this.$scope.data.courseCategoryOptions[i].name.indexOf('Select') == 0 ? "" : this.$scope.data.courseCategoryOptions[i].name;
         }
       }
+    }
+
+    private isEmpty(obj) {
+      return Object.keys(obj).length === 0;
     }
   }
   UMS.controller('CourseTeacher', CourseTeacher);
