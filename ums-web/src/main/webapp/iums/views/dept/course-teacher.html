@@ -68,7 +68,7 @@
   <div class="orgRightClass pull-left" id="rightDiv">
 
     <div class="panel" style="min-height: 490px;">
-      <div class="panel-heading">Course Teacher List For "Bsc in CSE" Program of CSE Department - Spring, 2015<span
+      <div class="panel-heading">Course Teacher List For "{{programName}}" Program of {{departmentName}} Department - {{semesterName}}<span
           class="subtitle"></span></div>
       <div class="panel-body">
 
@@ -116,14 +116,14 @@
                     <select multiple="multiple" data-ng-if="courseTeacher.editMode" data-style="btn-white"
                             class="selectpicker form-control" data-ng-model="selectedTeacher.sections"
                             style="width:50px;"
-                            data-ng-options="sections.id as sections.name for sections in courseTeacher.sections">
+                            data-ng-options="section.name as section.name for section in courseTeacher.sections">
                     </select>
-                    <span data-ng-if="!courseTeacher.editMode" data-ng-repeat="section in selectedTeacher.sections">{{section.name}}</span>
+                    <span data-ng-if="!courseTeacher.editMode" data-ng-repeat="section in selectedTeacher.sections">{{section}}</span>
                   </td>
                   <td width="60px">
-                    <a href="javascript:;" class="btn btn-xs btn-default" data-ng-click="removeCourseTeacher(courseId, selectedTeacher)">
+                    <a href="javascript:;" class="btn btn-xs btn-default" data-ng-if="courseTeacher.editMode" data-ng-click="removeCourseTeacher(courseId, selectedTeacher.id)">
                       <i class="fa remove"></i>&nbsp;
-                      Remove
+                      X
                     </a>
                   </td>
                 </tr>
@@ -133,19 +133,19 @@
             </td>
             <td>
               <div class="mbs">
-                <button class="btn btn-xs btn-success filter-submit" data-ng-click="editCourserTeacher(courseId)">
+                <button class="btn btn-xs btn-success filter-submit" data-ng-click="editCourseTeacher(courseId)">
                   <i class="fa fa-plus-square-o"></i>
                   Edit
                 </button>
               </div>
-              <div class="mbs">
+              <div class="mbs" data-ng-if="courseTeacher.editMode">
                 <button class="btn btn-xs btn-success filter-submit" data-ng-click="addTeacher(courseId)">
                   <i class="fa fa-plus-square-o"></i>
                   Add More
                 </button>
               </div>
-              <div class="mbs">
-                <a href="javascript:;" class="btn btn-xs btn-default" data-ng-click="saveCourseTeacher(courseId)">
+              <div class="mbs" data-ng-if="courseTeacher.editMode">
+                <a href="javascript:;" class="btn btn-xs btn-default" data-ng-click="saveCourseTeacher(courseId);courseTeacher.editMode=!courseTeacher.editMode;">
                   <i class="fa fa-save"></i>&nbsp;
                   Save
                 </a>

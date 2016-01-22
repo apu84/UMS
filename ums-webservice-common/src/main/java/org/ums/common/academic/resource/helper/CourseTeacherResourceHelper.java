@@ -24,7 +24,7 @@ public class CourseTeacherResourceHelper extends ResourceHelper<CourseTeacher, M
   private List<Builder<CourseTeacher, MutableCourseTeacher>> mBuilders;
 
   @Override
-  protected Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
     modifyContent(pJsonObject);
     Response.ResponseBuilder builder = Response.ok();
     return builder.build();
@@ -70,26 +70,36 @@ public class CourseTeacherResourceHelper extends ResourceHelper<CourseTeacher, M
   }
 
   protected void modifyContent(JsonObject pJsonObject) throws Exception {
-    MutableCourseTeacher mutableCourseTeacher = new PersistentCourseTeacher();
     LocalCache localCache = new LocalCache();
     JsonArray entries = pJsonObject.getJsonArray("entries");
+
     for (int i = 0; i < entries.size(); i++) {
       JsonObject jsonObject = entries.getJsonObject(i);
       String updateType = jsonObject.getString("updateType");
 
+      MutableCourseTeacher mutableCourseTeacher = new PersistentCourseTeacher();
+
       for (Builder<CourseTeacher, MutableCourseTeacher> builder : mBuilders) {
-        builder.build(mutableCourseTeacher, pJsonObject, localCache);
+        builder.build(mutableCourseTeacher, jsonObject, localCache);
       }
 
       switch (updateType) {
-        case "create":
+        case "insert":
           mutableCourseTeacher.commit(false);
           break;
         case "update":
-          mutableCourseTeacher.commit(true);
+          CourseTeacher courseTeacher = mCourseTeacherManager.get(mutableCourseTeacher.getId());
+          MutableCourseTeacher updateCourseTeacher = courseTeacher.edit();
+          updateCourseTeacher.setTeacher(mutableCourseTeacher.getTeacher());
+          updateCourseTeacher.setSemester(mutableCourseTeacher.getSemester());
+          updateCourseTeacher.setSection(mutableCourseTeacher.getSection());
+          updateCourseTeacher.setCourse(mutableCourseTeacher.getCourse());
+          updateCourseTeacher.commit(true);
           break;
         case "delete":
-          mutableCourseTeacher.delete();
+          CourseTeacher teacher = mCourseTeacherManager.get(mutableCourseTeacher.getId());
+          MutableCourseTeacher deleteCourseTeacher = teacher.edit();
+          deleteCourseTeacher.delete();
           break;
       }
     }

@@ -15,12 +15,17 @@ module ums {
     addTeacher: Function;
     editCourseTeacher: Function;
     removeCourseTeacher: Function;
+    saveCourseTeacher: Function;
+    programName: string;
+    departmentName: string;
+    semesterName: string;
   }
 
   interface ITeacher {
     id?: string;
     name?: string;
     sections?: Array<string>;
+    selectedSections?: Array<{id: string; name: string; uniqueId: string}>;
   }
 
   interface ICourseTeacher {
@@ -39,7 +44,7 @@ module ums {
     courseOfferedByDepartmentName: string;
     teachers: Array<ITeacher>;
     selectedTeachers: {[key: string]: ITeacher};
-    sections:Array<{section:string; uniqueId: string}>;
+    sections:Array<{id: string; name: string}>;
     editMode: boolean;
   }
 
@@ -64,11 +69,12 @@ module ums {
   }
 
   interface IPostCourseTeacherModel {
-    semesterId: string;
+    semesterId: number;
     courseId: string;
     teacherId: string;
     section?: string;
     updateType: string;
+    id?: string;
   }
 
   export class CourseTeacher {
@@ -91,8 +97,9 @@ module ums {
       $scope.loadingVisibility = false;
       $scope.fetchCourseTeacherInfo = this.fetchCourseTeacherInfo.bind(this);
       $scope.addTeacher = this.addTeacher.bind(this);
-      $scope.editCourseTeacher = this.editCourserTeacher.bind(this);
+      $scope.editCourseTeacher = this.editCourseTeacher.bind(this);
       $scope.removeCourseTeacher = this.removeCourseTeacher.bind(this);
+      $scope.saveCourseTeacher = this.saveCourseTeacher.bind(this);
 
       $('.selectpicker').selectpicker({
         iconBase: 'fa',
@@ -111,8 +118,28 @@ module ums {
       $("#rightDiv").removeClass("orgRightClass");
       $("#rightDiv").addClass("newRightClass");
 
+
       this.$scope.loadingVisibility = true;
       this.formattedMap = {};
+
+      for (var i = 0; i < this.$scope.courseTeacherSearchParamModel.programs.length; i++) {
+        if (this.$scope.courseTeacherSearchParamModel.programs[i].id == this.$scope.courseTeacherSearchParamModel.programId) {
+          this.$scope.programName = this.$scope.courseTeacherSearchParamModel.programs[i].longName;
+        }
+      }
+
+      for (var i = 0; i < this.$scope.courseTeacherSearchParamModel.semesters.length; i++) {
+        if (this.$scope.courseTeacherSearchParamModel.semesters[i].id == this.$scope.courseTeacherSearchParamModel.semesterId) {
+          this.$scope.semesterName = this.$scope.courseTeacherSearchParamModel.semesters[i].name;
+        }
+      }
+
+      for (var i = 0; i < this.$scope.courseTeacherSearchParamModel.departments.length; i++) {
+        if (this.$scope.courseTeacherSearchParamModel.departments[i].id == this.$scope.courseTeacherSearchParamModel.departmentId) {
+          this.$scope.departmentName = this.$scope.courseTeacherSearchParamModel.departments[i].name;
+        }
+      }
+
       this.httpClient.get("academic/courseTeacher/programId/" + this.$scope.courseTeacherSearchParamModel.programId
           + "/semesterId/" + this.$scope.courseTeacherSearchParamModel.semesterId + "/year/"
           + this.$scope.courseTeacherSearchParamModel.academicYearId + "/semester/" + this.$scope.courseTeacherSearchParamModel.academicSemesterId,
@@ -128,21 +155,27 @@ module ums {
     private formatCourseTeacher(courseTeachers:Array<ICourseTeacher>):void {
       for (var i = 0; i < courseTeachers.length; i++) {
         if (!this.formattedMap[courseTeachers[i].courseId]) {
-          this.formattedMap[courseTeachers[i].courseId].editMode = false;
           this.formattedMap[courseTeachers[i].courseId] = courseTeachers[i];
           this.formattedMap[courseTeachers[i].courseId].selectedTeachers = {};
+          this.formattedMap[courseTeachers[i].courseId].editMode = false;
         }
         if (courseTeachers[i].teacherId) {
           var teacher:ITeacher = {
             id: courseTeachers[i].teacherId,
             name: courseTeachers[i].teacherName,
-            sections: []
+            sections: [],
+            selectedSections: []
           };
           if (!this.formattedMap[courseTeachers[i].courseId].selectedTeachers[courseTeachers[i].teacherId]) {
             this.formattedMap[courseTeachers[i].courseId].selectedTeachers[courseTeachers[i].teacherId] = teacher;
           }
-
-          this.formattedMap[courseTeachers[i].courseId].selectedTeachers[courseTeachers[i].teacherId].sections.push(courseTeachers[i].section);
+          var section = {
+            id: courseTeachers[i].section,
+            name: courseTeachers[i].section,
+            uniqueId: courseTeachers[i].id
+          };
+          this.formattedMap[courseTeachers[i].courseId].selectedTeachers[courseTeachers[i].teacherId].selectedSections.push(section);
+          this.formattedMap[courseTeachers[i].courseId].selectedTeachers[courseTeachers[i].teacherId].sections.push(section.id);
 
         }
 
@@ -185,11 +218,14 @@ module ums {
 
     private addTeacher(courseId:string):void {
       this.newTeacherId = this.newTeacherId - 1;
-      this.formattedMap[courseId].selectedTeachers[this.newTeacherId] = {id: this.newTeacherId + ""};
+      this.formattedMap[courseId].selectedTeachers[this.newTeacherId] = {};
+      this.formattedMap[courseId].selectedTeachers[this.newTeacherId].id = this.newTeacherId + "";
     }
 
-    private editCourserTeacher(courseId:string):void {
-      this.formattedMap[courseId].editMode = true;
+    private editCourseTeacher(courseId: string): void {
+      console.debug("edit");
+      this.$scope.entries[courseId].editMode = true;
+      //console.debug("%o", this.$scope.entries[courseId].editMode);
     }
 
     private removeCourseTeacher(courseId:string, teacherId:string):void {
@@ -202,42 +238,130 @@ module ums {
       savedCourseTeacher.entries = [];
 
       var saved:ICourseTeacher = this.savedCopy[courseId];
-      var modified:ICourseTeacher = this.formattedMap[courseId];
+      var modified: ICourseTeacher = this.formattedMap[courseId];
+      console.debug("%o", modified);
 
       for (var teacherId in saved.selectedTeachers) {
         if (saved.selectedTeachers.hasOwnProperty(teacherId)) {
           if (!modified.selectedTeachers.hasOwnProperty(teacherId)) {
-            savedCourseTeacher.entries.push({
-              courseId: courseId,
-              semesterId: this.$scope.courseTeacherSearchParamModel.semesterId,
-              teacherId: teacherId,
-              updateType: 'delete'
-            });
-          } else {
-            var modifiedTeacher:ITeacher = modified.selectedTeachers[teacherId];
-            var savedTeacher:ITeacher = saved.selectedTeachers[teacherId];
-            var sectionFound:boolean = false;
-            for (var i = 0; i < savedTeacher.sections.length; i++) {
-              for (var j = 0; j < modifiedTeacher.sections.length; j++) {
-              }
-              if (savedTeacher.sections[i] == modifiedTeacher.sections[i]) {
-                sectionFound = true;
-              }
-            }
-            if (!sectionFound) {
+            var selectedSections = saved.selectedTeachers[teacherId].selectedSections;
+            for (var i = 0; i < selectedSections.length; i++) {
+              console.debug("delete 1");
               savedCourseTeacher.entries.push({
+                id: selectedSections[i].uniqueId,
                 courseId: courseId,
                 semesterId: this.$scope.courseTeacherSearchParamModel.semesterId,
                 teacherId: teacherId,
-                section: '',
-                updateType: 'delete',
-                id: savedTeacher.id
+                updateType: 'delete'
               });
             }
 
+          } else {
+            var modifiedTeacher:ITeacher = modified.selectedTeachers[teacherId];
+            var savedTeacher:ITeacher = saved.selectedTeachers[teacherId];
+
+            if (teacherId != modifiedTeacher.id) {
+              var selectedSections = saved.selectedTeachers[teacherId].selectedSections;
+              for (var i = 0; i < selectedSections.length; i++) {
+                console.debug("delete 2");
+                savedCourseTeacher.entries.push({
+                  id: selectedSections[i].uniqueId,
+                  courseId: courseId,
+                  semesterId: this.$scope.courseTeacherSearchParamModel.semesterId,
+                  teacherId: teacherId,
+                  updateType: 'delete'
+                });
+              }
+            }
+            for (var i = 0; i < savedTeacher.selectedSections.length; i++) {
+              var sectionFound: boolean = false;
+              for (var j = 0; j < modifiedTeacher.sections.length; j++) {
+                if (savedTeacher.selectedSections[i].id == modifiedTeacher.sections[j]) {
+                  sectionFound = true;
+                }
+              }
+
+              if (!sectionFound) {
+                console.debug("delete 3");
+                savedCourseTeacher.entries.push({
+                  id: savedTeacher.selectedSections[i].uniqueId,
+                  courseId: courseId,
+                  semesterId: this.$scope.courseTeacherSearchParamModel.semesterId,
+                  teacherId: teacherId,
+                  section: '',
+                  updateType: 'delete'
+                });
+              }
+            }
           }
         }
       }
+
+      for (var teacherId in modified.selectedTeachers) {
+        if (modified.selectedTeachers.hasOwnProperty(teacherId)) {
+          if (!saved.selectedTeachers.hasOwnProperty(teacherId)) {
+            var modifiedSelectedSections: Array<string> = modified.selectedTeachers[teacherId].sections;
+            for (var i = 0; i < modifiedSelectedSections.length; i++) {
+              console.debug("insert 1");
+              savedCourseTeacher.entries.push({
+                courseId: courseId,
+                semesterId: this.$scope.courseTeacherSearchParamModel.semesterId,
+                teacherId: modified.selectedTeachers[teacherId].id,
+                updateType: 'insert',
+                section: modifiedSelectedSections[i]
+              });
+            }
+
+          } else {
+            var modifiedTeacher: ITeacher = modified.selectedTeachers[teacherId];
+            var savedTeacher: ITeacher = saved.selectedTeachers[teacherId];
+
+            if (teacherId != modifiedTeacher.id) {
+              var modifiedSelectedSections: Array<string> = modified.selectedTeachers[teacherId].sections;
+              for (var i = 0; i < modifiedSelectedSections.length; i++) {
+                console.debug("insert 2");
+                savedCourseTeacher.entries.push({
+                  courseId: courseId,
+                  semesterId: this.$scope.courseTeacherSearchParamModel.semesterId,
+                  teacherId: modifiedTeacher.id,
+                  updateType: 'insert',
+                  section: modifiedSelectedSections[i]
+                });
+              }
+            }
+
+            for (var i = 0; i < modifiedTeacher.sections.length; i++) {
+              var sectionFound: boolean = false;
+              for (var j = 0; j < savedTeacher.selectedSections.length; j++) {
+                if (modifiedTeacher.sections[i] == savedTeacher.selectedSections[j].id) {
+                  sectionFound = true;
+                }
+              }
+              console.debug("sectionFound: %o", sectionFound);
+              if (!sectionFound) {
+                console.debug("insert 3");
+                savedCourseTeacher.entries.push({
+                  courseId: courseId,
+                  semesterId: this.$scope.courseTeacherSearchParamModel.semesterId,
+                  teacherId: teacherId,
+                  section: modifiedTeacher.sections[i],
+                  updateType: 'insert'
+                });
+              }
+            }
+          }
+        }
+      }
+
+      console.debug("%o", savedCourseTeacher);
+
+      this.httpClient.post('academic/courseTeacher/', savedCourseTeacher, 'application/json')
+          .success(() => {
+            console.debug("saved");
+            this.fetchCourseTeacherInfo();
+          }).error((error) => {
+            console.error(error);
+          });
     }
   }
   UMS.controller('CourseTeacher', CourseTeacher);

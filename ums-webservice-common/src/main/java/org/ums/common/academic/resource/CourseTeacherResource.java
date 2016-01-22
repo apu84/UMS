@@ -13,6 +13,7 @@ import javax.json.JsonObject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 @Component
@@ -45,5 +46,10 @@ public class CourseTeacherResource extends Resource {
                         final @PathParam("year") Integer pYear,
                         final @PathParam("semester") Integer pSemester) throws Exception {
     return mResourceHelper.getCourseTeachers(pProgramId, pSemesterId, pYear, pSemester, mUriInfo);
+  }
+
+  @POST
+  public Response post(final JsonObject pJsonObject) throws Exception {
+    return mResourceHelper.post(pJsonObject, mUriInfo);
   }
 }
