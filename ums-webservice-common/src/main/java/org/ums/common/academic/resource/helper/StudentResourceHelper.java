@@ -1,5 +1,6 @@
 package org.ums.common.academic.resource.helper;
 
+import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -54,7 +55,8 @@ public class StudentResourceHelper extends ResourceHelper<Student, MutableStuden
     MutableUser studentUser = new PersistentUser();
     studentUser.setId(pJsonObject.getString("id"));
     //TODO: Use a password generator to generate temporary password
-    studentUser.setTemporaryPassword("testPassword".toCharArray());
+    String random = RandomStringUtils.randomAlphanumeric(10).toUpperCase();
+    studentUser.setTemporaryPassword(random.toCharArray());
     //TODO: Use role name to fetch a particular role, say for Student it should be "student"
     studentUser.setRole(mRoleManager.get(11));
     studentUser.setActive(true);

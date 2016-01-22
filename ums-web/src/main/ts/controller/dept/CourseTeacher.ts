@@ -264,8 +264,19 @@ module ums {
       }); }, 50);
     }
 
-    private removeCourseTeacher(courseId:string, teacherId:string):void {
-      delete this.formattedMap[courseId].selectedTeachers[teacherId];
+    private removeCourseTeacher(courseId: string, teacherId: string): void {
+      console.debug(teacherId);
+      if (this.formattedMap[courseId].selectedTeachers[teacherId]) {
+        delete this.formattedMap[courseId].selectedTeachers[teacherId];
+      } else {
+        for (var teacher in this.formattedMap[courseId].selectedTeachers) {
+          if (this.formattedMap[courseId].selectedTeachers.hasOwnProperty(teacher)) {
+            if (this.formattedMap[courseId].selectedTeachers[teacher].id == teacherId) {
+              delete this.formattedMap[courseId].selectedTeachers[teacher];
+            }
+          }
+        }
+      }
     }
 
     private saveCourseTeacher(courseId:string):void {
