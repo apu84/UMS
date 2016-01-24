@@ -43,6 +43,6 @@
 /// <reference path='directive/ProgramSelector.ts'/>
 /// <reference path='directive/FileModel.ts'/>
 /// <reference path='directive/Image.ts'/>
-
+/// <reference path='directive/UITab.ts'/>
 
 /// <reference path='interceptor/Unauthorized.ts'/>
