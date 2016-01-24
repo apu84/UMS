@@ -10,24 +10,35 @@ module.exports = function (grunt) {
                 out: '<%= pack.dest %>/iums/js/main.js'
             }
         },
-        watch: {
+        sync: {
+            main: {
+                files: [{
+                    cwd: 'src/main/webapp/',
+                    src: ['**/*.*'],
+                    dest: '<%= pack.dest %>/'
+                }// makes all src relative to cwd
+                ]
+            }
+        },
+        esteWatch: {
             options: {
-                livereload: true
+                dirs: ['src/main/ts/**/', 'src/main/webapp/**/',
+                    '!src/main/webapp/templates/**/', '!src/main/webapp/vendors/**/']
             },
-            static_resource: {
-                files: ['**/*.*'],
-                tasks: ['sync']
+            ts: function (filepath) {
+                return ['ts'];
             },
-            ts: {
-                files: ['**/*.ts'],
-                tasks: ['ts'],
-                options: {
-                    nospawn: true
-                }
+            html: function (filePath) {
+                console.log("sync is done");
+                return ['sync'];
             },
-            gruntfile: {
-                files: 'Gruntfile.js',
-                tasks: ['default']
+            css: function (filePath) {
+                console.log("sync is done");
+                return ['sync'];
+            },
+            js: function (filePath) {
+                console.log("sync is done");
+                return ['sync'];
             }
         },
         concurrent: {
@@ -38,20 +49,10 @@ module.exports = function (grunt) {
                 }
             }
         },
-        sync: {
-            main: {
-                files: [{
-                    cwd: 'src/main/webapp/',
-                    src: ['**/*.*'],
-                    dest: '<%= pack.dest %>/'
-                }// makes all src relative to cwd
-                ]
-            }
-        }
     });
     grunt.loadNpmTasks("grunt-ts");
     grunt.loadNpmTasks("grunt-concurrent");
-    grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-este-watch');
     grunt.loadNpmTasks('grunt-sync');
 
 

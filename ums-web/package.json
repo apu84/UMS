@@ -7,10 +7,10 @@
   "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-concurrent": "*",
-    "grunt-contrib-watch": "^0.1.18",
     "grunt-sync": "*",
     "grunt-ts": "~5.2.0",
-    "load-grunt-tasks": "*"
+    "load-grunt-tasks": "*",
+    "grunt-este-watch": "*"
   },
   "engines": {
     "node": ">=0.8.0"
