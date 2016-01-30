@@ -88,6 +88,7 @@ public class PersistentSemesterSyllabusMapDao extends SemesterSyllabusMapDaoDeco
   class SemesterSyllabusRowMapper implements RowMapper<SemesterSyllabusMap> {
     @Override
     public SemesterSyllabusMap mapRow(ResultSet resultSet, int i) throws SQLException {
+      //TODO: Refactor this so it uses more simplified model.
       PersistentSemesterSyllabusMap pSSMap = new PersistentSemesterSyllabusMap();
       pSSMap.setId(resultSet.getInt("MAPPING_ID"));
       pSSMap.setYear(resultSet.getInt("YEAR"));

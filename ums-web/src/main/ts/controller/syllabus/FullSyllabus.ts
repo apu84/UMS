@@ -103,6 +103,7 @@ module ums {
       return courseMap;
     }
 
+    //TODO: Move this function to utility class
     private static getSuffix(n: string): string {
       var suffix: string = "th";
       switch (parseInt(n)) {

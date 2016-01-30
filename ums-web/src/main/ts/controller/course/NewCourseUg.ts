@@ -41,7 +41,7 @@ module ums {
         }
       }
 
-
+      //TODO: A common changeListener for resetting changes.
       $scope.$watch('course.programId', function() {
         $scope.syllabusOptions=appConstants.initSyllabus;
         /**--------Program Load----------------**/

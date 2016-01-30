@@ -45,6 +45,7 @@ module ums {
       this.$scope.semester.statusId=1;
       this.httpClient.post('academic/semester/', this.$scope.semester, 'application/json')
           .success(() => {
+            //TODO: Move $.notific8 Common messaging service
             $.notific8('Successfully created a new semester.');
             this.$scope. semester.programTypeId="";
             this.$scope. semester.semesterTypeId="";

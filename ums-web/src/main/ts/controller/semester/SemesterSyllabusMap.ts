@@ -74,6 +74,7 @@ module ums {
       this.$scope.mapDetailVisiblity=false;
     }
     private goNext():void {
+      //TODO: Make a common loading directive/service
       this.$scope.loadingVisibility1=true;
       this.$scope.mapTableVisibility=false;
       this.$scope.mapDetailVisiblity=false;
