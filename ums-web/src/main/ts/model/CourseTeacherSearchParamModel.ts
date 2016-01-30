@@ -1,9 +1,19 @@
 ///<reference path="ProgramSelectorModel.ts"/>
+
 module ums {
-  export interface CourseTeacherSearchParamModel extends ProgramSelectorModel{
+  export class CourseTeacherSearchParamModel {
     semesterId: string;
     academicYearId:string;
     academicSemesterId:string;
     courseCategoryId:string;
+    programSelector: ProgramSelectorModel;
+
+    constructor(appConstants:any, httpClient:HttpClient) {
+      this.programSelector = new ProgramSelectorModel(appConstants, httpClient);
+      this.semesterId = '';
+      this.academicYearId = '';
+      this.academicSemesterId = '';
+      this.courseCategoryId = '';
+    }
   }
 }

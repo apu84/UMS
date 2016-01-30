@@ -1,14 +1,16 @@
-///<reference path="ProgramSelectorModelImpl.ts"/>
+///<reference path="ProgramSelectorModel.ts"/>
 module ums {
-  export class SemesterSyllabusMapModel extends ProgramSelectorModelImpl {
+  export class SemesterSyllabusMapModel {
     semesterId: string;
     mapId:string;
     syllabuses:any;
+    programSelector: ProgramSelectorModel;
+    
     constructor(appConstants:any, httpClient:HttpClient) {
-      super(appConstants, httpClient);
-
+      this.programSelector = new ProgramSelectorModel(appConstants, httpClient);
       this.semesterId = '';
-
+      this.mapId = '';
+      this.syllabuses = '';
     }
   }
 }

@@ -6,14 +6,14 @@
     <div class="panel-body pan">
       <form action="" class="form-horizontal">
         <div class="form-body pal">
-          <div data-program-selector="" data-model="courseTeacherSearchParamModel"></div>
+          <div data-program-selector="" data-model="courseTeacherSearchParamModel.programSelector"></div>
           <div class="form-group">
             <label class="col-md-4 control-label">Semester</label>
 
             <div class="col-md-8">
               <select class="form-control required" data-ng-model="courseTeacherSearchParamModel.semesterId"
                       ng-init="courseTeacherSearchParamModel.academicSemesterId=''">
-                <option data-ng-repeat="semester in courseTeacherSearchParamModel.semesters" value="{{semester.id}}">
+                <option data-ng-repeat="semester in courseTeacherSearchParamModel.programSelector.getSemesters()" value="{{semester.id}}">
                   {{semester.name}}
                 </option>
               </select>

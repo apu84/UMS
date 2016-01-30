@@ -1,7 +1,7 @@
 ///<reference path="../../model/master_data/Student.ts"/>
 ///<reference path="../../model/PasswordReset.ts"/>
 ///<reference path="../../model/ProgramSelectorModel.ts"/>
-///<reference path="../../model/ProgramSelectorModelImpl.ts"/>
+///<reference path="../../model/ProgramSelectorModel.ts"/>
 module ums {
   interface UserInfo {
     userId: string;
@@ -28,7 +28,7 @@ module ums {
     constructor(private appConstants:any,private $scope: IPasswordReset, private httpClient: HttpClient,
                 private $window: ng.IWindowService, private $sce: ng.ISCEService) {
 
-      $scope.bulkUserPasswordModel = new ProgramSelectorModelImpl(this.appConstants, this.httpClient);
+      $scope.bulkUserPasswordModel = new ProgramSelectorModel(this.appConstants, this.httpClient);
       $scope.submit = this.submit.bind(this);
       $scope.generateSinglePdf = this.generateSinglePdf.bind(this);
       $scope.generateBulkPdf = this.generateBulkPdf.bind(this);

@@ -53,12 +53,16 @@ module ums {
       $scope.mapDetailVisiblity=false;
 
       $scope.$watch(
-          () => {return $scope.semesterSyllabusMapModel.departmentId;},
+          () => {
+            return $scope.semesterSyllabusMapModel.programSelector.departmentId;
+          },
           (newValue, oldValue) => {if (newValue !== oldValue) {this.clearMap();}}
       );
 
       $scope.$watch(
-          () => {return $scope.semesterSyllabusMapModel.programId;},
+          () => {
+            return $scope.semesterSyllabusMapModel.programSelector.programId;
+          },
           (newValue, oldValue) => {if (newValue !== oldValue) {this.clearMap();}}
       );
       $scope.$watch('semesterSyllabusMapModel.semesters', function() { $scope.semesterSyllabusMapModel.semesterId=appConstants.Empty; }, true);
@@ -76,7 +80,7 @@ module ums {
       this.$scope.noRecordVisibility=false;
       this.$scope.copyDivVisiblity=false;
 
-        this.httpClient.get('academic/ssmap/program/'+this.$scope.semesterSyllabusMapModel.programId+'/semester/'+this.$scope.semesterSyllabusMapModel.semesterId+'', 'application/json',
+      this.httpClient.get('academic/ssmap/program/' + this.$scope.semesterSyllabusMapModel.programSelector.programId + '/semester/' + this.$scope.semesterSyllabusMapModel.semesterId + '', 'application/json',
             (json:any, etag:string) => {
               this.$scope.loadingVisibility1=false;
               this.$scope.maps = json.entries;
@@ -95,8 +99,11 @@ module ums {
     }
 
     private copyMapping():void{
-
-      var postJson={"semesterId":parseInt(this.$scope.semesterSyllabusMapModel.semesterId),"copySemesterId":parseInt(this.$scope.copySemesterId),"programId":parseInt(this.$scope.semesterSyllabusMapModel.programId)};
+      var postJson = {
+        "semesterId": parseInt(this.$scope.semesterSyllabusMapModel.semesterId),
+        "copySemesterId": parseInt(this.$scope.copySemesterId),
+        "programId": parseInt(this.$scope.semesterSyllabusMapModel.programSelector.programId)
+      };
       this.httpClient.post('academic/ssmap/',postJson, 'application/json')
           .success(() => {
             $.notific8('Successfully inserted new mapping.');
@@ -122,7 +129,7 @@ module ums {
             console.error(response);
           });
 
-      this.httpClient.get('academic/syllabus/program-id/'+this.$scope.semesterSyllabusMapModel.programId, 'application/json',
+      this.httpClient.get('academic/syllabus/program-id/' + this.$scope.semesterSyllabusMapModel.programSelector.programId, 'application/json',
            (json:any, etag:string) =>{
 
             var entries:any = json.entries;

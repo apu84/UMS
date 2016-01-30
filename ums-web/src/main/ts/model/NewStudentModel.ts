@@ -1,33 +1,33 @@
-///<reference path="ProgramSelectorModelImpl.ts"/>
+///<reference path="ProgramSelectorModel.ts"/>
 module ums {
-  export class NewStudentModel extends ProgramSelectorModelImpl {
-     id:string;
-     fullName:string;
-     fatherName:string;
-     motherName:string;
-     semesterId:string;
-     dateOfBirth:string;
-     gender:string;
-     mobileNo:string;
-     phoneNo:string;
-     bloodGroup:string;
-     email:string;
-     presentAddress:string;
-     permanentAddress:string;
-     guardianName:string;
-     guardianMobileNo:string;
-     guardianPhoneNo:string;
-     guardianEmail:string;
+  export class NewStudentModel {
+    id: string;
+    fullName: string;
+    fatherName: string;
+    motherName: string;
+    semesterId: string;
+    dateOfBirth: string;
+    gender: string;
+    mobileNo: string;
+    phoneNo: string;
+    bloodGroup: string;
+    email: string;
+    presentAddress: string;
+    permanentAddress: string;
+    guardianName: string;
+    guardianMobileNo: string;
+    guardianPhoneNo: string;
+    guardianEmail: string;
 
-     genders:any;
-     bloodGroups:any;
+    getGenders: Function;
+    getBloodGroups: Function;
 
-     imageData: string;
-     picture: any;
+    imageData: string;
+    picture: any;
+    programSelector: ProgramSelectorModel;
 
-    constructor(appConstants:any, httpClient:HttpClient) {
-      super(appConstants, httpClient);
-
+    constructor(appConstants: any, httpClient: HttpClient) {
+      this.programSelector = new ProgramSelectorModel(appConstants, httpClient);
       this.id = '';
       this.fullName = '';
       this.fatherName = '';
@@ -48,8 +48,12 @@ module ums {
 
       this.imageData = '';
 
-      this.genders = appConstants.gender;
-      this.bloodGroups = appConstants.bloodGroup;
+      this.getGenders = () => {
+        return appConstants.gender;
+      };
+      this.getBloodGroups = () => {
+        return appConstants.bloodGroup;
+      };
     }
   }
 }

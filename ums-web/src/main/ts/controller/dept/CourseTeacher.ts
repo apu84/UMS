@@ -2,12 +2,12 @@
 ///<reference path="../../lib/jquery.notific8.d.ts"/>
 ///<reference path="../../lib/bootstrap.selectpicker.d.ts"/>
 ///<reference path="../../model/CourseTeacherSearchParamModel.ts"/>
-///<reference path="../../model/CourseTeacherSearchParamModelImp.ts"/>
+///<reference path="../../model/CourseTeacherSearchParamModel.ts"/>
 module ums {
 
   interface ICourseTeacherScope extends ng.IScope {
     submit: Function;
-    courseTeacherSearchParamModel:CourseTeacherSearchParamModelImp;
+    courseTeacherSearchParamModel:CourseTeacherSearchParamModel;
     data:any;
     loadingVisibility:boolean;
     contentVisibility:boolean;
@@ -92,7 +92,7 @@ module ums {
 
     constructor(private appConstants:any, private httpClient:HttpClient,
                 private $scope:ICourseTeacherScope, private $q:ng.IQService) {
-      $scope.courseTeacherSearchParamModel = new CourseTeacherSearchParamModelImp(this.appConstants, this.httpClient);
+      $scope.courseTeacherSearchParamModel = new CourseTeacherSearchParamModel(this.appConstants, this.httpClient);
       $scope.data = {
         courseCategoryOptions: appConstants.courseCategory,
         academicYearOptions: appConstants.academicYear,
@@ -130,7 +130,7 @@ module ums {
 
       this.formattedMap = {};
 
-      var fetchUri:string = "academic/courseTeacher/programId/" + this.$scope.courseTeacherSearchParamModel.programId
+      var fetchUri: string = "academic/courseTeacher/programId/" + this.$scope.courseTeacherSearchParamModel.programSelector.programId
           + "/semesterId/" + this.$scope.courseTeacherSearchParamModel.semesterId;
 
       if (this.$scope.courseTeacherSearchParamModel.academicYearId
@@ -405,21 +405,21 @@ module ums {
     }
 
     private renderHeader():void {
-      for (var i = 0; i < this.$scope.courseTeacherSearchParamModel.programs.length; i++) {
-        if (this.$scope.courseTeacherSearchParamModel.programs[i].id == this.$scope.courseTeacherSearchParamModel.programId) {
-          this.$scope.programName = this.$scope.courseTeacherSearchParamModel.programs[i].longName;
+      for (var i = 0; i < this.$scope.courseTeacherSearchParamModel.programSelector.getPrograms().length; i++) {
+        if (this.$scope.courseTeacherSearchParamModel.programSelector.getPrograms()[i].id == this.$scope.courseTeacherSearchParamModel.programSelector.programId) {
+          this.$scope.programName = this.$scope.courseTeacherSearchParamModel.programSelector.getPrograms()[i].longName;
         }
       }
 
-      for (var i = 0; i < this.$scope.courseTeacherSearchParamModel.semesters.length; i++) {
-        if (this.$scope.courseTeacherSearchParamModel.semesters[i].id == this.$scope.courseTeacherSearchParamModel.semesterId) {
-          this.$scope.semesterName = this.$scope.courseTeacherSearchParamModel.semesters[i].name;
+      for (var i = 0; i < this.$scope.courseTeacherSearchParamModel.programSelector.getSemesters().length; i++) {
+        if (this.$scope.courseTeacherSearchParamModel.programSelector.getSemesters()[i].id == this.$scope.courseTeacherSearchParamModel.semesterId) {
+          this.$scope.semesterName = this.$scope.courseTeacherSearchParamModel.programSelector.getSemesters()[i].name;
         }
       }
 
-      for (var i = 0; i < this.$scope.courseTeacherSearchParamModel.departments.length; i++) {
-        if (this.$scope.courseTeacherSearchParamModel.departments[i].id == this.$scope.courseTeacherSearchParamModel.departmentId) {
-          this.$scope.departmentName = this.$scope.courseTeacherSearchParamModel.departments[i].name;
+      for (var i = 0; i < this.$scope.courseTeacherSearchParamModel.programSelector.getDepartments().length; i++) {
+        if (this.$scope.courseTeacherSearchParamModel.programSelector.getDepartments()[i].id == this.$scope.courseTeacherSearchParamModel.programSelector.departmentId) {
+          this.$scope.departmentName = this.$scope.courseTeacherSearchParamModel.programSelector.getDepartments()[i].name;
         }
       }
 

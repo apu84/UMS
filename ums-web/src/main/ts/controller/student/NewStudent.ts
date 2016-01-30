@@ -50,10 +50,13 @@ module ums {
         console.debug("onload.....");
         var dataURL = fileReader.result;
         console.debug("data....%o", dataURL);
-        this.$scope.newStudentModel.imageData = dataURL; console.debug("%o", this.$scope.newStudentModel);
+        this.$scope.newStudentModel.imageData = dataURL;
+        var newObject = jQuery.extend({}, this.$scope.newStudentModel);
+        console.debug("%o", newObject);
         this.httpClient.post(this.baseUri.toAbsolute('academic/student'), this.$scope.newStudentModel, this.appConstants.mimeTypeJson)
             .success((data, status, headers) => {
               console.debug("Student created, resource location : " + headers('location'));
+              this.resetModel();
             }).error((data) => {
               console.error(data);
             });
@@ -61,6 +64,15 @@ module ums {
         //this.fileUpload.uploadFile(dataURL, $scope.fileUpload.type, $scope.fileUpload.name, this.baseUri.toAbsolute('academic/student/upload'));
       };
       fileReader.readAsDataURL(this.$scope.newStudentModel.picture);
+    }
+
+    private resetModel(): void {
+      for (var property in this.$scope.newStudentModel) {
+        if(this.$scope.newStudentModel.hasOwnProperty(property)
+         && (typeof this.$scope.newStudentModel[property] === 'string')) {
+         delete this.$scope.newStudentModel[property];
+        }
+      }
     }
   }
   UMS.controller('NewStudent', NewStudent);
