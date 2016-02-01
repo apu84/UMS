@@ -263,5 +263,10 @@ module ums {
             }]
           }
         })
+        .state('studentProfile', {
+          url: "/studentProfile",
+          templateUrl: 'views/student/student-profile.html'
+        })
+
   });
 }

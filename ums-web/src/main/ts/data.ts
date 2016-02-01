@@ -19,7 +19,8 @@
     '/singleUserPassword': {title: 'User Management', 'breadcrumb': ['User Management','Single']},
     '/bulkUserPassword': {title: 'User Management ', 'breadcrumb': ['User Management','Bulk']},
     '/courseTeacher': {title: 'Course Teacher Assign ', 'breadcrumb': ['Course Teacher']},
-    '/classRoutine': {title: 'Class Routine Upload ', 'breadcrumb': ['Class Routine']}
+    '/classRoutine': {title: 'Class Routine Upload ', 'breadcrumb': ['Class Routine']},
+    '/studentProfile': {title: 'Student Profile ', 'breadcrumb': ['Student Profile']}
 
   };
 

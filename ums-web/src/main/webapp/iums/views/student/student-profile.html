@@ -1,0 +1,193 @@
+
+<div id="page-user-profile" class="row">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <div class="text-center mbl"><img src="userPhotos/128.jpg" style="border: 5px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0.25);" class="img-circle"/></div>
+                </div>
+                <table class="table table-striped table-hover">
+                    <tbody>
+                    <tr>
+                        <td width="50%">Student Id</td>
+                        <td>STUDENT_ID</td>
+                    </tr>
+                    <tr>
+                        <td width="50%">Student Name</td>
+                        <td>STUDENT_NAME</td>
+                    </tr>
+                    <tr>
+                        <td width="50%">SEMESTER</td>
+                        <td>1-2</td>
+                    </tr>
+                    <tr>
+                        <td width="50%">Init Semester</td>
+                        <td>Spring, 2015</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-9">
+                <ul data-ui-tab="" class="nav nav-tabs ul-edit responsive">
+                    <li class="active">
+                        <a href="#tab-personal" data-toggle="tab"><i class="fa fa-bolt"></i>&nbsp;Personal</a>
+                    </li>
+                    <li>
+                        <a href="#tab-academic" data-toggle="tab"><i class="fa fa-edit"></i>&nbsp;Academic</a>
+                    </li>
+                    <li>
+                        <a href="#tab-guardian" data-toggle="tab"><i class="fa fa-edit"></i>&nbsp;Guardian</a>
+                    </li>
+                    <li>
+                        <a href="#tab-contact" data-toggle="tab"><i class="fa fa-edit"></i>&nbsp;Contact</a>
+                    </li>
+                </ul>
+                <div id="generalTabContent" class="tab-content shadowPanel">
+                    <div id="tab-personal" class="tab-pane fade in active">
+                        <table class="table table-striped table-hover">
+                            <tbody>
+                            <tr>
+                                <td width="50%"><b>Student Name</b></td>
+                                <td>{STUDENT_NAME}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Father Name</b></td>
+                                <td>{FATHER_NAME}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Mother Name</b></td>
+                                <td>{MOTHER_NAME}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Birth Date</b></td>
+                                <td>{BIRTH_DATE}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Gender</b></td>
+                                <td>{GENDER}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Blood Group</b></td>
+                                <td>{BLOOD_GROUP}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="tab-academic" class="tab-pane fade">
+                        <table class="table table-striped table-hover">
+                            <tbody>
+                            <tr>
+                                <td width="50%"><b>Dept./School</b></td>
+                                <td>{DEPT_NAME}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Program</b></td>
+                                <td>{PROGRAM_NAME}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Admission Semester</b></td>
+                                <td>{ADMISSION_SEMESTER}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Current Year-Semester</b></td>
+                                <td>{CURRENT_YEAR_SEMESTER}</td>
+                            </tr>
+                            <tr>
+                                <td><b>CGPA</b></td>
+                                <td>{CGPA}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Theory Section</b></td>
+                                <td>{THEORY_SECTION}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Sessional Section</b></td>
+                                <td>{SESSIONAL_SECTION}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Advisor</b></td>
+                                <td>{ADVISOR}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="tab-guardian" class="tab-pane fade">
+                        <table class="table table-striped table-hover">
+                            <tbody>
+                            <tr>
+                                <td width="50%"><b>Guardian Name</b></td>
+                                <td>{GUARDIAN_NAME}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Guardian Mobile</b></td>
+                                <td>{GUARDIAN_MOBILE}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Guardian Phone</b></td>
+                                <td>{GUARDIAN_PHONE}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Guardian Email</b></td>
+                                <td>{GUARDIAN_EMAIL}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="tab-contact" class="tab-pane fade">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="tab-content">
+                                    <div id="tab-profile-setting" class="tab-pane fade in active">
+                                        <form action="#" class="form-horizontal">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">Mobile Number</label>
+                                                <div class="col-sm-9 controls">
+                                                    <input type="text" placeholder="first name" class="form-control"/>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">Phone Number</label>
+                                                <div class="col-sm-9 controls">
+                                                    <input type="text" placeholder="last name" class="form-control"/>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">Email</label>
+                                                <div class="col-sm-9 controls">
+                                                    <input type="email" placeholder="email@yourcompany.com" class="form-control"/>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">Present Address</label>
+                                                <div class="col-sm-9 controls">
+                                                    <textarea rows="3" class="form-control"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">Permanent Address</label>
+                                                <div class="col-sm-9 controls">
+                                                    <textarea rows="3" class="form-control"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form-group mbn">
+                                                <label class="col-sm-3 control-label"></label>
+                                                <div class="col-sm-9 controls">
+                                                    <button type="submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;
+                                                        Save
+                                                    </button>&nbsp; &nbsp;<a href="#" class="btn btn-default">Cancel</a>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
