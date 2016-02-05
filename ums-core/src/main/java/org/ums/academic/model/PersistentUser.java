@@ -25,6 +25,8 @@ public class PersistentUser implements MutableUser {
   private Role mRole;
   private Integer mRoleId;
   private boolean mActive;
+  private String mPasswordResetToken;
+  private boolean mPasswordResetTokenValidity;
 
   public PersistentUser() {
 
@@ -98,6 +100,7 @@ public class PersistentUser implements MutableUser {
     return new PersistentUser(this);
   }
 
+
   @Override
   public String getId() {
     return mId;
@@ -116,5 +119,25 @@ public class PersistentUser implements MutableUser {
   @Override
   public void setTemporaryPassword(char[] pPassword) {
     mTemporaryPassword = pPassword;
+  }
+
+  @Override
+  public void setPasswordResetToken(String pPasswordResetToken) {
+    mPasswordResetToken=pPasswordResetToken;
+  }
+
+  @Override
+  public String getPasswordResetToken() {
+    return mPasswordResetToken;
+  }
+
+  @Override
+  public void setPasswordResetTokenValidity(boolean pPasswordResetToken) {
+    mPasswordResetTokenValidity=pPasswordResetToken;
+  }
+
+  @Override
+  public boolean isPasswordResetTokenValid() {
+    return mPasswordResetTokenValidity;
   }
 }

@@ -15,4 +15,9 @@ public interface MutableUser extends User, Mutable, MutableIdentifier<String> {
   void setRole(final Role pRole);
 
   void setActive(final boolean pActive);
+
+  void setPasswordResetToken(final String pPasswordResetToken);
+
+  void setPasswordResetTokenValidity(final boolean pPasswordResetToken);
+
 }

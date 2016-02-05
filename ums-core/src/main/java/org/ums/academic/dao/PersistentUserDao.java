@@ -13,17 +13,16 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentUserDao extends ContentDaoDecorator<User, MutableUser, String, ContentManager<User, MutableUser, String>> {
-  static String SELECT_ALL = "SELECT USER_ID, PASSWORD, ROLE_ID, STATUS, TEMP_PASSWORD FROM USERS ";
+  static String SELECT_ALL = "SELECT USER_ID, PASSWORD, ROLE_ID, STATUS, TEMP_PASSWORD,PR_TOKEN,0 TOKEN_STATUS FROM USERS ";
   static String UPDATE_ALL = "UPDATE USERS SET PASSWORD = ?, ROLE_ID = ?, STATUS = ?, TEMP_PASSWORD = ? ";
   static String DELETE_ALL = "DELETE FROM USERS ";
   static String INSERT_ALL = "INSERT INTO USERS(USER_ID, PASSWORD, ROLE_ID, STATUS, TEMP_PASSWORD) VALUES " +
       "(?, ?, ?, ?, ?)";
-
-  static String SELECT_PASSWORD_RESET_TOKEN="Select PR_TOKEN,TOKEN_EXP_DATE, " +
-      "CASE WHEN TOKEN_EXP_DATE IS NULL THEN 'INVALID' " +
-      "     WHEN TOKEN_EXP_DATE>=SYSDATE THEN 'INVALID' " +
-      "          ELSE 'VALID' " +
-      "     END AS 'STATUS' " +
+  static String SELECT_PASSWORD_RESET_TOKEN="Select PR_TOKEN, " +
+      "CASE WHEN TOKEN_EXP_DATE IS NULL THEN 0" +
+      "     WHEN TOKEN_EXP_DATE>=SYSDATE THEN 0 " +
+      "          ELSE 1 " +
+      "     END AS 'TOKEN_STATUS' " +
       " from USERS Where User_Id=? ";
 
   private JdbcTemplate mJdbcTemplate;
@@ -78,6 +77,8 @@ public class PersistentUserDao extends ContentDaoDecorator<User, MutableUser, St
       user.setRoleId(rs.getInt("ROLE_ID"));
       user.setActive(rs.getBoolean("STATUS"));
       user.setTemporaryPassword((rs.getString("TEMP_PASSWORD") == null ? null : rs.getString("TEMP_PASSWORD").toCharArray()));
+      user.setPasswordResetToken(rs.getString("PR_TOKEN"));
+      user.setPasswordResetTokenValidity(rs.getBoolean("TOKEN_STATUS"));
       AtomicReference<User> atomicReference = new AtomicReference<>(user);
       return atomicReference.get();
     }

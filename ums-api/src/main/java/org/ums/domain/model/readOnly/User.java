@@ -16,4 +16,8 @@ public interface User extends Serializable, EditType<MutableUser>, Identifier<St
   Role getRole() throws Exception;
 
   boolean isActive();
+
+  String getPasswordResetToken();
+
+  boolean isPasswordResetTokenValid();
 }
