@@ -27,7 +27,6 @@ public class LoginHelper {
   @Autowired
   private PasswordService mPasswordService;
 
-
   public Response changePassword(final JsonObject pJsonObject) throws Exception {
 
     Subject loggedInUser = SecurityUtils.getSubject();
@@ -57,6 +56,18 @@ public class LoginHelper {
 
     return Response.notModified().build();
   }
+
+  public Response forgotPassword(final JsonObject pJsonObject) throws Exception {
+    String userId = pJsonObject.getString("userId");
+    User user = mUserManager.get(userId);
+    if(user==null){
+      //Set proper message with 200 response code and KO status . STATUS_CODE,STATUS_MESSAGE,RESPONSE TYPE 200;
+      //return;
+    }
+
+    //
+    return null;
+    }
 
   protected void changePassword(User pCurrentUser, final String pNewPassword) throws Exception {
     MutableUser mutableUser = pCurrentUser.edit();
