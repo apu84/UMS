@@ -16,8 +16,8 @@ import org.ums.common.academic.resource.StudentResource;
 import org.ums.domain.model.mutable.MutableRole;
 import org.ums.domain.model.mutable.MutableStudent;
 import org.ums.domain.model.mutable.MutableUser;
-import org.ums.domain.model.regular.Role;
-import org.ums.domain.model.regular.Student;
+import org.ums.domain.model.readOnly.Role;
+import org.ums.domain.model.readOnly.Student;
 import org.ums.manager.BinaryContentManager;
 import org.ums.manager.ContentManager;
 

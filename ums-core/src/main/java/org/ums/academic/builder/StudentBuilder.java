@@ -2,10 +2,10 @@ package org.ums.academic.builder;
 
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.mutable.MutableStudent;
-import org.ums.domain.model.regular.Department;
-import org.ums.domain.model.regular.Program;
-import org.ums.domain.model.regular.Semester;
-import org.ums.domain.model.regular.Student;
+import org.ums.domain.model.readOnly.Department;
+import org.ums.domain.model.readOnly.Program;
+import org.ums.domain.model.readOnly.Semester;
+import org.ums.domain.model.readOnly.Student;
 import org.ums.manager.BinaryContentManager;
 
 import javax.json.JsonObject;

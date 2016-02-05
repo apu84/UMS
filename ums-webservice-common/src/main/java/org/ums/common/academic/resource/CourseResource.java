@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.common.Resource;
 import org.ums.common.academic.resource.helper.CourseResourceHelper;
-import org.ums.domain.model.regular.Course;
+import org.ums.domain.model.readOnly.Course;
 import org.ums.domain.model.mutable.MutableCourse;
 import org.ums.manager.ContentManager;
 

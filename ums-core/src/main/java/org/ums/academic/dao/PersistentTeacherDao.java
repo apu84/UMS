@@ -5,8 +5,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.academic.model.PersistentTeacher;
 import org.ums.domain.model.mutable.MutableTeacher;
-import org.ums.domain.model.regular.Department;
-import org.ums.domain.model.regular.Teacher;
+import org.ums.domain.model.readOnly.Department;
+import org.ums.domain.model.readOnly.Teacher;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

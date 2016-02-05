@@ -5,8 +5,8 @@ import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.mutable.MutableRole;
 import org.ums.domain.model.mutable.MutableUser;
-import org.ums.domain.model.regular.Role;
-import org.ums.domain.model.regular.User;
+import org.ums.domain.model.readOnly.Role;
+import org.ums.domain.model.readOnly.User;
 import org.ums.manager.ContentManager;
 
 public class PersistentUser implements MutableUser {

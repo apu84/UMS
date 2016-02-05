@@ -8,8 +8,8 @@ import org.ums.cache.LocalCache;
 import org.ums.common.academic.resource.ResourceHelper;
 import org.ums.domain.model.mutable.MutableDepartment;
 import org.ums.domain.model.mutable.MutableTeacher;
-import org.ums.domain.model.regular.Department;
-import org.ums.domain.model.regular.Teacher;
+import org.ums.domain.model.readOnly.Department;
+import org.ums.domain.model.readOnly.Teacher;
 import org.ums.manager.ContentManager;
 import org.ums.manager.TeacherManager;
 

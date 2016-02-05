@@ -4,7 +4,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.academic.model.PersistentUser;
 import org.ums.domain.model.mutable.MutableUser;
-import org.ums.domain.model.regular.User;
+import org.ums.domain.model.readOnly.User;
 import org.ums.manager.ContentManager;
 
 import java.sql.ResultSet;
@@ -18,6 +18,13 @@ public class PersistentUserDao extends ContentDaoDecorator<User, MutableUser, St
   static String DELETE_ALL = "DELETE FROM USERS ";
   static String INSERT_ALL = "INSERT INTO USERS(USER_ID, PASSWORD, ROLE_ID, STATUS, TEMP_PASSWORD) VALUES " +
       "(?, ?, ?, ?, ?)";
+
+  static String SELECT_PASSWORD_RESET_TOKEN="Select PR_TOKEN,TOKEN_EXP_DATE, " +
+      "CASE WHEN TOKEN_EXP_DATE IS NULL THEN 'INVALID' " +
+      "     WHEN TOKEN_EXP_DATE>=SYSDATE THEN 'INVALID' " +
+      "          ELSE 'VALID' " +
+      "     END AS 'STATUS' " +
+      " from USERS Where User_Id=? ";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -49,6 +56,11 @@ public class PersistentUserDao extends ContentDaoDecorator<User, MutableUser, St
   public void delete(MutableUser pMutable) throws Exception {
     String query = DELETE_ALL + "WHERE USER_ID = ?";
     mJdbcTemplate.update(query, pMutable.getId());
+  }
+
+  public User getUserPasswordResetToken(String pUserId) throws Exception{
+    String query = SELECT_PASSWORD_RESET_TOKEN;
+    return mJdbcTemplate.queryForObject(query, new Object[]{pUserId}, new UserRowMapper());
   }
 
   @Override

@@ -2,7 +2,7 @@ package org.ums.academic.dao;
 
 
 import org.ums.domain.model.mutable.MutableSemester;
-import org.ums.domain.model.regular.Semester;
+import org.ums.domain.model.readOnly.Semester;
 import org.ums.manager.CacheManager;
 import org.ums.manager.SemesterManager;
 import org.ums.util.CacheUtil;

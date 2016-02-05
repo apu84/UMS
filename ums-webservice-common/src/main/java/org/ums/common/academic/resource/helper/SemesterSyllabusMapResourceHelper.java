@@ -11,7 +11,7 @@ import org.ums.common.academic.resource.SemesterResource;
 import org.ums.domain.model.dto.MutableSemesterSyllabusMapDto;
 import org.ums.domain.model.dto.SemesterSyllabusMapDto;
 import org.ums.domain.model.mutable.MutableSemesterSyllabusMap;
-import org.ums.domain.model.regular.SemesterSyllabusMap;
+import org.ums.domain.model.readOnly.SemesterSyllabusMap;
 import org.ums.manager.ContentManager;
 import org.ums.manager.SemesterSyllabusMapManager;
 

@@ -1,7 +1,7 @@
 package org.ums.academic.dao;
 
 import org.ums.domain.model.mutable.MutableSyllabus;
-import org.ums.domain.model.regular.Syllabus;
+import org.ums.domain.model.readOnly.Syllabus;
 import org.ums.manager.SyllabusManager;
 
 import java.util.List;

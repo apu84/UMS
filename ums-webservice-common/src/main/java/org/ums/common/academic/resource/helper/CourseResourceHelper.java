@@ -9,14 +9,13 @@ import org.ums.cache.LocalCache;
 import org.ums.common.academic.resource.ResourceHelper;
 import org.ums.common.academic.resource.SemesterResource;
 import org.ums.domain.model.mutable.MutableCourse;
-import org.ums.domain.model.regular.Course;
+import org.ums.domain.model.readOnly.Course;
 import org.ums.manager.CourseManager;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
-import javax.ws.rs.core.EntityTag;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;

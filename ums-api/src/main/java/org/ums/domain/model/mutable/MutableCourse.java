@@ -1,9 +1,9 @@
 package org.ums.domain.model.mutable;
 
-import org.ums.domain.model.regular.Course;
-import org.ums.domain.model.regular.CourseGroup;
-import org.ums.domain.model.regular.Department;
-import org.ums.domain.model.regular.Syllabus;
+import org.ums.domain.model.readOnly.Course;
+import org.ums.domain.model.readOnly.CourseGroup;
+import org.ums.domain.model.readOnly.Department;
+import org.ums.domain.model.readOnly.Syllabus;
 import org.ums.domain.model.common.Mutable;
 import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.enums.CourseCategory;

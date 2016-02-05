@@ -1,7 +1,6 @@
 package org.ums.academic.builder;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.ums.academic.model.PersistentProgram;
 import org.ums.academic.model.PersistentSemester;
@@ -9,9 +8,9 @@ import org.ums.cache.LocalCache;
 import org.ums.domain.model.mutable.MutableProgram;
 import org.ums.domain.model.mutable.MutableSemester;
 import org.ums.domain.model.mutable.MutableSyllabus;
-import org.ums.domain.model.regular.Program;
-import org.ums.domain.model.regular.Semester;
-import org.ums.domain.model.regular.Syllabus;
+import org.ums.domain.model.readOnly.Program;
+import org.ums.domain.model.readOnly.Semester;
+import org.ums.domain.model.readOnly.Syllabus;
 import org.ums.manager.ContentManager;
 
 import javax.json.JsonObject;

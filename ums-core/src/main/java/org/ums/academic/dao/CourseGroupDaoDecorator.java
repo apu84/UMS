@@ -2,7 +2,7 @@ package org.ums.academic.dao;
 
 
 import org.ums.domain.model.mutable.MutableCourseGroup;
-import org.ums.domain.model.regular.CourseGroup;
+import org.ums.domain.model.readOnly.CourseGroup;
 import org.ums.manager.CourseGroupManager;
 
 public class CourseGroupDaoDecorator extends ContentDaoDecorator<CourseGroup, MutableCourseGroup, Integer, CourseGroupManager>

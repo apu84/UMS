@@ -4,7 +4,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.academic.model.PersistentRole;
 import org.ums.domain.model.mutable.MutableRole;
-import org.ums.domain.model.regular.Role;
+import org.ums.domain.model.readOnly.Role;
 import org.ums.manager.ContentManager;
 
 import java.sql.ResultSet;

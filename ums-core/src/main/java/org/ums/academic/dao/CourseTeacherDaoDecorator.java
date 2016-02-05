@@ -1,7 +1,7 @@
 package org.ums.academic.dao;
 
 import org.ums.domain.model.mutable.MutableCourseTeacher;
-import org.ums.domain.model.regular.CourseTeacher;
+import org.ums.domain.model.readOnly.CourseTeacher;
 import org.ums.enums.CourseCategory;
 import org.ums.manager.CourseTeacherManager;
 

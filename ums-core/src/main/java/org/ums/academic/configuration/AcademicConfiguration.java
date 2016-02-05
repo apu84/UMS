@@ -11,7 +11,7 @@ import org.ums.academic.dao.*;
 import org.ums.domain.model.dto.MutableSemesterSyllabusMapDto;
 import org.ums.domain.model.dto.SemesterSyllabusMapDto;
 import org.ums.domain.model.mutable.*;
-import org.ums.domain.model.regular.*;
+import org.ums.domain.model.readOnly.*;
 import org.ums.manager.*;
 import org.ums.util.Constants;
 

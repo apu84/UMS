@@ -5,7 +5,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.academic.model.PersistentSyllabus;
 import org.ums.domain.model.mutable.MutableSyllabus;
-import org.ums.domain.model.regular.Syllabus;
+import org.ums.domain.model.readOnly.Syllabus;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

@@ -9,7 +9,7 @@ import org.ums.cache.LocalCache;
 import org.ums.common.academic.resource.ResourceHelper;
 import org.ums.common.academic.resource.SyllabusResource;
 import org.ums.domain.model.mutable.MutableSyllabus;
-import org.ums.domain.model.regular.Syllabus;
+import org.ums.domain.model.readOnly.Syllabus;
 import org.ums.manager.ContentManager;
 
 import javax.json.Json;

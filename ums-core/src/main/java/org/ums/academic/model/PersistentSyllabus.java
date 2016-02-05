@@ -5,11 +5,10 @@ import org.ums.context.AppContext;
 import org.ums.domain.model.mutable.MutableProgram;
 import org.ums.domain.model.mutable.MutableSemester;
 import org.ums.domain.model.mutable.MutableSyllabus;
-import org.ums.domain.model.regular.Program;
-import org.ums.domain.model.regular.Semester;
-import org.ums.domain.model.regular.Syllabus;
+import org.ums.domain.model.readOnly.Program;
+import org.ums.domain.model.readOnly.Semester;
+import org.ums.domain.model.readOnly.Syllabus;
 import org.ums.manager.ContentManager;
-import org.ums.util.Constants;
 
 
 public class PersistentSyllabus implements MutableSyllabus {

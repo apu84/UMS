@@ -2,8 +2,8 @@ package org.ums.manager;
 
 import org.ums.domain.model.dto.SemesterSyllabusMapDto;
 import org.ums.domain.model.mutable.MutableSemesterSyllabusMap;
-import org.ums.domain.model.regular.SemesterSyllabusMap;
-import org.ums.domain.model.regular.Syllabus;
+import org.ums.domain.model.readOnly.SemesterSyllabusMap;
+import org.ums.domain.model.readOnly.Syllabus;
 
 import java.util.List;
 

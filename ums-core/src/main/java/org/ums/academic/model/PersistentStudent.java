@@ -5,7 +5,7 @@ import org.ums.context.AppContext;
 import org.ums.domain.model.mutable.MutableDepartment;
 import org.ums.domain.model.mutable.MutableProgram;
 import org.ums.domain.model.mutable.MutableStudent;
-import org.ums.domain.model.regular.*;
+import org.ums.domain.model.readOnly.*;
 import org.ums.manager.ContentManager;
 import org.ums.manager.SemesterManager;
 

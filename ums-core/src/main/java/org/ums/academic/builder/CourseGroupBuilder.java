@@ -1,13 +1,12 @@
 package org.ums.academic.builder;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.ums.cache.LocalCache;
-import org.ums.domain.model.regular.CourseGroup;
+import org.ums.domain.model.readOnly.CourseGroup;
 import org.ums.domain.model.mutable.MutableCourseGroup;
 import org.ums.domain.model.mutable.MutableSyllabus;
-import org.ums.domain.model.regular.Syllabus;
+import org.ums.domain.model.readOnly.Syllabus;
 import org.ums.manager.ContentManager;
 
 import javax.json.JsonObject;

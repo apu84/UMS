@@ -3,10 +3,9 @@ package org.ums.academic.model;
 
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
-import org.ums.domain.model.regular.Department;
+import org.ums.domain.model.readOnly.Department;
 import org.ums.domain.model.mutable.MutableDepartment;
 import org.ums.manager.ContentManager;
-import org.ums.util.Constants;
 
 public class PersistentDepartment implements MutableDepartment {
   private static ContentManager<Department, MutableDepartment, String> sDepartmentManager;

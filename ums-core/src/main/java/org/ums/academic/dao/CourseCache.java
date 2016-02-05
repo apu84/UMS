@@ -1,9 +1,7 @@
 package org.ums.academic.dao;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.ums.domain.model.mutable.MutableCourse;
-import org.ums.domain.model.regular.Course;
-import org.ums.domain.model.regular.Semester;
+import org.ums.domain.model.readOnly.Course;
 import org.ums.manager.CacheManager;
 import org.ums.manager.CourseManager;
 import org.ums.util.CacheUtil;

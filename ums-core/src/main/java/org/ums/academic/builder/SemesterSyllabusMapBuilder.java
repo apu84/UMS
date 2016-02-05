@@ -1,20 +1,14 @@
 package org.ums.academic.builder;
 
-import org.ums.academic.model.PersistentSemester;
 import org.ums.academic.model.PersistentSyllabus;
 import org.ums.cache.LocalCache;
-import org.ums.domain.model.mutable.MutableProgramType;
-import org.ums.domain.model.mutable.MutableSemester;
 import org.ums.domain.model.mutable.MutableSemesterSyllabusMap;
-import org.ums.domain.model.regular.ProgramType;
-import org.ums.domain.model.regular.Semester;
-import org.ums.domain.model.regular.SemesterSyllabusMap;
+import org.ums.domain.model.readOnly.SemesterSyllabusMap;
 import org.ums.manager.ContentManager;
 
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
-import java.text.DateFormat;
 
 /**
  * Created by Ifti on 09-Jan-16.

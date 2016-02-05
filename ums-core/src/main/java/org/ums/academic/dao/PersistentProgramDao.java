@@ -5,7 +5,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.academic.model.PersistentProgram;
 import org.ums.domain.model.mutable.MutableProgram;
-import org.ums.domain.model.regular.Program;
+import org.ums.domain.model.readOnly.Program;
 import org.ums.manager.ContentManager;
 
 import java.sql.ResultSet;

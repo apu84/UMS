@@ -1,7 +1,7 @@
 package org.ums.academic.dao;
 
 import org.ums.domain.model.mutable.MutableCourse;
-import org.ums.domain.model.regular.Course;
+import org.ums.domain.model.readOnly.Course;
 import org.ums.manager.CourseManager;
 
 import java.util.List;

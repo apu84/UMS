@@ -4,9 +4,8 @@ package org.ums.academic.model;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.mutable.MutableProgramType;
-import org.ums.domain.model.regular.ProgramType;
+import org.ums.domain.model.readOnly.ProgramType;
 import org.ums.manager.ContentManager;
-import org.ums.util.Constants;
 
 public class PersistentProgramType implements MutableProgramType {
   private static ContentManager<ProgramType, MutableProgramType, Integer> sManager;

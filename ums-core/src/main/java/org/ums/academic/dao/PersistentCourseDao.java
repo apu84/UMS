@@ -5,7 +5,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.academic.model.PersistentCourse;
 import org.ums.domain.model.mutable.MutableCourse;
-import org.ums.domain.model.regular.Course;
+import org.ums.domain.model.readOnly.Course;
 import org.ums.enums.CourseCategory;
 import org.ums.enums.CourseType;
 

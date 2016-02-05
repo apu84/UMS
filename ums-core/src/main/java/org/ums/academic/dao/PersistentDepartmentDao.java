@@ -4,7 +4,7 @@ package org.ums.academic.dao;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.academic.model.PersistentDepartment;
-import org.ums.domain.model.regular.Department;
+import org.ums.domain.model.readOnly.Department;
 import org.ums.domain.model.mutable.MutableDepartment;
 import org.ums.manager.ContentManager;
 

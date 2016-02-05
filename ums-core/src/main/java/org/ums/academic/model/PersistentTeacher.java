@@ -4,7 +4,7 @@ import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.mutable.MutableDepartment;
 import org.ums.domain.model.mutable.MutableTeacher;
-import org.ums.domain.model.regular.Department;
+import org.ums.domain.model.readOnly.Department;
 import org.ums.manager.ContentManager;
 
 public class PersistentTeacher implements MutableTeacher {

@@ -1,4 +1,4 @@
-package org.ums.domain.model.regular;
+package org.ums.domain.model.readOnly;
 
 import org.ums.domain.model.common.EditType;
 import org.ums.domain.model.common.Identifier;

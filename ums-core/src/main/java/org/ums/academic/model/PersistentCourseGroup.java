@@ -2,12 +2,11 @@ package org.ums.academic.model;
 
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
-import org.ums.domain.model.regular.CourseGroup;
+import org.ums.domain.model.readOnly.CourseGroup;
 import org.ums.domain.model.mutable.MutableCourseGroup;
 import org.ums.domain.model.mutable.MutableSyllabus;
-import org.ums.domain.model.regular.Syllabus;
+import org.ums.domain.model.readOnly.Syllabus;
 import org.ums.manager.ContentManager;
-import org.ums.util.Constants;
 
 public class PersistentCourseGroup implements MutableCourseGroup {
   private static ContentManager<Syllabus, MutableSyllabus, String> sSyllabusManager;

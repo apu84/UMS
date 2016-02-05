@@ -4,8 +4,8 @@ package org.ums.academic.builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.mutable.MutableProgramType;
 import org.ums.domain.model.mutable.MutableSemester;
-import org.ums.domain.model.regular.ProgramType;
-import org.ums.domain.model.regular.Semester;
+import org.ums.domain.model.readOnly.ProgramType;
+import org.ums.domain.model.readOnly.Semester;
 import org.ums.manager.ContentManager;
 
 import javax.json.JsonObject;

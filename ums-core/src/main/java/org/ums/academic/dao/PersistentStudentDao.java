@@ -5,7 +5,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.academic.model.PersistentStudent;
 import org.ums.domain.model.mutable.MutableStudent;
-import org.ums.domain.model.regular.Student;
+import org.ums.domain.model.readOnly.Student;
 import org.ums.manager.ContentManager;
 import org.ums.util.Constants;
 

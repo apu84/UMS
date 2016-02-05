@@ -2,8 +2,8 @@ package org.ums.academic.dao;
 
 
 import org.ums.domain.model.mutable.MutableTeacher;
-import org.ums.domain.model.regular.Department;
-import org.ums.domain.model.regular.Teacher;
+import org.ums.domain.model.readOnly.Department;
+import org.ums.domain.model.readOnly.Teacher;
 import org.ums.manager.TeacherManager;
 
 import java.util.List;

@@ -1,8 +1,8 @@
 package org.ums.domain.model.mutable;
 
-import org.ums.domain.model.regular.Department;
-import org.ums.domain.model.regular.Program;
-import org.ums.domain.model.regular.ProgramType;
+import org.ums.domain.model.readOnly.Department;
+import org.ums.domain.model.readOnly.Program;
+import org.ums.domain.model.readOnly.ProgramType;
 import org.ums.domain.model.common.Mutable;
 import org.ums.domain.model.common.MutableIdentifier;
 

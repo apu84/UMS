@@ -4,7 +4,7 @@ package org.ums.academic.dao;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.academic.model.PersistentCourseGroup;
-import org.ums.domain.model.regular.CourseGroup;
+import org.ums.domain.model.readOnly.CourseGroup;
 import org.ums.domain.model.mutable.MutableCourseGroup;
 
 import java.sql.ResultSet;

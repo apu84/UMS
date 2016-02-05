@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.common.Resource;
-import org.ums.domain.model.regular.Department;
+import org.ums.domain.model.readOnly.Department;
 import org.ums.domain.model.mutable.MutableDepartment;
 import org.ums.manager.ContentManager;
 

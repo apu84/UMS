@@ -1,17 +1,10 @@
 package org.ums.academic.model;
 
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.ums.context.AppContext;
-import org.ums.domain.model.common.MutableIdentifier;
-import org.ums.domain.model.mutable.MutableProgramType;
-import org.ums.domain.model.mutable.MutableSemester;
 import org.ums.domain.model.mutable.MutableSemesterSyllabusMap;
-import org.ums.domain.model.regular.*;
+import org.ums.domain.model.readOnly.*;
 import org.ums.manager.ContentManager;
-import org.ums.util.Constants;
-
-import java.util.Date;
 
 /**
  * Created by Ifti on 08-Jan-16.

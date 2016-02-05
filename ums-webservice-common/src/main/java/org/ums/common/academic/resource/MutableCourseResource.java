@@ -2,7 +2,7 @@ package org.ums.common.academic.resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.ums.common.Resource;
-import org.ums.domain.model.regular.Course;
+import org.ums.domain.model.readOnly.Course;
 import org.ums.domain.model.mutable.MutableCourse;
 
 import javax.json.JsonObject;

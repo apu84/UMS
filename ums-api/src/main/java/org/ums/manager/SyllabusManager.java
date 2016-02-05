@@ -1,7 +1,7 @@
 package org.ums.manager;
 
 import org.ums.domain.model.mutable.MutableSyllabus;
-import org.ums.domain.model.regular.Syllabus;
+import org.ums.domain.model.readOnly.Syllabus;
 
 import java.util.List;
 

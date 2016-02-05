@@ -7,15 +7,14 @@ import org.ums.context.AppContext;
 import org.ums.domain.model.mutable.MutableCourse;
 import org.ums.domain.model.mutable.MutableDepartment;
 import org.ums.domain.model.mutable.MutableSyllabus;
-import org.ums.domain.model.regular.Course;
-import org.ums.domain.model.regular.CourseGroup;
-import org.ums.domain.model.regular.Department;
-import org.ums.domain.model.regular.Syllabus;
+import org.ums.domain.model.readOnly.Course;
+import org.ums.domain.model.readOnly.CourseGroup;
+import org.ums.domain.model.readOnly.Department;
+import org.ums.domain.model.readOnly.Syllabus;
 import org.ums.enums.CourseCategory;
 import org.ums.enums.CourseType;
 import org.ums.manager.ContentManager;
 import org.ums.manager.CourseGroupManager;
-import org.ums.util.Constants;
 
 public class PersistentCourse implements MutableCourse {
   private static ContentManager<Syllabus, MutableSyllabus, String> sSyllabusManager;

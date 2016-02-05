@@ -12,14 +12,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.domain.model.mutable.MutableStudent;
 import org.ums.domain.model.mutable.MutableUser;
-import org.ums.domain.model.regular.Student;
-import org.ums.domain.model.regular.User;
+import org.ums.domain.model.readOnly.Student;
+import org.ums.domain.model.readOnly.User;
 import org.ums.manager.ContentManager;
 import org.ums.report.generator.AbstractReportGenerator;
 
 import java.net.URL;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 @Component

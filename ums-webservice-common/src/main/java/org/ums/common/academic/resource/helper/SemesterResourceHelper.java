@@ -10,7 +10,7 @@ import org.ums.cache.LocalCache;
 import org.ums.common.academic.resource.ResourceHelper;
 import org.ums.common.academic.resource.SemesterResource;
 import org.ums.domain.model.mutable.MutableSemester;
-import org.ums.domain.model.regular.Semester;
+import org.ums.domain.model.readOnly.Semester;
 import org.ums.manager.ContentManager;
 
 import javax.json.Json;

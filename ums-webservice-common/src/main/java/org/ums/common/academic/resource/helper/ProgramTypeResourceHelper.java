@@ -9,7 +9,7 @@ import org.ums.cache.LocalCache;
 import org.ums.common.academic.resource.ProgramTypeResource;
 import org.ums.common.academic.resource.ResourceHelper;
 import org.ums.domain.model.mutable.MutableProgramType;
-import org.ums.domain.model.regular.ProgramType;
+import org.ums.domain.model.readOnly.ProgramType;
 import org.ums.manager.ContentManager;
 
 import javax.json.JsonObject;
