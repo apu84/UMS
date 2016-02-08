@@ -50,6 +50,9 @@
         <include>com.lowagie:itext</include>
         <include>com.lowagie:itext-rtf</include>
         <include>commons-lang:commons-lang</include>
+        <include>org.springframework:spring-context-support</include>
+        <include>org.apache.velocity:velocity</include>
+        <include>javax.mail:mail</include>
       </includes>
       <outputDirectory>lib</outputDirectory>
       <useTransitiveDependencies>true</useTransitiveDependencies>

@@ -9,6 +9,8 @@ import org.ums.domain.model.readOnly.Role;
 import org.ums.domain.model.readOnly.User;
 import org.ums.manager.ContentManager;
 
+import java.util.Date;
+
 public class PersistentUser implements MutableUser {
   private static ContentManager<User, MutableUser, String> sUserManager;
   private static ContentManager<Role, MutableRole, Integer> sRoleManager;
@@ -26,7 +28,7 @@ public class PersistentUser implements MutableUser {
   private Integer mRoleId;
   private boolean mActive;
   private String mPasswordResetToken;
-  private boolean mPasswordResetTokenValidity;
+  private Date mPasswordTokenGenerateDateTime;
 
   public PersistentUser() {
 
@@ -132,12 +134,12 @@ public class PersistentUser implements MutableUser {
   }
 
   @Override
-  public void setPasswordResetTokenValidity(boolean pPasswordResetToken) {
-    mPasswordResetTokenValidity=pPasswordResetToken;
+  public void setPasswordTokenGenerateDateTime(Date pDateTime) {
+    mPasswordTokenGenerateDateTime=pDateTime;
   }
 
   @Override
-  public boolean isPasswordResetTokenValid() {
-    return mPasswordResetTokenValidity;
+  public Date getPasswordTokenGenerateDateTime() {
+    return mPasswordTokenGenerateDateTime;
   }
 }

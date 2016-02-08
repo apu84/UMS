@@ -5,6 +5,8 @@ import org.ums.domain.model.readOnly.User;
 import org.ums.domain.model.common.Mutable;
 import org.ums.domain.model.common.MutableIdentifier;
 
+import java.util.Date;
+
 public interface MutableUser extends User, Mutable, MutableIdentifier<String> {
   void setPassword(final char[] pPassword);
 
@@ -18,6 +20,6 @@ public interface MutableUser extends User, Mutable, MutableIdentifier<String> {
 
   void setPasswordResetToken(final String pPasswordResetToken);
 
-  void setPasswordResetTokenValidity(final boolean pPasswordResetToken);
+  void setPasswordTokenGenerateDateTime(final Date pDateTime);
 
 }

@@ -10,7 +10,7 @@
     http://www.springframework.org/schema/tx/spring-tx-4.0.xsd"
        xmlns:tx="http://www.springframework.org/schema/tx">
 
-  <context:component-scan base-package="org.ums.dummy.shared,org.ums.cache,org.ums.academic.configuration"/>
+  <context:component-scan base-package="org.ums.dummy.shared,org.ums.cache,org.ums.academic.configuration,org.ums.services"/>
   <context:annotation-config/>
   <context:spring-configured/>
 
@@ -123,4 +123,29 @@
   </bean>
 
   <bean id="contextApplicationContextProvider" class="org.ums.context.ApplicationContextProvider"></bean>
+<!--Mail Configuration [Start]-->
+  <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+    <property name="javaMailProperties">
+      <props>
+        <prop key="mail.smtp.auth">true</prop>
+        <prop key="mail.smtp.starttls.enable">true</prop>
+        <prop key="mail.smtp.host">smtp.gmail.com</prop>
+        <prop key="mail.smtp.port">587</prop>
+        <prop key="mail.smtp.ssl.trust">smtp.gmail.com</prop>
+      </props>
+    </property>
+    <property name="username" value="aust.test.email@gmail.com" />
+    <property name="password" value="Iums4Aust" />
+  </bean>
+
+  <bean id="velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
+    <property name="velocityProperties">
+      <value>
+        resource.loader=class
+        class.resource.loader.class=org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
+      </value>
+    </property>
+  </bean>
+
+  <!--Mail Configuration [End]-->
 </beans>

@@ -5,6 +5,7 @@ import org.ums.domain.model.common.Identifier;
 import org.ums.domain.model.mutable.MutableUser;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public interface User extends Serializable, EditType<MutableUser>, Identifier<String> {
   char[] getPassword();
@@ -19,5 +20,6 @@ public interface User extends Serializable, EditType<MutableUser>, Identifier<St
 
   String getPasswordResetToken();
 
-  boolean isPasswordResetTokenValid();
+  Date getPasswordTokenGenerateDateTime();
+
 }

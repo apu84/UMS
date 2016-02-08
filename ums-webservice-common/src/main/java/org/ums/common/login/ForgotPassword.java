@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.common.Resource;
 import org.ums.common.login.helper.LoginHelper;
+import org.ums.services.LoginService;
 
 import javax.json.JsonObject;
 import javax.ws.rs.*;
@@ -20,11 +21,16 @@ public class ForgotPassword extends Resource {
   @Autowired
   LoginHelper mLoginHelper;
 
-  @POST
-  @Path("/resetEmail")
+  @Autowired
+  LoginService mLoginService;
+
+  @PUT
+  @Path("/passwordReset")
   public Response passwordResetEmailRequest(final @Context Request pRequest,
                                  final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader,
                                  final JsonObject pJsonObject) throws Exception {
-    return mLoginHelper.changePassword(pJsonObject);
+    mLoginService.checkAndSendPasswordResetEmailToUser(pJsonObject.getString("userId"));
+    return Response.status(Response.Status.NOT_FOUND).build();
+
   }
 }
