@@ -33,5 +33,14 @@ public class ForgotPassword extends Resource {
     return Response.ok(response.toString(), MediaType.APPLICATION_JSON).build();
 
   }
-  //  @Path("/passwordReset")
+
+  @PUT
+  @Path("/resetPassword1")
+  public Response resetPassword(final @Context Request pRequest, final JsonObject pJsonObject) throws Exception {
+
+    ResponseDto response=mLoginService.resetPassword(pJsonObject.getString("userId"),pJsonObject.getString("passwordResetToken"),pJsonObject.getString("newPassword"),pJsonObject.getString("confirmNewPassword"));
+    return Response.ok( response.toString(),MediaType.APPLICATION_JSON).build();
+
+  }
+
 }

@@ -24,9 +24,8 @@ public class UMSLogin {
     Subject currentUser = SecurityUtils.getSubject();
     String userName = currentUser.getPrincipal().toString();
     final JsonObjectBuilder builder = Json.createObjectBuilder();
-    builder.add("firstName", userName);
-    builder.add("surName", userName);
-    builder.add("username", userName);
+    builder.add("userId", userName);
+    builder.add("userName", userName);
     return builder.build();
   }
 

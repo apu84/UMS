@@ -22,9 +22,6 @@ import java.util.UUID;
 
 @Service
 public class LoginService {
-//  @Autowired
-//  @Qualifier("jdbcRealm")
-//  AuthorizingRealm mAuthenticationRealm;
 
   @Autowired
   @Qualifier("userManager")
@@ -59,11 +56,11 @@ public class LoginService {
       }
 
         if(StringUtils.isBlank(user.getPasswordResetToken()) || tokenInvalidDate.after(now) || user.getPasswordTokenGenerateDateTime()==null){
-          mUserManager.setPasswordResetToken(mPasswordService.encryptPassword(token),pUserId);
+          mUserManager.setPasswordResetToken(mPasswordService.encryptPassword(token).replaceAll("=", ""),pUserId);
           user=mUserManager.get(pUserId);
         }
 
-      if(user.getPasswordTokenGenerateDateTime()!=null && tokenEmailInvalidDate.before(now)) {
+      if(user.getPasswordTokenGenerateDateTime()!=null && tokenEmailInvalidDate!=null && tokenEmailInvalidDate.before(now)) {
         System.out.println("Token already email. please try again after 5 minutes");
       }
       else {
@@ -78,4 +75,42 @@ public class LoginService {
 
       }
 
+  public ResponseDto resetPassword(final String pUserId,final String pResetToken,final String pNewPassword,final String pConfirmNewPassword) throws  Exception {
+
+    ResponseDto response=new ResponseDto();
+    User user =null;
+    Date tokenInvalidDate =null;
+    Date now = new Date();
+
+    try{user=mUserManager.get(pUserId);}
+    catch(Exception ex){
+
+      response.setCode("KO");
+      response.setMessage("UserId does not exist.");
+      return response;
+    }
+    if(user.getPasswordTokenGenerateDateTime()!=null) {
+      tokenInvalidDate = new Date(user.getPasswordTokenGenerateDateTime().getTime() + (Constants.PASSWORD_RESET_TOKEN_LIFE * Constants.ONE_MINUTE_IN_MILLIS));
+    }
+    if(user.getPasswordTokenGenerateDateTime()!=null && tokenInvalidDate.before(now)) {
+      response.setCode("KO");
+      response.setMessage("Password reset url is invalid.");
+      return response;
+    }
+    if(!pNewPassword.equals(pConfirmNewPassword)){
+      response.setCode("KO");
+      response.setMessage("Password and Confirm New Password are not equal.");
+      return response;
+    }
+
+    if(pResetToken.equals(user.getPasswordResetToken())){
+      mUserManager.updatePassword(pUserId,mPasswordService.encryptPassword(pNewPassword));
+      mUserManager.clearPasswordResetToken(pUserId);
+      response.setCode("OK");
+      response.setMessage("--");
+      return response;
+    }
+
+    return response;
+  }
 }

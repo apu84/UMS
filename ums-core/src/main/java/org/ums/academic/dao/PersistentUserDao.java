@@ -16,6 +16,8 @@ import java.util.concurrent.atomic.AtomicReference;
 public class PersistentUserDao extends UserDaoDecorator {
   static String SELECT_ALL = "SELECT USER_ID, PASSWORD, ROLE_ID, STATUS, TEMP_PASSWORD,PR_TOKEN,TOKEN_GENERATED_ON FROM USERS ";
   static String UPDATE_ALL = "UPDATE USERS SET PASSWORD = ?, ROLE_ID = ?, STATUS = ?, TEMP_PASSWORD = ? ";
+  static String UPDATE_PASSWORD = "UPDATE USERS SET PASSWORD=? ";
+  static String CLEAR_PASSWORD_RESET_TOKEN = "UPDATE USERS SET PR_TOKEN=NULL,TOKEN_GENERATED_ON=NULL  ";
   static String DELETE_ALL = "DELETE FROM USERS ";
   static String INSERT_ALL = "INSERT INTO USERS(USER_ID, PASSWORD, ROLE_ID, STATUS, TEMP_PASSWORD) VALUES " +
       "(?, ?, ?, ?, ?)";
@@ -46,6 +48,19 @@ public class PersistentUserDao extends UserDaoDecorator {
         pMutable.getRole().getId(), pMutable.isActive(),
         pMutable.getTemporaryPassword() == null ? "" : String.valueOf(pMutable.getPassword()), pMutable.getId());
   }
+
+  @Override
+  public void updatePassword(final String pUserId,final String pPassword) throws Exception {
+    String query = UPDATE_PASSWORD + "WHERE USER_ID = ?";
+    mJdbcTemplate.update(query, pPassword,pUserId);
+  }
+
+  @Override
+  public void clearPasswordResetToken(final String pUserId) throws Exception {
+    String query = CLEAR_PASSWORD_RESET_TOKEN + "WHERE USER_ID = ?";
+    mJdbcTemplate.update(query,pUserId);
+  }
+
 
   @Override
   public void delete(MutableUser pMutable) throws Exception {

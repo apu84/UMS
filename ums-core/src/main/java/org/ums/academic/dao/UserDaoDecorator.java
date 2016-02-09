@@ -15,4 +15,12 @@ public class UserDaoDecorator  extends ContentDaoDecorator<User, MutableUser, St
   public void setPasswordResetToken(String pToken, String pUserId)  throws Exception{
      getManager().setPasswordResetToken(pToken, pUserId);
   }
+
+  public void updatePassword(String pUserId,String pPassword) throws Exception {
+    getManager().updatePassword(pUserId, pPassword);
+  }
+  public void clearPasswordResetToken(final String pUserId) throws Exception {
+    getManager().clearPasswordResetToken(pUserId);
+  }
+
 }

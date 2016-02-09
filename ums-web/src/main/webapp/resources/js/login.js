@@ -95,11 +95,70 @@ var Authentication = (function () {
     });
   };
 
+
+  Authentication.prototype.changePassword = function () {
+    eraseAllCookies();
+
+    var resetToken=$("#password_reset_token").val();
+    var userId=$("#user_id").val();
+    var newPassword=$("#new_password").val();
+    var confirmNewPassword=$("#confirm_new_password").val();
+
+    if(newPassword!=confirmNewPassword){
+      alert("New Password and Confirm New Password are not equal.");
+      return;
+    }
+
+    $(".loaderDiv").show();
+    $("#btn_change_password").hide();
+
+    var credentials = "Basic " + btoa("dpregistrar" + ":" + "12345");
+    $.ajax({
+      crossDomain: true,
+      type: "PUT",
+      async: true,
+      url: window.location.origin + '/ums-webservice-common/forgotPassword/resetPassword1',
+      contentType: 'application/json',
+      data:'{"userId":"'+userId+'","passwordResetToken":"'+resetToken+'","newPassword":"'+newPassword+'","confirmNewPassword":"'+confirmNewPassword+'"}',
+      withCredentials: true,
+      headers: {
+        "Authorization": credentials,
+        "Accept": "application/json"
+      },
+      success: function (response) {
+
+        credentials = "Basic " + btoa(userId + ":" + newPassword);
+        if(response.code=="OK"){
+
+          var user={"userId":userId,"userName":userId};
+          getUserAndStartApplication(credentials, user);
+        }
+        else if(response.code=="KO"){
+
+          $(".loaderDiv").hide();
+          $("#btn_change_password").show();
+
+          $("#errorDiv").show();
+          $("#errorDiv").html("<b>Sorry</b>, "+response.message);
+
+        }
+        //   $("#login_msg").hide();
+
+      },
+      error: (function (httpObj, textStatus) {
+        $(".loaderDiv").hide();
+        $("#btn_change_password").show();
+
+      })
+    });
+  };
+
+
+
   function getUserAndStartApplication(credentials, user) {
     var user = {
-      firstName: user['firstName'],
-      surName: user['surName'],
-      username: user['username']
+      userId: user['userId'],
+      userName: user['userName']
     };
     startApplication(credentials, user);
   }
