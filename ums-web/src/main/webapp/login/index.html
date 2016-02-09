@@ -20,6 +20,10 @@
     $('#loginForm').submit(function (event) {
       event.preventDefault();
     });
+    $('#forgotPasswordForm').submit(function (event) {
+      event.preventDefault();
+    });
+
     function authenticate() {
       var authenticationHelper = new Authentication();
       authenticationHelper.authenticate();
@@ -66,15 +70,15 @@
       <div class="fPasswordDiv" style="display:none;">
         <div class="IUMS-sub-head">Forgot your username or password?</div>
         <p>Please enter your username or email and we’ll send you instructions to reset your password.</p>
-        <form id='loginForm' action='' method='post'>
+        <form id='forgotPasswordForm' action='' method='post'>
           <div class="contact-wrap">
             <div class="error-msm" id="messages" style="display:none"></div>
             <div class="form-group">
-              <label for="userName" class="contact-label">User ID</label>
-              <input name="userName" type="text" class="form-control" id="userName" placeholder="Enter your User ID"/>
+              <label for="userId_forgotPassword" class="contact-label">User ID</label>
+              <input name="userId_forgotPassword" type="text" class="form-control" id="userId_forgotPassword" placeholder="Enter your User ID"/>
             </div>
             <div class="text-center">
-              <button type="button" class="btn" id="submit_btn" onclick="fPassword()"><span>Submit</span></button>
+              <button type="button" class="btn" id="btn_forgotPassword" onclick="forgotPassword()"><span>Submit</span></button>
               <div class="btn loaderDiv">
                 <div class="loader">Loading...</div>
               </div>
@@ -83,6 +87,12 @@
         </form>
         <div class="login-forgotpassword"><a href="javascript:void(0)" onclick="manageDivs('login')">Go to login</a></div>
       </div>
+      <br/><br/>
+
+      <div class="contact-wrap">
+        <div class="error-msm" id="errorDiv" style="clear: both;display:none"></div>
+      </div>
+
       <div class="successdDiv" style="display:none">
         <div class="IUMS-sub-head">Success!</div>
         <p>Your password reset instructions have been sent. Please check your email.</p>
@@ -97,26 +107,24 @@
 <script type="text/javascript">
   function manageDivs(div_name){
     if(div_name=="fPassword"){
-
       $(".fPasswordDiv").show();
-      $(".successdDiv").hide();
       $(".signInDiv").hide();
     }
     else{
       $(".fPasswordDiv").hide();
-      $(".successdDiv").hide();
-
       $(".signInDiv").show();
     }
+    $(".successdDiv").hide();
+    $("#errorDiv").hide();
+    $("#login_msg").hide();
+
 
   }
 
-  function fPassword(){
-    $(".successdDiv").show();
-    $(".fPasswordDiv").hide();
-
-
+  function forgotPassword(){
     $(".signInDiv").hide();
+    var authenticationHelper = new Authentication();
+    authenticationHelper.forgotPassword();
   }
 </script>
 </body>

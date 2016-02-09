@@ -1,22 +1,30 @@
 package org.ums.domain.model.dto;
 
+import com.google.gson.Gson;
+
 public class ResponseDto {
-  private String response_code;
-  private String response_message;
+  private String code;
+  private String message;
 
-  public String getResponse_code() {
-    return response_code;
+  public String getCode() {
+    return code;
   }
 
-  public void setResponse_code(String response_code) {
-    this.response_code = response_code;
+  public void setCode(String code) {
+    this.code = code;
   }
 
-  public String getResponse_message() {
-    return response_message;
+  public String getMessage() {
+    return message;
   }
 
-  public void setResponse_message(String response_message) {
-    this.response_message = response_message;
+  public void setMessage(String message) {
+    this.message = message;
   }
+
+  public String toString() {
+    Gson gson = new Gson();
+    return gson.toJson(this);
+  }
+
 }

@@ -53,6 +53,7 @@
         <include>org.springframework:spring-context-support</include>
         <include>org.apache.velocity:velocity</include>
         <include>javax.mail:mail</include>
+        <include>com.google.code.gson:gson</include>
       </includes>
       <outputDirectory>lib</outputDirectory>
       <useTransitiveDependencies>true</useTransitiveDependencies>

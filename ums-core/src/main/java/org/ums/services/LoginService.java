@@ -16,7 +16,9 @@ import org.ums.util.Constants;
 
 import javax.json.JsonObject;
 import javax.ws.rs.core.Response;
+import java.util.Base64;
 import java.util.Date;
+import java.util.UUID;
 
 @Service
 public class LoginService {
@@ -34,45 +36,46 @@ public class LoginService {
   @Autowired
   private EmailService emailService;
 
-    public String checkAndSendPasswordResetEmailToUser(final String pUserId) throws  Exception{
-
-      User user =null;
-      Date now = new Date();
-
-      try{user=mUserManager.get(pUserId);}
-        catch(Exception ex){}
-
-      Date tokenInvalidDate = new Date(user.getPasswordTokenGenerateDateTime().getTime()+ (Constants.PASSWORD_RESET_TOKEN_LIFE * Constants.ONE_MINUTE_IN_MILLIS));
-      Date tokenEmailInvalidDate = new Date(user.getPasswordTokenGenerateDateTime().getTime()+ (Constants.PASSWORD_RESET_TOKEN_EMAIL_LIFE* Constants.ONE_MINUTE_IN_MILLIS));
+    public ResponseDto checkAndSendPasswordResetEmailToUser(final String pUserId) throws  Exception{
 
       ResponseDto response=new ResponseDto();
-        if(StringUtils.isBlank(user.getPasswordResetToken()) || tokenInvalidDate.after(now)){
-          mUserManager.setPasswordResetToken("token",pUserId);
+      User user =null;
+      String token=UUID.randomUUID().toString();
+      Date now = new Date();
+      Date tokenInvalidDate =null;
+      Date tokenEmailInvalidDate =null;
+
+      try{user=mUserManager.get(pUserId);}
+        catch(Exception ex){
+
+          response.setCode("KO");
+          response.setMessage("UserId does not exist.");
+          return response;
+        }
+
+      if(user.getPasswordTokenGenerateDateTime()!=null) {
+         tokenInvalidDate = new Date(user.getPasswordTokenGenerateDateTime().getTime() + (Constants.PASSWORD_RESET_TOKEN_LIFE * Constants.ONE_MINUTE_IN_MILLIS));
+         tokenEmailInvalidDate = new Date(user.getPasswordTokenGenerateDateTime().getTime() + (Constants.PASSWORD_RESET_TOKEN_EMAIL_LIFE * Constants.ONE_MINUTE_IN_MILLIS));
+      }
+
+        if(StringUtils.isBlank(user.getPasswordResetToken()) || tokenInvalidDate.after(now) || user.getPasswordTokenGenerateDateTime()==null){
+          mUserManager.setPasswordResetToken(mPasswordService.encryptPassword(token),pUserId);
           user=mUserManager.get(pUserId);
         }
 
-      if(tokenEmailInvalidDate.before(now)) {
+      if(user.getPasswordTokenGenerateDateTime()!=null && tokenEmailInvalidDate.before(now)) {
         System.out.println("Token already email. please try again after 5 minutes");
       }
       else {
         System.out.println("Send an password token email again.");
       }
-
+      //ToDo: Need to check whether the user has an email address in the database
+      emailService.setUser(user);
       emailService.sendEmail("ifticse_kuet@hotmail.com", "ifticse_kuet@hotmail.com", "Reset Your IUMS Password");
 
-      //if(user.getPasswordTokenEmailSendDateTime())
+      response.setCode("OK");
+      return response;
 
-
-        //if(user.getPasswordResetToken()!=null && user.isPasswordResetTokenValid()){
-
-
-       // }
-//    if(user==null){
-//          //Set proper message with 200 response code and KO status . STATUS_CODE,STATUS_MESSAGE,RESPONSE TYPE 200;
-//          return Response.status(Response.Status.NOT_FOUND).build();
-//        }
-//        return null;
-        return user.getPasswordTokenGenerateDateTime().toString();
       }
 
 }

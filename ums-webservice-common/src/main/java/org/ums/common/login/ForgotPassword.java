@@ -4,11 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.common.Resource;
 import org.ums.common.login.helper.LoginHelper;
+import org.ums.domain.model.dto.ResponseDto;
 import org.ums.services.LoginService;
 
 import javax.json.JsonObject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 
@@ -25,12 +27,11 @@ public class ForgotPassword extends Resource {
   LoginService mLoginService;
 
   @PUT
-  @Path("/passwordReset")
-  public Response passwordResetEmailRequest(final @Context Request pRequest,
-                                 final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader,
-                                 final JsonObject pJsonObject) throws Exception {
-    mLoginService.checkAndSendPasswordResetEmailToUser(pJsonObject.getString("userId"));
-    return Response.status(Response.Status.NOT_FOUND).build();
+  public Response passwordResetEmailRequest(final @Context Request pRequest, final JsonObject pJsonObject) throws Exception {
+
+    ResponseDto response=mLoginService.checkAndSendPasswordResetEmailToUser(pJsonObject.getString("userId"));
+    return Response.ok(response.toString(), MediaType.APPLICATION_JSON).build();
 
   }
+  //  @Path("/passwordReset")
 }

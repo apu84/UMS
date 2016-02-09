@@ -51,6 +51,50 @@ var Authentication = (function () {
     });
   };
 
+  Authentication.prototype.forgotPassword = function () {
+    eraseAllCookies();
+    var userId = $('#userId_forgotPassword').val();
+
+    $(".loaderDiv").show();
+    $("#btn_forgotPassword").hide();
+    var credentials = "Basic " + btoa("dpregistrar" + ":" + "12345");
+    $.ajax({
+      crossDomain: true,
+      type: "PUT",
+      async: true,
+      url: window.location.origin + '/ums-webservice-common/forgotPassword',
+      contentType: 'application/json',
+      data:'{"userId":"'+userId+'"}',
+      withCredentials: true,
+      headers: {
+        "Authorization": credentials,
+        "Accept": "application/json"
+      },
+      success: function (response) {
+
+        if(response.code=="OK"){
+          $("#errorDiv").hide();
+          $(".successdDiv").show();
+          $(".fPasswordDiv").hide();
+          $(".loaderDiv").hide();
+          $("#btn_forgotPassword").show();
+        }
+        else if(response.code=="KO"){
+          $("#errorDiv").show();
+          $("#errorDiv").html("<b>Sorry</b>, "+response.message);
+          $(".loaderDiv").hide();
+          $("#btn_forgotPassword").show();
+        }
+        $("#login_msg").hide();
+
+      },
+      error: (function (httpObj, textStatus) {
+        $(".loaderDiv").hide();
+        $("#btn_forgotPassword").show();
+      })
+    });
+  };
+
   function getUserAndStartApplication(credentials, user) {
     var user = {
       firstName: user['firstName'],
