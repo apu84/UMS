@@ -15,12 +15,11 @@ public class UMSHttpAuthenticationFilter extends BasicHttpAuthenticationFilter {
       response, Object mappedValue) {
     HttpServletRequest httpRequest = WebUtils.toHttp(request);
     String httpMethod = httpRequest.getMethod();
-    if ("OPTIONS".equalsIgnoreCase(httpMethod)) {
-      return true;
-    } else {
-      return super.isAccessAllowed(request, response, mappedValue);
-    }
-
+    String path = WebUtils.getPathWithinApplication(httpRequest);
+    //TODO: Make this list of unauthenticated resource configurable
+    return "OPTIONS".equalsIgnoreCase(httpMethod)
+        || path.contains("forgotPassword")
+        || super.isAccessAllowed(request, response, mappedValue);
   }
 
   @Override
