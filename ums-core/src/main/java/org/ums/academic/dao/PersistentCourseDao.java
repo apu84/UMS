@@ -41,9 +41,9 @@ public class PersistentCourseDao extends CourseDaoDecorator {
     return mJdbcTemplate.query(query, new CourseRowMapper());
   }
 
-  public void update(final MutableCourse pCourse) throws Exception {
+  public int update(final MutableCourse pCourse) throws Exception {
     String query = UPDATE_ONE + "WHERE GORUP_ID = ?";
-    mJdbcTemplate.update(query,
+    return mJdbcTemplate.update(query,
         pCourse.getNo(),
         pCourse.getTitle(),
         pCourse.getCrHr(),
@@ -57,13 +57,13 @@ public class PersistentCourseDao extends CourseDaoDecorator {
         pCourse.getCourseCategory().ordinal());
   }
 
-  public void delete(final MutableCourse pCourse) throws Exception {
+  public int delete(final MutableCourse pCourse) throws Exception {
     String query = DELETE_ONE + "WHERE COURSE_ID = ?";
-    mJdbcTemplate.update(query, pCourse.getId());
+    return mJdbcTemplate.update(query, pCourse.getId());
   }
 
-  public void create(final MutableCourse pCourse) throws Exception {
-    mJdbcTemplate.update(INSERT_ONE,
+  public int create(final MutableCourse pCourse) throws Exception {
+    return mJdbcTemplate.update(INSERT_ONE,
         pCourse.getId(),
         pCourse.getNo(),
         pCourse.getTitle(),

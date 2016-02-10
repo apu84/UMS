@@ -76,14 +76,14 @@ public class PersistentCourseTeacherDao extends CourseTeacherDaoDecorator {
   }
 
   @Override
-  public void delete(MutableCourseTeacher pMutable) throws Exception {
+  public int delete(MutableCourseTeacher pMutable) throws Exception {
     String query = DELETE_ALL + "WHERE ID = ?";
-    mJdbcTemplate.update(query, pMutable.getId());
+    return mJdbcTemplate.update(query, pMutable.getId());
   }
 
   @Override
-  public void create(MutableCourseTeacher pMutable) throws Exception {
-    mJdbcTemplate.update(INSERT_ONE,
+  public int create(MutableCourseTeacher pMutable) throws Exception {
+    return mJdbcTemplate.update(INSERT_ONE,
         pMutable.getSemester().getId(),
         pMutable.getTeacher().getId(),
         pMutable.getCourse().getId(),
@@ -91,9 +91,9 @@ public class PersistentCourseTeacherDao extends CourseTeacherDaoDecorator {
   }
 
   @Override
-  public void update(MutableCourseTeacher pMutable) throws Exception {
+  public int update(MutableCourseTeacher pMutable) throws Exception {
     String query = UPDATE_ALL + "WHERE ID = ?";
-    mJdbcTemplate.update(query,
+    return mJdbcTemplate.update(query,
         pMutable.getSemester().getId(),
         pMutable.getTeacher().getId(),
         pMutable.getCourse().getId(),

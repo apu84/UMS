@@ -1,26 +1,35 @@
 package org.ums.academic.dao;
 
-import org.ums.domain.model.mutable.MutableTeacher;
 import org.ums.domain.model.mutable.MutableUser;
-import org.ums.domain.model.readOnly.Department;
-import org.ums.domain.model.readOnly.Teacher;
 import org.ums.domain.model.readOnly.User;
-import org.ums.manager.TeacherManager;
 import org.ums.manager.UserManager;
 
-import java.util.List;
-
-public class UserDaoDecorator  extends ContentDaoDecorator<User, MutableUser, String, UserManager> implements UserManager {
+public class UserDaoDecorator extends ContentDaoDecorator<User, MutableUser, String, UserManager> implements UserManager {
   @Override
-  public void setPasswordResetToken(String pToken, String pUserId)  throws Exception{
-     getManager().setPasswordResetToken(pToken, pUserId);
+  public int setPasswordResetToken(String pToken, String pUserId) throws Exception {
+    int modified = getManager().setPasswordResetToken(pToken, pUserId);
+    if (modified <= 0) {
+      throw new IllegalArgumentException("No entry updated");
+    }
+    return modified;
   }
 
-  public void updatePassword(String pUserId,String pPassword) throws Exception {
-    getManager().updatePassword(pUserId, pPassword);
+  @Override
+  public int updatePassword(String pUserId, String pPassword) throws Exception {
+    int modified = getManager().updatePassword(pUserId, pPassword);
+    if (modified <= 0) {
+      throw new IllegalArgumentException("No entry updated");
+    }
+    return modified;
   }
-  public void clearPasswordResetToken(final String pUserId) throws Exception {
-    getManager().clearPasswordResetToken(pUserId);
+
+  @Override
+  public int clearPasswordResetToken(final String pUserId) throws Exception {
+    int modified = getManager().clearPasswordResetToken(pUserId);
+    if (modified <= 0) {
+      throw new IllegalArgumentException("No entry updated");
+    }
+    return modified;
   }
 
 }

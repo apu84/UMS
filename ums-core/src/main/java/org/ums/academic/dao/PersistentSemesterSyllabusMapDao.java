@@ -57,9 +57,10 @@ public class PersistentSemesterSyllabusMapDao extends SemesterSyllabusMapDaoDeco
     return mJdbcTemplate.queryForObject(query, new Object[]{pMapId}, new SemesterSyllabusRowMapper());
   }
 
-  public void update(final MutableSemesterSyllabusMap pSSMap) throws Exception {
+  @Override
+  public int update(final MutableSemesterSyllabusMap pSSMap) throws Exception {
     String query = UPDATE_ONE + " Where Mapping_Id=?";
-    mJdbcTemplate.update(query,
+    return mJdbcTemplate.update(query,
         pSSMap.getSyllabus().getId(),
         pSSMap.getId());
   }

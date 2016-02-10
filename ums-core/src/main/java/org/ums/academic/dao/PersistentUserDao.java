@@ -5,7 +5,6 @@ import org.springframework.jdbc.core.RowMapper;
 import org.ums.academic.model.PersistentUser;
 import org.ums.domain.model.mutable.MutableUser;
 import org.ums.domain.model.readOnly.User;
-import org.ums.manager.ContentManager;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,7 +20,7 @@ public class PersistentUserDao extends UserDaoDecorator {
   static String DELETE_ALL = "DELETE FROM USERS ";
   static String INSERT_ALL = "INSERT INTO USERS(USER_ID, PASSWORD, ROLE_ID, STATUS, TEMP_PASSWORD) VALUES " +
       "(?, ?, ?, ?, ?)";
-  static String UPDATE_PASSWORD_RESET_TOKEN="Update USERS Set PR_TOKEN=?,TOKEN_GENERATED_ON=SYSDATE Where User_Id=? ";
+  static String UPDATE_PASSWORD_RESET_TOKEN = "Update USERS Set PR_TOKEN=?,TOKEN_GENERATED_ON=SYSDATE Where User_Id=? ";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -42,40 +41,40 @@ public class PersistentUserDao extends UserDaoDecorator {
   }
 
   @Override
-  public void update(MutableUser pMutable) throws Exception {
+  public int update(MutableUser pMutable) throws Exception {
     String query = UPDATE_ALL + "WHERE USER_ID = ?";
-    mJdbcTemplate.update(query, pMutable.getPassword() == null ? "" : String.valueOf(pMutable.getPassword()),
+    return mJdbcTemplate.update(query, pMutable.getPassword() == null ? "" : String.valueOf(pMutable.getPassword()),
         pMutable.getRole().getId(), pMutable.isActive(),
         pMutable.getTemporaryPassword() == null ? "" : String.valueOf(pMutable.getPassword()), pMutable.getId());
   }
 
   @Override
-  public void updatePassword(final String pUserId,final String pPassword) throws Exception {
+  public int updatePassword(final String pUserId, final String pPassword) throws Exception {
     String query = UPDATE_PASSWORD + "WHERE USER_ID = ?";
-    mJdbcTemplate.update(query, pPassword,pUserId);
+    return mJdbcTemplate.update(query, pPassword, pUserId);
   }
 
   @Override
-  public void clearPasswordResetToken(final String pUserId) throws Exception {
+  public int clearPasswordResetToken(final String pUserId) throws Exception {
     String query = CLEAR_PASSWORD_RESET_TOKEN + "WHERE USER_ID = ?";
-    mJdbcTemplate.update(query,pUserId);
+    return mJdbcTemplate.update(query, pUserId);
   }
 
 
   @Override
-  public void delete(MutableUser pMutable) throws Exception {
+  public int delete(MutableUser pMutable) throws Exception {
     String query = DELETE_ALL + "WHERE USER_ID = ?";
-    mJdbcTemplate.update(query, pMutable.getId());
+    return mJdbcTemplate.update(query, pMutable.getId());
   }
 
   @Override
-  public void setPasswordResetToken(String pToken, String pUserId) throws Exception{
-      mJdbcTemplate.update(UPDATE_PASSWORD_RESET_TOKEN, pToken,pUserId);
+  public int setPasswordResetToken(String pToken, String pUserId) throws Exception {
+    return mJdbcTemplate.update(UPDATE_PASSWORD_RESET_TOKEN, pToken, pUserId);
   }
 
   @Override
-  public void create(MutableUser pMutable) throws Exception {
-    mJdbcTemplate.update(INSERT_ALL, pMutable.getId(), pMutable.getPassword() == null ? "" : String.valueOf(pMutable.getPassword()),
+  public int create(MutableUser pMutable) throws Exception {
+    return mJdbcTemplate.update(INSERT_ALL, pMutable.getId(), pMutable.getPassword() == null ? "" : String.valueOf(pMutable.getPassword()),
         pMutable.getRole().getId(), pMutable.isActive(), pMutable.getTemporaryPassword() == null ? "" : String.valueOf(pMutable.getTemporaryPassword()));
   }
 
@@ -90,7 +89,7 @@ public class PersistentUserDao extends UserDaoDecorator {
       user.setTemporaryPassword((rs.getString("TEMP_PASSWORD") == null ? null : rs.getString("TEMP_PASSWORD").toCharArray()));
       user.setPasswordResetToken(rs.getString("PR_TOKEN"));
 
-      Timestamp timestamp =rs.getTimestamp("TOKEN_GENERATED_ON");
+      Timestamp timestamp = rs.getTimestamp("TOKEN_GENERATED_ON");
       if (timestamp != null)
         user.setPasswordTokenGenerateDateTime(new java.util.Date(timestamp.getTime()));
 

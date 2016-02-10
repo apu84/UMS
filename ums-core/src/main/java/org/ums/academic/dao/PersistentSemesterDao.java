@@ -37,14 +37,16 @@ public class PersistentSemesterDao extends SemesterDaoDecorator {
     return mJdbcTemplate.queryForObject(query, new Object[]{pSemesterId}, new SemesterRowMapper());
   }
 
+  @Override
   public List<Semester> getAll() throws Exception {
     String query = SELECT_ALL;
     return mJdbcTemplate.query(query, new SemesterRowMapper());
   }
 
-  public void update(final MutableSemester pSemester) throws Exception {
+  @Override
+  public int update(final MutableSemester pSemester) throws Exception {
     String query = UPDATE_ONE + "WHERE SEMESTER_ID = ?";
-    mJdbcTemplate.update(query,
+    return mJdbcTemplate.update(query,
         pSemester.getName(),
         mDateFormat.format(pSemester.getStartDate()),
         pSemester.getEndDate() == null ? "" : mDateFormat.format(pSemester.getEndDate()),
@@ -53,13 +55,15 @@ public class PersistentSemesterDao extends SemesterDaoDecorator {
         pSemester.getId());
   }
 
-  public void delete(final MutableSemester pSemester) throws Exception {
+  @Override
+  public int delete(final MutableSemester pSemester) throws Exception {
     String query = DELETE_ONE + "WHERE SEMESTER_ID = ?";
-    mJdbcTemplate.update(query, pSemester.getId());
+    return mJdbcTemplate.update(query, pSemester.getId());
   }
 
-  public void create(final MutableSemester pSemester) throws Exception {
-    mJdbcTemplate.update(INSERT_ONE,
+  @Override
+  public int create(final MutableSemester pSemester) throws Exception {
+    return mJdbcTemplate.update(INSERT_ONE,
         pSemester.getId(),
         pSemester.getName(),
         mDateFormat.format(pSemester.getStartDate()),
@@ -68,13 +72,13 @@ public class PersistentSemesterDao extends SemesterDaoDecorator {
         pSemester.getStatus());
   }
 
-    @Override
-    public List<Semester> getSemesters(Integer pProgramType, Integer pLimit) throws Exception {
-        String query = SELECT_ALL + "WHERE PROGRAM_TYPE = ? Order By START_DATE desc";
-        return mJdbcTemplate.query(query, new Object[]{pProgramType}, new SemesterRowMapper());
-    }
+  @Override
+  public List<Semester> getSemesters(Integer pProgramType, Integer pLimit) throws Exception {
+    String query = SELECT_ALL + "WHERE PROGRAM_TYPE = ? Order By START_DATE desc";
+    return mJdbcTemplate.query(query, new Object[]{pProgramType}, new SemesterRowMapper());
+  }
 
-    class SemesterRowMapper implements RowMapper<Semester> {
+  class SemesterRowMapper implements RowMapper<Semester> {
     @Override
     public Semester mapRow(ResultSet resultSet, int i) throws SQLException {
       PersistentSemester semester = new PersistentSemester();
