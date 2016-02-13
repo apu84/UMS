@@ -5,6 +5,11 @@
   <display-name>ums-webservice-common</display-name>
 
   <context-param>
+    <param-name>locatorFactorySelector</param-name>
+    <param-value>classpath:beanRefContext.xml</param-value>
+  </context-param>
+
+  <context-param>
     <param-name>parentContextKey</param-name>
     <param-value>sharedContext</param-value>
   </context-param>

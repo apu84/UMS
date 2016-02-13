@@ -2,18 +2,18 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
     http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
     http://www.springframework.org/schema/context
     http://www.springframework.org/schema/context/spring-context-4.0.xsd
     http://www.springframework.org/schema/tx
-    http://www.springframework.org/schema/tx/spring-tx-4.0.xsd"
-       xmlns:tx="http://www.springframework.org/schema/tx">
+    http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop.xsd">
 
-  <context:component-scan base-package="org.ums.dummy.webservice,org.ums.common.academic.resource,org.ums.common.login,org.ums.common.report" />
-  <context:annotation-config/>
-    <!-- Define beans specific to the SampleWeb2 project here. 
-         Beans used by all WARs should be defined in the SampleServices project instead. -->
-  <tx:annotation-driven  transaction-manager="transactionManager"/>
-
+  <aop:aspectj-autoproxy/>
+  <context:component-scan
+      base-package="org.ums.dummy.webservice,org.ums.common.academic.resource,org.ums.common.academic.resource.helper,org.ums.common.login,org.ums.common.report"/>
 </beans>

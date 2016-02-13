@@ -143,6 +143,11 @@ public class AcademicConfiguration {
   }
 
   @Bean
+  PermissionManager permissionManager() {
+    return new PersistentPermissionDao(mJdbcTemplate);
+  }
+
+  @Bean
   Builder<Program, MutableProgram> getProgramBuilder() {
     return new ProgramBuilder();
   }

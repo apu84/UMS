@@ -1,15 +1,26 @@
 package org.ums.authentication;
 
+import com.google.common.collect.Sets;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.authc.credential.PasswordMatcher;
+import org.apache.shiro.authz.AuthorizationException;
+import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.jdbc.JdbcRealm;
+import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.ums.domain.model.mutable.MutableUser;
+import org.ums.domain.model.readOnly.Permission;
 import org.ums.domain.model.readOnly.User;
 import org.ums.manager.ContentManager;
+import org.ums.manager.PermissionManager;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 
 public class UMSAuthenticationRealm extends JdbcRealm {
@@ -19,6 +30,8 @@ public class UMSAuthenticationRealm extends JdbcRealm {
   @Autowired
   @Qualifier("userManager")
   private ContentManager<User, MutableUser, String> mUserManager;
+  @Autowired
+  private PermissionManager mPermissionManager;
 
   public void setSalt(String pSalt) {
     mSalt = pSalt;
@@ -82,5 +95,36 @@ public class UMSAuthenticationRealm extends JdbcRealm {
   public void setHashCredentialsMatcher(CredentialsMatcher pHashCredentialsMatcher) {
     mHashCredentialsMatcher = pHashCredentialsMatcher;
   }
-  //TODO: Implement AuthorizationInfo and Permissions also
+
+  @Override
+  public boolean hasRole(PrincipalCollection principals, String roleIdentifier) {
+    return true;
+  }
+
+  @Override
+  protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) throws AuthorizationException {
+    //null usernames are invalid
+    if (principals == null) {
+      throw new AuthorizationException("PrincipalCollection method argument cannot be null.");
+    }
+    SimpleAuthorizationInfo info = null;
+    String username = (String) getAvailablePrincipal(principals);
+    try {
+      User user = mUserManager.get(username);
+      info = new SimpleAuthorizationInfo(Sets.newHashSet(user.getPrimaryRole().getName()));
+      List<Permission> rolePermissions = mPermissionManager.getPermissionByRole(user.getPrimaryRole());
+
+      Set<String> permissions = new HashSet<>();
+
+      for (Permission permission : rolePermissions) {
+        permissions.addAll(permission.getPermissions());
+      }
+
+      info.setStringPermissions(permissions);
+    } catch (Exception e) {
+      throw new AuthorizationException(e);
+    }
+    return info;
+
+  }
 }

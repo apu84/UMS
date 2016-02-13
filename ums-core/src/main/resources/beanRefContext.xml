@@ -9,7 +9,7 @@
     <bean id="sharedContext" class="org.springframework.context.support.ClassPathXmlApplicationContext">
         <constructor-arg>
             <list>
-                <value>services-context.xml</value>
+                <value>classpath*:services-context.xml</value>
             </list>
         </constructor-arg>
     </bean>

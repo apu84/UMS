@@ -32,7 +32,7 @@ public class UserDaoImpl implements UserDao {
     return jdbcTemplate.queryForObject(query, new Object[]{pUserName}, new UserRowMapper());
   }
 
-  @RequiresPermissions("filesystem:read")
+ // @RequiresPermissions("filesystem:read")
   public List<User> getAll() {
     String query = SELECT_ALL;
     JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);

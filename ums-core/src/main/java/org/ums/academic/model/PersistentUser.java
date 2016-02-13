@@ -9,6 +9,9 @@ import org.ums.domain.model.readOnly.Role;
 import org.ums.domain.model.readOnly.User;
 import org.ums.manager.ContentManager;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PersistentUser implements MutableUser {
   private static ContentManager<User, MutableUser, String> sUserManager;
   private static ContentManager<Role, MutableRole, Integer> sRoleManager;
@@ -22,11 +25,14 @@ public class PersistentUser implements MutableUser {
   private String mId;
   private char[] mPassword;
   private char[] mTemporaryPassword;
-  private Role mRole;
-  private Integer mRoleId;
+  private List<Role> mRoles;
+  private List<Integer> mRoleIds;
   private boolean mActive;
   private String mPasswordResetToken;
   private boolean mPasswordResetTokenValidity;
+  private Integer mPrimaryRoleId;
+  private Role mPrimaryRole;
+  private List<String> mAdditionalPermissions;
 
   public PersistentUser() {
 
@@ -36,9 +42,11 @@ public class PersistentUser implements MutableUser {
     mId = pPersistentUser.getId();
     mPassword = pPersistentUser.getPassword();
     mTemporaryPassword = pPersistentUser.getTemporaryPassword();
-    mRoleId = pPersistentUser.getRoleId();
-    mRole = pPersistentUser.getRole();
+    mRoleIds = pPersistentUser.getRoleIds();
+    mRoles = pPersistentUser.getRoles();
     mActive = pPersistentUser.isActive();
+    mPrimaryRole = pPersistentUser.getPrimaryRole();
+    mAdditionalPermissions = pPersistentUser.getAdditionalPermissions();
   }
 
   @Override
@@ -66,23 +74,27 @@ public class PersistentUser implements MutableUser {
   }
 
   @Override
-  public Integer getRoleId() {
-    return mRoleId;
+  public List<Integer> getRoleIds() {
+    return mRoleIds;
   }
 
   @Override
-  public void setRoleId(Integer pRoleId) {
-    mRoleId = pRoleId;
+  public void setRoleIds(List<Integer> pRoleIds) {
+    mRoleIds = pRoleIds;
   }
 
   @Override
-  public Role getRole() throws Exception {
-    return mRole == null ? sRoleManager.get(mRoleId) : sRoleManager.validate(mRole);
+  public List<Role> getRoles() throws Exception {
+    mRoles = new ArrayList<>();
+    for (Integer roleId : mRoleIds) {
+      mRoles.add(sRoleManager.get(roleId));
+    }
+    return mRoles;
   }
 
   @Override
-  public void setRole(Role pRole) {
-    mRole = pRole;
+  public void setRoles(List<Role> pRoles) {
+    mRoles = pRoles;
   }
 
   @Override
@@ -139,5 +151,35 @@ public class PersistentUser implements MutableUser {
   @Override
   public boolean isPasswordResetTokenValid() {
     return mPasswordResetTokenValidity;
+  }
+
+  @Override
+  public void setPrimaryRoleId(Integer pRoleId) {
+    mPrimaryRoleId = pRoleId;
+  }
+
+  @Override
+  public void setPrimaryRole(Role pPrimaryRole) {
+    mPrimaryRole = pPrimaryRole;
+  }
+
+  @Override
+  public Integer getPrimaryRoleId() {
+    return mPrimaryRoleId;
+  }
+
+  @Override
+  public Role getPrimaryRole() throws Exception {
+    return mPrimaryRole == null ? sRoleManager.get(mPrimaryRoleId) : sRoleManager.validate(mPrimaryRole);
+  }
+
+  @Override
+  public void setAdditionalPermissions(List<String> pAdditionalPermissions) {
+    mAdditionalPermissions = pAdditionalPermissions;
+  }
+
+  @Override
+  public List<String> getAdditionalPermissions() {
+    return mAdditionalPermissions;
   }
 }
