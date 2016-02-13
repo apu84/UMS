@@ -14,6 +14,7 @@ import org.ums.manager.ContentManager;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 
 public class NewUserFilter extends AuthorizationFilter {
 
@@ -27,8 +28,11 @@ public class NewUserFilter extends AuthorizationFilter {
 
   @Override
   protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
+    HttpServletRequest httpRequest = WebUtils.toHttp(request);
+    String path = WebUtils.getPathWithinApplication(httpRequest);
 
-    if (isLoginRequest(request, response)) {
+    if (isLoginRequest(request, response)
+        || path.contains("forgotPassword")) {
       return true;
     }
 
