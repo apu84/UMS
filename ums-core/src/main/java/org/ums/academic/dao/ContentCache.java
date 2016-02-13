@@ -8,7 +8,7 @@ import org.ums.manager.ContentManager;
 
 import java.util.List;
 
-public abstract class ContentCache<R extends Identifier<I> & LastModifier, M extends R, I, C extends ContentManager<R,M,I>> extends ContentDaoDecorator<R, M, I, C> {
+public abstract class ContentCache<R extends Identifier<I> & LastModifier, M extends R, I, C extends ContentManager<R, M, I>> extends ContentDaoDecorator<R, M, I, C> {
 
   @Override
   public List<R> getAll() throws Exception {
@@ -20,15 +20,17 @@ public abstract class ContentCache<R extends Identifier<I> & LastModifier, M ext
   }
 
   @Override
-  public void delete(M pMutable) throws Exception {
-    super.delete(pMutable);
+  public int delete(M pMutable) throws Exception {
+    int modified = super.delete(pMutable);
     invalidate(pMutable);
+    return modified;
   }
 
   @Override
-  public void update(M pMutable) throws Exception {
-    super.update(pMutable);
+  public int update(M pMutable) throws Exception {
+    int modified = super.update(pMutable);
     invalidate(pMutable);
+    return modified;
   }
 
   @Override

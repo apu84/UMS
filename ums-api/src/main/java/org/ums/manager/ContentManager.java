@@ -10,9 +10,9 @@ public interface ContentManager<R, M, I> {
 
   R validate(final R pReadonly) throws Exception;
 
-  void update(final M pMutable) throws Exception;
+  int update(final M pMutable) throws Exception;
 
-  void delete(final M pMutable) throws Exception;
+  int delete(final M pMutable) throws Exception;
 
-  void create(final M pMutable) throws Exception;
+  int create(final M pMutable) throws Exception;
 }

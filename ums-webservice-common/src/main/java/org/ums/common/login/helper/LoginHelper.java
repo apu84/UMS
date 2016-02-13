@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import org.ums.domain.model.dto.ResponseDto;
 import org.ums.domain.model.mutable.MutableUser;
 import org.ums.domain.model.readOnly.User;
 import org.ums.manager.ContentManager;
@@ -56,18 +57,6 @@ public class LoginHelper {
 
     return Response.notModified().build();
   }
-
-  public Response forgotPassword(final JsonObject pJsonObject) throws Exception {
-    String userId = pJsonObject.getString("userId");
-    User user = mUserManager.get(userId);
-    if(user==null){
-      //Set proper message with 200 response code and KO status . STATUS_CODE,STATUS_MESSAGE,RESPONSE TYPE 200;
-      //return;
-    }
-
-    //
-    return null;
-    }
 
   protected void changePassword(User pCurrentUser, final String pNewPassword) throws Exception {
     MutableUser mutableUser = pCurrentUser.edit();

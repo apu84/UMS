@@ -36,20 +36,20 @@ public class PersistentRoleDao extends ContentDaoDecorator<Role, MutableRole, In
   }
 
   @Override
-  public void update(MutableRole pMutable) throws Exception {
+  public int update(MutableRole pMutable) throws Exception {
     String query = UPDATE_ALL + "WHERE ROLE_ID = ?";
-    mJdbcTemplate.update(query, pMutable.getId());
+    return mJdbcTemplate.update(query, pMutable.getId());
   }
 
   @Override
-  public void delete(MutableRole pMutable) throws Exception {
+  public int delete(MutableRole pMutable) throws Exception {
     String query = DELETE_ALL + "WHERE ROLE_ID = ?";
-    mJdbcTemplate.update(query, pMutable.getId());
+    return mJdbcTemplate.update(query, pMutable.getId());
   }
 
   @Override
-  public void create(MutableRole pMutable) throws Exception {
-    mJdbcTemplate.update(INSERT_ALL, pMutable.getId(), pMutable.getName());
+  public int create(MutableRole pMutable) throws Exception {
+    return mJdbcTemplate.update(INSERT_ALL, pMutable.getId(), pMutable.getName());
   }
 
   class RoleRowMapper implements RowMapper<Role> {

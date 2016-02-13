@@ -35,18 +35,18 @@ public class PersistentProgramTypeDao extends ContentDaoDecorator<ProgramType, M
     return mJdbcTemplate.query(query, new ProgramTypeRowMapper());
   }
 
-  public void update(final MutableProgramType pProgramType) throws Exception {
+  public int update(final MutableProgramType pProgramType) throws Exception {
     String query = UPDATE_ONE + "WHERE TYPE_ID = ?";
-    mJdbcTemplate.update(query, pProgramType.getName(), pProgramType.getId());
+    return mJdbcTemplate.update(query, pProgramType.getName(), pProgramType.getId());
   }
 
-  public void delete(final MutableProgramType pProgramType) throws Exception {
+  public int delete(final MutableProgramType pProgramType) throws Exception {
     String query = DELETE_ONE + "WHERE TYPE_ID = ?";
-    mJdbcTemplate.update(query, pProgramType.getId());
+    return mJdbcTemplate.update(query, pProgramType.getId());
   }
 
-  public void create(final MutableProgramType pProgramType) throws Exception {
-    mJdbcTemplate.update(INSERT_ONE, pProgramType.getId(), pProgramType.getName());
+  public int create(final MutableProgramType pProgramType) throws Exception {
+    return mJdbcTemplate.update(INSERT_ONE, pProgramType.getId(), pProgramType.getName());
   }
 
   class ProgramTypeRowMapper implements RowMapper<ProgramType> {

@@ -45,22 +45,22 @@ public class PersistentCourseGroupDao extends CourseGroupDaoDecorator {
   }
 
   @Override
-  public void update(final MutableCourseGroup pCourseGroup) throws Exception {
+  public int update(final MutableCourseGroup pCourseGroup) throws Exception {
     String query = UPDATE_ONE + "WHERE GORUP_ID = ?";
-    mJdbcTemplate.update(query,
+    return mJdbcTemplate.update(query,
         pCourseGroup.getSyllabus().getId(),
         pCourseGroup.getName(),
         pCourseGroup.getId());
   }
 
-  public void delete(final MutableCourseGroup pCourseGroup) throws Exception {
+  public int delete(final MutableCourseGroup pCourseGroup) throws Exception {
     String query = DELETE_ONE + "WHERE GROUP_ID = ?";
-    mJdbcTemplate.update(query, pCourseGroup.getId());
+    return mJdbcTemplate.update(query, pCourseGroup.getId());
   }
 
   @Override
-  public void create(final MutableCourseGroup pCourseGroup) throws Exception {
-    mJdbcTemplate.update(INSERT_ONE,
+  public int create(final MutableCourseGroup pCourseGroup) throws Exception {
+    return mJdbcTemplate.update(INSERT_ONE,
         pCourseGroup.getSyllabus().getId(),
         pCourseGroup.getId(),
         pCourseGroup.getName());

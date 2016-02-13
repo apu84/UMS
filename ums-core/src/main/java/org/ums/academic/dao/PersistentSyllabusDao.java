@@ -34,26 +34,28 @@ public class PersistentSyllabusDao extends SyllabusDaoDecorator {
     String query = SELECT_ALL + "WHERE PROGRAM_ID = ?";
     return mJdbcTemplate.query(query, new Object[]{pProgramId}, new SyllabusRowMapper());
   }
+  @Override
   public List<Syllabus> getAll() throws Exception {
     String query = SELECT_ALL;
     return mJdbcTemplate.query(query, new SyllabusRowMapper());
   }
 
-  public void update(final MutableSyllabus pSyllabus) throws Exception {
+  @Override
+  public int update(final MutableSyllabus pSyllabus) throws Exception {
     String query = UPDATE_ONE + "WHERE SYLLABUS_ID = ?";
-    mJdbcTemplate.update(query,
+    return mJdbcTemplate.update(query,
         pSyllabus.getSemester().getId(),
         pSyllabus.getProgram().getId(),
         pSyllabus.getId());
   }
 
-  public void delete(final MutableSyllabus pSyllabus) throws Exception {
+  public int delete(final MutableSyllabus pSyllabus) throws Exception {
     String query = DELETE_ONE + "WHERE SYLLABUS_ID = ?";
-    mJdbcTemplate.update(query, pSyllabus.getId());
+    return mJdbcTemplate.update(query, pSyllabus.getId());
   }
 
-  public void create(final MutableSyllabus pSyllabus) throws Exception {
-    mJdbcTemplate.update(INSERT_ONE,
+  public int create(final MutableSyllabus pSyllabus) throws Exception {
+    return mJdbcTemplate.update(INSERT_ONE,
         pSyllabus.getId(),
         pSyllabus.getSemester().getId(),
         pSyllabus.getProgram().getId());

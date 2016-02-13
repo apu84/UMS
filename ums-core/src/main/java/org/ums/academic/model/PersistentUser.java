@@ -12,6 +12,8 @@ import org.ums.manager.ContentManager;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.util.Date;
+
 public class PersistentUser implements MutableUser {
   private static ContentManager<User, MutableUser, String> sUserManager;
   private static ContentManager<Role, MutableRole, Integer> sRoleManager;
@@ -29,7 +31,7 @@ public class PersistentUser implements MutableUser {
   private List<Integer> mRoleIds;
   private boolean mActive;
   private String mPasswordResetToken;
-  private boolean mPasswordResetTokenValidity;
+  private Date mPasswordTokenGenerateDateTime;
   private Integer mPrimaryRoleId;
   private Role mPrimaryRole;
   private List<String> mAdditionalPermissions;
@@ -144,13 +146,13 @@ public class PersistentUser implements MutableUser {
   }
 
   @Override
-  public void setPasswordResetTokenValidity(boolean pPasswordResetToken) {
-    mPasswordResetTokenValidity=pPasswordResetToken;
+  public void setPasswordTokenGenerateDateTime(Date pDateTime) {
+    mPasswordTokenGenerateDateTime=pDateTime;
   }
 
   @Override
-  public boolean isPasswordResetTokenValid() {
-    return mPasswordResetTokenValidity;
+  public Date getPasswordTokenGenerateDateTime() {
+    return mPasswordTokenGenerateDateTime;
   }
 
   @Override

@@ -95,9 +95,9 @@ public class PersistentStudentDao extends ContentDaoDecorator<Student, MutableSt
   }
 
   @Override
-  public void update(MutableStudent pMutable) throws Exception {
+  public int update(MutableStudent pMutable) throws Exception {
     String query = UPDATE_ALL + " WHERE STUDENT_ID = ?";
-    mJdbcTemplate.update(query,
+    return mJdbcTemplate.update(query,
         pMutable.getFullName(),
         pMutable.getDepartmentId(),
         pMutable.getSemesterId(),
@@ -121,14 +121,14 @@ public class PersistentStudentDao extends ContentDaoDecorator<Student, MutableSt
   }
 
   @Override
-  public void delete(MutableStudent pMutable) throws Exception {
+  public int delete(MutableStudent pMutable) throws Exception {
     String query = DELETE_ALL + " WHERE STUDENT_ID = ?";
-    mJdbcTemplate.update(query, pMutable.getId());
+    return mJdbcTemplate.update(query, pMutable.getId());
   }
 
   @Override
-  public void create(MutableStudent pMutable) throws Exception {
-    mJdbcTemplate.update(CREATE_ALL,
+  public int create(MutableStudent pMutable) throws Exception {
+    return mJdbcTemplate.update(CREATE_ALL,
         pMutable.getId(),
         pMutable.getFullName(),
         pMutable.getDepartmentId(),

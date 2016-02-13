@@ -33,15 +33,27 @@ public class ContentDaoDecorator<R, M, I, C extends ContentManager<R, M, I>> imp
     return getManager() == null ? pReadonly : getManager().validate(pReadonly);
   }
 
-  public void update(final M pMutable) throws Exception {
-    getManager().update(pMutable);
+  public int update(final M pMutable) throws Exception {
+    int updated = getManager().update(pMutable);
+    if (updated <= 0) {
+      throw new IllegalArgumentException("No entry has been updated");
+    }
+    return updated;
   }
 
-  public void delete(final M pMutable) throws Exception {
-    getManager().delete(pMutable);
+  public int delete(final M pMutable) throws Exception {
+    int deleted = getManager().delete(pMutable);
+    if (deleted <= 0) {
+      throw new IllegalArgumentException("No entry has been deleted");
+    }
+    return deleted;
   }
 
-  public void create(final M pMutable) throws Exception {
-    getManager().create(pMutable);
+  public int create(final M pMutable) throws Exception {
+    int created = getManager().create(pMutable);
+    if (created <= 0) {
+      throw new IllegalArgumentException("No entry has been created");
+    }
+    return created;
   }
 }

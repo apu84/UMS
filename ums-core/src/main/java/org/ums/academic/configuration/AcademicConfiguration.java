@@ -13,6 +13,7 @@ import org.ums.domain.model.dto.SemesterSyllabusMapDto;
 import org.ums.domain.model.mutable.*;
 import org.ums.domain.model.readOnly.*;
 import org.ums.manager.*;
+import org.ums.services.LoginService;
 import org.ums.util.Constants;
 
 import javax.sql.DataSource;
@@ -128,7 +129,7 @@ public class AcademicConfiguration {
   }
 
   @Bean(name = "userManager")
-  ContentManager<User, MutableUser, String> userManager() {
+UserManager userManager() {
     return new PersistentUserDao(mJdbcTemplate);
   }
 
@@ -275,5 +276,10 @@ public class AcademicConfiguration {
     List<Builder<CourseTeacher, MutableCourseTeacher>> builders = new ArrayList<>();
     builders.add(new CourseTeacherBuilder(courseManager(), teacherManager(), semesterManager()));
     return builders;
+  }
+
+  @Bean
+  LoginService  loginService() {
+    return new LoginService();
   }
 }
