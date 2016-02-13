@@ -1,6 +1,8 @@
 package org.ums.academic.builder;
 
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.mutable.MutableProgramType;
 import org.ums.domain.model.mutable.MutableSemester;

@@ -1,6 +1,7 @@
 package org.ums.common.academic.resource.helper;
 
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -62,6 +63,8 @@ public class SemesterResourceHelper extends ResourceHelper<Semester, MutableSeme
     return "";
   }
 
+  //TODO: Remove this @RequiresPermissions, as it is added to test permission workflow
+  @RequiresPermissions(value = "lookup:semester")
   public JsonObject buildSemesters(final List<Semester> pSemesters, final UriInfo pUriInfo) throws Exception {
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();

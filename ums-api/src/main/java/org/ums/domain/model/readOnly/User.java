@@ -23,8 +23,6 @@ public interface User extends Serializable, EditType<MutableUser>, Identifier<St
 
   Date getPasswordTokenGenerateDateTime();
 
-  boolean isPasswordResetTokenValid();
-
   Integer getPrimaryRoleId();
 
   Role getPrimaryRole() throws Exception;

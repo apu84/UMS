@@ -97,11 +97,6 @@ public class UMSAuthenticationRealm extends JdbcRealm {
   }
 
   @Override
-  public boolean hasRole(PrincipalCollection principals, String roleIdentifier) {
-    return true;
-  }
-
-  @Override
   protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) throws AuthorizationException {
     //null usernames are invalid
     if (principals == null) {

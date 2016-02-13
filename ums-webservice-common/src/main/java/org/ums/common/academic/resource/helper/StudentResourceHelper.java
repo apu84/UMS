@@ -58,7 +58,7 @@ public class StudentResourceHelper extends ResourceHelper<Student, MutableStuden
     String random = RandomStringUtils.randomAlphanumeric(10).toUpperCase();
     studentUser.setTemporaryPassword(random.toCharArray());
     //TODO: Use role name to fetch a particular role, say for Student it should be "student"
-    studentUser.setRole(mRoleManager.get(11));
+    studentUser.setPrimaryRole(mRoleManager.get(11));
     studentUser.setActive(true);
     studentUser.commit(false);
 
