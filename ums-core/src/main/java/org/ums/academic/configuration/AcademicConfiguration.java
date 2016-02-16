@@ -277,6 +277,22 @@ UserManager userManager() {
     builders.add(new CourseTeacherBuilder(courseManager(), teacherManager(), semesterManager()));
     return builders;
   }
+  ClassRoomManager getPersistentClassRoomDao() {
+    return new PersistentClassRoomDao(mJdbcTemplate);
+  }
+  @Bean(name = "classRoomManager")
+  ClassRoomManager classRoomManager() {
+    return new PersistentClassRoomDao(mJdbcTemplate);
+  }
+  @Bean
+  Builder<ClassRoom, MutableClassRoom> getClassRoomBuilder() {
+    return new ClassRoomBuilder();
+  }
+
+  @Bean
+  List<Builder<ClassRoom, MutableClassRoom>> getClassRoomBuilders() {
+    return Arrays.asList(new ClassRoomBuilder());
+  }
 
   @Bean
   LoginService  loginService() {

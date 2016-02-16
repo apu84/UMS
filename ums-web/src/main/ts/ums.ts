@@ -267,6 +267,19 @@ module ums {
           url: "/studentProfile",
           templateUrl: 'views/student/student-profile.html'
         })
-
+       .state('classRoomInfo', {
+          url: "/classRoomInfo",
+          controller: 'ClassRoomInfo',
+          templateUrl: 'views/common/academic/class-room.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: ['vendors/jqGrid_JS_5.0.2/js/i18n/grid.locale-en.js',
+                  'vendors/jqGrid_JS_5.0.2/src/jquery.jqGrid.js',
+                  'vendors/jqGrid_JS_5.0.2/css/ui.jqgrid-bootstrap.css']
+              });
+            }]
+          }
+    })
   });
 }

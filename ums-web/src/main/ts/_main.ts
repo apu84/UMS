@@ -12,6 +12,7 @@
 /// <reference path='lib/bootstrap-switch.d.ts'/>
 /// <reference path='lib/uri.d.ts'/>
 /// <reference path='lib/angular-cookies.d.ts'/>
+/// <reference path='lib/jquery.jqgrid.d.ts'/>
 
 
 /// <reference path='ums.ts'/>
