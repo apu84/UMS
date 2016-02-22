@@ -17,11 +17,7 @@ module ums {
     public static $inject = ['appConstants', 'HttpClient','$scope'];
     constructor(private appConstants:any,private httpClient:HttpClient,private $scope:IClassRoomScope) {
 
-      $.jgrid.defaults.responsive = true;
-      $.jgrid.defaults.styleUI = 'Bootstrap';
-      $.extend($.jgrid.inlineEdit, { restoreAfterError: false });
-
-       var lastSel,
+      var lastSel,
       cancelEditing = function(myGrid) {
         var lrid;
         if (typeof lastSel !== "undefined") {
@@ -31,36 +27,13 @@ module ums {
           $("tr#" + lrid + " div.ui-inline-save, " + "tr#" + lrid + " div.ui-inline-cancel").hide();
         }
       };
-      $.extend($.jgrid.defaults, {
-        ajaxRowOptions: { contentType: "application/json", async: true,type:"PUT",
-          beforeSend: function (jqXHR, settings) {
-            jqXHR.setRequestHeader("Authorization", 'Basic ZHByZWdpc3RyYXI6MTIzNDU=');
-            jqXHR.setRequestHeader("If-Match", '*');
-          },
-          complete: function(res, stat) {
-            if (res.status==200 || res.status==204) {
-              $("#jqGrid").trigger("reloadGrid");
-            } else {
-              return [false, res.responseText ];
-            }
-          }
-        },
-        serializeRowData: function (data) {
-          var propertyName, propertyValue, dataToSend = {};
-          for (propertyName in data) {
-            if (data.hasOwnProperty(propertyName)) {
-              propertyValue = data[propertyName];
-              if ($.isFunction(propertyValue)) {
-                dataToSend[propertyName] = propertyValue();
-              } else {
-                dataToSend[propertyName] = propertyValue;
-              }
-            }
-          }
-          return JSON.stringify(dataToSend);
-        }
-      });
 
+      var hideDelIcon = function(rowid) {
+        setTimeout(function() {
+          $("tr#"+$.jgrid.jqID(rowid)+ " div.ui-inline-edit").hide();
+          $("tr#"+$.jgrid.jqID(rowid)+ " div.ui-inline-del").hide();
+        },50);
+      };
       var thisGrid =$("#jqGrid").jqGrid({
         datatype: "json",
         url: 'https://localhost/ums-webservice-common/academic/classroom/all',
@@ -126,9 +99,20 @@ module ums {
 
           {
             label: 'Dept./School',
-            name: 'capacity',
+            name: 'dept_id',
             width: 100,
-            editable: true
+            editable: true,
+            width: 100, align: 'center', formatter: 'select',
+            edittype: 'select',
+            editoptions: {
+              value: appConstants.dept4JqGridSelectBox,
+              defaultValue: 'None'
+            },
+            stype: 'select',
+            searchoptions: {
+              sopt: ['eq', 'ne'],
+              value:appConstants.dept4JqGridSelectBox
+            }
           },
           {
             label: 'Seat Plan',
@@ -151,11 +135,7 @@ module ums {
             formatter: "actions",
             formatoptions: {
               keys: true,
-              editOptions: {
-              },
-              addOptions: {
-                mtype: 'POST'
-              },
+              mtype: "PUT",
               delOptions: {
                 mtype: 'DELETE',
                 onclickSubmit: function(rp_ge) {
@@ -222,18 +202,27 @@ module ums {
 
       var addOptions = {
         keys: true,
-        type: "POST",
-        url: "AddUser",
+        mtype: "POST",
+        url: "https://localhost/ums-webservice-common/academic/classroom",
         successfunc: function () {
+          //Fire hoy na
           var $self = $(this);
           setTimeout(function () {
+            alert("abc");
             $self.trigger("reloadGrid");
+            alert("def");
           }, 50);
+        },
+        oneditfunc: function(){
+          hideDelIcon("empty");
         }
+
       };
       $("#jqGrid").jqGrid("inlineNav", "#jqGridPager", {
         addParams: {
           position: "last",
+          rowID: 'empty',
+          useDefValues: true,
           addRowParams: addOptions
         }
       });

@@ -21,7 +21,7 @@ public class PersistentClassRoomDao  extends ClassRoomDaoDecorator {
   static String UPDATE_ONE = "UPDATE ROOM_INFO SET ROOM_NO = ?, DESCRIPTION = ?, TOTAL_ROW=?,TOTAL_COLUMN=?,CAPACITY=?,ROOM_TYPE=?,DEPT_ID=?,EXAM_SEAT_PLAN=?,LAST_MODIFIED = " + getLastModifiedSql() + " ";
   static String DELETE_ONE = "DELETE FROM ROOM_INFO ";
   static String INSERT_ONE = "INSERT INTO ROOM_INFO(ROOM_ID,ROOM_NO,DESCRIPTION,TOTAL_ROW,TOTAL_COLUMN,CAPACITY,ROOM_TYPE,DEPT_ID,EXAM_SEAT_PLAN,LAST_MODIFIED) " +
-      "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, " + getLastModifiedSql() + ")";
+      "VALUES(SQN_CLASS_ROOM.NEXTVAL, ?, ?, ?, ?, ?, ?, ?, ?, " + getLastModifiedSql() + ")";
 
 
   private JdbcTemplate mJdbcTemplate;
@@ -61,6 +61,17 @@ public class PersistentClassRoomDao  extends ClassRoomDaoDecorator {
     return mJdbcTemplate.update(query, pClassRoom.getId());
   }
 
+  public int create(final MutableClassRoom pClassRoom) throws Exception {
+    return mJdbcTemplate.update(INSERT_ONE,
+        pClassRoom.getRoomNo(),
+        pClassRoom.getDescription(),
+        pClassRoom.getTotalRow(),
+        pClassRoom.getTotalColumn(),
+        pClassRoom.getCapacity(),
+        pClassRoom.getRoomType().getValue(),
+        pClassRoom.getDeptId(),
+        pClassRoom.isExamSeatPlan());
+  }
   /*
   @Override
   public int update(final MutableSyllabus pSyllabus) throws Exception {
@@ -76,12 +87,7 @@ public class PersistentClassRoomDao  extends ClassRoomDaoDecorator {
     return mJdbcTemplate.update(query, pSyllabus.getId());
   }
 
-  public int create(final MutableSyllabus pSyllabus) throws Exception {
-    return mJdbcTemplate.update(INSERT_ONE,
-        pSyllabus.getId(),
-        pSyllabus.getSemester().getId(),
-        pSyllabus.getProgram().getId());
-  }
+
   */
   class ClassRoomRowMapper implements RowMapper<ClassRoom> {
     @Override
@@ -92,9 +98,7 @@ public class PersistentClassRoomDao  extends ClassRoomDaoDecorator {
       classRoom.setDescription(resultSet.getString("DESCRIPTION"));
       classRoom.setTotalRow(resultSet.getInt("TOTAL_ROW"));
       classRoom.setTotalColumn(resultSet.getInt("TOTAL_COLUMN"));
-      //classRoom.setId(resultSet.getInt("ROOM_TYPE"));
-      //classRoom.setId(resultSet.getInt("DEPT_ID"));
-      //classRoom.setId(resultSet.getInt("EXAM_SEAT_PLAN"));
+      classRoom.setDeptId(resultSet.getString("DEPT_ID") == null ? "" : resultSet.getString("DEPT_ID"));
       classRoom.setExamSeatPlan(resultSet.getBoolean("EXAM_SEAT_PLAN"));
       classRoom.setRoomType(ClassRoomType.get(resultSet.getInt("ROOM_TYPE")));
 

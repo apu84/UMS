@@ -30,24 +30,14 @@ public class ClassRoomBuilder implements Builder<ClassRoom, MutableClassRoom> {
     pBuilder.add("capacity",pReadOnly.getCapacity());
     pBuilder.add("examSeatPlan",pReadOnly.isExamSeatPlan());
     pBuilder.add("roomType",pReadOnly.getRoomType().getValue());
-
-    /*
-    private int mCapacity;
-    private String mDeptId;
-    private ClassRoomType mRoomType;
-    private Department mDept;
-    private boolean mExamSeatPlan;
-    private String mLastModified;
-    */
-
-
+    pBuilder.add("dept_id",pReadOnly.getDeptId());
     pBuilder.add("self", pUriInfo.getBaseUriBuilder().path("academic").path("classroom")
         .path(pReadOnly.getId().toString()).build().toString());
   }
 
   @Override
   public void build(MutableClassRoom pMutable, JsonObject pJsonObject, final LocalCache pLocalCache) throws Exception {
-    pMutable.setId(Integer.parseInt(pJsonObject.getString("id")));
+    pMutable.setId(pJsonObject.getString("id").contains("empty")?0:Integer.parseInt(pJsonObject.getString("id")));
     pMutable.setRoomNo(pJsonObject.getString("roomNo"));
     pMutable.setDescription(pJsonObject.getString("description"));
     pMutable.setTotalRow((Integer.parseInt(pJsonObject.getString("totalRow"))));
@@ -55,5 +45,6 @@ public class ClassRoomBuilder implements Builder<ClassRoom, MutableClassRoom> {
     pMutable.setCapacity((Integer.parseInt(pJsonObject.getString("capacity"))));
     pMutable.setRoomType(ClassRoomType.values()[Integer.parseInt(pJsonObject.getString("roomType"))]);
     pMutable.setExamSeatPlan(true);
+    pMutable.setDeptId(pJsonObject.getString("dept_id"));
   }
 }
