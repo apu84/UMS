@@ -271,6 +271,12 @@ module ums {
           url: "/classRoomInfo",
           controller: 'ClassRoomInfo',
           templateUrl: 'views/common/academic/class-room.html'
-    })
+        })
+        .state('examRoutine', {
+          url: "/examRoutine",
+          controller: 'ExamRoutine',
+          templateUrl: 'views/common/academic/exam-routine.html'
+        })
+
   });
 }
