@@ -275,7 +275,22 @@ module ums {
         .state('examRoutine', {
           url: "/examRoutine",
           controller: 'ExamRoutine',
-          templateUrl: 'views/common/academic/exam-routine.html'
+          templateUrl: 'views/common/academic/exam-routine.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: [
+                  'vendors/bootstrap-datepicker/css/datepicker.css',
+                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                  'vendors/select2/select2-madmin.css',
+                  'vendors/bootstrap-select/bootstrap-select.min.css',
+                  'vendors/multi-select/css/multi-select-madmin.css',
+                  'vendors/select2/select2.min.js',
+                  'vendors/bootstrap-select/bootstrap-select.min.js'
+                ]
+              });
+            }]
+          }
         })
 
   });

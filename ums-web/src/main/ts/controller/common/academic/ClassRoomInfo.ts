@@ -100,7 +100,6 @@ module ums {
           {
             label: 'Dept./School',
             name: 'dept_id',
-            width: 100,
             editable: true,
             width: 100, align: 'center', formatter: 'select',
             edittype: 'select',

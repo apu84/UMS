@@ -20,27 +20,30 @@
                 <font color="blue">Create :</font>
                <input type="text" /> rows
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <input type="button" value="Add New" ng-click="addNewRow()"/>
+                <input type="button" value="Add New" ng-click="addNewDateTime()"/>
 
                 <table class="table table-hover table-bordered table-advanced" style="margin-top: 20px;border-collapse: collapse;" cellpadding="0" cellspacing="0">
                     <thead>
                     <tr role="row" class="heading">
-                        <th width="20%" class="sorting">Date-Time</th>
-                        <th width="20%" class="sorting_asc">Program</th>
+                        <th width="15%" class="sorting">Date-Time</th>
+                        <th width="15%" class="sorting_asc">Program</th>
                         <th width="6%" class="sorting">Year<br/>(Student's)</th>
                         <th width="6%" class="sorting">Semester<br/>(Student's)</th>
                         <th width="10%" class="sorting">Course No.</th>
-                        <th width="30%" class="sorting">Course Title</th>
+                        <th width="40%" class="sorting">Course Title</th>
                         <th width="6%" class="sorting">Delete</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr ng-repeat="date_time in routine.date_times">
                         <td align="center">
-                            <input class="form-control" type="text"><br/>
-                            <select class="form-control" style="width: 80%;">
-                                <option>9:30 a.m. to 12:30 p.m</option>
-                            </select><br/><br/>
+                            <div class="input-icon right"><i class="fa fa-calendar"></i>
+                                <input type="text" data-date-format="dd/mm/yyyy" placeholder="DD/MM/YYYY" class="datepicker-default form-control required" autocomplete="off"/><br/>
+                            </div>
+                            <select class="form-control">
+                                <option data-ng-repeat="examTime in data.examTimeOptions" value="{{examTime.id}}">{{examTime.name}}</option>
+                            </select>
+                            <br/><br/>
                             <input type="button" value="Add Program" ng-click="addNewProgram(date_time.index)"/>
 
                             <a href="javascript:;" class="btn btn-xs btn-default"
@@ -50,22 +53,31 @@
                         <td colspan="6" style="padding: 0px;">
                             <table width="100%">
                                 <tr ng-repeat="program in date_time.programs">
-                                    <td width="25%" align="center" style="vertical-align: top;padding-top: 20px;padding-bottom: 20px;">
-                                        <input class="form-control" type="text" value="Program" style="width: 80%"><br/>
+                                    <td width="16%" align="center" style="vertical-align: top;padding-top: 20px;padding-bottom: 20px;">
+                                        <select class="form-control"  style="width: 80%">
+                                            <option data-ng-repeat="program in data.ugPrograms" value="{{program.programs[0].id}}">{{program.programs[0].shortName}}</option>
+                                        </select><br/>
+
                                         <input type="button" value="Add Course" ng-click="addNewCourse(date_time.index,program.index)"/>
                                         <a href="javascript:;" class="btn btn-xs btn-default"
                                            data-ng-click="removeProgram(date_time.index,program.index)">
                                             Delete <i class="fa fa-times" style="color: red;"></i>
                                         </a>
                                     </td>
-                                    <td width="75%" style="padding-top: 10px;vertical-align: top;" >
+                                    <td width="74%" style="padding-top: 10px;vertical-align: top;" >
                                         <table width="100%">
                                             <tr ng-repeat="course in program.courses">
-                                                <td width="12%" align="center" style="padding-top: 5px;padding-bottom: 5px;"><input type="text" style="width: 80%;" /> </td>
-                                                <td width="11%" align="center" style="padding-top: 5px;padding-bottom: 5px;"><input type="text" style="width: 80%;" /> </td>
-                                                <td width="18%" align="center" style="padding-top: 5px;padding-bottom: 5px;"><input type="text" style="width: 90%;" /> </td>
-                                                <td width="52%" align="center" style="padding-top: 5px;padding-bottom: 5px;"></td>
-                                                <td width="10%" align="center" style="padding-top: 5px;padding-bottom: 5px;">
+                                                <td width="10%" align="center" style="padding-top: 5px;padding-bottom: 5px;"><input type="text" class="form-control" style="width: 80%;height: 25px;text-align: center;padding: 0px;" value="{{course1.year}}"/> </td>
+                                                <td width="10%" align="center" style="padding-top: 5px;padding-bottom: 5px;"><input type="text" class="form-control" style="width: 80%;height: 25px;text-align: center;padding: 0px;" value="{{course1.semester}}"/> </td>
+                                                <td width="15%" align="center" style="padding-top: 5px;padding-bottom: 5px;">
+                                                    <select class="select2-size form-control" style="width: 90%;height: 25px;text-align: center;padding: 0px;" ng-model="course1"
+                                                            ng-change="setCourseTitle(course1)"
+                                                            ng-options=" course1 as course1.courseNumber for course1 in data.courses">
+
+                                                    </select>
+                                                </td>
+                                                <td width="58%" align="center" style="padding-top: 5px;padding-bottom: 5px;">{{course1.courseTitle}}</td>
+                                                <td width="12%" align="center" style="padding-top: 5px;padding-bottom: 5px;">
                                                     <a href="javascript:;" class="btn btn-xs btn-default"
                                                        data-ng-click="removeCourse(date_time.index,program.index,course.index)">
                                                         Delete <i class="fa fa-times" style="color: red;"></i>
