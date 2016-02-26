@@ -24,8 +24,11 @@ public class PersistentCourseDao extends CourseDaoDecorator {
       "VIEW_ORDER, YEAR, SEMESTER, COURSE_TYPE, COURSE_CATEGORY, LAST_MODIFIED) " +
       "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, " + getLastModifiedSql() + ")";
   static String ORDER_BY = " ORDER BY YEAR, SEMESTER, COURSE_CATEGORY, VIEW_ORDER";
+  static String SELECT_ALL_BY_SEMESER_PROGRAM="Select COURSE_ID,COURSE_NO,COURSE_TITLE,YEAR,SEMESTER From MST_COURSE Where Syllabus_Id In " +
+          "(Select Syllabus_Id from SEMESTER_SYLLABUS_MAP Where Program_Id=? and Semester_Id=?) ";
 
-  private JdbcTemplate mJdbcTemplate;
+
+    private JdbcTemplate mJdbcTemplate;
 
   public PersistentCourseDao(final JdbcTemplate pJdbcTemplate) {
     mJdbcTemplate = pJdbcTemplate;
@@ -82,6 +85,12 @@ public class PersistentCourseDao extends CourseDaoDecorator {
   public List<Course> getBySyllabus(String pSyllabusId) {
     String query = SELECT_ALL + "WHERE SYLLABUS_ID = ? "+ ORDER_BY;
     return mJdbcTemplate.query(query, new Object[]{pSyllabusId}, new CourseRowMapper());
+  }
+
+  @Override
+  public List<Course> getBySemesterProgram(String pSemesterId,String pProgramId) {
+    String query = SELECT_ALL + "Where Syllabus_Id In (Select Syllabus_Id from SEMESTER_SYLLABUS_MAP Where Semester_Id=? And Program_Id=? ) "+ORDER_BY;
+    return mJdbcTemplate.query(query, new Object[]{pSemesterId,pProgramId}, new CourseRowMapper());
   }
 
   class CourseRowMapper implements RowMapper<Course> {

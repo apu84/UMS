@@ -40,7 +40,6 @@ module ums {
         courses:this.getCourses('abc')
       };
       console.log("===============");
-      alert("ifti");
       console.log($scope.data.courses);
 
       $scope.routine = {

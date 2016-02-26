@@ -37,10 +37,18 @@ public class CourseResource extends MutableCourseResource {
   public JsonObject getBySyllabus(final @Context Request pRequest, final @PathParam("object-id") String pObjectId) throws Exception {
     return mResourceHelper.getBySyllabus(pObjectId, pRequest, mUriInfo);
   }
+
+  @GET
+  @Path("/semester/{semester-id}/program/{program-id}")
+  public JsonObject getBySemesterProgram(final @Context Request pRequest, final @PathParam("semester-id") String pSemesterId, final @PathParam("program-id") String pProgramId) throws Exception {
+    return mResourceHelper.getBySemesterProgram(pSemesterId,pProgramId, pRequest, mUriInfo);
+  }
+
   @GET
   @Path(PATH_PARAM_OBJECT_ID)
   public Response get(final @Context Request pRequest, final @PathParam("object-id") String pObjectId) throws Exception {
     return mResourceHelper.get(pObjectId, pRequest, mUriInfo);
   }
+
 
 }

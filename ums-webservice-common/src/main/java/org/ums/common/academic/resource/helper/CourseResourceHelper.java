@@ -88,4 +88,19 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
 
     return object.build();
   }
+
+  public JsonObject getBySemesterProgram(final String pSemesterId,final String pProgramId, final Request pRequest, final UriInfo pUriInfo) throws Exception {
+    List<Course> courses = getContentManager().getBySemesterProgram(pSemesterId,pProgramId);
+
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+    for (Course course : courses) {
+      children.add(toJson(course, pUriInfo, localCache));
+    }
+    object.add("entries", children);
+    localCache.invalidate();
+
+    return object.build();
+  }
 }
