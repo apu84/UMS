@@ -38,9 +38,9 @@
                     <tr ng-repeat="date_time in routine.date_times">
                         <td align="center">
                             <div class="input-icon right"><i class="fa fa-calendar"></i>
-                                <input type="text" data-date-format="dd/mm/yyyy" placeholder="DD/MM/YYYY" class="datepicker-default form-control required" autocomplete="off"/><br/>
+                                <input type="text"  data-ng-model="date_time.examDate" data-date-format="dd/mm/yyyy" placeholder="DD/MM/YYYY" class="datepicker-default form-control required" autocomplete="off"/><br/>
                             </div>
-                            <select class="form-control">
+                            <select class="form-control" data-ng-model="date_time.examTime">
                                 <option data-ng-repeat="examTime in data.examTimeOptions" value="{{examTime.id}}">{{examTime.name}}</option>
                             </select>
                             <br/><br/>
@@ -53,9 +53,9 @@
                         <td colspan="6" style="padding: 0px;">
                             <table width="100%">
                                 <tr ng-repeat="program in date_time.programs">
-                                    <td width="16%" align="center" style="vertical-align: top;padding-top: 20px;padding-bottom: 20px;">
-                                        <select class="form-control"  style="width: 80%" data-ng-model="exam_program"
-                                                ng-change="programSelectionChanged(program,exam_program)">
+                                    <td width="16%" align="center" style="vertical-align: top;padding-top: 20px;padding-bottom: 20px; ">
+                                        <select class="form-control"  style="width: 80%" data-ng-model="exam_program" id="program{{date_time.index}}{{program.index}}"
+                                                ng-change="programSelectionChanged(program,exam_program,date_time)">
                                             <option data-ng-repeat="ugProgram in data.ugPrograms" value="{{ugProgram.programs[0].id}}">{{ugProgram.programs[0].shortName}}</option>
                                         </select><br/>
                                         <a href="javascript:;" class="btn btn-xs btn-default"
@@ -63,7 +63,7 @@
                                             &nbsp;&nbsp;Add&nbsp;&nbsp; <i class="fa fa-plus-circle" style="color: blue;"></i>
                                         </a>
                                         <a href="javascript:;" class="btn btn-xs btn-default"
-                                           data-ng-click="removeProgram(date_time.index,program.index)">
+                                           data-ng-click="saveByProgram(date_time,program)">
                                             Save <i class="fa fa-floppy-o" style="color: green;"></i>
                                         </a>
                                         <a href="javascript:;" class="btn btn-xs btn-default"

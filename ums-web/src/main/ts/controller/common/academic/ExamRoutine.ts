@@ -13,6 +13,7 @@ module ums {
     removeCourse: Function;
     programSelectionChanged: Function;
     courseSelectionChanged:Function;
+    saveByProgram:Function;
     routine: any;
     data: any;
     rowId: any;
@@ -61,6 +62,7 @@ module ums {
 
       $scope.programSelectionChanged = this.programSelectionChanged.bind(this);
       $scope.courseSelectionChanged = this.courseSelectionChanged.bind(this);
+      $scope.saveByProgram = this.saveByProgram.bind(this);
 
 
     }
@@ -69,11 +71,14 @@ module ums {
       var item = this.getNewDateTimeRow(index);
       this.$scope.routine.date_times.splice(0, 0, item);
 
+      setTimeout(function(){
+        $('.datepicker-default').datepicker();
+        $('.datepicker-default').on('change', function(){
+          $('.datepicker').hide();
+        });
+      }, 200);
 
-      $('.datepicker-default').datepicker();
-      $('.datepicker-default').on('change', function(){
-        $('.datepicker').hide();
-      });
+
 
     }
     private removeDateTime(index:number):void {
@@ -135,7 +140,7 @@ module ums {
       this.$scope.routine.date_times[dateTimeTargetIndex].programs[programTargetIndex].courses.splice( courseTargetIndex, 1 );
     }
 
-    private programSelectionChanged(program_obj_row:IProgram,exam_program_id:number):void {
+    private programSelectionChanged(program_obj_row:IProgram,exam_program_id:number,date_time:IDateTime):void {
       console.log(exam_program_id);
       console.log(program_obj_row);
       for (var ind in program_obj_row.courses)
@@ -145,6 +150,7 @@ module ums {
         course.semester=null;
         course.title=null;
       }
+      program_obj_row.programId= $("#program"+program_obj_row.index+date_time.index).val();
       program_obj_row.courseArr=null;
 
       this.getCourseArr(exam_program_id).then((courseArr: Array<ICourse>)=>{
@@ -174,7 +180,7 @@ module ums {
       var dateTimeRow:IDateTime ={
         index: index-1,
         examDate: '',
-        examTime: '',
+        examTime: 'M',
         programs: Array<IProgram>()
       }
       return dateTimeRow;
@@ -217,8 +223,43 @@ module ums {
       course_row.year=selected_course.year;
       course_row.semester=selected_course.semester;
       course_row.title=selected_course.title;
+      course_row.id=selected_course.id;
+      course_row.no=selected_course.no;
     }
 
+    private saveByProgram(date_time:IDateTime, program:IProgram){
+      program.programId=$("#program"+date_time.index+program.index).val();
+      var routine:IDateTime={
+        index: date_time.index,
+        examDate: date_time.examDate,
+        examTime: date_time.examTime,
+        programs: [program]
+
+      }
+      console.log(routine);
+      for (var ind in this.$scope.routine.date_times) {
+        var dateTime:IDateTime = this.$scope.routine.date_times[ind];
+            for(var ind1 in dateTime.programs){
+              alert(dateTime.programs[ind1].programId+"-----"+program.programId+"@@@"+dateTime.examDate+"-----"+routine.examDate+"@@@"+dateTime.examTime+"-----"+routine.examTime+"@@@"+dateTime.index+"-----"+routine.index);
+                if(dateTime.programs[ind1].programId==program.programId && dateTime.examDate==routine.examDate && dateTime.examTime==routine.examTime){
+                    if(dateTime.index==routine.index){
+                        if(dateTime.programs[ind1].index==routine.programs[0].index){
+                          $( "#program"+dateTime.index+dateTime.programs[ind1].index ).parent().css("background-color","transparent");
+                          alert(dateTime.index+program.index);
+                          $( "#program"+dateTime.index+program.index ).parent().css("background-color","transparent");
+                          continue;
+                        }
+                    }
+                  alert("duplicate program name in same date found.");
+                  $( "#program"+dateTime.index+dateTime.programs[ind1].index ).parent().css("background-color","blue");
+                  $( "#program"+dateTime.index+program.index ).parent().css("background-color","blue");
+                  return;
+                }
+
+            }
+      }
+      console.log(this.$scope.routine);
+    }
   }
   UMS.controller('ExamRoutine', ExamRoutine);
 }
