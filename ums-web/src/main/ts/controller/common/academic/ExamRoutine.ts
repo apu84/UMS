@@ -99,7 +99,7 @@ module ums {
     }
 
     private addNewCourse(date_time_index:number,program_index:number,program_id:number):void {
-      console.log(date_time_index+"--"+program_index+"---");
+     // console.log(date_time_index+"--"+program_index+"---");
 
       var date_time_Arr = eval( this.$scope.routine.date_times );
       var dateTimeTargetIndex = this.findIndex(date_time_Arr,date_time_index);
@@ -113,7 +113,9 @@ module ums {
       this.getCourseArr(program_id).then((courseArr: Array<ICourse>)=>{
         this.$scope.routine.date_times[dateTimeTargetIndex].programs[programTargetIndex].courseArr=courseArr;
         this.$scope.routine.date_times[dateTimeTargetIndex].programs[programTargetIndex].courses.splice(0, 0, courseRow);
-        setTimeout(function(){ $('.select2-size').select2({
+
+        console.log('#'+program_index+'select'+courseRow.index);
+        setTimeout(function(){ $('#'+program_index+'select'+courseRow.index).select2({
           placeholder: "Select an option",
           allowClear: true
         });}, 50);
@@ -144,7 +146,15 @@ module ums {
         course.title=null;
       }
       program_obj_row.courseArr=null;
-      $(".select2-size").select2("destroy").select2();
+
+      this.getCourseArr(exam_program_id).then((courseArr: Array<ICourse>)=>{
+        program_obj_row.courseArr=courseArr;
+        for (var ind in program_obj_row.courses) {
+          $("#" + program_obj_row.index + "select"+ind).select2("destroy").select2();
+        }
+      });
+
+
 
     }
 
