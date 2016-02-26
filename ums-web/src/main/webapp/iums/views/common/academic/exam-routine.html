@@ -58,7 +58,14 @@
                                                 ng-change="programSelectionChanged(program,exam_program)">
                                             <option data-ng-repeat="ugProgram in data.ugPrograms" value="{{ugProgram.programs[0].id}}">{{ugProgram.programs[0].shortName}}</option>
                                         </select><br/>
-                                        <input type="button" value="Add Course" ng-click="addNewCourse(date_time.index,program.index,exam_program)"/>
+                                        <a href="javascript:;" class="btn btn-xs btn-default"
+                                           data-ng-click="addNewCourse(date_time.index,program.index,exam_program)">
+                                            &nbsp;&nbsp;Add&nbsp;&nbsp; <i class="fa fa-plus-circle" style="color: blue;"></i>
+                                        </a>
+                                        <a href="javascript:;" class="btn btn-xs btn-default"
+                                           data-ng-click="removeProgram(date_time.index,program.index)">
+                                            Save <i class="fa fa-floppy-o" style="color: green;"></i>
+                                        </a>
                                         <a href="javascript:;" class="btn btn-xs btn-default"
                                            data-ng-click="removeProgram(date_time.index,program.index)">
                                             Delete <i class="fa fa-times" style="color: red;"></i>
