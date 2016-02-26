@@ -7,25 +7,33 @@ module ums {
   interface IExamRoutineScope extends ng.IScope {
     addNewDateTime: Function;
     removeDateTime: Function;
-    addNewProgram:Function;
-    removeProgram:Function;
-    addNewCourse:Function;
-    removeCourse:Function;
-    programSelectionChanged:Function;
-    routine:any;
-    data:any;
-    rowId:any;
+    addNewProgram: Function;
+    removeProgram: Function;
+    addNewCourse: Function;
+    removeCourse: Function;
+    programSelectionChanged: Function;
+    courseSelectionChanged:Function;
+    routine: any;
+    data: any;
+    rowId: any;
+  }
+  interface IDateTime{
+    index: number;
+    examDate: string;
+    examTime: string;
+    programs: Array<IProgram>;
   }
   interface IProgram {
     index:number;
-    programId:string;
+    programId: number;
     courses : Array<ICourse>;
+    courseArr: Array<ICourse>;
   }
   interface ICourse {
-    index:number;
-    courseId: string;
-    courseNumber:string;
-    courseTitle: string;
+    index: number;
+    id: string;
+    no: string;
+    title: string;
     year: number;
     semester: number;
   }
@@ -38,15 +46,8 @@ module ums {
         examTimeOptions:appConstants.examTime,
         ugPrograms:appConstants.ugPrograms
       };
-      console.log("===============");
-      console.log($scope.data.courses);
-
       $scope.routine = {
-        date_times: [{
-          index: 0,
-          programs: Array<IProgram>()
-
-        }]
+        date_times: Array<IDateTime>()
       };
 
 
@@ -59,6 +60,8 @@ module ums {
       $scope.removeCourse = this.removeCourse.bind(this);
 
       $scope.programSelectionChanged = this.programSelectionChanged.bind(this);
+      $scope.courseSelectionChanged = this.courseSelectionChanged.bind(this);
+
 
     }
     private addNewDateTime():void {
@@ -96,6 +99,8 @@ module ums {
     }
 
     private addNewCourse(date_time_index:number,program_index:number,program_id:number):void {
+      console.log(date_time_index+"--"+program_index+"---");
+
       var date_time_Arr = eval( this.$scope.routine.date_times );
       var dateTimeTargetIndex = this.findIndex(date_time_Arr,date_time_index);
 
@@ -103,9 +108,11 @@ module ums {
       var programTargetIndex = this.findIndex(program_Arr,program_index);
 
       var index = this.$scope.routine.date_times[dateTimeTargetIndex].programs[programTargetIndex].courses.length + 1;
-      this.getNewCourseRow(index, program_id).then((item: JSON)=>{
-        this.$scope.routine.date_times[dateTimeTargetIndex].programs[programTargetIndex].courses.splice(0, 0, item);
+      var courseRow=this.getNewCourseRow(index);
 
+      this.getCourseArr(program_id).then((courseArr: Array<ICourse>)=>{
+        this.$scope.routine.date_times[dateTimeTargetIndex].programs[programTargetIndex].courseArr=courseArr;
+        this.$scope.routine.date_times[dateTimeTargetIndex].programs[programTargetIndex].courses.splice(0, 0, courseRow);
         setTimeout(function(){ $('.select2-size').select2({
           placeholder: "Select an option",
           allowClear: true
@@ -126,17 +133,23 @@ module ums {
       this.$scope.routine.date_times[dateTimeTargetIndex].programs[programTargetIndex].courses.splice( courseTargetIndex, 1 );
     }
 
-    private programSelectionChanged(program_obj:IProgram):void {
-      console.log(program_obj);
-      for (var ind in program_obj.courses)
+    private programSelectionChanged(program_obj_row:IProgram,exam_program_id:number):void {
+      console.log(exam_program_id);
+      console.log(program_obj_row);
+      for (var ind in program_obj_row.courses)
       {
-        var abc:any=program_obj.courses[ind];
-        abc.courseArr=null;
+        var course:ICourse=program_obj_row.courses[ind];
+        course.year=null;
+        course.semester=null;
+        course.title=null;
       }
+      program_obj_row.courseArr=null;
+      $(".select2-size").select2("destroy").select2();
+
     }
 
 
-private findIndex(source_arr: Array<any>, target_index: number): number {
+    private findIndex(source_arr: Array<any>, target_index: number): number {
       var targetIndex = -1;
       for( var i = 0; i < source_arr.length; i++ ) {
         if( source_arr[i].index == target_index ) {
@@ -145,35 +158,44 @@ private findIndex(source_arr: Array<any>, target_index: number): number {
         }
       }
       return targetIndex;
-      }
+    }
 
     private getNewDateTimeRow(index:number){
-      var item = {
-        index: index - 1,
+      var dateTimeRow:IDateTime ={
+        index: index-1,
+        examDate: '',
+        examTime: '',
         programs: Array<IProgram>()
-      };
-      return item;
+      }
+      return dateTimeRow;
     }
     private getNewProgramRow(index:number){
-      var item = {
+      var programRow:IProgram={
         index:index-1,
-        courses: Array<ICourse>()
-      };
-      return item;
+        programId: null,
+        courses: Array<ICourse>(),
+        courseArr: Array<ICourse>()
+      }
+      return programRow;
     }
-    private getNewCourseRow(index:number,program:number):ng.IPromise<any>{
-
+    private getNewCourseRow(index:number){
+      var courseRow:ICourse={
+        index: index-1,
+        id: '',
+        no: '',
+        title: '',
+        year: null,
+        semester: null
+      }
+      return courseRow;
+    }
+    private getCourseArr(program_id:number):ng.IPromise<any>{
       var defer = this.$q.defer();
       var courseArr:Array<any>;
-      this.httpClient.get('academic/course/semester/11012015/program/'+program, 'application/json',
+      this.httpClient.get('academic/course/semester/11012015/program/'+program_id, 'application/json',
           (json:any, etag:string) => {
             courseArr = json.entries;
-            var item = {
-              index: index - 1,
-              course: '',
-              courseArr: courseArr
-            };
-            defer.resolve(item);
+            defer.resolve(courseArr);
           },
           (response:ng.IHttpPromiseCallbackArg<any>) => {
             console.error(response);
@@ -181,12 +203,12 @@ private findIndex(source_arr: Array<any>, target_index: number): number {
 
       return defer.promise;
     }
-
-
-    private getCourses(semesterId:string){
-      var courses=[{courseId:1,courseNumber:'CSE 1234',courseTitle:'ABC Course',year:1,semester:1},{courseId:2,courseNumber:'CSE 6666',courseTitle:'BBCDE Course',year:2,semester:2}]
-      return courses;
+    private courseSelectionChanged(course_row:ICourse,selected_course:ICourse){
+      course_row.year=selected_course.year;
+      course_row.semester=selected_course.semester;
+      course_row.title=selected_course.title;
     }
+
   }
   UMS.controller('ExamRoutine', ExamRoutine);
 }
