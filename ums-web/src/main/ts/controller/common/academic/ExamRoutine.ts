@@ -240,22 +240,23 @@ module ums {
       for (var ind in this.$scope.routine.date_times) {
         var dateTime:IDateTime = this.$scope.routine.date_times[ind];
             for(var ind1 in dateTime.programs){
-              alert(dateTime.programs[ind1].programId+"-----"+program.programId+"@@@"+dateTime.examDate+"-----"+routine.examDate+"@@@"+dateTime.examTime+"-----"+routine.examTime+"@@@"+dateTime.index+"-----"+routine.index);
+              //alert(dateTime.programs[ind1].programId+"-----"+program.programId+"@@@"+dateTime.examDate+"-----"+routine.examDate+"@@@"+dateTime.examTime+"-----"+routine.examTime+"@@@"+dateTime.index+"-----"+routine.index);
                 if(dateTime.programs[ind1].programId==program.programId && dateTime.examDate==routine.examDate && dateTime.examTime==routine.examTime){
                     if(dateTime.index==routine.index){
                         if(dateTime.programs[ind1].index==routine.programs[0].index){
                           $( "#program"+dateTime.index+dateTime.programs[ind1].index ).parent().css("background-color","transparent");
-                          alert(dateTime.index+program.index);
-                          $( "#program"+dateTime.index+program.index ).parent().css("background-color","transparent");
                           continue;
                         }
+
                     }
                   alert("duplicate program name in same date found.");
-                  $( "#program"+dateTime.index+dateTime.programs[ind1].index ).parent().css("background-color","blue");
-                  $( "#program"+dateTime.index+program.index ).parent().css("background-color","blue");
+                  $( "#program"+dateTime.index+dateTime.programs[ind1].index ).parent().css("background-color","#E6A9EC");
+                  $( "#program"+dateTime.index+program.index ).parent().css("background-color","#E6A9EC");
                   return;
                 }
-
+                else{
+                  $( "#program"+dateTime.index+dateTime.programs[ind1].index ).parent().css("background-color","transparent");
+                }
             }
       }
       console.log(this.$scope.routine);
