@@ -8,6 +8,7 @@ import org.ums.domain.model.readOnly.Role;
 import org.ums.manager.ContentManager;
 
 import java.util.List;
+import java.util.Set;
 
 public class PersistentRole implements MutableRole {
   private static ContentManager<Role, MutableRole, Integer> sRoleManager;
@@ -19,7 +20,7 @@ public class PersistentRole implements MutableRole {
 
   private Integer mId;
   private String mName;
-  private List<String> mPermissions;
+  private Set<String> mPermissions;
 
   public PersistentRole() {
 
@@ -56,12 +57,12 @@ public class PersistentRole implements MutableRole {
   }
 
   @Override
-  public void setPermissions(List<String> pPermissions) {
+  public void setPermissions(Set<String> pPermissions) {
     mPermissions = pPermissions;
   }
 
   @Override
-  public List<String> getPermissions() {
+  public Set<String> getPermissions() {
     return mPermissions;
   }
 

@@ -1,5 +1,6 @@
 package org.ums.academic.configuration;
 
+import com.google.common.collect.Lists;
 import org.apache.shiro.authc.credential.PasswordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -13,6 +14,8 @@ import org.ums.domain.model.dto.SemesterSyllabusMapDto;
 import org.ums.domain.model.mutable.*;
 import org.ums.domain.model.readOnly.*;
 import org.ums.manager.*;
+import org.ums.processor.navigation.NavigationProcessor;
+import org.ums.processor.navigation.NavigationProcessorImpl;
 import org.ums.services.LoginService;
 import org.ums.util.Constants;
 
@@ -149,6 +152,11 @@ UserManager userManager() {
   }
 
   @Bean
+  NavigationManager navigationManager() {
+    return new PersistentNavigationDao(mJdbcTemplate);
+  }
+
+  @Bean
   Builder<Program, MutableProgram> getProgramBuilder() {
     return new ProgramBuilder();
   }
@@ -275,6 +283,18 @@ UserManager userManager() {
   List<Builder<CourseTeacher, MutableCourseTeacher>> getCourseTeacherBuilders() {
     List<Builder<CourseTeacher, MutableCourseTeacher>> builders = new ArrayList<>();
     builders.add(new CourseTeacherBuilder(courseManager(), teacherManager(), semesterManager()));
+    return builders;
+  }
+
+  @Bean
+  Builder<Navigation, MutableNavigation> getNavigationBuilder() {
+    return new NavigationBuilder();
+  }
+
+  @Bean
+  List<Builder<Navigation, MutableNavigation>> getNavigationBuilders() {
+    List<Builder<Navigation, MutableNavigation>> builders = new ArrayList<>();
+    builders.add(new NavigationBuilder());
     return builders;
   }
 

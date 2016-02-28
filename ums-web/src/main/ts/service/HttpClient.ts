@@ -5,7 +5,7 @@
 module ums {
   export class HttpClient {
 
-    private credentials:string;
+    private credentials:any;
 
     public static $inject = [
       '$http',
@@ -90,9 +90,9 @@ module ums {
     }
 
     public resetAuthenticationHeader(authetication?: string) {
-      this.credentials = !authetication ? this.cookieService.getCookieByKey(CookieService.CREDENTIAL_KEY) : authetication;
+      this.credentials = !authetication ? this.cookieService.getCookieAsJson(CookieService.CREDENTIAL_KEY) : authetication;
       if (this.credentials != null && this.credentials != '') {
-        this.$http.defaults.headers.common.Authorization = this.credentials;
+        this.$http.defaults.headers.common.Authorization = this.credentials.credential;
       }
     }
   }

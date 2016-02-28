@@ -80,6 +80,98 @@ COMMENT ON COLUMN DB_IUMS.MAIN_NAVIGATION.VIEW_ORDER IS 'Order of menu items';
 
 COMMENT ON COLUMN DB_IUMS.MAIN_NAVIGATION.STATUS IS '1/0, Active/Inactive';
 
+
+Insert into DB_IUMS.MAIN_NAVIGATION
+   (NAVIGATION_ID, MENU_TITLE, PERMISSION, LOCATION, PARENT_MENU,
+    VIEW_ICON, VIEW_ORDER, STATUS, LAST_MODIFIED)
+ Values
+   (2003, 'Semester Initialization', 'semester:initialization', '#', 0,
+    '<a href=''javascript:void(0);'' ng-click=''_menu.collapse(2)'' index=''2'' ng-init=''_menu.status[2]=true''><i class=''fa fa-check-square-o fa-fw''><div class=''icon-bg bg-pink''></div></i><span class=''menu-title''>Semester Initialization</span><span class=''fa arrow''></span></a>', 2, 1, '201602141037');
+Insert into DB_IUMS.MAIN_NAVIGATION
+   (NAVIGATION_ID, MENU_TITLE, PERMISSION, LOCATION, PARENT_MENU,
+    VIEW_ICON, VIEW_ORDER, STATUS, LAST_MODIFIED)
+ Values
+   (2002, 'User Home', 'user:home', '/userHome', 0,
+    '<a href=''javascript:void(0);'' ui-sref=''userHome'' ng-click=''_menu.collapse(1)'' index=''1'' ng-init=''_menu.status[1]=true''><i class=''fa fa-home fa-fw''><div class=''icon-bg bg-orange''></div></i><span class=''menu-title''>User Home</span></a>', 1, 1, '201602141037');
+Insert into DB_IUMS.MAIN_NAVIGATION
+   (NAVIGATION_ID, MENU_TITLE, PERMISSION, LOCATION, PARENT_MENU,
+    VIEW_ICON, VIEW_ORDER, STATUS, LAST_MODIFIED)
+ Values
+   (2004, 'New Semester', 'new:semester', '/createSemester', 2003,
+    '<a href=''javascript:void(0);'' ui-sref="createSemester" ng-click=''_menu.collapse(3)'' index=''3'' ng-init=''_menu.status[3]=true''><i class="fa fa-plus-square-o"></i><span class="submenu-title">New Semester</span></a>', 3, 1, '201602141037');
+Insert into DB_IUMS.MAIN_NAVIGATION
+   (NAVIGATION_ID, MENU_TITLE, PERMISSION, LOCATION, PARENT_MENU,
+    VIEW_ICON, VIEW_ORDER, STATUS, LAST_MODIFIED)
+ Values
+   (2005, 'Semester Syllabus Map', 'semester:syllabusmap', '/semesterSyllabusMap', 2003,
+    '<a href=''javascript:void(0);'' ui-sref="semesterSyllabusMap" ng-click=''_menu.collapse(4)'' index=''4'' ng-init=''_menu.status[4]=true''><i class="fa fa-arrows-alt"></i><span class="submenu-title">Semester-Syllabus map</span></a>', 4, 1, '201602141037');
+Insert into DB_IUMS.MAIN_NAVIGATION
+   (NAVIGATION_ID, MENU_TITLE, PERMISSION, LOCATION, PARENT_MENU,
+    VIEW_ICON, VIEW_ORDER, STATUS, LAST_MODIFIED)
+ Values
+   (2006, 'New Student', 'new:student', '/createStudent', 2003,
+    '<a ui-sref="createStudent" href=''javascript:void(0);'' ng-click=''_menu.collapse(5)'' index=''5'' ng-init=''_menu.status[5]=true''><i class="fa fa-graduation-cap"></i><span class="submenu-title">New Student</span></a>', 5, 1, '201602141037');
+Insert into DB_IUMS.MAIN_NAVIGATION
+   (NAVIGATION_ID, MENU_TITLE, PERMISSION, LOCATION, PARENT_MENU,
+    VIEW_ICON, VIEW_ORDER, STATUS, LAST_MODIFIED)
+ Values
+   (2007, 'Syllabus Bank', 'syllabus:bank', '#', 0,
+    '<a href="javascript:void(0);" ng-click=''_menu.collapse(6)'' index=''6'' ng-init=''_menu.status[6]=true''><i class="fa fa-book fa-fw"><div class="icon-bg bg-green"></div></i><span class="menu-title">Syllabus Bank</span><span class="fa arrow"></span></a>', 6, 1, '201602141037');
+Insert into DB_IUMS.MAIN_NAVIGATION
+   (NAVIGATION_ID, MENU_TITLE, PERMISSION, LOCATION, PARENT_MENU,
+    VIEW_ICON, VIEW_ORDER, STATUS, LAST_MODIFIED)
+ Values
+   (2008, 'Syllabus List', 'syllabus:list', '/showSyllabusList', 2007,
+    '<a ui-sref="showSyllabusList" ng-click=''_menu.collapse(7)'' index=''7'' ng-init=''_menu.status[7]=true''><i class="fa fa-list"></i><span class="submenu-title">Syllabus List</span></a>', 7, 1, '201602141037');
+Insert into DB_IUMS.MAIN_NAVIGATION
+   (NAVIGATION_ID, MENU_TITLE, PERMISSION, LOCATION, PARENT_MENU,
+    VIEW_ICON, VIEW_ORDER, STATUS, LAST_MODIFIED)
+ Values
+   (2009, 'Create Syllabus', 'create:syllabus', '/createSyllabus', 2007,
+    '<a ui-sref="createSyllabus" ng-click=''_menu.collapse(8)'' index=''8'' ng-init=''_menu.status[8]=true''><i class="fa fa-plus-square-o"></i><span class="submenu-title">Create New Syllabus</span></a>', 8, 1, '201602141037');
+Insert into DB_IUMS.MAIN_NAVIGATION
+   (NAVIGATION_ID, MENU_TITLE, PERMISSION, LOCATION, PARENT_MENU,
+    VIEW_ICON, VIEW_ORDER, STATUS, LAST_MODIFIED)
+ Values
+   (2010, 'Create Course', 'create:course', '/createUgCourse', 2007,
+    '<a ui-sref="createUgCourse" ng-click=''_menu.collapse(9)'' index=''9'' ng-init=''_menu.status[9]=true''><i class="fa fa-plus-square"></i><span class="submenu-title">Create Course</span></a>', 9, 1, '201602141037');
+Insert into DB_IUMS.MAIN_NAVIGATION
+   (NAVIGATION_ID, MENU_TITLE, PERMISSION, LOCATION, PARENT_MENU,
+    VIEW_ICON, VIEW_ORDER, STATUS, LAST_MODIFIED)
+ Values
+   (2011, 'User Management', 'user:management', '#', 0,
+    '<a href="javascript:void(0);" ng-click=''_menu.collapse(10)'' index=''10'' ng-init=''_menu.status[10]=true''><i class="fa fa-user fa-fw"><div class="icon-bg bg-violet"></div></i><span class="menu-title">User Management</span><span class="fa arrow"></span></a>', 10, 1, '201602141037');
+Insert into DB_IUMS.MAIN_NAVIGATION
+   (NAVIGATION_ID, MENU_TITLE, PERMISSION, LOCATION, PARENT_MENU,
+    VIEW_ICON, VIEW_ORDER, STATUS, LAST_MODIFIED)
+ Values
+   (2012, 'Reset User Password', 'reset:password', '/passwordReport', 2011,
+    '<a ui-sref="passwordReport" ng-click=''_menu.collapse(11)'' index=''11'' ng-init=''_menu.status[11]=true''><i class="fa fa-lock"></i><span class="submenu-title">Reset User Password</span></a>', 11, 1, '201602141037');
+Insert into DB_IUMS.MAIN_NAVIGATION
+   (NAVIGATION_ID, MENU_TITLE, PERMISSION, LOCATION, PARENT_MENU,
+    VIEW_ICON, VIEW_ORDER, STATUS, LAST_MODIFIED)
+ Values
+   (2013, 'Department', 'deparment:activity', '#', 0,
+    '<a href="javascript:void(0);" ng-click=''_menu.collapse(12)'' index=''12'' ng-init=''_menu.status[12]=true''><i class="fa fa-renren fa-fw"><div class="icon-bg bg-violet"></div></i><span class="menu-title">Department</span><span class="fa arrow"></span></a>', 12, 1, '201602141037');
+Insert into DB_IUMS.MAIN_NAVIGATION
+   (NAVIGATION_ID, MENU_TITLE, PERMISSION, LOCATION, PARENT_MENU,
+    VIEW_ICON, VIEW_ORDER, STATUS, LAST_MODIFIED)
+ Values
+   (2014, 'Course Teacher', 'course:teacher', '/courseTeacher', 2013,
+    '<a ui-sref="courseTeacher" ng-click=''_menu.collapse(13)'' index=''13'' ng-init=''_menu.status[13]=true''><i class="fa fa-thumb-tack"></i><span class="submenu-title">Course Teacher</span></a>', 13, 1, '201602141037');
+Insert into DB_IUMS.MAIN_NAVIGATION
+   (NAVIGATION_ID, MENU_TITLE, PERMISSION, LOCATION, PARENT_MENU,
+    VIEW_ICON, VIEW_ORDER, STATUS, LAST_MODIFIED)
+ Values
+   (2015, 'Class Routine Upload', 'class:routine', '/classRoutine', 2013,
+    '<a ui-sref="classRoutine" ng-click=''_menu.collapse(14)'' index=''14'' ng-init=''_menu.status[14]=true''><i class="fa fa-thumb-tack"></i><span class="submenu-title">Class Routine Upload</span></a>', 14, 1, '201602141037');
+Insert into DB_IUMS.MAIN_NAVIGATION
+   (NAVIGATION_ID, MENU_TITLE, PERMISSION, LOCATION, PARENT_MENU,
+    VIEW_ICON, VIEW_ORDER, STATUS, LAST_MODIFIED)
+ Values
+   (2016, 'Student Profile', 'student:profile', '/studentProfile', 0,
+    '<a ui-sref="studentProfile" ng-click=''_menu.collapse(15)'' index=''15'' ng-init=''_menu.status[15]=true''><i class="fa fa-home fa-fw"><div class="icon-bg bg-orange"></div></i><span class="menu-title">Student Profile</span></a>', 15, 1, '201602141037');
+
 CREATE SEQUENCE DB_IUMS.SQN_ADDITIONAL_ROLE_ID
   START WITH 5001
   MAXVALUE 9999999999999999999999999999
@@ -136,6 +228,28 @@ FOR EACH ROW
 BEGIN
   SELECT DB_IUMS.SQN_PERMSSIONS_ID.NEXTVAL
   INTO   :new.PERMISSION_ID
+  FROM   dual;
+END;
+/
+
+DROP SEQUENCE DB_IUMS.SQN_MAIN_NAVIGATION_ID;
+
+CREATE SEQUENCE DB_IUMS.SQN_MAIN_NAVIGATION_ID
+  START WITH 2001
+  MAXVALUE 9999999999999999999999999999
+  MINVALUE 0
+  NOCYCLE
+  NOCACHE
+  NOORDER;
+
+DROP TRIGGER DB_IUMS.MAIN_NAVIGATION_TRIGGER;
+
+CREATE OR REPLACE TRIGGER DB_IUMS.MAIN_NAVIGATION_TRIGGER
+BEFORE INSERT ON DB_IUMS.MAIN_NAVIGATION
+FOR EACH ROW
+BEGIN
+  SELECT DB_IUMS.SQN_MAIN_NAVIGATION_ID.NEXTVAL
+  INTO   :new.NAVIGATION_ID
   FROM   dual;
 END;
 /

@@ -21,16 +21,19 @@ module ums {
   declare var CustomElement:CustomElement;
 
   export class LeftMenu implements ng.IDirective {
+
     constructor(private $parse:ng.IParseService,
-                private $compile:ng.ICompileService) {
+                private $compile: ng.ICompileService,
+                private httpClient: HttpClient,
+                private appConstants: any,
+                private $templateCache: ng.ITemplateCacheService,
+                private $timeout: ng.ITimeoutService) {
 
     }
 
     public restrict = 'AE';
-    public scope = false;
 
     public link = ($scope:any, element:JQuery, attributes:any) => {
-
       $scope._menu = {status: [], collapse: {}, hover: []};
 
       $scope._menu.mouseleave = function () {
@@ -45,11 +48,13 @@ module ums {
         $scope._menu.hover[i] = 'nav-hover';
       };
       $scope._menu.collapse = function (i) {
+        console.log("clicked "+ $scope._menu.status[i]);
         $scope._menu.status[i] = !$scope._menu.status[i];
 
-        var current = attributes.$$element.find('a[index=' + i + ']');
+        var current = $(element).find('a[index=' + i + ']'); console.debug("%o", current);
 
         current.parent('li').addClass('active').siblings().removeClass('active').children('ul').each(function () {
+          console.debug("%o", $(this).attr('index'));
           $scope._menu.status[$(this).attr('index')] = true;
         });
 
@@ -78,23 +83,16 @@ module ums {
         }
       };
 
-      attributes.$$element.find('li').children('a').each(function (index, value) {
-        $scope._menu.status[index] = true;
-        $(this).attr({'ng-click': '_menu.collapse(' + index + ')', 'index': index});
-        $('>ul', $(this).parent('li')).attr({'collapse': '_menu.status[' + index + ']', 'index': index});
-      });
 
-      $(">li", attributes.$$element).each(function (index, value) {
-        $scope._menu.hover[index] = '';
-        $(this).attr({
-          'ng-mouseleave': '_menu.mouseleave()',
-          'ng-mouseover': '_menu.mouseover(' + index + ')',
-          'ng-class': '_menu.hover[' + index + ']'
-        });
-      });
-      var compiledHtml:any = this.$compile(element.html())($scope);
-      $(element).html(compiledHtml);
-    }
+      this.httpClient.get("mainNavigation", this.appConstants.mimeTypeJson,
+          (data: any, etag: string) => {
+            $scope.entries = data.entries;
+          });
+    };
+
+    public templateUrl = "./views/common/navigation.html";
+
   }
-  UMS.directive("ngMenu", ['$parse', '$compile', ($parse, $compile) => new LeftMenu($parse, $compile)]);
+  UMS.directive("ngMenu", ['$parse', '$compile', 'HttpClient', 'appConstants', '$templateCache', '$timeout',
+    ($parse, $compile, httpClient, appConstants, $templateCache, $timeout) => new LeftMenu($parse, $compile, httpClient, appConstants, $templateCache, $timeout)]);
 }

@@ -2,7 +2,6 @@
 ///<reference path="../../lib/jquery.notific8.d.ts"/>
 ///<reference path="../../lib/bootstrap.selectpicker.d.ts"/>
 ///<reference path="../../model/CourseTeacherSearchParamModel.ts"/>
-///<reference path="../../model/CourseTeacherSearchParamModel.ts"/>
 module ums {
 
   interface ICourseTeacherScope extends ng.IScope {

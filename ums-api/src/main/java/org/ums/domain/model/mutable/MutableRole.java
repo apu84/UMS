@@ -5,9 +5,10 @@ import org.ums.domain.model.common.Mutable;
 import org.ums.domain.model.common.MutableIdentifier;
 
 import java.util.List;
+import java.util.Set;
 
 public interface MutableRole extends Role, Mutable, MutableIdentifier<Integer> {
   void setName(final String pName);
 
-  void setPermissions(final List<String> pPermissions);
+  void setPermissions(final Set<String> pPermissions);
 }

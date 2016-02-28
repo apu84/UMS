@@ -160,11 +160,14 @@ var Authentication = (function () {
       userId: user['userId'],
       userName: user['userName']
     };
-    startApplication(credentials, user);
+    var credential = {
+      credential: credentials
+    };
+    startApplication(credential, user);
   }
 
   function startApplication(credentials, user) {
-    document.cookie = "UMS.credentials=" + credentials + "; path=/";
+    document.cookie = "UMS.credentials=" + JSON.stringify(credentials) + "; path=/";
     document.cookie = "UMS.user=" + JSON.stringify(user) + "; path=/";
     var params = getQueryParams();
     if (isValidRedirectTo()) {

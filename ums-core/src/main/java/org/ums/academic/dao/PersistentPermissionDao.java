@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentPermissionDao extends PermissionDaoDecorator {
-  String PERMISSION_SEPARATOR = ",";
+  static String PERMISSION_SEPARATOR = ",";
   String SELECT_ALL = "SELECT PERMISSION_ID, ROLE_ID, PERMISSIONS, LAST_MODIFIED FROM PERMISSIONS ";
   String INSERT_ALL = "INSERT INTO PERMISSIONS (ROLE_ID, PERMISSIONS, LAST_MODIFIED) VALUES (?, ?, ? " + getLastModifiedSql() + ") ";
   String UPDATE_ALL = "UPDATE PERMISSIONS SET ROLE_ID = ?, PERMISSIONS = ?, LAST_MODIFIED = " + getLastModifiedSql() + " WHERE PERMISSION_ID = ? ";

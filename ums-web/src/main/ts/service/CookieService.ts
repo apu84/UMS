@@ -10,13 +10,11 @@ module ums {
     public getUserCredential():string {
       return this.$cookies[CookieService.CREDENTIAL_KEY];
     }
-    public getCookieByKey(key):string {
-      console.log("Cookie for credential in cookie service: " + this.$cookies[key]);
-      return this.$cookies[key];
+    public getCookieByKey(key):string { console.debug("%o", this.$cookieStore.get(key));
+      return this.$cookieStore.get(key);
     }
 
     public getCookieAsJson(key):string {
-      console.log("Cookie for credential in cookie service: " + this.$cookieStore.get(key));
       return this.$cookieStore.get(key);
     }
 

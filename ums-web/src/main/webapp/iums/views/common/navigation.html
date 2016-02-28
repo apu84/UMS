@@ -1,0 +1,29 @@
+<div class="sidebar-collapse menu-scroll">
+    <ul id="side-menu" class="nav admin-nav-main">
+        <li class="user-panel">
+            <!--
+        <div class="thumb"><img src="" alt="" class="img-circle"/></div>
+        <div class="info">
+          <p>John Doe</p>
+          <ul class="list-inline list-unstyled">
+            <li><a ui-sref="extra-profile" data-hover="tooltip" title="Profile"><i class="fa fa-user"></i></a></li>
+            <li><a ui-sref="email-inbox" data-hover="tooltip" title="Mail"><i class="fa fa-envelope"></i></a></li>
+            <li><a href="javascript:void(0);" data-hover="tooltip" title="Setting" data-toggle="modal" data-target="#modal-config"><i class="fa fa-cog"></i></a></li>
+            <li><a href="javascript:window.location.href = '/ums-web/login.html'" data-hover="tooltip" title="Logout"><i class="fa fa-sign-out"></i></a></li>
+          </ul>
+        </div>
+        -->
+            <div class="clearfix"></div>
+        </li>
+        <li data-ng-repeat="entry in entries[0].items" data-ng-mouseleave="_menu.mouseleave()"
+            data-ng-mouseover="_menu.mouseover($index)"
+            data-ng-class="_menu.hover[$index]">
+            <span data-ums-bind-html="{{entry.iconContent}}"></span>
+            <ul data-ng-if="entry.children.length > 0" class="nav nav-second-level" collapse="_menu.status[{{entry.viewOrder}}]" index="{{entry.viewOrder}}">
+                <li data-ng-repeat="children in entry.children">
+                    <span data-ums-bind-html="{{children.iconContent}}"></span>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>

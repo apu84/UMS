@@ -44,5 +44,9 @@
 /// <reference path='directive/FileModel.ts'/>
 /// <reference path='directive/Image.ts'/>
 /// <reference path='directive/UITab.ts'/>
+/// <reference path='directive/MainNavigation.ts'/>
+/// <reference path='directive/BindHtml.ts'/>
 
 /// <reference path='interceptor/Unauthorized.ts'/>
+
+/// <reference path='filter/TrustAsHtml.ts'/>

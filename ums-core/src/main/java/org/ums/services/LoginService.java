@@ -2,21 +2,14 @@ package org.ums.services;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authc.credential.PasswordService;
-import org.apache.shiro.realm.AuthorizingRealm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.ums.domain.model.dto.ResponseDto;
-import org.ums.domain.model.mutable.MutableCourse;
-import org.ums.domain.model.mutable.MutableUser;
 import org.ums.domain.model.readOnly.User;
-import org.ums.manager.ContentManager;
 import org.ums.manager.UserManager;
 import org.ums.util.Constants;
 
-import javax.json.JsonObject;
-import javax.ws.rs.core.Response;
-import java.util.Base64;
 import java.util.Date;
 import java.util.UUID;
 

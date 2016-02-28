@@ -152,4 +152,15 @@
   </bean>
 
   <!--Mail Configuration [End]-->
+
+  <!--Menu item processors-->
+  <bean id="dummyNavigationProcessor" class="org.ums.processor.navigation.DummyNavigationItemProcessor"/>
+
+  <bean id="navigationProcessor" class="org.ums.processor.navigation.NavigationProcessorImpl">
+    <constructor-arg>
+      <list>
+        <ref bean="dummyNavigationProcessor"/>
+      </list>
+    </constructor-arg>
+  </bean>
 </beans>

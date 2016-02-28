@@ -1,10 +1,13 @@
 module ums {
   export class AppController {
-    public static $inject = ['$scope', '$rootScope', 'CookieService'];
+    public static $inject = ['$scope', '$rootScope', 'CookieService', '$http', 'appConstants', '$templateCache'];
 
     constructor(private $scope:any,
                 private $rootScope:any,
-                private cookieService: CookieService) {
+                private cookieService: CookieService,
+                private $http: ng.IHttpService,
+                private appConstants: any,
+                private $templateCache: ng.ITemplateCacheService) {
       this.$rootScope.style = 'style1';
       this.$rootScope.theme = 'orange-blue';
       this.$scope.data = {};
@@ -158,7 +161,19 @@ module ums {
         $('.news-ticker').remove();
       });
 
-      $scope.user = JSON.parse(cookieService.getCookieByKey(CookieService.USER_KEY));
+      $scope.user = cookieService.getCookieAsJson(CookieService.USER_KEY);
+
+      var config: ng.IRequestShortcutConfig = {
+        cache: this.$templateCache,
+        headers: {
+          'Accept' : 'text/html'
+        }
+      };
+
+      this.$http.get('views/common/navigation.html', config).then((response:ng.IHttpPromiseCallbackArg<any>) => {
+        $scope.menuHtml = response.data;
+      });
+
     }
   }
   UMS.controller('AppController', AppController);
