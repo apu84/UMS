@@ -46,7 +46,6 @@
                                 <i class="fa fa-calendar"></i>
                                 <input  id="date_{{date_time.index}}" type="text"  data-ng-model="date_time.examDate" data-date-format="dd/mm/yyyy" placeholder="DD/MM/YYYY" class="datepicker-default form-control required" autocomplete="off"/><br/>
                             </div>
-                            {{date_time.index}}
                             <div class="input-icon right" data-ng-show="date_time.readOnly">
                                 {{date_time.examDate}}
                             </div>
@@ -59,17 +58,27 @@
                             </div>
                             <br/><br/>
                             <a href="javascript:;" class="btn btn-xs btn-default btn-round"
-                               data-ng-click="addNewProgram(date_time.index)" style="border-radius: 15px;">
+                               data-ng-click="addNewProgram(date_time.index)" style="border-radius: 15px;" data-ng-hide="date_time.readOnly">
                                 <i class="fa fa-plus-circle" style="color: blue;"></i>
                             </a>
+                            <a href="javascript:;" class="btn btn-xs btn-default btn-round disabled"
+                               style="border-radius: 15px;" data-ng-show="date_time.readOnly">
+                                <i class="fa fa-plus-circle" style="color: darkslategrey;"></i>
+                            </a>
+
                             <a href="javascript:;" class="btn btn-xs btn-default btn-round"
                                data-ng-click="saveByDateTime(date_time)">
                                 <i class="fa fa-floppy-o" style="color: green;"></i>
                             </a>
                             <a href="javascript:;" class="btn btn-xs btn-default btn-round"
-                               data-ng-click="editDateTime(date_time)">
+                               data-ng-click="editDateTime(date_time)" data-ng-show="date_time.readOnly">
                                 <i class="fa fa-edit" style="color: orange;"></i>
                             </a>
+                            <a href="javascript:;" class="btn btn-xs btn-default btn-round disabled"
+                               data-ng-hide="date_time.readOnly">
+                                <i class="fa fa-edit" style="color: darkslategrey;"></i>
+                            </a>
+
                             <a href="javascript:;" class="btn btn-xs btn-default btn-round"
                                data-ng-click="removeDateTime(date_time.index)">
                                 <i class="fa fa-times" style="color: red;"></i>
@@ -119,8 +128,6 @@
                                                             ng-model="exam_course.id" data-ng-change="courseSelectionChanged(program,course,exam_course.id)">
                                                         <option data-ng-repeat="exam_course in program.courseArr" value="{{exam_course.id}}">{{exam_course.no}}</option>
                                                     </select>
-                                                    <!--id as exam_course.no for exam_course in program.courseArr-->
-                                                    course_{{date_time.index}}{{program.index}}{{course.index}}
                                                     <div  data-ng-show="date_time.readOnly">
                                                         {{course.no}}
                                                     </div>

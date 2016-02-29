@@ -596,11 +596,11 @@ setTimeout(function() {
         var program:IProgram = date_time_row_obj.programs[ind];
       for (var ind2 in program.courses) {
           var course:ICourse =program.courses[ind2];
-          $("#course_" + date_time_row_obj.index + program.index + course.index).select2().select2('val',course.id);// val(course.id).change();
+          $("#course_" + date_time_row_obj.index + program.index + course.index).select2().select2('val',course.id);
         }
       }
 },
-2000);
+1000);
 
     }
   }
