@@ -26,7 +26,7 @@ public class PersistentExamRoutineDao  extends ExamRoutineDaoDecorator {
       "And EXAM_ROUTINE.COURSE_ID=MST_COURSE.COURSE_ID " +
       "And MST_COURSE.SYLLABUS_ID=MST_SYLLABUS.SYLLABUS_ID " +
       "And MST_SYLLABUS.PROGRAM_ID=MST_PROGRAM.PROGRAM_ID " +
-      "Order By Exam_Date,Exam_Time,Program_Id,Year,Semester,Course_No ";
+      "Order By to_date(EXAM_DATE,'DD/MM/YYYY'),Exam_Time,Program_Id,Year,Semester,Course_No ";
 
   static String INSERT_ONE = "INSERT INTO EXAM_ROUTINE(SEMESTER,EXAM_TYPE,EXAM_DATE,EXAM_TIME,COURSE_ID) " +
       "VALUES(?,?,to_date(?,'dd/MM/YYYY'),?,?)";
