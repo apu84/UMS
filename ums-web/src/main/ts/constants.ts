@@ -86,7 +86,7 @@ module ums {
           '1': 'Active'
         },
         examTime: [
-          {id: 'M', name: '9:30 a.m. to 12:30 p.m'}
+          {id: '9:30 a.m. to 12:30 p.m', name: '9:30 a.m. to 12:30 p.m'}
         ],
         bloodGroup: [
           {id: '', name: 'Select Blood Group'},

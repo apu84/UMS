@@ -280,9 +280,15 @@ UserManager userManager() {
   ClassRoomManager getPersistentClassRoomDao() {
     return new PersistentClassRoomDao(mJdbcTemplate);
   }
-  @Bean(name = "classRoomManager")
+  //@Bean(name = "classRoomManager")
+  @Bean
   ClassRoomManager classRoomManager() {
     return new PersistentClassRoomDao(mJdbcTemplate);
+  }
+  //@Bean(name = "examRoutineManager")
+  @Bean
+  ExamRoutineManager examRoutineManager() {
+    return new PersistentExamRoutineDao(mJdbcTemplate);
   }
   @Bean
   Builder<ClassRoom, MutableClassRoom> getClassRoomBuilder() {
@@ -293,6 +299,12 @@ UserManager userManager() {
   List<Builder<ClassRoom, MutableClassRoom>> getClassRoomBuilders() {
     return Arrays.asList(new ClassRoomBuilder());
   }
+
+  @Bean
+  Builder<ExamRoutine, MutableExamRoutine> getExamRoutineBuilder() {
+    return new ExamRoutineBuilder();
+  }
+
 
   @Bean
   LoginService  loginService() {
