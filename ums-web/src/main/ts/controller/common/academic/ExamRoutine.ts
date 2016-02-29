@@ -592,20 +592,15 @@ module ums {
       }
 
 setTimeout(function() {
-    //  alert("abc");
       for (var ind1 in date_time_row_obj.programs) {
         var program:IProgram = date_time_row_obj.programs[ind];
-
-        for (var ind2 in program.courses) {
+      for (var ind2 in program.courses) {
           var course:ICourse =program.courses[ind2];
-         //alert("#course_" + date_time_row_obj.index + program.index + course.index);
           $("#course_" + date_time_row_obj.index + program.index + course.index).select2().select2('val',course.id);// val(course.id).change();
-          //$("#course_" + date_time_row_obj.index + program.index + course.index).val(course.id).change();
         }
       }
 },
-
-    2000);
+2000);
 
     }
   }
