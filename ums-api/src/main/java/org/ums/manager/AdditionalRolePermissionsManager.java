@@ -17,4 +17,6 @@ public interface AdditionalRolePermissionsManager extends ContentManager<Additio
   int addRole(final String pUserId, final Role pRole, final User pAssignedBy, final Date pFromDate, final Date pToDate);
 
   int addPermissions(final String pUserId, final Set<String> pPermissions, final User pAssignedBy, final Date pFromDate, final Date pToDate);
+
+  int removeExistingAdditionalRolePermissions(final String pUserId, final String pAssignedBy);
 }

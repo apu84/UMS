@@ -32,4 +32,9 @@ public class AdditionalRolePermissionsDaoDecorator
   public int addPermissions(String pUserId, Set<String> pPermissions, User pAssignedBy, Date pFromDate, Date pToDate) {
     return getManager().addPermissions(pUserId, pPermissions, pAssignedBy, pFromDate, pToDate);
   }
+
+  @Override
+  public int removeExistingAdditionalRolePermissions(String pUserId, String pAssignedBy) {
+    return getManager().removeExistingAdditionalRolePermissions(pUserId, pAssignedBy);
+  }
 }

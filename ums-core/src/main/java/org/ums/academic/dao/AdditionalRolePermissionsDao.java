@@ -4,7 +4,6 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.Sets;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.ums.academic.model.PersistentAdditionalRolePermissions;
 import org.ums.domain.model.mutable.MutableAdditionalRolePermissions;
@@ -52,11 +51,7 @@ public class AdditionalRolePermissionsDao extends AdditionalRolePermissionsDaoDe
   }
 
   @Override
-  @Transactional
   public int create(MutableAdditionalRolePermissions pMutable) throws Exception {
-    String query = DELETE_ALL + "WHERE ASSIGNED_BY = ? AND USER_ID = ?";
-    mJdbcTemplate.update(query, pMutable.getAssignedByUserId(), pMutable.getUserId());
-
     return mJdbcTemplate.update(INSERT_ALL,
         pMutable.getUser().getId(),
         pMutable.getRole() == null ? 0 : pMutable.getRole().getId(),
@@ -97,6 +92,11 @@ public class AdditionalRolePermissionsDao extends AdditionalRolePermissionsDaoDe
     return mJdbcTemplate.query(SELECT_ALL, new RolePermissionsMapper());
   }
 
+  @Override
+  public int removeExistingAdditionalRolePermissions(String pUserId, String pAssignedBy) {
+    String query = DELETE_ALL + "WHERE ASSIGNED_BY = ? AND USER_ID = ?";
+    return mJdbcTemplate.update(query, pAssignedBy, pUserId);
+  }
 
   @Override
   public int addPermissions(String pUserId, Set<String> pPermissions, User pAssignedBy, Date pFromDate, Date pToDate) {

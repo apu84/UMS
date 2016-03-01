@@ -19,7 +19,6 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.net.URI;
 import java.util.List;
 
 @Component
@@ -41,6 +40,8 @@ public class AdditionalRolePermissionsHelper extends ResourceHelper<AdditionalRo
     for (Builder<AdditionalRolePermissions, MutableAdditionalRolePermissions> builder : mBuilders) {
       builder.build(mutableAdditionalRolePermissions, pJsonObject, localCache);
     }
+    mAdditionalRolePermissionsManager
+        .removeExistingAdditionalRolePermissions(mutableAdditionalRolePermissions.getUserId(), mutableAdditionalRolePermissions.getAssignedByUserId());
     mutableAdditionalRolePermissions.commit(false);
 
     Response.ResponseBuilder builder = Response.ok();
