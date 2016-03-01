@@ -4,6 +4,8 @@
 
 module ums {
   export class HttpClient {
+    static MIME_TYPE_JSON: string = 'application/json';
+    static MIME_TYPE_PDF: string = 'application/pdf';
 
     private credentials:any;
 

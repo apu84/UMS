@@ -12,4 +12,9 @@ public class NavigationDaoDecorator extends ContentDaoDecorator<Navigation, Muta
   public List<Navigation> getByPermissions(Set<String> pPermissions) {
     return getManager().getByPermissions(pPermissions);
   }
+
+  @Override
+  public List<Navigation> getByPermissionsId(Set<Integer> pPermissionIds) {
+    return getManager().getByPermissionsId(pPermissionIds);
+  }
 }

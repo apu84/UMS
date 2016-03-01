@@ -78,6 +78,12 @@ public class PersistentUserDao extends UserDaoDecorator {
         pMutable.getPrimaryRole().getId(), pMutable.isActive(), pMutable.getTemporaryPassword() == null ? "" : String.valueOf(pMutable.getTemporaryPassword()));
   }
 
+  @Override
+  public List<User> getUsers() throws Exception {
+    String query = SELECT_ALL + "WHERE ROLE_ID != 11";
+    return mJdbcTemplate.query(query, new UserRowMapper());
+  }
+
   class UserRowMapper implements RowMapper<User> {
     @Override
     public User mapRow(ResultSet rs, int rowNum) throws SQLException {

@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-public interface MutableAdditionalRolePermission extends AdditionalRolePermissions, Mutable, MutableLastModifier, MutableIdentifier<Integer> {
+public interface MutableAdditionalRolePermissions extends AdditionalRolePermissions, Mutable, MutableLastModifier, MutableIdentifier<Integer> {
   void setUser(final User pUser);
 
   void setUserId(final String pUserId);
@@ -27,4 +27,8 @@ public interface MutableAdditionalRolePermission extends AdditionalRolePermissio
   void setValidTo(final Date pToDate);
 
   void setActive(final boolean pActive);
+
+  void setAssignedBy(final User pUser);
+
+  void setAssignedByUserId(final String pUserId);
 }

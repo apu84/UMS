@@ -65,6 +65,12 @@ public class PersistentNavigationDao extends NavigationDaoDecorator {
     return namedParameterJdbcTemplate.query(query, Collections.singletonMap("permissions", pPermissions), new NavigationMapper());
   }
 
+  @Override
+  public List<Navigation> getByPermissionsId(Set<Integer> pPermissionIds) {
+    String query = SELECT_ALL + "WHERE NAVIGATION_ID IN (:permissions) ORDER BY PARENT_MENU ASC, VIEW_ORDER ASC";
+    NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(mJdbcTemplate.getDataSource());
+    return namedParameterJdbcTemplate.query(query, Collections.singletonMap("permissions", pPermissionIds), new NavigationMapper());  }
+
   class NavigationMapper implements RowMapper<Navigation> {
     @Override
     public Navigation mapRow(ResultSet rs, int rowNum) throws SQLException {

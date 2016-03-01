@@ -22,12 +22,7 @@ module ums {
 
   export class LeftMenu implements ng.IDirective {
 
-    constructor(private $parse:ng.IParseService,
-                private $compile: ng.ICompileService,
-                private httpClient: HttpClient,
-                private appConstants: any,
-                private $templateCache: ng.ITemplateCacheService,
-                private $timeout: ng.ITimeoutService) {
+    constructor(private httpClient: HttpClient) {
 
     }
 
@@ -48,13 +43,11 @@ module ums {
         $scope._menu.hover[i] = 'nav-hover';
       };
       $scope._menu.collapse = function (i) {
-        console.log("clicked "+ $scope._menu.status[i]);
         $scope._menu.status[i] = !$scope._menu.status[i];
 
-        var current = $(element).find('a[index=' + i + ']'); console.debug("%o", current);
+        var current = $(element).find('a[index=' + i + ']');
 
         current.parent('li').addClass('active').siblings().removeClass('active').children('ul').each(function () {
-          console.debug("%o", $(this).attr('index'));
           $scope._menu.status[$(this).attr('index')] = true;
         });
 
@@ -84,15 +77,14 @@ module ums {
       };
 
 
-      this.httpClient.get("mainNavigation", this.appConstants.mimeTypeJson,
+      this.httpClient.get("mainNavigation", HttpClient.MIME_TYPE_JSON,
           (data: any, etag: string) => {
-            $scope.entries = data.entries;
+            $scope.menuEntries = data.entries;
           });
     };
 
     public templateUrl = "./views/common/navigation.html";
 
   }
-  UMS.directive("ngMenu", ['$parse', '$compile', 'HttpClient', 'appConstants', '$templateCache', '$timeout',
-    ($parse, $compile, httpClient, appConstants, $templateCache, $timeout) => new LeftMenu($parse, $compile, httpClient, appConstants, $templateCache, $timeout)]);
+  UMS.directive("ngMenu", ['HttpClient', (httpClient) => new LeftMenu(httpClient)]);
 }

@@ -162,18 +162,6 @@ module ums {
       });
 
       $scope.user = cookieService.getCookieAsJson(CookieService.USER_KEY);
-
-      var config: ng.IRequestShortcutConfig = {
-        cache: this.$templateCache,
-        headers: {
-          'Accept' : 'text/html'
-        }
-      };
-
-      this.$http.get('views/common/navigation.html', config).then((response:ng.IHttpPromiseCallbackArg<any>) => {
-        $scope.menuHtml = response.data;
-      });
-
     }
   }
   UMS.controller('AppController', AppController);

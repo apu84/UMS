@@ -1,6 +1,5 @@
 package org.ums.academic.configuration;
 
-import com.google.common.collect.Lists;
 import org.apache.shiro.authc.credential.PasswordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -14,8 +13,6 @@ import org.ums.domain.model.dto.SemesterSyllabusMapDto;
 import org.ums.domain.model.mutable.*;
 import org.ums.domain.model.readOnly.*;
 import org.ums.manager.*;
-import org.ums.processor.navigation.NavigationProcessor;
-import org.ums.processor.navigation.NavigationProcessorImpl;
 import org.ums.services.LoginService;
 import org.ums.util.Constants;
 
@@ -132,7 +129,7 @@ public class AcademicConfiguration {
   }
 
   @Bean(name = "userManager")
-UserManager userManager() {
+  UserManager userManager() {
     return new PersistentUserDao(mJdbcTemplate);
   }
 
@@ -154,6 +151,11 @@ UserManager userManager() {
   @Bean
   NavigationManager navigationManager() {
     return new PersistentNavigationDao(mJdbcTemplate);
+  }
+
+  @Bean
+  AdditionalRolePermissionsManager additionalRolePermissionsManager() {
+    return new AdditionalRolePermissionsDao(mJdbcTemplate, getGenericDateFormat());
   }
 
   @Bean
@@ -295,6 +297,30 @@ UserManager userManager() {
   List<Builder<Navigation, MutableNavigation>> getNavigationBuilders() {
     List<Builder<Navigation, MutableNavigation>> builders = new ArrayList<>();
     builders.add(new NavigationBuilder());
+    return builders;
+  }
+
+  @Bean
+  List<Builder<User, MutableUser>> getUserBuilders() {
+    List<Builder<User, MutableUser>> builders = new ArrayList<>();
+    builders.add(new UserBuilder());
+    return builders;
+  }
+
+  @Bean
+  Builder<User, MutableUser> getUserBuilder() {
+    return new UserBuilder();
+  }
+
+  @Bean
+  Builder<AdditionalRolePermissions, MutableAdditionalRolePermissions> getAdditionalRolePermissionsBuilder() {
+    return new AdditionalRolePermissionsBuilder(navigationManager(), getGenericDateFormat());
+  }
+
+  @Bean
+  List<Builder<AdditionalRolePermissions, MutableAdditionalRolePermissions>> getAdditionalRolePermissionsBuilders() {
+    List<Builder<AdditionalRolePermissions, MutableAdditionalRolePermissions>> builders = new ArrayList<>();
+    builders.add(getAdditionalRolePermissionsBuilder());
     return builders;
   }
 

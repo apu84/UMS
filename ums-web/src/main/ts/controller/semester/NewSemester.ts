@@ -53,7 +53,7 @@ module ums {
             this.$scope. semester.startDate="";
             this.$scope. semester.endDate="";
           }).error((data) => {
-      })
+      });
 
     }
 

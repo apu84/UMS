@@ -4,6 +4,8 @@ import org.ums.domain.model.mutable.MutableUser;
 import org.ums.domain.model.readOnly.User;
 import org.ums.manager.UserManager;
 
+import java.util.List;
+
 public class UserDaoDecorator extends ContentDaoDecorator<User, MutableUser, String, UserManager> implements UserManager {
   @Override
   public int setPasswordResetToken(String pToken, String pUserId) throws Exception {
@@ -32,4 +34,8 @@ public class UserDaoDecorator extends ContentDaoDecorator<User, MutableUser, Str
     return modified;
   }
 
+  @Override
+  public List<User> getUsers() throws Exception {
+    return getManager().getUsers();
+  }
 }

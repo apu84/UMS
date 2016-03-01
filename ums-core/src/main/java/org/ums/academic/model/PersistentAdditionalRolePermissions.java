@@ -1,8 +1,9 @@
 package org.ums.academic.model;
 
 import org.springframework.context.ApplicationContext;
+import org.springframework.util.StringUtils;
 import org.ums.context.AppContext;
-import org.ums.domain.model.mutable.MutableAdditionalRolePermission;
+import org.ums.domain.model.mutable.MutableAdditionalRolePermissions;
 import org.ums.domain.model.mutable.MutableRole;
 import org.ums.domain.model.readOnly.Role;
 import org.ums.domain.model.readOnly.User;
@@ -14,7 +15,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-public class PersistentAdditionalRolePermissions implements MutableAdditionalRolePermission {
+public class PersistentAdditionalRolePermissions implements MutableAdditionalRolePermissions {
   private static UserManager sUserManager;
   private static ContentManager<Role, MutableRole, Integer> sRoleManager;
   private static AdditionalRolePermissionsManager sAdditionalRolePermissionsManager;
@@ -34,9 +35,11 @@ public class PersistentAdditionalRolePermissions implements MutableAdditionalRol
   private Date mValidTo;
   private boolean mActive;
   private String mLastModified;
+  private User mAssignedBy;
 
   private String mUserId;
   private Integer mRoleId;
+  private String mAssignedByUserId;
 
   public PersistentAdditionalRolePermissions() {
   }
@@ -96,7 +99,7 @@ public class PersistentAdditionalRolePermissions implements MutableAdditionalRol
 
   @Override
   public Role getRole() throws Exception {
-    return mRole == null ? sRoleManager.get(mRoleId) : sRoleManager.validate(mRole);
+    return mRole == null ? (StringUtils.isEmpty(mRoleId)? null : sRoleManager.get(mRoleId)) : sRoleManager.validate(mRole);
   }
 
   @Override
@@ -107,7 +110,7 @@ public class PersistentAdditionalRolePermissions implements MutableAdditionalRol
   @Override
   public Set<String> getPermission() throws Exception {
     Role role = getRole();
-    if (role.getPermissions() != null) {
+    if (role != null && role.getPermissions() != null) {
       if (mPermission == null) {
         mPermission = new HashSet<>();
       }
@@ -157,6 +160,25 @@ public class PersistentAdditionalRolePermissions implements MutableAdditionalRol
   }
 
   @Override
+  public void setAssignedBy(User pUser) {
+    mAssignedBy = pUser;
+  }
+
+  @Override
+  public User getAssignedBy() throws Exception {
+    return mAssignedBy == null ? sUserManager.get(mAssignedByUserId) : sUserManager.validate(mAssignedBy);
+  }
+
+  @Override
+  public String getAssignedByUserId() {
+    return mAssignedByUserId;
+  }
+
+  public void setAssignedByUserId(String pAssignedByUserId) {
+    mAssignedByUserId = pAssignedByUserId;
+  }
+
+  @Override
   public String getLastModified() {
     return mLastModified;
   }
@@ -176,7 +198,7 @@ public class PersistentAdditionalRolePermissions implements MutableAdditionalRol
   }
 
   @Override
-  public MutableAdditionalRolePermission edit() throws Exception {
+  public MutableAdditionalRolePermissions edit() throws Exception {
     return new PersistentAdditionalRolePermissions(this);
   }
 

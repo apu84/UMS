@@ -29,6 +29,7 @@
 /// <reference path='controller/common/ChangePassword.ts'/>
 /// <reference path='controller/common/Logout.ts'/>
 /// <reference path='controller/common/PasswordReport.ts'/>
+/// <reference path='controller/common/AssignRole.ts'/>
 
 /// <reference path='controller/dept/CourseTeacher.ts'/>
 

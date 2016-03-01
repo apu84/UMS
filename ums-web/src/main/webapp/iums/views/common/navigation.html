@@ -15,7 +15,7 @@
         -->
             <div class="clearfix"></div>
         </li>
-        <li data-ng-repeat="entry in entries[0].items" data-ng-mouseleave="_menu.mouseleave()"
+        <li data-ng-repeat="entry in menuEntries[0].items" data-ng-mouseleave="_menu.mouseleave()"
             data-ng-mouseover="_menu.mouseover($index)"
             data-ng-class="_menu.hover[$index]">
             <span data-ums-bind-html="{{entry.iconContent}}"></span>

@@ -21,6 +21,9 @@ public class DummyNavigationItemProcessor implements NavigationProcessor {
     if (pNavigation.getLocation().contains("studentProfile")
         && currentUser.getPrimaryRole().getName().equalsIgnoreCase("sadmin")) {
       MutableNavigation mutableNavigation = pNavigation.edit();
+      /**
+       * Do some processing here
+       */
 //      mutableNavigation.setActive(false);
       return mutableNavigation;
     }
