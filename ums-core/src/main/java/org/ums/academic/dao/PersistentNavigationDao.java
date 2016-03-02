@@ -1,5 +1,6 @@
 package org.ums.academic.dao;
 
+import com.google.common.collect.Lists;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -60,16 +61,21 @@ public class PersistentNavigationDao extends NavigationDaoDecorator {
 
   @Override
   public List<Navigation> getByPermissions(Set<String> pPermissions) {
-    String query = SELECT_ALL + "WHERE PERMISSION IN (:permissions) ORDER BY PARENT_MENU ASC, VIEW_ORDER ASC";
-    NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(mJdbcTemplate.getDataSource());
-    return namedParameterJdbcTemplate.query(query, Collections.singletonMap("permissions", pPermissions), new NavigationMapper());
+    if (pPermissions.size() > 0) {
+      String query = SELECT_ALL + "WHERE PERMISSION IN (:permissions) ORDER BY PARENT_MENU ASC, VIEW_ORDER ASC";
+      NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(mJdbcTemplate.getDataSource());
+      return namedParameterJdbcTemplate.query(query, Collections.singletonMap("permissions", pPermissions), new NavigationMapper());
+    } else {
+      return Lists.newArrayList();
+    }
   }
 
   @Override
   public List<Navigation> getByPermissionsId(Set<Integer> pPermissionIds) {
     String query = SELECT_ALL + "WHERE NAVIGATION_ID IN (:permissions) ORDER BY PARENT_MENU ASC, VIEW_ORDER ASC";
     NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(mJdbcTemplate.getDataSource());
-    return namedParameterJdbcTemplate.query(query, Collections.singletonMap("permissions", pPermissionIds), new NavigationMapper());  }
+    return namedParameterJdbcTemplate.query(query, Collections.singletonMap("permissions", pPermissionIds), new NavigationMapper());
+  }
 
   class NavigationMapper implements RowMapper<Navigation> {
     @Override

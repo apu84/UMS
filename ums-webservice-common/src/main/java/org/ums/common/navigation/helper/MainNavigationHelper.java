@@ -10,14 +10,8 @@ import org.ums.academic.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.common.academic.resource.ResourceHelper;
 import org.ums.domain.model.mutable.MutableNavigation;
-import org.ums.domain.model.readOnly.Navigation;
-import org.ums.domain.model.readOnly.Permission;
-import org.ums.domain.model.readOnly.Role;
-import org.ums.domain.model.readOnly.User;
-import org.ums.manager.ContentManager;
-import org.ums.manager.NavigationManager;
-import org.ums.manager.PermissionManager;
-import org.ums.manager.UserManager;
+import org.ums.domain.model.readOnly.*;
+import org.ums.manager.*;
 import org.ums.processor.navigation.NavigationProcessor;
 
 import javax.json.*;
@@ -29,6 +23,8 @@ import java.util.*;
 public class MainNavigationHelper extends ResourceHelper<Navigation, MutableNavigation, Integer> {
   @Autowired
   NavigationManager mNavigationManager;
+  @Autowired
+  AdditionalRolePermissionsManager mAdditionalRolePermissionsManager;
   @Autowired
   private List<Builder<Navigation, MutableNavigation>> mBuilders;
   @Autowired
@@ -62,7 +58,8 @@ public class MainNavigationHelper extends ResourceHelper<Navigation, MutableNavi
 
   public JsonObject getNavigationItems(final UriInfo pUriInfo) throws Exception {
     Subject subject = SecurityUtils.getSubject();
-    User user = mUserManager.get(subject.getPrincipal().toString());
+    String userId = subject.getPrincipal().toString();
+    User user = mUserManager.get(userId);
 
     Role primaryRole = user.getPrimaryRole();
     List<Permission> rolePermissions = mPermissionManager.getPermissionByRole(primaryRole);
@@ -71,45 +68,30 @@ public class MainNavigationHelper extends ResourceHelper<Navigation, MutableNavi
       permissions.addAll(permission.getPermissions());
     }
 
-    List<Navigation> navigationItems = mNavigationManager.getByPermissions(permissions);
-    List<Map<String, Object>> navigationMaps = insertChildMenu(navigationItems);
-
     JsonObjectBuilder root = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
 
     JsonObjectBuilder typedItems = Json.createObjectBuilder();
     typedItems.add("type", "primaryRole");
     typedItems.add("name", primaryRole.getName());
-
-    LocalCache localCache = new LocalCache();
-    JsonArrayBuilder items = Json.createArrayBuilder();
-
-    for (Map<String, Object> navigationMap : navigationMaps) {
-      Navigation navigation = (Navigation) navigationMap.get("navigation");
-
-      navigation = mNavigationProcessor.process(navigation, SecurityUtils.getSubject());
-
-      if (navigation.isActive()) {
-        JsonObject jsonObject = toJson(navigation, pUriInfo, localCache);
-        JsonObjectBuilder jsonObjectBuilder = toJsonObjectBuilder(jsonObject);
-
-        List<Navigation> childNavigation = (List<Navigation>) navigationMap.get("children");
-        if (childNavigation.size() > 0) {
-          JsonArrayBuilder childrenNavigation = Json.createArrayBuilder();
-          for (Navigation child : childNavigation) {
-            childrenNavigation.add(toJson(child, pUriInfo, localCache));
-          }
-          jsonObjectBuilder.add("children", childrenNavigation);
-        }
-
-        items.add(jsonObjectBuilder.build());
-      }
-    }
-    typedItems.add("items", items);
+    typedItems.add("items", buildNavigation(permissions, pUriInfo));
     children.add(typedItems);
-    root.add("entries", children);
-    localCache.invalidate();
 
+    permissions = new HashSet<>();
+
+    List<AdditionalRolePermissions> additionalRolePermissions = mAdditionalRolePermissionsManager.getPermissionsByUser(userId);
+    if (additionalRolePermissions.size() > 0) {
+      for (AdditionalRolePermissions additionalRolePermission : additionalRolePermissions) {
+        permissions.addAll(additionalRolePermission.getPermission());
+      }
+
+      typedItems = Json.createObjectBuilder();
+      typedItems.add("type", "additionalPermission");
+      typedItems.add("name", "AdditionalPermission");
+      typedItems.add("items", buildNavigation(permissions, pUriInfo));
+      children.add(typedItems);
+    }
+    root.add("entries", children);
     return root.build();
   }
 
@@ -143,6 +125,38 @@ public class MainNavigationHelper extends ResourceHelper<Navigation, MutableNavi
       }
     }
     return null;
+  }
+
+  private JsonArray buildNavigation(final Set<String> permissions, final UriInfo pUriInfo) throws Exception {
+    LocalCache localCache = new LocalCache();
+    JsonArrayBuilder items = Json.createArrayBuilder();
+
+    List<Navigation> navigationItems = mNavigationManager.getByPermissions(permissions);
+    List<Map<String, Object>> navigationMaps = insertChildMenu(navigationItems);
+
+    for (Map<String, Object> navigationMap : navigationMaps) {
+      Navigation navigation = (Navigation) navigationMap.get("navigation");
+
+      navigation = mNavigationProcessor.process(navigation, SecurityUtils.getSubject());
+
+      if (navigation.isActive()) {
+        JsonObject jsonObject = toJson(navigation, pUriInfo, localCache);
+        JsonObjectBuilder jsonObjectBuilder = toJsonObjectBuilder(jsonObject);
+
+        List<Navigation> childNavigation = (List<Navigation>) navigationMap.get("children");
+        if (childNavigation.size() > 0) {
+          JsonArrayBuilder childrenNavigation = Json.createArrayBuilder();
+          for (Navigation child : childNavigation) {
+            childrenNavigation.add(toJson(child, pUriInfo, localCache));
+          }
+          jsonObjectBuilder.add("children", childrenNavigation);
+        }
+
+        items.add(jsonObjectBuilder.build());
+      }
+    }
+    localCache.invalidate();
+    return items.build();
   }
 
   private JsonObjectBuilder toJsonObjectBuilder(final JsonObject pJsonObject) {

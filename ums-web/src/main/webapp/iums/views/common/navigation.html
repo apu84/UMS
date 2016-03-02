@@ -25,5 +25,15 @@
                 </li>
             </ul>
         </li>
+        <li data-ng-if="menuEntries.length > 1" data-ng-repeat="entry in menuEntries[1].items" data-ng-mouseleave="_menu.mouseleave()"
+            data-ng-mouseover="_menu.mouseover($index)"
+            data-ng-class="_menu.hover[$index]">
+            <span data-ums-bind-html="{{entry.iconContent}}"></span>
+            <ul data-ng-if="entry.children.length > 0" class="nav nav-second-level" collapse="_menu.status[{{entry.viewOrder}}]" index="{{entry.viewOrder}}">
+                <li data-ng-repeat="children in entry.children">
+                    <span data-ums-bind-html="{{children.iconContent}}"></span>
+                </li>
+            </ul>
+        </li>
     </ul>
 </div>

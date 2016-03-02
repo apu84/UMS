@@ -100,7 +100,6 @@ public class AdditionalRolePermissionsDao extends AdditionalRolePermissionsDaoDe
 
   @Override
   public int addPermissions(String pUserId, Set<String> pPermissions, User pAssignedBy, Date pFromDate, Date pToDate) {
-    //First remove all the existing permissions and then new one.
     String query = DELETE_ALL + "WHERE ASSIGNED_BY = ? AND USER_ID = ?";
     mJdbcTemplate.update(query, pAssignedBy.getId(), pUserId);
 
