@@ -38,7 +38,7 @@ public class ExamRoutineBuilder  implements Builder<ExamRoutine, MutableExamRout
       routine = new ExamRoutineDto();
       routine.setExamDate(jsonObject.getString("date"));
       routine. setExamTime(jsonObject.getString("time"));
-      routine.setProgramId(Integer.valueOf(jsonObject.getString("program")));
+      routine.setProgramId(jsonObject.getInt("program"));
       routine.setCourseId(jsonObject.getString("course"));
 
       routineList.add(routine);

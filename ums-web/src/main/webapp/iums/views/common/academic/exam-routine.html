@@ -6,14 +6,21 @@
     .btn-round{
         border-radius: 15px !important;
     }
-
+    .select2-container .select2-choice{
+        height: 26px !important;
+        line-height: 26px !important;
+    }
+    .select2-container .select2-choice .select2-arrow{
+        margin-top: -2px !important;
+    }
 
 </style>
 <div class="row">
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-body shadowPanel" style="min-height: 600px;">
-                <font color="blue"> Semester :</font> <select>
+                <font color="blue"> Semester :</font>
+                <select>
                 <option>Spring, 2015</option>
             </select>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -26,6 +33,13 @@
                 <input type="text" /> rows
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <input type="button" value="Add New Date" ng-click="addNewDateTime()"/>
+
+                <a href="javascript:;" class="btn btn-xs btn-default"
+                   data-ng-click="saveAll()">
+                    &nbsp;&nbsp;Save All &nbsp;
+                    <i class="fa fa-floppy-o" style="color: green;"></i>
+                </a>
+
 
                 <table class="table table-hover table-bordered table-advanced" style="margin-top: 20px;border-collapse: collapse;" cellpadding="0" cellspacing="0">
                     <thead>
@@ -40,7 +54,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="date_time in routine.date_times">
+                    <tr ng-repeat="date_time in routine.date_times ">
                         <td align="center">
                             <div class="input-icon right" data-ng-hide="date_time.readOnly">
                                 <i class="fa fa-calendar"></i>
@@ -87,16 +101,24 @@
                             <table width="100%">
                                 <tr ng-repeat="program in date_time.programs">
                                     <td width="19%" align="center" style="vertical-align: top;padding-top: 20px;padding-bottom: 20px; ">
-                                        <select id="program_{{date_time.index}}{{program.index}}" data-ng-hide="date_time.readOnly" class="form-control"  style="width: 80%" data-ng-model="program.programId"
+
+                                        <!--
+                                        <select id="program_{{date_time.index}}{{program.index}}"  data-ng-hide="date_time.readOnly" class="form-control"  style="width: 80%"  data-ng-model="program.programId"
                                                 ng-change="programSelectionChanged(program,date_time)">
-                                            <option data-ng-repeat="ugProgram in data.ugPrograms" value="{{ugProgram.programs[0].id}}">{{ugProgram.programs[0].shortName}}</option>
+                                            <option data-ng-repeat="ugProgram in data.ugPrograms" value="ugProgram.programs[0].id">{{ugProgram.programs[0].shortName}}</option>
                                         </select>
+                                        -->
+                                        <select id="program_{{date_time.index}}{{program.index}}"  data-ng-hide="date_time.readOnly" class="form-control"  style="width: 80%"  data-ng-model="exam_program"
+                                                ng-change="programSelectionChanged(program,date_time)"
+                                                ng-options="ugProgram.programs[0].shortName for ugProgram in data.ugPrograms track by ugProgram.programs[0].id">
+                                        </select >
+
                                         <div  data-ng-show="date_time.readOnly">
                                             {{program.programName}}
                                         </div>
                                         <br/>
                                         <a href="javascript:;" class="btn btn-xs btn-default"
-                                           data-ng-click="addNewCourse(date_time.index,program.index,program.programId)">
+                                           data-ng-click="addNewCourse(date_time,program)">
                                             &nbsp;&nbsp;Add&nbsp;&nbsp; <i class="fa fa-plus-circle" style="color: blue;"></i>
                                         </a>
                                         <a href="javascript:;" class="btn btn-xs btn-default"

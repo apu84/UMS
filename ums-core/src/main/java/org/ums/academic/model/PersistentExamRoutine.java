@@ -52,11 +52,10 @@ public class PersistentExamRoutine implements MutableExamRoutine {
 
   @Override
   public void delete() throws Exception {
-    if(mInsertType.equalsIgnoreCase("DateTimeProgram")) {
-      //do delete
-    }
+    sExamRoutineManager.delete(this);
 
   }
+
 
   @Override
   public void commit(boolean update) throws Exception {

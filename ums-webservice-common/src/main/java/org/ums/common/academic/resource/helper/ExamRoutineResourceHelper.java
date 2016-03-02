@@ -19,6 +19,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import javax.json.*;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.util.Arrays;
 import java.util.List;
 
 @Component
@@ -82,7 +83,7 @@ public class ExamRoutineResourceHelper extends ResourceHelper<ExamRoutine, Mutab
               //dateTimeString="{\"index\":"+dateTimeCounter+",\"examDate\":\""+routineDto.getExamDate()+"\",\"examTime\":\""+routineDto.getExamTime()+"\",\"readOnly\":true,";
               dateTimeString="";
               courseCounter=0;
-              programString="{\"index\":"+programCounter+",\"programId\":\""+routineDto.getProgramId()+"\",\"programName\":\""+routineDto.getProgramName()+"\",\"readOnly\":true";
+              programString="{\"index\":"+programCounter+",\"programId\":"+routineDto.getProgramId()+",\"programName\":\""+routineDto.getProgramName()+"\",\"readOnly\":true";
               courseString=",\"courses\":[{\"index\":"+courseCounter+",\"id\":\""+routineDto.getCourseId()+"\",\"no\":\""+routineDto.getCourseNumber()+"\",\"title\":\""+routineDto.getCourseTitle()+"\",\"year\":"+routineDto.getCourseYear()+",\"semester\":\""+routineDto.getCourseSemester()+"\",\"readOnly\":true},";
               programCounter++;
               courseCounter++;
@@ -101,7 +102,7 @@ public class ExamRoutineResourceHelper extends ResourceHelper<ExamRoutine, Mutab
           programCounter=0;
           courseCounter=0;
           dateTimeString="{\"index\":"+dateTimeCounter+",\"examDate\":\""+routineDto.getExamDate()+"\",\"examTime\":\""+routineDto.getExamTime()+"\",\"readOnly\":true,";
-          programString="\"programs\":[{\"index\":"+programCounter+",\"programId\":\""+routineDto.getProgramId()+"\",\"programName\":\""+routineDto.getProgramName()+"\",\"readOnly\":true";
+          programString="\"programs\":[{\"index\":"+programCounter+",\"programId\":"+routineDto.getProgramId()+",\"programName\":\""+routineDto.getProgramName()+"\",\"readOnly\":true";
           courseString=",\"courses\":[{\"index\":"+courseCounter+",\"id\":\""+routineDto.getCourseId()+"\",\"no\":\""+routineDto.getCourseNumber()+"\",\"title\":\""+routineDto.getCourseTitle()+"\",\"year\":"+routineDto.getCourseYear()+",\"semester\":\""+routineDto.getCourseSemester()+"\",\"readOnly\":true},";
           programCounter++;
           courseCounter++;
@@ -117,7 +118,9 @@ public class ExamRoutineResourceHelper extends ResourceHelper<ExamRoutine, Mutab
       totalString+=dateTimeString+programString+courseString+"]}]}]";
     }
     System.out.println(totalString);
-    object.add("entries", children);
+
+
+    object.add("entries", totalString);
 
     return object.build();
   }

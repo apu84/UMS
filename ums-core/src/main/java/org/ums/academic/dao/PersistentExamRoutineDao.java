@@ -28,8 +28,10 @@ public class PersistentExamRoutineDao  extends ExamRoutineDaoDecorator {
       "And MST_SYLLABUS.PROGRAM_ID=MST_PROGRAM.PROGRAM_ID " +
       "Order By to_date(EXAM_DATE,'DD/MM/YYYY'),Exam_Time,Program_Id,Year,Semester,Course_No ";
 
-  static String INSERT_ONE = "INSERT INTO EXAM_ROUTINE(SEMESTER,EXAM_TYPE,EXAM_DATE,EXAM_TIME,COURSE_ID) " +
-      "VALUES(?,?,to_date(?,'dd/MM/YYYY'),?,?)";
+  static String INSERT_ONE = "INSERT INTO EXAM_ROUTINE(SEMESTER,EXAM_TYPE,EXAM_DATE,EXAM_TIME,PROGRAM_ID,COURSE_ID) " +
+      "VALUES(?,?,to_date(?,'dd/MM/YYYY'),?,?,?)";
+
+  static String DELETE="DELETE EXAM_ROUTINE Where SEMESTER=? And Exam_Type=? ";
 
 
   private JdbcTemplate mJdbcTemplate;
@@ -45,10 +47,25 @@ public class PersistentExamRoutineDao  extends ExamRoutineDaoDecorator {
   }
 
   public int delete(final MutableExamRoutine pExamRoutine) throws Exception {
-    //if(pExamRoutine.)
-    //String query = DELETE_ONE + "WHERE COURSE_ID = ?";
-   // return mJdbcTemplate.update(query, pCourse.getId());
-    return 1;
+    if(pExamRoutine.getInsertType().equalsIgnoreCase("byProgram") ){
+      String query = DELETE + " And  Exam_Date= to_date(?,'dd/MM/YYYY') And Exam_Time =?  and  Program_Id =?";
+      String examDate= pExamRoutine.getRoutine().get(0).getExamDate();
+      String examTime= pExamRoutine.getRoutine().get(0).getExamTime();
+      int programId=  pExamRoutine.getRoutine().get(0).getProgramId();
+
+      return mJdbcTemplate.update(query, pExamRoutine.getSemesterId(), pExamRoutine.getExamTypeId(),examDate,examTime,programId);
+    }
+    else if(pExamRoutine.getInsertType().equalsIgnoreCase("byDateTime") ){
+      String query = DELETE + " And  Exam_Date= to_date(?,'dd/MM/YYYY') And Exam_Time = ?  ";
+      String examDate= pExamRoutine.getRoutine().get(0).getExamDate();
+      String examTime= pExamRoutine.getRoutine().get(0).getExamTime();
+      return mJdbcTemplate.update(query, pExamRoutine.getSemesterId(), pExamRoutine.getExamTypeId(),examDate,examTime);
+    }
+    else if(pExamRoutine.getInsertType().equalsIgnoreCase("all") ){
+      String query = DELETE ;
+      return mJdbcTemplate.update(query, pExamRoutine.getSemesterId(), pExamRoutine.getExamTypeId());
+    }
+    return 0;
   }
 
 
@@ -69,7 +86,8 @@ public class PersistentExamRoutineDao  extends ExamRoutineDaoDecorator {
         ps.setInt(2, pExamRoutine.getExamTypeId());
         ps.setString(3,routine.getExamDate());
         ps.setString(4, routine.getExamTime());
-        ps.setString(5, routine.getCourseId());
+        ps.setInt(5, routine.getProgramId());
+        ps.setString(6, routine.getCourseId());
 
       }
 

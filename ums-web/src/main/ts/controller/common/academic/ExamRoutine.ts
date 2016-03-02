@@ -15,6 +15,7 @@ module ums {
     courseSelectionChanged:Function;
     saveByProgram:Function;
     saveByDateTime:Function;
+    saveAll:Function;
     editDateTime:Function;
     routine: any;
     data: any;
@@ -57,9 +58,15 @@ module ums {
         date_times: Array<IDateTime>()
       };
 
-      $scope.routine.date_times = [{"index":0,"examDate":"01/03/2016","examTime":"9:30 a.m. to 12:30 p.m","readOnly":true,"programs":[{"index":0,"programId":"110500","programName":"BSC in EEE","readOnly":true,"courses":[{"index":0,"id":"EEE2206_S2014_110500","no":"EEE 2206","title":"Energy Conversion II Lab","year":2,"semester":"2","readOnly":true}]}]},{"index":1,"examDate":"22/02/2016","examTime":"9:30 a.m. to 12:30 p.m","readOnly":true,"programs":[{"index":0,"programId":"110500","programName":"BSC in EEE","readOnly":true,"courses":[{"index":0,"id":"ME1101_S2014_110500","no":"ME 1101","title":"Mechanical Engineering Fundamentals","year":1,"semester":"1","readOnly":true},{"index":1,"id":"ME1102_S2014_110500","no":"ME 1102","title":"Mechanical Engineering Fundamentals Lab","year":1,"semester":"1","readOnly":true}]}]},{"index":2,"examDate":"23/02/2016","examTime":"9:30 a.m. to 12:30 p.m","readOnly":true,"programs":[{"index":0,"programId":"110400","programName":"BSC in CSE","readOnly":true,"courses":[{"index":0,"id":"CSE1200_F2009_110400","no":"CSE 1200","title":"Software Development-I","year":1,"semester":"2","readOnly":true}]},{"index":1,"programId":"110500","programName":"BSC in EEE","readOnly":true,"courses":[{"index":0,"id":"MATH1103_S2014_110500","no":"MATH 1103","title":"Mathematics I","year":1,"semester":"1","readOnly":true},{"index":1,"id":"MATH1103_S2014_110500","no":"MATH 1103","title":"Mathematics I","year":1,"semester":"1","readOnly":true},{"index":2,"id":"ME1101_S2014_110500","no":"ME 1101","title":"Mechanical Engineering Fundamentals","year":1,"semester":"1","readOnly":true}]}]},{"index":3,"examDate":"29/02/2016","examTime":"9:30 a.m. to 12:30 p.m","readOnly":true,"programs":[{"index":0,"programId":"110500","programName":"BSC in EEE","readOnly":true,"courses":[{"index":0,"id":"ME1102_S2014_110500","no":"ME 1102","title":"Mechanical Engineering Fundamentals Lab","year":1,"semester":"1","readOnly":true}]}]}];
+      //$scope.routine.date_times = [{"index":0,"examDate":"01/03/2016","examTime":"9:30 a.m. to 12:30 p.m","readOnly":true,"programs":[{"index":0,"programId":"110500","programName":"BSC in EEE","readOnly":true,"courses":[{"index":0,"id":"EEE2206_S2014_110500","no":"EEE 2206","title":"Energy Conversion II Lab","year":2,"semester":"2","readOnly":true}]}]},{"index":1,"examDate":"22/02/2016","examTime":"9:30 a.m. to 12:30 p.m","readOnly":true,"programs":[{"index":0,"programId":"110500","programName":"BSC in EEE","readOnly":true,"courses":[{"index":0,"id":"ME1101_S2014_110500","no":"ME 1101","title":"Mechanical Engineering Fundamentals","year":1,"semester":"1","readOnly":true},{"index":1,"id":"ME1102_S2014_110500","no":"ME 1102","title":"Mechanical Engineering Fundamentals Lab","year":1,"semester":"1","readOnly":true}]}]},{"index":2,"examDate":"23/02/2016","examTime":"9:30 a.m. to 12:30 p.m","readOnly":true,"programs":[{"index":0,"programId":"110400","programName":"BSC in CSE","readOnly":true,"courses":[{"index":0,"id":"CSE1200_F2009_110400","no":"CSE 1200","title":"Software Development-I","year":1,"semester":"2","readOnly":true}]},{"index":1,"programId":"110500","programName":"BSC in EEE","readOnly":true,"courses":[{"index":0,"id":"MATH1103_S2014_110500","no":"MATH 1103","title":"Mathematics I","year":1,"semester":"1","readOnly":true},{"index":1,"id":"MATH1103_S2014_110500","no":"MATH 1103","title":"Mathematics I","year":1,"semester":"1","readOnly":true},{"index":2,"id":"ME1101_S2014_110500","no":"ME 1101","title":"Mechanical Engineering Fundamentals","year":1,"semester":"1","readOnly":true}]}]},{"index":3,"examDate":"29/02/2016","examTime":"9:30 a.m. to 12:30 p.m","readOnly":true,"programs":[{"index":0,"programId":"110500","programName":"BSC in EEE","readOnly":true,"courses":[{"index":0,"id":"ME1102_S2014_110500","no":"ME 1102","title":"Mechanical Engineering Fundamentals Lab","year":1,"semester":"1","readOnly":true}]}]}];
 
+      this.httpClient.get("academic/examroutine/semester/11012015/examtype/1", this.appConstants.mimeTypeJson,
+          (data:any, etag:string) => {
 
+            var a:Array<IDateTime>=eval(data.entries);
+            console.log(a);
+            $scope.routine.date_times =a;
+          });
       $scope.addNewDateTime = this.addNewDateTime.bind(this);
       $scope.removeDateTime = this.removeDateTime.bind(this);
       $scope.addNewProgram = this.addNewProgram.bind(this);
@@ -72,6 +79,7 @@ module ums {
       $scope.courseSelectionChanged = this.courseSelectionChanged.bind(this);
       $scope.saveByProgram = this.saveByProgram.bind(this);
       $scope.saveByDateTime = this.saveByDateTime.bind(this);
+      $scope.saveAll = this.saveAll.bind(this);
       $scope.editDateTime = this.editDateTime.bind(this);
 
 
@@ -114,25 +122,24 @@ module ums {
       this.$scope.routine.date_times[dateTimeTargetIndex].programs.splice(programTargetIndex, 1);
     }
 
-    private addNewCourse(date_time_index:number, program_index:number, program_id:number):void {
+    private addNewCourse(date_time_row_obj:IDateTime, program_row_obj:IProgram):void {
       // console.log(date_time_index+"--"+program_index+"---");
 
       var date_time_Arr = eval(this.$scope.routine.date_times);
-      var dateTimeTargetIndex = this.findIndex(date_time_Arr, date_time_index);
+      var dateTimeTargetIndex = this.findIndex(date_time_Arr, date_time_row_obj.index);
 
       var program_Arr = eval(this.$scope.routine.date_times[dateTimeTargetIndex].programs);
-      var programTargetIndex = this.findIndex(program_Arr, program_index);
+      var programTargetIndex = this.findIndex(program_Arr, program_row_obj.index);
 
       var index = this.getAttributeMaxValueFromArray(this.$scope.routine.date_times[dateTimeTargetIndex].programs[programTargetIndex].courses);
       var courseRow = this.getNewCourseRow(index);
       this.$scope.routine.date_times[dateTimeTargetIndex].programs[programTargetIndex].courses.splice(0, 0, courseRow);
 
-      this.getCourseArr(program_id).then((courseArr:Array<ICourse>)=> {
+      this.getCourseArr(program_row_obj.programId).then((courseArr:Array<ICourse>)=> {
         this.$scope.routine.date_times[dateTimeTargetIndex].programs[programTargetIndex].courseArr = courseArr;
 
-
         setTimeout(function () {
-          $('#' + 'course_' + date_time_index + program_index + courseRow.index).select2({
+          $('#' + 'course_' + date_time_row_obj.index + program_row_obj.index + courseRow.index).select2({
             placeholder: "Select an option",
             allowClear: true
           });
@@ -154,6 +161,9 @@ module ums {
     }
 
     private programSelectionChanged(program_obj_row:IProgram, date_time:IDateTime):void {
+
+      if(program_obj_row.programId==null)
+        program_obj_row.programId = $("#program_" + date_time.index + program_obj_row.index).val() == "?" ? null : parseInt($("#program_" + date_time.index + program_obj_row.index).val());
       console.log("------------>>" + program_obj_row.programId);
       console.log(program_obj_row);
       for (var ind in program_obj_row.courses) {
@@ -254,19 +264,66 @@ module ums {
     }
     return null;
   }
+
     private saveByDateTime(date_time:IDateTime) {
       var validate:boolean = true;
       validate = this.validateExamRoutine([date_time]);
-      var json:any = this.convertToJson([date_time]);
-      this.httpClient.put('academic/examroutine/semester/1/examtype/1', json, 'application/json')
-          .success(() => {
-            //$.notific8('Successfully Updated Mapping Information.');
-            alert("abc");
-          }).error((data) => {
-          });
+      if(validate==false){
+        alert("Please correct data.");
+        return;
+      }
+      var json:any = this.convertToJson([date_time],"byDateTime");
+      this.saveRoutine(json).then((message:string)=> {
+        $.notific8(message);
+      });
 
     }
-    private convertToJson(dateTimeArr:Array<IDateTime>):any {
+    private saveByProgram(date_time:IDateTime, program:IProgram) {
+      var dateTimeRow:IDateTime = {
+        readOnly: false,
+        index: date_time.index,
+        examDate: date_time.examDate,
+        examTime: date_time.examTime,
+        programs: [program]
+      }
+      var validate:boolean = true;
+      validate = this.validateExamRoutine([dateTimeRow]);
+      if(validate==false){
+        alert("Please correct data.");
+        return;
+      }
+      var json:any = this.convertToJson([date_time],"byProgram");
+      this.saveRoutine(json).then((message:string)=> {
+        $.notific8(message);
+      });
+    }
+
+    private saveAll(){
+      var validate:boolean = true;
+      var validate = this.validateExamRoutine(this.$scope.routine.date_times);
+      if(validate==false){
+        alert("Please correct data.");
+        return;
+      }
+      var json:any = this.convertToJson(this.$scope.routine.date_times,"all");
+      this.saveRoutine(json).then((message:string)=> {
+        $.notific8(message);
+      });
+
+    }
+
+    private saveRoutine(json:any):ng.IPromise<any> {
+      var defer = this.$q.defer();
+      this.httpClient.put('academic/examroutine/semester/11012015/examtype/1', json, 'application/json')
+          .success(() => {
+            defer.resolve('Successfully Saved Exam Routine.');
+          }).error((data) => {
+          });
+      return defer.promise;
+    }
+
+
+    private convertToJson(dateTimeArr:Array<IDateTime>,insertType:string):any {
       var jsonObj = [];
       for (var indx_date_time in dateTimeArr) {
         console.log("Row :" + indx_date_time);
@@ -294,37 +351,10 @@ module ums {
       complete_json["entries"] = jsonObj;
       complete_json["semesterId"] = "11012015";
       complete_json["examType"] = "1";
-      complete_json["insertType"] = "date-time";
+      complete_json["insertType"] = insertType;
       console.log(complete_json);
       return complete_json;
     }
-
-    private saveByProgram(date_time:IDateTime, program:IProgram) {
-      //program.programId=$("#program_"+date_time.index+program.index).val()=="? undefined:undefined ?"?null:$("#program_"+date_time.index+program.index).val();
-
-      var dateTimeRow:IDateTime = {
-        readOnly: false,
-        index: date_time.index,
-        examDate: date_time.examDate,
-        examTime: date_time.examTime,
-        programs: [program]
-      }
-
-
-      var validate:boolean = true;
-      validate = this.validateExamRoutine([dateTimeRow]);
-
-
-      /*
-       this.httpClient.put('academic/examroutine/semester/1/examtype/2',this.$scope.routine, 'application/json')
-       .success(() => {
-       //$.notific8('Successfully Updated Mapping Information.');
-       alert("abc");
-       }).error((data) => {
-       });
-       */
-    }
-
     private validateExamRoutine(dateTimeArr:Array<IDateTime>) {
 
       var validate:boolean = true;
@@ -332,7 +362,8 @@ module ums {
         var dateTimeRow:IDateTime = dateTimeArr[ind_date_time];
         for (var ind_program in dateTimeRow.programs) {
           var programRow:IProgram = dateTimeArr[ind_date_time].programs[ind_program];
-          programRow.programId = $("#program_" + dateTimeRow.index + programRow.index).val() == "? undefined:undefined ?" ? null : $("#program_" + dateTimeRow.index + programRow.index).val();
+          if(programRow.programId==null)
+              programRow.programId = $("#program_" + dateTimeRow.index + programRow.index).val() == "?" ? null : $("#program_" + dateTimeRow.index + programRow.index).val();
         }
         console.log(dateTimeRow);
         validate = this.validateSingleRow(dateTimeRow) && validate;
@@ -495,7 +526,9 @@ module ums {
 
 setTimeout(function() {
       for (var ind1 in date_time_row_obj.programs) {
-        var program:IProgram = date_time_row_obj.programs[ind];
+        var program:IProgram = date_time_row_obj.programs[ind1];
+        console.log(program);
+        $("#program_"+date_time_row_obj.index+program.index).val(program.programId+'');
       for (var ind2 in program.courses) {
           var course:ICourse =program.courses[ind2];
           $("#course_" + date_time_row_obj.index + program.index + course.index).select2().select2('val',course.id);
@@ -503,7 +536,7 @@ setTimeout(function() {
       }
 },
 1000);
-
+//alert($("#program_10").val());
     }
   }
   UMS.controller('ExamRoutine', ExamRoutine);
