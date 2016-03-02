@@ -27,10 +27,13 @@
     <link type="text/css" rel="stylesheet" href="vendors/bootstrap-daterangepicker/daterangepicker-bs3.css"/>
     <link type="text/css" rel="stylesheet" href="vendors/calendar/zabuto_calendar.min.css"/>
     <!-- Loading template style-->
-    <link rel="stylesheet" data-ng-href="css/themes/style1/orange-blue.css"/>
+    <!--<link rel="stylesheet" data-ng-href="css/themes/style1/orange-blue.css"/>-->
     <link rel="stylesheet" data-ng-href="css/themes/{{style}}/{{theme}}.css"/>
     <link rel="stylesheet" href="css/style-responsive.css"/>
     <link rel="stylesheet" data-ng-href="css/custom.css"/>
+
+    <link rel="stylesheet" data-ng-href="vendors/jquery-jqgrid-5.0.2/css/ui.jqgrid-bootstrap.css"/>
+
     <!-- Loading library javascript-->
     <script src="vendors/jquery-1.10.2.min.js"></script>
     <script src="js/lib/angular.js"></script>
@@ -59,8 +62,14 @@
     <script src="vendors/moment/moment.js"></script>
     <script src="vendors/flot-chart/jquery.flot.js"></script>
     <script src="vendors/DataTables/media/js/jquery.dataTables.js"></script>
+
+    <script src="vendors/jquery-jqgrid-5.0.2/js/i18n/grid.locale-en.js"></script>
+    <script src="vendors/jquery-jqgrid-5.0.2/js/jquery.jqGrid.min.js"></script>
+    <script src="vendors/jquery-jqgrid-5.0.2/defaultSettings.js"></script>
+
     <!-- Loading core javascript-->
     <script src="js/main.js?wewe"></script>
+    <script src="js/utils/HTML5StorageMultidimensional.js"></script>
     <!--Load script for each page using LazyLoad-->
 </head>
 <body ng-controller="AppController" ng-class="[header.menu_style, header.menu_collapse, header.header_topbar, header.effect]" class="animated">

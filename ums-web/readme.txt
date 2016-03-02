@@ -12,6 +12,7 @@ Run "/ums-web" directory on server enviroment (we are using node static to run l
 
 >npm install -g grunt-cli
 >npm install
+>npm install grunt-este-watch
 >grunt esteWatch
 
 

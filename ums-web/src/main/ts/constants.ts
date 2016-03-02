@@ -64,6 +64,7 @@ module ums {
           '06': 'Department of Textile Engineering',
           '07': 'Department of Mechanical & Production Engineering'
         },
+        dept4JqGridSelectBox: ':None;01:ARC;02:BBA;03:CE;04:CSE;05:EEE;06:TE;07:MPE',
         officeShort: {
           '80': 'RO',
           '81': 'CO',
@@ -84,6 +85,9 @@ module ums {
           '0': 'Inactive',
           '1': 'Active'
         },
+        examTime: [
+          {id: '9:30 a.m. to 12:30 p.m', name: '9:30 a.m. to 12:30 p.m'}
+        ],
         bloodGroup: [
           {id: '', name: 'Select Blood Group'},
           {id: 'O+', name: 'O+'},

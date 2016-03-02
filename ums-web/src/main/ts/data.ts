@@ -20,7 +20,10 @@
     '/bulkUserPassword': {title: 'User Management ', 'breadcrumb': ['User Management','Bulk']},
     '/courseTeacher': {title: 'Course Teacher Assign ', 'breadcrumb': ['Course Teacher']},
     '/classRoutine': {title: 'Class Routine Upload ', 'breadcrumb': ['Class Routine']},
-    '/studentProfile': {title: 'Student Profile ', 'breadcrumb': ['Student Profile']}
+    '/studentProfile': {title: 'Student Profile ', 'breadcrumb': ['Student Profile']},
+    '/classRoomInfo': {title: 'Class Room Information ', 'breadcrumb': ['Class Room Information']},
+    '/examRoutine': {title: 'Exam Routine ', 'breadcrumb': ['Exam Routine']}
+
 
   };
 

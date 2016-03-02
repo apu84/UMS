@@ -11,4 +11,7 @@ public class CourseDaoDecorator extends ContentDaoDecorator<Course, MutableCours
   public List<Course> getBySyllabus(String pSyllabusId) {
     return getManager().getBySyllabus(pSyllabusId);
   }
+  public List<Course> getBySemesterProgram(String pSemesterId,String pProgramId) {
+    return getManager().getBySemesterProgram(pSemesterId,pProgramId);
+  }
 }
