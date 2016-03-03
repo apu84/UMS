@@ -1,6 +1,7 @@
 package org.ums.academic.configuration;
 
 import org.apache.shiro.authc.credential.PasswordService;
+import org.apache.shiro.realm.jdbc.JdbcRealm;
 import org.apache.velocity.app.VelocityEngine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -9,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.ums.academic.builder.*;
 import org.ums.academic.dao.*;
+import org.ums.authentication.UMSAuthenticationRealm;
 import org.ums.domain.model.dto.MutableSemesterSyllabusMapDto;
 import org.ums.domain.model.dto.SemesterSyllabusMapDto;
 import org.ums.domain.model.mutable.*;
@@ -44,6 +46,9 @@ public class AcademicConfiguration {
 
   @Autowired
   BinaryContentManager<byte[]> mBinaryContentManager;
+
+  @Autowired
+  UMSAuthenticationRealm mAuthenticationRealm;
 
   SemesterManager getPersistentSemesterDao() {
     return new PersistentSemesterDao(mJdbcTemplate, getGenericDateFormat());
@@ -154,7 +159,9 @@ public class AcademicConfiguration {
 
   @Bean
   NavigationManager navigationManager() {
-    return new PersistentNavigationDao(mJdbcTemplate);
+    NavigationByPermissionResolver navigationByPermissionResolver = new NavigationByPermissionResolver(mAuthenticationRealm);
+    navigationByPermissionResolver.setManager(new PersistentNavigationDao(mJdbcTemplate));
+    return navigationByPermissionResolver;
   }
 
   @Bean

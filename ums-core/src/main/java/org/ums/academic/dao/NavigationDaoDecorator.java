@@ -9,7 +9,7 @@ import java.util.Set;
 
 public class NavigationDaoDecorator extends ContentDaoDecorator<Navigation, MutableNavigation, Integer, NavigationManager> implements NavigationManager {
   @Override
-  public List<Navigation> getByPermissions(Set<String> pPermissions) {
+  public List<Navigation> getByPermissions(Set<String> pPermissions) throws Exception{
     return getManager().getByPermissions(pPermissions);
   }
 
