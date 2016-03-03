@@ -55,7 +55,7 @@ public class PersistentNavigationDao extends NavigationDaoDecorator {
 
   @Override
   public List<Navigation> getAll() throws Exception {
-    String query = SELECT_ALL + "ORDER BY VIEW_ORDER";
+    String query = SELECT_ALL + "ORDER BY PARENT_MENU ASC";
     return mJdbcTemplate.query(query, new NavigationMapper());
   }
 

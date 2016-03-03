@@ -99,16 +99,21 @@ public class MainNavigationHelper extends ResourceHelper<Navigation, MutableNavi
     List<Map<String, Object>> navigationList = new ArrayList<>();
 
     for (Navigation navigation : pNavigationList) {
-      Map<String, Object> navigationMap = new HashMap<>();
-      navigationMap.put("navigation", navigation);
-      navigationMap.put("children", new ArrayList<Navigation>());
-      Map<String, Object> parent = findParentNavigation(navigationList, navigation);
-
-      if (parent != null) {
-        List<Navigation> children = (List<Navigation>) parent.get("children");
-        children.add(navigation);
-      } else {
+      if (navigation.getParentId() <= 0) {
+        Map<String, Object> navigationMap = new HashMap<>();
+        navigationMap.put("navigation", navigation);
+        navigationMap.put("children", new ArrayList<Navigation>());
         navigationList.add(navigationMap);
+      }
+    }
+
+    for (Navigation navigation : pNavigationList) {
+      if (navigation.getParentId() > 0) {
+        Map<String, Object> parent = findParentNavigation(navigationList, navigation);
+        if (parent != null) {
+          List<Navigation> children = (List<Navigation>) parent.get("children");
+          children.add(navigation);
+        }
       }
     }
 
@@ -132,6 +137,7 @@ public class MainNavigationHelper extends ResourceHelper<Navigation, MutableNavi
     JsonArrayBuilder items = Json.createArrayBuilder();
 
     List<Navigation> navigationItems = mNavigationManager.getByPermissions(permissions);
+    navigationItems.sort((s1, s2) ->  s1.getViewOrder().compareTo(s2.getViewOrder()));
     List<Map<String, Object>> navigationMaps = insertChildMenu(navigationItems);
 
     for (Map<String, Object> navigationMap : navigationMaps) {
