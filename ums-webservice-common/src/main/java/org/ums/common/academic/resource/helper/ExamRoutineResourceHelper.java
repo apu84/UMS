@@ -58,7 +58,6 @@ public class ExamRoutineResourceHelper extends ResourceHelper<ExamRoutine, Mutab
 
   protected JsonObject buildJsonResponse(final Integer pSemesterId, final Integer pExamType,final List<ExamRoutineDto> routineList) throws Exception {
     JsonObjectBuilder object = Json.createObjectBuilder();
-    JsonArrayBuilder children = Json.createArrayBuilder();
     String prevDateTime="",currDateTime= "";
     int prevProgram=0,currProgram= 0;
     int counter=0, dateTimeCounter=0,programCounter=0,courseCounter=0;
@@ -117,6 +116,9 @@ public class ExamRoutineResourceHelper extends ResourceHelper<ExamRoutine, Mutab
         courseString=courseString.substring(0,courseString.length()-1);
       totalString+=dateTimeString+programString+courseString+"]}]}]";
     }
+    else
+    totalString+="]";
+
     System.out.println(totalString);
 
 

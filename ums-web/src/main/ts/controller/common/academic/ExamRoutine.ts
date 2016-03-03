@@ -17,6 +17,8 @@ module ums {
     saveByDateTime:Function;
     saveAll:Function;
     editDateTime:Function;
+    fetchSavedRoutine:Function;
+    loadingVisibility:boolean;
     routine: any;
     data: any;
     rowId: any;
@@ -55,18 +57,13 @@ module ums {
         ugPrograms: appConstants.ugPrograms
       };
       $scope.routine = {
-        date_times: Array<IDateTime>()
+        date_times: Array<IDateTime>(),
+        semester:0,
+        examType:0,
+        addButtonDisable:true,
+        saveButtonDisable:true
       };
-
-      //$scope.routine.date_times = [{"index":0,"examDate":"01/03/2016","examTime":"9:30 a.m. to 12:30 p.m","readOnly":true,"programs":[{"index":0,"programId":"110500","programName":"BSC in EEE","readOnly":true,"courses":[{"index":0,"id":"EEE2206_S2014_110500","no":"EEE 2206","title":"Energy Conversion II Lab","year":2,"semester":"2","readOnly":true}]}]},{"index":1,"examDate":"22/02/2016","examTime":"9:30 a.m. to 12:30 p.m","readOnly":true,"programs":[{"index":0,"programId":"110500","programName":"BSC in EEE","readOnly":true,"courses":[{"index":0,"id":"ME1101_S2014_110500","no":"ME 1101","title":"Mechanical Engineering Fundamentals","year":1,"semester":"1","readOnly":true},{"index":1,"id":"ME1102_S2014_110500","no":"ME 1102","title":"Mechanical Engineering Fundamentals Lab","year":1,"semester":"1","readOnly":true}]}]},{"index":2,"examDate":"23/02/2016","examTime":"9:30 a.m. to 12:30 p.m","readOnly":true,"programs":[{"index":0,"programId":"110400","programName":"BSC in CSE","readOnly":true,"courses":[{"index":0,"id":"CSE1200_F2009_110400","no":"CSE 1200","title":"Software Development-I","year":1,"semester":"2","readOnly":true}]},{"index":1,"programId":"110500","programName":"BSC in EEE","readOnly":true,"courses":[{"index":0,"id":"MATH1103_S2014_110500","no":"MATH 1103","title":"Mathematics I","year":1,"semester":"1","readOnly":true},{"index":1,"id":"MATH1103_S2014_110500","no":"MATH 1103","title":"Mathematics I","year":1,"semester":"1","readOnly":true},{"index":2,"id":"ME1101_S2014_110500","no":"ME 1101","title":"Mechanical Engineering Fundamentals","year":1,"semester":"1","readOnly":true}]}]},{"index":3,"examDate":"29/02/2016","examTime":"9:30 a.m. to 12:30 p.m","readOnly":true,"programs":[{"index":0,"programId":"110500","programName":"BSC in EEE","readOnly":true,"courses":[{"index":0,"id":"ME1102_S2014_110500","no":"ME 1102","title":"Mechanical Engineering Fundamentals Lab","year":1,"semester":"1","readOnly":true}]}]}];
-
-      this.httpClient.get("academic/examroutine/semester/11012015/examtype/1", this.appConstants.mimeTypeJson,
-          (data:any, etag:string) => {
-
-            var a:Array<IDateTime>=eval(data.entries);
-            console.log(a);
-            $scope.routine.date_times =a;
-          });
+      $scope.loadingVisibility=false;
       $scope.addNewDateTime = this.addNewDateTime.bind(this);
       $scope.removeDateTime = this.removeDateTime.bind(this);
       $scope.addNewProgram = this.addNewProgram.bind(this);
@@ -81,8 +78,37 @@ module ums {
       $scope.saveByDateTime = this.saveByDateTime.bind(this);
       $scope.saveAll = this.saveAll.bind(this);
       $scope.editDateTime = this.editDateTime.bind(this);
+      $scope.fetchSavedRoutine=this.fetchSavedRoutine.bind(this);
+
+    }
+    private fetchSavedRoutine():void{
+
+      this.$scope.routine.date_times=new Array<IDateTime>();
+      if(this.$scope.routine.semester==0 || this.$scope.routine.examType==0)
+        return;
+
+      this.$scope.loadingVisibility=true;
+      this.getRoutine(this.$scope.routine.semester,this.$scope.routine.examType).then((dateTimeArr:Array<IDateTime>)=> {
+        this.$scope.routine.date_times =dateTimeArr;
+        this.$scope.loadingVisibility=false;
+        this.$scope.routine.addButtonDisable=false;
+        this.$scope.routine.saveButtonDisable=false;
+      });
+    }
 
 
+    private getRoutine(semester_id:number,exam_type:number):ng.IPromise<any> {
+      var defer = this.$q.defer();
+      this.httpClient.get("academic/examroutine/semester/"+semester_id+"/examtype/"+exam_type, this.appConstants.mimeTypeJson,
+          (json:any, etag:string) => {
+            var dateTimeArr:Array<IDateTime>=eval(json.entries);
+            defer.resolve(dateTimeArr);
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>) => {
+            console.error(response);
+          });
+
+      return defer.promise;
     }
 
     private addNewDateTime():void {
@@ -275,6 +301,7 @@ module ums {
       var json:any = this.convertToJson([date_time],"byDateTime");
       this.saveRoutine(json).then((message:string)=> {
         $.notific8(message);
+        this.readOnlyRow([date_time]);
       });
 
     }
@@ -295,6 +322,7 @@ module ums {
       var json:any = this.convertToJson([date_time],"byProgram");
       this.saveRoutine(json).then((message:string)=> {
         $.notific8(message);
+        this.readOnlyRow([date_time]);
       });
     }
 
@@ -308,8 +336,8 @@ module ums {
       var json:any = this.convertToJson(this.$scope.routine.date_times,"all");
       this.saveRoutine(json).then((message:string)=> {
         $.notific8(message);
+        this.readOnlyRow(this.$scope.routine.date_times);
       });
-
     }
 
     private saveRoutine(json:any):ng.IPromise<any> {
@@ -320,6 +348,14 @@ module ums {
           }).error((data) => {
           });
       return defer.promise;
+    }
+
+    private readOnlyRow(date_time_arr:Array<IDateTime>){
+      for(var ind in date_time_arr){
+        var date_time_row_obj:IDateTime =date_time_arr[ind];
+        date_time_row_obj.readOnly=true;
+
+      }
     }
 
 
@@ -355,8 +391,9 @@ module ums {
       console.log(complete_json);
       return complete_json;
     }
-    private validateExamRoutine(dateTimeArr:Array<IDateTime>) {
 
+
+    private validateExamRoutine(dateTimeArr:Array<IDateTime>) {
       var validate:boolean = true;
       for (var ind_date_time in dateTimeArr) {
         var dateTimeRow:IDateTime = dateTimeArr[ind_date_time];
@@ -541,4 +578,3 @@ setTimeout(function() {
   }
   UMS.controller('ExamRoutine', ExamRoutine);
 }
-

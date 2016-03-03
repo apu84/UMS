@@ -19,27 +19,37 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-body shadowPanel" style="min-height: 600px;">
-                <font color="blue"> Semester :</font>
-                <select>
-                <option>Spring, 2015</option>
-            </select>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <font color="blue">Exam Type :</font>
-                <select>
-                    <option>Regular Exam</option>
-                </select>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <font color="blue">Create :</font>
-                <input type="text" /> rows
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <input type="button" value="Add New Date" ng-click="addNewDateTime()"/>
-
-                <a href="javascript:;" class="btn btn-xs btn-default"
-                   data-ng-click="saveAll()">
-                    &nbsp;&nbsp;Save All &nbsp;
-                    <i class="fa fa-floppy-o" style="color: green;"></i>
-                </a>
-
+                <div class="row">
+                    <div class="col-md-6">
+                            <font color="blue"> Semester :</font>
+                            <select data-ng-model="routine.semester" data-ng-change="fetchSavedRoutine()">
+                                <option value="0" ng-selected="true">Select a Semester</option>
+                                <option value="11012016">Spring, 2016</option>
+                                <option value="11020106">Fall, 2016</option>
+                                <option value="11012015">Spring, 2015</option>
+                                <option value="11022015">Fall, 2015</option>
+                            </select>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <font color="blue">Exam Type :</font>
+                            <select data-ng-model="routine.examType" data-ng-change="fetchSavedRoutine()">
+                                <option value="0" ng-selected="true">Select Exam Type</option>
+                                <option value="1">Regular Exam</option>
+                                <option value="2">Carry/Improvement</option>
+                            </select>
+                    </div>
+                    <div class="col-md-6" style="text-align: right;">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <a href="javascript:;" class="btn btn-xs btn-default"
+                           data-ng-click="addNewDateTime()"  data-ng-disabled="routine.addButtonDisable">
+                            Add New Date <i class="fa fa-plus-circle" style="color: blue;"></i>
+                        </a>
+                        <a href="javascript:;" class="btn btn-xs btn-default"
+                           data-ng-click="saveAll()" data-ng-disabled="routine.saveButtonDisable">
+                            &nbsp;&nbsp;Save All &nbsp;
+                            <i class="fa fa-floppy-o" style="color: green;"></i>
+                        </a>
+                    </div>
+                </div>
 
                 <table class="table table-hover table-bordered table-advanced" style="margin-top: 20px;border-collapse: collapse;" cellpadding="0" cellspacing="0">
                     <thead>
@@ -117,9 +127,12 @@
                                             {{program.programName}}
                                         </div>
                                         <br/>
-                                        <a href="javascript:;" class="btn btn-xs btn-default"
+                                        <a href="javascript:;" class="btn btn-xs btn-default" data-ng-hide="date_time.readOnly"
                                            data-ng-click="addNewCourse(date_time,program)">
                                             &nbsp;&nbsp;Add&nbsp;&nbsp; <i class="fa fa-plus-circle" style="color: blue;"></i>
+                                        </a>
+                                        <a href="javascript:;" class="btn btn-xs btn-default disabled" data-ng-show="date_time.readOnly">
+                                            &nbsp;&nbsp;Add&nbsp;&nbsp;<i class="fa fa-plus-circle" style="color: darkslategrey;"></i>
                                         </a>
                                         <a href="javascript:;" class="btn btn-xs btn-default"
                                            data-ng-click="saveByProgram(date_time,program)">
@@ -172,6 +185,11 @@
                     </tr>
                     </tbody>
                 </table>
+                <div class="spinner" ng-show="loadingVisibility">
+                    <div class="bounce1"></div>
+                    <div class="bounce2"></div>
+                    <div class="bounce3"></div>
+                </div>
             </div>
         </div>
     </div>
