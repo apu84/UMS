@@ -1,6 +1,7 @@
 package org.ums.academic.configuration;
 
 import org.apache.shiro.authc.credential.PasswordService;
+import org.apache.velocity.app.VelocityEngine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -37,6 +38,9 @@ public class AcademicConfiguration {
 
   @Autowired
   JdbcTemplate mJdbcTemplate;
+
+  @Autowired
+  private VelocityEngine velocityEngine;
 
   @Autowired
   BinaryContentManager<byte[]> mBinaryContentManager;
@@ -318,13 +322,13 @@ public class AcademicConfiguration {
 
   @Bean
   Builder<Navigation, MutableNavigation> getNavigationBuilder() {
-    return new NavigationBuilder();
+    return new NavigationBuilder(velocityEngine);
   }
 
   @Bean
   List<Builder<Navigation, MutableNavigation>> getNavigationBuilders() {
     List<Builder<Navigation, MutableNavigation>> builders = new ArrayList<>();
-    builders.add(new NavigationBuilder());
+    builders.add(new NavigationBuilder(velocityEngine));
     return builders;
   }
 

@@ -21,10 +21,10 @@ public class PersistentNavigation implements MutableNavigation {
   private Navigation mNavigation;
   private int mViewOrder;
   private String mLocation;
-  private String mIconContent;
+  private String mIconImgClass;
+  private String mIconColorClass;
   private boolean mActive;
   private String mLastModified;
-
   private Integer mParentId;
 
   public PersistentNavigation() {
@@ -37,7 +37,8 @@ public class PersistentNavigation implements MutableNavigation {
     setParentId(pNavigation.getParentId());
     setViewOrder(pNavigation.getViewOrder());
     setLocation(pNavigation.getLocation());
-    setIconContent(pNavigation.getIconContent());
+    setIconImgClass(pNavigation.getIconImgClass());
+    setIconColorClass(pNavigation.getIconColorClass());
     setActive(pNavigation.isActive());
     setLastModified(pNavigation.getLastModified());
   }
@@ -68,8 +69,13 @@ public class PersistentNavigation implements MutableNavigation {
   }
 
   @Override
-  public void setIconContent(String pIconContent) {
-    mIconContent = pIconContent;
+  public void setIconImgClass(String iIconImgClass) {
+    mIconImgClass = iIconImgClass;
+  }
+
+  @Override
+  public void setIconColorClass(String iIconColorClass) {
+    mIconColorClass = iIconColorClass;
   }
 
   @Override
@@ -128,8 +134,13 @@ public class PersistentNavigation implements MutableNavigation {
   }
 
   @Override
-  public String getIconContent() {
-    return mIconContent;
+  public String getIconImgClass() {
+    return mIconImgClass;
+  }
+
+  @Override
+  public String getIconColorClass() {
+    return mIconColorClass;
   }
 
   @Override

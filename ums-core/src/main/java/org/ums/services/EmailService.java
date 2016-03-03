@@ -17,10 +17,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.velocity.VelocityEngineUtils;
-import org.ums.academic.model.PersistentUser;
-import org.ums.domain.model.common.Mutable;
 import org.ums.domain.model.dto.ResetPasswordEmailDto;
-import org.ums.domain.model.mutable.MutableUser;
 import org.ums.domain.model.readOnly.User;
 
 @Component("emailService")
@@ -81,7 +78,7 @@ public class EmailService  {
         model.put("others",others );
 
         String body = VelocityEngineUtils.mergeTemplateIntoString(
-            velocityEngine, "email-templates/password-reset.vm", "UTF-8", model);
+            velocityEngine, "html-templates/password-reset-email.vm", "UTF-8", model);
         message.setText(body, true);
         if (!StringUtils.isBlank(attachmentPath)) {
           FileSystemResource file = new FileSystemResource(attachmentPath);

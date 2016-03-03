@@ -20,7 +20,9 @@ public interface Navigation extends Serializable, Identifier<Integer>, LastModif
 
   String getLocation();
 
-  String getIconContent();
+  String getIconImgClass();
+
+  String getIconColorClass();
 
   boolean isActive();
 }

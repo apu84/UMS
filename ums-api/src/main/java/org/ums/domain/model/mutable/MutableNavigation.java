@@ -17,7 +17,9 @@ public interface MutableNavigation extends Navigation, Mutable, MutableLastModif
 
   void setLocation(final String pLocation);
 
-  void setIconContent(final String pIconContent);
+  void setIconImgClass(final String pIconImgClass);
+
+  void setIconColorClass(final String pIconColorClass);
 
   void setActive(final boolean pActive);
 }

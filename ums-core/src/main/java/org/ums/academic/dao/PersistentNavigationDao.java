@@ -16,11 +16,11 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentNavigationDao extends NavigationDaoDecorator {
-  String SELECT_ALL = "SELECT NAVIGATION_ID, MENU_TITLE, PERMISSION, LOCATION, PARENT_MENU, VIEW_ICON, VIEW_ORDER, STATUS, LAST_MODIFIED FROM MAIN_NAVIGATION ";
-  String INSERT_ALL = "INSERT INTO MAIN_NAVIGATION (MENU_TITLE, PERMISSION, LOCATION, PARENT_MENU, VIEW_ICON, VIEW_ORDER, STATUS, LAST_MODIFIED) " +
-      "VALUES (?, ?, ?, ?, ?, ?, ?, " + getLastModifiedSql() + ")";
+  String SELECT_ALL = "SELECT NAVIGATION_ID, MENU_TITLE, PERMISSION, LOCATION, PARENT_MENU, ICON_IMG_CLASS, ICON_COLOR_CLASS, VIEW_ORDER, STATUS, LAST_MODIFIED FROM MAIN_NAVIGATION ";
+  String INSERT_ALL = "INSERT INTO MAIN_NAVIGATION (MENU_TITLE, PERMISSION, LOCATION, PARENT_MENU, ICON_IMG_CLASS, ICON_COLOR_CLASS, VIEW_ORDER, STATUS, LAST_MODIFIED) " +
+      "VALUES (?, ?, ?, ?, ?, ?,?, ?, " + getLastModifiedSql() + ")";
   String UPDATE_ALL = "UPDATE MAIN_NAVIGATION SET MENU_TITLE = ?, PERMISSION = ?, LOCATION = ?, PARENT_MENU = ?, " +
-      "VIEW_ICON = ?, VIEW_ORDER = ?, STATUS = ?, LAST_MODIFIED = " + getLastModifiedSql() + " ";
+      "ICON_IMG_CLASS=?, ICON_COLOR_CLASS=?,  VIEW_ORDER = ?, STATUS = ?, LAST_MODIFIED = " + getLastModifiedSql() + " ";
 
   String DELETE_ALL = "DELETE FROM MAIN_NAVIGATION ";
 
@@ -87,7 +87,8 @@ public class PersistentNavigationDao extends NavigationDaoDecorator {
       navigation.setParentId(rs.getInt("PARENT_MENU"));
       navigation.setViewOrder(rs.getInt("VIEW_ORDER"));
       navigation.setLocation(rs.getString("LOCATION"));
-      navigation.setIconContent(rs.getString("VIEW_ICON"));
+      navigation.setIconImgClass(rs.getString("ICON_IMG_CLASS"));
+      navigation.setIconColorClass(rs.getString("ICON_COLOR_CLASS"));
       navigation.setActive(rs.getBoolean("STATUS"));
       navigation.setLastModified(rs.getString("LAST_MODIFIED"));
       AtomicReference<Navigation> atomicReference = new AtomicReference<>(navigation);

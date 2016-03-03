@@ -1,0 +1,2 @@
+<a href='javascript:void(0);' ui-sref="${sref}" ng-click='_menu.collapse(${index})' index='${index}' ng-init='_menu.status[${index}]=true'><i class='fa ${icon_image_class} fa-fw'><div class='icon-bg ${icon_color_class}'></div></i><span class='menu-title'>${title}</span><span class='fa arrow'></span>
+</a>
