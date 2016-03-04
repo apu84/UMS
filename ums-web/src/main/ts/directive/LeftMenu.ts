@@ -11,6 +11,7 @@ module ums {
     mozCancelFullScreen: any;
     webkitExitFullscreen: any;
     msExitFullscreen: any;
+    loading_visibility:boolean;
   }
   declare var document:CustomDocument;
 
@@ -29,6 +30,7 @@ module ums {
     public restrict = 'AE';
 
     public link = ($scope:any, element:JQuery, attributes:any) => {
+      $scope.loading_visibility=true;
       $scope._menu = {status: [], collapse: {}, hover: []};
 
       $scope._menu.mouseleave = function () {
@@ -79,7 +81,9 @@ module ums {
 
       this.httpClient.get("mainNavigation", HttpClient.MIME_TYPE_JSON,
           (data: any, etag: string) => {
+            $scope.loading_visibility=false;
             $scope.menuEntries = data.entries;
+
           });
     };
 
