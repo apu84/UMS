@@ -146,7 +146,7 @@
                                     <td width="73%" style="padding-top: 10px;vertical-align: top;" >
                                         <table width="100%">
                                             <tr ng-repeat="course in program.courses">
-                                                <td width="11%" align="center" style="padding-top: 5px;padding-bottom: 5px;">
+                                                <td width="11%" align="center" style="padding-top: 5px;padding-bottom: 5px;height: 45px;" height="45px">
                                                     <input id="year_{{date_time.index}}{{program.index}}{{course.index}}" type="text" class="form-control" style="width: 80%;height: 25px;text-align: center;padding: 0px;" data-ng-model="course.year" data-ng-hide="date_time.readOnly"/>
                                                     <div  data-ng-show="date_time.readOnly">
                                                         {{course.year}}
