@@ -252,6 +252,7 @@ module ums {
         })
         .state('classRoutine', {
           url: "/classRoutine",
+          controller:'ClassRoutine',
           templateUrl: 'views/dept/class-routine.html',
           resolve: {
             loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {

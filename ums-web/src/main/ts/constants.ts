@@ -65,6 +65,9 @@ module ums {
           '07': 'Department of Mechanical & Production Engineering'
         },
         dept4JqGridSelectBox: ':None;01:ARC;02:BBA;03:CE;04:CSE;05:EEE;06:TE;07:MPE',
+        days:':None;01:Saturday;02:Sunday;03:Monday;04:Tuesday;05:Wednesday;06:Thursday;07:Friday',
+        startTime:':None;01:8.00 AM;02:8.50 AM;03:9.40 AM;04:10.30 AM;05:11.20 AM;06:12.10 PM;07:1.00 AM;08:1.50 PM;09:2.40 PM;10:3.30 PM;11:4.20 PM;12:5.10 PM;13:6.00 PM',
+        endTime:':None;01:8.00 AM;02:8.50 AM;03:9.40 AM;04:10.30 AM;05:11.20 AM;06:12.10 PM;07:1.00 AM;08:1.50 PM;09:2.40 PM;10:3.30 PM;11:4.20 PM;12:5.10 PM;13:6.00 PM',
         officeShort: {
           '80': 'RO',
           '81': 'CO',

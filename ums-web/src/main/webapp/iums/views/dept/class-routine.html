@@ -1,43 +1,80 @@
+
+
+<!-- *********************Priliminary Input Forms************************* -->
 <div class="row">
-    <div class="col-md-6">
-
-        <div class="panel panel-default">
+    <div class="col-md-3"></div>
+    <div class="col-md-6 centered">
+        <div class="panel panel-default" id="leftDiv">
             <div class="panel-heading">
-                <h3 class="panel-title">Instructions</h3>
+                <h3 class="panel-title">Select </h3>
             </div>
+            <div class="panel-body pan">
+                <form action="" class="form-horizontal">
+                    <div class="form-body pal">
+
+
+
+                        <div data-program-selector="" data-model="courseTeacherSearchParamModel.programSelector"></div>
+
+
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Academic Semester</label>
+                            <div class="col-md-8">
+                                <select class="form-control required" data-ng-model="courseTeacherSearchParamModel.semesterId" ng-init="newSyllabusModel.semesterId=''">
+                                    <option data-ng-repeat="semester in courseTeacherSearchParamModel.programSelector.getSemesters()" value="{{semester.id}}">{{semester.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Students Year</label>
+                            <div class="col-md-8">
+                                <select class="form-control required" data-ng-model="courseTeacherSearchParamModel.academicYearId" ng-init="academicYear=''">
+                                    <option data-ng-repeat="year in data.academicYear" value="{{year.id}}">
+                                        {{year.name}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Students Semester</label>
+                            <div class="col-md-8">
+                                <select class="form-control required" data-ng-model="courseTeacherSearchParamModel.academicSemesterId" ng-init="academicSemester=''">
+                                    <option data-ng-repeat="semester in data.academicSemester" value="{{semester.id}}">
+                                        {{semester.name}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-actions text-right pal">
+                            <button type="button" class="btn btn-success" data-ng-click="fetchProgramTypeAndDeptInfo()">Search</button>
+                        </div>
+
+
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+
+
+    </div>
+    <div class="col-md-3"></div>
+</div>
+
+
+<!-- ************************************************  -->
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
             <div class="panel-body">
-                <ul>
-                    <li>
-                        Upload Class routine for each   &nbsp;<strong>Year-Semester</strong>&nbsp; Separately.<br/><br/>
-                    </li>
-                    <li>
-                        Name the Class Routine for Students by the following way-
-                        1-1-01-2015.pdf<br/>&nbsp;<strong>for</strong>&nbsp; (1st Year 1st Semester  Spring, 2015)<br/><br/>
-                        <span class="badge badge-pink"><strong>YEAR_SEMESTER_FALL/SPRING_YEAR.pdf</strong></span><br/><br/>
-                    </li>
-                    <li>
-                        Name the Class Routine for Teachers by the following way-
-                        112233-01-2015.pdf<br/>&nbsp;<strong>for</strong>&nbsp;  (1st Year 1st Semester  Spring, 2015)<br/><br/>
-                        <span class="badge badge-green"><strong>TEACHERID_FALL/SPRING_YEAR.pdf</strong></span><br/>
-                    </li>
-                </ul>
+                <div style="margin-left:20px">
+                    <table id="jqGrid"></table>
+                    <div id="jqGridPager"></div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-md-6">
-
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">Upload Class Routine</h3>
-            </div>
-            <div class="panel-body" style="min-height: 400px;">
-                <button type="submit" class="btn btn-success start"><i class="glyphicon glyphicon-plus"></i></i>&nbsp;<span>Add File</span></button>&nbsp; &nbsp;
-                <button type="submit" class="btn btn-primary start"><i class="glyphicon glyphicon-upload"></i>&nbsp;<span>Start upload</span></button>&nbsp; &nbsp;
-                <button type="button" class="btn btn-danger delete"><i class="glyphicon glyphicon-trash"></i>&nbsp;<span>Delete</span></button>&nbsp; &nbsp;
-                <!--The global file processing state--><span class="fileupload-process"></span>
-            </div>
-        </div>
-
-    </div>
-
 </div>
