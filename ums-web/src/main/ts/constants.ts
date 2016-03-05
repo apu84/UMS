@@ -195,12 +195,14 @@ module ums {
             ]
           }
         ],
+        theorySectionsGrid:":None;A:A;B:B;C:C;D:D",
         theorySections: [
           {id: "A", name: "A"},
           {id: "B", name: "B"},
           {id: "C", name: "C"},
           {id: "D", name: "D"}
         ],
+        sessionalSectionsGrid:";A1:A1;B1:B1;C1:C1;D1:D2;A2:A2;B2:B2;C2:C2;D2:D2",
         sessionalSections: [
           {id: "A1", name: "A1"},
           {id: "B1", name: "B1"},

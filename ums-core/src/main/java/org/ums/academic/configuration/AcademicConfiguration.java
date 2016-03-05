@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.ums.academic.builder.*;
 import org.ums.academic.dao.*;
+import org.ums.academic.model.PersistentRoutine;
 import org.ums.authentication.UMSAuthenticationRealm;
 import org.ums.domain.model.dto.MutableSemesterSyllabusMapDto;
 import org.ums.domain.model.dto.SemesterSyllabusMapDto;
@@ -120,6 +121,10 @@ public class AcademicConfiguration {
     return new PersistentCourseGroupDao(mJdbcTemplate);
   }
 
+  @Bean
+  RoutineManager routineManager(){
+    return new PersistentRoutineDao(mJdbcTemplate);
+  }
   @Bean
   CourseManager courseManager() {
     CourseCache courseCache = new CourseCache(mLocalCacheManager);
