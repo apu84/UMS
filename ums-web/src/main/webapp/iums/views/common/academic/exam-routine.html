@@ -119,7 +119,7 @@
                                         </select>
                                         -->
                                         <select id="program_{{date_time.index}}{{program.index}}"  data-ng-hide="date_time.readOnly" class="form-control"  style="width: 80%"  data-ng-model="exam_program"
-                                                ng-change="programSelectionChanged(program,date_time)"
+                                                ng-change="programSelectionChanged(date_time,program)"
                                                 ng-options="ugProgram.programs[0].shortName for ugProgram in data.ugPrograms track by ugProgram.programs[0].id">
                                         </select >
 

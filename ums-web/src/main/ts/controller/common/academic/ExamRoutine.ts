@@ -161,8 +161,10 @@ module ums {
       var courseRow = this.getNewCourseRow(index);
       this.$scope.routine.date_times[dateTimeTargetIndex].programs[programTargetIndex].courses.splice(0, 0, courseRow);
 
+    alert("ifti");
+      console.log("program_courses_"+program_row_obj.programId);
 
-      console.log(localStorage.getItem("program_courses_"+program_row_obj.programId));
+
       if (localStorage.getItem("program_courses_"+program_row_obj.programId) != null) {
         var courseArr:Array<any>=JSON.parse(localStorage.getItem("program_courses_"+program_row_obj.programId) );
         this.$scope.routine.date_times[dateTimeTargetIndex].programs[programTargetIndex].courseArr =  courseArr;
@@ -200,9 +202,9 @@ module ums {
       this.$scope.routine.date_times[dateTimeTargetIndex].programs[programTargetIndex].courses.splice(courseTargetIndex, 1);
     }
 
-    private programSelectionChanged(program_obj_row:IProgram, date_time:IDateTime):void {
+    private programSelectionChanged(date_time:IDateTime,program_obj_row:IProgram):void {
 
-      if(program_obj_row.programId==null)
+      //if(program_obj_row.programId==null)
         program_obj_row.programId = $("#program_" + date_time.index + program_obj_row.index).val() == "?" ? null : parseInt($("#program_" + date_time.index + program_obj_row.index).val());
       console.log("------------>>" + program_obj_row.programId);
       console.log(program_obj_row);
