@@ -12,6 +12,7 @@
                             <select data-ng-model="userId" data-ng-change="savedAdditionalRolePermission()">
                                 <option data-ng-repeat="user in users">{{::user.id}}</option>
                             </select>
+                            <div data-spinner="" data-ng-if="isPermissionLoading"></div>
                         </div>
                         <div class="col-md-5">
                             <ul>

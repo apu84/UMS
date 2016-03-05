@@ -1,13 +1,5 @@
 <div class="sidebar-collapse menu-scroll">
-
-    <div class="loading_wave" id="loading_wave" data-ng-show="loading_visibility">
-        <div class="rect1"></div>
-        <div class="rect2"></div>
-        <div class="rect3"></div>
-        <div class="rect4"></div>
-        <div class="rect5"></div>
-    </div>
-
+    <div data-spinner="" data-ng-if="isMenuLoading"></div>
     <ul id="side-menu" class="nav admin-nav-main">
         <li class="user-panel">
             <!--
