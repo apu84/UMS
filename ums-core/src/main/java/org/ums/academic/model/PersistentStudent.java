@@ -49,6 +49,7 @@ public class PersistentStudent implements MutableStudent {
   private String mGuardianPhoneNo;
   private String mGuardianEmail;
   private String mLastModified;
+  private EnrollmentType mEnrollmentType;
 
   public PersistentStudent() {
 
@@ -76,6 +77,7 @@ public class PersistentStudent implements MutableStudent {
     setGuardianPhoneNo(pMutableStudent.getGuardianPhoneNo());
     setGuardianEmail(pMutableStudent.getGuardianEmail());
     setLastModified(pMutableStudent.getLastModified());
+    setEnrollmentType(pMutableStudent.getEnrollmentType());
   }
 
 
@@ -336,5 +338,15 @@ public class PersistentStudent implements MutableStudent {
   @Override
   public void setLastModified(String pLastModified) {
     mLastModified = pLastModified;
+  }
+
+  @Override
+  public EnrollmentType getEnrollmentType() {
+    return mEnrollmentType;
+  }
+
+  @Override
+  public void setEnrollmentType(EnrollmentType pEnrollmentType) {
+    mEnrollmentType = pEnrollmentType;
   }
 }

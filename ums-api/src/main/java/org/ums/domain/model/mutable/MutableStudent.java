@@ -50,4 +50,6 @@ public interface MutableStudent extends Student, Mutable, MutableIdentifier<Stri
   void setGuardianPhoneNo(final String pGuardianPhoneNo);
 
   void setGuardianEmail(final String pGuardianEmail);
+
+  void setEnrollmentType(final EnrollmentType pEnrollmentType);
 }

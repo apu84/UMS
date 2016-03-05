@@ -7,6 +7,9 @@ import org.ums.domain.model.mutable.MutableStudent;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
 
 public interface Student extends Serializable, EditType<MutableStudent>, Identifier<String>, LastModifier {
   User getUser();
@@ -52,4 +55,35 @@ public interface Student extends Serializable, EditType<MutableStudent>, Identif
   String getGuardianPhoneNo();
 
   String getGuardianEmail();
+
+  EnrollmentType getEnrollmentType();
+
+  enum EnrollmentType {
+    ACTUAL(1),
+    TEMPORARY(0);
+
+    private static final Map<Integer, EnrollmentType> lookup
+        = new HashMap<>();
+
+    static {
+      for (EnrollmentType c : EnumSet.allOf(EnrollmentType.class)) {
+        lookup.put(c.getValue(), c);
+      }
+    }
+
+
+    private int typeCode;
+
+    private EnrollmentType(int pTypeCode) {
+      this.typeCode = pTypeCode;
+    }
+
+    public static EnrollmentType get(final int pTypeCode) {
+      return lookup.get(pTypeCode);
+    }
+
+    public int getValue() {
+      return this.typeCode;
+    }
+  }
 }

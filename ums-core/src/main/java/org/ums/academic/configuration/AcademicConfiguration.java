@@ -170,6 +170,11 @@ public class AcademicConfiguration {
   }
 
   @Bean
+  StudentRecordManager studentRecordManager() {
+    return new PersistentStudentRecordDao(mJdbcTemplate);
+  }
+
+  @Bean
   Builder<Program, MutableProgram> getProgramBuilder() {
     return new ProgramBuilder();
   }

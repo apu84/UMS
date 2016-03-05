@@ -35,7 +35,8 @@ public class PersistentStudentDao extends ContentDaoDecorator<Student, MutableSt
       "  GUARDIAN_PHONE," +
       "  GUARDIAN_EMAIL," +
       "  PROGRAM_ID," +
-      "  LAST_MODIFIED" +
+      "  LAST_MODIFIED," +
+      "  ENROLLMENT_TYPE" +
       "  FROM STUDENTS ";
 
   static String UPDATE_ALL = "UPDATE STUDENTS SET" +
@@ -57,7 +58,8 @@ public class PersistentStudentDao extends ContentDaoDecorator<Student, MutableSt
       "  GUARDIAN_PHONE = ?," +
       "  GUARDIAN_EMAIL = ?," +
       "  PROGRAM_ID = ?," +
-      "  LAST_MODIFIED = " + getLastModifiedSql();
+      "  LAST_MODIFIED = " + getLastModifiedSql() +
+      "  ENROLLMENT_TYPE = ? ";
 
   static String DELETE_ALL = "DELETE FROM STUDENTS";
   static String CREATE_ALL = "INSERT INTO STUDENTS(" +
@@ -80,8 +82,9 @@ public class PersistentStudentDao extends ContentDaoDecorator<Student, MutableSt
       "  GUARDIAN_PHONE," +
       "  GUARDIAN_EMAIL," +
       "  PROGRAM_ID," +
-      "  LAST_MODIFIED" +
-      ") VALUES (?,?,?,?,?,?,TO_DATE(?, '" + Constants.DATE_FORMAT + "'),?,?,?,?,?,?,?,?,?,?,?,?," + getLastModifiedSql() + ")";
+      "  LAST_MODIFIED," +
+      "  ENROLLMENT_TYPE" +
+      ") VALUES (?,?,?,?,?,?,TO_DATE(?, '" + Constants.DATE_FORMAT + "'),?,?,?,?,?,?,?,?,?,?,?,?," + getLastModifiedSql() + ",?)";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -116,6 +119,7 @@ public class PersistentStudentDao extends ContentDaoDecorator<Student, MutableSt
         pMutable.getGuardianPhoneNo(),
         pMutable.getGuardianEmail(),
         pMutable.getProgramId(),
+        pMutable.getEnrollmentType().getValue(),
         pMutable.getId()
     );
   }
@@ -147,7 +151,8 @@ public class PersistentStudentDao extends ContentDaoDecorator<Student, MutableSt
         pMutable.getGuardianMobileNo(),
         pMutable.getGuardianPhoneNo(),
         pMutable.getGuardianEmail(),
-        pMutable.getProgramId()
+        pMutable.getProgramId(),
+        pMutable.getEnrollmentType().getValue()
     );
   }
 
@@ -187,6 +192,7 @@ public class PersistentStudentDao extends ContentDaoDecorator<Student, MutableSt
       student.setGuardianEmail("GUARDIAN_EMAIL");
       student.setProgramId(rs.getInt("PROGRAM_ID"));
       student.setLastModified(rs.getString("LAST_MODIFIED"));
+      student.setEnrollmentType(Student.EnrollmentType.get(rs.getInt("ENROLLMENT_TYPE")));
       return student;
     }
   }
