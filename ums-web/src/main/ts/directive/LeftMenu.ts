@@ -78,12 +78,12 @@ module ums {
         }
       };
 
-
+      $scope.isMenuLoading = true;
       this.httpClient.get("mainNavigation", HttpClient.MIME_TYPE_JSON,
           (data: any, etag: string) => {
             $scope.loading_visibility=false;
             $scope.menuEntries = data.entries;
-
+            $scope.isMenuLoading = false;
           });
     };
 

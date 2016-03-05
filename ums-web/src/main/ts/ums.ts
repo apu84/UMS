@@ -2,7 +2,13 @@
 
 module ums {
   export var UMS = angular.module('UMS', [
-    'ngRoute', 'ui.bootstrap', 'ui.router', 'oc.lazyLoad', 'LocalStorageModule', 'ngCookies', 'ngSanitize'
+    'ngRoute',
+    'ui.bootstrap',
+    'ui.router',
+    'oc.lazyLoad',
+    'LocalStorageModule',
+    'ngCookies',
+    'ngSanitize'
   ]);
 
   UMS.constant("appConstants", Constants.Default());

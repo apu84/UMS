@@ -40,6 +40,7 @@ module ums {
       $scope.saveAssignment = this.saveAssignment.bind(this);
 
       $scope.savedAdditionalRolePermission = () => {
+        $scope.isPermissionLoading = true;
         httpClient.get('additionalRolePermissions/' + $scope.userId, HttpClient.MIME_TYPE_JSON,
             (data: any, etag: string) => {
               this.reset($scope.permissions);
@@ -50,6 +51,7 @@ module ums {
                   $scope.permissions[data.entries[i].permissions.entries[j]] = true;
                 }
               }
+              $scope.isPermissionLoading = false;
             });
       };
     }

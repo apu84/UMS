@@ -14,7 +14,6 @@
 /// <reference path='lib/angular-cookies.d.ts'/>
 /// <reference path='lib/jquery.jqgrid.d.ts'/>
 
-
 /// <reference path='ums.ts'/>
 /// <reference path='data.ts'/>
 /// <reference path='controller/AppController.ts'/>
@@ -49,6 +48,7 @@
 /// <reference path='directive/MainNavigation.ts'/>
 /// <reference path='directive/BindHtml.ts'/>
 /// <reference path='directive/DatePicker.ts'/>
+/// <reference path='directive/Spinner.ts'/>
 
 /// <reference path='interceptor/Unauthorized.ts'/>
 
