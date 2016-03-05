@@ -48,6 +48,7 @@
 /// <reference path='directive/UITab.ts'/>
 /// <reference path='directive/MainNavigation.ts'/>
 /// <reference path='directive/BindHtml.ts'/>
+/// <reference path='directive/DatePicker.ts'/>
 
 /// <reference path='interceptor/Unauthorized.ts'/>
 

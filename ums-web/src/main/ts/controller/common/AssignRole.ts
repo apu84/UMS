@@ -15,11 +15,6 @@ module ums {
     constructor(private $scope: any,
                 private httpClient: HttpClient) {
 
-      $('.datepicker-default').datepicker();
-      $('.datepicker-default').on('change', function () {
-        $('.datepicker').hide();
-      });
-
       httpClient.get('users', HttpClient.MIME_TYPE_JSON,
           (data: any, etag) => {
             $scope.users = data.entries;
@@ -42,29 +37,7 @@ module ums {
           });
 
       $scope.permissions = permissions;
-
-      $scope.saveAssignment = () => {
-        var savedPermissions: Array<number> = [];
-        for (var id in permissions) {
-          if (permissions.hasOwnProperty(id) && permissions[id]) {
-            savedPermissions[savedPermissions.length] = id;
-          }
-        }
-
-        var save = {};
-        save['user'] = $scope.userId;
-        save['permissions'] = savedPermissions;
-        save['start'] = $scope.startDate;
-        save['end'] = $scope.endDate;
-
-        console.debug("%o", save);
-
-        this.httpClient.post('additionalRolePermissions/', save, 'application/json')
-            .success((data) => {
-              console.debug(data);
-            }).error((data) => {
-            });
-      };
+      $scope.saveAssignment = this.saveAssignment.bind(this);
 
       $scope.savedAdditionalRolePermission = () => {
         httpClient.get('additionalRolePermissions/' + $scope.userId, HttpClient.MIME_TYPE_JSON,
@@ -79,6 +52,29 @@ module ums {
               }
             });
       };
+    }
+
+    private saveAssignment(): void {
+      var savedPermissions: Array<number> = [];
+      for (var id in this.$scope.permissions) {
+        if (this.$scope.permissions.hasOwnProperty(id) && this.$scope.permissions[id]) {
+          savedPermissions[savedPermissions.length] = id;
+        }
+      }
+
+      var save = {};
+      save['user'] = this.$scope.userId;
+      save['permissions'] = savedPermissions;
+      save['start'] = this.$scope.startDate;
+      save['end'] = this.$scope.endDate;
+
+      console.debug("%o", save);
+
+      this.httpClient.post('additionalRolePermissions/', save, 'application/json')
+          .success((data) => {
+            console.debug(data);
+          }).error((data) => {
+          });
     }
 
     private reset(permissions: {number?: boolean}): void {
