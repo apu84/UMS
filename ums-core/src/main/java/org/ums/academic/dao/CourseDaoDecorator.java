@@ -15,3 +15,4 @@ public class CourseDaoDecorator extends ContentDaoDecorator<Course, MutableCours
     return getManager().getBySemesterProgram(pSemesterId,pProgramId);
   }
 }
+

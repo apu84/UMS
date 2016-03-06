@@ -12,6 +12,7 @@ import org.ums.academic.builder.*;
 import org.ums.academic.dao.*;
 import org.ums.academic.model.PersistentRoutine;
 import org.ums.authentication.UMSAuthenticationRealm;
+import org.ums.domain.model.common.Mutable;
 import org.ums.domain.model.dto.MutableSemesterSyllabusMapDto;
 import org.ums.domain.model.dto.SemesterSyllabusMapDto;
 import org.ums.domain.model.mutable.*;
@@ -306,6 +307,11 @@ public class AcademicConfiguration {
   ClassRoomManager getPersistentClassRoomDao() {
     return new PersistentClassRoomDao(mJdbcTemplate);
   }
+
+
+  RoutineManager getRoutineDao(){
+    return new PersistentRoutineDao(mJdbcTemplate);
+  }
   //@Bean(name = "classRoomManager")
   @Bean
   ClassRoomManager classRoomManager() {
@@ -321,6 +327,15 @@ public class AcademicConfiguration {
     return new ClassRoomBuilder();
   }
 
+  @Bean
+  Builder<Routine,MutableRoutine> getRoutineBuilder(){
+    return new RoutineBuilder();
+  }
+
+  @Bean
+  List<Builder<Routine,MutableRoutine>> getRoutineBuilders(){
+    return Arrays.asList(new RoutineBuilder());
+  }
   @Bean
   List<Builder<ClassRoom, MutableClassRoom>> getClassRoomBuilders() {
     return Arrays.asList(new ClassRoomBuilder());
