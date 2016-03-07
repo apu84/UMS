@@ -45,6 +45,7 @@ module ums {
     title: string;
     year: number;
     semester: number;
+    pairCourseId:string;
   }
 
   export class ExamRoutine {
@@ -161,7 +162,6 @@ module ums {
       var courseRow = this.getNewCourseRow(index);
       this.$scope.routine.date_times[dateTimeTargetIndex].programs[programTargetIndex].courses.splice(0, 0, courseRow);
 
-    alert("ifti");
       console.log("program_courses_"+program_row_obj.programId);
 
 
@@ -269,7 +269,8 @@ module ums {
         no: '',
         title: '',
         year: null,
-        semester: null
+        semester: null,
+        pairCourseId:''
       }
       return courseRow;
     }

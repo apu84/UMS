@@ -81,9 +81,9 @@ public class PersistentSemesterSyllabusMapDao extends SemesterSyllabusMapDaoDeco
   }
 
   @Override
-  public Syllabus getSyllabusForSemester(Integer pProgramId, Integer pSemesterId, Integer pYear, Integer pSemester) {
+  public Syllabus getSyllabusForSemester(Integer pSemesterId, Integer pProgramId, Integer pYear, Integer pSemester) {
     String query = SELECT_SYLLABUS + " AND YEAR = ? AND SEMESTER = ?";
-    return mJdbcTemplate.queryForObject(query, new Object[]{pProgramId, pSemesterId}, new SyllabusRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[]{pProgramId, pSemesterId,pYear,pSemester}, new SyllabusRowMapper());
   }
 
   class SemesterSyllabusRowMapper implements RowMapper<SemesterSyllabusMap> {
