@@ -77,6 +77,22 @@ public class PersistentSemesterEnrollmentDao extends SemesterEnrollmentDaoDecora
         pMutable.getType().getValue());
   }
 
+  @Override
+  public List<SemesterEnrollment> getEnrollmentStatus(SemesterEnrollment.Type pType, Integer pProgramId,
+                                                      Integer pSemesterId) {
+    String query = SELECT_ALL + "WHERE ENROLL_TYPE = ? AND PROGRAM_ID = ? AND SEMESTER_ID = ?";
+    return mJdbcTemplate.query(query, new Object[]{pType, pProgramId, pSemesterId}, new SemesterEnrollmentRowMapper());
+  }
+
+  @Override
+  public List<SemesterEnrollment> getEnrollmentStatus(SemesterEnrollment.Type pType, Integer pProgramId, Integer pSemesterId,
+                                                      Integer pYear, Integer pAcademicSemester) {
+    String query = SELECT_ALL + "WHERE ENROLL_TYPE = ? AND PROGRAM_ID = ? AND SEMESTER_ID = ? AND STUDENT_YEAR = ? " +
+        "AND STUDENT_SEMESTER = ?";
+    return mJdbcTemplate.query(query,
+        new Object[]{pType, pProgramId, pSemesterId, pYear, pAcademicSemester}, new SemesterEnrollmentRowMapper());
+  }
+
   class SemesterEnrollmentRowMapper implements RowMapper<SemesterEnrollment> {
     @Override
     public SemesterEnrollment mapRow(ResultSet rs, int rowNum) throws SQLException {

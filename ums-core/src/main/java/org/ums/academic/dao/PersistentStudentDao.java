@@ -1,20 +1,21 @@
 package org.ums.academic.dao;
 
 
+import com.google.common.collect.Lists;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.academic.model.PersistentStudent;
 import org.ums.domain.model.mutable.MutableStudent;
 import org.ums.domain.model.readOnly.Student;
-import org.ums.manager.ContentManager;
 import org.ums.util.Constants;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
-public class PersistentStudentDao extends ContentDaoDecorator<Student, MutableStudent, String, ContentManager<Student, MutableStudent, String>> {
+public class PersistentStudentDao extends StudentDaoDecorator {
   static String SELECT_ALL = "SELECT" +
       "  STUDENT_ID," +
       "  FULL_NAME," +
@@ -100,28 +101,7 @@ public class PersistentStudentDao extends ContentDaoDecorator<Student, MutableSt
   @Override
   public int update(MutableStudent pMutable) throws Exception {
     String query = UPDATE_ALL + " WHERE STUDENT_ID = ?";
-    return mJdbcTemplate.update(query,
-        pMutable.getFullName(),
-        pMutable.getDepartmentId(),
-        pMutable.getSemesterId(),
-        pMutable.getFatherName(),
-        pMutable.getMotherName(),
-        mDateFormat.format(pMutable.getDateOfBirth()),
-        pMutable.getGender(),
-        pMutable.getPresentAddress(),
-        pMutable.getPermanentAddress(),
-        pMutable.getMobileNo(),
-        pMutable.getPhoneNo(),
-        pMutable.getBloodGroup(),
-        pMutable.getEmail(),
-        pMutable.getGuardianName(),
-        pMutable.getGuardianMobileNo(),
-        pMutable.getGuardianPhoneNo(),
-        pMutable.getGuardianEmail(),
-        pMutable.getProgramId(),
-        pMutable.getEnrollmentType().getValue(),
-        pMutable.getId()
-    );
+    return mJdbcTemplate.update(query, getUpdateParamArray(Lists.newArrayList(pMutable)).get(0));
   }
 
   @Override
@@ -167,6 +147,43 @@ public class PersistentStudentDao extends ContentDaoDecorator<Student, MutableSt
     String query = SELECT_ALL;
     return mJdbcTemplate.query(query, new StudentRowMapper());
   }
+
+  @Override
+  public int update(List<MutableStudent> pStudentList) throws Exception {
+    String query = UPDATE_ALL + " WHERE STUDENT_ID = ?";
+    return mJdbcTemplate.batchUpdate(query, getUpdateParamArray(pStudentList)).length;
+  }
+
+  private List<Object[]> getUpdateParamArray(List<MutableStudent> pStudents) {
+    List<Object[]> params = new ArrayList<>();
+    for (Student student : pStudents) {
+      params.add(new Object[]{
+          student.getFullName(),
+          student.getDepartmentId(),
+          student.getSemesterId(),
+          student.getFatherName(),
+          student.getMotherName(),
+          mDateFormat.format(student.getDateOfBirth()),
+          student.getGender(),
+          student.getPresentAddress(),
+          student.getPermanentAddress(),
+          student.getMobileNo(),
+          student.getPhoneNo(),
+          student.getBloodGroup(),
+          student.getEmail(),
+          student.getGuardianName(),
+          student.getGuardianMobileNo(),
+          student.getGuardianPhoneNo(),
+          student.getGuardianEmail(),
+          student.getProgramId(),
+          student.getEnrollmentType().getValue(),
+          student.getId()
+      });
+    }
+
+    return params;
+  }
+
 
   class StudentRowMapper implements RowMapper<Student> {
     @Override

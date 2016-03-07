@@ -20,10 +20,12 @@ public class ContentDaoDecorator<R, M, I, C extends ContentManager<R, M, I>> imp
     mManager = pManager;
   }
 
+  @Override
   public List<R> getAll() throws Exception {
     return getManager().getAll();
   }
 
+  @Override
   public R get(final I pId) throws Exception {
     return getManager().get(pId);
   }
@@ -33,6 +35,7 @@ public class ContentDaoDecorator<R, M, I, C extends ContentManager<R, M, I>> imp
     return getManager() == null ? pReadonly : getManager().validate(pReadonly);
   }
 
+  @Override
   public int update(final M pMutable) throws Exception {
     int updated = getManager().update(pMutable);
     if (updated <= 0) {
@@ -41,6 +44,16 @@ public class ContentDaoDecorator<R, M, I, C extends ContentManager<R, M, I>> imp
     return updated;
   }
 
+  @Override
+  public int update(final List<M> pMutableList) throws Exception {
+    int updated = getManager().update(pMutableList);
+    if (updated <= 0) {
+      throw new IllegalArgumentException("No entry has been updated");
+    }
+    return updated;
+  }
+
+  @Override
   public int delete(final M pMutable) throws Exception {
     int deleted = getManager().delete(pMutable);
     if (deleted <= 0) {
@@ -49,6 +62,16 @@ public class ContentDaoDecorator<R, M, I, C extends ContentManager<R, M, I>> imp
     return deleted;
   }
 
+  @Override
+  public int delete(final List<M> pMutableList) throws Exception {
+    int deleted = getManager().delete(pMutableList);
+    if (deleted <= 0) {
+      throw new IllegalArgumentException("No entry has been deleted");
+    }
+    return deleted;
+  }
+
+  @Override
   public int create(final M pMutable) throws Exception {
     int created = getManager().create(pMutable);
     if (created <= 0) {
@@ -56,4 +79,14 @@ public class ContentDaoDecorator<R, M, I, C extends ContentManager<R, M, I>> imp
     }
     return created;
   }
+
+  @Override
+  public int create(final List<M> pMutableList) throws Exception {
+    int created = getManager().update(pMutableList);
+    if (created <= 0) {
+      throw new IllegalArgumentException("No entry has been created");
+    }
+    return created;
+  }
+
 }

@@ -25,7 +25,7 @@ public class PersistentSemester implements MutableSemester {
   private String mName;
   private Date mStartDate;
   private Date mEndDate;
-  private boolean mStatus;
+  private Status mStatus;
   private ProgramType mProgramType;
   private String mLastModified;
   private int mProgramTypeId;
@@ -74,11 +74,11 @@ public class PersistentSemester implements MutableSemester {
     mEndDate = pEndDate;
   }
 
-  public boolean getStatus() {
+  public Status getStatus() {
     return mStatus;
   }
 
-  public void setStatus(final boolean pStatus) {
+  public void setStatus(final Status pStatus) {
     mStatus = pStatus;
   }
 

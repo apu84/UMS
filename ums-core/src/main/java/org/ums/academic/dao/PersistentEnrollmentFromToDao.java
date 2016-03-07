@@ -68,6 +68,12 @@ public class PersistentEnrollmentFromToDao extends EnrollmentFromToDaoDecorator 
     return mJdbcTemplate.query(SELECT_ALL, new EnrollmentFromToRowMapper());
   }
 
+  @Override
+  public List<EnrollmentFromTo> getEnrollmentFromTo(Integer pProgramId) {
+    String query = SELECT_ALL + "WHERE PROGRAM_ID = ?";
+    return mJdbcTemplate.query(query, new Object[]{pProgramId}, new EnrollmentFromToRowMapper());
+  }
+
   class EnrollmentFromToRowMapper implements RowMapper<EnrollmentFromTo> {
     @Override
     public EnrollmentFromTo mapRow(ResultSet rs, int rowNum) throws SQLException {

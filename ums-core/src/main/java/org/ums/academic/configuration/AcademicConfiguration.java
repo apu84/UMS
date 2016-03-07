@@ -133,7 +133,7 @@ public class AcademicConfiguration {
   }
 
   @Bean(name = "studentManager")
-  ContentManager<Student, MutableStudent, String> studentManager() {
+  StudentManager studentManager() {
     return new PersistentStudentDao(mJdbcTemplate, getGenericDateFormat());
   }
 
@@ -172,6 +172,16 @@ public class AcademicConfiguration {
   @Bean
   StudentRecordManager studentRecordManager() {
     return new PersistentStudentRecordDao(mJdbcTemplate);
+  }
+
+  @Bean
+  SemesterEnrollmentManager studentEnrollmentManager() {
+    return new PersistentSemesterEnrollmentDao(mJdbcTemplate, getGenericDateFormat());
+  }
+
+  @Bean
+  EnrollmentFromToManager enrollmentFromToManager() {
+    return new PersistentEnrollmentFromToDao(mJdbcTemplate);
   }
 
   @Bean

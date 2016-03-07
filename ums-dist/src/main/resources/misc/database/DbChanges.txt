@@ -486,3 +486,9 @@ Insert into DB_IUMS.ENROLMENT_FROM_TO
    (110100, 5, 1, 5, 2,
     '20160305162401', 7132);
 COMMIT;
+
+
+COMMENT ON COLUMN DB_IUMS.STUDENT_RECORD.STATUS IS '''F''=Failed; ''P''=Passed; ''U''=Unknown;''W''=Withheld'
+/
+COMMENT ON COLUMN DB_IUMS.STUDENT_RECORD.TYPE IS '''R''=Regular; ''RA''=Readmission;''T''=Temporary; '
+/

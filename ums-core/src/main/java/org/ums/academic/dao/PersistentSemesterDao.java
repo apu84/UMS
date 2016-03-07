@@ -78,6 +78,19 @@ public class PersistentSemesterDao extends SemesterDaoDecorator {
     return mJdbcTemplate.query(query, new Object[]{pProgramType}, new SemesterRowMapper());
   }
 
+  @Override
+  public Semester getPreviousSemester(Integer pSemesterId, Integer pProgramTypeId) throws Exception {
+    String query = SELECT_ALL + "WHERE START_DATE =\n" +
+        "              (SELECT MAX (START_DATE)\n" +
+        "                 FROM MST_SEMESTER\n" +
+        "                WHERE START_DATE <\n" +
+        "                         (SELECT START_DATE\n" +
+        "                            FROM MST_SEMESTER\n" +
+        "                           WHERE SEMESTER_ID = ? AND PROGRAM_TYPE = ?))\n" +
+        "       AND PROGRAM_TYPE = ?";
+    return mJdbcTemplate.queryForObject(query, new Object[]{pSemesterId, pProgramTypeId, pProgramTypeId}, new SemesterRowMapper());
+  }
+
   class SemesterRowMapper implements RowMapper<Semester> {
     @Override
     public Semester mapRow(ResultSet resultSet, int i) throws SQLException {
@@ -87,7 +100,7 @@ public class PersistentSemesterDao extends SemesterDaoDecorator {
       semester.setStartDate(resultSet.getDate("START_DATE"));
       semester.setEndDate(resultSet.getDate("END_DATE"));
       semester.setProgramTypeId(resultSet.getInt("PROGRAM_TYPE"));
-      semester.setStatus(resultSet.getBoolean("STATUS"));
+      semester.setStatus(Semester.Status.get(resultSet.getInt("STATUS")));
       semester.setLastModified(resultSet.getString("LAST_MODIFIED"));
       AtomicReference<Semester> atomicReference = new AtomicReference<>(semester);
       return atomicReference.get();

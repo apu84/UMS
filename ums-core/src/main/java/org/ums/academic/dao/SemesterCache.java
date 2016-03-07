@@ -30,4 +30,9 @@ public class SemesterCache extends ContentCache<Semester, MutableSemester, Integ
   public List<Semester> getSemesters(Integer pProgramType, Integer pLimit) throws Exception {
     return getManager().getSemesters(pProgramType, pLimit);
   }
+
+  @Override
+  public Semester getPreviousSemester(Integer pSemesterId, Integer pProgramTypeId) throws Exception {
+    return getManager().getPreviousSemester(pSemesterId, pProgramTypeId);
+  }
 }

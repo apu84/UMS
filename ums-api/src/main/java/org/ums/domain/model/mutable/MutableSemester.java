@@ -16,7 +16,7 @@ public interface MutableSemester extends Semester, Mutable, MutableLastModifier,
 
   void setEndDate(final Date pDate);
 
-  void setStatus(final boolean pStatus);
+  void setStatus(final Status pStatus);
 
   void setProgramType(final ProgramType pProgram);
 

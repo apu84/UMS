@@ -1,8 +1,6 @@
 package org.ums.academic.builder;
 
 
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.mutable.MutableProgramType;
 import org.ums.domain.model.mutable.MutableSemester;
@@ -37,7 +35,7 @@ public class SemesterBuilder implements Builder<Semester, MutableSemester> {
 
     pBuilder.add("programType", pUriInfo.getBaseUriBuilder().path("academic").path("programtype")
         .path(String.valueOf(programType.getId())).build().toString());
-    pBuilder.add("status", pSemester.getStatus());
+    pBuilder.add("status", pSemester.getStatus().getValue());
     pBuilder.add("self", pUriInfo.getBaseUriBuilder().path("academic").path("semester")
         .path(String.valueOf(pSemester.getId())).build().toString());
   }
@@ -47,7 +45,7 @@ public class SemesterBuilder implements Builder<Semester, MutableSemester> {
     String name = pJsonObject.getString("semesterName");
     String startDate = pJsonObject.getString("startDate");
     int program = Integer.parseInt(pJsonObject.getString("programTypeId"));
-    boolean status = pJsonObject.getInt("statusId")==1?Boolean.TRUE:Boolean.FALSE;
+    Semester.Status status = Semester.Status.get(pJsonObject.getInt("statusId"));
     pMutableSemester.setId(id);
     pMutableSemester.setName(name);
     pMutableSemester.setStartDate(mDateFormat.parse(startDate));

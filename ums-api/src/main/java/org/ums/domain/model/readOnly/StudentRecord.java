@@ -35,7 +35,7 @@ public interface StudentRecord extends Serializable, Identifier<Integer>, LastMo
     REGULAR("R"),
     READMISSION_REQUIRED("RR"),
     READMITTED("RA"),
-    NONE("");
+    TEMPORARY("T");
 
     private static final Map<String, Type> lookup
         = new HashMap<>();
@@ -64,8 +64,8 @@ public interface StudentRecord extends Serializable, Identifier<Integer>, LastMo
   enum Status {
     FAILED("F"),
     PASSED("P"),
-    CURRENT("C"),
-    TEMPORARY("T");
+    UNKNOWN("U"),
+    WITHHELD("W");
 
     private static final Map<String, Status> lookup
         = new HashMap<>();
