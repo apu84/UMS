@@ -113,7 +113,7 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
 
   public JsonObject getOptionalCourses(final Integer pSemesterId,final Integer pProgramId,final Integer pYear,final Integer pSemester,  final Request pRequest, final UriInfo pUriInfo) throws Exception {
     Syllabus syllabus=mSemesterSyllabusMapManager.getSyllabusForSemester(pSemesterId,pProgramId,pYear,pSemester);
-    List<Course> courses = getContentManager().getOptionalCourses(syllabus.getId(), pYear,pSemester);
+    List<Course> courses = getContentManager().getOptionalCourseList(syllabus.getId(), pYear,pSemester) ;
 
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
@@ -124,6 +124,36 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
     object.add("entries", children);
     localCache.invalidate();
 
+    return object.build();
+  }
+
+  public JsonObject getOfferedCourses(final Integer pSemesterId,final Integer pProgramId,final Integer pYear,final Integer pSemester, final UriInfo pUriInfo) throws Exception {
+
+    List<Course> courses = getContentManager().getOfferedCourseList(pSemesterId, pProgramId, pYear, pSemester);
+
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+    for (Course course : courses) {
+      children.add(toJson(course, pUriInfo, localCache));
+    }
+    object.add("entries", children);
+    localCache.invalidate();
+    return object.build();
+  }
+
+  public JsonObject getApprovedCourses(final Integer pSemesterId,final Integer pProgramId,final Integer pYear,final Integer pSemester, final UriInfo pUriInfo) throws Exception {
+
+    List<Course> courses = getContentManager().getApprovedCourseList(pSemesterId, pProgramId, pYear, pSemester);
+
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+    for (Course course : courses) {
+      children.add(toJson(course,pUriInfo, localCache));
+    }
+    object.add("entries", children);
+    localCache.invalidate();
     return object.build();
   }
 

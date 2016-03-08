@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentCourseDao extends CourseDaoDecorator {
   static String SELECT_ALL = "SELECT COURSE_ID, COURSE_NO, COURSE_TITLE, CRHR, SYLLABUS_ID, OPT_GROUP_ID, OFFER_BY," +
-      "VIEW_ORDER, YEAR, SEMESTER, COURSE_TYPE, COURSE_CATEGORY, LAST_MODIFIED FROM MST_COURSE ";
+      "VIEW_ORDER, YEAR, SEMESTER, COURSE_TYPE, COURSE_CATEGORY,PAIR_COURSE_ID, LAST_MODIFIED FROM MST_COURSE ";
   static String UPDATE_ONE = "UPDATE MST_COURSE SET COURSE_NO = ?, COURSE_TITLE = ?, CRHR = ?, SYLLABUS_ID = ?, " +
       "OPT_GROUP_ID = ?, OFFER_BY = ?, VIEW_ORDER = ?, YEAR = ?, SEMESTER = ?, COURSE_TYPE = ?, LAST_MODIFIED = " + getLastModifiedSql() + " ";
   static String DELETE_ONE = "DELETE FROM MST_COURSE ";
@@ -24,8 +24,16 @@ public class PersistentCourseDao extends CourseDaoDecorator {
       "VIEW_ORDER, YEAR, SEMESTER, COURSE_TYPE, COURSE_CATEGORY, LAST_MODIFIED) " +
       "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, " + getLastModifiedSql() + ")";
   static String ORDER_BY = " ORDER BY YEAR, SEMESTER, COURSE_CATEGORY, VIEW_ORDER";
-  static String SELECT_ALL_BY_SEMESER_PROGRAM="Select COURSE_ID,COURSE_NO,COURSE_TITLE,YEAR,SEMESTER From MST_COURSE Where Syllabus_Id In " +
+  static String SELECT_ALL_BY_SEMESTER_PROGRAM="Select COURSE_ID,COURSE_NO,COURSE_TITLE,YEAR,SEMESTER From MST_COURSE Where Syllabus_Id In " +
           "(Select Syllabus_Id from SEMESTER_SYLLABUS_MAP Where Program_Id=? and Semester_Id=?) ";
+
+  static String SELECT_OFFERED_COURSES="Select MST_COURSE.* From OPT_COURSE_OFFER,MST_COURSE " +
+      "Where OPT_COURSE_OFFER.COURSE_ID=MST_COURSE.COURSE_ID " +
+      "And Semester_Id=? and Program_Id=? and OPT_COURSE_OFFER.Year=? and OPT_COURSE_OFFER.Semester=? ";
+
+  static String SELECT_APPROVED_COURSES="Select MST_COURSE.* From OPT_COURSE_OFFER,MST_COURSE " +
+      "Where OPT_COURSE_OFFER.COURSE_ID=MST_COURSE.COURSE_ID " +
+      "And Semester_Id=? and Program_Id=? and OPT_COURSE_OFFER.Year=? and OPT_COURSE_OFFER.Semester=? And APPROVED='Y'";
 
 
     private JdbcTemplate mJdbcTemplate;
@@ -95,9 +103,21 @@ public class PersistentCourseDao extends CourseDaoDecorator {
 
 
   @Override
-  public List<Course> getOptionalCourses(String pSyllabusId,Integer pYear,Integer pSemester) {
+  public List<Course> getOptionalCourseList(String pSyllabusId,Integer pYear,Integer pSemester) {
     String query = SELECT_ALL + "Where Syllabus_Id=? And Course_Category="+CourseCategory.OPTIONAL.getValue()+" And Year=? and Semester=? "+" Order By OPT_GROUP_ID,Course_No ";
     return mJdbcTemplate.query(query, new Object[]{pSyllabusId,pYear,pSemester}, new CourseRowMapper());
+  }
+
+  @Override
+  public List<Course> getOfferedCourseList(Integer pSemesterId, Integer pProgramId, Integer pYear, Integer pSemester) {
+    String query = SELECT_OFFERED_COURSES;
+    return mJdbcTemplate.query(query, new Object[]{pSemesterId,pProgramId,pYear,pSemester}, new CourseRowMapper());
+  }
+
+  @Override
+  public List<Course> getApprovedCourseList(Integer pSemesterId, Integer pProgramId, Integer pYear, Integer pSemester) {
+    String query = SELECT_APPROVED_COURSES;
+    return mJdbcTemplate.query(query, new Object[]{pSemesterId,pProgramId,pYear,pSemester}, new CourseRowMapper());
   }
 
   class CourseRowMapper implements RowMapper<Course> {
@@ -120,6 +140,7 @@ public class PersistentCourseDao extends CourseDaoDecorator {
       if (resultSet.getObject("COURSE_CATEGORY") != null) {
         course.setCourseCategory(CourseCategory.get(resultSet.getInt("COURSE_CATEGORY")));
       }
+      course.setPairCourseId(resultSet.getString("PAIR_COURSE_ID"));
       course.setLastModified(resultSet.getString("LAST_MODIFIED"));
       AtomicReference<Course> atomicReference = new AtomicReference<>(course);
       return atomicReference.get();

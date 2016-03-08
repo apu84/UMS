@@ -1,7 +1,6 @@
 package org.ums.academic.configuration;
 
 import org.apache.shiro.authc.credential.PasswordService;
-import org.apache.shiro.realm.jdbc.JdbcRealm;
 import org.apache.velocity.app.VelocityEngine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -313,8 +312,8 @@ public class AcademicConfiguration {
   }
 
   @Bean
-  OptionalCourseOfferManager optionalCourseOfferManager() {
-    return new PersistentOptionalCourseOfferDao(mJdbcTemplate);
+  PersistentOptionalCourseApplicationDao persistentOptionalCourseApplicationDao() {
+   return new PersistentOptionalCourseApplicationDao(mJdbcTemplate);
   }
 
 
@@ -334,10 +333,6 @@ public class AcademicConfiguration {
     return new ExamRoutineBuilder();
   }
 
-  @Bean
-  Builder<OptionalCourseOffer, MutableOptionalCourseOffer> getOptionalCourseOfferBuilder() {
-    return new OptionalCourseOfferBuilder();
-  }
 
   @Bean
   Builder<Navigation, MutableNavigation> getNavigationBuilder() {
