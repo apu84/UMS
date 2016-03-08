@@ -270,6 +270,20 @@ module ums {
             }]
           }
         })
+        .state('studentsRoutine', {
+          url: "/studentsRoutine",
+          controller:'StudentsRoutine',
+          templateUrl: 'views/dept/students-routine.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: ['vendors/jquery-file-upload/css/jquery.fileupload.css',
+                  'vendors/jquery-file-upload/css/jquery.fileupload-ui.css',
+                  'vendors/jquery-file-upload/css/blueimp-gallery.min.css']
+              });
+            }]
+          }
+        })
         .state('studentProfile', {
           url: "/studentProfile",
           templateUrl: 'views/student/student-profile.html'
