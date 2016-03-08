@@ -22,7 +22,8 @@
     '/classRoutine': {title: 'Class Routine Upload ', 'breadcrumb': ['Class Routine']},
     '/studentProfile': {title: 'Student Profile ', 'breadcrumb': ['Student Profile']},
     '/classRoomInfo': {title: 'Class Room Information ', 'breadcrumb': ['Class Room Information']},
-    '/examRoutine': {title: 'Exam Routine ', 'breadcrumb': ['Exam Routine']}
+    '/examRoutine': {title: 'Exam Routine ', 'breadcrumb': ['Exam Routine']},
+    '/optionalCoursesOffer': {title: 'Optional Courses ', 'breadcrumb': ['Optional Course Settings']}
 
 
   };

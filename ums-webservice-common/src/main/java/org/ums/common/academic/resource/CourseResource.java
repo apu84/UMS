@@ -50,5 +50,11 @@ public class CourseResource extends MutableCourseResource {
     return mResourceHelper.get(pObjectId, pRequest, mUriInfo);
   }
 
+  @GET
+  @Path("/semester-id/{semester-id}/program/{program-id}/year/{year}/semester/{semester}")
+  public JsonObject getOptionalCourses(final @Context Request pRequest, final @PathParam("semester-id") Integer pSemesterId, final @PathParam("program-id") Integer pProgramId
+      , final @PathParam("year") Integer pYear, final @PathParam("semester") Integer pSemester) throws Exception {
+    return mResourceHelper.getOptionalCourses(pSemesterId, pProgramId, pYear,pSemester,pRequest, mUriInfo);
+  }
 
 }

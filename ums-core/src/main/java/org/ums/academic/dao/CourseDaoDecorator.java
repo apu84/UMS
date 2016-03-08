@@ -14,5 +14,10 @@ public class CourseDaoDecorator extends ContentDaoDecorator<Course, MutableCours
   public List<Course> getBySemesterProgram(String pSemesterId,String pProgramId) {
     return getManager().getBySemesterProgram(pSemesterId,pProgramId);
   }
+
+  @Override
+  public List<Course> getOptionalCourses(String pSyllabusId, Integer pYear, Integer pSemester) {
+    return getManager().getOptionalCourses(pSyllabusId, pYear,pSemester);
+  }
 }
 
