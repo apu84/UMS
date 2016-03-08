@@ -326,6 +326,14 @@ public class AcademicConfiguration {
   ExamRoutineManager examRoutineManager() {
     return new PersistentExamRoutineDao(mJdbcTemplate);
   }
+
+  @Bean
+  OptionalCourseOfferManager optionalCourseOfferManager() {
+    return new PersistentOptionalCourseOfferDao(mJdbcTemplate);
+  }
+
+
+
   @Bean
   Builder<ClassRoom, MutableClassRoom> getClassRoomBuilder() {
     return new ClassRoomBuilder();
@@ -341,6 +349,10 @@ public class AcademicConfiguration {
     return new ExamRoutineBuilder();
   }
 
+  @Bean
+  Builder<OptionalCourseOffer, MutableOptionalCourseOffer> getOptionalCourseOfferBuilder() {
+    return new OptionalCourseOfferBuilder();
+  }
 
   @Bean
   Builder<Navigation, MutableNavigation> getNavigationBuilder() {

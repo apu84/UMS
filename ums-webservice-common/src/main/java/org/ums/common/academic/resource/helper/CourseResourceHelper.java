@@ -10,7 +10,10 @@ import org.ums.common.academic.resource.ResourceHelper;
 import org.ums.common.academic.resource.SemesterResource;
 import org.ums.domain.model.mutable.MutableCourse;
 import org.ums.domain.model.readOnly.Course;
+import org.ums.domain.model.readOnly.Syllabus;
 import org.ums.manager.CourseManager;
+import org.ums.manager.SemesterSyllabusMapManager;
+import org.ums.manager.SyllabusManager;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
@@ -27,6 +30,10 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
   @Autowired
   @Qualifier("courseManager")
   private CourseManager mManager;
+
+  @Autowired
+  @Qualifier("semesterSyllabusMapManager")
+  private SemesterSyllabusMapManager mSemesterSyllabusMapManager;
 
   @Autowired
   private List<Builder<Course, MutableCourse>> mBuilders;
@@ -103,4 +110,22 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
 
     return object.build();
   }
+
+  public JsonObject getOptionalCourses(final Integer pSemesterId,final Integer pProgramId,final Integer pYear,final Integer pSemester,  final Request pRequest, final UriInfo pUriInfo) throws Exception {
+    Syllabus syllabus=mSemesterSyllabusMapManager.getSyllabusForSemester(pSemesterId,pProgramId,pYear,pSemester);
+    List<Course> courses = getContentManager().getOptionalCourses(syllabus.getId(), pYear,pSemester);
+
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+    for (Course course : courses) {
+      children.add(toJson(course, pUriInfo, localCache));
+    }
+    object.add("entries", children);
+    localCache.invalidate();
+
+    return object.build();
+  }
+
+
 }

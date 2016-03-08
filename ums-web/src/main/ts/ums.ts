@@ -317,6 +317,11 @@ module ums {
             }]
           }
         })
+        .state('optionalCoursesOffer', {
+          url: "/optionalCoursesOffer",
+          templateUrl: 'views/dept/optional-course-setting.html',
+          controller: 'OptionalCoursesOffer'
+        })
 
   });
 }

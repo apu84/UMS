@@ -93,6 +93,13 @@ public class PersistentCourseDao extends CourseDaoDecorator {
     return mJdbcTemplate.query(query, new Object[]{pSemesterId,pProgramId}, new CourseRowMapper());
   }
 
+
+  @Override
+  public List<Course> getOptionalCourses(String pSyllabusId,Integer pYear,Integer pSemester) {
+    String query = SELECT_ALL + "Where Syllabus_Id=? And Course_Category="+CourseCategory.OPTIONAL.getValue()+" And Year=? and Semester=? "+" Order By OPT_GROUP_ID,Course_No ";
+    return mJdbcTemplate.query(query, new Object[]{pSyllabusId,pYear,pSemester}, new CourseRowMapper());
+  }
+
   class CourseRowMapper implements RowMapper<Course> {
     @Override
     public Course mapRow(ResultSet resultSet, int i) throws SQLException {
