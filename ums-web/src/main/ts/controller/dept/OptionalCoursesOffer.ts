@@ -5,12 +5,13 @@
 module ums {
 
   interface IExamRoutineScope extends ng.IScope {
-    offerCourses:any;
-    callForApplicationSelectionChange:Function;
+    optional:any;
+    offeredSelectionChange:Function;
     approvedSelectionChange:Function;
     removeApprovedCourse:Function;
-    removeCall4ApplicationCourse:Function;
+    removeOfferedCourse:Function;
     showAppliedStudents:Function;
+    showCourses:Function;
   }
 
   interface IOptCourse {
@@ -21,7 +22,7 @@ module ums {
     year: number;
     semester: number;
     pairCourseId:string;
-    call4Application:boolean;
+    offered:boolean;
     approved:boolean;
     bgColor:string;
   }
@@ -31,34 +32,82 @@ module ums {
 
     constructor(private appConstants:any, private httpClient:HttpClient, private $scope:IExamRoutineScope, private $q:ng.IQService) {
 
-      $scope.offerCourses = {
+      $scope.optional = {
         optionalCourses: Array<IOptCourse>(),
-        approvedCourses: Array<IOptCourse>(),
-        call4ApplicationCourses: Array<IOptCourse>()
+        offeredCourses: Array<IOptCourse>(),
+        approvedCourses: Array<IOptCourse>()
+
       };
-      $scope.callForApplicationSelectionChange = this.callForApplicationSelectionChange.bind(this);
+      $scope.offeredSelectionChange = this.offeredSelectionChange.bind(this);
       $scope.approvedSelectionChange = this.approvedSelectionChange.bind(this);
       $scope.removeApprovedCourse = this.removeApprovedCourse.bind(this);
-      $scope.removeCall4ApplicationCourse = this.removeCall4ApplicationCourse.bind(this);
+      $scope.removeOfferedCourse = this.removeOfferedCourse.bind(this);
       $scope.showAppliedStudents=this.showAppliedStudents.bind(this);
+      $scope.showCourses=this.showCourses.bind(this);
 
-      /*
-      this.getOptionalCourses(1,1).then((optCourseArr:Array<IOptCourse>)=> {
-        this.$scope.offerCourses.optionalCourses=optCourseArr;
-          for(var ind in this.$scope.offerCourses.optionalCourses){
 
-            var course:IOptCourse=this.$scope.offerCourses.optionalCourses[ind];
-            course.approved=false;
-            course.call4Application=false;
-          }
-      });
-      */
+
+
       //$('.nav-tabs li:eq(2) a').tab('show')
     }
 
-    private getOptionalCourses(semester_id:number,exam_type:number):ng.IPromise<any> {
+
+    private showCourses():void{
+      var url1:string="https://localhost/ums-webservice-common/academic/course/optional/semester-id/11012015/program/110500/year/4/semester/1";
+      var url2:string="https://localhost/ums-webservice-common/academic/course/offered/semester-id/11012015/program/110500/year/4/semester/1";
+      var url3:string="https://localhost/ums-webservice-common/academic/course/approved/semester-id/11012015/program/110500/year/4/semester/1";
+
+      this.getCourses(url2).then((optCourseArr:Array<IOptCourse>)=> {
+        this.$scope.optional.offeredCourses=optCourseArr;
+      });
+
+      this.getCourses(url3).then((optCourseArr:Array<IOptCourse>)=> {
+        this.$scope.optional.approvedCourses=optCourseArr;
+
+        this.getCourses(url1).then((optCourseArr:Array<IOptCourse>)=> {
+          this.$scope.optional.optionalCourses=optCourseArr;
+          for(var ind in this.$scope.optional.optionalCourses){
+            var course:IOptCourse=this.$scope.optional.optionalCourses[ind];
+            course.approved=false;
+            course.offered=false;
+          }
+
+          for(var ind1 in this.$scope.optional.offeredCourses){
+              var course1:IOptCourse=this.$scope.optional.offeredCourses[ind1];
+            for(var ind2 in this.$scope.optional.optionalCourses){
+              var course2:IOptCourse=this.$scope.optional.optionalCourses[ind2];
+              if(course1.id==course2.id){
+                course2.offered=true;
+                course2.bgColor="#FFFFCC";
+              }
+            }
+          }
+
+          for(var ind1 in this.$scope.optional.approvedCourses){
+            var course1:IOptCourse=this.$scope.optional.approvedCourses[ind1];
+            for(var ind2 in this.$scope.optional.optionalCourses){
+              var course2:IOptCourse=this.$scope.optional.optionalCourses[ind2];
+              if(course1.id==course2.id){
+                course2.approved=true;
+                if(course2.offered=true)
+                    course2.bgColor="#CCFFCC";
+                else
+                    course2.bgColor="#E0FFFF";
+              }
+            }
+          }
+
+        });
+
+
+      });
+
+
+    }
+
+    private getCourses(url:string):ng.IPromise<any> {
       var defer = this.$q.defer();
-      this.httpClient.get("https://localhost/ums-webservice-common/academic/course/semester-id/11012015/program/110500/year/4/semester/1", this.appConstants.mimeTypeJson,
+      this.httpClient.get(url, this.appConstants.mimeTypeJson,
           (json:any, etag:string) => {
             var courseArr:Array<IOptCourse>=eval(json.entries);
             defer.resolve(courseArr);
@@ -69,23 +118,29 @@ module ums {
 
       return defer.promise;
     }
-    private callForApplicationSelectionChange(index:number,course:IOptCourse) {
+    private offeredSelectionChange(index:number,course:IOptCourse) {
 
-      if (course.call4Application == true) {
-      course.bgColor = "#D2B48C";
 
-        var index = this.getAttributeMaxValueFromArray(this.$scope.offerCourses.call4ApplicationCourses);
+      if (course.offered == true) {
+        course.bgColor = "#FFFFCC";
+
+        var index = this.getAttributeMaxValueFromArray(this.$scope.optional.offeredCourses);
         //var item = this.getNewCall4ApplicationRow(index);
         var item=course;
         item.index=index;
-        this.$scope.offerCourses.call4ApplicationCourses.splice(0, 0, item);
+        this.$scope.optional.offeredCourses.splice(0, 0, item);
 
     }
-      else
-        course.bgColor="none";
+      else {
+        course.bgColor = "none";
+        var offered_course_arr = eval(this.$scope.optional.offeredCourses);
+        var offeredCourseTargetIndex = this.findIndexFromCourseId(offered_course_arr, course.id);
 
-
-
+        this.$scope.optional.offeredCourses.splice(offeredCourseTargetIndex, 1);
+      }
+      if(course.offered==true && course.approved==true){
+        course.bgColor = "#CCFFCC";
+      }
     }
 
     private approvedSelectionChange(index:number,course:IOptCourse) {
@@ -96,11 +151,11 @@ module ums {
       if (course.approved == true) {
         course.bgColor = "#E0FFFF";
 
-        var index = this.getAttributeMaxValueFromArray(this.$scope.offerCourses.approvedCourses);
+        var index = this.getAttributeMaxValueFromArray(this.$scope.optional.approvedCourses);
         //var item = this.getNewCall4ApplicationRow(index);
         var item = course;
         item.index = index;
-        this.$scope.offerCourses.approvedCourses.splice(0, 0, item);
+        this.$scope.optional.approvedCourses.splice(0, 0, item);
         console.log(item);
 
       }
@@ -109,12 +164,14 @@ module ums {
       course.bgColor = "none";
 
         //Remove it from the  approved course list
-      var approved_course_arr = eval(this.$scope.offerCourses.approvedCourses);
+      var approved_course_arr = eval(this.$scope.optional.approvedCourses);
       var approvedCourseTargetIndex = this.findIndexFromCourseId(approved_course_arr, course.id);
 
-      this.$scope.offerCourses.approvedCourses.splice(approvedCourseTargetIndex, 1);
+      this.$scope.optional.approvedCourses.splice(approvedCourseTargetIndex, 1);
     }
-
+      if(course.offered==true && course.approved==true){
+        course.bgColor = "#CCFFCC";
+      }
 
 
 
@@ -134,28 +191,28 @@ module ums {
     private removeApprovedCourse(course:IOptCourse):void {
       console.log(course);
       console.log(course.index);
-      var approved_course_arr = eval(this.$scope.offerCourses.approvedCourses);
+      var approved_course_arr = eval(this.$scope.optional.approvedCourses);
       var approvedCourseTargetIndex = this.findIndex(approved_course_arr, course.index);
       console.log(approvedCourseTargetIndex);
 
-      this.$scope.offerCourses.approvedCourses.splice(approvedCourseTargetIndex, 1);
+      this.$scope.optional.approvedCourses.splice(approvedCourseTargetIndex, 1);
 
 
-      var a=this.findIndexFromCourseId(this.$scope.offerCourses.optionalCourses,course.id);
-      this.$scope.offerCourses.optionalCourses[a].approved=false;
-      this.$scope.offerCourses.optionalCourses[a].bgColor="none";
+      var a=this.findIndexFromCourseId(this.$scope.optional.optionalCourses,course.id);
+      this.$scope.optional.optionalCourses[a].approved=false;
+      this.$scope.optional.optionalCourses[a].bgColor="none";
     }
 
-    private removeCall4ApplicationCourse(course:IOptCourse):void {
-      var call4App_course_arr = eval(this.$scope.offerCourses.call4ApplicationCourses);
+    private removeOfferedCourse(course:IOptCourse):void {
+      var call4App_course_arr = eval(this.$scope.optional.offeredCourses);
       var call4AppCourseTargetIndex = this.findIndex(call4App_course_arr, course.index);
 
-      this.$scope.offerCourses.call4ApplicationCourses.splice(call4AppCourseTargetIndex, 1);
+      this.$scope.optional.offeredCourses.splice(call4AppCourseTargetIndex, 1);
 
 
-      var a=this.findIndexFromCourseId(this.$scope.offerCourses.optionalCourses,course.id);
-      this.$scope.offerCourses.optionalCourses[a].call4Application=false;
-      this.$scope.offerCourses.optionalCourses[a].bgColor="none";
+      var a=this.findIndexFromCourseId(this.$scope.optional.optionalCourses,course.id);
+      this.$scope.optional.optionalCourses[a].offeredCourses=false;
+      this.$scope.optional.optionalCourses[a].bgColor="none";
     }
 
 

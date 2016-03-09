@@ -57,7 +57,7 @@
                             <option value="4|1">4th Year, 1st Semester</option>
                         </select><br/>
                         <a href="javascript:;" class="btn btn-xs btn-default"
-                           data-ng-click="saveAll()" data-ng-disabled="routine.saveButtonDisable" style="margin-top: 20px;">
+                           data-ng-click="showCourses()" style="margin-top: 20px;">
                             &nbsp;&nbsp;Save All &nbsp;
                             <i class="fa fa-floppy-o" style="color: green;"></i>
                         </a>
@@ -140,7 +140,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr ng-repeat="course in offerCourses.approvedCourses">
+                                <tr ng-repeat="course in optional.approvedCourses">
                                     <td>{{$index + 1}}</td>
                                     <td>{{course.no}}</td>
                                     <td>{{course.title}}</td>
@@ -174,7 +174,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr ng-repeat="course in offerCourses.call4ApplicationCourses">
+                                    <tr ng-repeat="course in optional.offeredCourses">
                                     <td>{{$index + 1}}</td>
                                     <td>{{course.no}}</td>
                                     <td>{{course.title}}</td>
@@ -186,7 +186,7 @@
                                     <td><a data-ng-click="showAppliedStudents()">123</a></td>
                                     <td style="text-align: center;">
                                         <a href="javascript:;" class="btn btn-xs btn-default btn-round"
-                                           data-ng-click="removeCall4ApplicationCourse(course)">
+                                           data-ng-click="removeOfferedCourse(course)">
                                         <i class="fa fa-times" style="color: red;"></i>
                                         </a>
                                     </td>
@@ -212,14 +212,14 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr ng-repeat="course in offerCourses.optionalCourses"   style="background-color: {{course.bgColor}}">
+                                    <tr ng-repeat="course in optional.optionalCourses"   style="background-color: {{course.bgColor}}">
                                         <td>{{$index + 1}}</td>
                                         <td>{{course.no}}</td>
                                         <td>{{course.title}}</td>
                                         <td>{{course.crhr}}</td>
                                         <td><span class="label label-sm label-success">{{course.type}}</span></td>
                                         <td style="text-align: center">
-                                            <input  tabindex="13" type="checkbox" ng-model="course.call4Application" data-ng-change="callForApplicationSelectionChange({{$index}},course)"/>&nbsp;&nbsp;
+                                            <input  tabindex="13" type="checkbox" ng-model="course.offered" data-ng-change="offeredSelectionChange({{$index}},course)"/>&nbsp;&nbsp;
                                         </td>
                                         <td style="text-align: center">
                                             <input  tabindex="13" type="checkbox" ng-model="course.approved" data-ng-change="approvedSelectionChange({{$index}},course)"/>&nbsp;&nbsp;

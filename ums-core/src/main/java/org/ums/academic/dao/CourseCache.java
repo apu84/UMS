@@ -39,7 +39,19 @@ public class CourseCache extends ContentCache<Course, MutableCourse, String, Cou
   }
 
   @Override
-  public List<Course> getOptionalCourses(String pSyllabusId, Integer pYear, Integer pSemester) {
-    return getManager().getOptionalCourses(pSyllabusId, pYear,pSemester);
+  public List<Course> getOptionalCourseList(String pSyllabusId, Integer pYear, Integer pSemester) {
+    return getManager().getOptionalCourseList(pSyllabusId, pYear, pSemester);
   }
+
+  @Override
+  public List<Course> getOfferedCourseList(Integer pSemesterId,Integer pProgramId, Integer pYear, Integer pSemester) {
+    return getManager().getOfferedCourseList(pSemesterId, pProgramId, pYear, pSemester);
+  }
+
+  @Override
+  public List<Course> getApprovedCourseList(Integer pSemesterId,Integer pProgramId, Integer pYear, Integer pSemester) {
+    return getManager().getApprovedCourseList(pSemesterId, pProgramId, pYear, pSemester);
+  }
+
+
 }

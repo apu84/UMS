@@ -47,6 +47,7 @@ public class PersistentCourse implements MutableCourse {
   private String mDepartmentId;
   private String mSyllabusId;
   private int mCourseGroupId;
+  private String mPairCourseId;
 
   public PersistentCourse() {
 
@@ -237,6 +238,14 @@ public class PersistentCourse implements MutableCourse {
 
   public void setSyllabusId(String pSyllabusId) {
     mSyllabusId = pSyllabusId;
+  }
+
+  public String getPairCourseId() {
+    return mPairCourseId;
+  }
+
+  public void setPairCourseId(String mPairCourseId) {
+    this.mPairCourseId = mPairCourseId;
   }
 
   @Override
