@@ -384,10 +384,8 @@ public class AcademicConfiguration {
   }
 
   @Bean
-  List<Builder<AdditionalRolePermissions, MutableAdditionalRolePermissions>> getAdditionalRolePermissionsBuilders() {
-    List<Builder<AdditionalRolePermissions, MutableAdditionalRolePermissions>> builders = new ArrayList<>();
-    builders.add(getAdditionalRolePermissionsBuilder());
-    return builders;
+  Builder<EnrollmentFromTo, MutableEnrollmentFromTo> getEnrollmentFromToBuilder() {
+    return new EnrollmentFromToBuilder();
   }
 
   @Bean
