@@ -208,6 +208,13 @@
       <scope>provided</scope>
     </dependency>
 
+    <dependency>
+      <groupId>org.glassfish.jersey.media</groupId>
+      <artifactId>jersey-media-json-jackson</artifactId>
+      <version>${jersey.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
     <!--Apache Shiro-->
     <dependency>
       <groupId>org.apache.shiro</groupId>

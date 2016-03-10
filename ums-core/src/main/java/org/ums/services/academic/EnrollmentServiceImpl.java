@@ -12,6 +12,8 @@ import org.ums.domain.model.mutable.MutableStudent;
 import org.ums.domain.model.mutable.MutableStudentRecord;
 import org.ums.domain.model.readOnly.*;
 import org.ums.manager.*;
+import org.ums.response.type.GenericResponse;
+import org.ums.response.type.GenericMessageResponse;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,7 +51,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
    * @throws Exception
    */
   @Transactional
-  public void saveEnrollment(final SemesterEnrollment.Type pType,
+  public GenericResponse<Map> saveEnrollment(final SemesterEnrollment.Type pType,
                       final Integer pNewSemesterId,
                       final Integer pProgramId,
                       final Integer pToYear,
@@ -160,15 +162,17 @@ public class EnrollmentServiceImpl implements EnrollmentService {
       }
 
     }
+    return new GenericMessageResponse(GenericResponse.ResponseType.SUCCESSFUL, "Semester enrolled successfully");
   }
 
   @Override
   @Transactional
-  public void saveEnrollment(SemesterEnrollment.Type pType, Integer pNewSemesterId, Integer pProgramId) throws Exception {
+  public GenericResponse<Map> saveEnrollment(SemesterEnrollment.Type pType, Integer pNewSemesterId, Integer pProgramId) throws Exception {
     List<EnrollmentFromTo> enrollmentFromToList = mEnrollmentFromToManager.getEnrollmentFromTo(pProgramId);
     for (EnrollmentFromTo enrollment : enrollmentFromToList) {
       saveEnrollment(pType, pNewSemesterId, pProgramId, enrollment.getToYear(), enrollment.getToSemester());
     }
+    return new GenericMessageResponse(GenericResponse.ResponseType.SUCCESSFUL, "Semester enrolled successfully");
   }
 
   private Map<String, StudentRecord> toMap(List<StudentRecord> pStudentRecordList) {

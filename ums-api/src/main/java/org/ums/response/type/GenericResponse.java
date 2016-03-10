@@ -9,9 +9,15 @@ public interface GenericResponse<T> extends Serializable {
 
   ResponseType getResponseType();
 
+  void setResponseType(ResponseType pResponseType);
+
   String getMessage();
 
+  void setMessage(final String pMessage);
+
   T getResponse();
+
+  void setResponse(T pResponse);
 
   enum ResponseType {
     SUCCESSFUL(1),
