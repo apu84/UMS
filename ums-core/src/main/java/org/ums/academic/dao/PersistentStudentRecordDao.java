@@ -15,18 +15,9 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentStudentRecordDao extends StudentRecordDaoDecorator {
-  String SELECT_ALL = "SELECT STUDENT_ID, SEMESTER_ID, YEAR, SEMESTER, CGPA, GPA, TYPE, STATUS, LAST_MODIFIED, ID FROM STUDENT_RECORD ";
-  String INSERT_ALL = "INSERT INTO STUDENT_RECORD(STUDENT_ID, SEMESTER_ID, YEAR, SEMESTER, CGPA, GPA, TYPE, STATUS, LAST_MODIFIED) VALUES(" +
-      "?, ?, ?, ?, ?, ?, ?, ?, " + getLastModifiedSql() + ") ";
-  String INSERT_ENROLLMENT = "INSERT INTO STUDENT_RECORD(STUDENT_ID, SEMESTER_ID, YEAR, SEMESTER, TYPE, STATUS, LAST_MODIFIED) (" +
-      "SELECT STUDENTS.STUDENT_ID, %s, %s, %s, %s, %s, " + getLastModifiedSql() + " \n" +
-      "  FROM STUDENT_RECORD, STUDENTS\n" +
-      " WHERE     STUDENT_RECORD.STUDENT_ID = STUDENTS.STUDENT_ID\n" +
-      "       AND STUDENTS.PROGRAM_ID = ?\n" +
-      "       AND STUDENT_RECORD.YEAR = ?\n" +
-      "       AND STUDENT_RECORD.SEMESTER = ?\n" +
-      "       AND STUDENT_RECORD.SEMESTER_ID = ?\n" +
-      "       AND STUDENT_RECORD.STATUS = 'P') ";
+  String SELECT_ALL = "SELECT STUDENT_RECORD.STUDENT_ID, STUDENT_RECORD.SEMESTER_ID, YEAR, SEMESTER, CGPA, GPA, TYPE, STATUS, STUDENT_RECORD.LAST_MODIFIED, ID FROM STUDENT_RECORD ";
+  String INSERT_ALL = "INSERT INTO STUDENT_RECORD(STUDENT_ID, SEMESTER_ID, YEAR, SEMESTER, TYPE, STATUS, LAST_MODIFIED) VALUES(" +
+      "?, ?, ?, ?, ?, ?, " + getLastModifiedSql() + ") ";
   String UPDATE_ALL = "UPDATE STUDENT_RECORD SET STUDENT_ID = ?, " +
       "SEMESTER_ID = ?, " +
       "YEAR = ?," +
@@ -69,46 +60,44 @@ public class PersistentStudentRecordDao extends StudentRecordDaoDecorator {
 
   @Override
   public int create(MutableStudentRecord pMutable) throws Exception {
-    return mJdbcTemplate.update(INSERT_ALL, pMutable.getStudent().getId(),
-        pMutable.getStudent().getId(),
-        pMutable.getYear(),
-        pMutable.getAcademicSemester(),
-        pMutable.getCGPA(),
-        pMutable.getGPA(),
-        pMutable.getType().getValue(),
-        pMutable.getStatus().getValue());
+    return mJdbcTemplate.update(INSERT_ALL, getInsertParamList(Lists.newArrayList(pMutable)));
   }
 
   @Override
   public List<StudentRecord> getStudentRecords(Integer pProgramId, Integer pSemesterId) {
-    String query = SELECT_ALL + "WHERE PROGRAM_ID AND SEMESTER_ID = ?";
+    String query = SELECT_ALL + ",STUDENTS WHERE STUDENT_RECORD.STUDENT_ID = STUDENTS.STUDENT_ID AND STUDENTS.PROGRAM_ID = ? AND STUDENT_RECORD.SEMESTER_ID = ?";
     return mJdbcTemplate.query(query, new Object[]{pProgramId, pSemesterId}, new StudentRecordRowMapper());
   }
 
   @Override
   public List<StudentRecord> getStudentRecords(Integer pProgramId, Integer pSemesterId, Integer pYear, Integer pAcademicSemester) {
-    String query = SELECT_ALL + "WHERE PROGRAM_ID AND SEMESTER_ID = ? AND YEAR = ? AND SEMESTER = ?";
+    String query = SELECT_ALL + ",STUDENTS WHERE STUDENT_RECORD.STUDENT_ID = STUDENTS.STUDENT_ID AND STUDENTS.PROGRAM_ID = ? AND STUDENT_RECORD.SEMESTER_ID = ? AND YEAR = ? AND SEMESTER = ?";
     return mJdbcTemplate.query(query, new Object[]{pProgramId, pSemesterId, pYear, pAcademicSemester}, new StudentRecordRowMapper());
   }
 
   @Override
   public List<StudentRecord> getStudentRecords(Integer pProgramId, Integer pSemesterId, StudentRecord.Type pType) {
-    String query = SELECT_ALL + "WHERE PROGRAM_ID AND SEMESTER_ID = ? AND TYPE = ?";
+    String query = SELECT_ALL + ",STUDENTS WHERE STUDENT_RECORD.STUDENT_ID = STUDENTS.STUDENT_ID AND STUDENTS.PROGRAM_ID = ? AND STUDENT_RECORD.SEMESTER_ID = ? AND TYPE = ?";
     return mJdbcTemplate.query(query, new Object[]{pProgramId, pSemesterId, pType.getValue()}, new StudentRecordRowMapper());
   }
 
   @Override
   public List<StudentRecord> getStudentRecords(Integer pProgramId, Integer pSemesterId, Integer pYear,
                                                Integer pAcademicSemester, StudentRecord.Type pType) {
-    String query = SELECT_ALL + "WHERE PROGRAM_ID AND SEMESTER_ID = ? AND YEAR = ? AND SEMESTER = ? AND TYPE = ?";
+    String query = SELECT_ALL + ",STUDENTS WHERE STUDENT_RECORD.STUDENT_ID = STUDENTS.STUDENT_ID AND STUDENTS.PROGRAM_ID = ? AND STUDENT_RECORD.SEMESTER_ID = ? AND YEAR = ? AND SEMESTER = ? AND TYPE = ?";
     return mJdbcTemplate.query(query, new Object[]{pProgramId, pSemesterId, pYear, pAcademicSemester, pType.getValue()},
         new StudentRecordRowMapper());
   }
 
   @Override
+  public int create(List<MutableStudentRecord> pStudentRecordList) throws Exception {
+    return mJdbcTemplate.batchUpdate(INSERT_ALL, getInsertParamList(pStudentRecordList)).length;
+  }
+
+  @Override
   public int update(List<MutableStudentRecord> pStudentRecordList) throws Exception {
     String query = UPDATE_ALL + "WHERE ID=?";
-    return mJdbcTemplate.update(query, getUpdateParamList(pStudentRecordList));
+    return mJdbcTemplate.batchUpdate(query, getUpdateParamList(pStudentRecordList)).length;
   }
 
   private List<Object[]> getUpdateParamList(List<MutableStudentRecord> pStudentRecords) throws Exception {
@@ -124,6 +113,22 @@ public class PersistentStudentRecordDao extends StudentRecordDaoDecorator {
           studentRecord.getType().getValue(),
           studentRecord.getStatus().getValue(),
           studentRecord.getId()
+      });
+    }
+
+    return params;
+  }
+
+  private List<Object[]> getInsertParamList(List<MutableStudentRecord> pStudentRecords) throws Exception {
+    List<Object[]> params = new ArrayList<>();
+    for (StudentRecord studentRecord : pStudentRecords) {
+      params.add(new Object[]{
+          studentRecord.getStudent().getId(),
+          studentRecord.getSemester().getId(),
+          studentRecord.getYear(),
+          studentRecord.getAcademicSemester(),
+          studentRecord.getType().getValue(),
+          studentRecord.getStatus().getValue(),
       });
     }
 

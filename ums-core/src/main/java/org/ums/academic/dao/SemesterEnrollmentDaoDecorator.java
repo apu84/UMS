@@ -15,7 +15,7 @@ public class SemesterEnrollmentDaoDecorator
     }
 
     @Override
-    public List<SemesterEnrollment> getEnrollmentStatus(SemesterEnrollment.Type pType, Integer pProgramId, Integer pSemesterId,
+    public SemesterEnrollment getEnrollmentStatus(SemesterEnrollment.Type pType, Integer pProgramId, Integer pSemesterId,
                                                         Integer pYear, Integer pAcademicSemester) {
         return getManager().getEnrollmentStatus(pType, pProgramId, pSemesterId, pYear, pAcademicSemester);
     }

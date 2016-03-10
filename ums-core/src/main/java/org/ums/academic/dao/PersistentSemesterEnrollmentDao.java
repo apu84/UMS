@@ -17,13 +17,13 @@ import java.util.concurrent.atomic.AtomicReference;
 public class PersistentSemesterEnrollmentDao extends SemesterEnrollmentDaoDecorator {
   private String SELECT_ALL = "SELECT SEMESTER_ID, PROGRAM_ID, STUDENT_YEAR, STUDENT_SEMESTER, ENROLL_DATE, ENROLL_TYPE, LAST_MODIFIED, ID FROM SEMESTER_ENROLLMENT ";
   private String INSERT_ALL = "INSERT INTO SEMESTER_ENROLLMENT(SEMESTER_ID, PROGRAM_ID, STUDENT_YEAR, STUDENT_SEMESTER, ENROLL_DATE, ENROLL_TYPE, LAST_MODIFIED) VALUES" +
-      "(?, ?, ?, ?, TO_DATE(?, " + Constants.DATE_FORMAT + "), ?, " + getLastModifiedSql() + ") ";
+      "(?, ?, ?, ?, SYSDATE, ?, " + getLastModifiedSql() + ") ";
   private String UPDATE_ALL = "UPDATE SEMESTER_ENROLLMENT SET " +
       "SEMESTER_ID = ?," +
       "PROGRAM_ID = ?," +
       "STUDENT_YEAR = ?," +
       "STUDENT_SEMESTER = ?," +
-      "ENROLL_DATE = TO_DATE(?, " + Constants.DATE_FORMAT + ")," +
+      "ENROLL_DATE = TO_DATE(?, '" + Constants.DATE_FORMAT + "')," +
       "ENROLL_TYPE = ?," +
       "LAST_MODIFIED = " + getLastModifiedSql() + " ";
   private String DELETE_ALL = "DELETE FROM SEMESTER_ENROLLMENT ";
@@ -73,7 +73,6 @@ public class PersistentSemesterEnrollmentDao extends SemesterEnrollmentDaoDecora
         pMutable.getProgram().getId(),
         pMutable.getYear(),
         pMutable.getAcademicSemester(),
-        mDateFormat.format(pMutable.getEnrollmentDate()),
         pMutable.getType().getValue());
   }
 
@@ -81,16 +80,16 @@ public class PersistentSemesterEnrollmentDao extends SemesterEnrollmentDaoDecora
   public List<SemesterEnrollment> getEnrollmentStatus(SemesterEnrollment.Type pType, Integer pProgramId,
                                                       Integer pSemesterId) {
     String query = SELECT_ALL + "WHERE ENROLL_TYPE = ? AND PROGRAM_ID = ? AND SEMESTER_ID = ?";
-    return mJdbcTemplate.query(query, new Object[]{pType, pProgramId, pSemesterId}, new SemesterEnrollmentRowMapper());
+    return mJdbcTemplate.query(query, new Object[]{pType.getValue(), pProgramId, pSemesterId}, new SemesterEnrollmentRowMapper());
   }
 
   @Override
-  public List<SemesterEnrollment> getEnrollmentStatus(SemesterEnrollment.Type pType, Integer pProgramId, Integer pSemesterId,
+  public SemesterEnrollment getEnrollmentStatus(SemesterEnrollment.Type pType, Integer pProgramId, Integer pSemesterId,
                                                       Integer pYear, Integer pAcademicSemester) {
     String query = SELECT_ALL + "WHERE ENROLL_TYPE = ? AND PROGRAM_ID = ? AND SEMESTER_ID = ? AND STUDENT_YEAR = ? " +
         "AND STUDENT_SEMESTER = ?";
-    return mJdbcTemplate.query(query,
-        new Object[]{pType, pProgramId, pSemesterId, pYear, pAcademicSemester}, new SemesterEnrollmentRowMapper());
+    return mJdbcTemplate.queryForObject(query,
+        new Object[]{pType.getValue(), pProgramId, pSemesterId, pYear, pAcademicSemester}, new SemesterEnrollmentRowMapper());
   }
 
   class SemesterEnrollmentRowMapper implements RowMapper<SemesterEnrollment> {

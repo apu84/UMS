@@ -59,7 +59,7 @@ public class PersistentStudentDao extends StudentDaoDecorator {
       "  GUARDIAN_PHONE = ?," +
       "  GUARDIAN_EMAIL = ?," +
       "  PROGRAM_ID = ?," +
-      "  LAST_MODIFIED = " + getLastModifiedSql() +
+      "  LAST_MODIFIED = " + getLastModifiedSql() + ","+
       "  ENROLLMENT_TYPE = ? ";
 
   static String DELETE_ALL = "DELETE FROM STUDENTS";

@@ -14,6 +14,7 @@ import org.ums.manager.EnrollmentFromToManager;
 import org.ums.manager.SemesterEnrollmentManager;
 import org.ums.manager.StudentRecordManager;
 import org.ums.services.academic.EnrollmentService;
+import org.ums.services.academic.EnrollmentServiceImpl;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
@@ -22,7 +23,9 @@ import javax.json.JsonObjectBuilder;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.text.DateFormat;
 import java.util.List;
 
 @Component
@@ -41,10 +44,11 @@ public class StudentEnrollmentResource extends Resource {
   @Autowired
   @Qualifier("getEnrollmentFromToBuilder")
   Builder<EnrollmentFromTo, MutableEnrollmentFromTo> mBuilder;
-
-
+  @Autowired
+  @Qualifier("getGenericDateFormat")
+  DateFormat mDateFormat;
   @GET
-  @Path("enrollment-type/{enrollment-type}/program-id/{program-id}/semester-id/{semester-id}")
+  @Path("/enrollment-type/{enrollment-type}/program-id/{program-id}/semester-id/{semester-id}")
   public JsonObject getSemesterList(final @Context Request pRequest,
                                     final @PathParam("enrollment-type") int pEnrollmentType,
                                     final @PathParam("program-id") int pProgramId,
@@ -62,8 +66,11 @@ public class StudentEnrollmentResource extends Resource {
       JsonObjectBuilder jsonObjectBuilder = toJson(enrollmentFromTo, mUriInfo, localCache);
       if (semesterEnrollmentList != null) {
         for (SemesterEnrollment semesterEnrollment : semesterEnrollmentList) {
-          if (semesterEnrollment.getProgram().getId().intValue() == enrollmentFromTo.getProgram().getId().intValue()) {
+          if (semesterEnrollment.getProgram().getId().intValue() == enrollmentFromTo.getProgram().getId().intValue()
+              && semesterEnrollment.getYear().intValue() == enrollmentFromTo.getToYear().intValue()
+              && semesterEnrollment.getAcademicSemester().intValue() == enrollmentFromTo.getToSemester().intValue()) {
             jsonObjectBuilder.add("type", semesterEnrollment.getType().getValue());
+            jsonObjectBuilder.add("enrollmentDate", mDateFormat.format(semesterEnrollment.getEnrollmentDate()));
           }
         }
       }
@@ -75,6 +82,15 @@ public class StudentEnrollmentResource extends Resource {
     return object.build();
   }
 
+  @POST
+  @Path("/enroll/{enrollment-type}/program-id/{program-id}/semester-id/{semester-id}")
+  public Response enrollSemester(final @Context Request pRequest,
+                                 final @PathParam("enrollment-type") int pEnrollmentType,
+                                 final @PathParam("program-id") int pProgramId,
+                                 final @PathParam("semester-id") int pSemesterId) throws Exception {
+    mEnrollmentService.saveEnrollment(SemesterEnrollment.Type.get(pEnrollmentType), pSemesterId, pProgramId);
+    return Response.ok().build();
+  }
 
   protected JsonObjectBuilder toJson(final EnrollmentFromTo pObject, final UriInfo pUriInfo, final LocalCache pLocalCache) throws Exception {
     JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();

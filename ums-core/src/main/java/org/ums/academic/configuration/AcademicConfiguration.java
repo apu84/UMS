@@ -174,7 +174,7 @@ public class AcademicConfiguration {
   }
 
   @Bean
-  SemesterEnrollmentManager studentEnrollmentManager() {
+  SemesterEnrollmentManager semesterEnrollmentManager() {
     return new PersistentSemesterEnrollmentDao(mJdbcTemplate, getGenericDateFormat());
   }
 
