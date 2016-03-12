@@ -101,7 +101,9 @@ public class AcademicConfiguration {
 
   @Bean
   ContentManager<Program, MutableProgram, Integer> programManager() {
-    return new PersistentProgramDao(mJdbcTemplate);
+    ProgramCache programCache = new ProgramCache(mLocalCacheManager);
+    programCache.setManager(new PersistentProgramDao(mJdbcTemplate));
+    return programCache;
   }
 
   @Bean

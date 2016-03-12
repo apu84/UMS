@@ -51,7 +51,8 @@ public abstract class ContentCache<R extends Identifier<I> & LastModifier, M ext
 
     if (StringUtils.isEmpty(lastModified)
         || StringUtils.isEmpty(pReadonly.getLastModified())
-        || (!StringUtils.isEmpty(lastModified) && lastModified.compareTo(pReadonly.getLastModified()) > 0)) {
+        || (!StringUtils.isEmpty(lastModified) && !StringUtils.isEmpty(pReadonly.getLastModified())
+        && lastModified.compareTo(pReadonly.getLastModified()) > 0)) {
       R readOnly = super.get(pReadonly.getId());
       getCacheManager().invalidate(cacheKey);
       getCacheManager().put(getCacheKey(pReadonly.getId()), readOnly);

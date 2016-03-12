@@ -19,8 +19,8 @@ public class LocalCacheManager<R extends LastModifier> implements CacheManager<R
 
   @Override
   public void put(String pCacheId, R pReadonly) {
-    mCache.putIfAbsent(pCacheId, pReadonly);
-    mLastModified.putIfAbsent(pCacheId, pReadonly.getLastModified());
+    mCache.put(pCacheId, pReadonly);
+    mLastModified.put(pCacheId, pReadonly.getLastModified());
   }
 
   @Override
