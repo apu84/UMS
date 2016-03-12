@@ -50,6 +50,8 @@ public class PersistentStudent implements MutableStudent {
   private String mGuardianEmail;
   private String mLastModified;
   private EnrollmentType mEnrollmentType;
+  private Integer mYear;
+  private Integer mAcademicSemester;
 
   public PersistentStudent() {
 
@@ -78,6 +80,8 @@ public class PersistentStudent implements MutableStudent {
     setGuardianEmail(pMutableStudent.getGuardianEmail());
     setLastModified(pMutableStudent.getLastModified());
     setEnrollmentType(pMutableStudent.getEnrollmentType());
+    setCurrentYear(pMutableStudent.getCurrentYear());
+    setCurrentAcademicSemester(pMutableStudent.getCurrentAcademicSemester());
   }
 
 
@@ -348,5 +352,25 @@ public class PersistentStudent implements MutableStudent {
   @Override
   public void setEnrollmentType(EnrollmentType pEnrollmentType) {
     mEnrollmentType = pEnrollmentType;
+  }
+
+  @Override
+  public void setCurrentYear(Integer pCurrentYear) {
+    mYear = pCurrentYear;
+  }
+
+  @Override
+  public void setCurrentAcademicSemester(Integer pAcademicSemester) {
+    mAcademicSemester = pAcademicSemester;
+  }
+
+  @Override
+  public Integer getCurrentYear() {
+    return mYear;
+  }
+
+  @Override
+  public Integer getCurrentAcademicSemester() {
+    return mAcademicSemester;
   }
 }

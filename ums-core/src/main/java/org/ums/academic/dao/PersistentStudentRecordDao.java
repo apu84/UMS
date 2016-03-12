@@ -15,9 +15,9 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentStudentRecordDao extends StudentRecordDaoDecorator {
-  String SELECT_ALL = "SELECT STUDENT_RECORD.STUDENT_ID, STUDENT_RECORD.SEMESTER_ID, YEAR, SEMESTER, CGPA, GPA, TYPE, STATUS, STUDENT_RECORD.LAST_MODIFIED, ID FROM STUDENT_RECORD ";
-  String INSERT_ALL = "INSERT INTO STUDENT_RECORD(STUDENT_ID, SEMESTER_ID, YEAR, SEMESTER, TYPE, STATUS, LAST_MODIFIED) VALUES(" +
-      "?, ?, ?, ?, ?, ?, " + getLastModifiedSql() + ") ";
+  String SELECT_ALL = "SELECT STUDENT_ID, SEMESTER_ID, PROGRAM_ID, YEAR, SEMESTER, CGPA, GPA, TYPE, STATUS, LAST_MODIFIED, ID FROM STUDENT_RECORD ";
+  String INSERT_ALL = "INSERT INTO STUDENT_RECORD(STUDENT_ID, SEMESTER_ID, PROGRAM_ID, YEAR, SEMESTER, TYPE, STATUS, LAST_MODIFIED) VALUES(" +
+      "?, ?, ?, ?, ?, ?, ?, " + getLastModifiedSql() + ") ";
   String UPDATE_ALL = "UPDATE STUDENT_RECORD SET STUDENT_ID = ?, " +
       "SEMESTER_ID = ?, " +
       "YEAR = ?," +
@@ -60,31 +60,31 @@ public class PersistentStudentRecordDao extends StudentRecordDaoDecorator {
 
   @Override
   public int create(MutableStudentRecord pMutable) throws Exception {
-    return mJdbcTemplate.update(INSERT_ALL, getInsertParamList(Lists.newArrayList(pMutable)));
+    return mJdbcTemplate.update(INSERT_ALL, getInsertParamList(Lists.newArrayList(pMutable)).get(0));
   }
 
   @Override
   public List<StudentRecord> getStudentRecords(Integer pProgramId, Integer pSemesterId) {
-    String query = SELECT_ALL + ",STUDENTS WHERE STUDENT_RECORD.STUDENT_ID = STUDENTS.STUDENT_ID AND STUDENTS.PROGRAM_ID = ? AND STUDENT_RECORD.SEMESTER_ID = ?";
+    String query = SELECT_ALL + " WHERE PROGRAM_ID = ? AND SEMESTER_ID = ?";
     return mJdbcTemplate.query(query, new Object[]{pProgramId, pSemesterId}, new StudentRecordRowMapper());
   }
 
   @Override
   public List<StudentRecord> getStudentRecords(Integer pProgramId, Integer pSemesterId, Integer pYear, Integer pAcademicSemester) {
-    String query = SELECT_ALL + ",STUDENTS WHERE STUDENT_RECORD.STUDENT_ID = STUDENTS.STUDENT_ID AND STUDENTS.PROGRAM_ID = ? AND STUDENT_RECORD.SEMESTER_ID = ? AND YEAR = ? AND SEMESTER = ?";
+    String query = SELECT_ALL + " WHERE PROGRAM_ID = ? AND SEMESTER_ID = ? AND YEAR = ? AND SEMESTER = ?";
     return mJdbcTemplate.query(query, new Object[]{pProgramId, pSemesterId, pYear, pAcademicSemester}, new StudentRecordRowMapper());
   }
 
   @Override
   public List<StudentRecord> getStudentRecords(Integer pProgramId, Integer pSemesterId, StudentRecord.Type pType) {
-    String query = SELECT_ALL + ",STUDENTS WHERE STUDENT_RECORD.STUDENT_ID = STUDENTS.STUDENT_ID AND STUDENTS.PROGRAM_ID = ? AND STUDENT_RECORD.SEMESTER_ID = ? AND TYPE = ?";
+    String query = SELECT_ALL + " WHERE PROGRAM_ID = ? AND SEMESTER_ID = ? AND TYPE = ?";
     return mJdbcTemplate.query(query, new Object[]{pProgramId, pSemesterId, pType.getValue()}, new StudentRecordRowMapper());
   }
 
   @Override
   public List<StudentRecord> getStudentRecords(Integer pProgramId, Integer pSemesterId, Integer pYear,
                                                Integer pAcademicSemester, StudentRecord.Type pType) {
-    String query = SELECT_ALL + ",STUDENTS WHERE STUDENT_RECORD.STUDENT_ID = STUDENTS.STUDENT_ID AND STUDENTS.PROGRAM_ID = ? AND STUDENT_RECORD.SEMESTER_ID = ? AND YEAR = ? AND SEMESTER = ? AND TYPE = ?";
+    String query = SELECT_ALL + " WHERE PROGRAM_ID = ? AND SEMESTER_ID = ? AND YEAR = ? AND SEMESTER = ? AND TYPE = ?";
     return mJdbcTemplate.query(query, new Object[]{pProgramId, pSemesterId, pYear, pAcademicSemester, pType.getValue()},
         new StudentRecordRowMapper());
   }
@@ -125,6 +125,7 @@ public class PersistentStudentRecordDao extends StudentRecordDaoDecorator {
       params.add(new Object[]{
           studentRecord.getStudent().getId(),
           studentRecord.getSemester().getId(),
+          studentRecord.getProgram().getId(),
           studentRecord.getYear(),
           studentRecord.getAcademicSemester(),
           studentRecord.getType().getValue(),
@@ -149,6 +150,7 @@ public class PersistentStudentRecordDao extends StudentRecordDaoDecorator {
       studentRecord.setType(StudentRecord.Type.get(rs.getString("TYPE")));
       studentRecord.setStatus(StudentRecord.Status.get(rs.getString("STATUS")));
       studentRecord.setLastModified(rs.getString("LAST_MODIFIED"));
+      studentRecord.setProgramId(rs.getInt("PROGRAM_ID"));
       AtomicReference<StudentRecord> atomicReference = new AtomicReference<>(studentRecord);
       return atomicReference.get();
     }

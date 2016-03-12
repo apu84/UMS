@@ -2,6 +2,7 @@ package org.ums.domain.model.mutable;
 
 import org.ums.domain.model.common.Mutable;
 import org.ums.domain.model.common.MutableIdentifier;
+import org.ums.domain.model.readOnly.Program;
 import org.ums.domain.model.readOnly.Semester;
 import org.ums.domain.model.readOnly.Student;
 import org.ums.domain.model.readOnly.StudentRecord;
@@ -26,4 +27,8 @@ public interface MutableStudentRecord extends StudentRecord, Mutable, MutableIde
   void setCGPA(final Float pCGPA);
 
   void setGPA(final Float pGPA);
+
+  void setProgramId(final Integer pProgramId);
+
+  void setProgram(final Program pProgram);
 }

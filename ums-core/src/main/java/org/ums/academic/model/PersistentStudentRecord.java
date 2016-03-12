@@ -2,8 +2,10 @@ package org.ums.academic.model;
 
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
+import org.ums.domain.model.mutable.MutableProgram;
 import org.ums.domain.model.mutable.MutableStudent;
 import org.ums.domain.model.mutable.MutableStudentRecord;
+import org.ums.domain.model.readOnly.Program;
 import org.ums.domain.model.readOnly.Semester;
 import org.ums.domain.model.readOnly.Student;
 import org.ums.domain.model.readOnly.StudentRecord;
@@ -14,6 +16,7 @@ import org.ums.manager.StudentRecordManager;
 public class PersistentStudentRecord implements MutableStudentRecord {
   private static StudentRecordManager sStudentRecordManager;
   private static ContentManager<Student, MutableStudent, String> sStudentManager;
+  private static ContentManager<Program, MutableProgram, Integer> sProgramManager;
   private static SemesterManager sSemesterManager;
 
   static {
@@ -21,6 +24,7 @@ public class PersistentStudentRecord implements MutableStudentRecord {
     sStudentRecordManager = applicationContext.getBean("studentRecordManager", StudentRecordManager.class);
     sStudentManager = (ContentManager<Student, MutableStudent, String>) applicationContext.getBean("studentManager");
     sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
+    sProgramManager = (ContentManager<Program, MutableProgram, Integer>) applicationContext.getBean("programManager");
   }
 
   private Integer mId;
@@ -35,6 +39,8 @@ public class PersistentStudentRecord implements MutableStudentRecord {
   private StudentRecord.Status mStatus;
   private StudentRecord.Type mType;
   private String mLastModified;
+  private Integer mProgramId;
+  private Program mProgram;
 
   public PersistentStudentRecord() {
   }
@@ -189,5 +195,25 @@ public class PersistentStudentRecord implements MutableStudentRecord {
   @Override
   public String getLastModified() {
     return mLastModified;
+  }
+
+  @Override
+  public void setProgramId(Integer pProgramId) {
+    mProgramId = pProgramId;
+  }
+
+  @Override
+  public void setProgram(Program pProgram) {
+    mProgram = pProgram;
+  }
+
+  @Override
+  public Integer getProgramId() {
+    return mProgramId;
+  }
+
+  @Override
+  public Program getProgram() throws Exception {
+    return mProgram == null ? sProgramManager.get(mProgramId) : sProgramManager.validate(mProgram);
   }
 }

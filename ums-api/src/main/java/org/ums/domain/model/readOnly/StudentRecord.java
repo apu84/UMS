@@ -19,6 +19,10 @@ public interface StudentRecord extends Serializable, Identifier<Integer>, LastMo
 
   Semester getSemester() throws Exception;
 
+  Integer getProgramId();
+
+  Program getProgram() throws Exception;
+
   Integer getYear();
 
   Integer getAcademicSemester();

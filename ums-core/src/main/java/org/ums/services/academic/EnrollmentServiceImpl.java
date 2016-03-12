@@ -105,6 +105,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
             MutableStudentRecord mutableStudentRecord = new PersistentStudentRecord();
             mutableStudentRecord.setStudentId(studentRecord.getStudentId());
             mutableStudentRecord.setSemesterId(pNewSemesterId);
+            mutableStudentRecord.setProgramId(pProgramId);
             mutableStudentRecord.setYear(currentEnrollmentFromTo.getToYear());
             mutableStudentRecord.setAcademicSemester(currentEnrollmentFromTo.getToSemester());
             mutableStudentRecord.setType(StudentRecord.Type.TEMPORARY);
@@ -113,6 +114,8 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
             MutableStudent mutableStudent = mStudentManager.get(studentRecord.getStudentId()).edit();
             mutableStudent.setEnrollmentType(Student.EnrollmentType.TEMPORARY);
+            mutableStudent.setCurrentYear(currentEnrollmentFromTo.getToYear());
+            mutableStudent.setCurrentAcademicSemester(currentEnrollmentFromTo.getToSemester());
             mutableStudents.add(mutableStudent);
           }
 
@@ -137,41 +140,48 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         List<StudentRecord> temporaryEnrolledStudentRecords = mStudentRecordManager.getStudentRecords(pProgramId,
             pNewSemesterId, pToYear, pToAcademicSemester, StudentRecord.Type.TEMPORARY);
 
-        List<StudentRecord> previousSemesterStudentRecords = mStudentRecordManager.getStudentRecords(pProgramId,
-            previousSemester.getId(), currentEnrollmentFromTo.getFromYear(), currentEnrollmentFromTo.getFromSemester());
-        if (previousSemesterStudentRecords.size() > 0) {
-          Map<String, StudentRecord> studentRecordMap = toMap(previousSemesterStudentRecords);
+        if (pToYear == UmsUtils.FIRST && pToAcademicSemester == UmsUtils.FIRST) {
+          permanentEnrollmentNewStudents(temporaryEnrolledStudentRecords);
 
-          List<MutableStudentRecord> mutableStudentRecords = new ArrayList<>();
-          List<MutableStudent> mutableStudents = new ArrayList<>();
+        } else {
+          List<StudentRecord> previousSemesterStudentRecords = mStudentRecordManager.getStudentRecords(pProgramId,
+              previousSemester.getId(), currentEnrollmentFromTo.getFromYear(), currentEnrollmentFromTo.getFromSemester());
+          if (previousSemesterStudentRecords.size() > 0) {
+            Map<String, StudentRecord> studentRecordMap = toMap(previousSemesterStudentRecords);
 
-          for (StudentRecord studentRecord : temporaryEnrolledStudentRecords) {
+            List<MutableStudentRecord> mutableStudentRecords = new ArrayList<>();
+            List<MutableStudent> mutableStudents = new ArrayList<>();
 
-            Student student = mStudentManager.get(studentRecord.getStudentId());
-            MutableStudent mutableStudent = student.edit();
+            for (StudentRecord studentRecord : temporaryEnrolledStudentRecords) {
 
-            MutableStudentRecord mutableStudentRecord = studentRecord.edit();
-            StudentRecord previousSemesterRecord = studentRecordMap.get(studentRecord.getStudentId());
+              Student student = mStudentManager.get(studentRecord.getStudentId());
+              MutableStudent mutableStudent = student.edit();
 
-            if (previousSemesterRecord.getStatus() == StudentRecord.Status.PASSED) {
-              mutableStudentRecord.setType(StudentRecord.Type.REGULAR);
-              mutableStudent.setEnrollmentType(Student.EnrollmentType.ACTUAL);
-            } else if (previousSemesterRecord.getStatus() == StudentRecord.Status.FAILED) {
-              mutableStudentRecord.setType(StudentRecord.Type.REGULAR);
-              mutableStudentRecord.setYear(previousSemesterRecord.getYear());
-              mutableStudentRecord.setAcademicSemester(previousSemesterRecord.getAcademicSemester());
-              mutableStudent.setEnrollmentType(Student.EnrollmentType.ACTUAL);
+              MutableStudentRecord mutableStudentRecord = studentRecord.edit();
+              StudentRecord previousSemesterRecord = studentRecordMap.get(studentRecord.getStudentId());
+
+              if (previousSemesterRecord.getStatus() == StudentRecord.Status.PASSED) {
+                mutableStudentRecord.setType(StudentRecord.Type.REGULAR);
+                mutableStudent.setEnrollmentType(Student.EnrollmentType.ACTUAL);
+              } else if (previousSemesterRecord.getStatus() == StudentRecord.Status.FAILED) {
+                mutableStudentRecord.setType(StudentRecord.Type.REGULAR);
+                mutableStudentRecord.setYear(previousSemesterRecord.getYear());
+                mutableStudentRecord.setAcademicSemester(previousSemesterRecord.getAcademicSemester());
+
+                mutableStudent.setEnrollmentType(Student.EnrollmentType.ACTUAL);
+                mutableStudent.setCurrentYear(previousSemesterRecord.getYear());
+                mutableStudent.setCurrentAcademicSemester(previousSemesterRecord.getAcademicSemester());
+              }
+
+              mutableStudentRecords.add(mutableStudentRecord);
+              mutableStudents.add(mutableStudent);
             }
 
-            mutableStudentRecords.add(mutableStudentRecord);
-            mutableStudents.add(mutableStudent);
+            mStudentRecordManager.update(mutableStudentRecords);
+            mStudentManager.update(mutableStudents);
           }
-
-          mStudentRecordManager.update(mutableStudentRecords);
-          mStudentManager.update(mutableStudents);
         }
       }
-
     }
     return new GenericMessageResponse(GenericResponse.ResponseType.SUCCESSFUL, "Semester enrolled successfully");
   }
@@ -250,5 +260,28 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     }
 
     return new GenericMessageResponse(GenericResponse.ResponseType.SUCCESSFUL);
+  }
+
+  private void permanentEnrollmentNewStudents(final List<StudentRecord> pStudentRecordList) throws Exception {
+
+    List<MutableStudentRecord> mutableStudentRecords = new ArrayList<>();
+    List<MutableStudent> mutableStudents = new ArrayList<>();
+
+    for (StudentRecord studentRecord : pStudentRecordList) {
+
+      Student student = mStudentManager.get(studentRecord.getStudentId());
+      MutableStudent mutableStudent = student.edit();
+
+      MutableStudentRecord mutableStudentRecord = studentRecord.edit();
+
+      mutableStudentRecord.setType(StudentRecord.Type.REGULAR);
+      mutableStudent.setEnrollmentType(Student.EnrollmentType.ACTUAL);
+
+      mutableStudentRecords.add(mutableStudentRecord);
+      mutableStudents.add(mutableStudent);
+    }
+
+    mStudentRecordManager.update(mutableStudentRecords);
+    mStudentManager.update(mutableStudents);
   }
 }

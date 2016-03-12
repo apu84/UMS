@@ -2,6 +2,7 @@ package org.ums.util;
 
 
 public class UmsUtils {
+  public static int FIRST = 1;
   public static String getNumberWithSuffix(final int pNumber) {
     String suffix = "";
     switch (pNumber) {

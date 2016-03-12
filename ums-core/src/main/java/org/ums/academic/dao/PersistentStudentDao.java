@@ -37,7 +37,9 @@ public class PersistentStudentDao extends StudentDaoDecorator {
       "  GUARDIAN_EMAIL," +
       "  PROGRAM_ID," +
       "  LAST_MODIFIED," +
-      "  ENROLLMENT_TYPE" +
+      "  ENROLLMENT_TYPE," +
+      "  CURR_YEAR," +
+      "  CURR_SEMESTER" +
       "  FROM STUDENTS ";
 
   static String UPDATE_ALL = "UPDATE STUDENTS SET" +
@@ -58,9 +60,10 @@ public class PersistentStudentDao extends StudentDaoDecorator {
       "  GUARDIAN_MOBILE = ?," +
       "  GUARDIAN_PHONE = ?," +
       "  GUARDIAN_EMAIL = ?," +
-      "  PROGRAM_ID = ?," +
       "  LAST_MODIFIED = " + getLastModifiedSql() + ","+
-      "  ENROLLMENT_TYPE = ? ";
+      "  ENROLLMENT_TYPE = ?," +
+      "  CURR_YEAR = ?," +
+      "  CURR_SEMESTER = ? ";
 
   static String DELETE_ALL = "DELETE FROM STUDENTS";
   static String CREATE_ALL = "INSERT INTO STUDENTS(" +
@@ -84,8 +87,10 @@ public class PersistentStudentDao extends StudentDaoDecorator {
       "  GUARDIAN_EMAIL," +
       "  PROGRAM_ID," +
       "  LAST_MODIFIED," +
-      "  ENROLLMENT_TYPE" +
-      ") VALUES (?,?,?,?,?,?,TO_DATE(?, '" + Constants.DATE_FORMAT + "'),?,?,?,?,?,?,?,?,?,?,?,?," + getLastModifiedSql() + ",?)";
+      "  ENROLLMENT_TYPE," +
+      "  CURR_YEAR, " +
+      "  CURR_SEMESTER" +
+      ") VALUES (?,?,?,?,?,?,TO_DATE(?, '" + Constants.DATE_FORMAT + "'),?,?,?,?,?,?,?,?,?,?,?,?," + getLastModifiedSql() + ",?, ?, ?)";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -132,7 +137,9 @@ public class PersistentStudentDao extends StudentDaoDecorator {
         pMutable.getGuardianPhoneNo(),
         pMutable.getGuardianEmail(),
         pMutable.getProgramId(),
-        pMutable.getEnrollmentType().getValue()
+        pMutable.getEnrollmentType().getValue(),
+        pMutable.getCurrentYear(),
+        pMutable.getCurrentAcademicSemester()
     );
   }
 
@@ -175,8 +182,9 @@ public class PersistentStudentDao extends StudentDaoDecorator {
           student.getGuardianMobileNo(),
           student.getGuardianPhoneNo(),
           student.getGuardianEmail(),
-          student.getProgramId(),
           student.getEnrollmentType().getValue(),
+          student.getCurrentYear(),
+          student.getCurrentAcademicSemester(),
           student.getId()
       });
     }
@@ -209,7 +217,15 @@ public class PersistentStudentDao extends StudentDaoDecorator {
       student.setGuardianEmail("GUARDIAN_EMAIL");
       student.setProgramId(rs.getInt("PROGRAM_ID"));
       student.setLastModified(rs.getString("LAST_MODIFIED"));
-      student.setEnrollmentType(Student.EnrollmentType.get(rs.getInt("ENROLLMENT_TYPE")));
+      if (rs.getObject("ENROLLMENT_TYPE") != null) {
+        student.setEnrollmentType(Student.EnrollmentType.get(rs.getInt("ENROLLMENT_TYPE")));
+      }
+      if (rs.getObject("CURR_YEAR") != null) {
+        student.setCurrentYear(rs.getInt("CURR_YEAR"));
+      }
+      if (rs.getObject("CURR_SEMESTER") != null) {
+        student.setCurrentAcademicSemester(rs.getInt("CURR_SEMESTER"));
+      }
       return student;
     }
   }

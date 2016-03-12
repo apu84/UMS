@@ -6,6 +6,7 @@ import org.ums.domain.model.common.LastModifier;
 import org.ums.domain.model.mutable.MutableStudent;
 
 import java.io.Serializable;
+import java.net.Inet4Address;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -57,6 +58,10 @@ public interface Student extends Serializable, EditType<MutableStudent>, Identif
   String getGuardianEmail();
 
   EnrollmentType getEnrollmentType();
+
+  Integer getCurrentYear();
+
+  Integer getCurrentAcademicSemester();
 
   enum EnrollmentType {
     ACTUAL(1),
