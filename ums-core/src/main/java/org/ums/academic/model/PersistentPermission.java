@@ -7,17 +7,18 @@ import org.ums.domain.model.mutable.MutableRole;
 import org.ums.domain.model.readOnly.Role;
 import org.ums.manager.ContentManager;
 import org.ums.manager.PermissionManager;
+import org.ums.manager.RoleManager;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class PersistentPermission implements MutablePermission {
-  private static ContentManager<Role, MutableRole, Integer> sRoleManager;
+  private static RoleManager sRoleManager;
   private static PermissionManager sPermissionManager;
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sRoleManager = (ContentManager<Role, MutableRole, Integer>) applicationContext.getBean("roleManager");
+    sRoleManager = applicationContext.getBean("roleManager", RoleManager.class);
     sPermissionManager = (PermissionManager) applicationContext.getBean("permissionManager");
   }
 

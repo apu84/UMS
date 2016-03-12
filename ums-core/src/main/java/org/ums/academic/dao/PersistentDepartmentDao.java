@@ -13,7 +13,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class PersistentDepartmentDao extends ContentDaoDecorator<Department, MutableDepartment, String, ContentManager<Department, MutableDepartment, String>> {
+public class PersistentDepartmentDao extends DepartmentDaoDecorator {
   static String SELECT_ALL = "SELECT DEPT_ID, SHORT_NAME, LONG_NAME, TYPE, LAST_MODIFIED FROM MST_DEPT_OFFICE ";
 
   private JdbcTemplate mJdbcTemplate;

@@ -2,29 +2,28 @@ package org.ums.academic.model;
 
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
-import org.ums.domain.model.mutable.MutableProgram;
-import org.ums.domain.model.mutable.MutableStudent;
 import org.ums.domain.model.mutable.MutableStudentRecord;
 import org.ums.domain.model.readOnly.Program;
 import org.ums.domain.model.readOnly.Semester;
 import org.ums.domain.model.readOnly.Student;
 import org.ums.domain.model.readOnly.StudentRecord;
-import org.ums.manager.ContentManager;
+import org.ums.manager.ProgramManager;
 import org.ums.manager.SemesterManager;
+import org.ums.manager.StudentManager;
 import org.ums.manager.StudentRecordManager;
 
 public class PersistentStudentRecord implements MutableStudentRecord {
   private static StudentRecordManager sStudentRecordManager;
-  private static ContentManager<Student, MutableStudent, String> sStudentManager;
-  private static ContentManager<Program, MutableProgram, Integer> sProgramManager;
+  private static StudentManager sStudentManager;
+  private static ProgramManager sProgramManager;
   private static SemesterManager sSemesterManager;
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sStudentRecordManager = applicationContext.getBean("studentRecordManager", StudentRecordManager.class);
-    sStudentManager = (ContentManager<Student, MutableStudent, String>) applicationContext.getBean("studentManager");
+    sStudentManager = applicationContext.getBean("studentManager", StudentManager.class);
     sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
-    sProgramManager = (ContentManager<Program, MutableProgram, Integer>) applicationContext.getBean("programManager");
+    sProgramManager = applicationContext.getBean("programManager", ProgramManager.class);
   }
 
   private Integer mId;

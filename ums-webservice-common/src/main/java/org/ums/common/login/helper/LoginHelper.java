@@ -9,10 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import org.ums.domain.model.dto.ResponseDto;
 import org.ums.domain.model.mutable.MutableUser;
 import org.ums.domain.model.readOnly.User;
-import org.ums.manager.ContentManager;
+import org.ums.manager.UserManager;
 
 import javax.json.JsonObject;
 import javax.ws.rs.core.Response;
@@ -24,7 +23,7 @@ public class LoginHelper {
   AuthorizingRealm mAuthenticationRealm;
   @Autowired
   @Qualifier("userManager")
-  private ContentManager<User, MutableUser, String> mUserManager;
+  private UserManager mUserManager;
   @Autowired
   private PasswordService mPasswordService;
 

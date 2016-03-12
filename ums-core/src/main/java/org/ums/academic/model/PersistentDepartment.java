@@ -6,13 +6,14 @@ import org.ums.context.AppContext;
 import org.ums.domain.model.readOnly.Department;
 import org.ums.domain.model.mutable.MutableDepartment;
 import org.ums.manager.ContentManager;
+import org.ums.manager.DepartmentManager;
 
 public class PersistentDepartment implements MutableDepartment {
-  private static ContentManager<Department, MutableDepartment, String> sDepartmentManager;
+  private static DepartmentManager sDepartmentManager;
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sDepartmentManager = (ContentManager) applicationContext.getBean("departmentManager");
+    sDepartmentManager = applicationContext.getBean("departmentManager", DepartmentManager.class);
   }
 
   private String mId;

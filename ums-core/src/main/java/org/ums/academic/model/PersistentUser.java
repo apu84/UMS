@@ -8,6 +8,8 @@ import org.ums.domain.model.mutable.MutableUser;
 import org.ums.domain.model.readOnly.Role;
 import org.ums.domain.model.readOnly.User;
 import org.ums.manager.ContentManager;
+import org.ums.manager.RoleManager;
+import org.ums.manager.UserManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,13 +17,13 @@ import java.util.List;
 import java.util.Date;
 
 public class PersistentUser implements MutableUser {
-  private static ContentManager<User, MutableUser, String> sUserManager;
-  private static ContentManager<Role, MutableRole, Integer> sRoleManager;
+  private static UserManager sUserManager;
+  private static RoleManager sRoleManager;
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sUserManager = (ContentManager<User, MutableUser, String>) applicationContext.getBean("userManager");
-    sRoleManager = (ContentManager<Role, MutableRole, Integer>) applicationContext.getBean("roleManager");
+    sUserManager = applicationContext.getBean("userManager", UserManager.class);
+    sRoleManager = applicationContext.getBean("roleManager", RoleManager.class);
   }
 
   private String mId;

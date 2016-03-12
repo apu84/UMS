@@ -9,25 +9,29 @@ import org.ums.domain.model.readOnly.Program;
 import org.ums.domain.model.readOnly.Semester;
 import org.ums.domain.model.readOnly.Syllabus;
 import org.ums.manager.ContentManager;
+import org.ums.manager.ProgramManager;
+import org.ums.manager.SemesterManager;
+import org.ums.manager.SyllabusManager;
 
 
 public class PersistentSyllabus implements MutableSyllabus {
-  private static ContentManager<Semester, MutableSemester, Integer> sSemesterManager;
-  private static ContentManager<Program, MutableProgram, Integer> sProgramManager;
-  private static ContentManager<Syllabus, MutableSyllabus, String> sSyllabusManager;
+  private static SemesterManager sSemesterManager;
+  private static ProgramManager sProgramManager;
+  private static SyllabusManager sSyllabusManager;
+
+  static {
+    ApplicationContext applicationContext = AppContext.getApplicationContext();
+    sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
+    sProgramManager = applicationContext.getBean("programManager", ProgramManager.class);
+    sSyllabusManager = applicationContext.getBean("syllabusManager", SyllabusManager.class);
+  }
+
   private String mId;
   private Semester mSemester;
   private Program mProgram;
   private int mSemesterId;
   private int mProgramId;
   private String mLastModified;
-
-  static {
-    ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sSemesterManager = (ContentManager<Semester, MutableSemester, Integer>) applicationContext.getBean("semesterManager");
-    sProgramManager = (ContentManager<Program, MutableProgram, Integer>) applicationContext.getBean("programManager");
-    sSyllabusManager = (ContentManager<Syllabus, MutableSyllabus, String>) applicationContext.getBean("syllabusManager");
-  }
 
   public PersistentSyllabus() {
 

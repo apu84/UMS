@@ -1,7 +1,8 @@
-package org.ums.academic.builder;
+package org.ums.common.builder;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.ums.academic.model.PersistentDepartment;
 import org.ums.cache.LocalCache;
@@ -16,25 +17,24 @@ import org.ums.enums.CourseCategory;
 import org.ums.enums.CourseType;
 import org.ums.manager.ContentManager;
 import org.ums.manager.CourseGroupManager;
+import org.ums.manager.DepartmentManager;
+import org.ums.manager.SyllabusManager;
 
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.sql.Types;
 
+@Component
 public class CourseBuilder implements Builder<Course, MutableCourse> {
+  @Autowired
+  DepartmentManager mDepartmentManager;
 
   @Autowired
-  @Qualifier("departmentManager")
-  ContentManager<Department, MutableDepartment, String> mDepartmentManager;
-
-  @Autowired
-  @Qualifier("courseGroupManager")
   CourseGroupManager mCourseGroupManager;
 
   @Autowired
-  @Qualifier("syllabusManager")
-  ContentManager<Syllabus, MutableSyllabus, String> mSyllabusManager;
+  SyllabusManager mSyllabusManager;
 
   @Override
   public void build(final JsonObjectBuilder pBuilder, final Course pReadOnly, final UriInfo pUriInfo,

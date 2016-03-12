@@ -5,29 +5,28 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.util.StringUtils;
 import org.ums.context.AppContext;
 import org.ums.domain.model.mutable.MutableCourse;
-import org.ums.domain.model.mutable.MutableDepartment;
-import org.ums.domain.model.mutable.MutableSyllabus;
-import org.ums.domain.model.readOnly.Course;
 import org.ums.domain.model.readOnly.CourseGroup;
 import org.ums.domain.model.readOnly.Department;
 import org.ums.domain.model.readOnly.Syllabus;
 import org.ums.enums.CourseCategory;
 import org.ums.enums.CourseType;
-import org.ums.manager.ContentManager;
 import org.ums.manager.CourseGroupManager;
+import org.ums.manager.CourseManager;
+import org.ums.manager.DepartmentManager;
+import org.ums.manager.SyllabusManager;
 
 public class PersistentCourse implements MutableCourse {
-  private static ContentManager<Syllabus, MutableSyllabus, String> sSyllabusManager;
+  private static SyllabusManager sSyllabusManager;
   private static CourseGroupManager sCourseGroupManager;
-  private static ContentManager<Department, MutableDepartment, String> sDepartmentManager;
-  private static ContentManager<Course, MutableCourse, String> sCourseManager;
+  private static DepartmentManager sDepartmentManager;
+  private static CourseManager sCourseManager;
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sSyllabusManager = (ContentManager) applicationContext.getBean("syllabusManager");
-    sCourseGroupManager = (CourseGroupManager) applicationContext.getBean("courseGroupManager");
-    sDepartmentManager = (ContentManager) applicationContext.getBean("departmentManager");
-    sCourseManager = (ContentManager) applicationContext.getBean("courseManager");
+    sSyllabusManager = applicationContext.getBean("syllabusManager", SyllabusManager.class);
+    sCourseGroupManager = applicationContext.getBean("courseGroupManager", CourseGroupManager.class);
+    sDepartmentManager = applicationContext.getBean("departmentManager", DepartmentManager.class);
+    sCourseManager = applicationContext.getBean("courseManager", CourseManager.class);
   }
 
   private String mId;

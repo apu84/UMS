@@ -9,6 +9,7 @@ import org.ums.domain.model.readOnly.Role;
 import org.ums.domain.model.readOnly.User;
 import org.ums.manager.AdditionalRolePermissionsManager;
 import org.ums.manager.ContentManager;
+import org.ums.manager.RoleManager;
 import org.ums.manager.UserManager;
 
 import java.util.Date;
@@ -17,13 +18,13 @@ import java.util.Set;
 
 public class PersistentAdditionalRolePermissions implements MutableAdditionalRolePermissions {
   private static UserManager sUserManager;
-  private static ContentManager<Role, MutableRole, Integer> sRoleManager;
+  private static RoleManager sRoleManager;
   private static AdditionalRolePermissionsManager sAdditionalRolePermissionsManager;
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sUserManager = applicationContext.getBean("userManager", UserManager.class);
-    sRoleManager = applicationContext.getBean("roleManager", ContentManager.class);
+    sRoleManager = applicationContext.getBean("roleManager", RoleManager.class);
     sAdditionalRolePermissionsManager = applicationContext.getBean("additionalRolePermissionsManager", AdditionalRolePermissionsManager.class);
   }
 

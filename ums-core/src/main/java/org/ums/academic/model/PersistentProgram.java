@@ -9,18 +9,21 @@ import org.ums.domain.model.readOnly.Program;
 import org.ums.domain.model.readOnly.ProgramType;
 import org.ums.context.AppContext;
 import org.ums.manager.ContentManager;
+import org.ums.manager.DepartmentManager;
+import org.ums.manager.ProgramManager;
+import org.ums.manager.ProgramTypeManager;
 
 public class PersistentProgram implements MutableProgram {
 
-  private static ContentManager<Department, MutableDepartment, String> sDepartmentManger;
-  private static ContentManager<Program, MutableProgram, Integer> sProgramManager;
-  private static ContentManager<ProgramType, MutableProgramType, Integer> sProgramTypeManager;
+  private static DepartmentManager sDepartmentManger;
+  private static ProgramManager sProgramManager;
+  private static ProgramTypeManager sProgramTypeManager;
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sDepartmentManger = (ContentManager) applicationContext.getBean("departmentManager");
-    sProgramManager = (ContentManager) applicationContext.getBean("programManager");
-    sProgramTypeManager = (ContentManager) applicationContext.getBean("programTypeManager");
+    sDepartmentManger = applicationContext.getBean("departmentManager", DepartmentManager.class);
+    sProgramManager = applicationContext.getBean("programManager", ProgramManager.class);
+    sProgramTypeManager = applicationContext.getBean("programTypeManager", ProgramTypeManager.class);
   }
 
   private int mId;

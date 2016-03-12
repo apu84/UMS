@@ -3,14 +3,14 @@ package org.ums.common.resource.helper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.ums.academic.builder.Builder;
+import org.ums.common.builder.AdditionalRolePermissionsBuilder;
+import org.ums.common.builder.Builder;
 import org.ums.academic.model.PersistentAdditionalRolePermissions;
 import org.ums.cache.LocalCache;
 import org.ums.common.academic.resource.ResourceHelper;
 import org.ums.domain.model.mutable.MutableAdditionalRolePermissions;
 import org.ums.domain.model.readOnly.AdditionalRolePermissions;
 import org.ums.manager.AdditionalRolePermissionsManager;
-import org.ums.manager.ContentManager;
 import org.ums.manager.NavigationManager;
 
 import javax.json.Json;
@@ -22,7 +22,7 @@ import javax.ws.rs.core.UriInfo;
 import java.util.List;
 
 @Component
-public class AdditionalRolePermissionsHelper extends ResourceHelper<AdditionalRolePermissions, MutableAdditionalRolePermissions, Integer> {
+public class AdditionalRolePermissionsHelper extends ResourceHelper<AdditionalRolePermissions, MutableAdditionalRolePermissions,Integer> {
   @Autowired
   AdditionalRolePermissionsManager mAdditionalRolePermissionsManager;
 
@@ -30,16 +30,14 @@ public class AdditionalRolePermissionsHelper extends ResourceHelper<AdditionalRo
   NavigationManager mNavigationManager;
 
   @Autowired
-  List<Builder<AdditionalRolePermissions, MutableAdditionalRolePermissions>> mBuilders;
+  AdditionalRolePermissionsBuilder mBuilder;
 
   @Override
   @Transactional
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
     MutableAdditionalRolePermissions mutableAdditionalRolePermissions = new PersistentAdditionalRolePermissions();
     LocalCache localCache = new LocalCache();
-    for (Builder<AdditionalRolePermissions, MutableAdditionalRolePermissions> builder : mBuilders) {
-      builder.build(mutableAdditionalRolePermissions, pJsonObject, localCache);
-    }
+    getBuilder().build(mutableAdditionalRolePermissions, pJsonObject, localCache);
     mAdditionalRolePermissionsManager
         .removeExistingAdditionalRolePermissions(mutableAdditionalRolePermissions.getUserId(), mutableAdditionalRolePermissions.getAssignedByUserId());
     mutableAdditionalRolePermissions.commit(false);
@@ -49,13 +47,13 @@ public class AdditionalRolePermissionsHelper extends ResourceHelper<AdditionalRo
   }
 
   @Override
-  protected ContentManager<AdditionalRolePermissions, MutableAdditionalRolePermissions, Integer> getContentManager() {
+  protected AdditionalRolePermissionsManager getContentManager() {
     return mAdditionalRolePermissionsManager;
   }
 
   @Override
-  protected List<Builder<AdditionalRolePermissions, MutableAdditionalRolePermissions>> getBuilders() {
-    return mBuilders;
+  protected AdditionalRolePermissionsBuilder getBuilder() {
+    return mBuilder;
   }
 
   @Override

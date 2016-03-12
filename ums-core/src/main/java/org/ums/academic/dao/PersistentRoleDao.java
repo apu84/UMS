@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class PersistentRoleDao extends ContentDaoDecorator<Role, MutableRole, Integer, ContentManager<Role, MutableRole, Integer>> {
+public class PersistentRoleDao extends RoleDaoDecorator {
   static String SELECT_ALL = "SELECT ROLE_ID, ROLE_NAME FROM MST_ROLE ";
   static String UPDATE_ALL = "UPDATE MST_ROLE set ROLE_NAME=? ";
   static String DELETE_ALL = "DELETE FROM MST_ROLE ";

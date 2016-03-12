@@ -2,26 +2,23 @@ package org.ums.common.academic.resource.helper;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.ums.academic.builder.Builder;
-import org.ums.academic.model.PersistentSemesterEnrollment;
 import org.ums.academic.model.PersistentStudent;
 import org.ums.academic.model.PersistentStudentRecord;
 import org.ums.academic.model.PersistentUser;
 import org.ums.cache.LocalCache;
 import org.ums.common.academic.resource.ResourceHelper;
 import org.ums.common.academic.resource.StudentResource;
-import org.ums.domain.model.mutable.*;
-import org.ums.domain.model.readOnly.Role;
-import org.ums.domain.model.readOnly.SemesterEnrollment;
+import org.ums.common.builder.StudentBuilder;
+import org.ums.domain.model.mutable.MutableStudent;
+import org.ums.domain.model.mutable.MutableStudentRecord;
+import org.ums.domain.model.mutable.MutableUser;
 import org.ums.domain.model.readOnly.Student;
 import org.ums.domain.model.readOnly.StudentRecord;
 import org.ums.manager.BinaryContentManager;
-import org.ums.manager.ContentManager;
-import org.ums.manager.SemesterEnrollmentManager;
-import org.ums.manager.StudentRecordManager;
+import org.ums.manager.RoleManager;
+import org.ums.manager.StudentManager;
 import org.ums.util.UmsUtils;
 
 import javax.json.JsonObject;
@@ -29,20 +26,20 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.Base64;
-import java.util.List;
 
 @Component
 public class StudentResourceHelper extends ResourceHelper<Student, MutableStudent, String> {
   @Autowired
-  @Qualifier("roleManager")
-  ContentManager<Role, MutableRole, Integer> mRoleManager;
+  RoleManager mRoleManager;
+
   @Autowired
   BinaryContentManager<byte[]> mBinaryContentManager;
+
   @Autowired
-  @Qualifier("studentManager")
-  private ContentManager<Student, MutableStudent, String> mManager;
+  private StudentManager mManager;
+
   @Autowired
-  private List<Builder<Student, MutableStudent>> mBuilders;
+  private StudentBuilder mBuilder;
 
   @Override
   @Transactional
@@ -50,9 +47,7 @@ public class StudentResourceHelper extends ResourceHelper<Student, MutableStuden
     MutableStudent mutableStudent = new PersistentStudent();
 
     LocalCache localCache = new LocalCache();
-    for (Builder<Student, MutableStudent> builder : mBuilders) {
-      builder.build(mutableStudent, pJsonObject, localCache);
-    }
+    getBuilder().build(mutableStudent, pJsonObject, localCache);
 
     mutableStudent.setCurrentYear(UmsUtils.FIRST);
     mutableStudent.setCurrentAcademicSemester(UmsUtils.FIRST);
@@ -92,13 +87,13 @@ public class StudentResourceHelper extends ResourceHelper<Student, MutableStuden
   }
 
   @Override
-  protected ContentManager<Student, MutableStudent, String> getContentManager() {
+  protected StudentManager getContentManager() {
     return mManager;
   }
 
   @Override
-  protected List<Builder<Student, MutableStudent>> getBuilders() {
-    return mBuilders;
+  protected StudentBuilder getBuilder() {
+    return mBuilder;
   }
 
   @Override

@@ -1,5 +1,7 @@
-package org.ums.academic.builder;
+package org.ums.common.builder;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.mutable.MutableStudent;
 import org.ums.domain.model.readOnly.Department;
@@ -13,14 +15,12 @@ import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.text.DateFormat;
 
+@Component
 public class StudentBuilder implements Builder<Student, MutableStudent> {
+  @Autowired
   private DateFormat mDateFormat;
+  @Autowired
   private BinaryContentManager<byte[]> mBinaryContentManager;
-
-  public StudentBuilder(final DateFormat pDateFormat, final BinaryContentManager<byte[]> pBinaryContentManager) {
-    mDateFormat = pDateFormat;
-    mBinaryContentManager = pBinaryContentManager;
-  }
 
   public void build(final JsonObjectBuilder pBuilder,
                     final Student pStudent,

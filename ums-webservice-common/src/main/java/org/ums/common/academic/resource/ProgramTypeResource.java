@@ -4,9 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.common.Resource;
-import org.ums.domain.model.mutable.MutableProgramType;
-import org.ums.domain.model.readOnly.ProgramType;
-import org.ums.manager.ContentManager;
+import org.ums.manager.ProgramTypeManager;
 
 import javax.json.JsonObject;
 import javax.ws.rs.*;
@@ -21,7 +19,7 @@ import javax.ws.rs.core.Response;
 public class ProgramTypeResource extends MutableProgramTypeResource {
   @Autowired
   @Qualifier("programTypeManager")
-  ContentManager<ProgramType, MutableProgramType, Integer> mManager;
+  ProgramTypeManager mManager;
 
   @GET
   @Path("/all")

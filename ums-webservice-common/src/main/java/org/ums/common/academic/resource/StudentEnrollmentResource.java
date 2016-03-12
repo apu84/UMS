@@ -4,7 +4,7 @@ package org.ums.common.academic.resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import org.ums.academic.builder.Builder;
+import org.ums.common.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.common.Resource;
 import org.ums.domain.model.mutable.MutableEnrollmentFromTo;

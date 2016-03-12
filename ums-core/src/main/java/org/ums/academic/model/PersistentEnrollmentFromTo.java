@@ -8,14 +8,15 @@ import org.ums.domain.model.mutable.MutableProgram;
 import org.ums.domain.model.readOnly.Program;
 import org.ums.manager.ContentManager;
 import org.ums.manager.EnrollmentFromToManager;
+import org.ums.manager.ProgramManager;
 
 public class PersistentEnrollmentFromTo implements MutableEnrollmentFromTo {
   private static EnrollmentFromToManager sEnrollmentFromToManager;
-  private static ContentManager<Program, MutableProgram, Integer> sProgramManager;
+  private static ProgramManager sProgramManager;
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sProgramManager = (ContentManager<Program, MutableProgram, Integer>) applicationContext.getBean("programManager");
+    sProgramManager = applicationContext.getBean("programManager", ProgramManager.class);
     sEnrollmentFromToManager = applicationContext.getBean("enrollmentFromToManager", EnrollmentFromToManager.class);
   }
 

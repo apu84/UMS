@@ -5,9 +5,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.common.Resource;
 import org.ums.common.academic.resource.helper.CourseResourceHelper;
-import org.ums.domain.model.readOnly.Course;
-import org.ums.domain.model.mutable.MutableCourse;
-import org.ums.manager.ContentManager;
+import org.ums.manager.CourseManager;
 
 import javax.json.JsonObject;
 import javax.ws.rs.*;
@@ -25,7 +23,7 @@ public class CourseResource extends MutableCourseResource {
 
   @Autowired
   @Qualifier("courseManager")
-  ContentManager<Course, MutableCourse, String> mManager;
+  CourseManager mManager;
 
   @GET
   @Path("/all")

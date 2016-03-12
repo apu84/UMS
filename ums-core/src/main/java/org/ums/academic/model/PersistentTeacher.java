@@ -6,9 +6,15 @@ import org.ums.domain.model.mutable.MutableDepartment;
 import org.ums.domain.model.mutable.MutableTeacher;
 import org.ums.domain.model.readOnly.Department;
 import org.ums.manager.ContentManager;
+import org.ums.manager.DepartmentManager;
 
 public class PersistentTeacher implements MutableTeacher {
-  private static ContentManager<Department, MutableDepartment, String> sDepartmentManager;
+  private static DepartmentManager sDepartmentManager;
+
+  static {
+    ApplicationContext applicationContext = AppContext.getApplicationContext();
+    sDepartmentManager = applicationContext.getBean("departmentManager", DepartmentManager.class);
+  }
   private String mId;
   private String mName;
   private String mDesignationName;
@@ -18,11 +24,6 @@ public class PersistentTeacher implements MutableTeacher {
   private Department mDepartment;
   private boolean mStatus;
   private String mLastModified;
-
-  static {
-    ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sDepartmentManager = (ContentManager<Department, MutableDepartment, String>) applicationContext.getBean("departmentManager");
-  }
 
   @Override
   public void setName(String pName) {

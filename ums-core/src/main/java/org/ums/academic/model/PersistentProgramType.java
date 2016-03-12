@@ -6,13 +6,14 @@ import org.ums.context.AppContext;
 import org.ums.domain.model.mutable.MutableProgramType;
 import org.ums.domain.model.readOnly.ProgramType;
 import org.ums.manager.ContentManager;
+import org.ums.manager.ProgramTypeManager;
 
 public class PersistentProgramType implements MutableProgramType {
-  private static ContentManager<ProgramType, MutableProgramType, Integer> sManager;
+  private static ProgramTypeManager sManager;
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sManager = (ContentManager<ProgramType, MutableProgramType, Integer>)applicationContext.getBean("programTypeManager");
+    sManager = applicationContext.getBean("programTypeManager", ProgramTypeManager.class);
   }
 
   int mId;

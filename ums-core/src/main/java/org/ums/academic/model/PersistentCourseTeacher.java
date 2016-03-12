@@ -5,6 +5,7 @@ import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.mutable.MutableCourseTeacher;
 import org.ums.domain.model.readOnly.Course;
+import org.ums.domain.model.readOnly.CourseTeacher;
 import org.ums.domain.model.readOnly.Semester;
 import org.ums.domain.model.readOnly.Teacher;
 import org.ums.manager.CourseManager;
@@ -20,10 +21,10 @@ public class PersistentCourseTeacher implements MutableCourseTeacher {
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sTeacherManager = (TeacherManager) applicationContext.getBean("teacherManager");
-    sCourseManager = (CourseManager) applicationContext.getBean("courseManager");
-    sSemesterManager = (SemesterManager) applicationContext.getBean("semesterManager");
-    sCourseTeacherManager = (CourseTeacherManager) applicationContext.getBean("courseTeacherManager");
+    sTeacherManager = applicationContext.getBean("teacherManager", TeacherManager.class);
+    sCourseManager = applicationContext.getBean("courseManager", CourseManager.class);
+    sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
+    sCourseTeacherManager = applicationContext.getBean("courseTeacherManager", CourseTeacherManager.class);
   }
 
   private String mId;

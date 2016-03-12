@@ -6,16 +6,17 @@ import org.ums.context.AppContext;
 import org.ums.domain.model.mutable.MutableRole;
 import org.ums.domain.model.readOnly.Role;
 import org.ums.manager.ContentManager;
+import org.ums.manager.RoleManager;
 
 import java.util.List;
 import java.util.Set;
 
 public class PersistentRole implements MutableRole {
-  private static ContentManager<Role, MutableRole, Integer> sRoleManager;
+  private static RoleManager sRoleManager;
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sRoleManager = (ContentManager<Role, MutableRole, Integer>) applicationContext.getBean("roleManager");
+    sRoleManager = applicationContext.getBean("roleManager", RoleManager.class);
   }
 
   private Integer mId;

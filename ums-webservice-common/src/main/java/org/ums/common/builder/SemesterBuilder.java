@@ -1,27 +1,25 @@
-package org.ums.academic.builder;
+package org.ums.common.builder;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
-import org.ums.domain.model.mutable.MutableProgramType;
 import org.ums.domain.model.mutable.MutableSemester;
 import org.ums.domain.model.readOnly.ProgramType;
 import org.ums.domain.model.readOnly.Semester;
-import org.ums.manager.ContentManager;
+import org.ums.manager.ProgramTypeManager;
 
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.text.DateFormat;
 
+@Component
 public class SemesterBuilder implements Builder<Semester, MutableSemester> {
+  @Autowired
   DateFormat mDateFormat;
-  ContentManager<ProgramType, MutableProgramType, Integer> mProgramTypeManager;
-
-  public SemesterBuilder(final DateFormat pDateFormat,
-                         final ContentManager<ProgramType, MutableProgramType, Integer> pProgramTypeManager) {
-    mDateFormat = pDateFormat;
-    mProgramTypeManager = pProgramTypeManager;
-  }
+  @Autowired
+  ProgramTypeManager mProgramTypeManager;
 
   public void build(final JsonObjectBuilder pBuilder, final Semester pSemester, final UriInfo pUriInfo, final LocalCache pLocalCache) throws Exception {
     pBuilder.add("id", pSemester.getId());

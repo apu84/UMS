@@ -1,7 +1,8 @@
-package org.ums.academic.builder;
+package org.ums.common.builder;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.readOnly.CourseGroup;
 import org.ums.domain.model.mutable.MutableCourseGroup;
@@ -13,6 +14,7 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
 
+@Component
 public class CourseGroupBuilder implements Builder<CourseGroup, MutableCourseGroup> {
   @Autowired
   @Qualifier("syllabusManager")

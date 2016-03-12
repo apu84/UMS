@@ -1,30 +1,28 @@
-package org.ums.academic.builder;
+package org.ums.common.builder;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 import org.ums.academic.model.PersistentProgram;
 import org.ums.academic.model.PersistentSemester;
 import org.ums.cache.LocalCache;
-import org.ums.domain.model.mutable.MutableProgram;
-import org.ums.domain.model.mutable.MutableSemester;
 import org.ums.domain.model.mutable.MutableSyllabus;
 import org.ums.domain.model.readOnly.Program;
 import org.ums.domain.model.readOnly.Semester;
 import org.ums.domain.model.readOnly.Syllabus;
-import org.ums.manager.ContentManager;
+import org.ums.manager.ProgramManager;
+import org.ums.manager.SemesterManager;
 
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
 
+@Component
 public class SyllabusBuilder implements Builder<Syllabus, MutableSyllabus> {
   @Autowired
-  @Qualifier("semesterManager")
-  ContentManager<Semester, MutableSemester, Integer> mSemesterManager;
+  SemesterManager mSemesterManager;
 
   @Autowired
-  @Qualifier("programManager")
-  ContentManager<Program, MutableProgram, Integer> mProgramManager;
+  ProgramManager mProgramManager;
 
   @Override
   public void build(JsonObjectBuilder pBuilder, Syllabus pReadOnly, UriInfo pUriInfo, final LocalCache pLocalCache) throws Exception {

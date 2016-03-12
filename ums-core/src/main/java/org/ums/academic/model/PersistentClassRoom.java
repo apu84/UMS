@@ -4,20 +4,19 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.util.StringUtils;
 import org.ums.context.AppContext;
 import org.ums.domain.model.mutable.MutableClassRoom;
-import org.ums.domain.model.mutable.MutableDepartment;
-import org.ums.domain.model.readOnly.ClassRoom;
 import org.ums.domain.model.readOnly.Department;
 import org.ums.enums.ClassRoomType;
-import org.ums.manager.ContentManager;
+import org.ums.manager.ClassRoomManager;
+import org.ums.manager.DepartmentManager;
 
 public class PersistentClassRoom  implements MutableClassRoom {
-  private static ContentManager<ClassRoom, MutableClassRoom, Integer> sClassRoomManager;
-  private static ContentManager<Department, MutableDepartment, String> sDepartmentManager;
+  private static ClassRoomManager sClassRoomManager;
+  private static DepartmentManager sDepartmentManager;
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sClassRoomManager = (ContentManager<ClassRoom, MutableClassRoom, Integer>)applicationContext.getBean("classRoomManager");
-    sDepartmentManager = (ContentManager<Department, MutableDepartment, String>)applicationContext.getBean("departmentManager");
+    sClassRoomManager = applicationContext.getBean("classRoomManager", ClassRoomManager.class);
+    sDepartmentManager = applicationContext.getBean("departmentManager", DepartmentManager.class);
   }
 
   private int mId;

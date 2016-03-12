@@ -6,16 +6,17 @@ import org.ums.domain.model.dto.ExamRoutineDto;
 import org.ums.domain.model.mutable.MutableExamRoutine;
 import org.ums.domain.model.readOnly.ExamRoutine;
 import org.ums.manager.ContentManager;
+import org.ums.manager.ExamRoutineManager;
 
 import java.util.List;
 
 public class PersistentExamRoutine implements MutableExamRoutine {
 
-  private static ContentManager<ExamRoutine, MutableExamRoutine, Object> sExamRoutineManager;
+  private static ExamRoutineManager sExamRoutineManager;
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sExamRoutineManager = (ContentManager<ExamRoutine, MutableExamRoutine, Object>) applicationContext.getBean("examRoutineManager");
+    sExamRoutineManager = applicationContext.getBean("examRoutineManager", ExamRoutineManager.class);
   }
 
 

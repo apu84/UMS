@@ -7,18 +7,20 @@ import org.ums.domain.model.mutable.MutableSemester;
 import org.ums.domain.model.readOnly.ProgramType;
 import org.ums.domain.model.readOnly.Semester;
 import org.ums.manager.ContentManager;
+import org.ums.manager.ProgramTypeManager;
+import org.ums.manager.SemesterManager;
 
 import java.util.Date;
 
 public class PersistentSemester implements MutableSemester {
 
-  private static ContentManager<Semester, MutableSemester, Integer> sSemesterManager;
-  private static ContentManager<ProgramType, MutableProgramType, Integer> sProgramTypeManager;
+  private static SemesterManager sSemesterManager;
+  private static ProgramTypeManager sProgramTypeManager;
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sSemesterManager = (ContentManager<Semester, MutableSemester, Integer>)applicationContext.getBean("semesterManager");
-    sProgramTypeManager = (ContentManager<ProgramType, MutableProgramType, Integer>)applicationContext.getBean("programTypeManager");
+    sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
+    sProgramTypeManager = applicationContext.getBean("programTypeManager", ProgramTypeManager.class);
   }
 
   private int mId;

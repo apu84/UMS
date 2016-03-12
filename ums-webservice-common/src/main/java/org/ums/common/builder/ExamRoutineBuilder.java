@@ -1,9 +1,8 @@
-package org.ums.academic.builder;
+package org.ums.common.builder;
 
-import org.ums.academic.model.PersistentCourseTeacher;
+import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.dto.ExamRoutineDto;
-import org.ums.domain.model.mutable.MutableCourseTeacher;
 import org.ums.domain.model.mutable.MutableExamRoutine;
 import org.ums.domain.model.readOnly.*;
 
@@ -17,6 +16,7 @@ import java.util.List;
 /**
  * Created by Ifti on 27-Feb-16.
  */
+@Component
 public class ExamRoutineBuilder  implements Builder<ExamRoutine, MutableExamRoutine> {
 
   @Override

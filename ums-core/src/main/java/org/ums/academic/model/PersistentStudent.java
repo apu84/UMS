@@ -2,27 +2,30 @@ package org.ums.academic.model;
 
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
-import org.ums.domain.model.mutable.MutableDepartment;
-import org.ums.domain.model.mutable.MutableProgram;
 import org.ums.domain.model.mutable.MutableStudent;
-import org.ums.domain.model.readOnly.*;
-import org.ums.manager.ContentManager;
+import org.ums.domain.model.readOnly.Department;
+import org.ums.domain.model.readOnly.Program;
+import org.ums.domain.model.readOnly.Semester;
+import org.ums.domain.model.readOnly.User;
+import org.ums.manager.DepartmentManager;
+import org.ums.manager.ProgramManager;
 import org.ums.manager.SemesterManager;
+import org.ums.manager.StudentManager;
 
 import java.util.Date;
 
 public class PersistentStudent implements MutableStudent {
-  private static ContentManager<Department, MutableDepartment, String> sDepartmentManager;
+  private static DepartmentManager sDepartmentManager;
   private static SemesterManager sSemesterManager;
-  private static ContentManager<Program, MutableProgram, Integer> sProgramManager;
-  private static ContentManager<Student, MutableStudent, String> sStudentManager;
+  private static ProgramManager sProgramManager;
+  private static StudentManager sStudentManager;
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sDepartmentManager = (ContentManager) applicationContext.getBean("departmentManager");
-    sSemesterManager = (SemesterManager) applicationContext.getBean("semesterManager");
-    sProgramManager = (ContentManager<Program, MutableProgram, Integer>) applicationContext.getBean("programManager");
-    sStudentManager = (ContentManager<Student, MutableStudent, String>) applicationContext.getBean("studentManager");
+    sDepartmentManager = applicationContext.getBean("departmentManager", DepartmentManager.class);
+    sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
+    sProgramManager = applicationContext.getBean("programManager", ProgramManager.class);
+    sStudentManager = applicationContext.getBean("studentManager", StudentManager.class);
   }
 
   private String mId;

@@ -1,5 +1,7 @@
-package org.ums.academic.builder;
+package org.ums.common.builder;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.mutable.MutableCourseTeacher;
@@ -15,17 +17,14 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
 
+@Component
 public class CourseTeacherBuilder implements Builder<CourseTeacher, MutableCourseTeacher> {
-
+  @Autowired
   private CourseManager mCourseManager;
+  @Autowired
   private TeacherManager mTeacherManager;
+  @Autowired
   private SemesterManager mSemesterManager;
-
-  public CourseTeacherBuilder(CourseManager pCourseManager, TeacherManager pTeacherManager, SemesterManager pSemesterManager) {
-    mCourseManager = pCourseManager;
-    mTeacherManager = pTeacherManager;
-    mSemesterManager = pSemesterManager;
-  }
 
   @Override
   public void build(JsonObjectBuilder pBuilder, CourseTeacher pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) throws Exception {

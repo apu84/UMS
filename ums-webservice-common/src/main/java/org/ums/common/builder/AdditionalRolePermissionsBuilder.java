@@ -1,6 +1,8 @@
-package org.ums.academic.builder;
+package org.ums.common.builder;
 
 import org.apache.shiro.SecurityUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.mutable.MutableAdditionalRolePermissions;
@@ -15,9 +17,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@Component
 public class AdditionalRolePermissionsBuilder implements Builder<AdditionalRolePermissions, MutableAdditionalRolePermissions> {
-
+  @Autowired
   NavigationManager mNavigationManager;
+  @Autowired
   DateFormat mDateFormat;
 
   public AdditionalRolePermissionsBuilder(final NavigationManager pNavigationManager,

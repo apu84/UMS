@@ -1,4 +1,4 @@
-package org.ums.academic.builder;
+package org.ums.common.builder;
 
 import org.ums.cache.LocalCache;
 

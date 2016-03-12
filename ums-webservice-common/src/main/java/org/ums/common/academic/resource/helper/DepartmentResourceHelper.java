@@ -1,36 +1,33 @@
 package org.ums.common.academic.resource.helper;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import org.ums.academic.builder.Builder;
 import org.ums.common.academic.resource.ResourceHelper;
-import org.ums.domain.model.readOnly.Department;
+import org.ums.common.builder.DepartmentBuilder;
 import org.ums.domain.model.mutable.MutableDepartment;
-import org.ums.manager.ContentManager;
+import org.ums.domain.model.readOnly.Department;
+import org.ums.manager.DepartmentManager;
 
 import javax.json.JsonObject;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.util.List;
 
 @Component
 public class DepartmentResourceHelper extends ResourceHelper<Department, MutableDepartment, String> {
   @Autowired
-  @Qualifier("departmentManager")
-  private ContentManager<Department, MutableDepartment, String> mManager;
+  private DepartmentManager mManager;
 
   @Autowired
-  private List<Builder<Department, MutableDepartment>> mBuilders;
+  private DepartmentBuilder mBuilder;
 
   @Override
-  public ContentManager<Department, MutableDepartment, String> getContentManager() {
+  public DepartmentManager getContentManager() {
     return mManager;
   }
 
   @Override
-  public List<Builder<Department, MutableDepartment>> getBuilders() {
-    return mBuilders;
+  public DepartmentBuilder getBuilder() {
+    return mBuilder;
   }
 
   public Response post(final JsonObject pJsonObject, final UriInfo pUriInfo) throws Exception {

@@ -5,16 +5,17 @@ import org.ums.context.AppContext;
 import org.ums.domain.model.mutable.MutableSemesterSyllabusMap;
 import org.ums.domain.model.readOnly.*;
 import org.ums.manager.ContentManager;
+import org.ums.manager.SemesterSyllabusMapManager;
 
 /**
  * Created by Ifti on 08-Jan-16.
  */
 public class PersistentSemesterSyllabusMap implements MutableSemesterSyllabusMap {
 
-  private static ContentManager<SemesterSyllabusMap, MutableSemesterSyllabusMap, Integer> sSemesterSyllabusMapManager;
+  private static SemesterSyllabusMapManager sSemesterSyllabusMapManager;
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sSemesterSyllabusMapManager = (ContentManager<SemesterSyllabusMap, MutableSemesterSyllabusMap, Integer>)applicationContext.getBean("semesterSyllabusMapManager");
+    sSemesterSyllabusMapManager = applicationContext.getBean("semesterSyllabusMapManager", SemesterSyllabusMapManager.class);
   }
 
   private int mId;

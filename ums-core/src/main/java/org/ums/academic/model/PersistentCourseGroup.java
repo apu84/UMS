@@ -7,15 +7,17 @@ import org.ums.domain.model.mutable.MutableCourseGroup;
 import org.ums.domain.model.mutable.MutableSyllabus;
 import org.ums.domain.model.readOnly.Syllabus;
 import org.ums.manager.ContentManager;
+import org.ums.manager.CourseGroupManager;
+import org.ums.manager.SyllabusManager;
 
 public class PersistentCourseGroup implements MutableCourseGroup {
-  private static ContentManager<Syllabus, MutableSyllabus, String> sSyllabusManager;
-  private static ContentManager<CourseGroup, MutableCourseGroup, Integer> sCourseGroupManager;
+  private static SyllabusManager sSyllabusManager;
+  private static CourseGroupManager sCourseGroupManager;
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sSyllabusManager = (ContentManager) applicationContext.getBean("syllabusManager");
-    sCourseGroupManager = (ContentManager) applicationContext.getBean("courseGroupManager");
+    sSyllabusManager = applicationContext.getBean("syllabusManager", SyllabusManager.class);
+    sCourseGroupManager = applicationContext.getBean("courseGroupManager", CourseGroupManager.class);
   }
 
   private int mId;

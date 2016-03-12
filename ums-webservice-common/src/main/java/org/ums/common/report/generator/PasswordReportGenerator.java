@@ -10,11 +10,8 @@ import org.pentaho.reporting.libraries.resourceloader.ResourceManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import org.ums.domain.model.mutable.MutableStudent;
-import org.ums.domain.model.mutable.MutableUser;
-import org.ums.domain.model.readOnly.Student;
-import org.ums.domain.model.readOnly.User;
-import org.ums.manager.ContentManager;
+import org.ums.manager.StudentManager;
+import org.ums.manager.UserManager;
 import org.ums.report.generator.AbstractReportGenerator;
 
 import java.net.URL;
@@ -24,11 +21,11 @@ import java.util.Map;
 public class PasswordReportGenerator extends AbstractReportGenerator {
   @Autowired
   @Qualifier("userManager")
-  ContentManager<User, MutableUser, String> mUserManager;
+  UserManager mUserManager;
 
   @Autowired
   @Qualifier("studentManager")
-  ContentManager<Student, MutableStudent, String> mStudentManager;
+  StudentManager mStudentManager;
 
   private static final String QUERY_NAME = "ReportQuery";
 

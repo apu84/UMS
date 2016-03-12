@@ -1,5 +1,6 @@
-package org.ums.academic.builder;
+package org.ums.common.builder;
 
+import org.springframework.stereotype.Component;
 import org.ums.academic.model.PersistentProgram;
 import org.ums.academic.model.PersistentSemester;
 import org.ums.cache.LocalCache;
@@ -12,9 +13,7 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
 
-/**
- * Created by User on 1/16/2016.
- */
+@Component
 public class SemesterSyllabusMapsBuilder implements Builder<SemesterSyllabusMapDto, MutableSemesterSyllabusMapDto> {
   @Override
   public void build(JsonObjectBuilder pBuilder, SemesterSyllabusMapDto pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) throws Exception {

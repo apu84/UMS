@@ -1,5 +1,6 @@
-package org.ums.academic.builder;
+package org.ums.common.builder;
 
+import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.mutable.MutableTeacher;
 import org.ums.domain.model.readOnly.Department;
@@ -9,7 +10,7 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
 
-
+@Component
 public class TeacherBuilder implements Builder<Teacher, MutableTeacher> {
   @Override
   public void build(JsonObjectBuilder pBuilder, Teacher pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) throws Exception {

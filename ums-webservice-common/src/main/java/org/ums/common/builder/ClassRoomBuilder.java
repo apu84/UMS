@@ -1,25 +1,17 @@
-package org.ums.academic.builder;
+package org.ums.common.builder;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.ums.academic.model.PersistentClassRoom;
-import org.ums.academic.model.PersistentProgram;
-import org.ums.academic.model.PersistentSemester;
+import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.mutable.*;
 import org.ums.domain.model.readOnly.*;
 import org.ums.enums.ClassRoomType;
-import org.ums.enums.CourseType;
-import org.ums.manager.ContentManager;
 
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
 
-
+@Component
 public class ClassRoomBuilder implements Builder<ClassRoom, MutableClassRoom> {
-
-
   @Override
   public void build(JsonObjectBuilder pBuilder, ClassRoom pReadOnly, UriInfo pUriInfo, final LocalCache pLocalCache) throws Exception {
     pBuilder.add("id", pReadOnly.getId());

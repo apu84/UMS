@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import org.ums.common.Resource;
 import org.ums.domain.model.mutable.MutableProgram;
 import org.ums.domain.model.readOnly.Program;
-import org.ums.manager.ContentManager;
+import org.ums.manager.ProgramManager;
 
 import javax.json.JsonObject;
 import javax.ws.rs.*;
@@ -24,7 +24,7 @@ public class ProgramResource extends Resource {
 
   @Autowired
   @Qualifier("programManager")
-  ContentManager<Program, MutableProgram, Integer> mManager;
+  ProgramManager mManager;
 
   @GET
   @Path("/all")

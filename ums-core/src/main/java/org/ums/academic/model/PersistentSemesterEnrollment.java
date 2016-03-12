@@ -3,12 +3,11 @@ package org.ums.academic.model;
 
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
-import org.ums.domain.model.mutable.MutableProgram;
 import org.ums.domain.model.mutable.MutableSemesterEnrollment;
 import org.ums.domain.model.readOnly.Program;
 import org.ums.domain.model.readOnly.Semester;
 import org.ums.domain.model.readOnly.SemesterEnrollment;
-import org.ums.manager.ContentManager;
+import org.ums.manager.ProgramManager;
 import org.ums.manager.SemesterEnrollmentManager;
 import org.ums.manager.SemesterManager;
 
@@ -16,12 +15,12 @@ import java.util.Date;
 
 public class PersistentSemesterEnrollment implements MutableSemesterEnrollment {
   private static SemesterManager sSemesterManager;
-  private static ContentManager<Program, MutableProgram, Integer> sProgramManager;
+  private static ProgramManager sProgramManager;
   private static SemesterEnrollmentManager sSemesterEnrollmentManager;
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sProgramManager = (ContentManager<Program, MutableProgram, Integer>) applicationContext.getBean("programManager");
+    sProgramManager = applicationContext.getBean("programManager", ProgramManager.class);
     sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
     sSemesterEnrollmentManager = applicationContext.getBean("semesterEnrollmentManager", SemesterEnrollmentManager.class);
   }
