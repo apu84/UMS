@@ -80,8 +80,16 @@ public class PersistentSemesterEnrollmentDao extends SemesterEnrollmentDaoDecora
   @Override
   public List<SemesterEnrollment> getEnrollmentStatus(SemesterEnrollment.Type pType, Integer pProgramId,
                                                       Integer pSemesterId) {
-    String query = SELECT_ALL + "WHERE ENROLL_TYPE = ? AND PROGRAM_ID = ? AND SEMESTER_ID = ?";
-    return mJdbcTemplate.query(query, new Object[]{pType.getValue(), pProgramId, pSemesterId}, new SemesterEnrollmentRowMapper());
+    String query = SELECT_ALL + "WHERE %s AND PROGRAM_ID = ? AND SEMESTER_ID = ?";
+    if (pType == SemesterEnrollment.Type.TEMPORARY) {
+      query = String.format(query, "(ENROLL_TYPE = ? OR ENROLL_TYPE = ?)");
+      return mJdbcTemplate.query(query, new Object[]{SemesterEnrollment.Type.TEMPORARY.getValue(),
+          SemesterEnrollment.Type.PERMANENT.getValue(),
+          pProgramId, pSemesterId}, new SemesterEnrollmentRowMapper());
+    } else {
+      query = String.format(query, "ENROLL_TYPE = ?");
+      return mJdbcTemplate.query(query, new Object[]{pType.getValue(), pProgramId, pSemesterId}, new SemesterEnrollmentRowMapper());
+    }
   }
 
   @Override
