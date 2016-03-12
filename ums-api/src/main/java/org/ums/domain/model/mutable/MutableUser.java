@@ -2,8 +2,8 @@ package org.ums.domain.model.mutable;
 
 import org.ums.domain.model.common.Mutable;
 import org.ums.domain.model.common.MutableIdentifier;
-import org.ums.domain.model.readOnly.Role;
-import org.ums.domain.model.readOnly.User;
+import org.ums.domain.model.immutable.Role;
+import org.ums.domain.model.immutable.User;
 
 import java.util.List;
 

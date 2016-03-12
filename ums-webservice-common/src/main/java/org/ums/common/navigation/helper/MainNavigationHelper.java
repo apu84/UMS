@@ -6,12 +6,11 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import org.ums.common.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.common.academic.resource.ResourceHelper;
 import org.ums.common.builder.NavigationBuilder;
 import org.ums.domain.model.mutable.MutableNavigation;
-import org.ums.domain.model.readOnly.*;
+import org.ums.domain.model.immutable.*;
 import org.ums.manager.*;
 import org.ums.processor.navigation.NavigationProcessor;
 

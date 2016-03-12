@@ -2,12 +2,12 @@ package org.ums.common.academic.resource.helper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ums.academic.model.PersistentCourseTeacher;
+import org.ums.persistent.model.PersistentCourseTeacher;
 import org.ums.cache.LocalCache;
 import org.ums.common.academic.resource.ResourceHelper;
 import org.ums.common.builder.CourseTeacherBuilder;
 import org.ums.domain.model.mutable.MutableCourseTeacher;
-import org.ums.domain.model.readOnly.CourseTeacher;
+import org.ums.domain.model.immutable.CourseTeacher;
 import org.ums.enums.CourseCategory;
 import org.ums.manager.CourseTeacherManager;
 

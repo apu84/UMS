@@ -1,17 +1,16 @@
 package org.ums.services.academic;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-import org.ums.academic.model.PersistentSemesterEnrollment;
-import org.ums.academic.model.PersistentStudentRecord;
+import org.ums.persistent.model.PersistentSemesterEnrollment;
+import org.ums.persistent.model.PersistentStudentRecord;
 import org.ums.domain.model.mutable.MutableProgram;
 import org.ums.domain.model.mutable.MutableSemesterEnrollment;
 import org.ums.domain.model.mutable.MutableStudent;
 import org.ums.domain.model.mutable.MutableStudentRecord;
-import org.ums.domain.model.readOnly.*;
+import org.ums.domain.model.immutable.*;
 import org.ums.manager.*;
 import org.ums.message.MessageResource;
 import org.ums.response.type.GenericMessageResponse;

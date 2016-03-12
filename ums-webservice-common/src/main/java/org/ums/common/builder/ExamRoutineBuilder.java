@@ -2,11 +2,9 @@ package org.ums.common.builder;
 
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
-import org.ums.common.builder.Builder;
 import org.ums.domain.model.dto.ExamRoutineDto;
-import org.ums.domain.model.mutable.MutableCourseTeacher;
 import org.ums.domain.model.mutable.MutableExamRoutine;
-import org.ums.domain.model.readOnly.*;
+import org.ums.domain.model.immutable.*;
 
 import javax.json.JsonArray;
 import javax.json.JsonObject;

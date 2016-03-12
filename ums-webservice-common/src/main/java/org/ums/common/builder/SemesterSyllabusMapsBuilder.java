@@ -1,8 +1,8 @@
 package org.ums.common.builder;
 
 import org.springframework.stereotype.Component;
-import org.ums.academic.model.PersistentProgram;
-import org.ums.academic.model.PersistentSemester;
+import org.ums.persistent.model.PersistentProgram;
+import org.ums.persistent.model.PersistentSemester;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.dto.MutableSemesterSyllabusMapDto;
 import org.ums.domain.model.dto.SemesterSyllabusMapDto;

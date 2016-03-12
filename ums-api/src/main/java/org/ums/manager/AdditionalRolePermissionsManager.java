@@ -1,9 +1,9 @@
 package org.ums.manager;
 
 import org.ums.domain.model.mutable.MutableAdditionalRolePermissions;
-import org.ums.domain.model.readOnly.AdditionalRolePermissions;
-import org.ums.domain.model.readOnly.Role;
-import org.ums.domain.model.readOnly.User;
+import org.ums.domain.model.immutable.AdditionalRolePermissions;
+import org.ums.domain.model.immutable.Role;
+import org.ums.domain.model.immutable.User;
 
 import java.util.Date;
 import java.util.List;

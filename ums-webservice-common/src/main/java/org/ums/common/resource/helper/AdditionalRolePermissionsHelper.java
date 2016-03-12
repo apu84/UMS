@@ -4,12 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.ums.common.builder.AdditionalRolePermissionsBuilder;
-import org.ums.common.builder.Builder;
-import org.ums.academic.model.PersistentAdditionalRolePermissions;
+import org.ums.persistent.model.PersistentAdditionalRolePermissions;
 import org.ums.cache.LocalCache;
 import org.ums.common.academic.resource.ResourceHelper;
 import org.ums.domain.model.mutable.MutableAdditionalRolePermissions;
-import org.ums.domain.model.readOnly.AdditionalRolePermissions;
+import org.ums.domain.model.immutable.AdditionalRolePermissions;
 import org.ums.manager.AdditionalRolePermissionsManager;
 import org.ums.manager.NavigationManager;
 

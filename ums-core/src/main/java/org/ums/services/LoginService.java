@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.ums.domain.model.dto.ResponseDto;
-import org.ums.domain.model.readOnly.User;
+import org.ums.domain.model.immutable.User;
 import org.ums.manager.UserManager;
 import org.ums.util.Constants;
 

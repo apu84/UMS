@@ -6,8 +6,8 @@ import org.ums.cache.LocalCache;
 import org.ums.common.academic.resource.ResourceHelper;
 import org.ums.common.builder.TeacherBuilder;
 import org.ums.domain.model.mutable.MutableTeacher;
-import org.ums.domain.model.readOnly.Department;
-import org.ums.domain.model.readOnly.Teacher;
+import org.ums.domain.model.immutable.Department;
+import org.ums.domain.model.immutable.Teacher;
 import org.ums.manager.DepartmentManager;
 import org.ums.manager.TeacherManager;
 

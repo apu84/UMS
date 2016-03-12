@@ -1,6 +1,6 @@
 package org.ums.services.academic;
 
-import org.ums.domain.model.readOnly.SemesterEnrollment;
+import org.ums.domain.model.immutable.SemesterEnrollment;
 import org.ums.response.type.GenericResponse;
 
 import java.util.Map;

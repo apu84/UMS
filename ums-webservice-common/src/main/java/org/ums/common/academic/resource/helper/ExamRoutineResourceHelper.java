@@ -2,12 +2,12 @@ package org.ums.common.academic.resource.helper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ums.academic.model.PersistentExamRoutine;
+import org.ums.persistent.model.PersistentExamRoutine;
 import org.ums.common.academic.resource.ResourceHelper;
 import org.ums.common.builder.ExamRoutineBuilder;
 import org.ums.domain.model.dto.ExamRoutineDto;
 import org.ums.domain.model.mutable.MutableExamRoutine;
-import org.ums.domain.model.readOnly.ExamRoutine;
+import org.ums.domain.model.immutable.ExamRoutine;
 import org.ums.manager.ExamRoutineManager;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 

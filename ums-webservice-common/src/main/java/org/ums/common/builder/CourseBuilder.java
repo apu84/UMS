@@ -1,21 +1,17 @@
 package org.ums.common.builder;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import org.ums.academic.model.PersistentDepartment;
+import org.ums.persistent.model.PersistentDepartment;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.mutable.MutableCourse;
-import org.ums.domain.model.mutable.MutableDepartment;
-import org.ums.domain.model.mutable.MutableSyllabus;
-import org.ums.domain.model.readOnly.Course;
-import org.ums.domain.model.readOnly.CourseGroup;
-import org.ums.domain.model.readOnly.Department;
-import org.ums.domain.model.readOnly.Syllabus;
+import org.ums.domain.model.immutable.Course;
+import org.ums.domain.model.immutable.CourseGroup;
+import org.ums.domain.model.immutable.Department;
+import org.ums.domain.model.immutable.Syllabus;
 import org.ums.enums.CourseCategory;
 import org.ums.enums.CourseType;
-import org.ums.manager.ContentManager;
 import org.ums.manager.CourseGroupManager;
 import org.ums.manager.DepartmentManager;
 import org.ums.manager.SyllabusManager;

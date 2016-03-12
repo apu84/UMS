@@ -1,10 +1,10 @@
 package org.ums.common.builder;
 
 import org.springframework.stereotype.Component;
-import org.ums.academic.model.PersistentSyllabus;
+import org.ums.persistent.model.PersistentSyllabus;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.mutable.MutableSemesterSyllabusMap;
-import org.ums.domain.model.readOnly.SemesterSyllabusMap;
+import org.ums.domain.model.immutable.SemesterSyllabusMap;
 
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;

@@ -1,9 +1,7 @@
 package org.ums.manager;
 
 import org.ums.domain.model.mutable.MutableClassRoom;
-import org.ums.domain.model.mutable.MutableSemester;
-import org.ums.domain.model.readOnly.ClassRoom;
-import org.ums.domain.model.readOnly.Semester;
+import org.ums.domain.model.immutable.ClassRoom;
 
 import java.util.List;
 

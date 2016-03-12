@@ -2,14 +2,12 @@ package org.ums.common.academic.resource;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import org.ums.common.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.common.Resource;
-import org.ums.domain.model.mutable.MutableEnrollmentFromTo;
-import org.ums.domain.model.readOnly.EnrollmentFromTo;
-import org.ums.domain.model.readOnly.SemesterEnrollment;
+import org.ums.common.builder.EnrollmentFromToBuilder;
+import org.ums.domain.model.immutable.EnrollmentFromTo;
+import org.ums.domain.model.immutable.SemesterEnrollment;
 import org.ums.manager.EnrollmentFromToManager;
 import org.ums.manager.SemesterEnrollmentManager;
 import org.ums.manager.StudentRecordManager;
@@ -42,10 +40,8 @@ public class StudentEnrollmentResource extends Resource {
   @Autowired
   EnrollmentService mEnrollmentService;
   @Autowired
-  @Qualifier("getEnrollmentFromToBuilder")
-  Builder<EnrollmentFromTo, MutableEnrollmentFromTo> mBuilder;
+  EnrollmentFromToBuilder mBuilder;
   @Autowired
-  @Qualifier("getGenericDateFormat")
   DateFormat mDateFormat;
   @GET
   @Path("/enrollment-type/{enrollment-type}/program-id/{program-id}/semester-id/{semester-id}")

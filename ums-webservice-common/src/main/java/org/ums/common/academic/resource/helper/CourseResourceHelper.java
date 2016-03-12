@@ -3,15 +3,14 @@ package org.ums.common.academic.resource.helper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import org.ums.academic.model.PersistentCourse;
+import org.ums.persistent.model.PersistentCourse;
 import org.ums.cache.LocalCache;
 import org.ums.common.academic.resource.ResourceHelper;
 import org.ums.common.academic.resource.SemesterResource;
-import org.ums.common.builder.Builder;
 import org.ums.common.builder.CourseBuilder;
 import org.ums.domain.model.mutable.MutableCourse;
-import org.ums.domain.model.readOnly.Course;
-import org.ums.domain.model.readOnly.Syllabus;
+import org.ums.domain.model.immutable.Course;
+import org.ums.domain.model.immutable.Syllabus;
 import org.ums.manager.CourseManager;
 import org.ums.manager.SemesterSyllabusMapManager;
 

@@ -19,7 +19,7 @@ import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.velocity.VelocityEngineUtils;
 import org.ums.domain.model.dto.ResetPasswordEmailDto;
-import org.ums.domain.model.readOnly.User;
+import org.ums.domain.model.immutable.User;
 
 @Component("emailService")
 public class EmailService {

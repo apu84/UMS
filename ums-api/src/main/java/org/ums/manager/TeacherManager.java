@@ -2,8 +2,8 @@ package org.ums.manager;
 
 
 import org.ums.domain.model.mutable.MutableTeacher;
-import org.ums.domain.model.readOnly.Department;
-import org.ums.domain.model.readOnly.Teacher;
+import org.ums.domain.model.immutable.Department;
+import org.ums.domain.model.immutable.Teacher;
 
 import java.util.List;
 

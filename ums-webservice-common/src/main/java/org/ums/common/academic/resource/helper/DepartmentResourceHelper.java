@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import org.ums.common.academic.resource.ResourceHelper;
 import org.ums.common.builder.DepartmentBuilder;
 import org.ums.domain.model.mutable.MutableDepartment;
-import org.ums.domain.model.readOnly.Department;
+import org.ums.domain.model.immutable.Department;
 import org.ums.manager.DepartmentManager;
 
 import javax.json.JsonObject;

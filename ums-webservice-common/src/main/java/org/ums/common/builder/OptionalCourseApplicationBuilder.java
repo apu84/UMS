@@ -1,16 +1,12 @@
 package org.ums.common.builder;
 
 import org.springframework.stereotype.Component;
-import org.ums.academic.model.PersistentCourse;
-import org.ums.cache.LocalCache;
-import org.ums.domain.model.dto.ExamRoutineDto;
+import org.ums.persistent.model.PersistentCourse;
 import org.ums.domain.model.mutable.MutableCourse;
-import org.ums.domain.model.mutable.MutableExamRoutine;
-import org.ums.domain.model.readOnly.Course;
+import org.ums.domain.model.immutable.Course;
 
 import javax.json.JsonArray;
 import javax.json.JsonObject;
-import java.util.ArrayList;
 import java.util.List;
 @Component
 public class OptionalCourseApplicationBuilder {

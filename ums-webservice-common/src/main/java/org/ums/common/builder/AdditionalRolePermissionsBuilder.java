@@ -6,8 +6,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.mutable.MutableAdditionalRolePermissions;
-import org.ums.domain.model.readOnly.AdditionalRolePermissions;
-import org.ums.domain.model.readOnly.Navigation;
+import org.ums.domain.model.immutable.AdditionalRolePermissions;
+import org.ums.domain.model.immutable.Navigation;
 import org.ums.manager.NavigationManager;
 
 import javax.json.*;
@@ -23,12 +23,6 @@ public class AdditionalRolePermissionsBuilder implements Builder<AdditionalRoleP
   NavigationManager mNavigationManager;
   @Autowired
   DateFormat mDateFormat;
-
-  public AdditionalRolePermissionsBuilder(final NavigationManager pNavigationManager,
-                                          final DateFormat pDateFormat) {
-    mNavigationManager = pNavigationManager;
-    mDateFormat = pDateFormat;
-  }
 
   @Override
   public void build(JsonObjectBuilder pBuilder, AdditionalRolePermissions pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) throws Exception {

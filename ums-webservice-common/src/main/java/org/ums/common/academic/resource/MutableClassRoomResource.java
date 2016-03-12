@@ -2,11 +2,8 @@ package org.ums.common.academic.resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.ums.common.Resource;
-import org.ums.common.academic.resource.helper.ClassRoomResourceHelper;
 import org.ums.domain.model.mutable.MutableClassRoom;
-import org.ums.domain.model.mutable.MutableCourse;
-import org.ums.domain.model.readOnly.ClassRoom;
-import org.ums.domain.model.readOnly.Course;
+import org.ums.domain.model.immutable.ClassRoom;
 
 import javax.json.JsonObject;
 import javax.ws.rs.*;

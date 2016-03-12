@@ -2,11 +2,8 @@ package org.ums.common.academic.resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.ums.academic.model.PersistentSemester;
 import org.ums.common.Resource;
 import org.ums.common.academic.resource.helper.SemesterSyllabusMapResourceHelper;
-import org.ums.common.academic.resource.helper.StudentResourceHelper;
-import org.ums.common.academic.resource.helper.SyllabusResourceHelper;
 import org.ums.manager.SemesterSyllabusMapManager;
 
 import javax.json.JsonObject;

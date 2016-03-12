@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.ui.velocity.VelocityEngineUtils;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.mutable.MutableNavigation;
-import org.ums.domain.model.readOnly.Navigation;
+import org.ums.domain.model.immutable.Navigation;
 
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;

@@ -3,7 +3,7 @@ package org.ums.common.builder;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.mutable.MutableEnrollmentFromTo;
-import org.ums.domain.model.readOnly.EnrollmentFromTo;
+import org.ums.domain.model.immutable.EnrollmentFromTo;
 
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;

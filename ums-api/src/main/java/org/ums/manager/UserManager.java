@@ -1,7 +1,7 @@
 package org.ums.manager;
 
 import org.ums.domain.model.mutable.MutableUser;
-import org.ums.domain.model.readOnly.User;
+import org.ums.domain.model.immutable.User;
 
 import java.util.List;
 

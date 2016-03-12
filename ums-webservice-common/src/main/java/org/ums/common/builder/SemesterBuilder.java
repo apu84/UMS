@@ -5,8 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.mutable.MutableSemester;
-import org.ums.domain.model.readOnly.ProgramType;
-import org.ums.domain.model.readOnly.Semester;
+import org.ums.domain.model.immutable.ProgramType;
+import org.ums.domain.model.immutable.Semester;
 import org.ums.manager.ProgramTypeManager;
 
 import javax.json.JsonObject;

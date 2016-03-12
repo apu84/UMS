@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.common.Resource;
 import org.ums.domain.model.mutable.MutableDepartment;
-import org.ums.domain.model.readOnly.Department;
+import org.ums.domain.model.immutable.Department;
 import org.ums.manager.DepartmentManager;
 
 import javax.json.JsonObject;

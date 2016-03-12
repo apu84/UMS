@@ -1,7 +1,7 @@
 package org.ums.manager;
 
 import org.ums.domain.model.mutable.MutableNavigation;
-import org.ums.domain.model.readOnly.Navigation;
+import org.ums.domain.model.immutable.Navigation;
 
 import java.util.List;
 import java.util.Set;

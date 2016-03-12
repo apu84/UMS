@@ -1,7 +1,7 @@
 package org.ums.manager;
 
 import org.ums.domain.model.mutable.MutableEnrollmentFromTo;
-import org.ums.domain.model.readOnly.EnrollmentFromTo;
+import org.ums.domain.model.immutable.EnrollmentFromTo;
 
 import java.util.List;
 

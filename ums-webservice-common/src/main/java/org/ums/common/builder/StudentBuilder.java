@@ -4,10 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.mutable.MutableStudent;
-import org.ums.domain.model.readOnly.Department;
-import org.ums.domain.model.readOnly.Program;
-import org.ums.domain.model.readOnly.Semester;
-import org.ums.domain.model.readOnly.Student;
+import org.ums.domain.model.immutable.Department;
+import org.ums.domain.model.immutable.Program;
+import org.ums.domain.model.immutable.Semester;
+import org.ums.domain.model.immutable.Student;
 import org.ums.manager.BinaryContentManager;
 
 import javax.json.JsonObject;

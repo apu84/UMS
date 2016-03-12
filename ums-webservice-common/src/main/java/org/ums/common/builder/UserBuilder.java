@@ -3,7 +3,7 @@ package org.ums.common.builder;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.mutable.MutableUser;
-import org.ums.domain.model.readOnly.User;
+import org.ums.domain.model.immutable.User;
 
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;

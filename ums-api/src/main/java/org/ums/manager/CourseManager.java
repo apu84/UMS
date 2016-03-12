@@ -1,7 +1,7 @@
 package org.ums.manager;
 
 import org.ums.domain.model.mutable.MutableCourse;
-import org.ums.domain.model.readOnly.Course;
+import org.ums.domain.model.immutable.Course;
 
 import java.util.List;
 

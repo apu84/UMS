@@ -3,8 +3,8 @@ package org.ums.common.builder;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.mutable.MutableTeacher;
-import org.ums.domain.model.readOnly.Department;
-import org.ums.domain.model.readOnly.Teacher;
+import org.ums.domain.model.immutable.Department;
+import org.ums.domain.model.immutable.Teacher;
 
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;

@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.ums.domain.model.mutable.MutableUser;
-import org.ums.domain.model.readOnly.User;
+import org.ums.domain.model.immutable.User;
 import org.ums.manager.UserManager;
 
 import javax.json.JsonObject;

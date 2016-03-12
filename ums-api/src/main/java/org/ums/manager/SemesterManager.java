@@ -1,7 +1,7 @@
 package org.ums.manager;
 
 import org.ums.domain.model.mutable.MutableSemester;
-import org.ums.domain.model.readOnly.Semester;
+import org.ums.domain.model.immutable.Semester;
 
 import java.util.List;
 

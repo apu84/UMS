@@ -3,7 +3,7 @@ package org.ums.common.academic.resource.helper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import org.ums.academic.model.PersistentSemesterSyllabusMap;
+import org.ums.persistent.model.PersistentSemesterSyllabusMap;
 import org.ums.cache.LocalCache;
 import org.ums.common.academic.resource.ResourceHelper;
 import org.ums.common.academic.resource.SemesterResource;
@@ -11,7 +11,7 @@ import org.ums.common.builder.SemesterSyllabusMapBuilder;
 import org.ums.common.builder.SemesterSyllabusMapsBuilder;
 import org.ums.domain.model.dto.MutableSemesterSyllabusMapDto;
 import org.ums.domain.model.mutable.MutableSemesterSyllabusMap;
-import org.ums.domain.model.readOnly.SemesterSyllabusMap;
+import org.ums.domain.model.immutable.SemesterSyllabusMap;
 import org.ums.manager.SemesterSyllabusMapManager;
 
 import javax.json.Json;
@@ -41,7 +41,7 @@ public class SemesterSyllabusMapResourceHelper extends ResourceHelper<SemesterSy
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
-    MutableSemesterSyllabusMapDto mutableSemesterSyllabusMap = new org.ums.academic.model.dto.SemesterSyllabusMap();
+    MutableSemesterSyllabusMapDto mutableSemesterSyllabusMap = new org.ums.domain.model.dto.SemesterSyllabusMap();
     LocalCache localCache = new LocalCache();
     mMapBuilder.build(mutableSemesterSyllabusMap, pJsonObject, localCache);
 

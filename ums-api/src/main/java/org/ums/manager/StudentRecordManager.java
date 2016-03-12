@@ -2,7 +2,7 @@ package org.ums.manager;
 
 
 import org.ums.domain.model.mutable.MutableStudentRecord;
-import org.ums.domain.model.readOnly.StudentRecord;
+import org.ums.domain.model.immutable.StudentRecord;
 
 import java.util.List;
 

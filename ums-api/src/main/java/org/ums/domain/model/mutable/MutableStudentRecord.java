@@ -2,10 +2,10 @@ package org.ums.domain.model.mutable;
 
 import org.ums.domain.model.common.Mutable;
 import org.ums.domain.model.common.MutableIdentifier;
-import org.ums.domain.model.readOnly.Program;
-import org.ums.domain.model.readOnly.Semester;
-import org.ums.domain.model.readOnly.Student;
-import org.ums.domain.model.readOnly.StudentRecord;
+import org.ums.domain.model.immutable.Program;
+import org.ums.domain.model.immutable.Semester;
+import org.ums.domain.model.immutable.Student;
+import org.ums.domain.model.immutable.StudentRecord;
 
 public interface MutableStudentRecord extends StudentRecord, Mutable, MutableIdentifier<Integer>, MutableLastModifier {
   void setStudentId(final String pStudentId);

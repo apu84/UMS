@@ -4,17 +4,15 @@ package org.ums.common.academic.resource.helper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import org.ums.common.builder.Builder;
 import org.ums.common.academic.resource.ResourceHelper;
 import org.ums.common.builder.CourseGroupBuilder;
 import org.ums.domain.model.mutable.MutableCourseGroup;
-import org.ums.domain.model.readOnly.CourseGroup;
+import org.ums.domain.model.immutable.CourseGroup;
 import org.ums.manager.CourseGroupManager;
 
 import javax.json.JsonObject;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.util.List;
 
 @Component
 public class CourseGroupResourceHelper extends ResourceHelper<CourseGroup, MutableCourseGroup, Integer> {

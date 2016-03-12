@@ -2,11 +2,11 @@ package org.ums.common.academic.resource.helper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ums.academic.dao.PersistentOptionalCourseApplicationDao;
+import org.ums.persistent.dao.PersistentOptionalCourseApplicationDao;
 import org.ums.common.builder.OptionalCourseApplicationBuilder;
 import org.ums.domain.model.dto.OptCourseStudentDto;
 import org.ums.domain.model.dto.OptionalCourseApplicationStatDto;
-import org.ums.domain.model.readOnly.Course;
+import org.ums.domain.model.immutable.Course;
 
 import javax.json.*;
 import javax.ws.rs.core.Response;

@@ -3,9 +3,9 @@ package org.ums.domain.model.mutable;
 
 import org.ums.domain.model.common.Mutable;
 import org.ums.domain.model.common.MutableIdentifier;
-import org.ums.domain.model.readOnly.Program;
-import org.ums.domain.model.readOnly.Semester;
-import org.ums.domain.model.readOnly.SemesterEnrollment;
+import org.ums.domain.model.immutable.Program;
+import org.ums.domain.model.immutable.Semester;
+import org.ums.domain.model.immutable.SemesterEnrollment;
 
 import java.util.Date;
 

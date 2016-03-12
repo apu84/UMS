@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.common.Resource;
 import org.ums.domain.model.mutable.MutableCourseGroup;
-import org.ums.domain.model.readOnly.CourseGroup;
+import org.ums.domain.model.immutable.CourseGroup;
 import org.ums.manager.CourseGroupManager;
 
 import javax.json.JsonObject;

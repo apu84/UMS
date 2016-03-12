@@ -2,12 +2,11 @@ package org.ums.common.resource.helper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ums.common.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.common.academic.resource.ResourceHelper;
 import org.ums.common.builder.UserBuilder;
 import org.ums.domain.model.mutable.MutableUser;
-import org.ums.domain.model.readOnly.User;
+import org.ums.domain.model.immutable.User;
 import org.ums.manager.UserManager;
 
 import javax.json.Json;

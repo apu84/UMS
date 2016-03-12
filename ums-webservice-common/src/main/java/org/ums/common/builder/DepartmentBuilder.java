@@ -4,7 +4,7 @@ package org.ums.common.builder;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.mutable.MutableDepartment;
-import org.ums.domain.model.readOnly.Department;
+import org.ums.domain.model.immutable.Department;
 
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
