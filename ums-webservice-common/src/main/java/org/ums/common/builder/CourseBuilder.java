@@ -77,6 +77,9 @@ public class CourseBuilder implements Builder<Course, MutableCourse> {
     pBuilder.add("viewOrder", pReadOnly.getViewOrder());
     pBuilder.add("self", pUriInfo.getBaseUriBuilder().path("academic").path("course")
         .path(String.valueOf(pReadOnly.getId())).build().toString());
+
+    pBuilder.add("totalApplied", pReadOnly.getTotalApplied());
+
   }
 
   @Override
@@ -105,6 +108,8 @@ public class CourseBuilder implements Builder<Course, MutableCourse> {
     pMutable.setViewOrder(Integer.parseInt(pJsonObject.getString("viewOrder")));
     Integer groupId = StringUtils.isEmpty(pJsonObject.getString("optionalGroupId")) ? Types.NULL: Integer.parseInt(pJsonObject.getString("optionalGroupId"));
     pMutable.setCourseGroupId(groupId);
+
+
 
     //Unnecessary. No use of it in any Use Case. If any Use case need this then we will open it again
     /*

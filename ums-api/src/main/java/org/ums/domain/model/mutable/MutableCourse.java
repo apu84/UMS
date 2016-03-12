@@ -43,4 +43,5 @@ public interface MutableCourse extends Course, Mutable, MutableLastModifier, Mut
 
   void setPairCourseId(final String pPairCourseId);
 
+  void setTotalApplied(final int pTotalApplied);
 }

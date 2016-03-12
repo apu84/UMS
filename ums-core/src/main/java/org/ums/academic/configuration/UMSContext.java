@@ -18,7 +18,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 @Configuration
-public class AcademicConfiguration {
+public class UMSContext {
   @Autowired
   DataSource mDataSource;
 

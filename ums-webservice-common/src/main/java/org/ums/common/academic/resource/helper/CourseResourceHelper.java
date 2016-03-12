@@ -140,6 +140,23 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
     return object.build();
   }
 
+  public JsonObject getCallForApplicationCourses(final Integer pSemesterId,final Integer pProgramId,final Integer pYear,final Integer pSemester, final UriInfo pUriInfo) throws Exception {
+
+    List<Course> courses = getContentManager().getCallForApplicationCourseList(pSemesterId, pProgramId, pYear, pSemester);
+
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+    for (Course course : courses) {
+      children.add(toJson(course, pUriInfo, localCache));
+    }
+    object.add("entries", children);
+    localCache.invalidate();
+    return object.build();
+  }
+
+
+
   public JsonObject getApprovedCourses(final Integer pSemesterId,final Integer pProgramId,final Integer pYear,final Integer pSemester, final UriInfo pUriInfo) throws Exception {
 
     List<Course> courses = getContentManager().getApprovedCourseList(pSemesterId, pProgramId, pYear, pSemester);
