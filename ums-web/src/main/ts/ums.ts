@@ -273,7 +273,7 @@ module ums {
         .state('studentsRoutine', {
           url: "/studentsRoutine",
           controller:'StudentsRoutine',
-          templateUrl: 'views/dept/students-routine.html',
+          templateUrl: 'views/routine/students-routine.html',
           resolve: {
             loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
               return $ocLazyLoad.load({

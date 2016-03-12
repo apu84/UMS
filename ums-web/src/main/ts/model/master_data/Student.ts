@@ -24,5 +24,7 @@ module ums {
     guardianName: string;
     guardianEmail: string;
     guardianMobile: string;
+    theorySection:string;
+    sessionalSection:string;
   }
 }

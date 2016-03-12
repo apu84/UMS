@@ -128,6 +128,129 @@ module ums {
           {id: '02', name: 'BBA'},
           {id: '05', name: 'EEE'}
         ],
+        timeChecker:[
+          {
+            id:'08.00 AM',
+            val:'08.50 AM'
+          },
+          {
+            id:'08.50 AM',
+            val:'09.40 AM'
+          },
+          {
+            id:'09.40 AM',
+            val:'10.30 AM'
+          },
+          {
+            id:'10.30 AM',
+            val:'11.20 AM'
+          },
+          {
+            id:'11.20 AM',
+            val:'12.10 PM'
+          },
+          {
+            id:'12.10 PM',
+            val:'01.00 PM'
+          },
+          {
+            id:'01.00 PM',
+            val:'01.50 PM'
+          },
+          {
+            id:'01.50 PM',
+            val:'02.40 PM'
+          },
+          {
+            id:'02.40 PM',
+            val:'03.30 PM'
+          },
+          {
+            id:'03.30 PM',
+            val:'04.20 PM'
+          },
+          {
+            id:'04.20 PM',
+            val:'05.00 PM'
+          }
+        ],
+        routineTime:[
+          {
+            counter:'1',
+            id:'08.00 AM'
+          },
+          {
+            counter:'2',
+            id:'08.50 AM'
+          },
+          {
+            counter:'3',
+            id:'09.40 AM'
+          },
+          {
+            counter:'4',
+            id:'10.30 AM'
+          },
+          {
+            counter:'5',
+            id:'11.20 AM'
+          },
+          {
+            counter:'6',
+            id:'12.10 PM'
+          },
+          {
+            counter:'7',
+            id:'01.00 PM'
+          },
+          {
+            counter:'8',
+            id:'01.50 PM'
+          },
+
+          {
+            counter:'9',
+            id:'02.40 PM'
+          },
+          {
+            counter:'10',
+            id:'03.30 PM'
+          },
+          {
+            counter:'11',
+            id:'04.20 PM'
+          },
+          {
+            counter:'12',
+            id:'05.10 PM'
+          }
+        ],
+        weekDays:[
+          {
+            id:'01',
+            day:'Saturday'
+          },
+          {
+            id:'02',
+            day:'Sunday'
+          },
+          {
+            id:'03',
+            day:'Monday'
+          },
+          {
+            id:'04',
+            day:'Tuesday'
+          },
+          {
+            id:'05',
+            day:'Wednesday'
+          },
+          {
+            id:'06',
+            day:'Thursday'
+          }
+        ],
         ugPrograms: [
           {
             deptId: '01',
