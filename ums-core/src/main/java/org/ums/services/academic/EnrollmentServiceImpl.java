@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.ums.academic.model.PersistentSemesterEnrollment;
 import org.ums.academic.model.PersistentStudentRecord;
 import org.ums.domain.model.mutable.MutableProgram;
@@ -12,8 +13,10 @@ import org.ums.domain.model.mutable.MutableStudent;
 import org.ums.domain.model.mutable.MutableStudentRecord;
 import org.ums.domain.model.readOnly.*;
 import org.ums.manager.*;
-import org.ums.response.type.GenericResponse;
+import org.ums.message.MessageResource;
 import org.ums.response.type.GenericMessageResponse;
+import org.ums.response.type.GenericResponse;
+import org.ums.util.UmsUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,6 +44,9 @@ public class EnrollmentServiceImpl implements EnrollmentService {
   @Autowired
   SemesterEnrollmentManager mSemesterEnrollmentManager;
 
+  @Autowired
+  MessageResource mMessageResource;
+
   /***
    * Enroll students of particular program to new Semester
    * @param pType
@@ -56,6 +62,11 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                       final Integer pProgramId,
                       final Integer pToYear,
                       final Integer pToAcademicSemester) throws Exception {
+
+    GenericResponse<Map> enrollmentStatus = enrollmentStatus(pType, pNewSemesterId, pProgramId, pToYear, pToAcademicSemester);
+    if (enrollmentStatus.getResponseType() == GenericResponse.ResponseType.FAILED) {
+      return enrollmentStatus;
+    }
 
     Program program = mProgramManager.get(pProgramId);
     Semester previousSemester = mSemesterManager.getPreviousSemester(pNewSemesterId, program.getProgramType().getId());
@@ -170,9 +181,12 @@ public class EnrollmentServiceImpl implements EnrollmentService {
   public GenericResponse<Map> saveEnrollment(SemesterEnrollment.Type pType, Integer pNewSemesterId, Integer pProgramId) throws Exception {
     List<EnrollmentFromTo> enrollmentFromToList = mEnrollmentFromToManager.getEnrollmentFromTo(pProgramId);
     for (EnrollmentFromTo enrollment : enrollmentFromToList) {
-      saveEnrollment(pType, pNewSemesterId, pProgramId, enrollment.getToYear(), enrollment.getToSemester());
+      GenericResponse<Map> response = saveEnrollment(pType, pNewSemesterId, pProgramId, enrollment.getToYear(), enrollment.getToSemester());
+      if (response.getResponseType() == GenericResponse.ResponseType.FAILED) {
+        return response;
+      }
     }
-    return new GenericMessageResponse(GenericResponse.ResponseType.SUCCESSFUL, "Semester enrolled successfully");
+    return new GenericMessageResponse(GenericResponse.ResponseType.SUCCESSFUL, mMessageResource.getMessage("enrollment.successful"));
   }
 
   private Map<String, StudentRecord> toMap(List<StudentRecord> pStudentRecordList) {
@@ -181,5 +195,60 @@ public class EnrollmentServiceImpl implements EnrollmentService {
       studentRecordMap.put(studentRecord.getStudentId(), studentRecord);
     }
     return studentRecordMap;
+  }
+
+  private GenericResponse<Map> enrollmentStatus(final SemesterEnrollment.Type pType,
+                                                final Integer pNewSemesterId,
+                                                final Integer pProgramId,
+                                                final Integer pToYear,
+                                                final Integer pToAcademicSemester) throws Exception {
+    //if temporary enrollment, then check whether enrollment is already done. if permanent enrollment then check whether
+    //temporary is done first.
+    SemesterEnrollment semesterEnrollmentStatus = mSemesterEnrollmentManager.getEnrollmentStatus(pType, pProgramId,
+        pNewSemesterId, pToYear, pToAcademicSemester);
+
+    if (semesterEnrollmentStatus != null) {
+
+      return new GenericMessageResponse(GenericResponse.ResponseType.FAILED,
+          mMessageResource.getMessage("semester.enrollment.already.done",
+              StringUtils.capitalize(pType.toString().toLowerCase()),
+              UmsUtils.getNumberWithSuffix(pToYear),
+              UmsUtils.getNumberWithSuffix(pToAcademicSemester),
+              semesterEnrollmentStatus.getSemester().getName()));
+
+    } else if (pType == SemesterEnrollment.Type.TEMPORARY) {
+
+      SemesterEnrollment permanentEnrollmentStatus
+          = mSemesterEnrollmentManager.getEnrollmentStatus(SemesterEnrollment.Type.PERMANENT,
+          pProgramId,
+          pNewSemesterId,
+          pToYear,
+          pToAcademicSemester);
+
+      if (permanentEnrollmentStatus != null) {
+        return new GenericMessageResponse(GenericResponse.ResponseType.FAILED,
+            mMessageResource.getMessage("semester.enrollment.already.done",
+                StringUtils.capitalize(SemesterEnrollment.Type.PERMANENT.toString().toLowerCase()),
+                UmsUtils.getNumberWithSuffix(pToYear),
+                UmsUtils.getNumberWithSuffix(pToAcademicSemester),
+                permanentEnrollmentStatus.getSemester().getName()));
+      }
+    } else if (pType == SemesterEnrollment.Type.PERMANENT) {
+      SemesterEnrollment temporaryEnrollmentStatus
+          = mSemesterEnrollmentManager.getEnrollmentStatus(SemesterEnrollment.Type.TEMPORARY,
+          pProgramId,
+          pNewSemesterId,
+          pToYear,
+          pToAcademicSemester);
+
+      if (temporaryEnrollmentStatus == null) {
+        return new GenericMessageResponse(GenericResponse.ResponseType.FAILED,
+            mMessageResource.getMessage("semester.temporary.enrollment.required",
+                UmsUtils.getNumberWithSuffix(pToYear),
+                UmsUtils.getNumberWithSuffix(pToAcademicSemester)));
+      }
+    }
+
+    return new GenericMessageResponse(GenericResponse.ResponseType.SUCCESSFUL);
   }
 }

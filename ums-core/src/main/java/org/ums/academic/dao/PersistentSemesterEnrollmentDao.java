@@ -1,6 +1,7 @@
 package org.ums.academic.dao;
 
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.academic.model.PersistentSemesterEnrollment;
@@ -85,11 +86,17 @@ public class PersistentSemesterEnrollmentDao extends SemesterEnrollmentDaoDecora
 
   @Override
   public SemesterEnrollment getEnrollmentStatus(SemesterEnrollment.Type pType, Integer pProgramId, Integer pSemesterId,
-                                                      Integer pYear, Integer pAcademicSemester) {
+                                                Integer pYear, Integer pAcademicSemester) {
+    SemesterEnrollment semesterEnrollment;
     String query = SELECT_ALL + "WHERE ENROLL_TYPE = ? AND PROGRAM_ID = ? AND SEMESTER_ID = ? AND STUDENT_YEAR = ? " +
         "AND STUDENT_SEMESTER = ?";
-    return mJdbcTemplate.queryForObject(query,
-        new Object[]{pType.getValue(), pProgramId, pSemesterId, pYear, pAcademicSemester}, new SemesterEnrollmentRowMapper());
+    try {
+      semesterEnrollment = mJdbcTemplate.queryForObject(query,
+          new Object[]{pType.getValue(), pProgramId, pSemesterId, pYear, pAcademicSemester}, new SemesterEnrollmentRowMapper());
+    } catch (EmptyResultDataAccessException em) {
+      semesterEnrollment = null;
+    }
+    return semesterEnrollment;
   }
 
   class SemesterEnrollmentRowMapper implements RowMapper<SemesterEnrollment> {

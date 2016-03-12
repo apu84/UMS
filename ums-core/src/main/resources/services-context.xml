@@ -11,7 +11,7 @@
        xmlns:tx="http://www.springframework.org/schema/tx">
 
   <context:component-scan
-      base-package="org.ums.dummy.shared,org.ums.cache,org.ums.academic.configuration,org.ums.services"/>
+      base-package="org.ums.dummy.shared,org.ums.cache,org.ums.academic.configuration,org.ums.services,org.ums.message"/>
   <context:annotation-config/>
   <context:spring-configured/>
 
@@ -148,6 +148,13 @@
         resource.loader=class
         class.resource.loader.class=org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
       </value>
+    </property>
+  </bean>
+
+  <bean id="messageSource"
+        class="org.springframework.context.support.ResourceBundleMessageSource">
+    <property name="basename">
+      <value>message.common.message</value>
     </property>
   </bean>
 
