@@ -8,10 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.ums.authentication.UMSAuthenticationRealm;
-import org.ums.cache.CourseCache;
-import org.ums.cache.DepartmentCache;
-import org.ums.cache.ProgramCache;
-import org.ums.cache.SemesterCache;
+import org.ums.cache.*;
 import org.ums.manager.*;
 import org.ums.navigation.NavigationByPermissionResolver;
 import org.ums.persistent.dao.*;
@@ -54,10 +51,6 @@ public class UMSContext {
     return new PersistentSemesterSyllabusMapDao(new JdbcTemplate(mDataSource), syllabusManager());
   }
 
-  SyllabusManager getPersistentSyllabusDao() {
-    return new PersistentSyllabusDao(mJdbcTemplate);
-  }
-
   @Bean
   SemesterManager semesterManager() {
     SemesterCache semesterCache = new SemesterCache(mLocalCacheManager);
@@ -96,7 +89,9 @@ public class UMSContext {
 
   @Bean
   SyllabusManager syllabusManager() {
-    return getPersistentSyllabusDao();
+    SyllabusCache syllabusCache = new SyllabusCache(mLocalCacheManager);
+    syllabusCache.setManager(new PersistentSyllabusDao(mJdbcTemplate));
+    return syllabusCache;
   }
 
   @Bean
@@ -116,14 +111,18 @@ public class UMSContext {
     return new PersistentRoleDao(mJdbcTemplate);
   }
 
-  @Bean(name = "studentManager")
+  @Bean
   StudentManager studentManager() {
-    return new PersistentStudentDao(mJdbcTemplate, getGenericDateFormat());
+    StudentCache studentCache = new StudentCache(mLocalCacheManager);
+    studentCache.setManager(new PersistentStudentDao(mJdbcTemplate, getGenericDateFormat()));
+    return studentCache;
   }
 
-  @Bean(name = "userManager")
+  @Bean
   UserManager userManager() {
-    return new PersistentUserDao(mJdbcTemplate);
+    UserCache userCache = new UserCache(mLocalCacheManager);
+    userCache.setManager(new PersistentUserDao(mJdbcTemplate));
+    return userCache;
   }
 
   @Bean
