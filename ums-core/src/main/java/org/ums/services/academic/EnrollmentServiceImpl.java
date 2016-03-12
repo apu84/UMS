@@ -38,7 +38,6 @@ public class EnrollmentServiceImpl implements EnrollmentService {
   SemesterManager mSemesterManager;
 
   @Autowired
-  @Qualifier("programManager")
   ContentManager<Program, MutableProgram, Integer> mProgramManager;
 
   @Autowired

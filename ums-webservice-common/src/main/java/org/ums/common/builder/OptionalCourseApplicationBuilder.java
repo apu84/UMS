@@ -1,5 +1,6 @@
 package org.ums.common.builder;
 
+import org.springframework.stereotype.Component;
 import org.ums.academic.model.PersistentCourse;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.dto.ExamRoutineDto;
@@ -11,7 +12,7 @@ import javax.json.JsonArray;
 import javax.json.JsonObject;
 import java.util.ArrayList;
 import java.util.List;
-
+@Component
 public class OptionalCourseApplicationBuilder {
 
   public void build(List<Course> pCourseList, JsonObject pJsonObject,String courseType) throws Exception {
