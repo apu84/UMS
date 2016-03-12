@@ -48,6 +48,7 @@ public class PersistentCourse implements MutableCourse {
   private String mSyllabusId;
   private int mCourseGroupId;
   private String mPairCourseId;
+  private int mTotalApplied;
 
   public PersistentCourse() {
 
@@ -246,6 +247,14 @@ public class PersistentCourse implements MutableCourse {
 
   public void setPairCourseId(String mPairCourseId) {
     this.mPairCourseId = mPairCourseId;
+  }
+  @Override
+  public int getTotalApplied() {
+    return mTotalApplied;
+  }
+  @Override
+  public void setTotalApplied(int mTotalApplied) {
+    this.mTotalApplied = mTotalApplied;
   }
 
   @Override

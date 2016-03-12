@@ -348,6 +348,10 @@ public class AcademicConfiguration {
     return new ExamRoutineBuilder();
   }
 
+  @Bean
+  OptionalCourseApplicationBuilder getOptionalCourseApplicationBuilder(){
+    return new OptionalCourseApplicationBuilder();
+  }
 
   @Bean
   Builder<Navigation, MutableNavigation> getNavigationBuilder() {

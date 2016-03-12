@@ -42,4 +42,6 @@ public interface Course extends Serializable, LastModifier, EditType<MutableCour
   CourseCategory getCourseCategory();
 
   String getPairCourseId();
+
+  int getTotalApplied();
 }

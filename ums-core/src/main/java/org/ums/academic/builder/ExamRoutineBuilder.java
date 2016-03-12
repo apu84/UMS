@@ -13,10 +13,6 @@ import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.util.ArrayList;
 import java.util.List;
-
-/**
- * Created by Ifti on 27-Feb-16.
- */
 public class ExamRoutineBuilder  implements Builder<ExamRoutine, MutableExamRoutine> {
 
   @Override
