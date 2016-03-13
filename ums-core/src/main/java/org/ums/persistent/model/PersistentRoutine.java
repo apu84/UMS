@@ -3,28 +3,25 @@ package org.ums.persistent.model;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.Program;
-import org.ums.domain.model.immutable.Routine;
 import org.ums.domain.model.immutable.Semester;
-import org.ums.domain.model.mutable.*;
-import org.ums.manager.ContentManager;
+import org.ums.domain.model.mutable.MutableRoutine;
+import org.ums.manager.ProgramManager;
+import org.ums.manager.RoutineManager;
+import org.ums.manager.SemesterManager;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- * Created by My Pc on 3/5/2016.
- */
 public class PersistentRoutine implements MutableRoutine {
-
-  private static ContentManager<Semester,MutableSemester,Integer> sSemesterManager;
-  private static ContentManager<Program,MutableProgram,Integer> sProgramManager;
-  private static ContentManager<Routine,MutableRoutine,String> sRoutineManager;
+  private static SemesterManager sSemesterManager;
+  private static ProgramManager sProgramManager;
+  private static RoutineManager sRoutineManager;
 
   static{
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sSemesterManager = (ContentManager)applicationContext.getBean("semesterManager");
-    sProgramManager = (ContentManager) applicationContext.getBean("programManager");
-    sRoutineManager = (ContentManager) applicationContext.getBean("routineManager");
+    sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
+    sProgramManager = applicationContext.getBean("programManager", ProgramManager.class);
+    sRoutineManager = applicationContext.getBean("routineManager", RoutineManager.class);
   }
 
   private String mId;
@@ -113,7 +110,7 @@ public class PersistentRoutine implements MutableRoutine {
 
   @Override
   public Program getProgram() throws Exception {
-    return mProgram==null? sProgramManager.get(mProgramId): sProgramManager.validate(mProgram);
+    return mProgram == null ? sProgramManager.get(mProgramId) : sProgramManager.validate(mProgram);
 
   }
 
@@ -178,10 +175,9 @@ public class PersistentRoutine implements MutableRoutine {
 
   @Override
   public void commit(boolean update) throws Exception {
-    if(update){
+    if (update) {
       sRoutineManager.update(this);
-    }
-    else{
+    } else {
       sRoutineManager.create(this);
     }
   }
