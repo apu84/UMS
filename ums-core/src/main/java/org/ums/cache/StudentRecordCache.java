@@ -1,6 +1,5 @@
 package org.ums.cache;
 
-import org.ums.domain.model.immutable.Student;
 import org.ums.domain.model.immutable.StudentRecord;
 import org.ums.domain.model.mutable.MutableStudentRecord;
 import org.ums.manager.CacheManager;
@@ -24,7 +23,7 @@ public class StudentRecordCache extends ContentCache<StudentRecord, MutableStude
 
   @Override
   protected String getCacheKey(Integer pId) {
-    return CacheUtil.getCacheKey(Student.class, pId);
+    return CacheUtil.getCacheKey(StudentRecord.class, pId);
   }
 
   @Override

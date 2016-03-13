@@ -154,7 +154,9 @@ public class UMSContext {
 
   @Bean
   StudentRecordManager studentRecordManager() {
-    return new PersistentStudentRecordDao(mJdbcTemplate);
+    StudentRecordCache studentRecordCache = new StudentRecordCache(mLocalCacheManager);
+    studentRecordCache.setManager(new PersistentStudentRecordDao(mJdbcTemplate));
+    return studentRecordCache;
   }
 
   @Bean
@@ -164,7 +166,9 @@ public class UMSContext {
 
   @Bean
   EnrollmentFromToManager enrollmentFromToManager() {
-    return new PersistentEnrollmentFromToDao(mJdbcTemplate);
+    EnrollmentFromToCache enrollmentFromToCache = new EnrollmentFromToCache(mLocalCacheManager);
+    enrollmentFromToCache.setManager(new PersistentEnrollmentFromToDao(mJdbcTemplate));
+    return enrollmentFromToCache;
   }
 
   ClassRoomManager getPersistentClassRoomDao() {
