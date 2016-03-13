@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import org.ums.dummy.shared.dao.UserDao;
 import org.ums.dummy.shared.model.User;
 
-@Component
 public class DummyRealm extends JdbcRealm {
   @Autowired
   UserDao userDao;

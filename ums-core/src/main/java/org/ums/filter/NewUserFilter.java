@@ -7,9 +7,8 @@ import org.apache.shiro.util.PatternMatcher;
 import org.apache.shiro.web.filter.authz.AuthorizationFilter;
 import org.apache.shiro.web.util.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.ums.domain.model.mutable.MutableUser;
 import org.ums.domain.model.immutable.User;
+import org.ums.domain.model.mutable.MutableUser;
 import org.ums.manager.ContentManager;
 
 import javax.servlet.ServletRequest;
@@ -19,7 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 public class NewUserFilter extends AuthorizationFilter {
 
   @Autowired
-  @Qualifier("userManager")
   private ContentManager<User, MutableUser, String> mUserManager;
 
   private String mChangePasswordUrl;

@@ -1,11 +1,10 @@
 package org.ums.common.academic.resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.common.Resource;
-import org.ums.domain.model.mutable.MutableCourseGroup;
 import org.ums.domain.model.immutable.CourseGroup;
+import org.ums.domain.model.mutable.MutableCourseGroup;
 import org.ums.manager.CourseGroupManager;
 
 import javax.json.JsonObject;
@@ -23,7 +22,6 @@ public class CourseGroupResource extends Resource {
   ResourceHelper<CourseGroup, MutableCourseGroup, Integer> mResourceHelper;
 
   @Autowired
-  @Qualifier("courseGroupManager")
   CourseGroupManager mManager;
 
   @GET

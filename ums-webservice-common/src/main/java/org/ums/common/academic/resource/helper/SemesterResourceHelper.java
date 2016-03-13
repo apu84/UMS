@@ -3,16 +3,15 @@ package org.ums.common.academic.resource.helper;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import org.ums.persistent.model.PersistentSemester;
 import org.ums.cache.LocalCache;
 import org.ums.common.academic.resource.ResourceHelper;
 import org.ums.common.academic.resource.SemesterResource;
 import org.ums.common.builder.SemesterBuilder;
-import org.ums.domain.model.mutable.MutableSemester;
 import org.ums.domain.model.immutable.Semester;
+import org.ums.domain.model.mutable.MutableSemester;
 import org.ums.manager.SemesterManager;
+import org.ums.persistent.model.PersistentSemester;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
@@ -26,7 +25,6 @@ import java.util.List;
 @Component
 public class SemesterResourceHelper extends ResourceHelper<Semester, MutableSemester, Integer> {
   @Autowired
-  @Qualifier("semesterManager")
   private SemesterManager mManager;
 
   @Autowired

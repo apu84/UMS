@@ -12,7 +12,6 @@ import org.ums.manager.ContentManager;
 
 public class DummyNavigationItemProcessor implements NavigationProcessor {
   @Autowired
-  @Qualifier("userManager")
   ContentManager<User, MutableUser, String> mUserManager;
 
   @Override

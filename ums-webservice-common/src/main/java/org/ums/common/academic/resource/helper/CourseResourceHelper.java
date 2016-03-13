@@ -1,18 +1,17 @@
 package org.ums.common.academic.resource.helper;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import org.ums.persistent.model.PersistentCourse;
 import org.ums.cache.LocalCache;
 import org.ums.common.academic.resource.ResourceHelper;
 import org.ums.common.academic.resource.SemesterResource;
 import org.ums.common.builder.CourseBuilder;
-import org.ums.domain.model.mutable.MutableCourse;
 import org.ums.domain.model.immutable.Course;
 import org.ums.domain.model.immutable.Syllabus;
+import org.ums.domain.model.mutable.MutableCourse;
 import org.ums.manager.CourseManager;
 import org.ums.manager.SemesterSyllabusMapManager;
+import org.ums.persistent.model.PersistentCourse;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
@@ -27,11 +26,9 @@ import java.util.List;
 @Component
 public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, String> {
   @Autowired
-  @Qualifier("courseManager")
   private CourseManager mManager;
 
   @Autowired
-  @Qualifier("semesterSyllabusMapManager")
   private SemesterSyllabusMapManager mSemesterSyllabusMapManager;
 
   @Autowired

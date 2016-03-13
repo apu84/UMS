@@ -3,7 +3,6 @@ package org.ums.services;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authc.credential.PasswordService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.ums.domain.model.dto.ResponseDto;
 import org.ums.domain.model.immutable.User;
@@ -17,7 +16,6 @@ import java.util.UUID;
 public class LoginService {
 
   @Autowired
-  @Qualifier("userManager")
   private UserManager mUserManager;
 
   @Autowired

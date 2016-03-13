@@ -2,12 +2,11 @@ package org.ums.common.academic.resource.helper;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.common.academic.resource.ResourceHelper;
 import org.ums.common.builder.ProgramBuilder;
-import org.ums.domain.model.mutable.MutableProgram;
 import org.ums.domain.model.immutable.Program;
+import org.ums.domain.model.mutable.MutableProgram;
 import org.ums.manager.ProgramManager;
 
 import javax.json.JsonObject;
@@ -17,7 +16,6 @@ import javax.ws.rs.core.UriInfo;
 @Component
 public class ProgramResourceHelper extends ResourceHelper<Program, MutableProgram, Integer> {
   @Autowired
-  @Qualifier("programManager")
   private ProgramManager mManager;
 
   @Autowired

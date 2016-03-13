@@ -2,7 +2,6 @@ package org.ums.common.academic.resource;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.manager.StudentManager;
 
@@ -18,7 +17,6 @@ import javax.ws.rs.core.Response;
 @Path("/academic/student")
 public class StudentResource extends MutableStudentResource {
   @Autowired
-  @Qualifier("studentManager")
   StudentManager mManager;
 
   @GET

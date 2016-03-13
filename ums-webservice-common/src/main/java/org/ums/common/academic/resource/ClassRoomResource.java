@@ -1,7 +1,6 @@
 package org.ums.common.academic.resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.common.Resource;
 import org.ums.manager.ClassRoomManager;
@@ -18,7 +17,6 @@ import javax.ws.rs.Produces;
 @Consumes(Resource.MIME_TYPE_JSON)
 public class ClassRoomResource  extends MutableClassRoomResource {
   @Autowired
-  @Qualifier("classRoomManager")
   ClassRoomManager mManager;
 
   @GET

@@ -1,7 +1,6 @@
 package org.ums.common.academic.resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.common.Resource;
 import org.ums.common.academic.resource.helper.CourseResourceHelper;
@@ -22,7 +21,6 @@ public class CourseResource extends MutableCourseResource {
   CourseResourceHelper mResourceHelper;
 
   @Autowired
-  @Qualifier("courseManager")
   CourseManager mManager;
 
   @GET

@@ -8,7 +8,6 @@ import org.pentaho.reporting.engine.classic.core.modules.misc.datafactory.sql.SQ
 import org.pentaho.reporting.libraries.resourceloader.Resource;
 import org.pentaho.reporting.libraries.resourceloader.ResourceManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.manager.StudentManager;
 import org.ums.manager.UserManager;
@@ -20,11 +19,9 @@ import java.util.Map;
 @Component
 public class PasswordReportGenerator extends AbstractReportGenerator {
   @Autowired
-  @Qualifier("userManager")
   UserManager mUserManager;
 
   @Autowired
-  @Qualifier("studentManager")
   StudentManager mStudentManager;
 
   private static final String QUERY_NAME = "ReportQuery";

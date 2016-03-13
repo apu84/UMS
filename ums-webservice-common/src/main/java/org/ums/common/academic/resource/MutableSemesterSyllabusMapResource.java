@@ -1,13 +1,15 @@
 package org.ums.common.academic.resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.ums.common.Resource;
 import org.ums.common.academic.resource.helper.SemesterSyllabusMapResourceHelper;
 import org.ums.manager.SemesterSyllabusMapManager;
 
 import javax.json.JsonObject;
-import javax.ws.rs.*;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
@@ -21,7 +23,6 @@ public class MutableSemesterSyllabusMapResource extends Resource {
   SemesterSyllabusMapResourceHelper  mResourceHelper;
 
   @Autowired
-  @Qualifier("semesterSyllabusMapManager")
   SemesterSyllabusMapManager mManager;
 
   @PUT

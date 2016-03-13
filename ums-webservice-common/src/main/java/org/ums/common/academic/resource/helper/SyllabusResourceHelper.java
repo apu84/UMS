@@ -1,16 +1,15 @@
 package org.ums.common.academic.resource.helper;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import org.ums.persistent.model.PersistentSyllabus;
 import org.ums.cache.LocalCache;
 import org.ums.common.academic.resource.ResourceHelper;
 import org.ums.common.academic.resource.SyllabusResource;
 import org.ums.common.builder.SyllabusBuilder;
-import org.ums.domain.model.mutable.MutableSyllabus;
 import org.ums.domain.model.immutable.Syllabus;
+import org.ums.domain.model.mutable.MutableSyllabus;
 import org.ums.manager.SyllabusManager;
+import org.ums.persistent.model.PersistentSyllabus;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
@@ -24,7 +23,6 @@ import java.util.List;
 @Component
 public class SyllabusResourceHelper extends ResourceHelper<Syllabus, MutableSyllabus, String> {
   @Autowired
-  @Qualifier("syllabusManager")
   private SyllabusManager mManager;
 
   @Autowired

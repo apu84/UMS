@@ -6,11 +6,10 @@ import org.apache.shiro.authc.credential.PasswordService;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import org.ums.domain.model.mutable.MutableUser;
 import org.ums.domain.model.immutable.User;
+import org.ums.domain.model.mutable.MutableUser;
 import org.ums.manager.UserManager;
 
 import javax.json.JsonObject;
@@ -19,10 +18,8 @@ import javax.ws.rs.core.Response;
 @Component
 public class LoginHelper {
   @Autowired
-  @Qualifier("jdbcRealm")
   AuthorizingRealm mAuthenticationRealm;
   @Autowired
-  @Qualifier("userManager")
   private UserManager mUserManager;
   @Autowired
   private PasswordService mPasswordService;
