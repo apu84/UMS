@@ -14,7 +14,7 @@ public class DepartmentCache extends ContentCache<Department, MutableDepartment,
   }
 
   @Override
-  protected CacheManager getCacheManager() {
+  protected CacheManager<Department> getCacheManager() {
     return mCacheManager;
   }
 

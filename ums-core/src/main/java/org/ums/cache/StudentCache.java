@@ -14,7 +14,7 @@ public class StudentCache extends ContentCache<Student, MutableStudent, String, 
   }
 
   @Override
-  protected CacheManager getCacheManager() {
+  protected CacheManager<Student> getCacheManager() {
     return mCacheManager;
   }
 
@@ -22,6 +22,5 @@ public class StudentCache extends ContentCache<Student, MutableStudent, String, 
   protected String getCacheKey(String pId) {
     return CacheUtil.getCacheKey(Student.class, pId);
   }
-
 
 }

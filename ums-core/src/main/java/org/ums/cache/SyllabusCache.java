@@ -16,7 +16,7 @@ public class SyllabusCache extends ContentCache<Syllabus, MutableSyllabus, Strin
   }
 
   @Override
-  protected CacheManager getCacheManager() {
+  protected CacheManager<Syllabus> getCacheManager() {
     return mCacheManager;
   }
 

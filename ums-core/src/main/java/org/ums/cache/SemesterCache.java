@@ -17,7 +17,7 @@ public class SemesterCache extends ContentCache<Semester, MutableSemester, Integ
   }
 
   @Override
-  protected CacheManager getCacheManager() {
+  protected CacheManager<Semester> getCacheManager() {
     return mCacheManager;
   }
 

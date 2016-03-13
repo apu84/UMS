@@ -16,7 +16,7 @@ public class UserCache extends ContentCache<User, MutableUser, String, UserManag
   }
 
   @Override
-  protected CacheManager getCacheManager() {
+  protected CacheManager<User> getCacheManager() {
     return mCacheManager;
   }
 
@@ -41,7 +41,7 @@ public class UserCache extends ContentCache<User, MutableUser, String, UserManag
   }
 
   @Override
-  public List<org.ums.domain.model.immutable.User> getUsers() throws Exception {
+  public List<User> getUsers() throws Exception {
     return getManager().getUsers();
   }
 }
