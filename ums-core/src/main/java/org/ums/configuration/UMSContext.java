@@ -42,24 +42,18 @@ public class UMSContext {
   @Autowired
   UMSAuthenticationRealm mAuthenticationRealm;
 
-  SemesterManager getPersistentSemesterDao() {
-    return new PersistentSemesterDao(mJdbcTemplate, getGenericDateFormat());
-  }
-
-  SemesterSyllabusMapManager getPersistentSemesterSyllabusMapDao() {
-    return new PersistentSemesterSyllabusMapDao(new JdbcTemplate(mDataSource), syllabusManager());
-  }
-
   @Bean
   SemesterManager semesterManager() {
     SemesterCache semesterCache = new SemesterCache(mLocalCacheManager);
-    semesterCache.setManager(getPersistentSemesterDao());
+    semesterCache.setManager(new PersistentSemesterDao(mJdbcTemplate, getGenericDateFormat()));
     return semesterCache;
   }
 
   @Bean
   SemesterSyllabusMapManager semesterSyllabusMapManager() {
-    return getPersistentSemesterSyllabusMapDao();
+    SemesterSyllabusMapCache semesterSyllabusMapCache = new SemesterSyllabusMapCache(mLocalCacheManager);
+    semesterSyllabusMapCache.setManager(new PersistentSemesterSyllabusMapDao(new JdbcTemplate(mDataSource), syllabusManager()));
+    return semesterSyllabusMapCache;
   }
 
   @Bean
@@ -69,7 +63,9 @@ public class UMSContext {
 
   @Bean
   ProgramTypeManager programTypeManager() {
-    return new PersistentProgramTypeDao(mJdbcTemplate);
+    ProgramTypeCache programTypeCache = new ProgramTypeCache(mLocalCacheManager);
+    programTypeCache.setManager(new PersistentProgramTypeDao(mJdbcTemplate));
+    return programTypeCache;
   }
 
   @Bean
@@ -95,7 +91,9 @@ public class UMSContext {
 
   @Bean
   CourseGroupManager courseGroupManager() {
-    return new PersistentCourseGroupDao(mJdbcTemplate);
+    CourseGroupCache courseGroupCache = new CourseGroupCache(mLocalCacheManager);
+    courseGroupCache.setManager(new PersistentCourseGroupDao(mJdbcTemplate));
+    return courseGroupCache;
   }
 
   @Bean
@@ -107,7 +105,9 @@ public class UMSContext {
 
   @Bean
   RoleManager roleManager() {
-    return new PersistentRoleDao(mJdbcTemplate);
+    RoleCache roleCache = new RoleCache(mLocalCacheManager);
+    roleCache.setManager(new PersistentRoleDao(mJdbcTemplate));
+    return roleCache;
   }
 
   @Bean
@@ -126,17 +126,23 @@ public class UMSContext {
 
   @Bean
   TeacherManager teacherManager() {
-    return new PersistentTeacherDao(mJdbcTemplate);
+    TeacherCache teacherCache = new TeacherCache(mLocalCacheManager);
+    teacherCache.setManager(new PersistentTeacherDao(mJdbcTemplate));
+    return teacherCache;
   }
 
   @Bean
   CourseTeacherManager courseTeacherManager() {
-    return new PersistentCourseTeacherDao(mJdbcTemplate);
+    CourseTeacherCache courseTeacherCache = new CourseTeacherCache(mLocalCacheManager);
+    courseTeacherCache.setManager(new PersistentCourseTeacherDao(mJdbcTemplate));
+    return courseTeacherCache;
   }
 
   @Bean
   PermissionManager permissionManager() {
-    return new PersistentPermissionDao(mJdbcTemplate);
+    PermissionCache permissionCache = new PermissionCache(mLocalCacheManager);
+    permissionCache.setManager(new PersistentPermissionDao(mJdbcTemplate));
+    return permissionCache;
   }
 
   @Bean
@@ -148,7 +154,9 @@ public class UMSContext {
 
   @Bean
   AdditionalRolePermissionsManager additionalRolePermissionsManager() {
-    return new AdditionalRolePermissionsDao(mJdbcTemplate, getGenericDateFormat());
+    AdditionalRolePermissionsCache additionalRolePermissionsCache = new AdditionalRolePermissionsCache(mLocalCacheManager);
+    additionalRolePermissionsCache.setManager(new AdditionalRolePermissionsDao(mJdbcTemplate, getGenericDateFormat()));
+    return additionalRolePermissionsCache;
   }
 
   @Bean
@@ -160,7 +168,9 @@ public class UMSContext {
 
   @Bean
   SemesterEnrollmentManager semesterEnrollmentManager() {
-    return new PersistentSemesterEnrollmentDao(mJdbcTemplate, getGenericDateFormat());
+    SemesterEnrollmentCache semesterEnrollmentCache = new SemesterEnrollmentCache(mLocalCacheManager);
+    semesterEnrollmentCache.setManager(new PersistentSemesterEnrollmentDao(mJdbcTemplate, getGenericDateFormat()));
+    return semesterEnrollmentCache;
   }
 
   @Bean
@@ -173,11 +183,13 @@ public class UMSContext {
   ClassRoomManager getPersistentClassRoomDao() {
     return new PersistentClassRoomDao(mJdbcTemplate);
   }
+
   //@Bean(name = "classRoomManager")
   @Bean
   ClassRoomManager classRoomManager() {
     return new PersistentClassRoomDao(mJdbcTemplate);
   }
+
   //@Bean(name = "examRoutineManager")
   @Bean
   ExamRoutineManager examRoutineManager() {
@@ -186,12 +198,12 @@ public class UMSContext {
 
   @Bean
   PersistentOptionalCourseApplicationDao persistentOptionalCourseApplicationDao() {
-   return new PersistentOptionalCourseApplicationDao(mJdbcTemplate);
+    return new PersistentOptionalCourseApplicationDao(mJdbcTemplate);
   }
 
 
   @Bean
-  LoginService  loginService() {
+  LoginService loginService() {
     return new LoginService();
   }
 

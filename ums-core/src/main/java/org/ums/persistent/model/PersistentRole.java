@@ -19,6 +19,7 @@ public class PersistentRole implements MutableRole {
   private Integer mId;
   private String mName;
   private Set<String> mPermissions;
+  private String mLastModified;
 
   public PersistentRole() {
 
@@ -76,5 +77,15 @@ public class PersistentRole implements MutableRole {
   @Override
   public void delete() throws Exception {
     sRoleManager.delete(this);
+  }
+
+  @Override
+  public String getLastModified() {
+    return mLastModified;
+  }
+
+  @Override
+  public void setLastModified(String pLastModified) {
+    mLastModified = pLastModified;
   }
 }

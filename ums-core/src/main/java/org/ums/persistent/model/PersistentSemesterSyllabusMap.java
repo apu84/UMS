@@ -2,8 +2,10 @@ package org.ums.persistent.model;
 
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
+import org.ums.domain.model.immutable.Program;
+import org.ums.domain.model.immutable.Semester;
+import org.ums.domain.model.immutable.Syllabus;
 import org.ums.domain.model.mutable.MutableSemesterSyllabusMap;
-import org.ums.domain.model.immutable.*;
 import org.ums.manager.SemesterSyllabusMapManager;
 
 /**
@@ -23,6 +25,7 @@ public class PersistentSemesterSyllabusMap implements MutableSemesterSyllabusMap
   private Syllabus mSyllabus;
   private int mYear;
   private int mSemester;
+  private String mLastModified;
 
   public PersistentSemesterSyllabusMap() {
 
@@ -100,5 +103,15 @@ public class PersistentSemesterSyllabusMap implements MutableSemesterSyllabusMap
 
   public MutableSemesterSyllabusMap edit() throws Exception {
     return new PersistentSemesterSyllabusMap(this);
+  }
+
+  @Override
+  public String getLastModified() {
+    return mLastModified;
+  }
+
+  @Override
+  public void setLastModified(String pLastModified) {
+    mLastModified = pLastModified;
   }
 }
