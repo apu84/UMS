@@ -35,7 +35,6 @@ import java.util.List;
 public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutine, String> {
 
   @Autowired
-  @Qualifier("routineManager")
   private RoutineManager mManager;
 
   @Autowired

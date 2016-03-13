@@ -21,9 +21,7 @@ import javax.ws.rs.core.Response;
 @Consumes(Resource.MIME_TYPE_JSON)
 public class RoutineResource extends MutableRoutineResource{
 
-
   @Autowired
-  @Qualifier("routineManager")
   RoutineManager mManager;
 
 
