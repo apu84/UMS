@@ -337,6 +337,20 @@ module ums {
           templateUrl: 'views/dept/optional-course-setting.html',
           controller: 'OptionalCoursesOffer'
         })
+        .state('semesterEnrollment', {
+          url: "/semesterEnrollment",
+          templateUrl: 'views/semester/semester-enrollment.html',
+          controller: 'SemesterEnrollment',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: [
+                  'vendors/jquery-validate/jquery.validate.min.js'
+                ]
+              });
+            }]
+          }
+        })
 
   });
 }

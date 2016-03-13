@@ -82,7 +82,7 @@ public class ContentDaoDecorator<R, M, I, C extends ContentManager<R, M, I>> imp
 
   @Override
   public int create(final List<M> pMutableList) throws Exception {
-    int created = getManager().update(pMutableList);
+    int created = getManager().create(pMutableList);
     if (created <= 0) {
       throw new IllegalArgumentException("No entry has been created");
     }

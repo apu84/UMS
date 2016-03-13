@@ -44,7 +44,7 @@ public class StudentEnrollmentResource extends Resource {
   @Autowired
   DateFormat mDateFormat;
   @GET
-  @Path("/enrollment-type/{enrollment-type}/program-id/{program-id}/semester-id/{semester-id}")
+  @Path("/enrollment-type/{enrollment-type}/program/{program-id}/semester/{semester-id}")
   public JsonObject getSemesterList(final @Context Request pRequest,
                                     final @PathParam("enrollment-type") int pEnrollmentType,
                                     final @PathParam("program-id") int pProgramId,
@@ -79,7 +79,7 @@ public class StudentEnrollmentResource extends Resource {
   }
 
   @POST
-  @Path("/enroll/{enrollment-type}/program-id/{program-id}/semester-id/{semester-id}")
+  @Path("/enroll/{enrollment-type}/program/{program-id}/semester/{semester-id}")
   public GenericResponse<Map> enrollSemester(final @Context Request pRequest,
                                  final @PathParam("enrollment-type") int pEnrollmentType,
                                  final @PathParam("program-id") int pProgramId,

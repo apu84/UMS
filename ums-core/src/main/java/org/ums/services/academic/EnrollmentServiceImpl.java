@@ -4,15 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-import org.ums.persistent.model.PersistentSemesterEnrollment;
-import org.ums.persistent.model.PersistentStudentRecord;
+import org.ums.domain.model.immutable.*;
 import org.ums.domain.model.mutable.MutableProgram;
 import org.ums.domain.model.mutable.MutableSemesterEnrollment;
 import org.ums.domain.model.mutable.MutableStudent;
 import org.ums.domain.model.mutable.MutableStudentRecord;
-import org.ums.domain.model.immutable.*;
 import org.ums.manager.*;
 import org.ums.message.MessageResource;
+import org.ums.persistent.model.PersistentSemesterEnrollment;
+import org.ums.persistent.model.PersistentStudentRecord;
 import org.ums.response.type.GenericMessageResponse;
 import org.ums.response.type.GenericResponse;
 import org.ums.util.UmsUtils;
@@ -138,7 +138,8 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         List<StudentRecord> temporaryEnrolledStudentRecords = mStudentRecordManager.getStudentRecords(pProgramId,
             pNewSemesterId, pToYear, pToAcademicSemester, StudentRecord.Type.TEMPORARY);
 
-        if (pToYear == UmsUtils.FIRST && pToAcademicSemester == UmsUtils.FIRST) {
+        if (pToYear == UmsUtils.FIRST && pToAcademicSemester == UmsUtils.FIRST
+            && temporaryEnrolledStudentRecords.size() > 0) {
           permanentEnrollmentNewStudents(temporaryEnrolledStudentRecords);
 
         } else {
