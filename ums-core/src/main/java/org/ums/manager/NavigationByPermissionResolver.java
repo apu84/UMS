@@ -1,4 +1,4 @@
-package org.ums.navigation;
+package org.ums.manager;
 
 
 import org.apache.shiro.authz.Permission;

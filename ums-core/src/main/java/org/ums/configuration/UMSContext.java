@@ -10,7 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.ums.authentication.UMSAuthenticationRealm;
 import org.ums.cache.*;
 import org.ums.manager.*;
-import org.ums.navigation.NavigationByPermissionResolver;
+import org.ums.manager.NavigationByPermissionResolver;
 import org.ums.persistent.dao.*;
 import org.ums.services.LoginService;
 import org.ums.util.Constants;
