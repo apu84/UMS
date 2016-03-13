@@ -1,37 +1,46 @@
 /// <reference path='model/SemesterEnrollmentModel.ts'/>
 module ums {
+  export interface SemesterEnrollmentScope extends ng.IScope {
+    semesterEnrollmentModel: SemesterEnrollmentModel;
+    submit: Function;
+    showStatus: boolean;
+  }
   export class SemesterEnrollment {
     public static $inject = ['$scope', 'appConstants', 'HttpClient'];
 
-    constructor(private $scope: any,
+    constructor(private $scope: SemesterEnrollmentScope,
                 private appConstants: any,
                 private httpClient: HttpClient) {
 
       $scope.semesterEnrollmentModel = new SemesterEnrollmentModel(appConstants, httpClient);
       $scope.submit = this.submit.bind(this);
 
-      $scope.$watch(
-          () => {
-            return $scope.semesterEnrollmentModel.semesterId;
-          },
+      $scope.$watchGroup(['semesterEnrollmentModel.semesterId',
+            'semesterEnrollmentModel.enrollmentType',
+            'semesterEnrollmentModel.programSelector.programId'],
           (newValue, oldValue) => {
             console.debug("Change detected: %o", $scope.semesterEnrollmentModel);
+
             if (newValue !== oldValue) {
 
-              this.httpClient.get('academic/studentEnrollment/enrollment-type/'
-                  + $scope.semesterEnrollmentModel.enrollmentType
-                  + '/program/' + $scope.semesterEnrollmentModel.programSelector.programId
-                  + '/semester/' + $scope.semesterEnrollmentModel.semesterId + '',
-                  HttpClient.MIME_TYPE_JSON,
-                  (json: any, etag: string) => {
-                    var enrollmentStatus: Array<SemesterEnrollmentStatus> = json.entries;
-                    this.$scope.semesterEnrollmentModel.status = enrollmentStatus;
-                  },
-                  (response: ng.IHttpPromiseCallbackArg<any>) => {
-                    console.error(response);
-                  });
+              if ($scope.semesterEnrollmentModel.enrollmentType != ''
+                  && $scope.semesterEnrollmentModel.programSelector.programId != ''
+                  && $scope.semesterEnrollmentModel.semesterId != '') {
 
-
+                this.httpClient.get('academic/studentEnrollment/enrollment-type/'
+                    + $scope.semesterEnrollmentModel.enrollmentType
+                    + '/program/' + $scope.semesterEnrollmentModel.programSelector.programId
+                    + '/semester/' + $scope.semesterEnrollmentModel.semesterId + '',
+                    HttpClient.MIME_TYPE_JSON,
+                    (json: any, etag: string) => {
+                      var enrollmentStatus: Array<SemesterEnrollmentStatus> = json.entries;
+                      this.$scope.semesterEnrollmentModel.status = enrollmentStatus;
+                      $scope.showStatus = true;
+                    },
+                    (response: ng.IHttpPromiseCallbackArg<any>) => {
+                      console.error(response);
+                    });
+              }
             }
           }
       );
