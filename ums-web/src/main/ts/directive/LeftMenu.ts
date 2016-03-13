@@ -30,7 +30,6 @@ module ums {
     public restrict = 'AE';
 
     public link = ($scope:any, element:JQuery, attributes:any) => {
-      $scope.loading_visibility=true;
       $scope._menu = {status: [], collapse: {}, hover: []};
 
       $scope._menu.mouseleave = function () {

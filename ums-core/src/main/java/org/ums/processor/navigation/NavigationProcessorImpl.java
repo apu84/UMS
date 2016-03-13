@@ -2,7 +2,7 @@ package org.ums.processor.navigation;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
-import org.ums.domain.model.readOnly.Navigation;
+import org.ums.domain.model.immutable.Navigation;
 
 import java.util.List;
 

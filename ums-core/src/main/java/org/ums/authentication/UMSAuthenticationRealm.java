@@ -11,10 +11,9 @@ import org.apache.shiro.realm.jdbc.JdbcRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.ums.domain.model.immutable.Permission;
+import org.ums.domain.model.immutable.User;
 import org.ums.domain.model.mutable.MutableUser;
-import org.ums.domain.model.readOnly.Permission;
-import org.ums.domain.model.readOnly.User;
 import org.ums.manager.ContentManager;
 import org.ums.manager.PermissionManager;
 
@@ -28,7 +27,6 @@ public class UMSAuthenticationRealm extends JdbcRealm {
   private PasswordMatcher mPlainPasswordMatcher;
   private CredentialsMatcher mHashCredentialsMatcher;
   @Autowired
-  @Qualifier("userManager")
   private ContentManager<User, MutableUser, String> mUserManager;
   @Autowired
   private PermissionManager mPermissionManager;

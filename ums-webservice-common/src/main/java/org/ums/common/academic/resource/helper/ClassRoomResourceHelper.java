@@ -1,22 +1,15 @@
 package org.ums.common.academic.resource.helper;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import org.ums.academic.builder.Builder;
-import org.ums.academic.model.PersistentClassRoom;
-import org.ums.academic.model.PersistentSemester;
+import org.ums.persistent.model.PersistentClassRoom;
 import org.ums.cache.LocalCache;
 import org.ums.common.academic.resource.ResourceHelper;
 import org.ums.common.academic.resource.SemesterResource;
-import org.ums.domain.model.jqGrid.JqGridData;
+import org.ums.common.builder.ClassRoomBuilder;
 import org.ums.domain.model.mutable.MutableClassRoom;
-import org.ums.domain.model.mutable.MutableSemester;
-import org.ums.domain.model.readOnly.ClassRoom;
-import org.ums.domain.model.readOnly.Semester;
-import org.ums.manager.ContentManager;
+import org.ums.domain.model.immutable.ClassRoom;
+import org.ums.manager.ClassRoomManager;
 
 import javax.json.*;
 import javax.ws.rs.core.Response;
@@ -29,20 +22,19 @@ import java.util.List;
 public class ClassRoomResourceHelper extends ResourceHelper<ClassRoom, MutableClassRoom, Integer> {
 
   @Autowired
-  @Qualifier("classRoomManager")
-  private ContentManager<ClassRoom, MutableClassRoom, Integer> mManager;
+  private ClassRoomManager mManager;
 
   @Autowired
-  private List<Builder<ClassRoom, MutableClassRoom>> mBuilders;
+  private ClassRoomBuilder mBuilder;
 
   @Override
-  public ContentManager<ClassRoom, MutableClassRoom, Integer> getContentManager() {
+  public ClassRoomManager getContentManager() {
     return mManager;
   }
 
   @Override
-  public List<Builder<ClassRoom, MutableClassRoom>> getBuilders() {
-    return mBuilders;
+  public ClassRoomBuilder getBuilder() {
+    return mBuilder;
   }
 
 
@@ -80,9 +72,7 @@ public class ClassRoomResourceHelper extends ResourceHelper<ClassRoom, MutableCl
   public Response post(final JsonObject pJsonObject, final UriInfo pUriInfo) throws Exception {
     MutableClassRoom mutableClassRoom = new PersistentClassRoom();
     LocalCache localCache = new LocalCache();
-    for (Builder<ClassRoom, MutableClassRoom> builder : mBuilders) {
-      builder.build(mutableClassRoom, pJsonObject, localCache);
-    }
+    getBuilder().build(mutableClassRoom, pJsonObject, localCache);
     mutableClassRoom.commit(false);
 
     URI contextURI = pUriInfo.getBaseUriBuilder().path(SemesterResource.class).path(SemesterResource.class, "get").build(mutableClassRoom.getId());

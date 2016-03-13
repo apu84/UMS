@@ -1,8 +1,6 @@
 package org.ums.common.academic.resource;
 
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.common.Resource;
 import org.ums.manager.SemesterManager;
@@ -19,7 +17,6 @@ import javax.ws.rs.core.Response;
 @Consumes(Resource.MIME_TYPE_JSON)
 public class SemesterResource extends MutableSemesterResource {
   @Autowired
-  @Qualifier("semesterManager")
   SemesterManager mManager;
 
   @GET

@@ -2,7 +2,7 @@ package org.ums.manager;
 
 import org.ums.domain.model.dto.ExamRoutineDto;
 import org.ums.domain.model.mutable.MutableExamRoutine;
-import org.ums.domain.model.readOnly.ExamRoutine;
+import org.ums.domain.model.immutable.ExamRoutine;
 
 import java.util.List;
 

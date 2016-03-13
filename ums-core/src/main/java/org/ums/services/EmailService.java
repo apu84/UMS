@@ -1,4 +1,5 @@
 package org.ums.services;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -18,10 +19,10 @@ import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.velocity.VelocityEngineUtils;
 import org.ums.domain.model.dto.ResetPasswordEmailDto;
-import org.ums.domain.model.readOnly.User;
+import org.ums.domain.model.immutable.User;
 
 @Component("emailService")
-public class EmailService  {
+public class EmailService {
 
   @Autowired
   private JavaMailSender mailSender;
@@ -32,8 +33,8 @@ public class EmailService  {
 
   private User user;
 
-  public void setUser(User user){
-    this.user=user;
+  public void setUser(User user) {
+    this.user = user;
   }
 
   public void sendEmail(final String toEmailAddresses, final String fromEmailAddress,
@@ -54,7 +55,7 @@ public class EmailService  {
       public void prepare(MimeMessage mimeMessage) throws Exception {
         MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true);
         message.setTo(toEmailAddresses);
-        message.setFrom(new InternetAddress(fromEmailAddress,"IUMS"));
+        message.setFrom(new InternetAddress(fromEmailAddress, "IUMS"));
         message.setSubject(subject);
 
 
@@ -65,17 +66,17 @@ public class EmailService  {
         ResetPasswordEmailDto others = new ResetPasswordEmailDto();
         others.setUmsRootUrl("https://localhost/ums-web/login");
         others.setUmsForgotPasswordUrl("https://localhost/ums-web/login/?fogot-password.ums");
-        String abc="https://localhost/ums-web/login/reset-password.html?pr_token=$$TOKEN$$&uid=$$USER_ID$$";
-        abc=abc.replace("$$TOKEN$$",user.getPasswordResetToken());
-        abc=abc.replace("$$USER_ID$$",user.getId());
+        String abc = "https://localhost/ums-web/login/reset-password.html?pr_token=$$TOKEN$$&uid=$$USER_ID$$";
+        abc = abc.replace("$$TOKEN$$", user.getPasswordResetToken());
+        abc = abc.replace("$$USER_ID$$", user.getId());
 
         others.setUmsResetPasswordUrl(abc);
         others.setForgotPasswordRequestDateTime(strDate);
 
 
         Map model = new HashMap();
-        model.put("user",user );
-        model.put("others",others );
+        model.put("user", user);
+        model.put("others", others);
 
         String body = VelocityEngineUtils.mergeTemplateIntoString(
             velocityEngine, "html-templates/password-reset-email.vm", "UTF-8", model);

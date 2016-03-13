@@ -2,12 +2,12 @@ package org.ums.common.academic.resource.helper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ums.academic.builder.Builder;
-import org.ums.academic.model.PersistentCourseTeacher;
+import org.ums.persistent.model.PersistentCourseTeacher;
 import org.ums.cache.LocalCache;
 import org.ums.common.academic.resource.ResourceHelper;
+import org.ums.common.builder.CourseTeacherBuilder;
 import org.ums.domain.model.mutable.MutableCourseTeacher;
-import org.ums.domain.model.readOnly.CourseTeacher;
+import org.ums.domain.model.immutable.CourseTeacher;
 import org.ums.enums.CourseCategory;
 import org.ums.manager.CourseTeacherManager;
 
@@ -22,7 +22,7 @@ public class CourseTeacherResourceHelper extends ResourceHelper<CourseTeacher, M
   CourseTeacherManager mCourseTeacherManager;
 
   @Autowired
-  private List<Builder<CourseTeacher, MutableCourseTeacher>> mBuilders;
+  private CourseTeacherBuilder mBuilder;
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
@@ -37,8 +37,8 @@ public class CourseTeacherResourceHelper extends ResourceHelper<CourseTeacher, M
   }
 
   @Override
-  protected List<Builder<CourseTeacher, MutableCourseTeacher>> getBuilders() {
-    return mBuilders;
+  protected CourseTeacherBuilder getBuilder() {
+    return mBuilder;
   }
 
   @Override
@@ -102,12 +102,8 @@ public class CourseTeacherResourceHelper extends ResourceHelper<CourseTeacher, M
     for (int i = 0; i < entries.size(); i++) {
       JsonObject jsonObject = entries.getJsonObject(i);
       String updateType = jsonObject.getString("updateType");
-
       MutableCourseTeacher mutableCourseTeacher = new PersistentCourseTeacher();
-
-      for (Builder<CourseTeacher, MutableCourseTeacher> builder : mBuilders) {
-        builder.build(mutableCourseTeacher, jsonObject, localCache);
-      }
+      getBuilder().build(mutableCourseTeacher, jsonObject, localCache);
 
       switch (updateType) {
         case "insert":

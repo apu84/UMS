@@ -2,55 +2,67 @@ package org.ums.common.academic.resource.helper;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.ums.academic.builder.Builder;
-import org.ums.academic.model.PersistentStudent;
-import org.ums.academic.model.PersistentUser;
+import org.ums.persistent.model.PersistentStudent;
+import org.ums.persistent.model.PersistentStudentRecord;
+import org.ums.persistent.model.PersistentUser;
 import org.ums.cache.LocalCache;
 import org.ums.common.academic.resource.ResourceHelper;
 import org.ums.common.academic.resource.StudentResource;
-import org.ums.domain.model.mutable.MutableRole;
+import org.ums.common.builder.StudentBuilder;
 import org.ums.domain.model.mutable.MutableStudent;
+import org.ums.domain.model.mutable.MutableStudentRecord;
 import org.ums.domain.model.mutable.MutableUser;
-import org.ums.domain.model.readOnly.Role;
-import org.ums.domain.model.readOnly.Student;
+import org.ums.domain.model.immutable.Student;
+import org.ums.domain.model.immutable.StudentRecord;
 import org.ums.manager.BinaryContentManager;
-import org.ums.manager.ContentManager;
+import org.ums.manager.RoleManager;
+import org.ums.manager.StudentManager;
+import org.ums.util.UmsUtils;
 
 import javax.json.JsonObject;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.Base64;
-import java.util.List;
 
 @Component
 public class StudentResourceHelper extends ResourceHelper<Student, MutableStudent, String> {
   @Autowired
-  @Qualifier("roleManager")
-  ContentManager<Role, MutableRole, Integer> mRoleManager;
+  RoleManager mRoleManager;
+
   @Autowired
   BinaryContentManager<byte[]> mBinaryContentManager;
-  @Autowired
-  @Qualifier("studentManager")
-  private ContentManager<Student, MutableStudent, String> mManager;
-  @Autowired
-  private List<Builder<Student, MutableStudent>> mBuilders;
 
+  @Autowired
+  private StudentManager mManager;
+
+  @Autowired
+  private StudentBuilder mBuilder;
 
   @Override
-  @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class, isolation = Isolation.DEFAULT)
+  @Transactional
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
     MutableStudent mutableStudent = new PersistentStudent();
+
     LocalCache localCache = new LocalCache();
-    for (Builder<Student, MutableStudent> builder : mBuilders) {
-      builder.build(mutableStudent, pJsonObject, localCache);
-    }
+    getBuilder().build(mutableStudent, pJsonObject, localCache);
+
+    mutableStudent.setCurrentYear(UmsUtils.FIRST);
+    mutableStudent.setCurrentAcademicSemester(UmsUtils.FIRST);
+    mutableStudent.setEnrollmentType(Student.EnrollmentType.TEMPORARY);
     mutableStudent.commit(false);
+
+    MutableStudentRecord mutableStudentRecord = new PersistentStudentRecord();
+    mutableStudentRecord.setStudentId(mutableStudent.getId());
+    mutableStudentRecord.setSemesterId(mutableStudent.getSemesterId());
+    mutableStudentRecord.setProgramId(mutableStudent.getProgramId());
+    mutableStudentRecord.setYear(UmsUtils.FIRST);
+    mutableStudentRecord.setAcademicSemester(UmsUtils.FIRST);
+    mutableStudentRecord.setType(StudentRecord.Type.TEMPORARY);
+    mutableStudentRecord.setStatus(StudentRecord.Status.UNKNOWN);
+    mutableStudentRecord.commit(false);
 
     MutableUser studentUser = new PersistentUser();
     studentUser.setId(pJsonObject.getString("id"));
@@ -75,13 +87,13 @@ public class StudentResourceHelper extends ResourceHelper<Student, MutableStuden
   }
 
   @Override
-  protected ContentManager<Student, MutableStudent, String> getContentManager() {
+  protected StudentManager getContentManager() {
     return mManager;
   }
 
   @Override
-  protected List<Builder<Student, MutableStudent>> getBuilders() {
-    return mBuilders;
+  protected StudentBuilder getBuilder() {
+    return mBuilder;
   }
 
   @Override

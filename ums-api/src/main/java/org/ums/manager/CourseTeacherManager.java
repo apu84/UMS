@@ -1,7 +1,7 @@
 package org.ums.manager;
 
 import org.ums.domain.model.mutable.MutableCourseTeacher;
-import org.ums.domain.model.readOnly.CourseTeacher;
+import org.ums.domain.model.immutable.CourseTeacher;
 import org.ums.enums.CourseCategory;
 
 import java.util.List;

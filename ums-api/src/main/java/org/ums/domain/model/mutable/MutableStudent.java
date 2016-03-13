@@ -2,7 +2,7 @@ package org.ums.domain.model.mutable;
 
 import org.ums.domain.model.common.Mutable;
 import org.ums.domain.model.common.MutableIdentifier;
-import org.ums.domain.model.readOnly.*;
+import org.ums.domain.model.immutable.*;
 
 import java.util.Date;
 
@@ -50,4 +50,10 @@ public interface MutableStudent extends Student, Mutable, MutableIdentifier<Stri
   void setGuardianPhoneNo(final String pGuardianPhoneNo);
 
   void setGuardianEmail(final String pGuardianEmail);
+
+  void setEnrollmentType(final EnrollmentType pEnrollmentType);
+
+  void setCurrentYear(final Integer pCurrentYear);
+
+  void setCurrentAcademicSemester(final Integer pAcademicSemester);
 }

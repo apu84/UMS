@@ -2,11 +2,8 @@ package org.ums.common.academic.resource;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import org.ums.domain.model.mutable.MutableStudent;
-import org.ums.domain.model.readOnly.Student;
-import org.ums.manager.ContentManager;
+import org.ums.manager.StudentManager;
 
 import javax.json.JsonObject;
 import javax.ws.rs.GET;
@@ -20,8 +17,7 @@ import javax.ws.rs.core.Response;
 @Path("/academic/student")
 public class StudentResource extends MutableStudentResource {
   @Autowired
-  @Qualifier("studentManager")
-  ContentManager<Student, MutableStudent, String> mManager;
+  StudentManager mManager;
 
   @GET
   @Path("/all")

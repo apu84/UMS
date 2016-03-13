@@ -1,12 +1,11 @@
 package org.ums.common.academic.resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.common.Resource;
+import org.ums.domain.model.immutable.Program;
 import org.ums.domain.model.mutable.MutableProgram;
-import org.ums.domain.model.readOnly.Program;
-import org.ums.manager.ContentManager;
+import org.ums.manager.ProgramManager;
 
 import javax.json.JsonObject;
 import javax.ws.rs.*;
@@ -23,8 +22,7 @@ public class ProgramResource extends Resource {
   ResourceHelper<Program, MutableProgram, Integer> mResourceHelper;
 
   @Autowired
-  @Qualifier("programManager")
-  ContentManager<Program, MutableProgram, Integer> mManager;
+  ProgramManager mManager;
 
   @GET
   @Path("/all")

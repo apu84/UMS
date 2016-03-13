@@ -1,19 +1,17 @@
 package org.ums.common.academic.resource.helper;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import org.ums.academic.builder.Builder;
-import org.ums.academic.model.PersistentSemesterSyllabusMap;
 import org.ums.cache.LocalCache;
 import org.ums.common.academic.resource.ResourceHelper;
 import org.ums.common.academic.resource.SemesterResource;
+import org.ums.common.builder.SemesterSyllabusMapBuilder;
+import org.ums.common.builder.SemesterSyllabusMapsBuilder;
 import org.ums.domain.model.dto.MutableSemesterSyllabusMapDto;
-import org.ums.domain.model.dto.SemesterSyllabusMapDto;
+import org.ums.domain.model.immutable.SemesterSyllabusMap;
 import org.ums.domain.model.mutable.MutableSemesterSyllabusMap;
-import org.ums.domain.model.readOnly.SemesterSyllabusMap;
-import org.ums.manager.ContentManager;
 import org.ums.manager.SemesterSyllabusMapManager;
+import org.ums.persistent.model.PersistentSemesterSyllabusMap;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
@@ -31,22 +29,19 @@ import java.util.List;
 @Component
 public class SemesterSyllabusMapResourceHelper extends ResourceHelper<SemesterSyllabusMap, MutableSemesterSyllabusMap, Integer> {
   @Autowired
-  @Qualifier("semesterSyllabusMapManager")
   private SemesterSyllabusMapManager mManager;
 
   @Autowired
-  private List<Builder<SemesterSyllabusMap, MutableSemesterSyllabusMap>> mBuilders;
+  private SemesterSyllabusMapBuilder mBuilder;
 
   @Autowired
-  private List<Builder<SemesterSyllabusMapDto, MutableSemesterSyllabusMapDto>> mMapBuilders;
+  private SemesterSyllabusMapsBuilder mMapBuilder;
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
-    MutableSemesterSyllabusMapDto mutableSemesterSyllabusMap = new org.ums.academic.model.dto.SemesterSyllabusMap();
+    MutableSemesterSyllabusMapDto mutableSemesterSyllabusMap = new org.ums.domain.model.dto.SemesterSyllabusMap();
     LocalCache localCache = new LocalCache();
-    for (Builder<SemesterSyllabusMapDto, MutableSemesterSyllabusMapDto> builder : mMapBuilders) {
-      builder.build(mutableSemesterSyllabusMap, pJsonObject, localCache);
-    }
+    mMapBuilder.build(mutableSemesterSyllabusMap, pJsonObject, localCache);
 
     mManager.copySyllabus(mutableSemesterSyllabusMap);
 
@@ -59,16 +54,13 @@ public class SemesterSyllabusMapResourceHelper extends ResourceHelper<SemesterSy
   }
 
   @Override
-  protected ContentManager<SemesterSyllabusMap, MutableSemesterSyllabusMap, Integer> getContentManager() {
+  protected SemesterSyllabusMapManager getContentManager() {
     return mManager;
   }
 
   public Response put(final JsonObject pJsonObject) throws Exception {
     MutableSemesterSyllabusMap mutable =new PersistentSemesterSyllabusMap();
-
-    for (Builder<SemesterSyllabusMap, MutableSemesterSyllabusMap> builder : getBuilders()) {
-      builder.build(mutable, pJsonObject, null);
-    }
+    getBuilder().build(mutable, pJsonObject, null);
     SemesterSyllabusMap readOnly = load(mutable.getId());
     System.out.println(readOnly.getAcademicSemester().getStatus());
 
@@ -76,8 +68,8 @@ public class SemesterSyllabusMapResourceHelper extends ResourceHelper<SemesterSy
     return Response.noContent().build();
   }
   @Override
-  protected List<Builder<SemesterSyllabusMap, MutableSemesterSyllabusMap>> getBuilders() {
-    return mBuilders;
+  protected SemesterSyllabusMapBuilder getBuilder() {
+    return mBuilder;
   }
 
   public JsonObject buildMaps(final List<SemesterSyllabusMap> pSyllabuses, final UriInfo pUriInfo) throws Exception {

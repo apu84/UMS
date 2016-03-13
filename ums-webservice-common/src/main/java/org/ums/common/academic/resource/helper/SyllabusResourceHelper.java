@@ -1,16 +1,15 @@
 package org.ums.common.academic.resource.helper;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import org.ums.academic.builder.Builder;
-import org.ums.academic.model.PersistentSyllabus;
 import org.ums.cache.LocalCache;
 import org.ums.common.academic.resource.ResourceHelper;
 import org.ums.common.academic.resource.SyllabusResource;
+import org.ums.common.builder.SyllabusBuilder;
+import org.ums.domain.model.immutable.Syllabus;
 import org.ums.domain.model.mutable.MutableSyllabus;
-import org.ums.domain.model.readOnly.Syllabus;
-import org.ums.manager.ContentManager;
+import org.ums.manager.SyllabusManager;
+import org.ums.persistent.model.PersistentSyllabus;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
@@ -24,28 +23,25 @@ import java.util.List;
 @Component
 public class SyllabusResourceHelper extends ResourceHelper<Syllabus, MutableSyllabus, String> {
   @Autowired
-  @Qualifier("syllabusManager")
-  private ContentManager<Syllabus, MutableSyllabus, String> mManager;
+  private SyllabusManager mManager;
 
   @Autowired
-  private List<Builder<Syllabus, MutableSyllabus>> mBuilders;
+  private SyllabusBuilder mBuilder;
 
   @Override
-  public ContentManager<Syllabus, MutableSyllabus, String> getContentManager() {
+  public SyllabusManager getContentManager() {
     return mManager;
   }
 
   @Override
-  public List<Builder<Syllabus, MutableSyllabus>> getBuilders() {
-    return mBuilders;
+  public SyllabusBuilder getBuilder() {
+    return mBuilder;
   }
 
   public Response post(final JsonObject pJsonObject, final UriInfo pUriInfo) throws Exception {
     MutableSyllabus mutableSyllabus = new PersistentSyllabus();
     LocalCache localCache = new LocalCache();
-    for (Builder<Syllabus, MutableSyllabus> builder : mBuilders) {
-      builder.build(mutableSyllabus, pJsonObject, localCache);
-    }
+    getBuilder().build(mutableSyllabus, pJsonObject, localCache);
     mutableSyllabus.commit(false);
 
     URI contextURI = pUriInfo.getBaseUriBuilder().path(SyllabusResource.class).path(SyllabusResource.class, "get").build(mutableSyllabus.getId());

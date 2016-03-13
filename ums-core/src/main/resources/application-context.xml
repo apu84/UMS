@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+  <bean class="org.ums.cache.LocalCacheManager" id="localCache"/>
+
+  <bean class="org.ums.manager.FileContentManager" id="fileContentManager">
+    <property name="storageRoot" value="${binary.storageRoot}"/>
+  </bean>
+
+  <!--Mail Configuration [Start]-->
+  <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+    <property name="javaMailProperties">
+      <props>
+        <prop key="mail.smtp.auth">true</prop>
+        <prop key="mail.smtp.starttls.enable">true</prop>
+        <prop key="mail.smtp.host">smtp.gmail.com</prop>
+        <prop key="mail.smtp.port">587</prop>
+        <prop key="mail.smtp.ssl.trust">smtp.gmail.com</prop>
+      </props>
+    </property>
+    <property name="username" value="aust.test.email@gmail.com"/>
+    <property name="password" value="Iums4Aust"/>
+  </bean>
+
+  <bean id="velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
+    <property name="velocityProperties">
+      <value>
+        resource.loader=class
+        class.resource.loader.class=org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
+      </value>
+    </property>
+  </bean>
+
+  <bean id="messageSource"
+        class="org.springframework.context.support.ResourceBundleMessageSource">
+    <property name="basename">
+      <value>message.common.message</value>
+    </property>
+  </bean>
+
+  <!--Mail Configuration [End]-->
+
+  <!--Menu item processors-->
+  <bean id="dummyNavigationProcessor" class="org.ums.processor.navigation.DummyNavigationItemProcessor"/>
+
+  <bean id="navigationProcessor" class="org.ums.processor.navigation.NavigationProcessorImpl">
+    <constructor-arg>
+      <list>
+        <ref bean="dummyNavigationProcessor"/>
+      </list>
+    </constructor-arg>
+  </bean>
+
+</beans>

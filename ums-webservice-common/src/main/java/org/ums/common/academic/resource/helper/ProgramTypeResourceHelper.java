@@ -1,48 +1,43 @@
 package org.ums.common.academic.resource.helper;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import org.ums.academic.builder.Builder;
-import org.ums.academic.model.PersistentProgramType;
+import org.ums.persistent.model.PersistentProgramType;
 import org.ums.cache.LocalCache;
 import org.ums.common.academic.resource.ProgramTypeResource;
 import org.ums.common.academic.resource.ResourceHelper;
+import org.ums.common.builder.ProgramTypeBuilder;
 import org.ums.domain.model.mutable.MutableProgramType;
-import org.ums.domain.model.readOnly.ProgramType;
-import org.ums.manager.ContentManager;
+import org.ums.domain.model.immutable.ProgramType;
+import org.ums.manager.ProgramTypeManager;
 
 import javax.json.JsonObject;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
-import java.util.List;
 
 @Component
 public class ProgramTypeResourceHelper extends ResourceHelper<ProgramType, MutableProgramType, Integer> {
   @Autowired
-  @Qualifier("programTypeManager")
-  private ContentManager<ProgramType, MutableProgramType, Integer> mManager;
+  private ProgramTypeManager mManager;
 
   @Autowired
-  private List<Builder<ProgramType, MutableProgramType>> mBuilders;
+  private ProgramTypeBuilder mBuilder;
 
   @Override
-  public ContentManager<ProgramType, MutableProgramType, Integer> getContentManager() {
+  public ProgramTypeManager getContentManager() {
     return mManager;
   }
 
   @Override
-  public List<Builder<ProgramType, MutableProgramType>> getBuilders() {
-    return mBuilders;
+  public ProgramTypeBuilder getBuilder() {
+    return mBuilder;
   }
 
   public Response post(final JsonObject pJsonObject, final UriInfo pUriInfo) throws Exception {
     MutableProgramType mutableProgramType = new PersistentProgramType();
     LocalCache localCache = new LocalCache();
-    for (Builder<ProgramType, MutableProgramType> builder : mBuilders) {
-      builder.build(mutableProgramType, pJsonObject, localCache);
-    }
+    getBuilder().build(mutableProgramType, pJsonObject, localCache);
     mutableProgramType.commit(false);
 
     URI contextURI = pUriInfo.getBaseUriBuilder().path(ProgramTypeResource.class).path(ProgramTypeResource.class, "get")

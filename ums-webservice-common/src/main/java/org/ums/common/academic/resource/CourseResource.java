@@ -1,13 +1,10 @@
 package org.ums.common.academic.resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.common.Resource;
 import org.ums.common.academic.resource.helper.CourseResourceHelper;
-import org.ums.domain.model.readOnly.Course;
-import org.ums.domain.model.mutable.MutableCourse;
-import org.ums.manager.ContentManager;
+import org.ums.manager.CourseManager;
 
 import javax.json.JsonObject;
 import javax.ws.rs.*;
@@ -24,8 +21,7 @@ public class CourseResource extends MutableCourseResource {
   CourseResourceHelper mResourceHelper;
 
   @Autowired
-  @Qualifier("courseManager")
-  ContentManager<Course, MutableCourse, String> mManager;
+  CourseManager mManager;
 
   @GET
   @Path("/all")
@@ -51,10 +47,33 @@ public class CourseResource extends MutableCourseResource {
   }
 
   @GET
-  @Path("/semester-id/{semester-id}/program/{program-id}/year/{year}/semester/{semester}")
+  @Path("/optional/semester-id/{semester-id}/program/{program-id}/year/{year}/semester/{semester}")
   public JsonObject getOptionalCourses(final @Context Request pRequest, final @PathParam("semester-id") Integer pSemesterId, final @PathParam("program-id") Integer pProgramId
       , final @PathParam("year") Integer pYear, final @PathParam("semester") Integer pSemester) throws Exception {
     return mResourceHelper.getOptionalCourses(pSemesterId, pProgramId, pYear,pSemester,pRequest, mUriInfo);
   }
+
+  @GET
+  @Path("/offered/semester-id/{semester-id}/program/{program-id}/year/{year}/semester/{semester}")
+  public JsonObject getOfferedCourses(final @Context Request pRequest, final @PathParam("semester-id") Integer pSemesterId, final @PathParam("program-id") Integer pProgramId
+      , final @PathParam("year") Integer pYear, final @PathParam("semester") Integer pSemester) throws Exception {
+    return mResourceHelper.getOfferedCourses(pSemesterId, pProgramId, pYear,pSemester,mUriInfo);
+  }
+
+  @GET
+  @Path("/call4Application/semester-id/{semester-id}/program/{program-id}/year/{year}/semester/{semester}")
+  public JsonObject getCallForApplicationCourses(final @Context Request pRequest, final @PathParam("semester-id") Integer pSemesterId, final @PathParam("program-id") Integer pProgramId
+      , final @PathParam("year") Integer pYear, final @PathParam("semester") Integer pSemester) throws Exception {
+    return mResourceHelper.getCallForApplicationCourses(pSemesterId, pProgramId, pYear, pSemester,mUriInfo);
+  }
+
+  @GET
+  @Path("/approved/semester-id/{semester-id}/program/{program-id}/year/{year}/semester/{semester}")
+  public JsonObject getApprovedCourses(final @Context Request pRequest, final @PathParam("semester-id") Integer pSemesterId, final @PathParam("program-id") Integer pProgramId
+      , final @PathParam("year") Integer pYear, final @PathParam("semester") Integer pSemester) throws Exception {
+    return mResourceHelper.getApprovedCourses(pSemesterId, pProgramId, pYear, pSemester,mUriInfo);
+  }
+
+
 
 }

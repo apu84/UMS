@@ -1,12 +1,11 @@
 package org.ums.common.academic.resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.common.Resource;
-import org.ums.domain.model.readOnly.Department;
+import org.ums.domain.model.immutable.Department;
 import org.ums.domain.model.mutable.MutableDepartment;
-import org.ums.manager.ContentManager;
+import org.ums.manager.DepartmentManager;
 
 import javax.json.JsonObject;
 import javax.ws.rs.*;
@@ -23,8 +22,7 @@ public class DepartmentResource extends Resource {
   ResourceHelper<Department, MutableDepartment, String> mResourceHelper;
 
   @Autowired
-  @Qualifier("departmentManager")
-  ContentManager<Department, MutableDepartment, String> mManager;
+  DepartmentManager mManager;
 
   @GET
   @Path("/all")

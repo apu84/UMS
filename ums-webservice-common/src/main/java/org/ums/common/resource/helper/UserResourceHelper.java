@@ -2,12 +2,11 @@ package org.ums.common.resource.helper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ums.academic.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.common.academic.resource.ResourceHelper;
+import org.ums.common.builder.UserBuilder;
 import org.ums.domain.model.mutable.MutableUser;
-import org.ums.domain.model.readOnly.User;
-import org.ums.manager.ContentManager;
+import org.ums.domain.model.immutable.User;
 import org.ums.manager.UserManager;
 
 import javax.json.Json;
@@ -24,7 +23,7 @@ public class UserResourceHelper extends ResourceHelper<User, MutableUser, String
   UserManager mUserManager;
 
   @Autowired
-  List<Builder<User, MutableUser>> mBuilders;
+  UserBuilder mBuilder;
 
   @Override
   protected Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
@@ -33,13 +32,13 @@ public class UserResourceHelper extends ResourceHelper<User, MutableUser, String
   }
 
   @Override
-  protected ContentManager<User, MutableUser, String> getContentManager() {
+  protected UserManager getContentManager() {
     return mUserManager;
   }
 
   @Override
-  protected List<Builder<User, MutableUser>> getBuilders() {
-    return mBuilders;
+  protected UserBuilder getBuilder() {
+    return mBuilder;
   }
 
   @Override

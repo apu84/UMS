@@ -1,8 +1,8 @@
 package org.ums.domain.model.mutable;
 
 
-import org.ums.domain.model.readOnly.ProgramType;
-import org.ums.domain.model.readOnly.Semester;
+import org.ums.domain.model.immutable.ProgramType;
+import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.common.Mutable;
 import org.ums.domain.model.common.MutableIdentifier;
 
@@ -16,7 +16,7 @@ public interface MutableSemester extends Semester, Mutable, MutableLastModifier,
 
   void setEndDate(final Date pDate);
 
-  void setStatus(final boolean pStatus);
+  void setStatus(final Status pStatus);
 
   void setProgramType(final ProgramType pProgram);
 
