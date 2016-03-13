@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+  <bean id="saltBytes" class="org.apache.shiro.util.SimpleByteSource">
+    <constructor-arg value="${authentication.salt}"/>
+  </bean>
+
+  <bean id="hashService" class="org.apache.shiro.crypto.hash.DefaultHashService">
+    <property name="hashAlgorithmName" value="SHA-512"/>
+    <property name="hashIterations" value="1024"/>
+    <property name="generatePublicSalt" value="true"/>
+    <property name="privateSalt" ref="saltBytes"/>
+  </bean>
+
+  <bean id="hashFormat" class="org.apache.shiro.crypto.hash.format.Shiro1CryptFormat"/>
+
+  <bean id="passwordService" class="org.apache.shiro.authc.credential.DefaultPasswordService">
+    <property name="hashService" ref="hashService"/>
+    <property name="hashFormat" ref="hashFormat"/>
+  </bean>
+
+  <bean id="credentialMatcher" class="org.apache.shiro.authc.credential.PasswordMatcher">
+    <property name="passwordService" ref="passwordService"/>
+  </bean>
+
+  <bean id="plainPasswordMatcher" class="org.ums.authentication.PlainPasswordMatcher"/>
+
+  <bean id="rolePermissionResolver" class="org.ums.authorization.UMSRolePermissionResolver"/>
+  <!-- security datasource: -->
+  <bean id="jdbcRealm" class="org.ums.authentication.UMSAuthenticationRealm">
+    <property name="dataSource" ref="dataSource"/>
+    <property name="permissionsLookupEnabled" value="true"/>
+    <property name="authenticationQuery" value="SELECT password, temp_password FROM Users WHERE user_id = ?"/>
+    <property name="userRolesQuery" value="select role_id from Users where user_id = ?"/>
+    <property name="permissionsQuery" value="select permissions from permissions where role_id = ?"/>
+    <property name="credentialsMatcher" ref="credentialMatcher"/>
+    <property name="hashCredentialsMatcher" ref="credentialMatcher"/>
+    <property name="plainPasswordMatcher" ref="plainPasswordMatcher"/>
+    <property name="saltStyle" value="EXTERNAL"/>
+    <property name="rolePermissionResolver" ref="rolePermissionResolver"/>
+    <!--Trying to implement temporary password solution for new user. So application cache rather shiro cache -->
+    <!--<property name="cacheManager" ref="memoryConstrainedCacheManager"/>-->
+    <!--<property name="authenticationCachingEnabled" value="true"/>-->
+  </bean>
+
+  <bean id="memoryConstrainedCacheManager" class="org.apache.shiro.cache.MemoryConstrainedCacheManager"/>
+
+  <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+    <property name="realm" ref="jdbcRealm"/>
+  </bean>
+
+  <bean id="umsAuthBasic" class="org.ums.filter.UMSHttpAuthenticationFilter"/>
+
+  <bean id="newUser" class="org.ums.filter.NewUserFilter">
+    <property name="changePasswordUrl" value="/changePassword"/>
+    <property name="loginUrl" value="/login"/>
+  </bean>
+
+  <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+    <property name="securityManager" ref="securityManager"/>
+    <property name="filterChainDefinitions">
+      <value>
+        /** = noSessionCreation,umsAuthBasic,newUser
+      </value>
+    </property>
+  </bean>
+
+  <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+
+  <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
+        depends-on="lifecycleBeanPostProcessor"/>
+
+  <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+    <property name="securityManager" ref="securityManager"/>
+  </bean>
+
+</beans>

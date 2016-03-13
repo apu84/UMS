@@ -37,85 +37,6 @@
 
   <tx:annotation-driven transaction-manager="transactionManager"/>
 
-  <bean id="saltBytes" class="org.apache.shiro.util.SimpleByteSource">
-    <constructor-arg value="${authentication.salt}"/>
-  </bean>
-
-  <bean id="hashService" class="org.apache.shiro.crypto.hash.DefaultHashService">
-    <property name="hashAlgorithmName" value="SHA-512"/>
-    <property name="hashIterations" value="1024"/>
-    <property name="generatePublicSalt" value="true"/>
-    <property name="privateSalt" ref="saltBytes"/>
-  </bean>
-
-  <bean id="hashFormat" class="org.apache.shiro.crypto.hash.format.Shiro1CryptFormat"/>
-
-  <bean id="passwordService" class="org.apache.shiro.authc.credential.DefaultPasswordService">
-    <property name="hashService" ref="hashService"/>
-    <property name="hashFormat" ref="hashFormat"/>
-  </bean>
-
-  <bean id="credentialMatcher" class="org.apache.shiro.authc.credential.PasswordMatcher">
-    <property name="passwordService" ref="passwordService"/>
-  </bean>
-
-  <bean id="plainPasswordMatcher" class="org.ums.authentication.PlainPasswordMatcher"/>
-
-  <bean id="rolePermissionResolver" class="org.ums.authorization.UMSRolePermissionResolver"/>
-  <!-- security datasource: -->
-  <bean id="jdbcRealm" class="org.ums.authentication.UMSAuthenticationRealm">
-    <property name="dataSource" ref="dataSource"/>
-    <property name="permissionsLookupEnabled" value="true"/>
-    <property name="authenticationQuery" value="SELECT password, temp_password FROM Users WHERE user_id = ?"/>
-    <property name="userRolesQuery" value="select role_id from Users where user_id = ?"/>
-    <property name="permissionsQuery" value="select permissions from permissions where role_id = ?"/>
-    <property name="credentialsMatcher" ref="credentialMatcher"/>
-    <property name="hashCredentialsMatcher" ref="credentialMatcher"/>
-    <property name="plainPasswordMatcher" ref="plainPasswordMatcher"/>
-    <property name="saltStyle" value="EXTERNAL"/>
-    <property name="rolePermissionResolver" ref="rolePermissionResolver"/>
-    <!--Trying to implement temporary password solution for new user. So application cache rather shiro cache -->
-    <!--<property name="cacheManager" ref="memoryConstrainedCacheManager"/>-->
-    <!--<property name="authenticationCachingEnabled" value="true"/>-->
-  </bean>
-
-  <bean id="memoryConstrainedCacheManager" class="org.apache.shiro.cache.MemoryConstrainedCacheManager"/>
-
-  <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
-    <property name="realm" ref="jdbcRealm"/>
-  </bean>
-
-  <bean id="umsAuthBasic" class="org.ums.filter.UMSHttpAuthenticationFilter"/>
-
-  <bean id="newUser" class="org.ums.filter.NewUserFilter">
-    <property name="changePasswordUrl" value="/changePassword"/>
-    <property name="loginUrl" value="/login"/>
-  </bean>
-
-  <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
-    <property name="securityManager" ref="securityManager"/>
-    <property name="filterChainDefinitions">
-      <value>
-        /** = noSessionCreation,umsAuthBasic,newUser
-      </value>
-    </property>
-  </bean>
-
-  <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
-
-  <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
-        depends-on="lifecycleBeanPostProcessor"/>
-
-  <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
-    <property name="securityManager" ref="securityManager"/>
-  </bean>
-
-  <bean class="org.ums.cache.LocalCacheManager" id="localCache"/>
-
-  <bean class="org.ums.manager.FileContentManager" id="fileContentManager">
-    <property name="storageRoot" value="${binary.storageRoot}"/>
-  </bean>
-
   <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
     <property name="locations">
       <list>
@@ -127,47 +48,7 @@
   </bean>
 
   <bean id="contextApplicationContextProvider" class="org.ums.context.ApplicationContextProvider"></bean>
-  <!--Mail Configuration [Start]-->
-  <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-    <property name="javaMailProperties">
-      <props>
-        <prop key="mail.smtp.auth">true</prop>
-        <prop key="mail.smtp.starttls.enable">true</prop>
-        <prop key="mail.smtp.host">smtp.gmail.com</prop>
-        <prop key="mail.smtp.port">587</prop>
-        <prop key="mail.smtp.ssl.trust">smtp.gmail.com</prop>
-      </props>
-    </property>
-    <property name="username" value="aust.test.email@gmail.com"/>
-    <property name="password" value="Iums4Aust"/>
-  </bean>
 
-  <bean id="velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
-    <property name="velocityProperties">
-      <value>
-        resource.loader=class
-        class.resource.loader.class=org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-      </value>
-    </property>
-  </bean>
-
-  <bean id="messageSource"
-        class="org.springframework.context.support.ResourceBundleMessageSource">
-    <property name="basename">
-      <value>message.common.message</value>
-    </property>
-  </bean>
-
-  <!--Mail Configuration [End]-->
-
-  <!--Menu item processors-->
-  <bean id="dummyNavigationProcessor" class="org.ums.processor.navigation.DummyNavigationItemProcessor"/>
-
-  <bean id="navigationProcessor" class="org.ums.processor.navigation.NavigationProcessorImpl">
-    <constructor-arg>
-      <list>
-        <ref bean="dummyNavigationProcessor"/>
-      </list>
-    </constructor-arg>
-  </bean>
+  <import resource="shiro-context.xml"/>
+  <import resource="application-context.xml"/>
 </beans>
