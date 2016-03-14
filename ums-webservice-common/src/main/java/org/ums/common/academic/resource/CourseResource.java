@@ -74,6 +74,14 @@ public class CourseResource extends MutableCourseResource {
     return mResourceHelper.getApprovedCourses(pSemesterId, pProgramId, pYear, pSemester,mUriInfo);
   }
 
+  @GET
+  @Path("/approved-call-for-application/semester-id/{semester-id}/program/{program-id}/year/{year}/semester/{semester}")
+  public JsonObject getApprovedCallForApplicationCourseList(final @Context Request pRequest, final @PathParam("semester-id") Integer pSemesterId, final @PathParam("program-id") Integer pProgramId
+      , final @PathParam("year") Integer pYear, final @PathParam("semester") Integer pSemester) throws Exception {
+    return mResourceHelper.getApprovedCallForApplicationCourseList(pSemesterId, pProgramId, pYear, pSemester,mUriInfo);
+  }
+
+
 
 
 }

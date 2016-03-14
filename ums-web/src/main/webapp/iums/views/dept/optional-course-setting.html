@@ -117,10 +117,10 @@
                         <a href="#tab-optCourses" data-toggle="tab"><i class="fa fa-bolt"></i>&nbsp;Optional Courses</a>
                     </li>
                     <li>
-                        <a href="#tab-allStudent" data-toggle="tab"><i class="fa fa-edit"></i>&nbsp;Optional Course(All Student)</a>
+                        <a href="#tab-allStudent" data-toggle="tab"><i class="fa fa-edit"></i>&nbsp;All Student</a>
                     </li>
                     <li>
-                        <a href="#tab-singleStudent" data-toggle="tab"><i class="fa fa-edit"></i>&nbsp;Optional Course(Single Student)</a>
+                        <a href="#tab-singleStudent" data-toggle="tab"><i class="fa fa-edit"></i>&nbsp;Single Student</a>
                     </li>
                     <li>
                         <a href="#tab-shiftApplication" data-toggle="tab"><i class="fa fa-edit"></i>&nbsp;Shift Application</a>
@@ -276,7 +276,7 @@
                     <div id="tab-singleStudent" class="tab-pane fade">
                     </div>
                     <div id="tab-shiftApplication" class="tab-pane fade">
-                        <div id="dragndrop">
+                        <div class="dragndrop">
 
                             <div class="row">
                                 <div class="col-md-6">
@@ -317,7 +317,7 @@
                                         </div>
                                     </div>
 
-                            <div class="jqdragndrop-drop D" style="width: 100%;height: 200px;background: #FFFFCC;">
+                                <div class="jqdragndrop-drop D" style="width: 100%;height: 200px;background: #FFFFCC;">
                                 </div>
                                 </div>
                                 </div>
@@ -331,47 +331,79 @@
                             <div class="col-md-12">
                                 <div class="tab-content">
                                     <div id="tab-profile-setting" class="tab-pane fade in active">
-                                        <form action="#" class="form-horizontal">
-                                            <div class="form-group">
-                                                <label class="col-sm-3 control-label">Mobile Number</label>
-                                                <div class="col-sm-9 controls">
-                                                    <input type="text" placeholder="first name" class="form-control"/>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="col-sm-3 control-label">Phone Number</label>
-                                                <div class="col-sm-9 controls">
-                                                    <input type="text" placeholder="last name" class="form-control"/>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="col-sm-3 control-label">Email</label>
-                                                <div class="col-sm-9 controls">
-                                                    <input type="email" placeholder="email@yourcompany.com" class="form-control"/>
-                                                </div>
-                                            </div>
+                                            <div class="row">
+                                                <div class="dragndrop1">
+                                                <div class="col-md-5">
+                                                    Select a Course :
+                                                    <br/>
+                                                    <select class="form-control required">
+                                                        <option ng-repeat="course in optional.approvedCallForApplicationCourses" value="{{course.id}}">{{course.title}}</option>
+                                                    </select>
+                                                    <br/>
 
-                                            <div class="form-group">
-                                                <label class="col-sm-3 control-label">Present Address</label>
-                                                <div class="col-sm-9 controls">
-                                                    <textarea rows="3" class="form-control"></textarea>
+                                                    <div class="jqdragndrop-drop AA" style="width: 100%;height: 200px;background: #FFFFCC;">
+                                                        <b class="jqselection-selectable" style="background-image:url(&quot;data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='40px' width='180px'><text x='15' y='26' fill='black' font-size='25'>ABCDED1</text></svg>&quot;)"><span class='AB' style='display:none'>ABCDED</span></b>
+                                                        <b class="jqselection-selectable" style="background-image:url(&quot;data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='40px' width='180px'><text x='15' y='26' fill='black' font-size='25'>ABCDED2</text></svg>&quot;)"><span class='AB' style='display:none'>ABCDED</span></b>
+                                                        <b class="jqselection-selectable" style="background-image:url(&quot;data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='40px' width='180px'><text x='15' y='26' fill='black' font-size='25'>ABCDED3</text></svg>&quot;)"><span class='AB' style='display:none'>ABCDED</span></b>
+                                                        <b class="jqselection-selectable" style="background-image:url(&quot;data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='40px' width='180px'><text x='15' y='26' fill='black' font-size='25'>ABCDED4</text></svg>&quot;)"><span class='AB' style='display:none'>ABCDED</span></b>
+                                                        <b class="jqselection-selectable" style="background-image:url(&quot;data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='40px' width='180px'><text x='15' y='26' fill='black' font-size='25'>ABCDED5</text></svg>&quot;)"><span class='AB' style='display:none'>ABCDED</span></b>
+                                                        <b class="jqselection-selectable" style="background-image:url(&quot;data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='40px' width='180px'><text x='15' y='26' fill='black' font-size='25'>ABCDED6</text></svg>&quot;)"><span class='AB' style='display:none'>ABCDED</span></b>
+                                                        <b class="jqselection-selectable" style="background-image:url(&quot;data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='40px' width='180px'><text x='15' y='26' fill='black' font-size='25'>ABCDED7</text></svg>&quot;)"><span class='AB' style='display:none'>ABCDED</span></b>
+
+                                                    </div>
+
+                                                    <br/>
+                                                    <a href="javascript:;" class="btn btn-xs btn-default"
+                                                       data-ng-click="addNewSection()"  data-ng-disabled="routine.addButtonDisable">
+                                                        Add New Section <i class="fa fa-plus-circle" style="color: blue;"></i>
+                                                    </a>
+                                                    <a href="javascript:;" class="btn btn-xs btn-default"
+                                                       data-ng-click="saveAll()" data-ng-disabled="routine.saveButtonDisable">
+                                                        &nbsp;&nbsp;Save All &nbsp;
+                                                        <i class="fa fa-floppy-o" style="color: green;"></i>
+                                                    </a>
+
+                                                </div>
+                                                <div class="col-md-7" >
+
+
+                                                    <div ng-repeat="section in optional.sections">
+                                                        <div class="thumbnail">
+                                                            <div class="row">
+                                                                <div class="col-md-9">
+                                                                    Section Name : <input type="text" style="width: 70%"/>
+                                                                    </div>
+                                                                <div class="col-md-3" style='text-align:right;'>
+                                                                    <a href="javascript:;" class="btn btn-xs btn-default btn-round"
+                                                                       data-ng-click="removeSection(section.index)" style="border-radius: 15px;" data-ng-hide="date_time.readOnly">
+                                                                        <i class="fa fa-floppy-o" style="color: green;"></i>
+                                                                    </a>
+                                                                    <a href="javascript:;" class="btn btn-xs btn-default btn-round"
+                                                                       data-ng-click="removeSection(section.index)" style="border-radius: 15px;" data-ng-hide="date_time.readOnly">
+                                                                        <i class="fa fa-times" style="color: red;"></i> & <i class="fa fa-floppy-o" style="color: green;"></i>
+                                                                    </a>
+
+                                                                </div>
+                                                                </div>
+
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                            <div class="jqdragndrop-drop BB" style="width: 100%;height: 200px;background: #FFFFCC;">aa
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+
+
+
+</div>
+</div>
+
+
+                                                    </div>
+
                                                 </div>
                                             </div>
-                                            <div class="form-group">
-                                                <label class="col-sm-3 control-label">Permanent Address</label>
-                                                <div class="col-sm-9 controls">
-                                                    <textarea rows="3" class="form-control"></textarea>
-                                                </div>
-                                            </div>
-                                            <div class="form-group mbn">
-                                                <label class="col-sm-3 control-label"></label>
-                                                <div class="col-sm-9 controls">
-                                                    <button type="submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;
-                                                        Save
-                                                    </button>&nbsp; &nbsp;<a href="#" class="btn btn-default">Cancel</a>
-                                                </div>
-                                            </div>
-                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -384,3 +416,14 @@
         </div>
     </div>
 </div>
+
+        <!--
+                WITH DATA AS
+      ( SELECT STUDENT_LIST str FROM OPT_COURSE_SECTION_INFO
+      )
+    SELECT trim(regexp_substr(str, '[^,]+', 1, LEVEL)) str
+    FROM DATA
+    CONNECT BY instr(str, ',', 1, LEVEL - 1) > 0
+
+    https://lalitkumarb.com/2014/12/02/split-comma-delimited-string-into-rows-in-oracle/
+            -->

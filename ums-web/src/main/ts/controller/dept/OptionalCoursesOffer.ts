@@ -13,8 +13,16 @@ module ums {
     showCourses:Function;
     saveCourses:Function;
     fetchRejectedStudents:Function;
+    sections:ISection;
+    addNewSection:Function;
+    removeSection:Function;
   }
-
+  interface ISection{
+    index:number;
+    courseId:string;
+    section:string;
+    students:Array<String>;
+  }
   interface IOptCourse {
     index: number;
     id: string;
@@ -41,8 +49,9 @@ module ums {
         optionalCourses: Array<IOptCourse>(),
         applicationCourses: Array<IOptCourse>(),
         approvedCourses: Array<IOptCourse>(),
-        rejectedStudents:Array<IOptStudent>()
-
+        rejectedStudents:Array<IOptStudent>(),
+        sections:Array<ISection>(),
+        approvedCallForApplicationCourses:Array<IOptCourse>()
       };
       $scope.applicationSelectionChange = this.applicationSelectionChange.bind(this);
       $scope.approvedSelectionChange = this.approvedSelectionChange.bind(this);
@@ -52,6 +61,8 @@ module ums {
       $scope.showCourses=this.showCourses.bind(this);
       $scope.saveCourses=this.saveCourses.bind(this);
       $scope.fetchRejectedStudents=this.fetchRejectedStudents.bind(this);
+      $scope.addNewSection=this.addNewSection.bind(this);
+      $scope.removeSection=this.removeSection.bind(this);
 
       //$('.nav-tabs li:eq(2) a').tab('show')
     }
@@ -60,6 +71,13 @@ module ums {
       var url1:string="https://localhost/ums-webservice-common/academic/course/optional/semester-id/11012017/program/110500/year/4/semester/1";
       var url2:string="https://localhost/ums-webservice-common/academic/course/call4Application/semester-id/11012017/program/110500/year/4/semester/1";
       var url3:string="https://localhost/ums-webservice-common/academic/course/approved/semester-id/11012017/program/110500/year/4/semester/1";
+
+      var urlApprovedCallForApplication:string="https://localhost/ums-webservice-common/academic/course/approved-call-for-application/semester-id/11012017/program/110500/year/4/semester/1";
+
+      this.getCourses(urlApprovedCallForApplication).then((optCourseArr:Array<IOptCourse>)=> {
+        this.$scope.optional.approvedCallForApplicationCourses=optCourseArr;
+      });
+
 
       this.getCourses(url2).then((optCourseArr:Array<IOptCourse>)=> {
         this.$scope.optional.applicationCourses=optCourseArr;
@@ -183,14 +201,6 @@ module ums {
 
 
 
-    private getAttributeMaxValueFromArray(array:Array<any>):number {
-      var val:number = 0;
-      if (array.length != 0)
-        val = Math.max.apply(Math, array.map(function (o) {
-          return o.index;
-        })) + 1;
-      return val;
-    }
     private removeApprovedCourse(course:IOptCourse):void {
       console.log(course);
       console.log(course.index);
@@ -267,13 +277,46 @@ module ums {
           (json:any, etag:string) => {
             var rejectedStudentArr:Array<IOptStudent>=eval(json.entries);
             this.$scope.optional.rejectedStudents=rejectedStudentArr;
-            $.plugin_dragndrop('#dragndrop').duration(150);
+            $.plugin_dragndrop('.dragndrop').duration(150);
           },
           (response:ng.IHttpPromiseCallbackArg<any>) => {
             console.error(response);
           });
     }
 
-  }
+    private addNewSection():void {
+      var index = this.getAttributeMaxValueFromArray(this.$scope.optional.sections);
+      var item = this.addNewSectionRow(index);
+      this.$scope.optional.sections.splice(0, 0, item);
+      $.plugin_dragndrop('.dragndrop1').duration(150);
+      $.plugin_dragndrop('.dragndrop2').duration(150);
+    }
+
+    private getAttributeMaxValueFromArray(array:Array<any>):number {
+      var val:number = 0;
+      if (array.length != 0)
+        val = Math.max.apply(Math, array.map(function (o) {
+          return o.index;
+        })) + 1;
+      return val;
+    }
+
+    private addNewSectionRow(index:number) {
+      var sectionRow:ISection = {
+        index: index,
+        courseId:'',
+      section:'',
+      students:Array<String>()
+      }
+      return sectionRow;
+    }
+    private removeSection(index:number):void {
+      var section_arr = eval(this.$scope.optional.sections);
+      var targetIndex = this.findIndex(section_arr, index);
+      this.$scope.optional.sections.splice(targetIndex, 1);
+    }
+
+    }
   UMS.controller('OptionalCoursesOffer', OptionalCoursesOffer);
 }
+

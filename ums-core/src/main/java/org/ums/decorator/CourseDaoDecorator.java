@@ -38,4 +38,10 @@ public class CourseDaoDecorator extends ContentDaoDecorator<Course, MutableCours
     return getManager().getApprovedCourseList(pSemesterId, pProgramId,pYear, pSemester);
   }
 
+  @Override
+  public List<Course> getApprovedCallForApplicationCourseList(Integer pSemesterId,Integer pProgramId,Integer pYear, Integer pSemester) {
+    return getManager().getApprovedCallForApplicationCourseList(pSemesterId, pProgramId,pYear, pSemester);
+  }
+
+
 }
