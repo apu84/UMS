@@ -36,4 +36,9 @@ public class SemesterEnrollmentCache extends ContentCache<SemesterEnrollment, Mu
                                                 Integer pYear, Integer pAcademicSemester) {
     return getManager().getEnrollmentStatus(pType, pProgramId, pSemesterId, pYear, pAcademicSemester);
   }
+
+  @Override
+  public List<SemesterEnrollment> getEnrollmentStatus(Integer pProgramId, Integer pSemesterId) {
+    return getManager().getEnrollmentStatus(pProgramId, pSemesterId);
+  }
 }

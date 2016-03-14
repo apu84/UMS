@@ -44,15 +44,13 @@ public class StudentEnrollmentResource extends Resource {
   @Autowired
   DateFormat mDateFormat;
   @GET
-  @Path("/enrollment-type/{enrollment-type}/program/{program-id}/semester/{semester-id}")
+  @Path("/program/{program-id}/semester/{semester-id}")
   public JsonObject getSemesterList(final @Context Request pRequest,
-                                    final @PathParam("enrollment-type") int pEnrollmentType,
                                     final @PathParam("program-id") int pProgramId,
                                     final @PathParam("semester-id") int pSemesterId) throws Exception {
 
     List<EnrollmentFromTo> enrollmentFromToList = mEnrollmentFromToManager.getEnrollmentFromTo(pProgramId);
-    List<SemesterEnrollment> semesterEnrollmentList
-        = mSemesterEnrollmentManager.getEnrollmentStatus(SemesterEnrollment.Type.get(pEnrollmentType), pProgramId, pSemesterId);
+    List<SemesterEnrollment> semesterEnrollmentList = mSemesterEnrollmentManager.getEnrollmentStatus(pProgramId, pSemesterId);
 
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();

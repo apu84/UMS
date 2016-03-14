@@ -24,11 +24,10 @@ module ums {
             if (newValue !== oldValue) {
 
               if ($scope.semesterEnrollmentModel.enrollmentType != ''
-                  && $scope.semesterEnrollmentModel.programSelector.programId != ''
-                  && $scope.semesterEnrollmentModel.semesterId != '') {
+                  && $scope.semesterEnrollmentModel.programSelector.programId
+                  && $scope.semesterEnrollmentModel.semesterId) {
 
-                this.httpClient.get('academic/studentEnrollment/enrollment-type/'
-                    + $scope.semesterEnrollmentModel.enrollmentType
+                this.httpClient.get('academic/studentEnrollment'
                     + '/program/' + $scope.semesterEnrollmentModel.programSelector.programId
                     + '/semester/' + $scope.semesterEnrollmentModel.semesterId + '',
                     HttpClient.MIME_TYPE_JSON,
