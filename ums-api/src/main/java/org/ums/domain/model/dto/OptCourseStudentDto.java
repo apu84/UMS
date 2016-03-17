@@ -9,8 +9,12 @@ public class OptCourseStudentDto {
   private String studentId;
   private String studentName;
   private String courseId;
+  private String courseNo;
+  private String courseTitle;
   private String appliedOn;
-  private String status;
+  private int statusId;
+  private String statusLabel;
+
 
   public String getStudentId() {
     return studentId;
@@ -44,14 +48,37 @@ public class OptCourseStudentDto {
     this.appliedOn = appliedOn;
   }
 
-  public String getStatus() {
-    return status;
+  public String getCourseNo() {
+    return courseNo;
   }
 
-  public void setStatus(String status) {
-    this.status = status;
+  public void setCourseNo(String courseNo) {
+    this.courseNo = courseNo;
   }
 
+  public String getCourseTitle() {
+    return courseTitle;
+  }
+
+  public void setCourseTitle(String courseTitle) {
+    this.courseTitle = courseTitle;
+  }
+
+  public int getStatusId() {
+    return statusId;
+  }
+
+  public void setStatusId(int statusId) {
+    this.statusId = statusId;
+  }
+
+  public String getStatusLabel() {
+    return statusLabel;
+  }
+
+  public void setStatusLabel(String statusLabel) {
+    this.statusLabel = statusLabel;
+  }
 
   public String toString() {
     Gson gson = new Gson();

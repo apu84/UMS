@@ -16,28 +16,39 @@ module ums {
     sections:ISection;
     addNewSection:Function;
     removeSection:Function;
+    fetchSectionInformation:Function;
+    saveSection:Function;
+    searchApplication:Function;
   }
   interface ISection{
     index:number;
     courseId:string;
-    section:string;
-    students:Array<String>;
+    sectionName:string;
+    type:string;
+    students:Array<IOptStudent>;
   }
   interface IOptCourse {
     index: number;
     id: string;
+    courseId:string;
     no: string;
+    courseNo:string;
     title: string;
+    courseTitle:string;
     year: number;
     semester: number;
     pairCourseId:string;
     application:boolean;
     approved:boolean;
     bgColor:string;
+    status_id:number;
+    status_label:string;
   }
 
   interface IOptStudent{
+    mId:String;
     studentId:String;
+    studentName:String;
   }
 
   export class OptionalCoursesOffer {
@@ -51,7 +62,9 @@ module ums {
         approvedCourses: Array<IOptCourse>(),
         rejectedStudents:Array<IOptStudent>(),
         sections:Array<ISection>(),
-        approvedCallForApplicationCourses:Array<IOptCourse>()
+        approvedCallForApplicationCourses:Array<IOptCourse>(),
+        nonAssignedStudents:Array<IOptStudent>(),
+        appliedCoursesForSingleStudent:Array<IOptStudent>()
       };
       $scope.applicationSelectionChange = this.applicationSelectionChange.bind(this);
       $scope.approvedSelectionChange = this.approvedSelectionChange.bind(this);
@@ -63,6 +76,9 @@ module ums {
       $scope.fetchRejectedStudents=this.fetchRejectedStudents.bind(this);
       $scope.addNewSection=this.addNewSection.bind(this);
       $scope.removeSection=this.removeSection.bind(this);
+      $scope.fetchSectionInformation=this.fetchSectionInformation.bind(this);
+      $scope.saveSection=this.saveSection.bind(this);
+      $scope.searchApplication=this.searchApplication.bind(this);
 
       //$('.nav-tabs li:eq(2) a').tab('show')
     }
@@ -284,6 +300,33 @@ module ums {
           });
     }
 
+    private fetchSectionInformation(avc:number):void{
+
+      var courseId=$("#sectionCourseId").val();
+
+      this.httpClient.get("https://localhost/ums-webservice-common/academic/optional/application/non-assigned-section/students/semester-id/11012017/program/110500/course-id/EEE4154_S2014_110500", this.appConstants.mimeTypeJson,
+          (json:any, etag:string) => {
+            var nonAssignedStudentsArr:Array<IOptStudent>=json.entries;
+            this.$scope.optional.nonAssignedStudents=nonAssignedStudentsArr;
+            $.plugin_dragndrop('.dragndrop1').duration(150);
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>) => {
+            console.error(response);
+          });
+
+      this.httpClient.get("https://localhost/ums-webservice-common/academic/optional/application/assigned-section/students/semester-id/11012017/program/110500/course-id/EEE4154_S2014_110500", this.appConstants.mimeTypeJson,
+          (json:any, etag:string) => {
+            var sectionArr:Array<IOptStudent>=json.entries;
+            this.$scope.optional.sections=sectionArr;
+            $.plugin_dragndrop('.dragndrop1').duration(150);
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>) => {
+            console.error(response);
+          });
+
+
+    }
+
     private addNewSection():void {
       var index = this.getAttributeMaxValueFromArray(this.$scope.optional.sections);
       var item = this.addNewSectionRow(index);
@@ -305,16 +348,57 @@ module ums {
       var sectionRow:ISection = {
         index: index,
         courseId:'',
-      section:'',
-      students:Array<String>()
+        sectionName:'',
+        type:'new',
+      students:Array<IOptStudent>()
       }
       return sectionRow;
     }
     private removeSection(index:number):void {
       var section_arr = eval(this.$scope.optional.sections);
       var targetIndex = this.findIndex(section_arr, index);
+
+      console.log(this.$scope.optional.sections[targetIndex]);
+      if(this.$scope.optional.sections[targetIndex].type!="new")
+      {
+        this.httpClient.delete("https://localhost/ums-webservice-common/academic/optional/application/semester-id/11012017/program/110500/course/EEE4154_S2014_110500/section/Section A")
+            .success(() => {
+              alert("ifti");
+            }).error((data) => {
+            });
+
+
+
+      }
       this.$scope.optional.sections.splice(targetIndex, 1);
+
+
     }
+
+    private saveSection():void{
+      var complete_json = {};
+
+      this.httpClient.put("https://localhost/ums-webservice-common/academic/optional/application/semester-id/11012017/program/110500/course/EEE4154_S2014_110500/section/Section A", complete_json, 'application/json')
+          .success(() => {
+            alert("ifti1");
+          }).error((data) => {
+          });
+    }
+
+    private searchApplication():void{
+
+      this.httpClient.get("https://localhost/ums-webservice-common/academic/optional/application/applied-courses/student-id/150105001/semester-id/11012017/program/1", this.appConstants.mimeTypeJson,
+          (json:any, etag:string) => {
+            var courseArr:Array<IOptCourse>=eval(json.entries);
+            this.$scope.optional.appliedCoursesForSingleStudent=courseArr;
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>) => {
+            console.error(response);
+          });
+
+
+    }
+
 
     }
   UMS.controller('OptionalCoursesOffer', OptionalCoursesOffer);

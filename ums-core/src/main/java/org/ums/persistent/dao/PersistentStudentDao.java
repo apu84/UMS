@@ -193,6 +193,18 @@ public class PersistentStudentDao extends StudentDaoDecorator {
     return params;
   }
 
+  @Override
+  public List<Student> getStudentListFromStudentsString(String pStudents) throws Exception {
+    String query = "Select * From Students where Student_Id in ( " +
+        "select regexp_substr(?,'[^,]+', 1, level)  " +
+        "from dual  " +
+        "connect by  " +
+        "regexp_substr(?, '[^,]+', 1, level)  " +
+        "is not null  " +
+        ") ";
+    return mJdbcTemplate.query(query, new Object[]{pStudents,pStudents},new StudentRowMapper());
+  }
+
 
   class StudentRowMapper implements RowMapper<Student> {
     @Override

@@ -22,7 +22,7 @@ module ums {
             console.debug("Change detected: %o", $scope.semesterEnrollmentModel);
 
             if (newValue !== oldValue) {
-
+/*
               if ($scope.semesterEnrollmentModel.enrollmentType != ''
                   && $scope.semesterEnrollmentModel.programSelector.programId
                   && $scope.semesterEnrollmentModel.semesterId) {
@@ -40,6 +40,7 @@ module ums {
                       console.error(response);
                     });
               }
+              */
             }
           }
       );
