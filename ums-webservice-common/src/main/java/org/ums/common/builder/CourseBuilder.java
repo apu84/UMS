@@ -45,6 +45,7 @@ public class CourseBuilder implements Builder<Course, MutableCourse> {
     pBuilder.add("category_value", pReadOnly.getCourseCategory().getValue());
     pBuilder.add("year", pReadOnly.getYear());
     pBuilder.add("semester", pReadOnly.getSemester());
+    pBuilder.add("pairCourseId",pReadOnly.getPairCourseId()==null?"":pReadOnly.getPairCourseId());
 
     if (!StringUtils.isEmpty(pReadOnly.getOfferedDepartmentId())) {
       Department offeredBy = (Department) pLocalCache.cache(() -> pReadOnly.getOfferedBy(),
@@ -104,6 +105,7 @@ public class CourseBuilder implements Builder<Course, MutableCourse> {
     pMutable.setViewOrder(Integer.parseInt(pJsonObject.getString("viewOrder")));
     Integer groupId = StringUtils.isEmpty(pJsonObject.getString("optionalGroupId")) ? Types.NULL: Integer.parseInt(pJsonObject.getString("optionalGroupId"));
     pMutable.setCourseGroupId(groupId);
+
 
 
 

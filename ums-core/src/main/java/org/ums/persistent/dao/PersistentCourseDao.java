@@ -171,6 +171,7 @@ public class PersistentCourseDao extends CourseDaoDecorator {
       if (resultSet.getObject("TOTAL_APPLIED") != null) {
         course.setTotalApplied(resultSet.getInt("TOTAL_APPLIED"));
       }
+      course.setPairCourseId(resultSet.getString("PAIR_COURSE_ID"));
       AtomicReference<Course> atomicReference = new AtomicReference<>(course);
       return atomicReference.get();
     }

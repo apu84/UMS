@@ -55,19 +55,22 @@
                         <h3 class="panel-title">Instructions</h3>
                     </div>
                     <div class="panel-body shadowPanel">
-                        <select style="width: 90%">
+                        <select style="width: 90%" data-ng-model="optional.program">
                             <option value="110500">BSC in EEE</option>
                         </select><br/>
-                        <select style="width: 90%;margin-top: 10px;">
-                            <option value="11022016">Fall, 2016</option>
+                        <select style="width: 90%;margin-top: 10px;"  data-ng-model="optional.semesterId">
+                            <option value="11012017">Spring, 2017</option>
                         </select><br/>
-                        <select style="width: 90%;margin-top: 10px;">
-                            <option value="4|1">4th Year, 1st Semester</option>
+                        <select style="width: 90%;margin-top: 10px;"  data-ng-model="optional.year">
+                            <option value="4">4th Year</option>
+                        </select><br/>
+                        <select style="width: 90%;margin-top: 10px;"  data-ng-model="optional.semester">
+                            <option value="1">1st Semester</option>
                         </select><br/>
                         <a href="javascript:;" class="btn btn-xs btn-default"
                            data-ng-click="showCourses()" style="margin-top: 20px;">
-                            &nbsp;&nbsp;Save All &nbsp;
-                            <i class="fa fa-floppy-o" style="color: green;"></i>
+                            &nbsp;&nbsp;Go Next &nbsp;
+                            <i class="fa fa-forward" style="color: green;"></i>
                         </a>
                     </div>
                 </div>
@@ -121,21 +124,21 @@
             <div class="col-md-9">
                 <ul data-ui-tab="" class="nav nav-tabs ul-edit responsive">
                     <li class="active">
-                        <a href="#tab-optCourses" data-toggle="tab"><i class="fa fa-bolt"></i>&nbsp;Optional Courses</a>
+                        <a href="#tab-optCourses" data-toggle="tab"><i class="fa fa-book"></i>&nbsp;Optional Courses</a>
                     </li>
                     <li>
-                        <a href="#tab-allStudent" data-toggle="tab"><i class="fa fa-edit"></i>&nbsp;All Student</a>
+                        <a href="#tab-allStudent" data-toggle="tab"><i class="fa fa-users"></i>&nbsp;All Student</a>
                     </li>
                     <li>
-                        <a href="#tab-singleStudent" data-toggle="tab"><i class="fa fa-edit"></i>&nbsp;Single
+                        <a href="#tab-singleStudent" data-toggle="tab"><i class="fa fa-user"></i>&nbsp;Single
                             Student</a>
                     </li>
                     <li>
-                        <a href="#tab-shiftApplication" data-toggle="tab"><i class="fa fa-edit"></i>&nbsp;Shift
+                        <a href="#tab-shiftApplication" data-toggle="tab"><i class="fa fa-random"></i>&nbsp;Shift
                             Application</a>
                     </li>
                     <li>
-                        <a href="#tab-section" data-toggle="tab"><i class="fa fa-edit"></i>&nbsp;Section</a>
+                        <a href="#tab-section" data-toggle="tab"><i class="fa fa-puzzle-piece"></i>&nbsp;Section</a>
                     </li>
 
                 </ul>
