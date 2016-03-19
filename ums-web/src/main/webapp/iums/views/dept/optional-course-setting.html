@@ -8,35 +8,40 @@
         border: 1px groove #ddd !important;
         padding: 0 1.4em 1.4em 1.4em !important;
         margin: 0 0 1.5em 0 !important;
-        -webkit-box-shadow:  0px 0px 0px 0px #000;
-        box-shadow:  0px 0px 0px 0px #000;
+        -webkit-box-shadow: 0px 0px 0px 0px #000;
+        box-shadow: 0px 0px 0px 0px #000;
     }
 
     legend.scheduler-border {
         font-size: 1.2em !important;
         font-weight: bold !important;
         text-align: left !important;
-        width:auto;
-        padding:0 10px;
-        border-bottom:none;
+        width: auto;
+        padding: 0 10px;
+        border-bottom: none;
     }
-    .btn-round{
+
+    .btn-round {
         border-radius: 15px !important;
     }
-    .btn-xs, .btn-group-xs > .btn{
+
+    .btn-xs, .btn-group-xs > .btn {
         padding: 1px 5px !important;
     }
+
     #dragndrop {
         margin-top: 20px;
         text-align: center;
     }
+
     .jqdragndrop-drop {
         transition: background .2s ease;
-        background: rgba(0,0,0,.3);
+        background: rgba(0, 0, 0, .3);
     }
+
     .jqdragndrop-dropHover {
-        box-shadow: 0 0 20px rgba(0,0,0,.2);
-        background: rgba(0,0,0,.5);
+        box-shadow: 0 0 20px rgba(0, 0, 0, .2);
+        background: rgba(0, 0, 0, .5);
     }
 </style>
 <div id="page-user-profile" class="row">
@@ -45,23 +50,27 @@
             <div class="col-md-3">
 
                 <div class="panel panel-default " style="border: none;">
-                    <div class="panel-heading portlet-pink" style="background: #bf3773 none repeat scroll 0 0;border: 1px solid #bf3773;color: white;">
+                    <div class="panel-heading portlet-pink"
+                         style="background: #bf3773 none repeat scroll 0 0;border: 1px solid #bf3773;color: white;">
                         <h3 class="panel-title">Instructions</h3>
                     </div>
                     <div class="panel-body shadowPanel">
-                        <select style="width: 90%">
+                        <select style="width: 90%" data-ng-model="optional.program">
                             <option value="110500">BSC in EEE</option>
                         </select><br/>
-                        <select style="width: 90%;margin-top: 10px;">
-                            <option value="11022016">Fall, 2016</option>
+                        <select style="width: 90%;margin-top: 10px;"  data-ng-model="optional.semesterId">
+                            <option value="11012017">Spring, 2017</option>
                         </select><br/>
-                        <select style="width: 90%;margin-top: 10px;">
-                            <option value="4|1">4th Year, 1st Semester</option>
+                        <select style="width: 90%;margin-top: 10px;"  data-ng-model="optional.year">
+                            <option value="4">4th Year</option>
+                        </select><br/>
+                        <select style="width: 90%;margin-top: 10px;"  data-ng-model="optional.semester">
+                            <option value="1">1st Semester</option>
                         </select><br/>
                         <a href="javascript:;" class="btn btn-xs btn-default"
                            data-ng-click="showCourses()" style="margin-top: 20px;">
-                            &nbsp;&nbsp;Save All &nbsp;
-                            <i class="fa fa-floppy-o" style="color: green;"></i>
+                            &nbsp;&nbsp;Go Next &nbsp;
+                            <i class="fa fa-forward" style="color: green;"></i>
                         </a>
                     </div>
                 </div>
@@ -78,7 +87,7 @@
                                 <td><span class="badge badge-warning pull-right">{{ ::total_crhr}}</span></td>
                             </tr>
                             <tr>
-                                <td width="50%">Optional  Total</td>
+                                <td width="50%">Optional Total</td>
                                 <td><span class="badge badge-warning pull-right">{{ ::optional_crhr}}</span></td>
                             </tr>
                             <tr>
@@ -95,7 +104,8 @@
                 </div>
 
                 <div class="panel panel-default " style="border: none;">
-                    <div class="panel-heading portlet-blue" style="background: #0a819c none repeat scroll 0 0;border: 1px solid #bf3773;color: white;">
+                    <div class="panel-heading portlet-blue"
+                         style="background: #0a819c none repeat scroll 0 0;border: 1px solid #bf3773;color: white;">
                         <h3 class="panel-title">Application Statistics</h3>
                     </div>
                     <div class="panel-body shadowPanel">
@@ -114,19 +124,21 @@
             <div class="col-md-9">
                 <ul data-ui-tab="" class="nav nav-tabs ul-edit responsive">
                     <li class="active">
-                        <a href="#tab-optCourses" data-toggle="tab"><i class="fa fa-bolt"></i>&nbsp;Optional Courses</a>
+                        <a href="#tab-optCourses" data-toggle="tab"><i class="fa fa-book"></i>&nbsp;Optional Courses</a>
                     </li>
                     <li>
-                        <a href="#tab-allStudent" data-toggle="tab"><i class="fa fa-edit"></i>&nbsp;All Student</a>
+                        <a href="#tab-allStudent" data-toggle="tab"><i class="fa fa-users"></i>&nbsp;All Student</a>
                     </li>
                     <li>
-                        <a href="#tab-singleStudent" data-toggle="tab"><i class="fa fa-edit"></i>&nbsp;Single Student</a>
+                        <a href="#tab-singleStudent" data-toggle="tab"><i class="fa fa-user"></i>&nbsp;Single
+                            Student</a>
                     </li>
                     <li>
-                        <a href="#tab-shiftApplication" data-toggle="tab"><i class="fa fa-edit"></i>&nbsp;Shift Application</a>
+                        <a href="#tab-shiftApplication" data-toggle="tab"><i class="fa fa-random"></i>&nbsp;Shift
+                            Application</a>
                     </li>
                     <li>
-                        <a href="#tab-section" data-toggle="tab"><i class="fa fa-edit"></i>&nbsp;Section</a>
+                        <a href="#tab-section" data-toggle="tab"><i class="fa fa-puzzle-piece"></i>&nbsp;Section</a>
                     </li>
 
                 </ul>
@@ -134,37 +146,37 @@
                 <div id="generalTabContent" class="tab-content shadowPanel">
                     <div id="tab-optCourses" class="tab-pane fade in active">
                         <fieldset class="scheduler-border">
-                        <legend class="scheduler-border">Approved Optional Courses</legend>
-                        <div class="control-group">
-                            <table class="table table-hover table-condensed">
-                                <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Course No</th>
-                                    <th>Course Title</th>
-                                    <th>CrHr</th>
-                                    <th>Course Type</th>
-                                    <th style="text-align: center;">Cancel</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr ng-repeat="course in optional.approvedCourses">
-                                    <td>{{$index + 1}}</td>
-                                    <td>{{course.no}}</td>
-                                    <td>{{course.title}}</td>
-                                    <td>{{course.crhr}}</td>
-                                    <td><span class="label label-sm label-success">{{course.type}}</span></td>
-                                    <td style="text-align: center;">
-                                        <a href="javascript:;" class="btn btn-xs btn-default btn-round"
-                                           data-ng-click="removeApprovedCourse(course)">
-                                            <i class="fa fa-times" style="color: red;"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </fieldset>
+                            <legend class="scheduler-border">Approved Optional Courses</legend>
+                            <div class="control-group">
+                                <table class="table table-hover table-condensed">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Course No</th>
+                                        <th>Course Title</th>
+                                        <th>CrHr</th>
+                                        <th>Course Type</th>
+                                        <th style="text-align: center;">Cancel</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="course in optional.approvedCourses">
+                                        <td>{{$index + 1}}</td>
+                                        <td>{{course.no}}</td>
+                                        <td>{{course.title}}</td>
+                                        <td>{{course.crhr}}</td>
+                                        <td><span class="label label-sm label-success">{{course.type}}</span></td>
+                                        <td style="text-align: center;">
+                                            <a href="javascript:;" class="btn btn-xs btn-default btn-round"
+                                               data-ng-click="removeApprovedCourse(course)">
+                                                <i class="fa fa-times" style="color: red;"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </fieldset>
 
                         <fieldset class="scheduler-border">
                             <legend class="scheduler-border">Call for Application</legend>
@@ -183,18 +195,19 @@
                                     </thead>
                                     <tbody>
                                     <tr ng-repeat="course in optional.applicationCourses">
-                                    <td>{{$index + 1}}</td>
-                                    <td>{{course.no}}</td>
-                                    <td>{{course.title}}</td>
-                                    <td>{{course.crhr}}</td>
+                                        <td>{{$index + 1}}</td>
+                                        <td>{{course.no}}</td>
+                                        <td>{{course.title}}</td>
+                                        <td>{{course.crhr}}</td>
                                         <td><span class="label label-sm label-success">{{course.type}}</span></td>
-                                    <td align="center"><a data-ng-click="showAppliedStudents()"><span class="badge badge-warning">{{course.totalApplied}}</span></a></td>
-                                    <td style="text-align: center;">
-                                        <a href="javascript:;" class="btn btn-xs btn-default btn-round"
-                                           data-ng-click="removeApplicationCourse(course)">
-                                        <i class="fa fa-times" style="color: red;"></i>
-                                        </a>
-                                    </td>
+                                        <td align="center"><a data-ng-click="showAppliedStudents()"><span
+                                                class="badge badge-warning">{{course.totalApplied}}</span></a></td>
+                                        <td style="text-align: center;">
+                                            <a href="javascript:;" class="btn btn-xs btn-default btn-round"
+                                               data-ng-click="removeApplicationCourse(course)">
+                                                <i class="fa fa-times" style="color: red;"></i>
+                                            </a>
+                                        </td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -212,22 +225,25 @@
                                         <th>Course Title</th>
                                         <th>CrHr</th>
                                         <th>Course Type</th>
-                                        <th  style="text-align: center">Call For<br/> Application</th>
-                                        <th  style="text-align: center">Approved</th>
+                                        <th style="text-align: center">Call For<br/> Application</th>
+                                        <th style="text-align: center">Approved</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr ng-repeat="course in optional.optionalCourses"   style="background-color: {{course.bgColor}}">
+                                    <tr ng-repeat="course in optional.optionalCourses"
+                                        style="background-color: {{course.bgColor}}">
                                         <td>{{$index + 1}}</td>
                                         <td>{{course.no}}</td>
                                         <td>{{course.title}}</td>
                                         <td>{{course.crhr}}</td>
                                         <td><span class="label label-sm label-success">{{course.type}}</span></td>
                                         <td style="text-align: center">
-                                            <input  tabindex="13" type="checkbox" ng-model="course.application" data-ng-change="applicationSelectionChange({{$index}},course)"/>&nbsp;&nbsp;
+                                            <input tabindex="13" type="checkbox" ng-model="course.application"
+                                                   data-ng-change="applicationSelectionChange({{$index}},course)"/>&nbsp;&nbsp;
                                         </td>
                                         <td style="text-align: center">
-                                            <input  tabindex="13" type="checkbox" ng-model="course.approved" data-ng-change="approvedSelectionChange({{$index}},course)"/>&nbsp;&nbsp;
+                                            <input tabindex="13" type="checkbox" ng-model="course.approved"
+                                                   data-ng-change="approvedSelectionChange({{$index}},course)"/>&nbsp;&nbsp;
                                             {{approved}}
                                         </td>
                                     </tr>
@@ -251,15 +267,18 @@
 
                                 <td width="20%">
                                     <a href="javascript:;" class="btn btn-xs btn-default btn-round"
-                                       data-ng-click="addNewProgram(date_time.index)" style="border-radius: 15px;" data-ng-hide="date_time.readOnly">
+                                       data-ng-click="addNewProgram(date_time.index)" style="border-radius: 15px;"
+                                       data-ng-hide="date_time.readOnly">
                                         <i class="fa fa-check-square" style="color: green;"></i>
                                     </a>
                                     <a href="javascript:;" class="btn btn-xs btn-default btn-round"
-                                       data-ng-click="addNewProgram(date_time.index)" style="border-radius: 15px;" data-ng-hide="date_time.readOnly">
+                                       data-ng-click="addNewProgram(date_time.index)" style="border-radius: 15px;"
+                                       data-ng-hide="date_time.readOnly">
                                         <i class="fa fa-times" style="color: red;"></i>
                                     </a>
                                     <a href="javascript:;" class="btn btn-xs btn-default btn-round"
-                                       data-ng-click="addNewProgram(date_time.index)" style="border-radius: 15px;" data-ng-hide="date_time.readOnly">
+                                       data-ng-click="addNewProgram(date_time.index)" style="border-radius: 15px;"
+                                       data-ng-hide="date_time.readOnly">
                                         <i class="fa fa-random" style="color: blue;"></i>
                                     </a>
 
@@ -274,6 +293,63 @@
 
                     </div>
                     <div id="tab-singleStudent" class="tab-pane fade">
+
+                        <div class="form-group">
+                            <div class="col-md-2"></div>
+                            <label class="col-md-2 control-label"><b>Student Id</b></label>
+
+                            <div class="col-md-4">
+                                <div class="input-icon right">
+                                    <input name="userId" data-ng-model="passwordReset.userId" type="text"
+                                           class="form-control required"/>
+                                </div>
+
+
+
+                            </div>
+                            <div class="col-md-2">
+
+                                <a href="javascript:;" class="btn btn-xs btn-default"
+                                   data-ng-click="searchApplication()">
+                                    Search  <i class="fa fa-search"
+                                                       style="color: blue;"></i>
+                                </a>
+
+
+                            </div>
+
+                            <div class="col-md-2"></div>
+                        </div>
+                        <br/><br/><br/>
+                        <table class="table table-striped table-hover">
+                            <tbody>
+                            <tr <tr ng-repeat="course in optional.appliedCoursesForSingleStudent">
+                                <td width="15%"><b>{{ ::course.courseNo}}</b></td>
+                                <td width="55%">{{ ::course.courseTitle}}</td>
+                                <td width="10%">{{ ::course.statusLabel}}</td>
+
+                                <td width="20%" style="text-align: right">
+                                    <a href="javascript:;" class="btn btn-xs btn-default btn-round"
+                                       data-ng-click="addNewProgram(date_time.index)" style="border-radius: 15px;"
+                                       data-ng-hide="date_time.readOnly">
+                                        <i class="fa fa-check-square" style="color: green;"></i>
+                                    </a>
+                                    <a href="javascript:;" class="btn btn-xs btn-default btn-round"
+                                       data-ng-click="addNewProgram(date_time.index)" style="border-radius: 15px;"
+                                       data-ng-hide="date_time.readOnly">
+                                        <i class="fa fa-times" style="color: red;"></i>
+                                    </a>
+                                    <a href="javascript:;" class="btn btn-xs btn-default btn-round"
+                                       data-ng-click="addNewProgram(date_time.index)" style="border-radius: 15px;"
+                                       data-ng-hide="date_time.readOnly">
+                                        <i class="fa fa-random" style="color: blue;"></i>
+                                    </a>
+                                </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+
                     </div>
                     <div id="tab-shiftApplication" class="tab-pane fade">
                         <div class="dragndrop">
@@ -283,47 +359,113 @@
 
                                     <div class="panel panel-white">
                                         <div class="panel-heading">Rejected Students List for :
-                                        <select style="width: 80%;font-size: 14px;color: black;" data-ng-change="fetchRejectedStudents(abc)" data-ng-model="abc">
-                                            <option ng-repeat="course in optional.applicationCourses" value="{{course.id}}">{{course.title}}</option>
-                                        </select>
+                                            <select style="width: 80%;font-size: 14px;color: black;"
+                                                    data-ng-change="fetchRejectedStudents(abc)" data-ng-model="abc">
+                                                <option ng-repeat="course in optional.applicationCourses"
+                                                        value="{{course.id}}">{{course.title}}
+                                                </option>
+                                            </select>
                                         </div>
                                         <div class="panel-body" style="text-align: left">
-                                            <div class="jqdragndrop-drop C" style="width: 100%;height: 400px;background: #CCFFCC;" ng-repeat="student in optional.rejectedStudents">
+                                            <div class="jqdragndrop-drop C"
+                                                 style="width: 100%;height: 400px;background: #CCFFCC;"
+                                                 ng-repeat="student in optional.rejectedStudents">
                                                 {{student}}
                                                 {{student.studentId}}
-                                                <b class="jqselection-selectable" style="background-image:url(&quot;data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='40px' width='180px'><text x='15' y='26' fill='black' font-size='25'>{{student.studentId}}</text></svg>&quot;)"><span class='AB' style='display:none'>{{ ::studentId}}</span></b>
+                                                <b class="jqselection-selectable"
+                                                   style="background-image:url(&quot;data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='40px' width='180px'><text x='15' y='26' fill='black' font-size='25'>{{student.studentId}}</text></svg>&quot;)"><span
+                                                        class='AB' style='display:none'>{{ ::studentId}}</span></b>
 
                                             </div>
                                         </div>
                                     </div>
 
-                            </div>
+                                </div>
                                 <div class="col-md-6">
                                     <div class="panel panel-white">
                                         <div class="panel-heading">Move Students to Course :
-                                            <select style="width: 80%;font-size: 14px;color: black;" >
-                                                <option ng-repeat="course in optional.applicationCourses" value="{{course.id}}">{{course.title}}</option>
+                                            <select style="width: 80%;font-size: 14px;color: black;">
+                                                <option ng-repeat="course in optional.applicationCourses"
+                                                        value="{{course.id}}">{{course.title}}
+                                                </option>
                                             </select>
                                         </div>
                                         <div class="panel-body" style="text-align: left">
-                                            <span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span>
-                                            <span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span>
-                                            <span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span>
-                                            <span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span>
-                                            <span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span>
-                                            <span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span>
-                                            <span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span>
-                                            <span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span><span class="badge badge-default">150105001</span>
+                                            <span class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span>
+                                            <span class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span>
+                                            <span class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span>
+                                            <span class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span>
+                                            <span class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span>
+                                            <span class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span>
+                                            <span class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span>
+                                            <span class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span><span
+                                                class="badge badge-default">150105001</span>
                                         </div>
                                     </div>
 
-                                <div class="jqdragndrop-drop D" style="width: 100%;height: 200px;background: #FFFFCC;">
+                                    <div class="jqdragndrop-drop D"
+                                         style="width: 100%;height: 200px;background: #FFFFCC;">
+                                    </div>
                                 </div>
-                                </div>
-                                </div>
+                            </div>
 
                             <br/>
-                            <input type='button' value="ABC" onclick="abc()" />
+                            <input type='button' value="ABC" onclick="abc()"/>
                         </div>
                     </div>
                     <div id="tab-section" class="tab-pane fade">
@@ -331,79 +473,97 @@
                             <div class="col-md-12">
                                 <div class="tab-content">
                                     <div id="tab-profile-setting" class="tab-pane fade in active">
-                                            <div class="row">
-                                                <div class="dragndrop1">
+                                        <div class="row">
+                                            <div class="dragndrop1">
                                                 <div class="col-md-5">
                                                     Select a Course :
                                                     <br/>
-                                                    <select class="form-control required">
-                                                        <option ng-repeat="course in optional.approvedCallForApplicationCourses" value="{{course.id}}">{{course.title}}</option>
+                                                    <select class="form-control required"
+                                                            data-ng-change="fetchSectionInformation(1)"
+                                                            id="sectionCourseId" data-ng-model="XXX">
+                                                        <option value="">Select a Course</option>
+                                                        <option ng-repeat="course in optional.approvedCallForApplicationCourses"
+                                                                value="{{course.id}}">{{course.title}}
+                                                        </option>
                                                     </select>
                                                     <br/>
 
-                                                    <div class="jqdragndrop-drop AA" style="width: 100%;height: 200px;background: #FFFFCC;">
-                                                        <b class="jqselection-selectable" style="background-image:url(&quot;data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='40px' width='180px'><text x='15' y='26' fill='black' font-size='25'>ABCDED1</text></svg>&quot;)"><span class='AB' style='display:none'>ABCDED</span></b>
-                                                        <b class="jqselection-selectable" style="background-image:url(&quot;data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='40px' width='180px'><text x='15' y='26' fill='black' font-size='25'>ABCDED2</text></svg>&quot;)"><span class='AB' style='display:none'>ABCDED</span></b>
-                                                        <b class="jqselection-selectable" style="background-image:url(&quot;data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='40px' width='180px'><text x='15' y='26' fill='black' font-size='25'>ABCDED3</text></svg>&quot;)"><span class='AB' style='display:none'>ABCDED</span></b>
-                                                        <b class="jqselection-selectable" style="background-image:url(&quot;data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='40px' width='180px'><text x='15' y='26' fill='black' font-size='25'>ABCDED4</text></svg>&quot;)"><span class='AB' style='display:none'>ABCDED</span></b>
-                                                        <b class="jqselection-selectable" style="background-image:url(&quot;data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='40px' width='180px'><text x='15' y='26' fill='black' font-size='25'>ABCDED5</text></svg>&quot;)"><span class='AB' style='display:none'>ABCDED</span></b>
-                                                        <b class="jqselection-selectable" style="background-image:url(&quot;data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='40px' width='180px'><text x='15' y='26' fill='black' font-size='25'>ABCDED6</text></svg>&quot;)"><span class='AB' style='display:none'>ABCDED</span></b>
-                                                        <b class="jqselection-selectable" style="background-image:url(&quot;data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='40px' width='180px'><text x='15' y='26' fill='black' font-size='25'>ABCDED7</text></svg>&quot;)"><span class='AB' style='display:none'>ABCDED</span></b>
-
+                                                    <div class="jqdragndrop-drop AA"
+                                                         style="width: 100%;height: 200px;background: #FFFFCC;">
+                                                        <b class="jqselection-selectable"
+                                                           ng-repeat="student in optional.nonAssignedStudents"
+                                                           style="background-image:url(&quot;data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='40px' width='180px'><text x='15' y='26' fill='black' font-size='25'>{{ ::student.studentId}}</text></svg>&quot;)"><span
+                                                                class='AB'
+                                                                style='display:none'>{{ ::student.studentId}}</span></b>
                                                     </div>
 
                                                     <br/>
                                                     <a href="javascript:;" class="btn btn-xs btn-default"
-                                                       data-ng-click="addNewSection()"  data-ng-disabled="routine.addButtonDisable">
-                                                        Add New Section <i class="fa fa-plus-circle" style="color: blue;"></i>
+                                                       data-ng-click="addNewSection()"
+                                                       data-ng-disabled="routine.addButtonDisable">
+                                                        Add New Section <i class="fa fa-plus-circle"
+                                                                           style="color: blue;"></i>
                                                     </a>
                                                     <a href="javascript:;" class="btn btn-xs btn-default"
-                                                       data-ng-click="saveAll()" data-ng-disabled="routine.saveButtonDisable">
+                                                       data-ng-click="saveAll()"
+                                                       data-ng-disabled="routine.saveButtonDisable">
                                                         &nbsp;&nbsp;Save All &nbsp;
                                                         <i class="fa fa-floppy-o" style="color: green;"></i>
                                                     </a>
 
                                                 </div>
-                                                <div class="col-md-7" >
+                                                <div class="col-md-7">
 
 
                                                     <div ng-repeat="section in optional.sections">
                                                         <div class="thumbnail">
                                                             <div class="row">
                                                                 <div class="col-md-9">
-                                                                    Section Name : <input type="text" style="width: 70%"/>
-                                                                    </div>
+                                                                    Section Name : <input type="text"
+                                                                                          style="width: 70%"/>
+                                                                </div>
                                                                 <div class="col-md-3" style='text-align:right;'>
-                                                                    <a href="javascript:;" class="btn btn-xs btn-default btn-round"
-                                                                       data-ng-click="removeSection(section.index)" style="border-radius: 15px;" data-ng-hide="date_time.readOnly">
-                                                                        <i class="fa fa-floppy-o" style="color: green;"></i>
+                                                                    <a href="javascript:;"
+                                                                       class="btn btn-xs btn-default btn-round"
+                                                                       data-ng-click="saveSection(section.index)"
+                                                                       style="border-radius: 15px;"
+                                                                       data-ng-hide="date_time.readOnly">
+                                                                        <i class="fa fa-floppy-o"
+                                                                           style="color: green;"></i>
                                                                     </a>
-                                                                    <a href="javascript:;" class="btn btn-xs btn-default btn-round"
-                                                                       data-ng-click="removeSection(section.index)" style="border-radius: 15px;" data-ng-hide="date_time.readOnly">
-                                                                        <i class="fa fa-times" style="color: red;"></i> & <i class="fa fa-floppy-o" style="color: green;"></i>
+                                                                    <a href="javascript:;"
+                                                                       class="btn btn-xs btn-default btn-round"
+                                                                       data-ng-click="removeSection(section.index)"
+                                                                       style="border-radius: 15px;"
+                                                                       data-ng-hide="date_time.readOnly">
+                                                                        <i class="fa fa-times" style="color: red;"></i>
                                                                     </a>
 
                                                                 </div>
-                                                                </div>
+                                                            </div>
 
                                                             <div class="row">
                                                                 <div class="col-md-12">
-                                                            <div class="jqdragndrop-drop BB" style="width: 100%;height: 200px;background: #FFFFCC;">aa
-                                                                        </div>
+                                                                    <div class="jqdragndrop-drop BB"
+                                                                         style="width: 100%;height: 200px;background: #FFFFCC;">
+                                                                        <b class="jqselection-selectable"
+                                                                           ng-repeat="student in section.studentList"
+                                                                           style="background-image:url(&quot;data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='40px' width='180px'><text x='15' y='26' fill='black' font-size='25'>{{ ::student.mId}}</text></svg>&quot;)"><span
+                                                                                class='AB' style='display:none'>{{ ::student.mId}}</span></b>
+
                                                                     </div>
                                                                 </div>
+                                                            </div>
 
 
-
-
-</div>
-</div>
-
-
+                                                        </div>
                                                     </div>
 
+
                                                 </div>
+
                                             </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -416,14 +576,3 @@
         </div>
     </div>
 </div>
-
-        <!--
-                WITH DATA AS
-      ( SELECT STUDENT_LIST str FROM OPT_COURSE_SECTION_INFO
-      )
-    SELECT trim(regexp_substr(str, '[^,]+', 1, LEVEL)) str
-    FROM DATA
-    CONNECT BY instr(str, ',', 1, LEVEL - 1) > 0
-
-    https://lalitkumarb.com/2014/12/02/split-comma-delimited-string-into-rows-in-oracle/
-            -->

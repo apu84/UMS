@@ -23,7 +23,7 @@ module ums {
           (newValue, oldValue) => {
 
             if (newValue !== oldValue) {
-
+/*
               if ($scope.semesterEnrollmentModel.enrollmentType != ''
                   && $scope.semesterEnrollmentModel.programSelector.programId
                   && $scope.semesterEnrollmentModel.semesterId) {
@@ -35,6 +35,7 @@ module ums {
                       this.$scope.showStatus = true;
                     });
               }
+              */
             }
           }
       );
