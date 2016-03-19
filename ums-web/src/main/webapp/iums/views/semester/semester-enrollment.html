@@ -34,9 +34,6 @@
                         </div>
 
                     </div>
-                    <div class="form-actions text-right pal">
-                        <button type="button" class="btn btn-success">Enroll</button>
-                    </div>
                 </div>
             </div>
         </div>
@@ -61,7 +58,8 @@
                         <tbody>
 
                         <tr ng-repeat="entry in semesterEnrollmentModel.status">
-                            <td>{{entry.year}} Year -{{entry.semester}} Semester</td>
+                            <td>{{numberWithSuffix(entry.year)}} Year - {{numberWithSuffix(entry.semester)}} Semester
+                            </td>
                             <td>{{entry.enrollmentDate}} <span data-ng-if="entry.type == 0">(Temporary)</span></td>
                             <td>
                                 <input type="checkbox" data-ng-model="entry.checked"
@@ -69,6 +67,9 @@
                             </td>
                         </tr>
                     </table>
+                </div>
+                <div class="form-actions text-right pal">
+                    <button type="button" class="btn btn-success">Enroll</button>
                 </div>
             </div>
         </div>

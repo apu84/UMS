@@ -80,6 +80,8 @@ public class EnrollmentServiceImpl implements EnrollmentService {
       }
     }
 
+    int totalEnrolledStudent = 0;
+
     if (currentEnrollmentFromTo != null) {
 
       if (pType == SemesterEnrollment.Type.TEMPORARY) {
@@ -115,6 +117,8 @@ public class EnrollmentServiceImpl implements EnrollmentService {
             mutableStudent.setCurrentYear(currentEnrollmentFromTo.getToYear());
             mutableStudent.setCurrentAcademicSemester(currentEnrollmentFromTo.getToSemester());
             mutableStudents.add(mutableStudent);
+
+            totalEnrolledStudent++;
           }
 
           mStudentRecordManager.create(mutableStudentRecords);
@@ -129,8 +133,10 @@ public class EnrollmentServiceImpl implements EnrollmentService {
           *   4. Update StudentRecord set type = StudentRecord.Type.READMISSION_REQUIRED for students who has status == StudentRecord.Status.FAILED in the previous semester
           *     4.1 Update StudentRecord set year and semester from previous semester
           */
-        SemesterEnrollment semesterEnrollment = mSemesterEnrollmentManager.getEnrollmentStatus(SemesterEnrollment.Type.TEMPORARY, pProgramId,
-            pNewSemesterId, pToYear, pToAcademicSemester);
+        SemesterEnrollment semesterEnrollment
+            = mSemesterEnrollmentManager.getEnrollmentStatus(SemesterEnrollment.Type.TEMPORARY, pProgramId, pNewSemesterId,
+            pToYear, pToAcademicSemester);
+
         MutableSemesterEnrollment mutableSemesterEnrollment = semesterEnrollment.edit();
         mutableSemesterEnrollment.setType(SemesterEnrollment.Type.PERMANENT);
         mutableSemesterEnrollment.commit(true);
@@ -141,6 +147,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         if (pToYear == UmsUtils.FIRST && pToAcademicSemester == UmsUtils.FIRST
             && temporaryEnrolledStudentRecords.size() > 0) {
           permanentEnrollmentNewStudents(temporaryEnrolledStudentRecords);
+          totalEnrolledStudent += temporaryEnrolledStudentRecords.size();
 
         } else {
           List<StudentRecord> previousSemesterStudentRecords = mStudentRecordManager.getStudentRecords(pProgramId,
@@ -174,6 +181,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
               mutableStudentRecords.add(mutableStudentRecord);
               mutableStudents.add(mutableStudent);
+              totalEnrolledStudent++;
             }
 
             mStudentRecordManager.update(mutableStudentRecords);
@@ -182,7 +190,11 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         }
       }
     }
-    return new GenericMessageResponse(GenericResponse.ResponseType.SUCCESSFUL, "Semester enrolled successfully");
+    return new GenericMessageResponse(GenericResponse.ResponseType.SUCCESSFUL,
+        mMessageResource.getMessage("enrollment.successful",
+            UmsUtils.getNumberWithSuffix(pToYear),
+            UmsUtils.getNumberWithSuffix(pToAcademicSemester),
+            totalEnrolledStudent));
   }
 
   @Override

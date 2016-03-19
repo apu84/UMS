@@ -53,3 +53,5 @@
 /// <reference path='interceptor/Unauthorized.ts'/>
 
 /// <reference path='filter/TrustAsHtml.ts'/>
+/// <reference path='util/UmsUtil.ts'/>
+

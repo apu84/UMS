@@ -4,13 +4,15 @@ module ums {
     semesterEnrollmentModel: SemesterEnrollmentModel;
     submit: Function;
     showStatus: boolean;
+    numberWithSuffix: (n: number) => string;
   }
   export class SemesterEnrollment {
-    public static $inject = ['$scope', 'appConstants', 'HttpClient'];
+    public static $inject = ['$scope', 'appConstants', 'HttpClient', '$q'];
 
     constructor(private $scope: SemesterEnrollmentScope,
                 private appConstants: any,
-                private httpClient: HttpClient) {
+                private httpClient: HttpClient,
+                private $q: ng.IQService) {
 
       $scope.semesterEnrollmentModel = new SemesterEnrollmentModel(appConstants, httpClient);
       $scope.submit = this.submit.bind(this);
@@ -19,7 +21,6 @@ module ums {
             'semesterEnrollmentModel.enrollmentType',
             'semesterEnrollmentModel.programSelector.programId'],
           (newValue, oldValue) => {
-            console.debug("Change detected: %o", $scope.semesterEnrollmentModel);
 
             if (newValue !== oldValue) {
 
@@ -27,35 +28,55 @@ module ums {
                   && $scope.semesterEnrollmentModel.programSelector.programId
                   && $scope.semesterEnrollmentModel.semesterId) {
 
-                this.httpClient.get('academic/studentEnrollment'
-                    + '/program/' + $scope.semesterEnrollmentModel.programSelector.programId
-                    + '/semester/' + $scope.semesterEnrollmentModel.semesterId + '',
-                    HttpClient.MIME_TYPE_JSON,
-                    (json: any, etag: string) => {
-                      var enrollmentStatus: Array<SemesterEnrollmentStatus> = json.entries;
+                this.enrollmentStatus($scope.semesterEnrollmentModel.programSelector.programId,
+                    $scope.semesterEnrollmentModel.semesterId)
+                    .then((enrollmentStatus: Array<SemesterEnrollmentStatus>) => {
                       this.$scope.semesterEnrollmentModel.status = enrollmentStatus;
-                      $scope.showStatus = true;
-                    },
-                    (response: ng.IHttpPromiseCallbackArg<any>) => {
-                      console.error(response);
+                      this.$scope.showStatus = true;
                     });
               }
             }
           }
       );
+
+      $scope.numberWithSuffix = (n: number) => {
+        return UmsUtil.getNumberWithSuffix(n);
+      };
+    }
+
+    private enrollmentStatus(programId: string, semesterId: string): ng.IPromise<Array<SemesterEnrollmentStatus>> {
+      var defer: ng.IDeferred = this.$q.defer();
+      this.httpClient.get('academic/studentEnrollment'
+          + '/program/' + programId
+          + '/semester/' + semesterId + '',
+          HttpClient.MIME_TYPE_JSON,
+          (json: any, etag: string) => {
+            var enrollmentStatus: Array<SemesterEnrollmentStatus> = json.entries;
+            defer.resolve(enrollmentStatus);
+          },
+          (response: ng.IHttpPromiseCallbackArg<any>) => {
+            console.error(response);
+          });
+      return defer.promise;
     }
 
     private submit(): void {
-      console.debug("Submit.....");
       this.httpClient.post('academic/studentEnrollment/enroll/'
       + this.$scope.semesterEnrollmentModel.enrollmentType
       + "/program/"
       + this.$scope.semesterEnrollmentModel.programSelector.programId
       + "/semester/"
-      + this.$scope.semesterEnrollmentModel.semesterId, {}, 'application/json')
+      + this.$scope.semesterEnrollmentModel.semesterId, {'status': this.$scope.semesterEnrollmentModel.status}, 'application/json')
           .success((data) => {
-            console.debug(data);
+            $.notific8(data.message);
+            this.enrollmentStatus(this.$scope.semesterEnrollmentModel.programSelector.programId,
+                this.$scope.semesterEnrollmentModel.semesterId).then((enrollmentStatus: Array<SemesterEnrollmentStatus>) => {
+                  this.$scope.semesterEnrollmentModel.status = enrollmentStatus;
+                  this.$scope.showStatus = true;
+                });
+
           }).error((data) => {
+            console.error(data);
           });
     }
   }
