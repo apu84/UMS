@@ -20,9 +20,10 @@ public interface GenericResponse<T> extends Serializable {
   void setResponse(T pResponse);
 
   enum ResponseType {
-    SUCCESSFUL(1),
-    FAILED(0),
-    INVALID_PARAMETER(2);
+    SUCCESS(1),
+    ERROR(0),
+    INFO(2),
+    WARN(3);
 
     private static final Map<Integer, ResponseType> lookup = new HashMap<>();
 

@@ -62,7 +62,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                       final Integer pToAcademicSemester) throws Exception {
 
     GenericResponse<Map> enrollmentStatus = enrollmentStatus(pType, pNewSemesterId, pProgramId, pToYear, pToAcademicSemester);
-    if (enrollmentStatus.getResponseType() == GenericResponse.ResponseType.FAILED) {
+    if (enrollmentStatus.getResponseType() == GenericResponse.ResponseType.ERROR) {
       return enrollmentStatus;
     }
 
@@ -130,7 +130,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
           *   1. Find students eligible for permanent enrollment, that is who has StudentRecord.Type.TEMPORARY as type.
           *   2. Find StudentRecord for all students for previous semester. Create a map of studentId as key and student record as value
           *   3. Update StudentRecord set type = StudentRecord.Type.REGULAR for students who has status == StudentRecord.Status.PASSED in the previous semester
-          *   4. Update StudentRecord set type = StudentRecord.Type.READMISSION_REQUIRED for students who has status == StudentRecord.Status.FAILED in the previous semester
+          *   4. Update StudentRecord set type = StudentRecord.Type.READMISSION_REQUIRED for students who has status == StudentRecord.Status.ERROR in the previous semester
           *     4.1 Update StudentRecord set year and semester from previous semester
           */
         SemesterEnrollment semesterEnrollment
@@ -190,7 +190,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         }
       }
     }
-    return new GenericMessageResponse(GenericResponse.ResponseType.SUCCESSFUL,
+    return new GenericMessageResponse(GenericResponse.ResponseType.SUCCESS,
         mMessageResource.getMessage("enrollment.successful",
             UmsUtils.getNumberWithSuffix(pToYear),
             UmsUtils.getNumberWithSuffix(pToAcademicSemester),
@@ -203,11 +203,11 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     List<EnrollmentFromTo> enrollmentFromToList = mEnrollmentFromToManager.getEnrollmentFromTo(pProgramId);
     for (EnrollmentFromTo enrollment : enrollmentFromToList) {
       GenericResponse<Map> response = saveEnrollment(pType, pNewSemesterId, pProgramId, enrollment.getToYear(), enrollment.getToSemester());
-      if (response.getResponseType() == GenericResponse.ResponseType.FAILED) {
+      if (response.getResponseType() == GenericResponse.ResponseType.ERROR) {
         return response;
       }
     }
-    return new GenericMessageResponse(GenericResponse.ResponseType.SUCCESSFUL, mMessageResource.getMessage("enrollment.successful"));
+    return new GenericMessageResponse(GenericResponse.ResponseType.SUCCESS, mMessageResource.getMessage("enrollment.successful"));
   }
 
   private Map<String, StudentRecord> toMap(List<StudentRecord> pStudentRecordList) {
@@ -230,7 +230,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
     if (semesterEnrollmentStatus != null) {
 
-      return new GenericMessageResponse(GenericResponse.ResponseType.FAILED,
+      return new GenericMessageResponse(GenericResponse.ResponseType.ERROR,
           mMessageResource.getMessage("semester.enrollment.already.done",
               StringUtils.capitalize(pType.toString().toLowerCase()),
               UmsUtils.getNumberWithSuffix(pToYear),
@@ -247,7 +247,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
           pToAcademicSemester);
 
       if (permanentEnrollmentStatus != null) {
-        return new GenericMessageResponse(GenericResponse.ResponseType.FAILED,
+        return new GenericMessageResponse(GenericResponse.ResponseType.ERROR,
             mMessageResource.getMessage("semester.enrollment.already.done",
                 StringUtils.capitalize(SemesterEnrollment.Type.PERMANENT.toString().toLowerCase()),
                 UmsUtils.getNumberWithSuffix(pToYear),
@@ -263,14 +263,14 @@ public class EnrollmentServiceImpl implements EnrollmentService {
           pToAcademicSemester);
 
       if (temporaryEnrollmentStatus == null) {
-        return new GenericMessageResponse(GenericResponse.ResponseType.FAILED,
+        return new GenericMessageResponse(GenericResponse.ResponseType.ERROR,
             mMessageResource.getMessage("semester.temporary.enrollment.required",
                 UmsUtils.getNumberWithSuffix(pToYear),
                 UmsUtils.getNumberWithSuffix(pToAcademicSemester)));
       }
     }
 
-    return new GenericMessageResponse(GenericResponse.ResponseType.SUCCESSFUL);
+    return new GenericMessageResponse(GenericResponse.ResponseType.SUCCESS);
   }
 
   private void permanentEnrollmentNewStudents(final List<StudentRecord> pStudentRecordList) throws Exception {

@@ -104,7 +104,7 @@ public class StudentEnrollmentResource extends Resource {
 
           previousResponse = genericResponse;
 
-          if (genericResponse.getResponseType() == GenericResponse.ResponseType.FAILED) {
+          if (genericResponse.getResponseType() == GenericResponse.ResponseType.ERROR) {
             return genericResponse;
           }
         }

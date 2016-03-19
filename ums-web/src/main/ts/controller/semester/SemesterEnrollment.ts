@@ -7,12 +7,13 @@ module ums {
     numberWithSuffix: (n: number) => string;
   }
   export class SemesterEnrollment {
-    public static $inject = ['$scope', 'appConstants', 'HttpClient', '$q'];
+    public static $inject = ['$scope', 'appConstants', 'HttpClient', '$q', 'notify'];
 
     constructor(private $scope: SemesterEnrollmentScope,
                 private appConstants: any,
                 private httpClient: HttpClient,
-                private $q: ng.IQService) {
+                private $q: ng.IQService,
+                private notify: Notify) {
 
       $scope.semesterEnrollmentModel = new SemesterEnrollmentModel(appConstants, httpClient);
       $scope.submit = this.submit.bind(this);
@@ -23,8 +24,8 @@ module ums {
           (newValue, oldValue) => {
 
             if (newValue !== oldValue) {
-/*
-              if ($scope.semesterEnrollmentModel.enrollmentType != ''
+
+              if ($scope.semesterEnrollmentModel.enrollmentType
                   && $scope.semesterEnrollmentModel.programSelector.programId
                   && $scope.semesterEnrollmentModel.semesterId) {
 
@@ -35,7 +36,6 @@ module ums {
                       this.$scope.showStatus = true;
                     });
               }
-              */
             }
           }
       );
@@ -68,8 +68,8 @@ module ums {
       + this.$scope.semesterEnrollmentModel.programSelector.programId
       + "/semester/"
       + this.$scope.semesterEnrollmentModel.semesterId, {'status': this.$scope.semesterEnrollmentModel.status}, 'application/json')
-          .success((data) => {
-            $.notific8(data.message);
+          .success((data:NotifyMessage) => {
+            this.notify.show(data);
             this.enrollmentStatus(this.$scope.semesterEnrollmentModel.programSelector.programId,
                 this.$scope.semesterEnrollmentModel.semesterId).then((enrollmentStatus: Array<SemesterEnrollmentStatus>) => {
                   this.$scope.semesterEnrollmentModel.status = enrollmentStatus;

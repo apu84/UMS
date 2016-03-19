@@ -55,3 +55,5 @@
 /// <reference path='filter/TrustAsHtml.ts'/>
 /// <reference path='util/UmsUtil.ts'/>
 
+/// <reference path='service/Notify.ts'/>
+
