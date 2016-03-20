@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.ums.cache.*;
-import org.ums.domain.model.immutable.ParameterSetting;
 import org.ums.manager.*;
 import org.ums.persistent.dao.*;
 import org.ums.security.authentication.UMSAuthenticationRealm;
@@ -215,7 +214,7 @@ public class UMSContext {
     return new PersistentRoutineDao(mJdbcTemplate);
   }
 
-  @Bean
+/*  @Bean
   ParameterManager parameterManager(){
     return new PersistentParameterDao(mJdbcTemplate);
   }
@@ -223,7 +222,7 @@ public class UMSContext {
   ParameterSettingManager parameterSettingManager(){
 
     return  new PersistentParameterSettingDao(mJdbcTemplate);
-  }
+  }*/
 
   @Bean
   BearerAccessTokenManager bearerAccessTokenManager() {
