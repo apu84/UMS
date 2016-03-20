@@ -11,9 +11,7 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
 
-/**
- * Created by My Pc on 3/6/2016.
- */
+
 @Component
 public class RoutineBuilder implements Builder<Routine, MutableRoutine> {
 
