@@ -14,13 +14,15 @@ import org.ums.manager.ContentManager;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Collection;
+import java.util.List;
 
 public class NewUserFilter extends AuthorizationFilter {
 
   @Autowired
   private ContentManager<User, MutableUser, String> mUserManager;
 
-  private String mChangePasswordUrl;
+  private Collection<String> mAllowedResource;
 
   protected PatternMatcher mPathMatcher = new AntPathMatcher();
 
@@ -39,7 +41,7 @@ public class NewUserFilter extends AuthorizationFilter {
     try {
       User user = mUserManager.get(userName);
       if (user.getTemporaryPassword() != null) {
-        if (!isChangePasswordRequest(request)) {
+        if (!isAllowed(request)) {
           return false;
         }
       }
@@ -49,15 +51,20 @@ public class NewUserFilter extends AuthorizationFilter {
     return true;
   }
 
-  protected boolean isChangePasswordRequest(ServletRequest pRequest) {
-    return mPathMatcher.matches(mChangePasswordUrl, getPathWithinApplication(pRequest));
+  protected boolean isAllowed(ServletRequest pRequest) {
+    for (String resource : mAllowedResource) {
+      if (mPathMatcher.matches(resource, getPathWithinApplication(pRequest))) {
+        return true;
+      }
+    }
+    return false;
   }
 
   protected String getPathWithinApplication(ServletRequest request) {
     return WebUtils.getPathWithinApplication(WebUtils.toHttp(request));
   }
 
-  public void setChangePasswordUrl(String pChangePasswordUrl) {
-    mChangePasswordUrl = pChangePasswordUrl;
+  public void setAllowedResource(Collection<String> pAllowedResource) {
+    mAllowedResource = pAllowedResource;
   }
 }

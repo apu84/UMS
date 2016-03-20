@@ -28,4 +28,6 @@ public class UMSHttpAuthenticationFilter extends BasicHttpAuthenticationFilter {
     httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
     return false;
   }
+
+
 }

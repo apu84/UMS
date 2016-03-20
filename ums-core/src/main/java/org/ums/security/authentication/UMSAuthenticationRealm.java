@@ -11,18 +11,20 @@ import org.apache.shiro.realm.jdbc.JdbcRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.ums.domain.model.immutable.Permission;
 import org.ums.domain.model.immutable.User;
 import org.ums.domain.model.mutable.MutableUser;
 import org.ums.manager.ContentManager;
 import org.ums.manager.PermissionManager;
+import org.ums.security.bearertoken.ProfileRealm;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 
-public class UMSAuthenticationRealm extends JdbcRealm {
+public class UMSAuthenticationRealm extends JdbcRealm implements ProfileRealm {
   private String mSalt;
   private PasswordMatcher mPlainPasswordMatcher;
   private CredentialsMatcher mHashCredentialsMatcher;
@@ -30,6 +32,10 @@ public class UMSAuthenticationRealm extends JdbcRealm {
   private ContentManager<User, MutableUser, String> mUserManager;
   @Autowired
   private PermissionManager mPermissionManager;
+
+  public UMSAuthenticationRealm() {
+    setAuthenticationTokenClass(UsernamePasswordToken.class);
+  }
 
   public void setSalt(String pSalt) {
     mSalt = pSalt;
@@ -119,5 +125,20 @@ public class UMSAuthenticationRealm extends JdbcRealm {
     }
     return info;
 
+  }
+
+  @Override
+  public boolean accountExists(String pUserId) throws Exception{
+    return !StringUtils.isEmpty(pUserId) && mUserManager.get(pUserId) != null;
+  }
+
+  @Override
+  public User getAccount(String pUserId) throws Exception{
+    return mUserManager.get(pUserId);
+  }
+
+  @Override
+  public boolean supports(AuthenticationToken token) {
+    return token != null && getAuthenticationTokenClass().isAssignableFrom(token.getClass());
   }
 }

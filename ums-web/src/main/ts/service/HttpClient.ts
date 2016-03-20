@@ -54,8 +54,6 @@ module ums {
       if(fileName) {
         requestHeaders['X-ums-media-filename'] = fileName;
       }
-      console.debug("in http client %o", data);
-
       return this.$http({
         url: this.baseURI.toAbsolute(url),
         method: 'POST',
@@ -91,10 +89,10 @@ module ums {
       return status == 0 || (status >= 502 && status <= 504);
     }
 
-    public resetAuthenticationHeader(authetication?: string) {
-      this.credentials = !authetication ? this.cookieService.getCookieAsJson(CookieService.CREDENTIAL_KEY) : authetication;
+    public resetAuthenticationHeader() {
+      this.credentials = this.cookieService.getCookieAsJson(CookieService.CREDENTIAL_KEY);
       if (this.credentials != null && this.credentials != '') {
-        this.$http.defaults.headers.common.Authorization = this.credentials.credential;
+        this.$http.defaults.headers.common['X-Authorization'] = this.credentials.credential;
       }
     }
   }

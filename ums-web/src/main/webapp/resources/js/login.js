@@ -28,6 +28,7 @@ var Authentication = (function () {
       success: function (user) {
         console.log("submitting the form !!");
         $('#loginForm').submit();
+        credentials = "Basic " + btoa(userName + ":" + user.token);
         getUserAndStartApplication(credentials, user);
 
       },

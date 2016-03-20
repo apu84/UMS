@@ -211,4 +211,9 @@ public class UMSContext {
   RoutineManager routineManager() {
     return new PersistentRoutineDao(mJdbcTemplate);
   }
+
+  @Bean
+  BearerAccessTokenManager bearerAccessTokenManager() {
+    return new BearerAccessTokenDao(mJdbcTemplate);
+  }
 }

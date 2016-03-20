@@ -513,3 +513,13 @@ Insert into DB_IUMS.MAIN_NAVIGATION
    ('Student Enrollment', 'student:enroll', '/semesterEnrollment', 2018,
     'fa-plus-square-o', 'bg-pink', 16, 1, '201602141037');
 COMMIT;
+
+
+DROP TABLE DB_IUMS.BEARER_ACCESS_TOKEN CASCADE CONSTRAINTS;
+
+CREATE TABLE DB_IUMS.BEARER_ACCESS_TOKEN
+(
+  TOKEN             VARCHAR2(40 BYTE)           NOT NULL,
+  USER_ID           VARCHAR2(30 BYTE),
+  LAST_ACCESS_TIME  DATE
+)

@@ -88,8 +88,10 @@ public class PersistentUser implements MutableUser {
   @Override
   public List<Role> getRoles() throws Exception {
     mRoles = new ArrayList<>();
-    for (Integer roleId : mRoleIds) {
-      mRoles.add(sRoleManager.get(roleId));
+    if (mRoleIds!=null) {
+      for (Integer roleId : mRoleIds) {
+        mRoles.add(sRoleManager.get(roleId));
+      }
     }
     return mRoles;
   }

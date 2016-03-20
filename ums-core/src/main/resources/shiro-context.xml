@@ -44,19 +44,37 @@
     <!--<property name="authenticationCachingEnabled" value="true"/>-->
   </bean>
 
+  <bean id="bearerTokenRealm" class="org.ums.security.bearertoken.BearerTokenAuthenticatingRealm"/>
+
   <bean id="memoryConstrainedCacheManager" class="org.apache.shiro.cache.MemoryConstrainedCacheManager"/>
 
   <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
-    <property name="realm" ref="jdbcRealm"/>
+    <property name="realms">
+      <list>
+        <ref bean="jdbcRealm"/>
+        <ref bean="bearerTokenRealm"/>
+      </list>
+    </property>
   </bean>
 
-  <bean id="umsAuthBasic" class="org.ums.security.filter.UMSHttpAuthenticationFilter"/>
-
-  <bean id="newUser" class="org.ums.security.filter.NewUserFilter">
-    <property name="changePasswordUrl" value="/changePassword"/>
+  <bean id="umsAuthBasic" class="org.ums.security.filter.UMSHttpAuthenticationFilter">
     <property name="loginUrl" value="/login"/>
   </bean>
 
+  <bean id="bearerTokenFilter" class="org.ums.security.bearertoken.filter.BearerTokenAuthenticatingFilter">
+    <property name="loginUrl" value="/login"/>
+  </bean>
+
+  <bean id="newUser" class="org.ums.security.filter.NewUserFilter">
+    <property name="allowedResource">
+      <list>
+        <value>/changePassword</value>
+        <value>/mainNavigation</value>
+      </list>
+    </property>
+    <property name="loginUrl" value="/login"/>
+  </bean>
+<!--TODO: Need to add bearerTokenFilter in the filter list before umsAuthBasic-->
   <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
     <property name="securityManager" ref="securityManager"/>
     <property name="filterChainDefinitions">

@@ -1,6 +1,6 @@
 module ums {
   export interface User {
-    username: string;
+    userName: string;
     firstName: string;
     lastName: string;
   }

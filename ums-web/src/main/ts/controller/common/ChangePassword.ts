@@ -19,16 +19,17 @@ module ums {
     constructor(private $scope:IChangePasswordScope, private httpClient:HttpClient,
                 private cookieService:CookieService) {
       $scope.submit = this.submit.bind(this);
+      console.debug('%o',this.$scope.user);
     }
 
     private submit():void {
       this.httpClient.put('changePassword', this.$scope.password, 'application/json')
-          .success(() => {
+          .success((response) => {
             this.$scope.response = {
               status: true,
               text: "Password changed successfully"
             };
-            this.resetAuthentication(this.$scope.user, this.$scope.password.newPassword);
+            this.resetAuthentication(this.$scope.user, response.token);
           }).error((data) => {
             this.$scope.response = {
               status: false,
@@ -37,11 +38,14 @@ module ums {
           });
     }
 
-    private resetAuthentication(user:User, password:string):void {
+    private resetAuthentication(user: User, token: string): void {
       this.cookieService.removeCookie(CookieService.CREDENTIAL_KEY);
-      var credentials = "Basic " + btoa(user.username + ":" + password);
-      document.cookie = CookieService.CREDENTIAL_KEY + "=" + credentials + "; path=/";
-      this.httpClient.resetAuthenticationHeader(credentials);
+      var encoded = btoa(user.userName + ":" + token);
+      var encodedToken = {
+        credential:  "Basic " + encoded
+      };
+      document.cookie = CookieService.CREDENTIAL_KEY + "=" + JSON.stringify(encodedToken) + "; path=/";
+      this.httpClient.resetAuthenticationHeader();
     }
   }
 
