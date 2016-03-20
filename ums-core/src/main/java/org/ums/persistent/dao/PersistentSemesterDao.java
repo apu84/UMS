@@ -35,6 +35,7 @@ public class PersistentSemesterDao extends SemesterDaoDecorator {
 
   public Semester get(final Integer pSemesterId) throws Exception {
     String query = SELECT_ALL + "WHERE SEMESTER_ID = ?";
+ //   Semester test = mJdbcTemplate.queryForObject(query, new Object[]{pSemesterId}, new SemesterRowMapper());
     return mJdbcTemplate.queryForObject(query, new Object[]{pSemesterId}, new SemesterRowMapper());
   }
 

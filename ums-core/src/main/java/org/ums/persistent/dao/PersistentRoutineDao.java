@@ -98,7 +98,7 @@ public class PersistentRoutineDao extends RoutineDaoDecorator {
 
   @Override
   public int delete(final MutableRoutine pMutable) throws Exception {
-    String query = DELETE_ONE+"WHERE ROUTINE_ID=?";
+    String query = DELETE_ONE+" WHERE ROUTINE_ID=?";
     return mJdbcTemplate.update(query,pMutable.getId());
   }
 
