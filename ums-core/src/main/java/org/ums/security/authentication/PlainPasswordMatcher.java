@@ -1,4 +1,4 @@
-package org.ums.authentication;
+package org.ums.security.authentication;
 
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;

@@ -36,7 +36,7 @@
 /// <reference path='controller/syllabus/FullSyllabus.ts'/>
 /// <reference path='controller/syllabus/NewSyllabus.ts'/>
 /// <reference path='controller/syllabus/GridSyllabus.ts'/>
-
+/// <reference path='controller/semester/SemesterEnrollment.ts'/>
 
 /// <reference path='directive/LeftMenu.ts'/>
 /// <reference path='directive/DisableOperation.ts'/>
@@ -53,3 +53,7 @@
 /// <reference path='interceptor/Unauthorized.ts'/>
 
 /// <reference path='filter/TrustAsHtml.ts'/>
+/// <reference path='util/UmsUtil.ts'/>
+
+/// <reference path='service/Notify.ts'/>
+

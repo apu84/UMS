@@ -12,8 +12,11 @@ public class UmsUtils {
       case 2:
         suffix = "nd";
         break;
-      default:
+      case 3:
         suffix = "rd";
+        break;
+      default:
+        suffix = "th";
         break;
     }
     return pNumber + "" + suffix;

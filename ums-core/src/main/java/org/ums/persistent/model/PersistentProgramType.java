@@ -17,6 +17,7 @@ public class PersistentProgramType implements MutableProgramType {
 
   int mId;
   String mName;
+  String mLastModified;
 
   public PersistentProgramType() {
 
@@ -59,4 +60,13 @@ public class PersistentProgramType implements MutableProgramType {
     return new PersistentProgramType(this);
   }
 
+  @Override
+  public String getLastModified() {
+    return mLastModified;
+  }
+
+  @Override
+  public void setLastModified(String pLastModified) {
+    mLastModified = pLastModified;
+  }
 }

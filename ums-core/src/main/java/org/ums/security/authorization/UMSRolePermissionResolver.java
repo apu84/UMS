@@ -1,4 +1,4 @@
-package org.ums.authorization;
+package org.ums.security.authorization;
 
 import org.apache.shiro.authz.Permission;
 import org.apache.shiro.authz.permission.PermissionResolver;

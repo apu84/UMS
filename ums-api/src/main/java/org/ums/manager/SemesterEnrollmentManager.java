@@ -13,4 +13,6 @@ public interface SemesterEnrollmentManager extends ContentManager<SemesterEnroll
                                                final Integer pSemesterId,
                                                final Integer pYear,
                                                final Integer pAcademicSemester);
+  List<SemesterEnrollment> getEnrollmentStatus(final Integer pProgramId,
+                                               final Integer pSemesterId);
 }

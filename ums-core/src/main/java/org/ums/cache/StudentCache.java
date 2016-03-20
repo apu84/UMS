@@ -6,6 +6,8 @@ import org.ums.manager.CacheManager;
 import org.ums.manager.StudentManager;
 import org.ums.util.CacheUtil;
 
+import java.util.List;
+
 public class StudentCache extends ContentCache<Student, MutableStudent, String, StudentManager> implements StudentManager {
   private CacheManager<Student> mCacheManager;
 
@@ -23,4 +25,9 @@ public class StudentCache extends ContentCache<Student, MutableStudent, String, 
     return CacheUtil.getCacheKey(Student.class, pId);
   }
 
+
+  @Override
+  public List<Student> getStudentListFromStudentsString(String pStudents) throws Exception {
+    return getManager().getStudentListFromStudentsString(pStudents);
+  }
 }

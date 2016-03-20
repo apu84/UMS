@@ -1,4 +1,4 @@
-package org.ums.filter;
+package org.ums.security.filter;
 
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
 import org.apache.shiro.web.util.WebUtils;

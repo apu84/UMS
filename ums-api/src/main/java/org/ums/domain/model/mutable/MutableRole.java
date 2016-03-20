@@ -6,7 +6,7 @@ import org.ums.domain.model.common.MutableIdentifier;
 
 import java.util.Set;
 
-public interface MutableRole extends Role, Mutable, MutableIdentifier<Integer> {
+public interface MutableRole extends Role, Mutable, MutableIdentifier<Integer>, MutableLastModifier {
   void setName(final String pName);
 
   void setPermissions(final Set<String> pPermissions);

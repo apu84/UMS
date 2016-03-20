@@ -12,4 +12,6 @@ public interface CourseManager extends ContentManager<Course, MutableCourse, Str
   public List<Course> getOfferedCourseList(final Integer pSemesterId,final Integer pProgramId,final Integer pYear,final Integer pSemester);
   public List<Course> getCallForApplicationCourseList(final Integer pSemesterId,final Integer pProgramId,final Integer pYear,final Integer pSemester);
   public List<Course> getApprovedCourseList(final Integer pSemesterId,final Integer pProgramId,final Integer pYear,final Integer pSemester);
+  public List<Course> getApprovedCallForApplicationCourseList(final Integer pSemesterId,final Integer pProgramId,final Integer pYear,final Integer pSemester);
+
 }

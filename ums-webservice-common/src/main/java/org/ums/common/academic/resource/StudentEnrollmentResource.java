@@ -14,10 +14,7 @@ import org.ums.manager.StudentRecordManager;
 import org.ums.response.type.GenericResponse;
 import org.ums.services.academic.EnrollmentService;
 
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
+import javax.json.*;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
@@ -44,15 +41,13 @@ public class StudentEnrollmentResource extends Resource {
   @Autowired
   DateFormat mDateFormat;
   @GET
-  @Path("/enrollment-type/{enrollment-type}/program-id/{program-id}/semester-id/{semester-id}")
+  @Path("/program/{program-id}/semester/{semester-id}")
   public JsonObject getSemesterList(final @Context Request pRequest,
-                                    final @PathParam("enrollment-type") int pEnrollmentType,
                                     final @PathParam("program-id") int pProgramId,
                                     final @PathParam("semester-id") int pSemesterId) throws Exception {
 
     List<EnrollmentFromTo> enrollmentFromToList = mEnrollmentFromToManager.getEnrollmentFromTo(pProgramId);
-    List<SemesterEnrollment> semesterEnrollmentList
-        = mSemesterEnrollmentManager.getEnrollmentStatus(SemesterEnrollment.Type.get(pEnrollmentType), pProgramId, pSemesterId);
+    List<SemesterEnrollment> semesterEnrollmentList = mSemesterEnrollmentManager.getEnrollmentStatus(pProgramId, pSemesterId);
 
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
@@ -79,12 +74,45 @@ public class StudentEnrollmentResource extends Resource {
   }
 
   @POST
-  @Path("/enroll/{enrollment-type}/program-id/{program-id}/semester-id/{semester-id}")
+  @Path("/enroll/{enrollment-type}/program/{program-id}/semester/{semester-id}")
   public GenericResponse<Map> enrollSemester(final @Context Request pRequest,
                                  final @PathParam("enrollment-type") int pEnrollmentType,
                                  final @PathParam("program-id") int pProgramId,
-                                 final @PathParam("semester-id") int pSemesterId) throws Exception {
-    return mEnrollmentService.saveEnrollment(SemesterEnrollment.Type.get(pEnrollmentType), pSemesterId, pProgramId);
+                                 final @PathParam("semester-id") int pSemesterId,
+                                 final JsonObject pJsonObject) throws Exception {
+
+    GenericResponse<Map> genericResponse = null, previousResponse = null;
+
+    if (pJsonObject.containsKey("status")) {
+      JsonArray postArray = pJsonObject.getJsonArray("status");
+
+      for (int i = 0; i < postArray.size(); i++) {
+        JsonObject status = postArray.getJsonObject(i);
+
+        if (status.containsKey("checked") && status.getBoolean("checked")) {
+
+          int year = status.getInt("year");
+          int semester = status.getInt("semester");
+
+          genericResponse = mEnrollmentService.saveEnrollment(SemesterEnrollment.Type.get(pEnrollmentType),
+              pSemesterId, pProgramId, year, semester);
+
+          //join the responses for all year, semesters
+          if (previousResponse != null) {
+            genericResponse.setMessage(genericResponse.getMessage() + "\n" + previousResponse.getMessage());
+          }
+
+          previousResponse = genericResponse;
+
+          if (genericResponse.getResponseType() == GenericResponse.ResponseType.ERROR) {
+            return genericResponse;
+          }
+        }
+      }
+    } else {
+      return mEnrollmentService.saveEnrollment(SemesterEnrollment.Type.get(pEnrollmentType), pSemesterId, pProgramId);
+    }
+    return genericResponse;
   }
 
   protected JsonObjectBuilder toJson(final EnrollmentFromTo pObject, final UriInfo pUriInfo, final LocalCache pLocalCache) throws Exception {

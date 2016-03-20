@@ -4,10 +4,10 @@ package org.ums.persistent.dao;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.ums.persistent.model.PersistentSemesterEnrollment;
 import org.ums.decorator.SemesterEnrollmentDaoDecorator;
-import org.ums.domain.model.mutable.MutableSemesterEnrollment;
 import org.ums.domain.model.immutable.SemesterEnrollment;
+import org.ums.domain.model.mutable.MutableSemesterEnrollment;
+import org.ums.persistent.model.PersistentSemesterEnrollment;
 import org.ums.util.Constants;
 
 import java.sql.ResultSet;
@@ -106,6 +106,12 @@ public class PersistentSemesterEnrollmentDao extends SemesterEnrollmentDaoDecora
       semesterEnrollment = null;
     }
     return semesterEnrollment;
+  }
+
+  @Override
+  public List<SemesterEnrollment> getEnrollmentStatus(Integer pProgramId, Integer pSemesterId) {
+    String query = SELECT_ALL + "WHERE PROGRAM_ID = ? AND SEMESTER_ID = ?";
+    return mJdbcTemplate.query(query, new Object[]{pProgramId, pSemesterId}, new SemesterEnrollmentRowMapper());
   }
 
   class SemesterEnrollmentRowMapper implements RowMapper<SemesterEnrollment> {

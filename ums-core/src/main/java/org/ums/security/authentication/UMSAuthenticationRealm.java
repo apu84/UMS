@@ -1,4 +1,4 @@
-package org.ums.authentication;
+package org.ums.security.authentication;
 
 import com.google.common.collect.Sets;
 import org.apache.shiro.authc.*;
@@ -55,29 +55,29 @@ public class UMSAuthenticationRealm extends JdbcRealm {
     SimpleAuthenticationInfo info;
 
     UsernamePasswordToken upToken = (UsernamePasswordToken) token;
-    String username = upToken.getUsername();
+    String userId = upToken.getUsername();
 
     // Null username is invalid
-    if (username == null) {
-      throw new AccountException("Null usernames are not allowed by this realm.");
+    if (userId == null) {
+      throw new AccountException("Null username is not allowed by this realm.");
     }
 
     try {
       setCredentialsMatcher(mHashCredentialsMatcher);
 
-      User user = mUserManager.get(username);
+      User user = mUserManager.get(userId);
 
       if (user.getPassword() == null) {
 
         if (user.getTemporaryPassword() == null) {
-          throw new UnknownAccountException("No account found for user [" + username + "]");
+          throw new UnknownAccountException("No account found for user [" + userId + "]");
         } else {
           setCredentialsMatcher(mPlainPasswordMatcher);
-          info = new SimpleAuthenticationInfo(username, user.getTemporaryPassword(), getName());
+          info = new SimpleAuthenticationInfo(userId, user.getTemporaryPassword(), getName());
         }
 
       } else {
-        info = new SimpleAuthenticationInfo(username, user.getPassword(), getName());
+        info = new SimpleAuthenticationInfo(userId, user.getPassword(), getName());
         if (mSalt != null) {
           info.setCredentialsSalt(ByteSource.Util.bytes(mSalt));
         }

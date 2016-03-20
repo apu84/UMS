@@ -16,7 +16,7 @@ module ums {
         }
       });
 
-      $(element).find('button.btn-success').on('click', function(){
+      $(element).on('click', 'button.btn-success', () => {
         if($(element).valid()){
           $scope.onvalidate();
         }

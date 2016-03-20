@@ -347,7 +347,12 @@ module ums {
           {id: "D2", name: "D2"}
         ],
         mimeTypeJson : 'application/json',
-        mimeTypePdf : 'application/pdf'
+        mimeTypePdf: 'application/pdf',
+        semesterEnrollmentTypes: [
+          {id: "", name: "Select Enrollment Type"},
+          {id: "0", name: "Temporary"},
+          {id: "1", name: "Permanent"}
+        ]
       };
     }
   }

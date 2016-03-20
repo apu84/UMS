@@ -1,4 +1,4 @@
-package org.ums.filter;
+package org.ums.security.filter;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
