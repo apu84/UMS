@@ -24,11 +24,11 @@
     <property name="passwordService" ref="passwordService"/>
   </bean>
 
-  <bean id="plainPasswordMatcher" class="org.ums.authentication.PlainPasswordMatcher"/>
+  <bean id="plainPasswordMatcher" class="org.ums.security.authentication.PlainPasswordMatcher"/>
 
-  <bean id="rolePermissionResolver" class="org.ums.authorization.UMSRolePermissionResolver"/>
+  <bean id="rolePermissionResolver" class="org.ums.security.authorization.UMSRolePermissionResolver"/>
   <!-- security datasource: -->
-  <bean id="jdbcRealm" class="org.ums.authentication.UMSAuthenticationRealm">
+  <bean id="jdbcRealm" class="org.ums.security.authentication.UMSAuthenticationRealm">
     <property name="dataSource" ref="dataSource"/>
     <property name="permissionsLookupEnabled" value="true"/>
     <property name="authenticationQuery" value="SELECT password, temp_password FROM Users WHERE user_id = ?"/>
@@ -50,9 +50,9 @@
     <property name="realm" ref="jdbcRealm"/>
   </bean>
 
-  <bean id="umsAuthBasic" class="org.ums.filter.UMSHttpAuthenticationFilter"/>
+  <bean id="umsAuthBasic" class="org.ums.security.filter.UMSHttpAuthenticationFilter"/>
 
-  <bean id="newUser" class="org.ums.filter.NewUserFilter">
+  <bean id="newUser" class="org.ums.security.filter.NewUserFilter">
     <property name="changePasswordUrl" value="/changePassword"/>
     <property name="loginUrl" value="/login"/>
   </bean>

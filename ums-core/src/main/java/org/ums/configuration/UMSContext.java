@@ -7,10 +7,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.ums.authentication.UMSAuthenticationRealm;
 import org.ums.cache.*;
 import org.ums.manager.*;
 import org.ums.persistent.dao.*;
+import org.ums.security.authentication.UMSAuthenticationRealm;
 import org.ums.services.LoginService;
 import org.ums.util.Constants;
 
