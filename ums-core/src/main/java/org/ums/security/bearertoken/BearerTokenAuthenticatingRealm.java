@@ -105,7 +105,7 @@ public class BearerTokenAuthenticatingRealm extends AuthorizingRealm {
 
   //TODO: Move this method to a common place so both the realm can use same authorization base
   @Override
-  protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+  protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) throws AuthorizationException {
     //null usernames are invalid
     if (principals == null) {
       throw new AuthorizationException("PrincipalCollection method argument cannot be null.");
