@@ -74,12 +74,11 @@
     </property>
     <property name="loginUrl" value="/login"/>
   </bean>
-<!--TODO: Need to add bearerTokenFilter in the filter list before umsAuthBasic-->
   <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
     <property name="securityManager" ref="securityManager"/>
     <property name="filterChainDefinitions">
       <value>
-        /** = noSessionCreation,umsAuthBasic,newUser
+        /** = noSessionCreation,bearerTokenFilter,umsAuthBasic,newUser
       </value>
     </property>
   </bean>
