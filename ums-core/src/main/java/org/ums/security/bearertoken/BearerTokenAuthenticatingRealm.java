@@ -71,17 +71,16 @@ public class BearerTokenAuthenticatingRealm extends AuthenticatingRealm {
     String userId = (String) token.getPrincipal();
     String credentials = (String) token.getCredentials();
 
-    Validate.notNull(userId, "Email can't be null");
+    Validate.notNull(userId, "UserId can't be null");
     Validate.notNull(token, "Token can't be null");
     BearerAccessToken dbToken;
     try {
       dbToken = mBearerAccessTokenManager.get(credentials);
       if (tokenIsInvalid(token, dbToken)) {
-        return null;
+        throw new AuthenticationException("Access denied. Invalid access token");
       }
     } catch (Exception e) {
-      e.printStackTrace();
-      return null;
+      throw new AuthenticationException("Not able to find provided bearer access token");
     }
 
     return new BearerAuthenticationInfo(dbToken);
