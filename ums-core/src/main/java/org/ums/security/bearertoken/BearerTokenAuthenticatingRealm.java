@@ -111,9 +111,10 @@ public class BearerTokenAuthenticatingRealm extends AuthorizingRealm {
       throw new AuthorizationException("PrincipalCollection method argument cannot be null.");
     }
     SimpleAuthorizationInfo info = null;
-    String username = (String) getAvailablePrincipal(principals);
+    String token = (String) getAvailablePrincipal(principals);
     try {
-      User user = mUserManager.get(username);
+      BearerAccessToken bearerAccessToken = mBearerAccessTokenManager.get(token);
+      User user = mUserManager.get(bearerAccessToken.getUserId());
       info = new SimpleAuthorizationInfo(Sets.newHashSet(user.getPrimaryRole().getName()));
       List<Permission> rolePermissions = mPermissionManager.getPermissionByRole(user.getPrimaryRole());
 
@@ -125,7 +126,7 @@ public class BearerTokenAuthenticatingRealm extends AuthorizingRealm {
 
       info.setStringPermissions(permissions);
     } catch (Exception e) {
-      throw new AuthorizationException(e);
+      throw new AuthorizationException("Invalid access token", e);
     }
     return info;
   }
