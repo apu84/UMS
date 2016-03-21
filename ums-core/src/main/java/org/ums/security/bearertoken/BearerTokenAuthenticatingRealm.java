@@ -1,25 +1,42 @@
 package org.ums.security.bearertoken;
 
+import com.google.common.collect.Sets;
 import org.apache.commons.lang.Validate;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.credential.AllowAllCredentialsMatcher;
+import org.apache.shiro.authz.AuthorizationException;
+import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.mgt.RealmSecurityManager;
 import org.apache.shiro.realm.AuthenticatingRealm;
+import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.ums.domain.model.immutable.BearerAccessToken;
+import org.ums.domain.model.immutable.Permission;
+import org.ums.domain.model.immutable.User;
+import org.ums.domain.model.mutable.MutableUser;
 import org.ums.manager.BearerAccessTokenManager;
+import org.ums.manager.ContentManager;
+import org.ums.manager.PermissionManager;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-public class BearerTokenAuthenticatingRealm extends AuthenticatingRealm {
+public class BearerTokenAuthenticatingRealm extends AuthorizingRealm {
   @Autowired
   private BearerAccessTokenManager mBearerAccessTokenManager;
+  @Autowired
+  private PermissionManager mPermissionManager;
+  @Autowired
+  private ContentManager<User, MutableUser, String> mUserManager;
 
   private class BearerAuthenticationInfo implements AuthenticationInfo {
     private final BearerAccessToken token;
@@ -84,6 +101,33 @@ public class BearerTokenAuthenticatingRealm extends AuthenticatingRealm {
     }
 
     return new BearerAuthenticationInfo(dbToken);
+  }
+
+  //TODO: Move this method to a common place so both the realm can use same authorization base
+  @Override
+  protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+    //null usernames are invalid
+    if (principals == null) {
+      throw new AuthorizationException("PrincipalCollection method argument cannot be null.");
+    }
+    SimpleAuthorizationInfo info = null;
+    String username = (String) getAvailablePrincipal(principals);
+    try {
+      User user = mUserManager.get(username);
+      info = new SimpleAuthorizationInfo(Sets.newHashSet(user.getPrimaryRole().getName()));
+      List<Permission> rolePermissions = mPermissionManager.getPermissionByRole(user.getPrimaryRole());
+
+      Set<String> permissions = new HashSet<>();
+
+      for (Permission permission : rolePermissions) {
+        permissions.addAll(permission.getPermissions());
+      }
+
+      info.setStringPermissions(permissions);
+    } catch (Exception e) {
+      throw new AuthorizationException(e);
+    }
+    return info;
   }
 
   @Override
