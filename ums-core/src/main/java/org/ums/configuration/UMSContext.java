@@ -214,7 +214,7 @@ public class UMSContext {
     return new PersistentRoutineDao(mJdbcTemplate);
   }
 
-/*  @Bean
+ @Bean
   ParameterManager parameterManager(){
     return new PersistentParameterDao(mJdbcTemplate);
   }
@@ -222,7 +222,7 @@ public class UMSContext {
   ParameterSettingManager parameterSettingManager(){
 
     return  new PersistentParameterSettingDao(mJdbcTemplate);
-  }*/
+  }
 
   @Bean
   BearerAccessTokenManager bearerAccessTokenManager() {

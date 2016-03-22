@@ -1,8 +1,8 @@
 
 
 <!-- *********************Priliminary Input Forms************************* -->
-<div class="row">
-    <div class="col-md-3"></div>
+<div class="span4" data-ng-show="showSelection">
+<div class="col-md-3"></div>
     <div class="col-md-6 centered">
         <div class="panel panel-default" id="leftDiv">
             <div class="panel-heading">
@@ -20,7 +20,7 @@
                         <div class="form-group">
                             <label class="col-md-4 control-label">Academic Semester</label>
                             <div class="col-md-8">
-                                <select class="form-control required" data-ng-model="courseTeacherSearchParamModel.semesterId" ng-init="newSyllabusModel.semesterId=''">
+                                <select class="form-control required" data-ng-change="getRoomNo()" data-ng-model="courseTeacherSearchParamModel.semesterId" ng-init="newSyllabusModel.semesterId=''" >
                                     <option data-ng-repeat="semester in courseTeacherSearchParamModel.programSelector.getSemesters()" value="{{semester.id}}">{{semester.name}}</option>
                                 </select>
                             </div>
@@ -29,7 +29,7 @@
                         <div class="form-group">
                             <label class="col-md-4 control-label">Students Year</label>
                             <div class="col-md-8">
-                                <select class="form-control required" data-ng-model="courseTeacherSearchParamModel.academicYearId" ng-init="academicYear=''">
+                                <select class="form-control required" data-ng-change="getCourseId()" data-ng-model="courseTeacherSearchParamModel.academicYearId" ng-init="academicYear=''">
                                     <option data-ng-repeat="year in data.academicYear" value="{{year.id}}">
                                         {{year.name}}
                                     </option>
@@ -63,16 +63,25 @@
     <div class="col-md-3"></div>
 </div>
 
+<div data-ng-show="showGrid">
 
+<button type="button" class="btn btn-default btn-lg" data-ng-click="hideGrid()">
+    <span class="glyphicon glyphicon-triangle-left" aria-hidden="true"></span> <<<<
+</button>
 <!-- ************************************************  -->
 
-<table class="table table-bordered table-hover table-condensed">
-    <tr style="font-weight: :bold">
-        <td style="width:15%">Day</td>
-        <td style="width:15%">Start Time</td>
-        <td style="width:15%">End Time</td>
-        <td style="width:20%">Course Id</td>
-        <td style="width: 20%">Section</td>
-        <td style="width:20%">Room No.</td>
-    </tr>
-</table>
+<div class="span8" >
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div style="margin-left:20px" >
+                    <table id="jqGrid" ></table>
+                    <div id="jqGridPager"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+

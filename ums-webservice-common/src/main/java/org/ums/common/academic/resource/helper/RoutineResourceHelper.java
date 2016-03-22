@@ -139,7 +139,7 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
   }
 
   @Override
-  public String getEtag(Routine pReadonly) {
-    return null;
+  public String getEtag(Routine pReadOnly) {
+    return pReadOnly.getLastModified();
   }
 }

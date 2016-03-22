@@ -151,22 +151,19 @@ module ums{
 
     private addDate():void{
       console.log("this is inside date");
-      /*setTimeout(function () {
+      setTimeout(function () {
         $('.datepicker-default').datepicker();
         $('.datepicker-default').on('change', function () {
           $('.datepicker').hide();
         });
-      }, 200);*/
+      }, 200);
 
       //BEGIN PLUGINS DATETIME PICKER
-      $('#datetimepicker1').datetimepicker({ format: 'dd/MM/yyyy hh:mm:ss' });;
+      $('#datetimepicker1').datetimepicker({ format: 'dd/MM/yyyy hh:mm:ss' });
 
 
 
-      /*$( "#datepicker1" ).datepicker();
 
-
-      $( "#datepicker2" ).datepicker();*/
     }
 
     private showValue():void{
@@ -182,11 +179,7 @@ module ums{
       this.$scope.editId = editId;
 
       this.$scope.contentEdit = true;
-     /* for(var i=0;i<this.$scope.semesterSettingStore.length;i++){
-        if(this.$scope.semesterSettingStore[i].parameterId == editId){
-          this.$scope.semesterSettingStore[i].editData = true;
-        }
-      }*/
+
       this.$scope.semesterSettingStore[srl].editData = true;
 
     }
@@ -340,9 +333,7 @@ module ums{
         count++;
       }
 
-      /*if(count==(length-1)){
-        this.getAllData();
-      }*/
+
 
     }
   }
