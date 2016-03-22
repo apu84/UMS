@@ -1,5 +1,5 @@
 module ums{
-  export interface Parameter{
+  export interface IParameter{
     id:string;
     parameter:string;
     shortDescription:string;

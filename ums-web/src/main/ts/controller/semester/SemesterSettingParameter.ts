@@ -1,8 +1,8 @@
 module ums{
-  import ParameterSetting = ums.ParameterSetting;
+  import ParameterSetting = ums.IParameterSetting;
   interface ISemesterSettingParameterScope extends ng.IScope{
     semesterSelector:Array<Semester>;
-    parameterSelector:Array<Parameter>
+    parameterSelector:Array<IParameter>
     parameterId:string;
     semesterTypeId:number;
     programTypeSelector:any;

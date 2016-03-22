@@ -92,7 +92,6 @@ module ums{
       $scope.getCourseId = this.getCourseId.bind(this);
       $scope.getRoomNo = this.getRoomNo.bind(this);
       $scope.hideGrid = this.hideGrid.bind(this);
-      //this.getRoomNo();
 
 
 
@@ -129,7 +128,6 @@ module ums{
 
       var thisGrid = $("#jqGrid").jqGrid({
 
-        //url: 'https://localhost/ums-webservice-common/department/routine'+this.program+'/'+this.academicSemester+'/',
 
         url: 'https://localhost/ums-webservice-common/academic/routine/routineForEmployee/semester/'+this.$scope.courseTeacherSearchParamModel.semesterId+"/program/"+this.$scope.courseTeacherSearchParamModel.programSelector.programId+"/year/"+this.$scope.courseTeacherSearchParamModel.academicYearId+"/semester/"+this.$scope.courseTeacherSearchParamModel.academicSemesterId,
 
@@ -421,7 +419,6 @@ module ums{
               courseId = courseId + ';' + courseArr[i].no + ':' + courseArr[i].no;
 
             }
-            //this.$scope.data.courseClass = courseArr;
 
             this.$scope.courses = courseId;
             defer.resolve(courseArr);

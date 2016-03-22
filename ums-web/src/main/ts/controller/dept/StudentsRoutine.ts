@@ -3,6 +3,7 @@
 ///<reference path="../../lib/jquery.notify.d.ts"/>
 ///<reference path="../../lib/jquery.jqGrid.d.ts"/>
 module  ums{
+  import Routine = ums.IRoutine;
   import Student = ums.Student;
   interface IStudentsRoutineScope extends ng.IScope{
     routine:Routine;

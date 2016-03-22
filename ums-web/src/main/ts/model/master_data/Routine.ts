@@ -1,5 +1,5 @@
 module ums{
-  export interface Routine{
+  export interface IRoutine{
     id:string;
     semesterId:number;
     programId:number;
