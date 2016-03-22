@@ -51,8 +51,8 @@
   <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
     <property name="realms">
       <list>
-        <ref bean="jdbcRealm"/>
         <ref bean="bearerTokenRealm"/>
+        <ref bean="jdbcRealm"/>
       </list>
     </property>
   </bean>

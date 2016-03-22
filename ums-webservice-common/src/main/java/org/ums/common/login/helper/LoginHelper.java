@@ -25,8 +25,6 @@ import java.util.UUID;
 @Component
 public class LoginHelper {
   @Autowired
-  AuthorizingRealm mAuthenticationRealm;
-  @Autowired
   private UserManager mUserManager;
   @Autowired
   private PasswordService mPasswordService;

@@ -27,17 +27,29 @@ public class UserCache extends ContentCache<User, MutableUser, String, UserManag
 
   @Override
   public int setPasswordResetToken(String pToken, String pUserId) throws Exception {
-    return getManager().setPasswordResetToken(pToken, pUserId);
+    int modified = getManager().setPasswordResetToken(pToken, pUserId);
+    if (modified > 0) {
+      getCacheManager().invalidate(getCacheKey(pUserId));
+    }
+    return modified;
   }
 
   @Override
   public int updatePassword(String pUserId, String pPassword) throws Exception {
-    return getManager().updatePassword(pUserId, pPassword);
+    int modified = getManager().updatePassword(pUserId, pPassword);
+    if (modified > 1) {
+      getCacheManager().invalidate(getCacheKey(pUserId));
+    }
+    return modified;
   }
 
   @Override
   public int clearPasswordResetToken(String pUserId) throws Exception {
-    return getManager().clearPasswordResetToken(pUserId);
+    int modified = getManager().clearPasswordResetToken(pUserId);
+    if (modified > 1) {
+      getCacheManager().invalidate(getCacheKey(pUserId));
+    }
+    return modified;
   }
 
   @Override
