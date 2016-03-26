@@ -8,9 +8,7 @@ import org.ums.util.CacheUtil;
 
 import java.util.List;
 
-/**
- * Created by User on 1/16/2016.
- */
+
 public class CourseCache extends ContentCache<Course, MutableCourse, String, CourseManager> implements CourseManager {
   CacheManager<Course> mCacheManager;
 
