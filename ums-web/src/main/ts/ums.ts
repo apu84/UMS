@@ -342,6 +342,11 @@ module ums {
           templateUrl: 'views/student/optional-course.html',
           controller: 'OptionalCoursesApplication'
         })
+        .state('optionalCoursesApplication', {
+          url: "/optionalCoursesApplication",
+          templateUrl: 'views/student/optional-course.html',
+          controller: 'OptionalCoursesApplication'
+        })
         .state('semesterEnrollment', {
           url: "/semesterEnrollment",
           templateUrl: 'views/semester/semester-enrollment.html',
