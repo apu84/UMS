@@ -762,3 +762,13 @@ BEGIN
 END;
 /
 ALTER TRIGGER "DB_IUMS"."MST_PARAMETER_SETTING_TRG1" ENABLE;
+
+
+
+
+-------------------------------------------------------------
+--Input for main-navigation
+-------------------------------------------------------------
+Insert into DB_IUMS.MAIN_NAVIGATION (NAVIGATION_ID,MENU_TITLE,PERMISSION,LOCATION,PARENT_MENU,ICON_IMG_CLASS,ICON_COLOR_CLASS,VIEW_ORDER,STATUS,LAST_MODIFIED) values (2022,'Routine','class:studentsRoutine','/studentsRoutine',0,'fa-plus-square-o','bg-pink',18,1,null);
+
+Insert into DB_IUMS.MAIN_NAVIGATION (NAVIGATION_ID,MENU_TITLE,PERMISSION,LOCATION,PARENT_MENU,ICON_IMG_CLASS,ICON_COLOR_CLASS,VIEW_ORDER,STATUS,LAST_MODIFIED) values (2023,'Semester Parameters','semester:settingparameter','/semesterSettingParameter',2003,'fa-plus-square-o',null,19,1,null);
