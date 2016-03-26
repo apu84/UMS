@@ -1,3 +1,15 @@
+<style>
+    /*table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+    th, td {
+        padding: 5px;
+    }*/
+    table{
+        background: white;
+    }
+</style>
 <div class="row">
     <div class="col-lg-3"></div>
     <div class="col-lg-6">
@@ -9,23 +21,23 @@
                         <div class="form-group">
                             <label  class="col-md-3 control-label">Program Type</label>
                             <div class="col-md-9">
-                                <select class="form-control required" name="programTypeId" data-ng-model="semester.programTypeId" ng-init="semester.programTypeId=''">
-                                    <option data-ng-repeat="programType in data.programTypeOptions" value="{{programType.id}}">{{programType.name}}</option>
+                                <select class="form-control required" name="programType" data-ng-model="programType" data-ng-change="getSemesterInfo()" >
+                                    <option data-ng-repeat="programType in programTypeSelector" value="{{programType.id}}">{{programType.name}}</option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group">
                             <label  class="col-md-3 control-label">Semester</label>
                             <div class="col-md-9">
-                                <select class="form-control required" name="semesterType" id="semesterType" data-ng-model="semester.semesterTypeId" ng-init="semester.semesterTypeId=''">
-                                    <option data-ng-repeat="semesterType in data.semesterTypeOptions" value="{{semesterType.id}}">{{semesterType.name}}</option>
+                                <select class="form-control required" name="semesterType" id="semesterType" data-ng-model="semesterTypeId" data-ng-change="getParameterInfo()" ng-init="semesterSelector.name='Select a semester'">
+                                    <option data-ng-repeat="semesterType in semesterSelector" value="{{semesterType.id}}" >{{semesterType.name}}</option>
                                 </select>
                             </div>
                         </div>
 
                     </div>
                     <div class="form-actions text-right pal">
-                        <button type="button" class="btn btn-success">Create Semester</button>
+                        <button type="button" class="btn btn-success" data-ng-click="getAllData()">Search & Edit</button>
                     </div>
 
                 </form>
@@ -34,3 +46,58 @@
     </div>
     <div class="col-lg-3"></div>
 </div>
+
+<br><br>
+<div class="container fluid" data-ng-show="showTable" >
+    <table class="table table-bordered">
+        <col width="300">
+        <col width="130">
+        <col width="130">
+        <col width="130">
+        <tr>
+            <th align="right"><h4 align="center">Parameter</h4></th>
+            <th align="right"><h4 align="center">Start Date</h4></th>
+            <th align="right"><h4 align="center">End Date</h4></th>
+            <th align="right"><h4 align="center">Add/Edit/Delete</h4></th>
+        </tr>
+        <tr data-ng-repeat="parameter in semesterSettingStore">
+            <th>{{parameter.longDescription}}</th>
+
+            <th>
+
+                <div data-ng-if="parameter.editData ==false" align="center">
+                    {{parameter.startDate}}
+
+                </div>
+                <div data-ng-if="parameter.editData ==true">
+                    <div class="input-icon right" >
+                        <i class="fa fa-calendar"></i>
+                        <input  type="text"  data-ng-model="parameter.startDateTmp" data-date-format="dd/mm/yyyy" placeholder="DD/MM/YYYY" class="datepicker-default form-control required" autocomplete="off"/><br/>
+                    </div>
+
+                </div>
+            </th>
+            <th>
+                <div data-ng-if="parameter.editData ==false" align="center">
+
+                    {{parameter.endDate}}
+                </div>
+                <div data-ng-if="parameter.editData ==true">
+                    <div class="input-icon right" >
+                        <i class="fa fa-calendar"></i>
+                        <input  type="text"  data-ng-model="parameter.endDateTmp" data-date-format="dd/mm/yyyy" placeholder="DD/MM/YYYY" class="datepicker-default form-control required" autocomplete="off"/><br/>
+                    </div>
+                </div>
+            </th>
+
+            <th>
+                <button type="button" class="btn btn-xs" data-ng-if="parameter.editData"  data-ng-click="addAndReloadData(parameter)"><span class="glyphicon glyphicon-ok " aria-hidden="true"></span></button>
+                <button type="button" class="btn btn-xs" data-ng-if="parameter.editData == false" data-ng-click="editData(parameter.srl,parameter.parameterId);addDate()"><span class="glyphicon glyphicon-edit " aria-hidden="true"></span></button>
+                <button type="button" class="btn btn-xs" data-ng-if="parameter.editData" data-ng-click="cancel(parameter.srl,parameter.parameterId)"><span class="glyphicon glyphicon-remove " aria-hidden="true"></span></button>
+            </th>
+        </tr>
+    </table>
+    <button type="button" class="btn btn-success" data-ng-click="saveAll()">Save All</button>
+</div>
+
+
