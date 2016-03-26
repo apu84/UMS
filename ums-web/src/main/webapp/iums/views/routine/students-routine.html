@@ -1,0 +1,67 @@
+<style type="text/css">
+    table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+</style>
+
+<div class="container">
+    <form>
+        <div class="form-group">
+            <label for="studentId">Input your student id</label>
+            <input type="text" class="form-control" data-ng-model="studentId" id="studentId" value="15015001">
+        </div>
+        <button type="button" class="btn btn-default" data-ng-click="studentsRoutine()">Search Routine</button>
+    </form>
+</div>
+<div class="container" data-ng-show="showRoutine">
+    <div class="text-center">
+        <h1>AHSANULLAH UNIVERSITY OF SCIENCE AND TECHNOLOGY</h1>
+        <h2>DEPARTMENT OF ELECTRICAL AND ELECTRONIC ENGINEERING</h2>
+        <h2></h2>
+        <h2>CLASS SCHEDULE ({{semesterName}})</h2>
+    </div>
+    <div class="row">
+        <div class="text-center">
+            YEAR: 1    SEMESTER: 1    SECTION:A
+        </div>
+    </div>
+</div>
+<br><br>
+<div class="container-fluid" data-ng-show="showRoutine">
+    <div class="table-responsive">
+        <table class="table">
+            <tr>
+                <th>Time &rarr;<br>Day &darr;</th>
+                <th>8:00 am - <br> 8:50 am</th>
+                <th>8:50 am - <br> 9:40 am</th>
+                <th>9:40 am - <br> 10:30 am</th>
+                <th>10:30 am - <br> 11:20 am</th>
+                <th>11:20 am - <br> 12:10 pm</th>
+                <th>12:10 pm - <br> 1:00 pm</th>
+                <th>1:00 pm - <br> 1:50 pm</th>
+                <th>1:50 pm - <br> 2:40 pm</th>
+                <th>2:40 pm - <br> 3:30 pm</th>
+                <th>3:30 pm - <br> 4:20 pm</th>
+                <th>4:20 pm - <br> 5:10 pm</th>
+                <th>5:10 pm - <br> 6:00 pm</th>
+            </tr>
+
+            <tr data-ng-repeat="day in days">
+                <td><b><i>{{day.day}}</i></b></td>
+                <td colspan={{stores.colspan}} data-ng-repeat="stores in routineStore | filter:{day:day.id}">
+                    <p align="center"><b>{{stores.courseId}}<br>{{stores.roomNo}}</b></p>
+                </td>
+
+            </tr>
+
+        </table>
+    </div>
+</div>
+<script>
+    function increaseTimeChecker(timeChecker,duration)
+    {
+        var numericDuration = parseInt(duration);
+        return timeChecker+numericDuration;
+    }
+</script>
