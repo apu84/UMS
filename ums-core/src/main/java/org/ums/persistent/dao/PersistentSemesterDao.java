@@ -3,6 +3,9 @@ package org.ums.persistent.dao;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.ums.domain.model.immutable.Program;
+import org.ums.enums.ProgramType;
+import org.ums.enums.SemesterStatus;
 import org.ums.persistent.model.PersistentSemester;
 import org.ums.decorator.SemesterDaoDecorator;
 import org.ums.domain.model.mutable.MutableSemester;
@@ -24,6 +27,9 @@ public class PersistentSemesterDao extends SemesterDaoDecorator {
   static String INSERT_ONE = "INSERT INTO MST_SEMESTER(SEMESTER_ID, SEMESTER_NAME, START_DATE, END_DATE, PROGRAM_TYPE, STATUS, LAST_MODIFIED) " +
       "VALUES(?, ?, TO_DATE(?, '" + Constants.DATE_FORMAT + "'), TO_DATE(?, '" + Constants.DATE_FORMAT + "'), ?, ?, " + getLastModifiedSql() + ")";
 
+  static String SELECT_SEMESTER_BY_STATUS="SELECT SEMESTER_ID, SEMESTER_NAME, START_DATE, END_DATE, PROGRAM_TYPE, STATUS, LAST_MODIFIED FROM MST_SEMESTER ";
+
+
   private JdbcTemplate mJdbcTemplate;
   private DateFormat mDateFormat;
 
@@ -35,8 +41,11 @@ public class PersistentSemesterDao extends SemesterDaoDecorator {
 
   public Semester get(final Integer pSemesterId) throws Exception {
     String query = SELECT_ALL + "WHERE SEMESTER_ID = ?";
- //   Semester test = mJdbcTemplate.queryForObject(query, new Object[]{pSemesterId}, new SemesterRowMapper());
     return mJdbcTemplate.queryForObject(query, new Object[]{pSemesterId}, new SemesterRowMapper());
+  }
+  public Semester getSemesterByStatus(final ProgramType pProgramType,SemesterStatus status) throws Exception {
+    String sql=SELECT_SEMESTER_BY_STATUS+" WHERE  Program_Type=? AND STATUS=?";
+    return mJdbcTemplate.queryForObject(sql, new Object[]{pProgramType.getValue(),status.getId()}, new SemesterRowMapper());
   }
 
   @Override

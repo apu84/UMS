@@ -32,7 +32,7 @@ public class OptionalCourseApplicationResource extends MutableOptionalCourseAppl
 
 
   @GET
-  @Path("/students/semester-id/{semester-id}/course-id/{course-id}/status/{status}")
+  @Path("/students/semester-id/{semester-id}/course/{course-id}/status/{status}")
   public JsonObject getStudentList(final @Context Request pRequest,
                                    final @PathParam("semester-id") Integer pSemesterId,
                                    final @PathParam("course-id") String pCourseId,
@@ -41,7 +41,7 @@ public class OptionalCourseApplicationResource extends MutableOptionalCourseAppl
   }
 
   @GET
-   @Path("/non-assigned-section/students/semester-id/{semester-id}/program/{program-id}/course-id/{course-id}")
+   @Path("/non-assigned-section/students/semester-id/{semester-id}/program/{program-id}/course/{course-id}")
    public JsonObject getNonAssignedSectionStudentList(final @Context Request pRequest,
                                                       final @PathParam("semester-id") Integer pSemesterId,
                                                       final @PathParam("program-id") Integer pProgramId,
@@ -50,7 +50,7 @@ public class OptionalCourseApplicationResource extends MutableOptionalCourseAppl
   }
 
   @GET
-  @Path("/assigned-section/students/semester-id/{semester-id}/program/{program-id}/course-id/{course-id}")
+  @Path("/assigned-section/students/semester-id/{semester-id}/program/{program-id}/course/{course-id}")
   public JsonObject getOptionalSectionListWithStudents(final @Context Request pRequest,
                                                        final @PathParam("semester-id") Integer pSemesterId,
                                                        final @PathParam("program-id") Integer pProgramId,
@@ -61,7 +61,7 @@ public class OptionalCourseApplicationResource extends MutableOptionalCourseAppl
   @GET
   @Path("/status/student-id/{student-id}/semester-id/{semester-id}/program/{program-id}")
   public JsonObject getApplicationStatus(final @Context Request pRequest,
-                                                       final @PathParam("student-id") Integer pStudentId,
+                                                       final @PathParam("student-id") String pStudentId,
                                                        final @PathParam("semester-id") Integer pSemesterId) throws Exception {
     return mResourceHelper.getApplicationStatus(pStudentId, pSemesterId);
   }
@@ -69,11 +69,21 @@ public class OptionalCourseApplicationResource extends MutableOptionalCourseAppl
   @GET
   @Path("/applied-courses/student-id/{student-id}/semester-id/{semester-id}/program/{program-id}")
   public JsonObject getAppliedCoursesByStudent(final @Context Request pRequest,
-                                                      final @PathParam("student-id") Integer pStudentId,
+                                                      final @PathParam("student-id") String pStudentId,
                                                       final @PathParam("semester-id") Integer pSemesterId,
                                                       final @PathParam("program-id") Integer pProgramId) throws Exception {
     return mResourceHelper.getAppliedCoursesByStudent(pStudentId, pSemesterId, pProgramId);
   }
+
+
+  /***------------Student's Part------------****/
+
+  @GET
+  @Path("/student")
+  public JsonObject getDataForStudent(final @Context Request pRequest) throws Exception {
+    return mResourceHelper.getDataForStudent(pRequest, mUriInfo);
+  }
+
 
 
 }

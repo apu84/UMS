@@ -14,6 +14,8 @@ public class OptCourseStudentDto {
   private String appliedOn;
   private int statusId;
   private String statusLabel;
+  private int applicationTypeId;
+  private String applicationTypeLabel;
 
 
   public String getStudentId() {
@@ -78,6 +80,22 @@ public class OptCourseStudentDto {
 
   public void setStatusLabel(String statusLabel) {
     this.statusLabel = statusLabel;
+  }
+
+  public int getApplicationTypeId() {
+    return applicationTypeId;
+  }
+
+  public void setApplicationTypeId(int applicationTypeId) {
+    this.applicationTypeId = applicationTypeId;
+  }
+
+  public String getApplicationTypeLabel() {
+    return applicationTypeLabel;
+  }
+
+  public void setApplicationTypeLabel(String applicationTypeLabel) {
+    this.applicationTypeLabel = applicationTypeLabel;
   }
 
   public String toString() {

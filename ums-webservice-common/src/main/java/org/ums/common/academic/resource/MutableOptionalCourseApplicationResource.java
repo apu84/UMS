@@ -5,10 +5,7 @@ import org.ums.common.Resource;
 import org.ums.common.academic.resource.helper.OptionalCourseApplicationResourceHelper;
 
 import javax.json.JsonObject;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
@@ -52,6 +49,42 @@ public class MutableOptionalCourseApplicationResource  extends Resource {
                                                           final @PathParam("section-name") String pSectionName,
                                                            final JsonObject pJsonObject) throws Exception {
     return mResourceHelper.mergeSelection(pSemesterId, pProgramId, pCourseId, pSectionName, pJsonObject);
+  }
+
+  @PUT
+  @Path("/status/semester-id/{semester-id}/course/{course-id}")
+  public Response updateApplicationStatusByCourse(final @Context Request pRequest,
+                                 final @PathParam("semester-id") Integer pSemesterId,
+                                 final @PathParam("course-id") String pCourseId,
+                                 final JsonObject pJsonObject) throws Exception {
+    return mResourceHelper.updateApplicationStatusByCourse(pSemesterId, pCourseId, pJsonObject);
+  }
+  @PUT
+  @Path("status/semester-id/{semester-id}/student/{student-id}")
+  public Response updateApplicationStatusByStudent(final @Context Request pRequest,
+                                               final @PathParam("semester-id") Integer pSemesterId,
+                                               final @PathParam("student-id") String pStudentId,
+                                               final JsonObject pJsonObject) throws Exception {
+    return mResourceHelper.updateApplicationStatusByStudent(pSemesterId, pStudentId,pJsonObject);
+  }
+
+  @PUT
+  @Path("shift/semester-id/{semester-id}/source-course/{source-course-id}/target-course/{target-course-id}")
+  public Response shiftStudents(final @Context Request pRequest,
+                                                   final @PathParam("semester-id") Integer pSemesterId,
+                                                   final @PathParam("source-course-id") String pSourceCourseId,
+                                                   final @PathParam("target-course-id") String pTargetCourseId,
+                                                   final JsonObject pJsonObject) throws Exception {
+    return mResourceHelper.shiftStudents(pSemesterId, pSourceCourseId,pTargetCourseId, pJsonObject);
+  }
+
+  /***------------Student's Part------------****/
+  @PUT
+  @Path("student/{STATUS-ID}")
+  public Response shiftStudents(final @Context Request pRequest,
+                                final @PathParam("STATUS-ID") Integer status,
+                                final JsonObject pJsonObject) throws Exception {
+    return mResourceHelper.saveStudentApplication(status, pJsonObject);
   }
 
 }

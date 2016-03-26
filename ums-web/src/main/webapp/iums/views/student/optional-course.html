@@ -1,0 +1,71 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div style="margin-left:20px">
+                    <table class="table table-hover table-condensed">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Course No</th>
+                            <th>Course Title</th>
+                            <th>CrHr</th>
+                            <th>Course Type</th>
+                            <th data-ng-show="optional.applicationStatus=='Saved'">Apply</th>
+                            <th data-ng-show="optional.applicationStatus=='Submitted'">Applied</th>
+                            <th data-ng-show="optional.applicationStatus=='Submitted'">Status</th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="course in optional.courses">
+                            <td>{{$index + 1}}</td>
+                            <td>{{course.no}}</td>
+                            <td>{{course.title}}</td>
+                            <td>{{course.crhr}}</td>
+                            <td><span class="label label-sm label-success">{{course.type}}</span></td>
+                            <td data-ng-show="optional.applicationStatus=='Saved'">
+                                <input type="checkbox" data-ng-model="course.studentApplied"  ng-true-value="1" ng-false-value="0"
+                                       data-ng-change="applicationSelectionChange(course)"/>
+
+                            </td>
+                            <td width="15%" data-ng-show="optional.applicationStatus=='Submitted'">
+                                <i class="fa fa-check-square" style="color: green;" data-ng-show="course.studentApplied"></i>
+                            </td>
+
+                            <td width="15%" style="text-align: center" data-ng-show="optional.applicationStatus=='Submitted'">
+
+                                <div ng-switch on="course.statusLabel">
+                                    <button  ng-switch-when="Applied" class="btn btn-default btn-outlined" type="button" style="padding: 0 5px;">{{ ::course.statusLabel}} </button>
+                                    <button  ng-switch-when="Approved" class="btn btn-success btn-outlined" type="button" style="padding: 0 5px;">{{ ::course.statusLabel}} </button>
+                                    <button  ng-switch-when="Rejected" class="btn btn-primary btn-outlined" type="button" style="padding: 0 5px;">{{ ::course.statusLabel}} </button>
+                                    <button  ng-switch-when="Rejected and Shifted" class="btn btn-info btn-outlined" type="button" style="padding: 0 5px;">{{ ::course.statusLabel}} </button>
+                                </div>
+
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="row">
+                        <div class="col-md-12" style="text-align: right;padding-right: 100px;" data-ng-show="optional.applicationStatus=='Saved'">
+
+                            <a href="javascript:;" class="btn btn-xs btn-default"
+                               data-ng-click="saveOrSubmitApplication(0)" style="margin-top: 20px;">
+                                &nbsp;&nbsp;Save Changes &nbsp;
+                                <i class="fa fa-forward" style="color: green;"></i>
+                            </a>
+
+                            <a href="javascript:;" class="btn btn-xs btn-default"
+                               data-ng-click="saveOrSubmitApplication(1)" style="margin-top: 20px;">
+                                &nbsp;&nbsp;Submit Application &nbsp;
+                                <i class="fa fa-forward" style="color: green;"></i>
+                            </a>
+                            </div>
+                        </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

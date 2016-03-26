@@ -6,6 +6,18 @@ module ums {
     static APPROVED_APPLICATION : string = "#E0FFFF";
     static NONE : string = "none";
 
+    /*
+      *Status code for Optional Course Status Fields
+      * Database Table: Optional_Course_Application
+      * Field: Status
+     */
+    static SCODE_APPLIED:number = 0;
+    static SCODE_APPROVED:number = 1;
+    static SCODE_REJECTED:number = 2;
+    static SCODE_REJECTED_AND_SHIFTED : number = 3;
+
+
+
     public static findIndex(source_arr:Array<any>, element_value:string):number {
       var targetIndex = -1;
       for (var i = 0; i < source_arr.length; i++) {

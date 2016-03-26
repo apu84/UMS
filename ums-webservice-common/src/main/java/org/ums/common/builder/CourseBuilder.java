@@ -33,7 +33,7 @@ public class CourseBuilder implements Builder<Course, MutableCourse> {
   SyllabusManager mSyllabusManager;
 
   @Override
-  public void build(final JsonObjectBuilder pBuilder, final Course pReadOnly, final UriInfo pUriInfo,
+  public void build(final JsonObjectBuilder pBuilder, final Course pReadOnly, UriInfo pUriInfo,
                     final LocalCache pLocalCache) throws Exception {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("no", pReadOnly.getNo());
@@ -72,8 +72,7 @@ public class CourseBuilder implements Builder<Course, MutableCourse> {
     }
 
     pBuilder.add("viewOrder", pReadOnly.getViewOrder());
-    pBuilder.add("self", pUriInfo.getBaseUriBuilder().path("academic").path("course")
-        .path(String.valueOf(pReadOnly.getId())).build().toString());
+    //pBuilder.add("self", pUriInfo.getBaseUriBuilder().path("academic").path("course").path(String.valueOf(pReadOnly.getId())).build().toString());
 
     pBuilder.add("totalApplied", pReadOnly.getTotalApplied());
 
