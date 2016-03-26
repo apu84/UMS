@@ -24,10 +24,19 @@ public class OptionalCourseApplicationResource extends MutableOptionalCourseAppl
   @Path("/stat/semester-id/{semester-id}/program/{program-id}")
   public JsonObject getStatistics(final @Context Request pRequest,
                                    final @PathParam("semester-id") Integer pSemesterId,
-                                   final @PathParam("program-id") Integer pExamTypeId) throws Exception {
-    return mResourceHelper.getApplicationStatistics(pSemesterId, pExamTypeId);
+                                   final @PathParam("program-id") Integer pProgramId) throws Exception {
+    return mResourceHelper.getApplicationStatistics(pSemesterId, pProgramId);
   }
 
+  @GET
+  @Path("/CrHr/semester-id/{semester-id}/program/{program-id}/year/{year}/semester/{semester}")
+  public JsonObject getCrHrInfo(final @Context Request pRequest,
+                                  final @PathParam("semester-id") Integer pSemesterId,
+                                  final @PathParam("program-id") Integer pProgramId,
+                                  final @PathParam("semester") Integer pSemester,
+                                  final @PathParam("year") Integer pYear) throws Exception {
+    return mResourceHelper.getSemesterWiseCrHrInfo(pSemesterId, pProgramId,pYear,pSemester);
+  }
 
 
 

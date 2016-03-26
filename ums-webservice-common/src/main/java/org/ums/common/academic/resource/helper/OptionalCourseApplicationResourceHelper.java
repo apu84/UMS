@@ -8,17 +8,21 @@ import org.ums.common.builder.OptionalCourseApplicationBuilder;
 import org.ums.domain.model.dto.OptCourseStudentDto;
 import org.ums.domain.model.dto.OptSectionDto;
 import org.ums.domain.model.dto.OptionalCourseApplicationStatDto;
+import org.ums.domain.model.dto.SemesterWiseCrHrDto;
 import org.ums.domain.model.immutable.Course;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.Student;
+import org.ums.domain.model.immutable.Syllabus;
 import org.ums.enums.OptCourseApplicationStatus;
 import org.ums.enums.OptCourseCourseStatus;
 import org.ums.enums.ProgramType;
 import org.ums.enums.SemesterStatus;
 import org.ums.manager.CourseManager;
 import org.ums.manager.SemesterManager;
+import org.ums.manager.SemesterSyllabusMapManager;
 import org.ums.manager.StudentManager;
 import org.ums.persistent.dao.PersistentOptionalCourseApplicationDao;
+import org.ums.persistent.dao.PersistentSemesterWiseCrHrDao;
 
 import javax.json.*;
 import javax.ws.rs.core.Request;
@@ -42,10 +46,14 @@ public class OptionalCourseApplicationResourceHelper {
   private PersistentOptionalCourseApplicationDao mManager;
   @Autowired
   private OptionalCourseApplicationBuilder mBuilder;
+  @Autowired
+  SemesterSyllabusMapManager mSemesterSyllabusManager;
 
   @Autowired
   CourseResourceHelper mCourseResourceHelper;
 
+  @Autowired
+  private PersistentSemesterWiseCrHrDao mSemesterWiseCrHrManager;
 
   public PersistentOptionalCourseApplicationDao getContentManager() {
     return mManager;
@@ -55,6 +63,29 @@ public class OptionalCourseApplicationResourceHelper {
     return mBuilder;
   }
 
+
+  public JsonObject getSemesterWiseCrHrInfo(Integer pSemesterId,Integer pProgramId,Integer pYear, Integer pSemester) throws Exception {
+
+    Syllabus syllabus=mSemesterSyllabusManager.getSyllabusForSemester(pSemesterId, pProgramId, pYear, pSemester);
+    SemesterWiseCrHrDto crHr = mSemesterWiseCrHrManager.getCrHrInfoByYearSemester(syllabus.getId(),pYear,pSemester);
+
+
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+
+    JsonReader jsonReader;
+    JsonObject object1;
+
+      jsonReader = Json.createReader(new StringReader(crHr.toString()));
+      object1 = jsonReader.readObject();
+      jsonReader.close();
+
+    object.add("CrHr", object1);
+
+    return object.build();
+
+
+  }
 
   public JsonObject getApplicationStatistics(final Integer pSemesterId, final Integer pProgramId) throws Exception {
     List<OptionalCourseApplicationStatDto> statList = mManager.getApplicationStatistics(pSemesterId, pProgramId, 1, 1);

@@ -1,4 +1,5 @@
 module ums {
+
   interface IOptCourseOffer extends ng.IScope {
     optional:any;
     saveApplicationStatusForSingleStudent:Function;
@@ -22,6 +23,7 @@ module ums {
     saveSection:Function;
     goToTab:Function;
     sections:ISection;
+    CrHr:ICrHr;
   }
   interface ISection {
     id:number;
@@ -64,10 +66,18 @@ module ums {
   }
   interface IOptStatistics{
     courseNumber:String;
-    totalApplied:Number;
+    totalApplied:number;
   }
+  interface ICrHr{
+    totalCrHr : number;
+    optionalCrHr: number;
+    optionalTheoryCrHr: number;
+    optionalSessionalCrHr: number;
+  }
+
   var map = new Map();
    map.set("statistics_url", "academic/optional/application/stat/semester-id/{SEMESTER-ID}/program/{PROGRAM-ID}");
+  map.set("crhr_url", "academic/optional/application/CrHr/semester-id/{SEMESTER-ID}/program/{PROGRAM-ID}/year/{YEAR}/semester/{SEMESTER}");
   map.set("optional_url", "academic/course/optional/semester-id/{SEMESTER-ID}/program/{PROGRAM-ID}/year/{YEAR}/semester/{SEMESTER}");
   map.set("application_url", "academic/course/call4Application/semester-id/{SEMESTER-ID}/program/{PROGRAM-ID}/year/{YEAR}/semester/{SEMESTER}");
   map.set("approved_url", "academic/course/approved/semester-id/{SEMESTER-ID}/program/{PROGRAM-ID}/year/{YEAR}/semester/{SEMESTER}");
@@ -136,11 +146,19 @@ module ums {
     private goToTab(tabIndex:number):void{
       $('.nav-tabs li:eq('+tabIndex+') a').tab('show');
     }
+
+
     private showCourses():void {
 
       this.getStatistics(this.urlPlaceholderReplace(map.get("statistics_url"))).then((statArr:Array<IOptStatistics>)=> {
         this.$scope.optional.statistics = statArr;
       });
+
+      this.getCrHrInfo(this.urlPlaceholderReplace(map.get("crhr_url"))).then((CrHr:ICrHr)=> {
+        console.log(CrHr);
+        this.$scope.CrHr= CrHr;
+      });
+
 
       this.getCourses(this.urlPlaceholderReplace(map.get("approved_call4Application_url"))).then((optCourseArr:Array<IOptCourse>)=> {
         this.$scope.optional.approvedCallForApplicationCourses = optCourseArr;
@@ -214,6 +232,20 @@ module ums {
             var statArr:Array<IOptStatistics> = json.entries;
             console.log(statArr);
             defer.resolve(statArr);
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>) => {
+            console.error(response);
+          });
+      return defer.promise;
+
+    }
+
+    private getCrHrInfo(url:string):ng.IPromise<any> {
+      var defer = this.$q.defer();
+      this.httpClient.get(url, this.appConstants.mimeTypeJson,
+          (json:any, etag:string) => {
+            var CrHr:ICrHr = json.CrHr;
+            defer.resolve(CrHr);
           },
           (response:ng.IHttpPromiseCallbackArg<any>) => {
             console.error(response);
@@ -497,6 +529,9 @@ module ums {
       var complete_json = {};
       var shiftedStudentArray = [];
       $(".jqdragndrop-drop.D > .jqselection-selectable > .dragableObject").each(function() { shiftedStudentArray.push($(this).html()) });
+
+      if(shiftedStudentArray.length==0) return;
+
       complete_json["students"] =shiftedStudentArray;
 
       var url=this.urlPlaceholderReplace(map.get("save_application_shifting"));
@@ -507,7 +542,6 @@ module ums {
       this.httpClient.put(url, complete_json, 'application/json')
           .success(() => {
             $.notific8("Successfully Saved");
-            alert("abc");
             $(".jqdragndrop-drop.D").html("");
           }).error((data) => {
           });
@@ -571,6 +605,8 @@ module ums {
     private fetchSectionInformation(avc:number):void {
 
       var  courseId= $("#sectionCourseId").val();
+      if(courseId=="") return;
+
       var url=this.urlPlaceholderReplace(map.get("section_nonAssignedStudents_for_course"));
       url=url.replace("{COURSE-ID}",courseId);
 
@@ -606,6 +642,8 @@ module ums {
     }
 
     private addNewSection():void {
+      if($("#sectionCourseId").val()=="") return;
+
       var index = Utils.arrayMaxIndex(this.$scope.optional.sections);
       var item = this.addNewSectionRow(index);
       this.$scope.optional.sections.splice(0, 0, item);
@@ -631,7 +669,7 @@ module ums {
 
      var section_arr = this.$scope.optional.sections;
       var targetIndex = Utils.findIndex(section_arr, index.toString());
-      alert(targetIndex);
+      //alert(targetIndex);
       var courseId = $("#sectionCourseId").val();
 
       var url=this.urlPlaceholderReplace(map.get("delete_section"));
@@ -665,14 +703,14 @@ module ums {
       var sectionStudents = [];
       $("#section"+section.index+" > .jqselection-selectable > .dragableObject").each(function() { sectionStudents.push($(this).html()) });
       var students =  sectionStudents.join(',');
-      alert(students);
+      //alert(students);
       var complete_json = {};
       complete_json["students"] =students;
       console.log(complete_json);
 
       this.httpClient.put(url, complete_json, 'application/json')
           .success(() => {
-            alert("ifti1");
+            //alert("ifti1");
           }).error((data) => {
           });
     }

@@ -29,9 +29,15 @@ public class OptionalCourseApplicationBuilder {
 
   public void buildStudent(List<String> pStudentId, JsonObject pJsonObject,String operationType) throws Exception {
     JsonArray entries=pJsonObject.getJsonArray(operationType);
+    String studentId="";
     for (int i = 0; i < entries.size(); i++) {
-      JsonObject jsonObject = entries.getJsonObject(i);
-      pStudentId.add(jsonObject.getString("studentId"));
+      if(operationType.equalsIgnoreCase("students"))
+        studentId=entries.getString(i);
+      else {
+        JsonObject jsonObject = entries.getJsonObject(i);
+        studentId = jsonObject.getString("studentId");
+      }
+      pStudentId.add(studentId);
     }
   }
 

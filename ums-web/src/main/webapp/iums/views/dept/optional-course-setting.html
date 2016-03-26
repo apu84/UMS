@@ -87,19 +87,19 @@
                             <tbody>
                             <tr>
                                 <td width="50%">Semester Total</td>
-                                <td><span class="badge badge-warning pull-right">{{ ::total_crhr}}</span></td>
+                                <td><span class="badge badge-pink pull-right" style="font-weight: bold;">{{CrHr.totalCrHr}}</span></td>
                             </tr>
                             <tr>
                                 <td width="50%">Optional Total</td>
-                                <td><span class="badge badge-warning pull-right">{{ ::optional_crhr}}</span></td>
+                                <td><span class="badge badge-blue pull-right">{{CrHr.optionalCrHr}}</span></td>
                             </tr>
                             <tr>
-                                <td width="50%">Theory Total</td>
-                                <td><span class="badge badge-warning pull-right">{{ ::theory_crhr}}</span></td>
+                                <td width="50%">Opt. Theory Total</td>
+                                <td><span class="badge badge-yellow pull-right">{{CrHr.optionalTheoryCrHr}}</span></td>
                             </tr>
                             <tr>
-                                <td width="50%">Sessional Total</td>
-                                <td><span class="badge pull-right">{{ ::sessional_crhr}}</span></td>
+                                <td width="50%">Opt. Sessional Total</td>
+                                <td><span class="badge badge-yellow  pull-right">{{CrHr.optionalSessionalCrHr}}</span></td>
                             </tr>
                             </tbody>
                         </table>
@@ -333,14 +333,14 @@
                                 </td>
                                 <td width="15%" style="text-align: center">
 
-                                    <i class="fa fa-eraser" data-ng-click="resetChanges(student)" style="cursor: pointer"></i>
+                                    <i class="fa fa-eraser" data-ng-click="resetChanges(student)" style="cursor: pointer" ></i>
 
                                 </td>
                             </tr>
                             </tbody>
                         </table>
                         <a href="javascript:;" class="btn btn-xs btn-default"
-                           data-ng-click="saveApplicationStatus()" style="margin-top: 20px;">
+                           data-ng-click="saveApplicationStatus()" style="margin-top: 20px;" data-ng-show="optional.applicationStudents.length>0">
                             &nbsp;&nbsp;Save Changes &nbsp;
                             <i class="fa fa-forward" style="color: green;"></i>
                         </a>
@@ -424,7 +424,7 @@
 
                             </tbody>
                         </table>
-                        <div class="row">
+                        <div class="row" data-ng-show="optional.appliedCoursesForSingleStudent.length>0">
                             <div class="col-md-6">
                                 <a href="javascript:;" class="btn btn-xs btn-default"
                                    data-ng-click="goToTab(1)" style="margin-top: 20px;">

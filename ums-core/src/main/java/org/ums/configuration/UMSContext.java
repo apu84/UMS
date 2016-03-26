@@ -202,7 +202,10 @@ public class UMSContext {
   PersistentOptionalCourseApplicationDao persistentOptionalCourseApplicationDao() {
     return new PersistentOptionalCourseApplicationDao(mJdbcTemplate);
   }
-
+  @Bean
+  PersistentSemesterWiseCrHrDao persistentSemesterWiseCrHrDao() {
+    return new PersistentSemesterWiseCrHrDao(mJdbcTemplate);
+  }
 
   @Bean
   LoginService loginService() {

@@ -81,7 +81,7 @@ public class MutableOptionalCourseApplicationResource  extends Resource {
   /***------------Student's Part------------****/
   @PUT
   @Path("student/{STATUS-ID}")
-  public Response shiftStudents(final @Context Request pRequest,
+  public Response saveStudentApplication(final @Context Request pRequest,
                                 final @PathParam("STATUS-ID") Integer status,
                                 final JsonObject pJsonObject) throws Exception {
     return mResourceHelper.saveStudentApplication(status, pJsonObject);
