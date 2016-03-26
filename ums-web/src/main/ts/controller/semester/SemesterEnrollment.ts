@@ -46,7 +46,7 @@ module ums {
     }
 
     private enrollmentStatus(programId: string, semesterId: string): ng.IPromise<Array<SemesterEnrollmentStatus>> {
-      var defer: ng.IDeferred = this.$q.defer();
+      var defer = this.$q.defer();
       this.httpClient.get('academic/studentEnrollment'
           + '/program/' + programId
           + '/semester/' + semesterId + '',
