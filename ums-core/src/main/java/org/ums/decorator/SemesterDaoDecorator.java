@@ -3,6 +3,8 @@ package org.ums.decorator;
 import org.ums.cache.ContentDaoDecorator;
 import org.ums.domain.model.mutable.MutableSemester;
 import org.ums.domain.model.immutable.Semester;
+import org.ums.enums.ProgramType;
+import org.ums.enums.SemesterStatus;
 import org.ums.manager.SemesterManager;
 
 import java.util.List;
@@ -20,4 +22,10 @@ public class SemesterDaoDecorator extends ContentDaoDecorator<Semester, MutableS
   public Semester getPreviousSemester(Integer pSemesterId, Integer pProgramTypeId) throws Exception {
     return getManager().getPreviousSemester(pSemesterId, pProgramTypeId);
   }
+
+  @Override
+  public Semester getSemesterByStatus( ProgramType programType,SemesterStatus status) throws Exception {
+    return getManager().getSemesterByStatus(programType, status);
+  }
+
 }

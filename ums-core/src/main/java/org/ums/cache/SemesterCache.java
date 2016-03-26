@@ -3,6 +3,8 @@ package org.ums.cache;
 
 import org.ums.domain.model.mutable.MutableSemester;
 import org.ums.domain.model.immutable.Semester;
+import org.ums.enums.ProgramType;
+import org.ums.enums.SemesterStatus;
 import org.ums.manager.CacheManager;
 import org.ums.manager.SemesterManager;
 import org.ums.util.CacheUtil;
@@ -34,5 +36,10 @@ public class SemesterCache extends ContentCache<Semester, MutableSemester, Integ
   @Override
   public Semester getPreviousSemester(Integer pSemesterId, Integer pProgramTypeId) throws Exception {
     return getManager().getPreviousSemester(pSemesterId, pProgramTypeId);
+  }
+
+  @Override
+  public Semester getSemesterByStatus(ProgramType pProgramType,SemesterStatus status) throws Exception {
+    return getManager().getSemesterByStatus(pProgramType,status);
   }
 }

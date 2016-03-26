@@ -33,7 +33,7 @@ public class PersistentCourseDao extends CourseDaoDecorator {
       "Where OPT_COURSE_OFFER.COURSE_ID=MST_COURSE.COURSE_ID " +
       "And Semester_Id=? and Program_Id=? and OPT_COURSE_OFFER.Year=? and OPT_COURSE_OFFER.Semester=? ";
 
-  static String CALL_FOR_APPLICATION_COURSES = "Select MST_COURSE.*,TOTAL_APPLIED From OPT_COURSE_OFFER,MST_COURSE " +
+  static String SELECT_CALL_FOR_APPLICATION_COURSES = "Select MST_COURSE.*,TOTAL_APPLIED From OPT_COURSE_OFFER,MST_COURSE " +
       "Where OPT_COURSE_OFFER.COURSE_ID=MST_COURSE.COURSE_ID " +
       "And Semester_Id=? and Program_Id=? and OPT_COURSE_OFFER.Year=? and OPT_COURSE_OFFER.Semester=? And CALL_FOR_APPLICATION='Y' ";
 
@@ -127,7 +127,7 @@ public class PersistentCourseDao extends CourseDaoDecorator {
 
   @Override
   public List<Course> getCallForApplicationCourseList(Integer pSemesterId, Integer pProgramId, Integer pYear, Integer pSemester) {
-    String query = CALL_FOR_APPLICATION_COURSES;
+    String query = SELECT_CALL_FOR_APPLICATION_COURSES;
     return mJdbcTemplate.query(query, new Object[]{pSemesterId, pProgramId, pYear, pSemester}, new CourseRowMapper());
   }
 
