@@ -22,6 +22,8 @@ module ums{
     room:Array<IClassRooms>;
     courseData:any;
     courses:any;
+    courseArr:Array<ICourse>;
+    sectionsOnChange: string;
     rooms:any;
     showTable:boolean;
     showGrid: boolean;
@@ -40,6 +42,7 @@ module ums{
     no: string;
     title: string;
     year: number;
+    type:string;
     semester: number;
   }
 
@@ -113,6 +116,20 @@ module ums{
       this.$scope.showGrid = true;
       this.$scope.showTable= true;
       this.$scope.showSelection = true;
+      var courseArr = this.$scope.courseArr;
+      //var sectionsOnChange = this.$scope.sectionsOnChange;
+      var allSections = this.appConstants.theorySectionsGrid+this.appConstants.sessionalSectionsGrid2;
+      var sessional = this.appConstants.sessionalSectionsGrid;
+      var theory = this.appConstants.theorySectionsGrid;
+
+
+      var type = { '1': 'THEORY', '2': 'SESSIONAL' };
+      var states = {'A': 'A', 'B': 'B', 'C': 'C', 'D': 'D','A1': 'A1', 'A2': 'A2','B1':'B1','B2':'B2','C1':'C1','C2':'C2','D1':'D1','D2':'D2'};
+      var typesOfTheoryAndSessional = {
+        1: { 'A': 'A', 'B': 'B', 'C': 'C', 'D': 'D' },
+        2: { 'A1': 'A1', 'A2': 'A2','B1':'B1','B2':'B2','C1':'C1','C2':'C2','D1':'D1','D2':'D2' }
+      };
+
 
       var lastSel,
           cancelEditing = function(myGrid) {
@@ -133,6 +150,7 @@ module ums{
       };
       console.log("99999999999999999999999");
       console.log(this.$scope.courses);
+      var _this=this;
       var thisGrid = $("#jqGrid").jqGrid({
 
 
@@ -245,10 +263,92 @@ module ums{
             formatter:'select',
             editoptions:{
               value:this.$scope.courses,
+              dataInit:function(elem){
+                var v = $(elem).val();
+                var sectionsOnChange;
+
+                //console.log(courseArr);
+
+                for(var i=0;i<courseArr.length;i++){
+                  if(v == courseArr[i].id){
+                    if(courseArr[i].type == "THEORY"){
+                      console.log(courseArr[i].type)
+                      sectionsOnChange = theory;
+                    }
+                    else{
+                      console.log(courseArr[i].type)
+
+                      sectionsOnChange = sessional;
+                    }
+                    break;
+                  }
+                }
+                $("#jqGrid").jqGrid('setColProp', 'section', { editoptions: { value: sectionsOnChange} });
+
+
+
+              },
               dataEvents: [
                 {  type: 'change',
+
                   fn: function(e) {
-                    alert(this.value);
+                    var sectionsOnChanges;
+
+                    //console.log(courseArr);
+                    //resetting
+                    $("#jqGrid").jqGrid('setColProp', 'section', { editoptions: { value: allSections} });
+
+                    var v = $(e.target).val();
+
+                    for(var i=0;i<courseArr.length;i++){
+                      if(v == courseArr[i].id){
+                        if(courseArr[i].type == "THEORY"){
+                          console.log(courseArr[i].type)
+                          sectionsOnChanges = 1;
+                        }
+                        else{
+                          console.log(courseArr[i].type)
+
+                          sectionsOnChanges = 2;
+                        }
+                        break;
+                      }
+
+
+                    }
+
+
+                    var sc = typesOfTheoryAndSessional[sectionsOnChanges];
+                    var newOptions = '';
+                    for(var stateId in sc){
+                      if (sc.hasOwnProperty(stateId)) {
+                        newOptions += '<option role="option" value="' +
+                            stateId + '">' +
+                            states[stateId] + '</option>';
+                      }
+
+                    }
+
+
+                    if ($(e.target).is('.FormElement')) {
+                      // form editing
+                      var form = $(e.target).closest('form.FormGrid');
+                      $("select#section.FormElement", form[0]).html(newOptions);
+                    } else {
+                      // inline editing
+                      var row = $(e.target).closest('tr.jqgrow');
+                      var rowId = row.attr('id');
+                      $("select#" + rowId + "_section", row[0]).html(newOptions);
+                    }
+
+
+                    console.log("^^^^^^^^^^^");
+                    console.log(sectionsOnChanges);
+                    //this.$scope.sectionsOnChange = sectionsOnChange;   <---------------I want to use here..
+                    _this.$scope.sectionsOnChange = sectionsOnChanges;
+                    //can u tell me what is this this ??
+                    //$("#jqGrid").jqGrid('setColProp', 'section', { editoptions: { value: sectionsOnChanges} });
+
                   }
 
                 }
@@ -267,8 +367,9 @@ module ums{
             width: 150,
             editable: true,
             edittype:'select',
+            formatter:'select',
             editoptions:{
-              value:this.appConstants.theorySectionsGrid+this.appConstants.sessionalSectionsGrid
+              value:states
             }
           },
 
@@ -419,7 +520,10 @@ module ums{
           position: "last",
           rowID: 'empty',
           useDefValues: true,
-          addRowParams: addOptions
+          addRowParams: addOptions,
+          oneditfunc  : function (rowId) {
+            alert(rowId);
+          }
         }
       });
 
@@ -433,7 +537,7 @@ module ums{
           (json:any, etag:string) => {
             courseArr = json.entries;
             var courseId: string = ':None';
-
+            this.$scope.courseArr = courseArr;
             for (var i in courseArr) {
 
               courseId = courseId + ';' + courseArr[i].id + ':' + courseArr[i].no;
