@@ -112,6 +112,11 @@ public class PersistentCourseDao extends CourseDaoDecorator {
     return mJdbcTemplate.query(query, new Object[]{pSemesterId, pProgramId}, new CourseRowMapper());
   }
 
+  public List<Course> getByYearSemester(String pSemesterId,String pProgramId,int year,int semester){
+    String query = SELECT_ALL + "Where Syllabus_Id In (Select Syllabus_Id from SEMESTER_SYLLABUS_MAP Where Semester_Id=? And Program_Id=? AND YEAR=? AND SEMESTER=?) " + ORDER_BY;
+    return mJdbcTemplate.query(query, new Object[]{pSemesterId, pProgramId,year,semester}, new CourseRowMapper());
+  }
+
 
   @Override
   public List<Course> getOptionalCourseList(String pSyllabusId, Integer pYear, Integer pSemester) {

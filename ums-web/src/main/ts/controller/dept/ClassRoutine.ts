@@ -102,10 +102,17 @@ module ums{
       this.$scope.showGrid = false;
       this.$scope.showSelection = true;
     }
+
     private fetchProgramTypeAndDeptInfo():void{
+      $("#leftDiv").hide();
+      $("#arrowDiv").show();
+      $("#rightDiv").removeClass("orgRightClass");
+      $("#rightDiv").addClass("newRightClass");
+
+      this.$scope.courseTeacherSearchParamModel.programSelector.programId;
       this.$scope.showGrid = true;
       this.$scope.showTable= true;
-      this.$scope.showSelection = false;
+      this.$scope.showSelection = true;
 
       var lastSel,
           cancelEditing = function(myGrid) {
@@ -124,8 +131,8 @@ module ums{
           $("tr#"+$.jgrid.jqID(rowid)+ " div.ui-inline-del").show();
         },50);
       };
-
-
+      console.log("99999999999999999999999");
+      console.log(this.$scope.courses);
       var thisGrid = $("#jqGrid").jqGrid({
 
 
@@ -229,6 +236,41 @@ module ums{
             }
 
           },
+          {
+            label:'Course ID',
+            name: 'courseId',
+            width: 150,
+            editable: true,
+            edittype:'select',
+            formatter:'select',
+            editoptions:{
+              value:this.$scope.courses,
+              dataEvents: [
+                {  type: 'change',
+                  fn: function(e) {
+                    alert(this.value);
+                  }
+
+                }
+              ]
+            },
+            stype:'select',
+            searchoptions:{
+              sopt:['eq','ne'],
+              value:this.$scope.courses
+
+            }
+          },
+          {
+            label: 'Section',
+            name:'section',
+            width: 150,
+            editable: true,
+            edittype:'select',
+            editoptions:{
+              value:this.appConstants.theorySectionsGrid+this.appConstants.sessionalSectionsGrid
+            }
+          },
 
           {
             label:'Start Time',
@@ -260,32 +302,8 @@ module ums{
               value:this.appConstants.endTime
             }
           },
-          {
-            label:'Course ID',
-            name: 'courseId',
-            width: 150,
-            editable: true,
-            edittype:'select',
-            editoptions:{
-              value:this.$scope.courses
-            },
-            stype:'select',
-            searchoptions:{
-              sopt:['eq','ne'],
-              value:this.$scope.courses
 
-            }
-          },
-          {
-            label: 'Section',
-            name:'section',
-            width: 150,
-            editable: true,
-            edittype:'select',
-            editoptions:{
-              value:this.appConstants.theorySectionsGrid+this.appConstants.sessionalSectionsGrid
-            }
-          },
+
           {
             label:  'Room No',
             name: 'roomNo',
@@ -331,7 +349,7 @@ module ums{
                   cancelEditing(thisGrid);
                 }
                 lastSel = id;
-                $("#jqGrid").setGridParam({ editurl: "https://localhost/ums-webservice-common/academic/classroom/" + encodeURIComponent(id)});
+                $("#jqGrid").setGridParam({ editurl: "https://localhost/ums-webservice-common/academic/routine/" + encodeURIComponent(id)});
               }
 
             }
@@ -346,6 +364,8 @@ module ums{
         pager: "#jqGridPager",
         rownumbers: true,
         height:500,
+
+
 
         rowList: [],        // disable page size dropdown
         pgbuttons: false,     // disable page control like next, back button
@@ -408,7 +428,7 @@ module ums{
 
     private getCourseId():void{
       var defer = this.$q.defer();
-      var courseArr:Array<any>;
+      var courseArr:Array<ICourse>;
       this.httpClient.get('/ums-webservice-common/academic/course/semester/'+'11012015'+'/program/'+'110500', 'application/json',
           (json:any, etag:string) => {
             courseArr = json.entries;
@@ -416,7 +436,7 @@ module ums{
 
             for (var i in courseArr) {
 
-              courseId = courseId + ';' + courseArr[i].no + ':' + courseArr[i].no;
+              courseId = courseId + ';' + courseArr[i].id + ':' + courseArr[i].no;
 
             }
 

@@ -12,6 +12,7 @@ module  ums{
     showRoutine:boolean;
     studentsRoutine:Function;
     getStudentInfo:Function;
+    getCourses:Function;
     increaseTimeChecker:Function;
     studentsRoutineBySemesterAndProgram: Function;
     routines:Array<Routine>;
@@ -32,6 +33,7 @@ module  ums{
     duration:string;
     checker:any;
     routineStore:any;
+    courseArr:Array<ICourse>
   }
 
   class IRoutineStore{
@@ -44,6 +46,15 @@ module  ums{
   interface ISemester{
     id:string;
     name:string;
+  }
+  interface ICourse {
+    readOnly: boolean;
+    index: number;
+    id: string;
+    no: string;
+    title: string;
+    year: number;
+    semester: number;
   }
 
   export class StudentsRoutine{
@@ -58,6 +69,7 @@ module  ums{
       console.log('for day');
       console.log($scope.days);
       $scope.studentsRoutine = this.studentsRoutine.bind(this);
+      $scope.getCourses = this.getCourses.bind(this);
 
     }
 
@@ -79,6 +91,8 @@ module  ums{
       console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!');
       console.log(routine);
       var routineStoreArr: IRoutineStore[] = [];
+      console.log("-----course--arr-----");
+      console.log(this.$scope.courseArr);
 
       for(var d=0;d<this.$scope.days.length;d++){
 
@@ -88,8 +102,14 @@ module  ums{
             if(routine[routines].startTime == this.$scope.times[i] && routine[routines].day== this.$scope.days[d].id){
               var routineStore = new IRoutineStore();
               routineStore.day = "0"+routine[routines].day.toString();
-              routineStore.colspan= routine[routines].duration.toString();
-              routineStore.courseId = routine[routines].courseId;
+              routineStore.colspan= routine[routines].duration.toString();   //routine[routines].courseId;
+              for(var course = 0; course<this.$scope.courseArr.length; course++){
+                if(this.$scope.courseArr[course].id == routine[routines].courseId){
+                  routineStore.courseId = this.$scope.courseArr[course].no;
+                }
+              }
+              console.log("----------");
+              console.log(routineStore.courseId);
               routineStore.roomNo = routine[routines].roomNo;
               //console.log(routineStore);
               routineStoreArr.push(routineStore);
@@ -119,7 +139,10 @@ module  ums{
     private getStudentRoutineBySemesterAndProgram(semesterId:string,programId:string){
       this.httpClient.get('academic/routine/routineForStudent/'+semesterId+'/'+programId,'application/json',(json:any,etag:string)=>{
             this.$scope.routines = json.entries;
-            this.createStudentsRoutine(this.$scope.routines);
+            this.getCourses().then((courseArr:Array<ICourse>)=>{
+              this.createStudentsRoutine(this.$scope.routines);
+            });
+
           },
           (response:ng.IHttpPromiseCallbackArg<any>)=>{
             console.error(response);
@@ -150,10 +173,26 @@ module  ums{
             this.$scope.departmentName = this.appConstants.deptLong[this.$scope.student.department];
             this.getSemesterInfo(this.$scope.semesterId);
             this.getStudentRoutineBySemesterAndProgram(this.$scope.semesterId,this.$scope.programId);
+
           },
           (response:ng.IHttpPromiseCallbackArg<any>)=>{
             console.error(response);
           });
+    }
+
+    private getCourses():ng.IPromise<any>{
+      var defer = this.$q.defer();
+      var courseArr:Array<ICourse>;
+      this.httpClient.get('/ums-webservice-common/academic/course/semester/'+'11012015'+'/program/'+'110500', 'application/json',
+          (json:any, etag:string) => {
+            courseArr = json.entries;
+            this.$scope.courseArr = courseArr;
+            defer.resolve(courseArr);
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>) => {
+            console.error(response);
+          });
+      return defer.promise;
     }
 
   }
