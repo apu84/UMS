@@ -345,6 +345,7 @@ module ums {
         })
         .state('studentProfile', {
           url: "/studentProfile",
+          controller: "StudentProfile",
           templateUrl: 'views/student/student-profile.html'
         })
         .state('assignRole', {

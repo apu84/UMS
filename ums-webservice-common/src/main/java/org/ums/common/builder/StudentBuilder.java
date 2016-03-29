@@ -37,6 +37,7 @@ public class StudentBuilder implements Builder<Student, MutableStudent> {
 
     Semester semester = (Semester) pLocalCache.cache(() -> pStudent.getSemester(), pStudent.getSemesterId(), Semester.class);
     pBuilder.add("semesterId", semester.getId());
+    pBuilder.add("semesterName", semester.getName());
     pBuilder.add("semester", pUriInfo.getBaseUriBuilder().path("academic").path("semester")
         .path(String.valueOf(semester.getId())).build().toString());
 
@@ -44,6 +45,9 @@ public class StudentBuilder implements Builder<Student, MutableStudent> {
     pBuilder.add("programId", program.getId());
     pBuilder.add("program", pUriInfo.getBaseUriBuilder().path("academic").path("program")
         .path(String.valueOf(program.getId())).build().toString());
+
+    pBuilder.add("year", pStudent.getCurrentYear());
+    pBuilder.add("academicSemester", pStudent.getCurrentAcademicSemester());
 
     pBuilder.add("fatherName", pStudent.getFatherName());
     pBuilder.add("motherName", pStudent.getMotherName());

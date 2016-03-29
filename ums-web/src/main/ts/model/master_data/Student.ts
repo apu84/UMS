@@ -10,6 +10,8 @@ module ums {
     programId: string;
     semesterId: string;
     semesterName: string;
+    year: number;
+    academicSemester: number;
     fatherName: string;
     motherName: string;
     birthDate: string;
@@ -17,7 +19,7 @@ module ums {
     mobileNumber: string;
     phoneNumber: string;
     bloodGroup: string;
-    emailAddress: string;
+    email: string;
     presentAddress: string;
     permanentAddress: string;
     guardianPhone: string;
