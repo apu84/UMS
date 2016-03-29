@@ -16,7 +16,7 @@ public class ClassRoomBuilder implements Builder<ClassRoom, MutableClassRoom> {
   public void build(JsonObjectBuilder pBuilder, ClassRoom pReadOnly, UriInfo pUriInfo, final LocalCache pLocalCache) throws Exception {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("roomNo",pReadOnly.getRoomNo());
-    pBuilder.add("description",pReadOnly.getDescription());
+    pBuilder.add("description",pReadOnly.getDescription()==null?"":pReadOnly.getDescription());
     pBuilder.add("totalRow",pReadOnly.getTotalRow());
     pBuilder.add("totalColumn",pReadOnly.getTotalColumn());
     pBuilder.add("capacity",pReadOnly.getCapacity());

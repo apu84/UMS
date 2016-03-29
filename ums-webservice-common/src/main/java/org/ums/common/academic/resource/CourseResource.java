@@ -41,6 +41,12 @@ public class CourseResource extends MutableCourseResource {
   }
 
   @GET
+  @Path("/semester/{semester-id}/program/{program-id}/year/{year}/academicSemester/{semester}")
+  public JsonObject getByYearSemester(final @Context Request pRequest, final @PathParam("semester-id") String pSemesterId, final @PathParam("program-id") String pProgramId,final @PathParam("year") int year,final @PathParam("semester") int semester) throws Exception {
+    return mResourceHelper.getByYearSemester(pSemesterId,pProgramId,year,semester, pRequest, mUriInfo);
+  }
+
+  @GET
   @Path(PATH_PARAM_OBJECT_ID)
   public Response get(final @Context Request pRequest, final @PathParam("object-id") String pObjectId) throws Exception {
     return mResourceHelper.get(pObjectId, pRequest, mUriInfo);

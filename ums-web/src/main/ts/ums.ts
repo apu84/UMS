@@ -184,45 +184,64 @@ module ums {
           }
         })
         .state('semesterSettingParameter',{
-          url:"/semesterSettingParameter",
-          controller:'SemesterSettingParameter',
-          templateUrl:'views/semester/semester-setting-parameter.html',
+                   url:"/semesterSettingParameter",
+                 controller:'SemesterSettingParameter',
+                 templateUrl:'views/semester/semester-setting-parameter.html',
+                 resolve: {
+                 loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                     return $ocLazyLoad.load({
+                           files: [
+                            'vendors/bootstrap-colorpicker/css/colorpicker.css',
+                            'vendors/bootstrap-datepicker/css/datepicker.css',
+                            'vendors/bootstrap-daterangepicker/daterangepicker-bs3.css',
+                            'vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css',
+                            'vendors/bootstrap-timepicker/css/bootstrap-timepicker.min.css',
+                            'vendors/bootstrap-clockface/css/clockface.css',
+                            'vendors/bootstrap-switch/css/bootstrap-switch.css',
+                            'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                            'vendors/bootstrap-daterangepicker/daterangepicker.js',
+                            'vendors/moment/moment.js',
+                            'vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
+                            'vendors/bootstrap-timepicker/js/bootstrap-timepicker.js',
+                            'vendors/bootstrap-clockface/js/clockface.js',
+                            'vendors/bootstrap-colorpicker/js/bootstrap-colorpicker.js',
+                            'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
+                            'vendors/jquery-maskedinput/jquery-maskedinput.js',
+                           'vendors/charCount.js',
+                            'vendors/bootstrap-datepicker/css/datepicker.css',
+                            'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                            'vendors/select2/select2-madmin.css',
+                            'vendors/bootstrap-select/bootstrap-select.min.css',
+                            'vendors/multi-select/css/multi-select-madmin.css',
+                            'vendors/select2/select2.min.js',
+                            'vendors/bootstrap-switch/css/bootstrap-switch.css',
+                            'vendors/bootstrap-datepicker/css/datepicker.css',
+                            'vendors/jquery-validate/jquery.validate.min.js',
+                            'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
+                          ]
+                      });
+                    }]
+                }
+            })
+        .state('semesterWithdrawForStudent', {
+          url: "/semesterWithdrawForStudent",
+          controller: 'SemesterWithdrawForStudent',
+          templateUrl: 'views/semester/semester-withdraw-student.html',
           resolve: {
             loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
               return $ocLazyLoad.load({
                 files: [
-                  'vendors/bootstrap-colorpicker/css/colorpicker.css',
-                  'vendors/bootstrap-datepicker/css/datepicker.css',
-                  'vendors/bootstrap-daterangepicker/daterangepicker-bs3.css',
-                  'vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css',
-                  'vendors/bootstrap-timepicker/css/bootstrap-timepicker.min.css',
-                  'vendors/bootstrap-clockface/css/clockface.css',
-                  'vendors/bootstrap-switch/css/bootstrap-switch.css',
-                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
-                  'vendors/bootstrap-daterangepicker/daterangepicker.js',
-                  'vendors/moment/moment.js',
-                  'vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
-                  'vendors/bootstrap-timepicker/js/bootstrap-timepicker.js',
-                  'vendors/bootstrap-clockface/js/clockface.js',
-                  'vendors/bootstrap-colorpicker/js/bootstrap-colorpicker.js',
-                  'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
-                  'vendors/jquery-maskedinput/jquery-maskedinput.js',
-                  'vendors/charCount.js',
-                  'vendors/bootstrap-datepicker/css/datepicker.css',
-                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
-                  'vendors/select2/select2-madmin.css',
-                  'vendors/bootstrap-select/bootstrap-select.min.css',
-                  'vendors/multi-select/css/multi-select-madmin.css',
-                  'vendors/select2/select2.min.js',
                   'vendors/bootstrap-switch/css/bootstrap-switch.css',
                   'vendors/bootstrap-datepicker/css/datepicker.css',
                   'vendors/jquery-validate/jquery.validate.min.js',
+                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
                   'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
                 ]
               });
             }]
           }
         })
+
         .state('semesterSyllabusMap', {
           url: "/semesterSyllabusMap",
           controller: 'SemesterSyllabusMap',
@@ -326,6 +345,7 @@ module ums {
         })
         .state('studentProfile', {
           url: "/studentProfile",
+          controller: "StudentProfile",
           templateUrl: 'views/student/student-profile.html'
         })
         .state('assignRole', {
@@ -347,7 +367,7 @@ module ums {
             }]
           }
         })
-       .state('classRoomInfo', {
+        .state('classRoomInfo', {
           url: "/classRoomInfo",
           controller: 'ClassRoomInfo',
           templateUrl: 'views/common/academic/class-room.html'
@@ -376,6 +396,11 @@ module ums {
           url: "/optionalCoursesOffer",
           templateUrl: 'views/dept/optional-course-setting.html',
           controller: 'OptionalCoursesOffer'
+        })
+        .state('optionalCoursesApplication', {
+          url: "/optionalCoursesApplication",
+          templateUrl: 'views/student/optional-course.html',
+          controller: 'OptionalCoursesApplication'
         })
         .state('semesterEnrollment', {
           url: "/semesterEnrollment",

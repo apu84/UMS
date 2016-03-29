@@ -1,8 +1,8 @@
 module ums{
-  import ParameterSetting = ums.ParameterSetting;
+  import ParameterSetting = ums.IParameterSetting;
   interface ISemesterSettingParameterScope extends ng.IScope{
     semesterSelector:Array<Semester>;
-    parameterSelector:Array<Parameter>
+    parameterSelector:Array<IParameter>
     parameterId:string;
     semesterTypeId:number;
     programTypeSelector:any;
@@ -48,6 +48,8 @@ module ums{
     semesterId: any;
     startDate: any;
     endDate: any;
+    startDateTmp:any;
+    endDateTmp: any;
     editData:boolean;
     updatable:boolean;
   }
@@ -121,6 +123,8 @@ module ums{
               inners.longDescription =this.$scope.parameterSelector[i].longDescription ;
               inners.startDate = this.$scope.semesterSettingParameterData[j].startDate;
               inners.endDate = this.$scope.semesterSettingParameterData[j].endDate;
+              inners.startDateTmp = this.$scope.semesterSettingParameterData[j].startDate;
+              inners.endDateTmp = this.$scope.semesterSettingParameterData[j].endDate;
               inners.editData = false;
               inners.updatable = true;
               parameterSettingArr.push(inners);
@@ -136,6 +140,8 @@ module ums{
           inners.longDescription =this.$scope.parameterSelector[i].longDescription;
           inners.startDate = '';
           inners.endDate = '';
+          inners.startDateTmp = '';
+          inners.endDateTmp = '';
           inners.editData = false;
           inners.updatable = false;
           parameterSettingArr.push(inners);
@@ -151,22 +157,18 @@ module ums{
 
     private addDate():void{
       console.log("this is inside date");
-      /*setTimeout(function () {
+      setTimeout(function () {
         $('.datepicker-default').datepicker();
         $('.datepicker-default').on('change', function () {
           $('.datepicker').hide();
         });
-      }, 200);*/
+      }, 200);
 
       //BEGIN PLUGINS DATETIME PICKER
-      $('#datetimepicker1').datetimepicker({ format: 'dd/MM/yyyy hh:mm:ss' });;
+      $('.datetimepicker-default').datetimepicker();
 
 
 
-      /*$( "#datepicker1" ).datepicker();
-
-
-      $( "#datepicker2" ).datepicker();*/
     }
 
     private showValue():void{
@@ -182,11 +184,7 @@ module ums{
       this.$scope.editId = editId;
 
       this.$scope.contentEdit = true;
-     /* for(var i=0;i<this.$scope.semesterSettingStore.length;i++){
-        if(this.$scope.semesterSettingStore[i].parameterId == editId){
-          this.$scope.semesterSettingStore[i].editData = true;
-        }
-      }*/
+
       this.$scope.semesterSettingStore[srl].editData = true;
 
     }
@@ -255,8 +253,8 @@ module ums{
       console.log(parameter);
 
       if (parameter.updatable == true) {
-          this.$scope.semesterSettingStore[parameter.srl].startDate = parameter.startDate;
-          this.$scope.semesterSettingStore[parameter.srl].endDate = parameter.endDate;
+          this.$scope.semesterSettingStore[parameter.srl].startDate = parameter.startDateTmp;
+          this.$scope.semesterSettingStore[parameter.srl].endDate = parameter.endDateTmp;
           ////
           var json = this.convertToJsonForUpdate(this.$scope.semesterSettingStore[parameter.srl].id,this.$scope.semesterTypeId, parameter.parameterId, parameter.startDate, parameter.endDate);
 
@@ -267,8 +265,8 @@ module ums{
               }).error((data) => {
           });
 
-         this.$scope.semesterSettingStore[parameter.srl].startDate=parameter.startDate;
-         this.$scope.semesterSettingStore[parameter.srl].endDate=parameter.endDate;
+         this.$scope.semesterSettingStore[parameter.srl].startDate=parameter.startDateTmp;
+         this.$scope.semesterSettingStore[parameter.srl].endDate=parameter.endDateTmp;
         this.$scope.semesterSettingStore[parameter.srl].updatable = true;
          this.$scope.semesterSettingStore[parameter.srl].editData = false;
         console.log("-----updated data---");
@@ -282,7 +280,7 @@ module ums{
           alert("parameterId:"+parameter.parameterId+", startDate:"+ parameter.startDate+",endDate:"+parameter.endDate);
         }
       else {
-        var jsons = this.convertToJson(this.$scope.semesterTypeId, parameter.parameterId, parameter.startDate, parameter.endDate);
+        var jsons = this.convertToJson(this.$scope.semesterTypeId, parameter.parameterId, parameter.startDateTmp, parameter.endDateTmp);
         console.log("----------------json----------------");
         console.log(json);
         this.$scope.semesterSettingStore[parameter.srl].editData = false;
@@ -340,9 +338,7 @@ module ums{
         count++;
       }
 
-      /*if(count==(length-1)){
-        this.getAllData();
-      }*/
+
 
     }
   }

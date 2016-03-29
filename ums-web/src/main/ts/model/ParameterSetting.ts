@@ -1,5 +1,5 @@
 module ums{
-  export interface ParameterSetting{
+  export interface IParameterSetting{
     id: any;
     semesterId:any;
     parameterId:any;

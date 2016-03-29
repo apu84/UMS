@@ -202,7 +202,10 @@ public class UMSContext {
   PersistentOptionalCourseApplicationDao persistentOptionalCourseApplicationDao() {
     return new PersistentOptionalCourseApplicationDao(mJdbcTemplate);
   }
-
+  @Bean
+  PersistentSemesterWiseCrHrDao persistentSemesterWiseCrHrDao() {
+    return new PersistentSemesterWiseCrHrDao(mJdbcTemplate);
+  }
 
   @Bean
   LoginService loginService() {
@@ -214,7 +217,7 @@ public class UMSContext {
     return new PersistentRoutineDao(mJdbcTemplate);
   }
 
-/*  @Bean
+ @Bean
   ParameterManager parameterManager(){
     return new PersistentParameterDao(mJdbcTemplate);
   }
@@ -222,7 +225,7 @@ public class UMSContext {
   ParameterSettingManager parameterSettingManager(){
 
     return  new PersistentParameterSettingDao(mJdbcTemplate);
-  }*/
+  }
 
   @Bean
   BearerAccessTokenManager bearerAccessTokenManager() {

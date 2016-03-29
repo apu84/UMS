@@ -20,7 +20,6 @@ public class MutableRoutineResource extends Resource {
 
   @POST
   public Response createRoutine(final  JsonObject pJsonObject) throws Exception{
-    //return mResourceHelper.post(Integer.parseInt(semesterId),Integer.parseInt(programId),Integer.parseInt(year),Integer.parseInt(semester),pJsonObject,mUriInfo);
     return mRoutineResourceHelper.post(pJsonObject,mUriInfo);
   }
 
@@ -32,6 +31,7 @@ public class MutableRoutineResource extends Resource {
       final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader,
       final JsonObject pJsonObject
       )throws Exception{
+
     return mRoutineResourceHelper.put(pObjectId,pRequest,pIfMatchHeader,pJsonObject);
   }
 

@@ -1,27 +1,32 @@
-///<reference path="../../service/HttpClient.ts"/>
-///<reference path="../../lib/jquery.notific8.d.ts"/>
-///<reference path="../../lib/jquery.notify.d.ts"/>
-///<reference path="../../lib/jquery.jqGrid.d.ts"/>
-
 module ums {
-  interface IExamRoutineScope extends ng.IScope {
+
+  interface IOptCourseOffer extends ng.IScope {
     optional:any;
+    saveApplicationStatusForSingleStudent:Function;
+    fetchApplicationForSingleStudent:Function;
     applicationSelectionChange:Function;
+    showApplicationForStudent:Function;
+    removeApplicationCourse:Function;
     approvedSelectionChange:Function;
     removeApprovedCourse:Function;
-    removeApplicationCourse:Function;
-    showAppliedStudents:Function;
-    showCourses:Function;
-    saveCourses:Function;
-    fetchRejectedStudents:Function;
-    sections:ISection;
-    addNewSection:Function;
-    removeSection:Function;
     fetchSectionInformation:Function;
+    saveApplicationShifting:Function;
+    saveApplicationStatus:Function;
+    showAppliedStudents:Function;
+    fetchApplications:Function;
+    removeSection:Function;
+    addNewSection:Function;
+    fetchStudents:Function;
+    showCourses:Function;
+    resetChanges:Function;
+    saveCourses:Function;
     saveSection:Function;
-    searchApplication:Function;
+    goToTab:Function;
+    sections:ISection;
+    CrHr:ICrHr;
   }
   interface ISection {
+    id:number;
     index:number;
     courseId:string;
     sectionName:string;
@@ -29,8 +34,8 @@ module ums {
     students:Array<IOptStudent>;
   }
   interface IOptCourse {
-    index: number;
     id: string;
+    index: number;
     courseId:string;
     no: string;
     courseNo:string;
@@ -42,62 +47,118 @@ module ums {
     application:boolean;
     approved:boolean;
     bgColor:string;
-    status_id:number;
-    status_label:string;
+    statusId:number;
+    statusLabel:string;
+    newStatusId:number;
+    applicationTypeId:number;
+    applicationTypeLabel:String;
+    newStatusLabel:string;
   }
-
   interface IOptStudent {
     mId:String;
     studentId:String;
     studentName:String;
+    statusId:number;
+    statusLabel:String;
+    applicationTypeId:number;
+    applicationTypeLabel:String;
+    newStatusId:number;
   }
+  interface IOptStatistics{
+    courseNumber:String;
+    totalApplied:number;
+  }
+  interface ICrHr{
+    totalCrHr : number;
+    optionalCrHr: number;
+    optionalTheoryCrHr: number;
+    optionalSessionalCrHr: number;
+  }
+
   var map = new Map();
+   map.set("statistics_url", "academic/optional/application/stat/semester-id/{SEMESTER-ID}/program/{PROGRAM-ID}");
+  map.set("crhr_url", "academic/optional/application/CrHr/semester-id/{SEMESTER-ID}/program/{PROGRAM-ID}/year/{YEAR}/semester/{SEMESTER}");
   map.set("optional_url", "academic/course/optional/semester-id/{SEMESTER-ID}/program/{PROGRAM-ID}/year/{YEAR}/semester/{SEMESTER}");
   map.set("application_url", "academic/course/call4Application/semester-id/{SEMESTER-ID}/program/{PROGRAM-ID}/year/{YEAR}/semester/{SEMESTER}");
   map.set("approved_url", "academic/course/approved/semester-id/{SEMESTER-ID}/program/{PROGRAM-ID}/year/{YEAR}/semester/{SEMESTER}");
   map.set("approved_call4Application_url", "academic/course/approved-call-for-application/semester-id/{SEMESTER-ID}/program/{PROGRAM-ID}/year/{YEAR}/semester/{SEMESTER}");
   map.set("save_optional", "academic/optional/application/settings/semester-id/{SEMESTER-ID}/program/{PROGRAM-ID}/year/{YEAR}/semester/{SEMESTER}");
-
+  map.set("fetch_students", "academic/optional/application/students/semester-id/{SEMESTER-ID}/course/{COURSE-ID}/status/{STATUS-ID}");
+  map.set("fetch_applications", "academic/optional/application/students/semester-id/{SEMESTER-ID}/course/{COURSE-ID}/status/all");
+  map.set("save_application_status", "academic/optional/application/status/semester-id/{SEMESTER-ID}/course/{COURSE-ID}");
+  map.set("fetch_applications_for_single_student", "academic/optional/application/applied-courses/student-id/{STUDENT-ID}/semester-id/{SEMESTER-ID}/program/{PROGRAM-ID}");
+  map.set("save_application_status_for_single_student", "academic/optional/application/status/semester-id/{SEMESTER-ID}student/{STUDENT-ID}");
+  map.set("save_application_shifting", "academic/optional/application/shift/semester-id/{SEMESTER-ID}/source-course/{SOURCE-COURSE-ID}/target-course/{TARGET-COURSE-ID}");
+  map.set("section_nonAssignedStudents_for_course", "academic/optional/application/non-assigned-section/students/semester-id/{SEMESTER-ID}/program/{PROGRAM-ID}/course/{COURSE-ID}");
+  map.set("sections_info_of_course", "academic/optional/application/assigned-section/students/semester-id/{SEMESTER-ID}/program/{PROGRAM-ID}/course/{COURSE-ID}");
+  map.set("delete_section", "academic/optional/application/semester-id/{SEMESTER-ID}/program/{PROGRAM-ID}/course/{COURSE-ID}/section/{SECTION-NAME}");
+  map.set("save_section", "academic/optional/application/semester-id/{SEMESTER-ID}/program/{PROGRAM-ID}/course/{COURSE-ID}/section/{SECTION-NAME}");
 
   export class OptionalCoursesOffer {
-
     public static $inject = ['appConstants', 'HttpClient', '$scope', '$q'];
 
-    constructor(private appConstants:any, private httpClient:HttpClient, private $scope:IExamRoutineScope, private $q:ng.IQService) {
-
+    constructor(private appConstants:any, private httpClient:HttpClient, private $scope:IOptCourseOffer, private $q:ng.IQService) {
       $scope.optional = {
-        optionalCourses: Array<IOptCourse>(),
-        applicationCourses: Array<IOptCourse>(),
-        approvedCourses: Array<IOptCourse>(),
         approvedCallForApplicationCourses: Array<IOptCourse>(),
-        rejectedStudents: Array<IOptStudent>(),
-        nonAssignedStudents: Array<IOptStudent>(),
-        sections: Array<ISection>(),
         appliedCoursesForSingleStudent: Array<IOptStudent>(),
-        program: '',
+        nonAssignedStudents: Array<IOptStudent>(),
+        applicationStudents:Array<IOptStudent>(),
+        approvedStudents: Array<IOptStudent>(),
+        applicationCourses: Array<IOptCourse>(),
+        rejectedStudents: Array<IOptStudent>(),
+        approvedCourses: Array<IOptCourse>(),
+        optionalCourses: Array<IOptCourse>(),
+        sections: Array<ISection>(),
+        statistics: Array<IOptStatistics>(),
+        targetCourseIdForStudentShifting:'',
+        courseIdForRejectedStudents:'',
+        allStudentCourseId:'',
+        sectionCourseId:'',
         semesterId:'',
-        year:'',
-        semester:''
+        semester:'',
+        program: '',
+        studentId:'',
+        year:''
       };
 
+      $scope.saveApplicationStatusForSingleStudent=this.saveApplicationStatusForSingleStudent.bind(this);
       $scope.applicationSelectionChange = this.applicationSelectionChange.bind(this);
+      $scope.showApplicationForStudent=this.showApplicationForStudent.bind(this);
       $scope.approvedSelectionChange = this.approvedSelectionChange.bind(this);
       $scope.removeApplicationCourse = this.removeApplicationCourse.bind(this);
       $scope.removeApprovedCourse = this.removeApprovedCourse.bind(this);
       $scope.fetchSectionInformation = this.fetchSectionInformation.bind(this);
-      $scope.fetchRejectedStudents = this.fetchRejectedStudents.bind(this);
+      $scope.saveApplicationShifting=this.saveApplicationShifting.bind(this);
       $scope.showAppliedStudents = this.showAppliedStudents.bind(this);
-      $scope.searchApplication = this.searchApplication.bind(this);
+      $scope.saveApplicationStatus=this.saveApplicationStatus.bind(this);
+      $scope.fetchApplicationForSingleStudent = this.fetchApplicationForSingleStudent.bind(this);
+      $scope.fetchApplications=this.fetchApplications.bind(this);
       $scope.addNewSection = this.addNewSection.bind(this);
       $scope.removeSection = this.removeSection.bind(this);
+      $scope.fetchStudents = this.fetchStudents.bind(this);
       $scope.showCourses = this.showCourses.bind(this);
       $scope.saveCourses = this.saveCourses.bind(this);
+      $scope.resetChanges=this.resetChanges.bind(this);
       $scope.saveSection = this.saveSection.bind(this);
-
-      //$('.nav-tabs li:eq(2) a').tab('show')
+      $scope.goToTab=this.goToTab.bind(this);
     }
 
+    private goToTab(tabIndex:number):void{
+      $('.nav-tabs li:eq('+tabIndex+') a').tab('show');
+    }
+
+
     private showCourses():void {
+
+      this.getStatistics(this.urlPlaceholderReplace(map.get("statistics_url"))).then((statArr:Array<IOptStatistics>)=> {
+        this.$scope.optional.statistics = statArr;
+      });
+
+      this.getCrHrInfo(this.urlPlaceholderReplace(map.get("crhr_url"))).then((CrHr:ICrHr)=> {
+        console.log(CrHr);
+        this.$scope.CrHr= CrHr;
+      });
+
 
       this.getCourses(this.urlPlaceholderReplace(map.get("approved_call4Application_url"))).then((optCourseArr:Array<IOptCourse>)=> {
         this.$scope.optional.approvedCallForApplicationCourses = optCourseArr;
@@ -144,7 +205,12 @@ module ums {
           }
         });
       });
+
+
+
     }
+
+
 
     private getCourses(url:string):ng.IPromise<any> {
       var defer = this.$q.defer();
@@ -157,6 +223,35 @@ module ums {
             console.error(response);
           });
       return defer.promise;
+    }
+
+    private getStatistics(url:string):ng.IPromise<any> {
+      var defer = this.$q.defer();
+      this.httpClient.get(url, this.appConstants.mimeTypeJson,
+          (json:any, etag:string) => {
+            var statArr:Array<IOptStatistics> = json.entries;
+            console.log(statArr);
+            defer.resolve(statArr);
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>) => {
+            console.error(response);
+          });
+      return defer.promise;
+
+    }
+
+    private getCrHrInfo(url:string):ng.IPromise<any> {
+      var defer = this.$q.defer();
+      this.httpClient.get(url, this.appConstants.mimeTypeJson,
+          (json:any, etag:string) => {
+            var CrHr:ICrHr = json.CrHr;
+            defer.resolve(CrHr);
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>) => {
+            console.error(response);
+          });
+      return defer.promise;
+
     }
 
     private applicationSelectionChange(index:number, course:IOptCourse) {
@@ -264,16 +359,163 @@ module ums {
           });
     }
 
+    private fetchApplications():void {
+      var url=this.urlPlaceholderReplace(map.get("fetch_applications"));
+      url=url.replace("{COURSE-ID}",this.$scope.optional.allStudentCourseId);
+
+      this.httpClient.get(url, this.appConstants.mimeTypeJson,
+          (json:any, etag:string) => {
+            var appliedStudentArr:Array<IOptStudent> = json.entries;
+            for (var ind in appliedStudentArr) {
+              var student:IOptStudent=appliedStudentArr[ind];
+              student.newStatusId = -1;
+          }
+              this.$scope.optional.applicationStudents = appliedStudentArr;
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>) => {
+            console.error(response);
+          });
+
+    }
+
+  private resetChanges(student_or_course:any):void{
+    student_or_course.newStatusId=-1;
+  }
+
+    private saveApplicationStatus():void{
+
+      var complete_json = {};
+      var approveStudentList=Array<IOptStudent>();
+      var rejectStudentList=Array<IOptStudent>();
+      var removeStudentList=Array<IOptStudent>();
+
+      var statusChangedStudentList:Array<IOptStudent>=new Array<IOptStudent>();
+     for(var ind in  this.$scope.optional.applicationStudents) {
+       var student:IOptStudent = this.$scope.optional.applicationStudents[ind];
+       if(student.statusId!=student.newStatusId && student.newStatusId!=-1){
+         statusChangedStudentList.push(student);
+       }
+     }
+
+      for(var ind in statusChangedStudentList){
+        var student:IOptStudent=statusChangedStudentList[ind];
+        if(student.newStatusId==Utils.SCODE_APPROVED){
+          approveStudentList.push(student);
+        }
+        else if(student.newStatusId==Utils.SCODE_REJECTED  && student.applicationTypeId==Utils.SCODE_APPROVED){
+          removeStudentList.push(student);
+        }
+        else if(student.newStatusId==Utils.SCODE_REJECTED){
+          rejectStudentList.push(student);
+        }
+      }
+      complete_json["approve"] =approveStudentList;
+      complete_json["reject"] = rejectStudentList;
+      complete_json["remove"] = removeStudentList;
+
+      var url=this.urlPlaceholderReplace(map.get("save_application_status"));
+      url=url.replace("{COURSE-ID}",this.$scope.optional.allStudentCourseId);
+
+
+      this.httpClient.put(url, complete_json, 'application/json')
+          .success(() => {
+            $.notific8("Successfully Saved");
+          }).error((data) => {
+          });
+
+    }
+
     private showAppliedStudents(course_id) {
       //$('.nav-tabs li:eq(1) a').tab('show')
     }
+    private showApplicationForStudent(student:IOptStudent):void {
+        $('.nav-tabs li:eq(2) a').tab('show');
+        this.$scope.optional.studentId=student.studentId;
+        this.fetchApplicationForSingleStudent();
+    }
 
-    private fetchRejectedStudents(course_id:string):void {
-      alert(course_id);
-      this.httpClient.get("https://localhost/ums-webservice-common/academic/optional/application/students/semester-id/11012017/course-id/EEE4138_S2014_110500/status/2", this.appConstants.mimeTypeJson,
+    private fetchApplicationForSingleStudent():void {
+
+      var url=this.urlPlaceholderReplace(map.get("fetch_applications_for_single_student"));
+      url=url.replace("{STUDENT-ID}",this.$scope.optional.studentId);
+
+      this.httpClient.get(url, this.appConstants.mimeTypeJson,
           (json:any, etag:string) => {
-            var rejectedStudentArr:Array<IOptStudent> = eval(json.entries);
-            this.$scope.optional.rejectedStudents = rejectedStudentArr;
+            var courseArr:Array<IOptCourse> = json.entries;
+            for(var ind in courseArr){
+              var course:IOptCourse=courseArr[ind];
+              course.newStatusId=-1;
+            }
+            this.$scope.optional.appliedCoursesForSingleStudent = courseArr;
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>) => {
+            console.error(response);
+          });
+
+    }
+
+    private saveApplicationStatusForSingleStudent():void{
+
+      var complete_json = {};
+      var approveCourseList=Array<IOptCourse>();
+      var rejectCourseList=Array<IOptCourse>();
+      var removeCourseList=Array<IOptCourse>();
+
+      var statusChangedCourseList:Array<IOptCourse>=new Array<IOptCourse>();
+      for(var ind in  this.$scope.optional.appliedCoursesForSingleStudent) {
+        var course:IOptCourse = this.$scope.optional.appliedCoursesForSingleStudent[ind];
+        if(course.statusId!=course.newStatusId && course.newStatusId!=-1){
+          statusChangedCourseList.push(course);
+        }
+      }
+
+
+      for(var ind in statusChangedCourseList){
+        var course:IOptCourse=statusChangedCourseList[ind];
+        if(course.newStatusId==Utils.SCODE_APPROVED){
+          approveCourseList.push(course);
+        }
+        else if(course.newStatusId==Utils.SCODE_REJECTED  && course.applicationTypeId==Utils.SCODE_APPROVED){
+          removeCourseList.push(course);
+        }
+        else if(course.newStatusId==Utils.SCODE_REJECTED ){
+          rejectCourseList.push(course);
+        }
+      }
+      complete_json["approve"] =approveCourseList;
+      complete_json["reject"] = rejectCourseList;
+      complete_json["remove"] = removeCourseList;
+
+      var url=this.urlPlaceholderReplace(map.get("save_application_status_for_single_student"));
+      url=url.replace("{STUDENT-ID}",this.$scope.optional.semesterId);
+
+      this.httpClient.put(url, complete_json, 'application/json')
+          .success(() => {
+            $.notific8("Successfully Saved");
+          }).error((data) => {
+          });
+
+    }
+    private fetchStudents(course_id:string,status_id:any,type:string):void {
+      var url=this.urlPlaceholderReplace(map.get("fetch_students"));
+      url=url.replace("{COURSE-ID}",course_id);
+      url=url.replace("{STATUS-ID}",status_id);
+      this.httpClient.get(url, this.appConstants.mimeTypeJson,
+          (json:any, etag:string) => {
+            var studentArr:Array<IOptStudent> = eval(json.entries);
+            this.$scope.optional[type] = studentArr;
+            /*
+            if(type=='rejectedStudents')
+              //$.plugin_dragndrop('.dragndrop').duration(150);
+            else if(type=='approvedStudents'){
+
+            }*/
+          /*
+            if(this.$scope.optional.courseIdForRejectedStudents==this.$scope.optional.targetCourseIdForStudentShifting){
+                alert("For shifting source and target course id should be different.");
+                return;
+            }*/
+
             $.plugin_dragndrop('.dragndrop').duration(150);
           },
           (response:ng.IHttpPromiseCallbackArg<any>) => {
@@ -281,11 +523,94 @@ module ums {
           });
     }
 
+    private  saveApplicationShifting():void {
+      this.validateShifting();
+
+      var complete_json = {};
+      var shiftedStudentArray = [];
+      $(".jqdragndrop-drop.D > .jqselection-selectable > .dragableObject").each(function() { shiftedStudentArray.push($(this).html()) });
+
+      if(shiftedStudentArray.length==0) return;
+
+      complete_json["students"] =shiftedStudentArray;
+
+      var url=this.urlPlaceholderReplace(map.get("save_application_shifting"));
+      url=url.replace("{SOURCE-COURSE-ID}",this.$scope.optional.courseIdForRejectedStudents);
+      url=url.replace("{TARGET-COURSE-ID}",this.$scope.optional.targetCourseIdForStudentShifting);
+
+
+      this.httpClient.put(url, complete_json, 'application/json')
+          .success(() => {
+            $.notific8("Successfully Saved");
+            $(".jqdragndrop-drop.D").html("");
+          }).error((data) => {
+          });
+  }
+
+    private validateShifting():boolean{
+      var targetCourseStudentArray = [];
+      $(".badge.badge-default").each(function() { targetCourseStudentArray.push($(this).html()) });
+
+      var shiftedStudentArray = [];
+      $(".jqdragndrop-drop.D > .jqselection-selectable > .dragableObject").each(function() { shiftedStudentArray.push($(this).html()) });
+
+
+      var quotedP1 = '"' + targetCourseStudentArray.join('", "') + '"';
+      var quotedP2 = '"' + shiftedStudentArray.join('", "') + '"';
+
+      console.log(quotedP1);
+      console.log(quotedP2);
+
+      var duplicateStudentArr=this.intersect(targetCourseStudentArray,shiftedStudentArray);
+      console.log(duplicateStudentArr);
+
+
+      if(duplicateStudentArr.length>0){
+        for(var ind in duplicateStudentArr){
+          var studentId=duplicateStudentArr[ind];
+            $("#"+studentId).css({'background-color': 'pink'});
+        }
+
+//        alert("We found some duplicate student in a same course. Duplicate students are not allowed. Press ok to return back the duplicate students.");
+
+        for(var ind in duplicateStudentArr) {
+          var studentId=duplicateStudentArr[ind];
+          document.getElementById(studentId+'').style.backgroundColor = '';
+
+          var cloneVersion = $("#"+studentId)[0].outerHTML;
+
+          $("#"+studentId).remove();
+          $('.jqdragndrop-drop.C').html($('.jqdragndrop-drop.C').html() +cloneVersion);
+
+        }
+        $.plugin_dragndrop('.dragndrop').duration(150);
+
+      }
+      return false;
+    }
+
+
+
+    private intersect(arr1, arr2):Array<number> {
+      var results:Array<number> = new Array<number>();
+
+      for (var i = 0; i < arr1.length; i++) {
+        if (arr2.indexOf(arr1[i]) !== -1) {
+          results.push(arr1[i]);
+        }
+      }
+    return results;
+  }
+
     private fetchSectionInformation(avc:number):void {
 
-      var courseId = $("#sectionCourseId").val();
+      var  courseId= $("#sectionCourseId").val();
+      if(courseId=="") return;
 
-      this.httpClient.get("https://localhost/ums-webservice-common/academic/optional/application/non-assigned-section/students/semester-id/11012017/program/110500/course-id/EEE4154_S2014_110500", this.appConstants.mimeTypeJson,
+      var url=this.urlPlaceholderReplace(map.get("section_nonAssignedStudents_for_course"));
+      url=url.replace("{COURSE-ID}",courseId);
+
+      this.httpClient.get(url, this.appConstants.mimeTypeJson,
           (json:any, etag:string) => {
             var nonAssignedStudentsArr:Array<IOptStudent> = json.entries;
             this.$scope.optional.nonAssignedStudents = nonAssignedStudentsArr;
@@ -295,9 +620,17 @@ module ums {
             console.error(response);
           });
 
-      this.httpClient.get("https://localhost/ums-webservice-common/academic/optional/application/assigned-section/students/semester-id/11012017/program/110500/course-id/EEE4154_S2014_110500", this.appConstants.mimeTypeJson,
+      url=this.urlPlaceholderReplace(map.get("sections_info_of_course"));
+      url=url.replace("{COURSE-ID}",courseId);
+
+      this.httpClient.get(url, this.appConstants.mimeTypeJson,
           (json:any, etag:string) => {
-            var sectionArr:Array<IOptStudent> = json.entries;
+            var sectionArr:Array<ISection> = json.entries;
+            for(var ind in sectionArr){
+              sectionArr[ind].index=ind;
+              sectionArr[ind].id=ind;
+              sectionArr[ind].type="saved";
+            }
             this.$scope.optional.sections = sectionArr;
             $.plugin_dragndrop('.dragndrop1').duration(150);
           },
@@ -309,6 +642,8 @@ module ums {
     }
 
     private addNewSection():void {
+      if($("#sectionCourseId").val()=="") return;
+
       var index = Utils.arrayMaxIndex(this.$scope.optional.sections);
       var item = this.addNewSectionRow(index);
       this.$scope.optional.sections.splice(0, 0, item);
@@ -318,27 +653,37 @@ module ums {
 
 
     private addNewSectionRow(index:number) {
-      var sectionRow:ISection = {
+      var sectionRow:ISection;
+      sectionRow = {
         index: index,
+        id: index,
         courseId: '',
         sectionName: '',
         type: 'new',
         students: Array<IOptStudent>()
-      }
+      };
       return sectionRow;
     }
 
     private removeSection(index:number):void {
-      var section_arr = eval(this.$scope.optional.sections);
-      var targetIndex = Utils.findIndex(section_arr, index.toString());
 
-      console.log(this.$scope.optional.sections[targetIndex]);
+     var section_arr = this.$scope.optional.sections;
+      var targetIndex = Utils.findIndex(section_arr, index.toString());
+      //alert(targetIndex);
+      var courseId = $("#sectionCourseId").val();
+
+      var url=this.urlPlaceholderReplace(map.get("delete_section"));
+      url=url.replace("{COURSE-ID}",courseId);
+      url=url.replace("{SECTION-NAME}",this.$scope.optional.sections[targetIndex].sectionName);
+
+
       if (this.$scope.optional.sections[targetIndex].type != "new") {
-        this.httpClient.delete("https://localhost/ums-webservice-common/academic/optional/application/semester-id/11012017/program/110500/course/EEE4154_S2014_110500/section/Section A")
+        this.httpClient.delete(url)
             .success(() => {
-              alert("ifti");
+              $.notific8("Removed Section");
             }).error((data) => {
             });
+
 
 
       }
@@ -347,29 +692,30 @@ module ums {
 
     }
 
-    private saveSection():void {
-      var complete_json = {};
+    private saveSection(section:ISection):void {
+      var courseId = $("#sectionCourseId").val();
 
-      this.httpClient.put("https://localhost/ums-webservice-common/academic/optional/application/semester-id/11012017/program/110500/course/EEE4154_S2014_110500/section/Section A", complete_json, 'application/json')
+      var url=this.urlPlaceholderReplace(map.get("delete_section"));
+      url=url.replace("{COURSE-ID}",courseId);
+      url=url.replace("{SECTION-NAME}",section.sectionName);
+
+
+      var sectionStudents = [];
+      $("#section"+section.index+" > .jqselection-selectable > .dragableObject").each(function() { sectionStudents.push($(this).html()) });
+      var students =  sectionStudents.join(',');
+      //alert(students);
+      var complete_json = {};
+      complete_json["students"] =students;
+      console.log(complete_json);
+
+      this.httpClient.put(url, complete_json, 'application/json')
           .success(() => {
-            alert("ifti1");
+            //alert("ifti1");
           }).error((data) => {
           });
     }
 
-    private searchApplication():void {
 
-      this.httpClient.get("https://localhost/ums-webservice-common/academic/optional/application/applied-courses/student-id/150105001/semester-id/11012017/program/1", this.appConstants.mimeTypeJson,
-          (json:any, etag:string) => {
-            var courseArr:Array<IOptCourse> = eval(json.entries);
-            this.$scope.optional.appliedCoursesForSingleStudent = courseArr;
-          },
-          (response:ng.IHttpPromiseCallbackArg<any>) => {
-            console.error(response);
-          });
-
-
-    }
 private urlPlaceholderReplace(inputUrl:string):string{
   var url=inputUrl.replace("{SEMESTER-ID}",this.$scope.optional.semesterId);
   url=url.replace("{PROGRAM-ID}",this.$scope.optional.program);

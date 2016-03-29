@@ -23,8 +23,8 @@
     '/studentProfile': {title: 'Student Profile ', 'breadcrumb': ['Student Profile']},
     '/classRoomInfo': {title: 'Class Room Information ', 'breadcrumb': ['Class Room Information']},
     '/examRoutine': {title: 'Exam Routine ', 'breadcrumb': ['Exam Routine']},
+    '/optionalCoursesApplication': {title: 'Optional Courses ', 'breadcrumb': ['Optional Course Application']},
     '/optionalCoursesOffer': {title: 'Optional Courses ', 'breadcrumb': ['Optional Course Settings']}
-
 
   };
 

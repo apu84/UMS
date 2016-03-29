@@ -9,9 +9,12 @@ import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
 import org.ums.common.academic.resource.ResourceHelper;
 import org.ums.common.builder.NavigationBuilder;
-import org.ums.domain.model.mutable.MutableNavigation;
 import org.ums.domain.model.immutable.*;
-import org.ums.manager.*;
+import org.ums.domain.model.mutable.MutableNavigation;
+import org.ums.manager.AdditionalRolePermissionsManager;
+import org.ums.manager.NavigationManager;
+import org.ums.manager.PermissionManager;
+import org.ums.manager.UserManager;
 import org.ums.processor.navigation.NavigationProcessor;
 
 import javax.json.*;
@@ -57,35 +60,30 @@ public class MainNavigationHelper extends ResourceHelper<Navigation, MutableNavi
   }
 
   public JsonObject getNavigationItems(final UriInfo pUriInfo) throws Exception {
+    JsonObjectBuilder root = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+
     Subject subject = SecurityUtils.getSubject();
     String userId = subject.getPrincipal().toString();
     User user = mUserManager.get(userId);
 
     Role primaryRole = user.getPrimaryRole();
-    List<Permission> rolePermissions = mPermissionManager.getPermissionByRole(primaryRole);
+    children.add(getRoleWisePermission(primaryRole, pUriInfo, "primaryRole"));
+
     Set<String> permissions = new HashSet<>();
-    for (Permission permission : rolePermissions) {
-      permissions.addAll(permission.getPermissions());
-    }
-
-    JsonObjectBuilder root = Json.createObjectBuilder();
-    JsonArrayBuilder children = Json.createArrayBuilder();
-
-    JsonObjectBuilder typedItems = Json.createObjectBuilder();
-    typedItems.add("type", "primaryRole");
-    typedItems.add("name", primaryRole.getName());
-    typedItems.add("items", buildNavigation(permissions, pUriInfo));
-    children.add(typedItems);
-
-    permissions = new HashSet<>();
 
     List<AdditionalRolePermissions> additionalRolePermissions = mAdditionalRolePermissionsManager.getPermissionsByUser(userId);
     if (additionalRolePermissions.size() > 0) {
       for (AdditionalRolePermissions additionalRolePermission : additionalRolePermissions) {
-        permissions.addAll(additionalRolePermission.getPermission());
+        //if there is any additional role
+        if (additionalRolePermission.getRoleId() > 0) {
+          children.add(getRoleWisePermission(additionalRolePermission.getRole(), pUriInfo, "additionalRole"));
+        } else {
+          permissions.addAll(additionalRolePermission.getPermission());
+        }
       }
 
-      typedItems = Json.createObjectBuilder();
+      JsonObjectBuilder typedItems = Json.createObjectBuilder();
       typedItems.add("type", "additionalPermission");
       typedItems.add("name", "AdditionalPermission");
       typedItems.add("items", buildNavigation(permissions, pUriInfo));
@@ -137,7 +135,7 @@ public class MainNavigationHelper extends ResourceHelper<Navigation, MutableNavi
     JsonArrayBuilder items = Json.createArrayBuilder();
 
     List<Navigation> navigationItems = mNavigationManager.getByPermissions(permissions);
-    navigationItems.sort((s1, s2) ->  s1.getViewOrder().compareTo(s2.getViewOrder()));
+    navigationItems.sort((s1, s2) -> s1.getViewOrder().compareTo(s2.getViewOrder()));
     List<Map<String, Object>> navigationMaps = insertChildMenu(navigationItems);
 
     for (Map<String, Object> navigationMap : navigationMaps) {
@@ -171,5 +169,19 @@ public class MainNavigationHelper extends ResourceHelper<Navigation, MutableNavi
       job.add(entry.getKey(), entry.getValue());
     }
     return job;
+  }
+
+  private JsonObjectBuilder getRoleWisePermission(final Role pRole, final UriInfo pUriInfo, final String pRoleType) throws Exception {
+    JsonObjectBuilder typedItems = Json.createObjectBuilder();
+    List<Permission> rolePermissions = mPermissionManager.getPermissionByRole(pRole);
+    Set<String> permissions = new HashSet<>();
+    for (Permission permission : rolePermissions) {
+      permissions.addAll(permission.getPermissions());
+    }
+
+    typedItems.add("type", pRoleType);
+    typedItems.add("name", pRole.getName());
+    typedItems.add("items", buildNavigation(permissions, pUriInfo));
+    return typedItems;
   }
 }

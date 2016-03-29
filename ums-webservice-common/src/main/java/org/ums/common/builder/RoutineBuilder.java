@@ -21,6 +21,7 @@ public class RoutineBuilder implements Builder<Routine, MutableRoutine> {
     pBuilder.add("semesterId", pReadOnly.getSemester().getId());
     pBuilder.add("courseId", pReadOnly.getCourseId());
     pBuilder.add("programId", pReadOnly.getProgram().getId());
+
     pBuilder.add("day", pReadOnly.getDay());
     pBuilder.add("section", pReadOnly.getSection());
     pBuilder.add("academicYear", pReadOnly.getAcademicYear());

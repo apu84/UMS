@@ -8,6 +8,12 @@ import org.ums.manager.CourseManager;
 import java.util.List;
 
 public class CourseDaoDecorator extends ContentDaoDecorator<Course, MutableCourse, String, CourseManager> implements CourseManager {
+
+  @Override
+  public List<Course> getByYearSemester(String pSemesterId, String pProgramId, int year, int semester) {
+    return getManager().getByYearSemester(pSemesterId,pProgramId,year,semester);
+  }
+
   @Override
   public List<Course> getBySyllabus(String pSyllabusId) {
     return getManager().getBySyllabus(pSyllabusId);
