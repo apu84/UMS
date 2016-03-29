@@ -37,6 +37,7 @@
 /// <reference path='controller/syllabus/NewSyllabus.ts'/>
 /// <reference path='controller/syllabus/GridSyllabus.ts'/>
 /// <reference path='controller/semester/SemesterEnrollment.ts'/>
+/// <reference path='controller/student/StudentProfile.ts'/>
 
 /// <reference path='directive/LeftMenu.ts'/>
 /// <reference path='directive/DisableOperation.ts'/>

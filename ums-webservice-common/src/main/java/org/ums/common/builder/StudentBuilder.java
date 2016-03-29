@@ -1,6 +1,7 @@
 package org.ums.common.builder;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.mutable.MutableStudent;
@@ -16,6 +17,7 @@ import javax.ws.rs.core.UriInfo;
 import java.text.DateFormat;
 
 @Component
+@Qualifier("StudentBuilder")
 public class StudentBuilder implements Builder<Student, MutableStudent> {
   @Autowired
   private DateFormat mDateFormat;
@@ -34,6 +36,7 @@ public class StudentBuilder implements Builder<Student, MutableStudent> {
     pBuilder.add("departmentId", department.getId());
     pBuilder.add("department", pUriInfo.getBaseUriBuilder().path("academic").path("department")
         .path(String.valueOf(department.getId())).build().toString());
+    pBuilder.add("departmentName", department.getLongName());
 
     Semester semester = (Semester) pLocalCache.cache(() -> pStudent.getSemester(), pStudent.getSemesterId(), Semester.class);
     pBuilder.add("semesterId", semester.getId());
@@ -45,6 +48,7 @@ public class StudentBuilder implements Builder<Student, MutableStudent> {
     pBuilder.add("programId", program.getId());
     pBuilder.add("program", pUriInfo.getBaseUriBuilder().path("academic").path("program")
         .path(String.valueOf(program.getId())).build().toString());
+    pBuilder.add("programName", program.getLongName());
 
     pBuilder.add("year", pStudent.getCurrentYear());
     pBuilder.add("academicSemester", pStudent.getCurrentAcademicSemester());

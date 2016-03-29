@@ -3,6 +3,7 @@ package org.ums.common.academic.resource;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.ums.common.Resource;
@@ -21,6 +22,7 @@ import javax.ws.rs.core.Response;
 @Path("/academic/student/profile")
 public class StudentProfile extends Resource {
   @Autowired
+  @Qualifier("StudentProfileHelper")
   StudentProfileHelper mResourceHelper;
 
   @PUT

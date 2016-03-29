@@ -2,6 +2,7 @@ package org.ums.common.academic.resource.helper;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.ums.persistent.model.PersistentStudent;
@@ -28,6 +29,7 @@ import java.net.URI;
 import java.util.Base64;
 
 @Component
+@Qualifier("StudentResourceHelper")
 public class StudentResourceHelper extends ResourceHelper<Student, MutableStudent, String> {
   @Autowired
   RoleManager mRoleManager;
@@ -39,6 +41,7 @@ public class StudentResourceHelper extends ResourceHelper<Student, MutableStuden
   private StudentManager mManager;
 
   @Autowired
+  @Qualifier("StudentBuilder")
   private StudentBuilder mBuilder;
 
   //TODO: Move this to service layer

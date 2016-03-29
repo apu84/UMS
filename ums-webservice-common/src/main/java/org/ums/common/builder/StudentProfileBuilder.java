@@ -1,5 +1,6 @@
 package org.ums.common.builder;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.mutable.MutableStudent;
@@ -7,6 +8,7 @@ import org.ums.domain.model.mutable.MutableStudent;
 import javax.json.JsonObject;
 
 @Component
+@Qualifier("StudentProfileBuilder")
 public class StudentProfileBuilder extends StudentBuilder {
   @Override
   public void build(final MutableStudent pMutableStudent,
@@ -17,7 +19,6 @@ public class StudentProfileBuilder extends StudentBuilder {
     pMutableStudent.setPermanentAddress(pJsonObject.getString("permanentAddress"));
     pMutableStudent.setMobileNo(pJsonObject.getString("mobileNo"));
     pMutableStudent.setPhoneNo(pJsonObject.getString("phoneNo"));
-    pMutableStudent.setBloodGroup(pJsonObject.getString("bloodGroup"));
     pMutableStudent.setEmail(pJsonObject.getString("email"));
   }
 }

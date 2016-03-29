@@ -60,7 +60,7 @@
                             </tr>
                             <tr>
                                 <td><b>Birth Date</b></td>
-                                <td>{{student.brithDate}}</td>
+                                <td>{{student.dateOfBirth}}</td>
                             </tr>
                             <tr>
                                 <td><b>Gender</b></td>
@@ -78,7 +78,7 @@
                             <tbody>
                             <tr>
                                 <td width="50%"><b>Dept./School</b></td>
-                                <td>{{student.department}}</td>
+                                <td>{{student.departmentName}}</td>
                             </tr>
                             <tr>
                                 <td><b>Program</b></td>
@@ -134,44 +134,65 @@
                             <div class="col-md-12">
                                 <div class="tab-content">
                                     <div id="tab-profile-setting" class="tab-pane fade in active">
-                                        <form  action="" class="form-horizontal" data-validate="" data-onvalidate="submit">
+                                        <form action="" class="form-horizontal" data-validate=""
+                                              data-onvalidate="saveProfile">
                                             <div class="form-group">
                                                 <label class="col-sm-3 control-label">Mobile Number</label>
                                                 <div class="col-sm-9 controls">
-                                                    <input type="text" placeholder="first name" class="form-control" data-ng-model="student.mobileNumber"/>
+                                                    <input type="text" placeholder="Mobile No."
+                                                           class="form-control required"
+                                                           data-ng-model="student.mobileNo"
+                                                           data-ng-disabled="!editProfileMode"/>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label class="col-sm-3 control-label">Phone Number</label>
                                                 <div class="col-sm-9 controls">
-                                                    <input type="text" placeholder="last name" class="form-control" data-ng-model="student.phoneNumber"/>
+                                                    <input type="text" placeholder="Phone No."
+                                                           class="form-control required" data-ng-model="student.phoneNo"
+                                                           data-ng-disabled="!editProfileMode"/>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label class="col-sm-3 control-label">Email</label>
                                                 <div class="col-sm-9 controls">
-                                                    <input type="email" placeholder="email@yourcompany.com" class="form-control" data-ng-model="student.email"/>
+                                                    <input type="email" placeholder="email@yourcompany.com"
+                                                           class="form-control required" data-ng-model="student.email"
+                                                           data-ng-disabled="!editProfileMode"/>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="col-sm-3 control-label">Present Address</label>
                                                 <div class="col-sm-9 controls">
-                                                    <textarea rows="3" class="form-control" data-ng-model="student.presentAddress"></textarea>
+                                                    <textarea rows="3" class="form-control required"
+                                                              data-ng-model="student.presentAddress"
+                                                              data-ng-disabled="!editProfileMode"></textarea>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label class="col-sm-3 control-label">Permanent Address</label>
                                                 <div class="col-sm-9 controls">
-                                                    <textarea rows="3" class="form-control" data-ng-model="student.permanentAddress"></textarea>
+                                                    <textarea rows="3" class="form-control required"
+                                                              data-ng-model="student.permanentAddress"
+                                                              data-ng-disabled="!editProfileMode"></textarea>
                                                 </div>
                                             </div>
                                             <div class="form-group mbn">
                                                 <label class="col-sm-3 control-label"></label>
                                                 <div class="col-sm-9 controls">
-                                                    <button type="submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;
-                                                        Save
-                                                    </button>&nbsp; &nbsp;<a href="#" class="btn btn-default">Cancel</a>
+                                                    <button type="button" class="btn" data-ng-if="!editProfileMode"
+                                                            data-ng-click="toggleEditProfile()">
+                                                        <i class="fa fa-edit"></i>&nbsp;Edit
+                                                    </button>
+                                                    <button type="submit" class="btn btn-success"
+                                                            data-ng-if="editProfileMode">
+                                                        <i class="fa fa-save"></i>&nbsp;Save
+                                                    </button>
+                                                    <button type="button" class="btn" data-ng-if="editProfileMode"
+                                                            data-ng-click="cancelEditProfile()">
+                                                        <i class="fa fa-edit"></i>&nbsp;Cancel
+                                                    </button>
                                                 </div>
                                             </div>
                                         </form>

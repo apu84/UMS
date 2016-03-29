@@ -46,7 +46,9 @@
 
   <bean id="bearerTokenRealm" class="org.ums.security.bearertoken.BearerTokenAuthenticatingRealm"/>
 
+<!--
   <bean id="memoryConstrainedCacheManager" class="org.apache.shiro.cache.MemoryConstrainedCacheManager"/>
+-->
 
   <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
     <property name="realms">
