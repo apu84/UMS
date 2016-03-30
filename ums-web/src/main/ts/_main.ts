@@ -50,6 +50,7 @@
 /// <reference path='directive/BindHtml.ts'/>
 /// <reference path='directive/DatePicker.ts'/>
 /// <reference path='directive/Spinner.ts'/>
+/// <reference path='directive/ProfilePicture.ts'/>
 
 /// <reference path='interceptor/Unauthorized.ts'/>
 
