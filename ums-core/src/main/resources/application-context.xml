@@ -57,10 +57,15 @@
     <property name="allowedRole" value="student"/>
   </bean>
 
+  <bean id="officialsHomeProcessor" class="org.ums.processor.userhome.OfficialsHomeProcessor">
+    <property name="allowedRole" value="dpregistrar"/>
+  </bean>
+
   <bean id="userHomeService" class="org.ums.services.UserHomeServiceImpl">
     <property name="userHomeProcessors">
       <list>
         <ref bean="studentHomeProcessor"/>
+        <ref bean="officialsHomeProcessor"/>
       </list>
     </property>
   </bean>

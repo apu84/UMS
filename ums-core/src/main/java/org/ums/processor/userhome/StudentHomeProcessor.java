@@ -2,23 +2,15 @@ package org.ums.processor.userhome;
 
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.ums.domain.model.immutable.Role;
 import org.ums.domain.model.immutable.Student;
-import org.ums.domain.model.immutable.User;
 import org.ums.manager.StudentManager;
-import org.ums.manager.UserManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class StudentHomeProcessor implements UserHomeProcessor {
-  private static String ALLOWED_ROLES_SEPARATOR = ",";
-  private String mAllowedRole;
-
-  @Autowired
-  private UserManager mUserManager;
+public class StudentHomeProcessor extends AbstractUserHomeProcessor {
   @Autowired
   private StudentManager mStudentManager;
 
@@ -30,50 +22,33 @@ public class StudentHomeProcessor implements UserHomeProcessor {
     List<Map<String, String>> profileContent = new ArrayList<>();
 
     Map<String, String> studentName = new HashMap<>();
-    studentName.put("Name", student.getFullName());
+    studentName.put("key", "Name");
+    studentName.put("value", student.getFullName());
     profileContent.add(studentName);
 
     Map<String, String> department = new HashMap<>();
-    studentName.put("Department", student.getDepartment().getLongName());
+    department.put("key", "Department");
+    department.put("value", student.getDepartment().getLongName());
     profileContent.add(department);
 
     Map<String, String> yearSemester = new HashMap<>();
-    studentName.put("Year/ Semester", student.getCurrentYear() + "/" + student.getCurrentAcademicSemester());
+    yearSemester.put("key", "Year/ Semester");
+    yearSemester.put("value", student.getCurrentYear() + "/" + student.getCurrentAcademicSemester());
     profileContent.add(yearSemester);
 
     Map<String, String> currentEnrolledSemester = new HashMap<>();
-    studentName.put("Current semester", student.getSemester().getName());
+    currentEnrolledSemester.put("key", "Current semester");
+    currentEnrolledSemester.put("value", student.getSemester().getName());
     profileContent.add(currentEnrolledSemester);
 
     Map<String, String> enrollmentStatus = new HashMap<>();
-    studentName.put("Current enrollment status", student.getEnrollmentType().toString());
+    enrollmentStatus.put("key", "Current enrollment status");
+    enrollmentStatus.put("value", student.getEnrollmentType().toString());
     profileContent.add(enrollmentStatus);
 
     return profileContent;
   }
 
-  @Override
-  public boolean supports(Subject pCurrentSubject) throws Exception {
-    String userId = pCurrentSubject.getPrincipal().toString();
-    User user = mUserManager.get(userId);
-
-    if (user != null) {
-      Role userRole = user.getPrimaryRole();
-      if (mAllowedRole.contains(ALLOWED_ROLES_SEPARATOR)) {
-        String[] allowedRoles = mAllowedRole.split(ALLOWED_ROLES_SEPARATOR);
-
-        for (String allowedRole : allowedRoles) {
-          if (allowedRole.equalsIgnoreCase(userRole.getName())) {
-            return true;
-          }
-        }
-      } else {
-        return userRole.getName().equalsIgnoreCase(mAllowedRole);
-      }
-    }
-
-    return false;
-  }
 
   public String getAllowedRole() {
     return mAllowedRole;
