@@ -28,14 +28,16 @@ public class NavigationByPermissionResolver extends NavigationDaoDecorator {
     if (navigationList != null && navigationList.size() > 0) {
       permittedNavigation = new ArrayList<>();
 
-      for (String permissionString : pPermissions) {
-        Permission permission = permissionResolver.resolvePermission(permissionString);
+      if (pPermissions != null) {
+        for (String permissionString : pPermissions) {
+          Permission permission = permissionResolver.resolvePermission(permissionString);
 
-        for (Navigation navigation : navigationList) {
-          String navigationPermissionString = navigation.getPermission();
-          Permission navigationPermission = permissionResolver.resolvePermission(navigationPermissionString);
-          if (permission.implies(navigationPermission)) {
-            permittedNavigation.add(navigation);
+          for (Navigation navigation : navigationList) {
+            String navigationPermissionString = navigation.getPermission();
+            Permission navigationPermission = permissionResolver.resolvePermission(navigationPermissionString);
+            if (permission.implies(navigationPermission)) {
+              permittedNavigation.add(navigation);
+            }
           }
         }
       }
