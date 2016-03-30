@@ -353,6 +353,12 @@ module ums {
           {id: "", name: "Select Enrollment Type"},
           {id: "0", name: "Temporary"},
           {id: "1", name: "Permanent"}
+        ],
+        applicationTypes:[
+          {id:"",name:"Select Application Type"},
+          {id:"0",name:"Academic"},
+          {id:"1",name:"Semester Withdraw"},
+          {id:"2",name:"Optional Course Selection"}
         ]
       };
     }

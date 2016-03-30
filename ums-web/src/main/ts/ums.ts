@@ -223,10 +223,10 @@ module ums {
                     }]
                 }
             })
-        .state('semesterWithdrawForStudent', {
-          url: "/semesterWithdrawForStudent",
-          controller: 'SemesterWithdrawForStudent',
-          templateUrl: 'views/semester/semester-withdraw-student.html',
+        .state('applicationsStudent', {
+          url: "/applicationsStudent",
+          controller: 'ApplicationsStudent',
+          templateUrl: 'views/semester/applications-student.html',
           resolve: {
             loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
               return $ocLazyLoad.load({

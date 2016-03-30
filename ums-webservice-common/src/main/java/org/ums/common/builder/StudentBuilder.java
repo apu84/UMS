@@ -63,6 +63,8 @@ public class StudentBuilder implements Builder<Student, MutableStudent> {
     pBuilder.add("phoneNo", pStudent.getPhoneNo());
     pBuilder.add("bloodGroup", pStudent.getBloodGroup());
     pBuilder.add("email", pStudent.getEmail());
+    pBuilder.add("year",pStudent.getCurrentYear());
+    pBuilder.add("academicSemester",pStudent.getCurrentAcademicSemester());
     pBuilder.add("guardianName", pStudent.getGuardianName());
     pBuilder.add("guardianMobileNo", pStudent.getGuardianMobileNo());
     pBuilder.add("guardianPhoneNo", pStudent.getGuardianPhoneNo());
