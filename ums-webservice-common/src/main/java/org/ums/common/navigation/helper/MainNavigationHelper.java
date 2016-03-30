@@ -76,7 +76,7 @@ public class MainNavigationHelper extends ResourceHelper<Navigation, MutableNavi
     if (additionalRolePermissions.size() > 0) {
       for (AdditionalRolePermissions additionalRolePermission : additionalRolePermissions) {
         //if there is any additional role
-        if (additionalRolePermission.getRoleId() > 0) {
+        if (additionalRolePermission.getRoleId() != null) {
           children.add(getRoleWisePermission(additionalRolePermission.getRole(), pUriInfo, "additionalRole"));
         } else {
           permissions.addAll(additionalRolePermission.getPermission());

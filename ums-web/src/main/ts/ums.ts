@@ -370,7 +370,10 @@ module ums {
                   'vendors/jquery-validate/jquery.validate.min.js',
                   'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
                   'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
-                  'vendors/jquery-notify/jquery.notify.js'
+                  'vendors/jquery-notify/jquery.notify.js',
+                  'vendors/select2/select2-madmin.css',
+                  'vendors/bootstrap-select/bootstrap-select.min.css',
+                  'vendors/multi-select/css/multi-select-madmin.css'
                 ]
               });
             }]
