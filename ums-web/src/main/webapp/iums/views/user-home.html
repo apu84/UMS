@@ -5,22 +5,17 @@
         <div class="panel">
           <div class="panel-body shadowPanel">
             <div class="form-group">
-              <div class="text-center mbl"> <img class="img-circle" style="border: 5px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0.25);" src="userPhotos/128.jpg"> </div>
+              <div class="text-center mbl">
+                <img class="img-circle" style="border: 5px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0.25);" src=""
+                     data-profile-picture="">
+              </div>
             </div>
             <div>
               <table class="table table-striped table-hover">
                 <tbody>
-                <tr>
-                  <td width="50%"><b>User Name</b></td>
-                  <td>Mr. Md. Muniruzzaman</td>
-                </tr>
-                <tr>
-                  <td width="50%"><b>Office</b></td>
-                  <td>Office of the Registrar</td>
-                </tr>
-                <tr>
-                  <td width="50%"><b>Designation</b></td>
-                  <td>Deputy Registrar</td>
+                <tr data-ng-repeat="property in userHome">
+                  <td width="50%"><b>{{property.key}}</b></td>
+                  <td>{{property.value}}</td>
                 </tr>
                 </tbody>
               </table>
