@@ -345,7 +345,17 @@ module ums {
         })
         .state('studentProfile', {
           url: "/studentProfile",
-          templateUrl: 'views/student/student-profile.html'
+          controller: "StudentProfile",
+          templateUrl: 'views/student/student-profile.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: [
+                  'vendors/jquery-validate/jquery.validate.min.js'
+                ]
+              });
+            }]
+          }
         })
         .state('assignRole', {
           url: "/assignRole",

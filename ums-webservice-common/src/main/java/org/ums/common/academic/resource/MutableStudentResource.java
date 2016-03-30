@@ -2,6 +2,7 @@ package org.ums.common.academic.resource;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.ums.common.Resource;
 import org.ums.common.academic.resource.helper.StudentResourceHelper;
 
@@ -13,6 +14,7 @@ import javax.ws.rs.core.Response;
 
 public class MutableStudentResource extends Resource {
   @Autowired
+  @Qualifier("StudentResourceHelper")
   StudentResourceHelper mResourceHelper;
 
   @POST

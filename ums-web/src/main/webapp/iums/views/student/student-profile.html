@@ -10,19 +10,19 @@
                     <tbody>
                     <tr>
                         <td width="50%">Student Id</td>
-                        <td>STUDENT_ID</td>
+                        <td>{{student.id}}</td>
                     </tr>
                     <tr>
                         <td width="50%">Student Name</td>
-                        <td>STUDENT_NAME</td>
+                        <td>{{student.fullName}}</td>
                     </tr>
                     <tr>
-                        <td width="50%">SEMESTER</td>
-                        <td>1-2</td>
+                        <td width="50%">Semester</td>
+                        <td>{{student.semesterName}}</td>
                     </tr>
                     <tr>
-                        <td width="50%">Init Semester</td>
-                        <td>Spring, 2015</td>
+                        <td width="50%">Year/Semester</td>
+                        <td>{{student.year}}/{{student.academicSemester}}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -48,27 +48,27 @@
                             <tbody>
                             <tr>
                                 <td width="50%"><b>Student Name</b></td>
-                                <td>{STUDENT_NAME}</td>
+                                <td>{{student.fullName}}</td>
                             </tr>
                             <tr>
                                 <td><b>Father Name</b></td>
-                                <td>{FATHER_NAME}</td>
+                                <td>{{student.fatherName}}</td>
                             </tr>
                             <tr>
                                 <td><b>Mother Name</b></td>
-                                <td>{MOTHER_NAME}</td>
+                                <td>{{student.motherName}}</td>
                             </tr>
                             <tr>
                                 <td><b>Birth Date</b></td>
-                                <td>{BIRTH_DATE}</td>
+                                <td>{{student.dateOfBirth}}</td>
                             </tr>
                             <tr>
                                 <td><b>Gender</b></td>
-                                <td>{GENDER}</td>
+                                <td>{{student.gender}}</td>
                             </tr>
                             <tr>
                                 <td><b>Blood Group</b></td>
-                                <td>{BLOOD_GROUP}</td>
+                                <td>{{student.bloodGroup}}</td>
                             </tr>
                             </tbody>
                         </table>
@@ -78,19 +78,15 @@
                             <tbody>
                             <tr>
                                 <td width="50%"><b>Dept./School</b></td>
-                                <td>{DEPT_NAME}</td>
+                                <td>{{student.departmentName}}</td>
                             </tr>
                             <tr>
                                 <td><b>Program</b></td>
-                                <td>{PROGRAM_NAME}</td>
-                            </tr>
-                            <tr>
-                                <td><b>Admission Semester</b></td>
-                                <td>{ADMISSION_SEMESTER}</td>
+                                <td>{{student.programName}}</td>
                             </tr>
                             <tr>
                                 <td><b>Current Year-Semester</b></td>
-                                <td>{CURRENT_YEAR_SEMESTER}</td>
+                                <td>{{student.year}}/{{student.academicSemester}}</td>
                             </tr>
                             <tr>
                                 <td><b>CGPA</b></td>
@@ -116,19 +112,19 @@
                             <tbody>
                             <tr>
                                 <td width="50%"><b>Guardian Name</b></td>
-                                <td>{GUARDIAN_NAME}</td>
+                                <td>{{student.guardianName}}</td>
                             </tr>
                             <tr>
                                 <td><b>Guardian Mobile</b></td>
-                                <td>{GUARDIAN_MOBILE}</td>
+                                <td>{{student.guardianMobileNo}}</td>
                             </tr>
                             <tr>
                                 <td><b>Guardian Phone</b></td>
-                                <td>{GUARDIAN_PHONE}</td>
+                                <td>{{student.guardianPhoneNo}}</td>
                             </tr>
                             <tr>
                                 <td><b>Guardian Email</b></td>
-                                <td>{GUARDIAN_EMAIL}</td>
+                                <td>{{student.guardianEmail}}</td>
                             </tr>
                             </tbody>
                         </table>
@@ -138,44 +134,65 @@
                             <div class="col-md-12">
                                 <div class="tab-content">
                                     <div id="tab-profile-setting" class="tab-pane fade in active">
-                                        <form action="#" class="form-horizontal">
+                                        <form action="" class="form-horizontal" data-validate=""
+                                              data-onvalidate="saveProfile">
                                             <div class="form-group">
                                                 <label class="col-sm-3 control-label">Mobile Number</label>
                                                 <div class="col-sm-9 controls">
-                                                    <input type="text" placeholder="first name" class="form-control"/>
+                                                    <input type="text" placeholder="Mobile No."
+                                                           class="form-control required"
+                                                           data-ng-model="student.mobileNo"
+                                                           data-ng-disabled="!editProfileMode"/>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label class="col-sm-3 control-label">Phone Number</label>
                                                 <div class="col-sm-9 controls">
-                                                    <input type="text" placeholder="last name" class="form-control"/>
+                                                    <input type="text" placeholder="Phone No."
+                                                           class="form-control required" data-ng-model="student.phoneNo"
+                                                           data-ng-disabled="!editProfileMode"/>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label class="col-sm-3 control-label">Email</label>
                                                 <div class="col-sm-9 controls">
-                                                    <input type="email" placeholder="email@yourcompany.com" class="form-control"/>
+                                                    <input type="email" placeholder="email@yourcompany.com"
+                                                           class="form-control required" data-ng-model="student.email"
+                                                           data-ng-disabled="!editProfileMode"/>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="col-sm-3 control-label">Present Address</label>
                                                 <div class="col-sm-9 controls">
-                                                    <textarea rows="3" class="form-control"></textarea>
+                                                    <textarea rows="3" class="form-control required"
+                                                              data-ng-model="student.presentAddress"
+                                                              data-ng-disabled="!editProfileMode"></textarea>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label class="col-sm-3 control-label">Permanent Address</label>
                                                 <div class="col-sm-9 controls">
-                                                    <textarea rows="3" class="form-control"></textarea>
+                                                    <textarea rows="3" class="form-control required"
+                                                              data-ng-model="student.permanentAddress"
+                                                              data-ng-disabled="!editProfileMode"></textarea>
                                                 </div>
                                             </div>
                                             <div class="form-group mbn">
                                                 <label class="col-sm-3 control-label"></label>
                                                 <div class="col-sm-9 controls">
-                                                    <button type="submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;
-                                                        Save
-                                                    </button>&nbsp; &nbsp;<a href="#" class="btn btn-default">Cancel</a>
+                                                    <button type="button" class="btn" data-ng-if="!editProfileMode"
+                                                            data-ng-click="toggleEditProfile()">
+                                                        <i class="fa fa-edit"></i>&nbsp;Edit
+                                                    </button>
+                                                    <button type="submit" class="btn btn-success"
+                                                            data-ng-if="editProfileMode">
+                                                        <i class="fa fa-save"></i>&nbsp;Save
+                                                    </button>
+                                                    <button type="button" class="btn" data-ng-if="editProfileMode"
+                                                            data-ng-click="cancelEditProfile()">
+                                                        <i class="fa fa-edit"></i>&nbsp;Cancel
+                                                    </button>
                                                 </div>
                                             </div>
                                         </form>
