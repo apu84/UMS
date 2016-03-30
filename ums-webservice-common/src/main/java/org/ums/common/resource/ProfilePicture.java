@@ -14,6 +14,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import java.io.ByteArrayInputStream;
+import java.io.FileNotFoundException;
 
 @Component
 @Path("/profilePicture")
@@ -30,7 +31,12 @@ public class ProfilePicture extends Resource {
     if (subject != null) {
       userId = subject.getPrincipal().toString();
     }
-    byte[] imageData = mBinaryContentManager.get(userId, BinaryContentManager.Domain.PICTURE);
+    byte[] imageData;
+    try {
+      imageData = mBinaryContentManager.get(userId, BinaryContentManager.Domain.PICTURE);
+    } catch (FileNotFoundException fl) {
+      return Response.status(Response.Status.NOT_FOUND).build();
+    }
     return Response.ok(new ByteArrayInputStream(imageData)).build();
   }
 }
