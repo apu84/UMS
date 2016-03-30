@@ -19,6 +19,8 @@ module ums {
     bloodGroup: string;
     emailAddress: string;
     presentAddress: string;
+    year:number;
+    academicSemester: number;
     permanentAddress: string;
     guardianPhone: string;
     guardianName: string;
