@@ -95,9 +95,9 @@ module ums {
   map.set("save_section", "academic/optional/application/semester-id/{SEMESTER-ID}/program/{PROGRAM-ID}/course/{COURSE-ID}/section/{SECTION-NAME}");
 
   export class OptionalCoursesOffer {
-    public static $inject = ['appConstants', 'HttpClient', '$scope', '$q'];
+    public static $inject = ['appConstants', 'HttpClient', '$scope', '$q', 'notify'];
 
-    constructor(private appConstants:any, private httpClient:HttpClient, private $scope:IOptCourseOffer, private $q:ng.IQService) {
+    constructor(private appConstants:any, private httpClient:HttpClient, private $scope:IOptCourseOffer, private $q:ng.IQService,private notify: Notify) {
       $scope.optional = {
         approvedCallForApplicationCourses: Array<IOptCourse>(),
         appliedCoursesForSingleStudent: Array<IOptStudent>(),
@@ -418,8 +418,8 @@ module ums {
 
 
       this.httpClient.put(url, complete_json, 'application/json')
-          .success(() => {
-            $.notific8("Successfully Saved");
+          .success((data:NotifyMessage) => {
+            this.notify.show(data);
           }).error((data) => {
           });
 

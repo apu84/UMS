@@ -3,12 +3,14 @@ package org.ums.common.academic.resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.ums.common.Resource;
 import org.ums.common.academic.resource.helper.OptionalCourseApplicationResourceHelper;
+import org.ums.response.type.GenericResponse;
 
 import javax.json.JsonObject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
+import java.util.Map;
 
 /**
  * Created by Ifti on 17-Mar-16.
@@ -53,7 +55,7 @@ public class MutableOptionalCourseApplicationResource  extends Resource {
 
   @PUT
   @Path("/status/semester-id/{semester-id}/course/{course-id}")
-  public Response updateApplicationStatusByCourse(final @Context Request pRequest,
+  public GenericResponse<Map> updateApplicationStatusByCourse(final @Context Request pRequest,
                                  final @PathParam("semester-id") Integer pSemesterId,
                                  final @PathParam("course-id") String pCourseId,
                                  final JsonObject pJsonObject) throws Exception {
