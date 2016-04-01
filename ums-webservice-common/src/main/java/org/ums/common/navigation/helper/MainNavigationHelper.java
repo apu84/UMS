@@ -80,14 +80,13 @@ public class MainNavigationHelper extends ResourceHelper<Navigation, MutableNavi
           children.add(getRoleWisePermission(additionalRolePermission.getRole(), pUriInfo, "additionalRole"));
         } else {
           permissions.addAll(additionalRolePermission.getPermission());
+          JsonObjectBuilder typedItems = Json.createObjectBuilder();
+          typedItems.add("type", "additionalPermission");
+          typedItems.add("name", "AdditionalPermission");
+          typedItems.add("items", buildNavigation(permissions, pUriInfo));
+          children.add(typedItems);
         }
       }
-
-      JsonObjectBuilder typedItems = Json.createObjectBuilder();
-      typedItems.add("type", "additionalPermission");
-      typedItems.add("name", "AdditionalPermission");
-      typedItems.add("items", buildNavigation(permissions, pUriInfo));
-      children.add(typedItems);
     }
     root.add("entries", children);
     return root.build();

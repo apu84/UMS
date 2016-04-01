@@ -1,57 +1,105 @@
 <div class="sidebar-collapse menu-scroll">
-  <div data-spinner="" data-ng-if="isMenuLoading"></div>
-  <ul id="side-menu" class="nav admin-nav-main">
-    <li class="user-panel">
-      <!--
-  <div class="thumb"><img src="" alt="" class="img-circle"/></div>
-  <div class="info">
-    <p>John Doe</p>
-    <ul class="list-inline list-unstyled">
-      <li><a ui-sref="extra-profile" data-hover="tooltip" title="Profile"><i class="fa fa-user"></i></a></li>
-      <li><a ui-sref="email-inbox" data-hover="tooltip" title="Mail"><i class="fa fa-envelope"></i></a></li>
-      <li><a href="javascript:void(0);" data-hover="tooltip" title="Setting" data-toggle="modal" data-target="#modal-config"><i class="fa fa-cog"></i></a></li>
-      <li><a href="javascript:window.location.href = '/ums-web/login.html'" data-hover="tooltip" title="Logout"><i class="fa fa-sign-out"></i></a></li>
-    </ul>
-  </div>
-  -->
-      <div class="clearfix"></div>
-    </li>
-
-    <li data-ng-repeat="entry in menuEntries[0].items" data-ng-mouseleave="_menu.mouseleave()"
-        data-ng-mouseover="_menu.mouseover($index)"
-        data-ng-class="_menu.hover[$index]"
-        data-ng-if="menuEntries.length == 1">
-      <span data-ums-bind-html="{{entry.iconContent}}"></span>
-      <ul data-ng-if="entry.children.length > 0" class="nav nav-second-level"
-          collapse="_menu.status[{{entry.viewOrder}}]" index="{{entry.viewOrder}}">
-        <li data-ng-repeat="children in entry.children">
-          <span data-ums-bind-html="{{children.iconContent}}"></span>
-        </li>
-      </ul>
-    </li>
-
-    <li data-ng-if="menuEntries.length > 1 && $index >=1" data-ng-repeat="roleWiseEntry in menuEntries">
-      <a href="#">
-        <i class="fa fa-sitemap fa-fw">
-          <div class="icon-bg bg-dark"></div>
-        </i>
-        <span class="menu-title">{{roleWiseEntry.name}}</span>
-        <span class="fa arrow"></span>
-      </a>
-      <ul class="nav nav-second-level collapse in">
-        <li data-ng-repeat="entry in roleWiseEntry.items"
-            data-ng-mouseleave="_menu.mouseleave()"
-            data-ng-mouseover="_menu.mouseover($index)"
-            data-ng-class="_menu.hover[$index]">
-          <span data-ums-bind-html="{{entry.iconContent}}"></span>
-          <ul data-ng-if="entry.children.length > 0" class="nav nav-third-level"
-              collapse="_menu.status[{{entry.viewOrder}}]" index="{{entry.viewOrder}}">
-            <li data-ng-repeat="children in entry.children">
-              <span data-ums-bind-html="{{children.iconContent}}"></span>
-            </li>
+    <div data-spinner="" data-ng-if="isMenuLoading"></div>
+    <ul id="side-menu" class="nav admin-nav-main">
+        <li class="user-panel">
+            <!--
+        <div class="thumb"><img src="" alt="" class="img-circle"/></div>
+        <div class="info">
+          <p>John Doe</p>
+          <ul class="list-inline list-unstyled">
+            <li><a ui-sref="extra-profile" data-hover="tooltip" title="Profile"><i class="fa fa-user"></i></a></li>
+            <li><a ui-sref="email-inbox" data-hover="tooltip" title="Mail"><i class="fa fa-envelope"></i></a></li>
+            <li><a href="javascript:void(0);" data-hover="tooltip" title="Setting" data-toggle="modal" data-target="#modal-config"><i class="fa fa-cog"></i></a></li>
+            <li><a href="javascript:window.location.href = '/ums-web/login.html'" data-hover="tooltip" title="Logout"><i class="fa fa-sign-out"></i></a></li>
           </ul>
+        </div>
+        -->
+            <div class="clearfix"></div>
         </li>
-      </ul>
-    </li>
-  </ul>
+
+        <li data-ng-repeat="entry in menuEntries[0].items" data-ng-mouseleave="_menu.mouseleave()"
+            data-ng-mouseover="_menu.mouseover(entry.viewOrder)"
+            data-ng-class="_menu.hover[entry.viewOrder]"
+            data-ng-if="menuEntries.length == 1">
+            <a href='javascript:void(0);' data-ng-if="entry.location!=''"
+               data-ui-sref="{{entry.location}}"
+               data-ng-click="_menu.collapse(entry.viewOrder)"
+               index="{{entry.viewOrder}}"
+               data-ng-init="_menu.status[entry.viewOrder]=true">
+                <span data-ums-bind-html="{{entry.iconContent}}"></span>
+            </a>
+            <a href='javascript:void(0);' data-ng-if="entry.location==''"
+               data-ng-click="_menu.collapse(entry.viewOrder)"
+               index="{{entry.viewOrder}}"
+               data-ng-init="_menu.status[entry.viewOrder]=true">
+                <span data-ums-bind-html="{{entry.iconContent}}"></span>
+            </a>
+            <ul data-ng-if="entry.children.length > 0" class="nav nav-second-level"
+                collapse="_menu.status[{{entry.viewOrder}}]" index="{{entry.viewOrder}}">
+                <li data-ng-repeat="children in entry.children">
+                    <a href='javascript:void(0);'
+                       ui-sref="{{children.location}}"
+                       data-ng-click="_menu.collapse(children.viewOrder)"
+                       index="{{children.viewOrder}}"
+                       data-ng-init="_menu.status[children.viewOrder]=true">
+                        <span data-ums-bind-html="{{children.iconContent}}"></span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li data-ng-if="menuEntries.length > 1"
+            data-ng-repeat="roleWiseEntry in menuEntries"
+            data-ng-init="index=firstLevel()"
+            data-ng-class="_menu.hover[index]"
+            index="{{index}}">
+            <a href="javascript:void(0)"
+               data-ng-click="_menu.collapse(index)"
+               index="{{index}}"
+               data-ng-init="_menu.status[index]=true">
+                <i class="fa fa-sitemap fa-fw">
+                    <div class="icon-bg bg-dark"></div>
+                </i>
+                <span class="menu-title">{{roleWiseEntry.name}}</span>
+                <span class="fa arrow"></span>
+            </a>
+            <ul class="nav nav-second-level collapse" collapse="_menu.status[index]"
+                index="{{index}}">
+                <li data-ng-repeat="entry in roleWiseEntry.items"
+                    data-ng-mouseleave="_menu.mouseleave()"
+                    data-ng-init="index=secondLevel();_menu.hover[index]=''"
+                    data-ng-mouseover="_menu.mouseover(index)"
+                    data-ng-class="_menu.hover[index]"
+                    index="{{index}}">
+                    <a href='javascript:void(0);' data-ng-if="entry.location!=''"
+                       data-ui-sref="{{entry.location}}"
+                       data-ng-click="_menu.collapse(index)"
+                       index="{{index}}"
+                       data-ng-init="_menu.status[index]=true">
+                        <span data-ums-bind-html="{{entry.iconContent}}"></span>
+                    </a>
+                    <a href='javascript:void(0);' data-ng-if="entry.location==''"
+                       data-ng-click="_menu.collapse(index)"
+                       index="{{index}}"
+                       data-ng-init="_menu.status[index]=true">
+                        <span data-ums-bind-html="{{entry.iconContent}}"></span>
+                    </a>
+                    <ul data-ng-if="entry.children.length > 0" class="nav nav-third-level"
+                        data-collapse="_menu.status[{{index}}]"
+                        index="{{index}}">
+                        <li data-ng-repeat="children in entry.children"
+                            data-ng-init="index=thirdLevel()"
+                            index="{{index}}">
+                            <a href='javascript:void(0);'
+                               ui-sref="{{children.location}}"
+                               data-ng-click="_menu.collapse(index)"
+                               index="{{index}}"
+                               data-ng-init="_menu.status[index]=true">
+                                <span data-ums-bind-html="{{children.iconContent}}"></span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    </ul>
 </div>

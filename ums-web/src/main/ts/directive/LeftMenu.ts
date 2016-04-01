@@ -23,7 +23,9 @@ module ums {
 
   export class LeftMenu implements ng.IDirective {
 
-    constructor(private httpClient: HttpClient) {
+    constructor(private httpClient: HttpClient,
+                private $compile: ng.ICompileService,
+                private $timeout: ng.ITimeoutService) {
 
     }
 
@@ -41,13 +43,13 @@ module ums {
         for (var j = 0; j < $scope._menu.hover.length; j++) {
           $scope._menu.hover[j] = '';
         }
+
         $scope._menu.hover[i] = 'nav-hover';
       };
       $scope._menu.collapse = function (i) {
         $scope._menu.status[i] = !$scope._menu.status[i];
 
         var current = $(element).find('a[index=' + i + ']');
-
         current.parent('li').addClass('active').siblings().removeClass('active').children('ul').each(function () {
           $scope._menu.status[$(this).attr('index')] = true;
         });
@@ -76,6 +78,18 @@ module ums {
           }
         }
       };
+      var firstLevel: number = 0;
+      $scope.firstLevel = () => {
+        return firstLevel++;
+      };
+
+      $scope.secondLevel = () => {
+        return firstLevel++;
+      };
+
+      $scope.thirdLevel = () => {
+        return firstLevel++;
+      };
 
       $scope.isMenuLoading = true;
       this.httpClient.get("mainNavigation", HttpClient.MIME_TYPE_JSON,
@@ -88,5 +102,5 @@ module ums {
     public templateUrl = "./views/common/navigation.html";
 
   }
-  UMS.directive("ngMenu", ['HttpClient', (httpClient) => new LeftMenu(httpClient)]);
+  UMS.directive("ngMenu", ['HttpClient', '$compile', '$timeout', (httpClient, $compile, $timeout) => new LeftMenu(httpClient, $compile, $timeout)]);
 }
