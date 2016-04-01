@@ -60,7 +60,7 @@
                         <tr ng-repeat="entry in semesterEnrollmentModel.status">
                             <td>{{numberWithSuffix(entry.year)}} Year - {{numberWithSuffix(entry.semester)}} Semester
                             </td>
-                            <td>{{entry.enrollmentDate}} <span data-ng-if="entry.type == 0">(Temporary)</span></td>
+                            <td>{{entry.enrollmentDate}} <span data-ng-if="entry.type == 0" class="label label-primary">Temporary</span></td>
                             <td>
                                 <input type="checkbox" data-ng-model="entry.checked"
                                        data-ng-if="!entry.hasOwnProperty('type') || (entry.hasOwnProperty('type') && entry.type < semesterEnrollmentModel.enrollmentType)">
