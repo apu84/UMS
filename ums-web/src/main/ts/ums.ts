@@ -428,6 +428,10 @@ module ums {
             }]
           }
         })
+        .state('flushCache', {
+          url: "/flushCache",
+          controller: 'FlushCache'
+        })
 
   });
 }

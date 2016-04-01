@@ -9,4 +9,6 @@ public interface CacheManager<R> {
   String getLastModified(String pCacheId) throws Exception;
 
   void invalidate(String pCacheId) throws Exception;
+
+  void flushAll() throws Exception;
 }
