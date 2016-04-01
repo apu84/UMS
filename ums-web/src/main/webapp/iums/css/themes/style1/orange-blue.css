@@ -3410,8 +3410,8 @@ body.sidebar-colors #wrapper #sidebar ul#side-menu li.active a i:before,
 body.sidebar-colors #wrapper #sidebar ul#side-menu li:hover a i:before {
   color: #FFFFFF;
 }
-body.sidebar-colors #wrapper #sidebar ul#side-menu li.active a i .icon-bg,
-body.sidebar-colors #wrapper #sidebar ul#side-menu li:hover a i .icon-bg {
+body.sidebar-colors #wrapper #sidebar ul#side-menu > li.active > a > i > .icon-bg,
+body.sidebar-colors #wrapper #sidebar ul#side-menu > li:hover > a > i > .icon-bg {
   left: 0;
 }
 body.sidebar-colors #wrapper #sidebar ul#side-menu li.user-panel {
@@ -3439,7 +3439,7 @@ body.sidebar-colors #wrapper #sidebar ul#side-menu li a i:before {
   position: relative;
   z-index: 1;
 }
-body.sidebar-colors #wrapper #sidebar ul#side-menu li a i .icon-bg {
+body.sidebar-colors #wrapper #sidebar ul#side-menu > li > a > i > .icon-bg {
   display: block;
   position: absolute;
   z-index: 12;
