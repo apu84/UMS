@@ -23,6 +23,8 @@ import org.ums.manager.SemesterSyllabusMapManager;
 import org.ums.manager.StudentManager;
 import org.ums.persistent.dao.PersistentOptionalCourseApplicationDao;
 import org.ums.persistent.dao.PersistentSemesterWiseCrHrDao;
+import org.ums.response.type.GenericMessageResponse;
+import org.ums.response.type.GenericResponse;
 
 import javax.json.*;
 import javax.ws.rs.core.Request;
@@ -32,6 +34,7 @@ import java.io.StringReader;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class OptionalCourseApplicationResourceHelper {
@@ -227,7 +230,7 @@ public class OptionalCourseApplicationResourceHelper {
   }
 
   @Transactional
-  public Response updateApplicationStatusByCourse(int pSemesterId, String pCourseId, final JsonObject pJsonObject) throws Exception {
+  public GenericResponse<Map> updateApplicationStatusByCourse(int pSemesterId, String pCourseId, final JsonObject pJsonObject) throws Exception {
 
     OptionalCourseApplicationBuilder builder = getBuilder();
     List<String> approveStudentList = new ArrayList<>();
@@ -253,8 +256,8 @@ public class OptionalCourseApplicationResourceHelper {
       mManager.deleteCourseAppliedByTeacher(pSemesterId, course.getPairCourseId(), removeStudentList);
     }
 
-
-    return Response.noContent().build();
+    return new GenericMessageResponse(GenericResponse.ResponseType.SUCCESS, "Successfully Updated Information.");
+    //return Response.noContent().build();
   }
 
   @Transactional
