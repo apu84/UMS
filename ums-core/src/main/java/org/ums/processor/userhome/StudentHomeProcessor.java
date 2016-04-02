@@ -37,7 +37,7 @@ public class StudentHomeProcessor extends AbstractUserHomeProcessor {
     profileContent.add(yearSemester);
 
     Map<String, String> currentEnrolledSemester = new HashMap<>();
-    currentEnrolledSemester.put("key", "Current semester");
+    currentEnrolledSemester.put("key", "Admitted semester");
     currentEnrolledSemester.put("value", student.getSemester().getName());
     profileContent.add(currentEnrolledSemester);
 
