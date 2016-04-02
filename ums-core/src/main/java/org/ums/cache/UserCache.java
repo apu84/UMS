@@ -37,7 +37,7 @@ public class UserCache extends ContentCache<User, MutableUser, String, UserManag
   @Override
   public int updatePassword(String pUserId, String pPassword) throws Exception {
     int modified = getManager().updatePassword(pUserId, pPassword);
-    if (modified > 1) {
+    if (modified >=1 ) {
       getCacheManager().invalidate(getCacheKey(pUserId));
     }
     return modified;
@@ -46,7 +46,7 @@ public class UserCache extends ContentCache<User, MutableUser, String, UserManag
   @Override
   public int clearPasswordResetToken(String pUserId) throws Exception {
     int modified = getManager().clearPasswordResetToken(pUserId);
-    if (modified > 1) {
+    if (modified >= 1) {
       getCacheManager().invalidate(getCacheKey(pUserId));
     }
     return modified;

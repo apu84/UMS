@@ -3,16 +3,7 @@
         <div class="panel panel-default">
             <div class="panel-body shadowPanel">
                 <div>
-                    <div class="container">
-                        <form>
-                            <div class="form-group">
-                                <label for="studentId">Input your student id</label>
-                                <input type="text" class="form-control" data-ng-model="studentId" id="studentId" value="15015001">
-                            </div>
-                            <button type="button" class="btn btn-default" data-ng-click="studentsRoutine()">Search Routine</button>
-                        </form>
-                    </div>
-                    <div id="printableArea">
+                    <div id="printableArea" style="min-height: 400px;">
                         <style type="text/css">
                             table {
                                 border:solid #000 ;
@@ -23,12 +14,13 @@
                                 border-width:0 1px 1px 0 ;
                             }
                         </style>
-                        <div class="container" data-ng-show="showRoutine">
+                        <div class="container">
                             <div class="text-center">
                                 <h4>AHSANULLAH UNIVERSITY OF SCIENCE AND TECHNOLOGY</h4>
                                 <h5>DEPARTMENT OF ELECTRICAL AND ELECTRONIC ENGINEERING</h5>
                                 <h5></h5>
-                                <h5>CLASS SCHEDULE ({{semesterName}})</h5>
+                                <h5>CLASS SCHEDULE (Spring, 2016)</h5>
+                                <!--{{semesterName}}-->
                             </div>
                             <div class="row">
                                 <div class="text-center">
@@ -37,7 +29,7 @@
                             </div>
                         </div>
 
-                        <div class="container-fluid" data-ng-show="showRoutine" style="margin-top:15px;">
+                        <div class="container-fluid"  style="margin-top:15px;">
                             <div class="table-responsive">
                                 <table class="table" style="font-size: smaller">
                                     <tr>
@@ -87,7 +79,7 @@
 
 
 
-<div data-ng-show="showRoutine">
+<div>
     <input type="button" onclick="printDiv('printableArea')" value="PRINT" />
     <!-- printing  -->
 

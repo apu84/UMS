@@ -158,7 +158,7 @@ module ums{
 
         editurl: 'https://localhost/ums-webservice-common/academic/routine',
         loadBeforeSend: function(jqXHR) {
-          jqXHR.setRequestHeader("Authorization", 'Basic ZHByZWdpc3RyYXI6MTIzNDU=');
+          jqXHR.setRequestHeader("X-Authorization", 'Basic ZWVlX2l1bXM6NTQxNGY3MzUtOTFiMi00MWRlLWJmN2ItOWRhNDVlYzllMzc3');
         },
         mtype: "GET",
         datatype: "json",
@@ -438,7 +438,7 @@ module ums{
                 ajaxDelOptions: {
                   contentType: "application/json",
                   beforeSend: function(jqXHR) {
-                    jqXHR.setRequestHeader("Authorization", 'Basic ZHByZWdpc3RyYXI6MTIzNDU=');
+                    jqXHR.setRequestHeader("X-Authorization", 'Basic ZWVlX2l1bXM6NTQxNGY3MzUtOTFiMi00MWRlLWJmN2ItOWRhNDVlYzllMzc3');
                   }
                 },
                 serializeDelData: function(postdata) {
@@ -533,7 +533,7 @@ module ums{
     private getCourseId():void{
       var defer = this.$q.defer();
       var courseArr:Array<ICourse>;
-      this.httpClient.get('/ums-webservice-common/academic/course/semester/'+'11012015'+'/program/'+'110500', 'application/json',
+      this.httpClient.get('/ums-webservice-common/academic/course/semester/'+'11012016'+'/program/'+'110500', 'application/json',
           (json:any, etag:string) => {
             courseArr = json.entries;
             var courseId: string = ':None';

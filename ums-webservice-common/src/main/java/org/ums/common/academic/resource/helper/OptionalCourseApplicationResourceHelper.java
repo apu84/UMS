@@ -1,5 +1,6 @@
 package org.ums.common.academic.resource.helper;
 
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -331,7 +332,8 @@ public class OptionalCourseApplicationResourceHelper {
   }
 
   public JsonObject getDataForStudent(Request pRequest,UriInfo mUriInfo) throws Exception {
-    String mStudentId="160105002";
+
+    String mStudentId=SecurityUtils.getSubject().getPrincipal().toString();
     Semester mSemester=mSemesterManager.getSemesterByStatus(ProgramType.UG, SemesterStatus.NEWLY_CREATED);
     OptCourseApplicationStatus mApplicationStatus=mManager.getApplicationStatus(mStudentId,mSemester.getId());
     JsonObject  mStudentCourses=getAppliedCoursesByStudent(mStudentId,mSemester.getId(),110500);
@@ -349,7 +351,7 @@ public class OptionalCourseApplicationResourceHelper {
   @Transactional
   public Response saveStudentApplication(Integer status, final JsonObject pJsonObject) throws Exception {
 
-    Student mStudent=mStudentManager.get("160105002");
+    String mStudentId=SecurityUtils.getSubject().getPrincipal().toString();
     Semester mSemester = mSemesterManager.getSemesterByStatus(ProgramType.UG, SemesterStatus.NEWLY_CREATED);
 
     //ToDo: Below validation need to be done
@@ -359,9 +361,9 @@ public class OptionalCourseApplicationResourceHelper {
 
     List<String> mCourseList = new ArrayList<>();
     getBuilder().buildCourseId(mCourseList, pJsonObject);
-    mManager.deleteCoursesAppliedByStudent(mStudent.getId(),mSemester.getId());
-    mManager.saveStudentApplication(mStudent.getId(), mSemester.getId(), mCourseList);
-    mManager.updateStatus(mStudent.getId(), mSemester.getId(), OptCourseApplicationStatus.values()[status]);
+    mManager.deleteCoursesAppliedByStudent(mStudentId,mSemester.getId());
+    mManager.saveStudentApplication(mStudentId, mSemester.getId(), mCourseList);
+    mManager.updateStatus(mStudentId, mSemester.getId(), OptCourseApplicationStatus.values()[status]);
 
     return Response.noContent().build();
   }
