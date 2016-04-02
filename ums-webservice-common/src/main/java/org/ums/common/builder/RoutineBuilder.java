@@ -30,7 +30,7 @@ public class RoutineBuilder implements Builder<Routine, MutableRoutine> {
     pBuilder.add("endTime", pReadOnly.getEndTime());
     pBuilder.add("duration", pReadOnly.getDuration());
     pBuilder.add("roomNo", pReadOnly.getRoomNo());
-    pBuilder.add("self", pUriInfo.getBaseUriBuilder().path("academic").path("routine").path(pReadOnly.getId().toString()).build().toString());
+    //pBuilder.add("self", pUriInfo.getBaseUriBuilder().path("academic").path("routine").path(pReadOnly.getId().toString()).build().toString());
   }
 
   @Override

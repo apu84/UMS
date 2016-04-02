@@ -50,7 +50,7 @@ public class PersistentSemesterDao extends SemesterDaoDecorator {
 
   @Override
   public List<Semester> getAll() throws Exception {
-    String query = SELECT_ALL;
+    String query = SELECT_ALL+" order by START_DATE DESC ";
     return mJdbcTemplate.query(query, new SemesterRowMapper());
   }
 

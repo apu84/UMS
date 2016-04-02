@@ -2,6 +2,7 @@ package org.ums.persistent.dao;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.ums.domain.model.immutable.Student;
 import org.ums.persistent.model.PersistentRoutine;
 import org.ums.decorator.RoutineDaoDecorator;
 import org.ums.domain.model.mutable.MutableRoutine;
@@ -23,7 +24,7 @@ public class PersistentRoutineDao extends RoutineDaoDecorator {
   static String ORDER_BY = "ORDER BY SEMESTER_ID";
   static String SELECT_ALL_FOR_TEACHER = "SELECT SEMESTER_ID,PROGRAM_ID,COURSE_ID,DAY,SECTION,YEAR,SEMESTER,START_TIME,END_TIME,DURATION,ROOM_NO FROM CLASS_ROUTINE AND COURSE_TEACHER WHERE "+
       "WHERE COURSE_TEACHER.TEACHER_ID = ? AND CLASS_ROUTINE.COURSE_ID = COURSE_TEACHER.COURSE_ID";
-  static String SELECT_ALL_FOR_STUDENT = " SELECT ROUTINE_ID,SEMESTER_ID,PROGRAM_ID,COURSE_ID,DAY,SECTION,YEAR,SEMESTER,START_TIME,END_TIME,DURATION,ROOM_NO,LAST_MODIFIED FROM CLASS_ROUTINE WHERE SEMESTER_ID=? AND PROGRAM_ID=?";
+  static String SELECT_ALL_FOR_STUDENT = " SELECT ROUTINE_ID,SEMESTER_ID,PROGRAM_ID,COURSE_ID,DAY,SECTION,YEAR,SEMESTER,START_TIME,END_TIME,DURATION,ROOM_NO,LAST_MODIFIED FROM CLASS_ROUTINE WHERE SEMESTER_ID=? AND PROGRAM_ID=? AND YEAR=? AND SEMESTER=?";
 
   static String SELECT_ALL_FOR_EMPLOYEE = "SELECT ROUTINE_ID,SEMESTER_ID,PROGRAM_ID,COURSE_ID,DAY,SECTION,YEAR,SEMESTER,START_TIME,END_TIME,DURATION,ROOM_NO,LAST_MODIFIED FROM CLASS_ROUTINE WHERE SEMESTER_ID=? and PROGRAM_ID=? and YEAR=? and SEMESTER=? ";
   private JdbcTemplate mJdbcTemplate;
@@ -84,9 +85,9 @@ public class PersistentRoutineDao extends RoutineDaoDecorator {
   }
 
   @Override
-  public List<Routine> getStudentRoutine(int semesterId,int programId) {
+  public List<Routine> getStudentRoutine(Student pStudent) {
     String query = SELECT_ALL_FOR_STUDENT;
-    return mJdbcTemplate.query(query,new Object[]{semesterId,programId},new RoutineRowMapper());
+    return mJdbcTemplate.query(query,new Object[]{pStudent.getSemesterId(),pStudent.getProgramId(),pStudent.getCurrentYear(),pStudent.getCurrentAcademicSemester()},new RoutineRowMapper());
   }
 
   @Override

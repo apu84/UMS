@@ -5,10 +5,10 @@ var Authentication = (function () {
   var endpointUrl = window.location.origin + '/ums-webservice-common/login';
 
 
-  Authentication.prototype.authenticate = function () {
+  Authentication.prototype.authenticate = function (pUserName,pPassword) {
     eraseAllCookies();
-    var userName = document.getElementById('userName').value;
-    var password = document.getElementById('password').value;
+    var userName = pUserName?pUserName:document.getElementById('userName').value;
+    var password = pPassword?pPassword:document.getElementById('password').value;
 
     $(".loaderDiv").show();
     $("#login_btn").hide();
@@ -58,7 +58,7 @@ var Authentication = (function () {
 
     $(".loaderDiv").show();
     $("#btn_forgotPassword").hide();
-    var credentials = "Basic " + btoa("dpregistrar" + ":" + "12345");
+ //   var credentials = "Basic " + btoa("dpregistrar" + ":" + "12345");
     $.ajax({
       crossDomain: true,
       type: "PUT",
@@ -66,11 +66,11 @@ var Authentication = (function () {
       url: window.location.origin + '/ums-webservice-common/forgotPassword',
       contentType: 'application/json',
       data:'{"userId":"'+userId+'"}',
-      withCredentials: true,
-      headers: {
+    //  withCredentials: true,
+     /* headers: {
         "Authorization": credentials,
         "Accept": "application/json"
-      },
+      },*/
       success: function (response) {
 
         if(response.code=="OK"){
@@ -98,6 +98,7 @@ var Authentication = (function () {
 
 
   Authentication.prototype.changePassword = function () {
+    var _this = this;
     eraseAllCookies();
 
     var resetToken=$("#password_reset_token").val();
@@ -113,7 +114,7 @@ var Authentication = (function () {
     $(".loaderDiv").show();
     $("#btn_change_password").hide();
 
-    var credentials = "Basic " + btoa("dpregistrar" + ":" + "12345");
+  // var credentials = "Basic " + btoa("dpregistrar" + ":" + "12345");
     $.ajax({
       crossDomain: true,
       type: "PUT",
@@ -121,18 +122,20 @@ var Authentication = (function () {
       url: window.location.origin + '/ums-webservice-common/forgotPassword/resetPassword1',
       contentType: 'application/json',
       data:'{"userId":"'+userId+'","passwordResetToken":"'+resetToken+'","newPassword":"'+newPassword+'","confirmNewPassword":"'+confirmNewPassword+'"}',
-      withCredentials: true,
+      //withCredentials: true,
+      /*
       headers: {
         "Authorization": credentials,
         "Accept": "application/json"
-      },
+      },*/
       success: function (response) {
 
         credentials = "Basic " + btoa(userId + ":" + newPassword);
         if(response.code=="OK"){
 
           var user={"userId":userId,"userName":userId};
-          getUserAndStartApplication(credentials, user);
+          //getUserAndStartApplication(credentials, user);
+          _this.authenticate(userId,newPassword);
         }
         else if(response.code=="KO"){
 
