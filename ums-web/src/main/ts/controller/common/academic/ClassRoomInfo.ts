@@ -39,7 +39,7 @@ module ums {
         url: 'https://localhost/ums-webservice-common/academic/classroom/all',
         editurl:'https://localhost/ums-webservice-common/academic/classroom',
         loadBeforeSend: function(jqXHR) {
-          jqXHR.setRequestHeader("Authorization", 'Basic ZHByZWdpc3RyYXI6MTIzNDU=');
+          jqXHR.setRequestHeader("X-Authorization", 'Basic ZHByZWdpc3RyYXI6MTMwOTc3YzUtNzgyZC00NDA5LWIzNTUtZDdhYzZkYWQ1ODYx');
         },
         jsonReader: { repeatitems: false },
         colModel: [
@@ -124,8 +124,6 @@ module ums {
               sopt: ['eq', 'ne'],
               value: '1:Yes;0:No'
             }
-
-
           },
           {
             label: "Edit Actions",
@@ -143,9 +141,9 @@ module ums {
                   rp_ge.url = "https://localhost/ums-webservice-common/academic/classroom" + '/' + selrow_id ;
                 },
                 ajaxDelOptions: {
-                  contentType: "application/json",
+                  contentType: "application/json"  ,
                   beforeSend: function(jqXHR) {
-                    jqXHR.setRequestHeader("Authorization", 'Basic ZHByZWdpc3RyYXI6MTIzNDU=');
+                    jqXHR.setRequestHeader("X-Authorization", 'Basic ZHByZWdpc3RyYXI6MTMwOTc3YzUtNzgyZC00NDA5LWIzNTUtZDdhYzZkYWQ1ODYx');
                   }
                 },
                 serializeDelData: function(postdata) {

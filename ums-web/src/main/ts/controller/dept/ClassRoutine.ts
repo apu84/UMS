@@ -158,7 +158,7 @@ module ums{
 
         editurl: 'https://localhost/ums-webservice-common/academic/routine',
         loadBeforeSend: function(jqXHR) {
-          jqXHR.setRequestHeader("X-Authorization", 'Basic ZWVlX2l1bXM6NTQxNGY3MzUtOTFiMi00MWRlLWJmN2ItOWRhNDVlYzllMzc3');
+          jqXHR.setRequestHeader("X-Authorization", 'Basic ZWVlX2l1bXM6ZTY1NDIwZDctZDc0Mi00Nzc3LTkzNjAtMDJjYzg0MzVhNGRm');
         },
         mtype: "GET",
         datatype: "json",
@@ -438,7 +438,7 @@ module ums{
                 ajaxDelOptions: {
                   contentType: "application/json",
                   beforeSend: function(jqXHR) {
-                    jqXHR.setRequestHeader("X-Authorization", 'Basic ZWVlX2l1bXM6NTQxNGY3MzUtOTFiMi00MWRlLWJmN2ItOWRhNDVlYzllMzc3');
+                    jqXHR.setRequestHeader("X-Authorization", 'Basic ZWVlX2l1bXM6ZTY1NDIwZDctZDc0Mi00Nzc3LTkzNjAtMDJjYzg0MzVhNGRm');
                   }
                 },
                 serializeDelData: function(postdata) {

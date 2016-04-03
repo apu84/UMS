@@ -33,6 +33,22 @@
 
 /// <reference path='controller/dept/CourseTeacher.ts'/>
 
+/// <reference path='lib/jquery.dragNdrop.d.ts'/>
+/// <reference path='lib/jquery.tab.d.ts'/>
+
+/// <reference path='controller/common/academic/ClassRoomInfo.ts'/>
+/// <reference path='controller/common/academic/ExamRoutine.ts'/>
+/// <reference path='controller/dept/StudentsRoutine.ts'/>
+/// <reference path='controller/semester/SemesterSettingParameter.ts'/>
+/// <reference path='controller/dept/ClassRoutine.ts'/>
+
+/// <reference path='Utils.ts'/>
+
+
+
+
+
+
 /// <reference path='controller/syllabus/FullSyllabus.ts'/>
 /// <reference path='controller/syllabus/NewSyllabus.ts'/>
 /// <reference path='controller/syllabus/GridSyllabus.ts'/>

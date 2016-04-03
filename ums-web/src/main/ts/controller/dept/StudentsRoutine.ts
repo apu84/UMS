@@ -2,18 +2,19 @@
 ///<reference path="../../lib/jquery.notific8.d.ts"/>
 ///<reference path="../../lib/jquery.notify.d.ts"/>
 ///<reference path="../../lib/jquery.jqGrid.d.ts"/>
+///<reference path="../../model/master_data/Routine.ts"/>
 module  ums{
-  import Routine = ums.IRoutine;
-  import Student = ums.Student;
+  //import Routine = ums.IRoutine;
+  //import Student = ums.Student;
   interface IStudentsRoutineScope extends ng.IScope{
-    routine:Routine;
+    routine:IRoutine;
     hello:string;
     studentsRoutine:Function;
     getStudentInfo:Function;
     getCourses:Function;
     increaseTimeChecker:Function;
     studentsRoutineBySemesterAndProgram: Function;
-    routines:Array<Routine>;
+    routines:Array<IRoutine>;
     student:Student;
     semesterId:string;
     programId: string;
@@ -82,7 +83,7 @@ module  ums{
 
     }
 
-    private createStudentsRoutine(routine:Array<Routine>){
+    private createStudentsRoutine(routine:Array<IRoutine>){
 
       console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!');
       console.log(routine);

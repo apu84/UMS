@@ -275,6 +275,7 @@ module ums {
       return courseRow;
     }
 
+
     private getCourseArr(program_id:number):ng.IPromise<any> {
       var defer = this.$q.defer();
       var courseArr:Array<any>;

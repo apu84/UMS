@@ -1,5 +1,7 @@
+///<reference path="../../model/ParameterSetting.ts"/>
+///<reference path="../../model/master_data/Parameter.ts"/>
 module ums{
-  import ParameterSetting = ums.IParameterSetting;
+//  import ParameterSetting = ums.IParameterSetting;
   interface ISemesterSettingParameterScope extends ng.IScope{
     semesterSelector:Array<Semester>;
     parameterSelector:Array<IParameter>
@@ -24,8 +26,8 @@ module ums{
     addAndReloadData:Function;
     saveAll:Function;
     getDummyParameterSetting: Function;
-    semesterSettingParameterData:Array<ParameterSetting>;
-    semesterSettingParameter: ParameterSetting;
+    semesterSettingParameterData:Array<IParameterSetting>;
+    semesterSettingParameter: IParameterSetting;
     dummySemesterSetting: Array<DummySemesterSetting>;
     inner : DummySemesterSetting;
     addRow:boolean;
@@ -89,7 +91,7 @@ module ums{
 
     }
     private getAllData():void{
-      this.getParameterSettingData().then((parameterSettingArr:Array<ParameterSetting>)=>{
+      this.getParameterSettingData().then((parameterSettingArr:Array<IParameterSetting>)=>{
         this.getDummyParameterSetting();
       });
 
@@ -165,7 +167,7 @@ module ums{
       }, 200);
 
       //BEGIN PLUGINS DATETIME PICKER
-      $('.datetimepicker-default').datetimepicker();
+      //$('.datetimepicker-default').datetimepicker();
 
 
 
@@ -286,7 +288,7 @@ module ums{
         this.$scope.semesterSettingStore[parameter.srl].editData = false;
         this.httpClient.post('academic/parameterSetting/', jsons, 'application/json')
             .success(() => {
-              this.getParameterSettingData().then((parameterSettingArr:Array<ParameterSetting>)=>{
+              this.getParameterSettingData().then((parameterSettingArr:Array<IParameterSetting>)=>{
                 this.getDummyParameterSetting();
               });
             }).error((data) => {
