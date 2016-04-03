@@ -235,6 +235,7 @@ module ums {
                   'vendors/bootstrap-datepicker/css/datepicker.css',
                   'vendors/jquery-validate/jquery.validate.min.js',
                   'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                  'vendors/ckeditor/ckeditor.js',
                   'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
                 ]
               });

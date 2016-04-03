@@ -359,6 +359,20 @@ module ums {
           {id:"0",name:"Academic"},
           {id:"1",name:"Semester Withdraw"},
           {id:"2",name:"Optional Course Selection"}
+        ],
+        actors:[
+          {id:"0", name:"Student"},
+          {id:"1",name:"Head"},
+          {id:"2",name:"Deputy Registrar"},
+          {id:"3",name:"Registrar"},
+          {id:"4",name:"Assistant Admin Officer"},
+          {id:"5",name:"Vice Chancellor"}
+        ],
+        action:[
+          {id:"0",name:"Saved"},
+          {id:"1",name:"Submitted"},
+          {id:"2",name:"Approved"},
+          {id:"3",name:"Rejected"}
         ]
       };
     }

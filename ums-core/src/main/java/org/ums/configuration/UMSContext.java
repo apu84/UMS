@@ -50,6 +50,27 @@ public class UMSContext {
   }
 
   @Bean
+  EmployeeManager employeeManager(){
+    EmployeeCache employeeCache = new EmployeeCache(mLocalCacheManager);
+    employeeCache.setManager(new PersistentEmployeeDao(mJdbcTemplate));
+    return employeeCache;
+  }
+
+  @Bean
+  SemesterWithDrawalManager semesterWithdrawalManager(){
+    SemesterWithdrawalCache semesterWithdrawalCache = new SemesterWithdrawalCache(mLocalCacheManager);
+    semesterWithdrawalCache.setManager(new PersistentSemesterWithdrawalDao(mJdbcTemplate));
+    return semesterWithdrawalCache;
+  }
+
+  @Bean
+  SemesterWithdrawalLogManager semesterWithdrawalLogManager(){
+    SemesterWithdrawalLogCache semesterWithdrawalLogCache = new SemesterWithdrawalLogCache(mLocalCacheManager);
+    semesterWithdrawalLogCache.setManager(new PersistentSemesterWithdrawalLogDao(mJdbcTemplate));
+    return  semesterWithdrawalLogCache;
+  }
+
+  @Bean
   SemesterSyllabusMapManager semesterSyllabusMapManager() {
     SemesterSyllabusMapCache semesterSyllabusMapCache = new SemesterSyllabusMapCache(mLocalCacheManager);
     semesterSyllabusMapCache.setManager(new PersistentSemesterSyllabusMapDao(new JdbcTemplate(mDataSource), syllabusManager()));
@@ -186,13 +207,11 @@ public class UMSContext {
     return new PersistentClassRoomDao(mJdbcTemplate);
   }
 
-  //@Bean(name = "classRoomManager")
   @Bean
   ClassRoomManager classRoomManager() {
     return new PersistentClassRoomDao(mJdbcTemplate);
   }
 
-  //@Bean(name = "examRoutineManager")
   @Bean
   ExamRoutineManager examRoutineManager() {
     return new PersistentExamRoutineDao(mJdbcTemplate);
