@@ -27,9 +27,27 @@ public abstract class ContentCache<R extends Identifier<I> & LastModifier, M ext
   }
 
   @Override
+  public int delete(List<M> pMutableList) throws Exception {
+    int modified = super.delete(pMutableList);
+    for (M mutable : pMutableList) {
+      invalidate(mutable);
+    }
+    return modified;
+  }
+
+  @Override
   public int update(M pMutable) throws Exception {
     int modified = super.update(pMutable);
     invalidate(pMutable);
+    return modified;
+  }
+
+  @Override
+  public int update(List<M> pMutableList) throws Exception {
+    int modified = super.update(pMutableList);
+    for (M mutable : pMutableList) {
+      invalidate(mutable);
+    }
     return modified;
   }
 

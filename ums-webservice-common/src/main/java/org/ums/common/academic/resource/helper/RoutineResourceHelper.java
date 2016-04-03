@@ -1,11 +1,14 @@
 package org.ums.common.academic.resource.helper;
 
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import org.ums.common.builder.Builder;
 import org.ums.common.builder.RoutineBuilder;
+import org.ums.domain.model.immutable.Student;
+import org.ums.manager.StudentManager;
 import org.ums.persistent.model.PersistentProgram;
 import org.ums.persistent.model.PersistentRoutine;
 import org.ums.cache.LocalCache;
@@ -36,6 +39,9 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
 
   @Autowired
   private RoutineManager mManager;
+
+  @Autowired
+  private StudentManager mStudentManager;
 
   @Autowired
   private RoutineBuilder mBuilder;
@@ -99,13 +105,15 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
     return object.build();
   }
 
-  public JsonObject getRoutineForStudent(final String semesterId, final String programId, final Request pRequest, final UriInfo pUriInfo) throws Exception {
-    List<Routine> routines = getContentManager().getStudentRoutine(Integer.parseInt(semesterId), Integer.parseInt(programId));
+  public JsonObject getRoutineForStudent() throws Exception {
+    String mStudentId=SecurityUtils.getSubject().getPrincipal().toString();
+    Student student=mStudentManager.get(mStudentId);
+    List<Routine> routines = getContentManager().getStudentRoutine(student);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
     for (Routine routine : routines) {
-      children.add(toJson(routine, pUriInfo, localCache));
+      children.add(toJson(routine, null, localCache));
     }
     object.add("entries", children);
     localCache.invalidate();

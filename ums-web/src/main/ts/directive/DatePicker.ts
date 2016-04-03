@@ -4,7 +4,7 @@ module ums {
     }
 
     public restrict: string = "A";
-    public link = ($scope: any, element: JQuery, attrs) => { console.debug('here');
+    public link = ($scope: any, element: JQuery, attrs) => {
       element.datepicker();
       element.on('change', function () {
         $('.datepicker').hide();

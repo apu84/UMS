@@ -22,7 +22,7 @@ module ums {
         boxed: '',
         layout_menu: '',
         theme_style: 'style1',
-        header_topbar: 'static',
+        header_topbar: 'header-fixed',   //static or header-fixed // changed by ifti
         menu_style: 'sidebar-colors',
         menu_collapse: '',
         menu_style_restore: 'sidebar-default',

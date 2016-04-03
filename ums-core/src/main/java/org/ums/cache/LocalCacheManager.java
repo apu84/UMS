@@ -38,4 +38,10 @@ public class LocalCacheManager<R extends LastModifier> implements CacheManager<R
     mCache.remove(pCacheId);
     mLastModified.remove(pCacheId);
   }
+
+  @Override
+  public void flushAll() throws Exception {
+    mCache.clear();
+    mLastModified.clear();
+  }
 }

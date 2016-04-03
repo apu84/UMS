@@ -33,11 +33,28 @@
 
 /// <reference path='controller/dept/CourseTeacher.ts'/>
 
+/// <reference path='lib/jquery.dragNdrop.d.ts'/>
+/// <reference path='lib/jquery.tab.d.ts'/>
+
+/// <reference path='controller/common/academic/ClassRoomInfo.ts'/>
+/// <reference path='controller/common/academic/ExamRoutine.ts'/>
+/// <reference path='controller/dept/StudentsRoutine.ts'/>
+/// <reference path='controller/semester/SemesterSettingParameter.ts'/>
+/// <reference path='controller/dept/ClassRoutine.ts'/>
+
+/// <reference path='Utils.ts'/>
+
+
+
+
+
+
 /// <reference path='controller/syllabus/FullSyllabus.ts'/>
 /// <reference path='controller/syllabus/NewSyllabus.ts'/>
 /// <reference path='controller/syllabus/GridSyllabus.ts'/>
 /// <reference path='controller/semester/SemesterEnrollment.ts'/>
 /// <reference path='controller/student/StudentProfile.ts'/>
+/// <reference path='directive/FlushCache.ts'/>
 
 /// <reference path='directive/LeftMenu.ts'/>
 /// <reference path='directive/DisableOperation.ts'/>
@@ -50,6 +67,7 @@
 /// <reference path='directive/BindHtml.ts'/>
 /// <reference path='directive/DatePicker.ts'/>
 /// <reference path='directive/Spinner.ts'/>
+/// <reference path='directive/ProfilePicture.ts'/>
 
 /// <reference path='interceptor/Unauthorized.ts'/>
 

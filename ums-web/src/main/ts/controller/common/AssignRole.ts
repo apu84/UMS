@@ -19,7 +19,6 @@ module ums {
           (data: any, etag) => {
             $scope.users = data.entries;
           });
-
       var permissions: {number?: boolean} = {};
 
       this.httpClient.get("mainNavigation", HttpClient.MIME_TYPE_JSON,

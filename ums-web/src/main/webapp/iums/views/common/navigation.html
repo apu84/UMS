@@ -16,23 +16,88 @@
         -->
             <div class="clearfix"></div>
         </li>
+
         <li data-ng-repeat="entry in menuEntries[0].items" data-ng-mouseleave="_menu.mouseleave()"
-            data-ng-mouseover="_menu.mouseover($index)"
-            data-ng-class="_menu.hover[$index]">
-            <span data-ums-bind-html="{{entry.iconContent}}"></span>
-            <ul data-ng-if="entry.children.length > 0" class="nav nav-second-level" collapse="_menu.status[{{entry.viewOrder}}]" index="{{entry.viewOrder}}">
+            data-ng-mouseover="_menu.mouseover(entry.viewOrder)"
+            data-ng-class="_menu.hover[entry.viewOrder]"
+            data-ng-if="menuEntries.length == 1">
+            <a href='javascript:void(0);' data-ng-if="entry.location!=''"
+               data-ui-sref="{{entry.location}}"
+               data-ng-click="_menu.collapse(entry.viewOrder)"
+               index="{{entry.viewOrder}}"
+               data-ng-init="_menu.status[entry.viewOrder]=true">
+                <span data-ums-bind-html="{{entry.iconContent}}"></span>
+            </a>
+            <a href='javascript:void(0);' data-ng-if="entry.location==''"
+               data-ng-click="_menu.collapse(entry.viewOrder)"
+               index="{{entry.viewOrder}}"
+               data-ng-init="_menu.status[entry.viewOrder]=true">
+                <span data-ums-bind-html="{{entry.iconContent}}"></span>
+            </a>
+            <ul data-ng-if="entry.children.length > 0" class="nav nav-second-level"
+                collapse="_menu.status[{{entry.viewOrder}}]" index="{{entry.viewOrder}}">
                 <li data-ng-repeat="children in entry.children">
-                    <span data-ums-bind-html="{{children.iconContent}}"></span>
+                    <a href='javascript:void(0);'
+                       ui-sref="{{children.location}}"
+                       data-ng-click="_menu.collapse(children.viewOrder)"
+                       index="{{children.viewOrder}}"
+                       data-ng-init="_menu.status[children.viewOrder]=true">
+                        <span data-ums-bind-html="{{children.iconContent}}"></span>
+                    </a>
                 </li>
             </ul>
         </li>
-        <li data-ng-if="menuEntries.length > 1" data-ng-repeat="entry in menuEntries[1].items" data-ng-mouseleave="_menu.mouseleave()"
-            data-ng-mouseover="_menu.mouseover($index)"
-            data-ng-class="_menu.hover[$index]">
-            <span data-ums-bind-html="{{entry.iconContent}}"></span>
-            <ul data-ng-if="entry.children.length > 0" class="nav nav-second-level" collapse="_menu.status[{{entry.viewOrder}}]" index="{{entry.viewOrder}}">
-                <li data-ng-repeat="children in entry.children">
-                    <span data-ums-bind-html="{{children.iconContent}}"></span>
+        <li data-ng-if="menuEntries.length > 1"
+            data-ng-repeat="roleWiseEntry in menuEntries"
+            data-ng-init="index=firstLevel()"
+            data-ng-class="_menu.hover[index]"
+            index="{{index}}">
+            <a href="javascript:void(0)"
+               data-ng-click="_menu.collapse(index)"
+               index="{{index}}"
+               data-ng-init="_menu.status[index]=true">
+                <i class="fa fa-sitemap fa-fw">
+                    <div class="icon-bg bg-dark"></div>
+                </i>
+                <span class="menu-title">{{roleWiseEntry.name}}</span>
+                <span class="fa arrow"></span>
+            </a>
+            <ul class="nav nav-second-level collapse" collapse="_menu.status[index]"
+                index="{{index}}">
+                <li data-ng-repeat="entry in roleWiseEntry.items"
+                    data-ng-mouseleave="_menu.mouseleave()"
+                    data-ng-init="index=secondLevel();_menu.hover[index]=''"
+                    data-ng-mouseover="_menu.mouseover(index)"
+                    data-ng-class="_menu.hover[index]"
+                    index="{{index}}">
+                    <a href='javascript:void(0);' data-ng-if="entry.location!=''"
+                       data-ui-sref="{{entry.location}}"
+                       data-ng-click="_menu.collapse(index)"
+                       index="{{index}}"
+                       data-ng-init="_menu.status[index]=true">
+                        <span data-ums-bind-html="{{entry.iconContent}}"></span>
+                    </a>
+                    <a href='javascript:void(0);' data-ng-if="entry.location==''"
+                       data-ng-click="_menu.collapse(index)"
+                       index="{{index}}"
+                       data-ng-init="_menu.status[index]=true">
+                        <span data-ums-bind-html="{{entry.iconContent}}"></span>
+                    </a>
+                    <ul data-ng-if="entry.children.length > 0" class="nav nav-third-level"
+                        data-collapse="_menu.status[{{index}}]"
+                        index="{{index}}">
+                        <li data-ng-repeat="children in entry.children"
+                            data-ng-init="index=thirdLevel()"
+                            index="{{index}}">
+                            <a href='javascript:void(0);'
+                               ui-sref="{{children.location}}"
+                               data-ng-click="_menu.collapse(index)"
+                               index="{{index}}"
+                               data-ng-init="_menu.status[index]=true">
+                                <span data-ums-bind-html="{{children.iconContent}}"></span>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
             </ul>
         </li>

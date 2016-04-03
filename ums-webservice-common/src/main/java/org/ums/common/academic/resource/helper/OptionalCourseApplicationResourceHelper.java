@@ -1,5 +1,6 @@
 package org.ums.common.academic.resource.helper;
 
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +24,8 @@ import org.ums.manager.SemesterSyllabusMapManager;
 import org.ums.manager.StudentManager;
 import org.ums.persistent.dao.PersistentOptionalCourseApplicationDao;
 import org.ums.persistent.dao.PersistentSemesterWiseCrHrDao;
+import org.ums.response.type.GenericMessageResponse;
+import org.ums.response.type.GenericResponse;
 
 import javax.json.*;
 import javax.ws.rs.core.Request;
@@ -32,6 +35,7 @@ import java.io.StringReader;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class OptionalCourseApplicationResourceHelper {
@@ -227,7 +231,7 @@ public class OptionalCourseApplicationResourceHelper {
   }
 
   @Transactional
-  public Response updateApplicationStatusByCourse(int pSemesterId, String pCourseId, final JsonObject pJsonObject) throws Exception {
+  public GenericResponse<Map> updateApplicationStatusByCourse(int pSemesterId, String pCourseId, final JsonObject pJsonObject) throws Exception {
 
     OptionalCourseApplicationBuilder builder = getBuilder();
     List<String> approveStudentList = new ArrayList<>();
@@ -253,8 +257,8 @@ public class OptionalCourseApplicationResourceHelper {
       mManager.deleteCourseAppliedByTeacher(pSemesterId, course.getPairCourseId(), removeStudentList);
     }
 
-
-    return Response.noContent().build();
+    return new GenericMessageResponse(GenericResponse.ResponseType.SUCCESS, "Successfully Updated Information.");
+    //return Response.noContent().build();
   }
 
   @Transactional
@@ -328,7 +332,8 @@ public class OptionalCourseApplicationResourceHelper {
   }
 
   public JsonObject getDataForStudent(Request pRequest,UriInfo mUriInfo) throws Exception {
-    String mStudentId="160105002";
+
+    String mStudentId=SecurityUtils.getSubject().getPrincipal().toString();
     Semester mSemester=mSemesterManager.getSemesterByStatus(ProgramType.UG, SemesterStatus.NEWLY_CREATED);
     OptCourseApplicationStatus mApplicationStatus=mManager.getApplicationStatus(mStudentId,mSemester.getId());
     JsonObject  mStudentCourses=getAppliedCoursesByStudent(mStudentId,mSemester.getId(),110500);
@@ -346,7 +351,7 @@ public class OptionalCourseApplicationResourceHelper {
   @Transactional
   public Response saveStudentApplication(Integer status, final JsonObject pJsonObject) throws Exception {
 
-    Student mStudent=mStudentManager.get("160105002");
+    String mStudentId=SecurityUtils.getSubject().getPrincipal().toString();
     Semester mSemester = mSemesterManager.getSemesterByStatus(ProgramType.UG, SemesterStatus.NEWLY_CREATED);
 
     //ToDo: Below validation need to be done
@@ -356,9 +361,9 @@ public class OptionalCourseApplicationResourceHelper {
 
     List<String> mCourseList = new ArrayList<>();
     getBuilder().buildCourseId(mCourseList, pJsonObject);
-    mManager.deleteCoursesAppliedByStudent(mStudent.getId(),mSemester.getId());
-    mManager.saveStudentApplication(mStudent.getId(), mSemester.getId(), mCourseList);
-    mManager.updateStatus(mStudent.getId(), mSemester.getId(), OptCourseApplicationStatus.values()[status]);
+    mManager.deleteCoursesAppliedByStudent(mStudentId,mSemester.getId());
+    mManager.saveStudentApplication(mStudentId, mSemester.getId(), mCourseList);
+    mManager.updateStatus(mStudentId, mSemester.getId(), OptCourseApplicationStatus.values()[status]);
 
     return Response.noContent().build();
   }

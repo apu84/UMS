@@ -61,7 +61,7 @@
                     <div class="row label-padding">
                         <div class="col-md-12">
                             <select class="form-control required" data-ng-model="copySemesterId" ng-init="copySemesterId=''">
-                                <option data-ng-repeat="semester in semesterSyllabusMapModel.semesters" value="{{semester.id}}">{{semester.name}}</option>
+                                <option data-ng-repeat="semester in semesterSyllabusMapModel.programSelector.getSemesters()" value="{{semester.id}}">{{semester.name}}</option>
                             </select>
                         </div>
                     </div>

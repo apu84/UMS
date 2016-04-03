@@ -227,7 +227,7 @@ public class PersistentStudentDao extends StudentDaoDecorator {
       student.setGuardianName(rs.getString("GUARDIAN_NAME"));
       student.setGuardianMobileNo(rs.getString("GUARDIAN_MOBILE"));
       student.setGuardianPhoneNo(rs.getString("GUARDIAN_PHONE"));
-      student.setGuardianEmail("GUARDIAN_EMAIL");
+      student.setGuardianEmail(rs.getString("GUARDIAN_EMAIL"));
       student.setProgramId(rs.getInt("PROGRAM_ID"));
       student.setLastModified(rs.getString("LAST_MODIFIED"));
       if (rs.getObject("ENROLLMENT_TYPE") != null) {

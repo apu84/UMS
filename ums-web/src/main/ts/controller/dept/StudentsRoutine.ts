@@ -2,20 +2,19 @@
 ///<reference path="../../lib/jquery.notific8.d.ts"/>
 ///<reference path="../../lib/jquery.notify.d.ts"/>
 ///<reference path="../../lib/jquery.jqGrid.d.ts"/>
+///<reference path="../../model/master_data/Routine.ts"/>
 module  ums{
-  import Routine = ums.IRoutine;
-  import Student = ums.Student;
+  //import Routine = ums.IRoutine;
+  //import Student = ums.Student;
   interface IStudentsRoutineScope extends ng.IScope{
-    routine:Routine;
-    studentId:string;
+    routine:IRoutine;
     hello:string;
-    showRoutine:boolean;
     studentsRoutine:Function;
     getStudentInfo:Function;
     getCourses:Function;
     increaseTimeChecker:Function;
     studentsRoutineBySemesterAndProgram: Function;
-    routines:Array<Routine>;
+    routines:Array<IRoutine>;
     student:Student;
     semesterId:string;
     programId: string;
@@ -61,7 +60,7 @@ module  ums{
 
     public static $inject = ['appConstants','HttpClient','$scope','$q'];
     constructor(private appConstants: any, private httpClient: HttpClient, private $scope: IStudentsRoutineScope,private $q:ng.IQService ){
-      $scope.studentId="150105001";
+      //$scope.studentId="150105001";
       $scope.days = appConstants.weekDays;
       $scope.checker = appConstants.timeChecker;
       var times:string[]=['08:00 am'];
@@ -71,6 +70,8 @@ module  ums{
       $scope.studentsRoutine = this.studentsRoutine.bind(this);
       $scope.getCourses = this.getCourses.bind(this);
 
+      this.studentsRoutine();
+
     }
 
     private studentsRoutine(){
@@ -78,15 +79,11 @@ module  ums{
       this.$scope.timeChecker="08.00 AM";
       this.$scope.colspan=1;
 
-      if(this.$scope.studentId!=null){
-        this.$scope.showRoutine = true;
-      }
-
-      this.getStudentInfo(this.$scope.studentId);
+      this.getStudentInfo();
 
     }
 
-    private createStudentsRoutine(routine:Array<Routine>){
+    private createStudentsRoutine(routine:Array<IRoutine>){
 
       console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!');
       console.log(routine);
@@ -136,8 +133,8 @@ module  ums{
       console.log(this.$scope.routineStore);
     }
 
-    private getStudentRoutineBySemesterAndProgram(semesterId:string,programId:string){
-      this.httpClient.get('academic/routine/routineForStudent/'+semesterId+'/'+programId,'application/json',(json:any,etag:string)=>{
+    private getStudentRoutineBySemesterAndProgram(){
+      this.httpClient.get('academic/routine/routineForStudent','application/json',(json:any,etag:string)=>{
             this.$scope.routines = json.entries;
             this.getCourses().then((courseArr:Array<ICourse>)=>{
               this.createStudentsRoutine(this.$scope.routines);
@@ -150,6 +147,7 @@ module  ums{
     }
 
 
+    /*
     private getSemesterInfo(semesterId:string){
       this.httpClient.get('academic/semester/'+semesterId,'application/json',(json:any,etag:string)=>{
             console.log("semesters");
@@ -162,17 +160,13 @@ module  ums{
             console.error(response);
           });
     }
-
-    private getStudentInfo(studentId: string):void{
+*/
+    private getStudentInfo():void{
       var defer = this.$q.defer();
       var studentArr: Array<any>;
-      this.httpClient.get('academic/student/'+studentId,'application/json',(json:any,etag:string)=>{
+      this.httpClient.get('academic/student','application/json',(json:any,etag:string)=>{
             this.$scope.student = json;
-            this.$scope.semesterId = this.$scope.student.semesterId;
-            this.$scope.programId = this.$scope.student.programId;
-            this.$scope.departmentName = this.appConstants.deptLong[this.$scope.student.department];
-            this.getSemesterInfo(this.$scope.semesterId);
-            this.getStudentRoutineBySemesterAndProgram(this.$scope.semesterId,this.$scope.programId);
+            this.getStudentRoutineBySemesterAndProgram();
 
           },
           (response:ng.IHttpPromiseCallbackArg<any>)=>{
@@ -183,7 +177,7 @@ module  ums{
     private getCourses():ng.IPromise<any>{
       var defer = this.$q.defer();
       var courseArr:Array<ICourse>;
-      this.httpClient.get('/ums-webservice-common/academic/course/semester/'+'11012015'+'/program/'+'110500', 'application/json',
+      this.httpClient.get('/ums-webservice-common/academic/course/semester/'+'11012016'+'/program/'+'110500', 'application/json',
           (json:any, etag:string) => {
             courseArr = json.entries;
             this.$scope.courseArr = courseArr;

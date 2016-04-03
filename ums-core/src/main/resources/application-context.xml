@@ -21,7 +21,7 @@
     </property>
     <property name="username" value="aust.test.email@gmail.com"/>
     <property name="password" value="Iums4Aust"/>
-    <property name="port" value="587" />
+    <property name="port" value="587"/>
   </bean>
 
   <bean id="velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
@@ -51,6 +51,23 @@
         <ref bean="dummyNavigationProcessor"/>
       </list>
     </constructor-arg>
+  </bean>
+
+  <bean id="studentHomeProcessor" class="org.ums.processor.userhome.StudentHomeProcessor">
+    <property name="allowedRole" value="student"/>
+  </bean>
+
+  <bean id="officialsHomeProcessor" class="org.ums.processor.userhome.OfficialsHomeProcessor">
+    <property name="allowedRole" value="sadmin,registrar,iums-secratary"/>
+  </bean>
+
+  <bean id="userHomeService" class="org.ums.services.UserHomeServiceImpl">
+    <property name="userHomeProcessors">
+      <list>
+        <ref bean="studentHomeProcessor"/>
+        <ref bean="officialsHomeProcessor"/>
+      </list>
+    </property>
   </bean>
 
 </beans>

@@ -1,7 +1,7 @@
 <div class="row">
     <div class="orgLeftClass pull-left panel panel-green col-md-12" id="leftDiv">
         <div class="panel-heading">
-            <h3 class="panel-title">Select </h3>
+            <h3 class="panel-title">Assign Activity</h3>
         </div>
         <form action="" class="form-horizontal" data-validate="" data-onvalidate="saveAssignment"
               data-ng-hide="response.status">
@@ -9,7 +9,8 @@
                 <div class="form-body pal">
                     <div class="row">
                         <div class="col-md-2">
-                            <select data-ng-model="userId" data-ng-change="savedAdditionalRolePermission()">
+                            <select data-ng-model="userId" data-ng-change="savedAdditionalRolePermission()"
+                                    class="selectpicker form-control">
                                 <option data-ng-repeat="user in users">{{::user.id}}</option>
                             </select>
                             <div data-spinner="" data-ng-if="isPermissionLoading"></div>
