@@ -11,8 +11,7 @@ import java.sql.Timestamp;
 
 public interface SemesterWithdrawalLog extends Serializable,LastModifier,EditType<MutableSemesterWithdrawalLog>,Identifier<Integer> {
   public SemesterWithdrawal getSemesterWithdrawal() throws Exception;
-  public int getActor();
-  public String getActorId();
+  public Employee getEmployee() throws Exception;
   public String getEventDateTime();
   public int getAction();
   public String getComments();

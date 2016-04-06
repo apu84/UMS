@@ -10,9 +10,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 
-/**
- * Created by My Pc on 3/6/2016.
- */
+
 public class MutableRoutineResource extends Resource {
 
   @Autowired

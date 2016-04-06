@@ -16,8 +16,8 @@ public class SemesterWithdrawalLogCache extends ContentCache<SemesterWithdrawalL
   }
 
   @Override
-  public SemesterWithdrawalLog getForStudent(String pStudentId,int semesterId) {
-    return getManager().getForStudent(pStudentId,semesterId);
+  public SemesterWithdrawalLog getBySemesterWithdrawalId(int pSemesterWithdrawalId) {
+    return getManager().getBySemesterWithdrawalId(pSemesterWithdrawalId);
   }
 
   @Override

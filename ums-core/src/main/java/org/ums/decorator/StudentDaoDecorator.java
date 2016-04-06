@@ -16,5 +16,4 @@ public class StudentDaoDecorator extends ContentDaoDecorator<Student, MutableStu
         return getManager().getStudentListFromStudentsString(pStudents);
     }
 
-
 }

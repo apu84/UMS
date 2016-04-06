@@ -33,4 +33,9 @@ public class ParameterSettingCache extends ContentCache<ParameterSetting,Mutable
   protected String getCacheKey(String pId) {
     return CacheUtil.getCacheKey(ParameterSetting.class,pId);
   }
+
+  @Override
+  public ParameterSetting getBySemesterAndParameterId(int parameterId, int semesterId) {
+    return getManager().getBySemesterAndParameterId(parameterId,semesterId);
+  }
 }

@@ -8,6 +8,7 @@ import org.ums.domain.model.mutable.MutableSemester;
 import org.ums.domain.model.mutable.MutableSemesterWithdrawal;
 import org.ums.persistent.model.PersistentProgram;
 import org.ums.persistent.model.PersistentSemester;
+import org.ums.persistent.model.PersistentStudent;
 
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
@@ -21,7 +22,11 @@ public class SemesterWithdrawalBuilder implements Builder<SemesterWithdrawal,Mut
     pBuilder.add("id",pReadOnly.getId());
     pBuilder.add("semesterId",pReadOnly.getSemester().getId());
     pBuilder.add("programId",pReadOnly.getProgram().getId());
+    pBuilder.add("studentId",pReadOnly.getStudent().getId());
+    pBuilder.add("year",pReadOnly.getStudent().getCurrentYear());
+    pBuilder.add("semester",pReadOnly.getStudent().getCurrentAcademicSemester());
     pBuilder.add("cause",pReadOnly.getCause());
+    pBuilder.add("appDate",pReadOnly.getAppDate());
     pBuilder.add("self", pUriInfo.getBaseUriBuilder().path("academic").path("semesterWithdraw").path(pReadOnly.getId().toString()).build().toString());
 
   }
@@ -35,6 +40,11 @@ public class SemesterWithdrawalBuilder implements Builder<SemesterWithdrawal,Mut
     PersistentProgram program = new PersistentProgram();
     program.setId(Integer.parseInt(pJsonObject.getString("programId")));
     pMutable.setProgram(program);
+    PersistentStudent student = new PersistentStudent();
+    student.setId(pJsonObject.getString("studentId"));
+    student.setCurrentYear(Integer.parseInt(pJsonObject.getString("year")));
+    student.setCurrentAcademicSemester(Integer.parseInt(pJsonObject.getString("semester")));
+    pMutable.setStudent(student);
     pMutable.setCause(pJsonObject.getString("cause"));
   }
 }

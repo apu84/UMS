@@ -10,4 +10,5 @@ import java.util.List;
  */
 public interface ParameterSettingManager extends ContentManager<ParameterSetting,MutableParameterSetting,String> {
   public List<ParameterSetting> getBySemester(int semesterId);
+  public ParameterSetting getBySemesterAndParameterId(int parameterId,int semesterId);
 }

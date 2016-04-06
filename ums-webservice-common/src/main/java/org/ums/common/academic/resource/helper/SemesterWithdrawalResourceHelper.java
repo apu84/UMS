@@ -1,6 +1,7 @@
 package org.ums.common.academic.resource.helper;
 
 
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
@@ -10,6 +11,7 @@ import org.ums.common.academic.resource.RoutineResource;
 import org.ums.common.academic.resource.SemesterWithdrawalResource;
 import org.ums.common.builder.Builder;
 import org.ums.common.builder.SemesterWithdrawalBuilder;
+import org.ums.domain.model.immutable.Routine;
 import org.ums.domain.model.immutable.SemesterWithdrawal;
 import org.ums.domain.model.mutable.MutableRoutine;
 import org.ums.domain.model.mutable.MutableSemesterWithdrawal;
@@ -18,10 +20,15 @@ import org.ums.manager.SemesterWithDrawalManager;
 import org.ums.persistent.model.PersistentRoutine;
 import org.ums.persistent.model.PersistentSemesterWithdrawal;
 
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.util.List;
 
 @Component
 public class SemesterWithdrawalResourceHelper extends ResourceHelper<SemesterWithdrawal,MutableSemesterWithdrawal,Integer> {
@@ -45,6 +52,19 @@ public class SemesterWithdrawalResourceHelper extends ResourceHelper<SemesterWit
     Response.ResponseBuilder builder = Response.created(contextURI);
     builder.status(Response.Status.CREATED);
     return builder.build();
+  }
+
+  public JsonObject getStudentRecord(final int semesterId,final int year,final int academicSemester, Request pRequest, final UriInfo pUriInfo) throws Exception {
+    String mStudentId = SecurityUtils.getSubject().getPrincipal().toString();
+    SemesterWithdrawal semesterWithdrawal = getContentManager().getStudentsRecord(mStudentId,semesterId,year,academicSemester);
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+
+    children.add(toJson(semesterWithdrawal, pUriInfo, localCache));
+    object.add("entries", children);
+    localCache.invalidate();
+    return object.build();
   }
 
   @Override

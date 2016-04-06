@@ -46,6 +46,12 @@ public class PersistentParameterSettingDao extends ParameterSettingDaoDecorator 
   }
 
   @Override
+  public ParameterSetting getBySemesterAndParameterId(int parameterId, int semesterId) {
+    String query = SELECT_ALL+" WHERE PARAMETER_ID=? AND SEMESTER_ID=?";
+    return mJdbcTemplate.queryForObject(query,new Object[]{parameterId,semesterId},new ParameterSettingRowMapper());
+  }
+
+  @Override
   public int update(MutableParameterSetting pMutable) throws Exception {
     String query = UPDATE_ONE+" WHERE PS_ID=? ";
     return mJdbcTemplate.update(query,

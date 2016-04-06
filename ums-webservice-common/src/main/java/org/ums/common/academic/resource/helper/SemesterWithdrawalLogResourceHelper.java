@@ -48,20 +48,20 @@ public class SemesterWithdrawalLogResourceHelper extends ResourceHelper<Semester
     return builder.build();
   }
 
-  public JsonObject getForStudent(final String studentOrEmployeeId, final int semesterId,final Request pRequest,final UriInfo pUriInfo)throws Exception{
-    SemesterWithdrawalLog mLog = getContentManager().getForStudent(studentOrEmployeeId,semesterId);
+
+  public JsonObject getBySemesterWithdrawalId(final int semesterWithdrawalid,final Request pRequest,final UriInfo pUriInfo)throws Exception{
+    SemesterWithdrawalLog mLog = getContentManager().getBySemesterWithdrawalId(semesterWithdrawalid);
 
 
-      JsonObjectBuilder object = Json.createObjectBuilder();
-      JsonArrayBuilder children = Json.createArrayBuilder();
-      LocalCache localCache = new LocalCache();
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
 
 
-      children.add(toJson(mLog, pUriInfo, localCache));
-      object.add("entries", children);
-      localCache.invalidate();
-      return object.build();
-
+    children.add(toJson(mLog, pUriInfo, localCache));
+    object.add("entries", children);
+    localCache.invalidate();
+    return object.build();
   }
 
   @Override

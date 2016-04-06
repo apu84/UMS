@@ -3,10 +3,12 @@ package org.ums.persistent.model;
 
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
+import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.SemesterWithdrawal;
 import org.ums.domain.model.immutable.Student;
 import org.ums.domain.model.mutable.MutableSemesterWithdrawalLog;
+import org.ums.manager.EmployeeManager;
 import org.ums.manager.SemesterManager;
 import org.ums.manager.SemesterWithDrawalManager;
 import org.ums.manager.SemesterWithdrawalLogManager;
@@ -20,18 +22,20 @@ public class PersistentSemesterWithdrawalLog implements MutableSemesterWithdrawa
 
   private static SemesterWithDrawalManager sSemesterWithdrawalManager;
   private static SemesterWithdrawalLogManager sSemesterWithdrawalLogManager;
+  private static EmployeeManager sEmployeeManager;
 
   static{
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sSemesterWithdrawalManager = applicationContext.getBean("semesterWithdrawalManager",SemesterWithDrawalManager.class);
+    sEmployeeManager = applicationContext.getBean("employeeManager",EmployeeManager.class);
     sSemesterWithdrawalLogManager = applicationContext.getBean("semesterWithdrawalLogManager",SemesterWithdrawalLogManager.class);
   }
 
   private int mId;
   private SemesterWithdrawal mSemesterWithdrawal;
   private int mSemesterWithdrawalId;
-  private int mActor;
-  private String mActorId;
+  private Employee mEmployee;
+  private String mEmployeeId;
   private String mEventDateTime;
   private int mAction;
   private String mLastModified;
@@ -46,8 +50,6 @@ public class PersistentSemesterWithdrawalLog implements MutableSemesterWithdrawa
 
     mSemesterWithdrawal = pPersistentSemesterWithdrawalLog.getSemesterWithdrawal();
     mSemesterWithdrawalId = pPersistentSemesterWithdrawalLog.getSemesterWithdrawalId();
-    mActor  = pPersistentSemesterWithdrawalLog.getActor();
-    mActorId = pPersistentSemesterWithdrawalLog.getActorId();
     mEventDateTime = pPersistentSemesterWithdrawalLog.getEventDateTime();
     mAction = pPersistentSemesterWithdrawalLog.getAction();
     mComments = pPersistentSemesterWithdrawalLog.getComments();
@@ -64,9 +66,22 @@ public class PersistentSemesterWithdrawalLog implements MutableSemesterWithdrawa
     mEventDateTime = mDate;
   }
 
+  public String getEmployeeId() {
+    return mEmployeeId;
+  }
+
+  public void setEmployeeId(String pEmployeeId) {
+    mEmployeeId = pEmployeeId;
+  }
+
   @Override
-  public String getActorId() {
-    return mActorId;
+  public void setEmployee(Employee pEmployee) {
+    mEmployee = pEmployee;
+  }
+
+  @Override
+  public Employee getEmployee() throws Exception {
+    return mEmployee==null?sEmployeeManager.get(mEmployeeId):sEmployeeManager.validate(mEmployee);
   }
 
   @Override
@@ -97,22 +112,12 @@ public class PersistentSemesterWithdrawalLog implements MutableSemesterWithdrawa
     mSemesterWithdrawal = pSemesterWithdrawal;
   }
 
-  @Override
-  public void setActorId(String pId) {
-    mActorId= pId;
-  }
+
 
 
   @Override
   public SemesterWithdrawal getSemesterWithdrawal() throws Exception {
     return mSemesterWithdrawal==null? sSemesterWithdrawalManager.get(mSemesterWithdrawalId): sSemesterWithdrawalManager.validate(mSemesterWithdrawal);
-  }
-
-
-
-  @Override
-  public void setActor(int pActor) {
-    mActor = pActor;
   }
 
 
@@ -145,12 +150,6 @@ public class PersistentSemesterWithdrawalLog implements MutableSemesterWithdrawa
     mLastModified = pLastModified;
   }
 
-
-
-  @Override
-  public int getActor() {
-    return mActor;
-  }
 
   @Override
   public String getEventDateTime() {
