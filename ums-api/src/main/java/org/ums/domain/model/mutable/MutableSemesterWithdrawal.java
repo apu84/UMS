@@ -2,10 +2,10 @@ package org.ums.domain.model.mutable;
 
 import org.ums.domain.model.common.Mutable;
 import org.ums.domain.model.common.MutableIdentifier;
-import org.ums.domain.model.immutable.*;
-import org.ums.enums.ApplicationStatus;
-
-import java.util.List;
+import org.ums.domain.model.immutable.Program;
+import org.ums.domain.model.immutable.Semester;
+import org.ums.domain.model.immutable.SemesterWithdrawal;
+import org.ums.domain.model.immutable.Student;
 
 /**
  * Created by My Pc on 3/22/2016.

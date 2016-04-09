@@ -2,9 +2,9 @@
 ///<reference path="../../lib/jquery.notific8.d.ts"/>
 ///<reference path="../../lib/jquery.notify.d.ts"/>
 ///<reference path="../../lib/jquery.jqGrid.d.ts"/>
-module ums{
+module ums {
   import ISemester = ums;
-  interface ICassRoutineScope extends ng.IScope{
+  interface ICassRoutineScope extends ng.IScope {
     addNewRoutine: Function;
     updateRoutine: Function;
     getRoomNo: Function;
@@ -29,7 +29,7 @@ module ums{
     showGrid: boolean;
     showSelection: boolean;
   }
-  interface IPrograms{
+  interface IPrograms {
     index: number;
     programId: string;
     courses: Array<ICourse>;
@@ -46,7 +46,7 @@ module ums{
     semester: number;
   }
 
-  interface ISemester{
+  interface ISemester {
     semesterId: number;
     semesterName: string;
     startDate:string;
@@ -55,199 +55,202 @@ module ums{
     status: number;
   }
 
-  interface IClassRooms{
+  interface IClassRooms {
     roomId: string;
     roomNo: string;
   }
 
 
-
-  export class ClassRoutine{
+  export class ClassRoutine {
     program: Array<string>;
     academicYear: string;
     academicSemester: string;
     getPrograms: Function;
-    semesters:ISemester[];
+    semesters: ISemester[];
     semester: string;
     semesterId: string;
     courseId;
     constantRoomNo: string;
-    showGrid:boolean=true;
+    showGrid: boolean = true;
 
 
+    public static $inject = ['appConstants', 'HttpClient', '$scope', '$q'];
 
-    public static $inject = ['appConstants','HttpClient','$scope','$q'];
-    constructor(private appConstants: any, private httpClient: HttpClient, private $scope: ICassRoutineScope,private $q:ng.IQService ){
+    constructor(private appConstants: any, private httpClient: HttpClient, private $scope: ICassRoutineScope, private $q: ng.IQService) {
 
       $scope.courseTeacherSearchParamModel = new CourseTeacherSearchParamModel(this.appConstants, this.httpClient);
       $scope.showTable = false;
       $scope.showGrid = false;
       $scope.showSelection = true;
-      $scope.data={
-        ugPrograms : appConstants.ugPrograms,
+      $scope.data = {
+        ugPrograms: appConstants.ugPrograms,
         academicYear: appConstants.academicYear,
         academicSemester: appConstants.academicSemester,
-
-        courseClass:{}
-      }
+        courseClass: {}
+      };
 
       $scope.fetchProgramTypeAndDeptInfo = this.fetchProgramTypeAndDeptInfo.bind(this);
       $scope.getCourseId = this.getCourseId.bind(this);
       $scope.getRoomNo = this.getRoomNo.bind(this);
       $scope.hideGrid = this.hideGrid.bind(this);
-
-
-
     }
 
 
-    private hideGrid():void{
+    private hideGrid(): void {
       this.$scope.showGrid = false;
       this.$scope.showSelection = true;
     }
 
-    private fetchProgramTypeAndDeptInfo():void{
+    private fetchProgramTypeAndDeptInfo(): void {
       $("#leftDiv").hide();
       $("#arrowDiv").show();
-      $("#rightDiv").removeClass("orgRightClass");
-      $("#rightDiv").addClass("newRightClass");
+      $("#rightDiv").removeClass("orgRightClass").addClass("newRightClass");
 
-      this.$scope.courseTeacherSearchParamModel.programSelector.programId;
       this.$scope.showGrid = true;
-      this.$scope.showTable= true;
+      this.$scope.showTable = true;
       this.$scope.showSelection = true;
       var courseArr = this.$scope.courseArr;
       //var sectionsOnChange = this.$scope.sectionsOnChange;
-      var allSections = this.appConstants.theorySectionsGrid+this.appConstants.sessionalSectionsGrid2;
+      var allSections = this.appConstants.theorySectionsGrid + this.appConstants.sessionalSectionsGrid2;
       var sessional = this.appConstants.sessionalSectionsGrid;
       var theory = this.appConstants.theorySectionsGrid;
 
 
-      var type = { '1': 'THEORY', '2': 'SESSIONAL' };
-      var states = {'A': 'A', 'B': 'B', 'C': 'C', 'D': 'D','A1': 'A1', 'A2': 'A2','B1':'B1','B2':'B2','C1':'C1','C2':'C2','D1':'D1','D2':'D2'};
+      var type = {'1': 'THEORY', '2': 'SESSIONAL'};
+      var states = {
+        'A': 'A',
+        'B': 'B',
+        'C': 'C',
+        'D': 'D',
+        'A1': 'A1',
+        'A2': 'A2',
+        'B1': 'B1',
+        'B2': 'B2',
+        'C1': 'C1',
+        'C2': 'C2',
+        'D1': 'D1',
+        'D2': 'D2'
+      };
       var typesOfTheoryAndSessional = {
-        1: { 'A': 'A', 'B': 'B', 'C': 'C', 'D': 'D' },
-        2: { 'A1': 'A1', 'A2': 'A2','B1':'B1','B2':'B2','C1':'C1','C2':'C2','D1':'D1','D2':'D2' }
+        1: {'A': 'A', 'B': 'B', 'C': 'C', 'D': 'D'},
+        2: {'A1': 'A1', 'A2': 'A2', 'B1': 'B1', 'B2': 'B2', 'C1': 'C1', 'C2': 'C2', 'D1': 'D1', 'D2': 'D2'}
       };
 
 
       var lastSel,
-          cancelEditing = function(myGrid) {
+          cancelEditing = function (myGrid) {
             var lrid;
             if (typeof lastSel !== "undefined") {
-              myGrid.jqGrid('restoreRow',lastSel);
+              myGrid.jqGrid('restoreRow', lastSel);
               lrid = $.jgrid.jqID(lastSel);
               $("tr#" + lrid + " div.ui-inline-edit, " + "tr#" + lrid + " div.ui-inline-del").show();
               $("tr#" + lrid + " div.ui-inline-save, " + "tr#" + lrid + " div.ui-inline-cancel").hide();
             }
           };
 
-      var hideDelIcon = function(rowid) {
-        setTimeout(function() {
-          $("tr#"+$.jgrid.jqID(rowid)+ " div.ui-inline-edit").show();
-          $("tr#"+$.jgrid.jqID(rowid)+ " div.ui-inline-del").show();
-        },50);
+      var hideDelIcon = function (rowid) {
+        setTimeout(function () {
+          $("tr#" + $.jgrid.jqID(rowid) + " div.ui-inline-edit").show();
+          $("tr#" + $.jgrid.jqID(rowid) + " div.ui-inline-del").show();
+        }, 50);
       };
-      console.log("99999999999999999999999");
-      console.log(this.$scope.courses);
-      var _this=this;
+
+      var _this = this;
       var thisGrid = $("#jqGrid").jqGrid({
-
-
-        url: 'https://localhost/ums-webservice-common/academic/routine/routineForEmployee/semester/'+this.$scope.courseTeacherSearchParamModel.semesterId+"/program/"+this.$scope.courseTeacherSearchParamModel.programSelector.programId+"/year/"+this.$scope.courseTeacherSearchParamModel.academicYearId+"/semester/"+this.$scope.courseTeacherSearchParamModel.academicSemesterId,
+        url: 'https://localhost/ums-webservice-common/academic/routine/routineForEmployee/semester/' + this.$scope.courseTeacherSearchParamModel.semesterId + "/program/" + this.$scope.courseTeacherSearchParamModel.programSelector.programId + "/year/" + this.$scope.courseTeacherSearchParamModel.academicYearId + "/semester/" + this.$scope.courseTeacherSearchParamModel.academicSemesterId,
 
         editurl: 'https://localhost/ums-webservice-common/academic/routine',
-        loadBeforeSend: function(jqXHR) {
-          jqXHR.setRequestHeader("X-Authorization", 'Basic ZWVlX2l1bXM6ZTY1NDIwZDctZDc0Mi00Nzc3LTkzNjAtMDJjYzg0MzVhNGRm');
+        loadBeforeSend: function (jqXHR) {
+          jqXHR.setRequestHeader("X-Authorization", 'Basic ZHByZWdpc3RyYXI6ZmM0MmE5NWEtNWQwZC00Y2Q3LWE5ZTgtZDVhOTYzN2JkYzc3');
         },
         mtype: "GET",
         datatype: "json",
-        jsonReader: {repeatitems:false,root:"entries"},
-        colModel:[
+        jsonReader: {repeatitems: false, root: "entries"},
+        colModel: [
           {
             label: 'Routine Id',
             name: 'id',
-            width:10,
+            width: 10,
             hidden: true,
             key: true
           },
           {
-            label:'Semester Id',
-            name:'semesterId',
-            width:100,
-            hidden:true,
-            editable:true,
-            editoptions:{
-              defaultValue:this.$scope.courseTeacherSearchParamModel.semesterId
+            label: 'Semester Id',
+            name: 'semesterId',
+            width: 100,
+            hidden: true,
+            editable: true,
+            editoptions: {
+              defaultValue: this.$scope.courseTeacherSearchParamModel.semesterId
             }
           },
           {
-            label:'Program Id',
-            name:'programId',
-            width:0,
-            hidden:true,
-            editable:true,
-            editoptions:{
-              defaultValue:this.$scope.courseTeacherSearchParamModel.programSelector.programId
+            label: 'Program Id',
+            name: 'programId',
+            width: 0,
+            hidden: true,
+            editable: true,
+            editoptions: {
+              defaultValue: this.$scope.courseTeacherSearchParamModel.programSelector.programId
             }
           },
           {
-            label:'Academic Year',
-            name:'academicYear',
-            width:0,
-            hidden:true,
-            editable:true,
-            editoptions:{
-              defaultValue:this.$scope.courseTeacherSearchParamModel.academicYearId
+            label: 'Academic Year',
+            name: 'academicYear',
+            width: 0,
+            hidden: true,
+            editable: true,
+            editoptions: {
+              defaultValue: this.$scope.courseTeacherSearchParamModel.academicYearId
             }
           },
           {
-            label:'Academic Semester',
-            name:'academicSemester',
-            width:0,
-            hidden:true,
-            editable:true,
-            editoptions:{
-              defaultValue:this.$scope.courseTeacherSearchParamModel.academicSemesterId
+            label: 'Academic Semester',
+            name: 'academicSemester',
+            width: 0,
+            hidden: true,
+            editable: true,
+            editoptions: {
+              defaultValue: this.$scope.courseTeacherSearchParamModel.academicSemesterId
             }
           },
           {
-            label:'Day',
+            label: 'Day',
             name: 'day',
-            width:120,
-            editable:true,
+            width: 120,
+            editable: true,
             //width:100,align:'center',formatter:'select',
-            edittype:'select',
-            editoptions:{
+            edittype: 'select',
+            editoptions: {
               value: this.appConstants.days,
-              defaultValue:'None'
+              defaultValue: 'None'
             },
-            stype:'select',
-            searchoptions:{
-              sopt:['eq','ne'],
-              value:this.appConstants.days
+            stype: 'select',
+            searchoptions: {
+              sopt: ['eq', 'ne'],
+              value: this.appConstants.days
             },
-            formatter:function (cellValue, opts, rowObject) {
+            formatter: function (cellValue, opts, rowObject) {
               var temp = "";
-              if(cellValue==1){
-                temp="Saturday";
+              if (cellValue == 1) {
+                temp = "Saturday";
               }
-              else if(cellValue==2){
-                temp="Sunday";
+              else if (cellValue == 2) {
+                temp = "Sunday";
               }
-              else if(cellValue ==3){
-                temp="Monday";
+              else if (cellValue == 3) {
+                temp = "Monday";
               }
-              else if(cellValue ==4){
-                temp="Tuesday";
+              else if (cellValue == 4) {
+                temp = "Tuesday";
               }
-              else if(cellValue ==5){
+              else if (cellValue == 5) {
                 temp = "Wednesday";
               }
-              else if(cellValue ==6){
+              else if (cellValue == 6) {
                 temp = "Thursday";
               }
-              else{
+              else {
                 temp = "Friday";
               }
               return temp;
@@ -255,76 +258,75 @@ module ums{
 
           },
           {
-            label:'Course ID',
+            label: 'Course ID',
             name: 'courseId',
             width: 150,
             editable: true,
-            edittype:'select',
-            formatter:'select',
-            editoptions:{
-              value:this.$scope.courses,
-              dataInit:function(elem){
+            edittype: 'select',
+            formatter: 'select',
+            editoptions: {
+              value: this.$scope.courses,
+              dataInit: function (elem) {
                 var v = $(elem).val();
                 var sectionsOnChange;
 
                 //console.log(courseArr);
 
-                for(var i=0;i<courseArr.length;i++){
-                  if(v == courseArr[i].id){
-                    if(courseArr[i].type == "THEORY"){
-                      console.log(courseArr[i].type)
+                for (var i = 0; i < courseArr.length; i++) {
+                  if (v == courseArr[i].id) {
+                    if (courseArr[i].type == "THEORY") {
+                      console.log(courseArr[i].type);
                       sectionsOnChange = theory;
                     }
-                    else{
-                      console.log(courseArr[i].type)
+                    else {
+                      console.log(courseArr[i].type);
 
                       sectionsOnChange = sessional;
                     }
                     break;
                   }
                 }
-                $("#jqGrid").jqGrid('setColProp', 'section', { editoptions: { value: sectionsOnChange} });
-
+                $("#jqGrid").jqGrid('setColProp', 'section', {editoptions: {value: sectionsOnChange}});
 
 
               },
               dataEvents: [
-                {  type: 'change',
+                {
+                  type: 'change',
 
-                  fn: function(e) {
+                  fn: function (e) {
                     var sectionsOnChanges;
 
                     //console.log(courseArr);
                     //resetting
-                    $("#jqGrid").jqGrid('setColProp', 'section', { editoptions: { value: allSections} });
+                    $("#jqGrid").jqGrid('setColProp', 'section', {editoptions: {value: allSections}});
 
                     var v = $(e.target).val();
 
-                    for(var i=0;i<courseArr.length;i++){
-                      if(v == courseArr[i].id){
-                        if(courseArr[i].type == "THEORY"){
-                          console.log(courseArr[i].type)
+                    for (var i = 0; i < courseArr.length; i++) {
+                      if (v == courseArr[i].id) {
+                        if (courseArr[i].type == "THEORY") {
+                          console.log(courseArr[i].type);
                           sectionsOnChanges = 1;
                         }
-                        else{
-                          console.log(courseArr[i].type)
+                        else {
+                          console.log(courseArr[i].type);
 
                           sectionsOnChanges = 2;
                         }
                         break;
                       }
 
-
                     }
 
 
                     var sc = typesOfTheoryAndSessional[sectionsOnChanges];
                     var newOptions = '';
-                    for(var stateId in sc){
+                    for (var stateId in sc) {
                       if (sc.hasOwnProperty(stateId)) {
                         newOptions += '<option role="option" value="' +
-                            stateId + '">' +
-                            states[stateId] + '</option>';
+                        stateId + '">' +
+                        states[stateId] + '</option>';
                       }
 
                     }
@@ -340,83 +342,76 @@ module ums{
                       var rowId = row.attr('id');
                       $("select#" + rowId + "_section", row[0]).html(newOptions);
                     }
-
-
-                    console.log("^^^^^^^^^^^");
-                    console.log(sectionsOnChanges);
-                    //this.$scope.sectionsOnChange = sectionsOnChange;   <---------------I want to use here..
                     _this.$scope.sectionsOnChange = sectionsOnChanges;
-                    //can u tell me what is this this ??
-                    //$("#jqGrid").jqGrid('setColProp', 'section', { editoptions: { value: sectionsOnChanges} });
 
                   }
 
                 }
               ]
             },
-            stype:'select',
-            searchoptions:{
-              sopt:['eq','ne'],
-              value:this.$scope.courses
+            stype: 'select',
+            searchoptions: {
+              sopt: ['eq', 'ne'],
+              value: this.$scope.courses
 
             }
           },
           {
             label: 'Section',
-            name:'section',
+            name: 'section',
             width: 150,
             editable: true,
-            edittype:'select',
-            formatter:'select',
-            editoptions:{
-              value:states
+            edittype: 'select',
+            formatter: 'select',
+            editoptions: {
+              value: states
             }
           },
 
           {
-            label:'Start Time',
-            name:'startTime',
-            width:150,
-            editable:true,
-            edittype:'select',
-            editoptions:{
-              value:this.appConstants.startTime
+            label: 'Start Time',
+            name: 'startTime',
+            width: 150,
+            editable: true,
+            edittype: 'select',
+            editoptions: {
+              value: this.appConstants.startTime
             },
-            stype:'select',
-            searchoptions:{
-              sopt:['eq','ne'],
-              value:this.appConstants.startTime
+            stype: 'select',
+            searchoptions: {
+              sopt: ['eq', 'ne'],
+              value: this.appConstants.startTime
             }
           },
           {
-            label:'End Time',
-            name:'endTime',
-            width:150,
-            editable:true,
-            edittype:'select',
-            editoptions:{
-              value:this.appConstants.endTime
+            label: 'End Time',
+            name: 'endTime',
+            width: 150,
+            editable: true,
+            edittype: 'select',
+            editoptions: {
+              value: this.appConstants.endTime
             },
-            stype:'select',
-            searchoptions:{
-              sopt:['eq','ne'],
-              value:this.appConstants.endTime
+            stype: 'select',
+            searchoptions: {
+              sopt: ['eq', 'ne'],
+              value: this.appConstants.endTime
             }
           },
 
 
           {
-            label:  'Room No',
+            label: 'Room No',
             name: 'roomNo',
             width: 150,
             editable: true,
-            edittype:'select',
-            editoptions:{
-              value:this.$scope.rooms   //I want to use here with that format.
+            edittype: 'select',
+            editoptions: {
+              value: this.$scope.rooms   //I want to use here with that format.
             },
-            stype:'select',
-            searchoptions:{
-              sopt:['eq','ne'],
+            stype: 'select',
+            searchoptions: {
+              sopt: ['eq', 'ne'],
               value: this.$scope.rooms
             }
           },
@@ -430,18 +425,18 @@ module ums{
               mtype: "PUT",
               delOptions: {
                 mtype: 'DELETE',
-                onclickSubmit: function(rp_ge) {
+                onclickSubmit: function (rp_ge) {
                   var selrow_id = thisGrid.getGridParam('selrow');
                   var rowdata = thisGrid.getRowData(selrow_id);
-                  rp_ge.url = "https://localhost/ums-webservice-common/academic/routine" + '/' + selrow_id ;
+                  rp_ge.url = "https://localhost/ums-webservice-common/academic/routine" + '/' + selrow_id;
                 },
                 ajaxDelOptions: {
                   contentType: "application/json",
-                  beforeSend: function(jqXHR) {
-                    jqXHR.setRequestHeader("X-Authorization", 'Basic ZWVlX2l1bXM6ZTY1NDIwZDctZDc0Mi00Nzc3LTkzNjAtMDJjYzg0MzVhNGRm');
+                  beforeSend: function (jqXHR) {
+                    jqXHR.setRequestHeader("X-Authorization", 'Basic ZHByZWdpc3RyYXI6ZmM0MmE5NWEtNWQwZC00Y2Q3LWE5ZTgtZDVhOTYzN2JkYzc3');
                   }
                 },
-                serializeDelData: function(postdata) {
+                serializeDelData: function (postdata) {
                   return JSON.stringify(postdata);
                 }
               },
@@ -450,30 +445,26 @@ module ums{
                   cancelEditing(thisGrid);
                 }
                 lastSel = id;
-                $("#jqGrid").setGridParam({ editurl: "https://localhost/ums-webservice-common/academic/routine/" + encodeURIComponent(id)});
+                $("#jqGrid").setGridParam({editurl: "https://localhost/ums-webservice-common/academic/routine/" + encodeURIComponent(id)});
               }
 
             }
           }
         ],
-
-
-
         sortname: 'id',
         loadonce: true,
         autowidth: true,
         pager: "#jqGridPager",
         rownumbers: true,
-        height:500,
-
+        height: 500,
 
 
         rowList: [],        // disable page size dropdown
         pgbuttons: false,     // disable page control like next, back button
         pgtext: null,
 
-        ondblClickRow: function(id, ri, ci,e) {
-          if(typeof (lastSel) !== "undefined" && id !== lastSel) {
+        ondblClickRow: function (id, ri, ci, e) {
+          if (typeof (lastSel) !== "undefined" && id !== lastSel) {
             cancelEditing($(this));
           }
           lastSel = id;
@@ -482,13 +473,15 @@ module ums{
           var element = e.target || e.srcElement;
 
 
-          $("#jqGrid").jqGrid('editRow',id,true,function() {
-            var colModel = jQuery("#jqGrid").jqGrid ('getGridParam', 'colModel');
+          $("#jqGrid").jqGrid('editRow', id, true, function () {
+            var colModel = jQuery("#jqGrid").jqGrid('getGridParam', 'colModel');
             var colName = colModel[ci].name;
             var input = $('#' + id + '_' + colName);
 
-            setTimeout(function(){  input.get(0).focus(); }, 300);
-          },null,"https://localhost/ums-webservice-common/academic/routine/"+ encodeURIComponent(id));
+            setTimeout(function () {
+              input.get(0).focus();
+            }, 300);
+          }, null, "https://localhost/ums-webservice-common/academic/routine/" + encodeURIComponent(id));
           $("tr#" + lrid + " div.ui-inline-edit, " + "tr#" + lrid + " div.ui-inline-del").hide();
           $("tr#" + lrid + " div.ui-inline-save, " + "tr#" + lrid + " div.ui-inline-cancel").show();
         }
@@ -510,7 +503,7 @@ module ums{
             alert("def");
           }, 50);
         },
-        oneditfunc: function(){
+        oneditfunc: function () {
           hideDelIcon("empty");
         }
 
@@ -521,7 +514,7 @@ module ums{
           rowID: 'empty',
           useDefValues: true,
           addRowParams: addOptions,
-          oneditfunc  : function (rowId) {
+          oneditfunc: function (rowId) {
             alert(rowId);
           }
         }
@@ -530,11 +523,11 @@ module ums{
     }
 
 
-    private getCourseId():void{
+    private getCourseId(): void {
       var defer = this.$q.defer();
-      var courseArr:Array<ICourse>;
-      this.httpClient.get('/ums-webservice-common/academic/course/semester/'+'11012016'+'/program/'+'110500', 'application/json',
-          (json:any, etag:string) => {
+      var courseArr: Array<ICourse>;
+      this.httpClient.get('/ums-webservice-common/academic/course/semester/' + '11012016' + '/program/' + '110500', 'application/json',
+          (json: any, etag: string) => {
             courseArr = json.entries;
             var courseId: string = ':None';
             this.$scope.courseArr = courseArr;
@@ -547,43 +540,40 @@ module ums{
             this.$scope.courses = courseId;
             defer.resolve(courseArr);
           },
-          (response:ng.IHttpPromiseCallbackArg<any>) => {
+          (response: ng.IHttpPromiseCallbackArg<any>) => {
             console.error(response);
           });
 
 
     }
 
-    private getRoomNo(): void{
+    private getRoomNo(): void {
       var defer = this.$q.defer();
       var roomArr: Array<any>;
-      this.httpClient.get('academic/classroom/all','application/json',(json:any,etag:string)=>{
+      this.httpClient.get('academic/classroom/all', 'application/json',
+          (json: any, etag: string)=> {
 
             roomArr = json.rows;
-            var roomNumber:string=':None';
+            var roomNumber: string = ':None';
             var roomNo: Array<IClassRooms>;
-            var roomN2:Array<IClassRooms>;
+            var roomN2: Array<IClassRooms>;
 
             roomNo = roomArr;
-            var count:number=0;
+            var count: number = 0;
 
-            for(var i in roomNo){
-
-
-              roomNumber = roomNumber+";"+roomNo[i].roomNo+":"+roomNo[i].roomNo;
-
-
+            for (var i in roomNo) {
+              roomNumber = roomNumber + ";" + roomNo[i].roomNo + ":" + roomNo[i].roomNo;
             }
 
-            this.$scope.rooms=roomNumber;
+            this.$scope.rooms = roomNumber;
             defer.resolve(roomArr);
           },
-          (response:ng.IHttpPromiseCallbackArg<any>)=>{
+          (response: ng.IHttpPromiseCallbackArg<any>)=> {
             console.error(response);
           });
     }
 
   }
 
-  UMS.controller("ClassRoutine",ClassRoutine);
+  UMS.controller("ClassRoutine", ClassRoutine);
 }

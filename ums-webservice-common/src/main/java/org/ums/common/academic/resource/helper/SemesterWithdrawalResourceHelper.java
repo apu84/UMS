@@ -6,16 +6,12 @@ import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
 import org.ums.common.academic.resource.MutableSemesterWithdrawalResource;
 import org.ums.common.academic.resource.ResourceHelper;
-import org.ums.common.academic.resource.RoutineResource;
 import org.ums.common.academic.resource.SemesterWithdrawalResource;
 import org.ums.common.builder.Builder;
 import org.ums.common.builder.SemesterWithdrawalBuilder;
 import org.ums.domain.model.immutable.SemesterWithdrawal;
-import org.ums.domain.model.mutable.MutableRoutine;
 import org.ums.domain.model.mutable.MutableSemesterWithdrawal;
-import org.ums.manager.ContentManager;
 import org.ums.manager.SemesterWithDrawalManager;
-import org.ums.persistent.model.PersistentRoutine;
 import org.ums.persistent.model.PersistentSemesterWithdrawal;
 
 import javax.json.JsonObject;
