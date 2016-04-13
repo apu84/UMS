@@ -17,4 +17,5 @@ public interface SemesterWithdrawal extends Serializable,LastModifier,EditType<M
   String getCause();
   String getAppDate();
   int getStatus();
+  String getComment();
 }

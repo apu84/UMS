@@ -31,6 +31,11 @@ public class SemesterWithdrawalCache extends ContentCache<SemesterWithdrawal,Mut
   }
 
   @Override
+  public List<SemesterWithdrawal> getByDeptForEmployee(String deptId) {
+    return getManager().getByDeptForEmployee(deptId);
+  }
+
+  @Override
   public SemesterWithdrawal getStudentsRecord(String studentId,int semesterId,int year,int semester) {
     return getManager().getStudentsRecord(studentId,semesterId,year,semester);
   }

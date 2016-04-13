@@ -368,7 +368,7 @@ module ums {
           {id:"4",name:"Assistant Admin Officer"},
           {id:"5",name:"Vice Chancellor"}
         ],
-        action:[
+        applicationStatus:[
           {id:"0",name:"Saved"},
           {id:"1",name:"Submitted"},
           {id:"2",name:"Approved"},

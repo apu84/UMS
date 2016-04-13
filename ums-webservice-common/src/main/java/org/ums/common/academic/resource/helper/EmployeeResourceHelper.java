@@ -1,6 +1,7 @@
 package org.ums.common.academic.resource.helper;
 
 
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
@@ -49,8 +50,9 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee,MutableEmplo
     return builder.build();
   }
 
-  public JsonObject getByEmployeeId(final String pEmployeeId,final Request pRequest,final UriInfo pUriInfo)throws Exception{
-    Employee employee = getContentManager().getByEmployeeId(pEmployeeId);
+  public JsonObject getByEmployeeId(final UriInfo pUriInfo)throws Exception{
+    String employeeId = SecurityUtils.getSubject().getPrincipal().toString();
+    Employee employee = getContentManager().getByEmployeeId(employeeId);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();

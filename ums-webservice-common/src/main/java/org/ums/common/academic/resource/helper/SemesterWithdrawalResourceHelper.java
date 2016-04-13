@@ -48,7 +48,10 @@ public class SemesterWithdrawalResourceHelper extends ResourceHelper<SemesterWit
     LocalCache localCache = new LocalCache();
     getBuilder().build(mutableSemesterWithdrawal, pJsonObject, localCache);
     mutableSemesterWithdrawal.commit(false);
-    URI contextURI = pUriInfo.getBaseUriBuilder().path(SemesterWithdrawalResource.class).path(MutableSemesterWithdrawalResource.class, "get").build(mutableSemesterWithdrawal.getId());
+    URI contextURI = pUriInfo.getBaseUriBuilder().
+        path(SemesterWithdrawalResource.class).
+        path(SemesterWithdrawalResource.class,"get").
+        build("0");
     Response.ResponseBuilder builder = Response.created(contextURI);
     builder.status(Response.Status.CREATED);
     return builder.build();
@@ -62,6 +65,20 @@ public class SemesterWithdrawalResourceHelper extends ResourceHelper<SemesterWit
     LocalCache localCache = new LocalCache();
 
     children.add(toJson(semesterWithdrawal, pUriInfo, localCache));
+    object.add("entries", children);
+    localCache.invalidate();
+    return object.build();
+  }
+
+
+  public JsonObject getRoutineByDeptForEmployee(final String deptId, final Request pRequest, final UriInfo pUriInfo) throws Exception {
+    List<SemesterWithdrawal> semesterWithdrawals = getContentManager().getByDeptForEmployee(deptId);
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+    for (SemesterWithdrawal semesterWithdrawal: semesterWithdrawals) {
+      children.add(toJson(semesterWithdrawal, pUriInfo, localCache));
+    }
     object.add("entries", children);
     localCache.invalidate();
     return object.build();

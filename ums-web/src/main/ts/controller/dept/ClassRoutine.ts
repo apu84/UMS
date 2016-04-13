@@ -148,8 +148,7 @@ module ums{
           $("tr#"+$.jgrid.jqID(rowid)+ " div.ui-inline-del").show();
         },50);
       };
-      console.log("99999999999999999999999");
-      console.log(this.$scope.courses);
+
       var _this=this;
       var thisGrid = $("#jqGrid").jqGrid({
 
@@ -267,16 +266,14 @@ module ums{
                 var v = $(elem).val();
                 var sectionsOnChange;
 
-                //console.log(courseArr);
+
 
                 for(var i=0;i<courseArr.length;i++){
                   if(v == courseArr[i].id){
                     if(courseArr[i].type == "THEORY"){
-                      console.log(courseArr[i].type)
                       sectionsOnChange = theory;
                     }
                     else{
-                      console.log(courseArr[i].type)
 
                       sectionsOnChange = sessional;
                     }
@@ -294,8 +291,7 @@ module ums{
                   fn: function(e) {
                     var sectionsOnChanges;
 
-                    //console.log(courseArr);
-                    //resetting
+
                     $("#jqGrid").jqGrid('setColProp', 'section', { editoptions: { value: allSections} });
 
                     var v = $(e.target).val();
@@ -303,11 +299,9 @@ module ums{
                     for(var i=0;i<courseArr.length;i++){
                       if(v == courseArr[i].id){
                         if(courseArr[i].type == "THEORY"){
-                          console.log(courseArr[i].type)
                           sectionsOnChanges = 1;
                         }
                         else{
-                          console.log(courseArr[i].type)
 
                           sectionsOnChanges = 2;
                         }
@@ -342,12 +336,9 @@ module ums{
                     }
 
 
-                    console.log("^^^^^^^^^^^");
-                    console.log(sectionsOnChanges);
-                    //this.$scope.sectionsOnChange = sectionsOnChange;   <---------------I want to use here..
+
                     _this.$scope.sectionsOnChange = sectionsOnChanges;
-                    //can u tell me what is this this ??
-                    //$("#jqGrid").jqGrid('setColProp', 'section', { editoptions: { value: sectionsOnChanges} });
+
 
                   }
 

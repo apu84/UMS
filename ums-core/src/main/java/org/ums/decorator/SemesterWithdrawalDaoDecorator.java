@@ -18,6 +18,11 @@ public class SemesterWithdrawalDaoDecorator extends ContentDaoDecorator<Semester
   }
 
   @Override
+  public List<SemesterWithdrawal> getByDeptForEmployee(String deptId) {
+    return getManager().getByDeptForEmployee(deptId);
+  }
+
+  @Override
   public List<SemesterWithdrawal> getSemesterWithdrawalForHead(String teacherId) {
     return getManager().getSemesterWithdrawalForHead(teacherId);
   }
