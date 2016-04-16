@@ -48,7 +48,7 @@ module ums{
     semesterId:number;
     programId:number;
     cause:string;
-    tempCause:string;
+    /*tempCause:string;*/
     studentId:string;
     year:number;
     semester:number;
@@ -75,6 +75,7 @@ module ums{
         }
         //$scope.initialize = this.initialize.bind(this);
         this.initialize();
+        //this.$scope.initialize = this.initialize.bind(this);
         $scope.editApplication=false;
         $scope.submitButtonClicked = false;
         $scope.submitButton = false;
@@ -122,6 +123,7 @@ module ums{
                         this.$scope.data.status = "Saved";
                         this.$scope.editButton = true;
                         this.$scope.submitButton = true;
+                        this.$scope.deleteButton=true;
                       }
                       else if(this.$scope.semesterWithdrawArr[i].status==2){
                         this.$scope.data.status = "Accepted By Head"
@@ -234,6 +236,8 @@ module ums{
         this.$scope.textEditable=true;
         this.$scope.saveButton = true;
         this.$scope.cancelButton = true;
+        this.$scope.editButton=false;
+        this.$scope.submitButton=false;
         this.$scope.deleteButton = false;
       });
     }
@@ -257,6 +261,8 @@ module ums{
               this.$scope.updateButton=false;
               this.$scope.cancelButton=false;
             }
+
+            this.initialize();
           }).error((data) => {
       });
     }
@@ -325,18 +331,19 @@ module ums{
       semesterWithdraw["studentId"] = this.$scope.student[0].id;
       semesterWithdraw["year"] = this.$scope.student[0].year;
       semesterWithdraw["semester"] = this.$scope.student[0].academicSemester;
-      if(this.$scope.submitButtonClicked==false)
-      {
-        this.$scope.semesterWithdraw.cause = this.$scope.semesterWithdraw.tempCause;
+      if(this.$scope.data.cause.length>0){
+        semesterWithdraw["cause"] = this.$scope.data.cause;
       }
-      semesterWithdraw["cause"] = this.$scope.semesterWithdraw.cause;
+      else{
+        semesterWithdraw["cause"] = this.$scope.semesterWithdraw.cause;
+      }
       if(this.$scope.submitButtonClicked==true){
         semesterWithdraw["status"] = 1;
       }else{
         semesterWithdraw["status"] = 0;
       }
       semesterWithdraw["applicationDate"] = "";
-      semesterWithdraw["comments"] = "---";
+      semesterWithdraw["comments"] = " ";
       return semesterWithdraw;
     }
 

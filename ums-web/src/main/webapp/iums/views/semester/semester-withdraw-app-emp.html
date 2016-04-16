@@ -12,11 +12,11 @@
             </tr>
             </thead>
             <tbody>
-                <tr data-ng-repeat="app in semesterWithdrawArr">
+                <tr data-ng-repeat="app in semesterWithdrawArr | filter:{status:'!0'}">
                     {{tempSemesterWithdraw=app;""}}
                     <td>{{app.studentId}}</td>
                     <td>{{app.appDate}}</td>
-                    <td data-ng-if="app.status!=0">
+                    <td data-ng-if="app.status>0">
                         <span class="label label-sm label-info" data-ng-if="app.status==1">Submitted</span>
                         <span class="label label-sm label-success" data-ng-if="app.status==2">Approved By Head</span>
                         <span class="label label-sm label-warning" data-ng-if="app.status==3">Rejected By Head</span>
@@ -118,8 +118,8 @@
                         </div>
                     </div>
                     <div class="form-actions text-right pal">
-                        <button  class="btn btn-primary" data-ng-if="approveButton" data-ng-click="approve()">Approve</button>
-                        <button  class="btn btn-primary" data-ng-if="rejectButton" data-ng-click="reject()">Reject</button>
+                        <button  class="btn btn-primary" data-ng-if="approveButton==true" data-ng-click="approve()">Approve</button>
+                        <button  class="btn btn-primary" data-ng-if="rejectButton==true" data-ng-click="reject()">Reject</button>
                         <button  class="btn btn-primary" data-ng-if="saveAndCloseButton" data-ng-click="saveAndClose()">Save & Close</button>
 
                     </div>

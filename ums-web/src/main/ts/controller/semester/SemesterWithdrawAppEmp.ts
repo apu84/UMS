@@ -106,14 +106,20 @@ module ums{
       this.$scope.tempSemesterWithdraw = semesterWith;
       this.$scope.detailButtonCliecked = true;
       this.$scope.data.status = "";
-
-      if(this.$scope.employee[0].designation == 101){
+      //console.log(this.$scope.employee[0].status);
+      //console.log(this.$scope.employee[0].designation);
+      this.$scope.approveButton=false;
+      this.$scope.rejectButton = false;
+      if(this.$scope.employee[0].designation == 101 && this.$scope.tempSemesterWithdraw.status!=4 && this.$scope.tempSemesterWithdraw.status!=5 && this.$scope.tempSemesterWithdraw.status!=3 && this.$scope.tempSemesterWithdraw.status!=2 ){
         this.$scope.approveButton=true;
         this.$scope.rejectButton = true;
+        console.log("I am in");
       }
-      if(this.$scope.employee.designation!=101 && this.$scope.tempSemesterWithdraw.status==2 || this.$scope.tempSemesterWithdraw.status==4 || this.$scope.tempSemesterWithdraw.status==5){
+      if(this.$scope.employee[0].designation!=101 && this.$scope.tempSemesterWithdraw.status==2 && this.$scope.tempSemesterWithdraw.status!=4 && this.$scope.tempSemesterWithdraw.status!=5){
+
         this.$scope.approveButton = true;
         this.$scope.rejectButton= true;
+        console.log("I dont want");
       }
       this.getStudentInfo().then((studentInfoArr:Array<Student>)=>{
         this.getSemesterInfo().then((semesterInfoArr:Array<Student>)=>{
