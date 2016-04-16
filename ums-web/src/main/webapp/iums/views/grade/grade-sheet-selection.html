@@ -1,0 +1,243 @@
+<style>
+    .table thead tr th, .table thead tr td {
+        border-bottom: 1px solid grey;
+    }
+</style>
+<div class="row" id="selection1">
+    <div class="orgLeftClass pull-left panel panel-green" id="leftDiv">
+        <div class="panel-heading">
+            <h3 class="panel-title">Select </h3>
+        </div>
+        <div class="panel-body pan">
+            <form action="" class="form-horizontal">
+                <div class="form-body pal">
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Program Type</label>
+                        <div class="col-md-8">
+                            <select class="form-control required">
+                                <option  value="11">Undergraduate</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Semester</label>
+
+                        <div class="col-md-8">
+                            <select class="form-control required" >
+                                <option  value="11012016">Spring, 2016</option>
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Exam Type</label>
+
+                        <div class="col-md-8">
+                            <select class="form-control required" >
+                                <option  value="1">Regular</option>
+                                <option  value="2">Clearance/Carry Over/Improvement</option>
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="form-actions text-right pal">
+                    <button type="button" class="btn btn-success" onclick="fetchCourseTeacherInfo()">Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="arrowClass pull-left" onclick="resetDivs()" id="arrowDiv"><i
+            class="fa fa-angle-double-right fa-4x"></i></i> </div>
+    <div class="orgRightClass pull-left" id="rightDiv">
+
+        <div class="panel">
+            <div class="panel-heading">Teacher's Different Roles for different courses of Online Grade Submission<span
+                        class="subtitle"></span></div>
+            <div class="panel-body shadowPanel"   style="min-height: 490px;">
+
+                <table class="table table-hover table-bordered">
+                    <thead>
+                    <tr>
+                        <th width="10%">Course No</th>
+                        <th width="30%">Course Title</th>
+                        <th width="5%" align="center">Year-Sem.</th>
+                        <th width="20%">Course Teacher</th>
+                        <th width="20%">Preparer-Scrutinizer</th>
+                        <th width="15%">Status</th>
+                    </tr>
+
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                        <a href="javascript:void(0)" onclick="fetchGradeSheet()">
+                            EEE 2204
+                        </a>
+                        </td>
+                        <td>Electronics II Lab</td>
+                        <td align="center">2-2</td>
+                        <td>Mr. Md. Tanvir Ahammed(Section-A1), Mr. Md. Istiaque Rahaman(Section-A2)</td>
+                        <td>Mr. Md. Tanvir Ahammed <span class="badge badge-warning">P</span> <br/>
+                               Mr. Md. Istiaque Rahaman <span class="badge badge-info">S</span></td>
+                        <td>Not Submitted</td>
+                    </tr>
+                    <tr>
+                        <td>EEE 2211</td>
+                        <td>Measurement and Instrumentation</td>
+                        <td align="center">2-2</td>
+                        <td>Mr. Monjur Morshed(Section-A), Ms. Sharmin Sobhan(Section-B)</td>
+                        <td>Mr. Monjur Morshed<span class="badge badge-warning">P</span> <br/>
+                            Ms. Sharmin Sobhan<span class="badge badge-info">S</span></td>
+                        <td>Not Submitted</td>
+                    </tr>
+                    <tr>
+                        <td>EEE 2203</td>
+                        <td>Electronics II</td>
+                        <td align="center">2-2</td>
+                        <td>Mr. Tanvir Ahmad(Section-A), Mr. Khandakar Md. Ishtiak(Section-B)</td>
+                        <td>Mr. Tanvir Ahmad <span class="badge badge-warning">P</span> <br/>
+                            Mr. Khandakar Md. Ishtiak <span class="badge badge-info">S</span></td>
+                        <td>Not Submitted</td>
+                    </tr>
+
+                    </tbody>
+                </table>
+
+            </div>
+            <div class="form-actions text-right pal" style="margin-top:25px;display: none;">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row" id="selection2" style="display: none;">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-body shadowPanel">
+
+                <table width="80%" align="center">
+                    <tr>
+                        <td colspan="4" align="center">
+                            <h4>Marks/Grade Sheet (Fall, 2014)</h4>
+                            <h4>Department/School : Dept. of EEE</h4>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="15%"><b>Course Title :</b></td>
+                        <td width="50%">Course Title Goes Here</td>
+                        <td width="15%"><b>Course Number :</b></td>
+                        <td width="20%">EEE 1234</td>
+
+                    </tr>
+                    <tr>
+                        <td><b>Credit Hour :</b></td>
+                        <td>1.5</td>
+                        <td><b>Total Part :</b></td>
+                        <td></td>
+                    </tr>
+                </table>
+
+                <scrollable-table watch="visibleProjects">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                        <tr>
+                            <th sortable-header col="facility">Facility</th>
+                            <th sortable-header col="code">Unit code</th>
+                            <th sortable-header col="cost">Cost</th>
+                            <th sortable-header col="conditionRating">Condition score</th>
+                            <th sortable-header col="extent">Replace %</th>
+                            <th sortable-header col="planYear" comparator-fn="comparator">Plan year</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="response in visibleProjects" row-id="{{ response.facility }}"
+                            ng-class="{info: selected == response.facility}" >
+                            <td>{{ response.facility }}</td>
+                            <td>{{ response.code }}</td>
+                            <td>{{ response.cost }}</td>
+                            <td class="cr">{{ response.conditionRating }}</td>
+                            <td>{{ response.extent }}</td>
+                            <td>{{ response.planYear }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </scrollable-table>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<style type="text/css">
+
+    .orgLeftClass {
+        width: 30%;
+
+    }
+
+    .orgRightClass {
+        width: 66%;
+    }
+
+    .arrowClass {
+        display: none;
+        cursor: pointer;
+    }
+
+    .orgLeftClass, .arrowClass {
+        margin-right: 25px;
+        margin-left: 8px;
+    "
+
+    }
+
+    .newRightClass {
+        width: 94%;
+    }
+
+    .bootstrap-select.btn-group:not(.input-group-btn), .bootstrap-select.btn-group[class*="span"] {
+        margin-bottom: 0px !important;
+    }
+
+    .table tbody tr td {
+        border-top: none !important;
+    }
+</style>
+<script type="text/javascript">
+     function fetchCourseTeacherInfo() {
+     $("#leftDiv").hide();
+     $("#arrowDiv").show();
+
+     $("#rightDiv").removeClass("orgRightClass");
+     $("#rightDiv").addClass("newRightClass");
+
+     }
+
+    function resetDivs() {
+        $("#arrowDiv").hide();
+
+        $("#leftDiv").show();
+
+        $("#rightDiv").removeClass("newRightClass");
+        $("#rightDiv").addClass("orgRightClass");
+
+    }
+
+    function fetchGradeSheet(){
+        document.getElementById('selection1').style.display='none';
+        document.getElementById('selection2').style.display='block';
+        $('.page-title.ng-binding').html("Online Grade Submission &nbsp;&nbsp;&nbsp;&nbsp;<a href='javascript:void(0)' onclick='goBack()'><i class='fa fa-arrow-circle-left'></i></a>");
+    }
+
+    function goBack(){
+        document.getElementById('selection1').style.display='block';
+        document.getElementById('selection2').style.display='none';
+        $('.page-title.ng-binding').html("Grade Sheet Selection");
+    }
+</script>
