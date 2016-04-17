@@ -12,9 +12,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 
-/**
- * Created by My Pc on 3/6/2016.
- */
+
 @Component
 @Path("academic/routine")
 @Produces(Resource.MIME_TYPE_JSON)

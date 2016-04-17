@@ -44,6 +44,7 @@ public class PersistentSemesterWithdrawal implements MutableSemesterWithdrawal {
   private int mStatus;
   private String mAppDate;
   private String mLastModified;
+  private String mComment;
   private List<SemesterWithdrawalLog> mLogs = new ArrayList<>();
 
   public PersistentSemesterWithdrawal(){
@@ -67,6 +68,17 @@ public class PersistentSemesterWithdrawal implements MutableSemesterWithdrawal {
     mStatus = pPersistentSemesterWithdrawal.getStatus();
     mAppDate = pPersistentSemesterWithdrawal.getAppDate();
     mLastModified = pPersistentSemesterWithdrawal.getLastModified();
+    mComment = pPersistentSemesterWithdrawal.getComment();
+  }
+
+  @Override
+  public void setComments(String pComments) {
+    mComment = pComments;
+  }
+
+  @Override
+  public String getComment() {
+    return mComment;
   }
 
   @Override

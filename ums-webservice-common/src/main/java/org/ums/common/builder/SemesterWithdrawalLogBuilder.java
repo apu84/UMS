@@ -19,9 +19,8 @@ public class SemesterWithdrawalLogBuilder implements Builder<SemesterWithdrawalL
   public void build(JsonObjectBuilder pBuilder, SemesterWithdrawalLog pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) throws Exception {
     pBuilder.add("id",pReadOnly.getId());
     pBuilder.add("semesterWithdrawId",pReadOnly.getSemesterWithdrawal().getId());
-    pBuilder.add("employeeId",pReadOnly.getEmployee().getId());
+    pBuilder.add("employeeId",pReadOnly.getEmployeeId());
     pBuilder.add("action",pReadOnly.getAction());
-    pBuilder.add("comments",pReadOnly.getComments());
     pBuilder.add("eventDateTime",pReadOnly.getEventDateTime());
     pBuilder.add("lastModified",pReadOnly.getLastModified());
     pBuilder.add("self", pUriInfo.getBaseUriBuilder().path("academic").path("semesterWithdrawLog").path(pReadOnly.getId().toString()).build().toString());
@@ -30,13 +29,12 @@ public class SemesterWithdrawalLogBuilder implements Builder<SemesterWithdrawalL
 
   @Override
   public void build(MutableSemesterWithdrawalLog pMutable, JsonObject pJsonObject, LocalCache pLocalCache) throws Exception {
-    pMutable.setId(Integer.parseInt(pJsonObject.getString("id")));
     PersistentSemesterWithdrawal persistentSemesterWithdrawal = new PersistentSemesterWithdrawal();
-    persistentSemesterWithdrawal.setId(Integer.parseInt(pJsonObject.getString("semesterWithdrawId")));
+    persistentSemesterWithdrawal.setId(pJsonObject.getInt("semesterWithdrawId"));
     pMutable.setSemesterWithdrawal(persistentSemesterWithdrawal);
-    PersistentEmployee employee = new PersistentEmployee();
-    employee.setId(pJsonObject.getString("employeeId"));
-    pMutable.setAction(Integer.parseInt(pJsonObject.getString("action")));
-    pMutable.setComments(pJsonObject.getString("comments"));
+    /*PersistentEmployee employee = new PersistentEmployee();
+    employee.setId(pJsonObject.getString("employeeId"));*/
+    pMutable.setEmployeeId(pJsonObject.getString("employeeId"));
+    pMutable.setAction(pJsonObject.getInt("action"));
   }
 }

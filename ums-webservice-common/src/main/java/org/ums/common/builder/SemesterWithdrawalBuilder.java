@@ -27,24 +27,34 @@ public class SemesterWithdrawalBuilder implements Builder<SemesterWithdrawal,Mut
     pBuilder.add("semester",pReadOnly.getStudent().getCurrentAcademicSemester());
     pBuilder.add("cause",pReadOnly.getCause());
     pBuilder.add("appDate",pReadOnly.getAppDate());
+    pBuilder.add("status",pReadOnly.getStatus());
+    pBuilder.add("comments",pReadOnly.getComment());
     pBuilder.add("self", pUriInfo.getBaseUriBuilder().path("academic").path("semesterWithdraw").path(pReadOnly.getId().toString()).build().toString());
 
   }
 
   @Override
   public void build(MutableSemesterWithdrawal pMutable, JsonObject pJsonObject, LocalCache pLocalCache) throws Exception {
-    pMutable.setId(Integer.parseInt(pJsonObject.getString("id")));
+    int id = pJsonObject.getInt("id");
+    if(id!=0)
+    {
+      pMutable.setId(id);
+    }
+    int semId = pJsonObject.getInt("semesterId");
     PersistentSemester semester = new PersistentSemester();
-    semester.setId(Integer.parseInt(pJsonObject.getString("semesterId")));
+    semester.setId(semId);
     pMutable.setSemester(semester);
     PersistentProgram program = new PersistentProgram();
-    program.setId(Integer.parseInt(pJsonObject.getString("programId")));
+    program.setId(pJsonObject.getInt("programId"));
     pMutable.setProgram(program);
     PersistentStudent student = new PersistentStudent();
+    //int studentId = (pJsonObject.getInt("studentId"));
     student.setId(pJsonObject.getString("studentId"));
-    student.setCurrentYear(Integer.parseInt(pJsonObject.getString("year")));
-    student.setCurrentAcademicSemester(Integer.parseInt(pJsonObject.getString("semester")));
+    student.setCurrentYear(pJsonObject.getInt("year"));
+    student.setCurrentAcademicSemester(pJsonObject.getInt("semester"));
     pMutable.setStudent(student);
     pMutable.setCause(pJsonObject.getString("cause"));
+    pMutable.setStatus(pJsonObject.getInt("status"));
+    pMutable.setComments(pJsonObject.getString("comments"));
   }
 }

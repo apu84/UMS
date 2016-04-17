@@ -39,7 +39,6 @@ public class PersistentSemesterWithdrawalLog implements MutableSemesterWithdrawa
   private String mEventDateTime;
   private int mAction;
   private String mLastModified;
-  private String mComments;
 
   public PersistentSemesterWithdrawalLog(){
 
@@ -52,7 +51,6 @@ public class PersistentSemesterWithdrawalLog implements MutableSemesterWithdrawa
     mSemesterWithdrawalId = pPersistentSemesterWithdrawalLog.getSemesterWithdrawalId();
     mEventDateTime = pPersistentSemesterWithdrawalLog.getEventDateTime();
     mAction = pPersistentSemesterWithdrawalLog.getAction();
-    mComments = pPersistentSemesterWithdrawalLog.getComments();
     mLastModified = pPersistentSemesterWithdrawalLog.getLastModified();
   }
 
@@ -74,25 +72,9 @@ public class PersistentSemesterWithdrawalLog implements MutableSemesterWithdrawa
     mEmployeeId = pEmployeeId;
   }
 
-  @Override
-  public void setEmployee(Employee pEmployee) {
-    mEmployee = pEmployee;
-  }
 
-  @Override
-  public Employee getEmployee() throws Exception {
-    return mEmployee==null?sEmployeeManager.get(mEmployeeId):sEmployeeManager.validate(mEmployee);
-  }
 
-  @Override
-  public void setComments(String pComments) {
-    mComments = pComments;
-  }
 
-  @Override
-  public String getComments() {
-    return mComments;
-  }
 
   public int getSemesterWithdrawalId() {
     return mSemesterWithdrawalId;

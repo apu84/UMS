@@ -80,7 +80,7 @@ public class PersistentClassRoom implements MutableClassRoom {
 
   @Override
   public void setCapacity(int pTotalCapacity) {
-    mTotalColumn = pTotalCapacity;
+    mCapacity = pTotalCapacity;
   }
 
   @Override
@@ -120,12 +120,12 @@ public class PersistentClassRoom implements MutableClassRoom {
 
   @Override
   public int getTotalColumn() {
-    return 0;
+    return mTotalColumn;
   }
 
   @Override
   public int getCapacity() {
-    return mCapacity;
+    return mTotalColumn*mTotalRow;
   }
 
   @Override

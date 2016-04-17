@@ -12,8 +12,7 @@ import java.sql.Timestamp;
 
 public interface MutableSemesterWithdrawalLog extends SemesterWithdrawalLog,Mutable,MutableLastModifier,MutableIdentifier<Integer> {
   void setSemesterWithdrawal(final SemesterWithdrawal pSemesterWithdrawal);
-  void setEmployee(final Employee pEmployee);
+  void setEmployeeId(final String pEmployeeId);
   void setAction(final int pAction);
   void setEventDate(final String mDate);
-  void setComments(final String pComments);
 }

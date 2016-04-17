@@ -16,12 +16,11 @@ import java.util.List;
 
 public class PersistentSemesterWithdrawalLogDao extends SemesterWithdrawalLogDaoDecorator {
 
-  static String SELECT_ALL = "SELECT SWL_ID,SW_ID,EMPLOYEE_ID,ACTION,COMMENTS,EVENT_DATE_TIME,LAST_MODIFIED FROM SEMESTER_WITHDRAW_LOG ";
-  static String SELECT_ALL_FOR_STUDENT="SELECT L.SWL_ID,L.SW_ID,L.EMPLOYEE_ID,L.ACTION,L.COMMENTS,L.EVENT_DATE_TIME,L.LAST_MODIFIED FROM SEMESTER_WITHDRAW_LOG L , SEMESTER_WITHDRAW S " +
-      "WHERE S.SW_ID=L.SW_ID AND L.ACTOR_ID=? AND S.SEMESTER_ID=?";
-  static String INSERT_ONE = "INSERT INTO SEMESTER_WITHDRAW_LOG (SW_ID,EMPLOYEE_ID,ACTION,COMMENTS,EVENT_DATE_TIME,LAST_MODIFIED)" +
-      "VALUES (?,?,?,?,to_date(to_char(sysdate,'DD MM YYYY HH:MM')),"+getLastModifiedSql()+" )";
-  static String UPDATE_ONE = "UPDATE SEMESTER_WITHDRAW_LOG SET SW_ID=?,EMPLOYEE_ID=?,ACTION=?,COMMENTS=?,EVENT_DATE_TIME=to_date(to_char(sysdate,'DD MM YYYY HH:MM')),LAST_MODIFIED= "+getLastModifiedSql()+" ";
+  static String SELECT_ALL = "SELECT SWL_ID,SW_ID,EMPLOYEE_ID,ACTION,EVENT_DATE_TIME,LAST_MODIFIED FROM SEMESTER_WITHDRAW_LOG ";
+
+  static String INSERT_ONE = "INSERT INTO SEMESTER_WITHDRAW_LOG (SW_ID,EMPLOYEE_ID,ACTION,EVENT_DATE_TIME,LAST_MODIFIED)" +
+      "VALUES (?,?,?,systimestamp,"+getLastModifiedSql()+" )";
+  static String UPDATE_ONE = "UPDATE SEMESTER_WITHDRAW_LOG SET SW_ID=?,EMPLOYEE_ID=?,ACTION=?,EVENT_DATE_TIME=systimestamp,LAST_MODIFIED= "+getLastModifiedSql()+" ";
   static String DELETE_ONE = "DELETE FROM SEMESTER_WITHDRAW_LOG ";
 
   private JdbcTemplate mJdbcTemplate;
@@ -47,9 +46,8 @@ public class PersistentSemesterWithdrawalLogDao extends SemesterWithdrawalLogDao
     String query = UPDATE_ONE+" WHERE SWL_ID=?";
     return mJdbcTemplate.update(query,
           pMutable.getSemesterWithdrawal().getId(),
-          pMutable.getEmployee().getId(),
+          pMutable.getEmployeeId(),
           pMutable.getAction(),
-          pMutable.getComments(),
           pMutable.getId()
         );
   }
@@ -65,9 +63,8 @@ public class PersistentSemesterWithdrawalLogDao extends SemesterWithdrawalLogDao
     String query = INSERT_ONE;
     return mJdbcTemplate.update(query,
           pMutable.getSemesterWithdrawal().getId(),
-          pMutable.getEmployee().getId(),
-          pMutable.getAction(),
-          pMutable.getComments()
+          pMutable.getEmployeeId(),
+          pMutable.getAction()
         );
   }
 
@@ -85,7 +82,6 @@ public class PersistentSemesterWithdrawalLogDao extends SemesterWithdrawalLogDao
       pLog.setSemesterWithdrawalId(pResultSet.getInt("SW_ID"));
       pLog.setEmployeeId(pResultSet.getString("EMPLOYEE_ID"));
       pLog.setAction(pResultSet.getInt("ACTION"));
-      pLog.setComments(pResultSet.getString("COMMENTS"));
       pLog.setEventDate(pResultSet.getString("EVENT_DATE_TIME"));
       pLog.setLastModified(pResultSet.getString("LAST_MODIFIED"));
       return null;

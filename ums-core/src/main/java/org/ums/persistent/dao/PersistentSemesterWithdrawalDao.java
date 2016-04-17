@@ -14,10 +14,14 @@ import java.util.List;
 
 public class PersistentSemesterWithdrawalDao extends SemesterWithdrawalDaoDecorator {
 
-  static String SELECT_ALL = "SELECT SW_ID,SEMESTER_ID,PROGRAM_ID,STUDENT_ID,YEAR,SEMESTER,CAUSE,STATUS,APP_DATE,LAST_MODIFIED FROM SEMESTER_WITHDRAW";
-  static String INSERT_ONE = "INSERT INTO SEMESTER_WITHDRAW(SEMESTER_ID,PROGRAM_ID,STUDENT_ID,YEAR,SEMESTER,CAUSE,STATUS,APP_DATE,LAST_MODIFIED) VALUES(?,?,?,?,?,?,?,to_date(to_char(sysdate,'DD MM YYYY HH:MM')),"+getLastModifiedSql()+") ";
-  static String UPDATE_ONE = "UPDATE SEMESTER_WITHDRAW SET SEMESTER_ID=?,PROGRAM_ID=?,STUDENT_ID=?,YEAR=?,SEMESTER=?,CAUSE=?,STATUS=?,APP_DATE=to_date(to_char(sysdate,'DD MM YYYY HH:MM')),LAST_MODIFIED="+getLastModifiedSql()+" ";
-  static String DELETE_ONE = "DELETE FROM SEMESTER_WITHDRAW ";
+   String SELECT_ALL = "SELECT SW_ID,SEMESTER_ID,PROGRAM_ID,STUDENT_ID,YEAR,SEMESTER,CAUSE,STATUS,APP_DATE,COMMENTS,LAST_MODIFIED FROM SEMESTER_WITHDRAW";
+   String SELECT_ALL_For_Employee = "SELECT SW.SW_ID,SW.SEMESTER_ID,SW.PROGRAM_ID,SW.STUDENT_ID,SW.YEAR,SW.SEMESTER,SW.CAUSE,SW.STATUS,SW.APP_DATE,SW.COMMENTS,SW.LAST_MODIFIED FROM SEMESTER_WITHDRAW";
+
+  String INSERT_ONE = "INSERT INTO SEMESTER_WITHDRAW(SEMESTER_ID,PROGRAM_ID,STUDENT_ID,YEAR,SEMESTER,CAUSE,STATUS,COMMENTS,APP_DATE,LAST_MODIFIED) VALUES(?,?,?,?,?,?,?,?,systimestamp,"+getLastModifiedSql()+") ";
+   String UPDATE_ONE = "UPDATE SEMESTER_WITHDRAW SET SEMESTER_ID=?,PROGRAM_ID=?,STUDENT_ID=?,YEAR=?,SEMESTER=?,CAUSE=?,STATUS=?,COMMENTS=?,APP_DATE=systimestamp,LAST_MODIFIED="+getLastModifiedSql()+" ";
+  String UPDATE_ONE_ALTERNATE = "UPDATE SEMESTER_WITHDRAW SET SEMESTER_ID=?,PROGRAM_ID=?,STUDENT_ID=?,YEAR=?,SEMESTER=?,CAUSE=?,STATUS=?,APP_DATE=TO_TIMESTAMP(?,'RRRR-MM-DD HH24:MI:SS.FF'),COMMENTS=?,LAST_MODIFIED="+getLastModifiedSql()+" ";
+
+  String DELETE_ONE = "DELETE FROM SEMESTER_WITHDRAW ";
 
 
 
@@ -61,15 +65,44 @@ public class PersistentSemesterWithdrawalDao extends SemesterWithdrawalDaoDecora
   }
 
   @Override
+  public List<SemesterWithdrawal> getByDeptForEmployee(String deptId) {
+
+    String query = SELECT_ALL_For_Employee+"  SW,STUDENTS S,STUDENT_RECORD SR WHERE SW.STUDENT_ID = S.STUDENT_ID AND SW.STUDENT_ID=SR.STUDENT_ID AND S.DEPT_ID=? AND SW.YEAR =SR.YEAR AND SW.SEMESTER=SR.SEMESTER  ";
+    return mJdbcTemplate.query(query,new Object[]{deptId},new SemesterWithdrawalRowMapper());
+  }
+
+  @Override
   public int update(MutableSemesterWithdrawal pMutable) throws Exception {
-    String query = UPDATE_ONE+" WHERE SW_ID=?" ;
-    return mJdbcTemplate.update(query,
+    if(pMutable.getStatus()<2){
+      String query = UPDATE_ONE+" WHERE SW_ID=?" ;
+      return mJdbcTemplate.update(query,
           pMutable.getSemester().getId(),
           pMutable.getProgram().getId(),
           pMutable.getStudent().getId(),
+          pMutable.getStudent().getCurrentYear(),
+          pMutable.getStudent().getCurrentAcademicSemester(),
           pMutable.getCause(),
+          pMutable.getStatus(),
+          pMutable.getComment(),
           pMutable.getId()
-        );
+      );
+    }else{
+
+      String query = UPDATE_ONE_ALTERNATE+" WHERE SW_ID=?" ;
+      return mJdbcTemplate.update(query,
+          pMutable.getSemester().getId(),
+          pMutable.getProgram().getId(),
+          pMutable.getStudent().getId(),
+          pMutable.getStudent().getCurrentYear(),
+          pMutable.getStudent().getCurrentAcademicSemester(),
+          pMutable.getCause(),
+          pMutable.getStatus(),
+          pMutable.getAppDate(),
+          pMutable.getComment(),
+          pMutable.getId()
+      );
+    }
+
   }
 
   @Override
@@ -97,7 +130,11 @@ public class PersistentSemesterWithdrawalDao extends SemesterWithdrawalDaoDecora
         pMutable.getSemester().getId(),
         pMutable.getProgram().getId(),
         pMutable.getStudent().getId(),
-        pMutable.getCause()
+        pMutable.getStudent().getCurrentYear(),
+        pMutable.getStudent().getCurrentAcademicSemester(),
+        pMutable.getCause(),
+        pMutable.getStatus(),
+        pMutable.getComment()
         );
   }
 
@@ -118,6 +155,7 @@ public class PersistentSemesterWithdrawalDao extends SemesterWithdrawalDaoDecora
       persistenceSW.setProgramId(pResultSet.getInt("PROGRAM_ID"));
       persistenceSW.setStatus(pResultSet.getInt("STATUS"));
       persistenceSW.setAppDate(pResultSet.getString("APP_DATE"));
+      persistenceSW.setComments(pResultSet.getString("COMMENTS"));
       persistenceSW.setLastModified(pResultSet.getString("LAST_MODIFIED"));
       return persistenceSW;
     }

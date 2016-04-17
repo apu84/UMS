@@ -8,7 +8,8 @@ module ums {
     'oc.lazyLoad',
     'LocalStorageModule',
     'ngCookies',
-    'ngSanitize'
+    'ngSanitize',
+    'scrollable-table'
   ]);
 
   UMS.constant("appConstants", Constants.Default());
@@ -223,10 +224,10 @@ module ums {
                     }]
                 }
             })
-        .state('applicationsStudent', {
-          url: "/applicationsStudent",
-          controller: 'ApplicationsStudent',
-          templateUrl: 'views/semester/applications-student.html',
+        .state('semesterWithdrawAppStd', {
+          url: "/semesterWithdrawAppStd",
+          controller: 'SemesterWithdrawAppStd',
+          templateUrl: 'views/semester/semester-withdraw-app-std.html',
           resolve: {
             loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
               return $ocLazyLoad.load({
@@ -243,6 +244,25 @@ module ums {
           }
         })
 
+     .state('semesterWithdrawApp', {
+      url: "/semesterWithdrawApp",
+      controller: 'SemesterWithdrawAppEmp',
+      templateUrl: 'views/semester/semester-withdraw-app-emp.html',
+      resolve: {
+        loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+          return $ocLazyLoad.load({
+            files: [
+              'vendors/bootstrap-switch/css/bootstrap-switch.css',
+              'vendors/bootstrap-datepicker/css/datepicker.css',
+              'vendors/jquery-validate/jquery.validate.min.js',
+              'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+              'vendors/ckeditor/ckeditor.js',
+              'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
+            ]
+          });
+        }]
+      }
+    })
         .state('semesterSyllabusMap', {
           url: "/semesterSyllabusMap",
           controller: 'SemesterSyllabusMap',
@@ -254,7 +274,7 @@ module ums {
                   'vendors/bootstrap-switch/css/bootstrap-switch.css',
                   'vendors/bootstrap-datepicker/css/datepicker.css',
                   'vendors/jquery-validate/jquery.validate.min.js',
-                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                  'vendors/boots-trap-datepicker/js/bootstrap-datepicker.js',
                   'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
                 ]
               });
@@ -432,6 +452,11 @@ module ums {
         .state('flushCache', {
           url: "/flushCache",
           controller: 'FlushCache'
+        })
+        .state('gradeSheetSelection', {
+          url: "/gradeSheetSelection",
+          templateUrl: 'views/grade/grade-sheet-selection.html',
+          controller: 'MarksSubmission'
         })
 
   });

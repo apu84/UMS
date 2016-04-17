@@ -29,9 +29,7 @@ import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.List;
 
-/**
- * Created by My Pc on 3/6/2016.
- */
+
 @Component
 public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutine, String> {
 
