@@ -68,6 +68,7 @@
 /// <reference path='directive/DatePicker.ts'/>
 /// <reference path='directive/Spinner.ts'/>
 /// <reference path='directive/ProfilePicture.ts'/>
+/// <reference path='directive/Grid.ts'/>
 
 /// <reference path='interceptor/Unauthorized.ts'/>
 
@@ -76,3 +77,11 @@
 
 /// <reference path='service/Notify.ts'/>
 
+
+/// <reference path='grid/GridConfig.ts'/>
+/// <reference path='grid/GridDecorator.ts'/>
+/// <reference path='grid/GridOptions.ts'/>
+/// <reference path='grid/InlineNavigationOptions.ts'/>
+/// <reference path='grid/InlineNavigationOptionsImpl.ts'/>
+/// <reference path='grid/JqGridApi.ts'/>
+/// <reference path='grid/JqGridApiImpl.ts'/>

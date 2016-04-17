@@ -42,12 +42,12 @@
 
                 </div>
                 <div class="form-actions text-right pal">
-                    <button type="button" class="btn btn-success" data-ng-click="fetchProgramTypeAndDeptInfo()">Search</button>
+                    <button type="button" class="btn btn-success" data-ng-click="fetchGrid()">Search</button>
                 </div>
             </form>
         </div>
     </div>
-    <div class="arrowClass pull-left" onclick="resetDivs()" id="arrowDiv"><i
+    <div class="arrowClass pull-left" data-ng-click="resetDivs()" id="arrowDiv"><i
             class="fa fa-angle-double-right fa-4x"></i></i> </div>
 
     <div class="orgRightClass pull-left" id="rightDiv">
@@ -56,9 +56,16 @@
             <div class="panel-heading">Class Routine<span
                         class="subtitle"></span></div>
             <div class="panel-body">
-                <div  >
-                    <table id="jqGrid" ></table>
-                    <div id="jqGridPager"></div>
+                <div data-jq-grid=""
+                     data-config="gridOptions"
+                     data-addnew="true"
+                     data="classRoutineData"
+                     gridid="classRoutine"
+                     pagerid="classRoutinePager"
+                     grid="grid"
+                     inline-nav-options="inlineNavOptions"
+                     data-ng-if="gridOptions">
+
                 </div>
             </div>
         </div>
@@ -101,25 +108,3 @@
         border-top: none !important;
     }
 </style>
-<script type="text/javascript">
-    /* function fetchCourseTeacherInfo() {
-     $("#leftDiv").hide();
-     $("#arrowDiv").show();
-
-     $("#rightDiv").removeClass("orgRightClass");
-     $("#rightDiv").addClass("newRightClass");
-
-     }*/
-
-    function resetDivs() {
-        $("#arrowDiv").hide();
-
-        $("#leftDiv").show();
-
-        $("#rightDiv").removeClass("newRightClass");
-        $("#rightDiv").addClass("orgRightClass");
-
-    }
-
-
-</script>

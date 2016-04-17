@@ -1,19 +1,17 @@
-///<reference path="grid/JqGridApi.ts"/>
-///<reference path="grid/JqGridApiImpl.ts"/>
-///<reference path="grid/InlineNavigationOptions.ts"/>
+///<reference path="../grid/JqGridApi.ts"/>
+///<reference path="../grid/JqGridApiImpl.ts"/>
+///<reference path="../grid/InlineNavigationOptions.ts"/>
 module ums {
   export interface JqGridScope extends ng.IScope {
     config: JQueryJqGridOptions;
     data: any;
     insert: any;
-    grid: {
-      api: JqGridApi;
-    };
+    grid: JqGrid;
     addnew: boolean;
     inlineNavOptions: any;
   }
 
-  export class JqGrid implements ng.IDirective {
+  export class Grid implements ng.IDirective {
     public restrict: string = 'A';
     public replace: boolean = true;
 
@@ -27,10 +25,10 @@ module ums {
     };
 
     public link = (scope: JqGridScope, element: JQuery, attrs: any) => {
-      var table, div, messageDisplayed: boolean = false;
+      var table, div;
 
       scope.$watch('config', (value) => {
-        element.children().empty();
+        element.empty();
         table = angular.element('<table id="' + attrs.gridid + '"></table>');
 
         element.append(table);
@@ -54,6 +52,7 @@ module ums {
         //   view:  <ng-jqgrid … api="gridapi">
         //   ctrl:  $scope.gridapi.clear();
         scope.grid.api = new JqGridApiImpl(table, scope.data);
+        console.debug('%o', scope.grid.api);
       });
 
 
@@ -68,7 +67,7 @@ module ums {
   }
 
   UMS.directive('jqGrid', [() => {
-    return new JqGrid();
+    return new Grid();
   }]);
 
 }
