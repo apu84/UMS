@@ -39,7 +39,7 @@ module ums {
         url: 'https://localhost/ums-webservice-common/academic/classroom/all',
         editurl:'https://localhost/ums-webservice-common/academic/classroom',
         loadBeforeSend: function(jqXHR) {
-          jqXHR.setRequestHeader("X-Authorization", 'Basic ZHByZWdpc3RyYXI6MTMwOTc3YzUtNzgyZC00NDA5LWIzNTUtZDdhYzZkYWQ1ODYx');
+          jqXHR.setRequestHeader("X-Authorization", 'Basic ZHByZWdpc3RyYXI6Yzg5ZTdhYzMtNjM1NS00ZjQ0LWE5OWEtNzZjNmJmNDkyNWM5');
         },
         jsonReader: { repeatitems: false },
         colModel: [
@@ -78,7 +78,7 @@ module ums {
             label: 'Capacity',
             name: 'capacity',
             width: 50,
-            editable: true
+            editable: false
           },
           {
             label: 'Room Type',
