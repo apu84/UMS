@@ -22,15 +22,12 @@ public class MutableRoutineResource extends Resource {
   }
 
   @PUT
-  @Path(PATH_PARAM_OBJECT_ID)
   public Response updateRoutine(
-      final @PathParam("object-id") String pObjectId,
       final @Context Request pRequest,
       final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader,
       final JsonObject pJsonObject
       )throws Exception{
-
-    return mRoutineResourceHelper.put(pObjectId,pRequest,pIfMatchHeader,pJsonObject);
+    return mRoutineResourceHelper.put(pJsonObject.getString("id"), pRequest, pIfMatchHeader, pJsonObject);
   }
 
   @DELETE

@@ -2,23 +2,21 @@ package org.ums.common.academic.resource.helper;
 
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-
-import org.ums.common.builder.Builder;
-import org.ums.common.builder.RoutineBuilder;
-import org.ums.domain.model.immutable.Student;
-import org.ums.manager.StudentManager;
-import org.ums.persistent.model.PersistentProgram;
-import org.ums.persistent.model.PersistentRoutine;
 import org.ums.cache.LocalCache;
 import org.ums.common.academic.resource.ResourceHelper;
 import org.ums.common.academic.resource.RoutineResource;
+import org.ums.common.builder.Builder;
+import org.ums.common.builder.RoutineBuilder;
+import org.ums.domain.model.immutable.Routine;
+import org.ums.domain.model.immutable.Student;
 import org.ums.domain.model.mutable.MutableProgram;
 import org.ums.domain.model.mutable.MutableRoutine;
 import org.ums.domain.model.mutable.MutableSemester;
-import org.ums.domain.model.immutable.Routine;
 import org.ums.manager.RoutineManager;
+import org.ums.manager.StudentManager;
+import org.ums.persistent.model.PersistentProgram;
+import org.ums.persistent.model.PersistentRoutine;
 import org.ums.persistent.model.PersistentSemester;
 
 import javax.json.Json;
@@ -104,8 +102,8 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
   }
 
   public JsonObject getRoutineForStudent() throws Exception {
-    String mStudentId=SecurityUtils.getSubject().getPrincipal().toString();
-    Student student=mStudentManager.get(mStudentId);
+    String mStudentId = SecurityUtils.getSubject().getPrincipal().toString();
+    Student student = mStudentManager.get(mStudentId);
     List<Routine> routines = getContentManager().getStudentRoutine(student);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
@@ -118,14 +116,14 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
     return object.build();
   }
 
-  public JsonObject getRoutineForEmployee(final int semesterId, final int programId, final int academicYear, final int academicSemester, final Request pRequest, final UriInfo pUriInfo) throws Exception {
+  public JsonObject getRoutineForEmployee(final int semesterId, final int programId, final int academicYear,
+                                          final int academicSemester, final Request pRequest, final UriInfo pUriInfo) throws Exception {
     List<Routine> routines = getContentManager().getEmployeeRoutine(semesterId, programId, academicYear, academicSemester);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-    int counter = 0;
+
     for (Routine routine : routines) {
-      counter++;
       children.add(toJson(routine, pUriInfo, localCache));
     }
     object.add("entries", children);

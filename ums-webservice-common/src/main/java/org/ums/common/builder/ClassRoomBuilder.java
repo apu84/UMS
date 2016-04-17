@@ -2,8 +2,8 @@ package org.ums.common.builder;
 
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
-import org.ums.domain.model.mutable.*;
-import org.ums.domain.model.immutable.*;
+import org.ums.domain.model.immutable.ClassRoom;
+import org.ums.domain.model.mutable.MutableClassRoom;
 import org.ums.enums.ClassRoomType;
 
 import javax.json.JsonObject;
@@ -29,7 +29,6 @@ public class ClassRoomBuilder implements Builder<ClassRoom, MutableClassRoom> {
 
   @Override
   public void build(MutableClassRoom pMutable, JsonObject pJsonObject, final LocalCache pLocalCache) throws Exception {
-    pMutable.setId(pJsonObject.getString("id").contains("empty")?0:Integer.parseInt(pJsonObject.getString("id")));
     pMutable.setRoomNo(pJsonObject.getString("roomNo"));
     pMutable.setDescription(pJsonObject.getString("description"));
     pMutable.setTotalRow((Integer.parseInt(pJsonObject.getString("totalRow"))));

@@ -18,15 +18,15 @@ module ums {
     constructor(private appConstants:any,private httpClient:HttpClient,private $scope:IClassRoomScope) {
 
       var lastSel,
-      cancelEditing = function(myGrid) {
-        var lrid;
-        if (typeof lastSel !== "undefined") {
-          myGrid.jqGrid('restoreRow',lastSel);
-          lrid = $.jgrid.jqID(lastSel);
-          $("tr#" + lrid + " div.ui-inline-edit, " + "tr#" + lrid + " div.ui-inline-del").show();
-          $("tr#" + lrid + " div.ui-inline-save, " + "tr#" + lrid + " div.ui-inline-cancel").hide();
-        }
-      };
+          cancelEditing = function(myGrid) {
+            var lrid;
+            if (typeof lastSel !== "undefined") {
+              myGrid.jqGrid('restoreRow',lastSel);
+              lrid = $.jgrid.jqID(lastSel);
+              $("tr#" + lrid + " div.ui-inline-edit, " + "tr#" + lrid + " div.ui-inline-del").show();
+              $("tr#" + lrid + " div.ui-inline-save, " + "tr#" + lrid + " div.ui-inline-cancel").hide();
+            }
+          };
 
       var hideDelIcon = function(rowid) {
         setTimeout(function() {
@@ -169,7 +169,7 @@ module ums {
         height:500,
 
         rowList: [],        // disable page size dropdown
-        pgbuttons: true,     // disable page control like next, back button
+        pgbuttons: false,     // disable page control like next, back button
         pgtext: null,
 
         ondblClickRow: function(id, ri, ci,e) {
@@ -194,7 +194,7 @@ module ums {
         }
 
 
-        });
+      });
 
 
       var addOptions = {
@@ -229,4 +229,3 @@ module ums {
   }
   UMS.controller('ClassRoomInfo', ClassRoomInfo);
 }
-

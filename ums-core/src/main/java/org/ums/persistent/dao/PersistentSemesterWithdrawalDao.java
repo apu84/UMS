@@ -1,21 +1,15 @@
 package org.ums.persistent.dao;
 
-import com.sun.rowset.internal.Row;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.SemesterWithdrawalDaoDecorator;
 import org.ums.domain.model.immutable.SemesterWithdrawal;
-import org.ums.domain.model.immutable.SemesterWithdrawalLog;
 import org.ums.domain.model.mutable.MutableSemesterWithdrawal;
-import org.ums.enums.ApplicationStatus;
 import org.ums.persistent.model.PersistentSemesterWithdrawal;
-import org.ums.persistent.model.PersistentSemesterWithdrawalLog;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.List;
 
 
 public class PersistentSemesterWithdrawalDao extends SemesterWithdrawalDaoDecorator {

@@ -47,6 +47,8 @@ interface JQueryJqGridOptions {
   autowidth?:any;
   viewrecords?:any;
   rownumbers?:any;
+  ondblClickRow?(rowid: string, iRow: number, iCol: number, e: Event): void;
+  onSelectRow?(id: string): void;
 }
 
 interface defaults {

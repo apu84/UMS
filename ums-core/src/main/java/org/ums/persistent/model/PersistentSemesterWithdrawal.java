@@ -7,15 +7,13 @@ import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.SemesterWithdrawalLog;
 import org.ums.domain.model.immutable.Student;
 import org.ums.domain.model.mutable.MutableSemesterWithdrawal;
-import org.ums.enums.ApplicationStatus;
 import org.ums.manager.ProgramManager;
 import org.ums.manager.SemesterManager;
 import org.ums.manager.SemesterWithDrawalManager;
 import org.ums.manager.StudentManager;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class PersistentSemesterWithdrawal implements MutableSemesterWithdrawal {
