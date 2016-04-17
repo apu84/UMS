@@ -78,7 +78,7 @@ module ums {
             label: 'Capacity',
             name: 'capacity',
             width: 50,
-            editable: false
+            editable: true
           },
           {
             label: 'Room Type',
