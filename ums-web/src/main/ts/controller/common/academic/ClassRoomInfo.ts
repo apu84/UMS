@@ -169,7 +169,7 @@ module ums {
         height:500,
 
         rowList: [],        // disable page size dropdown
-        pgbuttons: false,     // disable page control like next, back button
+        pgbuttons: true,     // disable page control like next, back button
         pgtext: null,
 
         ondblClickRow: function(id, ri, ci,e) {

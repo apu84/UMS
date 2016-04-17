@@ -360,7 +360,7 @@ module ums {
 
     private saveRoutine(json:any):ng.IPromise<any> {
       var defer = this.$q.defer();
-      this.httpClient.put('academic/examroutine/semester/11012015/examtype/1', json, 'application/json')
+      this.httpClient.put('academic/examroutine/semester/'+ this.$scope.routine.semester+'/examtype/'+this.$scope.routine.examType, json, 'application/json')
           .success(() => {
             defer.resolve('Successfully Saved Exam Routine.');
           }).error((data) => {
@@ -403,8 +403,8 @@ module ums {
 
       var complete_json = {};
       complete_json["entries"] = jsonObj;
-      complete_json["semesterId"] = "11012015";
-      complete_json["examType"] = "1";
+      complete_json["semesterId"] = this.$scope.routine.semester;
+      complete_json["examType"] = this.$scope.routine.examType;
       complete_json["insertType"] = insertType;
       console.log(complete_json);
       return complete_json;
