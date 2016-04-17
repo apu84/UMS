@@ -97,21 +97,7 @@ module ums {
       this.$scope.showGrid = true;
       this.$scope.showTable = true;
       this.$scope.showSelection = true;
-
-
-      this.httpClient.get("academic/routine/routineForEmployee/semester/"
-          + this.$scope.courseTeacherSearchParamModel.semesterId
-          + "/program/"
-          + this.$scope.courseTeacherSearchParamModel.programSelector.programId
-          + "/year/"
-          + this.$scope.courseTeacherSearchParamModel.academicYearId
-          + "/semester/"
-          + this.$scope.courseTeacherSearchParamModel.academicSemesterId, HttpClient.MIME_TYPE_JSON,
-          (response) => {
-            this.initializeGrid();
-
-            this.$scope.classRoutineData = response.entries;
-          });
+      this.loadData();
 
     }
 
@@ -376,9 +362,11 @@ module ums {
       if (rowData.id.indexOf('jqg') == 0) {
         this.httpClient.post('academic/routine', rowData, HttpClient.MIME_TYPE_JSON).success(()=> {
           this.decoratedScope.grid.api.toggleMessage();
+          this.loadData();
         }).error((response) => {
           console.error(response);
           this.decoratedScope.grid.api.toggleMessage();
+          this.loadData();
         });
       } else {
         this.httpClient.put('academic/routine', rowData, HttpClient.MIME_TYPE_JSON)
@@ -387,6 +375,7 @@ module ums {
             }).error((response) => {
               console.error(response);
               this.decoratedScope.grid.api.toggleMessage();
+              this.loadData();
             });
       }
     }
@@ -407,6 +396,22 @@ module ums {
       $("#leftDiv").show();
       $("#rightDiv").removeClass("newRightClass").addClass("orgRightClass");
       this.decoratedScope.grid.api.resize();
+    }
+
+    private loadData(): void {
+      this.httpClient.get("academic/routine/routineForEmployee/semester/"
+          + this.$scope.courseTeacherSearchParamModel.semesterId
+          + "/program/"
+          + this.$scope.courseTeacherSearchParamModel.programSelector.programId
+          + "/year/"
+          + this.$scope.courseTeacherSearchParamModel.academicYearId
+          + "/semester/"
+          + this.$scope.courseTeacherSearchParamModel.academicSemesterId, HttpClient.MIME_TYPE_JSON,
+          (response) => {
+            this.initializeGrid();
+
+            this.$scope.classRoutineData = response.entries;
+          });
     }
   }
 

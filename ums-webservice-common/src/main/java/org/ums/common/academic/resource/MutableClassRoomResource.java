@@ -23,12 +23,10 @@ public class MutableClassRoomResource extends Resource {
   }
 
   @PUT
-  @Path(PATH_PARAM_OBJECT_ID)
-  public Response updateSemester(final @PathParam("object-id") String pObjectId,
-                                 final @Context Request pRequest,
+  public Response updateSemester(final @Context Request pRequest,
                                  final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader,
                                  final JsonObject pJsonObject) throws Exception {
-    return mResourceHelper.put(Integer.parseInt(pObjectId), pRequest, pIfMatchHeader, pJsonObject);
+    return mResourceHelper.put(Integer.parseInt(pJsonObject.getString("id")), pRequest, pIfMatchHeader, pJsonObject);
   }
 
   @DELETE

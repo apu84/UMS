@@ -11,7 +11,7 @@ module ums {
     public scroll: boolean = true;
     public scrollrows: boolean = true;
     public currentSelectedRowId: string = '';
-    public colModel: JQueryJqGridColumn[];
+    public colModel: any;
 
     public ondblClickRow(rowid, iRow, iCol, e) {
       // do nothing, will be implemented in calling class

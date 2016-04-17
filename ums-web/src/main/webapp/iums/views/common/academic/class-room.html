@@ -3,8 +3,17 @@
         <div class="panel panel-default">
             <div class="panel-body">
                 <div style="margin-left:20px">
-                    <table id="jqGrid"></table>
-                    <div id="jqGridPager"></div>
+                    <div data-jq-grid=""
+                         data-config="gridOptions"
+                         data-addnew="true"
+                         data="classRoomData"
+                         gridid="classRoom"
+                         pagerid="classRoomPager"
+                         grid="grid"
+                         inline-nav-options="inlineNavOptions"
+                         data-ng-if="gridOptions">
+
+                    </div>
                 </div>
             </div>
         </div>
