@@ -28,6 +28,15 @@ public class SemesterWithdrawalResource extends MutableSemesterWithdrawalResourc
   }
 
   @GET
+  @Path("/studentInfo/semester/{semesterId}/year/{year}/semester/{semester}")
+  public JsonObject getStudentRecord(final @Context Request pRequest,
+                                          final @PathParam("semesterId") String semesterId,
+                                          final @PathParam("year") String year,
+                                          final @PathParam("semester") String semester)throws Exception{
+    return mHelper.getStudentRecord(Integer.parseInt(semesterId),Integer.parseInt(year),Integer.parseInt(semester),pRequest,mUriInfo);
+  }
+
+  @GET
   @Path(PATH_PARAM_OBJECT_ID)
   public Response get(final @Context Request pRequest, final @PathParam("object-id") int pObjectId)throws Exception{
     return mHelper.get(pObjectId,pRequest,mUriInfo);

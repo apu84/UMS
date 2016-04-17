@@ -4,5 +4,9 @@ module ums{
     semesterId:number;
     programId:number;
     cause:string;
+    studentId:string;
+    year:number;
+    semester:number;
+    status:number;
   }
 }

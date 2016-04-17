@@ -143,6 +143,10 @@ public class PersistentStudentDao extends StudentDaoDecorator {
         pMutable.getCurrentAcademicSemester()
     );
   }
+  /*
+  * This get(pId) method can be used for getting student's info while student log in
+  * with his or her password. No separate rest call is needed ,like : /academic/student/11001,
+  * The information can be fetched with the following method, by passing the studentId vai login methodology.*/
 
   @Override
   public Student get(String pId) throws Exception {

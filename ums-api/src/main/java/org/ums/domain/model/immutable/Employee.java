@@ -9,9 +9,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
 
-/**
- * Created by My Pc on 3/30/2016.
- */
+
 public interface Employee extends Serializable,LastModifier,EditType<MutableEmployee>,Identifier<String>{
   String getEmployeeName();
   int getDesignation();

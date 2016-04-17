@@ -26,6 +26,12 @@ public class StudentResource extends MutableStudentResource {
     return mResourceHelper.getAll(mUriInfo);
   }
 
+  @GET
+  @Path("/getStudentInfoById")
+  public JsonObject getStudentInfoById() throws Exception {
+    return mResourceHelper.getStudentInfoById(mUriInfo);
+  }
+
   //Commented during refactoring of student's class routine
 //  @GET
 //  @Path(PATH_PARAM_OBJECT_ID)

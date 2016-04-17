@@ -37,8 +37,12 @@ public class PersistentSemesterWithdrawal implements MutableSemesterWithdrawal {
   private int mProgramId;
   private Student mStudent;
   private String mStudentId;
+  private int mAcademicYear;
+  private int mAcademicSemester;
   private int mSemesterId;
   private String mCause;
+  private int mStatus;
+  private String mAppDate;
   private String mLastModified;
   private List<SemesterWithdrawalLog> mLogs = new ArrayList<>();
 
@@ -57,8 +61,48 @@ public class PersistentSemesterWithdrawal implements MutableSemesterWithdrawal {
     mProgramId = pPersistentSemesterWithdrawal.getProgramId();
     mStudent = pPersistentSemesterWithdrawal.getStudent();
     mStudentId = pPersistentSemesterWithdrawal.getStudentId();
+    mAcademicYear = pPersistentSemesterWithdrawal.getAcademicYear();
+    mAcademicSemester = pPersistentSemesterWithdrawal.getAcademicSemester();
     mCause = pPersistentSemesterWithdrawal.getCause();
+    mStatus = pPersistentSemesterWithdrawal.getStatus();
+    mAppDate = pPersistentSemesterWithdrawal.getAppDate();
     mLastModified = pPersistentSemesterWithdrawal.getLastModified();
+  }
+
+  @Override
+  public void setAppDate(String pAppDate) {
+    mAppDate = pAppDate;
+  }
+
+  @Override
+  public String getAppDate() {
+    return mAppDate;
+  }
+
+  @Override
+  public void setStatus(int pStatus) {
+    mStatus  = pStatus;
+  }
+
+  @Override
+  public int getStatus() {
+    return mStatus;
+  }
+
+  public int getAcademicYear() {
+    return mAcademicYear;
+  }
+
+  public void setAcademicYear(int pAcademicYear) {
+    mAcademicYear = pAcademicYear;
+  }
+
+  public int getAcademicSemester() {
+    return mAcademicSemester;
+  }
+
+  public void setAcademicSemester(int pAcademicSemester) {
+    mAcademicSemester = pAcademicSemester;
   }
 
   public String getStudentId() {

@@ -12,9 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-/**
- * Created by My Pc on 3/5/2016.
- */
+
 public class PersistentRoutineDao extends RoutineDaoDecorator {
   static String SELECT_ALL="SELECT ROUTINE_ID,SEMESTER_ID,PROGRAM_ID,COURSE_ID,DAY,SECTION,YEAR,SEMESTER,START_TIME,END_TIME,DURATION,ROOM_NO,LAST_MODIFIED FROM CLASS_ROUTINE ";
   static String UPDATE_ONE = "UPDATE CLASS_ROUTINE SET SEMESTER_ID=?,PROGRAM_ID=?,COURSE_ID=?,DAY=?,SECTION=?,YEAR=?,SEMESTER=?,START_TIME=?,END_TIME=?,DURATION=?,ROOM_NO=?,LAST_MODIFIED="+ getLastModifiedSql()+" ";

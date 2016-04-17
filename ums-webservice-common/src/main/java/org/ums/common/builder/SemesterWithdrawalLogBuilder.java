@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.SemesterWithdrawalLog;
 import org.ums.domain.model.mutable.MutableSemesterWithdrawalLog;
+import org.ums.persistent.model.PersistentEmployee;
 import org.ums.persistent.model.PersistentSemesterWithdrawal;
 
 import javax.json.JsonObject;
@@ -18,8 +19,7 @@ public class SemesterWithdrawalLogBuilder implements Builder<SemesterWithdrawalL
   public void build(JsonObjectBuilder pBuilder, SemesterWithdrawalLog pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) throws Exception {
     pBuilder.add("id",pReadOnly.getId());
     pBuilder.add("semesterWithdrawId",pReadOnly.getSemesterWithdrawal().getId());
-    pBuilder.add("actor",pReadOnly.getActor());
-    pBuilder.add("actorId",pReadOnly.getActorId());
+    pBuilder.add("employeeId",pReadOnly.getEmployee().getId());
     pBuilder.add("action",pReadOnly.getAction());
     pBuilder.add("comments",pReadOnly.getComments());
     pBuilder.add("eventDateTime",pReadOnly.getEventDateTime());
@@ -34,8 +34,8 @@ public class SemesterWithdrawalLogBuilder implements Builder<SemesterWithdrawalL
     PersistentSemesterWithdrawal persistentSemesterWithdrawal = new PersistentSemesterWithdrawal();
     persistentSemesterWithdrawal.setId(Integer.parseInt(pJsonObject.getString("semesterWithdrawId")));
     pMutable.setSemesterWithdrawal(persistentSemesterWithdrawal);
-    pMutable.setActor(Integer.parseInt(pJsonObject.getString("actor")));
-    pMutable.setActorId(pJsonObject.getString("actorId"));
+    PersistentEmployee employee = new PersistentEmployee();
+    employee.setId(pJsonObject.getString("employeeId"));
     pMutable.setAction(Integer.parseInt(pJsonObject.getString("action")));
     pMutable.setComments(pJsonObject.getString("comments"));
   }

@@ -14,9 +14,9 @@ import java.util.List;
 
 public class PersistentSemesterWithdrawalDao extends SemesterWithdrawalDaoDecorator {
 
-  static String SELECT_ALL = "SELECT SW_ID,SEMESTER_ID,PROGRAM_ID,STUDENT_ID,CAUSE,LAST_MODIFIED FROM SEMESTER_WITHDRAW";
-  static String INSERT_ONE = "INSERT INTO SEMESTER_WITHDRAW(SEMESTER_ID,PROGRAM_ID,STUDENT_ID,CAUSE,LAST_MODIFIED) VALUES(?,?,?,?,"+getLastModifiedSql()+") ";
-  static String UPDATE_ONE = "UPDATE SEMESTER_WITHDRAW SET SEMESTER_ID=?,PROGRAM_ID=?,STUDENT_ID=?,CAUSE,LAST_MODIFIED="+getLastModifiedSql()+" ";
+  static String SELECT_ALL = "SELECT SW_ID,SEMESTER_ID,PROGRAM_ID,STUDENT_ID,YEAR,SEMESTER,CAUSE,STATUS,APP_DATE,LAST_MODIFIED FROM SEMESTER_WITHDRAW";
+  static String INSERT_ONE = "INSERT INTO SEMESTER_WITHDRAW(SEMESTER_ID,PROGRAM_ID,STUDENT_ID,YEAR,SEMESTER,CAUSE,STATUS,APP_DATE,LAST_MODIFIED) VALUES(?,?,?,?,?,?,?,to_date(to_char(sysdate,'DD MM YYYY HH:MM')),"+getLastModifiedSql()+") ";
+  static String UPDATE_ONE = "UPDATE SEMESTER_WITHDRAW SET SEMESTER_ID=?,PROGRAM_ID=?,STUDENT_ID=?,YEAR=?,SEMESTER=?,CAUSE=?,STATUS=?,APP_DATE=to_date(to_char(sysdate,'DD MM YYYY HH:MM')),LAST_MODIFIED="+getLastModifiedSql()+" ";
   static String DELETE_ONE = "DELETE FROM SEMESTER_WITHDRAW ";
 
 
@@ -30,9 +30,9 @@ public class PersistentSemesterWithdrawalDao extends SemesterWithdrawalDaoDecora
 
 
   @Override
-  public List<SemesterWithdrawal> getStudentsRecord(String studentId,int semesterId) {
-    String query = SELECT_ALL+" WHERE STUDENT_ID=? AND SEMESTER_ID=? ";
-    return mJdbcTemplate.query(query,new Object[]{studentId,semesterId},new SemesterWithdrawalRowMapper());
+  public SemesterWithdrawal getStudentsRecord(String studentId,int semesterId,int year,int semester) {
+    String query = SELECT_ALL+" WHERE STUDENT_ID=? AND SEMESTER_ID=? AND YEAR=? AND SEMESTER=?";
+    return mJdbcTemplate.queryForObject(query,new Object[]{studentId,semesterId,year,semester},new SemesterWithdrawalRowMapper());
   }
 
   @Override
@@ -112,8 +112,12 @@ public class PersistentSemesterWithdrawalDao extends SemesterWithdrawalDaoDecora
       persistenceSW.setId(pResultSet.getInt("SW_ID"));
       persistenceSW.setSemesterId(pResultSet.getInt("SEMESTER_ID"));
       persistenceSW.setStudentId(pResultSet.getString("STUDENT_ID"));
+      persistenceSW.setAcademicYear(pResultSet.getInt("YEAR"));
+      persistenceSW.setAcademicSemester(pResultSet.getInt("SEMESTER"));
       persistenceSW.setCause(pResultSet.getString("CAUSE"));
       persistenceSW.setProgramId(pResultSet.getInt("PROGRAM_ID"));
+      persistenceSW.setStatus(pResultSet.getInt("STATUS"));
+      persistenceSW.setAppDate(pResultSet.getString("APP_DATE"));
       persistenceSW.setLastModified(pResultSet.getString("LAST_MODIFIED"));
       return persistenceSW;
     }

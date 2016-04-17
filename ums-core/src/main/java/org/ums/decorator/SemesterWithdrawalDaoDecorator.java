@@ -13,8 +13,8 @@ import java.util.List;
 public class SemesterWithdrawalDaoDecorator extends ContentDaoDecorator<SemesterWithdrawal,MutableSemesterWithdrawal,Integer,SemesterWithDrawalManager> implements SemesterWithDrawalManager {
 
   @Override
-  public List<SemesterWithdrawal> getStudentsRecord(String studentId,int semesterId) {
-    return getManager().getStudentsRecord(studentId,semesterId);
+  public SemesterWithdrawal getStudentsRecord(String studentId,int semesterId,int year,int semester) {
+    return getManager().getStudentsRecord(studentId,semesterId,year,semester);
   }
 
   @Override

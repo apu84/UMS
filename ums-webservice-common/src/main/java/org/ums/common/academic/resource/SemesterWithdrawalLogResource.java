@@ -28,9 +28,9 @@ public class SemesterWithdrawalLogResource extends MutableSemesterWithdrawalLogR
   }
 
   @GET
-  @Path("/studentId/{studentId}/semesterId/{semesterId}")
-  public JsonObject getForStudent(final @Context Request pRequest,final @PathParam("studentId") String studentId,final @PathParam("semesterId") int semesterId)throws Exception{
-    return mHelper.getForStudent(studentId,semesterId,pRequest,mUriInfo);
+  @Path("/semesterWithdrawalId/{semesterWithdrawalId}")
+  public JsonObject getForStudent(final @Context Request pRequest,final @PathParam("semesterWithdrawalId") int semesterWithdrawalId)throws Exception{
+    return mHelper.getBySemesterWithdrawalId(semesterWithdrawalId,pRequest,mUriInfo);
   }
 
   @GET

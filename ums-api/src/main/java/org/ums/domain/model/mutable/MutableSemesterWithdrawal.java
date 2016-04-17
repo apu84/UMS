@@ -15,4 +15,6 @@ public interface MutableSemesterWithdrawal extends SemesterWithdrawal,Mutable,Mu
   void setStudent(final Student pStudent);
   void setCause(final String pCause);
   void setProgram(final Program pProgram);
+  void setStatus(final int pStatus);
+  void setAppDate(final String pAppDate);
 }

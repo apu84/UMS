@@ -66,6 +66,21 @@ public class ParameterSettingResourceHelper extends ResourceHelper<ParameterSett
     return object.build();
   }
 
+  public JsonObject getByParameterAndSemesterId(final int pParameterId,final int pSemesterId, final Request pRequest, final UriInfo pUriInfo) throws Exception{
+    ParameterSetting parameterSettings = getContentManager().getBySemesterAndParameterId(pParameterId,pSemesterId);
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+
+    children.add(toJson(parameterSettings,pUriInfo,localCache));
+
+    object.add("entries",children);
+    localCache.invalidate();
+
+    return object.build();
+  }
+
+
   public JsonObject getAllInfo(final UriInfo pUriInfo) throws Exception{
     List<ParameterSetting> parameterSettings = getContentManager().getAll();
     JsonObjectBuilder object = Json.createObjectBuilder();

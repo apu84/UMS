@@ -15,4 +15,9 @@ public class ParameterSettingDaoDecorator extends ContentDaoDecorator<ParameterS
   public List<ParameterSetting> getBySemester(int semesterId) {
     return getManager().getBySemester(semesterId);
   }
+
+  @Override
+  public ParameterSetting getBySemesterAndParameterId(int parameterId, int semesterId) {
+    return getManager().getBySemesterAndParameterId(parameterId,semesterId);
+  }
 }

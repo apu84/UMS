@@ -17,11 +17,13 @@ module ums{
     showLoginPanel:boolean;
     editApplication:boolean;
     editButtonShow: boolean;
+    application:boolean;
     savedOrSubmitted:number;
     actors:any;
     actions:any;
     semesterWithdraw:ISemesterWithdraw;
     semesterWithdrawLog: ISemesterWithdrawLog;
+    parameterSetting: IParameterSetting;
   }
 
 
@@ -41,68 +43,85 @@ module ums{
     constructor(private appConstants: any, private httpClient: HttpClient, private $scope: IApplicationScope,private $q:ng.IQService ) {
         $scope.data={
           studentId:"",
-          cause:""
+          cause:"",
+          status:""
         }
+
         $scope.editApplication=false;
         $scope.savedOrSubmitted=0;
         $scope.showLoginPanel= true;
         $scope.showSemesterWithdrawApplicationPanel = false;
         $scope.editButtonShow = false;
+        $scope.application = false;
         $scope.applicationTypeOptions = appConstants.applicationTypes;
         $scope.actors = appConstants.actors;
         $scope.actions = appConstants.actions;
-        $scope.getStudentAndSemesterInfo = this.getStudentAndSemesterInfo.bind(this);
         $scope.saveApplication = this.saveApplication.bind(this);
         $scope.edit = this.edit.bind(this);
     }
 
+    private initialize():void{
+      this.getStudentsInformation().then((studentArr:Array<Student>)=>{
+          this.getParameterSetting().then((parameterArr:Array<IParameterSetting>)=>{
+            var date = new Date();
+            var parameterSettingStartDate = new Date(this.$scope.parameterSetting.startDate);
+            var parameterSettingEndDate = new Date(this.$scope.parameterSetting.endDate);
+
+            if(date >= parameterSettingStartDate || date <= parameterSettingEndDate){
+                this.getStudentsSemesterWithdrawApplication().then((applicationArr:Array<ISemesterWithdraw>)=>{
+                    if(applicationArr.length== 0){
+                        this.$scope.application = true;
+                    }else{
+                        this.$scope.application = true;
+                        if(this.$scope.semesterWithdraw.status==0){
+                          this.$scope.editButtonShow = true;
+                        }
+                    }
+                });
+            }else{
+              this.showApplicationDateEndMessage();
+            }
+          });
+      });
+    }
+
+    private showApplicationDateEndMessage():void{
+
+    }
+
     private saveApplication():void{
-      var jsons = this.convertToJsonForSemesterWithdrawLog();
-      this.httpClient.post('academic/semesterWithdrawalLog/', jsons, 'application/json')
+      var jsons = this.convertToJsonForSemesterWithdraw();
+      this.httpClient.post('academic/semesterWithdrawal/', jsons, 'application/json')
           .success(() => {
 
-            });
+            }).error((data) => {
+      });
 
+    }
+
+    private updateApplication():void{
+      var jsons = this.convertToJsonForSemesterWithdraw();
+      this.httpClient.put('academic/semesterWithdrawal/'+this.$scope.semesterWithdraw.id,jsons,'application/json')
+          .success(() => {
+
+
+          }).error((data) => {
+      });
     }
 
     private edit():void{
       this.$scope.editApplication = true;
     }
 
-    private getStudentAndSemesterInfo():void{
-      this.studentInfo().then((studentArr:Array<Student>)=>{
-        this.semesterInfo().then((semesterArr:Array<ISemester>)=>{
-          if(this.$scope.applicationType==1){
-            this.$scope.showLoginPanel = false;
-            this.$scope.showSemesterWithdrawApplicationPanel = true;
-            this.getLogInfoForStudent().then((logArr:Array<ISemesterWithdrawLog>)=>{
-              if(this.$scope.semesterWithdrawLog == null){
-                this.$scope.editApplication=true;
-              }
-              else{
-                if(this.$scope.semesterWithdrawLog.action==0){
-                  this.$scope.editButtonShow=true;
-                }
-              }
-            });
-          }
-        });
 
-      });
-    }
 
-    private studentInfo():ng.IPromise<any>{
+    private getStudentsInformation():ng.IPromise<any>{
       var defer = this.$q.defer();
-      console.log(this.$scope.data.studentId);
-
-      var studentArr:Student;
-      this.httpClient.get('/ums-webservice-common/academic/student/'+this.$scope.data.studentId, 'application/json',
+      this.httpClient.get('/ums-webservice-common/academic/student/getStudentInfoById', 'application/json',
           (json:any, etag:string) => {
-            studentArr = json;
+            this.$scope.student = json;
 
-            this.$scope.student = studentArr;
-
-            defer.resolve(studentArr);
+            defer.resolve(this.$scope.student);
           },
           (response:ng.IHttpPromiseCallbackArg<any>) => {
             console.error(response);
@@ -110,16 +129,13 @@ module ums{
       return defer.promise;
     }
 
-    private semesterInfo():ng.IPromise<any>{
+    private getParameterSetting():ng.IPromise<any>{
       var defer = this.$q.defer();
-      var semesterArr: ISemester;
-      this.httpClient.get('/ums-webservice-common/academic/semester/'+this.$scope.student.semesterId, 'application/json',
+      this.httpClient.get('/ums-webservice-common/academic/parameterSetting/parameter/9/semester/'+this.$scope.student.semesterId, 'application/json',
           (json:any, etag:string) => {
-            semesterArr = json;
-            console.log("------------------");
-            console.log(semesterArr);
-            this.$scope.semester = semesterArr;
-            defer.resolve(semesterArr);
+            this.$scope.parameterSetting = json;
+
+            defer.resolve(this.$scope.parameterSetting);
           },
           (response:ng.IHttpPromiseCallbackArg<any>) => {
             console.error(response);
@@ -127,39 +143,33 @@ module ums{
       return defer.promise;
     }
 
-    private getLogInfoForStudent():ng.IPromise<any>{
+    private getStudentsSemesterWithdrawApplication():ng.IPromise<any>{
       var defer = this.$q.defer();
-      var logArr: ISemesterWithdrawLog;
-      this.httpClient.get('/ums-webservice-common/academic/semesterWithdrawalLog/studentId/'+this.$scope.student.id+'/semesterId/'+this.$scope.student.semesterId, 'application/json',
+      this.httpClient.get('/ums-webservice-common/academic/semesterWithdraw/studentInfo/semester/'+this.$scope.student.semesterId+'/year/'+this.$scope.student.year+'/semester/'+this.$scope.student.academicSemester, 'application/json',
           (json:any, etag:string) => {
-            logArr = json;
-            this.$scope.semesterWithdrawLog = logArr;
-            defer.resolve(logArr);
+            this.$scope.semesterWithdraw = json;
+
+            defer.resolve(this.$scope.semesterWithdraw);
           },
           (response:ng.IHttpPromiseCallbackArg<any>) => {
             console.error(response);
           });
       return defer.promise;
     }
+
 
     private convertToJsonForSemesterWithdraw(){
       var semesterWithdraw={};
       semesterWithdraw["id"]="";
       semesterWithdraw["programId"]=this.$scope.student.programId;
       semesterWithdraw["semesterId"] = this.$scope.student.semesterId;
+      semesterWithdraw["year"] = this.$scope.student.year;
+      semesterWithdraw["semester"] = this.$scope.student.academicSemester;
       semesterWithdraw["cause"] = this.$scope.data.cause;
+      semesterWithdraw["status"] = this.$scope.data.status;
       semesterWithdraw["applicationDate"] = "";
     }
 
-    private convertToJsonForSemesterWithdrawLog(){
-      var log={};
-      log["id"] = "";
-      log["semesterWithdrawalId"] = this.$scope.semesterWithdrawLog.semesterWithdrawId;
-      log["actor"]=this.$scope.semesterWithdrawLog.actor;
-      log["actorId"]=this.$scope.semesterWithdrawLog.actorId;
-      log["action"]=this.$scope.savedOrSubmitted;
-      log["comments"] = "";
-    }
   }
   UMS.controller("ApplicationsStudent",ApplicationsStudent);
 }
