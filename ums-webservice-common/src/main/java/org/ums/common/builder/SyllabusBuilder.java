@@ -49,7 +49,7 @@ public class SyllabusBuilder implements Builder<Syllabus, MutableSyllabus> {
   public void build(MutableSyllabus pMutable, JsonObject pJsonObject, final LocalCache pLocalCache) throws Exception {
     String id = pJsonObject.getString("syllabusId");
     int semesterId = Integer.parseInt(pJsonObject.getString("semesterId"));
-    int programId = Integer.parseInt(pJsonObject.getString("programId"));
+    int programId = Integer.parseInt(pJsonObject.getJsonObject("programSelector").getString("programId"));
     pMutable.setId(id);
 
     PersistentSemester pSemester=new PersistentSemester();
