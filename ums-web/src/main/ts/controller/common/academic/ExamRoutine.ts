@@ -279,7 +279,7 @@ module ums {
     private getCourseArr(program_id:number):ng.IPromise<any> {
       var defer = this.$q.defer();
       var courseArr:Array<any>;
-      this.httpClient.get('academic/course/semester/11012015/program/' + program_id, 'application/json',
+      this.httpClient.get('academic/course/semester/'+ this.$scope.routine.semester+'/program/' + program_id, 'application/json',
           (json:any, etag:string) => {
             courseArr = json.entries;
             defer.resolve(courseArr);

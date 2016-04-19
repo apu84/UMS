@@ -51,8 +51,10 @@ public abstract class ResourceHelper<R extends EditType<M>, M extends Mutable, I
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
+    int count=0;
     for (R readOnly : readOnlys) {
       children.add(toJson(readOnly, pUriInfo, localCache));
+      count++;
     }
     object.add("entries", children);
     localCache.invalidate();
