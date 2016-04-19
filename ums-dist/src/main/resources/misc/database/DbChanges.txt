@@ -15,7 +15,6 @@ END;
 
 
 
-------------------------------------------exam_routine data----------------------------------------------------
 Insert into DB_IUMS.EXAM_ROUTINE
    (SEMESTER, EXAM_TYPE, EXAM_DATE, EXAM_TIME, PROGRAM_ID,
     COURSE_ID)
@@ -2099,7 +2098,7 @@ Insert into DB_IUMS.EXAM_ROUTINE
 
 
 
-    -----------------------------------------semesterSyllabusMap data----------------------------
+  
     Insert into DB_IUMS.SEMESTER_SYLLABUS_MAP
        (MAPPING_ID, PROGRAM_ID, YEAR, SEMESTER, SEMESTER_ID,
         SYLLABUS_ID)
