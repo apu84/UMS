@@ -22,6 +22,7 @@ module ums {
     routine: any;
     data: any;
     rowId: any;
+    courseArr:Array<ICourse>;
   }
   interface IDateTime{
     readOnly: boolean;
@@ -279,9 +280,13 @@ module ums {
     private getCourseArr(program_id:number):ng.IPromise<any> {
       var defer = this.$q.defer();
       var courseArr:Array<any>;
+      console.log('-----inside courseArr----')
+      console.log(this.$scope.routine.semester);
+      console.log(program_id);
       this.httpClient.get('academic/course/semester/'+ this.$scope.routine.semester+'/program/' + program_id, 'application/json',
           (json:any, etag:string) => {
             courseArr = json.entries;
+            this.$scope.courseArr = courseArr;
             defer.resolve(courseArr);
           },
           (response:ng.IHttpPromiseCallbackArg<any>) => {
@@ -293,7 +298,7 @@ module ums {
 
     private courseSelectionChanged(program_row:IProgram,course_row:ICourse, selected_course_id:string) {
       console.log(selected_course_id);
-      var course:ICourse=this.arrayLookup(program_row.courseArr,'id',selected_course_id);
+      var course:ICourse=this.arrayLookup(this.$scope.courseArr,'id',selected_course_id);
       course_row.year = course.year;
       course_row.semester = course.semester;
       course_row.title = course.title;
@@ -572,9 +577,9 @@ module ums {
         var program:IProgram = date_time_row_obj.programs[ind];
 
         this.getCourseArr(program.programId).then((courseArr:Array<ICourse>)=> {
-          program.courseArr = courseArr;
-
-
+          console.log("---inside the thief---");
+          program.courseArr = this.$scope.courseArr;
+          console.log(program.courseArr);
         });
 
       }
