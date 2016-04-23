@@ -11,11 +11,12 @@ import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.mgt.RealmSecurityManager;
-import org.apache.shiro.realm.AuthenticatingRealm;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.ums.domain.model.immutable.BearerAccessToken;
 import org.ums.domain.model.immutable.Permission;
@@ -31,6 +32,8 @@ import java.util.List;
 import java.util.Set;
 
 public class BearerTokenAuthenticatingRealm extends AuthorizingRealm {
+  private static final Logger mLogger = LoggerFactory.getLogger(BearerTokenAuthenticatingRealm.class);
+
   @Autowired
   private BearerAccessTokenManager mBearerAccessTokenManager;
   @Autowired
@@ -99,7 +102,9 @@ public class BearerTokenAuthenticatingRealm extends AuthorizingRealm {
     } catch (Exception e) {
       throw new AuthenticationException("Not able to find provided bearer access token");
     }
-
+    if (mLogger.isDebugEnabled()) {
+      mLogger.debug("Authorized user: " + userId);
+    }
     return new BearerAuthenticationInfo(dbToken);
   }
 

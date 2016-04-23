@@ -458,6 +458,11 @@ module ums {
           templateUrl: 'views/grade/grade-sheet-selection.html',
           controller: 'MarksSubmission'
         })
+        .state('loggerGrid', {
+          url: "/loggerGrid",
+          controller: 'LoggerGrid',
+          templateUrl: 'views/logger/logger-grid.html'
+        })
 
   });
 }

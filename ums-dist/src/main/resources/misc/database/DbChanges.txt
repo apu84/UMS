@@ -9,3 +9,11 @@ BEGIN
   FROM   dual;
 END;
 /
+
+Insert into DB_IUMS.MAIN_NAVIGATION
+   (MENU_TITLE, PERMISSION, LOCATION, PARENT_MENU,
+    ICON_IMG_CLASS, VIEW_ORDER, STATUS, LAST_MODIFIED)
+ Values
+   ('Logger', 'logger:logger', '/loggerGrid', 0,
+    'fa-plus-square-o', 19, 1, '201602141037');
+COMMIT;
