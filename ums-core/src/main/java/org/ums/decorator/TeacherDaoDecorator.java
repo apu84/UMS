@@ -1,7 +1,6 @@
 package org.ums.decorator;
 
 
-import org.ums.cache.ContentDaoDecorator;
 import org.ums.domain.model.mutable.MutableTeacher;
 import org.ums.domain.model.immutable.Department;
 import org.ums.domain.model.immutable.Teacher;

@@ -1,4 +1,4 @@
-package org.ums.cache;
+package org.ums.decorator;
 
 
 import org.ums.manager.ContentManager;
@@ -89,4 +89,8 @@ public class ContentDaoDecorator<R, M, I, C extends ContentManager<R, M, I>> imp
     return created;
   }
 
+  @Override
+  public boolean exists(I pId) throws Exception {
+    return getManager().exists(pId);
+  }
 }

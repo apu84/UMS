@@ -1,7 +1,6 @@
 package org.ums.decorator;
 
 
-import org.ums.cache.ContentDaoDecorator;
 import org.ums.domain.model.mutable.MutableCourseGroup;
 import org.ums.domain.model.immutable.CourseGroup;
 import org.ums.manager.CourseGroupManager;

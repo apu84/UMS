@@ -1,6 +1,5 @@
 package org.ums.decorator;
 
-import org.ums.cache.ContentDaoDecorator;
 import org.ums.domain.model.mutable.MutableUser;
 import org.ums.domain.model.immutable.User;
 import org.ums.manager.UserManager;

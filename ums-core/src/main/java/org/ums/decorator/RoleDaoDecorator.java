@@ -1,6 +1,5 @@
 package org.ums.decorator;
 
-import org.ums.cache.ContentDaoDecorator;
 import org.ums.domain.model.mutable.MutableRole;
 import org.ums.domain.model.immutable.Role;
 import org.ums.manager.RoleManager;

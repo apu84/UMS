@@ -1,6 +1,5 @@
 package org.ums.decorator;
 
-import org.ums.cache.ContentDaoDecorator;
 import org.ums.domain.model.dto.ExamRoutineDto;
 import org.ums.domain.model.mutable.MutableExamRoutine;
 import org.ums.domain.model.immutable.ExamRoutine;

@@ -1,6 +1,5 @@
 package org.ums.decorator;
 
-import org.ums.cache.ContentDaoDecorator;
 import org.ums.domain.model.immutable.SemesterWithdrawal;
 import org.ums.domain.model.mutable.MutableSemesterWithdrawal;
 import org.ums.manager.SemesterWithDrawalManager;
