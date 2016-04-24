@@ -2,11 +2,11 @@ module ums {
   export class Constants {
     static  Default():any {
       return {
-        Empty:"",
-        initDept: [{id:'',name:'Select Dept./School'}],
+        Empty: "",
+        initDept: [{id: '', name: 'Select Dept./School'}],
         initProgram: [{id: '', longName: 'Select a Program'}],
         initSemester: [{id: '', name: 'Select a Semester'}],
-        initSyllabus: [{id: '', semester_name: 'Select a ',program_name:'Syllabus'}],
+        initSyllabus: [{id: '', semester_name: 'Select a ', program_name: 'Syllabus'}],
         courseType: [
           {id: '', name: 'Select Course Type'},
           {id: '1', name: 'Theory'},
@@ -65,18 +65,18 @@ module ums {
           '07': 'Department of Mechanical & Production Engineering'
         },
         dept4JqGridSelectBox: ':None;01:ARC;02:BBA;03:CE;04:CSE;05:EEE;06:TE;07:MPE',
-        days:':None;1:Saturday;2:Sunday;3:Monday;4:Tuesday;5:Wednesday;6:Thursday;7:Friday',
-        startTime:':None;08.00 AM:08.00 AM;08.50 AM:08.50 AM;09.40 AM:09.40 AM;10.30 AM:10.30 AM;11.20 AM:11.20 AM;12.10 PM:12.10 PM;01.00 PM:01.00 PM;01.50 PM:01.50 PM;02.40 PM:02.40 PM;03.30 PM:03.30 PM;04.20 PM:04.20 PM;05.10 PM:05.10 PM;06.00 PM:06.00 PM',
-        endTime:':None;08.00 AM:08.00 AM;08.50 AM:08.50 AM;09.40 AM:09.40 AM;10.30 AM:10.30 AM;11.20 AM:11.20 AM;12.10 PM:12.10 PM;01.00 PM:01.00 PM;01.50 PM:01.50 PM;02.40 PM:02.40 PM;03.30 PM:03.30 PM;04.20 PM:04.20 PM;05.10 PM:05.10 PM;06.00 PM:06.00 PM',
+        days: ':None;1:Saturday;2:Sunday;3:Monday;4:Tuesday;5:Wednesday;6:Thursday;7:Friday',
+        startTime: ':None;08.00 AM:08.00 AM;08.50 AM:08.50 AM;09.40 AM:09.40 AM;10.30 AM:10.30 AM;11.20 AM:11.20 AM;12.10 PM:12.10 PM;01.00 PM:01.00 PM;01.50 PM:01.50 PM;02.40 PM:02.40 PM;03.30 PM:03.30 PM;04.20 PM:04.20 PM;05.10 PM:05.10 PM;06.00 PM:06.00 PM',
+        endTime: ':None;08.00 AM:08.00 AM;08.50 AM:08.50 AM;09.40 AM:09.40 AM;10.30 AM:10.30 AM;11.20 AM:11.20 AM;12.10 PM:12.10 PM;01.00 PM:01.00 PM;01.50 PM:01.50 PM;02.40 PM:02.40 PM;03.30 PM:03.30 PM;04.20 PM:04.20 PM;05.10 PM:05.10 PM;06.00 PM:06.00 PM',
 
-        day:{
-          '01':'SATURDAY',
-          '02':'SUNDAY',
-          '03':'MONDAY',
-          '04':'TUESDAY',
-          '05':'WEDNESDAY',
-          '06':'THURSDAY',
-          '07':'FRIDAY'
+        day: {
+          '01': 'SATURDAY',
+          '02': 'SUNDAY',
+          '03': 'MONDAY',
+          '04': 'TUESDAY',
+          '05': 'WEDNESDAY',
+          '06': 'THURSDAY',
+          '07': 'FRIDAY'
         },
         officeShort: {
           '80': 'RO',
@@ -128,127 +128,127 @@ module ums {
           {id: '02', name: 'BBA'},
           {id: '05', name: 'EEE'}
         ],
-        timeChecker:[
+        timeChecker: [
           {
-            id:'08.00 AM',
-            val:'08.50 AM'
+            id: '08.00 AM',
+            val: '08.50 AM'
           },
           {
-            id:'08.50 AM',
-            val:'09.40 AM'
+            id: '08.50 AM',
+            val: '09.40 AM'
           },
           {
-            id:'09.40 AM',
-            val:'10.30 AM'
+            id: '09.40 AM',
+            val: '10.30 AM'
           },
           {
-            id:'10.30 AM',
-            val:'11.20 AM'
+            id: '10.30 AM',
+            val: '11.20 AM'
           },
           {
-            id:'11.20 AM',
-            val:'12.10 PM'
+            id: '11.20 AM',
+            val: '12.10 PM'
           },
           {
-            id:'12.10 PM',
-            val:'01.00 PM'
+            id: '12.10 PM',
+            val: '01.00 PM'
           },
           {
-            id:'01.00 PM',
-            val:'01.50 PM'
+            id: '01.00 PM',
+            val: '01.50 PM'
           },
           {
-            id:'01.50 PM',
-            val:'02.40 PM'
+            id: '01.50 PM',
+            val: '02.40 PM'
           },
           {
-            id:'02.40 PM',
-            val:'03.30 PM'
+            id: '02.40 PM',
+            val: '03.30 PM'
           },
           {
-            id:'03.30 PM',
-            val:'04.20 PM'
+            id: '03.30 PM',
+            val: '04.20 PM'
           },
           {
-            id:'04.20 PM',
-            val:'05.00 PM'
+            id: '04.20 PM',
+            val: '05.00 PM'
           }
         ],
-        routineTime:[
+        routineTime: [
           {
-            counter:'1',
-            id:'08.00 AM'
+            counter: '1',
+            id: '08.00 AM'
           },
           {
-            counter:'2',
-            id:'08.50 AM'
+            counter: '2',
+            id: '08.50 AM'
           },
           {
-            counter:'3',
-            id:'09.40 AM'
+            counter: '3',
+            id: '09.40 AM'
           },
           {
-            counter:'4',
-            id:'10.30 AM'
+            counter: '4',
+            id: '10.30 AM'
           },
           {
-            counter:'5',
-            id:'11.20 AM'
+            counter: '5',
+            id: '11.20 AM'
           },
           {
-            counter:'6',
-            id:'12.10 PM'
+            counter: '6',
+            id: '12.10 PM'
           },
           {
-            counter:'7',
-            id:'01.00 PM'
+            counter: '7',
+            id: '01.00 PM'
           },
           {
-            counter:'8',
-            id:'01.50 PM'
+            counter: '8',
+            id: '01.50 PM'
           },
 
           {
-            counter:'9',
-            id:'02.40 PM'
+            counter: '9',
+            id: '02.40 PM'
           },
           {
-            counter:'10',
-            id:'03.30 PM'
+            counter: '10',
+            id: '03.30 PM'
           },
           {
-            counter:'11',
-            id:'04.20 PM'
+            counter: '11',
+            id: '04.20 PM'
           },
           {
-            counter:'12',
-            id:'05.10 PM'
+            counter: '12',
+            id: '05.10 PM'
           }
         ],
-        weekDays:[
+        weekDays: [
           {
-            id:'01',
-            day:'Saturday'
+            id: '01',
+            day: 'Saturday'
           },
           {
-            id:'02',
-            day:'Sunday'
+            id: '02',
+            day: 'Sunday'
           },
           {
-            id:'03',
-            day:'Monday'
+            id: '03',
+            day: 'Monday'
           },
           {
-            id:'04',
-            day:'Tuesday'
+            id: '04',
+            day: 'Tuesday'
           },
           {
-            id:'05',
-            day:'Wednesday'
+            id: '05',
+            day: 'Wednesday'
           },
           {
-            id:'06',
-            day:'Thursday'
+            id: '06',
+            day: 'Thursday'
           }
         ],
         ugPrograms: [
@@ -328,15 +328,15 @@ module ums {
             ]
           }
         ],
-        theorySectionsGrid:":None;A:A;B:B;C:C;D:D",
+        theorySectionsGrid: ":None;A:A;B:B;C:C;D:D",
         theorySections: [
           {id: "A", name: "A"},
           {id: "B", name: "B"},
           {id: "C", name: "C"},
           {id: "D", name: "D"}
         ],
-        sessionalSectionsGrid:":NONE;A1:A1;B1:B1;C1:C1;D1:D2;A2:A2;B2:B2;C2:C2;D2:D2",
-        sessionalSectionsGrid2:";A1:A1;B1:B1;C1:C1;D1:D2;A2:A2;B2:B2;C2:C2;D2:D2",
+        sessionalSectionsGrid: ":NONE;A1:A1;B1:B1;C1:C1;D1:D2;A2:A2;B2:B2;C2:C2;D2:D2",
+        sessionalSectionsGrid2: ";A1:A1;B1:B1;C1:C1;D1:D2;A2:A2;B2:B2;C2:C2;D2:D2",
         sessionalSections: [
           {id: "A1", name: "A1"},
           {id: "B1", name: "B1"},
@@ -347,33 +347,39 @@ module ums {
           {id: "C2", name: "C2"},
           {id: "D2", name: "D2"}
         ],
-        mimeTypeJson : 'application/json',
+        mimeTypeJson: 'application/json',
         mimeTypePdf: 'application/pdf',
         semesterEnrollmentTypes: [
           {id: "", name: "Select Enrollment Type"},
           {id: "0", name: "Temporary"},
           {id: "1", name: "Permanent"}
         ],
-        applicationTypes:[
-          {id:"",name:"Select Application Type"},
-          {id:"0",name:"Academic"},
-          {id:"1",name:"Semester Withdraw"},
-          {id:"2",name:"Optional Course Selection"}
+        applicationTypes: [
+          {id: "", name: "Select Application Type"},
+          {id: "0", name: "Academic"},
+          {id: "1", name: "Semester Withdraw"},
+          {id: "2", name: "Optional Course Selection"}
         ],
-        actors:[
-          {id:"0", name:"Student"},
-          {id:"1",name:"Head"},
-          {id:"2",name:"Deputy Registrar"},
-          {id:"3",name:"Registrar"},
-          {id:"4",name:"Assistant Admin Officer"},
-          {id:"5",name:"Vice Chancellor"}
+        actors: [
+          {id: "0", name: "Student"},
+          {id: "1", name: "Head"},
+          {id: "2", name: "Deputy Registrar"},
+          {id: "3", name: "Registrar"},
+          {id: "4", name: "Assistant Admin Officer"},
+          {id: "5", name: "Vice Chancellor"}
         ],
-        applicationStatus:[
-          {id:"0",name:"Saved"},
-          {id:"1",name:"Submitted"},
-          {id:"2",name:"Approved"},
-          {id:"3",name:"Rejected"}
-        ]
+        applicationStatus: [
+          {id: "0", name: "Saved"},
+          {id: "1", name: "Submitted"},
+          {id: "2", name: "Approved"},
+          {id: "3", name: "Rejected"}
+        ],
+        responseTypes: {
+          'ERROR': 'ERROR',
+          'SUCCESS': 'SUCCESS',
+          'INFO': 'INFO',
+          'WARN': 'WARN'
+        }
       };
     }
   }

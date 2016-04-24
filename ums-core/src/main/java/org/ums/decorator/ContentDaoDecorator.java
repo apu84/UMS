@@ -88,4 +88,9 @@ public class ContentDaoDecorator<R, M, I, C extends ContentManager<R, M, I>> imp
     }
     return created;
   }
+
+  @Override
+  public boolean exists(I pId) throws Exception {
+    return getManager().exists(pId);
+  }
 }

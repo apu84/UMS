@@ -2,10 +2,10 @@ package org.ums.persistent.dao;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.ums.persistent.model.PersistentUser;
 import org.ums.decorator.UserDaoDecorator;
-import org.ums.domain.model.mutable.MutableUser;
 import org.ums.domain.model.immutable.User;
+import org.ums.domain.model.mutable.MutableUser;
+import org.ums.persistent.model.PersistentUser;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,6 +22,7 @@ public class PersistentUserDao extends UserDaoDecorator {
   static String INSERT_ALL = "INSERT INTO USERS(USER_ID, PASSWORD, ROLE_ID, STATUS, TEMP_PASSWORD) VALUES " +
       "(?, ?, ?, ?, ?)";
   static String UPDATE_PASSWORD_RESET_TOKEN = "Update USERS Set PR_TOKEN=?,TOKEN_GENERATED_ON=SYSDATE Where User_Id=? ";
+  String EXISTS = "SELECT COUNT(USER_ID) EXIST FROM USERS ";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -83,6 +84,12 @@ public class PersistentUserDao extends UserDaoDecorator {
   public List<User> getUsers() throws Exception {
     String query = SELECT_ALL + "WHERE ROLE_ID != 11";
     return mJdbcTemplate.query(query, new UserRowMapper());
+  }
+
+  @Override
+  public boolean exists(String pId) throws Exception {
+    String query = EXISTS + "WHERE USER_ID = ?";
+    return mJdbcTemplate.queryForObject(query, Boolean.class, pId);
   }
 
   class UserRowMapper implements RowMapper<User> {

@@ -81,6 +81,13 @@ public abstract class ContentCache<R extends Identifier<I> & LastModifier, M ext
 
   }
 
+  @Override
+  public boolean exists(I pId) throws Exception {
+    String cacheKey = getCacheKey(pId);
+    R pReadonly = getCacheManager().get(cacheKey);
+    return pReadonly != null || super.exists(pId);
+  }
+
   protected void invalidate(final R pReadonly) throws Exception {
     getCacheManager().invalidate(getCacheKey(pReadonly.getId()));
   }

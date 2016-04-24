@@ -21,4 +21,6 @@ public interface ContentManager<R, M, I> {
   int create(final M pMutable) throws Exception;
 
   int create(final List<M> pMutableList) throws Exception;
+
+  boolean exists(final I pId) throws Exception;
 }

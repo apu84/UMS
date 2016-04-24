@@ -63,14 +63,14 @@ var Authentication = (function () {
 
       success: function (response) {
 
-        if(response.code=="OK"){
+        if (response.responseType == "SUCCESS") {
           $("#errorDiv").hide();
           $(".successdDiv").show();
           $(".fPasswordDiv").hide();
           $(".loaderDiv").hide();
           $("#btn_forgotPassword").show();
         }
-        else if(response.code=="KO"){
+        else if (response.responseType == "ERROR") {
           $("#errorDiv").show().html("<b>Sorry</b>, "+response.message);
           $(".loaderDiv").hide();
           $("#btn_forgotPassword").show();
@@ -104,17 +104,14 @@ var Authentication = (function () {
       crossDomain: true,
       type: "PUT",
       async: true,
-      url: window.location.origin + '/ums-webservice-common/forgotPassword/resetPassword1',
+      url: window.location.origin + '/ums-webservice-common/forgotPassword/resetPassword',
       contentType: 'application/json',
       data:'{"userId":"'+userId+'","passwordResetToken":"'+resetToken+'","newPassword":"'+newPassword+'","confirmNewPassword":"'+confirmNewPassword+'"}',
       success: function (response) {
-
-        var credentials = "Basic " + btoa(userId + ":" + newPassword);
-        if(response.code=="OK"){
-          var user={"userId":userId,"userName":userId};
+        if (response.responseType == "SUCCESS") {
           _this.authenticate(userId,newPassword);
         }
-        else if(response.code=="KO"){
+        else if (response.responseType == "ERROR") {
           $(".loaderDiv").hide();
           $("#btn_change_password").show();
           $("#errorDiv").show().html("<b>Sorry</b>, " + response.message);
