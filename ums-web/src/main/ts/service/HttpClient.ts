@@ -1,23 +1,23 @@
 /// <reference path='../ums.ts' />
 /// <reference path='BaseUri.ts' />
-/// <reference path='CookieService.ts' />
-
 module ums {
   export class HttpClient {
     static MIME_TYPE_JSON: string = 'application/json';
     static MIME_TYPE_PDF: string = 'application/pdf';
+    static CREDENTIAL_KEY = 'ums.token';
+    static USER_KEY = 'ums.user';
 
     private credentials:any;
 
     public static $inject = [
       '$http',
       'BaseUri',
-      'CookieService'
+      '$window'
     ];
 
     constructor(private $http:ng.IHttpService,
                 private baseURI:BaseUri,
-                private cookieService:CookieService) {
+                private $window: ng.IWindowService) {
       this.resetAuthenticationHeader();
     }
 
@@ -90,9 +90,10 @@ module ums {
     }
 
     public resetAuthenticationHeader() {
-      this.credentials = this.cookieService.getCookieAsJson(CookieService.CREDENTIAL_KEY);
+      this.credentials = this.$window.sessionStorage.getItem(HttpClient.CREDENTIAL_KEY);
+      console.debug(this.credentials);
       if (this.credentials != null && this.credentials != '') {
-        this.$http.defaults.headers.common['X-Authorization'] = this.credentials.credential;
+        this.$http.defaults.headers.common['X-Authorization'] = this.credentials;
       }
     }
   }

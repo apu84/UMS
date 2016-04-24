@@ -1,7 +1,6 @@
 ///<reference path="../../model/ChangePasswordModel.ts"/>
 ///<reference path="../../model/User.ts"/>
 ///<reference path="../../service/HttpClient.ts"/>
-///<reference path="../../service/CookieService.ts"/>
 
 module ums {
   interface IChangePasswordScope extends ng.IScope {
@@ -14,10 +13,10 @@ module ums {
     }
   }
   export class ChangePassword {
-    public static $inject = ['$scope', 'HttpClient', 'CookieService'];
+    public static $inject = ['$scope', 'HttpClient', '$window'];
 
     constructor(private $scope:IChangePasswordScope, private httpClient:HttpClient,
-                private cookieService:CookieService) {
+                private $window:ng.IWindowService) {
       $scope.submit = this.submit.bind(this);
       console.debug('%o',this.$scope.user);
     }
@@ -39,12 +38,9 @@ module ums {
     }
 
     private resetAuthentication(user: User, token: string): void {
-      this.cookieService.removeCookie(CookieService.CREDENTIAL_KEY);
+      this.$window.sessionStorage.removeItem(HttpClient.CREDENTIAL_KEY);
       var encoded = btoa(user.userName + ":" + token);
-      var encodedToken = {
-        credential:  "Basic " + encoded
-      };
-      document.cookie = CookieService.CREDENTIAL_KEY + "=" + JSON.stringify(encodedToken) + "; path=/";
+      this.$window.sessionStorage.setItem(HttpClient.CREDENTIAL_KEY, "Basic " + encoded);
       this.httpClient.resetAuthenticationHeader();
     }
   }

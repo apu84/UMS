@@ -1,10 +1,10 @@
 module ums {
   export class AppController {
-    public static $inject = ['$scope', '$rootScope', 'CookieService', '$http', 'appConstants', '$templateCache'];
+    public static $inject = ['$scope', '$rootScope', '$window', '$http', 'appConstants', '$templateCache'];
 
     constructor(private $scope:any,
                 private $rootScope:any,
-                private cookieService: CookieService,
+                private $window: ng.IWindowService,
                 private $http: ng.IHttpService,
                 private appConstants: any,
                 private $templateCache: ng.ITemplateCacheService) {
@@ -161,7 +161,7 @@ module ums {
         $('.news-ticker').remove();
       });
 
-      $scope.user = cookieService.getCookieAsJson(CookieService.USER_KEY);
+      $scope.user = JSON.parse($window.sessionStorage.getItem(HttpClient.USER_KEY));
     }
   }
   UMS.controller('AppController', AppController);
