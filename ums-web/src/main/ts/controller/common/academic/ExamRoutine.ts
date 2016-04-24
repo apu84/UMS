@@ -101,9 +101,10 @@ module ums {
 
     private getRoutine(semester_id:number,exam_type:number):ng.IPromise<any> {
       var defer = this.$q.defer();
-      this.httpClient.get("academic/examroutine/semester/"+semester_id+"/examtype/"+exam_type, this.appConstants.mimeTypeJson,
+      this.httpClient.get("academic/examroutine/semester/"+this.$scope.routine.semester+"/examtype/"+exam_type, this.appConstants.mimeTypeJson,
           (json:any, etag:string) => {
             var dateTimeArr:Array<IDateTime>=eval(json.entries);
+            console.log(dateTimeArr);
             defer.resolve(dateTimeArr);
           },
           (response:ng.IHttpPromiseCallbackArg<any>) => {

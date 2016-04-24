@@ -169,6 +169,13 @@ public class UMSContext {
   }
 
   @Bean
+  SeatPlanGroupManager seatPlanGroupManager(){
+    SeatPlanGroupCache seatPlanGroupCache = new SeatPlanGroupCache(mLocalCacheManager);
+    seatPlanGroupCache.setManager(new PersistentSeatPlanGroupDao(mJdbcTemplate));
+    return seatPlanGroupCache;
+  }
+
+  @Bean
   NavigationManager navigationManager() {
     NavigationByPermissionResolver navigationByPermissionResolver = new NavigationByPermissionResolver(mAuthenticationRealm);
     navigationByPermissionResolver.setManager(new PersistentNavigationDao(mJdbcTemplate));
