@@ -31,7 +31,7 @@ module ums {
     showSelection: boolean;
 
     //New Implementation
-    classRoutineData: Array<RowData<string>>;
+    classRoutineData: Array<RowData>;
     resetDivs: void;
   }
 
@@ -357,7 +357,7 @@ module ums {
       this.decoratedScope.gridOptions.colModel = columnModel.colModel;
     }
 
-    private insert(rowData: RowData<any>): void {
+    private insert(rowData: RowData): void {
       this.decoratedScope.grid.api.toggleMessage('Saving...');
       if (rowData.id.indexOf('jqg') == 0) {
         this.httpClient.post('academic/routine', rowData, HttpClient.MIME_TYPE_JSON).success(()=> {

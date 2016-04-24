@@ -9,7 +9,7 @@ module ums {
     levelStr: string;
   }
 
-  interface LoggerRowData extends RowData {
+  export interface LoggerRowData extends RowData {
     level : string;
     name : string;
   }
@@ -88,7 +88,7 @@ module ums {
       this.decoratedScope.gridOptions.colModel = columnModel.colModel;
     }
 
-    private insert(rowData: LoggerRowData<any>, levelId?: number): void {
+    private insert(rowData: LoggerRowData, levelId?: number): void {
       this.decoratedScope.grid.api.toggleMessage('Saving...'); console.debug(levelId+"");
       if (levelId) {
         rowData.level = levelId.toString();
