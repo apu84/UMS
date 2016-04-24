@@ -19,8 +19,8 @@
         <prop key="mail.smtp.ssl.trust">smtp.gmail.com</prop>
       </props>
     </property>
-    <property name="username" value="aust.test.email@gmail.com"/>
-    <property name="password" value="Iums4Aust"/>
+    <property name="username" value="${mail.user}"/>
+    <property name="password" value="${mail.password}"/>
     <property name="port" value="587"/>
   </bean>
 

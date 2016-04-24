@@ -42,6 +42,7 @@
       <list>
         <value>${ums.properties.dir:classpath:}/jdbc.properties</value>
         <value>${ums.properties.dir:classpath:}/common.properties</value>
+        <value>${ums.properties.dir:classpath:}/mail-config.properties</value>
       </list>
     </property>
     <property name="ignoreUnresolvablePlaceholders" value="true"/>
