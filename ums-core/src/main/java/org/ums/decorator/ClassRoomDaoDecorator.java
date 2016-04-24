@@ -1,6 +1,5 @@
 package org.ums.decorator;
 
-import org.ums.cache.ContentDaoDecorator;
 import org.ums.domain.model.mutable.MutableClassRoom;
 import org.ums.domain.model.immutable.ClassRoom;
 import org.ums.manager.ClassRoomManager;

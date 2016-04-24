@@ -1,6 +1,5 @@
 package org.ums.decorator;
 
-import org.ums.cache.ContentDaoDecorator;
 import org.ums.domain.model.immutable.Parameter;
 import org.ums.domain.model.mutable.MutableParameter;
 import org.ums.manager.ParameterManager;

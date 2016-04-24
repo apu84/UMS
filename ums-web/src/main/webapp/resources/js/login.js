@@ -4,9 +4,7 @@ var Authentication = (function () {
 
   var endpointUrl = window.location.origin + '/ums-webservice-common/login';
 
-
   Authentication.prototype.authenticate = function (pUserName,pPassword) {
-    eraseAllCookies();
     var userName = pUserName?pUserName:document.getElementById('userName').value;
     var password = pPassword?pPassword:document.getElementById('password').value;
 
@@ -26,14 +24,12 @@ var Authentication = (function () {
         "Accept": "application/json"
       },
       success: function (user) {
-        console.log("submitting the form !!");
         $('#loginForm').submit();
         credentials = "Basic " + btoa(userName + ":" + user.token);
         getUserAndStartApplication(credentials, user);
-
       },
       fail: function (msg) {
-        console.log("failed....");
+        console.error("Login failed....");
       },
       error: (function (httpObj, textStatus) {
 
@@ -53,12 +49,10 @@ var Authentication = (function () {
   };
 
   Authentication.prototype.forgotPassword = function () {
-    eraseAllCookies();
     var userId = $('#userId_forgotPassword').val();
-
     $(".loaderDiv").show();
     $("#btn_forgotPassword").hide();
- //   var credentials = "Basic " + btoa("dpregistrar" + ":" + "12345");
+
     $.ajax({
       crossDomain: true,
       type: "PUT",
@@ -66,11 +60,7 @@ var Authentication = (function () {
       url: window.location.origin + '/ums-webservice-common/forgotPassword',
       contentType: 'application/json',
       data:'{"userId":"'+userId+'"}',
-    //  withCredentials: true,
-     /* headers: {
-        "Authorization": credentials,
-        "Accept": "application/json"
-      },*/
+
       success: function (response) {
 
         if(response.code=="OK"){
@@ -81,8 +71,7 @@ var Authentication = (function () {
           $("#btn_forgotPassword").show();
         }
         else if(response.code=="KO"){
-          $("#errorDiv").show();
-          $("#errorDiv").html("<b>Sorry</b>, "+response.message);
+          $("#errorDiv").show().html("<b>Sorry</b>, "+response.message);
           $(".loaderDiv").hide();
           $("#btn_forgotPassword").show();
         }
@@ -99,8 +88,6 @@ var Authentication = (function () {
 
   Authentication.prototype.changePassword = function () {
     var _this = this;
-    eraseAllCookies();
-
     var resetToken=$("#password_reset_token").val();
     var userId=$("#user_id").val();
     var newPassword=$("#new_password").val();
@@ -113,8 +100,6 @@ var Authentication = (function () {
 
     $(".loaderDiv").show();
     $("#btn_change_password").hide();
-
-  // var credentials = "Basic " + btoa("dpregistrar" + ":" + "12345");
     $.ajax({
       crossDomain: true,
       type: "PUT",
@@ -122,32 +107,18 @@ var Authentication = (function () {
       url: window.location.origin + '/ums-webservice-common/forgotPassword/resetPassword1',
       contentType: 'application/json',
       data:'{"userId":"'+userId+'","passwordResetToken":"'+resetToken+'","newPassword":"'+newPassword+'","confirmNewPassword":"'+confirmNewPassword+'"}',
-      //withCredentials: true,
-      /*
-      headers: {
-        "Authorization": credentials,
-        "Accept": "application/json"
-      },*/
       success: function (response) {
 
-        credentials = "Basic " + btoa(userId + ":" + newPassword);
+        var credentials = "Basic " + btoa(userId + ":" + newPassword);
         if(response.code=="OK"){
-
           var user={"userId":userId,"userName":userId};
-          //getUserAndStartApplication(credentials, user);
           _this.authenticate(userId,newPassword);
         }
         else if(response.code=="KO"){
-
           $(".loaderDiv").hide();
           $("#btn_change_password").show();
-
-          $("#errorDiv").show();
-          $("#errorDiv").html("<b>Sorry</b>, "+response.message);
-
+          $("#errorDiv").show().html("<b>Sorry</b>, " + response.message);
         }
-        //   $("#login_msg").hide();
-
       },
       error: (function (httpObj, textStatus) {
         $(".loaderDiv").hide();
@@ -160,19 +131,16 @@ var Authentication = (function () {
 
 
   function getUserAndStartApplication(credentials, user) {
-    var user = {
+    var userObject = {
       userId: user['userId'],
       userName: user['userName']
     };
-    var credential = {
-      credential: credentials
-    };
-    startApplication(credential, user);
+    startApplication(credentials, userObject);
   }
 
   function startApplication(credentials, user) {
-    document.cookie = "UMS.credentials=" + JSON.stringify(credentials) + "; path=/";
-    document.cookie = "UMS.user=" + JSON.stringify(user) + "; path=/";
+    sessionStorage.setItem("ums.token", credentials);
+    sessionStorage.setItem("ums.user", JSON.stringify(user));
     var params = getQueryParams();
     if (isValidRedirectTo()) {
       window.location.href = decodeURIComponent(params.redirectTo);
@@ -230,20 +198,6 @@ var Authentication = (function () {
       }
     }
     return params;
-  }
-
-  function eraseAllCookies() {
-    var cookies = document.cookie.split(";");
-    for (var i = 0; i < cookies.length; i++) {
-      eraseCookie(cookies[i].split("=")[0]);
-    }
-  }
-
-  function eraseCookie(name) {
-    var date = new Date();
-    date.setTime(date.getTime() + (-1 * 24 * 60 * 60 * 1000));
-    var expires = "; expires=" + date.toGMTString();
-    document.cookie = name + "=" + "" + expires + "; path=/";
   }
 
   function presentErrorMessage(msg) {

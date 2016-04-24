@@ -1,6 +1,5 @@
 package org.ums.decorator;
 
-import org.ums.cache.ContentDaoDecorator;
 import org.ums.domain.model.mutable.MutableNavigation;
 import org.ums.domain.model.immutable.Navigation;
 import org.ums.manager.NavigationManager;

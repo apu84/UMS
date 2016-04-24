@@ -8,7 +8,7 @@ module ums {
 
     private messageDisplayed: boolean = false;
 
-    public insert(rows: Array<RowData<any>>): void {
+    public insert(rows: Array<RowData>): void {
       if (rows) {
         for (var i = 0; i < rows.length; i++) {
           this.gridData.push(rows[i]);

@@ -1,6 +1,5 @@
 package org.ums.decorator;
 
-import org.ums.cache.ContentDaoDecorator;
 import org.ums.domain.model.mutable.MutableSemester;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.enums.ProgramType;

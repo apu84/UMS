@@ -1,6 +1,5 @@
 package org.ums.decorator;
 
-import org.ums.cache.ContentDaoDecorator;
 import org.ums.domain.model.mutable.MutableSyllabus;
 import org.ums.domain.model.immutable.Syllabus;
 import org.ums.manager.SyllabusManager;

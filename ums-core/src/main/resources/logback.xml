@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <appender name="fileAppender" class="ch.qos.logback.core.FileAppender">
+    <file>${CATALINA_HOME}/logs/ums-logs.log</file>
+    <append>true</append>
+    <encoder>
+      <pattern>%d %-5level %logger{35} - %msg%n</pattern>
+    </encoder>
+    <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+      <!-- daily rollover -->
+      <fileNamePattern>${CATALINA_HOME}/logs/ums-logs_%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+      <maxFileSize>10MB</maxFileSize>
+      <!-- keep 30 days' worth of history -->
+      <maxHistory>30</maxHistory>
+      <totalSizeCap>1GB</totalSizeCap>
+    </rollingPolicy>
+  </appender>
+
+  <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+    <queueSize>600</queueSize>
+    <discardingThreshold>0</discardingThreshold>
+    <appender-ref ref="fileAppender" />
+  </appender>
+
+  <root level="error">
+     <appender-ref ref="ASYNC"/>
+  </root>
+  <!--
+  <logger name="org.ums" level="error" additivity="false">
+    <appender-ref ref="fileAppender"/>
+  </logger>
+  -->
+</configuration>

@@ -1,6 +1,7 @@
 package org.ums.cache;
 
 import org.springframework.util.StringUtils;
+import org.ums.decorator.ContentDaoDecorator;
 import org.ums.domain.model.common.Identifier;
 import org.ums.domain.model.common.LastModifier;
 import org.ums.manager.CacheManager;
