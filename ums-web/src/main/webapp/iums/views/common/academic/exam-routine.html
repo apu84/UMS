@@ -161,7 +161,7 @@
                                                 <td width="18%" align="center" style="padding-top: 5px;padding-bottom: 5px;">
                                                     <select id="course_{{date_time.index}}{{program.index}}{{course.index}}" data-ng-hide="date_time.readOnly" class="select2-size form-control" style="width: 90%;height: 25px;text-align: center;padding: 0px;"
                                                             ng-model="exam_course.id" data-ng-change="courseSelectionChanged(program,course,exam_course.id)">
-                                                        <option data-ng-repeat="exam_course in program.courseArr" value="{{exam_course.id}}">{{exam_course.no}}</option>
+                                                        <option data-ng-repeat="exam_course in courseArr" value="{{exam_course.id}}">{{exam_course.no}}</option>
                                                     </select>
                                                     <div  data-ng-show="date_time.readOnly">
                                                         {{course.no}}

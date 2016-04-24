@@ -22,6 +22,7 @@ module ums {
     routine: any;
     data: any;
     rowId: any;
+    courseArr:Array<ICourse>;
   }
   interface IDateTime{
     readOnly: boolean;
@@ -100,9 +101,10 @@ module ums {
 
     private getRoutine(semester_id:number,exam_type:number):ng.IPromise<any> {
       var defer = this.$q.defer();
-      this.httpClient.get("academic/examroutine/semester/"+semester_id+"/examtype/"+exam_type, this.appConstants.mimeTypeJson,
+      this.httpClient.get("academic/examroutine/semester/"+this.$scope.routine.semester+"/examtype/"+exam_type, this.appConstants.mimeTypeJson,
           (json:any, etag:string) => {
             var dateTimeArr:Array<IDateTime>=eval(json.entries);
+            console.log(dateTimeArr);
             defer.resolve(dateTimeArr);
           },
           (response:ng.IHttpPromiseCallbackArg<any>) => {
@@ -279,9 +281,13 @@ module ums {
     private getCourseArr(program_id:number):ng.IPromise<any> {
       var defer = this.$q.defer();
       var courseArr:Array<any>;
-      this.httpClient.get('academic/course/semester/11012015/program/' + program_id, 'application/json',
+      console.log('-----inside courseArr----')
+      console.log(this.$scope.routine.semester);
+      console.log(program_id);
+      this.httpClient.get('academic/course/semester/'+ this.$scope.routine.semester+'/program/' + program_id, 'application/json',
           (json:any, etag:string) => {
             courseArr = json.entries;
+            this.$scope.courseArr = courseArr;
             defer.resolve(courseArr);
           },
           (response:ng.IHttpPromiseCallbackArg<any>) => {
@@ -293,7 +299,7 @@ module ums {
 
     private courseSelectionChanged(program_row:IProgram,course_row:ICourse, selected_course_id:string) {
       console.log(selected_course_id);
-      var course:ICourse=this.arrayLookup(program_row.courseArr,'id',selected_course_id);
+      var course:ICourse=this.arrayLookup(this.$scope.courseArr,'id',selected_course_id);
       course_row.year = course.year;
       course_row.semester = course.semester;
       course_row.title = course.title;
@@ -360,7 +366,7 @@ module ums {
 
     private saveRoutine(json:any):ng.IPromise<any> {
       var defer = this.$q.defer();
-      this.httpClient.put('academic/examroutine/semester/11012015/examtype/1', json, 'application/json')
+      this.httpClient.put('academic/examroutine/semester/'+ this.$scope.routine.semester+'/examtype/'+this.$scope.routine.examType, json, 'application/json')
           .success(() => {
             defer.resolve('Successfully Saved Exam Routine.');
           }).error((data) => {
@@ -403,8 +409,8 @@ module ums {
 
       var complete_json = {};
       complete_json["entries"] = jsonObj;
-      complete_json["semesterId"] = "11012015";
-      complete_json["examType"] = "1";
+      complete_json["semesterId"] = this.$scope.routine.semester;
+      complete_json["examType"] = this.$scope.routine.examType;
       complete_json["insertType"] = insertType;
       console.log(complete_json);
       return complete_json;
@@ -572,9 +578,9 @@ module ums {
         var program:IProgram = date_time_row_obj.programs[ind];
 
         this.getCourseArr(program.programId).then((courseArr:Array<ICourse>)=> {
-          program.courseArr = courseArr;
-
-
+          console.log("---inside the thief---");
+          program.courseArr = this.$scope.courseArr;
+          console.log(program.courseArr);
         });
 
       }

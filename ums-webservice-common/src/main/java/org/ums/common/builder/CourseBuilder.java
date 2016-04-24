@@ -61,6 +61,7 @@ public class CourseBuilder implements Builder<Course, MutableCourse> {
     pBuilder.add("syllabus", pUriInfo.getBaseUriBuilder().path("academic").path("syllabus")
         .path(String.valueOf(syllabus.getId())).build().toString());
 
+
     if (pReadOnly.getCourseGroupId() > 0) {
       CourseGroup courseGroup = (CourseGroup) pLocalCache.cache(() -> pReadOnly.getCourseGroup(syllabus.getId()),
           (syllabus.getId() + pReadOnly.getCourseGroupId()), CourseGroup.class);

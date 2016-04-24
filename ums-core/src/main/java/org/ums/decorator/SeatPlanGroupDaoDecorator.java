@@ -1,0 +1,18 @@
+package org.ums.decorator;
+
+
+import org.ums.domain.model.immutable.SeatPlanGroup;
+import org.ums.domain.model.mutable.MutableSeatPlanGroup;
+import org.ums.manager.SeatPlanGroupManager;
+
+import java.util.List;
+
+/**
+ * Created by My Pc on 4/20/2016.
+ */
+public class SeatPlanGroupDaoDecorator extends ContentDaoDecorator<SeatPlanGroup,MutableSeatPlanGroup,Integer,SeatPlanGroupManager> implements SeatPlanGroupManager {
+  @Override
+  public List<SeatPlanGroup> getGroupBySemester(int pSemesterId,int pExamType) {
+    return getManager().getGroupBySemester(pSemesterId,pExamType);
+  }
+}

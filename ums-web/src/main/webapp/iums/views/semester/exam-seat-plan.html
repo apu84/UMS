@@ -1,0 +1,108 @@
+<style>
+
+    p.times {
+        padding-left: 5%;
+    }
+
+
+</style>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title" align="center">Exam Seat Plan</h3>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+
+            <div class="col-md-3">
+                Select Semester <br>
+                <select class="form-control required" name="semester" data-ng-model="semesterId" >
+                    <option data-ng-repeat="semesters in semesterList| filter:{status:'1'}" value="{{semesters.id}}">{{semesters.name}}</option>
+                </select>
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-3">
+                Select Exam Type <br>
+                <select class="form-control required" name="examType" data-ng-model="examType" >
+                    <option value="1">Regular</option>
+                    <option value="2">Carry</option>
+                    <option value="3">Clearance</option>
+                </select>
+            </div>
+
+            <div class="col-md-1"></div>
+
+            <div class="col-md-3">
+                Select Seat Plannign System
+                <select class="form-control required" name="system" data-ng-model="system" >
+                    <option value="1">Automatic</option>
+                    <option value="2">Manual</option>
+                </select>
+            </div>
+
+
+        </div>
+        <hr>
+        <hr>
+        <br>
+        <br>
+        <div data-ng-if="semesterId && examType && system " data-ng-init="getGroups()">
+            <h2 align="center">Groups</h2>
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Group 1</h3>
+                    </div>
+                    <div data-ng-repeat="group in seatPlanGroupList| filter:{groupNo:1}">
+                        <p class="times">{{group.programName}}, {{group.year}} year {{group.semester}} semester</p>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Group 2</h3>
+                    </div>
+                    <div data-ng-repeat="group in seatPlanGroupList| filter:{groupNo:2}">
+                        <p class="times">{{group.programName}}, {{group.year}} year {{group.semester}} semester</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Group 3</h3>
+                    </div>
+                    <div data-ng-repeat="group in seatPlanGroupList| filter:{groupNo:3}">
+                        <p class="times">{{group.programName}}, {{group.year}} year {{group.semester}} semester</p>
+                    </div>
+                </div>
+            </div>
+
+            <!--<div data-ng-if="seatPlanGroupListLength>0">
+                <h3><b>Group 1</b></h3>
+                <div data-ng-repeat="group in seatPlanGroupList">
+                    <div data-ng-if="group.groupNo == groupNumber">
+                        {{group.programName}}, {{group.year}} year {{group.semester}} semester
+                    </div>
+                    <div data-ng-if="group.groupNo != groupNumber">
+                        <hr>
+                        {{groupNumber=group.groupNo;""}}
+                        <h3><b>Group {{groupNumber}}</b></h3>
+                        {{group.programName}}, {{group.year}} year {{group.semester}}
+                    </div>
+                </div>
+            </div>-->
+
+
+        </div>
+        <div data-ng-if="seatPlanGroupList.length==0">
+            <h1>Please Create an Exam Rroutine first for {{semesterId}} !!!!!!</h1>
+        </div>
+
+        <hr>
+        <hr>
+
+    </div>
+</div>
