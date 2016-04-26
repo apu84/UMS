@@ -70,7 +70,7 @@ public class BearerAccessTokenDao extends BearerAccessTokenDaoDecorator {
       MutableBearerAccessToken accessToken = new PersistentBearerAccessToken();
       accessToken.setId(rs.getString("TOKEN"));
       accessToken.setUserId(rs.getString("USER_ID"));
-      accessToken.setLastAccessedTime(rs.getDate("LAST_ACCESS_TIME"));
+      accessToken.setLastAccessedTime(rs.getTimestamp("LAST_ACCESS_TIME"));
       AtomicReference<BearerAccessToken> reference = new AtomicReference<>(accessToken);
       return reference.get();
     }

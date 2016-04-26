@@ -99,4 +99,14 @@
     <property name="securityManager" ref="securityManager"/>
   </bean>
 
+  <!--session timeout value in minutes-->
+  <bean id="sessionTimeout" class="java.lang.Integer">
+    <constructor-arg type="java.lang.String" value="${session.timeout}"/>
+  </bean>
+
+  <bean id="sessionTimeoutInterval" class="java.lang.Integer">
+    <constructor-arg type="java.lang.String" value="${session.timeoutInterval}"/>
+  </bean>
+
+
 </beans>

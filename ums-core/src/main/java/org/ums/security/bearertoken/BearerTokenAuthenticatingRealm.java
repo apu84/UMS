@@ -13,6 +13,7 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.mgt.RealmSecurityManager;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.realm.Realm;
+import org.apache.shiro.session.ExpiredSessionException;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.slf4j.Logger;
@@ -21,15 +22,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.ums.domain.model.immutable.BearerAccessToken;
 import org.ums.domain.model.immutable.Permission;
 import org.ums.domain.model.immutable.User;
+import org.ums.domain.model.mutable.MutableBearerAccessToken;
 import org.ums.domain.model.mutable.MutableUser;
 import org.ums.manager.BearerAccessTokenManager;
 import org.ums.manager.ContentManager;
 import org.ums.manager.PermissionManager;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class BearerTokenAuthenticatingRealm extends AuthorizingRealm {
   private static final Logger mLogger = LoggerFactory.getLogger(BearerTokenAuthenticatingRealm.class);
@@ -40,6 +39,11 @@ public class BearerTokenAuthenticatingRealm extends AuthorizingRealm {
   private PermissionManager mPermissionManager;
   @Autowired
   private ContentManager<User, MutableUser, String> mUserManager;
+  @Autowired
+  private Integer sessionTimeout = 15;
+  @Autowired
+  private Integer sessionTimeoutInterval = 1;
+
 
   private class BearerAuthenticationInfo implements AuthenticationInfo {
     private final BearerAccessToken token;
@@ -86,7 +90,7 @@ public class BearerTokenAuthenticatingRealm extends AuthorizingRealm {
   }
 
   @Override
-  protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken pAuthenticationToken) throws AuthenticationException {
+  protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken pAuthenticationToken) throws AuthenticationException, ExpiredSessionException {
     BearerToken token = (BearerToken) pAuthenticationToken;
     String userId = (String) token.getPrincipal();
     String credentials = (String) token.getCredentials();
@@ -99,6 +103,28 @@ public class BearerTokenAuthenticatingRealm extends AuthorizingRealm {
       if (tokenIsInvalid(token, dbToken)) {
         throw new AuthenticationException("Access denied. Invalid access token");
       }
+
+      /**
+       * If difference between current time and last accessed time is less than 15 minutes
+       * or less than some pre-configured time that update last access time. Otherwise throw
+       * an SessionTimeout Exception.
+       */
+      Date currentDate = new Date();
+      long diff = currentDate.getTime() - dbToken.getLastAccessTime().getTime();
+      long diffMinutes = diff / (60 * 1000) % 60;
+
+      if (diffMinutes >= sessionTimeoutInterval && diffMinutes <= sessionTimeout) {
+        MutableBearerAccessToken mutableBearerAccessToken = dbToken.edit();
+        mutableBearerAccessToken.commit(true);
+      } else if (diffMinutes > sessionTimeout) {
+        MutableBearerAccessToken mutableBearerAccessToken = dbToken.edit();
+        mutableBearerAccessToken.delete();
+        if (mLogger.isDebugEnabled()) {
+          mLogger.debug("Removed expired access token: " + dbToken.getId());
+        }
+        throw new ExpiredSessionException("Access denied, Access token is expired");
+      }
+
     } catch (Exception e) {
       throw new AuthenticationException("Not able to find provided bearer access token");
     }

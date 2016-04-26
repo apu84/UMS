@@ -40,9 +40,12 @@
   <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
     <property name="locations">
       <list>
-        <value>${ums.properties.dir:classpath:}/jdbc.properties</value>
-        <value>${ums.properties.dir:classpath:}/common.properties</value>
-        <value>${ums.properties.dir:classpath:}/mail-config.properties</value>
+        <value>classpath:jdbc.properties</value>
+        <value>classpath:common.properties</value>
+        <value>classpath:mail-config.properties</value>
+        <value>${ums.properties.dir}/jdbc.properties</value>
+        <value>${ums.properties.dir}/common.properties</value>
+        <value>${ums.properties.dir}/mail-config.properties</value>
       </list>
     </property>
     <property name="ignoreUnresolvablePlaceholders" value="true"/>
