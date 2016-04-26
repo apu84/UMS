@@ -2,7 +2,7 @@ module ums {
   function UnauthorizedInterceptor($q:ng.IQService, $log:ng.ILogService, baseURI:BaseUri) {
     return {
       responseError: function (response:ng.IHttpPromiseCallbackArg<any>) {
-        if (response.status == 401) { console.debug('%o',response);
+        if (response.status == 401) {
           var base = baseURI.getBaseURI();
           var requestURI = new URI(response.config.url);
 
@@ -10,7 +10,7 @@ module ums {
             $log.debug('Redirecting to login page. 401 Unauthorized found when requested: ' + response.config.url);
 
             var redirectQuery = '?redirectTo=' + encodeURIComponent(window.location.href);
-            //window.location.href = UrlUtil.getBaseAppUrl() + 'login/' + redirectQuery;
+            window.location.href = UrlUtil.getBaseAppUrl() + 'login/' + redirectQuery;
           }
         }
 
