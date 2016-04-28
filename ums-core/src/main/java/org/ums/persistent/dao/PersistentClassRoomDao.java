@@ -35,7 +35,7 @@ public class PersistentClassRoomDao  extends ClassRoomDaoDecorator {
 
   @Override
   public List<ClassRoom> getAll() throws Exception {
-    String query = SELECT_ALL+ " Order by ROOM_NO";
+    String query = SELECT_ALL+ " Order by ROOM_ID";
     return mJdbcTemplate.query(query, new ClassRoomRowMapper());
   }
   @Override

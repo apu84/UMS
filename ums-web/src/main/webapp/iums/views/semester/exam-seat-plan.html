@@ -4,10 +4,13 @@
         padding-left: 5%;
     }
 
+    table, th, td {
+        border: 1px solid black;
+    }
 
 </style>
 
-<div class="panel panel-default">
+<div class="panel panel-default" data-ng-show="showGroupSelectionPanel">
     <div class="panel-heading">
         <h3 class="panel-title" align="center">Exam Seat Plan</h3>
     </div>
@@ -18,7 +21,7 @@
                 Select Semester <br>
                 <select class="form-control required" name="semester" data-ng-model="semesterId" >
                     <option data-ng-repeat="semesters in semesterList| filter:{status:'1'}" value="{{semesters.id}}">{{semesters.name}}</option>
-                </select>
+                </select><br>
             </div>
             <div class="col-md-1"></div>
             <div class="col-md-3">
@@ -101,8 +104,63 @@
             <h1>Please Create an Exam Rroutine first for {{semesterId}} !!!!!!</h1>
         </div>
 
+        <br>
+        <br>
+        <hr>
         <hr>
         <hr>
 
+        <div data-ng-if="seatPlanGroupList.length>0">
+            <div class="row">
+                <div class="col-md-6">
+                    <hr>
+                    <hr>
+                    Select Group For Exam Seat Plan Viewing or Generation<br>
+                    <select class="form-control required" name="groupNoForSeatPlanViewing" data-ng-model="groupNoForSeatPlanViewing">
+                        <option value="1">Group 1</option>
+                        <option value="2">Group 2</option>
+                        <option value="3">Group 3</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <hr>
+                    <hr>
+                    <br>
+                    <button data-ng-click="createOrViewSeatPlan()">Create or View <br> Seat Plan</button>
+                </div>
+
+
+            </div>
+        </div>
+
     </div>
+</div>
+
+<div class="panel panel-grey" data-ng-show="groupSelected">
+    <div class="panel-heading">
+        <h3 class="panel-title pull-left">
+            Seat Plan Room Information
+        </h3>
+
+        <button class="btn btn-default pull-right" data-ng-click="closeRoomInfoWindow()"><i class="fa fa-times" aria-hidden="true"></i></button>
+        <div class="clearfix"></div>
+
+    </div>
+    <div class="panel-body">
+        <table style="width:100%" class="table table-striped">
+            <tr>
+                <th align="center"><h2 align="center">Room No</h2></th>
+                <th align="center"><h2 align="center">Total Capacity</h2></th>
+                <th align="center"><h2 align="center">Detail Seat Plan</h2></th>
+            </tr>
+            <tr data-ng-repeat="room in roomList">
+                <td align="center">{{room.roomNo}}</td>
+                <td align="center">{{room.capacity}}</td>
+                <td align="center"><button>Details</button></td>
+            </tr>
+        </table>
+
+
+    </div>
+
 </div>
