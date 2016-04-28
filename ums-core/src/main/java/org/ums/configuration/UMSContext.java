@@ -162,6 +162,13 @@ public class UMSContext {
   }
 
   @Bean
+  SpStudentManager spStudentManager(){
+    SpStudentCache spStudentCache = new SpStudentCache(mLocalCacheManager);
+    spStudentCache.setManager(new PersistentSpStudentDao(mJdbcTemplate));
+    return spStudentCache;
+  }
+
+  @Bean
   PermissionManager permissionManager() {
     PermissionCache permissionCache = new PermissionCache(mLocalCacheManager);
     permissionCache.setManager(new PersistentPermissionDao(mJdbcTemplate));
