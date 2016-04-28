@@ -24,6 +24,10 @@
     <property name="port" value="587"/>
   </bean>
 
+  <bean id="dummyEmail" class="java.lang.String">
+    <constructor-arg type="java.lang.String" value="${dummy.email}"/>
+  </bean>
+
   <bean id="velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
     <property name="velocityProperties">
       <value>

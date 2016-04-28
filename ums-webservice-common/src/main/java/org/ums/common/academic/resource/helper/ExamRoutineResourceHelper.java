@@ -112,7 +112,7 @@ public class ExamRoutineResourceHelper extends ResourceHelper<ExamRoutine, Mutab
         courseString = courseString.substring(0, courseString.length() - 1);
       totalString += dateTimeString + programString + courseString + "]}]}]";
     } else
-      totalString += "]";
+      totalString = totalString.substring(0,totalString.length()-1) +"]}"+ "]";
 
     System.out.println(totalString);
 

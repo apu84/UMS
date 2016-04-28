@@ -2,18 +2,25 @@ package org.ums.services;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authc.credential.PasswordService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.ums.domain.model.dto.ResponseDto;
 import org.ums.domain.model.immutable.User;
 import org.ums.manager.UserManager;
+import org.ums.message.MessageResource;
+import org.ums.response.type.GenericMessageResponse;
+import org.ums.response.type.GenericResponse;
 import org.ums.util.Constants;
 
 import java.util.Date;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
 public class LoginService {
+
+  private static Logger mLogger = LoggerFactory.getLogger(LoginService.class);
 
   @Autowired
   private UserManager mUserManager;
@@ -24,85 +31,75 @@ public class LoginService {
   @Autowired
   private EmailService emailService;
 
-  public ResponseDto checkAndSendPasswordResetEmailToUser(final String pUserId) throws Exception {
+  @Autowired
+  MessageResource mMessageResource;
 
-    ResponseDto response = new ResponseDto();
-    User user = null;
+  @Autowired
+  private String dummyEmail;
+
+
+  public GenericResponse<Map> checkAndSendPasswordResetEmailToUser(final String pUserId) throws Exception {
     String token = UUID.randomUUID().toString();
     Date now = new Date();
     Date tokenInvalidDate = null;
     Date tokenEmailInvalidDate = null;
 
-    try {
-      user = mUserManager.get(pUserId);
-    } catch (Exception ex) {
-
-      response.setCode("KO");
-      response.setMessage("UserId does not exist.");
-      return response;
+    if (!mUserManager.exists(pUserId)) {
+      return new GenericMessageResponse(GenericResponse.ResponseType.ERROR, mMessageResource.getMessage("user.not.exists"));
     }
+
+    User user = mUserManager.get(pUserId);
 
     if (user.getPasswordTokenGenerateDateTime() != null) {
       tokenInvalidDate = new Date(user.getPasswordTokenGenerateDateTime().getTime() + (Constants.PASSWORD_RESET_TOKEN_LIFE * Constants.ONE_MINUTE_IN_MILLIS));
       tokenEmailInvalidDate = new Date(user.getPasswordTokenGenerateDateTime().getTime() + (Constants.PASSWORD_RESET_TOKEN_EMAIL_LIFE * Constants.ONE_MINUTE_IN_MILLIS));
     }
 
-    if (StringUtils.isBlank(user.getPasswordResetToken()) || tokenInvalidDate.after(now) || user.getPasswordTokenGenerateDateTime() == null) {
+    if (StringUtils.isBlank(user.getPasswordResetToken())
+        || (tokenInvalidDate != null && tokenInvalidDate.after(now))
+        || user.getPasswordTokenGenerateDateTime() == null) {
       mUserManager.setPasswordResetToken(mPasswordService.encryptPassword(token).replaceAll("=", ""), pUserId);
       user = mUserManager.get(pUserId);
     }
 
     if (user.getPasswordTokenGenerateDateTime() != null && tokenEmailInvalidDate != null && tokenEmailInvalidDate.before(now)) {
-      System.out.println("Token already email. please try again after 5 minutes");
+      mLogger.info("Token already email. please try again after 5 minutes");
     } else {
-      System.out.println("Send an password token email again.");
+      mLogger.info("Send an password token email again.");
     }
     //ToDo: Need to check whether the user has an email address in the database
     emailService.setUser(user);
-    emailService.sendEmail("ifticse_kuet@hotmail.com", "ifticse_kuet@hotmail.com", "Reset Your IUMS Password");
+    emailService.sendEmail(dummyEmail, dummyEmail, "Reset Your IUMS Password");
 
-    response.setCode("OK");
-    return response;
+    return new GenericMessageResponse(GenericResponse.ResponseType.SUCCESS);
 
   }
 
-  public ResponseDto resetPassword(final String pUserId, final String pResetToken, final String pNewPassword, final String pConfirmNewPassword) throws Exception {
-
-    ResponseDto response = new ResponseDto();
-    User user = null;
+  public GenericResponse<Map> resetPassword(final String pUserId, final String pResetToken, final String pNewPassword, final String pConfirmNewPassword) throws Exception {
     Date tokenInvalidDate = null;
     Date now = new Date();
 
-    try {
-      user = mUserManager.get(pUserId);
-    } catch (Exception ex) {
-
-      response.setCode("KO");
-      response.setMessage("UserId does not exist.");
-      return response;
+    if (!mUserManager.exists(pUserId)) {
+      return new GenericMessageResponse(GenericResponse.ResponseType.ERROR, mMessageResource.getMessage("user.not.exists"));
     }
+
+    User user = mUserManager.get(pUserId);
+
     if (user.getPasswordTokenGenerateDateTime() != null) {
       tokenInvalidDate = new Date(user.getPasswordTokenGenerateDateTime().getTime() + (Constants.PASSWORD_RESET_TOKEN_LIFE * Constants.ONE_MINUTE_IN_MILLIS));
     }
     if (user.getPasswordTokenGenerateDateTime() != null && tokenInvalidDate.before(now)) {
-      response.setCode("KO");
-      response.setMessage("Password reset url is invalid.");
-      return response;
+      return new GenericMessageResponse(GenericResponse.ResponseType.ERROR, mMessageResource.getMessage("invalid.password.reset.url"));
     }
     if (!pNewPassword.equals(pConfirmNewPassword)) {
-      response.setCode("KO");
-      response.setMessage("Password and Confirm New Password are not equal.");
-      return response;
+      return new GenericMessageResponse(GenericResponse.ResponseType.ERROR, mMessageResource.getMessage("password.confirm.password.different"));
     }
-
     if (pResetToken.equals(user.getPasswordResetToken())) {
       mUserManager.updatePassword(pUserId, mPasswordService.encryptPassword(pNewPassword));
       mUserManager.clearPasswordResetToken(pUserId);
-      response.setCode("OK");
-      response.setMessage("--");
-      return response;
+      return new GenericMessageResponse(GenericResponse.ResponseType.SUCCESS);
     }
 
-    return response;
+    return new GenericMessageResponse(GenericResponse.ResponseType.ERROR);
   }
 }
