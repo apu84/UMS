@@ -19,6 +19,17 @@ module ums{
     groupNoForSubGroup:number;
     subGroupNo:number;  //how many subgroup
     colForSubgroup:number; //it will be used for generating columns.
+    totalStudentGroup1:number;
+    totalStudentGroup2:number;
+    totalStudentGroup3:number;
+    totalNumberSubGroup:number;
+    subGroupTotalNumber:number;
+    subGroup1List:any;
+    subGroup2List:any;
+    subGroup3List:any;
+    subGroup4List:any;
+    subGroup5List:any;
+    subGroup6List:any;
 
     groupSelected:boolean;
     showGroupSelectionPanel:boolean;
@@ -68,6 +79,7 @@ module ums{
     semester:number;
     groupNo:number;
     type:number;
+    studentNumber:number;
     lastUpdated:string;
 
   }
@@ -85,6 +97,9 @@ module ums{
       $scope.arr = arr;
       $scope.update = 0;
       $scope.groupNumber = 1;
+      $scope.totalStudentGroup1=0;
+      $scope.totalStudentGroup2=0;
+      $scope.totalStudentGroup3=0;
       $scope.getSemesterInfo = this.getSemesterInfo.bind(this);
       $scope.getSeatPlanGroupInfo = this.getSeatPlanGroupInfo.bind(this);
       $scope.getGroups = this.getGroups.bind(this);
@@ -111,11 +126,23 @@ module ums{
       }*/
       this.$scope.showGroupSelection = true;
 
+
     }
 
     private createOrViewSubgroups(group:number):void{
-      $( "#draggable" ).draggable({ cursor: "move" });
+
+
+      $("#sortable,#droppable1,#droppable2,#droppable3,#droppable4,#droppable5,#droppable6").sortable({
+        connectWith: ".connectedSortable"
+      }).disableSelection();
       this.$scope.groupNoForSubGroup = group;
+      if(group==1){
+        this.$scope.subGroupTotalNumber = this.$scope.totalStudentGroup1;
+      }else if(group==2){
+        this.$scope.subGroupTotalNumber = this.$scope.totalStudentGroup2;
+      }else{
+        this.$scope.subGroupTotalNumber = this.$scope.totalStudentGroup3;
+      }
       console.log('------------------------');
       console.log('Inside sub group');
       console.log(group);
@@ -129,15 +156,28 @@ module ums{
     }
 
     private generateSubGroups(group:number):void{
-      console.log('----generate subgroups---');
+      /*
+      * colForSubGroup==9999 means, invalid
+      * */
       var totalSubgroups =Math.floor(12/group) ;
-      this.$scope.colForSubgroup=totalSubgroups;
-      this.$scope.subGroupStorage=["1"];
-      for(var i=2;i<=totalSubgroups;i++){
-        this.$scope.subGroupStorage.push(i.toString());
+      if(group>6){
+        alert("Subgroup can be no more than six.");
+        this.$scope.colForSubgroup=9999;
+
+      }else if(group<=0){
+        alert("Please generate sub groups");
+        this.$scope.colForSubgroup=9999;
+
+      }else if(group==null){
+        alert("Please generate sub groups");
+        this.$scope.colForSubgroup=9999;
+      }
+      else{
+        this.$scope.colForSubgroup=group;
       }
 
-      console.log(this.$scope.subGroupStorage);
+      console.log('--------subgroup------');
+      console.log(this.$scope.colForSubgroup);
 
     }
 
@@ -145,6 +185,16 @@ module ums{
       this.getSeatPlanGroupInfo().then((groupArr:Array<ISeatPlanGroup>)=>{
         this.$scope.seatPlanGroupList = groupArr;
         this.$scope.seatPlanGroupListLength = this.$scope.seatPlanGroupList.length;
+        for(var i=0;i<this.$scope.seatPlanGroupListLength;i++){
+          if(groupArr[i].groupNo==1){
+            this.$scope.totalStudentGroup1 += groupArr[i].studentNumber;
+          }else if(groupArr[i].groupNo==2){
+            this.$scope.totalStudentGroup2 += groupArr[i].studentNumber;
+          }
+          else{
+            this.$scope.totalStudentGroup3 += groupArr[i].studentNumber;
+          }
+        }
       });
     }
 
@@ -186,23 +236,7 @@ module ums{
     }
 
     private getRoomInfo():void{
-     /* var defer = this.$q.defer();
-      var roomList:Array<IRoom>;
-      this.httpClient.get('/ums-webservice-common/academic/classroom/all', 'application/json',
-          (json:any, etag:string) => {
-            roomList = json;
-            console.log("-------------getRoomInfo----------");
 
-            for(var r in roomList){
-              console.log(r);
-            }
-
-            defer.resolve(roomList);
-          },
-          (response:ng.IHttpPromiseCallbackArg<any>) => {
-            console.error(response);
-          });
-      return defer.promise;*/
       this.httpClient.get("academic/classroom/all", HttpClient.MIME_TYPE_JSON,
           (response) => {
             this.$scope.roomList = response.rows;

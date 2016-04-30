@@ -7,6 +7,49 @@
     table, th, td {
         border: 1px solid black;
     }
+    #list{
+        border: 1px solid black;
+        background-color: white;
+
+    }
+    #statistics{
+        border-left:1px solid black;
+    }
+
+    #sortable {
+        border: 1px solid #eee;
+        width: 142px;
+        min-height: 20px;
+        list-style-type: none;
+        margin: 0;
+        padding: 5px 0 0 0;
+        float: left;
+        margin-right: 10px;
+    }
+
+    .drag { width: 150px; height: 150px; padding: 0.5em; float: left; margin: 10px; }
+    .subGroup{
+        width: 20px; height: 10px; padding: 0.5em; float: left; margin: 10px 10px 10px 0;
+    }
+
+
+   #droppable1,#droppable2,#droppable3,#droppable4,#droppable5,#droppable6 {
+       border: 1px solid #eee;
+       width: 142px;
+       min-height: 20px;
+       list-style-type: none;
+       margin: 0;
+       padding: 5px 0 0 0;
+       float: left;
+       margin-right: 10px;}
+
+    #sortable li, #droppable1 li,#droppable2 li,#droppable3 li,#droppable4 li,#droppable5 li,#droppable6 li{
+        margin: 0 5px 5px 5px;
+        padding: 5px;
+        font-size: 1.2em;
+        width: 120px;
+    }
+
 
 
 </style>
@@ -58,8 +101,12 @@
                         <h3 class="panel-title">Group 1</h3>
                     </div>
                     <div data-ng-repeat="group in seatPlanGroupList| filter:{groupNo:1}">
-                        <p class="times">{{group.programName}}, {{group.year}} year {{group.semester}} semester</p>
-
+                        <p class="times">{{group.programName}}, {{group.year}} year {{group.semester}} semester ({{group.studentNumber}})</p>
+                    </div>
+                    <hr>
+                    <hr>
+                    <div>
+                        <h2>Total Student : {{totalStudentGroup1}}</h2>
                     </div>
                 </div>
             </div>
@@ -69,9 +116,15 @@
                         <h3 class="panel-title">Group 2</h3>
                     </div>
                     <div data-ng-repeat="group in seatPlanGroupList| filter:{groupNo:2}">
-                        <p class="times">{{group.programName}}, {{group.year}} year {{group.semester}} semester</p>
+                        <p class="times">{{group.programName}}, {{group.year}} year {{group.semester}} semester ({{group.studentNumber}})</p>
+                    </div>
+                    <hr>
+                    <hr>
+                    <div>
+                        <h2>Total Student : {{totalStudentGroup2}}</h2>
                     </div>
                 </div>
+
             </div>
             <div class="col-md-4">
                 <div class="panel panel-default">
@@ -79,25 +132,17 @@
                         <h3 class="panel-title">Group 3</h3>
                     </div>
                     <div data-ng-repeat="group in seatPlanGroupList| filter:{groupNo:3}">
-                        <p class="times">{{group.programName}}, {{group.year}} year {{group.semester}} semester</p>
+                        <p class="times">{{group.programName}}, {{group.year}} year {{group.semester}} semester ({{group.studentNumber}})</p>
+                    </div>
+                    <hr>
+                    <hr>
+                    <div>
+                        <h2>Total Student : {{totalStudentGroup3}}</h2>
                     </div>
                 </div>
             </div>
 
-            <!--<div data-ng-if="seatPlanGroupListLength>0">
-                <h3><b>Group 1</b></h3>
-                <div data-ng-repeat="group in seatPlanGroupList">
-                    <div data-ng-if="group.groupNo == groupNumber">
-                        {{group.programName}}, {{group.year}} year {{group.semester}} semester
-                    </div>
-                    <div data-ng-if="group.groupNo != groupNumber">
-                        <hr>
-                        {{groupNumber=group.groupNo;""}}
-                        <h3><b>Group {{groupNumber}}</b></h3>
-                        {{group.programName}}, {{group.year}} year {{group.semester}}
-                    </div>
-                </div>
-            </div>-->
+
 
 
         </div>
@@ -165,32 +210,86 @@
     </div>
     <div class="panel-body">
         <div class="row">
-            <div class="col-md-3">
-                <ul data-ng-repeat="group in seatPlanGroupList| filter:{groupNo:groupNoForSubGroup}" id="draggable" class="ui-widget-content" style="list-style: none">
-                    <li>{{group.programName}},  {{group.year}} year, {{group.semester}} semester</li>
+            <div class="col-md-2">
+                <ul data-ng-repeat="group in seatPlanGroupList| filter:{groupNo:groupNoForSubGroup}"   id="sortable"  class="connectedSortable">
+                    <li class="ui-state-default">{{group.programName}} {{group.year}}/{{group.semester}}</li>
                 </ul>
             </div>
-            <div class="col-md-4">
+
+            <div class="col-md-7">
+                <div class="row" align="center">
+                    <p><b>How many subgroups ? </b></p>
+                    <input type="number" data-ng-model="subGroupNumber" />
+                    <br>
+                    <br>
+                    <button data-ng-click="generateSubGroups(subGroupNumber)">Generate Sub-groups</button>
+                </div>
+                <hr>
+                <hr>
+
+
+                <!--
+                    data-ng-if doesnot work in showing the subgroups.
+                -->
+
+                <div class="row" data-ng-if="colForSubGroup!=9999">
+
+                    <ul id="droppable1" class="connectedSortable" data-ng-show="colForSubgroup>=1">
+                        <li>Sub Group 1</li>
+                    </ul>
+                    <ul class="connectedSortable" id="droppable2" data-ng-show="colForSubgroup>=2" >
+                        <li>Sub Group 2</li>
+                    </ul>
+                    <ui class="connectedSortable" id="droppable3" data-ng-show="colForSubgroup>=3" >
+                        <li>Sub Group 3</li>
+                    </ui>
+                </div>
+                <hr>
+                <hr>
+                <div class="row" data-ng-if="colForSubgroup!=9999">
+                    <ui class=" connectedSortable" id="droppable4" data-ng-show="colForSubgroup>=4">
+                        <li>Sub Group 4</li>
+                    </ui>
+                    <div class="connectedSortable" id="droppable5" data-ng-show="colForSubgroup>=5">
+                        <li>Sub Group 5</li>
+                    </div>
+                    <div class="connectedSortable" id="droppable6" data-ng-show="colForSubgroup>=6">
+                        <li>Sub Group 6</li>
+                    </div>
+
+                </div>
 
             </div>
-            <div class="col-md-4">
-                <p><b>How many subgroups ? </b></p>
-                <input type="number" data-ng-model="subGroupNumber" />
-                <br>
-                <br>
-                <button data-ng-click="generateSubGroups(subGroupNumber)">Generate Sub-groups</button>
+            <div class="row" id="statistics">
+                <h2>Statistics</h2>
+                Total Students: {{subGroupTotalNumber}}
+                <hr>
+                <hr>
+                <div data-ng-if="colForSubgroup>=1">
+                    Sub Group 1 Size : {{subGroup1List}}
+                </div>
+                <div data-ng-if="colForSubgroup>=2">
+                    Sub Group 2 Size : {{subGroup2List}}
+                </div>
+                <div data-ng-if="colForSubgroup>=3">
+                    Sub Group 3 Size : {{subGroup3List}}
+                </div>
+                <div data-ng-if ="colForSubgroup>=4">
+                    Sub Group 4 Size : {{subGroup4List}}
+                </div>
+                <div data-ng-if="colForSubgroup>=5">
+                    Sub Group 5 Size : {{subGroup5List}}
+                </div>
+                <div data-ng-if="colForSubgroup>=6">
+                    Sub Group 6 Size : {{subGroup6List}}
+                </div>
+
             </div>
 
         </div>
         <hr>
         <hr>
-        <div class="row">
-            {{subGroupNumber}}
-            <div data-ng-repeat="i in subGroupStorage"  class="md-col-{{colForSubgroup}}">
 
-                    Sub Group {{i}}
-            </div>
-        </div>
 
     </div>
 
