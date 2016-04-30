@@ -2,21 +2,28 @@ module ums{
   interface IExamSeatPlanScope extends ng.IScope{
     semesterList:Array<ISemester>;
     seatPlanGroupList:Array<ISeatPlanGroup>;
+    subGroupStorage:Array<String>;
     roomList:any;
 
     data:any;
     groupNumber:number;
     semester:ISemester
+    group:Array<ISeatPlanGroup>;
     examType:number;
     system:number;
     update:number;
     seatPlanGroupListLength:number;
     semesterId:number;
     groupNoForSeatPlanViewing:number;
+    selectedGroupNo:number;
+    groupNoForSubGroup:number;
+    subGroupNo:number;  //how many subgroup
+    colForSubgroup:number; //it will be used for generating columns.
 
     groupSelected:boolean;
     showGroupSelectionPanel:boolean;
     showGroupSelection:boolean;
+    subGroupSelected:boolean;
 
     arr :any;
 
@@ -26,8 +33,10 @@ module ums{
     getGroups:Function;
     getRoomInfo:Function;
     getRoomList:Function;
-    closeRoomInfoWindow: Function;
+    closeSubGroupOrRoomInfoWindow: Function;
     showGroups:Function;
+    createOrViewSubgroups:Function;
+    generateSubGroups:Function;
   }
 
   interface IRoom{
@@ -44,6 +53,10 @@ module ums{
     name:string;
     startDate:string;
     status:number;
+  }
+
+  interface ISubGroup{
+    subGroupNumber:number;
   }
 
   interface ISeatPlanGroup{
@@ -68,6 +81,7 @@ module ums{
       $scope.groupSelected = false;
       $scope.showGroupSelectionPanel = true;
       $scope.showGroupSelection = false;
+      $scope.subGroupSelected=false;
       $scope.arr = arr;
       $scope.update = 0;
       $scope.groupNumber = 1;
@@ -76,9 +90,11 @@ module ums{
       $scope.getGroups = this.getGroups.bind(this);
       $scope.getRoomInfo = this.getRoomInfo.bind(this);
       $scope.getRoomList = this.getRoomList.bind(this);
-      $scope.closeRoomInfoWindow = this.closeRoomInfoWindow.bind(this);
+      $scope.closeSubGroupOrRoomInfoWindow = this.closeSubGroupOrRoomInfoWindow.bind(this);
       $scope.createOrViewSeatPlan = this.createOrViewSeatPlan.bind(this);
       $scope.showGroups = this.showGroups.bind(this);
+      $scope.createOrViewSubgroups = this.createOrViewSubgroups.bind(this);
+      $scope.generateSubGroups = this.generateSubGroups.bind(this);
       this.initialize();
 
     }
@@ -94,6 +110,34 @@ module ums{
         this.$scope.showGroupSelection = true;
       }*/
       this.$scope.showGroupSelection = true;
+
+    }
+
+    private createOrViewSubgroups(group:number):void{
+      $( "#draggable" ).draggable({ cursor: "move" });
+      this.$scope.groupNoForSubGroup = group;
+      console.log('------------------------');
+      console.log('Inside sub group');
+      console.log(group);
+      this.$scope.subGroupSelected=true;
+      this.$scope.showGroupSelectionPanel = false;
+      for(var i in this.$scope.seatPlanGroupList){
+        if(i.groupNo == group){
+            this.$scope.group.push(i);
+        }
+      }
+    }
+
+    private generateSubGroups(group:number):void{
+      console.log('----generate subgroups---');
+      var totalSubgroups =Math.floor(12/group) ;
+      this.$scope.colForSubgroup=totalSubgroups;
+      this.$scope.subGroupStorage=["1"];
+      for(var i=2;i<=totalSubgroups;i++){
+        this.$scope.subGroupStorage.push(i.toString());
+      }
+
+      console.log(this.$scope.subGroupStorage);
 
     }
 
@@ -116,8 +160,9 @@ module ums{
     }
 
 
-    private closeRoomInfoWindow():void{
+    private closeSubGroupOrRoomInfoWindow():void{
       this.$scope.groupSelected = false;
+      this.$scope.subGroupSelected = false;
       this.$scope.showGroupSelectionPanel = true;
     }
 

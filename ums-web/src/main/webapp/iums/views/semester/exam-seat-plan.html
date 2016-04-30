@@ -8,6 +8,7 @@
         border: 1px solid black;
     }
 
+
 </style>
 
 <div class="panel panel-default" data-ng-show="showGroupSelectionPanel">
@@ -112,21 +113,35 @@
 
         <div data-ng-if="seatPlanGroupList.length>0">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-2">
+                    <hr>
+                    <hr>
+                </div>
+                <div class="col-md-4">
                     <hr>
                     <hr>
                     Select Group For Exam Seat Plan Viewing or Generation<br>
-                    <select class="form-control required" name="groupNoForSeatPlanViewing" data-ng-model="groupNoForSeatPlanViewing">
+
+                    <select class="form-control required" name="examType" data-ng-model="groupNoForSeatPlanViewing" >
                         <option value="1">Group 1</option>
                         <option value="2">Group 2</option>
                         <option value="3">Group 3</option>
                     </select>
+                    {{groupNoForSeatPlanViewing}}
+
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-3">
                     <hr>
                     <hr>
                     <br>
-                    <button data-ng-click="createOrViewSeatPlan()">Create or View <br> Seat Plan</button>
+                    <button data-ng-click="createOrViewSubgroups(groupNoForSeatPlanViewing)">Create or View <br> Subgroups</button>
+                    <button data-ng-click="createOrViewSeatPlan(groupNoForSeatPlanViewing)">Create or View <br> Seat Plan</button>
+                </div>
+                <div class="col-md-3">
+                    <hr>
+                    <hr>
+                    <br>
+
                 </div>
 
 
@@ -136,13 +151,59 @@
     </div>
 </div>
 
+
+
+<div class="panel panel-grey" data-ng-show="subGroupSelected">
+    <div class="panel-heading">
+        <h3 class="panel-title pull-left">
+            Sub Groups for Group {{groupNoForSubGroup}}
+        </h3>
+
+        <button class="btn btn-default pull-right" data-ng-click="closeSubGroupOrRoomInfoWindow()"><i class="fa fa-times" aria-hidden="true"></i></button>
+        <div class="clearfix"></div>
+
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-3">
+                <ul data-ng-repeat="group in seatPlanGroupList| filter:{groupNo:groupNoForSubGroup}" id="draggable" class="ui-widget-content" style="list-style: none">
+                    <li>{{group.programName}},  {{group.year}} year, {{group.semester}} semester</li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+
+            </div>
+            <div class="col-md-4">
+                <p><b>How many subgroups ? </b></p>
+                <input type="number" data-ng-model="subGroupNumber" />
+                <br>
+                <br>
+                <button data-ng-click="generateSubGroups(subGroupNumber)">Generate Sub-groups</button>
+            </div>
+
+        </div>
+        <hr>
+        <hr>
+        <div class="row">
+            {{subGroupNumber}}
+            <div data-ng-repeat="i in subGroupStorage"  class="md-col-{{colForSubgroup}}">
+
+                    Sub Group {{i}}
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
 <div class="panel panel-grey" data-ng-show="groupSelected">
     <div class="panel-heading">
         <h3 class="panel-title pull-left">
             Seat Plan Room Information
         </h3>
 
-        <button class="btn btn-default pull-right" data-ng-click="closeRoomInfoWindow()"><i class="fa fa-times" aria-hidden="true"></i></button>
+        <button class="btn btn-default pull-right" data-ng-click="closeSubGroupOrRoomInfoWindow()"><i class="fa fa-times" aria-hidden="true"></i></button>
         <div class="clearfix"></div>
 
     </div>
