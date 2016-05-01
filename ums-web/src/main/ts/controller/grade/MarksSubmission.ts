@@ -75,7 +75,6 @@ module ums {
 
       $scope.visibleProjects = abc;
 
-
     }
 
   }

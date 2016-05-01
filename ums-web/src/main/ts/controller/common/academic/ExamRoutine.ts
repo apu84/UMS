@@ -264,7 +264,7 @@ module ums {
     }
 
     private getNewCourseRow(index:number) {
-      var courseRow:ICourse = {
+      var courseRow = {
         readOnly: false,
         index: index,
         id: '',
@@ -276,6 +276,8 @@ module ums {
       }
       return courseRow;
     }
+
+
 
 
     private getCourseArr(program_id:number):ng.IPromise<any> {
