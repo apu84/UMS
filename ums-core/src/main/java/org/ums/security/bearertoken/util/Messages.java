@@ -9,7 +9,8 @@ public final class Messages {
 	public enum Status {
 		OK("ok"),
 		FAILED("nope"),
-		UNAUTHORIZED("nopeNopeNope");
+		UNAUTHORIZED("nopeNopeNope"),
+		EXPIRED_TOKEN("expired_token");
 
 		private final String text;
 

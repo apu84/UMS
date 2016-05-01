@@ -3,12 +3,14 @@ package org.ums.common.login.helper;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.credential.PasswordService;
-import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.Subject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.ums.domain.model.immutable.BearerAccessToken;
 import org.ums.domain.model.immutable.User;
 import org.ums.domain.model.mutable.MutableBearerAccessToken;
 import org.ums.domain.model.mutable.MutableUser;
@@ -24,6 +26,7 @@ import java.util.UUID;
 
 @Component
 public class LoginHelper {
+  private static final Logger mLogger = LoggerFactory.getLogger(LoginHelper.class);
   @Autowired
   private UserManager mUserManager;
   @Autowired
@@ -72,7 +75,13 @@ public class LoginHelper {
     mutableUser.setTemporaryPassword(null);
     mutableUser.commit(true);
 
-    mBearerAccessTokenManager.invalidateTokens(pCurrentUser.getId());
+    //delete any pre-existing token
+    try {
+      BearerAccessToken bearerAccessToken = mBearerAccessTokenManager.getByUser(pCurrentUser.getId());
+      mBearerAccessTokenManager.delete(bearerAccessToken.edit());
+    } catch (Exception e) {
+      mLogger.info("No pre existing token for: " + pCurrentUser.getId(), e);
+    }
 
     String newToken = UUID.randomUUID().toString();
     MutableBearerAccessToken accessToken = new PersistentBearerAccessToken();

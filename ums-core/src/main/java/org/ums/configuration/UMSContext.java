@@ -255,6 +255,8 @@ public class UMSContext {
 
   @Bean
   BearerAccessTokenManager bearerAccessTokenManager() {
-    return new BearerAccessTokenDao(mJdbcTemplate);
+    BearerAccessTokenCache bearerAccessTokenCache = new BearerAccessTokenCache(mLocalCacheManager);
+    bearerAccessTokenCache.setManager(new BearerAccessTokenDao(mJdbcTemplate));
+    return bearerAccessTokenCache;
   }
 }

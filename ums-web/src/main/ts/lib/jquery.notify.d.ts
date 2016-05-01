@@ -33,7 +33,8 @@ interface JQueryNotifyOptions {
 }
 
 interface JQueryNotify {
-  (message: string, type: string, option?: JQueryNotifyOptions): JQueryNotify;
+  (message: string, type: string): JQueryNotify;
+  (message: string, option?: JQueryNotifyOptions): JQueryNotify;
   defaults(option: JQueryNotifyOptions);
 }
 

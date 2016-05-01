@@ -24,15 +24,14 @@ public class NewUserFilter extends AuthorizationFilter {
 
   private Collection<String> mAllowedResource;
 
+  private List<String> mPassThrough;
+
   protected PatternMatcher mPathMatcher = new AntPathMatcher();
 
   @Override
   protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
-    HttpServletRequest httpRequest = WebUtils.toHttp(request);
-    String path = WebUtils.getPathWithinApplication(httpRequest);
-
     if (isLoginRequest(request, response)
-        || path.contains("forgotPassword")) {
+        || isPassThrough(request)) {
       return true;
     }
 
@@ -60,11 +59,24 @@ public class NewUserFilter extends AuthorizationFilter {
     return false;
   }
 
+  protected boolean isPassThrough(ServletRequest pRequest) {
+    for (String resource : mPassThrough) {
+      if (mPathMatcher.matches(resource, getPathWithinApplication(pRequest))) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   protected String getPathWithinApplication(ServletRequest request) {
     return WebUtils.getPathWithinApplication(WebUtils.toHttp(request));
   }
 
   public void setAllowedResource(Collection<String> pAllowedResource) {
     mAllowedResource = pAllowedResource;
+  }
+
+  public void setPassThrough(List<String> pPassThrough) {
+    mPassThrough = pPassThrough;
   }
 }

@@ -9,12 +9,7 @@ public class BearerAccessTokenDaoDecorator
     extends ContentDaoDecorator<BearerAccessToken, MutableBearerAccessToken, String, BearerAccessTokenManager>
     implements BearerAccessTokenManager {
     @Override
-    public int deleteToken(String pToken) {
-        return getManager().deleteToken(pToken);
-    }
-
-    @Override
-    public int invalidateTokens(String pUserId) {
-        return getManager().invalidateTokens(pUserId);
+    public BearerAccessToken getByUser(String userId) {
+        return getManager().getByUser(userId);
     }
 }

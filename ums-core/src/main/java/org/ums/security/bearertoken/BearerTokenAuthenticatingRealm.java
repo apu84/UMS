@@ -13,7 +13,6 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.mgt.RealmSecurityManager;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.realm.Realm;
-import org.apache.shiro.session.ExpiredSessionException;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.slf4j.Logger;
@@ -43,7 +42,12 @@ public class BearerTokenAuthenticatingRealm extends AuthorizingRealm {
   private Integer sessionTimeout = 15;
   @Autowired
   private Integer sessionTimeoutInterval = 1;
+  @Autowired
+  private String mLogoutUri = "/logout";
 
+  public void setLogoutUri(String pLogoutUri) {
+    mLogoutUri = pLogoutUri;
+  }
 
   private class BearerAuthenticationInfo implements AuthenticationInfo {
     private final BearerAccessToken token;
@@ -90,7 +94,7 @@ public class BearerTokenAuthenticatingRealm extends AuthorizingRealm {
   }
 
   @Override
-  protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken pAuthenticationToken) throws AuthenticationException, ExpiredSessionException {
+  protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken pAuthenticationToken) throws AuthenticationException {
     BearerToken token = (BearerToken) pAuthenticationToken;
     String userId = (String) token.getPrincipal();
     String credentials = (String) token.getCredentials();
@@ -98,39 +102,46 @@ public class BearerTokenAuthenticatingRealm extends AuthorizingRealm {
     Validate.notNull(userId, "UserId can't be null");
     Validate.notNull(token, "Token can't be null");
     BearerAccessToken dbToken;
+
     try {
       dbToken = mBearerAccessTokenManager.get(credentials);
-      if (tokenIsInvalid(token, dbToken)) {
-        throw new AuthenticationException("Access denied. Invalid access token");
-      }
+    } catch (Exception e) {
+      mLogger.error("User: " + userId + " Credential: " + credentials + " is invalid");
+      throw new AuthenticationException("Not able to find provided bearer access token", e);
+    }
 
-      /**
-       * If difference between current time and last accessed time is less than 15 minutes
-       * or less than some pre-configured time that update last access time. Otherwise throw
-       * an SessionTimeout Exception.
-       */
+    if (tokenIsInvalid(token, dbToken)) {
+      mLogger.error("User: " + token.getPrincipal() + ", Invalid access token: " + token.getCredentials());
+      throw new AuthenticationException("Access denied. Invalid access token");
+    }
+
+    /**
+     * If difference between current time and last accessed time is less than 15 minutes
+     * or less than some pre-configured time that update last access time. Otherwise throw
+     * an SessionTimeout Exception.
+     */
+    //Bypassing logout uri.
+    if (!token.getPath().contains(mLogoutUri)) {
       Date currentDate = new Date();
       long diff = currentDate.getTime() - dbToken.getLastAccessTime().getTime();
-      long diffMinutes = diff / (60 * 1000) % 60;
+      long diffMinutes = diff / (60 * 1000);
 
       if (diffMinutes >= sessionTimeoutInterval && diffMinutes <= sessionTimeout) {
-        MutableBearerAccessToken mutableBearerAccessToken = dbToken.edit();
-        mutableBearerAccessToken.commit(true);
-      } else if (diffMinutes > sessionTimeout) {
-        MutableBearerAccessToken mutableBearerAccessToken = dbToken.edit();
-        mutableBearerAccessToken.delete();
-        if (mLogger.isDebugEnabled()) {
-          mLogger.debug("Removed expired access token: " + dbToken.getId());
+        try {
+          MutableBearerAccessToken mutableBearerAccessToken = dbToken.edit();
+          mutableBearerAccessToken.commit(true);
+        } catch (Exception e) {
+          throw new AuthenticationException("Failed to update token", e);
         }
-        throw new ExpiredSessionException("Access denied, Access token is expired");
-      }
 
-    } catch (Exception e) {
-      throw new AuthenticationException("Not able to find provided bearer access token");
+      } else if (diffMinutes > sessionTimeout) {
+        if (mLogger.isDebugEnabled()) {
+          mLogger.debug("Expired access token: " + dbToken.getId());
+        }
+        throw new AuthenticationException("Expired token");
+      }
     }
-    if (mLogger.isDebugEnabled()) {
-      mLogger.debug("Authorized user: " + userId);
-    }
+
     return new BearerAuthenticationInfo(dbToken);
   }
 
@@ -173,7 +184,12 @@ public class BearerTokenAuthenticatingRealm extends AuthorizingRealm {
     Collection<String> tokens = principals.fromRealm(getName());
     if (tokens != null) {
       for (String token : tokens) {
-        mBearerAccessTokenManager.deleteToken(token);
+        try {
+          mBearerAccessTokenManager.delete(mBearerAccessTokenManager.get(token).edit());
+        } catch (Exception e) {
+          mLogger.error("Failed to delete token: " + token, e);
+        }
+
       }
     }
   }

@@ -16,19 +16,27 @@ module ums {
       $.notify(message.message, message.responseType.toLowerCase());
     }
 
-    public success(pMessage: string): void {
+    public success(pMessage: string, autoHide?: boolean): void {
       $.notify(pMessage, 'success');
     }
 
-    public error(pMessage: string): void {
-      $.notify(pMessage, 'error');
+    public error(pMessage: string, autoHide?: boolean): void {
+      if (!autoHide) {
+        $.notify(pMessage, {
+          className: 'error',
+          autoHide: autoHide
+        });
+        console.debug('here.....')
+      }else {
+        $.notify(pMessage, 'error');
+      }
     }
 
-    public info(pMessage: string): void {
+    public info(pMessage: string, autoHide?: boolean): void {
       $.notify(pMessage, 'info');
     }
 
-    public warn(pMessage: string): void {
+    public warn(pMessage: string, autoHide?: boolean): void {
       $.notify(pMessage, 'warn');
     }
   }
