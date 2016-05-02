@@ -259,4 +259,9 @@ public class UMSContext {
     bearerAccessTokenCache.setManager(new BearerAccessTokenDao(mJdbcTemplate));
     return bearerAccessTokenCache;
   }
+
+  @Bean
+  ExamGradeManager examGradeManager() {
+    return new PersistentExamGradeDao(mJdbcTemplate);
+  }
 }
