@@ -4,6 +4,7 @@ module ums {
   export interface IMarksSubmissionScope extends ng.IScope {
     allStudents: any;
     toggleColumn:boolean;
+      excel_copy_paste_error_div:boolean;
     total_part:number;
     part_a_total:number;
     part_b_total:number;
@@ -12,6 +13,7 @@ module ums {
     fetchGradeSheet:Function;
     pasteExcelData:Function;
     validateExcelSheetHeader:Function;
+      setFieldValue:Function;
 
   }
 
@@ -28,10 +30,7 @@ module ums {
       $scope.fetchGradeSheet = this.fetchGradeSheet.bind(this);
       $scope.pasteExcelData = this.pasteExcelData.bind(this);
       $scope.validateExcelSheetHeader = this.validateExcelSheetHeader.bind(this);
-
-
-
-
+      $scope.setFieldValue = this.setFieldValue.bind(this);
 
     }
 
@@ -93,32 +92,50 @@ module ums {
     //console.log(data);
     var rows = data.split("\n");
 
-   // var table = $('<table />');asdfasfasdf --------
+   // var table = $('<table />');asdfasfasdf -------------
 
     for(var y in rows) {
-      console.log(y);
-      var cells = rows[y].split("\t");
+     // console.log(y);
+      var row = rows[y].split("\t");
       if(y==0){
-        this.validateExcelSheetHeader(cells);
+        this.validateExcelSheetHeader(row);
       }
-      //var row = $('<tr />');
-      for(var x in cells) {
+      //var row = $('<tr /....----asdfasfd=====------------====
+      //for(var x in cells) {
        // row.append('<td>'+cells[x]+'</td>');
-      }
+        console.log("quiz_"+row[0]+"---"+row[2]);
+        this.setFieldValue("quiz_"+row[0], row[2]);
+        this.setFieldValue("class_perf_"+row[0], row[3]);
+        this.setFieldValue("part_a_"+row[0], row[4]);
+        this.setFieldValue("part_b_"+row[0], row[5]);
+        this.setFieldValue("total_"+row[0], row[6]);
+        this.setFieldValue("grade_letter_"+row[0], row[7]);
+
+      //}-------==========
      // table.append(row);
     }
 
 // Insert into DOM
     //$('#excel_table').html(table);
+        $('#modal-prompt').modal('hide');
+
+
+
   }
+      private setFieldValue(field_id:string,field_value:any){
+          $("#"+field_id).val(field_value);
+      }
 
     private validateExcelSheetHeader(cells:any):void{;
 console.log(cells);
         if(cells[0]!="Student Id" || cells[1]!="Student Name" || cells[2]!="Quiz" || cells[3]!="Class Perf." || cells[4]!="Part-A" || cells[5]!="Part-B" || cells[6]!="Total" || cells[7]!="Grade Letter")
         {
-          alert("ABC");
+          this.$scope.excel_copy_paste_error_div=true;
 
         }
+        else
+            this.$scope.excel_copy_paste_error_div=false;
+
 
     }
 

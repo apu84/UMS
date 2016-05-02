@@ -174,25 +174,25 @@
                         <tr>
                             <th sortable-header col="studentId" width="10%">Student Id</th>
                             <th sortable-header col="studentName" width="40%">Student Name</th>
-                            <th sortable-header col="quiz" width="10%">Quiz(20)</th>
-                            <th sortable-header col="classPerformance" width="10%">Class Perf.(10)</th>
-                            <th sortable-header col="partA" width="10%">Part-A</th>
-                            <th sortable-header col="partB" width="10%" ng-show="toggleColumn">Part-B</th>
-                            <th sortable-header col="total" width="10%">Total</th>
-                            <th sortable-header col="gradeLetter" width="10%">Grade Letter</th>
+                            <th sortable-header col="quiz" width="10%" style="text-align: center;">Quiz(20)</th>
+                            <th sortable-header col="classPerformance" width="10%" style="text-align: center;">Class Perf.(10)</th>
+                            <th sortable-header col="partA" width="10%" style="text-align: center;">Part-A</th>
+                            <th sortable-header col="partB" width="10%" style="text-align: center;" ng-show="toggleColumn">Part-B</th>
+                            <th sortable-header col="total" width="10%" style="text-align: center;">Total</th>
+                            <th sortable-header col="gradeLetter" width="10%" style="text-align: center;">Grade Letter</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr ng-repeat="response in allStudents" row-id="{{ response.studentId }}">
                             <td>{{ response.studentId }}</td>
                             <td>{{ response.studentName }}</td>
-                            <td><input type="text" style="width: 80px;border: 1px solid grey;" /></td>
-                            <td class="cr"><input type="text" style="width: 80px;border: 1px solid grey;" /></td>
-                            <td><input type="text" style="width: 80px;border: 1px solid grey;" /></td>
-                            <td ng-show="toggleColumn"><input type="text" style="width: 80px;border: 1px solid grey;" /></td>
-                            <td><input type="text" style="width: 80px;border: 1px solid grey;" /></td>
+                            <td><input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="quiz_{{response.studentId}}"/></td>
+                            <td class="cr"><input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="class_perf_{{response.studentId}}"/></td>
+                            <td><input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="part_a_{{response.studentId}}"/></td>
+                            <td ng-show="toggleColumn"><input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="part_b_{{response.studentId}}"/></td>
+                            <td><input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="total_{{response.studentId}}"/></td>
                             <td>
-                                <select style="width: 100px;border: 1px solid grey;padding: 0px;height: 23px;">
+                                <select style="width: 100px;border: 1px solid grey;padding: 0px;height: 23px;" id="grade_letter_{{response.studentId}}">
                                     <option>Select Grade</option>
                                     <option>A+</option>
                                     <option>A</option>
@@ -389,18 +389,14 @@
                         class="close">&times;</button>
                 <h4 id="modal-prompt-label" class="modal-title">Paste your excel data here</h4></div>
             <div class="modal-body">
-
-                <textarea name="excel_data" style="width:250px;height:150px;"></textarea><br>
-                <input type="button" data-ng-click="pasteExcelData()" value="Genereate Table"/>
+                <textarea name="excel_data" style="width:550px;height:150px;border: 1px solid grey;"></textarea><br>
                 <br><br>
-                <p>Table data will appear below</p>
-                <hr>
-                <div id="excel_table"></div>
-
+                <div class="alert alert-danger" data-ng-show="excel_copy_paste_error_div"><strong>Sorry!</strong> You are using a wrong excel formatted file.
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
-                <button type="button" class="btn btn-primary">OK</button>
+                <button type="button"  data-ng-click="pasteExcelData()"  class="btn btn-primary">Process</button>
             </div>
         </div>
     </div>
