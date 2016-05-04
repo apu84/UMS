@@ -44,7 +44,9 @@
     <!--<property name="authenticationCachingEnabled" value="true"/>-->
   </bean>
 
-  <bean id="bearerTokenRealm" class="org.ums.security.bearertoken.BearerTokenAuthenticatingRealm"/>
+  <bean id="bearerTokenRealm" class="org.ums.security.bearertoken.BearerTokenAuthenticatingRealm">
+    <property name="logoutUri" value="/logout"/>
+  </bean>
 
 <!--
   <bean id="memoryConstrainedCacheManager" class="org.apache.shiro.cache.MemoryConstrainedCacheManager"/>
@@ -59,15 +61,27 @@
     </property>
   </bean>
 
+  <bean id="passThrough" class="java.util.ArrayList">
+    <constructor-arg>
+      <list>
+        <value>/forgotPassword</value>
+        <!--        <value>/logout</value>-->
+      </list>
+    </constructor-arg>
+  </bean>
+
   <bean id="umsAuthBasic" class="org.ums.security.filter.UMSHttpAuthenticationFilter">
     <property name="loginUrl" value="/login"/>
+    <property name="passThrough" ref="passThrough"/>
   </bean>
 
   <bean id="bearerTokenFilter" class="org.ums.security.bearertoken.filter.BearerTokenAuthenticatingFilter">
     <property name="loginUrl" value="/login"/>
+    <property name="passThrough" ref="passThrough"/>
   </bean>
 
   <bean id="newUser" class="org.ums.security.filter.NewUserFilter">
+    <property name="passThrough" ref="passThrough"/>
     <property name="allowedResource">
       <list>
         <value>/changePassword</value>
@@ -98,5 +112,15 @@
   <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
     <property name="securityManager" ref="securityManager"/>
   </bean>
+
+  <!--session timeout value in minutes-->
+  <bean id="sessionTimeout" class="java.lang.Integer">
+    <constructor-arg type="java.lang.String" value="${session.timeout}"/>
+  </bean>
+
+  <bean id="sessionTimeoutInterval" class="java.lang.Integer">
+    <constructor-arg type="java.lang.String" value="${session.timeoutInterval}"/>
+  </bean>
+
 
 </beans>

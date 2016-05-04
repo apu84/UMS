@@ -6,10 +6,12 @@ public class BearerToken implements AuthenticationToken {
 
   private final String userId;
   private final String token;
+  private final String path;
 
-  public BearerToken(String userId, String token) {
+  public BearerToken(String userId, String token, String path) {
     this.userId = userId;
     this.token = token;
+    this.path = path;
   }
 
   @Override
@@ -22,4 +24,7 @@ public class BearerToken implements AuthenticationToken {
     return userId;
   }
 
+  public String getPath() {
+    return path;
+  }
 }

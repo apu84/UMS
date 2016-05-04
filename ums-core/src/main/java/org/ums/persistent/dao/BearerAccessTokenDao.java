@@ -14,9 +14,9 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class BearerAccessTokenDao extends BearerAccessTokenDaoDecorator {
-  String SELECT_ALL = "SELECT TOKEN, USER_ID, LAST_ACCESS_TIME FROM BEARER_ACCESS_TOKEN ";
-  String INSERT_ALL = "INSERT INTO BEARER_ACCESS_TOKEN(TOKEN, USER_ID, LAST_ACCESS_TIME) VALUES (?, ? ,SYSDATE) ";
-  String UPDATE_ALL = "UPDATE BEARER_ACCESS_TOKEN SET LAST_ACCESS_TIME = SYSDATE ";
+  String SELECT_ALL = "SELECT TOKEN, USER_ID, LAST_ACCESS_TIME, LAST_MODIFIED FROM BEARER_ACCESS_TOKEN ";
+  String INSERT_ALL = "INSERT INTO BEARER_ACCESS_TOKEN(TOKEN, USER_ID, LAST_ACCESS_TIME, LAST_MODIFIED) VALUES (?, ? ,SYSDATE, " + getLastModifiedSql() + ") ";
+  String UPDATE_ALL = "UPDATE BEARER_ACCESS_TOKEN SET LAST_ACCESS_TIME = SYSDATE, LAST_MODIFIED = " + getLastModifiedSql() + " ";
   String DELETE_ALL = "DELETE FROM BEARER_ACCESS_TOKEN ";
 
   private JdbcTemplate mJdbcTemplate;
@@ -32,7 +32,8 @@ public class BearerAccessTokenDao extends BearerAccessTokenDaoDecorator {
 
   @Override
   public int delete(MutableBearerAccessToken pMutable) throws Exception {
-    return deleteToken(pMutable.getId());
+    String query = DELETE_ALL + "WHERE TOKEN = ?";
+    return mJdbcTemplate.update(query, pMutable.getId());
   }
 
   @Override
@@ -53,15 +54,9 @@ public class BearerAccessTokenDao extends BearerAccessTokenDaoDecorator {
   }
 
   @Override
-  public int deleteToken(String pToken) {
-    String query = DELETE_ALL + "WHERE TOKEN = ?";
-    return mJdbcTemplate.update(query, pToken);
-  }
-
-  @Override
-  public int invalidateTokens(String pUserId) {
-    String query = DELETE_ALL + "WHERE USER_ID = ?";
-    return mJdbcTemplate.update(query, pUserId);
+  public BearerAccessToken getByUser(String userId) {
+    String query = SELECT_ALL + "WHERE USER_ID = ?";
+    return mJdbcTemplate.queryForObject(query, new Object[]{userId}, new BearerAccessTokenRowMapper());
   }
 
   class BearerAccessTokenRowMapper implements RowMapper<BearerAccessToken> {
@@ -70,7 +65,8 @@ public class BearerAccessTokenDao extends BearerAccessTokenDaoDecorator {
       MutableBearerAccessToken accessToken = new PersistentBearerAccessToken();
       accessToken.setId(rs.getString("TOKEN"));
       accessToken.setUserId(rs.getString("USER_ID"));
-      accessToken.setLastAccessedTime(rs.getDate("LAST_ACCESS_TIME"));
+      accessToken.setLastAccessedTime(rs.getTimestamp("LAST_ACCESS_TIME"));
+      accessToken.setLastModified(rs.getString("LAST_MODIFIED"));
       AtomicReference<BearerAccessToken> reference = new AtomicReference<>(accessToken);
       return reference.get();
     }

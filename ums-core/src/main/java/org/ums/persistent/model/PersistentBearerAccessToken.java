@@ -19,6 +19,7 @@ public class PersistentBearerAccessToken implements MutableBearerAccessToken {
   private String mId;
   private String mUserId;
   private Date mLastAccessTime;
+  private String mLastModified;
 
   public PersistentBearerAccessToken() {
   }
@@ -76,5 +77,15 @@ public class PersistentBearerAccessToken implements MutableBearerAccessToken {
   @Override
   public void delete() throws Exception {
     sBearerAccessTokenManager.delete(this);
+  }
+
+  @Override
+  public String getLastModified() {
+    return mLastModified;
+  }
+
+  @Override
+  public void setLastModified(String pLastModified) {
+    mLastModified = pLastModified;
   }
 }

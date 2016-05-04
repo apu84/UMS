@@ -4,11 +4,10 @@ import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.codec.Base64;
 import org.apache.shiro.web.util.WebUtils;
-import org.ums.security.authentication.UMSAuthenticationRealm;
 import org.ums.security.bearertoken.BearerToken;
-import org.ums.security.bearertoken.MessageBean;
 import org.ums.security.bearertoken.util.HTTP;
 import org.ums.security.bearertoken.util.Messages;
+import org.ums.security.bearertoken.util.MimeTypes;
 import org.ums.security.filter.UMSHttpAuthenticationFilter;
 
 import javax.servlet.ServletRequest;
@@ -66,7 +65,7 @@ public final class BearerTokenAuthenticatingFilter extends UMSHttpAuthentication
       String username = principlesAndCredentials[0];
       String token = principlesAndCredentials[1];
 
-      return new BearerToken(username, token);
+      return new BearerToken(username, token, WebUtils.toHttp(request).getPathInfo());
     }
   }
 
@@ -84,7 +83,13 @@ public final class BearerTokenAuthenticatingFilter extends UMSHttpAuthentication
 
   @Override
   protected boolean onLoginFailure(AuthenticationToken token, AuthenticationException e, ServletRequest request, ServletResponse response) {
-    HTTP.writeError(response, HTTP.Status.UNAUTHORIZED);
+    boolean isLogin = isLoginRequest(request, response);
+    if (isLogin) {
+      HTTP.writeError(response, HTTP.Status.UNAUTHORIZED);
+    } else {
+      HTTP.write(response, MimeTypes.PLAINTEXT, HTTP.Status.UNAUTHORIZED, Messages.Status.EXPIRED_TOKEN.toString());
+    }
+
     return false;
   }
 

@@ -21,15 +21,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.ums.domain.model.immutable.BearerAccessToken;
 import org.ums.domain.model.immutable.Permission;
 import org.ums.domain.model.immutable.User;
+import org.ums.domain.model.mutable.MutableBearerAccessToken;
 import org.ums.domain.model.mutable.MutableUser;
 import org.ums.manager.BearerAccessTokenManager;
 import org.ums.manager.ContentManager;
 import org.ums.manager.PermissionManager;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class BearerTokenAuthenticatingRealm extends AuthorizingRealm {
   private static final Logger mLogger = LoggerFactory.getLogger(BearerTokenAuthenticatingRealm.class);
@@ -40,6 +38,16 @@ public class BearerTokenAuthenticatingRealm extends AuthorizingRealm {
   private PermissionManager mPermissionManager;
   @Autowired
   private ContentManager<User, MutableUser, String> mUserManager;
+  @Autowired
+  private Integer sessionTimeout = 15;
+  @Autowired
+  private Integer sessionTimeoutInterval = 1;
+  @Autowired
+  private String mLogoutUri = "/logout";
+
+  public void setLogoutUri(String pLogoutUri) {
+    mLogoutUri = pLogoutUri;
+  }
 
   private class BearerAuthenticationInfo implements AuthenticationInfo {
     private final BearerAccessToken token;
@@ -94,17 +102,46 @@ public class BearerTokenAuthenticatingRealm extends AuthorizingRealm {
     Validate.notNull(userId, "UserId can't be null");
     Validate.notNull(token, "Token can't be null");
     BearerAccessToken dbToken;
+
     try {
       dbToken = mBearerAccessTokenManager.get(credentials);
-      if (tokenIsInvalid(token, dbToken)) {
-        throw new AuthenticationException("Access denied. Invalid access token");
-      }
     } catch (Exception e) {
-      throw new AuthenticationException("Not able to find provided bearer access token");
+      mLogger.error("User: " + userId + " Credential: " + credentials + " is invalid");
+      throw new AuthenticationException("Not able to find provided bearer access token", e);
     }
-    if (mLogger.isDebugEnabled()) {
-      mLogger.debug("Authorized user: " + userId);
+
+    if (tokenIsInvalid(token, dbToken)) {
+      mLogger.error("User: " + token.getPrincipal() + ", Invalid access token: " + token.getCredentials());
+      throw new AuthenticationException("Access denied. Invalid access token");
     }
+
+    /**
+     * If difference between current time and last accessed time is less than 15 minutes
+     * or less than some pre-configured time that update last access time. Otherwise throw
+     * an SessionTimeout Exception.
+     */
+    //Bypassing logout uri.
+    if (!token.getPath().contains(mLogoutUri)) {
+      Date currentDate = new Date();
+      long diff = currentDate.getTime() - dbToken.getLastAccessTime().getTime();
+      long diffMinutes = diff / (60 * 1000);
+
+      if (diffMinutes >= sessionTimeoutInterval && diffMinutes <= sessionTimeout) {
+        try {
+          MutableBearerAccessToken mutableBearerAccessToken = dbToken.edit();
+          mutableBearerAccessToken.commit(true);
+        } catch (Exception e) {
+          throw new AuthenticationException("Failed to update token", e);
+        }
+
+      } else if (diffMinutes > sessionTimeout) {
+        if (mLogger.isDebugEnabled()) {
+          mLogger.debug("Expired access token: " + dbToken.getId());
+        }
+        throw new AuthenticationException("Expired token");
+      }
+    }
+
     return new BearerAuthenticationInfo(dbToken);
   }
 
@@ -147,7 +184,12 @@ public class BearerTokenAuthenticatingRealm extends AuthorizingRealm {
     Collection<String> tokens = principals.fromRealm(getName());
     if (tokens != null) {
       for (String token : tokens) {
-        mBearerAccessTokenManager.deleteToken(token);
+        try {
+          mBearerAccessTokenManager.delete(mBearerAccessTokenManager.get(token).edit());
+        } catch (Exception e) {
+          mLogger.error("Failed to delete token: " + token, e);
+        }
+
       }
     }
   }

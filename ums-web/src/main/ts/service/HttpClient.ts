@@ -91,7 +91,6 @@ module ums {
 
     public resetAuthenticationHeader() {
       this.credentials = this.$window.sessionStorage.getItem(HttpClient.CREDENTIAL_KEY);
-      console.debug(this.credentials);
       if (this.credentials != null && this.credentials != '') {
         this.$http.defaults.headers.common['X-Authorization'] = this.credentials;
       }

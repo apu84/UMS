@@ -2,10 +2,13 @@ package org.ums.common.login;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.ums.common.Resource;
+import org.ums.domain.model.immutable.BearerAccessToken;
 import org.ums.domain.model.mutable.MutableBearerAccessToken;
 import org.ums.manager.BearerAccessTokenManager;
 import org.ums.persistent.model.PersistentBearerAccessToken;
@@ -24,6 +27,7 @@ import java.util.UUID;
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
 public class UMSLogin {
+  private static final Logger mLogger = LoggerFactory.getLogger(UMSLogin.class);
 
   @Autowired
   BearerAccessTokenManager mBearerAccessTokenManager;
@@ -37,7 +41,14 @@ public class UMSLogin {
     builder.add("userId", userName);
     builder.add("userName", userName);
 
-    mBearerAccessTokenManager.invalidateTokens(userName);
+    //delete any pre-existing token
+    try {
+      BearerAccessToken bearerAccessToken = mBearerAccessTokenManager.getByUser(userName);
+      mBearerAccessTokenManager.delete(bearerAccessToken.edit());
+    } catch (Exception e) {
+      mLogger.info("No pre existing token for: " + userName, e);
+    }
+
     String newToken = UUID.randomUUID().toString();
     MutableBearerAccessToken accessToken = new PersistentBearerAccessToken();
     accessToken.setUserId(userName);

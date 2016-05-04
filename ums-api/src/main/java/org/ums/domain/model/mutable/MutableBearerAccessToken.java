@@ -6,7 +6,7 @@ import org.ums.domain.model.immutable.BearerAccessToken;
 
 import java.util.Date;
 
-public interface MutableBearerAccessToken extends Mutable, BearerAccessToken, MutableIdentifier<String> {
+public interface MutableBearerAccessToken extends Mutable, BearerAccessToken, MutableIdentifier<String>, MutableLastModifier {
   void setUserId(final String pUserId);
 
   void setLastAccessedTime(final Date pDate);
