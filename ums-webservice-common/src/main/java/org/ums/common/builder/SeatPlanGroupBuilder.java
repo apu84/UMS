@@ -5,7 +5,9 @@ import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.SeatPlanGroup;
 import org.ums.domain.model.mutable.MutableSeatPlanGroup;
+import org.ums.manager.DepartmentManager;
 import org.ums.manager.ProgramManager;
+import org.ums.manager.SpStudentManager;
 import org.ums.persistent.model.PersistentProgram;
 import org.ums.persistent.model.PersistentSemester;
 
@@ -23,6 +25,12 @@ public class SeatPlanGroupBuilder implements Builder<SeatPlanGroup,MutableSeatPl
   @Autowired
   ProgramManager mProgramManager;
 
+  @Autowired
+  DepartmentManager mDepartmentManager;
+
+  @Autowired
+  SpStudentManager mSpStudentManager;
+
   @Override
   public void build(JsonObjectBuilder pBuilder, SeatPlanGroup pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) throws Exception {
     pBuilder.add("id",pReadOnly.getId());
@@ -33,6 +41,7 @@ public class SeatPlanGroupBuilder implements Builder<SeatPlanGroup,MutableSeatPl
     pBuilder.add("semester",pReadOnly.getAcademicSemester());
     pBuilder.add("groupNo",pReadOnly.getGroupNo());
     pBuilder.add("type",pReadOnly.getExamType());
+    pBuilder.add("studentNumber",mSpStudentManager.getStudentByProgramYearSemesterStatus(pReadOnly.getProgram().getId(),pReadOnly.getAcademicYear(),pReadOnly.getAcademicSemester(),1).size());
     String lastUpdated = pReadOnly.getLastUpdateDate();
     pBuilder.add("lastUpdated",pReadOnly.getLastUpdateDate());
   }

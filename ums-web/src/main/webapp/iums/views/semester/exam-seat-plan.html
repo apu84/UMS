@@ -4,10 +4,55 @@
         padding-left: 5%;
     }
 
+    table, th, td {
+        border: 1px solid navy;
+    }
+    #list{
+        border: 1px solid black;
+        background-color: white;
+
+    }
+
+
+    #sortable {
+        border: 1px solid #eee;
+        width: 142px;
+        min-height: 20px;
+        list-style-type: none;
+        margin: 0;
+        padding: 5px 0 0 0;
+        float: left;
+        margin-right: 10px;
+    }
+
+    .drag { width: 150px; height: 150px; padding: 0.5em; float: left; margin: 10px; }
+    .subGroup{
+        width: 20px; height: 10px; padding: 0.5em; float: left; margin: 10px 10px 10px 0;
+    }
+
+
+   #droppable1,#droppable2,#droppable3,#droppable4,#droppable5,#droppable6 {
+       border: 1px solid #eee;
+       width: 142px;
+       min-height: 20px;
+       list-style-type: none;
+       margin: 0;
+       padding: 5px 0 0 0;
+       float: left;
+       margin-right: 10px;}
+
+    #sortable li, #droppable1 li,#droppable2 li,#droppable3 li,#droppable4 li,#droppable5 li,#droppable6 li{
+        margin: 0 5px 5px 5px;
+        padding: 5px;
+        font-size: 1.2em;
+        width: 120px;
+    }
+
+
 
 </style>
 
-<div class="panel panel-default">
+<div class="panel panel-default" data-ng-show="showGroupSelectionPanel">
     <div class="panel-heading">
         <h3 class="panel-title" align="center">Exam Seat Plan</h3>
     </div>
@@ -18,7 +63,7 @@
                 Select Semester <br>
                 <select class="form-control required" name="semester" data-ng-model="semesterId" >
                     <option data-ng-repeat="semesters in semesterList| filter:{status:'1'}" value="{{semesters.id}}">{{semesters.name}}</option>
-                </select>
+                </select><br>
             </div>
             <div class="col-md-1"></div>
             <div class="col-md-3">
@@ -48,52 +93,50 @@
         <br>
         <div data-ng-if="semesterId && examType && system " data-ng-init="getGroups()">
             <h2 align="center">Groups</h2>
-            <div class="col-md-4">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Group 1</h3>
-                    </div>
-                    <div data-ng-repeat="group in seatPlanGroupList| filter:{groupNo:1}">
-                        <p class="times">{{group.programName}}, {{group.year}} year {{group.semester}} semester</p>
 
+            <div class="row">
+                <div data-ng-repeat="groupNo in groupList">
+                    <div class="col-md-4" data-ng-if="groupNo.groupNumber==1">
+                        <div class="panel panel-default">
+                            <div class="panel-heading"> Group {{groupNo.groupNumber}}</div>
+                            <div data-ng-repeat="group in groupNo.groupMembers">
+                                <p class="times">{{group.programName}}, {{group.year}} year {{group.semester}} semester ({{group.studentNumber}})</p>
+                            </div>
+                            <hr>
+                            <hr>
+                            <div>
+                                <h2>Total Student : {{groupNo.totalStudentNumber}}</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4" data-ng-if="groupNo.groupNumber==2">
+                        <div class="panel panel-default">
+                            <div class="panel-heading"> Group {{groupNo.groupNumber}}</div>
+                            <div data-ng-repeat="group in groupNo.groupMembers">
+                                <p class="times">{{group.programName}}, {{group.year}} year {{group.semester}} semester ({{group.studentNumber}})</p>
+                            </div>
+                            <hr>
+                            <hr>
+                            <div>
+                                <h2>Total Student : {{groupNo.totalStudentNumber}}</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4" data-ng-if="groupNo.groupNumber==3">
+                        <div class="panel panel-default">
+                            <div class="panel-heading"> Group {{groupNo.groupNumber}}</div>
+                            <div data-ng-repeat="group in groupNo.groupMembers">
+                                <p class="times">{{group.programName}}, {{group.year}} year {{group.semester}} semester ({{group.studentNumber}})</p>
+                            </div>
+                            <hr>
+                            <hr>
+                            <div>
+                                <h2>Total Student : {{groupNo.totalStudentNumber}}</h2>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Group 2</h3>
-                    </div>
-                    <div data-ng-repeat="group in seatPlanGroupList| filter:{groupNo:2}">
-                        <p class="times">{{group.programName}}, {{group.year}} year {{group.semester}} semester</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Group 3</h3>
-                    </div>
-                    <div data-ng-repeat="group in seatPlanGroupList| filter:{groupNo:3}">
-                        <p class="times">{{group.programName}}, {{group.year}} year {{group.semester}} semester</p>
-                    </div>
-                </div>
-            </div>
-
-            <!--<div data-ng-if="seatPlanGroupListLength>0">
-                <h3><b>Group 1</b></h3>
-                <div data-ng-repeat="group in seatPlanGroupList">
-                    <div data-ng-if="group.groupNo == groupNumber">
-                        {{group.programName}}, {{group.year}} year {{group.semester}} semester
-                    </div>
-                    <div data-ng-if="group.groupNo != groupNumber">
-                        <hr>
-                        {{groupNumber=group.groupNo;""}}
-                        <h3><b>Group {{groupNumber}}</b></h3>
-                        {{group.programName}}, {{group.year}} year {{group.semester}}
-                    </div>
-                </div>
-            </div>-->
 
 
         </div>
@@ -101,8 +144,174 @@
             <h1>Please Create an Exam Rroutine first for {{semesterId}} !!!!!!</h1>
         </div>
 
+        <br>
+        <br>
+        <hr>
         <hr>
         <hr>
 
+        <div data-ng-if="seatPlanGroupList.length>0">
+            <div class="row">
+                <div class="col-md-2">
+                    <hr>
+                    <hr>
+                </div>
+                <div class="col-md-4">
+                    <hr>
+                    <hr>
+                    Select Group For Exam Seat Plan Viewing or Generation<br>
+
+                    <select class="form-control required" name="examType" data-ng-model="groupNoForSeatPlanViewing" >
+                        <option value="1">Group 1</option>
+                        <option value="2">Group 2</option>
+                        <option value="3">Group 3</option>
+                    </select>
+
+                </div>
+                <div class="col-md-3">
+                    <hr>
+                    <hr>
+                    <br>
+                    <button data-ng-click="createOrViewSubgroups(groupNoForSeatPlanViewing)">Create or View <br> Subgroups</button>
+                    <button data-ng-click="createOrViewSeatPlan(groupNoForSeatPlanViewing)">Create or View <br> Seat Plan</button>
+                </div>
+                <div class="col-md-3">
+                    <hr>
+                    <hr>
+                    <br>
+
+                </div>
+
+
+            </div>
+        </div>
+
     </div>
+</div>
+
+
+
+<div class="panel panel-grey" data-ng-show="subGroupSelected">
+    <div class="panel-heading">
+        <h3 class="panel-title pull-left">
+            Sub Groups for Group {{groupNoForSubGroup}}
+        </h3>
+
+        <button class="btn btn-default pull-right" data-ng-click="closeSubGroupOrRoomInfoWindow()"><i class="fa fa-times" aria-hidden="true"></i></button>
+        <div class="clearfix"></div>
+
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-2">
+                {{selectedGroupNo}}
+                <div data-ng-repeat="groupNo in groupList | filter:{groupNumber: selectedGroupNo}">
+                    <ul data-ng-repeat="group in groupNo.groupMembers"   id="sortable"  class="connectedSortable">
+                        <li class="ui-state-default" id="{{group.id}}">{{group.programName}}:{{group.year}}/{{group.semester}} ({{group.studentNumber}})</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-md-7">
+                <div class="row" align="center">
+                    <p><b>How many subgroups ? </b></p>
+                    <input type="number" data-ng-model="subGroupNumber" />
+                    <br>
+                    <br>
+                    <button data-ng-click="generateSubGroups(subGroupNumber)">Generate Sub-groups</button>
+                </div>
+                <hr>
+                <hr>
+
+
+                <!--
+                    data-ng-if doesnot work in showing the subgroups.
+                -->
+
+                <div class="row" data-ng-if="colForSubGroup!=9999">
+
+                    <ul id="droppable1" class="connectedSortable" data-ng-show="colForSubgroup>=1"  >
+                        <li>Sub Group 1</li>
+                    </ul>
+                    <ul class="connectedSortable" id="droppable2" data-ng-show="colForSubgroup>=2" >
+                        <li>Sub Group 2</li>
+                    </ul>
+                    <ui class="connectedSortable" id="droppable3" data-ng-show="colForSubgroup>=3"  >
+                        <li>Sub Group 3</li>
+                    </ui>
+                </div>
+                <hr>
+                <hr>
+                <div class="row" data-ng-if="colForSubgroup!=9999">
+                    <ui class=" connectedSortable" id="droppable4" data-ng-show="colForSubgroup>=4" >
+                        <li>Sub Group 4</li>
+                    </ui>
+                    <div class="connectedSortable" id="droppable5" data-ng-show="colForSubgroup>=5" >
+                        <li>Sub Group 5</li>
+                    </div>
+                    <div class="connectedSortable" id="droppable6" data-ng-show="colForSubgroup>=6"  >
+                        <li>Sub Group 6</li>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="row " id="statistics">
+                <div >
+                    <h2>Statistics</h2>
+
+                    Total Students:
+                    <div  bindonce data-ng-repeat="groupNo in groupList | filter:{groupNumber: selectedGroupNo}">
+                       <h3>{{groupNo.totalStudentNumber}}</h3>
+                    </div>
+                    <hr>
+                    <hr>
+                    <div   data-ng-repeat="subGroup in subGroupList">
+                        <p data-ng-if="subGroup.subGroupNumber<= colForSubgroup " >Sub Group {{subGroup.subGroupNumber}} total Student: {{subGroup.subGroupTotalStudentNumber}}</p>
+                    </div>
+                    <hr>
+                    <hr>
+                  
+                </div>
+
+
+            </div>
+
+        </div>
+        <hr>
+        <hr>
+
+
+    </div>
+
+</div>
+
+
+<div class="panel panel-grey" data-ng-show="groupSelected">
+    <div class="panel-heading">
+        <h3 class="panel-title pull-left">
+            Seat Plan Room Information
+        </h3>
+
+        <button class="btn btn-default pull-right" data-ng-click="closeSubGroupOrRoomInfoWindow()"><i class="fa fa-times" aria-hidden="true"></i></button>
+        <div class="clearfix"></div>
+
+    </div>
+    <div class="panel-body">
+        <table style="width:100%" class="table table-striped">
+            <tr>
+                <th align="center"><h2 align="center">Room No</h2></th>
+                <th align="center"><h2 align="center">Total Capacity</h2></th>
+                <th align="center"><h2 align="center">Detail Seat Plan</h2></th>
+            </tr>
+            <tr data-ng-repeat="room in roomList">
+                <td align="center">{{room.roomNo}}</td>
+                <td align="center">{{room.capacity}}</td>
+                <td align="center"><button>Details</button></td>
+            </tr>
+        </table>
+
+
+    </div>
+
 </div>

@@ -35,6 +35,7 @@
 
 /// <reference path='lib/jquery.dragNdrop.d.ts'/>
 /// <reference path='lib/jquery.tab.d.ts'/>
+/// <reference path='lib/bootstrap.modal.d.ts'/>
 
 /// <reference path='controller/common/academic/ClassRoomInfo.ts'/>
 /// <reference path='controller/common/academic/ExamRoutine.ts'/>
