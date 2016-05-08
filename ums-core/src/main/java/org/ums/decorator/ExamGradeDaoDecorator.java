@@ -23,4 +23,14 @@ public class ExamGradeDaoDecorator  extends ContentDaoDecorator<ExamGrade, Mutab
         return getManager().getMarksSubmissionStatus(semesterId,courseId, examType);
     }
 
+    @Override
+    public List<MarksSubmissionStatusDto> getMarksSubmissionStatus(int semesterId,int examType) throws Exception {
+        return getManager().getMarksSubmissionStatus(semesterId, examType);
+    }
+
+    @Override
+    public boolean saveGradeSheet(int semesterId,String courseId,int examType,List<StudentGradeDto> gradeList) throws Exception {
+        return getManager().saveGradeSheet(semesterId, courseId, examType, gradeList);
+    }
+
 }

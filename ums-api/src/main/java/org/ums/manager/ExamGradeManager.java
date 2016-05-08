@@ -13,6 +13,7 @@ import java.util.List;
 public interface ExamGradeManager extends ContentManager<ExamGrade, MutableExamGrade, Object> {
     public List<StudentGradeDto> getAllGradeForTheoryCourse(int semesterId,String courseId,int examType) throws Exception;
     public MarksSubmissionStatusDto getMarksSubmissionStatus(int semesterId,String courseId,int examType) throws Exception;
-
+    public List<MarksSubmissionStatusDto> getMarksSubmissionStatus(int semesterId,int examType) throws Exception;
+    public boolean saveGradeSheet(int semesterId,String courseId,int examType,List<StudentGradeDto> gradeList) throws Exception;
 }
 

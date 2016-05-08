@@ -24,8 +24,18 @@ public class GradeSubmissionResource extends MutableGradeSubmissionResource {
                                      final @PathParam("exam-type") Integer pExamTypeId) throws Exception {
         return mResourceHelper.getGradeList(pSemesterId,pExamTypeId,"");
 
-       // return null;
     }
+
+    @GET
+    @Path("/semester/{semester-id}/examtype/{exam-type}")
+    public JsonObject getGradeSubmissionStatus(final @Context Request pRequest,
+                                   final @PathParam("semester-id") Integer pSemesterId,
+                                   final @PathParam("exam-type") Integer pExamTypeId) throws Exception {
+        return mResourceHelper.getGradeSubmissionStatus(pSemesterId,pExamTypeId);
+
+    }
+
+
 
 
 

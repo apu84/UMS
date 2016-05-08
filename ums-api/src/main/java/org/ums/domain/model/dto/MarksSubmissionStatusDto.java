@@ -1,19 +1,34 @@
 package org.ums.domain.model.dto;
 
 import com.google.gson.Gson;
+import java.util.List;
 
 /**
  * Created by ikh on 5/1/2016.
  */
 public class MarksSubmissionStatusDto {
     private String courseId;
+    private String courseNo;
+    private String courseTitle;
     private int semesterId;
+    private String semesterName;
     private int examType;
+    private String examTypeName;
     private int total_part;
     private int part_a_total;
     private int part_b_total;
     private int statusId;
     private String statusName;
+
+    private String preparerId;
+    private String preparerName;
+    private String scrutinizerId;
+    private String scrutinizerName;
+    private int year;
+    private int semester;
+    private String offeredTo;
+    private List<CourseTeacherDto> courseTeacherList;
+
 
     public String getCourseId() {
         return courseId;
@@ -77,6 +92,102 @@ public class MarksSubmissionStatusDto {
 
     public void setStatusName(String statusName) {
         this.statusName = statusName;
+    }
+
+    public String getCourseTitle() {
+        return courseTitle;
+    }
+
+    public void setCourseTitle(String courseTitle) {
+        this.courseTitle = courseTitle;
+    }
+
+    public String getSemesterName() {
+        return semesterName;
+    }
+
+    public void setSemesterName(String semesterName) {
+        this.semesterName = semesterName;
+    }
+
+    public String getExamTypeName() {
+        return examTypeName;
+    }
+
+    public void setExamTypeName(String examTypeName) {
+        this.examTypeName = examTypeName;
+    }
+
+    public String getPreparerId() {
+        return preparerId;
+    }
+
+    public void setPreparerId(String preparerId) {
+        this.preparerId = preparerId;
+    }
+
+    public String getPreparerName() {
+        return preparerName;
+    }
+
+    public void setPreparerName(String preparerName) {
+        this.preparerName = preparerName;
+    }
+
+    public String getScrutinizerId() {
+        return scrutinizerId;
+    }
+
+    public void setScrutinizerId(String scrutinizerId) {
+        this.scrutinizerId = scrutinizerId;
+    }
+
+    public String getScrutinizerName() {
+        return scrutinizerName;
+    }
+
+    public void setScrutinizerName(String scrutinizerName) {
+        this.scrutinizerName = scrutinizerName;
+    }
+
+    public List<CourseTeacherDto> getCourseTeacherList() {
+        return courseTeacherList;
+    }
+
+    public void setCourseTeacherList(List<CourseTeacherDto> courseTeacherList) {
+        this.courseTeacherList = courseTeacherList;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public int getSemester() {
+        return semester;
+    }
+
+    public void setSemester(int semester) {
+        this.semester = semester;
+    }
+
+    public String getCourseNo() {
+        return courseNo;
+    }
+
+    public void setCourseNo(String courseNo) {
+        this.courseNo = courseNo;
+    }
+
+    public String getOfferedTo() {
+        return offeredTo;
+    }
+
+    public void setOfferedTo(String offeredTo) {
+        this.offeredTo = offeredTo;
     }
 
     public String toString() {
