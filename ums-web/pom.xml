@@ -13,13 +13,12 @@
   <properties>
     <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
   </properties>
-
   <dependencies>
     <dependency>
       <groupId>org.ums</groupId>
-      <artifactId>ums-core</artifactId>
-      <version>trunk-SNAPSHOT</version>
-      <scope>provided</scope>
+      <artifactId>ums-web-templates</artifactId>
+      <type>war</type>
+      <version>${project.version}</version>
     </dependency>
   </dependencies>
   <build>
