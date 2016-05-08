@@ -46,7 +46,7 @@
 
                 </div>
                 <div class="form-actions text-right pal">
-                    <button type="button" class="btn btn-success" onclick="fetchCourseTeacherInfo()">Search</button>
+                    <button type="button" class="btn btn-success" data-ng-click="fetchGradeSubmissionTable()">Search</button>
                 </div>
             </form>
         </div>
@@ -63,9 +63,10 @@
                 <table class="table table-hover table-bordered">
                     <thead>
                     <tr>
-                        <th width="10%">Course No</th>
-                        <th width="30%">Course Title</th>
-                        <th width="5%" align="center">Year-Sem.</th>
+                        <th width="8%">Course No</th>
+                        <th width="25%">Course Title</th>
+                        <th width="5%" style="text-align: center;">Y-S</th>
+                        <th width="5%" style="text-align: center;">Program.</th>
                         <th width="20%">Course Teacher</th>
                         <th width="20%">Preparer-Scrutinizer</th>
                         <th width="15%">Status</th>
@@ -73,38 +74,21 @@
 
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>
-                        <a href="javascript:void(0)" data-ng-click="fetchGradeSheet()">
-                            EEE 2204
-                        </a>
-                        </td>
-                        <td>Electronics II Lab</td>
-                        <td align="center">2-2</td>
-                        <td>Mr. Md. Tanvir Ahammed(Section-A1), Mr. Md. Istiaque Rahaman(Section-A2)</td>
-                        <td>Mr. Md. Tanvir Ahammed <span class="badge badge-warning">P</span> <br/>
-                               Mr. Md. Istiaque Rahaman <span class="badge badge-info">S</span></td>
-                        <td>Not Submitted</td>
-                    </tr>
-                    <tr>
-                        <td>EEE 2211</td>
-                        <td>Measurement and Instrumentation</td>
-                        <td align="center">2-2</td>
-                        <td>Mr. Monjur Morshed(Section-A), Ms. Sharmin Sobhan(Section-B)</td>
-                        <td>Mr. Monjur Morshed<span class="badge badge-warning">P</span> <br/>
-                            Ms. Sharmin Sobhan<span class="badge badge-info">S</span></td>
-                        <td>Not Submitted</td>
-                    </tr>
-                    <tr>
-                        <td>EEE 2203</td>
-                        <td>Electronics II</td>
-                        <td align="center">2-2</td>
-                        <td>Mr. Tanvir Ahmad(Section-A), Mr. Khandakar Md. Ishtiak(Section-B)</td>
-                        <td>Mr. Tanvir Ahmad <span class="badge badge-warning">P</span> <br/>
-                            Mr. Khandakar Md. Ishtiak <span class="badge badge-info">S</span></td>
-                        <td>Not Submitted</td>
-                    </tr>
 
+                    <tr ng-repeat="marksSubmission in allMarksSubmissionStatus">
+                        <td>
+                            <a href="javascript:void(0)" data-ng-click="fetchGradeSheet()">
+                                {{marksSubmission.courseNo}}
+                            </a>
+                        </td>
+                        <td>{{marksSubmission.courseTitle}}</td>
+                        <td align="center">{{marksSubmission.year}}-{{marksSubmission.semester}}</td>
+                        <td align="center">{{marksSubmission.offeredTo}}</td>
+                        <td>Mr. Md. Tanvir Ahammed(Section-A1), Mr. Md. Istiaque Rahaman(Section-A2)</td>
+                        <td>{{marksSubmission.preparerName}} <span class="badge badge-warning">P</span> <br/>
+                            {{marksSubmission.scrutinizerName}} <span class="badge badge-info">S</span></td>
+                        <td>{{marksSubmission.statusName}}</td>
+                    </tr>
                     </tbody>
                 </table>
 
@@ -174,28 +158,28 @@
                         <tr>
                             <th sortable-header col="studentId" width="10%">Student Id</th>
                             <th sortable-header col="studentName" width="40%">Student Name</th>
-                            <th sortable-header col="quiz" width="10%" style="text-align: center;">Quiz(20)</th>
-                            <th sortable-header col="classPerformance" width="10%" style="text-align: center;">Class Perf.(10)</th>
-                            <th sortable-header col="partA" width="10%" style="text-align: center;">Part-A</th>
-                            <th sortable-header col="partB" width="10%" style="text-align: center;" ng-show="toggleColumn">Part-B</th>
+                            <th sortable-header col="quiz" width="10%" style="text-align: center;">Quiz (20)</th>
+                            <th sortable-header col="classPerformance" width="10%" style="text-align: center;">Class Perf. (10)</th>
+                            <th sortable-header col="partA" width="10%" style="text-align: center;">Part-A ({{part_a_total}})</th>
+                            <th sortable-header col="partB" width="10%" style="text-align: center;" ng-show="toggleColumn">Part-B ({{part_b_total}})</th>
                             <th sortable-header col="total" width="10%" style="text-align: center;">Total</th>
                             <th sortable-header col="gradeLetter" width="10%" style="text-align: center;">Grade Letter</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="response in allStudents" row-id="{{ response.studentId }}">
-                            <td>{{ response.studentId }}</td>
-                            <td>{{ response.studentName }}</td>
-                            <td><input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="quiz_{{response.studentId}}"/></td>
-                            <td class="cr"><input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="class_perf_{{response.studentId}}"/></td>
-                            <td><input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="part_a_{{response.studentId}}"/></td>
-                            <td ng-show="toggleColumn"><input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="part_b_{{response.studentId}}"/></td>
-                            <td><input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="total_{{response.studentId}}"/></td>
-                            <td>
+                        <tr ng-repeat="response in allStudents" row-id="{{response.studentId}}" id="row_{{response.studentId}}">
+                            <td id="sid_{{response.studentId}}">{{response.studentId}}</td>
+                            <td id="td_sname_{{response.studentId}}">{{ response.studentName }}</td>
+                            <td id="td_quiz_{{response.studentId}}"><input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="quiz_{{response.studentId}}"/></td>
+                            <td id="td_cperf_{{response.studentId}}"><input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="class_perf_{{response.studentId}}"/></td>
+                            <td id="td_parta_{{response.studentId}}"><input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="part_a_{{response.studentId}}"/></td>
+                            <td id="td_partb_{{response.studentId}}" ng-show="toggleColumn"><input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="part_b_{{response.studentId}}"/></td>
+                            <td id="td_total_{{response.studentId}}"><input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="total_{{response.studentId}}"/></td>
+                            <td id="td_grade_letter_{{response.studentId}}">
                                 <select style="width: 100px;border: 1px solid grey;padding: 0px;height: 23px;" id="grade_letter_{{response.studentId}}">
-                                    <option>Select Grade</option>
-                                    <option>A+</option>
-                                    <option>A</option>
+                                    <option value="">Select Grade</option>
+                                    <option value="A+">A+</option>
+                                    <option value="A">A</option>
                                 </select>
 
                             </td>
@@ -209,7 +193,7 @@
                         <button type="button" class="btn btn-default btn-square" onclick='goBack()'>Back to Grade Sheet Selection</button>
                     </div>
                     <div class="col-md-6" style="text-align: right;">
-                        <button type="button" class="btn btn-grey btn-square">Save Data</button>
+                        <button type="button" class="btn btn-grey btn-square" data-ng-click="saveGradeSheet()">Save Data</button>
                         <button type="button" class="btn btn-green btn-square">Send to Scrutinizer</button>
                     </div>
                 </div>
@@ -439,14 +423,6 @@
     }
 </style>
 <script type="text/javascript">
-     function fetchCourseTeacherInfo() {
-     $("#leftDiv").hide();
-     $("#arrowDiv").show();
-
-     $("#rightDiv").removeClass("orgRightClass");
-     $("#rightDiv").addClass("newRightClass");
-
-     }
 
     function resetDivs() {
         $("#arrowDiv").hide();
