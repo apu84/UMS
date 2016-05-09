@@ -1,9 +1,7 @@
 package org.ums.configuration;
 
 import org.apache.shiro.authc.credential.PasswordService;
-import org.apache.velocity.app.VelocityEngine;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -33,9 +31,6 @@ public class UMSContext {
   JdbcTemplate mJdbcTemplate;
 
   @Autowired
-  private VelocityEngine velocityEngine;
-
-  @Autowired
   BinaryContentManager<byte[]> mBinaryContentManager;
 
   @Autowired
@@ -49,36 +44,36 @@ public class UMSContext {
   }
 
   @Bean
-  EmployeeManager employeeManager(){
+  EmployeeManager employeeManager() {
     EmployeeCache employeeCache = new EmployeeCache(mCacheFactory.getCacheManager());
     employeeCache.setManager(new PersistentEmployeeDao(mJdbcTemplate));
     return employeeCache;
   }
 
   @Bean
-  SemesterWithDrawalManager semesterWithdrawalManager(){
+  SemesterWithDrawalManager semesterWithdrawalManager() {
     SemesterWithdrawalCache semesterWithdrawalCache = new SemesterWithdrawalCache(mCacheFactory.getCacheManager());
     semesterWithdrawalCache.setManager(new PersistentSemesterWithdrawalDao(mJdbcTemplate));
     return semesterWithdrawalCache;
   }
 
   @Bean
-  SemesterWithdrawalLogManager semesterWithdrawalLogManager(){
+  SemesterWithdrawalLogManager semesterWithdrawalLogManager() {
     SemesterWithdrawalLogCache semesterWithdrawalLogCache = new SemesterWithdrawalLogCache(mCacheFactory.getCacheManager());
     semesterWithdrawalLogCache.setManager(new PersistentSemesterWithdrawalLogDao(mJdbcTemplate));
-    return  semesterWithdrawalLogCache;
+    return semesterWithdrawalLogCache;
   }
 
   @Bean
-  SubGroupManager subGroupManager(){
-    SubGroupCache subGroupCache = new SubGroupCache(mLocalCacheManager);
+  SubGroupManager subGroupManager() {
+    SubGroupCache subGroupCache = new SubGroupCache(mCacheFactory.getCacheManager());
     subGroupCache.setManager(new PersistentSubGroupDao(mJdbcTemplate));
     return subGroupCache;
   }
 
   @Bean
-  SeatPlanManager seatPlanManager(){
-    SeatPlanCache seatPlanCache = new SeatPlanCache(mLocalCacheManager);
+  SeatPlanManager seatPlanManager() {
+    SeatPlanCache seatPlanCache = new SeatPlanCache(mCacheFactory.getCacheManager());
     seatPlanCache.setManager(new PersistentSeatPlanDao(mJdbcTemplate));
     return seatPlanCache;
   }
@@ -138,7 +133,6 @@ public class UMSContext {
   }
 
 
-
   @Bean
   RoleManager roleManager() {
     RoleCache roleCache = new RoleCache(mCacheFactory.getCacheManager());
@@ -175,7 +169,7 @@ public class UMSContext {
   }
 
   @Bean
-  SpStudentManager spStudentManager(){
+  SpStudentManager spStudentManager() {
     SpStudentCache spStudentCache = new SpStudentCache(mCacheFactory.getCacheManager());
     spStudentCache.setManager(new PersistentSpStudentDao(mJdbcTemplate));
     return spStudentCache;
@@ -189,7 +183,7 @@ public class UMSContext {
   }
 
   @Bean
-  SeatPlanGroupManager seatPlanGroupManager(){
+  SeatPlanGroupManager seatPlanGroupManager() {
     SeatPlanGroupCache seatPlanGroupCache = new SeatPlanGroupCache(mCacheFactory.getCacheManager());
     seatPlanGroupCache.setManager(new PersistentSeatPlanGroupDao(mJdbcTemplate));
     return seatPlanGroupCache;
@@ -248,6 +242,7 @@ public class UMSContext {
   PersistentOptionalCourseApplicationDao persistentOptionalCourseApplicationDao() {
     return new PersistentOptionalCourseApplicationDao(mJdbcTemplate);
   }
+
   @Bean
   PersistentSemesterWiseCrHrDao persistentSemesterWiseCrHrDao() {
     return new PersistentSemesterWiseCrHrDao(mJdbcTemplate);
@@ -263,14 +258,15 @@ public class UMSContext {
     return new PersistentRoutineDao(mJdbcTemplate);
   }
 
- @Bean
-  ParameterManager parameterManager(){
+  @Bean
+  ParameterManager parameterManager() {
     return new PersistentParameterDao(mJdbcTemplate);
   }
-  @Bean
-  ParameterSettingManager parameterSettingManager(){
 
-    return  new PersistentParameterSettingDao(mJdbcTemplate);
+  @Bean
+  ParameterSettingManager parameterSettingManager() {
+
+    return new PersistentParameterSettingDao(mJdbcTemplate);
   }
 
   @Bean

@@ -5,7 +5,12 @@
 
   <bean class="org.ums.cache.LocalCacheManager" id="localCache"/>
 
-  <bean class="org.ums.cache.MemcacheClientManager" id="memCachedClientManager"/>
+  <bean class="org.ums.cache.MemcacheClientManager" id="memCachedClientManager">
+    <property name="objectCacheUrl" value="${object.cache.url}"/>
+    <property name="objectCachePort" value="${object.cache.port}"/>
+    <property name="lastModifiedCacheUrl" value="${lastmodified.cache.url}"/>
+    <property name="lastModifiedCachePort" value="${lastmodified.cache.port}"/>
+  </bean>
 
   <bean class="org.ums.cache.CacheFactoryImpl" id="cacheFactory">
     <property name="cacheManager" ref="${app.cache.type}"/>
