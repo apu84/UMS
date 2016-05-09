@@ -2594,3 +2594,14 @@ Insert into DB_IUMS.EXAM_ROUTINE
 
 
 ALTER TABLE DB_IUMS.BEARER_ACCESS_TOKEN ADD (LAST_MODIFIED  VARCHAR2(18));
+
+
+
+
+//******* process is increased due to problem ****///
+cmd>sqlplus / as sysdba
+sqlplus>alter system set processes=300 scope=spfile;
+sqlplus>shut immediate;
+sqlplus>startup
+
+//************************************************///

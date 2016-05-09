@@ -4,22 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.ums.domain.model.dto.ExamRoutineDto;
-import org.ums.domain.model.immutable.Course;
-import org.ums.domain.model.immutable.ExamRoutine;
-import org.ums.domain.model.immutable.SeatPlanGroup;
-import org.ums.domain.model.immutable.Syllabus;
+import org.ums.domain.model.immutable.*;
+import org.ums.domain.model.mutable.MutableSeatPlan;
 import org.ums.domain.model.mutable.MutableSeatPlanGroup;
 import org.ums.manager.*;
-import org.ums.persistent.model.PersistentProgram;
-import org.ums.persistent.model.PersistentSeatPlanGroup;
-import org.ums.persistent.model.PersistentSemester;
+import org.ums.persistent.model.*;
 import org.ums.response.type.GenericMessageResponse;
 import org.ums.response.type.GenericResponse;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Monjur-E-Morshed Pc on 4/21/2016.
@@ -40,10 +33,124 @@ public class SeatPlanServiceImpl implements SeatPlanService {
   @Autowired
   SyllabusManager mSyllabusManager;
 
+  @Autowired
+  SubGroupManager mSubGroupManager;
+
+  @Autowired
+  SeatPlanManager mSeatPlanManager;
+
+  @Autowired
+  SpStudentManager mSpStudentManager;
+
+  @Autowired
+  ClassRoomManager mClassRoomManager;
+
 
   @Override
   @Transactional
-  public GenericResponse<Map> saveSeatPlan(int pSemesterId,int pExamType) throws Exception {
+  public GenericResponse<Map> generateSeatPlan(int pSemesterId, int pGroupNo, int pExamType) throws Exception {
+    int numberOfSubGroups = mSubGroupManager.getSubGroupNumberOfAGroup(pSemesterId,pExamType,pGroupNo);
+
+    Map<Integer,List<SpStudent>> subGroupWithStudents = getStudentsOfTheSubGroups(pSemesterId,pGroupNo,pExamType,numberOfSubGroups);
+
+
+
+    List<ClassRoom> roomList = mClassRoomManager.getAll();
+    List<MutableSeatPlan> totalSeatPlan = new ArrayList<>();
+
+    for(ClassRoom room: roomList){
+      if(room.isExamSeatPlan()){
+        boolean subGroupEmpty=true;
+
+        double partitionForTheSubGroup = room.getCapacity()/numberOfSubGroups;
+        String[][] roomStructure = new String[room.getTotalRow()][room.getTotalColumn()];
+
+        int numberOfStudents = (int)Math.ceil(partitionForTheSubGroup);
+
+        for(int subGroup=1;subGroup<=numberOfSubGroups;subGroup++){
+          List<SpStudent> studentsOfTheSubGroup = subGroupWithStudents.get(subGroup);
+          if(studentsOfTheSubGroup.size()!=0){
+            subGroupEmpty = false;
+            for(SpStudent student: studentsOfTheSubGroup){
+              int studentCounter=0;
+
+              for(int roomRow=1;roomRow<=room.getTotalRow();roomRow++){
+
+                for(int roomColumn=1;roomColumn<=room.getTotalColumn();roomColumn++){
+                  if(roomStructure[roomRow][roomColumn]==null){
+                    roomStructure[roomRow][roomColumn] = student.getId();
+                    MutableSeatPlan seatPlan = new PersistentSeatPlan();
+                    PersistentClassRoom classRoom = new PersistentClassRoom();
+                    classRoom.setId(room.getId());
+                    seatPlan.setClassRoom(classRoom);
+                    seatPlan.setRowNo(roomRow);
+                    seatPlan.setColumnNo(roomColumn);
+                    PersistentSpStudent spStudent = new PersistentSpStudent();
+                    spStudent.setId(student.getId());
+                    seatPlan.setStudent(spStudent);
+                    seatPlan.setExamType(pExamType);
+                    PersistentSemester semester = new PersistentSemester();
+                    semester.setId(pSemesterId);
+                    seatPlan.setSemester(semester);
+                    seatPlan.setGroupNo(pGroupNo);
+
+                    totalSeatPlan.add(seatPlan);
+
+                    studentsOfTheSubGroup.remove(student);
+
+                    roomColumn+=2;
+
+                    if(roomColumn>room.getTotalColumn()){
+                      break;
+                    }
+
+                    studentCounter+=1;
+
+                    if(studentCounter>numberOfStudents){
+                      break;
+                    }
+
+                  }
+
+                  roomRow+=2;
+
+                  if(roomRow>room.getTotalRow()){
+                    break;
+                  }
+
+                  if(studentCounter>numberOfStudents){
+                    break;
+                  }
+                }
+              }
+            }
+          }
+
+
+          subGroupWithStudents.put(subGroup,studentsOfTheSubGroup);
+
+        }
+
+        if(subGroupEmpty){
+          break;
+        }
+
+      }
+    }
+
+    mSeatPlanManager.create(totalSeatPlan);
+
+
+    return new GenericMessageResponse(GenericResponse.ResponseType.SUCCESS);
+  }
+
+
+
+
+
+  @Override
+  @Transactional
+  public GenericResponse<Map> generateGroup(int pSemesterId, int pExamType) throws Exception {
     List<ExamRoutineDto> mExamRoutineList = mExamRoutineManager.getExamRoutine(pSemesterId,pExamType);
 
 
@@ -185,4 +292,37 @@ public class SeatPlanServiceImpl implements SeatPlanService {
 
     return groupWithProgramAndCourse;
   }
+
+
+
+  Map<Integer,List<SpStudent>> getStudentsOfTheSubGroups(int pSemesterId, int pGroupNo,int pExamType,int numberOfSubGroups)throws Exception{
+
+    Map<Integer,List<SpStudent>> subGroupMap = new HashMap<>();
+
+    for(int subGroupNumberIterator=1;subGroupNumberIterator<=numberOfSubGroups;subGroupNumberIterator++){
+      List<SpStudent> studentsOfTheSubGroup = new LinkedList<>();
+      List<SubGroup> subGroupMembers = mSubGroupManager.getSubGroupMembers(pSemesterId,pExamType,pGroupNo,subGroupNumberIterator);
+
+      int counter=0;
+      for(SubGroup member: subGroupMembers){
+        SeatPlanGroup group = mSeatPlanGroupManager.get(member.getGroup().getId());
+        List<SpStudent> studentsOfTheGroup = mSpStudentManager.getStudentByProgramYearSemesterStatus(group.getProgram().getId(),
+            group.getAcademicYear(),
+            group.getAcademicSemester(),
+            1);
+        if(counter==0){
+          studentsOfTheSubGroup = studentsOfTheGroup;
+        }else{
+          studentsOfTheSubGroup.addAll(studentsOfTheGroup);
+        }
+
+      }
+
+      subGroupMap.put(subGroupNumberIterator,studentsOfTheSubGroup);
+    }
+    return subGroupMap;
+  }
+
+
+
 }

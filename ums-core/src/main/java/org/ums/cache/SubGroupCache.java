@@ -1,0 +1,54 @@
+package org.ums.cache;
+
+import org.ums.domain.model.immutable.SubGroup;
+import org.ums.domain.model.mutable.MutableSubGroup;
+import org.ums.manager.CacheManager;
+import org.ums.manager.SubGroupManager;
+import org.ums.util.CacheUtil;
+
+import java.util.List;
+
+
+public class SubGroupCache extends ContentCache<SubGroup,MutableSubGroup,Integer,SubGroupManager> implements SubGroupManager {
+
+  CacheManager<SubGroup> mCacheManager;
+
+  public SubGroupCache(CacheManager<SubGroup> pCacheManager){
+    mCacheManager = pCacheManager;
+  }
+
+  @Override
+  protected CacheManager<SubGroup> getCacheManager() {
+    return mCacheManager;
+  }
+
+  @Override
+  protected String getCacheKey(Integer pId) {
+    return CacheUtil.getCacheKey(SubGroup.class,pId);
+  }
+
+  @Override
+  public List<SubGroup> getByGroupNo(int pGroupNo) {
+    return getManager().getByGroupNo(pGroupNo);
+  }
+
+  @Override
+  public int deleteBySemesterAndGroup(int pSemesterId, int pGroupNo) {
+    return getManager().deleteBySemesterAndGroup(pSemesterId,pGroupNo);
+  }
+
+  @Override
+  public List<SubGroup> getBySemesterGroupNoAndType(int pSemesterId, int pGroupNo, int pType) {
+    return getManager().getBySemesterGroupNoAndType(pSemesterId,pGroupNo,pType );
+  }
+
+  @Override
+  public int getSubGroupNumberOfAGroup(int pSemesterId, int pExamType, int pGroupNo) {
+    return getManager().getSubGroupNumberOfAGroup(pSemesterId,pExamType,pGroupNo);
+  }
+
+  @Override
+  public List<SubGroup> getSubGroupMembers(int pSemesterId, int pExamTYpe, int pGroupNo, int pSubGroupNo) {
+    return getManager().getSubGroupMembers(pSemesterId,pExamTYpe,pGroupNo,pSubGroupNo);
+  }
+}

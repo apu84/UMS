@@ -45,7 +45,8 @@ public class PersistentSeatPlanGroupDao extends SeatPlanGroupDaoDecorator {
 
   @Override
   public SeatPlanGroup get(Integer pId) throws Exception {
-    return super.get(pId);
+    String query = SELECT_ALL+" WHERE ID=?";
+    return mJdbcTemplate.queryForObject(query,new Object[]{pId},new SeatPlanGroupRowmapper());
   }
 
   @Override

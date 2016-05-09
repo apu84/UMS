@@ -6,7 +6,6 @@ import org.ums.cache.LocalCache;
 import org.ums.common.academic.resource.ResourceHelper;
 import org.ums.common.builder.Builder;
 import org.ums.common.builder.SeatPlanGroupBuilder;
-import org.ums.domain.model.immutable.Course;
 import org.ums.domain.model.immutable.SeatPlanGroup;
 import org.ums.domain.model.mutable.MutableSeatPlanGroup;
 import org.ums.manager.*;
@@ -77,7 +76,7 @@ public class SeatPlanGroupResourceHelper extends ResourceHelper<SeatPlanGroup,Mu
 
     }
     else{
-      genericResponse = mSeatPlanService.saveSeatPlan(pSemesterId,type);
+      genericResponse = mSeatPlanService.generateGroup(pSemesterId,type);
       if (genericResponse != null ) {
         seatPlanGroupForSemester = mSeatPlanGroupManager.getGroupBySemester(pSemesterId,type);
         for(SeatPlanGroup seatPlanGroup: seatPlanGroupForSemester){

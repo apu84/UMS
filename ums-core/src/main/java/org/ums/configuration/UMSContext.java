@@ -71,6 +71,20 @@ public class UMSContext {
   }
 
   @Bean
+  SubGroupManager subGroupManager(){
+    SubGroupCache subGroupCache = new SubGroupCache(mLocalCacheManager);
+    subGroupCache.setManager(new PersistentSubGroupDao(mJdbcTemplate));
+    return subGroupCache;
+  }
+
+  @Bean
+  SeatPlanManager seatPlanManager(){
+    SeatPlanCache seatPlanCache = new SeatPlanCache(mLocalCacheManager);
+    seatPlanCache.setManager(new PersistentSeatPlanDao(mJdbcTemplate));
+    return seatPlanCache;
+  }
+
+  @Bean
   SemesterSyllabusMapManager semesterSyllabusMapManager() {
     SemesterSyllabusMapCache semesterSyllabusMapCache = new SemesterSyllabusMapCache(mLocalCacheManager);
     semesterSyllabusMapCache.setManager(new PersistentSemesterSyllabusMapDao(new JdbcTemplate(mDataSource), syllabusManager()));
