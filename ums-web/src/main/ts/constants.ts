@@ -389,7 +389,19 @@ module ums {
           'SUCCESS': 'SUCCESS',
           'INFO': 'INFO',
           'WARN': 'WARN'
-        }
+        },
+        gradeLetters: [
+          {id: "A+", name: "A+"},
+          {id: "A", name: "A"},
+          {id: "A-", name: "A-"},
+          {id: "B+", name: "B+"},
+          {id: "B", name: "B"},
+          {id: "B-", name: "B-"},
+          {id: "C+", name: "C+"},
+          {id: "C", name: "C"},
+          {id: "D", name: "D"},
+          {id: "F", name: "F"}
+        ]
       };
     }
   }

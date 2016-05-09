@@ -2,6 +2,7 @@
 
 module ums {
   export interface IMarksSubmissionScope extends ng.IScope {
+      data:any;
     allStudents: any;
       allMarksSubmissionStatus:any;
     toggleColumn:boolean;
@@ -52,6 +53,7 @@ module ums {
         section:string;
         offeredTo:string;
 
+
     }
 
 
@@ -63,6 +65,10 @@ module ums {
                 private appConstants:any,
                 private httpClient:HttpClient) {
 
+
+        $scope.data = {
+            gradeLetterOptions: appConstants.gradeLetters
+        };
 
       $scope.onTotalPartChange = this.onTotalPartChange.bind(this);
       $scope.toggleStatRules = this.toggleStatRules.bind(this);
