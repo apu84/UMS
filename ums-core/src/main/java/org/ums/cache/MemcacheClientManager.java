@@ -16,20 +16,16 @@ public class MemcacheClientManager<R extends LastModifier> implements CacheManag
   private MemcachedClient mObjectCache;
   private MemcachedClient mLastModified;
 
-  private String mObjectCacheUrl;
-  private Integer mObjectCachePort;
-  private String mLastModifiedCacheUrl;
-  private Integer mLastModifiedCachePort;
 
-  public MemcacheClientManager() throws Exception {
-    Validate.notNull(mObjectCacheUrl);
-    Validate.notNull(mObjectCachePort);
-    Validate.notNull(mLastModifiedCacheUrl);
-    Validate.notNull(mLastModifiedCachePort);
+  public MemcacheClientManager(final String pObjectCacheUrl, final Integer pObjectCachePort,
+                               final String pLastModifiedCacheUrl, final Integer pLastModifiedCachePort) throws Exception {
+    Validate.notNull(pObjectCacheUrl);
+    Validate.notNull(pObjectCachePort);
+    Validate.notNull(pLastModifiedCacheUrl);
+    Validate.notNull(pLastModifiedCachePort);
 
-    mObjectCache = new MemcachedClient(new InetSocketAddress(mObjectCacheUrl, mObjectCachePort));
-    mLastModified = new MemcachedClient(new InetSocketAddress(mLastModifiedCacheUrl, mLastModifiedCachePort));
-
+//    mObjectCache = new MemcachedClient(new InetSocketAddress(pObjectCacheUrl, pObjectCachePort));
+//    mLastModified = new MemcachedClient(new InetSocketAddress(pLastModifiedCacheUrl, pLastModifiedCachePort));
   }
 
   @Override
@@ -58,21 +54,5 @@ public class MemcacheClientManager<R extends LastModifier> implements CacheManag
   public void flushAll() throws Exception {
     mObjectCache.flush();
     mLastModified.flush();
-  }
-
-  public void setObjectCacheUrl(String pObjectCacheUrl) {
-    mObjectCacheUrl = pObjectCacheUrl;
-  }
-
-  public void setObjectCachePort(Integer pObjectCachePort) {
-    mObjectCachePort = pObjectCachePort;
-  }
-
-  public void setLastModifiedCacheUrl(String pLastModifiedCacheUrl) {
-    mLastModifiedCacheUrl = pLastModifiedCacheUrl;
-  }
-
-  public void setLastModifiedCachePort(Integer pLastModifiedCachePort) {
-    mLastModifiedCachePort = pLastModifiedCachePort;
   }
 }
