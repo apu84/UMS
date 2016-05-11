@@ -4,6 +4,7 @@ import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.ExamGradeDaoDecorator;
+import org.ums.domain.model.dto.CourseTeacherDto;
 import org.ums.domain.model.dto.MarksSubmissionStatusDto;
 import org.ums.domain.model.dto.StudentGradeDto;
 import org.ums.domain.model.immutable.Course;
@@ -13,6 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -82,12 +84,24 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
             marks.setStudentId(resultSet.getString("STUDENT_ID"));
             //marks.setStudentName(resultSet.getString("STUDENT_NAME"));
             marks.setStudentName("Md. Abul Kalam Azad");
-            marks.setQuiz(resultSet.getFloat("QUIZ"));
-            marks.setClassPerformance(resultSet.getFloat("CLASS_PERFORMANCE"));
-            marks.setPartA(resultSet.getFloat("PART_A"));
-            marks.setPartB(resultSet.getFloat("PART_B"));
+
+            float quiz = resultSet.getFloat("QUIZ");
+            marks.setQuiz(resultSet.wasNull() ? null : quiz);
+
+            float classPerformance = resultSet.getFloat("CLASS_PERFORMANCE");
+            marks.setClassPerformance(resultSet.wasNull() ? null : classPerformance);
+
+            float partA = resultSet.getFloat("PART_A");
+            marks.setPartA(resultSet.wasNull() ? null : partA);
+
+            float partB = resultSet.getFloat("PART_B");
+            marks.setPartB(resultSet.wasNull() ? null : partB);
+
             marks.setPartTotal(resultSet.getFloat("PART_TOTAL"));
-            marks.setTotal(resultSet.getFloat("TOTAL"));
+
+            float total = resultSet.getFloat("TOTAL");
+            marks.setTotal(resultSet.wasNull() ? null : total);
+
             marks.setGradePoint(resultSet.getFloat("GRADE_POINT"));
             marks.setGradeLetter(resultSet.getString("GRADE_LETTER"));
             //marks.setStatus(resultSet.getFloat("STATUS"));
@@ -174,6 +188,16 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
                 statusDto.setOfferedTo(resultSet.getString("PROGRAM_SHORT_NAME").replaceAll("BSC in ",""));
                 statusDto.setStatusId(resultSet.getInt("STATUS"));
                 statusDto.setStatusName(CourseMarksSubmissionStatus.values()[resultSet.getInt("STATUS")].getLabel());
+
+                String courseTeachers=resultSet.getString("Course_Teachers");
+                String courseTeacherArr[]=courseTeachers.split("#");
+                ArrayList<CourseTeacherDto> teacherList=new ArrayList();
+                for(int t=0;t<courseTeacherArr.length;t++){
+                    CourseTeacherDto teacher=new CourseTeacherDto();
+                    teacher.setTeacher_name(courseTeacherArr[t]);
+                    teacherList.add(teacher);
+                }
+                statusDto.setCourseTeacherList(teacherList);
 
                 AtomicReference<MarksSubmissionStatusDto> atomicReference = new AtomicReference<>(statusDto);
                 return atomicReference.get();

@@ -8,14 +8,14 @@ import com.google.gson.Gson;
 public class StudentGradeDto {
     private String studentId;
     private String studentName;
-    private float quiz;
-    private float classPerformance;
-    private float partA;
-    private float partB;
-    private float partTotal;
-    private float total;
+    private Float quiz;
+    private Float classPerformance;
+    private Float partA;
+    private Float partB;
+    private Float partTotal;
+    private Float total;
     private String gradeLetter;
-    private float gradePoint;
+    private Float gradePoint;
     private int status;
     private String statusName;
 
@@ -35,51 +35,51 @@ public class StudentGradeDto {
         this.studentName = studentName;
     }
 
-    public float getQuiz() {
+    public Float getQuiz() {
         return quiz;
     }
 
-    public void setQuiz(float quiz) {
+    public void setQuiz(Float quiz) {
         this.quiz = quiz;
     }
 
-    public float getClassPerformance() {
+    public Float getClassPerformance() {
         return classPerformance;
     }
 
-    public void setClassPerformance(float classPerformance) {
+    public void setClassPerformance(Float classPerformance) {
         this.classPerformance = classPerformance;
     }
 
-    public float getPartA() {
+    public Float getPartA() {
         return partA;
     }
 
-    public void setPartA(float partA) {
+    public void setPartA(Float partA) {
         this.partA = partA;
     }
 
-    public float getPartB() {
+    public Float getPartB() {
         return partB;
     }
 
-    public void setPartB(float partB) {
+    public void setPartB(Float partB) {
         this.partB = partB;
     }
 
-    public float getPartTotal() {
+    public Float getPartTotal() {
         return partTotal;
     }
 
-    public void setPartTotal(float partTotal) {
+    public void setPartTotal(Float partTotal) {
         this.partTotal = partTotal;
     }
 
-    public float getTotal() {
+    public Float getTotal() {
         return total;
     }
 
-    public void setTotal(float total) {
+    public void setTotal(Float total) {
         this.total = total;
     }
 
@@ -91,11 +91,11 @@ public class StudentGradeDto {
         this.gradeLetter = gradeLetter;
     }
 
-    public float getGradePoint() {
+    public Float getGradePoint() {
         return gradePoint;
     }
 
-    public void setGradePoint(float gradePoint) {
+    public void setGradePoint(Float gradePoint) {
         this.gradePoint = gradePoint;
     }
 
