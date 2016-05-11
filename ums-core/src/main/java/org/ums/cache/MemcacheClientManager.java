@@ -5,6 +5,7 @@ import net.spy.memcached.MemcachedClient;
 import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 import org.ums.domain.model.common.LastModifier;
 import org.ums.manager.CacheManager;
 
@@ -24,14 +25,14 @@ public class MemcacheClientManager<R extends LastModifier> implements CacheManag
     Validate.notNull(pLastModifiedCacheUrl);
     Validate.notNull(pLastModifiedCachePort);
 
-//    mObjectCache = new MemcachedClient(new InetSocketAddress(pObjectCacheUrl, pObjectCachePort));
-//    mLastModified = new MemcachedClient(new InetSocketAddress(pLastModifiedCacheUrl, pLastModifiedCachePort));
+    mObjectCache = new MemcachedClient(new InetSocketAddress(pObjectCacheUrl, pObjectCachePort));
+    mLastModified = new MemcachedClient(new InetSocketAddress(pLastModifiedCacheUrl, pLastModifiedCachePort));
   }
 
   @Override
   public void put(String pCacheId, R pReadonly) {
     mObjectCache.set(pCacheId, 0, pReadonly);
-    mLastModified.set(pCacheId, 0, pReadonly.getLastModified());
+    mLastModified.set(pCacheId, 0, StringUtils.isEmpty(pReadonly.getLastModified()) ? "": pReadonly.getLastModified());
   }
 
   @Override

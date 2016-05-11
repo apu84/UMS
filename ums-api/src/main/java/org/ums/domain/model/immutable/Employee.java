@@ -6,8 +6,6 @@ import org.ums.domain.model.common.LastModifier;
 import org.ums.domain.model.mutable.MutableEmployee;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
-import java.util.Date;
 
 
 public interface Employee extends Serializable,LastModifier,EditType<MutableEmployee>,Identifier<String>{
