@@ -277,3 +277,13 @@ hr.style-eight:after {
 .modal-dialog {
     margin: 100px auto !important;
 }
+.course-teacher-inner-header {
+    border: 0;
+    width: 100%;
+}
+.course-teacher-inner{
+    border-collapse:separate;
+    border-spacing:4px;
+    border: 0;
+    width: 100%;
+}
