@@ -1,7 +1,7 @@
 package org.ums.decorator;
 
-import org.ums.domain.model.mutable.MutableCourseTeacher;
 import org.ums.domain.model.immutable.CourseTeacher;
+import org.ums.domain.model.mutable.MutableCourseTeacher;
 import org.ums.enums.CourseCategory;
 import org.ums.manager.CourseTeacherManager;
 
@@ -46,5 +46,10 @@ public class CourseTeacherDaoDecorator extends ContentDaoDecorator<CourseTeacher
   @Override
   public List<CourseTeacher> getCourseTeachers(Integer pProgramId, Integer pSemesterId, CourseCategory pCourseCategory) {
     return getManager().getCourseTeachers(pProgramId, pSemesterId, pCourseCategory);
+  }
+
+  @Override
+  public List<CourseTeacher> getCourseTeachers(Integer pProgramId, Integer pSemesterId, String pCourseId) {
+    return getManager().getCourseTeachers(pProgramId, pSemesterId, pCourseId);
   }
 }

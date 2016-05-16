@@ -72,6 +72,8 @@
 /// <reference path='directive/Spinner.ts'/>
 /// <reference path='directive/ProfilePicture.ts'/>
 /// <reference path='directive/Grid.ts'/>
+/// <reference path='directive/SelectPicker.ts'/>
+
 
 /// <reference path='interceptor/Unauthorized.ts'/>
 

@@ -7,6 +7,7 @@ module ums {
     academicSemesterId:string;
     courseCategoryId:string;
     programSelector: ProgramSelectorModel;
+    courseId: string;
 
     constructor(appConstants:any, httpClient:HttpClient) {
       this.programSelector = new ProgramSelectorModel(appConstants, httpClient);
@@ -14,6 +15,7 @@ module ums {
       this.academicYearId = '';
       this.academicSemesterId = '';
       this.courseCategoryId = '';
+      this.courseId = '';
     }
   }
 }

@@ -13,7 +13,7 @@ module ums {
             //var redirectQuery = '?redirectTo=' + encodeURIComponent(window.location.href);
             //window.location.href = UrlUtil.getBaseAppUrl() + 'login/' + redirectQuery;
             if (!expiredSession) {
-              notify.error("Your session has been expired. Please Logout and then Login again", false);
+              notify.error("Your session has expired. Please Logout and then Login again", false);
               expiredSession = !expiredSession;
             }
           }

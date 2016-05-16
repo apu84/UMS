@@ -5,6 +5,8 @@ import org.ums.domain.model.common.Identifier;
 import org.ums.domain.model.common.LastModifier;
 import org.ums.domain.model.mutable.MutableProgramType;
 
-public interface ProgramType extends EditType<MutableProgramType>, Identifier<Integer>, LastModifier {
+import java.io.Serializable;
+
+public interface ProgramType extends Serializable, EditType<MutableProgramType>, Identifier<Integer>, LastModifier {
   String getName();
 }

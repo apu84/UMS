@@ -18,5 +18,13 @@ module ums {
       }
       return n + "" + suffix;
     }
+
+    public static isEmpty(obj: any) {
+      return Object.keys(obj).length === 0;
+    }
+
+    public static isEmptyString(str: string) {
+      return (typeof str === 'undefined' || str === '' || str == null);
+    }
   }
 }

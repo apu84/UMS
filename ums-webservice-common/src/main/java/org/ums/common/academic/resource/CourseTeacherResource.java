@@ -87,6 +87,15 @@ public class CourseTeacherResource extends Resource {
     return mResourceHelper.getCourseTeachers(pProgramId, pSemesterId, pYear, pSemester, CourseCategory.get(Integer.parseInt(pCategory)), mUriInfo);
   }
 
+  @GET
+  @Path("/programId" + "/{program-id}" + "/semesterId" + "/{semester-id}" + "/courseId" + "/{courseId}")
+  public JsonObject getByCourse(final @Context Request pRequest,
+                                final @PathParam("program-id") Integer pProgramId,
+                                final @PathParam("semester-id") Integer pSemesterId,
+                                final @PathParam("courseId") String pCourseId) throws Exception {
+    return mResourceHelper.getCourseTeachers(pProgramId, pSemesterId, pCourseId, mUriInfo);
+  }
+
 
   @POST
   public Response post(final JsonObject pJsonObject) throws Exception {

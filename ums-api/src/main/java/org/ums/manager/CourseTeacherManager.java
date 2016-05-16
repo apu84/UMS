@@ -26,4 +26,6 @@ public interface CourseTeacherManager extends ContentManager<CourseTeacher, Muta
 
   List<CourseTeacher> getCourseTeachers(final Integer pProgramId, final Integer pSemesterId, final Integer pYear,
                                         final Integer pSemester, final CourseCategory pCourseCategory);
+
+  List<CourseTeacher> getCourseTeachers(final Integer pProgramId, final Integer pSemesterId, final String pCourseId);
 }

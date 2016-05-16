@@ -2,11 +2,11 @@ package org.ums.persistent.dao;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.ums.persistent.model.PersistentCourseTeacher;
 import org.ums.decorator.CourseTeacherDaoDecorator;
-import org.ums.domain.model.mutable.MutableCourseTeacher;
 import org.ums.domain.model.immutable.CourseTeacher;
+import org.ums.domain.model.mutable.MutableCourseTeacher;
 import org.ums.enums.CourseCategory;
+import org.ums.persistent.model.PersistentCourseTeacher;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,7 +21,7 @@ public class PersistentCourseTeacherDao extends CourseTeacherDaoDecorator {
   static String INSERT_ONE = "INSERT INTO COURSE_TEACHER(SEMESTER_ID, TEACHER_ID, COURSE_ID, SECTION, LAST_MODIFIED, ID) VALUES" +
       "(?, ?, ?, ?," + getLastModifiedSql() + ", SQN_COURSE_TEACHER_ID.nextVal)";
 
-  static String SELECT_BY_SEMESTER_PROGRAM =
+  String SELECT_BY_SEMESTER_PROGRAM =
       "SELECT t3.*,\n" +
           "       t4.teacher_id,\n" +
           "       t4.section,\n" +
@@ -44,6 +44,7 @@ public class PersistentCourseTeacherDao extends CourseTeacherDaoDecorator {
           "       LEFT JOIN\n" +
           "          course_teacher t4\n" +
           "       ON t3.course_id = t4.course_id "+
+          "%s" +
           "ORDER BY t3.COURSE_ID, t4.TEACHER_ID, t4.SECTION";
 
   private JdbcTemplate mJdbcTemplate;
@@ -110,32 +111,38 @@ public class PersistentCourseTeacherDao extends CourseTeacherDaoDecorator {
 
   @Override
   public List<CourseTeacher> getCourseTeachers(Integer pProgramId, Integer pSemesterId, Integer pYear, Integer pSemester) {
-    String query = String.format(SELECT_BY_SEMESTER_PROGRAM, " AND t2.year = ? AND T2.SEMESTER = ? ", "");
+    String query = String.format(SELECT_BY_SEMESTER_PROGRAM, " AND t2.year = ? AND T2.SEMESTER = ? ", "", "");
     return mJdbcTemplate.query(query, new Object[]{pProgramId, pSemesterId, pYear, pSemester}, new CourseTeacherRowMapper());
   }
 
   @Override
   public List<CourseTeacher> getCourseTeachers(Integer pProgramId, Integer pSemesterId, Integer pYear) {
-    String query = String.format(SELECT_BY_SEMESTER_PROGRAM, " AND t2.year = ? ", "");
+    String query = String.format(SELECT_BY_SEMESTER_PROGRAM, " AND t2.year = ? ", "", "");
     return mJdbcTemplate.query(query, new Object[]{pProgramId, pSemesterId, pYear}, new CourseTeacherRowMapper());
   }
 
   @Override
   public List<CourseTeacher> getCourseTeachers(Integer pProgramId, Integer pSemesterId, Integer pYear, CourseCategory pCourseCategory) {
-    String query = String.format(SELECT_BY_SEMESTER_PROGRAM, " AND t2.year = ? ", " AND t2.COURSE_CATEGORY = ? ");
+    String query = String.format(SELECT_BY_SEMESTER_PROGRAM, " AND t2.year = ? ", " AND t2.COURSE_CATEGORY = ? ", "");
     return mJdbcTemplate.query(query, new Object[]{pProgramId, pSemesterId, pYear, pCourseCategory.getValue()}, new CourseTeacherRowMapper());
   }
 
   @Override
   public List<CourseTeacher> getCourseTeachers(Integer pProgramId, Integer pSemesterId, Integer pYear, Integer pSemester, CourseCategory pCourseCategory) {
-    String query = String.format(SELECT_BY_SEMESTER_PROGRAM, " AND t2.year = ? AND t2.semester = ? ", " AND t2.COURSE_CATEGORY = ? ");
+    String query = String.format(SELECT_BY_SEMESTER_PROGRAM, " AND t2.year = ? AND t2.semester = ? ", " AND t2.COURSE_CATEGORY = ? ", "");
     return mJdbcTemplate.query(query, new Object[]{pProgramId, pSemesterId, pYear, pSemester, pCourseCategory.getValue()}, new CourseTeacherRowMapper());
   }
 
   @Override
   public List<CourseTeacher> getCourseTeachers(Integer pProgramId, Integer pSemesterId, CourseCategory pCourseCategory) {
-    String query = String.format(SELECT_BY_SEMESTER_PROGRAM, "", " AND t2.COURSE_CATEGORY = ? ");
+    String query = String.format(SELECT_BY_SEMESTER_PROGRAM, "", " AND t2.COURSE_CATEGORY = ? ", "");
     return mJdbcTemplate.query(query, new Object[]{pProgramId, pSemesterId, pCourseCategory.getValue()}, new CourseTeacherRowMapper());
+  }
+
+  @Override
+  public List<CourseTeacher> getCourseTeachers(Integer pProgramId, Integer pSemesterId, String pCourseId) {
+    String query = String.format(SELECT_BY_SEMESTER_PROGRAM, "", "", " WHERE t4.course_id = ? ");
+    return mJdbcTemplate.query(query, new Object[]{pProgramId, pSemesterId, pCourseId}, new CourseTeacherRowMapper());
   }
 
   class CourseTeacherRowMapper implements RowMapper<CourseTeacher> {

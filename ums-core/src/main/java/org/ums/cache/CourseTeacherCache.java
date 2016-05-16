@@ -65,4 +65,9 @@ public class CourseTeacherCache extends ContentCache<CourseTeacher, MutableCours
   public List<CourseTeacher> getCourseTeachers(Integer pProgramId, Integer pSemesterId, Integer pYear, Integer pSemester, CourseCategory pCourseCategory) {
     return getManager().getCourseTeachers(pProgramId, pSemesterId, pYear, pSemester, pCourseCategory);
   }
+
+  @Override
+  public List<CourseTeacher> getCourseTeachers(Integer pProgramId, Integer pSemesterId, String pCourseId) {
+    return  getManager().getCourseTeachers(pProgramId, pSemesterId,pCourseId);
+  }
 }

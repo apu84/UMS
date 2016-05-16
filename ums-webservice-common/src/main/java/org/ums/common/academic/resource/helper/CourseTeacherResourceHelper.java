@@ -2,14 +2,14 @@ package org.ums.common.academic.resource.helper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ums.persistent.model.PersistentCourseTeacher;
 import org.ums.cache.LocalCache;
 import org.ums.common.academic.resource.ResourceHelper;
 import org.ums.common.builder.CourseTeacherBuilder;
-import org.ums.domain.model.mutable.MutableCourseTeacher;
 import org.ums.domain.model.immutable.CourseTeacher;
+import org.ums.domain.model.mutable.MutableCourseTeacher;
 import org.ums.enums.CourseCategory;
 import org.ums.manager.CourseTeacherManager;
+import org.ums.persistent.model.PersistentCourseTeacher;
 
 import javax.json.*;
 import javax.ws.rs.core.Response;
@@ -66,6 +66,12 @@ public class CourseTeacherResourceHelper extends ResourceHelper<CourseTeacher, M
   public JsonObject getCourseTeachers(final Integer pProgramId, final Integer pSemesterId,
                                       final CourseCategory pCourseCategory, final UriInfo pUriInfo) throws Exception {
     List<CourseTeacher> courseTeachers = getContentManager().getCourseTeachers(pProgramId, pSemesterId, pCourseCategory);
+    return buildJsonResponse(courseTeachers, pUriInfo);
+  }
+
+  public JsonObject getCourseTeachers(final Integer pProgramId, final Integer pSemesterId,
+                                      final String pCourseId, final UriInfo pUriInfo) throws Exception {
+    List<CourseTeacher> courseTeachers = getContentManager().getCourseTeachers(pProgramId, pSemesterId, pCourseId);
     return buildJsonResponse(courseTeachers, pUriInfo);
   }
 
