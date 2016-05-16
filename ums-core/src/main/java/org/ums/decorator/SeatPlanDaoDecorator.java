@@ -24,4 +24,9 @@ public class SeatPlanDaoDecorator extends ContentDaoDecorator<SeatPlan,MutableSe
   public int deleteBySemesterGroupExamType(int pSemesterId, int pGroupNo, int pExamType) {
     return getManager().deleteBySemesterGroupExamType(pSemesterId,pGroupNo,pExamType);
   }
+
+  @Override
+  public SeatPlan getBySemesterGroupTypeRoomRowAndCol(int pSemesterId, int pGroupNo, int pType, int pRoomId, int pRow, int pCol) {
+    return getManager().getBySemesterGroupTypeRoomRowAndCol(pSemesterId,pGroupNo,pType,pRoomId,pRow,pCol);
+  }
 }

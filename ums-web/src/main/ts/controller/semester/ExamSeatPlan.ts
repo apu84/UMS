@@ -81,6 +81,7 @@ module ums{
     getGroupInfoFromSelectedSubGroup:Function;
     deleteExistingSubGroupInfo:Function;
     createDroppable:Function;
+    getSeatPlanInfo:Function;
 
 
     editSavedSubGroup:Function;
@@ -199,6 +200,7 @@ module ums{
       $scope.createDroppable = this.createDroppable.bind(this);
       $scope.editSavedSubGroup = this.editSavedSubGroup.bind(this);
       $scope.createNewSubGroup = this.createNewSubGroup.bind(this);
+      $scope.getSeatPlanInfo = this.getSeatPlanInfo.bind(this);
       this.initialize();
 
     }
@@ -827,8 +829,8 @@ module ums{
       this.$scope.showGroupSelectionPanel = true;
     }
 
-    private createOrViewSeatPlan():void{
-        this.getRoomList();
+    private createOrViewSeatPlan(groupNo:number):void{
+        this.getSeatPlanInfo(groupNo);
     }
 
     private getSeatPlanGroupInfo():ng.IPromise<any>{
@@ -885,6 +887,21 @@ module ums{
       return defer.promise;
     }
 
+    private getSeatPlanInfo(groupNo:number):void{
+      var defer = this.$q.defer();
+      var subGroupDb:string;
+      this.httpClient.get('/ums-webservice-common/academic/seatplan/semesterId/'+this.$scope.semesterId +'/groupNo/'+groupNo+'/type/'+this.$scope.examType, 'application/json',
+          (json:any, etag:string) => {
+            subGroupDb = json.entries;
+
+            defer.resolve(subGroupDb);
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>) => {
+            console.error(response);
+          });
+
+    }
+
     private postSubGroup(json:any):void{
 
 
@@ -902,6 +919,16 @@ module ums{
 
 
 
+    }
+
+    private postSeatPlanInfo(json:any):void{
+      this.httpClient.post('academic/',json,'application/json')
+        .success(()=>{
+          console.log("success");
+        }).error((data)=>{
+        console.log("Insertion failure");
+        console.log(data);
+      })
     }
 
 
@@ -924,6 +951,14 @@ module ums{
       item["position"] = position;
       item["studentNumber"] = studentNumber;
       item["examType"] = this.$scope.examType;
+      return item;
+    }
+
+    private convertToJsonForViewingSeatPlan(){
+      var item={};
+      item["semesterId"] = this.$scope.semesterId;
+      item["groupNo"] = this.$scope.groupNoForSeatPlanViewing;
+      item["type"] = this.$scope.examType;
       return item;
     }
 

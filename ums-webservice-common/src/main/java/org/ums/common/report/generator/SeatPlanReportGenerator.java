@@ -26,6 +26,9 @@ public class SeatPlanReportGenerator extends AbstractReportGenerator {
     return null;
   }
 
+
+
+
   @Override
   public DataFactory getDataFactory(String reportQuery) throws Exception {
     final DriverConnectionProvider sampleDriverConnectionProvider = new DriverConnectionProvider();

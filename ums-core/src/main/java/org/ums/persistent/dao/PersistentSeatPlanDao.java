@@ -17,9 +17,9 @@ import java.util.List;
  * Created by My Pc on 5/8/2016.
  */
 public class PersistentSeatPlanDao extends SeatPlanDaoDecorator{
-  String SELECT_ALL="SELECT ID,ROOM_ID,SEMESTER_ID,GROUP_NO,STUDENT_ID,ROW_NO,COL_NO,EXAM_TYPE,LAST_MODIFIED FRO SEAT_PLAN ";
+  String SELECT_ALL="SELECT ID,ROOM_ID,SEMESTER_ID,GROUP_NO,STUDENT_ID,ROW_NO,COL_NO,EXAM_TYPE,LAST_MODIFIED FROM SEAT_PLAN ";
   String INSERT_ALL="INSERT INTO SEAT_PLAN(ROOM_ID,SEMESTER_ID,GROUP_NO,STUDENT_ID,ROW_NO,COL_NO,EXAM_TYPE,LAST_MODIFIED) VALUES" +
-      " (?,?,?,?,?,?,"+ getLastModifiedSql()+" )";
+      " (?,?,?,?,?,?,?,"+ getLastModifiedSql()+" )";
   String UPDATE_ALL="UPDATE SEAT_PLAN SET ROOM_ID=?,SEMESTER_ID=?,GROUP_NO=?,STUDENT_ID=?,ROW_NO=?," +
       "COL_NO=?,EXAM_TYPE=?,LAST_MODIFIED="+getLastModifiedSql()+" ";
   String DELETE_ALL = "DELETE FROM SEAT_PLAN ";
@@ -35,6 +35,12 @@ public class PersistentSeatPlanDao extends SeatPlanDaoDecorator{
   public List<SeatPlan> getBySemesterAndGroupAndExamType(int pSemesterId, int pGropNo,int pExamType) {
     String query = SELECT_ALL+" WHERE SEMESTER_ID=? AND GROUP_NO=? AND EXAM_TYPE=? ";
     return mJdbcTemplate.query(query,new Object[]{pSemesterId,pGropNo,pExamType},new SeatPlanRowMapper());
+  }
+
+  @Override
+  public SeatPlan getBySemesterGroupTypeRoomRowAndCol(int pSemesterId, int pGroupNo, int pType, int pRoomId, int pRow, int pCol) {
+    String query = SELECT_ALL+ " WHERE SEMESTER_ID=? AND GROUP_NO=? AND EXAM_TYPE=? AND ROOM_ID=? AND ROW_NO=? AND COL_NO=? ";
+    return mJdbcTemplate.queryForObject(query,new Object[]{pSemesterId,pGroupNo,pType,pRoomId,pRow,pCol},new SeatPlanRowMapper());
   }
 
   @Override
@@ -78,10 +84,18 @@ public class PersistentSeatPlanDao extends SeatPlanDaoDecorator{
     return mJdbcTemplate.batchUpdate(INSERT_ALL,getInsertParamList(pMutableList)).length;
   }
 
-/*  @Override
+  @Override
   public int create(MutableSeatPlan pMutable) throws Exception {
-    return super.create(pMutable);
-  }*/
+    return mJdbcTemplate.update(INSERT_ALL,
+          pMutable.getClassRoom().getId(),
+        pMutable.getSemester().getId(),
+        pMutable.getGroupNo(),
+        pMutable.getStudent().getId(),
+        pMutable.getRowNo(),
+        pMutable.getColumnNo(),
+        pMutable.getExamType()
+        );
+  }
 
 
   private List<Object[]> getInsertParamList(List<MutableSeatPlan> pSeatPlans) throws Exception{
@@ -90,12 +104,12 @@ public class PersistentSeatPlanDao extends SeatPlanDaoDecorator{
     for(SeatPlan seatPlan:pSeatPlans){
       params.add(new Object[]{
           seatPlan.getClassRoom().getId(),
-          seatPlan.getRowNo(),
-          seatPlan.getColumnNo(),
-          seatPlan.getStudent().getId(),
-          seatPlan.getExamType(),
           seatPlan.getSemester().getId(),
           seatPlan.getGroupNo(),
+          seatPlan.getStudent().getId(),
+          seatPlan.getRowNo(),
+          seatPlan.getColumnNo(),
+          seatPlan.getExamType()
       });
     }
     return  params;

@@ -37,6 +37,12 @@ public class PersistentSeatPlanGroupDao extends SeatPlanGroupDaoDecorator {
   }
 
   @Override
+  public List<SeatPlanGroup> getBySemesterGroupAndType(int pSemesterId, int pGroupNo, int pType) {
+    String query=SELECT_ALL+" WHERE SEMESTER_ID=? AND GROUP_NO=? AND TYPE=? ORDER BY GROUP_NO,PROGRAM_ID,YEAR,SEMESTER ASC";
+    return mJdbcTemplate.query(query,new Object[]{pSemesterId,pGroupNo,pType},new SeatPlanGroupRowmapper());
+  }
+
+  @Override
   public List<SeatPlanGroup> getAll() throws Exception {
     String query = SELECT_ALL+ " ORDER BY GROUP_NO,PROGRAM_ID,YEAR,SEMESTER ASC";
     return mJdbcTemplate.query(query,
