@@ -85,18 +85,19 @@ public class SeatPlanServiceImpl implements SeatPlanService {
         int secondGroupAllZeroSizeCounter=0;
         List<Integer> firstGroupWithZeroSize = new ArrayList<>();
         List<Integer> secondGroupWithZeroSize = new ArrayList<>();
-        for(int i=0;i<room.getTotalRow();i++){
-          for(int j=0;j<room.getTotalColumn();j++){
+        for(int j=0;j<room.getTotalColumn();j++){
 
-            if(i%2==0){
+          for(int i=0;i<room.getTotalRow();i++){
+
+            if(j%2==0){
               if(tempSubGroupWithStudents.get(evenRow).size()>0){
-                if(j>0){
-                  if(roomStructure[i][j-1].equals(Integer.toString(evenRow))){
-                    if(j+1<room.getTotalColumn()){
+                if(i>0){
+                  if(roomStructure[i-1][j].equals(Integer.toString(evenRow))){
+                    if(i+1<room.getTotalRow()){
                       roomStructure[i][j]="";
-                      j+=1;
+                      i+=1;
                     }
-                    if(j+1==room.getTotalColumn()){
+                    if(i+1==room.getTotalRow()){
                       roomStructure[i][j]="";
                       break;
                     }
@@ -132,7 +133,7 @@ public class SeatPlanServiceImpl implements SeatPlanService {
                     evenRow=1;
                   }
                   if(roomStructure[i][j]==null){
-                    j-=1;
+                    i-=1;
 
                   }
 
@@ -145,15 +146,15 @@ public class SeatPlanServiceImpl implements SeatPlanService {
 
               if(tempSubGroupWithStudents.get(oddRow).size()>0){
 
-                if(j>0){
-                  if(roomStructure[i][j-1].equals(Integer.toString(oddRow))) {
-                    if(j+1<room.getTotalColumn()){
+                if(i>0){
+                  if(roomStructure[i-1][j].equals(Integer.toString(oddRow))) {
+                    if(i+1<room.getTotalRow()){
                       roomStructure[i][j]="";
 
-                      j+=1;
+                      i+=1;
 
                     }
-                    if(j+1==room.getTotalColumn()){
+                    if(i+1==room.getTotalRow()){
                       roomStructure[i][j]="";
                       break;
                     }
@@ -189,7 +190,7 @@ public class SeatPlanServiceImpl implements SeatPlanService {
                     oddRow=divider+1;
                   }
                   if(roomStructure[i][j]==null){
-                    j-=1;
+                    i-=1;
 
                   }
 
