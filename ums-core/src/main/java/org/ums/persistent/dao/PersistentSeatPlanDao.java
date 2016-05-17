@@ -38,9 +38,9 @@ public class PersistentSeatPlanDao extends SeatPlanDaoDecorator{
   }
 
   @Override
-  public SeatPlan getBySemesterGroupTypeRoomRowAndCol(int pSemesterId, int pGroupNo, int pType, int pRoomId, int pRow, int pCol) {
-    String query = SELECT_ALL+ " WHERE SEMESTER_ID=? AND GROUP_NO=? AND EXAM_TYPE=? AND ROOM_ID=? AND ROW_NO=? AND COL_NO=? ";
-    return mJdbcTemplate.queryForObject(query,new Object[]{pSemesterId,pGroupNo,pType,pRoomId,pRow,pCol},new SeatPlanRowMapper());
+  public List<SeatPlan> getBySemesterGroupTypeRoomRowAndCol(int pSemesterId, int pGroupNo, int pType, int pRoomId, int pRow, int pCol) {
+    String query = SELECT_ALL+ " WHERE SEMESTER_ID=? AND GROUP_NO=? AND EXAM_TYPE=? AND ROOM_ID=? AND ROW_NO=? AND COL_NO=? AND ROWNUM = 1";
+    return mJdbcTemplate.query(query,new Object[]{pSemesterId,pGroupNo,pType,pRoomId,pRow,pCol},new SeatPlanRowMapper());
   }
 
   @Override
@@ -82,6 +82,18 @@ public class PersistentSeatPlanDao extends SeatPlanDaoDecorator{
   @Override
   public int create(List<MutableSeatPlan> pMutableList) throws Exception {
     return mJdbcTemplate.batchUpdate(INSERT_ALL,getInsertParamList(pMutableList)).length;
+  }
+
+  @Override
+  public int checkIfExistsBySemesterGroupTypeRoomRowAndCol(int pSemesterId, int pGroupNo, int pType, int pRoomId, int pRow, int pCol) {
+    String query= "SELECT COUNT(*) FROM SEAT_PLAN  WHERE SEMESTER_ID=? AND GROUP_NO=? AND EXAM_TYPE=? AND ROOM_ID=? AND ROW_NO=? AND COL_NO=?";
+    return mJdbcTemplate.queryForObject(query,Integer.class,pSemesterId,pGroupNo,pType,pRoomId,pRow,pCol);
+  }
+
+  @Override
+  public int checkIfExistsByRoomSemesterGroupExamType(int pRoomId, int pSemesterId, int pGroupNo, int pExamType) {
+    String query = "SELECT COUNT(*) FROM SEAT_PLAN WHERE ROOM_ID=? AND SEMESTER_ID=? AND GROUP_NO=? AND EXAM_TYPE=?";
+    return mJdbcTemplate.queryForObject(query,Integer.class,pRoomId,pSemesterId,pGroupNo,pExamType);
   }
 
   @Override

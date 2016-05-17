@@ -12,5 +12,7 @@ public interface SeatPlanManager extends ContentManager<SeatPlan,MutableSeatPlan
   List<SeatPlan> getBySemesterAndGroupAndExamType(final int pSemesterId, final int pGropNo,final int pExamType);
   List<SeatPlan> getByRoomSemesterGroupExamType(final int pRoomId,final int pSemesterId,final int pGroupNo,final int pExamType);
   int deleteBySemesterGroupExamType(final int pSemesterId,final int pGroupNo,final int pExamType);
-  SeatPlan getBySemesterGroupTypeRoomRowAndCol(final int pSemesterId,final int pGroupNo,final int pType,int pRoomId,int pRow,int pCol);
+  List<SeatPlan> getBySemesterGroupTypeRoomRowAndCol(final int pSemesterId,final int pGroupNo,final int pType,int pRoomId,int pRow,int pCol);
+  int checkIfExistsBySemesterGroupTypeRoomRowAndCol(final int pSemesterId,final int pGroupNo,final int pType,int pRoomId,int pRow,int pCol);
+  int checkIfExistsByRoomSemesterGroupExamType(final int pRoomId,final int pSemesterId,final int pGroupNo,final int pExamType);
 }
