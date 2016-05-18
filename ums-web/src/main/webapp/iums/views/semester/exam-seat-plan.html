@@ -62,6 +62,8 @@
         padding: 5px;
         font-size: 1.2em;
         width: 120px;
+         background-color: red;
+         color: white;
     }
 
 
@@ -367,26 +369,26 @@
                 <div class="row" data-ng-if="colForSubGroup!=9999 " data-ng-show="subGroupFound==false">
 
                     <ul id="droppable1" class="connectedSortable" data-ng-show="colForSubgroup>=1"  >
-                        <li>Sub Group 1</li>
+                        <p><b>Sub Group 1</b> </p>
                     </ul>
                     <ul class="connectedSortable" id="droppable2" data-ng-show="colForSubgroup>=2" >
-                        <li>Sub Group 2</li>
+                        <p><b>Sub Group 2</b></p>
                     </ul>
                     <ui class="connectedSortable" id="droppable3" data-ng-show="colForSubgroup>=3"  >
-                        <li>Sub Group 3</li>
+                        <p><b>Sub Group 3</b></p>
                     </ui>
                 </div>
                 <hr>
                 <hr>
                 <div class="row" data-ng-if="colForSubgroup!=9999 " data-ng-show=" subGroupFound==false">
                     <ui class=" connectedSortable" id="droppable4" data-ng-show="colForSubgroup>=4" >
-                        <li>Sub Group 4</li>
+                        <p><b>Sub Group 4</b></p>
                     </ui>
                     <div class="connectedSortable" id="droppable5" data-ng-show="colForSubgroup>=5" >
-                        <li>Sub Group 5</li>
+                        <p><b>Sub Group 5</b></p>
                     </div>
                     <div class="connectedSortable" id="droppable6" data-ng-show="colForSubgroup>=6"  >
-                        <li>Sub Group 6</li>
+                        <p><b>Sub Group 6</b></p>
                     </div>
 
                 </div>
@@ -432,7 +434,7 @@
 </div>
 
 
-<div class="panel panel-grey" data-ng-show="groupSelected">
+<<!--div class="panel panel-grey" data-ng-show="groupSelected">
     <div class="panel-heading">
         <h3 class="panel-title pull-left">
             Seat Plan Room Information
@@ -459,4 +461,4 @@
 
     </div>
 
-</div>
+</div>-->

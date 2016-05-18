@@ -366,6 +366,7 @@ module ums{
       var classScope = this;
       $('#droppable1').sortable({
         connectWith:".connectedSortable",
+        items:"> li",
 
         update:function(event,ui){
           var result = $(this).sortable('toArray');
@@ -379,6 +380,8 @@ module ums{
       });
       $('#droppable2').sortable({
         connectWith:".connectedSortable",
+        items:"> li",
+
         update:function(event,ui) {
           var result = $(this).sortable('toArray');
           classScope.$scope.subGroup2List = result;
@@ -391,6 +394,8 @@ module ums{
       });
       $('#droppable3').sortable({
         connectWith:".connectedSortable",
+        items:"> li",
+
         update:function(event,ui) {
           var result = $(this).sortable('toArray');
           classScope.subGroupListChanged(3,result);
@@ -402,6 +407,8 @@ module ums{
       });
       $('#droppable4').sortable({
         connectWith:".connectedSortable",
+        items:"> li",
+
         update:function(event,ui) {
           var result = $(this).sortable('toArray');
           classScope.subGroupListChanged(4,result);
@@ -413,6 +420,8 @@ module ums{
       });
       $('#droppable5').sortable({
         connectWith:".connectedSortable",
+        items:"> li",
+
         update:function(event,ui) {
           var result = $(this).sortable('toArray');
           classScope.subGroupListChanged(5,result);
@@ -424,6 +433,8 @@ module ums{
       });
       $('#droppable6').sortable({
         connectWith:".connectedSortable",
+        items:"> li",
+
         update:function(event,ui) {
           var result = $(this).sortable('toArray');
           classScope.subGroupListChanged(6,result);
