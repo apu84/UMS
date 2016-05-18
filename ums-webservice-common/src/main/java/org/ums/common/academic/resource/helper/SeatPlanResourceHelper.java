@@ -197,11 +197,12 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan,MutableSeatP
 
       int roomCounter=0;
       for(ClassRoom room: rooms){
+        float fontSize;
         roomCounter+=1;
 
         int checkIfRoomExists = mSeatPlanManager.checkIfExistsByRoomSemesterGroupExamType(room.getId(),pSemesterId,groupNo,type);
 
-        if(checkIfRoomExists>0 && room.getId()!=284 && roomCounter==3){
+        if(checkIfRoomExists>0 && room.getId()!=284 ){
           String roomHeader = "Room No: "+ room.getRoomNo();
           Paragraph pRoomHeader = new Paragraph(roomHeader,FontFactory.getFont(FontFactory.TIMES_BOLD,12));
           pRoomHeader.setAlignment(Element.ALIGN_CENTER);
@@ -267,16 +268,36 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan,MutableSeatP
               }
             }
           }
+          float summaryFontSize=10.0f;
+          if(deptList.size()<6){
+            fontSize=12.0f;
+          }
+          else if(deptList.size()==6){
+            fontSize=10.0f;
+          }
+          else if(deptList.size()==9){
+            fontSize=9.0f;
+            summaryFontSize=9.0f;
+          }
+          else{
+            if(room.getCapacity()<=40){
+              fontSize=11.0f;
+            }else{
+              fontSize=9.0f;
+
+            }
+          }
+
 
           int totalStudent = 0;
           float[] tableWithForSummery = new float[]{1,1,8,1};
-          float[] columnWiths = new float[]{0.5f,0.4f,9f,1f};
+          float[] columnWiths = new float[]{0.5f,0.4f,9f,0.6f};
 
           PdfPTable summaryTable = new PdfPTable(tableWithForSummery);
           summaryTable.setWidthPercentage(100);
           summaryTable.setWidths(columnWiths);
           PdfPCell deptLabelCell = new PdfPCell();
-          Paragraph deptLabel = new Paragraph("DEPT",FontFactory.getFont(FontFactory.TIMES_ROMAN,10));
+          Paragraph deptLabel = new Paragraph("DEPT",FontFactory.getFont(FontFactory.TIMES_ROMAN,summaryFontSize));
           deptLabelCell.addElement(deptLabel);
           deptLabelCell.setPaddingRight(-0.5f);
           deptLabelCell.setColspan(1);
@@ -284,7 +305,7 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan,MutableSeatP
           summaryTable.addCell(deptLabelCell);
 
           PdfPCell yearSemesterLabelCell = new PdfPCell();
-          Paragraph yearSemesterLabel = new Paragraph("Y/S",FontFactory.getFont(FontFactory.TIMES_ROMAN,10));
+          Paragraph yearSemesterLabel = new Paragraph("Y/S",FontFactory.getFont(FontFactory.TIMES_ROMAN,summaryFontSize));
           yearSemesterLabelCell.addElement(yearSemesterLabel);
           yearSemesterLabelCell.setPaddingRight(-0.5f);
           yearSemesterLabelCell.setColspan(1);
@@ -292,14 +313,14 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan,MutableSeatP
           summaryTable.addCell(yearSemesterLabelCell);
 
           PdfPCell studentLabelCell = new PdfPCell();
-          Paragraph studentLabel = new Paragraph("STUDENT ID",FontFactory.getFont(FontFactory.TIMES_ROMAN,10));
+          Paragraph studentLabel = new Paragraph("STUDENT ID",FontFactory.getFont(FontFactory.TIMES_ROMAN,summaryFontSize));
           studentLabel.setAlignment(Element.ALIGN_CENTER);
           studentLabelCell.addElement(studentLabel);
           studentLabelCell.setPaddingTop(-2f);
           summaryTable.addCell(studentLabelCell);
 
           PdfPCell totalCellLabel = new PdfPCell();
-          Paragraph totalLabel = new Paragraph("TOTAL",FontFactory.getFont(FontFactory.TIMES_ROMAN,10));
+          Paragraph totalLabel = new Paragraph("TOTAL",FontFactory.getFont(FontFactory.TIMES_ROMAN,summaryFontSize));
           totalCellLabel.addElement(totalLabel);
           totalCellLabel.setPaddingTop(-2f);
           summaryTable.addCell(totalCellLabel);
@@ -307,12 +328,12 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan,MutableSeatP
           int deptListCounter=0;
           for(String deptOfTheList: deptList){
             PdfPCell deptCell = new PdfPCell();
-            Paragraph deptParagraph = new Paragraph(deptWithDeptNameMap.get(deptOfTheList),FontFactory.getFont(FontFactory.TIMES_ROMAN,10));
+            Paragraph deptParagraph = new Paragraph(deptWithDeptNameMap.get(deptOfTheList),FontFactory.getFont(FontFactory.TIMES_ROMAN,summaryFontSize));
             deptCell.addElement(deptParagraph);
             deptCell.setPaddingTop(-2f);
             summaryTable.addCell(deptCell);
             PdfPCell yearSemesterCell = new PdfPCell();
-            Paragraph yearSemesterCellParagraph = new Paragraph(deptWithYearSemesterMap.get(deptOfTheList),FontFactory.getFont(FontFactory.TIMES_ROMAN,10));
+            Paragraph yearSemesterCellParagraph = new Paragraph(deptWithYearSemesterMap.get(deptOfTheList),FontFactory.getFont(FontFactory.TIMES_ROMAN,summaryFontSize));
             yearSemesterCell.addElement(yearSemesterCellParagraph);
             yearSemesterCell.setPaddingTop(-2f);
             summaryTable.addCell(yearSemesterCell);
@@ -336,14 +357,14 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan,MutableSeatP
             studentListInString=studentListInString+" = "+studentList.size();
 
 
-            Paragraph studentCellParagraph = new Paragraph(studentListInString,FontFactory.getFont(FontFactory.TIMES_ROMAN,10));
+            Paragraph studentCellParagraph = new Paragraph(studentListInString,FontFactory.getFont(FontFactory.TIMES_ROMAN,summaryFontSize));
             studentCell.addElement(studentCellParagraph);
             studentCell.setPaddingTop(-2f);
             summaryTable.addCell(studentCell);
 
             if(deptListCounter==deptList.size()){
               PdfPCell totalCell = new PdfPCell();
-              Paragraph totalLabels = new Paragraph("Total:"+totalStudent,FontFactory.getFont(FontFactory.TIMES_BOLD,10));
+              Paragraph totalLabels = new Paragraph("Total:"+totalStudent,FontFactory.getFont(FontFactory.TIMES_BOLD,summaryFontSize));
               totalCell.addElement(totalLabels);
               totalCell.setPaddingTop(-2f);
               summaryTable.addCell(totalCell);
@@ -373,9 +394,11 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan,MutableSeatP
               int ifSeatPlanExists = mSeatPlanManager.checkIfExistsBySemesterGroupTypeRoomRowAndCol(pSemesterId,groupNo,type,room.getId(),i,j);
               if(ifSeatPlanExists==0){
                 PdfPCell emptyCell = new PdfPCell();
-                String emptyString = "---";
+                String emptyString = "  ";
                 Paragraph emptyParagraph = new Paragraph(emptyString);
+                Paragraph emptyParagraph2 = new Paragraph("  ");
                 emptyCell.addElement(emptyParagraph);
+                emptyCell.addElement(emptyParagraph2);
                 table.addCell(emptyCell);
                 //cellsForMainTable[cellCounter].addElement(emptyCell);
               }
@@ -393,10 +416,10 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan,MutableSeatP
                 PdfPCell lowerCell = new PdfPCell();
 
                 String upperPart = program.getShortName()+" "+student.getAcademicYear()+"/"+student.getAcademicSemester();
-                Paragraph upperParagraph = new Paragraph(upperPart,FontFactory.getFont(FontFactory.TIMES_ROMAN,10));
+                Paragraph upperParagraph = new Paragraph(upperPart,FontFactory.getFont(FontFactory.TIMES_ROMAN,fontSize));
                 upperParagraph.setSpacingBefore(-1f);
                 String lowerPart = student.getId();
-                Paragraph lowerParagraph = new Paragraph(lowerPart,FontFactory.getFont(FontFactory.TIMES_ROMAN,10));
+                Paragraph lowerParagraph = new Paragraph(lowerPart,FontFactory.getFont(FontFactory.TIMES_ROMAN,fontSize));
                 lowerParagraph.setSpacingBefore(-1f);
                 upperCell.addElement(upperParagraph);
                 upperCell.addElement(lowerParagraph);
@@ -410,7 +433,13 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan,MutableSeatP
               int ifSeatPlanExist2 = mSeatPlanManager.checkIfExistsBySemesterGroupTypeRoomRowAndCol(pSemesterId,groupNo,type,room.getId(),i,j);
 
               if(ifSeatPlanExist2==0){
-                table.addCell(new Phrase("---"));
+                PdfPCell emptyCell = new PdfPCell();
+                String emptyString = "  ";
+                Paragraph emptyParagraph = new Paragraph(emptyString);
+                Paragraph emptyParagraph2 = new Paragraph("  ");
+                emptyCell.addElement(emptyParagraph);
+                emptyCell.addElement(emptyParagraph2);
+                table.addCell(emptyCell);
 
               }
               else{
@@ -426,10 +455,10 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan,MutableSeatP
                 PdfPCell lowerCell = new PdfPCell();
                 lowerCell.setColspan(10);
                 String upperPart = program2.getShortName()+" "+student2.getAcademicYear()+"/"+student2.getAcademicSemester();
-                Paragraph upperParagraph = new Paragraph(upperPart,FontFactory.getFont(FontFactory.TIMES_ROMAN,10));
+                Paragraph upperParagraph = new Paragraph(upperPart,FontFactory.getFont(FontFactory.TIMES_ROMAN,fontSize));
                 upperParagraph.setSpacingBefore(-1f);
                 String lowerPart = student2.getId();
-                Paragraph lowerParagraph = new Paragraph(lowerPart,FontFactory.getFont(FontFactory.TIMES_ROMAN,10));
+                Paragraph lowerParagraph = new Paragraph(lowerPart,FontFactory.getFont(FontFactory.TIMES_ROMAN,fontSize));
                 lowerParagraph.setSpacingBefore(-1f);
                 upperCell.addElement(upperParagraph);
                 upperCell.addElement(lowerParagraph);
@@ -451,10 +480,18 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan,MutableSeatP
           }
 
           PdfPTable footer = new PdfPTable(3);
+          float footerFontSize;
+          if(deptList.size()>=9){
+            footerFontSize=10.0f;
+          }
+          else{
+            footerFontSize = 12.0f;
+
+          }
 
           PdfPCell dateAndPreparedByCell = new PdfPCell();
-          dateAndPreparedByCell.addElement(new Phrase("Date:",FontFactory.getFont(FontFactory.TIMES_BOLD,10)));
-          dateAndPreparedByCell.addElement(new Phrase("Prepared By",FontFactory.getFont(FontFactory.TIMES_BOLD,10)));
+          dateAndPreparedByCell.addElement(new Phrase("Date:",FontFactory.getFont(FontFactory.TIMES_BOLD,footerFontSize)));
+          dateAndPreparedByCell.addElement(new Phrase("Prepared By",FontFactory.getFont(FontFactory.TIMES_BOLD,footerFontSize)));
           dateAndPreparedByCell.setBorder(Rectangle.NO_BORDER);
           footer.addCell(dateAndPreparedByCell);
           //todo: remove border
@@ -463,19 +500,25 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan,MutableSeatP
           spaceCell.addElement(spaceParagraph);
           spaceCell.setBorder(PdfPCell.NO_BORDER);
           PdfPCell checkedByCell = new PdfPCell();
-          Paragraph pCheckedBy = new Paragraph("Checked By",FontFactory.getFont(FontFactory.TIMES_BOLD,10));
+          Paragraph pCheckedBy = new Paragraph("Checked By",FontFactory.getFont(FontFactory.TIMES_BOLD,footerFontSize));
           checkedByCell.addElement(spaceParagraph);
           checkedByCell.addElement(pCheckedBy);
           checkedByCell.setBorder(PdfPCell.NO_BORDER);
           footer.addCell(checkedByCell);
           PdfPCell controllerCell = new PdfPCell();
-          Paragraph pController = new Paragraph("Controller of Examinations",FontFactory.getFont(FontFactory.TIMES_BOLD,10));
+          Paragraph pController = new Paragraph("Controller of Examinations",FontFactory.getFont(FontFactory.TIMES_BOLD,footerFontSize));
           controllerCell.addElement(spaceParagraph);
           controllerCell.addElement(pController);
           controllerCell.setBorder(PdfPCell.NO_BORDER);
           footer.addCell(controllerCell);
 
-          footer.setSpacingBefore(20f);
+          if(room.getCapacity()<=40){
+            footer.setSpacingBefore(40f);
+
+          }else{
+            footer.setSpacingBefore(15.0f);
+
+          }
 
           document.add(footer);
           document.newPage();

@@ -375,10 +375,11 @@ public class SeatPlanServiceImpl implements SeatPlanService {
         }
 */
 
+        for(int roomColumn=0;roomColumn<room.getTotalColumn();roomColumn++){
               for(int roomRow=0;roomRow<room.getTotalRow();roomRow++){
                 boolean columnBreak=false;
 
-                for(int roomColumn=0;roomColumn<room.getTotalColumn();roomColumn++){
+
                   for(int subGroup=1;subGroup<=numberOfSubGroups;subGroup++){
                     if(roomStructure[roomRow][roomColumn]!=null){
                       if(roomStructure[roomRow][roomColumn].equals(Integer.toString(subGroup))){
