@@ -247,8 +247,25 @@
                 <div  data-ng-if="subGroupFound==true">
                     <div class="row">
 
-                                    <ul id="sortable1" class="connectedSortable" data-ng-repeat="subGroup in subGroupList" data-ng-if="subGroup.subGroupNumber==1">
-
+                        <ul id="sortable1" class="connectedSortable" data-ng-if="subGroupList.length>=1">
+                            <p><b>Sub Group 1</b></p>
+                            <li id="member.id" data-ng-repeat="member in subGroupWithDeptMap[0]" data-ng-if="member.id!=''">
+                                {{member.programName}}:{{member.year}}/{{member.semester}} ({{member.studentNumber}})
+                            </li>
+                        </ul>
+                        <ul id="sortable2" class="connectedSortable" data-ng-if="subGroupList.length>=2">
+                            <p><b>Sub Group 2</b></p>
+                            <li id="member.id" data-ng-repeat="member in subGroupWithDeptMap[1]" data-ng-if="member.id!=''">
+                                {{member.programName}}:{{member.year}}/{{member.semester}} ({{member.studentNumber}})
+                            </li>
+                        </ul>
+                        <ul id="sortable3" class="connectedSortable" data-ng-if="subGroupList.length>=3">
+                            <p><b>Sub Group 3</b></p>
+                            <li id="member.id" data-ng-repeat="member in subGroupWithDeptMap[2]" data-ng-if="member.id!=''">
+                                {{member.programName}}:{{member.year}}/{{member.semester}} ({{member.studentNumber}})
+                            </li>
+                        </ul>
+                                   <!-- <ul id="sortable1" class="connectedSortable" data-ng-repeat="subGroup in subGroupList" data-ng-if="subGroup.subGroupNumber==1">
 
                                                 <li id="{{member.id}}" data-ng-repeat="member in subGroup.subGroupMembers track by $index" >
                                                     <div data-ng-if="member.id==''">
@@ -262,8 +279,8 @@
 
 
 
-                                    </ul>
-                        <ul id="sortable2" class="connectedSortable" data-ng-repeat="subGroup in subGroupList" data-ng-if="subGroup.subGroupNumber==2">
+                                    </ul>-->
+                       <!-- <ul id="sortable2" class="connectedSortable" data-ng-repeat="subGroup in subGroupList" data-ng-if="subGroup.subGroupNumber==2">
 
 
 
@@ -299,12 +316,30 @@
                         </ul>
 
 
-
+-->
                     </div>
                     <hr>
                     <hr>
                     <div class="row">
-                        <ul id="sortable4" class="connectedSortable" data-ng-repeat="subGroup in subGroupList" data-ng-if="subGroup.subGroupNumber==4">
+                        <ul id="sortable4" class="connectedSortable" data-ng-if="subGroupList.length>=4">
+                            <p><b>Sub Group 4</b></p>
+                            <li id="member.id" data-ng-repeat="member in subGroupWithDeptMap[3]" data-ng-if="member.id!=''">
+                                {{member.programName}}:{{member.year}}/{{member.semester}} ({{member.studentNumber}})
+                            </li>
+                        </ul>
+                        <ul id="sortable5" class="connectedSortable" data-ng-if="subGroupList.length>=5">
+                            <p><b>Sub Group 5</b></p>
+                            <li id="member.id" data-ng-repeat="member in subGroupWithDeptMap[4]" data-ng-if="member.id!=''">
+                                {{member.programName}}:{{member.year}}/{{member.semester}} ({{member.studentNumber}})
+                            </li>
+                        </ul>
+                        <ul id="sortable6" class="connectedSortable" data-ng-if="subGroupList.length>=6">
+                            <p><b>Sub Group 6</b></p>
+                            <li id="member.id" data-ng-repeat="member in subGroupWithDeptMap[5]" data-ng-if="member.id!=''">
+                                {{member.programName}}:{{member.year}}/{{member.semester}} ({{member.studentNumber}})
+                            </li>
+                        </ul>
+                        <!--<ul id="sortable4" class="connectedSortable" data-ng-repeat="subGroup in subGroupList" data-ng-if="subGroup.subGroupNumber==4">
 
 
 
@@ -355,7 +390,7 @@
 
 
                         </ul>
-
+-->
 
 
 
@@ -399,7 +434,7 @@
                     <h2>Statistics</h2>
 
                     Total Students:
-                    <div  bindonce data-ng-repeat="groupNo in groupList | filter:{groupNumber: selectedGroupNo}">
+                    <div data-ng-repeat="groupNo in groupList | filter:{groupNumber: selectedGroupNo}">
                        <h3>{{groupNo.totalStudentNumber}}</h3>
                     </div>
                     <hr>

@@ -62,6 +62,9 @@ module ums{
 
     arr :any;
 
+    //map in javascript
+    subGroupWithDeptMap:any;
+
     getSemesterInfo:Function;
     getSeatPlanGroupInfo:Function;
     createOrViewSeatPlan:Function;
@@ -181,6 +184,7 @@ module ums{
       $scope.subGroup4StudentNumber=0;
       $scope.subGroup5StudentNumber=0;
       $scope.subGroup6StudentNumber=0;
+      $scope.subGroupWithDeptMap={};
       $scope.getSemesterInfo = this.getSemesterInfo.bind(this);
       $scope.getSeatPlanGroupInfo = this.getSeatPlanGroupInfo.bind(this);
       $scope.getGroups = this.getGroups.bind(this);
@@ -300,6 +304,13 @@ module ums{
 
           }
 
+          for(var i=0;i<this.$scope.subGroupList.length;i++){
+            var studentList:Array<ISeatPlanGroup>=this.$scope.subGroupList[i].subGroupMembers;
+
+            this.$scope.subGroupWithDeptMap[i]=studentList;
+
+          }
+
 
           $("#sortable1,#sortable2,#sortable3,#sortable4,#sortable5,#sortable6").sortable({
             connectWith: ".connectedSortable"
@@ -313,7 +324,7 @@ module ums{
           $("#sortable5").sortable("disable");
           $("#sortable6").sortable("disable");*/
 
-          this.$scope.selectedGroupNo = this.$scope.subGroupList.length;
+          this.$scope.colForSubgroup = this.$scope.subGroupList.length;
           /*this.$scope.$apply();*/
 
 
