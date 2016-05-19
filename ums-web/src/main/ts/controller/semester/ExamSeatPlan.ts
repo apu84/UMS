@@ -49,7 +49,9 @@ module ums{
 
     subGroup1ListTest:any;  //this is for test purpose
 
+    recreateButtonClicked:boolean;
     groupSelected:boolean;
+    editButtonClicked:boolean;
     showGroupSelectionPanel:boolean;
     showGroupSelection:boolean;
     subGroupSelected:boolean;
@@ -171,6 +173,8 @@ module ums{
       $scope.editSubGroup = false;
       $scope.cancelSubGroup = false;
       $scope.saveSubGroupInfo = false;
+      $scope.editButtonClicked=false;
+      $scope.recreateButtonClicked=false;
       $scope.deleteAndCreateNewSubGroup = false;
       $scope.arr = arr;
       $scope.update = 0;
@@ -217,6 +221,7 @@ module ums{
       $scope.createNewSubGroup = this.createNewSubGroup.bind(this);
       $scope.getSeatPlanInfo = this.getSeatPlanInfo.bind(this);
       $scope.saveSubGroupIntoDb = this.saveSubGroupIntoDb.bind(this);
+      $scope.cancelEditedSubGroup = this.cancelEditedSubGroup.bind(this);
       this.initialize();
 
     }
@@ -276,7 +281,8 @@ module ums{
 
         console.log('----sub group arr----');
         console.log(subGroupArr);
-        if(subGroupArr.length>0){
+        if(subGroupArr.length>0 && this.$scope.recreateButtonClicked==false){
+          console.log("inside found list----->");
           this.$scope.subGroupFound = true;
 
           this.$scope.subGroupList = [];
@@ -290,12 +296,14 @@ module ums{
               subGroupCreator.subGroupNumber=subGroupArr[i].subGroupNo;
               subGroupCreator.subGroupTotalStudentNumber = subGroupArr[i].studentNumber;
               var members:any=this.getGroupInfoFromSelectedSubGroup(subGroupArr[i].groupId);
-              var subGroupName:string="Sub Group "+subGroupCounter;
+              /*var subGroupName:string="Sub Group "+subGroupCounter;
               var nameMember:any={};
               nameMember.id="";
               nameMember.programName=subGroupName
               subGroupCreator.subGroupMembers = [];
-              subGroupCreator.subGroupMembers.push(nameMember);
+              subGroupCreator.subGroupMembers.push(nameMember);*/
+              subGroupCreator.subGroupMembers = [];
+
               subGroupCreator.subGroupMembers.push(members);
 
               this.$scope.subGroupList.push(subGroupCreator);
@@ -343,13 +351,17 @@ module ums{
 
 
           this.$scope.savedSubGroupList = this.$scope.subGroupList;
-          this.$scope.editSubGroup = true;
+          if(this.$scope.editButtonClicked==false){
+            this.$scope.editSubGroup = true;
+          }
           this.$scope.deleteAndCreateNewSubGroup = true;
 
 
 
         }
         else{
+
+          this.$scope.colForSubgroup=0;
 
           this.$scope.subGroupList=[];
 
@@ -473,30 +485,35 @@ module ums{
 
 
     private createNewSubGroup(groupNo:number):void{
+
+      this.$scope.recreateButtonClicked=true;
       this.$scope.subGroupFound = false;
-      this.deleteExistingSubGroupInfo(groupNo);
-      this.createDroppable();
       this.$scope.editSubGroup = false;
       this.$scope.cancelSubGroup = false;
       this.$scope.deleteAndCreateNewSubGroup = false;
-      this.$scope.selectedGroupNo = 0;
+      this.$scope.selectedGroupNo = groupNo;
+      this.$scope.showSubGroupSelectionNumber=true;
+      this.createOrViewSubgroups(groupNo);
+      this.$scope.colForSubgroup=0;
+      this.$scope.groupNoForSubGroup = groupNo;
     }
 
     private cancelEditedSubGroup():void{
+      console.log("Inside cancel");
 
-      this.createOrViewSubgroups(this.$scope.groupNoForSeatPlanViewing);
-      this.$scope.editSubGroup = true;
+      this.$scope.editButtonClicked=false;
       this.$scope.cancelSubGroup = false;
       this.$scope.saveSubGroupInfo = false;
-      this.$scope.deleteAndCreateNewSubGroup=false;
+      this.$scope.deleteAndCreateNewSubGroup=true;
+      this.createOrViewSubgroups(this.$scope.selectedGroupNo);
+
 
     }
 
     private editSavedSubGroup(groupNo:number):void{
-
       console.log(groupNo);
       this.createOrViewSubgroups(groupNo);
-      console.log("Inside edit sub group");
+      this.$scope.editButtonClicked=true;
       this.$scope.saveSubGroupInfo=true;
       this.$scope.cancelSubGroup = true;
       this.$scope.deleteAndCreateNewSubGroup = false;
@@ -597,6 +614,7 @@ module ums{
         }
       });
 
+      this.$scope.editSubGroup = false;
 
     }
 
@@ -633,13 +651,13 @@ module ums{
         for( var i=0;i< this.$scope.subGroupList.length;i++){
           if(this.$scope.subGroupList[i].subGroupNumber == subGroupNumber){
             this.$scope.subGroupList[i].subGroupMembers = [];
-            if(this.$scope.subGroupFound==true){
+            /*if(this.$scope.subGroupFound==true){
               var subGroupName:string="Sub Group "+subGroupNumber;
               var nameMember:any={};
               nameMember.id="";
               nameMember.programName=subGroupName
               this.$scope.subGroupList[i].subGroupMembers.push(nameMember);
-            }
+            }*/
             this.$scope.subGroupList[i].subGroupTotalStudentNumber = 0;
 
             for(var m in result){
@@ -771,6 +789,7 @@ module ums{
       var json = this.convertToJsonForSubGroup(seatPlanJsonDataList);
       this.saveSubGroupIntoDb(json).then((message:string)=>{
         $.notific8(message);
+        this.$scope.editButtonClicked=false;
         this.createOrViewSubgroups(this.$scope.selectedGroupNo);
       });
     }

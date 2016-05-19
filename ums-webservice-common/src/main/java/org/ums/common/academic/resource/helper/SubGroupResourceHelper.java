@@ -101,19 +101,22 @@ public class SubGroupResourceHelper extends ResourceHelper<SubGroup,MutableSubGr
     JsonArray entries = pJsonObject.getJsonArray("entries");
     for(int i=0;i<entries.size();i++){
       JsonObject jsonObject = entries.getJsonObject(i);
-      PersistentSubGroup subGroup = new PersistentSubGroup();
-      PersistentSemester semester = new PersistentSemester();
-      semester.setId(pSemesterId);
-      subGroup.setSemester(semester);
-      subGroup.setGroupNo(pGroupNo);
-      subGroup.setExamType(pType);
-      subGroup.setSubGroupNo(jsonObject.getInt("subGroupNo"));
-      subGroup.setPosition(jsonObject.getInt("position"));
-      PersistentSeatPlanGroup group = new PersistentSeatPlanGroup();
-      group.setId(jsonObject.getInt("groupId"));
-      subGroup.setGroup(group);
-      subGroup.setStudentNumber(jsonObject.getInt("studentNumber"));
-      subGroups.add(subGroup);
+//      if(jsonObject.getInt("position")!=1){
+        PersistentSubGroup subGroup = new PersistentSubGroup();
+        PersistentSemester semester = new PersistentSemester();
+        semester.setId(pSemesterId);
+        subGroup.setSemester(semester);
+        subGroup.setGroupNo(pGroupNo);
+        subGroup.setExamType(pType);
+        subGroup.setSubGroupNo(jsonObject.getInt("subGroupNo"));
+        subGroup.setPosition(jsonObject.getInt("position"));
+        PersistentSeatPlanGroup group = new PersistentSeatPlanGroup();
+        group.setId(jsonObject.getInt("groupId"));
+        subGroup.setGroup(group);
+        subGroup.setStudentNumber(jsonObject.getInt("studentNumber"));
+        subGroups.add(subGroup);
+//      }
+
     }
 
     mManager.create(subGroups);
