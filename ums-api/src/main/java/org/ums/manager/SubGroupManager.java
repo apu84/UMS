@@ -10,10 +10,11 @@ import java.util.List;
  */
 public interface SubGroupManager extends ContentManager<SubGroup,MutableSubGroup,Integer> {
   public List<SubGroup> getByGroupNo(int pGroupNo);
-  public int deleteBySemesterAndGroup(int pSemesterId,int pGroupNo);
+  public int deleteBySemesterGroupAndType(int pSemesterId,int pGroupNo,int pType);
   public List<SubGroup> getBySemesterGroupNoAndType(int pSemesterId, int pGroupNo, int pType);
   public int getSubGroupNumberOfAGroup(int pSemesterId,int pExamType,int pGroupNo);
   public List<SubGroup> getSubGroupMembers(int pSemesterId,int pExamTYpe,int pGroupNo,int pSubGroupNo);
+  public int checkBySemesterGroupNoAndType(int pSemesterId,int pGroupNo,int pType);
 }
 
 //todo: add examtype option

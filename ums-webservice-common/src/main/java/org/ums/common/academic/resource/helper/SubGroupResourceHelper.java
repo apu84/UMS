@@ -7,19 +7,21 @@ import org.ums.common.academic.resource.ResourceHelper;
 import org.ums.common.academic.resource.SubGroupResource;
 import org.ums.common.builder.Builder;
 import org.ums.common.builder.SubGroupBuilder;
+import org.ums.domain.model.immutable.SeatPlanGroup;
 import org.ums.domain.model.immutable.SubGroup;
 import org.ums.domain.model.mutable.MutableSubGroup;
+import org.ums.manager.SeatPlanManager;
 import org.ums.manager.SubGroupManager;
+import org.ums.persistent.model.PersistentSeatPlanGroup;
+import org.ums.persistent.model.PersistentSemester;
 import org.ums.persistent.model.PersistentSubGroup;
 
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
+import javax.json.*;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,6 +33,9 @@ public class SubGroupResourceHelper extends ResourceHelper<SubGroup,MutableSubGr
 
   @Autowired
   private SubGroupManager mManager;
+
+  @Autowired
+  private SeatPlanManager mSeatPlanManager;
 
   @Autowired
   private SubGroupBuilder mBuilder;
@@ -75,11 +80,46 @@ public class SubGroupResourceHelper extends ResourceHelper<SubGroup,MutableSubGr
     return object.build();
   }
 
-  public Response deleteBySemesterAndGroup(final int pSemesterId,final int pGroupNo)throws Exception{
-    int delete = getContentManager().deleteBySemesterAndGroup(pSemesterId,pGroupNo);
+  public Response deleteBySemesterAndGroup(final int pSemesterId,final int pGroupNo,final int pType)throws Exception{
+    int delete = getContentManager().deleteBySemesterGroupAndType(pSemesterId,pGroupNo,pType);
     return Response.noContent().build();
   }
 
+
+  public Response save(final int pSemesterId,final int pGroupNo,final int pType,final JsonObject pJsonObject) throws Exception{
+
+    int checkIfSubGroupExist = mManager.checkBySemesterGroupNoAndType(pSemesterId,pGroupNo,pType);
+
+    if(checkIfSubGroupExist>0){
+      mManager.deleteBySemesterGroupAndType(pSemesterId,pGroupNo,pType);
+      mSeatPlanManager.deleteBySemesterGroupExamType(pSemesterId,pGroupNo,pType);
+    }
+
+
+    List<MutableSubGroup> subGroups = new ArrayList<>();
+
+    JsonArray entries = pJsonObject.getJsonArray("entries");
+    for(int i=0;i<entries.size();i++){
+      JsonObject jsonObject = entries.getJsonObject(i);
+      PersistentSubGroup subGroup = new PersistentSubGroup();
+      PersistentSemester semester = new PersistentSemester();
+      semester.setId(pSemesterId);
+      subGroup.setSemester(semester);
+      subGroup.setGroupNo(pGroupNo);
+      subGroup.setExamType(pType);
+      subGroup.setSubGroupNo(jsonObject.getInt("subGroupNo"));
+      subGroup.setPosition(jsonObject.getInt("position"));
+      PersistentSeatPlanGroup group = new PersistentSeatPlanGroup();
+      group.setId(jsonObject.getInt("groupId"));
+      subGroup.setGroup(group);
+      subGroup.setStudentNumber(jsonObject.getInt("studentNumber"));
+      subGroups.add(subGroup);
+    }
+
+    mManager.create(subGroups);
+
+    return Response.noContent().build();
+  }
 
   @Override
   protected SubGroupManager getContentManager() {

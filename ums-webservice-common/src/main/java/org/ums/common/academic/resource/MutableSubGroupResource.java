@@ -38,10 +38,22 @@ public class MutableSubGroupResource extends Resource{
     return mSubGroupResourceHelper.delete(objectId);
   }
 
+  @PUT
+  @Path("/save/semester/{semesterId}/groupNo/{groupNo}/type/{type}")
+  public Response saveAllSubGroupInfo(final @PathParam("semesterId") String pSemesterId,
+                                      final @PathParam("groupNo") String pGroupNo,
+                                      final @PathParam("type") String pType,
+                                      final JsonObject pJsonObject) throws Exception{
+    return mSubGroupResourceHelper.save(Integer.parseInt(pSemesterId),
+                                        Integer.parseInt(pGroupNo),
+                                        Integer.parseInt(pType),pJsonObject);
+  }
 
   @DELETE
-  @Path("/semesterId/{semesterId}/groupNo/{groupNo}")
-  public Response deleteBySemesterAndGroup(final @PathParam("semesterId") int semesterId,final @PathParam("groupNo") int groupNo)throws Exception{
-    return mSubGroupResourceHelper.deleteBySemesterAndGroup(semesterId,groupNo);
+  @Path("/semesterId/{semesterId}/groupNo/{groupNo}/type/{type}")
+  public Response deleteBySemesterAndGroup(final @PathParam("semesterId") int semesterId,
+                                           final @PathParam("groupNo") int groupNo,
+                                           final @PathParam("type") int pType)throws Exception{
+    return mSubGroupResourceHelper.deleteBySemesterAndGroup(semesterId,groupNo,pType);
   }
 }

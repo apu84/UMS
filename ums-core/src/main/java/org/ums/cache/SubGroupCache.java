@@ -33,8 +33,8 @@ public class SubGroupCache extends ContentCache<SubGroup,MutableSubGroup,Integer
   }
 
   @Override
-  public int deleteBySemesterAndGroup(int pSemesterId, int pGroupNo) {
-    return getManager().deleteBySemesterAndGroup(pSemesterId,pGroupNo);
+  public int deleteBySemesterGroupAndType(int pSemesterId, int pGroupNo, int pType) {
+    return getManager().deleteBySemesterGroupAndType(pSemesterId,pGroupNo,pType);
   }
 
   @Override
@@ -50,5 +50,10 @@ public class SubGroupCache extends ContentCache<SubGroup,MutableSubGroup,Integer
   @Override
   public List<SubGroup> getSubGroupMembers(int pSemesterId, int pExamTYpe, int pGroupNo, int pSubGroupNo) {
     return getManager().getSubGroupMembers(pSemesterId,pExamTYpe,pGroupNo,pSubGroupNo);
+  }
+
+  @Override
+  public int checkBySemesterGroupNoAndType(int pSemesterId, int pGroupNo, int pType) {
+    return getManager().checkBySemesterGroupNoAndType(pSemesterId,pGroupNo,pType);
   }
 }

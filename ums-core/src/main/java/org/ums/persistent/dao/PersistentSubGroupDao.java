@@ -6,6 +6,7 @@ import org.ums.decorator.SubGroupDaoDecorator;
 import org.ums.domain.model.immutable.SubGroup;
 import org.ums.domain.model.mutable.MutableSubGroup;
 import org.ums.persistent.model.PersistentSubGroup;
+import sun.misc.resources.Messages_ja;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -43,15 +44,21 @@ public class PersistentSubGroupDao extends SubGroupDaoDecorator{
   }
 
   @Override
+  public int checkBySemesterGroupNoAndType(int pSemesterId, int pGroupNo, int pType) {
+    String query = "SELECT COUNT(*) FROM SP_SUB_GROUP WHERE SEMESTER_ID=? AND GROUP_NO=? AND EXAM_TYPE=?";
+    return mJdbcTemplate.queryForObject(query,Integer.class,pSemesterId,pGroupNo,pType);
+  }
+
+  @Override
   public List<SubGroup> getBySemesterGroupNoAndType(int pSemesterId, int pGroupNo, int pType) {
     String query = SELECT_ALL+" WHERE SEMESTER_ID=? AND GROUP_NO=? AND EXAM_TYPE=? ORDER BY SUB_GROUP_NO ASC, ID ASC ";
     return mJdbcTemplate.query(query,new Object[]{pSemesterId,pGroupNo,pType},new SubGroupRowMapper());
   }
 
   @Override
-  public int deleteBySemesterAndGroup(int pSemesterId, int pGroupNo) {
-    String query = DELETE_ALL+" WHERE SEMESTER_ID=? AND GROUP_NO=? ";
-    return mJdbcTemplate.update(query,pSemesterId,pGroupNo);
+  public int deleteBySemesterGroupAndType(int pSemesterId, int pGroupNo,int pType) {
+    String query = DELETE_ALL+" WHERE SEMESTER_ID=? AND GROUP_NO=? AND EXAM_TYPE=? ";
+    return mJdbcTemplate.update(query,pSemesterId,pGroupNo,pType);
   }
 
   @Override
@@ -83,6 +90,7 @@ public class PersistentSubGroupDao extends SubGroupDaoDecorator{
         pMutable.getExamType()
         );
   }
+
 
   @Override
   public int delete(MutableSubGroup pMutable) throws Exception {

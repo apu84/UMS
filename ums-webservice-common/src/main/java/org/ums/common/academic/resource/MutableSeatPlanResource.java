@@ -32,6 +32,7 @@ public class MutableSeatPlanResource extends Resource{
     return mSeatPlanResourceHelper.put(pJsonObject.getInt("id"), pRequest, pIfMatchHeader, pJsonObject);
   }
 
+
   @DELETE
   @Path(PATH_PARAM_OBJECT_ID)
   public Response deleteSeatPlan(final @PathParam("object-id") int objectId) throws Exception{

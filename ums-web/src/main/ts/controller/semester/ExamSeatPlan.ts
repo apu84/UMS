@@ -5,6 +5,7 @@ module ums{
     semesterList:Array<ISemester>;
     seatPlanGroupList:Array<ISeatPlanGroup>;
     subGroupStorage:Array<String>;
+    seatPlanJsonData:Array<ISeatPlanJsonData>;
     roomList:any;
 
     data:any;
@@ -78,6 +79,7 @@ module ums{
     subGroupListChanged:Function;
     saveSubGroup:Function;
     postSubGroup:Function;
+    saveSubGroupIntoDb:Function;
     getSubGroupInfo:Function;
     getSubGroup:Function;
     getSelectedGroupList:Function;
@@ -132,6 +134,13 @@ module ums{
     studentNumber:number;
   }
 
+  interface ISeatPlanJsonData{
+    subGroupNo:number;
+    groupId:number;
+    position:number;
+    studentNumber:number;
+  }
+
   interface ISeatPlanGroup{
     id:any;
     semesterId:number;
@@ -144,6 +153,8 @@ module ums{
     studentNumber:number;
     lastUpdated:string;
   }
+
+
 
   export class ExamSeatPlan{
     public static $inject = ['appConstants','HttpClient','$scope','$q','notify','$timeout'];
@@ -205,6 +216,7 @@ module ums{
       $scope.editSavedSubGroup = this.editSavedSubGroup.bind(this);
       $scope.createNewSubGroup = this.createNewSubGroup.bind(this);
       $scope.getSeatPlanInfo = this.getSeatPlanInfo.bind(this);
+      $scope.saveSubGroupIntoDb = this.saveSubGroupIntoDb.bind(this);
       this.initialize();
 
     }
@@ -310,6 +322,8 @@ module ums{
             this.$scope.subGroupWithDeptMap[i]=studentList;
 
           }
+
+         // this.$scope.subGroupList = [];
 
 
           $("#sortable1,#sortable2,#sortable3,#sortable4,#sortable5,#sortable6").sortable({
@@ -458,9 +472,9 @@ module ums{
     }
 
 
-    private createNewSubGroup():void{
+    private createNewSubGroup(groupNo:number):void{
       this.$scope.subGroupFound = false;
-      this.deleteExistingSubGroupInfo();
+      this.deleteExistingSubGroupInfo(groupNo);
       this.createDroppable();
       this.$scope.editSubGroup = false;
       this.$scope.cancelSubGroup = false;
@@ -478,9 +492,10 @@ module ums{
 
     }
 
-    private editSavedSubGroup():void{
+    private editSavedSubGroup(groupNo:number):void{
 
-
+      console.log(groupNo);
+      this.createOrViewSubgroups(groupNo);
       console.log("Inside edit sub group");
       this.$scope.saveSubGroupInfo=true;
       this.$scope.cancelSubGroup = true;
@@ -503,23 +518,25 @@ module ums{
       var classScope = this;
       $('#sortable1').sortable({
         connectWith:".connectedSortable",
+        items:"> li",
 
-        update:function(event,ui){
+        update:function(event,ui) {
           var result = $(this).sortable('toArray');
-          console.log(result);
           classScope.subGroupListChanged(1,result);
+
         },
 
         change:function(event,ui){
-          var length = $("#droppable1").sortable('serialize');
+
 
         }
       });
       $('#sortable2').sortable({
         connectWith:".connectedSortable",
+        items:"> li",
+
         update:function(event,ui) {
           var result = $(this).sortable('toArray');
-          classScope.$scope.subGroup2List = result;
           classScope.subGroupListChanged(2,result);
 
         },
@@ -529,6 +546,8 @@ module ums{
       });
       $('#sortable3').sortable({
         connectWith:".connectedSortable",
+        items:"> li",
+
         update:function(event,ui) {
           var result = $(this).sortable('toArray');
           classScope.subGroupListChanged(3,result);
@@ -540,6 +559,8 @@ module ums{
       });
       $('#sortable4').sortable({
         connectWith:".connectedSortable",
+        items:"> li",
+
         update:function(event,ui) {
           var result = $(this).sortable('toArray');
           classScope.subGroupListChanged(4,result);
@@ -551,6 +572,8 @@ module ums{
       });
       $('#sortable5').sortable({
         connectWith:".connectedSortable",
+        items:"> li",
+
         update:function(event,ui) {
           var result = $(this).sortable('toArray');
           classScope.subGroupListChanged(5,result);
@@ -562,6 +585,8 @@ module ums{
       });
       $('#sortable6').sortable({
         connectWith:".connectedSortable",
+        items:"> li",
+
         update:function(event,ui) {
           var result = $(this).sortable('toArray');
           classScope.subGroupListChanged(6,result);
@@ -578,7 +603,10 @@ module ums{
     private subGroupListChanged(subGroupNumber:number,result:any){
 
 
-
+      console.log("results");
+      console.log(result);
+      console.log("sub group number");
+      console.log(subGroupNumber);
       console.log("----before manipulation---");
       console.log(this.$scope.subGroupList);
       if(this.$scope.subGroupList.length ==0){
@@ -685,28 +713,32 @@ module ums{
     }
 
 
-    private saveSubGroup():void{
+    private saveSubGroup(groupNo:number):void{
 
       console.log("Inside save sub group ");
 
-      if(this.$scope.subGroupFound){
-        this.deleteExistingSubGroupInfo();
-      }
+
 
       this.$scope.editSubGroup=true;
       this.$scope.deleteAndCreateNewSubGroup=true;
       this.$scope.saveSubGroupInfo = false;
       var operationFailed:boolean=false;
+      var seatPlanJsonDataList:Array<ISeatPlanJsonData>=[];
       for(var i=0;i<this.$scope.subGroupList.length;i++){
         var position=1;
         for(var j=0;j<this.$scope.subGroupList[i].subGroupMembers.length;j++){
-
-          var json = this.convertToJsonForSubGroup(this.$scope.subGroupList[i].subGroupNumber,
+          var seatPlanJsonData:any={};
+          var seatPlanJsonData:any={};
+          seatPlanJsonData.subGroupNo =this.$scope.subGroupList[i].subGroupNumber;
+          seatPlanJsonData.position = position;
+          seatPlanJsonData.groupId = this.$scope.subGroupList[i].subGroupMembers[j].id;
+          seatPlanJsonData.studentNumber =this.$scope.subGroupList[i].subGroupMembers[j].studentNumber;
+         /* var json = this.convertToJsonForSubGroup(this.$scope.subGroupList[i].subGroupNumber,
                                                   position,
-                                                  this.$scope.subGroupList[i].subGroupMembers[j].id,this.$scope.subGroupList[i].subGroupMembers[j].studentNumber);
-          this.postSubGroup(json);
+                                                  this.$scope.subGroupList[i].subGroupMembers[j].id,this.$scope.subGroupList[i].subGroupMembers[j].studentNumber);*/
+          //this.postSubGroup(json);
 
-
+          seatPlanJsonDataList.push(seatPlanJsonData);
           position+=1;
 
 
@@ -735,6 +767,12 @@ module ums{
           $("#sortable6").sortable("disable");
         }
       }
+
+      var json = this.convertToJsonForSubGroup(seatPlanJsonDataList);
+      this.saveSubGroupIntoDb(json).then((message:string)=>{
+        $.notific8(message);
+        this.createOrViewSubgroups(this.$scope.selectedGroupNo);
+      });
     }
 
     private generateSubGroups(group:number):void{
@@ -927,14 +965,13 @@ module ums{
     private postSubGroup(json:any):void{
 
 
-
       this.httpClient.post('academic/subGroup/',json,'application/json')
         .success(()=>{
           console.log("success");
 
         }).error((data)=>{
         console.log("insertion failure");
-        console.log(data);
+        //console.log(data);
 
         postResult:false;
       });
@@ -953,9 +990,23 @@ module ums{
       })
     }
 
+    private saveSubGroupIntoDb(json:any):ng.IPromise<any>{
+      var defer = this.$q.defer();
+      this.httpClient.put('academic/subGroup/save/semester/'+this.$scope.semesterId+'/groupNo/'+this.$scope.selectedGroupNo+'/type/'+this.$scope.examType,json,'application/json')
+        .success(()=>{
+          defer.resolve("Sucessfully Saved Sub Group Information!");
+        })
+        .error((data)=>{
 
-    private deleteExistingSubGroupInfo():void{
-      this.httpClient.delete('academic/subGroup/semesterId/'+this.$scope.semesterId+'/groupNo/'+this.$scope.groupNoForSeatPlanViewing)
+        });
+      return defer.promise;
+    }
+
+
+    private deleteExistingSubGroupInfo(groupNo:number):void{
+      console.log("*********************8");
+
+      this.httpClient.delete('academic/subGroup/semesterId/'+this.$scope.semesterId+'/groupNo/'+groupNo)
         .success(()=>{
           console.log("Successfully deleted");
         }).error((data)=>{
@@ -964,16 +1015,23 @@ module ums{
       })
     }
 
-    private convertToJsonForSubGroup(subGroupNo:number,position:number,groupId:number,studentNumber:number){
-      var item={};
-      item["semesterId"]=this.$scope.semesterId;
-      item["groupNo"] = this.$scope.selectedGroupNo;
-      item["subGroupNo"]= subGroupNo;
-      item["groupId"] = groupId;
-      item["position"] = position;
-      item["studentNumber"] = studentNumber;
-      item["examType"] = this.$scope.examType;
-      return item;
+    private convertToJsonForSubGroup(seatPlanJsonData:Array<ISeatPlanJsonData>){
+      var completeJson={};
+      var jsonObj=[];
+      for(var i=0;i<seatPlanJsonData.length;i++){
+        var item={};
+        item["subGroupNo"] = seatPlanJsonData[i].subGroupNo;
+        item["groupId"] = seatPlanJsonData[i].groupId;
+        item["position"] = seatPlanJsonData[i].position;
+        item["studentNumber"] = seatPlanJsonData[i].studentNumber;
+
+        jsonObj.push(item);
+      }
+      completeJson["semesterId"] = this.$scope.semesterId;
+      completeJson["groupNo"] = this.$scope.selectedGroupNo;
+      completeJson["examType"] = this.$scope.examType;
+      completeJson["entries"] = jsonObj;
+      return completeJson;
     }
 
     private convertToJsonForViewingSeatPlan(){
