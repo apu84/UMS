@@ -42,4 +42,19 @@ public class SeatPlanCache extends ContentCache<SeatPlan,MutableSeatPlan,Integer
   public int deleteBySemesterGroupExamType(int pSemesterId, int pGroupNo, int pExamType) {
     return getManager().deleteBySemesterGroupExamType(pSemesterId,pGroupNo,pExamType);
   }
+
+  @Override
+  public List<SeatPlan> getBySemesterGroupTypeRoomRowAndCol(int pSemesterId, int pGroupNo, int pType, int pRoomId, int pRow, int pCol) {
+    return getManager().getBySemesterGroupTypeRoomRowAndCol(pSemesterId, pGroupNo, pType, pRoomId, pRow, pCol);
+  }
+
+  @Override
+  public int checkIfExistsBySemesterGroupTypeRoomRowAndCol(int pSemesterId, int pGroupNo, int pType, int pRoomId, int pRow, int pCol) {
+    return getManager().checkIfExistsBySemesterGroupTypeRoomRowAndCol(pSemesterId,pGroupNo,pType,pRoomId,pRow,pCol);
+  }
+
+  @Override
+  public int checkIfExistsByRoomSemesterGroupExamType(int pRoomId, int pSemesterId, int pGroupNo, int pExamType) {
+    return getManager().checkIfExistsByRoomSemesterGroupExamType(pRoomId,pSemesterId,pGroupNo,pExamType);
+  }
 }

@@ -40,6 +40,7 @@ public class UMSLogin {
     final JsonObjectBuilder builder = Json.createObjectBuilder();
     builder.add("userId", userName);
     builder.add("userName", userName);
+    builder.add("doSomething", "soemthing");
 
     //delete any pre-existing token
     try {

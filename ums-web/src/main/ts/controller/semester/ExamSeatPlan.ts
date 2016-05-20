@@ -5,6 +5,7 @@ module ums{
     semesterList:Array<ISemester>;
     seatPlanGroupList:Array<ISeatPlanGroup>;
     subGroupStorage:Array<String>;
+    seatPlanJsonData:Array<ISeatPlanJsonData>;
     roomList:any;
 
     data:any;
@@ -48,7 +49,9 @@ module ums{
 
     subGroup1ListTest:any;  //this is for test purpose
 
+    recreateButtonClicked:boolean;
     groupSelected:boolean;
+    editButtonClicked:boolean;
     showGroupSelectionPanel:boolean;
     showGroupSelection:boolean;
     subGroupSelected:boolean;
@@ -61,6 +64,9 @@ module ums{
     cameFromEdit:boolean;   //if edited, then, delete the existing data and insert the new data
 
     arr :any;
+
+    //map in javascript
+    subGroupWithDeptMap:any;
 
     getSemesterInfo:Function;
     getSeatPlanGroupInfo:Function;
@@ -75,12 +81,14 @@ module ums{
     subGroupListChanged:Function;
     saveSubGroup:Function;
     postSubGroup:Function;
+    saveSubGroupIntoDb:Function;
     getSubGroupInfo:Function;
     getSubGroup:Function;
     getSelectedGroupList:Function;
     getGroupInfoFromSelectedSubGroup:Function;
     deleteExistingSubGroupInfo:Function;
     createDroppable:Function;
+    getSeatPlanInfo:Function;
 
 
     editSavedSubGroup:Function;
@@ -128,6 +136,13 @@ module ums{
     studentNumber:number;
   }
 
+  interface ISeatPlanJsonData{
+    subGroupNo:number;
+    groupId:number;
+    position:number;
+    studentNumber:number;
+  }
+
   interface ISeatPlanGroup{
     id:any;
     semesterId:number;
@@ -140,6 +155,8 @@ module ums{
     studentNumber:number;
     lastUpdated:string;
   }
+
+
 
   export class ExamSeatPlan{
     public static $inject = ['appConstants','HttpClient','$scope','$q','notify','$timeout'];
@@ -156,6 +173,8 @@ module ums{
       $scope.editSubGroup = false;
       $scope.cancelSubGroup = false;
       $scope.saveSubGroupInfo = false;
+      $scope.editButtonClicked=false;
+      $scope.recreateButtonClicked=false;
       $scope.deleteAndCreateNewSubGroup = false;
       $scope.arr = arr;
       $scope.update = 0;
@@ -180,6 +199,7 @@ module ums{
       $scope.subGroup4StudentNumber=0;
       $scope.subGroup5StudentNumber=0;
       $scope.subGroup6StudentNumber=0;
+      $scope.subGroupWithDeptMap={};
       $scope.getSemesterInfo = this.getSemesterInfo.bind(this);
       $scope.getSeatPlanGroupInfo = this.getSeatPlanGroupInfo.bind(this);
       $scope.getGroups = this.getGroups.bind(this);
@@ -199,6 +219,9 @@ module ums{
       $scope.createDroppable = this.createDroppable.bind(this);
       $scope.editSavedSubGroup = this.editSavedSubGroup.bind(this);
       $scope.createNewSubGroup = this.createNewSubGroup.bind(this);
+      $scope.getSeatPlanInfo = this.getSeatPlanInfo.bind(this);
+      $scope.saveSubGroupIntoDb = this.saveSubGroupIntoDb.bind(this);
+      $scope.cancelEditedSubGroup = this.cancelEditedSubGroup.bind(this);
       this.initialize();
 
     }
@@ -258,7 +281,8 @@ module ums{
 
         console.log('----sub group arr----');
         console.log(subGroupArr);
-        if(subGroupArr.length>0){
+        if(subGroupArr.length>0 && this.$scope.recreateButtonClicked==false){
+          console.log("inside found list----->");
           this.$scope.subGroupFound = true;
 
           this.$scope.subGroupList = [];
@@ -272,12 +296,14 @@ module ums{
               subGroupCreator.subGroupNumber=subGroupArr[i].subGroupNo;
               subGroupCreator.subGroupTotalStudentNumber = subGroupArr[i].studentNumber;
               var members:any=this.getGroupInfoFromSelectedSubGroup(subGroupArr[i].groupId);
-              var subGroupName:string="Sub Group "+subGroupCounter;
+              /*var subGroupName:string="Sub Group "+subGroupCounter;
               var nameMember:any={};
               nameMember.id="";
               nameMember.programName=subGroupName
               subGroupCreator.subGroupMembers = [];
-              subGroupCreator.subGroupMembers.push(nameMember);
+              subGroupCreator.subGroupMembers.push(nameMember);*/
+              subGroupCreator.subGroupMembers = [];
+
               subGroupCreator.subGroupMembers.push(members);
 
               this.$scope.subGroupList.push(subGroupCreator);
@@ -298,6 +324,15 @@ module ums{
 
           }
 
+          for(var i=0;i<this.$scope.subGroupList.length;i++){
+            var studentList:Array<ISeatPlanGroup>=this.$scope.subGroupList[i].subGroupMembers;
+
+            this.$scope.subGroupWithDeptMap[i]=studentList;
+
+          }
+
+         // this.$scope.subGroupList = [];
+
 
           $("#sortable1,#sortable2,#sortable3,#sortable4,#sortable5,#sortable6").sortable({
             connectWith: ".connectedSortable"
@@ -311,18 +346,22 @@ module ums{
           $("#sortable5").sortable("disable");
           $("#sortable6").sortable("disable");*/
 
-          this.$scope.selectedGroupNo = this.$scope.subGroupList.length;
+          this.$scope.colForSubgroup = this.$scope.subGroupList.length;
           /*this.$scope.$apply();*/
 
 
           this.$scope.savedSubGroupList = this.$scope.subGroupList;
-          this.$scope.editSubGroup = true;
+          if(this.$scope.editButtonClicked==false){
+            this.$scope.editSubGroup = true;
+          }
           this.$scope.deleteAndCreateNewSubGroup = true;
 
 
 
         }
         else{
+
+          this.$scope.colForSubgroup=0;
 
           this.$scope.subGroupList=[];
 
@@ -364,6 +403,7 @@ module ums{
       var classScope = this;
       $('#droppable1').sortable({
         connectWith:".connectedSortable",
+        items:"> li",
 
         update:function(event,ui){
           var result = $(this).sortable('toArray');
@@ -377,6 +417,8 @@ module ums{
       });
       $('#droppable2').sortable({
         connectWith:".connectedSortable",
+        items:"> li",
+
         update:function(event,ui) {
           var result = $(this).sortable('toArray');
           classScope.$scope.subGroup2List = result;
@@ -389,6 +431,8 @@ module ums{
       });
       $('#droppable3').sortable({
         connectWith:".connectedSortable",
+        items:"> li",
+
         update:function(event,ui) {
           var result = $(this).sortable('toArray');
           classScope.subGroupListChanged(3,result);
@@ -400,6 +444,8 @@ module ums{
       });
       $('#droppable4').sortable({
         connectWith:".connectedSortable",
+        items:"> li",
+
         update:function(event,ui) {
           var result = $(this).sortable('toArray');
           classScope.subGroupListChanged(4,result);
@@ -411,6 +457,8 @@ module ums{
       });
       $('#droppable5').sortable({
         connectWith:".connectedSortable",
+        items:"> li",
+
         update:function(event,ui) {
           var result = $(this).sortable('toArray');
           classScope.subGroupListChanged(5,result);
@@ -422,6 +470,8 @@ module ums{
       });
       $('#droppable6').sortable({
         connectWith:".connectedSortable",
+        items:"> li",
+
         update:function(event,ui) {
           var result = $(this).sortable('toArray');
           classScope.subGroupListChanged(6,result);
@@ -434,30 +484,36 @@ module ums{
     }
 
 
-    private createNewSubGroup():void{
+    private createNewSubGroup(groupNo:number):void{
+
+      this.$scope.recreateButtonClicked=true;
       this.$scope.subGroupFound = false;
-      this.deleteExistingSubGroupInfo();
-      this.createDroppable();
       this.$scope.editSubGroup = false;
       this.$scope.cancelSubGroup = false;
       this.$scope.deleteAndCreateNewSubGroup = false;
-      this.$scope.selectedGroupNo = 0;
+      this.$scope.selectedGroupNo = groupNo;
+      this.$scope.showSubGroupSelectionNumber=true;
+      this.createOrViewSubgroups(groupNo);
+      this.$scope.colForSubgroup=0;
+      this.$scope.groupNoForSubGroup = groupNo;
     }
 
     private cancelEditedSubGroup():void{
+      console.log("Inside cancel");
 
-      this.createOrViewSubgroups(this.$scope.groupNoForSeatPlanViewing);
-      this.$scope.editSubGroup = true;
+      this.$scope.editButtonClicked=false;
       this.$scope.cancelSubGroup = false;
       this.$scope.saveSubGroupInfo = false;
-      this.$scope.deleteAndCreateNewSubGroup=false;
+      this.$scope.deleteAndCreateNewSubGroup=true;
+      this.createOrViewSubgroups(this.$scope.selectedGroupNo);
+
 
     }
 
-    private editSavedSubGroup():void{
-
-
-      console.log("Inside edit sub group");
+    private editSavedSubGroup(groupNo:number):void{
+      console.log(groupNo);
+      this.createOrViewSubgroups(groupNo);
+      this.$scope.editButtonClicked=true;
       this.$scope.saveSubGroupInfo=true;
       this.$scope.cancelSubGroup = true;
       this.$scope.deleteAndCreateNewSubGroup = false;
@@ -479,23 +535,25 @@ module ums{
       var classScope = this;
       $('#sortable1').sortable({
         connectWith:".connectedSortable",
+        items:"> li",
 
-        update:function(event,ui){
+        update:function(event,ui) {
           var result = $(this).sortable('toArray');
-          console.log(result);
           classScope.subGroupListChanged(1,result);
+
         },
 
         change:function(event,ui){
-          var length = $("#droppable1").sortable('serialize');
+
 
         }
       });
       $('#sortable2').sortable({
         connectWith:".connectedSortable",
+        items:"> li",
+
         update:function(event,ui) {
           var result = $(this).sortable('toArray');
-          classScope.$scope.subGroup2List = result;
           classScope.subGroupListChanged(2,result);
 
         },
@@ -505,6 +563,8 @@ module ums{
       });
       $('#sortable3').sortable({
         connectWith:".connectedSortable",
+        items:"> li",
+
         update:function(event,ui) {
           var result = $(this).sortable('toArray');
           classScope.subGroupListChanged(3,result);
@@ -516,6 +576,8 @@ module ums{
       });
       $('#sortable4').sortable({
         connectWith:".connectedSortable",
+        items:"> li",
+
         update:function(event,ui) {
           var result = $(this).sortable('toArray');
           classScope.subGroupListChanged(4,result);
@@ -527,6 +589,8 @@ module ums{
       });
       $('#sortable5').sortable({
         connectWith:".connectedSortable",
+        items:"> li",
+
         update:function(event,ui) {
           var result = $(this).sortable('toArray');
           classScope.subGroupListChanged(5,result);
@@ -538,6 +602,8 @@ module ums{
       });
       $('#sortable6').sortable({
         connectWith:".connectedSortable",
+        items:"> li",
+
         update:function(event,ui) {
           var result = $(this).sortable('toArray');
           classScope.subGroupListChanged(6,result);
@@ -548,13 +614,17 @@ module ums{
         }
       });
 
+      this.$scope.editSubGroup = false;
 
     }
 
     private subGroupListChanged(subGroupNumber:number,result:any){
 
 
-
+      console.log("results");
+      console.log(result);
+      console.log("sub group number");
+      console.log(subGroupNumber);
       console.log("----before manipulation---");
       console.log(this.$scope.subGroupList);
       if(this.$scope.subGroupList.length ==0){
@@ -581,13 +651,13 @@ module ums{
         for( var i=0;i< this.$scope.subGroupList.length;i++){
           if(this.$scope.subGroupList[i].subGroupNumber == subGroupNumber){
             this.$scope.subGroupList[i].subGroupMembers = [];
-            if(this.$scope.subGroupFound==true){
+            /*if(this.$scope.subGroupFound==true){
               var subGroupName:string="Sub Group "+subGroupNumber;
               var nameMember:any={};
               nameMember.id="";
               nameMember.programName=subGroupName
               this.$scope.subGroupList[i].subGroupMembers.push(nameMember);
-            }
+            }*/
             this.$scope.subGroupList[i].subGroupTotalStudentNumber = 0;
 
             for(var m in result){
@@ -661,28 +731,32 @@ module ums{
     }
 
 
-    private saveSubGroup():void{
+    private saveSubGroup(groupNo:number):void{
 
       console.log("Inside save sub group ");
 
-      if(this.$scope.subGroupFound){
-        this.deleteExistingSubGroupInfo();
-      }
+
 
       this.$scope.editSubGroup=true;
       this.$scope.deleteAndCreateNewSubGroup=true;
       this.$scope.saveSubGroupInfo = false;
       var operationFailed:boolean=false;
+      var seatPlanJsonDataList:Array<ISeatPlanJsonData>=[];
       for(var i=0;i<this.$scope.subGroupList.length;i++){
         var position=1;
         for(var j=0;j<this.$scope.subGroupList[i].subGroupMembers.length;j++){
-
-          var json = this.convertToJsonForSubGroup(this.$scope.subGroupList[i].subGroupNumber,
+          var seatPlanJsonData:any={};
+          var seatPlanJsonData:any={};
+          seatPlanJsonData.subGroupNo =this.$scope.subGroupList[i].subGroupNumber;
+          seatPlanJsonData.position = position;
+          seatPlanJsonData.groupId = this.$scope.subGroupList[i].subGroupMembers[j].id;
+          seatPlanJsonData.studentNumber =this.$scope.subGroupList[i].subGroupMembers[j].studentNumber;
+         /* var json = this.convertToJsonForSubGroup(this.$scope.subGroupList[i].subGroupNumber,
                                                   position,
-                                                  this.$scope.subGroupList[i].subGroupMembers[j].id,this.$scope.subGroupList[i].subGroupMembers[j].studentNumber);
-          this.postSubGroup(json);
+                                                  this.$scope.subGroupList[i].subGroupMembers[j].id,this.$scope.subGroupList[i].subGroupMembers[j].studentNumber);*/
+          //this.postSubGroup(json);
 
-
+          seatPlanJsonDataList.push(seatPlanJsonData);
           position+=1;
 
 
@@ -711,6 +785,13 @@ module ums{
           $("#sortable6").sortable("disable");
         }
       }
+
+      var json = this.convertToJsonForSubGroup(seatPlanJsonDataList);
+      this.saveSubGroupIntoDb(json).then((message:string)=>{
+        $.notific8(message);
+        this.$scope.editButtonClicked=false;
+        this.createOrViewSubgroups(this.$scope.selectedGroupNo);
+      });
     }
 
     private generateSubGroups(group:number):void{
@@ -827,8 +908,8 @@ module ums{
       this.$scope.showGroupSelectionPanel = true;
     }
 
-    private createOrViewSeatPlan():void{
-        this.getRoomList();
+    private createOrViewSeatPlan(groupNo:number):void{
+        this.getSeatPlanInfo(groupNo);
     }
 
     private getSeatPlanGroupInfo():ng.IPromise<any>{
@@ -885,8 +966,22 @@ module ums{
       return defer.promise;
     }
 
-    private postSubGroup(json:any):void{
+    private getSeatPlanInfo(groupNo:number):void{
+      var defer = this.$q.defer();
+      var subGroupDb:string;
+      this.httpClient.get('/ums-webservice-common/academic/seatplan/semesterId/'+this.$scope.semesterId +'/groupNo/'+groupNo+'/type/'+this.$scope.examType, 'application/json',
+          (json:any, etag:string) => {
+            subGroupDb = json.entries;
 
+            defer.resolve(subGroupDb);
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>) => {
+            console.error(response);
+          });
+
+    }
+
+    private postSubGroup(json:any):void{
 
 
       this.httpClient.post('academic/subGroup/',json,'application/json')
@@ -895,7 +990,7 @@ module ums{
 
         }).error((data)=>{
         console.log("insertion failure");
-        console.log(data);
+        //console.log(data);
 
         postResult:false;
       });
@@ -904,9 +999,33 @@ module ums{
 
     }
 
+    private postSeatPlanInfo(json:any):void{
+      this.httpClient.post('academic/',json,'application/json')
+        .success(()=>{
+          console.log("success");
+        }).error((data)=>{
+        console.log("Insertion failure");
+        console.log(data);
+      })
+    }
 
-    private deleteExistingSubGroupInfo():void{
-      this.httpClient.delete('academic/subGroup/semesterId/'+this.$scope.semesterId+'/groupNo/'+this.$scope.groupNoForSeatPlanViewing)
+    private saveSubGroupIntoDb(json:any):ng.IPromise<any>{
+      var defer = this.$q.defer();
+      this.httpClient.put('academic/subGroup/save/semester/'+this.$scope.semesterId+'/groupNo/'+this.$scope.selectedGroupNo+'/type/'+this.$scope.examType,json,'application/json')
+        .success(()=>{
+          defer.resolve("Sucessfully Saved Sub Group Information!");
+        })
+        .error((data)=>{
+
+        });
+      return defer.promise;
+    }
+
+
+    private deleteExistingSubGroupInfo(groupNo:number):void{
+      console.log("*********************8");
+
+      this.httpClient.delete('academic/subGroup/semesterId/'+this.$scope.semesterId+'/groupNo/'+groupNo)
         .success(()=>{
           console.log("Successfully deleted");
         }).error((data)=>{
@@ -915,15 +1034,30 @@ module ums{
       })
     }
 
-    private convertToJsonForSubGroup(subGroupNo:number,position:number,groupId:number,studentNumber:number){
+    private convertToJsonForSubGroup(seatPlanJsonData:Array<ISeatPlanJsonData>){
+      var completeJson={};
+      var jsonObj=[];
+      for(var i=0;i<seatPlanJsonData.length;i++){
+        var item={};
+        item["subGroupNo"] = seatPlanJsonData[i].subGroupNo;
+        item["groupId"] = seatPlanJsonData[i].groupId;
+        item["position"] = seatPlanJsonData[i].position;
+        item["studentNumber"] = seatPlanJsonData[i].studentNumber;
+
+        jsonObj.push(item);
+      }
+      completeJson["semesterId"] = this.$scope.semesterId;
+      completeJson["groupNo"] = this.$scope.selectedGroupNo;
+      completeJson["examType"] = this.$scope.examType;
+      completeJson["entries"] = jsonObj;
+      return completeJson;
+    }
+
+    private convertToJsonForViewingSeatPlan(){
       var item={};
-      item["semesterId"]=this.$scope.semesterId;
-      item["groupNo"] = this.$scope.selectedGroupNo;
-      item["subGroupNo"]= subGroupNo;
-      item["groupId"] = groupId;
-      item["position"] = position;
-      item["studentNumber"] = studentNumber;
-      item["examType"] = this.$scope.examType;
+      item["semesterId"] = this.$scope.semesterId;
+      item["groupNo"] = this.$scope.groupNoForSeatPlanViewing;
+      item["type"] = this.$scope.examType;
       return item;
     }
 

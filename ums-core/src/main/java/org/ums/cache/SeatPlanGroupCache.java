@@ -33,4 +33,9 @@ public class SeatPlanGroupCache extends ContentCache<SeatPlanGroup,MutableSeatPl
   public List<SeatPlanGroup> getGroupBySemester(int pSemesterId,int pExamType) {
     return getManager().getGroupBySemester(pSemesterId,pExamType);
   }
+
+  @Override
+  public List<SeatPlanGroup> getBySemesterGroupAndType(int pSemesterId, int pGroupNo, int pType) {
+    return getManager().getBySemesterGroupAndType(pSemesterId,pGroupNo,pType);
+  }
 }

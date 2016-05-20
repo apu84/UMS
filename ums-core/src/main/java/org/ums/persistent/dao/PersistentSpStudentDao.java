@@ -38,7 +38,7 @@ public class PersistentSpStudentDao extends SpStudentDaoDecorator {
 
   @Override
   public SpStudent get(String pId) throws Exception {
-    String query = SELECT_ALL+" WHERE STUDENT_ID=?";
+    String query = SELECT_ALL+" WHERE STUDENT_ID=? AND ROWNUM = 1";
 
     return mJdbcTemplate.queryForObject(query,new Object[]{pId},new SpStudentRowMapper());
   }

@@ -52,91 +52,386 @@ public class SeatPlanServiceImpl implements SeatPlanService {
     int numberOfSubGroups = mSubGroupManager.getSubGroupNumberOfAGroup(pSemesterId,pExamType,pGroupNo);
 
     Map<Integer,List<SpStudent>> subGroupWithStudents = getStudentsOfTheSubGroups(pSemesterId,pGroupNo,pExamType,numberOfSubGroups);
+    Map<Integer,List<SpStudent>> tempSubGroupWithStudents =getStudentsOfTheSubGroups(pSemesterId,pGroupNo,pExamType,numberOfSubGroups);
+
 
 
 
     List<ClassRoom> roomList = mClassRoomManager.getAll();
     List<MutableSeatPlan> totalSeatPlan = new ArrayList<>();
 
+    int roomCounter=0;
+
     for(ClassRoom room: roomList){
+
+
+      roomCounter+=1;
       if(room.isExamSeatPlan()){
         boolean subGroupEmpty=true;
-
-        double partitionForTheSubGroup = room.getCapacity()/numberOfSubGroups;
+        int capacity = room.getCapacity();
         String[][] roomStructure = new String[room.getTotalRow()][room.getTotalColumn()];
 
-        int numberOfStudents = (int)Math.ceil(partitionForTheSubGroup);
 
-        for(int subGroup=1;subGroup<=numberOfSubGroups;subGroup++){
-          List<SpStudent> studentsOfTheSubGroup = subGroupWithStudents.get(subGroup);
-          if(studentsOfTheSubGroup.size()!=0){
-            subGroupEmpty = false;
-            for(SpStudent student: studentsOfTheSubGroup){
-              int studentCounter=0;
+        //**********new Algorithm *************************
 
-              for(int roomRow=1;roomRow<=room.getTotalRow();roomRow++){
 
-                for(int roomColumn=1;roomColumn<=room.getTotalColumn();roomColumn++){
-                  if(roomStructure[roomRow][roomColumn]==null){
-                    roomStructure[roomRow][roomColumn] = student.getId();
-                    MutableSeatPlan seatPlan = new PersistentSeatPlan();
-                    PersistentClassRoom classRoom = new PersistentClassRoom();
-                    classRoom.setId(room.getId());
-                    seatPlan.setClassRoom(classRoom);
-                    seatPlan.setRowNo(roomRow);
-                    seatPlan.setColumnNo(roomColumn);
-                    PersistentSpStudent spStudent = new PersistentSpStudent();
-                    spStudent.setId(student.getId());
-                    seatPlan.setStudent(spStudent);
-                    seatPlan.setExamType(pExamType);
-                    PersistentSemester semester = new PersistentSemester();
-                    semester.setId(pSemesterId);
-                    seatPlan.setSemester(semester);
-                    seatPlan.setGroupNo(pGroupNo);
+        int divider = numberOfSubGroups/2;
 
-                    totalSeatPlan.add(seatPlan);
 
-                    studentsOfTheSubGroup.remove(student);
 
-                    roomColumn+=2;
+        int evenRow=1;
+        int oddRow= divider+1;
+        int firstGroupAllZeroSizeCounter=0;
+        int secondGroupAllZeroSizeCounter=0;
+        List<Integer> firstGroupWithZeroSize = new ArrayList<>();
+        List<Integer> secondGroupWithZeroSize = new ArrayList<>();
+        for(int j=0;j<room.getTotalColumn();j++){
 
-                    if(roomColumn>room.getTotalColumn()){
+          for(int i=0;i<room.getTotalRow();i++){
+
+            if(j%2==0){
+              if(tempSubGroupWithStudents.get(evenRow).size()>0){
+                if(i>0){
+                  if(roomStructure[i-1][j].equals(Integer.toString(evenRow))){
+                    if(i+1<room.getTotalRow()){
+                      roomStructure[i][j]="";
+                      i+=1;
+                    }
+                    if(i+1==room.getTotalRow()){
+                      roomStructure[i][j]="";
                       break;
                     }
 
-                    studentCounter+=1;
-
-                    if(studentCounter>numberOfStudents){
-                      break;
-                    }
-
-                  }
-
-                  roomRow+=2;
-
-                  if(roomRow>room.getTotalRow()){
-                    break;
-                  }
-
-                  if(studentCounter>numberOfStudents){
-                    break;
                   }
                 }
+                roomStructure[i][j] = Integer.toString(evenRow);
+                List<SpStudent> tempStudentOfTheSubgroup = tempSubGroupWithStudents.get(evenRow);
+                tempStudentOfTheSubgroup.remove(0);
+                tempSubGroupWithStudents.put(evenRow,tempStudentOfTheSubgroup);
+                if(evenRow==divider){
+                  evenRow=1;
+                }else{
+                  evenRow+=1;
+                }
+              }else{
+                if(secondGroupWithZeroSize.size()==((divider+1)-1)){
+                  roomStructure[i][j]="";
+                }
+                else{
+                  boolean alreadyInList = false;
+                  if(secondGroupWithZeroSize.size()==0){
+                    secondGroupWithZeroSize.add(evenRow);
+                  }else{
+                    if(secondGroupWithZeroSize.contains(evenRow)){
+                      alreadyInList = true;
+                    }else{
+                      secondGroupWithZeroSize.add(evenRow);
+                    }
+                  }
+                  evenRow+=1;
+                  if(evenRow>divider){
+                    evenRow=1;
+                  }
+                  if(roomStructure[i][j]==null){
+                    i-=1;
+
+                  }
+
+
+                }
+
               }
+
+            }else{
+
+              if(tempSubGroupWithStudents.get(oddRow).size()>0){
+
+                if(i>0){
+                  if(roomStructure[i-1][j].equals(Integer.toString(oddRow))) {
+                    if(i+1<room.getTotalRow()){
+                      roomStructure[i][j]="";
+
+                      i+=1;
+
+                    }
+                    if(i+1==room.getTotalRow()){
+                      roomStructure[i][j]="";
+                      break;
+                    }
+                  }
+                }
+
+                roomStructure[i][j] = Integer.toString(oddRow);
+                List<SpStudent> studentsOfTheSubGroup = tempSubGroupWithStudents.get(oddRow);
+                studentsOfTheSubGroup.remove(0);
+                tempSubGroupWithStudents.put(oddRow,studentsOfTheSubGroup);
+                if(oddRow>=numberOfSubGroups){
+                  oddRow = divider+1;
+                }else{
+                  oddRow+=1;
+                }
+              }else{
+                if(firstGroupWithZeroSize.size()==(numberOfSubGroups-divider)){
+                  roomStructure[i][j]="";
+                }
+                else{
+                  boolean alreadyInList = false;
+                  if(firstGroupWithZeroSize.size()==0){
+                    firstGroupWithZeroSize.add(oddRow);
+                  }else{
+                    if(firstGroupWithZeroSize.contains(oddRow)){
+                      alreadyInList = true;
+                    }else{
+                      firstGroupWithZeroSize.add(oddRow);
+                    }
+                  }
+                  oddRow+=1;
+                  if(oddRow>numberOfSubGroups){
+                    oddRow=divider+1;
+                  }
+                  if(roomStructure[i][j]==null){
+                    i-=1;
+
+                  }
+
+
+                }
+
+              }
+
             }
           }
+        }
+
+        //*********end of new Algorithm ******************
 
 
-          subGroupWithStudents.put(subGroup,studentsOfTheSubGroup);
+      /*  int numberOfStudents;
+        List<Integer> tempSubGroupHolderGreaterThanMinimal=new ArrayList<>();
+
+
+        if (room.getCapacity() % numberOfSubGroups == 0) {
+          numberOfStudents = room.getCapacity()/numberOfSubGroups;
+        }else{
+          float partitionForTheSubGroup = (room.getTotalColumn()*room.getTotalRow())/numberOfSubGroups;
+          numberOfStudents = (int)Math.ceil(partitionForTheSubGroup+1);
 
         }
 
-        if(subGroupEmpty){
+        int numberOfStudentsLessThanAverage = 0;
+        int numberOfStudentsHigherThanAverage=0;
+        for(int subGroupIteratorForStudentNumber=1;subGroupIteratorForStudentNumber<=numberOfSubGroups;subGroupIteratorForStudentNumber++){
+            if(subGroupWithStudents.get(subGroupIteratorForStudentNumber).size()>numberOfStudents){
+              tempSubGroupHolderGreaterThanMinimal.add(subGroupIteratorForStudentNumber);
+            }else{
+              numberOfStudentsLessThanAverage += subGroupWithStudents.get(subGroupIteratorForStudentNumber).size();
+            }
+        }
+
+
+        if(tempSubGroupHolderGreaterThanMinimal.size()<6){
+          int leftTotalSpace = room.getCapacity()-numberOfStudentsLessThanAverage;
+          if(leftTotalSpace% tempSubGroupHolderGreaterThanMinimal.size()==0){
+            numberOfStudents = leftTotalSpace/tempSubGroupHolderGreaterThanMinimal.size();
+          }
+          else{
+            float partitioner = leftTotalSpace/tempSubGroupHolderGreaterThanMinimal.size();
+            numberOfStudents = (int) partitioner +1;
+          }
+        }
+        int subGroupCounter=0;
+        int totalStudentOfTheSubGroupInRoom=0;
+        int studentPerSubGroupCounter=0;
+        int seatAllocationCounter=0;
+        while(true){
+          boolean noMoreMembers=false;
+          boolean noSpace=false;
+          for(int row=0;row<room.getTotalRow();row++){
+            boolean incraseRowNumberByOne=false;
+            for(int col=0;col<room.getTotalColumn();col++){
+              if(roomStructure[row][col]==null){
+                if(subGroupCounter==0){
+                  subGroupCounter=1;
+                  for(int subGroupNumberIterator=subGroupCounter;subGroupNumberIterator<=numberOfSubGroups;subGroupNumberIterator++){
+                    if(subGroupWithStudents.get(subGroupNumberIterator)!=null){
+                      int sizeOfTheSubGroup = subGroupWithStudents.get(subGroupNumberIterator).size();
+                      if(sizeOfTheSubGroup>0){
+                        if(sizeOfTheSubGroup>numberOfStudents){
+                          totalStudentOfTheSubGroupInRoom=numberOfStudents;
+                        }
+                        else{
+                          totalStudentOfTheSubGroupInRoom=sizeOfTheSubGroup;
+                        }
+                        subGroupCounter=subGroupNumberIterator;
+                        break;
+                      }else{
+                        if(subGroupNumberIterator==numberOfSubGroups){
+                          noMoreMembers=true;
+                          break;
+                        }
+                    }
+
+                    }
+                  }
+
+                  roomStructure[row][col]=Integer.toString(subGroupCounter);
+                  seatAllocationCounter+=1;
+                  col+=1;
+                  studentPerSubGroupCounter+=1;
+
+                  if(subGroupCounter>=numberOfSubGroups && studentPerSubGroupCounter>=totalStudentOfTheSubGroupInRoom){
+                    break;
+                  }
+                  if(studentPerSubGroupCounter>=totalStudentOfTheSubGroupInRoom){
+                    for(int subGroupNumberIterator=subGroupCounter;subGroupNumberIterator<=numberOfSubGroups;subGroupNumberIterator++){
+                      if(subGroupWithStudents.get(subGroupNumberIterator)!=null){
+                        int sizeOfTheSubGroup = subGroupWithStudents.get(subGroupNumberIterator).size();
+                        if(sizeOfTheSubGroup>0){
+                          if(sizeOfTheSubGroup>numberOfStudents){
+                            totalStudentOfTheSubGroupInRoom=numberOfStudents;
+                          }
+                          else{
+                            totalStudentOfTheSubGroupInRoom=sizeOfTheSubGroup;
+                          }
+                          subGroupCounter=subGroupNumberIterator;
+                          break;
+                        }else{
+                          if(subGroupNumberIterator==numberOfSubGroups){
+                            noMoreMembers=true;
+                            break;
+                          }
+                        }
+                      }
+
+                    }
+                  }
+                  if((col+1)>=room.getTotalColumn()){
+                    incraseRowNumberByOne=true;
+                    break;
+                  }
+                }else{
+                  roomStructure[row][col]=Integer.toString(subGroupCounter);
+                  seatAllocationCounter+=1;
+                  col+=1;
+
+                  studentPerSubGroupCounter+=1;
+
+                  if(subGroupCounter>=numberOfSubGroups && studentPerSubGroupCounter>=totalStudentOfTheSubGroupInRoom){
+                    break;
+                  }
+                  if(studentPerSubGroupCounter>=totalStudentOfTheSubGroupInRoom){
+                    subGroupCounter+=1;
+                    for(int subGroupNumberIterator=subGroupCounter;subGroupNumberIterator<=numberOfSubGroups;subGroupNumberIterator++){
+                      int sizeOfTheSubGroup = subGroupWithStudents.get(subGroupNumberIterator).size();
+                      if(sizeOfTheSubGroup>0){
+                        if(sizeOfTheSubGroup>numberOfStudents){
+                          totalStudentOfTheSubGroupInRoom=numberOfStudents;
+                        }
+                        else{
+                          totalStudentOfTheSubGroupInRoom=sizeOfTheSubGroup;
+                        }
+                        subGroupCounter=subGroupNumberIterator;
+                        break;
+                      }
+                    }
+                    studentPerSubGroupCounter=0;
+                  }
+                  if((col+1)>=room.getTotalColumn()){
+                    incraseRowNumberByOne=true;
+                    break;
+                  }
+
+                }
+              }
+            }
+            if(noMoreMembers){
+              break;
+            }
+            if(subGroupCounter>=numberOfSubGroups && studentPerSubGroupCounter>=totalStudentOfTheSubGroupInRoom){
+              break;
+            }
+
+            if(incraseRowNumberByOne){
+              row+=1;
+              if((row+1)>=room.getTotalRow()){
+                if(seatAllocationCounter>=room.getCapacity()){
+                  noSpace = true;
+                }
+                break;
+
+              }
+            }
+          }
+          if(noMoreMembers){
+            break;
+          }
+          if(subGroupCounter>=numberOfSubGroups && studentPerSubGroupCounter>=totalStudentOfTheSubGroupInRoom){
+            break;
+          }
+          if(noSpace){
+            break;
+          }
+
+        }
+*/
+
+        for(int roomColumn=0;roomColumn<room.getTotalColumn();roomColumn++){
+              for(int roomRow=0;roomRow<room.getTotalRow();roomRow++){
+                boolean columnBreak=false;
+
+
+                  for(int subGroup=1;subGroup<=numberOfSubGroups;subGroup++){
+                    if(roomStructure[roomRow][roomColumn]!=null){
+                      if(roomStructure[roomRow][roomColumn].equals(Integer.toString(subGroup))){
+                        if(subGroupWithStudents.get(subGroup)!=null){
+                          List<SpStudent> studentsOfTheSubGroup = subGroupWithStudents.get(subGroup);
+                          SpStudent student = studentsOfTheSubGroup.get(0);
+                          roomStructure[roomRow][roomColumn] = student.getId();
+                          MutableSeatPlan seatPlan = new PersistentSeatPlan();
+                          PersistentClassRoom classRoom = new PersistentClassRoom();
+                          classRoom.setId(room.getId());
+                          seatPlan.setClassRoom(classRoom);
+                          seatPlan.setRowNo(roomRow+1);
+                          seatPlan.setColumnNo(roomColumn+1);
+                          PersistentSpStudent spStudent = new PersistentSpStudent();
+                          spStudent.setId(student.getId());
+                          seatPlan.setStudent(spStudent);
+                          seatPlan.setExamType(pExamType);
+                          PersistentSemester semester = new PersistentSemester();
+                          semester.setId(pSemesterId);
+                          seatPlan.setSemester(semester);
+                          seatPlan.setGroupNo(pGroupNo);
+
+                          totalSeatPlan.add(seatPlan);
+                          studentsOfTheSubGroup.remove(0);
+                          subGroupWithStudents.put(subGroup,studentsOfTheSubGroup);
+                          break;
+                        }
+
+
+                      }
+                    }
+
+                  }
+
+                }
+
+
+              }
+
+
+        int roomC=roomCounter;
+
+        if((firstGroupWithZeroSize.size()+secondGroupWithZeroSize.size())==numberOfSubGroups){
           break;
         }
 
       }
     }
+
+    /*for(MutableSeatPlan seatPlan:totalSeatPlan){
+      mSeatPlanManager.create(seatPlan);
+    }*/
 
     mSeatPlanManager.create(totalSeatPlan);
 
@@ -312,8 +607,10 @@ public class SeatPlanServiceImpl implements SeatPlanService {
             1);
         if(counter==0){
           studentsOfTheSubGroup = studentsOfTheGroup;
+          counter+=1;
         }else{
           studentsOfTheSubGroup.addAll(studentsOfTheGroup);
+          counter+=1;
         }
 
       }
