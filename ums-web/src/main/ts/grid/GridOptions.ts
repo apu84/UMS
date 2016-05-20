@@ -12,7 +12,7 @@ module ums {
     public colModel: any;
     public loadonce: boolean = true;
 
-    public ondblClickRow(rowid, iRow, iCol, e) {
+    public ondblClickRow(rowid, iRow, iCol, e) { console.debug(rowid);
       // do nothing, will be implemented in calling class
     }
 

@@ -1,6 +1,6 @@
 module ums {
 
-  interface ILoggerScope extends ng.IScope {
+  interface ILoggerScope extends ng.IScope, GridConfig {
     loggerData:any;
   }
 
@@ -14,9 +14,9 @@ module ums {
     name : string;
   }
 
-  export class LoggerGrid {
+  export class LoggerGrid implements GridEditActions {
     public static $inject = ['appConstants', 'HttpClient', '$scope'];
-    decoratedScope: GridConfig;
+    //decoratedScope: GridConfig;
     private levelString: string = '';
     private levelArray: Array<ILevel>;
 
@@ -36,73 +36,78 @@ module ums {
     }
 
     private initializeGrid(): void {
-      this.decoratedScope = GridDecorator.decorate(this.$scope);
-
-      var columnModel = {
-        colModel: [
-          {
-            label: 'Name',
-            name: 'name',
-            hidden: false,
-            editable: true,
-            key: true
-          },
-          {
-            label: 'Level',
-            name: 'level',
-            editable: true,
-            align: 'center',
-            formatter: 'select',
-            edittype: 'select',
-            editoptions: {
-              value: this.levelString,
-              defaultValue: 'DEBUG'
-            },
-            stype: 'select',
-            searchoptions: {
-              sopt: ['eq', 'ne'],
-              value: this.levelString
-            }
-          },
-          {
-            label: "Edit Actions",
-            name: "actions",
-            formatter: "actions",
-            formatoptions: {
-              keys: false,
-              delOptions: {
-                mtype: 'DELETE',
-                onclickSubmit: () => {
-                  this.insert(this.decoratedScope.grid.api.getRowData(this.decoratedScope.gridOptions.currentSelectedRowId),
-                      this.getLevelId("OFF"));
-                }
-              },
-              afterSave: (rowid) => {
-                this.insert(this.decoratedScope.grid.api.getRowData(rowid));
-              }
-            }
-          }
-        ]
-      };
-
-      this.decoratedScope.gridOptions.colModel = columnModel.colModel;
+      GridDecorator.decorate(this);
     }
 
-    private insert(rowData: LoggerRowData, levelId?: number): void {
-      this.decoratedScope.grid.api.toggleMessage('Saving...'); console.debug(levelId+"");
-      if (levelId) {
-        rowData.level = levelId.toString();
-      }
-      console.debug("%o",rowData);
+    public decorateScope(): GridConfig {
+      return this.$scope;
+    }
+
+    public getColumnModel(): any {
+      return [
+        {
+          label: 'Name',
+          name: 'name',
+          hidden: false,
+          editable: true,
+          key: true
+        },
+        {
+          label: 'Level',
+          name: 'level',
+          editable: true,
+          align: 'center',
+          formatter: 'select',
+          edittype: 'select',
+          editoptions: {
+            value: this.levelString,
+            defaultValue: 'DEBUG'
+          },
+          stype: 'select',
+          searchoptions: {
+            sopt: ['eq', 'ne'],
+            value: this.levelString
+          }
+        }
+      ]
+    }
+
+    public insert(rowData: LoggerRowData, levelId?: number): void {
+      this.decorateScope().grid.api.toggleMessage('Saving...');
       this.httpClient.post('logger', rowData, HttpClient.MIME_TYPE_JSON).success(()=> {
-        this.decoratedScope.grid.api.toggleMessage();
+        this.decorateScope().grid.api.toggleMessage();
         this.loadData();
       }).error((response) => {
         console.error(response);
         this.loadData();
-        this.decoratedScope.grid.api.toggleMessage();
+        this.decorateScope().grid.api.toggleMessage();
       });
 
+    }
+
+    public edit(rowData: LoggerRowData): void {
+      this.decorateScope().grid.api.toggleMessage('Saving...');
+      this.httpClient.post('logger', rowData, HttpClient.MIME_TYPE_JSON).success(()=> {
+        this.decorateScope().grid.api.toggleMessage();
+        this.loadData();
+      }).error((response) => {
+        console.error(response);
+        this.loadData();
+        this.decorateScope().grid.api.toggleMessage();
+      });
+    }
+
+    public remove(rowData: LoggerRowData): void {
+      rowData.level = this.getLevelId("OFF").toString();
+      this.decorateScope().grid.api.toggleMessage('Saving...');
+      this.httpClient.post('logger', rowData, HttpClient.MIME_TYPE_JSON).success(()=> {
+        this.decorateScope().grid.api.toggleMessage();
+        this.loadData();
+      }).error((response) => {
+        console.error(response);
+        this.loadData();
+        this.decorateScope().grid.api.toggleMessage();
+      });
     }
 
     private loadData(): void {
