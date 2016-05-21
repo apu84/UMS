@@ -48,7 +48,7 @@
     <url-pattern>/*</url-pattern>
   </filter-mapping>
 
-  <servlet>
+<!--  <servlet>
     <description>DummyServlet from its parent ApplicationContext</description>
     <display-name>DummyServlet</display-name>
     <servlet-name>DummyServlet</servlet-name>
@@ -62,7 +62,7 @@
 
   <welcome-file-list>
     <welcome-file>dummyServlet</welcome-file>
-  </welcome-file-list>
+  </welcome-file-list>-->
 
   <servlet>
     <servlet-name>UMSWebservice</servlet-name>
