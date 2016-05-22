@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
+import org.ums.common.validator.StudentValidator;
 import org.ums.common.validator.Validator;
 import org.ums.domain.model.mutable.MutableStudent;
 import org.ums.domain.model.immutable.Department;
@@ -24,9 +25,6 @@ public class StudentBuilder implements Builder<Student, MutableStudent> {
   private DateFormat mDateFormat;
   @Autowired
   private BinaryContentManager<byte[]> mBinaryContentManager;
-  @Autowired
-  @Qualifier("studentValidator")
-  private Validator mStudentValidator;
 
   public void build(final JsonObjectBuilder pBuilder,
                     final Student pStudent,
@@ -79,7 +77,8 @@ public class StudentBuilder implements Builder<Student, MutableStudent> {
                     final JsonObject pJsonObject,
                     final LocalCache pLocalCache) throws Exception {
 
-    mStudentValidator.validate(pJsonObject);
+    Validator validator = new StudentValidator();
+    validator.validate(pJsonObject);
 
     pMutableStudent.setId(pJsonObject.getString("id"));
     pMutableStudent.setFullName(pJsonObject.getString("fullName"));

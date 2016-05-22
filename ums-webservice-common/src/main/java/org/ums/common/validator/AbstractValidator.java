@@ -29,11 +29,13 @@ public abstract class AbstractValidator implements Validator {
   }
 
   private void aggregateValidations() throws ValidationException {
-    JsonObject validationRoot = mValidationRoot.build();
     mValidationRoot.add("fieldValidation", mFieldValidationMap.build());
+    JsonObject validationRoot = mValidationRoot.build();
     if (validationRoot.containsKey("rootCause")
       || validationRoot.getJsonObject("fieldValidation").size() > 0){
       throw new ValidationException(validationRoot.toString());
     }
   }
+
+  protected abstract void validateFields(JsonObject pJsonObject);
 }
