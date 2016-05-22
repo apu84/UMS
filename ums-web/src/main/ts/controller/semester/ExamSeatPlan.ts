@@ -233,9 +233,7 @@ module ums{
     }
 
     private showGroups():void{
-      /*if(this.$scope.semesterId!=null && this.$scope.examType!=null && this.$scope.system!=null){
-        this.$scope.showGroupSelection = true;
-      }*/
+
       this.$scope.showGroupSelection = true;
 
 
@@ -279,10 +277,8 @@ module ums{
       this.getSubGroupInfo().then((subGroupArr:Array<ISubGroupDb>)=>{
 
 
-        console.log('----sub group arr----');
-        console.log(subGroupArr);
+
         if(subGroupArr.length>0 && this.$scope.recreateButtonClicked==false){
-          console.log("inside found list----->");
           this.$scope.subGroupFound = true;
 
           this.$scope.subGroupList = [];
@@ -296,12 +292,7 @@ module ums{
               subGroupCreator.subGroupNumber=subGroupArr[i].subGroupNo;
               subGroupCreator.subGroupTotalStudentNumber = subGroupArr[i].studentNumber;
               var members:any=this.getGroupInfoFromSelectedSubGroup(subGroupArr[i].groupId);
-              /*var subGroupName:string="Sub Group "+subGroupCounter;
-              var nameMember:any={};
-              nameMember.id="";
-              nameMember.programName=subGroupName
-              subGroupCreator.subGroupMembers = [];
-              subGroupCreator.subGroupMembers.push(nameMember);*/
+
               subGroupCreator.subGroupMembers = [];
 
               subGroupCreator.subGroupMembers.push(members);
@@ -339,12 +330,7 @@ module ums{
 
           }).disableSelection();
 
-         /* $("#sortable1").sortable("disable");
-          $("#sortable2").sortable("disable");
-          $("#sortable3").sortable("disable");
-          $("#sortable4").sortable("disable");
-          $("#sortable5").sortable("disable");
-          $("#sortable6").sortable("disable");*/
+
 
           this.$scope.colForSubgroup = this.$scope.subGroupList.length;
           /*this.$scope.$apply();*/
@@ -499,7 +485,6 @@ module ums{
     }
 
     private cancelEditedSubGroup():void{
-      console.log("Inside cancel");
 
       this.$scope.editButtonClicked=false;
       this.$scope.cancelSubGroup = false;
@@ -511,7 +496,6 @@ module ums{
     }
 
     private editSavedSubGroup(groupNo:number):void{
-      console.log(groupNo);
       this.createOrViewSubgroups(groupNo);
       this.$scope.editButtonClicked=true;
       this.$scope.saveSubGroupInfo=true;
@@ -520,12 +504,7 @@ module ums{
       this.$scope.editSubGroup = false;
 
 
-     /* $("#sortable1").sortable("enable");
-      $("#sortable2").sortable("enable");
-      $("#sortable3").sortable("enable");
-      $("#sortable4").sortable("enable");
-      $("#sortable5").sortable("enable");
-      $("#sortable6").sortable("enable");*/
+
 
       $("#sortable1,#sortable2,#sortable3,#sortable4,#sortable5,#sortable6").sortable({
         connectWith: ".connectedSortable"
@@ -621,12 +600,7 @@ module ums{
     private subGroupListChanged(subGroupNumber:number,result:any){
 
 
-      console.log("results");
-      console.log(result);
-      console.log("sub group number");
-      console.log(subGroupNumber);
-      console.log("----before manipulation---");
-      console.log(this.$scope.subGroupList);
+
       if(this.$scope.subGroupList.length ==0){
         var subGroup:any={};
         subGroup.subGroupNumber = subGroupNumber;
@@ -725,15 +699,14 @@ module ums{
 
       this.$scope.$apply();
 
-      console.log("---after maniputation---");
-      console.log(this.$scope.subGroupList)
+
 
     }
 
 
     private saveSubGroup(groupNo:number):void{
 
-      console.log("Inside save sub group ");
+
 
 
 
@@ -815,8 +788,7 @@ module ums{
         this.$scope.colForSubgroup=group;
       }
 
-      console.log('--------subgroup------');
-      console.log(this.$scope.colForSubgroup);
+
 
     }
 
@@ -885,8 +857,7 @@ module ums{
           }*/
         }
 
-        console.log('----total group list ----');
-        console.log(this.$scope.groupList);
+
       });
     }
 
@@ -896,8 +867,7 @@ module ums{
         this.$scope.groupSelected = true;
         this.$scope.showGroupSelectionPanel = false;
 
-        //console.log(this.$scope.roomList[0].roomN
-        //umber);
+
 
     }
 
@@ -941,8 +911,7 @@ module ums{
       this.httpClient.get('/ums-webservice-common/academic/semester/all', 'application/json',
           (json:any, etag:string) => {
             this.$scope.semesterList = json.entries;
-            console.log("---inside semesterInfo---");
-            console.log(this.$scope.semesterList);
+
             defer.resolve(this.$scope.semesterList);
           },
           (response:ng.IHttpPromiseCallbackArg<any>) => {
@@ -986,7 +955,7 @@ module ums{
 
       this.httpClient.post('academic/subGroup/',json,'application/json')
         .success(()=>{
-          console.log("success");
+
 
         }).error((data)=>{
         console.log("insertion failure");
@@ -1023,7 +992,6 @@ module ums{
 
 
     private deleteExistingSubGroupInfo(groupNo:number):void{
-      console.log("*********************8");
 
       this.httpClient.delete('academic/subGroup/semesterId/'+this.$scope.semesterId+'/groupNo/'+groupNo)
         .success(()=>{
