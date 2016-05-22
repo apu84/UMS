@@ -36,7 +36,7 @@ public class SeatPlanDaoDecorator extends ContentDaoDecorator<SeatPlan,MutableSe
   }
 
   @Override
-  public int checkIfExistsByRoomSemesterGroupExamType(int pRoomId, int pSemesterId, int pGroupNo, int pExamType) {
+  public int checkIfExistsByRoomSemesterGroupExamType(int pRoomId, int pSemesterId, int pGroupNo, int pExamType) throws Exception{
     return getManager().checkIfExistsByRoomSemesterGroupExamType(pRoomId,pSemesterId,pGroupNo,pExamType);
   }
 }

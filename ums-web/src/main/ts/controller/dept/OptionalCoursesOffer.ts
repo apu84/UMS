@@ -75,24 +75,24 @@ module ums {
     optionalSessionalCrHr: number;
   }
 
-  var map = new Map();
-   map.set("statistics_url", "academic/optional/application/stat/semester-id/{SEMESTER-ID}/program/{PROGRAM-ID}");
-  map.set("crhr_url", "academic/optional/application/CrHr/semester-id/{SEMESTER-ID}/program/{PROGRAM-ID}/year/{YEAR}/semester/{SEMESTER}");
-  map.set("optional_url", "academic/course/optional/semester-id/{SEMESTER-ID}/program/{PROGRAM-ID}/year/{YEAR}/semester/{SEMESTER}");
-  map.set("application_url", "academic/course/call4Application/semester-id/{SEMESTER-ID}/program/{PROGRAM-ID}/year/{YEAR}/semester/{SEMESTER}");
-  map.set("approved_url", "academic/course/approved/semester-id/{SEMESTER-ID}/program/{PROGRAM-ID}/year/{YEAR}/semester/{SEMESTER}");
-  map.set("approved_call4Application_url", "academic/course/approved-call-for-application/semester-id/{SEMESTER-ID}/program/{PROGRAM-ID}/year/{YEAR}/semester/{SEMESTER}");
-  map.set("save_optional", "academic/optional/application/settings/semester-id/{SEMESTER-ID}/program/{PROGRAM-ID}/year/{YEAR}/semester/{SEMESTER}");
-  map.set("fetch_students", "academic/optional/application/students/semester-id/{SEMESTER-ID}/course/{COURSE-ID}/status/{STATUS-ID}");
-  map.set("fetch_applications", "academic/optional/application/students/semester-id/{SEMESTER-ID}/course/{COURSE-ID}/status/all");
-  map.set("save_application_status", "academic/optional/application/status/semester-id/{SEMESTER-ID}/course/{COURSE-ID}");
-  map.set("fetch_applications_for_single_student", "academic/optional/application/applied-courses/student-id/{STUDENT-ID}/semester-id/{SEMESTER-ID}/program/{PROGRAM-ID}");
-  map.set("save_application_status_for_single_student", "academic/optional/application/status/semester-id/{SEMESTER-ID}student/{STUDENT-ID}");
-  map.set("save_application_shifting", "academic/optional/application/shift/semester-id/{SEMESTER-ID}/source-course/{SOURCE-COURSE-ID}/target-course/{TARGET-COURSE-ID}");
-  map.set("section_nonAssignedStudents_for_course", "academic/optional/application/non-assigned-section/students/semester-id/{SEMESTER-ID}/program/{PROGRAM-ID}/course/{COURSE-ID}");
-  map.set("sections_info_of_course", "academic/optional/application/assigned-section/students/semester-id/{SEMESTER-ID}/program/{PROGRAM-ID}/course/{COURSE-ID}");
-  map.set("delete_section", "academic/optional/application/semester-id/{SEMESTER-ID}/program/{PROGRAM-ID}/course/{COURSE-ID}/section/{SECTION-NAME}");
-  map.set("save_section", "academic/optional/application/semester-id/{SEMESTER-ID}/program/{PROGRAM-ID}/course/{COURSE-ID}/section/{SECTION-NAME}");
+  var map: {[key:string]: string} = {};
+  map["statistics_url"] = "academic/optional/application/stat/semester-id/{SEMESTER-ID}/program/{PROGRAM-ID}";
+  map["crhr_url"] =  "academic/optional/application/CrHr/semester-id/{SEMESTER-ID}/program/{PROGRAM-ID}/year/{YEAR}/semester/{SEMESTER}";
+  map["optional_url"] =  "academic/course/optional/semester-id/{SEMESTER-ID}/program/{PROGRAM-ID}/year/{YEAR}/semester/{SEMESTER}";
+  map["application_url"] =  "academic/course/call4Application/semester-id/{SEMESTER-ID}/program/{PROGRAM-ID}/year/{YEAR}/semester/{SEMESTER}";
+  map["approved_url"] =  "academic/course/approved/semester-id/{SEMESTER-ID}/program/{PROGRAM-ID}/year/{YEAR}/semester/{SEMESTER}";
+  map["approved_call4Application_url"] =  "academic/course/approved-call-for-application/semester-id/{SEMESTER-ID}/program/{PROGRAM-ID}/year/{YEAR}/semester/{SEMESTER}";
+  map["save_optional"] =  "academic/optional/application/settings/semester-id/{SEMESTER-ID}/program/{PROGRAM-ID}/year/{YEAR}/semester/{SEMESTER}";
+  map["fetch_students"] =  "academic/optional/application/students/semester-id/{SEMESTER-ID}/course/{COURSE-ID}/status/{STATUS-ID}";
+  map["fetch_applications"] =  "academic/optional/application/students/semester-id/{SEMESTER-ID}/course/{COURSE-ID}/status/all";
+  map["save_application_status"] =  "academic/optional/application/status/semester-id/{SEMESTER-ID}/course/{COURSE-ID}";
+  map["fetch_applications_for_single_student"] =  "academic/optional/application/applied-courses/student-id/{STUDENT-ID}/semester-id/{SEMESTER-ID}/program/{PROGRAM-ID}";
+  map["save_application_status_for_single_student"] =  "academic/optional/application/status/semester-id/{SEMESTER-ID}student/{STUDENT-ID}";
+  map["save_application_shifting"] =  "academic/optional/application/shift/semester-id/{SEMESTER-ID}/source-course/{SOURCE-COURSE-ID}/target-course/{TARGET-COURSE-ID}";
+  map["section_nonAssignedStudents_for_course"] =  "academic/optional/application/non-assigned-section/students/semester-id/{SEMESTER-ID}/program/{PROGRAM-ID}/course/{COURSE-ID}";
+  map["sections_info_of_course"] =  "academic/optional/application/assigned-section/students/semester-id/{SEMESTER-ID}/program/{PROGRAM-ID}/course/{COURSE-ID}";
+  map["delete_section"] =  "academic/optional/application/semester-id/{SEMESTER-ID}/program/{PROGRAM-ID}/course/{COURSE-ID}/section/{SECTION-NAME}";
+  map["save_section"] =  "academic/optional/application/semester-id/{SEMESTER-ID}/program/{PROGRAM-ID}/course/{COURSE-ID}/section/{SECTION-NAME}";
 
   export class OptionalCoursesOffer {
     public static $inject = ['appConstants', 'HttpClient', '$scope', '$q', 'notify'];
@@ -150,28 +150,28 @@ module ums {
 
     private showCourses():void {
 
-      this.getStatistics(this.urlPlaceholderReplace(map.get("statistics_url"))).then((statArr:Array<IOptStatistics>)=> {
+      this.getStatistics(this.urlPlaceholderReplace(map["statistics_url"])).then((statArr:Array<IOptStatistics>)=> {
         this.$scope.optional.statistics = statArr;
       });
 
-      this.getCrHrInfo(this.urlPlaceholderReplace(map.get("crhr_url"))).then((CrHr:ICrHr)=> {
+      this.getCrHrInfo(this.urlPlaceholderReplace(map["crhr_url"])).then((CrHr:ICrHr)=> {
         console.log(CrHr);
         this.$scope.CrHr= CrHr;
       });
 
 
-      this.getCourses(this.urlPlaceholderReplace(map.get("approved_call4Application_url"))).then((optCourseArr:Array<IOptCourse>)=> {
+      this.getCourses(this.urlPlaceholderReplace(map["approved_call4Application_url"])).then((optCourseArr:Array<IOptCourse>)=> {
         this.$scope.optional.approvedCallForApplicationCourses = optCourseArr;
       });
 
-      this.getCourses(this.urlPlaceholderReplace(map.get("application_url"))).then((optCourseArr:Array<IOptCourse>)=> {
+      this.getCourses(this.urlPlaceholderReplace(map["application_url"])).then((optCourseArr:Array<IOptCourse>)=> {
         this.$scope.optional.applicationCourses = optCourseArr;
       });
 
-      this.getCourses(this.urlPlaceholderReplace(map.get("approved_url"))).then((optCourseArr:Array<IOptCourse>)=> {
+      this.getCourses(this.urlPlaceholderReplace(map["approved_url"])).then((optCourseArr:Array<IOptCourse>)=> {
         this.$scope.optional.approvedCourses = optCourseArr;
 
-        this.getCourses(this.urlPlaceholderReplace(map.get("optional_url"))).then((optCourseArr:Array<IOptCourse>)=> {
+        this.getCourses(this.urlPlaceholderReplace(map["optional_url"])).then((optCourseArr:Array<IOptCourse>)=> {
           this.$scope.optional.optionalCourses = optCourseArr;
           for (var ind in this.$scope.optional.optionalCourses) {
             var course:IOptCourse = this.$scope.optional.optionalCourses[ind];
@@ -352,7 +352,7 @@ module ums {
       complete_json["approved"] = this.$scope.optional.approvedCourses;
       complete_json["callForApplication"] = this.$scope.optional.applicationCourses;
 
-      this.httpClient.put(this.urlPlaceholderReplace(map.get("save_optional")), complete_json, 'application/json')
+      this.httpClient.put(this.urlPlaceholderReplace(map["save_optional"]), complete_json, 'application/json')
           .success(() => {
             $.notific8("Successfully Saved");
           }).error((data) => {
@@ -360,7 +360,7 @@ module ums {
     }
 
     private fetchApplications():void {
-      var url=this.urlPlaceholderReplace(map.get("fetch_applications"));
+      var url=this.urlPlaceholderReplace(map["fetch_applications"]);
       url=url.replace("{COURSE-ID}",this.$scope.optional.allStudentCourseId);
 
       this.httpClient.get(url, this.appConstants.mimeTypeJson,
@@ -413,7 +413,7 @@ module ums {
       complete_json["reject"] = rejectStudentList;
       complete_json["remove"] = removeStudentList;
 
-      var url=this.urlPlaceholderReplace(map.get("save_application_status"));
+      var url=this.urlPlaceholderReplace(map["save_application_status"]);
       url=url.replace("{COURSE-ID}",this.$scope.optional.allStudentCourseId);
 
 
@@ -436,7 +436,7 @@ module ums {
 
     private fetchApplicationForSingleStudent():void {
 
-      var url=this.urlPlaceholderReplace(map.get("fetch_applications_for_single_student"));
+      var url=this.urlPlaceholderReplace(map["fetch_applications_for_single_student"]);
       url=url.replace("{STUDENT-ID}",this.$scope.optional.studentId);
 
       this.httpClient.get(url, this.appConstants.mimeTypeJson,
@@ -486,7 +486,7 @@ module ums {
       complete_json["reject"] = rejectCourseList;
       complete_json["remove"] = removeCourseList;
 
-      var url=this.urlPlaceholderReplace(map.get("save_application_status_for_single_student"));
+      var url=this.urlPlaceholderReplace(map["save_application_status_for_single_student"]);
       url=url.replace("{STUDENT-ID}",this.$scope.optional.semesterId);
 
       this.httpClient.put(url, complete_json, 'application/json')
@@ -497,7 +497,7 @@ module ums {
 
     }
     private fetchStudents(course_id:string,status_id:any,type:string):void {
-      var url=this.urlPlaceholderReplace(map.get("fetch_students"));
+      var url=this.urlPlaceholderReplace(map["fetch_students"]);
       url=url.replace("{COURSE-ID}",course_id);
       url=url.replace("{STATUS-ID}",status_id);
       this.httpClient.get(url, this.appConstants.mimeTypeJson,
@@ -534,7 +534,7 @@ module ums {
 
       complete_json["students"] =shiftedStudentArray;
 
-      var url=this.urlPlaceholderReplace(map.get("save_application_shifting"));
+      var url=this.urlPlaceholderReplace(map["save_application_shifting"]);
       url=url.replace("{SOURCE-COURSE-ID}",this.$scope.optional.courseIdForRejectedStudents);
       url=url.replace("{TARGET-COURSE-ID}",this.$scope.optional.targetCourseIdForStudentShifting);
 
@@ -607,7 +607,7 @@ module ums {
       var  courseId= $("#sectionCourseId").val();
       if(courseId=="") return;
 
-      var url=this.urlPlaceholderReplace(map.get("section_nonAssignedStudents_for_course"));
+      var url=this.urlPlaceholderReplace(map["section_nonAssignedStudents_for_course"]);
       url=url.replace("{COURSE-ID}",courseId);
 
       this.httpClient.get(url, this.appConstants.mimeTypeJson,
@@ -620,7 +620,7 @@ module ums {
             console.error(response);
           });
 
-      url=this.urlPlaceholderReplace(map.get("sections_info_of_course"));
+      url=this.urlPlaceholderReplace(map["sections_info_of_course"]);
       url=url.replace("{COURSE-ID}",courseId);
 
       this.httpClient.get(url, this.appConstants.mimeTypeJson,
@@ -672,7 +672,7 @@ module ums {
       //alert(targetIndex);
       var courseId = $("#sectionCourseId").val();
 
-      var url=this.urlPlaceholderReplace(map.get("delete_section"));
+      var url=this.urlPlaceholderReplace(map["delete_section"]);
       url=url.replace("{COURSE-ID}",courseId);
       url=url.replace("{SECTION-NAME}",this.$scope.optional.sections[targetIndex].sectionName);
 
@@ -695,7 +695,7 @@ module ums {
     private saveSection(section:ISection):void {
       var courseId = $("#sectionCourseId").val();
 
-      var url=this.urlPlaceholderReplace(map.get("delete_section"));
+      var url=this.urlPlaceholderReplace(map["delete_section"]);
       url=url.replace("{COURSE-ID}",courseId);
       url=url.replace("{SECTION-NAME}",section.sectionName);
 
