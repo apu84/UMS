@@ -13,13 +13,13 @@ import java.util.List;
  */
 public class SeatPlanCache extends ContentCache<SeatPlan,MutableSeatPlan,Integer,SeatPlanManager> implements SeatPlanManager {
 
-  private CacheManager<SeatPlan> mCacheManager;
+  private CacheManager mCacheManager;
 
-  public SeatPlanCache(final CacheManager<SeatPlan> pCacheManager){
+  public SeatPlanCache(final CacheManager pCacheManager){
     mCacheManager = pCacheManager;
   }
   @Override
-  protected CacheManager<SeatPlan> getCacheManager() {
+  protected CacheManager getCacheManager() {
     return mCacheManager;
   }
 
@@ -54,7 +54,20 @@ public class SeatPlanCache extends ContentCache<SeatPlan,MutableSeatPlan,Integer
   }
 
   @Override
-  public int checkIfExistsByRoomSemesterGroupExamType(int pRoomId, int pSemesterId, int pGroupNo, int pExamType) {
-    return getManager().checkIfExistsByRoomSemesterGroupExamType(pRoomId,pSemesterId,pGroupNo,pExamType);
+  public int checkIfExistsByRoomSemesterGroupExamType(int pRoomId, int pSemesterId, int pGroupNo, int pExamType) throws Exception{
+    int pCacheKey = generateCacheKeyForRoomSemesterGroupExamType(pRoomId, pSemesterId, pGroupNo, pExamType);
+    String cacheKey = getCacheKey(pCacheKey);
+    Object pReadonly = getCacheManager().get(cacheKey);
+    if (pReadonly == null) {
+      pReadonly = getManager().checkIfExistsByRoomSemesterGroupExamType(pRoomId, pSemesterId, pGroupNo, pExamType);;
+      getCacheManager().put(cacheKey, pReadonly);
+    }
+    return (int)pReadonly;
+  }
+
+  protected int generateCacheKeyForRoomSemesterGroupExamType(int pRoomId, int pSemesterId, int pGroupNo, int pExamType) {
+    StringBuilder builder = new StringBuilder();
+    builder.append(pRoomId).append(pSemesterId).append(pGroupNo).append(pExamType);
+    return Integer.parseInt(builder.toString());
   }
 }
