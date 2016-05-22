@@ -13,7 +13,7 @@ module ums {
 
   function ValidationExceptions($q: ng.IQService, $log: ng.ILogService, baseURI: BaseUri, notify: Notify) {
     return {
-      responseError: function (response: ng.IHttpPromiseCallbackArg<any>) {
+      responseError: function (response: ng.IHttpPromiseCallbackArg<any>) { console.debug('%o', response);
         if (response.status == 400) {
           var responseJson: ValidationExceptionModel = response.data;
 
@@ -38,8 +38,9 @@ module ums {
               }
             }
           }
-          return $q.reject(response);
         }
+
+        return $q.reject(response);
       }
     };
   }
@@ -50,5 +51,6 @@ module ums {
 
   UMS.config(['$httpProvider', function ($httpProvider: ng.IHttpProvider) {
     $httpProvider.interceptors.push('ValidationExceptions');
+    console.debug('%o',$httpProvider);
   }]);
 }
