@@ -297,7 +297,7 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan,MutableSeatP
           summaryTable.setWidthPercentage(100);
           summaryTable.setWidths(columnWiths);
           PdfPCell deptLabelCell = new PdfPCell();
-          Paragraph deptLabel = new Paragraph("DEPT",FontFactory.getFont(FontFactory.TIMES_ROMAN,summaryFontSize));
+          Paragraph deptLabel = new Paragraph("DEPT",FontFactory.getFont(FontFactory.TIMES_BOLD,summaryFontSize));
           deptLabelCell.addElement(deptLabel);
           deptLabelCell.setPaddingRight(-0.5f);
           deptLabelCell.setColspan(1);
@@ -305,7 +305,7 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan,MutableSeatP
           summaryTable.addCell(deptLabelCell);
 
           PdfPCell yearSemesterLabelCell = new PdfPCell();
-          Paragraph yearSemesterLabel = new Paragraph("Y/S",FontFactory.getFont(FontFactory.TIMES_ROMAN,summaryFontSize));
+          Paragraph yearSemesterLabel = new Paragraph("Y/S",FontFactory.getFont(FontFactory.TIMES_BOLD,summaryFontSize));
           yearSemesterLabelCell.addElement(yearSemesterLabel);
           yearSemesterLabelCell.setPaddingRight(-0.5f);
           yearSemesterLabelCell.setColspan(1);
@@ -313,14 +313,14 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan,MutableSeatP
           summaryTable.addCell(yearSemesterLabelCell);
 
           PdfPCell studentLabelCell = new PdfPCell();
-          Paragraph studentLabel = new Paragraph("STUDENT ID",FontFactory.getFont(FontFactory.TIMES_ROMAN,summaryFontSize));
+          Paragraph studentLabel = new Paragraph("STUDENT ID",FontFactory.getFont(FontFactory.TIMES_BOLD,summaryFontSize));
           studentLabel.setAlignment(Element.ALIGN_CENTER);
           studentLabelCell.addElement(studentLabel);
           studentLabelCell.setPaddingTop(-2f);
           summaryTable.addCell(studentLabelCell);
 
           PdfPCell totalCellLabel = new PdfPCell();
-          Paragraph totalLabel = new Paragraph("TOTAL",FontFactory.getFont(FontFactory.TIMES_ROMAN,summaryFontSize));
+          Paragraph totalLabel = new Paragraph("TOTAL",FontFactory.getFont(FontFactory.TIMES_BOLD,summaryFontSize));
           totalCellLabel.addElement(totalLabel);
           totalCellLabel.setPaddingTop(-2f);
           summaryTable.addCell(totalCellLabel);

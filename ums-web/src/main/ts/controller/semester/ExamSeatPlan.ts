@@ -273,15 +273,19 @@ module ums{
       this.$scope.selectedGroupNo = group;
       this.getSelectedGroupList(group);
 
+      console.log("Re create button condition before");
+      console.log(this.$scope.recreateButtonClicked);
 
       this.getSubGroupInfo().then((subGroupArr:Array<ISubGroupDb>)=>{
 
 
 
         if(subGroupArr.length>0 && this.$scope.recreateButtonClicked==false){
+          console.log("well, recreateButton is not clicked!");
           this.$scope.subGroupFound = true;
 
           this.$scope.subGroupList = [];
+
           var subGroupCreator:any={};
           var subGroupCounter:number = 0;
           for(var i=0;i<subGroupArr.length;i++){
@@ -322,6 +326,8 @@ module ums{
 
           }
 
+
+
          // this.$scope.subGroupList = [];
 
 
@@ -330,7 +336,7 @@ module ums{
 
           }).disableSelection();
 
-
+          $(".connectedSortable").css("background-color","antiquewhite");
 
           this.$scope.colForSubgroup = this.$scope.subGroupList.length;
           /*this.$scope.$apply();*/
@@ -496,7 +502,12 @@ module ums{
     }
 
     private editSavedSubGroup(groupNo:number):void{
-      this.createOrViewSubgroups(groupNo);
+      $(".connectedSortable").css("background-color","skyblue");
+      console.log("Edit button clicked");
+      if(this.$scope.subGroupFound==false){
+        this.createOrViewSubgroups(groupNo);
+
+      }
       this.$scope.editButtonClicked=true;
       this.$scope.saveSubGroupInfo=true;
       this.$scope.cancelSubGroup = true;
@@ -508,8 +519,16 @@ module ums{
 
       $("#sortable1,#sortable2,#sortable3,#sortable4,#sortable5,#sortable6").sortable({
         connectWith: ".connectedSortable"
+      });
 
-      }).disableSelection();
+
+      $("#sortable1").sortable("enable");
+      $("#sortable2").sortable("enable");
+      $("#sortable3").sortable("enable");
+      $("#sortable4").sortable("enable");
+      $("#sortable5").sortable("enable");
+      $("#sortable6").sortable("enable");
+
 
       var classScope = this;
       $('#sortable1').sortable({
@@ -708,12 +727,11 @@ module ums{
 
 
 
-
-
       this.$scope.editSubGroup=true;
       this.$scope.deleteAndCreateNewSubGroup=true;
       this.$scope.saveSubGroupInfo = false;
       var operationFailed:boolean=false;
+      this.$scope.recreateButtonClicked=false;
       var seatPlanJsonDataList:Array<ISeatPlanJsonData>=[];
       for(var i=0;i<this.$scope.subGroupList.length;i++){
         var position=1;
@@ -763,7 +781,11 @@ module ums{
       this.saveSubGroupIntoDb(json).then((message:string)=>{
         $.notific8(message);
         this.$scope.editButtonClicked=false;
-        this.createOrViewSubgroups(this.$scope.selectedGroupNo);
+        if(this.$scope.subGroupFound==false){
+          this.createOrViewSubgroups(this.$scope.selectedGroupNo);
+
+        }
+        $(".connectedSortable").css("background-color","antiquewhite");
       });
     }
 
