@@ -52,14 +52,13 @@ module ums {
   }
 
 
-  export class ClassRoutine {
+  export class ClassRoutine implements GridEditActions {
     program: Array<string>;
     academicYear: string;
     academicSemester: string;
     semester: string;
     semesterId: string;
     courseId: string;
-    decoratedScope: GridConfig;
 
     public static $inject = ['appConstants', 'HttpClient', '$scope', '$q'];
 
@@ -155,6 +154,47 @@ module ums {
     }
 
     private initializeGrid(): void {
+      GridDecorator.decorate(this);
+    }
+
+    public insert(rowData: RowData): void {
+      this.decorateScope().grid.api.toggleMessage('Saving...');
+      this.httpClient.post('academic/routine', rowData, HttpClient.MIME_TYPE_JSON).success(()=> {
+        this.decorateScope().grid.api.toggleMessage();
+        this.loadData();
+      }).error((response) => {
+        console.error(response);
+        this.decorateScope().grid.api.toggleMessage();
+        this.loadData();
+      });
+    }
+
+    public edit(rowData: RowData): void {
+      this.decorateScope().grid.api.toggleMessage('Saving...');
+      this.httpClient.put('academic/routine', rowData, HttpClient.MIME_TYPE_JSON)
+          .success(() => {
+            this.decorateScope().grid.api.toggleMessage();
+          }).error((response) => {
+            console.error(response);
+            this.decorateScope().grid.api.toggleMessage();
+            this.loadData();
+          });
+    }
+
+    public remove(rowData: RowData): void {
+      this.httpClient.delete('academic/routine/' + rowData)
+          .success(() => {
+            $.notific8("Removed entry");
+          }).error((data) => {
+            console.error(data);
+          });
+    }
+
+    public decorateScope(): GridConfig {
+      return this.$scope;
+    }
+
+    public getColumnModel(): any {
       var states = {
         'A': 'A',
         'B': 'B',
@@ -174,211 +214,165 @@ module ums {
         2: {'A1': 'A1', 'A2': 'A2', 'B1': 'B1', 'B2': 'B2', 'C1': 'C1', 'C2': 'C2', 'D1': 'D1', 'D2': 'D2'}
       };
 
-      this.decoratedScope = GridDecorator.decorate(this.$scope);
-
-      var columnModel: any = {
-        colModel: [
-          {
-            label: 'Routine Id',
-            name: 'id',
-            hidden: true,
-            key: true
-          },
-          {
-            label: 'Semester Id',
-            name: 'semesterId',
-            hidden: true,
-            editable: false,
-            editoptions: {
-              defaultValue: this.$scope.courseTeacherSearchParamModel.semesterId
-            }
-          },
-          {
-            label: 'Program Id',
-            name: 'programId',
-            hidden: true,
-            editable: false,
-            editoptions: {
-              defaultValue: this.$scope.courseTeacherSearchParamModel.programSelector.programId
-            }
-          },
-          {
-            label: 'Academic Year',
-            name: 'academicYear',
-            hidden: true,
-            editable: false,
-            editoptions: {
-              defaultValue: this.$scope.courseTeacherSearchParamModel.academicYearId
-            }
-          },
-          {
-            label: 'Academic Semester',
-            name: 'academicSemester',
-            hidden: true,
-            editable: false,
-            editoptions: {
-              defaultValue: this.$scope.courseTeacherSearchParamModel.academicSemesterId
-            }
-          },
-          {
-            label: 'Day',
-            name: 'day',
-            editable: true,
-            edittype: 'select',
-            editoptions: {
-              value: this.appConstants.days,
-              defaultValue: 'None'
-            },
-            formatter: 'select'
-
-          },
-          {
-            label: 'Course ID',
-            name: 'courseId',
-            editable: true,
-            edittype: 'select',
-            formatter: 'select',
-            editoptions: {
-              value: this.$scope.courses,
-
-              dataEvents: [
-                {
-                  type: 'change',
-
-                  fn: (e) => {
-                    var sectionsOnChanges;
-                    var v = $(e.target).val();
-                    this.isTheory(v) ? sectionsOnChanges = 1 : sectionsOnChanges = 2;
-                    var sc = typesOfTheoryAndSessional[sectionsOnChanges];
-
-                    var newOptions = '';
-                    for (var stateId in sc) {
-                      if (sc.hasOwnProperty(stateId)) {
-                        newOptions += '<option role="option" value="' + stateId + '">'
-                        + states[stateId]
-                        + '</option>';
-                      }
-
-                    }
-
-                    if ($(e.target).is('.FormElement')) {
-                      // form editing
-                      var form = $(e.target).closest('form.FormGrid');
-                      $("select#section.FormElement", form[0]).html(newOptions);
-                    } else {
-                      // inline editing
-                      var row = $(e.target).closest('tr.jqgrow');
-                      var rowId = row.attr('id');
-                      $("select#" + rowId + "_section", row[0]).html(newOptions);
-                    }
-                    this.$scope.sectionsOnChange = sectionsOnChanges;
-                  }
-                }
-              ]
-            }
-          },
-          {
-            label: 'Section',
-            name: 'section',
-            editable: true,
-            edittype: 'select',
-            formatter: 'select',
-            editoptions: {
-              value: states
-            }
-          },
-          {
-            label: 'Start Time',
-            name: 'startTime',
-            editable: true,
-            edittype: 'select',
-            editoptions: {
-              value: this.appConstants.startTime
-            },
-            stype: 'select',
-            searchoptions: {
-              sopt: ['eq', 'ne'],
-              value: this.appConstants.startTime
-            }
-          },
-          {
-            label: 'End Time',
-            name: 'endTime',
-            editable: true,
-            edittype: 'select',
-            editoptions: {
-              value: this.appConstants.endTime
-            },
-            stype: 'select',
-            searchoptions: {
-              sopt: ['eq', 'ne'],
-              value: this.appConstants.endTime
-            }
-          },
-          {
-            label: 'Room No',
-            name: 'roomNo',
-            editable: true,
-            edittype: 'select',
-            editoptions: {
-              value: this.$scope.rooms   //I want to use here with that format.
-            },
-            stype: 'select',
-            searchoptions: {
-              sopt: ['eq', 'ne'],
-              value: this.$scope.rooms
-            }
-          },
-          {
-            label: "Edit Actions",
-            name: "actions",
-            formatter: "actions",
-            formatoptions: {
-              keys: false,
-              delOptions: {
-                mtype: 'DELETE',
-                onclickSubmit: () => {
-                  this.httpClient.delete('academic/routine/' + this.decoratedScope.gridOptions.currentSelectedRowId)
-                      .success(() => {
-                        $.notific8("Removed entry");
-                      }).error((data) => {
-                        console.error(data);
-                      });
-                }
-              },
-              afterSave: (rowid) => {
-                this.insert(this.decoratedScope.grid.api.getRowData(rowid));
-              }
-            }
+      return [
+        {
+          label: 'Routine Id',
+          name: 'id',
+          hidden: true,
+          key: true
+        },
+        {
+          label: 'Semester Id',
+          name: 'semesterId',
+          hidden: true,
+          editable: true,
+          editrules: {edithidden: false},
+          editoptions: {
+            defaultValue: this.$scope.courseTeacherSearchParamModel.semesterId
           }
-        ]
-      };
+        },
+        {
+          label: 'Program Id',
+          name: 'programId',
+          hidden: true,
+          editable: true,
+          editrules: {edithidden: false},
+          editoptions: {
+            defaultValue: this.$scope.courseTeacherSearchParamModel.programSelector.programId
+          }
+        },
+        {
+          label: 'Academic Year',
+          name: 'academicYear',
+          hidden: true,
+          editable: true,
+          editrules: {edithidden: false},
+          editoptions: {
+            defaultValue: this.$scope.courseTeacherSearchParamModel.academicYearId
+          }
+        },
+        {
+          label: 'Academic Semester',
+          name: 'academicSemester',
+          hidden: true,
+          editable: true,
+          editrules: {edithidden: false},
+          editoptions: {
+            defaultValue: this.$scope.courseTeacherSearchParamModel.academicSemesterId
+          }
+        },
+        {
+          label: 'Day',
+          name: 'day',
+          editable: true,
+          edittype: 'select',
+          editoptions: {
+            value: this.appConstants.days,
+            defaultValue: 'None'
+          },
+          formatter: 'select'
 
-      this.decoratedScope.gridOptions.colModel = columnModel.colModel;
+        },
+        {
+          label: 'Course ID',
+          name: 'courseId',
+          editable: true,
+          edittype: 'select',
+          formatter: 'select',
+          editoptions: {
+            value: this.$scope.courses,
+
+            dataEvents: [
+              {
+                type: 'change',
+
+                fn: (e) => {
+                  var sectionsOnChanges;
+                  var v = $(e.target).val();
+                  this.isTheory(v) ? sectionsOnChanges = 1 : sectionsOnChanges = 2;
+                  var sc = typesOfTheoryAndSessional[sectionsOnChanges];
+
+                  var newOptions = '';
+                  for (var stateId in sc) {
+                    if (sc.hasOwnProperty(stateId)) {
+                      newOptions += '<option role="option" value="' + stateId + '">'
+                      + states[stateId]
+                      + '</option>';
+                    }
+
+                  }
+
+                  if ($(e.target).is('.FormElement')) {
+                    // form editing
+                    var form = $(e.target).closest('form.FormGrid');
+                    $("select#section.FormElement", form[0]).html(newOptions);
+                  } else {
+                    // inline editing
+                    var row = $(e.target).closest('tr.jqgrow');
+                    var rowId = row.attr('id');
+                    $("select#" + rowId + "_section", row[0]).html(newOptions);
+                  }
+                  this.$scope.sectionsOnChange = sectionsOnChanges;
+                }
+              }
+            ]
+          }
+        },
+        {
+          label: 'Section',
+          name: 'section',
+          editable: true,
+          edittype: 'select',
+          formatter: 'select',
+          editoptions: {
+            value: states
+          }
+        },
+        {
+          label: 'Start Time',
+          name: 'startTime',
+          editable: true,
+          edittype: 'select',
+          editoptions: {
+            value: this.appConstants.startTime
+          },
+          stype: 'select',
+          searchoptions: {
+            sopt: ['eq', 'ne'],
+            value: this.appConstants.startTime
+          }
+        },
+        {
+          label: 'End Time',
+          name: 'endTime',
+          editable: true,
+          edittype: 'select',
+          editoptions: {
+            value: this.appConstants.endTime
+          },
+          stype: 'select',
+          searchoptions: {
+            sopt: ['eq', 'ne'],
+            value: this.appConstants.endTime
+          }
+        },
+        {
+          label: 'Room No',
+          name: 'roomNo',
+          editable: true,
+          edittype: 'select',
+          editoptions: {
+            value: this.$scope.rooms   //I want to use here with that format.
+          },
+          stype: 'select',
+          searchoptions: {
+            sopt: ['eq', 'ne'],
+            value: this.$scope.rooms
+          }
+        }
+      ];
     }
 
-    private insert(rowData: RowData): void {
-      this.decoratedScope.grid.api.toggleMessage('Saving...');
-      if (rowData.id.indexOf('jqg') == 0) {
-        this.httpClient.post('academic/routine', rowData, HttpClient.MIME_TYPE_JSON).success(()=> {
-          this.decoratedScope.grid.api.toggleMessage();
-          this.loadData();
-        }).error((response) => {
-          console.error(response);
-          this.decoratedScope.grid.api.toggleMessage();
-          this.loadData();
-        });
-      } else {
-        this.httpClient.put('academic/routine', rowData, HttpClient.MIME_TYPE_JSON)
-            .success(() => {
-              this.decoratedScope.grid.api.toggleMessage();
-            }).error((response) => {
-              console.error(response);
-              this.decoratedScope.grid.api.toggleMessage();
-              this.loadData();
-            });
-      }
-    }
 
     private isTheory(id: string): boolean {
       for (var i = 0; i < this.$scope.courseArr.length; i++) {
@@ -395,7 +389,7 @@ module ums {
       $("#arrowDiv").hide();
       $("#leftDiv").show();
       $("#rightDiv").removeClass("newRightClass").addClass("orgRightClass");
-      this.decoratedScope.grid.api.resize();
+      //this.decoratedScope.grid.api.resize();
     }
 
     private loadData(): void {

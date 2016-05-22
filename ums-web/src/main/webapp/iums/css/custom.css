@@ -281,9 +281,27 @@ hr.style-eight:after {
     border: 0;
     width: 100%;
 }
-.course-teacher-inner{
+.course-teacher-inner {
     border-collapse:separate;
     border-spacing:4px;
     border: 0;
     width: 100%;
+}
+
+/*For JQGrid horizontal scrollbar issue*/
+div.ui-jqgrid-view table.ui-jqgrid-btable {
+    border-style: none;
+    border-collapse: separate;
+}
+
+div.ui-jqgrid-view table.ui-jqgrid-btable td {
+    border-left-style: none
+}
+
+div.ui-jqgrid-view table.ui-jqgrid-htable {
+    border-collapse: separate;
+}
+
+div.ui-jqgrid-view table.ui-jqgrid-btable th {
+    border-left-style: none
 }

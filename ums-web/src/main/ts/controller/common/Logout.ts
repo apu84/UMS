@@ -5,9 +5,15 @@ module ums {
 
     constructor(private $window: ng.IWindowService, private httpClient: HttpClient) {
       this.httpClient.get('logout', HttpClient.MIME_TYPE_JSON, (response) => {
-        this.$window.sessionStorage.clear();
-        window.location.href = UrlUtil.getBaseAppUrl() + 'login/';
+        this.logout();
+      }, (error) => {
+        this.logout();
       });
+    }
+
+    private logout(): void {
+      this.$window.sessionStorage.clear();
+      window.location.href = UrlUtil.getBaseAppUrl() + 'login/';
     }
   }
 

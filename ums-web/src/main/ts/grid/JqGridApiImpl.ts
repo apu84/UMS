@@ -1,8 +1,21 @@
 module ums {
   export class JqGridApiImpl implements JqGridApi {
+    private currentGridElement: JQuery;
+    private currentGridData: any;
+    public gridEditActions: GridEditActions;
+
+    public gridElement(element: JQuery) {
+      this.currentGridElement = element;
+    }
+
+    public gridData(data: any) {
+      this.currentGridData = data;
+    }
+
+
     resize(): void {
       $(window).bind('resize', () => {
-        this.gridElement.jqGrid('setGridWidth',($(window).width()));
+        this.currentGridElement.jqGrid('setGridWidth', ($(window).width()));
       }).trigger('resize');
     }
 
@@ -11,38 +24,46 @@ module ums {
     public insert(rows: Array<RowData>): void {
       if (rows) {
         for (var i = 0; i < rows.length; i++) {
-          this.gridData.push(rows[i]);
+          this.currentGridData.push(rows[i]);
         }
-        this.gridElement.jqGrid('setGridParam', {data: this.gridData})
+        this.currentGridElement.jqGrid('setGridParam', {data: this.gridData})
             .trigger('reloadGrid');
       }
     }
 
     public clear(): void {
       this.gridData.length = 0;
-      this.gridElement.jqGrid('clearGridData', {data: this.gridElement})
+      this.currentGridElement.jqGrid('clearGridData', {data: this.gridElement})
           .trigger('reloadGrid');
     }
 
     public refresh(): void {
-      this.gridElement
+      this.currentGridElement
           .jqGrid('clearGridData')
           .jqGrid('setGridParam', {data: this.gridData})
           .trigger('reloadGrid');
     }
 
     public getRowData(rowId: string): any {
-      return this.gridElement.jqGrid('getRowData', rowId);
+      return this.currentGridElement.jqGrid('getRowData', rowId);
     }
 
-    public editRow(rowId: string, event: Event): void {
-      if (!event) event = window.event; // get browser independent object
-      var element = event.target || event.srcElement;
-      jQuery.fn.fmatter.rowactions.call(element, 'edit');
-    }
 
     public editGridRow(rowId: string): void {
-      this.gridElement.jqGrid('editGridRow', rowId, {keys: true});
+      this.currentGridElement.jqGrid('editGridRow', rowId, {
+        editCaption: "The Edit Dialog",
+        closeOnEscape: true,
+        closeAfterEdit: true,
+        errorTextFormat: function (data) {
+          return 'Error: ' + data.responseText
+        },
+        onclickSubmit: (row, data) => {
+          if (this.gridEditActions
+              && this.gridEditActions.edit) {
+            this.gridEditActions.edit(data);
+          }
+        }
+      });
     }
 
     public toggleMessage(message: string): void {
@@ -57,9 +78,7 @@ module ums {
       this.messageDisplayed = !this.messageDisplayed;
     }
 
-    constructor(private gridElement: JQuery,
-                private gridData: any) {
-
+    constructor() {
     }
 
   }
