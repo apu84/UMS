@@ -13,7 +13,7 @@ module ums {
 
   function ValidationExceptions($q: ng.IQService, $log: ng.ILogService, baseURI: BaseUri, notify: Notify) {
     return {
-      responseError: function (response: ng.IHttpPromiseCallbackArg<any>) { console.debug('%o', response);
+      responseError: function (response: ng.IHttpPromiseCallbackArg<any>) {
         if (response.status == 400) {
           var responseJson: ValidationExceptionModel = response.data;
 
