@@ -175,13 +175,27 @@
                         <tr ng-repeat="response in allStudents" row-id="{{response.studentId}}" id="row_{{response.studentId}}">
                             <td id="sid_{{response.studentId}}">{{response.studentId}}</td>
                             <td id="td_sname_{{response.studentId}}">{{ response.studentName }}</td>
-                            <td id="td_quiz_{{response.studentId}}"><input type="text"  style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="quiz_{{response.studentId}}" value="{{response.quiz}}"/></td>
-                            <td id="td_cperf_{{response.studentId}}"><input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="class_perf_{{response.studentId}}" value="{{response.classPerformance}}"/></td>
-                            <td id="td_parta_{{response.studentId}}"><input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="part_a_{{response.studentId}}" value="{{response.partA}}"/></td>
-                            <td id="td_partb_{{response.studentId}}" ng-show="toggleColumn"><input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="part_b_{{response.studentId}}" value="{{response.partB}}"/></td>
-                            <td id="td_total_{{response.studentId}}"><input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="total_{{response.studentId}}" value="{{response.total}}"/></td>
+                            <td id="td_quiz_{{response.studentId}}">
+                                <input type="text"  style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="quiz_{{response.studentId}}"
+                                       value="{{response.quiz}}" data-ng-change="calculateTotalAndGradeLetter('{{response.studentId}}')" data-ng-model="response.quiz" maxlength="2"/>
+                            </td>
+                            <td id="td_cperf_{{response.studentId}}">
+                                <input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="class_perf_{{response.studentId}}"
+                                       value="{{response.classPerformance}}"  data-ng-change="calculateTotalAndGradeLetter('{{response.studentId}}')" data-ng-model="response.classPerformance" maxlength="2"/>
+                            </td>
+                            <td id="td_parta_{{response.studentId}}">
+                                <input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="part_a_{{response.studentId}}"
+                                       value="{{response.partA}}" data-ng-change="calculateTotalAndGradeLetter('{{response.studentId}}')" data-ng-model="response.partA" maxlength="2"/>
+                            </td>
+                            <td id="td_partb_{{response.studentId}}" ng-show="toggleColumn">
+                                <input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="part_b_{{response.studentId}}"
+                                       value="{{response.partB}}" data-ng-change="calculateTotalAndGradeLetter('{{response.studentId}}')" data-ng-model="response.partB" maxlength="2"/>
+                            </td>
+                            <td id="td_total_{{response.studentId}}">
+                                <input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" disabled="disabled" id="total_{{response.studentId}}" value="{{response.total}}"/>
+                            </td>
                             <td id="td_grade_letter_{{response.studentId}}">
-                                <select  style="width: 100px;border: 1px solid grey;padding: 0px;height: 23px;" id="grade_letter_{{response.studentId}}">
+                                <select  style="width: 100px;border: 1px solid grey;padding: 0px;height: 23px;" id="grade_letter_{{response.studentId}}" disabled="disabled">
                                     <option value="">Select Grade</option>
                                     <option ng-selected="{{gradeLetter.id == response.gradeLetter}}" data-ng-repeat="gradeLetter in data.gradeLetterOptions" value="{{gradeLetter.id}}">{{gradeLetter.name}}</option>
                                 </select>
@@ -198,7 +212,7 @@
                     </div>
                     <div class="col-md-6" style="text-align: right;">
                         <button type="button" class="btn btn-grey btn-square" data-ng-click="saveGradeSheet()">Save Data</button>
-                        <button type="button" class="btn btn-green btn-square">Send to Scrutinizer</button>
+                        <button type="button" class="btn btn-green btn-square" data-ng-click="saveAndSendToScrutinizer()">Save & Send to Scrutinizer</button>
                     </div>
                 </div>
                 <br/><br/>
@@ -445,7 +459,6 @@
         document.getElementById('selection2').style.display='none';
         $('.page-title.ng-binding').html("Grade Sheet Selection");
     }
-
 
 </script>
 

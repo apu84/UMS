@@ -118,6 +118,10 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
 
     public Response saveGradeSheet(final JsonObject pJsonObject) throws Exception {
         List<StudentGradeDto> gradeList=getBuilder().build(pJsonObject);
+        MarksSubmissionStatusDto partInfoDto=new MarksSubmissionStatusDto();
+        getBuilder().build(partInfoDto,pJsonObject);
+
+        int aa= getContentManager().updatePartInfo(partInfoDto.getSemesterId(),partInfoDto.getCourseId(),partInfoDto.getExamType(),partInfoDto.getTotal_part(),partInfoDto.getPart_a_total(),partInfoDto.getPart_b_total());
         boolean updateStatus = getContentManager().saveGradeSheet(11012016, "CID1",1, gradeList);
 
         Response.ResponseBuilder builder = Response.created(null);

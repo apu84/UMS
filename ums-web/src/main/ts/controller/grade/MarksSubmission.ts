@@ -20,7 +20,9 @@ module ums {
     gradeLetterFromMarks:Function;
     validateGradeSheet:Function;
     saveGradeSheet:Function;
+    saveAndSendToScrutinizer:Function;
     fetchGradeSubmissionTable:Function;
+      calculateTotalAndGradeLetter:Function;
   }
     interface IStudentMarks {
         studentId:string;
@@ -52,8 +54,14 @@ module ums {
         semester:string;
         section:string;
         offeredTo:string;
-
-
+    }
+    interface ICourseInfo{
+        course_id:string;
+        semester_id:number;
+        exam_type:number;
+        total_part:number;
+        part_a_total:number;
+        part_b_total:number;
     }
 
 
@@ -80,7 +88,10 @@ module ums {
       $scope.gradeLetterFromMarks=this.gradeLetterFromMarks.bind(this);
       $scope.validateGradeSheet=this.validateGradeSheet.bind(this);
       $scope.saveGradeSheet=this.saveGradeSheet.bind(this);
-        $scope.fetchGradeSubmissionTable=this.fetchGradeSubmissionTable.bind(this);
+      $scope.saveAndSendToScrutinizer=this.saveAndSendToScrutinizer.bind(this);
+      $scope.fetchGradeSubmissionTable=this.fetchGradeSubmissionTable.bind(this);
+      $scope.calculateTotalAndGradeLetter=this.calculateTotalAndGradeLetter.bind(this);
+
 
 
     }
@@ -115,7 +126,8 @@ module ums {
                       // this.$scope.total_part=part_info.total_part;
                       $("#total_part").val(part_info.total_part);
                       this.$scope.part_a_total=part_info.part_a_total==0?null:part_info.part_a_total;
-            this.$scope.part_b_total=part_info.part_b_total==0?null:part_info.part_b_total
+            this.$scope.part_b_total=part_info.part_b_total==0?null:part_info.part_b_total;
+                      this.$scope.total_part=part_info.total_part;
 
           });
 
@@ -128,6 +140,30 @@ module ums {
 
     }
 
+    public recalculateTotalAndGradeLetter():void{
+
+    }
+
+    private calculateTotalAndGradeLetter(student_id:string):void{
+
+        var quiz:number=Number($("#quiz_"+student_id).val()) || 0;
+        var class_perf:number=Number($("#class_perf_"+student_id).val()) || 0;
+        var part_a:number=Number($("#part_a_"+student_id).val()) || 0;
+        var part_b:number=0;
+
+        if($("#total_part").val()==2)
+            part_b=Number($("#part_b_"+student_id).val()) || 0;
+
+
+        var total=quiz+class_perf+part_a+part_b;
+
+
+        $("#total_"+student_id).val(String(total));
+        var grade_letter:string=this.gradeLetterFromMarks(total);
+        $("#grade_letter_"+student_id).val(grade_letter);
+
+        this.validateGrade(false,student_id,String(quiz),String(class_perf),String(part_a),String(part_b),String(total),grade_letter);
+    }
 
     public onTotalPartChange(): void {
 
@@ -193,69 +229,8 @@ module ums {
         rowError=false;
 
         console.log(studentId); //
-        //Quiz
-        if(row[2] !="" && (this.checkNumber(row[2])==false ||  row[2]>20)){
-            document.getElementById("quiz_"+studentId).style.border = "2px solid red";
-            rowError=true;
-        }
-        else{
-            document.getElementById("quiz_"+studentId).style.border = "1px solid grey";
-        }
 
-        //Class Performance
-        if(row[3] !="" && (this.checkNumber(row[3])==false ||  row[3]>10)){
-            document.getElementById("class_perf_"+studentId).style.border = "2px solid red";
-            rowError=true;
-        }
-        else{
-            document.getElementById("class_perf_"+studentId).style.border = "1px solid grey";
-        }
-
-        //Part A
-        if(this.$scope.part_a_total != null && row[4] !="" &&  (this.checkNumber(row[4])==false ||  row[4]>this.$scope.part_a_total)){
-            document.getElementById("part_a_"+studentId).style.border = "2px solid red";
-            rowError=true;
-        }
-        else{
-            document.getElementById("part_a_"+studentId).style.border = "1px solid grey";
-        }
-
-        //Part B
-        if(this.$scope.total_part==2 && this.$scope.part_b_total != null && row[5] !="" &&  (this.checkNumber(row[5])==false ||  row[5]>this.$scope.part_b_total)){
-            document.getElementById("part_b_"+studentId).style.border = "2px solid red";
-            rowError=true;
-        }
-        else{
-            document.getElementById("part_b_"+studentId).style.border = "1px solid grey";
-        }
-
-        //Total
-        if(row[6] !="" &&  (this.checkNumber(row[6])==false ||  row[6]>row[2]+row[3]+row[4]+row[5])){
-            document.getElementById("total_"+studentId).style.border = "2px solid red";
-            rowError=true;
-        }
-        else{
-            document.getElementById("total_"+studentId).style.border = "1px solid grey";
-        }
-
-        //Grade Letter
-        if(row[7] !="" &&  (this.checkNumber(row[7])==false ||  this.gradeLetterFromMarks(parseFloat(row[6]))!=row[7])){
-            document.getElementById("grade_letter_"+studentId).style.border = "2px solid red";
-            rowError=true;
-        }
-        else{
-            document.getElementById("grade_letter_"+studentId).style.border = "1px solid grey";
-        }
-
-
-        if(rowError==true ) {
-            var parentRow = document.getElementById("row_" + row[0]);
-            var tdArray = parentRow.getElementsByTagName('td');
-            for (var i = 0; i < tdArray.length; i++) {
-                tdArray[i].style.backgroundColor = "#FCDC3B";//"#FFFF7E";
-            }
-
-        }
+        this.validateGrade(false,studentId,row[2],row[3],row[4],row[5],row[6],row[7]);
 
       //}-------==========
      // table.append(row);
@@ -268,6 +243,97 @@ module ums {
 
 
   }
+      private validateGrade(force_validate:boolean,student_id:string,quiz:string,class_performance:string,part_a:string,part_b:string,total:string,grade_letter:string):void{
+          var row_error:boolean=false;
+          var border_error:any={"border" : "2px solid red"};
+          var border_ok:any={"border" : "1px solid grey"};
+
+          //Quiz
+          if(quiz !="" || force_validate){
+              if( (this.checkNumber(quiz)==false ||  Number(quiz)>20)) {
+                  $("#quiz_" + student_id).css(border_error);
+                  row_error = true;
+              }
+              else{
+                  $("#quiz_"+student_id).css(border_ok);
+              }
+          }
+
+          //Class Performance
+          if(class_performance !="" || force_validate) {
+              if (this.checkNumber(class_performance) == false || Number(class_performance) > 10) {
+                  $("#class_perf_" + student_id).css(border_error);
+                  row_error = true;
+              }
+              else {
+                  $("#class_perf_" + student_id).css(border_ok);
+              }
+          }
+
+          //Part A
+          if(part_a !="" || force_validate){
+              if(this.$scope.part_a_total != null &&  (this.checkNumber(part_a)==false ||  Number(part_a)>this.$scope.part_a_total)) {
+                  $("#part_a_" + student_id).css(border_error);
+                  row_error = true;
+              }
+              else{
+                  $("#part_a_"+student_id).css(border_ok);
+              }
+          }
+
+
+          //Part B
+          if(part_b !=""  || force_validate){
+           if(this.$scope.total_part==2 && this.$scope.part_b_total != null &&  (this.checkNumber(part_b)==false ||  Number(part_b)>this.$scope.part_b_total)) {
+               $("#part_b_" + student_id).css(border_error);
+               row_error = true;
+           }
+           else{
+               $("#part_b_"+student_id).css(border_ok);
+           }
+          }
+
+          //Total
+          if(total !="" || force_validate){
+            if(this.checkNumber(total)==false ||  Number(total)!=Number(quiz)+Number(class_performance)+Number(part_a)+Number(part_b))
+              {
+                  $("#total_" + student_id).css(border_error);
+                  row_error = true;
+              }
+            else{
+                  $("#total_"+student_id).css(border_ok);
+              }
+          }
+
+          //Grade Letter
+          if(grade_letter !="" || force_validate) {
+              if (grade_letter != "" && this.gradeLetterFromMarks(Number(total)) != grade_letter) {
+                  $("#grade_letter_" + student_id).css(border_error);
+                  row_error = true;
+              }
+              else {
+                  $("#grade_letter_"+student_id).css(border_ok);
+              }
+          }
+
+          var parentRow = document.getElementById("row_" + student_id);
+          var tdArray = parentRow.getElementsByTagName('td');
+
+
+          if(row_error==true ) {
+              for (var i = 0; i < tdArray.length; i++) {
+                  tdArray[i].style.backgroundColor = "#FCDC3B";//"#FFFF7E";
+              }
+          }
+          else{
+              for (var i = 0; i < tdArray.length; i++) {
+                  //tdArray[i].style.backgroundColor = "none";
+                //  tdArray[i].style.backgroundColor = "transparent";//"#FFFF7E";
+              }//asdfasdfasdfasfasdfsadfasdfsssss
+
+          }
+
+      }
       private setFieldValue(field_id:string,field_value:any){
           $("#"+field_id).val(field_value);
       }
@@ -334,12 +400,24 @@ console.log(cells);
           var  url="https://localhost/ums-webservice-common/academic/gradeSubmission";
           var complete_json={};
           complete_json["gradeList"] = gradeList;
-          complete_json["course_id"] = "cId";
-          complete_json["semester_id"] = "sId";
-          complete_json["exam_type"] = "examType";
-          complete_json["total_part"] = 2;
-          complete_json["part_a_total"] = 35;
-          complete_json["part_b_total"] = 35;
+
+          var courseInfo:ICourseInfo={
+              course_id:'',
+              semester_id:0,
+              exam_type:0,
+              total_part:0,
+              part_a_total:0,
+              part_b_total:0
+          };
+          courseInfo.course_id="CID1";
+          courseInfo.semester_id=11012016;
+          courseInfo.exam_type=1;
+          courseInfo.total_part=Number(this.$scope.total_part);
+          courseInfo.part_a_total=Number(this.$scope.part_a_total);
+          courseInfo.part_b_total=Number(this.$scope.part_b_total);
+
+
+          complete_json["courseInfo"] = courseInfo;
 
           console.clear();
           console.log(complete_json);
@@ -360,6 +438,10 @@ console.log(cells);
               });
 
           return false;
+      }
+
+      private saveAndSendToScrutinizer():void{
+
       }
 
 
