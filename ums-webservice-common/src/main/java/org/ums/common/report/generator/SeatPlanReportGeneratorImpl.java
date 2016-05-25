@@ -480,7 +480,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
         while((nextByte  = inputStream.read()) != -1 ){
           outputStream.write(nextByte);
         }
-        outputStream.flush();
+        outputStream.flush();  
         outputStream.close();
         inputStream.close();
       }
