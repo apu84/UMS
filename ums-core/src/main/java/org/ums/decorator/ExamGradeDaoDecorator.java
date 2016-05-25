@@ -33,4 +33,11 @@ public class ExamGradeDaoDecorator  extends ContentDaoDecorator<ExamGrade, Mutab
         return getManager().saveGradeSheet(semesterId, courseId, examType, gradeList);
     }
 
+
+    @Override
+    public int updatePartInfo(int pSemesterId,String pCourseId,int pExamType,int pTotalPart,int partA,int partB) throws Exception {
+        return getManager().updatePartInfo(pSemesterId, pCourseId,pExamType, pTotalPart, partA,partB);
+    }
+
+
 }

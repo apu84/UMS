@@ -26,6 +26,8 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
     static String SELECT_THEORY_MARKS = "Select * From UG_THEORY_MARKS  Where Semester_Id='11012016' and Course_Id='CID1' and Exam_Type=1 ";
     static String SELECT_PART_INFO="Select * From MARKS_SUBMISSION_STATUS Where Semester_Id='11012016' and Course_Id='CID1' and Exam_Type=1 ";
 
+    static String UPDATE_PART_INFO="Update MARKS_SUBMISSION_STATUS Set TOTAL_PART=?,PART_A_TOTAL=?,PART_B_TOTAL=? Where SEMESTER_ID=? and COURSE_ID=? and EXAM_TYPE=? and Status=0";
+
     static String UPDATE_THEORY_MARKS="Update  UG_THEORY_MARKS Set Quiz=?,Class_Performance=?,Part_A=?,Part_B=?,Total=?,Grade_Letter=?,Grade_Point=?,Status=? " +
             " Where Semester_Id=? And Course_Id=? and Exam_Type=? and Student_Id=?";
 
@@ -75,6 +77,13 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
     public List<MarksSubmissionStatusDto> getMarksSubmissionStatus(int pSemesterId,int pExamType) throws Exception {
         String query = SELECT_GRADE_SUBMISSION_TABLE;
         return mJdbcTemplate.query(query, new MarksSubmissionStatusTableRowMapper());
+    }
+
+    @Override
+    public int updatePartInfo(int pSemesterId,String pCourseId,int pExamType,int pTotalPart,int partA,int partB) throws Exception {
+        String query = UPDATE_PART_INFO;
+        return mJdbcTemplate.update(query, pTotalPart,partA,partB,pSemesterId,pCourseId,pExamType);
+
     }
 
     class StudentMarksRowMapper implements RowMapper<StudentGradeDto> {
