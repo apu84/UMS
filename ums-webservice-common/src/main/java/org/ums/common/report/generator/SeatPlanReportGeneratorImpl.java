@@ -110,17 +110,21 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
     int routineCounter=0;
     for(ExamRoutineDto routine:examRoutines){
       SeatPlanGroup group = seatPlanGroup.get(0);
-      routineCounter+=1;
 
       if(routine.getProgramId() == group.getProgram().getId() && routine.getCourseYear()==group.getAcademicYear() && routine.getCourseSemester()== group.getAcademicSemester()){
 
         if(routineCounter==examRoutines.size()){
           examDates = examDates+routine.getExamDate();
         }else{
-          examDates=examDates+routine.getExamDate()+",";
+          if(examDates.equals("Date: ")){
+            examDates=examDates+routine.getExamDate()+",";
+          }
+          examDates=examDates+","+routine.getExamDate();
 
         }
       }
+      routineCounter+=1;
+
     }
 
     if(noSeatPlanInfo){
@@ -480,7 +484,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
         while((nextByte  = inputStream.read()) != -1 ){
           outputStream.write(nextByte);
         }
-        outputStream.flush();  
+        outputStream.flush();
         outputStream.close();
         inputStream.close();
       }
