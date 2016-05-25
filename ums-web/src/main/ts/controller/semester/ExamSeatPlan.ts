@@ -898,6 +898,7 @@ module ums{
       this.$scope.groupSelected = false;
       this.$scope.subGroupSelected = false;
       this.$scope.showGroupSelectionPanel = true;
+      this.$scope.recreateButtonClicked=false;
     }
 
     private createOrViewSeatPlan(groupNo:number):void{
