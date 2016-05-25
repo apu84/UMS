@@ -117,7 +117,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
           examDates = examDates+routine.getExamDate();
         }else{
           if(examDates.equals("Date: ")){
-            examDates=examDates+routine.getExamDate()+",";
+            examDates=examDates+routine.getExamDate();
           }
           examDates=examDates+","+routine.getExamDate();
 
@@ -144,7 +144,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
         boolean checkIfRoomExistsInSeatPlan = roomsOfTheSeatPlan.contains(room.getId());
         //int checkIfRoomExists = mSeatPlanManager.checkIfExistsByRoomSemesterGroupExamType(room.getId(),pSemesterId,groupNo,type);
 
-        if(checkIfRoomExistsInSeatPlan && room.getId()!=284 ){
+        if(checkIfRoomExistsInSeatPlan && room.getId()!=284  ){
           String roomHeader = "Room No: "+ room.getRoomNo();
           Paragraph pRoomHeader = new Paragraph(roomHeader,FontFactory.getFont(FontFactory.TIMES_BOLD,12));
           pRoomHeader.setAlignment(Element.ALIGN_CENTER);

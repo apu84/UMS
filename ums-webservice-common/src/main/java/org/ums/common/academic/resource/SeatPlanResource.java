@@ -11,7 +11,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
+import java.io.File;
 
 /**
  * Created by My Pc on 5/8/2016.
@@ -32,12 +34,16 @@ public class SeatPlanResource extends MutableSeatPlanResource{
   @GET
   @Path("/semesterId/{semesterId}/groupNo/{groupNo}/type/{type}")
   @Produces("application/pdf")
-  public StreamingOutput createOrViewSeatPlan(final @Context Request pRequest, final @PathParam("semesterId") String pSemesterId,
+  public Response createOrViewSeatPlan(final @Context Request pRequest, final @PathParam("semesterId") String pSemesterId,
                                               final @PathParam("groupNo") String pGroupNo,
                                               final @PathParam("type") String pType)throws Exception{
-    return mSeatPlanResourceHelper.createOrCheckSeatPlanAndReturnRoomList(
-      Integer.parseInt(pSemesterId),Integer.parseInt(pGroupNo),Integer.parseInt(pType),pRequest,mUriInfo
+    StreamingOutput strem =  mSeatPlanResourceHelper.createOrCheckSeatPlanAndReturnRoomList(
+        Integer.parseInt(pSemesterId),Integer.parseInt(pGroupNo),Integer.parseInt(pType),pRequest,mUriInfo
     );
+    File file = new File( "I:/pdf/seat_plan_report.pdf");
+    Response.ResponseBuilder response = Response.ok((Object) file);
+    response.header("SeatPlan Report","attachment;filename=seatPlanReport.pdf");
+    return  response.build();
   }
 
 }

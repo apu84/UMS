@@ -73,7 +73,7 @@
 
 </style>
 
-<div class="panel panel-default" data-ng-show="showGroupSelectionPanel">
+<div class="panel panel-primary" data-ng-show="showGroupSelectionPanel">
     <div class="panel-heading">
         <h3 class="panel-title" align="center">Exam Seat Plan</h3>
     </div>
@@ -95,16 +95,21 @@
                     <option value="3">Clearance</option>
                 </select>
             </div>
-
-            <div class="col-md-1"></div>
+            <div class="col-md-2"></div>
 
             <div class="col-md-3">
+                <br>
+                <button type="button" class="btn btn-info" data-ng-click="showGroups()">View Groups</button>
+            </div>
+
+
+            <!--<div class="col-md-3">
                 Select Seat Plannign System
                 <select class="form-control required" name="system" data-ng-model="system" >
                     <option value="1">Automatic</option>
                     <option value="2">Manual</option>
                 </select>
-            </div>
+            </div>-->
 
 
         </div>
@@ -112,47 +117,47 @@
         <hr>
         <br>
         <br>
-        <div data-ng-if="semesterId && examType && system " data-ng-init="getGroups()">
+        <div id="groupPanel" data-ng-if="showGroupOrNot" >
             <h2 align="center">Groups</h2>
 
             <div class="row">
                 <div data-ng-repeat="groupNo in groupList">
                     <div class="col-md-4" data-ng-if="groupNo.groupNumber==1">
-                        <div class="panel panel-default">
+                        <div class=" panel panel-info">
                             <div class="panel-heading"> Group {{groupNo.groupNumber}}</div>
-                            <div data-ng-repeat="group in groupNo.groupMembers">
-                                <p class="times">{{group.programName}}, {{group.year}} year {{group.semester}} semester ({{group.studentNumber}})</p>
-                            </div>
+                            <ul data-role="listview" class="list-group" data-ng-repeat="group in groupNo.groupMembers">
+                                <li class="list-group-item">{{group.programName}}, {{group.year}} year {{group.semester}} semester <span class="badge">{{group.studentNumber}}</span> </li>
+                            </ul>
                             <hr>
                             <hr>
                             <div>
-                                <h2>Total Student : {{groupNo.totalStudentNumber}}</h2>
+                                <h2 align="center">Total Student : {{groupNo.totalStudentNumber}}</h2>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4" data-ng-if="groupNo.groupNumber==2">
-                        <div class="panel panel-default">
+                        <div class=" panel panel-info">
                             <div class="panel-heading"> Group {{groupNo.groupNumber}}</div>
-                            <div data-ng-repeat="group in groupNo.groupMembers">
-                                <p class="times">{{group.programName}}, {{group.year}} year {{group.semester}} semester ({{group.studentNumber}})</p>
-                            </div>
+                            <ul class="list-group" data-ng-repeat="group in groupNo.groupMembers">
+                                <li class="list-group-item">{{group.programName}}, {{group.year}} year {{group.semester}} semester <span class="badge">{{group.studentNumber}}</span></li>
+                            </ul>
                             <hr>
                             <hr>
                             <div>
-                                <h2>Total Student : {{groupNo.totalStudentNumber}}</h2>
+                                <h2 align="center">Total Student : {{groupNo.totalStudentNumber}}</h2>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4" data-ng-if="groupNo.groupNumber==3">
-                        <div class="panel panel-default">
+                        <div class=" panel panel-info">
                             <div class="panel-heading"> Group {{groupNo.groupNumber}}</div>
-                            <div data-ng-repeat="group in groupNo.groupMembers">
-                                <p class="times">{{group.programName}}, {{group.year}} year {{group.semester}} semester ({{group.studentNumber}})</p>
-                            </div>
+                            <ul class="list-group" data-ng-repeat="group in groupNo.groupMembers">
+                                <li class="list-group-item">{{group.programName}}, {{group.year}} year {{group.semester}} semester <span class="badge">{{group.studentNumber}}</span></li>
+                            </ul>
                             <hr>
                             <hr>
                             <div>
-                                <h2>Total Student : {{groupNo.totalStudentNumber}}</h2>
+                                <h2 align="center">Total Student : {{groupNo.totalStudentNumber}}</h2>
                             </div>
                         </div>
                     </div>
@@ -192,9 +197,9 @@
                 <div class="col-md-3">
                     <hr>
                     <hr>
-                    <br>
-                    <button data-ng-click="createOrViewSubgroups(groupNoForSeatPlanViewing)">Create or View <br> Subgroups</button>
-                    <button data-ng-click="createOrViewSeatPlan(groupNoForSeatPlanViewing)">Create or View <br> Seat Plan</button>
+
+                    <button type="button" class="btn btn-info" data-ng-click="createOrViewSubgroups(groupNoForSeatPlanViewing)">Create or View <br> Subgroups</button>
+                    <button type="button" class="btn btn-info" data-ng-click="createOrViewSeatPlan(groupNoForSeatPlanViewing)">Create or View <br> Seat Plan</button>
                 </div>
                 <div class="col-md-3">
                     <hr>
@@ -338,7 +343,7 @@
 
                     Total Students:
                     <div data-ng-repeat="groupNo in groupList | filter:{groupNumber: selectedGroupNo}">
-                       <h3>{{groupNo.totalStudentNumber}}</h3>
+                        <h3>{{groupNo.totalStudentNumber}}</h3>
                     </div>
                     <hr>
                     <hr>
