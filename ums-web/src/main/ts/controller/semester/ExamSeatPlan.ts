@@ -961,7 +961,7 @@ module ums{
     private getSeatPlanInfo(groupNo:number):void{
       var defer = this.$q.defer();
       var subGroupDb:string;
-      this.httpClient.get('/ums-webservice-common/academic/seatplan/semesterId/'+this.$scope.semesterId +'/groupNo/'+groupNo+'/type/'+this.$scope.examType, 'application/json',
+      this.httpClient.get('/ums-webservice-common/academic/seatplan/semesterId/'+this.$scope.semesterId +'/groupNo/'+groupNo+'/type/'+this.$scope.examType, 'application/pdf',
           (json:any, etag:string) => {
             subGroupDb = json.entries;
 

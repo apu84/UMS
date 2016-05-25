@@ -8,8 +8,10 @@ import javax.json.JsonObject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
+import javax.ws.rs.core.StreamingOutput;
 
 /**
  * Created by My Pc on 5/8/2016.
@@ -29,9 +31,10 @@ public class SeatPlanResource extends MutableSeatPlanResource{
 
   @GET
   @Path("/semesterId/{semesterId}/groupNo/{groupNo}/type/{type}")
-  public JsonObject createOrViewSeatPlan(final @Context Request pRequest, final @PathParam("semesterId") String pSemesterId,
-                                         final @PathParam("groupNo") String pGroupNo,
-                                         final @PathParam("type") String pType)throws Exception{
+  @Produces("application/pdf")
+  public StreamingOutput createOrViewSeatPlan(final @Context Request pRequest, final @PathParam("semesterId") String pSemesterId,
+                                              final @PathParam("groupNo") String pGroupNo,
+                                              final @PathParam("type") String pType)throws Exception{
     return mSeatPlanResourceHelper.createOrCheckSeatPlanAndReturnRoomList(
       Integer.parseInt(pSemesterId),Integer.parseInt(pGroupNo),Integer.parseInt(pType),pRequest,mUriInfo
     );
