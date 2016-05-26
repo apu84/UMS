@@ -57,6 +57,9 @@ public class SeatPlanGroupResourceHelper extends ResourceHelper<SeatPlanGroup,Mu
     * we search by a semesterId, then, our program will be shown error or exception.
     * */
     List<SeatPlanGroup> seatPlanGroupListForCheckingIfThereIsValueOrNot = mSeatPlanGroupManager.getAll();
+    List<SeatPlanGroup> seatPlanGroupListBySemesterAndType;
+
+
 
     /*variable seatPlanGroupForSemester will be used to sent the group information based on the semesterId
     * */
@@ -65,8 +68,17 @@ public class SeatPlanGroupResourceHelper extends ResourceHelper<SeatPlanGroup,Mu
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
+    Boolean seatPlanGroupExistForTheSemesterAndType=false;
 
-    if(seatPlanGroupListForCheckingIfThereIsValueOrNot.size() !=0  && update==0){
+    if(seatPlanGroupListForCheckingIfThereIsValueOrNot.size()>0){
+      seatPlanGroupListBySemesterAndType = mSeatPlanGroupManager.getGroupBySemester(pSemesterId,type);
+      if(seatPlanGroupListBySemesterAndType.size()>0){
+        seatPlanGroupExistForTheSemesterAndType = true;
+      }
+    }
+
+
+    if(seatPlanGroupExistForTheSemesterAndType==true  && update==0){
 
       seatPlanGroupForSemester = mSeatPlanGroupManager.getGroupBySemester(pSemesterId,type);
         for(SeatPlanGroup seatPlanGroup: seatPlanGroupForSemester){

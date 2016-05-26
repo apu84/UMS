@@ -59,7 +59,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
   @Autowired
   private SpStudentManager mSpStudentManager;
 
-  public static final String DEST = "I:/pdf/seat_plan_report.pdf";
+  public static final String DEST = "seat_plan_report.pdf";
 
   @Override
   public StreamingOutput createPdf(String dest, boolean noSeatPlanInfo, int pSemesterId, int groupNo, int type) throws Exception, IOException, DocumentException,WebApplicationException {
@@ -118,8 +118,9 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
         }else{
           if(examDates.equals("Date: ")){
             examDates=examDates+routine.getExamDate();
+          }else{
+            examDates=examDates+","+routine.getExamDate();
           }
-          examDates=examDates+","+routine.getExamDate();
 
         }
       }
@@ -128,7 +129,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
     }
 
     if(noSeatPlanInfo){
-      Chunk c = new Chunk("No Seat Plan Information in the database, create one and then come back again!",f);
+      Chunk c = new Chunk("No SubGroup and No Seat Plan Information in the database, create one and then come back again!",f);
       c.setBackground(BaseColor.WHITE);
       Paragraph p= new Paragraph(c);
       p.setAlignment(Element.ALIGN_CENTER);
@@ -149,8 +150,13 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
           Paragraph pRoomHeader = new Paragraph(roomHeader,FontFactory.getFont(FontFactory.TIMES_BOLD,12));
           pRoomHeader.setAlignment(Element.ALIGN_CENTER);
           document.add(pRoomHeader);
-
-          String semesterInfo = "Semester Final Examination " + semesterName+". Capacity: "+room.getCapacity()+".";
+          String semesterInfo="";
+          if(type==1){
+            semesterInfo = "Semester Final Examination " + semesterName+". Capacity: "+room.getCapacity()+".";
+          }
+          if(type==2){
+            semesterInfo = "Clearance/Improvement/Carryover Examination " + semesterName+". Capacity: "+room.getCapacity()+".";
+          }
           Paragraph pSemesterInfo = new Paragraph(semesterInfo,FontFactory.getFont(FontFactory.TIMES_BOLD,12));
           pSemesterInfo.setAlignment(Element.ALIGN_CENTER);
           document.add(pSemesterInfo);
@@ -212,14 +218,14 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
           }
           float summaryFontSize=10.0f;
           if(deptList.size()<6){
-            fontSize=12.0f;
+            fontSize=11.0f;
           }
           else if(deptList.size()==6){
             fontSize=10.0f;
           }
           else if(deptList.size()==9){
             fontSize=9.0f;
-            summaryFontSize=9.0f;
+//            summaryFontSize=9.0f;
           }
           else{
             if(room.getCapacity()<=40){
@@ -290,7 +296,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
                 studentCounter+=1;
               }
               else{
-                studentListInString = studentListInString+",  "+studentOfTheList;
+                studentListInString = studentListInString+","+studentOfTheList;
 
               }
             }
@@ -298,6 +304,9 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
             deptListCounter+=1;
             studentListInString=studentListInString+" = "+studentList.size();
 
+            if(studentList.size()>10){
+              summaryFontSize = 9.0f;
+            }
 
             Paragraph studentCellParagraph = new Paragraph(studentListInString,FontFactory.getFont(FontFactory.TIMES_ROMAN,summaryFontSize));
             studentCell.addElement(studentCellParagraph);

@@ -20,4 +20,9 @@ public class SeatPlanGroupDaoDecorator extends ContentDaoDecorator<SeatPlanGroup
   public List<SeatPlanGroup> getBySemesterGroupAndType(int pSemesterId, int pGroupNo, int pType) {
     return getManager().getBySemesterGroupAndType(pSemesterId,pGroupNo,pType);
   }
+
+  @Override
+  public int deleteBySemesterAndExamType(int pSemesterId, int pExamType) {
+    return getManager().deleteBySemesterAndExamType(pSemesterId,pExamType);
+  }
 }

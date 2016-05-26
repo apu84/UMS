@@ -37,6 +37,12 @@ public class PersistentSeatPlanGroupDao extends SeatPlanGroupDaoDecorator {
   }
 
   @Override
+  public int deleteBySemesterAndExamType(int pSemesterId, int pExamType) {
+    String query = DELETE_ONE+" WHERE SEMESTER_ID=?  AND TYPE=?";
+    return mJdbcTemplate.update(query,pSemesterId,pExamType);
+  }
+
+  @Override
   public List<SeatPlanGroup> getBySemesterGroupAndType(int pSemesterId, int pGroupNo, int pType) {
     String query=SELECT_ALL+" WHERE SEMESTER_ID=? AND GROUP_NO=? AND TYPE=? ORDER BY GROUP_NO,PROGRAM_ID,YEAR,SEMESTER ASC";
     return mJdbcTemplate.query(query,new Object[]{pSemesterId,pGroupNo,pType},new SeatPlanGroupRowmapper());

@@ -74,6 +74,9 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan,MutableSeatP
   @Autowired
   private SpStudentManager mSpStudentManager;
 
+  @Autowired
+  private SubGroupManager mSubGroupManager;
+
   public static final String DEST = "I:/pdf/seat_plan_report.pdf";
 
 
@@ -126,22 +129,27 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan,MutableSeatP
     File file = new File(DEST);
     file.getParentFile().mkdirs();
     boolean noSeatPlanInfo;
-
+    boolean seatPlanOfTheGroupFound=false;
     if(allSeatPlans.size()>0){
       List<SeatPlan> seatPlanOfTheGroup = mManager.getBySemesterAndGroupAndExamType(pSemesterId,groupNo,type);
       if(seatPlanOfTheGroup.size()>0){
+        seatPlanOfTheGroupFound=true;
+      }
+    }
+
+    if(seatPlanOfTheGroupFound){
+
         noSeatPlanInfo = false;
         return mSeatPlanReportGenerator.createPdf(DEST,noSeatPlanInfo,pSemesterId,groupNo,type);
 
-      }else{
+    }else{
+      List<SubGroup> subGroupOfTheGroup = mSubGroupManager.getBySemesterGroupNoAndType(pSemesterId,groupNo,type);
+      if(subGroupOfTheGroup.size()>0){
         genericResponse = mSeatPlanService.generateSeatPlan(pSemesterId,groupNo,type);
         noSeatPlanInfo = false;
-        return mSeatPlanReportGenerator.createPdf(DEST,noSeatPlanInfo,pSemesterId,groupNo,type);
-
+      }else{
+        noSeatPlanInfo=true;
       }
-    }else{
-      genericResponse = mSeatPlanService.generateSeatPlan(pSemesterId,groupNo,type);
-      noSeatPlanInfo = false;
       return mSeatPlanReportGenerator.createPdf(DEST,noSeatPlanInfo,pSemesterId,groupNo,type);
 
     }

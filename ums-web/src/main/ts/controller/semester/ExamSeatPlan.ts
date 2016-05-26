@@ -161,8 +161,10 @@ module ums{
 
 
   export class ExamSeatPlan{
-    public static $inject = ['appConstants','HttpClient','$scope','$q','notify','$timeout'];
-    constructor(private appConstants: any, private httpClient: HttpClient, private $scope: IExamSeatPlanScope,private $q:ng.IQService, private notify: Notify,private $timeout:ITimeoutService) {
+    public static $inject = ['appConstants','HttpClient','$scope','$q','notify','$timeout','$sce','$window'];
+    constructor(private appConstants: any, private httpClient: HttpClient, private $scope: IExamSeatPlanScope,
+                private $q:ng.IQService, private notify: Notify,private $timeout:ITimeoutService,
+                private $sce:ng.ISCEService,private $window:ng.IWindowService) {
 
       var arr : { [key:number]:Array<ISeatPlanGroup>; } = {};
 
@@ -959,28 +961,28 @@ module ums{
     }
 
     private getSubGroupInfo():ng.IPromise<any>{
-      var defer = this.$q.defer();
-      var subGroupDb:Array<ISubGroupDb>;
-      this.httpClient.get('/ums-webservice-common/academic/subGroup/get/semesterId/'+this.$scope.semesterId +'/groupNo/'+this.$scope.selectedGroupNo+'/type/'+this.$scope.examType, 'application/json',
-          (json:any, etag:string) => {
-            subGroupDb = json.entries;
+    var defer = this.$q.defer();
+    var subGroupDb:Array<ISubGroupDb>;
+    this.httpClient.get('/ums-webservice-common/academic/subGroup/get/semesterId/'+this.$scope.semesterId +'/groupNo/'+this.$scope.selectedGroupNo+'/type/'+this.$scope.examType, 'application/json',
+        (json:any, etag:string) => {
+          subGroupDb = json.entries;
 
-            defer.resolve(subGroupDb);
-          },
-          (response:ng.IHttpPromiseCallbackArg<any>) => {
-            console.error(response);
-          });
-      return defer.promise;
-    }
+          defer.resolve(subGroupDb);
+        },
+        (response:ng.IHttpPromiseCallbackArg<any>) => {
+          console.error(response);
+        });
+    return defer.promise;
+  }
 
     private getSeatPlanInfo(groupNo:number):void{
       var defer = this.$q.defer();
       var subGroupDb:string;
       this.httpClient.get('/ums-webservice-common/academic/seatplan/semesterId/'+this.$scope.semesterId +'/groupNo/'+groupNo+'/type/'+this.$scope.examType, 'application/pdf',
-          (json:any, etag:string) => {
-            subGroupDb = json.entries;
-
-            defer.resolve(subGroupDb);
+          (data:any, etag:string) => {
+            var file=new Blob([data],{type:'application/pdf'});
+            var fileURL = this.$sce.trustAsResourceUrl(URL.createObjectURL(file));
+            this.$window.open(fileURL);
           },
           (response:ng.IHttpPromiseCallbackArg<any>) => {
             console.error(response);

@@ -19,8 +19,9 @@ public class MutableExamRoutineResource  extends Resource {
   @PUT
   @Path( "/semester/{semester-id}/examtype/{exam-type}")
   public Response saveExamRoutine(final @PathParam("semester-id") String pSemesterId,
+                                    final @PathParam("exam-type") String pExamType,
                                     final JsonObject pJsonObject) throws Exception {
-    return mResourceHelper.save(pJsonObject);
+    return mResourceHelper.save(pJsonObject,Integer.parseInt(pSemesterId),Integer.parseInt(pExamType));
   }
 
 }

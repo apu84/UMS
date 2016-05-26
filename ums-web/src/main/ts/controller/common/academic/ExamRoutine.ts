@@ -103,7 +103,15 @@ module ums {
       var defer = this.$q.defer();
       this.httpClient.get("academic/examroutine/semester/"+this.$scope.routine.semester+"/examtype/"+exam_type, this.appConstants.mimeTypeJson,
           (json:any, etag:string) => {
-            var dateTimeArr:Array<IDateTime>=eval(json.entries);
+            var tempVar = json;
+            console.log('---temp var length---');
+            console.log(tempVar.entries[0]);
+            if(tempVar.entries[0]==']'){
+              var dateTimeArr:Array<IDateTime> = [];
+            }
+            else{
+              var dateTimeArr:Array<IDateTime>=eval(json.entries);
+            }
             console.log(dateTimeArr);
             defer.resolve(dateTimeArr);
           },
