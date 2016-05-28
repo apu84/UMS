@@ -252,7 +252,7 @@ module ums {
       var saved: ICourseTeacher = this.savedCopy[courseId];
       var modified: ICourseTeacher = this.formattedMap[courseId];
 
-      if (!this.validate(modified)) {
+      if (!this.validate(modified, saved)) {
         return;
       }
       for (var teacherId in saved.selectedTeachers) {
@@ -407,10 +407,14 @@ module ums {
       }
     }
 
-    private validate(modifiedVal: ICourseTeacher): boolean {
+    private validate(modifiedVal: ICourseTeacher, saved: ICourseTeacher): boolean {
       if (UmsUtil.isEmpty(modifiedVal.selectedTeachers)) {
-        console.debug("Please select teacher/s");
-        return false;
+        if(UmsUtil.isEmpty(saved.selectedTeachers)) {
+          this.notify.warn("Please select teacher/s");
+          return false;
+        }else {
+          return true;
+        }
       }
 
       for (var key in modifiedVal.selectedTeachers) {
