@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.domain.model.immutable.SeatPlanGroup;
 import org.ums.manager.SeatPlanGroupManager;
+import org.ums.manager.SubGroupManager;
 import org.ums.persistent.model.PersistentExamRoutine;
 import org.ums.common.academic.resource.ResourceHelper;
 import org.ums.common.builder.ExamRoutineBuilder;
@@ -31,6 +32,9 @@ public class ExamRoutineResourceHelper extends ResourceHelper<ExamRoutine, Mutab
 
   @Autowired
   private SeatPlanGroupManager mSeatPlanGroupManager;
+
+  @Autowired
+  private SubGroupManager mSubGroupManager;
 
   @Override
   protected Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
@@ -133,6 +137,9 @@ public class ExamRoutineResourceHelper extends ResourceHelper<ExamRoutine, Mutab
     List<SeatPlanGroup> groups = mSeatPlanGroupManager.getGroupBySemester(pSemesterId,pExamType);
     if(groups.size()>0){
       mSeatPlanGroupManager.deleteBySemesterAndExamType(pSemesterId,pExamType);
+      for(int i=1;i<=3;i++){
+        mSubGroupManager.deleteBySemesterGroupAndType(pSemesterId,i,pExamType);
+      }
     }
     PersistentExamRoutine mutable = new PersistentExamRoutine();
     getBuilder().build(mutable, pJsonObject, null);

@@ -296,7 +296,13 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
                 studentCounter+=1;
               }
               else{
-                studentListInString = studentListInString+","+studentOfTheList;
+                if(studentList.size()>10){
+                  studentListInString = studentListInString+","+studentOfTheList;
+
+                }else{
+                  studentListInString = studentListInString+", "+studentOfTheList;
+
+                }
 
               }
             }

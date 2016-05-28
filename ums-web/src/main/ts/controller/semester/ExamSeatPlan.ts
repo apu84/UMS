@@ -49,6 +49,7 @@ module ums{
 
     subGroup1ListTest:any;  //this is for test purpose
 
+    loadingVisibility:boolean;
     showGroupOrNot:boolean;
     recreateButtonClicked:boolean;
     groupSelected:boolean;
@@ -168,6 +169,7 @@ module ums{
 
       var arr : { [key:number]:Array<ISeatPlanGroup>; } = {};
 
+      $scope.loadingVisibility = false;
       $scope.showGroupOrNot=false;
       $scope.groupSelected = false;
       $scope.showGroupSelectionPanel = true;
@@ -238,11 +240,13 @@ module ums{
     }
 
     private showGroups():void{
-      this.$scope.groupList=[];
-      this.$scope.showGroupSelection = true;
-      this.$scope.showGroupOrNot=true;
-      this.$scope.getGroups();
-      $("#groupPanel").slideDown("slow");
+      if(this.$scope.semesterId!=null && this.$scope.examType!=null){
+        this.$scope.groupList=[];
+        this.$scope.showGroupSelection = true;
+        this.$scope.getGroups();
+        $("#groupPanel").slideDown("slow");
+      }
+
     }
 
     private getSelectedGroupList(group:number):void{
@@ -407,8 +411,16 @@ module ums{
       }).disableSelection();
       var classScope = this;
       $('#droppable1').sortable({
+        cursor: "move",
         connectWith:".connectedSortable",
         items:"> li",
+        over:function(event,ui){
+          $("#droppable1").css("background-color","aqua");
+        },
+        receive:function(event,ui){
+          $("#droppable1").css("background-color","antiquewhite");
+        },
+
 
         update:function(event,ui){
           var result = $(this).sortable('toArray');
@@ -416,11 +428,11 @@ module ums{
         },
 
         change:function(event,ui){
-          var length = $("#droppable1").sortable('serialize');
-
         }
       });
       $('#droppable2').sortable({
+        cursor: "move",
+
         connectWith:".connectedSortable",
         items:"> li",
 
@@ -435,6 +447,8 @@ module ums{
         }
       });
       $('#droppable3').sortable({
+        cursor: "move",
+
         connectWith:".connectedSortable",
         items:"> li",
 
@@ -448,6 +462,8 @@ module ums{
         }
       });
       $('#droppable4').sortable({
+        cursor: "move",
+
         connectWith:".connectedSortable",
         items:"> li",
 
@@ -461,6 +477,8 @@ module ums{
         }
       });
       $('#droppable5').sortable({
+        cursor: "move",
+
         connectWith:".connectedSortable",
         items:"> li",
 
@@ -474,6 +492,8 @@ module ums{
         }
       });
       $('#droppable6').sortable({
+        cursor: "move",
+
         connectWith:".connectedSortable",
         items:"> li",
 
@@ -546,6 +566,8 @@ module ums{
       var classScope = this;
       $('#sortable1').sortable({
         connectWith:".connectedSortable",
+        cursor: "move",
+
         items:"> li",
 
         update:function(event,ui) {
@@ -561,6 +583,8 @@ module ums{
       });
       $('#sortable2').sortable({
         connectWith:".connectedSortable",
+        cursor: "move",
+
         items:"> li",
 
         update:function(event,ui) {
@@ -574,6 +598,8 @@ module ums{
       });
       $('#sortable3').sortable({
         connectWith:".connectedSortable",
+        cursor: "move",
+
         items:"> li",
 
         update:function(event,ui) {
@@ -587,6 +613,8 @@ module ums{
       });
       $('#sortable4').sortable({
         connectWith:".connectedSortable",
+        cursor: "move",
+
         items:"> li",
 
         update:function(event,ui) {
@@ -600,6 +628,8 @@ module ums{
       });
       $('#sortable5').sortable({
         connectWith:".connectedSortable",
+        cursor: "move",
+
         items:"> li",
 
         update:function(event,ui) {
@@ -613,6 +643,8 @@ module ums{
       });
       $('#sortable6').sortable({
         connectWith:".connectedSortable",
+        cursor: "move",
+
         items:"> li",
 
         update:function(event,ui) {
@@ -832,7 +864,11 @@ module ums{
     }
 
     private getGroups():void{
+      this.$scope.loadingVisibility = true;
+      this.$scope.showGroupOrNot = false;
       this.getSeatPlanGroupInfo().then((groupArr:Array<ISeatPlanGroup>)=>{
+        this.$scope.showGroupOrNot = true;
+        this.$scope.loadingVisibility = false;
         this.$scope.seatPlanGroupList = groupArr;
         this.$scope.seatPlanGroupListLength = this.$scope.seatPlanGroupList.length;
         for(var i=0;i<groupArr.length;i++){

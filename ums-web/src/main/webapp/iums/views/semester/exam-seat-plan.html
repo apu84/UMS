@@ -37,7 +37,7 @@
        min-height: 20px;
        list-style-type: none;
        margin: 0;
-       padding: 5px 0 0 0;
+       padding: 0 0 0 0;
        float: left;
        margin-right: 10px;}
 
@@ -51,18 +51,24 @@
         float: left;
         margin-right: 10px;}
     #sortable li, #droppable1 li,#droppable2 li,#droppable3 li,#droppable4 li,#droppable5 li,#droppable6 li{
+        border-radius: 25px;
+        border: 2px solid #73AD21;
         margin: 0 5px 5px 5px;
         padding: 5px;
-        font-size: 1.2em;
+        font-size: 1.0em;
         width: 120px;
+        background-color: lightslategray;
+        color: white;
     }
 
      #sortable1 li,#sortable2 li,#sortable3 li,#sortable4 li,#sortable6 li,#sortable5 li{
-        margin: 0 5px 5px 5px;
-        padding: 5px;
-        font-size: 1.2em;
-        width: 120px;
-         background-color: red;
+         border-radius: 25px;
+         border: 2px solid #73AD21;
+         margin: 0 5px 5px 5px;
+         padding: 5px;
+         font-size: 1.0em;
+         width: 120px;
+         background-color: lightslategray;
          color: white;
     }
 
@@ -73,23 +79,25 @@
 
 </style>
 
-<div class="panel panel-primary" data-ng-show="showGroupSelectionPanel">
+<div class="panel panel-blue" data-ng-show="showGroupSelectionPanel">
     <div class="panel-heading">
-        <h3 class="panel-title" align="center">Exam Seat Plan</h3>
+        <h2 class="panel-title" align="center"><h4 align="center">Exam Seat Plan</h4></h2>
     </div>
     <div class="panel-body">
         <div class="row">
 
             <div class="col-md-3">
-                Select Semester <br>
+                 <br>
                 <select class="form-control required" name="semester" data-ng-model="semesterId" >
+                    <option value="">Select Semester</option>
                     <option data-ng-repeat="semesters in semesterList| filter:{status:'1'}" value="{{semesters.id}}">{{semesters.name}}</option>
                 </select><br>
             </div>
             <div class="col-md-1"></div>
             <div class="col-md-4">
-                Select Exam Type <br>
+                 <br>
                 <select class="form-control required" name="examType" data-ng-model="examType" >
+                    <option value="">Select Exam Type</option>
                     <option value="1">Regular Exam</option>
                     <option value="2">Clearance/Improvement/Carryover Exam</option>
                 </select>
@@ -98,7 +106,7 @@
 
             <div class="col-md-2">
                 <br>
-                <button type="button" class="btn btn-info" data-ng-click="showGroups()">View Groups</button>
+                <button type="button" class="btn btn-success" data-ng-click="showGroups()">View Groups</button>
             </div>
 
 
@@ -116,6 +124,11 @@
         <hr>
         <br>
         <br>
+        <div class="spinner" ng-show="loadingVisibility">
+            <div class="bounce1"></div>
+            <div class="bounce2"></div>
+            <div class="bounce3"></div>
+        </div>
         <div id="groupPanel" data-ng-if="showGroupOrNot" >
             <h2 align="center">Groups</h2>
 
@@ -175,7 +188,7 @@
         <hr>
         <hr>
 
-        <div data-ng-if="seatPlanGroupList.length>0">
+        <div data-ng-if="seatPlanGroupList.length>0 && showGroupOrNot==true">
             <div class="row">
                 <div class="col-md-2">
                     <hr>
@@ -193,7 +206,7 @@
                     </select>
 
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3" >
                     <hr>
                     <hr>
 
@@ -232,7 +245,11 @@
 
                 <div data-ng-repeat="groupNo in groupList | filter:{groupNumber: selectedGroupNo}" data-ng-show="subGroupFound==false" >
                     <ul data-ng-repeat="group in groupNo.groupMembers"   id="sortable"  class="connectedSortable">
-                        <li class="ui-state-default" id="{{group.id}}">{{group.programName}}:{{group.year}}/{{group.semester}} ({{group.studentNumber}})</li>
+                        <li class="ui-state-default" id="{{group.id}}">
+                           <!-- <p >-->
+                            {{group.programName}}:{{group.year}}/{{group.semester}} ({{group.studentNumber}})
+                            <!--<p>-->
+                        </li>
                     </ul>
                 </div>
             </div>
