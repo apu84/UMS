@@ -32,6 +32,8 @@ module ums{
     totalNumberSubGroup:number;
     subGroupTotalNumber:number;
     groupList:Array<IGroup>;
+    tempGroupList:Array<IGroup>;
+    splittedGroupList:Array<IGroup>;
     selectedGroupList:Array<ISeatPlanGroup>;
     subGroupList:Array<ISubGroup>;
     subGroup1List:any;
@@ -49,6 +51,8 @@ module ums{
 
     subGroup1ListTest:any;  //this is for test purpose
 
+    splitButtonClicked:boolean;
+    reverseSplitButtonClicked: boolean;
     loadingVisibility:boolean;
     showGroupOrNot:boolean;
     recreateButtonClicked:boolean;
@@ -119,7 +123,7 @@ module ums{
     groupNumber:number;
     groupMembers:Array<ISeatPlanGroup>;
     totalStudentNumber:number;
-
+    showSubPortion:boolean;
 
   }
 
@@ -169,6 +173,8 @@ module ums{
 
       var arr : { [key:number]:Array<ISeatPlanGroup>; } = {};
 
+      $scope.splitButtonClicked = false;
+      $scope.reverseSplitButtonClicked = false;
       $scope.loadingVisibility = false;
       $scope.showGroupOrNot=false;
       $scope.groupSelected = false;
@@ -285,6 +291,62 @@ module ums{
 
     }
     private createOrViewSubgroups(group:number):void{
+      var whichMenuClicked:String;
+
+      // Trigger action when the contexmenu is about to be shown
+      $(".connectedSortable").bind("contextmenu", function (event) {
+
+        // Avoid the real one
+        event.preventDefault();
+
+        // Show contextmenu
+        $(".custom-menu").finish().toggle(100).
+
+        // In the right position (the mouse)
+        css({
+
+          top: event.pageY - $("#topbar").height()+"px" ,
+          left: event.pageX - $("#sidebar").width()+"px"
+        });
+      });
+
+
+// If the document is clicked somewhere
+      $("#subGroupPanel").bind("mousedown", function (e) {
+
+        // If the clicked element is not the menu
+        if (!($(e.target).parents(".custom-menu").length > 0)) {
+
+          // Hide it
+          $(".custom-menu").hide(100);
+        }
+      });
+
+      /*with the mouse down jquery function, we are getting the event only of right button,
+      * that's why the case is 3.
+      * with the line: $(this).attr('id') , we are getting the id when the right mouse button click event is triggered.*/
+    $(".connectedSortable li").mousedown(function(event){
+      switch(event.which){
+        case 3:
+          console.log($(this).attr('id'));
+      }
+    });
+
+      /*Current scope will be used in replace of 'this' of angularjs, to jquery, else, jquery will not recognize that.*/
+      var currentScope = this;
+// If the menu element is clicked
+      $(".custom-menu li").click(function(){
+
+        // This is the triggered action name
+        switch($(this).attr("data-action")) {
+
+          case "split": currentScope.$scope.splitButtonClicked=true; console.log("Split button is clicked");break;
+          case "revertSplit": currentScope.$scope.reverseSplitButtonClicked=true;console.log("Reverse button is clicked!");break;
+        }
+
+        // Hide it AFTER the action was triggered
+        $(".custom-menu").hide(100);
+      });
 
       this.$scope.selectedGroupNo = group;
       this.getSelectedGroupList(group);
@@ -881,6 +943,7 @@ module ums{
             group.groupMembers.push(groupArr[i]);
             group.totalStudentNumber = 0;
             group.totalStudentNumber+=groupArr[i].studentNumber;
+            group.showSubPortion=false;
             this.$scope.groupList.push(group);
 
 
@@ -907,6 +970,7 @@ module ums{
               group.groupMembers.push(groupArr[i]);
               group.totalStudentNumber = 0;
               group.totalStudentNumber+=groupArr[i].studentNumber;
+              group.showSubPortion=false;
               this.$scope.groupList.push(group);
 
 
@@ -914,22 +978,7 @@ module ums{
 
           }
 
-          //automation ended for group
 
-          /*if(groupArr[i].groupNo==1){
-            //group automation
-
-            //group automation end
-            this.$scope.group1List.push(this.$scope.seatPlanGroupList[i]);
-            this.$scope.totalStudentGroup1 += groupArr[i].studentNumber;
-          }else if(groupArr[i].groupNo==2){
-            this.$scope.group2List.push(this.$scope.seatPlanGroupList[i]);
-            this.$scope.totalStudentGroup2 += groupArr[i].studentNumber;
-          }
-          else{
-            this.$scope.group3List.push(this.$scope.seatPlanGroupList[i]);
-            this.$scope.totalStudentGroup3 += groupArr[i].studentNumber;
-          }*/
         }
 
 
