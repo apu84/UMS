@@ -278,11 +278,11 @@ module ums{
     }
 
     private splitAction(splitNumber:number):void{
+
       for(var i=0;i<this.$scope.tempGroupList.length;i++) {
         if (this.$scope.tempGroupList[i].groupNumber == this.$scope.selectedGroupNo) {
           var tempMemberStore = this.$scope.tempGroupList[i].groupMembers;
           if(this.$scope.tempGroupListAll.length==0){
-            this.$scope.tempGroupListAll=[];
             this.$scope.tempGroupListAll = this.$scope.tempGroupListAll.concat(tempMemberStore);
           }
           //this.$scope.tempGroupList[i].groupMembers = [];
@@ -332,15 +332,15 @@ module ums{
               var idNumeric = +idString;
               newMember.id = idNumeric;
               tempArray.push(newMember);
-              for(var k=1;k<tempArray.length;k++){
-                var text = tempArray[k].programName+":"+tempArray[k].year+"/"+tempArray[k].semester+" ("+tempArray[k].studentNumber+")";
-                var $li = $("<li class='ui-state-default' />").text(text);
-                $li.attr('id',newMember.id);
-                $("#sortable").append($li);
-                this.$scope.tempGroupListAll.push(tempArray[k]);
+
+              var text = newMember.programName+":"+newMember.year+"/"+newMember.semester+" ("+newMember.studentNumber+")";
+              var $li = $("<li class='ui-state-default' />").text(text);
+              $li.attr('id',newMember.id);
+              $("#splittedList").append($li);
+              this.$scope.tempGroupListAll.push(newMember);
                 //this.$scope.tempGroupList[i].groupMembers.push(tempArray[k]);
 
-              }
+
               console.log("-- new member id: "+newMember.id);
 
             } else {
@@ -349,12 +349,12 @@ module ums{
             this.$scope.tempGroupListAll=[];
             this.$scope.tempGroupListAll = this.$scope.tempGroupList[i].groupMembers;
           }
-          if(foundInTheTempGroup==false){
+          /*if(foundInTheTempGroup==false){
 
             for(var m=0;m<this.$scope.tempGroupListAll.length;m++){
               var members = this.$scope.tempGroupListAll[m];
               if(members.id==this.$scope.splitId){
-                //*********************
+                //!*********************
 
                 var memberStudentNumber :any={};
                 memberStudentNumber= members.studentNumber;
@@ -397,17 +397,17 @@ module ums{
                 $("#sortable").append($li);
                 this.$scope.tempGroupListAll.splice((m+1),0,newMember);
                 //this.$scope.tempGroupList.splice(0,0,newMember);
-                //********************
+                //!********************
 
                 break;
               }
             }
-          }
+          }*/
           break;
         }
       }
 
-      $("#sortable").sortable("refresh");
+     $("#sortable").sortable("refresh");
       console.log(this.$scope.tempGroupList);
 
     }
@@ -627,6 +627,13 @@ module ums{
           this.$scope.subGroupFound = false;
           this.$scope.showSubGroupSelectionNumber = true;
 
+          for(var l=0;l<this.$scope.groupList;l++){
+            if(this.$scope.groupList[l].groupNumber==this.$scope.selectedGroupNo){
+              this.$scope.tempGroupListAll=[];
+              this.$scope.tempGroupListAll = this.$scope.groupList[l].groupMembers;
+            }
+          }
+
           /*this.$scope.$apply();*/
 
           this.createDroppable();
@@ -651,7 +658,7 @@ module ums{
     }
 
     private createDroppable():void{
-      $("#sortable,#droppable1,#droppable2,#droppable3,#droppable4,#dropdown5,#droppable6").sortable({
+      $("#sortable,#droppable1,#droppable2,#droppable3,#droppable4,#dropdown5,#droppable6,#splittedList").sortable({
         connectWith: ".connectedSortable"
 
       }).disableSelection();
@@ -845,7 +852,7 @@ module ums{
 
 
 
-      $("#sortable1,#sortable2,#sortable3,#sortable4,#sortable5,#sortable6").sortable({
+      $("#sortable1,#sortable2,#sortable3,#sortable4,#sortable5,#sortable6,#splittedList").sortable({
         connectWith: ".connectedSortable"
       });
 

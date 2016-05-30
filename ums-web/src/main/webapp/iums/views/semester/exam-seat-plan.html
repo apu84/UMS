@@ -36,7 +36,7 @@
     }
 
 
-    #sortable {
+    #sortable,#splittedList {
         border: 1px solid #eee;
         width: 142px;
         min-height: 20px;
@@ -72,7 +72,7 @@
         padding: 5px 0 0 0;
         float: left;
         margin-right: 10px;}
-    #sortable li, #droppable1 li,#droppable2 li,#droppable3 li,#droppable4 li,#droppable5 li,#droppable6 li{
+    #sortable li,#splittedList li, #droppable1 li,#droppable2 li,#droppable3 li,#droppable4 li,#droppable5 li,#droppable6 li{
         border-radius: 25px;
         border: 2px solid #73AD21;
         margin: 0 5px 5px 5px;
@@ -270,6 +270,9 @@
         <div class="row">
             <div class="col-md-2">
 
+                <ul id="splittedList" class="connectedSortable"   >
+
+                </ul>
                 <div data-ng-repeat="groupNo in tempGroupList | filter:{groupNumber: selectedGroupNo}" data-ng-show="subGroupFound==false" >
                     <ul data-ng-repeat="group in groupNo.groupMembers track by group.id"   id="sortable"  class="connectedSortable">
                         <li class="ui-state-default" id="{{group.id}}">
