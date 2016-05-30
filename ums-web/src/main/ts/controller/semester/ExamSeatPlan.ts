@@ -667,7 +667,9 @@ module ums{
           $("#droppable1").css("background-color","antiquewhite");
         },
 
-
+        out:function(event,ui){
+          $("#droppable1").css("background-color","antiquewhite");
+        },
         update:function(event,ui){
           var result = $(this).sortable('toArray');
           classScope.subGroupListChanged(1,result);
@@ -681,6 +683,16 @@ module ums{
 
         connectWith:".connectedSortable",
         items:"> li",
+        over:function(event,ui){
+          $("#droppable2").css("background-color","aqua");
+        },
+        receive:function(event,ui){
+          $("#droppable2").css("background-color","antiquewhite");
+        },
+
+        out:function(event,ui){
+          $("#droppable2").css("background-color","antiquewhite");
+        },
 
         update:function(event,ui) {
           var result = $(this).sortable('toArray');
@@ -698,6 +710,16 @@ module ums{
         connectWith:".connectedSortable",
         items:"> li",
 
+        over:function(event,ui){
+          $("#droppable3").css("background-color","aqua");
+        },
+        receive:function(event,ui){
+          $("#droppable3").css("background-color","antiquewhite");
+        },
+
+        out:function(event,ui){
+          $("#droppable3").css("background-color","antiquewhite");
+        },
         update:function(event,ui) {
           var result = $(this).sortable('toArray');
           classScope.subGroupListChanged(3,result);
@@ -712,7 +734,16 @@ module ums{
 
         connectWith:".connectedSortable",
         items:"> li",
+        over:function(event,ui){
+          $("#droppable4").css("background-color","aqua");
+        },
+        receive:function(event,ui){
+          $("#droppable4").css("background-color","antiquewhite");
+        },
 
+        out:function(event,ui){
+          $("#droppable4").css("background-color","antiquewhite");
+        },
         update:function(event,ui) {
           var result = $(this).sortable('toArray');
           classScope.subGroupListChanged(4,result);
@@ -727,7 +758,16 @@ module ums{
 
         connectWith:".connectedSortable",
         items:"> li",
+        over:function(event,ui){
+          $("#droppable5").css("background-color","aqua");
+        },
+        receive:function(event,ui){
+          $("#droppable5").css("background-color","antiquewhite");
+        },
 
+        out:function(event,ui){
+          $("#droppable5").css("background-color","antiquewhite");
+        },
         update:function(event,ui) {
           var result = $(this).sortable('toArray');
           classScope.subGroupListChanged(5,result);
@@ -742,7 +782,16 @@ module ums{
 
         connectWith:".connectedSortable",
         items:"> li",
+        over:function(event,ui){
+          $("#droppable6").css("background-color","aqua");
+        },
+        receive:function(event,ui){
+          $("#droppable6").css("background-color","antiquewhite");
+        },
 
+        out:function(event,ui){
+          $("#droppable6").css("background-color","antiquewhite");
+        },
         update:function(event,ui) {
           var result = $(this).sortable('toArray');
           classScope.subGroupListChanged(6,result);
@@ -815,7 +864,16 @@ module ums{
         cursor: "move",
 
         items:"> li",
+        over:function(event,ui){
+          $("#sortable1").css("background-color","aqua");
+        },
+        receive:function(event,ui){
+          $("#sortable1").css("background-color","antiquewhite");
+        },
 
+        out:function(event,ui){
+          $("#sortable1").css("background-color","antiquewhite");
+        },
         update:function(event,ui) {
           var result = $(this).sortable('toArray');
           classScope.subGroupListChanged(1,result);
@@ -833,6 +891,16 @@ module ums{
 
         items:"> li",
 
+        over:function(event,ui){
+          $("#sortable2").css("background-color","aqua");
+        },
+        receive:function(event,ui){
+          $("#sortable2").css("background-color","antiquewhite");
+        },
+
+        out:function(event,ui){
+          $("#sortable2").css("background-color","antiquewhite");
+        },
         update:function(event,ui) {
           var result = $(this).sortable('toArray');
           classScope.subGroupListChanged(2,result);
@@ -848,6 +916,16 @@ module ums{
 
         items:"> li",
 
+        over:function(event,ui){
+          $("#sortable3").css("background-color","aqua");
+        },
+        receive:function(event,ui){
+          $("#sortable3").css("background-color","antiquewhite");
+        },
+
+        out:function(event,ui){
+          $("#sortable3").css("background-color","antiquewhite");
+        },
         update:function(event,ui) {
           var result = $(this).sortable('toArray');
           classScope.subGroupListChanged(3,result);
@@ -863,6 +941,16 @@ module ums{
 
         items:"> li",
 
+        over:function(event,ui){
+          $("#sortable4").css("background-color","aqua");
+        },
+        receive:function(event,ui){
+          $("#sortable4").css("background-color","antiquewhite");
+        },
+
+        out:function(event,ui){
+          $("#sortable4").css("background-color","antiquewhite");
+        },
         update:function(event,ui) {
           var result = $(this).sortable('toArray');
           classScope.subGroupListChanged(4,result);
@@ -877,7 +965,16 @@ module ums{
         cursor: "move",
 
         items:"> li",
+        over:function(event,ui){
+          $("#sortable5").css("background-color","aqua");
+        },
+        receive:function(event,ui){
+          $("#sortable5").css("background-color","antiquewhite");
+        },
 
+        out:function(event,ui){
+          $("#sortable5").css("background-color","antiquewhite");
+        },
         update:function(event,ui) {
           var result = $(this).sortable('toArray');
           classScope.subGroupListChanged(5,result);
@@ -892,7 +989,16 @@ module ums{
         cursor: "move",
 
         items:"> li",
+        over:function(event,ui){
+          $("#sortable6").css("background-color","aqua");
+        },
+        receive:function(event,ui){
+          $("#sortable6").css("background-color","antiquewhite");
+        },
 
+        out:function(event,ui){
+          $("#sortable6").css("background-color","antiquewhite");
+        },
         update:function(event,ui) {
           var result = $(this).sortable('toArray');
           classScope.subGroupListChanged(6,result);
