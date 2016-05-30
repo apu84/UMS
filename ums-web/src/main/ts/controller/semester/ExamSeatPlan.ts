@@ -9,6 +9,7 @@ module ums{
     roomList:any;
 
     data:any;
+    splitNumber:number;
     groupNumber:number;
     semester:ISemester
     group:Array<ISeatPlanGroup>;
@@ -33,6 +34,7 @@ module ums{
     subGroupTotalNumber:number;
     groupList:Array<IGroup>;
     tempGroupList:Array<IGroup>;
+    tempGroupListAll:Array<ISeatPlanGroup>;
     splittedGroupList:Array<IGroup>;
     selectedGroupList:Array<ISeatPlanGroup>;
     subGroupList:Array<ISubGroup>;
@@ -48,6 +50,7 @@ module ums{
     subGroup4StudentNumber:number;
     subGroup5StudentNumber:number;
     subGroup6StudentNumber:number;
+    splitId:number;
 
     subGroup1ListTest:any;  //this is for test purpose
 
@@ -96,6 +99,8 @@ module ums{
     deleteExistingSubGroupInfo:Function;
     createDroppable:Function;
     getSeatPlanInfo:Function;
+    splitACourseStudent:Function;
+    splitAction:Function;
 
 
     editSavedSubGroup:Function;
@@ -161,6 +166,8 @@ module ums{
     type:number;
     studentNumber:number;
     lastUpdated:string;
+    showSubPortion:boolean;
+    splitOccuranceNumber:number;
   }
 
 
@@ -235,11 +242,14 @@ module ums{
       $scope.saveSubGroupIntoDb = this.saveSubGroupIntoDb.bind(this);
       $scope.cancelEditedSubGroup = this.cancelEditedSubGroup.bind(this);
       $scope.showGroups = this.showGroups.bind(this);
+      $scope.splitACourseStudent = this.splitCourseStudent.bind(this);
+      $scope.splitAction = this.splitAction.bind(this);
       this.initialize();
 
     }
 
     private initialize():void{
+
       this.getSemesterInfo().then((semesterArr:Array<ISemester>)=>{
 
       });
@@ -267,6 +277,167 @@ module ums{
       }
     }
 
+    private splitAction(splitNumber:number):void{
+      for(var i=0;i<this.$scope.tempGroupList.length;i++) {
+        if (this.$scope.tempGroupList[i].groupNumber == this.$scope.selectedGroupNo) {
+          var tempMemberStore = this.$scope.tempGroupList[i].groupMembers;
+          if(this.$scope.tempGroupListAll.length==0){
+            this.$scope.tempGroupListAll=[];
+            this.$scope.tempGroupListAll = this.$scope.tempGroupListAll.concat(tempMemberStore);
+          }
+          //this.$scope.tempGroupList[i].groupMembers = [];
+          var foundInTheTempGroup:boolean = false;
+          for (var j = 0; j < tempMemberStore.length; j++) {
+            var members = tempMemberStore[j];
+            if (members.id == this.$scope.splitId) {
+              var $liDelete=$("<li class='ui-state-default' />").text(" ");
+              $liDelete.attr('id',members.id);
+              foundInTheTempGroup = true;
+              console.log("Found match");
+              var tempArray:Array<ISeatPlanGroup>=[];
+              var memberStudentNumber :any={};
+              memberStudentNumber= members.studentNumber;
+              var leftStudentNumber = memberStudentNumber - splitNumber;
+              var previousMember = members;
+              this.$scope.tempGroupList[i].groupMembers[j].studentNumber = splitNumber;
+              this.$scope.tempGroupList[i].groupMembers[j].showSubPortion = false;
+              console.log("---previous member id : "+previousMember.id);
+              tempArray.push(previousMember);
+
+              //var newMember = tempMemberStore[j];
+              var newMember:any={};
+              newMember.groupNo=this.$scope.selectedGroupNo;
+              newMember.lastUpdated = members.lastUpdated;
+              newMember.programId = members.programId;
+              newMember.programName = members.programName;
+              newMember.semester = members.semester;
+              newMember.year = members.year;
+              newMember.semesterId = members.semesterId;
+              newMember.showSubPortion = false;
+              newMember.splitOccuranceNumber=0;
+              newMember.studentNumber = leftStudentNumber;
+              newMember.showSubPortion = false;
+              newMember.studentNumber =leftStudentNumber;
+              var id = members.id;
+              var idString = id.toString();
+              if (newMember.splitOccuranceNumber == 0) {
+                idString = idString + '1';
+                newMember.splitOccuranceNumber = 1;
+              } else {
+                var idArr: Array<String> = idString.split("");
+                var lastInt: number = +(idArr[idArr.length - 1]);
+                lastInt = lastInt + 1;
+                idString = idArr.toString();
+              }
+              var idNumeric = +idString;
+              newMember.id = idNumeric;
+              tempArray.push(newMember);
+              for(var k=1;k<tempArray.length;k++){
+                var text = tempArray[k].programName+":"+tempArray[k].year+"/"+tempArray[k].semester+" ("+tempArray[k].studentNumber+")";
+                var $li = $("<li class='ui-state-default' />").text(text);
+                $li.attr('id',newMember.id);
+                $("#sortable").append($li);
+                this.$scope.tempGroupListAll.push(tempArray[k]);
+                //this.$scope.tempGroupList[i].groupMembers.push(tempArray[k]);
+
+              }
+              console.log("-- new member id: "+newMember.id);
+
+            } else {
+              //this.$scope.tempGroupList[i].groupMembers.push(members);
+            }
+            this.$scope.tempGroupListAll=[];
+            this.$scope.tempGroupListAll = this.$scope.tempGroupList[i].groupMembers;
+          }
+          if(foundInTheTempGroup==false){
+
+            for(var m=0;m<this.$scope.tempGroupListAll.length;m++){
+              var members = this.$scope.tempGroupListAll[m];
+              if(members.id==this.$scope.splitId){
+                //*********************
+
+                var memberStudentNumber :any={};
+                memberStudentNumber= members.studentNumber;
+                var leftStudentNumber = memberStudentNumber - splitNumber;
+                var previousMember = members;
+                previousMember.studentNumber = splitNumber;
+                previousMember.showSubPortion = false;
+                this.$scope.tempGroupListAll[m]= previousMember;
+
+                //var newMember = tempMemberStore[j];
+                var newMember:any={};
+                newMember.groupNo=this.$scope.selectedGroupNo;
+                newMember.lastUpdated = members.lastUpdated;
+                newMember.programId = members.programId;
+                newMember.programName = members.programName;
+                newMember.semester = members.semester;
+                newMember.year = members.year;
+                newMember.semesterId = members.semesterId;
+                newMember.showSubPortion = false;
+                newMember.splitOccuranceNumber=0;
+                newMember.studentNumber = leftStudentNumber;
+                newMember.showSubPortion = false;
+                newMember.studentNumber =leftStudentNumber;
+                var id = members.id;
+                var idString = id.toString();
+                if (newMember.splitOccuranceNumber == 0) {
+                  idString = idString + '1';
+                  newMember.splitOccuranceNumber = 1;
+                } else {
+                  var idArr: Array<String> = idString.split("");
+                  var lastInt: number = +(idArr[idArr.length - 1]);
+                  lastInt = lastInt + 1;
+                  idString = idArr.toString();
+                }
+                var idNumeric = +idString;
+                newMember.id = idNumeric;
+                var text = newMember.programName+":"+newMember.year+"/"+newMember.semester+" ("+newMember.studentNumber+")";
+                var $li = $("<li class='ui-state-default' />").text(text);
+                $li.attr('id',newMember.id);
+                $("#sortable").append($li);
+                this.$scope.tempGroupListAll.splice((m+1),0,newMember);
+                //this.$scope.tempGroupList.splice(0,0,newMember);
+                //********************
+
+                break;
+              }
+            }
+          }
+          break;
+        }
+      }
+
+      $("#sortable").sortable("refresh");
+      console.log(this.$scope.tempGroupList);
+
+    }
+
+
+    private splitCourseStudent(menuNumber:number):void{
+      console.log("splitting started");
+      var currentScope = this;
+
+      if(menuNumber==1){
+        for(var i=0;i<currentScope.$scope.groupList.length;i++){
+          if(currentScope.$scope.groupList[i].groupNumber == currentScope.$scope.selectedGroupNo){
+            for(var j=0; j<currentScope.$scope.groupList[i].groupMembers.length;j++){
+              if(currentScope.$scope.groupList[i].groupMembers[j].id == currentScope.$scope.splitId){
+                currentScope.$scope.groupList[i].groupMembers[j].showSubPortion = true;
+
+                break;
+              }
+            }
+          }
+        }
+      }else{
+
+      }
+      this.$scope.$apply();
+
+      console.log("--Splitting concluded--");
+
+    }
+
     private getGroupInfoFromSelectedSubGroup(groupId:number):any{
 
 
@@ -290,11 +461,16 @@ module ums{
 
 
     }
+
+
+
     private createOrViewSubgroups(group:number):void{
+      this.$scope.tempGroupListAll=[];
+
       var whichMenuClicked:String;
 
       // Trigger action when the contexmenu is about to be shown
-      $(".connectedSortable").bind("contextmenu", function (event) {
+      $(".connectedSortable li").on("contextmenu", function (event) {
 
         // Avoid the real one
         event.preventDefault();
@@ -308,6 +484,7 @@ module ums{
           top: event.pageY - $("#topbar").height()+"px" ,
           left: event.pageX - $("#sidebar").width()+"px"
         });
+
       });
 
 
@@ -323,14 +500,17 @@ module ums{
       });
 
       /*with the mouse down jquery function, we are getting the event only of right button,
-      * that's why the case is 3.
-      * with the line: $(this).attr('id') , we are getting the id when the right mouse button click event is triggered.*/
-    $(".connectedSortable li").mousedown(function(event){
-      switch(event.which){
-        case 3:
-          console.log($(this).attr('id'));
-      }
-    });
+       * that's why the case is 3.
+       * with the line: $(this).attr('id') , we are getting the id when the right mouse button click event is triggered.*/
+      $(".connectedSortable li").mousedown(function(event){
+        switch(event.which){
+          case 3:
+            var id = $(this).attr('id');
+            currentScope.$scope.splitId = +id;
+
+            console.log($(this).attr('id'));
+        }
+      });
 
       /*Current scope will be used in replace of 'this' of angularjs, to jquery, else, jquery will not recognize that.*/
       var currentScope = this;
@@ -340,11 +520,13 @@ module ums{
         // This is the triggered action name
         switch($(this).attr("data-action")) {
 
-          case "split": currentScope.$scope.splitButtonClicked=true; console.log("Split button is clicked");break;
+          case "split": currentScope.$scope.splitButtonClicked=true;
+            console.log('split button before function call');
+            console.log(currentScope.$scope.splitButtonClicked);
+            currentScope.splitCourseStudent(1);
+            console.log("Split button is clicked");break;
           case "revertSplit": currentScope.$scope.reverseSplitButtonClicked=true;console.log("Reverse button is clicked!");break;
         }
-
-        // Hide it AFTER the action was triggered
         $(".custom-menu").hide(100);
       });
 
@@ -400,14 +582,14 @@ module ums{
 
           for(var i=0;i<this.$scope.subGroupList.length;i++){
             var studentList:Array<ISeatPlanGroup>=this.$scope.subGroupList[i].subGroupMembers;
-
+            this.$scope.tempGroupListAll = this.$scope.tempGroupListAll.concat(studentList);
             this.$scope.subGroupWithDeptMap[i]=studentList;
 
           }
 
 
 
-         // this.$scope.subGroupList = [];
+          // this.$scope.subGroupList = [];
 
 
           $("#sortable1,#sortable2,#sortable3,#sortable4,#sortable5,#sortable6").sortable({
@@ -431,6 +613,8 @@ module ums{
 
         }
         else{
+
+
 
           this.$scope.colForSubgroup=0;
 
@@ -752,25 +936,25 @@ module ums{
           if(this.$scope.subGroupList[i].subGroupNumber == subGroupNumber){
             this.$scope.subGroupList[i].subGroupMembers = [];
             /*if(this.$scope.subGroupFound==true){
-              var subGroupName:string="Sub Group "+subGroupNumber;
-              var nameMember:any={};
-              nameMember.id="";
-              nameMember.programName=subGroupName
-              this.$scope.subGroupList[i].subGroupMembers.push(nameMember);
-            }*/
+             var subGroupName:string="Sub Group "+subGroupNumber;
+             var nameMember:any={};
+             nameMember.id="";
+             nameMember.programName=subGroupName
+             this.$scope.subGroupList[i].subGroupMembers.push(nameMember);
+             }*/
             this.$scope.subGroupList[i].subGroupTotalStudentNumber = 0;
 
             for(var m in result){
-                if(result[m] != "" ){
-                  for(var j=0;j< this.$scope.selectedGroupList.length;j++){
-                    if(this.$scope.selectedGroupList[j].id == result[m]){
-                      this.$scope.subGroupList[i].subGroupMembers.push(this.$scope.selectedGroupList[j]);
-                      this.$scope.subGroupList[i].subGroupTotalStudentNumber+= this.$scope.selectedGroupList[j].studentNumber;
+              if(result[m] != "" ){
+                for(var j=0;j< this.$scope.selectedGroupList.length;j++){
+                  if(this.$scope.selectedGroupList[j].id == result[m]){
+                    this.$scope.subGroupList[i].subGroupMembers.push(this.$scope.selectedGroupList[j]);
+                    this.$scope.subGroupList[i].subGroupTotalStudentNumber+= this.$scope.selectedGroupList[j].studentNumber;
 
-                      break;
-                    }
+                    break;
                   }
                 }
+              }
             }
 
             subGroupFound = true;
@@ -847,9 +1031,9 @@ module ums{
           seatPlanJsonData.position = position;
           seatPlanJsonData.groupId = this.$scope.subGroupList[i].subGroupMembers[j].id;
           seatPlanJsonData.studentNumber =this.$scope.subGroupList[i].subGroupMembers[j].studentNumber;
-         /* var json = this.convertToJsonForSubGroup(this.$scope.subGroupList[i].subGroupNumber,
-                                                  position,
-                                                  this.$scope.subGroupList[i].subGroupMembers[j].id,this.$scope.subGroupList[i].subGroupMembers[j].studentNumber);*/
+          /* var json = this.convertToJsonForSubGroup(this.$scope.subGroupList[i].subGroupNumber,
+           position,
+           this.$scope.subGroupList[i].subGroupMembers[j].id,this.$scope.subGroupList[i].subGroupMembers[j].studentNumber);*/
           //this.postSubGroup(json);
 
           seatPlanJsonDataList.push(seatPlanJsonData);
@@ -860,8 +1044,8 @@ module ums{
 
         /*if(operationFailed==true){
 
-          break;
-        }*/
+         break;
+         }*/
 
         if(i==this.$scope.subGroupList.length-1 && this.$scope.subGroupFound==false){
           $("#droppable1").sortable("disable");
@@ -887,9 +1071,9 @@ module ums{
         $.notific8(message);
         this.$scope.editButtonClicked=false;
         /*if(this.$scope.subGroupFound==false){
-          this.createOrViewSubgroups(this.$scope.selectedGroupNo);
+         this.createOrViewSubgroups(this.$scope.selectedGroupNo);
 
-        }*/
+         }*/
 
         this.$scope.editSubGroup=true;
         this.$scope.deleteAndCreateNewSubGroup=true;
@@ -902,8 +1086,8 @@ module ums{
 
     private generateSubGroups(group:number):void{
       /*
-      * colForSubGroup==9999 means, invalid
-      * */
+       * colForSubGroup==9999 means, invalid
+       * */
       var totalSubgroups =Math.floor(12/group) ;
       if(group>6){
         alert("Subgroup can be no more than six.");
@@ -929,11 +1113,14 @@ module ums{
       this.$scope.loadingVisibility = true;
       this.$scope.showGroupOrNot = false;
       this.getSeatPlanGroupInfo().then((groupArr:Array<ISeatPlanGroup>)=>{
+
         this.$scope.showGroupOrNot = true;
         this.$scope.loadingVisibility = false;
         this.$scope.seatPlanGroupList = groupArr;
         this.$scope.seatPlanGroupListLength = this.$scope.seatPlanGroupList.length;
         for(var i=0;i<groupArr.length;i++){
+          groupArr[i].showSubPortion=false;
+          groupArr[i].splitOccuranceNumber=0;
 
           if(this.$scope.groupList.length == 0){
             var group: any={};
@@ -948,7 +1135,7 @@ module ums{
 
 
           }
-           else{
+          else{
             var groupFound:boolean;
             groupFound = false;
 
@@ -983,13 +1170,14 @@ module ums{
 
 
       });
+      this.$scope.tempGroupList = this.$scope.groupList;
     }
 
     private getRoomList():void{
-        this.getRoomInfo();
+      this.getRoomInfo();
 
-        this.$scope.groupSelected = true;
-        this.$scope.showGroupSelectionPanel = false;
+      this.$scope.groupSelected = true;
+      this.$scope.showGroupSelectionPanel = false;
 
 
 
@@ -1001,10 +1189,14 @@ module ums{
       this.$scope.subGroupSelected = false;
       this.$scope.showGroupSelectionPanel = true;
       this.$scope.recreateButtonClicked=false;
-    }
+      $(".connectedSortable li").off("contextmenu");
+
+
+
+      }
 
     private createOrViewSeatPlan(groupNo:number):void{
-        this.getSeatPlanInfo(groupNo);
+      this.getSeatPlanInfo(groupNo);
     }
 
     private getSeatPlanGroupInfo():ng.IPromise<any>{
@@ -1046,19 +1238,19 @@ module ums{
     }
 
     private getSubGroupInfo():ng.IPromise<any>{
-    var defer = this.$q.defer();
-    var subGroupDb:Array<ISubGroupDb>;
-    this.httpClient.get('/ums-webservice-common/academic/subGroup/get/semesterId/'+this.$scope.semesterId +'/groupNo/'+this.$scope.selectedGroupNo+'/type/'+this.$scope.examType, 'application/json',
-        (json:any, etag:string) => {
-          subGroupDb = json.entries;
+      var defer = this.$q.defer();
+      var subGroupDb:Array<ISubGroupDb>;
+      this.httpClient.get('/ums-webservice-common/academic/subGroup/get/semesterId/'+this.$scope.semesterId +'/groupNo/'+this.$scope.selectedGroupNo+'/type/'+this.$scope.examType, 'application/json',
+          (json:any, etag:string) => {
+            subGroupDb = json.entries;
 
-          defer.resolve(subGroupDb);
-        },
-        (response:ng.IHttpPromiseCallbackArg<any>) => {
-          console.error(response);
-        });
-    return defer.promise;
-  }
+            defer.resolve(subGroupDb);
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>) => {
+            console.error(response);
+          });
+      return defer.promise;
+    }
 
     private getSeatPlanInfo(groupNo:number):void{
       var defer = this.$q.defer();
@@ -1079,10 +1271,10 @@ module ums{
 
 
       this.httpClient.post('academic/subGroup/',json,'application/json')
-        .success(()=>{
+          .success(()=>{
 
 
-        }).error((data)=>{
+          }).error((data)=>{
         console.log("insertion failure");
         //console.log(data);
 
@@ -1095,9 +1287,9 @@ module ums{
 
     private postSeatPlanInfo(json:any):void{
       this.httpClient.post('academic/',json,'application/json')
-        .success(()=>{
-          console.log("success");
-        }).error((data)=>{
+          .success(()=>{
+            console.log("success");
+          }).error((data)=>{
         console.log("Insertion failure");
         console.log(data);
       })
@@ -1106,12 +1298,12 @@ module ums{
     private saveSubGroupIntoDb(json:any):ng.IPromise<any>{
       var defer = this.$q.defer();
       this.httpClient.put('academic/subGroup/save/semester/'+this.$scope.semesterId+'/groupNo/'+this.$scope.selectedGroupNo+'/type/'+this.$scope.examType,json,'application/json')
-        .success(()=>{
-          defer.resolve("Sucessfully Saved Sub Group Information!");
-        })
-        .error((data)=>{
+          .success(()=>{
+            defer.resolve("Sucessfully Saved Sub Group Information!");
+          })
+          .error((data)=>{
 
-        });
+          });
       return defer.promise;
     }
 
@@ -1119,9 +1311,9 @@ module ums{
     private deleteExistingSubGroupInfo(groupNo:number):void{
 
       this.httpClient.delete('academic/subGroup/semesterId/'+this.$scope.semesterId+'/groupNo/'+groupNo)
-        .success(()=>{
-          console.log("Successfully deleted");
-        }).error((data)=>{
+          .success(()=>{
+            console.log("Successfully deleted");
+          }).error((data)=>{
         console.log("Deletion failure");
         console.log(data);
       })

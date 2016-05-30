@@ -249,13 +249,13 @@
     </div>
 </div>
 
-
+<ul class="custom-menu">
+    <li data-action="split">Split</li>
+    <li data-action="revertSplit">Revert Split</li>
+</ul>
 
 <div class="panel panel-grey" data-ng-show="subGroupSelected" id="subGroupPanel">
-    <ul class="custom-menu">
-        <li data-action="split">Split</li>
-        <li data-action="revertSplit">Revert Split</li>
-    </ul>
+
     <div class="panel-heading">
         <h3 class="panel-title pull-left">
             Sub Groups for Group {{selectedGroupNo}}
@@ -270,14 +270,17 @@
         <div class="row">
             <div class="col-md-2">
 
-                <div data-ng-repeat="groupNo in groupList | filter:{groupNumber: selectedGroupNo}" data-ng-show="subGroupFound==false" >
-                    <ul data-ng-repeat="group in groupNo.groupMembers"   id="sortable"  class="connectedSortable">
+                <div data-ng-repeat="groupNo in tempGroupList | filter:{groupNumber: selectedGroupNo}" data-ng-show="subGroupFound==false" >
+                    <ul data-ng-repeat="group in groupNo.groupMembers track by group.id"   id="sortable"  class="connectedSortable">
                         <li class="ui-state-default" id="{{group.id}}">
                             <div>
                                 {{group.programName}}:{{group.year}}/{{group.semester}} ({{group.studentNumber}})
                             </div>
                             <div data-ng-show="group.showSubPortion">
-                                This is splitter portion.
+                                <hr>
+                                Split size: <input  data-ng-model="splitNumber" style="width:40px;color: black "  />
+                                <button data-ng-click="splitAction(splitNumber)" style="color: black">Split</button><button data-ng-click="cancelSplitAction()" style="color: black">cancel</button>
+                                <br>
                             </div>
                         </li>
                     </ul>
