@@ -124,7 +124,7 @@ public class PersistentSubGroupDao extends SubGroupDaoDecorator{
     for(SubGroup subGroup: pSubGroups){
       params.add(new Object[]{
           subGroup.getSemester().getId(),
-          subGroup.getGroup().getGroupNo(),
+          subGroup.getGroupNo(),
           subGroup.subGroupNo(),
           subGroup.getGroup().getId(),
           subGroup.getPosition(),

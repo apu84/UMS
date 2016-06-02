@@ -269,6 +269,13 @@
 
         <div class="row">
             <div class="col-md-2">
+                <div>
+                    <p>
+                        Total Students: <b>{{selectedGroupTotalStudent}}</b>
+
+                    </p>
+
+                </div>
 
                 <ul id="splittedList" class="connectedSortable"   >
 
@@ -291,7 +298,7 @@
                 </div>
             </div>
 
-            <div class="col-md-7">
+            <div class="col-md-10">
                 <div class="row" align="center" data-ng-if="showSubGroupSelectionNumber && subGroupFound==false" >
                     <p><b>How many subgroups ? </b></p>
                     <input type="number" data-ng-model="subGroupNumber" />
@@ -306,10 +313,11 @@
                 <!--
                     data-ng-if doesnot work in showing the subgroups.
                 -->
+
                 <div  data-ng-if="subGroupFound==true">
                     <div class="row">
 
-                        <ul id="sortable1" class="connectedSortable" data-ng-if="subGroupList.length>=1">
+                        <ul id="sortable1" class="connectedSortable " data-ng-if="subGroupList.length>=1">
                             <p><b>Sub Group 1</b></p>
                             <li class="splittable" id="{{member.id}}" data-ng-repeat="member in subGroupWithDeptMap[0] track by $index" data-ng-if="member.id!=''">
                                 {{member.programName}}:{{member.year}}/{{member.semester}} ({{member.studentNumber}})
@@ -329,10 +337,10 @@
                         </ul>
 
 
-                    </div>
+                    <!--</div>
                     <hr>
                     <hr>
-                    <div class="row">
+                    <div class="row">-->
                         <ul id="sortable4" class="connectedSortable" data-ng-if="subGroupList.length>=4">
                             <p><b>Sub Group 4</b></p>
                             <li class="splittable" id="{{member.id}}" data-ng-repeat="member in subGroupWithDeptMap[3] track by $index" data-ng-if="member.id!=''">
@@ -364,19 +372,19 @@
 
                 <div class="row" data-ng-if="colForSubGroup!=9999 " data-ng-show="subGroupFound==false">
 
-                    <ul id="droppable1" class="connectedSortable" data-ng-show="colForSubgroup>=1"  >
+                    <ul id="droppable1" class="connectedSortable col-md-2" data-ng-show="colForSubgroup>=1"  >
                         <p><b>Sub Group 1</b> </p>
                     </ul>
-                    <ul class="connectedSortable" id="droppable2" data-ng-show="colForSubgroup>=2" >
+                    <ul class="connectedSortable col-md-2" id="droppable2" data-ng-show="colForSubgroup>=2" >
                         <p><b>Sub Group 2</b></p>
                     </ul>
                     <ui class="connectedSortable" id="droppable3" data-ng-show="colForSubgroup>=3"  >
                         <p><b>Sub Group 3</b></p>
                     </ui>
-                </div>
+               <!-- </div>
                 <hr>
-                <hr>
-                <div class="row" data-ng-if="colForSubgroup!=9999 " data-ng-show=" subGroupFound==false">
+                <hr>-->
+                <!--<div class="row" data-ng-if="colForSubgroup!=9999 " data-ng-show=" subGroupFound==false">-->
                     <ui class=" connectedSortable" id="droppable4" data-ng-show="colForSubgroup>=4" >
                         <p><b>Sub Group 4</b></p>
                     </ui>
@@ -388,28 +396,23 @@
                     </div>
 
                 </div>
+                    <hr>
+                    <div class="row " id="statistics">
+                        <div >
+
+
+                            <div   data-ng-repeat="subGroup in subGroupList">
+                                <p data-ng-if="subGroup.subGroupNumber<= colForSubgroup " class="col-md-1" style="width: 13%;"><!--Sub Group {{subGroup.subGroupNumber}}--> total Student: {{subGroup.subGroupTotalStudentNumber}}</p>
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
 
             </div>
-            <div class="row " id="statistics">
-                <div >
-                    <h2>Statistics</h2>
 
-                    Total Students:
-                    <div data-ng-repeat="groupNo in groupList | filter:{groupNumber: selectedGroupNo}">
-                        <h3>{{groupNo.totalStudentNumber}}</h3>
-                    </div>
-                    <hr>
-                    <hr>
-                    <div   data-ng-repeat="subGroup in subGroupList">
-                        <p data-ng-if="subGroup.subGroupNumber<= colForSubgroup " >Sub Group {{subGroup.subGroupNumber}} total Student: {{subGroup.subGroupTotalStudentNumber}}</p>
-                    </div>
-                    <hr>
-                    <hr>
-
-                </div>
-
-
-            </div>
 
         </div>
         <hr>

@@ -9,6 +9,7 @@ module ums{
     roomList:any;
 
     data:any;
+    selectedGroupTotalStudent:number;
     splitNumber:number;
     groupNumber:number;
     semester:ISemester
@@ -32,6 +33,7 @@ module ums{
     totalStudentGroup3:number;
     totalNumberSubGroup:number;
     subGroupTotalNumber:number;
+    groupIdLength:number;
     groupList:Array<IGroup>;
     tempGroupList:Array<IGroup>;
     tempGroupListAll:Array<ISeatPlanGroup>;
@@ -319,6 +321,13 @@ module ums{
               memberStudentNumber= members.studentNumber;
               var leftStudentNumber = memberStudentNumber - splitNumber;
               var previousMember = members;
+              if(this.$scope.tempGroupList[i].groupMembers[j].splitOccuranceNumber==0 && this.$scope.groupIdLength==null){
+                /*When any split occurance is occured, then, in the group id, an extra number is added, so that the number can be used to show the unique id's.
+                * But, the extra number is needed to be removed. That's why groupIdLength is recorded once. It will be recorded only when split is fired. Else,
+                * the value will be null and it will be checked at the json making time.*/
+                var idString:string = this.$scope.tempGroupList[i].groupMembers[j].id.toString();
+                this.$scope.groupIdLength = idString.length;
+              }
               this.$scope.tempGroupList[i].groupMembers[j].splitOccuranceNumber+=1;
               this.$scope.tempGroupList[i].groupMembers[j].studentNumber = leftStudentNumber;
               this.$scope.tempGroupList[i].groupMembers[j].showSubPortion = false;
@@ -339,7 +348,7 @@ module ums{
               newMember.studentNumber = +splitNumber;
               newMember.showSubPortion = false;
               var id = members.id;
-              var idString = id.toString();
+              var idString:string = id.toString();
               if (newMember.splitOccuranceNumber == 0) {
                 idString = idString + this.$scope.tempGroupList[i].groupMembers[j].splitOccuranceNumber;
                 newMember.splitOccuranceNumber = 1;
@@ -437,6 +446,14 @@ module ums{
 
 
     private createOrViewSubgroups(group:number):void{
+
+      for(var i=0;i<this.$scope.groupList.length;i++){
+        if(this.$scope.groupList[i].groupNumber==group){
+          this.$scope.selectedGroupTotalStudent = this.$scope.groupList[i].totalStudentNumber;
+          console.log("--total student--:"+this.$scope.selectedGroupTotalStudent);
+          break;
+        }
+      }
       this.$scope.splitActionOccured = false;
       this.$scope.tempGroupListAll=[];
 
@@ -552,15 +569,19 @@ module ums{
 
 
           }
-
+          this.$scope.tempGroupListAll=[];
           for(var i=0;i<this.$scope.subGroupList.length;i++){
             var studentList:Array<ISeatPlanGroup>=this.$scope.subGroupList[i].subGroupMembers;
+            for(var m=0;m<this.$scope.subGroupList[i].subGroupMembers.length;m++){
+
+            }
             this.$scope.tempGroupListAll = this.$scope.tempGroupListAll.concat(studentList);
             this.$scope.subGroupWithDeptMap[i]=studentList;
 
           }
 
-
+          console.log("tempgroupListAll--->");
+          console.log(this.$scope.tempGroupListAll);
 
           // this.$scope.subGroupList = [];
 
@@ -1412,7 +1433,30 @@ module ums{
       for(var i=0;i<seatPlanJsonData.length;i++){
         var item={};
         item["subGroupNo"] = seatPlanJsonData[i].subGroupNo;
-        item["groupId"] = seatPlanJsonData[i].groupId;
+        if(this.$scope.groupIdLength!=null){
+          var groupId:string = seatPlanJsonData[i].groupId.toString();
+          if(groupId.length>this.$scope.groupIdLength){
+            console.log("----*******----");
+            console.log("groupId:"+groupId);
+            var groupIdToStringArray = groupId.split("");
+
+            console.log("groupIdToStringArray:"+groupIdToStringArray);
+            var idStr:string="";
+            for(var k=0;k<groupIdToStringArray.length-1;k++){
+              idStr= idStr+ groupIdToStringArray[k];
+            }
+
+            console.log('idStr:'+idStr);
+            var id:number = +idStr;
+            console.log("id:"+id);
+            item["groupId"] = id;
+          }else{
+            item["groupId"] = seatPlanJsonData[i].groupId;
+          }
+
+        }else{
+          item["groupId"] = seatPlanJsonData[i].groupId;
+        }
         item["position"] = seatPlanJsonData[i].position;
         item["studentNumber"] = seatPlanJsonData[i].studentNumber;
 

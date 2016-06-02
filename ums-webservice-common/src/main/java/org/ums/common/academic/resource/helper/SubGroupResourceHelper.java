@@ -112,6 +112,7 @@ public class SubGroupResourceHelper extends ResourceHelper<SubGroup,MutableSubGr
         subGroup.setPosition(jsonObject.getInt("position"));
         PersistentSeatPlanGroup group = new PersistentSeatPlanGroup();
         group.setId(jsonObject.getInt("groupId"));
+        group.setGroupNo(pGroupNo);
         subGroup.setGroup(group);
         subGroup.setStudentNumber(jsonObject.getInt("studentNumber"));
         subGroups.add(subGroup);

@@ -16,5 +16,6 @@ public interface SubGroup extends Serializable,LastModifier,EditType<MutableSubG
   int subGroupNo();
   int getPosition();
   int getStudentNumber();
+  int getGroupNo();
   int getExamType();
 }
