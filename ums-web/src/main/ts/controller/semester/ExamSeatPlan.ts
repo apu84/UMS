@@ -37,9 +37,9 @@ module ums{
     subGroupTotalNumber:number;
     groupIdLength:number;
     groupList:Array<IGroup>;
-    tempGroupList:Array<IGroup>;
+    tempGroupList:Array<ISeatPlanGroup>;
     tempGroupListAll:Array<ISeatPlanGroup>;
-    splittedGroupList:Array<IGroup>;
+    splittedGroupList:Array<ISeatPlanGroup>;
     selectedGroupList:Array<ISeatPlanGroup>;
     subGroupList:Array<ISubGroup>;
     subGroup1List:any;
@@ -82,7 +82,7 @@ module ums{
 
     //map in javascript
     subGroupWithDeptMap:any;
-
+    mouseClickEvent:Function;
     viewGroups:Function;
     getSemesterInfo:Function;
     getSeatPlanGroupInfo:Function;
@@ -183,7 +183,7 @@ module ums{
     public static $inject = ['appConstants','HttpClient','$scope','$q','notify','$timeout','$sce','$window'];
     constructor(private appConstants: any, private httpClient: HttpClient, private $scope: IExamSeatPlanScope,
                 private $q:ng.IQService, private notify: Notify,private $timeout:ITimeoutService,
-                private $sce:ng.ISCEService,private $window:ng.IWindowService,private $angularUi: UISortableOptions ) {
+                private $sce:ng.ISCEService,private $window:ng.IWindowService ) {
 
       var arr : { [key:number]:Array<ISeatPlanGroup>; } = {};
 
@@ -254,6 +254,7 @@ module ums{
       $scope.splitACourseStudent = this.splitCourseStudent.bind(this);
       $scope.splitAction = this.splitAction.bind(this);
       $scope.cancelSplitAction = this.cancelSplitAction.bind(this);
+      $scope.mouseClickEvent = this.mouseClickEvent.bind(this);
       this.initialize();
 
     }
@@ -282,7 +283,7 @@ module ums{
     private cancelSplitAction(splitId:number):void{
       console.log("in the cancel action");
       console.log(splitId);
-      for(var i=0;i<this.$scope.tempGroupList.length;i++){
+    /*  for(var i=0;i<this.$scope.tempGroupList.length;i++){
         if(this.$scope.tempGroupList[i].groupNumber == this.$scope.selectedGroupNo){
           for(var j=0;j<this.$scope.tempGroupList[i].groupMembers.length;j++){
             var member = this.$scope.tempGroupList[i].groupMembers[j];
@@ -294,6 +295,13 @@ module ums{
           }
           break;
         }
+      }*/
+
+      for(var i=0;i<this.$scope.tempGroupList.length;i++){
+        if(this.$scope.tempGroupList[i].id == splitId){
+          this.$scope.tempGroupList[i].showSubPortion=false;
+          break;
+        }
       }
 
       //this.$scope.$apply();
@@ -303,37 +311,36 @@ module ums{
       this.$scope.splitActionOccured = true;
       this.$scope.tempGroupListAll=[];
       this.$scope.recreate = true;
-      for(var i=0;i<this.$scope.tempGroupList.length;i++) {
+     /* for(var i=0;i<this.$scope.tempGroupList.length;i++) {
         if (this.$scope.tempGroupList[i].groupNumber == this.$scope.selectedGroupNo) {
           var tempMemberStore = this.$scope.tempGroupList[i].groupMembers;
-         /* if(this.$scope.tempGroupListAll.length==0){
+         /!* if(this.$scope.tempGroupListAll.length==0){
             this.$scope.tempGroupListAll = this.$scope.tempGroupListAll.concat(tempMemberStore);
-          }*/
+          }*!/
           //this.$scope.tempGroupList[i].groupMembers = [];
-          var foundInTheTempGroup:boolean = false;
-          for (var j = 0; j < tempMemberStore.length; j++) {
-            var members = tempMemberStore[j];
+          var foundInTheTempGroup:boolean = false;*/
+          for (var j = 0; j < this.$scope.tempGroupList.length; j++) {
+            var members =this.$scope.tempGroupList[j];
             if (members.id == this.$scope.splitId) {
               var $liDelete=$("<li class='ui-state-default' />").text(" ");
               $liDelete.attr('id',members.id);
-              foundInTheTempGroup = true;
               console.log("Found match");
               var tempArray:Array<ISeatPlanGroup>=[];
               var memberStudentNumber :any={};
               memberStudentNumber= members.studentNumber;
               var leftStudentNumber = memberStudentNumber - splitNumber;
               var previousMember = members;
-              if(this.$scope.tempGroupList[i].groupMembers[j].splitOccuranceNumber==0 && this.$scope.groupIdLength==null){
+              if(this.$scope.tempGroupList[j].splitOccuranceNumber==0 && this.$scope.groupIdLength==null){
                 /*When any split occurance is occured, then, in the group id, an extra number is added, so that the number can be used to show the unique id's.
                 * But, the extra number is needed to be removed. That's why groupIdLength is recorded once. It will be recorded only when split is fired. Else,
                 * the value will be null and it will be checked at the json making time.*/
-                var idString:string = this.$scope.tempGroupList[i].groupMembers[j].id.toString();
+                var idString:string = this.$scope.tempGroupList[j].id.toString();
                 this.$scope.groupIdLength = idString.length;
               }
-              this.$scope.tempGroupList[i].groupMembers[j].splitOccuranceNumber+=1;
-              this.$scope.tempGroupList[i].groupMembers[j].studentNumber = leftStudentNumber;
-              this.$scope.tempGroupList[i].groupMembers[j].showSubPortion = false;
-              this.$scope.tempGroupListAll.push(this.$scope.tempGroupList[i].groupMembers[j]);
+              this.$scope.tempGroupList[j].splitOccuranceNumber+=1;
+              this.$scope.tempGroupList[j].studentNumber = leftStudentNumber;
+              this.$scope.tempGroupList[j].showSubPortion = false;
+              this.$scope.tempGroupListAll.push(this.$scope.tempGroupList[j]);
               console.log("---previous member id : "+previousMember.id);
 
               //var newMember = tempMemberStore[j];
@@ -352,7 +359,7 @@ module ums{
               var id = members.id;
               var idString:string = id.toString();
               if (newMember.splitOccuranceNumber == 0) {
-                idString = idString + this.$scope.tempGroupList[i].groupMembers[j].splitOccuranceNumber;
+                idString = idString + this.$scope.tempGroupList[j].splitOccuranceNumber;
                 newMember.splitOccuranceNumber = 1;
               } else {
                 var idArr: Array<String> = idString.split("");
@@ -372,6 +379,7 @@ module ums{
              /*this.createDroppable();*/
 
               this.$scope.tempGroupListAll.push(newMember);
+              this.$scope.splittedGroupList.push(newMember);
                 //this.$scope.tempGroupList[i].groupMembers.push(tempArray[k]);
 
 
@@ -379,19 +387,17 @@ module ums{
 
             } else {
               //this.$scope.tempGroupList[i].groupMembers.push(members);
-              this.$scope.tempGroupListAll.push(this.$scope.tempGroupList[i].groupMembers[j]);
+              this.$scope.tempGroupListAll.push(this.$scope.tempGroupList[j]);
             }
             /*this.$scope.tempGroupListAll=[];
             this.$scope.tempGroupListAll = this.$scope.tempGroupList[i].groupMembers;*/
           }
 
-          break;
-        }
-      }
+
       this.$scope.recreate=false;
-      /*$("#sortable").sortable("refresh");
-      $("#sortable").sortable("refreshPositions");*/
-      console.log(this.$scope.tempGroupListAll);
+      /*/!*$("#sortable").sortable("refresh");
+      $("#sortable").sortable("refreshPositions");*!/
+      console.log(this.$scope.tempGroupListAll);*/
 
     }
 
@@ -401,14 +407,28 @@ module ums{
       var currentScope = this;
 
       if(menuNumber==1){
-        for(var i=0;i<currentScope.$scope.groupList.length;i++){
-          if(currentScope.$scope.groupList[i].groupNumber == currentScope.$scope.selectedGroupNo){
-            for(var j=0; j<currentScope.$scope.groupList[i].groupMembers.length;j++){
-              if(currentScope.$scope.groupList[i].groupMembers[j].id == currentScope.$scope.splitId){
-                currentScope.$scope.groupList[i].groupMembers[j].showSubPortion = true;
+        console.clear();
 
+        if(this.$scope.subGroupFound){
+          console.log('Sub group found!!!!');
+          for(var i=0;i<this.$scope.subGroupList.length;i++){
+            var matchFound:boolean=false;
+            for(var j=0;j<this.$scope.subGroupList[i].subGroupMembers.length;j++){
+              if(this.$scope.subGroupList[i].subGroupMembers[j].id==this.$scope.splitId){
+                console.log("match found of saved sub group");
+                this.$scope.subGroupList[i].subGroupMembers[j].showSubPortion=true;
+                matchFound=true;
                 break;
               }
+            }
+            if(matchFound){
+              break;
+            }
+          }
+        }else{
+          for(var i=0;i<this.$scope.tempGroupList.length;i++){
+            if(this.$scope.tempGroupList[i].id==this.$scope.splitId){
+              this.$scope.tempGroupList[i].showSubPortion=true;
             }
           }
         }
@@ -493,19 +513,25 @@ module ums{
 
     private createOrViewSubgroups(group:number):void{
 
+      console.clear();
+      console.log("##############");
       console.log(this.$scope.groupList);
-
+      this.$scope.tempGroupList=[];
+      this.$scope.splittedGroupList=[];
       for(var l=0;l<this.$scope.groupList.length;l++){
         if(this.$scope.groupList[l].groupNumber==group){
           this.$scope.tempGroupListAll=[];
          for(var i=0;i<this.$scope.groupList[l].groupMembers.length;i++){
 
            this.$scope.tempGroupListAll.push(this.$scope.groupList[l].groupMembers[i]);
+           this.$scope.tempGroupList.push(this.$scope.groupList[l].groupMembers[i]);
 
          }
           break;
         }
       }
+
+      $("#splittedList").enableSelection();
       console.log("*** temp group list all***");
       console.log(this.$scope.tempGroupListAll);
       for(var i=0;i<this.$scope.groupList.length;i++){
@@ -520,66 +546,6 @@ module ums{
 
       var whichMenuClicked:String;
 
-      // Trigger action when the contexmenu is about to be shown
-      $("#subGroupPanel li").on("contextmenu", function (event) {
-
-        // Avoid the real one
-        event.preventDefault();
-
-        // Show contextmenu
-        $(".custom-menu").finish().toggle(100).
-
-        // In the right position (the mouse)
-        css({
-
-          top: event.pageY - $("#topbar").height()+"px" ,
-          left: event.pageX - $("#sidebar").width()+"px"
-        });
-
-      });
-
-
-// If the document is clicked somewhere
-      $("#subGroupPanel").bind("mousedown", function (e) {
-
-        // If the clicked element is not the menu
-        if (!($(e.target).parents(".custom-menu").length > 0)) {
-
-          // Hide it
-          $(".custom-menu").hide(100);
-        }
-      });
-
-      /*with the mouse down jquery function, we are getting the event only of right button,
-       * that's why the case is 3.
-       * with the line: $(this).attr('id') , we are getting the id when the right mouse button click event is triggered.*/
-      $(".connectedSortable li").mousedown(function(event){
-        switch(event.which){
-          case 3:
-            var id = $(this).attr('id');
-            currentScope.$scope.splitId = +id;
-
-            console.log($(this).attr('id'));
-        }
-      });
-
-      /*Current scope will be used in replace of 'this' of angularjs, to jquery, else, jquery will not recognize that.*/
-      var currentScope = this;
-// If the menu element is clicked
-      $(".custom-menu li").click(function(){
-
-        // This is the triggered action name
-        switch($(this).attr("data-action")) {
-
-          case "split": currentScope.$scope.splitButtonClicked=true;
-            console.log('split button before function call');
-            console.log(currentScope.$scope.splitButtonClicked);
-            currentScope.splitCourseStudent(1);
-            console.log("Split button is clicked");break;
-          case "revertSplit": currentScope.$scope.reverseSplitButtonClicked=true;console.log("Reverse button is clicked!");break;
-        }
-        $(".custom-menu").hide(100);
-      });
 
       this.$scope.selectedGroupNo = group;
       this.getSelectedGroupList(group);
@@ -633,11 +599,13 @@ module ums{
           }
 
           this.$scope.tempGroupListAll=[];
+          this.$scope.tempGroupList=[];
           for(var i=0;i<this.$scope.subGroupList.length;i++){
             var studentList:Array<ISeatPlanGroup>=this.$scope.subGroupList[i].subGroupMembers;
 
            for(var k=0;k<studentList.length;k++){
              this.$scope.tempGroupListAll.push(studentList[k]);
+             this.$scope.tempGroupList.push(studentList[k]);
            }
             this.$scope.subGroupWithDeptMap[i]=studentList;
 
@@ -666,7 +634,7 @@ module ums{
           }
           this.$scope.deleteAndCreateNewSubGroup = true;
 
-
+          this.mouseClickEvent();
 
         }
         else{
@@ -689,11 +657,87 @@ module ums{
 
           this.createDroppable();
 
+          this.mouseClickEvent();
 
+        }
+
+       /* $("#ifti_div").on("contextmenu", function (event) {
+          event.preventDefault();
+          console.log("ifti");
+          console.log($( "#subGroupPanel" ).find( "li" ));
+        });
+        //console.log($( "#subGroupPanel" ).find( "li" ));
+
+        //setTimeout(myFunction, 2000)
+
+        function myFunction() {
+          // Trigger action when the contexmenu is about to be shown
+          $(".ui-state-default").on("contextmenu", function (event) {
+
+            console.log("Inside 'contextmenu' ....................");
+            // Avoid the real one
+            event.preventDefault();
+
+            // Show contextmenu
+            $(".custom-menu").finish().toggle(100).
+
+            // In the right position (the mouse)
+            css({
+
+              top: event.pageY - $("#topbar").height()+"px" ,
+              left: event.pageX - $("#sidebar").width()+"px"
+            });
+
+          });
 
         }
 
 
+
+
+
+// If the document is clicked somewhere
+        $("#subGroupPanel").bind("mousedown", function (e) {
+          console.log("Inside 'mousedown' ....................");
+          // If the clicked element is not the menu
+          if (!($(e.target).parents(".custom-menu").length > 0)) {
+            console.log("inside ......................")
+            // Hide it
+            $(".custom-menu").hide(100);
+          }
+        });
+
+        /!*with the mouse down jquery function, we are getting the event only of right button,
+         * that's why the case is 3.
+         * with the line: $(this).attr('id') , we are getting the id when the right mouse button click event is triggered.*!/
+        $(".connectedSortable li").mousedown(function(event){
+          switch(event.which){
+            case 3:
+              var id = $(this).attr('id');
+              currentScope.$scope.splitId = +id;
+
+              console.log($(this).attr('id'));
+          }
+        });
+
+        /!*Current scope will be used in replace of 'this' of angularjs, to jquery, else, jquery will not recognize that.*!/
+        var currentScope = this;
+// If the menu element is clicked
+        $(".custom-menu li").click(function(){
+
+          // This is the triggered action name
+          switch($(this).attr("data-action")) {
+
+            case "split": currentScope.$scope.splitButtonClicked=true;
+              console.log('split button before function call');
+              console.log(currentScope.$scope.splitButtonClicked);
+              currentScope.splitCourseStudent(1);
+              console.log("Split button is clicked");break;
+            case "revertSplit": currentScope.$scope.reverseSplitButtonClicked=true;console.log("Reverse button is clicked!");break;
+          }
+          $(".custom-menu").hide(100);
+        });
+*/
 
       });
 
@@ -704,6 +748,95 @@ module ums{
 
     }
 
+    private mouseClickEvent():void{
+
+
+      setTimeout(myFunction, 2000)
+      $("#ifti_div").on("contextmenu", function (event) {
+        event.preventDefault();
+        console.log("ifti");
+        console.log($( "#subGroupPanel" ).find( "li" ));
+      });
+      //console.log($( "#subGroupPanel" ).find( "li" ));
+
+
+
+      function myFunction() {
+        // Trigger action when the contexmenu is about to be shown
+        $(".connectedSortable li").on("contextmenu", function (event) {
+
+          console.log("Inside 'contextmenu' ....................");
+          // Avoid the real one
+          event.preventDefault();
+
+          // Show contextmenu
+          $(".custom-menu").finish().toggle(100).
+
+          // In the right position (the mouse)
+          css({
+
+            top: event.pageY - $("#topbar").height()+"px" ,
+            left: event.pageX - $("#sidebar").width()+"px"
+          });
+
+        });
+
+
+// If the document is clicked somewhere
+        $("#subGroupPanel").bind("mousedown", function (e) {
+          console.log("Inside 'mousedown' ....................");
+          // If the clicked element is not the menu
+          if (!($(e.target).parents(".custom-menu").length > 0)) {
+            console.log("inside .....???.................")
+            // Hide it
+            $(".custom-menu").hide(100);
+          }
+        });
+
+        /*with the mouse down jquery function, we are getting the event only of right button,
+         * that's why the case is 3.
+         * with the line: $(this).attr('id') , we are getting the id when the right mouse button click event is triggered.*/
+        $("#subGroupPanel li").mousedown(function(event){
+          console.log("In the list");
+          switch(event.which){
+            case 3:
+              var id = $(this).attr('id');
+              console.log($(this));
+              currentScope.$scope.splitId = +id;
+
+              console.log($(this).attr('id'));
+          }
+        });
+
+      }
+
+
+
+
+
+
+
+
+
+      /*Current scope will be used in replace of 'this' of angularjs, to jquery, else, jquery will not recognize that.*/
+      var currentScope = this;
+// If the menu element is clicked
+      $(".custom-menu li").click(function(){
+
+        // This is the triggered action name
+        switch($(this).attr("data-action")) {
+
+          case "split": currentScope.$scope.splitButtonClicked=true;
+            console.log('split button before function call');
+            console.log(currentScope.$scope.splitButtonClicked);
+            currentScope.splitCourseStudent(1);
+            console.log("Split button is clicked");break;
+          case "revertSplit": currentScope.$scope.reverseSplitButtonClicked=true;console.log("Reverse button is clicked!");break;
+        }
+        $(".custom-menu").hide(100);
+      });
+
+    }
     private createDroppable():void{
       $("#sortable,#droppable1,#droppable2,#droppable3,#droppable4,#dropdown5,#droppable6,#splittedList").sortable({
         connectWith: ".connectedSortable"
@@ -905,11 +1038,11 @@ module ums{
 
 
 
-      $("#sortable1,#sortable2,#sortable3,#sortable4,#sortable5,#sortable6,#splittedList").sortable({
+      $("#sortable,#sortable1,#sortable2,#sortable3,#sortable4,#sortable5,#sortable6,#splittedList").sortable({
         connectWith: ".connectedSortable"
       });
 
-
+      $("#sortable").sortable("enable");
       $("#sortable1").sortable("enable");
       $("#sortable2").sortable("enable");
       $("#sortable3").sortable("enable");
@@ -1336,7 +1469,7 @@ module ums{
 
 
       });
-      this.$scope.tempGroupList = this.$scope.groupList;
+
     }
 
     private getRoomList():void{
@@ -1351,13 +1484,19 @@ module ums{
 
 
     private closeSubGroupOrRoomInfoWindow():void{
+
+      $("#splittedList").empty();
+
+      console.log(" -- close button clicked---");
       this.$scope.groupSelected = false;
       this.$scope.subGroupSelected = false;
       this.$scope.showGroupSelectionPanel = true;
       this.$scope.recreateButtonClicked=false;
-      $(".connectedSortable li").off("contextmenu");
-
-
+      $( "#subGroupPanel").unbind( "mousedown" );
+      $("#subGroupPanel li").unbind("contextmenu");
+      $("#ifti_div").unbind("contextmenu");
+      //$("#subGroupPanel li").off();
+    //$(".connectedSortable li").off();
 
       }
 
