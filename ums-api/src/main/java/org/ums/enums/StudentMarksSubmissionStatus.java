@@ -5,13 +5,14 @@ package org.ums.enums;
  */
 public enum StudentMarksSubmissionStatus {
     NONE(0,"None"),
-    SAVED(1,"Saved"),
+    SUBMIT(1,"Submit"),
     SUBMITTED(2,"Submitted"),
-    APPROVED(3,"Approved"),
-    ACCEPTED(4,"Accepted"),
-    RECHECK(5,"Recheck"),
-    RECHECKED(6,"Rechecked");
-
+    SCRUTINIZE(3,"Scrutiny"),
+    SCRUTINIZED(4,"Scrutinized"),
+    APPROVE(5,"Approve"),
+    APPROVED(6,"Approved"),
+    ACCEPT(7,"Accept"),
+    ACCEPTED(8,"Accepted");
 
     private String label;
     private int id;

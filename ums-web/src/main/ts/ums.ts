@@ -488,8 +488,18 @@ module ums {
           url: "/flushCache",
           controller: 'FlushCache'
         })
-        .state('gradeSheetSelection', {
-          url: "/gradeSheetSelection",
+        .state('gradeSheetSelectionTeacher', {
+          url: "/gradeSheetSelectionTeacher/:role",
+          templateUrl: 'views/grade/grade-sheet-selection.html',
+          controller: 'MarksSubmission'
+        })
+        .state('gradeSheetSelectionHead', {
+          url: "/gradeSheetSelectionHead/:role",
+          templateUrl: 'views/grade/grade-sheet-selection.html',
+          controller: 'MarksSubmission'
+        })
+        .state('gradeSheetSelectionCoE', {
+          url: "/gradeSheetSelectionCoE/:role",
           templateUrl: 'views/grade/grade-sheet-selection.html',
           controller: 'MarksSubmission'
         })

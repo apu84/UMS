@@ -9,6 +9,8 @@ import org.ums.domain.model.immutable.ExamGrade;
 import org.ums.domain.model.immutable.ExamRoutine;
 import org.ums.domain.model.mutable.MutableExamGrade;
 import org.ums.domain.model.mutable.MutableExamRoutine;
+import org.ums.enums.RecheckStatus;
+import org.ums.enums.StudentMarksSubmissionStatus;
 
 import javax.json.Json;
 import javax.json.JsonArray;
@@ -60,10 +62,128 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
                 grade.setPartB((jsonObject.getString("partB")==null  || jsonObject.getString("partB").equalsIgnoreCase(""))? -1:Float.parseFloat(jsonObject.getString("partB")));
             grade.setTotal((jsonObject.getString("total") == null || jsonObject.getString("total").equalsIgnoreCase("")) ? -1 : Float.parseFloat(jsonObject.getString("total")));
             grade.setGradeLetter((jsonObject.getString("gradeLetter")==null  || jsonObject.getString("gradeLetter").equalsIgnoreCase("") )? "" :jsonObject.getString("gradeLetter"));
-            grade.setStatus(jsonObject.getInt("status"));
+            grade.setStatusId(jsonObject.getInt("statusId"));
+            grade.setStatus(StudentMarksSubmissionStatus.values()[jsonObject.getInt("statusId")]);
+
+            //grade.setrec(RecheckStatus.values()[jsonObject.getInt("status")]);
+            //grade.setStatus(StudentMarksSubmissionStatus.values()[jsonObject.getInt("status")]);
 
             gradeList.add(grade);
         }
         return gradeList;
     }
+
+    public ArrayList<List<StudentGradeDto>> buildForRecheckApproveGrade(String action,String actor,JsonObject pJsonObject) throws Exception {
+
+        ArrayList<List<StudentGradeDto>> recheckApproveList=new ArrayList<>();
+        JsonArray recheckEntries=pJsonObject.getJsonArray("recheckList");
+        JsonArray approveEntries=pJsonObject.getJsonArray("approveList");
+
+        List<StudentGradeDto> recheckList=new ArrayList<>(recheckEntries.size());
+        List<StudentGradeDto> approveList=new ArrayList<>(approveEntries.size());
+
+        if(action.equalsIgnoreCase("save")) {
+            for (int i = 0; i < recheckEntries.size(); i++) {
+                JsonObject jsonObject = recheckEntries.getJsonObject(i);
+                StudentGradeDto grade = new StudentGradeDto();
+                grade.setRecheckStatus(RecheckStatus.RECHECK_TRUE);
+                grade.setStudentId(jsonObject.getString("studentId"));
+                grade.setPreviousStatusString(getPrevMarksSubmissionStatus(actor));
+                recheckList.add(grade);
+            }
+            for (int i = 0; i < approveEntries.size(); i++) {
+                JsonObject jsonObject = approveEntries.getJsonObject(i);
+                StudentGradeDto grade = new StudentGradeDto();
+                grade.setRecheckStatus(RecheckStatus.RECHECK_FALSE);
+                grade.setStatus(getMarksSubmissionStatus(actor, action, "approve"));
+                grade.setStudentId(jsonObject.getString("studentId"));
+                grade.setPreviousStatusString(getPrevMarksSubmissionStatus(actor));
+                approveList.add(grade);
+            }
+        }
+        else if(action.equalsIgnoreCase("recheck")) {
+            for (int i = 0; i < recheckEntries.size(); i++) {
+                JsonObject jsonObject = recheckEntries.getJsonObject(i);
+                StudentGradeDto grade = new StudentGradeDto();
+                grade.setRecheckStatus(RecheckStatus.RECHECK_TRUE);
+                grade.setStatus(getMarksSubmissionStatus(actor,action,"recheck"));
+                grade.setStudentId(jsonObject.getString("studentId"));
+                grade.setPreviousStatusString(getPrevMarksSubmissionStatus(actor));
+                recheckList.add(grade);
+            }
+            for (int i = 0; i < approveEntries.size(); i++) {
+                JsonObject jsonObject = approveEntries.getJsonObject(i);
+                StudentGradeDto grade = new StudentGradeDto();
+                grade.setRecheckStatus(RecheckStatus.RECHECK_FALSE);
+                grade.setStatus(getMarksSubmissionStatus(actor,action,"approve"));
+                grade.setStudentId(jsonObject.getString("studentId"));
+                grade.setPreviousStatusString(getPrevMarksSubmissionStatus(actor));
+                approveList.add(grade);
+            }
+        }
+        else if(action.equalsIgnoreCase("approve")) {
+            for (int i = 0; i < approveEntries.size(); i++) {
+                JsonObject jsonObject = approveEntries.getJsonObject(i);
+                StudentGradeDto grade = new StudentGradeDto();
+                grade.setRecheckStatus(RecheckStatus.RECHECK_FALSE);
+                grade.setStatus(getMarksSubmissionStatus(actor,action,"approve"));
+                grade.setStudentId(jsonObject.getString("studentId"));
+                grade.setPreviousStatusString(getPrevMarksSubmissionStatus(actor));
+                approveList.add(grade);
+            }
+        }
+        recheckApproveList.add(recheckList);
+        recheckApproveList.add(approveList);
+        return recheckApproveList;
+    }
+
+    private StudentMarksSubmissionStatus getMarksSubmissionStatus(String actor,String action,String gradeType){
+        if(actor.equals("scrutinizer")){
+            if(action.equals("save") && gradeType.equals("approve"))
+                return StudentMarksSubmissionStatus.SCRUTINIZE;
+            else if(action.equals("recheck")  && gradeType.equals("recheck"))
+                return StudentMarksSubmissionStatus.NONE;
+            else if(action.equals("recheck")  && gradeType.equals("approve"))
+                return StudentMarksSubmissionStatus.SCRUTINIZE;
+            else if(action.equals("approve")   && gradeType.equals("recheck"))
+                return StudentMarksSubmissionStatus.SCRUTINIZED;
+            else if(action.equals("approve") && gradeType.equals("approve"))
+                return StudentMarksSubmissionStatus.SCRUTINIZED;
+        }
+        if(actor.equals("head")){
+            if(action.equals("save") && gradeType.equals("approve"))
+                return StudentMarksSubmissionStatus.APPROVE;
+            else if(action.equals("recheck")  && gradeType.equals("recheck"))
+                return StudentMarksSubmissionStatus.SUBMITTED;
+            else if(action.equals("recheck")  && gradeType.equals("approve"))
+                return StudentMarksSubmissionStatus.APPROVE;
+            else if(action.equals("approve") && gradeType.equals("approve"))
+                return StudentMarksSubmissionStatus.APPROVED;
+        }
+        if(actor.equals("coe")){
+            if(action.equals("save") && gradeType.equals("approve"))
+                return StudentMarksSubmissionStatus.ACCEPT;
+            else if(action.equals("recheck")  && gradeType.equals("recheck"))
+                return StudentMarksSubmissionStatus.SCRUTINIZED;
+            else if(action.equals("recheck")  && gradeType.equals("approve"))
+                return StudentMarksSubmissionStatus.ACCEPT;
+            else if(action.equals("approve")  && gradeType.equals("approve"))
+                return StudentMarksSubmissionStatus.ACCEPTED;
+        }
+        return null;
+    }
+
+    private String getPrevMarksSubmissionStatus(String actor){
+        if(actor.equals("scrutinizer"))
+            return StudentMarksSubmissionStatus.SUBMITTED.getId()+","+StudentMarksSubmissionStatus.SCRUTINIZE.getId();
+        if(actor.equals("head"))
+            return StudentMarksSubmissionStatus.SCRUTINIZED.getId()+","+StudentMarksSubmissionStatus.APPROVE.getId();
+        if(actor.equals("coe"))
+            return StudentMarksSubmissionStatus.APPROVED.getId()+","+StudentMarksSubmissionStatus.ACCEPT.getId();
+
+        return null;
+    }
+
+
+
 }

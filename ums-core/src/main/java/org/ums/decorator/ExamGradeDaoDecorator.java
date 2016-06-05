@@ -4,6 +4,7 @@ import org.ums.domain.model.dto.MarksSubmissionStatusDto;
 import org.ums.domain.model.dto.StudentGradeDto;
 import org.ums.domain.model.immutable.ExamGrade;
 import org.ums.domain.model.mutable.MutableExamGrade;
+import org.ums.enums.CourseMarksSubmissionStatus;
 import org.ums.manager.ExamGradeManager;
 
 import java.util.List;
@@ -24,8 +25,8 @@ public class ExamGradeDaoDecorator  extends ContentDaoDecorator<ExamGrade, Mutab
     }
 
     @Override
-    public List<MarksSubmissionStatusDto> getMarksSubmissionStatus(int semesterId,int examType) throws Exception {
-        return getManager().getMarksSubmissionStatus(semesterId, examType);
+    public List<MarksSubmissionStatusDto> getMarksSubmissionStatus(int pSemesterId,int pExamType,String userId,String deptId,String userRole) throws Exception {
+        return getManager().getMarksSubmissionStatus(pSemesterId,pExamType,userId,deptId,userRole);
     }
 
     @Override
@@ -33,6 +34,24 @@ public class ExamGradeDaoDecorator  extends ContentDaoDecorator<ExamGrade, Mutab
         return getManager().saveGradeSheet(semesterId, courseId, examType, gradeList);
     }
 
+    @Override
+    public boolean updateGradeStatus_Save(int pSemesterId,String pCourseId,int pExamType,List<StudentGradeDto> recheckList,List<StudentGradeDto> approveList) throws Exception {
+        return getManager().updateGradeStatus_Save(pSemesterId, pCourseId, pExamType, recheckList,approveList);
+    }
+    @Override
+    public boolean updateGradeStatus_Recheck(int pSemesterId,String pCourseId,int pExamType,List<StudentGradeDto> recheckList,List<StudentGradeDto> approveList) throws Exception {
+        return getManager().updateGradeStatus_Recheck(pSemesterId, pCourseId, pExamType, recheckList,approveList);
+    }
+
+    @Override
+    public boolean updateGradeStatus_Approve(int pSemesterId,String pCourseId,int pExamType,List<StudentGradeDto> recheckList,List<StudentGradeDto> approveList) throws Exception {
+        return getManager().updateGradeStatus_Approve(pSemesterId, pCourseId, pExamType, recheckList,approveList);
+    }
+
+    @Override
+    public int updateCourseMarksSubmissionStatus(int semesterId,String courseId,int examType,CourseMarksSubmissionStatus status) throws Exception {
+        return getManager().updateCourseMarksSubmissionStatus(semesterId, courseId, examType, status);
+    }
 
     @Override
     public int updatePartInfo(int pSemesterId,String pCourseId,int pExamType,int pTotalPart,int partA,int partB) throws Exception {
