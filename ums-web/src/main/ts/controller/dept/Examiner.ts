@@ -14,6 +14,7 @@ module ums {
     scrutinizerId?: string;
     updateType: string;
     id?: string;
+    programId?: string;
   }
 
   export interface IPostExaminerEntries {
