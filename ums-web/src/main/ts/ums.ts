@@ -498,6 +498,14 @@ module ums {
           controller: 'LoggerGrid',
           templateUrl: 'views/logger/logger-grid.html'
         })
+        //In database use /dummyController/H or /dummyController/T in the location column
+        //https://localhost/ums-web/iums/#/dummyConroller/T
+        //https://localhost/ums-web/iums/#/dummyConroller/H
+        .state('dummyController', {
+          url: "/dummyConroller/:type",
+          controller: 'DummyController',
+          templateUrl: 'views/dummy/dummy.html'
+        })
 
   });
 }

@@ -48,3 +48,11 @@ Insert into DB_IUMS.MAIN_NAVIGATION
  Values
    (2039, 'Examiners', 'assign:examiner', '/examiner', 2029,
     'fa-plus-square-o', 20, 1, '201602141037');
+
+
+Insert into DB_IUMS.MAIN_NAVIGATION
+   (NAVIGATION_ID, MENU_TITLE, PERMISSION, LOCATION, PARENT_MENU,
+    ICON_IMG_CLASS, VIEW_ORDER, STATUS, LAST_MODIFIED)
+ Values
+   (2034, 'Dummy Controller', 'dummy:controller', '/dummyController/H', 0,
+    'fa-plus-square-o', 21, 1, '201602141037');

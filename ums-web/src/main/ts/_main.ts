@@ -96,3 +96,9 @@
 
 /// <reference path='model/TeacherAssignmentSearchParamModel.ts'/>
 /// <reference path='model/CourseTeacherSearchParamModel.ts'/>
+
+
+
+
+
+/// <reference path='dummy/DummyController.ts'/>
