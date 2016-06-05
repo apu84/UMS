@@ -34,12 +34,10 @@ module ums {
     year: string;
     semester: string;
     syllabusId: string;
-    teacherId: string;
-    teacherName: string;
     courseOfferedByDepartmentId: string;
     courseOfferedByDepartmentName: string;
     teachers: Array<ITeacher>;
-    selectedTeachers: {[key: string]: ITeacher};
+
     editMode: boolean;
     updated: boolean;
   }
@@ -60,7 +58,7 @@ module ums {
     [courseId: string]: T;
   }
 
-  interface IPostTeacherEntries {
+  export interface IPostTeacherEntries {
     entries? : Array<IPostAssignedTeacherModel>;
   }
 
@@ -76,8 +74,6 @@ module ums {
     public teachersList: ITeachersMap;
     public formattedMap: IFormattedTeacherMap<T>;
     public savedCopy: IFormattedTeacherMap<T>;
-
-    private newTeacherId: number = 0;
 
     constructor(public appConstants: any, public httpClient: HttpClient,
                 public $scope: ITeacherAssignmentScope, public $q: ng.IQService,
@@ -108,7 +104,7 @@ module ums {
     private fetchTeacherInfo(): void {
       $("#leftDiv").hide();
       $("#arrowDiv").show();
-      $("#rightDiv").removeClass("orgRightClass").addClass("newRightClass");
+      $("#rightDiv").removeClass("orgRightClass").addClass("newRightClass").removeClass('hidden');
 
       this.$scope.loadingVisibility = true;
       this.$scope.contentVisibility = false;
@@ -125,21 +121,24 @@ module ums {
           (data: IAssignedTeachers, etag: string)=> {
             if (!UmsUtil.isEmptyString(this.$scope.teacherSearchParamModel.courseId)) {
               this.formattedMap[this.$scope.teacherSearchParamModel.courseId].updated = true;
+              this.formatTeacher(data.entries, this.$scope.teacherSearchParamModel['courseId']);
               delete this.$scope.teacherSearchParamModel['courseId'];
+            } else {
+              this.formatTeacher(data.entries);
             }
-            this.formatTeacher(data.entries, this.formattedMap);
+
             this.$scope.loadingVisibility = false;
             this.$scope.contentVisibility = true;
           });
     }
 
     //override
-    public formatTeacher(teachers: Array<IAssignedTeacher>, formattedMap: IFormattedTeacherMap<T>): void {
+    public formatTeacher(teachers: Array<IAssignedTeacher>, courseId?: string): void {
       throw new Error("Method not implemented");
     }
 
 
-    private populateTeachers(courseId: string): void {
+    public populateTeachers(courseId: string): void {
       if (this.$scope.entries.hasOwnProperty(courseId)) {
         this.getTeachers(this.$scope.entries[courseId]).then(()=> {
           //do nothing
@@ -171,38 +170,23 @@ module ums {
       throw new Error("Method not implemented");
     }
 
-    private addTeacher(courseId: string): void {
-      this.populateTeachers(courseId);
-      this.$scope.entries[courseId].editMode = true;
-      this.newTeacherId = this.newTeacherId - 1;
-      this.formattedMap[courseId].selectedTeachers[this.newTeacherId] = {};
-      this.formattedMap[courseId].selectedTeachers[this.newTeacherId].id = this.newTeacherId + "";
+    public addTeacher(courseId: string): void {
+      throw new Error("Method not implemented");
     }
 
-    private editTeacher(courseId: string): void {
-      this.populateTeachers(courseId);
-      this.$scope.entries[courseId].editMode = true;
+    public editTeacher(courseId: string): void {
+      throw new Error("Method not implemented");
     }
 
-    private removeTeacher(courseId: string, teacherId: string): void {
-      if (this.formattedMap[courseId].selectedTeachers[teacherId]) {
-        delete this.formattedMap[courseId].selectedTeachers[teacherId];
-      } else {
-        for (var teacher in this.formattedMap[courseId].selectedTeachers) {
-          if (this.formattedMap[courseId].selectedTeachers.hasOwnProperty(teacher)) {
-            if (this.formattedMap[courseId].selectedTeachers[teacher].id == teacherId) {
-              delete this.formattedMap[courseId].selectedTeachers[teacher];
-            }
-          }
-        }
-      }
+    public removeTeacher(courseId: string, teacherId: string): void {
+      throw new Error("Method not implemented");
     }
 
     public saveTeacher(courseId: string): void {
       throw new Error('Method not implemented');
     }
 
-    public postTeacher(save: IPostTeacherEntries, courseId: string): void {
+    public postTeacher(save: IPostExaminerEntries, courseId: string): void {
       this.httpClient.post(this.getPostUri(), save, 'application/json')
           .success(() => {
             this.$scope.teacherSearchParamModel.courseId = courseId;
@@ -245,30 +229,17 @@ module ums {
 
       for (var i = 0; i < this.$scope.data.courseCategoryOptions.length; i++) {
         if (this.$scope.data.courseCategoryOptions[i].id == this.$scope.teacherSearchParamModel.courseCategoryId) {
-          this.$scope.courseCategory = this.$scope.data.courseCategoryOptions[i].name.indexOf('Select') == 0 ? "" : this.$scope.data.courseCategoryOptions[i].name;
+          this.$scope.courseCategory = this.$scope.data.courseCategoryOptions[i].name.indexOf('Select') == 0 ? "All" : this.$scope.data.courseCategoryOptions[i].name;
         }
       }
     }
 
     public validate(modifiedVal: IAssignedTeacher, saved: IAssignedTeacher): boolean {
-      if (UmsUtil.isEmpty(modifiedVal.selectedTeachers)) {
-        if (UmsUtil.isEmpty(saved.selectedTeachers)) {
-          this.notify.warn("Please select teacher/s");
-          return false;
-        } else {
-          return true;
-        }
-      }
-      return this.validateSubmission(modifiedVal, saved);
-    }
-
-    public validateSubmission(modifiedVal: IAssignedTeacher, saved: IAssignedTeacher): boolean {
       throw new Error("Method not implemented");
     }
 
     private uriBuilder(param: CourseTeacherSearchParamModel): string {
-      /*var fetchUri: string = "academic/courseTeacher/programId/" + '110500'
-       + "/semesterId/" + '11012015' + '/year/1';*/
+      //var fetchUri: string = this.getBaseUri() + "/programId/" + '110500' + "/semesterId/" + '11012015' + '/year/4';
       var fetchUri = this.getBaseUri() + "/programId/" + param.programSelector.programId + "/semesterId/" + param.semesterId;
 
       if (!UmsUtil.isEmptyString(param.courseId)) {

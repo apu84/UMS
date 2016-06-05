@@ -6,6 +6,8 @@ module ums {
   }
 
   interface ICourseTeacher extends IAssignedTeacher {
+    teacherId: string;
+    teacherName: string;
     section: string;
     sections:Array<{id: string; name: string}>;
     selectedTeachers: {[key: string]: ICTeacher};
@@ -43,13 +45,15 @@ module ums {
   export class CourseTeacher extends TeacherAssignment<ICourseTeacher> {
     public static $inject = ['appConstants', 'HttpClient', '$scope', '$q', 'notify'];
 
+    private newTeacherId: number = 0;
+
     constructor(appConstants: any, httpClient: HttpClient,
                 $scope: ITeacherAssignmentScope, $q: ng.IQService,
                 notify: Notify) {
       super(appConstants, httpClient, $scope, $q, notify);
     }
 
-    public formatTeacher(courseTeachers: Array<ICourseTeacher>): void {
+    public formatTeacher(courseTeachers: Array<ICourseTeacher>, courseId?: string): void {
       for (var i = 0; i < courseTeachers.length; i++) {
         if (!this.formattedMap[courseTeachers[i].courseId] || this.formattedMap[courseTeachers[i].courseId].updated) {
           this.formattedMap[courseTeachers[i].courseId] = courseTeachers[i];
@@ -88,6 +92,33 @@ module ums {
       sectionArray.push.apply(sectionArray, this.appConstants.theorySections);
       sectionArray.push.apply(sectionArray, this.appConstants.sessionalSections);
       assignedTeacher.sections = sectionArray;
+    }
+
+    public addTeacher(courseId: string): void {
+      this.populateTeachers(courseId);
+      this.$scope.entries[courseId].editMode = true;
+      this.newTeacherId = this.newTeacherId - 1;
+      this.formattedMap[courseId].selectedTeachers[this.newTeacherId] = {};
+      this.formattedMap[courseId].selectedTeachers[this.newTeacherId].id = this.newTeacherId + "";
+    }
+
+    public editTeacher(courseId: string): void {
+      this.populateTeachers(courseId);
+      this.$scope.entries[courseId].editMode = true;
+    }
+
+    public removeTeacher(courseId: string, teacherId: string): void {
+      if (this.formattedMap[courseId].selectedTeachers[teacherId]) {
+        delete this.formattedMap[courseId].selectedTeachers[teacherId];
+      } else {
+        for (var teacher in this.formattedMap[courseId].selectedTeachers) {
+          if (this.formattedMap[courseId].selectedTeachers.hasOwnProperty(teacher)) {
+            if (this.formattedMap[courseId].selectedTeachers[teacher].id == teacherId) {
+              delete this.formattedMap[courseId].selectedTeachers[teacher];
+            }
+          }
+        }
+      }
     }
 
     public saveTeacher(courseId: string): void {
@@ -210,7 +241,16 @@ module ums {
     }
 
 
-    public validateSubmission(modifiedVal: ICourseTeacher, saved: ICourseTeacher): boolean {
+    public validate(modifiedVal: ICourseTeacher, saved: ICourseTeacher): boolean {
+      if (UmsUtil.isEmpty(modifiedVal.selectedTeachers)) {
+        if (UmsUtil.isEmpty(saved.selectedTeachers)) {
+          this.notify.warn("Please select teacher/s");
+          return false;
+        } else {
+          return true;
+        }
+      }
+
       for (var key in modifiedVal.selectedTeachers) {
         if (modifiedVal.selectedTeachers.hasOwnProperty(key)) {
           if (key < 0 && modifiedVal.selectedTeachers[key].id == null) {

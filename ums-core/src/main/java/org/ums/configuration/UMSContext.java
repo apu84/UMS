@@ -6,6 +6,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.ums.cache.*;
+import org.ums.domain.model.immutable.CourseTeacher;
+import org.ums.domain.model.immutable.Examiner;
+import org.ums.domain.model.mutable.MutableCourseTeacher;
+import org.ums.domain.model.mutable.MutableExaminer;
 import org.ums.manager.*;
 import org.ums.persistent.dao.*;
 import org.ums.security.authentication.UMSAuthenticationRealm;
@@ -162,10 +166,17 @@ public class UMSContext {
   }
 
   @Bean
-  CourseTeacherManager courseTeacherManager() {
+  AssignedTeacherManager<CourseTeacher, MutableCourseTeacher, Integer> courseTeacherManager() {
     CourseTeacherCache courseTeacherCache = new CourseTeacherCache(mCacheFactory.getCacheManager());
     courseTeacherCache.setManager(new PersistentCourseTeacherDao(mJdbcTemplate));
     return courseTeacherCache;
+  }
+
+  @Bean
+  AssignedTeacherManager<Examiner, MutableExaminer, Integer> examinerManager() {
+    ExaminerCache examinerCache = new ExaminerCache(mCacheFactory.getCacheManager());
+    examinerCache.setManager(new PersistentExaminerDao(mJdbcTemplate));
+    return examinerCache;
   }
 
   @Bean

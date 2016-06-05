@@ -32,6 +32,7 @@
 /// <reference path='controller/common/AssignRole.ts'/>
 /// <reference path='controller/dept/TeacherAssignment.ts'/>
 /// <reference path='controller/dept/CourseTeacher.ts'/>
+/// <reference path='controller/dept/Examiner.ts'/>
 
 /// <reference path='lib/jquery.dragNdrop.d.ts'/>
 /// <reference path='lib/jquery.tab.d.ts'/>
@@ -94,3 +95,4 @@
 /// <reference path='grid/JqGridApiImpl.ts'/>
 
 /// <reference path='model/TeacherAssignmentSearchParamModel.ts'/>
+/// <reference path='model/CourseTeacherSearchParamModel.ts'/>

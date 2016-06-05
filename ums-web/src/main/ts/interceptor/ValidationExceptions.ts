@@ -22,7 +22,13 @@ module ums {
             var fieldValidationModel: FieldValidationModel = null;
 
             if (responseJson.message) {
-              fieldValidationModel = JSON.parse(responseJson.message);
+              try {
+                fieldValidationModel = JSON.parse(responseJson.message);
+              } catch (e) {
+                notify.error(responseJson.message);
+                return $q.reject(response);
+              }
+
             }
 
             var rootCause = fieldValidationModel.rootCause ? fieldValidationModel.rootCause : "";
@@ -51,6 +57,5 @@ module ums {
 
   UMS.config(['$httpProvider', function ($httpProvider: ng.IHttpProvider) {
     $httpProvider.interceptors.push('ValidationExceptions');
-    console.debug('%o',$httpProvider);
   }]);
 }

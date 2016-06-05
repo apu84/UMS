@@ -5,9 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.common.Resource;
-import org.ums.common.academic.resource.helper.CourseTeacherResourceHelper;
-import org.ums.domain.model.immutable.CourseTeacher;
-import org.ums.domain.model.mutable.MutableCourseTeacher;
+import org.ums.common.academic.resource.helper.ExaminerResourceHelper;
+import org.ums.domain.model.immutable.Examiner;
+import org.ums.domain.model.mutable.MutableExaminer;
 import org.ums.enums.CourseCategory;
 import org.ums.manager.AssignedTeacherManager;
 import org.ums.manager.SemesterSyllabusMapManager;
@@ -19,16 +19,16 @@ import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 
 @Component
-@Path("/academic/courseTeacher")
+@Path("/academic/examiner")
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
-public class CourseTeacherResource extends Resource {
+public class ExaminerResource extends Resource {
   @Autowired
-  @Qualifier("courseTeacherManager")
-  AssignedTeacherManager<CourseTeacher, MutableCourseTeacher, Integer> mCourseTeacherManager;
+  @Qualifier("examinerManager")
+  AssignedTeacherManager<Examiner, MutableExaminer, Integer> mExaminerManager;
 
   @Autowired
-  CourseTeacherResourceHelper mResourceHelper;
+  ExaminerResourceHelper mResourceHelper;
 
   @Autowired
   SemesterSyllabusMapManager mSemesterSyllabusMapManager;
