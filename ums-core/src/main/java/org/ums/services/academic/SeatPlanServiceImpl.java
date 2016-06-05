@@ -50,9 +50,11 @@ public class SeatPlanServiceImpl implements SeatPlanService {
   @Transactional
   public GenericResponse<Map> generateSeatPlan(int pSemesterId, int pGroupNo, int pExamType) throws Exception {
     int numberOfSubGroups = mSubGroupManager.getSubGroupNumberOfAGroup(pSemesterId,pExamType,pGroupNo);
+    Map<String,List<SpStudent>> studentsByProgramYearSemesterStatusList = initiateStudentsBasedOnProgramYearSemesterStatus();
+    Map<String,List<SpStudent>> studentsByProgramYearSemesterStatusList2 = initiateStudentsBasedOnProgramYearSemesterStatus();
 
-    Map<Integer,List<SpStudent>> subGroupWithStudents = getStudentsOfTheSubGroups(pSemesterId,pGroupNo,pExamType,numberOfSubGroups);
-    Map<Integer,List<SpStudent>> tempSubGroupWithStudents =getStudentsOfTheSubGroups(pSemesterId,pGroupNo,pExamType,numberOfSubGroups);
+    Map<Integer,List<SpStudent>> subGroupWithStudents = getStudentsOfTheSubGroups(pSemesterId,pGroupNo,pExamType,numberOfSubGroups,studentsByProgramYearSemesterStatusList);
+    Map<Integer,List<SpStudent>> tempSubGroupWithStudents =getStudentsOfTheSubGroups(pSemesterId,pGroupNo,pExamType,numberOfSubGroups,studentsByProgramYearSemesterStatusList2);
 
 
 
@@ -590,7 +592,7 @@ public class SeatPlanServiceImpl implements SeatPlanService {
 
 
 
-  Map<Integer,List<SpStudent>> getStudentsOfTheSubGroups(int pSemesterId, int pGroupNo,int pExamType,int numberOfSubGroups)throws Exception{
+  Map<Integer,List<SpStudent>> getStudentsOfTheSubGroups(int pSemesterId, int pGroupNo,int pExamType,int numberOfSubGroups,Map<String,List<SpStudent>> studentsByProgramYearSemesterStatusList)throws Exception{
 
     Map<Integer,List<SpStudent>> subGroupMap = new HashMap<>();
 
@@ -601,10 +603,22 @@ public class SeatPlanServiceImpl implements SeatPlanService {
       int counter=0;
       for(SubGroup member: subGroupMembers){
         SeatPlanGroup group = mSeatPlanGroupManager.get(member.getGroup().getId());
-        List<SpStudent> studentsOfTheGroup = mSpStudentManager.getStudentByProgramYearSemesterStatus(group.getProgram().getId(),
-            group.getAcademicYear(),
-            group.getAcademicSemester(),
-            1);
+        String key = group.getProgram().getId()+""+group.getAcademicYear()+""+group.getAcademicSemester()+""+1;
+        List<SpStudent> studentsOfTheGroup = new ArrayList<>();
+        List<SpStudent> existingStudents = studentsByProgramYearSemesterStatusList.get(key);
+
+        int studentCounter=0;
+        int totalExistingStudentSize = existingStudents.size();
+        for(int m=0;m<totalExistingStudentSize;m++){
+          SpStudent existingStudent = existingStudents.get(0);
+          studentsOfTheGroup.add(existingStudent);
+          existingStudents.remove(0);
+          studentCounter+=1;
+          if(studentCounter==member.getStudentNumber()){
+            break;
+          }
+        }
+        studentsByProgramYearSemesterStatusList.put(key,existingStudents);
         if(counter==0){
           studentsOfTheSubGroup = studentsOfTheGroup;
           counter+=1;
@@ -618,6 +632,26 @@ public class SeatPlanServiceImpl implements SeatPlanService {
       subGroupMap.put(subGroupNumberIterator,studentsOfTheSubGroup);
     }
     return subGroupMap;
+  }
+  Map<String,List<SpStudent>> initiateStudentsBasedOnProgramYearSemesterStatus() throws Exception{
+
+    Map<String,List<SpStudent>> studentInfoMap = new HashMap<>();
+
+    List<SpStudent> allStudents = mSpStudentManager.getAll();
+
+    for(SpStudent student: allStudents){
+      String keyWithProgramYearSemesterStatus = student.getProgram().getId()+""+student.getAcademicYear()+""+student.getAcademicSemester()+""+student.getStatus();
+      if(studentInfoMap.size()==0 || studentInfoMap.get(keyWithProgramYearSemesterStatus)==null){
+        List<SpStudent> studentList = new ArrayList<>();
+        studentList.add(student);
+        studentInfoMap.put(keyWithProgramYearSemesterStatus,studentList);
+      }else{
+        List<SpStudent> studentList = studentInfoMap.get(keyWithProgramYearSemesterStatus);
+        studentList.add(student);
+        studentInfoMap.put(keyWithProgramYearSemesterStatus,studentList);
+      }
+    }
+    return studentInfoMap;
   }
 
 

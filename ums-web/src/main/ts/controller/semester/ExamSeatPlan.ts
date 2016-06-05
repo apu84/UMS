@@ -309,7 +309,6 @@ module ums{
     }
     private splitAction(splitNumber:number):void{
       this.$scope.splitActionOccured = true;
-      this.$scope.tempGroupListAll=[];
       this.$scope.recreate = true;
      /* for(var i=0;i<this.$scope.tempGroupList.length;i++) {
         if (this.$scope.tempGroupList[i].groupNumber == this.$scope.selectedGroupNo) {
@@ -322,8 +321,7 @@ module ums{
           for (var j = 0; j < this.$scope.tempGroupList.length; j++) {
             var members =this.$scope.tempGroupList[j];
             if (members.id == this.$scope.splitId) {
-              var $liDelete=$("<li class='ui-state-default' />").text(" ");
-              $liDelete.attr('id',members.id);
+
               console.log("Found match");
               var tempArray:Array<ISeatPlanGroup>=[];
               var memberStudentNumber :any={};
@@ -340,7 +338,9 @@ module ums{
               this.$scope.tempGroupList[j].splitOccuranceNumber+=1;
               this.$scope.tempGroupList[j].studentNumber = leftStudentNumber;
               this.$scope.tempGroupList[j].showSubPortion = false;
-              this.$scope.tempGroupListAll.push(this.$scope.tempGroupList[j]);
+              this.$scope.tempGroupListAll[j].splitOccuranceNumber+=1;
+              this.$scope.tempGroupListAll[j].studentNumber=leftStudentNumber;
+              this.$scope.tempGroupListAll[j].showSubPortion=false;
               console.log("---previous member id : "+previousMember.id);
 
               //var newMember = tempMemberStore[j];
@@ -387,7 +387,7 @@ module ums{
 
             } else {
               //this.$scope.tempGroupList[i].groupMembers.push(members);
-              this.$scope.tempGroupListAll.push(this.$scope.tempGroupList[j]);
+              //this.$scope.tempGroupListAll.push(this.$scope.tempGroupList[j]);
             }
             /*this.$scope.tempGroupListAll=[];
             this.$scope.tempGroupListAll = this.$scope.tempGroupList[i].groupMembers;*/
@@ -407,7 +407,6 @@ module ums{
       var currentScope = this;
 
       if(menuNumber==1){
-        console.clear();
 
         if(this.$scope.subGroupFound){
           console.log('Sub group found!!!!');
@@ -513,7 +512,6 @@ module ums{
 
     private createOrViewSubgroups(group:number):void{
 
-      console.clear();
       console.log("##############");
       console.log(this.$scope.groupList);
       this.$scope.tempGroupList=[];
@@ -1052,6 +1050,23 @@ module ums{
 
 
       var classScope = this;
+      $("#sortable").sortable({
+        connectWith:".connectedSortable",
+        cursor: "move",
+
+        items:"> li",
+        over:function(event,ui){
+          $("#sortable").css("background-color","aqua");
+        },
+        receive:function(event,ui){
+          $("#sortable").css("background-color","antiquewhite");
+        },
+
+        out:function(event,ui){
+          $("#sortable").css("background-color","antiquewhite");
+        }
+      });
+
       $('#sortable1').sortable({
         connectWith:".connectedSortable",
         cursor: "move",
@@ -1203,21 +1218,27 @@ module ums{
       });
 
       this.$scope.editSubGroup = false;
+      this.$scope.$apply();
 
     }
 
     private subGroupListChanged(subGroupNumber:number,result:any){
 
-
+      console.clear();
+      console.log("############################");
+      console.log(this.$scope.tempGroupListAll);
+      console.log("result_--");
+      console.log(result);
 
       if(this.$scope.subGroupList.length ==0){
         var subGroup:any={};
         subGroup.subGroupNumber = subGroupNumber;
+
         for(var j=0;j< this.$scope.tempGroupListAll.length;j++){
 
           for(var m in result){
             if(result[m]!=""){
-              if(this.$scope.tempGroupListAll[j].id == result[m]){
+              if(this.$scope.tempGroupListAll[j].id == +result[m]){
                 subGroup.subGroupTotalStudentNumber= this.$scope.tempGroupListAll[j].studentNumber;
                 subGroup.subGroupMembers=[];
                 subGroup.subGroupMembers.push(this.$scope.tempGroupListAll[j]);
@@ -1246,7 +1267,7 @@ module ums{
             for(var m in result){
               if(result[m] != "" ){
                 for(var j=0;j< this.$scope.tempGroupListAll.length;j++){
-                  if(this.$scope.tempGroupListAll[j].id == result[m]){
+                  if(this.$scope.tempGroupListAll[j].id == +result[m]){
                     this.$scope.subGroupList[i].subGroupMembers.push(this.$scope.tempGroupListAll[j]);
                     this.$scope.subGroupList[i].subGroupTotalStudentNumber+= this.$scope.tempGroupListAll[j].studentNumber;
 
@@ -1264,12 +1285,13 @@ module ums{
         if(subGroupFound==false){
           var subGroup:any={};
           subGroup.subGroupNumber = subGroupNumber;
-          for(var j=0;j< this.$scope.tempGroupListAll.length;j++){
 
 
-            for(var m in result){
-              if(result[m]!=""){
-                if(this.$scope.tempGroupListAll[j].id == result[m]){
+          for(var m in result){
+            if(result[m]!=""){
+                for(var j=0;j< this.$scope.tempGroupListAll.length;j++){
+
+                  if(this.$scope.tempGroupListAll[j].id == +result[m]){
                   subGroup.subGroupTotalStudentNumber= this.$scope.tempGroupListAll[j].studentNumber;
                   subGroup.subGroupMembers=[];
 
@@ -1280,7 +1302,9 @@ module ums{
             }
 
           }
+          console.log(subGroup);
           this.$scope.subGroupList.push(subGroup);
+          console.log(this.$scope.subGroupList);
         }
       }
 

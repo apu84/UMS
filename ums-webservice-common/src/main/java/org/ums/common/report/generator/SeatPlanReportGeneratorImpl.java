@@ -2,9 +2,7 @@ package org.ums.common.report.generator;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.List;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.*;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -70,6 +68,8 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
     document.addTitle("Seat Plan");
 
     PdfWriter writer = PdfWriter.getInstance(document,new FileOutputStream(dest));
+    MyFooter event = new MyFooter();
+    writer.setPageEvent(event);
     document.open();
     document.setPageSize(PageSize.A4.rotate());
 
@@ -145,7 +145,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
         boolean checkIfRoomExistsInSeatPlan = roomsOfTheSeatPlan.contains(room.getId());
         //int checkIfRoomExists = mSeatPlanManager.checkIfExistsByRoomSemesterGroupExamType(room.getId(),pSemesterId,groupNo,type);
 
-        if(checkIfRoomExistsInSeatPlan && room.getId()!=284  ){
+        if(checkIfRoomExistsInSeatPlan && room.getId()!=284  && roomCounter==2){
           String roomHeader = "Room No: "+ room.getRoomNo();
           Paragraph pRoomHeader = new Paragraph(roomHeader,FontFactory.getFont(FontFactory.TIMES_BOLD,12));
           pRoomHeader.setAlignment(Element.ALIGN_CENTER);
@@ -477,7 +477,8 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
 
           }
 
-          document.add(footer);
+          /*document.add(footer);*/
+
           document.newPage();
 
         }
@@ -505,4 +506,26 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
       }
     };
   }
+
+  class MyFooter extends PdfPageEventHelper{
+    Font ffont = new Font(Font.FontFamily.UNDEFINED, 5, Font.ITALIC);
+    public void onEndPage(PdfWriter writer,Document document){
+      PdfContentByte cb = writer.getDirectContent();
+      Paragraph pDate = new Paragraph("Date:",FontFactory.getFont(FontFactory.TIMES_BOLD,10));
+      Paragraph pPreparedBy = new Paragraph("Prepared by:",FontFactory.getFont(FontFactory.TIMES_BOLD,10));
+
+      PdfPCell dateAndPreparedByCell = new PdfPCell();
+      dateAndPreparedByCell.addElement(new Phrase("Date:",FontFactory.getFont(FontFactory.TIMES_BOLD,12)));
+      dateAndPreparedByCell.addElement(new Phrase("Prepared By",FontFactory.getFont(FontFactory.TIMES_BOLD,12)));
+      dateAndPreparedByCell.setBorder(Rectangle.NO_BORDER);
+      Phrase leftPhrase = new Phrase();
+      leftPhrase.add(dateAndPreparedByCell);
+
+      ColumnText.showTextAligned(cb,Element.ALIGN_LEFT,leftPhrase,(document.right() - document.left()) / 2 + document.leftMargin(),
+          document.bottom() - 10, 0);
+
+
+    }
+  }
+
 }

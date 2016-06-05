@@ -40,9 +40,9 @@ public class SeatPlanResource extends MutableSeatPlanResource{
   public Response createOrViewSeatPlan(final @Context Request pRequest, final @PathParam("semesterId") String pSemesterId,
                                                        final @PathParam("groupNo") String pGroupNo,
                                                        final @PathParam("type") String pType)throws Exception{
-    /*StreamingOutput strem =  mSeatPlanResourceHelper.createOrCheckSeatPlanAndReturnRoomList(
+    StreamingOutput strem =  mSeatPlanResourceHelper.createOrCheckSeatPlanAndReturnRoomList(
         Integer.parseInt(pSemesterId),Integer.parseInt(pGroupNo),Integer.parseInt(pType),pRequest,mUriInfo
-    );*/
+    );
 
 
     File file = new File(FILE_PATH );
