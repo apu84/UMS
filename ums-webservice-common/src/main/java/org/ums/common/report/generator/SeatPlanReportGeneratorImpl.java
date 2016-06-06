@@ -145,7 +145,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
         boolean checkIfRoomExistsInSeatPlan = roomsOfTheSeatPlan.contains(room.getId());
         //int checkIfRoomExists = mSeatPlanManager.checkIfExistsByRoomSemesterGroupExamType(room.getId(),pSemesterId,groupNo,type);
 
-        if(checkIfRoomExistsInSeatPlan && room.getId()!=284  && roomCounter==2){
+        if(checkIfRoomExistsInSeatPlan && room.getId()!=284  ){
           String roomHeader = "Room No: "+ room.getRoomNo();
           Paragraph pRoomHeader = new Paragraph(roomHeader,FontFactory.getFont(FontFactory.TIMES_BOLD,12));
           pRoomHeader.setAlignment(Element.ALIGN_CENTER);
@@ -221,17 +221,18 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
             fontSize=11.0f;
           }
           else if(deptList.size()==6){
-            fontSize=10.0f;
+            fontSize=11.0f;
+
           }
           else if(deptList.size()==9){
-            fontSize=9.0f;
+            fontSize=11.0f;
 //            summaryFontSize=9.0f;
           }
           else{
             if(room.getCapacity()<=40){
               fontSize=11.0f;
             }else{
-              fontSize=9.0f;
+              fontSize=11.0f;
 
             }
           }
@@ -288,6 +289,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
             PdfPCell studentCell = new PdfPCell();
             String studentListInString = "";
             java.util.List<String> studentList = deptStudentListMap.get(deptOfTheList);
+            Collections.sort(studentList);
             totalStudent+= studentList.size();
             int studentCounter=0;
             for(String studentOfTheList: studentList){
@@ -511,18 +513,39 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
     Font ffont = new Font(Font.FontFamily.UNDEFINED, 5, Font.ITALIC);
     public void onEndPage(PdfWriter writer,Document document){
       PdfContentByte cb = writer.getDirectContent();
-      Paragraph pDate = new Paragraph("Date:",FontFactory.getFont(FontFactory.TIMES_BOLD,10));
-      Paragraph pPreparedBy = new Paragraph("Prepared by:",FontFactory.getFont(FontFactory.TIMES_BOLD,10));
+      Paragraph pDate = new Paragraph("Date:",FontFactory.getFont(FontFactory.TIMES_BOLD,12));
+      Paragraph pPreparedBy = new Paragraph("Prepared by:",FontFactory.getFont(FontFactory.TIMES_BOLD,12));
+      Paragraph pCheckedBy = new Paragraph("Checked by:",FontFactory.getFont(FontFactory.TIMES_BOLD,12));
+      Paragraph pController = new Paragraph("Controller of Examinations",FontFactory.getFont(FontFactory.TIMES_BOLD,12));
+
 
       PdfPCell dateAndPreparedByCell = new PdfPCell();
       dateAndPreparedByCell.addElement(new Phrase("Date:",FontFactory.getFont(FontFactory.TIMES_BOLD,12)));
       dateAndPreparedByCell.addElement(new Phrase("Prepared By",FontFactory.getFont(FontFactory.TIMES_BOLD,12)));
       dateAndPreparedByCell.setBorder(Rectangle.NO_BORDER);
       Phrase leftPhrase = new Phrase();
-      leftPhrase.add(dateAndPreparedByCell);
+      leftPhrase.add(pDate);
+      Phrase leftPhraseBottom = new Phrase();
+      leftPhraseBottom.add(pPreparedBy);
 
-      ColumnText.showTextAligned(cb,Element.ALIGN_LEFT,leftPhrase,(document.right() - document.left()) / 2 + document.leftMargin(),
-          document.bottom() - 10, 0);
+      Phrase middlePhraseBottom = new Phrase();
+      middlePhraseBottom.add(pCheckedBy);
+
+      Phrase rightPhraseButtom = new Phrase();
+      rightPhraseButtom.add(pController);
+
+      ColumnText.showTextAligned(cb,Element.ALIGN_LEFT,leftPhrase,( document.left()) / 3 ,
+          document.bottom() - 1, 0);
+
+      ColumnText.showTextAligned(cb,Element.ALIGN_LEFT,leftPhraseBottom,( document.left()) / 3 ,
+          document.bottom() - 20, 0);
+
+      ColumnText.showTextAligned(cb,Element.ALIGN_LEFT,middlePhraseBottom,(document.right()) / 2 ,
+          document.bottom() - 20, 0);
+
+      ColumnText.showTextAligned(cb,Element.ALIGN_RIGHT,rightPhraseButtom,(document.right()) / 1 ,
+          document.bottom() - 20, 0);
+
 
 
     }
