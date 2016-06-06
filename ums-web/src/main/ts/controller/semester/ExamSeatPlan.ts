@@ -39,6 +39,7 @@ module ums{
     groupList:Array<IGroup>;
     tempGroupList:Array<ISeatPlanGroup>;
     tempGroupListAll:Array<ISeatPlanGroup>;
+    tempGroupListForSplitInversion:Array<ISeatPlanGroup>;
     splittedGroupList:Array<ISeatPlanGroup>;
     selectedGroupList:Array<ISeatPlanGroup>;
     subGroupList:Array<ISubGroup>;
@@ -108,7 +109,7 @@ module ums{
     splitACourseStudent:Function;
     splitAction:Function;
     cancelSplitAction:Function;
-
+    revertSplitAction:Function;
 
     editSavedSubGroup:Function;
     cancelEditedSubGroup:Function;
@@ -255,6 +256,7 @@ module ums{
       $scope.splitAction = this.splitAction.bind(this);
       $scope.cancelSplitAction = this.cancelSplitAction.bind(this);
       $scope.mouseClickEvent = this.mouseClickEvent.bind(this);
+      $scope.revertSplitAction = this.revertSplitAction.bind(this);
       this.initialize();
 
     }
@@ -328,13 +330,13 @@ module ums{
               memberStudentNumber= members.studentNumber;
               var leftStudentNumber = memberStudentNumber - splitNumber;
               var previousMember = members;
-              if(this.$scope.tempGroupList[j].splitOccuranceNumber==0 && this.$scope.groupIdLength==null){
-                /*When any split occurance is occured, then, in the group id, an extra number is added, so that the number can be used to show the unique id's.
+              /*if(this.$scope.tempGroupList[j].splitOccuranceNumber==0 && this.$scope.groupIdLength==null){
+                /!*When any split occurance is occured, then, in the group id, an extra number is added, so that the number can be used to show the unique id's.
                 * But, the extra number is needed to be removed. That's why groupIdLength is recorded once. It will be recorded only when split is fired. Else,
-                * the value will be null and it will be checked at the json making time.*/
+                * the value will be null and it will be checked at the json making time.*!/
                 var idString:string = this.$scope.tempGroupList[j].id.toString();
                 this.$scope.groupIdLength = idString.length;
-              }
+              }*/
               this.$scope.tempGroupList[j].splitOccuranceNumber+=1;
               this.$scope.tempGroupList[j].studentNumber = leftStudentNumber;
               this.$scope.tempGroupList[j].showSubPortion = false;
@@ -399,6 +401,45 @@ module ums{
       $("#sortable").sortable("refreshPositions");*!/
       console.log(this.$scope.tempGroupListAll);*/
 
+    }
+
+    private revertSplitAction():void{
+      console.log("In the revertSplitAction() section");
+      for(var i=0;i<this.$scope.tempGroupListForSplitInversion.length;i++){
+        if(this.$scope.tempGroupListForSplitInversion[i].id == this.$scope.splitId){
+          this.$scope.tempGroupList[i].studentNumber=this.$scope.tempGroupListForSplitInversion[i].studentNumber;
+          this.$scope.tempGroupList[i].splitOccuranceNumber=0;
+          console.log("stored info");
+          console.log(this.$scope.tempGroupListForSplitInversion[i].studentNumber);
+          console.log("TempList info");
+          console.log(this.$scope.tempGroupList[i]);
+          for(var j=0;j<this.$scope.splittedGroupList.length;j++){
+            var id:number = this.$scope.splittedGroupList[j].id;
+            var idString:string = id.toString();
+            var idStringArr:Array<string> = idString.split("");
+
+            var splitId:number = this.$scope.splitId;
+            var splitIdStr:string = splitId.toString();
+            var splitIdArr:Array<string> = splitIdStr.split("");
+
+            var unMatchFound:boolean=false;
+
+            for(var k=0;k<splitIdArr.length;k++){
+              if(idStringArr[k]!=splitIdArr[k]){
+                unMatchFound = true;
+                break;
+              }
+            }
+            if(unMatchFound==false){
+              $('#'+idString).remove();
+            }
+          }
+
+        }
+      }
+      if(!this.$scope.$digest()){
+        this.$scope.$apply();
+      }
     }
 
 
@@ -516,18 +557,33 @@ module ums{
       console.log(this.$scope.groupList);
       this.$scope.tempGroupList=[];
       this.$scope.splittedGroupList=[];
+      var temporaryList:any=[];
       for(var l=0;l<this.$scope.groupList.length;l++){
         if(this.$scope.groupList[l].groupNumber==group){
-          this.$scope.tempGroupListAll=[];
+
          for(var i=0;i<this.$scope.groupList[l].groupMembers.length;i++){
 
-           this.$scope.tempGroupListAll.push(this.$scope.groupList[l].groupMembers[i]);
-           this.$scope.tempGroupList.push(this.$scope.groupList[l].groupMembers[i]);
-
+           temporaryList.push(this.$scope.groupList[l].groupMembers[i]);
+           if(i==0){
+             var id:number = this.$scope.groupList[l].groupMembers[i].id;
+             var idStr:string = id.toString();
+             this.$scope.groupIdLength = idStr.length;
+           }
+           /*this.$scope.tempGroupListAll.push(this.$scope.groupList[l].groupMembers[i]);
+           this.$scope.tempGroupList.push(this.$scope.groupList[l].groupMembers[i])*/;
          }
           break;
         }
       }
+      this.$scope.tempGroupListAll=[];
+      this.$scope.tempGroupList = angular.copy(temporaryList);
+      this.$scope.tempGroupListAll = angular.copy(temporaryList);
+      this.$scope.tempGroupListForSplitInversion=[];
+      this.$scope.tempGroupListForSplitInversion=angular.copy(temporaryList);
+
+
+
+
 
       $("#splittedList").enableSelection();
       console.log("*** temp group list all***");
@@ -659,83 +715,6 @@ module ums{
 
         }
 
-       /* $("#ifti_div").on("contextmenu", function (event) {
-          event.preventDefault();
-          console.log("ifti");
-          console.log($( "#subGroupPanel" ).find( "li" ));
-        });
-        //console.log($( "#subGroupPanel" ).find( "li" ));
-
-        //setTimeout(myFunction, 2000)
-
-        function myFunction() {
-          // Trigger action when the contexmenu is about to be shown
-          $(".ui-state-default").on("contextmenu", function (event) {
-
-            console.log("Inside 'contextmenu' ....................");
-            // Avoid the real one
-            event.preventDefault();
-
-            // Show contextmenu
-            $(".custom-menu").finish().toggle(100).
-
-            // In the right position (the mouse)
-            css({
-
-              top: event.pageY - $("#topbar").height()+"px" ,
-              left: event.pageX - $("#sidebar").width()+"px"
-            });
-
-          });
-
-        }
-
-
-
-
-
-// If the document is clicked somewhere
-        $("#subGroupPanel").bind("mousedown", function (e) {
-          console.log("Inside 'mousedown' ....................");
-          // If the clicked element is not the menu
-          if (!($(e.target).parents(".custom-menu").length > 0)) {
-            console.log("inside ......................")
-            // Hide it
-            $(".custom-menu").hide(100);
-          }
-        });
-
-        /!*with the mouse down jquery function, we are getting the event only of right button,
-         * that's why the case is 3.
-         * with the line: $(this).attr('id') , we are getting the id when the right mouse button click event is triggered.*!/
-        $(".connectedSortable li").mousedown(function(event){
-          switch(event.which){
-            case 3:
-              var id = $(this).attr('id');
-              currentScope.$scope.splitId = +id;
-
-              console.log($(this).attr('id'));
-          }
-        });
-
-        /!*Current scope will be used in replace of 'this' of angularjs, to jquery, else, jquery will not recognize that.*!/
-        var currentScope = this;
-// If the menu element is clicked
-        $(".custom-menu li").click(function(){
-
-          // This is the triggered action name
-          switch($(this).attr("data-action")) {
-
-            case "split": currentScope.$scope.splitButtonClicked=true;
-              console.log('split button before function call');
-              console.log(currentScope.$scope.splitButtonClicked);
-              currentScope.splitCourseStudent(1);
-              console.log("Split button is clicked");break;
-            case "revertSplit": currentScope.$scope.reverseSplitButtonClicked=true;console.log("Reverse button is clicked!");break;
-          }
-          $(".custom-menu").hide(100);
-        });
-*/
 
       });
 
@@ -829,7 +808,11 @@ module ums{
             console.log(currentScope.$scope.splitButtonClicked);
             currentScope.splitCourseStudent(1);
             console.log("Split button is clicked");break;
-          case "revertSplit": currentScope.$scope.reverseSplitButtonClicked=true;console.log("Reverse button is clicked!");break;
+          case "revertSplit":
+            currentScope.$scope.reverseSplitButtonClicked=true;
+            console.log("Reverse button is clicked!");
+            currentScope.revertSplitAction();
+            break;
         }
         $(".custom-menu").hide(100);
       });

@@ -643,6 +643,7 @@ public class SeatPlanServiceImpl implements SeatPlanService {
       String keyWithProgramYearSemesterStatus = student.getProgram().getId()+""+student.getAcademicYear()+""+student.getAcademicSemester()+""+student.getStatus();
       if(studentInfoMap.size()==0 || studentInfoMap.get(keyWithProgramYearSemesterStatus)==null){
         List<SpStudent> studentList = new ArrayList<>();
+
         studentList.add(student);
         studentInfoMap.put(keyWithProgramYearSemesterStatus,studentList);
       }else{

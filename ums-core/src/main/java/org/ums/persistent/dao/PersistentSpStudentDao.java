@@ -32,7 +32,7 @@ public class PersistentSpStudentDao extends SpStudentDaoDecorator {
   }
   @Override
   public List<SpStudent> getAll() throws Exception {
-    String query = SELECT_ALL;
+    String query = SELECT_ALL+" WHERE ACTIVE=1  ORDER BY STUDENT_ID";
     return mJdbcTemplate.query(query,new SpStudentRowMapper());
   }
 
