@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentUserDao extends UserDaoDecorator {
-  static String SELECT_ALL = "SELECT USER_ID, PASSWORD, ROLE_ID, STATUS, TEMP_PASSWORD,PR_TOKEN,TOKEN_GENERATED_ON FROM USERS ";
+  static String SELECT_ALL = "SELECT USER_ID, PASSWORD, ROLE_ID,EMPLOYEE_ID, STATUS, TEMP_PASSWORD,PR_TOKEN,TOKEN_GENERATED_ON FROM USERS ";
   static String UPDATE_ALL = "UPDATE USERS SET PASSWORD = ?, ROLE_ID = ?, STATUS = ?, TEMP_PASSWORD = ? ";
   static String UPDATE_PASSWORD = "UPDATE USERS SET PASSWORD=? ";
   static String CLEAR_PASSWORD_RESET_TOKEN = "UPDATE USERS SET PR_TOKEN=NULL,TOKEN_GENERATED_ON=NULL  ";
@@ -102,7 +102,7 @@ public class PersistentUserDao extends UserDaoDecorator {
       user.setActive(rs.getBoolean("STATUS"));
       user.setTemporaryPassword((rs.getString("TEMP_PASSWORD") == null ? null : rs.getString("TEMP_PASSWORD").toCharArray()));
       user.setPasswordResetToken(rs.getString("PR_TOKEN"));
-
+      user.setEmployeeId(rs.getString("EMPLOYEE_ID")==null?"":rs.getString("EMPLOYEE_ID"));
       Timestamp timestamp = rs.getTimestamp("TOKEN_GENERATED_ON");
       if (timestamp != null)
         user.setPasswordTokenGenerateDateTime(new java.util.Date(timestamp.getTime()));

@@ -18,21 +18,23 @@ import javax.ws.rs.core.Request;
 public class GradeSubmissionResource extends MutableGradeSubmissionResource {
 
     @GET
-    @Path("/semester/{semester-id}/courseid/{coruse-id}/examtype/{exam-type}")
+    @Path("/semester/{semester-id}/courseid/{course-id}/examtype/{exam-type}/role/{role}")
     public JsonObject getExamGrade(final @Context Request pRequest,
                                      final @PathParam("semester-id") Integer pSemesterId,
-                                     final @PathParam("exam-type") Integer pExamTypeId) throws Exception {
-        return mResourceHelper.getGradeList(pSemesterId,pExamTypeId,"");
+                                     final @PathParam("course-id") String pCourseId,
+                                     final @PathParam("exam-type") Integer pExamTypeId,
+                                     final @PathParam("role") String pRequestedRole) throws Exception {
+        return mResourceHelper.getGradeList(pRequestedRole,pSemesterId,pCourseId,pExamTypeId);
 
     }
 
     @GET
-    @Path("/semester/{semester-id}/examtype/{exam-type}/dept/{dept-id}/role/{user-role}")
+    @Path("/semester/{semester-id}/examtype/{exam-type}/dept/{dept-id}/role/{role}")
     public JsonObject getGradeSubmissionStatus(final @Context Request pRequest,
                                    final @PathParam("semester-id") Integer pSemesterId,
                                    final @PathParam("exam-type") Integer pExamTypeId,
                                    final @PathParam("dept-id") String pDeptId,
-                                   final @PathParam("user-role") String pUserRole) throws Exception {
+                                   final @PathParam("role") String pUserRole) throws Exception {
         return mResourceHelper.getGradeSubmissionStatus( pSemesterId, pExamTypeId,pDeptId,pUserRole);
 
     }

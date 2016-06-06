@@ -13,16 +13,20 @@ import org.ums.domain.model.dto.*;
 import org.ums.domain.model.immutable.Course;
 import org.ums.domain.model.immutable.ExamGrade;
 import org.ums.domain.model.immutable.ExamRoutine;
+import org.ums.domain.model.immutable.User;
 import org.ums.domain.model.mutable.MutableClassRoom;
 import org.ums.domain.model.mutable.MutableExamGrade;
 import org.ums.domain.model.mutable.MutableExamRoutine;
+import org.ums.domain.model.mutable.MutableUser;
 import org.ums.enums.CourseMarksSubmissionStatus;
 import org.ums.enums.RecheckStatus;
 import org.ums.enums.StudentMarksSubmissionStatus;
 import org.ums.manager.ExamGradeManager;
 import org.ums.manager.ExamRoutineManager;
+import org.ums.manager.UserManager;
 import org.ums.persistent.model.PersistentClassRoom;
 import org.ums.persistent.model.PersistentExamRoutine;
+import org.ums.persistent.model.PersistentUser;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.json.*;
@@ -46,6 +50,9 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
     @Autowired
     private ExamGradeBuilder mBuilder;
 
+    @Autowired
+    private  UserManager mUserManager;
+
     @Override
     protected Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
         throw new NotImplementedException();
@@ -67,7 +74,7 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
     }
 
 
-    public JsonObject getGradeList(final Integer pSemesterId, final Integer pExamType,final String pCourseId) throws Exception {
+    public JsonObject getGradeList(final String pRequestedRoleId,final Integer pSemesterId, final String pCourseId,final Integer pExamType) throws Exception {
         List<StudentGradeDto> examGradeList = getContentManager().getAllGradeForTheoryCourse(pSemesterId,pCourseId, pExamType);
 
         MarksSubmissionStatusDto marksSubmissionStatusDto = getContentManager().getMarksSubmissionStatus(pSemesterId, pCourseId, pExamType);
@@ -76,9 +83,9 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
         JsonObjectBuilder object = Json.createObjectBuilder();
         jsonReader.close();
         object.add("part_info",object1);
-        //String currentActor="preparer";
-        String currentActor="scrutinizer";
-        object.add("current_actor",currentActor); //Nead to Prepare this
+
+        String currentActor=getActorForCurrentUser(SecurityUtils.getSubject().getPrincipal().toString(),pRequestedRoleId,pSemesterId,pCourseId);
+        object.add("current_actor",currentActor);
         object.add("current_course_status",marksSubmissionStatusDto.getStatusId());
 
 
@@ -186,8 +193,8 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
         if (subject != null) {
             userId = subject.getPrincipal().toString();
         }
-
-        List<MarksSubmissionStatusDto> examGradeStatusList = getContentManager().getMarksSubmissionStatus(pSemesterId,pExamType,userId, deptId,pUserRole);
+        User user=mUserManager.get(userId);
+        List<MarksSubmissionStatusDto> examGradeStatusList = getContentManager().getMarksSubmissionStatus(pSemesterId,pExamType,user.getEmployeeId(), deptId,pUserRole);
 
         JsonObjectBuilder object = Json.createObjectBuilder();
         JsonArrayBuilder children = Json.createArrayBuilder();
@@ -291,6 +298,32 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
         }
 
         return nextStatus;
+    }
+
+    public String getActorForCurrentUser(String userId,String requestedRole,int semesterId,String courseId) throws Exception {
+        if(requestedRole.equalsIgnoreCase("T")) {
+            User user=mUserManager.get(userId);
+            List<String> roleList = mManager.getRoleForTeacher(user.getEmployeeId(), semesterId, courseId);
+            if(roleList.size()==0)
+                return "Invalid";
+            else
+                return roleList.get(0);
+        }
+        else if(requestedRole.equalsIgnoreCase("H")) {
+            List<String> roleList = mManager.getRoleForHead(userId);
+            if(roleList.size()==0)
+                return "Invalid";
+            else
+                return roleList.get(0);
+        }
+        else if(requestedRole.equalsIgnoreCase("C")) {
+            List<String> roleList = mManager.getRoleForCoE(userId);
+            if(roleList.size()==0)
+                return "Invalid";
+            else
+                return roleList.get(0);
+        }
+        return "Invalid";
     }
 
 

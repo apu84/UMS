@@ -12,6 +12,8 @@ import java.util.Date;
 public interface MutableUser extends User, Mutable, MutableIdentifier<String>, MutableLastModifier {
   void setPassword(final char[] pPassword);
 
+  void setEmployeeId(final String pEmployeeId);
+
   void setTemporaryPassword(final char[] pPassword);
 
   void setRoleIds(final List<Integer> pRoleIds);
