@@ -111,6 +111,7 @@ module ums{
     cancelSplitAction:Function;
     revertSplitAction:Function;
 
+    reCreate:Function;
     editSavedSubGroup:Function;
     cancelEditedSubGroup:Function;
     createNewSubGroup:Function;
@@ -257,6 +258,7 @@ module ums{
       $scope.cancelSplitAction = this.cancelSplitAction.bind(this);
       $scope.mouseClickEvent = this.mouseClickEvent.bind(this);
       $scope.revertSplitAction = this.revertSplitAction.bind(this);
+      $scope.reCreate = this.reCreate.bind(this);
       this.initialize();
 
     }
@@ -553,8 +555,7 @@ module ums{
 
     private createOrViewSubgroups(group:number):void{
 
-      console.log("##############");
-      console.log(this.$scope.groupList);
+
       this.$scope.tempGroupList=[];
       this.$scope.splittedGroupList=[];
       var temporaryList:any=[];
@@ -725,6 +726,21 @@ module ums{
 
     }
 
+
+
+    private reCreate():void{
+      $("#droppable1").empty();
+      $("#droppable2").empty();
+      $("#droppable3").empty();
+      $("#droppable4").empty();
+      $("#droppable5").empty();
+      $("#droppable6").empty();
+
+     /* setTimeout(this.createOrViewSubgroups,2000);
+      //this.createOrViewSubgroups(this.$scope.selectedGroupNo);*/
+
+    }
+
     private mouseClickEvent():void{
 
 
@@ -823,6 +839,8 @@ module ums{
         connectWith: ".connectedSortable"
 
       }).disableSelection();
+
+      this.reCreate();
       var classScope = this;
       $("#sortable").sortable({
         cursor:"move"
