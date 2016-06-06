@@ -5,8 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.velocity.VelocityEngineUtils;
 import org.ums.cache.LocalCache;
-import org.ums.domain.model.mutable.MutableNavigation;
 import org.ums.domain.model.immutable.Navigation;
+import org.ums.domain.model.mutable.MutableNavigation;
 
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
@@ -25,7 +25,11 @@ public class NavigationBuilder implements Builder<Navigation, MutableNavigation>
     pBuilder.add("title", pReadOnly.getTitle());
     pBuilder.add("parentMenu", pReadOnly.getParent() == null ? "" : String.valueOf(pReadOnly.getParent().getId()));
     pBuilder.add("viewOrder", pReadOnly.getViewOrder());
-    pBuilder.add("location", pReadOnly.getLocation().replaceAll("/", "").replaceAll("#", ""));  // commented out by Ifti( due to url parameter issue)
+    String location = pReadOnly.getLocation();
+    if (location.length() > 0 && location.charAt(0) == '/') {
+      location = location.substring(1);
+    }
+    pBuilder.add("location", location.replaceAll("#", ""));  // commented out by Ifti( due to url parameter issue)
     //pBuilder.add("location", pReadOnly.getLocation());  // commented out by Ifti( due to url parameter issue)
 
 
