@@ -109,7 +109,7 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
 
     static String CHART_DATA="Select Grade_Letter,sum(Students) Students From  " +
         "( " +
-        "select Grade_Letter,Count(Student_Id) Students From UG_THEORY_MARKS Where ..... Group by Grade_Letter " +
+        "select Grade_Letter,Count(Student_Id) Students From UG_THEORY_MARKS Where Semester_Id=? And Course_Id=? and Exam_Type=? Group by Grade_Letter " +
         "Union " +
         "Select 'A+' Grade_Letter, 0 Students From Dual " +
         "Union " +
