@@ -105,9 +105,9 @@ module ums {
                 private httpClient:HttpClient, private $stateParams:any) {
 
                 //console.clear();
-                console.log($stateParams.role);
+      console.log($stateParams["1"]);
                 //his.$scope.userRole=$params.role;
-      this.$scope.userRole=$stateParams.role;
+      this.$scope.userRole = $stateParams["1"];
                 $scope.data = {
                   gradeLetterOptions: appConstants.gradeLetters,
                   total_part:Number,
