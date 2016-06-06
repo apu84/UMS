@@ -25,7 +25,8 @@ public class NavigationBuilder implements Builder<Navigation, MutableNavigation>
     pBuilder.add("title", pReadOnly.getTitle());
     pBuilder.add("parentMenu", pReadOnly.getParent() == null ? "" : String.valueOf(pReadOnly.getParent().getId()));
     pBuilder.add("viewOrder", pReadOnly.getViewOrder());
-    pBuilder.add("location", pReadOnly.getLocation().replaceAll("/", "").replaceAll("#", ""));
+    pBuilder.add("location", pReadOnly.getLocation().replaceAll("/", "").replaceAll("#", ""));  // commented out by Ifti( due to url parameter issue)
+    //pBuilder.add("location", pReadOnly.getLocation());  // commented out by Ifti( due to url parameter issue)
 
 
     Map menu = new HashMap();

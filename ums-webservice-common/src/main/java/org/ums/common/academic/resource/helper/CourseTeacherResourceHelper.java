@@ -1,25 +1,26 @@
 package org.ums.common.academic.resource.helper;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
-import org.ums.common.academic.resource.ResourceHelper;
 import org.ums.common.builder.CourseTeacherBuilder;
 import org.ums.domain.model.immutable.CourseTeacher;
 import org.ums.domain.model.mutable.MutableCourseTeacher;
-import org.ums.enums.CourseCategory;
-import org.ums.manager.CourseTeacherManager;
+import org.ums.manager.AssignedTeacherManager;
 import org.ums.persistent.model.PersistentCourseTeacher;
 
-import javax.json.*;
+import javax.json.JsonArray;
+import javax.json.JsonObject;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.util.List;
 
 @Component
-public class CourseTeacherResourceHelper extends ResourceHelper<CourseTeacher, MutableCourseTeacher, String> {
+public class CourseTeacherResourceHelper
+    extends AbstractAssignedTeacherResourceHelper<CourseTeacher, MutableCourseTeacher, Integer, AssignedTeacherManager<CourseTeacher, MutableCourseTeacher, Integer>> {
   @Autowired
-  CourseTeacherManager mCourseTeacherManager;
+  @Qualifier("courseTeacherManager")
+  AssignedTeacherManager<CourseTeacher, MutableCourseTeacher, Integer> mCourseTeacherManager;
 
   @Autowired
   private CourseTeacherBuilder mBuilder;
@@ -32,7 +33,7 @@ public class CourseTeacherResourceHelper extends ResourceHelper<CourseTeacher, M
   }
 
   @Override
-  protected CourseTeacherManager getContentManager() {
+  protected AssignedTeacherManager<CourseTeacher, MutableCourseTeacher, Integer> getContentManager() {
     return mCourseTeacherManager;
   }
 
@@ -44,61 +45,6 @@ public class CourseTeacherResourceHelper extends ResourceHelper<CourseTeacher, M
   @Override
   protected String getEtag(CourseTeacher pReadonly) {
     return pReadonly.getLastModified();
-  }
-
-  public JsonObject getCourseTeachers(final Integer pProgramId, final Integer pSemesterId, final UriInfo pUriInfo) throws Exception {
-    List<CourseTeacher> courseTeachers = getContentManager().getCourseTeachers(pProgramId, pSemesterId);
-    return buildJsonResponse(courseTeachers, pUriInfo);
-  }
-
-  public JsonObject getCourseTeachers(final Integer pProgramId, final Integer pSemesterId,
-                                      final Integer pYear, final UriInfo pUriInfo) throws Exception {
-    List<CourseTeacher> courseTeachers = getContentManager().getCourseTeachers(pProgramId, pSemesterId, pYear);
-    return buildJsonResponse(courseTeachers, pUriInfo);
-  }
-
-  public JsonObject getCourseTeachers(final Integer pProgramId, final Integer pSemesterId,
-                                      final Integer pYear, final Integer pSemester, final UriInfo pUriInfo) throws Exception {
-    List<CourseTeacher> courseTeachers = getContentManager().getCourseTeachers(pProgramId, pSemesterId, pYear, pSemester);
-    return buildJsonResponse(courseTeachers, pUriInfo);
-  }
-
-  public JsonObject getCourseTeachers(final Integer pProgramId, final Integer pSemesterId,
-                                      final CourseCategory pCourseCategory, final UriInfo pUriInfo) throws Exception {
-    List<CourseTeacher> courseTeachers = getContentManager().getCourseTeachers(pProgramId, pSemesterId, pCourseCategory);
-    return buildJsonResponse(courseTeachers, pUriInfo);
-  }
-
-  public JsonObject getCourseTeachers(final Integer pProgramId, final Integer pSemesterId,
-                                      final String pCourseId, final UriInfo pUriInfo) throws Exception {
-    List<CourseTeacher> courseTeachers = getContentManager().getCourseTeachers(pProgramId, pSemesterId, pCourseId);
-    return buildJsonResponse(courseTeachers, pUriInfo);
-  }
-
-  public JsonObject getCourseTeachers(final Integer pProgramId, final Integer pSemesterId, final Integer pYear,
-                                      final CourseCategory pCourseCategory, final UriInfo pUriInfo) throws Exception {
-    List<CourseTeacher> courseTeachers = getContentManager().getCourseTeachers(pProgramId, pSemesterId, pYear, pCourseCategory);
-    return buildJsonResponse(courseTeachers, pUriInfo);
-  }
-
-  public JsonObject getCourseTeachers(final Integer pProgramId, final Integer pSemesterId, final Integer pYear,
-                                      final Integer pSemester, final CourseCategory pCourseCategory,
-                                      final UriInfo pUriInfo) throws Exception {
-    List<CourseTeacher> courseTeachers = getContentManager().getCourseTeachers(pProgramId, pSemesterId, pYear, pSemester, pCourseCategory);
-    return buildJsonResponse(courseTeachers, pUriInfo);
-  }
-
-  protected JsonObject buildJsonResponse(final List<CourseTeacher> pCourseTeachers, final UriInfo pUriInfo) throws Exception {
-    JsonObjectBuilder object = Json.createObjectBuilder();
-    JsonArrayBuilder children = Json.createArrayBuilder();
-    LocalCache localCache = new LocalCache();
-    for (CourseTeacher courseTeacher : pCourseTeachers) {
-      children.add(toJson(courseTeacher, pUriInfo, localCache));
-    }
-    object.add("entries", children);
-    localCache.invalidate();
-
-    return object.build();
   }
 
   protected void modifyContent(JsonObject pJsonObject) throws Exception {

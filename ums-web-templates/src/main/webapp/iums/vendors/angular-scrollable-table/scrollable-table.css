@@ -74,7 +74,7 @@
 }
 
 .scrollArea table .th-inner .ng-scope {
-    display: block;
+    /*display: block;*/
     overflow: hidden;
     text-overflow: ellipsis;
 }

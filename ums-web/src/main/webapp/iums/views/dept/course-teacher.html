@@ -4,68 +4,12 @@
       <h3 class="panel-title">Select </h3>
     </div>
     <div class="panel-body pan">
-      <form action="" class="form-horizontal">
-        <div class="form-body pal">
-          <div data-program-selector="" data-model="courseTeacherSearchParamModel.programSelector"></div>
-          <div class="form-group">
-            <label class="col-md-4 control-label">Semester</label>
-
-            <div class="col-md-8">
-              <select class="form-control required" data-ng-model="courseTeacherSearchParamModel.semesterId"
-                      ng-init="courseTeacherSearchParamModel.academicSemesterId=''">
-                <option data-ng-repeat="semester in courseTeacherSearchParamModel.programSelector.getSemesters()" value="{{semester.id}}">
-                  {{semester.name}}
-                </option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="col-md-4 control-label">Year</label>
-
-            <div class="col-md-8">
-              <select class="form-control required" data-ng-model="courseTeacherSearchParamModel.academicYearId"
-                      ng-init="courseTeacherSearchParamModel.academicYearId=''">
-                <option data-ng-repeat="year in data.academicYearOptions" value="{{year.id}}">{{year.name}}</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="col-md-4 control-label">Semester</label>
-
-            <div class="col-md-8">
-              <select class="form-control required" data-ng-model="courseTeacherSearchParamModel.academicSemesterId"
-                      ng-init="courseTeacherSearchParamModel.academicYearId=''">
-                <option data-ng-repeat="semester in data.academicSemesterOptions" value="{{semester.id}}">
-                  {{semester.name}}
-                </option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="col-md-4 control-label">Category</label>
-
-            <div class="col-md-8">
-              <select class="form-control required" data-ng-model="courseTeacherSearchParamModel.courseCategoryId"
-                      ng-init="courseTeacherSearchParamModel.courseCategoryId=''">
-                <option data-ng-repeat="courseCategory in data.courseCategoryOptions" value="{{courseCategory.id}}">
-                  {{courseCategory.name}}
-                </option>
-              </select>
-            </div>
-          </div>
-        </div>
-        <div class="form-actions text-right pal">
-          <button type="button" class="btn btn-success" data-ng-click="fetchCourseTeacherInfo()">Search</button>
-        </div>
-      </form>
+      <div data-ng-include="" data-src="'views/dept/assigned-teacher-selector.html'"></div>
     </div>
   </div>
   <div class="arrowClass pull-left" onclick="resetDivs()" id="arrowDiv"><i
       class="fa fa-angle-double-right fa-4x"></i></i> </div>
-  <div class="orgRightClass pull-left" id="rightDiv">
+  <div class="orgRightClass pull-left hidden" id="rightDiv">
 
     <div class="panel" style="min-height: 490px;">
       <div class="panel-heading">Course Teacher List For "{{programName}}" Program of {{departmentName}} Department -
@@ -80,7 +24,7 @@
         </div>
         <div data-ng-if="contentVisibility">
         <div class="alert alert-success" style="color: #3c763d;font-weight: bold;padding: 5px;">
-          {{academicYear}} -{{academicSemester}} : {{courseCategory}} Courses
+          {{academicYear}} {{academicSemester? "- "+ academicSemester: ""}} : {{courseCategory}} Courses
         </div>
         <table class="table table-hover table-bordered table-advanced">
           <thead>
@@ -131,7 +75,7 @@
                   </td>
                   <td width="5%" style="padding-left: 5px;">
                     <a href="javascript:void(0);" class="btn btn-xs btn-default" data-ng-if="courseTeacher.editMode"
-                       data-ng-click="removeCourseTeacher(courseId, selectedTeacher.id)">
+                       data-ng-click="removeTeacher(courseId, selectedTeacher.id)">
                       <i class="fa fa-times" style="color: red;"></i>
                     </a>
                   </td>
@@ -140,7 +84,7 @@
             </td>
             <td>
               <div class="mbs">
-                <button class="btn btn-xs btn-success filter-submit" data-ng-click="editCourseTeacher(courseId)"
+                <button class="btn btn-xs btn-success filter-submit" data-ng-click="editTeacher(courseId)"
                         data-ng-if="!courseTeacher.editMode && !isEmpty(courseTeacher.selectedTeachers)">
                   <i class="fa fa-plus-square-o"></i>
                   Edit
@@ -154,14 +98,14 @@
               </div>
               <div class="mbs" data-ng-if="courseTeacher.editMode">
                 <a href="javascript:void(0);" class="btn btn-xs btn-default"
-                   data-ng-click="saveCourseTeacher(courseId);">
+                   data-ng-click="saveTeacher(courseId);">
                   <i class="fa fa-save"></i>&nbsp;
                   Save
                 </a>
               </div>
               <div class="mbs" data-ng-if="courseTeacher.editMode">
                 <a href="javascript:void(0);" class="btn btn-xs btn-default"
-                   data-ng-click="fetchCourseTeacherInfo()">
+                   data-ng-click="fetchTeacherInfo()">
                   <i class="fa fa-reply"></i>&nbsp;
                   Cancel
                 </a>
@@ -175,7 +119,7 @@
 
       </div>
       <div class="form-actions text-right pal" style="margin-top:25px;display: none;">
-        <button type="button" class="btn btn-success" onclick="fetchCourseTeacherInfo()">Save Course-Teacher Info
+        <button type="button" class="btn btn-success" onclick="fetchTeacherInfo()">Save Course-Teacher Info
         </button>
       </div>
     </div>

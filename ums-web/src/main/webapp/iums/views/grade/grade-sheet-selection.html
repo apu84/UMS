@@ -2,9 +2,19 @@
     .table thead tr th, .table thead tr td {
         border-bottom: 1px solid grey;
     }
-    scrollable-table .scrollableContainer{
+    /*scrollable-table .scrollableContainer{
         height:450px;
+    }*/
+    .scrollArea table .recheckAll .th-inner .ng-scope {
+        display: inline;
     }
+    .table_overlay{
+        display:none;
+        position:absolute;
+        background:#fff;
+        border: 1px solid #efefef;
+    }
+    .scrollableContainer { height: inherit; }
 </style>
 <div class="row" id="selection1">
     <div class="orgLeftClass pull-left panel panel-green" id="leftDiv">
@@ -137,85 +147,444 @@
                     </tr>
                     <tr>
                         <td  style="height: 30px;"><b>Credit Hour :</b></td>
-                        <td>1.5</td>
+                        <td>1.5 <a href="Javascript:void(0)" data-ng-click="fetchGradeSheet()">Reload</a></td>
                         <td><b>Total Part :</b></td>
                         <td>
-                            <select id="total_part" data-ng-model="total_part" data-ng-change="onTotalPartChange()"   style="float: left;border:1px solid grey;text-align: center;height: 22px;">
+                            <select id="total_part" data-ng-model="total_part" data-ng-change="onTotalPartChange()"   style="float: left;border:1px solid grey;text-align: center;height: 22px;" data-ng-if="(gradeSubmissionStatus =='0' && currentActor=='preparer')">
                                 <option value="1">&nbsp;1&nbsp;</option>
                                 <option value="2">&nbsp;2&nbsp;</option>
                             </select>
+                            <span data-ng-if="(gradeSubmissionStatus !='0' || currentActor!='preparer')">{{total_part}}</span>
+
                             <div style="float: left;margin-left: 10px;display: none;" id="partDiv">
                                 &nbsp;&nbsp;&nbsp;&nbsp;
-                            Part-A  <input type="text" style="width: 50px;border:1px solid grey;text-align: center;" data-ng-model="part_a_total" />&nbsp;&nbsp;
-                            Part-B  <input type="text" style="width: 50px;border:1px solid grey;text-align: center;" data-ng-model="part_b_total"/>
+                            Part-A  <input type="text" style="width: 50px;border:1px solid grey;text-align: center;" data-ng-model="part_a_total"  data-ng-if="(gradeSubmissionStatus =='0' && currentActor=='preparer')"/>
+                                    <span data-ng-if="(gradeSubmissionStatus !='0' || currentActor!='preparer')">{{part_a_total}}</span>&nbsp;&nbsp;
+                            Part-B  <input type="text" style="width: 50px;border:1px solid grey;text-align: center;" data-ng-model="part_b_total" data-ng-if="(gradeSubmissionStatus =='0' && currentActor=='preparer')"/>
+                                    <span data-ng-if="(gradeSubmissionStatus !='0' || currentActor!='preparer')">{{part_a_total}}</span>
                             </div>
 
                         </td>
                     </tr>
                 </table>
 
+                <!-- Grade Sheet Preparer Block (Fresh/New Grade Submission , Requested for recheck grades are not here) -->
+                <div ng-if="noneSubmittedGrades.length>0 &&  (gradeSubmissionStatus =='0' && currentActor=='preparer')">
 
-
-
-                <scrollable-table watch="allStudents">
-                    <table class="table table-striped table-bordered">
-                        <thead>
-                        <tr>
-                            <th sortable-header col="studentId" width="10%">Student Id</th>
-                            <th sortable-header col="studentName" width="40%">Student Name</th>
-                            <th sortable-header col="quiz" width="10%" style="text-align: center;">Quiz (20)</th>
-                            <th sortable-header col="classPerformance" width="10%" style="text-align: center;">Class Perf. (10)</th>
-                            <th sortable-header col="partA" width="10%" style="text-align: center;">Part-A ({{part_a_total}})</th>
-                            <th sortable-header col="partB" width="10%" style="text-align: center;" ng-show="toggleColumn">Part-B ({{part_b_total}})</th>
-                            <th sortable-header col="total" width="10%" style="text-align: center;">Total</th>
-                            <th sortable-header col="gradeLetter" width="10%" style="text-align: center;">Grade Letter</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr ng-repeat="response in allStudents" row-id="{{response.studentId}}" id="row_{{response.studentId}}">
-                            <td id="sid_{{response.studentId}}">{{response.studentId}}</td>
-                            <td id="td_sname_{{response.studentId}}">{{ response.studentName }}</td>
-                            <td id="td_quiz_{{response.studentId}}">
-                                <input type="text"  style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="quiz_{{response.studentId}}"
-                                       value="{{response.quiz}}" data-ng-change="calculateTotalAndGradeLetter('{{response.studentId}}')" data-ng-model="response.quiz" maxlength="2"/>
-                            </td>
-                            <td id="td_cperf_{{response.studentId}}">
-                                <input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="class_perf_{{response.studentId}}"
-                                       value="{{response.classPerformance}}"  data-ng-change="calculateTotalAndGradeLetter('{{response.studentId}}')" data-ng-model="response.classPerformance" maxlength="2"/>
-                            </td>
-                            <td id="td_parta_{{response.studentId}}">
-                                <input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="part_a_{{response.studentId}}"
-                                       value="{{response.partA}}" data-ng-change="calculateTotalAndGradeLetter('{{response.studentId}}')" data-ng-model="response.partA" maxlength="2"/>
-                            </td>
-                            <td id="td_partb_{{response.studentId}}" ng-show="toggleColumn">
-                                <input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="part_b_{{response.studentId}}"
-                                       value="{{response.partB}}" data-ng-change="calculateTotalAndGradeLetter('{{response.studentId}}')" data-ng-model="response.partB" maxlength="2"/>
-                            </td>
-                            <td id="td_total_{{response.studentId}}">
-                                <input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" disabled="disabled" id="total_{{response.studentId}}" value="{{response.total}}"/>
-                            </td>
-                            <td id="td_grade_letter_{{response.studentId}}">
-                                <select  style="width: 100px;border: 1px solid grey;padding: 0px;height: 23px;" id="grade_letter_{{response.studentId}}" disabled="disabled">
-                                    <option value="">Select Grade</option>
-                                    <option ng-selected="{{gradeLetter.id == response.gradeLetter}}" data-ng-repeat="gradeLetter in data.gradeLetterOptions" value="{{gradeLetter.id}}">{{gradeLetter.name}}</option>
-                                </select>
-
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </scrollable-table>
-                <br/><br/>
-                <div class="row">
-                    <div class="col-md-6">
-                        <button type="button" class="btn btn-default btn-square" onclick='goBack()'>Back to Grade Sheet Selection</button>
+                    <div class="btn btn-blue reportrange" style="margin-top: 20px;">
+                        <i class="fa fa-check-circle-o"></i>
+                        <span style="padding-right: 100px;">{{gradeTitle}}</span>
                     </div>
-                    <div class="col-md-6" style="text-align: right;">
-                        <button type="button" class="btn btn-grey btn-square" data-ng-click="saveGradeSheet()">Save Data</button>
-                        <button type="button" class="btn btn-green btn-square" data-ng-click="saveAndSendToScrutinizer()">Save & Send to Scrutinizer</button>
+                    <div class="clearfix"></div>
+                    <scrollable-table watch="noneSubmittedGrades" ng-style="{height: noneSubmittedGrades.length > 10 ? 450 : (38 + (noneSubmittedGrades.length * 35.5))}">
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                            <tr>
+                                <th sortable-header col="studentId" width="10%">Student Id</th>
+                                <th sortable-header col="studentName" width="40%">Student Name</th>
+                                <th sortable-header col="quiz" width="10%" style="text-align: center;">Quiz (20)</th>
+                                <th sortable-header col="classPerformance" width="10%" style="text-align: center;">Class Perf. (10)</th>
+                                <th sortable-header col="partA" width="10%" style="text-align: center;">Part-A ({{part_a_total}})</th>
+                                <th sortable-header col="partB" width="10%" style="text-align: center;" ng-show="toggleColumn">Part-B ({{part_b_total}})</th>
+                                <th sortable-header col="total" width="10%" style="text-align: center;">Total</th>
+                                <th sortable-header col="gradeLetter" width="10%" style="text-align: center;">Grade Letter</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="response in noneSubmittedGrades" row-id="{{response.studentId}}" id="row_{{response.studentId}}">
+                                <td id="sid_{{response.studentId}}">{{response.studentId}}</td>
+                                <td id="td_sname_{{response.studentId}}">{{ response.studentName }}</td>
+                                <td id="td_quiz_{{response.studentId}}">
+                                    <input type="text"  style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="quiz_{{response.studentId}}"
+                                           value="{{response.quiz}}" data-ng-change="calculateTotalAndGradeLetter('{{response.studentId}}')" data-ng-model="response.quiz" maxlength="2"/>
+                                </td>
+                                <td id="td_cperf_{{response.studentId}}">
+                                    <input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="class_perf_{{response.studentId}}"
+                                           value="{{response.classPerformance}}"  data-ng-change="calculateTotalAndGradeLetter('{{response.studentId}}')" data-ng-model="response.classPerformance" maxlength="2"/>
+                                </td>
+                                <td id="td_parta_{{response.studentId}}">
+                                    <input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="part_a_{{response.studentId}}"
+                                           value="{{response.partA}}" data-ng-change="calculateTotalAndGradeLetter('{{response.studentId}}')" data-ng-model="response.partA" maxlength="2"/>
+                                </td>
+                                <td id="td_partb_{{response.studentId}}" ng-show="toggleColumn">
+                                    <input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="part_b_{{response.studentId}}"
+                                           value="{{response.partB}}" data-ng-change="calculateTotalAndGradeLetter('{{response.studentId}}')" data-ng-model="response.partB" maxlength="2"/>
+                                </td>
+                                <td id="td_total_{{response.studentId}}">
+                                    <input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" disabled="disabled" id="total_{{response.studentId}}" value="{{response.total}}"/>
+                                </td>
+                                <td id="td_grade_letter_{{response.studentId}}">
+                                    <select  style="width: 100px;border: 1px solid grey;padding: 0px;height: 23px;" id="grade_letter_{{response.studentId}}" disabled="disabled">
+                                        <option value="">Select Grade</option>
+                                        <option ng-selected="{{gradeLetter.id == response.gradeLetter}}" data-ng-repeat="gradeLetter in data.gradeLetterOptions" value="{{gradeLetter.id}}">{{gradeLetter.name}}</option>
+                                    </select>
+
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </scrollable-table>
+
+                    <br/><br/>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-default btn-square" onclick='goBack()'>Back to Grade Sheet Selection</button>
+                        </div>
+                        <div class="col-md-6" style="text-align: right;">
+                            <button type="button" class="btn btn-grey btn-square" data-ng-click="saveGradeSheet()">Save Data</button>
+                            <button type="button" class="btn btn-green btn-square" data-ng-click="saveAndSendToScrutinizer()">Save & Send to Scrutinizer</button>
+                        </div>
+                    </div>
+                    <br/><br/>
+                </div>
+                <!-- End of Preparer block -->
+
+                <!-- IF the Current Actor have the right to send back or forward the grades -->
+                <!-- For example Waiting for Scrutinizer's Approval(Scrutinizer Role), Waiting for Head's Approval(Head Role), Waiting for CoE's Approval(CoE Role) -->
+                <div ng-if="candidatesGrades.length>0 &&  (gradeSubmissionStatus =='1' && currentActor=='scrutinizer') || (gradeSubmissionStatus =='3' && currentActor=='head') ||
+                     (gradeSubmissionStatus =='5' && currentActor=='coe')"  id="top_div">
+
+                    <div class="btn btn-blue reportrange" style="margin-top: 20px;">
+                        <i class="fa fa-check-circle-o"></i>
+                        <span style="padding-right: 100px;">{{gradeTitle}}</span>
+                    </div>
+                    <div class="clearfix"></div>
+
+                    <scrollable-table watch="candidatesGrades" ng-style="{height: candidatesGrades.length > 10 ? 450 : (38 + (candidatesGrades.length * 35.5))}">
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                            <tr>
+                                <th sortable-header col="studentId" width="10%">Student Id</th>
+                                <th sortable-header col="studentName" width="25%">Student Name</th>
+                                <th sortable-header col="quiz" width="6%" style="text-align: center;">Quiz (20)</th>
+                                <th sortable-header col="classPerformance" width="8%" style="text-align: center;">Class Perf. (10)</th>
+                                <th sortable-header col="partA" width="8%" style="text-align: center;">Part-A ({{part_a_total}})</th>
+                                <th sortable-header col="partB" width="8%" style="text-align: center;" ng-show="toggleColumn">Part-B ({{part_b_total}})</th>
+                                <th sortable-header col="total" width="8%" style="text-align: center;">Total</th>
+                                <th sortable-header class="col2" col="gradeLetter" width="8%" style="text-align: center;">Grade Letter</th>
+                                <th sortable-header col="recheckAll" width="8%" style="text-align: center;">Recheck&nbsp;&nbsp;<input type="checkbox" data-ng-click="recheckAll(currentActor)" id="recheckAllCheckBox"/></th>
+                                <th col="scrutinyAll" col="approveAll"  width="8%" style="text-align: center;">{{approveAction}}&nbsp;&nbsp;<input type="checkbox"  data-ng-click="approveAll(currentActor)" id="approveAllCheckBox"/></a>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="response in candidatesGrades">
+                                <td>{{response.studentId}}</td>
+                                <td>{{ response.studentName }}</td>
+                                <td style="padding-right: 30px;text-align: right;">{{response.quiz}}</td>
+                                <td style="padding-right: 30px;text-align: right;">{{response.classPerformance}}</td>
+                                <td style="padding-right: 30px;text-align: right;">{{response.partA}}</td>
+                                <td style="padding-right: 30px;text-align: right;">{{response.partB}}</td>
+                                <td style="padding-right: 30px;text-align: right;">{{response.total}}</td>
+                                <td style="text-align: center;">{{response.gradeLetter}}</td>
+                                <td style="text-align: center;"><input type="checkbox" id="recheck_{{response.studentId}}" data-ng-click="onRecheckClick(currentActor,response)" ng-checked="response.recheckStatusId"/> </td>
+                                <td style="text-align: center;"><input type="checkbox" id="approve_{{response.studentId}}" data-ng-click="onApproveClick(currentActor,response)"
+                                                                       ng-checked="((gradeSubmissionStatus =='1' && response.statusId==3) || (gradeSubmissionStatus =='3' && response.statusId==5) || (gradeSubmissionStatus =='5' && response.statusId==7))
+                                                                       && response.recheckStatusId==0"/> </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="table_overlay"></div>
+                        <!--<div id="msg_div24" style="position: absolute;background-color:wheat;padding:20px;">Showing message here...</div>-->
+                            <div class="modal-dialog" id="msg_div24"  style="position: absolute;">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button class="close" aria-hidden="true" data-dismiss="modal" type="button" data-ng-click="closePopupModal()">×</button>
+                                        <h4 id="modal-stackable-label" class="modal-title">Message</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p id="msg_content"></p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-primary" type="button" data-ng-click="closePopupModal()">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                    </scrollable-table>
+
+                    <div class="row" style="padding-top:20px;padding-bottom: 20px;">
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-default btn-square" onclick='goBack()'>Back to Grade Sheet Selection</button>
+                        </div>
+                        <div class="col-md-6" style="text-align: right;">
+                            <button type="button" class="btn btn-grey btn-square" data-ng-click="saveRecheckApproveGrades(currentActor,'save')">Save Data</button>
+                            <button type="button" id="recheckBtn" class="btn btn-primary btn-square disabled" data-ng-click="saveRecheckApproveGrades(currentActor,'recheck')">{{recheckButtonLabel}}</button>
+                            <button type="button" id="approveBtn" class="btn btn-green btn-square disabled" data-ng-click="saveRecheckApproveGrades(currentActor,'approve')">{{approveButtonLabel}}</button>
+                        </div>
                     </div>
                 </div>
-                <br/><br/>
+                <!-- End of Back and Forward Block (If the current actor has  back or forward role) -->
+
+
+
+                <!-- Start of Recheck Candidates Grades -->
+                <div ng-if="recheckCandidatesGrades.length >0 &&  ((gradeSubmissionStatus =='2' || gradeSubmissionStatus =='4' || gradeSubmissionStatus =='6') && currentActor!='preparer')">
+                    <div class="btn btn-blue reportrange" style="margin-top: 20px;">
+                        <i class="fa fa-check-circle-o"></i>
+                        <span style="padding-right: 100px;">Requested for Recheck Grades</span>
+                    </div>
+                    <div class="clearfix"></div>
+                    <scrollable-table watch="recheckCandidatesGrades" ng-style="{height: recheckCandidatesGrades.length > 10 ? 450 : (38 + (recheckCandidatesGrades.length * 35.5))}">
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                            <tr>
+                                <th sortable-header col="studentId" width="10%">Student Id</th>
+                                <th sortable-header col="studentName" width="32%">Student Name</th>
+                                <th sortable-header col="quiz" width="10%" style="text-align: center;">Quiz (20)</th>
+                                <th sortable-header col="classPerformance" width="10%" style="text-align: center;">Class Perf. (10)</th>
+                                <th sortable-header col="partA" width="10%" style="text-align: center;">Part-A ({{part_a_total}})</th>
+                                <th sortable-header col="partB" width="10%" style="text-align: center;" ng-show="toggleColumn">Part-B ({{part_b_total}})</th>
+                                <th sortable-header col="total" width="10%" style="text-align: center;">Total</th>
+                                <th sortable-header col="gradeLetter" width="10%" style="text-align: center;">Grade Letter</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="response in recheckCandidatesGrades">
+                                <td>{{response.studentId}}</td>
+                                <td>{{ response.studentName }}</td>
+                                <td style="padding-right: 30px;text-align: right;">{{response.quiz}}</td>
+                                <td style="padding-right: 30px;text-align: right;">{{response.classPerformance}}</td>
+                                <td style="padding-right: 30px;text-align: right;">{{response.partA}}</td>
+                                <td style="padding-right: 30px;text-align: right;">{{response.partB}}</td>
+                                <td style="padding-right: 30px;text-align: right;">{{response.total}}</td>
+                                <td style="text-align: center;">{{response.gradeLetter}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </scrollable-table>
+                </div>
+
+                <div ng-if="recheckCandidatesGrades.length >0 &&  ((gradeSubmissionStatus =='2' || gradeSubmissionStatus =='4' || gradeSubmissionStatus =='6') && currentActor=='preparer')">
+                    <div class="btn btn-blue reportrange" style="margin-top: 20px;">
+                        <i class="fa fa-check-circle-o"></i>
+                        <span style="padding-right: 100px;">Requested for Recheck Grades</span>
+                    </div>
+                    <div class="clearfix"></div>
+                    <scrollable-table watch="recheckCandidatesGrades" ng-style="{height: recheckCandidatesGrades.length > 10 ? 450 : (38 + (recheckCandidatesGrades.length * 35.5))}">
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                            <tr>
+                                <th sortable-header col="studentId" width="10%">Student Id</th>
+                                <th sortable-header col="studentName" width="28%">Student Name</th>
+                                <th sortable-header col="quiz" width="8%" style="text-align: center;">Quiz (20)</th>
+                                <th sortable-header col="classPerformance" width="8%" style="text-align: center;">Class Perf. (10)</th>
+                                <th sortable-header col="partA" width="8%" style="text-align: center;">Part-A ({{part_a_total}})</th>
+                                <th sortable-header col="partB" width="8%" style="text-align: center;" ng-show="toggleColumn">Part-B ({{part_b_total}})</th>
+                                <th sortable-header col="total" width="8%" style="text-align: center;">Total</th>
+                                <th sortable-header col="gradeLetter" width="8%" style="text-align: center;">Grade Letter</th>
+                                <th sortable-header col="recheckAll" width="5%" style="text-align: center;">R&nbsp;&nbsp;
+                                    <input type="checkbox" data-ng-click="recheckAll(currentActor)" id="recheckAllCheckBox"/>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="response in recheckCandidatesGrades" row-id="{{response.studentId}}" id="row_{{response.studentId}}">
+                                <td id="sid_{{response.studentId}}">{{response.studentId}}</td>
+                                <td id="td_sname_{{response.studentId}}">{{ response.studentName }}</td>
+                                <td id="td_quiz_{{response.studentId}}">
+                                    <input type="text"  style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="quiz_{{response.studentId}}"
+                                           value="{{response.quiz}}" data-ng-change="calculateTotalAndGradeLetter('{{response.studentId}}')" data-ng-model="response.quiz" maxlength="2"/>
+                                </td>
+                                <td id="td_cperf_{{response.studentId}}">
+                                    <input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="class_perf_{{response.studentId}}"
+                                           value="{{response.classPerformance}}"  data-ng-change="calculateTotalAndGradeLetter('{{response.studentId}}')" data-ng-model="response.classPerformance" maxlength="2"/>
+                                </td>
+                                <td id="td_parta_{{response.studentId}}">
+                                    <input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="part_a_{{response.studentId}}"
+                                           value="{{response.partA}}" data-ng-change="calculateTotalAndGradeLetter('{{response.studentId}}')" data-ng-model="response.partA" maxlength="2"/>
+                                </td>
+                                <td id="td_partb_{{response.studentId}}" ng-show="toggleColumn">
+                                    <input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="part_b_{{response.studentId}}"
+                                           value="{{response.partB}}" data-ng-change="calculateTotalAndGradeLetter('{{response.studentId}}')" data-ng-model="response.partB" maxlength="2"/>
+                                </td>
+                                <td id="td_total_{{response.studentId}}">
+                                    <input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" disabled="disabled" id="total_{{response.studentId}}" value="{{response.total}}"/>
+                                </td>
+                                <td id="td_grade_letter_{{response.studentId}}">
+                                    <select  style="width: 100px;border: 1px solid grey;padding: 0px;height: 23px;" id="grade_letter_{{response.studentId}}" disabled="disabled">
+                                        <option value="">Select Grade</option>
+                                        <option ng-selected="{{gradeLetter.id == response.gradeLetter}}" data-ng-repeat="gradeLetter in data.gradeLetterOptions" value="{{gradeLetter.id}}">{{gradeLetter.name}}</option>
+                                    </select>
+                                </td>
+                                <td style="text-align: center;">
+                                    <input type="checkbox" id="recheck_{{response.studentId}}" data-ng-click="onRecheckClick(currentActor,response)" ng-checked="response.statusId==1"/>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </scrollable-table>
+                    <br/><br/>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-default btn-square" onclick='goBack()'>Back to Grade Sheet Selection</button>
+                        </div>
+                        <div class="col-md-6" style="text-align: right;">
+                            <button type="button" class="btn btn-grey btn-square" data-ng-click="saveGradeSheet()">Save Data</button>
+                            <button type="button" class="btn btn-green btn-square" data-ng-click="saveAndSendToScrutinizer()">Save & Send to Scrutinizer</button>
+                        </div>
+                    </div>
+                    <br/><br/>
+                </div>
+                <!-- End of Recheck Candidates Grades -->
+
+                <!-- Start of Submitted Grades -->
+                <div ng-if="submittedGrades.length>0  &&  (currentActor=='scrutinizer' && gradeSubmissionStatus !='1') ||(currentActor!='scrutinizer') ">
+                    <div class="btn btn-blue reportrange" style="margin-top: 20px;">
+                        <i class="fa fa-check-circle-o"></i>
+                        <span style="padding-right: 100px;">Submitted Grades</span>
+                    </div>
+                    <div class="clearfix"></div>
+
+                    <scrollable-table watch="submittedGrades" ng-style="{height: submittedGrades.length > 10 ? 450 : (38 + (submittedGrades.length * 35.5))}">
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                            <tr>
+                                <th sortable-header col="studentId" width="10%">Student Id</th>
+                                <th sortable-header col="studentName" width="32%">Student Name</th>
+                                <th sortable-header col="quiz" width="10%" style="text-align: center;">Quiz (20)</th>
+                                <th sortable-header col="classPerformance" width="10%" style="text-align: center;">Class Perf. (10)</th>
+                                <th sortable-header col="partA" width="10%" style="text-align: center;">Part-A ({{part_a_total}})</th>
+                                <th sortable-header col="partB" width="10%" style="text-align: center;" ng-show="toggleColumn">Part-B ({{part_b_total}})</th>
+                                <th sortable-header col="total" width="10%" style="text-align: center;">Total</th>
+                                <th sortable-header col="gradeLetter" width="10%" style="text-align: center;">Grade Letter</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="response in submittedGrades">
+                                <td>{{response.studentId}}</td>
+                                <td>{{ response.studentName }}</td>
+                                <td style="padding-right: 30px;text-align: right;">{{response.quiz}}</td>
+                                <td style="padding-right: 30px;text-align: right;">{{response.classPerformance}}</td>
+                                <td style="padding-right: 30px;text-align: right;">{{response.partA}}</td>
+                                <td style="padding-right: 30px;text-align: right;">{{response.partB}}</td>
+                                <td style="padding-right: 30px;text-align: right;">{{response.total}}</td>
+                                <td style="text-align: center;">{{response.gradeLetter}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </scrollable-table>
+                </div>
+                <!-- End of Submitted Grades -->
+
+                <!-- Start of Scrutnized Grades -->
+                <div ng-if="scrutinizedGrades.length">
+                    <div class="btn btn-blue reportrange" style="margin-top: 20px;">
+                        <i class="fa fa-check-circle-o"></i>
+                        <span style="padding-right: 100px;">Scrutinized Grades</span>
+                    </div>
+                    <div class="clearfix"></div>
+
+                    <scrollable-table watch="scrutinizedGrades" ng-style="{height: scrutinizedGrades.length > 10 ? 450 : (38 + (scrutinizedGrades.length * 35.5))}">
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                            <tr>
+                                <th sortable-header col="studentId" width="10%">Student Id</th>
+                                <th sortable-header col="studentName" width="32%">Student Name</th>
+                                <th sortable-header col="quiz" width="10%" style="text-align: center;">Quiz (20)</th>
+                                <th sortable-header col="classPerformance" width="10%" style="text-align: center;">Class Perf. (10)</th>
+                                <th sortable-header col="partA" width="10%" style="text-align: center;">Part-A ({{part_a_total}})</th>
+                                <th sortable-header col="partB" width="10%" style="text-align: center;" ng-show="toggleColumn">Part-B ({{part_b_total}})</th>
+                                <th sortable-header col="total" width="10%" style="text-align: center;">Total</th>
+                                <th sortable-header col="gradeLetter" width="10%" style="text-align: center;">Grade Letter</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="response in scrutinizedGrades">
+                                <td>{{response.studentId}}</td>
+                                <td>{{ response.studentName }}</td>
+                                <td style="padding-right: 30px;text-align: right;">{{response.quiz}}</td>
+                                <td style="padding-right: 30px;text-align: right;">{{response.classPerformance}}</td>
+                                <td style="padding-right: 30px;text-align: right;">{{response.partA}}</td>
+                                <td style="padding-right: 30px;text-align: right;">{{response.partB}}</td>
+                                <td style="padding-right: 30px;text-align: right;">{{response.total}}</td>
+                                <td style="text-align: center;">{{response.gradeLetter}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </scrollable-table>
+                </div>
+                <!-- End of Scrutinized Grades -->
+
+                <!-- Start of Approved Grades -->
+                <div ng-if="approvedGrades.length">
+                    <div class="btn btn-blue reportrange" style="margin-top: 20px;">
+                        <i class="fa fa-check-circle-o"></i>
+                        <span style="padding-right: 100px;">Approved(by Head) Grades</span>
+                    </div>
+                    <div class="clearfix"></div>
+
+                    <scrollable-table watch="approvedGrades" ng-style="{height: approvedGrades.length > 10 ? 450 : (38 + (approvedGrades.length * 35.5))}">
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                            <tr>
+                                <th sortable-header col="studentId" width="10%">Student Id</th>
+                                <th sortable-header col="studentName" width="32%">Student Name</th>
+                                <th sortable-header col="quiz" width="10%" style="text-align: center;">Quiz (20)</th>
+                                <th sortable-header col="classPerformance" width="10%" style="text-align: center;">Class Perf. (10)</th>
+                                <th sortable-header col="partA" width="10%" style="text-align: center;">Part-A ({{part_a_total}})</th>
+                                <th sortable-header col="partB" width="10%" style="text-align: center;" ng-show="toggleColumn">Part-B ({{part_b_total}})</th>
+                                <th sortable-header col="total" width="10%" style="text-align: center;">Total</th>
+                                <th sortable-header col="gradeLetter" width="10%" style="text-align: center;">Grade Letter</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="response in approvedGrades">
+                                <td>{{response.studentId}}</td>
+                                <td>{{ response.studentName }}</td>
+                                <td style="padding-right: 30px;text-align: right;">{{response.quiz}}</td>
+                                <td style="padding-right: 30px;text-align: right;">{{response.classPerformance}}</td>
+                                <td style="padding-right: 30px;text-align: right;">{{response.partA}}</td>
+                                <td style="padding-right: 30px;text-align: right;">{{response.partB}}</td>
+                                <td style="padding-right: 30px;text-align: right;">{{response.total}}</td>
+                                <td style="text-align: center;">{{response.gradeLetter}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </scrollable-table>
+                </div>
+                <!-- End of Approved Grades -->
+
+                <!-- Start of Accepted Grades -->
+                <div ng-if="acceptedGrades.length">
+                    <div class="btn btn-blue reportrange" style="margin-top: 20px;">
+                        <i class="fa fa-check-circle"></i>
+                        <span style="padding-right: 100px;">Accepted(by CoE) Grades</span>
+                    </div>
+                    <div class="clearfix"></div>
+                    <scrollable-table watch="acceptedGrades" ng-style="{height: acceptedGrades.length > 10 ? 450 : (38 + (acceptedGrades.length * 35.5))}">
+                    <table class="table table-striped table-bordered">
+                            <thead>
+                            <tr>
+                                <th sortable-header col="studentId" width="10%">Student Id</th>
+                                <th sortable-header col="studentName" width="32%">Student Name</th>
+                                <th sortable-header col="quiz" width="10%" style="text-align: center;">Quiz (20)</th>
+                                <th sortable-header col="classPerformance" width="10%" style="text-align: center;">Class Perf. (10)</th>
+                                <th sortable-header col="partA" width="10%" style="text-align: center;">Part-A ({{part_a_total}})</th>
+                                <th sortable-header col="partB" width="10%" style="text-align: center;" ng-show="toggleColumn">Part-B ({{part_b_total}})</th>
+                                <th sortable-header col="total" width="10%" style="text-align: center;">Total</th>
+                                <th sortable-header col="gradeLetter" width="10%" style="text-align: center;">Grade Letter</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="response in acceptedGrades">
+                                <td>{{response.studentId}}</td>
+                                <td>{{ response.studentName }}</td>
+                                <td style="padding-right: 30px;text-align: right;">{{response.quiz}}</td>
+                                <td style="padding-right: 30px;text-align: right;">{{response.classPerformance}}</td>
+                                <td style="padding-right: 30px;text-align: right;">{{response.partA}}</td>
+                                <td style="padding-right: 30px;text-align: right;">{{response.partB}}</td>
+                                <td style="padding-right: 30px;text-align: right;">{{response.total}}</td>
+                                <td style="text-align: center;">{{response.gradeLetter}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </scrollable-table>
+                </div>
+                <!-- End  of Accepted Grades -->
+
+
+
                 <hr class="style-two" />
                 <br/><br/>
                 <div class="row">
@@ -585,4 +954,15 @@
                 'angel_difference' : 90,
                 'radius':100
             });
+
+            /*
+            function recheckAll(actor){
+                angular.element(document.getElementById('recheckAllCheckBox')).scope().recheckAll(actor);
+            }
+            function approveAll(action){
+                angular.element(document.getElementById('approveAllCheckBox')).scope().approveAll(action);
+            }*/
+
+
+
         </script>

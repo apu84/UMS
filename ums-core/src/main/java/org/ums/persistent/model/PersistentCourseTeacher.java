@@ -3,38 +3,21 @@ package org.ums.persistent.model;
 
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
-import org.ums.domain.model.mutable.MutableCourseTeacher;
-import org.ums.domain.model.immutable.Course;
-import org.ums.domain.model.immutable.Semester;
+import org.ums.domain.model.immutable.CourseTeacher;
 import org.ums.domain.model.immutable.Teacher;
-import org.ums.manager.CourseManager;
-import org.ums.manager.CourseTeacherManager;
-import org.ums.manager.SemesterManager;
-import org.ums.manager.TeacherManager;
+import org.ums.domain.model.mutable.MutableCourseTeacher;
+import org.ums.manager.AssignedTeacherManager;
 
-public class PersistentCourseTeacher implements MutableCourseTeacher {
-  private static TeacherManager sTeacherManager;
-  private static CourseManager sCourseManager;
-  private static SemesterManager sSemesterManager;
-  private static CourseTeacherManager sCourseTeacherManager;
+public class PersistentCourseTeacher extends AbstractAssignedTeacher implements MutableCourseTeacher {
+  private static AssignedTeacherManager<CourseTeacher, MutableCourseTeacher, Integer> sCourseTeacherManager;
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sTeacherManager = applicationContext.getBean("teacherManager", TeacherManager.class);
-    sCourseManager = applicationContext.getBean("courseManager", CourseManager.class);
-    sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
-    sCourseTeacherManager = applicationContext.getBean("courseTeacherManager", CourseTeacherManager.class);
+    sCourseTeacherManager = applicationContext.getBean("courseTeacherManager", AssignedTeacherManager.class);
   }
 
-  private String mId;
-  private Semester mSemester;
-  private Course mCourse;
-  private Teacher mTeacher;
   private String mSection;
-  private String mLastModified;
-
-  private Integer mSemesterId;
-  private String mCourseId;
+  private Teacher mTeacher;
   private String mTeacherId;
 
   public PersistentCourseTeacher() {
@@ -50,36 +33,6 @@ public class PersistentCourseTeacher implements MutableCourseTeacher {
   }
 
   @Override
-  public String getId() {
-    return mId;
-  }
-
-  @Override
-  public void setId(String pId) {
-    mId = pId;
-  }
-
-  @Override
-  public Semester getSemester() throws Exception {
-    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager.validate(mSemester);
-  }
-
-  @Override
-  public void setSemester(Semester pSemester) {
-    mSemester = pSemester;
-  }
-
-  @Override
-  public Course getCourse() throws Exception {
-    return mCourse == null ? sCourseManager.get(mCourseId) : sCourseManager.validate(mCourse);
-  }
-
-  @Override
-  public void setCourse(Course pCourse) {
-    mCourse = pCourse;
-  }
-
-  @Override
   public Teacher getTeacher() throws Exception {
     return mTeacher == null ? sTeacherManager.get(mTeacherId) : sTeacherManager.validate(mTeacher);
   }
@@ -90,6 +43,16 @@ public class PersistentCourseTeacher implements MutableCourseTeacher {
   }
 
   @Override
+  public String getTeacherId() {
+    return mTeacherId;
+  }
+
+  @Override
+  public void setTeacherId(String pTeacherId) {
+    mTeacherId = pTeacherId;
+  }
+
+  @Override
   public String getSection() {
     return mSection;
   }
@@ -97,16 +60,6 @@ public class PersistentCourseTeacher implements MutableCourseTeacher {
   @Override
   public void setSection(String pSection) {
     mSection = pSection;
-  }
-
-  @Override
-  public String getLastModified() {
-    return mLastModified;
-  }
-
-  @Override
-  public void setLastModified(String pLastModified) {
-    mLastModified = pLastModified;
   }
 
   @Override
@@ -126,29 +79,5 @@ public class PersistentCourseTeacher implements MutableCourseTeacher {
     } else {
       sCourseTeacherManager.create(this);
     }
-  }
-
-  public Integer getSemesterId() {
-    return mSemesterId;
-  }
-
-  public void setSemesterId(Integer pSemesterId) {
-    mSemesterId = pSemesterId;
-  }
-
-  public String getCourseId() {
-    return mCourseId;
-  }
-
-  public void setCourseId(String pCourseId) {
-    mCourseId = pCourseId;
-  }
-
-  public String getTeacherId() {
-    return mTeacherId;
-  }
-
-  public void setTeacherId(String pTeacherId) {
-    mTeacherId = pTeacherId;
   }
 }

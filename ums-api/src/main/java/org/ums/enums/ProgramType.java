@@ -9,7 +9,7 @@ import java.util.Map;
  */
 public enum ProgramType {
   UG(11),
-  PG(2);
+  PG(22);
 
   private static final Map<Integer, ProgramType> lookup
       = new HashMap<>();

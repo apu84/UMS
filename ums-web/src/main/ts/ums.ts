@@ -354,6 +354,23 @@ module ums {
             }]
           }
         })
+        .state('examiner', {
+          url: "/examiner",
+          controller: 'Examiner',
+          templateUrl: 'views/dept/examiner.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: ['vendors/select2/select2-madmin.css',
+                  'vendors/bootstrap-select/bootstrap-select.min.css',
+                  'vendors/multi-select/css/multi-select-madmin.css',
+                  'vendors/select2/select2.min.js',
+                  'vendors/bootstrap-select/bootstrap-select.min.js',
+                  'vendors/multi-select/js/jquery.multi-select.js']
+              });
+            }]
+          }
+        })
         .state('classRoutine', {
           url: "/classRoutine",
           controller:'ClassRoutine',
@@ -471,8 +488,18 @@ module ums {
           url: "/flushCache",
           controller: 'FlushCache'
         })
-        .state('gradeSheetSelection', {
-          url: "/gradeSheetSelection",
+        .state('gradeSheetSelectionTeacher', {
+          url: "/gradeSheetSelectionTeacher/:role",
+          templateUrl: 'views/grade/grade-sheet-selection.html',
+          controller: 'MarksSubmission'
+        })
+        .state('gradeSheetSelectionHead', {
+          url: "/gradeSheetSelectionHead/:role",
+          templateUrl: 'views/grade/grade-sheet-selection.html',
+          controller: 'MarksSubmission'
+        })
+        .state('gradeSheetSelectionCoE', {
+          url: "/gradeSheetSelectionCoE/:role",
           templateUrl: 'views/grade/grade-sheet-selection.html',
           controller: 'MarksSubmission'
         })
@@ -480,6 +507,14 @@ module ums {
           url: "/loggerGrid",
           controller: 'LoggerGrid',
           templateUrl: 'views/logger/logger-grid.html'
+        })
+        //In database use /dummyController/H or /dummyController/T in the location column
+        //https://localhost/ums-web/iums/#/dummyConroller/T
+        //https://localhost/ums-web/iums/#/dummyConroller/H
+        .state('dummyController', {
+          url: "/dummyConroller/:type",
+          controller: 'DummyController',
+          templateUrl: 'views/dummy/dummy.html'
         })
 
   });

@@ -3,9 +3,9 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-  <bean class="org.ums.cache.LocalCacheManager" id="localCache"/>
+  <bean class="org.ums.cache.LocalCacheManager" id="localCache" lazy-init="true"/>
 
-  <bean class="org.ums.cache.MemcacheClientManager" id="memCachedClientManager">
+  <bean class="org.ums.cache.MemcacheClientManager" id="memCachedClientManager" lazy-init="true">
     <constructor-arg index="0" type="java.lang.String" value="${object.cache.url}"/>
     <constructor-arg index="1" type="java.lang.Integer" value="${object.cache.port}"/>
     <constructor-arg index="2" type="java.lang.String" value="${lastmodified.cache.url}"/>

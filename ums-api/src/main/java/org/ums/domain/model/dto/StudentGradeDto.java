@@ -1,6 +1,8 @@
 package org.ums.domain.model.dto;
 
 import com.google.gson.Gson;
+import org.ums.enums.RecheckStatus;
+import org.ums.enums.StudentMarksSubmissionStatus;
 
 /**
  * Created by ikh on 4/29/2016.
@@ -16,8 +18,15 @@ public class StudentGradeDto {
     private Float total;
     private String gradeLetter;
     private Float gradePoint;
-    private int status;
+    private StudentMarksSubmissionStatus status;
+    private int statusId;
     private String statusName;
+
+    private RecheckStatus recheckStatus;
+    private int recheckStatusId;
+
+    //Don't know whether we need them or not
+    private String previousStatusString; //This will hold the candidates previous Status String which will be used in an in query
 
     public String getStudentId() {
         return studentId;
@@ -99,14 +108,6 @@ public class StudentGradeDto {
         this.gradePoint = gradePoint;
     }
 
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
     public String getStatusName() {
         return statusName;
     }
@@ -115,6 +116,45 @@ public class StudentGradeDto {
         this.statusName = statusName;
     }
 
+    public StudentMarksSubmissionStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(StudentMarksSubmissionStatus status) {
+        this.status = status;
+    }
+
+    public RecheckStatus getRecheckStatus() {
+        return recheckStatus;
+    }
+
+    public void setRecheckStatus(RecheckStatus recheckStatus) {
+        this.recheckStatus = recheckStatus;
+    }
+
+    public String getPreviousStatusString() {
+        return previousStatusString;
+    }
+
+    public void setPreviousStatusString(String previousStatusString) {
+        this.previousStatusString = previousStatusString;
+    }
+
+    public int getStatusId() {
+        return statusId;
+    }
+
+    public void setStatusId(int statusId) {
+        this.statusId = statusId;
+    }
+
+    public int getRecheckStatusId() {
+        return recheckStatusId;
+    }
+
+    public void setRecheckStatusId(int recheckStatusId) {
+        this.recheckStatusId = recheckStatusId;
+    }
     public String toString() {
         Gson gson = new Gson();
         return gson.toJson(this);

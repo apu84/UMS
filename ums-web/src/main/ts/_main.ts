@@ -30,8 +30,9 @@
 /// <reference path='controller/common/Logout.ts'/>
 /// <reference path='controller/common/PasswordReport.ts'/>
 /// <reference path='controller/common/AssignRole.ts'/>
-
+/// <reference path='controller/dept/TeacherAssignment.ts'/>
 /// <reference path='controller/dept/CourseTeacher.ts'/>
+/// <reference path='controller/dept/Examiner.ts'/>
 
 /// <reference path='lib/jquery.dragNdrop.d.ts'/>
 /// <reference path='lib/jquery.tab.d.ts'/>
@@ -43,6 +44,7 @@
 /// <reference path='controller/semester/SemesterSettingParameter.ts'/>
 /// <reference path='controller/dept/ClassRoutine.ts'/>
 /// <reference path='controller/logger/LoggerGrid.ts'/>
+
 
 
 /// <reference path='Utils.ts'/>
@@ -91,3 +93,12 @@
 /// <reference path='grid/InlineNavigationOptionsImpl.ts'/>
 /// <reference path='grid/JqGridApi.ts'/>
 /// <reference path='grid/JqGridApiImpl.ts'/>
+
+/// <reference path='model/TeacherAssignmentSearchParamModel.ts'/>
+/// <reference path='model/CourseTeacherSearchParamModel.ts'/>
+
+
+
+
+
+/// <reference path='dummy/DummyController.ts'/>
