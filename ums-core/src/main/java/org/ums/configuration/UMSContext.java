@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.ums.cache.*;
 import org.ums.domain.model.immutable.CourseTeacher;
 import org.ums.domain.model.immutable.Examiner;
@@ -14,6 +16,8 @@ import org.ums.manager.*;
 import org.ums.persistent.dao.*;
 import org.ums.security.authentication.UMSAuthenticationRealm;
 import org.ums.services.LoginService;
+import org.ums.statistics.DBLogger;
+import org.ums.statistics.QueryLogger;
 import org.ums.util.Constants;
 
 import javax.sql.DataSource;
@@ -21,6 +25,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 @Configuration
+@EnableAsync
+@EnableScheduling
 public class UMSContext {
   @Autowired
   DataSource mDataSource;
@@ -180,6 +186,11 @@ public class UMSContext {
   }
 
   @Bean
+  LoggerEntryManager loggerEntryManager() {
+    return new PersistentLoggerEntryDao(mJdbcTemplate);
+  }
+
+  @Bean
   SpStudentManager spStudentManager() {
     SpStudentCache spStudentCache = new SpStudentCache(mCacheFactory.getCacheManager());
     spStudentCache.setManager(new PersistentSpStudentDao(mJdbcTemplate));
@@ -290,5 +301,10 @@ public class UMSContext {
   @Bean
   ExamGradeManager examGradeManager() {
     return new PersistentExamGradeDao(mJdbcTemplate);
+  }
+
+  @Bean
+  QueryLogger queryLogger() {
+    return new DBLogger();
   }
 }
