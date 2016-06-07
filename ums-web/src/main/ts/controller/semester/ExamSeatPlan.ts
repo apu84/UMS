@@ -666,6 +666,9 @@ module ums{
 
           }
 
+          this.$scope.tempGroupListForSplitInversion=[];
+          this.$scope.tempGroupListForSplitInversion = angular.copy(this.$scope.tempGroupListAll);
+
           console.log("tempgroupListAll--->");
           console.log(this.$scope.tempGroupListAll);
 
