@@ -35,6 +35,7 @@ public class PersistentUser implements MutableUser {
   private Role mPrimaryRole;
   private List<String> mAdditionalPermissions;
   private String mLastModified;
+  private String mEmployeeId;
 
   public PersistentUser() {
 
@@ -195,5 +196,15 @@ public class PersistentUser implements MutableUser {
   @Override
   public void setLastModified(String pLastModified) {
     mLastModified = pLastModified;
+  }
+
+  @Override
+  public String getEmployeeId() {
+    return mEmployeeId;
+  }
+
+  @Override
+  public void setEmployeeId(String pEmployeeId) {
+    mEmployeeId = pEmployeeId;
   }
 }

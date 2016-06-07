@@ -4,7 +4,7 @@ module ums {
 
     constructor($scope: any, $stateParams: any) {
       console.debug("Inside dummy controller");
-      console.debug("%o", $stateParams.type);
+      console.debug("%o", $stateParams);
     }
   }
   UMS.controller("DummyController", DummyController);

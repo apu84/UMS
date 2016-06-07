@@ -39,6 +39,7 @@
                 <li data-ng-repeat="children in entry.children">
                     <a href='javascript:void(0);'
                        ui-sref="{{children.location}}"
+                       ui-sref-active="active"
                        data-ng-click="_menu.collapse(children.viewOrder)"
                        index="{{children.viewOrder}}"
                        data-ng-init="_menu.status[children.viewOrder]=true">

@@ -40,10 +40,10 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
             "Select tmp3.*,MVIEW_TEACHERS.TEACHER_NAME Preparer_name From  " +
             "( " +
             "Select tmp2.*,Mst_Course.Course_Title,Program_Short_Name,MST_COURSE.COURSE_NO,Year,Semester from ( " +
-            "Select semester_id,course_id,preparer preparer_id,scrutinizer scrutinizer_id From PREPARER_SCRUTINIZER Where Semester_Id=11012016 And (Preparer=28 or Scrutinizer=28) " +
+            "Select semester_id,course_id,preparer preparer_id,scrutinizer scrutinizer_id From PREPARER_SCRUTINIZER Where Semester_Id=? And (Preparer=? or Scrutinizer=?) " +
             "Union " +
             "Select tmp1.semester_id,tmp1.course_id,preparer preparer_id,scrutinizer scrutinizer_id from ( " +
-            "Select Semester_Id,Course_Id From COURSE_TEACHER Where Semester_Id=11012016 and Teacher_Id=28)tmp1,PREPARER_SCRUTINIZER " +
+            "Select Semester_Id,Course_Id From COURSE_TEACHER Where Semester_Id=? and Teacher_Id=?)tmp1,PREPARER_SCRUTINIZER " +
             "Where tmp1.semester_id=PREPARER_SCRUTINIZER.semester_id(+) " +
             "and tmp1.course_id=PREPARER_SCRUTINIZER.course_id(+))tmp2,Mst_Course,Mst_Syllabus,Mst_Program " +
             "Where tmp2.Course_id=Mst_Course.Course_id " +
@@ -66,7 +66,7 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
         "And MST_SYLLABUS.SYLLABUS_ID=MST_COURSE.SYLLABUS_ID " +
         "And MST_SYLLABUS.PROGRAM_ID=MST_PROGRAM.PROGRAM_ID " +
         "And Offer_By in " +
-        "(Select dept_id From MVIEW_Teachers  where Teacher_Id in (Select Employee_Id From Users Where User_Id=?)) ";
+        "(Select dept_id From MVIEW_Teachers  where Teacher_Id =?) ";
 
     static String SELECT_GRADE_SUBMISSION_TABLE_CoE="Select Ms_Status.Semester_Id,Exam_Type,Mst_Course.Course_Id,Course_No,Course_Title ,CrHr,Course_Type,Course_Category,Offer_By,Year,Semester,Mst_Course.Syllabus_Id, " +
         "getCourseTeacher(Ms_Status.semester_id,Mst_Course.course_id) Course_Teachers, " +
@@ -92,6 +92,46 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
     static String UPDATE_THEORY_STATUS_APPROVE="Update UG_THEORY_MARKS Set RECHECK_STATUS=?, STATUS=?  Where SEMESTER_ID=? And COURSE_ID=? And EXAM_TYPE=? And STUDENT_ID=? and  " +
         " Status in (select regexp_substr(?,'[^,]+', 1, level) from dual connect by regexp_substr(?, '[^,]+', 1, level) is not null)";
 
+    static String CHECK_TEACHER_ROLE="Select * From  " +
+        "( " +
+        "Select 'preparer' Role,1 Serial From PREPARER_SCRUTINIZER Where Preparer=? And Semester_Id=? and Course_Id=?  " +
+        "Union " +
+        "Select 'scrutinizer' Role,2 Serial From PREPARER_SCRUTINIZER Where Scrutinizer=? And Semester_Id=? and Course_Id=? " +
+        "Union " +
+        "Select 'courseteacher' Role,3 Role From Course_Teacher Where Teacher_Id =? and Semester_Id=? and Course_Id=? " +
+        ")tmp1 Order by Serial" ;
+
+    static String CHECK_HEAD_ROLE="Select 'head' Role, 1 Serial From ADDITIONAL_ROLE_PERMISSIONS Where User_Id=? and Role_Id=22" ;
+
+    static String CHECK_COE_ROLE="Select 'coe' Role, 1 Serial From USERS Where User_Id=? and Role_Id=71 " +
+        "Union " +
+        "Select 'CoE' Role, 2 Serial From ADDITIONAL_ROLE_PERMISSIONS Where User_Id=?  And Role_Id=71";
+
+    static String CHART_DATA="Select Grade_Letter,sum(Students) Students From  " +
+        "( " +
+        "select Grade_Letter,Count(Student_Id) Students From UG_THEORY_MARKS Where Semester_Id=? And Course_Id=? and Exam_Type=? Group by Grade_Letter " +
+        "Union " +
+        "Select 'A+' Grade_Letter, 0 Students From Dual " +
+        "Union " +
+        "Select 'A' Grade_Letter, 0 Students From Dual " +
+        "Union " +
+        "Select 'A-' Grade_Letter, 0 Students From Dual " +
+        "Union " +
+        "Select 'B+' Grade_Letter, 0 Students From Dual " +
+        "Union " +
+        "Select 'B' Grade_Letter, 0 Students From Dual " +
+        "Union " +
+        "Select 'B-' Grade_Letter, 0 Students From Dual " +
+        "Union " +
+        "Select 'C+' Grade_Letter, 0 Students From Dual " +
+        "Union " +
+        "Select 'C' Grade_Letter, 0 Students From Dual " +
+        "Union " +
+        "Select 'D' Grade_Letter, 0 Students From Dual " +
+        "Union " +
+        "Select 'F' Grade_Letter, 0 Students From Dual " +
+        ")Tmp Group by Grade_Letter Order by Decode(Grade_Letter,'A+',1,'A',2,'A-',3,'B+',4,'B',5,'B-',6,'C+',7,'C',8,'D',9,'F',10) " ;
+
     private JdbcTemplate mJdbcTemplate;
 
     public PersistentExamGradeDao(final JdbcTemplate pJdbcTemplate) {
@@ -112,15 +152,15 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
     }
 
     @Override
-    public List<MarksSubmissionStatusDto> getMarksSubmissionStatus(int pSemesterId,int pExamType,String userId,String deptId,String userRole) throws Exception {
+    public List<MarksSubmissionStatusDto> getMarksSubmissionStatus(int pSemesterId,int pExamType,String teacherId,String deptId,String userRole) throws Exception {
         String query="";
         if(userRole.equals("T")){  //Teacher
             query = SELECT_GRADE_SUBMISSION_TABLE_TEACHER;
-            return mJdbcTemplate.query(query, new MarksSubmissionStatusTableRowMapper());
+            return mJdbcTemplate.query(query, new Object[] {pSemesterId,teacherId,teacherId,pSemesterId,teacherId},new MarksSubmissionStatusTableRowMapper());
         }
         else if(userRole.equals("H")){  //Head
             query = SELECT_GRADE_SUBMISSION_TABLE_HEAD;
-            return mJdbcTemplate.query(query, new Object[]{pSemesterId,pExamType,userId},new MarksSubmissionStatusTableRowMapper());
+            return mJdbcTemplate.query(query, new Object[]{pSemesterId,pExamType,teacherId},new MarksSubmissionStatusTableRowMapper());
         }
         else if(userRole.equals("C")){  //CoE
             query = SELECT_GRADE_SUBMISSION_TABLE_CoE;
@@ -129,6 +169,21 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
         return null;
     }
 
+    @Override
+    public List<String> getRoleForTeacher(String pTeacherId,int  pSemesterId,String pCourseId) throws Exception {
+        String query = CHECK_TEACHER_ROLE;
+        return mJdbcTemplate.query(query, new Object[]{pTeacherId, pSemesterId, pCourseId,pTeacherId, pSemesterId, pCourseId,pTeacherId, pSemesterId, pCourseId}, new RoleRowMapper());
+    }
+    @Override
+    public List<String> getRoleForHead(String pUserId) throws Exception {
+        String query = CHECK_HEAD_ROLE;
+        return mJdbcTemplate.query(query, new Object[]{pUserId},new RoleRowMapper());
+    }
+    @Override
+    public List<String> getRoleForCoE(String pUserId) throws Exception {
+        String query = CHECK_COE_ROLE;
+        return mJdbcTemplate.query(query, new Object[]{pUserId,pUserId},new RoleRowMapper());
+    }
     @Override
     public int updatePartInfo(int pSemesterId,String pCourseId,int pExamType,int pTotalPart,int partA,int partB) throws Exception {
         String query = UPDATE_PART_INFO;
@@ -385,5 +440,17 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
                 return atomicReference.get();
             }
         }
+    class RoleRowMapper implements RowMapper<String> {
+        @Override
+        public String mapRow(ResultSet resultSet, int i) throws SQLException {
+            String a=resultSet.getString("ROLE");
+
+            AtomicReference<String> atomicReference = new AtomicReference<>(a);
+            return atomicReference.get();
+        }
+    }
+
+
+
 
 }

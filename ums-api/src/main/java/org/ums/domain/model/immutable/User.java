@@ -12,6 +12,8 @@ import java.util.List;
 public interface User extends Serializable, EditType<MutableUser>, Identifier<String>, LastModifier {
   char[] getPassword();
 
+  String getEmployeeId();
+
   char[] getTemporaryPassword();
 
   List<Integer> getRoleIds();

@@ -25,8 +25,8 @@ public class ExamGradeDaoDecorator  extends ContentDaoDecorator<ExamGrade, Mutab
     }
 
     @Override
-    public List<MarksSubmissionStatusDto> getMarksSubmissionStatus(int pSemesterId,int pExamType,String userId,String deptId,String userRole) throws Exception {
-        return getManager().getMarksSubmissionStatus(pSemesterId,pExamType,userId,deptId,userRole);
+    public List<MarksSubmissionStatusDto> getMarksSubmissionStatus(int pSemesterId,int pExamType,String teacherId,String deptId,String userRole) throws Exception {
+        return getManager().getMarksSubmissionStatus(pSemesterId,pExamType,teacherId,deptId,userRole);
     }
 
     @Override
@@ -56,6 +56,23 @@ public class ExamGradeDaoDecorator  extends ContentDaoDecorator<ExamGrade, Mutab
     @Override
     public int updatePartInfo(int pSemesterId,String pCourseId,int pExamType,int pTotalPart,int partA,int partB) throws Exception {
         return getManager().updatePartInfo(pSemesterId, pCourseId,pExamType, pTotalPart, partA,partB);
+    }
+
+    @Override
+    public List<String> getRoleForTeacher(String pTeacherId,int  pSemesterId,String pCourseId) throws Exception {
+        return getManager().getRoleForTeacher(pTeacherId, pSemesterId, pCourseId);
+    }
+
+
+    @Override
+    public List<String> getRoleForHead(String pUserId) throws Exception {
+        return getManager().getRoleForHead(pUserId);
+    }
+
+
+    @Override
+    public List<String> getRoleForCoE(String pUserId) throws Exception {
+        return getManager().getRoleForCoE(pUserId);
     }
 
 
