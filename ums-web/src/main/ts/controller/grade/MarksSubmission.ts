@@ -19,9 +19,6 @@ module ums {
     allMarksSubmissionStatus:any;
     toggleColumn:boolean;
     excel_copy_paste_error_div:boolean;
-    total_part:number;
-    part_a_total:number;
-    part_b_total:number;
     gradeSubmissionStatus:number;  //Grade Submission Status for the current Course
     onTotalPartChange: Function;
     toggleStatRules:Function;
@@ -108,11 +105,14 @@ module ums {
                 private httpClient:HttpClient, private $stateParams:any) {
 
                 //console.clear();
-                console.log($stateParams.role);
+      console.log($stateParams["1"]);
                 //his.$scope.userRole=$params.role;
-      this.$scope.userRole=$stateParams.role;
+      this.$scope.userRole = $stateParams["1"];
                 $scope.data = {
-                  gradeLetterOptions: appConstants.gradeLetters
+                  gradeLetterOptions: appConstants.gradeLetters,
+                  total_part:Number,
+                  part_a_total:Number,
+                  part_b_total:Number
                 };
 
       $scope.onTotalPartChange = this.onTotalPartChange.bind(this);
@@ -156,8 +156,8 @@ module ums {
 
     private fetchGradeSheet():void {
       this.$scope.toggleColumn = true;
-      //https://localhost/ums-webservice-common/
-      this.httpClient.get("academic/gradeSubmission/semester/1/courseid/1/examtype/1",
+      //https://localhost/ums-webservice-common/sadf
+      this.httpClient.get("academic/gradeSubmission/semester/11012016/courseid/EEE1101_S2014_110500/examtype/1/role/"+this.$scope.userRole,
           this.appConstants.mimeTypeJson,
           (data:any, etag:string)=> {
             this.$scope.noneSubmittedGrades = data.none_and_submit_grades;
@@ -184,10 +184,10 @@ module ums {
             console.log(part_info.total_part);
             this.onTotalPartChange();
 
-            $("#total_part").val(part_info.total_part);
-            this.$scope.part_a_total = part_info.part_a_total == 0 ? null : part_info.part_a_total;
-            this.$scope.part_b_total = part_info.part_b_total == 0 ? null : part_info.part_b_total;
-            this.$scope.total_part = part_info.total_part;
+            //$("#total_part").val(part_info.total_part);
+            this.$scope.data.part_a_total = part_info.part_a_total == 0 ? null : part_info.part_a_total;
+            this.$scope.data.part_b_total = part_info.part_b_total == 0 ? null : part_info.part_b_total;
+            this.$scope.data.total_part = part_info.total_part;
             this.$scope.gradeSubmissionStatus=part_info.statusId;
             this.$scope.currentActor = data.current_actor;
 
@@ -239,7 +239,7 @@ module ums {
 
       if ($("#total_part") && $("#total_part").val() == 2)
         part_b = Number($("#part_b_" + student_id).val()) || 0;
-      if (this.$scope.total_part == 2)
+      if (this.$scope.data.total_part == 2)
         part_b = Number($("#part_b_" + student_id).val()) || 0;
 
       var total = quiz + class_perf + part_a + part_b;
@@ -253,15 +253,15 @@ module ums {
 
     public onTotalPartChange():void {
 
-      if (this.$scope.total_part == 1) {
+      if (this.$scope.data.total_part == 1) {
         this.$scope.toggleColumn = false;
-        this.$scope.part_a_total = 70;
-        this.$scope.part_b_total = 0;
+        this.$scope.data.part_a_total = 70;
+        this.$scope.data.part_b_total = 0;
         $("#partDiv").hide();
       }
       else {
-        this.$scope.part_a_total = 0;
-        this.$scope.part_b_total = 0;
+        this.$scope.data.part_a_total = 0;
+        this.$scope.data.part_b_total = 0;
         this.$scope.toggleColumn = true;
         $("#partDiv").show();
       }
@@ -359,7 +359,7 @@ module ums {
 
       //Part A
       if (part_a != "" || force_validate) {
-        if (this.$scope.part_a_total != null && (this.checkNumber(part_a) == false || Number(part_a) > this.$scope.part_a_total)) {
+        if (this.$scope.data.part_a_total != null && (this.checkNumber(part_a) == false || Number(part_a) > this.$scope.data.part_a_total)) {
           $("#part_a_" + student_id).css(border_error);
           row_error = true;
         }
@@ -370,7 +370,7 @@ module ums {
 
       //Part B
       if (part_b != "" || force_validate) {
-        if (this.$scope.total_part == 2 && this.$scope.part_b_total != null && (this.checkNumber(part_b) == false || Number(part_b) > this.$scope.part_b_total)) {
+        if (this.$scope.data.total_part == 2 && this.$scope.data.part_b_total != null && (this.checkNumber(part_b) == false || Number(part_b) > this.$scope.data.part_b_total)) {
           $("#part_b_" + student_id).css(border_error);
           row_error = true;
         }
@@ -405,7 +405,6 @@ module ums {
       var tdArray = parentRow.getElementsByTagName('td');
 
       if (row_error == true) {
-        alert(student_id);
         for (var i = 0; i < tdArray.length; i++) {
           tdArray[i].style.backgroundColor = "#FCDC3B";//"#FFFF7E";
         }
@@ -561,12 +560,13 @@ module ums {
         part_a_total: 0,
         part_b_total: 0
       };
+      alert(this.$scope.data.part_a_total);
       courseInfo.course_id = "EEE1101_S2014_110500";
       courseInfo.semester_id = 11012016;
       courseInfo.exam_type = 1;
-      courseInfo.total_part = Number(this.$scope.total_part);
-      courseInfo.part_a_total = Number(this.$scope.part_a_total);
-      courseInfo.part_b_total = Number(this.$scope.part_b_total);
+      courseInfo.total_part = Number(this.$scope.data.total_part);
+      courseInfo.part_a_total = Number(this.$scope.data.part_a_total);
+      courseInfo.part_b_total = Number(this.$scope.data.part_b_total);
 
       complete_json["courseInfo"] = courseInfo;
       complete_json["action"] = action;

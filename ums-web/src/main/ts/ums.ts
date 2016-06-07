@@ -489,17 +489,17 @@ module ums {
           controller: 'FlushCache'
         })
         .state('gradeSheetSelectionTeacher', {
-          url: "/gradeSheetSelectionTeacher/:role",
+          url: "/gradeSheetSelectionTeacher/:1",
           templateUrl: 'views/grade/grade-sheet-selection.html',
           controller: 'MarksSubmission'
         })
         .state('gradeSheetSelectionHead', {
-          url: "/gradeSheetSelectionHead/:role",
+          url: "/gradeSheetSelectionHead/:1",
           templateUrl: 'views/grade/grade-sheet-selection.html',
           controller: 'MarksSubmission'
         })
         .state('gradeSheetSelectionCoE', {
-          url: "/gradeSheetSelectionCoE/:role",
+          url: "/gradeSheetSelectionCoE/:1",
           templateUrl: 'views/grade/grade-sheet-selection.html',
           controller: 'MarksSubmission'
         })
@@ -512,7 +512,7 @@ module ums {
         //https://localhost/ums-web/iums/#/dummyConroller/T
         //https://localhost/ums-web/iums/#/dummyConroller/H
         .state('dummyController', {
-          url: "/dummyConroller/:type",
+          url: "/dummyConroller/:1",
           controller: 'DummyController',
           templateUrl: 'views/dummy/dummy.html'
         })
