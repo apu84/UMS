@@ -60,7 +60,7 @@ public class DBLogger implements QueryLogger {
   }
 
   @Scheduled(fixedDelay = 30000)
-  private void doLog() throws Exception {
+  public void doLog() throws Exception {
     List<MutableLoggerEntry> mutableLoggerEntries = new ArrayList<>();
     synchronized (mMutableLoggerEntries) {
       MutableLoggerEntry ml;
