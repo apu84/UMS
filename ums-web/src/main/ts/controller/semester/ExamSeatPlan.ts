@@ -1,7 +1,7 @@
 module ums{
 
   import ITimeoutService = ng.ITimeoutService;
-  import UISortableOptions = angular.ui.UISortableOptions;
+  //import UISortableOptions = angular.ui.UISortableOptions;
   interface IExamSeatPlanScope extends ng.IScope{
     semesterList:Array<ISemester>;
     seatPlanGroupList:Array<ISeatPlanGroup>;
