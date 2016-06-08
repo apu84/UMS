@@ -72,4 +72,12 @@
     </property>
   </bean>
 
+  <bean id="jdbcTemplateFactory" class="org.ums.statistics.JdbcTemplateFactoryImpl">
+    <property name="loggingEnabled" value="${enable.query.logging}"/>
+  </bean>
+
+  <bean id="loggerFactory" class="org.ums.statistics.LoggerFactoryImpl">
+    <property name="loggerType" value="${query.logger}"/>
+  </bean>
+
 </beans>
