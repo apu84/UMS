@@ -42,5 +42,4 @@ public class GradeSubmissionResource extends MutableGradeSubmissionResource {
 
 
 
-
 }

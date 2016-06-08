@@ -491,7 +491,17 @@ module ums {
         .state('gradeSheetSelectionTeacher', {
           url: "/gradeSheetSelectionTeacher/:1",
           templateUrl: 'views/grade/grade-sheet-selection.html',
-          controller: 'MarksSubmission'
+          controller: 'MarksSubmission',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: [
+                  'vendors/amcharts/amcharts.js',
+                    'vendors/amcharts/serial.js'
+                ]
+              });
+            }]
+          }
         })
         .state('gradeSheetSelectionHead', {
           url: "/gradeSheetSelectionHead/:1",

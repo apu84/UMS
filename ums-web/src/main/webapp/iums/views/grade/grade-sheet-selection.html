@@ -150,7 +150,7 @@
                         <td>1.5 <a href="Javascript:void(0)" data-ng-click="fetchGradeSheet()">Reload</a></td>
                         <td><b>Total Part :</b></td>
                         <td>
-                            <select id="total_part" data-ng-model="data.total_part" data-ng-change="onTotalPartChange()"   style="float: left;border:1px solid grey;text-align: center;height: 22px;" data-ng-if="(gradeSubmissionStatus =='0' && currentActor=='preparer')">
+                            <select id="total_part" data-ng-model="data.total_part" data-ng-change="onTotalPartChange()"   style="float: left;border:1px solid grey;text-align: center;height: 22px;" data-ng-if="(gradeSubmissionStatus =='0' && currentActor=='preparer')" data-convert-to-number>
                                 <option value="1">&nbsp;1&nbsp;</option>
                                 <option value="2">&nbsp;2&nbsp;</option>
                             </select>
@@ -429,7 +429,7 @@
                 <!-- End of Recheck Candidates Grades -->
 
                 <!-- Start of Submitted Grades -->
-                <div ng-if="submittedGrades.length>0  &&  (currentActor=='scrutinizer' && gradeSubmissionStatus !='1') ||(currentActor!='scrutinizer') ">
+                <div ng-if="submittedGrades.length>0  &&  ((currentActor=='scrutinizer' && gradeSubmissionStatus !='1') || (currentActor!='scrutinizer' && gradeSubmissionStatus =='0')) ">
                     <div class="btn btn-blue reportrange" style="margin-top: 20px;">
                         <i class="fa fa-check-circle-o"></i>
                         <span style="padding-right: 100px;">Submitted Grades</span>
@@ -748,7 +748,8 @@
     </div>
 </div>
 
-
+<am-chart chart-id="chart-2" source="chart1" type="serial"></am-chart>
+<div data-ng-click="downloadPdf()">Click Here....</div>
 
 <!--Modal Prompt-->
 <div id="modal-prompt" tabindex="-1" role="dialog" aria-labelledby="modal-prompt-label"
@@ -829,31 +830,26 @@
         $('.page-title.ng-binding').html("Grade Sheet Selection");
     }
 
-</script>
-
-<script src="https://localhost/ums-web/iums/vendors/amcharts/amcharts.js" type="text/javascript"></script>
-<script src="https://localhost/ums-web/iums/vendors/amcharts/serial.js" type="text/javascript"></script>
-<script>
     var chart;
 
     var chartData = [
         {
-            "country": "A+",
-            "visits": 4025,
+            "grade": "A+",
+            "total": 4025,
             "color": "#FF0F00"
         },
         {
-            "country": "A",
+            "grade": "A",
             "visits": 1882,
             "color": "#FF6600"
         },
         {
-            "country": "A-",
+            "grade": "A-",
             "visits": 1809,
             "color": "#FF9E01"
         },
         {
-            "country": "B+",
+            "grade": "B+",
             "visits": 1322,
             "color": "#FCD202"
         },
@@ -954,15 +950,4 @@
                 'angel_difference' : 90,
                 'radius':100
             });
-
-            /*
-            function recheckAll(actor){
-                angular.element(document.getElementById('recheckAllCheckBox')).scope().recheckAll(actor);
-            }
-            function approveAll(action){
-                angular.element(document.getElementById('approveAllCheckBox')).scope().approveAll(action);
-            }*/
-
-
-
         </script>
