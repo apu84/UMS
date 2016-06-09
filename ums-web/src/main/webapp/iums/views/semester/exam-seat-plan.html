@@ -279,11 +279,13 @@
                 </div>
 
 
-                <ul id="splittedList" class="connectedSortable"   >
+                    <ul id="splittedList" class="connectedSortable "  >
 
-                </ul>
-                    <ul subGroupSortable data-ng-repeat="group in tempGroupList track by group.id"   id="sortable"  class="connectedSortable"  data-ng-if="recreate==false">
-                        <li class="ui-state-default" id="{{group.id}}" data-ng-if="subGroupFound==false">
+                    </ul>
+
+
+                    <ul subGroupSortable data-ng-repeat="group in tempGroupList track by group.id"   id="sortable"  class="connectedSortable"  data-ng-if="recreate==false && subGroupFound==false">
+                        <li class="ui-state-default" id="{{group.id}}" >
                             <div>
                                 {{group.programName}}:{{group.year}}/{{group.semester}} ({{group.studentNumber}})
                             </div>

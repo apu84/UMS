@@ -43,6 +43,7 @@ module ums{
     splittedGroupList:Array<ISeatPlanGroup>;
     selectedGroupList:Array<ISeatPlanGroup>;
     subGroupList:Array<ISubGroup>;
+    tempSubGroupList:Array<ISubGroup>;
     subGroup1List:any;
     subGroup2List:any;
     subGroup3List:any;
@@ -110,6 +111,7 @@ module ums{
     splitAction:Function;
     cancelSplitAction:Function;
     revertSplitAction:Function;
+    refreshSortables:Function;
 
     reCreate:Function;
     editSavedSubGroup:Function;
@@ -259,6 +261,7 @@ module ums{
       $scope.mouseClickEvent = this.mouseClickEvent.bind(this);
       $scope.revertSplitAction = this.revertSplitAction.bind(this);
       $scope.reCreate = this.reCreate.bind(this);
+      $scope.refreshSortables = this.refreshSubGroups.bind(this);
       this.initialize();
 
     }
@@ -386,6 +389,29 @@ module ums{
               this.$scope.splittedGroupList.push(newMember);
                 //this.$scope.tempGroupList[i].groupMembers.push(tempArray[k]);
 
+              /*if(this.$scope.subGroupFound){
+                for(var p=0;p<this.$scope.subGroupList.length;p++){
+                  var processingDone:boolean = false;
+                  for(var r=0;r<this.$scope.subGroupList[p].subGroupMembers.length;r++){
+                    if(this.$scope.subGroupList[p].subGroupMembers[r].id==this.$scope.splitId){
+                      var memberList:Array<string>=[];
+                      for(var mem=0;mem< this.$scope.subGroupList[p].subGroupMembers.length;mem++){
+                         var memberId:number = this.$scope.subGroupList[p].subGroupMembers[mem].id;
+                         memberList.push(memberId.toString());
+                      }
+                      this.subGroupListChanged(p,memberList);
+                      processingDone=true;
+                      break;
+
+                    }
+                  }
+
+                  if(processingDone){
+                    break;
+                  }
+                }
+              }*/
+
 
               console.log("-- new member id: "+newMember.id);
 
@@ -399,6 +425,8 @@ module ums{
 
 
       this.$scope.recreate=false;
+      //setTimeout(this.refreshSubGroups,2000);
+
       /*/!*$("#sortable").sortable("refresh");
       $("#sortable").sortable("refreshPositions");*!/
       console.log(this.$scope.tempGroupListAll);*/
@@ -439,11 +467,37 @@ module ums{
 
         }
       }
+
+      //setTimeout(this.refreshSubGroups,2000);
+
       if(!this.$scope.$digest()){
         this.$scope.$apply();
       }
     }
 
+
+    private refreshSubGroups():void{
+
+      $("#sortable").sortable("refresh");
+      $("#splittedList").sortable("refresh");
+      if(this.$scope.subGroupFound==false || this.$scope.recreateButtonClicked==true){
+
+        $("#droppable1").sortable("refresh");
+        $("#droppable2").sortable("refresh");
+        $("#droppable3").sortable("refresh");
+        $("#droppable4").sortable("refresh");
+        $("#droppable5").sortable("refresh");
+        $("#droppable6").sortable("refresh");
+
+      }else{
+        $("sortable1").sortable("refresh");
+        $("sortable2").sortable("refresh");
+        $("sortable3").sortable("refresh");
+        $("sortable4").sortable("refresh");
+        $("sortable5").sortable("refresh");
+        $("sortable6").sortable("refresh");
+      }
+    }
 
     private splitCourseStudent(menuNumber:number):void{
       console.log("splitting started");
@@ -453,11 +507,16 @@ module ums{
 
         if(this.$scope.subGroupFound){
           console.log('Sub group found!!!!');
+          console.log('split id----->'+this.$scope.splitId);
           for(var i=0;i<this.$scope.subGroupList.length;i++){
             var matchFound:boolean=false;
+            console.log("----------------");
             for(var j=0;j<this.$scope.subGroupList[i].subGroupMembers.length;j++){
+              console.log(this.$scope.subGroupList[i].subGroupMembers[j].id);
               if(this.$scope.subGroupList[i].subGroupMembers[j].id==this.$scope.splitId){
+
                 console.log("match found of saved sub group");
+                console.log(this.$scope.subGroupList[i].subGroupMembers[j]);
                 this.$scope.subGroupList[i].subGroupMembers[j].showSubPortion=true;
                 matchFound=true;
                 break;
@@ -477,7 +536,10 @@ module ums{
       }else{
 
       }
-      this.$scope.$apply();
+      if(!this.$scope.$digest()){
+        this.$scope.$apply();
+
+      }
 
       console.log("--Splitting concluded--");
 
@@ -652,15 +714,16 @@ module ums{
 
 
           }
-
+          this.$scope.tempSubGroupList=[];
+          this.$scope.tempSubGroupList = angular.copy(this.$scope.subGroupList);
           this.$scope.tempGroupListAll=[];
           this.$scope.tempGroupList=[];
           for(var i=0;i<this.$scope.subGroupList.length;i++){
             var studentList:Array<ISeatPlanGroup>=this.$scope.subGroupList[i].subGroupMembers;
 
            for(var k=0;k<studentList.length;k++){
-             this.$scope.tempGroupListAll.push(studentList[k]);
-             this.$scope.tempGroupList.push(studentList[k]);
+             this.$scope.tempGroupListAll.push(this.$scope.subGroupList[i].subGroupMembers[k]);
+             this.$scope.tempGroupList.push(this.$scope.subGroupList[i].subGroupMembers[k]);
            }
             this.$scope.subGroupWithDeptMap[i]=studentList;
 
@@ -706,14 +769,19 @@ module ums{
           this.$scope.editSubGroup=false;
           this.$scope.deleteAndCreateNewSubGroup=false;
           this.$scope.cancelSubGroup = false;
-          this.$scope.subGroupFound = false;
+          if(this.$scope.recreateButtonClicked==false){
+            this.$scope.subGroupFound = false;
+            this.reCreate();
+
+          }
           this.$scope.showSubGroupSelectionNumber = true;
 
 
 
           /*this.$scope.$apply();*/
 
-          this.createDroppable();
+          setTimeout(this.createDroppable(),200);
+          //this.createDroppable();
 
           this.mouseClickEvent();
 
@@ -738,7 +806,7 @@ module ums{
       $("#droppable4").empty();
       $("#droppable5").empty();
       $("#droppable6").empty();
-
+      $("#splittedList").empty();
      /* setTimeout(this.createOrViewSubgroups,2000);
       //this.createOrViewSubgroups(this.$scope.selectedGroupNo);*/
 
@@ -843,10 +911,32 @@ module ums{
 
       }).disableSelection();
 
-      this.reCreate();
+
+      //this.reCreate();
       var classScope = this;
       $("#sortable").sortable({
         cursor:"move"
+      });
+
+      $("#splittedList").sortable({
+        connectWith:".connectedSortable",
+        cursor: "move",
+
+        items:"> li",
+        over:function(event,ui){
+          $("#splittedList").css("background-color","aqua");
+        },
+        receive:function(event,ui){
+          $("#splittedList").css("background-color","antiquewhite");
+        },
+
+        out:function(event,ui){
+          $("#splittedList").css("background-color","antiquewhite");
+        },
+        update:function(event,ui){
+          /*var result = $(this).sortable('toArray');
+          classScope.subGroupListChanged(1,result);*/
+        },
       });
       $('#droppable1').sortable({
         cursor: "move",
@@ -1071,6 +1161,22 @@ module ums{
         }
       });
 
+      $("#splittedList").sortable({
+        connectWith:".connectedSortable",
+        cursor: "move",
+
+        items:"> li",
+        over:function(event,ui){
+          $("#splittedList").css("background-color","aqua");
+        },
+        receive:function(event,ui){
+          $("#splittedList").css("background-color","antiquewhite");
+        },
+
+        out:function(event,ui){
+          $("#splittedList").css("background-color","antiquewhite");
+        }
+      });
       $('#sortable1').sortable({
         connectWith:".connectedSortable",
         cursor: "move",
@@ -1222,7 +1328,9 @@ module ums{
       });
 
       this.$scope.editSubGroup = false;
-      this.$scope.$apply();
+     /* if(!this.$scope.$digest()){
+        this.$scope.$apply();
+      }*/
 
     }
 
@@ -1334,7 +1442,9 @@ module ums{
         }
       }
 
-      this.$scope.$apply();
+      if(!this.$scope.$digest()){
+        this.$scope.$apply();
+      }
 
 
 
