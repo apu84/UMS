@@ -179,6 +179,7 @@ module ums{
     lastUpdated:string;
     showSubPortion:boolean;
     splitOccuranceNumber:number;
+    subGroupNumber:number;
   }
 
 
@@ -389,7 +390,7 @@ module ums{
               this.$scope.splittedGroupList.push(newMember);
                 //this.$scope.tempGroupList[i].groupMembers.push(tempArray[k]);
 
-              /*if(this.$scope.subGroupFound){
+              if(this.$scope.subGroupFound){
                 for(var p=0;p<this.$scope.subGroupList.length;p++){
                   var processingDone:boolean = false;
                   for(var r=0;r<this.$scope.subGroupList[p].subGroupMembers.length;r++){
@@ -399,7 +400,7 @@ module ums{
                          var memberId:number = this.$scope.subGroupList[p].subGroupMembers[mem].id;
                          memberList.push(memberId.toString());
                       }
-                      this.subGroupListChanged(p,memberList);
+                      this.subGroupListChanged((p+1),memberList);
                       processingDone=true;
                       break;
 
@@ -410,7 +411,7 @@ module ums{
                     break;
                   }
                 }
-              }*/
+              }
 
 
               console.log("-- new member id: "+newMember.id);
@@ -470,7 +471,7 @@ module ums{
 
       //setTimeout(this.refreshSubGroups,2000);
 
-      if(!this.$scope.$digest()){
+      if(!this.$scope.$$phase){
         this.$scope.$apply();
       }
     }
@@ -536,9 +537,8 @@ module ums{
       }else{
 
       }
-      if(!this.$scope.$digest()){
+      if(!this.$scope.$$phase){
         this.$scope.$apply();
-
       }
 
       console.log("--Splitting concluded--");
@@ -722,13 +722,15 @@ module ums{
             var studentList:Array<ISeatPlanGroup>=this.$scope.subGroupList[i].subGroupMembers;
 
            for(var k=0;k<studentList.length;k++){
+             this.$scope.subGroupList[i].subGroupMembers[k].subGroupNumber= this.$scope.subGroupList[i].subGroupNumber;
              this.$scope.tempGroupListAll.push(this.$scope.subGroupList[i].subGroupMembers[k]);
              this.$scope.tempGroupList.push(this.$scope.subGroupList[i].subGroupMembers[k]);
            }
             this.$scope.subGroupWithDeptMap[i]=studentList;
 
           }
-
+          console.log("$$$$ temp group list All after sub group found$$$$$$");
+          console.log(this.$scope.tempGroupListAll);
           this.$scope.tempGroupListForSplitInversion=[];
           this.$scope.tempGroupListForSplitInversion = angular.copy(this.$scope.tempGroupListAll);
 
@@ -1335,12 +1337,9 @@ module ums{
     }
 
     private subGroupListChanged(subGroupNumber:number,result:any){
-
       console.clear();
-      console.log("############################");
-      console.log(this.$scope.tempGroupListAll);
-      console.log("result_--");
-      console.log(result);
+
+      console.log("Sub group number: "+subGroupNumber);
 
       if(this.$scope.subGroupList.length ==0){
         var subGroup:any={};
@@ -1366,6 +1365,8 @@ module ums{
         var subGroupFound= false;
         for( var i=0;i< this.$scope.subGroupList.length;i++){
           if(this.$scope.subGroupList[i].subGroupNumber == subGroupNumber){
+            console.log(" a sub group match found");
+            console.log(this.$scope.subGroupList[i]);
             this.$scope.subGroupList[i].subGroupMembers = [];
             /*if(this.$scope.subGroupFound==true){
              var subGroupName:string="Sub Group "+subGroupNumber;
@@ -1383,6 +1384,10 @@ module ums{
                     this.$scope.subGroupList[i].subGroupMembers.push(this.$scope.tempGroupListAll[j]);
                     this.$scope.subGroupList[i].subGroupTotalStudentNumber+= this.$scope.tempGroupListAll[j].studentNumber;
 
+                    console.log("inside sub group lsit changed");
+                    console.log(this.$scope.subGroupList[i].subGroupMembers);
+                    console.log(this.$scope.subGroupList[i].subGroupTotalStudentNumber);
+                    console.log("------------------------------------");
                     break;
                   }
                 }
@@ -1442,7 +1447,7 @@ module ums{
         }
       }
 
-      if(!this.$scope.$digest()){
+      if(!this.$scope.$$phase){
         this.$scope.$apply();
       }
 

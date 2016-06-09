@@ -331,7 +331,7 @@
                         <div class="col-md-2" align="center">
                             <ul id="sortable1" class="connectedSortable " data-ng-if="subGroupList.length>=1">
                                 <p><b>Sub Group 1</b></p>
-                                <li class="ui-state-default" id="{{member.id}}" data-ng-repeat="member in subGroupWithDeptMap[0] track by member.id" data-ng-if="member.id!=''">
+                                <li class="ui-state-default" id="{{member.id}}" data-ng-repeat="member in tempGroupList | filter:{subGroupNumber:1}  " data-ng-if="member.id!=''">
                                     <div>
                                         {{member.programName}}:{{member.year}}/{{member.semester}} ({{member.studentNumber}})
                                     </div>
