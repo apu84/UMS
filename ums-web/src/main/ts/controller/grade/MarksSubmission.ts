@@ -3,6 +3,7 @@
 module ums {
   export interface IMarksSubmissionScope extends ng.IScope {
     data:any;
+    chart1:any;
     noneSubmittedGrades: any;
     waitingForScrutinyGrades :any;
     waitingForHeadApprovalGrades :any;
@@ -53,6 +54,7 @@ module ums {
     closePopupModal:Function;
 
     userRole:string;
+    downloadPdf:Function;
   }
   interface IStudentMarks {
     studentId:string;
@@ -98,16 +100,27 @@ module ums {
   }
 
   export class MarksSubmission {
-    public static $inject = ['$scope', 'appConstants', 'HttpClient','$stateParams'];
+    public static $inject = ['$scope', 'appConstants', 'HttpClient','$stateParams', '$window', '$sce'];
 
     constructor(private $scope:IMarksSubmissionScope,
                 private appConstants:any,
-                private httpClient:HttpClient, private $stateParams:any) {
+                private httpClient:HttpClient, private $stateParams:any,private $window: ng.IWindowService, private $sce: ng.ISCEService) {
 
                 //console.clear();
       console.log($stateParams["1"]);
                 //his.$scope.userRole=$params.role;
-      this.$scope.userRole = $stateParams["1"];
+
+      $scope.chart1 = [{
+        "year": "1950",
+        "value": -0.307
+      }, {
+        "year": "1951",
+        "value": -0.168
+      }, {
+        "year": "1952",
+        "value": -0.073
+      }];
+        this.$scope.userRole = $stateParams["1"];
                 $scope.data = {
                   gradeLetterOptions: appConstants.gradeLetters,
                   total_part:Number,
@@ -131,6 +144,8 @@ module ums {
       $scope.recheckAll=this.recheckAll.bind(this);
       $scope.approveAll=this.approveAll.bind(this);
 
+      $scope.downloadPdf=this.downloadPdf.bind(this);
+
       $scope.onRecheckClick=this.onRecheckClick.bind(this);
       $scope.onApproveClick=this.onApproveClick.bind(this);
 
@@ -139,6 +154,17 @@ module ums {
 
     }
 
+    private downloadPdf():void {
+      this.httpClient.get("https://localhost/ums-webservice-common/gradeReport", 'application/pdf',
+          (data:any, etag:string) => {
+            var file = new Blob([data], {type: 'application/pdf'});
+            var fileURL = this.$sce.trustAsResourceUrl(URL.createObjectURL(file));
+            this.$window.open(fileURL);
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>) => {
+            console.error(response);
+          }, 'arraybuffer');
+    }
 
     private fetchGradeSubmissionTable():void {
       this.httpClient.get("academic/gradeSubmission/semester/11012016/examtype/1/dept/05/role/"+this.$scope.userRole,
@@ -153,6 +179,7 @@ module ums {
       $("#rightDiv").removeClass("orgRightClass");
       $("#rightDiv").addClass("newRightClass");
     }
+
 
     private fetchGradeSheet():void {
       this.$scope.toggleColumn = true;
