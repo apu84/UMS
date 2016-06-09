@@ -18,7 +18,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 @Component
 public class DBLogger implements QueryLogger {
   @Autowired
-  JdbcTemplate mJdbcTemplate;
+  JdbcTemplate jdbcTemplate;
   @Autowired
   LoggerEntryManager mLoggerEntryManager;
 
@@ -56,7 +56,7 @@ public class DBLogger implements QueryLogger {
   }
 
 
-  @Scheduled(fixedDelay = 30000)
+  @Scheduled(fixedDelay = 30000, initialDelay = 60000)
   public void doLog() throws Exception {
     List<MutableLoggerEntry> mutableLoggerEntries = new ArrayList<>();
     synchronized (mMutableLoggerEntries) {
@@ -65,7 +65,8 @@ public class DBLogger implements QueryLogger {
         mutableLoggerEntries.add(ml);
       }
     }
-
-    mLoggerEntryManager.create(mutableLoggerEntries);
+    if (mutableLoggerEntries.size() > 0) {
+      mLoggerEntryManager.create(mutableLoggerEntries);
+    }
   }
 }

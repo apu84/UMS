@@ -2,6 +2,7 @@ package org.ums.configuration;
 
 import org.apache.shiro.authc.credential.PasswordService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -185,11 +186,6 @@ public class UMSContext {
     ExaminerCache examinerCache = new ExaminerCache(mCacheFactory.getCacheManager());
     examinerCache.setManager(new PersistentExaminerDao(mTemplateFactory.getJdbcTemplate()));
     return examinerCache;
-  }
-
-  @Bean
-  LoggerEntryManager loggerEntryManager() {
-    return new PersistentLoggerEntryDao(mTemplateFactory.getJdbcTemplate());
   }
 
   @Bean
