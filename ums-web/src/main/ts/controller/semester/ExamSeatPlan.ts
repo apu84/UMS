@@ -423,11 +423,31 @@ module ums{
     }
 
     private changeTotalStudentNumberForSplitAction():void{
+      var totalSubGroupNumber:number=0;
+
       if(this.$scope.subGroupFound){
+        totalSubGroupNumber=this.$scope.subGroupList.length;
+      }else{
+        totalSubGroupNumber = this.$scope.colForSubgroup ;
+      }
+
+      for(var i=1;i<=totalSubGroupNumber;i++){
+        var members:Array<String>=[];
+
+        for(var j=0;j<this.$scope.tempGroupListAll.length;j++){
+          if(this.$scope.tempGroupListAll[j].subGroupNumber==i){
+            members.push(this.$scope.tempGroupListAll[j].id);
+          }
+        }
+
+        this.subGroupListChanged(i,members);
+      }
+
+    /*  if(this.$scope.subGroupFound){
         for(var p=0;p<this.$scope.subGroupList.length;p++){
           var processingDone:boolean = false;
           for(var r=0;r<this.$scope.subGroupList[p].subGroupMembers.length;r++){
-            if(this.$scope.subGroupList[p].subGroupMembers[r].id==this.$scope.splitId){
+            //if(this.$scope.subGroupList[p].subGroupMembers[r].id==this.$scope.splitId){
               var memberList:Array<string>=[];
               for(var mem=0;mem< this.$scope.subGroupList[p].subGroupMembers.length;mem++){
                 var memberId:number = this.$scope.subGroupList[p].subGroupMembers[mem].id;
@@ -437,14 +457,15 @@ module ums{
               processingDone=true;
               break;
 
-            }
+            //}
           }
 
           if(processingDone){
             break;
           }
         }
-      }
+      }*/
+
     }
 
     private revertSplitAction():void{
@@ -871,27 +892,30 @@ module ums{
         }
         console.log(this.$scope.mergeIdList);
         console.log(this.$scope.splitId);
-        var indexForDelete:number=0;
-        var idString:string;
+        var indexForDelete:Array<number>=[];
+        var idString:Array<string>=[];
         for(var i=0;i<this.$scope.mergeIdList.length;i++){
           if(this.$scope.mergeIdList[i]!=this.$scope.splitId){
 
-                       
+
 
             console.log("-----------------------");
             for(var j=0;j<this.$scope.tempGroupListAll.length;j++){
               if(this.$scope.tempGroupListAll[j].id==this.$scope.mergeIdList[i]){
-                indexForDelete=j;
+                indexForDelete.push(j);
                 //this.$scope.tempGroupListAll.splice(j,1);
-                idString = this.$scope.mergeIdList[i].toString();
-
+                idString.push(this.$scope.mergeIdList[i].toString());
               }
             }
           }
         }
         console.log(" split id :"+this.$scope.splitId);
-        this.$scope.tempGroupListAll.splice(indexForDelete,1);
-        $('#'+idString).remove();
+
+        for(var i=0;i<indexForDelete.length;i++){
+          this.$scope.tempGroupListAll.splice(indexForDelete[i],1);
+          $('#'+idString[i]).remove();
+        }
+
         console.log(this.$scope.tempGroupListAll);
         this.$scope.mergeIdList=[];
         this.$scope.mergeIdList.push(this.$scope.splitId);
@@ -901,6 +925,7 @@ module ums{
         this.$scope.$apply();
       }
 
+      this.changeTotalStudentNumberForSplitAction();
 
     }
 
