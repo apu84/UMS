@@ -116,6 +116,7 @@ module ums{
     refreshSortables:Function;
     changeTotalStudentNumberForSplitAction:Function;
     mergeInitialization:Function;
+    mergeGroups:Function;
 
     reCreate:Function;
     editSavedSubGroup:Function;
@@ -271,6 +272,7 @@ module ums{
       $scope.refreshSortables = this.refreshSubGroups.bind(this);
       $scope.changeTotalStudentNumberForSplitAction = this.changeTotalStudentNumberForSplitAction.bind(this);
       $scope.mergeInitialization = this.mergeInitialization.bind(this);
+      $scope.mergeGroups = this.mergeGroups.bind(this);
       this.initialize();
 
     }
@@ -842,6 +844,66 @@ module ums{
       return baseId;
     }
 
+
+    private mergeGroups():void{
+      console.clear();
+      console.log("in the merge groups");
+      if(this.$scope.mergeIdList.length>1){
+        var studentNumber:number=0;
+
+        for(var i=0;i<this.$scope.mergeIdList.length;i++){
+          for(var j=0;j<this.$scope.tempGroupListAll.length;j++){
+            if(this.$scope.tempGroupListAll[j].id==this.$scope.mergeIdList[i]){
+              studentNumber+= this.$scope.tempGroupListAll[j].studentNumber;
+            }
+          }
+        }
+        console.log("student number: "+ studentNumber);
+        for(var i=0;i<this.$scope.tempGroupListAll.length;i++){
+          if(this.$scope.tempGroupListAll[i].id==this.$scope.splitId){
+            this.$scope.tempGroupListAll[i].studentNumber = 0;
+            this.$scope.tempGroupListAll[i].studentNumber = studentNumber;
+            console.log("temp group student number: "+ this.$scope.tempGroupListAll[i].studentNumber);
+            console.log("------temp group list check---------");
+            console.log(this.$scope.tempGroupListAll[i]);
+            console.log("------temp group list check ends-----");
+          }
+        }
+        console.log(this.$scope.mergeIdList);
+        console.log(this.$scope.splitId);
+        var indexForDelete:number=0;
+        var idString:string;
+        for(var i=0;i<this.$scope.mergeIdList.length;i++){
+          if(this.$scope.mergeIdList[i]!=this.$scope.splitId){
+
+                       
+
+            console.log("-----------------------");
+            for(var j=0;j<this.$scope.tempGroupListAll.length;j++){
+              if(this.$scope.tempGroupListAll[j].id==this.$scope.mergeIdList[i]){
+                indexForDelete=j;
+                //this.$scope.tempGroupListAll.splice(j,1);
+                idString = this.$scope.mergeIdList[i].toString();
+
+              }
+            }
+          }
+        }
+        console.log(" split id :"+this.$scope.splitId);
+        this.$scope.tempGroupListAll.splice(indexForDelete,1);
+        $('#'+idString).remove();
+        console.log(this.$scope.tempGroupListAll);
+        this.$scope.mergeIdList=[];
+        this.$scope.mergeIdList.push(this.$scope.splitId);
+      }
+
+      if(!this.$scope.$$phase){
+        this.$scope.$apply();
+      }
+
+
+    }
+
     private mergeInitialization(id:string):void{
       console.log("Inside merge initialization")
 
@@ -849,7 +911,7 @@ module ums{
 
       if(this.$scope.mergeIdList.length==0){
         this.$scope.mergeIdList.push(idNum);
-        $("#"+idNum).css("background-color","#000099");
+        $("#"+idNum).css("background-color","red");
       }else{
         var duplicateFound:boolean= false;
         for(var i=0;i<this.$scope.mergeIdList.length;i++){
@@ -882,7 +944,7 @@ module ums{
 
         if(mismatchFound==false){
 
-          $("#"+id).css("background-color","#000099");
+          $("#"+id).css("background-color","red");
         }else{
 
           for(var i=0;i<this.$scope.mergeIdList.length-1;i++){
@@ -891,7 +953,7 @@ module ums{
 
           }
 
-          $("#"+id).css("background-color","#000099");
+          $("#"+id).css("background-color","red");
 
           this.$scope.mergeIdList=[];
 
@@ -1015,6 +1077,9 @@ module ums{
             currentScope.$scope.reverseSplitButtonClicked=true;
             console.log("Reverse button is clicked!");
             currentScope.revertSplitAction();
+            break;
+          case "merge":
+            currentScope.mergeGroups();
             break;
         }
         $(".custom-menu").hide(100);
