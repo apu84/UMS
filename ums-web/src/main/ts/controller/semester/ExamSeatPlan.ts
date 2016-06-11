@@ -329,14 +329,7 @@ module ums{
       console.log(this.$scope.tempGroupListAll)
       this.$scope.splitActionOccured = true;
       this.$scope.recreate = true;
-     /* for(var i=0;i<this.$scope.tempGroupList.length;i++) {
-        if (this.$scope.tempGroupList[i].groupNumber == this.$scope.selectedGroupNo) {
-          var tempMemberStore = this.$scope.tempGroupList[i].groupMembers;
-         /!* if(this.$scope.tempGroupListAll.length==0){
-            this.$scope.tempGroupListAll = this.$scope.tempGroupListAll.concat(tempMemberStore);
-          }*!/
-          //this.$scope.tempGroupList[i].groupMembers = [];
-          var foundInTheTempGroup:boolean = false;*/
+
           for (var j = 0; j < this.$scope.tempGroupList.length; j++) {
             var members =this.$scope.tempGroupList[j];
             if (members.id == this.$scope.splitId) {
@@ -347,13 +340,7 @@ module ums{
               memberStudentNumber= members.studentNumber;
               var leftStudentNumber = memberStudentNumber - splitNumber;
               var previousMember = members;
-              /*if(this.$scope.tempGroupList[j].splitOccuranceNumber==0 && this.$scope.groupIdLength==null){
-                /!*When any split occurance is occured, then, in the group id, an extra number is added, so that the number can be used to show the unique id's.
-                * But, the extra number is needed to be removed. That's why groupIdLength is recorded once. It will be recorded only when split is fired. Else,
-                * the value will be null and it will be checked at the json making time.*!/
-                var idString:string = this.$scope.tempGroupList[j].id.toString();
-                this.$scope.groupIdLength = idString.length;
-              }*/
+
               this.$scope.tempGroupList[j].splitOccuranceNumber+=1;
               this.$scope.tempGroupList[j].studentNumber = leftStudentNumber;
               this.$scope.tempGroupList[j].showSubPortion = false;
@@ -1320,7 +1307,7 @@ module ums{
       this.$scope.selectedGroupNo = groupNo;
       this.$scope.showSubGroupSelectionNumber=true;
       this.createOrViewSubgroups(groupNo);
-      this.$scope.colForSubgroup=0;
+      this.$scope.colForSubgroup=0;   
       this.$scope.groupNoForSubGroup = groupNo;
       $("#splittedList").empty();
 
