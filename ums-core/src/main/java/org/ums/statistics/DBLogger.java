@@ -17,9 +17,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Component
 public class DBLogger implements QueryLogger {
-  public static String QUERY_PARAM_PLACE_HOLDER = "\\?";
   @Autowired
-  JdbcTemplate mJdbcTemplate;
+  JdbcTemplate jdbcTemplate;
   @Autowired
   LoggerEntryManager mLoggerEntryManager;
 
@@ -30,7 +29,7 @@ public class DBLogger implements QueryLogger {
   @Async
   public void log(String pQuery, Object[] pQueryParams, String pUserName, final long pExecutionTime) {
     MutableLoggerEntry loggerEntry = new PersistentLoggerEntry();
-    loggerEntry.setSql(buildQuery(pQuery, pQueryParams));
+    loggerEntry.setSql(LoggerUtils.buildQuery(pQuery, pQueryParams));
     loggerEntry.setUserName(pUserName);
     loggerEntry.setExecutionTime(pExecutionTime);
     loggerEntry.setTimestamp(new Date());
@@ -48,18 +47,16 @@ public class DBLogger implements QueryLogger {
     mMutableLoggerEntries.add(loggerEntry);
   }
 
-  protected String buildQuery(String pQuery, final Object[] pQueryParams) {
-    if (pQuery.contains(QUERY_PARAM_PLACE_HOLDER)
-        && pQueryParams.length > 0) {
-      for (Object param : pQueryParams) {
-        pQuery = pQuery.replaceFirst(QUERY_PARAM_PLACE_HOLDER, isString(param) ? "'" + param.toString() + "'" : param.toString());
-      }
+  @Override
+  @Async
+  public void log(String pQuery, List<Object[]> pQueryParams, String pUserName, long pExecutionTime) {
+    for (Object[] params : pQueryParams) {
+      this.log(pQuery, params, pUserName, pExecutionTime);
     }
-
-    return pQuery;
   }
 
-  @Scheduled(fixedDelay = 30000)
+
+  @Scheduled(fixedDelay = 30000, initialDelay = 60000)
   public void doLog() throws Exception {
     List<MutableLoggerEntry> mutableLoggerEntries = new ArrayList<>();
     synchronized (mMutableLoggerEntries) {
@@ -68,16 +65,8 @@ public class DBLogger implements QueryLogger {
         mutableLoggerEntries.add(ml);
       }
     }
-
-    mLoggerEntryManager.update(mutableLoggerEntries);
+    if (mutableLoggerEntries.size() > 0) {
+      mLoggerEntryManager.create(mutableLoggerEntries);
+    }
   }
-
-  private boolean isNumber(Object pObject) {
-    return pObject instanceof Number;
-  }
-
-  private boolean isString(Object pObject) {
-    return pObject instanceof String;
-  }
-
 }
