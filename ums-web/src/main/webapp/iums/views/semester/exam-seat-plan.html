@@ -204,11 +204,8 @@
             <h1>Please Create an Exam Rroutine first for {{semesterId}} !!!!!!</h1>
         </div>
 
-        <br>
-        <br>
-        <hr>
-        <hr>
-        <hr>
+       <br>
+
 
         <div data-ng-if="seatPlanGroupList.length>0 && showGroupOrNot==true">
             <div class="row">
@@ -536,7 +533,7 @@
         <div class="row" align="center">
             <button type="button" class="btn btn-info" data-ng-click="saveSubGroup(selectedGroupNo)" data-ng-if="saveSubGroupInfo">Save </button>
             <button type="button" class="btn btn-info" data-ng-click="editSavedSubGroup(selectedGroupNo)" data-ng-if="editSubGroup">Edit </button>
-            <!--<button type="button" class="btn btn-info" data-ng-click="cancelEditedSubGroup()" data-ng-if="cancelSubGroup">Cancel</button>-->
+            <!--<button type="button" class="btn btn-info" data-ng-click="makeSortableCancel()" data-ng-if="cancelSubGroup">Cancel</button>-->
             <button type="button" class="btn btn-info" data-ng-click="createNewSubGroup(selectedGroupNo)" data-ng-if="deleteAndCreateNewSubGroup">Re-Create</button>
 
 

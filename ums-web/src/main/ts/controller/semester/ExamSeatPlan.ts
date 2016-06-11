@@ -118,6 +118,7 @@ module ums{
     mergeInitialization:Function;
     mergeGroups:Function;
     makeSortableEmpty:Function;
+    makeSortableCancel:Function;
 
     reCreate:Function;
     editSavedSubGroup:Function;
@@ -275,6 +276,7 @@ module ums{
       $scope.mergeInitialization = this.mergeInitialization.bind(this);
       $scope.mergeGroups = this.mergeGroups.bind(this);
       $scope.makeSortableEmpty = this.makeSortableEmpty.bind(this);
+      $scope.makeSortableCancel = this.makeSortableCancel.bind(this);
       this.initialize();
 
     }
@@ -819,7 +821,7 @@ module ums{
           this.$scope.saveSubGroupInfo = true;
           this.$scope.editSubGroup=false;
           this.$scope.deleteAndCreateNewSubGroup=false;
-          this.$scope.cancelSubGroup = false;
+          this.$scope.cancelSubGroup = true;
           if(this.$scope.recreateButtonClicked==false){
             this.$scope.subGroupFound = false;
             this.reCreate();
@@ -1311,7 +1313,7 @@ module ums{
       this.$scope.recreateButtonClicked=true;
       this.$scope.subGroupFound = false;
       this.$scope.editSubGroup = false;
-      this.$scope.cancelSubGroup = false;
+      this.$scope.cancelSubGroup = true;
       this.$scope.deleteAndCreateNewSubGroup = false;
       this.$scope.selectedGroupNo = groupNo;
       this.$scope.showSubGroupSelectionNumber=true;
@@ -1745,6 +1747,7 @@ module ums{
         this.$scope.editSubGroup=true;
         this.$scope.deleteAndCreateNewSubGroup=true;
         this.$scope.saveSubGroupInfo = false;
+        this.$scope.cancelSubGroup = false;
         this.createOrViewSubgroups(this.$scope.selectedGroupNo);
 
         $(".connectedSortable").css("background-color","antiquewhite");
@@ -1850,6 +1853,51 @@ module ums{
 
     }
 
+    private makeSortableCancel():void{
+      if($("#splittedList").hasClass('connectedSortable')){
+        $("#splittedList").sortable("destroy");
+      }
+      if($("#sortable").hasClass('connectedSortable')){
+        $("#sortable").sortable("destroy");
+      }
+      if($("#sortable1").hasClass('connectedSortable')){
+        $("#sortable1").sortable("destroy");
+      }
+      if($("#sortable2").hasClass('connectedSortable')){
+        $("#sortable2").sortable("destroy");
+      }
+      if($("#sortable3").hasClass('connectedSortable')){
+        $("#sortable3").sortable("destroy");
+      }
+      if($("#sortable4").hasClass('connectedSortable')){
+        $("#sortable4").sortable("destroy");
+      }
+      if($("#sortable5").hasClass('connectedSortable')){
+        $("#sortable5").sortable("destroy");
+      }
+      if($("#sortable6").hasClass('connectedSortable')){
+        $("#sortable6").sortable("destroy");
+      }
+      if($("#droppable1").hasClass('connectedSortable')){
+        $("#droppable1").sortable("destroy");
+      }
+      if($("#droppable2").hasClass('connectedSortable')){
+        $("#droppable2").sortable("destroy");
+      }
+      if($("#droppable3").hasClass('connectedSortable')){
+        $("#droppable3").sortable("destroy");
+      }
+      if($("#droppable4").hasClass('connectedSortable')){
+        $("#droppable4").sortable("destroy");
+      }
+      if($("#droppable5").hasClass('connectedSortable')){
+        $("#droppable5").sortable("destroy");
+      }
+      if($("#droppable6").hasClass('connectedSortable')){
+        $("#droppable6").sortable("destroy");
+      }
+    }
+
     private makeSortableEmpty():void{
       if($("#splittedList").hasClass('connectedSortable')){
         $("#splittedList").empty();
@@ -1907,6 +1955,7 @@ module ums{
       this.$scope.recreateButtonClicked=false;
       this.$scope.saveSubGroupInfo=false;
       this.$scope.editButtonClicked=false;
+      this.$scope.cancelSubGroup = false;
       $( "#subGroupPanel").unbind( "mousedown" );
       $("#subGroupPanel li").unbind("contextmenu");
       $("#ifti_div").unbind("contextmenu");
