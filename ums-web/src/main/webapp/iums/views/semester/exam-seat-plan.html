@@ -306,9 +306,9 @@
                     <br>
                     <button data-ng-click="generateSubGroups(subGroupNumber)">Generate Sub-groups</button>
 
-                    <a data-ng-click="createOrViewSubgroups(1)" href="javascript:void(0)">Group 1</a> |
+                   <!-- <a data-ng-click="createOrViewSubgroups(1)" href="javascript:void(0)">Group 1</a> |
                     <a data-ng-click="createOrViewSubgroups(2)" href="javascript:void(0)">Group 2</a> |
-                    <a data-ng-click="createOrViewSubgroups(3)" href="javascript:void(0)">Group 3</a>
+                    <a data-ng-click="createOrViewSubgroups(3)" href="javascript:void(0)">Group 3</a>-->
 
                 </div>
                 <hr>
@@ -445,7 +445,7 @@
 
                 </div>
 
-                <div class="row" data-ng-if="colForSubGroup!=9999 " data-ng-show="subGroupFound==false">
+                <div class="row" data-ng-if="colForSubgroup!=9999"  data-ng-show="subGroupFound==false  ">
                     <div class="col-md-2" data-ng-show="colForSubgroup>=1">
                         <p><b>Sub Group 1</b> </p>
 
@@ -475,7 +475,7 @@
 
 
                 </div>
-                <div class="row" data-ng-if="colForSubGroup!=9999 " data-ng-show="subGroupFound==false">
+                <div class="row"  data-ng-if="colForSubgroup!=9999"  data-ng-show="subGroupFound==false">
                     <div class="col-md-2">
                         <ul id="droppable1" class="connectedSortable col-md-2" data-ng-show="colForSubgroup>=1"  >
                         </ul>

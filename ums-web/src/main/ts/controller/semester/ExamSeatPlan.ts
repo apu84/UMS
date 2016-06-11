@@ -1760,22 +1760,27 @@ module ums{
        * */
       var totalSubgroups =Math.floor(12/group) ;
       if(group>6){
+        this.$scope.colForSubgroup=9999;
         alert("Subgroup can be no more than six.");
-        this.$scope.colForSubgroup=9999;
 
-      }else if(group<=0){
-        alert("Please generate sub groups");
+
+      }else if(group<4){
         this.$scope.colForSubgroup=9999;
+        alert("Please generate at least 4 sub groups");
+
 
       }else if(group==null){
-        alert("Please generate sub groups");
         this.$scope.colForSubgroup=9999;
+        alert("Please generate sub groups");
+
       }
-      else{
+      else if(group>=4 && group<=6){
         this.$scope.colForSubgroup=group;
+      }else{
+
       }
 
-
+      console.log("col for sub group: "+this.$scope.colForSubgroup);
 
     }
 
