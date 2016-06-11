@@ -252,17 +252,18 @@
 <ul class="custom-menu">
     <li data-action="split">Split</li>
     <li data-action="revertSplit">Revert Split</li>
+    <li data-action="merge">Merge</li>
 </ul>
 
 
 <div class="panel panel-grey" data-ng-show="subGroupSelected" id="subGroupPanel">
-    <div id="ifti_div">Click here....</div>
+
     <div class="panel-heading">
         <h3 class="panel-title pull-left">
             Sub Groups for Group {{selectedGroupNo}}
         </h3>
 
-        <button class="btn btn-default pull-right" data-ng-click="closeSubGroupOrRoomInfoWindow()"><i class="fa fa-times" aria-hidden="true"></i></button>
+       <!-- <button class="btn btn-default pull-right" data-ng-click="closeSubGroupOrRoomInfoWindow()"><i class="fa fa-times" aria-hidden="true"></i></button>-->
         <div class="clearfix"></div>
 
     </div>
@@ -279,11 +280,13 @@
                 </div>
 
 
-                <ul id="splittedList" class="connectedSortable"   >
+                    <ul id="splittedList" class="connectedSortable " >
 
-                </ul>
-                    <ul subGroupSortable data-ng-repeat="group in tempGroupList track by group.id"   id="sortable"  class="connectedSortable"  data-ng-if="recreate==false">
-                        <li class="ui-state-default" id="{{group.id}}" data-ng-if="subGroupFound==false">
+                    </ul>
+
+
+                    <ul subGroupSortable data-ng-repeat="group in tempGroupList track by group.id"   id="sortable"  class="connectedSortable"  data-ng-if="recreate==false && subGroupFound==false">
+                        <li class="ui-state-default" id="{{group.id}}" >
                             <div>
                                 {{group.programName}}:{{group.year}}/{{group.semester}} ({{group.studentNumber}})
                             </div>
@@ -320,16 +323,16 @@
                 -->
 
                 <div  data-ng-if="subGroupFound==true">
-                    <div class="row" align="center">
+                    <!--<div class="row" align="center">
                         <a data-ng-click="createOrViewSubgroups(1)" href="javascript:void(0)">Group 1</a> |
                         <a data-ng-click="createOrViewSubgroups(2)" href="javascript:void(0)">Group 2</a> |
                         <a data-ng-click="createOrViewSubgroups(3)" href="javascript:void(0)">Group 3</a>
-                    </div>
+                    </div>-->
                     <div class="row">
                         <div class="col-md-2" align="center">
                             <ul id="sortable1" class="connectedSortable " data-ng-if="subGroupList.length>=1">
                                 <p><b>Sub Group 1</b></p>
-                                <li class="ui-state-default" id="{{member.id}}" data-ng-repeat="member in subGroupWithDeptMap[0] track by member.id" data-ng-if="member.id!=''">
+                                <li class="ui-state-default" id="{{member.id}}" data-ng-repeat="member in subGroupWithDeptMap[0] track by member.id  " data-ng-if="member.id!=''">
                                     <div>
                                         {{member.programName}}:{{member.year}}/{{member.semester}} ({{member.studentNumber}})
                                     </div>
@@ -446,19 +449,46 @@
                 </div>
 
                 <div class="row" data-ng-if="colForSubGroup!=9999 " data-ng-show="subGroupFound==false">
+                    <div class="col-md-2" data-ng-show="colForSubgroup>=1">
+                        <p><b>Sub Group 1</b> </p>
+
+                    </div>
+                    <div class="col-md-2" data-ng-show="colForSubgroup>=2">
+                        <p><b>Sub Group 2</b></p>
+
+                    </div>
+                    <div class="col-md-2"  data-ng-show="colForSubgroup>=3" >
+                        <p><b>Sub Group 3</b></p>
+
+                    </div>
+
+
+                    <div class="col-md-2" data-ng-show="colForSubgroup>=4">
+                        <p><b>Sub Group 4</b></p>
+
+                    </div>
+                    <div class="col-md-2" data-ng-show="colForSubgroup>=5">
+                        <p><b>Sub Group 5</b></p>
+
+                    </div>
+                    <div class="col-md-2" data-ng-show="colForSubgroup>=6"  >
+                        <p><b>Sub Group 6</b></p>
+
+                    </div>
+
+
+                </div>
+                <div class="row" data-ng-if="colForSubGroup!=9999 " data-ng-show="subGroupFound==false">
                     <div class="col-md-2">
                         <ul id="droppable1" class="connectedSortable col-md-2" data-ng-show="colForSubgroup>=1"  >
-                            <p><b>Sub Group 1</b> </p>
                         </ul>
                     </div>
                     <div class="col-md-2">
                         <ul class="connectedSortable col-md-2" id="droppable2" data-ng-show="colForSubgroup>=2" >
-                            <p><b>Sub Group 2</b></p>
                         </ul>
                     </div>
                     <div class="col-md-2">
                         <ui class="connectedSortable" id="droppable3" data-ng-show="colForSubgroup>=3"  >
-                            <p><b>Sub Group 3</b></p>
                         </ui>
                     </div>
 
@@ -468,17 +498,14 @@
                 <!--<div class="row" data-ng-if="colForSubgroup!=9999 " data-ng-show=" subGroupFound==false">-->
                     <div class="col-md-2">
                         <ui class=" connectedSortable" id="droppable4" data-ng-show="colForSubgroup>=4" >
-                            <p><b>Sub Group 4</b></p>
                         </ui>
                     </div>
                     <div class="col-md-2">
                         <div class="connectedSortable" id="droppable5" data-ng-show="colForSubgroup>=5" >
-                            <p><b>Sub Group 5</b></p>
                         </div>
                     </div>
                     <div class="col-md-2">
                         <div class="connectedSortable" id="droppable6" data-ng-show="colForSubgroup>=6"  >
-                            <p><b>Sub Group 6</b></p>
                         </div>
                     </div>
 
@@ -516,6 +543,9 @@
         </div>
         <hr>
         <hr>
+        <div class="row" align="right" style="padding-right: 3%;">
+            <button type="button" class="btn btn-success" data-ng-click="closeSubGroupOrRoomInfoWindow()" >Close </button>
+        </div>
 
     </div>
 
