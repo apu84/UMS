@@ -63,6 +63,7 @@ module ums{
     subGroup1ListTest:any;  //this is for test purpose
 
     recreate:boolean;
+    showContextMenu:boolean;
     splitActionOccured:boolean;
     splitButtonClicked:boolean;
     reverseSplitButtonClicked: boolean;
@@ -218,6 +219,7 @@ module ums{
       $scope.editButtonClicked=false;
       $scope.recreateButtonClicked=false;
       $scope.deleteAndCreateNewSubGroup = false;
+      $scope.showContextMenu=false;
       $scope.arr = arr;
       $scope.update = 0;
       $scope.groupNumber = 1;
@@ -812,7 +814,7 @@ module ums{
 
         }
         else{
-
+          this.$scope.showContextMenu=true;
 
           this.$scope.colForSubgroup=0;
 
@@ -1349,6 +1351,7 @@ module ums{
         this.createOrViewSubgroups(groupNo);
 
       }
+      this.$scope.showContextMenu=true;
       this.$scope.editButtonClicked=true;
       this.$scope.saveSubGroupInfo=true;
       this.$scope.cancelSubGroup = true;
@@ -1743,7 +1746,7 @@ module ums{
          this.createOrViewSubgroups(this.$scope.selectedGroupNo);
 
          }*/
-
+        this.$scope.showContextMenu=false;
         this.$scope.editSubGroup=true;
         this.$scope.deleteAndCreateNewSubGroup=true;
         this.$scope.saveSubGroupInfo = false;
@@ -1961,6 +1964,7 @@ module ums{
       this.$scope.saveSubGroupInfo=false;
       this.$scope.editButtonClicked=false;
       this.$scope.cancelSubGroup = false;
+      this.$scope.showContextMenu = false;
       $( "#subGroupPanel").unbind( "mousedown" );
       $("#subGroupPanel li").unbind("contextmenu");
       $("#ifti_div").unbind("contextmenu");
