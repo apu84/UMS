@@ -72,4 +72,8 @@
     </property>
   </bean>
 
+  <bean id="loggerFactory" class="org.ums.statistics.LoggerFactoryImpl">
+    <property name="loggerType" value="${query.logger}"/>
+  </bean>
+
 </beans>
