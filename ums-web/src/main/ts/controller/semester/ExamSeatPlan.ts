@@ -322,7 +322,15 @@ module ums{
 
     }
 
-
+    private findIdMatch(id:number):boolean{
+      var noMatch:boolean=true;
+      for(var x=0;x<this.$scope.tempGroupListAll.length;x++){
+        if(this.$scope.tempGroupListAll[x].id==id){
+          noMatch=false;
+        }
+      }
+      return noMatch;
+    }
 
     private splitAction(splitNumber:number):void{
       console.log("TempGroupListAll---->");
@@ -367,13 +375,39 @@ module ums{
               var id = members.id;
               var idString:string = id.toString();
               if (newMember.splitOccuranceNumber == 0) {
-                idString = idString + this.$scope.tempGroupList[j].splitOccuranceNumber;
+                var ocNumber:number = this.$scope.tempGroupList[j].splitOccuranceNumber;
+                idString = idString + ocNumber;
+                var noMatch:boolean=true;
+                noMatch = this.findIdMatch(+idString);
+                while(true){
+                  idString = idString + ocNumber;
+                  var noMatch:boolean=true;
+                  noMatch = this.findIdMatch(+idString);
+                  if(noMatch==true){
+                    break;
+                  }else{
+                    ocNumber+=1;
+                  }
+                }
+
                 newMember.splitOccuranceNumber = 1;
               } else {
                 var idArr: Array<String> = idString.split("");
                 var lastInt: number = +(idArr[idArr.length - 1]);
                 lastInt = lastInt + 1;
                 idString = idArr.toString();
+                var noMatch:boolean=true;
+                var count:number=2;
+                while(true){
+                  noMatch=this.findIdMatch(+idString);
+
+                  if(noMatch==true){
+                    break;
+                  }else{
+                    idString=idString+count;
+                    count+=1;
+                  }
+                }
               }
               var idNumeric = +idString;
               newMember.id = idNumeric;
@@ -896,13 +930,18 @@ module ums{
               if(this.$scope.tempGroupListAll[j].id==this.$scope.mergeIdList[i]){
                 indexForDelete.push(j);
                 //this.$scope.tempGroupListAll.splice(j,1);
-                idString.push(this.$scope.mergeIdList[i].toString());
+                var idNumeric = this.$scope.mergeIdList[i];
+                idString.push(idNumeric.toString());
               }
             }
           }
         }
         console.log(" split id :"+this.$scope.splitId);
-
+        console.log("id string");
+        console.log(idString);
+        console.log("***************************");
+        console.log(indexForDelete);
+        console.log("***************************");
         for(var i=0;i<indexForDelete.length;i++){
           this.$scope.tempGroupListAll.splice(indexForDelete[i],1);
           $('#'+idString[i]).remove();
@@ -1307,7 +1346,7 @@ module ums{
       this.$scope.selectedGroupNo = groupNo;
       this.$scope.showSubGroupSelectionNumber=true;
       this.createOrViewSubgroups(groupNo);
-      this.$scope.colForSubgroup=0;   
+      this.$scope.colForSubgroup=0;
       this.$scope.groupNoForSubGroup = groupNo;
       $("#splittedList").empty();
 
@@ -1553,7 +1592,7 @@ module ums{
     }
 
     private subGroupListChanged(subGroupNumber:number,result:any){
-      console.clear();
+      //console.clear();
       console.log("Sub group number: "+subGroupNumber);
       console.log("Items");
       console.log(result);
