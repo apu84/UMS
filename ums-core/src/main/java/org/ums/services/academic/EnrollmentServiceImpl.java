@@ -5,14 +5,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.ums.domain.model.immutable.*;
-import org.ums.domain.model.mutable.MutableProgram;
-import org.ums.domain.model.mutable.MutableSemesterEnrollment;
-import org.ums.domain.model.mutable.MutableStudent;
-import org.ums.domain.model.mutable.MutableStudentRecord;
+import org.ums.domain.model.mutable.*;
+import org.ums.enums.ExamType;
 import org.ums.manager.*;
 import org.ums.message.MessageResource;
-import org.ums.persistent.model.PersistentSemesterEnrollment;
-import org.ums.persistent.model.PersistentStudentRecord;
+import org.ums.persistent.model.*;
 import org.ums.response.type.GenericMessageResponse;
 import org.ums.response.type.GenericResponse;
 import org.ums.util.UmsUtils;
@@ -37,13 +34,28 @@ public class EnrollmentServiceImpl implements EnrollmentService {
   SemesterManager mSemesterManager;
 
   @Autowired
-  ContentManager<Program, MutableProgram, Integer> mProgramManager;
+  ProgramManager mProgramManager;
 
   @Autowired
   SemesterEnrollmentManager mSemesterEnrollmentManager;
 
   @Autowired
   MessageResource mMessageResource;
+
+  @Autowired
+  SemesterSyllabusMapManager mSemesterSyllabusMapManager;
+
+  @Autowired
+  CourseManager mCourseManager;
+
+  @Autowired
+  UGRegistrationResultManager mUGRegistrationResultManager;
+
+  @Autowired
+  UGTheoryMarksManager mUGTheoryMarksManager;
+
+  @Autowired
+  UGSessionalMarksManager mUGSessionalMarksManager;
 
   /***
    * Enroll students of particular program to new Semester
@@ -84,6 +96,14 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
     if (currentEnrollmentFromTo != null) {
 
+      Syllabus syllabus = mSemesterSyllabusMapManager.getSyllabusForSemester(pNewSemesterId, pProgramId, pToYear, pToAcademicSemester);
+      List<Course> mandatoryCourseList = null, mandatoryTheoryCourse = null, mandatorySessionalCourse = null;
+      if (syllabus != null) {
+        mandatoryCourseList = mCourseManager.getMandatoryCourses(syllabus.getId(), pToYear, pToAcademicSemester);
+        mandatoryTheoryCourse = mCourseManager.getMandatoryTheoryCourses(syllabus.getId(), pToYear, pToAcademicSemester);
+        mandatorySessionalCourse = mCourseManager.getMandatorySesssionalCourses(syllabus.getId(), pToYear, pToAcademicSemester);
+      }
+
       if (pType == SemesterEnrollment.Type.TEMPORARY) {
 
         MutableSemesterEnrollment semesterEnrollment = new PersistentSemesterEnrollment();
@@ -100,6 +120,9 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         if (studentRecords.size() > 0) {
           List<MutableStudent> mutableStudents = new ArrayList<>();
           List<MutableStudentRecord> mutableStudentRecords = new ArrayList<>();
+          List<MutableUGRegistrationResult> registrationResults = new ArrayList<>();
+          List<MutableUGTheoryMarks> ugTheoryMarks = new ArrayList<>();
+          List<MutableUGSessionalMarks> ugSessionalMarks = new ArrayList<>();
 
           for (StudentRecord studentRecord : studentRecords) {
             MutableStudentRecord mutableStudentRecord = new PersistentStudentRecord();
@@ -118,11 +141,23 @@ public class EnrollmentServiceImpl implements EnrollmentService {
             mutableStudent.setCurrentAcademicSemester(currentEnrollmentFromTo.getToSemester());
             mutableStudents.add(mutableStudent);
 
+            insertRegistrationResult(mandatoryCourseList, pNewSemesterId, studentRecord.getStudentId(),
+                ExamType.SEMESTER_FINAL, UGBaseRegistration.Status.UNKNOWN, registrationResults);
+
+            insertTheoryMarks(mandatoryTheoryCourse, pNewSemesterId, studentRecord.getStudentId(),
+                ExamType.SEMESTER_FINAL, UGBaseRegistration.Status.UNKNOWN, ugTheoryMarks);
+
+            insertSessionalMarks(mandatorySessionalCourse, pNewSemesterId, studentRecord.getStudentId(),
+                ExamType.SEMESTER_FINAL, UGBaseRegistration.Status.UNKNOWN, ugSessionalMarks);
+
             totalEnrolledStudent++;
           }
 
           mStudentRecordManager.create(mutableStudentRecords);
           mStudentManager.update(mutableStudents);
+          mUGRegistrationResultManager.create(registrationResults);
+          mUGTheoryMarksManager.create(ugTheoryMarks);
+          mUGSessionalMarksManager.create(ugSessionalMarks);
         }
       } else {
          /*
@@ -150,6 +185,10 @@ public class EnrollmentServiceImpl implements EnrollmentService {
           totalEnrolledStudent += temporaryEnrolledStudentRecords.size();
 
         } else {
+          List<MutableUGRegistrationResult> registrationResults = new ArrayList<>();
+          List<MutableUGTheoryMarks> ugTheoryMarks = new ArrayList<>();
+          List<MutableUGSessionalMarks> ugSessionalMarks = new ArrayList<>();
+
           List<StudentRecord> previousSemesterStudentRecords = mStudentRecordManager.getStudentRecords(pProgramId,
               previousSemester.getId(), currentEnrollmentFromTo.getFromYear(), currentEnrollmentFromTo.getFromSemester());
           if (previousSemesterStudentRecords.size() > 0) {
@@ -170,13 +209,36 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                 mutableStudentRecord.setType(StudentRecord.Type.REGULAR);
                 mutableStudent.setEnrollmentType(Student.EnrollmentType.ACTUAL);
               } else if (previousSemesterRecord.getStatus() == StudentRecord.Status.FAILED) {
-                mutableStudentRecord.setType(StudentRecord.Type.REGULAR);
+                mutableStudentRecord.setType(StudentRecord.Type.READMISSION_REQUIRED);
                 mutableStudentRecord.setYear(previousSemesterRecord.getYear());
                 mutableStudentRecord.setAcademicSemester(previousSemesterRecord.getAcademicSemester());
 
                 mutableStudent.setEnrollmentType(Student.EnrollmentType.ACTUAL);
                 mutableStudent.setCurrentYear(previousSemesterRecord.getYear());
                 mutableStudent.setCurrentAcademicSemester(previousSemesterRecord.getAcademicSemester());
+
+                //remove from ug_registration_result, ug_theory_marks, ug_sessional_marks
+                MutableUGRegistrationResult registrationResult = new PersistentUGRegistrationResult();
+                registrationResult.setStudentId(studentRecord.getStudentId());
+                registrationResult.setSemesterId(pNewSemesterId);
+                registrationResult.setExamType(ExamType.SEMESTER_FINAL);
+                registrationResult.setStatus(UGBaseRegistration.Status.UNKNOWN);
+                registrationResults.add(registrationResult);
+
+
+                MutableUGTheoryMarks theoryMarks = new PersistentUGTheoryMarks();
+                theoryMarks.setStudentId(studentRecord.getStudentId());
+                theoryMarks.setSemesterId(pNewSemesterId);
+                theoryMarks.setExamType(ExamType.SEMESTER_FINAL);
+                theoryMarks.setStatus(UGBaseRegistration.Status.UNKNOWN);
+                ugTheoryMarks.add(theoryMarks);
+
+                MutableUGSessionalMarks sessionalMarks = new PersistentUGSessionalMarks();
+                sessionalMarks.setStudentId(studentRecord.getStudentId());
+                sessionalMarks.setSemesterId(pNewSemesterId);
+                sessionalMarks.setExamType(ExamType.SEMESTER_FINAL);
+                sessionalMarks.setStatus(UGBaseRegistration.Status.UNKNOWN);
+                ugSessionalMarks.add(sessionalMarks);
               }
 
               mutableStudentRecords.add(mutableStudentRecord);
@@ -186,6 +248,12 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
             mStudentRecordManager.update(mutableStudentRecords);
             mStudentManager.update(mutableStudents);
+            if(registrationResults.size() > 0){
+              mUGRegistrationResultManager.delete(registrationResults);
+              mUGSessionalMarksManager.delete(ugSessionalMarks);
+              mUGTheoryMarksManager.delete(ugTheoryMarks);
+            }
+
           }
         }
       }
@@ -294,5 +362,47 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
     mStudentRecordManager.update(mutableStudentRecords);
     mStudentManager.update(mutableStudents);
+  }
+
+  private void insertRegistrationResult(List<Course> pCourses, Integer pSemesterId, String pStudentId,
+                                        ExamType pExamType, UGBaseRegistration.Status pStatus,
+                                        List<MutableUGRegistrationResult> pRegistrationResults) {
+    for (Course course : pCourses) {
+      MutableUGRegistrationResult registrationResult = new PersistentUGRegistrationResult();
+      registrationResult.setStudentId(pStudentId);
+      registrationResult.setCourseId(course.getId());
+      registrationResult.setSemesterId(pSemesterId);
+      registrationResult.setExamType(pExamType);
+      registrationResult.setStatus(pStatus);
+      pRegistrationResults.add(registrationResult);
+    }
+  }
+
+  private void insertTheoryMarks(List<Course> pCourses, Integer pSemesterId, String pStudentId,
+                                 ExamType pExamType, UGBaseRegistration.Status pStatus,
+                                 List<MutableUGTheoryMarks> pRegistrationResults) {
+    for (Course course : pCourses) {
+      MutableUGTheoryMarks registrationResult = new PersistentUGTheoryMarks();
+      registrationResult.setStudentId(pStudentId);
+      registrationResult.setCourseId(course.getId());
+      registrationResult.setSemesterId(pSemesterId);
+      registrationResult.setExamType(pExamType);
+      registrationResult.setStatus(pStatus);
+      pRegistrationResults.add(registrationResult);
+    }
+  }
+
+  private void insertSessionalMarks(List<Course> pCourses, Integer pSemesterId, String pStudentId,
+                                    ExamType pExamType, UGBaseRegistration.Status pStatus,
+                                    List<MutableUGSessionalMarks> pRegistrationResults) {
+    for (Course course : pCourses) {
+      MutableUGSessionalMarks registrationResult = new PersistentUGSessionalMarks();
+      registrationResult.setStudentId(pStudentId);
+      registrationResult.setCourseId(course.getId());
+      registrationResult.setSemesterId(pSemesterId);
+      registrationResult.setExamType(pExamType);
+      registrationResult.setStatus(pStatus);
+      pRegistrationResults.add(registrationResult);
+    }
   }
 }

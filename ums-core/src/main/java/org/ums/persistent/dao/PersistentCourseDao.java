@@ -149,6 +149,24 @@ public class PersistentCourseDao extends CourseDaoDecorator {
     return mJdbcTemplate.query(query, new Object[]{pSemesterId, pProgramId, pYear, pSemester}, new CourseRowMapper());
   }
 
+  @Override
+  public List<Course> getMandatoryCourses(String pSyllabusId, final Integer pYear, final Integer pSemester) {
+    String query = SELECT_ALL + "Where Syllabus_Id=? And Course_Category=" + CourseCategory.MANDATORY.getValue() + " AND YEAR = ? AND SEMESTER = ? Order By Course_No ";
+    return mJdbcTemplate.query(query, new Object[]{pSyllabusId, pYear, pSemester}, new CourseRowMapper());
+  }
+
+  @Override
+  public List<Course> getMandatoryTheoryCourses(String pSyllabusId, final Integer pYear, final Integer pSemester) {
+    String query = SELECT_ALL + "Where Syllabus_Id=? And Course_Type=" + CourseType.THEORY.getValue() + " AND YEAR = ? AND SEMESTER = ? Order By Course_No ";
+    return mJdbcTemplate.query(query, new Object[]{pSyllabusId, pYear, pSemester}, new CourseRowMapper());
+  }
+
+  @Override
+  public List<Course> getMandatorySesssionalCourses(String pSyllabusId, final Integer pYear, final Integer pSemester) {
+    String query = SELECT_ALL + "Where Syllabus_Id=? And" +
+        " (COURSE_TYPE = " + CourseType.THESIS_PROJECT.getValue() + " OR Course_Type=" + CourseType.SESSIONAL.getValue() + ") AND YEAR = ? AND SEMESTER = ? Order By Course_No ";
+    return mJdbcTemplate.query(query, new Object[]{pSyllabusId, pYear, pSemester}, new CourseRowMapper());
+  }
 
   class CourseRowMapper implements RowMapper<Course> {
     @Override

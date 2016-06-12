@@ -1,7 +1,7 @@
 package org.ums.decorator;
 
-import org.ums.domain.model.mutable.MutableCourse;
 import org.ums.domain.model.immutable.Course;
+import org.ums.domain.model.mutable.MutableCourse;
 import org.ums.manager.CourseManager;
 
 import java.util.List;
@@ -48,5 +48,18 @@ public class CourseDaoDecorator extends ContentDaoDecorator<Course, MutableCours
     return getManager().getApprovedCallForApplicationCourseList(pSemesterId, pProgramId,pYear, pSemester);
   }
 
+  @Override
+  public List<Course> getMandatoryCourses(String pSyllabusId, final Integer pYear, final Integer pSemester) {
+    return getManager().getMandatoryCourses(pSyllabusId, pYear, pSemester);
+  }
 
+  @Override
+  public List<Course> getMandatoryTheoryCourses(String pSyllabusId, final Integer pYear, final Integer pSemester) {
+    return getManager().getMandatoryTheoryCourses(pSyllabusId, pYear, pSemester);
+  }
+
+  @Override
+  public List<Course> getMandatorySesssionalCourses(String pSyllabusId, final Integer pYear, final Integer pSemester) {
+    return getManager().getMandatorySesssionalCourses(pSyllabusId, pYear, pSemester);
+  }
 }

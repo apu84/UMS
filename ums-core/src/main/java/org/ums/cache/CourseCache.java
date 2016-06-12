@@ -66,4 +66,23 @@ public class CourseCache extends ContentCache<Course, MutableCourse, String, Cou
     return getManager().getApprovedCallForApplicationCourseList(pSemesterId, pProgramId, pYear, pSemester);
   }
 
+  @Override
+  public List<Course> getMandatoryCourses(String pSyllabusId, final Integer pYear, final Integer pSemester) {
+    return getManager().getMandatoryCourses(pSyllabusId, pYear, pSemester);
+  }
+
+  @Override
+  public List<Course> getAll() throws Exception {
+    return super.getAll();
+  }
+
+  @Override
+  public List<Course> getMandatorySesssionalCourses(String pSyllabusId, final Integer pYear, final Integer pSemester) {
+    return getManager().getMandatorySesssionalCourses(pSyllabusId, pYear, pSemester);
+  }
+
+  @Override
+  public List<Course> getMandatoryTheoryCourses(String pSyllabusId, final Integer pYear, final Integer pSemester) {
+    return getManager().getMandatoryTheoryCourses(pSyllabusId, pYear, pSemester);
+  }
 }
