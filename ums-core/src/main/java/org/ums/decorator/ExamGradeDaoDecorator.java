@@ -1,5 +1,6 @@
 package org.ums.decorator;
 
+import org.ums.domain.model.dto.GradeChartDataDto;
 import org.ums.domain.model.dto.MarksSubmissionStatusDto;
 import org.ums.domain.model.dto.StudentGradeDto;
 import org.ums.domain.model.immutable.ExamGrade;
@@ -19,6 +20,10 @@ public class ExamGradeDaoDecorator  extends ContentDaoDecorator<ExamGrade, Mutab
         return getManager().getAllGradeForTheoryCourse(semesterId,courseId, examType);
     }
 
+    @Override
+    public List<GradeChartDataDto> getTheoryChartData(int semesterId,String courseId, int examType) throws Exception {
+        return getManager().getTheoryChartData(semesterId,courseId, examType);
+    }
     @Override
     public MarksSubmissionStatusDto getMarksSubmissionStatus(int semesterId,String courseId, int examType) throws Exception {
         return getManager().getMarksSubmissionStatus(semesterId,courseId, examType);

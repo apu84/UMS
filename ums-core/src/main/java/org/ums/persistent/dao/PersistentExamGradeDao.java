@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.ExamGradeDaoDecorator;
 import org.ums.domain.model.dto.CourseTeacherDto;
+import org.ums.domain.model.dto.GradeChartDataDto;
 import org.ums.domain.model.dto.MarksSubmissionStatusDto;
 import org.ums.domain.model.dto.StudentGradeDto;
 import org.ums.domain.model.immutable.Course;
@@ -107,30 +108,30 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
         "Union " +
         "Select 'CoE' Role, 2 Serial From ADDITIONAL_ROLE_PERMISSIONS Where User_Id=?  And Role_Id=71";
 
-    static String CHART_DATA="Select Grade_Letter,sum(Students) Students From  " +
-        "( " +
-        "select Grade_Letter,Count(Student_Id) Students From UG_THEORY_MARKS Where Semester_Id=? And Course_Id=? and Exam_Type=? Group by Grade_Letter " +
-        "Union " +
-        "Select 'A+' Grade_Letter, 0 Students From Dual " +
-        "Union " +
-        "Select 'A' Grade_Letter, 0 Students From Dual " +
-        "Union " +
-        "Select 'A-' Grade_Letter, 0 Students From Dual " +
-        "Union " +
-        "Select 'B+' Grade_Letter, 0 Students From Dual " +
-        "Union " +
-        "Select 'B' Grade_Letter, 0 Students From Dual " +
-        "Union " +
-        "Select 'B-' Grade_Letter, 0 Students From Dual " +
-        "Union " +
-        "Select 'C+' Grade_Letter, 0 Students From Dual " +
-        "Union " +
-        "Select 'C' Grade_Letter, 0 Students From Dual " +
-        "Union " +
-        "Select 'D' Grade_Letter, 0 Students From Dual " +
-        "Union " +
-        "Select 'F' Grade_Letter, 0 Students From Dual " +
-        ")Tmp Group by Grade_Letter Order by Decode(Grade_Letter,'A+',1,'A',2,'A-',3,'B+',4,'B',5,'B-',6,'C+',7,'C',8,'D',9,'F',10) " ;
+    static String THEORY_CHART_DATA="Select Grade_Letter,sum(Total) Total, max(Color) Color From   " +
+        "(  " +
+        "select Grade_Letter,Count(Total) Total,'' Color From UG_THEORY_MARKS Where Semester_Id=? And Course_Id=? and Exam_Type=? Group by Grade_Letter  " +
+        "Union  " +
+        "Select 'A+' Grade_Letter, 0 Total, '#FF0F00' Color From Dual  " +
+        "Union  " +
+        "Select 'A' Grade_Letter, 0 Total, '#FF6600' Color From Dual  " +
+        "Union  " +
+        "Select 'A-' Grade_Letter, 0 Total, '#FF9E01' Color From Dual  " +
+        "Union  " +
+        "Select 'B+' Grade_Letter, 0 Total, '#FCD202' Color From Dual  " +
+        "Union  " +
+        "Select 'B' Grade_Letter, 0 Total, '#F8FF01' Color From Dual  " +
+        "Union  " +
+        "Select 'B-' Grade_Letter, 0 Total, '#B0DE09' Color From Dual  " +
+        "Union  " +
+        "Select 'C+' Grade_Letter, 0 Total, '#04D215' Color From Dual  " +
+        "Union  " +
+        "Select 'C' Grade_Letter, 0 Total, '#0D8ECF' Color From Dual  " +
+        "Union  " +
+        "Select 'D' Grade_Letter, 0 Total, '#0D52D1' Color From Dual  " +
+        "Union  " +
+        "Select 'F' Grade_Letter, 0 Total, '#2A0CD0' Color From Dual  " +
+        ")Tmp Group by Grade_Letter Order by Decode(Grade_Letter,'A+',1,'A',2,'A-',3,'B+',4,'B',5,'B-',6,'C+',7,'C',8,'D',9,'F',10)  " ;
 
     private JdbcTemplate mJdbcTemplate;
 
@@ -144,6 +145,13 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
         String query = SELECT_THEORY_MARKS + ORDER_BY;
         return mJdbcTemplate.query(query, new StudentMarksRowMapper());
     }
+
+    @Override
+    public List<GradeChartDataDto> getTheoryChartData(int pSemesterId,String pCourseId,int pExamType) throws Exception {
+        String query = THEORY_CHART_DATA;
+        return mJdbcTemplate.query(query, new ChartDataRowMapper());
+    }
+
 
     @Override
     public MarksSubmissionStatusDto getMarksSubmissionStatus(int pSemesterId,String pCourseId,int pExamType) throws Exception {
@@ -194,6 +202,18 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
     public int updateCourseMarksSubmissionStatus(int pSemesterId,String pCourseId,int pExamType,CourseMarksSubmissionStatus status) throws Exception {
         String query = UPDATE_MARKS_SUBMISSION_STATUS;
         return mJdbcTemplate.update(query,status.getId(), pSemesterId,pCourseId,pExamType);
+    }
+
+    class ChartDataRowMapper implements RowMapper<GradeChartDataDto> {
+        @Override
+        public GradeChartDataDto mapRow(ResultSet resultSet, int i) throws SQLException {
+            GradeChartDataDto data = new GradeChartDataDto();
+            data.setGradeLetter(resultSet.getString("GRADE_LETTER"));
+            data.setTotal(resultSet.getInt("TOTAL"));
+            data.setColor(resultSet.getString("COLOR"));
+            AtomicReference<GradeChartDataDto> atomicReference = new AtomicReference<>(data);
+            return atomicReference.get();
+        }
     }
 
     class StudentMarksRowMapper implements RowMapper<StudentGradeDto> {

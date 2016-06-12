@@ -122,7 +122,7 @@
                 <div id='outer_container' style="position: absolute;top: 40px; right: 40px;">
                     <a class="menu_button" href="javascript:void(0)" title="Toggle"><span>Menu Toggle</span></a>
                     <ul class="menu_option">
-                        <li><a href="#" style="background: #ea4c3a"><span style="background-image:  url('https://localhost/ums-web/iums/vendors/pieMenu/pdf-256.png')">Item</span></a></li>
+                        <li><a href="javascript:void(0)" data-ng-click="downloadPdf()"  style="background: #ea4c3a"><span style="background-image:  url('https://localhost/ums-web/iums/vendors/pieMenu/pdf-256.png')">Item</span></a></li>
                         <li><a href="#" style="background: transparent;"><span style="background-image:  url('https://localhost/ums-web/iums/vendors/pieMenu/chart.png')">Item</span></a></li>
                         <li><a href="javascript:void(0)" data-target="#modal-prompt" data-toggle="modal" style="background: transparent;">
                             <span style="background-image:  url('https://localhost/ums-web/iums/vendors/pieMenu/excel-paste.png')">Item</span></a></li>
@@ -148,20 +148,21 @@
                     <tr>
                         <td  style="height: 30px;"><b>Credit Hour :</b></td>
                         <td>1.5 <a href="Javascript:void(0)" data-ng-click="fetchGradeSheet()">Reload</a></td>
-                        <td><b>Total Part :</b></td>
+                        <td><b>Total Part <span data-ng-if="(gradeSubmissionStatus !='0')">({{data.total_part}})</span> :</b></td>
                         <td>
                             <select id="total_part" data-ng-model="data.total_part" data-ng-change="onTotalPartChange()"   style="float: left;border:1px solid grey;text-align: center;height: 22px;" data-ng-if="(gradeSubmissionStatus =='0' && currentActor=='preparer')" data-convert-to-number>
                                 <option value="1">&nbsp;1&nbsp;</option>
                                 <option value="2">&nbsp;2&nbsp;</option>
                             </select>
-                            <span data-ng-if="(gradeSubmissionStatus !='0' || currentActor!='preparer')">{{total_part}}</span>
 
-                            <div style="float: left;margin-left: 10px;display: none;" id="partDiv">
-                                &nbsp;&nbsp;&nbsp;&nbsp;
+
+                            <div style="float: left;display: none;" id="partDiv">
                             Part-A  <input type="text" style="width: 50px;border:1px solid grey;text-align: center;" data-ng-model="data.part_a_total"  data-ng-if="(gradeSubmissionStatus =='0' && currentActor=='preparer')"/>
                                     <span data-ng-if="(gradeSubmissionStatus !='0' || currentActor!='preparer')">{{data.part_a_total}}</span>&nbsp;&nbsp;
+                            <span data-ng-if="(data.total_part=='2')">
                             Part-B  <input type="text" style="width: 50px;border:1px solid grey;text-align: center;" data-ng-model="data.part_b_total" data-ng-if="(gradeSubmissionStatus =='0' && currentActor=='preparer')"/>
-                                    <span data-ng-if="(gradeSubmissionStatus !='0' || currentActor!='preparer')">{{data.part_a_total}}</span>
+                                    <span data-ng-if="(gradeSubmissionStatus !='0' || currentActor!='preparer')">{{data.part_b_total}}</span>
+                            </span>
                             </div>
 
                         </td>
@@ -353,6 +354,11 @@
                             </tbody>
                         </table>
                     </scrollable-table>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-default btn-square" onclick='goBack()'>Back to Grade Sheet Selection</button>
+                        </div>
+                    </div>
                 </div>
 
                 <div ng-if="recheckCandidatesGrades.length >0 &&  ((gradeSubmissionStatus =='2' || gradeSubmissionStatus =='4' || gradeSubmissionStatus =='6') && currentActor=='preparer')">
@@ -429,7 +435,7 @@
                 <!-- End of Recheck Candidates Grades -->
 
                 <!-- Start of Submitted Grades -->
-                <div ng-if="submittedGrades.length>0  &&  ((currentActor=='scrutinizer' && gradeSubmissionStatus !='1') || (currentActor!='scrutinizer' && gradeSubmissionStatus =='0')) ">
+                <div ng-if="submittedGrades.length>0  &&  ((currentActor=='scrutinizer' && gradeSubmissionStatus !='1') || (currentActor!='scrutinizer')) ">
                     <div class="btn btn-blue reportrange" style="margin-top: 20px;">
                         <i class="fa fa-check-circle-o"></i>
                         <span style="padding-right: 100px;">Submitted Grades</span>
@@ -464,11 +470,17 @@
                             </tbody>
                         </table>
                     </scrollable-table>
+                    <br/><br/>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-default btn-square" onclick='goBack()'>Back to Grade Sheet Selection</button>
+                        </div>
+                    </div>
                 </div>
                 <!-- End of Submitted Grades -->
 
                 <!-- Start of Scrutnized Grades -->
-                <div ng-if="scrutinizedGrades.length">
+                <div ng-if="scrutinizedGrades.length>0  &&  ((currentActor=='head' && gradeSubmissionStatus !='3') || (currentActor!='head')) ">
                     <div class="btn btn-blue reportrange" style="margin-top: 20px;">
                         <i class="fa fa-check-circle-o"></i>
                         <span style="padding-right: 100px;">Scrutinized Grades</span>
@@ -503,6 +515,12 @@
                             </tbody>
                         </table>
                     </scrollable-table>
+                    <br/><br/>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-default btn-square" onclick='goBack()'>Back to Grade Sheet Selection</button>
+                        </div>
+                    </div>
                 </div>
                 <!-- End of Scrutinized Grades -->
 
@@ -542,6 +560,12 @@
                             </tbody>
                         </table>
                     </scrollable-table>
+                    <br/><br/>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-default btn-square" onclick='goBack()'>Back to Grade Sheet Selection</button>
+                        </div>
+                    </div>
                 </div>
                 <!-- End of Approved Grades -->
 
@@ -580,6 +604,12 @@
                             </tbody>
                         </table>
                     </scrollable-table>
+                    <br/><br/>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-default btn-square" onclick='goBack()'>Back to Grade Sheet Selection</button>
+                        </div>
+                    </div>
                 </div>
                 <!-- End  of Accepted Grades -->
 
@@ -747,8 +777,6 @@
         </div>
     </div>
 </div>
-
-<div data-ng-click="downloadPdf()">Click Here....</div>
 
 <!--Modal Prompt-->
 <div id="modal-prompt" tabindex="-1" role="dialog" aria-labelledby="modal-prompt-label"

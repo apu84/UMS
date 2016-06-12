@@ -587,7 +587,7 @@ module ums {
         part_a_total: 0,
         part_b_total: 0
       };
-      alert(this.$scope.data.part_a_total);
+      //alert(this.$scope.data.part_a_total);
       courseInfo.course_id = "EEE1101_S2014_110500";
       courseInfo.semester_id = 11012016;
       courseInfo.exam_type = 1;
@@ -690,6 +690,7 @@ module ums {
       this.httpClient.put(url, complete_json, 'application/json')
           .success(() => {
             $.notific8("Successfully Saved");
+            this.fetchGradeSheet();
             /* if(statusId==1)
              this.$scope.optional.applicationStatus="Submitted";
              else

@@ -506,12 +506,32 @@ module ums {
         .state('gradeSheetSelectionHead', {
           url: "/gradeSheetSelectionHead/:1",
           templateUrl: 'views/grade/grade-sheet-selection.html',
-          controller: 'MarksSubmission'
+          controller: 'MarksSubmission',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: [
+                  'vendors/amcharts/amcharts.js',
+                  'vendors/amcharts/serial.js'
+                ]
+              });
+            }]
+          }
         })
         .state('gradeSheetSelectionCoE', {
           url: "/gradeSheetSelectionCoE/:1",
           templateUrl: 'views/grade/grade-sheet-selection.html',
-          controller: 'MarksSubmission'
+          controller: 'MarksSubmission',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: [
+                  'vendors/amcharts/amcharts.js',
+                  'vendors/amcharts/serial.js'
+                ]
+              });
+            }]
+          }
         })
         .state('loggerGrid', {
           url: "/loggerGrid",
