@@ -204,11 +204,8 @@
             <h1>Please Create an Exam Rroutine first for {{semesterId}} !!!!!!</h1>
         </div>
 
-        <br>
-        <br>
-        <hr>
-        <hr>
-        <hr>
+       <br>
+
 
         <div data-ng-if="seatPlanGroupList.length>0 && showGroupOrNot==true">
             <div class="row">
@@ -249,7 +246,7 @@
     </div>
 </div>
 
-<ul class="custom-menu">
+<ul class="custom-menu" >
     <li data-action="split">Split</li>
     <li data-action="revertSplit">Revert Split</li>
     <li data-action="merge">Merge</li>
@@ -309,9 +306,9 @@
                     <br>
                     <button data-ng-click="generateSubGroups(subGroupNumber)">Generate Sub-groups</button>
 
-                    <a data-ng-click="createOrViewSubgroups(1)" href="javascript:void(0)">Group 1</a> |
+                   <!-- <a data-ng-click="createOrViewSubgroups(1)" href="javascript:void(0)">Group 1</a> |
                     <a data-ng-click="createOrViewSubgroups(2)" href="javascript:void(0)">Group 2</a> |
-                    <a data-ng-click="createOrViewSubgroups(3)" href="javascript:void(0)">Group 3</a>
+                    <a data-ng-click="createOrViewSubgroups(3)" href="javascript:void(0)">Group 3</a>-->
 
                 </div>
                 <hr>
@@ -448,7 +445,7 @@
 
                 </div>
 
-                <div class="row" data-ng-if="colForSubGroup!=9999 " data-ng-show="subGroupFound==false">
+                <div class="row" data-ng-if="colForSubgroup!=9999"  data-ng-show="subGroupFound==false  ">
                     <div class="col-md-2" data-ng-show="colForSubgroup>=1">
                         <p><b>Sub Group 1</b> </p>
 
@@ -478,7 +475,7 @@
 
 
                 </div>
-                <div class="row" data-ng-if="colForSubGroup!=9999 " data-ng-show="subGroupFound==false">
+                <div class="row"  data-ng-if="colForSubgroup!=9999"  data-ng-show="subGroupFound==false">
                     <div class="col-md-2">
                         <ul id="droppable1" class="connectedSortable col-md-2" data-ng-show="colForSubgroup>=1"  >
                         </ul>
@@ -536,7 +533,7 @@
         <div class="row" align="center">
             <button type="button" class="btn btn-info" data-ng-click="saveSubGroup(selectedGroupNo)" data-ng-if="saveSubGroupInfo">Save </button>
             <button type="button" class="btn btn-info" data-ng-click="editSavedSubGroup(selectedGroupNo)" data-ng-if="editSubGroup">Edit </button>
-            <!--<button type="button" class="btn btn-info" data-ng-click="cancelEditedSubGroup()" data-ng-if="cancelSubGroup">Cancel</button>-->
+            <!--<button type="button" class="btn btn-info" data-ng-click="makeSortableCancel()" data-ng-if="cancelSubGroup">Cancel</button>-->
             <button type="button" class="btn btn-info" data-ng-click="createNewSubGroup(selectedGroupNo)" data-ng-if="deleteAndCreateNewSubGroup">Re-Create</button>
 
 
