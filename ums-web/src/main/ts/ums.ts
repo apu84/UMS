@@ -9,7 +9,8 @@ module ums {
     'LocalStorageModule',
     'ngCookies',
     'ngSanitize',
-    'scrollable-table'
+    'scrollable-table',
+    'amChartsDirective'
   ]);
 
   UMS.constant("appConstants", Constants.Default());
