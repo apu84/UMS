@@ -51,7 +51,7 @@
         padding: 0 0 0 0;
         float: left;
         margin-right: 10px;}
-    #sortable1,#sortable2,#sortable3,#sortable4,#sortable5,#sortable6 {
+    #sortable1,#sortable2,#sortable3,#sortable4,#sortable5,#sortable6,#sortable0 {
         border: 1px solid #eee;
         width: 142px;
         min-height: 20px;
@@ -70,7 +70,7 @@
         background-color: lightslategray;
         color: white;
     }
-    #sortable1 li,#sortable2 li,#sortable3 li,#sortable4 li,#sortable6 li,#sortable5 li{
+    #sortable1 li,#sortable0 li,#sortable2 li,#sortable3 li,#sortable4 li,#sortable6 li,#sortable5 li{
         border-radius: 25px;
         border: 2px solid #73AD21;
         margin: 0 5px 5px 5px;
@@ -230,7 +230,7 @@
     </div>
 </div>
 
-<ul class="custom-menu" data-ng-show="showContextMenu">
+<ul class="custom-menu" >
     <li data-action="split">Split</li>
     <li data-action="revertSplit">Revert Split</li>
     <li data-action="merge">Merge</li>
@@ -266,15 +266,29 @@
                 </ul>
 
 
-                <ul subGroupSortable data-ng-repeat="group in tempGroupListAll track by group.id "   id="sortable"  class="connectedSortable"  >
-                    <li class="ui-state-default" id="{{group.id}}" data-ng-if="group.found==false" >
+                <ul subGroupSortable data-ng-repeat="group in tempGroupList track by group.id"   id="sortable"  class="connectedSortable"  data-ng-if="recreate==false && subGroupFound==false">
+                    <li class="ui-state-default" id="{{group.id}}" >
                         <div>
-                           {{group.id}}- {{group.programName}}:{{group.year}}/{{group.semester}} ({{group.studentNumber}})
+                            {{group.id}}- {{group.programName}}:{{group.year}}/{{group.semester}} ({{group.studentNumber}})
                         </div>
                         <div data-ng-show="group.showSubPortion">
                             <hr>
                             Split size: <input  data-ng-model="splitNumber" style="width:40px;color: black "  />
                             <button data-ng-click="splitAction(splitNumber)" style="color: black">Split</button><button data-ng-click="cancelSplitAction(group.id)" style="color: black">cancel</button>
+                            <br>
+                        </div>
+                    </li>
+                </ul>
+                <ul id="sortable0" class="connectedSortable " data-ng-if="subGroupList.length>=0 && subGroupFound">
+
+                    <li class="ui-state-default" id="{{member.id}}" data-ng-repeat="member in subGroupWithDeptMap[6] track by member.id  " data-ng-if="member.id!=''">
+                        <div>
+                            {{member.id}}-{{member.programName}}:{{member.year}}/{{member.semester}} ({{member.studentNumber}})
+                        </div>
+                        <div data-ng-show="member.showSubPortion">
+                            <hr>
+                            Split size: <input  data-ng-model="splitNumber" style="width:40px;color: black "  />
+                            <button data-ng-click="splitAction(splitNumber)" style="color: black">Split</button><button data-ng-click="cancelSplitAction(member.id)" style="color: black">cancel</button>
                             <br>
                         </div>
                     </li>
@@ -315,7 +329,7 @@
                                 <p><b>Sub Group 1</b></p>
                                 <li class="ui-state-default" id="{{member.id}}" data-ng-repeat="member in subGroupWithDeptMap[0] track by member.id  " data-ng-if="member.id!=''">
                                     <div>
-                                       {{member.id}}-{{member.programName}}:{{member.year}}/{{member.semester}} ({{member.studentNumber}})
+                                        {{member.id}}-{{member.programName}}:{{member.year}}/{{member.semester}} ({{member.studentNumber}})
                                     </div>
                                     <div data-ng-show="member.showSubPortion">
                                         <hr>
@@ -498,7 +512,7 @@
 
 
                         <div   data-ng-repeat="subGroup in subGroupList">
-                            <p data-ng-if="subGroup.subGroupNumber<= colForSubgroup " class="col-md-2" ><!--Sub Group {{subGroup.subGroupNumber}}--> total Student:{{subGroup.subGroupTotalStudentNumber}}</p>
+                            <p data-ng-if="subGroup.subGroupNumber<= colForSubgroup && subGroup.subGroupNumber!=7" class="col-md-2" ><!--Sub Group {{subGroup.subGroupNumber}}--> total Student:{{subGroup.subGroupTotalStudentNumber}}</p>
                         </div>
 
 

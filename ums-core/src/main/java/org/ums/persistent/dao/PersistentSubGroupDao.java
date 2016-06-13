@@ -68,7 +68,7 @@ public class PersistentSubGroupDao extends SubGroupDaoDecorator{
 
   @Override
   public int getSubGroupNumberOfAGroup(int pSemesterId, int pExamType, int pGroupNo) {
-    String query = "select count(distinct sub_group_no) from sp_sub_group where group_no=? and semester_id=? and exam_type=?";
+    String query = "select count(distinct sub_group_no) from sp_sub_group where group_no=? and semester_id=? and exam_type=? and sub_group_no!=7";
     return mJdbcTemplate.queryForObject(query,Integer.class,pGroupNo,pSemesterId,pExamType);
   }
 
