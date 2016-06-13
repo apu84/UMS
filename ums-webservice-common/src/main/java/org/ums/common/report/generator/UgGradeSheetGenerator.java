@@ -28,13 +28,11 @@ public class UgGradeSheetGenerator {
 
   /**
    * Creates a PDF document.
-   * @param filename the path to the new PDF document
    * @throws    DocumentException
    * @throws    IOException
    */
-  public void createPdf(OutputStream outputStream,String filename)
+  public void createPdf(OutputStream outputStream)
       throws DocumentException, IOException,Exception {
-
 
     // step 1
     Document document = new Document();
@@ -52,7 +50,9 @@ public class UgGradeSheetGenerator {
     List<StudentGradeDto> gradeList=examGradeManager.getAllGradeForTheoryCourse(11012016,"EEE1101_S2014_110500",1);
 
     document.open();
-    for (int i=0;i<(gradeList.size()/90)+1;i++) {
+    for (int i=0;i<(gradeList.size()/90);i++) {
+      if(i!=0)
+        document.newPage();
       PdfPTable mainTable=getMainTable();
       PdfPCell cell = new PdfPCell(getSubTableHeader());
       cell.setPadding(0);
@@ -84,7 +84,7 @@ public class UgGradeSheetGenerator {
 
       document.add(mainTable);
 
-      document.newPage();
+
     }
     // step 4
 

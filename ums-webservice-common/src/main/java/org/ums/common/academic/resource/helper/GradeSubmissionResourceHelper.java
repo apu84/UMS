@@ -89,10 +89,6 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
         object.add("current_course_status",marksSubmissionStatusDto.getStatusId());
 
 
-//        JsonArrayBuilder recheckListArrayBuilder = Json.createArrayBuilder();
-//        JsonArrayBuilder waitingForScrutinyArrayBuilder=Json.createArrayBuilder();
-//        JsonArrayBuilder waitingForHeadApprovalArrayBuilder=Json.createArrayBuilder();
-//        JsonArrayBuilder waitingForCoEApprovalArrayBuilder=Json.createArrayBuilder();
 
         JsonArrayBuilder noneAndSubmitArrayBuilder = Json.createArrayBuilder();
 
@@ -107,7 +103,7 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
         JsonArrayBuilder approvedArrayBuilder = Json.createArrayBuilder();
         JsonArrayBuilder acceptedArrayBuilder = Json.createArrayBuilder();
 
-
+        JsonArrayBuilder recheckAcceptedArrayBuilder = Json.createArrayBuilder();
 
         StudentMarksSubmissionStatus gradeStatus;
         CourseMarksSubmissionStatus courseStatus;
@@ -152,6 +148,11 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
                 scrutinizedArrayBuilder.add(object1);
             else if((gradeStatus == StudentMarksSubmissionStatus.APPROVED  ||  gradeStatus == StudentMarksSubmissionStatus.ACCEPT)  ) //&& !currentActor.equalsIgnoreCase("coe")
                 approvedArrayBuilder.add(object1);
+            else if(gradeStatus == StudentMarksSubmissionStatus.ACCEPTED ) {
+                acceptedArrayBuilder.add(object1);
+                if(gradeDto.getRecheckStatus()==RecheckStatus.RECHECK_TRUE)
+                    recheckAcceptedArrayBuilder.add(object1);
+            }
             else if(gradeStatus == StudentMarksSubmissionStatus.ACCEPTED )
                 acceptedArrayBuilder.add(object1);
 
@@ -179,6 +180,8 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
         object.add("scrutinized_grades", scrutinizedArrayBuilder);
         object.add("approved_grades", approvedArrayBuilder);
         object.add("accepted_grades", acceptedArrayBuilder);
+        object.add("recheck_accepted_grades", recheckAcceptedArrayBuilder);
+
 
 
 

@@ -23,7 +23,7 @@ import java.io.OutputStream;
 @Produces({"application/pdf"})
 public class UgGradeSheet extends Resource {
   @Autowired
-  PasswordReportGenerator mPasswordReportGenerator;
+  UgGradeSheetGenerator mUgGradeSheetGenerator;
 
   @GET
   //@Path("/single"+PATH_PARAM_OBJECT_ID)
@@ -31,7 +31,7 @@ public class UgGradeSheet extends Resource {
     return new StreamingOutput() {
       public void write(OutputStream output) throws IOException, WebApplicationException {
         try {
-          new UgGradeSheetGenerator().createPdf(output,"e://hello.pdf");
+          mUgGradeSheetGenerator.createPdf(output);
         } catch (Exception e) {
           throw new WebApplicationException(e);
         }
