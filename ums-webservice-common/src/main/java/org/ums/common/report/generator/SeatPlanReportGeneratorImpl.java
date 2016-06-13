@@ -93,13 +93,16 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
     Map<String,SpStudent> studentIdWIthStuddentInfoMap = new HashMap<>();
     Map<String,SeatPlan> roomRowColWithSeatPlanMap = new HashMap<>();
     Map<Integer,Program> programIdWithProgramInfoMap = new HashMap<>();
-
+    long startTime = System.currentTimeMillis();
     for(SeatPlan seatPlan: seatPlans){
-      roomsOfTheSeatPlan.add(seatPlan.getClassRoom().getId());
-      String roomRowCol = seatPlan.getClassRoom().getId()+""+seatPlan.getRowNo()+""+seatPlan.getColumnNo();
-      roomRowColWithSeatPlanMap.put(roomRowCol,seatPlan);
+      roomsOfTheSeatPlan.add(seatPlan.getClassRoomId());
+      /*StringBuilder sb = new StringBuilder();
+      sb.append(seatPlan.getClassRoom().getId()).append(seatPlan.getRowNo()).append(seatPlan.getColumnNo());*/
+      /*String roomRowCol =sb.toString();*/
+      roomRowColWithSeatPlanMap.put(seatPlan.getClassRoomId()+""+seatPlan.getRowNo()+""+seatPlan.getColumnNo(),seatPlan);
     }
-
+    long endTime = System.currentTimeMillis();
+    long totalTime = endTime - startTime;
     for(SpStudent student: students){
       studentIdWIthStuddentInfoMap.put(student.getId(),student);
     }
@@ -127,6 +130,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
       routineCounter+=1;
 
     }
+    long startTimeOfTheMainAlgorithm= System.currentTimeMillis();
 
     if(noSeatPlanInfo){
       Chunk c = new Chunk("No SubGroup and No Seat Plan Information in the database, create one and then come back again!",f);
@@ -146,6 +150,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
         //int checkIfRoomExists = mSeatPlanManager.checkIfExistsByRoomSemesterGroupExamType(room.getId(),pSemesterId,groupNo,type);
 
         if(checkIfRoomExistsInSeatPlan && room.getId()!=284  ){
+          long startTimeInRoom = System.currentTimeMillis();
           String roomHeader = "Room No: "+ room.getRoomNo();
           Paragraph pRoomHeader = new Paragraph(roomHeader,FontFactory.getFont(FontFactory.TIMES_BOLD,12));
           pRoomHeader.setAlignment(Element.ALIGN_CENTER);
@@ -179,7 +184,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
               int ifSeatPlanExist = mSeatPlanManager.checkIfExistsBySemesterGroupTypeRoomRowAndCol(pSemesterId,groupNo,type,room.getId(),i,j);
 
               if(seatPlanOfTheRowAndCol!=null){
-                SeatPlan seatPlan =roomRowColWithSeatPlanMap.get(room.getId()+""+i+""+j) ;
+                SeatPlan seatPlan = seatPlanOfTheRowAndCol;                                  //roomRowColWithSeatPlanMap.get(room.getId()+""+i+""+j) ;
                 SpStudent student = studentIdWIthStuddentInfoMap.get(seatPlan.getStudent().getId());
                 Program program = programIdWithProgramInfoMap.get(student.getProgram().getId());
                 String dept = program.getShortName()+" "+student.getAcademicYear()+"/"+student.getAcademicSemester();
@@ -480,8 +485,11 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
           }
 
           /*document.add(footer);*/
-
+          long endTimeInRoom = System.currentTimeMillis();
+          long totalTimeInRoom = endTimeInRoom-startTimeInRoom;
           document.newPage();
+
+
 
         }
 
@@ -493,6 +501,10 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
       }
     }
 
+    long endTimeOfTheMainAlgorithm = System.currentTimeMillis();
+    long totalTimeOfTHeMainAlgorithm = endTimeOfTheMainAlgorithm - startTimeOfTheMainAlgorithm;
+
+    long exp = totalTimeOfTHeMainAlgorithm;
     document.close();
     return new StreamingOutput() {
       @Override

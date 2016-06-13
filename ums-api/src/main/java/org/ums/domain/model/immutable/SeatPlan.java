@@ -14,6 +14,7 @@ public interface SeatPlan extends Serializable,LastModifier,EditType<MutableSeat
   ClassRoom getClassRoom() throws Exception;
   SpStudent getStudent() throws Exception;
   Semester getSemester() throws Exception;
+  int getClassRoomId();
   int getRowNo();
   int getColumnNo();
   int getExamType();
