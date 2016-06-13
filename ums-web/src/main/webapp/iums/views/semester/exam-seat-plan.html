@@ -230,7 +230,7 @@
     </div>
 </div>
 
-<ul class="custom-menu" >
+<ul class="custom-menu" data-ng-show="showContextMenu">
     <li data-action="split">Split</li>
     <li data-action="revertSplit">Revert Split</li>
     <li data-action="merge">Merge</li>
@@ -266,8 +266,8 @@
                 </ul>
 
 
-                <ul subGroupSortable data-ng-repeat="group in tempGroupList track by group.id"   id="sortable"  class="connectedSortable"  data-ng-if="recreate==false && subGroupFound==false">
-                    <li class="ui-state-default" id="{{group.id}}" >
+                <ul subGroupSortable data-ng-repeat="group in tempGroupListAll track by group.id "   id="sortable"  class="connectedSortable"  >
+                    <li class="ui-state-default" id="{{group.id}}" data-ng-if="group.found==false" >
                         <div>
                            {{group.id}}- {{group.programName}}:{{group.year}}/{{group.semester}} ({{group.studentNumber}})
                         </div>
