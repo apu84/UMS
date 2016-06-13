@@ -4,6 +4,7 @@ module ums {
   export interface IMarksSubmissionScope extends ng.IScope {
     data:any;
     chart1:any;
+    amChartOptions:any;
     noneSubmittedGrades: any;
     waitingForScrutinyGrades :any;
     waitingForHeadApprovalGrades :any;
@@ -17,6 +18,7 @@ module ums {
     acceptCandidatesGrades: any;
     recheckCandidatesGrades: any;
     acceptedGrades: any;
+    recheckAcceptedGrades:any;
     allMarksSubmissionStatus:any;
     toggleColumn:boolean;
     excel_copy_paste_error_div:boolean;
@@ -51,10 +53,12 @@ module ums {
     approveStatusId:number;
 
     saveRecheckApproveGrades:Function;
+    sendRecheckRequestToVC:Function;
     closePopupModal:Function;
 
     userRole:string;
     downloadPdf:Function;
+    copyGradeRow:Function;
   }
   interface IStudentMarks {
     studentId:string;
@@ -110,22 +114,14 @@ module ums {
       console.log($stateParams["1"]);
                 //his.$scope.userRole=$params.role;
 
-      $scope.chart1 = [{
-        "year": "1950",
-        "value": -0.307
-      }, {
-        "year": "1951",
-        "value": -0.168
-      }, {
-        "year": "1952",
-        "value": -0.073
-      }];
+
         this.$scope.userRole = $stateParams["1"];
                 $scope.data = {
                   gradeLetterOptions: appConstants.gradeLetters,
                   total_part:Number,
                   part_a_total:Number,
-                  part_b_total:Number
+                  part_b_total:Number,
+                  recheck_accepted_studentId:String
                 };
 
       $scope.onTotalPartChange = this.onTotalPartChange.bind(this);
@@ -152,7 +148,168 @@ module ums {
       $scope.saveRecheckApproveGrades=this.saveRecheckApproveGrades.bind(this);
       $scope.closePopupModal=this.closePopupModal.bind(this);
 
+      $scope.copyGradeRow=this.copyGradeRow.bind(this);
+      $scope.sendRecheckRequestToVC=this.sendRecheckRequestToVC.bind(this);
+
+      $scope.data.recheck_accepted_studentId="";
+      $scope.chart1 =[{
+        "country": "A+",
+        "visits": 2000,
+        "color": "#FF0F00"
+      },
+        {
+          "country": "A",
+          "visits": 1882,
+          "color": "#FF6600"
+        },
+        {
+          "country": "A-",
+          "visits": 1809,
+          "color": "#FF9E01"
+        },
+        {
+          "country": "B+",
+          "visits": 1322,
+          "color": "#FCD202"
+        },
+        {
+          "country": "B",
+          "visits": 1122,
+          "color": "#F8FF01"
+        },
+        {
+          "country": "B-",
+          "visits": 1114,
+          "color": "#B0DE09"
+        },
+        {
+          "country": "C+",
+          "visits": 984,
+          "color": "#04D215"
+        },
+        {
+          "country": "C",
+          "visits": 711,
+          "color": "#0D8ECF"
+        },
+        {
+          "country": "D",
+          "visits": 665,
+          "color": "#0D52D1"
+        },
+        {
+          "country": "F",
+          "visits": 580,
+          "color": "#2A0CD0"
+        }];
+
+      $scope.amChartOptions = {
+        data:  $scope.chart1,
+        type: "serial",
+
+        categoryField: "country",
+        depth3D : 20,
+         angle : 30,
+        pathToImages: 'http://www.amcharts.com/lib/3/images/',
+        categoryAxis: {
+          gridPosition: "start",
+          parseDates: false,
+            dashLength : 5
+        },
+        valueAxes: [{
+          dashLength : 5,
+          title: "Visitors"
+        }],
+        graphs: [{
+          type: "column",
+          valueField: "visits",
+          balloonText :"<span style='font-size:14px'>[[category]]: <b>[[value]]</b></span>",
+          fillAlphas: 1,
+            colorField : "color",
+          lineAlpha : 0,
+      labelText :  '[[value]]'
+        }],
+        chartCursor:[{
+          cursorAlpha:0,
+          zoomable:false,
+          categoryBalloonEnabled:false
+        }]
+      };
     }
+
+    private copyGradeRow():void{
+
+      var studentId:any=this.$scope.data.recheck_accepted_studentId;
+      var newRowId:any="recheck_accepted_"+studentId;
+      if ($("#"+newRowId).length) return;
+      var $clone = $("#"+studentId).clone();
+      $clone.attr("id", newRowId);
+      $clone.append('<td style="text-align: center;cursor:pointer;" onclick="removeTableRow(\''+newRowId+'\')"><img src="https://cdn4.iconfinder.com/data/icons/6x16-free-application-icons/16/Delete.png" /></td>');
+      $clone.appendTo($('#tbl_recheck_accepted > tbody'));
+      this.$scope.data.recheck_accepted_studentId="";
+
+    }
+
+    private sendRecheckRequestToVC():void{
+
+      console.log("aaaa  ");
+      $("#tbl_recheck_accepted  tbody tr[id^='recheck_accepted_']").each(function (i, el) {
+          console.log(el.id);
+      });
+      console.log("bbbb");
+      var newDAtaSet =[{
+        "country": "A+",
+        "visits": 4025,
+        "color": "#FF0F00"
+      },
+        {
+          "country": "A",
+          "visits": 1882,
+          "color": "#FF6600"
+        },
+        {
+          "country": "A-",
+          "visits": 1809,
+          "color": "#FF9E01"
+        },
+        {
+          "country": "B+",
+          "visits": 1322,
+          "color": "#FCD202"
+        },
+        {
+          "country": "B",
+          "visits": 1122,
+          "color": "#F8FF01"
+        },
+        {
+          "country": "B-",
+          "visits": 1114,
+          "color": "#B0DE09"
+        },
+        {
+          "country": "C+",
+          "visits": 984,
+          "color": "#04D215"
+        },
+        {
+          "country": "C",
+          "visits": 711,
+          "color": "#0D8ECF"
+        },
+        {
+          "country": "D",
+          "visits": 665,
+          "color": "#0D52D1"
+        },
+        {
+          "country": "F",
+          "visits": 665,
+          "color": "#2A0CD0"
+        }];
+      this.$scope.$broadcast("amCharts.updateData", newDAtaSet);
+    }
+
 
     private downloadPdf():void {
       this.httpClient.get("https://localhost/ums-webservice-common/gradeReport", 'application/pdf',
@@ -206,6 +363,8 @@ module ums {
             this.$scope.scrutinizedGrades = data.scrutinized_grades;
             this.$scope.approvedGrades = data.approved_grades;
             this.$scope.acceptedGrades = data.accepted_grades;
+            this.$scope.recheckAcceptedGrades = data.recheck_accepted_grades;
+
 
             var part_info = data.part_info;
             console.log(part_info.total_part);
@@ -587,7 +746,7 @@ module ums {
         part_a_total: 0,
         part_b_total: 0
       };
-      alert(this.$scope.data.part_a_total);
+      //alert(this.$scope.data.part_a_total);
       courseInfo.course_id = "EEE1101_S2014_110500";
       courseInfo.semester_id = 11012016;
       courseInfo.exam_type = 1;
@@ -690,6 +849,7 @@ module ums {
       this.httpClient.put(url, complete_json, 'application/json')
           .success(() => {
             $.notific8("Successfully Saved");
+            this.fetchGradeSheet();
             /* if(statusId==1)
              this.$scope.optional.applicationStatus="Submitted";
              else

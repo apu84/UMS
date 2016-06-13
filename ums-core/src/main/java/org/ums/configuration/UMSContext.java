@@ -2,7 +2,6 @@ package org.ums.configuration;
 
 import org.apache.shiro.authc.credential.PasswordService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -309,5 +308,20 @@ public class UMSContext {
   @Bean
   QueryLogger textLogger() {
     return new TextLogger();
+  }
+
+  @Bean
+  UGRegistrationResultManager registrationResultManager() {
+    return new PersistentUGRegistrationResultDao(mTemplateFactory.getJdbcTemplate());
+  }
+
+  @Bean
+  UGTheoryMarksManager theoryMarksManager() {
+    return new PersistentUGTheoryMarksDao(mTemplateFactory.getJdbcTemplate());
+  }
+
+  @Bean
+  UGSessionalMarksManager sessionalMarksManager() {
+    return new PersistentUGSessionalMarksDao(mTemplateFactory.getJdbcTemplate());
   }
 }

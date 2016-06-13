@@ -6,12 +6,20 @@ import java.util.List;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.ums.domain.model.dto.StudentGradeDto;
+import org.ums.manager.ExamGradeManager;
 
 /**
  * Created by Ifti on 07-Jun-16.
  */
 //http://developers.itextpdf.com/examples/itext-action-second-edition/chapter-4
+@Component
 public class UgGradeSheetGenerator {
+
+  @Autowired
+  private ExamGradeManager examGradeManager;
 
   /** Path to the resulting PDF file. */
   public static final String RESULT
@@ -20,13 +28,11 @@ public class UgGradeSheetGenerator {
 
   /**
    * Creates a PDF document.
-   * @param filename the path to the new PDF document
    * @throws    DocumentException
    * @throws    IOException
    */
-  public void createPdf(OutputStream outputStream,String filename)
-      throws DocumentException, IOException {
-
+  public void createPdf(OutputStream outputStream)
+      throws DocumentException, IOException,Exception {
 
     // step 1
     Document document = new Document();
@@ -41,12 +47,12 @@ public class UgGradeSheetGenerator {
 
     // step 3
 
-    List<String> studentList=new ArrayList<>();
-    for(int i=0;i<66;i++){
-      studentList.add(i,"Student-"+i);
-    }
+    List<StudentGradeDto> gradeList=examGradeManager.getAllGradeForTheoryCourse(11012016,"EEE1101_S2014_110500",1);
+
     document.open();
-    for (int i=0;i<(studentList.size()/90)+1;i++) {
+    for (int i=0;i<(gradeList.size()/90);i++) {
+      if(i!=0)
+        document.newPage();
       PdfPTable mainTable=getMainTable();
       PdfPCell cell = new PdfPCell(getSubTableHeader());
       cell.setPadding(0);
@@ -61,7 +67,7 @@ public class UgGradeSheetGenerator {
       mainTable.addCell(cell);
 
       cell = new PdfPCell();
-      cell.addElement(getGradeTable(studentList,i*90,45));
+      cell.addElement(getGradeTable(gradeList,i*90,45));
       cell.setPadding(0);
       cell.setBorder(Rectangle.NO_BORDER);
       mainTable.addCell(cell);
@@ -71,14 +77,14 @@ public class UgGradeSheetGenerator {
       mainTable.addCell(cell);
 
       cell = new PdfPCell();
-      cell.addElement(getGradeTable(studentList,i*90+46,45));
+      cell.addElement(getGradeTable(gradeList,i*90+46,45));
       cell.setPadding(0);
       cell.setBorder(Rectangle.NO_BORDER);
       mainTable.addCell(cell);
 
       document.add(mainTable);
 
-      document.newPage();
+
     }
     // step 4
 
@@ -96,7 +102,7 @@ public class UgGradeSheetGenerator {
     return table;
   }
 
-  public PdfPTable getGradeTable(java.util.List<String> studentList,int startIndex,int total) throws DocumentException {
+  public PdfPTable getGradeTable(java.util.List<StudentGradeDto> studentList,int startIndex,int total) throws DocumentException {
     // a table with three columns
     if(startIndex>studentList.size())
       return null;
@@ -145,7 +151,7 @@ public class UgGradeSheetGenerator {
   for(int i=startIndex;i<startIndex+total+1;i++){
     if(i>=studentList.size())
       break;
-    p = new Paragraph(studentList.get(i), nbFont);
+    p = new Paragraph(studentList.get(i).getStudentId(), nbFont);
     cell = new PdfPCell(p);
     cell.setFixedHeight(12);
     cell.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -204,7 +210,7 @@ public class UgGradeSheetGenerator {
     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
     table.addCell(cell);
 
-    p=new Paragraph("Marks/Grade Sheet Submission (Spring 2015)", gradeSheetHeader);
+    p=new Paragraph("Marks/Grade Sheet (Spring 2015)", gradeSheetHeader);
     cell = new PdfPCell(p);
     cell.setColspan(3);
     cell.setBorder(Rectangle.NO_BORDER);
