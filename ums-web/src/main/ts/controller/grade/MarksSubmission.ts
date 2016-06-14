@@ -54,6 +54,7 @@ module ums {
 
     saveRecheckApproveGrades:Function;
     sendRecheckRequestToVC:Function;
+    recheckRequestHandler:Function;
     closePopupModal:Function;
 
     userRole:string;
@@ -169,6 +170,7 @@ module ums {
 
       $scope.copyGradeRow=this.copyGradeRow.bind(this);
       $scope.sendRecheckRequestToVC=this.sendRecheckRequestToVC.bind(this);
+      $scope.recheckRequestHandler=this.recheckRequestHandler.bind(this);
       $scope.loadSemesters=this.loadSemesters.bind(this);
       $scope.loadPrograms=this.loadPrograms.bind(this);
 
@@ -320,11 +322,30 @@ module ums {
              else
              this.$scope.optional.applicationStatus="Saved";
              */
-
           }).error((data) => {
           });
-
     }
+
+    private recheckRequestHandler(actor:string,action:string):void{
+      var url = "academic/gradeSubmission/recheckApprove";
+      console.clear();
+      var complete_json =this.createCompleteJson(action,null,null,null);
+      console.log(complete_json);
+
+      this.httpClient.put(url, complete_json, 'application/json')
+          .success(() => {
+            $.notific8("Successfully Saved");
+            this.fetchGradeSheet();
+            /* if(statusId==1)
+             this.$scope.optional.applicationStatus="Submitted";
+             else
+             this.$scope.optional.applicationStatus="Saved";
+             */
+          }).error((data) => {
+          });
+    }
+
+
     private downloadPdf():void {
       this.httpClient.get("https://localhost/ums-webservice-common/gradeReport", 'application/pdf',
           (data:any, etag:string) => {

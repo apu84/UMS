@@ -2,9 +2,6 @@
     .table thead tr th, .table thead tr td {
         border-bottom: 1px solid grey;
     }
-    /*scrollable-table .scrollableContainer{
-        height:450px;
-    }*/
     .scrollArea table .recheckAll .th-inner .ng-scope {
         display: inline;
     }
@@ -15,6 +12,29 @@
         border: 1px solid #efefef;
     }
     .scrollableContainer { height: inherit; }
+    .orgLeftClass {
+        width: 30%;
+    }
+    .orgRightClass {
+        width: 66%;
+    }
+    .arrowClass {
+        display: none;
+        cursor: pointer;
+    }
+    .orgLeftClass, .arrowClass {
+        margin-right: 25px;
+        margin-left: 8px;
+    }
+    .newRightClass {
+        width: 94%;
+    }
+    .bootstrap-select.btn-group:not(.input-group-btn), .bootstrap-select.btn-group[class*="span"] {
+        margin-bottom: 0px !important;
+    }
+    .table tbody tr td {
+        border-top: none !important;
+    }
 </style>
 <div class="row" id="selection1">
     <div class="orgLeftClass pull-left panel panel-green" id="leftDiv">
@@ -720,7 +740,8 @@
                                 <button type="button" class="btn btn-default btn-square" onclick='goBack()'>Back to Grade Sheet Selection</button>
                             </div>
                             <div class="col-md-6" style="text-align: right;">
-                                <button type="button"  class="btn btn-green btn-square" data-ng-click="sendRecheckRequestToVC(currentActor)">Approve Recheck Request</button>
+                                <button type="button"  class="btn btn-red btn-square" data-ng-click="recheckRequestHandler(currentActor,'recheck_request_rejected')">Reject Recheck Request</button>
+                                <button type="button"  class="btn btn-green btn-square" data-ng-click="recheckRequestHandler(currentActor,'recheck_request_approved')">Approve Recheck Request</button>
                             </div>
                         </div>
 
@@ -734,10 +755,7 @@
                 <hr class="style-two" />
                 <br/><br/>
                 <div class="row">
-
                     <div class="col-md-6">
-
-
                         <div class="panel panel-green">
                             <div class="panel-heading"><i class="fa fa-table"></i>&nbsp;
                                 Statistics</div>
@@ -890,9 +908,6 @@
 
                     </div>
                 </div>
-
-
-
             </div>
         </div>
     </div>
@@ -922,43 +937,18 @@
 </div>
 
 
-<style type="text/css">
-
-    .orgLeftClass {
-        width: 30%;
-
-    }
-
-    .orgRightClass {
-        width: 66%;
-    }
-
-    .arrowClass {
-        display: none;
-        cursor: pointer;
-    }
-
-    .orgLeftClass, .arrowClass {
-        margin-right: 25px;
-        margin-left: 8px;
-    "
-
-    }
-
-    .newRightClass {
-        width: 94%;
-    }
-
-    .bootstrap-select.btn-group:not(.input-group-btn), .bootstrap-select.btn-group[class*="span"] {
-        margin-bottom: 0px !important;
-    }
-
-    .table tbody tr td {
-        border-top: none !important;
-    }
-</style>
+<link rel="stylesheet" href="https://localhost/ums-web/iums/vendors/pieMenu/css/piemenu.css">
+<script src="https://localhost/ums-web/iums/vendors/pieMenu/js/jquery.menu.js"></script>
 <script type="text/javascript">
+    $('#outer_container').PieMenu({
+        'starting_angel':180,
+        'angel_difference' : 90,
+        'radius':100
+    });
 
+    function removeTableRow(rowid){
+        $('#'+rowid).remove();
+    }
     function resetDivs() {
         $("#arrowDiv").hide();
 
@@ -968,32 +958,10 @@
         $("#rightDiv").addClass("orgRightClass");
 
     }
-
-
-
     function goBack(){
         document.getElementById('selection1').style.display='block';
         document.getElementById('selection2').style.display='none';
         $('.page-title.ng-binding').html("Grade Sheet Selection");
     }
     $("#btn_stat").focus();
-
 </script>
-
-
-
-<link rel="stylesheet" href="https://localhost/ums-web/iums/vendors/pieMenu/css/piemenu.css">
-<script src="https://localhost/ums-web/iums/vendors/pieMenu/js/jquery.menu.js"></script>
-        <script type="text/javascript">
-            $('#outer_container').PieMenu({
-                'starting_angel':180,
-                'angel_difference' : 90,
-                'radius':100
-            });
-
-            function removeTableRow(rowid){
-                $('#'+rowid).remove();
-            }
-
-
-        </script>
