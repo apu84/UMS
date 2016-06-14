@@ -1775,7 +1775,8 @@ module ums{
           $("#sortable6").sortable("disable");
         }
       }
-
+      console.log("&&&&&&&&&&&&&&&&&&&&&");
+      console.log(tempStorageM);
       if(tempStorageM.length!=0){
         for(var i=0;i<tempStorageM.length;i++){
           var inTheJsonList:boolean=false;
