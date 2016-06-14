@@ -15,7 +15,8 @@ public enum CourseMarksSubmissionStatus {
     REQUESTED_FOR_RECHECK_BY_HEAD(4,"Requested for recheck by Head"),
     WAITING_FOR_COE_APPROVAL(5,"Waiting for CoE's Approval"),
     REQUESTED_FOR_RECHECK_BY_COE(6,"Requested for recheck by CoE"),
-    ACCEPTED_BY_COE(7,"Accepted by CoE");
+    ACCEPTED_BY_COE(7,"Accepted by CoE"),
+    WAITING_FOR_RECHECK_REQUEST_APPROVAL(8,"Waiting for recheck request approval");
 
 
     private String label;

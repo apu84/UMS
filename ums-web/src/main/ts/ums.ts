@@ -534,6 +534,21 @@ module ums {
             }]
           }
         })
+        .state('gradeSheetSelectionVC', {
+            url: "/gradeSheetSelectionVC/:1",
+            templateUrl: 'views/grade/grade-sheet-selection.html',
+            controller: 'MarksSubmission',
+            resolve: {
+                loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        files: [
+                            'vendors/amcharts/amcharts.js',
+                            'vendors/amcharts/serial.js'
+                        ]
+                    });
+                }]
+            }
+        })
         .state('loggerGrid', {
           url: "/loggerGrid",
           controller: 'LoggerGrid',

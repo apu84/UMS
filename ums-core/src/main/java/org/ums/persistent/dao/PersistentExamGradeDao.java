@@ -149,7 +149,7 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
     @Override
     public List<GradeChartDataDto> getTheoryChartData(int pSemesterId,String pCourseId,int pExamType) throws Exception {
         String query = THEORY_CHART_DATA;
-        return mJdbcTemplate.query(query, new ChartDataRowMapper());
+        return mJdbcTemplate.query(query,new Object[]{pSemesterId,pCourseId,pExamType}, new ChartDataRowMapper());
     }
 
 
@@ -352,7 +352,7 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
             public void setValues(PreparedStatement ps, int i) throws SQLException {
                 StudentGradeDto gradeDto = recheckList.get(i);
                 ps.setInt(1, gradeDto.getRecheckStatus().getId());
-                ps.setInt(2, gradeDto.getRecheckStatus().getId());
+                ps.setInt(2, gradeDto.getStatus().getId());
                 ps.setInt(3, pSemesterId);
                 ps.setString(4, pCourseId);
                 ps.setInt(5, pExamType);

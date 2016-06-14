@@ -206,3 +206,409 @@ MODIFY(STATUS  DEFAULT 0);
 ALTER TABLE DB_IUMS.STUDENT_RECORD
 MODIFY(TYPE VARCHAR2(2 BYTE))
 /
+
+CREATE TABLE DB_IUMS.UG_SESSIONAL_MARKS
+(
+  SEMESTER_ID        NUMBER                     NOT NULL,
+  COURSE_ID          VARCHAR2(25 BYTE)          NOT NULL,
+  EXAM_TYPE          NUMBER(1)                  NOT NULL,
+  STUDENT_ID         VARCHAR2(9 BYTE)           NOT NULL,
+  TOTAL              FLOAT(126),
+  GRADE_POINT        FLOAT(126),
+  GRADE_LETTER       VARCHAR2(3 BYTE),
+  STATUS             NUMBER                     DEFAULT 0,
+  RECHECK_STATUS     NUMBER                     DEFAULT 0
+);
+
+DROP TABLE DB_IUMS.TEST_STUDENT CASCADE CONSTRAINTS;
+
+CREATE TABLE DB_IUMS.TEST_STUDENT
+(
+  STUDENT_ID    NUMBER,
+  STUDENT_NAME  VARCHAR2(40 BYTE)
+)
+TABLESPACE SYSTEM
+RESULT_CACHE (MODE DEFAULT)
+PCTUSED    40
+PCTFREE    10
+INITRANS   1
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+LOGGING
+NOCOMPRESS
+NOCACHE
+NOPARALLEL
+MONITORING;
+
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102001, 'Jahid Shai');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102002, 'Mohammad Yeamin');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102003, 'Abul Kalam Azad');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102004, 'Mohammad Samyr ');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102005, 'Abu Zar Gifari');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102006, 'Mostofa Kamal');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102007, 'Zarin Rownak Sochi');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102008, 'Ellora Shikder');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102009, 'Naushaba Khan Rasha');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102010, 'Muib Hossain');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102011, 'Farjana Dwin Tuly');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102012, 'Tasnuva Shanta');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102013, 'Rajib Kumar Chandra');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102014, 'S M Mizanur Rahman');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102015, 'Fahim Islam');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102016, 'Prattusha Das Biswas');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102017, 'Sadeequn Orthee');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102018, 'Waliul Islam');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102019, 'Apurbo Opu');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102020, 'Tanjuma Khan Roktim');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102021, 'Sanchita Rini');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102022, 'Irin Bhuiyan');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102023, 'Wahid Rahman');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102024, 'Mahmudul Hasan Limon');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102025, 'Nayem Reza');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102026, 'Ridoy Ahmed');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102027, 'Maliha Tasnim Mou');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102028, 'Samia Jahan');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102029, 'Sabree Ava');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102030, 'Mohammad Shafi');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102031, 'Muzahidul Islam');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102032, 'Rupa Khan');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102033, 'Abdullah Al Nomal');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102034, 'Shammi Mitu');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102035, 'Ariful Islam');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102036, 'Biddut Chandra Sarker');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102037, 'Tanjia Maira');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102038, 'Ety Rahman');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102039, 'SSaimon Rahman');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102040, 'Tanjia Maria');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102041, 'Farah Anjuman Ikra');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102042, 'Sadia Islam Sadman');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102043, 'Ziaul Bashir Adnan');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102044, 'Kazi Zakaria');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102045, 'Sujit Biswas');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102046, 'MMarufur Rahman');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102047, 'Monirul Islam Khan');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102048, 'Shamima Juthi');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102049, 'Nafis Rahman');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102050, 'Atiqur Islam Saon');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102051, 'Rahul ROy');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102052, 'Nayeem Murshed');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102053, 'Mahbubur Shimul');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102054, 'Runa Hellal');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102055, 'Goutam Tarafder');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102056, 'Suruz Rahman');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102057, 'Najila Nahar');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102058, 'Oshin Choudhury');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102059, 'Sayed Minhaj Hossain');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102060, 'Mahmudur Rahman Khan');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102061, 'Shishir Mia');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102062, 'Tanjila Jony');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102063, 'Shajia Shimu');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102064, 'Salman Jahir');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102065, 'Kowsar Jony');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102066, 'Fazle Rabbee');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102067, 'Saimuum Akash');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102068, 'Soumya Suhreed Das');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102069, 'Tanvir Ahmed Piash');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102070, 'Mustafizur Rahman');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102071, 'Nuruzzaman Milon');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102072, 'Irin Bhuiyan');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102073, 'Al Amin Mishu');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102074, 'Tanvir Ahmed Ony');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102075, 'Sazzad Hossain');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102076, 'Fahim Faisal');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102077, 'Shamiul Hassan Turjo');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102078, 'Tawfiqul Alam Nakib');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102079, 'Abu Raihan Rubel');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102080, 'Imran Khan Prodip');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102081, 'Plabon Rahman');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102082, 'Tabassum Khan');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102083, 'Ema Shaha');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102084, 'Shuvendu Shaha');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102085, 'Sazzad Hossain Ratul');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102086, 'Jaminul Hoque Biddut');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102087, 'Mehedi Hasan Arif');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102088, 'Ratul Shourov');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102089, 'Gazi Hasan');
+Insert into DB_IUMS.TEST_STUDENT
+   (STUDENT_ID, STUDENT_NAME)
+ Values
+   (10102090, 'Salal Kumar');
+COMMIT;

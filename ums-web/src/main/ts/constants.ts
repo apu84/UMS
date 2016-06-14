@@ -316,16 +316,6 @@ module ums {
             deptId: "07",
             programs: [
               {
-                id: "110708",
-                shortName: "BSC in ME",
-                longName: "Bachelor in Mechanical Engineering"
-              }
-            ]
-          },
-          {
-            deptId: "07",
-            programs: [
-              {
                 id: "110707",
                 shortName: "BSC in IPE",
                 longName: "Bachelor in Industrial and Production Engineering"
@@ -338,6 +328,7 @@ module ums {
             ]
           }
         ],
+        pgPrograms:[],
         theorySectionsGrid: ":None;A:A;B:B;C:C;D:D",
         theorySections: [
           {id: "A", name: "A"},
