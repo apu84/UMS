@@ -6,6 +6,7 @@ import org.ums.domain.model.dto.StudentGradeDto;
 import org.ums.domain.model.immutable.ExamGrade;
 import org.ums.domain.model.mutable.MutableExamGrade;
 import org.ums.enums.CourseMarksSubmissionStatus;
+import org.ums.enums.CourseType;
 
 import java.util.List;
 
@@ -14,7 +15,8 @@ import java.util.List;
  */
 public interface ExamGradeManager extends ContentManager<ExamGrade, MutableExamGrade, Object> {
     public List<GradeChartDataDto> getTheoryChartData(int semesterId,String courseId,int examType) throws Exception;
-    public List<StudentGradeDto> getAllGradeForTheoryCourse(int semesterId,String courseId,int examType) throws Exception;
+    public List<StudentGradeDto> getAllGrades(int semesterId,String courseId,int examType,CourseType courseType) throws Exception;
+
     public MarksSubmissionStatusDto getMarksSubmissionStatus(int semesterId,String courseId,int examType) throws Exception;
     public List<MarksSubmissionStatusDto> getMarksSubmissionStatus(int pSemesterId,int pExamType,String teacherId,String deptId,String userRole) throws Exception;
     public boolean saveGradeSheet(int semesterId,String courseId,int examType,List<StudentGradeDto> gradeList) throws Exception;
@@ -24,9 +26,14 @@ public interface ExamGradeManager extends ContentManager<ExamGrade, MutableExamG
     public int updateCourseMarksSubmissionStatus(int semesterId,String courseId,int examType,CourseMarksSubmissionStatus status) throws Exception;
     public int updatePartInfo(int pSemesterId,String pCourseId,int pExamType,int pTotalPart,int partA,int partB) throws Exception;
 
+
+    public int approveRecheckRequest(int pSemesterId,String pCourseId,int pExamType) throws Exception ;
+    public int rejectRecheckRequest(int pSemesterId,String pCourseId,int pExamType) throws Exception ;
+
     public List<String> getRoleForTeacher(String pTeacherId,int  pSemesterId,String pCourseId) throws Exception;
     public List<String> getRoleForHead(String pUserId) throws Exception;
     public List<String> getRoleForCoE(String pUserId) throws Exception;
+    public List<String> getRoleForVC(String pUserId) throws Exception;
 
 }
 

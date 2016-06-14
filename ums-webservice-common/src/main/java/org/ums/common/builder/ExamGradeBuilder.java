@@ -101,14 +101,17 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
                 approveList.add(grade);
             }
         }
-        else if(action.equalsIgnoreCase("recheck")) {
+        else if(action.equalsIgnoreCase("recheck") || action.equalsIgnoreCase("recheck_request_submit")) {
             for (int i = 0; i < recheckEntries.size(); i++) {
                 JsonObject jsonObject = recheckEntries.getJsonObject(i);
                 StudentGradeDto grade = new StudentGradeDto();
                 grade.setRecheckStatus(RecheckStatus.RECHECK_TRUE);
                 grade.setStatus(getMarksSubmissionStatus(actor,action,"recheck"));
                 grade.setStudentId(jsonObject.getString("studentId"));
-                grade.setPreviousStatusString(getPrevMarksSubmissionStatus(actor));
+                if(action.equalsIgnoreCase("recheck") )
+                    grade.setPreviousStatusString(getPrevMarksSubmissionStatus(actor));
+                else if( action.equalsIgnoreCase("recheck_request_submit"))
+                    grade.setPreviousStatusString(getPrevMarksSubmissionStatus(actor,action));
                 recheckList.add(grade);
             }
             for (int i = 0; i < approveEntries.size(); i++) {
@@ -169,6 +172,9 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
                 return StudentMarksSubmissionStatus.ACCEPT;
             else if(action.equals("approve")  && gradeType.equals("approve"))
                 return StudentMarksSubmissionStatus.ACCEPTED;
+            else if(action.equals("recheck_request_submit"))
+                return StudentMarksSubmissionStatus.ACCEPTED;
+
         }
         return null;
     }
@@ -180,6 +186,12 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
             return StudentMarksSubmissionStatus.SCRUTINIZED.getId()+","+StudentMarksSubmissionStatus.APPROVE.getId();
         if(actor.equals("coe"))
             return StudentMarksSubmissionStatus.APPROVED.getId()+","+StudentMarksSubmissionStatus.ACCEPT.getId();
+
+        return null;
+    }
+    private String getPrevMarksSubmissionStatus(String actor,String action){
+        if(actor.equals("coe") && action.equalsIgnoreCase("recheck_request_submit"))
+            return String.valueOf(StudentMarksSubmissionStatus.ACCEPTED.getId());
 
         return null;
     }

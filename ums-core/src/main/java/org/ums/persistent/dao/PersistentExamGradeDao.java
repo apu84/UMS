@@ -27,10 +27,12 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
 
-    static String SELECT_THEORY_MARKS = "Select * From UG_THEORY_MARKS  Where Semester_Id=? and Course_Id=? and Exam_Type=? ";
+    static String SELECT_THEORY_MARKS = "Select UG_THEORY_MARKS.*,STUDENT_NAME From UG_THEORY_MARKS,TEST_STUDENT  Where UG_THEORY_MARKS.STUDENT_ID=TEST_STUDENT.STUDENT_ID AND Semester_Id=? and Course_Id=? and Exam_Type=? ";
+    static String SELECT_SESSIONAL_MARKS = "Select UG_SESSIONAL_MARKS.*,STUDENT_NAME From UG_SESSIONAL_MARKS,TEST_STUDENT  Where UG_SESSIONAL_MARKS.STUDENT_ID=TEST_STUDENT.STUDENT_ID AND Semester_Id=? and Course_Id=? and Exam_Type=? ";
 
-    static String SELECT_PART_INFO="Select MARKS_SUBMISSION_STATUS.*,COURSE_TYPE From MARKS_SUBMISSION_STATUS, Where Course.Course_Id=MARKS_SUBMISSION_STATUS.Course_Id And " +
-            " Semester_Id=? and Course_Id=? and Exam_Type=? ";
+
+    static String SELECT_PART_INFO="Select MARKS_SUBMISSION_STATUS.*,COURSE_TYPE From MARKS_SUBMISSION_STATUS,MST_COURSE Where MST_COURSE.Course_Id=MARKS_SUBMISSION_STATUS.Course_Id And " +
+            "  MARKS_SUBMISSION_STATUS.Semester_Id=? and MARKS_SUBMISSION_STATUS.Course_Id=? and Exam_Type=? ";
 
     static String UPDATE_PART_INFO="Update MARKS_SUBMISSION_STATUS Set TOTAL_PART=?,PART_A_TOTAL=?,PART_B_TOTAL=? Where SEMESTER_ID=? and COURSE_ID=? and EXAM_TYPE=? and Status=0";
     static String UPDATE_MARKS_SUBMISSION_STATUS="Update MARKS_SUBMISSION_STATUS Set STATUS=? Where SEMESTER_ID=? and COURSE_ID=? and EXAM_TYPE=? ";
@@ -111,6 +113,10 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
         "Union " +
         "Select 'CoE' Role, 2 Serial From ADDITIONAL_ROLE_PERMISSIONS Where User_Id=?  And Role_Id=71";
 
+    static String CHECK_VC_ROLE="Select 'vc' Role, 1 Serial From USERS Where User_Id=? and Role_Id=91 " +
+        "Union " +
+        "Select 'vc' Role, 2 Serial From ADDITIONAL_ROLE_PERMISSIONS Where User_Id=?  And Role_Id=91";
+
     static String THEORY_CHART_DATA="Select Grade_Letter,sum(Total) Total, max(Color) Color From   " +
         "(  " +
         "select Grade_Letter,Count(Total) Total,'' Color From UG_THEORY_MARKS Where Semester_Id=? And Course_Id=? and Exam_Type=? Group by Grade_Letter  " +
@@ -143,10 +149,15 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
     }
 
     @Override
-    public List<StudentGradeDto> getAllGradeForTheoryCourse(int pSemesterId,String pCourseId,int pExamType) throws Exception {
-        String ORDER_BY=  " Order by Student_Id,Status  ";
-        String query = SELECT_THEORY_MARKS + ORDER_BY;
-        return mJdbcTemplate.query(query,new Object[]{pSemesterId,pCourseId,pExamType}, new StudentMarksRowMapper());
+    public List<StudentGradeDto> getAllGrades(int pSemesterId,String pCourseId,int pExamType,CourseType courseType) throws Exception {
+
+        String query ="";
+        if(courseType==CourseType.THEORY)
+            query=SELECT_THEORY_MARKS + " Order by UG_THEORY_MARKS.Student_Id,Status  ";
+        else if(courseType==CourseType.SESSIONAL)
+            query=SELECT_SESSIONAL_MARKS + " Order by UG_SESSIONAL_MARKS.Student_Id,Status  ";
+
+        return mJdbcTemplate.query(query,new Object[]{pSemesterId,pCourseId,pExamType}, new StudentMarksRowMapper(courseType));
     }
 
     @Override
@@ -177,6 +188,10 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
             query = SELECT_GRADE_SUBMISSION_TABLE_CoE;
             return mJdbcTemplate.query(query,new Object[]{pSemesterId,pExamType,deptId} ,new MarksSubmissionStatusTableRowMapper());
         }
+        else if(userRole.equals("V")){  //CoE
+            query = SELECT_GRADE_SUBMISSION_TABLE_CoE;
+            return mJdbcTemplate.query(query,new Object[]{pSemesterId,pExamType,deptId} ,new MarksSubmissionStatusTableRowMapper());
+        }
         return null;
     }
 
@@ -195,6 +210,12 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
         String query = CHECK_COE_ROLE;
         return mJdbcTemplate.query(query, new Object[]{pUserId,pUserId},new RoleRowMapper());
     }
+    @Override
+    public List<String> getRoleForVC(String pUserId) throws Exception {
+        String query = CHECK_VC_ROLE;
+        return mJdbcTemplate.query(query, new Object[]{pUserId,pUserId},new RoleRowMapper());
+    }
+
     @Override
     public int updatePartInfo(int pSemesterId,String pCourseId,int pExamType,int pTotalPart,int partA,int partB) throws Exception {
         String query = UPDATE_PART_INFO;
@@ -220,27 +241,32 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
     }
 
     class StudentMarksRowMapper implements RowMapper<StudentGradeDto> {
+        CourseType courseType;
+        public StudentMarksRowMapper(CourseType courseType){
+            this.courseType=courseType;
+        }
         @Override
         public StudentGradeDto mapRow(ResultSet resultSet, int i) throws SQLException {
             StudentGradeDto marks = new StudentGradeDto();
             marks.setStudentId(resultSet.getString("STUDENT_ID"));
             //marks.setStudentName(resultSet.getString("STUDENT_NAME"));
-            marks.setStudentName("Md. Abul Kalam Azad");
+            marks.setStudentName(resultSet.getString("STUDENT_NAME"));
 
-            float quiz = resultSet.getFloat("QUIZ");
-            marks.setQuiz(resultSet.wasNull() ? null : quiz);
+            if(courseType==CourseType.THEORY) {
+                float quiz = resultSet.getFloat("QUIZ");
+                marks.setQuiz(resultSet.wasNull() ? null : quiz);
 
-            float classPerformance = resultSet.getFloat("CLASS_PERFORMANCE");
-            marks.setClassPerformance(resultSet.wasNull() ? null : classPerformance);
+                float classPerformance = resultSet.getFloat("CLASS_PERFORMANCE");
+                marks.setClassPerformance(resultSet.wasNull() ? null : classPerformance);
 
-            float partA = resultSet.getFloat("PART_A");
-            marks.setPartA(resultSet.wasNull() ? null : partA);
+                float partA = resultSet.getFloat("PART_A");
+                marks.setPartA(resultSet.wasNull() ? null : partA);
 
-            float partB = resultSet.getFloat("PART_B");
-            marks.setPartB(resultSet.wasNull() ? null : partB);
+                float partB = resultSet.getFloat("PART_B");
+                marks.setPartB(resultSet.wasNull() ? null : partB);
 
-            marks.setPartTotal(resultSet.getFloat("PART_TOTAL"));
-
+                marks.setPartTotal(resultSet.getFloat("PART_TOTAL"));
+            }
             float total = resultSet.getFloat("TOTAL");
             marks.setTotal(resultSet.wasNull() ? null : total);
 
@@ -349,6 +375,18 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
         return true;
     }
 
+    @Override
+    public int rejectRecheckRequest(int pSemesterId,String pCourseId,int pExamType) throws Exception {
+        String query = "Update  UG_THEORY_MARKS Set RECHECK_STATUS="+RecheckStatus.RECHECK_FALSE.getId()+"  Where Semester_Id=? And Course_Id=? and Exam_Type=? ";
+        return mJdbcTemplate.update(query,pSemesterId,pCourseId,pExamType);
+
+    }
+    @Override
+    public int approveRecheckRequest(int pSemesterId,String pCourseId,int pExamType) throws Exception {
+        String query = "Update  UG_THEORY_MARKS Set STATUS="+StudentMarksSubmissionStatus.NONE.getId()+"  Where Semester_Id=? And Course_Id=? and Exam_Type=? and Status=  " +StudentMarksSubmissionStatus.ACCEPTED.getId()+
+            " and RECHECK_STATUS="+RecheckStatus.RECHECK_TRUE .getId();
+        return mJdbcTemplate.update(query,pSemesterId,pCourseId,pExamType);
+    }
     public void batchUpdateGradeStatus_Recheck(int pSemesterId,String pCourseId,int pExamType,List<StudentGradeDto> recheckList,List<StudentGradeDto> approveList){
         mJdbcTemplate.batchUpdate(UPDATE_THEORY_STATUS_RECHECK_RECHECK, new BatchPreparedStatementSetter() {
             @Override
@@ -450,12 +488,15 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
                 statusDto.setStatusName(CourseMarksSubmissionStatus.values()[resultSet.getInt("STATUS")].getLabel());
 
                 String courseTeachers=resultSet.getString("Course_Teachers");
-                String courseTeacherArr[]=courseTeachers.split("#");
                 ArrayList<CourseTeacherDto> teacherList=new ArrayList();
-                for(int t=0;t<courseTeacherArr.length;t++){
-                    CourseTeacherDto teacher=new CourseTeacherDto();
-                    teacher.setTeacher_name(courseTeacherArr[t]);
-                    teacherList.add(teacher);
+                if(courseTeachers!=null && !courseTeachers.equalsIgnoreCase("")) {
+                    String courseTeacherArr[] = courseTeachers.split("#");
+
+                    for (int t = 0; t < courseTeacherArr.length; t++) {
+                        CourseTeacherDto teacher = new CourseTeacherDto();
+                        teacher.setTeacher_name(courseTeacherArr[t]);
+                        teacherList.add(teacher);
+                    }
                 }
                 statusDto.setCourseTeacherList(teacherList);
 

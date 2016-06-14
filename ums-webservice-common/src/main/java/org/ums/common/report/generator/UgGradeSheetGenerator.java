@@ -9,6 +9,7 @@ import com.itextpdf.text.pdf.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.domain.model.dto.StudentGradeDto;
+import org.ums.enums.CourseType;
 import org.ums.manager.ExamGradeManager;
 
 /**
@@ -47,7 +48,7 @@ public class UgGradeSheetGenerator {
 
     // step 3
 
-    List<StudentGradeDto> gradeList=examGradeManager.getAllGradeForTheoryCourse(11012016,"EEE1101_S2014_110500",1);
+    List<StudentGradeDto> gradeList=examGradeManager.getAllGrades(11012016, "EEE1101_S2014_110500", 1, CourseType.THEORY);
 
     document.open();
     for (int i=0;i<(gradeList.size()/90);i++) {
