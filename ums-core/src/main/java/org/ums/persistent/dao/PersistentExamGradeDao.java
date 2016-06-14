@@ -10,6 +10,7 @@ import org.ums.domain.model.dto.MarksSubmissionStatusDto;
 import org.ums.domain.model.dto.StudentGradeDto;
 import org.ums.domain.model.immutable.Course;
 import org.ums.enums.CourseMarksSubmissionStatus;
+import org.ums.enums.CourseType;
 import org.ums.enums.RecheckStatus;
 import org.ums.enums.StudentMarksSubmissionStatus;
 
@@ -26,8 +27,10 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
 
-    static String SELECT_THEORY_MARKS = "Select * From UG_THEORY_MARKS  Where Semester_Id='11012016' and Course_Id='EEE1101_S2014_110500' and Exam_Type=1 ";
-    static String SELECT_PART_INFO="Select * From MARKS_SUBMISSION_STATUS Where Semester_Id='11012016' and Course_Id='EEE1101_S2014_110500' and Exam_Type=1 ";
+    static String SELECT_THEORY_MARKS = "Select * From UG_THEORY_MARKS  Where Semester_Id=? and Course_Id=? and Exam_Type=? ";
+
+    static String SELECT_PART_INFO="Select MARKS_SUBMISSION_STATUS.*,COURSE_TYPE From MARKS_SUBMISSION_STATUS, Where Course.Course_Id=MARKS_SUBMISSION_STATUS.Course_Id And " +
+            " Semester_Id=? and Course_Id=? and Exam_Type=? ";
 
     static String UPDATE_PART_INFO="Update MARKS_SUBMISSION_STATUS Set TOTAL_PART=?,PART_A_TOTAL=?,PART_B_TOTAL=? Where SEMESTER_ID=? and COURSE_ID=? and EXAM_TYPE=? and Status=0";
     static String UPDATE_MARKS_SUBMISSION_STATUS="Update MARKS_SUBMISSION_STATUS Set STATUS=? Where SEMESTER_ID=? and COURSE_ID=? and EXAM_TYPE=? ";
@@ -143,7 +146,7 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
     public List<StudentGradeDto> getAllGradeForTheoryCourse(int pSemesterId,String pCourseId,int pExamType) throws Exception {
         String ORDER_BY=  " Order by Student_Id,Status  ";
         String query = SELECT_THEORY_MARKS + ORDER_BY;
-        return mJdbcTemplate.query(query, new StudentMarksRowMapper());
+        return mJdbcTemplate.query(query,new Object[]{pSemesterId,pCourseId,pExamType}, new StudentMarksRowMapper());
     }
 
     @Override
@@ -156,7 +159,7 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
     @Override
     public MarksSubmissionStatusDto getMarksSubmissionStatus(int pSemesterId,String pCourseId,int pExamType) throws Exception {
         String query = SELECT_PART_INFO;
-        return mJdbcTemplate.queryForObject(query, new MarksSubmissionStatusRowMapper());
+        return mJdbcTemplate.queryForObject(query,new Object[]{pSemesterId,pCourseId,pExamType}, new MarksSubmissionStatusRowMapper());
     }
 
     @Override
@@ -422,7 +425,7 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
             statusDto.setPart_b_total(resultSet.getInt("PART_B_TOTAL"));
             statusDto.setStatusId(resultSet.getInt("STATUS"));
             statusDto.setStatus(CourseMarksSubmissionStatus.values()[resultSet.getInt("STATUS")]);
-
+            statusDto.setCourseType(CourseType.get(resultSet.getInt("COURSE_TYPE")));
             AtomicReference<MarksSubmissionStatusDto> atomicReference = new AtomicReference<>(statusDto);
             return atomicReference.get();
         }

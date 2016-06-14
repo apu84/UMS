@@ -254,6 +254,10 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
             updateStatus = getContentManager().updateGradeStatus_Recheck(11012016, "EEE1101_S2014_110500", 1, gradeList.get(0), gradeList.get(1));
             int bb = getContentManager().updateCourseMarksSubmissionStatus(11012016, "EEE1101_S2014_110500",1, getCourseMarksSubmissionNextStatus(actor,action,CourseMarksSubmissionStatus.values()[current_course_status]));
         }
+        else if(action.equals("recheck_request_rejected")) { // CoE Press the "Send Recheck Requst to VC" Button
+        }
+        else if(action.equals("recheck_request_approved")) { // CoE Press the "Send Recheck Requst to VC" Button
+        }
 
         Response.ResponseBuilder builder = Response.created(null);
         builder.status(Response.Status.CREATED);

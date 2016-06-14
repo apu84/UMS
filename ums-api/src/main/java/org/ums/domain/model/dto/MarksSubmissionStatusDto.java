@@ -2,6 +2,7 @@ package org.ums.domain.model.dto;
 
 import com.google.gson.Gson;
 import org.ums.enums.CourseMarksSubmissionStatus;
+import org.ums.enums.CourseType;
 
 import java.util.List;
 
@@ -23,6 +24,7 @@ public class MarksSubmissionStatusDto {
     private CourseMarksSubmissionStatus status;
     private String statusName;
     private String action;
+    private CourseType courseType;
 
     private String preparerId;
     private String preparerName;
@@ -208,6 +210,14 @@ public class MarksSubmissionStatusDto {
 
     public void setStatus(CourseMarksSubmissionStatus status) {
         this.status = status;
+    }
+
+    public CourseType getCourseType() {
+        return courseType;
+    }
+
+    public void setCourseType(CourseType courseType) {
+        this.courseType = courseType;
     }
 
     public String toString() {
