@@ -28,8 +28,9 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label">Program Type</label>
                         <div class="col-md-8">
-                            <select class="form-control required">
-                                <option  value="11">Undergraduate</option>
+                            <select class="form-control required" data-ng-model="inputParams.program_type" data-convert-to-number data-ng-change="loadSemesters()">
+                                    <option  value="11">Undergraduate</option>
+                                    <option  value="22">Postgraduate</option>
                             </select>
                         </div>
                     </div>
@@ -37,9 +38,10 @@
                         <label class="col-md-4 control-label">Semester</label>
 
                         <div class="col-md-8">
-                            <select class="form-control required" >
-                                <option  value="11012016">Spring, 2016</option>
+                            <select class="form-control required" data-ng-model="inputParams.semester_id">
+                                <option data-ng-repeat="semester in data.semesters" value="{{semester.id}}">{{semester.name}}</option>
                             </select>
+                            <!--                                <option  value="11012016">Spring, 2016</option>-->
                         </div>
 
                     </div>
@@ -47,9 +49,28 @@
                         <label class="col-md-4 control-label">Exam Type</label>
 
                         <div class="col-md-8">
-                            <select class="form-control required" >
-                                <option  value="1">Regular</option>
-                                <option  value="2">Clearance/Carry Over/Improvement</option>
+                            <select class="form-control required" data-ng-model="inputParams.exam_type" data-convert-to-number>
+                                <option  value="1">Semester Final</option>
+                                <option  value="2">Clearance/Carry/Improvement</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group" data-ng-if="userRole!='T'">
+                        <label class="col-md-4 control-label">Dept./School</label>
+
+                        <div class="col-md-8">
+                            <select class="form-control required" data-ng-model="inputParams.dept_id" data-ng-change="loadPrograms()">
+                                <option data-ng-repeat="department in data.depts" value="{{department.id}}">{{department.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group"  data-ng-if="userRole!='T'">
+                        <label class="col-md-4 control-label">Program Name</label>
+
+                        <div class="col-md-8">
+                            <select class="form-control required" data-ng-model="inputParams.prgram_id">
+                                <option data-ng-repeat="program in data.programs" value="{{program.id}}">{{program.shortName}}</option>
                             </select>
                         </div>
                     </div>
@@ -570,7 +591,7 @@
                 <!-- End of Approved Grades -->
 
                 <!-- Start of Accepted Grades -->
-                <div ng-if="acceptedGrades.length">
+                <div ng-if="acceptedGrades.length>0">
                     <div class="btn btn-blue reportrange" style="margin-top: 20px;">
                         <i class="fa fa-check-circle"></i>
                         <span style="padding-right: 100px;">Accepted(by CoE) Grades</span>
@@ -617,7 +638,7 @@
                             <span style="padding-right: 30px;">Recheck Accepted Grades(Pending) <input type="'textbox" style="width:150px;border:1px solid white;color:black;margin-left:10px"  ng-keypress="($event.which === 13)?copyGradeRow():0" data-ng-model="data.recheck_accepted_studentId"/></span>
                         </div>
                         <div class="clearfix"></div>
-                        <scrollable-table watch="acceptedGrades" ng-style="{height:300}">
+                        <scrollable-table watch="recheckAcceptedGrades" ng-style="{height:300}">
                             <table class="table table-striped table-bordered" id="tbl_recheck_accepted">
                                 <thead>
                                 <tr>
@@ -642,7 +663,7 @@
                                     <td style="padding-right: 30px;text-align: right;" ng-show="toggleColumn">{{response.partB}}</td>
                                     <td style="padding-right: 30px;text-align: right;">{{response.total}}</td>
                                     <td style="text-align: center;">{{response.gradeLetter}}</td>
-                                    <td style="text-align: center;"></td>
+                                    <td style="text-align: center;" ></td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -654,6 +675,52 @@
                             </div>
                             <div class="col-md-6" style="text-align: right;">
                                 <button type="button"  class="btn btn-green btn-square" data-ng-click="sendRecheckRequestToVC(currentActor)">Send Reheck Request to VC</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div ng-if="recheckAcceptedGrades.length>0 &&  (gradeSubmissionStatus =='8' && currentActor=='vc') ">
+                        <div class="btn btn-red reportrange" style="margin-top: 20px;">
+                            <i class="fa fa-check-circle"></i>
+                            <span style="padding-right: 30px;">Recheck Request for Accepted Grades(Pending) /></span>
+                        </div>
+                        <div class="clearfix"></div>
+                        <scrollable-table watch="recheckAcceptedGrades" ng-style="{height:300}">
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                <tr>
+                                    <th sortable-header col="studentId" width="10%">Student Id</th>
+                                    <th sortable-header col="studentName" width="30%">Student Name</th>
+                                    <th sortable-header col="quiz" width="8%" style="text-align: center;">Quiz (20)</th>
+                                    <th sortable-header col="classPerformance" width="10%" style="text-align: center;">Class Perf. (10)</th>
+                                    <th sortable-header col="partA" width="8%" style="text-align: center;">Part-A ({{data.part_a_total}})</th>
+                                    <th sortable-header col="partB" width="8%" style="text-align: center;" ng-show="toggleColumn">Part-B ({{data.part_b_total}})</th>
+                                    <th sortable-header col="total" width="8%" style="text-align: center;">Total</th>
+                                    <th sortable-header col="gradeLetter" width="8%" style="text-align: center;">Grade Letter</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="response in recheckAcceptedGrades">
+                                    <td>{{response.studentId}}</td>
+                                    <td>{{ response.studentName }}</td>
+                                    <td style="padding-right: 30px;text-align: right;">{{response.quiz}}</td>
+                                    <td style="padding-right: 30px;text-align: right;">{{response.classPerformance}}</td>
+                                    <td style="padding-right: 30px;text-align: right;">{{response.partA}}</td>
+                                    <td style="padding-right: 30px;text-align: right;" ng-show="toggleColumn">{{response.partB}}</td>
+                                    <td style="padding-right: 30px;text-align: right;">{{response.total}}</td>
+                                    <td style="text-align: center;">{{response.gradeLetter}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </scrollable-table>
+
+                        <div class="row" style="padding-top:20px;padding-bottom: 20px;">
+                            <div class="col-md-6">
+                                <button type="button" class="btn btn-default btn-square" onclick='goBack()'>Back to Grade Sheet Selection</button>
+                            </div>
+                            <div class="col-md-6" style="text-align: right;">
+                                <button type="button"  class="btn btn-green btn-square" data-ng-click="sendRecheckRequestToVC(currentActor)">Approve Recheck Request</button>
                             </div>
                         </div>
 
@@ -816,7 +883,7 @@
                             </div>
                             <div class="panel-body">
                                 <div style="width: 100%; height:250px">
-                                    <am-chart id="myFirstChart" options="amChartOptions"></am-chart>
+                                    <am-chart id="gradeChart" options="amChartOptions"></am-chart>
                                 </div>
                             </div>
                         </div>

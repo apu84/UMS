@@ -91,8 +91,6 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
 
 
         JsonArrayBuilder noneAndSubmitArrayBuilder = Json.createArrayBuilder();
-
-
         JsonArrayBuilder scrutinizeCandidatesArrayBuilder = Json.createArrayBuilder();
         JsonArrayBuilder approveCandidatesArrayBuilder = Json.createArrayBuilder();
         JsonArrayBuilder acceptCandidatesArrayBuilder = Json.createArrayBuilder();
@@ -116,23 +114,6 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
             courseStatus=CourseMarksSubmissionStatus.values()[marksSubmissionStatusDto.getStatusId()];
 
 
-            /*
-            if(gradeStatus == StudentMarksSubmissionStatus.NONE  && gradeDto.getRecheckStatus()==0 )
-                noneSubmittedArrayBuilder.add(object1);
-            else if((courseStatus== CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_SCRUTINIZER ||
-                courseStatus== CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_HEAD ||
-                courseStatus== CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_COE )
-                &&
-                gradeStatus == StudentMarksSubmissionStatus.DO_RECHECK  && gradeStatus == StudentMarksSubmissionStatus.RECHECK )
-                recheckListArrayBuilder.add(object1);
-
-            else if(courseStatus== CourseMarksSubmissionStatus.WAITING_FOR_SCRUTINY  && (gradeStatus == StudentMarksSubmissionStatus.RECHECKED || gradeStatus == StudentMarksSubmissionStatus.SCRUTINIZED || gradeStatus == StudentMarksSubmissionStatus.SUBMITTED) )
-                waitingForScrutinyArrayBuilder.add(object1);
-            else if(courseStatus== CourseMarksSubmissionStatus.WAITING_FOR_HEAD_APPROVAL && gradeStatus==StudentMarksSubmissionStatus.APPROVE && gradeStatus==StudentMarksSubmissionStatus.SCRUTINIZED)
-                waitingForHeadApprovalArrayBuilder.add(object1);
-            else if(courseStatus== CourseMarksSubmissionStatus.WAITING_FOR_COE_APPROVAL && gradeStatus==StudentMarksSubmissionStatus.ACCEPT && gradeStatus==StudentMarksSubmissionStatus.APPROVED)
-                waitingForCoEApprovalArrayBuilder.add(object1);
-            */
             if(gradeStatus == StudentMarksSubmissionStatus.NONE || gradeStatus == StudentMarksSubmissionStatus.SUBMIT  && gradeDto.getRecheckStatusId()==0  && currentActor.equalsIgnoreCase("preparer"))
                 noneAndSubmitArrayBuilder.add(object1);
             else if( (gradeStatus == StudentMarksSubmissionStatus.SUBMITTED  || gradeStatus == StudentMarksSubmissionStatus.SCRUTINIZE ) && currentActor.equalsIgnoreCase("scrutinizer"))
@@ -149,23 +130,20 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
             else if((gradeStatus == StudentMarksSubmissionStatus.APPROVED  ||  gradeStatus == StudentMarksSubmissionStatus.ACCEPT)  ) //&& !currentActor.equalsIgnoreCase("coe")
                 approvedArrayBuilder.add(object1);
             else if(gradeStatus == StudentMarksSubmissionStatus.ACCEPTED ) {
-                acceptedArrayBuilder.add(object1);
+                //acceptedArrayBuilder.add(object1);
                 if(gradeDto.getRecheckStatus()==RecheckStatus.RECHECK_TRUE)
                     recheckAcceptedArrayBuilder.add(object1);
+                else
+                    acceptedArrayBuilder.add(object1);
             }
-            else if(gradeStatus == StudentMarksSubmissionStatus.ACCEPTED )
-                acceptedArrayBuilder.add(object1);
+//            else if(gradeStatus == StudentMarksSubmissionStatus.ACCEPTED )
+//                acceptedArrayBuilder.add(object1);
 
             if((courseStatus==CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_SCRUTINIZER || courseStatus==CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_HEAD
                 || courseStatus==CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_COE) &&  gradeDto.getRecheckStatus()== RecheckStatus.RECHECK_TRUE){
                 recheckCandidatesArrayBuilder.add(object1);
             }
         }
-//        object.add("none_submitted_grades", noneSubmittedArrayBuilder);
-//        object.add("recheck_grades", recheckListArrayBuilder);
-//        object.add("waiting_for_scrutiny_grades", waitingForScrutinyArrayBuilder);
-//        object.add("waiting_for_head_approval_grades", waitingForHeadApprovalArrayBuilder);
-//        object.add("waiting_for_CoE_approval_grades", waitingForCoEApprovalArrayBuilder);
 
         object.add("none_and_submit_grades", noneAndSubmitArrayBuilder);
 
@@ -262,14 +240,18 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
 
         boolean updateStatus;
         //Need to improve this if else logic here....
-        if(action.equals("save"))
+        if(action.equals("save"))  // Scrutinizer, Head, CoE  Press the Save Button
             updateStatus=getContentManager().updateGradeStatus_Save(11012016, "EEE1101_S2014_110500", 1, gradeList.get(0),gradeList.get(1));
-        else if(action.equals("recheck")) {
+        else if(action.equals("recheck")) {  //Scrutnizer, Head, CoE Press the Recheck Button
             updateStatus = getContentManager().updateGradeStatus_Recheck(11012016, "EEE1101_S2014_110500", 1, gradeList.get(0), gradeList.get(1));
             int bb = getContentManager().updateCourseMarksSubmissionStatus(11012016, "EEE1101_S2014_110500",1, getCourseMarksSubmissionNextStatus(actor,action,CourseMarksSubmissionStatus.values()[current_course_status]));
         }
-        else if(action.equals("approve")) {
+        else if(action.equals("approve")) { //Scrutnizer, Head, CoE Press the Approve Button
             updateStatus = getContentManager().updateGradeStatus_Approve(11012016, "EEE1101_S2014_110500", 1, gradeList.get(0), gradeList.get(1));
+            int bb = getContentManager().updateCourseMarksSubmissionStatus(11012016, "EEE1101_S2014_110500",1, getCourseMarksSubmissionNextStatus(actor,action,CourseMarksSubmissionStatus.values()[current_course_status]));
+        }
+        else if(action.equals("recheck_request_submit")) { // CoE Press the "Send Recheck Requst to VC" Button
+            updateStatus = getContentManager().updateGradeStatus_Recheck(11012016, "EEE1101_S2014_110500", 1, gradeList.get(0), gradeList.get(1));
             int bb = getContentManager().updateCourseMarksSubmissionStatus(11012016, "EEE1101_S2014_110500",1, getCourseMarksSubmissionNextStatus(actor,action,CourseMarksSubmissionStatus.values()[current_course_status]));
         }
 
@@ -298,6 +280,8 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
                 nextStatus=CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_COE;
             else if(action.equalsIgnoreCase("approve") && currentStatus==CourseMarksSubmissionStatus.WAITING_FOR_COE_APPROVAL)
                 nextStatus=CourseMarksSubmissionStatus.ACCEPTED_BY_COE;
+            else if(action.equalsIgnoreCase("recheck_request_submit") && currentStatus==CourseMarksSubmissionStatus.ACCEPTED_BY_COE)
+                nextStatus=CourseMarksSubmissionStatus.WAITING_FOR_RECHECK_REQUEST_APPROVAL;
         }
 
         return nextStatus;
@@ -329,5 +313,33 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
         return "Invalid";
     }
 
+    public JsonObject getChartData(final Integer pSemesterId,final String pCourseId, final Integer pExamType) throws Exception {
+
+        String userId = "";
+        Subject subject = SecurityUtils.getSubject();
+        if (subject != null) {
+            userId = subject.getPrincipal().toString();
+        }
+        User user=mUserManager.get(userId);
+        //Need to check User Role
+        //Need to check Course Type - Theory or Sessional
+        List<GradeChartDataDto> examGradeStatusList = getContentManager().getTheoryChartData(pSemesterId,pCourseId,pExamType);
+
+        JsonObjectBuilder object = Json.createObjectBuilder();
+        JsonArrayBuilder children = Json.createArrayBuilder();
+
+        JsonReader jsonReader;
+        JsonObject object1;
+
+        for (GradeChartDataDto chartDto : examGradeStatusList) {
+            jsonReader = Json.createReader(new StringReader(chartDto.toString()));
+            object1 = jsonReader.readObject();
+            jsonReader.close();
+            children.add(object1);
+        }
+        object.add("entries", children);
+
+        return object.build();
+    }
 
 }
