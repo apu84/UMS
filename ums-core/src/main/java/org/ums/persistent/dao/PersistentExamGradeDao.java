@@ -39,6 +39,8 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
 
     static String UPDATE_THEORY_MARKS="Update  UG_THEORY_MARKS Set Quiz=?,Class_Performance=?,Part_A=?,Part_B=?,Total=?,Grade_Letter=?,Grade_Point=?,Status=? " +
             " Where Semester_Id=? And Course_Id=? and Exam_Type=? and Student_Id=?";
+    static String UPDATE_SESSIONAL_MARKS="Update  UG_SESSIONAL_MARKS Set Total=?,Grade_Letter=?,Grade_Point=?,Status=? " +
+            " Where Semester_Id=? And Course_Id=? and Exam_Type=? and Student_Id=?";
 
     static String SELECT_GRADE_SUBMISSION_TABLE_TEACHER="Select tmp5.*,Status From ( " +
             "Select tmp4.*,MVIEW_TEACHERS.TEACHER_NAME Scrutinizer_Name,getCourseTeacher(semester_id,course_id) Course_Teachers From " +
@@ -85,17 +87,17 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
         "And MST_SYLLABUS.PROGRAM_ID=MST_PROGRAM.PROGRAM_ID " +
         "And Offer_By =? " ;
 
-    static String UPDATE_THEORY_STATUS_SAVE_RECHECK="Update UG_THEORY_MARKS Set RECHECK_STATUS=?  Where SEMESTER_ID=? And COURSE_ID=? And EXAM_TYPE=? And STUDENT_ID=? and " +
+    static String UPDATE_STATUS_SAVE_RECHECK="Update TABLE_NAME Set RECHECK_STATUS=?  Where SEMESTER_ID=? And COURSE_ID=? And EXAM_TYPE=? And STUDENT_ID=? and " +
         " Status in (select regexp_substr(?,'[^,]+', 1, level) from dual connect by regexp_substr(?, '[^,]+', 1, level) is not null)";
-    static String UPDATE_THEORY_STATUS_SAVE_APPROVE="Update UG_THEORY_MARKS Set RECHECK_STATUS=?,STATUS=?  Where SEMESTER_ID=? And COURSE_ID=? And EXAM_TYPE=? And STUDENT_ID=? and " +
+    static String UPDATE_STATUS_SAVE_APPROVE="Update TABLE_NAME Set RECHECK_STATUS=?,STATUS=?  Where SEMESTER_ID=? And COURSE_ID=? And EXAM_TYPE=? And STUDENT_ID=? and " +
         " Status in  (select regexp_substr(?,'[^,]+', 1, level) from dual connect by regexp_substr(?, '[^,]+', 1, level) is not null)";
 
-    static String UPDATE_THEORY_STATUS_RECHECK_RECHECK="Update UG_THEORY_MARKS Set RECHECK_STATUS=?,STATUS=?   Where SEMESTER_ID=? And COURSE_ID=? And EXAM_TYPE=? And STUDENT_ID=? and " +
+    static String UPDATE_STATUS_RECHECK_RECHECK="Update TABLE_NAME Set RECHECK_STATUS=?,STATUS=?   Where SEMESTER_ID=? And COURSE_ID=? And EXAM_TYPE=? And STUDENT_ID=? and " +
         " Status in (select regexp_substr(?,'[^,]+', 1, level) from dual connect by regexp_substr(?, '[^,]+', 1, level) is not null)";
-    static String UPDATE_THEORY_STATUS_RECHECK_APPROVE="Update UG_THEORY_MARKS Set RECHECK_STATUS=?,STATUS=?   Where SEMESTER_ID=? And COURSE_ID=? And EXAM_TYPE=? And STUDENT_ID=? and  " +
+    static String UPDATE_STATUS_RECHECK_APPROVE="Update TABLE_NAME Set RECHECK_STATUS=?,STATUS=?   Where SEMESTER_ID=? And COURSE_ID=? And EXAM_TYPE=? And STUDENT_ID=? and  " +
         " Status in (select regexp_substr(?,'[^,]+', 1, level) from dual connect by regexp_substr(?, '[^,]+', 1, level) is not null)";
 
-    static String UPDATE_THEORY_STATUS_APPROVE="Update UG_THEORY_MARKS Set RECHECK_STATUS=?, STATUS=?  Where SEMESTER_ID=? And COURSE_ID=? And EXAM_TYPE=? And STUDENT_ID=? and  " +
+    static String UPDATE_STATUS_APPROVE="Update TABLE_NAME Set RECHECK_STATUS=?, STATUS=?  Where SEMESTER_ID=? And COURSE_ID=? And EXAM_TYPE=? And STUDENT_ID=? and  " +
         " Status in (select regexp_substr(?,'[^,]+', 1, level) from dual connect by regexp_substr(?, '[^,]+', 1, level) is not null)";
 
     static String CHECK_TEACHER_ROLE="Select * From  " +
@@ -117,9 +119,9 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
         "Union " +
         "Select 'vc' Role, 2 Serial From ADDITIONAL_ROLE_PERMISSIONS Where User_Id=?  And Role_Id=91";
 
-    static String THEORY_CHART_DATA="Select Grade_Letter,sum(Total) Total, max(Color) Color From   " +
+    String CHART_DATA="Select Grade_Letter,sum(Total) Total, max(Color) Color From   " +
         "(  " +
-        "select Grade_Letter,Count(Total) Total,'' Color From UG_THEORY_MARKS Where Semester_Id=? And Course_Id=? and Exam_Type=? Group by Grade_Letter  " +
+        "select Grade_Letter,Count(Total) Total,'' Color From TABLE_NAME Where Semester_Id=? And Course_Id=? and Exam_Type=? Group by Grade_Letter  " +
         "Union  " +
         "Select 'A+' Grade_Letter, 0 Total, '#FF0F00' Color From Dual  " +
         "Union  " +
@@ -151,7 +153,7 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
     @Override
     public List<StudentGradeDto> getAllGrades(int pSemesterId,String pCourseId,int pExamType,CourseType courseType) throws Exception {
 
-        String query ="";
+        String query="";
         if(courseType==CourseType.THEORY)
             query=SELECT_THEORY_MARKS + " Order by UG_THEORY_MARKS.Student_Id,Status  ";
         else if(courseType==CourseType.SESSIONAL)
@@ -161,11 +163,19 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
     }
 
     @Override
-    public List<GradeChartDataDto> getTheoryChartData(int pSemesterId,String pCourseId,int pExamType) throws Exception {
-        String query = THEORY_CHART_DATA;
+    public List<GradeChartDataDto> getChartData(int pSemesterId,String pCourseId,int pExamType,CourseType courseType) throws Exception {
+        String query =getQuery(CHART_DATA,courseType);
         return mJdbcTemplate.query(query,new Object[]{pSemesterId,pCourseId,pExamType}, new ChartDataRowMapper());
     }
 
+    private String getQuery(String orgQuery,CourseType courseType){
+        String query="";
+        if(courseType==CourseType.THEORY)
+            query=orgQuery.replaceAll("TABLE_NAME", " UG_THEORY_MARKS");
+        else if(courseType==CourseType.SESSIONAL)
+            query=orgQuery.replaceAll("TABLE_NAME", "UG_SESSIONAL_MARKS");
+        return query;
+    }
 
     @Override
     public MarksSubmissionStatusDto getMarksSubmissionStatus(int pSemesterId,String pCourseId,int pExamType) throws Exception {
@@ -223,7 +233,7 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
 
     }
     @Override
-    public int updateCourseMarksSubmissionStatus(int pSemesterId,String pCourseId,int pExamType,CourseMarksSubmissionStatus status) throws Exception {
+    public int updateCourseMarksSubmissionStatus(int pSemesterId,String pCourseId,int pExamType,CourseType courseType,CourseMarksSubmissionStatus status) throws Exception {
         String query = UPDATE_MARKS_SUBMISSION_STATUS;
         return mJdbcTemplate.update(query,status.getId(), pSemesterId,pCourseId,pExamType);
     }
@@ -283,39 +293,58 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
         }
     }
 
-    public boolean saveGradeSheet(int pSemesterId,String pCourseId,int pExamType,List<StudentGradeDto> pGradeList) throws Exception {
-        batchUpdateGrade(pSemesterId, pCourseId, pExamType, pGradeList);
+    public boolean saveGradeSheet(int pSemesterId,String pCourseId,int pExamType,CourseType courseType,List<StudentGradeDto> pGradeList) throws Exception {
+        batchUpdateGrade(pSemesterId, pCourseId, pExamType,courseType, pGradeList);
         return true;
     }
 
-    public void batchUpdateGrade(int pSemesterId,String pCourseId,int pExamType,List<StudentGradeDto> pGradeList){
-        String sql = UPDATE_THEORY_MARKS;
+    public void batchUpdateGrade(int pSemesterId,String pCourseId,int pExamType,CourseType courseType,List<StudentGradeDto> pGradeList){
+        String sql ="";
+        if(courseType==CourseType.THEORY)
+            sql=UPDATE_THEORY_MARKS;
+        else if(courseType==CourseType.SESSIONAL)
+            sql=UPDATE_SESSIONAL_MARKS;
 
         mJdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
                 StudentGradeDto gradeDto = pGradeList.get(i);
-                if (gradeDto.getQuiz() == -1)
-                    ps.setNull(1, Types.NULL);
-                else
-                    ps.setFloat(1, gradeDto.getQuiz());
-                if (gradeDto.getClassPerformance() == -1) ps.setNull(2, Types.NULL);
-                else ps.setFloat(2, gradeDto.getClassPerformance());
-                if (gradeDto.getPartA() == -1) ps.setNull(3, Types.NULL);
-                else ps.setFloat(3, gradeDto.getPartA());
-                if (gradeDto.getPartB() == -1) ps.setNull(4, Types.NULL);
-                else ps.setFloat(4, gradeDto.getPartB());
-                if (gradeDto.getTotal() == -1) ps.setNull(5, Types.NULL);
-                else ps.setFloat(5, gradeDto.getTotal());
+                if(courseType==CourseType.THEORY) {
+                    if (gradeDto.getQuiz() == -1)
+                        ps.setNull(1, Types.NULL);
+                    else
+                        ps.setFloat(1, gradeDto.getQuiz());
+                    if (gradeDto.getClassPerformance() == -1) ps.setNull(2, Types.NULL);
+                    else ps.setFloat(2, gradeDto.getClassPerformance());
+                    if (gradeDto.getPartA() == -1) ps.setNull(3, Types.NULL);
+                    else ps.setFloat(3, gradeDto.getPartA());
+                    if (gradeDto.getPartB() == -1) ps.setNull(4, Types.NULL);
+                    else ps.setFloat(4, gradeDto.getPartB());
+                    if (gradeDto.getTotal() == -1) ps.setNull(5, Types.NULL);
+                    else ps.setFloat(5, gradeDto.getTotal());
 
-                ps.setString(6, gradeDto.getGradeLetter());
-                ps.setFloat(7, 4);
-                ps.setInt(8, gradeDto.getStatusId());
+                    ps.setString(6, gradeDto.getGradeLetter());
+                    ps.setFloat(7, 4);
+                    ps.setInt(8, gradeDto.getStatusId());
 
-                ps.setInt(9, pSemesterId);
-                ps.setString(10, pCourseId);
-                ps.setInt(11, pExamType);
-                ps.setString(12, gradeDto.getStudentId());
+                    ps.setInt(9, pSemesterId);
+                    ps.setString(10, pCourseId);
+                    ps.setInt(11, pExamType);
+                    ps.setString(12, gradeDto.getStudentId());
+                }
+                if(courseType==CourseType.SESSIONAL) {
+                    if (gradeDto.getTotal() == -1) ps.setNull(1, Types.NULL);
+                    else ps.setFloat(1, gradeDto.getTotal());
+
+                    ps.setString(2, gradeDto.getGradeLetter());
+                    ps.setFloat(3, 4);
+                    ps.setInt(4, gradeDto.getStatusId());
+
+                    ps.setInt(5, pSemesterId);
+                    ps.setString(6, pCourseId);
+                    ps.setInt(7, pExamType);
+                    ps.setString(8, gradeDto.getStudentId());
+                }
             }
             @Override
             public int getBatchSize() {
@@ -325,13 +354,16 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
         });
     }
 
-    public boolean updateGradeStatus_Save(int pSemesterId,String pCourseId,int pExamType,List<StudentGradeDto> recheckList,List<StudentGradeDto> approveList) throws Exception {
-        batchUpdateGradeStatus_Save(pSemesterId, pCourseId, pExamType,recheckList,approveList);
+    @Override
+    public boolean updateGradeStatus_Save(int pSemesterId,String pCourseId,int pExamType,CourseType courseType,List<StudentGradeDto> recheckList,List<StudentGradeDto> approveList) throws Exception {
+        batchUpdateGradeStatus_Save(pSemesterId, pCourseId, pExamType,courseType,recheckList,approveList);
         return true;
     }
 
-    public void batchUpdateGradeStatus_Save(int pSemesterId,String pCourseId,int pExamType,List<StudentGradeDto> recheckList,List<StudentGradeDto> approveList){
-        mJdbcTemplate.batchUpdate(UPDATE_THEORY_STATUS_SAVE_RECHECK, new BatchPreparedStatementSetter() {
+    public void batchUpdateGradeStatus_Save(int pSemesterId,String pCourseId,int pExamType,CourseType courseType,List<StudentGradeDto> recheckList,List<StudentGradeDto> approveList){
+
+        String query =getQuery(UPDATE_STATUS_SAVE_RECHECK,courseType);
+        mJdbcTemplate.batchUpdate(query, new BatchPreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
                 StudentGradeDto gradeDto = recheckList.get(i);
@@ -349,7 +381,9 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
             }
 
         });
-        mJdbcTemplate.batchUpdate(UPDATE_THEORY_STATUS_SAVE_APPROVE, new BatchPreparedStatementSetter() {
+
+        query =getQuery(UPDATE_STATUS_SAVE_APPROVE,courseType);
+        mJdbcTemplate.batchUpdate(query, new BatchPreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
                 StudentGradeDto gradeDto = approveList.get(i);
@@ -370,25 +404,28 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
         });
     }
 
-    public boolean updateGradeStatus_Recheck(int pSemesterId,String pCourseId,int pExamType,List<StudentGradeDto> recheckList,List<StudentGradeDto> approveList) throws Exception {
-        batchUpdateGradeStatus_Recheck(pSemesterId, pCourseId, pExamType, recheckList, approveList);
+    @Override
+    public boolean updateGradeStatus_Recheck(int pSemesterId,String pCourseId,int pExamType,CourseType courseType,List<StudentGradeDto> recheckList,List<StudentGradeDto> approveList) throws Exception {
+        batchUpdateGradeStatus_Recheck(pSemesterId, pCourseId, pExamType,courseType, recheckList, approveList);
         return true;
     }
 
     @Override
-    public int rejectRecheckRequest(int pSemesterId,String pCourseId,int pExamType) throws Exception {
+    public int rejectRecheckRequest(int pSemesterId,String pCourseId,int pExamType,CourseType courseType) throws Exception {
         String query = "Update  UG_THEORY_MARKS Set RECHECK_STATUS="+RecheckStatus.RECHECK_FALSE.getId()+"  Where Semester_Id=? And Course_Id=? and Exam_Type=? ";
         return mJdbcTemplate.update(query,pSemesterId,pCourseId,pExamType);
 
     }
     @Override
-    public int approveRecheckRequest(int pSemesterId,String pCourseId,int pExamType) throws Exception {
+    public int approveRecheckRequest(int pSemesterId,String pCourseId,int pExamType,CourseType courseType) throws Exception {
         String query = "Update  UG_THEORY_MARKS Set STATUS="+StudentMarksSubmissionStatus.NONE.getId()+"  Where Semester_Id=? And Course_Id=? and Exam_Type=? and Status=  " +StudentMarksSubmissionStatus.ACCEPTED.getId()+
             " and RECHECK_STATUS="+RecheckStatus.RECHECK_TRUE .getId();
         return mJdbcTemplate.update(query,pSemesterId,pCourseId,pExamType);
     }
-    public void batchUpdateGradeStatus_Recheck(int pSemesterId,String pCourseId,int pExamType,List<StudentGradeDto> recheckList,List<StudentGradeDto> approveList){
-        mJdbcTemplate.batchUpdate(UPDATE_THEORY_STATUS_RECHECK_RECHECK, new BatchPreparedStatementSetter() {
+    public void batchUpdateGradeStatus_Recheck(int pSemesterId,String pCourseId,int pExamType,CourseType courseType,List<StudentGradeDto> recheckList,List<StudentGradeDto> approveList){
+
+        String query =getQuery(UPDATE_STATUS_RECHECK_RECHECK,courseType);
+        mJdbcTemplate.batchUpdate(query, new BatchPreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
                 StudentGradeDto gradeDto = recheckList.get(i);
@@ -407,7 +444,9 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
             }
 
         });
-        mJdbcTemplate.batchUpdate(UPDATE_THEORY_STATUS_RECHECK_APPROVE, new BatchPreparedStatementSetter() {
+
+        query =getQuery(UPDATE_STATUS_RECHECK_APPROVE,courseType);
+        mJdbcTemplate.batchUpdate(query, new BatchPreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
                 StudentGradeDto gradeDto = approveList.get(i);
@@ -427,13 +466,15 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
 
         });
     }
-    public boolean updateGradeStatus_Approve(int pSemesterId,String pCourseId,int pExamType,List<StudentGradeDto> recheckList,List<StudentGradeDto> approveList) throws Exception {
-        batchUpdateGradeStatus_Approve(pSemesterId, pCourseId, pExamType, recheckList, approveList);
+
+    @Override
+    public boolean updateGradeStatus_Approve(int pSemesterId,String pCourseId,int pExamType,CourseType courseType,List<StudentGradeDto> recheckList,List<StudentGradeDto> approveList) throws Exception {
+        batchUpdateGradeStatus_Approve(pSemesterId, pCourseId, pExamType,courseType, recheckList, approveList);
         return true;
     }
-    public void batchUpdateGradeStatus_Approve(int pSemesterId,String pCourseId,int pExamType,List<StudentGradeDto> recheckList,List<StudentGradeDto> approveList){
-
-        mJdbcTemplate.batchUpdate(UPDATE_THEORY_STATUS_APPROVE, new BatchPreparedStatementSetter() {
+    public void batchUpdateGradeStatus_Approve(int pSemesterId,String pCourseId,int pExamType,CourseType courseType,List<StudentGradeDto> recheckList,List<StudentGradeDto> approveList){
+        String query =getQuery(UPDATE_STATUS_APPROVE,courseType);
+        mJdbcTemplate.batchUpdate(query, new BatchPreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
                 StudentGradeDto gradeDto = approveList.get(i);

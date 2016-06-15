@@ -40,12 +40,13 @@ public class GradeSubmissionResource extends MutableGradeSubmissionResource {
     }
 
   @GET
-  @Path("/chartdata/semester/{semester-id}/courseid/{course-id}/examtype/{exam-type}")
+  @Path("/chartdata/semester/{semester-id}/courseid/{course-id}/examtype/{exam-type}/coursetype/{course-type}")
   public JsonObject getChartData(final @Context Request pRequest,
                                              final @PathParam("semester-id") Integer pSemesterId,
                                              final @PathParam("course-id") String pCourseId,
-                                             final @PathParam("exam-type") Integer pExamTypeId) throws Exception {
-    return mResourceHelper.getChartData(pSemesterId, pCourseId, pExamTypeId);
+                                             final @PathParam("exam-type") Integer pExamTypeId,
+                                             final @PathParam("course-type") Integer pCourseTypeId) throws Exception {
+    return mResourceHelper.getChartData(pSemesterId, pCourseId, pExamTypeId,pCourseTypeId);
   }
 
 

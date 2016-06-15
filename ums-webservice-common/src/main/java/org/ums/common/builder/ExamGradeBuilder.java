@@ -9,6 +9,7 @@ import org.ums.domain.model.immutable.ExamGrade;
 import org.ums.domain.model.immutable.ExamRoutine;
 import org.ums.domain.model.mutable.MutableExamGrade;
 import org.ums.domain.model.mutable.MutableExamRoutine;
+import org.ums.enums.CourseType;
 import org.ums.enums.RecheckStatus;
 import org.ums.enums.StudentMarksSubmissionStatus;
 
@@ -43,6 +44,7 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
         partInfoDto.setTotal_part(course.getInt("total_part"));
         partInfoDto.setPart_a_total(course.getInt("part_a_total"));
         partInfoDto.setPart_b_total(course.getInt("part_b_total"));
+        partInfoDto.setCourseType(CourseType.get(course.getInt("course_type")));
     }
 
     public List<StudentGradeDto> build(JsonObject pJsonObject) throws Exception {
@@ -55,11 +57,13 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
             JsonObject jsonObject = entries.getJsonObject(i);
             StudentGradeDto grade = new StudentGradeDto();
             grade.setStudentId(jsonObject.getString("studentId"));
-            grade.setQuiz((jsonObject.getString("quiz") == null || jsonObject.getString("quiz").equalsIgnoreCase(""))? -1 : Float.parseFloat(jsonObject.getString("quiz")));
-            grade.setClassPerformance((jsonObject.getString("classPerformance") == null || jsonObject.getString("classPerformance").equalsIgnoreCase(""))? -1 : Float.parseFloat(jsonObject.getString("classPerformance")));
-            grade.setPartA((jsonObject.getString("partA") == null || jsonObject.getString("partA").equalsIgnoreCase(""))? -1 : Float.parseFloat(jsonObject.getString("partA")));
-            if(courseInfo.getInt("total_part")==2)
-                grade.setPartB((jsonObject.getString("partB")==null  || jsonObject.getString("partB").equalsIgnoreCase(""))? -1:Float.parseFloat(jsonObject.getString("partB")));
+            if(courseInfo.getInt("course_type")==1) { // For  only theory courses
+                grade.setQuiz((jsonObject.getString("quiz") == null || jsonObject.getString("quiz").equalsIgnoreCase("")) ? -1 : Float.parseFloat(jsonObject.getString("quiz")));
+                grade.setClassPerformance((jsonObject.getString("classPerformance") == null || jsonObject.getString("classPerformance").equalsIgnoreCase("")) ? -1 : Float.parseFloat(jsonObject.getString("classPerformance")));
+                grade.setPartA((jsonObject.getString("partA") == null || jsonObject.getString("partA").equalsIgnoreCase("")) ? -1 : Float.parseFloat(jsonObject.getString("partA")));
+                if (courseInfo.getInt("total_part") == 2)
+                    grade.setPartB((jsonObject.getString("partB") == null || jsonObject.getString("partB").equalsIgnoreCase("")) ? -1 : Float.parseFloat(jsonObject.getString("partB")));
+            }
             grade.setTotal((jsonObject.getString("total") == null || jsonObject.getString("total").equalsIgnoreCase("")) ? -1 : Float.parseFloat(jsonObject.getString("total")));
             grade.setGradeLetter((jsonObject.getString("gradeLetter")==null  || jsonObject.getString("gradeLetter").equalsIgnoreCase("") )? "" :jsonObject.getString("gradeLetter"));
             grade.setStatusId(jsonObject.getInt("statusId"));

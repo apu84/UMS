@@ -107,6 +107,7 @@ module ums {
     total_part:number;
     part_a_total:number;
     part_b_total:number;
+    course_type:number
   }
   interface IInputParams{
     program_type:number;
@@ -277,7 +278,8 @@ module ums {
 
 
     private fetchChartData():ng.IPromise<any> {
-      var url="https://localhost/ums-webservice-common/academic/gradeSubmission/chartdata/semester/11012016/courseid/EEE1101_S2014_110500/examtype/1";
+
+      var url="academic/gradeSubmission/chartdata/semester/"+this.$scope.inputParams.semester_id+"/courseid/"+this.$scope.current_courseId+"/examtype/"+this.$scope.inputParams.exam_type+"/coursetype/"+(this.$scope.courseType=="THEORY"?"1":"2");
       var defer = this.$q.defer();
       this.httpClient.get(url, this.appConstants.mimeTypeJson,
           (json:any, etag:string) => {
@@ -459,7 +461,8 @@ module ums {
 
       //Fetch Chart Data ---
       this.fetchChartData().then((chartData:any)=> {
-        this.$scope.$broadcast("amCharts.updateData", chartData);
+            this.$scope.$broadcast("amCharts.updateData", chartData);
+        this.$scope.chartData=chartData;
       });
 
     }
@@ -746,13 +749,16 @@ module ums {
           studentMark = <IStudentMarks>{};
           studentId = currentStudent.studentId;
           studentMark.studentId = studentId;
-          studentMark.quiz = $("#quiz_" + studentId).val();
-          studentMark.classPerformance = $("#class_perf_" + studentId).val();
+          if(this.$scope.courseType=="THEORY") {
+            studentMark.quiz = $("#quiz_" + studentId).val();
+            studentMark.classPerformance = $("#class_perf_" + studentId).val();
 
-          studentMark.partA = $("#part_a_" + studentId).val();
-          studentMark.partB = $("#part_b_" + studentId).val();
-          studentMark.total = $("#total_" + studentId).val();
-          studentMark.gradeLetter = $("#grade_letter_" + studentId).val();
+            studentMark.partA = $("#part_a_" + studentId).val();
+            studentMark.partB = $("#part_b_" + studentId).val();
+          }
+            studentMark.total = $("#total_" + studentId).val();
+            studentMark.gradeLetter = $("#grade_letter_" + studentId).val();
+
           studentMark.total = $("#total_" + studentId).val();
           studentMark.statusId = status;
 
@@ -770,10 +776,19 @@ module ums {
     private saveAndSendToScrutinizer():void {
       var gradeList:Array<IStudentMarks> = this.getTargetGradeList(2);
       var validate:boolean = true;
-      for (var ind in gradeList) {
-        var studentMark:IStudentMarks = gradeList[ind];
-        if (this.validateGrade(true, studentMark.studentId, studentMark.quiz.toString(), studentMark.classPerformance.toString(), studentMark.partA.toString(), studentMark.partB.toString(), studentMark.total.toString(), studentMark.gradeLetter) == false)
-          validate = true;
+      if(this.$scope.courseType=="THEORY") {
+        for (var ind in gradeList) {
+          var studentMark:IStudentMarks = gradeList[ind];
+          if (this.validateGrade(true, studentMark.studentId, studentMark.quiz.toString(), studentMark.classPerformance.toString(), studentMark.partA.toString(), studentMark.partB.toString(), studentMark.total.toString(), studentMark.gradeLetter) == true)
+            validate = false;
+        }
+      }
+      else if(this.$scope.courseType=="SESSIONAL") {
+        for (var ind in gradeList) {
+          var studentMark:IStudentMarks = gradeList[ind];
+          if (this.validateGrade(true, studentMark.studentId,"", "", "", "", studentMark.total.toString(), studentMark.gradeLetter) == true)
+            validate = false;
+        }
       }
       if (validate == false) {
         alert("Correct your data ...");
@@ -815,12 +830,14 @@ module ums {
         exam_type: 0,
         total_part: 0,
         part_a_total: 0,
-        part_b_total: 0
+        part_b_total: 0,
+        course_type:0
       };
       //alert(this.$scope.data.part_a_total);
-      courseInfo.course_id = "EEE1101_S2014_110500";
-      courseInfo.semester_id = 11012016;
-      courseInfo.exam_type = 1;
+      courseInfo.course_id = this.$scope.current_courseId;
+      courseInfo.semester_id = Number(this.$scope.inputParams.semester_id);
+      courseInfo.exam_type = Number(this.$scope.inputParams.exam_type);
+      courseInfo.course_type=this.$scope.courseType=="THEORY"?1:2;
       courseInfo.total_part = Number(this.$scope.data.total_part);
       courseInfo.part_a_total = Number(this.$scope.data.part_a_total);
       courseInfo.part_b_total = Number(this.$scope.data.part_b_total);
