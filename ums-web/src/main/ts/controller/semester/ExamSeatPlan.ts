@@ -458,16 +458,19 @@ module ums{
         totalSubGroupNumber = this.$scope.colForSubgroup ;
       }
       if(this.$scope.subGroupFound){
-        for(var i=1;i<=totalSubGroupNumber;i++){
-          var members:Array<String>=[];
+        for(var i=1;i<=7;i++){
+          if(this.$scope.subGroupWithDeptMap[i]){
+            var members:Array<String>=[];
 
-          for(var j=0;j<this.$scope.tempGroupListAll.length;j++){
-            if(this.$scope.tempGroupListAll[j].subGroupNumber==i){
-              members.push(this.$scope.tempGroupListAll[j].id);
+            for(var j=0;j<this.$scope.tempGroupListAll.length;j++){
+              if(this.$scope.tempGroupListAll[j].subGroupNumber==i){
+                members.push(this.$scope.tempGroupListAll[j].id);
+              }
             }
+
+            this.subGroupListChanged(i,members);
           }
 
-          this.subGroupListChanged(i,members);
         }
       }else{
         for(var i=1;i<=totalSubGroupNumber;i++){
@@ -802,6 +805,7 @@ module ums{
               this.$scope.tempGroupListAll.push(this.$scope.subGroupList[i].subGroupMembers[k]);
               this.$scope.tempGroupList.push(this.$scope.subGroupList[i].subGroupMembers[k]);
             }
+
             this.$scope.subGroupWithDeptMap[this.$scope.subGroupList[i].subGroupNumber]=studentList;
 
           }
@@ -813,15 +817,19 @@ module ums{
           console.log("tempgroupListAll--->");
           console.log(this.$scope.tempGroupListAll);
 
+          setTimeout(subGroupFunc,2000);
+
+          function subGroupFunc(){
+            $("#sortable1,#sortable2,#sortable3,#sortable4,#sortable5,#sortable6,#sortable0").sortable({
+              connectWith: ".connectedSortable"
+
+            }).disableSelection();
+
+            $(".connectedSortable").css("background-color","antiquewhite");
+          }
+          //this.makeSortableEmpty();
 
 
-
-          $("#sortable1,#sortable2,#sortable3,#sortable4,#sortable5,#sortable6,#sortable0").sortable({
-            connectWith: ".connectedSortable"
-
-          }).disableSelection();
-
-          $(".connectedSortable").css("background-color","antiquewhite");
 
           this.$scope.colForSubgroup = this.$scope.subGroupList.length;
           /*this.$scope.$apply();*/
@@ -1756,7 +1764,10 @@ module ums{
       var operationFailed:boolean=false;
       this.$scope.recreateButtonClicked=false;
       var seatPlanJsonDataList:Array<ISeatPlanJsonData>=[];
-      var tempStorage:Array<ISeatPlanGroup>=angular.copy(this.$scope.tempGroupListAll);
+      var tempStorage:Array<ISeatPlanGroup>=[];
+      console.log("####################");
+      console.log(this.$scope.subGroupList);
+      tempStorage=angular.copy(this.$scope.tempGroupListAll);
       for(var i=0;i<this.$scope.subGroupList.length;i++){
         var position=1;
         for(var j=0;j<this.$scope.subGroupList[i].subGroupMembers.length;j++){
@@ -1772,10 +1783,7 @@ module ums{
             seatPlanJsonData.position = position;
             seatPlanJsonData.groupId = this.$scope.subGroupList[i].subGroupMembers[j].baseId;
             seatPlanJsonData.studentNumber =this.$scope.subGroupList[i].subGroupMembers[j].studentNumber;
-            /* var json = this.convertToJsonForSubGroup(this.$scope.subGroupList[i].subGroupNumber,
-             position,
-             this.$scope.subGroupList[i].subGroupMembers[j].id,this.$scope.subGroupList[i].subGroupMembers[j].studentNumber);*/
-            //this.postSubGroup(json);
+
 
             seatPlanJsonDataList.push(seatPlanJsonData);
             position+=1;
@@ -1846,6 +1854,11 @@ module ums{
         this.$scope.saveSubGroupInfo = false;
         this.$scope.cancelSubGroup = false;
         this.createOrViewSubgroups(this.$scope.selectedGroupNo);
+
+
+        function myFunc(){
+
+        }
 
         $(".connectedSortable").css("background-color","antiquewhite");
       });
@@ -2063,9 +2076,17 @@ module ums{
       this.$scope.editButtonClicked=false;
       this.$scope.cancelSubGroup = false;
       this.$scope.showContextMenu = false;
-      $( "#subGroupPanel").unbind( "mousedown" );
-      $("#subGroupPanel li").unbind("contextmenu");
-      $("#ifti_div").unbind("contextmenu");
+      this.$scope.subGroupList=[];
+
+      setTimeout(myFunc,2000);
+
+      function myFunc(){
+        $( "#subGroupPanel").unbind( "mousedown" );
+        $("#subGroupPanel li").unbind("contextmenu");
+        $("#ifti_div").unbind("contextmenu");
+      }
+
+
       //$("#subGroupPanel li").off();
       //$(".connectedSortable li").off();
 

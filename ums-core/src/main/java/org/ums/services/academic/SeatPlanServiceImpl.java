@@ -602,7 +602,7 @@ public class SeatPlanServiceImpl implements SeatPlanService {
 
       int counter=0;
       for(SubGroup member: subGroupMembers){
-        SeatPlanGroup group = mSeatPlanGroupManager.get(member.getGroup().getId());
+        SeatPlanGroup group = mSeatPlanGroupManager.get(member.getGroupId());
         String key = group.getProgram().getId()+""+group.getAcademicYear()+""+group.getAcademicSemester()+""+1;
         List<SpStudent> studentsOfTheGroup = new ArrayList<>();
         List<SpStudent> existingStudents = studentsByProgramYearSemesterStatusList.get(key);

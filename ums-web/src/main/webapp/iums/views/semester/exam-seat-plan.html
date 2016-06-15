@@ -70,7 +70,7 @@
         background-color: lightslategray;
         color: white;
     }
-    #sortable1 li,#sortable0 li,#sortable2 li,#sortable3 li,#sortable4 li,#sortable6 li,#sortable5 li{
+    #sortable1 li,#sortable2 li,#sortable3 li,#sortable4 li,#sortable6 li,#sortable5 li,#sortable0 li{
         border-radius: 25px;
         border: 2px solid #73AD21;
         margin: 0 5px 5px 5px;
@@ -230,7 +230,11 @@
     </div>
 </div>
 
-
+<ul class="custom-menu" >
+    <li data-action="split">Split</li>
+    <li data-action="revertSplit">Revert Split</li>
+    <li data-action="merge">Merge</li>
+</ul>
 
 
 <div class="panel panel-grey" data-ng-show="subGroupSelected" id="subGroupPanel">
@@ -245,11 +249,6 @@
 
     </div>
     <div class="panel-body">
-        <ul class="custom-menu"  >
-            <li data-action="split">Split</li>
-            <li data-action="revertSplit">Revert Split</li>
-            <li data-action="merge">Merge</li>
-        </ul>
 
         <div class="row">
             <div class="col-md-2">
@@ -281,25 +280,20 @@
                     </li>
                 </ul>
                 <div data-ng-if="subGroupFound">
-                    <ul id="sortable0" class="connectedSortable " data-ng-if="subGroupList.length>=1 ">
-
-                        <li class="ui-state-default" id="{{member.id}}" data-ng-repeat="member in subGroupWithDeptMap[7] track by member.id  " data-ng-if="member.id!=''">
-                            <div>
-                                {{member.id}}-{{member.programName}}:{{member.year}}/{{member.semester}} ({{member.studentNumber}})
-                            </div>
-                            <div data-ng-show="member.showSubPortion">
-                                <hr>
-                                Split size: <input  data-ng-model="splitNumber" style="width:40px;color: black "  />
-                                <button data-ng-click="splitAction(splitNumber)" style="color: black">Split</button><button data-ng-click="cancelSplitAction(member.id)" style="color: black">cancel</button>
-                                <br>
-                            </div>
-                        </li>
-                    </ul>
+                        <ul id="sortable0" class="connectedSortable ">
+                            <li class="ui-state-default" id="{{member.id}}" data-ng-repeat="member in subGroupWithDeptMap[7] track by member.id  " data-ng-if="member.id!=''">
+                                <div>
+                                    {{member.id}}-{{member.programName}}:{{member.year}}/{{member.semester}} ({{member.studentNumber}})
+                                </div>
+                                <div data-ng-show="member.showSubPortion">
+                                    <hr>
+                                    Split size: <input  data-ng-model="splitNumber" style="width:40px;color: black "  />
+                                    <button data-ng-click="splitAction(splitNumber)" style="color: black">Split</button><button data-ng-click="cancelSplitAction(member.id)" style="color: black">cancel</button>
+                                    <br>
+                                </div>
+                            </li>
+                        </ul>
                 </div>
-
-
-
-
 
             </div>
 
@@ -332,7 +326,7 @@
                     </div>-->
                     <div class="row">
                         <div class="col-md-2" align="center">
-                            <ul id="sortable1" class="connectedSortable " data-ng-if="subGroupList.length>1">
+                            <ul id="sortable1" class="connectedSortable " data-ng-if="subGroupWithDeptMap[1]">
                                 <p><b>Sub Group 1</b></p>
                                 <li class="ui-state-default" id="{{member.id}}" data-ng-repeat="member in subGroupWithDeptMap[1] track by member.id  " data-ng-if="member.id!=''">
                                     <div>
@@ -349,7 +343,7 @@
                         </div>
 
                         <div class="col-md-2" align="center">
-                            <ul id="sortable2" class="connectedSortable" data-ng-if="subGroupList.length>2">
+                            <ul id="sortable2" class="connectedSortable" data-ng-if="subGroupWithDeptMap[2]">
                                 <p><b>Sub Group 2</b></p>
                                 <li class="splittable" id="{{member.id}}" data-ng-repeat="member in subGroupWithDeptMap[2] track by member.id" data-ng-if="member.id!=''">
                                     <div>
@@ -366,7 +360,7 @@
                         </div>
 
                         <div class="col-md-2" align="center">
-                            <ul id="sortable3" class="connectedSortable" data-ng-if="subGroupList.length>3">
+                            <ul id="sortable3" class="connectedSortable" data-ng-if="subGroupWithDeptMap[3]">
                                 <p><b>Sub Group 3</b></p>
                                 <li class="splittable" id="{{member.id}}" data-ng-repeat="member in subGroupWithDeptMap[3] track by member.id" data-ng-if="member.id!=''">
                                     <div>
@@ -389,7 +383,7 @@
                         <hr>
                         <div class="row">-->
                         <div class="col-md-2" align="center">
-                            <ul id="sortable4" class="connectedSortable" data-ng-if="subGroupList.length>4">
+                            <ul id="sortable4" class="connectedSortable" data-ng-if="subGroupWithDeptMap[4]">
                                 <p><b>Sub Group 4</b></p>
                                 <li class="splittable" id="{{member.id}}" data-ng-repeat="member in subGroupWithDeptMap[4] track by member.id" data-ng-if="member.id!=''">
                                     <div>
@@ -406,7 +400,7 @@
                         </div>
 
                         <div class="col-md-2" align="center">
-                            <ul id="sortable5" class="connectedSortable" data-ng-if="subGroupList.length>5">
+                            <ul id="sortable5" class="connectedSortable" data-ng-if="subGroupWithDeptMap[5]">
                                 <p><b>Sub Group 5</b></p>
                                 <li class="splittable" id="{{member.id}}" data-ng-repeat="member in subGroupWithDeptMap[5] track by member.id" data-ng-if="member.id!=''">
                                     <div>
@@ -423,7 +417,7 @@
                         </div>
 
                         <div class="col-md-2" align="center">
-                            <ul id="sortable6" class="connectedSortable" data-ng-if="subGroupList.length>6">
+                            <ul id="sortable6" class="connectedSortable" data-ng-if="subGroupWithDeptMap[6]">
                                 <p><b>Sub Group 6</b></p>
                                 <li class="splittable" id="{{member.id}}" data-ng-repeat="member in subGroupWithDeptMap[6] track by member.id" data-ng-if="member.id!=''">
                                     <div>
@@ -519,7 +513,7 @@
 
 
                         <div   data-ng-repeat="subGroup in subGroupList">
-                            <p data-ng-if="subGroup.subGroupNumber<= colForSubgroup && subGroup.subGroupNumber!=7" class="col-md-2" ><!--Sub Group {{subGroup.subGroupNumber}}--> total Student:{{subGroup.subGroupTotalStudentNumber}}</p>
+                            <p data-ng-if="subGroup.subGroupNumber<= colForSubgroup " class="col-md-2" ><!--Sub Group {{subGroup.subGroupNumber}}--> total Student:{{subGroup.subGroupTotalStudentNumber}}</p>
                         </div>
 
 
