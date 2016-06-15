@@ -1,3 +1,7 @@
 <div style="width: 600px; height: 500px;">
-    <am-chart id="myFirstChart" options="amChartOptions"></am-chart>
+  <am-chart id="myFirstChart" options="amChartOptions"></am-chart>
 </div>
+
+<modal data-handler="modalSettings.handler" data-body="modalSettings.body" data-footer="modalSettings.footer" data-header="modalSettings.header"
+       data-ng-click-right-button="modalSettings.rightButton()"></modal>
+<a href="#{{modalSettings.handler}}" role="button" class="btn btn-success" data-toggle="modal">Launch Demo Modal</a>

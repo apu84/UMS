@@ -2,7 +2,7 @@ module ums {
   export class DummyController {
     public static $inject = ['$scope', '$stateParams', '$timeout'];
 
-    constructor($scope: any, $stateParams: any, $timeout: ng.ITimeoutService) {
+    constructor($scope:any, $stateParams:any, $timeout:ng.ITimeoutService) {
       $scope.amChartOptions = {
         data: [{
           year: 2005,
@@ -77,6 +77,17 @@ module ums {
         }];
         $scope.$broadcast("amCharts.updateData", updatedData);
       }, 5000);
+
+
+      $scope.modalSettings = {};
+      $scope.modalSettings.title = "Some title";
+      $scope.modalSettings.body = "Some body";
+      $scope.modalSettings.footer = "Some footer";
+      $scope.modalSettings.header = "Some header";
+      $scope.modalSettings.handler = "modal1";
+      $scope.modalSettings.rightButton = () => {
+        console.debug("Do something......");
+      }
     }
 
   }
