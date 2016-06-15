@@ -230,11 +230,7 @@
     </div>
 </div>
 
-<ul class="custom-menu" >
-    <li data-action="split">Split</li>
-    <li data-action="revertSplit">Revert Split</li>
-    <li data-action="merge">Merge</li>
-</ul>
+
 
 
 <div class="panel panel-grey" data-ng-show="subGroupSelected" id="subGroupPanel">
@@ -249,6 +245,11 @@
 
     </div>
     <div class="panel-body">
+        <ul class="custom-menu"  >
+            <li data-action="split">Split</li>
+            <li data-action="revertSplit">Revert Split</li>
+            <li data-action="merge">Merge</li>
+        </ul>
 
         <div class="row">
             <div class="col-md-2">
@@ -279,20 +280,37 @@
                         </div>
                     </li>
                 </ul>
-                <ul id="sortable0" class="connectedSortable " data-ng-if="subGroupList.length>=0 && subGroupFound==true">
-
-                    <li class="ui-state-default" id="{{member.id}}" data-ng-repeat="member in subGroupWithDeptMap[6] track by member.id  " data-ng-if="member.id!=''">
+                <ul subGroupSortable data-ng-repeat="group in tempGroupList track by group.id"   id="sortable0"  class="connectedSortable"  data-ng-if="recreate==true && subGroupFound==true">
+                    <li class="ui-state-default" id="{{group.id}}" >
                         <div>
-                            {{member.id}}-{{member.programName}}:{{member.year}}/{{member.semester}} ({{member.studentNumber}})
+                            {{group.id}}- {{group.programName}}:{{group.year}}/{{group.semester}} ({{group.studentNumber}})
                         </div>
-                        <div data-ng-show="member.showSubPortion">
+                        <div data-ng-show="group.showSubPortion">
                             <hr>
                             Split size: <input  data-ng-model="splitNumber" style="width:40px;color: black "  />
-                            <button data-ng-click="splitAction(splitNumber)" style="color: black">Split</button><button data-ng-click="cancelSplitAction(member.id)" style="color: black">cancel</button>
+                            <button data-ng-click="splitAction(splitNumber)" style="color: black">Split</button><button data-ng-click="cancelSplitAction(group.id)" style="color: black">cancel</button>
                             <br>
                         </div>
                     </li>
                 </ul>
+
+                <div data-ng-if="subGroupFound==true">
+                    <ul id="sortable0" class="connectedSortable " >
+
+                        <li class="ui-state-default" id="{{member.id}}" data-ng-repeat="member in leftGroups track by member.id  " >
+                            <div>
+                                {{member.id}}-{{member.programName}}:{{member.year}}/{{member.semester}} ({{member.studentNumber}})
+                            </div>
+                            <div data-ng-show="member.showSubPortion">
+                                <hr>
+                                Split size: <input  data-ng-model="splitNumber" style="width:40px;color: black "  />
+                                <button data-ng-click="splitAction(splitNumber)" style="color: black">Split</button><button data-ng-click="cancelSplitAction(member.id)" style="color: black">cancel</button>
+                                <br>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
 
             </div>
 
