@@ -61,8 +61,8 @@ public class DBLogger implements QueryLogger {
     List<MutableLoggerEntry> mutableLoggerEntries = new ArrayList<>();
     synchronized (mMutableLoggerEntries) {
       MutableLoggerEntry ml;
-      while ((ml = mMutableLoggerEntries.poll()) != null) {
-        mutableLoggerEntries.add(ml);
+      while (!mMutableLoggerEntries.isEmpty()) {
+        mutableLoggerEntries.add(mMutableLoggerEntries.poll());
       }
     }
     if (mutableLoggerEntries.size() > 0) {
