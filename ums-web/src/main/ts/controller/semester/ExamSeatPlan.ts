@@ -787,6 +787,8 @@ module ums{
 
 
           }
+          console.log("****************");
+          console.log(this.$scope.subGroupList);
           this.$scope.tempSubGroupList=[];
           this.$scope.tempSubGroupList = angular.copy(this.$scope.subGroupList);
           this.$scope.tempGroupListAll=[];
@@ -800,7 +802,7 @@ module ums{
               this.$scope.tempGroupListAll.push(this.$scope.subGroupList[i].subGroupMembers[k]);
               this.$scope.tempGroupList.push(this.$scope.subGroupList[i].subGroupMembers[k]);
             }
-            this.$scope.subGroupWithDeptMap[i]=studentList;
+            this.$scope.subGroupWithDeptMap[this.$scope.subGroupList[i].subGroupNumber]=studentList;
 
           }
           console.log("$$$$ temp group list All after sub group found$$$$$$");
@@ -814,7 +816,7 @@ module ums{
 
 
 
-          $("#sortable1,#sortable2,#sortable3,#sortable4,#sortable5,#sortable6").sortable({
+          $("#sortable1,#sortable2,#sortable3,#sortable4,#sortable5,#sortable6,#sortable0").sortable({
             connectWith: ".connectedSortable"
 
           }).disableSelection();
@@ -870,6 +872,10 @@ module ums{
 
       this.$scope.subGroupSelected=true;
       this.$scope.showGroupSelectionPanel = false;
+
+      if(!this.$scope.$$phase){
+        this.$scope.$apply();
+      }
 
     }
 
@@ -1151,9 +1157,7 @@ module ums{
       $("#sortable").sortable({
         cursor:"move"
       });
-      $("#sortable0").sortable({
-        cursor:"move"
-      });
+
 
       $("#splittedList").sortable({
         connectWith:".connectedSortable",
@@ -1398,10 +1402,11 @@ module ums{
 
 
 
-      $("#sortable,#sortable1,#sortable2,#sortable3,#sortable4,#sortable5,#sortable6,#splittedList").sortable({
+      $("#sortable,#sortable1,#sortable2,#sortable3,#sortable4,#sortable5,#sortable6,#splittedList,#sortable0").sortable({
         connectWith: ".connectedSortable"
       });
 
+      $("#sortable0").sortable("enable");
       $("#sortable").sortable("enable");
       $("#sortable1").sortable("enable");
       $("#sortable2").sortable("enable");
@@ -1428,7 +1433,27 @@ module ums{
           $("#sortable").css("background-color","antiquewhite");
         }
       });
+      $("#sortable0").sortable({
+        connectWith:".connectedSortable",
+        cursor: "move",
 
+        items:"> li",
+        over:function(event,ui){
+          $("#splittedList").css("background-color","aqua");
+        },
+        receive:function(event,ui){
+          $("#splittedList").css("background-color","antiquewhite");
+        },
+
+        out:function(event,ui){
+          $("#splittedList").css("background-color","antiquewhite");
+        },
+        update:function(event,ui) {
+          var result = $(this).sortable('toArray');
+          classScope.subGroupListChanged(7,result);
+
+        }
+      });
       $("#splittedList").sortable({
         connectWith:".connectedSortable",
         cursor: "move",
@@ -1731,60 +1756,31 @@ module ums{
       var operationFailed:boolean=false;
       this.$scope.recreateButtonClicked=false;
       var seatPlanJsonDataList:Array<ISeatPlanJsonData>=[];
-      /*for(var i=0;i<this.$scope.subGroupList.length;i++){
-       for(var j=0;j<this.$scope.tempGroupListAll.length;j++){
-       if(this.$scope.tempGroupListAll[j].subGroupNumber==i){
-       var position=1;
-
-       var seatPlanJsonData:any={};
-       var seatPlanJsonData:any={};
-       seatPlanJsonData.subGroupNo =this.$scope.tempGroupListAll[j].subGroupNumber;
-       seatPlanJsonData.position = position;
-       seatPlanJsonData.groupId = this.$scope.tempGroupListAll[j].baseId;
-       seatPlanJsonData.studentNumber =this.$scope.tempGroupListAll[j].studentNumber;
-       /!* var json = this.convertToJsonForSubGroup(this.$scope.subGroupList[i].subGroupNumber,
-       position,
-       this.$scope.subGroupList[i].subGroupMembers[j].id,this.$scope.subGroupList[i].subGroupMembers[j].studentNumber);*!/
-       //this.postSubGroup(json);
-
-       seatPlanJsonDataList.push(seatPlanJsonData);
-       position+=1;
-       }
-       }
-       if(i==this.$scope.subGroupList.length-1 && this.$scope.subGroupFound==false){
-       $("#droppable1").sortable("disable");
-       $("#droppable2").sortable("disable");
-       $("#droppable3").sortable("disable");
-       $("#droppable4").sortable("disable");
-       $("#droppable5").sortable("disable");
-       $("#droppable6").sortable("disable");
-
-       }
-       else{
-       $("#sortable1").sortable("disable");
-       $("#sortable2").sortable("disable");
-       $("#sortable3").sortable("disable");
-       $("#sortable4").sortable("disable");
-       $("#sortable5").sortable("disable");
-       $("#sortable6").sortable("disable");
-       }
-       }*/
+      var tempStorage:Array<ISeatPlanGroup>=angular.copy(this.$scope.tempGroupListAll);
       for(var i=0;i<this.$scope.subGroupList.length;i++){
         var position=1;
         for(var j=0;j<this.$scope.subGroupList[i].subGroupMembers.length;j++){
-          var seatPlanJsonData:any={};
-          var seatPlanJsonData:any={};
-          seatPlanJsonData.subGroupNo =this.$scope.subGroupList[i].subGroupNumber;
-          seatPlanJsonData.position = position;
-          seatPlanJsonData.groupId = this.$scope.subGroupList[i].subGroupMembers[j].baseId;
-          seatPlanJsonData.studentNumber =this.$scope.subGroupList[i].subGroupMembers[j].studentNumber;
-          /* var json = this.convertToJsonForSubGroup(this.$scope.subGroupList[i].subGroupNumber,
-           position,
-           this.$scope.subGroupList[i].subGroupMembers[j].id,this.$scope.subGroupList[i].subGroupMembers[j].studentNumber);*/
-          //this.postSubGroup(json);
+            for(var x=0;x<tempStorage.length;x++){
+              if(tempStorage[x].id==this.$scope.subGroupList[i].subGroupMembers[j].id){
+                tempStorage.splice(x,1);
+                break;
+              }
+            }
+            var seatPlanJsonData:any={};
+            var seatPlanJsonData:any={};
+            seatPlanJsonData.subGroupNo =this.$scope.subGroupList[i].subGroupNumber;
+            seatPlanJsonData.position = position;
+            seatPlanJsonData.groupId = this.$scope.subGroupList[i].subGroupMembers[j].baseId;
+            seatPlanJsonData.studentNumber =this.$scope.subGroupList[i].subGroupMembers[j].studentNumber;
+            /* var json = this.convertToJsonForSubGroup(this.$scope.subGroupList[i].subGroupNumber,
+             position,
+             this.$scope.subGroupList[i].subGroupMembers[j].id,this.$scope.subGroupList[i].subGroupMembers[j].studentNumber);*/
+            //this.postSubGroup(json);
 
-          seatPlanJsonDataList.push(seatPlanJsonData);
-          position+=1;
+            seatPlanJsonDataList.push(seatPlanJsonData);
+            position+=1;
+
+
 
 
         }
@@ -1812,6 +1808,29 @@ module ums{
           $("#sortable6").sortable("disable");
         }
       }
+
+      console.log("tempStorage");
+      console.log(tempStorage);
+      if(this.$scope.subGroupFound==false){
+        if(tempStorage.length>0){
+          for(var x=0;x<tempStorage.length;x++){
+            var seatPlanJsonData:any={};
+            var seatPlanJsonData:any={};
+            seatPlanJsonData.subGroupNo =7;
+            seatPlanJsonData.position = 1;
+            seatPlanJsonData.groupId = tempStorage[x].baseId;
+            seatPlanJsonData.studentNumber =tempStorage[x].studentNumber;
+            /* var json = this.convertToJsonForSubGroup(this.$scope.subGroupList[i].subGroupNumber,
+             position,
+             this.$scope.subGroupList[i].subGroupMembers[j].id,this.$scope.subGroupList[i].subGroupMembers[j].studentNumber);*/
+            //this.postSubGroup(json);
+
+            seatPlanJsonDataList.push(seatPlanJsonData);
+          }
+
+        }
+      }
+
 
       var json = this.convertToJsonForSubGroup(seatPlanJsonDataList);
       this.saveSubGroupIntoDb(json).then((message:string)=>{
@@ -1988,6 +2007,9 @@ module ums{
       if($("#sortable").hasClass('connectedSortable')){
         $("#sortable").empty();
       }
+      if($("#sortable0").hasClass('connectedSortable')){
+        $("#sortable0").empty();
+      }
       if($("#sortable1").hasClass('connectedSortable')){
         $("#sortable1").empty();
       }
@@ -2024,6 +2046,7 @@ module ums{
       if($("#droppable6").hasClass('connectedSortable')){
         $("#droppable6").empty();
       }
+
     }
 
 
