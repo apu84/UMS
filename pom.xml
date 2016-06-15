@@ -21,6 +21,8 @@
     <apache-shiro-version>1.2.4</apache-shiro-version>
     <pentaho-version>5.0.1</pentaho-version>
     <itext-version>2.1.7</itext-version>
+    <jxls-version>2.3.0</jxls-version>
+    <jxls-poi-version>1.0.9</jxls-poi-version>
   </properties>
 
  <!-- <repositories>
@@ -430,6 +432,19 @@
       <version>5.5.9</version>
     </dependency>
 
+    <dependency>
+      <groupId>org.jxls</groupId>
+      <artifactId>jxls</artifactId>
+      <version>${jxls-version}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jxls</groupId>
+      <artifactId>jxls-poi</artifactId>
+      <version>${jxls-poi-version}</version>
+      <scope>provided</scope>
+    </dependency>
 
 
   </dependencies>

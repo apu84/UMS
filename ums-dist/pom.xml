@@ -420,6 +420,20 @@
       <scope>compile</scope>
     </dependency>
 
+    <dependency>
+      <groupId>org.jxls</groupId>
+      <artifactId>jxls</artifactId>
+      <version>${jxls-version}</version>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jxls</groupId>
+      <artifactId>jxls-poi</artifactId>
+      <version>${jxls-poi-version}</version>
+      <scope>compile</scope>
+    </dependency>
+
   </dependencies>
 
   <build>
