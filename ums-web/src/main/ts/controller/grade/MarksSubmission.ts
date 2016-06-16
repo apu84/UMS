@@ -2,6 +2,7 @@
 module ums {
   export interface IMarksSubmissionScope extends ng.IScope {
     data:any;
+    modalSettings:any;
     chartData:any;
     amChartOptions:any;
     inputParams:IInputParams;
@@ -65,6 +66,8 @@ module ums {
     copyGradeRow:Function;
     loadSemesters:Function;
     loadPrograms:Function;
+
+    generateXls:Function;
   }
   interface IStudentMarks {
     studentId:string;
@@ -148,6 +151,9 @@ module ums {
         programs:Array<IOption>()
       };
 
+            $scope.modalSettings = {};
+      this.$scope.modalSettings.header = "Confirmation";
+
       $scope.onTotalPartChange = this.onTotalPartChange.bind(this);
       $scope.toggleStatRules = this.toggleStatRules.bind(this);
       $scope.fetchGradeSheet = this.fetchGradeSheet.bind(this);
@@ -179,11 +185,27 @@ module ums {
       $scope.loadSemesters=this.loadSemesters.bind(this);
       $scope.loadPrograms=this.loadPrograms.bind(this);
 
+      $scope.generateXls=this.generateXls.bind(this);
       //$scope.inputParams.program_type=11;
 
       $scope.data.recheck_accepted_studentId="";
       $scope.chartData =[];
       this.initChart();
+    }
+
+    private generateXls(): void {
+      this.httpClient.get("https://localhost/ums-webservice-common/gradeReport/xls/semester/"+this.$scope.inputParams.semester_id+"/courseid/"+this.$scope.current_courseId+"/examtype/"+this.$scope.inputParams.exam_type+"/role/"+this.$scope.currentActor, 'application/vnd.ms-excel',
+          (data: any, etag: string) => {
+            var file = new Blob([data], {type: 'application/vnd.ms-excel'});
+            var reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onloadend = function (e) {
+              window.open(reader.result, 'Excel', 'width=20,height=10,toolbar=0,menubar=0,scrollbars=no', false);
+            };
+          },
+          (response: ng.IHttpPromiseCallbackArg<any>) => {
+            console.error(response);
+          }, 'arraybuffer');
     }
 
     private loadSemesters():void{
@@ -354,7 +376,7 @@ module ums {
 
 
     private downloadPdf():void {
-      this.httpClient.get("https://localhost/ums-webservice-common/gradeReport", 'application/pdf',
+      this.httpClient.get("https://localhost/ums-webservice-common/gradeReport/pdf/semester/"+this.$scope.inputParams.semester_id+"/courseid/"+this.$scope.current_courseId+"/examtype/"+this.$scope.inputParams.exam_type+"/role/"+this.$scope.currentActor, 'application/pdf',
           (data:any, etag:string) => {
             var file = new Blob([data], {type: 'application/pdf'});
             var fileURL = this.$sce.trustAsResourceUrl(URL.createObjectURL(file));
@@ -384,6 +406,7 @@ module ums {
       this.fetchGradeSheet(this.$scope.current_courseId);
     }
     private fetchGradeSheet(courseId:string):void {
+      $('.page-title.ng-binding').html("Online Grade Submission/Approval");
       this.$scope.current_courseId=courseId;
       this.$scope.toggleColumn = true;
       var url="academic/gradeSubmission/semester/"+this.$scope.inputParams.semester_id+"/courseid/"+this.$scope.current_courseId+"/examtype/"+this.$scope.inputParams.exam_type+"/role/"+this.$scope.userRole;
@@ -427,6 +450,12 @@ module ums {
 
             if( this.$scope.currentActor=="preparer" &&  this.$scope.gradeSubmissionStatus==0){
               this.$scope.gradeTitle="Non-Submitted Grades";
+
+              this.$scope.modalSettings.submitBody = "Are you sure you want to send grades to the Scrutinizer?";
+              this.$scope.modalSettings.submitHandler = "submitModal";
+              this.$scope.modalSettings.submitRightButton = () => {
+                this.saveAndSendToScrutinizer();
+              }
             }
             if( this.$scope.currentActor=="scrutinizer" &&  this.$scope.gradeSubmissionStatus==1){
               this.$scope.gradeTitle="Waiting for Scrutinizer's Approval";
@@ -436,6 +465,15 @@ module ums {
               this.$scope.recheckButtonLabel="Save & Send back to Preparer";
               this.$scope.approveButtonLabel="Scrutiny & Send to Head";
               this.$scope.candidatesGrades=this.$scope.scrutinizeCandidatesGrades;
+
+              this.$scope.modalSettings.recheckBody = "Are you sure you want to send back the selected grades to preparer for recheck?";
+              this.$scope.modalSettings.recheckHandler = "recheckModal";
+              this.$scope.modalSettings.approveBody = "Are you sure you want to send grades to the Head for Approval?";
+              this.$scope.modalSettings.approveHandler = "approveModal";
+              this.$scope.modalSettings.rightButton = (currentActor,action) => {
+                this.saveRecheckApproveGrades(currentActor,action);
+              }
+
             }
             if( this.$scope.currentActor=="head" &&  this.$scope.gradeSubmissionStatus==3){
               this.$scope.gradeTitle="Waiting for Head's Approval";
@@ -443,14 +481,62 @@ module ums {
               this.$scope.recheckButtonLabel="Save & Send back to Preparer";
               this.$scope.approveButtonLabel="Approve & Send to CoE";
               this.$scope.candidatesGrades=this.$scope.approveCandidatesGrades;
+
+              this.$scope.modalSettings.recheckBody = "Are you sure you want to send back the selected grades to preparer for recheck?";
+              this.$scope.modalSettings.recheckHandler = "recheckModal";
+              this.$scope.modalSettings.approveBody = "Are you sure you want to send grades to the CoE for Acceptance?";
+              this.$scope.modalSettings.approveHandler = "approveModal";
+              this.$scope.modalSettings.rightButton = (currentActor,action) => {
+                this.saveRecheckApproveGrades(currentActor,action);
+              }
+
             }
-            if( this.$scope.currentActor=="coe" && this.$scope.gradeSubmissionStatus==5){
-              this.$scope.gradeTitle="Waiting for CoE's Approval";
-              this.$scope.approveAction="Accept";
-              this.$scope.recheckButtonLabel="Save & Send back to Preparer";
-              this.$scope.approveButtonLabel="Save and Accept";
-              this.$scope.candidatesGrades=this.$scope.acceptCandidatesGrades;
+            if( this.$scope.currentActor=="coe"){
+               if(this.$scope.gradeSubmissionStatus==5) {
+                 this.$scope.gradeTitle = "Waiting for CoE's Approval";
+                 this.$scope.approveAction = "Accept";
+                 this.$scope.recheckButtonLabel = "Save & Send back to Preparer";
+                 this.$scope.approveButtonLabel = "Save and Accept";
+                 this.$scope.candidatesGrades = this.$scope.acceptCandidatesGrades;
+
+                 this.$scope.modalSettings.recheckBody = "Are you sure you want to send back the selected grades to preparer for recheck?";
+                 this.$scope.modalSettings.recheckHandler = "recheckModal";
+                 this.$scope.modalSettings.approveBody = "Are you sure you want to Accept the grade sheet?";
+                 this.$scope.modalSettings.approveHandler = "approveModal";
+                 this.$scope.modalSettings.rightButton = (currentActor, action) => {
+                   this.saveRecheckApproveGrades(currentActor, action);
+                 }
+               }
+              else if(this.$scope.gradeSubmissionStatus==7){
+                this.$scope.modalSettings.submitBody = "Are you sure you want to send grade recheck request to Honorable Vice Chancellor?";
+                this.$scope.modalSettings.submitHandler = "submitModal";
+                this.$scope.modalSettings.submitRightButton = () => {
+                  this.sendRecheckRequestToVC();
+                }
+              }
+
             }
+            if( this.$scope.currentActor=="vc" && this.$scope.gradeSubmissionStatus==8) {
+
+              this.$scope.modalSettings.rejectBody = "Are you sure you want to reject the recheck request?";
+              this.$scope.modalSettings.rejectHandler = "submitModal";
+              this.$scope.modalSettings.rejectRightButton = (currentActor,action) => {
+                this.recheckRequestHandler(currentActor,action);
+              }
+
+              this.$scope.modalSettings.approveBody = "Are you sure you want to approve the recheck request?";
+              this.$scope.modalSettings.approveHandler = "submitModal";
+              this.$scope.modalSettings.approveRightButton = (currentActor,action) => {
+                this.recheckRequestHandler(currentActor,action);
+              }
+            }
+
+            //Fetch Chart Data ---
+            this.fetchChartData().then((chartData:any)=> {
+              this.$scope.$broadcast("amCharts.updateData", chartData);
+              this.$scope.chartData=chartData;
+            });
+
 
           });
 
@@ -459,11 +545,7 @@ module ums {
       //$("#btn_stat").focus();
       $(window).scrollTop($('#panel_top').offset().top - 56);
 
-      //Fetch Chart Data ---
-      this.fetchChartData().then((chartData:any)=> {
-            this.$scope.$broadcast("amCharts.updateData", chartData);
-        this.$scope.chartData=chartData;
-      });
+
 
     }
 

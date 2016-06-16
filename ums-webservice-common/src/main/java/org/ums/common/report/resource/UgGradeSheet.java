@@ -19,7 +19,7 @@ import java.io.OutputStream;
  */
 
 @Component
-@Path("/gradeReport")
+@Path("/gradeReport/pdf/")
 @Produces({"application/pdf"})
 public class UgGradeSheet extends Resource {
   @Autowired
