@@ -48,7 +48,7 @@ public class SeatPlanResource extends MutableSeatPlanResource{
     File file = new File(FILE_PATH );
 
     Response.ResponseBuilder response = Response.ok((Object) file);
-    response.header("SeatPlan Report","attachment;filename=seatPlanReport.pdf");
+    //response.header("SeatPlan Report","attachment;filename=seatPlanReport.pdf");
 
 
     return  response.build();

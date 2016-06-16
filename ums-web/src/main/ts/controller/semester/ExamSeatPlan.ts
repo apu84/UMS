@@ -62,6 +62,7 @@ module ums{
 
     subGroup1ListTest:any;  //this is for test purpose
 
+    pdfGenerator:boolean;
     recreate:boolean;
     showContextMenu:boolean;
     splitActionOccured:boolean;
@@ -218,6 +219,7 @@ module ums{
       $scope.saveSubGroupInfo = false;
       $scope.editButtonClicked=false;
       $scope.recreateButtonClicked=false;
+      $scope.pdfGenerator=false;
       $scope.deleteAndCreateNewSubGroup = false;
       $scope.showContextMenu=false;
       $scope.arr = arr;
@@ -412,7 +414,7 @@ module ums{
           var idNumeric = +idString;
           newMember.id = idNumeric;
 
-          var text = newMember.id+"-"+newMember.programName+":"+newMember.year+"/"+newMember.semester+" ("+newMember.studentNumber+")";
+          var text = newMember.programName+":"+newMember.year+"/"+newMember.semester+" ("+newMember.studentNumber+")";
           var $li = $("<li style='background-color: #0a6aa1' class='ui-state-default' />").text(text);
           $li.attr('id',newMember.id);
           $("#splittedList").append($li);
@@ -693,7 +695,7 @@ module ums{
 
 
       this.$scope.tempIdList=[];
-
+      this.$scope.subGroupWithDeptMap={};
       this.$scope.tempGroupList=[];
       this.$scope.splittedGroupList=[];
       var temporaryList:any=[];
@@ -1814,6 +1816,7 @@ module ums{
           $("#sortable4").sortable("disable");
           $("#sortable5").sortable("disable");
           $("#sortable6").sortable("disable");
+          $("#sortable0").sortable("disable");
         }
       }
 
@@ -1856,8 +1859,12 @@ module ums{
         this.createOrViewSubgroups(this.$scope.selectedGroupNo);
 
 
-        function myFunc(){
+        setTimeout(myFunc,2000);
 
+        function myFunc(){
+          $( "#subGroupPanel").unbind( "mousedown" );
+          $("#subGroupPanel li").unbind("contextmenu");
+          $("#ifti_div").unbind("contextmenu");
         }
 
         $(".connectedSortable").css("background-color","antiquewhite");
@@ -2152,11 +2159,13 @@ module ums{
     private getSeatPlanInfo(groupNo:number):void{
       var defer = this.$q.defer();
       var subGroupDb:string;
-      this.httpClient.get('/ums-webservice-common/academic/seatplan/semesterId/'+this.$scope.semesterId +'/groupNo/'+groupNo+'/type/'+this.$scope.examType, 'application/pdf',
+      this.$scope.pdfGenerator=true;
+      this.httpClient.get('/ums-webservice-common/academic/seatplan/semesterId/'+this.$scope.semesterId +'/groupNo/'+groupNo+'/type/'+this.$scope.examType,  'application/pdf',
           (data:any, etag:string) => {
             var file=new Blob([data],{type:'application/pdf'});
             var fileURL = this.$sce.trustAsResourceUrl(URL.createObjectURL(file));
             this.$window.open(fileURL);
+            this.$scope.pdfGenerator=false;
           },
           (response:ng.IHttpPromiseCallbackArg<any>) => {
             console.error(response);

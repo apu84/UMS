@@ -126,10 +126,7 @@
 
 
         </div>
-        <hr>
-        <hr>
-        <br>
-        <br>
+
         <div class="spinner" ng-show="loadingVisibility">
             <div class="bounce1"></div>
             <div class="bounce2"></div>
@@ -185,7 +182,7 @@
 
         </div>
         <div data-ng-if="seatPlanGroupList.length==0">
-            <h1>Please Create an Exam Rroutine first for {{semesterId}} !!!!!!</h1>
+            <h1 style="background-color: wheat; color: red">Please Create Exam Routine First For The Semester</h1>
         </div>
 
         <br>
@@ -226,14 +223,19 @@
 
             </div>
         </div>
+        <div class="spinner" ng-show="pdfGenerator">
+            <div class="bounce1"></div>
+            <div class="bounce2"></div>
+            <div class="bounce3"></div>
+        </div>
 
     </div>
 </div>
 
-<ul class="custom-menu" >
-    <li data-action="split">Split</li>
-    <li data-action="revertSplit">Revert Split</li>
-    <li data-action="merge">Merge</li>
+<ul class="custom-menu"  style="list-style-type:none">
+    <li data-action="split"><i class="fa fa-expand" aria-hidden="true"></i>Split Out</li>
+    <li data-action="revertSplit"><i class="fa fa-compress" aria-hidden="true"></i>Revert Split</li>
+    <li data-action="merge"><i class="fa fa-retweet" aria-hidden="true"></i>Merge</li>
 </ul>
 
 
@@ -269,7 +271,7 @@
                 <ul subGroupSortable data-ng-repeat="group in tempGroupList track by group.id"   id="sortable"  class="connectedSortable"  data-ng-if="recreate==false && subGroupFound==false">
                     <li class="ui-state-default" id="{{group.id}}" >
                         <div>
-                            {{group.id}}- {{group.programName}}:{{group.year}}/{{group.semester}} ({{group.studentNumber}})
+                             {{group.programName}}:{{group.year}}/{{group.semester}} ({{group.studentNumber}})
                         </div>
                         <div data-ng-show="group.showSubPortion">
                             <hr>
@@ -283,7 +285,7 @@
                         <ul id="sortable0" class="connectedSortable ">
                             <li class="ui-state-default" id="{{member.id}}" data-ng-repeat="member in subGroupWithDeptMap[7] track by member.id  " data-ng-if="member.id!=''">
                                 <div>
-                                    {{member.id}}-{{member.programName}}:{{member.year}}/{{member.semester}} ({{member.studentNumber}})
+                                    {{member.programName}}:{{member.year}}/{{member.semester}} ({{member.studentNumber}})
                                 </div>
                                 <div data-ng-show="member.showSubPortion">
                                     <hr>
@@ -330,7 +332,7 @@
                                 <p><b>Sub Group 1</b></p>
                                 <li class="ui-state-default" id="{{member.id}}" data-ng-repeat="member in subGroupWithDeptMap[1] track by member.id  " data-ng-if="member.id!=''">
                                     <div>
-                                        {{member.id}}-{{member.programName}}:{{member.year}}/{{member.semester}} ({{member.studentNumber}})
+                                        {{member.programName}}:{{member.year}}/{{member.semester}} ({{member.studentNumber}})
                                     </div>
                                     <div data-ng-show="member.showSubPortion">
                                         <hr>
@@ -347,7 +349,7 @@
                                 <p><b>Sub Group 2</b></p>
                                 <li class="splittable" id="{{member.id}}" data-ng-repeat="member in subGroupWithDeptMap[2] track by member.id" data-ng-if="member.id!=''">
                                     <div>
-                                        {{member.id}}-{{member.programName}}:{{member.year}}/{{member.semester}} ({{member.studentNumber}})
+                                        {{member.programName}}:{{member.year}}/{{member.semester}} ({{member.studentNumber}})
                                     </div>
                                     <div data-ng-show="member.showSubPortion">
                                         <hr>
@@ -364,7 +366,7 @@
                                 <p><b>Sub Group 3</b></p>
                                 <li class="splittable" id="{{member.id}}" data-ng-repeat="member in subGroupWithDeptMap[3] track by member.id" data-ng-if="member.id!=''">
                                     <div>
-                                        {{member.id}}-{{member.programName}}:{{member.year}}/{{member.semester}} ({{member.studentNumber}})
+                                        {{member.programName}}:{{member.year}}/{{member.semester}} ({{member.studentNumber}})
                                     </div>
                                     <div data-ng-show="member.showSubPortion">
                                         <hr>
@@ -387,7 +389,7 @@
                                 <p><b>Sub Group 4</b></p>
                                 <li class="splittable" id="{{member.id}}" data-ng-repeat="member in subGroupWithDeptMap[4] track by member.id" data-ng-if="member.id!=''">
                                     <div>
-                                        {{member.id}}-{{member.programName}}:{{member.year}}/{{member.semester}} ({{member.studentNumber}})
+                                        {{member.programName}}:{{member.year}}/{{member.semester}} ({{member.studentNumber}})
                                     </div>
                                     <div data-ng-show="member.showSubPortion">
                                         <hr>
@@ -404,7 +406,7 @@
                                 <p><b>Sub Group 5</b></p>
                                 <li class="splittable" id="{{member.id}}" data-ng-repeat="member in subGroupWithDeptMap[5] track by member.id" data-ng-if="member.id!=''">
                                     <div>
-                                        {{member.id}}-{{member.programName}}:{{member.year}}/{{member.semester}} ({{member.studentNumber}})
+                                        {{member.programName}}:{{member.year}}/{{member.semester}} ({{member.studentNumber}})
                                     </div>
                                     <div data-ng-show="member.showSubPortion">
                                         <hr>
@@ -421,7 +423,7 @@
                                 <p><b>Sub Group 6</b></p>
                                 <li class="splittable" id="{{member.id}}" data-ng-repeat="member in subGroupWithDeptMap[6] track by member.id" data-ng-if="member.id!=''">
                                     <div>
-                                        {{member.id}}-{{member.programName}}:{{member.year}}/{{member.semester}} ({{member.studentNumber}})
+                                        {{member.programName}}:{{member.year}}/{{member.semester}} ({{member.studentNumber}})
                                     </div>
                                     <div data-ng-show="member.showSubPortion">
                                         <hr>
@@ -513,7 +515,7 @@
 
 
                         <div   data-ng-repeat="subGroup in subGroupList">
-                            <p data-ng-if="subGroup.subGroupNumber<= colForSubgroup " class="col-md-2" ><!--Sub Group {{subGroup.subGroupNumber}}--> total Student:{{subGroup.subGroupTotalStudentNumber}}</p>
+                            <p data-ng-if="subGroup.subGroupNumber<= colForSubgroup && subGroup.subGroupNumber!=7 " class="col-md-2" > total Student:{{subGroup.subGroupTotalStudentNumber}}</p>
                         </div>
 
 
