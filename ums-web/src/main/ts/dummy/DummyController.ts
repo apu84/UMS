@@ -89,9 +89,9 @@ module ums {
       $scope.modalSettings.handler = "modal1";
       $scope.modalSettings.rightButton = () => {
         console.debug("Do something......");
-      }
+      };
 
-      this.generateXls();
+      $scope.generateXls = this.generateXls.bind(this);
     }
 
     private generateXls(): void {
