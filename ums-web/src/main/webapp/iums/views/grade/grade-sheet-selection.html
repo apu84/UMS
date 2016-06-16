@@ -49,8 +49,8 @@
                         <label class="col-md-4 control-label">Program Type</label>
                         <div class="col-md-8">
                             <select class="form-control required" data-ng-model="inputParams.program_type" data-convert-to-number data-ng-change="loadSemesters()">
-                                    <option  value="11">Undergraduate</option>
-                                    <option  value="22">Postgraduate</option>
+                                <option  value="11">Undergraduate</option>
+                                <option  value="22">Postgraduate</option>
                             </select>
                         </div>
                     </div>
@@ -108,7 +108,7 @@
 
         <div class="panel">
             <div class="panel-heading">Teacher's Different Roles for different courses of Online Grade Submission<span
-                        class="subtitle"></span></div>
+                    class="subtitle"></span></div>
             <div class="panel-body shadowPanel"   style="min-height: 490px;">
 
                 <table class="table table-hover table-bordered">
@@ -128,7 +128,7 @@
 
                     <tr ng-repeat="marksSubmission in allMarksSubmissionStatus">
                         <td>
-                            <a href="javascript:void(0)" data-ng-click="fetchGradeSheet()">
+                            <a href="javascript:void(0)" data-ng-click="fetchGradeSheet(marksSubmission.courseId)">
                                 {{marksSubmission.courseNo}}
                             </a>
                         </td>
@@ -159,7 +159,12 @@
 <div class="row" id="selection2" style="display: none;">
     <div class="col-md-12">
         <div class="panel panel-default">
-            <div class="panel-body shadowPanel" style="position: relative;" id="panel_top">
+            <div class="panel-body shadowPanel" style="min-height: 400px;line-height: 100px;font-size: 20px;text-align: center;color: maroon;"  data-ng-if="gradeSubmissionStatus =='0' && currentActor!='preparer'">
+                Marks not yet been submitted. Please check again later. <br/>
+                <button type="button" class="btn btn-default btn-square" onclick='goBack()'>Back to Grade Sheet Selection</button>
+            </div>
+
+            <div class="panel-body shadowPanel" style="position: relative;" id="panel_top" data-ng-if="gradeSubmissionStatus !='0' || currentActor=='preparer'" >
                 <div id='outer_container' style="position: absolute;top: 40px; right: 40px;">
                     <a class="menu_button" href="javascript:void(0)" title="Toggle"><span>Menu Toggle</span></a>
                     <ul class="menu_option">
@@ -171,7 +176,7 @@
                         <li><a href="#"><span>Item</span></a></li>
                     </ul>
                 </div>
-                <span data-ng-if="gradeSubmissionStatus =='0' && currentActor!='preparer'">Marks Yet not submitted. Please check later on.</span>
+
                 <table width="90%" align="center" style="margin-bottom: 10px;">
                     <tr>
                         <td colspan="4" align="center" style="height: 30px;">
@@ -188,18 +193,18 @@
                     </tr>
                     <tr>
                         <td  style="height: 30px;"><b>Credit Hour :</b></td>
-                        <td>1.5 <a href="Javascript:void(0)" data-ng-click="fetchGradeSheet()">Reload</a></td>
-                        <td><b>Total Part <span data-ng-if="(gradeSubmissionStatus !='0')">({{data.total_part}})</span> :</b></td>
-                        <td>
+                        <td>1.5 <a href="Javascript:void(0)" data-ng-click="refreshGradeSheet()">Reload</a></td>
+                        <td data-ng-if="courseType=='THEORY'"><b>Total Part <span data-ng-if="(gradeSubmissionStatus !='0')">({{data.total_part}})</span> :</b></td>
+                        <td data-ng-if="courseType=='THEORY'">
                             <select id="total_part" data-ng-model="data.total_part" data-ng-change="onTotalPartChange()"   style="float: left;border:1px solid grey;text-align: center;height: 22px;" data-ng-if="(gradeSubmissionStatus =='0' && currentActor=='preparer')" data-convert-to-number>
                                 <option value="1">&nbsp;1&nbsp;</option>
                                 <option value="2">&nbsp;2&nbsp;</option>
                             </select>
 
 
-                            <div style="float: left;display: none;" id="partDiv">
-                            Part-A  <input type="text" style="width: 50px;border:1px solid grey;text-align: center;" data-ng-model="data.part_a_total"  data-ng-if="(gradeSubmissionStatus =='0' && currentActor=='preparer')"/>
-                                    <span data-ng-if="(gradeSubmissionStatus !='0' || currentActor!='preparer')">{{data.part_a_total}}</span>&nbsp;&nbsp;
+                            <div style="float: left;" ng-="partDiv" data-ng-show="courseType=='THEORY'">
+                                Part-A  <input type="text" style="width: 50px;border:1px solid grey;text-align: center;" data-ng-model="data.part_a_total"  data-ng-if="(gradeSubmissionStatus =='0' && currentActor=='preparer')"/>
+                                <span data-ng-if="(gradeSubmissionStatus !='0' || currentActor!='preparer')">{{data.part_a_total}}</span>&nbsp;&nbsp;
                             <span data-ng-if="(data.total_part=='2')">
                             Part-B  <input type="text" style="width: 50px;border:1px solid grey;text-align: center;" data-ng-model="data.part_b_total" data-ng-if="(gradeSubmissionStatus =='0' && currentActor=='preparer')"/>
                                     <span data-ng-if="(gradeSubmissionStatus !='0' || currentActor!='preparer')">{{data.part_b_total}}</span>
@@ -224,38 +229,40 @@
                             <tr>
                                 <th sortable-header col="studentId" width="10%">Student Id</th>
                                 <th sortable-header col="studentName" width="40%">Student Name</th>
-                                <th sortable-header col="quiz" width="10%" style="text-align: center;">Quiz (20)</th>
-                                <th sortable-header col="classPerformance" width="10%" style="text-align: center;">Class Perf. (10)</th>
-                                <th sortable-header col="partA" width="10%" style="text-align: center;">Part-A ({{data.part_a_total}})</th>
-                                <th sortable-header col="partB" width="10%" style="text-align: center;" ng-show="toggleColumn">Part-B ({{data.part_b_total}})</th>
-                                <th sortable-header col="total" width="10%" style="text-align: center;">Total</th>
-                                <th sortable-header col="gradeLetter" width="10%" style="text-align: center;">Grade Letter</th>
+                                <th sortable-header col="quiz" width="10%" style="text-align: center;" data-ng-show="courseType=='THEORY'">Quiz (20)</th>
+                                <th sortable-header col="classPerformance" width="10%" style="text-align: center;" data-ng-show="courseType=='THEORY'">Class Perf. (10)</th>
+                                <th sortable-header col="partA" width="10%" style="text-align: center;" data-ng-show="courseType=='THEORY'">Part-A ({{data.part_a_total}})</th>
+                                <th sortable-header col="partB" width="10%" style="text-align: center;" ng-show="toggleColumn && courseType=='THEORY'">Part-B ({{data.part_b_total}})</th>
+                                <th sortable-header col="total" width="5%" style="text-align: center;">Total</th>
+                                <th sortable-header col="gradeLetter" width="5%" style="text-align: center;">Grade Letter</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr ng-repeat="response in noneSubmittedGrades" row-id="{{response.studentId}}" id="row_{{response.studentId}}">
                                 <td id="sid_{{response.studentId}}">{{response.studentId}}</td>
                                 <td id="td_sname_{{response.studentId}}">{{ response.studentName }}</td>
-                                <td id="td_quiz_{{response.studentId}}">
+                                <td id="td_quiz_{{response.studentId}}" data-ng-show="courseType=='THEORY'">
                                     <input type="text"  style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="quiz_{{response.studentId}}"
                                            value="{{response.quiz}}" data-ng-change="calculateTotalAndGradeLetter('{{response.studentId}}')" data-ng-model="response.quiz" maxlength="2"/>
                                 </td>
-                                <td id="td_cperf_{{response.studentId}}">
+                                <td id="td_cperf_{{response.studentId}}" data-ng-show="courseType=='THEORY'">
                                     <input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="class_perf_{{response.studentId}}"
                                            value="{{response.classPerformance}}"  data-ng-change="calculateTotalAndGradeLetter('{{response.studentId}}')" data-ng-model="response.classPerformance" maxlength="2"/>
                                 </td>
-                                <td id="td_parta_{{response.studentId}}">
+                                <td id="td_parta_{{response.studentId}}" data-ng-show="courseType=='THEORY'">
                                     <input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="part_a_{{response.studentId}}"
                                            value="{{response.partA}}" data-ng-change="calculateTotalAndGradeLetter('{{response.studentId}}')" data-ng-model="response.partA" maxlength="2"/>
                                 </td>
-                                <td id="td_partb_{{response.studentId}}" ng-show="toggleColumn">
+                                <td id="td_partb_{{response.studentId}}" ng-show="toggleColumn && courseType=='THEORY'">
                                     <input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="part_b_{{response.studentId}}"
                                            value="{{response.partB}}" data-ng-change="calculateTotalAndGradeLetter('{{response.studentId}}')" data-ng-model="response.partB" maxlength="2"/>
                                 </td>
-                                <td id="td_total_{{response.studentId}}">
-                                    <input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" disabled="disabled" id="total_{{response.studentId}}" value="{{response.total}}"/>
+                                <td id="td_total_{{response.studentId}}" style="text-align: center;">
+                                    <input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" data-ng-disabled="courseType=='THEORY'"
+                                           id="total_{{response.studentId}}" value="{{response.total}}" data-ng-model="response.total"
+                                           data-ng-change="calculateTotalAndGradeLetter('{{response.studentId}}')" maxlength="3"/>
                                 </td>
-                                <td id="td_grade_letter_{{response.studentId}}">
+                                <td id="td_grade_letter_{{response.studentId}}" style="text-align: center;">
                                     <select  style="width: 100px;border: 1px solid grey;padding: 0px;height: 23px;" id="grade_letter_{{response.studentId}}" disabled="disabled">
                                         <option value="">Select Grade</option>
                                         <option ng-selected="{{gradeLetter.id == response.gradeLetter}}" data-ng-repeat="gradeLetter in data.gradeLetterOptions" value="{{gradeLetter.id}}">{{gradeLetter.name}}</option>
@@ -298,10 +305,10 @@
                             <tr>
                                 <th sortable-header col="studentId" width="10%">Student Id</th>
                                 <th sortable-header col="studentName" width="25%">Student Name</th>
-                                <th sortable-header col="quiz" width="6%" style="text-align: center;">Quiz (20)</th>
-                                <th sortable-header col="classPerformance" width="8%" style="text-align: center;">Class Perf. (10)</th>
-                                <th sortable-header col="partA" width="8%" style="text-align: center;">Part-A ({{data.part_a_total}})</th>
-                                <th sortable-header col="partB" width="8%" style="text-align: center;" ng-show="toggleColumn">Part-B ({{data.part_b_total}})</th>
+                                <th sortable-header col="quiz" width="6%" style="text-align: center;" data-ng-show="courseType=='THEORY'">Quiz (20)</th>
+                                <th sortable-header col="classPerformance" width="8%" style="text-align: center;" data-ng-show="courseType=='THEORY'">Class Perf. (10)</th>
+                                <th sortable-header col="partA" width="8%" style="text-align: center;" data-ng-show="courseType=='THEORY'">Part-A ({{data.part_a_total}})</th>
+                                <th sortable-header col="partB" width="8%" style="text-align: center;" ng-show="toggleColumn && courseType=='THEORY'">Part-B ({{data.part_b_total}})</th>
                                 <th sortable-header col="total" width="8%" style="text-align: center;">Total</th>
                                 <th sortable-header class="col2" col="gradeLetter" width="8%" style="text-align: center;">Grade Letter</th>
                                 <th sortable-header col="recheckAll" width="8%" style="text-align: center;">Recheck&nbsp;&nbsp;<input type="checkbox" data-ng-click="recheckAll(currentActor)" id="recheckAllCheckBox"/></th>
@@ -313,10 +320,10 @@
                             <tr ng-repeat="response in candidatesGrades">
                                 <td>{{response.studentId}}</td>
                                 <td>{{ response.studentName }}</td>
-                                <td style="padding-right: 30px;text-align: right;">{{response.quiz}}</td>
-                                <td style="padding-right: 30px;text-align: right;">{{response.classPerformance}}</td>
-                                <td style="padding-right: 30px;text-align: right;">{{response.partA}}</td>
-                                <td style="padding-right: 30px;text-align: right;">{{response.partB}}</td>
+                                <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.quiz}}</td>
+                                <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.classPerformance}}</td>
+                                <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.partA}}</td>
+                                <td style="padding-right: 30px;text-align: right;" ng-show="toggleColumn && courseType=='THEORY'">{{response.partB}}</td>
                                 <td style="padding-right: 30px;text-align: right;">{{response.total}}</td>
                                 <td style="text-align: center;">{{response.gradeLetter}}</td>
                                 <td style="text-align: center;"><input type="checkbox" id="recheck_{{response.studentId}}" data-ng-click="onRecheckClick(currentActor,response)" ng-checked="response.recheckStatusId"/> </td>
@@ -328,20 +335,20 @@
                         </table>
                         <div class="table_overlay"></div>
                         <!--<div id="msg_div24" style="position: absolute;background-color:wheat;padding:20px;">Showing message here...</div>-->
-                            <div class="modal-dialog" id="msg_div24"  style="position: absolute;">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button class="close" aria-hidden="true" data-dismiss="modal" type="button" data-ng-click="closePopupModal()">×</button>
-                                        <h4 id="modal-stackable-label" class="modal-title">Message</h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        <p id="msg_content"></p>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button class="btn btn-primary" type="button" data-ng-click="closePopupModal()">Close</button>
-                                    </div>
+                        <div class="modal-dialog" id="msg_div24"  style="position: absolute;">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button class="close" aria-hidden="true" data-dismiss="modal" type="button" data-ng-click="closePopupModal()">×</button>
+                                    <h4 id="modal-stackable-label" class="modal-title">Message</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <p id="msg_content"></p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-primary" type="button" data-ng-click="closePopupModal()">Close</button>
                                 </div>
                             </div>
+                        </div>
 
                     </scrollable-table>
 
@@ -373,10 +380,10 @@
                             <tr>
                                 <th sortable-header col="studentId" width="10%">Student Id</th>
                                 <th sortable-header col="studentName" width="32%">Student Name</th>
-                                <th sortable-header col="quiz" width="10%" style="text-align: center;">Quiz (20)</th>
-                                <th sortable-header col="classPerformance" width="10%" style="text-align: center;">Class Perf. (10)</th>
-                                <th sortable-header col="partA" width="10%" style="text-align: center;">Part-A ({{data.part_a_total}})</th>
-                                <th sortable-header col="partB" width="10%" style="text-align: center;" ng-show="toggleColumn">Part-B ({{data.part_b_total}})</th>
+                                <th sortable-header col="quiz" width="10%" style="text-align: center;" data-ng-show="courseType=='THEORY'">Quiz (20)</th>
+                                <th sortable-header col="classPerformance" width="10%" style="text-align: center;" data-ng-show="courseType=='THEORY'">Class Perf. (10)</th>
+                                <th sortable-header col="partA" width="10%" style="text-align: center;" data-ng-show="courseType=='THEORY'">Part-A ({{data.part_a_total}})</th>
+                                <th sortable-header col="partB" width="10%" style="text-align: center;" ng-show="toggleColumn && courseType=='THEORY'">Part-B ({{data.part_b_total}})</th>
                                 <th sortable-header col="total" width="10%" style="text-align: center;">Total</th>
                                 <th sortable-header col="gradeLetter" width="10%" style="text-align: center;">Grade Letter</th>
                             </tr>
@@ -385,10 +392,10 @@
                             <tr ng-repeat="response in recheckCandidatesGrades">
                                 <td>{{response.studentId}}</td>
                                 <td>{{ response.studentName }}</td>
-                                <td style="padding-right: 30px;text-align: right;">{{response.quiz}}</td>
-                                <td style="padding-right: 30px;text-align: right;">{{response.classPerformance}}</td>
-                                <td style="padding-right: 30px;text-align: right;">{{response.partA}}</td>
-                                <td style="padding-right: 30px;text-align: right;">{{response.partB}}</td>
+                                <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.quiz}}</td>
+                                <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.classPerformance}}</td>
+                                <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.partA}}</td>
+                                <td style="padding-right: 30px;text-align: right;" ng-show="toggleColumn && courseType=='THEORY'">{{response.partB}}</td>
                                 <td style="padding-right: 30px;text-align: right;">{{response.total}}</td>
                                 <td style="text-align: center;">{{response.gradeLetter}}</td>
                             </tr>
@@ -414,10 +421,10 @@
                             <tr>
                                 <th sortable-header col="studentId" width="10%">Student Id</th>
                                 <th sortable-header col="studentName" width="28%">Student Name</th>
-                                <th sortable-header col="quiz" width="8%" style="text-align: center;">Quiz (20)</th>
-                                <th sortable-header col="classPerformance" width="8%" style="text-align: center;">Class Perf. (10)</th>
-                                <th sortable-header col="partA" width="8%" style="text-align: center;">Part-A ({{data.part_a_total}})</th>
-                                <th sortable-header col="partB" width="8%" style="text-align: center;" ng-show="toggleColumn">Part-B ({{data.part_b_total}})</th>
+                                <th sortable-header col="quiz" width="8%" style="text-align: center;" data-ng-show="courseType=='THEORY'">Quiz (20)</th>
+                                <th sortable-header col="classPerformance" width="8%" style="text-align: center;" data-ng-show="courseType=='THEORY'">Class Perf. (10)</th>
+                                <th sortable-header col="partA" width="8%" style="text-align: center;" data-ng-show="courseType=='THEORY'">Part-A ({{data.part_a_total}})</th>
+                                <th sortable-header col="partB" width="8%" style="text-align: center;" ng-show="toggleColumn && courseType=='THEORY'">Part-B ({{data.part_b_total}})</th>
                                 <th sortable-header col="total" width="8%" style="text-align: center;">Total</th>
                                 <th sortable-header col="gradeLetter" width="8%" style="text-align: center;">Grade Letter</th>
                                 <th sortable-header col="recheckAll" width="5%" style="text-align: center;">R&nbsp;&nbsp;
@@ -429,19 +436,19 @@
                             <tr ng-repeat="response in recheckCandidatesGrades" row-id="{{response.studentId}}" id="row_{{response.studentId}}">
                                 <td id="sid_{{response.studentId}}">{{response.studentId}}</td>
                                 <td id="td_sname_{{response.studentId}}">{{ response.studentName }}</td>
-                                <td id="td_quiz_{{response.studentId}}">
+                                <td id="td_quiz_{{response.studentId}}" data-ng-show="courseType=='THEORY'">
                                     <input type="text"  style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="quiz_{{response.studentId}}"
                                            value="{{response.quiz}}" data-ng-change="calculateTotalAndGradeLetter('{{response.studentId}}')" data-ng-model="response.quiz" maxlength="2"/>
                                 </td>
-                                <td id="td_cperf_{{response.studentId}}">
+                                <td id="td_cperf_{{response.studentId}}" data-ng-show="courseType=='THEORY'">
                                     <input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="class_perf_{{response.studentId}}"
                                            value="{{response.classPerformance}}"  data-ng-change="calculateTotalAndGradeLetter('{{response.studentId}}')" data-ng-model="response.classPerformance" maxlength="2"/>
                                 </td>
-                                <td id="td_parta_{{response.studentId}}">
+                                <td id="td_parta_{{response.studentId}}" data-ng-show="courseType=='THEORY'">
                                     <input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="part_a_{{response.studentId}}"
                                            value="{{response.partA}}" data-ng-change="calculateTotalAndGradeLetter('{{response.studentId}}')" data-ng-model="response.partA" maxlength="2"/>
                                 </td>
-                                <td id="td_partb_{{response.studentId}}" ng-show="toggleColumn">
+                                <td id="td_partb_{{response.studentId}}" ng-show="toggleColumn && courseType=='THEORY'">
                                     <input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="part_b_{{response.studentId}}"
                                            value="{{response.partB}}" data-ng-change="calculateTotalAndGradeLetter('{{response.studentId}}')" data-ng-model="response.partB" maxlength="2"/>
                                 </td>
@@ -489,11 +496,11 @@
                             <tr>
                                 <th sortable-header col="studentId" width="10%">Student Id</th>
                                 <th sortable-header col="studentName" width="32%">Student Name</th>
-                                <th sortable-header col="quiz" width="10%" style="text-align: center;">Quiz (20)</th>
-                                <th sortable-header col="classPerformance" width="10%" style="text-align: center;">Class Perf. (10)</th>
-                                <th sortable-header col="partA" width="10%" style="text-align: center;">Part-A ({{data.part_a_total}})</th>
-                                <th sortable-header col="partB" width="10%" style="text-align: center;" ng-show="toggleColumn">Part-B ({{data.part_b_total}})</th>
-                                <th sortable-header col="total" width="10%" style="text-align: center;">Total</th>
+                                <th sortable-header col="quiz" width="10%" style="text-align: center;" data-ng-show="courseType=='THEORY'">Quiz (20)</th>
+                                <th sortable-header col="classPerformance" width="10%" style="text-align: center;" data-ng-show="courseType=='THEORY'">Class Perf. (10)</th>
+                                <th sortable-header col="partA" width="10%" style="text-align: center;" data-ng-show="courseType=='THEORY'">Part-A ({{data.part_a_total}})</th>
+                                <th sortable-header col="partB" width="10%" style="text-align: center;" ng-show="toggleColumn && courseType=='THEORY'">Part-B ({{data.part_b_total}})</th>
+                                <th sortable-header col="total" width="5%" style="text-align: center;">Total</th>
                                 <th sortable-header col="gradeLetter" width="10%" style="text-align: center;">Grade Letter</th>
                             </tr>
                             </thead>
@@ -501,10 +508,10 @@
                             <tr ng-repeat="response in submittedGrades">
                                 <td>{{response.studentId}}</td>
                                 <td>{{ response.studentName }}</td>
-                                <td style="padding-right: 30px;text-align: right;">{{response.quiz}}</td>
-                                <td style="padding-right: 30px;text-align: right;">{{response.classPerformance}}</td>
-                                <td style="padding-right: 30px;text-align: right;">{{response.partA}}</td>
-                                <td style="padding-right: 30px;text-align: right;">{{response.partB}}</td>
+                                <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.quiz}}</td>
+                                <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.classPerformance}}</td>
+                                <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.partA}}</td>
+                                <td style="padding-right: 30px;text-align: right;" ng-show="toggleColumn && courseType=='THEORY'">{{response.partB}}</td>
                                 <td style="padding-right: 30px;text-align: right;">{{response.total}}</td>
                                 <td style="text-align: center;">{{response.gradeLetter}}</td>
                             </tr>
@@ -534,10 +541,10 @@
                             <tr>
                                 <th sortable-header col="studentId" width="10%">Student Id</th>
                                 <th sortable-header col="studentName" width="32%">Student Name</th>
-                                <th sortable-header col="quiz" width="10%" style="text-align: center;">Quiz (20)</th>
-                                <th sortable-header col="classPerformance" width="10%" style="text-align: center;">Class Perf. (10)</th>
-                                <th sortable-header col="partA" width="10%" style="text-align: center;">Part-A ({{data.part_a_total}})</th>
-                                <th sortable-header col="partB" width="10%" style="text-align: center;" ng-show="toggleColumn">Part-B ({{data.part_b_total}})</th>
+                                <th sortable-header col="quiz" width="10%" style="text-align: center;" data-ng-show="courseType=='THEORY'">Quiz (20)</th>
+                                <th sortable-header col="classPerformance" width="10%" style="text-align: center;" data-ng-show="courseType=='THEORY'">Class Perf. (10)</th>
+                                <th sortable-header col="partA" width="10%" style="text-align: center;" data-ng-show="courseType=='THEORY'">Part-A ({{data.part_a_total}})</th>
+                                <th sortable-header col="partB" width="10%" style="text-align: center;" ng-show="toggleColumn && courseType=='THEORY'">Part-B ({{data.part_b_total}})</th>
                                 <th sortable-header col="total" width="10%" style="text-align: center;">Total</th>
                                 <th sortable-header col="gradeLetter" width="10%" style="text-align: center;">Grade Letter</th>
                             </tr>
@@ -546,10 +553,10 @@
                             <tr ng-repeat="response in scrutinizedGrades">
                                 <td>{{response.studentId}}</td>
                                 <td>{{ response.studentName }}</td>
-                                <td style="padding-right: 30px;text-align: right;">{{response.quiz}}</td>
-                                <td style="padding-right: 30px;text-align: right;">{{response.classPerformance}}</td>
-                                <td style="padding-right: 30px;text-align: right;">{{response.partA}}</td>
-                                <td style="padding-right: 30px;text-align: right;">{{response.partB}}</td>
+                                <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.quiz}}</td>
+                                <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.classPerformance}}</td>
+                                <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.partA}}</td>
+                                <td style="padding-right: 30px;text-align: right;" ng-show="toggleColumn && courseType=='THEORY'">{{response.partB}}</td>
                                 <td style="padding-right: 30px;text-align: right;">{{response.total}}</td>
                                 <td style="text-align: center;">{{response.gradeLetter}}</td>
                             </tr>
@@ -566,7 +573,7 @@
                 <!-- End of Scrutinized Grades -->
 
                 <!-- Start of Approved Grades -->
-                <div ng-if="approvedGrades.length">
+                <div ng-if="approvedGrades.length>0 &&  ((currentActor=='coe' && gradeSubmissionStatus !='5') || (currentActor!='coe')) ">
                     <div class="btn btn-blue reportrange" style="margin-top: 20px;">
                         <i class="fa fa-check-circle-o"></i>
                         <span style="padding-right: 100px;">Approved(by Head) Grades</span>
@@ -579,10 +586,10 @@
                             <tr>
                                 <th sortable-header col="studentId" width="10%">Student Id</th>
                                 <th sortable-header col="studentName" width="32%">Student Name</th>
-                                <th sortable-header col="quiz" width="10%" style="text-align: center;">Quiz (20)</th>
-                                <th sortable-header col="classPerformance" width="10%" style="text-align: center;">Class Perf. (10)</th>
-                                <th sortable-header col="partA" width="10%" style="text-align: center;">Part-A ({{data.part_a_total}})</th>
-                                <th sortable-header col="partB" width="10%" style="text-align: center;" ng-show="toggleColumn">Part-B ({{data.part_b_total}})</th>
+                                <th sortable-header col="quiz" width="10%" style="text-align: center;" data-ng-show="courseType=='THEORY'">Quiz (20)</th>
+                                <th sortable-header col="classPerformance" width="10%" style="text-align: center;" data-ng-show="courseType=='THEORY'">Class Perf. (10)</th>
+                                <th sortable-header col="partA" width="10%" style="text-align: center;" data-ng-show="courseType=='THEORY'">Part-A ({{data.part_a_total}})</th>
+                                <th sortable-header col="partB" width="10%" style="text-align: center;" ng-show="toggleColumn && courseType=='THEORY'">Part-B ({{data.part_b_total}})</th>
                                 <th sortable-header col="total" width="10%" style="text-align: center;">Total</th>
                                 <th sortable-header col="gradeLetter" width="10%" style="text-align: center;">Grade Letter</th>
                             </tr>
@@ -591,10 +598,10 @@
                             <tr ng-repeat="response in approvedGrades">
                                 <td>{{response.studentId}}</td>
                                 <td>{{ response.studentName }}</td>
-                                <td style="padding-right: 30px;text-align: right;">{{response.quiz}}</td>
-                                <td style="padding-right: 30px;text-align: right;">{{response.classPerformance}}</td>
-                                <td style="padding-right: 30px;text-align: right;">{{response.partA}}</td>
-                                <td style="padding-right: 30px;text-align: right;">{{response.partB}}</td>
+                                <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.quiz}}</td>
+                                <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.classPerformance}}</td>
+                                <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.partA}}</td>
+                                <td style="padding-right: 30px;text-align: right;" ng-show="toggleColumn && courseType=='THEORY'">{{response.partB}}</td>
                                 <td style="padding-right: 30px;text-align: right;">{{response.total}}</td>
                                 <td style="text-align: center;">{{response.gradeLetter}}</td>
                             </tr>
@@ -618,15 +625,15 @@
                     </div>
                     <div class="clearfix"></div>
                     <scrollable-table watch="acceptedGrades" ng-style="{height: acceptedGrades.length > 10 ? 450 : (38 + (acceptedGrades.length * 35.5))}">
-                    <table class="table table-striped table-bordered">
+                        <table class="table table-striped table-bordered">
                             <thead>
                             <tr>
                                 <th sortable-header col="studentId" width="10%">Student Id</th>
                                 <th sortable-header col="studentName" width="32%">Student Name</th>
-                                <th sortable-header col="quiz" width="10%" style="text-align: center;">Quiz (20)</th>
-                                <th sortable-header col="classPerformance" width="10%" style="text-align: center;">Class Perf. (10)</th>
-                                <th sortable-header col="partA" width="10%" style="text-align: center;">Part-A ({{data.part_a_total}})</th>
-                                <th sortable-header col="partB" width="10%" style="text-align: center;" ng-show="toggleColumn">Part-B ({{data.part_b_total}})</th>
+                                <th sortable-header col="quiz" width="10%" style="text-align: center;" data-ng-show="courseType=='THEORY'">Quiz (20)</th>
+                                <th sortable-header col="classPerformance" width="10%" style="text-align: center;" data-ng-show="courseType=='THEORY'">Class Perf. (10)</th>
+                                <th sortable-header col="partA" width="10%" style="text-align: center;" data-ng-show="courseType=='THEORY'">Part-A ({{data.part_a_total}})</th>
+                                <th sortable-header col="partB" width="10%" style="text-align: center;" ng-show="toggleColumn && courseType=='THEORY'">Part-B ({{data.part_b_total}})</th>
                                 <th sortable-header col="total" width="10%" style="text-align: center;">Total</th>
                                 <th sortable-header col="gradeLetter" width="10%" style="text-align: center;">Grade Letter</th>
                             </tr>
@@ -635,10 +642,10 @@
                             <tr ng-repeat="response in acceptedGrades" id="{{response.studentId}}">
                                 <td>{{response.studentId}}</td>
                                 <td>{{ response.studentName }}</td>
-                                <td style="padding-right: 30px;text-align: right;">{{response.quiz}}</td>
-                                <td style="padding-right: 30px;text-align: right;">{{response.classPerformance}}</td>
-                                <td style="padding-right: 30px;text-align: right;">{{response.partA}}</td>
-                                <td style="padding-right: 30px;text-align: right;">{{response.partB}}</td>
+                                <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.quiz}}</td>
+                                <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.classPerformance}}</td>
+                                <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.partA}}</td>
+                                <td style="padding-right: 30px;text-align: right;" ng-show="toggleColumn && courseType=='THEORY'">{{response.partB}}</td>
                                 <td style="padding-right: 30px;text-align: right;">{{response.total}}</td>
                                 <td style="text-align: center;">{{response.gradeLetter}}</td>
                             </tr>
@@ -664,10 +671,10 @@
                                 <tr>
                                     <th sortable-header col="studentId" width="10%">Student Id</th>
                                     <th sortable-header col="studentName" width="30%">Student Name</th>
-                                    <th sortable-header col="quiz" width="8%" style="text-align: center;">Quiz (20)</th>
-                                    <th sortable-header col="classPerformance" width="10%" style="text-align: center;">Class Perf. (10)</th>
-                                    <th sortable-header col="partA" width="8%" style="text-align: center;">Part-A ({{data.part_a_total}})</th>
-                                    <th sortable-header col="partB" width="8%" style="text-align: center;" ng-show="toggleColumn">Part-B ({{data.part_b_total}})</th>
+                                    <th sortable-header col="quiz" width="8%" style="text-align: center;" data-ng-show="courseType=='THEORY'">Quiz (20)</th>
+                                    <th sortable-header col="classPerformance" width="10%" style="text-align: center;" data-ng-show="courseType=='THEORY'">Class Perf. (10)</th>
+                                    <th sortable-header col="partA" width="8%" style="text-align: center;" data-ng-show="courseType=='THEORY'">Part-A ({{data.part_a_total}})</th>
+                                    <th sortable-header col="partB" width="8%" style="text-align: center;" ng-show="toggleColumn && courseType=='THEORY'">Part-B ({{data.part_b_total}})</th>
                                     <th sortable-header col="total" width="8%" style="text-align: center;">Total</th>
                                     <th sortable-header col="gradeLetter" width="8%" style="text-align: center;">Grade Letter</th>
                                     <th sortable-header col="gradeLetter" width="4%" style="text-align: center;">Delete</th>
@@ -677,10 +684,10 @@
                                 <tr ng-repeat="response in recheckAcceptedGrades" id="recheck_accepted_{{response.studentId}}">
                                     <td>{{response.studentId}}</td>
                                     <td>{{ response.studentName }}</td>
-                                    <td style="padding-right: 30px;text-align: right;">{{response.quiz}}</td>
-                                    <td style="padding-right: 30px;text-align: right;">{{response.classPerformance}}</td>
-                                    <td style="padding-right: 30px;text-align: right;">{{response.partA}}</td>
-                                    <td style="padding-right: 30px;text-align: right;" ng-show="toggleColumn">{{response.partB}}</td>
+                                    <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.quiz}}</td>
+                                    <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.classPerformance}}</td>
+                                    <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.partA}}</td>
+                                    <td style="padding-right: 30px;text-align: right;" ng-show="toggleColumn && courseType=='THEORY'">{{response.partB}}</td>
                                     <td style="padding-right: 30px;text-align: right;">{{response.total}}</td>
                                     <td style="text-align: center;">{{response.gradeLetter}}</td>
                                     <td style="text-align: center;" ></td>
@@ -700,22 +707,22 @@
 
                     </div>
 
-                    <div ng-if="recheckAcceptedGrades.length>0 &&  (gradeSubmissionStatus =='8' && currentActor=='vc') ">
+                    <div ng-if="recheckAcceptedGrades.length>0 &&  gradeSubmissionStatus =='8' ">
                         <div class="btn btn-red reportrange" style="margin-top: 20px;">
                             <i class="fa fa-check-circle"></i>
-                            <span style="padding-right: 30px;">Recheck Request for Accepted Grades(Pending) /></span>
+                            <span style="padding-right: 30px;">Recheck Request for Accepted Grades(Pending)</span>
                         </div>
                         <div class="clearfix"></div>
-                        <scrollable-table watch="recheckAcceptedGrades" ng-style="{height:300}">
+                        <scrollable-table watch="recheckAcceptedGrades" ng-style="{height: recheckAcceptedGrades.length > 10 ? 450 : (38 + (recheckAcceptedGrades.length * 35.5))}">
                             <table class="table table-striped table-bordered">
                                 <thead>
                                 <tr>
                                     <th sortable-header col="studentId" width="10%">Student Id</th>
                                     <th sortable-header col="studentName" width="30%">Student Name</th>
-                                    <th sortable-header col="quiz" width="8%" style="text-align: center;">Quiz (20)</th>
-                                    <th sortable-header col="classPerformance" width="10%" style="text-align: center;">Class Perf. (10)</th>
-                                    <th sortable-header col="partA" width="8%" style="text-align: center;">Part-A ({{data.part_a_total}})</th>
-                                    <th sortable-header col="partB" width="8%" style="text-align: center;" ng-show="toggleColumn">Part-B ({{data.part_b_total}})</th>
+                                    <th sortable-header col="quiz" width="8%" style="text-align: center;" data-ng-show="courseType=='THEORY'">Quiz (20)</th>
+                                    <th sortable-header col="classPerformance" width="10%" style="text-align: center;" data-ng-show="courseType=='THEORY'">Class Perf. (10)</th>
+                                    <th sortable-header col="partA" width="8%" style="text-align: center;" data-ng-show="courseType=='THEORY'">Part-A ({{data.part_a_total}})</th>
+                                    <th sortable-header col="partB" width="8%" style="text-align: center;" ng-show="toggleColumn && courseType=='THEORY'">Part-B ({{data.part_b_total}})</th>
                                     <th sortable-header col="total" width="8%" style="text-align: center;">Total</th>
                                     <th sortable-header col="gradeLetter" width="8%" style="text-align: center;">Grade Letter</th>
                                 </tr>
@@ -724,10 +731,10 @@
                                 <tr ng-repeat="response in recheckAcceptedGrades">
                                     <td>{{response.studentId}}</td>
                                     <td>{{ response.studentName }}</td>
-                                    <td style="padding-right: 30px;text-align: right;">{{response.quiz}}</td>
-                                    <td style="padding-right: 30px;text-align: right;">{{response.classPerformance}}</td>
-                                    <td style="padding-right: 30px;text-align: right;">{{response.partA}}</td>
-                                    <td style="padding-right: 30px;text-align: right;" ng-show="toggleColumn">{{response.partB}}</td>
+                                    <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.quiz}}</td>
+                                    <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.classPerformance}}</td>
+                                    <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.partA}}</td>
+                                    <td style="padding-right: 30px;text-align: right;" ng-show="toggleColumn && courseType=='THEORY'">{{response.partB}}</td>
                                     <td style="padding-right: 30px;text-align: right;">{{response.total}}</td>
                                     <td style="text-align: center;">{{response.gradeLetter}}</td>
                                 </tr>
@@ -739,7 +746,7 @@
                             <div class="col-md-6">
                                 <button type="button" class="btn btn-default btn-square" onclick='goBack()'>Back to Grade Sheet Selection</button>
                             </div>
-                            <div class="col-md-6" style="text-align: right;">
+                            <div class="col-md-6" style="text-align: right;" ng-if="gradeSubmissionStatus =='8' && currentActor=='vc'">
                                 <button type="button"  class="btn btn-red btn-square" data-ng-click="recheckRequestHandler(currentActor,'recheck_request_rejected')">Reject Recheck Request</button>
                                 <button type="button"  class="btn btn-green btn-square" data-ng-click="recheckRequestHandler(currentActor,'recheck_request_approved')">Approve Recheck Request</button>
                             </div>
@@ -749,7 +756,29 @@
 
                 </div>
                 <!-- End  of Accepted Grades -->
+                <modal data-handler="modalSettings.handler" data-body="modalSettings.body" data-footer="modalSettings.footer" data-header="modalSettings.header"
+                        data-ng-click-right-button="modalSettings.rightButton()"></modal>
+                <a data-target="#{{modalSettings.handler}}" role="button" class="btn btn-success" data-toggle="modal">Launch Demo Modal</a>
 
+                <button type="button" data-target="#myModal" data-toggle="modal" class="btn btn-primary">View Demo</button>
+                <div id="myModal" class="modal fade">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h4 class="modal-title">Confirmation</h4>
+                            </div>
+                            <div class="modal-body">
+                                <p>Do you want to save changes you made to document before closing?</p>
+                                <p class="text-warning"><small>If you don't save, your changes will be lost.</small></p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
 
                 <hr class="style-two" />
@@ -767,27 +796,27 @@
                                     <tbody>
                                     <tr>
                                         <td width="16.5%"><b>A+</b></td>
-                                        <td width="16.5%">10</td>
+                                        <td width="16.5%">{{chartData[0].total}}</td>
                                         <td width="16.5%"><b>B+</b></td>
-                                        <td width="16.5%">20</td>
+                                        <td width="16.5%">{{chartData[3].total}}</td>
                                         <td width="16.5%"><b>C+</b></td>
-                                        <td width="16.5%">15</td>
+                                        <td width="16.5%">{{chartData[6].total}}</td>
                                     </tr>
                                     <tr>
                                         <td><b>A</b></td>
-                                        <td>8</td>
+                                        <td>{{chartData[1].total}}</td>
                                         <td><b>B</b></td>
-                                        <td>19</td>
+                                        <td>{{chartData[4].total}}</td>
                                         <td><b>C</b></td>
-                                        <td>12</td>
+                                        <td>{{chartData[7].total}}</td>
                                     </tr>
                                     <tr>
                                         <td><b>A-</b></td>
-                                        <td>21</td>
+                                        <td>{{chartData[1].total}}</td>
                                         <td><b>B-</b></td>
-                                        <td>45</td>
+                                        <td>{{chartData[5].total}}</td>
                                         <td><b>D</b></td>
-                                        <td>32</td>
+                                        <td>{{chartData[8].total}}</td>
                                     </tr>
                                     <tr>
                                         <td></td>
@@ -795,7 +824,7 @@
                                         <td></td>
                                         <td></td>
                                         <td><b>F</b></td>
-                                        <td>32</td>
+                                        <td>{{chartData[9].total}}</td>
                                     </tr>
                                     <tr>
                                         <td></td>
@@ -803,19 +832,19 @@
                                         <td></td>
                                         <td></td>
                                         <td><b>Total</b></td>
-                                        <td><span class="badge badge-success pull-left">100</span></td>
+                                        <td><span class="badge badge-success pull-left">{{chartData[0].total+chartData[1].total+chartData[2].total+chartData[3].total+chartData[4].total+chartData[5].total+chartData[6].total+chartData[7].total+chartData[8].total+chartData[9].total}}</span></td>
                                     </tr>
 
 
                                     </tbody>
 
-                                    </table>
+                                </table>
 
                                 <table class="table table-hover table-bordered" id="tbl_rules" style="display: none;">
                                     <thead>
-                                        <th>Numerical Equivalent</th>
-                                        <th>Letter Grade</th>
-                                        <th>Grade Point</th>
+                                    <th>Numerical Equivalent</th>
+                                    <th>Letter Grade</th>
+                                    <th>Grade Point</th>
                                     </thead>
                                     <tbody>
                                     <tr>

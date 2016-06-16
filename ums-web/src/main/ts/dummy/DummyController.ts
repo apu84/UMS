@@ -1,8 +1,10 @@
 module ums {
   export class DummyController {
-    public static $inject = ['$scope', '$stateParams', '$timeout'];
+    public static $inject = ['$scope', '$stateParams', '$timeout', 'HttpClient', '$window'];
 
-    constructor($scope: any, $stateParams: any, $timeout: ng.ITimeoutService) {
+    constructor($scope: any, $stateParams: any, $timeout: ng.ITimeoutService,
+                private httpClient: HttpClient, private $window: ng.IWindowService,
+                private $sce: ng.ISCEService) {
       $scope.amChartOptions = {
         data: [{
           year: 2005,
@@ -77,6 +79,34 @@ module ums {
         }];
         $scope.$broadcast("amCharts.updateData", updatedData);
       }, 5000);
+
+
+      $scope.modalSettings = {};
+      $scope.modalSettings.title = "Some title";
+      $scope.modalSettings.body = "Some body";
+      $scope.modalSettings.footer = "Some footer";
+      $scope.modalSettings.header = "Some header";
+      $scope.modalSettings.handler = "modal1";
+      $scope.modalSettings.rightButton = () => {
+        console.debug("Do something......");
+      };
+
+      $scope.generateXls = this.generateXls.bind(this);
+    }
+
+    private generateXls(): void {
+      this.httpClient.get('dummyXls', 'application/vnd.ms-excel',
+          (data: any, etag: string) => {
+            var file = new Blob([data], {type: 'application/vnd.ms-excel'});
+            var reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onloadend = function (e) {
+              window.open(reader.result, 'Excel', 'width=20,height=10,toolbar=0,menubar=0,scrollbars=no', false);
+            };
+          },
+          (response: ng.IHttpPromiseCallbackArg<any>) => {
+            console.error(response);
+          }, 'arraybuffer');
     }
 
   }

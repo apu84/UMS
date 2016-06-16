@@ -76,6 +76,7 @@
 /// <reference path='directive/Grid.ts'/>
 /// <reference path='directive/SelectPicker.ts'/>
 /// <reference path='directive/ConvertToNumber.ts'/>
+/// <reference path='directive/Modal.ts'/>
 
 
 /// <reference path='interceptor/Unauthorized.ts'/>

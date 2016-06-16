@@ -31,4 +31,11 @@ public class MutableGradeSubmissionResource extends Resource {
         return mResourceHelper.updateGradeStatus(pJsonObject);
     }
 
+    @PUT
+    @Path("/vc/recheckApprove")
+    public Response recheckRequestApprove(final JsonObject pJsonObject) throws Exception {
+        return mResourceHelper.recheckRequestApprove(pJsonObject);
+    }
+
+
 }

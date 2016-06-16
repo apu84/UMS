@@ -6,6 +6,7 @@ import org.ums.domain.model.dto.StudentGradeDto;
 import org.ums.domain.model.immutable.ExamGrade;
 import org.ums.domain.model.mutable.MutableExamGrade;
 import org.ums.enums.CourseMarksSubmissionStatus;
+import org.ums.enums.CourseType;
 import org.ums.manager.ExamGradeManager;
 
 import java.util.List;
@@ -16,13 +17,13 @@ import java.util.List;
 public class ExamGradeDaoDecorator  extends ContentDaoDecorator<ExamGrade, MutableExamGrade, Object, ExamGradeManager> implements ExamGradeManager {
 
     @Override
-    public List<StudentGradeDto> getAllGradeForTheoryCourse(int semesterId,String courseId, int examType) throws Exception {
-        return getManager().getAllGradeForTheoryCourse(semesterId,courseId, examType);
+    public List<StudentGradeDto> getAllGrades(int semesterId,String courseId, int examType,CourseType courseType) throws Exception {
+        return getManager().getAllGrades(semesterId, courseId, examType,courseType);
     }
 
     @Override
-    public List<GradeChartDataDto> getTheoryChartData(int semesterId,String courseId, int examType) throws Exception {
-        return getManager().getTheoryChartData(semesterId,courseId, examType);
+    public List<GradeChartDataDto> getChartData(int semesterId,String courseId, int examType,CourseType courseType) throws Exception {
+        return getManager().getChartData(semesterId, courseId, examType,courseType);
     }
     @Override
     public MarksSubmissionStatusDto getMarksSubmissionStatus(int semesterId,String courseId, int examType) throws Exception {
@@ -35,33 +36,44 @@ public class ExamGradeDaoDecorator  extends ContentDaoDecorator<ExamGrade, Mutab
     }
 
     @Override
-    public boolean saveGradeSheet(int semesterId,String courseId,int examType,List<StudentGradeDto> gradeList) throws Exception {
-        return getManager().saveGradeSheet(semesterId, courseId, examType, gradeList);
+    public boolean saveGradeSheet(int semesterId,String courseId,int examType,CourseType courseType,List<StudentGradeDto> gradeList) throws Exception {
+        return getManager().saveGradeSheet(semesterId, courseId, examType, courseType,gradeList);
     }
 
     @Override
-    public boolean updateGradeStatus_Save(int pSemesterId,String pCourseId,int pExamType,List<StudentGradeDto> recheckList,List<StudentGradeDto> approveList) throws Exception {
-        return getManager().updateGradeStatus_Save(pSemesterId, pCourseId, pExamType, recheckList,approveList);
+    public boolean updateGradeStatus_Save(int pSemesterId,String pCourseId,int pExamType,CourseType courseType,List<StudentGradeDto> recheckList,List<StudentGradeDto> approveList) throws Exception {
+        return getManager().updateGradeStatus_Save(pSemesterId, pCourseId, pExamType,courseType, recheckList,approveList);
     }
     @Override
-    public boolean updateGradeStatus_Recheck(int pSemesterId,String pCourseId,int pExamType,List<StudentGradeDto> recheckList,List<StudentGradeDto> approveList) throws Exception {
-        return getManager().updateGradeStatus_Recheck(pSemesterId, pCourseId, pExamType, recheckList,approveList);
-    }
-
-    @Override
-    public boolean updateGradeStatus_Approve(int pSemesterId,String pCourseId,int pExamType,List<StudentGradeDto> recheckList,List<StudentGradeDto> approveList) throws Exception {
-        return getManager().updateGradeStatus_Approve(pSemesterId, pCourseId, pExamType, recheckList,approveList);
+    public boolean updateGradeStatus_Recheck(int pSemesterId,String pCourseId,int pExamType,CourseType courseType,List<StudentGradeDto> recheckList,List<StudentGradeDto> approveList) throws Exception {
+        return getManager().updateGradeStatus_Recheck(pSemesterId, pCourseId, pExamType,courseType, recheckList,approveList);
     }
 
     @Override
-    public int updateCourseMarksSubmissionStatus(int semesterId,String courseId,int examType,CourseMarksSubmissionStatus status) throws Exception {
-        return getManager().updateCourseMarksSubmissionStatus(semesterId, courseId, examType, status);
+    public boolean updateGradeStatus_Approve(int pSemesterId,String pCourseId,int pExamType,CourseType courseType,List<StudentGradeDto> recheckList,List<StudentGradeDto> approveList) throws Exception {
+        return getManager().updateGradeStatus_Approve(pSemesterId, pCourseId, pExamType,courseType, recheckList,approveList);
+    }
+
+    @Override
+    public int updateCourseMarksSubmissionStatus(int semesterId,String courseId,int examType,CourseType courseType,CourseMarksSubmissionStatus status) throws Exception {
+        return getManager().updateCourseMarksSubmissionStatus(semesterId, courseId, examType,courseType, status);
     }
 
     @Override
     public int updatePartInfo(int pSemesterId,String pCourseId,int pExamType,int pTotalPart,int partA,int partB) throws Exception {
         return getManager().updatePartInfo(pSemesterId, pCourseId,pExamType, pTotalPart, partA,partB);
     }
+
+    @Override
+    public int rejectRecheckRequest(int semesterId,String courseId,int examType,CourseType courseType) throws Exception {
+        return getManager().rejectRecheckRequest(semesterId, courseId, examType,courseType);
+    }
+
+    @Override
+    public int approveRecheckRequest(int semesterId,String courseId,int examType,CourseType courseType) throws Exception {
+        return getManager().approveRecheckRequest(semesterId, courseId, examType,courseType);
+    }
+
 
     @Override
     public List<String> getRoleForTeacher(String pTeacherId,int  pSemesterId,String pCourseId) throws Exception {
@@ -79,6 +91,9 @@ public class ExamGradeDaoDecorator  extends ContentDaoDecorator<ExamGrade, Mutab
     public List<String> getRoleForCoE(String pUserId) throws Exception {
         return getManager().getRoleForCoE(pUserId);
     }
-
+    @Override
+    public List<String> getRoleForVC(String pUserId) throws Exception {
+        return getManager().getRoleForVC(pUserId);
+    }
 
 }

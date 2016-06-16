@@ -9,6 +9,7 @@ import org.ums.domain.model.immutable.ExamGrade;
 import org.ums.domain.model.immutable.ExamRoutine;
 import org.ums.domain.model.mutable.MutableExamGrade;
 import org.ums.domain.model.mutable.MutableExamRoutine;
+import org.ums.enums.CourseType;
 import org.ums.enums.RecheckStatus;
 import org.ums.enums.StudentMarksSubmissionStatus;
 
@@ -43,6 +44,7 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
         partInfoDto.setTotal_part(course.getInt("total_part"));
         partInfoDto.setPart_a_total(course.getInt("part_a_total"));
         partInfoDto.setPart_b_total(course.getInt("part_b_total"));
+        partInfoDto.setCourseType(CourseType.get(course.getInt("course_type")));
     }
 
     public List<StudentGradeDto> build(JsonObject pJsonObject) throws Exception {
@@ -55,11 +57,13 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
             JsonObject jsonObject = entries.getJsonObject(i);
             StudentGradeDto grade = new StudentGradeDto();
             grade.setStudentId(jsonObject.getString("studentId"));
-            grade.setQuiz((jsonObject.getString("quiz") == null || jsonObject.getString("quiz").equalsIgnoreCase(""))? -1 : Float.parseFloat(jsonObject.getString("quiz")));
-            grade.setClassPerformance((jsonObject.getString("classPerformance") == null || jsonObject.getString("classPerformance").equalsIgnoreCase(""))? -1 : Float.parseFloat(jsonObject.getString("classPerformance")));
-            grade.setPartA((jsonObject.getString("partA") == null || jsonObject.getString("partA").equalsIgnoreCase(""))? -1 : Float.parseFloat(jsonObject.getString("partA")));
-            if(courseInfo.getInt("total_part")==2)
-                grade.setPartB((jsonObject.getString("partB")==null  || jsonObject.getString("partB").equalsIgnoreCase(""))? -1:Float.parseFloat(jsonObject.getString("partB")));
+            if(courseInfo.getInt("course_type")==1) { // For  only theory courses
+                grade.setQuiz((jsonObject.getString("quiz") == null || jsonObject.getString("quiz").equalsIgnoreCase("")) ? -1 : Float.parseFloat(jsonObject.getString("quiz")));
+                grade.setClassPerformance((jsonObject.getString("classPerformance") == null || jsonObject.getString("classPerformance").equalsIgnoreCase("")) ? -1 : Float.parseFloat(jsonObject.getString("classPerformance")));
+                grade.setPartA((jsonObject.getString("partA") == null || jsonObject.getString("partA").equalsIgnoreCase("")) ? -1 : Float.parseFloat(jsonObject.getString("partA")));
+                if (courseInfo.getInt("total_part") == 2)
+                    grade.setPartB((jsonObject.getString("partB") == null || jsonObject.getString("partB").equalsIgnoreCase("")) ? -1 : Float.parseFloat(jsonObject.getString("partB")));
+            }
             grade.setTotal((jsonObject.getString("total") == null || jsonObject.getString("total").equalsIgnoreCase("")) ? -1 : Float.parseFloat(jsonObject.getString("total")));
             grade.setGradeLetter((jsonObject.getString("gradeLetter")==null  || jsonObject.getString("gradeLetter").equalsIgnoreCase("") )? "" :jsonObject.getString("gradeLetter"));
             grade.setStatusId(jsonObject.getInt("statusId"));
@@ -101,14 +105,17 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
                 approveList.add(grade);
             }
         }
-        else if(action.equalsIgnoreCase("recheck")) {
+        else if(action.equalsIgnoreCase("recheck") || action.equalsIgnoreCase("recheck_request_submit")) {
             for (int i = 0; i < recheckEntries.size(); i++) {
                 JsonObject jsonObject = recheckEntries.getJsonObject(i);
                 StudentGradeDto grade = new StudentGradeDto();
                 grade.setRecheckStatus(RecheckStatus.RECHECK_TRUE);
                 grade.setStatus(getMarksSubmissionStatus(actor,action,"recheck"));
                 grade.setStudentId(jsonObject.getString("studentId"));
-                grade.setPreviousStatusString(getPrevMarksSubmissionStatus(actor));
+                if(action.equalsIgnoreCase("recheck") )
+                    grade.setPreviousStatusString(getPrevMarksSubmissionStatus(actor));
+                else if( action.equalsIgnoreCase("recheck_request_submit"))
+                    grade.setPreviousStatusString(getPrevMarksSubmissionStatus(actor,action));
                 recheckList.add(grade);
             }
             for (int i = 0; i < approveEntries.size(); i++) {
@@ -169,6 +176,9 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
                 return StudentMarksSubmissionStatus.ACCEPT;
             else if(action.equals("approve")  && gradeType.equals("approve"))
                 return StudentMarksSubmissionStatus.ACCEPTED;
+            else if(action.equals("recheck_request_submit"))
+                return StudentMarksSubmissionStatus.ACCEPTED;
+
         }
         return null;
     }
@@ -180,6 +190,12 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
             return StudentMarksSubmissionStatus.SCRUTINIZED.getId()+","+StudentMarksSubmissionStatus.APPROVE.getId();
         if(actor.equals("coe"))
             return StudentMarksSubmissionStatus.APPROVED.getId()+","+StudentMarksSubmissionStatus.ACCEPT.getId();
+
+        return null;
+    }
+    private String getPrevMarksSubmissionStatus(String actor,String action){
+        if(actor.equals("coe") && action.equalsIgnoreCase("recheck_request_submit"))
+            return String.valueOf(StudentMarksSubmissionStatus.ACCEPTED.getId());
 
         return null;
     }
