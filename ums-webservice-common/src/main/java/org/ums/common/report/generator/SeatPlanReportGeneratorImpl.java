@@ -14,10 +14,7 @@ import org.ums.services.academic.SeatPlanService;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.StreamingOutput;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.*;
 
 /**
@@ -60,14 +57,15 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
   public static final String DEST = "seat_plan_report.pdf";
 
   @Override
-  public StreamingOutput createPdf(String dest, boolean noSeatPlanInfo, int pSemesterId, int groupNo, int type) throws Exception, IOException, DocumentException,WebApplicationException {
+  public void createPdf(String dest, boolean noSeatPlanInfo, int pSemesterId, int groupNo, int type,OutputStream pOutputStream) throws Exception, IOException, DocumentException,WebApplicationException {
 
 
 
     Document document = new Document();
     document.addTitle("Seat Plan");
 
-    PdfWriter writer = PdfWriter.getInstance(document,new FileOutputStream(dest));
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    PdfWriter writer = PdfWriter.getInstance(document,baos);
     MyFooter event = new MyFooter();
     writer.setPageEvent(event);
     document.open();
@@ -122,7 +120,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
           if(examDates.equals("Date: ")){
             examDates=examDates+routine.getExamDate();
           }else{
-            examDates=examDates+","+routine.getExamDate();
+            examDates=examDates+", "+routine.getExamDate();
           }
 
         }
@@ -328,7 +326,8 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
 
             if(deptListCounter==deptList.size()){
               PdfPCell totalCell = new PdfPCell();
-              Paragraph totalLabels = new Paragraph("Total:"+totalStudent,FontFactory.getFont(FontFactory.TIMES_BOLD,summaryFontSize));
+              Paragraph totalLabels = new Paragraph(""+totalStudent,FontFactory.getFont(FontFactory.TIMES_BOLD,summaryFontSize));
+              totalLabels.setAlignment(Element.ALIGN_CENTER);
               totalCell.addElement(totalLabels);
               totalCell.setPaddingTop(-2f);
               summaryTable.addCell(totalCell);
@@ -506,19 +505,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
 
     long exp = totalTimeOfTHeMainAlgorithm;
     document.close();
-    return new StreamingOutput() {
-      @Override
-      public void write(OutputStream outputStream) throws IOException, WebApplicationException {
-        FileInputStream inputStream = new FileInputStream(dest);
-        int nextByte=0;
-        while((nextByte  = inputStream.read()) != -1 ){
-          outputStream.write(nextByte);
-        }
-        outputStream.flush();
-        outputStream.close();
-        inputStream.close();
-      }
-    };
+    baos.writeTo(pOutputStream);
   }
 
   class MyFooter extends PdfPageEventHelper{

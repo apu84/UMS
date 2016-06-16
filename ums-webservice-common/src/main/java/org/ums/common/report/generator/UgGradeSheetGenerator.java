@@ -9,8 +9,14 @@ import com.itextpdf.text.pdf.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.domain.model.dto.StudentGradeDto;
+import org.ums.domain.model.immutable.Course;
+import org.ums.domain.model.immutable.Semester;
 import org.ums.enums.CourseType;
+import org.ums.manager.CourseManager;
 import org.ums.manager.ExamGradeManager;
+import org.ums.manager.SemesterManager;
+
+import javax.ws.rs.PathParam;
 
 /**
  * Created by Ifti on 07-Jun-16.
@@ -21,10 +27,10 @@ public class UgGradeSheetGenerator {
 
   @Autowired
   private ExamGradeManager examGradeManager;
-
-  /** Path to the resulting PDF file. */
-  public static final String RESULT
-      = "d://hello.pdf";
+  @Autowired
+  private CourseManager courseManager;
+  @Autowired
+  private SemesterManager semesterManager;
 
 
   /**
@@ -32,9 +38,11 @@ public class UgGradeSheetGenerator {
    * @throws    DocumentException
    * @throws    IOException
    */
-  public void createPdf(OutputStream outputStream)
+  public void createPdf(Integer semesterId,String courseId,Integer examTypeId,String userRole,OutputStream outputStream)
       throws DocumentException, IOException,Exception {
 
+    //Validation goes here
+    //Check
     // step 1
     Document document = new Document();
     document.setMargins(10,10,30,72);
@@ -48,14 +56,16 @@ public class UgGradeSheetGenerator {
 
     // step 3
 
-    List<StudentGradeDto> gradeList=examGradeManager.getAllGrades(11012016, "EEE1101_S2014_110500", 1, CourseType.THEORY);
+    Course course=courseManager.get(courseId);
+    Semester semester=semesterManager.get(semesterId);
+    List<StudentGradeDto> gradeList=examGradeManager.getAllGrades(semesterId, courseId, examTypeId, course.getCourseType());
 
     document.open();
     for (int i=0;i<(gradeList.size()/90);i++) {
       if(i!=0)
         document.newPage();
       PdfPTable mainTable=getMainTable();
-      PdfPCell cell = new PdfPCell(getSubTableHeader());
+      PdfPCell cell = new PdfPCell(getSubTableHeader(course,gradeList.size(),semester.getName()));
       cell.setPadding(0);
       mainTable.addCell(cell);
 
@@ -63,12 +73,12 @@ public class UgGradeSheetGenerator {
       cell.setBorder(Rectangle.NO_BORDER);
       mainTable.addCell(cell);
 
-      cell = new PdfPCell(getSubTableHeader());
+      cell = new PdfPCell(getSubTableHeader(course,gradeList.size(),semester.getName()));
       cell.setPadding(0);
       mainTable.addCell(cell);
 
       cell = new PdfPCell();
-      cell.addElement(getGradeTable(gradeList,i*90,45));
+      cell.addElement(getGradeTable(gradeList,i*90,45,course.getCourseType()));
       cell.setPadding(0);
       cell.setBorder(Rectangle.NO_BORDER);
       mainTable.addCell(cell);
@@ -78,7 +88,7 @@ public class UgGradeSheetGenerator {
       mainTable.addCell(cell);
 
       cell = new PdfPCell();
-      cell.addElement(getGradeTable(gradeList,i*90+46,45));
+      cell.addElement(getGradeTable(gradeList,i*90+46,45,course.getCourseType()));
       cell.setPadding(0);
       cell.setBorder(Rectangle.NO_BORDER);
       mainTable.addCell(cell);
@@ -103,10 +113,12 @@ public class UgGradeSheetGenerator {
     return table;
   }
 
-  public PdfPTable getGradeTable(java.util.List<StudentGradeDto> studentList,int startIndex,int total) throws DocumentException {
+  public PdfPTable getGradeTable(java.util.List<StudentGradeDto> studentList,int startIndex,int total,CourseType courseType) throws DocumentException {
     // a table with three columns
     if(startIndex>studentList.size())
       return null;
+
+    StudentGradeDto student;
 
     Font fontAUST = new Font(Font.FontFamily.HELVETICA, 7, Font.NORMAL);
     Font gradeSheetHeader = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD);
@@ -114,8 +126,18 @@ public class UgGradeSheetGenerator {
     Font nuFont = new Font(Font.FontFamily.HELVETICA, 8, Font.UNDERLINE);
     Font nbFont = new Font(Font.FontFamily.HELVETICA, 8, Font.BOLD);
 
-    PdfPTable table = new PdfPTable(6);
-    table.setWidths(new int[]{2, 1,1,1,1,1});
+    PdfPTable table=null;
+
+    if(courseType==CourseType.THEORY) {
+      table = new PdfPTable(6);
+      table.setWidths(new int[]{2, 1,1,1,1,1});
+    }
+    else if(courseType==CourseType.SESSIONAL) {
+      table = new PdfPTable(3);
+      table.setWidths(new int[]{2, 1,1});
+    }
+
+
     table.setWidthPercentage(100);
 
 
@@ -124,20 +146,22 @@ public class UgGradeSheetGenerator {
     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
     table.addCell(cell);
 
-    p = new Paragraph("Quiz\n(20).", nbFont);
-    cell = new PdfPCell(p);
-    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-    table.addCell(cell);
+    if(courseType==CourseType.THEORY) {
+      p = new Paragraph("Quiz\n(20).", nbFont);
+      cell = new PdfPCell(p);
+      cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+      table.addCell(cell);
 
-    p = new Paragraph("Class \nPerf.\n(10).", nbFont);
-    cell = new PdfPCell(p);
-    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-    table.addCell(cell);
+      p = new Paragraph("Class \nPerf.\n(10).", nbFont);
+      cell = new PdfPCell(p);
+      cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+      table.addCell(cell);
 
-    p = new Paragraph("Final\n(70)", nbFont);
-    cell = new PdfPCell(p);
-    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-    table.addCell(cell);
+      p = new Paragraph("Final\n(70)", nbFont);
+      cell = new PdfPCell(p);
+      cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+      table.addCell(cell);
+    }
 
     p = new Paragraph("Total\n(100)", nbFont);
     cell = new PdfPCell(p);
@@ -152,40 +176,45 @@ public class UgGradeSheetGenerator {
   for(int i=startIndex;i<startIndex+total+1;i++){
     if(i>=studentList.size())
       break;
+
+    student=studentList.get(i);
+
     p = new Paragraph(studentList.get(i).getStudentId(), nbFont);
     cell = new PdfPCell(p);
     cell.setFixedHeight(12);
     cell.setHorizontalAlignment(Element.ALIGN_LEFT);
     table.addCell(cell);
 
-    p = new Paragraph("9", nFont);
+    if(courseType==CourseType.THEORY) {
+      p = new Paragraph(String.valueOf(student.getQuiz()), nFont);
+      cell = new PdfPCell(p);
+      cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+      table.addCell(cell);
+
+      p = new Paragraph(String.valueOf(student.getClassPerformance()), nFont);
+      cell = new PdfPCell(p);
+      cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+      table.addCell(cell);
+
+      p = new Paragraph(String.valueOf(student.getPartA()+student.getPartB()), nFont);
+      cell = new PdfPCell(p);
+      cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+    }
+    table.addCell(cell);
+
+    p = new Paragraph(String.valueOf(student.getTotal()), nFont);
     cell = new PdfPCell(p);
     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
     table.addCell(cell);
 
-    p = new Paragraph("9", nFont);
-    cell = new PdfPCell(p);
-    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-    table.addCell(cell);
-
-    p = new Paragraph("24", nFont);
-    cell = new PdfPCell(p);
-    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-    table.addCell(cell);
-
-    p = new Paragraph("42", nFont);
-    cell = new PdfPCell(p);
-    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-    table.addCell(cell);
-
-    p = new Paragraph("D", nFont);
+    p = new Paragraph(student.getGradeLetter(), nFont);
     cell = new PdfPCell(p);
     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
     table.addCell(cell);
   }
     return table;
   }
-  public PdfPTable getSubTableHeader() throws DocumentException{
+  public PdfPTable getSubTableHeader(Course course,int totalStudents,String semesterName) throws Exception{
     // a table with three columns
     Font fontAUST = new Font(Font.FontFamily.HELVETICA, 7, Font.NORMAL);
     Font gradeSheetHeader = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD);
@@ -211,14 +240,14 @@ public class UgGradeSheetGenerator {
     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
     table.addCell(cell);
 
-    p=new Paragraph("Marks/Grade Sheet (Spring 2015)", gradeSheetHeader);
+    p=new Paragraph("Marks/Grade Sheet ("+semesterName+")", gradeSheetHeader);
     cell = new PdfPCell(p);
     cell.setColspan(3);
     cell.setBorder(Rectangle.NO_BORDER);
     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
     table.addCell(cell);
 
-    p=new Paragraph("Theoretical", gradeSheetHeader);
+    p=new Paragraph(course.getCourseType()==CourseType.THEORY?"Theoretical":"Sessional", gradeSheetHeader);
     cell = new PdfPCell(p);
     cell.setColspan(3);
     cell.setBorder(Rectangle.NO_BORDER);
@@ -232,8 +261,9 @@ public class UgGradeSheetGenerator {
     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
     table.addCell(cell);
 
+
     Paragraph parag1=new Paragraph("Department : ",nFont);//This gonna be bold font
-    Paragraph parag2=new Paragraph("CSE ", nuFont); //This gonna be normal font
+    Paragraph parag2=new Paragraph(course.getOfferedBy().getShortName(), nuFont); //This gonna be normal font
     Paragraph comb=new Paragraph();
     comb.add(parag1);
     comb.add(parag2);
@@ -244,7 +274,7 @@ public class UgGradeSheetGenerator {
     table.addCell(cell);
 
     parag1=new Paragraph("Year : ",nFont);//This gonna be bold font
-    parag2=new Paragraph("1st ", nuFont); //This gonna be normal font
+    parag2=new Paragraph(course.getYear()+"", nuFont); //This gonna be normal font
     comb=new Paragraph();
     comb.add(parag1);
     comb.add(parag2);
@@ -254,7 +284,7 @@ public class UgGradeSheetGenerator {
     table.addCell(cell);
 
     parag1=new Paragraph("Semester : ",nFont);//This gonna be bold font
-    parag2=new Paragraph("1st ", nuFont); //This gonna be normal font
+    parag2=new Paragraph(course.getSemester()+"", nuFont); //This gonna be normal font
     comb=new Paragraph();
     comb.add(parag1);
     comb.add(parag2);
@@ -265,7 +295,7 @@ public class UgGradeSheetGenerator {
     table.addCell(cell);
 
     parag1=new Paragraph("Course No : ",nFont);//This gonna be bold font
-    parag2=new Paragraph("CSE 1101 ", nuFont); //This gonna be normal font
+    parag2=new Paragraph(course.getNo(), nuFont); //This gonna be normal font
     comb=new Paragraph();
     comb.add(parag1);
     comb.add(parag2);
@@ -276,7 +306,7 @@ public class UgGradeSheetGenerator {
     table.addCell(cell);
 
     parag1=new Paragraph("Course Title : ",nFont);//This gonna be bold font
-    parag2=new Paragraph("Cjhemistry ", nuFont); //This gonna be normal font
+    parag2=new Paragraph(course.getTitle(), nuFont); //This gonna be normal font
     comb=new Paragraph();
     comb.add(parag1);
     comb.add(parag2);
@@ -286,7 +316,7 @@ public class UgGradeSheetGenerator {
     cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
     table.addCell(cell);
 
-    p=new Paragraph("(The number of students registered for the course is - 207)", nFont);
+    p=new Paragraph("(The number of students registered for the course is - "+totalStudents+")", nFont);
     cell = new PdfPCell(p);
     cell.setColspan(3);
     cell.setBorder(Rectangle.NO_BORDER);
@@ -294,7 +324,7 @@ public class UgGradeSheetGenerator {
     table.addCell(cell);
 
     parag1=new Paragraph("Credit Hour : ",nFont);//This gonna be bold font
-    parag2=new Paragraph("3.0 ", nuFont); //This gonna be normal font
+    parag2=new Paragraph(course.getCrHr()+"", nuFont); //This gonna be normal font
     comb=new Paragraph();
     comb.add(parag1);
     comb.add(parag2);

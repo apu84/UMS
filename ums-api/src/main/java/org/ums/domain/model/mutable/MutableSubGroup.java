@@ -16,4 +16,5 @@ public interface MutableSubGroup extends SubGroup,Mutable,MutableLastModifier,Mu
   void setPosition(final int pPosition);
   void setStudentNumber(final int pStudentNumber);
   void setExamType(final int pExamType);
+  void setGroupId(final int pGroupId);
 }

@@ -9,10 +9,7 @@ import java.util.Map;
  */
 public enum ExamType {
     SEMESTER_FINAL(1),
-    CLEARANCE(2),
-    CARRY(3),
-    SPECIAL_CARRY(4),
-    IMPROVEMENT(5);
+    CLEARANCE_CARRY_IMPROVEMENT(2);
 
     private static final Map<Integer, ExamType> lookup
             = new HashMap<>();
