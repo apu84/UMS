@@ -12,6 +12,8 @@ import org.ums.domain.model.immutable.CourseTeacher;
 import org.ums.domain.model.immutable.Examiner;
 import org.ums.domain.model.mutable.MutableCourseTeacher;
 import org.ums.domain.model.mutable.MutableExaminer;
+import org.ums.generator.JxlsGenerator;
+import org.ums.generator.XlsGenerator;
 import org.ums.manager.*;
 import org.ums.persistent.dao.*;
 import org.ums.security.authentication.UMSAuthenticationRealm;
@@ -323,5 +325,10 @@ public class UMSContext {
   @Bean
   UGSessionalMarksManager sessionalMarksManager() {
     return new PersistentUGSessionalMarksDao(mTemplateFactory.getJdbcTemplate());
+  }
+
+  @Bean
+  XlsGenerator xlsGenerator() {
+    return new JxlsGenerator();
   }
 }
