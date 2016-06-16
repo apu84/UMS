@@ -1,6 +1,7 @@
 package org.ums.common.report.generator;
 
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.pdf.codec.Base64;
 import org.pentaho.reporting.engine.classic.core.DataFactory;
 import org.pentaho.reporting.engine.classic.core.MasterReport;
 import org.pentaho.reporting.engine.classic.core.modules.misc.datafactory.sql.DriverConnectionProvider;
@@ -12,6 +13,7 @@ import org.ums.report.generator.AbstractReportGenerator;
 
 import javax.ws.rs.core.StreamingOutput;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Map;
 
 /**
@@ -19,5 +21,5 @@ import java.util.Map;
  */
 
 public interface SeatPlanReportGenerator {
-  StreamingOutput createPdf(String dest,boolean noSeatPlanInfo,int pSemesterId,int groupNo,int type) throws Exception,IOException,DocumentException;
+  void createPdf(String dest, boolean noSeatPlanInfo, int pSemesterId, int groupNo, int type, OutputStream pOutputStream ) throws Exception,IOException,DocumentException;
 }

@@ -2162,14 +2162,14 @@ module ums{
       this.$scope.pdfGenerator=true;
       this.httpClient.get('/ums-webservice-common/academic/seatplan/semesterId/'+this.$scope.semesterId +'/groupNo/'+groupNo+'/type/'+this.$scope.examType,  'application/pdf',
           (data:any, etag:string) => {
-            var file=new Blob([data],{type:'application/pdf'});
+            var file = new Blob([data], {type: 'application/pdf'});
             var fileURL = this.$sce.trustAsResourceUrl(URL.createObjectURL(file));
             this.$window.open(fileURL);
             this.$scope.pdfGenerator=false;
           },
           (response:ng.IHttpPromiseCallbackArg<any>) => {
             console.error(response);
-          });
+          },'arraybuffer');
 
     }
 

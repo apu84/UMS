@@ -5,17 +5,12 @@ import org.springframework.stereotype.Component;
 import org.ums.manager.SeatPlanManager;
 
 import javax.json.JsonObject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+import java.io.*;
 
 /**
  * Created by My Pc on 5/8/2016.
@@ -37,10 +32,10 @@ public class SeatPlanResource extends MutableSeatPlanResource{
   @GET
   @Path("/semesterId/{semesterId}/groupNo/{groupNo}/type/{type}")
   @Produces("application/pdf")
-  public Response createOrViewSeatPlan(final @Context Request pRequest, final @PathParam("semesterId") String pSemesterId,
+  public StreamingOutput createOrViewSeatPlan(final @Context Request pRequest, final @PathParam("semesterId") String pSemesterId,
                                                        final @PathParam("groupNo") String pGroupNo,
                                                        final @PathParam("type") String pType)throws Exception{
-    StreamingOutput strem =  mSeatPlanResourceHelper.createOrCheckSeatPlanAndReturnRoomList(
+   /* StreamingOutput strem =  mSeatPlanResourceHelper.createOrCheckSeatPlanAndReturnRoomList(
         Integer.parseInt(pSemesterId),Integer.parseInt(pGroupNo),Integer.parseInt(pType),pRequest,mUriInfo
     );
 
@@ -51,7 +46,20 @@ public class SeatPlanResource extends MutableSeatPlanResource{
     //response.header("SeatPlan Report","attachment;filename=seatPlanReport.pdf");
 
 
-    return  response.build();
+    return  response.build();*/
+
+    return new StreamingOutput() {
+      @Override
+      public void write(OutputStream pOutputStream) throws IOException, WebApplicationException {
+        try{
+          mSeatPlanResourceHelper.createOrCheckSeatPlanAndReturnRoomList(
+              Integer.parseInt(pSemesterId),Integer.parseInt(pGroupNo),Integer.parseInt(pType),pOutputStream,pRequest,mUriInfo
+          );
+        }catch (Exception e){
+          throw new WebApplicationException(e);
+        }
+      }
+    };
   }
 
 }

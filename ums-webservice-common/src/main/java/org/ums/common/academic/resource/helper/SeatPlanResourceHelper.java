@@ -27,6 +27,7 @@ import javax.ws.rs.core.UriInfo;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -119,7 +120,7 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan,MutableSeatP
   }
 
 
-  public StreamingOutput createOrCheckSeatPlanAndReturnRoomList(final int pSemesterId, final int groupNo, final int type, final Request pRequest, final UriInfo pUriInfo) throws Exception,IOException{
+  public void createOrCheckSeatPlanAndReturnRoomList(final int pSemesterId, final int groupNo, final int type, OutputStream pOutputStream, final Request pRequest, final UriInfo pUriInfo) throws Exception,IOException{
     GenericResponse<Map> genericResponse = null, previousResponse = null;
 
 
@@ -140,7 +141,7 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan,MutableSeatP
     if(seatPlanOfTheGroupFound){
 
         noSeatPlanInfo = false;
-        return mSeatPlanReportGenerator.createPdf(DEST,noSeatPlanInfo,pSemesterId,groupNo,type);
+         mSeatPlanReportGenerator.createPdf(DEST,noSeatPlanInfo,pSemesterId,groupNo,type,pOutputStream);
 
     }else{
       List<SubGroup> subGroupOfTheGroup = mSubGroupManager.getBySemesterGroupNoAndType(pSemesterId,groupNo,type);
@@ -150,7 +151,7 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan,MutableSeatP
       }else{
         noSeatPlanInfo=true;
       }
-      return mSeatPlanReportGenerator.createPdf(DEST,noSeatPlanInfo,pSemesterId,groupNo,type);
+       mSeatPlanReportGenerator.createPdf(DEST,noSeatPlanInfo,pSemesterId,groupNo,type,pOutputStream);
 
     }
 
