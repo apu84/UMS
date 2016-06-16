@@ -200,6 +200,7 @@
                     Select Group For Exam Seat Plan Viewing or Generation<br>
 
                     <select class="form-control required" name="examType" data-ng-model="groupNoForSeatPlanViewing" >
+                        <option value="">Select Group</option>
                         <option value="1">Group 1</option>
                         <option value="2">Group 2</option>
                         <option value="3">Group 3</option>
@@ -232,7 +233,7 @@
     </div>
 </div>
 
-<ul class="custom-menu"  style="list-style-type:none">
+<ul class="custom-menu"  style="list-style-type:none" data-ng-show="showContextMenu">
     <li data-action="split"><i class="fa fa-expand" aria-hidden="true"></i>Split Out</li>
     <li data-action="revertSplit"><i class="fa fa-compress" aria-hidden="true"></i>Revert Split</li>
     <li data-action="merge"><i class="fa fa-retweet" aria-hidden="true"></i>Merge</li>

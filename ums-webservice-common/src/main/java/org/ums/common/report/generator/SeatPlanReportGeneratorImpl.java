@@ -122,7 +122,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
           if(examDates.equals("Date: ")){
             examDates=examDates+routine.getExamDate();
           }else{
-            examDates=examDates+","+routine.getExamDate();
+            examDates=examDates+", "+routine.getExamDate();
           }
 
         }
@@ -328,7 +328,8 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
 
             if(deptListCounter==deptList.size()){
               PdfPCell totalCell = new PdfPCell();
-              Paragraph totalLabels = new Paragraph("Total:"+totalStudent,FontFactory.getFont(FontFactory.TIMES_BOLD,summaryFontSize));
+              Paragraph totalLabels = new Paragraph(""+totalStudent,FontFactory.getFont(FontFactory.TIMES_BOLD,summaryFontSize));
+              totalLabels.setAlignment(Element.ALIGN_CENTER);
               totalCell.addElement(totalLabels);
               totalCell.setPaddingTop(-2f);
               summaryTable.addCell(totalCell);

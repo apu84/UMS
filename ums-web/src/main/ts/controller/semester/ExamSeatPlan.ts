@@ -1773,22 +1773,22 @@ module ums{
       for(var i=0;i<this.$scope.subGroupList.length;i++){
         var position=1;
         for(var j=0;j<this.$scope.subGroupList[i].subGroupMembers.length;j++){
-            for(var x=0;x<tempStorage.length;x++){
-              if(tempStorage[x].id==this.$scope.subGroupList[i].subGroupMembers[j].id){
-                tempStorage.splice(x,1);
-                break;
-              }
+          for(var x=0;x<tempStorage.length;x++){
+            if(tempStorage[x].id==this.$scope.subGroupList[i].subGroupMembers[j].id){
+              tempStorage.splice(x,1);
+              break;
             }
-            var seatPlanJsonData:any={};
-            var seatPlanJsonData:any={};
-            seatPlanJsonData.subGroupNo =this.$scope.subGroupList[i].subGroupNumber;
-            seatPlanJsonData.position = position;
-            seatPlanJsonData.groupId = this.$scope.subGroupList[i].subGroupMembers[j].baseId;
-            seatPlanJsonData.studentNumber =this.$scope.subGroupList[i].subGroupMembers[j].studentNumber;
+          }
+          var seatPlanJsonData:any={};
+          var seatPlanJsonData:any={};
+          seatPlanJsonData.subGroupNo =this.$scope.subGroupList[i].subGroupNumber;
+          seatPlanJsonData.position = position;
+          seatPlanJsonData.groupId = this.$scope.subGroupList[i].subGroupMembers[j].baseId;
+          seatPlanJsonData.studentNumber =this.$scope.subGroupList[i].subGroupMembers[j].studentNumber;
 
 
-            seatPlanJsonDataList.push(seatPlanJsonData);
-            position+=1;
+          seatPlanJsonDataList.push(seatPlanJsonData);
+          position+=1;
 
 
 
