@@ -157,25 +157,32 @@
 </div>
 
 <div class="row" id="selection2" style="display: none;">
+
     <div class="col-md-12">
+
+
+
         <div class="panel panel-default">
+            <div id='outer_container' style="position: absolute;top: 40px; right: 55px;z-index: 99999;">
+                <a class="menu_button" href="javascript:void(0)" title="Toggle"><span>Menu Toggle</span></a>
+                <ul class="menu_option">
+                    <li><a href="javascript:void(0)" data-ng-click="downloadPdf()"  style="background: #ea4c3a"><span style="background-image:  url('https://localhost/ums-web/iums/vendors/pieMenu/pdf-256.png')">Item</span></a></li>
+                    <li><a href="#" style="background: transparent;"><span style="background-image:  url('https://localhost/ums-web/iums/vendors/pieMenu/chart.png')">Item</span></a></li>
+                    <li><a href="javascript:void(0)" data-target="#modal-prompt" data-toggle="modal" style="background: transparent;">
+                        <span style="background-image:  url('https://localhost/ums-web/iums/vendors/pieMenu/excel-paste.png')">Item</span></a></li>
+                    <li><a href="#"><span>Item</span></a></li>
+                    <li><a  href="javascript:void(0)" data-ng-click="generateXls()"><span>Xls</span></a></li>
+
+                </ul>
+            </div>
             <div class="panel-body shadowPanel" style="min-height: 400px;line-height: 100px;font-size: 20px;text-align: center;color: maroon;"  data-ng-if="gradeSubmissionStatus =='0' && currentActor!='preparer'">
                 Marks not yet been submitted. Please check again later. <br/>
                 <button type="button" class="btn btn-default btn-square" onclick='goBack()'>Back to Grade Sheet Selection</button>
             </div>
 
+
+
             <div class="panel-body shadowPanel" style="position: relative;" id="panel_top" data-ng-if="gradeSubmissionStatus !='0' || currentActor=='preparer'" >
-                <div id='outer_container' style="position: absolute;top: 40px; right: 40px;">
-                    <a class="menu_button" href="javascript:void(0)" title="Toggle"><span>Menu Toggle</span></a>
-                    <ul class="menu_option">
-                        <li><a href="javascript:void(0)" data-ng-click="downloadPdf()"  style="background: #ea4c3a"><span style="background-image:  url('https://localhost/ums-web/iums/vendors/pieMenu/pdf-256.png')">Item</span></a></li>
-                        <li><a href="#" style="background: transparent;"><span style="background-image:  url('https://localhost/ums-web/iums/vendors/pieMenu/chart.png')">Item</span></a></li>
-                        <li><a href="javascript:void(0)" data-target="#modal-prompt" data-toggle="modal" style="background: transparent;">
-                            <span style="background-image:  url('https://localhost/ums-web/iums/vendors/pieMenu/excel-paste.png')">Item</span></a></li>
-                        <li><a href="#"><span>Item</span></a></li>
-                        <li><a href="#"><span>Item</span></a></li>
-                    </ul>
-                </div>
 
                 <table width="90%" align="center" style="margin-bottom: 10px;">
                     <tr>
@@ -214,7 +221,6 @@
                         </td>
                     </tr>
                 </table>
-
                 <!-- Grade Sheet Preparer Block (Fresh/New Grade Submission , Requested for recheck grades are not here) -->
                 <div ng-if="noneSubmittedGrades.length>0 &&  (gradeSubmissionStatus =='0' && currentActor=='preparer')">
 
@@ -281,7 +287,9 @@
                         </div>
                         <div class="col-md-6" style="text-align: right;">
                             <button type="button" class="btn btn-grey btn-square" data-ng-click="saveGradeSheet()">Save Data</button>
-                            <button type="button" class="btn btn-green btn-square" data-ng-click="saveAndSendToScrutinizer()">Save & Send to Scrutinizer</button>
+                            <modal data-handler="modalSettings.submitHandler" data-body="modalSettings.submitBody"  data-header="modalSettings.header" data-ng-click-right-button="modalSettings.submitRightButton()"></modal>
+                            <a data-target="#{{modalSettings.submitHandler}}" role="button" class="btn btn-green btn-square" data-toggle="modal">Save & Send to Scrutinizer</a>
+
                         </div>
                     </div>
                     <br/><br/>
@@ -358,8 +366,12 @@
                         </div>
                         <div class="col-md-6" style="text-align: right;">
                             <button type="button" class="btn btn-grey btn-square" data-ng-click="saveRecheckApproveGrades(currentActor,'save')">Save Data</button>
-                            <button type="button" id="recheckBtn" class="btn btn-primary btn-square disabled" data-ng-click="saveRecheckApproveGrades(currentActor,'recheck')">{{recheckButtonLabel}}</button>
-                            <button type="button" id="approveBtn" class="btn btn-green btn-square disabled" data-ng-click="saveRecheckApproveGrades(currentActor,'approve')">{{approveButtonLabel}}</button>
+                            <modal  data-handler="modalSettings.recheckHandler" data-body="modalSettings.recheckBody"  data-header="modalSettings.header" data-ng-click-right-button="modalSettings.rightButton(currentActor,'recheck')"></modal>
+                            <a data-target="#{{modalSettings.recheckHandler}}" role="button" id="recheckBtn"  class="btn btn-primary btn-square disabled" data-toggle="modal">{{recheckButtonLabel}}</a>
+
+                            <modal   data-handler="modalSettings.approveHandler" data-body="modalSettings.approveBody"  data-header="modalSettings.header" data-ng-click-right-button="modalSettings.rightButton(currentActor,'approve')"></modal>
+                            <a data-target="#{{modalSettings.approveHandler}}" role="button" id="approveBtn"  class="btn btn-green btn-square disabled" data-toggle="modal">{{approveButtonLabel}}</a>
+
                         </div>
                     </div>
                 </div>
@@ -701,7 +713,10 @@
                                 <button type="button" class="btn btn-default btn-square" onclick='goBack()'>Back to Grade Sheet Selection</button>
                             </div>
                             <div class="col-md-6" style="text-align: right;">
-                                <button type="button"  class="btn btn-green btn-square" data-ng-click="sendRecheckRequestToVC(currentActor)">Send Reheck Request to VC</button>
+
+                                <modal data-handler="modalSettings.submitHandler" data-body="modalSettings.submitBody"  data-header="modalSettings.header" data-ng-click-right-button="modalSettings.submitRightButton()"></modal>
+                                <a data-target="#{{modalSettings.submitHandler}}" role="button" class="btn btn-green btn-square" data-toggle="modal">Send Recheck Request to VC</a>
+
                             </div>
                         </div>
 
@@ -747,8 +762,14 @@
                                 <button type="button" class="btn btn-default btn-square" onclick='goBack()'>Back to Grade Sheet Selection</button>
                             </div>
                             <div class="col-md-6" style="text-align: right;" ng-if="gradeSubmissionStatus =='8' && currentActor=='vc'">
-                                <button type="button"  class="btn btn-red btn-square" data-ng-click="recheckRequestHandler(currentActor,'recheck_request_rejected')">Reject Recheck Request</button>
-                                <button type="button"  class="btn btn-green btn-square" data-ng-click="recheckRequestHandler(currentActor,'recheck_request_approved')">Approve Recheck Request</button>
+
+                                <modal  data-handler="modalSettings.rejectHandler" data-body="modalSettings.rejectBody"  data-header="modalSettings.header" data-ng-click-right-button="modalSettings.rejectRightButton(currentActor,'recheck_request_rejected')"></modal>
+                                <a data-target="#{{modalSettings.rejectHandler}}" role="button" id="rejectBtn"  class="btn btn-primary btn-square" data-toggle="modal">Reject Recheck Request</a>
+
+                                <modal   data-handler="modalSettings.approveHandler" data-body="modalSettings.approveBody"  data-header="modalSettings.header" data-ng-click-right-button="modalSettings.approveRightButton(currentActor,'recheck_request_approved')"></modal>
+                                <a data-target="#{{modalSettings.approveHandler}}" role="button" id="approveBtn"  class="btn btn-green btn-square" data-toggle="modal">Approve Recheck Request</a>
+
+
                             </div>
                         </div>
 
@@ -756,30 +777,6 @@
 
                 </div>
                 <!-- End  of Accepted Grades -->
-                <modal data-handler="modalSettings.handler" data-body="modalSettings.body" data-footer="modalSettings.footer" data-header="modalSettings.header"
-                        data-ng-click-right-button="modalSettings.rightButton()"></modal>
-                <a data-target="#{{modalSettings.handler}}" role="button" class="btn btn-success" data-toggle="modal">Launch Demo Modal</a>
-
-                <button type="button" data-target="#myModal" data-toggle="modal" class="btn btn-primary">View Demo</button>
-                <div id="myModal" class="modal fade">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                <h4 class="modal-title">Confirmation</h4>
-                            </div>
-                            <div class="modal-body">
-                                <p>Do you want to save changes you made to document before closing?</p>
-                                <p class="text-warning"><small>If you don't save, your changes will be lost.</small></p>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Save changes</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
 
                 <hr class="style-two" />
                 <br/><br/>
@@ -992,5 +989,6 @@
         document.getElementById('selection2').style.display='none';
         $('.page-title.ng-binding').html("Grade Sheet Selection");
     }
+    $('.page-title.ng-binding').html("Grade Sheet Selection");
     $("#btn_stat").focus();
 </script>

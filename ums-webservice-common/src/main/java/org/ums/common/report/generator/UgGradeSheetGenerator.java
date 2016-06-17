@@ -291,7 +291,7 @@ public class UgGradeSheetGenerator {
     cell = new PdfPCell(comb);
     cell.setColspan(2);
     cell.setBorder(Rectangle.NO_BORDER);
-    cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+    cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
     table.addCell(cell);
 
     parag1=new Paragraph("Course No : ",nFont);//This gonna be bold font
@@ -300,7 +300,6 @@ public class UgGradeSheetGenerator {
     comb.add(parag1);
     comb.add(parag2);
     cell = new PdfPCell(comb);
-    cell.setColspan(2);
     cell.setBorder(Rectangle.NO_BORDER);
     cell.setHorizontalAlignment(Element.ALIGN_LEFT);
     table.addCell(cell);
