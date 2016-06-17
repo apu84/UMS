@@ -10,6 +10,7 @@ module ums{
     roomList:any;
 
     data:any;
+    selectedSubGroupNo:string;
     selectedGroupTotalStudent:number;
     tempIdList:Array<number>;
     mergeIdList:any;
@@ -224,6 +225,7 @@ module ums{
       $scope.showContextMenu=false;
       $scope.arr = arr;
       $scope.update = 0;
+      $scope.selectedSubGroupNo="";
       $scope.groupNumber = 1;
       $scope.group1List = [];
       $scope.group2List = [];
@@ -850,10 +852,7 @@ module ums{
 
           this.$scope.subGroupList=[];
 
-          this.$scope.saveSubGroupInfo = true;
-          this.$scope.editSubGroup=false;
-          this.$scope.deleteAndCreateNewSubGroup=false;
-          this.$scope.cancelSubGroup = true;
+
           if(this.$scope.recreateButtonClicked==false){
             this.$scope.subGroupFound = false;
             this.reCreate();
@@ -1868,33 +1867,19 @@ module ums{
       });
     }
 
-    private generateSubGroups(group:number):void{
-      /*
-       * colForSubGroup==9999 means, invalid
-       * */
-      var totalSubgroups =Math.floor(12/group) ;
-      if(group>6){
-        this.$scope.colForSubgroup=9999;
-        alert("Subgroup can be no more than six.");
+    private generateSubGroups(group:string):void{
 
+      if(group!=""){
+        this.$scope.colForSubgroup=+group;
+        this.$scope.saveSubGroupInfo = true;
+        this.$scope.editSubGroup=false;
+        this.$scope.deleteAndCreateNewSubGroup=false;
+        this.$scope.cancelSubGroup = true;
 
-      }else if(group<4){
-        this.$scope.colForSubgroup=9999;
-        alert("Please generate at least 4 sub groups");
-
-
-      }else if(group==null){
-        this.$scope.colForSubgroup=9999;
-        alert("Please generate sub groups");
-
-      }
-      else if(group>=4 && group<=6){
-        this.$scope.colForSubgroup=group;
-      }else{
-
+        console.log("col for sub group: "+this.$scope.colForSubgroup);
       }
 
-      console.log("col for sub group: "+this.$scope.colForSubgroup);
+
 
     }
 

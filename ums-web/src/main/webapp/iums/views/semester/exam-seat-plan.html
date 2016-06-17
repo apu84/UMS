@@ -301,12 +301,25 @@
             </div>
 
             <div class="col-md-10">
-                <div class="row" align="center" data-ng-if="showSubGroupSelectionNumber && subGroupFound==false" >
-                    <p><b>How many subgroups ? </b></p>
-                    <input type="number" data-ng-model="subGroupNumber" />
-                    <br>
-                    <br>
-                    <button data-ng-click="generateSubGroups(subGroupNumber)">Generate Sub-groups</button>
+                <div class="row" data-ng-if="showSubGroupSelectionNumber && subGroupFound==false" >
+                    <div class="col-md-4">
+
+                    </div>
+                    <div class="col-md-4" align="center">
+                        <select class="form-control required" name="subGroupNo" data-ng-model="selectedSubGroupNo" >
+                            <option value="">How Many Sub Groups?</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                        </select>
+                        <br>
+                        <button  class="btn btn-info" data-ng-click="generateSubGroups(selectedSubGroupNo)">Generate Sub-groups</button>
+                    </div>
+                    <div class="col-md-4">
+
+                    </div>
+
+
 
                     <!-- <a data-ng-click="createOrViewSubgroups(1)" href="javascript:void(0)">Group 1</a> |
                      <a data-ng-click="createOrViewSubgroups(2)" href="javascript:void(0)">Group 2</a> |
@@ -447,7 +460,7 @@
 
                 </div>
 
-                <div class="row" data-ng-if="colForSubgroup!=9999"  data-ng-show="subGroupFound==false  ">
+                <div class="row" data-ng-if="colForSubgroup!=9999 && subGroupFound==false" >
                     <div class="col-md-2" data-ng-show="colForSubgroup>=1">
                         <p><b>Sub Group 1</b> </p>
 
@@ -524,22 +537,22 @@
 
 
                 </div>
+                <hr>
+                <hr>
+                <div class="row" align="center">
+                    <button type="button" class="btn btn-info" data-ng-click="saveSubGroup(selectedGroupNo)" data-ng-if="saveSubGroupInfo">Save </button>
+                    <button type="button" class="btn btn-info" data-ng-click="editSavedSubGroup(selectedGroupNo)" data-ng-if="editSubGroup">Edit </button>
+                    <!--<button type="button" class="btn btn-info" data-ng-click="makeSortableCancel()" data-ng-if="cancelSubGroup">Cancel</button>-->
+                    <button type="button" class="btn btn-info" data-ng-click="createNewSubGroup(selectedGroupNo)" data-ng-if="deleteAndCreateNewSubGroup">Re-Create</button>
+
+
+                </div>
 
             </div>
 
 
         </div>
-        <hr>
-        <hr>
 
-        <div class="row" align="center">
-            <button type="button" class="btn btn-info" data-ng-click="saveSubGroup(selectedGroupNo)" data-ng-if="saveSubGroupInfo">Save </button>
-            <button type="button" class="btn btn-info" data-ng-click="editSavedSubGroup(selectedGroupNo)" data-ng-if="editSubGroup">Edit </button>
-            <!--<button type="button" class="btn btn-info" data-ng-click="makeSortableCancel()" data-ng-if="cancelSubGroup">Cancel</button>-->
-            <button type="button" class="btn btn-info" data-ng-click="createNewSubGroup(selectedGroupNo)" data-ng-if="deleteAndCreateNewSubGroup">Re-Create</button>
-
-
-        </div>
         <hr>
         <hr>
         <div class="row" align="right" style="padding-right: 3%;">
