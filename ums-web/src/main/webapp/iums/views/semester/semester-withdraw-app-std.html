@@ -17,7 +17,10 @@
                         <br>
                         <label class="control-label"><b>CAUSE:</b></label>
                         <br>
-                        <p data-ng-if="textEditable == false">{{semesterWithdraw.cause}}</p>
+                        <div data-ng-if="textEditable == false" >
+                            <textarea readonly rows="10" class="form-control" value="{{cause}}">
+                            </textarea>
+                        </div>
                         <textarea rows="10" class="form-control" data-ng-model="data.cause" data-ng-if="textEditable==true" value="{{semesterWithdraw.cause}}"></textarea>
                     </div>
 

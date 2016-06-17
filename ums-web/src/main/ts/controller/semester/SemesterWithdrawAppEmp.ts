@@ -54,8 +54,8 @@ module ums{
   }
   export class SemesterWithdrawAppEmp{
 
-    public static $inject = ['appConstants','HttpClient','$scope','$q','notify'];
-    constructor(private appConstants: any, private httpClient: HttpClient, private $scope: ISemesterWithdrawAppEmpScope,private $q:ng.IQService, private notify: Notify ) {
+    public static $inject = ['appConstants','HttpClient','$scope','$q','notify','$sce'];
+    constructor(private appConstants: any, private httpClient: HttpClient, private $scope: ISemesterWithdrawAppEmpScope,private $q:ng.IQService, private notify: Notify,private $sce:ng.ISCEService ) {
       $scope.data={
         action:"",
         comments:"",
@@ -307,7 +307,9 @@ module ums{
       semesterWithdraw["cause"] = this.$scope.tempSemesterWithdraw.cause;
       semesterWithdraw["status"] = this.$scope.tempSemesterWithdraw.status;
       semesterWithdraw["applicationDate"] = this.$scope.tempSemesterWithdraw.appDate;
-      semesterWithdraw["comments"] = this.$scope.tempSemesterWithdraw.comments;
+      var comments = this.$sce.getTrustedHtml(this.$scope.tempSemesterWithdraw.comments);
+      var str = comments.replace("&#10;","<br>")
+      semesterWithdraw["comments"] = str;
       return semesterWithdraw;
     }
 

@@ -2066,6 +2066,9 @@ module ums{
       this.$scope.cancelSubGroup = false;
       this.$scope.showContextMenu = false;
       this.$scope.subGroupList=[];
+      this.$scope.editSubGroup=false;
+      this.$scope.deleteAndCreateNewSubGroup=false;
+
 
       setTimeout(myFunc,2000);
 

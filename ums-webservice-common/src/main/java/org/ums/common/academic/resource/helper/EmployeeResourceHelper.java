@@ -11,10 +11,12 @@ import org.ums.common.academic.resource.RoutineResource;
 import org.ums.common.builder.Builder;
 import org.ums.common.builder.EmployeeBuilder;
 import org.ums.domain.model.immutable.Employee;
+import org.ums.domain.model.immutable.User;
 import org.ums.domain.model.mutable.MutableEmployee;
 import org.ums.domain.model.mutable.MutableRoutine;
 import org.ums.manager.ContentManager;
 import org.ums.manager.EmployeeManager;
+import org.ums.manager.UserManager;
 import org.ums.persistent.model.PersistentEmployee;
 import org.ums.persistent.model.PersistentRoutine;
 
@@ -37,6 +39,10 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee,MutableEmplo
   @Autowired
   private EmployeeBuilder mBuilder;
 
+  @Autowired
+  private UserManager mUserManager;
+
+
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
@@ -52,7 +58,9 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee,MutableEmplo
 
   public JsonObject getByEmployeeId(final UriInfo pUriInfo)throws Exception{
     //String employeeId = SecurityUtils.getSubject().getPrincipal().toString();
-    String employeeId = "28";
+    String userId = SecurityUtils.getSubject().getPrincipal().toString();
+    User user = mUserManager.get(userId);
+    String employeeId=user.getEmployeeId();
     Employee employee = getContentManager().getByEmployeeId(employeeId);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();

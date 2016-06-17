@@ -18,7 +18,7 @@
                     <td>{{app.appDate}}</td>
                     <td data-ng-if="app.status>0">
                         <span class="label label-sm label-info" data-ng-if="app.status==1">Submitted</span>
-                        <span class="label label-sm label-success" data-ng-if="app.status==2">Approved By Head</span>
+                        <span class="label label-sm label-success" data-ng-if="app.status==2">Waiting for Registrar's approval</span>
                         <span class="label label-sm label-warning" data-ng-if="app.status==3">Rejected By Head</span>
                         <span class="label label-sm label-success" data-ng-if="app.status==4">Approved By Registrar</span>
                         <span class="label label-sm label-warning" data-ng-if="app.status==5">Rejected By Registrar</span>
@@ -100,7 +100,8 @@
                                     <p> <b>CAUSE</b></p>
                                 </div>
                                 <div class="form-group" align="left">
-                                    <p> {{tempSemesterWithdraw.cause}}</p>
+                                    <textarea readonly rows="10" class="form-control" value="{{tempSemesterWithdraw.cause}}">
+                            </textarea>
                                 </div>
                             </div>
 
@@ -111,7 +112,9 @@
                             <div class="form-group" align="left">
                                 <div class="col-md-12">
                                     <p>Comment: </p>
-                                    <p data-ng-if="commentEdit==false">{{tempSemesterWithdraw.comments}}</p>
+                                    <div data-ng-if="commentEdit==false">
+                                        <textarea readonly rows="10" class="form-control" value="{{tempSemesterWithdraw.comments}}"></textarea>
+                                    </div>
                                     <textarea rows="10" class="form-control"  data-ng-if="commentEdit" data-ng-model="tempSemesterWithdraw.comments" ></textarea>
                                 </div>
                             </div>

@@ -33,6 +33,7 @@ module ums{
     dateEnd: boolean;
     textEditable: boolean;
     savedOrSubmitted:number;
+    cause:any;
     actors:any;
     actions:any;
     semesterWithdraw:SemesterWithdraw;
@@ -76,6 +77,7 @@ module ums{
         //$scope.initialize = this.initialize.bind(this);
         this.initialize();
         //this.$scope.initialize = this.initialize.bind(this);
+        $scope.cause="";
         $scope.editApplication=false;
         $scope.submitButtonClicked = false;
         $scope.submitButton = false;
@@ -102,6 +104,7 @@ module ums{
     }
 
     private initialize():void{
+      this.$scope.cause={};
       this.getStudentsInformation().then((studentArr:Array<Student>)=>{
           this.getParameterSetting().then((parameterArr:Array<IParameterSetting>)=>{
             var date = new Date();
@@ -170,6 +173,8 @@ module ums{
                         this.$scope.submitButton=false;
                         this.$scope.textEditable=false;
                       }
+                      this.$scope.cause = this.$scope.semesterWithdraw.cause;
+
                       break;
                     }
                   }
@@ -182,6 +187,8 @@ module ums{
                     this.$scope.textEditable=true;
                     this.$scope.data.status = "Application not yet created.";
                   }
+
+
                 });
             }else{
               this.$scope.dateEnd = true;
@@ -189,6 +196,7 @@ module ums{
             }
           });
       });
+
     }
 
     private showApplicationDateEndMessage():void{
@@ -332,8 +340,11 @@ module ums{
       semesterWithdraw["year"] = this.$scope.student[0].year;
       semesterWithdraw["semester"] = this.$scope.student[0].academicSemester;
       if(this.$scope.data.cause.length>0){
-        var cause:any = this.$sce.trustAsHtml(this.$scope.data.cause) ;
-        semesterWithdraw["cause"] = cause;
+        var cause:any ={};
+        //cause = this.nl2br(this.$scope.data.cause);
+        cause = this.$sce.getTrustedHtml(this.$scope.data.cause);
+        var str = cause.replace("&#10;","<br>")
+        semesterWithdraw["cause"] = this.$scope.data.cause;
       }
       else{
         semesterWithdraw["cause"] = this.$scope.semesterWithdraw.cause;
@@ -357,6 +368,7 @@ module ums{
       semesterWithdraw["studentId"] = this.$scope.student[0].id;
       semesterWithdraw["year"] = this.$scope.student[0].year;
       semesterWithdraw["semester"] = this.$scope.student[0].academicSemester;
+      var cause:any = this.$sce.trustAsHtml(this.$scope.data.cause) ;
       semesterWithdraw["cause"] = this.$scope.data.cause;
 
       semesterWithdraw["status"] = this.$scope.data.status;
