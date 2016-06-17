@@ -51,7 +51,8 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee,MutableEmplo
   }
 
   public JsonObject getByEmployeeId(final UriInfo pUriInfo)throws Exception{
-    String employeeId = SecurityUtils.getSubject().getPrincipal().toString();
+    //String employeeId = SecurityUtils.getSubject().getPrincipal().toString();
+    String employeeId = "28";
     Employee employee = getContentManager().getByEmployeeId(employeeId);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();

@@ -84,9 +84,8 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
         jsonReader.close();
         object.add("part_info",object1);
 
+
         List<StudentGradeDto> examGradeList = getContentManager().getAllGrades(pSemesterId,pCourseId, pExamType,marksSubmissionStatusDto.getCourseType());
-
-
         String currentActor=getActorForCurrentUser(SecurityUtils.getSubject().getPrincipal().toString(),pRequestedRoleId,pSemesterId,pCourseId);
         object.add("current_actor",currentActor);
         object.add("current_course_status",marksSubmissionStatusDto.getStatusId());

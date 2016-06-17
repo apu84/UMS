@@ -96,7 +96,7 @@
                 <br>
                 <select class="form-control required" name="semester" data-ng-model="semesterId" >
                     <option value="">Select Semester</option>
-                    <option data-ng-repeat="semesters in semesterList| filter:{status:'1'}" value="{{semesters.id}}">{{semesters.name}}</option>
+                    <option data-ng-repeat="semesters in semesterList" value="{{semesters.id}}">{{semesters.name}}</option>
                 </select><br>
             </div>
             <div class="col-md-1"></div>

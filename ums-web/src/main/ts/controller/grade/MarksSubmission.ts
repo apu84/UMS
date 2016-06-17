@@ -141,6 +141,11 @@ module ums {
         total_part:Number,
         part_a_total:Number,
         part_b_total:Number,
+        course_no:String,
+        course_title:String,
+        crhr:Number,
+        semester_name:String,
+        dept_name:String,
         recheck_accepted_studentId:String,
         semesters: Array<IOption>(),
         depts:Array<IOption>(),
@@ -406,6 +411,22 @@ module ums {
       this.fetchGradeSheet(this.$scope.current_courseId);
     }
     private fetchGradeSheet(courseId:string):void {
+      /*
+      var topPanelDiv=$("#panel_top");
+      console.clear();
+      console.log($("#panel_top").width());
+      console.log($("#panel_top").height());
+      $(".panel_overlay").css({
+        background:'url("https://localhost/ums-web/iums/images/overlay1.png")',
+        opacity : 0.5,
+        top     : topPanelDiv.position().top-150,
+        width   : $("#panel_top").width(),
+        height  : $("#panel_top").height(),
+        zIndex:100
+      });
+      $(".panel_overlay").fadeIn();
+      */
+
       $('.page-title.ng-binding').html("Online Grade Submission/Approval");
       this.$scope.current_courseId=courseId;
       this.$scope.toggleColumn = true;
@@ -443,6 +464,13 @@ module ums {
             this.$scope.data.part_a_total = part_info.part_a_total == 0 ? null : part_info.part_a_total;
             this.$scope.data.part_b_total = part_info.part_b_total == 0 ? null : part_info.part_b_total;
             this.$scope.data.total_part = part_info.total_part;
+
+            this.$scope.data.course_no = part_info.courseNo;
+            this.$scope.data.course_title = part_info.courseTitle;
+            this.$scope.data.crhr = part_info.cRhR;
+            this.$scope.data.semester_name = part_info.semesterName;
+            this.$scope.data.dept_name = part_info.deptSchoolName;
+
             this.$scope.gradeSubmissionStatus=part_info.statusId;
             this.$scope.courseType=part_info.courseType;
             this.$scope.currentActor = data.current_actor;
@@ -545,7 +573,7 @@ module ums {
       //$("#btn_stat").focus();
       $(window).scrollTop($('#panel_top').offset().top - 56);
 
-
+      //$(".panel_overlay").fadeOut();
 
     }
 

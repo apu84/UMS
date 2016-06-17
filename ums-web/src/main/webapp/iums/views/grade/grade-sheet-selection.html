@@ -11,6 +11,13 @@
         background:#fff;
         border: 1px solid #efefef;
     }
+
+    .panel_overlay{
+        display:none;
+        position:absolute;
+        background:#fff;
+        border: 1px solid #efefef;
+    }
     .scrollableContainer { height: inherit; }
     .orgLeftClass {
         width: 30%;
@@ -182,25 +189,25 @@
 
 
 
-            <div class="panel-body shadowPanel" style="position: relative;" id="panel_top" data-ng-if="gradeSubmissionStatus !='0' || currentActor=='preparer'" >
-
+            <div id="panel_top" class="panel-body shadowPanel" style="position: relative;"  data-ng-if="gradeSubmissionStatus !='0' || currentActor=='preparer'" >
+                <div class="panel_overlay"></div>
                 <table width="90%" align="center" style="margin-bottom: 10px;">
                     <tr>
                         <td colspan="4" align="center" style="height: 30px;">
-                            <h4>Marks/Grade Sheet (Fall, 2014)</h4>
-                            <h4>Department/School : Dept. of EEE</h4>
+                            <h4>Marks/Grade Sheet ({{data.semester_name}})</h4>
+                            <h4>Department/School : {{data.dept_name}}</h4>
                         </td>
                     </tr>
                     <tr>
                         <td width="15%"><b>Course Title :</b></td>
-                        <td width="40%">Course Title Goes Here</td>
+                        <td width="40%">{{data.course_title}}</td>
                         <td width="15%"><b>Course Number :</b></td>
-                        <td width="30%">EEE 1234</td>
+                        <td width="30%">{{data.course_no}}</td>
 
                     </tr>
                     <tr>
                         <td  style="height: 30px;"><b>Credit Hour :</b></td>
-                        <td>1.5 <a href="Javascript:void(0)" data-ng-click="refreshGradeSheet()">Reload</a></td>
+                        <td>{{data.crhr}} <a href="Javascript:void(0)" data-ng-click="refreshGradeSheet()">Reload</a></td>
                         <td data-ng-if="courseType=='THEORY'"><b>Total Part <span data-ng-if="(gradeSubmissionStatus !='0')">({{data.total_part}})</span> :</b></td>
                         <td data-ng-if="courseType=='THEORY'">
                             <select id="total_part" data-ng-model="data.total_part" data-ng-change="onTotalPartChange()"   style="float: left;border:1px solid grey;text-align: center;height: 22px;" data-ng-if="(gradeSubmissionStatus =='0' && currentActor=='preparer')" data-convert-to-number>

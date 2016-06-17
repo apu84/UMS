@@ -15,6 +15,8 @@ public class MarksSubmissionStatusDto {
     private String courseTitle;
     private int semesterId;
     private String semesterName;
+    private float cRhR;
+    private String deptSchoolName;
     private int examType;
     private String examTypeName;
     private int total_part;
@@ -218,6 +220,22 @@ public class MarksSubmissionStatusDto {
 
     public void setCourseType(CourseType courseType) {
         this.courseType = courseType;
+    }
+
+    public float getcRhR() {
+        return cRhR;
+    }
+
+    public void setcRhR(float cRhR) {
+        this.cRhR = cRhR;
+    }
+
+    public String getDeptSchoolName() {
+        return deptSchoolName;
+    }
+
+    public void setDeptSchoolName(String deptSchoolName) {
+        this.deptSchoolName = deptSchoolName;
     }
 
     public String toString() {
