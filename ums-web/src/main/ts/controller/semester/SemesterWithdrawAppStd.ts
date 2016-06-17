@@ -66,8 +66,8 @@ module ums{
   }
   export class SemesterWithdrawAppStd{
 
-    public static $inject = ['appConstants','HttpClient','$scope','$q','notify'];
-    constructor(private appConstants: any, private httpClient: HttpClient, private $scope: IApplicationScope,private $q:ng.IQService, private notify: Notify ) {
+    public static $inject = ['appConstants','HttpClient','$scope','$q','notify','$sce'];
+    constructor(private appConstants: any, private httpClient: HttpClient, private $scope: IApplicationScope,private $q:ng.IQService, private notify: Notify,private $sce:ng.ISCEService ) {
         $scope.data={
           studentId:"",
           cause:"",
@@ -126,7 +126,7 @@ module ums{
                         this.$scope.deleteButton=true;
                       }
                       else if(this.$scope.semesterWithdrawArr[i].status==2){
-                        this.$scope.data.status = "Accepted By Head"
+                        this.$scope.data.status = "Waiting for Registrar's approval"
                         this.$scope.saveButton=false;
                         this.$scope.deleteButton=false;
                         this.$scope.updateButton=false;
@@ -332,7 +332,8 @@ module ums{
       semesterWithdraw["year"] = this.$scope.student[0].year;
       semesterWithdraw["semester"] = this.$scope.student[0].academicSemester;
       if(this.$scope.data.cause.length>0){
-        semesterWithdraw["cause"] = this.$scope.data.cause;
+        var cause:any = this.$sce.trustAsHtml(this.$scope.data.cause) ;
+        semesterWithdraw["cause"] = cause;
       }
       else{
         semesterWithdraw["cause"] = this.$scope.semesterWithdraw.cause;
