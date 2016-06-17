@@ -40,7 +40,9 @@ public class SemesterWithdrawalResource extends MutableSemesterWithdrawalResourc
   @Path("/deptId/{deptId}")
   public JsonObject getByDeptForEmployee(final @Context Request pRequest,
                                      final @PathParam("deptId") String deptId)throws Exception{
-    return mHelper.getRoutineByDeptForEmployee(deptId,pRequest,mUriInfo);
+
+    String dId="05";
+    return mHelper.getRoutineByDeptForEmployee(dId,pRequest,mUriInfo);
   }
 
   @GET

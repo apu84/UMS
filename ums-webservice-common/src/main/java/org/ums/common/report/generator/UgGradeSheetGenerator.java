@@ -199,8 +199,8 @@ public class UgGradeSheetGenerator {
       p = new Paragraph(String.valueOf(student.getPartA()+student.getPartB()), nFont);
       cell = new PdfPCell(p);
       cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+      table.addCell(cell);
     }
-    table.addCell(cell);
 
     p = new Paragraph(String.valueOf(student.getTotal()), nFont);
     cell = new PdfPCell(p);
@@ -300,6 +300,7 @@ public class UgGradeSheetGenerator {
     comb.add(parag1);
     comb.add(parag2);
     cell = new PdfPCell(comb);
+    cell.setColspan(3);
     cell.setBorder(Rectangle.NO_BORDER);
     cell.setHorizontalAlignment(Element.ALIGN_LEFT);
     table.addCell(cell);
@@ -310,9 +311,9 @@ public class UgGradeSheetGenerator {
     comb.add(parag1);
     comb.add(parag2);
     cell = new PdfPCell(comb);
-    cell.setColspan(2);
+    cell.setColspan(3);
     cell.setBorder(Rectangle.NO_BORDER);
-    cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+    cell.setHorizontalAlignment(Element.ALIGN_LEFT);
     table.addCell(cell);
 
     p=new Paragraph("(The number of students registered for the course is - "+totalStudents+")", nFont);

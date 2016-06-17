@@ -31,8 +31,14 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
     static String SELECT_SESSIONAL_MARKS = "Select UG_SESSIONAL_MARKS.*,STUDENT_NAME From UG_SESSIONAL_MARKS,TEST_STUDENT  Where UG_SESSIONAL_MARKS.STUDENT_ID=TEST_STUDENT.STUDENT_ID AND Semester_Id=? and Course_Id=? and Exam_Type=? ";
 
 
-    static String SELECT_PART_INFO="Select MARKS_SUBMISSION_STATUS.*,COURSE_TYPE From MARKS_SUBMISSION_STATUS,MST_COURSE Where MST_COURSE.Course_Id=MARKS_SUBMISSION_STATUS.Course_Id And " +
-            "  MARKS_SUBMISSION_STATUS.Semester_Id=? and MARKS_SUBMISSION_STATUS.Course_Id=? and Exam_Type=? ";
+    static String SELECT_PART_INFO="Select MARKS_SUBMISSION_STATUS.*,COURSE_TYPE,COURSE_TITLE,COURSE_NO,CRHR,LONG_NAME,SEMESTER_NAME " +
+        "From MARKS_SUBMISSION_STATUS,MST_COURSE,MST_SYLLABUS,MST_PROGRAM,MST_DEPT_OFFICE,MST_SEMESTER " +
+        " Where MST_COURSE.Course_Id=MARKS_SUBMISSION_STATUS.Course_Id  " +
+        " And MST_COURSE.SYLLABUS_ID=MST_SYLLABUS.SYLLABUS_ID " +
+        " And MST_SYLLABUS.PROGRAM_ID=MST_PROGRAM.PROGRAM_ID " +
+        " And MST_PROGRAM.DEPT_ID=MST_DEPT_OFFICE.DEPT_ID " +
+        " And MST_SEMESTER.SEMESTER_ID=MARKS_SUBMISSION_STATUS.SEMESTER_ID " +
+        " And MARKS_SUBMISSION_STATUS.Semester_Id=? and MARKS_SUBMISSION_STATUS.Course_Id=? and Exam_Type=?  ";
 
     static String UPDATE_PART_INFO="Update MARKS_SUBMISSION_STATUS Set TOTAL_PART=?,PART_A_TOTAL=?,PART_B_TOTAL=? Where SEMESTER_ID=? and COURSE_ID=? and EXAM_TYPE=? and Status=0";
     static String UPDATE_MARKS_SUBMISSION_STATUS="Update MARKS_SUBMISSION_STATUS Set STATUS=? Where SEMESTER_ID=? and COURSE_ID=? and EXAM_TYPE=? ";
@@ -505,6 +511,13 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
             statusDto.setStatusId(resultSet.getInt("STATUS"));
             statusDto.setStatus(CourseMarksSubmissionStatus.values()[resultSet.getInt("STATUS")]);
             statusDto.setCourseType(CourseType.get(resultSet.getInt("COURSE_TYPE")));
+
+            statusDto.setCourseTitle(resultSet.getString("COURSE_TITLE"));
+            statusDto.setCourseNo(resultSet.getString("COURSE_NO"));
+            statusDto.setDeptSchoolName(resultSet.getString("LONG_NAME"));
+            statusDto.setSemesterName(resultSet.getString("SEMESTER_NAME"));
+            statusDto.setcRhR(resultSet.getFloat("CRHR"));
+
             AtomicReference<MarksSubmissionStatusDto> atomicReference = new AtomicReference<>(statusDto);
             return atomicReference.get();
         }
