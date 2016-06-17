@@ -286,7 +286,6 @@ module ums{
     }
 
     private initialize():void{
-      console.log(this.$scope.mergeIdList);
       this.getSemesterInfo().then((semesterArr:Array<ISemester>)=>{
 
       });
@@ -308,8 +307,6 @@ module ums{
 
     private cancelSplitAction(splitId:number):void{
 
-      console.log('split id in cancel: '+splitId);
-      // tempGroupList is changed to tempGroupListAll
       for(var i=0;i<this.$scope.tempGroupList.length;i++){
         if(this.$scope.tempGroupList[i].id == splitId){
           this.$scope.tempGroupList[i].showSubPortion=false;
@@ -2181,8 +2178,6 @@ module ums{
 
 
           }).error((data)=>{
-        console.log("insertion failure");
-        //console.log(data);
 
         postResult:false;
       });

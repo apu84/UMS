@@ -283,7 +283,7 @@
                     </li>
                 </ul>
                 <div data-ng-if="subGroupFound">
-                        <ul id="sortable0" class="connectedSortable ">
+                        <ul id="sortable0" class="connectedSortable " data-ng-if="subGroupWithDeptMap[7]">
                             <li class="ui-state-default" id="{{member.id}}" data-ng-repeat="member in subGroupWithDeptMap[7] track by member.id  " data-ng-if="member.id!=''">
                                 <div>
                                     {{member.programName}}:{{member.year}}/{{member.semester}} ({{member.studentNumber}})
