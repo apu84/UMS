@@ -186,23 +186,23 @@ public class UgGradeSheetGenerator {
     table.addCell(cell);
 
     if(courseType==CourseType.THEORY) {
-      p = new Paragraph(String.valueOf(student.getQuiz()), nFont);
+      p = new Paragraph(String.valueOf(Math.round(student.getQuiz())), nFont);
       cell = new PdfPCell(p);
       cell.setHorizontalAlignment(Element.ALIGN_CENTER);
       table.addCell(cell);
 
-      p = new Paragraph(String.valueOf(student.getClassPerformance()), nFont);
+      p = new Paragraph(String.valueOf(Math.round(student.getClassPerformance())), nFont);
       cell = new PdfPCell(p);
       cell.setHorizontalAlignment(Element.ALIGN_CENTER);
       table.addCell(cell);
 
-      p = new Paragraph(String.valueOf(student.getPartA()+student.getPartB()), nFont);
+      p = new Paragraph(String.valueOf(Math.round(student.getPartA()+student.getPartB())), nFont);
       cell = new PdfPCell(p);
       cell.setHorizontalAlignment(Element.ALIGN_CENTER);
       table.addCell(cell);
     }
 
-    p = new Paragraph(String.valueOf(student.getTotal()), nFont);
+    p = new Paragraph(String.valueOf(Math.round(student.getTotal())), nFont);
     cell = new PdfPCell(p);
     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
     table.addCell(cell);
