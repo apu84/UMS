@@ -193,13 +193,15 @@ module ums {
       $scope.generateXls=this.generateXls.bind(this);
       //$scope.inputParams.program_type=11;
 
+      //$scope.inputParams.program_type=11;
+
       $scope.data.recheck_accepted_studentId="";
       $scope.chartData =[];
       this.initChart();
     }
 
     private generateXls(): void {
-      this.httpClient.get("https://localhost/ums-webservice-common/gradeReport/xls/semester/"+this.$scope.inputParams.semester_id+"/courseid/"+this.$scope.current_courseId+"/examtype/"+this.$scope.inputParams.exam_type+"/role/"+this.$scope.currentActor, 'application/vnd.ms-excel',
+      this.httpClient.get("https://localhost/ums-webservice-common/gradeReport/xls/semester/"+this.$scope.inputParams.semester_id+"/courseid/"+this.$scope.current_courseId+"/examtype/"+this.$scope.inputParams.exam_type+"/coursetype/"+(this.$scope.courseType=="THEORY"?"1":"2")+"/role/"+this.$scope.currentActor, 'application/vnd.ms-excel',
           (data: any, etag: string) => {
             var file = new Blob([data], {type: 'application/vnd.ms-excel'});
             var reader = new FileReader();
@@ -547,13 +549,13 @@ module ums {
             if( this.$scope.currentActor=="vc" && this.$scope.gradeSubmissionStatus==8) {
 
               this.$scope.modalSettings.rejectBody = "Are you sure you want to reject the recheck request?";
-              this.$scope.modalSettings.rejectHandler = "submitModal";
+              this.$scope.modalSettings.rejectHandler = "rejectModal";
               this.$scope.modalSettings.rejectRightButton = (currentActor,action) => {
                 this.recheckRequestHandler(currentActor,action);
               }
 
               this.$scope.modalSettings.approveBody = "Are you sure you want to approve the recheck request?";
-              this.$scope.modalSettings.approveHandler = "submitModal";
+              this.$scope.modalSettings.approveHandler = "approveModal";
               this.$scope.modalSettings.approveRightButton = (currentActor,action) => {
                 this.recheckRequestHandler(currentActor,action);
               }
