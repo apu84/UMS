@@ -9,9 +9,9 @@ import org.ums.util.CacheUtil;
 
 public class SemesterWithdrawalLogCache extends ContentCache<SemesterWithdrawalLog,MutableSemesterWithdrawalLog,Integer,SemesterWithdrawalLogManager> implements SemesterWithdrawalLogManager {
 
-  CacheManager<SemesterWithdrawalLog> mCacheManager;
+  CacheManager<SemesterWithdrawalLog, Integer> mCacheManager;
 
-  public SemesterWithdrawalLogCache(CacheManager<SemesterWithdrawalLog> pCachemanager){
+  public SemesterWithdrawalLogCache(CacheManager<SemesterWithdrawalLog, Integer> pCachemanager){
     mCacheManager = pCachemanager;
   }
 
@@ -21,7 +21,7 @@ public class SemesterWithdrawalLogCache extends ContentCache<SemesterWithdrawalL
   }
 
   @Override
-  protected CacheManager<SemesterWithdrawalLog> getCacheManager() {
+  protected CacheManager<SemesterWithdrawalLog, Integer> getCacheManager() {
     return mCacheManager;
   }
 

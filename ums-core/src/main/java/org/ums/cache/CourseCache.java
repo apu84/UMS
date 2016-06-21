@@ -10,16 +10,16 @@ import java.util.List;
 
 
 public class CourseCache extends ContentCache<Course, MutableCourse, String, CourseManager> implements CourseManager {
-  CacheManager<Course> mCacheManager;
+  CacheManager<Course, String> mCacheManager;
 
 
 
-  public CourseCache(CacheManager<Course> pCacheManager) {
+  public CourseCache(CacheManager<Course, String> pCacheManager) {
     mCacheManager = pCacheManager;
   }
 
   @Override
-  protected CacheManager<Course> getCacheManager() {
+  protected CacheManager<Course, String> getCacheManager() {
     return mCacheManager;
   }
 

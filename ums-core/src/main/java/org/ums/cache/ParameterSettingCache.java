@@ -13,9 +13,9 @@ import java.util.List;
  * Created by My Pc on 3/15/2016.
  */
 public class ParameterSettingCache extends ContentCache<ParameterSetting,MutableParameterSetting,String,ParameterSettingManager> implements ParameterSettingManager {
-  private CacheManager<ParameterSetting> mCacheManager;
+  private CacheManager<ParameterSetting, String> mCacheManager;
 
-  public ParameterSettingCache(final CacheManager<ParameterSetting> pCacheManager){
+  public ParameterSettingCache(final CacheManager<ParameterSetting, String> pCacheManager){
     mCacheManager = pCacheManager;
   }
 
@@ -25,7 +25,7 @@ public class ParameterSettingCache extends ContentCache<ParameterSetting,Mutable
   }
 
   @Override
-  protected CacheManager<ParameterSetting> getCacheManager() {
+  protected CacheManager<ParameterSetting, String> getCacheManager() {
     return mCacheManager;
   }
 

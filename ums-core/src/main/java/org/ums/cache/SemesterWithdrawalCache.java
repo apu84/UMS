@@ -14,14 +14,14 @@ import java.util.List;
 public class SemesterWithdrawalCache extends ContentCache<SemesterWithdrawal,MutableSemesterWithdrawal,Integer,SemesterWithDrawalManager> implements SemesterWithDrawalManager {
 
 
-  CacheManager<SemesterWithdrawal> mCacheManager;
+  CacheManager<SemesterWithdrawal, Integer> mCacheManager;
 
-  public SemesterWithdrawalCache(CacheManager<SemesterWithdrawal> pCacheManager){
+  public SemesterWithdrawalCache(CacheManager<SemesterWithdrawal, Integer> pCacheManager){
     mCacheManager = pCacheManager;
   }
 
   @Override
-  protected CacheManager<SemesterWithdrawal> getCacheManager() {
+  protected CacheManager<SemesterWithdrawal, Integer> getCacheManager() {
     return mCacheManager;
   }
 

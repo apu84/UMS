@@ -10,8 +10,9 @@ import org.ums.domain.model.common.LastModifier;
 import org.ums.manager.CacheManager;
 
 import java.net.InetSocketAddress;
+import java.util.List;
 
-public class MemcacheClientManager<R extends LastModifier> implements CacheManager<R> {
+public class MemcacheClientManager<R extends LastModifier, I> implements CacheManager<R, I> {
   private static final Logger mLogger = LoggerFactory.getLogger(MemcacheClientManager.class);
 
   private MemcachedClient mObjectCache;
@@ -55,5 +56,30 @@ public class MemcacheClientManager<R extends LastModifier> implements CacheManag
   public void flushAll() throws Exception {
     mObjectCache.flush();
     mLastModified.flush();
+  }
+
+  @Override
+  public void put(String pCacheId, List<I> pReadOnlyIds) throws Exception {
+    mObjectCache.set(pCacheId, 0, pReadOnlyIds);
+  }
+
+  @Override
+  public void putKeys(String pCacheId, List<String> pKeys) throws Exception {
+    mObjectCache.set(pCacheId, 0, pKeys);
+  }
+
+  @Override
+  public List<I> getList(String pCacheId) throws Exception {
+    return (List<I>) mObjectCache.get(pCacheId);
+  }
+
+  @Override
+  public List<String> getCachedKeyList(String pCacheId) throws Exception {
+    return (List<String>) mObjectCache.get(pCacheId);
+  }
+
+  @Override
+  public void invalidateList(String pCacheId) throws Exception {
+    mObjectCache.delete(pCacheId);
   }
 }

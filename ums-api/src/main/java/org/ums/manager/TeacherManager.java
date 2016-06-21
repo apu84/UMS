@@ -8,5 +8,5 @@ import org.ums.domain.model.immutable.Teacher;
 import java.util.List;
 
 public interface TeacherManager extends ContentManager<Teacher, MutableTeacher, String> {
-  List<Teacher> getByDepartment(final Department pDepartment);
+  List<Teacher> getByDepartment(final Department pDepartment) throws Exception;
 }

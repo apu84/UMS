@@ -13,14 +13,14 @@ import java.util.List;
 
 public class SemesterSyllabusMapCache extends ContentCache<SemesterSyllabusMap, MutableSemesterSyllabusMap, Integer, SemesterSyllabusMapManager>
     implements SemesterSyllabusMapManager {
-  private CacheManager<SemesterSyllabusMap> mCacheManager;
+  private CacheManager<SemesterSyllabusMap, Integer> mCacheManager;
 
-  public SemesterSyllabusMapCache(final CacheManager<SemesterSyllabusMap> pCacheManager) {
+  public SemesterSyllabusMapCache(final CacheManager<SemesterSyllabusMap,Integer> pCacheManager) {
     mCacheManager = pCacheManager;
   }
 
   @Override
-  protected CacheManager<SemesterSyllabusMap> getCacheManager() {
+  protected CacheManager<SemesterSyllabusMap, Integer> getCacheManager() {
     return mCacheManager;
   }
 

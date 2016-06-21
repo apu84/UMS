@@ -10,14 +10,14 @@ import java.util.List;
 
 public class StudentRecordCache extends ContentCache<StudentRecord, MutableStudentRecord, Integer, StudentRecordManager>
     implements StudentRecordManager {
-  private CacheManager<StudentRecord> mCacheManager;
+  private CacheManager<StudentRecord, Integer> mCacheManager;
 
-  public StudentRecordCache(final CacheManager<StudentRecord> pCacheManager) {
+  public StudentRecordCache(final CacheManager<StudentRecord, Integer> pCacheManager) {
     mCacheManager = pCacheManager;
   }
 
   @Override
-  protected CacheManager<StudentRecord> getCacheManager() {
+  protected CacheManager<StudentRecord, Integer> getCacheManager() {
     return mCacheManager;
   }
 

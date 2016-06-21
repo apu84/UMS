@@ -10,14 +10,14 @@ import java.util.List;
 
 public class SemesterEnrollmentCache extends ContentCache<SemesterEnrollment, MutableSemesterEnrollment, Integer, SemesterEnrollmentManager>
     implements SemesterEnrollmentManager {
-  private CacheManager<SemesterEnrollment> mCacheManager;
+  private CacheManager<SemesterEnrollment, Integer> mCacheManager;
 
-  public SemesterEnrollmentCache(final CacheManager<SemesterEnrollment> pCacheManager) {
+  public SemesterEnrollmentCache(final CacheManager<SemesterEnrollment, Integer> pCacheManager) {
     mCacheManager = pCacheManager;
   }
 
   @Override
-  protected CacheManager<SemesterEnrollment> getCacheManager() {
+  protected CacheManager<SemesterEnrollment, Integer> getCacheManager() {
     return mCacheManager;
   }
 

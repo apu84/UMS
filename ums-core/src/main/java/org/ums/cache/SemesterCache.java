@@ -12,14 +12,14 @@ import org.ums.util.CacheUtil;
 import java.util.List;
 
 public class SemesterCache extends ContentCache<Semester, MutableSemester, Integer, SemesterManager> implements SemesterManager {
-  private CacheManager<Semester> mCacheManager;
+  private CacheManager<Semester, Integer> mCacheManager;
 
-  public SemesterCache(final CacheManager<Semester> pCacheManager) {
+  public SemesterCache(final CacheManager<Semester, Integer> pCacheManager) {
     mCacheManager = pCacheManager;
   }
 
   @Override
-  protected CacheManager<Semester> getCacheManager() {
+  protected CacheManager<Semester, Integer> getCacheManager() {
     return mCacheManager;
   }
 

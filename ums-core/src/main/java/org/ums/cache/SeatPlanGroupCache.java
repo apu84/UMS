@@ -13,14 +13,14 @@ import java.util.List;
  */
 public class SeatPlanGroupCache extends ContentCache<SeatPlanGroup,MutableSeatPlanGroup,Integer,SeatPlanGroupManager> implements SeatPlanGroupManager {
 
-  CacheManager<SeatPlanGroup> mCacheManager;
+  CacheManager<SeatPlanGroup, Integer> mCacheManager;
 
-  public SeatPlanGroupCache(CacheManager<SeatPlanGroup> pCacheManager){
+  public SeatPlanGroupCache(CacheManager<SeatPlanGroup, Integer> pCacheManager){
     mCacheManager = pCacheManager;
   }
 
   @Override
-  protected CacheManager<SeatPlanGroup> getCacheManager() {
+  protected CacheManager<SeatPlanGroup, Integer> getCacheManager() {
     return mCacheManager;
   }
 

@@ -11,14 +11,14 @@ import java.util.List;
 
 public class PermissionCache extends ContentCache<Permission, MutablePermission, Integer, PermissionManager>
     implements PermissionManager {
-  private CacheManager<Permission> mCacheManager;
+  private CacheManager<Permission, Integer> mCacheManager;
 
-  public PermissionCache(final CacheManager<Permission> pCacheManager) {
+  public PermissionCache(final CacheManager<Permission, Integer> pCacheManager) {
     mCacheManager = pCacheManager;
   }
 
   @Override
-  protected CacheManager<Permission> getCacheManager() {
+  protected CacheManager<Permission, Integer> getCacheManager() {
     return mCacheManager;
   }
 

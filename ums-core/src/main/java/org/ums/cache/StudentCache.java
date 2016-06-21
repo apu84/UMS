@@ -9,14 +9,14 @@ import org.ums.util.CacheUtil;
 import java.util.List;
 
 public class StudentCache extends ContentCache<Student, MutableStudent, String, StudentManager> implements StudentManager {
-  private CacheManager<Student> mCacheManager;
+  private CacheManager<Student, String> mCacheManager;
 
-  public StudentCache(final CacheManager<Student> pCacheManager) {
+  public StudentCache(final CacheManager<Student, String> pCacheManager) {
     mCacheManager = pCacheManager;
   }
 
   @Override
-  protected CacheManager<Student> getCacheManager() {
+  protected CacheManager<Student, String> getCacheManager() {
     return mCacheManager;
   }
 
