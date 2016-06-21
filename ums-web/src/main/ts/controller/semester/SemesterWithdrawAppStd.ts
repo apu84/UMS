@@ -51,6 +51,7 @@ module ums{
     cause:string;
     /*tempCause:string;*/
     studentId:string;
+    studentName:string;
     year:number;
     semester:number;
     status:number;
@@ -75,7 +76,7 @@ module ums{
           status:""
         }
         //$scope.initialize = this.initialize.bind(this);
-        this.initialize();
+        //this.initialize();
         //this.$scope.initialize = this.initialize.bind(this);
         $scope.cause="";
         $scope.editApplication=false;
@@ -95,6 +96,7 @@ module ums{
         $scope.applicationTypeOptions = appConstants.applicationTypes;
         $scope.actors = appConstants.actors;
         $scope.actions = appConstants.actions;
+        $scope.initialize = this.initialize.bind(this);
         $scope.saveApplication = this.saveApplication.bind(this);
         $scope.edit = this.edit.bind(this);
         $scope.cancel = this.cancel.bind(this) ;

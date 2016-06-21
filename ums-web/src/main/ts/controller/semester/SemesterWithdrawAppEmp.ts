@@ -10,7 +10,9 @@ module ums{
     student:Student;
     semester:ISemester;
     data:any;
+    comments:any;
 
+    initialize:Function;
     getEmployeeInformation:Function;
     getSemesterWithdrawApplications:Function;
     getSemesterWithdrawApplicatinsAll:Function;
@@ -40,6 +42,7 @@ module ums{
     programId:number;
     cause:string;
     studentId:string;
+    studentName:string;
     year:number;
     semester:number;
     status:number;
@@ -67,8 +70,8 @@ module ums{
       $scope.showComment = false;
       $scope.commentEdit = false;
       $scope.saveAndCloseButton=false;
-      this.initialize();
-
+      //this.initialize();
+      $scope.initialize=this.initialize.bind(this);
       $scope.getEmployeeInformation = this.getEmployeeInformation.bind(this);
       $scope.getSemesterWithdrawApplications = this.getSemesterWithdrawApplications.bind(this);
       $scope.getSemesterWithdrawApplicatinsAll = this.getSemesterWithdrawApplicationsAll.bind(this);
@@ -103,6 +106,7 @@ module ums{
     }
    //check the status
     private details(semesterWith:SemesterWithdraw):void{
+      this.$scope.comments={};
       this.$scope.tempSemesterWithdraw = semesterWith;
       this.$scope.detailButtonCliecked = true;
       this.$scope.data.status = "";
@@ -121,6 +125,7 @@ module ums{
         this.$scope.rejectButton= true;
         console.log("I dont want");
       }
+      this.$scope.comments=semesterWith.comments;
       this.getStudentInfo().then((studentInfoArr:Array<Student>)=>{
         this.getSemesterInfo().then((semesterInfoArr:Array<Student>)=>{
             /*if(this.$scope.tempSemesterWithdraw.status==1){
@@ -297,6 +302,7 @@ module ums{
     }
 
     private convertToJsonForSemesterWithdrawForUpdateOrSubmit(){
+      var cause:any={};
       var semesterWithdraw={};
       semesterWithdraw["id"]=this.$scope.tempSemesterWithdraw.id;
       semesterWithdraw["programId"]=this.$scope.tempSemesterWithdraw.programId;
@@ -308,8 +314,10 @@ module ums{
       semesterWithdraw["status"] = this.$scope.tempSemesterWithdraw.status;
       semesterWithdraw["applicationDate"] = this.$scope.tempSemesterWithdraw.appDate;
       var comments = this.$sce.getTrustedHtml(this.$scope.tempSemesterWithdraw.comments);
-      var str = comments.replace("&#10;","<br>")
-      semesterWithdraw["comments"] = str;
+      cause = this.$sce.getTrustedHtml(this.$scope.data.comments);
+
+      //console.log(str);
+      semesterWithdraw["comments"] = this.$scope.data.comments;
       return semesterWithdraw;
     }
 

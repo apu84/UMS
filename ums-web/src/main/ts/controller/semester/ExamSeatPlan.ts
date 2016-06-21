@@ -827,6 +827,15 @@ module ums{
             }).disableSelection();
 
             $(".connectedSortable").css("background-color","antiquewhite");
+
+            $("#sortable1").sortable("disable");
+            $("#sortable2").sortable("disable");
+            $("#sortable3").sortable("disable");
+            $("#sortable4").sortable("disable");
+            $("#sortable5").sortable("disable");
+            $("#sortable6").sortable("disable");
+            $("#sortable0").sortable("disable");
+
           }
           //this.makeSortableEmpty();
 
@@ -890,15 +899,11 @@ module ums{
 
       var baseId:number;
       var idStringBase = id.toString();
-      if(idStringBase.length==this.$scope.groupIdLength){
-        baseId = id;
-      }else{
-        var idStringBaseArr:Array<string>=idStringBase.split("");
-        var strForIdDetecting="";
-        for(var y=0;y<this.$scope.groupIdLength;y++){
-          strForIdDetecting=strForIdDetecting+idStringBaseArr[y];
+      for(var i=0;i<this.$scope.tempGroupListAll.length;i++){
+        if(this.$scope.tempGroupListAll[i].id==id){
+          baseId = this.$scope.tempGroupListAll[i].baseId;
+          break;
         }
-        baseId = +strForIdDetecting;
       }
       return baseId;
     }
@@ -999,6 +1004,9 @@ module ums{
             baseId = this.getBaseId(this.$scope.mergeIdList[i]);
           }else{
             var tempBaseId:number = this.getBaseId(this.$scope.mergeIdList[i]);
+            console.log("*****");
+            console.log(tempBaseId);
+            console.log(baseId);
             if(baseId!=tempBaseId){
               mismatchFound=true;
               break;

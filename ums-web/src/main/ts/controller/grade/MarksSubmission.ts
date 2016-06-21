@@ -193,13 +193,15 @@ module ums {
       $scope.generateXls=this.generateXls.bind(this);
       //$scope.inputParams.program_type=11;
 
+      //$scope.inputParams.program_type=11;
+
       $scope.data.recheck_accepted_studentId="";
       $scope.chartData =[];
       this.initChart();
     }
 
     private generateXls(): void {
-      this.httpClient.get("https://localhost/ums-webservice-common/gradeReport/xls/semester/"+this.$scope.inputParams.semester_id+"/courseid/"+this.$scope.current_courseId+"/examtype/"+this.$scope.inputParams.exam_type+"/role/"+this.$scope.currentActor, 'application/vnd.ms-excel',
+      this.httpClient.get("https://localhost/ums-webservice-common/gradeReport/xls/semester/"+this.$scope.inputParams.semester_id+"/courseid/"+this.$scope.current_courseId+"/examtype/"+this.$scope.inputParams.exam_type+"/coursetype/"+(this.$scope.courseType=="THEORY"?"1":"2")+"/role/"+this.$scope.currentActor, 'application/vnd.ms-excel',
           (data: any, etag: string) => {
             var file = new Blob([data], {type: 'application/vnd.ms-excel'});
             var reader = new FileReader();
@@ -547,13 +549,13 @@ module ums {
             if( this.$scope.currentActor=="vc" && this.$scope.gradeSubmissionStatus==8) {
 
               this.$scope.modalSettings.rejectBody = "Are you sure you want to reject the recheck request?";
-              this.$scope.modalSettings.rejectHandler = "submitModal";
+              this.$scope.modalSettings.rejectHandler = "rejectModal";
               this.$scope.modalSettings.rejectRightButton = (currentActor,action) => {
                 this.recheckRequestHandler(currentActor,action);
               }
 
               this.$scope.modalSettings.approveBody = "Are you sure you want to approve the recheck request?";
-              this.$scope.modalSettings.approveHandler = "submitModal";
+              this.$scope.modalSettings.approveHandler = "approveModal";
               this.$scope.modalSettings.approveRightButton = (currentActor,action) => {
                 this.recheckRequestHandler(currentActor,action);
               }
@@ -596,14 +598,18 @@ module ums {
 
            total = quiz + class_perf + part_a + part_b;
         $("#total_" + student_id).val(String(total));
+        var grade_letter:string = this.gradeLetterFromMarks(total);
+        $("#grade_letter_" + student_id).val(grade_letter);
+        this.validateGrade(false, student_id, String(quiz), String(class_perf), String(part_a), String(part_b), String(total), grade_letter);
       }
-      else
-        total=$("#total_" + student_id).val();
+      else {
+        total = $("#total_" + student_id).val();
+        $("#total_" + student_id).val(String(total));
+        var grade_letter:string = this.gradeLetterFromMarks(total);
+        $("#grade_letter_" + student_id).val(grade_letter);
+        this.validateGrade(false, student_id, "", "", "", "", String(total), grade_letter);
+      }
 
-      var grade_letter:string = this.gradeLetterFromMarks(total);
-      $("#grade_letter_" + student_id).val(grade_letter);
-
-      this.validateGrade(false, student_id, String(quiz), String(class_perf), String(part_a), String(part_b), String(total), grade_letter);
     }
 
     public onTotalPartChange():void {
@@ -661,19 +667,29 @@ module ums {
         //for(var x in cells) {
         // row.append('<td>'+cells[x]+'</td>');
         studentId = row[0];
-        this.setFieldValue("quiz_" + studentId, row[2]);
-        this.setFieldValue("class_perf_" + studentId, row[3]);
-        this.setFieldValue("part_a_" + studentId, row[4]);
-        this.setFieldValue("part_b_" + studentId, row[5]);
-        this.setFieldValue("total_" + studentId, row[6]);
-        if (row[7] != "")
-          this.setFieldValue("grade_letter_" + studentId, row[7]);
 
+        console.clear();
+        console.log(row);
+        console.log(studentId);
         rowError = false;
+        if(this.$scope.courseType=="THEORY") {
+          this.setFieldValue("quiz_" + studentId, row[2]);
+          this.setFieldValue("class_perf_" + studentId, row[3]);
+          this.setFieldValue("part_a_" + studentId, row[4]);
+          this.setFieldValue("part_b_" + studentId, row[5]);
+          this.setFieldValue("total_" + studentId, row[6]);
+          if (row[7] != "")
+            this.setFieldValue("grade_letter_" + studentId, row[7]);
 
-        console.log(studentId); //
+          this.validateGrade(false, studentId, row[2], row[3], row[4], row[5], row[6], row[7]);
+        }
+        else{
+          this.setFieldValue("total_" + studentId, row[2]);
+          if (row[3] != "")
+            this.setFieldValue("grade_letter_" + studentId, row[3]);
+          this.validateGrade(false, studentId, "","", "", "", row[2], row[3]);
+        }
 
-        this.validateGrade(false, studentId, row[2], row[3], row[4], row[5], row[6], row[7]);
 
         //}-------==========
         // table.append(row);
@@ -772,6 +788,7 @@ module ums {
       }
 
       var parentRow = document.getElementById("row_" + student_id);
+      console.log(parentRow);
       var tdArray = parentRow.getElementsByTagName('td');
 
       if (row_error == true) {
@@ -802,13 +819,23 @@ module ums {
 
     private validateExcelSheetHeader(cells:any):boolean {
       console.log(cells);
-      if (cells[0] != "Student Id" || cells[1] != "Student Name" || cells[2] != "Quiz" || cells[3] != "Class Perf." || cells[4] != "Part-A" || cells[5] != "Part-B" || cells[6] != "Total" || cells[7] != "Grade Letter") {
-        this.$scope.excel_copy_paste_error_div = true;
-        return false;
-
+      if ( this.$scope.courseType=="THEORY"){
+        if(cells[0] != "Student Id" || cells[1] != "Student Name" || cells[2] != "Quiz" || cells[3] != "Class Perf." || cells[4] != "Part-A" || cells[5] != "Part-B" || cells[6] != "Total" || cells[7] != "Grade Letter") {
+          this.$scope.excel_copy_paste_error_div = true;
+          return false;
+        }
+        else
+          this.$scope.excel_copy_paste_error_div = false;
       }
-      else
-        this.$scope.excel_copy_paste_error_div = false;
+      else if ( this.$scope.courseType=="SESSIONAL"){
+            if(cells[0] != "Student Id" || cells[1] != "Student Name" || cells[2] != "Total" || cells[3] != "Grade Letter") {
+              this.$scope.excel_copy_paste_error_div = true;
+              return false;
+            }
+            else
+              this.$scope.excel_copy_paste_error_div = false;
+        }
+
       return true;
 
 

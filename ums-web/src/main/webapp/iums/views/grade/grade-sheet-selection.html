@@ -55,7 +55,7 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label">Program Type</label>
                         <div class="col-md-8">
-                            <select class="form-control required" data-ng-model="inputParams.program_type" data-convert-to-number data-ng-change="loadSemesters()">
+                            <select class="form-control required" data-ng-model="inputParams.program_type" data-ng-change="loadSemesters()" data-convert-to-number >
                                 <option  value="11">Undergraduate</option>
                                 <option  value="22">Postgraduate</option>
                             </select>
@@ -816,7 +816,7 @@
                                     </tr>
                                     <tr>
                                         <td><b>A-</b></td>
-                                        <td>{{chartData[1].total}}</td>
+                                        <td>{{chartData[2].total}}</td>
                                         <td><b>B-</b></td>
                                         <td>{{chartData[5].total}}</td>
                                         <td><b>D</b></td>

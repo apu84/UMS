@@ -37,17 +37,18 @@ public class UgGradeSheetXls extends Resource {
   XlsGenerator xlsGenerator;
 
   @GET
-  @Path("/semester/{semester-id}/courseid/{course-id}/examtype/{exam-type}/role/{role}")
+  @Path("/semester/{semester-id}/courseid/{course-id}/examtype/{exam-type}/coursetype/{course-type}/role/{role}")
   public StreamingOutput get(final @Context Request pRequest,
                              final @PathParam("semester-id") Integer pSemesterId,
                              final @PathParam("course-id") String pCourseId,
                              final @PathParam("exam-type") Integer pExamTypeId,
+                             final @PathParam("course-type") Integer pCourseType,
                              final @PathParam("role") String pRequestedRole) throws Exception {
-    List<StudentGradeDto> gradeList = mExamGradeManager.getAllGrades(pSemesterId,pCourseId,pExamTypeId, CourseType.THEORY);
+    List<StudentGradeDto> gradeList = mExamGradeManager.getAllGrades(pSemesterId,pCourseId,pExamTypeId, CourseType.get(pCourseType));
     return new StreamingOutput() {
       public void write(OutputStream output) throws IOException, WebApplicationException {
         try {
-          InputStream a=DummyXLSGenerator.class.getResourceAsStream("/report/xls/template/theory.xls");
+          InputStream a=DummyXLSGenerator.class.getResourceAsStream("/report/xls/template/"+CourseType.get(pCourseType).toString().toLowerCase()+".xls");
           xlsGenerator.build(gradeList, output, a);
         } catch (Exception e) {
           throw new WebApplicationException(e);

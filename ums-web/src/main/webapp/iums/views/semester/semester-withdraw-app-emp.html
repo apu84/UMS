@@ -1,11 +1,12 @@
 
-<div class="panel panel-green" data-ng-if="detailButtonCliecked==false">
+<div class="panel panel-green" data-ng-if="detailButtonCliecked==false" data-ng-init="initialize()">
     <div class="panel-heading">Semester Withdraw Applications</div>
     <div class="panel-body">
         <table class="table table-hover table-bordered">
             <thead>
             <tr>
                 <th>Student Id</th>
+                <th>Student Name</th>
                 <th>Application Date</th>
                 <th>Status</th>
                 <th>Action</th>
@@ -15,6 +16,7 @@
                 <tr data-ng-repeat="app in semesterWithdrawArr | filter:{status:'!0'}">
                     {{tempSemesterWithdraw=app;""}}
                     <td>{{app.studentId}}</td>
+                    <td>{{app.studentName}}</td>
                     <td>{{app.appDate}}</td>
                     <td data-ng-if="app.status>0">
                         <span class="label label-sm label-info" data-ng-if="app.status==1">Submitted</span>
@@ -113,9 +115,12 @@
                                 <div class="col-md-12">
                                     <p>Comment: </p>
                                     <div data-ng-if="commentEdit==false">
-                                        <textarea readonly rows="10" class="form-control" value="{{tempSemesterWithdraw.comments}}"></textarea>
+                                        <textarea readonly rows="10" class="form-control" value="{{comments}}">
+                                       </textarea>
                                     </div>
-                                    <textarea rows="10" class="form-control"  data-ng-if="commentEdit" data-ng-model="tempSemesterWithdraw.comments" ></textarea>
+                                    <div data-ng-if="commentEdit">
+                                        <textarea rows="10" class="form-control" data-ng-model="data.comments" data-ng-if="commentEdit" ></textarea>
+                                    </div>
                                 </div>
                             </div>
                         </div>
