@@ -2,6 +2,7 @@ package org.ums.cache;
 
 import org.ums.domain.model.immutable.Permission;
 import org.ums.domain.model.immutable.Role;
+import org.ums.domain.model.immutable.Teacher;
 import org.ums.domain.model.mutable.MutablePermission;
 import org.ums.manager.CacheManager;
 import org.ums.manager.PermissionManager;
@@ -28,7 +29,13 @@ public class PermissionCache extends ContentCache<Permission, MutablePermission,
   }
 
   @Override
-  public List<Permission> getPermissionByRole(Role pRole) {
-    return getManager().getPermissionByRole(pRole);
+  public List<Permission> getPermissionByRole(Role pRole) throws Exception{
+    String cacheKey = getCacheKey(Permission.class.toString(), pRole.getId());
+    return cachedList(cacheKey, () -> getManager().getPermissionByRole(pRole));
+  }
+
+  @Override
+  protected String getCachedListKey() {
+    return "PermissionListCache";
   }
 }
