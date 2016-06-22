@@ -130,7 +130,7 @@ public abstract class ContentCache<R extends Identifier<I> & LastModifier, M ext
     return "all_cached_list";
   }
 
-  public List<R> cachedList(final String pCacheKey, Callable<List<R>> pCallable) throws Exception {
+  protected List<R> cachedList(final String pCacheKey, Callable<List<R>> pCallable) throws Exception {
     String methodName = Thread.currentThread().getStackTrace()[2].getMethodName();
     String cacheKey = pCacheKey + methodName;
 
