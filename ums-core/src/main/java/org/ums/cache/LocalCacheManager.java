@@ -48,6 +48,7 @@ public class LocalCacheManager<R extends LastModifier, I> implements CacheManage
   public void flushAll() throws Exception {
     mCache.clear();
     mCacheList.clear();
+    mCachedKeyList.clear();
     mLastModified.clear();
   }
 

@@ -138,28 +138,27 @@ public abstract class ContentCache<R extends Identifier<I> & LastModifier, M ext
 
     if (cachedList == null || cachedList.size() == 0) {
       // if list is not present in cache
-      long currentTime = System.currentTimeMillis();
       List<R> entityList = pCallable.call();
-      long afterTime = System.currentTimeMillis();
-      System.out.println((afterTime - currentTime));
+      if (entityList.size() > 0) {
+        List<I> entityCacheIds = new ArrayList<>();
 
-      List<I> entityCacheIds = new ArrayList<>();
+        for (R entity : entityList) {
+          String entityCacheKey = getCacheKey(entity.getId());
+          getCacheManager().put(entityCacheKey, entity);
+          entityCacheIds.add(entity.getId());
+        }
+        getCacheManager().put(cacheKey, entityCacheIds);
 
-      for (R entity : entityList) {
-        String entityCacheKey = getCacheKey(entity.getId());
-        getCacheManager().put(entityCacheKey, entity);
-        entityCacheIds.add(entity.getId());
+        //update list cache
+        List<String> cachedLists = getCacheManager().getCachedKeyList(getCachedListKey());
+        if (cachedLists == null) {
+          cachedLists = new ArrayList<>();
+        }
+        if (!cachedLists.contains(cacheKey)) {
+          cachedLists.add(cacheKey);
+        }
+        getCacheManager().putKeys(getCachedListKey(), cachedLists);
       }
-      getCacheManager().put(cacheKey, entityCacheIds);
-
-      //update list cache
-      List<String> cachedLists = getCacheManager().getCachedKeyList(getCachedListKey());
-      if (cachedLists == null) {
-        cachedLists = new ArrayList<>();
-      }
-      cachedLists.add(cacheKey);
-      getCacheManager().putKeys(getCachedListKey(), cachedLists);
-
       return entityList;
 
     } else {
