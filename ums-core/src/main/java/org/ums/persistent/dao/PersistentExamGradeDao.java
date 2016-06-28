@@ -9,10 +9,7 @@ import org.ums.domain.model.dto.GradeChartDataDto;
 import org.ums.domain.model.dto.MarksSubmissionStatusDto;
 import org.ums.domain.model.dto.StudentGradeDto;
 import org.ums.domain.model.immutable.Course;
-import org.ums.enums.CourseMarksSubmissionStatus;
-import org.ums.enums.CourseType;
-import org.ums.enums.RecheckStatus;
-import org.ums.enums.StudentMarksSubmissionStatus;
+import org.ums.enums.*;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -43,9 +40,9 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
     static String UPDATE_PART_INFO="Update MARKS_SUBMISSION_STATUS Set TOTAL_PART=?,PART_A_TOTAL=?,PART_B_TOTAL=? Where SEMESTER_ID=? and COURSE_ID=? and EXAM_TYPE=? and Status=0";
     static String UPDATE_MARKS_SUBMISSION_STATUS="Update MARKS_SUBMISSION_STATUS Set STATUS=? Where SEMESTER_ID=? and COURSE_ID=? and EXAM_TYPE=? ";
 
-    static String UPDATE_THEORY_MARKS="Update  UG_THEORY_MARKS Set Quiz=?,Class_Performance=?,Part_A=?,Part_B=?,Total=?,Grade_Letter=?,Grade_Point=?,Status=? " +
+    static String UPDATE_THEORY_MARKS="Update  UG_THEORY_MARKS Set Quiz=?,Class_Performance=?,Part_A=?,Part_B=?,Total=?,Grade_Letter=?,Status=? " +
             " Where Semester_Id=? And Course_Id=? and Exam_Type=? and Student_Id=?";
-    static String UPDATE_SESSIONAL_MARKS="Update  UG_SESSIONAL_MARKS Set Total=?,Grade_Letter=?,Grade_Point=?,Status=? " +
+    static String UPDATE_SESSIONAL_MARKS="Update  UG_SESSIONAL_MARKS Set Total=?,Grade_Letter=?,Status=? " +
             " Where Semester_Id=? And Course_Id=? and Exam_Type=? and Student_Id=?";
 
     static String SELECT_GRADE_SUBMISSION_TABLE_TEACHER="Select tmp5.*,Status From ( " +
@@ -68,7 +65,8 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
             "Where tmp4.scrutinizer_id=MVIEW_TEACHERS.teacher_id (+) " +
             ")tmp5, Marks_Submission_Status " +
             "Where tmp5.course_id=MARKS_SUBMISSION_STATUS.COURSE_ID(+) " +
-            "And tmp5.SEMESTER_ID=MARKS_SUBMISSION_STATUS.SEMESTER_ID(+) ";
+            "And tmp5.SEMESTER_ID=MARKS_SUBMISSION_STATUS.SEMESTER_ID(+)  "+
+            "And Exam_Type=?";
 
     static String SELECT_GRADE_SUBMISSION_TABLE_HEAD="Select Ms_Status.Semester_Id,Exam_Type,Mst_Course.Course_Id,Course_No,Course_Title ,CrHr,Course_Type,Course_Category,Offer_By,Year,Semester,Mst_Course.Syllabus_Id, " +
         "getCourseTeacher(Ms_Status.semester_id,Mst_Course.course_id) Course_Teachers, " +
@@ -160,10 +158,18 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
     public List<StudentGradeDto> getAllGrades(int pSemesterId,String pCourseId,int pExamType,CourseType courseType) throws Exception {
 
         String query="";
-        if(courseType==CourseType.THEORY)
-            query=SELECT_THEORY_MARKS + " Order by UG_THEORY_MARKS.Student_Id,Status  ";
-        else if(courseType==CourseType.SESSIONAL)
-            query=SELECT_SESSIONAL_MARKS + " Order by UG_SESSIONAL_MARKS.Student_Id,Status  ";
+        if(courseType==CourseType.THEORY) {
+            if(ExamType.SEMESTER_FINAL == ExamType.get(pExamType))
+                query = SELECT_THEORY_MARKS + " Order by UG_THEORY_MARKS.Student_Id,Status  ";
+            else
+                query = SELECT_THEORY_MARKS + " Order by Reg_Type,UG_THEORY_MARKS.Student_Id,Status  ";
+        }
+        else if(courseType==CourseType.SESSIONAL) {
+            if(ExamType.SEMESTER_FINAL == ExamType.get(pExamType))
+                query = SELECT_SESSIONAL_MARKS + " Order by UG_SESSIONAL_MARKS.Student_Id,Status  ";
+            else
+                query = SELECT_SESSIONAL_MARKS + " Order by Reg_Type,UG_SESSIONAL_MARKS.Student_Id,Status  ";
+        }
 
         return mJdbcTemplate.query(query,new Object[]{pSemesterId,pCourseId,pExamType}, new StudentMarksRowMapper(courseType));
     }
@@ -194,7 +200,7 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
         String query="";
         if(userRole.equals("T")){  //Teacher
             query = SELECT_GRADE_SUBMISSION_TABLE_TEACHER;
-            return mJdbcTemplate.query(query, new Object[] {pSemesterId,teacherId,teacherId,pSemesterId,teacherId},new MarksSubmissionStatusTableRowMapper());
+            return mJdbcTemplate.query(query, new Object[] {pSemesterId,teacherId,teacherId,pSemesterId,teacherId,pExamType},new MarksSubmissionStatusTableRowMapper());
         }
         else if(userRole.equals("H")){  //Head
             query = SELECT_GRADE_SUBMISSION_TABLE_HEAD;
@@ -286,13 +292,14 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
             float total = resultSet.getFloat("TOTAL");
             marks.setTotal(resultSet.wasNull() ? null : total);
 
-            marks.setGradePoint(resultSet.getFloat("GRADE_POINT"));
             marks.setGradeLetter(resultSet.getString("GRADE_LETTER"));
 
             marks.setStatus(StudentMarksSubmissionStatus.values()[resultSet.getInt("STATUS")]);
             marks.setStatusId(resultSet.getInt("STATUS"));
             marks.setRecheckStatusId(resultSet.getInt("RECHECK_STATUS"));
             marks.setRecheckStatus(RecheckStatus.values()[resultSet.getInt("RECHECK_STATUS")]);
+
+            marks.setRegType(resultSet.getInt("REG_TYPE"));
 
             AtomicReference<StudentGradeDto> atomicReference = new AtomicReference<>(marks);
             return atomicReference.get();
@@ -330,26 +337,24 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
                     else ps.setFloat(5, gradeDto.getTotal());
 
                     ps.setString(6, gradeDto.getGradeLetter());
-                    ps.setFloat(7, 4);
-                    ps.setInt(8, gradeDto.getStatusId());
+                    ps.setInt(7, gradeDto.getStatusId());
 
-                    ps.setInt(9, pSemesterId);
-                    ps.setString(10, pCourseId);
-                    ps.setInt(11, pExamType);
-                    ps.setString(12, gradeDto.getStudentId());
+                    ps.setInt(8, pSemesterId);
+                    ps.setString(9, pCourseId);
+                    ps.setInt(10, pExamType);
+                    ps.setString(11, gradeDto.getStudentId());
                 }
                 if(courseType==CourseType.SESSIONAL) {
                     if (gradeDto.getTotal() == -1) ps.setNull(1, Types.NULL);
                     else ps.setFloat(1, gradeDto.getTotal());
 
                     ps.setString(2, gradeDto.getGradeLetter());
-                    ps.setFloat(3, 4);
-                    ps.setInt(4, gradeDto.getStatusId());
+                    ps.setInt(3, gradeDto.getStatusId());
 
-                    ps.setInt(5, pSemesterId);
-                    ps.setString(6, pCourseId);
-                    ps.setInt(7, pExamType);
-                    ps.setString(8, gradeDto.getStudentId());
+                    ps.setInt(4, pSemesterId);
+                    ps.setString(5, pCourseId);
+                    ps.setInt(6, pExamType);
+                    ps.setString(7, gradeDto.getStudentId());
                 }
             }
             @Override

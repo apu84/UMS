@@ -77,7 +77,7 @@
 /// <reference path='directive/SelectPicker.ts'/>
 /// <reference path='directive/ConvertToNumber.ts'/>
 /// <reference path='directive/Modal.ts'/>
-
+/// <reference path='directive/CourseRegTypeLegend.ts'/>
 
 /// <reference path='interceptor/Unauthorized.ts'/>
 /// <reference path='interceptor/ValidationExceptions.ts'/>

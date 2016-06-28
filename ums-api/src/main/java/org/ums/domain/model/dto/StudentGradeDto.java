@@ -24,6 +24,7 @@ public class StudentGradeDto {
 
     private RecheckStatus recheckStatus;
     private int recheckStatusId;
+    private int regType;
 
     //Don't know whether we need them or not
     private String previousStatusString; //This will hold the candidates previous Status String which will be used in an in query
@@ -150,6 +151,14 @@ public class StudentGradeDto {
 
     public int getRecheckStatusId() {
         return recheckStatusId;
+    }
+
+    public int getRegType() {
+        return regType;
+    }
+
+    public void setRegType(int regType) {
+        this.regType = regType;
     }
 
     public void setRecheckStatusId(int recheckStatusId) {
