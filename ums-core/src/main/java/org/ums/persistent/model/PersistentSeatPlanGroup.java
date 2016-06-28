@@ -38,6 +38,8 @@ public class PersistentSeatPlanGroup implements MutableSeatPlanGroup {
   private int mGroupNo;
   private String mLastUpdateDate;
   private int mType;
+  private int mTotalStudentNumber;
+  private String mProgramShortName;
 
   public PersistentSeatPlanGroup(){
 
@@ -52,9 +54,31 @@ public class PersistentSeatPlanGroup implements MutableSeatPlanGroup {
     mAcademicYear = pPersistentSeatPlanGroup.getAcademicYear();
     mAcademicSemester = pPersistentSeatPlanGroup.getAcademicSemester();
     mGroupNo = pPersistentSeatPlanGroup.getGroupNo();
+    mTotalStudentNumber = pPersistentSeatPlanGroup.getTotalStudentNumber();
+    mProgramShortName = pPersistentSeatPlanGroup.getProgramName();
     mLastUpdateDate = pPersistentSeatPlanGroup.getLastUpdateDate();
   }
 
+
+  @Override
+  public void setTotalStudentNumber(int pTotalStudentNumber) {
+    mTotalStudentNumber = pTotalStudentNumber;
+  }
+
+  @Override
+  public void setProgramShortName(String pProgramShortName) {
+    mProgramShortName = pProgramShortName;
+  }
+
+  @Override
+  public int getTotalStudentNumber() {
+    return mTotalStudentNumber;
+  }
+
+  @Override
+  public String getProgramName() {
+    return mProgramShortName;
+  }
 
   @Override
   public void setLastUpdateDate(String pLastUpdateDate) {

@@ -1,0 +1,16 @@
+
+<h1>Here I am</h1>
+<p>{{seatPlanGroup}}</p>
+    <ul data-ng-repeat="group in seatPlanGroup track by group.id"   id="sortable"  class="connectedSortable">
+        <li class="ui-state-default" id="{{group.id}}">
+            <div>
+                {{group.programName}}:{{group.year}}/{{group.semester}} ({{group.studentNumber}})
+            </div>
+            <div data-ng-show="group.showSubPortion">
+                <hr>
+                Split size: <input  data-ng-model="splitNumber" style="width:40px;color: black "  />
+                <button data-ng-click="splitAction(splitNumber)" style="color: black">Split</button><button data-ng-click="cancelSplitAction()" style="color: black">cancel</button>
+                <br>
+            </div>
+        </li>
+    </ul>

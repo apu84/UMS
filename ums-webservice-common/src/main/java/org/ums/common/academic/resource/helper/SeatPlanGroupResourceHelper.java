@@ -9,6 +9,9 @@ import org.ums.common.builder.SeatPlanGroupBuilder;
 import org.ums.domain.model.immutable.SeatPlanGroup;
 import org.ums.domain.model.mutable.MutableSeatPlanGroup;
 import org.ums.manager.*;
+import org.ums.persistent.model.PersistentProgram;
+import org.ums.persistent.model.PersistentSeatPlanGroup;
+import org.ums.persistent.model.PersistentSemester;
 import org.ums.response.type.GenericResponse;
 import org.ums.services.academic.SeatPlanService;
 
@@ -19,6 +22,7 @@ import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -80,7 +84,9 @@ public class SeatPlanGroupResourceHelper extends ResourceHelper<SeatPlanGroup,Mu
 
     if(seatPlanGroupExistForTheSemesterAndType==true  && update==0){
 
-      seatPlanGroupForSemester = mSeatPlanGroupManager.getGroupBySemester(pSemesterId,type);
+      //seatPlanGroupForSemester = mSeatPlanGroupManager.getGroupBySemester(pSemesterId,type);
+
+      seatPlanGroupForSemester = mSeatPlanGroupManager.getGroupBySemesterTypeFromDb(pSemesterId,type);
         for(SeatPlanGroup seatPlanGroup: seatPlanGroupForSemester){
 
           children.add(toJson(seatPlanGroup,pUriInfo,localCache));
@@ -88,7 +94,7 @@ public class SeatPlanGroupResourceHelper extends ResourceHelper<SeatPlanGroup,Mu
 
     }
     else{
-      genericResponse = mSeatPlanService.generateGroup(pSemesterId,type);
+      /*genericResponse = mSeatPlanService.generateGroup(pSemesterId,type);
       if (genericResponse != null ) {
         seatPlanGroupForSemester = mSeatPlanGroupManager.getGroupBySemester(pSemesterId,type);
         for(SeatPlanGroup seatPlanGroup: seatPlanGroupForSemester){
@@ -98,8 +104,36 @@ public class SeatPlanGroupResourceHelper extends ResourceHelper<SeatPlanGroup,Mu
       }
       else{
         genericResponse.setMessage(genericResponse.getMessage() + "\n" + previousResponse.getMessage());
+      }*/
+
+      List<SeatPlanGroup> seatplanGroups = mSeatPlanGroupManager.getGroupBySemester(pSemesterId,type);
+
+      List<MutableSeatPlanGroup> mutableSeatPlanGroups = new ArrayList<>();
+
+      for(SeatPlanGroup group: seatplanGroups){
+        MutableSeatPlanGroup mSeatPlanGroup = new PersistentSeatPlanGroup();
+        PersistentSemester semester = new PersistentSemester();
+        semester.setId(group.getSemester().getId());
+        mSeatPlanGroup.setSemester(semester);
+        PersistentProgram program = new PersistentProgram();
+        program.setId(group.getProgram().getId());
+        mSeatPlanGroup.setProgram(program);
+        mSeatPlanGroup.setAcademicYear(group.getAcademicYear());
+        mSeatPlanGroup.setAcademicSemester(group.getAcademicSemester());
+        mSeatPlanGroup.setGroupNo(group.getGroupNo());
+        mSeatPlanGroup.setExamType(group.getExamType());
+        mSeatPlanGroup.setProgramShortName(group.getProgramName());
+        mSeatPlanGroup.setTotalStudentNumber(group.getTotalStudentNumber());
+        mutableSeatPlanGroups.add(mSeatPlanGroup);
       }
 
+      mSeatPlanGroupManager.create(mutableSeatPlanGroups);
+
+      seatPlanGroupForSemester = mSeatPlanGroupManager.getGroupBySemesterTypeFromDb(pSemesterId,type);
+      for(SeatPlanGroup seatPlanGroup: seatPlanGroupForSemester){
+
+        children.add(toJson(seatPlanGroup,pUriInfo,localCache));
+      }
     }
 
     object.add("entries", children);

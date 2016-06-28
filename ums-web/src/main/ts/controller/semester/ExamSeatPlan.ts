@@ -89,6 +89,7 @@ module ums{
 
     //map in javascript
     subGroupWithDeptMap:any;
+    groupNumeberSelection:Function;
     mouseClickEvent:Function;
     viewGroups:Function;
     getSemesterInfo:Function;
@@ -306,6 +307,8 @@ module ums{
     private getSelectedGroupList(group:number):void{
       this.$scope.selectedGroupList = this.$scope.tempGroupListAll;
     }
+
+
 
     private cancelSplitAction(splitId:number):void{
 
@@ -692,7 +695,7 @@ module ums{
 
     private createOrViewSubgroups(group:number):void{
 
-
+      this.$scope.groupNoForSeatPlanViewing = group;
       this.$scope.tempIdList=[];
       this.$scope.subGroupWithDeptMap={};
       this.$scope.tempGroupList=[];
@@ -1166,6 +1169,7 @@ module ums{
       }).disableSelection();
 
 
+
       //this.reCreate();
       var classScope = this;
       $("#sortable").sortable({
@@ -1347,7 +1351,7 @@ module ums{
       $("#droppable6").sortable("enable");
 
 
-      $("#sortable").sortable("refresh");
+      $("#sortable").sortable("enable");
 
     }
 
@@ -2062,7 +2066,8 @@ module ums{
 
     private closeSubGroupOrRoomInfoWindow():void{
 
-      this.makeSortableEmpty();
+
+      $("#sortable").empty();
 
       console.log(" -- close button clicked---");
       this.$scope.groupSelected = false;
@@ -2084,6 +2089,7 @@ module ums{
         $( "#subGroupPanel").unbind( "mousedown" );
         $("#subGroupPanel li").unbind("contextmenu");
         $("#ifti_div").unbind("contextmenu");
+        $("#sortable").empty();
       }
 
 

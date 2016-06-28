@@ -18,4 +18,6 @@ public interface SeatPlanGroup extends Serializable,LastModifier,EditType<Mutabl
   int getGroupNo();
   String getLastUpdateDate();
   int getExamType();
+  int getTotalStudentNumber();
+  String getProgramName();
 }

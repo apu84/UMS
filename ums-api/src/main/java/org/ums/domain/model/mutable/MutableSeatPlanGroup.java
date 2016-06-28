@@ -17,4 +17,6 @@ public interface MutableSeatPlanGroup extends SeatPlanGroup,Mutable,MutableLastM
   void setGroupNo(final int pGroupNo);
   void setExamType(final int mType);
   void setLastUpdateDate(final String pLastUpdateDate);
+  void setTotalStudentNumber(final int pTotalStudentNumber);
+  void setProgramShortName(final String pProgramShortName);
 }
