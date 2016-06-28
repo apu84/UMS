@@ -6,7 +6,7 @@ import org.ums.domain.model.mutable.MutableExaminer;
 import org.ums.manager.CacheManager;
 
 public class ExaminerCache extends AssignedTeacherCache<Examiner, MutableExaminer, Integer> {
-  public ExaminerCache(final CacheManager<Examiner> pCacheManager) {
+  public ExaminerCache(final CacheManager<Examiner, Integer> pCacheManager) {
     super(pCacheManager);
   }
 }

@@ -9,14 +9,14 @@ import org.ums.util.CacheUtil;
 
 public class BearerAccessTokenCache extends ContentCache<BearerAccessToken, MutableBearerAccessToken, String, BearerAccessTokenManager>
     implements BearerAccessTokenManager {
-  private CacheManager<BearerAccessToken> mCacheManager;
+  private CacheManager<BearerAccessToken, String> mCacheManager;
 
-  public BearerAccessTokenCache(final CacheManager<BearerAccessToken> pBearerAccessTokenCacheManager) {
+  public BearerAccessTokenCache(final CacheManager<BearerAccessToken, String> pBearerAccessTokenCacheManager) {
     mCacheManager = pBearerAccessTokenCacheManager;
   }
 
   @Override
-  protected CacheManager<BearerAccessToken> getCacheManager() {
+  protected CacheManager<BearerAccessToken, String> getCacheManager() {
     return mCacheManager;
   }
 

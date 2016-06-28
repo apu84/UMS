@@ -7,7 +7,7 @@ module ums {
     public height: string = "auto";
     public scroll: boolean = false;
     public scrollrows: boolean = true;
-    public rowNum:number = 10;
+    public rowNum:number = 18;
     public currentSelectedRowId: string = '';
     public colModel: any;
     public loadonce: boolean = true;

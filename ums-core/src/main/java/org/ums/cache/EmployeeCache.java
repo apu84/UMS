@@ -11,14 +11,14 @@ import java.util.List;
 
 public class EmployeeCache extends ContentCache<Employee,MutableEmployee,String,EmployeeManager> implements EmployeeManager {
 
-  private CacheManager<Employee> mCacheManager;
+  private CacheManager<Employee, String> mCacheManager;
 
-  public EmployeeCache(final CacheManager<Employee> pCacheManager){
+  public EmployeeCache(final CacheManager<Employee, String> pCacheManager){
     mCacheManager = pCacheManager;
   }
 
   @Override
-  protected CacheManager<Employee> getCacheManager() {
+  protected CacheManager<Employee, String> getCacheManager() {
     return mCacheManager;
   }
 

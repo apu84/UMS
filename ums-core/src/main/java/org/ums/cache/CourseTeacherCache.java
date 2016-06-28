@@ -7,7 +7,7 @@ import org.ums.manager.CacheManager;
 public class CourseTeacherCache
     extends AssignedTeacherCache<CourseTeacher, MutableCourseTeacher, Integer> {
 
-  public CourseTeacherCache(final CacheManager<CourseTeacher> pCacheManager) {
+  public CourseTeacherCache(final CacheManager<CourseTeacher, Integer> pCacheManager) {
     super(pCacheManager);
   }
 }

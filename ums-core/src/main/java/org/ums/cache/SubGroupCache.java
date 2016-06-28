@@ -11,14 +11,14 @@ import java.util.List;
 
 public class SubGroupCache extends ContentCache<SubGroup,MutableSubGroup,Integer,SubGroupManager> implements SubGroupManager {
 
-  CacheManager<SubGroup> mCacheManager;
+  CacheManager<SubGroup, Integer> mCacheManager;
 
-  public SubGroupCache(CacheManager<SubGroup> pCacheManager){
+  public SubGroupCache(CacheManager<SubGroup, Integer> pCacheManager){
     mCacheManager = pCacheManager;
   }
 
   @Override
-  protected CacheManager<SubGroup> getCacheManager() {
+  protected CacheManager<SubGroup, Integer> getCacheManager() {
     return mCacheManager;
   }
 

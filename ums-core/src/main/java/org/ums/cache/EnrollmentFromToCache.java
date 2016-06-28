@@ -10,14 +10,14 @@ import java.util.List;
 
 public class EnrollmentFromToCache extends ContentCache<EnrollmentFromTo, MutableEnrollmentFromTo, Integer, EnrollmentFromToManager>
     implements EnrollmentFromToManager {
-  private CacheManager<EnrollmentFromTo> mCacheManager;
+  private CacheManager<EnrollmentFromTo, Integer> mCacheManager;
 
-  public EnrollmentFromToCache(final CacheManager<EnrollmentFromTo> pCacheManager) {
+  public EnrollmentFromToCache(final CacheManager<EnrollmentFromTo, Integer> pCacheManager) {
     mCacheManager = pCacheManager;
   }
 
   @Override
-  protected CacheManager<EnrollmentFromTo> getCacheManager() {
+  protected CacheManager<EnrollmentFromTo, Integer> getCacheManager() {
     return mCacheManager;
   }
 

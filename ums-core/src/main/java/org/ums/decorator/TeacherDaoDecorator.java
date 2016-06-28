@@ -10,7 +10,7 @@ import java.util.List;
 
 public class TeacherDaoDecorator extends ContentDaoDecorator<Teacher, MutableTeacher, String, TeacherManager> implements TeacherManager {
   @Override
-  public List<Teacher> getByDepartment(Department pDepartment) {
+  public List<Teacher> getByDepartment(Department pDepartment) throws Exception{
     return getManager().getByDepartment(pDepartment);
   }
 }

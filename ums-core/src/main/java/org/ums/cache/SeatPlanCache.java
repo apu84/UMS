@@ -21,7 +21,7 @@ public class SeatPlanCache extends ContentCache<SeatPlan, MutableSeatPlan, Integ
   }
 
   @Override
-  protected CacheManager getCacheManager() {
+  protected CacheManager<SeatPlan, Integer> getCacheManager() {
     return mCacheManager;
   }
 

@@ -213,7 +213,9 @@ public class UMSContext {
   @Bean
   NavigationManager navigationManager() {
     NavigationByPermissionResolver navigationByPermissionResolver = new NavigationByPermissionResolver(mAuthenticationRealm);
-    navigationByPermissionResolver.setManager(new PersistentNavigationDao(mTemplateFactory.getJdbcTemplate()));
+    NavigationCache navigationCache = new NavigationCache(mCacheFactory.getCacheManager());
+    navigationCache.setManager(new PersistentNavigationDao(mTemplateFactory.getJdbcTemplate()));
+    navigationByPermissionResolver.setManager(navigationCache);
     return navigationByPermissionResolver;
   }
 

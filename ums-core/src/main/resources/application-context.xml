@@ -60,7 +60,7 @@
   </bean>
 
   <bean id="officialsHomeProcessor" class="org.ums.processor.userhome.OfficialsHomeProcessor">
-    <property name="allowedRole" value="sadmin,registrar,iums-secratary"/>
+    <property name="allowedRole" value="sadmin,registrar,iums-secratary,teacher"/>
   </bean>
 
   <bean id="userHomeService" class="org.ums.services.UserHomeServiceImpl">

@@ -76,7 +76,7 @@ module ums{
           status:""
         }
         //$scope.initialize = this.initialize.bind(this);
-        //this.initialize();
+        this.initialize();
         //this.$scope.initialize = this.initialize.bind(this);
         $scope.cause="";
         $scope.editApplication=false;

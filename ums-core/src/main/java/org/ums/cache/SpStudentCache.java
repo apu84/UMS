@@ -12,14 +12,14 @@ import java.util.List;
  * Created by My Pc on 4/27/2016.
  */
 public class SpStudentCache extends ContentCache<SpStudent,MutableSpStudent,String,SpStudentManager> implements SpStudentManager {
-  CacheManager<SpStudent> mCacheManager;
+  CacheManager<SpStudent, String> mCacheManager;
 
-  public SpStudentCache(CacheManager<SpStudent> pCacheManager){
+  public SpStudentCache(CacheManager<SpStudent, String> pCacheManager){
     mCacheManager = pCacheManager;
   }
 
   @Override
-  protected CacheManager<SpStudent> getCacheManager() {
+  protected CacheManager<SpStudent, String> getCacheManager() {
     return mCacheManager;
   }
 

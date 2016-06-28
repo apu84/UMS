@@ -110,6 +110,11 @@ public class MainNavigationHelper extends ResourceHelper<Navigation, MutableNavi
         if (parent != null) {
           List<Navigation> children = (List<Navigation>) parent.get("children");
           children.add(navigation);
+        } else {
+          Map<String, Object> navigationMap = new HashMap<>();
+          navigationMap.put("navigation", navigation);
+          navigationMap.put("children", new ArrayList<Navigation>());
+          navigationList.add(navigationMap);
         }
       }
     }

@@ -16,14 +16,14 @@ import java.util.Set;
 public class AdditionalRolePermissionsCache
     extends ContentCache<AdditionalRolePermissions, MutableAdditionalRolePermissions, Integer, AdditionalRolePermissionsManager>
     implements AdditionalRolePermissionsManager {
-  private CacheManager<AdditionalRolePermissions> mCacheManager;
+  private CacheManager<AdditionalRolePermissions, Integer> mCacheManager;
 
-  public AdditionalRolePermissionsCache(final CacheManager<AdditionalRolePermissions> pCacheManager) {
+  public AdditionalRolePermissionsCache(final CacheManager<AdditionalRolePermissions, Integer> pCacheManager) {
     mCacheManager = pCacheManager;
   }
 
   @Override
-  protected CacheManager<AdditionalRolePermissions> getCacheManager() {
+  protected CacheManager<AdditionalRolePermissions, Integer> getCacheManager() {
     return mCacheManager;
   }
 

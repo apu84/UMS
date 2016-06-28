@@ -9,14 +9,14 @@ import org.ums.util.CacheUtil;
 
 public class ProgramCache extends ContentCache<Program, MutableProgram, Integer, ProgramManager>
     implements ProgramManager {
-  private CacheManager<Program> mCacheManager;
+  private CacheManager<Program, Integer> mCacheManager;
 
-  public ProgramCache(final CacheManager<Program> pCacheManager) {
+  public ProgramCache(final CacheManager<Program, Integer> pCacheManager) {
     mCacheManager = pCacheManager;
   }
 
   @Override
-  protected CacheManager<Program> getCacheManager() {
+  protected CacheManager<Program, Integer> getCacheManager() {
     return mCacheManager;
   }
 

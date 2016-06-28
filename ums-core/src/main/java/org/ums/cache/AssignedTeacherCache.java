@@ -15,14 +15,14 @@ public class AssignedTeacherCache<R extends Identifier<I> & LastModifier, M exte
     extends ContentCache<R, M, I, AssignedTeacherManager<R, M, I>>
     implements AssignedTeacherManager<R, M, I> {
 
-  private CacheManager<R> mCacheManager;
+  private CacheManager<R, I> mCacheManager;
 
-  public AssignedTeacherCache(final CacheManager<R> pCacheManager) {
+  public AssignedTeacherCache(final CacheManager<R, I> pCacheManager) {
     mCacheManager = pCacheManager;
   }
 
   @Override
-  protected CacheManager<R> getCacheManager() {
+  protected CacheManager<R, I> getCacheManager() {
     return mCacheManager;
   }
 

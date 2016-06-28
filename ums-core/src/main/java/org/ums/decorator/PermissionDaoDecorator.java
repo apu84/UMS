@@ -10,7 +10,7 @@ import java.util.List;
 
 public class PermissionDaoDecorator extends ContentDaoDecorator<Permission, MutablePermission, Integer, PermissionManager> implements PermissionManager {
   @Override
-  public List<Permission> getPermissionByRole(Role pRole) {
+  public List<Permission> getPermissionByRole(Role pRole) throws Exception {
     return getManager().getPermissionByRole(pRole);
   }
 }

@@ -8,14 +8,14 @@ import org.ums.util.CacheUtil;
 
 public class CourseGroupCache extends ContentCache<CourseGroup, MutableCourseGroup, Integer, CourseGroupManager>
     implements CourseGroupManager {
-  private CacheManager<CourseGroup> mCacheManager;
+  private CacheManager<CourseGroup, Integer> mCacheManager;
 
-  public CourseGroupCache(final CacheManager<CourseGroup> pCacheManager) {
+  public CourseGroupCache(final CacheManager<CourseGroup, Integer> pCacheManager) {
     mCacheManager = pCacheManager;
   }
 
   @Override
-  protected CacheManager<CourseGroup> getCacheManager() {
+  protected CacheManager<CourseGroup, Integer> getCacheManager() {
     return mCacheManager;
   }
 

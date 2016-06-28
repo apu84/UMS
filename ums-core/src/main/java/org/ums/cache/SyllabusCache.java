@@ -9,14 +9,14 @@ import org.ums.util.CacheUtil;
 import java.util.List;
 
 public class SyllabusCache extends ContentCache<Syllabus, MutableSyllabus, String, SyllabusManager> implements SyllabusManager {
-  private CacheManager<Syllabus> mCacheManager;
+  private CacheManager<Syllabus, String> mCacheManager;
 
-  public SyllabusCache(final CacheManager<Syllabus> pCacheManager) {
+  public SyllabusCache(final CacheManager<Syllabus, String> pCacheManager) {
     mCacheManager = pCacheManager;
   }
 
   @Override
-  protected CacheManager<Syllabus> getCacheManager() {
+  protected CacheManager<Syllabus, String> getCacheManager() {
     return mCacheManager;
   }
 

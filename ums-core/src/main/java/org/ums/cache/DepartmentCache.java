@@ -7,14 +7,14 @@ import org.ums.manager.DepartmentManager;
 import org.ums.util.CacheUtil;
 
 public class DepartmentCache extends ContentCache<Department, MutableDepartment, String, DepartmentManager> implements DepartmentManager {
-  private CacheManager<Department> mCacheManager;
+  private CacheManager<Department, String> mCacheManager;
 
-  public DepartmentCache(final CacheManager<Department> pCacheManager) {
+  public DepartmentCache(final CacheManager<Department, String> pCacheManager) {
     mCacheManager = pCacheManager;
   }
 
   @Override
-  protected CacheManager<Department> getCacheManager() {
+  protected CacheManager<Department, String> getCacheManager() {
     return mCacheManager;
   }
 
