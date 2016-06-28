@@ -36,14 +36,14 @@ public class SeatPlanGroupBuilder implements Builder<SeatPlanGroup,MutableSeatPl
     pBuilder.add("id",pReadOnly.getId());
     pBuilder.add("semesterId",pReadOnly.getSemester().getId());
     pBuilder.add("programId",pReadOnly.getProgram().getId());
-    pBuilder.add("programName",mProgramManager.get(pReadOnly.getProgram().getId()).getShortName());
+    pBuilder.add("programName",pReadOnly.getProgramName());
     pBuilder.add("year",pReadOnly.getAcademicYear());
     pBuilder.add("semester",pReadOnly.getAcademicSemester());
     pBuilder.add("groupNo",pReadOnly.getGroupNo());
     pBuilder.add("type",pReadOnly.getExamType());
-    pBuilder.add("studentNumber",mSpStudentManager.getStudentByProgramYearSemesterStatus(pReadOnly.getProgram().getId(),pReadOnly.getAcademicYear(),pReadOnly.getAcademicSemester(),1).size());
-    String lastUpdated = pReadOnly.getLastUpdateDate();
-    pBuilder.add("lastUpdated",pReadOnly.getLastUpdateDate());
+    pBuilder.add("studentNumber",pReadOnly.getTotalStudentNumber());
+    /*String lastUpdated = pReadOnly.getLastUpdateDate();
+    pBuilder.add("lastUpdated",pReadOnly.getLastUpdateDate());*/
   }
 
   @Override

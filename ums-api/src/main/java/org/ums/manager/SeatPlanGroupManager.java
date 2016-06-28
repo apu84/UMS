@@ -10,6 +10,7 @@ import java.util.List;
  */
 public interface SeatPlanGroupManager extends ContentManager<SeatPlanGroup,MutableSeatPlanGroup,Integer> {
   List<SeatPlanGroup> getGroupBySemester(final int pSemesterId,final int pExamType);
+  List<SeatPlanGroup> getGroupBySemesterTypeFromDb(final int pSemesterId,final int pExamType);
   List<SeatPlanGroup> getBySemesterGroupAndType(int pSemesterId,int pGroupNo,int pType);
   int deleteBySemesterAndExamType(final int pSemesterId, final int pExamType);
 }

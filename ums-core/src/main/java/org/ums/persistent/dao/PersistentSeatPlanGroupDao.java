@@ -9,19 +9,47 @@ import org.ums.persistent.model.PersistentSeatPlanGroup;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by My Pc on 4/20/2016.
- */
+
 public class PersistentSeatPlanGroupDao extends SeatPlanGroupDaoDecorator {
 
 
-
-  String SELECT_ALL = "SELECT ID,SEMESTER_ID,PROGRAM_ID,YEAR,SEMESTER,GROUP_NO,TYPE,LAST_UPDATED FROM SP_GROUP ";
-  String INSERT_ONE = "INSERT INTO SP_GROUP (SEMESTER_ID,PROGRAM_ID,YEAR,SEMESTER,GROUP_NO,LAST_UPDATED,TYPE) VALUES(?,?,?,?,?, systimestamp,?)";
-  String UPDATE_ONE = "UPDATE SP_GROUP SET SEMESTER_ID=?,PROGRAM_ID=?,YEAR=?, SEMESTER=?, GROUP_NO=?, LAST_UPDATED = systimestamp, TYPE=?";
+  String SELECT_ALL = "SELECT ID,SEMESTER_ID,PROGRAM_ID,YEAR,SEMESTER,GROUP_NO,TYPE,PROGRAM_SHORT_NAME,TOTAL_STUDENT,LAST_UPDATED FROM SP_GROUP ";
+  String INSERT_ONE = "INSERT INTO SP_GROUP (SEMESTER_ID,PROGRAM_ID,YEAR,SEMESTER,GROUP_NO,LAST_UPDATED,TYPE,PROGRAM_SHORT_NAME,TOTAL_STUDENT) VALUES(?,?,?,?,?, systimestamp,?,?,?)";
+  String UPDATE_ONE = "UPDATE SP_GROUP SET SEMESTER_ID=?,PROGRAM_ID=?,YEAR=?, SEMESTER=?, GROUP_NO=?, LAST_UPDATED = systimestamp, TYPE=?,PROGRAM_SHORT_NAME=?,TOTAL_STUDENT=?";
   String DELETE_ONE = "DELETE  FROM SP_GROUP";
+  String SELECT_ALL_FROM_EXAM_ROTINE ="select tmp5.*,program_short_name from\n" +
+      "      (  " +
+      "      select group_name,tmp4.program_id,tmp4.semester,tmp4.exam_type,course_year,course_semester,count(student_id) total_student from  " +
+      "      (  " +
+      "      select tmp3.*,student_id from   " +
+      "      (select distinct semester,exam_type,program_id,course_year,course_semester,group_name from  " +
+      "      (select * from   " +
+      "      (Select EXAM_ROUTINE.*,YEAR COURSE_YEAR,MST_COURSE.SEMESTER COURSE_SEMESTER From EXAM_ROUTINE,MST_COURSE  " +
+      "      Where EXAM_ROUTINE.COURSE_ID=MST_COURSE.COURSE_ID and EXAM_ROUTINE.EXAM_TYPE=? and EXAM_ROUTINE.SEMESTER=? " +
+      "      order by exam_date  " +
+      "      ) tmp1,  " +
+      "      (select exam_date,  " +
+      "      CASE WHEN mod(ind,3)=0 THEN 3 ELSE mod(ind,3) END AS Group_name  " +
+      "      from (  " +
+      "      select tmp.exam_date,tmp.exam_type,rownum ind from (  " +
+      "      Select Distinct Exam_Date,Exam_type From EXAM_ROUTINE  where exam_date not in ( select exclude_date from sp_parameter where exam_type=? and semester_id=?)  Order by Exam_Date  " +
+      "      ) tmp)   " +
+      "      )tmp2  " +
+      "      where tmp1.exam_date = tmp2.exam_date )  " +
+      "      order by group_name  " +
+      "      )tmp3,sp_student  " +
+      "      where  " +
+      "      tmp3.program_id = sp_student.program_id  " +
+      "      and tmp3.course_year = sp_student.year  " +
+      "      and tmp3.course_semester = sp_student.semester  " +
+      "      )tmp4 group by group_name,  " +
+      "      tmp4.program_id,tmp4.semester,tmp4.exam_type,course_year,course_semester  " +
+      "      )tmp5,mst_program  " +
+      "      where tmp5.program_id = mst_program.program_id  " +
+      "      order by group_name,program_short_name,course_year,course_semester";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -31,9 +59,22 @@ public class PersistentSeatPlanGroupDao extends SeatPlanGroupDaoDecorator {
 
   @Override
   public List<SeatPlanGroup> getGroupBySemester(int pSemesterId,int pExamType) {
-    String query = SELECT_ALL+" WHERE SEMESTER_ID=? AND TYPE=? ORDER BY GROUP_NO,PROGRAM_ID,YEAR,SEMESTER ASC ";
-    return mJdbcTemplate.query(query,new Object[]{pSemesterId,pExamType},
-        new  SeatPlanGroupRowmapper());
+    String query = SELECT_ALL_FROM_EXAM_ROTINE;
+    return mJdbcTemplate.query(
+        query,
+        new Object[]{pExamType,pSemesterId,pExamType,pSemesterId},
+        new SeatPlanGroupRowmapperTemp()
+    );
+  }
+
+  @Override
+  public List<SeatPlanGroup> getGroupBySemesterTypeFromDb(int pSemesterId, int pExamType) {
+    String query = SELECT_ALL+" WHERE SEMESTER_ID=? AND TYPE=?";
+    return mJdbcTemplate.query(
+        query,
+        new Object[]{pSemesterId,pExamType},
+        new SeatPlanGroupRowmapper()
+    );
   }
 
   @Override
@@ -82,6 +123,8 @@ public class PersistentSeatPlanGroupDao extends SeatPlanGroupDaoDecorator {
     return super.delete(pMutableList);
   }
 
+
+
   @Override
   public int create(MutableSeatPlanGroup pMutable) throws Exception {
     String query = INSERT_ONE;
@@ -97,7 +140,45 @@ public class PersistentSeatPlanGroupDao extends SeatPlanGroupDaoDecorator {
 
   @Override
   public int create(List<MutableSeatPlanGroup> pMutableList) throws Exception {
-    return super.create(pMutableList);
+    return mJdbcTemplate.batchUpdate(INSERT_ONE,getInsertParamList(pMutableList)).length;
+  }
+
+
+  private List<Object[]> getInsertParamList(List<MutableSeatPlanGroup> pSeatPlanGroups) throws Exception{
+    List<Object[]> params = new ArrayList<>();
+    for(SeatPlanGroup seatPlanGroup:pSeatPlanGroups){
+      params.add(new Object[]{
+          //seatPlanGroup.getId(),
+          seatPlanGroup.getSemester().getId(),
+          seatPlanGroup.getProgram().getId(),
+          seatPlanGroup.getAcademicYear(),
+          seatPlanGroup.getAcademicSemester(),
+          seatPlanGroup.getGroupNo(),
+          seatPlanGroup.getExamType(),
+          seatPlanGroup.getProgramName(),
+          seatPlanGroup.getTotalStudentNumber(),
+      });
+    }
+
+    return params;
+  }
+
+
+  class SeatPlanGroupRowmapperTemp implements RowMapper<SeatPlanGroup>{
+    @Override
+    public SeatPlanGroup mapRow(ResultSet pResultSet, int pI) throws SQLException {
+      PersistentSeatPlanGroup seatPlanGroup = new PersistentSeatPlanGroup();
+      seatPlanGroup.setGroupNo(pResultSet.getInt("GROUP_NAME"));
+      seatPlanGroup.setProgramId(pResultSet.getInt("PROGRAM_ID"));
+      seatPlanGroup.setSemesterId(pResultSet.getInt("SEMESTER"));
+      seatPlanGroup.setExamType(pResultSet.getInt("EXAM_TYPE"));   //SELECT ID,SEMESTER_ID,PROGRAM_ID,YEAR,SEMESTER,GROUP_NO,TYPE,TO_CHAR(LAST_UPDATED,'DD/MM/YYYY'
+      seatPlanGroup.setAcademicYear(pResultSet.getInt("COURSE_YEAR"));
+      seatPlanGroup.setAcademicSemester(pResultSet.getInt("COURSE_SEMESTER"));
+      seatPlanGroup.setTotalStudentNumber(pResultSet.getInt("TOTAL_STUDENT"));
+      seatPlanGroup.setProgramShortName(pResultSet.getString("PROGRAM_SHORT_NAME"));
+     // seatPlanGroup.setLastUpdateDate(pResultSet.getString("LAST_UPDATED"));
+      return seatPlanGroup;
+    }
   }
 
   class SeatPlanGroupRowmapper implements RowMapper<SeatPlanGroup>{
@@ -110,11 +191,12 @@ public class PersistentSeatPlanGroupDao extends SeatPlanGroupDaoDecorator {
       seatPlanGroup.setAcademicYear(pResultSet.getInt("YEAR"));
       seatPlanGroup.setAcademicSemester(pResultSet.getInt("SEMESTER"));
       seatPlanGroup.setGroupNo(pResultSet.getInt("GROUP_NO"));
-      seatPlanGroup.setExamType(pResultSet.getInt("TYPE"));   //SELECT ID,SEMESTER_ID,PROGRAM_ID,YEAR,SEMESTER,GROUP_NO,TYPE,TO_CHAR(LAST_UPDATED,'DD/MM/YYYY'
       seatPlanGroup.setLastUpdateDate(pResultSet.getString("LAST_UPDATED"));
+      seatPlanGroup.setExamType(pResultSet.getInt("TYPE"));   //SELECT ID,SEMESTER_ID,PROGRAM_ID,YEAR,SEMESTER,GROUP_NO,TYPE,TO_CHAR(LAST_UPDATED,'DD/MM/YYYY'
+      seatPlanGroup.setProgramShortName(pResultSet.getString("PROGRAM_SHORT_NAME"));
+      seatPlanGroup.setTotalStudentNumber(pResultSet.getInt("TOTAL_STUDENT"));
       return seatPlanGroup;
     }
   }
-
 
 }
