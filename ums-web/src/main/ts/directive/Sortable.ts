@@ -28,7 +28,7 @@ module ums{
     baseId:number;
   }
 
-  export class SortableDirective{
+/*  export class SortableDirective{
     public static $inject = ['appConstants','HttpClient','$scope','$q','notify','$timeout','$sce','$window'];
     constructor(private appConstants: any, private httpClient: HttpClient, private $scope: SortableScope,
                 private $q:ng.IQService, private notify: Notify,private $timeout:ITimeoutService,
@@ -71,31 +71,32 @@ module ums{
       });
     }
 
-  }
+  }*/
 
   export class Sortable implements ng.IDirective{
     public scope={
-      tempGroupList:'=',
+      seatPlanGroup:'=',
       connectWith:'=',
       subGroupListChanged:'&',
       subGroupNumber:'='
     };
 
-  public templateUrl:string ="./views/directive/sub-group-sortable.html";
+    public templateUrl:string ="./views/directive/sub-group-sortable.html";
 
-    public controller = SortableDirective;
-
-
-
-    /*public link = ($scope:SortableScope, element: any, attrs:any)=>{
+    //public controller = SortableDirective;
 
 
+
+    public link = ($scope:SortableScope, element: any, attrs:any)=>{
 
 
       console.log("~~~~~ inside directive ~~~~~~~");
+
+      console.log(attrs.seatPlanGroup);
+      $scope.seatPlanGroup = attrs.seatPlanGroup;
       console.log($scope.seatPlanGroup);
 
-      $scope.$watchCollection('seatPlanGroup',makeSortable)
+      $scope.$watchCollection('seatPlanGroup',makeSortable);
 
       function makeSortable(){
         $("#sortable9").sortable({
@@ -128,8 +129,8 @@ module ums{
       }
 
 
-    }*/
+    }
   }
 
-  UMS.directive("uiSortable", () => new Sortable());
+  UMS.directive("sortableSeatPlan", () => new Sortable());
 }

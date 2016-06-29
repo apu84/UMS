@@ -125,6 +125,7 @@ module ums{
     mergeGroups:Function;
     makeSortableEmpty:Function;
     makeSortableCancel:Function;
+    makeSortableEnable:Function;
 
     reCreate:Function;
     editSavedSubGroup:Function;
@@ -286,6 +287,7 @@ module ums{
       $scope.mergeGroups = this.mergeGroups.bind(this);
       $scope.makeSortableEmpty = this.makeSortableEmpty.bind(this);
       $scope.makeSortableCancel = this.makeSortableCancel.bind(this);
+      $scope.makeSortableEnable = this.makeSortableEnable.bind(this);
       this.initialize();
 
     }
@@ -339,8 +341,7 @@ module ums{
     }
 
     private splitAction(splitNumber:number):void{
-      console.log("TempGroupListAll---->");
-      console.log(this.$scope.tempGroupListAll)
+
       this.$scope.splitActionOccured = true;
       this.$scope.recreate = true;
 
@@ -348,7 +349,6 @@ module ums{
         var members =this.$scope.tempGroupList[j];
         if (members.id == this.$scope.splitId) {
 
-          console.log("Found match");
           var tempArray:Array<ISeatPlanGroup>=[];
           var memberStudentNumber :any={};
           memberStudentNumber= members.studentNumber;
@@ -363,7 +363,6 @@ module ums{
           this.$scope.tempGroupListAll[j].showSubPortion=false;
           this.$scope.tempGroupList[j].baseId = angular.copy(this.$scope.tempGroupList[j].baseId);
           this.$scope.tempGroupListAll[j].baseId = angular.copy(this.$scope.tempGroupList[j].baseId);
-          console.log("---previous member id : "+previousMember.id);
 
           //var newMember = tempMemberStore[j];
           var newMember:any={};
@@ -435,7 +434,6 @@ module ums{
           this.changeTotalStudentNumberForSplitAction();
 
 
-          console.log("-- new member id: "+newMember.id);
 
         } else {
           //this.$scope.tempGroupList[i].groupMembers.push(members);
@@ -494,14 +492,12 @@ module ums{
     }
 
     private revertSplitAction():void{
-      console.log("In the revertSplitAction() section");
-      console.log(this.$scope.tempGroupListForSplitInversion);
+
       for(var i=0;i<this.$scope.tempGroupListForSplitInversion.length;i++){
         if(this.$scope.tempGroupListForSplitInversion[i].id == this.$scope.splitId){
           this.$scope.tempGroupListAll[i].studentNumber=this.$scope.tempGroupListForSplitInversion[i].studentNumber;
           this.$scope.tempGroupList[i].studentNumber=this.$scope.tempGroupListForSplitInversion[i].studentNumber;
 
-          console.log(this.$scope.tempGroupList[i].studentNumber);
           this.$scope.tempGroupListAll[i].splitOccuranceNumber=0;
           this.$scope.tempGroupList[i].splitOccuranceNumber=0;
 
@@ -570,9 +566,7 @@ module ums{
     }
 
     private splitCourseStudent(menuNumber:number):void{
-      console.log("_____split id_____");
-      console.log(this.$scope.splitId);
-      console.log("splitting started");
+
       var currentScope = this;
 
       if(menuNumber==1){
@@ -620,7 +614,6 @@ module ums{
         this.$scope.$apply();
       }
 
-      console.log("--Splitting concluded--");
 
     }
 
@@ -629,7 +622,6 @@ module ums{
       var member:any;
       for(var j=0;j<this.$scope.tempGroupListAll.length;j++){
         if(this.$scope.tempGroupListAll[j].id == groupId){
-          console.log("found match");
           if(this.$scope.tempSubGropStudentList==null){
             this.$scope.tempSubGropStudentList=[];
             this.$scope.tempGroupListAll[j].studentNumber = studentNumber;
@@ -731,12 +723,11 @@ module ums{
 
 
       $("#splittedList").enableSelection();
-      console.log("*** temp group list all***");
-      console.log(this.$scope.tempGroupListAll);
+
       for(var i=0;i<this.$scope.groupList.length;i++){
         if(this.$scope.groupList[i].groupNumber==group){
           this.$scope.selectedGroupTotalStudent = this.$scope.groupList[i].totalStudentNumber;
-          console.log("--total student--:"+this.$scope.selectedGroupTotalStudent);
+
           break;
         }
       }
@@ -749,17 +740,14 @@ module ums{
       this.$scope.selectedGroupNo = group;
       this.getSelectedGroupList(group);
 
-      console.log("Re create button condition before");
-      console.log(this.$scope.recreateButtonClicked);
+
       this.$scope.subGroupList = [];
 
       this.getSubGroupInfo().then((subGroupArr:Array<ISubGroupDb>)=>{
 
-        console.log("subgroup arr");
-        console.log(subGroupArr);
+
 
         if(subGroupArr.length>0 && this.$scope.recreateButtonClicked==false){
-          console.log("well, recreateButton is not clicked!");
           this.$scope.subGroupFound = true;
 
 
@@ -796,8 +784,6 @@ module ums{
 
 
           }
-          console.log("****************");
-          console.log(this.$scope.subGroupList);
           this.$scope.tempSubGroupList=[];
           this.$scope.tempSubGroupList = angular.copy(this.$scope.subGroupList);
           this.$scope.tempGroupListAll=[];
@@ -815,17 +801,13 @@ module ums{
             this.$scope.subGroupWithDeptMap[this.$scope.subGroupList[i].subGroupNumber]=studentList;
 
           }
-          console.log("$$$$ temp group list All after sub group found$$$$$$");
-          console.log(this.$scope.tempGroupListAll);
           this.$scope.tempGroupListForSplitInversion=[];
           this.$scope.tempGroupListForSplitInversion = angular.copy(this.$scope.tempGroupListAll);
 
-          console.log("tempgroupListAll--->");
-          console.log(this.$scope.tempGroupListAll);
+          if(this.$scope.editButtonClicked==false){
 
-          setTimeout(subGroupFunc,2000);
+            console.log("I am in");
 
-          function subGroupFunc(){
             $("#sortable1,#sortable2,#sortable3,#sortable4,#sortable5,#sortable6,#sortable0").sortable({
               connectWith: ".connectedSortable"
 
@@ -840,8 +822,15 @@ module ums{
             $("#sortable5").sortable("disable");
             $("#sortable6").sortable("disable");
             $("#sortable0").sortable("disable");
+            /*setTimeout(subGroupFunc,2000);
 
+            function subGroupFunc(){
+
+
+            }*/
           }
+
+
           //this.makeSortableEmpty();
 
 
@@ -872,14 +861,17 @@ module ums{
             this.reCreate();
 
           }
+
+
           this.$scope.showSubGroupSelectionNumber = true;
 
 
 
           /*this.$scope.$apply();*/
-          this.createDroppable();
-
           //this.createDroppable();
+
+          //
+          this.createDroppable();
 
           this.mouseClickEvent();
 
@@ -915,8 +907,6 @@ module ums{
 
 
     private mergeGroups():void{
-      console.clear();
-      console.log("in the merge groups");
       if(this.$scope.mergeIdList.length>1){
         var studentNumber:number=0;
 
@@ -927,19 +917,14 @@ module ums{
             }
           }
         }
-        console.log("student number: "+ studentNumber);
         for(var i=0;i<this.$scope.tempGroupListAll.length;i++){
           if(this.$scope.tempGroupListAll[i].id==this.$scope.splitId){
             this.$scope.tempGroupListAll[i].studentNumber = 0;
             this.$scope.tempGroupListAll[i].studentNumber = studentNumber;
-            console.log("temp group student number: "+ this.$scope.tempGroupListAll[i].studentNumber);
-            console.log("------temp group list check---------");
-            console.log(this.$scope.tempGroupListAll[i]);
-            console.log("------temp group list check ends-----");
+
           }
         }
-        console.log(this.$scope.mergeIdList);
-        console.log(this.$scope.splitId);
+
         var indexForDelete:Array<number>=[];
         var idString:Array<string>=[];
         for(var i=0;i<this.$scope.mergeIdList.length;i++){
@@ -947,7 +932,6 @@ module ums{
 
 
 
-            console.log("-----------------------");
             for(var j=0;j<this.$scope.tempGroupListAll.length;j++){
               if(this.$scope.tempGroupListAll[j].id==this.$scope.mergeIdList[i]){
                 indexForDelete.push(j);
@@ -966,7 +950,6 @@ module ums{
           $('#'+idString[i]).remove();
         }
 
-        console.log(this.$scope.tempGroupListAll);
         this.$scope.mergeIdList=[];
         this.$scope.mergeIdList.push(this.$scope.splitId);
       }
@@ -980,7 +963,6 @@ module ums{
     }
 
     private mergeInitialization(id:string):void{
-      console.log("Inside merge initialization")
 
       var idNum = +id;
 
@@ -1009,9 +991,7 @@ module ums{
             baseId = this.getBaseId(this.$scope.mergeIdList[i]);
           }else{
             var tempBaseId:number = this.getBaseId(this.$scope.mergeIdList[i]);
-            console.log("*****");
-            console.log(tempBaseId);
-            console.log(baseId);
+
             if(baseId!=tempBaseId){
               mismatchFound=true;
               break;
@@ -1039,7 +1019,7 @@ module ums{
         }
       }
 
-      console.log(this.$scope.mergeIdList);
+
     }
 
 
@@ -1066,8 +1046,7 @@ module ums{
       setTimeout(myFunction, 2000)
       $("#ifti_div").on("contextmenu", function (event) {
         event.preventDefault();
-        console.log("ifti");
-        console.log($( "#subGroupPanel" ).find( "li" ));
+
       });
       //console.log($( "#subGroupPanel" ).find( "li" ));
 
@@ -1077,7 +1056,6 @@ module ums{
         // Trigger action when the contexmenu is about to be shown
         $("#subGroupPanel li").on("contextmenu", function (event) {
 
-          console.log("Inside 'contextmenu' ....................");
           // Avoid the real one
           event.preventDefault();
 
@@ -1096,10 +1074,8 @@ module ums{
 
 // If the document is clicked somewhere
         $("#subGroupPanel").bind("mousedown", function (e) {
-          console.log("Inside 'mousedown' ....................");
           // If the clicked element is not the menu
           if (!($(e.target).parents(".custom-menu").length > 0)) {
-            console.log("inside .....???.................")
             // Hide it
             $(".custom-menu").hide(100);
           }
@@ -1110,7 +1086,6 @@ module ums{
          * with the line: $(this).attr('id') , we are getting the id when the right mouse button click event is triggered.*/
         var classScope = this;
         $("#subGroupPanel li").mousedown(function(event){
-          console.log("In the list");
           switch(event.which){
             case 1:
               var ids = $(this).attr('id');
@@ -1119,11 +1094,8 @@ module ums{
               break;
             case 3:
               var id = $(this).attr('id');
-              console.log($(this));
 
               currentScope.$scope.splitId = +id;
-              console.log("split id: "+currentScope.$scope.splitId);
-              console.log($(this).attr('id'));
               break;
           }
         });
@@ -1147,13 +1119,9 @@ module ums{
         switch($(this).attr("data-action")) {
 
           case "split": currentScope.$scope.splitButtonClicked=true;
-            console.log('split button before function call');
-            console.log(currentScope.$scope.splitButtonClicked);
             currentScope.splitCourseStudent(1);
-            console.log("Split button is clicked");break;
           case "revertSplit":
             currentScope.$scope.reverseSplitButtonClicked=true;
-            console.log("Reverse button is clicked!");
             currentScope.revertSplitAction();
             break;
           case "merge":
@@ -1165,6 +1133,7 @@ module ums{
 
     }
     private createDroppable():void{
+
       $("#sortable,#droppable1,#droppable2,#droppable3,#droppable4,#dropdown5,#droppable6,#splittedList,#sotable0").sortable({
         connectWith: ".connectedSortable"
 
@@ -1345,15 +1314,13 @@ module ums{
         }
       });
 
+     /* $("#sortable").sortable("enable");
       $("#droppable1").sortable("enable");
       $("#droppable2").sortable("enable");
       $("#droppable3").sortable("enable");
       $("#droppable4").sortable("enable");
       $("#droppable5").sortable("enable");
-      $("#droppable6").sortable("enable");
-
-
-      $("#sortable").sortable("enable");
+      $("#droppable6").sortable("enable"); */
 
     }
 
@@ -1407,11 +1374,7 @@ module ums{
 
     private editSavedSubGroup(groupNo:number):void{
       $(".connectedSortable").css("background-color","skyblue");
-      console.log("Edit button clicked");
-      if(this.$scope.subGroupFound==false){
-        this.createOrViewSubgroups(groupNo);
 
-      }
       this.$scope.showContextMenu=true;
       this.$scope.editButtonClicked=true;
       this.$scope.saveSubGroupInfo=true;
@@ -1645,14 +1608,15 @@ module ums{
        this.$scope.$apply();
        }*/
 
+      if(this.$scope.subGroupFound==false){
+        this.createOrViewSubgroups(groupNo);
+
+      }
+
     }
 
     private subGroupListChanged(subGroupNumber:number,result:any){
-      //console.clear();
-      console.log("Sub group number: "+subGroupNumber);
-      console.log("Items");
-      console.log(result);
-      console.log(this.$scope.tempGroupListAll);
+
       if(this.$scope.subGroupList.length ==0){
         var subGroup:any={};
         subGroup.subGroupNumber = subGroupNumber;
@@ -1677,8 +1641,7 @@ module ums{
         var subGroupFound= false;
         for( var i=0;i< this.$scope.subGroupList.length;i++){
           if(this.$scope.subGroupList[i].subGroupNumber == subGroupNumber){
-            console.log(" a sub group match found");
-            console.log(this.$scope.subGroupList[i]);
+
             this.$scope.subGroupList[i].subGroupMembers = [];
             /*if(this.$scope.subGroupFound==true){
              var subGroupName:string="Sub Group "+subGroupNumber;
@@ -1696,10 +1659,7 @@ module ums{
                     this.$scope.subGroupList[i].subGroupMembers.push(this.$scope.tempGroupListAll[j]);
                     this.$scope.subGroupList[i].subGroupTotalStudentNumber+= this.$scope.tempGroupListAll[j].studentNumber;
 
-                    console.log("inside sub group lsit changed");
-                    console.log(this.$scope.subGroupList[i].subGroupMembers);
-                    console.log(this.$scope.subGroupList[i].subGroupTotalStudentNumber);
-                    console.log("------------------------------------");
+
                     break;
                   }
                 }
@@ -1731,9 +1691,7 @@ module ums{
             }
 
           }
-          console.log(subGroup);
           this.$scope.subGroupList.push(subGroup);
-          console.log(this.$scope.subGroupList);
         }
       }
 
@@ -1777,8 +1735,6 @@ module ums{
       this.$scope.recreateButtonClicked=false;
       var seatPlanJsonDataList:Array<ISeatPlanJsonData>=[];
       var tempStorage:Array<ISeatPlanGroup>=[];
-      console.log("####################");
-      console.log(this.$scope.subGroupList);
       tempStorage=angular.copy(this.$scope.tempGroupListAll);
       for(var i=0;i<this.$scope.subGroupList.length;i++){
         var position=1;
@@ -1830,8 +1786,6 @@ module ums{
         }
       }
 
-      console.log("tempStorage");
-      console.log(tempStorage);
       if(this.$scope.subGroupFound==false){
         if(tempStorage.length>0){
           for(var x=0;x<tempStorage.length;x++){
@@ -1889,8 +1843,8 @@ module ums{
         this.$scope.editSubGroup=false;
         this.$scope.deleteAndCreateNewSubGroup=false;
         this.$scope.cancelSubGroup = true;
-
-        console.log("col for sub group: "+this.$scope.colForSubgroup);
+        //$("#sortable").sortable("enable");
+        this.createDroppable();
       }
 
 
@@ -2016,6 +1970,54 @@ module ums{
       }
     }
 
+    private makeSortableEnable():void{
+      if($("#splittedList").hasClass('connectedSortable')){
+        $("#splittedList").sortable("enable");
+      }
+      if($("#sortable").hasClass('connectedSortable')){
+        $("#sortable").sortable("enable");
+      }
+      if($("#sortable0").hasClass('connectedSortable')){
+        $("#sortable0").sortable("enable");
+      }
+      if($("#sortable1").hasClass('connectedSortable')){
+        $("#sortable1").sortable("enable");
+      }
+      if($("#sortable2").hasClass('connectedSortable')){
+        $("#sortable2").sortable("enable");
+      }
+      if($("#sortable3").hasClass('connectedSortable')){
+        $("#sortable3").sortable("enable");
+      }
+      if($("#sortable4").hasClass('connectedSortable')){
+        $("#sortable4").sortable("enable");
+      }
+      if($("#sortable5").hasClass('connectedSortable')){
+        $("#sortable5").sortable("enable");
+      }
+      if($("#sortable6").hasClass('connectedSortable')){
+        $("#sortable6").sortable("enable");
+      }
+      if($("#droppable1").hasClass('connectedSortable')){
+        $("#droppable1").sortable("enable");
+      }
+      if($("#droppable2").hasClass('connectedSortable')){
+        $("#droppable2").sortable("enable");
+      }
+      if($("#droppable3").hasClass('connectedSortable')){
+        $("#droppable3").sortable("enable");
+      }
+      if($("#droppable4").hasClass('connectedSortable')){
+        $("#droppable4").sortable("enable");
+      }
+      if($("#droppable5").hasClass('connectedSortable')){
+        $("#droppable5").sortable("enable");
+      }
+      if($("#droppable6").hasClass('connectedSortable')){
+        $("#droppable6").sortable("enable");
+      }
+    }
+
     private makeSortableEmpty():void{
       if($("#splittedList").hasClass('connectedSortable')){
         $("#splittedList").empty();
@@ -2069,9 +2071,8 @@ module ums{
     private closeSubGroupOrRoomInfoWindow():void{
 
 
-      $("#sortable").empty();
+      this.makeSortableEmpty();
 
-      console.log(" -- close button clicked---");
       this.$scope.groupSelected = false;
       this.$scope.subGroupSelected = false;
       this.$scope.showGroupSelectionPanel = true;
@@ -2081,6 +2082,8 @@ module ums{
       this.$scope.cancelSubGroup = false;
       this.$scope.showContextMenu = false;
       this.$scope.subGroupList=[];
+      this.$scope.tempGroupList=[];
+      this.$scope.tempGroupListAll=[];
       this.$scope.editSubGroup=false;
       this.$scope.deleteAndCreateNewSubGroup=false;
 
@@ -2091,12 +2094,12 @@ module ums{
         $( "#subGroupPanel").unbind( "mousedown" );
         $("#subGroupPanel li").unbind("contextmenu");
         $("#ifti_div").unbind("contextmenu");
-        $("#sortable").empty();
+        $("#sortable").sortable("refresh");
       }
 
 
-      //$("#subGroupPanel li").off();
-      //$(".connectedSortable li").off();
+
+
 
     }
 
