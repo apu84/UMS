@@ -22,3 +22,11 @@ Munna
 -----
 exp DB_IUMS/ig100@XE  STATISTICS=NONE FILE='H:\IUMS-Source2\UMS\ums-dist\src\main\resources\misc\database\DB_IUMS.dmp' LOG=H:\backuplog.txt
 imp  DB_IUMS/ig100@XE  STATISTICS=NONE FILE='H:\IUMS-Source2\UMS\ums-dist\src\main\resources\misc\database\DB_IUMS.dmp' LOG=H:\backuplog.txt
+
+
+exp DB_AUST_LEGACY/l3gacy  STATISTICS=NONE FILE='H:\DB_AUST_LEGACY.dmp' LOG=H:\backuplog.txt
+
+
+
+
+

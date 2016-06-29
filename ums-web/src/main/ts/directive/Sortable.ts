@@ -1,9 +1,14 @@
 module ums{
+  import ITimeoutService = ng.ITimeoutService;
   export interface SortableScope extends ng.IScope{
-    seatPlanGroup:any;
+    seatPlanGroup:Array<ISeatPlanGroup>;
     connectWith:any;
+    tempGroupList:any;
     subGroupListChanged:Function;
     subGroupNumber:number;
+    items:any;
+
+    initialize:Function;
   }
 
   interface ISeatPlanGroup{
@@ -23,26 +28,22 @@ module ums{
     baseId:number;
   }
 
-  export class Sortable implements ng.IDirective{
-    public scope={
-      seatPlanGroup:'=',
-      connectWith:'=',
-      subGroupListChanged:'&',
-      subGroupNumber:'='
-    };
+  export class SortableDirective{
+    public static $inject = ['appConstants','HttpClient','$scope','$q','notify','$timeout','$sce','$window'];
+    constructor(private appConstants: any, private httpClient: HttpClient, private $scope: SortableScope,
+                private $q:ng.IQService, private notify: Notify,private $timeout:ITimeoutService,
+                private $sce:ng.ISCEService,private $window:ng.IWindowService) {
 
-  public templateUrl:string ="./views/directive/sub-group-sortable.html";
+      $scope.seatPlanGroup=[];
+      $scope.initialize = this.initialize.bind(this);
+    }
 
-    public link = ($scope:SortableScope, element: any, attrs:any)=>{
+    private initialize():void{
 
-
-      //element.click(alert("YOu Clicked me!"));
-
-      console.log("~~~~~ inside directive ~~~~~~~");
-      console.log($scope.seatPlanGroup);
+      var currentScope = this;
 
       $("#sortable9").sortable({
-          connectWith:".connectedSortable"
+        connectWith:".connectedSortable"
       }).disableSelection();
 
       $('#sortable9').sortable({
@@ -50,14 +51,14 @@ module ums{
         connectWith:".connectedSortable",
         items:"> li",
         over:function(event,ui){
-          $("#droppable1").css("background-color","aqua");
+          $("#sortable9").css("background-color","aqua");
         },
         receive:function(event,ui){
-          $("#droppable1").css("background-color","antiquewhite");
+          $("#sortable9").css("background-color","antiquewhite");
         },
 
         out:function(event,ui){
-          $("#droppable1").css("background-color","antiquewhite");
+          $("#sortable9").css("background-color","antiquewhite");
         },
         update:function(event,ui){
           var result = $(this).sortable('toArray');
@@ -69,6 +70,65 @@ module ums{
         }
       });
     }
+
+  }
+
+  export class Sortable implements ng.IDirective{
+    public scope={
+      tempGroupList:'=',
+      connectWith:'=',
+      subGroupListChanged:'&',
+      subGroupNumber:'='
+    };
+
+  public templateUrl:string ="./views/directive/sub-group-sortable.html";
+
+    public controller = SortableDirective;
+
+
+
+    /*public link = ($scope:SortableScope, element: any, attrs:any)=>{
+
+
+
+
+      console.log("~~~~~ inside directive ~~~~~~~");
+      console.log($scope.seatPlanGroup);
+
+      $scope.$watchCollection('seatPlanGroup',makeSortable)
+
+      function makeSortable(){
+        $("#sortable9").sortable({
+          connectWith:".connectedSortable"
+        }).disableSelection();
+
+        $('#sortable9').sortable({
+          cursor: "move",
+          connectWith:".connectedSortable",
+          items:"> li",
+          over:function(event,ui){
+            $("#sortable9").css("background-color","aqua");
+          },
+          receive:function(event,ui){
+            $("#sortable9").css("background-color","antiquewhite");
+          },
+
+          out:function(event,ui){
+            $("#sortable9").css("background-color","antiquewhite");
+          },
+          update:function(event,ui){
+            var result = $(this).sortable('toArray');
+            this.subGroupListChanged()(this.subGroupNumber,result);
+          },
+
+          change:function(event,ui){
+
+          }
+        });
+      }
+
+
+    }*/
   }
 
   UMS.directive("uiSortable", () => new Sortable());

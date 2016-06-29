@@ -1,6 +1,7 @@
 module ums{
 
   import ITimeoutService = ng.ITimeoutService;
+
   //import UISortableOptions = angular.ui.UISortableOptions;
   interface IExamSeatPlanScope extends ng.IScope{
     semesterList:Array<ISemester>;
@@ -8,6 +9,7 @@ module ums{
     subGroupStorage:Array<String>;
     seatPlanJsonData:Array<ISeatPlanJsonData>;
     roomList:any;
+
 
     data:any;
     selectedSubGroupNo:string;
@@ -200,7 +202,7 @@ module ums{
     public static $inject = ['appConstants','HttpClient','$scope','$q','notify','$timeout','$sce','$window'];
     constructor(private appConstants: any, private httpClient: HttpClient, private $scope: IExamSeatPlanScope,
                 private $q:ng.IQService, private notify: Notify,private $timeout:ITimeoutService,
-                private $sce:ng.ISCEService,private $window:ng.IWindowService ) {
+        private $sce:ng.ISCEService,private $window:ng.IWindowService) {
 
       var arr : { [key:number]:Array<ISeatPlanGroup>; } = {};
       $scope.mergeIdList=[];
