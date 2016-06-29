@@ -68,6 +68,7 @@ module ums {
     loadPrograms:Function;
 
     generateXls:Function;
+    calculateStyle:Function;
   }
   interface IStudentMarks {
     studentId:string;
@@ -82,6 +83,7 @@ module ums {
     gradePoint:number;
     statusId:number;
     statusName:string;
+    regType:number;
   }
   interface IStudent{
     studentId:string;
@@ -191,6 +193,8 @@ module ums {
       $scope.loadPrograms=this.loadPrograms.bind(this);
 
       $scope.generateXls=this.generateXls.bind(this);
+      $scope.calculateStyle=this.calculateStyle.bind(this);
+
       //$scope.inputParams.program_type=11;
 
       //$scope.inputParams.program_type=11;
@@ -215,6 +219,15 @@ module ums {
           }, 'arraybuffer');
     }
 
+    private calculateStyle(regType:number):any{
+      var style={backgroundColor:''};
+      if (regType == 2) style.backgroundColor='#BBFFFF';
+      else if (regType == 3) style.backgroundColor='#CCCCFF';
+      else if (regType == 4) style.backgroundColor='#00FF00';
+      else if (regType == 5) style.backgroundColor='#FFF68F';
+
+      return style;
+    }
     private loadSemesters():void{
       console.log("~~~~~~~~~~~~~~~~~~~");
       this.fetchSemesters(this.$scope.inputParams.program_type).then((semesters:Array<IOption>)=> {
@@ -585,6 +598,7 @@ module ums {
 
     private calculateTotalAndGradeLetter(student_id:string):void {
       var total;
+      var regType=$("#reg_type_" + student_id).val();
       if(this.$scope.courseType=="THEORY") {
         var quiz:number = Number($("#quiz_" + student_id).val()) || 0;
         var class_perf:number = Number($("#class_perf_" + student_id).val()) || 0;
@@ -598,16 +612,17 @@ module ums {
 
            total = quiz + class_perf + part_a + part_b;
         $("#total_" + student_id).val(String(total));
-        var grade_letter:string = this.gradeLetterFromMarks(total);
+        var grade_letter:string = this.gradeLetterFromMarks(total,regType);
         $("#grade_letter_" + student_id).val(grade_letter);
-        this.validateGrade(false, student_id, String(quiz), String(class_perf), String(part_a), String(part_b), String(total), grade_letter);
+
+        this.validateGrade(false, student_id, String(quiz), String(class_perf), String(part_a), String(part_b), String(total), grade_letter,regType);
       }
       else {
         total = $("#total_" + student_id).val();
         $("#total_" + student_id).val(String(total));
-        var grade_letter:string = this.gradeLetterFromMarks(total);
+        var grade_letter:string = this.gradeLetterFromMarks(total,regType);
         $("#grade_letter_" + student_id).val(grade_letter);
-        this.validateGrade(false, student_id, "", "", "", "", String(total), grade_letter);
+        this.validateGrade(false, student_id, "", "", "", "", String(total), grade_letter,regType);
       }
 
     }
@@ -649,7 +664,7 @@ module ums {
       var data = $('textarea[name=excel_data]').val();
       //console.log(data);
       var rows = data.split("\n");
-
+      var regType:number;
       // var table = $('<table />');asdfasfasddfj========asdfasdfasdfasdf==============f -------------asdfasdfasdkflask
       var rowError = false;
       for (var y = 0; y < rows.length; y++) {
@@ -667,7 +682,7 @@ module ums {
         //for(var x in cells) {
         // row.append('<td>'+cells[x]+'</td>');
         studentId = row[0];
-
+        regType=$("#reg_type_" + studentId).val();
         console.clear();
         console.log(row);
         console.log(studentId);
@@ -681,13 +696,13 @@ module ums {
           if (row[7] != "")
             this.setFieldValue("grade_letter_" + studentId, row[7]);
 
-          this.validateGrade(false, studentId, row[2], row[3], row[4], row[5], row[6], row[7]);
+          this.validateGrade(false, studentId, row[2], row[3], row[4], row[5], row[6], row[7],regType);
         }
         else{
           this.setFieldValue("total_" + studentId, row[2]);
           if (row[3] != "")
             this.setFieldValue("grade_letter_" + studentId, row[3]);
-          this.validateGrade(false, studentId, "","", "", "", row[2], row[3]);
+          this.validateGrade(false, studentId, "","", "", "", row[2], row[3],regType);
         }
 
 
@@ -702,7 +717,7 @@ module ums {
 
     }
 
-    private validateGrade(force_validate:boolean, student_id:string, quiz:string, class_performance:string, part_a:string, part_b:string, total:string, grade_letter:string):boolean {
+    private validateGrade(force_validate:boolean, student_id:string, quiz:string, class_performance:string, part_a:string, part_b:string, total:string, grade_letter:string,reg_type:number):boolean {
       var row_error:boolean = false;
       var border_error:any = {"border": "2px solid red"};
       var border_ok:any = {"border": "1px solid grey"};
@@ -778,7 +793,7 @@ module ums {
       }
       //Grade Letter
       if (grade_letter != "" || force_validate) {
-        if (grade_letter != "" && this.gradeLetterFromMarks(Number(total)) != grade_letter) {
+        if (grade_letter != "" && this.gradeLetterFromMarks(Number(total),reg_type) != grade_letter) {
           $("#grade_letter_" + student_id).css(border_error);
           row_error = true;
         }
@@ -793,14 +808,13 @@ module ums {
 
       if (row_error == true) {
         for (var i = 0; i < tdArray.length; i++) {
-          tdArray[i].style.backgroundColor = "#FCDC3B";//"#FFFF7E";
+          if($("#reg_type_"+student_id).val()==1  || (i!=0 && $("#reg_type_"+student_id).val()!=1))
+              tdArray[i].style.backgroundColor = "#FCDC3B";//"#FFFF7E";
         }
       }
       else {
         for (var i = 0; i < tdArray.length; i++) {
-          //tdArray[i].style.backgroundColor = "none";
-          //  tdArray[i].style.backgroundColor = "transparent";//"#FFFF7E";
-          if($('#'+tdArray[i].id).is("[style]")) {
+          if(($('#'+tdArray[i].id).is("[style]") && $("#reg_type_"+student_id).val()==1)  || (i!=0 && $("#reg_type_"+student_id).val()!=1)) {
             $('#' + tdArray[i].id).attr('style', function (i, style) {
               return style.replace(/background-color[^;]+;?/g, '');
             });
@@ -845,16 +859,18 @@ module ums {
       return false;
     }
 
-    private gradeLetterFromMarks(total_marks:number):string {
+    private gradeLetterFromMarks(total_marks:number,reg_type:number):string {
 
-      if (total_marks >= 80) return "A+";
-      else if (total_marks >= 75 && total_marks < 80) return "A";
-      else if (total_marks >= 70 && total_marks < 75) return "A-";
-      else if (total_marks >= 65 && total_marks < 70) return "B+";
-      else if (total_marks >= 60 && total_marks < 65) return "B";
-      else if (total_marks >= 55 && total_marks < 60) return "B-";
-      else if (total_marks >= 50 && total_marks < 55) return "C+";
+      if (total_marks >= 80 && reg_type==1) return "A+";
+      else if (total_marks >= 75 && total_marks < 80 && reg_type==1) return "A";
+      else if (total_marks >= 70 && total_marks < 75 && reg_type==1) return "A-";
+      else if (total_marks >= 65 && total_marks < 70 && reg_type==1) return "B+";
+      else if (total_marks >= 60 && total_marks < 65 && reg_type==1) return "B";
+      else if (total_marks >= 60 &&  reg_type==5) return "B"; // Improvement
+      else if (total_marks >= 55 && total_marks < 60 && (reg_type==1 || reg_type==5)) return "B-";
+      else if (total_marks >= 50 && total_marks < 55 && (reg_type==1 || reg_type==5)) return "C+";
       else if (total_marks >= 45 && total_marks < 50) return "C";
+      else if (total_marks >= 45 && (reg_type==2 || reg_type==3  || reg_type==4)) return "C";  //Carry,Clearance, Special Carry
       else if (total_marks >= 40 && total_marks < 45) return "D";
       else if (total_marks < 40) return "F";
 
@@ -886,6 +902,7 @@ module ums {
           studentMark = <IStudentMarks>{};
           studentId = currentStudent.studentId;
           studentMark.studentId = studentId;
+          studentMark.regType=$("#reg_type_" + studentId).val();
           if(this.$scope.courseType=="THEORY") {
             studentMark.quiz = $("#quiz_" + studentId).val();
             studentMark.classPerformance = $("#class_perf_" + studentId).val();
@@ -916,14 +933,14 @@ module ums {
       if(this.$scope.courseType=="THEORY") {
         for (var ind in gradeList) {
           var studentMark:IStudentMarks = gradeList[ind];
-          if (this.validateGrade(true, studentMark.studentId, studentMark.quiz.toString(), studentMark.classPerformance.toString(), studentMark.partA.toString(), studentMark.partB.toString(), studentMark.total.toString(), studentMark.gradeLetter) == true)
+          if (this.validateGrade(true, studentMark.studentId, studentMark.quiz.toString(), studentMark.classPerformance.toString(), studentMark.partA.toString(), studentMark.partB.toString(), studentMark.total.toString(), studentMark.gradeLetter,studentMark.regType) == true)
             validate = false;
         }
       }
       else if(this.$scope.courseType=="SESSIONAL") {
         for (var ind in gradeList) {
           var studentMark:IStudentMarks = gradeList[ind];
-          if (this.validateGrade(true, studentMark.studentId,"", "", "", "", studentMark.total.toString(), studentMark.gradeLetter) == true)
+          if (this.validateGrade(true, studentMark.studentId,"", "", "", "", studentMark.total.toString(), studentMark.gradeLetter,studentMark.regType) == true)
             validate = false;
         }
       }

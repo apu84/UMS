@@ -9,7 +9,7 @@ import java.util.Map;
  */
 public enum CourseRegType {
 
-    SEMESTER_FINAL(1,"Semester Final"),
+    REGULAR(1,"Regular"),
     CLEARANCE(2,"Clearance"),
     CARRY(3,"Carry"),
     SPECIAL_CARRY(4,"Special Carry"),
