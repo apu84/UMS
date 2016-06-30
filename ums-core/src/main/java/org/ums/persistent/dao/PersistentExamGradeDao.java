@@ -45,7 +45,7 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
     static String UPDATE_SESSIONAL_MARKS="Update  UG_SESSIONAL_MARKS Set Total=?,Grade_Letter=?,Status=? " +
             " Where Semester_Id=? And Course_Id=? and Exam_Type=? and Student_Id=?";
 
-    static String SELECT_GRADE_SUBMISSION_TABLE_TEACHER="Select tmp5.*,Status From ( " +
+    static String SELECT_GRADE_SUBMISSION_TABLE_TEACHER="Select tmp5.*,Status,Exam_Type From ( " +
             "Select tmp4.*,MVIEW_TEACHERS.TEACHER_NAME Scrutinizer_Name,getCourseTeacher(semester_id,course_id) Course_Teachers From " +
             "( " +
             "Select tmp3.*,MVIEW_TEACHERS.TEACHER_NAME Preparer_name From  " +
@@ -536,8 +536,10 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
                 statusDto.setCourseId(resultSet.getString("COURSE_ID"));
                 statusDto.setCourseNo(resultSet.getString("COURSE_NO"));
                 statusDto.setCourseTitle(resultSet.getString("COURSE_TITLE"));
+                statusDto.setExamType(resultSet.getInt("EXAM_TYPE"));
                 statusDto.setYear(resultSet.getInt("YEAR"));
                 statusDto.setSemester(resultSet.getInt("SEMESTER"));
+                statusDto.setSemesterId(resultSet.getInt("SEMESTER_ID"));
 
                 statusDto.setPreparerName(resultSet.getString("PREPARER_NAME"));
                 statusDto.setScrutinizerName(resultSet.getString("SCRUTINIZER_NAME"));
