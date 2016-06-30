@@ -1314,27 +1314,22 @@ module ums{
         }
       });
 
-     /* $("#sortable").sortable("enable");
+      $("#sortable").sortable("enable");
       $("#droppable1").sortable("enable");
       $("#droppable2").sortable("enable");
       $("#droppable3").sortable("enable");
       $("#droppable4").sortable("enable");
       $("#droppable5").sortable("enable");
-      $("#droppable6").sortable("enable"); */
+      $("#droppable6").sortable("enable");
 
     }
 
 
     private createNewSubGroup(groupNo:number):void{
 
-      $("#sortable").empty();
-      $("#sortable").sortable("refresh");
-      $("#sortable1").empty();
-      $("#sortable2").empty();
-      $("#sortable3").empty();
-      $("#sortable4").empty();
-      $("#sortable5").empty();
-      $("#sortable6").empty();
+      this.makeSortableEmpty();
+
+
       this.$scope.recreateButtonClicked=true;
       this.$scope.subGroupFound = false;
       this.$scope.editSubGroup = false;
@@ -1844,7 +1839,10 @@ module ums{
         this.$scope.deleteAndCreateNewSubGroup=false;
         this.$scope.cancelSubGroup = true;
         //$("#sortable").sortable("enable");
-        this.createDroppable();
+
+        if(this.$scope.recreateButtonClicked==false){
+          this.createDroppable();
+        }
       }
 
 
