@@ -7,6 +7,8 @@ module ums {
     amChartOptions:any;
     inputParams:IInputParams;
     current_courseId:string;
+    current_semesterId:number;
+    current_examType:number;
     noneSubmittedGrades: any;
     waitingForScrutinyGrades :any;
     waitingForHeadApprovalGrades :any;
@@ -365,7 +367,7 @@ module ums {
       this.httpClient.put(url, complete_json, 'application/json')
           .success(() => {
             $.notific8("Successfully Saved");
-            this.fetchGradeSheet(this.$scope.current_courseId);
+            this.fetchGradeSheet(this.$scope.current_courseId,this.$scope.current_semesterId,this.$scope.current_examType);
             /* if(statusId==1)
              this.$scope.optional.applicationStatus="Submitted";
              else
@@ -384,7 +386,7 @@ module ums {
       this.httpClient.put(url, complete_json, 'application/json')
           .success(() => {
             $.notific8("Successfully Saved");
-            this.fetchGradeSheet(this.$scope.current_courseId);
+            this.fetchGradeSheet(this.$scope.current_courseId,this.$scope.current_semesterId,this.$scope.current_examType);
             /* if(statusId==1)
              this.$scope.optional.applicationStatus="Submitted";
              else
@@ -408,7 +410,7 @@ module ums {
     }
 
     private fetchGradeSubmissionTable():void {
-      this.httpClient.get("academic/gradeSubmission/semester/11012016/examtype/1/dept/05/role/"+this.$scope.userRole,
+      this.httpClient.get("academic/gradeSubmission/semester/"+this.$scope.inputParams.semester_id+"/examtype/"+this.$scope.inputParams.exam_type+"/dept/05/role/"+this.$scope.userRole,
           this.appConstants.mimeTypeJson,
           (data:any, etag:string)=> {
             this.$scope.allMarksSubmissionStatus = data.entries;
@@ -423,9 +425,14 @@ module ums {
 
 
     private refreshGradeSheet():void{
-      this.fetchGradeSheet(this.$scope.current_courseId);
+      this.fetchGradeSheet(this.$scope.current_courseId,this.$scope.current_semesterId,this.$scope.current_examType);
     }
-    private fetchGradeSheet(courseId:string):void {
+
+    private fetchGradeSheet(courseId:string,semesterId:number,examType:number):void {
+      this.$scope.current_courseId=courseId;
+      this.$scope.current_semesterId=semesterId;
+      this.$scope.current_examType=examType;
+
       /*
       var topPanelDiv=$("#panel_top");
       console.clear();
@@ -443,9 +450,9 @@ module ums {
       */
 
       $('.page-title.ng-binding').html("Online Grade Submission/Approval");
-      this.$scope.current_courseId=courseId;
+
       this.$scope.toggleColumn = true;
-      var url="academic/gradeSubmission/semester/"+this.$scope.inputParams.semester_id+"/courseid/"+this.$scope.current_courseId+"/examtype/"+this.$scope.inputParams.exam_type+"/role/"+this.$scope.userRole;
+      var url="academic/gradeSubmission/semester/"+semesterId+"/courseid/"+this.$scope.current_courseId+"/examtype/"+examType+"/role/"+this.$scope.userRole;
       this.httpClient.get(url,
           this.appConstants.mimeTypeJson,
           (data:any, etag:string)=> {
@@ -961,7 +968,7 @@ module ums {
       this.httpClient.put(url, complete_json, 'application/json')
           .success(() => {
             $.notific8("Successfully Saved");
-            this.fetchGradeSheet(this.$scope.current_courseId);
+            this.fetchGradeSheet(this.$scope.current_courseId,this.$scope.current_semesterId,this.$scope.current_examType);
             /* if(statusId==1)
              this.$scope.optional.applicationStatus="Submitted";
              else
@@ -1091,7 +1098,7 @@ module ums {
       this.httpClient.put(url, complete_json, 'application/json')
           .success(() => {
             $.notific8("Successfully Saved");
-            this.fetchGradeSheet(this.$scope.current_courseId);
+            this.fetchGradeSheet(this.$scope.current_courseId,this.$scope.current_semesterId,this.$scope.current_examType);
             /* if(statusId==1)
              this.$scope.optional.applicationStatus="Submitted";
              else

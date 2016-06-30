@@ -135,7 +135,7 @@
 
                     <tr ng-repeat="marksSubmission in allMarksSubmissionStatus">
                         <td>
-                            <a href="javascript:void(0)" data-ng-click="fetchGradeSheet(marksSubmission.courseId)">
+                            <a href="javascript:void(0)" data-ng-click="fetchGradeSheet(marksSubmission.courseId,marksSubmission.semesterId,marksSubmission.examType)">
                                 {{marksSubmission.courseNo}}
                             </a>
                         </td>
@@ -235,7 +235,7 @@
                         <i class="fa fa-check-circle-o"></i>
                         <span style="padding-right: 100px;">{{gradeTitle}}</span>
                     </div>
-                    <data-course-reg-type-legend examtype="{{inputParams.exam_type}}"></data-course-reg-type-legend>
+                    <data-course-reg-type-legend examtype="{{current_examType}}"></data-course-reg-type-legend>
 
                     <div class="clearfix"></div>
                     <scrollable-table watch="noneSubmittedGrades" ng-style="{height: noneSubmittedGrades.length > 10 ? 450 : (38 + (noneSubmittedGrades.length * 35.5))}">
@@ -314,6 +314,7 @@
                         <i class="fa fa-check-circle-o"></i>
                         <span style="padding-right: 100px;">{{gradeTitle}}</span>
                     </div>
+                    <data-course-reg-type-legend examtype="{{current_examType}}"></data-course-reg-type-legend>
                     <div class="clearfix"></div>
 
                     <scrollable-table watch="candidatesGrades" ng-style="{height: candidatesGrades.length > 10 ? 450 : (38 + (candidatesGrades.length * 35.5))}">
@@ -394,6 +395,7 @@
                         <i class="fa fa-check-circle-o"></i>
                         <span style="padding-right: 100px;">Requested for Recheck Grades</span>
                     </div>
+                    <data-course-reg-type-legend examtype="{{current_examType}}"></data-course-reg-type-legend>
                     <div class="clearfix"></div>
                     <scrollable-table watch="recheckCandidatesGrades" ng-style="{height: recheckCandidatesGrades.length > 10 ? 450 : (38 + (recheckCandidatesGrades.length * 35.5))}">
                         <table class="table table-striped table-bordered">
@@ -435,6 +437,7 @@
                         <i class="fa fa-check-circle-o"></i>
                         <span style="padding-right: 100px;">Requested for Recheck Grades</span>
                     </div>
+                    <data-course-reg-type-legend examtype="{{current_examType}}"></data-course-reg-type-legend>
                     <div class="clearfix"></div>
                     <scrollable-table watch="recheckCandidatesGrades" ng-style="{height: recheckCandidatesGrades.length > 10 ? 450 : (38 + (recheckCandidatesGrades.length * 35.5))}">
                         <table class="table table-striped table-bordered">
@@ -509,6 +512,7 @@
                         <i class="fa fa-check-circle-o"></i>
                         <span style="padding-right: 100px;">Submitted Grades</span>
                     </div>
+                    <data-course-reg-type-legend examtype="{{current_examType}}"></data-course-reg-type-legend>
                     <div class="clearfix"></div>
 
                     <scrollable-table watch="submittedGrades" ng-style="{height: submittedGrades.length > 10 ? 450 : (38 + (submittedGrades.length * 35.5))}">
@@ -554,6 +558,7 @@
                         <i class="fa fa-check-circle-o"></i>
                         <span style="padding-right: 100px;">Scrutinized Grades</span>
                     </div>
+                    <data-course-reg-type-legend examtype="{{current_examType}}"></data-course-reg-type-legend>
                     <div class="clearfix"></div>
 
                     <scrollable-table watch="scrutinizedGrades" ng-style="{height: scrutinizedGrades.length > 10 ? 450 : (38 + (scrutinizedGrades.length * 35.5))}">
@@ -599,6 +604,7 @@
                         <i class="fa fa-check-circle-o"></i>
                         <span style="padding-right: 100px;">Approved(by Head) Grades</span>
                     </div>
+                    <data-course-reg-type-legend examtype="{{current_examType}}"></data-course-reg-type-legend>
                     <div class="clearfix"></div>
 
                     <scrollable-table watch="approvedGrades" ng-style="{height: approvedGrades.length > 10 ? 450 : (38 + (approvedGrades.length * 35.5))}">
@@ -644,6 +650,7 @@
                         <i class="fa fa-check-circle"></i>
                         <span style="padding-right: 100px;">Accepted(by CoE) Grades</span>
                     </div>
+                    <data-course-reg-type-legend examtype="{{current_examType}}"></data-course-reg-type-legend>
                     <div class="clearfix"></div>
                     <scrollable-table watch="acceptedGrades" ng-style="{height: acceptedGrades.length > 10 ? 450 : (38 + (acceptedGrades.length * 35.5))}">
                         <table class="table table-striped table-bordered">
