@@ -31,4 +31,8 @@ public interface User extends Serializable, EditType<MutableUser>, Identifier<St
   Role getPrimaryRole() throws Exception;
 
   List<String> getAdditionalPermissions();
+
+  Department getDepartment() throws Exception;
+
+  String getDepartmentId();
 }

@@ -2,25 +2,29 @@ package org.ums.persistent.model;
 
 
 import org.springframework.context.ApplicationContext;
+import org.springframework.util.StringUtils;
 import org.ums.context.AppContext;
-import org.ums.domain.model.mutable.MutableUser;
+import org.ums.domain.model.immutable.Department;
 import org.ums.domain.model.immutable.Role;
+import org.ums.domain.model.mutable.MutableUser;
+import org.ums.manager.DepartmentManager;
 import org.ums.manager.RoleManager;
 import org.ums.manager.UserManager;
 
 import java.util.ArrayList;
-import java.util.List;
-
 import java.util.Date;
+import java.util.List;
 
 public class PersistentUser implements MutableUser {
   private static UserManager sUserManager;
   private static RoleManager sRoleManager;
+  private static DepartmentManager sDepartmentManager;
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sUserManager = applicationContext.getBean("userManager", UserManager.class);
     sRoleManager = applicationContext.getBean("roleManager", RoleManager.class);
+    sDepartmentManager = applicationContext.getBean("departmentManager", DepartmentManager.class);
   }
 
   private String mId;
@@ -36,6 +40,8 @@ public class PersistentUser implements MutableUser {
   private List<String> mAdditionalPermissions;
   private String mLastModified;
   private String mEmployeeId;
+  private Department mDepartment;
+  private String mDepartmentId;
 
   public PersistentUser() {
 
@@ -50,6 +56,7 @@ public class PersistentUser implements MutableUser {
     mActive = pPersistentUser.isActive();
     mPrimaryRole = pPersistentUser.getPrimaryRole();
     mAdditionalPermissions = pPersistentUser.getAdditionalPermissions();
+    mDepartment = pPersistentUser.getDepartment();
   }
 
   @Override
@@ -206,5 +213,25 @@ public class PersistentUser implements MutableUser {
   @Override
   public void setEmployeeId(String pEmployeeId) {
     mEmployeeId = pEmployeeId;
+  }
+
+  @Override
+  public void setDepartment(Department pDepartment) {
+    mDepartment = pDepartment;
+  }
+
+  @Override
+  public void setDepartmentId(String pDepartmentId) {
+    mDepartmentId = pDepartmentId;
+  }
+
+  @Override
+  public Department getDepartment() throws Exception {
+    return mDepartment == null ? (StringUtils.isEmpty(mDepartmentId) ? null : sDepartmentManager.get(mDepartmentId)) : sDepartmentManager.validate(mDepartment);
+  }
+
+  @Override
+  public String getDepartmentId() {
+    return mDepartmentId;
   }
 }

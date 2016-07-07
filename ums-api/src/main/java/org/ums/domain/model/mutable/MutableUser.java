@@ -2,6 +2,7 @@ package org.ums.domain.model.mutable;
 
 import org.ums.domain.model.common.Mutable;
 import org.ums.domain.model.common.MutableIdentifier;
+import org.ums.domain.model.immutable.Department;
 import org.ums.domain.model.immutable.Role;
 import org.ums.domain.model.immutable.User;
 
@@ -31,4 +32,8 @@ public interface MutableUser extends User, Mutable, MutableIdentifier<String>, M
   void setPrimaryRole(final Role pPrimaryRole);
 
   void setAdditionalPermissions(List<String> pAdditionalPermissions);
+
+  void setDepartment(Department pDepartment);
+
+  void setDepartmentId(String pDepartmentId);
 }
