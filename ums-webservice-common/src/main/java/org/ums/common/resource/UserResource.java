@@ -1,15 +1,15 @@
 package org.ums.common.resource;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.common.Resource;
 import org.ums.common.resource.helper.UserResourceHelper;
-import org.ums.manager.UserDepartmentResolver;
 
 import javax.json.JsonObject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
@@ -31,8 +31,9 @@ public class UserResource extends Resource {
 
 
   @GET
-  @Path("/single")
+  @Path("/current")
   public Response get(final @Context Request pRequest) throws Exception {
-    return mUserResourceHelper.getUser(pRequest, mUriInfo);
+    Subject subject = SecurityUtils.getSubject();
+    return mUserResourceHelper.get(subject.getPrincipal().toString(), pRequest, mUriInfo);
   }
 }

@@ -1,18 +1,18 @@
 package org.ums.common.academic.resource.helper;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ums.common.ResourceHelper;
+import org.ums.common.builder.ExamRoutineBuilder;
+import org.ums.domain.model.dto.ExamRoutineDto;
+import org.ums.domain.model.immutable.ExamRoutine;
 import org.ums.domain.model.immutable.SeatPlanGroup;
+import org.ums.domain.model.mutable.MutableExamRoutine;
+import org.ums.manager.ExamRoutineManager;
 import org.ums.manager.SeatPlanGroupManager;
 import org.ums.manager.SubGroupManager;
 import org.ums.persistent.model.PersistentExamRoutine;
-import org.ums.common.academic.resource.ResourceHelper;
-import org.ums.common.builder.ExamRoutineBuilder;
-import org.ums.domain.model.dto.ExamRoutineDto;
-import org.ums.domain.model.mutable.MutableExamRoutine;
-import org.ums.domain.model.immutable.ExamRoutine;
-import org.ums.manager.ExamRoutineManager;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -37,8 +37,8 @@ public class ExamRoutineResourceHelper extends ResourceHelper<ExamRoutine, Mutab
   private SubGroupManager mSubGroupManager;
 
   @Override
-  protected Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
-    throw new NotImplementedException();
+  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+    throw new NotImplementedException("Post method not implemented for ExamRoutineResourceHelper");
   }
 
   @Override

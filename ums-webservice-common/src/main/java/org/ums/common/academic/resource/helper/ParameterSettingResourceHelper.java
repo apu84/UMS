@@ -4,12 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
 import org.ums.common.academic.resource.ParameterSettingResource;
-import org.ums.common.academic.resource.ResourceHelper;
-import org.ums.common.builder.Builder;
+import org.ums.common.ResourceHelper;
 import org.ums.common.builder.ParameterSettingBuilder;
 import org.ums.domain.model.immutable.ParameterSetting;
 import org.ums.domain.model.mutable.MutableParameterSetting;
-import org.ums.manager.ContentManager;
 import org.ums.manager.ParameterSettingManager;
 import org.ums.persistent.model.PersistentParameterSetting;
 

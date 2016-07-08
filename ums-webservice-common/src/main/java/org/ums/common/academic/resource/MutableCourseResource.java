@@ -2,6 +2,7 @@ package org.ums.common.academic.resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.ums.common.Resource;
+import org.ums.common.ResourceHelper;
 import org.ums.domain.model.immutable.Course;
 import org.ums.domain.model.mutable.MutableCourse;
 

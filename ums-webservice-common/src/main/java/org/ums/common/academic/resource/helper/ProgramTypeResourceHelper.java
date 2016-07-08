@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import org.ums.persistent.model.PersistentProgramType;
 import org.ums.cache.LocalCache;
 import org.ums.common.academic.resource.ProgramTypeResource;
-import org.ums.common.academic.resource.ResourceHelper;
+import org.ums.common.ResourceHelper;
 import org.ums.common.builder.ProgramTypeBuilder;
 import org.ums.domain.model.mutable.MutableProgramType;
 import org.ums.domain.model.immutable.ProgramType;

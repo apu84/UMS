@@ -6,12 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.ums.domain.model.immutable.Routine;
 import org.ums.persistent.model.PersistentStudent;
 import org.ums.persistent.model.PersistentStudentRecord;
 import org.ums.persistent.model.PersistentUser;
 import org.ums.cache.LocalCache;
-import org.ums.common.academic.resource.ResourceHelper;
+import org.ums.common.ResourceHelper;
 import org.ums.common.academic.resource.StudentResource;
 import org.ums.common.builder.StudentBuilder;
 import org.ums.domain.model.mutable.MutableStudent;
@@ -28,12 +27,10 @@ import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
-import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.Base64;
-import java.util.List;
 
 @Component
 @Qualifier("StudentResourceHelper")

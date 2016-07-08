@@ -14,6 +14,7 @@ public class UserBuilder implements Builder<User, MutableUser> {
   @Override
   public void build(JsonObjectBuilder pBuilder, User pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) throws Exception {
     pBuilder.add("id", pReadOnly.getId());
+    pBuilder.add("departmentName", pReadOnly.getDepartment().getShortName());
   }
 
   @Override

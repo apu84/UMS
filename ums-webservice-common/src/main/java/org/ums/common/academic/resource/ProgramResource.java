@@ -3,6 +3,7 @@ package org.ums.common.academic.resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.common.Resource;
+import org.ums.common.ResourceHelper;
 import org.ums.domain.model.immutable.Program;
 import org.ums.domain.model.mutable.MutableProgram;
 import org.ums.manager.ProgramManager;

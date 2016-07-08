@@ -1,16 +1,14 @@
 package org.ums.common.academic.resource.helper;
 
-import org.glassfish.jersey.server.Uri;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
-import org.ums.common.academic.resource.ResourceHelper;
+import org.ums.common.ResourceHelper;
 import org.ums.common.academic.resource.SpStudentResource;
 import org.ums.common.builder.Builder;
 import org.ums.common.builder.SpStudentBuilder;
 import org.ums.domain.model.immutable.SpStudent;
 import org.ums.domain.model.mutable.MutableSpStudent;
-import org.ums.manager.ContentManager;
 import org.ums.manager.ProgramManager;
 import org.ums.manager.SemesterManager;
 import org.ums.manager.SpStudentManager;
