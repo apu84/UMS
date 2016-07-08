@@ -1,5 +1,7 @@
 package org.ums.common.resource.helper;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
@@ -13,6 +15,8 @@ import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
+import javax.ws.rs.core.EntityTag;
+import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.List;
@@ -60,4 +64,23 @@ public class UserResourceHelper extends ResourceHelper<User, MutableUser, String
 
     return object.build();
   }
+
+  public Response getUser(final Request pRequest, final UriInfo pUriInfo) throws Exception {
+
+//    User user = mUserManager .get(SecurityUtils.getSubject().getPrincipal().toString());
+//    user.getDepartment();
+//    Response.ResponseBuilder builder;
+//    EntityTag etag = new EntityTag(getEtag(user));
+//    builder = pRequest.evaluatePreconditions(etag);
+//    builder = null;
+//    if (builder == null) {
+//      LocalCache localCache = new LocalCache();
+//      builder = Response.ok(toJson(user, pUriInfo, localCache));
+//      builder.tag(etag);
+//      localCache.invalidate();
+//    }
+//    return builder.build();
+    return null;
+  }
+
 }

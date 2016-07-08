@@ -34,7 +34,7 @@ public enum CourseRegType {
     }
 
 
-    public CourseRegType get(final int pId) {
+    public static CourseRegType get(final int pId) {
         return lookup.get(pId);
     }
     public String getLabel() {

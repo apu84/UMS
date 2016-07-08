@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.ums.domain.model.dto.StudentGradeDto;
 import org.ums.domain.model.immutable.Course;
 import org.ums.domain.model.immutable.Semester;
+import org.ums.enums.CourseRegType;
 import org.ums.enums.CourseType;
 import org.ums.manager.CourseManager;
 import org.ums.manager.ExamGradeManager;
@@ -32,6 +33,7 @@ public class UgGradeSheetGenerator {
   @Autowired
   private SemesterManager semesterManager;
 
+  private CourseRegType prevCourseRegType=CourseRegType.REGULAR;
 
   /**
    * Creates a PDF document.
@@ -78,7 +80,7 @@ public class UgGradeSheetGenerator {
       mainTable.addCell(cell);
 
       cell = new PdfPCell();
-      cell.addElement(getGradeTable(gradeList,i*90,45,course.getCourseType()));
+      cell.addElement(getGradeTable(gradeList,i*90,45,course.getCourseType(),examTypeId));
       cell.setPadding(0);
       cell.setBorder(Rectangle.NO_BORDER);
       mainTable.addCell(cell);
@@ -88,7 +90,7 @@ public class UgGradeSheetGenerator {
       mainTable.addCell(cell);
 
       cell = new PdfPCell();
-      cell.addElement(getGradeTable(gradeList,i*90+46,45,course.getCourseType()));
+      cell.addElement(getGradeTable(gradeList,i*90+46,45,course.getCourseType(),examTypeId));
       cell.setPadding(0);
       cell.setBorder(Rectangle.NO_BORDER);
       mainTable.addCell(cell);
@@ -108,12 +110,12 @@ public class UgGradeSheetGenerator {
     PdfPTable table = new PdfPTable(3);
     table.setWidths(new int[]{9, 2, 9});
     table.setWidthPercentage(100);
-    // cell 1: location and time
+    // cell 1: location and times
 
     return table;
   }
 
-  public PdfPTable getGradeTable(java.util.List<StudentGradeDto> studentList,int startIndex,int total,CourseType courseType) throws DocumentException {
+  public PdfPTable getGradeTable(java.util.List<StudentGradeDto> studentList,int startIndex,int total,CourseType courseType,int examTypeId) throws DocumentException {
     // a table with three columns
     if(startIndex>studentList.size())
       return null;
@@ -179,19 +181,30 @@ public class UgGradeSheetGenerator {
 
     student=studentList.get(i);
 
+    if(prevCourseRegType!=null && prevCourseRegType!=CourseRegType.get(student.getRegType())  && examTypeId!=1){
+      p = new Paragraph(CourseRegType.get(student.getRegType()).getLabel(), gradeSheetHeader);
+      cell = new PdfPCell(p);
+      cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+      cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+      cell.setColspan(6);
+      cell.setFixedHeight(16);
+      table.addCell(cell);
+
+    }
+    prevCourseRegType=CourseRegType.get(student.getRegType());
+
     p = new Paragraph(studentList.get(i).getStudentId(), nbFont);
     cell = new PdfPCell(p);
     cell.setFixedHeight(12);
     cell.setHorizontalAlignment(Element.ALIGN_LEFT);
     table.addCell(cell);
-
     if(courseType==CourseType.THEORY) {
-      p = new Paragraph(String.valueOf(Math.round(student.getQuiz())), nFont);
+      p = new Paragraph(student.getQuiz()==null?"":String.valueOf(Math.round(student.getQuiz())), nFont);
       cell = new PdfPCell(p);
       cell.setHorizontalAlignment(Element.ALIGN_CENTER);
       table.addCell(cell);
 
-      p = new Paragraph(String.valueOf(Math.round(student.getClassPerformance())), nFont);
+      p = new Paragraph(student.getClassPerformance()==null?"":String.valueOf(Math.round(student.getClassPerformance())), nFont);
       cell = new PdfPCell(p);
       cell.setHorizontalAlignment(Element.ALIGN_CENTER);
       table.addCell(cell);

@@ -197,9 +197,11 @@ module ums {
       $scope.generateXls=this.generateXls.bind(this);
       $scope.calculateStyle=this.calculateStyle.bind(this);
 
-      //$scope.inputParams.program_type=11;
-
-      //$scope.inputParams.program_type=11;
+      $scope.inputParams={program_type:11,
+      semester_id:11,
+      exam_type:1,
+      dept_id:''};
+      this.loadSemesters();
 
       $scope.data.recheck_accepted_studentId="";
       $scope.chartData =[];
@@ -230,14 +232,40 @@ module ums {
 
       return style;
     }
+
+    private fetchUser():ng.IPromise<any> {
+      var url="https://localhost/ums-webservice-common/users/single";
+      var defer = this.$q.defer();
+      this.httpClient.get(url, this.appConstants.mimeTypeJson,
+          (json:any, etag:string) => {
+           console.log(json);
+          //  defer.resolve(semesters);
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>) => {
+            console.error(response);
+          });
+      return defer.promise;
+    }
+
+
     private loadSemesters():void{
-      console.log("~~~~~~~~~~~~~~~~~~~");
+      console.log("~~~~~~~~~~~~ddd~~~~~asdfsadasdf~~");
       this.fetchSemesters(this.$scope.inputParams.program_type).then((semesters:Array<IOption>)=> {
         this.$scope.data.semesters=semesters;
-        //console.log(semesters);
+        this.$scope.inputParams.semester_id=semesters[0].id;
+
       });
-      if(this.$scope.inputParams.program_type==11)
-        this.$scope.data.depts=this.$scope.data.ugDepts;
+      if(this.$scope.inputParams.program_type==11) {
+        if(this.$scope.userRole=="H") {
+          this.fetchUser().then((semesters:Array<IOption>)=> {
+            alert("got asdfsadf");
+
+
+          });
+        }
+        else
+          this.$scope.data.depts = this.$scope.data.ugDepts;
+      }
       else if(this.$scope.inputParams.program_type==22)
         this.$scope.data.depts=this.$scope.data.pgDepts;
 
@@ -398,7 +426,8 @@ module ums {
 
 
     private downloadPdf():void {
-      this.httpClient.get("https://localhost/ums-webservice-common/gradeReport/pdf/semester/"+this.$scope.inputParams.semester_id+"/courseid/"+this.$scope.current_courseId+"/examtype/"+this.$scope.inputParams.exam_type+"/role/"+this.$scope.currentActor, 'application/pdf',
+      this.httpClient.get("https://localhost/ums-webservice-common/gradeReport/pdf/semester/"+this.$scope.inputParams.semester_id+"/courseid/"+this.$scope.current_courseId+"/examtype/"+this.$scope.current_examType+"/role/"+this.$scope.currentActor, 'application/pdf',
+
           (data:any, etag:string) => {
             var file = new Blob([data], {type: 'application/pdf'});
             var fileURL = this.$sce.trustAsResourceUrl(URL.createObjectURL(file));
@@ -702,14 +731,20 @@ module ums {
           this.setFieldValue("total_" + studentId, row[6]);
           if (row[7] != "")
             this.setFieldValue("grade_letter_" + studentId, row[7]);
+          else
+            this.setFieldValue("grade_letter_" + studentId, this.gradeLetterFromMarks(Number(row[6]),regType));
 
-          this.validateGrade(false, studentId, row[2], row[3], row[4], row[5], row[6], row[7],regType);
+
+          this.validateGrade(false, studentId, row[2], row[3], row[4], row[5], row[6], $("#grade_letter_" + studentId).val(),regType);
         }
         else{
           this.setFieldValue("total_" + studentId, row[2]);
           if (row[3] != "")
             this.setFieldValue("grade_letter_" + studentId, row[3]);
-          this.validateGrade(false, studentId, "","", "", "", row[2], row[3],regType);
+          else
+            this.setFieldValue("grade_letter_" + studentId, this.gradeLetterFromMarks(Number(row[2]),regType));
+
+          this.validateGrade(false, studentId, "","", "", "", row[2], $("#grade_letter_" + studentId).val(),regType);
         }
 
 
@@ -732,7 +767,7 @@ module ums {
       if(this.$scope.courseType=="THEORY") {
         //Quiz
         if (quiz != "" || force_validate) {
-          if ((this.checkNumber(quiz) == false || Number(quiz) > 20)) {
+          if (((this.checkNumber(quiz) == false || Number(quiz) > 20) && reg_type==1 )) {
             $("#quiz_" + student_id).css(border_error);
             row_error = true;
           }
@@ -743,7 +778,7 @@ module ums {
 
         //Class Performance
         if (class_performance != "" || force_validate) {
-          if (this.checkNumber(class_performance) == false || Number(class_performance) > 10) {
+          if ((this.checkNumber(class_performance) == false || Number(class_performance) > 10) && reg_type==1) {
             $("#class_perf_" + student_id).css(border_error);
             row_error = true;
           }
@@ -821,13 +856,13 @@ module ums {
       }
       else {
         for (var i = 0; i < tdArray.length; i++) {
-          if(($('#'+tdArray[i].id).is("[style]") && $("#reg_type_"+student_id).val()==1)  || (i!=0 && $("#reg_type_"+student_id).val()!=1)) {
+          if($('#'+tdArray[i].id).is("[style]") && ($("#reg_type_"+student_id).val()==1  || (i!=0 && $("#reg_type_"+student_id).val()!=1))) {
             $('#' + tdArray[i].id).attr('style', function (i, style) {
               return style.replace(/background-color[^;]+;?/g, '');
             });
           }
           //('#foo [style]').removeAttr('style');
-        }//asdfasdfasdfasfasdfsadfasdfsssss
+        }//asdfasdfasdf
 
       }
       return row_error;
@@ -952,7 +987,7 @@ module ums {
         }
       }
       if (validate == false) {
-        alert("Correct your data ...");
+        alert("There are some problem with the data you submitted. Please check and correct. Then submit it again.");
         return;
       }
       this.postGradeSheet(gradeList,'submit');
