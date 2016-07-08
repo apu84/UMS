@@ -35,4 +35,6 @@ public interface User extends Serializable, EditType<MutableUser>, Identifier<St
   Department getDepartment() throws Exception;
 
   String getDepartmentId();
+
+  String getName();
 }

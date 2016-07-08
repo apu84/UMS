@@ -36,4 +36,6 @@ public interface MutableUser extends User, Mutable, MutableIdentifier<String>, M
   void setDepartment(Department pDepartment);
 
   void setDepartmentId(String pDepartmentId);
+
+  void setName(String pName);
 }

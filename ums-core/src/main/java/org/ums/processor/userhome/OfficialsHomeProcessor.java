@@ -18,8 +18,13 @@ public class OfficialsHomeProcessor extends AbstractUserHomeProcessor {
 
     Map<String, String> userName = new HashMap<>();
     userName.put("key", "Name");
-    userName.put("value", userId);
+    userName.put("value", user.getName());
     profileContent.add(userName);
+
+    Map<String, String> department = new HashMap<>();
+    department.put("key", "Department/ Office");
+    department.put("value", user.getDepartment().getLongName());
+    profileContent.add(department);
 
     return profileContent;
   }

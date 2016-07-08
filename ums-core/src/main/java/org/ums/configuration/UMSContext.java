@@ -164,9 +164,9 @@ public class UMSContext {
   @Bean
   UserManager userManager() {
     UserCache userCache = new UserCache(mCacheFactory.getCacheManager());
-    UserDepartmentResolver userDepartmentResolver = new UserDepartmentResolver(employeeManager(), studentManager());
-    userDepartmentResolver.setManager(new PersistentUserDao(mTemplateFactory.getJdbcTemplate()));
-    userCache.setManager(userDepartmentResolver);
+    UserPropertyResolver userPropertyResolver = new UserPropertyResolver(employeeManager(), studentManager());
+    userPropertyResolver.setManager(new PersistentUserDao(mTemplateFactory.getJdbcTemplate()));
+    userCache.setManager(userPropertyResolver);
     return userCache;
   }
 

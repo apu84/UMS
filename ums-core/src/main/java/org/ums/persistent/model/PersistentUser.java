@@ -42,6 +42,7 @@ public class PersistentUser implements MutableUser {
   private String mEmployeeId;
   private Department mDepartment;
   private String mDepartmentId;
+  private String mName;
 
   public PersistentUser() {
 
@@ -57,6 +58,7 @@ public class PersistentUser implements MutableUser {
     mPrimaryRole = pPersistentUser.getPrimaryRole();
     mAdditionalPermissions = pPersistentUser.getAdditionalPermissions();
     mDepartment = pPersistentUser.getDepartment();
+    mName = pPersistentUser.getName();
   }
 
   @Override
@@ -233,5 +235,15 @@ public class PersistentUser implements MutableUser {
   @Override
   public String getDepartmentId() {
     return mDepartmentId;
+  }
+
+  @Override
+  public void setName(String pName) {
+    mName = pName;
+  }
+
+  @Override
+  public String getName() {
+    return mName;
   }
 }
