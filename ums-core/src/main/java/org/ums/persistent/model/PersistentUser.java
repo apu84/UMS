@@ -59,6 +59,7 @@ public class PersistentUser implements MutableUser {
     mAdditionalPermissions = pPersistentUser.getAdditionalPermissions();
     mDepartment = pPersistentUser.getDepartment();
     mName = pPersistentUser.getName();
+    mEmployeeId = pPersistentUser.getEmployeeId();
   }
 
   @Override
