@@ -16,6 +16,7 @@ public class UserBuilder implements Builder<User, MutableUser> {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("name", pReadOnly.getName());
     pBuilder.add("departmentName", pReadOnly.getDepartment().getShortName());
+    pBuilder.add("departmentId", pReadOnly.getDepartment().getId());
   }
 
   @Override

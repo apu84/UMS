@@ -392,6 +392,18 @@ module ums {
           {id: "C", name: "C"},
           {id: "D", name: "D"},
           {id: "F", name: "F"}
+        ],
+        marksSubmissionStatus:[
+          {id:"-1",name:"All"},
+          {id:"0",name:"Not Submitted"},
+          {id:"1",name:"Waiting for Scrutiny"},
+          {id:"2",name:"Requested for recheck by Scrutinizer"},
+          {id:"3",name:"Waiting for Head's Approval"},
+          {id:"4",name:"Requested for recheck by Head"},
+          {id:"5",name:"Waiting for CoE's Approval"},
+          {id:"6",name:"Requested for recheck by CoE"},
+          {id:"7",name:"Accepted by CoE"},
+          {id:"8",name:"Waiting for recheck request approval"}
         ]
       };
     }

@@ -121,6 +121,8 @@ module ums {
     semester_id:number;
     exam_type:number;
     dept_id:string;
+    program_id:number;
+    status:number;
   }
   interface IOption{
     id:number;
@@ -157,10 +159,11 @@ module ums {
         pgDepts: appConstants.pgDept,
         ugPrograms: appConstants.ugPrograms,
         pgPrograms: appConstants.pgPrograms,
-        programs:Array<IOption>()
+        programs:Array<IOption>(),
+        markSubmissionStatus:appConstants.marksSubmissionStatus
       };
 
-            $scope.modalSettings = {};
+      $scope.modalSettings = {};
       this.$scope.modalSettings.header = "Confirmation";
 
       $scope.onTotalPartChange = this.onTotalPartChange.bind(this);
@@ -198,9 +201,12 @@ module ums {
       $scope.calculateStyle=this.calculateStyle.bind(this);
 
       $scope.inputParams={program_type:11,
-      semester_id:11,
-      exam_type:1,
-      dept_id:''};
+        semester_id:11,
+        exam_type:1,
+        dept_id:'',
+        program_id:1,
+        status:-1};
+
       this.loadSemesters();
 
       $scope.data.recheck_accepted_studentId="";
@@ -233,13 +239,13 @@ module ums {
       return style;
     }
 
-    private fetchUser():ng.IPromise<any> {
-      var url="https://localhost/ums-webservice-common/users/single";
+    private fetchCurrentUser():ng.IPromise<any> {
+      var url="https://localhost/ums-webservice-common/users/current";
       var defer = this.$q.defer();
       this.httpClient.get(url, this.appConstants.mimeTypeJson,
           (json:any, etag:string) => {
-           console.log(json);
-          //  defer.resolve(semesters);
+            //console.log(json);
+             defer.resolve({id:json.departmentId,name:json.departmentName});
           },
           (response:ng.IHttpPromiseCallbackArg<any>) => {
             console.error(response);
@@ -249,7 +255,7 @@ module ums {
 
 
     private loadSemesters():void{
-      console.log("~~~~~~~~~~~~ddd~~~~~asdfsadasdf~~");
+      console.log("~~~~~~~~~~~~ddd~~~~~asdfsadasadfasdfafsdf~~");
       this.fetchSemesters(this.$scope.inputParams.program_type).then((semesters:Array<IOption>)=> {
         this.$scope.data.semesters=semesters;
         this.$scope.inputParams.semester_id=semesters[0].id;
@@ -257,11 +263,17 @@ module ums {
       });
       if(this.$scope.inputParams.program_type==11) {
         if(this.$scope.userRole=="H") {
-          this.fetchUser().then((semesters:Array<IOption>)=> {
-            alert("got asdfsadf");
 
+          this.fetchCurrentUser().then((departmentJson:any)=> {
+            this.$scope.data.depts = [departmentJson];
+            this.$scope.inputParams.dept_id=departmentJson.id;
+            this.loadPrograms();
 
           });
+
+
+
+
         }
         else
           this.$scope.data.depts = this.$scope.data.ugDepts;
@@ -311,6 +323,9 @@ module ums {
       console.log("~~~~~~~~~~~~basddsf~~~~~~~");
 
       this.$scope.data.programs= resultPrograms[0].programs;
+      console.log(resultPrograms[0].programs[0]);
+      this.$scope.inputParams.program_id=resultPrograms[0].programs[0].id;
+
       console.log(this.$scope.data.programs);
     }
 
@@ -439,7 +454,14 @@ module ums {
     }
 
     private fetchGradeSubmissionTable():void {
-      this.httpClient.get("academic/gradeSubmission/semester/"+this.$scope.inputParams.semester_id+"/examtype/"+this.$scope.inputParams.exam_type+"/dept/05/role/"+this.$scope.userRole,
+
+      var status=0;
+      if(this.$scope.userRole!="T"){
+        status=this.$scope.inputParams.status;
+      }
+
+
+      this.httpClient.get("academic/gradeSubmission/semester/"+this.$scope.inputParams.semester_id+"/examtype/"+this.$scope.inputParams.exam_type+"/dept/"+this.$scope.inputParams.dept_id+"/role/"+this.$scope.userRole+"/status/"+status,
           this.appConstants.mimeTypeJson,
           (data:any, etag:string)=> {
             this.$scope.allMarksSubmissionStatus = data.entries;
@@ -463,20 +485,20 @@ module ums {
       this.$scope.current_examType=examType;
 
       /*
-      var topPanelDiv=$("#panel_top");
-      console.clear();
-      console.log($("#panel_top").width());
-      console.log($("#panel_top").height());
-      $(".panel_overlay").css({
-        background:'url("https://localhost/ums-web/iums/images/overlay1.png")',
-        opacity : 0.5,
-        top     : topPanelDiv.position().top-150,
-        width   : $("#panel_top").width(),
-        height  : $("#panel_top").height(),
-        zIndex:100
-      });
-      $(".panel_overlay").fadeIn();
-      */
+       var topPanelDiv=$("#panel_top");
+       console.clear();
+       console.log($("#panel_top").width());
+       console.log($("#panel_top").height());
+       $(".panel_overlay").css({
+       background:'url("https://localhost/ums-web/iums/images/overlay1.png")',
+       opacity : 0.5,
+       top     : topPanelDiv.position().top-150,
+       width   : $("#panel_top").width(),
+       height  : $("#panel_top").height(),
+       zIndex:100
+       });
+       $(".panel_overlay").fadeIn();
+       */
 
       $('.page-title.ng-binding').html("Online Grade Submission/Approval");
 
@@ -571,21 +593,21 @@ module ums {
 
             }
             if( this.$scope.currentActor=="coe"){
-               if(this.$scope.gradeSubmissionStatus==5) {
-                 this.$scope.gradeTitle = "Waiting for CoE's Approval";
-                 this.$scope.approveAction = "Accept";
-                 this.$scope.recheckButtonLabel = "Save & Send back to Preparer";
-                 this.$scope.approveButtonLabel = "Save and Accept";
-                 this.$scope.candidatesGrades = this.$scope.acceptCandidatesGrades;
+              if(this.$scope.gradeSubmissionStatus==5) {
+                this.$scope.gradeTitle = "Waiting for CoE's Approval";
+                this.$scope.approveAction = "Accept";
+                this.$scope.recheckButtonLabel = "Save & Send back to Preparer";
+                this.$scope.approveButtonLabel = "Save and Accept";
+                this.$scope.candidatesGrades = this.$scope.acceptCandidatesGrades;
 
-                 this.$scope.modalSettings.recheckBody = "Are you sure you want to send back the selected grades to preparer for recheck?";
-                 this.$scope.modalSettings.recheckHandler = "recheckModal";
-                 this.$scope.modalSettings.approveBody = "Are you sure you want to Accept the grade sheet?";
-                 this.$scope.modalSettings.approveHandler = "approveModal";
-                 this.$scope.modalSettings.rightButton = (currentActor, action) => {
-                   this.saveRecheckApproveGrades(currentActor, action);
-                 }
-               }
+                this.$scope.modalSettings.recheckBody = "Are you sure you want to send back the selected grades to preparer for recheck?";
+                this.$scope.modalSettings.recheckHandler = "recheckModal";
+                this.$scope.modalSettings.approveBody = "Are you sure you want to Accept the grade sheet?";
+                this.$scope.modalSettings.approveHandler = "approveModal";
+                this.$scope.modalSettings.rightButton = (currentActor, action) => {
+                  this.saveRecheckApproveGrades(currentActor, action);
+                }
+              }
               else if(this.$scope.gradeSubmissionStatus==7){
                 this.$scope.modalSettings.submitBody = "Are you sure you want to send grade recheck request to Honorable Vice Chancellor?";
                 this.$scope.modalSettings.submitHandler = "submitModal";
@@ -646,7 +668,7 @@ module ums {
         if (this.$scope.data.total_part == 2)
           part_b = Number($("#part_b_" + student_id).val()) || 0;
 
-           total = quiz + class_perf + part_a + part_b;
+        total = quiz + class_perf + part_a + part_b;
         $("#total_" + student_id).val(String(total));
         var grade_letter:string = this.gradeLetterFromMarks(total,regType);
         $("#grade_letter_" + student_id).val(grade_letter);
@@ -673,8 +695,8 @@ module ums {
       }
       else {
 
-          this.$scope.data.part_a_total = 0;
-          this.$scope.data.part_b_total = 0;
+        this.$scope.data.part_a_total = 0;
+        this.$scope.data.part_b_total = 0;
         this.$scope.toggleColumn = true;
         $("#partDiv").show();
       }
@@ -809,16 +831,16 @@ module ums {
           }
         }
 
-      //Total
-      if (total != "" || force_validate) {
-        if (this.checkNumber(total) == false || Number(total) != Number(quiz) + Number(class_performance) + Number(part_a) + Number(part_b)) {
-          $("#total_" + student_id).css(border_error);
-          row_error = true;
+        //Total
+        if (total != "" || force_validate) {
+          if (this.checkNumber(total) == false || Number(total) != Number(quiz) + Number(class_performance) + Number(part_a) + Number(part_b)) {
+            $("#total_" + student_id).css(border_error);
+            row_error = true;
+          }
+          else {
+            $("#total_" + student_id).css(border_ok);
+          }
         }
-        else {
-          $("#total_" + student_id).css(border_ok);
-        }
-      }
 
       } //End of if
       if(this.$scope.courseType=="SESSIONAL") {
@@ -851,7 +873,7 @@ module ums {
       if (row_error == true) {
         for (var i = 0; i < tdArray.length; i++) {
           if($("#reg_type_"+student_id).val()==1  || (i!=0 && $("#reg_type_"+student_id).val()!=1))
-              tdArray[i].style.backgroundColor = "#FCDC3B";//"#FFFF7E";
+            tdArray[i].style.backgroundColor = "#FCDC3B";//"#FFFF7E";
         }
       }
       else {
@@ -884,13 +906,13 @@ module ums {
           this.$scope.excel_copy_paste_error_div = false;
       }
       else if ( this.$scope.courseType=="SESSIONAL"){
-            if(cells[0] != "Student Id" || cells[1] != "Student Name" || cells[2] != "Total" || cells[3] != "Grade Letter") {
-              this.$scope.excel_copy_paste_error_div = true;
-              return false;
-            }
-            else
-              this.$scope.excel_copy_paste_error_div = false;
+        if(cells[0] != "Student Id" || cells[1] != "Student Name" || cells[2] != "Total" || cells[3] != "Grade Letter") {
+          this.$scope.excel_copy_paste_error_div = true;
+          return false;
         }
+        else
+          this.$scope.excel_copy_paste_error_div = false;
+      }
 
       return true;
 
@@ -952,8 +974,8 @@ module ums {
             studentMark.partA = $("#part_a_" + studentId).val();
             studentMark.partB = $("#part_b_" + studentId).val();
           }
-            studentMark.total = $("#total_" + studentId).val();
-            studentMark.gradeLetter = $("#grade_letter_" + studentId).val();
+          studentMark.total = $("#total_" + studentId).val();
+          studentMark.gradeLetter = $("#grade_letter_" + studentId).val();
 
           studentMark.total = $("#total_" + studentId).val();
           studentMark.statusId = status;
