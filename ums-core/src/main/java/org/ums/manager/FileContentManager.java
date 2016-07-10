@@ -51,6 +51,13 @@ public class FileContentManager implements BinaryContentManager<byte[]> {
     }
   }
 
+  protected void createIfNotExist(final Domain pDomain, final String pPath) throws Exception {
+    Path path = Paths.get(mStorageRoot).resolve(Domain.get(pDomain.getValue()).toString()).resolve(pPath);
+    if (!Files.exists(path)) {
+      Files.createDirectories(path);
+    }
+  }
+
   protected Path getQualifiedPath(String pIdentifier, Domain pDomain) {
     return Paths.get(mStorageRoot).resolve(Domain.get(pDomain.getValue()).toString()).resolve(pIdentifier);
   }
@@ -64,7 +71,8 @@ public class FileContentManager implements BinaryContentManager<byte[]> {
   }
 
   @Override
-  public List<Map<String, String>> list(String pPath, Domain pDomain) {
+  public List<Map<String, String>> list(String pPath, Domain pDomain) throws Exception{
+    createIfNotExist(pDomain, pPath);
     return null;
   }
 
