@@ -35,6 +35,7 @@ public class UserPropertyResolver extends UserDaoDecorator {
       if (employee != null) {
         mutableUser.setDepartment(employee.getDepartment());
         mutableUser.setName(employee.getEmployeeName());
+        mutableUser.setEmployeeId(employee.getId());
       }
     }
     return mutableUser;

@@ -153,7 +153,7 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
   }
 
 
-  public JsonObject getGradeSubmissionStatus(final Integer pSemesterId, final Integer pExamType, final String deptId, final String pUserRole) throws Exception {
+  public JsonObject getGradeSubmissionStatus(final Integer pSemesterId, final Integer pExamType, final String deptId, final String pUserRole,final int pStatus) throws Exception {
 
     String userId = "";
     Subject subject = SecurityUtils.getSubject();
@@ -161,7 +161,7 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
       userId = subject.getPrincipal().toString();
     }
     User user = mUserManager.get(userId);
-    List<MarksSubmissionStatusDto> examGradeStatusList = getContentManager().getMarksSubmissionStatus(pSemesterId, pExamType, user.getEmployeeId(), deptId, pUserRole);
+    List<MarksSubmissionStatusDto> examGradeStatusList = getContentManager().getMarksSubmissionStatus(pSemesterId, pExamType, user.getEmployeeId(), deptId, pUserRole,pStatus);
 
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();

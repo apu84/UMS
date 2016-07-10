@@ -87,7 +87,7 @@
                         <label class="col-md-4 control-label">Dept./School</label>
 
                         <div class="col-md-8">
-                            <select class="form-control required" data-ng-model="inputParams.dept_id" data-ng-change="loadPrograms()">
+                            <select class="form-control required" data-ng-model="inputParams.dept_id" data-ng-change="loadPrograms()" data-convert-to-number>
                                 <option data-ng-repeat="department in data.depts" value="{{department.id}}">{{department.name}}</option>
                             </select>
                         </div>
@@ -96,7 +96,7 @@
                         <label class="col-md-4 control-label">Program Name</label>
 
                         <div class="col-md-8">
-                            <select class="form-control required" data-ng-model="inputParams.prgram_id">
+                            <select class="form-control required" data-ng-model="inputParams.program_id" data-convert-to-number>
                                 <option data-ng-repeat="program in data.programs" value="{{program.id}}">{{program.shortName}}</option>
                             </select>
                         </div>
@@ -105,8 +105,8 @@
                         <label class="col-md-4 control-label">Status</label>
 
                         <div class="col-md-8">
-                            <select class="form-control required" data-ng-model="inputParams.status">
-                                <option data-ng-repeat="program in data.programs" value="{{program.id}}">{{program.shortName}}</option>
+                            <select class="form-control required" data-ng-model="inputParams.status" data-convert-to-number>
+                                <option data-ng-repeat="status in data.markSubmissionStatus" value="{{status.id}}">{{status.name}}</option>
                             </select>
                         </div>
                     </div>

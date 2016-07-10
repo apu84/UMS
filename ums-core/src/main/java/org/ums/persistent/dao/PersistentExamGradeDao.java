@@ -202,7 +202,7 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
     }
 
     @Override
-    public List<MarksSubmissionStatusDto> getMarksSubmissionStatus(int pSemesterId,int pExamType,String teacherId,String deptId,String userRole) throws Exception {
+    public List<MarksSubmissionStatusDto> getMarksSubmissionStatus(int pSemesterId,int pExamType,String teacherId,String deptId,String userRole,int status) throws Exception {
         String query="";
         if(userRole.equals("T")){  //Teacher
             query = SELECT_GRADE_SUBMISSION_TABLE_TEACHER;
@@ -210,14 +210,17 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
         }
         else if(userRole.equals("H")){  //Head
             query = SELECT_GRADE_SUBMISSION_TABLE_HEAD;
+            if(status!=-1){query+="  And Ms_Status.Status=0"+status;}
             return mJdbcTemplate.query(query, new Object[]{pSemesterId,pExamType,teacherId},new MarksSubmissionStatusTableRowMapper());
         }
         else if(userRole.equals("C")){  //CoE
             query = SELECT_GRADE_SUBMISSION_TABLE_CoE;
+            if(status!=-1){query+="  And Ms_Status.Status=0"+status;}
             return mJdbcTemplate.query(query,new Object[]{pSemesterId,pExamType,deptId} ,new MarksSubmissionStatusTableRowMapper());
         }
         else if(userRole.equals("V")){  //CoE
             query = SELECT_GRADE_SUBMISSION_TABLE_CoE;
+            if(status!=-1){query+="  And Ms_Status.Status=0"+status;}
             return mJdbcTemplate.query(query,new Object[]{pSemesterId,pExamType,deptId} ,new MarksSubmissionStatusTableRowMapper());
         }
         return null;

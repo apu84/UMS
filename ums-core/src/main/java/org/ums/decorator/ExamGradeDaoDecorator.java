@@ -31,8 +31,8 @@ public class ExamGradeDaoDecorator  extends ContentDaoDecorator<ExamGrade, Mutab
     }
 
     @Override
-    public List<MarksSubmissionStatusDto> getMarksSubmissionStatus(int pSemesterId,int pExamType,String teacherId,String deptId,String userRole) throws Exception {
-        return getManager().getMarksSubmissionStatus(pSemesterId,pExamType,teacherId,deptId,userRole);
+    public List<MarksSubmissionStatusDto> getMarksSubmissionStatus(int pSemesterId,int pExamType,String teacherId,String deptId,String userRole,int status) throws Exception {
+        return getManager().getMarksSubmissionStatus(pSemesterId,pExamType,teacherId,deptId,userRole,status);
     }
 
     @Override
