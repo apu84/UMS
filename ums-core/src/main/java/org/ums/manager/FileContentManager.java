@@ -2,6 +2,7 @@ package org.ums.manager;
 
 
 import com.google.common.collect.Lists;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.ums.message.MessageResource;
 
@@ -62,25 +63,25 @@ public class FileContentManager implements BinaryContentManager<byte[]> {
   }
 
   protected void createIfNotExist(final Domain pDomain) throws Exception {
-    Path path = Paths.get(mStorageRoot).resolve(Domain.get(pDomain.getValue()).toString());
+    Path path = Paths.get(mStorageRoot, Domain.get(pDomain.getValue()).toString());
     if (!Files.exists(path)) {
       Files.createDirectories(path);
     }
   }
 
   protected void createIfNotExist(final Domain pDomain, final String pPath) throws Exception {
-    Path path = Paths.get(mStorageRoot).resolve(Domain.get(pDomain.getValue()).toString()).resolve(pPath);
+    Path path = Paths.get(mStorageRoot, Domain.get(pDomain.getValue()).toString(), pPath);
     if (!Files.exists(path)) {
       Files.createDirectories(path);
     }
   }
 
   protected Path getQualifiedPath(String pIdentifier, Domain pDomain) {
-    return Paths.get(mStorageRoot).resolve(Domain.get(pDomain.getValue()).toString()).resolve(pIdentifier);
+    return Paths.get(mStorageRoot, Domain.get(pDomain.getValue()).toString(), pIdentifier);
   }
 
   protected Path getQualifiedPath(Domain pDomain) {
-    return Paths.get(mStorageRoot).resolve(Domain.get(pDomain.getValue()).toString());
+    return Paths.get(mStorageRoot, Domain.get(pDomain.getValue()).toString());
   }
 
   public String getStorageRoot() {
@@ -92,9 +93,7 @@ public class FileContentManager implements BinaryContentManager<byte[]> {
   }
 
   @Override
-  public List<Map<String, String>> list(String pPath, Domain pDomain) {
-    Map<String, String> result = new HashMap<>();
-
+  public List<Map<String, Object>> list(String pPath, Domain pDomain) {
     try {
       /*
       This is to make sure course material gets into folder structure like {/coursematerial/semestername/coursename/}.
@@ -102,32 +101,29 @@ public class FileContentManager implements BinaryContentManager<byte[]> {
        */
       createIfNotExist(pDomain, pPath);
     } catch (Exception e) {
-      result.put(SUCCESS, null);
-      result.put(ERROR, mMessageResource.getMessage("folder.creation.failed", pPath));
-      return Lists.newArrayList(result);
+      return Lists.newArrayList(error(mMessageResource.getMessage("folder.creation.failed", pPath)));
     }
 
-    Path targetDirectory = Paths.get(mStorageRoot).resolve(Domain.get(pDomain.getValue()).toString()).resolve(pPath);
-    List<Map<String, String>> list = new ArrayList<>();
+    Path targetDirectory = Paths.get(mStorageRoot, Domain.get(pDomain.getValue()).toString(), pPath);
+
+    List<Map<String, Object>> list = new ArrayList<>();
 
     try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(targetDirectory)) {
       for (Path path : directoryStream) {
         list.add(getPathDetails(path));
       }
     } catch (Exception ex) {
-      result.put(SUCCESS, null);
-      result.put(ERROR, mMessageResource.getMessage("folder.listing.failed"));
-      return Lists.newArrayList(result);
+      return Lists.newArrayList(error(mMessageResource.getMessage("folder.listing.failed")));
     }
 
     return list;
   }
 
-  protected Map<String, String> getPathDetails(Path pTargetPath) throws Exception {
+  protected Map<String, Object> getPathDetails(Path pTargetPath) throws Exception {
     BasicFileAttributes attrs = Files.readAttributes(pTargetPath, BasicFileAttributes.class);
-    Map<String, String> details = new HashMap<>();
+    Map<String, Object> details = new HashMap<>();
     details.put(NAME, pTargetPath.getFileName().toString());
-    details.put(RIGHTS, getPermissions(pTargetPath));
+//    details.put(RIGHTS, getPermissions(pTargetPath));
     details.put(DATE, mDateFormat.format(new Date(attrs.lastModifiedTime().toMillis())));
     details.put(SIZE, attrs.size() + "");
     details.put(TYPE, attrs.isDirectory() ? "dir" : "file");
@@ -143,25 +139,87 @@ public class FileContentManager implements BinaryContentManager<byte[]> {
   }
 
   @Override
-  public Map<String, String> rename(String pOldPath, String pNewPath, Domain pDomain) {
+  public Map<String, Object> rename(String pOldPath, String pNewPath, Domain pDomain) {
     Path root = getQualifiedPath(pDomain);
-    Path oldPath = root.resolve(pOldPath);
-    return null;
+    Path oldPath = Paths.get(root.toString(), pOldPath);
+
+    Path newPath = Paths.get(root.toString(), pNewPath);
+    try {
+      Files.move(oldPath, oldPath.resolveSibling(newPath.toString()));
+    } catch (Exception e) {
+      return error(mMessageResource.getMessage("rename.failed"));
+    }
+    return success();
   }
 
   @Override
-  public Map<String, String> move(List<String> pItems, String pNewPath, Domain pDomain) {
-    return null;
+  public Map<String, Object> move(List<String> pItems, String pNewPath, Domain pDomain) {
+    Path root = getQualifiedPath(pDomain);
+
+    for (String oldPathString : pItems) {
+      Path oldPath = root.resolve(oldPathString);
+      Path newPath = root.resolve(pNewPath);
+      File srcFile = oldPath.toFile();
+      File destinationFile = newPath.toFile();
+
+      try {
+        if (srcFile.isFile()) {
+          FileUtils.moveFile(srcFile, destinationFile);
+        } else {
+          FileUtils.moveDirectory(srcFile, destinationFile);
+        }
+      } catch (Exception e) {
+        return error(mMessageResource.getMessage("move.failed"));
+      }
+    }
+
+    return success();
   }
 
   @Override
-  public Map<String, String> copy(List<String> pItems, String pNewPath, Domain pDomain) {
-    return null;
+  public Map<String, Object> copy(List<String> pItems, String pNewPath, Domain pDomain) {
+    Path root = getQualifiedPath(pDomain);
+
+    for (String oldPathString : pItems) {
+      Path oldPath = root.resolve(oldPathString);
+      Path newPath = root.resolve(pNewPath);
+      File srcFile = oldPath.toFile();
+      File destinationFile = newPath.toFile();
+
+      try {
+        if (srcFile.isFile()) {
+          FileUtils.copyFile(srcFile, destinationFile);
+        } else {
+          FileUtils.copyDirectory(srcFile, destinationFile);
+        }
+      } catch (Exception e) {
+        return error(mMessageResource.getMessage("copy.failed"));
+      }
+    }
+
+    return success();
   }
 
   @Override
-  public Map<String, String> remove(List<String> pItems, Domain pDomain) {
-    return null;
+  public Map<String, Object> remove(List<String> pItems, Domain pDomain) {
+    Path root = getQualifiedPath(pDomain);
+
+    for (String deletedItem : pItems) {
+      Path deletedPath = root.resolve(deletedItem);
+      File deletedFile = deletedPath.toFile();
+
+      try {
+        if (!FileUtils.deleteQuietly(deletedFile)) {
+          throw new Exception("Can't delete: " + deletedFile.getAbsolutePath());
+        }
+        return success();
+      } catch (Exception e) {
+        return error(e.getMessage());
+      }
+
+    }
+
+    return success();
   }
 
   @Override
@@ -170,22 +228,27 @@ public class FileContentManager implements BinaryContentManager<byte[]> {
   }
 
   @Override
-  public Map<String, String> createFolder(String pNewPath, Domain pDomain) {
+  public Map<String, Object> createFolder(String pNewPath, Domain pDomain) {
+    try {
+      createIfNotExist(pDomain, pNewPath);
+    } catch (Exception e) {
+      return error(mMessageResource.getMessage("folder.creation.failed", pNewPath));
+    }
+    return success();
+  }
+
+  @Override
+  public Map<String, Object> compress(List<String> pItems, String pNewPath, String pNewFileName, Domain pDomain) {
     return null;
   }
 
   @Override
-  public Map<String, String> compress(List<String> pItems, String pNewPath, String pNewFileName, Domain pDomain) {
+  public Map<String, Object> extract(String pZippedItem, String pDestination, Domain pDomain) {
     return null;
   }
 
   @Override
-  public Map<String, String> extract(String pZippedItem, String pDestination, Domain pDomain) {
-    return null;
-  }
-
-  @Override
-  public Map<String, String> upload(byte[] pFileContent, String pPath, Domain pDomain) {
+  public Map<String, Object> upload(byte[] pFileContent, String pPath, Domain pDomain) {
     return null;
   }
 
@@ -197,5 +260,19 @@ public class FileContentManager implements BinaryContentManager<byte[]> {
   @Override
   public byte[] downloadAsZip(List<String> pItems, String pNewFileName, Domain pDomain) {
     return new byte[0];
+  }
+
+  protected Map<String, Object> success() {
+    Map<String, Object> success = new HashMap<>();
+    success.put(SUCCESS, true);
+    success.put(ERROR, null);
+    return success;
+  }
+
+  protected Map<String, Object> error(String msg) {
+    Map<String, Object> error = new HashMap<>();
+    error.put(SUCCESS, false);
+    error.put(ERROR, msg);
+    return error;
   }
 }
