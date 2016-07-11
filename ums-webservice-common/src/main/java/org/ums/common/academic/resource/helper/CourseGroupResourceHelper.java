@@ -3,7 +3,7 @@ package org.ums.common.academic.resource.helper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ums.common.academic.resource.ResourceHelper;
+import org.ums.common.ResourceHelper;
 import org.ums.common.builder.CourseGroupBuilder;
 import org.ums.domain.model.immutable.CourseGroup;
 import org.ums.domain.model.mutable.MutableCourseGroup;
@@ -22,7 +22,7 @@ public class CourseGroupResourceHelper extends ResourceHelper<CourseGroup, Mutab
   private CourseGroupBuilder mBuilder;
 
   @Override
-  protected Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
     return null;
   }
 

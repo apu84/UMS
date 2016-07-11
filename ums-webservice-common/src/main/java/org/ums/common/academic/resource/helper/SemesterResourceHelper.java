@@ -1,11 +1,10 @@
 package org.ums.common.academic.resource.helper;
 
 
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
-import org.ums.common.academic.resource.ResourceHelper;
+import org.ums.common.ResourceHelper;
 import org.ums.common.academic.resource.SemesterResource;
 import org.ums.common.builder.SemesterBuilder;
 import org.ums.domain.model.immutable.Semester;

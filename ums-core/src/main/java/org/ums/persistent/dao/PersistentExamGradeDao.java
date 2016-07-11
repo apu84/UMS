@@ -159,16 +159,22 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
 
         String query="";
         if(courseType==CourseType.THEORY) {
+            query = SELECT_THEORY_MARKS + " Order by decode(Reg_Type,1,1,2,2,3,3,4,4,5,5,6,6),UG_THEORY_MARKS.Student_Id,Status  ";
+            /*
             if(ExamType.SEMESTER_FINAL == ExamType.get(pExamType))
                 query = SELECT_THEORY_MARKS + " Order by UG_THEORY_MARKS.Student_Id,Status  ";
             else
-                query = SELECT_THEORY_MARKS + " Order by Reg_Type,UG_THEORY_MARKS.Student_Id,Status  ";
+                query = SELECT_THEORY_MARKS + " Order by decode(Reg_Type,1,1,2,2,3,3,4,4,5,5,6,6),UG_THEORY_MARKS.Student_Id,Status  ";
+                */
         }
         else if(courseType==CourseType.SESSIONAL) {
+            query = SELECT_SESSIONAL_MARKS + " Order by decode(Reg_Type,1,1,2,2,3,3,4,4,5,5,6,6),UG_SESSIONAL_MARKS.Student_Id,Status  ";
+            /*
             if(ExamType.SEMESTER_FINAL == ExamType.get(pExamType))
                 query = SELECT_SESSIONAL_MARKS + " Order by UG_SESSIONAL_MARKS.Student_Id,Status  ";
             else
-                query = SELECT_SESSIONAL_MARKS + " Order by Reg_Type,UG_SESSIONAL_MARKS.Student_Id,Status  ";
+                query = SELECT_SESSIONAL_MARKS + " Order by decode(Reg_Type,1,1,2,2,3,3,4,4,5,5,6,6),UG_SESSIONAL_MARKS.Student_Id,Status  ";
+                */
         }
 
         return mJdbcTemplate.query(query,new Object[]{pSemesterId,pCourseId,pExamType}, new StudentMarksRowMapper(courseType));
@@ -196,7 +202,7 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
     }
 
     @Override
-    public List<MarksSubmissionStatusDto> getMarksSubmissionStatus(int pSemesterId,int pExamType,String teacherId,String deptId,String userRole) throws Exception {
+    public List<MarksSubmissionStatusDto> getMarksSubmissionStatus(int pSemesterId,int pExamType,String teacherId,String deptId,String userRole,int status) throws Exception {
         String query="";
         if(userRole.equals("T")){  //Teacher
             query = SELECT_GRADE_SUBMISSION_TABLE_TEACHER;
@@ -204,14 +210,17 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
         }
         else if(userRole.equals("H")){  //Head
             query = SELECT_GRADE_SUBMISSION_TABLE_HEAD;
+            if(status!=-1){query+="  And Ms_Status.Status=0"+status;}
             return mJdbcTemplate.query(query, new Object[]{pSemesterId,pExamType,teacherId},new MarksSubmissionStatusTableRowMapper());
         }
         else if(userRole.equals("C")){  //CoE
             query = SELECT_GRADE_SUBMISSION_TABLE_CoE;
+            if(status!=-1){query+="  And Ms_Status.Status=0"+status;}
             return mJdbcTemplate.query(query,new Object[]{pSemesterId,pExamType,deptId} ,new MarksSubmissionStatusTableRowMapper());
         }
         else if(userRole.equals("V")){  //CoE
             query = SELECT_GRADE_SUBMISSION_TABLE_CoE;
+            if(status!=-1){query+="  And Ms_Status.Status=0"+status;}
             return mJdbcTemplate.query(query,new Object[]{pSemesterId,pExamType,deptId} ,new MarksSubmissionStatusTableRowMapper());
         }
         return null;

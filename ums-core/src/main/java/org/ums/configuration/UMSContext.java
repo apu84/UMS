@@ -164,7 +164,9 @@ public class UMSContext {
   @Bean
   UserManager userManager() {
     UserCache userCache = new UserCache(mCacheFactory.getCacheManager());
-    userCache.setManager(new PersistentUserDao(mTemplateFactory.getJdbcTemplate()));
+    UserPropertyResolver userPropertyResolver = new UserPropertyResolver(employeeManager(), studentManager());
+    userPropertyResolver.setManager(new PersistentUserDao(mTemplateFactory.getJdbcTemplate()));
+    userCache.setManager(userPropertyResolver);
     return userCache;
   }
 
@@ -270,6 +272,11 @@ public class UMSContext {
   PersistentSemesterWiseCrHrDao persistentSemesterWiseCrHrDao() {
     return new PersistentSemesterWiseCrHrDao(mTemplateFactory.getJdbcTemplate());
   }
+
+/*  @Bean
+  CourseMaterialManager courseMaterialManager() {
+    return new PersistentCourseMaterialDao(mTemplateFactory.getJdbcTemplate());
+  }*/
 
   @Bean
   LoginService loginService() {

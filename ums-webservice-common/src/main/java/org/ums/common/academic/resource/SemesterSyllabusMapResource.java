@@ -9,6 +9,7 @@ import javax.json.JsonObject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
+import javax.ws.rs.core.Response;
 
 /**
  * Created by Ifti on 08-Jan-16.
@@ -32,10 +33,9 @@ public class SemesterSyllabusMapResource extends MutableSemesterSyllabusMapResou
 
   @GET
   @Path("/{map-id}")
-  public JsonObject get(final @Context Request pRequest, final @PathParam("map-id") int pMapId)
+  public Response get(final @Context Request pRequest, final @PathParam("map-id") Integer pMapId)
       throws Exception {
-
-    return mResourceHelper.toJson(mManager.get(pMapId), null,null);
+    return mResourceHelper.get(pMapId, pRequest, mUriInfo);
   }
 
 

@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
-import org.ums.common.academic.resource.ResourceHelper;
+import org.ums.common.ResourceHelper;
 import org.ums.common.builder.NavigationBuilder;
 import org.ums.domain.model.immutable.*;
 import org.ums.domain.model.mutable.MutableNavigation;
@@ -39,7 +39,7 @@ public class MainNavigationHelper extends ResourceHelper<Navigation, MutableNavi
   NavigationProcessor mNavigationProcessor;
 
   @Override
-  protected Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
     //Do nothing
     return null;
   }

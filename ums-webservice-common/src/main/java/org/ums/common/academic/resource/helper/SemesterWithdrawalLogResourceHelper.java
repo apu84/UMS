@@ -2,20 +2,15 @@ package org.ums.common.academic.resource.helper;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
-import org.ums.common.academic.resource.ResourceHelper;
-import org.ums.common.academic.resource.RoutineResource;
+import org.ums.common.ResourceHelper;
 import org.ums.common.academic.resource.SemesterWithdrawalLogResource;
 import org.ums.common.builder.Builder;
 import org.ums.common.builder.SemesterWithdrawalLogBuilder;
 import org.ums.domain.model.immutable.SemesterWithdrawalLog;
-import org.ums.domain.model.mutable.MutableRoutine;
 import org.ums.domain.model.mutable.MutableSemesterWithdrawalLog;
-import org.ums.manager.ContentManager;
 import org.ums.manager.SemesterWithdrawalLogManager;
-import org.ums.persistent.model.PersistentRoutine;
 import org.ums.persistent.model.PersistentSemesterWithdrawalLog;
 
 import javax.json.Json;

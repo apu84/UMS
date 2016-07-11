@@ -1,4 +1,4 @@
-package org.ums.common.academic.resource;
+package org.ums.common;
 
 
 import org.ums.common.builder.Builder;
@@ -19,11 +19,11 @@ import java.util.List;
 
 public abstract class ResourceHelper<R extends EditType<M>, M extends Mutable, I> {
 
-  protected R load(final I pObjectId) throws Exception {
+  public R load(final I pObjectId) throws Exception {
     return getContentManager().get(pObjectId);
   }
 
-  protected Response get(final I pObjectId, final Request pRequest, final UriInfo pUriInfo) throws Exception {
+  public Response get(final I pObjectId, final Request pRequest, final UriInfo pUriInfo) throws Exception {
     R readOnly = load(pObjectId);
     Response.ResponseBuilder builder;
     //Calculate the ETag on last modified date of user resource
@@ -46,7 +46,7 @@ public abstract class ResourceHelper<R extends EditType<M>, M extends Mutable, I
     return builder.build();
   }
 
-  protected JsonObject getAll(final UriInfo pUriInfo) throws Exception {
+  public JsonObject getAll(final UriInfo pUriInfo) throws Exception {
     List<R> readOnlys = getContentManager().getAll();
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
@@ -67,13 +67,13 @@ public abstract class ResourceHelper<R extends EditType<M>, M extends Mutable, I
     return jsonObjectBuilder.build();
   }
 
-  protected Response delete(final I pObjectId) throws Exception {
+  public Response delete(final I pObjectId) throws Exception {
     R readOnly = load(pObjectId);
     readOnly.edit().delete();
     return Response.noContent().build();
   }
 
-  protected Response put(final I pObjectId, final Request pRequest,
+  public Response put(final I pObjectId, final Request pRequest,
                          final String pIfMatch, final JsonObject pJsonObject) throws Exception {
     if (pIfMatch == null) {
       return Response.status(Response.Status.BAD_REQUEST).entity("No If-Match header found.").build();
@@ -96,7 +96,7 @@ public abstract class ResourceHelper<R extends EditType<M>, M extends Mutable, I
     return Response.noContent().build();
   }
 
-  protected abstract Response post(final JsonObject pJsonObject, final UriInfo pUriInfo) throws Exception;
+  public abstract Response post(final JsonObject pJsonObject, final UriInfo pUriInfo) throws Exception;
 
   protected abstract ContentManager<R, M, I> getContentManager();
 

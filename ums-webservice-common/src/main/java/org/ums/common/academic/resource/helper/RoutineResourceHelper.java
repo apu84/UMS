@@ -4,7 +4,7 @@ import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
-import org.ums.common.academic.resource.ResourceHelper;
+import org.ums.common.ResourceHelper;
 import org.ums.common.academic.resource.RoutineResource;
 import org.ums.common.builder.Builder;
 import org.ums.common.builder.RoutineBuilder;

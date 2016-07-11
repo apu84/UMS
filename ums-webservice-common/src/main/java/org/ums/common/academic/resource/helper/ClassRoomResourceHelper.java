@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.persistent.model.PersistentClassRoom;
 import org.ums.cache.LocalCache;
-import org.ums.common.academic.resource.ResourceHelper;
+import org.ums.common.ResourceHelper;
 import org.ums.common.academic.resource.SemesterResource;
 import org.ums.common.builder.ClassRoomBuilder;
 import org.ums.domain.model.mutable.MutableClassRoom;
@@ -38,7 +38,7 @@ public class ClassRoomResourceHelper extends ResourceHelper<ClassRoom, MutableCl
   }
 
 
-  protected JsonObject getAll(final UriInfo pUriInfo) throws Exception {
+  public JsonObject getAll(final UriInfo pUriInfo) throws Exception {
     List<ClassRoom> roomList = getContentManager().getAll();
 
     JsonObjectBuilder object = Json.createObjectBuilder();

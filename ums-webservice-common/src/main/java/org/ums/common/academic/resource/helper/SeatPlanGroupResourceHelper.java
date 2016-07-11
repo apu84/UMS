@@ -1,9 +1,10 @@
 package org.ums.common.academic.resource.helper;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
-import org.ums.common.academic.resource.ResourceHelper;
+import org.ums.common.ResourceHelper;
 import org.ums.common.builder.Builder;
 import org.ums.common.builder.SeatPlanGroupBuilder;
 import org.ums.domain.model.immutable.SeatPlanGroup;
@@ -30,7 +31,7 @@ import java.util.Map;
  * Created by Monjur-E-Morshed on 4/21/2016.
  */
 @Component
-public class SeatPlanGroupResourceHelper extends ResourceHelper<SeatPlanGroup,MutableSeatPlanGroup,Integer> {
+public class SeatPlanGroupResourceHelper extends ResourceHelper<SeatPlanGroup, MutableSeatPlanGroup, Integer> {
 
   @Autowired
   SeatPlanGroupManager mSeatPlanGroupManager;
@@ -52,7 +53,7 @@ public class SeatPlanGroupResourceHelper extends ResourceHelper<SeatPlanGroup,Mu
   SeatPlanService mSeatPlanService;
 
 
-  public JsonObject getSeatPlanGroupBySemester(final int pSemesterId,int type, final int update, final Request pRequest, final UriInfo pUriInfo) throws Exception {
+  public JsonObject getSeatPlanGroupBySemester(final int pSemesterId, int type, final int update, final Request pRequest, final UriInfo pUriInfo) throws Exception {
 
     GenericResponse<Map> genericResponse = null, previousResponse = null;
 
@@ -72,28 +73,27 @@ public class SeatPlanGroupResourceHelper extends ResourceHelper<SeatPlanGroup,Mu
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-    Boolean seatPlanGroupExistForTheSemesterAndType=false;
+    Boolean seatPlanGroupExistForTheSemesterAndType = false;
 
-    if(seatPlanGroupListForCheckingIfThereIsValueOrNot.size()>0){
-      seatPlanGroupListBySemesterAndType = mSeatPlanGroupManager.getGroupBySemester(pSemesterId,type);
-      if(seatPlanGroupListBySemesterAndType.size()>0){
+    if (seatPlanGroupListForCheckingIfThereIsValueOrNot.size() > 0) {
+      seatPlanGroupListBySemesterAndType = mSeatPlanGroupManager.getGroupBySemester(pSemesterId, type);
+      if (seatPlanGroupListBySemesterAndType.size() > 0) {
         seatPlanGroupExistForTheSemesterAndType = true;
       }
     }
 
 
-    if(seatPlanGroupExistForTheSemesterAndType==true  && update==0){
+    if (seatPlanGroupExistForTheSemesterAndType == true && update == 0) {
 
       //seatPlanGroupForSemester = mSeatPlanGroupManager.getGroupBySemester(pSemesterId,type);
 
-      seatPlanGroupForSemester = mSeatPlanGroupManager.getGroupBySemesterTypeFromDb(pSemesterId,type);
-        for(SeatPlanGroup seatPlanGroup: seatPlanGroupForSemester){
+      seatPlanGroupForSemester = mSeatPlanGroupManager.getGroupBySemesterTypeFromDb(pSemesterId, type);
+      for (SeatPlanGroup seatPlanGroup : seatPlanGroupForSemester) {
 
-          children.add(toJson(seatPlanGroup,pUriInfo,localCache));
-        }
+        children.add(toJson(seatPlanGroup, pUriInfo, localCache));
+      }
 
-    }
-    else{
+    } else {
       /*genericResponse = mSeatPlanService.generateGroup(pSemesterId,type);
       if (genericResponse != null ) {
         seatPlanGroupForSemester = mSeatPlanGroupManager.getGroupBySemester(pSemesterId,type);
@@ -106,11 +106,11 @@ public class SeatPlanGroupResourceHelper extends ResourceHelper<SeatPlanGroup,Mu
         genericResponse.setMessage(genericResponse.getMessage() + "\n" + previousResponse.getMessage());
       }*/
 
-      List<SeatPlanGroup> seatplanGroups = mSeatPlanGroupManager.getGroupBySemester(pSemesterId,type);
+      List<SeatPlanGroup> seatplanGroups = mSeatPlanGroupManager.getGroupBySemester(pSemesterId, type);
 
       List<MutableSeatPlanGroup> mutableSeatPlanGroups = new ArrayList<>();
 
-      for(SeatPlanGroup group: seatplanGroups){
+      for (SeatPlanGroup group : seatplanGroups) {
         MutableSeatPlanGroup mSeatPlanGroup = new PersistentSeatPlanGroup();
         PersistentSemester semester = new PersistentSemester();
         semester.setId(group.getSemester().getId());
@@ -129,10 +129,10 @@ public class SeatPlanGroupResourceHelper extends ResourceHelper<SeatPlanGroup,Mu
 
       mSeatPlanGroupManager.create(mutableSeatPlanGroups);
 
-      seatPlanGroupForSemester = mSeatPlanGroupManager.getGroupBySemesterTypeFromDb(pSemesterId,type);
-      for(SeatPlanGroup seatPlanGroup: seatPlanGroupForSemester){
+      seatPlanGroupForSemester = mSeatPlanGroupManager.getGroupBySemesterTypeFromDb(pSemesterId, type);
+      for (SeatPlanGroup seatPlanGroup : seatPlanGroupForSemester) {
 
-        children.add(toJson(seatPlanGroup,pUriInfo,localCache));
+        children.add(toJson(seatPlanGroup, pUriInfo, localCache));
       }
     }
 
@@ -142,8 +142,8 @@ public class SeatPlanGroupResourceHelper extends ResourceHelper<SeatPlanGroup,Mu
   }
 
   @Override
-  protected Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
-    return null;
+  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+    throw new NotImplementedException("Post method not implemented for SeatPlanGroupResourceHelper");
   }
 
   @Override

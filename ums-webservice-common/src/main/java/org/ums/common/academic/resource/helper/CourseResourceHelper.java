@@ -3,7 +3,7 @@ package org.ums.common.academic.resource.helper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
-import org.ums.common.academic.resource.ResourceHelper;
+import org.ums.common.ResourceHelper;
 import org.ums.common.academic.resource.SemesterResource;
 import org.ums.common.builder.CourseBuilder;
 import org.ums.domain.model.immutable.Course;

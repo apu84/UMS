@@ -1,13 +1,14 @@
 package org.ums.common.academic.resource.helper;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
-import org.ums.common.academic.resource.ResourceHelper;
+import org.ums.common.ResourceHelper;
 import org.ums.common.builder.TeacherBuilder;
-import org.ums.domain.model.mutable.MutableTeacher;
 import org.ums.domain.model.immutable.Department;
 import org.ums.domain.model.immutable.Teacher;
+import org.ums.domain.model.mutable.MutableTeacher;
 import org.ums.manager.DepartmentManager;
 import org.ums.manager.TeacherManager;
 
@@ -31,8 +32,8 @@ public class TeacherResourceHelper extends ResourceHelper<Teacher, MutableTeache
   private TeacherBuilder mBuilder;
 
   @Override
-  protected Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
-    return null;
+  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+    throw new NotImplementedException("Post method not implemented for TeacherResourceHelper");
   }
 
   @Override
