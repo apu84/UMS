@@ -44,7 +44,7 @@ public interface BinaryContentManager<T> {
   }
 
 
-  List<Map<String, String>> list(String pPath, Domain pDomain) throws Exception;
+  List<Map<String, String>> list(String pPath, Domain pDomain);
 
   Map<String, String> rename(String pOldPath, String pNewPath, Domain pDomain);
 
