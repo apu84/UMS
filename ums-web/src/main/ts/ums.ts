@@ -554,6 +554,23 @@ module ums {
           controller: 'LoggerGrid',
           templateUrl: 'views/logger/logger-grid.html'
         })
+        .state('courseMaterial', {
+          url: "/courseMaterial/:1/:2",
+          controller: 'CourseMaterial',
+          templateUrl: 'views/course-material/course-material.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: [
+                  'js/lib/ng-file-upload.min.js',
+                  'js/lib/angular-filemanager.min.js',
+                  'js/lib/angular-translate.min.js',
+                  'css/angular-filemanager.min.css'
+                ]
+              });
+            }]
+          }
+        })
         //In database use /dummyController/H or /dummyController/T in the location column
         //https://localhost/ums-web/iums/#/dummyConroller/T
         //https://localhost/ums-web/iums/#/dummyConroller/H
