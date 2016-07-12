@@ -44,25 +44,25 @@ public interface BinaryContentManager<T> {
   }
 
 
-  List<Map<String, String>> list(String pPath, Domain pDomain);
+  List<Map<String, Object>> list(String pPath, Domain pDomain);
 
-  Map<String, String> rename(String pOldPath, String pNewPath, Domain pDomain);
+  Map<String, Object> rename(String pOldPath, String pNewPath, Domain pDomain);
 
-  Map<String, String> move(List<String> pItems, String pNewPath, Domain pDomain);
+  Map<String, Object> move(List<String> pItems, String pNewPath, Domain pDomain);
 
-  Map<String, String> copy(List<String> pItems, String pNewPath, Domain pDomain);
+  Map<String, Object> copy(List<String> pItems, String pNewPath, Domain pDomain);
 
-  Map<String, String> remove(List<String> pItems, Domain pDomain);
+  Map<String, Object> remove(List<String> pItems, Domain pDomain);
 
   Map<String, byte[]> content(String pPath, Domain pDomain);
 
-  Map<String, String> createFolder(String pNewPath, Domain pDomain);
+  Map<String, Object> createFolder(String pNewPath, Domain pDomain);
 
-  Map<String, String> compress(List<String> pItems, String pNewPath, String pNewFileName, Domain pDomain);
+  Map<String, Object> compress(List<String> pItems, String pNewPath, String pNewFileName, Domain pDomain);
 
-  Map<String, String> extract(String pZippedItem, String pDestination, Domain pDomain);
+  Map<String, Object> extract(String pZippedItem, String pDestination, Domain pDomain);
 
-  Map<String, String> upload(byte[] pFileContent, String pPath, Domain pDomain);
+  Map<String, Object> upload(byte[] pFileContent, String pPath, Domain pDomain);
 
   byte[] download(String pPath, Domain pDomain);
 
