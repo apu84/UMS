@@ -157,16 +157,16 @@ public class FileContentManager implements BinaryContentManager<byte[]> {
     Path root = getQualifiedPath(pDomain);
 
     for (String oldPathString : pItems) {
-      Path oldPath = root.resolve(oldPathString);
-      Path newPath = root.resolve(pNewPath);
+      Path oldPath = Paths.get(root.toString(), oldPathString);
+      Path newPath = Paths.get(root.toString(), pNewPath);
       File srcFile = oldPath.toFile();
       File destinationFile = newPath.toFile();
 
       try {
         if (srcFile.isFile()) {
-          FileUtils.moveFile(srcFile, destinationFile);
+          FileUtils.moveFileToDirectory(srcFile, destinationFile, true);
         } else {
-          FileUtils.moveDirectory(srcFile, destinationFile);
+          FileUtils.moveDirectoryToDirectory(srcFile, destinationFile, true);
         }
       } catch (Exception e) {
         return error(mMessageResource.getMessage("move.failed"));
