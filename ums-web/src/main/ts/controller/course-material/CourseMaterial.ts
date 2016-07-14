@@ -9,7 +9,7 @@ module ums {
       FILEMANAGER_CONFIG.set({
         listUrl: baseUri,
         createFolderUrl: baseUri,
-        uploadUrl: baseUri,
+        uploadUrl: baseUri + "/upload",
         renameUrl: baseUri,
         copyUrl: baseUri,
         moveUrl: baseUri,

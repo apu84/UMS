@@ -1,5 +1,6 @@
 package org.ums.manager;
 
+import java.io.InputStream;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
@@ -62,7 +63,7 @@ public interface BinaryContentManager<T> {
 
   Map<String, Object> extract(String pZippedItem, String pDestination, Domain pDomain);
 
-  Map<String, Object> upload(byte[] pFileContent, String pPath, Domain pDomain);
+  Map<String, Object> upload(Map<String, InputStream> pFileContent, String pPath, Domain pDomain);
 
   byte[] download(String pPath, Domain pDomain);
 

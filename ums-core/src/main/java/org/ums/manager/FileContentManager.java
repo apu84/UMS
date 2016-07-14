@@ -6,10 +6,7 @@ import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.ums.message.MessageResource;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.*;
 import java.nio.file.attribute.*;
 import java.text.DateFormat;
@@ -248,8 +245,22 @@ public class FileContentManager implements BinaryContentManager<byte[]> {
   }
 
   @Override
-  public Map<String, Object> upload(byte[] pFileContent, String pPath, Domain pDomain) {
-    return null;
+  public Map<String, Object> upload(Map<String, InputStream> pFileContent, String pPath, Domain pDomain) {
+    if (pFileContent.size() == 0) {
+      return error("file size  = 0");
+    } else {
+      Path path = Paths.get(getQualifiedPath(pDomain).toString(), pPath);
+
+      for (Map.Entry<String, InputStream> fileEntry : pFileContent.entrySet()) {
+        Path filePath = Paths.get(path.toString(), fileEntry.getKey());
+        try {
+          Files.copy(fileEntry.getValue(), filePath , StandardCopyOption.REPLACE_EXISTING);
+        } catch (Exception e) {
+          error("Failed to upload file");
+        }
+      }
+    }
+    return success();
   }
 
   @Override

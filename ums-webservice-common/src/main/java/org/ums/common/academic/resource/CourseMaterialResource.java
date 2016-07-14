@@ -1,9 +1,8 @@
 package org.ums.common.academic.resource;
 
-import org.glassfish.jersey.media.multipart.BodyPartEntity;
-import org.glassfish.jersey.media.multipart.FormDataBodyPart;
-import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
-import org.glassfish.jersey.media.multipart.FormDataParam;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.common.Resource;
@@ -13,14 +12,12 @@ import org.ums.manager.SemesterManager;
 
 import javax.json.JsonArray;
 import javax.json.JsonObject;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
-import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,9 +26,8 @@ import java.util.Map;
 @Component
 @Path("/academic/courseMaterial")
 @Consumes(Resource.MIME_TYPE_JSON)
-
 public class CourseMaterialResource extends Resource {
-
+  public static String DESTINATION = "destination";
   @Autowired
   BinaryContentManager<byte[]> mBinaryContentManager;
 
@@ -84,37 +80,38 @@ public class CourseMaterialResource extends Resource {
   @POST
   @Consumes({MediaType.MULTIPART_FORM_DATA})
   @Path("/semester/{semester-name}/course/{course-no}/upload")
-  public Object uploadBySemesterCourse(final @Context Request pRequest,
+  public Object uploadBySemesterCourse(final @Context HttpServletRequest httpRequest,
                                        final @PathParam("semester-name") String pSemesterName,
-                                       final @PathParam("course-no") String pCourseNo,
-                                       @FormDataParam("files") List<FormDataBodyPart> bodyParts,
-                                       @FormDataParam("files") FormDataContentDisposition fileDispositions) throws Exception {
+                                       final @PathParam("course-no") String pCourseNo) throws Exception {
+
+
     String root = "/" + pSemesterName + "/" + pCourseNo;
-    for (int i = 0; i < bodyParts.size(); i++) {
-      /*
-       * Casting FormDataBodyPart to BodyPartEntity, which can give us
-			 * InputStream for uploaded file
-			 */
-      BodyPartEntity bodyPartEntity = (BodyPartEntity) bodyParts.get(i).getEntity();
-      String name = bodyParts.get(i).getName();
-      String destination = root;
-      if (name.equalsIgnoreCase("destination")) {
-        destination = destination + bodyParts.get(i).getValue();
-      }
-      String fileName = bodyParts.get(i).getContentDisposition().getFileName();
-      saveFile(bodyPartEntity.getInputStream(), destination + "/" + fileName);
+
+    if (ServletFileUpload.isMultipartContent(httpRequest)) {
+      return uploadFile(httpRequest, root);
     }
     return null;
   }
 
-  private void saveFile(InputStream file, String name) {
-    try {
-      /* Change directory path */
-      java.nio.file.Path path = FileSystems.getDefault().getPath("/Volumes/Drive2/temp/file/" + name);
-      /* Save InputStream as file */
-      Files.copy(file, path);
-    } catch (IOException ie) {
-      ie.printStackTrace();
+  private Object uploadFile(HttpServletRequest request, String pRootPath) throws Exception {
+    String destination = null;
+    Map<String, InputStream> files = new HashMap<>();
+
+    List<FileItem> items = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
+    for (FileItem item : items) {
+      if (item.isFormField()) {
+        // Process regular form field (input type="text|radio|checkbox|etc", select, etc).
+        if (DESTINATION.equals(item.getFieldName())) {
+          destination = item.getString();
+        }
+      } else {
+        // Process form file field (input type="file").
+        files.put(item.getName(), item.getInputStream());
+      }
     }
+
+    return mBinaryContentManager.upload(files,
+        pRootPath + destination,
+        BinaryContentManager.Domain.COURSE_MATERIAL);
   }
 }
