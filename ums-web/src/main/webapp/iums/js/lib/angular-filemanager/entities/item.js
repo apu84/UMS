@@ -12,6 +12,8 @@
                 perms: new Chmod(model && model.rights),
                 content: model && model.content || '',
                 recursive: false,
+                token: model && model.token || '',
+                owner: model && model.owner || '',
                 fullPath: function() {
                     var path = this.path.filter(Boolean);
                     return ('/' + path.join('/') + '/' + this.name).replace(/\/\//, '/');

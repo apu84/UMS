@@ -77,7 +77,8 @@
             //TODO: add spinner to indicate file is downloading
             var itemPath = this.getFilePath(item);
             var toFilename = item.model.name;
-
+            var token = item.model.token;
+            console.debug(item.model);
             if (item.isFolder()) {
                 return;
             }
@@ -87,7 +88,8 @@
                 itemPath,
                 toFilename,
                 fileManagerConfig.downloadFilesByAjax,
-                forceNewWindow
+                forceNewWindow,
+                token
             );
         };
 

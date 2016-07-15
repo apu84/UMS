@@ -13,7 +13,10 @@ module ums {
         renameUrl: baseUri,
         copyUrl: baseUri,
         moveUrl: baseUri,
-        removeUrl: baseUri
+        removeUrl: baseUri,
+        downloadFileUrl: '/ums-webservice-common/academic/courseMaterial/download/semester/' + semesterName + "/course/" + courseNo,
+        hidePermissions: true,
+        hideOwner: false
       });
     }
   }

@@ -216,17 +216,19 @@
             return deferred.promise;
         };
 
-        ApiHandler.prototype.getUrl = function(apiUrl, path) {
+        ApiHandler.prototype.getUrl = function(apiUrl, path, token) {
             var data = {
                 action: 'download',
-                path: path
+                path: path,
+                token: token
             };
             return path && [apiUrl, $.param(data)].join('?');
         };
 
-        ApiHandler.prototype.download = function(apiUrl, itemPath, toFilename, downloadByAjax, forceNewWindow) {
+        ApiHandler.prototype.download = function(apiUrl, itemPath, toFilename, downloadByAjax, forceNewWindow, token) {
+            console.debug("download file");
             var self = this;
-            var url = this.getUrl(apiUrl, itemPath);
+            var url = this.getUrl(apiUrl, itemPath, token);
 
             if (!downloadByAjax || forceNewWindow || !$window.saveAs) {
                 !$window.saveAs && $window.console.log('Your browser dont support ajax download, downloading by default');

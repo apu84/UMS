@@ -3,10 +3,15 @@ package org.ums.manager;
 
 import com.google.common.collect.Lists;
 import org.apache.commons.io.FileUtils;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.util.StringUtils;
 import org.ums.message.MessageResource;
 
 import java.io.*;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 import java.nio.file.*;
 import java.nio.file.attribute.*;
 import java.text.DateFormat;
@@ -22,11 +27,20 @@ public class FileContentManager implements BinaryContentManager<byte[]> {
   private static final String SIZE = "size";
   private static final String DATE = "date";
   private static final String TYPE = "type";
-  private String DATE_FORMAT = "EEE, d MMM yyyy HH:mm:ss z"; // (Wed, 4 Jul 2001 12:08:56)
+  private static final String OWNER = "owner";
+  private String DATE_FORMAT = "YYYY-MM-dd HH:mm:ss";
   private DateFormat mDateFormat = new SimpleDateFormat(DATE_FORMAT);
 
   @Autowired
   MessageResource mMessageResource;
+
+  @Autowired
+  @Lazy
+  BearerAccessTokenManager mBearerAccessTokenManager;
+
+  @Autowired
+  @Lazy
+  UserManager mUserManager;
 
   @Override
   public byte[] get(String pIdentifier, Domain pDomain) throws Exception {
@@ -70,6 +84,7 @@ public class FileContentManager implements BinaryContentManager<byte[]> {
     Path path = Paths.get(mStorageRoot, Domain.get(pDomain.getValue()).toString(), pPath);
     if (!Files.exists(path)) {
       Files.createDirectories(path);
+      addUser(SecurityUtils.getSubject().getPrincipal().toString(), path);
     }
   }
 
@@ -88,6 +103,7 @@ public class FileContentManager implements BinaryContentManager<byte[]> {
   public void setStorageRoot(String pStorageRoot) {
     mStorageRoot = pStorageRoot;
   }
+
 
   @Override
   public List<Map<String, Object>> list(String pPath, Domain pDomain) {
@@ -120,10 +136,18 @@ public class FileContentManager implements BinaryContentManager<byte[]> {
     BasicFileAttributes attrs = Files.readAttributes(pTargetPath, BasicFileAttributes.class);
     Map<String, Object> details = new HashMap<>();
     details.put(NAME, pTargetPath.getFileName().toString());
-//    details.put(RIGHTS, getPermissions(pTargetPath));
+//    details.put(RIGHTS, "some valid hash");
     details.put(DATE, mDateFormat.format(new Date(attrs.lastModifiedTime().toMillis())));
     details.put(SIZE, attrs.size() + "");
     details.put(TYPE, attrs.isDirectory() ? "dir" : "file");
+    details.put("token", mBearerAccessTokenManager.getByUser(SecurityUtils.getSubject().getPrincipal().toString()).getId());
+
+    String userId = getUser(pTargetPath);
+    if (!StringUtils.isEmpty(userId)) {
+      userId = mUserManager.get(userId).getName();
+    }
+    details.put(OWNER, userId);
+
     return details;
   }
 
@@ -202,18 +226,16 @@ public class FileContentManager implements BinaryContentManager<byte[]> {
     Path root = getQualifiedPath(pDomain);
 
     for (String deletedItem : pItems) {
-      Path deletedPath = root.resolve(deletedItem);
+      Path deletedPath = Paths.get(root.toString(), deletedItem);
       File deletedFile = deletedPath.toFile();
 
       try {
         if (!FileUtils.deleteQuietly(deletedFile)) {
           throw new Exception("Can't delete: " + deletedFile.getAbsolutePath());
         }
-        return success();
       } catch (Exception e) {
         return error(e.getMessage());
       }
-
     }
 
     return success();
@@ -255,6 +277,7 @@ public class FileContentManager implements BinaryContentManager<byte[]> {
         Path filePath = Paths.get(path.toString(), fileEntry.getKey());
         try {
           Files.copy(fileEntry.getValue(), filePath , StandardCopyOption.REPLACE_EXISTING);
+          addUser(SecurityUtils.getSubject().getPrincipal().toString(), filePath);
         } catch (Exception e) {
           error("Failed to upload file");
         }
@@ -264,13 +287,80 @@ public class FileContentManager implements BinaryContentManager<byte[]> {
   }
 
   @Override
-  public byte[] download(String pPath, Domain pDomain) {
-    return new byte[0];
+  public Map<String, Object> download(String pPath, String pToken, Domain pDomain) {
+    try {
+      if (mBearerAccessTokenManager.get(pToken) == null) {
+        return null;
+      }
+    } catch (Exception e) {
+      return null;
+    }
+
+    Map<String, Object> response = new HashMap<>();
+    try {
+      Path path = Paths.get(getQualifiedPath(pDomain).toString(), pPath);
+      File file = path.toFile();
+      response.put("Content-Type", Files.probeContentType(path));
+      response.put("Content-Length", String.valueOf(file.length()));
+      response.put("Content-Disposition", "inline; filename=\"" + file.getName() + "\"");
+      response.put("Content", Files.newInputStream(path));
+      return response;
+    } catch (Exception e) {
+      return null;
+    }
   }
 
   @Override
   public byte[] downloadAsZip(List<String> pItems, String pNewFileName, Domain pDomain) {
     return new byte[0];
+  }
+
+  protected boolean addUser(final String pUser, final Path pTargetPath) {
+    try {
+      if (!isUserDefinedAttributeSupported(pTargetPath)) {
+        return false;
+      }
+
+      UserDefinedFileAttributeView view = Files.
+          getFileAttributeView(pTargetPath, UserDefinedFileAttributeView.class);
+
+      view.write(OWNER, Charset.defaultCharset().encode(pUser));
+    } catch (Exception e) {
+      return false;
+    }
+    return true;
+  }
+
+  protected String getUser(final Path pTargetPath) {
+    try {
+      if (!isUserDefinedAttributeSupported(pTargetPath)) {
+        return "";
+      }
+
+      UserDefinedFileAttributeView view = Files.
+          getFileAttributeView(pTargetPath, UserDefinedFileAttributeView.class);
+
+      int size = view.size(OWNER);
+      ByteBuffer buf = ByteBuffer.allocateDirect(size);
+      view.read(OWNER, buf);
+      buf.flip();
+      return Charset.defaultCharset().decode(buf).toString();
+    } catch (Exception e) {
+      return "";
+    }
+  }
+
+  protected boolean isUserDefinedAttributeSupported(final Path pPath) {
+    try {
+      FileStore store = Files.getFileStore(pPath);
+      if (!store.supportsFileAttributeView(UserDefinedFileAttributeView.class)) {
+        System.err.format("UserDefinedFileAttributeView not supported on %s\n", store);
+      }
+    } catch (Exception e) {
+      return false;
+    }
+
+    return true;
   }
 
   protected Map<String, Object> success() {
