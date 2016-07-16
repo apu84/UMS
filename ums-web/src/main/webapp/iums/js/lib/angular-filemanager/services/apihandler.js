@@ -249,13 +249,14 @@
             return deferred.promise;
         };
 
-        ApiHandler.prototype.downloadMultiple = function(apiUrl, items, toFilename, downloadByAjax, forceNewWindow) {
+        ApiHandler.prototype.downloadMultiple = function(apiUrl, items, toFilename, downloadByAjax, forceNewWindow, token) {
             var self = this;
             var deferred = $q.defer();
             var data = {
                 action: 'downloadMultiple',
                 items: items,
-                toFilename: toFilename
+                toFilename: toFilename,
+                token: token
             };
             var url = [apiUrl, $.param(data)].join('?');
 

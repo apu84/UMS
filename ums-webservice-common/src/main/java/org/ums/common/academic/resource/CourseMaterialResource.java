@@ -103,30 +103,59 @@ public class CourseMaterialResource extends Resource {
                                       final @Context HttpServletResponse httpResponse,
                                       final @PathParam("semester-name") String pSemesterName,
                                       final @PathParam("course-no") String pCourseNo) throws Exception {
-    String action = httpRequest.getParameter("action");
-    if (!StringUtils.isEmpty(action)
-        && action.equalsIgnoreCase("download")) {
-      String token = httpRequest.getParameter("token");
-      String root = "/" + pSemesterName + "/" + pCourseNo;
-      String filePath = httpRequest.getParameter("path");
-      if (!StringUtils.isEmpty(filePath)) {
-        Map<String, Object> response = mBinaryContentManager.download(root + filePath, token,
-            BinaryContentManager.Domain.COURSE_MATERIAL);
-        if (response != null) {
-          InputStream fileStream = (InputStream) response.get("Content");
-          for (String key : response.keySet()) {
-            if (!key.equalsIgnoreCase("Content")) {
-              httpResponse.setHeader(key, response.get(key).toString());
-            }
-          }
+    String action = "", token = "", toFileName = "";
+    List<String> downloadFiles = null;
+    String root = "/" + pSemesterName + "/" + pCourseNo;
+    action = httpRequest.getParameter("action");
+    token = httpRequest.getParameter("token");
 
-          StreamUtils.copy(fileStream, httpResponse.getOutputStream());
-          httpResponse.getOutputStream().flush();
-        }
-      } else {
-        Response.ResponseBuilder responseBuilder = Response.status(Response.Status.NOT_FOUND);
-        return responseBuilder.build();
+    if (!StringUtils.isEmpty(action) && !StringUtils.isEmpty(token)) {
+      switch (action) {
+        case "download":
+          String filePath = httpRequest.getParameter("path");
+          if (!StringUtils.isEmpty(filePath)) {
+            Map<String, Object> response = mBinaryContentManager.download(root + filePath, token,
+                BinaryContentManager.Domain.COURSE_MATERIAL);
+            if (response != null) {
+              InputStream fileStream = (InputStream) response.get("Content");
+              for (String key : response.keySet()) {
+                if (!key.equalsIgnoreCase("Content")) {
+                  httpResponse.setHeader(key, response.get(key).toString());
+                }
+              }
+
+              StreamUtils.copy(fileStream, httpResponse.getOutputStream());
+              httpResponse.getOutputStream().flush();
+            }
+          } else {
+            Response.ResponseBuilder responseBuilder = Response.status(Response.Status.NOT_FOUND);
+            return responseBuilder.build();
+          }
+          break;
+        case "downloadMultiple":
+          downloadFiles = actionItems(httpRequest.getParameterValues("items[]"), root);
+          toFileName = httpRequest.getParameter("toFilename");
+          if (downloadFiles.size() > 0) {
+            Map<String, Object> response = mBinaryContentManager.downloadAsZip(downloadFiles, toFileName, token,
+                BinaryContentManager.Domain.COURSE_MATERIAL);
+            if (response != null) {
+              InputStream fileStream = (InputStream) response.get("Content");
+              for (String key : response.keySet()) {
+                if (!key.equalsIgnoreCase("Content")) {
+                  httpResponse.setHeader(key, response.get(key).toString());
+                }
+              }
+
+              StreamUtils.copy(fileStream, httpResponse.getOutputStream());
+              httpResponse.getOutputStream().flush();
+            }
+          } else {
+            Response.ResponseBuilder responseBuilder = Response.status(Response.Status.NOT_FOUND);
+            return responseBuilder.build();
+          }
+          break;
       }
+
     }
 
     Response.ResponseBuilder responseBuilder = Response.ok();
@@ -159,6 +188,16 @@ public class CourseMaterialResource extends Resource {
     List<String> actionItems = new ArrayList<>();
     for (int i = 0; i < pItems.size(); i++) {
       String actionItem = pItems.getString(i);
+      actionItems.add(pRoot + actionItem);
+    }
+
+    return actionItems;
+  }
+
+  protected List<String> actionItems(final String[] pItems, final String pRoot) {
+    List<String> actionItems = new ArrayList<>();
+    for (int i = 0; i < pItems.length; i++) {
+      String actionItem = pItems[i];
       actionItems.add(pRoot + actionItem);
     }
 

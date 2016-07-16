@@ -11,7 +11,7 @@
             return '/' + arrayPath.join('/');
         };
 
-        ApiMiddleware.prototype.getFileList = function(files) {
+        ApiMiddleware.prototype.getFileList = function(files) { console.debug(files);
             return (files || []).map(function(file) {
                 return file && file.model.fullPath();
             });
@@ -94,7 +94,7 @@
         };
 
         ApiMiddleware.prototype.downloadMultiple = function(files, forceNewWindow) {
-            var items = this.getFileList(files);
+            var items = this.getFileList(files); console.debug(items);
             var timestamp = new Date().getTime().toString().substr(8, 13);
             var toFilename = timestamp + '-' + fileManagerConfig.multipleDownloadFileName;
             
@@ -103,7 +103,8 @@
                 items, 
                 toFilename, 
                 fileManagerConfig.downloadFilesByAjax,
-                forceNewWindow
+                forceNewWindow,
+                files[0].model.token
             );
         };
 

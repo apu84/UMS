@@ -10,9 +10,11 @@ import org.springframework.util.StringUtils;
 import org.ums.message.MessageResource;
 
 import java.io.*;
+import java.net.URI;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.file.*;
+import java.nio.file.FileSystem;
 import java.nio.file.attribute.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -276,7 +278,7 @@ public class FileContentManager implements BinaryContentManager<byte[]> {
       for (Map.Entry<String, InputStream> fileEntry : pFileContent.entrySet()) {
         Path filePath = Paths.get(path.toString(), fileEntry.getKey());
         try {
-          Files.copy(fileEntry.getValue(), filePath , StandardCopyOption.REPLACE_EXISTING);
+          Files.copy(fileEntry.getValue(), filePath, StandardCopyOption.REPLACE_EXISTING);
           addUser(SecurityUtils.getSubject().getPrincipal().toString(), filePath);
         } catch (Exception e) {
           error("Failed to upload file");
@@ -288,31 +290,59 @@ public class FileContentManager implements BinaryContentManager<byte[]> {
 
   @Override
   public Map<String, Object> download(String pPath, String pToken, Domain pDomain) {
-    try {
-      if (mBearerAccessTokenManager.get(pToken) == null) {
+    if (isValidToken(pToken)) {
+
+      Map<String, Object> response = new HashMap<>();
+      try {
+        Path path = Paths.get(getQualifiedPath(pDomain).toString(), pPath);
+        File file = path.toFile();
+        response.put("Content-Type", Files.probeContentType(path));
+        response.put("Content-Length", String.valueOf(file.length()));
+        response.put("Content-Disposition", "inline; filename=\"" + file.getName() + "\"");
+        response.put("Content", Files.newInputStream(path));
+        return response;
+      } catch (Exception e) {
         return null;
       }
-    } catch (Exception e) {
-      return null;
     }
 
-    Map<String, Object> response = new HashMap<>();
-    try {
-      Path path = Paths.get(getQualifiedPath(pDomain).toString(), pPath);
-      File file = path.toFile();
-      response.put("Content-Type", Files.probeContentType(path));
-      response.put("Content-Length", String.valueOf(file.length()));
-      response.put("Content-Disposition", "inline; filename=\"" + file.getName() + "\"");
-      response.put("Content", Files.newInputStream(path));
-      return response;
-    } catch (Exception e) {
-      return null;
-    }
+    return null;
   }
 
   @Override
-  public byte[] downloadAsZip(List<String> pItems, String pNewFileName, Domain pDomain) {
-    return new byte[0];
+  public Map<String, Object> downloadAsZip(List<String> pItems, String pNewFileName, String pToken, Domain pDomain) {
+    if (isValidToken(pToken)) {
+      Map<String, Object> response = new HashMap<>();
+      try {
+
+        String tempDirectory = System.getProperty("java.io.tmpdir");
+        Path zipfile = Paths.get(tempDirectory, pNewFileName);
+
+        URI fileUri = zipfile.toUri();
+        URI zipUri = new URI("jar:" + fileUri.getScheme(), fileUri.getPath(), null);
+
+        Map<String, String> env = new HashMap<>();
+        env.put("create", "true");
+
+        try (FileSystem zipfs = FileSystems.newFileSystem(zipUri, env)) {
+          for (String toAdd : pItems) {
+            Path externalFile = Paths.get(getQualifiedPath(pDomain).toString(), toAdd);
+            Path pathInZipfile = zipfs.getPath("/" + externalFile.getFileName());
+            // copy a file into the zip file
+            Files.copy(externalFile, pathInZipfile,
+                StandardCopyOption.REPLACE_EXISTING);
+          }
+        }
+        response.put("Content-Type", Files.probeContentType(zipfile));
+        response.put("Content-Length", String.valueOf(zipfile.toFile().length()));
+        response.put("Content-Disposition", "inline; filename=\"" + zipfile.toFile().getName() + "\"");
+        response.put("Content", Files.newInputStream(zipfile));
+        return response;
+      } catch (Exception e) {
+        return null;
+      }
+    }
+    return null;
   }
 
   protected boolean addUser(final String pUser, final Path pTargetPath) {
@@ -375,5 +405,16 @@ public class FileContentManager implements BinaryContentManager<byte[]> {
     error.put(SUCCESS, false);
     error.put(ERROR, msg);
     return error;
+  }
+
+  protected boolean isValidToken(final String pToken) {
+    try {
+      if (mBearerAccessTokenManager.get(pToken) == null) {
+        return false;
+      }
+    } catch (Exception e) {
+      return false;
+    }
+    return true;
   }
 }

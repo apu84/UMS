@@ -67,5 +67,5 @@ public interface BinaryContentManager<T> {
 
   Map<String, Object> download(String pPath, String pToken, Domain pDomain);
 
-  byte[] downloadAsZip(List<String> pItems, String pNewFileName, Domain pDomain);
+  Map<String, Object> downloadAsZip(List<String> pItems, String pNewFileName, String pToken, Domain pDomain);
 }
