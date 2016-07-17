@@ -51,7 +51,7 @@ public interface BinaryContentManager<T> {
 
   Map<String, Object> move(List<String> pItems, String pNewPath, Domain pDomain);
 
-  Map<String, Object> copy(List<String> pItems, String pNewPath, Domain pDomain);
+  Map<String, Object> copy(List<String> pItems, String pNewPath, String pNewFileName, Domain pDomain);
 
   Map<String, Object> remove(List<String> pItems, Domain pDomain);
 

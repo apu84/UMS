@@ -14,6 +14,8 @@
                 recursive: false,
                 token: model && model.token || '',
                 owner: model && model.owner || '',
+                startDate: model && model.startDate || '',
+                endDate: model && model.endDate || '',
                 fullPath: function() {
                     var path = this.path.filter(Boolean);
                     return ('/' + path.join('/') + '/' + this.name).replace(/\/\//, '/');

@@ -11,7 +11,7 @@
             return '/' + arrayPath.join('/');
         };
 
-        ApiMiddleware.prototype.getFileList = function(files) { console.debug(files);
+            ApiMiddleware.prototype.getFileList = function (files) {
             return (files || []).map(function(file) {
                 return file && file.model.fullPath();
             });
@@ -78,7 +78,6 @@
             var itemPath = this.getFilePath(item);
             var toFilename = item.model.name;
             var token = item.model.token;
-            console.debug(item.model);
             if (item.isFolder()) {
                 return;
             }
@@ -94,7 +93,7 @@
         };
 
         ApiMiddleware.prototype.downloadMultiple = function(files, forceNewWindow) {
-            var items = this.getFileList(files); console.debug(items);
+            var items = this.getFileList(files);
             var timestamp = new Date().getTime().toString().substr(8, 13);
             var toFilename = timestamp + '-' + fileManagerConfig.multipleDownloadFileName;
             
@@ -132,6 +131,12 @@
             return this.apiHandler.createFolder(fileManagerConfig.createFolderUrl, path);
         };
 
+        ApiMiddleware.prototype.createAssignmentFolder = function (item) {
+            var path = item.tempModel.fullPath();
+            var startDate = item.tempModel.startDate ? item.tempModel.startDate : '';
+            var endDate = item.tempModel.endDate ? item.tempModel.endDate : '';
+            return this.apiHandler.createAssignmentFolder(fileManagerConfig.createFolderUrl, path, startDate, endDate);
+        };
         return ApiMiddleware;
 
     }]);

@@ -319,6 +319,23 @@
             });
         };
 
+        $scope.createAssignmentFolder = function () {
+            var item = $scope.singleSelection();
+            var name = item.tempModel.name;
+            if (!name || $scope.fileNavigator.fileNameExists(name)) {
+                return $scope.apiMiddleware.apiHandler.error = $translate.instant('error_invalid_filename');
+            }
+            if (item.tempModel.startDate && item.tempModel.startDate == '') {
+                return $scope.apiMiddleware.apiHandler.error = $translate.instant('error_invalid_startDate');
+            }
+            if (item.tempModel.endDate && item.tempModel.endDate == '') {
+                return $scope.apiMiddleware.apiHandler.error = $translate.instant('error_invalid_endDate');
+            }
+            $scope.apiMiddleware.createAssignmentFolder(item).then(function () {
+                $scope.fileNavigator.refresh();
+                $scope.modal('assignmentfolder', true);
+            });
+        };
         $scope.addForUpload = function($files) {
             $scope.uploadFileList = $scope.uploadFileList.concat($files);
             $scope.modal('uploadfile');

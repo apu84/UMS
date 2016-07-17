@@ -226,7 +226,6 @@
         };
 
         ApiHandler.prototype.download = function(apiUrl, itemPath, toFilename, downloadByAjax, forceNewWindow, token) {
-            console.debug("download file");
             var self = this;
             var url = this.getUrl(apiUrl, itemPath, token);
 
@@ -366,6 +365,28 @@
             return deferred.promise;
         };
 
+        ApiHandler.prototype.createAssignmentFolder = function(apiUrl, path, startDate, endDate) {
+            var self = this;
+            var deferred = $q.defer();
+            var data = {
+                action: 'createAssignmentFolder',
+                newPath: path,
+                startDate: startDate,
+                endDate: endDate
+            };
+
+            self.inprocess = true;
+            self.error = '';
+            $http.post(apiUrl, data).success(function(data, code) {
+                self.deferredHandler(data, deferred, code);
+            }).error(function(data, code) {
+                self.deferredHandler(data, deferred, code, $translate.instant('error_creating_folder'));
+            })['finally'](function() {
+                self.inprocess = false;
+            });
+
+            return deferred.promise;
+        };
         return ApiHandler;
 
     }]);

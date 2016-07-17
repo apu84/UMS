@@ -60,6 +60,11 @@
                                         <i class="glyphicon glyphicon-plus"></i> {{"new_folder" | translate}}
                                     </a>
                                 </li>
+                                <li role="presentation" ng-show="config.allowedActions.createAssignmentFolder" ng-click="modal('assignmentfolder') && prepareNewFolder()">
+                                    <a href="javascript:void(0)" role="menuitem" tabindex="-1">
+                                        <i class="glyphicon glyphicon-plus"></i> {{"assignment_folder" | translate}}
+                                    </a>
+                                </li>
                                 <li role="presentation" ng-show="config.allowedActions.upload" ng-click="modal('uploadfile')">
                                     <a href="javascript:void(0)" role="menuitem" tabindex="-1">
                                         <i class="glyphicon glyphicon-cloud-upload"></i> {{"upload_files" | translate}}

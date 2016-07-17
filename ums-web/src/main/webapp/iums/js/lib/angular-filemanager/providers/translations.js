@@ -82,6 +82,8 @@
             error_changing_perms: 'An error occurred changing the permissions of the file',
             error_uploading_files: 'An error occurred uploading files',
             sure_to_start_compression_with: 'Are you sure to compress',
+            error_invalid_startDate: 'Invalid start date',
+            error_invalid_endDate: 'Invalid end date',
             owner: 'Owner',
             group: 'Group',
             others: 'Others',
@@ -95,6 +97,8 @@
             open: 'Open',
             these_elements: 'these {{total}} elements',
             new_folder: 'New folder',
+            assignment_folder: 'Assignment' +
+            ' folder',
             download_as_zip: 'Download as ZIP'
         });
 

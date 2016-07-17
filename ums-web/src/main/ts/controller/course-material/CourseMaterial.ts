@@ -8,6 +8,7 @@ module ums {
       var baseUri: string = '/ums-webservice-common/academic/courseMaterial/semester/' + semesterName + "/course/" + courseNo;
       var downloadBaseUri: string = '/ums-webservice-common/academic/courseMaterial/download/semester/' + semesterName + "/course/" + courseNo;
       FILEMANAGER_CONFIG.set({
+        appName: semesterName + ' > ' + courseNo,
         listUrl: baseUri,
         createFolderUrl: baseUri,
         uploadUrl: baseUri + "/upload",
@@ -19,7 +20,10 @@ module ums {
         downloadMultipleUrl: downloadBaseUri,
         hidePermissions: true,
         hideOwner: false,
-        multipleDownloadFileName: 'CourseMaterial-' + semesterName + "-" + courseNo + '.zip'
+        multipleDownloadFileName: 'CourseMaterial-' + semesterName + "-" + courseNo + '.zip',
+        allowedActions: angular.extend(FILEMANAGER_CONFIG.$get().allowedActions, {
+          createAssignmentFolder: true
+        })
       });
     }
   }

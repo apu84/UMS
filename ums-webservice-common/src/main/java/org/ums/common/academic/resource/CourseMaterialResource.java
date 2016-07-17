@@ -53,31 +53,45 @@ public class CourseMaterialResource extends Resource {
     if (pJsonObject != null
         && pJsonObject.containsKey("action")) {
       switch (pJsonObject.getString("action")) {
+
         case "list":
           result.put("result", mBinaryContentManager.list(root + pJsonObject.getString("path"),
               BinaryContentManager.Domain.COURSE_MATERIAL));
-          return result;
+          break;
+
         case "rename":
-          return mBinaryContentManager.rename(root + pJsonObject.getString("item"),
+          result.put("result", mBinaryContentManager.rename(root + pJsonObject.getString("item"),
               root + pJsonObject.getString("newItemPath"),
-              BinaryContentManager.Domain.COURSE_MATERIAL);
+              BinaryContentManager.Domain.COURSE_MATERIAL));
+          break;
         case "move":
           JsonArray items = pJsonObject.getJsonArray("items");
-          return mBinaryContentManager.move(actionItems(items, root),
+          result.put("result", mBinaryContentManager.move(actionItems(items, root),
               root + pJsonObject.getString("newPath"),
-              BinaryContentManager.Domain.COURSE_MATERIAL);
+              BinaryContentManager.Domain.COURSE_MATERIAL));
         case "createFolder":
-          return mBinaryContentManager.createFolder(root + pJsonObject.getString("newPath"),
-              BinaryContentManager.Domain.COURSE_MATERIAL);
+          result.put("result", mBinaryContentManager.createFolder(root + pJsonObject.getString("newPath"),
+              BinaryContentManager.Domain.COURSE_MATERIAL));
+          break;
         case "remove":
           JsonArray deletedItems = pJsonObject.getJsonArray("items");
-          return mBinaryContentManager.remove(actionItems(deletedItems, root),
-              BinaryContentManager.Domain.COURSE_MATERIAL);
+          result.put("result", mBinaryContentManager.remove(actionItems(deletedItems, root),
+              BinaryContentManager.Domain.COURSE_MATERIAL));
+          break;
+        case "copy":
+          JsonArray copiedItems = pJsonObject.getJsonArray("items");
+          List<String> copiedFiles = actionItems(copiedItems, root);
+          String newPath = root + pJsonObject.getString("newPath");
+          String singleFile = pJsonObject.containsKey("singleFileName") ? pJsonObject.getString("singleFilename") : "";
 
+          result.put("result", mBinaryContentManager.copy(copiedFiles,
+              newPath, singleFile,
+              BinaryContentManager.Domain.COURSE_MATERIAL));
+          break;
       }
     }
 
-    return null;
+    return result;
   }
 
   @POST
@@ -200,7 +214,6 @@ public class CourseMaterialResource extends Resource {
       String actionItem = pItems[i];
       actionItems.add(pRoot + actionItem);
     }
-
     return actionItems;
   }
 }

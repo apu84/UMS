@@ -4,6 +4,8 @@ package org.ums.manager;
 import com.google.common.collect.Lists;
 import org.apache.commons.io.FileUtils;
 import org.apache.shiro.SecurityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.util.StringUtils;
@@ -21,6 +23,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class FileContentManager implements BinaryContentManager<byte[]> {
+  private static final Logger mLogger = LoggerFactory.getLogger(FileContentManager.class);
   private String mStorageRoot;
   private static final String SUCCESS = "success";
   private static final String ERROR = "error";
@@ -200,21 +203,25 @@ public class FileContentManager implements BinaryContentManager<byte[]> {
   }
 
   @Override
-  public Map<String, Object> copy(List<String> pItems, String pNewPath, Domain pDomain) {
+  public Map<String, Object> copy(List<String> pItems, String pNewPath, String pNewFileName, Domain pDomain) {
     Path root = getQualifiedPath(pDomain);
 
     for (String oldPathString : pItems) {
-      Path oldPath = root.resolve(oldPathString);
-      Path newPath = root.resolve(pNewPath);
+      Path oldPath = Paths.get(root.toString(), oldPathString);
+      Path newPath = Paths.get(root.toString(), pNewPath, pNewFileName);
       File srcFile = oldPath.toFile();
       File destinationFile = newPath.toFile();
 
       try {
-        if (srcFile.isFile()) {
-          FileUtils.copyFile(srcFile, destinationFile);
+        if (srcFile.isFile() && destinationFile.isDirectory()) {
+          FileUtils.copyFileToDirectory(srcFile, destinationFile);
+        } else if (srcFile.isDirectory() && destinationFile.isDirectory()) {
+          FileUtils.copyDirectoryToDirectory(srcFile, destinationFile);
         } else {
-          FileUtils.copyDirectory(srcFile, destinationFile);
+          FileUtils.copyFile(srcFile, destinationFile);
         }
+
+        addUser(SecurityUtils.getSubject().getPrincipal().toString(), Paths.get(newPath.toString(), srcFile.getName()));
       } catch (Exception e) {
         return error(mMessageResource.getMessage("copy.failed"));
       }
@@ -302,6 +309,7 @@ public class FileContentManager implements BinaryContentManager<byte[]> {
         response.put("Content", Files.newInputStream(path));
         return response;
       } catch (Exception e) {
+        mLogger.error("Failed to download file " + pPath, e);
         return null;
       }
     }
@@ -339,6 +347,7 @@ public class FileContentManager implements BinaryContentManager<byte[]> {
         response.put("Content", Files.newInputStream(zipfile));
         return response;
       } catch (Exception e) {
+        mLogger.error("Failed to download file as zip " + pNewFileName, e);
         return null;
       }
     }
@@ -384,9 +393,10 @@ public class FileContentManager implements BinaryContentManager<byte[]> {
     try {
       FileStore store = Files.getFileStore(pPath);
       if (!store.supportsFileAttributeView(UserDefinedFileAttributeView.class)) {
-        System.err.format("UserDefinedFileAttributeView not supported on %s\n", store);
+        throw new Exception(String.format("UserDefinedFileAttributeView not supported on %s\n", store));
       }
     } catch (Exception e) {
+      mLogger.error("UserDefinedFileAttributeView not supported", e);
       return false;
     }
 
@@ -413,6 +423,7 @@ public class FileContentManager implements BinaryContentManager<byte[]> {
         return false;
       }
     } catch (Exception e) {
+      mLogger.info("Token is not valid", e);
       return false;
     }
     return true;
