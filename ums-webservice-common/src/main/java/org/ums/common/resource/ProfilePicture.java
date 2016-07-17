@@ -3,6 +3,7 @@ package org.ums.common.resource;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.common.Resource;
 import org.ums.manager.BinaryContentManager;
@@ -22,6 +23,7 @@ import java.io.FileNotFoundException;
 public class ProfilePicture extends Resource {
 
   @Autowired
+  @Qualifier("fileContentManager")
   BinaryContentManager<byte[]> mBinaryContentManager;
 
   @GET

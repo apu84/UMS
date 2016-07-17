@@ -1,6 +1,7 @@
 package org.ums.common.academic.resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.common.Resource;
 import org.ums.manager.BinaryContentManager;
@@ -20,6 +21,7 @@ import java.io.ByteArrayInputStream;
 public class ImageResource extends Resource {
 
   @Autowired
+  @Qualifier("fileContentManager")
   BinaryContentManager<byte[]> mBinaryContentManager;
 
   @GET

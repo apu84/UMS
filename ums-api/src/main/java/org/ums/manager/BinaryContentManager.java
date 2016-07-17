@@ -45,7 +45,7 @@ public interface BinaryContentManager<T> {
   }
 
 
-  List<Map<String, Object>> list(String pPath, Domain pDomain);
+  Object list(String pPath, Domain pDomain);
 
   Map<String, Object> rename(String pOldPath, String pNewPath, Domain pDomain);
 

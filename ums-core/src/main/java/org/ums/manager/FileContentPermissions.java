@@ -1,0 +1,161 @@
+package org.ums.manager;
+
+import org.apache.shiro.SecurityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
+import org.ums.configuration.UMSConfiguration;
+import org.ums.decorator.BinaryContentDecorator;
+import org.ums.domain.model.immutable.BearerAccessToken;
+import org.ums.message.MessageResource;
+
+import java.io.InputStream;
+import java.util.Base64;
+import java.util.List;
+import java.util.Map;
+
+public class FileContentPermissions extends BinaryContentDecorator {
+  private static final Logger mLogger = LoggerFactory.getLogger(FileContentPermissions.class);
+
+  private final static String IV = "filepermissions1";
+  private final static String TOKEN = "token";
+  private static final String OWNER = "owner";
+
+  private BearerAccessTokenManager mBearerAccessTokenManager;
+  private UserManager mUserManager;
+  private UMSConfiguration mUMSConfiguration;
+  private MessageResource mMessageResource;
+
+  public FileContentPermissions(final UserManager pUserManager,
+                                final BearerAccessTokenManager pBearerAccessTokenManager,
+                                final UMSConfiguration pUMSConfiguration,
+                                final MessageResource pMessageResource) {
+    mBearerAccessTokenManager = pBearerAccessTokenManager;
+    mUserManager = pUserManager;
+    mUMSConfiguration = pUMSConfiguration;
+    mMessageResource = pMessageResource;
+  }
+
+
+  @Override
+  public Map<String, Object> downloadAsZip(List<String> pItems, String pNewFileName, String pToken, Domain pDomain) {
+    if (isValidToken(pToken)) {
+      return super.downloadAsZip(pItems, pNewFileName, pToken, pDomain);
+    } else {
+      return null;
+    }
+  }
+
+  @Override
+  public Map<String, Object> download(String pPath, String pToken, Domain pDomain) {
+    if (isValidToken(pToken)) {
+      return super.download(pPath, pToken, pDomain);
+    } else {
+      return null;
+    }
+  }
+
+  @Override
+  public Map<String, Object> upload(Map<String, InputStream> pFileContent, String pPath, Domain pDomain) {
+    return super.upload(pFileContent, pPath, pDomain);
+  }
+
+  @Override
+  public Map<String, Object> extract(String pZippedItem, String pDestination, Domain pDomain) {
+    return super.extract(pZippedItem, pDestination, pDomain);
+  }
+
+  @Override
+  public Map<String, Object> compress(List<String> pItems, String pNewPath, String pNewFileName, Domain pDomain) {
+    return super.compress(pItems, pNewPath, pNewFileName, pDomain);
+  }
+
+  @Override
+  public Map<String, Object> createFolder(String pNewPath, Domain pDomain) {
+    return super.createFolder(pNewPath, pDomain);
+  }
+
+  @Override
+  public Map<String, byte[]> content(String pPath, Domain pDomain) {
+    return super.content(pPath, pDomain);
+  }
+
+  @Override
+  public Map<String, Object> remove(List<String> pItems, Domain pDomain) {
+    return super.remove(pItems, pDomain);
+  }
+
+  @Override
+  public Map<String, Object> copy(List<String> pItems, String pNewPath, String pNewFileName, Domain pDomain) {
+    return super.copy(pItems, pNewPath, pNewFileName, pDomain);
+  }
+
+  @Override
+  public Map<String, Object> move(List<String> pItems, String pNewPath, Domain pDomain) {
+    return super.move(pItems, pNewPath, pDomain);
+  }
+
+  @Override
+  public Map<String, Object> rename(String pOldPath, String pNewPath, Domain pDomain) {
+    return super.rename(pOldPath, pNewPath, pDomain);
+  }
+
+  @Override
+  public Object list(String pPath, Domain pDomain) {
+
+    Object folderList = super.list(pPath, pDomain);
+
+    String userId = SecurityUtils.getSubject().getPrincipal().toString();
+    String accessToken = mBearerAccessTokenManager.getByUser(userId).getId();
+    try {
+      String encryptedToken = encrypt(userId + ":" + accessToken);
+
+
+      if (folderList instanceof List) {
+        List list = (List) folderList;
+        for (Object folder : list) {
+          if (folder instanceof Map) {
+            ((Map) folder).put(TOKEN, encryptedToken);
+            String owner = ((Map<String, String>) folder).get(OWNER);
+            if (!StringUtils.isEmpty(owner)) {
+              owner = mUserManager.get(userId).getName();
+            }
+            ((Map<String, String>) folder).put(OWNER, owner);
+          }
+        }
+      }
+    } catch (Exception e) {
+      return error(mMessageResource.getMessage("folder.listing.failed"));
+    }
+    return folderList;
+  }
+
+
+  private String encrypt(String plainText) throws Exception {
+    return Base64.getEncoder().encodeToString(plainText.getBytes());
+  }
+
+  private static String decrypt(String plainText) throws Exception {
+    return new String(Base64.getDecoder().decode(plainText));
+  }
+
+  private boolean isValidToken(final String pToken) {
+    try {
+      String decodedToken = decrypt(pToken);
+      String[] splitToken = decodedToken.split(":");
+
+      if (splitToken.length == 2) {
+        BearerAccessToken userToken = mBearerAccessTokenManager.getByUser(splitToken[0]);
+        if (userToken != null) {
+          if (userToken.getId().equals(splitToken[1])) {
+            return true;
+          }
+        }
+
+      }
+    } catch (Exception e) {
+      mLogger.info("Token is not valid", e);
+    }
+    return false;
+  }
+}

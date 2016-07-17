@@ -1,14 +1,13 @@
 package org.ums.manager;
 
 
-import com.google.common.collect.Lists;
 import org.apache.commons.io.FileUtils;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.util.StringUtils;
+import org.ums.decorator.BinaryContentDecorator;
 import org.ums.message.MessageResource;
 
 import java.io.*;
@@ -22,11 +21,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class FileContentManager implements BinaryContentManager<byte[]> {
+public class FileContentManager extends BinaryContentDecorator {
   private static final Logger mLogger = LoggerFactory.getLogger(FileContentManager.class);
   private String mStorageRoot;
-  private static final String SUCCESS = "success";
-  private static final String ERROR = "error";
   private static final String NAME = "name";
   private static final String RIGHTS = "rights";
   private static final String SIZE = "size";
@@ -111,7 +108,7 @@ public class FileContentManager implements BinaryContentManager<byte[]> {
 
 
   @Override
-  public List<Map<String, Object>> list(String pPath, Domain pDomain) {
+  public Object list(String pPath, Domain pDomain) {
     try {
       /*
       This is to make sure course material gets into folder structure like {/coursematerial/semestername/coursename/}.
@@ -119,7 +116,7 @@ public class FileContentManager implements BinaryContentManager<byte[]> {
        */
       createIfNotExist(pDomain, pPath);
     } catch (Exception e) {
-      return Lists.newArrayList(error(mMessageResource.getMessage("folder.creation.failed", pPath)));
+      return error(mMessageResource.getMessage("folder.creation.failed", pPath));
     }
 
     Path targetDirectory = Paths.get(mStorageRoot, Domain.get(pDomain.getValue()).toString(), pPath);
@@ -131,7 +128,7 @@ public class FileContentManager implements BinaryContentManager<byte[]> {
         list.add(getPathDetails(path));
       }
     } catch (Exception ex) {
-      return Lists.newArrayList(error(mMessageResource.getMessage("folder.listing.failed")));
+      return error(mMessageResource.getMessage("folder.listing.failed"));
     }
 
     return list;
@@ -145,14 +142,8 @@ public class FileContentManager implements BinaryContentManager<byte[]> {
     details.put(DATE, mDateFormat.format(new Date(attrs.lastModifiedTime().toMillis())));
     details.put(SIZE, attrs.size() + "");
     details.put(TYPE, attrs.isDirectory() ? "dir" : "file");
-    details.put("token", mBearerAccessTokenManager.getByUser(SecurityUtils.getSubject().getPrincipal().toString()).getId());
-
     String userId = getUser(pTargetPath);
-    if (!StringUtils.isEmpty(userId)) {
-      userId = mUserManager.get(userId).getName();
-    }
     details.put(OWNER, userId);
-
     return details;
   }
 
@@ -297,61 +288,53 @@ public class FileContentManager implements BinaryContentManager<byte[]> {
 
   @Override
   public Map<String, Object> download(String pPath, String pToken, Domain pDomain) {
-    if (isValidToken(pToken)) {
-
-      Map<String, Object> response = new HashMap<>();
-      try {
-        Path path = Paths.get(getQualifiedPath(pDomain).toString(), pPath);
-        File file = path.toFile();
-        response.put("Content-Type", Files.probeContentType(path));
-        response.put("Content-Length", String.valueOf(file.length()));
-        response.put("Content-Disposition", "inline; filename=\"" + file.getName() + "\"");
-        response.put("Content", Files.newInputStream(path));
-        return response;
-      } catch (Exception e) {
-        mLogger.error("Failed to download file " + pPath, e);
-        return null;
-      }
+    Map<String, Object> response = new HashMap<>();
+    try {
+      Path path = Paths.get(getQualifiedPath(pDomain).toString(), pPath);
+      File file = path.toFile();
+      response.put("Content-Type", Files.probeContentType(path));
+      response.put("Content-Length", String.valueOf(file.length()));
+      response.put("Content-Disposition", "inline; filename=\"" + file.getName() + "\"");
+      response.put("Content", Files.newInputStream(path));
+      return response;
+    } catch (Exception e) {
+      mLogger.error("Failed to download file " + pPath, e);
+      return null;
     }
-
-    return null;
   }
 
   @Override
   public Map<String, Object> downloadAsZip(List<String> pItems, String pNewFileName, String pToken, Domain pDomain) {
-    if (isValidToken(pToken)) {
-      Map<String, Object> response = new HashMap<>();
-      try {
+    Map<String, Object> response = new HashMap<>();
+    try {
 
-        String tempDirectory = System.getProperty("java.io.tmpdir");
-        Path zipfile = Paths.get(tempDirectory, pNewFileName);
+      String tempDirectory = System.getProperty("java.io.tmpdir");
+      Path zipfile = Paths.get(tempDirectory, pNewFileName);
 
-        URI fileUri = zipfile.toUri();
-        URI zipUri = new URI("jar:" + fileUri.getScheme(), fileUri.getPath(), null);
+      URI fileUri = zipfile.toUri();
+      URI zipUri = new URI("jar:" + fileUri.getScheme(), fileUri.getPath(), null);
 
-        Map<String, String> env = new HashMap<>();
-        env.put("create", "true");
+      Map<String, String> env = new HashMap<>();
+      env.put("create", "true");
 
-        try (FileSystem zipfs = FileSystems.newFileSystem(zipUri, env)) {
-          for (String toAdd : pItems) {
-            Path externalFile = Paths.get(getQualifiedPath(pDomain).toString(), toAdd);
-            Path pathInZipfile = zipfs.getPath("/" + externalFile.getFileName());
-            // copy a file into the zip file
-            Files.copy(externalFile, pathInZipfile,
-                StandardCopyOption.REPLACE_EXISTING);
-          }
+      try (FileSystem zipfs = FileSystems.newFileSystem(zipUri, env)) {
+        for (String toAdd : pItems) {
+          Path externalFile = Paths.get(getQualifiedPath(pDomain).toString(), toAdd);
+          Path pathInZipfile = zipfs.getPath("/" + externalFile.getFileName());
+          // copy a file into the zip file
+          Files.copy(externalFile, pathInZipfile,
+              StandardCopyOption.REPLACE_EXISTING);
         }
-        response.put("Content-Type", Files.probeContentType(zipfile));
-        response.put("Content-Length", String.valueOf(zipfile.toFile().length()));
-        response.put("Content-Disposition", "inline; filename=\"" + zipfile.toFile().getName() + "\"");
-        response.put("Content", Files.newInputStream(zipfile));
-        return response;
-      } catch (Exception e) {
-        mLogger.error("Failed to download file as zip " + pNewFileName, e);
-        return null;
       }
+      response.put("Content-Type", Files.probeContentType(zipfile));
+      response.put("Content-Length", String.valueOf(zipfile.toFile().length()));
+      response.put("Content-Disposition", "inline; filename=\"" + zipfile.toFile().getName() + "\"");
+      response.put("Content", Files.newInputStream(zipfile));
+      return response;
+    } catch (Exception e) {
+      mLogger.error("Failed to download file as zip " + pNewFileName, e);
+      return null;
     }
-    return null;
   }
 
   protected boolean addUser(final String pUser, final Path pTargetPath) {

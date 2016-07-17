@@ -39,6 +39,7 @@ public class StudentResourceHelper extends ResourceHelper<Student, MutableStuden
   RoleManager mRoleManager;
 
   @Autowired
+  @Qualifier("fileContentManager")
   BinaryContentManager<byte[]> mBinaryContentManager;
 
   @Autowired

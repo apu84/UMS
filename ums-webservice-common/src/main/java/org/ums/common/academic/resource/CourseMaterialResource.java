@@ -4,6 +4,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
 import org.springframework.util.StringUtils;
@@ -33,6 +34,7 @@ import java.util.Map;
 public class CourseMaterialResource extends Resource {
   public static String DESTINATION = "destination";
   @Autowired
+  @Qualifier("courseMaterialFileManager")
   BinaryContentManager<byte[]> mBinaryContentManager;
 
   @Autowired
