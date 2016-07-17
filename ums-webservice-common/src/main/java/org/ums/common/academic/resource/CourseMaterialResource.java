@@ -71,6 +71,7 @@ public class CourseMaterialResource extends Resource {
           result.put("result", mBinaryContentManager.move(actionItems(items, root),
               root + pJsonObject.getString("newPath"),
               BinaryContentManager.Domain.COURSE_MATERIAL));
+          break;
         case "createFolder":
           result.put("result", mBinaryContentManager.createFolder(root + pJsonObject.getString("newPath"),
               BinaryContentManager.Domain.COURSE_MATERIAL));

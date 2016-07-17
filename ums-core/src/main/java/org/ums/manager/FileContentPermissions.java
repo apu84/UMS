@@ -19,7 +19,6 @@ import java.util.Map;
 public class FileContentPermissions extends BinaryContentDecorator {
   private static final Logger mLogger = LoggerFactory.getLogger(FileContentPermissions.class);
 
-  private final static String IV = "filepermissions1";
   private final static String TOKEN = "token";
   private static final String OWNER = "owner";
 
@@ -75,21 +74,9 @@ public class FileContentPermissions extends BinaryContentDecorator {
   @Override
   public Map<String, Object> createFolder(String pNewPath, Domain pDomain) {
     // Check if there is permission to create folder
-    if (mUMSConfiguration.isOwnerOnlyModification()) {
-      Path parentPath = Paths.get(getQualifiedPath(pNewPath, pDomain).toString()).getParent();
-      try {
-        String userId = getUserDefinedProperty(OWNER, parentPath);
-        if (!StringUtils.isEmpty(userId)) {
-          String currentUserId = SecurityUtils.getSubject().getPrincipal().toString();
-          if (!currentUserId.equalsIgnoreCase(userId)) {
-            return error(mMessageResource.getMessage("folder.creation.not.allowed", pNewPath));
-          }
-        }
-      } catch (Exception e) {
-        mLogger.error("Can not find user", e);
-        return error(mMessageResource.getMessage("folder.creation.failed"));
-      }
-
+    Path parentPath = Paths.get(getQualifiedPath(pNewPath, pDomain).toString()).getParent();
+    if (!checkIfAllowed(parentPath)) {
+      return error(mMessageResource.getMessage("folder.creation.not.allowed", pNewPath));
     }
     return super.createFolder(pNewPath, pDomain);
   }
@@ -106,16 +93,46 @@ public class FileContentPermissions extends BinaryContentDecorator {
 
   @Override
   public Map<String, Object> copy(List<String> pItems, String pNewPath, String pNewFileName, Domain pDomain) {
+    Path parentPath = Paths.get(getQualifiedPath(pNewPath, pDomain).toString());
+    if (!checkIfAllowed(parentPath)) {
+      return error(mMessageResource.getMessage("folder.creation.not.allowed", pNewPath));
+    }
+
+    for (String copiedFile : pItems) {
+      Path copiedFilePath = Paths.get(getQualifiedPath(copiedFile, pDomain).toString());
+
+      if (!checkIfAllowed(copiedFilePath)) {
+        return error(mMessageResource.getMessage("folder.copy.not.allowed"));
+
+      }
+    }
     return super.copy(pItems, pNewPath, pNewFileName, pDomain);
   }
 
   @Override
   public Map<String, Object> move(List<String> pItems, String pNewPath, Domain pDomain) {
+    Path parentPath = Paths.get(getQualifiedPath(pNewPath, pDomain).toString());
+    if (!checkIfAllowed(parentPath)) {
+      return error(mMessageResource.getMessage("folder.move.not.allowed"));
+    }
+
+    for (String movedFile : pItems) {
+      Path movedFilePath = Paths.get(getQualifiedPath(movedFile, pDomain).toString());
+
+      if (!checkIfAllowed(movedFilePath)) {
+        return error(mMessageResource.getMessage("folder.move.not.allowed"));
+
+      }
+    }
     return super.move(pItems, pNewPath, pDomain);
   }
 
   @Override
   public Map<String, Object> rename(String pOldPath, String pNewPath, Domain pDomain) {
+    Path parentPath = Paths.get(getQualifiedPath(pOldPath, pDomain).toString());
+    if (!checkIfAllowed(parentPath)) {
+      return error(mMessageResource.getMessage("folder.creation.not.allowed", pNewPath));
+    }
     return super.rename(pOldPath, pNewPath, pDomain);
   }
 
@@ -181,5 +198,23 @@ public class FileContentPermissions extends BinaryContentDecorator {
   @Override
   protected String getStorageRoot() {
     return mUMSConfiguration.getStorageRoot();
+  }
+
+  private boolean checkIfAllowed(final Path pPath) {
+    if (mUMSConfiguration.isOwnerOnlyModification()) {
+      try {
+        String userId = getUserDefinedProperty(OWNER, pPath);
+        if (!StringUtils.isEmpty(userId)) {
+          String currentUserId = SecurityUtils.getSubject().getPrincipal().toString();
+          if (!currentUserId.equalsIgnoreCase(userId)) {
+            return false;
+          }
+        }
+      } catch (Exception e) {
+        mLogger.error("Can not find user", e);
+        return false;
+      }
+    }
+    return true;
   }
 }
