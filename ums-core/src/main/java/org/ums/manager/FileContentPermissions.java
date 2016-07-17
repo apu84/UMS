@@ -10,6 +10,8 @@ import org.ums.domain.model.immutable.BearerAccessToken;
 import org.ums.message.MessageResource;
 
 import java.io.InputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Base64;
 import java.util.List;
 import java.util.Map;
@@ -72,6 +74,23 @@ public class FileContentPermissions extends BinaryContentDecorator {
 
   @Override
   public Map<String, Object> createFolder(String pNewPath, Domain pDomain) {
+    // Check if there is permission to create folder
+    if (mUMSConfiguration.isOwnerOnlyModification()) {
+      Path parentPath = Paths.get(getQualifiedPath(pNewPath, pDomain).toString()).getParent();
+      try {
+        String userId = getUserDefinedProperty(OWNER, parentPath);
+        if (!StringUtils.isEmpty(userId)) {
+          String currentUserId = SecurityUtils.getSubject().getPrincipal().toString();
+          if (!currentUserId.equalsIgnoreCase(userId)) {
+            return error(mMessageResource.getMessage("folder.creation.not.allowed", pNewPath));
+          }
+        }
+      } catch (Exception e) {
+        mLogger.error("Can not find user", e);
+        return error(mMessageResource.getMessage("folder.creation.failed"));
+      }
+
+    }
     return super.createFolder(pNewPath, pDomain);
   }
 
@@ -118,7 +137,7 @@ public class FileContentPermissions extends BinaryContentDecorator {
             ((Map) folder).put(TOKEN, encryptedToken);
             String owner = ((Map<String, String>) folder).get(OWNER);
             if (!StringUtils.isEmpty(owner)) {
-              owner = mUserManager.get(userId).getName();
+              owner = mUserManager.get(owner).getName();
             }
             ((Map<String, String>) folder).put(OWNER, owner);
           }
@@ -157,5 +176,10 @@ public class FileContentPermissions extends BinaryContentDecorator {
       mLogger.info("Token is not valid", e);
     }
     return false;
+  }
+
+  @Override
+  protected String getStorageRoot() {
+    return mUMSConfiguration.getStorageRoot();
   }
 }

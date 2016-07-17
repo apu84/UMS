@@ -8,14 +8,14 @@ public class UMSConfiguration {
   @Value("${course.material.owner.only.modification}")
   private boolean mOwnerOnlyModification;
 
-  @Value("${file.token.encryption.key}")
-  private String mFileTokenEncryptionKey;
+  @Value("${binary.storageRoot}")
+  private String mStorageRoot;
 
   public boolean isOwnerOnlyModification() {
     return mOwnerOnlyModification;
   }
 
-  public String getFileTokenEncryptionKey() {
-    return mFileTokenEncryptionKey;
+  public String getStorageRoot() {
+    return mStorageRoot;
   }
 }

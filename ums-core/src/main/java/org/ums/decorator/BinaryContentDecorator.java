@@ -1,15 +1,26 @@
 package org.ums.decorator;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.ums.manager.BinaryContentManager;
 
 import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
+import java.nio.file.FileStore;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.attribute.UserDefinedFileAttributeView;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class BinaryContentDecorator implements BinaryContentManager<byte[]> {
+public abstract class BinaryContentDecorator implements BinaryContentManager<byte[]> {
+  private static Logger mLogger = LoggerFactory.getLogger(BinaryContentDecorator.class);
   protected static final String SUCCESS = "success";
   protected static final String ERROR = "error";
+  protected static final String OWNER = "owner";
 
   private BinaryContentManager<byte[]> mManager;
 
@@ -115,4 +126,53 @@ public class BinaryContentDecorator implements BinaryContentManager<byte[]> {
     error.put(ERROR, msg);
     return error;
   }
+
+
+  protected void addUserDefinedProperty(final String pPropertyName,
+                                        final String pPropertyValue,
+                                        final Path pTargetPath) throws Exception {
+    if (isUserDefinedAttributeSupported(pTargetPath)) {
+      UserDefinedFileAttributeView view = Files.
+          getFileAttributeView(pTargetPath, UserDefinedFileAttributeView.class);
+      view.write(pPropertyName, Charset.defaultCharset().encode(pPropertyValue));
+    }
+  }
+
+  protected String getUserDefinedProperty(final String pPropertyName, final Path pTargetPath) throws Exception {
+    if (isUserDefinedAttributeSupported(pTargetPath)) {
+      UserDefinedFileAttributeView view = Files.
+          getFileAttributeView(pTargetPath, UserDefinedFileAttributeView.class);
+
+      int size = view.size(pPropertyName);
+      ByteBuffer buf = ByteBuffer.allocateDirect(size);
+      view.read(pPropertyName, buf);
+      buf.flip();
+      return Charset.defaultCharset().decode(buf).toString();
+    }
+    return null;
+  }
+
+  private boolean isUserDefinedAttributeSupported(final Path pPath) {
+    try {
+      FileStore store = Files.getFileStore(pPath);
+      if (!store.supportsFileAttributeView(UserDefinedFileAttributeView.class)) {
+        throw new Exception(String.format("UserDefinedFileAttributeView not supported on %s\n", store));
+      }
+    } catch (Exception e) {
+      mLogger.error("UserDefinedFileAttributeView not supported", e);
+      return false;
+    }
+
+    return true;
+  }
+
+  protected Path getQualifiedPath(String pIdentifier, Domain pDomain) {
+    return Paths.get(getStorageRoot(), Domain.get(pDomain.getValue()).toString(), pIdentifier);
+  }
+
+  protected Path getQualifiedPath(Domain pDomain) {
+    return Paths.get(getStorageRoot(), Domain.get(pDomain.getValue()).toString());
+  }
+
+  protected abstract String getStorageRoot();
 }

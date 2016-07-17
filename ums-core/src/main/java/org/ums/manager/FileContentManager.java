@@ -6,14 +6,11 @@ import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.ums.decorator.BinaryContentDecorator;
 import org.ums.message.MessageResource;
 
 import java.io.*;
 import java.net.URI;
-import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
 import java.nio.file.*;
 import java.nio.file.FileSystem;
 import java.nio.file.attribute.*;
@@ -25,24 +22,14 @@ public class FileContentManager extends BinaryContentDecorator {
   private static final Logger mLogger = LoggerFactory.getLogger(FileContentManager.class);
   private String mStorageRoot;
   private static final String NAME = "name";
-  private static final String RIGHTS = "rights";
   private static final String SIZE = "size";
   private static final String DATE = "date";
   private static final String TYPE = "type";
-  private static final String OWNER = "owner";
   private String DATE_FORMAT = "YYYY-MM-dd HH:mm:ss";
   private DateFormat mDateFormat = new SimpleDateFormat(DATE_FORMAT);
 
   @Autowired
   MessageResource mMessageResource;
-
-  @Autowired
-  @Lazy
-  BearerAccessTokenManager mBearerAccessTokenManager;
-
-  @Autowired
-  @Lazy
-  UserManager mUserManager;
 
   @Override
   public byte[] get(String pIdentifier, Domain pDomain) throws Exception {
@@ -86,16 +73,8 @@ public class FileContentManager extends BinaryContentDecorator {
     Path path = Paths.get(mStorageRoot, Domain.get(pDomain.getValue()).toString(), pPath);
     if (!Files.exists(path)) {
       Files.createDirectories(path);
-      addUser(SecurityUtils.getSubject().getPrincipal().toString(), path);
+      addUserDefinedProperty(OWNER, SecurityUtils.getSubject().getPrincipal().toString(), path);
     }
-  }
-
-  protected Path getQualifiedPath(String pIdentifier, Domain pDomain) {
-    return Paths.get(mStorageRoot, Domain.get(pDomain.getValue()).toString(), pIdentifier);
-  }
-
-  protected Path getQualifiedPath(Domain pDomain) {
-    return Paths.get(mStorageRoot, Domain.get(pDomain.getValue()).toString());
   }
 
   public String getStorageRoot() {
@@ -116,6 +95,7 @@ public class FileContentManager extends BinaryContentDecorator {
        */
       createIfNotExist(pDomain, pPath);
     } catch (Exception e) {
+      mLogger.error("Failed to create directory: " + pPath, e);
       return error(mMessageResource.getMessage("folder.creation.failed", pPath));
     }
 
@@ -142,7 +122,7 @@ public class FileContentManager extends BinaryContentDecorator {
     details.put(DATE, mDateFormat.format(new Date(attrs.lastModifiedTime().toMillis())));
     details.put(SIZE, attrs.size() + "");
     details.put(TYPE, attrs.isDirectory() ? "dir" : "file");
-    String userId = getUser(pTargetPath);
+    String userId = getUserDefinedProperty(OWNER, pTargetPath);
     details.put(OWNER, userId);
     return details;
   }
@@ -212,7 +192,8 @@ public class FileContentManager extends BinaryContentDecorator {
           FileUtils.copyFile(srcFile, destinationFile);
         }
 
-        addUser(SecurityUtils.getSubject().getPrincipal().toString(), Paths.get(newPath.toString(), srcFile.getName()));
+        addUserDefinedProperty(OWNER, SecurityUtils.getSubject().getPrincipal().toString(),
+            Paths.get(newPath.toString(), srcFile.getName()));
       } catch (Exception e) {
         return error(mMessageResource.getMessage("copy.failed"));
       }
@@ -277,7 +258,7 @@ public class FileContentManager extends BinaryContentDecorator {
         Path filePath = Paths.get(path.toString(), fileEntry.getKey());
         try {
           Files.copy(fileEntry.getValue(), filePath, StandardCopyOption.REPLACE_EXISTING);
-          addUser(SecurityUtils.getSubject().getPrincipal().toString(), filePath);
+          addUserDefinedProperty(OWNER, SecurityUtils.getSubject().getPrincipal().toString(), filePath);
         } catch (Exception e) {
           error("Failed to upload file");
         }
@@ -309,9 +290,9 @@ public class FileContentManager extends BinaryContentDecorator {
     try {
 
       String tempDirectory = System.getProperty("java.io.tmpdir");
-      Path zipfile = Paths.get(tempDirectory, pNewFileName);
+      Path zipFile = Paths.get(tempDirectory, pNewFileName);
 
-      URI fileUri = zipfile.toUri();
+      URI fileUri = zipFile.toUri();
       URI zipUri = new URI("jar:" + fileUri.getScheme(), fileUri.getPath(), null);
 
       Map<String, String> env = new HashMap<>();
@@ -326,10 +307,10 @@ public class FileContentManager extends BinaryContentDecorator {
               StandardCopyOption.REPLACE_EXISTING);
         }
       }
-      response.put("Content-Type", Files.probeContentType(zipfile));
-      response.put("Content-Length", String.valueOf(zipfile.toFile().length()));
-      response.put("Content-Disposition", "inline; filename=\"" + zipfile.toFile().getName() + "\"");
-      response.put("Content", Files.newInputStream(zipfile));
+      response.put("Content-Type", Files.probeContentType(zipFile));
+      response.put("Content-Length", String.valueOf(zipFile.toFile().length()));
+      response.put("Content-Disposition", "inline; filename=\"" + zipFile.toFile().getName() + "\"");
+      response.put("Content", Files.newInputStream(zipFile));
       return response;
     } catch (Exception e) {
       mLogger.error("Failed to download file as zip " + pNewFileName, e);
@@ -337,78 +318,4 @@ public class FileContentManager extends BinaryContentDecorator {
     }
   }
 
-  protected boolean addUser(final String pUser, final Path pTargetPath) {
-    try {
-      if (!isUserDefinedAttributeSupported(pTargetPath)) {
-        return false;
-      }
-
-      UserDefinedFileAttributeView view = Files.
-          getFileAttributeView(pTargetPath, UserDefinedFileAttributeView.class);
-
-      view.write(OWNER, Charset.defaultCharset().encode(pUser));
-    } catch (Exception e) {
-      return false;
-    }
-    return true;
-  }
-
-  protected String getUser(final Path pTargetPath) {
-    try {
-      if (!isUserDefinedAttributeSupported(pTargetPath)) {
-        return "";
-      }
-
-      UserDefinedFileAttributeView view = Files.
-          getFileAttributeView(pTargetPath, UserDefinedFileAttributeView.class);
-
-      int size = view.size(OWNER);
-      ByteBuffer buf = ByteBuffer.allocateDirect(size);
-      view.read(OWNER, buf);
-      buf.flip();
-      return Charset.defaultCharset().decode(buf).toString();
-    } catch (Exception e) {
-      return "";
-    }
-  }
-
-  protected boolean isUserDefinedAttributeSupported(final Path pPath) {
-    try {
-      FileStore store = Files.getFileStore(pPath);
-      if (!store.supportsFileAttributeView(UserDefinedFileAttributeView.class)) {
-        throw new Exception(String.format("UserDefinedFileAttributeView not supported on %s\n", store));
-      }
-    } catch (Exception e) {
-      mLogger.error("UserDefinedFileAttributeView not supported", e);
-      return false;
-    }
-
-    return true;
-  }
-
-  protected Map<String, Object> success() {
-    Map<String, Object> success = new HashMap<>();
-    success.put(SUCCESS, true);
-    success.put(ERROR, null);
-    return success;
-  }
-
-  protected Map<String, Object> error(String msg) {
-    Map<String, Object> error = new HashMap<>();
-    error.put(SUCCESS, false);
-    error.put(ERROR, msg);
-    return error;
-  }
-
-  protected boolean isValidToken(final String pToken) {
-    try {
-      if (mBearerAccessTokenManager.get(pToken) == null) {
-        return false;
-      }
-    } catch (Exception e) {
-      mLogger.info("Token is not valid", e);
-      return false;
-    }
-    return true;
-  }
 }
