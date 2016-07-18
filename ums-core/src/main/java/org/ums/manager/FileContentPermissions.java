@@ -58,6 +58,11 @@ public class FileContentPermissions extends BinaryContentDecorator {
 
   @Override
   public Map<String, Object> upload(Map<String, InputStream> pFileContent, String pPath, Domain pDomain) {
+    Path uploadPath = Paths.get(getQualifiedPath(pPath, pDomain).toString());
+
+    if (!checkIfAllowed(uploadPath)) {
+      return error(mMessageResource.getMessage("file.upload.not.allowed", pPath));
+    }
     return super.upload(pFileContent, pPath, pDomain);
   }
 
@@ -88,6 +93,14 @@ public class FileContentPermissions extends BinaryContentDecorator {
 
   @Override
   public Map<String, Object> remove(List<String> pItems, Domain pDomain) {
+    for (String removedFile : pItems) {
+      Path removedFilePath = Paths.get(getQualifiedPath(removedFile, pDomain).toString());
+
+      if (!checkIfAllowed(removedFilePath)) {
+        return error(mMessageResource.getMessage("folder.remove.not.allowed"));
+
+      }
+    }
     return super.remove(pItems, pDomain);
   }
 
@@ -146,7 +159,6 @@ public class FileContentPermissions extends BinaryContentDecorator {
     try {
       String encryptedToken = encrypt(userId + ":" + accessToken);
 
-
       if (folderList instanceof List) {
         List list = (List) folderList;
         for (Object folder : list) {
@@ -165,7 +177,6 @@ public class FileContentPermissions extends BinaryContentDecorator {
     }
     return folderList;
   }
-
 
   private String encrypt(String plainText) throws Exception {
     return Base64.getEncoder().encodeToString(plainText.getBytes());
@@ -209,6 +220,9 @@ public class FileContentPermissions extends BinaryContentDecorator {
           if (!currentUserId.equalsIgnoreCase(userId)) {
             return false;
           }
+        } else {
+          //if there is no user info found on file/folder we take it as modifiable
+          return true;
         }
       } catch (Exception e) {
         mLogger.error("Can not find user", e);
