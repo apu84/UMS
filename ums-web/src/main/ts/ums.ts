@@ -118,6 +118,24 @@ module ums {
             }]
           }
         })
+        .state('applicationCCI', {
+          url: "/applicationCCI",
+          controller: 'ApplicationCCI',
+          templateUrl: 'views/semester/application-clearance-carry-improvement.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: [
+                  'vendors/bootstrap-switch/css/bootstrap-switch.css',
+                  'vendors/bootstrap-datepicker/css/datepicker.css',
+                  'vendors/jquery-validate/jquery.validate.min.js',
+                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                  'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
+                ]
+              });
+            }]
+          }
+        })
         .state('showSyllabusList', {
           url: "/showSyllabusList",
           controller:"GridSyllabus",

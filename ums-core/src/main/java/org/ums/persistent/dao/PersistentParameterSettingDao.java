@@ -46,6 +46,14 @@ public class PersistentParameterSettingDao extends ParameterSettingDaoDecorator 
   }
 
   @Override
+  public ParameterSetting getByParameterAndSemesterId(String parameter, int semesterId) {
+    String query = "SELECT PS.PS_ID,PS.SEMESTER_ID,PS.PARAMETER_ID,TO_CHAR(PS.START_DATE,'MM/DD/YYYY') START_DATE," +
+        "TO_CHAR(PS.END_DATE,'MM/DD/YYYY') END_DATE,PS.LAST_MODIFIED FROM MST_PARAMETER_SETTING PS , MST_PARAMETER P" +
+        " WHERE P.PARAMETER=? AND PS.SEMESTER_ID=?  and P.PARAMETER_ID=PS.PARAMETER_ID" ;
+    return mJdbcTemplate.queryForObject(query,new Object[]{parameter,semesterId}, new ParameterSettingRowMapper());
+  }
+
+  @Override
   public ParameterSetting getBySemesterAndParameterId(int parameterId, int semesterId) {
     String query = SELECT_ALL+" WHERE PARAMETER_ID=? AND SEMESTER_ID=?";
     return mJdbcTemplate.queryForObject(query,new Object[]{parameterId,semesterId},new ParameterSettingRowMapper());

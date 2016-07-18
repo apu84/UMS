@@ -20,6 +20,11 @@ public class ParameterSettingCache extends ContentCache<ParameterSetting,Mutable
   }
 
   @Override
+  public ParameterSetting getByParameterAndSemesterId(String parameter, int semesterId) {
+    return getManager().getByParameterAndSemesterId(parameter,semesterId);
+  }
+
+  @Override
   public List<ParameterSetting> getBySemester(int semesterId) {
     return getManager().getBySemester(semesterId);
   }

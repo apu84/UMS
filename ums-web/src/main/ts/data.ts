@@ -25,7 +25,8 @@
     '/examRoutine': {title: 'Exam Routine ', 'breadcrumb': ['Exam Routine']},
     '/optionalCoursesApplication': {title: 'Optional Courses ', 'breadcrumb': ['Optional Course Application']},
     '/optionalCoursesOffer': {title: 'Optional Courses ', 'breadcrumb': ['Optional Course Settings']},
-    '/gradeSheetSelection': {title: 'Grade Sheet Selection ', 'breadcrumb': ['Grade Sheet Selection']}
+    '/gradeSheetSelection': {title: 'Grade Sheet Selection ', 'breadcrumb': ['Grade Sheet Selection']},
+    '/applicationCCI':{title:'Appliction for Clearance/Improvement/Carry','breadcrumb':['Application for Clearance/Improvement/Carry']}
   };
 
   $.fn.Data.get = function (id) {
