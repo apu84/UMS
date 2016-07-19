@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.UserDefinedFileAttributeView;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,10 @@ public abstract class BinaryContentDecorator implements BinaryContentManager<byt
   protected static final String SUCCESS = "success";
   protected static final String ERROR = "error";
   protected static final String OWNER = "owner";
+  protected static final String START_DATE = "startDate";
+  protected static final String END_DATE = "endDate";
+  protected static final String FOLDER_TYPE = "type";
+  protected final static String TOKEN = "token";
 
   private BinaryContentManager<byte[]> mManager;
 
@@ -53,65 +58,69 @@ public abstract class BinaryContentDecorator implements BinaryContentManager<byt
   }
 
   @Override
-  public Object list(String pPath, Domain pDomain) {
-    return getManager().list(pPath, pDomain);
+  public Object list(String pPath, Domain pDomain, String... pRootPath) {
+    return getManager().list(pPath, pDomain, pRootPath);
   }
 
   @Override
-  public Map<String, Object> rename(String pOldPath, String pNewPath, Domain pDomain) {
-    return getManager().rename(pOldPath, pNewPath, pDomain);
+  public Map<String, Object> rename(String pOldPath, String pNewPath, Domain pDomain, String... pRootPath) {
+    return getManager().rename(pOldPath, pNewPath, pDomain, pRootPath);
   }
 
   @Override
-  public Map<String, Object> move(List<String> pItems, String pNewPath, Domain pDomain) {
-    return getManager().move(pItems, pNewPath, pDomain);
+  public Map<String, Object> move(List<String> pItems, String pNewPath, Domain pDomain, String... pRootPath) {
+    return getManager().move(pItems, pNewPath, pDomain, pRootPath);
   }
 
   @Override
-  public Map<String, Object> copy(List<String> pItems, String pNewPath, String pNewFileName, Domain pDomain) {
-    return getManager().copy(pItems, pNewPath, pNewFileName, pDomain);
+  public Map<String, Object> copy(List<String> pItems, String pNewPath, String pNewFileName, Domain pDomain, String... pRootPath) {
+    return getManager().copy(pItems, pNewPath, pNewFileName, pDomain, pRootPath);
   }
 
   @Override
-  public Map<String, Object> remove(List<String> pItems, Domain pDomain) {
-    return getManager().remove(pItems, pDomain);
+  public Map<String, Object> remove(List<String> pItems, Domain pDomain, String... pRootPath) {
+    return getManager().remove(pItems, pDomain, pRootPath);
   }
 
   @Override
-  public Map<String, byte[]> content(String pPath, Domain pDomain) {
-    return getManager().content(pPath, pDomain);
+  public Map<String, byte[]> content(String pPath, Domain pDomain, String... pRootPath) {
+    return getManager().content(pPath, pDomain, pRootPath);
   }
 
   @Override
-  public Map<String, Object> createFolder(String pNewPath, Domain pDomain) {
-    return getManager().createFolder(pNewPath, pDomain);
+  public Map<String, Object> createFolder(String pNewPath, Domain pDomain, String... pRootPath) {
+    return getManager().createFolder(pNewPath, pDomain, pRootPath);
   }
 
   @Override
-  public Map<String, Object> compress(List<String> pItems, String pNewPath, String pNewFileName, Domain pDomain) {
-    return getManager().compress(pItems, pNewPath, pNewFileName, pDomain);
+  public Map<String, Object> compress(List<String> pItems, String pNewPath, String pNewFileName, Domain pDomain, String... pRootPath) {
+    return getManager().compress(pItems, pNewPath, pNewFileName, pDomain, pRootPath);
   }
 
   @Override
-  public Map<String, Object> extract(String pZippedItem, String pDestination, Domain pDomain) {
-    return getManager().extract(pZippedItem, pDestination, pDomain);
+  public Map<String, Object> extract(String pZippedItem, String pDestination, Domain pDomain, String... pRootPath) {
+    return getManager().extract(pZippedItem, pDestination, pDomain, pRootPath);
   }
 
   @Override
-  public Map<String, Object> upload(Map<String, InputStream> pFileContent, String pPath, Domain pDomain) {
-    return getManager().upload(pFileContent, pPath, pDomain);
+  public Map<String, Object> upload(Map<String, InputStream> pFileContent, String pPath, Domain pDomain, String... pRootPath) {
+    return getManager().upload(pFileContent, pPath, pDomain, pRootPath);
   }
 
   @Override
-  public Map<String, Object> download(String pPath, String pToken, Domain pDomain) {
-    return getManager().download(pPath, pToken, pDomain);
+  public Map<String, Object> download(String pPath, String pToken, Domain pDomain, String... pRootPath) {
+    return getManager().download(pPath, pToken, pDomain, pRootPath);
   }
 
   @Override
-  public Map<String, Object> downloadAsZip(List<String> pItems, String pNewFileName, String pToken, Domain pDomain) {
-    return getManager().downloadAsZip(pItems, pNewFileName, pToken, pDomain);
+  public Map<String, Object> downloadAsZip(List<String> pItems, String pNewFileName, String pToken, Domain pDomain, String... pRootPath) {
+    return getManager().downloadAsZip(pItems, pNewFileName, pToken, pDomain, pRootPath);
   }
 
+  @Override
+  public Map<String, Object> createAssignmentFolder(String pNewPath, Date pStartDate, Date pEndDate, Domain pDomain, String... pRootPath) {
+    return getManager().createAssignmentFolder(pNewPath, pStartDate, pEndDate, pDomain, pRootPath);
+  }
 
   protected Map<String, Object> success() {
     Map<String, Object> success = new HashMap<>();
@@ -166,12 +175,18 @@ public abstract class BinaryContentDecorator implements BinaryContentManager<byt
     return true;
   }
 
-  protected Path getQualifiedPath(String pIdentifier, Domain pDomain) {
-    return Paths.get(getStorageRoot(), Domain.get(pDomain.getValue()).toString(), pIdentifier);
+  protected Path getQualifiedPath(Domain pDomain, String... pPaths) {
+    Path root = Paths.get(getStorageRoot(), Domain.get(pDomain.getValue()).toString());
+    return Paths.get(root.toString(), pPaths);
   }
 
   protected Path getQualifiedPath(Domain pDomain) {
     return Paths.get(getStorageRoot(), Domain.get(pDomain.getValue()).toString());
+  }
+
+  protected String buildPath(String pPath, String... pRootPath) {
+    Path rootPath = Paths.get("", pRootPath);
+    return Paths.get(rootPath.toString(), pPath).toString();
   }
 
   protected abstract String getStorageRoot();

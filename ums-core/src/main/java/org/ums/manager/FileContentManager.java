@@ -33,7 +33,7 @@ public class FileContentManager extends BinaryContentDecorator {
 
   @Override
   public byte[] get(String pIdentifier, Domain pDomain) throws Exception {
-    Path path = getQualifiedPath(pIdentifier, pDomain);
+    Path path = getQualifiedPath(pDomain, pIdentifier);
     if (!Files.exists(path)) {
       throw new FileNotFoundException();
     }
@@ -42,38 +42,37 @@ public class FileContentManager extends BinaryContentDecorator {
 
   @Override
   public void put(byte[] pData, String pIdentifier, Domain pDomain) throws Exception {
-    Path filePath = getQualifiedPath(pIdentifier, pDomain);
+    Path filePath = getQualifiedPath(pDomain, pIdentifier);
     Files.createFile(filePath);
     Files.copy(new ByteArrayInputStream(pData), filePath, StandardCopyOption.REPLACE_EXISTING);
   }
 
   @Override
   public void delete(String pIdentifier, Domain pDomain) throws Exception {
-    Path filePath = getQualifiedPath(pIdentifier, pDomain);
+    Path filePath = getQualifiedPath(pDomain, pIdentifier);
     Files.delete(filePath);
   }
 
   @Override
   public String create(byte[] pData, String pIdentifier, Domain pDomain) throws Exception {
     createIfNotExist(pDomain);
-    Path newFilePath = getQualifiedPath(pIdentifier, pDomain);
+    Path newFilePath = getQualifiedPath(pDomain, pIdentifier);
     Files.createFile(newFilePath);
     Files.copy(new ByteArrayInputStream(pData), newFilePath, StandardCopyOption.REPLACE_EXISTING);
     return newFilePath.toString();
   }
 
   protected void createIfNotExist(final Domain pDomain) throws Exception {
-    Path path = Paths.get(mStorageRoot, Domain.get(pDomain.getValue()).toString());
+    Path path = getQualifiedPath(pDomain);
     if (!Files.exists(path)) {
       Files.createDirectories(path);
     }
   }
 
   protected void createIfNotExist(final Domain pDomain, final String pPath) throws Exception {
-    Path path = Paths.get(mStorageRoot, Domain.get(pDomain.getValue()).toString(), pPath);
+    Path path = getQualifiedPath(pDomain, pPath);
     if (!Files.exists(path)) {
       Files.createDirectories(path);
-      addUserDefinedProperty(OWNER, SecurityUtils.getSubject().getPrincipal().toString(), path);
     }
   }
 
@@ -87,19 +86,22 @@ public class FileContentManager extends BinaryContentDecorator {
 
 
   @Override
-  public Object list(String pPath, Domain pDomain) {
+  public Object list(String pPath, Domain pDomain, String... pRootPath) {
     try {
       /*
       This is to make sure course material gets into folder structure like {/coursematerial/semestername/coursename/}.
       Initial request would be made with this.
        */
-      createIfNotExist(pDomain, pPath);
+      if (pPath.equalsIgnoreCase("\\/")) {
+        createIfNotExist(pDomain, buildPath(pPath, pRootPath));
+      }
+
     } catch (Exception e) {
       mLogger.error("Failed to create directory: " + pPath, e);
       return error(mMessageResource.getMessage("folder.creation.failed", pPath));
     }
 
-    Path targetDirectory = Paths.get(mStorageRoot, Domain.get(pDomain.getValue()).toString(), pPath);
+    Path targetDirectory = getQualifiedPath(pDomain, buildPath(pPath,pRootPath));
 
     List<Map<String, Object>> list = new ArrayList<>();
 
@@ -136,11 +138,9 @@ public class FileContentManager extends BinaryContentDecorator {
   }
 
   @Override
-  public Map<String, Object> rename(String pOldPath, String pNewPath, Domain pDomain) {
-    Path root = getQualifiedPath(pDomain);
-    Path oldPath = Paths.get(root.toString(), pOldPath);
-
-    Path newPath = Paths.get(root.toString(), pNewPath);
+  public Map<String, Object> rename(String pOldPath, String pNewPath, Domain pDomain, String... pRootPath) {
+    Path oldPath = getQualifiedPath(pDomain, buildPath(pOldPath, pRootPath));
+    Path newPath = getQualifiedPath(pDomain, buildPath(pNewPath, pRootPath));
     try {
       Files.move(oldPath, oldPath.resolveSibling(newPath.toString()));
     } catch (Exception e) {
@@ -150,12 +150,11 @@ public class FileContentManager extends BinaryContentDecorator {
   }
 
   @Override
-  public Map<String, Object> move(List<String> pItems, String pNewPath, Domain pDomain) {
-    Path root = getQualifiedPath(pDomain);
+  public Map<String, Object> move(List<String> pItems, String pNewPath, Domain pDomain, String... pRootPath) {
 
     for (String oldPathString : pItems) {
-      Path oldPath = Paths.get(root.toString(), oldPathString);
-      Path newPath = Paths.get(root.toString(), pNewPath);
+      Path oldPath = getQualifiedPath(pDomain, buildPath(oldPathString, pRootPath));
+      Path newPath = getQualifiedPath(pDomain, buildPath(pNewPath, pRootPath));
       File srcFile = oldPath.toFile();
       File destinationFile = newPath.toFile();
 
@@ -174,12 +173,11 @@ public class FileContentManager extends BinaryContentDecorator {
   }
 
   @Override
-  public Map<String, Object> copy(List<String> pItems, String pNewPath, String pNewFileName, Domain pDomain) {
-    Path root = getQualifiedPath(pDomain);
-
+  public Map<String, Object> copy(List<String> pItems, String pNewPath, String pNewFileName, Domain pDomain,
+                                  String... pRootPath) {
     for (String oldPathString : pItems) {
-      Path oldPath = Paths.get(root.toString(), oldPathString);
-      Path newPath = Paths.get(root.toString(), pNewPath, pNewFileName);
+      Path oldPath = getQualifiedPath(pDomain, buildPath(oldPathString, pRootPath));
+      Path newPath = getQualifiedPath(pDomain, buildPath(buildPath(pNewFileName, pNewPath), pRootPath));
       File srcFile = oldPath.toFile();
       File destinationFile = newPath.toFile();
 
@@ -203,11 +201,9 @@ public class FileContentManager extends BinaryContentDecorator {
   }
 
   @Override
-  public Map<String, Object> remove(List<String> pItems, Domain pDomain) {
-    Path root = getQualifiedPath(pDomain);
-
+  public Map<String, Object> remove(List<String> pItems, Domain pDomain, String... pRootPath) {
     for (String deletedItem : pItems) {
-      Path deletedPath = Paths.get(root.toString(), deletedItem);
+      Path deletedPath = getQualifiedPath(pDomain, buildPath(deletedItem, pRootPath));
       File deletedFile = deletedPath.toFile();
 
       try {
@@ -223,14 +219,16 @@ public class FileContentManager extends BinaryContentDecorator {
   }
 
   @Override
-  public Map<String, byte[]> content(String pPath, Domain pDomain) {
+  public Map<String, byte[]> content(String pPath, Domain pDomain, String... pRootPath) {
     return null;
   }
 
   @Override
-  public Map<String, Object> createFolder(String pNewPath, Domain pDomain) {
+  public Map<String, Object> createFolder(String pNewPath, Domain pDomain, String... pRootPath) {
     try {
-      createIfNotExist(pDomain, pNewPath);
+      createIfNotExist(pDomain, buildPath(pNewPath, pRootPath));
+      addUserDefinedProperty(OWNER, SecurityUtils.getSubject().getPrincipal().toString(),
+          getQualifiedPath(pDomain, buildPath(pNewPath, pRootPath)));
     } catch (Exception e) {
       return error(mMessageResource.getMessage("folder.creation.failed", pNewPath));
     }
@@ -238,21 +236,21 @@ public class FileContentManager extends BinaryContentDecorator {
   }
 
   @Override
-  public Map<String, Object> compress(List<String> pItems, String pNewPath, String pNewFileName, Domain pDomain) {
+  public Map<String, Object> compress(List<String> pItems, String pNewPath, String pNewFileName, Domain pDomain, String... pRootPath) {
     return null;
   }
 
   @Override
-  public Map<String, Object> extract(String pZippedItem, String pDestination, Domain pDomain) {
+  public Map<String, Object> extract(String pZippedItem, String pDestination, Domain pDomain, String... pRootPath) {
     return null;
   }
 
   @Override
-  public Map<String, Object> upload(Map<String, InputStream> pFileContent, String pPath, Domain pDomain) {
+  public Map<String, Object> upload(Map<String, InputStream> pFileContent, String pPath, Domain pDomain, String... pRootPath) {
     if (pFileContent.size() == 0) {
       return error("file size  = 0");
     } else {
-      Path path = Paths.get(getQualifiedPath(pDomain).toString(), pPath);
+      Path path = getQualifiedPath(pDomain, buildPath(pPath, pRootPath));
 
       for (Map.Entry<String, InputStream> fileEntry : pFileContent.entrySet()) {
         Path filePath = Paths.get(path.toString(), fileEntry.getKey());
@@ -268,10 +266,10 @@ public class FileContentManager extends BinaryContentDecorator {
   }
 
   @Override
-  public Map<String, Object> download(String pPath, String pToken, Domain pDomain) {
+  public Map<String, Object> download(String pPath, String pToken, Domain pDomain, String... pRootPath) {
     Map<String, Object> response = new HashMap<>();
     try {
-      Path path = Paths.get(getQualifiedPath(pDomain).toString(), pPath);
+      Path path = getQualifiedPath(pDomain, buildPath(pPath, pRootPath));
       File file = path.toFile();
       response.put("Content-Type", Files.probeContentType(path));
       response.put("Content-Length", String.valueOf(file.length()));
@@ -285,7 +283,7 @@ public class FileContentManager extends BinaryContentDecorator {
   }
 
   @Override
-  public Map<String, Object> downloadAsZip(List<String> pItems, String pNewFileName, String pToken, Domain pDomain) {
+  public Map<String, Object> downloadAsZip(List<String> pItems, String pNewFileName, String pToken, Domain pDomain, String... pRootPath) {
     Map<String, Object> response = new HashMap<>();
     try {
 
@@ -300,7 +298,7 @@ public class FileContentManager extends BinaryContentDecorator {
 
       try (FileSystem zipfs = FileSystems.newFileSystem(zipUri, env)) {
         for (String toAdd : pItems) {
-          Path externalFile = Paths.get(getQualifiedPath(pDomain).toString(), toAdd);
+          Path externalFile = getQualifiedPath(pDomain, buildPath(toAdd, pRootPath));
           Path pathInZipfile = zipfs.getPath("/" + externalFile.getFileName());
           // copy a file into the zip file
           Files.copy(externalFile, pathInZipfile,
@@ -318,4 +316,29 @@ public class FileContentManager extends BinaryContentDecorator {
     }
   }
 
+  @Override
+  public Map<String, Object> createAssignmentFolder(String pNewPath, Date pStartDate,
+                                                    Date pEndDate, Domain pDomain,
+                                                    String... pRootPath) {
+    Map<String, Object> createFolderResponse;
+
+    if (pStartDate != null
+        && pEndDate != null
+        && pStartDate.before(pEndDate)) {
+
+      createFolderResponse = createFolder(pNewPath, pDomain, pRootPath);
+      Path assignmentFolder = getQualifiedPath(pDomain, buildPath(pNewPath, pRootPath));
+      try {
+        addUserDefinedProperty(OWNER, SecurityUtils.getSubject().getPrincipal().toString(), assignmentFolder);
+        addUserDefinedProperty(START_DATE, mDateFormat.format(pStartDate), assignmentFolder);
+        addUserDefinedProperty(END_DATE, mDateFormat.format(pEndDate), assignmentFolder);
+        addUserDefinedProperty(FOLDER_TYPE, "assignment", assignmentFolder);
+      } catch (Exception e) {
+        return error("Failed to add user");
+      }
+    } else {
+      return error("Assignment submission dates are no valid");
+    }
+    return createFolderResponse;
+  }
 }

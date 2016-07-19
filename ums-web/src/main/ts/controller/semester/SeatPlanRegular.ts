@@ -1,9 +1,8 @@
 module ums{
-
   import ITimeoutService = ng.ITimeoutService;
 
   //import UISortableOptions = angular.ui.UISortableOptions;
-  interface IExamSeatPlanScope extends ng.IScope{
+  interface IExamSeatPlanRegularScope extends ng.IScope{
     semesterList:Array<ISemester>;
     seatPlanGroupList:Array<ISeatPlanGroup>;
     subGroupStorage:Array<String>;
@@ -197,11 +196,9 @@ module ums{
     baseId:number;
   }
 
-
-
-  export class ExamSeatPlan{
+  export class ExamSeatPlanRegular{
     public static $inject = ['appConstants','HttpClient','$scope','$q','notify','$timeout','$sce','$window'];
-    constructor(private appConstants: any, private httpClient: HttpClient, private $scope: IExamSeatPlanScope,
+    constructor(private appConstants: any, private httpClient: HttpClient, private $scope: IExamSeatPlanRegularScope,
                 private $q:ng.IQService, private notify: Notify,private $timeout:ITimeoutService,
                 private $sce:ng.ISCEService,private $window:ng.IWindowService) {
 
@@ -2250,8 +2247,7 @@ module ums{
       item["type"] = this.$scope.examType;
       return item;
     }
-
   }
 
-  UMS.controller("ExamSeatPlan",ExamSeatPlan);
+  UMS.controller("SeatPlanRegular",ExamSeatPlanRegular);
 }

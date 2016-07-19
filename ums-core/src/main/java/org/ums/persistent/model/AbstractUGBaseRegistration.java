@@ -26,31 +26,92 @@ public abstract class AbstractUGBaseRegistration implements MutableUGBaseRegistr
 
   private Integer mId;
   private String mCourseId;
+  private String mCourseTitle;
   private Course mCourse;
+  private String mCourseNo;
   private Integer mSemesterId;
   private Semester mSemester;
   private String mStudentId;
   private Student mStudent;
   private String mGradeLetter;
   private ExamType mExamType;
+  private String mType;
   private UGBaseRegistration.Status mStatus;
+  private String mExamDate;
   private String mLastModified;
+  private String mMessage;
 
   public AbstractUGBaseRegistration() {
   }
 
   public AbstractUGBaseRegistration(final MutableUGBaseRegistration pMutableUGBaseRegistration) {
     setCourseId(pMutableUGBaseRegistration.getCourseId());
+    setCourseNo(pMutableUGBaseRegistration.getCourseNo());
     setSemesterId(pMutableUGBaseRegistration.getSemesterId());
     setStudentId(pMutableUGBaseRegistration.getStudentId());
     setGradeLetter(pMutableUGBaseRegistration.getGradeLetter());
     setStatus(pMutableUGBaseRegistration.getStatus());
     setExamType(pMutableUGBaseRegistration.getExamType());
+    setType(pMutableUGBaseRegistration.getType());
+    setExamDate(pMutableUGBaseRegistration.getExamDate());
+  }
+
+  @Override
+  public String getMessage() {
+    if(mMessage==null){
+      mMessage="null";
+    }
+    return mMessage;
+  }
+
+  @Override
+  public void setMessage(String pMessage) {
+    mMessage = pMessage;
+  }
+
+  @Override
+  public void setExamDate(String pExamDate) {
+    mExamDate = pExamDate;
+  }
+
+  @Override
+  public String getExamDate() {
+    return mExamDate;
+  }
+
+  @Override
+  public String getCourseTitle() {
+    return mCourseTitle;
+  }
+
+  @Override
+  public void setCourseTitle(String pCourseTitle) {
+    mCourseTitle = pCourseTitle;
+  }
+
+  @Override
+  public void setCourseNo(String pCourseNo) {
+    mCourseNo = pCourseNo;
+  }
+
+  @Override
+  public String getCourseNo() {
+    return mCourseNo;
   }
 
   @Override
   public Integer getId() {
     return mId;
+  }
+
+
+  @Override
+  public void setType(String pType) {
+    mType= pType;
+  }
+
+  public String getType(){
+    return mType;
   }
 
   @Override

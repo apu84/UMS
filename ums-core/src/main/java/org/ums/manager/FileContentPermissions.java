@@ -11,16 +11,13 @@ import org.ums.message.MessageResource;
 
 import java.io.InputStream;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Base64;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 public class FileContentPermissions extends BinaryContentDecorator {
   private static final Logger mLogger = LoggerFactory.getLogger(FileContentPermissions.class);
-
-  private final static String TOKEN = "token";
-  private static final String OWNER = "owner";
 
   private BearerAccessTokenManager mBearerAccessTokenManager;
   private UserManager mUserManager;
@@ -39,113 +36,110 @@ public class FileContentPermissions extends BinaryContentDecorator {
 
 
   @Override
-  public Map<String, Object> downloadAsZip(List<String> pItems, String pNewFileName, String pToken, Domain pDomain) {
+  public Map<String, Object> downloadAsZip(List<String> pItems, String pNewFileName,
+                                           String pToken, Domain pDomain, String... pRootPath) {
     if (isValidToken(pToken)) {
-      return super.downloadAsZip(pItems, pNewFileName, pToken, pDomain);
+      return super.downloadAsZip(pItems, pNewFileName, pToken, pDomain, pRootPath);
     } else {
       return null;
     }
   }
 
   @Override
-  public Map<String, Object> download(String pPath, String pToken, Domain pDomain) {
+  public Map<String, Object> download(String pPath, String pToken, Domain pDomain, String... pRootPath) {
     if (isValidToken(pToken)) {
-      return super.download(pPath, pToken, pDomain);
+      return super.download(pPath, pToken, pDomain, pRootPath);
     } else {
       return null;
     }
   }
 
   @Override
-  public Map<String, Object> upload(Map<String, InputStream> pFileContent, String pPath, Domain pDomain) {
-    return super.upload(pFileContent, pPath, pDomain);
+  public Map<String, Object> upload(Map<String, InputStream> pFileContent, String pPath,
+                                    Domain pDomain, String... pRootPath) {
+    Path uploadPath = getQualifiedPath(pDomain, buildPath(pPath, pRootPath));
+    if (!checkIfAllowed(uploadPath)) {
+      return error(mMessageResource.getMessage("file.upload.not.allowed", pPath));
+    }
+    return super.upload(pFileContent, pPath, pDomain, pRootPath);
   }
 
   @Override
-  public Map<String, Object> extract(String pZippedItem, String pDestination, Domain pDomain) {
-    return super.extract(pZippedItem, pDestination, pDomain);
-  }
-
-  @Override
-  public Map<String, Object> compress(List<String> pItems, String pNewPath, String pNewFileName, Domain pDomain) {
-    return super.compress(pItems, pNewPath, pNewFileName, pDomain);
-  }
-
-  @Override
-  public Map<String, Object> createFolder(String pNewPath, Domain pDomain) {
+  public Map<String, Object> createFolder(String pNewPath, Domain pDomain, String... pRootPath) {
     // Check if there is permission to create folder
-    Path parentPath = Paths.get(getQualifiedPath(pNewPath, pDomain).toString()).getParent();
+    Path parentPath = getQualifiedPath(pDomain, buildPath(pNewPath, pRootPath)).getParent();
     if (!checkIfAllowed(parentPath)) {
       return error(mMessageResource.getMessage("folder.creation.not.allowed", pNewPath));
     }
-    return super.createFolder(pNewPath, pDomain);
+    return super.createFolder(pNewPath, pDomain, pRootPath);
   }
 
   @Override
-  public Map<String, byte[]> content(String pPath, Domain pDomain) {
-    return super.content(pPath, pDomain);
+  public Map<String, Object> remove(List<String> pItems, Domain pDomain, String... pRootPath) {
+    for (String removedFile : pItems) {
+      Path removedFilePath = getQualifiedPath(pDomain, buildPath(removedFile, pRootPath));
+
+      if (!checkIfAllowed(removedFilePath)) {
+        return error(mMessageResource.getMessage("folder.remove.not.allowed"));
+
+      }
+    }
+    return super.remove(pItems, pDomain, pRootPath);
   }
 
   @Override
-  public Map<String, Object> remove(List<String> pItems, Domain pDomain) {
-    return super.remove(pItems, pDomain);
-  }
-
-  @Override
-  public Map<String, Object> copy(List<String> pItems, String pNewPath, String pNewFileName, Domain pDomain) {
-    Path parentPath = Paths.get(getQualifiedPath(pNewPath, pDomain).toString());
+  public Map<String, Object> copy(List<String> pItems, String pNewPath, String pNewFileName,
+                                  Domain pDomain, String... pRootPath) {
+    Path parentPath = getQualifiedPath(pDomain, buildPath(pNewPath, pRootPath));
     if (!checkIfAllowed(parentPath)) {
       return error(mMessageResource.getMessage("folder.creation.not.allowed", pNewPath));
     }
 
     for (String copiedFile : pItems) {
-      Path copiedFilePath = Paths.get(getQualifiedPath(copiedFile, pDomain).toString());
-
+      Path copiedFilePath = getQualifiedPath(pDomain, buildPath(copiedFile, pRootPath));
       if (!checkIfAllowed(copiedFilePath)) {
         return error(mMessageResource.getMessage("folder.copy.not.allowed"));
-
       }
     }
-    return super.copy(pItems, pNewPath, pNewFileName, pDomain);
+    return super.copy(pItems, pNewPath, pNewFileName, pDomain, pRootPath);
   }
 
   @Override
-  public Map<String, Object> move(List<String> pItems, String pNewPath, Domain pDomain) {
-    Path parentPath = Paths.get(getQualifiedPath(pNewPath, pDomain).toString());
+  public Map<String, Object> move(List<String> pItems, String pNewPath, Domain pDomain, String... pRootPath) {
+    Path parentPath = getQualifiedPath(pDomain, buildPath(pNewPath, pRootPath));
     if (!checkIfAllowed(parentPath)) {
       return error(mMessageResource.getMessage("folder.move.not.allowed"));
     }
 
     for (String movedFile : pItems) {
-      Path movedFilePath = Paths.get(getQualifiedPath(movedFile, pDomain).toString());
+      Path movedFilePath = getQualifiedPath(pDomain, buildPath(movedFile, pRootPath));
 
       if (!checkIfAllowed(movedFilePath)) {
         return error(mMessageResource.getMessage("folder.move.not.allowed"));
 
       }
     }
-    return super.move(pItems, pNewPath, pDomain);
+    return super.move(pItems, pNewPath, pDomain, pRootPath);
   }
 
   @Override
-  public Map<String, Object> rename(String pOldPath, String pNewPath, Domain pDomain) {
-    Path parentPath = Paths.get(getQualifiedPath(pOldPath, pDomain).toString());
+  public Map<String, Object> rename(String pOldPath, String pNewPath, Domain pDomain, String... pRootPath) {
+    Path parentPath = getQualifiedPath(pDomain, buildPath(pOldPath, pRootPath));
     if (!checkIfAllowed(parentPath)) {
       return error(mMessageResource.getMessage("folder.creation.not.allowed", pNewPath));
     }
-    return super.rename(pOldPath, pNewPath, pDomain);
+    return super.rename(pOldPath, pNewPath, pDomain, pRootPath);
   }
 
   @Override
-  public Object list(String pPath, Domain pDomain) {
+  public Object list(String pPath, Domain pDomain, String... pRootPath) {
 
-    Object folderList = super.list(pPath, pDomain);
+    Object folderList = super.list(pPath, pDomain, pRootPath);
 
     String userId = SecurityUtils.getSubject().getPrincipal().toString();
     String accessToken = mBearerAccessTokenManager.getByUser(userId).getId();
     try {
       String encryptedToken = encrypt(userId + ":" + accessToken);
-
 
       if (folderList instanceof List) {
         List list = (List) folderList;
@@ -166,6 +160,11 @@ public class FileContentPermissions extends BinaryContentDecorator {
     return folderList;
   }
 
+  @Override
+  public Map<String, Object> createAssignmentFolder(String pNewPath, Date pStartDate,
+                                                    Date pEndDate, Domain pDomain, String... pRootPath) {
+    return super.createAssignmentFolder(pNewPath, pStartDate, pEndDate, pDomain, pRootPath);
+  }
 
   private String encrypt(String plainText) throws Exception {
     return Base64.getEncoder().encodeToString(plainText.getBytes());
@@ -209,6 +208,9 @@ public class FileContentPermissions extends BinaryContentDecorator {
           if (!currentUserId.equalsIgnoreCase(userId)) {
             return false;
           }
+        } else {
+          //if there is no user info found on file/folder we take it as modifiable
+          return true;
         }
       } catch (Exception e) {
         mLogger.error("Can not find user", e);

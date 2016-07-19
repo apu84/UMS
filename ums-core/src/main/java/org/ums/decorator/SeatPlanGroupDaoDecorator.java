@@ -30,4 +30,9 @@ public class SeatPlanGroupDaoDecorator extends ContentDaoDecorator<SeatPlanGroup
   public List<SeatPlanGroup> getGroupBySemesterTypeFromDb(int pSemesterId, int pExamType) {
     return getManager().getGroupBySemesterTypeFromDb(pSemesterId,pExamType);
   }
+
+  @Override
+  public int checkSeatPlanGroupDataSize(int pSemesterId, int pExamType) {
+    return getManager().checkSeatPlanGroupDataSize(pSemesterId,pExamType);
+  }
 }

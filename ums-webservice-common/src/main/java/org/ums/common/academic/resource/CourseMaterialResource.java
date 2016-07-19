@@ -50,46 +50,59 @@ public class CourseMaterialResource extends Resource {
                                     final @PathParam("semester-name") String pSemesterName,
                                     final @PathParam("course-no") String pCourseNo,
                                     final JsonObject pJsonObject) throws Exception {
-    String root = "/" + pSemesterName + "/" + pCourseNo;
     Map<String, Object> result = new HashMap<>();
     if (pJsonObject != null
         && pJsonObject.containsKey("action")) {
       switch (pJsonObject.getString("action")) {
 
         case "list":
-          result.put("result", mBinaryContentManager.list(root + pJsonObject.getString("path"),
-              BinaryContentManager.Domain.COURSE_MATERIAL));
+          result.put("result", mBinaryContentManager.list(pJsonObject.getString("path"),
+              BinaryContentManager.Domain.COURSE_MATERIAL, pSemesterName, pCourseNo));
           break;
 
         case "rename":
-          result.put("result", mBinaryContentManager.rename(root + pJsonObject.getString("item"),
-              root + pJsonObject.getString("newItemPath"),
-              BinaryContentManager.Domain.COURSE_MATERIAL));
+          result.put("result", mBinaryContentManager.rename(pJsonObject.getString("item"),
+              pJsonObject.getString("newItemPath"),
+              BinaryContentManager.Domain.COURSE_MATERIAL,
+              pSemesterName,
+              pCourseNo));
           break;
+
         case "move":
           JsonArray items = pJsonObject.getJsonArray("items");
-          result.put("result", mBinaryContentManager.move(actionItems(items, root),
-              root + pJsonObject.getString("newPath"),
-              BinaryContentManager.Domain.COURSE_MATERIAL));
+          result.put("result", mBinaryContentManager.move(actionItems(items),
+              pJsonObject.getString("newPath"),
+              BinaryContentManager.Domain.COURSE_MATERIAL,
+              pSemesterName,
+              pCourseNo));
           break;
+
         case "createFolder":
-          result.put("result", mBinaryContentManager.createFolder(root + pJsonObject.getString("newPath"),
-              BinaryContentManager.Domain.COURSE_MATERIAL));
+          result.put("result", mBinaryContentManager.createFolder(pJsonObject.getString("newPath"),
+              BinaryContentManager.Domain.COURSE_MATERIAL,
+              pSemesterName,
+              pCourseNo));
           break;
+
         case "remove":
           JsonArray deletedItems = pJsonObject.getJsonArray("items");
-          result.put("result", mBinaryContentManager.remove(actionItems(deletedItems, root),
-              BinaryContentManager.Domain.COURSE_MATERIAL));
+          result.put("result", mBinaryContentManager.remove(actionItems(deletedItems),
+              BinaryContentManager.Domain.COURSE_MATERIAL,
+              pSemesterName,
+              pCourseNo));
           break;
+
         case "copy":
           JsonArray copiedItems = pJsonObject.getJsonArray("items");
-          List<String> copiedFiles = actionItems(copiedItems, root);
-          String newPath = root + pJsonObject.getString("newPath");
+          List<String> copiedFiles = actionItems(copiedItems);
+          String newPath = pJsonObject.getString("newPath");
           String singleFile = pJsonObject.containsKey("singleFileName") ? pJsonObject.getString("singleFilename") : "";
 
           result.put("result", mBinaryContentManager.copy(copiedFiles,
               newPath, singleFile,
-              BinaryContentManager.Domain.COURSE_MATERIAL));
+              BinaryContentManager.Domain.COURSE_MATERIAL,
+              pSemesterName,
+              pCourseNo));
           break;
       }
     }
@@ -104,11 +117,10 @@ public class CourseMaterialResource extends Resource {
                                        final @PathParam("semester-name") String pSemesterName,
                                        final @PathParam("course-no") String pCourseNo) throws Exception {
 
-
-    String root = "/" + pSemesterName + "/" + pCourseNo;
-
     if (ServletFileUpload.isMultipartContent(httpRequest)) {
-      return uploadFile(httpRequest, root);
+      return uploadFile(httpRequest,
+          pSemesterName,
+          pCourseNo);
     }
     return null;
   }
@@ -122,7 +134,6 @@ public class CourseMaterialResource extends Resource {
                                       final @PathParam("course-no") String pCourseNo) throws Exception {
     String action = "", token = "", toFileName = "";
     List<String> downloadFiles = null;
-    String root = "/" + pSemesterName + "/" + pCourseNo;
     action = httpRequest.getParameter("action");
     token = httpRequest.getParameter("token");
 
@@ -131,40 +142,27 @@ public class CourseMaterialResource extends Resource {
         case "download":
           String filePath = httpRequest.getParameter("path");
           if (!StringUtils.isEmpty(filePath)) {
-            Map<String, Object> response = mBinaryContentManager.download(root + filePath, token,
-                BinaryContentManager.Domain.COURSE_MATERIAL);
+            Map<String, Object> response = mBinaryContentManager.download(filePath, token,
+                BinaryContentManager.Domain.COURSE_MATERIAL, pSemesterName, pCourseNo);
             if (response != null) {
-              InputStream fileStream = (InputStream) response.get("Content");
-              for (String key : response.keySet()) {
-                if (!key.equalsIgnoreCase("Content")) {
-                  httpResponse.setHeader(key, response.get(key).toString());
-                }
-              }
-
-              StreamUtils.copy(fileStream, httpResponse.getOutputStream());
-              httpResponse.getOutputStream().flush();
+              writeToResponse(response, httpResponse);
             }
           } else {
             Response.ResponseBuilder responseBuilder = Response.status(Response.Status.NOT_FOUND);
             return responseBuilder.build();
           }
           break;
+
         case "downloadMultiple":
-          downloadFiles = actionItems(httpRequest.getParameterValues("items[]"), root);
+          downloadFiles = actionItems(httpRequest.getParameterValues("items[]"));
           toFileName = httpRequest.getParameter("toFilename");
           if (downloadFiles.size() > 0) {
             Map<String, Object> response = mBinaryContentManager.downloadAsZip(downloadFiles, toFileName, token,
-                BinaryContentManager.Domain.COURSE_MATERIAL);
+                BinaryContentManager.Domain.COURSE_MATERIAL,
+                pSemesterName,
+                pCourseNo);
             if (response != null) {
-              InputStream fileStream = (InputStream) response.get("Content");
-              for (String key : response.keySet()) {
-                if (!key.equalsIgnoreCase("Content")) {
-                  httpResponse.setHeader(key, response.get(key).toString());
-                }
-              }
-
-              StreamUtils.copy(fileStream, httpResponse.getOutputStream());
-              httpResponse.getOutputStream().flush();
+              writeToResponse(response, httpResponse);
             }
           } else {
             Response.ResponseBuilder responseBuilder = Response.status(Response.Status.NOT_FOUND);
@@ -179,7 +177,20 @@ public class CourseMaterialResource extends Resource {
     return responseBuilder.build();
   }
 
-  private Object uploadFile(HttpServletRequest request, String pRootPath) throws Exception {
+  protected void writeToResponse(final Map<String, Object> pResponse,
+                                 final HttpServletResponse pHttpServletResponse) throws Exception {
+    InputStream fileStream = (InputStream) pResponse.get("Content");
+    for (String key : pResponse.keySet()) {
+      if (!key.equalsIgnoreCase("Content")) {
+        pHttpServletResponse.setHeader(key, pResponse.get(key).toString());
+      }
+    }
+
+    StreamUtils.copy(fileStream, pHttpServletResponse.getOutputStream());
+    pHttpServletResponse.getOutputStream().flush();
+  }
+
+  private Object uploadFile(HttpServletRequest request, String... pRootPath) throws Exception {
     String destination = null;
     Map<String, InputStream> files = new HashMap<>();
 
@@ -197,25 +208,26 @@ public class CourseMaterialResource extends Resource {
     }
 
     return mBinaryContentManager.upload(files,
-        pRootPath + destination,
-        BinaryContentManager.Domain.COURSE_MATERIAL);
+        destination,
+        BinaryContentManager.Domain.COURSE_MATERIAL,
+        pRootPath);
   }
 
-  protected List<String> actionItems(final JsonArray pItems, final String pRoot) {
+  protected List<String> actionItems(final JsonArray pItems) {
     List<String> actionItems = new ArrayList<>();
     for (int i = 0; i < pItems.size(); i++) {
       String actionItem = pItems.getString(i);
-      actionItems.add(pRoot + actionItem);
+      actionItems.add(actionItem);
     }
 
     return actionItems;
   }
 
-  protected List<String> actionItems(final String[] pItems, final String pRoot) {
+  protected List<String> actionItems(final String[] pItems) {
     List<String> actionItems = new ArrayList<>();
     for (int i = 0; i < pItems.length; i++) {
       String actionItem = pItems[i];
-      actionItems.add(pRoot + actionItem);
+      actionItems.add(actionItem);
     }
     return actionItems;
   }

@@ -103,6 +103,13 @@ public class UMSContext {
   }
 
   @Bean
+  ApplicationCCIManager applicationCCIManager(){
+    ApplicationCCICache applicationCCICache = new ApplicationCCICache(mCacheFactory.getCacheManager());
+    applicationCCICache.setManager(new PersistentApplicationCCIDao(mTemplateFactory.getJdbcTemplate()));
+    return applicationCCICache;
+  }
+
+  @Bean
   SemesterSyllabusMapManager semesterSyllabusMapManager() {
     SemesterSyllabusMapCache semesterSyllabusMapCache = new SemesterSyllabusMapCache(mCacheFactory.getCacheManager());
     semesterSyllabusMapCache.setManager(new PersistentSemesterSyllabusMapDao(new JdbcTemplate(mDataSource), syllabusManager()));
