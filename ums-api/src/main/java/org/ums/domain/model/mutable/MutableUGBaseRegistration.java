@@ -23,4 +23,14 @@ public interface MutableUGBaseRegistration extends UGBaseRegistration, Mutable, 
   void setExamType(final ExamType pExamType);
 
   void setStatus(final UGRegistrationResult.Status pStatus);
+
+  void setType(final String pType);
+
+  void setCourseNo(final String pCourseNo);
+
+  void setCourseTitle(final String pCourseTitle);
+
+  void setExamDate(final String pExamDate);
+
+  void setMessage(final String pMessage);
 }

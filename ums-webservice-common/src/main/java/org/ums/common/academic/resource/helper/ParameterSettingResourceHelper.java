@@ -1,5 +1,6 @@
 package org.ums.common.academic.resource.helper;
 
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
@@ -7,8 +8,10 @@ import org.ums.common.academic.resource.ParameterSettingResource;
 import org.ums.common.ResourceHelper;
 import org.ums.common.builder.ParameterSettingBuilder;
 import org.ums.domain.model.immutable.ParameterSetting;
+import org.ums.domain.model.immutable.Student;
 import org.ums.domain.model.mutable.MutableParameterSetting;
 import org.ums.manager.ParameterSettingManager;
+import org.ums.manager.StudentManager;
 import org.ums.persistent.model.PersistentParameterSetting;
 
 import javax.json.Json;
@@ -30,6 +33,9 @@ public class ParameterSettingResourceHelper extends ResourceHelper<ParameterSett
 
   @Autowired
   private ParameterSettingManager mManager;
+
+  @Autowired
+  private StudentManager mStudentManager;
 
   @Autowired
   private ParameterSettingBuilder mBuilder;
@@ -64,7 +70,7 @@ public class ParameterSettingResourceHelper extends ResourceHelper<ParameterSett
     return object.build();
   }
 
-  public JsonObject getByParameterAndSemesterId(final int pParameterId,final int pSemesterId, final Request pRequest, final UriInfo pUriInfo) throws Exception{
+  public JsonObject getByParameterIdAndSemesterId(final int pParameterId,final int pSemesterId, final Request pRequest, final UriInfo pUriInfo) throws Exception{
     ParameterSetting parameterSettings = getContentManager().getBySemesterAndParameterId(pParameterId,pSemesterId);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
@@ -78,6 +84,22 @@ public class ParameterSettingResourceHelper extends ResourceHelper<ParameterSett
     return object.build();
   }
 
+
+  public JsonObject getByParameterAndSemesterId(final String parameter, final Request pRequest, final UriInfo pUriInfo) throws Exception{
+    String mStudentId = SecurityUtils.getSubject().getPrincipal().toString();
+    Student student = mStudentManager.get(mStudentId);
+    ParameterSetting parameterSettings = getContentManager().getByParameterAndSemesterId(parameter,student.getSemester().getId());
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+
+    children.add(toJson(parameterSettings,pUriInfo,localCache));
+
+    object.add("entries",children);
+    localCache.invalidate();
+
+    return object.build();
+  }
 
   public JsonObject getAllInfo(final UriInfo pUriInfo) throws Exception{
     List<ParameterSetting> parameterSettings = getContentManager().getAll();

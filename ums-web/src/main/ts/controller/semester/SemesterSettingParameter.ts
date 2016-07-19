@@ -278,13 +278,13 @@ module ums{
       else {
 
 
-      if (parameter.startDate == '' || parameter.endDate == '') {
+      if (parameter.startDateTmp == '' || parameter.endDateTmp == '') {
           alert("parameterId:"+parameter.parameterId+", startDate:"+ parameter.startDate+",endDate:"+parameter.endDate);
         }
       else {
         var jsons = this.convertToJson(this.$scope.semesterTypeId, parameter.parameterId, parameter.startDateTmp, parameter.endDateTmp);
         console.log("----------------json----------------");
-        console.log(json);
+        console.log(jsons);
         this.$scope.semesterSettingStore[parameter.srl].editData = false;
         this.httpClient.post('academic/parameterSetting/', jsons, 'application/json')
             .success(() => {
@@ -309,7 +309,10 @@ module ums{
       item["startDate"] =startDate;
       item["endDate"] = endDate;
       jsonObj.push(item);
-
+      console.log("*******");
+      console.log(startDate);
+      console.log(endDate);
+      console.log(item);
       return item;
     }
     private convertToJsonForUpdate(id:string,semesterTypeId:number,parameterId:string,startDate:string,endDate:string){

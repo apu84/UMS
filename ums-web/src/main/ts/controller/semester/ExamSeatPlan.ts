@@ -203,7 +203,7 @@ module ums{
     public static $inject = ['appConstants','HttpClient','$scope','$q','notify','$timeout','$sce','$window'];
     constructor(private appConstants: any, private httpClient: HttpClient, private $scope: IExamSeatPlanScope,
                 private $q:ng.IQService, private notify: Notify,private $timeout:ITimeoutService,
-        private $sce:ng.ISCEService,private $window:ng.IWindowService) {
+                private $sce:ng.ISCEService,private $window:ng.IWindowService) {
 
       var arr : { [key:number]:Array<ISeatPlanGroup>; } = {};
       $scope.mergeIdList=[];
@@ -342,6 +342,11 @@ module ums{
 
     private splitAction(splitNumber:number):void{
 
+      console.log("*******************");
+      console.log('tempgrouplist:-->');
+      console.log(this.$scope.tempGroupList);
+      console.log("*******************");
+
       this.$scope.splitActionOccured = true;
       this.$scope.recreate = true;
 
@@ -352,7 +357,9 @@ module ums{
           var tempArray:Array<ISeatPlanGroup>=[];
           var memberStudentNumber :any={};
           memberStudentNumber= members.studentNumber;
+          this.$scope.tempGroupList[j].studentNumber=0;
           var leftStudentNumber = memberStudentNumber - splitNumber;
+          console.log("left student number: "+leftStudentNumber);
           var previousMember = members;
 
           this.$scope.tempGroupList[j].splitOccuranceNumber+=1;
@@ -445,6 +452,7 @@ module ums{
 
 
       this.$scope.recreate=false;
+      console.log(this.$scope.tempGroupListAll);
       //setTimeout(this.refreshSubGroups,2000);
 
       /*/!*$("#sortable").sortable("refresh");
@@ -567,44 +575,32 @@ module ums{
 
     private splitCourseStudent(menuNumber:number):void{
 
-      var currentScope = this;
-
+      //var currentScope = this;
+      console.log("Split id:");
+      console.log(this.$scope.splitId);
+      console.log(this.$scope.tempGroupList);
       if(menuNumber==1){
-        /*
-         if(this.$scope.subGroupFound){
-         console.log('Sub group found!!!!');
-         console.log('split id----->'+this.$scope.splitId);
-         for(var i=0;i<this.$scope.subGroupList.length;i++){
-         var matchFound:boolean=false;
-         for(var j=0;j<this.$scope.subGroupList[i].subGroupMembers.length;j++){
-         if(this.$scope.subGroupList[i].subGroupMembers[j].id==this.$scope.splitId){
 
-         console.log("match found of saved sub group");
-         console.log(this.$scope.subGroupList[i].subGroupMembers[j]);
-         this.$scope.subGroupList[i].subGroupMembers[j].showSubPortion=true;
-         matchFound=true;
-         break;
-         }
-         }
-         if(matchFound){
-         break;
-         }
-         }
-         }else{
-         for(var i=0;i<this.$scope.tempGroupList.length;i++){
-         if(this.$scope.tempGroupList[i].id==this.$scope.splitId){
-         this.$scope.tempGroupList[i].showSubPortion=true;
-         break;
-         }
-         }
-         }*/
-
-        for(var i=0;i<this.$scope.tempGroupList.length;i++){
-          if(this.$scope.tempGroupList[i].id==this.$scope.splitId){
-            this.$scope.tempGroupList[i].showSubPortion=true;
-            break;
+        if(this.$scope.subGroupFound){
+          for(var i=0;i<this.$scope.tempGroupListAll.length;i++){
+            if(this.$scope.tempGroupListAll[i].id==this.$scope.splitId){
+              this.$scope.tempGroupListAll[i].showSubPortion=true;
+              console.log("a match found");
+              break;
+            }
           }
         }
+        else{
+          for(var i=0;i<this.$scope.tempGroupList.length;i++){
+            if(this.$scope.tempGroupList[i].id==this.$scope.splitId){
+              this.$scope.tempGroupList[i].showSubPortion=true;
+              console.log("a match found");
+              break;
+            }
+          }
+        }
+
+
       }else{
 
       }
@@ -824,10 +820,10 @@ module ums{
             $("#sortable0").sortable("disable");
             /*setTimeout(subGroupFunc,2000);
 
-            function subGroupFunc(){
+             function subGroupFunc(){
 
 
-            }*/
+             }*/
           }
 
 
@@ -1120,6 +1116,7 @@ module ums{
 
           case "split": currentScope.$scope.splitButtonClicked=true;
             currentScope.splitCourseStudent(1);
+            break;
           case "revertSplit":
             currentScope.$scope.reverseSplitButtonClicked=true;
             currentScope.revertSplitAction();

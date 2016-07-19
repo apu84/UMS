@@ -1,14 +1,34 @@
-package org.ums.decorator;
+package org.ums.cache;
 
 import org.ums.domain.model.immutable.UGRegistrationResult;
 import org.ums.domain.model.mutable.MutableUGRegistrationResult;
+import org.ums.manager.CacheManager;
 import org.ums.manager.UGRegistrationResultManager;
+import org.ums.util.CacheUtil;
 
 import java.util.List;
 
-public class UGRegistrationResultDaoDecorator
-    extends ContentDaoDecorator<UGRegistrationResult, MutableUGRegistrationResult, Integer, UGRegistrationResultManager>
-    implements UGRegistrationResultManager {
+/**
+ * Created by My Pc on 7/12/2016.
+ */
+public class UGRegistrationResultCache extends ContentCache<UGRegistrationResult,MutableUGRegistrationResult,Integer,UGRegistrationResultManager>
+    implements UGRegistrationResultManager{
+
+  CacheManager<UGRegistrationResult,Integer> mCacheManager;
+
+  public UGRegistrationResultCache(final CacheManager<UGRegistrationResult,Integer> pCacheManager){
+    mCacheManager = pCacheManager;
+  }
+
+  @Override
+  protected CacheManager<UGRegistrationResult, Integer> getCacheManager() {
+    return mCacheManager;
+  }
+
+  @Override
+  protected String getCacheKey(Integer pId) {
+    return CacheUtil.getCacheKey(UGRegistrationResult.class,pId);
+  }
 
   @Override
   public List<UGRegistrationResult> getBySemesterAndExamTYpeAndGrade(int pSemesterId, int pExamType, String pGrade) {
