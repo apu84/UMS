@@ -123,7 +123,11 @@ public class PersistentSeatPlanGroupDao extends SeatPlanGroupDaoDecorator {
     return super.delete(pMutableList);
   }
 
-
+  @Override
+  public int checkSeatPlanGroupDataSize(int pSemesterId, int pExamType) {
+    String query = "SELECT  COUNT(*) FROM SP_GROUP WHERE SEMESTER_ID=? AND TYPE=?";
+    return mJdbcTemplate.queryForObject(query,Integer.class,pSemesterId,pExamType);
+  }
 
   @Override
   public int create(MutableSeatPlanGroup pMutable) throws Exception {
