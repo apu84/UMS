@@ -61,7 +61,7 @@ public class SeatPlanGroupResourceHelper extends ResourceHelper<SeatPlanGroup, M
     * First, we will check whethere there is value or not in the database. Because, if there is no value and
     * we search by a semesterId, then, our program will be shown error or exception.
     * */
-    List<SeatPlanGroup> seatPlanGroupListForCheckingIfThereIsValueOrNot = mSeatPlanGroupManager.getAll();
+    int seatPlanGroupListForCheckingIfThereIsValueOrNot = mSeatPlanGroupManager.checkSeatPlanGroupDataSize(pSemesterId,type);
     List<SeatPlanGroup> seatPlanGroupListBySemesterAndType;
 
 
@@ -75,12 +75,12 @@ public class SeatPlanGroupResourceHelper extends ResourceHelper<SeatPlanGroup, M
     LocalCache localCache = new LocalCache();
     Boolean seatPlanGroupExistForTheSemesterAndType = false;
 
-    if (seatPlanGroupListForCheckingIfThereIsValueOrNot.size() > 0) {
-      seatPlanGroupListBySemesterAndType = mSeatPlanGroupManager.getGroupBySemester(pSemesterId, type);
-      if (seatPlanGroupListBySemesterAndType.size() > 0) {
+    //if (seatPlanGroupListForCheckingIfThereIsValueOrNot > 0) {
+      //seatPlanGroupListBySemesterAndType = mSeatPlanGroupManager.getGroupBySemester(pSemesterId, type);
+      if (seatPlanGroupListForCheckingIfThereIsValueOrNot > 0) {
         seatPlanGroupExistForTheSemesterAndType = true;
       }
-    }
+
 
 
     if (seatPlanGroupExistForTheSemesterAndType == true && update == 0) {

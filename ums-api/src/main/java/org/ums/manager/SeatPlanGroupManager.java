@@ -13,4 +13,5 @@ public interface SeatPlanGroupManager extends ContentManager<SeatPlanGroup,Mutab
   List<SeatPlanGroup> getGroupBySemesterTypeFromDb(final int pSemesterId,final int pExamType);
   List<SeatPlanGroup> getBySemesterGroupAndType(int pSemesterId,int pGroupNo,int pType);
   int deleteBySemesterAndExamType(final int pSemesterId, final int pExamType);
+  int checkSeatPlanGroupDataSize(int pSemesterId,int pExamType);
 }
