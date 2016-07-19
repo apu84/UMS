@@ -73,7 +73,6 @@ public class FileContentManager extends BinaryContentDecorator {
     Path path = getQualifiedPath(pDomain, pPath);
     if (!Files.exists(path)) {
       Files.createDirectories(path);
-      addUserDefinedProperty(OWNER, SecurityUtils.getSubject().getPrincipal().toString(), path);
     }
   }
 
@@ -93,14 +92,16 @@ public class FileContentManager extends BinaryContentDecorator {
       This is to make sure course material gets into folder structure like {/coursematerial/semestername/coursename/}.
       Initial request would be made with this.
        */
-      createIfNotExist(pDomain, buildPath(pPath, pRootPath));
+      if (pPath.equalsIgnoreCase("\\/")) {
+        createIfNotExist(pDomain, buildPath(pPath, pRootPath));
+      }
 
     } catch (Exception e) {
       mLogger.error("Failed to create directory: " + pPath, e);
       return error(mMessageResource.getMessage("folder.creation.failed", pPath));
     }
 
-    Path targetDirectory = Paths.get(mStorageRoot, Domain.get(pDomain.getValue()).toString(), pPath);
+    Path targetDirectory = getQualifiedPath(pDomain, buildPath(pPath,pRootPath));
 
     List<Map<String, Object>> list = new ArrayList<>();
 
@@ -226,6 +227,8 @@ public class FileContentManager extends BinaryContentDecorator {
   public Map<String, Object> createFolder(String pNewPath, Domain pDomain, String... pRootPath) {
     try {
       createIfNotExist(pDomain, buildPath(pNewPath, pRootPath));
+      addUserDefinedProperty(OWNER, SecurityUtils.getSubject().getPrincipal().toString(),
+          getQualifiedPath(pDomain, buildPath(pNewPath, pRootPath)));
     } catch (Exception e) {
       return error(mMessageResource.getMessage("folder.creation.failed", pNewPath));
     }

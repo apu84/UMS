@@ -36,7 +36,8 @@ public class FileContentPermissions extends BinaryContentDecorator {
 
 
   @Override
-  public Map<String, Object> downloadAsZip(List<String> pItems, String pNewFileName, String pToken, Domain pDomain, String... pRootPath) {
+  public Map<String, Object> downloadAsZip(List<String> pItems, String pNewFileName,
+                                           String pToken, Domain pDomain, String... pRootPath) {
     if (isValidToken(pToken)) {
       return super.downloadAsZip(pItems, pNewFileName, pToken, pDomain, pRootPath);
     } else {

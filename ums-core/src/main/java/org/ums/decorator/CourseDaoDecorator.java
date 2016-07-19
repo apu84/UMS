@@ -62,4 +62,9 @@ public class CourseDaoDecorator extends ContentDaoDecorator<Course, MutableCours
   public List<Course> getMandatorySesssionalCourses(String pSyllabusId, final Integer pYear, final Integer pSemester) {
     return getManager().getMandatorySesssionalCourses(pSyllabusId, pYear, pSemester);
   }
+
+  @Override
+  public Course getByCourseName(String pCourseName, String pSyllabusId) {
+    return getManager().getByCourseName(pCourseName, pSyllabusId);
+  }
 }
