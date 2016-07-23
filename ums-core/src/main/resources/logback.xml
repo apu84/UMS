@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-  <appender name="fileAppender" class="ch.qos.logback.core.FileAppender">
+  <appender name="fileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
     <file>${CATALINA_HOME}/logs/ums-logs.log</file>
     <append>true</append>
     <encoder>

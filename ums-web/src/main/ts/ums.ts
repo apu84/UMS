@@ -10,8 +10,35 @@ module ums {
     'ngCookies',
     'ngSanitize',
     'scrollable-table',
-    'amChartsDirective'
+    'amChartsDirective',
+    'FileManagerApp'
   ]);
+
+  export var FILEMANAGER_CONFIG: any = {};
+
+  angular.module('FileManagerApp').config(
+      ['fileManagerConfigProvider', (config) => {
+        var defaults = config.$get();
+        FILEMANAGER_CONFIG = config;
+        config.set(
+            {
+              appName: 'Course Materials',
+              tplPath: 'views/file-manager',
+              pickCallback: function (item) {
+                var msg = 'Picked %s "%s" for external use'
+                    .replace('%s', item.type)
+                    .replace('%s', item.fullPath());
+                window.alert(msg);
+              },
+
+              allowedActions: angular.extend(
+                  defaults.allowedActions, {
+                    createFolder: true,
+                    pickFiles: true,
+                    pickFolders: true,
+                  }),
+            });
+      }]);
 
   UMS.constant("appConstants", Constants.Default());
 
@@ -612,6 +639,32 @@ module ums {
           url: "/loggerGrid",
           controller: 'LoggerGrid',
           templateUrl: 'views/logger/logger-grid.html'
+        })
+        .state('courseMaterial', {
+          url: "/courseMaterial/:1/:2",
+          controller: 'CourseMaterial',
+          templateUrl: 'views/course-material/course-material.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: ['vendors/bootstrap-datepicker/css/datepicker.css',
+                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js']
+              });
+            }]
+          }
+        })
+        .state('studentCourseMaterial', {
+          url: "/studentCourseMaterial/:1/:2",
+          controller: 'StudentCourseMaterial',
+          templateUrl: 'views/course-material/course-material.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: ['vendors/bootstrap-datepicker/css/datepicker.css',
+                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js']
+              });
+            }]
+          }
         })
         //In database use /dummyController/H or /dummyController/T in the location column
         //https://localhost/ums-web/iums/#/dummyConroller/T

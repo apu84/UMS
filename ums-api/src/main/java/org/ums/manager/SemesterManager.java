@@ -15,4 +15,6 @@ public interface SemesterManager extends ContentManager<Semester, MutableSemeste
 
   Semester getPreviousSemester(final Integer pSemesterId, final Integer pProgramTypeId) throws Exception;
   Semester getSemesterByStatus(final ProgramType programType,final SemesterStatus status) throws Exception;
+
+  Semester getBySemesterName(final String pSemesterName, final Integer pProgramTypeId) throws Exception;
 }

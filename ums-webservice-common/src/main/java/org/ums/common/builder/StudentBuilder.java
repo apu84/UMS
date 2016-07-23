@@ -24,6 +24,7 @@ public class StudentBuilder implements Builder<Student, MutableStudent> {
   @Autowired
   private DateFormat mDateFormat;
   @Autowired
+  @Qualifier("fileContentManager")
   private BinaryContentManager<byte[]> mBinaryContentManager;
 
   public void build(final JsonObjectBuilder pBuilder,

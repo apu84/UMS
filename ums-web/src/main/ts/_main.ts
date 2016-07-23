@@ -44,8 +44,8 @@
 /// <reference path='controller/semester/SemesterSettingParameter.ts'/>
 /// <reference path='controller/dept/ClassRoutine.ts'/>
 /// <reference path='controller/logger/LoggerGrid.ts'/>
-
-
+/// <reference path='controller/course-material/CourseMaterial.ts'/>
+/// <reference path='controller/course-material/StudentCourseMaterial.ts'/>
 
 /// <reference path='Utils.ts'/>
 

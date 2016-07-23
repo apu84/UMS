@@ -27,4 +27,8 @@ public class SemesterDaoDecorator extends ContentDaoDecorator<Semester, MutableS
     return getManager().getSemesterByStatus(programType, status);
   }
 
+  @Override
+  public Semester getBySemesterName(String pSemesterName, Integer pProgramTypeId) throws Exception {
+    return getManager().getBySemesterName(pSemesterName, pProgramTypeId);
+  }
 }

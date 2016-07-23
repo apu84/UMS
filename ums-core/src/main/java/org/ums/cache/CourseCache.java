@@ -1,7 +1,7 @@
 package org.ums.cache;
 
-import org.ums.domain.model.mutable.MutableCourse;
 import org.ums.domain.model.immutable.Course;
+import org.ums.domain.model.mutable.MutableCourse;
 import org.ums.manager.CacheManager;
 import org.ums.manager.CourseManager;
 import org.ums.util.CacheUtil;
@@ -11,7 +11,6 @@ import java.util.List;
 
 public class CourseCache extends ContentCache<Course, MutableCourse, String, CourseManager> implements CourseManager {
   CacheManager<Course, String> mCacheManager;
-
 
 
   public CourseCache(CacheManager<Course, String> pCacheManager) {
@@ -35,11 +34,12 @@ public class CourseCache extends ContentCache<Course, MutableCourse, String, Cou
 
   @Override
   public List<Course> getByYearSemester(String pSemesterId, String pProgramId, int year, int semester) {
-    return getManager().getByYearSemester(pSemesterId,pProgramId,year,semester);
+    return getManager().getByYearSemester(pSemesterId, pProgramId, year, semester);
   }
+
   @Override
-  public List<Course> getBySemesterProgram(String pSemesterId,String pProgramId) {
-    return getManager().getBySemesterProgram(pSemesterId,pProgramId);
+  public List<Course> getBySemesterProgram(String pSemesterId, String pProgramId) {
+    return getManager().getBySemesterProgram(pSemesterId, pProgramId);
   }
 
   @Override
@@ -48,21 +48,23 @@ public class CourseCache extends ContentCache<Course, MutableCourse, String, Cou
   }
 
   @Override
-  public List<Course> getOfferedCourseList(Integer pSemesterId,Integer pProgramId, Integer pYear, Integer pSemester) {
+  public List<Course> getOfferedCourseList(Integer pSemesterId, Integer pProgramId, Integer pYear, Integer pSemester) {
     return getManager().getOfferedCourseList(pSemesterId, pProgramId, pYear, pSemester);
   }
+
   @Override
-  public List<Course> getCallForApplicationCourseList(Integer pSemesterId,Integer pProgramId, Integer pYear, Integer pSemester) {
+  public List<Course> getCallForApplicationCourseList(Integer pSemesterId, Integer pProgramId, Integer pYear, Integer pSemester) {
     return getManager().getCallForApplicationCourseList(pSemesterId, pProgramId, pYear, pSemester);
   }
 
 
   @Override
-  public List<Course> getApprovedCourseList(Integer pSemesterId,Integer pProgramId, Integer pYear, Integer pSemester) {
+  public List<Course> getApprovedCourseList(Integer pSemesterId, Integer pProgramId, Integer pYear, Integer pSemester) {
     return getManager().getApprovedCourseList(pSemesterId, pProgramId, pYear, pSemester);
   }
+
   @Override
-  public List<Course> getApprovedCallForApplicationCourseList(Integer pSemesterId,Integer pProgramId, Integer pYear, Integer pSemester) {
+  public List<Course> getApprovedCallForApplicationCourseList(Integer pSemesterId, Integer pProgramId, Integer pYear, Integer pSemester) {
     return getManager().getApprovedCallForApplicationCourseList(pSemesterId, pProgramId, pYear, pSemester);
   }
 
@@ -84,5 +86,10 @@ public class CourseCache extends ContentCache<Course, MutableCourse, String, Cou
   @Override
   public List<Course> getMandatoryTheoryCourses(String pSyllabusId, final Integer pYear, final Integer pSemester) {
     return getManager().getMandatoryTheoryCourses(pSyllabusId, pYear, pSemester);
+  }
+
+  @Override
+  public Course getByCourseNo(String pCourseName, String pSyllabusId) {
+    return getManager().getByCourseNo(pCourseName, pSyllabusId);
   }
 }

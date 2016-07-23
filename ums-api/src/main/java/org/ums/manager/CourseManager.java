@@ -28,4 +28,6 @@ public interface CourseManager extends ContentManager<Course, MutableCourse, Str
 
   public List<Course> getMandatorySesssionalCourses(final String pSyllabusId, final Integer pYear, final Integer pSemester);
 
+  Course getByCourseNo(final String pCourseName, final String pSyllabusId);
+
 }
