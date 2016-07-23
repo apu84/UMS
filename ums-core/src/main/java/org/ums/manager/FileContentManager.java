@@ -92,7 +92,7 @@ public class FileContentManager extends BinaryContentDecorator {
       This is to make sure course material gets into folder structure like {/coursematerial/semestername/coursename/}.
       Initial request would be made with this.
        */
-      if (pPath.equalsIgnoreCase("\\/")) {
+      if (pPath.equalsIgnoreCase("/")) {
         createIfNotExist(pDomain, buildPath(pPath, pRootPath));
       }
 

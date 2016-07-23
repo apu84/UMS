@@ -105,7 +105,7 @@ public class PersistentSemesterDao extends SemesterDaoDecorator {
   @Override
   public Semester getBySemesterName(String pSemesterName, Integer pProgramTypeId) throws Exception {
     String query = SELECT_ALL + "WHERE SEMESTER_NAME = ? AND PROGRAM_TYPE = ?";
-    return mJdbcTemplate.queryForObject(query, new Object[]{pSemesterName, pProgramTypeId, pProgramTypeId}, new SemesterRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[]{pSemesterName, pProgramTypeId}, new SemesterRowMapper());
   }
 
   class SemesterRowMapper implements RowMapper<Semester> {

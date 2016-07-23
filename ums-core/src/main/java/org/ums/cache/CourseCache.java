@@ -89,7 +89,7 @@ public class CourseCache extends ContentCache<Course, MutableCourse, String, Cou
   }
 
   @Override
-  public Course getByCourseName(String pCourseName, String pSyllabusId) {
-    return getManager().getByCourseName(pCourseName, pSyllabusId);
+  public Course getByCourseNo(String pCourseName, String pSyllabusId) {
+    return getManager().getByCourseNo(pCourseName, pSyllabusId);
   }
 }

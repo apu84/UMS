@@ -291,11 +291,6 @@ public class UMSContext {
   }
 
   @Bean
-  CourseMaterialManager courseMaterialManager() {
-    return new PersistentCourseMaterialDao(mTemplateFactory.getJdbcTemplate());
-  }
-
-  @Bean
   LoginService loginService() {
     return new LoginService();
   }
@@ -360,9 +355,19 @@ public class UMSContext {
 
   @Bean
   @Lazy
-  BinaryContentManager<byte[]> courseMaterialFileManager() {
+  BinaryContentManager<byte[]> courseMaterialFileManagerForTeacher() {
     FileContentPermissions fileContentPermission = new FileContentPermissions(userManager(),
         bearerAccessTokenManager(), mUMSConfiguration, mMessageResource);
+    fileContentPermission.setManager(mBinaryContentManager);
+    return fileContentPermission;
+  }
+
+  @Bean
+  @Lazy
+  BinaryContentManager<byte[]> courseMaterialFileManagerForStudent() {
+    StudentFileContentPermission fileContentPermission = new StudentFileContentPermission(userManager(),
+        bearerAccessTokenManager(), mUMSConfiguration, mMessageResource, studentManager(), semesterManager(),
+        courseManager(), semesterSyllabusMapManager());
     fileContentPermission.setManager(mBinaryContentManager);
     return fileContentPermission;
   }

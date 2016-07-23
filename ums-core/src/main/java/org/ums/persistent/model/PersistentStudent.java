@@ -2,11 +2,11 @@ package org.ums.persistent.model;
 
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
-import org.ums.domain.model.mutable.MutableStudent;
 import org.ums.domain.model.immutable.Department;
 import org.ums.domain.model.immutable.Program;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.User;
+import org.ums.domain.model.mutable.MutableStudent;
 import org.ums.manager.DepartmentManager;
 import org.ums.manager.ProgramManager;
 import org.ums.manager.SemesterManager;
@@ -55,6 +55,8 @@ public class PersistentStudent implements MutableStudent {
   private EnrollmentType mEnrollmentType;
   private Integer mYear;
   private Integer mAcademicSemester;
+  private Integer mCurrentEnrolledSemesterId;
+  private Semester mCurrentEnrolledSemester;
 
   public PersistentStudent() {
 
@@ -85,6 +87,8 @@ public class PersistentStudent implements MutableStudent {
     setEnrollmentType(pMutableStudent.getEnrollmentType());
     setCurrentYear(pMutableStudent.getCurrentYear());
     setCurrentAcademicSemester(pMutableStudent.getCurrentAcademicSemester());
+    setCurrentEnrolledSemesterId(pMutableStudent.getCurrentEnrolledSemesterId());
+    setCurrentEnrolledSemester(pMutableStudent.getCurrentEnrolledSemester());
   }
 
 
@@ -375,5 +379,25 @@ public class PersistentStudent implements MutableStudent {
   @Override
   public Integer getCurrentAcademicSemester() {
     return mAcademicSemester;
+  }
+
+  @Override
+  public void setCurrentEnrolledSemesterId(Integer pCurrentEnrolledSemesterId) {
+    mCurrentEnrolledSemesterId = pCurrentEnrolledSemesterId;
+  }
+
+  @Override
+  public void setCurrentEnrolledSemester(Semester pCurrentEnrolledSemester) {
+    mCurrentEnrolledSemester = pCurrentEnrolledSemester;
+  }
+
+  @Override
+  public Integer getCurrentEnrolledSemesterId() {
+    return mCurrentEnrolledSemesterId;
+  }
+
+  @Override
+  public Semester getCurrentEnrolledSemester() {
+    return mCurrentEnrolledSemester;
   }
 }

@@ -3,15 +3,11 @@ package org.ums.common.academic.resource;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
 import org.springframework.util.StringUtils;
 import org.ums.common.Resource;
 import org.ums.manager.BinaryContentManager;
-import org.ums.manager.CourseManager;
-import org.ums.manager.SemesterManager;
 
 import javax.json.JsonArray;
 import javax.json.JsonObject;
@@ -29,19 +25,8 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-@Path("/academic/courseMaterial")
-@Consumes(Resource.MIME_TYPE_JSON)
-public class CourseMaterialResource extends Resource {
+public abstract class AbstractCourseMaterialResource extends Resource {
   public static String DESTINATION = "destination";
-  @Autowired
-  @Qualifier("courseMaterialFileManager")
-  BinaryContentManager<byte[]> mBinaryContentManager;
-
-  @Autowired
-  SemesterManager mSemesterManager;
-
-  @Autowired
-  CourseManager mCourseManager;
 
   @POST
   @Produces(Resource.MIME_TYPE_JSON)
@@ -56,12 +41,12 @@ public class CourseMaterialResource extends Resource {
       switch (pJsonObject.getString("action")) {
 
         case "list":
-          result.put("result", mBinaryContentManager.list(pJsonObject.getString("path"),
+          result.put("result", getBinaryContentManager().list(pJsonObject.getString("path"),
               BinaryContentManager.Domain.COURSE_MATERIAL, pSemesterName, pCourseNo));
           break;
 
         case "rename":
-          result.put("result", mBinaryContentManager.rename(pJsonObject.getString("item"),
+          result.put("result", getBinaryContentManager().rename(pJsonObject.getString("item"),
               pJsonObject.getString("newItemPath"),
               BinaryContentManager.Domain.COURSE_MATERIAL,
               pSemesterName,
@@ -70,7 +55,7 @@ public class CourseMaterialResource extends Resource {
 
         case "move":
           JsonArray items = pJsonObject.getJsonArray("items");
-          result.put("result", mBinaryContentManager.move(actionItems(items),
+          result.put("result", getBinaryContentManager().move(actionItems(items),
               pJsonObject.getString("newPath"),
               BinaryContentManager.Domain.COURSE_MATERIAL,
               pSemesterName,
@@ -78,7 +63,7 @@ public class CourseMaterialResource extends Resource {
           break;
 
         case "createFolder":
-          result.put("result", mBinaryContentManager.createFolder(pJsonObject.getString("newPath"),
+          result.put("result", getBinaryContentManager().createFolder(pJsonObject.getString("newPath"),
               BinaryContentManager.Domain.COURSE_MATERIAL,
               pSemesterName,
               pCourseNo));
@@ -86,7 +71,7 @@ public class CourseMaterialResource extends Resource {
 
         case "remove":
           JsonArray deletedItems = pJsonObject.getJsonArray("items");
-          result.put("result", mBinaryContentManager.remove(actionItems(deletedItems),
+          result.put("result", getBinaryContentManager().remove(actionItems(deletedItems),
               BinaryContentManager.Domain.COURSE_MATERIAL,
               pSemesterName,
               pCourseNo));
@@ -98,7 +83,7 @@ public class CourseMaterialResource extends Resource {
           String newPath = pJsonObject.getString("newPath");
           String singleFile = pJsonObject.containsKey("singleFileName") ? pJsonObject.getString("singleFilename") : "";
 
-          result.put("result", mBinaryContentManager.copy(copiedFiles,
+          result.put("result", getBinaryContentManager().copy(copiedFiles,
               newPath, singleFile,
               BinaryContentManager.Domain.COURSE_MATERIAL,
               pSemesterName,
@@ -116,11 +101,12 @@ public class CourseMaterialResource extends Resource {
   public Object uploadBySemesterCourse(final @Context HttpServletRequest httpRequest,
                                        final @PathParam("semester-name") String pSemesterName,
                                        final @PathParam("course-no") String pCourseNo) throws Exception {
-
+    Map<String, Object> result = new HashMap<>();
     if (ServletFileUpload.isMultipartContent(httpRequest)) {
-      return uploadFile(httpRequest,
+      result.put("result", uploadFile(httpRequest,
           pSemesterName,
-          pCourseNo);
+          pCourseNo));
+      return result;
     }
     return null;
   }
@@ -142,7 +128,7 @@ public class CourseMaterialResource extends Resource {
         case "download":
           String filePath = httpRequest.getParameter("path");
           if (!StringUtils.isEmpty(filePath)) {
-            Map<String, Object> response = mBinaryContentManager.download(filePath, token,
+            Map<String, Object> response = getBinaryContentManager().download(filePath, token,
                 BinaryContentManager.Domain.COURSE_MATERIAL, pSemesterName, pCourseNo);
             if (response != null) {
               writeToResponse(response, httpResponse);
@@ -157,7 +143,7 @@ public class CourseMaterialResource extends Resource {
           downloadFiles = actionItems(httpRequest.getParameterValues("items[]"));
           toFileName = httpRequest.getParameter("toFilename");
           if (downloadFiles.size() > 0) {
-            Map<String, Object> response = mBinaryContentManager.downloadAsZip(downloadFiles, toFileName, token,
+            Map<String, Object> response = getBinaryContentManager().downloadAsZip(downloadFiles, toFileName, token,
                 BinaryContentManager.Domain.COURSE_MATERIAL,
                 pSemesterName,
                 pCourseNo);
@@ -207,7 +193,7 @@ public class CourseMaterialResource extends Resource {
       }
     }
 
-    return mBinaryContentManager.upload(files,
+    return getBinaryContentManager().upload(files,
         destination,
         BinaryContentManager.Domain.COURSE_MATERIAL,
         pRootPath);
@@ -231,4 +217,6 @@ public class CourseMaterialResource extends Resource {
     }
     return actionItems;
   }
+
+  protected abstract BinaryContentManager<byte[]> getBinaryContentManager();
 }

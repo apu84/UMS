@@ -214,7 +214,7 @@ public class FileContentPermissions extends BinaryContentDecorator {
         }
       } catch (Exception e) {
         mLogger.error("Can not find user", e);
-        return false;
+        return true;
       }
     }
     return true;
