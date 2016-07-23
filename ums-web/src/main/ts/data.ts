@@ -8,6 +8,7 @@
     '/index': {title: 'Dashboard', 'breadcrumb': ['Dashboard']},
     '/userHome': {title: 'User Home', 'breadcrumb': ['User Home']},
     '/createSemester': {title: 'Create New Semester', 'breadcrumb': ['Semester']},
+    '/showSemesterList': {title: 'Semester List', 'breadcrumb': ['Semester List']},
     '/createSyllabus': {title: 'Create New Syllabus', 'breadcrumb': ['Syllabus']},
     '/showSyllabusList': {title: 'Syllabus List', 'breadcrumb': ['Syllabus List']},
     '/viewFullSyllabus': {title: 'Syllabus', 'breadcrumb': ['Syllabus']},

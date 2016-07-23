@@ -90,8 +90,8 @@ module ums {
               edit: true,
               add: true,
               del: true,
-              search: false,
-              refresh: false,
+              search: true,
+              refresh: true,
               view: false,
               position: "left",
               cloneToTop: false
