@@ -7,6 +7,12 @@ module ums {
         initProgram: [{id: '', longName: 'Select a Program'}],
         initSemester: [{id: '', name: 'Select a Semester'}],
         initSyllabus: [{id: '', semester_name: 'Select a ', program_name: 'Syllabus'}],
+        semesterStatus: [
+          {id: '', name: 'Select Semester Status'},
+          {id: '0', name: 'Inactive'},
+          {id: '1', name: 'Active'},
+          {id: '2', name: 'Newly Created'}
+        ],
         courseType: [
           {id: '', name: 'Select Course Type'},
           {id: '1', name: 'Theory'},

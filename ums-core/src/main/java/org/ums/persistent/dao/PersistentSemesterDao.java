@@ -1,6 +1,7 @@
 package org.ums.persistent.dao;
 
 
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.domain.model.immutable.Program;
@@ -14,6 +15,7 @@ import org.ums.util.Constants;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.text.DateFormat;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
@@ -74,13 +76,22 @@ public class PersistentSemesterDao extends SemesterDaoDecorator {
 
   @Override
   public int create(final MutableSemester pSemester) throws Exception {
-    return mJdbcTemplate.update(INSERT_ONE,
-        pSemester.getId(),
-        pSemester.getName(),
-        mDateFormat.format(pSemester.getStartDate()),
-        pSemester.getEndDate() == null ? "" : mDateFormat.format(pSemester.getEndDate()),
-        pSemester.getProgramType().getId(),
-        pSemester.getStatus());
+
+    try {
+      return mJdbcTemplate.update(INSERT_ONE,
+          pSemester.getId(),
+          pSemester.getName(),
+          mDateFormat.format(pSemester.getStartDate()),
+          pSemester.getEndDate() == null ? "" : mDateFormat.format(pSemester.getEndDate()),
+          pSemester.getProgramType().getId(),
+          pSemester.getStatus().getValue());
+    }
+    catch (DuplicateKeyException exception){
+      throw new SQLIntegrityConstraintViolationException("Semester already exists.");
+    }
+    catch(Exception ex){
+      throw  ex;
+    }
   }
 
   @Override

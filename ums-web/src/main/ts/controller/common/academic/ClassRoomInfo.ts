@@ -139,7 +139,7 @@ module ums {
           stype: 'select',
           searchoptions: {
             sopt: ['eq', 'ne'],
-            value: '1:Yes;0:No'
+            value: 'true:Yes;false:No'
           }
         }
       ]

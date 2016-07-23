@@ -82,6 +82,11 @@ module ums {
             }]
           }
         })
+        .state('showSemesterList', {
+          url: "/showSemesterList",
+          controller:"SemesterInfo",
+          templateUrl: "views/semester/list-semester.html"
+        })
         .state('createSyllabus', {
           url: "/createSyllabus",
           controller: 'NewSyllabus',
