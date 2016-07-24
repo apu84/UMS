@@ -1,6 +1,7 @@
 module ums{
 
   import ITimeoutService = ng.ITimeoutService;
+  import UISortableOptions = angular.ui.UISortableOptions;
 
   //import UISortableOptions = angular.ui.UISortableOptions;
   interface IExamSeatPlanScope extends ng.IScope{
@@ -18,6 +19,7 @@ module ums{
     mergeIdList:any;
     splitNumber:number;
     groupNumber:number;
+    iterationNumbers:Array<number>;
     semester:ISemester
     group:Array<ISeatPlanGroup>;
     examType:number;
@@ -63,6 +65,8 @@ module ums{
     subGroup6StudentNumber:number;
     splitId:number;
     examRoutineCCIArr:Array<IExamRoutineCCI>;
+
+    sortableOptionsIfSubGroupNotFound:UISortableOptions<ISeatPlanGroup>;
 
     //cci
 
@@ -134,6 +138,7 @@ module ums{
     makeSortableCancel:Function;
     makeSortableEnable:Function;
     getExamRoutineInfoForCCI:Function;
+    generateIterationNumberArray:Function;
 
     //cci
     createCCI:Function;
@@ -318,6 +323,7 @@ module ums{
       $scope.makeSortableEnable = this.makeSortableEnable.bind(this);
       $scope.getExamRoutineInfoForCCI = this.getExamRoutineCCIInfo.bind(this);
       $scope.getApplicationCCIInfoForSubGroup = this.getApplicationCCIInfoForSubGroup.bind(this);
+      $scope.generateIterationNumberArray = this.generateIterationNumberArray.bind(this);
       $scope.createCCI = this.createCCI.bind(this);
 
       this.initialize();
@@ -328,6 +334,26 @@ module ums{
       this.getSemesterInfo().then((semesterArr:Array<ISemester>)=>{
 
       });
+    }
+
+    private generateIterationNumberArray(subGroupNo:number){
+
+
+
+      this.$scope.subGroupWithDeptMap={};
+      this.$scope.iterationNumbers=[];
+      for(var i=1;i<=subGroupNo;i++){
+        this.$scope.iterationNumbers.push(i);
+        var subGroupWithDeptMap:Array<ISeatPlanGroup>=[];
+        this.$scope.subGroupWithDeptMap[i]=subGroupWithDeptMap;
+        console.log(this.$scope.subGroupWithDeptMap[i]);
+        console.log("--------------------------------");
+      }
+      this.$scope.sortableOptionsIfSubGroupNotFound={};
+      this.$scope.sortableOptionsIfSubGroupNotFound.connectWith='.apps-container';
+
+      console.log(this.$scope.sortableOptionsIfSubGroupNotFound);
+
     }
 
 
@@ -942,6 +968,10 @@ module ums{
 
         }
         else{
+          this.$scope.sortableOptionsIfSubGroupNotFound={};
+          this.$scope.sortableOptionsIfSubGroupNotFound.placeholder="item";
+          this.$scope.sortableOptionsIfSubGroupNotFound.connectWith='.apps-container';
+          //this.$scope.sortableOptionsIfSubGroupNotFound.appendTo=this.$scope.tempGroupList;
           this.$scope.showContextMenu=true;
 
           this.$scope.colForSubgroup=0;
@@ -1936,6 +1966,9 @@ module ums{
 
         if(this.$scope.recreateButtonClicked==false){
           this.createDroppable();
+        }
+        else{
+
         }
       }
 

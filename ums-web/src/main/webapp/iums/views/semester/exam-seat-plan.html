@@ -83,12 +83,18 @@
 
     .list {
         list-style: none outside none;
-        margin: 10px 0 30px;
+        //margin: 1px 0 1px;
+        background-color: #FAEBD7;
+        border: 2px dashed blue;
+        margin: 10px 10px 0 0;
+        padding: 5px;
+        min-width:160px;
+        min-height:50px;
     }
 
     .item {
         width: 150px;
-        padding: 5px 10px;
+        padding: 5px ;
         margin: 5px 0;
         border: 2px solid #444;
         border-radius: 5px;
@@ -327,10 +333,13 @@
                 </ul>
                 <br>
                 <br>
-                <ul ui-sortable data-ng-model="tempGroupList"   data-ng-if="recreate==false && subGroupFound==false && groupNoForSeatPlanViewing" class="list">
-                    <li data-ng-repeat="group in tempGroupList" class="item">
-                        <div style="cursor: pointer;">
+                <ul ui-sortable="sortableOptionsIfSubGroupNotFound" data-ng-model="tempGroupList"   data-ng-if="recreate==false && subGroupFound==false && groupNoForSeatPlanViewing" class="list apps-container">
+                    <li id="group.id" data-ng-repeat="group in tempGroupList" class="item">
+                        <div style="cursor: pointer;" data-ng-if="examType==1">
                             {{group.programName}}:{{group.year}}/{{group.semester}} ({{group.studentNumber}})
+                        </div>
+                        <div style="cursor: pointer;" data-ng-if="examType==2">
+                            {{group.courseNo}} ({{group.studentNumber}})
                         </div>
                         <div data-ng-show="group.showSubPortion">
                             <hr>
@@ -376,12 +385,12 @@
             </div>
 
             <div class="col-md-10">
-                <div class="row" data-ng-if="showSubGroupSelectionNumber && subGroupFound==false" >
+                <div class="row" >                          <!-- data-ng-if="showSubGroupSelectionNumber && subGroupFound==false" >-->
                     <div class="col-md-4">
 
                     </div>
                     <div class="col-md-4" align="center">
-                        <select class="form-control required" name="subGroupNo" data-ng-model="selectedSubGroupNo" >
+                        <select class="form-control required" name="subGroupNo" data-ng-model="selectedSubGroupNo" data-ng-change="generateIterationNumberArray(selectedSubGroupNo)" >
                             <option value="">How Many Sub Groups?</option>
                             <option value="4">4</option>
                             <option value="5">5</option>
@@ -535,6 +544,33 @@
 
                 </div>
 
+                <!--***************************************************************************-->
+                <div class="row" data-ng-show="colForSubgroup!=9999 && subGroupFound==false" >
+                    <div class="col-md-2" data-ng-repeat="i in iterationNumbers">
+                        <p>Sub Group {{i}}</p>
+                        <ul ui-sortable="sortableOptionsIfSubGroupNotFound" data-ng-model="subGroupWithDeptMap[i]"   data-ng-if="recreate==false && subGroupFound==false && groupNoForSeatPlanViewing" class="list apps-container">
+
+                            <li id="group.id" data-ng-repeat="group in subGroupWithDeptMap[i]" class="item">
+                                <div style="cursor: pointer;" data-ng-if="examType==1">
+                                    {{group.programName}}:{{group.year}}/{{group.semester}} ({{group.studentNumber}})
+                                </div>
+                                <div style="cursor: pointer;" data-ng-if="examType==2">
+                                    {{group.courseNo}} ({{group.studentNumber}})
+                                </div>
+                                <div data-ng-show="group.showSubPortion">
+                                    <hr>
+                                    Split size: <input  data-ng-model="splitNumber" style="width:40px;color: black "  />
+                                    <button data-ng-click="splitAction(splitNumber)" style="color: black">Split</button><button data-ng-click="cancelSplitAction(group.id)" style="color: black">cancel</button>
+                                    <br>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+                <hr>
+                <hr>
+                <!--**************************************************************************-->
                 <div class="row" data-ng-if="colForSubgroup!=9999 && subGroupFound==false" >
                     <div class="col-md-2" data-ng-show="colForSubgroup>=1">
                         <p><b>Sub Group 1</b> </p>
