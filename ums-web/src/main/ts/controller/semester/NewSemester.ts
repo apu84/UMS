@@ -19,7 +19,7 @@ module ums {
         programTypeOptions:appConstants.programType,
         semesterTypeOptions:appConstants.semesterType,
         semesterStatusOptions:[{id: '2', name: 'Newly Created'}],
-        year:[{id:"",name:"Select a Year"},{id:currentYear,name:currentYear},{id:nextYear,name:nextYear},]
+        year:[{id:"",name:"Select a Year"},{id:currentYear,name:currentYear},{id:nextYear,name:nextYear}]
       };
       /*
       setTimeout(function () {
