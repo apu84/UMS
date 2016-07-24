@@ -153,6 +153,10 @@ module ums {
           });
     }
 
+    public loadComplete():any{
+      alert("ifti");
+    }
+
   }
   UMS.controller('ClassRoomInfo', ClassRoomInfo);
 }

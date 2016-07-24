@@ -6,11 +6,15 @@
 
 module ums {
 
+  export interface RowData {
+    status:number;
+  }
+
   interface ISemesterScope extends ng.IScope {
     semesterData:any;
   }
 
-  export class SemesterInfo implements GridEditActions {
+  export class SemesterInfo implements GridEditActions,RowAttribute {
     public static $inject = ['appConstants', 'HttpClient', '$scope'];
 
     constructor(private appConstants: any, private httpClient: HttpClient, private $scope: ISemesterScope) {
@@ -19,6 +23,7 @@ module ums {
 
     private initializeGrid(): void {
       GridDecorator.decorate(this);
+      RowAttributeDecorator.decorate(this,this);
     }
 
     public insert(rowData: RowData): void {
@@ -60,6 +65,13 @@ module ums {
       return this.$scope;
     }
 
+    public rowattr(rowData:RowData):any{
+       if(rowData.status==1)
+            return {"class": "activeSemesterBG"};
+      else if(rowData.status==2)
+        return {"class": "newlyCreatedSemesterBG"};
+    }
+
     public getColumnModel(): any {
       return [
         {
@@ -70,14 +82,26 @@ module ums {
         },
         {
           label: 'Program Type',
-          name: 'programType',
-          editable: true
+          name: 'programTypeId',
+          editable: true,
+          formatter: 'select',
+          edittype: 'select',
+          width: 150,
+          editoptions: {
+            value: '11:Undergraduate;22:Postgraduate',
+            readonly: "readonly"
+          },
+          stype: 'select',
+          searchoptions: {
+            sopt: ['eq', 'ne'],
+            value: '11:Undergraduate;22:Postgraduate'
+          }
         },
         {
           label: 'Semester Name',
           name: 'name',
-          editable: true,
-          width: 200
+          editable: false,
+          width: 250
         },
         {
           label: 'Start Date',
@@ -87,13 +111,24 @@ module ums {
         {
           label: 'End Date',
           name: 'endDate',
-          width: 50,
+          width: 100,
           editable: true
         },
         {
           label: 'Status',
           name: 'status',
-          editable: true
+          editable: true,
+          width:100,
+          formatter: 'select',
+          edittype: 'select',
+          editoptions: {
+            value: '0:Inactive; 1:Active; 2:Newly Created'
+          },
+          stype: 'select',
+          searchoptions: {
+            sopt: ['eq', 'ne'],
+            value: '0:Inactive;1:Active;2:Newly Created'
+          }
         }
 
       ]

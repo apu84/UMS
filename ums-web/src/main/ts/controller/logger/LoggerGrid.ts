@@ -125,7 +125,6 @@ module ums {
         }
       }
     }
-
   }
   UMS.controller('LoggerGrid', LoggerGrid);
 }
