@@ -9,6 +9,9 @@ import org.ums.domain.model.immutable.*;
 import org.ums.message.MessageResource;
 
 import java.io.InputStream;
+import java.nio.file.Path;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -52,8 +55,9 @@ public class StudentFileContentPermission extends BinaryContentDecorator {
     // Student should only able to see course material of course he/she has registered
     String semesterName = pRootPath[0];
     String courseName = pRootPath[1];
+    Student student;
     try {
-      Student student = getStudent();
+      student = getStudent();
       ProgramType programType = student.getProgram().getProgramType();
 
       Semester semester = mSemesterManager.getBySemesterName(semesterName, programType.getId());
@@ -67,7 +71,26 @@ public class StudentFileContentPermission extends BinaryContentDecorator {
       mLogger.error("Exception while listing folders", e);
       return error(mMessageResource.getMessage("folder.listing.failed"));
     }
-    return super.list(pPath, pDomain, pRootPath);
+
+    Object list = super.list(pPath, pDomain, pRootPath);
+    try {
+      Path path = getQualifiedPath(pDomain, buildPath(pPath, pRootPath));
+      String type = getUserDefinedProperty("type", path);
+      if (type.equalsIgnoreCase("assignment")) {
+        List<Map<String, Object>> folderList = (List<Map<String, Object>>) list;
+        Iterator<Map<String, Object>> iterator = folderList.iterator();
+        while (iterator.hasNext()) {
+          String name = iterator.next().get("name").toString();
+          if (!name.equalsIgnoreCase(student.getId())) {
+            iterator.remove();
+          }
+        }
+      }
+    } catch (Exception e) {
+      mLogger.error("Exception while listing folders", e);
+      return error(mMessageResource.getMessage("folder.listing.failed"));
+    }
+    return list;
   }
 
   @Override
@@ -97,7 +120,28 @@ public class StudentFileContentPermission extends BinaryContentDecorator {
 
   @Override
   public Map<String, Object> upload(Map<String, InputStream> pFileContent, String pPath, Domain pDomain, String... pRootPath) {
-    return error(mMessageResource.getMessage("folder.upload.not.allowed"));
+    Path uploadPath = getQualifiedPath(pDomain, buildPath(pPath, pRootPath));
+    try {
+      if (getUserDefinedProperty("type", uploadPath).equalsIgnoreCase("assignment")) {
+        Date currentDate = new Date();
+        Date startDate = mDateFormat.parse(getUserDefinedProperty("startDate", uploadPath));
+        Date endDate = mDateFormat.parse(getUserDefinedProperty("endDate", uploadPath));
+
+        if (currentDate.after(startDate) && currentDate.before(endDate)) {
+          //create folder as studentId
+          Student student = getStudent();
+          String assignmentFolder = pPath + "/" + student.getId();
+          super.createFolder(assignmentFolder, pDomain, pRootPath);
+          super.upload(pFileContent, assignmentFolder, pDomain, pRootPath);
+          return success();
+        } else {
+          error(mMessageResource.getMessage("assignment.upload.time.limit.exceed", pPath));
+        }
+      }
+    } catch (Exception e) {
+      return error(mMessageResource.getMessage("file.upload.not.allowed", pPath));
+    }
+    return error(mMessageResource.getMessage("file.upload.not.allowed", pPath));
   }
 
   @Override

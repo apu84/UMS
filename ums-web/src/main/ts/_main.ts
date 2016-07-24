@@ -81,6 +81,7 @@
 
 /// <reference path='interceptor/Unauthorized.ts'/>
 /// <reference path='interceptor/ValidationExceptions.ts'/>
+/// <reference path='interceptor/ServerExceptions.ts'/>
 
 /// <reference path='filter/TrustAsHtml.ts'/>
 /// <reference path='util/UmsUtil.ts'/>

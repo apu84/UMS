@@ -10,6 +10,7 @@ module ums {
       FILEMANAGER_CONFIG.set({
         appName: semesterName + ' > ' + courseNo,
         listUrl: baseUri,
+        uploadUrl: baseUri + "/upload",
         downloadFileUrl: downloadBaseUri,
         downloadMultipleUrl: downloadBaseUri,
         hidePermissions: true,
@@ -17,8 +18,8 @@ module ums {
         multipleDownloadFileName: 'CourseMaterial-' + semesterName + "-" + courseNo + '.zip',
         allowedActions: angular.extend(FILEMANAGER_CONFIG.$get().allowedActions, {
           createAssignmentFolder: false,
-          upload: false,
-          rename: false,
+          upload: true,
+          rename: true,
           move: false,
           copy: false,
           edit: false,

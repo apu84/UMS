@@ -12,6 +12,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.UserDefinedFileAttributeView;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +28,7 @@ public abstract class BinaryContentDecorator implements BinaryContentManager<byt
   protected static final String END_DATE = "endDate";
   protected static final String FOLDER_TYPE = "type";
   protected final static String TOKEN = "token";
+  protected DateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
   private BinaryContentManager<byte[]> mManager;
 

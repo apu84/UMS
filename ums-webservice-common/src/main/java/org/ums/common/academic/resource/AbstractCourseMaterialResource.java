@@ -19,6 +19,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import java.io.InputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +29,7 @@ import java.util.Map;
 @Component
 public abstract class AbstractCourseMaterialResource extends Resource {
   public static String DESTINATION = "destination";
+  private DateFormat mDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
   @POST
   @Produces(Resource.MIME_TYPE_JSON)
@@ -64,6 +67,15 @@ public abstract class AbstractCourseMaterialResource extends Resource {
 
         case "createFolder":
           result.put("result", getBinaryContentManager().createFolder(pJsonObject.getString("newPath"),
+              BinaryContentManager.Domain.COURSE_MATERIAL,
+              pSemesterName,
+              pCourseNo));
+          break;
+
+        case "createAssignmentFolder":
+          result.put("result", getBinaryContentManager().createAssignmentFolder(pJsonObject.getString("newPath"),
+              mDateFormat.parse(pJsonObject.getString("startDate")),
+              mDateFormat.parse(pJsonObject.getString("endDate")),
               BinaryContentManager.Domain.COURSE_MATERIAL,
               pSemesterName,
               pCourseNo));
