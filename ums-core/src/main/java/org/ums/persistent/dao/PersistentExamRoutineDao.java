@@ -28,6 +28,8 @@ public class PersistentExamRoutineDao  extends ExamRoutineDaoDecorator {
       "And MST_SYLLABUS.PROGRAM_ID=MST_PROGRAM.PROGRAM_ID " +
       "Order By to_date(EXAM_DATE,'DD/MM/YYYY'),Exam_Time,Program_Id,Year,Semester,Course_No ";
 
+
+
   static String INSERT_ONE = "INSERT INTO EXAM_ROUTINE(SEMESTER,EXAM_TYPE,EXAM_DATE,EXAM_TIME,PROGRAM_ID,COURSE_ID) " +
       "VALUES(?,?,to_date(?,'dd/MM/YYYY'),?,?,?)";
 
@@ -44,6 +46,18 @@ public class PersistentExamRoutineDao  extends ExamRoutineDaoDecorator {
   public List<ExamRoutineDto> getExamRoutine(int semesterId, int examTypeId) throws Exception {
     String query = SELECT_ALL;
     return mJdbcTemplate.query(query, new Object[]{semesterId, examTypeId}, new ExamRoutineRowMapper());
+  }
+
+  @Override
+  public List<ExamRoutineDto> getExamRoutineForApplicationCCI(int semesterId, int examType) {
+    String query = "Select exam_routine.exam_date original_date,to_char(exam_routine.exam_date,'MM-DD-YYYY') exam_date,nvl(total_student,0) total_student From ( " +
+        "select distinct r.exam_date,semester,exam_type from exam_routine r Where r.exam_type=? and semester=?)exam_routine   " +
+        "left join  " +
+        "( " +
+        "select exam_date,semester_id,count(total_student) total_student  from sp_sub_group_cci where semester_id=? group by exam_date,semester_id,exam_date order by exam_date " +
+        ")subGroup on exam_routine.exam_date = subGroup.exam_date and exam_routine.semester=subGroup.semester_id  order by exam_routine.exam_date";
+
+    return mJdbcTemplate.query(query,new Object[]{examType,semesterId,semesterId}, new ExamRoutineForCCIRowMapper());
   }
 
   public int delete(final MutableExamRoutine pExamRoutine) throws Exception {
@@ -114,6 +128,17 @@ public class PersistentExamRoutineDao  extends ExamRoutineDaoDecorator {
       routine.setCourseTitle(resultSet.getString("COURSE_TITLE"));
       AtomicReference<ExamRoutineDto> atomicReference = new AtomicReference<>(routine);
       return atomicReference.get();
+    }
+  }
+
+  class ExamRoutineForCCIRowMapper implements RowMapper<ExamRoutineDto>{
+    @Override
+    public ExamRoutineDto mapRow(ResultSet pResultSet, int pI) throws SQLException {
+      ExamRoutineDto routine= new ExamRoutineDto();
+      routine.setExamDateOriginal(pResultSet.getString("ORIGINAL_DATE"));
+      routine.setExamDate(pResultSet.getString("EXAM_DATE"));
+      routine.setTotalStudent(pResultSet.getInt("TOTAL_STUDENT"));
+      return routine;
     }
   }
 }

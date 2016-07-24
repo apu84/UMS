@@ -79,6 +79,13 @@ public class UMSContext {
   }
 
   @Bean
+  SubGroupCCIManager subGroupCCIManager(){
+    SubGroupCCICache subGroupCCICache = new SubGroupCCICache(mCacheFactory.getCacheManager());
+    subGroupCCICache.setManager(new PersistentSubGroupCCIDao(mTemplateFactory.getJdbcTemplate()));
+    return subGroupCCICache;
+  }
+
+  @Bean
   SubGroupManager subGroupManager() {
     SubGroupCache subGroupCache = new SubGroupCache(mCacheFactory.getCacheManager());
     subGroupCache.setManager(new PersistentSubGroupDao(mTemplateFactory.getJdbcTemplate()));

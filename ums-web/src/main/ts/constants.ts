@@ -78,6 +78,15 @@ module ums {
           '06': 'THURSDAY',
           '07': 'FRIDAY'
         },
+        weekday:{
+          1:'SATURDAY',
+          2:'SUNDAY',
+          3:'MONDAY',
+          4:'TUESDAY',
+          5:'WEDNESDAY',
+          6:'THURSDAY',
+          7:'FRIDAY'
+        },
         officeShort: {
           '80': 'RO',
           '81': 'CO',

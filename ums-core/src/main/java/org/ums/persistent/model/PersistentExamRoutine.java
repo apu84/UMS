@@ -20,17 +20,37 @@ public class PersistentExamRoutine implements MutableExamRoutine {
 
   private List<ExamRoutineDto> mExamRoutine;
   private String mInsertType;
-  private int mSemesterId;
+  private Integer mSemesterId;
   private String mSemesterName;
-  private int mExamTypeId;
+  private Integer mExamTypeId;
   private String mExamTypeName;
+  private Integer mTotalStudent;
+  private String mExamDate;
+  private String mExamDateOriginal;
 
 
   public PersistentExamRoutine() {
   }
 
+  @Override
+  public String getExamDate() {
+    return mExamDate;
+  }
+
+  public void setExamDate(String pExamDate) {
+    mExamDate = pExamDate;
+  }
+
   public PersistentExamRoutine(final MutableExamRoutine pOriginal) throws Exception {
     mExamRoutine = pOriginal.getRoutine();
+  }
+
+  public void setExamDateOriginal(String pExamDateOriginal){
+    mExamDateOriginal = pExamDateOriginal;
+  }
+  @Override
+  public String getExamDateOriginal() {
+    return mExamDateOriginal;
   }
 
   @Override
@@ -65,6 +85,17 @@ public class PersistentExamRoutine implements MutableExamRoutine {
     return null;
   }
 
+
+  @Override
+  public void setTotalStudent(Integer pTotalStudent) {
+    mTotalStudent = pTotalStudent;
+  }
+
+  @Override
+  public Integer getTotalStudent() {
+    return mTotalStudent;
+  }
+
   @Override
   public String getInsertType() {
     return mInsertType;
@@ -77,12 +108,12 @@ public class PersistentExamRoutine implements MutableExamRoutine {
 
   @Override
 
-  public int getSemesterId() {
+  public Integer getSemesterId() {
     return mSemesterId;
   }
 
   @Override
-  public void setSemesterId(int mSemesterId) {
+  public void setSemesterId(Integer mSemesterId) {
     this.mSemesterId = mSemesterId;
   }
 
@@ -97,12 +128,14 @@ public class PersistentExamRoutine implements MutableExamRoutine {
   }
 
   @Override
-  public int getExamTypeId() {
+  public Integer getExamTypeId() {
     return mExamTypeId;
   }
 
+
+
   @Override
-  public void setExamTypeId(int mExamTypeId) {
+  public void setExamTypeId(Integer mExamTypeId) {
     this.mExamTypeId = mExamTypeId;
   }
 

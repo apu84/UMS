@@ -62,6 +62,13 @@ module ums{
     subGroup5StudentNumber:number;
     subGroup6StudentNumber:number;
     splitId:number;
+    examRoutineCCIArr:Array<IExamRoutineCCI>;
+
+    //cci
+
+    examDate:string;
+
+    //cci
 
     subGroup1ListTest:any;  //this is for test purpose
 
@@ -86,7 +93,7 @@ module ums{
     cancelSubGroup:boolean;
     deleteAndCreateNewSubGroup:boolean;
     cameFromEdit:boolean;   //if edited, then, delete the existing data and insert the new data
-
+    cciSelected:boolean;
     arr :any;
 
     //map in javascript
@@ -126,11 +133,24 @@ module ums{
     makeSortableEmpty:Function;
     makeSortableCancel:Function;
     makeSortableEnable:Function;
+    getExamRoutineInfoForCCI:Function;
+
+    //cci
+    createCCI:Function;
+    showCCI:Function;
+    getApplicationCCIInfoForSubGroup:Function;
+    //cci end
 
     reCreate:Function;
     editSavedSubGroup:Function;
     cancelEditedSubGroup:Function;
     createNewSubGroup:Function;
+  }
+
+  interface IExamRoutineCCI{
+    examDate:string;
+    weekDay:string;
+    totalStudent:number;
   }
 
   interface IRoom{
@@ -171,6 +191,9 @@ module ums{
     groupId:number;
     position:number;
     studentNumber:number;
+    courseId:string;
+    courseNo:string;
+    examDate:string;
   }
 
   interface ISeatPlanJsonData{
@@ -195,6 +218,10 @@ module ums{
     splitOccuranceNumber:number;
     subGroupNumber:number;
     baseId:number;
+    examDate:string;
+    courseNo:string;
+    courseId:string;
+    courseTitle:string;
   }
 
 
@@ -208,6 +235,7 @@ module ums{
       var arr : { [key:number]:Array<ISeatPlanGroup>; } = {};
       $scope.mergeIdList=[];
 
+      $scope.cciSelected = false;
       $scope.splitActionOccured = false;
       $scope.recreate = false;
       $scope.splitButtonClicked = false;
@@ -288,6 +316,10 @@ module ums{
       $scope.makeSortableEmpty = this.makeSortableEmpty.bind(this);
       $scope.makeSortableCancel = this.makeSortableCancel.bind(this);
       $scope.makeSortableEnable = this.makeSortableEnable.bind(this);
+      $scope.getExamRoutineInfoForCCI = this.getExamRoutineCCIInfo.bind(this);
+      $scope.getApplicationCCIInfoForSubGroup = this.getApplicationCCIInfoForSubGroup.bind(this);
+      $scope.createCCI = this.createCCI.bind(this);
+
       this.initialize();
 
     }
@@ -298,12 +330,61 @@ module ums{
       });
     }
 
+
+    private createCCI(examDate:string):void{
+      this.getApplicationCCIInfoForSubGroup(examDate).then((subGroupCCiArr:Array<ISeatPlanGroup>)=>{
+        this.createOrViewSubgroups(4);
+      });
+    }
+
     private showGroups():void{
       if(this.$scope.semesterId!=null && this.$scope.examType!=null){
-        this.$scope.groupList=[];
-        this.$scope.showGroupSelection = true;
-        this.$scope.getGroups();
-        $("#groupPanel").slideDown("slow");
+        if(this.$scope.examType==1){
+          this.$scope.groupList=[];
+          this.$scope.showGroupSelection = true;
+          this.$scope.getGroups();
+          $("#groupPanel").slideDown("slow");
+          console.log("into type 1");
+        }
+        else{
+          console.log("into type 2");
+          this.getExamRoutineCCIInfo().then((examRoutineArr:Array<IExamRoutineCCI>)=>{
+            this.$scope.examRoutineCCIArr=[];
+            var weekday:any={};
+            weekday[0]=  "Sunday";
+            weekday[1] = "Monday";
+            weekday[2] = "Tuesday";
+            weekday[3] = "Wednesday";
+            weekday[4] = "Thursday";
+            weekday[5] = "Friday";
+            weekday[6] = "Saturday";
+            var d= new Date();
+            for(var i=0;i<examRoutineArr.length;i++){
+              console.log(examRoutineArr[i].examDate);
+              var examRoutine:any={};
+              examRoutine.examDate=examRoutineArr[i].examDate;
+              console.log(new Date(examRoutineArr[i].examDate));
+              var d = new Date(examRoutineArr[i].examDate);
+              console.log(d.getDay());
+              examRoutine.weekDay = weekday[new Date(examRoutineArr[i].examDate).getDay()];
+              examRoutine.totalStudent = examRoutineArr[i].totalStudent;
+              this.$scope.examRoutineCCIArr.push(examRoutine);
+
+
+            }
+            this.$scope.cciSelected=true;
+
+            this.$scope.loadingVisibility=false;
+
+            console.log("Loadng visibility");
+            console.log(this.$scope.loadingVisibility);
+            console.log(this.$scope.examRoutineCCIArr);
+
+          });
+
+
+        }
+
       }
 
     }
@@ -685,56 +766,72 @@ module ums{
 
     private createOrViewSubgroups(group:number):void{
 
-      this.$scope.groupNoForSeatPlanViewing = group;
-      this.$scope.tempIdList=[];
-      this.$scope.subGroupWithDeptMap={};
-      this.$scope.tempGroupList=[];
-      this.$scope.splittedGroupList=[];
-      var temporaryList:any=[];
-      for(var l=0;l<this.$scope.groupList.length;l++){
-        if(this.$scope.groupList[l].groupNumber==group){
+      if(group==4){
+        this.$scope.groupNoForSeatPlanViewing = group;
+        this.$scope.tempIdList=[];
+        this.$scope.subGroupWithDeptMap={};
+        this.$scope.splittedGroupList=[];
 
-          for(var i=0;i<this.$scope.groupList[l].groupMembers.length;i++){
-            this.$scope.groupList[l].groupMembers[i].baseId = this.$scope.groupList[l].groupMembers[i].id;
-            temporaryList.push(this.$scope.groupList[l].groupMembers[i]);
-            if(i==0){
-              var id:number = this.$scope.groupList[l].groupMembers[i].id;
-              var idStr:string = id.toString();
-              this.$scope.groupIdLength = idStr.length;
+        this.$scope.tempGroupListAll = angular.copy(this.$scope.tempGroupList)
+      }
+      else{
+
+        //************************************************************
+        this.$scope.groupNoForSeatPlanViewing = group;
+        this.$scope.tempIdList=[];
+        this.$scope.subGroupWithDeptMap={};
+        this.$scope.tempGroupList=[];
+        this.$scope.splittedGroupList=[];
+        var temporaryList:any=[];
+        for(var l=0;l<this.$scope.groupList.length;l++){
+          if(this.$scope.groupList[l].groupNumber==group){
+
+            for(var i=0;i<this.$scope.groupList[l].groupMembers.length;i++){
+              this.$scope.groupList[l].groupMembers[i].baseId = this.$scope.groupList[l].groupMembers[i].id;
+              temporaryList.push(this.$scope.groupList[l].groupMembers[i]);
+              if(i==0){
+                var id:number = this.$scope.groupList[l].groupMembers[i].id;
+                var idStr:string = id.toString();
+                this.$scope.groupIdLength = idStr.length;
+              }
+              /*this.$scope.tempGroupListAll.push(this.$scope.groupList[l].groupMembers[i]);
+               this.$scope.tempGroupList.push(this.$scope.groupList[l].groupMembers[i])*/;
             }
-            /*this.$scope.tempGroupListAll.push(this.$scope.groupList[l].groupMembers[i]);
-             this.$scope.tempGroupList.push(this.$scope.groupList[l].groupMembers[i])*/;
+            break;
           }
-          break;
         }
-      }
-      this.$scope.tempGroupListAll=[];
-      this.$scope.tempGroupList = angular.copy(temporaryList);
-      this.$scope.tempGroupListAll = angular.copy(temporaryList);
-      this.$scope.tempGroupListForSplitInversion=[];
-      this.$scope.tempGroupListForSplitInversion=angular.copy(temporaryList);
+        this.$scope.tempGroupListAll=[];
+        this.$scope.tempGroupList = angular.copy(temporaryList);
+        this.$scope.tempGroupListAll = angular.copy(temporaryList);
+        this.$scope.tempGroupListForSplitInversion=[];
+        this.$scope.tempGroupListForSplitInversion=angular.copy(temporaryList);
 
 
 
 
 
-      $("#splittedList").enableSelection();
+        $("#splittedList").enableSelection();
 
-      for(var i=0;i<this.$scope.groupList.length;i++){
-        if(this.$scope.groupList[i].groupNumber==group){
-          this.$scope.selectedGroupTotalStudent = this.$scope.groupList[i].totalStudentNumber;
+        for(var i=0;i<this.$scope.groupList.length;i++){
+          if(this.$scope.groupList[i].groupNumber==group){
+            this.$scope.selectedGroupTotalStudent = this.$scope.groupList[i].totalStudentNumber;
 
-          break;
+            break;
+          }
         }
+        this.$scope.splitActionOccured = false;
+        /* this.$scope.tempGroupListAll=[];*/
+
+        var whichMenuClicked:String;
+
+
+        this.$scope.selectedGroupNo = group;
+        this.getSelectedGroupList(group);
+
+       // ******************************************************
       }
-      this.$scope.splitActionOccured = false;
-      /* this.$scope.tempGroupListAll=[];*/
-
-      var whichMenuClicked:String;
 
 
-      this.$scope.selectedGroupNo = group;
-      this.getSelectedGroupList(group);
 
 
       this.$scope.subGroupList = [];
@@ -2143,15 +2240,29 @@ module ums{
     private getSubGroupInfo():ng.IPromise<any>{
       var defer = this.$q.defer();
       var subGroupDb:Array<ISubGroupDb>;
-      this.httpClient.get('/ums-webservice-common/academic/subGroup/get/semesterId/'+this.$scope.semesterId +'/groupNo/'+this.$scope.selectedGroupNo+'/type/'+this.$scope.examType, 'application/json',
-          (json:any, etag:string) => {
-            subGroupDb = json.entries;
+      if(this.$scope.examType==4){
+        this.httpClient.get('/ums-webservice-common/academic/subGroupCCI/semester/'+this.$scope.semesterId+'/examDate/'+this.$scope.examDate,'application/json',
+            (json:any,etag:string)=>{
+              subGroupDb = json.entries;
 
-            defer.resolve(subGroupDb);
-          },
-          (response:ng.IHttpPromiseCallbackArg<any>) => {
-            console.error(response);
-          });
+              defer.resolve(subGroupDb);
+            },
+            (response:ng.IHttpPromiseCallbackArg<any>) => {
+              console.error(response);
+            });
+      }
+      else{
+        this.httpClient.get('/ums-webservice-common/academic/subGroup/get/semesterId/'+this.$scope.semesterId +'/groupNo/'+this.$scope.selectedGroupNo+'/type/'+this.$scope.examType, 'application/json',
+            (json:any, etag:string) => {
+              subGroupDb = json.entries;
+
+              defer.resolve(subGroupDb);
+            },
+            (response:ng.IHttpPromiseCallbackArg<any>) => {
+              console.error(response);
+            });
+      }
+
       return defer.promise;
     }
 
@@ -2170,6 +2281,52 @@ module ums{
             console.error(response);
           },'arraybuffer');
 
+    }
+
+    private getExamRoutineCCIInfo():ng.IPromise<any>{
+      var defer = this.$q.defer();
+      var examRoutineArr:Array<IExamRoutineCCI>=[];
+
+      this.httpClient.get('/ums-webservice-common/academic/examroutine/exam_routine_cci/semester/'+this.$scope.semesterId +'/examtype/'+this.$scope.examType,  'application/json',
+          (json:any, etag:string) => {
+            examRoutineArr = json.entries;
+            defer.resolve(examRoutineArr);
+            console.log(examRoutineArr);
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>) => {
+            console.error(response);
+          });
+
+      return defer.promise;
+
+    }
+
+
+
+    private getApplicationCCIInfoForSubGroup(examDate:string):ng.IPromise<any>{
+      this.$scope.examDate = examDate;
+      var defer = this.$q.defer();
+      this.$scope.selectedGroupTotalStudent=0;
+      console.log(examDate);
+      this.$scope.tempGroupList=[];
+      var applicationArr:Array<ISeatPlanGroup>=[];
+      this.httpClient.get('/ums-webservice-common/academic/applicationCCI/semester/'+this.$scope.semesterId+'/examDate/'+examDate, 'application/json',
+          (json:any, etag:string) => {
+            applicationArr = json.entries;
+            this.$scope.subGroupSelected=true;
+
+            for(var i=0;i<applicationArr.length;i++){
+              this.$scope.selectedGroupTotalStudent+=applicationArr[i].studentNumber;
+              applicationArr[i].showSubPortion=false;
+              applicationArr[i].id=i+1;
+              this.$scope.tempGroupList.push(applicationArr[i]);
+            }
+            defer.resolve(this.$scope.tempGroupList);
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>) => {
+            console.error(response);
+          });
+      return defer.promise;
     }
 
     private postSubGroup(json:any):void{

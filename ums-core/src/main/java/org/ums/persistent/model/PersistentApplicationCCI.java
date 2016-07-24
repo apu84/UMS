@@ -33,7 +33,7 @@ public class PersistentApplicationCCI implements MutableApplicationCCI {
 
   private int mId;
   private Semester mSemester;
-  private int mSemesterId;
+  private Integer mSemesterId;
   private Student mStudent;
   private String mStudentId;
   private Course mCourse;
@@ -43,7 +43,11 @@ public class PersistentApplicationCCI implements MutableApplicationCCI {
   private ApplicationType mApplicationType;
   private String mApplicationDate;
   private String mExamDate;
+  private String mExamDateOriginal;
   private String mMessage;
+  private Integer mTotalStudent;
+  private Integer mCourseYear;
+  private Integer mCourseSemester;
 
   public PersistentApplicationCCI(){
 
@@ -62,7 +66,52 @@ public class PersistentApplicationCCI implements MutableApplicationCCI {
     mApplicationType = pPersistentApplicationCCI.getApplicationType();
     mApplicationDate = pPersistentApplicationCCI.getApplicationDate();
     mExamDate = pPersistentApplicationCCI.getExamDate();
+    mExamDateOriginal = pPersistentApplicationCCI.getExamDateOriginal();
     mMessage = pPersistentApplicationCCI.getMessage();
+    mTotalStudent = pPersistentApplicationCCI.totalStudent();
+    mCourseYear = pPersistentApplicationCCI.getCourseYear();
+    mCourseSemester = pPersistentApplicationCCI.getCourseSemester();
+  }
+
+
+  @Override
+  public void setCourseYear(Integer pCourseYear) {
+    mCourseYear=pCourseYear;
+  }
+
+  @Override
+  public void setCourseSemester(Integer pCourseSemester) {
+    mCourseSemester = pCourseSemester;
+  }
+
+  @Override
+  public Integer getCourseYear() {
+    return mCourseYear;
+  }
+
+  @Override
+  public Integer getCourseSemester() {
+    return mCourseSemester;
+  }
+
+  @Override
+  public void setExamDateOriginal(String pExamDateOriginal) {
+    mExamDateOriginal = pExamDateOriginal;
+  }
+
+  @Override
+  public String getExamDateOriginal() {
+    return mExamDateOriginal;
+  }
+
+  @Override
+  public void setTotalStudent(Integer pTotalStudent) {
+    mTotalStudent = pTotalStudent;
+  }
+
+  @Override
+  public Integer totalStudent() {
+    return mTotalStudent;
   }
 
   @Override
@@ -110,7 +159,7 @@ public class PersistentApplicationCCI implements MutableApplicationCCI {
   }
 
   @Override
-  public void setSemesterId(int pSemesterId) {
+  public void setSemesterId(Integer pSemesterId) {
     mSemesterId = pSemesterId;
   }
 
@@ -120,7 +169,7 @@ public class PersistentApplicationCCI implements MutableApplicationCCI {
   }
 
   @Override
-  public int getSemesterId() {
+  public Integer getSemesterId() {
     return mSemesterId;
   }
 

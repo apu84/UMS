@@ -7,9 +7,10 @@ import java.util.List;
 
 public interface MutableExamRoutine extends ExamRoutine, Mutable {
   void setRoutine(final List<ExamRoutineDto> pRoutineList);
-  void setSemesterId(final int pSemesterId);
+  void setSemesterId(final Integer pSemesterId);
   void setSemesterName(final String pSemesterName);
-  void setExamTypeId(final int pExamType);
+  void setExamTypeId(final Integer pExamType);
   void setExamTypeName(final String pExamType);
   void setInsertType(final String pInsertType);
+  void setTotalStudent(final Integer pTotalStudent);
 }

@@ -10,7 +10,9 @@ import org.ums.persistent.model.PersistentApplicationCCI;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -82,6 +84,23 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
   }
 
   @Override
+  public List<ApplicationCCI> getBySemesterAndExamDate(Integer pSemesterId, String pExamDate)throws Exception {
+    SimpleDateFormat formatter = new SimpleDateFormat("MM-DD-YYYY");
+    //Date date = (Date) formatter.parse(pExamDate);
+    //Date date = (Date) formatter.parse(pExamDate);
+    //Timestamp timestamp = new Timestamp(date.getTime());
+    /*Date date = (Date) formatter.parse(pExamDate);
+    String examDate = date.toString();*/
+    String query="select e.exam_date,course.course_no,course.course_id,course.course_title,course.total_student,course.year,course.semester from ( " +
+        "select c.course_no,c.course_id,c.course_title,c.year,c.semester,a.semester_id,count(a.student_id) total_student  " +
+        "from application_cci a, mst_course c  " +
+        "where a.semester_id=?  " +
+        "and a.course_id = c.course_id group by c.course_no,c.course_id,c.course_title,c.year,c.semester,a.semester_id) course,exam_routine e where e.course_id = course.course_id and " +
+        "e.exam_date = to_date(?,'MM-DD-YYYY') and e.exam_type=2 and e.semester = course.semester_id order by course.course_no";
+    return mJdbcTemplate.query(query,new Object[]{pSemesterId,pExamDate},new ApplicationCCIRowMapperForSeatPlan());
+  }
+
+  @Override
   public List<ApplicationCCI> getBySemesterAndType(int pSemesterId, int pExamType) {
     return super.getBySemesterAndType(pSemesterId, pExamType);
   }
@@ -123,7 +142,24 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
       application.setCourseNo(pResultSet.getString("course_no"));
       application.setCourseTitle(pResultSet.getString("course_title"));
       application.setExamDate(pResultSet.getString("exam_date"));
+      //application.setTotalStudent(pResultSet.getInt("total_student"));
       return application;
+    }
+  }
+
+  class ApplicationCCIRowMapperForSeatPlan implements RowMapper<ApplicationCCI>{
+    @Override
+    public ApplicationCCI mapRow(ResultSet pResultSet, int pI) throws SQLException {
+      PersistentApplicationCCI applicaton = new PersistentApplicationCCI();
+      //applicaton.setId(pResultSet.getInt("id"));
+      applicaton.setExamDate(pResultSet.getString("exam_date"));
+      applicaton.setCourseNo(pResultSet.getString("course_no"));
+      applicaton.setCourseId(pResultSet.getString("course_id"));
+      applicaton.setCourseTitle(pResultSet.getString("course_title"));
+      applicaton.setTotalStudent(pResultSet.getInt("total_student"));
+      applicaton.setCourseYear(pResultSet.getInt("year"));
+      applicaton.setCourseSemester(pResultSet.getInt("semester"));
+      return applicaton;
     }
   }
 

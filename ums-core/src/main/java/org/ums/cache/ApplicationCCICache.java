@@ -41,7 +41,10 @@ public class ApplicationCCICache extends ContentCache<ApplicationCCI,MutableAppl
   public List<ApplicationCCI> getByStudentIdAndSemester(String pStudentId, int pSemesterId) {
     return getManager().getByStudentIdAndSemester(pStudentId,pSemesterId);
   }
-
+  @Override
+  public List<ApplicationCCI> getBySemesterAndExamDate(Integer pSemesterId, String pExamDate) throws Exception{
+    return getManager().getBySemesterAndExamDate(pSemesterId,pExamDate);
+  }
   @Override
   public int deleteByStudentId(String pStudentId) {
     return getManager().deleteByStudentId(pStudentId);
@@ -56,4 +59,6 @@ public class ApplicationCCICache extends ContentCache<ApplicationCCI,MutableAppl
   protected String getCacheKey(Integer pId) {
     return CacheUtil.getCacheKey(ApplicationCCI.class,pId);
   }
+
+
 }

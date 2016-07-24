@@ -3,6 +3,7 @@ package org.ums.common.academic.resource.helper;
 import org.apache.commons.lang.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ums.cache.LocalCache;
 import org.ums.common.ResourceHelper;
 import org.ums.common.builder.ExamRoutineBuilder;
 import org.ums.domain.model.dto.ExamRoutineDto;
@@ -15,8 +16,10 @@ import org.ums.manager.SubGroupManager;
 import org.ums.persistent.model.PersistentExamRoutine;
 
 import javax.json.Json;
+import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
+import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.List;
@@ -59,6 +62,27 @@ public class ExamRoutineResourceHelper extends ResourceHelper<ExamRoutine, Mutab
   public JsonObject getExamRoutine(final Integer pSemesterId, final Integer pExamType) throws Exception {
     List<ExamRoutineDto> examRoutine = getContentManager().getExamRoutine(pSemesterId, pExamType);
     return buildJsonResponse(pSemesterId, pExamType, examRoutine);
+  }
+
+
+  public JsonObject getExamRoutineForCCI(Integer pSemesterId, Integer pExamType, final Request pRequest, final UriInfo pUriInfo) throws Exception{
+    List<ExamRoutineDto> examRoutine = getContentManager().getExamRoutineForApplicationCCI(pSemesterId,pExamType);
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+    for(ExamRoutineDto exam: examRoutine){
+      PersistentExamRoutine ex = new PersistentExamRoutine();
+      ex.setExamDate( exam.getExamDate());
+      ex.setTotalStudent(exam.getTotalStudent());
+      ex.setExamDateOriginal(exam.getExamDateOriginal());
+      ExamRoutine exRegular = ex;
+      children.add(toJson(exRegular, pUriInfo, localCache));
+
+    }
+
+    object.add("entries", children);
+    localCache.invalidate();
+    return object.build();
   }
 
   protected JsonObject buildJsonResponse(final Integer pSemesterId, final Integer pExamType, final List<ExamRoutineDto> routineList) throws Exception {

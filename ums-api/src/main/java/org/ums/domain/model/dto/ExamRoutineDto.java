@@ -11,11 +11,28 @@ public class ExamRoutineDto implements Serializable {
   private String courseId;
   private String courseNumber;
   private String courseTitle;
-  private int courseYear;
-  private int courseSemester;
-  private int programId;
+  private Integer courseYear;
+  private Integer courseSemester;
+  private Integer programId;
   private String programName;
+  private Integer totalStudent;
+  private String examDateOriginal; //to retrieve the original examdate without doing anything with the modified examdate
 
+  public String getExamDateOriginal() {
+    return examDateOriginal;
+  }
+
+  public void setExamDateOriginal(String pExamDateOriginal) {
+    examDateOriginal = pExamDateOriginal;
+  }
+
+  public Integer getTotalStudent() {
+    return totalStudent;
+  }
+
+  public void setTotalStudent(Integer pTotalStudent) {
+    totalStudent = pTotalStudent;
+  }
 
   public String getExamDate() {
     return examDate;
@@ -49,27 +66,27 @@ public class ExamRoutineDto implements Serializable {
     this.courseTitle = courseTitle;
   }
 
-  public int getCourseYear() {
+  public Integer getCourseYear() {
     return courseYear;
   }
 
-  public void setCourseYear(int courseYear) {
+  public void setCourseYear(Integer courseYear) {
     this.courseYear = courseYear;
   }
 
-  public int getCourseSemester() {
+  public Integer getCourseSemester() {
     return courseSemester;
   }
 
-  public void setCourseSemester(int courseSemester) {
+  public void setCourseSemester(Integer courseSemester) {
     this.courseSemester = courseSemester;
   }
 
-  public int getProgramId() {
+  public Integer getProgramId() {
     return programId;
   }
 
-  public void setProgramId(int programId) {
+  public void setProgramId(Integer programId) {
     this.programId = programId;
   }
 

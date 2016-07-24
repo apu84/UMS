@@ -13,7 +13,7 @@ import java.io.Serializable;
  */
 public interface ApplicationCCI extends Serializable,LastModifier,EditType<MutableApplicationCCI>,Identifier<Integer> {
   Semester getSemester() throws Exception;
-  int getSemesterId();
+  Integer getSemesterId();
   Student getStudent() throws Exception;
   String getStudentId();
   Course getCourse()throws  Exception;
@@ -23,5 +23,9 @@ public interface ApplicationCCI extends Serializable,LastModifier,EditType<Mutab
   ApplicationType getApplicationType();
   String getApplicationDate();
   String getExamDate();
+  String getExamDateOriginal();
   String getMessage();
+  Integer totalStudent();
+  Integer getCourseYear();
+  Integer getCourseSemester();
 }

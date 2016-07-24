@@ -19,6 +19,29 @@ public class ExamRoutineBuilder  implements Builder<ExamRoutine, MutableExamRout
   @Override
   public void build(JsonObjectBuilder pBuilder, ExamRoutine pReadOnly, UriInfo pUriInfo, final LocalCache pLocalCache) throws Exception {
 
+    //please check if the object is null or not as required.
+    if(pReadOnly.getSemesterId()!=null){
+      pBuilder.add("semesterId",pReadOnly.getSemesterId());
+    }
+    if(pReadOnly.getExamTypeId()!=null){
+      pBuilder.add("examTypeId",pReadOnly.getExamTypeId());
+    }
+    if(pReadOnly.getExamTypeName()!=null){
+      pBuilder.add("examTypeName",pReadOnly.getExamTypeName());
+    }
+    if(pReadOnly.getInsertType()!=null){
+      pBuilder.add("insertType",pReadOnly.getInsertType());
+    }
+
+    if(pReadOnly.getExamDate()!=null){
+      pBuilder.add("examDate",pReadOnly.getExamDate());
+    }
+    if(pReadOnly.getTotalStudent()!=null){
+      pBuilder.add("totalStudent",pReadOnly.getTotalStudent());
+    }
+    if(pReadOnly.getExamDateOriginal()!=null){
+      pBuilder.add("examDateOriginal",pReadOnly.getExamDateOriginal());
+    }
   }
 
   @Override

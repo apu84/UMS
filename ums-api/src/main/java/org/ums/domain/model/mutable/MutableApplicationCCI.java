@@ -13,7 +13,7 @@ import org.ums.enums.ApplicationType;
  */
 public interface MutableApplicationCCI extends ApplicationCCI,Mutable,MutableLastModifier,MutableIdentifier<Integer> {
   void setSemester(final Semester pSemester);
-  void setSemesterId(final int pSemesterId);
+  void setSemesterId(final Integer pSemesterId);
   void setStudent(final Student pStudent);
   void setStudentId(final String pStudentId);
   void setCourse(final Course pCourse);
@@ -23,5 +23,9 @@ public interface MutableApplicationCCI extends ApplicationCCI,Mutable,MutableLas
   void setApplicationType(final ApplicationType pApplicationType);
   void setApplicationDate(final String pApplicationDate);
   void setExamDate(final String pExamDate);
+  void setExamDateOriginal(final String pExamDateOriginal);
   void setMessage(final String pMessage);
+  void setTotalStudent(final Integer pTotalStudent);
+  void setCourseYear(final Integer pCourseYear);
+  void setCourseSemester(final Integer pCourseSemester);
 }
