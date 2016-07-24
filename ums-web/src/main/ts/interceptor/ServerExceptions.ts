@@ -13,8 +13,8 @@ module ums {
           $log.debug("Internal Server Exception Occured.");
 //          notify.error("Internal Server Exception Occured.");
           notify.error(responseJson.message);
-          return $q.reject(response);
         }
+        return $q.reject(response);
       }
     };
   }
