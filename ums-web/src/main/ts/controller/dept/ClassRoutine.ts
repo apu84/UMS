@@ -189,6 +189,11 @@ module ums {
             console.error(data);
           });
     }
+    public beforeEditForm(formId: string, gridElement: JQuery): void {
+    }
+
+    public afterShowEditForm(formId: String, gridElement: JQuery): void {
+    }
 
     public decorateScope(): GridConfig {
       return this.$scope;

@@ -21,7 +21,9 @@ module ums {
     edit(rowData: RowData): void;
     remove(rowData: RowData): void;
     getColumnModel(): any;
-    decorateScope():GridConfig;
+    decorateScope(): GridConfig;
+    beforeEditForm(formId: string, gridElement: JQuery): void;
+    afterShowEditForm(formId: String, gridElement: JQuery): void;
   }
 
   export interface LoadComplete{

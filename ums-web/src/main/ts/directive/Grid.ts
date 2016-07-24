@@ -56,6 +56,12 @@ module ums {
                 && scope.grid.api.gridEditActions.edit) {
               scope.grid.api.gridEditActions.edit(data);
             }
+          },
+          beforeInitData: function(formid) {
+            scope.grid.api.gridEditActions.beforeEditForm(formid, table);
+          },
+          afterShowForm: function (formid) {
+            scope.grid.api.gridEditActions.afterShowEditForm(formid, table);
           }
         };
 

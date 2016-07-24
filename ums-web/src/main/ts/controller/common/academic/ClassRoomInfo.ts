@@ -10,6 +10,7 @@ module ums {
   }
 
   export class ClassRoomInfo implements GridEditActions {
+
     public static $inject = ['appConstants', 'HttpClient', '$scope'];
 
 
@@ -54,6 +55,12 @@ module ums {
           }).error((data) => {
             console.error(data);
           });
+    }
+
+    public beforeEditForm(formId: string, gridElement: JQuery): void {
+    }
+
+    public afterShowEditForm(formId: String, gridElement: JQuery): void {
     }
 
     public decorateScope(): GridConfig {
