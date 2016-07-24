@@ -150,16 +150,20 @@ public abstract class BinaryContentDecorator implements BinaryContentManager<byt
     }
   }
 
-  protected String getUserDefinedProperty(final String pPropertyName, final Path pTargetPath) throws Exception {
-    if (isUserDefinedAttributeSupported(pTargetPath)) {
-      UserDefinedFileAttributeView view = Files.
-          getFileAttributeView(pTargetPath, UserDefinedFileAttributeView.class);
+  protected String getUserDefinedProperty(final String pPropertyName, final Path pTargetPath) {
+    try {
+      if (isUserDefinedAttributeSupported(pTargetPath)) {
+        UserDefinedFileAttributeView view = Files.
+            getFileAttributeView(pTargetPath, UserDefinedFileAttributeView.class);
 
-      int size = view.size(pPropertyName);
-      ByteBuffer buf = ByteBuffer.allocateDirect(size);
-      view.read(pPropertyName, buf);
-      buf.flip();
-      return Charset.defaultCharset().decode(buf).toString();
+        int size = view.size(pPropertyName);
+        ByteBuffer buf = ByteBuffer.allocateDirect(size);
+        view.read(pPropertyName, buf);
+        buf.flip();
+        return Charset.defaultCharset().decode(buf).toString();
+      }
+    } catch (Exception e) {
+      mLogger.error("Can not find user defined property named " + pPropertyName, e);
     }
     return null;
   }

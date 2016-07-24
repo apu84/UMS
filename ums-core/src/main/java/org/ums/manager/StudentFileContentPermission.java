@@ -3,6 +3,7 @@ package org.ums.manager;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 import org.ums.configuration.UMSConfiguration;
 import org.ums.decorator.BinaryContentDecorator;
 import org.ums.domain.model.immutable.*;
@@ -10,6 +11,7 @@ import org.ums.message.MessageResource;
 
 import java.io.InputStream;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -73,23 +75,22 @@ public class StudentFileContentPermission extends BinaryContentDecorator {
     }
 
     Object list = super.list(pPath, pDomain, pRootPath);
-    try {
-      Path path = getQualifiedPath(pDomain, buildPath(pPath, pRootPath));
-      String type = getUserDefinedProperty("type", path);
-      if (type.equalsIgnoreCase("assignment")) {
-        List<Map<String, Object>> folderList = (List<Map<String, Object>>) list;
-        Iterator<Map<String, Object>> iterator = folderList.iterator();
-        while (iterator.hasNext()) {
-          String name = iterator.next().get("name").toString();
-          if (!name.equalsIgnoreCase(student.getId())) {
-            iterator.remove();
-          }
+
+    Path path = getQualifiedPath(pDomain, buildPath(pPath, pRootPath));
+
+    String type = getUserDefinedProperty("type", path);
+
+    if (!StringUtils.isEmpty(type) && type.equalsIgnoreCase("assignment")) {
+      List<Map<String, Object>> folderList = (List<Map<String, Object>>) list;
+      Iterator<Map<String, Object>> iterator = folderList.iterator();
+      while (iterator.hasNext()) {
+        String name = iterator.next().get("name").toString();
+        if (!name.equalsIgnoreCase(student.getId())) {
+          iterator.remove();
         }
       }
-    } catch (Exception e) {
-      mLogger.error("Exception while listing folders", e);
-      return error(mMessageResource.getMessage("folder.listing.failed"));
     }
+
     return list;
   }
 
@@ -121,25 +122,38 @@ public class StudentFileContentPermission extends BinaryContentDecorator {
   @Override
   public Map<String, Object> upload(Map<String, InputStream> pFileContent, String pPath, Domain pDomain, String... pRootPath) {
     Path uploadPath = getQualifiedPath(pDomain, buildPath(pPath, pRootPath));
-    try {
-      if (getUserDefinedProperty("type", uploadPath).equalsIgnoreCase("assignment")) {
-        Date currentDate = new Date();
-        Date startDate = mDateFormat.parse(getUserDefinedProperty("startDate", uploadPath));
-        Date endDate = mDateFormat.parse(getUserDefinedProperty("endDate", uploadPath));
+    String folderType = getUserDefinedProperty("type", uploadPath);
 
-        if (currentDate.after(startDate) && currentDate.before(endDate)) {
-          //create folder as studentId
-          Student student = getStudent();
-          String assignmentFolder = pPath + "/" + student.getId();
-          super.createFolder(assignmentFolder, pDomain, pRootPath);
-          super.upload(pFileContent, assignmentFolder, pDomain, pRootPath);
-          return success();
-        } else {
-          error(mMessageResource.getMessage("assignment.upload.time.limit.exceed", pPath));
+    if (!StringUtils.isEmpty(folderType)) {
+      //Check for parent folder type if current folder type is studentAssignment
+      if (folderType.equalsIgnoreCase("studentAssignment")) {
+        uploadPath = uploadPath.getParent();
+        pPath = pPath.substring(0, pPath.lastIndexOf("/"));
+      }
+      folderType = getUserDefinedProperty("type", uploadPath);
+
+      if (!StringUtils.isEmpty(folderType) && folderType.equalsIgnoreCase("assignment")) {
+        try {
+          Date currentDate = new Date();
+          Date startDate = mDateFormat.parse(getUserDefinedProperty("startDate", uploadPath));
+          Date endDate = mDateFormat.parse(getUserDefinedProperty("endDate", uploadPath));
+
+          if (currentDate.after(startDate) && currentDate.before(endDate)) {
+            //create folder as studentId
+            Student student = getStudent();
+            String assignmentFolder = Paths.get(pPath, student.getId()).toString();
+            super.createFolder(assignmentFolder, pDomain, pRootPath);
+            addUserDefinedProperty("type", "studentAssignment", getQualifiedPath(pDomain, buildPath(assignmentFolder, pRootPath)));
+            super.upload(pFileContent, assignmentFolder, pDomain, pRootPath);
+            return success();
+
+          } else {
+            error(mMessageResource.getMessage("assignment.upload.time.limit.exceed", pPath));
+          }
+        } catch (Exception e) {
+          return error(mMessageResource.getMessage("file.upload.not.allowed", pPath));
         }
       }
-    } catch (Exception e) {
-      return error(mMessageResource.getMessage("file.upload.not.allowed", pPath));
     }
     return error(mMessageResource.getMessage("file.upload.not.allowed", pPath));
   }
