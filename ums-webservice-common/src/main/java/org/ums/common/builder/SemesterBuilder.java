@@ -33,6 +33,7 @@ public class SemesterBuilder implements Builder<Semester, MutableSemester> {
 
     pBuilder.add("programType", pUriInfo.getBaseUriBuilder().path("academic").path("programtype")
         .path(String.valueOf(programType.getId())).build().toString());
+    pBuilder.add("programTypeId", String.valueOf(programType.getId()));
     pBuilder.add("status", pSemester.getStatus().getValue());
     pBuilder.add("self", pUriInfo.getBaseUriBuilder().path("academic").path("semester")
         .path(String.valueOf(pSemester.getId())).build().toString());

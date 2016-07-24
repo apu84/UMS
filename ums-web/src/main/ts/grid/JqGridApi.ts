@@ -24,6 +24,17 @@ module ums {
     decorateScope():GridConfig;
   }
 
+  export interface LoadComplete{
+    loadComplete():any;
+  }
+  export interface GridComplete{
+    gridComplete():any;
+  }
+  export interface RowAttribute{
+    rowattr(rowData: RowData):any;
+  }
+
+
   export interface JqGrid {
     api?: JqGridApi;
   }

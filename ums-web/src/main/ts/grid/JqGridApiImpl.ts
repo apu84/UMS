@@ -62,6 +62,16 @@ module ums {
               && this.gridEditActions.edit) {
             this.gridEditActions.edit(data);
           }
+        },
+        recreateForm: true,
+        beforeShowForm: function ($form) {
+          $form.find(".FormElement[readonly]")
+              .prop("disabled", true)
+              .addClass("ui-state-disabled")
+              .closest(".DataTD")
+              .prev(".CaptionTD")
+              .prop("disabled", true)
+              .addClass("ui-state-disabled")
         }
       });
     }

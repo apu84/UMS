@@ -407,6 +407,10 @@ module ums {
             this.$scope.classRoutineData = response.entries;
           });
     }
+
+    public loadComplete():any{
+      alert("ifti");
+    }
   }
 
   UMS.controller("ClassRoutine", ClassRoutine);
