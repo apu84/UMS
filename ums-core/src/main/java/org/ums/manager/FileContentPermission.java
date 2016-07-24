@@ -5,31 +5,24 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 import org.ums.configuration.UMSConfiguration;
-import org.ums.decorator.BinaryContentDecorator;
-import org.ums.domain.model.immutable.BearerAccessToken;
 import org.ums.message.MessageResource;
 
 import java.io.InputStream;
 import java.nio.file.Path;
-import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-public class FileContentPermissions extends BinaryContentDecorator {
-  private static final Logger mLogger = LoggerFactory.getLogger(FileContentPermissions.class);
-
-  private BearerAccessTokenManager mBearerAccessTokenManager;
-  private UserManager mUserManager;
+public class FileContentPermission extends BaseFileContentPermission {
+  private static final Logger mLogger = LoggerFactory.getLogger(FileContentPermission.class);
   private UMSConfiguration mUMSConfiguration;
   private MessageResource mMessageResource;
 
-  public FileContentPermissions(final UserManager pUserManager,
-                                final BearerAccessTokenManager pBearerAccessTokenManager,
-                                final UMSConfiguration pUMSConfiguration,
-                                final MessageResource pMessageResource) {
-    mBearerAccessTokenManager = pBearerAccessTokenManager;
-    mUserManager = pUserManager;
+  public FileContentPermission(final UserManager pUserManager,
+                               final BearerAccessTokenManager pBearerAccessTokenManager,
+                               final UMSConfiguration pUMSConfiguration,
+                               final MessageResource pMessageResource) {
+    super(pBearerAccessTokenManager, pUserManager, pMessageResource);
     mUMSConfiguration = pUMSConfiguration;
     mMessageResource = pMessageResource;
   }
@@ -133,65 +126,14 @@ public class FileContentPermissions extends BinaryContentDecorator {
 
   @Override
   public Object list(String pPath, Domain pDomain, String... pRootPath) {
-
     Object folderList = super.list(pPath, pDomain, pRootPath);
-
-    String userId = SecurityUtils.getSubject().getPrincipal().toString();
-    String accessToken = mBearerAccessTokenManager.getByUser(userId).getId();
-    try {
-      String encryptedToken = encrypt(userId + ":" + accessToken);
-
-      if (folderList instanceof List) {
-        List list = (List) folderList;
-        for (Object folder : list) {
-          if (folder instanceof Map) {
-            ((Map) folder).put(TOKEN, encryptedToken);
-            String owner = ((Map<String, String>) folder).get(OWNER);
-            if (!StringUtils.isEmpty(owner)) {
-              owner = mUserManager.get(owner).getName();
-            }
-            ((Map<String, String>) folder).put(OWNER, owner);
-          }
-        }
-      }
-    } catch (Exception e) {
-      return error(mMessageResource.getMessage("folder.listing.failed"));
-    }
-    return folderList;
+    return addOwnerToken(folderList);
   }
 
   @Override
   public Map<String, Object> createAssignmentFolder(String pNewPath, Date pStartDate,
                                                     Date pEndDate, Domain pDomain, String... pRootPath) {
     return super.createAssignmentFolder(pNewPath, pStartDate, pEndDate, pDomain, pRootPath);
-  }
-
-  private String encrypt(String plainText) throws Exception {
-    return Base64.getEncoder().encodeToString(plainText.getBytes());
-  }
-
-  private static String decrypt(String plainText) throws Exception {
-    return new String(Base64.getDecoder().decode(plainText));
-  }
-
-  private boolean isValidToken(final String pToken) {
-    try {
-      String decodedToken = decrypt(pToken);
-      String[] splitToken = decodedToken.split(":");
-
-      if (splitToken.length == 2) {
-        BearerAccessToken userToken = mBearerAccessTokenManager.getByUser(splitToken[0]);
-        if (userToken != null) {
-          if (userToken.getId().equals(splitToken[1])) {
-            return true;
-          }
-        }
-
-      }
-    } catch (Exception e) {
-      mLogger.info("Token is not valid", e);
-    }
-    return false;
   }
 
   @Override

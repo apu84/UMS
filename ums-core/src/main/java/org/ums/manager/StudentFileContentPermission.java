@@ -17,11 +17,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class StudentFileContentPermission extends BinaryContentDecorator {
+public class StudentFileContentPermission extends BaseFileContentPermission {
   private static Logger mLogger = LoggerFactory.getLogger(StudentFileContentPermission.class);
-  //TODO: Remove BearerAccessTokenManager and UserManager if not required
-  private BearerAccessTokenManager mBearerAccessTokenManager;
-  private UserManager mUserManager;
   private UMSConfiguration mUMSConfiguration;
   private MessageResource mMessageResource;
   private StudentManager mStudentManager;
@@ -37,8 +34,7 @@ public class StudentFileContentPermission extends BinaryContentDecorator {
                                       final SemesterManager pSemesterManager,
                                       final CourseManager pCourseManager,
                                       final SemesterSyllabusMapManager pSemesterSyllabusMapManager) {
-    mBearerAccessTokenManager = pBearerAccessTokenManager;
-    mUserManager = pUserManager;
+    super(pBearerAccessTokenManager, pUserManager, pMessageResource);
     mUMSConfiguration = pUMSConfiguration;
     mMessageResource = pMessageResource;
     mStudentManager = pStudentManager;
@@ -91,7 +87,7 @@ public class StudentFileContentPermission extends BinaryContentDecorator {
       }
     }
 
-    return list;
+    return addOwnerToken(list);
   }
 
   @Override

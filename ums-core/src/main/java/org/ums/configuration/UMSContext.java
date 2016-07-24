@@ -356,7 +356,7 @@ public class UMSContext {
   @Bean
   @Lazy
   BinaryContentManager<byte[]> courseMaterialFileManagerForTeacher() {
-    FileContentPermissions fileContentPermission = new FileContentPermissions(userManager(),
+    FileContentPermission fileContentPermission = new FileContentPermission(userManager(),
         bearerAccessTokenManager(), mUMSConfiguration, mMessageResource);
     fileContentPermission.setManager(mBinaryContentManager);
     return fileContentPermission;
