@@ -66,6 +66,7 @@
       <list>
         <value>/forgotPassword</value>
         <value>/academic/courseMaterial/download/**</value>
+        <value>/academic/studentCourseMaterial/download/**</value>
         <!--        <value>/logout</value>-->
       </list>
     </constructor-arg>
