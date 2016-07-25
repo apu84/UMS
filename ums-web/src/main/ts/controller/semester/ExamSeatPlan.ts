@@ -150,6 +150,7 @@ module ums{
     editSavedSubGroup:Function;
     cancelEditedSubGroup:Function;
     createNewSubGroup:Function;
+    getMouseClickEvent:Function;
   }
 
   interface IExamRoutineCCI{
@@ -324,6 +325,7 @@ module ums{
       $scope.getExamRoutineInfoForCCI = this.getExamRoutineCCIInfo.bind(this);
       $scope.getApplicationCCIInfoForSubGroup = this.getApplicationCCIInfoForSubGroup.bind(this);
       $scope.generateIterationNumberArray = this.generateIterationNumberArray.bind(this);
+      $scope.getMouseClickEvent = this.getMouseClickEvent.bind(this);
       $scope.createCCI = this.createCCI.bind(this);
 
       this.initialize();
@@ -354,6 +356,11 @@ module ums{
 
       console.log(this.$scope.sortableOptionsIfSubGroupNotFound);
 
+    }
+
+
+    private getMouseClickEvent(object:any){
+      console.log(object);
     }
 
 
