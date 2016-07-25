@@ -13,7 +13,10 @@ module ums{
 
 
     data:any;
+    mouseClickedObject:any;
+    mouseClickedObjectStore:Array<any>;
     selectedSubGroupNo:string;
+    subGroupTotalStudentNumber:any;
     selectedGroupTotalStudent:number;
     tempIdList:Array<number>;
     mergeIdList:any;
@@ -75,7 +78,7 @@ module ums{
     //cci
 
     subGroup1ListTest:any;  //this is for test purpose
-
+    cciSelected:boolean;
     pdfGenerator:boolean;
     recreate:boolean;
     showContextMenu:boolean;
@@ -97,7 +100,7 @@ module ums{
     cancelSubGroup:boolean;
     deleteAndCreateNewSubGroup:boolean;
     cameFromEdit:boolean;   //if edited, then, delete the existing data and insert the new data
-    cciSelected:boolean;
+    //:boolean;
     arr :any;
 
     //map in javascript
@@ -139,11 +142,15 @@ module ums{
     makeSortableEnable:Function;
     getExamRoutineInfoForCCI:Function;
     generateIterationNumberArray:Function;
-
+    splitOut:Function;
+    cancelSplit:Function;
+    showStatistics:Function;
+    splitActionUpdate:Function;
     //cci
     createCCI:Function;
     showCCI:Function;
     getApplicationCCIInfoForSubGroup:Function;
+    mergeUpdate:Function;
     //cci end
 
     reCreate:Function;
@@ -228,6 +235,7 @@ module ums{
     courseNo:string;
     courseId:string;
     courseTitle:string;
+    backgroundColor:string;
   }
 
 
@@ -240,7 +248,7 @@ module ums{
 
       var arr : { [key:number]:Array<ISeatPlanGroup>; } = {};
       $scope.mergeIdList=[];
-
+      $scope.cciSelected=false;
       $scope.cciSelected = false;
       $scope.splitActionOccured = false;
       $scope.recreate = false;
@@ -279,6 +287,7 @@ module ums{
       $scope.subGroup4List={};
       $scope.subGroup5List={};
       $scope.subGroup6List={};
+      $scope.mouseClickedObjectStore=[];
       $scope.subGroup1StudentNumber=0;
       $scope.subGroup2StudentNumber=0;
       $scope.subGroup3StudentNumber=0;
@@ -286,6 +295,7 @@ module ums{
       $scope.subGroup5StudentNumber=0;
       $scope.subGroup6StudentNumber=0;
       $scope.subGroupWithDeptMap={};
+      $scope.subGroupTotalStudentNumber={};
       $scope.getSemesterInfo = this.getSemesterInfo.bind(this);
       $scope.getSeatPlanGroupInfo = this.getSeatPlanGroupInfo.bind(this);
       $scope.getGroups = this.getGroups.bind(this);
@@ -326,7 +336,12 @@ module ums{
       $scope.getApplicationCCIInfoForSubGroup = this.getApplicationCCIInfoForSubGroup.bind(this);
       $scope.generateIterationNumberArray = this.generateIterationNumberArray.bind(this);
       $scope.getMouseClickEvent = this.getMouseClickEvent.bind(this);
+      $scope.splitOut = this.splitOut.bind(this);
       $scope.createCCI = this.createCCI.bind(this);
+      $scope.cancelSplit = this.cancelSplit.bind(this);
+      $scope.showStatistics = this.showStatistics.bind(this);
+      $scope.splitActionUpdate = this.splitActionUpdate.bind(this);
+      $scope.mergeUpdate = this.mergeUpdate.bind(this);
 
       this.initialize();
 
@@ -353,21 +368,151 @@ module ums{
       }
       this.$scope.sortableOptionsIfSubGroupNotFound={};
       this.$scope.sortableOptionsIfSubGroupNotFound.connectWith='.apps-container';
-
+      var currentScope=this;
+      this.$scope.sortableOptionsIfSubGroupNotFound={
+        connectWith:'.apps-container',
+        update(){
+          currentScope.showStatistics();
+        }
+      }
       console.log(this.$scope.sortableOptionsIfSubGroupNotFound);
 
     }
 
+    private mergeUpdate(){
+      var studentNumberStore:number = this.$scope.mouseClickedObject.studentNumber;
+      var studentNumber:number=0;
+      for(var i=0;i<this.$scope.mouseClickedObjectStore.length;i++){
+        if(this.$scope.mouseClickedObject!=this.$scope.mouseClickedObjectStore[i]){
+          studentNumber+= this.$scope.mouseClickedObjectStore[i].studentNumber;
+          //this.$scope.mouseClickedObjectStore[i]=null;
+          for(var j=0;j<this.$scope.tempGroupList.length;j++){
+            if(this.$scope.tempGroupList[j]==this.$scope.mouseClickedObjectStore[i]){
+              this.$scope.tempGroupList.splice(j,1);
+              break;
+            }
+          }
+          for(var j=1;j<=this.$scope.iterationNumbers.length;j++){
+            for(var k=0;k<this.$scope.subGroupWithDeptMap[j].length;k++){
+              if(this.$scope.subGroupWithDeptMap[j][k]==this.$scope.mouseClickedObjectStore[i]){
+                this.$scope.subGroupWithDeptMap[j].splice(k,1);
+                break;
+              }
+            }
+          }
+        }
+      }
+
+      console.log("00000000000000000");
+      console.log(this.$scope.mouseClickedObjectStore);
+      this.$scope.mouseClickedObject.studentNumber+=studentNumber;
+      this.$scope.mouseClickedObject.backgroundColor="#EA8A8A";
+      this.$scope.mouseClickedObjectStore=[];
+      this.$scope.mouseClickedObjectStore.push(this.$scope.mouseClickedObject);
+    }
+
+    private splitActionUpdate(object:any,splitNumber:number){
+      var currentStudentNumber:number = angular.copy(object.studentNumber);
+      console.log(currentStudentNumber);
+      console.log(splitNumber);
+      //this.$scope.splitNumber=splitNumber;
+      object.studentNumber = +splitNumber;
+      object.showSubPortion=false;
+      object.backgroundColor="#EA8A8A";
+
+      var newObject:ISeatPlanGroup = angular.copy(object);
+      newObject.studentNumber=currentStudentNumber-object.studentNumber;
+
+      this.$scope.tempGroupList.push(newObject);
+      console.log("================");
+      console.log(object);
+
+      this.showStatistics();
+
+    }
+
+    private showStatistics(){
+      for(var i=1;i<=this.$scope.iterationNumbers.length;i++){
+        this.$scope.subGroupTotalStudentNumber[i]=0;
+        for(var j=0;j<this.$scope.subGroupWithDeptMap[i].length;j++){
+          console.log(this.$scope.subGroupWithDeptMap[i][j].studentNumber);
+          this.$scope.subGroupTotalStudentNumber[i]+= this.$scope.subGroupWithDeptMap[i][j].studentNumber;
+        }
+      }
+
+      console.log("in stats");
+      console.log(this.$scope.subGroupTotalStudentNumber);
+    }
+
 
     private getMouseClickEvent(object:any){
-      console.log(object);
+      if(this.$scope.mouseClickedObject!=object){
+        this.$scope.mouseClickedObject={};
+
+        this.$scope.mouseClickedObject=object;
+        console.log("exam type:"+ this.$scope.examType);
+        if(this.$scope.mouseClickedObjectStore.length==0){
+          this.$scope.mouseClickedObjectStore.push(object);
+        }else{
+
+          var foundMisMatch:boolean=false;
+          for(var i=0;i<this.$scope.mouseClickedObjectStore.length;i++){
+            if(this.$scope.cciSelected){
+              if(this.$scope.mouseClickedObjectStore[i].courseId!=object.courseId){
+                console.log('found mismatch');
+                foundMisMatch=true;
+                break;
+              }
+            }else{
+              if(this.$scope.mouseClickedObjectStore[i].id!=object.id){
+                console.log('found mismatch');
+                foundMisMatch=true;
+                break;
+              }
+            }
+
+          }
+          if(foundMisMatch){
+            for(var i=0;i<this.$scope.mouseClickedObjectStore.length;i++){
+              this.$scope.mouseClickedObjectStore[i].backgroundColor="#EA8A8A";
+              console.log("deleted object");
+              console.log(this.$scope.mouseClickedObjectStore[i]);
+            }
+            console.log("-------before deletion----");
+            console.log(this.$scope.mouseClickedObjectStore);
+            this.$scope.mouseClickedObjectStore=[];
+            console.log("--------after deletion----");
+            this.$scope.mouseClickedObjectStore.push(object);
+          }else{
+            this.$scope.mouseClickedObjectStore.push(object);
+          }
+
+        }
+
+        console.log(this.$scope.mouseClickedObjectStore);
+        object.backgroundColor="red";
+        console.log(object);
+      }
+
     }
 
 
     private createCCI(examDate:string):void{
+       // for application cci, examType=4;
+      this.$scope.cciSelected=true;
       this.getApplicationCCIInfoForSubGroup(examDate).then((subGroupCCiArr:Array<ISeatPlanGroup>)=>{
         this.createOrViewSubgroups(4);
       });
+    }
+
+    private splitOut():void{
+      if(this.$scope.mouseClickedObject!=null){
+        this.$scope.mouseClickedObject.showSubPortion=true;
+      }
+    }
+
+    private cancelSplit():void{
+      this.$scope.mouseClickedObject.showSubPortion=false;
     }
 
     private showGroups():void{
@@ -821,6 +966,7 @@ module ums{
 
             for(var i=0;i<this.$scope.groupList[l].groupMembers.length;i++){
               this.$scope.groupList[l].groupMembers[i].baseId = this.$scope.groupList[l].groupMembers[i].id;
+              this.$scope.groupList[l].groupMembers[i].backgroundColor="#EA8A8A";
               temporaryList.push(this.$scope.groupList[l].groupMembers[i]);
               if(i==0){
                 var id:number = this.$scope.groupList[l].groupMembers[i].id;
@@ -833,6 +979,7 @@ module ums{
             break;
           }
         }
+
         this.$scope.tempGroupListAll=[];
         this.$scope.tempGroupList = angular.copy(temporaryList);
         this.$scope.tempGroupListAll = angular.copy(temporaryList);
@@ -2203,7 +2350,7 @@ module ums{
     private closeSubGroupOrRoomInfoWindow():void{
 
 
-      this.makeSortableEmpty();
+     /* this.makeSortableEmpty();
 
       this.$scope.groupSelected = false;
       this.$scope.subGroupSelected = false;
@@ -2227,10 +2374,11 @@ module ums{
         $("#subGroupPanel li").unbind("contextmenu");
         $("#ifti_div").unbind("contextmenu");
         $("#sortable").sortable("refresh");
-      }
-
-
-
+      }*/
+      this.$scope.showGroupSelectionPanel = true;
+      this.$scope.subGroupSelected = false;
+      this.$scope.subGroupWithDeptMap={};
+      this.$scope.selectedGroupNo=null;
 
 
     }
@@ -2359,6 +2507,7 @@ module ums{
               this.$scope.selectedGroupTotalStudent+=applicationArr[i].studentNumber;
               applicationArr[i].showSubPortion=false;
               applicationArr[i].id=i+1;
+              applicationArr[i].backgroundColor="#EA8A8A";
               this.$scope.tempGroupList.push(applicationArr[i]);
             }
             defer.resolve(this.$scope.tempGroupList);
