@@ -22,11 +22,20 @@ public class SubGroupBuilder implements Builder<SubGroup,MutableSubGroup> {
     pBuilder.add("id",pReadOnly.getId());
     pBuilder.add("semesterId",pReadOnly.getSemester().getId());
     pBuilder.add("groupNo",pReadOnly.getGroup().getGroupNo());
-    pBuilder.add("subGroupNo",pReadOnly.subGroupNo());
+    pBuilder.add("subGroupNumber",pReadOnly.subGroupNo());
     pBuilder.add("groupId",pReadOnly.getGroup().getId());
     pBuilder.add("position",pReadOnly.getPosition());
     pBuilder.add("studentNumber",pReadOnly.getStudentNumber());
     pBuilder.add("examType",pReadOnly.getExamType());
+    if(pReadOnly.getProgramShortName()!=null){
+      pBuilder.add("programName",pReadOnly.getProgramShortName());
+    }
+    if(pReadOnly.getStudentYear()!=null){
+      pBuilder.add("year",pReadOnly.getStudentYear());
+    }
+    if(pReadOnly.getStudentSemester()!=null){
+      pBuilder.add("semester",pReadOnly.getStudentSemester());
+    }
   }
 
   @Override

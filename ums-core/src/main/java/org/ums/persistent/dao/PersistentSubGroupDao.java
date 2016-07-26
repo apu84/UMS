@@ -18,7 +18,8 @@ import java.util.List;
  */
 public class PersistentSubGroupDao extends SubGroupDaoDecorator{
 
-  String SELECT_ALL="SELECT ID,SEMESTER_ID,GROUP_NO,SUB_GROUP_NO,GROUP_ID,POSITION,STUDENT_NUMBER,EXAM_TYPE,LAST_MODIFIED FROM SP_SUB_GROUP";
+  String SELECT_ALL="SELECT s.ID,s.SEMESTER_ID,s.GROUP_NO,s.SUB_GROUP_NO,s.GROUP_ID,s.POSITION,s.STUDENT_NUMBER,s.EXAM_TYPE,p.program_short_name,g.year,g.semester,s.LAST_MODIFIED  " +
+      "FROM SP_SUB_GROUP s,sp_group g,mst_program p where  s.group_id=g.id and g.program_id=p.program_id";
   String UPDATE_ONE="UPDATE SP_SUB_GROUP SET SEMESTER_ID=?,GROUP_NO=?,SUB_GROUP_NO=?,GROUP_ID=?,POSITION=?,STUDENT_NUMBER=?,EXAM_TYPE=?,LAST_MODIFIED="+getLastModifiedSql() +" ";
   String DELETE_ONE = "DELETE FROM SP_SUB_GROUP ";
   String INSERT_ONE = " INSERT INTO SP_SUB_GROUP(SEMESTER_ID,GROUP_NO,SUB_GROUP_NO,GROUP_ID,POSITION,STUDENT_NUMBER,EXAM_TYPE,LAST_MODIFIED) "+
@@ -51,7 +52,7 @@ public class PersistentSubGroupDao extends SubGroupDaoDecorator{
 
   @Override
   public List<SubGroup> getBySemesterGroupNoAndType(int pSemesterId, int pGroupNo, int pType) {
-    String query = SELECT_ALL+" WHERE SEMESTER_ID=? AND GROUP_NO=? AND EXAM_TYPE=? ORDER BY SUB_GROUP_NO ASC, ID ASC ";
+    String query = SELECT_ALL+" and  s.SEMESTER_ID=? AND s.GROUP_NO=? AND s.EXAM_TYPE=? ORDER BY s.SUB_GROUP_NO ASC, s.ID ASC ";
     return mJdbcTemplate.query(query,new Object[]{pSemesterId,pGroupNo,pType},new SubGroupRowMapper());
   }
 
@@ -149,6 +150,9 @@ public class PersistentSubGroupDao extends SubGroupDaoDecorator{
       mSubGroup.setPosition(pResultSet.getInt("POSITION"));
       mSubGroup.setStudentNumber(pResultSet.getInt("STUDENT_NUMBER"));
       mSubGroup.setExamType(pResultSet.getInt("EXAM_TYPE"));
+      mSubGroup.setProgramShortName(pResultSet.getString("PROGRAM_SHORT_NAME"));
+      mSubGroup.setStudentYear(pResultSet.getInt("YEAR"));
+      mSubGroup.setStudentSemester(pResultSet.getInt("SEMESTER"));
       mSubGroup.setLastModified(pResultSet.getString("LAST_MODIFIED"));
       return mSubGroup;
     }

@@ -36,6 +36,9 @@ public class PersistentSubGroup implements MutableSubGroup {
   private int mStudentNumber;
   private String mLastModified;
   private int mExamType;
+  private String mProgramShortName;
+  private Integer mStudentYear;
+  private Integer mStudentSemester;
 
   public PersistentSubGroup(){
 
@@ -53,6 +56,36 @@ public class PersistentSubGroup implements MutableSubGroup {
     mStudentNumber = pPersistentSubGroup.getStudentNumber();
     mLastModified = pPersistentSubGroup.getLastModified();
     mExamType = pPersistentSubGroup.getExamType();
+  }
+
+  @Override
+  public void setProgramShortName(String pProgramShortName) {
+    mProgramShortName = pProgramShortName;
+  }
+
+  @Override
+  public void setStudentYear(Integer pStudentYear) {
+    mStudentYear = pStudentYear;
+  }
+
+  @Override
+  public void setStudentSemester(Integer pStudentSemester) {
+    mStudentSemester = pStudentSemester;
+  }
+
+  @Override
+  public String getProgramShortName() {
+    return mProgramShortName;
+  }
+
+  @Override
+  public Integer getStudentYear() {
+    return mStudentYear;
+  }
+
+  @Override
+  public Integer getStudentSemester() {
+    return mStudentSemester;
   }
 
   @Override

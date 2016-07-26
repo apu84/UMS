@@ -17,4 +17,7 @@ public interface MutableSubGroup extends SubGroup,Mutable,MutableLastModifier,Mu
   void setStudentNumber(final int pStudentNumber);
   void setExamType(final int pExamType);
   void setGroupId(final int pGroupId);
+  void setProgramShortName(final String pProgramShortName);
+  void setStudentYear(final Integer pStudentYear);
+  void setStudentSemester(final Integer pStudentSemester);
 }

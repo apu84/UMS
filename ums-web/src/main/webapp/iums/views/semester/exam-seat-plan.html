@@ -83,8 +83,7 @@
 
     .list {
         list-style: none outside none;
-        //margin: 1px 0 1px;
-        background-color: #FAEBD7;
+
         border: 2px dashed blue;
         margin: 10px 10px 0 0;
         padding: 5px;
@@ -339,7 +338,7 @@
                 <br>
 
                 <div >
-                    <ul ui-sortable="sortableOptionsIfSubGroupNotFound" data-ng-model="tempGroupList"   data-ng-if="recreate==false && subGroupFound==false && groupNoForSeatPlanViewing" class="list apps-container ">
+                    <ul ui-sortable="sortableOptionsIfSubGroupNotFound" data-ng-model="tempGroupList"   data-ng-if="recreate==false && subGroupFound==false && groupNoForSeatPlanViewing" class="list apps-container " data-ng-style="{'background-color':classBodyBackgroundColor}">
                         <li id="group.id" data-ng-repeat="group in tempGroupList" class="item mouse-effect" data-ng-click="getMouseClickEvent(group)" data-ng-style="{'background-color':group.backgroundColor}">
                             <div style="cursor: pointer;" data-ng-if="examType==1">
                                 {{group.programName}}:{{group.year}}/{{group.semester}} ({{group.studentNumber}})
@@ -523,10 +522,10 @@
                 </div>-->
 
                 <!--***************************************************************************-->
-                <div class="row" data-ng-show="colForSubgroup!=9999 && subGroupFound==false" >
+                <div class="row"  >
                     <div class="col-md-2" data-ng-repeat="i in iterationNumbers">
                         <p>Sub Group {{i}}</p>
-                        <ul ui-sortable="sortableOptionsIfSubGroupNotFound" data-ng-model="subGroupWithDeptMap[i]"   data-ng-if="recreate==false && subGroupFound==false && groupNoForSeatPlanViewing" class="list apps-container">
+                        <ul ui-sortable="sortableOptionsIfSubGroupNotFound" data-ng-model="subGroupWithDeptMap[i]"    class="list apps-container" data-ng-style="{'background-color':classBodyBackgroundColor}">
 
                             <li id="group.id" data-ng-repeat="group in subGroupWithDeptMap[i]" class="item" data-ng-click="getMouseClickEvent(group)" data-ng-style="{'background-color':group.backgroundColor}">
                                 <div style="cursor: pointer;" data-ng-if="examType==1">
@@ -626,8 +625,8 @@
                 <hr>
                 <hr>
                 <div class="row" align="center">
-                    <button type="button" class="btn btn-info" data-ng-click="saveSubGroup(selectedGroupNo)" data-ng-if="saveSubGroupInfo">Save </button>
-                    <button type="button" class="btn btn-info" data-ng-click="editSavedSubGroup(selectedGroupNo)" data-ng-if="editSubGroup">Edit </button>
+                    <button type="button" class="btn btn-info" data-ng-click="saveSubGroup()" data-ng-if="saveSubGroupInfo">Save </button>
+                    <button type="button" class="btn btn-info" data-ng-click="editSavedSubGroup()" data-ng-if="editSubGroup">Edit </button>
                     <!--<button type="button" class="btn btn-info" data-ng-click="makeSortableCancel()" data-ng-if="cancelSubGroup">Cancel</button>-->
                     <button type="button" class="btn btn-info" data-ng-click="createNewSubGroup(selectedGroupNo)" data-ng-if="deleteAndCreateNewSubGroup">Re-Create</button>
                     <button type="button" class="btn btn-success" data-ng-click="closeSubGroupOrRoomInfoWindow()" >Go Back to Grouping </button>

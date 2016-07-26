@@ -113,6 +113,7 @@ public class SubGroupResourceHelper extends ResourceHelper<SubGroup,MutableSubGr
         group.setId(jsonObject.getInt("groupId"));
         group.setGroupNo(pGroupNo);
         subGroup.setGroup(group);
+        subGroup.setGroupId(jsonObject.getInt("groupId"));
         subGroup.setStudentNumber(jsonObject.getInt("studentNumber"));
         subGroups.add(subGroup);
 //      }
