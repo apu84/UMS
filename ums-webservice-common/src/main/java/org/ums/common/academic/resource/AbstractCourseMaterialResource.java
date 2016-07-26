@@ -101,6 +101,17 @@ public abstract class AbstractCourseMaterialResource extends Resource {
               pSemesterName,
               pCourseNo));
           break;
+        case "compress":
+          JsonArray compressItems = pJsonObject.getJsonArray("items");
+          List<String> compressFiles = actionItems(compressItems);
+          String destination = pJsonObject.getString("destination");
+          String compressedFileName = pJsonObject.getString("compressedFilename");
+          result.put("result", getBinaryContentManager().compress(compressFiles,
+              destination, compressedFileName,
+              BinaryContentManager.Domain.COURSE_MATERIAL,
+              pSemesterName,
+              pCourseNo));
+          break;
       }
     }
 

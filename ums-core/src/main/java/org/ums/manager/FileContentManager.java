@@ -236,8 +236,60 @@ public class FileContentManager extends BinaryContentDecorator {
   }
 
   @Override
-  public Map<String, Object> compress(List<String> pItems, String pNewPath, String pNewFileName, Domain pDomain, String... pRootPath) {
-    return null;
+  public Map<String, Object> compress(List<String> pItems, String pNewPath, String pNewFileName,
+                                      Domain pDomain, String... pRootPath) {
+    try {
+      Path zipFile = getQualifiedPath(pDomain, buildPath(Paths.get(pNewPath, pNewFileName).toString(), pRootPath));
+
+      URI fileUri = zipFile.toUri();
+      URI zipUri = new URI("jar:" + fileUri.getScheme(), fileUri.getPath(), null);
+
+      Map<String, String> env = new HashMap<>();
+      env.put("create", "true");
+
+      String rootPath = getQualifiedPath(pDomain, buildPath("", pRootPath)).toString();
+
+
+      try (FileSystem zipfs = FileSystems.newFileSystem(zipUri, env)) {
+        for (String toAdd : pItems) {
+          Path externalFile = getQualifiedPath(pDomain, buildPath(toAdd, pRootPath));
+          Path pathInZipfile = zipfs.getPath("/");
+
+          if (Files.isDirectory(externalFile)) {
+            //for directories, walk the file tree
+            Files.walkFileTree(externalFile, new SimpleFileVisitor<Path>() {
+              @Override
+              public FileVisitResult visitFile(Path file,
+                                               BasicFileAttributes attrs) throws IOException {
+                final Path dest = zipfs.getPath(pathInZipfile.toString(), file.toString().replace(externalFile.getParent().toString(), ""));
+                Files.copy(file, dest, StandardCopyOption.REPLACE_EXISTING);
+                return FileVisitResult.CONTINUE;
+              }
+
+              @Override
+              public FileVisitResult preVisitDirectory(Path dir,
+                                                       BasicFileAttributes attrs) throws IOException {
+                String targetDirectory = dir.toString().replace(externalFile.getParent().toString(), "");
+                final Path dirToCreate = zipfs.getPath(pathInZipfile.toString(), targetDirectory);
+                if (Files.notExists(dirToCreate)) {
+                  Files.createDirectories(dirToCreate);
+                }
+                return FileVisitResult.CONTINUE;
+              }
+            });
+          } else {
+            final Path dest = zipfs.getPath(pathInZipfile.toString(), externalFile.toString().replace(externalFile.getParent().toString(), ""));
+            Files.copy(externalFile, dest, StandardCopyOption.REPLACE_EXISTING);
+          }
+        }
+      }
+      addUserDefinedProperty(OWNER, SecurityUtils.getSubject().getPrincipal().toString(),
+          zipFile);
+      return success();
+    } catch (Exception e) {
+      mLogger.error("Failed to download file as zip " + pNewFileName, e);
+      return error(mMessageResource.getMessage("compress.failed"));
+    }
   }
 
   @Override

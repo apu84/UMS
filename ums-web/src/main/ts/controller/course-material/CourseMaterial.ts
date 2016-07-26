@@ -18,6 +18,7 @@ module ums {
         removeUrl: baseUri,
         downloadFileUrl: downloadBaseUri,
         downloadMultipleUrl: downloadBaseUri,
+        compressUrl: baseUri,
         hidePermissions: true,
         hideOwner: false,
         multipleDownloadFileName: 'CourseMaterial-' + semesterName + "-" + courseNo + '.zip',

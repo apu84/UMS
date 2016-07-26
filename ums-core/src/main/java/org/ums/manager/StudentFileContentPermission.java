@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 import org.ums.configuration.UMSConfiguration;
-import org.ums.decorator.BinaryContentDecorator;
 import org.ums.domain.model.immutable.*;
 import org.ums.message.MessageResource;
 
@@ -164,6 +163,11 @@ public class StudentFileContentPermission extends BaseFileContentPermission {
   public Map<String, Object> downloadAsZip(List<String> pItems, String pNewFileName, String pToken, Domain pDomain, String... pRootPath) {
     //TODO: Check if student has permission
     return super.downloadAsZip(pItems, pNewFileName, pToken, pDomain, pRootPath);
+  }
+
+  @Override
+  public Map<String, Object> compress(List<String> pItems, String pNewPath, String pNewFileName, Domain pDomain, String... pRootPath) {
+    return error(mMessageResource.getMessage("compress.not.allowed"));
   }
 
   protected Student getStudent() throws Exception {

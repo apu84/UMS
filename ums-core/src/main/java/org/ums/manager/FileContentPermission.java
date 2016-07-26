@@ -137,6 +137,11 @@ public class FileContentPermission extends BaseFileContentPermission {
   }
 
   @Override
+  public Map<String, Object> compress(List<String> pItems, String pNewPath, String pNewFileName, Domain pDomain, String... pRootPath) {
+    return super.compress(pItems, pNewPath, pNewFileName, pDomain, pRootPath);
+  }
+
+  @Override
   protected String getStorageRoot() {
     return mUMSConfiguration.getStorageRoot();
   }
