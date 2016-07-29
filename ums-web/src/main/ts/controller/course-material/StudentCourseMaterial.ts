@@ -16,6 +16,8 @@ module ums {
         hidePermissions: true,
         hideOwner: false,
         multipleDownloadFileName: 'CourseMaterial-' + semesterName + "-" + courseNo + '.zip',
+        searchForm: true,
+        languageSelection: false,
         allowedActions: angular.extend(FILEMANAGER_CONFIG.$get().allowedActions, {
           createAssignmentFolder: false,
           upload: true,

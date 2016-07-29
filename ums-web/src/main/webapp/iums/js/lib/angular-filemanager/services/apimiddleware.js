@@ -1,7 +1,7 @@
 (function(angular) {
     'use strict';
-    angular.module('FileManagerApp').service('apiMiddleware', ['$window', 'fileManagerConfig', 'apiHandler', 
-        function ($window, fileManagerConfig, ApiHandler) {
+    angular.module('FileManagerApp').service('apiMiddleware', ['$window', 'fileManagerConfig', 'apiHandler', '$location',
+        function ($window, fileManagerConfig, ApiHandler, $location) {
 
         var ApiMiddleware = function() {
             this.apiHandler = new ApiHandler();
