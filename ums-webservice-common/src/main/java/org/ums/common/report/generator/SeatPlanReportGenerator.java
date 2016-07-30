@@ -21,5 +21,5 @@ import java.util.Map;
  */
 
 public interface SeatPlanReportGenerator {
-  void createPdf(String dest, boolean noSeatPlanInfo, int pSemesterId, int groupNo, int type, OutputStream pOutputStream ) throws Exception,IOException,DocumentException;
+  void createPdf(String dest, boolean noSeatPlanInfo, int pSemesterId, int groupNo, int type,String examDate, OutputStream pOutputStream ) throws Exception,IOException,DocumentException;
 }

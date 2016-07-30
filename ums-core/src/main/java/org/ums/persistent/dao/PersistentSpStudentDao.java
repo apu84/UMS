@@ -74,6 +74,14 @@ public class PersistentSpStudentDao extends SpStudentDaoDecorator {
     return mJdbcTemplate.update(query,pMutable.getId());
   }
 
+  @Override
+  public List<SpStudent> getStudentByCourseIdAndSemesterIdForSeatPlanForCCI(String pCourseId, Integer pSemesterId) {
+    String query = "select distinct(s.student_id),p.program_short_name,s.year,s.semester,a.application_type from sp_student s,mst_program p, " +
+        "(select distinct(student_id),application_type from application_cci where course_id=? and semester_id=? )a  " +
+        "where a.student_id=s.student_id and s.program_id=p.program_id  order by  p.program_short_name,s.student_id";
+    return mJdbcTemplate.query(query,new Object[]{pCourseId,pSemesterId},new SpStudentRowMapperForCCI());
+  }
+
   class SpStudentRowMapper implements RowMapper<SpStudent>{
     @Override
     public SpStudent mapRow(ResultSet pResultSet, int pI) throws SQLException {
@@ -86,6 +94,19 @@ public class PersistentSpStudentDao extends SpStudentDaoDecorator {
       spStudent.setStatus(pResultSet.getInt("ACTIVE"));
       spStudent.setLastModified(pResultSet.getString("LAST_MODIFIED"));
       return spStudent;
+    }
+  }
+
+  class SpStudentRowMapperForCCI implements RowMapper<SpStudent>{
+    @Override
+    public SpStudent mapRow(ResultSet pResultSet, int pI) throws SQLException {
+      PersistentSpStudent student = new PersistentSpStudent();
+      student.setId(pResultSet.getString("student_id"));
+      student.setProgramShortName(pResultSet.getString("program_short_name"));
+      student.setAcademicYear(pResultSet.getInt("year"));
+      student.setAcademicSemester(pResultSet.getInt("semester"));
+      student.setApplicationType(pResultSet.getInt("application_type"));
+      return student;
     }
   }
 }

@@ -45,18 +45,53 @@ public class SeatPlanServiceImpl implements SeatPlanService {
   @Autowired
   ClassRoomManager mClassRoomManager;
 
+  @Autowired
+  SubGroupCCIManager mSubGroupCCIManager;
+
+  @Autowired
+  ApplicationCCIManager mApplicationCCIManager;
+
+  @Autowired
+  ProgramManager mProgramManager;
+
 
   @Override
   @Transactional
-  public GenericResponse<Map> generateSeatPlan(int pSemesterId, int pGroupNo, int pExamType) throws Exception {
-    int numberOfSubGroups = mSubGroupManager.getSubGroupNumberOfAGroup(pSemesterId,pExamType,pGroupNo);
-    Map<String,List<SpStudent>> studentsByProgramYearSemesterStatusList = initiateStudentsBasedOnProgramYearSemesterStatus();
+  public GenericResponse<Map> generateSeatPlan(int pSemesterId, int pGroupNo, int pExamType,String pExamDate) throws Exception {
+    int numberOfSubGroups;
+    if(pGroupNo==0){
+      numberOfSubGroups = mSubGroupCCIManager.checkSubGroupNumber(pSemesterId,pExamDate);
+    }else{
+      numberOfSubGroups= mSubGroupManager.getSubGroupNumberOfAGroup(pSemesterId,pExamType,pGroupNo);
+
+    }
+   /* Map<String,List<SpStudent>> studentsByProgramYearSemesterStatusList = initiateStudentsBasedOnProgramYearSemesterStatus();
     Map<String,List<SpStudent>> studentsByProgramYearSemesterStatusList2 = initiateStudentsBasedOnProgramYearSemesterStatus();
 
-    Map<Integer,List<SpStudent>> subGroupWithStudents = getStudentsOfTheSubGroups(pSemesterId,pGroupNo,pExamType,numberOfSubGroups,studentsByProgramYearSemesterStatusList);
-    Map<Integer,List<SpStudent>> tempSubGroupWithStudents =getStudentsOfTheSubGroups(pSemesterId,pGroupNo,pExamType,numberOfSubGroups,studentsByProgramYearSemesterStatusList2);
+    Map<Integer,List<SpStudent>> subGroupWithStudents = getStudentsOfTheSubGroups(pSemesterId,pGroupNo,pExamType,pExamDate,numberOfSubGroups,studentsByProgramYearSemesterStatusList);
+    Map<Integer,List<SpStudent>> tempSubGroupWithStudents =getStudentsOfTheSubGroups(pSemesterId,pGroupNo,pExamType,pExamDate,numberOfSubGroups,studentsByProgramYearSemesterStatusList2);*/
 
 
+    Map<String,List<SpStudent>> studentsByProgramYearSemesterStatusList= new HashMap<>();
+    Map<String,List<SpStudent>> studentsByProgramYearSemesterStatusList2 = new HashMap<>();
+
+    Map<Integer,List<SpStudent>> subGroupWithStudents = new HashMap<>();
+    Map<Integer,List<SpStudent>> tempSubGroupWithStudents = new HashMap<>();
+
+    if(pGroupNo==0){
+      studentsByProgramYearSemesterStatusList = initiateStudentsForCCIBasedOnExamDate(pSemesterId,pExamDate);
+      studentsByProgramYearSemesterStatusList2 = initiateStudentsForCCIBasedOnExamDate(pSemesterId,pExamDate);
+
+      subGroupWithStudents = getStudentsOfTheSubGroupsCCI(pSemesterId,pGroupNo,pExamType,pExamDate,numberOfSubGroups,studentsByProgramYearSemesterStatusList);
+      tempSubGroupWithStudents =getStudentsOfTheSubGroupsCCI(pSemesterId,pGroupNo,pExamType,pExamDate,numberOfSubGroups,studentsByProgramYearSemesterStatusList2);
+    }
+    else{
+     studentsByProgramYearSemesterStatusList = initiateStudentsBasedOnProgramYearSemesterStatus();
+     studentsByProgramYearSemesterStatusList2 = initiateStudentsBasedOnProgramYearSemesterStatus();
+
+       subGroupWithStudents = getStudentsOfTheSubGroups(pSemesterId,pGroupNo,pExamType,pExamDate,numberOfSubGroups,studentsByProgramYearSemesterStatusList);
+       tempSubGroupWithStudents =getStudentsOfTheSubGroups(pSemesterId,pGroupNo,pExamType,pExamDate,numberOfSubGroups,studentsByProgramYearSemesterStatusList2);
+    }
 
 
     List<ClassRoom> roomList = mClassRoomManager.getAll();
@@ -208,174 +243,7 @@ public class SeatPlanServiceImpl implements SeatPlanService {
         //*********end of new Algorithm ******************
 
 
-      /*  int numberOfStudents;
-        List<Integer> tempSubGroupHolderGreaterThanMinimal=new ArrayList<>();
 
-
-        if (room.getCapacity() % numberOfSubGroups == 0) {
-          numberOfStudents = room.getCapacity()/numberOfSubGroups;
-        }else{
-          float partitionForTheSubGroup = (room.getTotalColumn()*room.getTotalRow())/numberOfSubGroups;
-          numberOfStudents = (int)Math.ceil(partitionForTheSubGroup+1);
-
-        }
-
-        int numberOfStudentsLessThanAverage = 0;
-        int numberOfStudentsHigherThanAverage=0;
-        for(int subGroupIteratorForStudentNumber=1;subGroupIteratorForStudentNumber<=numberOfSubGroups;subGroupIteratorForStudentNumber++){
-            if(subGroupWithStudents.get(subGroupIteratorForStudentNumber).size()>numberOfStudents){
-              tempSubGroupHolderGreaterThanMinimal.add(subGroupIteratorForStudentNumber);
-            }else{
-              numberOfStudentsLessThanAverage += subGroupWithStudents.get(subGroupIteratorForStudentNumber).size();
-            }
-        }
-
-
-        if(tempSubGroupHolderGreaterThanMinimal.size()<6){
-          int leftTotalSpace = room.getCapacity()-numberOfStudentsLessThanAverage;
-          if(leftTotalSpace% tempSubGroupHolderGreaterThanMinimal.size()==0){
-            numberOfStudents = leftTotalSpace/tempSubGroupHolderGreaterThanMinimal.size();
-          }
-          else{
-            float partitioner = leftTotalSpace/tempSubGroupHolderGreaterThanMinimal.size();
-            numberOfStudents = (int) partitioner +1;
-          }
-        }
-        int subGroupCounter=0;
-        int totalStudentOfTheSubGroupInRoom=0;
-        int studentPerSubGroupCounter=0;
-        int seatAllocationCounter=0;
-        while(true){
-          boolean noMoreMembers=false;
-          boolean noSpace=false;
-          for(int row=0;row<room.getTotalRow();row++){
-            boolean incraseRowNumberByOne=false;
-            for(int col=0;col<room.getTotalColumn();col++){
-              if(roomStructure[row][col]==null){
-                if(subGroupCounter==0){
-                  subGroupCounter=1;
-                  for(int subGroupNumberIterator=subGroupCounter;subGroupNumberIterator<=numberOfSubGroups;subGroupNumberIterator++){
-                    if(subGroupWithStudents.get(subGroupNumberIterator)!=null){
-                      int sizeOfTheSubGroup = subGroupWithStudents.get(subGroupNumberIterator).size();
-                      if(sizeOfTheSubGroup>0){
-                        if(sizeOfTheSubGroup>numberOfStudents){
-                          totalStudentOfTheSubGroupInRoom=numberOfStudents;
-                        }
-                        else{
-                          totalStudentOfTheSubGroupInRoom=sizeOfTheSubGroup;
-                        }
-                        subGroupCounter=subGroupNumberIterator;
-                        break;
-                      }else{
-                        if(subGroupNumberIterator==numberOfSubGroups){
-                          noMoreMembers=true;
-                          break;
-                        }
-                    }
-
-                    }
-                  }
-
-                  roomStructure[row][col]=Integer.toString(subGroupCounter);
-                  seatAllocationCounter+=1;
-                  col+=1;
-                  studentPerSubGroupCounter+=1;
-
-                  if(subGroupCounter>=numberOfSubGroups && studentPerSubGroupCounter>=totalStudentOfTheSubGroupInRoom){
-                    break;
-                  }
-                  if(studentPerSubGroupCounter>=totalStudentOfTheSubGroupInRoom){
-                    for(int subGroupNumberIterator=subGroupCounter;subGroupNumberIterator<=numberOfSubGroups;subGroupNumberIterator++){
-                      if(subGroupWithStudents.get(subGroupNumberIterator)!=null){
-                        int sizeOfTheSubGroup = subGroupWithStudents.get(subGroupNumberIterator).size();
-                        if(sizeOfTheSubGroup>0){
-                          if(sizeOfTheSubGroup>numberOfStudents){
-                            totalStudentOfTheSubGroupInRoom=numberOfStudents;
-                          }
-                          else{
-                            totalStudentOfTheSubGroupInRoom=sizeOfTheSubGroup;
-                          }
-                          subGroupCounter=subGroupNumberIterator;
-                          break;
-                        }else{
-                          if(subGroupNumberIterator==numberOfSubGroups){
-                            noMoreMembers=true;
-                            break;
-                          }
-                        }
-                      }
-
-                    }
-                  }
-                  if((col+1)>=room.getTotalColumn()){
-                    incraseRowNumberByOne=true;
-                    break;
-                  }
-                }else{
-                  roomStructure[row][col]=Integer.toString(subGroupCounter);
-                  seatAllocationCounter+=1;
-                  col+=1;
-
-                  studentPerSubGroupCounter+=1;
-
-                  if(subGroupCounter>=numberOfSubGroups && studentPerSubGroupCounter>=totalStudentOfTheSubGroupInRoom){
-                    break;
-                  }
-                  if(studentPerSubGroupCounter>=totalStudentOfTheSubGroupInRoom){
-                    subGroupCounter+=1;
-                    for(int subGroupNumberIterator=subGroupCounter;subGroupNumberIterator<=numberOfSubGroups;subGroupNumberIterator++){
-                      int sizeOfTheSubGroup = subGroupWithStudents.get(subGroupNumberIterator).size();
-                      if(sizeOfTheSubGroup>0){
-                        if(sizeOfTheSubGroup>numberOfStudents){
-                          totalStudentOfTheSubGroupInRoom=numberOfStudents;
-                        }
-                        else{
-                          totalStudentOfTheSubGroupInRoom=sizeOfTheSubGroup;
-                        }
-                        subGroupCounter=subGroupNumberIterator;
-                        break;
-                      }
-                    }
-                    studentPerSubGroupCounter=0;
-                  }
-                  if((col+1)>=room.getTotalColumn()){
-                    incraseRowNumberByOne=true;
-                    break;
-                  }
-
-                }
-              }
-            }
-            if(noMoreMembers){
-              break;
-            }
-            if(subGroupCounter>=numberOfSubGroups && studentPerSubGroupCounter>=totalStudentOfTheSubGroupInRoom){
-              break;
-            }
-
-            if(incraseRowNumberByOne){
-              row+=1;
-              if((row+1)>=room.getTotalRow()){
-                if(seatAllocationCounter>=room.getCapacity()){
-                  noSpace = true;
-                }
-                break;
-
-              }
-            }
-          }
-          if(noMoreMembers){
-            break;
-          }
-          if(subGroupCounter>=numberOfSubGroups && studentPerSubGroupCounter>=totalStudentOfTheSubGroupInRoom){
-            break;
-          }
-          if(noSpace){
-            break;
-          }
-
-        }
-*/
 
         for(int roomColumn=0;roomColumn<room.getTotalColumn();roomColumn++){
               for(int roomRow=0;roomRow<room.getTotalRow();roomRow++){
@@ -403,7 +271,9 @@ public class SeatPlanServiceImpl implements SeatPlanService {
                           semester.setId(pSemesterId);
                           seatPlan.setSemester(semester);
                           seatPlan.setGroupNo(pGroupNo);
-
+                          if(pGroupNo==0){
+                            seatPlan.setExamDate(pExamDate);
+                          }
                           totalSeatPlan.add(seatPlan);
                           studentsOfTheSubGroup.remove(0);
                           subGroupWithStudents.put(subGroup,studentsOfTheSubGroup);
@@ -434,8 +304,11 @@ public class SeatPlanServiceImpl implements SeatPlanService {
     /*for(MutableSeatPlan seatPlan:totalSeatPlan){
       mSeatPlanManager.create(seatPlan);
     }*/
-
-    mSeatPlanManager.create(totalSeatPlan);
+    if(pGroupNo==0){
+      mSeatPlanManager.createSeatPlanForCCI(totalSeatPlan);
+    }else{
+      mSeatPlanManager.create(totalSeatPlan);
+    }
 
 
     return new GenericMessageResponse(GenericResponse.ResponseType.SUCCESS);
@@ -592,46 +465,117 @@ public class SeatPlanServiceImpl implements SeatPlanService {
 
 
 
-  Map<Integer,List<SpStudent>> getStudentsOfTheSubGroups(int pSemesterId, int pGroupNo,int pExamType,int numberOfSubGroups,Map<String,List<SpStudent>> studentsByProgramYearSemesterStatusList)throws Exception{
+  Map<Integer,List<SpStudent>> getStudentsOfTheSubGroups(int pSemesterId, int pGroupNo,int pExamType,String examDate,int numberOfSubGroups,Map<String,List<SpStudent>> studentsByProgramYearSemesterStatusList)throws Exception{
 
     Map<Integer,List<SpStudent>> subGroupMap = new HashMap<>();
 
-    for(int subGroupNumberIterator=1;subGroupNumberIterator<=numberOfSubGroups;subGroupNumberIterator++){
+    for(int subGroupNumberIterator=1;subGroupNumberIterator<=numberOfSubGroups;subGroupNumberIterator++) {
       List<SpStudent> studentsOfTheSubGroup = new LinkedList<>();
-      List<SubGroup> subGroupMembers = mSubGroupManager.getSubGroupMembers(pSemesterId,pExamType,pGroupNo,subGroupNumberIterator);
+      if(examDate.equals("null")){
+      List<SubGroup> subGroupMembers = mSubGroupManager.getSubGroupMembers(pSemesterId, pExamType, pGroupNo, subGroupNumberIterator);
 
-      int counter=0;
-      for(SubGroup member: subGroupMembers){
+      int counter = 0;
+      for (SubGroup member : subGroupMembers) {
         SeatPlanGroup group = mSeatPlanGroupManager.get(member.getGroupId());
-        String key = group.getProgram().getId()+""+group.getAcademicYear()+""+group.getAcademicSemester()+""+1;
+        String key = group.getProgram().getId() + "" + group.getAcademicYear() + "" + group.getAcademicSemester() + "" + 1;
         List<SpStudent> studentsOfTheGroup = new ArrayList<>();
         List<SpStudent> existingStudents = studentsByProgramYearSemesterStatusList.get(key);
 
-        int studentCounter=0;
+        int studentCounter = 0;
         int totalExistingStudentSize = existingStudents.size();
-        for(int m=0;m<totalExistingStudentSize;m++){
+        for (int m = 0; m < totalExistingStudentSize; m++) {
           SpStudent existingStudent = existingStudents.get(0);
           studentsOfTheGroup.add(existingStudent);
           existingStudents.remove(0);
-          studentCounter+=1;
-          if(studentCounter==member.getStudentNumber()){
+          studentCounter += 1;
+          if (studentCounter == member.getStudentNumber()) {
             break;
           }
         }
-        studentsByProgramYearSemesterStatusList.put(key,existingStudents);
-        if(counter==0){
+        studentsByProgramYearSemesterStatusList.put(key, existingStudents);
+        if (counter == 0) {
           studentsOfTheSubGroup = studentsOfTheGroup;
-          counter+=1;
-        }else{
+          counter += 1;
+        } else {
           studentsOfTheSubGroup.addAll(studentsOfTheGroup);
-          counter+=1;
+          counter += 1;
         }
 
       }
 
-      subGroupMap.put(subGroupNumberIterator,studentsOfTheSubGroup);
+      subGroupMap.put(subGroupNumberIterator, studentsOfTheSubGroup);
+     }
+      else{
+
+        List<SubGroupCCI> subGroupMembers = mSubGroupCCIManager.getBySemesterAndExamDate(pSemesterId, examDate);
+
+        int counter = 0;
+        for (SubGroupCCI member : subGroupMembers) {
+
+
+          //String key = member.getId()+member.getCourseId();
+          List<SpStudent> studentsOfTheGroup = new ArrayList<>();
+          List<SpStudent> existingStudents = studentsByProgramYearSemesterStatusList.get(member.getCourseId());
+
+          int studentCounter = 0;
+          int totalExistingStudentSize = existingStudents.size();
+          for (int m = 0; m < totalExistingStudentSize; m++) {
+            SpStudent existingStudent = existingStudents.get(0);
+            studentsOfTheGroup.add(existingStudent);
+            existingStudents.remove(0);
+            studentCounter += 1;
+            if (studentCounter == member.getTotalStudent()) {
+              break;
+            }
+          }
+          studentsByProgramYearSemesterStatusList.put(member.getCourseId(), existingStudents);
+          if (counter == 0) {
+            studentsOfTheSubGroup = studentsOfTheGroup;
+            counter += 1;
+          } else {
+            studentsOfTheSubGroup.addAll(studentsOfTheGroup);
+            counter += 1;
+          }
+
+        }
+
+        subGroupMap.put(subGroupNumberIterator, studentsOfTheSubGroup);
+      }
     }
     return subGroupMap;
+  }
+
+  Map<Integer,List<SpStudent>> getStudentsOfTheSubGroupsCCI(int pSemesterId, int pGroupNo,int pExamType,String examDate,int numberOfSubGroups,Map<String,List<SpStudent>> studentsByProgramYearSemesterStatusList)throws Exception{
+    List<SubGroupCCI> subGroupMembers = mSubGroupCCIManager.getBySemesterAndExamDate(pSemesterId,examDate);
+    Map<Integer,List<SpStudent>> subGroupNumberWithStudentsMap = new HashMap<>();
+    for(SubGroupCCI member: subGroupMembers){
+      List<SpStudent> students = studentsByProgramYearSemesterStatusList.get(member.getCourseId());
+      for(int i=1;i<=numberOfSubGroups;i++){
+        if(i==member.getSubGroupNo()){
+          if(subGroupNumberWithStudentsMap.get(i)!=null){
+            List<SpStudent> studentsOfTheSubGroup = subGroupNumberWithStudentsMap.get(i);
+            studentsOfTheSubGroup.addAll(students);
+            subGroupNumberWithStudentsMap.put(i,studentsOfTheSubGroup);
+          }
+          else{
+            subGroupNumberWithStudentsMap.put(i,students);
+          }
+
+          break;
+        }
+      }
+    }
+    return subGroupNumberWithStudentsMap;
+  }
+
+  Map<String,List<SpStudent>> initiateStudentsForCCIBasedOnExamDate(int pSemester,String pExamDate) throws Exception{
+    Map<String,List<SpStudent>> studentMap = new HashMap<>();
+    List<ApplicationCCI> applicationCCIs = mApplicationCCIManager.getBySemesterAndExamDate(pSemester,pExamDate) ;
+    for(ApplicationCCI app : applicationCCIs){
+      List<SpStudent> students = mSpStudentManager.getStudentByCourseIdAndSemesterIdForSeatPlanForCCI(app.getCourseId(),pSemester);
+      studentMap.put(app.getCourseId(),students);
+    }
+    return studentMap;
   }
   Map<String,List<SpStudent>> initiateStudentsBasedOnProgramYearSemesterStatus() throws Exception{
 

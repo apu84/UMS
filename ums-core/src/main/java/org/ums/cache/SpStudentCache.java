@@ -32,4 +32,9 @@ public class SpStudentCache extends ContentCache<SpStudent,MutableSpStudent,Stri
   public List<SpStudent> getStudentByProgramYearSemesterStatus(int pProgramId, int pYear, int pSemester, int pStatus) {
     return getManager().getStudentByProgramYearSemesterStatus(pProgramId,pYear,pSemester,pStatus);
   }
+
+  @Override
+  public List<SpStudent> getStudentByCourseIdAndSemesterIdForSeatPlanForCCI(String pCourseId, Integer pSemesterId) {
+    return getManager().getStudentByCourseIdAndSemesterIdForSeatPlanForCCI(pCourseId,pSemesterId);
+  }
 }

@@ -13,6 +13,8 @@ import java.io.Serializable;
 public interface SpStudent extends Serializable,LastModifier,EditType<MutableSpStudent>,Identifier<String> {
 
   Program getProgram() throws Exception;
+  String getProgramShortName();
+  int getApplicationType();
   Semester getSemester() throws Exception;
   int getAcademicYear();
   int getAcademicSemester();

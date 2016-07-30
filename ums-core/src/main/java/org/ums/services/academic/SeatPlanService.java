@@ -10,5 +10,5 @@ import java.util.Map;
  */
 public interface SeatPlanService {
   GenericResponse<Map> generateGroup(final int pNewSemesterId, final int pExamType) throws Exception;
-  GenericResponse<Map> generateSeatPlan(final int pSemesterId,final int pGroupNo,final int pExamType) throws  Exception;
+  GenericResponse<Map> generateSeatPlan(final int pSemesterId,final int pGroupNo,final int pExamType,final String pExamDate) throws  Exception;
 }

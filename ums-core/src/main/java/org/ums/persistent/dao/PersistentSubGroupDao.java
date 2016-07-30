@@ -75,7 +75,7 @@ public class PersistentSubGroupDao extends SubGroupDaoDecorator{
 
   @Override
   public List<SubGroup> getSubGroupMembers(int pSemesterId, int pExamTYpe, int pGroupNo, int pSubGroupNo) {
-    String query = SELECT_ALL+" WHERE SEMESTER_ID=? AND EXAM_TYPE=? AND GROUP_NO=? AND SUB_GROUP_NO=? ORDER BY ID ASC";
+    String query = SELECT_ALL+" and  s.SEMESTER_ID=? AND s.EXAM_TYPE=? AND s.GROUP_NO=? AND s.SUB_GROUP_NO=? ORDER BY ID ASC";
     return mJdbcTemplate.query(query,new Object[]{pSemesterId,pExamTYpe,pGroupNo,pSubGroupNo},new SubGroupRowMapper());
   }
 

@@ -33,6 +33,8 @@ public class PersistentSpStudent implements MutableSpStudent {
   private int mAcademicYear;
   private int mAcademicSemester;
   private int mStatus;
+  private String mProgramShortname;
+  private Integer mApplicationType;
   private String mLastModified;
 
   public PersistentSpStudent(){
@@ -48,8 +50,30 @@ public class PersistentSpStudent implements MutableSpStudent {
     mAcademicYear = pPersistentSpStudent.getAcademicYear();
     mAcademicSemester = pPersistentSpStudent.getAcademicSemester();
     mStatus = pPersistentSpStudent.getStatus();
+    mProgramShortname = pPersistentSpStudent.getProgramShortName();
+    mApplicationType = pPersistentSpStudent.getApplicationType();
     mLastModified = pPersistentSpStudent.getLastModified();
 
+  }
+
+  @Override
+  public void setProgramShortName(String pProgramShortName) {
+    mProgramShortname=pProgramShortName;
+  }
+
+  @Override
+  public void setApplicationType(Integer pApplicationType) {
+    mApplicationType = pApplicationType;
+  }
+
+  @Override
+  public String getProgramShortName() {
+    return mProgramShortname;
+  }
+
+  @Override
+  public int getApplicationType() {
+    return mApplicationType;
   }
 
   public int getSemesterId() {

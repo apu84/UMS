@@ -13,6 +13,7 @@ import java.io.Serializable;
 public interface SeatPlanGroup extends Serializable,LastModifier,EditType<MutableSeatPlanGroup>,Identifier<Integer> {
   Semester getSemester() throws Exception;
   Program getProgram() throws Exception;
+  int getProgramId();
   int getAcademicYear();
   int getAcademicSemester();
   int getGroupNo();

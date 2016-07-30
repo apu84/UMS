@@ -68,6 +68,9 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan,MutableSeatP
   @Autowired
   private SubGroupManager mSubGroupManager;
 
+  @Autowired
+  private SubGroupCCIManager mSubGroupCCIManager;
+
   public static final String DEST = "I:/pdf/seat_plan_report.pdf";
 
 
@@ -110,7 +113,7 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan,MutableSeatP
   }
 
 
-  public void createOrCheckSeatPlanAndReturnRoomList(final int pSemesterId, final int groupNo, final int type, OutputStream pOutputStream, final Request pRequest, final UriInfo pUriInfo) throws Exception,IOException{
+  public void createOrCheckSeatPlanAndReturnRoomList(final int pSemesterId, final int groupNo, final int type,final String examDate, OutputStream pOutputStream, final Request pRequest, final UriInfo pUriInfo) throws Exception,IOException{
     GenericResponse<Map> genericResponse = null, previousResponse = null;
 
 
@@ -122,26 +125,47 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan,MutableSeatP
     boolean noSeatPlanInfo;
     boolean seatPlanOfTheGroupFound=false;
     if(allSeatPlans.size()>0){
-      List<SeatPlan> seatPlanOfTheGroup = mManager.getBySemesterAndGroupAndExamType(pSemesterId,groupNo,type);
-      if(seatPlanOfTheGroup.size()>0){
-        seatPlanOfTheGroupFound=true;
+      if(groupNo==0){
+        List<SeatPlan> seatPlanOfTheGroup = mManager.getBySemesterAndGroupAndExamTypeAndExamDate(pSemesterId,groupNo,type,examDate);
+        if(seatPlanOfTheGroup.size()>0){
+          seatPlanOfTheGroupFound=true;
+        }
       }
+      else{
+        List<SeatPlan> seatPlanOfTheGroup = mManager.getBySemesterAndGroupAndExamType(pSemesterId,groupNo,type);
+        if(seatPlanOfTheGroup.size()>0){
+          seatPlanOfTheGroupFound=true;
+        }
+      }
+
     }
 
     if(seatPlanOfTheGroupFound){
 
         noSeatPlanInfo = false;
-         mSeatPlanReportGenerator.createPdf(DEST,noSeatPlanInfo,pSemesterId,groupNo,type,pOutputStream);
+         mSeatPlanReportGenerator.createPdf(DEST,noSeatPlanInfo,pSemesterId,groupNo,type,examDate,pOutputStream);
 
     }else{
-      List<SubGroup> subGroupOfTheGroup = mSubGroupManager.getBySemesterGroupNoAndType(pSemesterId,groupNo,type);
-      if(subGroupOfTheGroup.size()>0){
-        genericResponse = mSeatPlanService.generateSeatPlan(pSemesterId,groupNo,type);
-        noSeatPlanInfo = false;
-      }else{
-        noSeatPlanInfo=true;
+      if(groupNo==0){
+        List<SubGroupCCI> subGroupCCIs = mSubGroupCCIManager.getBySemesterAndExamDate(pSemesterId,examDate);
+        if(subGroupCCIs.size()>0){
+          genericResponse = mSeatPlanService.generateSeatPlan(pSemesterId,groupNo,type,examDate);
+          noSeatPlanInfo = false;
+        }else{
+          noSeatPlanInfo=true;
+        }
       }
-       mSeatPlanReportGenerator.createPdf(DEST,noSeatPlanInfo,pSemesterId,groupNo,type,pOutputStream);
+      else{
+        List<SubGroup> subGroupOfTheGroup = mSubGroupManager.getBySemesterGroupNoAndType(pSemesterId,groupNo,type);
+        if(subGroupOfTheGroup.size()>0){
+          genericResponse = mSeatPlanService.generateSeatPlan(pSemesterId,groupNo,type,examDate);
+          noSeatPlanInfo = false;
+        }else{
+          noSeatPlanInfo=true;
+        }
+      }
+
+       mSeatPlanReportGenerator.createPdf(DEST,noSeatPlanInfo,pSemesterId,groupNo,type,examDate,pOutputStream);
 
     }
 

@@ -57,7 +57,8 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
   public static final String DEST = "seat_plan_report.pdf";
 
   @Override
-  public void createPdf(String dest, boolean noSeatPlanInfo, int pSemesterId, int groupNo, int type,OutputStream pOutputStream) throws Exception, IOException, DocumentException,WebApplicationException {
+  public void createPdf(String dest, boolean noSeatPlanInfo, int pSemesterId, int groupNo, int type,String examDate,OutputStream pOutputStream) throws Exception, IOException, DocumentException,WebApplicationException {
+
 
 
 
@@ -83,7 +84,14 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
     String examDates = "Date: ";
     java.util.List<SeatPlanGroup> seatPlanGroup = mSeatPlanGroupManager.getBySemesterGroupAndType(pSemesterId,groupNo,type) ;
     java.util.List<ExamRoutineDto> examRoutines = mExamRoutineManager.getExamRoutine(pSemesterId,type);
-    java.util.List<SeatPlan> seatPlans = mSeatPlanManager.getBySemesterAndGroupAndExamType(pSemesterId,groupNo,type);
+    java.util.List<SeatPlan> seatPlans;
+    if(groupNo==0){
+      seatPlans=mSeatPlanManager.getBySemesterAndGroupAndExamTypeAndExamDate(pSemesterId,groupNo,type,examDate);
+    }
+    else{
+      seatPlans= mSeatPlanManager.getBySemesterAndGroupAndExamType(pSemesterId,groupNo,type);
+
+    }
     java.util.List<SpStudent> students = mSpStudentManager.getAll();
     java.util.List<Program> programs = mProgramManager.getAll();
 
@@ -109,25 +117,32 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
     }
 
     int routineCounter=0;
-    for(ExamRoutineDto routine:examRoutines){
-      SeatPlanGroup group = seatPlanGroup.get(0);
+    if(examDate.equals("null")){
+      for(ExamRoutineDto routine:examRoutines){
+        SeatPlanGroup group = seatPlanGroup.get(0);
 
-      if(routine.getProgramId() == group.getProgram().getId() && routine.getCourseYear()==group.getAcademicYear() && routine.getCourseSemester()== group.getAcademicSemester()){
+        if(routine.getProgramId() == group.getProgramId() && routine.getCourseYear()==group.getAcademicYear() && routine.getCourseSemester()== group.getAcademicSemester()){
 
-        if(routineCounter==examRoutines.size()){
-          examDates = examDates+routine.getExamDate();
-        }else{
-          if(examDates.equals("Date: ")){
-            examDates=examDates+routine.getExamDate();
+          if(routineCounter==examRoutines.size()){
+            examDates = examDates+routine.getExamDate();
           }else{
-            examDates=examDates+", "+routine.getExamDate();
+            if(examDates.equals("Date: ")){
+              examDates=examDates+routine.getExamDate();
+            }else{
+              examDates=examDates+", "+routine.getExamDate();
+            }
+
           }
-
         }
-      }
-      routineCounter+=1;
+        routineCounter+=1;
 
+      }
     }
+    else{
+      //examDate="";
+      examDates="Date: "+examDate;
+    }
+
     long startTimeOfTheMainAlgorithm= System.currentTimeMillis();
 
     if(noSeatPlanInfo){
@@ -179,7 +194,14 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
           for(int i=1;i<=room.getTotalRow();i++){
             for(int j=1;j<=room.getTotalColumn();j++){
               SeatPlan seatPlanOfTheRowAndCol = roomRowColWithSeatPlanMap.get(room.getId()+""+i+""+j) ;
-              int ifSeatPlanExist = mSeatPlanManager.checkIfExistsBySemesterGroupTypeRoomRowAndCol(pSemesterId,groupNo,type,room.getId(),i,j);
+              int ifSeatPlanExist;
+              if(groupNo==0){
+                ifSeatPlanExist = mSeatPlanManager.checkIfExistsBySemesterGroupTypeExamDateRoomRowAndCol(pSemesterId,groupNo,type,examDate,room.getId(),i,j);
+              }
+              else{
+                ifSeatPlanExist= mSeatPlanManager.checkIfExistsBySemesterGroupTypeRoomRowAndCol(pSemesterId,groupNo,type,room.getId(),i,j);
+
+              }
 
               if(seatPlanOfTheRowAndCol!=null){
                 SeatPlan seatPlan = seatPlanOfTheRowAndCol;                                  //roomRowColWithSeatPlanMap.get(room.getId()+""+i+""+j) ;

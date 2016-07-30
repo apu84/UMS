@@ -79,7 +79,10 @@ module ums{
     //cci
 
     subGroup1ListTest:any;  //this is for test purpose
+    confirmation:boolean;
     cciSelected:boolean;
+    customeMenu:boolean;
+    loadingVisibilityForCCI:boolean;
     pdfGenerator:boolean;
     recreate:boolean;
     showContextMenu:boolean;
@@ -147,6 +150,7 @@ module ums{
     cancelSplit:Function;
     showStatistics:Function;
     splitActionUpdate:Function;
+    getSeatPlanInfoCCi:Function;
     //cci
     createCCI:Function;
     showCCI:Function;
@@ -159,6 +163,10 @@ module ums{
     cancelEditedSubGroup:Function;
     createNewSubGroup:Function;
     getMouseClickEvent:Function;
+    viewCCI:Function;
+    deleteAndRecreate:Function;
+    cancelRecreation:Function;
+    deleteExistingSubGroupCCI:Function;
   }
 
   interface IExamRoutineCCI{
@@ -252,6 +260,7 @@ module ums{
 
       var arr : { [key:number]:Array<ISeatPlanGroup>; } = {};
       $scope.mergeIdList=[];
+      $scope.loadingVisibilityForCCI = false;
       $scope.cciSelected=false;
       $scope.cciSelected = false;
       $scope.splitActionOccured = false;
@@ -270,6 +279,7 @@ module ums{
       $scope.saveSubGroupInfo = false;
       $scope.editButtonClicked=false;
       $scope.recreateButtonClicked=false;
+      $scope.customeMenu=false;
       $scope.pdfGenerator=false;
       $scope.deleteAndCreateNewSubGroup = false;
       $scope.showContextMenu=false;
@@ -316,7 +326,6 @@ module ums{
       $scope.getSelectedGroupList = this.getSelectedGroupList.bind(this);
       $scope.getGroupInfoFromSelectedSubGroup = this.getGroupInfoFromSelectedSubGroup.bind(this);
       $scope.deleteExistingSubGroupInfo  = this.deleteExistingSubGroupInfo.bind(this);
-      $scope.createDroppable = this.createDroppable.bind(this);
       $scope.editSavedSubGroup = this.editSavedSubGroup.bind(this);
       $scope.createNewSubGroup = this.createNewSubGroup.bind(this);
       $scope.getSeatPlanInfo = this.getSeatPlanInfo.bind(this);
@@ -324,18 +333,7 @@ module ums{
       $scope.cancelEditedSubGroup = this.cancelEditedSubGroup.bind(this);
       $scope.showGroups = this.showGroups.bind(this);
       $scope.splitACourseStudent = this.splitCourseStudent.bind(this);
-      $scope.splitAction = this.splitAction.bind(this);
       $scope.cancelSplitAction = this.cancelSplitAction.bind(this);
-      $scope.mouseClickEvent = this.mouseClickEvent.bind(this);
-      $scope.revertSplitAction = this.revertSplitAction.bind(this);
-      $scope.reCreate = this.reCreate.bind(this);
-      $scope.refreshSortables = this.refreshSubGroups.bind(this);
-      $scope.changeTotalStudentNumberForSplitAction = this.changeTotalStudentNumberForSplitAction.bind(this);
-      $scope.mergeInitialization = this.mergeInitialization.bind(this);
-      $scope.mergeGroups = this.mergeGroups.bind(this);
-      $scope.makeSortableEmpty = this.makeSortableEmpty.bind(this);
-      $scope.makeSortableCancel = this.makeSortableCancel.bind(this);
-      $scope.makeSortableEnable = this.makeSortableEnable.bind(this);
       $scope.getExamRoutineInfoForCCI = this.getExamRoutineCCIInfo.bind(this);
       $scope.getApplicationCCIInfoForSubGroup = this.getApplicationCCIInfoForSubGroup.bind(this);
       $scope.generateIterationNumberArray = this.generateIterationNumberArray.bind(this);
@@ -346,6 +344,11 @@ module ums{
       $scope.showStatistics = this.showStatistics.bind(this);
       $scope.splitActionUpdate = this.splitActionUpdate.bind(this);
       $scope.mergeUpdate = this.mergeUpdate.bind(this);
+      $scope.viewCCI = this.viewCCI.bind(this);
+      $scope.getSeatPlanInfoCCi = this.getSeatPlanInfoCCi.bind(this);
+      $scope.deleteAndRecreate = this.deleteAndRecreate.bind(this);
+      $scope.cancelRecreation = this.cancelRecreation.bind(this);
+      $scope.deleteExistingSubGroupCCI = this.deleteExistingSubGroupCCI.bind(this);
 
       this.initialize();
 
@@ -412,25 +415,38 @@ module ums{
       this.$scope.mouseClickedObject.backgroundColor="#EA8A8A";
       this.$scope.mouseClickedObjectStore=[];
       this.$scope.mouseClickedObjectStore.push(this.$scope.mouseClickedObject);
+
+      this.showStatistics();
+      this.$scope.customeMenu=false;
     }
 
     private splitActionUpdate(object:any,splitNumber:number){
-      var currentStudentNumber:number = angular.copy(object.studentNumber);
-      console.log(currentStudentNumber);
-      console.log(splitNumber);
-      //this.$scope.splitNumber=splitNumber;
-      object.studentNumber = +splitNumber;
-      object.showSubPortion=false;
-      object.backgroundColor="#EA8A8A";
-
-      var newObject:ISeatPlanGroup = angular.copy(object);
-      newObject.studentNumber=currentStudentNumber-object.studentNumber;
-
-      this.$scope.tempGroupList.push(newObject);
-      console.log("================");
+      console.log("in the split action");
       console.log(object);
+      if(splitNumber>object.studentNumber){
+        this.$window.alert("Split number must be smaller than the current student number!");
+      }
+      else{
+        var currentStudentNumber:number = angular.copy(object.studentNumber);
+        console.log(currentStudentNumber);
+        console.log(splitNumber);
+        //this.$scope.splitNumber=splitNumber;
+        object.studentNumber = +splitNumber;
+        object.showSubPortion=false;
+        object.backgroundColor="#EA8A8A";
 
-      this.showStatistics();
+        var newObject:ISeatPlanGroup = angular.copy(object);
+        newObject.studentNumber=currentStudentNumber-object.studentNumber;
+
+        this.$scope.tempGroupList.push(newObject);
+        console.log("================");
+        console.log(object);
+
+        this.showStatistics();
+      }
+      this.$scope.customeMenu=false;
+      console.log("this is custom menu******");
+      console.log(this.$scope.customeMenu);
 
     }
 
@@ -449,25 +465,28 @@ module ums{
 
 
     private getMouseClickEvent(object:any){
+      this.$scope.customeMenu=true;
       if(this.$scope.mouseClickedObject!=object){
         this.$scope.mouseClickedObject={};
 
         this.$scope.mouseClickedObject=object;
         console.log("exam type:"+ this.$scope.examType);
         if(this.$scope.mouseClickedObjectStore.length==0){
+
           this.$scope.mouseClickedObjectStore.push(object);
+
         }else{
 
           var foundMisMatch:boolean=false;
           for(var i=0;i<this.$scope.mouseClickedObjectStore.length;i++){
             if(this.$scope.cciSelected){
-              if(this.$scope.mouseClickedObjectStore[i].courseId!=object.courseId){
+              if(this.$scope.mouseClickedObjectStore[i].courseId!=object.courseId || this.$scope.mouseClickedObjectStore[i]==object){
                 console.log('found mismatch');
                 foundMisMatch=true;
                 break;
               }
             }else{
-              if(this.$scope.mouseClickedObjectStore[i].id!=object.id){
+              if(this.$scope.mouseClickedObjectStore[i].id!=object.id || this.$scope.mouseClickedObjectStore[i]==object){
                 console.log('found mismatch');
                 foundMisMatch=true;
                 break;
@@ -487,6 +506,7 @@ module ums{
             console.log("--------after deletion----");
             this.$scope.mouseClickedObjectStore.push(object);
           }else{
+
             this.$scope.mouseClickedObjectStore.push(object);
           }
 
@@ -499,10 +519,20 @@ module ums{
 
     }
 
+    private viewCCI(examDate:string){
+      console.log('in the view cci');
+      this.$scope.examDate=examDate;
+      this.$scope.cciSelected=true;
+      this.$scope.editSubGroup=true;
+      this.$scope.recreate=true;
+      this.createOrViewSubgroups(4);
+    }
 
     private createCCI(examDate:string):void{
        // for application cci, examType=4;
+      this.$scope.classBodyBackgroundColor="#FAEBD7";
       this.$scope.cciSelected=true;
+      this.$scope.saveSubGroupInfo=true;
       this.getApplicationCCIInfoForSubGroup(examDate).then((subGroupCCiArr:Array<ISeatPlanGroup>)=>{
         this.createOrViewSubgroups(4);
       });
@@ -512,10 +542,12 @@ module ums{
       if(this.$scope.mouseClickedObject!=null){
         this.$scope.mouseClickedObject.showSubPortion=true;
       }
+      this.$scope.customeMenu=false;
     }
 
     private cancelSplit():void{
       this.$scope.mouseClickedObject.showSubPortion=false;
+      this.$scope.customeMenu=false;
     }
 
     private showGroups():void{
@@ -604,238 +636,13 @@ module ums{
       return noMatch;
     }
 
-    private splitAction(splitNumber:number):void{
-
-      console.log("*******************");
-      console.log('tempgrouplist:-->');
-      console.log(this.$scope.tempGroupList);
-      console.log("*******************");
-
-      this.$scope.splitActionOccured = true;
-      this.$scope.recreate = true;
-
-      for (var j = 0; j < this.$scope.tempGroupList.length; j++) {
-        var members =this.$scope.tempGroupList[j];
-        if (members.id == this.$scope.splitId) {
-
-          var tempArray:Array<ISeatPlanGroup>=[];
-          var memberStudentNumber :any={};
-          memberStudentNumber= members.studentNumber;
-          this.$scope.tempGroupList[j].studentNumber=0;
-          var leftStudentNumber = memberStudentNumber - splitNumber;
-          console.log("left student number: "+leftStudentNumber);
-          var previousMember = members;
-
-          this.$scope.tempGroupList[j].splitOccuranceNumber+=1;
-          this.$scope.tempGroupList[j].studentNumber = leftStudentNumber;
-          this.$scope.tempGroupList[j].showSubPortion = false;
-          this.$scope.tempGroupListAll[j].splitOccuranceNumber+=1;
-          this.$scope.tempGroupListAll[j].studentNumber=leftStudentNumber;
-          this.$scope.tempGroupListAll[j].showSubPortion=false;
-          this.$scope.tempGroupList[j].baseId = angular.copy(this.$scope.tempGroupList[j].baseId);
-          this.$scope.tempGroupListAll[j].baseId = angular.copy(this.$scope.tempGroupList[j].baseId);
-
-          //var newMember = tempMemberStore[j];
-          var newMember:any={};
-          newMember.groupNo=this.$scope.selectedGroupNo;
-          newMember.lastUpdated = members.lastUpdated;
-          newMember.programId = members.programId;
-          newMember.programName = members.programName;
-          newMember.semester = members.semester;
-          newMember.year = members.year;
-          newMember.semesterId = members.semesterId;
-          newMember.showSubPortion = false;
-          newMember.splitOccuranceNumber=0;
-          newMember.studentNumber = +splitNumber;
-          newMember.showSubPortion = false;
-          var id = members.id;
-          var idString:string = id.toString();
-          if (newMember.splitOccuranceNumber == 0) {
-            var ocNumber:number = this.$scope.tempGroupList[j].splitOccuranceNumber;
-            idString = idString + ocNumber;
-            var noMatch:boolean=true;
-            noMatch = this.findIdMatch(+idString);
-            while(true){
-              idString = idString + ocNumber;
-              var noMatch:boolean=true;
-              noMatch = this.findIdMatch(+idString);
-              if(noMatch==true){
-                break;
-              }else{
-                ocNumber+=1;
-              }
-            }
-
-            newMember.splitOccuranceNumber = 1;
-          } else {
-            var idArr: Array<String> = idString.split("");
-            var lastInt: number = +(idArr[idArr.length - 1]);
-            lastInt = lastInt + 1;
-            idString = idArr.toString();
-            var noMatch:boolean=true;
-            var count:number=2;
-            while(true){
-              noMatch=this.findIdMatch(+idString);
-
-              if(noMatch==true){
-                break;
-              }else{
-                idString=idString+count;
-                count+=1;
-              }
-            }
-          }
-          var idNumeric = +idString;
-          newMember.id = idNumeric;
-
-          var text = newMember.programName+":"+newMember.year+"/"+newMember.semester+" ("+newMember.studentNumber+")";
-          var $li = $("<li style='background-color: #0a6aa1' class='ui-state-default' />").text(text);
-          $li.attr('id',newMember.id);
-          $("#splittedList").append($li);
-          //this.$scope.tempGroupList.push(newMember);
-          //$("#sortable").append(newMember);
-          /*this.createDroppable();*/
-
-          newMember.baseId =angular.copy(this.$scope.tempGroupList[j].baseId);
-
-          this.$scope.tempGroupListAll.push(newMember);
-          this.$scope.splittedGroupList.push(newMember);
-          //this.$scope.tempGroupList[i].groupMembers.push(tempArray[k]);
-
-          this.changeTotalStudentNumberForSplitAction();
-
-
-
-        } else {
-          //this.$scope.tempGroupList[i].groupMembers.push(members);
-          //this.$scope.tempGroupListAll.push(this.$scope.tempGroupList[j]);
-        }
-        /*this.$scope.tempGroupListAll=[];
-         this.$scope.tempGroupListAll = this.$scope.tempGroupList[i].groupMembers;*/
-      }
-
-
-      this.$scope.recreate=false;
-      console.log(this.$scope.tempGroupListAll);
-      //setTimeout(this.refreshSubGroups,2000);
-
-      /*/!*$("#sortable").sortable("refresh");
-       $("#sortable").sortable("refreshPositions");*!/
-       console.log(this.$scope.tempGroupListAll);*/
-
-    }
-
-    private changeTotalStudentNumberForSplitAction():void{
-      var totalSubGroupNumber:number=0;
-
-      if(this.$scope.subGroupFound){
-        totalSubGroupNumber=this.$scope.subGroupList.length;
-      }else{
-        totalSubGroupNumber = this.$scope.colForSubgroup ;
-      }
-      if(this.$scope.subGroupFound){
-        for(var i=1;i<=7;i++){
-          if(this.$scope.subGroupWithDeptMap[i]){
-            var members:Array<String>=[];
-
-            for(var j=0;j<this.$scope.tempGroupListAll.length;j++){
-              if(this.$scope.tempGroupListAll[j].subGroupNumber==i){
-                members.push(this.$scope.tempGroupListAll[j].id);
-              }
-            }
-
-            this.subGroupListChanged(i,members);
-          }
-
-        }
-      }else{
-        for(var i=1;i<=totalSubGroupNumber;i++){
-          var idString:string="#droppable"+i;
-          var idList = $(idString).sortable("toArray");
-          this.subGroupListChanged(i,idList);
-        }
-      }
 
 
 
 
 
 
-    }
 
-    private revertSplitAction():void{
-
-      for(var i=0;i<this.$scope.tempGroupListForSplitInversion.length;i++){
-        if(this.$scope.tempGroupListForSplitInversion[i].id == this.$scope.splitId){
-          this.$scope.tempGroupListAll[i].studentNumber=this.$scope.tempGroupListForSplitInversion[i].studentNumber;
-          this.$scope.tempGroupList[i].studentNumber=this.$scope.tempGroupListForSplitInversion[i].studentNumber;
-
-          this.$scope.tempGroupListAll[i].splitOccuranceNumber=0;
-          this.$scope.tempGroupList[i].splitOccuranceNumber=0;
-
-
-          for(var j=0;j<this.$scope.splittedGroupList.length;j++){
-            var id:number = this.$scope.splittedGroupList[j].id;
-            var idString:string = id.toString();
-            var idStringArr:Array<string> = idString.split("");
-
-            var splitId:number = this.$scope.splitId;
-            var splitIdStr:string = splitId.toString();
-            var splitIdArr:Array<string> = splitIdStr.split("");
-
-            var unMatchFound:boolean=false;
-
-            for(var k=0;k<splitIdArr.length;k++){
-              if(idStringArr[k]!=splitIdArr[k]){
-                unMatchFound = true;
-                break;
-              }
-            }
-            if(unMatchFound==false){
-              for(var x=0;x<this.$scope.tempGroupListAll.length;x++){
-                if(this.$scope.tempGroupListAll[x].id==(+idString)){
-                  this.$scope.tempGroupListAll.splice(x,1);
-                }
-              }
-              $('#'+idString).remove();
-            }
-          }
-
-        }
-      }
-
-      setTimeout(this.changeTotalStudentNumberForSplitAction(),2000);
-      //this.changeTotalStudentNumberForSplitAction();
-      //setTimeout(this.refreshSubGroups,2000);
-
-      if(!this.$scope.$$phase){
-        this.$scope.$apply();
-      }
-    }
-
-
-    private refreshSubGroups():void{
-
-      $("#sortable").sortable("refresh");
-      $("#splittedList").sortable("refresh");
-      if(this.$scope.subGroupFound==false || this.$scope.recreateButtonClicked==true){
-
-        $("#droppable1").sortable("refresh");
-        $("#droppable2").sortable("refresh");
-        $("#droppable3").sortable("refresh");
-        $("#droppable4").sortable("refresh");
-        $("#droppable5").sortable("refresh");
-        $("#droppable6").sortable("refresh");
-
-      }else{
-        $("sortable1").sortable("refresh");
-        $("sortable2").sortable("refresh");
-        $("sortable3").sortable("refresh");
-        $("sortable4").sortable("refresh");
-        $("sortable5").sortable("refresh");
-        $("sortable6").sortable("refresh");
-      }
-    }
 
     private splitCourseStudent(menuNumber:number):void{
 
@@ -996,7 +803,7 @@ module ums{
 
 
 
-        $("#splittedList").enableSelection();
+
 
         for(var i=0;i<this.$scope.groupList.length;i++){
           if(this.$scope.groupList[i].groupNumber==group){
@@ -1025,6 +832,7 @@ module ums{
       this.getSubGroupInfo().then((subGroupArr:Array<ISeatPlanGroup>)=>{
 
         this.$scope.classBodyBackgroundColor="yellow";
+        console.log("saved data");
         console.log(subGroupArr);
         if(subGroupArr.length>0 && this.$scope.recreateButtonClicked==false){
 
@@ -1072,9 +880,14 @@ module ums{
           this.$scope.deleteAndCreateNewSubGroup=true;
           console.log(this.$scope.subGroupWithDeptMap);
           //this.$scope.sortableOptionsIfSubGroupNotFound.
+          this.showStatistics();
+          console.log(this.$scope.tempGroupList);
+          this.$scope.saveSubGroupInfo=false;
 
         }
         else{
+          this.$scope.deleteAndCreateNewSubGroup=false;
+          this.$scope.editSubGroup=false;
           this.$scope.classBodyBackgroundColor="#FAEBD7";
           this.$scope.saveSubGroupInfo=true;
           this.$scope.sortableOptionsIfSubGroupNotFound={};
@@ -1090,7 +903,6 @@ module ums{
 
           if(this.$scope.recreateButtonClicked==false){
             this.$scope.subGroupFound = false;
-            this.reCreate();
 
           }
 
@@ -1118,155 +930,18 @@ module ums{
     }
 
 
-    private getBaseId(id:number):number{
-
-      var baseId:number;
-      var idStringBase = id.toString();
-      for(var i=0;i<this.$scope.tempGroupListAll.length;i++){
-        if(this.$scope.tempGroupListAll[i].id==id){
-          baseId = this.$scope.tempGroupListAll[i].baseId;
-          break;
-        }
-      }
-      return baseId;
-    }
-
-
-    private mergeGroups():void{
-      if(this.$scope.mergeIdList.length>1){
-        var studentNumber:number=0;
-
-        for(var i=0;i<this.$scope.mergeIdList.length;i++){
-          for(var j=0;j<this.$scope.tempGroupListAll.length;j++){
-            if(this.$scope.tempGroupListAll[j].id==this.$scope.mergeIdList[i]){
-              studentNumber+= this.$scope.tempGroupListAll[j].studentNumber;
-            }
-          }
-        }
-        for(var i=0;i<this.$scope.tempGroupListAll.length;i++){
-          if(this.$scope.tempGroupListAll[i].id==this.$scope.splitId){
-            this.$scope.tempGroupListAll[i].studentNumber = 0;
-            this.$scope.tempGroupListAll[i].studentNumber = studentNumber;
-
-          }
-        }
-
-        var indexForDelete:Array<number>=[];
-        var idString:Array<string>=[];
-        for(var i=0;i<this.$scope.mergeIdList.length;i++){
-          if(this.$scope.mergeIdList[i]!=this.$scope.splitId){
-
-
-
-            for(var j=0;j<this.$scope.tempGroupListAll.length;j++){
-              if(this.$scope.tempGroupListAll[j].id==this.$scope.mergeIdList[i]){
-                indexForDelete.push(j);
-                this.$scope.tempGroupListAll.splice(j,1);
-                var idNumeric = this.$scope.mergeIdList[i];
-                idString.push(idNumeric.toString());
-                break;
-
-              }
-            }
-          }
-        }
-
-        for(var i=0;i<indexForDelete.length;i++){
-
-          $('#'+idString[i]).remove();
-        }
-
-        this.$scope.mergeIdList=[];
-        this.$scope.mergeIdList.push(this.$scope.splitId);
-      }
-
-      if(!this.$scope.$$phase){
-        this.$scope.$apply();
-      }
-
-      this.changeTotalStudentNumberForSplitAction();
-
-    }
-
-    private mergeInitialization(id:string):void{
-
-      var idNum = +id;
-
-      if(this.$scope.mergeIdList.length==0){
-        this.$scope.mergeIdList.push(idNum);
-        $("#"+idNum).css("background-color","red");
-      }else{
-        var duplicateFound:boolean= false;
-        for(var i=0;i<this.$scope.mergeIdList.length;i++){
-          if(this.$scope.mergeIdList[i]==idNum){
-            duplicateFound=true;
-            break;
-          }
-        }
-
-        if(!duplicateFound){
-          this.$scope.mergeIdList.push(idNum);
-        }
-
-        var baseId:number;
-        var mismatchFound:boolean=false;
-        var baseIdFound:boolean=false;
-
-        for(var i=0;i<this.$scope.mergeIdList.length;i++){
-          if(i==0 && baseId==null){
-            baseId = this.getBaseId(this.$scope.mergeIdList[i]);
-          }else{
-            var tempBaseId:number = this.getBaseId(this.$scope.mergeIdList[i]);
-
-            if(baseId!=tempBaseId){
-              mismatchFound=true;
-              break;
-            }
-          }
-        }
-
-
-        if(mismatchFound==false){
-
-          $("#"+id).css("background-color","red");
-        }else{
-
-          for(var i=0;i<this.$scope.mergeIdList.length-1;i++){
-            var idString=this.$scope.mergeIdList[i].toString();
-            $("#"+idString).css("background-color","lightslategray");
-
-          }
-
-          $("#"+id).css("background-color","red");
-
-          this.$scope.mergeIdList=[];
-
-          this.$scope.mergeIdList.push(idNum);
-        }
-      }
-
-
-    }
-
-
-
-    private reCreate():void{
-      $("#droppable1").empty();
-      $("#droppable2").empty();
-      $("#droppable3").empty();
-      $("#droppable4").empty();
-      $("#droppable5").empty();
-      $("#droppable6").empty();
-      $("#splittedList").empty();
-      /* setTimeout(this.createOrViewSubgroups,2000);
-       //this.createOrViewSubgroups(this.$scope.selectedGroupNo);*/
-
-    }
 
 
 
 
-    private mouseClickEvent():void{
+
+
+
+
+
+
+
+  /*  private mouseClickEvent():void{
 
 
       setTimeout(myFunction, 2000)
@@ -1307,9 +982,9 @@ module ums{
           }
         });
 
-        /*with the mouse down jquery function, we are getting the event only of right button,
+        /!*with the mouse down jquery function, we are getting the event only of right button,
          * that's why the case is 3.
-         * with the line: $(this).attr('id') , we are getting the id when the right mouse button click event is triggered.*/
+         * with the line: $(this).attr('id') , we are getting the id when the right mouse button click event is triggered.*!/
         var classScope = this;
         $("#subGroupPanel li").mousedown(function(event){
           switch(event.which){
@@ -1336,7 +1011,7 @@ module ums{
 
 
 
-      /*Current scope will be used in replace of 'this' of angularjs, to jquery, else, jquery will not recognize that.*/
+      /!*Current scope will be used in replace of 'this' of angularjs, to jquery, else, jquery will not recognize that.*!/
       var currentScope = this;
 // If the menu element is clicked
       $(".custom-menu li").click(function(){
@@ -1358,233 +1033,53 @@ module ums{
         $(".custom-menu").hide(100);
       });
 
-    }
-    private createDroppable():void{
-
-      $("#sortable,#droppable1,#droppable2,#droppable3,#droppable4,#dropdown5,#droppable6,#splittedList,#sotable0").sortable({
-        connectWith: ".connectedSortable"
-
-      }).disableSelection();
+    }*/
 
 
 
-      //this.reCreate();
-      var classScope = this;
-      $("#sortable").sortable({
-        cursor:"move"
-      });
+    private createNewSubGroup():void{
+      console.log("in the create");
+      this.$scope.confirmation=true;
 
 
-      $("#splittedList").sortable({
-        connectWith:".connectedSortable",
-        cursor: "move",
-
-        items:"> li",
-        over:function(event,ui){
-          $("#splittedList").css("background-color","aqua");
-        },
-        receive:function(event,ui){
-          $("#splittedList").css("background-color","antiquewhite");
-        },
-
-        out:function(event,ui){
-          $("#splittedList").css("background-color","antiquewhite");
-        },
-        update:function(event,ui){
-          /*var result = $(this).sortable('toArray');
-           classScope.subGroupListChanged(1,result);*/
-        },
-      });
-      $('#droppable1').sortable({
-        cursor: "move",
-        connectWith:".connectedSortable",
-        items:"> li",
-        over:function(event,ui){
-          $("#droppable1").css("background-color","aqua");
-        },
-        receive:function(event,ui){
-          $("#droppable1").css("background-color","antiquewhite");
-        },
-
-        out:function(event,ui){
-          $("#droppable1").css("background-color","antiquewhite");
-        },
-        update:function(event,ui){
-          var result = $(this).sortable('toArray');
-          classScope.subGroupListChanged(1,result);
-        },
-
-        change:function(event,ui){
-        }
-      });
-      $('#droppable2').sortable({
-        cursor: "move",
-
-        connectWith:".connectedSortable",
-        items:"> li",
-        over:function(event,ui){
-          $("#droppable2").css("background-color","aqua");
-        },
-        receive:function(event,ui){
-          $("#droppable2").css("background-color","antiquewhite");
-        },
-
-        out:function(event,ui){
-          $("#droppable2").css("background-color","antiquewhite");
-        },
-
-        update:function(event,ui) {
-          var result = $(this).sortable('toArray');
-          classScope.$scope.subGroup2List = result;
-          classScope.subGroupListChanged(2,result);
-
-        },
-        change:function(event,ui){
-
-        }
-      });
-      $('#droppable3').sortable({
-        cursor: "move",
-
-        connectWith:".connectedSortable",
-        items:"> li",
-
-        over:function(event,ui){
-          $("#droppable3").css("background-color","aqua");
-        },
-        receive:function(event,ui){
-          $("#droppable3").css("background-color","antiquewhite");
-        },
-
-        out:function(event,ui){
-          $("#droppable3").css("background-color","antiquewhite");
-        },
-        update:function(event,ui) {
-          var result = $(this).sortable('toArray');
-          classScope.subGroupListChanged(3,result);
-
-        },
-        change:function(event,ui){
-
-        }
-      });
-      $('#droppable4').sortable({
-        cursor: "move",
-
-        connectWith:".connectedSortable",
-        items:"> li",
-        over:function(event,ui){
-          $("#droppable4").css("background-color","aqua");
-        },
-        receive:function(event,ui){
-          $("#droppable4").css("background-color","antiquewhite");
-        },
-
-        out:function(event,ui){
-          $("#droppable4").css("background-color","antiquewhite");
-        },
-        update:function(event,ui) {
-          var result = $(this).sortable('toArray');
-          classScope.subGroupListChanged(4,result);
-
-        },
-        change:function(event,ui){
-
-        }
-      });
-      $('#droppable5').sortable({
-        cursor: "move",
-
-        connectWith:".connectedSortable",
-        items:"> li",
-        over:function(event,ui){
-          $("#droppable5").css("background-color","aqua");
-        },
-        receive:function(event,ui){
-          $("#droppable5").css("background-color","antiquewhite");
-        },
-
-        out:function(event,ui){
-          $("#droppable5").css("background-color","antiquewhite");
-        },
-        update:function(event,ui) {
-          var result = $(this).sortable('toArray');
-          classScope.subGroupListChanged(5,result);
-
-        },
-        change:function(event,ui){
-
-        }
-      });
-      $('#droppable6').sortable({
-        cursor: "move",
-
-        connectWith:".connectedSortable",
-        items:"> li",
-        over:function(event,ui){
-          $("#droppable6").css("background-color","aqua");
-        },
-        receive:function(event,ui){
-          $("#droppable6").css("background-color","antiquewhite");
-        },
-
-        out:function(event,ui){
-          $("#droppable6").css("background-color","antiquewhite");
-        },
-        update:function(event,ui) {
-          var result = $(this).sortable('toArray');
-          classScope.subGroupListChanged(6,result);
-
-        },
-        change:function(event,ui){
-
-        }
-      });
-
-      $("#sortable").sortable("enable");
-      $("#droppable1").sortable("enable");
-      $("#droppable2").sortable("enable");
-      $("#droppable3").sortable("enable");
-      $("#droppable4").sortable("enable");
-      $("#droppable5").sortable("enable");
-      $("#droppable6").sortable("enable");
-
-    }
-
-
-    private createNewSubGroup(groupNo:number):void{
-
-      /*this.makeSortableEmpty();
-
-
-      this.$scope.recreateButtonClicked=true;
-      this.$scope.subGroupFound = false;
-      this.$scope.editSubGroup = false;
-      this.$scope.cancelSubGroup = true;
-      this.$scope.deleteAndCreateNewSubGroup = false;
-      this.$scope.selectedGroupNo = groupNo;
-      this.$scope.showSubGroupSelectionNumber=true;
-      this.createOrViewSubgroups(groupNo);
-      this.$scope.colForSubgroup=0;
-      this.$scope.groupNoForSubGroup = groupNo;
-      $("#splittedList").empty();
-      setTimeout(myFunc,2000);
-      function myFunc(){
-        $( "#subGroupPanel").unbind( "mousedown" );
-        $("#subGroupPanel li").unbind("contextmenu");
-        $("#ifti_div").unbind("contextmenu");
+     /* this.$scope.recreateButtonClicked=true;
+      this.$scope.editSubGroup=false;
+      this.$scope.saveSubGroupInfo=true;
+      if(this.$scope.cciSelected){
+        this.createCCI(this.$scope.examDate);
+      }else{
+        this.createOrViewSubgroups(this.$scope.selectedGroupNo);
       }*/
+
+    }
+
+    private deleteAndRecreate(){
+      this.$scope.confirmation=false;
+      if(this.$scope.cciSelected){
+        this.deleteExistingSubGroupCCI();
+
+      }
+      else{
+        var groupNo:number=+this.$scope.selectedGroupNo;
+        this.deleteExistingSubGroupInfo(groupNo);
+      }
 
       this.$scope.recreateButtonClicked=true;
       this.$scope.editSubGroup=false;
       this.$scope.saveSubGroupInfo=true;
       if(this.$scope.cciSelected){
-        this.createOrViewSubgroups(4);
+        this.createCCI(this.$scope.examDate);
       }else{
         this.createOrViewSubgroups(this.$scope.selectedGroupNo);
       }
 
     }
+
+    private cancelRecreation(){
+      this.$scope.confirmation=false;
+
+    }
+
 
     private unbindJqueryFunctionality():void{
       $( "#subGroupPanel").unbind( "mousedown" );
@@ -1604,245 +1099,7 @@ module ums{
     }
 
     private editSavedSubGroup():void{
-      /*$(".connectedSortable").css("background-color","skyblue");
 
-      this.$scope.showContextMenu=true;
-      this.$scope.editButtonClicked=true;
-      this.$scope.saveSubGroupInfo=true;
-      this.$scope.cancelSubGroup = true;
-      this.$scope.deleteAndCreateNewSubGroup = false;
-      this.$scope.editSubGroup = false;
-
-
-
-
-      $("#sortable,#sortable1,#sortable2,#sortable3,#sortable4,#sortable5,#sortable6,#splittedList,#sortable0").sortable({
-        connectWith: ".connectedSortable"
-      });
-
-      $("#sortable0").sortable("enable");
-      $("#sortable").sortable("enable");
-      $("#sortable1").sortable("enable");
-      $("#sortable2").sortable("enable");
-      $("#sortable3").sortable("enable");
-      $("#sortable4").sortable("enable");
-      $("#sortable5").sortable("enable");
-      $("#sortable6").sortable("enable");
-
-
-      var classScope = this;
-      $("#sortable").sortable({
-        connectWith:".connectedSortable",
-        cursor: "move",
-
-        items:"> li",
-        over:function(event,ui){
-          $("#sortable").css("background-color","aqua");
-        },
-        receive:function(event,ui){
-          $("#sortable").css("background-color","antiquewhite");
-        },
-
-        out:function(event,ui){
-          $("#sortable").css("background-color","antiquewhite");
-        }
-      });
-      $("#sortable0").sortable({
-        connectWith:".connectedSortable",
-        cursor: "move",
-
-        items:"> li",
-        over:function(event,ui){
-          $("#splittedList").css("background-color","aqua");
-        },
-        receive:function(event,ui){
-          $("#splittedList").css("background-color","antiquewhite");
-        },
-
-        out:function(event,ui){
-          $("#splittedList").css("background-color","antiquewhite");
-        },
-        update:function(event,ui) {
-          var result = $(this).sortable('toArray');
-          classScope.subGroupListChanged(7,result);
-
-        }
-      });
-      $("#splittedList").sortable({
-        connectWith:".connectedSortable",
-        cursor: "move",
-
-        items:"> li",
-        over:function(event,ui){
-          $("#splittedList").css("background-color","aqua");
-        },
-        receive:function(event,ui){
-          $("#splittedList").css("background-color","antiquewhite");
-        },
-
-        out:function(event,ui){
-          $("#splittedList").css("background-color","antiquewhite");
-        }
-      });
-      $('#sortable1').sortable({
-        connectWith:".connectedSortable",
-        cursor: "move",
-
-        items:"> li",
-        over:function(event,ui){
-          $("#sortable1").css("background-color","aqua");
-        },
-        receive:function(event,ui){
-          $("#sortable1").css("background-color","antiquewhite");
-        },
-
-        out:function(event,ui){
-          $("#sortable1").css("background-color","antiquewhite");
-        },
-        update:function(event,ui) {
-          var result = $(this).sortable('toArray');
-          classScope.subGroupListChanged(1,result);
-
-        },
-
-        change:function(event,ui){
-
-
-        }
-      });
-      $('#sortable2').sortable({
-        connectWith:".connectedSortable",
-        cursor: "move",
-
-        items:"> li",
-
-        over:function(event,ui){
-          $("#sortable2").css("background-color","aqua");
-        },
-        receive:function(event,ui){
-          $("#sortable2").css("background-color","antiquewhite");
-        },
-
-        out:function(event,ui){
-          $("#sortable2").css("background-color","antiquewhite");
-        },
-        update:function(event,ui) {
-          var result = $(this).sortable('toArray');
-          classScope.subGroupListChanged(2,result);
-
-        },
-        change:function(event,ui){
-
-        }
-      });
-      $('#sortable3').sortable({
-        connectWith:".connectedSortable",
-        cursor: "move",
-
-        items:"> li",
-
-        over:function(event,ui){
-          $("#sortable3").css("background-color","aqua");
-        },
-        receive:function(event,ui){
-          $("#sortable3").css("background-color","antiquewhite");
-        },
-
-        out:function(event,ui){
-          $("#sortable3").css("background-color","antiquewhite");
-        },
-        update:function(event,ui) {
-          var result = $(this).sortable('toArray');
-          classScope.subGroupListChanged(3,result);
-
-        },
-        change:function(event,ui){
-
-        }
-      });
-      $('#sortable4').sortable({
-        connectWith:".connectedSortable",
-        cursor: "move",
-
-        items:"> li",
-
-        over:function(event,ui){
-          $("#sortable4").css("background-color","aqua");
-        },
-        receive:function(event,ui){
-          $("#sortable4").css("background-color","antiquewhite");
-        },
-
-        out:function(event,ui){
-          $("#sortable4").css("background-color","antiquewhite");
-        },
-        update:function(event,ui) {
-          var result = $(this).sortable('toArray');
-          classScope.subGroupListChanged(4,result);
-
-        },
-        change:function(event,ui){
-
-        }
-      });
-      $('#sortable5').sortable({
-        connectWith:".connectedSortable",
-        cursor: "move",
-
-        items:"> li",
-        over:function(event,ui){
-          $("#sortable5").css("background-color","aqua");
-        },
-        receive:function(event,ui){
-          $("#sortable5").css("background-color","antiquewhite");
-        },
-
-        out:function(event,ui){
-          $("#sortable5").css("background-color","antiquewhite");
-        },
-        update:function(event,ui) {
-          var result = $(this).sortable('toArray');
-          classScope.subGroupListChanged(5,result);
-
-        },
-        change:function(event,ui){
-
-        }
-      });
-      $('#sortable6').sortable({
-        connectWith:".connectedSortable",
-        cursor: "move",
-
-        items:"> li",
-        over:function(event,ui){
-          $("#sortable6").css("background-color","aqua");
-        },
-        receive:function(event,ui){
-          $("#sortable6").css("background-color","antiquewhite");
-        },
-
-        out:function(event,ui){
-          $("#sortable6").css("background-color","antiquewhite");
-        },
-        update:function(event,ui) {
-          var result = $(this).sortable('toArray');
-          classScope.subGroupListChanged(6,result);
-
-        },
-        change:function(event,ui){
-
-        }
-      });
-
-      this.$scope.editSubGroup = false;
-      /!* if(!this.$scope.$digest()){
-       this.$scope.$apply();
-       }*!/
-
-      if(this.$scope.subGroupFound==false){
-        this.createOrViewSubgroups(groupNo);
-
-      }*/
 
       this.$scope.sortableOptionsIfSubGroupNotFound={};
       var currentScope = this;
@@ -1860,115 +1117,6 @@ module ums{
 
     }
 
-    private subGroupListChanged(subGroupNumber:number,result:any){
-
-      if(this.$scope.subGroupList.length ==0){
-        var subGroup:any={};
-        subGroup.subGroupNumber = subGroupNumber;
-
-        for(var j=0;j< this.$scope.tempGroupListAll.length;j++){
-
-          for(var m in result){
-            if(result[m]!=""){
-              if(this.$scope.tempGroupListAll[j].id == +result[m]){
-                subGroup.subGroupTotalStudentNumber= this.$scope.tempGroupListAll[j].studentNumber;
-                subGroup.subGroupMembers=[];
-                subGroup.subGroupMembers.push(this.$scope.tempGroupListAll[j]);
-                break;
-              }
-            }
-          }
-
-        }
-        this.$scope.subGroupList.push(subGroup);
-      }
-      else{
-        var subGroupFound= false;
-        for( var i=0;i< this.$scope.subGroupList.length;i++){
-          if(this.$scope.subGroupList[i].subGroupNumber == subGroupNumber){
-
-            this.$scope.subGroupList[i].subGroupMembers = [];
-            /*if(this.$scope.subGroupFound==true){
-             var subGroupName:string="Sub Group "+subGroupNumber;
-             var nameMember:any={};
-             nameMember.id="";
-             nameMember.programName=subGroupName
-             this.$scope.subGroupList[i].subGroupMembers.push(nameMember);
-             }*/
-            this.$scope.subGroupList[i].subGroupTotalStudentNumber = 0;
-
-            for(var m in result){
-              if(result[m] != "" ){
-                for(var j=0;j< this.$scope.tempGroupListAll.length;j++){
-                  if(this.$scope.tempGroupListAll[j].id == +result[m]){
-                    this.$scope.subGroupList[i].subGroupMembers.push(this.$scope.tempGroupListAll[j]);
-                    this.$scope.subGroupList[i].subGroupTotalStudentNumber+= this.$scope.tempGroupListAll[j].studentNumber;
-
-
-                    break;
-                  }
-                }
-              }
-            }
-
-            subGroupFound = true;
-
-            break;
-          }
-        }
-        if(subGroupFound==false){
-          var subGroup:any={};
-          subGroup.subGroupNumber = subGroupNumber;
-
-
-          for(var m in result){
-            if(result[m]!=""){
-              for(var j=0;j< this.$scope.tempGroupListAll.length;j++){
-
-                if(this.$scope.tempGroupListAll[j].id == +result[m]){
-                  subGroup.subGroupTotalStudentNumber= this.$scope.tempGroupListAll[j].studentNumber;
-                  subGroup.subGroupMembers=[];
-
-                  subGroup.subGroupMembers.push(this.$scope.tempGroupListAll[j]);
-                  break;
-                }
-              }
-            }
-
-          }
-          this.$scope.subGroupList.push(subGroup);
-        }
-      }
-
-
-      for(var i=0;i<this.$scope.subGroupList.length;i++){
-        if(this.$scope.subGroupList[i].subGroupNumber==1){
-          this.$scope.subGroup1StudentNumber = this.$scope.subGroupList[i].subGroupTotalStudentNumber;
-        }
-        else if(this.$scope.subGroupList[i].subGroupNumber==2){
-          this.$scope.subGroup2StudentNumber = this.$scope.subGroupList[i].subGroupTotalStudentNumber;
-        }
-        else if(this.$scope.subGroupList[i].subGroupNumber==3){
-          this.$scope.subGroup3StudentNumber = this.$scope.subGroupList[i].subGroupTotalStudentNumber;
-        }
-        else if(this.$scope.subGroupList[i].subGroupNumber==4){
-          this.$scope.subGroup4StudentNumber = this.$scope.subGroupList[i].subGroupTotalStudentNumber;
-        }
-        else if(this.$scope.subGroupList[i].subGroupNumber==5){
-          this.$scope.subGroup5StudentNumber = this.$scope.subGroupList[i].subGroupTotalStudentNumber;
-        }
-        else {
-          this.$scope.subGroup6StudentNumber = this.$scope.subGroupList[i].subGroupTotalStudentNumber;
-        }
-      }
-
-      if(!this.$scope.$$phase){
-        this.$scope.$apply();
-      }
-
-
-
-    }
 
 
     private saveSubGroup():void{
@@ -1985,6 +1133,7 @@ module ums{
 
       }
       this.saveSubGroupIntoDb(json).then((message:string)=>{
+        this.$scope.mouseClickedObjectStore=[];
         $.notific8(message);
         this.$scope.editButtonClicked=false;
         /*if(this.$scope.subGroupFound==false){
@@ -2020,7 +1169,7 @@ module ums{
         //$("#sortable").sortable("enable");
 
         if(this.$scope.recreateButtonClicked==false){
-          this.createDroppable();
+         /* this.createDroppable();*/
         }
         else{
 
@@ -2105,177 +1254,12 @@ module ums{
 
     }
 
-    private makeSortableCancel():void{
-      if($("#splittedList").hasClass('connectedSortable')){
-        $("#splittedList").sortable("destroy");
-      }
-      if($("#sortable").hasClass('connectedSortable')){
-        $("#sortable").sortable("destroy");
-      }
-      if($("#sortable1").hasClass('connectedSortable')){
-        $("#sortable1").sortable("destroy");
-      }
-      if($("#sortable2").hasClass('connectedSortable')){
-        $("#sortable2").sortable("destroy");
-      }
-      if($("#sortable3").hasClass('connectedSortable')){
-        $("#sortable3").sortable("destroy");
-      }
-      if($("#sortable4").hasClass('connectedSortable')){
-        $("#sortable4").sortable("destroy");
-      }
-      if($("#sortable5").hasClass('connectedSortable')){
-        $("#sortable5").sortable("destroy");
-      }
-      if($("#sortable6").hasClass('connectedSortable')){
-        $("#sortable6").sortable("destroy");
-      }
-      if($("#droppable1").hasClass('connectedSortable')){
-        $("#droppable1").sortable("destroy");
-      }
-      if($("#droppable2").hasClass('connectedSortable')){
-        $("#droppable2").sortable("destroy");
-      }
-      if($("#droppable3").hasClass('connectedSortable')){
-        $("#droppable3").sortable("destroy");
-      }
-      if($("#droppable4").hasClass('connectedSortable')){
-        $("#droppable4").sortable("destroy");
-      }
-      if($("#droppable5").hasClass('connectedSortable')){
-        $("#droppable5").sortable("destroy");
-      }
-      if($("#droppable6").hasClass('connectedSortable')){
-        $("#droppable6").sortable("destroy");
-      }
-    }
 
-    private makeSortableEnable():void{
-      if($("#splittedList").hasClass('connectedSortable')){
-        $("#splittedList").sortable("enable");
-      }
-      if($("#sortable").hasClass('connectedSortable')){
-        $("#sortable").sortable("enable");
-      }
-      if($("#sortable0").hasClass('connectedSortable')){
-        $("#sortable0").sortable("enable");
-      }
-      if($("#sortable1").hasClass('connectedSortable')){
-        $("#sortable1").sortable("enable");
-      }
-      if($("#sortable2").hasClass('connectedSortable')){
-        $("#sortable2").sortable("enable");
-      }
-      if($("#sortable3").hasClass('connectedSortable')){
-        $("#sortable3").sortable("enable");
-      }
-      if($("#sortable4").hasClass('connectedSortable')){
-        $("#sortable4").sortable("enable");
-      }
-      if($("#sortable5").hasClass('connectedSortable')){
-        $("#sortable5").sortable("enable");
-      }
-      if($("#sortable6").hasClass('connectedSortable')){
-        $("#sortable6").sortable("enable");
-      }
-      if($("#droppable1").hasClass('connectedSortable')){
-        $("#droppable1").sortable("enable");
-      }
-      if($("#droppable2").hasClass('connectedSortable')){
-        $("#droppable2").sortable("enable");
-      }
-      if($("#droppable3").hasClass('connectedSortable')){
-        $("#droppable3").sortable("enable");
-      }
-      if($("#droppable4").hasClass('connectedSortable')){
-        $("#droppable4").sortable("enable");
-      }
-      if($("#droppable5").hasClass('connectedSortable')){
-        $("#droppable5").sortable("enable");
-      }
-      if($("#droppable6").hasClass('connectedSortable')){
-        $("#droppable6").sortable("enable");
-      }
-    }
-
-    private makeSortableEmpty():void{
-      if($("#splittedList").hasClass('connectedSortable')){
-        $("#splittedList").empty();
-      }
-      if($("#sortable").hasClass('connectedSortable')){
-        $("#sortable").empty();
-      }
-      if($("#sortable0").hasClass('connectedSortable')){
-        $("#sortable0").empty();
-      }
-      if($("#sortable1").hasClass('connectedSortable')){
-        $("#sortable1").empty();
-      }
-      if($("#sortable2").hasClass('connectedSortable')){
-        $("#sortable2").empty();
-      }
-      if($("#sortable3").hasClass('connectedSortable')){
-        $("#sortable3").empty();
-      }
-      if($("#sortable4").hasClass('connectedSortable')){
-        $("#sortable4").empty();
-      }
-      if($("#sortable5").hasClass('connectedSortable')){
-        $("#sortable5").empty();
-      }
-      if($("#sortable6").hasClass('connectedSortable')){
-        $("#sortable6").empty();
-      }
-      if($("#droppable1").hasClass('connectedSortable')){
-        $("#droppable1").empty();
-      }
-      if($("#droppable2").hasClass('connectedSortable')){
-        $("#droppable2").empty();
-      }
-      if($("#droppable3").hasClass('connectedSortable')){
-        $("#droppable3").empty();
-      }
-      if($("#droppable4").hasClass('connectedSortable')){
-        $("#droppable4").empty();
-      }
-      if($("#droppable5").hasClass('connectedSortable')){
-        $("#droppable5").empty();
-      }
-      if($("#droppable6").hasClass('connectedSortable')){
-        $("#droppable6").empty();
-      }
-
-    }
 
 
     private closeSubGroupOrRoomInfoWindow():void{
 
 
-     /* this.makeSortableEmpty();
-
-      this.$scope.groupSelected = false;
-      this.$scope.subGroupSelected = false;
-      this.$scope.showGroupSelectionPanel = true;
-      this.$scope.recreateButtonClicked=false;
-      this.$scope.saveSubGroupInfo=false;
-      this.$scope.editButtonClicked=false;
-      this.$scope.cancelSubGroup = false;
-      this.$scope.showContextMenu = false;
-      this.$scope.subGroupList=[];
-      this.$scope.tempGroupList=[];
-      this.$scope.tempGroupListAll=[];
-      this.$scope.editSubGroup=false;
-      this.$scope.deleteAndCreateNewSubGroup=false;
-
-
-      setTimeout(myFunc,2000);
-
-      function myFunc(){
-        $( "#subGroupPanel").unbind( "mousedown" );
-        $("#subGroupPanel li").unbind("contextmenu");
-        $("#ifti_div").unbind("contextmenu");
-        $("#sortable").sortable("refresh");
-      }*/
       this.$scope.showGroupSelectionPanel = true;
       this.$scope.subGroupSelected = false;
       this.$scope.subGroupWithDeptMap={};
@@ -2329,7 +1313,7 @@ module ums{
     private getSubGroupInfo():ng.IPromise<any>{
       var defer = this.$q.defer();
       var subGroupDb:Array<ISeatPlanGroup>;
-      if(this.$scope.examType==4){
+      if(this.$scope.cciSelected){
         this.httpClient.get('/ums-webservice-common/academic/subGroupCCI/semester/'+this.$scope.semesterId+'/examDate/'+this.$scope.examDate,'application/json',
             (json:any,etag:string)=>{
               subGroupDb = json.entries;
@@ -2366,7 +1350,10 @@ module ums{
       var defer = this.$q.defer();
       var subGroupDb:string;
       this.$scope.pdfGenerator=true;
-      this.httpClient.get('/ums-webservice-common/academic/seatplan/semesterId/'+this.$scope.semesterId +'/groupNo/'+groupNo+'/type/'+this.$scope.examType,  'application/pdf',
+      if(this.$scope.examDate==null){
+        this.$scope.examDate="null";
+      }
+      this.httpClient.get('/ums-webservice-common/academic/seatplan/semesterId/'+this.$scope.semesterId +'/groupNo/'+groupNo+'/type/'+this.$scope.examType+'/examDate/null',  'application/pdf',
           (data:any, etag:string) => {
             var file = new Blob([data], {type: 'application/pdf'});
             var fileURL = this.$sce.trustAsResourceUrl(URL.createObjectURL(file));
@@ -2377,6 +1364,25 @@ module ums{
             console.error(response);
           },'arraybuffer');
 
+    }
+
+    private getSeatPlanInfoCCi(examDate:string):void{
+      var defer = this.$q.defer();
+      var subGroupDb:string;
+      this.$scope.loadingVisibilityForCCI=true;
+      var groupNo:number = 0;
+
+      this.httpClient.get('/ums-webservice-common/academic/seatplan/semesterId/'+this.$scope.semesterId +'/groupNo/'+groupNo+'/type/'+this.$scope.examType+'/examDate/'+examDate,  'application/pdf',
+          (data:any, etag:string) => {
+            var file = new Blob([data], {type: 'application/pdf'});
+            var fileURL = this.$sce.trustAsResourceUrl(URL.createObjectURL(file));
+            this.$window.open(fileURL);
+            this.$scope.loadingVisibilityForCCI=false;
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>) => {
+            console.error(response);
+            this.$scope.loadingVisibilityForCCI=false;
+          },'arraybuffer');
     }
 
     private getExamRoutineCCIInfo():ng.IPromise<any>{
@@ -2454,15 +1460,24 @@ module ums{
 
     private saveSubGroupIntoDb(json:any):ng.IPromise<any>{
       var defer = this.$q.defer();
-
+      console.log(json);
       if(this.$scope.cciSelected){
-        this.httpClient.post('academic/subGroupCCI/semester/'+this.$scope.semesterId+'/examDate/'+this.$scope.examDate,json,'application/json')
-          .success(()=>{
-            defer.resolve("Successfully Saved Sub Group Information");
-          })
-        .error((data)=>{
-            defer.resolve("Error in saving data");
-        });
+
+        var semesterId:number = +this.$scope.semesterId;
+
+        this.httpClient.put('academic/subGroupCCI/put/semester/'+this.$scope.semesterId+'/examDate/'+this.$scope.examDate,json,'application/json')
+            .success(()=>{
+              for(var i=0;i<this.$scope.examRoutineCCIArr.length;i++){
+                if(this.$scope.examRoutineCCIArr[i].examDate==this.$scope.examDate){
+                  this.$scope.examRoutineCCIArr[i].totalStudent=5;
+                  break;
+                }
+              }
+              defer.resolve("Sucessfully Saved Sub Group Information!");
+            })
+            .error((data)=>{
+              console.log(data);
+            });
 
       }else{
         this.httpClient.put('academic/subGroup/save/semester/'+this.$scope.semesterId+'/groupNo/'+this.$scope.selectedGroupNo+'/type/'+this.$scope.examType,json,'application/json')
@@ -2470,7 +1485,7 @@ module ums{
               defer.resolve("Sucessfully Saved Sub Group Information!");
             })
             .error((data)=>{
-
+              console.log(data);
             });
       }
 
@@ -2487,6 +1502,20 @@ module ums{
         console.log("Deletion failure");
         console.log(data);
       })
+    }
+
+    private deleteExistingSubGroupCCI(){
+      this.httpClient.delete('academic/subGroupCCI/semesterId/'+this.$scope.semesterId+'/examDate/'+this.$scope.examDate)
+          .success(()=>{
+              for(var i=0;i<this.$scope.examRoutineCCIArr.length;i++){
+                if(this.$scope.examRoutineCCIArr[i].examDate==this.$scope.examDate){
+                  this.$scope.examRoutineCCIArr[i].totalStudent=0;
+                  break;
+                }
+              }
+          }).error((data)=>{
+        console.log(data);
+      });
     }
 
     private convertToJsonForSubGroup(){
@@ -2530,17 +1559,7 @@ module ums{
         }
       }
 
-      /*for(var i=0;i<seatPlanJsonData.length;i++){
-        var item={};
-        item["subGroupNo"] = seatPlanJsonData[i].subGroupNo;
 
-        item["groupId"] = seatPlanJsonData[i].groupId;
-
-        item["position"] = seatPlanJsonData[i].position;
-        item["studentNumber"] = seatPlanJsonData[i].studentNumber;
-
-        jsonObj.push(item);
-      }*/
       completeJson["semesterId"] = this.$scope.semesterId;
       completeJson["groupNo"] = this.$scope.selectedGroupNo;
       completeJson["examType"] = this.$scope.examType;
@@ -2580,7 +1599,8 @@ module ums{
           }
         }
       }
-      return jsonObject;
+      completeJson["entries"] = jsonObject;
+      return completeJson;
 
     }
 

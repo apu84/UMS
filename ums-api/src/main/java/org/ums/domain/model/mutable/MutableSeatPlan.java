@@ -19,4 +19,5 @@ public interface MutableSeatPlan extends SeatPlan,Mutable,MutableLastModifier,Mu
   void setColumnNo(final int pColumnNo);
   void setExamType(final int pExamType);
   void setGroupNo(final int pGroupNo);
+  void setExamDate(final String pExamDate);
 }

@@ -40,6 +40,7 @@ public class PersistentSeatPlan implements MutableSeatPlan {
   private int mColNo;
   private int mGroupNo;
   private int mExamType;
+  private String mExamDate;
   private String mLastModified;
 
 
@@ -59,9 +60,19 @@ public class PersistentSeatPlan implements MutableSeatPlan {
     mColNo = pPersistentSeatPlan.getColumnNo();
     mGroupNo = pPersistentSeatPlan.getGroupNo();
     mExamType = pPersistentSeatPlan.getExamType();
+    mExamDate = pPersistentSeatPlan.getExamDate();
     mLastModified = pPersistentSeatPlan.getLastModified();
   }
 
+  @Override
+  public void setExamDate(String pExamDate) {
+    mExamDate = pExamDate;
+  }
+
+  @Override
+  public String getExamDate() {
+    return mExamDate;
+  }
 
   public int getClassRoomId() {
     return mClassRoomId;

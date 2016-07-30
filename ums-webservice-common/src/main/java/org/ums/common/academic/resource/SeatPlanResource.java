@@ -30,11 +30,12 @@ public class SeatPlanResource extends MutableSeatPlanResource{
   }
 
   @GET
-  @Path("/semesterId/{semesterId}/groupNo/{groupNo}/type/{type}")
+  @Path("/semesterId/{semesterId}/groupNo/{groupNo}/type/{type}/examDate/{exam-date}")
   @Produces("application/pdf")
   public StreamingOutput createOrViewSeatPlan(final @Context Request pRequest, final @PathParam("semesterId") String pSemesterId,
                                                        final @PathParam("groupNo") String pGroupNo,
-                                                       final @PathParam("type") String pType)throws Exception{
+                                                       final @PathParam("type") String pType,
+                                                       final @PathParam("exam-date") String pExamDate)throws Exception{
    /* StreamingOutput strem =  mSeatPlanResourceHelper.createOrCheckSeatPlanAndReturnRoomList(
         Integer.parseInt(pSemesterId),Integer.parseInt(pGroupNo),Integer.parseInt(pType),pRequest,mUriInfo
     );
@@ -53,7 +54,7 @@ public class SeatPlanResource extends MutableSeatPlanResource{
       public void write(OutputStream pOutputStream) throws IOException, WebApplicationException {
         try{
           mSeatPlanResourceHelper.createOrCheckSeatPlanAndReturnRoomList(
-              Integer.parseInt(pSemesterId),Integer.parseInt(pGroupNo),Integer.parseInt(pType),pOutputStream,pRequest,mUriInfo
+              Integer.parseInt(pSemesterId),Integer.parseInt(pGroupNo),Integer.parseInt(pType),pExamDate,pOutputStream,pRequest,mUriInfo
           );
         }catch (Exception e){
           throw new WebApplicationException(e);

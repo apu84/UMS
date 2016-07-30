@@ -121,7 +121,8 @@ module ums{
           this.$scope.loadingVisibility=false;
 
           if(this.$scope.responseResults.length>=1){
-
+            this.$scope.submitButtonClicked=false;
+            this.$window.alert("Error in saving data");
           }else{
             $.notific8("Successfully saved data");
             this.initializatino();

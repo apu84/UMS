@@ -15,4 +15,6 @@ public interface MutableSpStudent extends SpStudent,Mutable,MutableLastModifier,
   void setAcademicYear(final int pAcademicYear);
   void setAcademicSemester(final int pAcademicSemester);
   void setStatus(final int pStatus);
+  void setProgramShortName(final String pProgramShortName);
+  void setApplicationType(final Integer pApplicationType);
 }

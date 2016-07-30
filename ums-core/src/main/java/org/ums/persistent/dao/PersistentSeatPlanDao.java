@@ -18,8 +18,11 @@ import java.util.List;
  */
 public class PersistentSeatPlanDao extends SeatPlanDaoDecorator{
   String SELECT_ALL="SELECT ID,ROOM_ID,SEMESTER_ID,GROUP_NO,STUDENT_ID,ROW_NO,COL_NO,EXAM_TYPE,LAST_MODIFIED FROM SEAT_PLAN ";
+  String SELECT_ALL_CCI="SELECT ID,ROOM_ID,SEMESTER_ID,GROUP_NO,STUDENT_ID,ROW_NO,COL_NO,EXAM_TYPE,EXAM_DATE,LAST_MODIFIED FROM SEAT_PLAN ";
   String INSERT_ALL="INSERT INTO SEAT_PLAN(ROOM_ID,SEMESTER_ID,GROUP_NO,STUDENT_ID,ROW_NO,COL_NO,EXAM_TYPE,LAST_MODIFIED) VALUES" +
       " (?,?,?,?,?,?,?,"+ getLastModifiedSql()+" )";
+  String INSERT_ALL_CCI="INSERT INTO SEAT_PLAN(ROOM_ID,SEMESTER_ID,GROUP_NO,STUDENT_ID,ROW_NO,COL_NO,EXAM_TYPE,EXAM_DATE,LAST_MODIFIED) VALUES" +
+      " (?,?,?,?,?,?,?,to_date(?,'MM-DD-YYYY'),"+ getLastModifiedSql()+" )";
   String UPDATE_ALL="UPDATE SEAT_PLAN SET ROOM_ID=?,SEMESTER_ID=?,GROUP_NO=?,STUDENT_ID=?,ROW_NO=?," +
       "COL_NO=?,EXAM_TYPE=?,LAST_MODIFIED="+getLastModifiedSql()+" ";
   String DELETE_ALL = "DELETE FROM SEAT_PLAN ";
@@ -47,6 +50,12 @@ public class PersistentSeatPlanDao extends SeatPlanDaoDecorator{
   public List<SeatPlan> getByRoomSemesterGroupExamType(int pRoomId, int pSemesterId, int pGroupNo,int pExamType) {
     String query = SELECT_ALL+" WHERE ROOM_ID=? AND  SEMESTER_ID=? AND GROUP_NO=? AND EXAM_TYPE=?";
     return mJdbcTemplate.query(query,new Object[]{pRoomId,pSemesterId,pGroupNo,pExamType},new SeatPlanRowMapper());
+  }
+
+  @Override
+  public List<SeatPlan> getBySemesterAndGroupAndExamTypeAndExamDate(int pSemesterId, int pGropuNo, int pExamType, String pExamDate) {
+    String query = SELECT_ALL_CCI+" WHERE SEMESTER_ID=? AND GROUP_NO=? AND EXAM_TYPE=? AND exam_date=to_date(?,'MM-DD-YYYY')";
+    return mJdbcTemplate.query(query,new Object[]{pSemesterId,pGropuNo,pExamType,pExamDate},new SeatPlanRowMapperForCCI());
   }
 
   @Override
@@ -80,14 +89,31 @@ public class PersistentSeatPlanDao extends SeatPlanDaoDecorator{
   }
 
   @Override
+  public int deleteBySemesterGroupExamTypeAndExamDate(int pSemesterId, int pGroupNo, int pExamType, String pExamDate) {
+    String query = DELETE_ALL+" WHERE SEMESTER_ID=? AND GROUP_NO=? AND EXAM_TYPE=? AND exam_date=to_date(?,'MM-DD-YYYY')";
+    return mJdbcTemplate.update(query,pSemesterId,pGroupNo,pExamType,pExamDate);
+  }
+
+  @Override
   public int create(List<MutableSeatPlan> pMutableList) throws Exception {
     return mJdbcTemplate.batchUpdate(INSERT_ALL,getInsertParamList(pMutableList)).length;
+  }
+
+  @Override
+  public int createSeatPlanForCCI(List<MutableSeatPlan> pSeatPlans) throws Exception{
+    return mJdbcTemplate.batchUpdate(INSERT_ALL_CCI,getInsertParamListCCI(pSeatPlans)).length;
   }
 
   @Override
   public int checkIfExistsBySemesterGroupTypeRoomRowAndCol(int pSemesterId, int pGroupNo, int pType, int pRoomId, int pRow, int pCol) {
     String query= "SELECT COUNT(*) FROM SEAT_PLAN  WHERE SEMESTER_ID=? AND GROUP_NO=? AND EXAM_TYPE=? AND ROOM_ID=? AND ROW_NO=? AND COL_NO=?";
     return mJdbcTemplate.queryForObject(query,Integer.class,pSemesterId,pGroupNo,pType,pRoomId,pRow,pCol);
+  }
+
+  @Override
+  public int checkIfExistsBySemesterGroupTypeExamDateRoomRowAndCol(int pSemesterId, int pGroupNo, int pType, String pExamDate, int pRoomId, int pRow, int pCol) {
+    String query= "SELECT COUNT(*) FROM SEAT_PLAN  WHERE SEMESTER_ID=? AND GROUP_NO=? AND EXAM_TYPE=? AND ROOM_ID=? AND ROW_NO=? AND COL_NO=? AND exam_date=to_date(?,'MM-DD-YYYY')";
+    return mJdbcTemplate.queryForObject(query,Integer.class,pSemesterId,pGroupNo,pType,pRoomId,pRow,pCol,pExamDate);
   }
 
   @Override
@@ -127,6 +153,23 @@ public class PersistentSeatPlanDao extends SeatPlanDaoDecorator{
     return  params;
   }
 
+  private List<Object[]> getInsertParamListCCI(List<MutableSeatPlan> pSeatPlans) throws Exception{
+    List<Object[]> params = new ArrayList<>();
+    for(SeatPlan seatPlan:pSeatPlans){
+      params.add(new Object[]{
+          seatPlan.getClassRoom().getId(),
+          seatPlan.getSemester().getId(),
+          seatPlan.getGroupNo(),
+          seatPlan.getStudent().getId(),
+          seatPlan.getRowNo(),
+          seatPlan.getColumnNo(),
+          seatPlan.getExamType(),
+          seatPlan.getExamDate()
+      });
+    }
+    return params;
+  }
+
   class SeatPlanRowMapper implements RowMapper<SeatPlan>{
     @Override
     public SeatPlan mapRow(ResultSet pResultSet, int pI) throws SQLException {
@@ -139,6 +182,24 @@ public class PersistentSeatPlanDao extends SeatPlanDaoDecorator{
       mSeatPlan.setExamType(pResultSet.getInt("EXAM_TYPE"));
       mSeatPlan.setSemesterId(pResultSet.getInt("SEMESTER_ID"));
       mSeatPlan.setGroupNo(pResultSet.getInt("GROUP_NO"));
+      mSeatPlan.setLastModified(pResultSet.getString("LAST_MODIFIED"));
+      return mSeatPlan;
+    }
+  }
+
+  class SeatPlanRowMapperForCCI implements RowMapper<SeatPlan>{
+    @Override
+    public SeatPlan mapRow(ResultSet pResultSet, int pI) throws SQLException {
+      PersistentSeatPlan mSeatPlan = new PersistentSeatPlan();
+      mSeatPlan.setId(pResultSet.getInt("ID"));
+      mSeatPlan.setClassRoomId(pResultSet.getInt("ROOM_ID"));
+      mSeatPlan.setRowNo(pResultSet.getInt("ROW_NO"));
+      mSeatPlan.setColumnNo(pResultSet.getInt("COL_NO"));
+      mSeatPlan.setStudentId(pResultSet.getString("STUDENT_ID"));
+      mSeatPlan.setExamType(pResultSet.getInt("EXAM_TYPE"));
+      mSeatPlan.setSemesterId(pResultSet.getInt("SEMESTER_ID"));
+      mSeatPlan.setGroupNo(pResultSet.getInt("GROUP_NO"));
+      mSeatPlan.setExamDate(pResultSet.getString("EXAM_DATE"));
       mSeatPlan.setLastModified(pResultSet.getString("LAST_MODIFIED"));
       return mSeatPlan;
     }

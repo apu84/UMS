@@ -12,6 +12,7 @@ import org.ums.domain.model.immutable.SeatPlanGroup;
 public interface MutableSeatPlanGroup extends SeatPlanGroup,Mutable,MutableLastModifier,MutableIdentifier<Integer>{
   void setSemester(final Semester pSemester);
   void setProgram(final Program pProgram);
+  void setProgramId(final int pProgramid);
   void setAcademicYear(final int pAcademicYear);
   void setAcademicSemester(final int pAcademicSemester);
   void setGroupNo(final int pGroupNo);
