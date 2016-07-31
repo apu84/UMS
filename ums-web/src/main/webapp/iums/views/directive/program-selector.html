@@ -8,7 +8,7 @@
     </select>
   </div>
 </div>
-<div class="form-group">
+<div class="form-group" data-ng-if="!model.isDepartmentPreset()">
   <label class="col-md-4 control-label">Dept./School</label>
   <div class="col-md-8">
     <select class="form-control required" data-ng-model="model.departmentId" data-ng-change="model.loadPrograms()">

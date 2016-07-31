@@ -25,7 +25,7 @@ public class FileContentManager extends BinaryContentDecorator {
   private static final String SIZE = "size";
   private static final String DATE = "date";
   private static final String TYPE = "type";
-  private String DATE_FORMAT = "YYYY-MM-dd HH:mm:ss";
+  private String DATE_FORMAT = "YYYY-MM-dd'T'HH:mm:ss'Z'";
   private DateFormat mDateFormat = new SimpleDateFormat(DATE_FORMAT);
 
   @Autowired
@@ -121,6 +121,7 @@ public class FileContentManager extends BinaryContentDecorator {
     Map<String, Object> details = new HashMap<>();
     details.put(NAME, pTargetPath.getFileName().toString());
 //    details.put(RIGHTS, "some valid hash");
+//    mDateFormat.setTimeZone( TimeZone.getTimeZone("UTC"));
     details.put(DATE, mDateFormat.format(new Date(attrs.lastModifiedTime().toMillis())));
     details.put(SIZE, attrs.size() + "");
     details.put(TYPE, attrs.isDirectory() ? "dir" : "file");
@@ -239,7 +240,7 @@ public class FileContentManager extends BinaryContentDecorator {
   public Map<String, Object> compress(List<String> pItems, String pNewPath, String pNewFileName,
                                       Domain pDomain, String... pRootPath) {
     try {
-      Path zipFile = getQualifiedPath(pDomain, buildPath(Paths.get(pNewPath, pNewFileName).toString(), pRootPath));
+      Path zipFile = getQualifiedPath(pDomain, buildPath(pNewPath + pNewFileName, pRootPath));
 
       URI fileUri = zipFile.toUri();
       URI zipUri = new URI("jar:" + fileUri.getScheme(), fileUri.getPath(), null);

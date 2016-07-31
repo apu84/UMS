@@ -100,6 +100,13 @@ public class CourseTeacherResource extends Resource {
     return mResourceHelper.getAssignedTeachers(pProgramId, pSemesterId, pCourseId, mUriInfo);
   }
 
+  @GET
+  @Path("/{semester-id}" + "/{teacher-id}" + "/course")
+  public JsonObject getByCourse(final @Context Request pRequest,
+                                final @PathParam("semester-id") Integer pSemesterId,
+                                final @PathParam("teacher-id") String pTeacherId) throws Exception {
+    return mResourceHelper.getAssignedCourses(pSemesterId, pTeacherId, mUriInfo);
+  }
 
   @POST
   public Response post(final JsonObject pJsonObject) throws Exception {

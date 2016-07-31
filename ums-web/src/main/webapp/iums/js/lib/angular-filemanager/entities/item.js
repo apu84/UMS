@@ -29,8 +29,8 @@
             this.tempModel = angular.copy(rawModel);
 
             function parseMySQLDate(mysqlDate) {
-                var d = (mysqlDate || '').toString().split(/[- :]/);
-                return new Date(d[0], d[1] - 1, d[2], d[3], d[4], d[5]);
+                //var d = (mysqlDate || '').toString().split(/[- :]/);
+                return new Date(mysqlDate);
             }
         };
 

@@ -1,9 +1,10 @@
 package org.ums.common.builder;
 
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.ums.cache.LocalCache;
-import org.ums.domain.model.mutable.MutableUser;
 import org.ums.domain.model.immutable.User;
+import org.ums.domain.model.mutable.MutableUser;
 
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
@@ -17,6 +18,9 @@ public class UserBuilder implements Builder<User, MutableUser> {
     pBuilder.add("name", pReadOnly.getName());
     pBuilder.add("departmentName", pReadOnly.getDepartment().getShortName());
     pBuilder.add("departmentId", pReadOnly.getDepartment().getId());
+    if (!StringUtils.isEmpty(pReadOnly.getEmployeeId())) {
+      pBuilder.add("employeeId", pReadOnly.getEmployeeId());
+    }
   }
 
   @Override

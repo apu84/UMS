@@ -65,4 +65,9 @@ public class AssignedTeacherCache<R extends Identifier<I> & LastModifier, M exte
   public List<R> getAssignedTeachers(Integer pProgramId, Integer pSemesterId, String pCourseId) {
     return getManager().getAssignedTeachers(pProgramId, pSemesterId, pCourseId);
   }
+
+  @Override
+  public List<R> getAssignedCourses(Integer pSemesterId, String pTeacherId) {
+    return getManager().getAssignedCourses(pSemesterId, pTeacherId);
+  }
 }

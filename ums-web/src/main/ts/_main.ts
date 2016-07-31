@@ -99,6 +99,8 @@
 
 /// <reference path='model/TeacherAssignmentSearchParamModel.ts'/>
 /// <reference path='model/CourseTeacherSearchParamModel.ts'/>
+/// <reference path='model/CourseTeacherModel.ts'/>
+/// <reference path='model/LoggedInUser.ts'/>
 
 
 

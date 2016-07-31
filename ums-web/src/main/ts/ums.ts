@@ -641,7 +641,8 @@ module ums {
           templateUrl: 'views/logger/logger-grid.html'
         })
         .state('courseMaterial', {
-          url: "/courseMaterial/:1/:2",
+          url: "/courseMaterial",
+          //url: "/courseMaterial/:1/:2",
           controller: 'CourseMaterial',
           templateUrl: 'views/course-material/course-material.html',
           resolve: {

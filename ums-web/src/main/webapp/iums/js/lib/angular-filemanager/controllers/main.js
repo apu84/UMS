@@ -30,6 +30,13 @@
             $scope.temp.revert();
         });
 
+        $scope.$watch('reloadOn', function (newValue, oldValue) {
+            if (newValue !== oldValue) {
+                $scope.fileNavigator.currentPath = [];
+                $scope.fileNavigator.refresh();
+            }
+        }, true);
+
         $scope.fileNavigator.onRefresh = function() {
             $scope.temps = [];
             $scope.query = '';

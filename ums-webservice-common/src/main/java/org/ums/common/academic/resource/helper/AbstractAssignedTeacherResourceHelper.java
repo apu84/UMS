@@ -70,6 +70,12 @@ public abstract class AbstractAssignedTeacherResourceHelper<R extends EditType<M
     return buildJsonResponse(assignedTeachers, pUriInfo);
   }
 
+  public JsonObject getAssignedCourses(final Integer pSemesterId, final String pTeacherId,
+                                       final UriInfo pUriInfo) throws Exception {
+    List<R> assignedTeachers = getContentManager().getAssignedCourses(pSemesterId, pTeacherId);
+    return buildJsonResponse(assignedTeachers, pUriInfo);
+  }
+
   protected JsonObject buildJsonResponse(final List<R> pAssignedTeachers, final UriInfo pUriInfo) throws Exception {
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
