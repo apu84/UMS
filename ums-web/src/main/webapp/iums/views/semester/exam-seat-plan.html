@@ -355,7 +355,7 @@
                 <br>
                 <br>
 
-                <div >
+                <div  align="center">
                     <ul ui-sortable="sortableOptionsIfSubGroupNotFound" data-ng-model="tempGroupList"   class="list apps-container " data-ng-style="{'background-color':classBodyBackgroundColor}">
                         <li  id="group.id" data-ng-repeat="group in tempGroupList" class="item mouse-effect" data-ng-click="getMouseClickEvent(group)" data-ng-style="{'background-color':group.backgroundColor}">
                             <div context-menu data-ng-if="group.backgroundColor=='red' && editSubGroup==false" class="mouseclick">
@@ -557,7 +557,7 @@
 
                 <!--***************************************************************************-->
                 <div class="row"  >
-                    <div class="col-md-2" data-ng-repeat="i in iterationNumbers">
+                    <div class="col-md-2" data-ng-repeat="i in iterationNumbers" align="center">
                         <p align="center">Sub Group {{i}}</p>
                         <ul ui-sortable="sortableOptionsIfSubGroupNotFound" data-ng-model="subGroupWithDeptMap[i]"    class="list apps-container" data-ng-style="{'background-color':classBodyBackgroundColor}">
 
