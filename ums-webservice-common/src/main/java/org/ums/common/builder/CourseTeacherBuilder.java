@@ -59,6 +59,7 @@ public class CourseTeacherBuilder implements Builder<CourseTeacher, MutableCours
 
     pBuilder.add("courseOfferedByDepartmentId", department.getId());
     pBuilder.add("courseOfferedByDepartmentName", department.getShortName());
+    pBuilder.add("semesterName", pReadOnly.getSemester().getName());
   }
 
   @Override

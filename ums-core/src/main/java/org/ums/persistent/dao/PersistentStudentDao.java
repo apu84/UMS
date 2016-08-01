@@ -4,10 +4,10 @@ package org.ums.persistent.dao;
 import com.google.common.collect.Lists;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.ums.persistent.model.PersistentStudent;
 import org.ums.decorator.StudentDaoDecorator;
-import org.ums.domain.model.mutable.MutableStudent;
 import org.ums.domain.model.immutable.Student;
+import org.ums.domain.model.mutable.MutableStudent;
+import org.ums.persistent.model.PersistentStudent;
 import org.ums.util.Constants;
 
 import java.sql.ResultSet;
@@ -40,7 +40,8 @@ public class PersistentStudentDao extends StudentDaoDecorator {
       "  LAST_MODIFIED," +
       "  ENROLLMENT_TYPE," +
       "  CURR_YEAR," +
-      "  CURR_SEMESTER" +
+      "  CURR_SEMESTER," +
+      "  CURR_ENROLLED_SEMESTER" +
       "  FROM STUDENTS ";
 
   static String UPDATE_ALL = "UPDATE STUDENTS SET" +
@@ -64,7 +65,8 @@ public class PersistentStudentDao extends StudentDaoDecorator {
       "  LAST_MODIFIED = " + getLastModifiedSql() + ","+
       "  ENROLLMENT_TYPE = ?," +
       "  CURR_YEAR = ?," +
-      "  CURR_SEMESTER = ? ";
+      "  CURR_SEMESTER = ?, " +
+      "  CURR_ENROLLED_SEMESTER = ?";
 
   static String DELETE_ALL = "DELETE FROM STUDENTS";
   static String CREATE_ALL = "INSERT INTO STUDENTS(" +
@@ -90,8 +92,9 @@ public class PersistentStudentDao extends StudentDaoDecorator {
       "  LAST_MODIFIED," +
       "  ENROLLMENT_TYPE," +
       "  CURR_YEAR, " +
-      "  CURR_SEMESTER" +
-      ") VALUES (?,?,?,?,?,?,TO_DATE(?, '" + Constants.DATE_FORMAT + "'),?,?,?,?,?,?,?,?,?,?,?,?," + getLastModifiedSql() + ",?, ?, ?)";
+      "  CURR_SEMESTER," +
+      "  CURR_ENROLLED_SEMESTER" +
+      ") VALUES (?,?,?,?,?,?,TO_DATE(?, '" + Constants.DATE_FORMAT + "'),?,?,?,?,?,?,?,?,?,?,?,?," + getLastModifiedSql() + ",?, ?, ?, ?)";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -140,7 +143,8 @@ public class PersistentStudentDao extends StudentDaoDecorator {
         pMutable.getProgramId(),
         pMutable.getEnrollmentType().getValue(),
         pMutable.getCurrentYear(),
-        pMutable.getCurrentAcademicSemester()
+        pMutable.getCurrentAcademicSemester(),
+        pMutable.getCurrentEnrolledSemester().getId()
     );
   }
   /*
@@ -190,6 +194,7 @@ public class PersistentStudentDao extends StudentDaoDecorator {
           student.getEnrollmentType().getValue(),
           student.getCurrentYear(),
           student.getCurrentAcademicSemester(),
+          student.getCurrentEnrolledSemester().getId(),
           student.getId()
       });
     }
@@ -243,6 +248,10 @@ public class PersistentStudentDao extends StudentDaoDecorator {
       if (rs.getObject("CURR_SEMESTER") != null) {
         student.setCurrentAcademicSemester(rs.getInt("CURR_SEMESTER"));
       }
+      if (rs.getObject("CURR_ENROLLED_SEMESTER") != null) {
+        student.setCurrentEnrolledSemesterId(rs.getInt("CURR_ENROLLED_SEMESTER"));
+      }
+
       return student;
     }
   }

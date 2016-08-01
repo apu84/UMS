@@ -14,6 +14,9 @@ module ums {
     private getAppConstants: Function;
     private getHttpClient: Function;
 
+    private setDepartmentPreset: Function;
+    private isDepartmentPreset: Function;
+
     programId:string;
     departmentId:string;
     programTypeId:string;
@@ -27,6 +30,7 @@ module ums {
       var departments = appConstants.initDept;
       var programs = appConstants.initProgram;
       var semesters = appConstants.initSemester;
+      var departmentPreset: boolean = false;
 
 
       this.getProgramTypes = () => {
@@ -70,9 +74,22 @@ module ums {
         return httpClient;
       };
 
+      this.setDepartmentPreset = (preset: boolean) => {
+        departmentPreset = preset;
+      };
+
+      this.isDepartmentPreset = () => {
+        return departmentPreset;
+      };
+
       this.programId = '';
       this.departmentId = '';
       this.programTypeId = '';
+    }
+
+    public setDepartment(departmentId: string): void {
+      this.departmentId = departmentId;
+      this.setDepartmentPreset(true);
     }
 
     public loadDepartments(): void {
@@ -88,7 +105,12 @@ module ums {
       else {
         this.setDepartments([{id: '', name: 'Select Dept./School'}]);
       }
-      this.departmentId = '';
+
+      if (!this.isDepartmentPreset) {
+        this.departmentId = '';
+      } else {
+        this.loadPrograms();
+      }
 
       if (this.programTypeId != this.getAppConstants().Empty) {
         this.getHttpClient().get('academic/semester/program-type/' + this.programTypeId + "/limit/0", 'application/json',

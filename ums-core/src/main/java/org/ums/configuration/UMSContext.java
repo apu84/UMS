@@ -2,8 +2,10 @@ package org.ums.configuration;
 
 import org.apache.shiro.authc.credential.PasswordService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -15,6 +17,7 @@ import org.ums.domain.model.mutable.MutableExaminer;
 import org.ums.generator.JxlsGenerator;
 import org.ums.generator.XlsGenerator;
 import org.ums.manager.*;
+import org.ums.message.MessageResource;
 import org.ums.persistent.dao.*;
 import org.ums.security.authentication.UMSAuthenticationRealm;
 import org.ums.services.LoginService;
@@ -45,10 +48,17 @@ public class UMSContext {
   JdbcTemplateFactory mTemplateFactory;
 
   @Autowired
+  @Qualifier("fileContentManager")
   BinaryContentManager<byte[]> mBinaryContentManager;
 
   @Autowired
   UMSAuthenticationRealm mAuthenticationRealm;
+
+  @Autowired
+  UMSConfiguration mUMSConfiguration;
+
+  @Autowired
+  MessageResource mMessageResource;
 
   @Bean
   SemesterManager semesterManager() {
@@ -287,11 +297,6 @@ public class UMSContext {
     return new PersistentSemesterWiseCrHrDao(mTemplateFactory.getJdbcTemplate());
   }
 
-/*  @Bean
-  CourseMaterialManager courseMaterialManager() {
-    return new PersistentCourseMaterialDao(mTemplateFactory.getJdbcTemplate());
-  }*/
-
   @Bean
   LoginService loginService() {
     return new LoginService();
@@ -353,5 +358,24 @@ public class UMSContext {
   @Bean
   XlsGenerator xlsGenerator() {
     return new JxlsGenerator();
+  }
+
+  @Bean
+  @Lazy
+  BinaryContentManager<byte[]> courseMaterialFileManagerForTeacher() {
+    FileContentPermission fileContentPermission = new FileContentPermission(userManager(),
+        bearerAccessTokenManager(), mUMSConfiguration, mMessageResource);
+    fileContentPermission.setManager(mBinaryContentManager);
+    return fileContentPermission;
+  }
+
+  @Bean
+  @Lazy
+  BinaryContentManager<byte[]> courseMaterialFileManagerForStudent() {
+    StudentFileContentPermission fileContentPermission = new StudentFileContentPermission(userManager(),
+        bearerAccessTokenManager(), mUMSConfiguration, mMessageResource, studentManager(), semesterManager(),
+        courseManager(), semesterSyllabusMapManager());
+    fileContentPermission.setManager(mBinaryContentManager);
+    return fileContentPermission;
   }
 }

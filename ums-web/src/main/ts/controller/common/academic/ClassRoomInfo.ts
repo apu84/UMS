@@ -10,6 +10,7 @@ module ums {
   }
 
   export class ClassRoomInfo implements GridEditActions {
+
     public static $inject = ['appConstants', 'HttpClient', '$scope'];
 
 
@@ -54,6 +55,12 @@ module ums {
           }).error((data) => {
             console.error(data);
           });
+    }
+
+    public beforeEditForm(formId: string, gridElement: JQuery): void {
+    }
+
+    public afterShowEditForm(formId: String, gridElement: JQuery): void {
     }
 
     public decorateScope(): GridConfig {
@@ -139,7 +146,7 @@ module ums {
           stype: 'select',
           searchoptions: {
             sopt: ['eq', 'ne'],
-            value: '1:Yes;0:No'
+            value: 'true:Yes;false:No'
           }
         }
       ]
@@ -151,6 +158,10 @@ module ums {
             this.initializeGrid();
             this.$scope.classRoomData = response.rows;
           });
+    }
+
+    public loadComplete():any{
+      alert("ifti");
     }
 
   }

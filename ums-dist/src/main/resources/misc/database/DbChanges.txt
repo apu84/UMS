@@ -160,3 +160,7 @@ Insert into DB_IUMS.PERMISSIONS
 
 
 update students set curr_year=3 and curr_semester=2 where student_id='160105001';
+
+
+ALTER TABLE DB_IUMS.STUDENTS
+ ADD (CURR_ENROLLED_SEMESTER  NUMBER);

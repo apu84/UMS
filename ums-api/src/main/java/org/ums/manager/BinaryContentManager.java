@@ -1,9 +1,7 @@
 package org.ums.manager;
 
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.InputStream;
+import java.util.*;
 
 public interface BinaryContentManager<T> {
 
@@ -17,8 +15,7 @@ public interface BinaryContentManager<T> {
 
   enum Domain {
     PICTURE(1),
-    COURSE_MATERIAL(2)
-    ;
+    COURSE_MATERIAL(2);
 
     private static final Map<Integer, Domain> lookup
         = new HashMap<>();
@@ -44,27 +41,29 @@ public interface BinaryContentManager<T> {
   }
 
 
-  List<Map<String, String>> list(String pPath, Domain pDomain);
+  Object list(String pPath, Domain pDomain, String... pRootPath);
 
-  Map<String, String> rename(String pOldPath, String pNewPath, Domain pDomain);
+  Map<String, Object> rename(String pOldPath, String pNewPath, Domain pDomain, String... pRootPath);
 
-  Map<String, String> move(List<String> pItems, String pNewPath, Domain pDomain);
+  Map<String, Object> move(List<String> pItems, String pNewPath, Domain pDomain, String... pRootPath);
 
-  Map<String, String> copy(List<String> pItems, String pNewPath, Domain pDomain);
+  Map<String, Object> copy(List<String> pItems, String pNewPath, String pNewFileName, Domain pDomain, String... pRootPath);
 
-  Map<String, String> remove(List<String> pItems, Domain pDomain);
+  Map<String, Object> remove(List<String> pItems, Domain pDomain, String... pRootPath);
 
-  Map<String, byte[]> content(String pPath, Domain pDomain);
+  Map<String, byte[]> content(String pPath, Domain pDomain, String... pRootPath);
 
-  Map<String, String> createFolder(String pNewPath, Domain pDomain);
+  Map<String, Object> createFolder(String pNewPath, Domain pDomain, String... pRootPath);
 
-  Map<String, String> compress(List<String> pItems, String pNewPath, String pNewFileName, Domain pDomain);
+  Map<String, Object> createAssignmentFolder(String pNewPath, Date pStartDate, Date pEndDate, Domain pDomain, String... pRootPath);
 
-  Map<String, String> extract(String pZippedItem, String pDestination, Domain pDomain);
+  Map<String, Object> compress(List<String> pItems, String pNewPath, String pNewFileName, Domain pDomain, String... pRootPath);
 
-  Map<String, String> upload(byte[] pFileContent, String pPath, Domain pDomain);
+  Map<String, Object> extract(String pZippedItem, String pDestination, Domain pDomain, String... pRootPath);
 
-  byte[] download(String pPath, Domain pDomain);
+  Map<String, Object> upload(Map<String, InputStream> pFileContent, String pPath, Domain pDomain, String... pRootPath);
 
-  byte[] downloadAsZip(List<String> pItems, String pNewFileName, Domain pDomain);
+  Map<String, Object> download(String pPath, String pToken, Domain pDomain, String... pRootPath);
+
+  Map<String, Object> downloadAsZip(List<String> pItems, String pNewFileName, String pToken, Domain pDomain, String... pRootPath);
 }

@@ -305,3 +305,11 @@ div.ui-jqgrid-view table.ui-jqgrid-htable {
 div.ui-jqgrid-view table.ui-jqgrid-btable th {
     border-left-style: none
 }
+
+.datepicker.dropdown-menu {
+    z-index: 2000 !important;
+}
+
+/*jQgrid row color style*/
+.activeSemesterBG { background-color: #CCFFFF; background-image: none; }
+.newlyCreatedSemesterBG { background-color: #EBDEF0; background-image: none; }

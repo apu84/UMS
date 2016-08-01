@@ -30,20 +30,22 @@
                         <div class="form-group">
                             <label  class="col-md-3 control-label">Year</label>
                             <div class="col-md-9">
-                                <select name="year"  class="col-md-5 form-control required" data-ng-model="semester.year">
-                                    <option value="">Select Year</option>
-                                    <option value="2017">2017</option>
-                                    <option value="2016">2016</option>
-                                    <option value="2015">2015</option>
+                                <select class="form-control required" name="year" id="year" data-ng-model="semester.year" ng-init="semester.year=''">
+                                    <option data-ng-repeat="year in data.year" value="{{year.id}}">{{year.name}}</option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group">
                             <label  class="col-md-3 control-label">Status</label>
                             <div class="col-md-9">
+                                <select class="form-control required" name="semesterStatus" id="semesterStatus" data-ng-model="semester.status" ng-init="semester.status='2'">
+                                    <option data-ng-repeat="semesterStatus in data.semesterStatusOptions" value="{{semesterStatus.id}}">{{semesterStatus.name}}</option>
+                                </select>
+                                <!--
                                 <div data-on="success" data-off="warning" class="make-switch" data-on-label="Active" data-off-label="Inactive" style="width: 150px;" data-ng-model="semester.status">
                                     <input type="checkbox" checked="checked" class="switch" data-ng-model="semester.mStatus"/>
                                 </div>&nbsp&nbsp;
+                                -->
                             </div>
                         </div>
                         <div class="form-group">

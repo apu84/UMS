@@ -19,5 +19,20 @@ module ums {
     public onSelectRow = (id: string) => {
       this.currentSelectedRowId = id;
     }
+
+    public loadComplete(){
+      //do nothing, will be implemented in calling class
+      //Called after the data being loaded.
+    }
+
+    public gridComplete(){
+      //do nothing, will be implemented in calling class
+      //Called after the grid being loaded.
+    }
+
+    public rowattr(rowData:RowData){
+      //do nothing, will be implemented in calling class
+      //return row attribute;
+    }
   }
 }

@@ -110,6 +110,12 @@ module ums {
       });
     }
 
+    public beforeEditForm(formId: string,gridElement: JQuery): void {
+    }
+
+    public afterShowEditForm(formId: String, gridElement: JQuery): void {
+    }
+
     private loadData(): void {
       this.httpClient.get("logger/list", HttpClient.MIME_TYPE_JSON,
           (response) => {
@@ -125,7 +131,6 @@ module ums {
         }
       }
     }
-
   }
   UMS.controller('LoggerGrid', LoggerGrid);
 }

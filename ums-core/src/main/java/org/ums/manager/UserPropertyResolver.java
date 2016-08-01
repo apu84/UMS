@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.ums.decorator.UserDaoDecorator;
 import org.ums.domain.model.immutable.Employee;
+import org.ums.domain.model.immutable.Student;
 import org.ums.domain.model.immutable.User;
 import org.ums.domain.model.mutable.MutableUser;
 
@@ -23,8 +24,9 @@ public class UserPropertyResolver extends UserDaoDecorator {
     User user = getManager().get(pId);
     MutableUser mutableUser = user.edit();
     if (user.getPrimaryRole().getName().equalsIgnoreCase("student")) {
-      mutableUser.setDepartment(mStudentManager.get(pId).getDepartment());
-      mutableUser.setName(mutableUser.getName());
+      Student student = mStudentManager.get(pId);
+      mutableUser.setDepartment(student.getDepartment());
+      mutableUser.setName(student.getFullName());
     } else {
       Employee employee = null;
       try {

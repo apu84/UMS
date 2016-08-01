@@ -17,4 +17,24 @@ module ums {
     }
 
   }
+
+  export class LoadCompleteDecorator{
+    public static decorate(toDecorate: GridEditActions,loadComplete:LoadComplete): GridConfig {
+      toDecorate.decorateScope().gridOptions.loadComplete=loadComplete.loadComplete();
+      return toDecorate;
+    }
+  }
+  export class GridCompleteDecorator{
+    public static decorate(toDecorate: GridEditActions,gridComplete:GridComplete): GridConfig {
+      toDecorate.decorateScope().gridOptions.gridComplete=gridComplete.gridComplete();
+      return toDecorate;
+    }
+  }
+  export class RowAttributeDecorator{
+    public static decorate(toDecorate: GridEditActions,rowAttribute:RowAttribute): GridConfig {
+      toDecorate.decorateScope().gridOptions.rowattr=rowAttribute.rowattr;
+      return toDecorate;
+    }
+  }
+
 }

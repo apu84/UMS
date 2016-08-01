@@ -56,4 +56,8 @@ public interface MutableStudent extends Student, Mutable, MutableIdentifier<Stri
   void setCurrentYear(final Integer pCurrentYear);
 
   void setCurrentAcademicSemester(final Integer pAcademicSemester);
+
+  void setCurrentEnrolledSemesterId(final Integer pCurrentEnrolledSemesterId);
+
+  void setCurrentEnrolledSemester(final Semester pCurrentEnrolledSemester);
 }

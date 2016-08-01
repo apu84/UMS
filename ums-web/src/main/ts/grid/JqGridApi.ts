@@ -21,8 +21,21 @@ module ums {
     edit(rowData: RowData): void;
     remove(rowData: RowData): void;
     getColumnModel(): any;
-    decorateScope():GridConfig;
+    decorateScope(): GridConfig;
+    beforeEditForm(formId: string, gridElement: JQuery): void;
+    afterShowEditForm(formId: String, gridElement: JQuery): void;
   }
+
+  export interface LoadComplete{
+    loadComplete():any;
+  }
+  export interface GridComplete{
+    gridComplete():any;
+  }
+  export interface RowAttribute{
+    rowattr(rowData: RowData):any;
+  }
+
 
   export interface JqGrid {
     api?: JqGridApi;

@@ -10,8 +10,7 @@ module ums {
     'ngCookies',
     'ngSanitize',
     'scrollable-table',
-    'amChartsDirective',
-    'ui.sortable'
+    'amChartsDirective'
   ]);
 
   UMS.constant("appConstants", Constants.Default());

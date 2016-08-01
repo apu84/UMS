@@ -11,19 +11,22 @@ module ums {
   }
 
   export class NewSemester {
-    public static $inject = ['appConstants', 'HttpClient','$scope'];
-    constructor(private appConstants:any,private httpClient:HttpClient,private $scope:INewSemesterScope) {
-
+    public static $inject = ['appConstants', 'HttpClient','$scope', 'notify'];
+    constructor(private appConstants:any,private httpClient:HttpClient,private $scope:INewSemesterScope,private notify: Notify) {
+      var currentYear:number=(new Date()).getFullYear();
+      var nextYear:number=currentYear+1;
       $scope.data = {
         programTypeOptions:appConstants.programType,
-        semesterTypeOptions:appConstants.semesterType
+        semesterTypeOptions:appConstants.semesterType,
+        semesterStatusOptions:[{id: '2', name: 'Newly Created'}],
+        year:[{id:"",name:"Select a Year"},{id:currentYear,name:currentYear},{id:nextYear,name:nextYear}]
       };
-
+      /*
       setTimeout(function () {
         $('.make-switch').bootstrapSwitch();
         $('#TheCheckBox').bootstrapSwitch();
       }, 50);
-
+      */
 
       $('.datepicker-default').datepicker();
       $('.datepicker-default').on('change', function(){
@@ -35,18 +38,17 @@ module ums {
 
     }
     private submit():void {
-      $.notify.defaults({
-        className: 'success'
-      });
+
       //$.notify("Access granted", { position:"top",autoHide:false });
       this.$scope. semester.semesterName=$("#semesterType option:selected").text()+","+this.$scope.semester.year;
       var semesterId=this.$scope.semester.programTypeId+this.$scope.semester.semesterTypeId+this.$scope.semester.year;
       this.$scope. semester.semesterId=+semesterId;
-      this.$scope.semester.statusId=1;
+      this.$scope.semester.statusId=2;
+      var notify=this.notify;
       this.httpClient.post('academic/semester/', this.$scope.semester, 'application/json')
           .success(() => {
             //TODO: Move $.notific8 Common messaging service
-            $.notific8('Successfully created a new semester.');
+            notify.success("Successfully created a new semester.");
             this.$scope. semester.programTypeId="";
             this.$scope. semester.semesterTypeId="";
             this.$scope. semester.year="";

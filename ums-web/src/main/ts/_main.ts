@@ -44,8 +44,8 @@
 /// <reference path='controller/semester/SemesterSettingParameter.ts'/>
 /// <reference path='controller/dept/ClassRoutine.ts'/>
 /// <reference path='controller/logger/LoggerGrid.ts'/>
-
-
+/// <reference path='controller/course-material/CourseMaterial.ts'/>
+/// <reference path='controller/course-material/StudentCourseMaterial.ts'/>
 
 /// <reference path='Utils.ts'/>
 
@@ -81,6 +81,7 @@
 
 /// <reference path='interceptor/Unauthorized.ts'/>
 /// <reference path='interceptor/ValidationExceptions.ts'/>
+/// <reference path='interceptor/ServerExceptions.ts'/>
 
 /// <reference path='filter/TrustAsHtml.ts'/>
 /// <reference path='util/UmsUtil.ts'/>
@@ -98,6 +99,8 @@
 
 /// <reference path='model/TeacherAssignmentSearchParamModel.ts'/>
 /// <reference path='model/CourseTeacherSearchParamModel.ts'/>
+/// <reference path='model/CourseTeacherModel.ts'/>
+/// <reference path='model/LoggedInUser.ts'/>
 
 
 

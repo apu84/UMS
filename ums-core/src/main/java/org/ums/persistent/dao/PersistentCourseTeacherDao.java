@@ -8,14 +8,15 @@ import org.ums.persistent.model.PersistentCourseTeacher;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentCourseTeacherDao extends AbstractAssignedTeacherDao<CourseTeacher, MutableCourseTeacher, Integer> {
 
-  static String SELECT_ALL = "SELECT SEMESTER_ID, TEACHER_ID, COURSE_ID, SECTION, LAST_MODIFIED, ID FROM COURSE_TEACHER ";
-  static String UPDATE_ALL = "UPDATE COURSE_TEACHER SET SEMESTER_ID = ?, TEACHER_ID = ?, COURSE_ID = ?, SECTION = ?, LAST_MODIFIED = " + getLastModifiedSql() + " ";
-  static String DELETE_ALL = "DELETE FROM COURSE_TEACHER ";
-  static String INSERT_ONE = "INSERT INTO COURSE_TEACHER(SEMESTER_ID, TEACHER_ID, COURSE_ID, SECTION, LAST_MODIFIED) VALUES" +
+  String SELECT_ALL = "SELECT SEMESTER_ID, TEACHER_ID, COURSE_ID, SECTION, LAST_MODIFIED, ID FROM COURSE_TEACHER ";
+  String UPDATE_ALL = "UPDATE COURSE_TEACHER SET SEMESTER_ID = ?, TEACHER_ID = ?, COURSE_ID = ?, SECTION = ?, LAST_MODIFIED = " + getLastModifiedSql() + " ";
+  String DELETE_ALL = "DELETE FROM COURSE_TEACHER ";
+  String INSERT_ONE = "INSERT INTO COURSE_TEACHER(SEMESTER_ID, TEACHER_ID, COURSE_ID, SECTION, LAST_MODIFIED) VALUES" +
       "(?, ?, ?, ?," + getLastModifiedSql() + ")";
 
   private String SELECT_BY_SEMESTER_PROGRAM =
@@ -40,10 +41,9 @@ public class PersistentCourseTeacherDao extends AbstractAssignedTeacherDao<Cours
           "                    t2.semester) t3\n" +
           "       LEFT JOIN\n" +
           "          course_teacher t4\n" +
-          "       ON t3.course_id = t4.course_id " +
+          "       ON t3.course_id = t4.course_id  and t3.semester_id = t4.semester_id " +
           "%s" +
           "ORDER BY t3.COURSE_ID, t4.TEACHER_ID, t4.SECTION";
-
 
   public PersistentCourseTeacherDao(JdbcTemplate pJdbcTemplate) {
     mJdbcTemplate = pJdbcTemplate;
@@ -88,6 +88,12 @@ public class PersistentCourseTeacherDao extends AbstractAssignedTeacherDao<Cours
         pMutable.getCourse().getId(),
         pMutable.getSection(),
         pMutable.getId());
+  }
+
+  @Override
+  public List<CourseTeacher> getAssignedCourses(Integer pSemesterId, String pTeacherId) {
+    String query = SELECT_ALL + " WHERE SEMESTER_ID = ? AND TEACHER_ID = ?";
+    return mJdbcTemplate.query(query, new Object[]{pSemesterId, pTeacherId}, getRowMapper());
   }
 
   class CourseTeacherRowMapper implements RowMapper<CourseTeacher> {

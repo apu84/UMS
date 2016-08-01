@@ -62,6 +62,10 @@ public interface Student extends Serializable, EditType<MutableStudent>, Identif
 
   Integer getCurrentAcademicSemester();
 
+  Integer getCurrentEnrolledSemesterId();
+
+  Semester getCurrentEnrolledSemester();
+
   enum EnrollmentType {
     ACTUAL(1),
     TEMPORARY(0);
