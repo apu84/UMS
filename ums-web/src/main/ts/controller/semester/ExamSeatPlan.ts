@@ -19,6 +19,7 @@ module ums{
     selectedSubGroupNo:string;
     subGroupTotalStudentNumber:any;
     selectedGroupTotalStudent:number;
+    previousIterationNumber:number;
     tempIdList:Array<number>;
     mergeIdList:any;
     splitNumber:number;
@@ -82,6 +83,7 @@ module ums{
     confirmation:boolean;
     cciSelected:boolean;
     customeMenu:boolean;
+    hideSelection:boolean;
     loadingVisibilityForCCI:boolean;
     pdfGenerator:boolean;
     recreate:boolean;
@@ -259,6 +261,7 @@ module ums{
                 private $sce:ng.ISCEService,private $window:ng.IWindowService) {
 
       var arr : { [key:number]:Array<ISeatPlanGroup>; } = {};
+      $scope.previousIterationNumber=0;
       $scope.mergeIdList=[];
       $scope.loadingVisibilityForCCI = false;
       $scope.cciSelected=false;
@@ -363,13 +366,40 @@ module ums{
     private generateIterationNumberArray(subGroupNo:number){
 
 
+      this.$scope.saveSubGroupInfo=true;
+      if(this.$scope.previousIterationNumber==0){
+        this.$scope.previousIterationNumber=subGroupNo;
+      }else{
+        if(subGroupNo<this.$scope.previousIterationNumber){
+          for(var i=this.$scope.previousIterationNumber;i>subGroupNo;i--){
+            if(this.$scope.subGroupWithDeptMap[i]!=null){
+              for(var j=0;j<this.$scope.subGroupWithDeptMap[i].length;j++){
+                this.$scope.tempGroupList.push(this.$scope.subGroupWithDeptMap[i][j]);
+              }
+              this.$scope.subGroupWithDeptMap[i]=null;
+              this.$scope.iterationNumbers.pop();
+            }
+            this.$scope.previousIterationNumber=subGroupNo;
+          }
+        }
+        console.log("*******");
+        console.log(this.$scope.iterationNumbers);
+      }
+      if(this.$scope.subGroupWithDeptMap==null){
+        this.$scope.subGroupWithDeptMap={};
 
-      this.$scope.subGroupWithDeptMap={};
-      this.$scope.iterationNumbers=[];
+      }
+      if(this.$scope.iterationNumbers==null){
+        this.$scope.iterationNumbers=[];
+
+      }
       for(var i=1;i<=subGroupNo;i++){
-        this.$scope.iterationNumbers.push(i);
-        var subGroupWithDeptMap:Array<ISeatPlanGroup>=[];
-        this.$scope.subGroupWithDeptMap[i]=subGroupWithDeptMap;
+        if(this.$scope.subGroupWithDeptMap[i]==null){
+          this.$scope.iterationNumbers.push(i);
+          var subGroupWithDeptMap:Array<ISeatPlanGroup>=[];
+          this.$scope.subGroupWithDeptMap[i]=subGroupWithDeptMap;
+        }
+
 
       }
       this.$scope.sortableOptionsIfSubGroupNotFound={};
@@ -382,6 +412,8 @@ module ums{
         }
       }
       console.log(this.$scope.sortableOptionsIfSubGroupNotFound);
+      this.$scope.hideSelection=false;
+      this.showStatistics();
 
     }
 
@@ -420,6 +452,7 @@ module ums{
       this.$scope.customeMenu=false;
     }
 
+
     private splitActionUpdate(object:any,splitNumber:number){
       console.log("in the split action");
       console.log(object);
@@ -437,8 +470,13 @@ module ums{
 
         var newObject:ISeatPlanGroup = angular.copy(object);
         newObject.studentNumber=currentStudentNumber-object.studentNumber;
-
+        var temporaryListHolder:Array<ISeatPlanGroup>=angular.copy(this.$scope.tempGroupList);
+        this.$scope.tempGroupList=[];
         this.$scope.tempGroupList.push(newObject);
+       // this.$scope.tempGroupList.concat(temporaryListHolder);
+        for(var x=0;x<temporaryListHolder.length;x++){
+          this.$scope.tempGroupList.push(temporaryListHolder[x]);
+        }
         console.log("================");
         console.log(object);
 
@@ -465,8 +503,14 @@ module ums{
 
 
     private getMouseClickEvent(object:any){
-      this.$scope.customeMenu=true;
-      if(this.$scope.mouseClickedObject!=object){
+
+
+        this.$scope.customeMenu=false;
+
+      var checked:boolean=false;
+      if(this.$scope.mouseClickedObject!=object && this.$scope.editSubGroup==false){
+        checked=true;
+        this.$scope.customeMenu=true;
         this.$scope.mouseClickedObject={};
 
         this.$scope.mouseClickedObject=object;
@@ -478,12 +522,19 @@ module ums{
         }else{
 
           var foundMisMatch:boolean=false;
+          var doNothing:boolean=false;
           for(var i=0;i<this.$scope.mouseClickedObjectStore.length;i++){
             if(this.$scope.cciSelected){
-              if(this.$scope.mouseClickedObjectStore[i].courseId!=object.courseId || this.$scope.mouseClickedObjectStore[i]==object){
+              if(this.$scope.mouseClickedObjectStore[i].courseId!=object.courseId ){
                 console.log('found mismatch');
                 foundMisMatch=true;
                 break;
+              }
+              else if(this.$scope.mouseClickedObjectStore[i]==object){
+                doNothing=true;
+              }
+              else{
+
               }
             }else{
               if(this.$scope.mouseClickedObjectStore[i].id!=object.id || this.$scope.mouseClickedObjectStore[i]==object){
@@ -506,8 +557,12 @@ module ums{
             console.log("--------after deletion----");
             this.$scope.mouseClickedObjectStore.push(object);
           }else{
+            if(doNothing==false){
+              this.$scope.mouseClickedObjectStore.push(object);
 
-            this.$scope.mouseClickedObjectStore.push(object);
+            }
+
+
           }
 
         }
@@ -515,7 +570,13 @@ module ums{
         console.log(this.$scope.mouseClickedObjectStore);
         object.backgroundColor="red";
         console.log(object);
+      }else{
+        this.$scope.customeMenu=true;
       }
+
+
+     // this.$scope.customeMenu=true;
+
 
     }
 
@@ -529,10 +590,10 @@ module ums{
     }
 
     private createCCI(examDate:string):void{
+      this.$scope.hideSelection=false;
        // for application cci, examType=4;
       this.$scope.classBodyBackgroundColor="#FAEBD7";
       this.$scope.cciSelected=true;
-      this.$scope.saveSubGroupInfo=true;
       this.getApplicationCCIInfoForSubGroup(examDate).then((subGroupCCiArr:Array<ISeatPlanGroup>)=>{
         this.createOrViewSubgroups(4);
       });
@@ -835,6 +896,8 @@ module ums{
         console.log("saved data");
         console.log(subGroupArr);
         if(subGroupArr.length>0 && this.$scope.recreateButtonClicked==false){
+          this.$scope.hideSelection=true;
+
 
           this.$scope.tempGroupList=[];
           this.$scope.subGroupWithDeptMap=[];
@@ -878,6 +941,7 @@ module ums{
 
           this.$scope.editSubGroup=true;
           this.$scope.deleteAndCreateNewSubGroup=true;
+          console.log("##################################");
           console.log(this.$scope.subGroupWithDeptMap);
           //this.$scope.sortableOptionsIfSubGroupNotFound.
           this.showStatistics();
@@ -886,10 +950,11 @@ module ums{
 
         }
         else{
+          this.$scope.hideSelection=false;
+
           this.$scope.deleteAndCreateNewSubGroup=false;
           this.$scope.editSubGroup=false;
           this.$scope.classBodyBackgroundColor="#FAEBD7";
-          this.$scope.saveSubGroupInfo=true;
           this.$scope.sortableOptionsIfSubGroupNotFound={};
           this.$scope.sortableOptionsIfSubGroupNotFound.placeholder="item";
           this.$scope.sortableOptionsIfSubGroupNotFound.connectWith='.apps-container';
@@ -1054,6 +1119,7 @@ module ums{
     }
 
     private deleteAndRecreate(){
+      console.log("in the delete and recreate");
       this.$scope.confirmation=false;
       if(this.$scope.cciSelected){
         this.deleteExistingSubGroupCCI();
@@ -1067,6 +1133,9 @@ module ums{
       this.$scope.recreateButtonClicked=true;
       this.$scope.editSubGroup=false;
       this.$scope.saveSubGroupInfo=true;
+      this.$scope.subGroupTotalStudentNumber={};
+      this.$scope.selectedSubGroupNo="";
+      this.$scope.subGroupWithDeptMap={};
       if(this.$scope.cciSelected){
         this.createCCI(this.$scope.examDate);
       }else{
@@ -1076,7 +1145,9 @@ module ums{
     }
 
     private cancelRecreation(){
+      console.log(" cancel the recreation process");
       this.$scope.confirmation=false;
+
 
     }
 
@@ -1132,30 +1203,46 @@ module ums{
         json = this.convertToJsonForSubGroup();
 
       }
-      this.saveSubGroupIntoDb(json).then((message:string)=>{
-        this.$scope.mouseClickedObjectStore=[];
-        $.notific8(message);
-        this.$scope.editButtonClicked=false;
-        /*if(this.$scope.subGroupFound==false){
-         this.createOrViewSubgroups(this.$scope.selectedGroupNo);
-
-         }*/
-        this.$scope.showContextMenu=false;
-        this.$scope.editSubGroup=true;
-        this.$scope.deleteAndCreateNewSubGroup=true;
-        this.$scope.saveSubGroupInfo = false;
-        this.$scope.cancelSubGroup = false;
-        this.$scope.recreateButtonClicked=false;
-        this.$scope.selectedSubGroupNo=null;
-        if(this.$scope.cciSelected){
-          this.createOrViewSubgroups(4);
-
-        }else{
-          this.createOrViewSubgroups(this.$scope.selectedGroupNo);
-
+      var emptySubgroupFound:boolean=false;
+      console.log(this.$scope.subGroupWithDeptMap);
+      for(var i=1;i<=this.$scope.iterationNumbers.length;i++){
+        if(this.$scope.subGroupWithDeptMap[i].length==0){
+          emptySubgroupFound=true;
+          break;
         }
+      }
+      if(emptySubgroupFound){
+        console.log("empty sub group found");
+          this.$window.alert("Sub group must not be empty");
+      }
+      else{
+        console.log("Everything ok!!!");
+        this.saveSubGroupIntoDb(json).then((message:string)=>{
+          this.$scope.mouseClickedObjectStore=[];
+          $.notific8(message);
+          this.$scope.editButtonClicked=false;
+          /*if(this.$scope.subGroupFound==false){
+           this.createOrViewSubgroups(this.$scope.selectedGroupNo);
 
-      });
+           }*/
+          this.$scope.showContextMenu=false;
+          this.$scope.editSubGroup=true;
+          this.$scope.deleteAndCreateNewSubGroup=true;
+          this.$scope.saveSubGroupInfo = false;
+          this.$scope.cancelSubGroup = false;
+          this.$scope.recreateButtonClicked=false;
+          this.$scope.selectedSubGroupNo=null;
+          if(this.$scope.cciSelected){
+            this.createOrViewSubgroups(4);
+
+          }else{
+            this.createOrViewSubgroups(this.$scope.selectedGroupNo);
+
+          }
+
+        });
+      }
+
     }
 
     private generateSubGroups(group:string):void{
@@ -1258,14 +1345,17 @@ module ums{
 
 
     private closeSubGroupOrRoomInfoWindow():void{
-
+      this.$scope.showStatistics();
 
       this.$scope.showGroupSelectionPanel = true;
       this.$scope.subGroupSelected = false;
       this.$scope.subGroupWithDeptMap={};
-      this.$scope.selectedSubGroupNo=null;
+      this.$scope.selectedSubGroupNo="";
 
       this.$scope.iterationNumbers=[];
+      this.$scope.subGroupTotalStudentNumber={};
+      this.$scope.previousIterationNumber=0;
+      this.$scope.tempGroupList=[];
     }
 
     private createOrViewSeatPlan(groupNo:number):void{
@@ -1313,6 +1403,8 @@ module ums{
     private getSubGroupInfo():ng.IPromise<any>{
       var defer = this.$q.defer();
       var subGroupDb:Array<ISeatPlanGroup>;
+      console.log("condition of cciSelected");
+      console.log(this.$scope.cciSelected);
       if(this.$scope.cciSelected){
         this.httpClient.get('/ums-webservice-common/academic/subGroupCCI/semester/'+this.$scope.semesterId+'/examDate/'+this.$scope.examDate,'application/json',
             (json:any,etag:string)=>{
@@ -1332,6 +1424,8 @@ module ums{
         this.httpClient.get('/ums-webservice-common/academic/subGroup/get/semesterId/'+this.$scope.semesterId +'/groupNo/'+this.$scope.selectedGroupNo+'/type/'+this.$scope.examType, 'application/json',
             (json:any, etag:string) => {
               subGroupDb = json.entries;
+              console.log("#######################");
+              console.log(subGroupDb);
               for(var i=0;i<subGroupDb.length;i++){
                 subGroupDb[i].backgroundColor="#EA8A8A";
                 subGroupDb[i].showSubPortion=false;
@@ -1521,18 +1615,20 @@ module ums{
     private convertToJsonForSubGroup(){
       var completeJson={};
       var jsonObj=[];
-
+      console.log("temp group list all ---->")
+      console.log(this.$scope.tempGroupList);
       if(this.$scope.tempGroupList.length>0){
         for(var i=0;i<this.$scope.tempGroupList.length;i++){
           var item={};
           item["subGroupNo"]=0;
-          if(this.$scope.tempGroupList[i].id!=null){
+         /* if(this.$scope.tempGroupList[i].id!=null){
             item["groupId"]=this.$scope.tempGroupList[i].id;
 
           }else{
-            item["groupId"]=this.$scope.tempGroupList[i].groupId;
 
-          }
+          }*/
+          item["groupId"]=this.$scope.tempGroupList[i].groupId;
+
           item["position"]=1;
           item["studentNumber"]=this.$scope.tempGroupList[i].studentNumber;
           jsonObj.push(item);
@@ -1544,14 +1640,15 @@ module ums{
             var item={};
             var item={};
             item["subGroupNo"]=i;
-            if(this.$scope.subGroupWithDeptMap[i][j].id!=null)
+           /* if(this.$scope.subGroupWithDeptMap[i][j].id!=null)
             {
               item["groupId"]=this.$scope.subGroupWithDeptMap[i][j].id;
 
             }
             else{
-              item["groupId"]=this.$scope.subGroupWithDeptMap[i][j].groupId;
-            }
+            }*/
+            item["groupId"]=this.$scope.subGroupWithDeptMap[i][j].groupId;
+
             item["position"]=1;
             item["studentNumber"]=this.$scope.subGroupWithDeptMap[i][j].studentNumber;
             jsonObj.push(item);

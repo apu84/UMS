@@ -34,6 +34,7 @@ public class SeatPlanGroupBuilder implements Builder<SeatPlanGroup,MutableSeatPl
   @Override
   public void build(JsonObjectBuilder pBuilder, SeatPlanGroup pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) throws Exception {
     pBuilder.add("id",pReadOnly.getId());
+    pBuilder.add("groupId",pReadOnly.getId());
     pBuilder.add("semesterId",pReadOnly.getSemester().getId());
     pBuilder.add("programId",pReadOnly.getProgram().getId());
     pBuilder.add("programName",pReadOnly.getProgramName());

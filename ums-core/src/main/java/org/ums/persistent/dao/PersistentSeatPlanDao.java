@@ -18,11 +18,11 @@ import java.util.List;
  */
 public class PersistentSeatPlanDao extends SeatPlanDaoDecorator{
   String SELECT_ALL="SELECT ID,ROOM_ID,SEMESTER_ID,GROUP_NO,STUDENT_ID,ROW_NO,COL_NO,EXAM_TYPE,LAST_MODIFIED FROM SEAT_PLAN ";
-  String SELECT_ALL_CCI="SELECT ID,ROOM_ID,SEMESTER_ID,GROUP_NO,STUDENT_ID,ROW_NO,COL_NO,EXAM_TYPE,EXAM_DATE,LAST_MODIFIED FROM SEAT_PLAN ";
+  String SELECT_ALL_CCI="SELECT ID,ROOM_ID,SEMESTER_ID,GROUP_NO,STUDENT_ID,ROW_NO,COL_NO,EXAM_TYPE,EXAM_DATE,application_type,LAST_MODIFIED FROM SEAT_PLAN ";
   String INSERT_ALL="INSERT INTO SEAT_PLAN(ROOM_ID,SEMESTER_ID,GROUP_NO,STUDENT_ID,ROW_NO,COL_NO,EXAM_TYPE,LAST_MODIFIED) VALUES" +
       " (?,?,?,?,?,?,?,"+ getLastModifiedSql()+" )";
-  String INSERT_ALL_CCI="INSERT INTO SEAT_PLAN(ROOM_ID,SEMESTER_ID,GROUP_NO,STUDENT_ID,ROW_NO,COL_NO,EXAM_TYPE,EXAM_DATE,LAST_MODIFIED) VALUES" +
-      " (?,?,?,?,?,?,?,to_date(?,'MM-DD-YYYY'),"+ getLastModifiedSql()+" )";
+  String INSERT_ALL_CCI="INSERT INTO SEAT_PLAN(ROOM_ID,SEMESTER_ID,GROUP_NO,STUDENT_ID,ROW_NO,COL_NO,EXAM_TYPE,EXAM_DATE,APPLICATION_TYPE,LAST_MODIFIED) VALUES" +
+      " (?,?,?,?,?,?,?,to_date(?,'MM-DD-YYYY'),?,"+ getLastModifiedSql()+" )";
   String UPDATE_ALL="UPDATE SEAT_PLAN SET ROOM_ID=?,SEMESTER_ID=?,GROUP_NO=?,STUDENT_ID=?,ROW_NO=?," +
       "COL_NO=?,EXAM_TYPE=?,LAST_MODIFIED="+getLastModifiedSql()+" ";
   String DELETE_ALL = "DELETE FROM SEAT_PLAN ";
@@ -164,7 +164,8 @@ public class PersistentSeatPlanDao extends SeatPlanDaoDecorator{
           seatPlan.getRowNo(),
           seatPlan.getColumnNo(),
           seatPlan.getExamType(),
-          seatPlan.getExamDate()
+          seatPlan.getExamDate(),
+          seatPlan.getApplicationType()
       });
     }
     return params;
@@ -200,6 +201,7 @@ public class PersistentSeatPlanDao extends SeatPlanDaoDecorator{
       mSeatPlan.setSemesterId(pResultSet.getInt("SEMESTER_ID"));
       mSeatPlan.setGroupNo(pResultSet.getInt("GROUP_NO"));
       mSeatPlan.setExamDate(pResultSet.getString("EXAM_DATE"));
+      mSeatPlan.setApplicationType(pResultSet.getInt("APPLICATION_TYPE"));
       mSeatPlan.setLastModified(pResultSet.getString("LAST_MODIFIED"));
       return mSeatPlan;
     }

@@ -20,4 +20,5 @@ public interface SeatPlan extends Serializable,LastModifier,EditType<MutableSeat
   int getExamType();
   int getGroupNo();
   String getExamDate();
+  Integer getApplicationType();
 }

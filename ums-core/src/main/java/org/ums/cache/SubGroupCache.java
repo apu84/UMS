@@ -56,4 +56,9 @@ public class SubGroupCache extends ContentCache<SubGroup,MutableSubGroup,Integer
   public int checkBySemesterGroupNoAndType(int pSemesterId, int pGroupNo, int pType) {
     return getManager().checkBySemesterGroupNoAndType(pSemesterId,pGroupNo,pType);
   }
+
+  @Override
+  public int checkForHalfFinishedSubGroupsBySemesterGroupNoAndType(int pSemesterId, int pGroupNo, int pType) {
+    return getManager().checkForHalfFinishedSubGroupsBySemesterGroupNoAndType(pSemesterId,pGroupNo,pType);
+  }
 }

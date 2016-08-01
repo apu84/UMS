@@ -15,6 +15,7 @@ public interface SubGroupManager extends ContentManager<SubGroup,MutableSubGroup
   public int getSubGroupNumberOfAGroup(int pSemesterId,int pExamType,int pGroupNo);
   public List<SubGroup> getSubGroupMembers(int pSemesterId,int pExamTYpe,int pGroupNo,int pSubGroupNo);
   public int checkBySemesterGroupNoAndType(int pSemesterId,int pGroupNo,int pType);
+  public int checkForHalfFinishedSubGroupsBySemesterGroupNoAndType(int pSemesterId,int pGroupNo,int pType);
 }
 
 //todo: add examtype option

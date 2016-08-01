@@ -10,6 +10,7 @@
         background: #FFF;
         color: #333;
         border-radius: 5px;
+        -webkit-padding-start: 2px !important;
     }
     .custom-menu li {
         padding: 8px 12px;
@@ -328,9 +329,9 @@
     <div  class="panel-body md-padding" >
         <!--<div contecontext-menuxt-menu mergeInitialization="mergeInitialization()" splitCourseStudent="splitCourseStudent()"  revertSplitAction="revertSplitAction()" mergeGroups="mergeGroups() "></div>-->
 
-        <ul class="custom-menu"  style="list-style-type:none" data-ng-if="customeMenu==true">
-            <li data-action="split" data-ng-click="splitOut()"><i class="fa fa-expand" aria-hidden="true"></i>Split Out</li>
-            <li data-action="merge" data-ng-click="mergeUpdate()"><i class="fa fa-retweet" aria-hidden="true"></i>Merge</li>
+        <ul context-menu class="custom-menu"  style="list-style-type:none">
+            <li data-action="split" data-ng-click="splitOut()"><i class="fa fa-expand" aria-hidden="true"></i>&nbsp;&nbsp;Split</li>
+            <li data-action="merge" data-ng-click="mergeUpdate()"><i class="fa fa-retweet" aria-hidden="true"></i>&nbsp;&nbsp;Merge</li>
         </ul>
         <div class="row">
             <div class="col-md-2">
@@ -357,7 +358,7 @@
                 <div >
                     <ul ui-sortable="sortableOptionsIfSubGroupNotFound" data-ng-model="tempGroupList"   class="list apps-container " data-ng-style="{'background-color':classBodyBackgroundColor}">
                         <li  id="group.id" data-ng-repeat="group in tempGroupList" class="item mouse-effect" data-ng-click="getMouseClickEvent(group)" data-ng-style="{'background-color':group.backgroundColor}">
-                            <div context-menu data-ng-if="group.backgroundColor=='red'" class="mouseclick">
+                            <div context-menu data-ng-if="group.backgroundColor=='red' && editSubGroup==false" class="mouseclick">
                                 <div style="cursor: pointer;" data-ng-if="examType==1">
                                     {{group.programName}}:{{group.year}}/{{group.semester}} ({{group.studentNumber}})
                                 </div>
@@ -401,7 +402,7 @@
 
                     </div>
                     <div class="col-md-4" align="center">
-                        <select class="form-control required" name="subGroupNo" data-ng-if="editSubGroup==false && deleteAndCreateNewSubGroup==false" data-ng-model="selectedSubGroupNo" data-ng-change="generateIterationNumberArray(selectedSubGroupNo)" >
+                        <select class="form-control required" name="subGroupNo" data-ng-if="editSubGroup==false && deleteAndCreateNewSubGroup==false " data-ng-model="selectedSubGroupNo" data-ng-change="generateIterationNumberArray(selectedSubGroupNo)" >
                             <option value="">How Many Sub Groups?</option>
                             <option value="4">4</option>
                             <option value="5">5</option>
@@ -562,7 +563,7 @@
 
                             <li  id="group.id" data-ng-repeat="group in subGroupWithDeptMap[i]" class="item" data-ng-click="getMouseClickEvent(group)" data-ng-style="{'background-color':group.backgroundColor}">
 
-                                <div context-menu data-ng-if="group.backgroundColor=='red'">
+                                <div context-menu data-ng-if="group.backgroundColor=='red' && editSubGroup==false">
                                     <div style="cursor: pointer;" data-ng-if="examType==1">
                                         {{group.programName}}:{{group.year}}/{{group.semester}} ({{group.studentNumber}})
                                     </div>
@@ -608,7 +609,7 @@
 
 
                 </div>
-                <div confirmation-dialog deleteAndRecreate="deleteAndRecreate()" cancel-recreation="cancelRecreation()" title="Recreate Sub Groups" data-ng-if="confirmation">
+                <div confirmation-dialog  title="Recreate Sub Groups" data-ng-if="confirmation">
                     <p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>Sub Groups will be permanently deleted and can not be recovered</p>
                     <hr>
                     <div align="right">

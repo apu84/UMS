@@ -92,7 +92,12 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
       seatPlans= mSeatPlanManager.getBySemesterAndGroupAndExamType(pSemesterId,groupNo,type);
 
     }
-    java.util.List<SpStudent> students = mSpStudentManager.getAll();
+    java.util.List<SpStudent> students;
+    if(groupNo!=0){
+     students = mSpStudentManager.getAll();
+    }else{
+      students = mSpStudentManager.getStudentBySemesterIdAndExamDateForCCI(pSemesterId,examDate);
+    }
     java.util.List<Program> programs = mProgramManager.getAll();
 
     java.util.List<Integer> roomsOfTheSeatPlan = new ArrayList<>();
@@ -206,14 +211,40 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
               if(seatPlanOfTheRowAndCol!=null){
                 SeatPlan seatPlan = seatPlanOfTheRowAndCol;                                  //roomRowColWithSeatPlanMap.get(room.getId()+""+i+""+j) ;
                 SpStudent student = studentIdWIthStuddentInfoMap.get(seatPlan.getStudent().getId());
-                Program program = programIdWithProgramInfoMap.get(student.getProgram().getId());
-                String dept = program.getShortName()+" "+student.getAcademicYear()+"/"+student.getAcademicSemester();
-                String deptName = program.getShortName();
+                Program program ;
+                String dept;
+                String deptName;
+                if(groupNo==0){
+                  dept = student.getProgramShortName()+" "+student.getAcademicYear()+"/"+student.getAcademicSemester();
+                  deptName=student.getProgramShortName();
+                }
+                else{
+                  program = programIdWithProgramInfoMap.get(student.getProgram().getId());
+                  dept = program.getShortName()+" "+student.getAcademicYear()+"/"+student.getAcademicSemester();
+                  deptName = program.getShortName();
+
+                }
                 String yearSemester = student.getAcademicYear()+"/"+student.getAcademicSemester();
                 if(deptList.size()==0){
                   deptList.add(dept);
                   java.util.List<String> studentList = new ArrayList<>();
-                  studentList.add(student.getId());
+                  if(groupNo==0){
+                    if(student.getApplicationType()==3){
+                      studentList.add(student.getId()+"(C)");
+                    }
+                    else if(student.getApplicationType()==5){
+                      studentList.add(student.getId()+"(I)");
+
+                    }
+                    else{
+                      studentList.add(student.getId());
+
+                    }
+                  }
+                  else{
+                    studentList.add(student.getId());
+
+                  }
                   deptStudentListMap.put(dept,studentList);
                   deptWithDeptNameMap.put(dept,deptName);
                   deptWithYearSemesterMap.put(dept,yearSemester);
@@ -222,7 +253,23 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
                   for(String deptOfTheList:deptList){
                     if(deptOfTheList.equals(dept)){
                       java.util.List<String> studentList = deptStudentListMap.get(dept);
-                      studentList.add(student.getId());
+                      if(groupNo==0){
+                        if(student.getApplicationType()==3){
+                          studentList.add(student.getId()+"(C)");
+                        }
+                        else if(student.getApplicationType()==5){
+                          studentList.add(student.getId()+"(I)");
+
+                        }
+                        else{
+                          studentList.add(student.getId());
+
+                        }
+                      }
+                      else{
+                        studentList.add(student.getId());
+
+                      }
                       deptStudentListMap.put(dept,studentList);
                       foundInTheList=true;
                       break;
@@ -231,7 +278,23 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
                   if(foundInTheList==false){
                     deptList.add(dept);
                     java.util.List<String> studentList = new ArrayList<>();
-                    studentList.add(student.getId());
+                    if(groupNo==0){
+                      if(student.getApplicationType()==3){
+                        studentList.add(student.getId()+"(C)");
+                      }
+                      else if(student.getApplicationType()==5){
+                        studentList.add(student.getId()+"(I)");
+
+                      }
+                      else{
+                        studentList.add(student.getId());
+
+                      }
+                    }
+                    else{
+                      studentList.add(student.getId());
+
+                    }
                     deptStudentListMap.put(dept,studentList);
                     deptStudentListMap.put(dept,studentList);
                     deptWithDeptNameMap.put(dept,deptName);

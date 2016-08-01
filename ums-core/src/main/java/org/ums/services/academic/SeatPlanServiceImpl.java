@@ -65,6 +65,20 @@ public class SeatPlanServiceImpl implements SeatPlanService {
       numberOfSubGroups= mSubGroupManager.getSubGroupNumberOfAGroup(pSemesterId,pExamType,pGroupNo);
 
     }
+
+    if(pGroupNo==0){
+      Integer numberOfSubGroupsWithZeroSubGroupNumber = mSubGroupCCIManager.checkForHalfFinishedSubGroup(pSemesterId,pExamDate);
+      if(numberOfSubGroupsWithZeroSubGroupNumber>0){
+        numberOfSubGroups-=1;
+      }
+    }
+    else{
+      Integer numberOfSubGroupsWithZeroSubGroupNumber =mSubGroupManager.checkForHalfFinishedSubGroupsBySemesterGroupNoAndType(pSemesterId,pGroupNo,1);
+      if(numberOfSubGroupsWithZeroSubGroupNumber>0){
+        numberOfSubGroups-=1;
+      }
+    }
+
    /* Map<String,List<SpStudent>> studentsByProgramYearSemesterStatusList = initiateStudentsBasedOnProgramYearSemesterStatus();
     Map<String,List<SpStudent>> studentsByProgramYearSemesterStatusList2 = initiateStudentsBasedOnProgramYearSemesterStatus();
 
@@ -110,6 +124,7 @@ public class SeatPlanServiceImpl implements SeatPlanService {
 
 
         //**********new Algorithm *************************
+
 
 
         int divider = numberOfSubGroups/2;
@@ -273,6 +288,7 @@ public class SeatPlanServiceImpl implements SeatPlanService {
                           seatPlan.setGroupNo(pGroupNo);
                           if(pGroupNo==0){
                             seatPlan.setExamDate(pExamDate);
+                            seatPlan.setApplicationType(student.getApplicationType());
                           }
                           totalSeatPlan.add(seatPlan);
                           studentsOfTheSubGroup.remove(0);
@@ -548,22 +564,47 @@ public class SeatPlanServiceImpl implements SeatPlanService {
   Map<Integer,List<SpStudent>> getStudentsOfTheSubGroupsCCI(int pSemesterId, int pGroupNo,int pExamType,String examDate,int numberOfSubGroups,Map<String,List<SpStudent>> studentsByProgramYearSemesterStatusList)throws Exception{
     List<SubGroupCCI> subGroupMembers = mSubGroupCCIManager.getBySemesterAndExamDate(pSemesterId,examDate);
     Map<Integer,List<SpStudent>> subGroupNumberWithStudentsMap = new HashMap<>();
+    Integer numberOfZeroValuedSubGroups = mSubGroupCCIManager.checkForHalfFinishedSubGroup(pSemesterId,examDate);
+
+
+    /*TO do:
+    * the employee or the user can see partial exam seat plan, that means, he/she can save some portions of the sub groups and then check the seat plan.
+    * So, there must be a provision for checking.
+    * For that process, check if there is any sub group number with value '0', if, then, the sub group number must be omitted in the loop.*/
     for(SubGroupCCI member: subGroupMembers){
       List<SpStudent> students = studentsByProgramYearSemesterStatusList.get(member.getCourseId());
       for(int i=1;i<=numberOfSubGroups;i++){
         if(i==member.getSubGroupNo()){
           if(subGroupNumberWithStudentsMap.get(i)!=null){
             List<SpStudent> studentsOfTheSubGroup = subGroupNumberWithStudentsMap.get(i);
-            studentsOfTheSubGroup.addAll(students);
+            for(int j=0;j<member.getTotalStudent();j++){
+              SpStudent spStudent = students.get(0);
+              students.remove(0);
+              studentsOfTheSubGroup.add(spStudent);
+            }
+            //studentsOfTheSubGroup.addAll(students);  //check
             subGroupNumberWithStudentsMap.put(i,studentsOfTheSubGroup);
           }
           else{
-            subGroupNumberWithStudentsMap.put(i,students);
+            List<SpStudent> studentsOfTheSubGroup = new ArrayList<>();
+            for(int j=0;j<member.getTotalStudent();j++)
+            {
+              SpStudent spStudent1 = students.get(0);
+              students.remove(0);
+              studentsOfTheSubGroup.add(spStudent1);
+            }
+
+            subGroupNumberWithStudentsMap.put(i,studentsOfTheSubGroup);
           }
 
           break;
         }
+
       }
+
+      studentsByProgramYearSemesterStatusList.put(member.getCourseId(),students);
+
+
     }
     return subGroupNumberWithStudentsMap;
   }

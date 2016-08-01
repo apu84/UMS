@@ -51,6 +51,12 @@ public class PersistentSubGroupDao extends SubGroupDaoDecorator{
   }
 
   @Override
+  public int checkForHalfFinishedSubGroupsBySemesterGroupNoAndType(int pSemesterId, int pGroupNo, int pType) {
+    String query = "SELECT COUNT(*) FROM SP_SUB_GROUP WHERE SEMESTER_ID=? AND GROUP_NO=? AND EXAM_TYPE=? and sub_group_no=0";
+    return mJdbcTemplate.queryForObject(query,Integer.class,pSemesterId,pGroupNo,pType);
+  }
+
+  @Override
   public List<SubGroup> getBySemesterGroupNoAndType(int pSemesterId, int pGroupNo, int pType) {
     String query = SELECT_ALL+" and  s.SEMESTER_ID=? AND s.GROUP_NO=? AND s.EXAM_TYPE=? ORDER BY s.SUB_GROUP_NO ASC, s.ID ASC ";
     return mJdbcTemplate.query(query,new Object[]{pSemesterId,pGroupNo,pType},new SubGroupRowMapper());
@@ -127,7 +133,7 @@ public class PersistentSubGroupDao extends SubGroupDaoDecorator{
           subGroup.getSemester().getId(),
           subGroup.getGroupNo(),
           subGroup.subGroupNo(),
-          subGroup.getGroup().getId(),
+          subGroup.getGroupId(),
           subGroup.getPosition(),
           subGroup.getStudentNumber(),
           subGroup.getExamType()

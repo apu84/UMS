@@ -11,4 +11,5 @@ import java.util.List;
 public interface SpStudentManager extends ContentManager<SpStudent,MutableSpStudent,String> {
   public List<SpStudent> getStudentByProgramYearSemesterStatus(int pProgramId,int pYear,int pSemester,int pStatus);
   public List<SpStudent> getStudentByCourseIdAndSemesterIdForSeatPlanForCCI(String pCourseId,Integer pSemesterId);
+  public List<SpStudent> getStudentBySemesterIdAndExamDateForCCI(Integer pSemesterId,String pExamDate);
 }
