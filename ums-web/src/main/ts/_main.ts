@@ -23,6 +23,7 @@
 /// <reference path='controller/semester/NewSemester.ts'/>
 /// <reference path='controller/semester/SemesterInfo.ts'/>
 /// <reference path='controller/semester/SemesterSyllabusMap.ts'/>
+/// <reference path='controller/semester/ExamSeatPlan.ts'/>
 
 /// <reference path='controller/course/NewCourseUg.ts'/>
 /// <reference path='controller/course/NewCoursePg.ts'/>
