@@ -75,4 +75,5 @@ interface JQuery {
   jgrid?:any;
   navGrid?:any;
   setGridParam(obj: any): void;
+  getRowData(rowId:String):any;
 }

@@ -313,3 +313,10 @@ div.ui-jqgrid-view table.ui-jqgrid-btable th {
 /*jQgrid row color style*/
 .activeSemesterBG { background-color: #CCFFFF; background-image: none; }
 .newlyCreatedSemesterBG { background-color: #EBDEF0; background-image: none; }
+
+/*
+.ui-jqgrid .loading{
+    height: 34px;
+}
+*/
+.ui-jqgrid .ui-jqgrid-btable { cursor : pointer; }

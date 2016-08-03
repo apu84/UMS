@@ -21,6 +21,7 @@
 
 /// <reference path='controller/student/NewStudent.ts'/>
 /// <reference path='controller/semester/NewSemester.ts'/>
+/// <reference path='controller/semester/SemesterInfo.ts'/>
 /// <reference path='controller/semester/SemesterSyllabusMap.ts'/>
 
 /// <reference path='controller/course/NewCourseUg.ts'/>
@@ -81,7 +82,6 @@
 
 /// <reference path='interceptor/Unauthorized.ts'/>
 /// <reference path='interceptor/ValidationExceptions.ts'/>
-/// <reference path='interceptor/ServerExceptions.ts'/>
 
 /// <reference path='filter/TrustAsHtml.ts'/>
 /// <reference path='util/UmsUtil.ts'/>
@@ -99,8 +99,10 @@
 
 /// <reference path='model/TeacherAssignmentSearchParamModel.ts'/>
 /// <reference path='model/CourseTeacherSearchParamModel.ts'/>
-/// <reference path='model/CourseTeacherModel.ts'/>
 /// <reference path='model/LoggedInUser.ts'/>
+/// <reference path='model/CourseTeacherModel.ts'/>
+
+
 
 
 

@@ -9,7 +9,8 @@ module ums {
     refresh?(): void;
     getRowData?(rowId: string): any;
     editGridRow?(rowId: string): void;
-    toggleMessage?(message?: string): void
+    toggleMessage?(message?: string): void;
+    removeLoadingMessage?():void;
     resize?(): void;
     gridElement?(element: JQuery);
     gridData?(data: any);
@@ -22,8 +23,8 @@ module ums {
     remove(rowData: RowData): void;
     getColumnModel(): any;
     decorateScope(): GridConfig;
-    beforeEditForm(formId: string, gridElement: JQuery): void;
-    afterShowEditForm(formId: String, gridElement: JQuery): void;
+    beforeShowEditForm(formId: any, gridElement: JQuery): void;
+    afterShowEditForm(formId: any, gridElement: JQuery): void;
   }
 
   export interface LoadComplete{

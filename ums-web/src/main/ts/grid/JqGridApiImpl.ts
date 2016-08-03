@@ -50,6 +50,7 @@ module ums {
 
 
     public editGridRow(rowId: string): void {
+      var that=this;
       this.currentGridElement.jqGrid('editGridRow', rowId, {
         editCaption: "The Edit Dialog",
         closeOnEscape: true,
@@ -58,17 +59,11 @@ module ums {
           return 'Error: ' + data.responseText
         },
         onclickSubmit: (row, data) => {
+          console.log(this);
           if (this.gridEditActions
               && this.gridEditActions.edit) {
             this.gridEditActions.edit(data);
           }
-        },
-
-        beforeInitData: (formid) => {
-          this.gridEditActions.beforeEditForm(formid, this.currentGridElement);
-        },
-        afterShowForm: (formid) => {
-          this.gridEditActions.afterShowEditForm(formid, this.currentGridElement);
         },
         recreateForm: true,
         beforeShowForm: function ($form) {
@@ -79,6 +74,12 @@ module ums {
               .prev(".CaptionTD")
               .prop("disabled", true)
               .addClass("ui-state-disabled")
+        },
+        beforeInitData: function($form) {
+          that.gridEditActions.beforeShowEditForm($form, that.currentGridElement);
+        },
+        afterShowForm: function ($form) {
+          //gridEditActions.afterShowEditForm($form, this.currentGridElement);
         }
       });
     }
@@ -87,12 +88,16 @@ module ums {
       if (!this.messageDisplayed) {
         var text = !message ? 'Loading...' : message;
         $(".loading").html(text).show();
-        $(".ui-overlay").show();
+        $(".ui-jqgrid .ui-overlay").show();
       } else {
         $(".loading").html('').hide();
-        $(".ui-overlay").hide();
+        $(".ui-jqgrid .ui-overlay").hide();
       }
       this.messageDisplayed = !this.messageDisplayed;
+    }
+
+    public removeLoadingMessage():void{
+      $(".loading").html('').hide();
     }
 
     constructor() {

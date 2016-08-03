@@ -57,11 +57,21 @@ module ums {
               scope.grid.api.gridEditActions.edit(data);
             }
           },
-          beforeInitData: function(formid) {
-            scope.grid.api.gridEditActions.beforeEditForm(formid, table);
+          recreateForm: true,
+          beforeShowForm: function ($form) {
+            $form.find(".FormElement[readonly]")
+                .prop("disabled", true)
+                .addClass("ui-state-disabled")
+                .closest(".DataTD")
+                .prev(".CaptionTD")
+                .prop("disabled", true)
+                .addClass("ui-state-disabled")
           },
-          afterShowForm: function (formid) {
-            scope.grid.api.gridEditActions.afterShowEditForm(formid, table);
+          beforeInitData: function($form) {
+            scope.grid.api.gridEditActions.beforeShowEditForm($form, table);
+          },
+          afterShowForm: function ($form) {
+            scope.grid.api.gridEditActions.afterShowEditForm($form, table);
           }
         };
 
@@ -76,10 +86,15 @@ module ums {
                 && scope.grid.api.gridEditActions.insert) {
               scope.grid.api.gridEditActions.insert(data);
             }
-          }
+          },
+          afterSubmit:function(response){
+            return [false,'',null];
+          },
+          closeAfterAdd: true
         };
 
         var deleteOptions = {
+          closeAfterEdit: true,
           errorTextFormat: function (data) {
             return 'Error: ' + data.responseText
           },
@@ -88,6 +103,9 @@ module ums {
                 && scope.grid.api.gridEditActions.remove) {
               scope.grid.api.gridEditActions.remove(data);
             }
+          },
+          afterSubmit:function(response){
+            return [true,'',null];
           }
         };
 

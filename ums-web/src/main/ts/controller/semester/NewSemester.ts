@@ -14,7 +14,7 @@ module ums {
     public static $inject = ['appConstants', 'HttpClient','$scope', 'notify'];
     constructor(private appConstants:any,private httpClient:HttpClient,private $scope:INewSemesterScope,private notify: Notify) {
       var currentYear:number=(new Date()).getFullYear();
-      var nextYear:number=currentYear+1;
+      var nextYear:number=currentYear+10;
       $scope.data = {
         programTypeOptions:appConstants.programType,
         semesterTypeOptions:appConstants.semesterType,
@@ -40,7 +40,7 @@ module ums {
     private submit():void {
 
       //$.notify("Access granted", { position:"top",autoHide:false });
-      this.$scope. semester.semesterName=$("#semesterType option:selected").text()+","+this.$scope.semester.year;
+      this.$scope. semester.semesterName=$("#semesterType option:selected").text()+", "+this.$scope.semester.year;
       var semesterId=this.$scope.semester.programTypeId+this.$scope.semester.semesterTypeId+this.$scope.semester.year;
       this.$scope. semester.semesterId=+semesterId;
       this.$scope.semester.statusId=2;
