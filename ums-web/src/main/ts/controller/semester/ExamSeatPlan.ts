@@ -592,7 +592,7 @@ module ums{
     private createCCI(examDate:string):void{
       this.$scope.hideSelection=false;
        // for application cci, examType=4;
-      this.$scope.classBodyBackgroundColor="#FAEBD7";
+      this.$scope.classBodyBackgroundColor="#d9edf7"; //Active Color
       this.$scope.cciSelected=true;
       this.getApplicationCCIInfoForSubGroup(examDate).then((subGroupCCiArr:Array<ISeatPlanGroup>)=>{
         this.createOrViewSubgroups(4);
@@ -892,7 +892,7 @@ module ums{
 
       this.getSubGroupInfo().then((subGroupArr:Array<ISeatPlanGroup>)=>{
 
-        this.$scope.classBodyBackgroundColor="yellow";
+        this.$scope.classBodyBackgroundColor="#FDEEF4";   //Inactive Color
         console.log("saved data");
         console.log(subGroupArr);
         if(subGroupArr.length>0 && this.$scope.recreateButtonClicked==false){
@@ -1181,7 +1181,7 @@ module ums{
         },
         disabled:false
       }
-      this.$scope.classBodyBackgroundColor="#FAEBD7";
+      this.$scope.classBodyBackgroundColor="#d9edf7"; //Active Color
       this.$scope.editSubGroup=false;
       this.$scope.saveSubGroupInfo=true;
 
