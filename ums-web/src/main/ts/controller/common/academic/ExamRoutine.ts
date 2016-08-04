@@ -213,7 +213,8 @@ module ums {
     }
 
     private programSelectionChanged(date_time:IDateTime,program_obj_row:IProgram):void {
-
+console.clear();
+      console.log(program_obj_row);
       //if(program_obj_row.programId==null)
         program_obj_row.programId = $("#program_" + date_time.index + program_obj_row.index).val() == "?" ? null : parseInt($("#program_" + date_time.index + program_obj_row.index).val());
       console.log("------------>>" + program_obj_row.programId);
@@ -291,9 +292,13 @@ module ums {
     private getCourseArr(program_id:number):ng.IPromise<any> {
       var defer = this.$q.defer();
       var courseArr:Array<any>;
-      console.log('-----inside courseArr----')
+      console.log('-----inside courseArr-22222222222222sadf asasdf sadf---')
       console.log(this.$scope.routine.semester);
+
+
       console.log(program_id);
+
+
       this.httpClient.get('academic/course/semester/'+ this.$scope.routine.semester+'/program/' + program_id, 'application/json',
           (json:any, etag:string) => {
             courseArr = json.entries;

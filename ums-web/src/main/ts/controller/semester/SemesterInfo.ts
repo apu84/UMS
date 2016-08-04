@@ -15,9 +15,9 @@ module ums {
   }
 
   export class SemesterInfo implements GridEditActions,RowAttribute {
-    public static $inject = ['appConstants', 'HttpClient', '$scope'];
+    public static $inject = ['appConstants', 'HttpClient', '$scope', 'notify'];
 
-    constructor(private appConstants: any, private httpClient: HttpClient, private $scope: ISemesterScope) {
+    constructor(private appConstants: any, private httpClient: HttpClient, private $scope: ISemesterScope,private notify: Notify) {
       this.loadData();
     }
 
@@ -27,19 +27,20 @@ module ums {
     }
 
     public insert(rowData: RowData): void {
+      //this.decorateScope().grid.api.setMessageDisplayed(false);
       this.decorateScope().grid.api.toggleMessage('Saving...');
-      if (rowData.id.indexOf('jqg') == 0) {
-        this.httpClient.post('academic/classroom', rowData, HttpClient.MIME_TYPE_JSON).success(()=> {
+      console.log(rowData);
+      console.log(rowData.id);
+        this.httpClient.post('academic/semester/', rowData, HttpClient.MIME_TYPE_JSON).success(()=> {
           this.decorateScope().grid.api.toggleMessage();
           this.loadData();
         }).error((response) => {
-          console.error(response);
-          this.loadData();
+          console.log(response);
+          // this.loadData();
+          this.decorateScope().grid.api.removeLoadingMessage();
           this.decorateScope().grid.api.toggleMessage();
         });
-      }
     }
-
     public edit(rowData: RowData): void {
       this.decorateScope().grid.api.toggleMessage('Saving...');
       this.httpClient.put('academic/classroom', rowData, HttpClient.MIME_TYPE_JSON)
@@ -53,20 +54,36 @@ module ums {
     }
 
     public remove(rowData: RowData): void {
-      this.httpClient.delete('academic/classroom/' + rowData)
+      var notify=this.notify;
+      this.httpClient.delete('academic/semester/' + rowData)
           .success(() => {
-            $.notific8("Removed entry");
+            notify.success("Successfully deleted select semester.");
+            this.decorateScope().grid.api.toggleMessage();
+            this.loadData();
           }).error((data) => {
             console.error(data);
           });
     }
 
-    public beforeEditForm(formId: string, gridElement: JQuery): void {
+    public beforeShowEditForm(form: any, gridElement: JQuery): void {
+
+      var rowId =gridElement.jqGrid('getGridParam','selrow');
+      var rowData = gridElement.getRowData(rowId);
+      if(rowData["status"]=="0") {
+        gridElement.jqGrid('setColProp', 'programTypeId', {editoptions: {readonly: "readonly"}});
+        gridElement.jqGrid('setColProp', 'name', {editoptions: {readonly: "readonly"}});
+        gridElement.jqGrid('setColProp', 'status', {editoptions: {readonly: "readonly"}});
+      }
+
 
     }
 
-    public afterShowEditForm(formId: String, gridElement: JQuery): void {
-
+    public afterShowEditForm(form: any, gridElement: JQuery): void {
+      var rowId =gridElement.jqGrid('getGridParam','selrow');
+      var rowData = gridElement.getRowData(rowId);
+      gridElement.jqGrid('setColProp','programTypeId',{  editoptions: {readonly: false}});
+      gridElement.jqGrid('setColProp','name',{  editoptions: {readonly: false}});
+      gridElement.jqGrid('setColProp','status',{  editoptions: {readonly: false}});
     }
 
     public decorateScope(): GridConfig {
@@ -86,6 +103,7 @@ module ums {
           label: 'Semester Id',
           name: 'id',
           hidden: true,
+          editable: true,
           key: true
         },
         {
@@ -96,8 +114,7 @@ module ums {
           edittype: 'select',
           width: 150,
           editoptions: {
-            value: '11:Undergraduate;22:Postgraduate',
-            readonly: "readonly"
+            value: '11:Undergraduate;22:Postgraduate'
           },
           stype: 'select',
           searchoptions: {
@@ -108,7 +125,7 @@ module ums {
         {
           label: 'Semester Name',
           name: 'name',
-          editable: false,
+          editable: true,
           width: 250
         },
         {

@@ -110,7 +110,7 @@ module ums {
       });
     }
 
-    public beforeEditForm(formId: string,gridElement: JQuery): void {
+    public beforeShowEditForm(formId: string,gridElement: JQuery): void {
     }
 
     public afterShowEditForm(formId: String, gridElement: JQuery): void {
