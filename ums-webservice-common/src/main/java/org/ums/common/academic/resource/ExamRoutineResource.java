@@ -34,7 +34,19 @@ public class ExamRoutineResource  extends MutableExamRoutineResource {
     return mResourceHelper.getExamRoutineForCCI(pSemesterId,pExamTypeId,pRequest,mUriInfo);
   }
 
+  @GET
+  @Path("/forPublish/civil/semester/{semester-id}")
+  public JsonObject getCivilExamInfo(final @Context Request pRequest,
+                                     final @PathParam("semester-id") Integer pSemesterId) throws Exception{
+    return mResourceHelper.getExamRoutineInfoForCivil(pSemesterId,pRequest,mUriInfo);
+  }
 
+  @GET
+  @Path("/forPublish/cci/semester/{semester-id}")
+  public JsonObject getCCIInfoForPublish(final @Context Request pRequest,
+                                     final @PathParam("semester-id") Integer pSemesterId) throws Exception{
+    return mResourceHelper.getExamRoutineForCCIForSeatPlanPublish(pSemesterId,pRequest,mUriInfo);
+  }
 
 
 }
