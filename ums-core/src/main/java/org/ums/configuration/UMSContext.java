@@ -89,6 +89,13 @@ public class UMSContext {
   }
 
   @Bean
+  SeatPlanPublishManager seatPlanPublishManager(){
+    SeatPlanPublishCache seatPlanPublishCache = new SeatPlanPublishCache(mCacheFactory.getCacheManager());
+    seatPlanPublishCache.setManager(new PersistentSeatPlanPublishDao(mTemplateFactory.getJdbcTemplate()));
+    return seatPlanPublishCache;
+  }
+
+  @Bean
   SubGroupCCIManager subGroupCCIManager(){
     SubGroupCCICache subGroupCCICache = new SubGroupCCICache(mCacheFactory.getCacheManager());
     subGroupCCICache.setManager(new PersistentSubGroupCCIDao(mTemplateFactory.getJdbcTemplate()));

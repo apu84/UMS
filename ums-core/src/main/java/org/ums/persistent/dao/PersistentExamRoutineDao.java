@@ -63,7 +63,7 @@ public class PersistentExamRoutineDao  extends ExamRoutineDaoDecorator {
 
   @Override
   public ExamRoutineDto getExamRoutineForCivilExamBySemester(Integer pSemesterId) {
-    String query = "select  TO_CHAR(rr.EXAM_DATE,'DD/MM/YYYY') from exam_routine,(  " +
+    String query = "select  TO_CHAR(rr.EXAM_DATE,'DD/MM/YYYY') exam_date from exam_routine,(  " +
         "select exam_date from exam_routine group by exam_date having count(exam_date)=2)  " +
         "rr where exam_routine.exam_date = rr.exam_date and ROWNUM=1 and semester=?";
     return mJdbcTemplate.queryForObject(query,new Object[]{pSemesterId},new ExamRoutineForSeatPlanPublishRowMapper());
@@ -71,7 +71,7 @@ public class PersistentExamRoutineDao  extends ExamRoutineDaoDecorator {
 
   @Override
   public List<ExamRoutineDto> getCCIExamRoutinesBySemeste(Integer pSemesterId) {
-    String query="select to_char(exam_date,'DD/MM/YYYY') FROM   " +
+    String query="select to_char(exam_date,'DD/MM/YYYY') exam_date  FROM   " +
         "(select distinct(exam_date) from exam_routine   " +
         "where exam_type=2 and semester=? order by exam_date) er";
     return mJdbcTemplate.query(query,new Object[]{pSemesterId},new ExamRoutineForSeatPlanPublishRowMapper());
@@ -164,7 +164,7 @@ public class PersistentExamRoutineDao  extends ExamRoutineDaoDecorator {
     public ExamRoutineDto mapRow(ResultSet resultSet, int pI) throws SQLException {
       ExamRoutineDto routine = new ExamRoutineDto();
       routine.setExamDate(resultSet.getString("exam_date"));
-      return null;
+      return routine;
     }
   }
 }
