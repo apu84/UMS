@@ -188,34 +188,39 @@
         </div>
 
         <div data-ng-if="cciSelected && examType==2">
-            <br>
-            <br>
-            <table class="table table-bordered" >
-
-
-                <tbody>
-                <tr align="center">
-                    <th><p align="center">Date Of Exam (MM-DD-YYYY)</p></p></th>
-                    <th><p align="center">Weekday</p></th>
-                    <th><p align="center">Sub Grouping</p></th>
-                    <th><p align="center">Seat Plan</p></th>
+            <div class="col-lg-8">
+            <table class="table table-bordered table-striped" >
+                <thead>
+                <tr align="center" class="warning">
+                    <th style="width: 20%"><p align="center">Exam Date</p></th>
+                    <th style="width: 20%"><p align="center">Weekday</p></th>
+                    <th style="width: 40%"><p align="center">Sub Grouping</p></th>
+                    <th style="width: 20%"><p align="center">Seat Plan</p></th>
                 </tr>
+                </thead>
+                <tbody>
                     <tr data-ng-repeat="e in examRoutineCCIArr" align="center">
                         <td><p>{{e.examDate}}</p></td>
                         <td><p>{{e.weekDay}}</p></td>
                         <td>
-                            <p data-ng-if="e.totalStudent>0" style="color: green;">Completed <br><button class="btn btn-success" data-ng-click="viewCCI(e.examDate)">View</button></p>
-                            <p data-ng-if="e.totalStudent==0" style="color: red;">Not-Completed <br><button class="btn btn-default" data-ng-click="createCCI(e.examDate)">Create</button></p>
+                            <p data-ng-if="e.totalStudent>0" style="color: green;">Completed <button class="btn btn-green" data-ng-click="viewCCI(e.examDate)">
+                                View
+                            </button>
+                            </p>
+                            <p data-ng-if="e.totalStudent==0" style="color: red;">Not-Initiated&nbsp;&nbsp;
+                                <button class="btn btn-blue" data-ng-click="createCCI(e.examDate)">
+                                    Initiate
+                                </button>
+                            </p>
                         </td>
                         <td>
-                            <button class="btn btn-success" data-ng-if="e.totalStudent>0" data-ng-click="getSeatPlanInfoCCi(e.examDate)">Generate & Download</button>
-
+                            <button  type="button" class="btn btn-success btn-outlined" data-ng-if="e.totalStudent>0" data-ng-click="getSeatPlanInfoCCi(e.examDate)" style="font-weight: bold;">Generate & Download</button>
                         </td>
 
                     </tr>
                 </tbody>
             </table>
-
+            </div>
         </div>
         <div id="groupPanel" data-ng-if="showGroupOrNot && examType==1" >
             <div class="row">

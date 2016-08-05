@@ -37,7 +37,7 @@ module ums {
                   defaults.allowedActions, {
                     createFolder: true,
                     pickFiles: true,
-                    pickFolders: true,
+                    pickFolders: true
                   }),
             });
       }]);
@@ -45,10 +45,10 @@ module ums {
 
   UMS.constant("appConstants", Constants.Default());
 
-  UMS.config(($stateProvider, $urlRouterProvider) => {
+  UMS.config(($stateProvider, $urlRouterProvider,$locationProvider) => {
     //
     // For any unmatched url, redirect to /state1
-
+    //$locationProvider.html5Mode(true);
     $urlRouterProvider.when('/passwordReport','/passwordReport/singleUserPassword');
     $urlRouterProvider.otherwise("/userHome");
 

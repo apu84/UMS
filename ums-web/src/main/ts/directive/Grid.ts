@@ -87,6 +87,11 @@ module ums {
               scope.grid.api.gridEditActions.insert(data);
             }
           },
+          addCaption:'Add New.....',
+          beforeShowForm: function(form) {
+            alert("inside before show form");
+            return false;
+          },
           afterSubmit:function(response){
             return [false,'',null];
           },
@@ -105,7 +110,7 @@ module ums {
             }
           },
           afterSubmit:function(response){
-            return [true,'',null];
+            return [false,'',null];
           }
         };
 
