@@ -3,6 +3,8 @@ module ums{
   interface IViewSeatPlan extends ng.IScope{
     student:Student;
 
+    getStudentInfo:Function;
+
   }
 
   class ViewSeatPlan{
@@ -10,6 +12,8 @@ module ums{
     constructor(private appConstants: any, private httpClient: HttpClient, private $scope: IViewSeatPlan,
                 private $q:ng.IQService, private notify: Notify,
                 private $sce:ng.ISCEService,private $window:ng.IWindowService) {
+
+      $scope.getStudentInfo = this.getStudentInfo.bind(this);
 
     }
 

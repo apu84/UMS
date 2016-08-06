@@ -61,4 +61,9 @@ public class SeatPlanDaoDecorator extends ContentDaoDecorator<SeatPlan,MutableSe
   public int checkIfExistsBySemesterGroupTypeExamDateRoomRowAndCol(int pSemesterId, int pGroupNo, int pType, String pExamDate, int pRoomId, int pRow, int pCol) {
     return getManager().checkIfExistsBySemesterGroupTypeExamDateRoomRowAndCol(pSemesterId,pGroupNo,pType,pExamDate,pRoomId,pRow,pCol);
   }
+
+  @Override
+  public List<SeatPlan> getForStudent(String pStudentId, Integer pSemesterId) {
+    return getManager().getForStudent(pStudentId,pSemesterId);
+  }
 }

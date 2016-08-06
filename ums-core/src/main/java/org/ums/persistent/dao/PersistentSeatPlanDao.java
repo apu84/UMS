@@ -123,6 +123,16 @@ public class PersistentSeatPlanDao extends SeatPlanDaoDecorator{
   }
 
   @Override
+  public List<SeatPlan> getForStudent(String pStudentId, Integer pSemesterId) {
+
+    String query="select  ID,s.ROOM_ID,SEMESTER_ID,GROUP_NO,STUDENT_ID,ROW_NO,COL_NO,EXAM_TYPE,LAST_MODIFIED from seat_plan s,  " +
+        "(  " +
+        "select room_id from seat_plan where student_id=? and semester_id=?) ss  " +
+        "where s.room_id = ss.room_id order by row_no,col_no;";
+    return mJdbcTemplate.query(query,new Object[]{pStudentId,pSemesterId},new SeatPlanRowMapper());
+  }
+
+  @Override
   public int create(MutableSeatPlan pMutable) throws Exception {
     return mJdbcTemplate.update(INSERT_ALL,
           pMutable.getClassRoom().getId(),

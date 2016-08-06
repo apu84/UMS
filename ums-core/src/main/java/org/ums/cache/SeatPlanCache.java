@@ -81,6 +81,11 @@ public class SeatPlanCache extends ContentCache<SeatPlan, MutableSeatPlan, Integ
 
 
   @Override
+  public List<SeatPlan> getForStudent(String pStudentId, Integer pSemesterId) {
+    return getManager().getForStudent(pStudentId,pSemesterId);
+  }
+
+  @Override
   public List<SeatPlan> getBySemesterAndGroupAndExamTypeAndExamDate(int pSemesterId, int pGropuNo, int pExamType, String pExamDate) {
     return getManager().getBySemesterAndGroupAndExamTypeAndExamDate(pSemesterId,pGropuNo,pExamType,pExamDate);
   }
