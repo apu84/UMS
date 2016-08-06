@@ -40,7 +40,6 @@ public class StudentResource extends MutableStudentResource {
 
   @GET
   public Response get(final @Context Request pRequest) throws Exception {
-
     return mResourceHelper.get(SecurityUtils.getSubject().getPrincipal().toString(), pRequest, mUriInfo);
   }
 }

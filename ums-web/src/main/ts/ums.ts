@@ -37,7 +37,7 @@ module ums {
                   defaults.allowedActions, {
                     createFolder: true,
                     pickFiles: true,
-                    pickFolders: true,
+                    pickFolders: true
                   }),
             });
       }]);
@@ -45,10 +45,10 @@ module ums {
 
   UMS.constant("appConstants", Constants.Default());
 
-  UMS.config(($stateProvider, $urlRouterProvider) => {
+  UMS.config(($stateProvider, $urlRouterProvider,$locationProvider) => {
     //
     // For any unmatched url, redirect to /state1
-
+    //$locationProvider.html5Mode(true);
     $urlRouterProvider.when('/passwordReport','/passwordReport/singleUserPassword');
     $urlRouterProvider.otherwise("/userHome");
 
@@ -694,9 +694,9 @@ module ums {
           }
         })
         .state('studentCourseMaterial', {
-          url: "/studentCourseMaterial/:1/:2",
+          url: "/studentCourseMaterial",
           controller: 'StudentCourseMaterial',
-          templateUrl: 'views/course-material/course-material.html',
+          templateUrl: 'views/course-material/student-course-material.html',
           resolve: {
             loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
               return $ocLazyLoad.load({

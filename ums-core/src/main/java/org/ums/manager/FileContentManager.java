@@ -1,6 +1,7 @@
 package org.ums.manager;
 
 
+import com.sun.xml.internal.bind.v2.TODO;
 import org.apache.commons.io.FileUtils;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
@@ -25,8 +26,6 @@ public class FileContentManager extends BinaryContentDecorator {
   private static final String SIZE = "size";
   private static final String DATE = "date";
   private static final String TYPE = "type";
-  private String DATE_FORMAT = "YYYY-MM-dd'T'HH:mm:ss'Z'";
-  private DateFormat mDateFormat = new SimpleDateFormat(DATE_FORMAT);
 
   @Autowired
   MessageResource mMessageResource;
@@ -240,7 +239,7 @@ public class FileContentManager extends BinaryContentDecorator {
   public Map<String, Object> compress(List<String> pItems, String pNewPath, String pNewFileName,
                                       Domain pDomain, String... pRootPath) {
     try {
-      Path zipFile = getQualifiedPath(pDomain, buildPath(pNewPath + pNewFileName, pRootPath));
+      Path zipFile = getQualifiedPath(pDomain, buildPath(pNewPath +"/"+ pNewFileName, pRootPath));
 
       URI fileUri = zipFile.toUri();
       URI zipUri = new URI("jar:" + fileUri.getScheme(), fileUri.getPath(), null);
@@ -357,8 +356,12 @@ public class FileContentManager extends BinaryContentDecorator {
           Files.copy(externalFile, pathInZipfile,
               StandardCopyOption.REPLACE_EXISTING);
         }
+        zipfs.close();
       }
-      response.put("Content-Type", Files.probeContentType(zipFile));
+
+      //TODO: Need to investigate more why Files.probeContentType returning null .
+     //response.put("Content-Type", Files.probeContentType(zipFile));
+      response.put("Content-Type", "application/zip, application/octet-stream");
       response.put("Content-Length", String.valueOf(zipFile.toFile().length()));
       response.put("Content-Disposition", "inline; filename=\"" + zipFile.toFile().getName() + "\"");
       response.put("Content", Files.newInputStream(zipFile));

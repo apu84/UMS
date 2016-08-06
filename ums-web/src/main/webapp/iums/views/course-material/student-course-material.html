@@ -49,10 +49,11 @@
     </div>
     <div class="arrowClass pull-left" onclick="resetDivs()" id="arrowDiv"><i
             class="fa fa-angle-double-right fa-4x"></i></i> </div>
-    <div class="orgRightClass pull-left" id="rightDiv" >
+    <div class="orgRightClass pull-left" id="rightDiv">
         <div class="panel">
-            <div class="panel-heading">Available Course List</div>
+            <div class="panel-heading">Course List</div>
             <div class="panel-body">
+
                 <div class="spinner" ng-show="loadingVisibility">
                     <div class="bounce1"></div>
                     <div class="bounce2"></div>
@@ -63,22 +64,20 @@
                         <thead>
                         <tr role="row" class="heading">
                             <th width="10%" class="sorting">CourseNo</th>
-                            <th width="40%" class="sorting_asc">Course Title</th>
+                            <th width="60%" class="sorting_asc">Course Title</th>
                             <th width="10%" class="sorting">CrHr</th>
-                            <th width="20%" class="sorting">Sections</th>
                             <th width="20%" class="sorting">Actions</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr data-ng-repeat="(courseId, courseTeacher) in entries">
-                            <td>{{::courseTeacher.courseNo}}</td>
-                            <td>{{::courseTeacher.courseTitle}}</td>
-                            <td>{{::courseTeacher.courseCrHr}}</td>
-                            <td>{{::courseTeacher.section}}</td>
+                        <tr data-ng-repeat="course in entries">
+                            <td>{{::course.no}}</td>
+                            <td>{{::course.title}}</td>
+                            <td>{{::course.crhr}}</td>
                             <td>
                                 <div class="mbs">
                                     <button class="btn btn-xs btn-success filter-submit"
-                                            data-ng-click="initFileManager(courseTeacher.semesterName, courseTeacher.courseNo)">
+                                            data-ng-click="initFileManager(course.no)">
                                         <i class="fa fa-plus-square-o"></i>
                                         Course Material
                                     </button>

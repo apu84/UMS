@@ -28,7 +28,8 @@ public abstract class BinaryContentDecorator implements BinaryContentManager<byt
   protected static final String END_DATE = "endDate";
   protected static final String FOLDER_TYPE = "type";
   protected final static String TOKEN = "token";
-  protected DateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+  protected String DATE_FORMAT = "dd-MM-yyyy HH:mm:ss";
+  protected DateFormat mDateFormat = new SimpleDateFormat(DATE_FORMAT);
 
   private BinaryContentManager<byte[]> mManager;
 

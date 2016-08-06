@@ -76,4 +76,6 @@ interface JQuery {
   navGrid?:any;
   setGridParam(obj: any): void;
   getRowData(rowId:String):any;
+  navButtonAdd?(pagerId:string,buttonConfig:any);
+
 }

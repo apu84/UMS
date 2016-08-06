@@ -13,6 +13,7 @@ module ums {
     removeLoadingMessage?():void;
     resize?(): void;
     gridElement?(element: JQuery);
+    getGrid?():JQuery;
     gridData?(data: any);
     gridEditActions?: GridEditActions;
   }
