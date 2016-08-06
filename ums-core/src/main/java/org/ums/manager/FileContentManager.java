@@ -238,7 +238,7 @@ public class FileContentManager extends BinaryContentDecorator {
   public Map<String, Object> compress(List<String> pItems, String pNewPath, String pNewFileName,
                                       Domain pDomain, String... pRootPath) {
     try {
-      Path zipFile = getQualifiedPath(pDomain, buildPath(pNewPath + pNewFileName, pRootPath));
+      Path zipFile = getQualifiedPath(pDomain, buildPath(pNewPath +"/"+ pNewFileName, pRootPath));
 
       URI fileUri = zipFile.toUri();
       URI zipUri = new URI("jar:" + fileUri.getScheme(), fileUri.getPath(), null);
