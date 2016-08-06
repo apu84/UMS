@@ -30,7 +30,11 @@
     '/applicationCCI':{title:'Appliction for Clearance/Improvement/Carry','breadcrumb':['Application for Clearance/Improvement/Carry']},
     '/examSeatPlan': {title: 'Exam Seat Plan ', 'breadcrumb': ['Seat Plan ']},
     '/seatPlanRegular': {title: 'Exam Seat Plan - Regular ', 'breadcrumb': ['Seat Plan','Regular']},
-    '/seatPlanCCI': {title: 'Exam Seat Plan - CCI ', 'breadcrumb': ['Seat Plan','CCI']}
+    '/seatPlanCCI': {title: 'Exam Seat Plan - CCI ', 'breadcrumb': ['Seat Plan','CCI']},
+    '/publishSeatPlan': {title: 'Publish Seat Plan', 'breadcrumb': ['Seat Plan','Publish']},
+    '/examiner': {title: 'Assign Preparer-Scrutinizer', 'breadcrumb': ['Preparer-Scrutinizer']},
+    '/courseMaterial': {title: 'Course Materials', 'breadcrumb': ['Course Materials']},
+    '/studentCourseMaterial': {title: 'Course Materials', 'breadcrumb': ['Course Materials']}
   };
 
   $.fn.Data.get = function (id) {
@@ -38,17 +42,17 @@
       return $this.pages[id];
     }
   };
-
+  
   $.fn.Data.checkbox = function () {
     if ($('#demo-checkbox-radio').length <= 0) {
-/*      $('input[type="checkbox"]:not(".switch")').iCheck({
-        checkboxClass: 'icheckbox_minimal-grey',
-        increaseArea: '20%' // optional
-      });
-      $('input[type="radio"]:not(".switch")').iCheck({
-        radioClass: 'iradio_minimal-grey',
-        increaseArea: '20%' // optional
-      });*/
+      /*      $('input[type="checkbox"]:not(".switch")').iCheck({
+       checkboxClass: 'icheckbox_minimal-grey',
+       increaseArea: '20%' // optional
+       });
+       $('input[type="radio"]:not(".switch")').iCheck({
+       radioClass: 'iradio_minimal-grey',
+       increaseArea: '20%' // optional
+       });*/
     }
   };
 })(jQuery);
