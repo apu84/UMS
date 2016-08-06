@@ -17,6 +17,12 @@ module ums {
     private setDepartmentPreset: Function;
     private isDepartmentPreset: Function;
 
+    private setProgramPreset: Function;
+    private isProgramPreset: Function;
+
+    private setProgramTypePreset: Function;
+    private isProgramTypePreset: Function;
+
     programId:string;
     departmentId:string;
     programTypeId:string;
@@ -30,7 +36,10 @@ module ums {
       var departments = appConstants.initDept;
       var programs = appConstants.initProgram;
       var semesters = appConstants.initSemester;
+      var programPreset: boolean = false;
       var departmentPreset: boolean = false;
+      var programTypePreset: boolean = false;
+
 
 
       this.getProgramTypes = () => {
@@ -82,6 +91,22 @@ module ums {
         return departmentPreset;
       };
 
+      this.setProgramPreset = (preset: boolean) => {
+        programPreset = preset;
+      };
+
+      this.isProgramPreset = () => {
+        return programPreset;
+      };
+
+      this.setProgramTypePreset = (preset: boolean) => {
+        programTypePreset = preset;
+      };
+
+      this.isProgramTypePreset = () => {
+        return programTypePreset;
+      };
+
       this.programId = '';
       this.departmentId = '';
       this.programTypeId = '';
@@ -90,6 +115,17 @@ module ums {
     public setDepartment(departmentId: string): void {
       this.departmentId = departmentId;
       this.setDepartmentPreset(true);
+    }
+
+    public setProgramId(programId: string): void {
+      this.programId = programId;
+      this.setProgramPreset(true);
+    }
+
+    public setProgramTypeId(programTypeId: string): void {
+      this.programTypeId = programTypeId;
+      this.setProgramTypePreset(true);
+      this.loadSemester();
     }
 
     public loadDepartments(): void {
@@ -112,15 +148,7 @@ module ums {
         this.loadPrograms();
       }
 
-      if (this.programTypeId != this.getAppConstants().Empty) {
-        this.getHttpClient().get('academic/semester/program-type/' + this.programTypeId + "/limit/0", 'application/json',
-            (json:any, etag:string) => {
-              this.setSemesters(json.entries);
-            },
-            (response:ng.IHttpPromiseCallbackArg<any>) => {
-              console.error(response);
-            });
-      }
+      this.loadSemester();
     }
 
     public loadPrograms(): void {
@@ -139,6 +167,18 @@ module ums {
       else {
         this.setPrograms([{id: '', longName: 'Select a Program'}]);
         this.programId = "";
+      }
+    }
+
+    public loadSemester(): void {
+      if (this.programTypeId != this.getAppConstants().Empty) {
+        this.getHttpClient().get('academic/semester/program-type/' + this.programTypeId + "/limit/0", 'application/json',
+            (json: any, etag: string) => {
+              this.setSemesters(json.entries);
+            },
+            (response: ng.IHttpPromiseCallbackArg<any>) => {
+              console.error(response);
+            });
       }
     }
   }

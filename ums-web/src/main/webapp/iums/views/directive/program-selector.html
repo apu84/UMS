@@ -1,4 +1,4 @@
-<div class="form-group">
+<div class="form-group" data-ng-if="!model.isProgramTypePreset()">
   <label class="col-md-4 control-label">Program Type</label>
   <div class="col-md-8">
     <select class="form-control required" name="programType" data-ng-model="model.programTypeId"
@@ -16,7 +16,7 @@
     </select>
   </div>
 </div>
-<div class="form-group">
+<div class="form-group" data-ng-if="!model.isProgramPreset()">
   <label class="col-md-4 control-label">Program Name</label>
   <div class="col-md-8">
     <select class="form-control required" data-ng-model="model.programId" id="dirProgram">

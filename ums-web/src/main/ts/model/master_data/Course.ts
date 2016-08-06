@@ -1,5 +1,6 @@
 module ums {
   export interface Course {
+    id: string;
     courseId: string;
     courseNumber: string;
     creditHour:number;

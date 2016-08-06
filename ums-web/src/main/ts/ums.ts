@@ -658,9 +658,9 @@ module ums {
           }
         })
         .state('studentCourseMaterial', {
-          url: "/studentCourseMaterial/:1/:2",
+          url: "/studentCourseMaterial",
           controller: 'StudentCourseMaterial',
-          templateUrl: 'views/course-material/course-material.html',
+          templateUrl: 'views/course-material/student-course-material.html',
           resolve: {
             loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
               return $ocLazyLoad.load({

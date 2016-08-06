@@ -52,7 +52,7 @@ public class StudentBuilder implements Builder<Student, MutableStudent> {
     pBuilder.add("program", pUriInfo.getBaseUriBuilder().path("academic").path("program")
         .path(String.valueOf(program.getId())).build().toString());
     pBuilder.add("programName", program.getLongName());
-
+    pBuilder.add("programTypeId", program.getProgramTypeId());
     pBuilder.add("year", pStudent.getCurrentYear());
     pBuilder.add("academicSemester", pStudent.getCurrentAcademicSemester());
 

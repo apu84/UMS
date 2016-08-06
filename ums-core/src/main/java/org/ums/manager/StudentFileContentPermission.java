@@ -143,7 +143,7 @@ public class StudentFileContentPermission extends BaseFileContentPermission {
             return success();
 
           } else {
-            error(mMessageResource.getMessage("assignment.upload.time.limit.exceed", pPath));
+            return error(mMessageResource.getMessage("assignment.upload.time.limit.exceed", pPath));
           }
         } catch (Exception e) {
           return error(mMessageResource.getMessage("file.upload.not.allowed", pPath));
