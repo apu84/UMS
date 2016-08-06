@@ -25,8 +25,6 @@ public class FileContentManager extends BinaryContentDecorator {
   private static final String SIZE = "size";
   private static final String DATE = "date";
   private static final String TYPE = "type";
-  private String DATE_FORMAT = "YYYY-MM-dd'T'HH:mm:ss'Z'";
-  private DateFormat mDateFormat = new SimpleDateFormat(DATE_FORMAT);
 
   @Autowired
   MessageResource mMessageResource;

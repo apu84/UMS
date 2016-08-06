@@ -63,7 +63,7 @@ module ums {
         allowedActions: angular.extend(FILEMANAGER_CONFIG.$get().allowedActions, {
           createAssignmentFolder: false,
           upload: true,
-          rename: true,
+          rename: false,
           move: false,
           copy: false,
           edit: false,
