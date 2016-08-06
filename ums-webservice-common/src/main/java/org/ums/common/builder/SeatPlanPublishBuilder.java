@@ -27,14 +27,35 @@ public class SeatPlanPublishBuilder implements Builder<SeatPlanPublish,MutableSe
     if(pReadOnly.getExamDate()!=null)
         pBuilder.add("examDate",pReadOnly.getExamDate());
     if(pReadOnly.getPublishStatus()!=null)
-        pBuilder.add("published",pReadOnly.getPublishStatus());
+    {
+      if(pReadOnly.getPublishStatus()==0){
+        pBuilder.add("published","false");
+
+      }
+      else{
+        pBuilder.add("published","true");
+
+      }
+
+    }
   }
 
   @Override
   public void build(MutableSeatPlanPublish pMutable, JsonObject pJsonObject, LocalCache pLocalCache) throws Exception {
-    pMutable.setSemesterId(pJsonObject.getInt("semesterId"));
+    /**
+     * In database, id is auto generated type. So, firstly, when there is no data of the element or item, then, there is no need to have any id, as that will be auto generated.
+     * But, for update purpose, we need an id, so, at the client side, we will set id==0, when, there is no id information, i.e. when we are inserting neew data.
+     * While updating, as we need the id, so, we will set the id value from the client side, and will use here.
+     *
+     * so, id==0, when, data is newly inserted.
+     * and id==(any numeric value), when we are updating.
+     */
+    if(pJsonObject.getInt("id")!=0){
+      pMutable.setId(pJsonObject.getInt("id"));
+    }
+    pMutable.setSemesterId(Integer.parseInt(pJsonObject.getString("semesterId")));
     pMutable.setExamType(ExamType.get(pJsonObject.getInt("examType")));
     pMutable.setExamDate(pJsonObject.getString("examDate"));
-    pMutable.setPublishStatus(pJsonObject.getInt("status"));
+    pMutable.setPublishStatus(pJsonObject.getInt("published"));
   }
 }
