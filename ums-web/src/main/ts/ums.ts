@@ -171,6 +171,24 @@ module ums {
             }]
           }
         })
+        .state('viewSeatPlan', {
+          url: "/viewSeatPlan",
+          controller: 'ViewSeatPlan',
+          templateUrl: 'views/semester/view-seat-plan.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: [
+                  'vendors/bootstrap-switch/css/bootstrap-switch.css',
+                  'vendors/bootstrap-datepicker/css/datepicker.css',
+                  'vendors/jquery-validate/jquery.validate.min.js',
+                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                  'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
+                ]
+              });
+            }]
+          }
+        })
         .state('seatPlanRegular', {
           url: "/seatPlanRegular",
           controller: 'SeatPlanRegular',
