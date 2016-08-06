@@ -1,0 +1,12 @@
+Insert into DB_IUMS.MAIN_NAVIGATION
+   (MENU_TITLE, PERMISSION, LOCATION, PARENT_MENU,
+    ICON_IMG_CLASS, ICON_COLOR_CLASS, VIEW_ORDER, STATUS)
+ Values
+   ('Course Material', 'course:material', '/courseMaterial', 0,
+    'fa fa-th', 'bg-pink', 38, 1);
+Insert into DB_IUMS.MAIN_NAVIGATION
+   (MENU_TITLE, PERMISSION, LOCATION, PARENT_MENU,
+    ICON_IMG_CLASS, ICON_COLOR_CLASS, VIEW_ORDER, STATUS)
+ Values
+   ('Course Material', 'student:course:material', '/studentCourseMaterial', 0,
+    'fa fa-th', 'bg-pink', 39, 1);
