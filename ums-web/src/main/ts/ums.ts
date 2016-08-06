@@ -37,7 +37,7 @@ module ums {
                   defaults.allowedActions, {
                     createFolder: true,
                     pickFiles: true,
-                    pickFolders: true,
+                    pickFolders: true
                   }),
             });
       }]);
@@ -45,10 +45,10 @@ module ums {
 
   UMS.constant("appConstants", Constants.Default());
 
-  UMS.config(($stateProvider, $urlRouterProvider) => {
+  UMS.config(($stateProvider, $urlRouterProvider,$locationProvider) => {
     //
     // For any unmatched url, redirect to /state1
-
+    //$locationProvider.html5Mode(true);
     $urlRouterProvider.when('/passwordReport','/passwordReport/singleUserPassword');
     $urlRouterProvider.otherwise("/userHome");
 
@@ -139,6 +139,24 @@ module ums {
           url: "/examSeatPlan",
           controller: 'ExamSeatPlan',
           templateUrl: 'views/semester/exam-seat-plan.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: [
+                  'vendors/bootstrap-switch/css/bootstrap-switch.css',
+                  'vendors/bootstrap-datepicker/css/datepicker.css',
+                  'vendors/jquery-validate/jquery.validate.min.js',
+                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                  'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
+                ]
+              });
+            }]
+          }
+        })
+        .state('publishSeatPlan', {
+          url: "/publishSeatPlan",
+          controller: 'PublishSeatPlan',
+          templateUrl: 'views/semester/publish-seat-plan.html',
           resolve: {
             loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
               return $ocLazyLoad.load({

@@ -4,6 +4,10 @@ module ums {
     private currentGridData: any;
     public gridEditActions: GridEditActions;
 
+    public getGrid(){
+      return this.currentGridElement;
+    }
+
     public gridElement(element: JQuery) {
       this.currentGridElement = element;
     }

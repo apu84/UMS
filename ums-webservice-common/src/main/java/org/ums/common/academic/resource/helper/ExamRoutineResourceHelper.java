@@ -3,6 +3,7 @@ package org.ums.common.academic.resource.helper;
 import org.apache.commons.lang.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ums.cache.LocalCache;
 import org.ums.common.ResourceHelper;
 import org.ums.common.builder.ExamRoutineBuilder;
 import org.ums.domain.model.dto.ExamRoutineDto;
@@ -13,15 +14,16 @@ import org.ums.manager.ExamRoutineManager;
 import org.ums.manager.SeatPlanGroupManager;
 import org.ums.manager.SubGroupManager;
 import org.ums.persistent.model.PersistentExamRoutine;
-import org.ums.cache.LocalCache;
-import javax.json.JsonArrayBuilder;
+
 import javax.json.Json;
+import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
+import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.List;
-import javax.ws.rs.core.Request;
+
 @Component
 public class ExamRoutineResourceHelper extends ResourceHelper<ExamRoutine, MutableExamRoutine, Object> {
 
@@ -62,6 +64,7 @@ public class ExamRoutineResourceHelper extends ResourceHelper<ExamRoutine, Mutab
     return buildJsonResponse(pSemesterId, pExamType, examRoutine);
   }
 
+
   public JsonObject getExamRoutineForCCI(Integer pSemesterId, Integer pExamType, final Request pRequest, final UriInfo pUriInfo) throws Exception{
     List<ExamRoutineDto> examRoutine = getContentManager().getExamRoutineForApplicationCCI(pSemesterId,pExamType);
     JsonObjectBuilder object = Json.createObjectBuilder();
@@ -81,6 +84,45 @@ public class ExamRoutineResourceHelper extends ResourceHelper<ExamRoutine, Mutab
     localCache.invalidate();
     return object.build();
   }
+
+
+  public JsonObject getExamRoutineInfoForCivil(Integer pSemesterId,final Request pRequest,final UriInfo pUriInfo) throws Exception{
+    ExamRoutineDto examRoutineDto = getContentManager().getExamRoutineForCivilExamBySemester(pSemesterId);
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+    PersistentExamRoutine ex = new PersistentExamRoutine();
+    ex.setExamDate( examRoutineDto.getExamDate());
+    ex.setTotalStudent(examRoutineDto.getTotalStudent());
+    ex.setExamDateOriginal(examRoutineDto.getExamDateOriginal());
+    ExamRoutine exRegular = ex;
+    children.add(toJson(exRegular, pUriInfo, localCache));
+
+    object.add("entries", children);
+    localCache.invalidate();
+    return object.build();
+  }
+
+  public JsonObject getExamRoutineForCCIForSeatPlanPublish(Integer pSemesterId,final Request pRequest,final UriInfo pUriInfo)throws Exception{
+    List<ExamRoutineDto> examRoutine = getContentManager().getCCIExamRoutinesBySemeste(pSemesterId);
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+    for(ExamRoutineDto exam: examRoutine){
+      PersistentExamRoutine ex = new PersistentExamRoutine();
+      ex.setExamDate( exam.getExamDate());
+      ex.setTotalStudent(exam.getTotalStudent());
+      ex.setExamDateOriginal(exam.getExamDateOriginal());
+      ExamRoutine exRegular = ex;
+      children.add(toJson(exRegular, pUriInfo, localCache));
+
+    }
+
+    object.add("entries", children);
+    localCache.invalidate();
+    return object.build();
+  }
+
   protected JsonObject buildJsonResponse(final Integer pSemesterId, final Integer pExamType, final List<ExamRoutineDto> routineList) throws Exception {
     JsonObjectBuilder object = Json.createObjectBuilder();
     String prevDateTime = "", currDateTime = "";
@@ -154,8 +196,6 @@ public class ExamRoutineResourceHelper extends ResourceHelper<ExamRoutine, Mutab
 
   public Response save(final JsonObject pJsonObject,int pSemesterId,int pExamType) throws Exception {
     //check if the group for the exam is already created, if created, the group will be deleted
-    // commented temporary and will be release later
-    /*
     List<SeatPlanGroup> groups = mSeatPlanGroupManager.getGroupBySemester(pSemesterId,pExamType);
     if(groups.size()>0){
       mSeatPlanGroupManager.deleteBySemesterAndExamType(pSemesterId,pExamType);
@@ -163,7 +203,6 @@ public class ExamRoutineResourceHelper extends ResourceHelper<ExamRoutine, Mutab
         mSubGroupManager.deleteBySemesterGroupAndType(pSemesterId,i,pExamType);
       }
     }
-    */
     PersistentExamRoutine mutable = new PersistentExamRoutine();
     getBuilder().build(mutable, pJsonObject, null);
     mutable.delete();

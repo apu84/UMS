@@ -1,0 +1,57 @@
+<div class="container-fluid" data-ng-init="getActiveSemesters()" >
+    <div class="panel panel-blue" style="background-color: white;">
+        <div class="panel-heading" align="center">Seat Plan Publication</div>
+
+        <div class="panel-body" >
+            <div class="row" align="center">
+                <div class="col-md-4"></div>
+                <div class="col-md-4">
+                    <select class="form-control required" name="semesterId" data-ng-model="semesterId" data-ng-change="showPublishInfo()">
+                        <option value="">Select Semesters</option>
+                        <option value="{{semester.id}}" data-ng-repeat="semester in semesterList|filter:{status:1}" >
+                            {{semester.name}}
+                        </option>
+                    </select>
+                </div>
+                <div class="col-md-4"></div>
+            </div>
+            <br>
+            <br>
+            <div class="row" align="center" style="padding-left: 5%;padding-right: 5%;">
+                <table class="table table-striped table-bordered" align="center" data-ng-if="showTable" >
+                    <thead align="center">
+                    <tr>
+                        <th><p align="center">Exam Type</p> </th>
+                        <th><p align="center">Date</p></th>
+                        <th><p align="center">Published</p></th>
+                    </tr>
+                    </thead>
+                    <tbody align="center">
+                    <tr data-ng-repeat="publish in seatPlanPublishArr">
+                            <td data-ng-if="publish.examType==1">Semester Final</td>
+                            <td data-ng-if="publish.examType==1"></td>
+                            <td data-ng-if="publish.examType==1"><input type="checkbox" data-ng-model="publish.published"> </td>
+
+                            <td data-ng-if="publish.examType==3">CE 3-1 & 3-2</td>
+                            <td data-ng-if="publish.examType==3">{{publish.examDate}}</td>
+                            <td data-ng-if="publish.examType==3"><input type="checkbox" data-ng-model="publish.published"></td>
+
+                            <td data-ng-if="publish.examType==2">CCI</td>
+                            <td data-ng-if="publish.examType==2">{{publish.examDate}}</td>
+                            <td data-ng-if="publish.examType==2"><input type="checkbox" data-ng-model="publish.published"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <br>
+            <br>
+            <hr>
+            <div class="row" align="right" data-ng-if="showTable" style="padding-right: 10%;">
+                <button class="btn btn-success" data-ng-click="saveDate()">Save</button>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+

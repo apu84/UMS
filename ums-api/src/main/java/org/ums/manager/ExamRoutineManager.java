@@ -9,5 +9,7 @@ import java.util.List;
 public interface ExamRoutineManager extends ContentManager<ExamRoutine, MutableExamRoutine, Object> {
   public List<ExamRoutineDto> getExamRoutine(int semesterId,int examType) throws Exception;
   public List<ExamRoutineDto> getExamRoutineForApplicationCCI(int semesterId,int examType);
+  public ExamRoutineDto getExamRoutineForCivilExamBySemester(Integer pSemesterId);
+  public List<ExamRoutineDto> getCCIExamRoutinesBySemeste(Integer pSemesterId);
 }
 

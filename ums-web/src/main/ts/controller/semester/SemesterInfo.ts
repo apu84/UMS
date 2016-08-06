@@ -1,5 +1,4 @@
 ///<reference path="../../service/HttpClient.ts"/>
-///<reference path="../../lib/jquery.notific8.d.ts"/>
 ///<reference path="../../lib/jquery.notify.d.ts"/>
 ///<reference path="../../lib/jquery.jqGrid.d.ts"/>
 ///<reference path="../../grid/GridDecorator.ts"/>
@@ -12,13 +11,16 @@ module ums {
 
   interface ISemesterScope extends ng.IScope {
     semesterData:any;
+    manageAddButton: Function;
   }
 
   export class SemesterInfo implements GridEditActions,RowAttribute {
-    public static $inject = ['appConstants', 'HttpClient', '$scope', 'notify'];
+    public static $inject = ['appConstants', 'HttpClient', '$scope', 'notify','$location'];
 
-    constructor(private appConstants: any, private httpClient: HttpClient, private $scope: ISemesterScope,private notify: Notify) {
+    constructor(private appConstants: any, private httpClient: HttpClient, private $scope: ISemesterScope,private notify: Notify,private $location:Location) {
+      console.log($location);
       this.loadData();
+      $scope.manageAddButton=this.manageAddButton.bind(this);
     }
 
     private initializeGrid(): void {
@@ -55,14 +57,8 @@ module ums {
 
     public remove(rowData: RowData): void {
       var notify=this.notify;
-      this.httpClient.delete('academic/semester/' + rowData)
-          .success(() => {
-            notify.success("Successfully deleted select semester.");
-            this.decorateScope().grid.api.toggleMessage();
-            this.loadData();
-          }).error((data) => {
-            console.error(data);
-          });
+      notify.error("Semester delete is not allowed.");
+      //asdfasdasdf
     }
 
     public beforeShowEditForm(form: any, gridElement: JQuery): void {
@@ -160,12 +156,35 @@ module ums {
     }
 
     private loadData(): void {
+      var that=this;
       this.httpClient.get("academic/semester/all", HttpClient.MIME_TYPE_JSON,
           (response) => {
             this.initializeGrid();
             this.$scope.semesterData = response.entries;
+
+            setTimeout(function(){ that.manageAddButton(); }, 100);
           });
+
     }
+
+    public manageAddButton():void{
+      var location:any=this.$location;
+      var scope:any=this.$scope;
+      var gridId=this.decorateScope().grid.api.getGrid()[0].id;
+      var $td = $('#add_'+gridId );
+        $td.hide();
+      $("#"+gridId).navButtonAdd('#semesterListPager', {
+        caption: "",
+        title: "Click here to add new record",
+        buttonicon: "glyphicon glyphicon-plus",
+        onClickButton: function() {
+          console.log(location);
+          location.path("/createSemester");
+          scope.$apply(); // this
+        },
+        position: "first"
+      });
+      }
 
   }
   UMS.controller('SemesterInfo', SemesterInfo);

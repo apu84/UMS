@@ -13,6 +13,7 @@ module ums{
 
 
     data:any;
+    splitButtonClickedStore:Array<ISeatPlanGroup>;
     classBodyBackgroundColor:string;
     mouseClickedObject:any;
     mouseClickedObjectStore:Array<any>;
@@ -261,6 +262,7 @@ module ums{
                 private $sce:ng.ISCEService,private $window:ng.IWindowService) {
 
       var arr : { [key:number]:Array<ISeatPlanGroup>; } = {};
+      $scope.splitButtonClickedStore=[];
       $scope.previousIterationNumber=0;
       $scope.mergeIdList=[];
       $scope.loadingVisibilityForCCI = false;
@@ -456,8 +458,14 @@ module ums{
     private splitActionUpdate(object:any,splitNumber:number){
       console.log("in the split action");
       console.log(object);
-      if(splitNumber>object.studentNumber){
+      if(splitNumber>object.studentNumber ){
         this.$window.alert("Split number must be smaller than the current student number!");
+      }
+      else if(splitNumber<0){
+        this.$window.alert("Split number cann't be negative");
+      }
+      else if(typeof splitNumber!="number"){
+        this.$window.alert("Split number must be numeric");
       }
       else{
         var currentStudentNumber:number = angular.copy(object.studentNumber);
@@ -592,7 +600,7 @@ module ums{
     private createCCI(examDate:string):void{
       this.$scope.hideSelection=false;
        // for application cci, examType=4;
-      this.$scope.classBodyBackgroundColor="#FAEBD7";
+      this.$scope.classBodyBackgroundColor="#d9edf7"; //Active Color
       this.$scope.cciSelected=true;
       this.getApplicationCCIInfoForSubGroup(examDate).then((subGroupCCiArr:Array<ISeatPlanGroup>)=>{
         this.createOrViewSubgroups(4);
@@ -600,8 +608,22 @@ module ums{
     }
 
     private splitOut():void{
+      console.log("From split out");
+
       if(this.$scope.mouseClickedObject!=null){
         this.$scope.mouseClickedObject.showSubPortion=true;
+        if(this.$scope.splitButtonClickedStore.length==0){
+          this.$scope.splitButtonClickedStore.push(this.$scope.mouseClickedObject);
+        }
+        else{
+          for(var i=0;i<this.$scope.splitButtonClickedStore.length;i++){
+            if(this.$scope.splitButtonClickedStore[i]!=this.$scope.mouseClickedObject){
+              this.$scope.splitButtonClickedStore[i].showSubPortion=false;
+            }
+          }
+          this.$scope.splitButtonClickedStore=[];
+          this.$scope.splitButtonClickedStore.push(this.$scope.mouseClickedObject);
+        }
       }
       this.$scope.customeMenu=false;
     }
@@ -892,7 +914,7 @@ module ums{
 
       this.getSubGroupInfo().then((subGroupArr:Array<ISeatPlanGroup>)=>{
 
-        this.$scope.classBodyBackgroundColor="yellow";
+        this.$scope.classBodyBackgroundColor="#FDEEF4";   //Inactive Color
         console.log("saved data");
         console.log(subGroupArr);
         if(subGroupArr.length>0 && this.$scope.recreateButtonClicked==false){
@@ -1181,7 +1203,7 @@ module ums{
         },
         disabled:false
       }
-      this.$scope.classBodyBackgroundColor="#FAEBD7";
+      this.$scope.classBodyBackgroundColor="#d9edf7"; //Active Color
       this.$scope.editSubGroup=false;
       this.$scope.saveSubGroupInfo=true;
 
@@ -1356,6 +1378,7 @@ module ums{
       this.$scope.subGroupTotalStudentNumber={};
       this.$scope.previousIterationNumber=0;
       this.$scope.tempGroupList=[];
+      this.$scope.splitButtonClickedStore=[];
     }
 
     private createOrViewSeatPlan(groupNo:number):void{

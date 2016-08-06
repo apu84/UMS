@@ -60,6 +60,23 @@ public class PersistentExamRoutineDao  extends ExamRoutineDaoDecorator {
     return mJdbcTemplate.query(query,new Object[]{examType,semesterId,semesterId}, new ExamRoutineForCCIRowMapper());
   }
 
+
+  @Override
+  public ExamRoutineDto getExamRoutineForCivilExamBySemester(Integer pSemesterId) {
+    String query = "select  TO_CHAR(rr.EXAM_DATE,'DD/MM/YYYY') exam_date from exam_routine,(  " +
+        "select exam_date from exam_routine group by exam_date having count(exam_date)=2)  " +
+        "rr where exam_routine.exam_date = rr.exam_date and ROWNUM=1 and semester=?";
+    return mJdbcTemplate.queryForObject(query,new Object[]{pSemesterId},new ExamRoutineForSeatPlanPublishRowMapper());
+  }
+
+  @Override
+  public List<ExamRoutineDto> getCCIExamRoutinesBySemeste(Integer pSemesterId) {
+    String query="select to_char(exam_date,'DD/MM/YYYY') exam_date  FROM   " +
+        "(select distinct(exam_date) from exam_routine   " +
+        "where exam_type=2 and semester=? order by exam_date) er";
+    return mJdbcTemplate.query(query,new Object[]{pSemesterId},new ExamRoutineForSeatPlanPublishRowMapper());
+  }
+
   public int delete(final MutableExamRoutine pExamRoutine) throws Exception {
     if(pExamRoutine.getInsertType().equalsIgnoreCase("byProgram") ){
       String query = DELETE + " And  Exam_Date= to_date(?,'dd/MM/YYYY') And Exam_Time =?  and  Program_Id =?";
@@ -138,6 +155,15 @@ public class PersistentExamRoutineDao  extends ExamRoutineDaoDecorator {
       routine.setExamDateOriginal(pResultSet.getString("ORIGINAL_DATE"));
       routine.setExamDate(pResultSet.getString("EXAM_DATE"));
       routine.setTotalStudent(pResultSet.getInt("TOTAL_STUDENT"));
+      return routine;
+    }
+  }
+
+  class ExamRoutineForSeatPlanPublishRowMapper implements RowMapper<ExamRoutineDto>{
+    @Override
+    public ExamRoutineDto mapRow(ResultSet resultSet, int pI) throws SQLException {
+      ExamRoutineDto routine = new ExamRoutineDto();
+      routine.setExamDate(resultSet.getString("exam_date"));
       return routine;
     }
   }
