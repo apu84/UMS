@@ -1,3 +1,22 @@
+<style>
+    .orgLeftClass {
+        width: 30%;
+    }
+    .orgRightClass {
+        width: 66%;
+    }
+    .arrowClass {
+        display: none;
+        cursor: pointer;
+    }
+    .orgLeftClass, .arrowClass {
+        margin-right: 25px;
+        margin-left: 8px;
+    }
+    .newRightClass {
+        width: 94%;
+    }
+</style>
 <div class="row">
     <div class="orgLeftClass pull-left panel panel-green" id="leftDiv">
         <div class="panel-heading">
@@ -30,7 +49,7 @@
     </div>
     <div class="arrowClass pull-left" onclick="resetDivs()" id="arrowDiv"><i
             class="fa fa-angle-double-right fa-4x"></i></i> </div>
-    <div class="orgRightClass pull-left hidden" id="rightDiv">
+    <div class="orgRightClass pull-left" id="rightDiv">
         <div class="panel">
             <div class="panel-heading">Course List</div>
             <div class="panel-body">
@@ -75,28 +94,6 @@
 </div>
 
 <style type="text/css">
-    .orgLeftClass {
-        width: 30%;
-    }
-
-    .orgRightClass {
-        width: 66%;
-    }
-
-    .arrowClass {
-        display: none;
-        cursor: pointer;
-    }
-
-    .orgLeftClass, .arrowClass {
-        margin-right: 25px;
-        margin-left: 8px;
-    }
-
-    .newRightClass {
-        width: 100%;
-    }
-
     .bootstrap-select.btn-group:not(.input-group-btn), .bootstrap-select.btn-group[class*="span"] {
         margin-bottom: 0px !important;
     }

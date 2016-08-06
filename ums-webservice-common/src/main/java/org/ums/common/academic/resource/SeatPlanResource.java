@@ -1,5 +1,7 @@
 package org.ums.common.academic.resource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.manager.SeatPlanManager;
@@ -18,7 +20,7 @@ import java.io.*;
 @Component
 @Path("/academic/seatplan")
 public class SeatPlanResource extends MutableSeatPlanResource{
-
+  private static final Logger mLogger = LoggerFactory.getLogger(SeatPlanResource.class);
   private static final String FILE_PATH = "I:/pdf/seat_plan_report.pdf";
   @Autowired
   SeatPlanManager mManager;
@@ -57,6 +59,7 @@ public class SeatPlanResource extends MutableSeatPlanResource{
               Integer.parseInt(pSemesterId),Integer.parseInt(pGroupNo),Integer.parseInt(pType),pExamDate,pOutputStream,pRequest,mUriInfo
           );
         }catch (Exception e){
+          mLogger.error(e.getMessage());
           throw new WebApplicationException(e);
         }
       }

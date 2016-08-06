@@ -2,6 +2,8 @@ package org.ums.common.academic.resource.helper;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.common.ResourceHelper;
@@ -31,7 +33,7 @@ import java.util.Map;
  */
 @Component
 public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan,MutableSeatPlan,Integer> {
-
+  private static final Logger mLogger = LoggerFactory.getLogger(SeatPlanResourceHelper.class);
   @Autowired
   private SeatPlanManager mManager;
 
