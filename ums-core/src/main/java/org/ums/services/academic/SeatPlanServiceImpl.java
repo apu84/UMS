@@ -1,5 +1,7 @@
 package org.ums.services.academic;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +21,7 @@ import java.util.*;
  */
 @Service
 public class SeatPlanServiceImpl implements SeatPlanService {
-
+  private static final Logger mLogger = LoggerFactory.getLogger(SeatPlanServiceImpl.class);
   @Autowired
   ExamRoutineManager mExamRoutineManager;
 
@@ -320,10 +322,16 @@ public class SeatPlanServiceImpl implements SeatPlanService {
     /*for(MutableSeatPlan seatPlan:totalSeatPlan){
       mSeatPlanManager.create(seatPlan);
     }*/
-    if(pGroupNo==0){
-      mSeatPlanManager.createSeatPlanForCCI(totalSeatPlan);
-    }else{
-      mSeatPlanManager.create(totalSeatPlan);
+    try {
+      if (pGroupNo == 0) {
+        mSeatPlanManager.createSeatPlanForCCI(totalSeatPlan);
+      } else {
+        mSeatPlanManager.create(totalSeatPlan);
+      }
+    }
+    catch(Exception ex){
+        mLogger.error(ex.getMessage());
+       return new GenericMessageResponse(GenericResponse.ResponseType.ERROR);
     }
 
 

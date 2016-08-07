@@ -28,7 +28,8 @@ module ums {
     private fetchCourseInfo(courseNo: string): void {
       $("#leftDiv").hide();
       $("#arrowDiv").show();
-      $("#rightDiv").removeClass("orgRightClass").addClass("newRightClass").removeClass('hidden');
+      $("#rightDiv").removeClass("orgRightClass");
+      $("#rightDiv").addClass("newRightClass");
 
       this.$scope.loadingVisibility = true;
       this.$scope.contentVisibility = false;

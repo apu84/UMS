@@ -1,5 +1,4 @@
 module ums{
-
   interface IPublishSeatPlan extends ng.IScope{
     semesterList:Array<Semester>;
     semesterId:number;
@@ -17,6 +16,7 @@ module ums{
     putSeatPlanPublish:Function;
     jsonConverter:Function;
     showPublishInfo:Function;
+    saveData:Function;
   }
 
   interface ISeatPlanPublish{
@@ -24,7 +24,7 @@ module ums{
     semesterId:number;
     examType:number;
     examDate:string;
-    published:boolean;
+    published:any;
   }
 
 
@@ -40,9 +40,10 @@ module ums{
       $scope.getActiveSemesters = this.getAcrtiveSemesters.bind(this);
       $scope.getSeatPlanPublish = this.getSeatPlanPublish.bind(this);
       $scope.postSeatPlanPublish = this.postSeatPlanPublish.bind(this);
-      $scope.putSeatPlanPublish = this.pubSeatPlanPublish.bind(this);
+      $scope.putSeatPlanPublish = this.putSeatPlanPublish.bind(this);
       $scope.jsonConverter = this.jsonConverter.bind(this);
       $scope.showPublishInfo=this.showPublishInfo.bind(this);
+      $scope.saveData = this.saveData.bind(this);
     }
 
     private showPublishInfo(){
@@ -54,6 +55,7 @@ module ums{
           var seatPlanPublish:any={};
           seatPlanPublish.published=false;
           seatPlanPublish.semesterId=this.$scope.semesterId;
+          seatPlanPublish.examDate='11/11/2999';
           seatPlanPublish.examType=1;
           this.$scope.seatPlanPublishArr.push(seatPlanPublish);
 
@@ -85,6 +87,17 @@ module ums{
         }
       });
     }
+
+
+    private saveData():void{
+      console.log("in the dave data");
+      this.jsonConverter().then((json:any)=>{
+          this.putSeatPlanPublish(json);
+      });
+
+    }
+
+
 
     private getAcrtiveSemesters():ng.IPromise<any>{
       var defer = this.$q.defer();
@@ -141,6 +154,15 @@ module ums{
       this.httpClient.get("/ums-webservice-common/academic/seatPlanPublish/semester/"+this.$scope.semesterId,'application/json',
           (json:any,etag:string)=>{
               var seatPlanPubLish:Array<ISeatPlanPublish>=json.entries;
+            console.log("**********************");
+            console.log(seatPlanPubLish);
+            for(var i=0;i<seatPlanPubLish.length;i++){
+              if(seatPlanPubLish[i].published=="true"){
+                  seatPlanPubLish[i].published=true;
+              }else{
+                seatPlanPubLish[i].published=false;
+              }
+            }
 
             defer.resolve(seatPlanPubLish);
           },
@@ -153,27 +175,28 @@ module ums{
 
     private postSeatPlanPublish(){
       var json = this.jsonConverter();
-      this.httpClient.post('academic/seatPlanPublish/semester'+this.$scope.semesterId,json,'application/json')
+      this.httpClient.post('/ums-webservice-common/academic/seatPlanPublish/semester/'+this.$scope.semesterId,json,'application/json')
         .success(()=>{
-          $.notific8("Successfully saved data");
+            this.notify.success("Successfully saved data");
         })
       .error(()=>{
         this.$window.alert("Error in saving data");
       })
     }
 
-    private pubSeatPlanPublish(){
-      var json = this.jsonConverter();
-      this.httpClient.put('academic/seatPlanPublish/semester'+this.$scope.semesterId,json,'application/json')
+    private putSeatPlanPublish(json:any){
+
+      this.httpClient.put('/ums-webservice-common/academic/seatPlanPublish/semester/'+this.$scope.semesterId,json,'application/json')
           .success(()=>{
-            $.notific8("Successfully saved data");
+            this.notify.success("Successfully saved data");
           })
           .error(()=>{
             this.$window.alert("Error in saving data");
           })
     }
 
-    private jsonConverter(){
+    private jsonConverter():ng.IPromise<any>{
+      var defer = this.$q.defer();
       var completeJson={};
       var jsonObject=[];
 
@@ -181,6 +204,8 @@ module ums{
         var item={};
         if(this.$scope.seatPlanPublishArr[i].id!=null){
           item["id"]=this.$scope.seatPlanPublishArr[i].id;
+        }else{
+          item["id"]=0;
         }
         item["semesterId"]=this.$scope.semesterId;
         item["examType"]=this.$scope.seatPlanPublishArr[i].examType;
@@ -196,7 +221,8 @@ module ums{
       }
 
       completeJson["entries"]=jsonObject;
-      return completeJson;
+      defer.resolve(completeJson);
+      return defer.promise;
     }
   }
 

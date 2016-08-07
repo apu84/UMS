@@ -10,6 +10,8 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.jdbc.JdbcRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.ums.domain.model.immutable.Permission;
@@ -25,6 +27,7 @@ import java.util.Set;
 
 
 public class UMSAuthenticationRealm extends JdbcRealm implements ProfileRealm {
+  private static final Logger mLogger = LoggerFactory.getLogger(UMSAuthenticationRealm.class);
   private String mSalt;
   private PasswordMatcher mPlainPasswordMatcher;
   private CredentialsMatcher mHashCredentialsMatcher;
@@ -90,6 +93,7 @@ public class UMSAuthenticationRealm extends JdbcRealm implements ProfileRealm {
       }
 
     } catch (Exception e) {
+      mLogger.error("Exception :"+e);
       throw new AuthenticationException(e);
     }
 

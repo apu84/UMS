@@ -27,7 +27,7 @@ public class PersistentSeatPlanPublishDao extends SeatPlanPublishDaoDecorator{
 
   @Override
   public List<SeatPlanPublish> getBySemester(Integer pSemesterId) {
-    String query="select id,semester_id,exam_type,to_char(exam_date,'DD/MM/YYYY'),published from sp_publish where semester_id=?";
+    String query="select id,semester_id,exam_type,to_char(exam_date,'DD/MM/YYYY') exam_date,published from sp_publish where semester_id=?";
     return mJdbcTemplate.query(query,new Object[]{pSemesterId},new SeatPlanPublishRowMapper());
   }
 
@@ -39,7 +39,7 @@ public class PersistentSeatPlanPublishDao extends SeatPlanPublishDaoDecorator{
 
   @Override
   public int update(List<MutableSeatPlanPublish> pMutableList) throws Exception {
-    String query = " update sp_publish set semester_id=? and exam_type=? and Exam_Date= to_date(?,'dd/MM/YYYY') and published=? where id=?";
+    String query = " update sp_publish set  published=? where id=?";
     return mJdbcTemplate.batchUpdate(query,getUpdateParamList(pMutableList)).length;
   }
 
@@ -59,9 +59,6 @@ public class PersistentSeatPlanPublishDao extends SeatPlanPublishDaoDecorator{
     List<Object[]> params = new ArrayList<>();
     for(SeatPlanPublish publish: pMutableSeatPlanPublishs){
       params.add(new Object[]{
-          publish.getSemesterId(),
-          publish.getExamType().getValue(),
-          publish.getExamDate(),
           publish.getPublishStatus(),
           publish.getId()
       });

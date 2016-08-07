@@ -19,4 +19,5 @@ public interface SeatPlanManager extends ContentManager<SeatPlan,MutableSeatPlan
   int checkIfExistsBySemesterGroupTypeRoomRowAndCol(final int pSemesterId,final int pGroupNo,final int pType,int pRoomId,int pRow,int pCol);
   int checkIfExistsBySemesterGroupTypeExamDateRoomRowAndCol(final int pSemesterId,final int pGroupNo,final int pType,final String pExamDate, final int pRoomId, final int pRow,final int pCol);
   int checkIfExistsByRoomSemesterGroupExamType(final int pRoomId,final int pSemesterId,final int pGroupNo,final int pExamType) throws Exception;
+  List<SeatPlan> getForStudent(String pStudentId,Integer pSemesterId);
 }

@@ -284,7 +284,8 @@
 
 
     <div class="panel-heading">
-            Sub Groups for [<b>Group - {{selectedGroupNo}}</b>]
+            <p data-ng-if="cciSelected==false">Sub Groups for [<b>Group - {{selectedGroupNo}}</b>]</p>
+        <p data-ng-if="cciSelected">Sub Groups</p>
     </div>
     <div  class="panel-body md-padding" >
         <!--<div contecontext-menuxt-menu mergeInitialization="mergeInitialization()" splitCourseStudent="splitCourseStudent()"  revertSplitAction="revertSplitAction()" mergeGroups="mergeGroups() "></div>-->

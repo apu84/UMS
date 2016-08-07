@@ -1,6 +1,5 @@
 package org.ums.manager;
 
-
 import org.apache.commons.io.FileUtils;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
@@ -355,8 +354,12 @@ public class FileContentManager extends BinaryContentDecorator {
           Files.copy(externalFile, pathInZipfile,
               StandardCopyOption.REPLACE_EXISTING);
         }
+        zipfs.close();
       }
-      response.put("Content-Type", Files.probeContentType(zipFile));
+
+      //TODO: Need to investigate more why Files.probeContentType returning null .
+     //response.put("Content-Type", Files.probeContentType(zipFile));
+      response.put("Content-Type", "application/zip, application/octet-stream");
       response.put("Content-Length", String.valueOf(zipFile.toFile().length()));
       response.put("Content-Disposition", "inline; filename=\"" + zipFile.toFile().getName() + "\"");
       response.put("Content", Files.newInputStream(zipFile));

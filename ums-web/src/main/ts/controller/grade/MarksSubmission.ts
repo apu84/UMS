@@ -461,7 +461,8 @@ module ums {
       }
 
 
-      this.httpClient.get("academic/gradeSubmission/semester/"+this.$scope.inputParams.semester_id+"/examtype/"+this.$scope.inputParams.exam_type+"/dept/"+this.$scope.inputParams.dept_id+"/role/"+this.$scope.userRole+"/status/"+status,
+      //this.httpClient.get("academic/gradeSubmission/semester/"+this.$scope.inputParams.semester_id+"/examtype/"+this.$scope.inputParams.exam_type+"/dept/"+this.$scope.inputParams.dept_id+"/role/"+this.$scope.userRole+"/status/"+status,
+      this.httpClient.get("academic/gradeSubmission/semester/"+this.$scope.inputParams.semester_id+"/examtype/"+this.$scope.inputParams.exam_type+"/dept/05/role/"+this.$scope.userRole+"/status/"+status,
           this.appConstants.mimeTypeJson,
           (data:any, etag:string)=> {
             this.$scope.allMarksSubmissionStatus = data.entries;

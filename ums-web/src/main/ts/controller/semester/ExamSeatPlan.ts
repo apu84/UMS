@@ -1431,10 +1431,12 @@ module ums{
       if(this.$scope.cciSelected){
         this.httpClient.get('/ums-webservice-common/academic/subGroupCCI/semester/'+this.$scope.semesterId+'/examDate/'+this.$scope.examDate,'application/json',
             (json:any,etag:string)=>{
+              this.$scope.selectedGroupTotalStudent=0;
               subGroupDb = json.entries;
               for(var i=0;i<subGroupDb.length;i++){
                 subGroupDb[i].backgroundColor="#EA8A8A";
                 subGroupDb[i].showSubPortion=false;
+                this.$scope.selectedGroupTotalStudent+=subGroupDb[i].studentNumber;
               }
 
               defer.resolve(subGroupDb);
