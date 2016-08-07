@@ -455,9 +455,12 @@ module ums{
     }
 
 
-    private splitActionUpdate(object:any,splitNumber:number){
+    private splitActionUpdate(object:any,splitNumecir:number){
+      var splitNumber:number=+splitNumecir;
+      console.log("%%%%%%%%%%%%%%");
       console.log("in the split action");
       console.log(object);
+      console.log(splitNumber);
       if(splitNumber>object.studentNumber ){
         this.$window.alert("Split number must be smaller than the current student number!");
       }
@@ -1438,6 +1441,8 @@ module ums{
                 subGroupDb[i].showSubPortion=false;
                 this.$scope.selectedGroupTotalStudent+=subGroupDb[i].studentNumber;
               }
+              console.log("******");
+              console.log(this.$scope.selectedGroupTotalStudent);
 
               defer.resolve(subGroupDb);
             },
@@ -1527,7 +1532,7 @@ module ums{
     private getApplicationCCIInfoForSubGroup(examDate:string):ng.IPromise<any>{
       this.$scope.examDate = examDate;
       var defer = this.$q.defer();
-      this.$scope.selectedGroupTotalStudent=0;
+      //this.$scope.selectedGroupTotalStudent=0;
       console.log(examDate);
       this.$scope.tempGroupList=[];
       var applicationArr:Array<ISeatPlanGroup>=[];
@@ -1535,12 +1540,13 @@ module ums{
           (json:any, etag:string) => {
             applicationArr = json.entries;
             this.$scope.subGroupSelected=true;
-
+            this.$scope.selectedGroupTotalStudent=0;
             for(var i=0;i<applicationArr.length;i++){
               this.$scope.selectedGroupTotalStudent+=applicationArr[i].studentNumber;
               applicationArr[i].showSubPortion=false;
               applicationArr[i].id=i+1;
               applicationArr[i].backgroundColor="#EA8A8A";
+              this.$scope.selectedGroupTotalStudent+=applicationArr[i].studentNumber;
               this.$scope.tempGroupList.push(applicationArr[i]);
             }
             defer.resolve(this.$scope.tempGroupList);
