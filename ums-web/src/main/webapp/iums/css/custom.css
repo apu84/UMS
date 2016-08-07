@@ -320,3 +320,16 @@ div.ui-jqgrid-view table.ui-jqgrid-btable th {
 }
 */
 .ui-jqgrid .ui-jqgrid-btable { cursor : pointer; }
+
+/* Change the Modal Dialog Style as it was overridden by Jquery File Upload Manager */
+.modal .modal-header{
+    background:#4b5d67 !important;
+    border-radius:0px !important;
+}
+.modal .modal-header .modal-title{
+    color:white !important;
+}
+.modal .modal-header .close{
+    color:white !important;
+}
+/*== End ==*/

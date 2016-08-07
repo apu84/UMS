@@ -1,13 +1,15 @@
 package org.ums.decorator;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.ums.manager.ContentManager;
 
 import java.util.List;
 
 public class ContentDaoDecorator<R, M, I, C extends ContentManager<R, M, I>> implements ContentManager<R, M, I> {
   private C mManager;
-
+  private static final Logger mLogger = LoggerFactory.getLogger(ContentDaoDecorator.class);
   protected static String getLastModifiedSql() {
     return "to_char(sysdate,'YYYYMMDDHHMISS')";
   }
@@ -82,9 +84,15 @@ public class ContentDaoDecorator<R, M, I, C extends ContentManager<R, M, I>> imp
 
   @Override
   public int create(final List<M> pMutableList) throws Exception {
-    int created = getManager().create(pMutableList);
-    if (created <= 0) {
-      throw new IllegalArgumentException("No entry has been created");
+    int created=0;
+    try {
+      created= getManager().create(pMutableList);
+      if (created <= 0) {
+        throw new IllegalArgumentException("No entry has been created");
+      }
+    }
+    catch(Exception ex){
+      mLogger.error("Exception :"+ex);
     }
     return created;
   }

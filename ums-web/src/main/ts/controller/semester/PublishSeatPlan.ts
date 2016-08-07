@@ -1,5 +1,4 @@
 module ums{
-
   interface IPublishSeatPlan extends ng.IScope{
     semesterList:Array<Semester>;
     semesterId:number;
@@ -178,7 +177,7 @@ module ums{
       var json = this.jsonConverter();
       this.httpClient.post('/ums-webservice-common/academic/seatPlanPublish/semester/'+this.$scope.semesterId,json,'application/json')
         .success(()=>{
-          $.notific8("Successfully saved data");
+            this.notify.success("Successfully saved data");
         })
       .error(()=>{
         this.$window.alert("Error in saving data");
@@ -186,12 +185,10 @@ module ums{
     }
 
     private putSeatPlanPublish(json:any){
-      console.log("json---------->");
-      console.log(json);
 
       this.httpClient.put('/ums-webservice-common/academic/seatPlanPublish/semester/'+this.$scope.semesterId,json,'application/json')
           .success(()=>{
-            $.notific8("Successfully saved data");
+            this.notify.success("Successfully saved data");
           })
           .error(()=>{
             this.$window.alert("Error in saving data");
