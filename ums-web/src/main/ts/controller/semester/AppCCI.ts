@@ -382,7 +382,7 @@ module ums{
               this.$scope.applicationMessage="";
               this.getApplicationCCI();
             }else{
-              this.$scope.applicationMessage="Application Now Allowed";
+              this.$scope.applicationMessage="Application Not Allowed";
             }
             defer.resolve(parameter);
           },
