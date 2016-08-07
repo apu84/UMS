@@ -1,8 +1,10 @@
 package org.ums.common.academic.resource;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
 import org.springframework.util.StringUtils;
@@ -197,6 +199,7 @@ public abstract class AbstractCourseMaterialResource extends Resource {
 
     StreamUtils.copy(fileStream, pHttpServletResponse.getOutputStream());
     pHttpServletResponse.getOutputStream().flush();
+    IOUtils.closeQuietly(fileStream);
   }
 
   private Object uploadFile(HttpServletRequest request, String... pRootPath) throws Exception {
