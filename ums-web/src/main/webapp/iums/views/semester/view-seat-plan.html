@@ -26,7 +26,7 @@
                     <li ><a href="" data-ng-click="showCCISeatPlan()" data-toggle="tab">CCI</a></li>
                 </ul>
                 <div id="myTabContent4" class="tab-content">
-                    <div id="home6" class="tab-pane fade in active" data-ng-if="semesterFinalSelected">
+                    <div id="home6" class="tab-pane fade in active" data-ng-if="seatPlanStructure">
                         <div class="row" align="center">
                             <h4>Room No: <b>{{classRoom.roomNo}}</b></h4>
                         </div>
@@ -47,9 +47,12 @@
 
                             </tr>
                         </table>
+                        <div class="row" align="right" data-ng-if="seatPlanStructure && semesterFinalSelected==false">
+                            <button class="btn btn-success" style="padding-right: 5%;" data-ng-click="goBack()">Go Back</button>
+                        </div>
 
                     </div>
-                    <div id="home6" class="tab-pane fade in active" data-ng-if="cciSelected">
+                    <div id="home6" class="tab-pane fade in active" data-ng-if="cciSelected && seatPlanStructure==false">
                         <table class="table table-bordered table-stripped">
                             <thead>
                                 <tr>

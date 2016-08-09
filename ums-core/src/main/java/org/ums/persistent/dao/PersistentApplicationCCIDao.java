@@ -85,7 +85,7 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
 
   @Override
   public List<ApplicationCCI> getByStudentIdAndSemesterForSeatPlanView(String pStudentId, Integer pSemesterId) {
-    String query="select to_char( e.EXAM_DATE,'DD-MM-YYYY'),c.COURSE_NO,a.APPLICATION_TYPE,r.ROOM_NO,r.ROOM_ID from EXAM_ROUTINE e,MST_COURSE c,APPLICATION_CCI a,ROOM_INFO r,SEAT_PLAN s  " +
+    String query="select to_char( e.EXAM_DATE,'DD-MM-YYYY') EXAM_DATE,c.COURSE_NO,a.APPLICATION_TYPE,r.ROOM_NO,r.ROOM_ID from EXAM_ROUTINE e,MST_COURSE c,APPLICATION_CCI a,ROOM_INFO r,SEAT_PLAN s  " +
         "where a.STUDENT_ID=? and a.SEMESTER_ID=? and a.COURSE_ID=c.COURSE_ID and  e.SEMESTER=a.SEMESTER_ID and e.COURSE_ID=a.COURSE_ID and e.EXAM_TYPE=2 and a.STUDENT_ID= s.STUDENT_ID  " +
         "and s.ROOM_ID=r.ROOM_ID and s.EXAM_TYPE=2 and s.STUDENT_ID=a.STUDENT_ID";
     return mJdbcTemplate.query(query,new Object[]{pStudentId,pSemesterId},new ApplicationCCIRowMapperForSeatPlanView());
@@ -181,11 +181,11 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
     @Override
     public ApplicationCCI mapRow(ResultSet pResultSet, int pI) throws SQLException {
       PersistentApplicationCCI applicationCCI = new PersistentApplicationCCI();
-      applicationCCI.setExamDate(pResultSet.getString("exam_date"));
-      applicationCCI.setCourseNo(pResultSet.getString("course_no"));
-      applicationCCI.setApplicationType(ApplicationType.get(pResultSet.getInt("application_type")));
-      applicationCCI.setRoomNo(pResultSet.getString("room_no"));
-      applicationCCI.setRoomId(pResultSet.getInt("room_id"));
+      applicationCCI.setExamDate(pResultSet.getString("EXAM_DATE"));
+      applicationCCI.setCourseNo(pResultSet.getString("COURSE_NO"));
+      applicationCCI.setApplicationType(ApplicationType.get(pResultSet.getInt("APPLICATION_TYPE")));
+      applicationCCI.setRoomNo(pResultSet.getString("ROOM_NO"));
+      applicationCCI.setRoomId(pResultSet.getInt("ROOM_ID"));
       return applicationCCI;
     }
   }

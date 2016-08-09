@@ -17,6 +17,7 @@ module ums{
     semesterFinalSelected:boolean;
     civilSelected:boolean;
     cciSelected:boolean;
+    seatPlanStructure:boolean;
 
 
     init:Function;
@@ -28,6 +29,9 @@ module ums{
     showCivilSpecialSeatPlan:Function;
     showCCISeatPlan:Function;
     getApplicationCCIInfo:Function;
+    viewSeatPlan:Function;
+    createRoomStructure:Function;
+    goBack:Function;
 
   }
 
@@ -76,6 +80,9 @@ module ums{
       $scope.showSemesterFinalSeatPlan = this.showSemesterFinalSeatPlan.bind(this);
       $scope.getApplicationCCIInfo = this.getApplicationCCIInfo.bind(this);
       $scope.showCCISeatPlan = this.showCCISeatPlan.bind(this);
+      $scope.createRoomStructure = this.createRoomStructure.bind(this);
+      $scope.viewSeatPlan = this.viewSeatPlan.bind(this);
+      $scope.goBack = this.goBack.bind(this);
 
     }
 
@@ -94,38 +101,58 @@ module ums{
       });
     }
 
+    private goBack(){
+      this.$scope.seatPlanStructure=false;
+      this.$scope.cciSelected=true;
+    }
+
+    private createRoomStructure(roomId:number){
+
+      this.$scope.roomId = roomId;
+
+      this.getClassRoomInfo(roomId).then((roomArr:Array<IClassRoom>)=>{
+        this.$scope.classRoom = roomArr[0];
+        console.log(this.$scope.classRoom);
+        this.$scope.colIterationArr=[];
+        this.$scope.rowIterationArr=[];
+        for(var i=1;i<=this.$scope.classRoom.totalColumn;i++){
+          this.$scope.colIterationArr.push(i);
+        }
+        for(var i=1;i<=this.$scope.classRoom.totalRow;i++){
+          this.$scope.rowIterationArr.push(i);
+        }
+      });
+    }
+
 
     private showSemesterFinalSeatPlan():void{
       this.$scope.semesterFinalSelected=true;
+      this.$scope.seatPlanStructure=true;
       this.$scope.cciSelected=false;
       this.$scope.civilSelected=false;
       this.getSeatPlanInfoFinalExam().then((seatPlanArr:Array<ISeatPlan>)=>{
         this.$scope.seatPlanArr = seatPlanArr[0];
         console.log(this.$scope.seatPlanArr);
-        this.$scope.roomId = this.$scope.seatPlanArr.roomId;
 
-        this.getClassRoomInfo(this.$scope.roomId).then((roomArr:Array<IClassRoom>)=>{
-          this.$scope.classRoom = roomArr[0];
-          this.$scope.colIterationArr=[];
-          this.$scope.rowIterationArr=[];
-          for(var i=1;i<=this.$scope.classRoom.totalColumn;i++){
-            this.$scope.colIterationArr.push(i);
-          }
-          for(var i=1;i<=this.$scope.classRoom.totalRow;i++){
-            this.$scope.rowIterationArr.push(i);
-          }
-        });
+        this.createRoomStructure(this.$scope.seatPlanArr.roomId);
 
       });
     }
 
     private showCCISeatPlan():void{
       this.$scope.cciSelected=true;
+      this.$scope.seatPlanStructure=false;
       this.$scope.civilSelected=false;
       this.$scope.semesterFinalSelected=false;
       this.getApplicationCCIInfo().then((applicationCCI:Array<IApplicationCCI>)=>{
         this.$scope.applicationCCIArr=applicationCCI;
       });
+    }
+
+    private viewSeatPlan(roomId:number){
+      this.createRoomStructure(roomId);
+      this.$scope.seatPlanStructure=true;
+      this.$scope.cciSelected=false;
     }
 
 
