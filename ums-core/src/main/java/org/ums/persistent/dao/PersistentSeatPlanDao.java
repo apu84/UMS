@@ -122,6 +122,16 @@ public class PersistentSeatPlanDao extends SeatPlanDaoDecorator{
     return mJdbcTemplate.queryForObject(query,Integer.class,pRoomId,pSemesterId,pGroupNo,pExamType);
   }
 
+
+
+
+  /**
+   * This method will bring out total room information for the student consisting the student id.
+   * This method will be used for showing the student to total view of the room, which will be sitted in the exam.
+   * @param pStudentId
+   * @param pSemesterId
+   * @return
+   */
   @Override
   public List<SeatPlan> getForStudent(String pStudentId, Integer pSemesterId) {
 

@@ -18,4 +18,7 @@ public interface StudentRecordManager extends ContentManager<StudentRecord, Muta
   List<StudentRecord> getStudentRecords(final Integer pProgramId, final Integer pSemesterId,
                                         final Integer pYear, final Integer pAcademicSemester,
                                         final StudentRecord.Type pType) throws Exception;
+
+  List<StudentRecord> getStudentRecords(final String pStudentId,final Integer pSemesterId,
+                                        final Integer pYear, final Integer pAcademicSemester) throws Exception;
 }

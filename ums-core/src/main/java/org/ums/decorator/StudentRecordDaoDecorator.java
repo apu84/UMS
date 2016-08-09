@@ -31,4 +31,9 @@ public class StudentRecordDaoDecorator
                                                Integer pAcademicSemester, StudentRecord.Type pType) throws Exception {
     return getManager().getStudentRecords(pProgramId, pSemesterId, pYear, pAcademicSemester, pType);
   }
+
+  @Override
+  public List<StudentRecord> getStudentRecords(String pStudentId, Integer pSemesterId, Integer pYear, Integer pAcademicSemester) throws Exception {
+    return getManager().getStudentRecords(pStudentId,pSemesterId,pYear,pAcademicSemester);
+  }
 }

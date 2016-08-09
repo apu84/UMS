@@ -4,6 +4,12 @@ module ums{
     student:Student;
 
     getStudentInfo:Function;
+    getStudentRecordInfo:Function;
+    getSeatPlanInfoFinalExam:Function;
+
+  }
+
+  interface ISeatPlan{
 
   }
 
@@ -14,6 +20,8 @@ module ums{
                 private $sce:ng.ISCEService,private $window:ng.IWindowService) {
 
       $scope.getStudentInfo = this.getStudentInfo.bind(this);
+      $scope.getStudentRecordInfo = this.getStudentRecordInfo.bind(this);
+      $scope.getSeatPlanInfoFinalExam = this.getSeatPlanInfoFinalExam.bind(this);
 
     }
 
@@ -35,6 +43,29 @@ module ums{
 
       return defer.promise;
     }
+
+    private getStudentRecordInfo():ng.IPromise<any>{
+      var defer = this.$q.defer();
+      var studentRecord:any;
+
+      this.httpClient.get("/ums-webservice-common/academic/studentrecord/student/"+this.$scope.student.id+
+              "/semesterId"+this.$scope.student.semesterId+"/year/"+this.$scope.student.year+"/semester/"+this.$scope.student.academicSemester,
+              'application/json',
+          (json:any,etag:string)=>{
+            studentRecord:json.entries;
+            defer.resolve(studentRecord);
+          },(response:ng.IHttpPromiseCallbackArg<any>)=>{
+            console.error(response);
+          });
+
+      return defer.promise;
+    }
+
+    private getSeatPlanInfoFinalExam():ng.IPromise<any>{
+      return null;
+    }
+
+
 
 
   }

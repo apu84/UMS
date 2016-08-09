@@ -8,6 +8,7 @@ import org.ums.persistent.model.PersistentStudentRecord;
 import org.ums.decorator.StudentRecordDaoDecorator;
 import org.ums.domain.model.mutable.MutableStudentRecord;
 import org.ums.domain.model.immutable.StudentRecord;
+import sun.misc.resources.Messages_ja;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -87,6 +88,13 @@ public class PersistentStudentRecordDao extends StudentRecordDaoDecorator {
                                                Integer pAcademicSemester, StudentRecord.Type pType) {
     String query = SELECT_ALL + " WHERE PROGRAM_ID = ? AND SEMESTER_ID = ? AND YEAR = ? AND SEMESTER = ? AND TYPE = ?";
     return mJdbcTemplate.query(query, new Object[]{pProgramId, pSemesterId, pYear, pAcademicSemester, pType.getValue()},
+        new StudentRecordRowMapper());
+  }
+
+  @Override
+  public List<StudentRecord> getStudentRecords(String pStudentId, Integer pSemesterId, Integer pYear, Integer pAcademicSemester) throws Exception {
+    String query = SELECT_ALL+" STUDENT_ID=? AND SEMESTER_ID=? AND YEAR=?AND SEMESTER=?";
+    return mJdbcTemplate.query(query,new Object[]{pStudentId,pSemesterId,pYear,pAcademicSemester},
         new StudentRecordRowMapper());
   }
 

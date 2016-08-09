@@ -64,4 +64,13 @@ public class StudentRecordCache extends ContentCache<StudentRecord, MutableStude
     }
     return readOnlys;
   }
+
+  @Override
+  public List<StudentRecord> getStudentRecords(String pStudentId, Integer pSemesterId, Integer pYear, Integer pAcademicSemester) throws Exception {
+    List<StudentRecord> readOnlys = getManager().getStudentRecords(pStudentId,pSemesterId,pYear,pAcademicSemester);
+    for(StudentRecord readOnly:readOnlys){
+      getCacheManager().put(getCacheKey(readOnly.getId()),readOnly);
+    }
+    return readOnlys;
+  }
 }

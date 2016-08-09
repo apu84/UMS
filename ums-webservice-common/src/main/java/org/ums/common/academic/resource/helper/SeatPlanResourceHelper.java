@@ -176,6 +176,10 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan,MutableSeatP
 
 
 
+  JsonObject getSeatPlanInformationForStuden(String pStudentId, Integer pSemesterId, final UriInfo mUriInfo)throws Exception{
+
+    return null;
+  }
 
 
   @Override
