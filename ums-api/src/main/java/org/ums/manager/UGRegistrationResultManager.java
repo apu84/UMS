@@ -12,4 +12,6 @@ public interface UGRegistrationResultManager extends ContentManager<UGRegistrati
   List<UGRegistrationResult> getImprovementCoursesBySemesterAndStudent(int pSemesterId,String pStudentId);
   List<UGRegistrationResult> getCarryCoursesBySemesterAndStudent(int pSemesterId, String pStudentId);
   List<UGRegistrationResult> getCarryClearanceImprovementCoursesByStudent(int pSemesterId,String pStudentId);
+
+  List<UGRegistrationResult> getByCourseSemester(int semesterId, String courseId, int pExamType);
 }

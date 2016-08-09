@@ -13,8 +13,6 @@ import java.net.URI;
 import java.nio.file.*;
 import java.nio.file.FileSystem;
 import java.nio.file.attribute.*;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class FileContentManager extends BinaryContentDecorator {
@@ -222,11 +220,18 @@ public class FileContentManager extends BinaryContentDecorator {
   }
 
   @Override
-  public Map<String, Object> createFolder(String pNewPath, Domain pDomain, String... pRootPath) {
+  public Map<String, Object> createFolder(String pNewPath, Map<String, String> pAdditionalParams, Domain pDomain, String... pRootPath) {
     try {
       createIfNotExist(pDomain, buildPath(pNewPath, pRootPath));
       addUserDefinedProperty(OWNER, SecurityUtils.getSubject().getPrincipal().toString(),
           getQualifiedPath(pDomain, buildPath(pNewPath, pRootPath)));
+
+      Path targetDirectory = getQualifiedPath(pDomain, buildPath(pNewPath, pRootPath));
+      if (pAdditionalParams != null) {
+        for (String key : pAdditionalParams.keySet()) {
+          addUserDefinedProperty(key, pAdditionalParams.get(key), targetDirectory);
+        }
+      }
     } catch (Exception e) {
       return error(mMessageResource.getMessage("folder.creation.failed", pNewPath));
     }
@@ -380,7 +385,7 @@ public class FileContentManager extends BinaryContentDecorator {
         && pEndDate != null
         && pStartDate.before(pEndDate)) {
 
-      createFolderResponse = createFolder(pNewPath, pDomain, pRootPath);
+      createFolderResponse = createFolder(pNewPath, null, pDomain, pRootPath);
       Path assignmentFolder = getQualifiedPath(pDomain, buildPath(pNewPath, pRootPath));
       try {
         addUserDefinedProperty(OWNER, SecurityUtils.getSubject().getPrincipal().toString(), assignmentFolder);

@@ -22,7 +22,8 @@
         };
 
         ApiMiddleware.prototype.list = function(path, customDeferredHandler) {
-            return this.apiHandler.list(fileManagerConfig.listUrl, this.getPath(path), customDeferredHandler);
+            return this.apiHandler.list(fileManagerConfig.listUrl, this.getPath(path), customDeferredHandler,
+                fileManagerConfig.additionalParams);
         };
 
         ApiMiddleware.prototype.copy = function(files, path) {
@@ -128,7 +129,7 @@
 
         ApiMiddleware.prototype.createFolder = function(item) {
             var path = item.tempModel.fullPath();
-            return this.apiHandler.createFolder(fileManagerConfig.createFolderUrl, path);
+            return this.apiHandler.createFolder(fileManagerConfig.createFolderUrl, path, fileManagerConfig.additionalParams);
         };
 
         ApiMiddleware.prototype.createAssignmentFolder = function (item) {

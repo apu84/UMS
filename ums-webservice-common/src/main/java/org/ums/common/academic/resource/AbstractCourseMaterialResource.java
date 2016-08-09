@@ -68,7 +68,14 @@ public abstract class AbstractCourseMaterialResource extends Resource {
           break;
 
         case "createFolder":
+          HashMap<String, String> additionalParams = null;
+          if (pJsonObject.containsKey("additionalParams")) {
+            pJsonObject.getJsonObject("additionalParams");
+            additionalParams = new ObjectMapper().readValue(
+                pJsonObject.getJsonObject("additionalParams").toString(), HashMap.class);
+          }
           result.put("result", getBinaryContentManager().createFolder(pJsonObject.getString("newPath"),
+              additionalParams,
               BinaryContentManager.Domain.COURSE_MATERIAL,
               pSemesterName,
               pCourseNo));

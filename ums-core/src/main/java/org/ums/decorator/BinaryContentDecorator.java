@@ -92,8 +92,8 @@ public abstract class BinaryContentDecorator implements BinaryContentManager<byt
   }
 
   @Override
-  public Map<String, Object> createFolder(String pNewPath, Domain pDomain, String... pRootPath) {
-    return getManager().createFolder(pNewPath, pDomain, pRootPath);
+  public Map<String, Object> createFolder(String pNewPath, Map<String, String> pAdditionalParams, Domain pDomain, String... pRootPath) {
+    return getManager().createFolder(pNewPath, pAdditionalParams, pDomain, pRootPath);
   }
 
   @Override

@@ -4,6 +4,7 @@ package org.ums.persistent.dao;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.UGRegistrationResultDaoDecorator;
+import org.ums.domain.model.immutable.UGBaseRegistration;
 import org.ums.domain.model.immutable.UGRegistrationResult;
 import org.ums.domain.model.mutable.MutableUGRegistrationResult;
 import org.ums.enums.ExamType;
@@ -13,8 +14,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentUGRegistrationResultDao extends UGRegistrationResultDaoDecorator {
+  String SELECT_ALL = "SELECT STUDENT_ID, SEMESTER_ID, COURSE_ID, GL, EXAM_TYPE, STATUS, LAST_MODIFIED FROM UG_REGISTRATION_RESULT ";
+
   String INSERT_ALL = "INSERT INTO UG_REGISTRATION_RESULT(STUDENT_ID, SEMESTER_ID, COURSE_ID, GL, EXAM_TYPE, STATUS, LAST_MODIFIED)" +
       " VALUES(?, ?, ?, ?, ?, ?, " + getLastModifiedSql() + ")";
   String DELETE_BY_STUDENT_SEMESTER = "DELETE FROM UG_REGISTRATION_RESULT WHERE STUDENT_ID = ? AND SEMESTER_ID = ? AND EXAM_TYPE = ? AND STATUS = ?";
@@ -71,6 +75,13 @@ public class PersistentUGRegistrationResultDao extends UGRegistrationResultDaoDe
   }
 
   @Override
+  public List<UGRegistrationResult> getByCourseSemester(int pSemesterId, String pCourseId, int pExamType) {
+    String query = SELECT_ALL + " WHERE COURSE_ID = ? AND SEMESTER_ID = ? AND EXAM_TYPE = ?";
+    return mJdbcTemplate.query(query, new Object[]{pCourseId, pSemesterId, pExamType},
+        new UGRegistrationResultRowMapper());
+  }
+
+  @Override
   public int create(List<MutableUGRegistrationResult> pMutableList) throws Exception {
     return mJdbcTemplate.batchUpdate(INSERT_ALL, getInsertParamList(pMutableList)).length;
   }
@@ -110,7 +121,6 @@ public class PersistentUGRegistrationResultDao extends UGRegistrationResultDaoDe
     return params;
   }
 
-
   //this will only work with Carry, Clearance and Improvement applications.
   class UGRegistrationResultCCIRowMapper implements RowMapper<UGRegistrationResult>{
     @Override
@@ -125,6 +135,23 @@ public class PersistentUGRegistrationResultDao extends UGRegistrationResultDaoDe
       result.setCourseTitle(pResultSet.getString("COURSE_TITLE"));
       result.setExamDate(pResultSet.getString("EXAM_DATE"));
       return result;
+    }
+  }
+
+  //this will only work with Carry, Clearance and Improvement applications.
+  class UGRegistrationResultRowMapper implements RowMapper<UGRegistrationResult> {
+    @Override
+    public UGRegistrationResult mapRow(ResultSet pResultSet, int pI) throws SQLException {
+      PersistentUGRegistrationResult result = new PersistentUGRegistrationResult();
+      result.setStudentId(pResultSet.getString("STUDENT_ID"));
+      result.setCourseId(pResultSet.getString("COURSE_ID"));
+      result.setGradeLetter(pResultSet.getString("GL"));
+      result.setExamType(ExamType.get(pResultSet.getInt("EXAM_TYPE")));
+      result.setSemesterId(pResultSet.getInt("SEMESTER_ID"));
+      result.setStatus(UGBaseRegistration.Status.get(pResultSet.getInt("STATUS")));
+      result.setLastModified(pResultSet.getString("LAST_MODIFIED"));
+      AtomicReference<UGRegistrationResult> registrationResult = new AtomicReference<>(result);
+      return registrationResult.get();
     }
   }
 

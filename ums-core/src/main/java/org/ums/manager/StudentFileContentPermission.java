@@ -110,7 +110,7 @@ public class StudentFileContentPermission extends BaseFileContentPermission {
   }
 
   @Override
-  public Map<String, Object> createFolder(String pNewPath, Domain pDomain, String... pRootPath) {
+  public Map<String, Object> createFolder(String pNewPath, Map<String, String> pAdditionalParams, Domain pDomain, String... pRootPath) {
     return error(mMessageResource.getMessage("folder.creation.not.allowed"));
   }
 
@@ -137,7 +137,7 @@ public class StudentFileContentPermission extends BaseFileContentPermission {
             //create folder as studentId
             Student student = getStudent();
             String assignmentFolder = Paths.get(pPath, student.getId()).toString();
-            super.createFolder(assignmentFolder, pDomain, pRootPath);
+            super.createFolder(assignmentFolder, null, pDomain, pRootPath);
             addUserDefinedProperty("type", "studentAssignment", getQualifiedPath(pDomain, buildPath(assignmentFolder, pRootPath)));
             super.upload(pFileContent, assignmentFolder, pDomain, pRootPath);
             return success();

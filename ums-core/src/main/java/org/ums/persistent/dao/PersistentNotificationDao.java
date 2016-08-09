@@ -16,9 +16,9 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentNotificationDao extends NotificationDaoDecorator {
-  String SELECT_ALL = "SELECT ID, PRODUCER_ID, CONSUMER_ID, NOTIFICATION_TYPE, PAYLOAD, PRODUCED_ON, CONSUMED_ON, LAST_MODIFIED FROM NOTIFICATION ";
-  String INSERT_ALL = "INSERT INTO NOTIFICATION (PRODUCER_ID, CONSUMER_ID, NOTIFICATION_TYPE, PAYLOAD, PRODUCED_ON, CONSUMED_ON, LAST_MODIFIED) " +
-      "VALUES (?, ?, ?, ?, TO_DATE(?, '" + Constants.DATE_FORMAT + "'), TO_DATE(?, '" + Constants.DATE_FORMAT + "'), " + getLastModifiedSql() + ")";
+  String SELECT_ALL = "SELECT ID, PRODUCER_ID, CONSUMER_ID, NOTIFICATION_TYPE, PAYLOAD, PRODUCED_ON, LAST_MODIFIED FROM NOTIFICATION ";
+  String INSERT_ALL = "INSERT INTO NOTIFICATION (PRODUCER_ID, CONSUMER_ID, NOTIFICATION_TYPE, PAYLOAD, PRODUCED_ON, LAST_MODIFIED) " +
+      "VALUES (?, ?, ?, ?, SYSDATE, " + getLastModifiedSql() + ")";
   String UPDATE_ALL = "UPDATE NOTIFICATION SET PRODUCER_ID = ?, CONSUMER_ID = ?, NOTIFICATION_TYPE = ?, PAYLOAD = ?," +
       " PRODUCED_ON = TO_DATE(?, '" + Constants.DATE_FORMAT + "'), CONSUMED_ON = TO_DATE(?, '" + Constants.DATE_FORMAT + "')," +
       " LAST_MODIFIED = " + getLastModifiedSql() + " ";
@@ -87,7 +87,7 @@ public class PersistentNotificationDao extends NotificationDaoDecorator {
 
   @Override
   public int create(List<MutableNotification> pMutableList) throws Exception {
-    return mJdbcTemplate.update(INSERT_ALL, getInsertParamArray(pMutableList));
+    return mJdbcTemplate.batchUpdate(INSERT_ALL, getInsertParamArray(pMutableList)).length;
   }
 
   @Override
@@ -102,9 +102,7 @@ public class PersistentNotificationDao extends NotificationDaoDecorator {
           notification.getProducer().getId(),
           notification.getConsumer().getId(),
           notification.getNotificationType(),
-          notification.getPayload(),
-          mDateFormat.format(notification.getProducedOn()),
-          mDateFormat.format(notification.getConsumedOn())
+          notification.getPayload()
       });
     }
     return params;

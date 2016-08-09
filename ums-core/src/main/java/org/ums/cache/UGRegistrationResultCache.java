@@ -54,4 +54,9 @@ public class UGRegistrationResultCache extends ContentCache<UGRegistrationResult
   public List<UGRegistrationResult> getCarryClearanceImprovementCoursesByStudent(int pSemesterId,String pStudentId) {
     return getManager().getCarryClearanceImprovementCoursesByStudent(pSemesterId,pStudentId);
   }
+
+  @Override
+  public List<UGRegistrationResult> getByCourseSemester(int semesterId, String courseId, int pExamType) {
+    return getManager().getByCourseSemester(semesterId, courseId, pExamType);
+  }
 }

@@ -61,7 +61,8 @@ module ums {
       return courseList;
     }
 
-    private initFileManager(semesterName: string, courseNo: string): void {
+    private initFileManager(semesterName: string, courseNo: string,
+                            semesterId: string, courseId: string): void {
       var baseUri: string = '/ums-webservice-common/academic/courseMaterial/semester/' + semesterName + "/course/" + courseNo;
       var downloadBaseUri: string = '/ums-webservice-common/academic/courseMaterial/download/semester/' + semesterName + "/course/" + courseNo;
 
@@ -85,7 +86,11 @@ module ums {
         allowedActions: angular.extend(FILEMANAGER_CONFIG.$get().allowedActions, {
           createAssignmentFolder: true,
           changePermissions: false
-        })
+        }),
+        additionalParams : {
+          semesterId: semesterId,
+          courseId: courseId
+        }
       });
 
       this.$scope.reloadOn = courseNo;

@@ -21,6 +21,7 @@ import org.ums.message.MessageResource;
 import org.ums.persistent.dao.*;
 import org.ums.security.authentication.UMSAuthenticationRealm;
 import org.ums.services.LoginService;
+import org.ums.services.NotificationGenerator;
 import org.ums.statistics.DBLogger;
 import org.ums.statistics.JdbcTemplateFactory;
 import org.ums.statistics.QueryLogger;
@@ -59,6 +60,9 @@ public class UMSContext {
 
   @Autowired
   MessageResource mMessageResource;
+
+  @Autowired
+  NotificationGenerator mNotificationGenerator;
 
   @Bean
   SemesterManager semesterManager() {
@@ -372,7 +376,10 @@ public class UMSContext {
   BinaryContentManager<byte[]> courseMaterialFileManagerForTeacher() {
     FileContentPermission fileContentPermission = new FileContentPermission(userManager(),
         bearerAccessTokenManager(), mUMSConfiguration, mMessageResource);
-    fileContentPermission.setManager(mBinaryContentManager);
+    CourseMaterialNotifier notifier = new CourseMaterialNotifier(userManager(), mNotificationGenerator,
+        registrationResultManager(), mUMSConfiguration, mMessageResource);
+    fileContentPermission.setManager(notifier);
+    notifier.setManager(mBinaryContentManager);
     return fileContentPermission;
   }
 
@@ -384,5 +391,10 @@ public class UMSContext {
         courseManager(), semesterSyllabusMapManager());
     fileContentPermission.setManager(mBinaryContentManager);
     return fileContentPermission;
+  }
+
+  @Bean
+  NotificationManager notificationManager() {
+    return new PersistentNotificationDao(mTemplateFactory.getJdbcTemplate(), getGenericDateFormat());
   }
 }
