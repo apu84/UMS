@@ -93,7 +93,7 @@ public class PersistentStudentRecordDao extends StudentRecordDaoDecorator {
 
   @Override
   public List<StudentRecord> getStudentRecords(String pStudentId, Integer pSemesterId, Integer pYear, Integer pAcademicSemester) throws Exception {
-    String query = SELECT_ALL+" STUDENT_ID=? AND SEMESTER_ID=? AND YEAR=?AND SEMESTER=?";
+    String query = SELECT_ALL+" where  STUDENT_ID=? AND SEMESTER_ID=? AND YEAR=? AND SEMESTER=?";
     return mJdbcTemplate.query(query,new Object[]{pStudentId,pSemesterId,pYear,pAcademicSemester},
         new StudentRecordRowMapper());
   }

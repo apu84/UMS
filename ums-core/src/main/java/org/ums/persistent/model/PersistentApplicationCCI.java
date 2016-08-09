@@ -48,6 +48,8 @@ public class PersistentApplicationCCI implements MutableApplicationCCI {
   private Integer mTotalStudent;
   private Integer mCourseYear;
   private Integer mCourseSemester;
+  private String mRoomNo;
+  private Integer mRoomId;
 
   public PersistentApplicationCCI(){
 
@@ -71,8 +73,30 @@ public class PersistentApplicationCCI implements MutableApplicationCCI {
     mTotalStudent = pPersistentApplicationCCI.totalStudent();
     mCourseYear = pPersistentApplicationCCI.getCourseYear();
     mCourseSemester = pPersistentApplicationCCI.getCourseSemester();
+    mRoomNo = pPersistentApplicationCCI.getRoomNo();
+    mRoomId = pPersistentApplicationCCI.getRoomId();
   }
 
+
+  @Override
+  public void setRoomId(Integer pRoomId) {
+    mRoomId = pRoomId;
+  }
+
+  @Override
+  public Integer getRoomId() {
+    return mRoomId;
+  }
+
+  @Override
+  public void setRoomNo(String pRoomNo) {
+    mRoomNo= pRoomNo;
+  }
+
+  @Override
+  public String getRoomNo() {
+    return mRoomNo;
+  }
 
   @Override
   public void setCourseYear(Integer pCourseYear) {

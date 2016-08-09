@@ -10,3 +10,22 @@ Insert into DB_IUMS.MAIN_NAVIGATION
  Values
    ('Course Material', 'student:course:material', '/studentCourseMaterial', 0,
     'fa fa-th', 'bg-pink', 39, 1);
+
+
+
+
+
+ Insert into DB_IUMS.MAIN_NAVIGATION
+    (NAVIGATION_ID, MENU_TITLE, PERMISSION, LOCATION, PARENT_MENU,
+     ICON_IMG_CLASS, ICON_COLOR_CLASS, VIEW_ORDER, STATUS, LAST_MODIFIED)
+  Values
+    (2042, 'View Seat Planning', 'student:viewSeatPlanning', '/viewSeatPlan', 0,
+     'fa-plus-square-o', 'bg-pink', 29, 1, '201602141037');
+
+
+
+
+ Insert into DB_IUMS.PERMISSIONS
+    (ROLE_ID, PERMISSIONS, PERMISSION_ID, LAST_MODIFIED)
+  Values
+    (11, 'user:home,student:profile,student:classRoutine,student:optCourseApplication,student:applications,student:applicationCCI,student:viewSeatPlanning', 1003, NULL);

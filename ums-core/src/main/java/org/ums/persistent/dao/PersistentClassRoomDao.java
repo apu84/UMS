@@ -34,6 +34,12 @@ public class PersistentClassRoomDao  extends ClassRoomDaoDecorator {
   }
 
   @Override
+  public ClassRoom getByRoomNo(String pRoomNo) throws Exception {
+    String query = SELECT_ALL+" WHERE ROOM_NO=? ";
+    return mJdbcTemplate.queryForObject(query,new Object[]{pRoomNo},new ClassRoomRowMapper());
+  }
+
+  @Override
   public List<ClassRoom> getAll() throws Exception {
     String query = SELECT_ALL+ " Order by ROOM_ID";
     return mJdbcTemplate.query(query, new ClassRoomRowMapper());

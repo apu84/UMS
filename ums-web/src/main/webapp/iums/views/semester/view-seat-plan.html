@@ -1,29 +1,84 @@
-<div data-ng-init="getStudentInfo()">
+
+<style>
+    .box{
+        width:100px;
+        height:50px;
+        border: 2px solid black;
+        background-color: white;
+        padding-bottom: 2%;
+    }
+
+    #found{
+        color:blue;
+    }
+</style>
+
+<div data-ng-init="init()">
     <div class="panel panel-blue">
         <div class="panel-heading" align="center">
             View Seat Plan
         </div>
-        <div class="panel-body">
-            <div class="row">
+        <div class="panel-body" >
+            <div class="row" data-ng-if="studentRecordFound" style="padding-left: 2%;padding-right: 2%;">
                 <ul id="myTab4" class="nav nav-tabs nav-justified">
-                    <li class="active"><a href="" data-toggle="tab">Semester Final</a></li>
+                    <li class="active"><a href="" ng-click="showSemesterFinalSeatPlan()" data-toggle="tab">Semester Final</a></li>
                     <li data-ng-if="student.programId==110300"><a href="" data-toggle="tab">3-1<-->3-2</a></li>
-                    <li ><a href="" data-toggle="tab">CCI</a></li>
+                    <li ><a href="" data-ng-click="showCCISeatPlan()" data-toggle="tab">CCI</a></li>
                 </ul>
                 <div id="myTabContent4" class="tab-content">
-                    <div id="home6" class="tab-pane fade in active">
-                        <p>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.</p>
+                    <div id="home6" class="tab-pane fade in active" data-ng-if="semesterFinalSelected">
+                        <div class="row" align="center">
+                            <h4>Room No: <b>{{classRoom.roomNo}}</b></h4>
+                        </div>
+                        <br>
+                        <table align="center">
+                            <tr data-ng-repeat="row in rowIterationArr">
+                                <td data-ng-repeat="col in colIterationArr" style="padding-bottom: 2%;">
+                                    <div   data-ng-if="col%2!=0" align="center">
+                                        <i data-ng-if="col==seatPlanArr.colNo && row==seatPlanArr.rowNo" id="found" class="fa fa-user fa-2x box" aria-hidden="true" ></i>
+                                        <i data-ng-if="col!=seatPlanArr.colNo || row!=seatPlanArr.rowNo" class="fa fa-user fa-2x box" aria-hidden="true" ></i>
+                                    </div>
+                                    <div data-ng-if="col%2==0" align="center">
+                                        <i data-ng-if="col==seatPlanArr.colNo && row==seatPlanArr.rowNo" id="found" class="fa fa-user fa-2x box" aria-hidden="true" ></i>
+                                        <i data-ng-if="col!=seatPlanArr.colNo || row!=seatPlanArr.rowNo" class="fa fa-user fa-2x box" aria-hidden="true" ></i> &nbsp;&nbsp;&nbsp;&nbsp;
+                                    </div>
+
+                                </td>
+
+                            </tr>
+                        </table>
+
                     </div>
-                    <div id="profile6" class="tab-pane fade">
-                        <p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson 8-bit, sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.</p>
+                    <div id="home6" class="tab-pane fade in active" data-ng-if="cciSelected">
+                        <table class="table table-bordered table-stripped">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Course</th>
+                                    <th>Reg. Type</th>
+                                    <th>Room Number</th>
+                                    <th>View</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr data-ng-repeat="app in applicationCCIArr">
+                                    <td>{{app.examDate}}</td>
+                                    <td>{{app.courseNo}}</td>
+                                    <td data-ng-if="app.applicationType==2">Clearance</td>
+                                    <td data-ng-if="app.applicationType==3">Carry</td>
+                                    <td data-ng-if="app.applicationType==4">Special Carry</td>
+                                    <td data-ng-if="app.applicationType==5">Improvement</td>
+                                    <td>{{app.roomNo}}</td>
+                                    <td><a href="" data-ng-click="viewSeatPlan(app.roomId)">View</a> </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-                    <div id="dropdown13" class="tab-pane fade">
-                        <p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy irony. Leggings gentrify squid 8-bit cred pitchfork. Williamsburg banh mi whatever gluten-free, carles pitchfork biodiesel fixie etsy retro mlkshk vice blog. Scenester cred you probably haven't heard of them, vinyl craft beer blog stumptown. Pitchfork sustainable tofu synth chambray yr.</p>
-                    </div>
-                    <div id="dropdown14" class="tab-pane fade">
-                        <p>Trust fund seitan letterpress, keytar raw denim keffiyeh etsy art party before they sold out master cleanse gluten-free squid scenester freegan cosby sweater. Fanny pack portland seitan DIY, art party locavore wolf cliche high life echo park Austin. Cred vinyl keffiyeh DIY salvia PBR, banh mi before they sold out farm-to-table VHS viral locavore cosby sweater. Lomo wolf viral, mustache readymade thundercats keffiyeh craft beer marfa ethical. Wolf salvia freegan, sartorial keffiyeh echo park vegan.</p>
-                    </div>
+
                 </div>
+            </div>
+            <div class="row" data-ng-if="!studentRecordFound" align="center">
+                <h2><b>Not Yet Registered</b> for the semester</h2>
             </div>
         </div>
     </div>

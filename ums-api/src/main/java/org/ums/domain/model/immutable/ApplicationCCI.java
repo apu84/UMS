@@ -28,4 +28,6 @@ public interface ApplicationCCI extends Serializable,LastModifier,EditType<Mutab
   Integer totalStudent();
   Integer getCourseYear();
   Integer getCourseSemester();
+  String getRoomNo();
+  Integer getRoomId();
 }

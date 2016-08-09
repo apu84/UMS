@@ -14,4 +14,9 @@ public class ClassRoomDaoDecorator extends ContentDaoDecorator<ClassRoom, Mutabl
   public List<ClassRoom> getRoomList() throws Exception {
     return getManager().getRoomList();
   }
+
+  @Override
+  public ClassRoom getByRoomNo(String pRoomNo) throws Exception {
+    return getManager().getByRoomNo(pRoomNo);
+  }
 }

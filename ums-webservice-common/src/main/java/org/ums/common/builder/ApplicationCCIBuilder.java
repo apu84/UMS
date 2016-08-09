@@ -49,6 +49,13 @@ public class ApplicationCCIBuilder implements Builder<ApplicationCCI,MutableAppl
     if(pReadOnly.getCourseSemester()!=null){
       pBuilder.add("semester",pReadOnly.getCourseSemester());
     }
+
+    if(pReadOnly.getRoomNo()!=null){
+      pBuilder.add("roomNo",pReadOnly.getRoomNo());
+    }
+    if(pReadOnly.getRoomId()!=null){
+      pBuilder.add("roomId",pReadOnly.getRoomId());
+    }
   }
 
   @Override

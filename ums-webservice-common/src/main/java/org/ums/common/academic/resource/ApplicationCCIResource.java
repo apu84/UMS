@@ -36,4 +36,10 @@ public class ApplicationCCIResource extends MutableApplicationCCIResource {
                                                  @PathParam("exam-date") String pExamDate)throws Exception{
     return mHelper.getApplicationCCIForSeatPlan(pSemesterId,pExamDate,pRequest,mUriInfo);
   }
+
+  @GET
+  @Path("/seatPlanView")
+  public JsonObject getApplicationCCIForSeatPlanView(@Context Request pRequest)throws Exception{
+    return mHelper.getApplicationCCIForSeatPlanViewingOfStudent(mUriInfo);
+  }
 }

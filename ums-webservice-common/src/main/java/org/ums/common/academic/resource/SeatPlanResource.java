@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ums.common.academic.resource.helper.SeatPlanResourceHelper;
 import org.ums.manager.SeatPlanManager;
 
 import javax.json.JsonObject;
@@ -24,6 +25,8 @@ public class SeatPlanResource extends MutableSeatPlanResource{
   private static final String FILE_PATH = "I:/pdf/seat_plan_report.pdf";
   @Autowired
   SeatPlanManager mManager;
+
+
 
   @GET
   @Path("/all")
@@ -64,6 +67,16 @@ public class SeatPlanResource extends MutableSeatPlanResource{
         }
       }
     };
+  }
+
+
+
+  @GET
+  @Path("/studentId/{student-id}/semesterId/{semester-id}")
+  public JsonObject getSeatPlanInfoForSeatPlanViewing(final @Context Request pRequest,
+                                                      final @PathParam("student-id") String pStudentId,
+                                                      final @PathParam("semester-id") Integer pSemesterId) throws Exception{
+    return mSeatPlanResourceHelper.getSeatPlanForStudentsSeatPlanView(pStudentId,pSemesterId,mUriInfo);
   }
 
 }

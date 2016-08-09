@@ -39,4 +39,9 @@ public class ApplicationCCIDaoDecorator extends ContentDaoDecorator<ApplicationC
   public List<ApplicationCCI> getBySemesterAndExamDate(Integer pSemesterId, String pExamDate) throws Exception{
     return getManager().getBySemesterAndExamDate(pSemesterId,pExamDate);
   }
+
+  @Override
+  public List<ApplicationCCI> getByStudentIdAndSemesterForSeatPlanView(String pStudentId, Integer pSemesterId) {
+    return getManager().getByStudentIdAndSemesterForSeatPlanView(pStudentId,pSemesterId);
+  }
 }

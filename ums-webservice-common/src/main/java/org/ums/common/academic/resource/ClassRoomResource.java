@@ -6,10 +6,9 @@ import org.ums.common.Resource;
 import org.ums.manager.ClassRoomManager;
 
 import javax.json.JsonObject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Request;
 
 @Component
 @Path("/academic/classroom")
@@ -23,6 +22,21 @@ public class ClassRoomResource  extends MutableClassRoomResource {
   @Path("/all")
   public JsonObject getAll() throws Exception {
     return mResourceHelper.getAll(mUriInfo);
+  }
+
+
+  @GET
+  @Path("/roomNo/{room-no}")
+  public JsonObject getByRoomNo(final @Context Request pRequest,
+                                final @PathParam("room-no") String roomNo) throws Exception{
+    return mResourceHelper.getByRoomNo(roomNo,mUriInfo);
+  }
+
+  @GET
+  @Path("/roomId/{room-id}")
+  public JsonObject getByRoomId(final @Context Request pRequest,
+                                final @PathParam("room-id") Integer roomId) throws Exception{
+    return mResourceHelper.getByRoomId(roomId,mUriInfo);
   }
 
 }

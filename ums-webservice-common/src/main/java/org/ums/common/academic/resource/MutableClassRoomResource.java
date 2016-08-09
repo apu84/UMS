@@ -3,6 +3,7 @@ package org.ums.common.academic.resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.ums.common.Resource;
 import org.ums.common.ResourceHelper;
+import org.ums.common.academic.resource.helper.ClassRoomResourceHelper;
 import org.ums.domain.model.mutable.MutableClassRoom;
 import org.ums.domain.model.immutable.ClassRoom;
 
@@ -15,7 +16,7 @@ import javax.ws.rs.core.Response;
 public class MutableClassRoomResource extends Resource {
 
   @Autowired
-  ResourceHelper<ClassRoom, MutableClassRoom, Integer> mResourceHelper;
+  ClassRoomResourceHelper mResourceHelper;
 
 
   @POST

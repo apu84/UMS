@@ -17,4 +17,6 @@ public interface ApplicationCCIManager extends ContentManager<ApplicationCCI,Mut
 
   List<ApplicationCCI> getBySemesterAndExamDate(Integer pSemesterId, String pExamDate) throws Exception;
   int deleteByStudentId(final String pStudentId);
+
+  List<ApplicationCCI> getByStudentIdAndSemesterForSeatPlanView(String pStudentId,Integer pSemesterId);
 }

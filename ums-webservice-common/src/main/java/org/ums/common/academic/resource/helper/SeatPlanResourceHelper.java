@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ums.cache.LocalCache;
 import org.ums.common.ResourceHelper;
 import org.ums.common.builder.Builder;
 import org.ums.common.builder.SeatPlanBuilder;
@@ -16,7 +17,10 @@ import org.ums.manager.*;
 import org.ums.response.type.GenericResponse;
 import org.ums.services.academic.SeatPlanService;
 
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
@@ -75,6 +79,20 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan,MutableSeatP
 
   public static final String DEST = "I:/pdf/seat_plan_report.pdf";
 
+
+
+   public JsonObject getSeatPlanForStudentsSeatPlanView(final String pStudentId,final  Integer pSemesterId, final UriInfo mUriInfo)throws Exception{
+    List<SeatPlan> seatPlans = getContentManager().getForStudent(pStudentId,pSemesterId);
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+    for(SeatPlan seatPlan: seatPlans){
+      children.add(toJson(seatPlan,mUriInfo,localCache));
+    }
+    object.add("entries",children);
+    localCache.invalidate();
+    return object.build();
+  }
 
 
   @Override
@@ -176,10 +194,6 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan,MutableSeatP
 
 
 
-  JsonObject getSeatPlanInformationForStuden(String pStudentId, Integer pSemesterId, final UriInfo mUriInfo)throws Exception{
-
-    return null;
-  }
 
 
   @Override

@@ -60,5 +60,8 @@ public class ApplicationCCICache extends ContentCache<ApplicationCCI,MutableAppl
     return CacheUtil.getCacheKey(ApplicationCCI.class,pId);
   }
 
-
+  @Override
+  public List<ApplicationCCI> getByStudentIdAndSemesterForSeatPlanView(String pStudentId, Integer pSemesterId) {
+    return getManager().getByStudentIdAndSemesterForSeatPlanView(pStudentId,pSemesterId);
+  }
 }

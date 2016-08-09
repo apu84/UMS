@@ -218,6 +218,22 @@ public class ApplicationCCIResourceHelper extends ResourceHelper<ApplicationCCI,
     return object.build();
   }
 
+  public JsonObject getApplicationCCIForSeatPlanViewingOfStudent(final UriInfo pUriInfo)throws Exception{
+    String studentId = SecurityUtils.getSubject().getPrincipal().toString();
+    Student student = mStudentManager.get(studentId);
+    List<ApplicationCCI> applications = getContentManager().getByStudentIdAndSemesterForSeatPlanView(studentId,student.getCurrentEnrolledSemesterId());
+
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+    for(ApplicationCCI app: applications){
+      children.add(toJson(app, pUriInfo, localCache));
+    }
+    object.add("entries", children);
+    localCache.invalidate();
+    return object.build();
+  }
+
 
 
   public JsonObject getApplicationCCIForSeatPlan(final Integer pSemesterId,final String pExamDate,final Request pRequest, final UriInfo pUriInfo)throws Exception{

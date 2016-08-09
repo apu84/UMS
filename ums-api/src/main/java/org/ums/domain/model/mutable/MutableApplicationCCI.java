@@ -28,4 +28,6 @@ public interface MutableApplicationCCI extends ApplicationCCI,Mutable,MutableLas
   void setTotalStudent(final Integer pTotalStudent);
   void setCourseYear(final Integer pCourseYear);
   void setCourseSemester(final Integer pCourseSemester);
+  void setRoomNo(final String pRoomNo);
+  void setRoomId(final Integer pRoomId);
 }
