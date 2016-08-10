@@ -95,6 +95,11 @@ public class SeatPlanCache extends ContentCache<SeatPlan, MutableSeatPlan, Integ
     return getManager().checkIfExistsBySemesterGroupTypeExamDateRoomRowAndCol(pSemesterId,pGroupNo,pType,pExamDate,pRoomId,pRow,pCol);
   }
 
+  @Override
+  public List<SeatPlan> getForStudentAndCCIExam(String pStudentId, Integer pSemesterid, String pExamDate) {
+    return getManager().getForStudentAndCCIExam(pStudentId,pSemesterid,pExamDate);
+  }
+
   protected long generateCacheKeyForRoomSemesterGroupExamType(int pRoomId, int pSemesterId, int pGroupNo, int pExamType) {
     StringBuilder builder = new StringBuilder();
     builder.append(pRoomId).append(pSemesterId).append(pGroupNo).append(pExamType);

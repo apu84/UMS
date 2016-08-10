@@ -27,33 +27,43 @@
                 </ul>
                 <div id="myTabContent4" class="tab-content">
                     <div id="home6" class="tab-pane fade in active" data-ng-if="seatPlanStructure">
-                        <div class="row" align="center">
-                            <h4>Room No: <b>{{classRoom.roomNo}}</b></h4>
+                        <div data-ng-if="seatPlanArrLength==0" align="center">
+                            <h2>No seat plan is published yet!</h2>
                         </div>
-                        <br>
-                        <table align="center">
-                            <tr data-ng-repeat="row in rowIterationArr">
-                                <td data-ng-repeat="col in colIterationArr" style="padding-bottom: 2%;">
-                                    <div   data-ng-if="col%2!=0" align="center">
-                                        <i data-ng-if="col==seatPlanArr.colNo && row==seatPlanArr.rowNo" id="found" class="fa fa-user fa-2x box" aria-hidden="true" ></i>
-                                        <i data-ng-if="col!=seatPlanArr.colNo || row!=seatPlanArr.rowNo" class="fa fa-user fa-2x box" aria-hidden="true" ></i>
-                                    </div>
-                                    <div data-ng-if="col%2==0" align="center">
-                                        <i data-ng-if="col==seatPlanArr.colNo && row==seatPlanArr.rowNo" id="found" class="fa fa-user fa-2x box" aria-hidden="true" ></i>
-                                        <i data-ng-if="col!=seatPlanArr.colNo || row!=seatPlanArr.rowNo" class="fa fa-user fa-2x box" aria-hidden="true" ></i> &nbsp;&nbsp;&nbsp;&nbsp;
-                                    </div>
+                        <div data-ng-if="seatPlanArrLength>0">
+                            <div class="row" align="center">
+                                <h4>Room No: <b>{{classRoom.roomNo}}</b></h4>
+                            </div>
+                            <br>
+                            <table align="center">
+                                <tr data-ng-repeat="row in rowIterationArr">
+                                    <td data-ng-repeat="col in colIterationArr" style="padding-bottom: 2%;">
+                                        <div   data-ng-if="col%2!=0" align="center">
+                                            <i data-ng-if="col==seatPlanArr.colNo && row==seatPlanArr.rowNo" id="found" class="fa fa-user fa-2x box" aria-hidden="true" ></i>
+                                            <i data-ng-if="col!=seatPlanArr.colNo || row!=seatPlanArr.rowNo" class="fa fa-user fa-2x box" aria-hidden="true" ></i>
+                                        </div>
+                                        <div data-ng-if="col%2==0" align="center">
+                                            <i data-ng-if="col==seatPlanArr.colNo && row==seatPlanArr.rowNo" id="found" class="fa fa-user fa-2x box" aria-hidden="true" ></i>
+                                            <i data-ng-if="col!=seatPlanArr.colNo || row!=seatPlanArr.rowNo" class="fa fa-user fa-2x box" aria-hidden="true" ></i> &nbsp;&nbsp;&nbsp;&nbsp;
+                                        </div>
 
-                                </td>
+                                    </td>
 
-                            </tr>
-                        </table>
-                        <div class="row" align="right" data-ng-if="seatPlanStructure && semesterFinalSelected==false">
-                            <button class="btn btn-success" style="padding-right: 5%;" data-ng-click="goBack()">Go Back</button>
+                                </tr>
+                            </table>
+                            <div class="row" align="right" data-ng-if="seatPlanStructure && semesterFinalSelected==false">
+                                <button class="btn btn-success" style="padding-right: 5%;" data-ng-click="goBack()">Go Back</button>
+                            </div>
                         </div>
+
+
 
                     </div>
                     <div id="home6" class="tab-pane fade in active" data-ng-if="cciSelected && seatPlanStructure==false">
-                        <table class="table table-bordered table-stripped">
+                        <div data-ng-if="applicationCCIArrLength==0" align="center">
+                            <h2>You dont have any carry exams!</h2>
+                        </div>
+                        <table class="table table-bordered table-stripped" data-ng-if="applicationCCILength>0">
                             <thead>
                                 <tr>
                                     <th>Date</th>
@@ -72,7 +82,7 @@
                                     <td data-ng-if="app.applicationType==4">Special Carry</td>
                                     <td data-ng-if="app.applicationType==5">Improvement</td>
                                     <td>{{app.roomNo}}</td>
-                                    <td><a href="" data-ng-click="viewSeatPlan(app.roomId)">View</a> </td>
+                                    <td><a href="" data-ng-click="viewSeatPlan(app.roomId,app.examDate)">View</a> </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -80,7 +90,7 @@
 
                 </div>
             </div>
-            <div class="row" data-ng-if="!studentRecordFound" align="center">
+            <div class="row" data-ng-if="studentRecordFound==false" align="center">
                 <h2><b>Not Yet Registered</b> for the semester</h2>
             </div>
         </div>

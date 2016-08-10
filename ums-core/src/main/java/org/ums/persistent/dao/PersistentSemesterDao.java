@@ -119,6 +119,12 @@ public class PersistentSemesterDao extends SemesterDaoDecorator {
     return mJdbcTemplate.queryForObject(query, new Object[]{pSemesterName, pProgramTypeId}, new SemesterRowMapper());
   }
 
+  @Override
+  public Semester getActiveSemester(Integer pProgramType) {
+    String query=SELECT_ALL+" where  STATUS=1 AND PROGRAM_TYPE=?";
+    return mJdbcTemplate.queryForObject(query,new Object[]{pProgramType},new SemesterRowMapper());
+  }
+
   class SemesterRowMapper implements RowMapper<Semester> {
     @Override
     public Semester mapRow(ResultSet resultSet, int i) throws SQLException {

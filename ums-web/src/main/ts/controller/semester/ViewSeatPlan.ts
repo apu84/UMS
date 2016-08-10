@@ -1,7 +1,12 @@
 module ums{
+  /*
+  * TODO: check in the student records, whether the student is registered in regular or cci or both.
+  * */
 
   interface IViewSeatPlan extends ng.IScope{
     student:Student;
+    seatPlanArrLength:number;
+    applicationCCILength:number;
     recordNotFoundMessage:string;
     seatPlanArr:ISeatPlan;
     roomId:number
@@ -18,6 +23,8 @@ module ums{
     civilSelected:boolean;
     cciSelected:boolean;
     seatPlanStructure:boolean;
+    isNoSeatPlanInfo:boolean;
+    isNoCCIInfo:boolean;
 
 
     init:Function;
@@ -32,6 +39,7 @@ module ums{
     viewSeatPlan:Function;
     createRoomStructure:Function;
     goBack:Function;
+    getSeatPlanInfoCCIExam:Function;
 
   }
 
@@ -83,6 +91,7 @@ module ums{
       $scope.createRoomStructure = this.createRoomStructure.bind(this);
       $scope.viewSeatPlan = this.viewSeatPlan.bind(this);
       $scope.goBack = this.goBack.bind(this);
+      $scope.getSeatPlanInfoCCIExam = this.getSeatPlanInfoCCIExam.bind(this);
 
     }
 
@@ -91,6 +100,7 @@ module ums{
       this.getStudentInfo().then((studentInfo:Student)=>{
         this.getStudentRecordInfo().then((studentRecords:any)=>{
           if(studentRecords.length>0){
+
             this.$scope.studentRecordFound=true;
             this.showSemesterFinalSeatPlan();
           }else{
@@ -132,6 +142,7 @@ module ums{
       this.$scope.civilSelected=false;
       this.getSeatPlanInfoFinalExam().then((seatPlanArr:Array<ISeatPlan>)=>{
         this.$scope.seatPlanArr = seatPlanArr[0];
+        this.$scope.seatPlanArrLength=seatPlanArr.length;
         console.log(this.$scope.seatPlanArr);
 
         this.createRoomStructure(this.$scope.seatPlanArr.roomId);
@@ -146,13 +157,23 @@ module ums{
       this.$scope.semesterFinalSelected=false;
       this.getApplicationCCIInfo().then((applicationCCI:Array<IApplicationCCI>)=>{
         this.$scope.applicationCCIArr=applicationCCI;
+        this.$scope.applicationCCILength=applicationCCI.length;
       });
     }
 
-    private viewSeatPlan(roomId:number){
-      this.createRoomStructure(roomId);
+    private viewSeatPlan(roomId:number,examDate:string){
       this.$scope.seatPlanStructure=true;
       this.$scope.cciSelected=false;
+      this.getSeatPlanInfoCCIExam(examDate).then((seatPlanArr:Array<ISeatPlan>)=>{
+        console.log("In the view section");
+        console.log(seatPlanArr);
+        this.$scope.seatPlanArrLength = seatPlanArr.length;
+        this.$scope.seatPlanArr = seatPlanArr[0];
+        console.log(this.$scope.seatPlanArr);
+
+        this.createRoomStructure(roomId);
+      });
+
     }
 
 
@@ -203,6 +224,21 @@ module ums{
             defer.resolve(seatPlanArr);
           },(response:ng.IHttpPromiseCallbackArg<any>)=>{
               console.error(response);
+          });
+      return defer.promise;
+    }
+
+    private getSeatPlanInfoCCIExam(examDate:string):ng.IPromise<any>{
+      var defer = this.$q.defer();
+      var seatPlanArr:Array<ISeatPlan>=[];
+      this.httpClient.get("/ums-webservice-common/academic/seatplan/studentId/"+this.$scope.student[0].id+"/semesterId/"+this.$scope.student[0].semesterId+'/examDate/'+examDate,'application/json',
+          (json:any,etag:string)=>{
+            seatPlanArr = json.entries;
+            console.log("*** seat plan CCIIIII****");
+            console.log(seatPlanArr);
+            defer.resolve(seatPlanArr);
+          },(response:ng.IHttpPromiseCallbackArg<any>)=>{
+            console.error(response);
           });
       return defer.promise;
     }

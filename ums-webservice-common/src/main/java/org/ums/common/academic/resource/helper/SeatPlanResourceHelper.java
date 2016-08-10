@@ -94,6 +94,19 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan,MutableSeatP
     return object.build();
   }
 
+  public JsonObject getSeatPlanForStudentAndCCIExam(final String pStudentId,final  Integer pSemesterId,final String pExamDate, final UriInfo mUriInfo)throws Exception{
+    List<SeatPlan> seatPlans = getContentManager().getForStudentAndCCIExam(pStudentId,pSemesterId,pExamDate);
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+    for(SeatPlan seatPlan: seatPlans){
+      children.add(toJson(seatPlan,mUriInfo,localCache));
+    }
+    object.add("entries",children);
+    localCache.invalidate();
+    return object.build();
+  }
+
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
