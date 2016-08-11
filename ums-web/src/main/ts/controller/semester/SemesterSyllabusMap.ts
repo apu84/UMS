@@ -80,7 +80,6 @@ module ums {
       this.$scope.mapDetailVisiblity=false;
       this.$scope.noRecordVisibility=false;
       this.$scope.copyDivVisiblity=false;
-
       this.httpClient.get('academic/ssmap/program/' + this.$scope.semesterSyllabusMapModel.programSelector.programId + '/semester/' + this.$scope.semesterSyllabusMapModel.semesterId + '', 'application/json',
             (json:any, etag:string) => {
               this.$scope.loadingVisibility1=false;
