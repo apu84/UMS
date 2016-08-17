@@ -1,6 +1,5 @@
 ///<reference path="../../model/master_data/Semester.ts"/>
 ///<reference path="../../service/HttpClient.ts"/>
-///<reference path="../../lib/jquery.notific8.d.ts"/>
 ///<reference path="../../lib/jquery.notify.d.ts"/>
 module ums {
 
@@ -21,12 +20,6 @@ module ums {
         semesterStatusOptions:[{id: '2', name: 'Newly Created'}],
         year:[{id:"",name:"Select a Year"},{id:currentYear,name:currentYear},{id:nextYear,name:nextYear}]
       };
-      /*
-      setTimeout(function () {
-        $('.make-switch').bootstrapSwitch();
-        $('#TheCheckBox').bootstrapSwitch();
-      }, 50);
-      */
 
       $('.datepicker-default').datepicker();
       $('.datepicker-default').on('change', function(){

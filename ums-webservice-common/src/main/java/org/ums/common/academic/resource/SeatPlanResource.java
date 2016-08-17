@@ -79,4 +79,13 @@ public class SeatPlanResource extends MutableSeatPlanResource{
     return mSeatPlanResourceHelper.getSeatPlanForStudentsSeatPlanView(pStudentId,pSemesterId,mUriInfo);
   }
 
+  @GET
+  @Path("/studentId/{student-id}/semesterId/{semester-id}/examDate/{exam-date}")
+  public JsonObject getSeatPlanForStudentAndCCIExam(final @Context Request pRequest,
+                                                      final @PathParam("student-id") String pStudentId,
+                                                      final @PathParam("semester-id") Integer pSemesterId,
+                                                      final @PathParam("exam-date") String pExamDate) throws Exception{
+    return mSeatPlanResourceHelper.getSeatPlanForStudentAndCCIExam(pStudentId,pSemesterId,pExamDate,mUriInfo);
+  }
+
 }

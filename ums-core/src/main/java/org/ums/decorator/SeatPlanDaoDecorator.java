@@ -66,4 +66,9 @@ public class SeatPlanDaoDecorator extends ContentDaoDecorator<SeatPlan,MutableSe
   public List<SeatPlan> getForStudent(String pStudentId, Integer pSemesterId) {
     return getManager().getForStudent(pStudentId,pSemesterId);
   }
+
+  @Override
+  public List<SeatPlan> getForStudentAndCCIExam(String pStudentId, Integer pSemesterid, String pExamDate) {
+    return getManager().getForStudentAndCCIExam(pStudentId,pSemesterid,pExamDate);
+  }
 }
