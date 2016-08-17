@@ -41,18 +41,6 @@ public class SeatPlanResource extends MutableSeatPlanResource{
                                                        final @PathParam("groupNo") String pGroupNo,
                                                        final @PathParam("type") String pType,
                                                        final @PathParam("exam-date") String pExamDate)throws Exception{
-   /* StreamingOutput strem =  mSeatPlanResourceHelper.createOrCheckSeatPlanAndReturnRoomList(
-        Integer.parseInt(pSemesterId),Integer.parseInt(pGroupNo),Integer.parseInt(pType),pRequest,mUriInfo
-    );
-
-
-    File file = new File(FILE_PATH );
-
-    Response.ResponseBuilder response = Response.ok((Object) file);
-    //response.header("SeatPlan Report","attachment;filename=seatPlanReport.pdf");
-
-
-    return  response.build();*/
 
     return new StreamingOutput() {
       @Override
@@ -68,6 +56,7 @@ public class SeatPlanResource extends MutableSeatPlanResource{
       }
     };
   }
+
 
 
 

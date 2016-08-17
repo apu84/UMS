@@ -27,9 +27,64 @@ public class PersistentExamRoutine implements MutableExamRoutine {
   private Integer mTotalStudent;
   private String mExamDate;
   private String mExamDateOriginal;
+  private String mProgramShortName;
+  private String mCourseNo;
+  private String mCourseTitle;
+  private Integer mCourseYear;
+  private Integer mCourseSemester;
 
 
   public PersistentExamRoutine() {
+  }
+
+  @Override
+  public void setCourseYear(Integer pCourseYear) {
+    mCourseYear = pCourseYear;
+  }
+
+  @Override
+  public void setCourseSemester(Integer pCourseSemester) {
+    mCourseSemester = pCourseSemester;
+  }
+
+  @Override
+  public Integer getCourseYear() {
+    return mCourseYear;
+  }
+
+  @Override
+  public Integer getCourseSemester() {
+    return mCourseSemester;
+  }
+
+  @Override
+  public void setProgramName(String pProgramShortName) {
+    mProgramShortName = pProgramShortName;
+  }
+
+  @Override
+  public void setCourseNumber(String pCourseNo) {
+    mCourseNo = pCourseNo;
+  }
+
+  @Override
+  public void setCourseTitle(String pCourseTitle) {
+    mCourseTitle = pCourseTitle;
+  }
+
+  @Override
+  public String getProgramName() {
+    return mProgramShortName;
+  }
+
+  @Override
+  public String getCourseNumber() {
+    return mCourseNo;
+  }
+
+  @Override
+  public String getCourseTitle() {
+    return mCourseTitle;
   }
 
   @Override

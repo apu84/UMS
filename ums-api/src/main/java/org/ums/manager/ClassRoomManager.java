@@ -11,5 +11,6 @@ import java.util.List;
 public interface ClassRoomManager extends ContentManager<ClassRoom, MutableClassRoom, Integer> {
   public List<ClassRoom> getRoomList() throws Exception;
   public ClassRoom getByRoomNo(String pRoomNo) throws Exception;
+  public List<ClassRoom> getSeatPlanRooms(Integer pSemesterid,Integer pExamType) throws Exception;
 }
 

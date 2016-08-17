@@ -27,4 +27,19 @@ public class ExamRoutineDaoDecorator extends ContentDaoDecorator<ExamRoutine, Mu
   public List<ExamRoutineDto> getCCIExamRoutinesBySemeste(Integer pSemesterId) {
     return getManager().getCCIExamRoutinesBySemeste(pSemesterId);
   }
+
+  @Override
+  public List<ExamRoutineDto> getExamRoutineBySemesterAndExamType(Integer pSemesterId, Integer pExamType) {
+    return getManager().getExamRoutineBySemesterAndExamType(pSemesterId,pExamType);
+  }
+
+  @Override
+  public List<ExamRoutineDto> getExamDatesBySemesterAndType(Integer pSemesterId, Integer pExamType) {
+    return getManager().getExamRoutineBySemesterAndExamType(pSemesterId,pExamType);
+  }
+
+  @Override
+  public List<ExamRoutineDto> getExamRoutineBySemesterAndExamTypeOrderByExamDateAndProgramIdAndCourseId(Integer pSemesterId, Integer pExamType) {
+    return getManager().getExamRoutineBySemesterAndExamTypeOrderByExamDateAndProgramIdAndCourseId(pSemesterId,pExamType);
+  }
 }

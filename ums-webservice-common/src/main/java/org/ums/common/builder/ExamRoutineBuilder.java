@@ -39,6 +39,25 @@ public class ExamRoutineBuilder  implements Builder<ExamRoutine, MutableExamRout
     if(pReadOnly.getTotalStudent()!=null){
       pBuilder.add("totalStudent",pReadOnly.getTotalStudent());
     }
+    if(pReadOnly.getProgramName()!=null){
+      pBuilder.add("programName",pReadOnly.getProgramName());
+    }
+
+    if(pReadOnly.getCourseYear()!=null){
+      pBuilder.add("year",pReadOnly.getCourseYear());
+    }
+
+    if(pReadOnly.getCourseSemester()!=null){
+      pBuilder.add("semester",pReadOnly.getCourseSemester());
+    }
+
+    if(pReadOnly.getCourseNumber()!=null){
+      pBuilder.add("courseNo",pReadOnly.getCourseNumber());
+    }
+
+    if(pReadOnly.getCourseTitle()!=null){
+      pBuilder.add("courseTitle",pReadOnly.getCourseTitle());
+    }
     if(pReadOnly.getExamDateOriginal()!=null){
       pBuilder.add("examDateOriginal",pReadOnly.getExamDateOriginal());
     }

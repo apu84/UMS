@@ -3,6 +3,7 @@ package org.ums.common.academic.resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.common.Resource;
+import org.ums.domain.model.immutable.Semester;
 import org.ums.manager.SemesterManager;
 
 import javax.json.JsonObject;
@@ -10,6 +11,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
+import java.util.List;
 
 @Component
 @Path("/academic/semester")
@@ -29,6 +31,7 @@ public class SemesterResource extends MutableSemesterResource {
   @Path("/program-type/{program-type}/limit/{list-limit}")
   public JsonObject getSemesterList(final @Context Request pRequest, final @PathParam("program-type") int pProgramType, final @PathParam("list-limit") int pListLimit)
       throws Exception {
+    List<Semester> semesters = mManager.getSemesters(pProgramType,pListLimit);
     return mResourceHelper.buildSemesters(mManager.getSemesters(pProgramType, pListLimit), mUriInfo);
   }
 

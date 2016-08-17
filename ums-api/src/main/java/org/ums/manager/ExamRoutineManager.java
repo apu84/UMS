@@ -11,5 +11,8 @@ public interface ExamRoutineManager extends ContentManager<ExamRoutine, MutableE
   public List<ExamRoutineDto> getExamRoutineForApplicationCCI(int semesterId,int examType);
   public ExamRoutineDto getExamRoutineForCivilExamBySemester(Integer pSemesterId);
   public List<ExamRoutineDto> getCCIExamRoutinesBySemeste(Integer pSemesterId);
+  public List<ExamRoutineDto> getExamRoutineBySemesterAndExamType(Integer pSemesterId,Integer pExamType);
+  public List<ExamRoutineDto> getExamDatesBySemesterAndType(Integer pSemesterId,Integer pExamType);
+  public List<ExamRoutineDto> getExamRoutineBySemesterAndExamTypeOrderByExamDateAndProgramIdAndCourseId(Integer pSemesterId, Integer pExamType);
 }
 

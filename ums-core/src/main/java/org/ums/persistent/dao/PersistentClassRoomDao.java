@@ -44,6 +44,36 @@ public class PersistentClassRoomDao  extends ClassRoomDaoDecorator {
     String query = SELECT_ALL+ " Order by ROOM_ID";
     return mJdbcTemplate.query(query, new ClassRoomRowMapper());
   }
+
+
+  @Override
+  public List<ClassRoom> getSeatPlanRooms(Integer pSemesterId, Integer pExamType) throws Exception {
+    String query = "select " +
+        "  ROOM_INFO.ROOM_ID, " +
+        "  ROOM_INFO.ROOM_NO, " +
+        "  ROOM_INFO.DESCRIPTION, " +
+        "  ROOM_INFO.TOTAL_ROW, " +
+        "  ROOM_INFO.TOTAL_COLUMN, " +
+        "  ROOM_INFO.CAPACITY, " +
+        "  ROOM_INFO.ROOM_TYPE, " +
+        "  ROOM_INFO.DEPT_ID, " +
+        "  ROOM_INFO.EXAM_SEAT_PLAN, " +
+        "  ROOM_INFO.LAST_MODIFIED " +
+        "from ROOM_INFO, " +
+        "  ( " +
+        "    SELECT " +
+        "  DISTINCT (ROOM_ID) Room_id " +
+        "from SEAT_PLAN " +
+        "WHERE " +
+        "  SEMESTER_ID=? AND " +
+        "  EXAM_TYPE=? " +
+        "  ) seatPlan " +
+        "WHERE " +
+        "  seatPlan.Room_id=ROOM_INFO.ROOM_ID " +
+        "ORDER BY room_info.ROOM_ID";
+    return mJdbcTemplate.query(query,new Object[]{pSemesterId,pExamType}, new ClassRoomRowMapper());
+  }
+
   @Override
   public int update(final MutableClassRoom pRoom) throws Exception {
     String query = UPDATE_ONE + "WHERE ROOM_ID = ?";

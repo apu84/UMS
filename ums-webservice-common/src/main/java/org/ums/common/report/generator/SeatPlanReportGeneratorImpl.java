@@ -1,9 +1,7 @@
 package org.ums.common.report.generator;
 
 import com.itextpdf.text.*;
-import com.itextpdf.text.List;
 import com.itextpdf.text.pdf.*;
-import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.ums.common.builder.SeatPlanBuilder;
@@ -13,9 +11,9 @@ import org.ums.manager.*;
 import org.ums.services.academic.SeatPlanService;
 
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.StreamingOutput;
 import java.io.*;
 import java.util.*;
+import java.util.List;
 
 /**
  * Created by My Pc on 5/25/2016.
@@ -54,10 +52,15 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
   @Autowired
   private SpStudentManager mSpStudentManager;
 
+  @Autowired
+  private CourseManager mCourseManager;
+
+
+
   public static final String DEST = "seat_plan_report.pdf";
 
   @Override
-  public void createPdf(String dest, boolean noSeatPlanInfo, int pSemesterId, int groupNo, int type,String examDate,OutputStream pOutputStream) throws Exception, IOException, DocumentException,WebApplicationException {
+  public void createPdf(String dest, boolean noSeatPlanInfo, int pSemesterId, int groupNo, int type, String examDate, OutputStream pOutputStream) throws Exception, IOException, DocumentException,WebApplicationException {
 
 
 
@@ -635,4 +638,190 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
     }
   }
 
+  @Override
+  public void createSeatPlanAttendenceReport(Integer pProgramType, Integer pSemesterId, Integer pExamType, String pExamDate) throws Exception,IOException,DocumentException{
+    java.util.List<ExamRoutineDto> examRoutines = new ArrayList<>();
+    List<SeatPlan> seatPlans = new ArrayList<>();
+    String universityName = new String("Ahsanullah University of Science and Technology") ;
+    String attendenceSheet = new String("ATTENDANCE SHEET");
+    String original = new String("ORIGINAL");
+    String duplicate = new String("DUPLICATE");
+    String roomNo=new String("ROOM NO...");
+    String year=new String("Year: ");
+    String semester=new String("Semester: ");
+    String courseNo=new String("Course No: ");
+    String courseTitle=new String("Course Title: ");
+    Semester semesterManager = mSemesterManager.get(pSemesterId);
+    String examName = new String("Semester Final Examination, "+semesterManager.getName());
+    String studentNo = new String("Student No.");
+    String signatureOfTheStudents = new String("Signature of the examinee");
+    String numberOfTheExamineesRegistered=new String("* Number of the examinees registered: ");
+    String numberOfTheExamineesAbsent = new String("* Number of the examinees absent: ");
+    String numberofTheExamineesPresent = new String("* Number of the examinees present: ");
+    String signatureOfTheInvigilator = new String("Signature of the Invigilator");
+    String nameOfTheInvigilator=new String("Name of the Invigilator");
+    /*String tr="<tr>";
+    String trEnd="</tr>";
+    String td="<td>";
+    String tdEnd="</td>";*/
+    if(pExamDate.equals("NULL")){
+      examRoutines=mExamRoutineManager.getExamRoutineBySemesterAndExamTypeOrderByExamDateAndProgramIdAndCourseId(pSemesterId,pExamType);
+      seatPlans = mSeatPlanManager.getSeatPlanBySemesterAndExamTypeOrderByExamDateAndCourseAndYearAndSemesterAndStudentId(pSemesterId,pExamType);
+    }else{
+
+    }
+    Document document = new Document();
+    document.addTitle("Seat Plan Attendance Sheet");
+
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    PdfWriter writer = PdfWriter.getInstance(document,baos);
+
+    document.open();
+    document.setPageSize(PageSize.A4.rotate());
+
+    for(ExamRoutineDto routine: examRoutines){
+      Course course = mCourseManager.get(routine.getCourseId());
+
+      document.newPage();
+      document.open();
+
+      SeatPlan seatPlan = seatPlans.get(0);
+        if(seatPlan.getStudent().getAcademicYear()== course.getYear() &&
+            seatPlan.getStudent().getAcademicSemester()== course.getSemester() &&
+            seatPlan.getStudent().getProgram().getId() == routine.getProgramId()){
+
+          PdfPTable table = new PdfPTable(2);
+          PdfPTable tableOne = new PdfPTable(1);
+          PdfPTable tableTwo = new PdfPTable(1);
+          Paragraph universityParagraph = new Paragraph(universityName);
+          universityParagraph.setAlignment(Element.ALIGN_CENTER);
+          universityParagraph.setFont(FontFactory.getFont(FontFactory.COURIER_BOLD,12));
+          PdfPCell cellUniversityName= new PdfPCell(new Phrase(universityParagraph));
+          cellUniversityName.setBorderColorBottom(BaseColor.BLACK);
+          tableOne.addCell(cellUniversityName);
+          tableTwo.addCell(cellUniversityName);
+
+          Paragraph originalParagraph = new Paragraph(original);
+          originalParagraph.setAlignment(Element.ALIGN_CENTER);
+          originalParagraph.setFont(FontFactory.getFont(FontFactory.TIMES_BOLD,14));
+          PdfPCell originalCell = new PdfPCell(originalParagraph);
+          originalCell.setBorderColorBottom(BaseColor.BLACK);
+          tableOne.addCell(originalCell);
+
+          Paragraph duplicateParagraph= new Paragraph(duplicate);
+          duplicateParagraph.setAlignment(Element.ALIGN_CENTER);
+          duplicateParagraph.setFont(FontFactory.getFont(FontFactory.TIMES_BOLD,14));
+          PdfPCell duplicateCell = new PdfPCell(duplicateParagraph);
+          duplicateCell.setBorderColorBottom(BaseColor.BLACK);
+          tableTwo.addCell(duplicateCell);
+
+
+          Paragraph attendanceParagraph=new Paragraph(attendenceSheet);
+          attendanceParagraph.setAlignment(Element.ALIGN_CENTER);
+          attendanceParagraph.setFont(FontFactory.getFont(FontFactory.TIMES,14));
+          PdfPCell attendanceCell = new PdfPCell(attendanceParagraph);
+          attendanceCell.setBorder(Rectangle.NO_BORDER);
+          tableOne.addCell(attendanceCell);
+          tableTwo.addCell(attendanceCell);
+
+
+          ClassRoom room = mRoomManager.get(seatPlan.getClassRoomId());
+          Paragraph roomNoParagraph= new Paragraph(roomNo+ room.getRoomNo());
+          roomNoParagraph.setAlignment(Element.ALIGN_CENTER);
+          roomNoParagraph.setFont(FontFactory.getFont(FontFactory.TIMES_BOLD));
+          PdfPCell roomCell = new PdfPCell(roomNoParagraph);
+          roomCell.setBorder(Rectangle.NO_BORDER);
+          tableOne.addCell(roomCell);
+          tableTwo.addCell(roomCell);
+
+
+          Paragraph date = new Paragraph("Date: "+routine.getExamDate());
+          date.setAlignment(Element.ALIGN_CENTER);
+          date.setFont(FontFactory.getFont(FontFactory.TIMES_BOLD));
+          PdfPCell dateCell = new PdfPCell(date);
+          dateCell.setBorder(Rectangle.NO_BORDER);
+          tableOne.addCell(dateCell);
+          tableTwo.addCell(dateCell);
+
+
+          Paragraph examParagraph = new Paragraph(examName);
+          examParagraph.setAlignment(Element.ALIGN_CENTER);
+          examParagraph.setFont(FontFactory.getFont(FontFactory.TIMES_BOLD,14));
+          PdfPCell examCell = new PdfPCell(examParagraph);
+          tableOne.addCell(examCell);
+          tableTwo.addCell(examCell);
+
+
+          Paragraph yearSemesterParagraph = new Paragraph(year+seatPlan.getStudent().getAcademicYear()+"   "+semester+seatPlan.getStudent().getAcademicSemester());
+          yearSemesterParagraph.setAlignment(Element.ALIGN_LEFT);
+          yearSemesterParagraph.setFont(FontFactory.getFont(FontFactory.TIMES_BOLD,12));
+          PdfPCell yearSemesterCell = new PdfPCell(yearSemesterParagraph);
+          tableOne.addCell(yearSemesterCell);
+          tableTwo.addCell(yearSemesterCell);
+
+          Paragraph departmentParagraph = new Paragraph("Department: "+seatPlan.getStudent().getProgram().getShortName());
+          departmentParagraph.setAlignment(Element.ALIGN_LEFT);
+          departmentParagraph.setFont(FontFactory.getFont(FontFactory.TIMES_BOLD,12));
+          PdfPCell departmentCell = new PdfPCell(departmentParagraph);
+          tableOne.addCell(departmentCell);
+          tableTwo.addCell(departmentCell);
+
+
+          Paragraph courseNoParagraph = new Paragraph(courseNo+ course.getNo());
+          courseNoParagraph.setAlignment(Element.ALIGN_LEFT);
+          courseNoParagraph.setFont(FontFactory.getFont(FontFactory.TIMES_BOLD,12));
+          PdfPCell courseNoCell = new PdfPCell(courseNoParagraph);
+          tableOne.addCell(courseNoCell);
+          tableTwo.addCell(courseNoCell);
+
+          Paragraph courseTitleParagrah = new Paragraph(courseTitle+course.getTitle());
+          courseTitleParagrah.setAlignment(Element.ALIGN_LEFT);
+          courseTitleParagrah.setFont(FontFactory.getFont(FontFactory.TIMES_BOLD,12));
+          PdfPCell courseTitleCell = new PdfPCell(courseTitleParagrah);
+          tableOne.addCell(courseTitleCell);
+          tableTwo.addCell(courseTitleCell);
+
+          float[] attendenceSheetColSpan = {4,7};
+          PdfPTable attendanceSheetTable = new PdfPTable(attendenceSheetColSpan);
+          attendanceSheetTable.setWidthPercentage(100);
+          PdfPCell sttudentNoCell = new PdfPCell(new Paragraph(studentNo,FontFactory.getFont(FontFactory.TIMES_BOLD,12)));
+          PdfPCell signatureCell = new PdfPCell(new Paragraph(signatureOfTheStudents,FontFactory.getFont(FontFactory.TIMES_BOLD,12)));
+          Integer seatPlanRoomId = seatPlan.getClassRoom().getId();
+          seatPlans.remove(0);
+          int counter=0;
+          while(true){
+            SeatPlan seatPlanInner = seatPlans.get(0);
+            if(seatPlanInner.getClassRoom().getId()==seatPlanRoomId){
+              PdfPCell innerCellOne = new PdfPCell(new Paragraph(seatPlanInner.getStudent().getId()));
+              PdfPCell innerCellTwo = new PdfPCell(new Paragraph("  "));
+              attendanceSheetTable.addCell(innerCellOne);
+              attendanceSheetTable.addCell(innerCellTwo);
+              counter+=1;
+            }else{
+              if(counter==20){
+                break;
+              }else{
+                PdfPCell innerCellOne = new PdfPCell(new Paragraph("   "));
+                PdfPCell innerCellTwo = new PdfPCell(new Paragraph("  "));
+                attendanceSheetTable.addCell(innerCellOne);
+                attendanceSheetTable.addCell(innerCellTwo);
+              }
+            }
+          }
+
+          PdfPCell cellOne = new PdfPCell(tableOne);
+          cellOne.setBorder(Rectangle.NO_BORDER);
+          PdfPCell cellTwo = new PdfPCell(tableTwo);
+          cellTwo.setBorder(Rectangle.NO_BORDER);
+
+          table.addCell(cellOne);
+          table.addCell(cellTwo);
+
+          document.newPage();
+
+        }
+
+
+    }
+  }
 }

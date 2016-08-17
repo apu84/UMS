@@ -189,28 +189,10 @@ module ums {
             }]
           }
         })
-        .state('seatPlanRegular', {
-          url: "/seatPlanRegular",
-          controller: 'SeatPlanRegular',
-          templateUrl: 'views/semester/exam-seat-plan-regular.html',
-          resolve: {
-            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-              return $ocLazyLoad.load({
-                files: [
-                  'vendors/bootstrap-switch/css/bootstrap-switch.css',
-                  'vendors/bootstrap-datepicker/css/datepicker.css',
-                  'vendors/jquery-validate/jquery.validate.min.js',
-                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
-                  'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
-                ]
-              });
-            }]
-          }
-        })
-        .state('seatPlanCCI', {
-          url: "/seatPlanCCI",
-          controller: 'SeatPlanCCI',
-          templateUrl: 'views/semester/exam-seat-plan-cci.html',
+        .state('seatPlanReports', {
+          url: "/seatPlanReports",
+          controller: 'SeatPlanReports',
+          templateUrl: 'views/semester/seat-plan-reports.html',
           resolve: {
             loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
               return $ocLazyLoad.load({

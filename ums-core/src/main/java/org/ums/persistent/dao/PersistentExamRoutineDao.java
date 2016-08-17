@@ -70,6 +70,33 @@ public class PersistentExamRoutineDao  extends ExamRoutineDaoDecorator {
   }
 
   @Override
+  public List<ExamRoutineDto> getExamDatesBySemesterAndType(Integer pSemesterId, Integer pExamType) {
+    String query = "select to_char(EXAM_DATE,'DD/MM/YYYY') Exam_Date from " +
+        "(select distinct(exam_date) from EXAM_ROUTINE " +
+        "where exam_type=? and semester=?) order by Exam_Date";
+    return mJdbcTemplate.query(query,new Object[]{pExamType,pSemesterId}, new ExamRoutineForSeatPlanPublishRowMapper());
+  }
+
+  @Override
+  public List<ExamRoutineDto> getExamRoutineBySemesterAndExamTypeOrderByExamDateAndProgramIdAndCourseId(Integer pSemesterId, Integer pExamType) {
+    String query="" +
+        "SELECT " +
+        "  SEMESTER, " +
+        "  to_char(EXAM_DATE,'DD/MM/YYYY') exam_date, " +
+        "  EXAM_TIME, " +
+        "  PROGRAM_ID, " +
+        "  COURSE_ID " +
+        "FROM EXAM_ROUTINE " +
+        "WHERE " +
+        "  SEMESTER=? " +
+        "  AND EXAM_TYPE=? " +
+        "ORDER BY EXAM_DATE, " +
+        "  PROGRAM_ID, " +
+        "  COURSE_ID";
+    return mJdbcTemplate.query(query, new Object[]{pSemesterId,pExamType}, new ExamRoutineRowMapperOfDbTable());
+  }
+
+  @Override
   public List<ExamRoutineDto> getCCIExamRoutinesBySemeste(Integer pSemesterId) {
     String query="select to_char(exam_date,'DD/MM/YYYY') exam_date  FROM   " +
         "(select distinct(exam_date) from exam_routine   " +
@@ -164,6 +191,19 @@ public class PersistentExamRoutineDao  extends ExamRoutineDaoDecorator {
     public ExamRoutineDto mapRow(ResultSet resultSet, int pI) throws SQLException {
       ExamRoutineDto routine = new ExamRoutineDto();
       routine.setExamDate(resultSet.getString("exam_date"));
+      return routine;
+    }
+  }
+
+  class ExamRoutineRowMapperOfDbTable implements RowMapper<ExamRoutineDto>{
+    @Override
+    public ExamRoutineDto mapRow(ResultSet pResultSet, int pI) throws SQLException {
+      ExamRoutineDto routine = new ExamRoutineDto();
+      routine.setCourseSemester(pResultSet.getInt("semester"));
+      routine.setExamDate(pResultSet.getString("exam_date"));
+      routine.setExamTime(pResultSet.getString("exam_time"));
+      routine.setProgramId(pResultSet.getInt("program_id"));
+      routine.setCourseId(pResultSet.getString("course_id"));
       return routine;
     }
   }

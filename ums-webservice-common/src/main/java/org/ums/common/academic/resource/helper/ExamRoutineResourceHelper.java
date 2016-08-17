@@ -123,6 +123,46 @@ public class ExamRoutineResourceHelper extends ResourceHelper<ExamRoutine, Mutab
     return object.build();
   }
 
+  public JsonObject getExamRoutineWithSemesterAndExamType(Integer pSemesterId,Integer pExamType, final Request pRequest,final UriInfo pUriInfo) throws Exception{
+    List<ExamRoutineDto> examRoutine = getContentManager().getExamRoutine(pSemesterId,pExamType);
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+    for(ExamRoutineDto exam: examRoutine){
+      PersistentExamRoutine ex = new PersistentExamRoutine();
+      ex.setExamDate( exam.getExamDate());
+      ex.setTotalStudent(exam.getTotalStudent());
+      ex.setExamDateOriginal(exam.getExamDateOriginal());
+      ExamRoutine exRegular = ex;
+      children.add(toJson(exRegular, pUriInfo, localCache));
+
+    }
+
+    object.add("entries", children);
+    localCache.invalidate();
+    return object.build();
+  }
+
+  public JsonObject getExamDateBySemesterAndExamType(Integer pSemesterId,Integer pExamType,final Request pRequest,final UriInfo pUriInfo)throws Exception{
+    List<ExamRoutineDto> examRoutine = getContentManager().getExamDatesBySemesterAndType(pSemesterId,pExamType);
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+    for(ExamRoutineDto exam: examRoutine){
+      PersistentExamRoutine ex = new PersistentExamRoutine();
+      ex.setExamDate( exam.getExamDate());
+      ex.setTotalStudent(exam.getTotalStudent());
+      ex.setExamDateOriginal(exam.getExamDateOriginal());
+      ExamRoutine exRegular = ex;
+      children.add(toJson(exRegular, pUriInfo, localCache));
+
+    }
+
+    object.add("entries", children);
+    localCache.invalidate();
+    return object.build();
+  }
+
   protected JsonObject buildJsonResponse(final Integer pSemesterId, final Integer pExamType, final List<ExamRoutineDto> routineList) throws Exception {
     JsonObjectBuilder object = Json.createObjectBuilder();
     String prevDateTime = "", currDateTime = "";

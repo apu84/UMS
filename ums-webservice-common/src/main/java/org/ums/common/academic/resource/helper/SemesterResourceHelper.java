@@ -61,6 +61,7 @@ public class SemesterResourceHelper extends ResourceHelper<Semester, MutableSeme
   //TODO: Remove this @RequiresPermissions, as it is added to test permission workflow
 //  @RequiresPermissions(value = "lookup:semester")
   public JsonObject buildSemesters(final List<Semester> pSemesters, final UriInfo pUriInfo) throws Exception {
+
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();

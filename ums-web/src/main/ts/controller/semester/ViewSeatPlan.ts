@@ -1,7 +1,15 @@
 module ums{
   /*
   * TODO: check in the student records, whether the student is registered in regular or cci or both.
+  * TODO: add CIVIL seat plan functionality.
   * */
+
+  /*Prerequisites:
+  * For viewing seat plan, a student must be enrolled in the current semester.
+  * If the controller office has prepared the seat plan, only then, students will be able to view.
+  * If the student has CCI exams then, students will be able to view.
+  *
+  * Current semester will be checked, so, student_record table must contain student record of the semester for CCI also.*/
 
   interface IViewSeatPlan extends ng.IScope{
     student:Student;

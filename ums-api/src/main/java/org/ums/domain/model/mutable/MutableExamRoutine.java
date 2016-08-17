@@ -13,4 +13,9 @@ public interface MutableExamRoutine extends ExamRoutine, Mutable {
   void setExamTypeName(final String pExamType);
   void setInsertType(final String pInsertType);
   void setTotalStudent(final Integer pTotalStudent);
+  void setProgramName(final String pProgramShortName);
+  void setCourseNumber(final String pCourseNo);
+  void setCourseTitle(final String pCourseTitle);
+  void setCourseYear(final Integer pCourseYear);
+  void setCourseSemester(final Integer pCourseSemester);
 }
