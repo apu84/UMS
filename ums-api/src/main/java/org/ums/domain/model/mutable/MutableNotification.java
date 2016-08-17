@@ -11,11 +11,7 @@ import java.util.Date;
 public interface MutableNotification extends Notification, Mutable, MutableIdentifier<Integer>, MutableLastModifier {
   void setProducerId(String pProducerId);
 
-  void setProducer(User pProducer);
-
   void setConsumerId(String pConsumerId);
-
-  void setConsumer(User pConsumer);
 
   void setNotificationType(String pNotificationType);
 

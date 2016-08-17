@@ -19,6 +19,7 @@ import org.ums.domain.model.immutable.User;
 import org.ums.domain.model.mutable.MutableUser;
 import org.ums.manager.ContentManager;
 import org.ums.manager.PermissionManager;
+import org.ums.manager.UserManager;
 import org.ums.security.bearertoken.ProfileRealm;
 
 import java.util.HashSet;
@@ -32,7 +33,7 @@ public class UMSAuthenticationRealm extends JdbcRealm implements ProfileRealm {
   private PasswordMatcher mPlainPasswordMatcher;
   private CredentialsMatcher mHashCredentialsMatcher;
   @Autowired
-  private ContentManager<User, MutableUser, String> mUserManager;
+  private UserManager mUserManager;
   @Autowired
   private PermissionManager mPermissionManager;
 
@@ -67,7 +68,7 @@ public class UMSAuthenticationRealm extends JdbcRealm implements ProfileRealm {
     String userId = upToken.getUsername();
 
     // Null username is invalid
-    if (userId == null) {
+    if (StringUtils.isEmpty(userId)) {
       throw new AccountException("Null username is not allowed by this realm.");
     }
 
@@ -93,7 +94,7 @@ public class UMSAuthenticationRealm extends JdbcRealm implements ProfileRealm {
       }
 
     } catch (Exception e) {
-      mLogger.error("Exception :"+e);
+      mLogger.error("Exception while trying to login ", e);
       throw new AuthenticationException(e);
     }
 

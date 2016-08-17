@@ -6,40 +6,33 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 import org.ums.configuration.UMSConfiguration;
 import org.ums.domain.model.immutable.*;
+import org.ums.enums.CourseRegType;
 import org.ums.message.MessageResource;
 
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-public class StudentFileContentPermission extends BaseFileContentPermission {
+public class StudentFileContentPermission extends AbstractSectionPermission {
   private static Logger mLogger = LoggerFactory.getLogger(StudentFileContentPermission.class);
   private UMSConfiguration mUMSConfiguration;
   private MessageResource mMessageResource;
   private StudentManager mStudentManager;
-  private SemesterManager mSemesterManager;
-  private CourseManager mCourseManager;
-  private SemesterSyllabusMapManager mSemesterSyllabusMapManager;
+  private UGRegistrationResultManager mUGRegistrationResultManager;
 
   public StudentFileContentPermission(final UserManager pUserManager,
                                       final BearerAccessTokenManager pBearerAccessTokenManager,
                                       final UMSConfiguration pUMSConfiguration,
                                       final MessageResource pMessageResource,
                                       final StudentManager pStudentManager,
-                                      final SemesterManager pSemesterManager,
-                                      final CourseManager pCourseManager,
-                                      final SemesterSyllabusMapManager pSemesterSyllabusMapManager) {
-    super(pBearerAccessTokenManager, pUserManager, pMessageResource);
+                                      final UGRegistrationResultManager pRegistrationResultManager,
+                                      final CourseTeacherManager pCourseTeacherManager) {
+    super(pBearerAccessTokenManager, pUserManager, pMessageResource, pCourseTeacherManager);
     mUMSConfiguration = pUMSConfiguration;
     mMessageResource = pMessageResource;
     mStudentManager = pStudentManager;
-    mSemesterManager = pSemesterManager;
-    mCourseManager = pCourseManager;
-    mSemesterSyllabusMapManager = pSemesterSyllabusMapManager;
+    mUGRegistrationResultManager = pRegistrationResultManager;
   }
 
   @Override
@@ -53,37 +46,51 @@ public class StudentFileContentPermission extends BaseFileContentPermission {
     String semesterName = pRootPath[0];
     String courseName = pRootPath[1];
     Student student;
+
+    Object list = super.list(pPath, pDomain, pRootPath);
     try {
       student = getStudent();
-      ProgramType programType = student.getProgram().getProgramType();
+      Path targetDirectory = getQualifiedPath(pDomain, buildPath(pPath, pRootPath));
+      String semesterIdString = getUserDefinedProperty(SEMESTER_ID, targetDirectory);
+      String courseIdString = getUserDefinedProperty(COURSE_ID, targetDirectory);
+      if (StringUtils.isEmpty(semesterIdString) || StringUtils.isEmpty(courseIdString)) {
+        throw new Exception("Can not find semesterId and courseId for directory " + pPath);
+      }
+      Integer semesterId = Integer.parseInt(semesterIdString);
+      List<UGRegistrationResult> registeredCourses
+          = mUGRegistrationResultManager.getRegisteredCourseByStudent(semesterId, student.getId(), CourseRegType.REGULAR);
 
-      Semester semester = mSemesterManager.getBySemesterName(semesterName, programType.getId());
-      //TODO: Check all the courses of all enrolled semester of a Student
-      Syllabus syllabus = mSemesterSyllabusMapManager.getSyllabusForSemester(student.getProgramId(), semester.getId(),
-          student.getCurrentYear(), student.getCurrentAcademicSemester());
+      boolean courseFound = false;
+      Course course = null;
+      for (UGRegistrationResult registeredCourse : registeredCourses) {
+        if (registeredCourse.getCourse().getId().equalsIgnoreCase(courseIdString)) {
+          courseFound = true;
+          course = registeredCourse.getCourse();
+          break;
+        }
+      }
 
-      Course course = mCourseManager.getByCourseNo(courseName, syllabus.getId());
+      if (!courseFound) {
+        throw new Exception(student.getId() + " has no registered course named " + courseName);
+      }
+
+      List<Map<String, Object>> folderList = (List<Map<String, Object>>) list;
+      Iterator<Map<String, Object>> iterator = folderList.iterator();
+
+      while (iterator.hasNext()) {
+        String name = iterator.next().get("name").toString();
+        Path path = getQualifiedPath(pDomain, buildPath(pPath, pRootPath));
+        path = Paths.get(path.toString(), name);
+        List<String> permittedSections = permittedSections(getUserDefinedProperty(OWNER, path), semesterId, course.getId());
+
+        if (!hasPermission(path, permittedSections, student)) {
+          iterator.remove();
+        }
+      }
 
     } catch (Exception e) {
       mLogger.error("Exception while listing folders", e);
       return error(mMessageResource.getMessage("folder.listing.failed"));
-    }
-
-    Object list = super.list(pPath, pDomain, pRootPath);
-
-    Path path = getQualifiedPath(pDomain, buildPath(pPath, pRootPath));
-
-    String type = getUserDefinedProperty("type", path);
-
-    if (!StringUtils.isEmpty(type) && type.equalsIgnoreCase("assignment")) {
-      List<Map<String, Object>> folderList = (List<Map<String, Object>>) list;
-      Iterator<Map<String, Object>> iterator = folderList.iterator();
-      while (iterator.hasNext()) {
-        String name = iterator.next().get("name").toString();
-        if (!name.equalsIgnoreCase(student.getId())) {
-          iterator.remove();
-        }
-      }
     }
 
     return addOwnerToken(list);
@@ -117,11 +124,11 @@ public class StudentFileContentPermission extends BaseFileContentPermission {
   @Override
   public Map<String, Object> upload(Map<String, InputStream> pFileContent, String pPath, Domain pDomain, String... pRootPath) {
     Path uploadPath = getQualifiedPath(pDomain, buildPath(pPath, pRootPath));
-    String folderType = getUserDefinedProperty("type", uploadPath);
+    String folderType = getUserDefinedProperty(FOLDER_TYPE, uploadPath);
 
     if (!StringUtils.isEmpty(folderType)) {
       //Check for parent folder type if current folder type is studentAssignment
-      if (folderType.equalsIgnoreCase("studentAssignment")) {
+      if (folderType.equalsIgnoreCase(FOLDER_TYPE_STUDENT_ASSIGNMENT)) {
         uploadPath = uploadPath.getParent();
         pPath = pPath.substring(0, pPath.lastIndexOf("/"));
       }
@@ -138,7 +145,7 @@ public class StudentFileContentPermission extends BaseFileContentPermission {
             Student student = getStudent();
             String assignmentFolder = Paths.get(pPath, student.getId()).toString();
             super.createFolder(assignmentFolder, null, pDomain, pRootPath);
-            addUserDefinedProperty("type", "studentAssignment", getQualifiedPath(pDomain, buildPath(assignmentFolder, pRootPath)));
+            addUserDefinedProperty(FOLDER_TYPE, FOLDER_TYPE_STUDENT_ASSIGNMENT, getQualifiedPath(pDomain, buildPath(assignmentFolder, pRootPath)));
             super.upload(pFileContent, assignmentFolder, pDomain, pRootPath);
             return success();
 

@@ -11,11 +11,7 @@ import java.util.Date;
 public interface Notification extends Serializable, EditType<MutableNotification>, LastModifier, Identifier<Integer> {
   String getProducerId();
 
-  User getProducer() throws Exception;
-
   String getConsumerId();
-
-  User getConsumer() throws Exception;
 
   String getNotificationType();
 

@@ -21,8 +21,6 @@ public class PersistentNotification implements MutableNotification {
   }
 
   private Integer mId;
-  private User mProducer;
-  private User mConsumer;
   private String mNotificationType;
   private String mPayload;
   private Date mProducedOn;
@@ -35,9 +33,7 @@ public class PersistentNotification implements MutableNotification {
   }
 
   public PersistentNotification(final PersistentNotification pPersistentNotification) throws Exception{
-    setProducer(pPersistentNotification.getProducer());
     setProducerId(pPersistentNotification.getProducerId());
-    setConsumer(pPersistentNotification.getConsumer());
     setConsumerId(pPersistentNotification.getConsumerId());
     setNotificationType(pPersistentNotification.getNotificationType());
     setPayload(pPersistentNotification.getPayload());
@@ -53,18 +49,8 @@ public class PersistentNotification implements MutableNotification {
   }
 
   @Override
-  public void setProducer(User pProducer) {
-    mProducer = pProducer;
-  }
-
-  @Override
   public void setConsumerId(String pConsumerId) {
     mConsumerId = pConsumerId;
-  }
-
-  @Override
-  public void setConsumer(User pConsumer) {
-    mConsumer = pConsumer;
   }
 
   @Override
@@ -107,18 +93,8 @@ public class PersistentNotification implements MutableNotification {
   }
 
   @Override
-  public User getProducer() throws Exception {
-    return mProducer == null ? sUserManager.get(mProducerId) : sUserManager.validate(mProducer);
-  }
-
-  @Override
   public String getConsumerId() {
     return mConsumerId;
-  }
-
-  @Override
-  public User getConsumer() throws Exception {
-    return mConsumer == null ? sUserManager.get(mConsumerId) : sUserManager.validate(mConsumer);
   }
 
   @Override

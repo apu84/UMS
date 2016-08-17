@@ -15,6 +15,7 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentStudentDao extends StudentDaoDecorator {
   static String SELECT_ALL = "SELECT" +
@@ -41,7 +42,9 @@ public class PersistentStudentDao extends StudentDaoDecorator {
       "  ENROLLMENT_TYPE," +
       "  CURR_YEAR," +
       "  CURR_SEMESTER," +
-      "  CURR_ENROLLED_SEMESTER" +
+      "  CURR_ENROLLED_SEMESTER," +
+      "  THEORY_SECTION," +
+      "  SESSIONAL_SECTION" +
       "  FROM STUDENTS ";
 
   static String UPDATE_ALL = "UPDATE STUDENTS SET" +
@@ -66,7 +69,9 @@ public class PersistentStudentDao extends StudentDaoDecorator {
       "  ENROLLMENT_TYPE = ?," +
       "  CURR_YEAR = ?," +
       "  CURR_SEMESTER = ?, " +
-      "  CURR_ENROLLED_SEMESTER = ?";
+      "  CURR_ENROLLED_SEMESTER = ?" +
+      "  THEORY_SECTION = ?," +
+      "  SESSIONAL_SECTION = ?";
 
   static String DELETE_ALL = "DELETE FROM STUDENTS";
   static String CREATE_ALL = "INSERT INTO STUDENTS(" +
@@ -94,7 +99,9 @@ public class PersistentStudentDao extends StudentDaoDecorator {
       "  CURR_YEAR, " +
       "  CURR_SEMESTER," +
       "  CURR_ENROLLED_SEMESTER" +
-      ") VALUES (?,?,?,?,?,?,TO_DATE(?, '" + Constants.DATE_FORMAT + "'),?,?,?,?,?,?,?,?,?,?,?,?," + getLastModifiedSql() + ",?, ?, ?, ?)";
+      "  THEORY_SECTION," +
+      "  SESSIONAL_SECTION" +
+      ") VALUES (?,?,?,?,?,?,TO_DATE(?, '" + Constants.DATE_FORMAT + "'),?,?,?,?,?,?,?,?,?,?,?,?," + getLastModifiedSql() + ",?, ?, ?, ?, ?,?)";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -144,7 +151,9 @@ public class PersistentStudentDao extends StudentDaoDecorator {
         pMutable.getEnrollmentType().getValue(),
         pMutable.getCurrentYear(),
         pMutable.getCurrentAcademicSemester(),
-        pMutable.getCurrentEnrolledSemester().getId()
+        pMutable.getCurrentEnrolledSemester().getId(),
+        pMutable.getTheorySection(),
+        pMutable.getSessionalSection()
     );
   }
   /*
@@ -195,6 +204,8 @@ public class PersistentStudentDao extends StudentDaoDecorator {
           student.getCurrentYear(),
           student.getCurrentAcademicSemester(),
           student.getCurrentEnrolledSemester().getId(),
+          student.getTheorySection(),
+          student.getSessionalSection(),
           student.getId()
       });
     }
@@ -251,8 +262,11 @@ public class PersistentStudentDao extends StudentDaoDecorator {
       if (rs.getObject("CURR_ENROLLED_SEMESTER") != null) {
         student.setCurrentEnrolledSemesterId(rs.getInt("CURR_ENROLLED_SEMESTER"));
       }
+      student.setTheorySection(rs.getString("THEORY_SECTION"));
+      student.setSessionalSection(rs.getString("SESSIONAL_SECTION"));
 
-      return student;
+      AtomicReference<Student> atomicReference = new AtomicReference<>(student);
+      return atomicReference.get();
     }
   }
 }

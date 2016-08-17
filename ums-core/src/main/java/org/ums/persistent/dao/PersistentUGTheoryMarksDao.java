@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PersistentUGTheoryMarksDao extends UGTheoryMarksDaoDecorator {
-  String INSERT_ALL = "INSERT INTO UG_THEORY_MARKS(STUDENT_ID, SEMESTER_ID, COURSE_ID, GL, EXAM_TYPE, STATUS, LAST_MODIFIED)" +
+  String INSERT_ALL = "INSERT INTO UG_THEORY_MARKS(STUDENT_ID, SEMESTER_ID, COURSE_ID, GL, EXAM_TYPE, REG_TYPE, LAST_MODIFIED)" +
       " VALUES(?, ?, ?, ?, ?, ?, " + getLastModifiedSql() + ")";
   String DELETE_BY_STUDENT_SEMESTER = "DELETE FROM UG_THEORY_MARKS WHERE STUDENT_ID = ? AND SEMESTER_ID = ? AND EXAM_TYPE = ? AND STATUS = ?";
 
@@ -34,7 +34,7 @@ public class PersistentUGTheoryMarksDao extends UGTheoryMarksDaoDecorator {
           theoryMarks.getCourse().getId(),
           theoryMarks.getGradeLetter(),
           theoryMarks.getExamType().getValue(),
-          theoryMarks.getStatus().getValue()
+          theoryMarks.getType().getId()
       });
     }
 
@@ -53,7 +53,7 @@ public class PersistentUGTheoryMarksDao extends UGTheoryMarksDaoDecorator {
           theoryMarks.getStudent().getId(),
           theoryMarks.getSemester().getId(),
           theoryMarks.getExamType().getValue(),
-          theoryMarks.getStatus().getValue()
+          theoryMarks.getType().getId()
       });
     }
 

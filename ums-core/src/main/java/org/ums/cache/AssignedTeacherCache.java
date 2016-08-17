@@ -11,8 +11,8 @@ import org.ums.util.CacheUtil;
 
 import java.util.List;
 
-public class AssignedTeacherCache<R extends Identifier<I> & LastModifier, M extends R, I>
-    extends ContentCache<R, M, I, AssignedTeacherManager<R, M, I>>
+public class AssignedTeacherCache<R extends Identifier<I> & LastModifier, M extends R, I, C extends AssignedTeacherManager<R, M, I>>
+    extends ContentCache<R, M, I, C>
     implements AssignedTeacherManager<R, M, I> {
 
   private CacheManager<R, I> mCacheManager;

@@ -4,6 +4,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.domain.model.immutable.CourseTeacher;
 import org.ums.domain.model.mutable.MutableCourseTeacher;
+import org.ums.manager.CourseTeacherManager;
 import org.ums.persistent.model.PersistentCourseTeacher;
 
 import java.sql.ResultSet;
@@ -11,7 +12,8 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class PersistentCourseTeacherDao extends AbstractAssignedTeacherDao<CourseTeacher, MutableCourseTeacher, Integer> {
+public class PersistentCourseTeacherDao extends AbstractAssignedTeacherDao<CourseTeacher, MutableCourseTeacher, Integer>
+implements CourseTeacherManager{
 
   String SELECT_ALL = "SELECT SEMESTER_ID, TEACHER_ID, COURSE_ID, SECTION, LAST_MODIFIED, ID FROM COURSE_TEACHER ";
   String UPDATE_ALL = "UPDATE COURSE_TEACHER SET SEMESTER_ID = ?, TEACHER_ID = ?, COURSE_ID = ?, SECTION = ?, LAST_MODIFIED = " + getLastModifiedSql() + " ";
@@ -81,7 +83,7 @@ public class PersistentCourseTeacherDao extends AbstractAssignedTeacherDao<Cours
 
   @Override
   public int update(MutableCourseTeacher pMutable) throws Exception {
-    String query = UPDATE_ALL + "WHERE ID = ?";
+    String query = UPDATE_ALL + " WHERE ID = ?";
     return mJdbcTemplate.update(query,
         pMutable.getSemester().getId(),
         pMutable.getTeacher().getId(),
@@ -94,6 +96,12 @@ public class PersistentCourseTeacherDao extends AbstractAssignedTeacherDao<Cours
   public List<CourseTeacher> getAssignedCourses(Integer pSemesterId, String pTeacherId) {
     String query = SELECT_ALL + " WHERE SEMESTER_ID = ? AND TEACHER_ID = ?";
     return mJdbcTemplate.query(query, new Object[]{pSemesterId, pTeacherId}, getRowMapper());
+  }
+
+  @Override
+  public List<CourseTeacher> getAssignedSections(Integer pSemesterId, String pCourseId, String pTeacherId) {
+    String query = SELECT_ALL + " WHERE SEMESTER_ID = ? AND COURSE_ID = ? AND TEACHER_ID = ?";
+    return mJdbcTemplate.query(query, new Object[]{pSemesterId, pCourseId, pTeacherId}, getRowMapper());
   }
 
   class CourseTeacherRowMapper implements RowMapper<CourseTeacher> {

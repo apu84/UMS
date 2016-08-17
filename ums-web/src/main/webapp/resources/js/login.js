@@ -24,7 +24,6 @@ var Authentication = (function () {
         "Accept": "application/json"
       },
       success: function (user) {
-        $('#loginForm').submit();
         credentials = "Basic " + btoa(userName + ":" + user.token);
         getUserAndStartApplication(credentials, user);
       },
@@ -32,7 +31,6 @@ var Authentication = (function () {
         console.error("Login failed....");
       },
       error: (function (httpObj, textStatus) {
-
         if (httpObj.status == 200) {
           startApplication();
         }

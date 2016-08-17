@@ -10,9 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.ums.cache.*;
-import org.ums.domain.model.immutable.CourseTeacher;
 import org.ums.domain.model.immutable.Examiner;
-import org.ums.domain.model.mutable.MutableCourseTeacher;
 import org.ums.domain.model.mutable.MutableExaminer;
 import org.ums.generator.JxlsGenerator;
 import org.ums.generator.XlsGenerator;
@@ -213,7 +211,7 @@ public class UMSContext {
   }
 
   @Bean
-  AssignedTeacherManager<CourseTeacher, MutableCourseTeacher, Integer> courseTeacherManager() {
+  CourseTeacherManager courseTeacherManager() {
     CourseTeacherCache courseTeacherCache = new CourseTeacherCache(mCacheFactory.getCacheManager());
     courseTeacherCache.setManager(new PersistentCourseTeacherDao(mTemplateFactory.getJdbcTemplate()));
     return courseTeacherCache;
@@ -377,7 +375,7 @@ public class UMSContext {
     FileContentPermission fileContentPermission = new FileContentPermission(userManager(),
         bearerAccessTokenManager(), mUMSConfiguration, mMessageResource);
     CourseMaterialNotifier notifier = new CourseMaterialNotifier(userManager(), mNotificationGenerator,
-        registrationResultManager(), mUMSConfiguration, mMessageResource);
+        registrationResultManager(), mUMSConfiguration, mMessageResource, courseTeacherManager(), bearerAccessTokenManager());
     fileContentPermission.setManager(notifier);
     notifier.setManager(mBinaryContentManager);
     return fileContentPermission;
@@ -387,8 +385,8 @@ public class UMSContext {
   @Lazy
   BinaryContentManager<byte[]> courseMaterialFileManagerForStudent() {
     StudentFileContentPermission fileContentPermission = new StudentFileContentPermission(userManager(),
-        bearerAccessTokenManager(), mUMSConfiguration, mMessageResource, studentManager(), semesterManager(),
-        courseManager(), semesterSyllabusMapManager());
+        bearerAccessTokenManager(), mUMSConfiguration, mMessageResource, studentManager(),
+        registrationResultManager(), courseTeacherManager());
     fileContentPermission.setManager(mBinaryContentManager);
     return fileContentPermission;
   }

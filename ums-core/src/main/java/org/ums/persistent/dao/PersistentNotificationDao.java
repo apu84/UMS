@@ -49,8 +49,8 @@ public class PersistentNotificationDao extends NotificationDaoDecorator {
     List<Object[]> params = new ArrayList<>();
     for (Notification notification : pMutableList) {
       params.add(new Object[]{
-          notification.getProducer().getId(),
-          notification.getConsumer().getId(),
+          notification.getProducerId(),
+          notification.getConsumerId(),
           notification.getNotificationType(),
           notification.getPayload(),
           mDateFormat.format(notification.getProducedOn()),
@@ -76,8 +76,8 @@ public class PersistentNotificationDao extends NotificationDaoDecorator {
   @Override
   public int create(MutableNotification pNotification) throws Exception {
     return mJdbcTemplate.update(INSERT_ALL,
-        pNotification.getProducer().getId(),
-        pNotification.getConsumer().getId(),
+        pNotification.getProducerId(),
+        pNotification.getConsumerId(),
         pNotification.getNotificationType(),
         pNotification.getPayload(),
         mDateFormat.format(pNotification.getProducedOn()),
@@ -99,8 +99,8 @@ public class PersistentNotificationDao extends NotificationDaoDecorator {
     List<Object[]> params = new ArrayList<>();
     for (Notification notification : pMutableList) {
       params.add(new Object[]{
-          notification.getProducer().getId(),
-          notification.getConsumer().getId(),
+          notification.getProducerId(),
+          notification.getConsumerId(),
           notification.getNotificationType(),
           notification.getPayload()
       });

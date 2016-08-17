@@ -373,7 +373,7 @@
             return deferred.promise;
         };
 
-        ApiHandler.prototype.createAssignmentFolder = function(apiUrl, path, startDate, endDate) {
+        ApiHandler.prototype.createAssignmentFolder = function(apiUrl, path, startDate, endDate, additionalParams) {
             var self = this;
             var deferred = $q.defer();
             var data = {
@@ -382,6 +382,10 @@
                 startDate: startDate,
                 endDate: endDate
             };
+
+            if(additionalParams) {
+                data['additionalParams'] = additionalParams;
+            }
 
             self.inprocess = true;
             self.error = '';

@@ -5,9 +5,9 @@ import org.ums.domain.model.immutable.User;
 import java.util.List;
 
 public interface Notifier {
-  List<User> consumers() throws Exception;
+  List<String> consumers() throws Exception;
 
-  User producer() throws Exception;
+  String producer() throws Exception;
 
   String notificationType();
 

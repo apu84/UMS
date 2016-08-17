@@ -136,7 +136,7 @@
             var path = item.tempModel.fullPath();
             var startDate = item.tempModel.startDate ? item.tempModel.startDate : '';
             var endDate = item.tempModel.endDate ? item.tempModel.endDate : '';
-            return this.apiHandler.createAssignmentFolder(fileManagerConfig.createFolderUrl, path, startDate, endDate);
+            return this.apiHandler.createAssignmentFolder(fileManagerConfig.createFolderUrl, path, startDate, endDate, fileManagerConfig.additionalParams);
         };
         return ApiMiddleware;
 

@@ -54,7 +54,7 @@ public interface BinaryContentManager<T> {
 
   Map<String, Object> createFolder(String pNewPath, Map<String, String> pAdditionalParams, Domain pDomain, String... pRootPath);
 
-  Map<String, Object> createAssignmentFolder(String pNewPath, Date pStartDate, Date pEndDate, Domain pDomain, String... pRootPath);
+  Map<String, Object> createAssignmentFolder(String pNewPath, Date pStartDate, Date pEndDate, Map<String, String> pAdditionalParams, Domain pDomain, String... pRootPath);
 
   Map<String, Object> compress(List<String> pItems, String pNewPath, String pNewFileName, Domain pDomain, String... pRootPath);
 

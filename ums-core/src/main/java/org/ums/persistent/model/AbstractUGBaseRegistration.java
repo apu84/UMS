@@ -7,6 +7,7 @@ import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.Student;
 import org.ums.domain.model.immutable.UGBaseRegistration;
 import org.ums.domain.model.mutable.MutableUGBaseRegistration;
+import org.ums.enums.CourseRegType;
 import org.ums.enums.ExamType;
 import org.ums.manager.CourseManager;
 import org.ums.manager.SemesterManager;
@@ -35,8 +36,7 @@ public abstract class AbstractUGBaseRegistration implements MutableUGBaseRegistr
   private Student mStudent;
   private String mGradeLetter;
   private ExamType mExamType;
-  private String mType;
-  private UGBaseRegistration.Status mStatus;
+  private CourseRegType mType;
   private String mExamDate;
   private String mLastModified;
   private String mMessage;
@@ -50,7 +50,6 @@ public abstract class AbstractUGBaseRegistration implements MutableUGBaseRegistr
     setSemesterId(pMutableUGBaseRegistration.getSemesterId());
     setStudentId(pMutableUGBaseRegistration.getStudentId());
     setGradeLetter(pMutableUGBaseRegistration.getGradeLetter());
-    setStatus(pMutableUGBaseRegistration.getStatus());
     setExamType(pMutableUGBaseRegistration.getExamType());
     setType(pMutableUGBaseRegistration.getType());
     setExamDate(pMutableUGBaseRegistration.getExamDate());
@@ -58,8 +57,8 @@ public abstract class AbstractUGBaseRegistration implements MutableUGBaseRegistr
 
   @Override
   public String getMessage() {
-    if(mMessage==null){
-      mMessage="null";
+    if (mMessage == null) {
+      mMessage = "null";
     }
     return mMessage;
   }
@@ -106,11 +105,11 @@ public abstract class AbstractUGBaseRegistration implements MutableUGBaseRegistr
 
 
   @Override
-  public void setType(String pType) {
-    mType= pType;
+  public void setType(CourseRegType pType) {
+    mType = pType;
   }
 
-  public String getType(){
+  public CourseRegType getType() {
     return mType;
   }
 
@@ -196,15 +195,6 @@ public abstract class AbstractUGBaseRegistration implements MutableUGBaseRegistr
 
   public void setExamType(ExamType pExamType) {
     mExamType = pExamType;
-  }
-
-  public Status getStatus() {
-    return mStatus;
-  }
-
-  @Override
-  public void setStatus(Status pStatus) {
-    mStatus = pStatus;
   }
 
   @Override

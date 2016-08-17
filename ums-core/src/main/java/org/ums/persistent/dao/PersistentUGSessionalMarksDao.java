@@ -10,7 +10,7 @@ import java.util.List;
 
 
 public class PersistentUGSessionalMarksDao extends UGSessionalMarksDaoDecorator {
-  String INSERT_ALL = "INSERT INTO UG_SESSIONAL_MARKS(STUDENT_ID, SEMESTER_ID, COURSE_ID, GL, EXAM_TYPE, STATUS, LAST_MODIFIED)" +
+  String INSERT_ALL = "INSERT INTO UG_SESSIONAL_MARKS(STUDENT_ID, SEMESTER_ID, COURSE_ID, GL, EXAM_TYPE, REG_TYPE, LAST_MODIFIED)" +
       " VALUES(?, ?, ?, ?, ?, ?, " + getLastModifiedSql() + ")";
   String DELETE_BY_STUDENT_SEMESTER = "DELETE FROM UG_SESSIONAL_MARKS WHERE STUDENT_ID = ? AND SEMESTER_ID = ? AND EXAM_TYPE = ? AND STATUS = ?";
 
@@ -25,16 +25,16 @@ public class PersistentUGSessionalMarksDao extends UGSessionalMarksDaoDecorator 
     return mJdbcTemplate.batchUpdate(INSERT_ALL, getInsertParamList(pMutableList)).length;
   }
 
-  private List<Object[]> getInsertParamList(List<MutableUGSessionalMarks> pSessionalMarkses) throws Exception {
+  private List<Object[]> getInsertParamList(List<MutableUGSessionalMarks> pSessionalMarks) throws Exception {
     List<Object[]> params = new ArrayList<>();
-    for (UGSessionalMarks sessionalMarks : pSessionalMarkses) {
+    for (UGSessionalMarks sessionalMarks : pSessionalMarks) {
       params.add(new Object[]{
           sessionalMarks.getStudent().getId(),
           sessionalMarks.getSemester().getId(),
           sessionalMarks.getCourse().getId(),
           sessionalMarks.getGradeLetter(),
           sessionalMarks.getExamType().getValue(),
-          sessionalMarks.getStatus().getValue()
+          sessionalMarks.getType().getId()
       });
     }
 
@@ -53,7 +53,7 @@ public class PersistentUGSessionalMarksDao extends UGSessionalMarksDaoDecorator 
           sessionalMarks.getStudent().getId(),
           sessionalMarks.getSemester().getId(),
           sessionalMarks.getExamType().getValue(),
-          sessionalMarks.getStatus().getValue()
+          sessionalMarks.getType().getId()
       });
     }
 

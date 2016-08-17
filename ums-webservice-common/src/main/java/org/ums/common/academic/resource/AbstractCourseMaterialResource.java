@@ -82,12 +82,18 @@ public abstract class AbstractCourseMaterialResource extends Resource {
           break;
 
         case "createAssignmentFolder":
+          HashMap<String, String> additionalAssignmentParams = null;
+          if (pJsonObject.containsKey("additionalParams")) {
+            pJsonObject.getJsonObject("additionalParams");
+            additionalAssignmentParams = new ObjectMapper().readValue(
+                pJsonObject.getJsonObject("additionalParams").toString(), HashMap.class);
+          }
           result.put("result", getBinaryContentManager().createAssignmentFolder(pJsonObject.getString("newPath"),
               mDateFormat.parse(pJsonObject.getString("startDate")),
               mDateFormat.parse(pJsonObject.getString("endDate")),
+              additionalAssignmentParams,
               BinaryContentManager.Domain.COURSE_MATERIAL,
-              pSemesterName,
-              pCourseNo));
+              pSemesterName, pCourseNo));
           break;
 
         case "remove":

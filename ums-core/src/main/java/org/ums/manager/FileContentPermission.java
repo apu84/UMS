@@ -132,8 +132,8 @@ public class FileContentPermission extends BaseFileContentPermission {
 
   @Override
   public Map<String, Object> createAssignmentFolder(String pNewPath, Date pStartDate,
-                                                    Date pEndDate, Domain pDomain, String... pRootPath) {
-    return super.createAssignmentFolder(pNewPath, pStartDate, pEndDate, pDomain, pRootPath);
+                                                    Date pEndDate, Map<String, String> pAdditionalParams, Domain pDomain, String... pRootPath) {
+    return super.createAssignmentFolder(pNewPath, pStartDate, pEndDate, pAdditionalParams, pDomain, pRootPath);
   }
 
   @Override
