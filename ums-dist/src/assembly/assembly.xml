@@ -60,6 +60,7 @@
         <include>net.spy:spymemcached</include>
         <include>org.jxls:jxls</include>
         <include>org.jxls:jxls-poi</include>
+        <include>org.springframework.data:spring-data-mongodb</include>
       </includes>
       <outputDirectory>lib</outputDirectory>
       <useTransitiveDependencies>true</useTransitiveDependencies>

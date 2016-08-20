@@ -1,26 +1,25 @@
 package org.ums.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
-import org.ums.domain.model.common.Mutable;
-import org.ums.domain.model.immutable.Notification;
-import org.ums.domain.model.immutable.User;
 import org.ums.domain.model.mutable.MutableNotification;
 import org.ums.manager.NotificationManager;
 import org.ums.persistent.model.PersistentNotification;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
-@Service
 public class NotificationGeneratorImpl implements NotificationGenerator{
-  @Autowired
-  @Qualifier("notificationManager")
-  NotificationManager mNotificationManager;
+  private NotificationManager mNotificationManager;
+  private DateFormat dateFormat;
+
+  public NotificationGeneratorImpl(NotificationManager pNotificationManager) {
+    mNotificationManager = pNotificationManager;
+    dateFormat = new SimpleDateFormat("YYYYMMDDHHmmss");
+  }
 
   @Async
   public void notify(Notifier pNotifier) throws Exception {
@@ -33,10 +32,13 @@ public class NotificationGeneratorImpl implements NotificationGenerator{
 
     for (String consumer: consumers) {
       MutableNotification notification = new PersistentNotification();
+      notification.setId(UUID.randomUUID().toString());
       notification.setProducerId(producer);
       notification.setConsumerId(consumer);
       notification.setPayload(payload);
       notification.setNotificationType(notificationType);
+      notification.setProducedOn(new Date());
+      notification.setLastModified(dateFormat.format(new Date()));
       notificationList.add(notification);
     }
 

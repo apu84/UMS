@@ -446,6 +446,12 @@
       <scope>compile</scope>
     </dependency>
 
+    <dependency>
+      <groupId>org.springframework.data</groupId>
+      <artifactId>spring-data-mongodb</artifactId>
+      <version>${spring-data-mongodb-version}</version>
+      <scope>compile</scope>
+    </dependency>
   </dependencies>
 
   <build>

@@ -1,0 +1,54 @@
+package org.ums.persistent.dao;
+
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
+import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
+import org.ums.decorator.NotificationDaoDecorator;
+import org.ums.domain.model.immutable.Notification;
+import org.ums.domain.model.mutable.MutableNotification;
+
+import java.util.List;
+
+public class PersistentObjectNotificationDao extends NotificationDaoDecorator {
+  private MongoOperations mMongoOperations;
+
+  public PersistentObjectNotificationDao(MongoOperations pMongoOperations) {
+    mMongoOperations = pMongoOperations;
+  }
+
+  @Override
+  public Notification get(String pId) throws Exception {
+    return mMongoOperations.findOne(Query.query(Criteria.where("id").is(pId)), Notification.class);
+  }
+
+  @Override
+  public int update(MutableNotification pMutable) throws Exception {
+    Query query = Query.query(Criteria.where("id").is(pMutable.getId()));
+    DBObject dbDoc = new BasicDBObject();
+    mMongoOperations.getConverter().write(pMutable, dbDoc);
+    Update update = Update.fromDBObject(dbDoc);
+    mMongoOperations.updateFirst(query, update, Notification.class);
+    return 1;
+  }
+
+  @Override
+  public int delete(MutableNotification pMutable) throws Exception {
+    mMongoOperations.remove(pMutable);
+    return 1;
+  }
+
+  @Override
+  public int create(MutableNotification pMutable) throws Exception {
+    mMongoOperations.insert(pMutable);
+    return 1;
+  }
+
+  @Override
+  public int create(List<MutableNotification> pMutableList) throws Exception {
+    mMongoOperations.insert(pMutableList, Notification.class);
+    return pMutableList.size();
+  }
+}

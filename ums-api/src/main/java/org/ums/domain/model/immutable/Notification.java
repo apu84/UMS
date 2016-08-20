@@ -8,7 +8,7 @@ import org.ums.domain.model.mutable.MutableNotification;
 import java.io.Serializable;
 import java.util.Date;
 
-public interface Notification extends Serializable, EditType<MutableNotification>, LastModifier, Identifier<Integer> {
+public interface Notification extends Serializable, EditType<MutableNotification>, LastModifier, Identifier<String> {
   String getProducerId();
 
   String getConsumerId();

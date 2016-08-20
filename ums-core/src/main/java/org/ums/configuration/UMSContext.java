@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -20,6 +21,7 @@ import org.ums.persistent.dao.*;
 import org.ums.security.authentication.UMSAuthenticationRealm;
 import org.ums.services.LoginService;
 import org.ums.services.NotificationGenerator;
+import org.ums.services.NotificationGeneratorImpl;
 import org.ums.statistics.DBLogger;
 import org.ums.statistics.JdbcTemplateFactory;
 import org.ums.statistics.QueryLogger;
@@ -60,7 +62,9 @@ public class UMSContext {
   MessageResource mMessageResource;
 
   @Autowired
-  NotificationGenerator mNotificationGenerator;
+  @Qualifier("mongoTemplate")
+  @Lazy
+  MongoTemplate mMongoOperations;
 
   @Bean
   SemesterManager semesterManager() {
@@ -379,7 +383,7 @@ public class UMSContext {
   BinaryContentManager<byte[]> courseMaterialFileManagerForTeacher() {
     FileContentPermission fileContentPermission = new FileContentPermission(userManager(),
         bearerAccessTokenManager(), mUMSConfiguration, mMessageResource);
-    CourseMaterialNotifier notifier = new CourseMaterialNotifier(userManager(), mNotificationGenerator,
+    CourseMaterialNotifier notifier = new CourseMaterialNotifier(userManager(), notificationGenerator(),
         registrationResultManager(), mUMSConfiguration, mMessageResource, courseTeacherManager(), bearerAccessTokenManager());
     fileContentPermission.setManager(notifier);
     notifier.setManager(mBinaryContentManager);
@@ -397,7 +401,14 @@ public class UMSContext {
   }
 
   @Bean
+  @Lazy
   NotificationManager notificationManager() {
-    return new PersistentNotificationDao(mTemplateFactory.getJdbcTemplate(), getGenericDateFormat());
+    return new PersistentObjectNotificationDao(mMongoOperations);
+  }
+
+  @Bean
+  @Lazy
+  NotificationGenerator notificationGenerator() {
+    return new NotificationGeneratorImpl(notificationManager());
   }
 }

@@ -8,7 +8,7 @@ import org.ums.manager.NotificationManager;
 import java.util.List;
 
 
-public class NotificationDaoDecorator extends ContentDaoDecorator<Notification, MutableNotification, Integer, NotificationManager>
+public class NotificationDaoDecorator extends ContentDaoDecorator<Notification, MutableNotification, String, NotificationManager>
     implements NotificationManager {
   @Override
   public List<Notification> consume(User pConsumer, String pNotificationType) {

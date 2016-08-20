@@ -2,25 +2,22 @@ package org.ums.persistent.model;
 
 
 import org.springframework.context.ApplicationContext;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.ums.context.AppContext;
-import org.ums.domain.model.immutable.User;
 import org.ums.domain.model.mutable.MutableNotification;
 import org.ums.manager.NotificationManager;
-import org.ums.manager.UserManager;
 
 import java.util.Date;
 
 public class PersistentNotification implements MutableNotification {
   private static NotificationManager sNotificationManager;
-  private static UserManager sUserManager;
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sNotificationManager = applicationContext.getBean("notificationManager", NotificationManager.class);
-    sUserManager = applicationContext.getBean("userManager", UserManager.class);
   }
-
-  private Integer mId;
+  private String mId;
   private String mNotificationType;
   private String mPayload;
   private Date mProducedOn;
@@ -83,7 +80,7 @@ public class PersistentNotification implements MutableNotification {
   }
 
   @Override
-  public void setId(Integer pId) {
+  public void setId(String pId) {
     mId = pId;
   }
 
@@ -123,7 +120,7 @@ public class PersistentNotification implements MutableNotification {
   }
 
   @Override
-  public Integer getId() {
+  public String getId() {
     return mId;
   }
 
@@ -140,5 +137,11 @@ public class PersistentNotification implements MutableNotification {
   @Override
   public void setLastModified(String pLastModified) {
     mLastModified = pLastModified;
+  }
+
+  @Override
+  public String toString() {
+    return "Notification [id=" + mId + ", notificationType=" + mNotificationType + ", payload=" + mPayload + "," +
+        " producedOn=" + mProducedOn + ", consumedOn=" + mConsumedOn + ", lastModified=" + mLastModified + "]";
   }
 }
