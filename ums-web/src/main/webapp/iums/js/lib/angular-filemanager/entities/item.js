@@ -8,7 +8,7 @@
                 path: path || [],
                 type: model && model.type || 'file',
                 size: model && parseInt(model.size || 0),
-                date: parseMySQLDate(model && model.date),
+                date: model && model.date,
                 perms: new Chmod(model && model.rights),
                 content: model && model.content || '',
                 recursive: false,
@@ -28,9 +28,9 @@
             this.model = angular.copy(rawModel);
             this.tempModel = angular.copy(rawModel);
 
-            function parseMySQLDate(mysqlDate) {
+            function parseMySQLDate(mysqlDate) { console.debug(mysqlDate);
                 //var d = (mysqlDate || '').toString().split(/[- :]/);
-                return new Date(mysqlDate);
+                return mysqlDate? moment(mysqlDate): mysqlDate;
             }
         };
 

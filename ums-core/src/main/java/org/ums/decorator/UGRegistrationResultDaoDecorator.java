@@ -2,6 +2,7 @@ package org.ums.decorator;
 
 import org.ums.domain.model.immutable.UGRegistrationResult;
 import org.ums.domain.model.mutable.MutableUGRegistrationResult;
+import org.ums.enums.CourseRegType;
 import org.ums.manager.UGRegistrationResultManager;
 
 import java.util.List;
@@ -33,5 +34,15 @@ public class UGRegistrationResultDaoDecorator
   @Override
   public List<UGRegistrationResult> getCarryClearanceImprovementCoursesByStudent(int pSemesterId,String pStudentId) {
     return getManager().getCarryClearanceImprovementCoursesByStudent(pSemesterId,pStudentId);
+  }
+
+  @Override
+  public List<UGRegistrationResult> getByCourseSemester(int semesterId, String courseId, CourseRegType pCourseRegType) {
+    return getManager().getByCourseSemester(semesterId, courseId, pCourseRegType);
+  }
+
+  @Override
+  public List<UGRegistrationResult> getRegisteredCourseByStudent(int pSemesterId, String pStudentId, CourseRegType pCourseRegType) {
+    return getManager().getRegisteredCourseByStudent(pSemesterId, pStudentId, pCourseRegType);
   }
 }

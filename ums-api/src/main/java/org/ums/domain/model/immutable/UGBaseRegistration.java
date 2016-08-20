@@ -2,6 +2,7 @@ package org.ums.domain.model.immutable;
 
 import org.ums.domain.model.common.Identifier;
 import org.ums.domain.model.common.LastModifier;
+import org.ums.enums.CourseRegType;
 import org.ums.enums.ExamType;
 
 import java.io.Serializable;
@@ -26,7 +27,7 @@ public interface UGBaseRegistration extends Serializable, Identifier<Integer>, L
 
   ExamType getExamType();
 
-  String getType(); //Type="Carry","Clearance","Improvement"
+  CourseRegType getType(); //Type="Carry","Clearance","Improvement"
 
   String getCourseNo();
 
@@ -35,31 +36,4 @@ public interface UGBaseRegistration extends Serializable, Identifier<Integer>, L
   String getExamDate(); //is required for getting exam date for clearance exam.
 
   String getMessage();
-  Status getStatus();
-
-  enum Status {
-    UNKNOWN(0);
-    private static final Map<Integer, Status> lookup
-        = new HashMap<>();
-
-    static {
-      for (Status c : EnumSet.allOf(Status.class)) {
-        lookup.put(c.getValue(), c);
-      }
-    }
-
-    private Integer statusCode;
-
-    private Status(final Integer pStatusCode) {
-      this.statusCode = pStatusCode;
-    }
-
-    public static Status get(final Integer pStatusCode) {
-      return lookup.get(pStatusCode);
-    }
-
-    public Integer getValue() {
-      return this.statusCode;
-    }
-  }
 }

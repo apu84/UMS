@@ -57,6 +57,8 @@ public class PersistentStudent implements MutableStudent {
   private Integer mAcademicSemester;
   private Integer mCurrentEnrolledSemesterId;
   private Semester mCurrentEnrolledSemester;
+  private String mTheorySection;
+  private String mSessionalSection;
 
   public PersistentStudent() {
 
@@ -399,5 +401,25 @@ public class PersistentStudent implements MutableStudent {
   @Override
   public Semester getCurrentEnrolledSemester() {
     return mCurrentEnrolledSemester;
+  }
+
+  @Override
+  public void setTheorySection(String pTheorySection) {
+    mTheorySection = pTheorySection;
+  }
+
+  @Override
+  public void setSessionalSection(String pSessionalSection) {
+    mSessionalSection = pSessionalSection;
+  }
+
+  @Override
+  public String getTheorySection() {
+    return mTheorySection;
+  }
+
+  @Override
+  public String getSessionalSection() {
+    return mSessionalSection;
   }
 }

@@ -10,28 +10,24 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
 
-/**
- * Created by My Pc on 7/13/2016.
- */
-
 @Component
-public class UGRegistrationResultBuilder implements Builder<UGRegistrationResult,MutableUGRegistrationResult> {
+public class UGRegistrationResultBuilder implements Builder<UGRegistrationResult, MutableUGRegistrationResult> {
 
   @Override
   public void build(JsonObjectBuilder pBuilder, UGRegistrationResult pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) throws Exception {
-    pBuilder.add("studentId",pReadOnly.getStudentId());
-    pBuilder.add("courseId",pReadOnly.getCourseId());
-    pBuilder.add("gradeLetter",pReadOnly.getGradeLetter());
+    pBuilder.add("studentId", pReadOnly.getStudentId());
+    pBuilder.add("courseId", pReadOnly.getCourseId());
+    pBuilder.add("gradeLetter", pReadOnly.getGradeLetter());
     pBuilder.add("examType", pReadOnly.getExamType().getValue());
-    pBuilder.add("type",pReadOnly.getType());
-    pBuilder.add("courseNo",pReadOnly.getCourseNo());
-    pBuilder.add("courseTitle",pReadOnly.getCourseTitle());
-    pBuilder.add("examDate",pReadOnly.getExamDate());
-    if(pReadOnly.getMessage()==null){
-      pBuilder.add("message","null");
+    pBuilder.add("type", pReadOnly.getType().getId());
+    pBuilder.add("courseNo", pReadOnly.getCourseNo());
+    pBuilder.add("courseTitle", pReadOnly.getCourseTitle());
+    pBuilder.add("examDate", pReadOnly.getExamDate());
+    if (pReadOnly.getMessage() == null) {
+      pBuilder.add("message", "null");
 
-    } else{
-      pBuilder.add("message",pReadOnly.getMessage());
+    } else {
+      pBuilder.add("message", pReadOnly.getMessage());
     }
 
   }

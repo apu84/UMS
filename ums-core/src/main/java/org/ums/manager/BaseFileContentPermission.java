@@ -7,8 +7,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 import org.ums.decorator.BinaryContentDecorator;
 import org.ums.domain.model.immutable.BearerAccessToken;
+import org.ums.domain.model.immutable.CourseTeacher;
+import org.ums.domain.model.immutable.Student;
+import org.ums.domain.model.immutable.User;
 import org.ums.message.MessageResource;
 
+import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.Map;
@@ -17,8 +22,8 @@ public abstract class BaseFileContentPermission extends BinaryContentDecorator {
   private static final Logger mLogger = LoggerFactory.getLogger(BaseFileContentPermission.class);
 
   private BearerAccessTokenManager mBearerAccessTokenManager;
-  private UserManager mUserManager;
-  private MessageResource mMessageResource;
+  protected UserManager mUserManager;
+  protected MessageResource mMessageResource;
 
   public BaseFileContentPermission(final BearerAccessTokenManager pBearerAccessTokenManager,
                                    final UserManager pUserManager,

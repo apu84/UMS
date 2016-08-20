@@ -27,8 +27,12 @@ public abstract class BinaryContentDecorator implements BinaryContentManager<byt
   protected static final String START_DATE = "startDate";
   protected static final String END_DATE = "endDate";
   protected static final String FOLDER_TYPE = "type";
+  protected static final String FOLDER_TYPE_ASSIGNMENT = "assignment";
+  protected static final String FOLDER_TYPE_STUDENT_ASSIGNMENT = "studentAssignment";
+  protected static final String SEMESTER_ID = "semesterId";
+  protected static final String COURSE_ID = "courseId";
   protected final static String TOKEN = "token";
-  protected String DATE_FORMAT = "dd-MM-yyyy HH:mm:ss";
+  protected String DATE_FORMAT = "dd-MM-yyyy HH:mm:ss Z";
   protected DateFormat mDateFormat = new SimpleDateFormat(DATE_FORMAT);
 
   private BinaryContentManager<byte[]> mManager;
@@ -92,8 +96,8 @@ public abstract class BinaryContentDecorator implements BinaryContentManager<byt
   }
 
   @Override
-  public Map<String, Object> createFolder(String pNewPath, Domain pDomain, String... pRootPath) {
-    return getManager().createFolder(pNewPath, pDomain, pRootPath);
+  public Map<String, Object> createFolder(String pNewPath, Map<String, String> pAdditionalParams, Domain pDomain, String... pRootPath) {
+    return getManager().createFolder(pNewPath, pAdditionalParams, pDomain, pRootPath);
   }
 
   @Override
@@ -122,8 +126,8 @@ public abstract class BinaryContentDecorator implements BinaryContentManager<byt
   }
 
   @Override
-  public Map<String, Object> createAssignmentFolder(String pNewPath, Date pStartDate, Date pEndDate, Domain pDomain, String... pRootPath) {
-    return getManager().createAssignmentFolder(pNewPath, pStartDate, pEndDate, pDomain, pRootPath);
+  public Map<String, Object> createAssignmentFolder(String pNewPath, Date pStartDate, Date pEndDate, Map<String, String> pAdditionalParams, Domain pDomain, String... pRootPath) {
+    return getManager().createAssignmentFolder(pNewPath, pStartDate, pEndDate, pAdditionalParams, pDomain, pRootPath);
   }
 
   protected Map<String, Object> success() {

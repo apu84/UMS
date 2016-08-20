@@ -314,11 +314,10 @@ div.ui-jqgrid-view table.ui-jqgrid-btable th {
 .activeSemesterBG { background-color: #CCFFFF; background-image: none; }
 .newlyCreatedSemesterBG { background-color: #EBDEF0; background-image: none; }
 
-/*
 .ui-jqgrid .loading{
-    height: 34px;
+    height: auto;
 }
-*/
+
 .ui-jqgrid .ui-jqgrid-btable { cursor : pointer; }
 
 /* Change the Modal Dialog Style as it was overridden by Jquery File Upload Manager */

@@ -58,13 +58,13 @@ public class FileContentPermission extends BaseFileContentPermission {
   }
 
   @Override
-  public Map<String, Object> createFolder(String pNewPath, Domain pDomain, String... pRootPath) {
+  public Map<String, Object> createFolder(String pNewPath, Map<String, String> pAdditionalParams, Domain pDomain, String... pRootPath) {
     // Check if there is permission to create folder
     Path parentPath = getQualifiedPath(pDomain, buildPath(pNewPath, pRootPath)).getParent();
     if (!checkIfAllowed(parentPath)) {
       return error(mMessageResource.getMessage("folder.creation.not.allowed", pNewPath));
     }
-    return super.createFolder(pNewPath, pDomain, pRootPath);
+    return super.createFolder(pNewPath, pAdditionalParams, pDomain, pRootPath);
   }
 
   @Override
@@ -132,8 +132,8 @@ public class FileContentPermission extends BaseFileContentPermission {
 
   @Override
   public Map<String, Object> createAssignmentFolder(String pNewPath, Date pStartDate,
-                                                    Date pEndDate, Domain pDomain, String... pRootPath) {
-    return super.createAssignmentFolder(pNewPath, pStartDate, pEndDate, pDomain, pRootPath);
+                                                    Date pEndDate, Map<String, String> pAdditionalParams, Domain pDomain, String... pRootPath) {
+    return super.createAssignmentFolder(pNewPath, pStartDate, pEndDate, pAdditionalParams, pDomain, pRootPath);
   }
 
   @Override

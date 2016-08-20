@@ -13,8 +13,6 @@ import java.net.URI;
 import java.nio.file.*;
 import java.nio.file.FileSystem;
 import java.nio.file.attribute.*;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class FileContentManager extends BinaryContentDecorator {
@@ -222,11 +220,12 @@ public class FileContentManager extends BinaryContentDecorator {
   }
 
   @Override
-  public Map<String, Object> createFolder(String pNewPath, Domain pDomain, String... pRootPath) {
+  public Map<String, Object> createFolder(String pNewPath, Map<String, String> pAdditionalParams, Domain pDomain, String... pRootPath) {
     try {
       createIfNotExist(pDomain, buildPath(pNewPath, pRootPath));
-      addUserDefinedProperty(OWNER, SecurityUtils.getSubject().getPrincipal().toString(),
-          getQualifiedPath(pDomain, buildPath(pNewPath, pRootPath)));
+      Path targetDirectory = getQualifiedPath(pDomain, buildPath(pNewPath, pRootPath));
+      addUserDefinedProperty(OWNER, SecurityUtils.getSubject().getPrincipal().toString(), targetDirectory);
+      addAdditionalParams(targetDirectory, pAdditionalParams);
     } catch (Exception e) {
       return error(mMessageResource.getMessage("folder.creation.failed", pNewPath));
     }
@@ -356,9 +355,7 @@ public class FileContentManager extends BinaryContentDecorator {
         }
         zipfs.close();
       }
-
-      //TODO: Need to investigate more why Files.probeContentType returning null .
-     //response.put("Content-Type", Files.probeContentType(zipFile));
+      response.put("Content-Type", Files.probeContentType(zipFile));
       response.put("Content-Type", "application/zip, application/octet-stream");
       response.put("Content-Length", String.valueOf(zipFile.toFile().length()));
       response.put("Content-Disposition", "inline; filename=\"" + zipFile.toFile().getName() + "\"");
@@ -372,7 +369,7 @@ public class FileContentManager extends BinaryContentDecorator {
 
   @Override
   public Map<String, Object> createAssignmentFolder(String pNewPath, Date pStartDate,
-                                                    Date pEndDate, Domain pDomain,
+                                                    Date pEndDate, Map<String, String> pAdditionalParams, Domain pDomain,
                                                     String... pRootPath) {
     Map<String, Object> createFolderResponse;
 
@@ -380,19 +377,29 @@ public class FileContentManager extends BinaryContentDecorator {
         && pEndDate != null
         && pStartDate.before(pEndDate)) {
 
-      createFolderResponse = createFolder(pNewPath, pDomain, pRootPath);
+      createFolderResponse = createFolder(pNewPath, null, pDomain, pRootPath);
       Path assignmentFolder = getQualifiedPath(pDomain, buildPath(pNewPath, pRootPath));
       try {
         addUserDefinedProperty(OWNER, SecurityUtils.getSubject().getPrincipal().toString(), assignmentFolder);
         addUserDefinedProperty(START_DATE, mDateFormat.format(pStartDate), assignmentFolder);
         addUserDefinedProperty(END_DATE, mDateFormat.format(pEndDate), assignmentFolder);
         addUserDefinedProperty(FOLDER_TYPE, "assignment", assignmentFolder);
+        addAdditionalParams(assignmentFolder, pAdditionalParams);
       } catch (Exception e) {
-        return error("Failed to add user");
+        return error("Failed to create assignment folder");
       }
     } else {
       return error("Assignment submission dates are no valid");
     }
     return createFolderResponse;
+  }
+
+  private void addAdditionalParams(final Path pTargetDirectory,
+                                   final Map<String, String> pAdditionalParams) throws Exception {
+    if (pAdditionalParams != null) {
+      for (String key : pAdditionalParams.keySet()) {
+        addUserDefinedProperty(key, pAdditionalParams.get(key), pTargetDirectory);
+      }
+    }
   }
 }

@@ -10,9 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.ums.cache.*;
-import org.ums.domain.model.immutable.CourseTeacher;
 import org.ums.domain.model.immutable.Examiner;
-import org.ums.domain.model.mutable.MutableCourseTeacher;
 import org.ums.domain.model.mutable.MutableExaminer;
 import org.ums.generator.JxlsGenerator;
 import org.ums.generator.XlsGenerator;
@@ -21,6 +19,7 @@ import org.ums.message.MessageResource;
 import org.ums.persistent.dao.*;
 import org.ums.security.authentication.UMSAuthenticationRealm;
 import org.ums.services.LoginService;
+import org.ums.services.NotificationGenerator;
 import org.ums.statistics.DBLogger;
 import org.ums.statistics.JdbcTemplateFactory;
 import org.ums.statistics.QueryLogger;
@@ -59,6 +58,9 @@ public class UMSContext {
 
   @Autowired
   MessageResource mMessageResource;
+
+  @Autowired
+  NotificationGenerator mNotificationGenerator;
 
   @Bean
   SemesterManager semesterManager() {
@@ -209,7 +211,7 @@ public class UMSContext {
   }
 
   @Bean
-  AssignedTeacherManager<CourseTeacher, MutableCourseTeacher, Integer> courseTeacherManager() {
+  CourseTeacherManager courseTeacherManager() {
     CourseTeacherCache courseTeacherCache = new CourseTeacherCache(mCacheFactory.getCacheManager());
     courseTeacherCache.setManager(new PersistentCourseTeacherDao(mTemplateFactory.getJdbcTemplate()));
     return courseTeacherCache;
@@ -377,7 +379,10 @@ public class UMSContext {
   BinaryContentManager<byte[]> courseMaterialFileManagerForTeacher() {
     FileContentPermission fileContentPermission = new FileContentPermission(userManager(),
         bearerAccessTokenManager(), mUMSConfiguration, mMessageResource);
-    fileContentPermission.setManager(mBinaryContentManager);
+    CourseMaterialNotifier notifier = new CourseMaterialNotifier(userManager(), mNotificationGenerator,
+        registrationResultManager(), mUMSConfiguration, mMessageResource, courseTeacherManager(), bearerAccessTokenManager());
+    fileContentPermission.setManager(notifier);
+    notifier.setManager(mBinaryContentManager);
     return fileContentPermission;
   }
 
@@ -385,9 +390,14 @@ public class UMSContext {
   @Lazy
   BinaryContentManager<byte[]> courseMaterialFileManagerForStudent() {
     StudentFileContentPermission fileContentPermission = new StudentFileContentPermission(userManager(),
-        bearerAccessTokenManager(), mUMSConfiguration, mMessageResource, studentManager(), semesterManager(),
-        courseManager(), semesterSyllabusMapManager());
+        bearerAccessTokenManager(), mUMSConfiguration, mMessageResource, studentManager(),
+        registrationResultManager(), courseTeacherManager());
     fileContentPermission.setManager(mBinaryContentManager);
     return fileContentPermission;
+  }
+
+  @Bean
+  NotificationManager notificationManager() {
+    return new PersistentNotificationDao(mTemplateFactory.getJdbcTemplate(), getGenericDateFormat());
   }
 }

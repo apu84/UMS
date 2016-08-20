@@ -33,7 +33,7 @@
             return deferred.resolve(data);
         };
 
-        ApiHandler.prototype.list = function(apiUrl, path, customDeferredHandler) {
+        ApiHandler.prototype.list = function(apiUrl, path, customDeferredHandler, additionalParams) {
             var self = this;
             var dfHandler = customDeferredHandler || self.deferredHandler;
             var deferred = $q.defer();
@@ -41,6 +41,10 @@
                 action: 'list',
                 path: path
             };
+
+            if(additionalParams) {
+                data['additionalParams'] = additionalParams;
+            }
 
             self.inprocess = true;
             self.error = '';
@@ -344,13 +348,17 @@
             return deferred.promise;
         };
 
-        ApiHandler.prototype.createFolder = function(apiUrl, path) {
+        ApiHandler.prototype.createFolder = function(apiUrl, path, additionalParams) {
             var self = this;
             var deferred = $q.defer();
             var data = {
                 action: 'createFolder',
                 newPath: path
             };
+
+            if(additionalParams) {
+                data['additionalParams'] = additionalParams;
+            }
 
             self.inprocess = true;
             self.error = '';
@@ -365,7 +373,7 @@
             return deferred.promise;
         };
 
-        ApiHandler.prototype.createAssignmentFolder = function(apiUrl, path, startDate, endDate) {
+        ApiHandler.prototype.createAssignmentFolder = function(apiUrl, path, startDate, endDate, additionalParams) {
             var self = this;
             var deferred = $q.defer();
             var data = {
@@ -374,6 +382,10 @@
                 startDate: startDate,
                 endDate: endDate
             };
+
+            if(additionalParams) {
+                data['additionalParams'] = additionalParams;
+            }
 
             self.inprocess = true;
             self.error = '';

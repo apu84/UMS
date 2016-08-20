@@ -66,6 +66,10 @@ public interface Student extends Serializable, EditType<MutableStudent>, Identif
 
   Semester getCurrentEnrolledSemester();
 
+  String getTheorySection();
+
+  String getSessionalSection();
+
   enum EnrollmentType {
     ACTUAL(1),
     TEMPORARY(0);

@@ -18,7 +18,6 @@ module ums {
     public static $inject = ['appConstants', 'HttpClient', '$scope', 'notify','$location'];
 
     constructor(private appConstants: any, private httpClient: HttpClient, private $scope: ISemesterScope,private notify: Notify,private $location:Location) {
-      console.log($location);
       this.loadData();
       $scope.manageAddButton=this.manageAddButton.bind(this);
     }
@@ -29,57 +28,71 @@ module ums {
     }
 
     public insert(rowData: RowData): void {
-      //this.decorateScope().grid.api.setMessageDisplayed(false);
       this.decorateScope().grid.api.toggleMessage('Saving...');
-      console.log(rowData);
-      console.log(rowData.id);
         this.httpClient.post('academic/semester/', rowData, HttpClient.MIME_TYPE_JSON).success(()=> {
           this.decorateScope().grid.api.toggleMessage();
           this.loadData();
         }).error((response) => {
-          console.log(response);
-          // this.loadData();
           this.decorateScope().grid.api.removeLoadingMessage();
           this.decorateScope().grid.api.toggleMessage();
         });
     }
     public edit(rowData: RowData): void {
-      this.decorateScope().grid.api.toggleMessage('Saving...');
-      this.httpClient.put('academic/classroom', rowData, HttpClient.MIME_TYPE_JSON)
+      console.log(rowData);
+      var gridId=this.decorateScope().grid.api.getGrid()[0].id;
+      var rowId =$("#"+gridId).jqGrid('getGridParam','selrow');
+      var oldRowData = $("#"+gridId).getRowData(rowId);
+      console.log(oldRowData);
+      if(oldRowData.status==0){
+        this.notify.error("Edit not permitted for an inactive semester.");
+        return;
+      }
+      this.decorateScope().grid.api.toggleMessage('Updating...');
+
+      this.httpClient.put('academic/semester/'+rowData.id,rowData, HttpClient.MIME_TYPE_JSON)
           .success(() => {
             this.decorateScope().grid.api.toggleMessage();
+            this.notify.success("Semester info successfully updated.");
+            this.loadData();
           }).error((response) => {
             console.error(response);
             this.decorateScope().grid.api.toggleMessage();
-            this.loadData();
           });
+
     }
 
     public remove(rowData: RowData): void {
       var notify=this.notify;
-      notify.error("Semester delete is not allowed.");
-      //asdfasdasdf
+      notify.error("Semester delete not permitted.");
     }
 
     public beforeShowEditForm(form: any, gridElement: JQuery): void {
-
       var rowId =gridElement.jqGrid('getGridParam','selrow');
       var rowData = gridElement.getRowData(rowId);
+      this.makeReadOnly(gridElement,'programTypeId','name');
       if(rowData["status"]=="0") {
-        gridElement.jqGrid('setColProp', 'programTypeId', {editoptions: {readonly: "readonly"}});
-        gridElement.jqGrid('setColProp', 'name', {editoptions: {readonly: "readonly"}});
-        gridElement.jqGrid('setColProp', 'status', {editoptions: {readonly: "readonly"}});
+        this.makeReadOnly(gridElement,'status','startDate','endDate');
       }
-
 
     }
 
+    //We should remove this method to jqGridCommon.ts file
+    public makeReadOnly(gridElement:JQuery,...fields: string[]):void{
+      for (var i = 0; i < arguments.length; i++) {
+        gridElement.jqGrid('setColProp', arguments[i], {editoptions: {readonly: "readonly"}});
+      }
+    }
+    //We should remove this method to jqGridCommon.ts file
+    public removeReadOnly(gridElement:JQuery,...fields: string[]):void{
+      for (var i = 0; i < arguments.length; i++) {
+        gridElement.jqGrid('setColProp',arguments[i],{  editoptions: {readonly: false}});
+      }
+    }
     public afterShowEditForm(form: any, gridElement: JQuery): void {
+
       var rowId =gridElement.jqGrid('getGridParam','selrow');
       var rowData = gridElement.getRowData(rowId);
-      gridElement.jqGrid('setColProp','programTypeId',{  editoptions: {readonly: false}});
-      gridElement.jqGrid('setColProp','name',{  editoptions: {readonly: false}});
-      gridElement.jqGrid('setColProp','status',{  editoptions: {readonly: false}});
+      this.removeReadOnly(gridElement,'programTypeId','name','status');
     }
 
     public decorateScope(): GridConfig {
@@ -143,7 +156,7 @@ module ums {
           formatter: 'select',
           edittype: 'select',
           editoptions: {
-            value: '0:Inactive; 1:Active; 2:Newly Created'
+            value: '0:Inactive;1:Active;2:Newly Created'
           },
           stype: 'select',
           searchoptions: {

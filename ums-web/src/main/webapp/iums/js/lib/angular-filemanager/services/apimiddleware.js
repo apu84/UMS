@@ -22,7 +22,8 @@
         };
 
         ApiMiddleware.prototype.list = function(path, customDeferredHandler) {
-            return this.apiHandler.list(fileManagerConfig.listUrl, this.getPath(path), customDeferredHandler);
+            return this.apiHandler.list(fileManagerConfig.listUrl, this.getPath(path), customDeferredHandler,
+                fileManagerConfig.additionalParams);
         };
 
         ApiMiddleware.prototype.copy = function(files, path) {
@@ -128,14 +129,14 @@
 
         ApiMiddleware.prototype.createFolder = function(item) {
             var path = item.tempModel.fullPath();
-            return this.apiHandler.createFolder(fileManagerConfig.createFolderUrl, path);
+            return this.apiHandler.createFolder(fileManagerConfig.createFolderUrl, path, fileManagerConfig.additionalParams);
         };
 
         ApiMiddleware.prototype.createAssignmentFolder = function (item) {
             var path = item.tempModel.fullPath();
             var startDate = item.tempModel.startDate ? item.tempModel.startDate : '';
             var endDate = item.tempModel.endDate ? item.tempModel.endDate : '';
-            return this.apiHandler.createAssignmentFolder(fileManagerConfig.createFolderUrl, path, startDate, endDate);
+            return this.apiHandler.createAssignmentFolder(fileManagerConfig.createFolderUrl, path, startDate, endDate, fileManagerConfig.additionalParams);
         };
         return ApiMiddleware;
 

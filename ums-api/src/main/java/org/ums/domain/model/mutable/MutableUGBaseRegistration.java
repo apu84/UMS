@@ -3,6 +3,7 @@ package org.ums.domain.model.mutable;
 import org.ums.domain.model.common.Mutable;
 import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.immutable.*;
+import org.ums.enums.CourseRegType;
 import org.ums.enums.ExamType;
 
 public interface MutableUGBaseRegistration extends UGBaseRegistration, Mutable, MutableIdentifier<Integer>, MutableLastModifier {
@@ -22,9 +23,7 @@ public interface MutableUGBaseRegistration extends UGBaseRegistration, Mutable, 
 
   void setExamType(final ExamType pExamType);
 
-  void setStatus(final UGRegistrationResult.Status pStatus);
-
-  void setType(final String pType);
+  void setType(final CourseRegType pType);
 
   void setCourseNo(final String pCourseNo);
 

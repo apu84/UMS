@@ -22,8 +22,10 @@ import java.util.concurrent.atomic.AtomicReference;
 public class PersistentSemesterDao extends SemesterDaoDecorator {
 
   static String SELECT_ALL = "SELECT SEMESTER_ID, SEMESTER_NAME, START_DATE, END_DATE, PROGRAM_TYPE, STATUS, LAST_MODIFIED FROM MST_SEMESTER  ";
-  static String UPDATE_ONE = "UPDATE MST_SEMESTER SET SEMESTER_NAME = ?,START_DATE = TO_DATE(?, '" + Constants.DATE_FORMAT + "'), " +
-      "END_DATE= TO_DATE(?, '" + Constants.DATE_FORMAT + "'), PROGRAM_TYPE = ?, STATUS = ?, LAST_MODIFIED = " + getLastModifiedSql() + " ";
+
+  static String UPDATE_ONE = "UPDATE MST_SEMESTER SET START_DATE = TO_DATE(?, '" + Constants.DATE_FORMAT + "'), " +
+      "END_DATE= TO_DATE(?, '" + Constants.DATE_FORMAT + "'), LAST_MODIFIED = " + getLastModifiedSql() + ", Status= ? ";
+
   static String DELETE_ONE = "DELETE FROM MST_SEMESTER ";
   static String INSERT_ONE = "INSERT INTO MST_SEMESTER(SEMESTER_ID, SEMESTER_NAME, START_DATE, END_DATE, PROGRAM_TYPE, STATUS, LAST_MODIFIED) " +
       "VALUES(?, ?, TO_DATE(?, '" + Constants.DATE_FORMAT + "'), TO_DATE(?, '" + Constants.DATE_FORMAT + "'), ?, ?, " + getLastModifiedSql() + ")";
@@ -58,13 +60,11 @@ public class PersistentSemesterDao extends SemesterDaoDecorator {
 
   @Override
   public int update(final MutableSemester pSemester) throws Exception {
-    String query = UPDATE_ONE + "WHERE SEMESTER_ID = ?";
+    String query = UPDATE_ONE + " Where Semester_Id=? and Status In (1,2)";
     return mJdbcTemplate.update(query,
-        pSemester.getName(),
         mDateFormat.format(pSemester.getStartDate()),
         pSemester.getEndDate() == null ? "" : mDateFormat.format(pSemester.getEndDate()),
-        pSemester.getProgramType().getId(),
-        pSemester.getStatus(),
+        pSemester.getStatus().getValue(),
         pSemester.getId());
   }
 

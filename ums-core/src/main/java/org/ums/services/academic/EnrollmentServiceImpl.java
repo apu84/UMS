@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.ums.domain.model.immutable.*;
 import org.ums.domain.model.mutable.*;
+import org.ums.enums.CourseRegType;
 import org.ums.enums.ExamType;
 import org.ums.manager.*;
 import org.ums.message.MessageResource;
@@ -142,13 +143,13 @@ public class EnrollmentServiceImpl implements EnrollmentService {
             mutableStudents.add(mutableStudent);
 
             insertRegistrationResult(mandatoryCourseList, pNewSemesterId, studentRecord.getStudentId(),
-                ExamType.SEMESTER_FINAL, UGBaseRegistration.Status.UNKNOWN, registrationResults);
+                ExamType.SEMESTER_FINAL, CourseRegType.REGULAR, registrationResults);
 
             insertTheoryMarks(mandatoryTheoryCourse, pNewSemesterId, studentRecord.getStudentId(),
-                ExamType.SEMESTER_FINAL, UGBaseRegistration.Status.UNKNOWN, ugTheoryMarks);
+                ExamType.SEMESTER_FINAL, CourseRegType.REGULAR, ugTheoryMarks);
 
             insertSessionalMarks(mandatorySessionalCourse, pNewSemesterId, studentRecord.getStudentId(),
-                ExamType.SEMESTER_FINAL, UGBaseRegistration.Status.UNKNOWN, ugSessionalMarks);
+                ExamType.SEMESTER_FINAL, CourseRegType.REGULAR, ugSessionalMarks);
 
             totalEnrolledStudent++;
           }
@@ -222,7 +223,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                 registrationResult.setStudentId(studentRecord.getStudentId());
                 registrationResult.setSemesterId(pNewSemesterId);
                 registrationResult.setExamType(ExamType.SEMESTER_FINAL);
-                registrationResult.setStatus(UGBaseRegistration.Status.UNKNOWN);
+                registrationResult.setType(CourseRegType.REGULAR);
                 registrationResults.add(registrationResult);
 
 
@@ -230,14 +231,14 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                 theoryMarks.setStudentId(studentRecord.getStudentId());
                 theoryMarks.setSemesterId(pNewSemesterId);
                 theoryMarks.setExamType(ExamType.SEMESTER_FINAL);
-                theoryMarks.setStatus(UGBaseRegistration.Status.UNKNOWN);
+                theoryMarks.setType(CourseRegType.REGULAR);
                 ugTheoryMarks.add(theoryMarks);
 
                 MutableUGSessionalMarks sessionalMarks = new PersistentUGSessionalMarks();
                 sessionalMarks.setStudentId(studentRecord.getStudentId());
                 sessionalMarks.setSemesterId(pNewSemesterId);
                 sessionalMarks.setExamType(ExamType.SEMESTER_FINAL);
-                sessionalMarks.setStatus(UGBaseRegistration.Status.UNKNOWN);
+                sessionalMarks.setType(CourseRegType.REGULAR);
                 ugSessionalMarks.add(sessionalMarks);
               }
 
@@ -365,7 +366,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
   }
 
   private void insertRegistrationResult(List<Course> pCourses, Integer pSemesterId, String pStudentId,
-                                        ExamType pExamType, UGBaseRegistration.Status pStatus,
+                                        ExamType pExamType, CourseRegType pCourseRegType,
                                         List<MutableUGRegistrationResult> pRegistrationResults) {
     for (Course course : pCourses) {
       MutableUGRegistrationResult registrationResult = new PersistentUGRegistrationResult();
@@ -373,13 +374,13 @@ public class EnrollmentServiceImpl implements EnrollmentService {
       registrationResult.setCourseId(course.getId());
       registrationResult.setSemesterId(pSemesterId);
       registrationResult.setExamType(pExamType);
-      registrationResult.setStatus(pStatus);
+      registrationResult.setType(pCourseRegType);
       pRegistrationResults.add(registrationResult);
     }
   }
 
   private void insertTheoryMarks(List<Course> pCourses, Integer pSemesterId, String pStudentId,
-                                 ExamType pExamType, UGBaseRegistration.Status pStatus,
+                                 ExamType pExamType, CourseRegType pCourseRegType,
                                  List<MutableUGTheoryMarks> pRegistrationResults) {
     for (Course course : pCourses) {
       MutableUGTheoryMarks registrationResult = new PersistentUGTheoryMarks();
@@ -387,13 +388,13 @@ public class EnrollmentServiceImpl implements EnrollmentService {
       registrationResult.setCourseId(course.getId());
       registrationResult.setSemesterId(pSemesterId);
       registrationResult.setExamType(pExamType);
-      registrationResult.setStatus(pStatus);
+      registrationResult.setType(pCourseRegType);
       pRegistrationResults.add(registrationResult);
     }
   }
 
   private void insertSessionalMarks(List<Course> pCourses, Integer pSemesterId, String pStudentId,
-                                    ExamType pExamType, UGBaseRegistration.Status pStatus,
+                                    ExamType pExamType, CourseRegType pCourseRegType,
                                     List<MutableUGSessionalMarks> pRegistrationResults) {
     for (Course course : pCourses) {
       MutableUGSessionalMarks registrationResult = new PersistentUGSessionalMarks();
@@ -401,7 +402,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
       registrationResult.setCourseId(course.getId());
       registrationResult.setSemesterId(pSemesterId);
       registrationResult.setExamType(pExamType);
-      registrationResult.setStatus(pStatus);
+      registrationResult.setType(pCourseRegType);
       pRegistrationResults.add(registrationResult);
     }
   }
