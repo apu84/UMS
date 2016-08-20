@@ -128,8 +128,8 @@ public class SeatPlanCache extends ContentCache<SeatPlan, MutableSeatPlan, Integ
   }
 
   @Override
-  public List<SeatPlan> getSeatPlanBySemesterAndExamTypeOrderByExamDateAndCourseAndYearAndSemesterAndStudentId(Integer pSemesterId, Integer pExamType)throws Exception {
-    List<SeatPlan> readOnlys= getManager().getSeatPlanBySemesterAndExamTypeOrderByExamDateAndCourseAndYearAndSemesterAndStudentId(pSemesterId,pExamType);
+  public List<SeatPlan> getSeatPlanOrderByExamDateAndCourseAndYearAndSemesterAndStudentId(Integer pSemesterId, Integer pExamType)throws Exception {
+    List<SeatPlan> readOnlys= getManager().getSeatPlanOrderByExamDateAndCourseAndYearAndSemesterAndStudentId(pSemesterId,pExamType);
     for(SeatPlan readOnly: readOnlys){
       getCacheManager().put(getCacheKey(readOnly.getId()),readOnly);
     }

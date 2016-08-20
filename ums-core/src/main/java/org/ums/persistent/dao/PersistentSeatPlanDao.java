@@ -1,5 +1,6 @@
 package org.ums.persistent.dao;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.SeatPlanDaoDecorator;
@@ -56,6 +57,57 @@ public class PersistentSeatPlanDao extends SeatPlanDaoDecorator{
   public List<SeatPlan> getBySemesterAndGroupAndExamTypeAndExamDate(int pSemesterId, int pGropuNo, int pExamType, String pExamDate) {
     String query = SELECT_ALL_CCI+" WHERE SEMESTER_ID=? AND GROUP_NO=? AND EXAM_TYPE=? AND exam_date=to_date(?,'MM-DD-YYYY')";
     return mJdbcTemplate.query(query,new Object[]{pSemesterId,pGropuNo,pExamType,pExamDate},new SeatPlanRowMapperForCCI());
+  }
+
+
+  @Override
+  public List<SeatPlan> getSeatPlanOrderByExamDateAndCourseAndYearAndSemesterAndStudentId(Integer pSemesterId, Integer pExamType) throws Exception {
+    String query="" +
+        "SELECT  " +
+        "  SEAT_PLAN.ID,  " +
+        "  SEAT_PLAN.ROOM_ID,  " +
+        "  SEAT_PLAN.ROW_NO,  " +
+        "  SEAT_PLAN.COL_NO,  " +
+        "  SEAT_PLAN.STUDENT_ID,  " +
+        "  SEAT_PLAN.EXAM_TYPE,  " +
+        "  SEAT_PLAN.SEMESTER_ID,  " +
+        "  SEAT_PLAN.GROUP_NO,  " +
+        "  SEAT_PLAN.LAST_MODIFIED  " +
+        "FROM  " +
+        "  SEAT_PLAN,STUDENTS,  " +
+        "  (  " +
+        "SELECT  " +
+        "  EXAM_ROUTINE.EXAM_DATE,  " +
+        "  MST_COURSE.COURSE_ID,  " +
+        "  MST_COURSE.YEAR,  " +
+        "  MST_COURSE.SEMESTER  " +
+        "  " +
+        "FROM MST_COURSE,EXAM_ROUTINE  " +
+        "WHERE  " +
+        "  EXAM_ROUTINE.SEMESTER=?  " +
+        "  AND EXAM_TYPE=?  " +
+        "  AND EXAM_ROUTINE.COURSE_ID=MST_COURSE.COURSE_ID  " +
+        "  " +
+        "ORDER BY  " +
+        "  EXAM_ROUTINE.EXAM_DATE,  " +
+        "  EXAM_ROUTINE.PROGRAM_ID,  " +
+        "  EXAM_ROUTINE.COURSE_ID,  " +
+        "  MST_COURSE.YEAR,  " +
+        "  MST_COURSE.SEMESTER  " +
+        "    ) examRoutine  " +
+        "WHERE  " +
+        "  SEAT_PLAN.EXAM_TYPE=? AND  " +
+        "    SEAT_PLAN.SEMESTER_ID=? and  " +
+        "  SEAT_PLAN.STUDENT_ID=STUDENTS.STUDENT_ID  " +
+        "  AND examRoutine.YEAR=STUDENTS.CURR_YEAR  " +
+        "  AND examRoutine.SEMESTER=STUDENTS.CURR_SEMESTER  " +
+        "ORDER BY  " +
+        "  examRoutine.EXAM_DATE,  " +
+        "  examRoutine.COURSE_ID,  " +
+        "  examRoutine.YEAR,  " +
+        "  examRoutine.SEMESTER,  " +
+        "  STUDENTS.STUDENT_ID";
+    return mJdbcTemplate.query(query,new Object[]{pSemesterId,pExamType,pExamType,pSemesterId},new SeatPlanRowMapper());
   }
 
   @Override
@@ -121,6 +173,8 @@ public class PersistentSeatPlanDao extends SeatPlanDaoDecorator{
     String query = "SELECT COUNT(*) FROM SEAT_PLAN WHERE ROOM_ID=? AND SEMESTER_ID=? AND GROUP_NO=? AND EXAM_TYPE=?";
     return mJdbcTemplate.queryForObject(query,Integer.class,pRoomId,pSemesterId,pGroupNo,pExamType);
   }
+
+
 
 
 

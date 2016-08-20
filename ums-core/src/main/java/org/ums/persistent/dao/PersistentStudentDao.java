@@ -2,6 +2,7 @@ package org.ums.persistent.dao;
 
 
 import com.google.common.collect.Lists;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.StudentDaoDecorator;

@@ -73,7 +73,7 @@ public class SeatPlanDaoDecorator extends ContentDaoDecorator<SeatPlan,MutableSe
   }
 
   @Override
-  public List<SeatPlan> getSeatPlanBySemesterAndExamTypeOrderByExamDateAndCourseAndYearAndSemesterAndStudentId(Integer pSemesterId, Integer pExamType) throws Exception {
-    return getManager().getSeatPlanBySemesterAndExamTypeOrderByExamDateAndCourseAndYearAndSemesterAndStudentId(pSemesterId,pExamType);
+  public List<SeatPlan> getSeatPlanOrderByExamDateAndCourseAndYearAndSemesterAndStudentId(Integer pSemesterId, Integer pExamType) throws Exception {
+    return getManager().getSeatPlanOrderByExamDateAndCourseAndYearAndSemesterAndStudentId(pSemesterId,pExamType);
   }
 }

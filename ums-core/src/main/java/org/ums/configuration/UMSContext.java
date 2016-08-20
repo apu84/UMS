@@ -353,6 +353,11 @@ public class UMSContext {
   }
 
   @Bean
+  SeatPlanReportManager seatPlanReportManager(){
+    return new PersistentSeatPlanReportDao(mTemplateFactory.getJdbcTemplate());
+  }
+
+  @Bean
   UGTheoryMarksManager theoryMarksManager() {
     return new PersistentUGTheoryMarksDao(mTemplateFactory.getJdbcTemplate());
   }
