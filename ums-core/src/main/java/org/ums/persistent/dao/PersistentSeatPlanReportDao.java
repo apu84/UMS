@@ -59,7 +59,7 @@ public class PersistentSeatPlanReportDao extends SeatPlanReportDaoDecorator{
       "        MST_PROGRAM,  " +
       "        MST_COURSE  " +
       "      where  " +
-      "        EXAM_ROUTINE.EXAM_TYPE=1  " +
+      "        EXAM_ROUTINE.EXAM_TYPE=?  " +
       "        and EXAM_ROUTINE.SEMESTER=?  " +
       "        and MST_COURSE.COURSE_ID=EXAM_ROUTINE.COURSE_ID  " +
       "        and MST_PROGRAM.PROGRAM_ID=EXAM_ROUTINE.PROGRAM_ID  " +
@@ -73,10 +73,10 @@ public class PersistentSeatPlanReportDao extends SeatPlanReportDaoDecorator{
       "  seatPlan.CURR_YEAR = examRoutine.YEAR AND  " +
       "  seatPlan.CURR_SEMESTER = examRoutine.SEMESTER  " +
       "ORDER BY  " +
-      "  seatPlan.ROOM_NO,seatPlan.PROGRAM_ID,examRoutine.COURSE_NO, seatPlan.STUDENT_ID";
+      "  seatPlan.ROOM_NO,seatPlan.PROGRAM_ID,examRoutine.EXAM_DATE,examRoutine.COURSE_NO, seatPlan.STUDENT_ID";
 
 
-  String SELECT_ALL_ATTENDENCE_SHEET_CCI="" +
+  String SELECT_ALL_ATTENDENCE_SHEET_EXAM_DATE="" +
       "SELECT  " +
       "  seatPlan.ROOM_NO,  " +
       "  examRoutine.PROGRAM_SHORT_NAME,  " +
@@ -121,7 +121,7 @@ public class PersistentSeatPlanReportDao extends SeatPlanReportDaoDecorator{
       "        MST_PROGRAM,  " +
       "        MST_COURSE  " +
       "      where  " +
-      "        EXAM_ROUTINE.EXAM_TYPE=1  " +
+      "        EXAM_ROUTINE.EXAM_TYPE=?  " +
       "        and EXAM_ROUTINE.SEMESTER=?  " +
       "        and Exam_routine.exam_date=to_date(?,'DD-MM-YYYY')  "+
       "        and MST_COURSE.COURSE_ID=EXAM_ROUTINE.COURSE_ID  " +
@@ -151,11 +151,11 @@ public class PersistentSeatPlanReportDao extends SeatPlanReportDaoDecorator{
     String query="";
     if(pExamDate.equals("NULL")){
       query= SELECT_ALL_ATTENDENCE_SHEET;
-      return mJdbcTemplate.query(query,new Object[]{pSemesterId,pExamType,pSemesterId},new SeatPlanReportRowMapper());
+      return mJdbcTemplate.query(query,new Object[]{pSemesterId,pExamType,pExamType,pSemesterId},new SeatPlanReportRowMapper());
     }
     else{
-      query=SELECT_ALL_ATTENDENCE_SHEET_CCI;
-      return  mJdbcTemplate.query(query,new Object[]{pSemesterId,pExamDate,pSemesterId,pExamDate}, new SeatPlanReportRowMapper());
+      query=SELECT_ALL_ATTENDENCE_SHEET_EXAM_DATE;
+      return  mJdbcTemplate.query(query,new Object[]{pSemesterId,pExamType,pExamType,pSemesterId,pExamDate}, new SeatPlanReportRowMapper());
     }
   }
 
