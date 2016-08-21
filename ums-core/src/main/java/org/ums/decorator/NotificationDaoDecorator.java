@@ -10,7 +10,12 @@ import java.util.List;
 public class NotificationDaoDecorator extends ContentDaoDecorator<Notification, MutableNotification, String, NotificationManager>
     implements NotificationManager {
   @Override
-  public List<Notification> consume(String pConsumerId, String pNotificationType) {
-    return getManager().consume(pConsumerId, pNotificationType);
+  public List<Notification> getNotifications(String pConsumerId, String pNotificationType) {
+    return getManager().getNotifications(pConsumerId, pNotificationType);
+  }
+
+  @Override
+  public List<Notification> getNotifications(String pConsumerId, Integer pNumOfLatestNotification) {
+    return getManager().getNotifications(pConsumerId, pNumOfLatestNotification);
   }
 }
