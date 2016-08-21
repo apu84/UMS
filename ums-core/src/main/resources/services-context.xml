@@ -2,12 +2,15 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mongo="http://www.springframework.org/schema/data/mongo"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
     http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
     http://www.springframework.org/schema/context
     http://www.springframework.org/schema/context/spring-context-4.0.xsd
     http://www.springframework.org/schema/tx
-    http://www.springframework.org/schema/tx/spring-tx-4.0.xsd"
+    http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+    http://www.springframework.org/schema/data/mongo
+    http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd"
        xmlns:tx="http://www.springframework.org/schema/tx">
 
   <context:component-scan
@@ -56,10 +59,12 @@
         <value>classpath:common.properties</value>
         <value>classpath:mail-config.properties</value>
         <value>classpath:caching.properties</value>
+        <value>classpath:mongodb.properties</value>
         <value>${ums.properties.dir}/jdbc.properties</value>
         <value>${ums.properties.dir}/common.properties</value>
         <value>${ums.properties.dir}/mail-config.properties</value>
         <value>${ums.properties.dir}/caching.properties</value>
+        <value>${ums.properties.dir}/mongodb.properties</value>
       </list>
     </property>
     <property name="ignoreUnresolvablePlaceholders" value="true"/>
@@ -67,6 +72,28 @@
   </bean>
 
   <bean id="contextApplicationContextProvider" class="org.ums.context.ApplicationContextProvider"></bean>
+
+
+  <mongo:mongo host="${mongo.host}" port="${mongo.port}" id="mongo">
+    <mongo:options
+        connections-per-host="${mongo.connectionsPerHost}"
+        threads-allowed-to-block-for-connection-multiplier="${mongo.threadsAllowedToBlockForConnectionMultiplier}"
+        connect-timeout="${mongo.connectTimeout}"
+        max-wait-time="${mongo.maxWaitTime}"
+        auto-connect-retry="${mongo.autoConnectRetry}"
+        socket-keep-alive="${mongo.socketKeepAlive}"
+        socket-timeout="${mongo.socketTimeout}"
+        slave-ok="${mongo.slaveOk}"
+        write-number="${mongo.writeNumber}"
+        write-timeout="${mongo.writeTimeout}"
+        write-fsync="${mongo.writeFsync}"/>
+  </mongo:mongo>
+
+  <mongo:db-factory dbname="${mongo.db_name}" mongo-ref="mongo" id="mongoDbFactory"/>
+
+  <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+    <constructor-arg name="mongoDbFactory" ref="mongoDbFactory"/>
+  </bean>
 
   <import resource="shiro-context.xml"/>
   <import resource="caching.xml"/>

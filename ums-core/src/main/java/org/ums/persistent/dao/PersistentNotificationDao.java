@@ -91,7 +91,7 @@ public class PersistentNotificationDao extends NotificationDaoDecorator {
   }
 
   @Override
-  public Notification get(Integer pId) throws Exception {
+  public Notification get(String pId) throws Exception {
     return super.get(pId);
   }
 
@@ -122,7 +122,7 @@ public class PersistentNotificationDao extends NotificationDaoDecorator {
     @Override
     public Notification mapRow(ResultSet rs, int rowNum) throws SQLException {
       MutableNotification notification = new PersistentNotification();
-      notification.setId(rs.getInt("ID"));
+      notification.setId(rs.getString("ID"));
       notification.setProducerId(rs.getString("PRODUCER_ID"));
       notification.setConsumerId(rs.getString("CONSUMER_ID"));
       notification.setNotificationType(rs.getString("NOTIFICATION_TYPE"));
