@@ -1,20 +1,20 @@
 module ums {
   export interface NotificationScope extends ng.IScope {
-    notifications: Array<Notification>;
+    notifications: Array<INotification>;
     numOfUnreadNotification: number;
     setReadStatus: Function;
   }
-  export interface Notification {
+  export interface INotification {
     payload: string;
     producedOn: string;
     consumedOn: string;
     isRead: boolean;
   }
   export interface NotificationEntries {
-    entries: Array<Notification>;
+    entries: Array<INotification>;
   }
   export class Notification implements ng.IDirective {
-    private scope: NotificationScope;
+    public scope: NotificationScope;
 
     constructor(private httpClient: HttpClient,
                 private $q: ng.IQService,
@@ -22,13 +22,14 @@ module ums {
 
     }
 
-    public restrict: string = 'E';
+    public restrict: string = 'AE';
 
     public link = ($scope: NotificationScope, element: JQuery, attributes: any) => {
       this.scope = $scope;
+      this.scope.numOfUnreadNotification = 0;
       this.$interval(()=> {
         this.getNotification();
-      }, 60000);
+      }, 5000);
 
       this.scope.setReadStatus = this.setReadStatus.bind(this);
     };
@@ -36,21 +37,23 @@ module ums {
     public templateUrl = "./views/directive/notification.html";
 
     private getNotification() {
-      this.scope.numOfUnreadNotification = 0;
-      this.httpClient.get("notification/10/", HttpClient.MIME_TYPE_JSON,
+      var tempCount:number = 0;
+      this.httpClient.poll("/ums-webservice-common/notification/10/", HttpClient.MIME_TYPE_JSON,
           (response: NotificationEntries)=> {
             for (var i = 0; i < response.entries.length; i++) {
-              var notification: Notification = response.entries[i];
+              var notification: INotification = response.entries[i];
               var producedOn: any = notification.producedOn ? moment(notification.producedOn, 'DD-MM-YYYY hh:mm:ss') : null;
               var consumedOn: any = notification.consumedOn ? moment(notification.consumedOn, 'DD-MM-YYYY hh:mm:ss') : null;
               if (producedOn = null || consumedOn == null || !consumedOn.isAfter(producedOn)) {
                 notification.isRead = false;
-                this.scope.numOfUnreadNotification = this.scope.numOfUnreadNotification + 1;
+                tempCount = tempCount + 1;
               } else {
                 notification.isRead = true;
               }
             }
-
+            if(tempCount != this.scope.numOfUnreadNotification) {
+              this.scope.numOfUnreadNotification = tempCount;
+            }
             this.scope.notifications = response.entries;
           });
     }
