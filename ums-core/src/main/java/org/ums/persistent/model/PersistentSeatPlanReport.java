@@ -43,7 +43,7 @@ public class PersistentSeatPlanReport implements MutableSeatPlanReport {
   }
 
   @Override
-  public void setProgramShortName(String pProgramShortName) {
+  public void setProgramName(String pProgramShortName) {
     mProgramShortName = pProgramShortName;
   }
 
@@ -88,7 +88,7 @@ public class PersistentSeatPlanReport implements MutableSeatPlanReport {
   }
 
   @Override
-  public String getProgramShortName() {
+  public String getProgramName() {
     return mProgramShortName;
   }
 

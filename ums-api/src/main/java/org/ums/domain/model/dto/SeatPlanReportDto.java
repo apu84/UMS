@@ -7,7 +7,7 @@ import java.io.Serializable;
  */
 public class SeatPlanReportDto implements Serializable {
   private String mRoomNo;
-  private String mProgramShortName;
+  private String mProgramName;
   private String mCourseTitle;
   private String mCourseNo;
   private String mExamDate;
@@ -27,12 +27,12 @@ public class SeatPlanReportDto implements Serializable {
     mRoomNo = pRoomNo;
   }
 
-  public String getProgramShortName() {
-    return mProgramShortName;
+  public String getProgramName() {
+    return mProgramName;
   }
 
-  public void setProgramShortName(String pProgramShortName) {
-    mProgramShortName = pProgramShortName;
+  public void setProgramName(String pProgramShortName) {
+    mProgramName = pProgramShortName;
   }
 
   public String getCourseTitle() {

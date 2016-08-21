@@ -2,6 +2,7 @@ package org.ums.common.report.generator;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
+import org.pentaho.reporting.libraries.fonts.registry.FontType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
@@ -1072,7 +1073,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
           upperCell.addElement(yearSemesterPhrase);
 
           Paragraph departmentP= new Paragraph("Department: ",lightFont);
-          Paragraph departmentParagraph = new Paragraph(" "+seatPlanReportDto.getProgramShortName(),boldFont);
+          Paragraph departmentParagraph = new Paragraph(" "+seatPlanReportDto.getProgramName(),boldFont);
           //departmentParagraph.setFont(FontFactory.getFont(FontFactory.TIMES_BOLD,12));
           PdfPCell departmentCell = new PdfPCell(departmentParagraph);
           /*tableOne.addCell(departmentCell);
@@ -1245,5 +1246,277 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
     long totalTime = endTime-startTime;
 
     System.out.println(totalTime);
+  }
+
+
+  @Override
+  public void createSeatPlanTopSheetPdfReport(Integer pProgramType, Integer pSemesterId, Integer pExamType, String pExamDate, OutputStream pOutputStream) throws Exception, IOException, DocumentException {
+    List<SeatPlanReportDto> seatPlans = mSeatPlanReportManager.getSeatPlanDataForTopSheet(pSemesterId,pExamType,pExamDate);
+
+    Document document = new Document();
+    document.addTitle("Seat Plan Attendence Sheet");
+
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    PdfWriter writer = PdfWriter.getInstance(document,baos);
+    /*MyFooter event = new MyFooter();
+    writer.setPageEvent(event);*/
+    document.open();
+    document.setPageSize(PageSize.A4);
+
+    Font lightFont = FontFactory.getFont(FontFactory.TIMES,12);
+
+    Font boldFont = FontFactory.getFont(FontFactory.TIMES_BOLD,12);
+
+    Semester semester = mSemesterManager.get(pSemesterId);
+
+    while(true){
+
+      SeatPlanReportDto seatPlan = seatPlans.get(0);
+
+      String examDate = seatPlan.getExamDate();
+
+
+      Paragraph dueDateOfSubmission = new Paragraph("DUE DATE OF SUBMISSION :");
+      dueDateOfSubmission.setFont(FontFactory.getFont(FontFactory.TIMES_BOLD,14));
+      dueDateOfSubmission.setAlignment(Element.ALIGN_CENTER);
+      PdfPCell dueDateCell = new PdfPCell();
+      dueDateCell.addElement(dueDateOfSubmission);
+      document.add(dueDateCell);
+
+
+      Paragraph universityName = new Paragraph("AHSANULLAH UNIVERSITY OF SCIENCE AND TECHNOLOGY");
+      universityName.setAlignment(Element.ALIGN_CENTER);
+      universityName.setFont(FontFactory.getFont(FontFactory.TIMES_BOLD,16));
+      PdfPCell universityNameCell = new PdfPCell();
+      universityNameCell.addElement(universityName);
+      document.add(universityNameCell);
+
+      Paragraph sponsoreName = new Paragraph("(Sponsored by the Dhaka Ahsania Mission and approved by the Government of the People's Republic of Bangladesh)");
+      sponsoreName.setAlignment(Element.ALIGN_CENTER);
+      sponsoreName.setFont(FontFactory.getFont(FontFactory.TIMES_BOLD,8));
+      PdfPCell sponsoreNameCell = new PdfPCell();
+      sponsoreNameCell.addElement(sponsoreName);
+      document.add(sponsoreNameCell);
+
+      Chunk examName ;
+
+      if(pExamType==1){
+        examName= new Chunk("TOP SHEET (FINAL EXAMINATION "+semester.getName());
+      }else{
+        examName = new Chunk("TOP SHEET (CARRY/CLEARANCE/IMPROVEMENT EXAMINATION "+semester.getName());
+      }
+
+      examName.setUnderline(0.1f, -2f);
+      Paragraph examNameP = new Paragraph(examName);
+      examNameP.setAlignment(Element.ALIGN_CENTER);
+      examNameP.setFont(FontFactory.getFont(FontFactory.TIMES,14));
+      PdfPCell examNameCell = new PdfPCell();
+      examNameCell.addElement(examNameP);
+      document.add(examNameCell);
+
+      Paragraph programP = new Paragraph("Program :",lightFont);
+      Paragraph programB = new Paragraph(seatPlan.getProgramName(),boldFont);
+      Phrase programPhrase = new Phrase();
+      programPhrase.add(programP);
+      programPhrase.add(programB);
+      PdfPCell programNameCell = new PdfPCell();
+      programNameCell.addElement(programPhrase);
+      document.add(programNameCell);
+      float[] upperTableWidth = new float[]{7f,1f};
+
+
+
+
+
+
+      PdfPTable upperTable = new PdfPTable(upperTableWidth);
+      Paragraph yearP = new Paragraph("Year :",lightFont);
+      Paragraph yearB = new Paragraph(seatPlan.getCurrentYear().toString(),boldFont);
+      Phrase yearPhrase = new Phrase();
+      yearPhrase.add(yearP);
+      yearPhrase.add(yearB);
+      PdfPCell yearCell = new PdfPCell();
+      yearCell.setBorder(Rectangle.NO_BORDER);
+      yearCell.addElement(yearPhrase);
+      upperTable.addCell(yearCell);
+
+      Paragraph semesterP = new Paragraph("Semester :",lightFont);
+      Paragraph semesterB = new Paragraph(seatPlan.getCurrentSemester().toString(),boldFont);
+      Phrase semesterPhrase = new Phrase();
+      semesterPhrase.add(semesterP);
+      semesterPhrase.add(semesterB);
+      PdfPCell semesterCell = new PdfPCell();
+      semesterCell.setBorder(Rectangle.NO_BORDER);
+      semesterCell.addElement(semesterPhrase);
+      upperTable.addCell(semesterCell);
+
+
+      Paragraph courseNoP = new Paragraph("Course no: ",lightFont);
+      Paragraph courseNoB = new Paragraph(seatPlan.getCourseNo(),boldFont);
+      Phrase courseNoPhrase = new Phrase();
+      courseNoPhrase.add(courseNoP);
+      courseNoPhrase.add(courseNoB);
+      PdfPCell courseNoCell = new PdfPCell();
+      courseNoCell.setBorder(Rectangle.NO_BORDER);
+      courseNoCell.addElement(courseNoPhrase);
+      upperTable.addCell(courseNoCell);
+
+      Paragraph groupP = new Paragraph("Group/Section",lightFont);
+      Phrase groupPhrase = new Phrase();
+      groupPhrase.add(groupP);
+      PdfPCell groupCell = new PdfPCell();
+      groupCell.setBorder(Rectangle.NO_BORDER);
+      groupCell.addElement(groupPhrase);
+      upperTable.addCell(groupCell);
+      upperTable.setWidthPercentage(100);
+      document.add(upperTable);
+
+
+
+
+      Paragraph courseTitleP = new Paragraph("Course Title :",lightFont);
+      Paragraph courseTitleB = new Paragraph(seatPlan.getCourseTitle(),boldFont);
+      Phrase courseTitlePhrase = new Phrase();
+      courseTitlePhrase.add(courseTitleP);
+      courseTitlePhrase.add(courseTitleB);
+      PdfPCell courseTitleCell = new PdfPCell();
+      courseTitleCell.addElement(courseTitlePhrase);
+      document.add(courseTitleCell);
+
+
+
+      /*main data table starting*/
+      float[] dataTableWidth = new float[]{8f,2f,2f};
+      PdfPTable dataTable = new PdfPTable(dataTableWidth);
+      dataTable.setWidthPercentage(100);
+
+      Paragraph registrationP = new Paragraph("Number of Candidates registered for the course",boldFont);
+      registrationP.setAlignment(Element.ALIGN_CENTER);
+      PdfPCell registrationCell = new PdfPCell();
+      registrationCell.addElement(registrationP);
+      dataTable.addCell(registrationCell);
+
+      Paragraph presentParagraph = new Paragraph("Number of Candidates present");
+      presentParagraph.setFont(FontFactory.getFont(FontFactory.TIMES_BOLD,10));
+      presentParagraph.setAlignment(Element.ALIGN_CENTER);
+      PdfPCell presentCell = new PdfPCell();
+      presentCell.addElement(presentParagraph);
+      dataTable.addCell(presentCell);
+
+      Paragraph absentParagraph = new Paragraph("Number of Candidates absent");
+      absentParagraph.setFont(FontFactory.getFont(FontFactory.TIMES_BOLD,10));
+      absentParagraph.setAlignment(Element.ALIGN_CENTER);
+      PdfPCell absentCell = new PdfPCell();
+      absentCell.addElement(absentParagraph);
+      dataTable.addCell(absentCell);
+
+      int rowCounter=0;
+      int studentCounter=0;
+
+      while(true){
+        SeatPlanReportDto seatPlanReportDto = seatPlans.get(0);
+        if(seatPlanReportDto.getCourseNo().equals(seatPlan.getCourseNo()) && seatPlans.size()!=0){
+          String studentId="";
+          for(int i=0;i<10;i++){
+            SeatPlanReportDto seatPlanInnerReport = seatPlans.get(0);
+            if(seatPlanInnerReport.getCourseNo().equals(seatPlan.getCourseNo()) && seatPlans.size()!=0){
+              studentId=studentId+seatPlanInnerReport+", ";
+              seatPlans.remove(0);
+              studentCounter+=1;
+            }else{
+              break;
+            }
+          }
+
+          Paragraph studentIdParagraph = new Paragraph(studentId);
+          Paragraph emptyParagraph= new Paragraph("  ");
+          PdfPCell firstCell = new PdfPCell();
+          PdfPCell middleCell = new PdfPCell();
+          PdfPCell lastCell = new PdfPCell();
+          firstCell.addElement(studentIdParagraph);
+          middleCell.addElement(emptyParagraph);
+          lastCell.addElement(emptyParagraph);
+          dataTable.addCell(firstCell);
+          dataTable.addCell(middleCell);
+          dataTable.addCell(lastCell);
+
+
+        }else{
+          Paragraph emptyParagraph= new Paragraph("  ");
+          PdfPCell firstCell = new PdfPCell();
+          PdfPCell middleCell = new PdfPCell();
+          PdfPCell lastCell = new PdfPCell();
+          firstCell.addElement(emptyParagraph);
+          middleCell.addElement(emptyParagraph);
+          lastCell.addElement(emptyParagraph);
+          dataTable.addCell(firstCell);
+          dataTable.addCell(middleCell);
+          dataTable.addCell(lastCell);
+          rowCounter+=1;
+        }
+
+
+        if(rowCounter==23 || seatPlans.size()==0){
+          break;
+        }
+      }
+
+
+      Paragraph totalParagraph = new Paragraph("Total :",lightFont);
+      Paragraph totalNumber = new Paragraph(studentCounter+"",boldFont);
+      Phrase totalPhrase = new Phrase();
+      totalPhrase.add(totalParagraph);
+      totalPhrase.add(totalNumber);
+      PdfPCell totalCellFirst = new PdfPCell();
+      totalCellFirst.addElement(totalPhrase);
+
+      dataTable.addCell(totalCellFirst);
+
+      PdfPCell totalCellMiddleAndLast = new PdfPCell();
+      totalCellMiddleAndLast.addElement(totalParagraph);
+      dataTable.addCell(totalCellMiddleAndLast);
+      dataTable.addCell(totalCellMiddleAndLast);
+      document.add(dataTable);
+
+      Paragraph enclosedParagraph = new Paragraph("Total number of the candidates whose scripts are enclosed:........................ (in words).........................................",boldFont);
+      document.add(enclosedParagraph);
+
+      float[] bottomTableSize = new float[]{7f,5f};
+      PdfPTable bottomTable = new PdfPTable(bottomTableSize);
+      bottomTable.setWidthPercentage(100);
+
+      PdfPCell dateCell = new PdfPCell(new Paragraph("Date: "+examDate,boldFont));
+      dateCell.setBorder(Rectangle.NO_BORDER);
+      bottomTable.addCell(dateCell);
+
+      PdfPCell preparedCell = new PdfPCell(new Paragraph("Prepared by:_____________Checked by:___________",boldFont));
+      preparedCell.setBorder(Rectangle.NO_BORDER);
+      bottomTable.addCell(preparedCell);
+
+      PdfPCell examineer = new PdfPCell();
+      examineer.addElement(new Paragraph("Name of the Examiner: ",lightFont));
+      examineer.addElement(new Paragraph("Address & telephone no: AUST,Mobile-"));
+      examineer.setBorder(Rectangle.NO_BORDER);
+      bottomTable.addCell(examineer);
+
+      PdfPCell controller = new PdfPCell();
+      controller.addElement(new Paragraph("_____________________________________",boldFont));;
+      controller.addElement(new Paragraph("    Controller of Examinations",boldFont));
+      controller.addElement(new Paragraph("       Aust,Dhaka-1208"));
+      controller.setBorder(Rectangle.NO_BORDER);
+      controller.setPaddingTop(10);
+      bottomTable.addCell(controller);
+      document.add(bottomTable);
+      if(seatPlans.size()==0){
+        break;
+      }else{
+        document.newPage();
+      }
+
+
+    }
+
+    document.close();
+    baos.writeTo(pOutputStream);
   }
 }

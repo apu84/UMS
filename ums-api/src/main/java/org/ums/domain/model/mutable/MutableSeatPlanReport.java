@@ -8,7 +8,7 @@ import org.ums.domain.model.immutable.SeatPlanReport;
  */
 public interface MutableSeatPlanReport extends SeatPlanReport,Mutable{
   void setRoomNo(String pRoomNo);
-  void setProgramShortName(String pProgramShortName);
+  void setProgramName(String pProgramShortName);
   void setCourseTitle(String pCourseTitle);
   void setCourseNo(String pCourseNo);
   void setCurrentYear(Integer pCurrentYear);
