@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 import org.ums.configuration.UMSConfiguration;
+import org.ums.domain.model.immutable.Notification;
 import org.ums.domain.model.immutable.UGRegistrationResult;
 import org.ums.domain.model.immutable.User;
 import org.ums.enums.CourseRegType;
@@ -69,7 +70,8 @@ public class CourseMaterialNotifier extends AbstractSectionPermission {
 
       @Override
       public String notificationType() {
-        return new StringBuilder("CM_").append(pRootPath[0]).append("_").append(pRootPath[1]).toString();
+        return new StringBuilder(Notification.Type.COURSE_MATERIAL.getValue()).append("_")
+            .append(pRootPath[0]).append("_").append(pRootPath[1]).toString();
       }
 
       @Override
@@ -133,7 +135,8 @@ public class CourseMaterialNotifier extends AbstractSectionPermission {
 
       @Override
       public String notificationType() {
-        return new StringBuilder("CA_").append(pRootPath[0]).append("_").append(pRootPath[1]).toString();
+        return new StringBuilder(Notification.Type.COURSE_ASSIGNMENT.getValue()).append("_")
+            .append(pRootPath[0]).append("_").append(pRootPath[1]).toString();
       }
 
       @Override

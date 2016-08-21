@@ -403,7 +403,9 @@ public class UMSContext {
   @Bean
   @Lazy
   NotificationManager notificationManager() {
-    return new PersistentObjectNotificationDao(mMongoOperations);
+    return mUMSConfiguration.isEnableObjectDb()
+        ? new PersistentObjectNotificationDao(mMongoOperations)
+        : new PersistentNotificationDao(mTemplateFactory.getJdbcTemplate(), getGenericDateFormat());
   }
 
   @Bean

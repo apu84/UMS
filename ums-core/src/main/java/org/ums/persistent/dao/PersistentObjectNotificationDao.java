@@ -26,7 +26,7 @@ public class PersistentObjectNotificationDao extends NotificationDaoDecorator {
 
   @Override
   public int update(MutableNotification pMutable) throws Exception {
-    Query query = Query.query(Criteria.where("id").is(pMutable.getId()));
+    Query query = Query.query(Criteria.where("mId").is(pMutable.getId()));
     DBObject dbDoc = new BasicDBObject();
     mMongoOperations.getConverter().write(pMutable, dbDoc);
     Update update = Update.fromDBObject(dbDoc);

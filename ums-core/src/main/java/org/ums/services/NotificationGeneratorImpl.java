@@ -38,6 +38,7 @@ public class NotificationGeneratorImpl implements NotificationGenerator{
       notification.setPayload(payload);
       notification.setNotificationType(notificationType);
       notification.setProducedOn(new Date());
+      notification.setConsumedOn(new Date());
       notification.setLastModified(dateFormat.format(new Date()));
       notificationList.add(notification);
     }
