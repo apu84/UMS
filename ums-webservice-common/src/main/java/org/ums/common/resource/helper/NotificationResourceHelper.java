@@ -15,6 +15,7 @@ import org.ums.manager.NotificationManager;
 import javax.json.*;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -75,12 +76,14 @@ public class NotificationResourceHelper extends ResourceHelper<Notification, Mut
   }
 
   public void updateReadStatus(JsonArray pJsonArray) throws Exception {
+    List<MutableNotification> notifications = new ArrayList<>();
     for (int i = 0; i < pJsonArray.size(); i++) {
       JsonObject notificationObject = pJsonArray.getJsonObject(i);
       Notification notification = mNotificationManager.get(notificationObject.getString("id"));
       MutableNotification mutableNotification = notification.edit();
       mutableNotification.setConsumedOn(new Date());
-      mutableNotification.commit(true);
+      notifications.add(mutableNotification);
     }
+    mNotificationManager.update(notifications);
   }
 }
