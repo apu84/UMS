@@ -10,7 +10,7 @@ import java.io.Serializable;
  */
 public interface SeatPlanReport extends Serializable,EditType<MutableSeatPlanReport> {
   String getRoomNo();
-  String getProgramShortName();
+  String getProgramName();
   String getCourseTitle();
   String getCourseNo();
   String getExamDate();

@@ -11,4 +11,5 @@ import java.util.List;
  */
 public interface SeatPlanReportManager extends ContentManager<SeatPlanReport,MutableSeatPlanReport,Object> {
   public List<SeatPlanReportDto> getSeatPlanDataForAttendenceSheet(Integer pSemesterId, Integer pExamType,String pExamDate);
+  public List<SeatPlanReportDto> getSeatPlanDataForTopSheet(Integer pSemesterId, Integer pExamType, String pExamDate);
 }
