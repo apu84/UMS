@@ -71,7 +71,7 @@ public class PersistentExamRoutineDao  extends ExamRoutineDaoDecorator {
 
   @Override
   public List<ExamRoutineDto> getExamDatesBySemesterAndType(Integer pSemesterId, Integer pExamType) {
-    String query = "select to_char(EXAM_DATE,'DD/MM/YYYY') Exam_Date from " +
+    String query = "select to_char(EXAM_DATE,'DD-MM-YYYY') Exam_Date from " +
         "(select distinct(exam_date) from EXAM_ROUTINE " +
         "where exam_type=? and semester=?) order by Exam_Date";
     return mJdbcTemplate.query(query,new Object[]{pExamType,pSemesterId}, new ExamRoutineForSeatPlanPublishRowMapper());
