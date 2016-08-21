@@ -2,16 +2,18 @@ package org.ums.persistent.model;
 
 
 import org.springframework.context.ApplicationContext;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 import org.ums.context.AppContext;
 import org.ums.domain.model.mutable.MutableNotification;
 import org.ums.manager.NotificationManager;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class PersistentNotification implements MutableNotification {
   private static NotificationManager sNotificationManager;
+  protected static String DATE_FORMAT = "dd-MM-yyyy HH:mm:ss Z";
+  protected static DateFormat mDateFormat = new SimpleDateFormat(DATE_FORMAT);
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
@@ -141,7 +143,8 @@ public class PersistentNotification implements MutableNotification {
 
   @Override
   public String toString() {
-    return "Notification [id=" + mId + ", notificationType=" + mNotificationType + ", payload=" + mPayload + "," +
-        " producedOn=" + mProducedOn + ", consumedOn=" + mConsumedOn + ", lastModified=" + mLastModified + "]";
+    return "Notification [id=" + mId + ", notificationType=" + mNotificationType + ", payload=" + mPayload + ","
+        + " producedOn=" + mDateFormat.format(mProducedOn) + ", consumedOn=" + mDateFormat.format(mConsumedOn)
+        + ", lastModified=" + mLastModified + "]";
   }
 }

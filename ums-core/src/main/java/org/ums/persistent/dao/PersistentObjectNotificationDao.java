@@ -2,6 +2,7 @@ package org.ums.persistent.dao;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -21,7 +22,7 @@ public class PersistentObjectNotificationDao extends NotificationDaoDecorator {
 
   @Override
   public Notification get(String pId) throws Exception {
-    return mMongoOperations.findOne(Query.query(Criteria.where("id").is(pId)), Notification.class);
+    return mMongoOperations.findOne(Query.query(Criteria.where("mId").is(pId)), Notification.class);
   }
 
   @Override
@@ -50,5 +51,24 @@ public class PersistentObjectNotificationDao extends NotificationDaoDecorator {
   public int create(List<MutableNotification> pMutableList) throws Exception {
     mMongoOperations.insert(pMutableList, Notification.class);
     return pMutableList.size();
+  }
+
+  @Override
+  public List<Notification> getNotifications(String pConsumerId, String pNotificationType) {
+    Query query = new Query();
+    query.addCriteria(
+        new Criteria().andOperator(
+            Criteria.where("mConsumerId").is(pConsumerId),
+            Criteria.where("mNotificationType").is(pNotificationType))
+    );
+    return mMongoOperations.find(query, Notification.class);
+  }
+
+  @Override
+  public List<Notification> getNotifications(String pConsumerId, Integer pNumOfLatestNotification) {
+    Query query = new Query(Criteria.where("mConsumerId").is(pConsumerId));
+    query.limit(pNumOfLatestNotification);
+    query.with(new Sort(Sort.Direction.DESC, "mProducedOn"));
+    return mMongoOperations.find(query, Notification.class);
   }
 }

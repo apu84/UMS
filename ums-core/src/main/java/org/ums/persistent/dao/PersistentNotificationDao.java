@@ -95,6 +95,19 @@ public class PersistentNotificationDao extends NotificationDaoDecorator {
     return super.get(pId);
   }
 
+  @Override
+  public List<Notification> getNotifications(String pConsumerId, String pNotificationType) {
+    String query = SELECT_ALL + " WHERE CONSUMER_ID = ? AND NOTIFICATION_TYPE = ? ORDER BY PRODUCED_ON DESC";
+    return mJdbcTemplate.query(query, new Object[]{pConsumerId, pNotificationType}, new NotificationRowMapper());
+  }
+
+  @Override
+  public List<Notification> getNotifications(String pConsumerId, Integer pNumOfLatestNotification) {
+    String query = "SELECT * FROM ("
+        + SELECT_ALL + " WHERE CONSUMER_ID = ? AND NOTIFICATION_TYPE = ? ORDER BY PRODUCED_ON DESC) WHERE ROWNUM <= ?";
+    return mJdbcTemplate.query(query, new Object[]{pConsumerId, pNumOfLatestNotification}, new NotificationRowMapper());
+  }
+
   private List<Object[]> getInsertParamArray(List<MutableNotification> pMutableList) throws Exception {
     List<Object[]> params = new ArrayList<>();
     for (Notification notification : pMutableList) {

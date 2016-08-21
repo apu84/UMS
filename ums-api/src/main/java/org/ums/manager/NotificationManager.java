@@ -11,5 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface NotificationManager extends ContentManager<Notification, MutableNotification, String> {
-  List<Notification> consume(String pConsumerId, String pNotificationType);
+  List<Notification> getNotifications(String pConsumerId, String pNotificationType);
+
+  List<Notification> getNotifications(String pConsumerId, Integer pNumOfLatestNotification);
 }

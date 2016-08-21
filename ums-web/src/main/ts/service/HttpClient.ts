@@ -89,6 +89,31 @@ module ums {
       return status == 0 || (status >= 502 && status <= 504);
     }
 
+    public poll(url: string,
+                contentType: string,
+                success: (json: any, etag: string) => void,
+                error?: (response: ng.IHttpPromiseCallbackArg<any>) => void,
+                responseType?: string): void {
+      var token = this.$http.defaults.headers.common['X-Authorization'];
+      $.ajax({
+        url: url,
+        beforeSend: function (xhr) {
+          xhr.setRequestHeader("X-Authorization", token);
+          xhr.setRequestHeader("Accept", contentType);
+        },
+        error: function (response) {
+          if (error) {
+            error(response);
+          }
+        },
+        success: function (data) {
+          success(data, "");
+        },
+        type: 'GET'
+      });
+    }
+
+
     public resetAuthenticationHeader() {
       this.credentials = this.$window.sessionStorage.getItem(HttpClient.CREDENTIAL_KEY);
       if (this.credentials != null && this.credentials != '') {
