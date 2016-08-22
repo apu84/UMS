@@ -6,22 +6,21 @@ import org.ums.decorator.NotificationDaoDecorator;
 import org.ums.domain.model.immutable.Notification;
 import org.ums.domain.model.mutable.MutableNotification;
 import org.ums.persistent.model.PersistentNotification;
-import org.ums.util.Constants;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentNotificationDao extends NotificationDaoDecorator {
-  String SELECT_ALL = "SELECT ID, PRODUCER_ID, CONSUMER_ID, NOTIFICATION_TYPE, PAYLOAD, PRODUCED_ON, LAST_MODIFIED FROM NOTIFICATION ";
+  String SELECT_ALL = "SELECT ID, PRODUCER_ID, CONSUMER_ID, NOTIFICATION_TYPE, PAYLOAD, PRODUCED_ON, CONSUMED_ON, LAST_MODIFIED FROM NOTIFICATION ";
   String INSERT_ALL = "INSERT INTO NOTIFICATION (PRODUCER_ID, CONSUMER_ID, NOTIFICATION_TYPE, PAYLOAD, PRODUCED_ON, LAST_MODIFIED) " +
       "VALUES (?, ?, ?, ?, SYSDATE, " + getLastModifiedSql() + ")";
   String UPDATE_ALL = "UPDATE NOTIFICATION SET PRODUCER_ID = ?, CONSUMER_ID = ?, NOTIFICATION_TYPE = ?, PAYLOAD = ?," +
-      " PRODUCED_ON = TO_DATE(?, '" + Constants.DATE_FORMAT + "'), CONSUMED_ON = TO_DATE(?, '" + Constants.DATE_FORMAT + "')," +
-      " LAST_MODIFIED = " + getLastModifiedSql() + " ";
+      "CONSUMED_ON = SYSDATE, LAST_MODIFIED = " + getLastModifiedSql() + " ";
 
   String DELETE_ALL = "DELETE FROM NOTIFICATION ";
 
@@ -34,9 +33,10 @@ public class PersistentNotificationDao extends NotificationDaoDecorator {
   }
 
   @Override
-  public int update(MutableNotification pMutable) throws Exception {
-    String query = UPDATE_ALL + " WHERE ID = ?";
-    return mJdbcTemplate.update(query, pMutable.getId());
+  public int update(MutableNotification pNotification) throws Exception {
+    List<MutableNotification> notifications = new ArrayList<>();
+    notifications.add(pNotification);
+    return update(notifications);
   }
 
   @Override
@@ -53,8 +53,6 @@ public class PersistentNotificationDao extends NotificationDaoDecorator {
           notification.getConsumerId(),
           notification.getNotificationType(),
           notification.getPayload(),
-          mDateFormat.format(notification.getProducedOn()),
-          mDateFormat.format(notification.getConsumedOn()),
           notification.getId()
       });
     }
@@ -92,7 +90,8 @@ public class PersistentNotificationDao extends NotificationDaoDecorator {
 
   @Override
   public Notification get(String pId) throws Exception {
-    return super.get(pId);
+    String query = SELECT_ALL + " WHERE ID = ?";
+    return mJdbcTemplate.queryForObject(query, new Object[]{pId}, new NotificationRowMapper());
   }
 
   @Override
@@ -104,7 +103,7 @@ public class PersistentNotificationDao extends NotificationDaoDecorator {
   @Override
   public List<Notification> getNotifications(String pConsumerId, Integer pNumOfLatestNotification) {
     String query = "SELECT * FROM ("
-        + SELECT_ALL + " WHERE CONSUMER_ID = ? AND NOTIFICATION_TYPE = ? ORDER BY PRODUCED_ON DESC) WHERE ROWNUM <= ?";
+        + SELECT_ALL + " WHERE CONSUMER_ID = ? ORDER BY PRODUCED_ON DESC) WHERE ROWNUM <= ?";
     return mJdbcTemplate.query(query, new Object[]{pConsumerId, pNumOfLatestNotification}, new NotificationRowMapper());
   }
 
@@ -140,8 +139,8 @@ public class PersistentNotificationDao extends NotificationDaoDecorator {
       notification.setConsumerId(rs.getString("CONSUMER_ID"));
       notification.setNotificationType(rs.getString("NOTIFICATION_TYPE"));
       notification.setPayload(rs.getString("PAYLOAD"));
-      notification.setProducedOn(rs.getDate("PRODUCED_ON"));
-      notification.setConsumedOn(rs.getDate("CONSUMED_ON"));
+      notification.setProducedOn(rs.getTimestamp("PRODUCED_ON"));
+      notification.setConsumedOn(rs.getObject("CONSUMED_ON") == null ? null : rs.getTimestamp("CONSUMED_ON"));
       notification.setLastModified(rs.getString("LAST_MODIFIED"));
       AtomicReference<Notification> atomicReference = new AtomicReference<>(notification);
       return atomicReference.get();

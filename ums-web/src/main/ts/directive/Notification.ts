@@ -37,9 +37,9 @@ module ums {
     public templateUrl = "./views/directive/notification.html";
 
     private getNotification() {
-      var tempCount:number = 0;
       this.httpClient.poll("/ums-webservice-common/notification/10/", HttpClient.MIME_TYPE_JSON,
           (response: NotificationEntries)=> {
+            var tempCount: number = 0;
             for (var i = 0; i < response.entries.length; i++) {
               var notification: INotification = response.entries[i];
               var producedOn: any = notification.producedOn ? moment(notification.producedOn, 'DD-MM-YYYY hh:mm:ss') : null;
@@ -62,7 +62,6 @@ module ums {
       delete this.scope.numOfUnreadNotification;
       this.httpClient.post('notification/read', this.scope.notifications, 'application/json')
           .success((data) => {
-            console.debug(data);
           }).error((data) => {
           });
     }
