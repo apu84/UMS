@@ -30,6 +30,29 @@ module ums{
 
       return defer.promise;
     }
+
+    public getSeatPlanTopSheetReport(programType:number,
+                                     semesterId:number,
+                                     examType:number,
+                                     examDate:string
+                                                       ): IPromise<any>{
+
+      var defer= this.$q.defer();
+
+      this.httpClient.get("/ums-webservice-common/academic/seatplan/topsheet/programType/"+programType+"/semesterId/"+semesterId+"/examType/"+examType+"/examDate/"+examDate,  'application/pdf',
+          (data:any, etag:string) => {
+            var file = new Blob([data], {type: 'application/pdf'});
+            var fileURL = this.$sce.trustAsResourceUrl(URL.createObjectURL(file));
+            this.$window.open(fileURL);
+            defer.resolve("success");
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>) => {
+            console.error(response);
+            defer.resolve("failure");
+          },'arraybuffer');
+
+      return defer.promise;
+    }
   }
 
   UMS.service("seatPlanService",SeatPlanService);

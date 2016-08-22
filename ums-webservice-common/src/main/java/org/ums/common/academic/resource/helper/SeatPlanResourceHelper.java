@@ -213,6 +213,15 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan,MutableSeatP
 
 
 
+  public void getSeatPlanTopSheetReport(Integer pProgramType,Integer pSemesterId,Integer pExamType,String pExamDate,OutputStream pOutputStream, final Request pRequest, final UriInfo mUriInfo) throws Exception,IOException{
+
+    mSeatPlanReportGenerator.createSeatPlanTopSheetPdfReport(pProgramType,pSemesterId,pExamType,pExamDate,pOutputStream);
+
+  }
+
+
+
+
 
 
   @Override

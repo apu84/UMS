@@ -1263,47 +1263,49 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
     document.open();
     document.setPageSize(PageSize.A4);
 
-    Font lightFont = FontFactory.getFont(FontFactory.TIMES,12);
-
+    Font lightFont = FontFactory.getFont(FontFactory.TIMES,11);
+    Font duetFont = FontFactory.getFont(FontFactory.COURIER_BOLD,13);
+    Font universityNameFont = FontFactory.getFont(FontFactory.TIMES_BOLD,16);
+    Font sponSoreFont = FontFactory.getFont(FontFactory.TIMES,8);
+    Font topSheetFont = FontFactory.getFont(FontFactory.TIMES_BOLD,13);
     Font boldFont = FontFactory.getFont(FontFactory.TIMES_BOLD,12);
 
     Semester semester = mSemesterManager.get(pSemesterId);
-
+    int seatPlanCounter=0;
     while(true){
+
+      seatPlanCounter+=1;
 
       SeatPlanReportDto seatPlan = seatPlans.get(0);
 
       String examDate = seatPlan.getExamDate();
 
 
-      Paragraph dueDateOfSubmission = new Paragraph("DUE DATE OF SUBMISSION :");
-      dueDateOfSubmission.setFont(FontFactory.getFont(FontFactory.TIMES_BOLD,14));
+      Paragraph dueDateOfSubmission = new Paragraph("DUE DATE OF SUBMISSION :",duetFont);
       dueDateOfSubmission.setAlignment(Element.ALIGN_CENTER);
       PdfPCell dueDateCell = new PdfPCell();
       dueDateCell.addElement(dueDateOfSubmission);
-      document.add(dueDateCell);
+      document.add(dueDateOfSubmission);
 
 
-      Paragraph universityName = new Paragraph("AHSANULLAH UNIVERSITY OF SCIENCE AND TECHNOLOGY");
+      Paragraph universityName = new Paragraph("AHSANULLAH UNIVERSITY OF SCIENCE AND TECHNOLOGY",universityNameFont);
       universityName.setAlignment(Element.ALIGN_CENTER);
-      universityName.setFont(FontFactory.getFont(FontFactory.TIMES_BOLD,16));
       PdfPCell universityNameCell = new PdfPCell();
       universityNameCell.addElement(universityName);
-      document.add(universityNameCell);
+      document.add(universityName);
 
-      Paragraph sponsoreName = new Paragraph("(Sponsored by the Dhaka Ahsania Mission and approved by the Government of the People's Republic of Bangladesh)");
+      Paragraph sponsoreName = new Paragraph("(Sponsored by the Dhaka Ahsania Mission and approved by the Government of the People's Republic of Bangladesh)",sponSoreFont);
       sponsoreName.setAlignment(Element.ALIGN_CENTER);
-      sponsoreName.setFont(FontFactory.getFont(FontFactory.TIMES_BOLD,8));
-      PdfPCell sponsoreNameCell = new PdfPCell();
-      sponsoreNameCell.addElement(sponsoreName);
-      document.add(sponsoreNameCell);
+      Phrase sponsoreNameCell = new Phrase();
+      sponsoreNameCell.add(sponsoreName);
+      document.add(sponsoreName);
 
       Chunk examName ;
 
       if(pExamType==1){
-        examName= new Chunk("TOP SHEET (FINAL EXAMINATION "+semester.getName());
+        examName= new Chunk("TOP SHEET (FINAL EXAMINATION "+semester.getName().toUpperCase()+")");
       }else{
-        examName = new Chunk("TOP SHEET (CARRY/CLEARANCE/IMPROVEMENT EXAMINATION "+semester.getName());
+        examName = new Chunk("TOP SHEET (CARRY/CLEARANCE/IMPROVEMENT EXAMINATION "+semester.getName()+")");
       }
 
       examName.setUnderline(0.1f, -2f);
@@ -1312,17 +1314,17 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
       examNameP.setFont(FontFactory.getFont(FontFactory.TIMES,14));
       PdfPCell examNameCell = new PdfPCell();
       examNameCell.addElement(examNameP);
-      document.add(examNameCell);
-
-      Paragraph programP = new Paragraph("Program :",lightFont);
+      document.add(examNameP);
+      document.add(new Paragraph(" "));
+      Paragraph programP = new Paragraph(" Program :",lightFont);
       Paragraph programB = new Paragraph(seatPlan.getProgramName(),boldFont);
       Phrase programPhrase = new Phrase();
       programPhrase.add(programP);
       programPhrase.add(programB);
       PdfPCell programNameCell = new PdfPCell();
       programNameCell.addElement(programPhrase);
-      document.add(programNameCell);
-      float[] upperTableWidth = new float[]{7f,1f};
+      document.add(programPhrase);
+      float[] upperTableWidth = new float[]{7f,3f};
 
 
 
@@ -1330,6 +1332,8 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
 
 
       PdfPTable upperTable = new PdfPTable(upperTableWidth);
+      upperTable.setPaddingTop(-10);
+      upperTable.setWidthPercentage(100);
       Paragraph yearP = new Paragraph("Year :",lightFont);
       Paragraph yearB = new Paragraph(seatPlan.getCurrentYear().toString(),boldFont);
       Phrase yearPhrase = new Phrase();
@@ -1337,6 +1341,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
       yearPhrase.add(yearB);
       PdfPCell yearCell = new PdfPCell();
       yearCell.setBorder(Rectangle.NO_BORDER);
+      yearCell.setPaddingTop(-8);
       yearCell.addElement(yearPhrase);
       upperTable.addCell(yearCell);
 
@@ -1347,6 +1352,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
       semesterPhrase.add(semesterB);
       PdfPCell semesterCell = new PdfPCell();
       semesterCell.setBorder(Rectangle.NO_BORDER);
+      semesterCell.setPaddingTop(-8);
       semesterCell.addElement(semesterPhrase);
       upperTable.addCell(semesterCell);
 
@@ -1374,14 +1380,14 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
 
 
 
-      Paragraph courseTitleP = new Paragraph("Course Title :",lightFont);
+      Paragraph courseTitleP = new Paragraph(" Course Title :",lightFont);
       Paragraph courseTitleB = new Paragraph(seatPlan.getCourseTitle(),boldFont);
       Phrase courseTitlePhrase = new Phrase();
       courseTitlePhrase.add(courseTitleP);
       courseTitlePhrase.add(courseTitleB);
       PdfPCell courseTitleCell = new PdfPCell();
       courseTitleCell.addElement(courseTitlePhrase);
-      document.add(courseTitleCell);
+      document.add(courseTitlePhrase);
 
 
 
@@ -1414,38 +1420,79 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
       int studentCounter=0;
 
       while(true){
-        SeatPlanReportDto seatPlanReportDto = seatPlans.get(0);
-        if(seatPlanReportDto.getCourseNo().equals(seatPlan.getCourseNo()) && seatPlans.size()!=0){
-          String studentId="";
-          for(int i=0;i<10;i++){
-            SeatPlanReportDto seatPlanInnerReport = seatPlans.get(0);
-            if(seatPlanInnerReport.getCourseNo().equals(seatPlan.getCourseNo()) && seatPlans.size()!=0){
-              studentId=studentId+seatPlanInnerReport+", ";
-              seatPlans.remove(0);
-              studentCounter+=1;
-            }else{
-              break;
+        if(seatPlans.size()!=0){
+          SeatPlanReportDto seatPlanReportDto = seatPlans.get(0);
+          if(seatPlanReportDto.getCourseNo().equals(seatPlan.getCourseNo()) && seatPlans.size()!=0){
+            String studentId="";
+            for(int i=0;i<6;i++){
+              if(seatPlans.size()!=0){
+                SeatPlanReportDto seatPlanInnerReport = seatPlans.get(0);
+                if(seatPlanInnerReport.getCourseNo().equals(seatPlan.getCourseNo())  && seatPlans.size()!=0){
+                  String stdIdTmp = "";
+                  stdIdTmp=studentId;
+                  studentId="";
+                  if(seatPlans.size()!=1)
+                  if(seatPlanReportDto.getCourseNo().equals(seatPlans.get(1).getCourseNo())){
+                    studentId=stdIdTmp+""+ seatPlanInnerReport.getStudentId()+", ";
+
+                  }else{
+                    studentId=stdIdTmp+""+ seatPlanInnerReport.getStudentId()+" ";
+
+                  }
+                  seatPlans.remove(0);
+                  studentCounter+=1;
+                  //rowCounter+=1;
+                }else{
+                  break;
+                }
+              }else{
+                break;
+              }
+
             }
+
+            Paragraph studentIdParagraph = new Paragraph(studentId);
+            studentIdParagraph.setFont(FontFactory.getFont(FontFactory.TIMES,11));
+            Paragraph emptyParagraph= new Paragraph("  ");
+            PdfPCell firstCell = new PdfPCell();
+            PdfPCell middleCell = new PdfPCell();
+            PdfPCell lastCell = new PdfPCell();
+            firstCell.setPaddingTop(-5);
+            middleCell.setPaddingTop(-5);
+            lastCell.setPaddingTop(-5);
+            firstCell.addElement(studentIdParagraph);
+            middleCell.addElement(emptyParagraph);
+            lastCell.addElement(emptyParagraph);
+            dataTable.addCell(firstCell);
+            dataTable.addCell(middleCell);
+            dataTable.addCell(lastCell);
+            rowCounter+=1;
+
+
+          }else{
+            Paragraph emptyParagraph= new Paragraph("  ");
+            PdfPCell firstCell = new PdfPCell();
+            PdfPCell middleCell = new PdfPCell();
+            PdfPCell lastCell = new PdfPCell();
+            firstCell.setPaddingTop(-5);
+            middleCell.setPaddingTop(-5);
+            lastCell.setPaddingTop(-5);
+            firstCell.addElement(emptyParagraph);
+            middleCell.addElement(emptyParagraph);
+            lastCell.addElement(emptyParagraph);
+            dataTable.addCell(firstCell);
+            dataTable.addCell(middleCell);
+            dataTable.addCell(lastCell);
+            rowCounter+=1;
           }
-
-          Paragraph studentIdParagraph = new Paragraph(studentId);
-          Paragraph emptyParagraph= new Paragraph("  ");
-          PdfPCell firstCell = new PdfPCell();
-          PdfPCell middleCell = new PdfPCell();
-          PdfPCell lastCell = new PdfPCell();
-          firstCell.addElement(studentIdParagraph);
-          middleCell.addElement(emptyParagraph);
-          lastCell.addElement(emptyParagraph);
-          dataTable.addCell(firstCell);
-          dataTable.addCell(middleCell);
-          dataTable.addCell(lastCell);
-
-
         }else{
           Paragraph emptyParagraph= new Paragraph("  ");
           PdfPCell firstCell = new PdfPCell();
           PdfPCell middleCell = new PdfPCell();
           PdfPCell lastCell = new PdfPCell();
+          firstCell.setPaddingTop(-5);
+          middleCell.setPaddingTop(-5);
+          lastCell.setPaddingTop(-5);
           firstCell.addElement(emptyParagraph);
           middleCell.addElement(emptyParagraph);
           lastCell.addElement(emptyParagraph);
@@ -1454,6 +1501,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
           dataTable.addCell(lastCell);
           rowCounter+=1;
         }
+
 
 
         if(rowCounter==23 || seatPlans.size()==0){
@@ -1478,31 +1526,42 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
       dataTable.addCell(totalCellMiddleAndLast);
       document.add(dataTable);
 
-      Paragraph enclosedParagraph = new Paragraph("Total number of the candidates whose scripts are enclosed:........................ (in words).........................................",boldFont);
+      Paragraph enclosedParagraph = new Paragraph("Total number of the candidates whose scripts are enclosed:........................ (in words)...........................",boldFont);
       document.add(enclosedParagraph);
 
-      float[] bottomTableSize = new float[]{7f,5f};
+      float[] bottomTableSize = new float[]{7f,6f};
       PdfPTable bottomTable = new PdfPTable(bottomTableSize);
+      bottomTable.setPaddingTop(10);
       bottomTable.setWidthPercentage(100);
 
-      PdfPCell dateCell = new PdfPCell(new Paragraph("Date: "+examDate,boldFont));
+      PdfPCell dateCell = new PdfPCell();
+      dateCell.addElement(new Paragraph(" "));
+      dateCell.addElement(new Paragraph("Date: "+examDate,boldFont));
       dateCell.setBorder(Rectangle.NO_BORDER);
+      dateCell.setPaddingTop(10);
       bottomTable.addCell(dateCell);
 
-      PdfPCell preparedCell = new PdfPCell(new Paragraph("Prepared by:_____________Checked by:___________",boldFont));
+      PdfPCell preparedCell = new PdfPCell();
+      preparedCell.addElement(new Paragraph(" "));
+      preparedCell.addElement(new Paragraph("Prepared by:________Checked by:________",boldFont));
       preparedCell.setBorder(Rectangle.NO_BORDER);
+      preparedCell.setPaddingTop(10);
       bottomTable.addCell(preparedCell);
 
       PdfPCell examineer = new PdfPCell();
       examineer.addElement(new Paragraph("Name of the Examiner: ",lightFont));
-      examineer.addElement(new Paragraph("Address & telephone no: AUST,Mobile-"));
+      examineer.addElement(new Paragraph("Address & telephone no: AUST,Mobile-",lightFont));
       examineer.setBorder(Rectangle.NO_BORDER);
       bottomTable.addCell(examineer);
 
       PdfPCell controller = new PdfPCell();
-      controller.addElement(new Paragraph("_____________________________________",boldFont));;
-      controller.addElement(new Paragraph("    Controller of Examinations",boldFont));
-      controller.addElement(new Paragraph("       Aust,Dhaka-1208"));
+      controller.addElement(new Paragraph("  "));
+      controller.addElement(new Paragraph("  "));
+      controller.addElement(new Paragraph(" ______________________________",lightFont));
+
+
+      controller.addElement(new Paragraph("      Controller of Examinations",boldFont));
+      controller.addElement(new Paragraph("          AUST,Dhaka-1208",boldFont));
       controller.setBorder(Rectangle.NO_BORDER);
       controller.setPaddingTop(10);
       bottomTable.addCell(controller);
