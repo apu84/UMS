@@ -20,4 +20,9 @@ public class SeatPlanReportDaoDecorator extends ContentDaoDecorator<SeatPlanRepo
   public List<SeatPlanReportDto> getSeatPlanDataForTopSheet(Integer pSemesterId, Integer pExamType, String pExamDate) {
     return getManager().getSeatPlanDataForTopSheet(pSemesterId,pExamType,pExamDate);
   }
+
+  @Override
+  public List<SeatPlanReportDto> getSeatPlanDataForSticker(Integer pSemesterId, Integer pExamType, String pExamDate) {
+    return getManager().getSeatPlanDataForSticker(pSemesterId,pExamType,pExamDate);
+  }
 }

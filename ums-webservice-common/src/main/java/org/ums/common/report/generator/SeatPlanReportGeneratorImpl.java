@@ -1402,14 +1402,14 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
       registrationCell.addElement(registrationP);
       dataTable.addCell(registrationCell);
 
-      Paragraph presentParagraph = new Paragraph("Number of Candidates present");
+      Paragraph presentParagraph = new Paragraph("Number of Candidates absent");
       presentParagraph.setFont(FontFactory.getFont(FontFactory.TIMES_BOLD,10));
       presentParagraph.setAlignment(Element.ALIGN_CENTER);
       PdfPCell presentCell = new PdfPCell();
       presentCell.addElement(presentParagraph);
       dataTable.addCell(presentCell);
 
-      Paragraph absentParagraph = new Paragraph("Number of Candidates absent");
+      Paragraph absentParagraph = new Paragraph("Number of Candidates reported");
       absentParagraph.setFont(FontFactory.getFont(FontFactory.TIMES_BOLD,10));
       absentParagraph.setAlignment(Element.ALIGN_CENTER);
       PdfPCell absentCell = new PdfPCell();
@@ -1431,14 +1431,19 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
                   String stdIdTmp = "";
                   stdIdTmp=studentId;
                   studentId="";
-                  if(seatPlans.size()!=1)
-                  if(seatPlanReportDto.getCourseNo().equals(seatPlans.get(1).getCourseNo())){
-                    studentId=stdIdTmp+""+ seatPlanInnerReport.getStudentId()+", ";
+                  if(seatPlans.size()!=1){
+                    if(seatPlanReportDto.getCourseNo().equals(seatPlans.get(1).getCourseNo())){
+                      studentId=stdIdTmp+""+ seatPlanInnerReport.getStudentId()+", ";
 
+                    }else{
+                      studentId=stdIdTmp+""+ seatPlanInnerReport.getStudentId()+" ";
+
+                    }
                   }else{
                     studentId=stdIdTmp+""+ seatPlanInnerReport.getStudentId()+" ";
 
                   }
+
                   seatPlans.remove(0);
                   studentCounter+=1;
                   //rowCounter+=1;
@@ -1504,7 +1509,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
 
 
 
-        if(rowCounter==23 || seatPlans.size()==0){
+        if(rowCounter==23 ){
           break;
         }
       }
@@ -1577,5 +1582,190 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
 
     document.close();
     baos.writeTo(pOutputStream);
+  }
+
+
+  @Override
+  public void createSeatPlanStickerReport(Integer pProgramType, Integer pSemesterId, Integer pExamType, String pExamDate, OutputStream pOutputStream) throws Exception, IOException, DocumentException {
+
+    List<SeatPlanReportDto> seatPlans = mSeatPlanReportManager.getSeatPlanDataForSticker(pSemesterId,pExamType,pExamDate);
+    Semester semester = mSemesterManager.get(pSemesterId);
+
+    Document document = new Document();
+    document.addTitle("Seat Plan Attendence Sheet");
+
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    PdfWriter writer = PdfWriter.getInstance(document,baos);
+    /*MyFooter event = new MyFooter();
+    writer.setPageEvent(event);*/
+    document.open();
+    document.setPageSize(PageSize.A4);
+
+    int totalRow;
+    if(pExamType==1){
+      totalRow=5;
+    }
+    else{
+      totalRow=4;
+    }
+
+    Font lightFont = FontFactory.getFont(FontFactory.TIMES,11);
+    Font duetFont = FontFactory.getFont(FontFactory.COURIER_BOLD,13);
+    Font universityNameFont = FontFactory.getFont(FontFactory.TIMES_BOLD,16);
+    Font sponSoreFont = FontFactory.getFont(FontFactory.TIMES,8);
+    Font topSheetFont = FontFactory.getFont(FontFactory.TIMES_BOLD,13);
+    Font boldFont = FontFactory.getFont(FontFactory.TIMES_BOLD,11);
+    PdfPTable masterTable = new PdfPTable(2);
+    masterTable.setWidthPercentage(108);
+
+
+    int rowCounter=0;
+    while(true){
+      PdfPCell masterLeftCell = new PdfPCell();
+      PdfPCell masterRightCell = new PdfPCell();
+      PdfPTable leftTable = new PdfPTable(1);
+      PdfPTable rightTable=new PdfPTable(1);
+      PdfPCell leftCell = new PdfPCell();
+      PdfPCell rightCell = new PdfPCell();
+      leftCell.setPaddingRight(13.0f);
+      rightCell.setPaddingLeft(13.0f);
+      boolean dataEnd=false;
+      for(int i=1;i<=2;i++){
+        if(seatPlans.size()!=0){
+          SeatPlanReportDto seatPlanReportDto = seatPlans.get(0);
+          Paragraph paragraph = new Paragraph();
+          String roomInfo = seatPlanReportDto.getRoomNo();
+          paragraph.add(roomInfo);
+          paragraph.setAlignment(Element.ALIGN_RIGHT);
+          paragraph.setFont(boldFont);
+          if(i==1)
+          {
+            leftCell.addElement(paragraph);
+          }
+          else{
+            rightCell.addElement(paragraph);
+          }
+
+          String semesterInfo;
+          if(pExamType==1){
+            semesterInfo="Semester Final Examination, "+semester.getName();
+          }
+          else{
+            semesterInfo="Carry/Clearance/Improvement Examination, "+semester.getName();
+          }
+
+          paragraph = new Paragraph(semesterInfo,boldFont);
+          paragraph.setAlignment(Element.ALIGN_CENTER);
+          if(i==1)
+          {
+            leftCell.addElement(paragraph);
+          }
+          else{
+            rightCell.addElement(paragraph);
+          }
+
+          paragraph = new Paragraph("  ");
+          if(i==1)
+          {
+            leftCell.addElement(paragraph);
+          }
+          else{
+            rightCell.addElement(paragraph);
+          }
+
+          String yearSemester="  Year :"+seatPlanReportDto.getCurrentYear()+"           "+"            Semester: "+seatPlanReportDto.getCurrentSemester();
+          paragraph = new Paragraph(yearSemester,boldFont);
+          if(i==1)
+          {
+            leftCell.addElement(paragraph);
+          }
+          else{
+            rightCell.addElement(paragraph);
+          }
+
+          String department = " Department :"+ seatPlanReportDto.getProgramName();
+          paragraph=new Paragraph(department,boldFont);
+          if(i==1)
+          {
+            leftCell.addElement(paragraph);
+          }
+          else{
+            rightCell.addElement(paragraph);
+          }
+
+          paragraph = new Paragraph(" Student Id: "+seatPlanReportDto.getStudentId(),boldFont);
+          if(i==1)
+          {
+            leftCell.addElement(paragraph);
+          }
+          else{
+            rightCell.addElement(paragraph);
+          }
+
+
+
+          paragraph = new Paragraph(" ");
+          if(i==1)
+          {
+            leftCell.addElement(paragraph);
+          }
+          else{
+            rightCell.addElement(paragraph);
+          }
+
+          seatPlans.remove(0);
+
+        }else{
+          dataEnd=true;
+          break;
+        }
+      }
+
+      leftTable.addCell(leftCell);
+      rightTable.addCell(rightCell);
+
+      leftTable.setWidthPercentage(90);
+      rightTable.setWidthPercentage(90);
+      masterLeftCell.addElement(leftTable);
+      masterRightCell.addElement(rightTable);
+      masterRightCell.setPaddingLeft(7);
+
+      masterLeftCell.setBorder(Rectangle.NO_BORDER);
+      masterRightCell.setBorder(Rectangle.NO_BORDER);
+
+
+      masterLeftCell.setPaddingBottom(30f);
+      masterRightCell.setPaddingBottom(30f);
+      masterTable.addCell(masterLeftCell);
+      masterTable.addCell(masterRightCell);
+
+
+      rowCounter+=1;
+
+
+      if(rowCounter==totalRow || dataEnd==true){
+        document.add(masterTable);
+        rowCounter=0;
+        masterTable=new PdfPTable(2);
+        masterTable.setWidthPercentage(108);
+      }
+
+
+      if(seatPlans.size()==0){
+        break;
+      }else{
+        document.newPage();
+
+      }
+
+
+
+    }
+
+
+    document.close();
+    baos.writeTo(pOutputStream);
+
+
   }
 }

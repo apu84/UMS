@@ -222,6 +222,15 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan,MutableSeatP
 
 
 
+  public void getSeatPlanStudentStickerReport(Integer pProgramType,Integer pSemesterId,Integer pExamType,String pExamDate,OutputStream pOutputStream, final Request pRequest, final UriInfo mUriInfo) throws Exception,IOException{
+
+    mSeatPlanReportGenerator.createSeatPlanStickerReport(pProgramType,pSemesterId,pExamType,pExamDate,pOutputStream);
+
+  }
+
+
+
+
 
 
   @Override

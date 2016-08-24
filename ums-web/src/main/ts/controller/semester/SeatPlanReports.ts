@@ -28,6 +28,7 @@ module ums{
     getExamRoutineInfo:Function;
     getAttendenceSheetReport:Function;
     getTopSheetReport:Function;
+    getStickerReport:Function;
 
   }
 
@@ -88,6 +89,7 @@ module ums{
       $scope.examTypeChanged= this.examTypeChanged.bind(this);
       $scope.getAttendenceSheetReport = this.getAttendenceSheetReport.bind(this);
       $scope.getTopSheetReport = this.getTopSheetReport.bind(this);
+      $scope.getStickerReport = this.getStickerReport.bind(this);
 
     }
 
@@ -192,6 +194,38 @@ module ums{
        });*/
 
       this.httpClient.get("/ums-webservice-common/academic/seatplan/topsheet/programType/"+programType+"/semesterId/"+semesterId+"/examType/"+examType+"/examDate/"+examDate,  'application/pdf',
+          (data:any, etag:string) => {
+            var file = new Blob([data], {type: 'application/pdf'});
+            var fileURL = this.$sce.trustAsResourceUrl(URL.createObjectURL(file));
+            this.$window.open(fileURL);
+            this.$scope.showLoader=false;
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>) => {
+            console.error(response);
+          },'arraybuffer');
+    }
+
+
+
+    private getStickerReport():void{
+      console.log("In the seat plan reports");
+      console.log(this.$scope.examDate);
+      var semesterId:number=this.$scope.semesterId;
+      var programType:number = +this.$scope.programType;
+      var examType:number = +this.$scope.examType;
+      var examDate:string;
+      if(this.$scope.examDate==""){
+        examDate="NULL";
+      }else{
+        examDate=this.$scope.examDate;
+      }
+      this.$scope.showLoader=true;
+
+      /*this.seatPlanService.getSeatPlanAttendanceSheetReport(programType,semesterId,examType,examDate).then((arr:any)=>{
+       this.$scope.showLoader=false;
+       });*/
+
+      this.httpClient.get("/ums-webservice-common/academic/seatplan/sticker/programType/"+programType+"/semesterId/"+semesterId+"/examType/"+examType+"/examDate/"+examDate,  'application/pdf',
           (data:any, etag:string) => {
             var file = new Blob([data], {type: 'application/pdf'});
             var fileURL = this.$sce.trustAsResourceUrl(URL.createObjectURL(file));
