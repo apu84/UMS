@@ -27,6 +27,12 @@ public class MarksSubmissionStatusDto {
     private String statusName;
     private String action;
     private CourseType courseType;
+    private Integer courseCreditHour;
+    private String programShortname;
+    private String examDate;
+    private Integer totalStudents;
+
+
 
     private String preparerId;
     private String preparerName;
@@ -35,12 +41,53 @@ public class MarksSubmissionStatusDto {
     private int year;
     private int semester;
     private String offeredTo;
+    private String lastSubmissionDate;
     private List<CourseTeacherDto> courseTeacherList;
 
 
-    public String getCourseId() {
-        return courseId;
+  public Integer getTotalStudents() {
+    return totalStudents;
+  }
+
+  public void setTotalStudents(Integer pTotalStudents) {
+    totalStudents = pTotalStudents;
+  }
+
+  public Integer getCourseCreditHour() {
+    return courseCreditHour;
+  }
+
+  public void setCourseCreditHour(Integer pCourseCreditHour) {
+    courseCreditHour = pCourseCreditHour;
+  }
+
+  public String getProgramShortname() {
+      return programShortname;
     }
+
+    public void setProgramShortname(String pProgramShortname) {
+      programShortname = pProgramShortname;
+    }
+
+    public String getExamDate() {
+      return examDate;
+    }
+
+    public void setExamDate(String pExamDate) {
+      examDate = pExamDate;
+    }
+
+    public String getLastSubmissionDate() {
+      return lastSubmissionDate;
+    }
+
+    public void setLastSubmissionDate(String pLastSubmissionDate) {
+      lastSubmissionDate = pLastSubmissionDate;
+    }
+
+    public String getCourseId() {
+          return courseId;
+      }
 
     public void setCourseId(String courseId) {
         this.courseId = courseId;

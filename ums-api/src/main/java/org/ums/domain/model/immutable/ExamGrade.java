@@ -19,4 +19,10 @@ public interface ExamGrade extends Serializable, EditType<MutableExamGrade> {
     String getExamTypeName();
     String getCourseId();
     String getCourseTitle();
+    String getCourseNo();
+    Integer getCourseCreditHour();
+    String getLastSubmissionDate();
+    String getExamDate();
+    String getProgramShortName();
+    Integer getTotalStudents();
 }

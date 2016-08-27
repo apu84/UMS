@@ -18,5 +18,10 @@ public interface MutableExamGrade extends ExamGrade, Mutable {
     void setExamTypeName(String pExamTypeName);
     void setCourseId(String  pCourseId);
     void setCourseTitle(String pCourseTitle);
-
+    void setCourseNo(String pCourseNo);
+    void setCourseCreditHour(Integer pCourseCreditHour);
+    void setLastSubmissionDate(String pLastSubmissionDate);
+    void setExamDate(String pExamDate);
+    void setProgramShortName(String pProgramShortName);
+    void setTotalStudents(Integer pTotalStudents);
 }
