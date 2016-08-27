@@ -267,7 +267,22 @@ public class PersistentSeatPlanReportDao extends SeatPlanReportDaoDecorator{
 
 
 
-
+  String SELECT_ALL_STICKER="" +
+      "select  " +
+      "  seatPlans.ROOM_NO,  " +
+      "  MST_PROGRAM.PROGRAM_SHORT_NAME,  " +
+      "  STUDENTS.CURR_YEAR,  " +
+      "  STUDENTS.CURR_SEMESTER,  " +
+      "  STUDENTS.STUDENT_ID  " +
+      "from STUDENTS,MST_PROGRAM,(  " +
+      "  select room_no,student_id from SEAT_PLAN,ROOM_INFO where SEMESTER_ID=? and EXAM_TYPE=? and SEAT_PLAN.ROOM_ID=ROOM_INFO.ROOM_ID ORDER BY STUDENT_ID  " +
+      "  " +
+      "  ) seatPlans  " +
+      "WHERE  " +
+      "  seatPlans.STUDENT_ID=STUDENTS.STUDENT_ID AND  " +
+      "  MST_PROGRAM.PROGRAM_ID=STUDENTS.PROGRAM_ID  " +
+      "ORDER BY  " +
+      "  MST_PROGRAM.PROGRAM_ID,students.STUDENT_ID,curr_year,CURR_SEMESTER";
 
 
   public JdbcTemplate mJdbcTemplate;
@@ -305,6 +320,13 @@ public class PersistentSeatPlanReportDao extends SeatPlanReportDaoDecorator{
     }
   }
 
+
+  @Override
+  public List<SeatPlanReportDto> getSeatPlanDataForSticker(Integer pSemesterId, Integer pExamType, String pExamDate) {
+    String query=SELECT_ALL_STICKER;
+    return mJdbcTemplate.query(query,new Object[]{pSemesterId,pExamType},new SeatPlanRowMapperSticker());
+  }
+
   class SeatPlanReportRowMapper implements RowMapper<SeatPlanReportDto>{
     @Override
     public SeatPlanReportDto mapRow(ResultSet pResultSet, int pI) throws SQLException {
@@ -331,6 +353,20 @@ public class PersistentSeatPlanReportDao extends SeatPlanReportDaoDecorator{
       seatPlan.setCourseTitle(pResultSet.getString("course_title"));
       seatPlan.setCourseNo(pResultSet.getString("course_no"));
       seatPlan.setExamDate(pResultSet.getString("exam_date"));
+      seatPlan.setCurrentYear(pResultSet.getInt("curr_year"));
+      seatPlan.setCurrentSemester(pResultSet.getInt("curr_semester"));
+      seatPlan.setStudentId(pResultSet.getString("student_id"));
+      return seatPlan;
+    }
+  }
+
+
+  class SeatPlanRowMapperSticker implements RowMapper<SeatPlanReportDto>{
+    @Override
+    public SeatPlanReportDto mapRow(ResultSet pResultSet, int pI) throws SQLException {
+      SeatPlanReportDto seatPlan = new SeatPlanReportDto();
+      seatPlan.setRoomNo(pResultSet.getString("room_no"));
+      seatPlan.setProgramName(pResultSet.getString("program_short_name"));
       seatPlan.setCurrentYear(pResultSet.getInt("curr_year"));
       seatPlan.setCurrentSemester(pResultSet.getInt("curr_semester"));
       seatPlan.setStudentId(pResultSet.getString("student_id"));

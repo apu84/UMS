@@ -25,5 +25,6 @@ public interface SeatPlanReportGenerator {
   void createSeatPlanAttendenceReport(Integer pProgramType, Integer pSemesterId,Integer pExamType, String pExamDate,OutputStream pOutputStream)throws Exception,IOException,DocumentException;
   void createSeatPlanAttendencePdfReport(Integer pProgramType, Integer pSemesterId,Integer pExamType, String pExamDate,OutputStream pOutputStream)throws Exception,IOException,DocumentException;
   void createSeatPlanTopSheetPdfReport(Integer pProgramType, Integer pSemesterId,Integer pExamType, String pExamDate,OutputStream pOutputStream)throws Exception,IOException,DocumentException;
+  void createSeatPlanStickerReport(Integer pProgramType, Integer pSemesterId,Integer pExamType, String pExamDate,OutputStream pOutputStream)throws Exception,IOException,DocumentException;
 
 }
