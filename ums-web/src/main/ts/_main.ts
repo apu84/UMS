@@ -12,7 +12,7 @@
 /// <reference path='lib/bootstrap-switch.d.ts'/>
 /// <reference path='lib/uri.d.ts'/>
 /// <reference path='lib/angular-cookies.d.ts'/>
-/// <reference path='lib/jquery.jqgrid.d.ts'/>
+/// <reference path='lib/jquery.jqGrid.d.ts'/>
 ///<reference path='lib/angular-ui-sortable.d.ts'/>
 ///<reference path='lib/moment.d.ts'/>
 
