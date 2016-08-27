@@ -96,4 +96,18 @@ public class ExamGradeDaoDecorator  extends ContentDaoDecorator<ExamGrade, Mutab
         return getManager().getRoleForVC(pUserId);
     }
 
+    @Override
+    public int checkSize(Integer pSemesterId, Integer pExamType, String pExamDate) {
+        return getManager().checkSize(pSemesterId,pExamType,pExamDate);
+    }
+
+    @Override
+    public int insertGradeSubmissionDeadLineInfo(Integer pSemesterId, Integer pExamType, String pExamDate) {
+        return getManager().insertGradeSubmissionDeadLineInfo(pSemesterId,pExamType,pExamDate);
+    }
+
+    @Override
+    public List<MarksSubmissionStatusDto> getGradeSubmissionDeadLine(Integer pSemesterId, Integer pExamType, String pExamDate) {
+        return getManager().getGradeSubmissionDeadLine(pSemesterId,pExamType,pExamDate);
+    }
 }

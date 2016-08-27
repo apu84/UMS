@@ -30,6 +30,12 @@ public class PersistentExamGrade implements MutableExamGrade {
     private String mSemesterName;
     private String mCourseId;
     private String mCourseTitle;
+    private String mCourseNo;
+    private String mExamDate;
+    private String mProgramShortname;
+    private Integer mCourseCreditHour;
+    private String mLastSubmissionDate;
+    private Integer mTotalStudents;
 
     public PersistentExamGrade() {
     }
@@ -62,6 +68,65 @@ public class PersistentExamGrade implements MutableExamGrade {
         return null;
     }
 
+    @Override
+    public void setTotalStudents(Integer pTotalStudents) {
+        mTotalStudents = pTotalStudents;
+    }
+
+    @Override
+    public Integer getTotalStudents() {
+        return mTotalStudents;
+    }
+
+    @Override
+    public void setCourseNo(String pCourseNo) {
+        mCourseNo = pCourseNo;
+    }
+
+    @Override
+    public void setCourseCreditHour(Integer pCourseCreditHour) {
+        mCourseCreditHour = pCourseCreditHour;
+    }
+
+    @Override
+    public void setLastSubmissionDate(String pLastSubmissionDate) {
+        mLastSubmissionDate = pLastSubmissionDate;
+    }
+
+    @Override
+    public void setExamDate(String pExamDate) {
+        mExamDate = pExamDate;
+    }
+
+    @Override
+    public void setProgramShortName(String pProgramShortName) {
+        mProgramShortname = pProgramShortName;
+    }
+
+    @Override
+    public String getCourseNo() {
+        return mCourseNo;
+    }
+
+    @Override
+    public Integer getCourseCreditHour() {
+        return mCourseCreditHour;
+    }
+
+    @Override
+    public String getLastSubmissionDate() {
+        return mLastSubmissionDate;
+    }
+
+    @Override
+    public String getExamDate() {
+        return mExamDate;
+    }
+
+    @Override
+    public String getProgramShortName() {
+        return mProgramShortname;
+    }
 
     @Override
     public void setGradeList(List<StudentGradeDto> pGradeList) {

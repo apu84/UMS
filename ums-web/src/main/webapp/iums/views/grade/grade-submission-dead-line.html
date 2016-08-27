@@ -1,0 +1,35 @@
+<div class="panel panel-blue" data-ng-init="getSemesters()">
+    <div class="panel-heading" align="center">
+        Grade Submission Deadline
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-4">
+                <select class="form-control required" name="semester" data-ng-model="semesterId" >
+                    <option value="">Select Semester</option>
+                    <option data-ng-repeat="semesters in semesterList" value="{{semesters.id}}">{{semesters.name}}</option>
+                </select>
+            </div>
+
+            <div class="col-md-2"></div>
+
+            <div class="col-md-4">
+                <select class="form-control required" name="examType" data-ng-model="examType" data-ng-change="getExamDates()" >
+                    <option value="">Select Exam Type</option>
+                    <option value="11">Regular</option>
+                    <option value="22">Carry/Clearance/Improvement</option>
+                </select>
+            </div>
+        </div>
+        <br>
+        <br>
+        <div class="row">
+            <div class="col-md-4">
+                <select class="form-control required" name="examDate" data-ng-model="examDate">
+                    <option value="">Select Exam Date</option>
+                    <option data-ng-repeat="examRoutine in examRoutineArr">{{examRoutine.examDate}}</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>

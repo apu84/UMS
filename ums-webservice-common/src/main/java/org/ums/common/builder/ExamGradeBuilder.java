@@ -30,6 +30,34 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
     @Override
     public void build(JsonObjectBuilder pBuilder, ExamGrade pReadOnly, UriInfo pUriInfo, final LocalCache pLocalCache) throws Exception {
 
+        if(pReadOnly.getExamDate()!=null){
+            pBuilder.add("examDate",pReadOnly.getExamDate());
+        }
+
+        if(pReadOnly.getProgramShortName()!=null){
+            pBuilder.add("programShortName",pReadOnly.getProgramShortName());
+        }
+
+        if(pReadOnly.getCourseNo()!=null){
+            pBuilder.add("courseNo",pReadOnly.getCourseNo());
+        }
+
+        if(pReadOnly.getCourseTitle()!=null){
+            pBuilder.add("courseTitle",pReadOnly.getCourseTitle());
+        }
+
+        if(pReadOnly.getCourseCreditHour()!=null){
+            pBuilder.add("courseCreditHour",pReadOnly.getCourseCreditHour());
+        }
+
+        if(pReadOnly.getTotalStudents()!=null){
+            pBuilder.add("totalStudents",pReadOnly.getTotalStudents());
+        }
+
+        if(pReadOnly.getLastSubmissionDate()!=null){
+            pBuilder.add("lastSubmissionDate",pReadOnly.getLastSubmissionDate());
+        }
+
     }
 
     @Override

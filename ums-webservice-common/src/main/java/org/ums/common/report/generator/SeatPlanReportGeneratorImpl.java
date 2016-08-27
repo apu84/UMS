@@ -936,7 +936,12 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
     String courseNo=new String("Course No: ");
     String courseTitle=new String("Course Title: ");
     Semester semesterManager = mSemesterManager.get(pSemesterId);
-    String examName = new String("Semester Final Examination, "+semesterManager.getName());
+    String examName ="";
+    if(pExamType==1){
+      examName="Semester Final Examination, "+semesterManager.getName();
+    }else{
+      examName="Carry/Clearance/Improvement Examination, "+semesterManager.getName();
+    }
     String studentNo = new String("Student No.");
     String signatureOfTheStudents = new String("Signature of the examinee");
     String numberOfTheExamineesRegistered=new String("* Number of the examinees registered: ");
@@ -1041,6 +1046,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
           /*tableOne.addCell(examCell);
           tableTwo.addCell(examCell);*/
           upperCell.addElement(examParagraph);
+          upperCell.addElement(new Paragraph(" "));
 
           /*
           * two private variables are declared for defining two types of fonts,

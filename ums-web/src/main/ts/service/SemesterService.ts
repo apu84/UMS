@@ -25,6 +25,22 @@ module ums{
 
       return defer.promise;
     }
+
+    public getAllSemesters():ng.IPromise<any>{
+      var defer = this.$q.defer();
+      var semesterArr:Array<Semester>=[];
+      this.httpClient.get('/ums-webservice-common/academic/semester/all', 'application/json',
+          (json:any, etag:string) => {
+            semesterArr = json.entries;
+            defer.resolve(semesterArr);
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>) => {
+            console.error(response);
+          });
+
+      return defer.promise;
+
+    }
   }
 
   UMS.service("semesterService",SemesterService);

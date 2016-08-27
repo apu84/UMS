@@ -148,10 +148,99 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
         "Select 'F' Grade_Letter, 0 Total, '#2A0CD0' Color From Dual  " +
         ")Tmp Group by Grade_Letter Order by Decode(Grade_Letter,'A+',1,'A',2,'A-',3,'B+',4,'B',5,'B-',6,'C+',7,'C',8,'D',9,'F',10)  " ;
 
+
+    String SELECT_EXAM_GRADE_DEAD_LINE="" +
+        "select  " +
+        "  to_char(EXAM_ROUTINE.EXAM_DATE,'dd-mm-yyyy') Exam_date,  " +
+        "  MST_PROGRAM.PROGRAM_SHORT_NAME,  " +
+        "  MST_COURSE.COURSE_NO,  " +
+        "  MST_COURSE.COURSE_TITLE,  " +
+        "  MST_COURSE.CRHR,  " +
+        "  ugRegistrationResult.total_students,  " +
+        "  marksSubmissionStatus.last_submission_date  " +
+        "  " +
+        "from  " +
+        "  EXAM_ROUTINE,  " +
+        "  MST_PROGRAM,  " +
+        "  MST_COURSE,  " +
+        "    (  " +
+        "        select  " +
+        "        COURSE_ID,count(COURSE_ID) total_students  " +
+        "        from UG_REGISTRATION_RESULT  " +
+        "        WHERE SEMESTER_ID=? GROUP BY  COURSE_ID  " +
+        "    ) ugRegistrationResult,  " +
+        "  (  " +
+        "    select  " +
+        "      SEMESTER_ID,  " +
+        "      COURSE_ID,  " +
+        "      last_submission_date  " +
+        "    from MARKS_SUBMISSION_STATUS  " +
+        "    ) marksSubmissionStatus  " +
+        "where  " +
+        "  EXAM_ROUTINE.EXAM_DATE=to_date(?,'dd-mm-yyyy') AND  " +
+        "  MST_PROGRAM.PROGRAM_ID = EXAM_ROUTINE.PROGRAM_ID AND  " +
+        "  MST_COURSE.COURSE_ID=EXAM_ROUTINE.COURSE_ID AND  " +
+        "  EXAM_ROUTINE.COURSE_ID=ugRegistrationResult.COURSE_ID AND  " +
+        "  exam_routine.SEMESTER=? AND  " +
+        "  exam_routine.exam_type=? and "+
+        "  marksSubmissionStatus.SEMESTER_ID=EXAM_ROUTINE.SEMESTER AND  " +
+        "  marksSubmissionStatus.COURSE_ID = EXAM_ROUTINE.COURSE_ID";
+
     private JdbcTemplate mJdbcTemplate;
 
     public PersistentExamGradeDao(final JdbcTemplate pJdbcTemplate) {
         mJdbcTemplate = pJdbcTemplate;
+    }
+
+
+    @Override
+    public int checkSize(Integer pSemesterId, Integer pExamType, String pExamDate) {
+        String query="" +
+            "select count(*) from MARKS_SUBMISSION_STATUS,  " +
+            "  (  " +
+            "      select course_id,SEMESTER  " +
+            "      from EXAM_ROUTINE  " +
+            "      where semester=?  " +
+            "      and exam_date=to_date(?,'dd-mm-yyyy')  " +
+            "    and EXAM_TYPE=?  " +
+            "  " +
+            "  ) examRoutine  " +
+            "where MARKS_SUBMISSION_STATUS.COURSE_ID = examRoutine.COURSE_ID  " +
+            "  and MARKS_SUBMISSION_STATUS.SEMESTER_ID=examRoutine.SEMESTER";
+        return mJdbcTemplate.queryForObject(query,Integer.class,pSemesterId,pExamDate,pExamType);
+    }
+
+
+
+  /**
+   *
+   * @param pSemesterId
+   * @param pExamType
+   * @param pExamDate
+   * @return
+   *
+   * At the first stage, there is no data of the specific semester. But, for showing the client about the grade submission deadline,
+   * data needed to be shown. So, before showing, first, all the relevant data are inserted into the table by course_id and then is returned to the client.
+   */
+    @Override
+    public int insertGradeSubmissionDeadLineInfo(Integer pSemesterId, Integer pExamType, String pExamDate) {
+        String query="" +
+            "insert into MARKS_SUBMISSION_STATUS (SEMESTER_ID,COURSE_ID,EXAM_TYPE)  " +
+            "    select  " +
+            "      SEMESTER,  " +
+            "      COURSE_ID,  " +
+            "      EXAM_DATE  " +
+            "    FROM EXAM_ROUTINE  " +
+            "    where EXAM_TYPE=?  " +
+            "    and SEMESTER=?  " +
+            "    and EXAM_DATE=TO_DATE(?,'dd-mm-yyyy')";
+        return mJdbcTemplate.update(query,pExamType,pSemesterId,pExamDate);
+    }
+
+    @Override
+    public List<MarksSubmissionStatusDto> getGradeSubmissionDeadLine(Integer pSemesterId, Integer pExamType, String pExamDate) {
+        String query= SELECT_EXAM_GRADE_DEAD_LINE;
+        return mJdbcTemplate.query(query,new Object[]{pSemesterId,pExamDate,pSemesterId,pExamType},new GradeSubmissionDeadlineRowMapper());
     }
 
     @Override
@@ -584,6 +673,22 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
         }
     }
 
+
+    class GradeSubmissionDeadlineRowMapper implements RowMapper<MarksSubmissionStatusDto>{
+        @Override
+        public MarksSubmissionStatusDto mapRow(ResultSet pResultSet, int pI) throws SQLException {
+            MarksSubmissionStatusDto submissionStatusDto= new MarksSubmissionStatusDto();
+
+            submissionStatusDto.setExamDate(pResultSet.getString("exam_date"));
+            submissionStatusDto.setProgramShortname(pResultSet.getString("program_short_name"));
+            submissionStatusDto.setCourseNo(pResultSet.getString("course_no"));
+            submissionStatusDto.setCourseTitle(pResultSet.getString("course_title"));
+            submissionStatusDto.setCourseCreditHour(pResultSet.getInt("crhr"));
+            submissionStatusDto.setTotalStudents(pResultSet.getInt("total_students"));
+            submissionStatusDto.setLastSubmissionDate(pResultSet.getString("last_submission_date"));
+            return submissionStatusDto;
+        }
+    }
 
 
 

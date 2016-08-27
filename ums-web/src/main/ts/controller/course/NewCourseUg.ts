@@ -70,7 +70,7 @@ module ums {
     }
     private pdfDownloadTest() : void {
 //this.$http.post('https://localhost/ums-webservice-common/report/password', {
-      this.$http.post('https://localhost/ums-webservice-common/report/password', {},{ cache: false,responseType: 'arraybuffer' }).success(function (data, $scope) {
+      this.$http.post('ums-webservice-common/report/password', {},{ cache: false,responseType: 'arraybuffer' }).success(function (data, $scope) {
             var blob=new Blob([data],{ type: 'application/pdf' });
             var fileURL = URL.createObjectURL(blob);
             console.log(fileURL);
