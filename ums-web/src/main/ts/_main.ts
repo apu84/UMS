@@ -50,7 +50,7 @@
 /// <reference path='controller/logger/LoggerGrid.ts'/>
 /// <reference path='controller/course-material/CourseMaterial.ts'/>
 /// <reference path='controller/course-material/StudentCourseMaterial.ts'/>
-
+/// <reference path='controller/grade/MarksSubmission.ts'/>
 /// <reference path='Utils.ts'/>
 
 

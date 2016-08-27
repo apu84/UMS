@@ -215,7 +215,7 @@ module ums {
     }
 
     private generateXls(): void {
-      this.httpClient.get("https://localhost/ums-webservice-common/gradeReport/xls/semester/"+this.$scope.inputParams.semester_id+"/courseid/"+this.$scope.current_courseId+"/examtype/"+this.$scope.inputParams.exam_type+"/coursetype/"+(this.$scope.courseType=="THEORY"?"1":"2")+"/role/"+this.$scope.currentActor, 'application/vnd.ms-excel',
+      this.httpClient.get("/ums-webservice-common/gradeReport/xls/semester/"+this.$scope.inputParams.semester_id+"/courseid/"+this.$scope.current_courseId+"/examtype/"+this.$scope.inputParams.exam_type+"/coursetype/"+(this.$scope.courseType=="THEORY"?"1":"2")+"/role/"+this.$scope.currentActor, 'application/vnd.ms-excel',
           (data: any, etag: string) => {
             var file = new Blob([data], {type: 'application/vnd.ms-excel'});
             var reader = new FileReader();
@@ -240,7 +240,7 @@ module ums {
     }
 
     private fetchCurrentUser():ng.IPromise<any> {
-      var url="https://localhost/ums-webservice-common/users/current";
+      var url="/ums-webservice-common/users/current";
       var defer = this.$q.defer();
       this.httpClient.get(url, this.appConstants.mimeTypeJson,
           (json:any, etag:string) => {
@@ -287,7 +287,7 @@ module ums {
     }
 
     private fetchSemesters(programType:number):ng.IPromise<any> {
-      var url="https://localhost/ums-webservice-common/academic/semester/program-type/"+programType+"/limit/0";
+      var url="/ums-webservice-common/academic/semester/program-type/"+programType+"/limit/0";
       var defer = this.$q.defer();
       this.httpClient.get(url, this.appConstants.mimeTypeJson,
           (json:any, etag:string) => {
@@ -441,7 +441,7 @@ module ums {
 
 
     private downloadPdf():void {
-      this.httpClient.get("https://localhost/ums-webservice-common/gradeReport/pdf/semester/"+this.$scope.inputParams.semester_id+"/courseid/"+this.$scope.current_courseId+"/examtype/"+this.$scope.current_examType+"/role/"+this.$scope.currentActor, 'application/pdf',
+      this.httpClient.get("/ums-webservice-common/gradeReport/pdf/semester/"+this.$scope.inputParams.semester_id+"/courseid/"+this.$scope.current_courseId+"/examtype/"+this.$scope.current_examType+"/role/"+this.$scope.currentActor, 'application/pdf',
 
           (data:any, etag:string) => {
             var file = new Blob([data], {type: 'application/pdf'});
@@ -1104,7 +1104,7 @@ module ums {
     private showPopupModal():void{
       var topDiv=$("#top_div");
       $(".table_overlay").css({
-        background:'url("https://localhost/ums-web/iums/images/overlay1.png")',
+        background:'url("images/overlay1.png")',
         opacity : 0.5,
         top     : topDiv.position().top-150,
         width   : topDiv.outerWidth()+20,

@@ -1,4 +1,4 @@
-module ums{
+ module ums{
   interface ISeatPlanReports extends ng.IScope{
     semesterList:Array<Semester>;
     semesterId:number;
