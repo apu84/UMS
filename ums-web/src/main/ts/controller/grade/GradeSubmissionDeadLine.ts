@@ -12,7 +12,7 @@ module ums{
 
   class GradeSubmissionDeadLine{
 
-    public static $inject = ['appConstants','HttpClient','$scope','$q','notify','$sce','$window','semesterService'];
+    public static $inject = ['appConstants','HttpClient','$scope','$q','notify','$sce','$window','semesterService','examRoutineService'];
     constructor(private appConstants: any, private httpClient: HttpClient, private $scope: IGradeSubmissionDeadline,
                 private $q:ng.IQService, private notify: Notify,
                 private $sce:ng.ISCEService,private $window:ng.IWindowService, private semesterService:SemesterService,
@@ -38,10 +38,12 @@ module ums{
 
     private getExamDates():void{
       var examType = + this.$scope.examType;
-      this.$scope.examRoutineArr={};
-
+      console.log(examType);
+      console.log(this.$scope.semesterId);
       if(this.$scope.semesterId!=null && this.$scope.examType!=""){
         this.examRoutineService.getExamRoutineDates(this.$scope.semesterId,examType).then((examDateArr:any)=>{
+          this.$scope.examRoutineArr={};
+          console.log(examDateArr);
           this.$scope.examRoutineArr=examDateArr;
         });
       }
