@@ -60,7 +60,8 @@
     <module>ums-webservice-common</module>
     <!--<module>ums-web</module>-->
     <module>ums-dist</module>
-   <!-- <module>ums-web-templates</module>-->
+    <module>ums-webservice-academic</module>
+    <!-- <module>ums-web-templates</module>-->
   </modules>
 
   <dependencies>
