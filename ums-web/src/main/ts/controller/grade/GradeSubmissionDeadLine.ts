@@ -4,23 +4,43 @@ module ums{
     semesterId:number;
     examType:any;
     examRoutineArr:any;
+    examGradeStatisticsArr:Array<IExamGrade>;
+    examDate:string;
+    showLoader:boolean;
+    showTable:boolean;
 
     //functions
     getSemesters:Function;
     getExamDates:Function;
+    search:Function;
+  }
+
+  interface IExamGrade{
+    examDate:string;
+    programShortName:string;
+    courseNo:string;
+    courseTitle:string;
+    courseCreditHour:string;
+    totalStudents:number;
+    lastSubmissionDate:string;
+    changed:boolean;
   }
 
   class GradeSubmissionDeadLine{
 
-    public static $inject = ['appConstants','HttpClient','$scope','$q','notify','$sce','$window','semesterService','examRoutineService'];
+    public static $inject = ['appConstants','HttpClient','$scope','$q','notify','$sce','$window','semesterService','examRoutineService','examGradeService'];
     constructor(private appConstants: any, private httpClient: HttpClient, private $scope: IGradeSubmissionDeadline,
                 private $q:ng.IQService, private notify: Notify,
                 private $sce:ng.ISCEService,private $window:ng.IWindowService, private semesterService:SemesterService,
-                private examRoutineService:ExamRoutineService) {
+                private examRoutineService:ExamRoutineService,
+                private examGradeService:ExamGradeService) {
 
 
+      $scope.showLoader=false;
+      $scope.showTable=false;
       $scope.getSemesters = this.getSemesters.bind(this);
       $scope.getExamDates = this.getExamDates.bind(this);
+      $scope.search = this.search.bind(this);
     }
 
     private getSemesters():ng.IPromise<any>{
@@ -48,6 +68,18 @@ module ums{
         });
       }
 
+    }
+
+    private search():void{
+      this.$scope.examGradeStatisticsArr=[];
+      var examType=+this.$scope.examType;
+      this.$scope.showLoader=true;
+      this.examGradeService.getGradeSubmissionDeadLine(this.$scope.semesterId,examType,this.$scope.examDate).then((outputArr:Array<IExamGrade>)=>{
+        this.$scope.examGradeStatisticsArr=outputArr;
+        console.log(outputArr);
+        this.$scope.showTable=true;
+        this.$scope.showLoader=false;
+      });
     }
 
   }

@@ -225,11 +225,12 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
     @Override
     public int insertGradeSubmissionDeadLineInfo(Integer pSemesterId, Integer pExamType, String pExamDate) {
         String query="" +
-            "insert into MARKS_SUBMISSION_STATUS (SEMESTER_ID,COURSE_ID,EXAM_TYPE)  " +
+            "insert into MARKS_SUBMISSION_STATUS (SEMESTER_ID,COURSE_ID,EXAM_TYPE,STATUS)  " +
             "    select  " +
             "      SEMESTER,  " +
             "      COURSE_ID,  " +
-            "      EXAM_DATE  " +
+            "      EXAM_TYPE,  " +
+            "      0 as STATUS "+
             "    FROM EXAM_ROUTINE  " +
             "    where EXAM_TYPE=?  " +
             "    and SEMESTER=?  " +
