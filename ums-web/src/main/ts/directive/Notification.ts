@@ -29,7 +29,7 @@ module ums {
       this.scope.numOfUnreadNotification = 0;
       this.$interval(()=> {
         this.getNotification();
-      }, 5000);
+      }, 10000);
 
       this.scope.setReadStatus = this.setReadStatus.bind(this);
     };
