@@ -51,4 +51,14 @@ public class GradeSubmissionResource extends MutableGradeSubmissionResource {
   }
 
 
+  @GET
+  @Path("/deadline/semester/{semester-id}/examType/{exam-type}/examDate/{exam-date}")
+  public JsonObject getGradeSubmissionDeadLine(final @Context Request pRequest,
+                                               final @PathParam("semester-id") Integer pSemesterId,
+                                               final @PathParam("exam-type") Integer pExamType,
+                                               final @PathParam("exam-date") String pExamDate) throws Exception{
+    return mResourceHelper.getGradeSubmissionDeadline(pSemesterId,pExamType,pExamDate,mUriInfo);
+  }
+
+
 }

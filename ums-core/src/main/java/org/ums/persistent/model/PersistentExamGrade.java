@@ -19,7 +19,7 @@ public class PersistentExamGrade implements MutableExamGrade {
 
     static {
         ApplicationContext applicationContext = AppContext.getApplicationContext();
-        sExamGradeManager = applicationContext.getBean("examRoutineManager", ExamGradeManager.class);
+        sExamGradeManager = applicationContext.getBean("examGradeManager", ExamGradeManager.class);
     }
 
 
@@ -37,7 +37,9 @@ public class PersistentExamGrade implements MutableExamGrade {
     private String mLastSubmissionDate;
     private Integer mTotalStudents;
 
-    public PersistentExamGrade() {
+
+    public PersistentExamGrade(){
+
     }
 
     public PersistentExamGrade(final MutableExamGrade pOriginal) throws Exception {

@@ -3,8 +3,10 @@ package org.ums.common.academic.resource.helper;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
+import org.glassfish.jersey.server.Uri;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ums.cache.LocalCache;
 import org.ums.common.ResourceHelper;
 import org.ums.common.builder.ExamGradeBuilder;
 import org.ums.domain.model.dto.GradeChartDataDto;
@@ -19,6 +21,7 @@ import org.ums.enums.RecheckStatus;
 import org.ums.enums.StudentMarksSubmissionStatus;
 import org.ums.manager.ExamGradeManager;
 import org.ums.manager.UserManager;
+import org.ums.persistent.model.PersistentExamGrade;
 
 import javax.json.*;
 import javax.ws.rs.core.Response;
@@ -360,6 +363,43 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
     }
     object.add("entries", children);
 
+    return object.build();
+  }
+
+  public JsonObject getGradeSubmissionDeadline(final Integer pSemesterId, final Integer pExamType, final String pExamDate, final UriInfo pUriInfo) throws Exception{
+
+    List<MarksSubmissionStatusDto> marksSubmissionStatusDtoList = new ArrayList<>();
+    Integer size = getContentManager().checkSize(pSemesterId,pExamType,pExamDate);
+
+    if(size==0){
+      getContentManager().insertGradeSubmissionDeadLineInfo(pSemesterId,pExamType,pExamDate);
+      marksSubmissionStatusDtoList = getContentManager().getGradeSubmissionDeadLine(pSemesterId,pExamType,pExamDate);
+    }else{
+      marksSubmissionStatusDtoList = mManager.getGradeSubmissionDeadLine(pSemesterId,pExamType,pExamDate);
+    }
+
+
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+
+    for(MarksSubmissionStatusDto marksSubmissionStatusDto: marksSubmissionStatusDtoList){
+      PersistentExamGrade examGrade= new PersistentExamGrade();
+      examGrade.setExamDate(marksSubmissionStatusDto.getExamDate());
+      examGrade.setProgramShortName(marksSubmissionStatusDto.getProgramShortname());
+      examGrade.setCourseNo(marksSubmissionStatusDto.getCourseNo());
+      examGrade.setCourseTitle(marksSubmissionStatusDto.getCourseTitle());
+      examGrade.setCourseCreditHour(marksSubmissionStatusDto.getCourseCreditHour());
+      examGrade.setTotalStudents(marksSubmissionStatusDto.getTotalStudents());
+      if(marksSubmissionStatusDto.getLastSubmissionDate()!=null){
+        examGrade.setLastSubmissionDate(marksSubmissionStatusDto.getLastSubmissionDate());
+      }
+      ExamGrade immutableExamGrade = examGrade;
+      children.add(toJson(immutableExamGrade,pUriInfo,localCache));
+    }
+
+    object.add("entries", children);
+    localCache.invalidate();
     return object.build();
   }
 
