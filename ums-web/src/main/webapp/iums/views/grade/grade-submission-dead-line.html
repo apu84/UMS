@@ -5,14 +5,14 @@
 </style>
 
 <div class="panel panel-blue" data-ng-init="getSemesters()">
-    <div class="panel-heading" align="center">
+    <div class="panel-heading" align="left">
         Grade Submission Deadline
     </div>
     <div class="panel-body">
         <div class="row">
             <div class="col-md-2" align="right"><p>Select Semester</p></div>
             <div class="col-md-4">
-                <select class="form-control required" name="semester" data-ng-model="semesterId" >
+                <select class="form-control required" name="semester" data-ng-model="semesterId" data-ng-change="getExamDates()">
                     <option value="">Select a Semester</option>
                     <option data-ng-repeat="semesters in semesterList" value="{{semesters.id}}">{{semesters.name}}</option>
                 </select>
@@ -47,12 +47,12 @@
             <i class="fa fa-spinner fa-spin fa-4x fa-fw"></i>
             <span class="sr-only">Loading...</span>
         </div>
-        <div class="row" data-ng-if="showTable==true">
+        <div class="row" data-ng-if="showTable==true" style="padding-left: 2%; padding-right: 2%;">
             <br>
             <hr>
             <hr>
             <br>
-            <table class="table table-bordered table-striped" style="padding-left: 10%; padding-right: 10%;">
+            <table class="table table-bordered table-striped" >
 
                 <thead id="thead">
                     <td align="center">Exam Date</td>
@@ -70,12 +70,16 @@
                         <td>{{e.courseNo}}</td>
                         <td>{{e.courseTitle}}</td>
                         <td>{{e.courseCreditHour}}</td>
-                        <td>{{e.totalStudents}}</td>
-                        <td>{{e.lastSubmissionDate}}</td>
+                        <td class="col-md-1">{{e.totalStudents}}</td>
+                        <td align="center" ><input contenteditable="editable" style="width:50%;" type="text" data-date-format="dd-mm-yyyy" placeholder="dd-mm-yyyy" class="datepicker-default form-control" data-ng-model="e.lastSubmissionDate" data-ng-change="dateChanged(e)"> </td>
                     </tr>
                 </tbody>
 
             </table>
+            <br>
+            <div align="right" style="padding-right: 3%;" data-ng-if="showButton">
+                <button class="btn btn-primary" data-ng-click="saveChanges()">Save Changes</button> <button class="btn btn-danger" data-ng-click="cancel()">Cancel</button>
+            </div>
         </div>
     </div>
 </div>

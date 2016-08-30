@@ -110,4 +110,9 @@ public class ExamGradeDaoDecorator  extends ContentDaoDecorator<ExamGrade, Mutab
     public List<MarksSubmissionStatusDto> getGradeSubmissionDeadLine(Integer pSemesterId, Integer pExamType, String pExamDate) {
         return getManager().getGradeSubmissionDeadLine(pSemesterId,pExamType,pExamDate);
     }
+
+    @Override
+    public int updateForGradeSubmissionDeadLine(List<MarksSubmissionStatusDto> pMarksSubmissionStatusDtos) throws Exception{
+        return getManager().updateForGradeSubmissionDeadLine(pMarksSubmissionStatusDtos);
+    }
 }
