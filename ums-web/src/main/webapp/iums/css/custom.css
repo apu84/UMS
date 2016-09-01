@@ -189,6 +189,7 @@ body.sidebar-colors #wrapper #sidebar ul#side-menu li ul.nav-second-level li.act
 body{
     color:#474747 !important;
     /*color: #575757 !important;*/
+    font-size: 13px !important;
 }
 
 .shadowPanel{
@@ -332,3 +333,21 @@ div.ui-jqgrid-view table.ui-jqgrid-btable th {
     color:white !important;
 }
 /*== End ==*/
+
+.page-title-breadcrumb{
+    height: 40px !important;
+}
+.page-title-breadcrumb .breadcrumb {
+    padding-top: 10px !important;
+}
+.page-title-breadcrumb .page-header .page-title {
+    font-size: 20px !important;
+    font-weight: 400;
+}
+.page-content{
+    padding-left: 16px !important;
+    padding-top: 12px !important;
+}
+.form-control {
+    font-size: 13px !important;
+}
