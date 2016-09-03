@@ -2102,7 +2102,7 @@ module ums{
     private getSeatPlanGroupInfo():ng.IPromise<any>{
       var defer = this.$q.defer();
       var seatPlanGroupList:Array<ISeatPlanGroup>;
-      this.httpClient.get('/ums-webservice-common/academic/seatPlanGroup/semester/'+this.$scope.semesterId +'/type/'+this.$scope.examType+'/update/'+this.$scope.update, 'application/json',
+      this.httpClient.get('/ums-webservice-academic/academic/seatPlanGroup/semester/'+this.$scope.semesterId +'/type/'+this.$scope.examType+'/update/'+this.$scope.update, 'application/json',
           (json:any, etag:string) => {
             seatPlanGroupList = json.entries;
 
@@ -2125,7 +2125,7 @@ module ums{
 
     private getSemesterInfo():ng.IPromise<any>{
       var defer = this.$q.defer();
-      this.httpClient.get('/ums-webservice-common/academic/semester/all', 'application/json',
+      this.httpClient.get('/ums-webservice-academic/academic/semester/all', 'application/json',
           (json:any, etag:string) => {
             this.$scope.semesterList = json.entries;
 
@@ -2140,7 +2140,7 @@ module ums{
     private getSubGroupInfo():ng.IPromise<any>{
       var defer = this.$q.defer();
       var subGroupDb:Array<ISubGroupDb>;
-      this.httpClient.get('/ums-webservice-common/academic/subGroup/get/semesterId/'+this.$scope.semesterId +'/groupNo/'+this.$scope.selectedGroupNo+'/type/'+this.$scope.examType, 'application/json',
+      this.httpClient.get('/ums-webservice-academic/academic/subGroup/get/semesterId/'+this.$scope.semesterId +'/groupNo/'+this.$scope.selectedGroupNo+'/type/'+this.$scope.examType, 'application/json',
           (json:any, etag:string) => {
             subGroupDb = json.entries;
 
@@ -2156,7 +2156,7 @@ module ums{
       var defer = this.$q.defer();
       var subGroupDb:string;
       this.$scope.pdfGenerator=true;
-      this.httpClient.get('/ums-webservice-common/academic/seatplan/semesterId/'+this.$scope.semesterId +'/groupNo/'+groupNo+'/type/'+this.$scope.examType,  'application/pdf',
+      this.httpClient.get('/ums-webservice-academic/academic/seatplan/semesterId/'+this.$scope.semesterId +'/groupNo/'+groupNo+'/type/'+this.$scope.examType,  'application/pdf',
           (data:any, etag:string) => {
             var file = new Blob([data], {type: 'application/pdf'});
             var fileURL = this.$sce.trustAsResourceUrl(URL.createObjectURL(file));

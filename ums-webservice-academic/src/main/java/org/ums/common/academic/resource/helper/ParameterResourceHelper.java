@@ -2,16 +2,16 @@ package org.ums.common.academic.resource.helper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.common.academic.resource.ParameterResource;
-import org.ums.common.ResourceHelper;
 import org.ums.common.builder.ParameterBuilder;
-import org.ums.common.builder.Builder;
 import org.ums.domain.model.immutable.Parameter;
 import org.ums.domain.model.mutable.MutableParameter;
-import org.ums.manager.ParameterManager;
 import org.ums.manager.ContentManager;
+import org.ums.manager.ParameterManager;
 import org.ums.persistent.model.PersistentParameter;
+import org.ums.resource.ResourceHelper;
 
 import javax.json.JsonObject;
 import javax.ws.rs.core.Response;

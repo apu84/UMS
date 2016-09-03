@@ -4,7 +4,6 @@ import org.apache.commons.lang.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
-import org.ums.common.ResourceHelper;
 import org.ums.common.builder.ExamRoutineBuilder;
 import org.ums.domain.model.dto.ExamRoutineDto;
 import org.ums.domain.model.immutable.ExamRoutine;
@@ -14,6 +13,7 @@ import org.ums.manager.ExamRoutineManager;
 import org.ums.manager.SeatPlanGroupManager;
 import org.ums.manager.SubGroupManager;
 import org.ums.persistent.model.PersistentExamRoutine;
+import org.ums.resource.ResourceHelper;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;

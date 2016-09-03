@@ -3,9 +3,8 @@ package org.ums.common.academic.resource.helper;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
-import org.ums.common.ResourceHelper;
-import org.ums.common.builder.Builder;
 import org.ums.common.builder.StudentRecordBuilder;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.Student;
@@ -14,6 +13,7 @@ import org.ums.domain.model.mutable.MutableStudentRecord;
 import org.ums.manager.SemesterManager;
 import org.ums.manager.StudentManager;
 import org.ums.manager.StudentRecordManager;
+import org.ums.resource.ResourceHelper;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;

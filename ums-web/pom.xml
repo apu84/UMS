@@ -16,13 +16,17 @@
   <dependencies>
     <dependency>
       <groupId>org.ums</groupId>
-      <artifactId>ums-web-templates</artifactId>
+      <artifactId>ums-web-core</artifactId>
       <type>war</type>
       <version>${project.version}</version>
     </dependency>
   </dependencies>
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+      </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>

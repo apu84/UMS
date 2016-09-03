@@ -2,6 +2,7 @@ package org.ums.common.builder;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.CourseGroup;
 import org.ums.domain.model.immutable.Syllabus;

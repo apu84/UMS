@@ -1,6 +1,3 @@
-///<reference path="../grid/JqGridApi.ts"/>
-///<reference path="../grid/JqGridApiImpl.ts"/>
-///<reference path="../grid/InlineNavigationOptions.ts"/>
 module ums {
   export interface JqGridScope extends ng.IScope {
     config: JQueryJqGridOptions;

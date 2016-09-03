@@ -1,4 +1,4 @@
-/// <reference path='../ums.ts' />
+/// <reference path='../../../../../ums-web/src/main/ts/ums.ts' />
 /// <reference path='BaseUri.ts' />
 module ums {
   export class HttpClient {

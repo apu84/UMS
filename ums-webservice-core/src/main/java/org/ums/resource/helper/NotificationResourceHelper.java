@@ -3,14 +3,14 @@ package org.ums.resource.helper;
 import org.apache.commons.lang.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ums.builder.Builder;
+import org.ums.builder.NotificationBuilder;
 import org.ums.cache.LocalCache;
-import org.ums.common.ResourceHelper;
-import org.ums.common.builder.Builder;
-import org.ums.common.builder.NotificationBuilder;
 import org.ums.domain.model.immutable.Notification;
 import org.ums.domain.model.mutable.MutableNotification;
 import org.ums.manager.ContentManager;
 import org.ums.manager.NotificationManager;
+import org.ums.resource.ResourceHelper;
 
 import javax.json.*;
 import javax.ws.rs.core.Response;

@@ -1,7 +1,7 @@
-///<reference path="../../../service/HttpClient.ts"/>
-///<reference path="../../../lib/jquery.notific8.d.ts"/>
-///<reference path="../../../lib/jquery.notify.d.ts"/>
-///<reference path="../../../lib/jquery.jqGrid.d.ts"/>
+///<reference path="../../../../../../../ums-web-core/src/main/ts/service/HttpClient.ts"/>
+///<reference path="../../../../../../../ums-web-core/src/main/ts/lib/jquery.notific8.d.ts"/>
+///<reference path="../../../../../../../ums-web-core/src/main/ts/lib/jquery.notify.d.ts"/>
+///<reference path="../../../../../../../ums-web-core/src/main/ts/lib/jquery.jqGrid.d.ts"/>
 module ums {
 
   interface IExamRoutineScope extends ng.IScope {

@@ -3,11 +3,11 @@ package org.ums.common.academic.resource.helper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ums.common.ResourceHelper;
 import org.ums.common.builder.ProgramBuilder;
 import org.ums.domain.model.immutable.Program;
 import org.ums.domain.model.mutable.MutableProgram;
 import org.ums.manager.ProgramManager;
+import org.ums.resource.ResourceHelper;
 
 import javax.json.JsonObject;
 import javax.ws.rs.core.Response;

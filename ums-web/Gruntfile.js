@@ -22,7 +22,7 @@ module.exports = function (grunt) {
         },
         esteWatch: {
             options: {
-                dirs: ['src/main/ts/**/', 'src/main/webapp/**/',
+                dirs: ['../ums-web-core/src/main/ts/**/', 'src/main/ts/**/', 'src/main/webapp/**/',
                     '!src/main/webapp/templates/**/', '!src/main/webapp/vendors/**/']
             },
             ts: function (filepath) {
@@ -48,7 +48,7 @@ module.exports = function (grunt) {
                     logConcurrentOutput: true
                 }
             }
-        },
+        }
     });
     grunt.loadNpmTasks("grunt-ts");
     grunt.loadNpmTasks("grunt-concurrent");

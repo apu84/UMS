@@ -276,7 +276,7 @@ module ums{
       var defer = this.$q.defer();
       var examRoutineArr:Array<IExamRoutineCCI>=[];
 
-      this.httpClient.get('/ums-webservice-common/academic/examroutine/exam_routine_cci/semester/'+semesterId +'/examtype/'+2,  'application/json',
+      this.httpClient.get('/ums-webservice-academic/academic/examroutine/exam_routine_cci/semester/'+semesterId +'/examtype/'+2,  'application/json',
           (json:any, etag:string) => {
             examRoutineArr = json.entries;
             defer.resolve(examRoutineArr);
@@ -293,7 +293,7 @@ module ums{
     private getSubGroupInfo():ng.IPromise<any>{
       var defer = this.$q.defer();
       var subGroupDb:Array<ISubGroupDb>=[];
-      this.httpClient.get('/ums-webservice-common/academic/subGroupCCI/semester/'+this.$scope.semesterId +'/examDate/'+this.$scope.subGroupExamDate, 'application/json',
+      this.httpClient.get('/ums-webservice-academic/academic/subGroupCCI/semester/'+this.$scope.semesterId +'/examDate/'+this.$scope.subGroupExamDate, 'application/json',
           (json:any, etag:string) => {
             subGroupDb = json.entries;
 
@@ -309,7 +309,7 @@ module ums{
     private getSemesterInfo():ng.IPromise<any>{
       var defer = this.$q.defer();
       this.$scope.semesterList=[];
-      this.httpClient.get('/ums-webservice-common/academic/semester/all', 'application/json',
+      this.httpClient.get('/ums-webservice-academic/academic/semester/all', 'application/json',
           (json:any, etag:string) => {
             this.$scope.semesterList = json.entries;
             console.log("################");
@@ -328,7 +328,7 @@ module ums{
       console.log(examDate);
       this.$scope.applicationCCIArr=[];
       var applicationArr:Array<IApplicationCCI>=[];
-      this.httpClient.get('/ums-webservice-common/academic/applicationCCI/semester/'+this.$scope.semesterId+'/examDate/'+examDate, 'application/json',
+      this.httpClient.get('/ums-webservice-academic/academic/applicationCCI/semester/'+this.$scope.semesterId+'/examDate/'+examDate, 'application/json',
           (json:any, etag:string) => {
             applicationArr = json.entries;
             this.$scope.subGroupPortionSelected=true;

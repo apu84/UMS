@@ -3,12 +3,12 @@ package org.ums.resource.helper;
 import org.apache.commons.lang.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ums.builder.UserBuilder;
 import org.ums.cache.LocalCache;
-import org.ums.common.ResourceHelper;
-import org.ums.common.builder.UserBuilder;
-import org.ums.domain.model.mutable.MutableUser;
 import org.ums.domain.model.immutable.User;
+import org.ums.domain.model.mutable.MutableUser;
 import org.ums.manager.UserManager;
+import org.ums.resource.ResourceHelper;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;

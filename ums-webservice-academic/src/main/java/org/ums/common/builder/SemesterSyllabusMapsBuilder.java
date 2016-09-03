@@ -1,6 +1,7 @@
 package org.ums.common.builder;
 
 import org.springframework.stereotype.Component;
+import org.ums.builder.Builder;
 import org.ums.persistent.model.PersistentProgram;
 import org.ums.persistent.model.PersistentSemester;
 import org.ums.cache.LocalCache;

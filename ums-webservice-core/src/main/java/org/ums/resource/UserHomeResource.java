@@ -3,7 +3,6 @@ package org.ums.resource;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ums.common.Resource;
 import org.ums.services.UserHomeService;
 
 import javax.ws.rs.GET;

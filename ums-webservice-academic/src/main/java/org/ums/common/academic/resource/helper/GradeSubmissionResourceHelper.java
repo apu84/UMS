@@ -6,7 +6,6 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
-import org.ums.common.ResourceHelper;
 import org.ums.common.builder.ExamGradeBuilder;
 import org.ums.domain.model.dto.GradeChartDataDto;
 import org.ums.domain.model.dto.MarksSubmissionStatusDto;
@@ -21,6 +20,7 @@ import org.ums.enums.StudentMarksSubmissionStatus;
 import org.ums.manager.ExamGradeManager;
 import org.ums.manager.UserManager;
 import org.ums.persistent.model.PersistentExamGrade;
+import org.ums.resource.ResourceHelper;
 
 import javax.json.*;
 import javax.ws.rs.core.Response;

@@ -4,8 +4,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ums.common.Resource;
-import org.ums.common.resource.helper.UserResourceHelper;
+import org.ums.resource.helper.UserResourceHelper;
 
 import javax.json.JsonObject;
 import javax.ws.rs.GET;

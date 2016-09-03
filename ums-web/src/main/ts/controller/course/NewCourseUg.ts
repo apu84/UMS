@@ -1,5 +1,5 @@
 ///<reference path="../../model/master_data/Course.ts"/>
-///<reference path="../../service/HttpClient.ts"/>
+///<reference path="../../../../../../ums-web-core/src/main/ts/service/HttpClient.ts"/>
 module ums {
   interface INewCourseUgScope extends ng.IScope {
     submit: Function;
@@ -69,8 +69,8 @@ module ums {
           });
     }
     private pdfDownloadTest() : void {
-//this.$http.post('https://localhost/ums-webservice-common/report/password', {
-      this.$http.post('ums-webservice-common/report/password', {},{ cache: false,responseType: 'arraybuffer' }).success(function (data, $scope) {
+//this.$http.post('https://localhost/ums-webservice-academic/report/password', {
+      this.$http.post('ums-webservice-academic/report/password', {},{ cache: false,responseType: 'arraybuffer' }).success(function (data, $scope) {
             var blob=new Blob([data],{ type: 'application/pdf' });
             var fileURL = URL.createObjectURL(blob);
             console.log(fileURL);

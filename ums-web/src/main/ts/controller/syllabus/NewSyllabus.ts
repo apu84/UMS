@@ -1,8 +1,8 @@
 ///<reference path="../../model/master_data/Syllabus.ts"/>
 ///<reference path="../../model/NewSyllabusModel.ts"/>
 ///<reference path="../../model/NewSyllabusModel.ts"/>
-///<reference path="../../service/HttpClient.ts"/>
-///<reference path="../../lib/jquery.notific8.d.ts"/>
+///<reference path="../../../../../../ums-web-core/src/main/ts/service/HttpClient.ts"/>
+///<reference path="../../../../../../ums-web-core/src/main/ts/lib/jquery.notific8.d.ts"/>
 
 module ums {
   interface INewSyllabusScope extends ng.IScope {

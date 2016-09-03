@@ -2,7 +2,7 @@ package org.ums.login;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ums.common.Resource;
+import org.ums.resource.Resource;
 import org.ums.response.type.GenericResponse;
 import org.ums.services.LoginService;
 

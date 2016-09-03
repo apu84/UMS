@@ -3,7 +3,6 @@ package org.ums.resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.cache.CacheFactory;
-import org.ums.common.Resource;
 
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;

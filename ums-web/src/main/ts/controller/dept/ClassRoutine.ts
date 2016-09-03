@@ -1,8 +1,3 @@
-///<reference path="../../service/HttpClient.ts"/>
-///<reference path="../../lib/jquery.notific8.d.ts"/>
-///<reference path="../../lib/jquery.notify.d.ts"/>
-///<reference path="../../lib/jquery.jqGrid.d.ts"/>
-///<reference path="../../grid/GridDecorator.ts"/>
 module ums {
   import ISemester = ums;
   interface ICassRoutineScope extends ng.IScope {
@@ -104,7 +99,7 @@ module ums {
     private getCourseId(): void {
       var defer = this.$q.defer();
       var courseArr: Array<ICourse>;
-      this.httpClient.get('/ums-webservice-common/academic/course/semester/'
+      this.httpClient.get('/ums-webservice-academic/academic/course/semester/'
           + this.$scope.courseTeacherSearchParamModel.semesterId
           + '/program/'
           + this.$scope.courseTeacherSearchParamModel.programSelector.programId,

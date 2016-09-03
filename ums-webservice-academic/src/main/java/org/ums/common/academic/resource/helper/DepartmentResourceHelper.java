@@ -2,11 +2,11 @@ package org.ums.common.academic.resource.helper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ums.common.ResourceHelper;
 import org.ums.common.builder.DepartmentBuilder;
-import org.ums.domain.model.mutable.MutableDepartment;
 import org.ums.domain.model.immutable.Department;
+import org.ums.domain.model.mutable.MutableDepartment;
 import org.ums.manager.DepartmentManager;
+import org.ums.resource.ResourceHelper;
 
 import javax.json.JsonObject;
 import javax.ws.rs.core.Response;

@@ -2,15 +2,15 @@ package org.ums.common.academic.resource.helper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
-import org.ums.common.ResourceHelper;
-import org.ums.common.builder.Builder;
 import org.ums.common.builder.SubGroupCCIBuilder;
 import org.ums.domain.model.immutable.SubGroupCCI;
 import org.ums.domain.model.mutable.MutableSubGroupCCI;
 import org.ums.manager.SeatPlanManager;
 import org.ums.manager.SubGroupCCIManager;
 import org.ums.persistent.model.PersistentSubGroupCCI;
+import org.ums.resource.ResourceHelper;
 
 import javax.json.*;
 import javax.ws.rs.core.Request;
@@ -24,7 +24,7 @@ import java.util.List;
  * Created by My Pc on 7/23/2016.
  */
 @Component
-public class SubGroupCCIResourceHelper extends ResourceHelper<SubGroupCCI,MutableSubGroupCCI,Integer>{
+public class SubGroupCCIResourceHelper extends ResourceHelper<SubGroupCCI, MutableSubGroupCCI, Integer> {
 
   @Autowired
   SubGroupCCIManager mManager;

@@ -1,8 +1,3 @@
-///<reference path="../../../service/HttpClient.ts"/>
-///<reference path="../../../lib/jquery.notific8.d.ts"/>
-///<reference path="../../../lib/jquery.notify.d.ts"/>
-///<reference path="../../../lib/jquery.jqGrid.d.ts"/>
-///<reference path="../../../grid/GridDecorator.ts"/>
 module ums {
 
   interface IClassRoomScope extends ng.IScope {

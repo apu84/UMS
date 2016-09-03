@@ -1,4 +1,4 @@
-package org.ums.common.builder;
+package org.ums.builder;
 
 import org.apache.velocity.app.VelocityEngine;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -2,11 +2,11 @@ package org.ums.common.academic.resource.helper;
 
 
 import org.ums.cache.LocalCache;
-import org.ums.common.ResourceHelper;
 import org.ums.domain.model.common.EditType;
 import org.ums.domain.model.common.Mutable;
 import org.ums.enums.CourseCategory;
 import org.ums.manager.AssignedTeacherManager;
+import org.ums.resource.ResourceHelper;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;

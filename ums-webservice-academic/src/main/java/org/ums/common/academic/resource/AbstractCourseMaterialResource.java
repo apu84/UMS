@@ -8,8 +8,8 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
 import org.springframework.util.StringUtils;
-import org.ums.common.Resource;
 import org.ums.manager.BinaryContentManager;
+import org.ums.resource.Resource;
 
 import javax.json.JsonArray;
 import javax.json.JsonObject;

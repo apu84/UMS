@@ -1,6 +1,7 @@
 package org.ums.common.builder;
 
 import org.springframework.stereotype.Component;
+import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.SubGroupCCI;
 import org.ums.domain.model.mutable.MutableSubGroupCCI;
@@ -14,7 +15,7 @@ import javax.ws.rs.core.UriInfo;
  * Created by My Pc on 7/23/2016.
  */
 @Component
-public class SubGroupCCIBuilder implements Builder<SubGroupCCI,MutableSubGroupCCI>{
+public class SubGroupCCIBuilder implements Builder<SubGroupCCI,MutableSubGroupCCI> {
   @Override
   public void build(JsonObjectBuilder pBuilder, SubGroupCCI pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) throws Exception {
     if(pReadOnly.getId()!=null)

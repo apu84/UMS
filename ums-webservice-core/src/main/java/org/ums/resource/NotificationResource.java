@@ -3,8 +3,7 @@ package org.ums.resource;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ums.common.Resource;
-import org.ums.common.resource.helper.NotificationResourceHelper;
+import org.ums.resource.helper.NotificationResourceHelper;
 
 import javax.json.JsonArray;
 import javax.json.JsonObject;

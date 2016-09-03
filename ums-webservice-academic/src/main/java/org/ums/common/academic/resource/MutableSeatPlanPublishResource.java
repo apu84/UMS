@@ -1,8 +1,8 @@
 package org.ums.common.academic.resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.ums.common.Resource;
 import org.ums.common.academic.resource.helper.SeatPlanPublishResourceHelper;
+import org.ums.resource.Resource;
 
 import javax.json.JsonObject;
 import javax.ws.rs.POST;

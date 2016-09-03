@@ -1,8 +1,3 @@
-///<reference path="../../service/HttpClient.ts"/>
-///<reference path="../../lib/jquery.notify.d.ts"/>
-///<reference path="../../lib/jquery.jqGrid.d.ts"/>
-///<reference path="../../grid/GridDecorator.ts"/>
-
 module ums {
 
   export interface RowData {

@@ -2,10 +2,9 @@ package org.ums.common.academic.resource.helper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
-import org.ums.common.ResourceHelper;
 import org.ums.common.academic.resource.SubGroupResource;
-import org.ums.common.builder.Builder;
 import org.ums.common.builder.SubGroupBuilder;
 import org.ums.domain.model.immutable.SubGroup;
 import org.ums.domain.model.mutable.MutableSubGroup;
@@ -14,6 +13,7 @@ import org.ums.manager.SubGroupManager;
 import org.ums.persistent.model.PersistentSeatPlanGroup;
 import org.ums.persistent.model.PersistentSemester;
 import org.ums.persistent.model.PersistentSubGroup;
+import org.ums.resource.ResourceHelper;
 
 import javax.json.*;
 import javax.ws.rs.core.Request;
@@ -28,7 +28,7 @@ import java.util.List;
  */
 
 @Component
-public class SubGroupResourceHelper extends ResourceHelper<SubGroup,MutableSubGroup,Integer>{
+public class SubGroupResourceHelper extends ResourceHelper<SubGroup, MutableSubGroup, Integer> {
 
   @Autowired
   private SubGroupManager mManager;

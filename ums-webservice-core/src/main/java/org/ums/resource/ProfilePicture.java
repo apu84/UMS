@@ -5,7 +5,6 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import org.ums.common.Resource;
 import org.ums.manager.BinaryContentManager;
 
 import javax.ws.rs.GET;

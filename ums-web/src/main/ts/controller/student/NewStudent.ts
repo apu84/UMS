@@ -1,6 +1,6 @@
-///<reference path="../../lib/jquery-maskedinput.d.ts"/>
-///<reference path="../../service/HttpClient.ts"/>
-///<reference path="../../service/FileUpload.ts"/>
+///<reference path="../../../../../../ums-web-core/src/main/ts/lib/jquery-maskedinput.d.ts"/>
+///<reference path="../../../../../../ums-web-core/src/main/ts/service/HttpClient.ts"/>
+///<reference path="../../../../../../ums-web-core/src/main/ts/service/FileUpload.ts"/>
 ///<reference path="../../model/NewStudentModel.ts"/>
 module ums {
   interface NewStudentScope extends ng.IScope {

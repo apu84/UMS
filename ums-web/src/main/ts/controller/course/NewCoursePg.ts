@@ -1,4 +1,4 @@
-///<reference path="../../service/HttpClient.ts"/>
+///<reference path="../../../../../../ums-web-core/src/main/ts/service/HttpClient.ts"/>
 module ums {
   export class NewCoursePg {
 

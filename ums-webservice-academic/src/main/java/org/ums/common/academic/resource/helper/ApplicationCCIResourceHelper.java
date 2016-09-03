@@ -3,11 +3,10 @@ package org.ums.common.academic.resource.helper;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
-import org.ums.common.ResourceHelper;
 import org.ums.common.academic.resource.ApplicationCCIResource;
 import org.ums.common.builder.ApplicationCCIBuilder;
-import org.ums.common.builder.Builder;
 import org.ums.common.builder.UGRegistrationResultBuilder;
 import org.ums.domain.model.immutable.ApplicationCCI;
 import org.ums.domain.model.immutable.Student;
@@ -18,6 +17,7 @@ import org.ums.manager.StudentManager;
 import org.ums.manager.UGRegistrationResultManager;
 import org.ums.persistent.model.PersistentApplicationCCI;
 import org.ums.persistent.model.PersistentUGRegistrationResult;
+import org.ums.resource.ResourceHelper;
 import org.ums.services.academic.ApplicationCCIService;
 
 import javax.json.*;
@@ -32,7 +32,7 @@ import java.util.List;
  * Created by My Pc on 7/14/2016.
  */
 @Component
-public class ApplicationCCIResourceHelper extends ResourceHelper<ApplicationCCI,MutableApplicationCCI,Integer>{
+public class ApplicationCCIResourceHelper extends ResourceHelper<ApplicationCCI, MutableApplicationCCI, Integer> {
 
   @Autowired
   ApplicationCCIManager mManager;

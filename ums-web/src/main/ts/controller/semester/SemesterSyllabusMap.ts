@@ -1,7 +1,7 @@
-///<reference path="../../service/HttpClient.ts"/>
-///<reference path="../../service/FileUpload.ts"/>
+///<reference path="../../../../../../ums-web-core/src/main/ts/service/HttpClient.ts"/>
+///<reference path="../../../../../../ums-web-core/src/main/ts/service/FileUpload.ts"/>
 ///<reference path="../../model/SemesterSyllabusMapModel.ts"/>
-///<reference path="../../lib/jquery.notific8.d.ts"/>
+///<reference path="../../../../../../ums-web-core/src/main/ts/lib/jquery.notific8.d.ts"/>
 
 module ums {
   interface SemesterSyllabusMapScope extends ng.IScope {

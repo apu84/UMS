@@ -1,16 +1,16 @@
-package org.ums.resource.helper;
+package org.ums.common.resource.helper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.ums.common.builder.AdditionalRolePermissionsBuilder;
-import org.ums.persistent.model.PersistentAdditionalRolePermissions;
 import org.ums.cache.LocalCache;
-import org.ums.common.ResourceHelper;
-import org.ums.domain.model.mutable.MutableAdditionalRolePermissions;
+import org.ums.common.builder.AdditionalRolePermissionsBuilder;
 import org.ums.domain.model.immutable.AdditionalRolePermissions;
+import org.ums.domain.model.mutable.MutableAdditionalRolePermissions;
 import org.ums.manager.AdditionalRolePermissionsManager;
 import org.ums.manager.NavigationManager;
+import org.ums.persistent.model.PersistentAdditionalRolePermissions;
+import org.ums.resource.ResourceHelper;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;

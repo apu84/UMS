@@ -4,13 +4,13 @@ import org.apache.commons.lang.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
-import org.ums.common.ResourceHelper;
 import org.ums.common.builder.TeacherBuilder;
 import org.ums.domain.model.immutable.Department;
 import org.ums.domain.model.immutable.Teacher;
 import org.ums.domain.model.mutable.MutableTeacher;
 import org.ums.manager.DepartmentManager;
 import org.ums.manager.TeacherManager;
+import org.ums.resource.ResourceHelper;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;

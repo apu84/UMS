@@ -1,7 +1,7 @@
 package org.ums.common.academic.resource;
 
 import org.springframework.stereotype.Component;
-import org.ums.common.Resource;
+import org.ums.resource.Resource;
 
 import javax.json.JsonObject;
 import javax.ws.rs.*;

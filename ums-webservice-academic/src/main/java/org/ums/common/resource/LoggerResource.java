@@ -3,8 +3,8 @@ package org.ums.common.resource;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import org.springframework.stereotype.Component;
-import org.ums.common.Resource;
 import org.ums.logging.applog.UMSLogger;
+import org.ums.resource.Resource;
 
 import javax.json.*;
 import javax.ws.rs.GET;

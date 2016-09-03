@@ -28,7 +28,7 @@ public class DummyServlet extends javax.servlet.http.HttpServlet implements java
     DummyService service = (DummyService) ctx.getBean("dummyService");*/
 
     response.getWriter().println(dummyService.getMessage());
-    response.getWriter().println("Using service instance ums-webservice-common");
+    response.getWriter().println("Using service instance ums-webservice-academic");
     response.getWriter().println(dummyService);
   }
 

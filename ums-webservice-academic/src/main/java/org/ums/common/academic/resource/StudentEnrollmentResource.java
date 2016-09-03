@@ -4,13 +4,13 @@ package org.ums.common.academic.resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
-import org.ums.common.Resource;
 import org.ums.common.builder.EnrollmentFromToBuilder;
 import org.ums.domain.model.immutable.EnrollmentFromTo;
 import org.ums.domain.model.immutable.SemesterEnrollment;
 import org.ums.manager.EnrollmentFromToManager;
 import org.ums.manager.SemesterEnrollmentManager;
 import org.ums.manager.StudentRecordManager;
+import org.ums.resource.Resource;
 import org.ums.response.type.GenericResponse;
 import org.ums.services.academic.EnrollmentService;
 

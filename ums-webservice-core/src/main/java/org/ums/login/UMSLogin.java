@@ -7,11 +7,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.ums.common.Resource;
 import org.ums.domain.model.immutable.BearerAccessToken;
 import org.ums.domain.model.mutable.MutableBearerAccessToken;
 import org.ums.manager.BearerAccessTokenManager;
 import org.ums.persistent.model.PersistentBearerAccessToken;
+import org.ums.resource.Resource;
 
 import javax.json.Json;
 import javax.json.JsonObject;

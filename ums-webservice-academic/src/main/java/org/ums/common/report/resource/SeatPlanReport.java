@@ -1,7 +1,7 @@
 package org.ums.common.report.resource;
 
 import org.springframework.stereotype.Component;
-import org.ums.common.Resource;
+import org.ums.resource.Resource;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

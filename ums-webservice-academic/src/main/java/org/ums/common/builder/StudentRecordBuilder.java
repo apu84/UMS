@@ -1,6 +1,7 @@
 package org.ums.common.builder;
 
 import org.springframework.stereotype.Component;
+import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.StudentRecord;
 import org.ums.domain.model.mutable.MutableStudentRecord;
@@ -13,7 +14,7 @@ import javax.ws.rs.core.UriInfo;
  * Created by My Pc on 08-Aug-16.
  */
 @Component
-public class StudentRecordBuilder implements  Builder<StudentRecord,MutableStudentRecord> {
+public class StudentRecordBuilder implements Builder<StudentRecord,MutableStudentRecord> {
   @Override
   public void build(JsonObjectBuilder pBuilder, StudentRecord pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) throws Exception {
     if(pReadOnly.getId()!=null){

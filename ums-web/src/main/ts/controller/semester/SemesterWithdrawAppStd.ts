@@ -296,7 +296,7 @@ module ums{
 
     private getStudentsInformation():ng.IPromise<any>{
       var defer = this.$q.defer();
-      this.httpClient.get('/ums-webservice-common/academic/student/getStudentInfoById', 'application/json',
+      this.httpClient.get('/ums-webservice-academic/academic/student/getStudentInfoById', 'application/json',
           (json:any, etag:string) => {
             this.$scope.student = json.entries;
             defer.resolve(this.$scope.student);
@@ -309,7 +309,7 @@ module ums{
 
     private getParameterSetting():ng.IPromise<any>{
       var defer = this.$q.defer();
-      this.httpClient.get('/ums-webservice-common/academic/parameterSetting/parameter/9/semester/'+this.$scope.student[0].semesterId, 'application/json',
+      this.httpClient.get('/ums-webservice-academic/academic/parameterSetting/parameter/9/semester/'+this.$scope.student[0].semesterId, 'application/json',
           (json:any, etag:string) => {
             this.$scope.parameterSetting = json.entries;
 
@@ -323,7 +323,7 @@ module ums{
 
     private getSemesterWithdrawApplications():ng.IPromise<any>{
       var defer = this.$q.defer();
-      this.httpClient.get('/ums-webservice-common/academic/semesterWithdraw/all', 'application/json',
+      this.httpClient.get('/ums-webservice-academic/academic/semesterWithdraw/all', 'application/json',
           (json:any, etag:string) => {
             this.$scope.semesterWithdrawArr = json.entries;
             defer.resolve(this.$scope.semesterWithdrawArr);

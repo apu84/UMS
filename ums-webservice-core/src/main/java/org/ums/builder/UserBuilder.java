@@ -1,4 +1,4 @@
-package org.ums.common.builder;
+package org.ums.builder;
 
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;

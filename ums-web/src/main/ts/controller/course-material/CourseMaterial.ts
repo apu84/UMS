@@ -63,8 +63,8 @@ module ums {
 
     private initFileManager(semesterName: string, courseNo: string,
                             semesterId: string, courseId: string): void {
-      var baseUri: string = '/ums-webservice-common/academic/courseMaterial/semester/' + semesterName + "/course/" + courseNo;
-      var downloadBaseUri: string = '/ums-webservice-common/academic/courseMaterial/download/semester/' + semesterName + "/course/" + courseNo;
+      var baseUri: string = '/ums-webservice-academic/academic/courseMaterial/semester/' + semesterName + "/course/" + courseNo;
+      var downloadBaseUri: string = '/ums-webservice-academic/academic/courseMaterial/download/semester/' + semesterName + "/course/" + courseNo;
 
       FILEMANAGER_CONFIG.set({
         appName: semesterName + ' > ' + courseNo,

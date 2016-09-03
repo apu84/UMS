@@ -2,14 +2,14 @@ package org.ums.common.academic.resource.helper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
-import org.ums.common.ResourceHelper;
-import org.ums.common.builder.Builder;
 import org.ums.common.builder.SeatPlanPublishBuilder;
 import org.ums.domain.model.immutable.SeatPlanPublish;
 import org.ums.domain.model.mutable.MutableSeatPlanPublish;
 import org.ums.manager.SeatPlanPublishManager;
 import org.ums.persistent.model.PersistentSeatPlanPublish;
+import org.ums.resource.ResourceHelper;
 
 import javax.json.*;
 import javax.ws.rs.core.Request;
@@ -23,7 +23,7 @@ import java.util.List;
  * Created by My Pc on 8/4/2016.
  */
 @Component
-public class SeatPlanPublishResourceHelper extends ResourceHelper<SeatPlanPublish,MutableSeatPlanPublish,Integer>{
+public class SeatPlanPublishResourceHelper extends ResourceHelper<SeatPlanPublish, MutableSeatPlanPublish, Integer> {
 
   @Autowired
   private SeatPlanPublishManager mManager;

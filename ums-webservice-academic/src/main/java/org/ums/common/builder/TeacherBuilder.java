@@ -1,10 +1,11 @@
 package org.ums.common.builder;
 
 import org.springframework.stereotype.Component;
+import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
-import org.ums.domain.model.mutable.MutableTeacher;
 import org.ums.domain.model.immutable.Department;
 import org.ums.domain.model.immutable.Teacher;
+import org.ums.domain.model.mutable.MutableTeacher;
 
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;

@@ -1,7 +1,7 @@
 package org.ums.resource;
 
 
-import org.ums.common.builder.Builder;
+import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.common.EditType;
 import org.ums.domain.model.common.Mutable;

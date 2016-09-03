@@ -2,13 +2,13 @@ package org.ums.common.report.resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ums.common.Resource;
 import org.ums.common.report.generator.UgGradeSheetGenerator;
 import org.ums.domain.model.dto.StudentGradeDto;
 import org.ums.dummy.webservice.DummyXLSGenerator;
 import org.ums.enums.CourseType;
 import org.ums.generator.XlsGenerator;
 import org.ums.manager.ExamGradeManager;
+import org.ums.resource.Resource;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;

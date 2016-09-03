@@ -102,7 +102,7 @@ module ums{
     private getAcrtiveSemesters():ng.IPromise<any>{
       var defer = this.$q.defer();
       this.$scope.semesterList=[];
-      this.httpClient.get('/ums-webservice-common/academic/semester/all', 'application/json',
+      this.httpClient.get('/ums-webservice-academic/academic/semester/all', 'application/json',
           (json:any, etag:string) => {
             this.$scope.semesterList = json.entries;
            // console.log(this.$scope.semesterList);
@@ -117,7 +117,7 @@ module ums{
 
     private getCivilExamRoutine():ng.IPromise<any>{
       var defer = this.$q.defer();
-      this.httpClient.get("/ums-webservice-common/academic/examroutine/forPublish/civil/semester/"+this.$scope.semesterId,'application/json',
+      this.httpClient.get("/ums-webservice-academic/academic/examroutine/forPublish/civil/semester/"+this.$scope.semesterId,'application/json',
           (json:any,etag:string)=>{
             var seatPlanPublishArr:ISeatPlanPublish=json.entries;
             console.log("~~~~~~~~~~~~~");
@@ -135,7 +135,7 @@ module ums{
     }
     private getCCIExamRoutine():ng.IPromise<any>{
       var defer = this.$q.defer();
-      this.httpClient.get("/ums-webservice-common/academic/examroutine/forPublish/cci/semester/"+this.$scope.semesterId,'application/json',
+      this.httpClient.get("/ums-webservice-academic/academic/examroutine/forPublish/cci/semester/"+this.$scope.semesterId,'application/json',
           (json:any,etag:string)=>{
             var seatPlanPublishArr:Array<ISeatPlanPublish>=json.entries;
             for(var i=0;i<seatPlanPublishArr.length;i++){
@@ -151,7 +151,7 @@ module ums{
     private getSeatPlanPublish():ng.IPromise<any>{
       console.log(this.$scope.semesterId);
       var defer = this.$q.defer();
-      this.httpClient.get("/ums-webservice-common/academic/seatPlanPublish/semester/"+this.$scope.semesterId,'application/json',
+      this.httpClient.get("/ums-webservice-academic/academic/seatPlanPublish/semester/"+this.$scope.semesterId,'application/json',
           (json:any,etag:string)=>{
               var seatPlanPubLish:Array<ISeatPlanPublish>=json.entries;
             console.log("**********************");
@@ -175,7 +175,7 @@ module ums{
 
     private postSeatPlanPublish(){
       var json = this.jsonConverter();
-      this.httpClient.post('/ums-webservice-common/academic/seatPlanPublish/semester/'+this.$scope.semesterId,json,'application/json')
+      this.httpClient.post('/ums-webservice-academic/academic/seatPlanPublish/semester/'+this.$scope.semesterId,json,'application/json')
         .success(()=>{
             this.notify.success("Successfully saved data");
         })
@@ -186,7 +186,7 @@ module ums{
 
     private putSeatPlanPublish(json:any){
 
-      this.httpClient.put('/ums-webservice-common/academic/seatPlanPublish/semester/'+this.$scope.semesterId,json,'application/json')
+      this.httpClient.put('/ums-webservice-academic/academic/seatPlanPublish/semester/'+this.$scope.semesterId,json,'application/json')
           .success(()=>{
             this.notify.success("Successfully saved data");
           })

@@ -5,8 +5,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ums.common.Resource;
 import org.ums.manager.BearerAccessTokenManager;
+import org.ums.resource.Resource;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;

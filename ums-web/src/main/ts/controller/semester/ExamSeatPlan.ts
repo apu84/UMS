@@ -1391,7 +1391,7 @@ module ums{
     private getSeatPlanGroupInfo():ng.IPromise<any>{
       var defer = this.$q.defer();
       var seatPlanGroupList:Array<ISeatPlanGroup>;
-      this.httpClient.get('/ums-webservice-common/academic/seatPlanGroup/semester/'+this.$scope.semesterId +'/type/'+this.$scope.examType+'/update/'+this.$scope.update, 'application/json',
+      this.httpClient.get('/ums-webservice-academic/academic/seatPlanGroup/semester/'+this.$scope.semesterId +'/type/'+this.$scope.examType+'/update/'+this.$scope.update, 'application/json',
           (json:any, etag:string) => {
             seatPlanGroupList = json.entries;
 
@@ -1414,7 +1414,7 @@ module ums{
 
     private getSemesterInfo():ng.IPromise<any>{
       var defer = this.$q.defer();
-      this.httpClient.get('/ums-webservice-common/academic/semester/all', 'application/json',
+      this.httpClient.get('/ums-webservice-academic/academic/semester/all', 'application/json',
           (json:any, etag:string) => {
             this.$scope.semesterList = json.entries;
 
@@ -1432,7 +1432,7 @@ module ums{
       console.log("condition of cciSelected");
       console.log(this.$scope.cciSelected);
       if(this.$scope.cciSelected){
-        this.httpClient.get('/ums-webservice-common/academic/subGroupCCI/semester/'+this.$scope.semesterId+'/examDate/'+this.$scope.examDate,'application/json',
+        this.httpClient.get('/ums-webservice-academic/academic/subGroupCCI/semester/'+this.$scope.semesterId+'/examDate/'+this.$scope.examDate,'application/json',
             (json:any,etag:string)=>{
               this.$scope.selectedGroupTotalStudent=0;
               subGroupDb = json.entries;
@@ -1451,7 +1451,7 @@ module ums{
             });
       }
       else{
-        this.httpClient.get('/ums-webservice-common/academic/subGroup/get/semesterId/'+this.$scope.semesterId +'/groupNo/'+this.$scope.selectedGroupNo+'/type/'+this.$scope.examType, 'application/json',
+        this.httpClient.get('/ums-webservice-academic/academic/subGroup/get/semesterId/'+this.$scope.semesterId +'/groupNo/'+this.$scope.selectedGroupNo+'/type/'+this.$scope.examType, 'application/json',
             (json:any, etag:string) => {
               subGroupDb = json.entries;
               console.log("#######################");
@@ -1477,7 +1477,7 @@ module ums{
       if(this.$scope.examDate==null){
         this.$scope.examDate="null";
       }
-      this.httpClient.get('/ums-webservice-common/academic/seatplan/semesterId/'+this.$scope.semesterId +'/groupNo/'+groupNo+'/type/'+this.$scope.examType+'/examDate/null',  'application/pdf',
+      this.httpClient.get('/ums-webservice-academic/academic/seatplan/semesterId/'+this.$scope.semesterId +'/groupNo/'+groupNo+'/type/'+this.$scope.examType+'/examDate/null',  'application/pdf',
           (data:any, etag:string) => {
             var file = new Blob([data], {type: 'application/pdf'});
             var fileURL = this.$sce.trustAsResourceUrl(URL.createObjectURL(file));
@@ -1496,7 +1496,7 @@ module ums{
       this.$scope.loadingVisibilityForCCI=true;
       var groupNo:number = 0;
 
-      this.httpClient.get('/ums-webservice-common/academic/seatplan/semesterId/'+this.$scope.semesterId +'/groupNo/'+groupNo+'/type/'+this.$scope.examType+'/examDate/'+examDate,  'application/pdf',
+      this.httpClient.get('/ums-webservice-academic/academic/seatplan/semesterId/'+this.$scope.semesterId +'/groupNo/'+groupNo+'/type/'+this.$scope.examType+'/examDate/'+examDate,  'application/pdf',
           (data:any, etag:string) => {
             var file = new Blob([data], {type: 'application/pdf'});
             var fileURL = this.$sce.trustAsResourceUrl(URL.createObjectURL(file));
@@ -1513,7 +1513,7 @@ module ums{
       var defer = this.$q.defer();
       var examRoutineArr:Array<IExamRoutineCCI>=[];
 
-      this.httpClient.get('/ums-webservice-common/academic/examroutine/exam_routine_cci/semester/'+this.$scope.semesterId +'/examtype/'+this.$scope.examType,  'application/json',
+      this.httpClient.get('/ums-webservice-academic/academic/examroutine/exam_routine_cci/semester/'+this.$scope.semesterId +'/examtype/'+this.$scope.examType,  'application/json',
           (json:any, etag:string) => {
             examRoutineArr = json.entries;
             defer.resolve(examRoutineArr);
@@ -1536,7 +1536,7 @@ module ums{
       console.log(examDate);
       this.$scope.tempGroupList=[];
       var applicationArr:Array<ISeatPlanGroup>=[];
-      this.httpClient.get('/ums-webservice-common/academic/applicationCCI/semester/'+this.$scope.semesterId+'/examDate/'+examDate, 'application/json',
+      this.httpClient.get('/ums-webservice-academic/academic/applicationCCI/semester/'+this.$scope.semesterId+'/examDate/'+examDate, 'application/json',
           (json:any, etag:string) => {
             applicationArr = json.entries;
             this.$scope.subGroupSelected=true;

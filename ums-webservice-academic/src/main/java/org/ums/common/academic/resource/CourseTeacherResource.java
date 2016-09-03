@@ -4,13 +4,13 @@ package org.ums.common.academic.resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import org.ums.common.Resource;
 import org.ums.common.academic.resource.helper.CourseTeacherResourceHelper;
 import org.ums.domain.model.immutable.CourseTeacher;
 import org.ums.domain.model.mutable.MutableCourseTeacher;
 import org.ums.enums.CourseCategory;
 import org.ums.manager.AssignedTeacherManager;
 import org.ums.manager.SemesterSyllabusMapManager;
+import org.ums.resource.Resource;
 
 import javax.json.JsonObject;
 import javax.ws.rs.*;

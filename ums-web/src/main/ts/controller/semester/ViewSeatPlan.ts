@@ -189,7 +189,7 @@ module ums{
       var defer = this.$q.defer();
       var student:Student;
 
-      this.httpClient.get('/ums-webservice-common/academic/student/getStudentInfoById','application/json',
+      this.httpClient.get('/ums-webservice-academic/academic/student/getStudentInfoById','application/json',
           (json:any,etag:string)=>{
             student = json.entries;
             this.$scope.student = student;
@@ -207,7 +207,7 @@ module ums{
       var defer = this.$q.defer();
       var studentRecord:any={};
 
-      this.httpClient.get("/ums-webservice-common/academic/studentrecord/student/"+this.$scope.student[0].id+
+      this.httpClient.get("/ums-webservice-academic/academic/studentrecord/student/"+this.$scope.student[0].id+
               "/semesterId/"+this.$scope.student[0].semesterId+"/year/"+this.$scope.student[0].year+"/semester/"+this.$scope.student[0].academicSemester,
               'application/json',
           (json:any,etag:string)=>{
@@ -224,7 +224,7 @@ module ums{
     private getSeatPlanInfoFinalExam():ng.IPromise<any>{
       var defer = this.$q.defer();
       var seatPlanArr:Array<ISeatPlan>=[];
-      this.httpClient.get("/ums-webservice-common/academic/seatplan/studentId/"+this.$scope.student[0].id+"/semesterId/"+this.$scope.student[0].semesterId,'application/json',
+      this.httpClient.get("/ums-webservice-academic/academic/seatplan/studentId/"+this.$scope.student[0].id+"/semesterId/"+this.$scope.student[0].semesterId,'application/json',
           (json:any,etag:string)=>{
             seatPlanArr = json.entries;
             console.log("*** seat plan information****");
@@ -239,7 +239,7 @@ module ums{
     private getSeatPlanInfoCCIExam(examDate:string):ng.IPromise<any>{
       var defer = this.$q.defer();
       var seatPlanArr:Array<ISeatPlan>=[];
-      this.httpClient.get("/ums-webservice-common/academic/seatplan/studentId/"+this.$scope.student[0].id+"/semesterId/"+this.$scope.student[0].semesterId+'/examDate/'+examDate,'application/json',
+      this.httpClient.get("/ums-webservice-academic/academic/seatplan/studentId/"+this.$scope.student[0].id+"/semesterId/"+this.$scope.student[0].semesterId+'/examDate/'+examDate,'application/json',
           (json:any,etag:string)=>{
             seatPlanArr = json.entries;
             console.log("*** seat plan CCIIIII****");
@@ -254,7 +254,7 @@ module ums{
     private getClassRoomInfo(roomId:number):ng.IPromise<any>{
       var defer = this.$q.defer();
       var classRoom:Array<IClassRoom>=[];
-      this.httpClient.get("/ums-webservice-common/academic/classroom/roomId/"+roomId,'application/json',
+      this.httpClient.get("/ums-webservice-academic/academic/classroom/roomId/"+roomId,'application/json',
           (json:any,etag:string)=>{
             classRoom=json.entries;
             defer.resolve(classRoom);
@@ -270,7 +270,7 @@ module ums{
     private getApplicationCCIInfo():ng.IPromise<any>{
       var defer = this.$q.defer();
       var applicationCCI:Array<IApplicationCCI>=[];
-      this.httpClient.get("/ums-webservice-common/academic/applicationCCI/seatPlanView","application/json",
+      this.httpClient.get("/ums-webservice-academic/academic/applicationCCI/seatPlanView","application/json",
           (json:any,etag:string)=>{
             applicationCCI=json.entries;
             console.log(applicationCCI);

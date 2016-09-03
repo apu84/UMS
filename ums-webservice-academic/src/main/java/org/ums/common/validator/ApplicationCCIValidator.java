@@ -4,8 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.ums.manager.ApplicationCCIManager;
 import org.ums.manager.ParameterSettingManager;
 import org.ums.manager.UGRegistrationResultManager;
+import org.ums.validator.AbstractValidator;
 
-import javax.json.*;
+import javax.json.JsonObject;
 
 /**
  * Created by My Pc on 7/17/2016.

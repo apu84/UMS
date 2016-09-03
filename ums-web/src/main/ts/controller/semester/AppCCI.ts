@@ -111,7 +111,7 @@ module ums{
       var json:any=this.convertToJson(this.$scope.registrationResults);
       this.$scope.loadingVisibility=true;
       this.$scope.responseResults=[];
-      this.httpClient.post('/ums-webservice-common/academic/applicationCCI',json,'application/json')
+      this.httpClient.post('/ums-webservice-academic/academic/applicationCCI',json,'application/json')
         .success((data,status,header,config)=>{
           console.log("#####################");
           console.log(data);
@@ -369,7 +369,7 @@ module ums{
       var defer = this.$q.defer();
       var parameter:IParameterSetting;
 
-      this.httpClient.get('/ums-webservice-common/academic/parameterSetting/parameter/'+'application_cci','application/json',
+      this.httpClient.get('/ums-webservice-academic/academic/parameterSetting/parameter/'+'application_cci','application/json',
           (json:any,etag:string)=>{
             parameter = json.entries;
 
@@ -395,7 +395,7 @@ module ums{
       var defer = this.$q.defer();
       var student:Student;
 
-      this.httpClient.get('/ums-webservice-common/academic/student/getStudentInfoById','application/json',
+      this.httpClient.get('/ums-webservice-academic/academic/student/getStudentInfoById','application/json',
           (json:any,etag:string)=>{
             student = json.entries;
             this.$scope.student = student;
@@ -409,7 +409,7 @@ module ums{
     private getRegistrationResultInfo():ng.IPromise<any>{
       var defer = this.$q.defer();
       var registrationResult:Array<IUGRegistrationResult>=[];
-      this.httpClient.get('/ums-webservice-common/academic/UGRegistrationResultResource/CarryClearanceImprovement','application/json',
+      this.httpClient.get('/ums-webservice-academic/academic/UGRegistrationResultResource/CarryClearanceImprovement','application/json',
           (json:any,etag:string)=>{
             registrationResult = json.entries;
 
@@ -424,7 +424,7 @@ module ums{
     private getApplicationCCIInfo():ng.IPromise<any>{
       var defer = this.$q.defer();
       var appCCIArr : Array<AppCCI>=[];
-      this.httpClient.get('/ums-webservice-common/academic/applicationCCI/student','application/json',
+      this.httpClient.get('/ums-webservice-academic/academic/applicationCCI/student','application/json',
           (json:any,etag:string)=>{
             appCCIArr = json.entries;
 

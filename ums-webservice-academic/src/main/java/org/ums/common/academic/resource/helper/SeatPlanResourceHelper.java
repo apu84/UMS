@@ -1,19 +1,21 @@
 package org.ums.common.academic.resource.helper;
 
-import com.itextpdf.text.*;
+import com.itextpdf.text.Document;
 import com.itextpdf.text.pdf.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
-import org.ums.common.ResourceHelper;
-import org.ums.common.builder.Builder;
 import org.ums.common.builder.SeatPlanBuilder;
 import org.ums.common.report.generator.SeatPlanReportGenerator;
-import org.ums.domain.model.immutable.*;
+import org.ums.domain.model.immutable.SeatPlan;
+import org.ums.domain.model.immutable.SubGroup;
+import org.ums.domain.model.immutable.SubGroupCCI;
 import org.ums.domain.model.mutable.MutableSeatPlan;
 import org.ums.manager.*;
+import org.ums.resource.ResourceHelper;
 import org.ums.response.type.GenericResponse;
 import org.ums.services.academic.SeatPlanService;
 

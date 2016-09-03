@@ -22,7 +22,7 @@
     </dependency>
     <dependency>
       <groupId>org.ums</groupId>
-      <artifactId>ums-webservice-common</artifactId>
+      <artifactId>ums-webservice-academic</artifactId>
       <type>war</type>
       <version>${project.version}</version>
     </dependency>

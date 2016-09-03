@@ -6,12 +6,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.ums.cache.LocalCache;
 import org.ums.common.builder.ExaminerBuilder;
-import org.ums.common.validator.ValidationException;
 import org.ums.domain.model.immutable.Examiner;
 import org.ums.domain.model.mutable.MutableExaminer;
 import org.ums.manager.AssignedTeacherManager;
 import org.ums.message.MessageResource;
 import org.ums.persistent.model.PersistentExaminer;
+import org.ums.validator.ValidationException;
 
 import javax.json.JsonArray;
 import javax.json.JsonObject;

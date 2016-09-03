@@ -1,14 +1,15 @@
 module ums {
-  export class BaseUri {
+  export interface IBaseUri {
+    toRelative(url: string): string;
+    toAbsolute(url: string): string;
+    getBaseURI(): URI;
+  }
 
+  export class BaseUri implements IBaseUri {
     baseURI:URI;
 
-    constructor() {
+    constructor(private servicePath: string) {
       this.baseURI = new URI().pathname(this.getServicePath()).username(null).password(null).search(null).fragment(null);
-    }
-
-    public getServicePath() {
-      return '/ums-webservice-common/';
     }
 
     public toRelative(url:string):string {
@@ -36,7 +37,24 @@ module ums {
     public getBaseURI():URI{
       return this.baseURI;
     }
+
+
+    public getServicePath(): string {
+      return this.servicePath;
+    }
   }
 
-  UMS.service('BaseUri', BaseUri);
+  export class BaseUriProvider implements ng.IServiceProvider {
+    private servicePath = "/";
+
+    public setServicePath(path: string): void {
+      this.servicePath = path;
+    }
+
+    public $get() {
+      return new BaseUri(this.servicePath);
+    }
+  }
+
+  UMS.provider('BaseUri', BaseUriProvider);
 }

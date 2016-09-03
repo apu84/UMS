@@ -2,10 +2,9 @@ package org.ums.common.academic.resource.helper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
-import org.ums.common.ResourceHelper;
 import org.ums.common.academic.resource.SpStudentResource;
-import org.ums.common.builder.Builder;
 import org.ums.common.builder.SpStudentBuilder;
 import org.ums.domain.model.immutable.SpStudent;
 import org.ums.domain.model.mutable.MutableSpStudent;
@@ -13,6 +12,7 @@ import org.ums.manager.ProgramManager;
 import org.ums.manager.SemesterManager;
 import org.ums.manager.SpStudentManager;
 import org.ums.persistent.model.PersistentSpStudent;
+import org.ums.resource.ResourceHelper;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
@@ -30,7 +30,7 @@ import java.util.List;
  */
 
 @Component
-public class SpStudentResourceHelper extends ResourceHelper<SpStudent,MutableSpStudent,String>{
+public class SpStudentResourceHelper extends ResourceHelper<SpStudent, MutableSpStudent, String> {
 
   @Autowired
   private SpStudentManager mManager;

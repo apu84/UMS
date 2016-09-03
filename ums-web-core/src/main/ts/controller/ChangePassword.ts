@@ -1,7 +1,3 @@
-///<reference path="../../model/ChangePasswordModel.ts"/>
-///<reference path="../../model/User.ts"/>
-///<reference path="../../service/HttpClient.ts"/>
-
 module ums {
   interface IChangePasswordScope extends ng.IScope {
     submit: Function;
@@ -15,13 +11,13 @@ module ums {
   export class ChangePassword {
     public static $inject = ['$scope', 'HttpClient', '$window'];
 
-    constructor(private $scope:IChangePasswordScope, private httpClient:HttpClient,
-                private $window:ng.IWindowService) {
+    constructor(private $scope: IChangePasswordScope, private httpClient: HttpClient,
+                private $window: ng.IWindowService) {
       $scope.submit = this.submit.bind(this);
-      console.debug('%o',this.$scope.user);
+      console.debug('%o', this.$scope.user);
     }
 
-    private submit():void {
+    private submit(): void {
       this.httpClient.put('changePassword', this.$scope.password, 'application/json')
           .success((response) => {
             this.$scope.response = {

@@ -4,10 +4,9 @@ package org.ums.common.academic.resource.helper;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.common.academic.resource.EmployeeResource;
-import org.ums.common.ResourceHelper;
-import org.ums.common.builder.Builder;
 import org.ums.common.builder.EmployeeBuilder;
 import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.immutable.User;
@@ -15,6 +14,7 @@ import org.ums.domain.model.mutable.MutableEmployee;
 import org.ums.manager.EmployeeManager;
 import org.ums.manager.UserManager;
 import org.ums.persistent.model.PersistentEmployee;
+import org.ums.resource.ResourceHelper;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
@@ -27,7 +27,7 @@ import java.net.URI;
 import java.util.List;
 
 @Component
-public class EmployeeResourceHelper extends ResourceHelper<Employee,MutableEmployee,String>{
+public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmployee, String> {
 
   @Autowired
   private EmployeeManager mEmployeeManager;

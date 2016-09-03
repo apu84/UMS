@@ -1,4 +1,4 @@
-///<reference path="../../lib/jquery.tablesorter.d.ts"/>
+///<reference path="../../../../../../ums-web-core/src/main/ts/lib/jquery.tablesorter.d.ts"/>
 module ums {
   export class GridSyllabus {
     public static $inject = ['appConstants', '$scope', 'HttpClient'];

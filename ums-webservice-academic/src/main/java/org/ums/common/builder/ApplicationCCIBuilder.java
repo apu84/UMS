@@ -1,6 +1,7 @@
 package org.ums.common.builder;
 
 import org.springframework.stereotype.Component;
+import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.ApplicationCCI;
 import org.ums.domain.model.mutable.MutableApplicationCCI;
@@ -10,11 +11,8 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
 
-/**
- * Created by My Pc on 7/14/2016.
- */
 @Component
-public class ApplicationCCIBuilder implements Builder<ApplicationCCI,MutableApplicationCCI>{
+public class ApplicationCCIBuilder implements Builder<ApplicationCCI, MutableApplicationCCI> {
   @Override
   public void build(JsonObjectBuilder pBuilder, ApplicationCCI pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) throws Exception {
     if(pReadOnly.getId()!=null)

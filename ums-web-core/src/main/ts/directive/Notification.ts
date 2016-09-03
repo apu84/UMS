@@ -37,7 +37,7 @@ module ums {
     public templateUrl = "./views/directive/notification.html";
 
     private getNotification() {
-      this.httpClient.poll("/ums-webservice-common/notification/10/", HttpClient.MIME_TYPE_JSON,
+      this.httpClient.poll("/ums-webservice-academic/notification/10/", HttpClient.MIME_TYPE_JSON,
           (response: NotificationEntries)=> {
             var tempCount: number = 0;
             for (var i = 0; i < response.entries.length; i++) {

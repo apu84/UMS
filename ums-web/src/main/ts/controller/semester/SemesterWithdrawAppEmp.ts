@@ -204,7 +204,7 @@ module ums{
 
     private getEmployeeInformation():ng.IPromise<any>{
       var defer = this.$q.defer();
-      this.httpClient.get('/ums-webservice-common/academic/employee/employeeById', 'application/json',
+      this.httpClient.get('/ums-webservice-academic/academic/employee/employeeById', 'application/json',
           (json:any, etag:string) => {
             this.$scope.employee = json.entries;
             defer.resolve(this.$scope.employee);
@@ -217,7 +217,7 @@ module ums{
 
     private getSemesterWithdrawApplications():ng.IPromise<any>{
       var defer = this.$q.defer();
-      this.httpClient.get('/ums-webservice-common/academic/semesterWithdraw/deptId/'+this.$scope.employee[0].deptOfficeId, 'application/json',
+      this.httpClient.get('/ums-webservice-academic/academic/semesterWithdraw/deptId/'+this.$scope.employee[0].deptOfficeId, 'application/json',
           (json:any, etag:string) => {
             this.$scope.semesterWithdrawArr = json.entries;
             defer.resolve(this.$scope.semesterWithdrawArr);
@@ -230,7 +230,7 @@ module ums{
 
     private getSemesterWithdrawApplicationsAll():ng.IPromise<any>{
       var defer = this.$q.defer();
-      this.httpClient.get('/ums-webservice-common/academic/semesterWithdraw/all', 'application/json',
+      this.httpClient.get('/ums-webservice-academic/academic/semesterWithdraw/all', 'application/json',
           (json:any, etag:string) => {0
             this.$scope.semesterWithdrawArr = json.entries;
             defer.resolve(this.$scope.semesterWithdrawArr);
@@ -242,7 +242,7 @@ module ums{
     }
     private getSemesterWithdrawLogs():ng.IPromise<any>{
       var defer = this.$q.defer();
-      this.httpClient.get('/ums-webservice-common/academic/semesterWithdrawLog/all', 'application/json',
+      this.httpClient.get('/ums-webservice-academic/academic/semesterWithdrawLog/all', 'application/json',
           (json:any, etag:string) => {
             this.$scope.semesterWithdrawLogArr = json.entries;
             defer.resolve(this.$scope.semesterWithdrawArr);
@@ -254,7 +254,7 @@ module ums{
     }
     private getStudentInfo():ng.IPromise<any>{
       var defer = this.$q.defer();
-      this.httpClient.get('/ums-webservice-common/academic/student/'+this.$scope.tempSemesterWithdraw.studentId, 'application/json',
+      this.httpClient.get('/ums-webservice-academic/academic/student/'+this.$scope.tempSemesterWithdraw.studentId, 'application/json',
           (json:any, etag:string) => {
             this.$scope.student = json;
 
@@ -268,7 +268,7 @@ module ums{
 
     private getSemesterInfo():ng.IPromise<any>{
       var defer = this.$q.defer();
-      this.httpClient.get('/ums-webservice-common/academic/semester/'+this.$scope.tempSemesterWithdraw.semesterId, 'application/json',
+      this.httpClient.get('/ums-webservice-academic/academic/semester/'+this.$scope.tempSemesterWithdraw.semesterId, 'application/json',
           (json:any, etag:string) => {
             this.$scope.semester = json;
             defer.resolve(this.$scope.semester);

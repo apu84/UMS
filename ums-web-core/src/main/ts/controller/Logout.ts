@@ -1,4 +1,4 @@
-///<reference path="../../util/UriUtil.ts"/>
+///<reference path="../../../../../ums-web/src/main/ts/util/UriUtil.ts"/>
 module ums {
   export class Logout {
     public static $inject = ['$window', 'HttpClient'];

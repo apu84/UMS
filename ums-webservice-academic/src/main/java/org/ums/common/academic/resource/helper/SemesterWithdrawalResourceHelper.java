@@ -4,15 +4,15 @@ package org.ums.common.academic.resource.helper;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
-import org.ums.common.ResourceHelper;
 import org.ums.common.academic.resource.SemesterWithdrawalResource;
-import org.ums.common.builder.Builder;
 import org.ums.common.builder.SemesterWithdrawalBuilder;
 import org.ums.domain.model.immutable.SemesterWithdrawal;
 import org.ums.domain.model.mutable.MutableSemesterWithdrawal;
 import org.ums.manager.SemesterWithDrawalManager;
 import org.ums.persistent.model.PersistentSemesterWithdrawal;
+import org.ums.resource.ResourceHelper;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;

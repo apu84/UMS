@@ -2,7 +2,7 @@ var Authentication = (function () {
   function Authentication() {
   }
 
-  var endpointUrl = window.location.origin + '/ums-webservice-common/login';
+  var endpointUrl = window.location.origin + '/ums-webservice-academic/login';
 
   Authentication.prototype.authenticate = function (pUserName,pPassword) {
     var userName = pUserName?pUserName:document.getElementById('userName').value;
@@ -55,7 +55,7 @@ var Authentication = (function () {
       crossDomain: true,
       type: "PUT",
       async: true,
-      url: window.location.origin + '/ums-webservice-common/forgotPassword',
+      url: window.location.origin + '/ums-webservice-academic/forgotPassword',
       contentType: 'application/json',
       data:'{"userId":"'+userId+'"}',
 
@@ -102,7 +102,7 @@ var Authentication = (function () {
       crossDomain: true,
       type: "PUT",
       async: true,
-      url: window.location.origin + '/ums-webservice-common/forgotPassword/resetPassword',
+      url: window.location.origin + '/ums-webservice-academic/forgotPassword/resetPassword',
       contentType: 'application/json',
       data:'{"userId":"'+userId+'","passwordResetToken":"'+resetToken+'","newPassword":"'+newPassword+'","confirmNewPassword":"'+confirmNewPassword+'"}',
       success: function (response) {

@@ -6,9 +6,8 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import org.ums.builder.NavigationBuilder;
 import org.ums.cache.LocalCache;
-import org.ums.common.ResourceHelper;
-import org.ums.common.builder.NavigationBuilder;
 import org.ums.domain.model.immutable.*;
 import org.ums.domain.model.mutable.MutableNavigation;
 import org.ums.manager.AdditionalRolePermissionsManager;
@@ -16,6 +15,7 @@ import org.ums.manager.NavigationManager;
 import org.ums.manager.PermissionManager;
 import org.ums.manager.UserManager;
 import org.ums.processor.navigation.NavigationProcessor;
+import org.ums.resource.ResourceHelper;
 
 import javax.json.*;
 import javax.ws.rs.core.Response;

@@ -4,13 +4,13 @@ package org.ums.common.academic.resource.helper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
-import org.ums.common.ResourceHelper;
 import org.ums.common.academic.resource.SemesterResource;
 import org.ums.common.builder.SemesterBuilder;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.mutable.MutableSemester;
 import org.ums.manager.SemesterManager;
 import org.ums.persistent.model.PersistentSemester;
+import org.ums.resource.ResourceHelper;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;

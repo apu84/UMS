@@ -68,7 +68,7 @@
     </dependencySet>
     <dependencySet>
       <includes>
-        <include>org.ums:ums-webservice-common</include>
+        <include>org.ums:ums-webservice-academic</include>
       </includes>
       <outputDirectory>webapps</outputDirectory>
       <outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>

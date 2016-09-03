@@ -14,7 +14,7 @@ module ums{
       var defer = this.$q.defer();
       var limit=0;
       var semesterArr:Array<Semester>=[];
-      this.httpClient.get('/ums-webservice-common/academic/semester/program-type/'+programTypeNumeric+'/limit/'+0, 'application/json',
+      this.httpClient.get('/ums-webservice-academic/academic/semester/program-type/'+programTypeNumeric+'/limit/'+0, 'application/json',
           (json:any, etag:string) => {
             semesterArr = json.entries;
             defer.resolve(semesterArr);
@@ -29,7 +29,7 @@ module ums{
     public getAllSemesters():ng.IPromise<any>{
       var defer = this.$q.defer();
       var semesterArr:Array<Semester>=[];
-      this.httpClient.get('/ums-webservice-common/academic/semester/all', 'application/json',
+      this.httpClient.get('/ums-webservice-academic/academic/semester/all', 'application/json',
           (json:any, etag:string) => {
             semesterArr = json.entries;
             defer.resolve(semesterArr);
