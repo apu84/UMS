@@ -43,7 +43,7 @@ module ums{
                 private $q:ng.IQService, private notify: Notify,
                 private $sce:ng.ISCEService,private $window:ng.IWindowService, private semesterService:SemesterService,
                 private examRoutineService:ExamRoutineService,
-                private examGradeService:ExamGradeService) {
+                private examGradeService:any) {
 
 
       $scope.showLoader=false;
