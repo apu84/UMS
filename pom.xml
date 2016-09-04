@@ -61,7 +61,6 @@
     <!--<module>ums-web</module>-->
     <module>ums-dist</module>
     <module>ums-webservice-academic</module>
-    <module>ums-web-core</module>
     <!-- <module>ums-web-templates</module>-->
   </modules>
 
