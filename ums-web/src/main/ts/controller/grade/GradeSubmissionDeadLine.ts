@@ -43,7 +43,7 @@ module ums{
                 private $q:ng.IQService, private notify: Notify,
                 private $sce:ng.ISCEService,private $window:ng.IWindowService, private semesterService:SemesterService,
                 private examRoutineService:ExamRoutineService,
-                private examGradeService:any) {
+                private examGradeService:ExamGradeService) {
 
 
       $scope.showLoader=false;
@@ -86,8 +86,8 @@ module ums{
     }
 
     private dateChanged(examGrade:IExamGrade){
-        this.$scope.showButton=true;
-        examGrade.changed=true;
+      this.$scope.showButton=true;
+      examGrade.changed=true;
     }
 
     private cancel(){
