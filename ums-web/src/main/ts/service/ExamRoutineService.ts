@@ -25,6 +25,7 @@ module ums{
     }
 
 
+
     public getExamRoutineDates(semesterId:number,examType:number):ng.IPromise<any>{
       var examRoutineList:Array<ExamRoutineModel>=[];
       var defer = this.$q.defer();

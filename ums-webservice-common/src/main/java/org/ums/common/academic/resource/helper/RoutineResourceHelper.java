@@ -8,6 +8,7 @@ import org.ums.common.ResourceHelper;
 import org.ums.common.academic.resource.RoutineResource;
 import org.ums.common.builder.Builder;
 import org.ums.common.builder.RoutineBuilder;
+import org.ums.common.report.generator.ClassRoutineGenerator;
 import org.ums.domain.model.immutable.Routine;
 import org.ums.domain.model.immutable.Student;
 import org.ums.domain.model.mutable.MutableProgram;
@@ -43,6 +44,9 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
 
   @Autowired
   private RoutineBuilder mBuilder;
+
+  @Autowired
+  private ClassRoutineGenerator mRoutineGenerator;
 
 
   @Override
@@ -106,7 +110,7 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
 
 
   public void getRoutineReportForTeacher(final OutputStream pOutputStream, final Request pRequest, final UriInfo pUriInfo)throws Exception{
-
+      mRoutineGenerator.createClassRoutineTeacherReport(pOutputStream);
   }
 
   public JsonObject getRoutineForStudent() throws Exception {

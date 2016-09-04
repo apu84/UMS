@@ -126,5 +126,8 @@ public class ClassRoutineGeneratorImpl implements ClassRoutineGenerator {
 
     document.add(table);
 
+    document.close();
+    baos.writeTo(pOutputStream);
+
   }
 }
