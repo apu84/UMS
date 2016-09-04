@@ -136,6 +136,9 @@ module  ums{
     private getStudentRoutineBySemesterAndProgram(){
       this.httpClient.get('academic/routine/routineForStudent','application/json',(json:any,etag:string)=>{
             this.$scope.routines = json.entries;
+            console.log("*******routines***********");
+            console.log(this.$scope.routines);
+            console.log("*********routines*******");
             this.getCourses().then((courseArr:Array<ICourse>)=>{
               this.createStudentsRoutine(this.$scope.routines);
             });
@@ -167,6 +170,8 @@ module  ums{
       this.httpClient.get('academic/student','application/json',(json:any,etag:string)=>{
             this.$scope.student = json;
             this.getStudentRoutineBySemesterAndProgram();
+            console.log("student: ");
+            console.log(this.$scope.student);
 
           },
           (response:ng.IHttpPromiseCallbackArg<any>)=>{
@@ -177,10 +182,13 @@ module  ums{
     private getCourses():ng.IPromise<any>{
       var defer = this.$q.defer();
       var courseArr:Array<ICourse>;
-      this.httpClient.get('/ums-webservice-common/academic/course/semester/'+'11012016'+'/program/'+'110500', 'application/json',
+      this.httpClient.get('/ums-webservice-common/academic/course/semester/'+this.$scope.student.semesterId+'/program/'+this.$scope.student.programId+'/year/'+this.$scope.student.year+'/academicSemester/'+this.$scope.student.academicSemester, 'application/json',
           (json:any, etag:string) => {
             courseArr = json.entries;
             this.$scope.courseArr = courseArr;
+            console.log("****courses*****");
+            console.log(courseArr);
+            console.log("****courses****");
             defer.resolve(courseArr);
           },
           (response:ng.IHttpPromiseCallbackArg<any>) => {

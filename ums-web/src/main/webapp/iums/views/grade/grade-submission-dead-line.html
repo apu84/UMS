@@ -58,7 +58,7 @@
                     <td align="center">Exam Date</td>
                     <td align="center">Program</td>
                     <td align="center">Course No</td>
-                    <td align="center">Course Title</td>
+                    <td align="left">Course Title</td>
                     <td align="center">CrHr</td>
                     <td align="center">Total Students</td>
                     <td align="center">Last Date of Submission</td>
@@ -68,10 +68,10 @@
                         <td>{{e.examDate}}</td>
                         <td>{{e.programShortName}}</td>
                         <td>{{e.courseNo}}</td>
-                        <td>{{e.courseTitle}}</td>
+                        <td align="left">{{e.courseTitle}}</td>
                         <td>{{e.courseCreditHour}}</td>
                         <td class="col-md-1">{{e.totalStudents}}</td>
-                        <td align="center" ><input contenteditable="editable" style="width:50%;" type="text" data-date-format="dd-mm-yyyy" placeholder="dd-mm-yyyy" class="datepicker-default form-control" data-ng-model="e.lastSubmissionDate" data-ng-change="dateChanged(e)"> </td>
+                        <td align="center" ><input align="center" contenteditable="editable" style="width:40%;" type="text" data-date-format="dd-mm-yyyy" placeholder="dd-mm-yyyy" class="datepicker-default form-control" data-ng-model="e.lastSubmissionDate" data-ng-change="dateChanged(e)"> </td>
                     </tr>
                 </tbody>
 

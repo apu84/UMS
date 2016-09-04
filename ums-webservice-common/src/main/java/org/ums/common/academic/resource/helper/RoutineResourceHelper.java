@@ -26,8 +26,10 @@ import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.io.OutputStream;
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 @Component
@@ -96,9 +98,15 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
     for (Routine routine : routines) {
       children.add(toJson(routine, pUriInfo, localCache));
     }
+
     object.add("entries", children);
     localCache.invalidate();
     return object.build();
+  }
+
+
+  public void getRoutineReportForTeacher(final OutputStream pOutputStream, final Request pRequest, final UriInfo pUriInfo)throws Exception{
+
   }
 
   public JsonObject getRoutineForStudent() throws Exception {
