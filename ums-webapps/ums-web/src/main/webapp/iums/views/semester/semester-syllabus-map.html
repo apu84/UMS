@@ -1,0 +1,136 @@
+<div class="row">
+    <div class="col-lg-4">
+        <div class="panel panel-white">
+            <div class="panel-heading">Selection</div>
+            <div class="panel-body pan shadowPanel">
+                <form action="" class="form-horizontal" >
+                    <div class="form-body pal">
+                        <div data-program-selector="" data-model="semesterSyllabusMapModel.programSelector"></div>
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Semester</label>
+                            <div class="col-md-8">
+                                <select class="form-control required" data-ng-model="semesterSyllabusMapModel.semesterId" ng-init="semesterSyllabusMapModel.semesterId=''">
+                                    <option data-ng-repeat="semester in semesterSyllabusMapModel.programSelector.getSemesters()" value="{{semester.id}}">{{semester.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-actions text-right pal">
+                        <button type="button" class="btn btn-success" ng-click="goNext()">Next</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="panel panel-white">
+            <div class="panel-heading">Saved Mapping</div>
+            <div class="panel-body shadowPanel" style="min-height: 400px;">
+
+                <div class="spinner" ng-show="loadingVisibility1">
+                    <div class="bounce1"></div>
+                    <div class="bounce2"></div>
+                    <div class="bounce3"></div>
+                </div>
+                <div class="no-record" data-ng-show="noRecordVisibility">{{mapMessage}}</div>
+                <table class="table table-hover" width="100%" data-ng-show="mapTableVisibility">
+                    <thead>
+                    <tr>
+                        <th width="40%">Year-Semester</th>
+                        <th width="40%">Syllabus</th>
+                        <th width="20%">View</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <tr ng-repeat="entry in maps">
+                        <td>{{entry.year}} Year -{{entry.semester}} Semester</td>
+                        <td>{{entry.syllabusName}}</td>
+                        <td>
+                            <a href="javascript:void(0)" ng-click="fetchSSmap(entry.id)">View</a>
+                        </td>
+                    </tr>
+                </table>
+
+                <div data-ng-show="copyDivVisiblity">
+                    <div class="row bold label-padding">
+                        <div class="col-md-12"> Copy Mapping From below Semester -</div>
+                    </div>
+                    <div class="row label-padding">
+                        <div class="col-md-12">
+                            <select class="form-control required" data-ng-model="copySemesterId" ng-init="copySemesterId=''">
+                                <option data-ng-repeat="semester in semesterSyllabusMapModel.programSelector.getSemesters()" value="{{semester.id}}">{{semester.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row right label-padding">
+                        <div class="col-md-12"><button type="button" class="btn btn-success" ng-click="copyMapping()">Copy Mapping</button></div>
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="panel panel-white">
+            <div class="panel-heading">View/Edit Mapping</div>
+            <div class="panel-body pan shadowPanel" style="min-height: 400px;">
+                <div class="spinner" ng-show="loadingVisibility2">
+                    <div class="bounce1"></div>
+                    <div class="bounce2"></div>
+                    <div class="bounce3"></div>
+                </div>
+
+                <form class="form-horizontal form-separated" data-ng-show="mapDetailVisiblity">
+                    <div class="form-body pal">
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">Year- Sem</label>
+                            <div class="col-md-9">
+                                <input class="form-control" disabled value="{{single.year}} Year - {{single.semester}} Semester"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">Semester</label>
+                            <div class="col-md-9">
+                                <input class="form-control" disabled ng-model="single.academicSemester"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">Dept/School</label>
+                            <div class="col-md-9">
+                                <input class="form-control" disabled ng-model="single.deptName"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">Program</label>
+                            <div class="col-md-9">
+                                <input class="form-control" disabled ng-model="single.programName"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">Syllabus</label>
+                            <div class="col-md-9">
+                                <input type="hidden"  data-ng-model="single.id" />
+                                <input class="form-control" disabled ng-model="single.syllabusName" data-ng-show="syllabusTextBoxVisibility"/>
+                                <select class="form-control required" data-ng-model="single.syllabusId" data-ng-show="syllabusSelectBoxVisibility">
+                                    <option data-ng-repeat="syllabus in syllabusOptions" value="{{syllabus.id}}">{{syllabus.semester_name}}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-actions text-right pal">
+                            <button type="button" class="btn btn-primary" data-ng-click="editAction()">Edit</button>&nbsp;
+                            <button type="button" class="btn btn-default" data-ng-click="editSaveAction()">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>

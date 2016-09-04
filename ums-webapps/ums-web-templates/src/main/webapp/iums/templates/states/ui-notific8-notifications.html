@@ -1,0 +1,88 @@
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="note note-success">
+      <h4 class="box-heading">Sco.message</h4>
+      <p>Sco.message is separate with Notific8, you can customize it easily</p>
+    </div>
+  </div>
+  <div class="col-lg-12">
+    <div class="panel">
+      <div class="panel-body pan">
+        <form action="#" class="form-horizontal form-bordered">
+          <div class="form-body">
+            <div class="form-group">
+              <label for="" class="col-md-3 control-label">Notification text:</label>
+              <div class="col-md-6">
+                <input id="notific8Text" type="text" value="notific8 was inspired by Windows 8 notifications" placeholder="enter a text ..." class="form-control"/>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="" class="col-md-3 control-label">Sticky:</label>
+              <div class="col-md-6">
+                <input id="notific8Sticky" type="checkbox" name="notific8Sticky"/>&nbsp;
+                (if checked, setting life below will be ignored)
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="" class="col-md-3 control-label">Life:</label>
+              <div class="col-md-6">
+                <select id="notific8Life" name="notific8Life" class="form-control">
+                  <option value="1000">1 second</option>
+                  <option value="5000">5 seconds</option>
+                  <option value="10000" selected="selected">10 seconds (default)</option>
+                  <option value="25000">25 seconds</option>
+                  <option value="60000">60 seconds</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="" class="col-md-3 control-label">Heading (optional):</label>
+              <div class="col-md-6">
+                <input id="notific8Heading" type="text" name="notific8Heading" size="50" maxlength="50" class="form-control"/>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="" class="col-md-3 control-label">Theme:</label>
+              <div class="col-md-6">
+                <select id="notific8Theme" name="notific8Theme" class="form-control">
+                  <option value="teal" selected="selected">teal (default)</option>
+                  <option value="amethyst">amethyst</option>
+                  <option value="ruby">ruby</option>
+                  <option value="tangerine">tangerine</option>
+                  <option value="lemon">lemon</option>
+                  <option value="lime">lime</option>
+                  <option value="ebony">ebony</option>
+                  <option value="smoke">smoke</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="" class="col-md-3 control-label">Position:</label>
+              <div class="col-md-3">
+                <select id="notific8horizontal" name="notific8horizontal" class="form-control">
+                  <option value="top">top (default)</option>
+                  <option value="bottom">bottom</option>
+                </select>
+              </div>
+              <div class="col-md-3">
+                <select id="notific8vertical" name="notific8vertical" class="form-control">
+                  <option value="right">right (default)</option>
+                  <option value="left">left</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="" class="col-md-3 control-label"></label>
+              <div class="col-md-9">
+                <button id="notific8Test" type="button" name="notific8Test" class="btn btn-primary">Test notific8</button>
+                <button id="message_trigger_ok" type="button" name="Sco.messageTest" class="btn btn-success mll">Test Sco.message.ok</button>
+                <button id="message_trigger_err" type="button" name="Sco.messageTest" class="btn btn-danger mll">Test Sco.message.error</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

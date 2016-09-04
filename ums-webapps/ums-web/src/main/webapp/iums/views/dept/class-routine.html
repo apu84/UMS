@@ -1,0 +1,110 @@
+<div class="row">
+    <div class="orgLeftClass pull-left panel panel-green" id="leftDiv">
+        <div class="panel-heading">
+            <h3 class="panel-title">Select </h3>
+        </div>
+        <div class="panel-body pan">
+            <form action="" class="form-horizontal">
+                <div class="form-body pal">
+
+                    <div data-program-selector="" data-model="courseTeacherSearchParamModel.programSelector"></div>
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Academic Semester</label>
+                        <div class="col-md-8">
+                            <select class="form-control required" data-ng-change="getRoomNo()" data-ng-model="courseTeacherSearchParamModel.semesterId" ng-init="newSyllabusModel.semesterId=''" >
+                                <option data-ng-repeat="semester in courseTeacherSearchParamModel.programSelector.getSemesters()" value="{{semester.id}}">{{semester.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Students Year</label>
+                        <div class="col-md-8">
+                            <select class="form-control required" data-ng-change="getCourseId()" data-ng-model="courseTeacherSearchParamModel.academicYearId" ng-init="academicYear=''">
+                                <option data-ng-repeat="year in data.academicYear" value="{{year.id}}">
+                                    {{year.name}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Students Semester</label>
+                        <div class="col-md-8">
+                            <select class="form-control required" data-ng-model="courseTeacherSearchParamModel.academicSemesterId" ng-init="academicSemester=''">
+                                <option data-ng-repeat="semester in data.academicSemester" value="{{semester.id}}">
+                                    {{semester.name}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="form-actions text-right pal">
+                    <button type="button" class="btn btn-success" data-ng-click="fetchGrid()">Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="arrowClass pull-left" data-ng-click="resetDivs()" id="arrowDiv"><i
+            class="fa fa-angle-double-right fa-4x"></i></i> </div>
+
+    <div class="orgRightClass pull-left" id="rightDiv">
+
+        <div class="panel" style="min-height: 490px;">
+            <div class="panel-heading">Class Routine<span
+                        class="subtitle"></span></div>
+            <div class="panel-body">
+                <div data-jq-grid=""
+                     data-config="gridOptions"
+                     data-addnew="true"
+                     data="classRoutineData"
+                     gridid="classRoutine"
+                     pagerid="classRoutinePager"
+                     grid="grid"
+                     inline-nav-options="inlineNavOptions"
+                     data-ng-if="gridOptions">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<style type="text/css">
+
+    .orgLeftClass {
+        width: 30%;
+
+    }
+
+    .orgRightClass {
+        width: 66%;
+    }
+
+    .arrowClass {
+        display: none;
+        cursor: pointer;
+    }
+
+    .orgLeftClass, .arrowClass {
+        margin-right: 25px;
+        margin-left: 8px;
+    "
+
+    }
+
+    .newRightClass {
+        width: 94%;
+    }
+
+    .bootstrap-select.btn-group:not(.input-group-btn), .bootstrap-select.btn-group[class*="span"] {
+        margin-bottom: 0px !important;
+    }
+
+    .table tbody tr td {
+        border-top: none !important;
+    }
+</style>

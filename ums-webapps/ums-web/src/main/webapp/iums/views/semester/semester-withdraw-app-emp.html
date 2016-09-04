@@ -1,0 +1,140 @@
+
+<div class="panel panel-green" data-ng-if="detailButtonCliecked==false" data-ng-init="initialize()">
+    <div class="panel-heading">Semester Withdraw Applications</div>
+    <div class="panel-body">
+        <table class="table table-hover table-bordered">
+            <thead>
+            <tr>
+                <th>Student Id</th>
+                <th>Student Name</th>
+                <th>Application Date</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr data-ng-repeat="app in semesterWithdrawArr | filter:{status:'!0'}">
+                    {{tempSemesterWithdraw=app;""}}
+                    <td>{{app.studentId}}</td>
+                    <td>{{app.studentName}}</td>
+                    <td>{{app.appDate}}</td>
+                    <td data-ng-if="app.status>0">
+                        <span class="label label-sm label-info" data-ng-if="app.status==1">Submitted</span>
+                        <span class="label label-sm label-success" data-ng-if="app.status==2">Waiting for Registrar's approval</span>
+                        <span class="label label-sm label-warning" data-ng-if="app.status==3">Rejected By Head</span>
+                        <span class="label label-sm label-success" data-ng-if="app.status==4">Approved By Registrar</span>
+                        <span class="label label-sm label-warning" data-ng-if="app.status==5">Rejected By Registrar</span>
+
+                    </td>
+                    <td>
+                        <button data-ng-click="details(app)">Detailes</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="row" data-ng-if="detailButtonCliecked==true">
+    <div class="col-lg-2"></div>
+    <div class="col-lg-8" align="center">
+        <div class="panel panel-grey">
+            <div class="panel-heading">
+                <h3 class="panel-title pull-left">
+                    Detailed Information
+                </h3>
+
+                <button class="btn btn-default pull-right" data-ng-click="closeWindow()"><i class="fa fa-times" aria-hidden="true"></i></button>
+                <div class="clearfix"></div>
+            </div>
+            <div class="panel-body pan">
+                <form action="">
+                    <div class="form-body pal">
+                        <div class="row">
+                            <div class="col-md-6" align="left">
+                                <div class="form-group">
+                                    <p>Student Name: <b>{{student.fullName}}</b></p>
+                                </div>
+                            </div>
+                            <div class="col-md-6" align="left">
+                                <div class="form-group">
+                                    <p>Student Id: <b>{{student.id}}</b></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6" align="left">
+                                <div class="form-group">
+                                    <p>Year : <b>{{student.year}}</b>, Semester: <b>{{student.academicSemester}}</b></p>
+                                </div>
+                            </div>
+                            <div class="col-md-6" align="left">
+                                <div class="form-group">
+                                        <p>Semester Name: <b>{{semester.name}}</b></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6" align="left">
+                                <div class="form-group">
+                                    <p>Application Date: {{tempSemesterWithdraw.appDate}}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6" align="left">
+                                <div class="form-group">
+                                    <p>Status: <b data-ng-if="tempSemesterWithdraw.status==2">Application Approved By Head</b>
+                                        <b data-ng-if="tempSemesterWithdraw.status==1">Submitted By Student.</b>
+                                        <b data-ng-if="tempSemesterWithdraw.status==3">Application Rejected By Head</b>
+                                        <b data-ng-if="tempSemesterWithdraw.status==4">Application Approved By Registrar</b>
+                                        <b data-ng-if="tempSemesterWithdraw.status==5">Application Rejected By Registrar</b>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <hr/>
+                        <hr/>
+
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group" align="left">
+                                    <p> <b>CAUSE</b></p>
+                                </div>
+                                <div class="form-group" align="left">
+                                    <textarea readonly rows="10" class="form-control" value="{{tempSemesterWithdraw.cause}}">
+                            </textarea>
+                                </div>
+                            </div>
+
+                        </div>
+                        <hr><hr>
+                        <div class="row">
+
+                            <div class="form-group" align="left">
+                                <div class="col-md-12">
+                                    <p>Comment: </p>
+                                    <div data-ng-if="commentEdit==false">
+                                        <textarea readonly rows="10" class="form-control" value="{{comments}}">
+                                       </textarea>
+                                    </div>
+                                    <div data-ng-if="commentEdit">
+                                        <textarea rows="10" class="form-control" data-ng-model="data.comments" data-ng-if="commentEdit" ></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-actions text-right pal">
+                        <button  class="btn btn-primary" data-ng-if="approveButton==true" data-ng-click="approve()">Approve</button>
+                        <button  class="btn btn-primary" data-ng-if="rejectButton==true" data-ng-click="reject()">Reject</button>
+                        <button  class="btn btn-primary" data-ng-if="saveAndCloseButton" data-ng-click="saveAndClose()">Save & Close</button>
+
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-2"></div>
+</div>

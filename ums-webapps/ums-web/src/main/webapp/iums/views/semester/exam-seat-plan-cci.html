@@ -1,0 +1,195 @@
+<style>
+
+    .custom-menu {
+        position: absolute;
+        display: none;
+        z-index: 1000;
+        overflow: hidden;
+        border: 1px solid #CCC;
+        white-space: nowrap;
+        font-family: sans-serif;
+        background: #FFF;
+        color: #333;
+        border-radius: 5px;
+    }
+    .custom-menu li {
+        padding: 8px 12px;
+        cursor: pointer;
+    }
+    .custom-menu li:hover {
+        background-color: #DEF;
+    }
+
+    .list {
+        list-style: none outside none;
+        margin: 10px 0 30px;
+    }
+
+    .item {
+        width: 200px;
+        padding: 5px 10px;
+        margin: 5px 0;
+        border: 2px solid #444;
+        border-radius: 5px;
+        background-color: #EA8A8A;
+
+        font-size: 1.1em;
+        font-weight: bold;
+        text-align: center;
+        cursor: pointer;
+    }
+
+    .ui-sortable-helper {
+        cursor: move;
+    }
+
+</style>
+
+
+
+
+
+    <div class="panel panel-blue" data-ng-init="getSemesterInfo()" data-ng-if="subGroupPortionSelected==false">
+        <div class="panel-heading">
+            <div class="panel-title" align="center"><p>Seat Plan for Carry/Clearance/Improvement Exam</p></div>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-4"></div>
+                <div class="col-md-4">
+                    <select class="form-control required" name="semester" data-ng-model="semesterId" data-ng-change="showApplicationCCIInfo(semesterId)">
+                        <option value="">Select Semester</option>
+                        <option data-ng-repeat="semesters in semesterList" value="{{semesters.id}}" >{{semesters.name}}</option>
+                    </select>
+                </div>
+                <div class="col-md-4"></div>
+            </div>
+            <div class="row" style="padding-left: 5%;padding-right: 5%;">
+                <div data-ng-if="showCCIInfo">
+                    <br>
+                    <br>
+                    <table class="table table-bordered" >
+
+
+                        <tbody>
+                        <tr align="center">
+                            <th><p align="center">Date Of Exam (MM-DD-YYYY)</p></p></th>
+                            <th><p align="center">Weekday</p></th>
+                            <th><p align="center">Sub Grouping</p></th>
+                            <th><p align="center">Seat Plan</p></th>
+                            <th><p align="center">Download</p></th>
+                        </tr>
+                        <tr data-ng-repeat="e in examRoutineCCIArr" align="center">
+                            <td><p>{{e.examDate}}</p></td>
+                            <td><p>{{e.weekDay}}</p></td>
+                            <td>
+                                <p data-ng-if="e.totalStudent>0" style="color: green;">Completed <br><button class="btn btn-success">View</button></p>
+                                <p data-ng-if="e.totalStudent==0" style="color: red;">Not-Completed <br><button class="btn btn-default" data-ng-click="create(e.examDate)">Create</button></p>
+                            </td>
+                            <td>
+                                <button class="btn btn-success" data-ng-if="e.totalStudent>0">Generate</button>
+                            </td>
+                            <td>
+                                <button class="btn btn-success" data-ng-if="e.totalStudent>0">Download</button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+    <!--*********************************************************************************-->
+    <!--<div class="panel panel-info" data-ng-if="subGroupPortionSelected">
+        <div class="panel-heading">
+            <h3 class="panel-title" align="center">Sub Group</h3>
+        </div>
+        <div class="panel-body">
+
+        </div>
+    </div>
+-->
+
+    <div class="panel panel-grey" data-ng-show="subGroupPortionSelected" id="subGroupPanel">
+        <ul class="custom-menu"  style="list-style-type:none" data-ng-show="showContextMenu">
+            <li data-action="split"><i class="fa fa-expand" aria-hidden="true"></i>Split Out</li>
+            <li data-action="revertSplit"><i class="fa fa-compress" aria-hidden="true"></i>Revert Split</li>
+            <li data-action="merge"><i class="fa fa-retweet" aria-hidden="true"></i>Merge</li>
+        </ul>
+
+        <div class="panel-heading">
+            <h3 class="panel-title pull-left">
+                Sub Groups
+            </h3>
+
+            <!-- <button class="btn btn-default pull-right" data-ng-click="closeSubGroupOrRoomInfoWindow()"><i class="fa fa-times" aria-hidden="true"></i></button>-->
+            <div class="clearfix"></div>
+
+        </div>
+        <div class="panel-body">
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="row">
+                        <p align="center">Total Student {{totalStudent}}</p>
+                    </div>
+                    <ul ui-sortable data-ng-model="tempGroupList" class="list" data-ng-if="createButtonClicked">
+                        <li data-ng-repeat="item in tempGroupList" class="item">
+                            {{item.courseNo}} ({{item.totalStudent}})
+                            <div data-ng-if="item.showSubPortion">
+                                <hr>
+                                Split size: <input  data-ng-model="splitNumber" style="width:40px;color: black "  />
+                                <button data-ng-click="splitAction(splitNumber)" style="color: black">Split</button><button data-ng-click="cancelSplitAction(group.id)" style="color: black">cancel</button>
+                                <br>
+                            </div>
+                        </li>
+                    </ul>
+                    <!--<li data-ng-repeat="item in tempGroupList">{{item.courseNo}} ({{item.totalStudent}})</li>-->
+                </div>
+                <div class="col-md-9">
+                    <div class="row" align="center">
+                        <div class="col-md-4"></div>
+                        <div class="col-md-4">
+                            <select class="form-control required" name="subGroupNo" data-ng-model="selectedSubGroupNo" data-ng-change="showSubGroups(selectedSubGroupNo)">
+                                <option value="">How Many Sub Groups?</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4"></div>
+                    </div>
+                    <div class="row" data-ng-show="showSelectedSubGrupPortions">
+                        <p> in there</p>
+                        <div  data-ng-repeat="i in getNumber(selectedSubGropNo)">
+                            <div class="col-md-3">
+                                Sub Group {{i}}
+                                <ul ui-sortable data-ng-model="subGroupMap[i]" class="list apps-container" style="background-color: yellow">
+                                    <li data-ng-repeat="item in subGroupMap[i]" class="item">
+                                        {{item.courseNo}} ({{item.totalStudent}})
+                                        <div data-ng-if="item.showSubPortion">
+                                            <hr>
+                                            Split size: <input  data-ng-model="splitNumber" style="width:40px;color: black "  />
+                                            <button data-ng-click="splitAction(splitNumber)" style="color: black">Split</button><button data-ng-click="cancelSplitAction(group.id)" style="color: black">cancel</button>
+                                            <br>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>

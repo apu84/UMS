@@ -1,0 +1,21 @@
+
+<div class="row">
+  <div ng-generaltab="" class="col-lg-12">
+    <ul id="treeviewTab" class="nav nav-tabs">
+      <li class="active"><a href="#jstree-tab" data-toggle="tab">JsTree</a></li>
+      <li><a href="#family-treeview-tab" data-toggle="tab">Family Treeview</a></li>
+      <li><a href="#treetable-tab" data-toggle="tab">TreeTable</a></li>
+    </ul>
+    <div id="treeviewTabContent" class="tab-content">
+      <div id="jstree-tab" class="tab-pane fade in active">
+        <ng-include src="'templates/states/_ui-treeview/ui-treeview-jstree-tab.html'" onload="jstree_tab()"></ng-include>
+      </div>
+      <div id="family-treeview-tab" class="tab-pane fade">
+        <ng-include src="'templates/states/_ui-treeview/ui-treeview-family-treeview-tab.html'" onload="family_treeview_tab()"></ng-include>
+      </div>
+      <div id="treetable-tab" class="tab-pane fade">
+        <ng-include src="'templates/states/_ui-treeview/ui-treeview-treetable-tab.html'" onload="treetable_tab()"></ng-include>
+      </div>
+    </div>
+  </div>
+</div>

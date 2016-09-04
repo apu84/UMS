@@ -1,0 +1,136 @@
+<div class="sidebar-collapse menu-scroll">
+    <ul id="side-menu" ng-menu="" class="nav admin-nav-main">
+
+        <li class="user-panel">
+            <!--
+        <div class="thumb"><img src="" alt="" class="img-circle"/></div>
+        <div class="info">
+          <p>John Doe</p>
+          <ul class="list-inline list-unstyled">
+            <li><a ui-sref="extra-profile" data-hover="tooltip" title="Profile"><i class="fa fa-user"></i></a></li>
+            <li><a ui-sref="email-inbox" data-hover="tooltip" title="Mail"><i class="fa fa-envelope"></i></a></li>
+            <li><a href="javascript:void(0);" data-hover="tooltip" title="Setting" data-toggle="modal" data-target="#modal-config"><i class="fa fa-cog"></i></a></li>
+            <li><a href="javascript:window.location.href = '/ums-web/login.html'" data-hover="tooltip" title="Logout"><i class="fa fa-sign-out"></i></a></li>
+          </ul>
+        </div>
+        -->
+            <div class="clearfix"></div>
+        </li>
+
+        <li>
+            <a ui-sref="userHome">
+                <i class="fa fa-home fa-fw">
+            <div class="icon-bg bg-orange"></div>
+        </i><span class="menu-title">User Home</span></a>
+        </li>
+
+        <li>
+            <a href="javascript:void(0);">
+                <i class="fa fa-check-square-o fa-fw">
+                    <div class="icon-bg bg-pink"></div>
+                </i>
+                <span class="menu-title">Semester Initialization</span><span class="fa arrow"></span>
+            </a>
+            <ul class="nav nav-second-level">
+                <li>
+                    <a ui-sref="createSemester">
+                        <i class="fa fa-plus-square-o"></i>
+                        <span class="submenu-title">New Semester</span>
+                    </a>
+                </li>
+                <li>
+                    <a ui-sref="semesterSyllabusMap">
+                        <i class="fa fa-arrows-alt"></i>
+                        <span class="submenu-title">Semester-Syllabus map</span>
+                    </a>
+                </li>
+                <li>
+                    <a ui-sref="createStudent">
+                        <i class="fa fa-graduation-cap"></i>
+                        <span class="submenu-title">New Student</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li>
+            <a href="javascript:void(0);">
+                <i class="fa fa-book fa-fw">
+                    <div class="icon-bg bg-green"></div>
+                </i>
+                <span class="menu-title">Syllabus Bank</span><span class="fa arrow"></span>
+            </a>
+            <ul class="nav nav-second-level">
+                <li>
+                    <a ui-sref="showSyllabusList">
+                        <i class="fa fa-list"></i>
+                        <span class="submenu-title">Syllabus List</span>
+                    </a>
+                </li>
+                <li>
+                    <a ui-sref="createSyllabus">
+                        <i class="fa fa-plus-square-o"></i>
+                        <span class="submenu-title">Create New Syllabus</span>
+                    </a>
+                </li>
+                <li>
+                    <a ui-sref="createUgCourse">
+                        <i class="fa fa-plus-square"></i>
+                        <span class="submenu-title">Create Course</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a href="javascript:void(0);">
+                <i class="fa fa-user fa-fw">
+                    <div class="icon-bg bg-violet"></div>
+                </i>
+                <span class="menu-title">User Management</span><span class="fa arrow"></span>
+            </a>
+            <ul class="nav nav-second-level">
+                <li>
+                    <a ui-sref="passwordReport">
+                        <i class="fa fa-lock"></i>
+                        <span class="submenu-title">Reset User Password</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li>
+            <a href="javascript:void(0);">
+                <i class="fa fa-renren fa-fw">
+                    <div class="icon-bg bg-violet"></div>
+                </i>
+                <span class="menu-title">Department</span><span class="fa arrow"></span>
+            </a>
+            <ul class="nav nav-second-level">
+                <li>
+                    <a ui-sref="courseTeacher">
+                        <i class="fa fa-thumb-tack"></i>
+                        <span class="submenu-title">Course Teacher</span>
+                    </a>
+                </li>
+                <li>
+                    <a ui-sref="classRoutine">
+                        <i class="fa fa-thumb-tack"></i>
+                        <span class="submenu-title">Class Routine Upload</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li><a ui-sref="studentProfile"><i class="fa fa-home fa-fw">
+            <div class="icon-bg bg-orange"></div>
+        </i><span class="menu-title">Student Profile</span></a>
+        </li>
+        <li><a ui-sref="classRoomInfo"><i class="fa fa-home fa-fw">
+            <div class="icon-bg bg-orange"></div>
+        </i><span class="menu-title">Class Room Information</span></a>
+        </li>
+        <li><a ui-sref="examRoutine"><i class="fa fa-home fa-fw">
+            <div class="icon-bg bg-orange"></div>
+        </i><span class="menu-title">Exam Routine</span></a>
+        </li>
+    </ul>
+</div>

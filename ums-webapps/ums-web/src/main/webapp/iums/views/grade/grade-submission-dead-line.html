@@ -1,0 +1,81 @@
+<style>
+    #thead{
+        font-weight: bolder;
+    }
+</style>
+
+<div class="panel panel-blue" data-ng-init="getSemesters()">
+    <div class="panel-heading" align="center">
+        Grade Submission Deadline
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-2" align="right"><p>Select Semester</p></div>
+            <div class="col-md-4">
+                <select class="form-control required" name="semester" data-ng-model="semesterId" >
+                    <option value="">Select a Semester</option>
+                    <option data-ng-repeat="semesters in semesterList" value="{{semesters.id}}">{{semesters.name}}</option>
+                </select>
+            </div>
+
+            <div class="col-md-2" align="right">Select Exam Type</div>
+            <div class="col-md-4">
+                <select class="form-control required" name="examType" data-ng-model="examType" data-ng-change="getExamDates()" >
+                    <option value="">Select Exam Type</option>
+                    <option value="1">Regular</option>
+                    <option value="2">Carry/Clearance/Improvement</option>
+                </select>
+            </div>
+        </div>
+        <br>
+        <br>
+        <div class="row">
+            <div class="col-md-2" align="right">Exam Date</div>
+            <div class="col-md-4">
+                <select class="form-control required" name="examDate" data-ng-model="examDate">
+                    <option value="">Select an Exam Date</option>
+                    <option data-ng-repeat="examRoutine in examRoutineArr">{{examRoutine.examDate}}</option>
+                </select>
+            </div>
+            <div class="col-md-2"></div>
+            <div class="col-md-4" align="center">
+                <button class="btn btn-success" data-ng-click="search()">Search</button>
+            </div>
+        </div>
+        <div class="row" data-ng-if="showLoader==true" align="center">
+            <br>
+            <i class="fa fa-spinner fa-spin fa-4x fa-fw"></i>
+            <span class="sr-only">Loading...</span>
+        </div>
+        <div class="row" data-ng-if="showTable==true">
+            <br>
+            <hr>
+            <hr>
+            <br>
+            <table class="table table-bordered table-striped" style="padding-left: 10%; padding-right: 10%;">
+
+                <thead id="thead">
+                    <td align="center">Exam Date</td>
+                    <td align="center">Program</td>
+                    <td align="center">Course No</td>
+                    <td align="center">Course Title</td>
+                    <td align="center">CrHr</td>
+                    <td align="center">Total Students</td>
+                    <td align="center">Last Date of Submission</td>
+                </thead>
+                <tbody>
+                    <tr data-ng-repeat="e in examGradeStatisticsArr" align="center">
+                        <td>{{e.examDate}}</td>
+                        <td>{{e.programShortName}}</td>
+                        <td>{{e.courseNo}}</td>
+                        <td>{{e.courseTitle}}</td>
+                        <td>{{e.courseCreditHour}}</td>
+                        <td>{{e.totalStudents}}</td>
+                        <td>{{e.lastSubmissionDate}}</td>
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</div>

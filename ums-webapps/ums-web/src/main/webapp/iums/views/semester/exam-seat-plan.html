@@ -1,0 +1,463 @@
+<style>
+    .custom-menu {
+        position: absolute;
+        display: none;
+        z-index: 1000;
+        overflow: hidden;
+        border: 1px solid #CCC;
+        white-space: nowrap;
+        font-family: sans-serif;
+        background: #FFF;
+        color: #333;
+        border-radius: 5px;
+        -webkit-padding-start: 2px !important;
+    }
+    .custom-menu li {
+        padding: 8px 12px;
+        cursor: pointer;
+    }
+    .custom-menu li:hover {
+        background-color: #DEF;
+    }
+    p.times {
+        padding-left: 5%;
+    }
+    table, th, td {
+        border: 1px solid navy;
+    }
+    #list{
+        border: 1px solid black;
+        background-color: white;
+    }
+    #sortable,#splittedList {
+        border: 1px solid #eee;
+        width: 142px;
+        min-height: 20px;
+        list-style-type: none;
+        margin: 0;
+        padding: 5px 0 0 0;
+        float: left;
+        margin-right: 10px;
+    }
+    .drag { width: 150px; height: 150px; padding: 0.5em; float: left; margin: 10px; }
+    .subGroup{
+        width: 20px; height: 10px; padding: 0.5em; float: left; margin: 10px 10px 10px 0;
+    }
+    #droppable1,#droppable2,#droppable3,#droppable4,#droppable5,#droppable6,#sortable9 {
+        border: 1px solid #eee;
+        width: 142px;
+        min-height: 20px;
+        list-style-type: none;
+        margin: 0;
+        padding: 0 0 0 0;
+        float: left;
+        margin-right: 10px;}
+    #sortable1,#sortable2,#sortable3,#sortable4,#sortable5,#sortable6,#sortable0 {
+        border: 1px solid #eee;
+        width: 142px;
+        min-height: 20px;
+        list-style-type: none;
+        margin: 0;
+        padding: 5px 0 0 0;
+        float: left;
+        margin-right: 10px;}
+    #sortable li,#splittedList li, #droppable1 li,#droppable2 li,#droppable3 li,#droppable4 li,#droppable5 li,#droppable6 li,#sortable9 li{
+        border-radius: 25px;
+        border: 2px solid #73AD21;
+        margin: 0 5px 5px 5px;
+        padding: 5px;
+        font-size: 1.0em;
+        width: 120px;
+        background-color: lightslategray;
+        color: white;
+    }
+    #sortable1 li,#sortable2 li,#sortable3 li,#sortable4 li,#sortable6 li,#sortable5 li,#sortable0 li{
+        border-radius: 25px;
+        border: 2px solid #73AD21;
+        margin: 0 5px 5px 5px;
+        padding: 5px;
+        font-size: 1.0em;
+        width: 120px;
+        background-color: lightslategray;
+        color: white;
+    }
+
+    .list {
+        list-style: none outside none;
+
+        border: 2px dashed blue;
+        margin: 10px 10px 0 0;
+        padding: 2px;
+        min-width:160px;
+        min-height:50px;
+    }
+
+    .item {
+        width: 150px;
+        padding: 5px ;
+        margin: 5px 0;
+        border: 2px solid #444;
+        border-radius: 5px;
+        background-color: #EA8A8A;
+
+        font-size: 1.1em;
+        font-weight: bold;
+        text-align: center;
+        cursor: pointer;
+    }
+
+    .ui-sortable-helper {
+        cursor: move;
+    }
+    .connectedSortable{
+        background-color: antiquewhite;
+    }
+
+    .dialogdemoBasicUsage #popupContainer {
+        position: relative; }
+    .dialogdemoBasicUsage .footer {
+        width: 100%;
+        text-align: center;
+        margin-left: 20px; }
+    .dialogdemoBasicUsage .footer, .dialogdemoBasicUsage .footer > code {
+        font-size: 0.8em;
+        margin-top: 50px; }
+    .dialogdemoBasicUsage button {
+        width: 200px; }
+    .dialogdemoBasicUsage div#status {
+        color: #c60008; }
+    .dialogdemoBasicUsage .dialog-demo-prerendered md-checkbox {
+        margin-bottom: 0; }
+</style>
+
+<div class="panel panel-blue" data-ng-show="showGroupSelectionPanel">
+    <div class="panel-heading">
+        Exam Seat Plan
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-1">Semester :</div>
+            <div class="col-md-3">
+                <select class="form-control required" name="semester" data-ng-model="semesterId" >
+                    <option value="">Select Semester</option>
+                    <option data-ng-repeat="semesters in semesterList" value="{{semesters.id}}">{{semesters.name}}</option>
+                </select>
+            </div>
+            <div class="col-md-1">Exam Type : </div>
+            <div class="col-md-3">
+                <select class="form-control required" name="examType" data-ng-model="examType" >
+                    <option value="">Select Exam Type</option>
+                    <option value="1">Regular Exam</option>
+                    <option value="2">Clearance/Improvement/Carryover Exam</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <button type="button" class="btn btn-success" data-ng-click="showGroups()">Show Groups</button>
+            </div>
+        </div>
+
+        <div class="spinner" ng-show="loadingVisibility">
+            <div class="bounce1"></div>
+            <div class="bounce2"></div>
+            <div class="bounce3"></div>
+        </div>
+        <div class="spinner" ng-show="loadingVisibilityForCCI">
+            <div class="bounce1"></div>
+            <div class="bounce2"></div>
+            <div class="bounce3"></div>
+        </div>
+        <br>
+        <div data-ng-if="seatPlanGroupList.length>0 && showGroupOrNot==true && examType==1">
+            <div class="row" style="padding-bottom: 10px;">
+                <div class="col-md-2">
+                    <p style="font-weight: bold;font-size: 20px;">Available Groups</p>
+                </div>
+                <div class="col-md-2">
+                    <select class="form-control required" name="examType" data-ng-model="groupNoForSeatPlanViewing" >
+                        <option value="">Select Group</option>
+                        <option value="1">Group 1</option>
+                        <option value="2">Group 2</option>
+                        <option value="3">Group 3</option>
+                    </select>
+                </div>
+                <div class="col-md-8" >
+                    <button type="button" class="btn btn-blue" data-ng-click="createOrViewSubgroups(groupNoForSeatPlanViewing)">Create or View Subgroups</button>
+                    <button type="button" class="btn btn-primary btn-square" data-ng-click="createOrViewSeatPlan(groupNoForSeatPlanViewing)">Create or View  Seat Plan</button>
+                </div>
+            </div>
+        </div>
+
+        <div data-ng-if="cciSelected && examType==2">
+            <div class="col-lg-8">
+            <table class="table table-bordered table-striped" >
+                <thead>
+                <tr align="center" class="warning">
+                    <th style="width: 20%"><p align="center">Exam Date</p></th>
+                    <th style="width: 20%"><p align="center">Weekday</p></th>
+                    <th style="width: 40%"><p align="center">Sub Grouping</p></th>
+                    <th style="width: 20%"><p align="center">Seat Plan</p></th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr data-ng-repeat="e in examRoutineCCIArr" align="center">
+                        <td><p>{{e.examDate}}</p></td>
+                        <td><p>{{e.weekDay}}</p></td>
+                        <td>
+                            <p data-ng-if="e.totalStudent>0" style="color: green;">Completed <button class="btn btn-green" data-ng-click="viewCCI(e.examDate)">
+                                View
+                            </button>
+                            </p>
+                            <p data-ng-if="e.totalStudent==0" style="color: red;">Not-Initiated&nbsp;&nbsp;
+                                <button class="btn btn-blue" data-ng-click="createCCI(e.examDate)">
+                                    Initiate
+                                </button>
+                            </p>
+                        </td>
+                        <td>
+                            <button  type="button" class="btn btn-success btn-outlined" data-ng-if="e.totalStudent>0" data-ng-click="getSeatPlanInfoCCi(e.examDate)" style="font-weight: bold;">Generate & Download</button>
+                        </td>
+
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+        </div>
+        <div id="groupPanel" data-ng-if="showGroupOrNot && examType==1" >
+            <div class="row">
+                <div data-ng-repeat="groupNo in groupList">
+                    <div class="col-md-4" data-ng-if="groupNo.groupNumber==1">
+                        <div class=" panel panel-info">
+                            <div class="panel-heading"> Group {{groupNo.groupNumber}}</div>
+                            <ul data-role="listview" class="list-group" data-ng-repeat="group in groupNo.groupMembers">
+                                <li class="list-group-item">{{group.programName}}, {{group.year}} year {{group.semester}} semester <span class="badge">{{group.studentNumber}}</span> </li>
+                            </ul>
+                            <div style="text-align: center;padding: 10px;">
+                                <font style="font-weight: bold;font-size: 22px;"> Total Student : {{groupNo.totalStudentNumber}}</font>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4" data-ng-if="groupNo.groupNumber==2">
+                        <div class=" panel panel-info">
+                            <div class="panel-heading"> Group {{groupNo.groupNumber}}</div>
+                            <ul class="list-group" data-ng-repeat="group in groupNo.groupMembers">
+                                <li class="list-group-item">{{group.programName}}, {{group.year}} year {{group.semester}} semester <span class="badge">{{group.studentNumber}}</span></li>
+                            </ul>
+                            <div style="text-align: center;padding: 10px;">
+                                <font style="font-weight: bold;font-size: 22px;"> Total Student : {{groupNo.totalStudentNumber}}</font>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4" data-ng-if="groupNo.groupNumber==3">
+                        <div class=" panel panel-info">
+                            <div class="panel-heading"> Group {{groupNo.groupNumber}}</div>
+                            <ul class="list-group" data-ng-repeat="group in groupNo.groupMembers">
+                                <li class="list-group-item">{{group.programName}}, {{group.year}} year {{group.semester}} semester <span class="badge">{{group.studentNumber}}</span></li>
+                            </ul>
+                            <div style="text-align: center;padding: 10px;">
+                                <font style="font-weight: bold;font-size: 22px;"> Total Student : {{groupNo.totalStudentNumber}}</font>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <div data-ng-if="seatPlanGroupList.length==0">
+            <h1 style="background-color: wheat; color: red">Please Create Exam Routine First For The Semester</h1>
+        </div>
+
+        <div class="spinner" ng-show="pdfGenerator">
+            <div class="bounce1"></div>
+            <div class="bounce2"></div>
+            <div class="bounce3"></div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+<div class="panel panel-blue" data-ng-show="subGroupSelected" id="subGroupPanel">
+
+
+    <div class="panel-heading">
+            <p data-ng-if="cciSelected==false">Sub Groups for [<b>Group - {{selectedGroupNo}}</b>]</p>
+        <p data-ng-if="cciSelected">Sub Groups</p>
+    </div>
+    <div  class="panel-body md-padding" >
+        <!--<div contecontext-menuxt-menu mergeInitialization="mergeInitialization()" splitCourseStudent="splitCourseStudent()"  revertSplitAction="revertSplitAction()" mergeGroups="mergeGroups() "></div>-->
+
+        <ul context-menu class="custom-menu"  style="list-style-type:none">
+            <li data-action="split" data-ng-click="splitOut()"><i class="fa fa-expand" aria-hidden="true"></i>&nbsp;&nbsp;Split</li>
+            <li data-action="merge" data-ng-click="mergeUpdate()"><i class="fa fa-retweet" aria-hidden="true"></i>&nbsp;&nbsp;Merge</li>
+        </ul>
+        <div class="row">
+            <div class="col-md-2">
+                <div class="alert alert-success">
+                    <strong>Total Students: </strong> <font style="font-weight: bold;font-size: 14px;">{{selectedGroupTotalStudent}}</font>
+                </div>
+
+
+                <div  align="center">
+                    <ul ui-sortable="sortableOptionsIfSubGroupNotFound" data-ng-model="tempGroupList"   class="list apps-container " data-ng-style="{'background-color':classBodyBackgroundColor}">
+                        <li  id="group.id" data-ng-repeat="group in tempGroupList" class="item mouse-effect" data-ng-click="getMouseClickEvent(group)" data-ng-style="{'background-color':group.backgroundColor}">
+                            <div context-menu data-ng-if="group.backgroundColor=='red' && editSubGroup==false" class="mouseclick">
+                                <div style="cursor: pointer;" data-ng-if="examType==1">
+                                    {{group.programName}}:{{group.year}}/{{group.semester}} ({{group.studentNumber}})
+                                </div>
+                                <div style="cursor: pointer;" data-ng-if="examType==2">
+                                    {{group.courseNo}} ({{group.studentNumber}})
+                                </div>
+                                <div data-ng-show="group.showSubPortion">
+                                    <hr style="margin-top: 10px;margin-bottom: 10px;">
+                                    Split size: <input  data-ng-model="splitNumber" style="width:40px;color: black;text-align: center; border: 1px solid white;"  />
+                                    <button data-ng-click="splitActionUpdate(group,splitNumber)" style="color: black;margin-top: 5px;">Split</button>
+                                    &nbsp;
+                                    <button data-ng-click="cancelSplit()" style="color: black">Cancel</button>
+                                    <br>
+                                </div>
+                            </div>
+                            <div data-ng-if="group.backgroundColor=='#EA8A8A'">
+                                <div style="cursor: pointer;" data-ng-if="examType==1">
+                                    {{group.programName}}:{{group.year}}/{{group.semester}} ({{group.studentNumber}})
+                                </div>
+                                <div style="cursor: pointer;" data-ng-if="examType==2">
+                                    {{group.courseNo}} ({{group.studentNumber}})
+                                </div>
+                                <div data-ng-show="group.showSubPortion">
+                                    <hr style="margin-top: 10px;margin-bottom: 10px;">
+                                    Split size: <input  data-ng-model="splitNumber" style="width:40px;color: black;text-align: center; border: 1px solid white; "  />
+                                    <button data-ng-click="splitActionUpdate(group,splitNumber)" style="color: black;margin-top: 5px;">Split</button>
+                                    &nbsp;
+                                    <button data-ng-click="cancelSplit()" style="color: black">Cancel</button>
+                                    <br>
+                                </div>
+                            </div>
+
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-md-10">
+                <div class="row" data-ng-if="editSubGroup==false && deleteAndCreateNewSubGroup==false " >                          <!-- data-ng-if="showSubGroupSelectionNumber && subGroupFound==false" >-->
+                    <div class="col-md-4">
+
+                    </div>
+                    <div class="col-md-4" align="center">
+                        <select class="form-control required" name="subGroupNo" data-ng-model="selectedSubGroupNo" data-ng-change="generateIterationNumberArray(selectedSubGroupNo)" >
+                            <option value="">How Many Sub Groups?</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                        </select>
+                        <br>
+
+                    </div>
+                    <div class="col-md-4">
+
+                    </div>
+
+
+                </div>
+
+
+                <!--***************************************************************************-->
+                <div class="row"  >
+                    <div class="col-md-2" data-ng-repeat="i in iterationNumbers" align="center">
+                        <div class="alert alert-info"><strong>Sub Group {{i}}</strong> </div>
+
+                        <ul ui-sortable="sortableOptionsIfSubGroupNotFound" data-ng-model="subGroupWithDeptMap[i]"    class="list apps-container" data-ng-style="{'background-color':classBodyBackgroundColor}">
+
+                            <li  id="group.id" data-ng-repeat="group in subGroupWithDeptMap[i]" class="item" data-ng-click="getMouseClickEvent(group)" data-ng-style="{'background-color':group.backgroundColor}">
+
+                                <div context-menu data-ng-if="group.backgroundColor=='red' && editSubGroup==false">
+                                    <div style="cursor: pointer;" data-ng-if="examType==1">
+                                        {{group.programName}}:{{group.year}}/{{group.semester}} ({{group.studentNumber}})
+                                    </div>
+                                    <div style="cursor: pointer;" data-ng-if="examType==2">
+                                        {{group.courseNo}} ({{group.studentNumber}})
+                                    </div>
+                                    <div data-ng-show="group.showSubPortion">
+                                        <hr style="margin-top: 10px;margin-bottom: 10px;">
+                                        Split size: <input  data-ng-model="splitNumber" style="width:40px;color: black;text-align: center; border: 1px solid white; "  />
+                                        <button data-ng-click="splitActionUpdate(group,splitNumber)" style="color: black;margin-top: 5px;">Split</button>
+                                        &nbsp;
+                                        <button data-ng-click="cancelSplit()" style="color: black">Cancel</button>
+                                        <br>
+                                    </div>
+                                </div>
+                                <div data-ng-if="group.backgroundColor=='#EA8A8A'">
+                                    <div style="cursor: pointer;" data-ng-if="examType==1">
+                                        {{group.programName}}:{{group.year}}/{{group.semester}} ({{group.studentNumber}})
+                                    </div>
+                                    <div style="cursor: pointer;" data-ng-if="examType==2">
+                                        {{group.courseNo}} ({{group.studentNumber}})
+                                    </div>
+                                    <div data-ng-show="group.showSubPortion">
+                                        <hr style="margin-top: 10px;margin-bottom: 10px;">
+                                        Split size: <input  data-ng-model="splitNumber" style="width:40px;color: black;text-align: center;border: 1px solid white; "  />
+                                        <button data-ng-click="splitActionUpdate(group,splitNumber)" style="color: black;margin-top: 5px;">Split</button>
+                                        &nbsp;
+                                        <button data-ng-click="cancelSplit()" style="color: black">Cancel</button>
+                                        <br>
+                                    </div>
+                                </div>
+
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+                <hr>
+
+                <div class="row " id="statistics">
+
+                        <div   data-ng-repeat="subGroup in iterationNumbers">
+                            <p  class="col-md-2" style="font-weight: bolder;font-size: 18px;" align="center">
+                                {{subGroupTotalStudentNumber[subGroup]}}
+                            </p>
+                        </div>
+                </div>
+                <div confirmation-dialog  title="Recreate Sub Groups" data-ng-if="confirmation">
+                    <p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>Sub Groups will be permanently deleted and can not be recovered</p>
+                    <hr>
+                    <div align="right">
+                        <button ng-click="deleteAndRecreate()">Recreate</button>   <button data-ng-click="cancelRecreation()">Cancel</button>
+                    </div>
+
+                </div>
+                <hr>
+                <div class="row" align="center">
+                    <button type="button" class="btn btn-success" data-ng-click="saveSubGroup()" data-ng-if="saveSubGroupInfo" style="width: 125px;">
+                        <i class="fa fa-floppy-o"></i>&nbsp;&nbsp;Save
+                    </button>
+                    <button type="button" class="btn btn-blue" data-ng-click="editSavedSubGroup()" data-ng-if="editSubGroup" style="width: 125px;">
+                        <i class="fa fa-edit"></i>&nbsp;&nbsp;Edit
+                    </button>
+                    <!--<button type="button" class="btn btn-info" data-ng-click="makeSortableCancel()" data-ng-if="cancelSubGroup">Cancel</button>-->
+                    <button type="button" class="btn btn-red" data-ng-click="createNewSubGroup()" data-ng-if="deleteAndCreateNewSubGroup" style="width: 125px;">
+                        <i class="fa fa-repeat"></i>&nbsp;&nbsp;Re-Create
+                    </button>
+                    <button type="button" class="btn btn-dark" data-ng-click="closeSubGroupOrRoomInfoWindow()"  style="width: 125px;">
+                        <i class="fa fa-backward"></i>&nbsp;&nbsp;Go Back
+
+                    </button>
+
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="https://rawgithub.com/angular-ui/ui-sortable/master/src/sortable.js"></script>

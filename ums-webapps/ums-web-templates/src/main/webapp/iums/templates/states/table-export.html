@@ -1,0 +1,252 @@
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="note note-success">
+      <h4 class="box-heading">Table Export</h4>
+      <p>Tableexport.jquery.plugin support file type: JSON, XML, SQL, CSV, TXT, Word, Excel, Powerpoint and PDF</p>
+      <p>Easily to install and adjust options</p>
+      <p>Check other Table export tool <a href="/#/table-datatables" target="_blank">DataTables</a></p>
+    </div>
+  </div>
+  <div class="col-lg-12">
+    <div class="portlet box">
+      <div class="portlet-header pam mbn">
+        <div class="caption">Table Export</div>
+      </div>
+      <div class="portlet-body">
+        <div class="btn-group mtm mbm"><a href="javascript:void(0);" data-toggle="dropdown" class="btn btn-warning btn-sm dropdown-toggle"><i class="fa fa-wrench"></i>&nbsp;
+            Export</a>
+          <ul class="dropdown-menu">
+            <li><a href="javascript:void(0);" onclick="$('#example-export').tableExport({type:'json',escape:'false'});"><img src="vendors/tableExport/icon/json.png" width="24px" class="mrx"/>Export to Json</a></li>
+            <li><a href="javascript:void(0);" onclick="$('#example-export').tableExport({type:'xml',escape:'false'});"><img src="vendors/tableExport/icon/xml.png" width="24px" class="mrx"/>Export to Xml</a></li>
+            <li><a href="javascript:void(0);" onclick="$('#example-export').tableExport({type:'sql'});"><img src="vendors/tableExport/icon/sql.png" width="24px" class="mrx"/>Export to Sql</a></li>
+            <li class="divider"></li>
+            <li><a href="javascript:void(0);" onclick="$('#example-export').tableExport({type:'csv'});"><img src="vendors/tableExport/icon/csv.png" width="24px" class="mrx"/>Export to csv</a></li>
+            <li><a href="javascript:void(0);" onclick="$('#example-export').tableExport({type:'txt',escape:'false'});"><img src="vendors/tableExport/icon/txt.png" width="24px" class="mrx"/>Export to TXT</a></li>
+            <li class="divider"></li>
+            <li><a href="javascript:void(0);" onclick="$('#example-export').tableExport({type:'excel',escape:'false'});"><img src="vendors/tableExport/icon/xls.png" width="24px" class="mrx"/>Export to Excel</a></li>
+            <li><a href="javascript:void(0);" onclick="$('#example-export').tableExport({type:'doc',escape:'false'});"><img src="vendors/tableExport/icon/word.png" width="24px" class="mrx"/>Export to word </a></li>
+            <li><a href="javascript:void(0);" onclick="$('#example-export').tableExport({type:'powerpoint',escape:'false'});"><img src="vendors/tableExport/icon/ppt.png" width="24px" class="mrx"/>Export to powerpoint</a></li>
+            <li class="divider"></li>
+            <li><a href="javascript:void(0);" onclick="$('#example-export').tableExport({type:'pdf', pdfFontSize:'14', escape:'true'});"><img src="vendors/tableExport/icon/pdf.png" width="24px" class="mrx"/>Export to Pdf</a></li>
+          </ul>
+        </div>
+        <table id="example-export" class="table table-hover table-striped table-bordered table-advanced tablesorter mbn">
+          <thead>
+            <tr>
+              <th width="9%">Record #</th>
+              <th width="10%">Username</th>
+              <th width="10%">Country</th>
+              <th width="10%">Gender</th>
+              <th width="7%">Order</th>
+              <th width="12%">Date</th>
+              <th width="10%">Price</th>
+              <th width="9%">Status</th>
+              <th width="12%">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Henry</td>
+              <td>United States</td>
+              <td>Male</td>
+              <td>32</td>
+              <td>20-05-2014</td>
+              <td>$240.50</td>
+              <td><span class="label label-sm label-success">Approved</span></td>
+              <td>
+                <button type="button" class="btn btn-default btn-xs"><i class="fa fa-edit"></i>&nbsp;
+                  Edit
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>John</td>
+              <td>United States</td>
+              <td>Female</td>
+              <td>45</td>
+              <td>20-05-2014</td>
+              <td>$240.50</td>
+              <td><span class="label label-sm label-info">Pending</span></td>
+              <td>
+                <button type="button" class="btn btn-default btn-xs"><i class="fa fa-edit"></i>&nbsp;
+                  Edit
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>Larry</td>
+              <td>United States</td>
+              <td>Female</td>
+              <td>40</td>
+              <td>20-05-2014</td>
+              <td>$240.50</td>
+              <td><span class="label label-sm label-warning">Suspended</span></td>
+              <td>
+                <button type="button" class="btn btn-default btn-xs"><i class="fa fa-edit"></i>&nbsp;
+                  Edit
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>Lahm</td>
+              <td>United States</td>
+              <td>Female</td>
+              <td>15</td>
+              <td>20-05-2014</td>
+              <td>$240.50</td>
+              <td><span class="label label-sm label-danger">Blocked</span></td>
+              <td>
+                <button type="button" class="btn btn-default btn-xs"><i class="fa fa-edit"></i>&nbsp;
+                  Edit
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>Henry</td>
+              <td>United States</td>
+              <td>Male</td>
+              <td>32</td>
+              <td>20-05-2014</td>
+              <td>$240.50</td>
+              <td><span class="label label-sm label-success">Approved</span></td>
+              <td>
+                <button type="button" class="btn btn-default btn-xs"><i class="fa fa-edit"></i>&nbsp;
+                  Edit
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>John</td>
+              <td>United States</td>
+              <td>Female</td>
+              <td>45</td>
+              <td>20-05-2014</td>
+              <td>$240.50</td>
+              <td><span class="label label-sm label-info">Pending</span></td>
+              <td>
+                <button type="button" class="btn btn-default btn-xs"><i class="fa fa-edit"></i>&nbsp;
+                  Edit
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>Larry</td>
+              <td>United States</td>
+              <td>Female</td>
+              <td>40</td>
+              <td>20-05-2014</td>
+              <td>$240.50</td>
+              <td><span class="label label-sm label-warning">Suspended</span></td>
+              <td>
+                <button type="button" class="btn btn-default btn-xs"><i class="fa fa-edit"></i>&nbsp;
+                  Edit
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>Lahm</td>
+              <td>United States</td>
+              <td>Female</td>
+              <td>15</td>
+              <td>20-05-2014</td>
+              <td>$240.50</td>
+              <td><span class="label label-sm label-danger">Blocked</span></td>
+              <td>
+                <button type="button" class="btn btn-default btn-xs"><i class="fa fa-edit"></i>&nbsp;
+                  Edit
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>Larry</td>
+              <td>United States</td>
+              <td>Female</td>
+              <td>40</td>
+              <td>20-05-2014</td>
+              <td>$240.50</td>
+              <td><span class="label label-sm label-warning">Suspended</span></td>
+              <td>
+                <button type="button" class="btn btn-default btn-xs"><i class="fa fa-edit"></i>&nbsp;
+                  Edit
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>Lahm</td>
+              <td>United States</td>
+              <td>Female</td>
+              <td>15</td>
+              <td>20-05-2014</td>
+              <td>$240.50</td>
+              <td><span class="label label-sm label-danger">Blocked</span></td>
+              <td>
+                <button type="button" class="btn btn-default btn-xs"><i class="fa fa-edit"></i>&nbsp;
+                  Edit
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>Henry</td>
+              <td>United States</td>
+              <td>Male</td>
+              <td>32</td>
+              <td>20-05-2014</td>
+              <td>$240.50</td>
+              <td><span class="label label-sm label-success">Approved</span></td>
+              <td>
+                <button type="button" class="btn btn-default btn-xs"><i class="fa fa-edit"></i>&nbsp;
+                  Edit
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <h4 class="mtl box-heading">Installation</h4>
+        <pre>&#x3C;script type=&#x22;text/javascript&#x22; src=&#x22;tableExport.js&#x22;&#x3E;
+&#x3C;script type=&#x22;text/javascript&#x22; src=&#x22;jquery.base64.js&#x22;&#x3E;</pre>
+        <h4 class="mtl box-heading">PDF Export</h4>
+        <pre>&#x3C;script type=&#x22;text/javascript&#x22; src=&#x22;jspdf/libs/sprintf.js&#x22;&#x3E;
+&#x3C;script type=&#x22;text/javascript&#x22; src=&#x22;jspdf/jspdf.js&#x22;&#x3E;
+&#x3C;script type=&#x22;text/javascript&#x22; src=&#x22;jspdf/libs/base64.js&#x22;&#x3E;</pre>
+        <h4 class="mtl box-heading">Usage</h4>
+        <pre>onclick=&#x22;$('#example-export').tableExport({type:'json',escape:'false'});&#x22;
+onclick=&#x22;$('#example-export').tableExport({type:'xml',escape:'false'});&#x22;
+onclick=&#x22;$('#example-export').tableExport({type:'sql',escape:'false'});&#x22;
+onclick=&#x22;$('#example-export').tableExport({type:'csv',escape:'false'});&#x22;
+onclick=&#x22;$('#example-export').tableExport({type:'txt',escape:'false'});&#x22;
+onclick=&#x22;$('#example-export').tableExport({type:'excel',escape:'false'});&#x22;
+onclick=&#x22;$('#example-export').tableExport({type:'doc',escape:'false'});&#x22;
+onclick=&#x22;$('#example-export').tableExport({type:'powerpoint',escape:'false'});&#x22;
+onclick=&#x22;$('#example-export').tableExport({type:'pdf', pdfFontSize:'14', escape:'false'});&#x22;</pre>
+        <h4 class="mtl box-heading">Options</h4>
+        <pre>separator: ','
+ignoreColumn: [2,3],
+tableName:'yourTableName'
+type:'csv'
+pdfFontSize:14
+pdfLeftMargin:20
+escape:'true'
+htmlContent:'false'
+consoleLog:'false'</pre>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="vendors/tableExport/tableExport.js"></script>
+<script src="vendors/tableExport/jquery.base64.js"></script>
+<script src="vendors/tableExport/html2canvas.js"></script>
+<script src="vendors/tableExport/jspdf/libs/sprintf.js"></script>
+<script src="vendors/tableExport/jspdf/jspdf.js"></script>
+<script src="vendors/tableExport/jspdf/libs/base64.js"></script>

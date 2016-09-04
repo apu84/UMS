@@ -1,0 +1,21 @@
+
+<div id="table-action" class="row">
+  <div class="col-lg-12">
+    <ul id="tableactiondTab" ng-tab="" class="nav nav-tabs">
+      <li class="active"><a href="#table-table-tab" data-toggle="tab">Action Tables</a></li>
+      <li><a href="#table-row-tab" data-toggle="tab">Action Rows</a></li>
+      <li><a href="#table-panel-tab" data-toggle="tab">Action Panels</a></li>
+    </ul>
+    <div id="tableactionTabContent" class="tab-content">
+      <div id="table-table-tab" class="tab-pane fade in active">
+        <ng-include src="'templates/states/_table-action/table-action-table-tab.html'" onload="table_action_update()"></ng-include>
+      </div>
+      <div id="table-row-tab" class="tab-pane fade">
+        <ng-include src="'templates/states/_table-action/table-action-row-tab.html'" onload="table_action_update()"></ng-include>
+      </div>
+      <div id="table-panel-tab" class="tab-pane fade">
+        <ng-include src="'templates/states/_table-action/table-action-panel-tab.html'" onload="table_action_update()"></ng-include>
+      </div>
+    </div>
+  </div>
+</div>

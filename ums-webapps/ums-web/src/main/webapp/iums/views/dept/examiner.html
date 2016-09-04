@@ -1,0 +1,174 @@
+<div class="row">
+    <div class="orgLeftClass pull-left panel panel-green" id="leftDiv">
+        <div class="panel-heading">
+            <h3 class="panel-title">Select </h3>
+        </div>
+        <div class="panel-body pan">
+            <div data-ng-include="" data-src="'views/dept/assigned-teacher-selector.html'"></div>
+        </div>
+    </div>
+    <div class="arrowClass pull-left" onclick="resetDivs()" id="arrowDiv"><i
+            class="fa fa-angle-double-right fa-4x"></i></i> </div>
+    <div class="orgRightClass pull-left hidden" id="rightDiv">
+        <div class="panel" style="min-height: 490px;">
+            <div class="panel-heading">Examiners List For "{{programName}}" Program of {{departmentName}} Department -
+                {{semesterName}}<span
+                        class="subtitle"></span></div>
+            <div class="panel-body">
+
+                <div class="spinner" ng-show="loadingVisibility">
+                    <div class="bounce1"></div>
+                    <div class="bounce2"></div>
+                    <div class="bounce3"></div>
+                </div>
+                <div data-ng-if="contentVisibility">
+                    <div class="alert alert-success" style="color: #3c763d;font-weight: bold;padding: 5px;">
+                        {{academicYear}} {{academicSemester? "- "+ academicSemester: ""}} : {{courseCategory}} Courses
+                    </div>
+                    <table class="table table-hover table-bordered table-advanced">
+                        <thead>
+                        <tr role="row" class="heading">
+                            <th width="10%" class="sorting">CourseNo</th>
+                            <th width="25%" class="sorting_asc">Course Title</th>
+                            <th width="4%" class="sorting">CrHr</th>
+                            <th width="50%" class="sorting">
+                                <table class="course-teacher-inner-header">
+                                    <tr>
+                                        <td width="25%">Preparer</td>
+                                        <td width="25%">Scrutinizer</td>
+                                    </tr>
+                                </table>
+                            </th>
+                            <th width="8%" class="sorting">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr data-ng-repeat="(courseId, examiner) in entries">
+                            <td>{{examiner.courseNo}}</td>
+                            <td>{{examiner.courseTitle}}</td>
+                            <td>{{examiner.courseCrHr}}</td>
+                            <td>
+                                <table class="course-teacher-inner">
+                                    <tr>
+                                        <td width="40%">
+                                            <div class="input-group" data-ng-if="!examiner.deleted">
+                                                <div class="input-group-addon"><i class="fa fa-user"></i></div>
+                                                <select class="form-control" data-ng-if="examiner.editMode"
+                                                        data-select="select2"
+                                                        data-ng-model="examiner.preparerId"
+                                                        data-ng-options="teacher.id as teacher.name for teacher in examiner.teachers">
+                                                </select>
+
+                                                <div style="padding-left:5px;padding-top:5px;"
+                                                     data-ng-if="!examiner.editMode">{{examiner.preparerName}}
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td width="10%">&nbsp;</td>
+                                        <td width="40%">
+                                            <div class="input-group" data-ng-if="!examiner.deleted">
+                                                <div class="input-group-addon"><i class="fa fa-user"></i></div>
+                                                <select class="form-control" data-ng-if="examiner.editMode"
+                                                        data-select="select2"
+                                                        data-ng-model="examiner.scrutinizerId"
+                                                        data-ng-options="teacher.id as teacher.name for teacher in examiner.teachers">
+                                                </select>
+
+                                                <div style="padding-left:5px;padding-top:5px;"
+                                                     data-ng-if="!examiner.editMode">{{examiner.scrutinizerName}}
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td width="10%" style="padding-left: 5px;">
+                                            <a href="javascript:void(0);" class="btn btn-xs btn-default"
+                                               data-ng-if="examiner.editMode && !examiner.deleted"
+                                               data-ng-click="removeTeacher(courseId)">
+                                                <i class="fa fa-times" style="color: red;"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td>
+                                <div class="mbs">
+                                    <button class="btn btn-xs btn-success filter-submit"
+                                            data-ng-click="editTeacher(courseId)"
+                                            data-ng-if="!examiner.editMode">
+                                        <i class="fa fa-plus-square-o"></i>
+                                        Edit
+                                    </button>
+                                </div>
+
+                                <div class="mbs" data-ng-if="examiner.editMode">
+                                    <a href="javascript:void(0);" class="btn btn-xs btn-default"
+                                       data-ng-click="saveTeacher(courseId);">
+                                        <i class="fa fa-save"></i>&nbsp;
+                                        Save
+                                    </a>
+                                </div>
+                                <div class="mbs" data-ng-if="examiner.editMode">
+                                    <a href="javascript:void(0);" class="btn btn-xs btn-default"
+                                       data-ng-click="fetchTeacherInfo()">
+                                        <i class="fa fa-reply"></i>&nbsp;
+                                        Cancel
+                                    </a>
+                                </div>
+
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+            <div class="form-actions text-right pal" style="margin-top:25px;display: none;">
+                <button type="button" class="btn btn-success" onclick="fetchTeacherInfo()">Save Course-Teacher Info
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<style type="text/css">
+
+    .orgLeftClass {
+        width: 30%;
+
+    }
+
+    .orgRightClass {
+        width: 66%;
+    }
+
+    .arrowClass {
+        display: none;
+        cursor: pointer;
+    }
+
+    .orgLeftClass, .arrowClass {
+        margin-right: 25px;
+        margin-left: 8px;
+    "
+
+    }
+
+    .newRightClass {
+        width: 94%;
+    }
+
+    .bootstrap-select.btn-group:not(.input-group-btn), .bootstrap-select.btn-group[class*="span"] {
+        margin-bottom: 0px !important;
+    }
+
+    .table tbody tr td {
+        border-top: none !important;
+    }
+</style>
+<script type="text/javascript">
+    function resetDivs() {
+        $("#arrowDiv").hide();
+        $("#leftDiv").show();
+        $("#rightDiv").removeClass("newRightClass").addClass("orgRightClass");
+    }
+</script>

@@ -1,0 +1,24 @@
+<a data-hover="dropdown" href="javascript:void(0);" class="dropdown-toggle" data-ng-click="setReadStatus()"><i
+        class="fa fa-bell fa-fw"></i><span class="badge badge-orange" data-ng-if="numOfUnreadNotification > 0">{{numOfUnreadNotification}}</span></a>
+<ul class="dropdown-menu dropdown-alerts">
+    <li>
+        <p data-ng-if="numOfUnreadNotification > 0">You have {{numOfUnreadNotification}} new notifications</p>
+
+        <p data-ng-if="!numOfUnreadNotification">You have no new notifications</p>
+    </li>
+    <li>
+        <div class="dropdown-slimscroll">
+            <ul>
+                <li data-ng-repeat="notification in notifications">
+                    <a href="javascript:void(0);">
+                            <span class="label label-green">
+                                <i class="fa fa-tasks"></i>
+                            </span>
+                        {{notification.payload}}
+                        <span class="pull-right text-muted small">{{notification.producedOn}}</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </li>
+</ul>

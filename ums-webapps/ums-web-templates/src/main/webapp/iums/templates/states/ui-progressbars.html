@@ -1,0 +1,17 @@
+
+<div class="row">
+  <div ng-generaltab="" class="col-lg-12">
+    <ul id="progressbarTab" class="nav nav-tabs ul-edit">
+      <li class="active"><a href="#horizontal-tab" data-toggle="tab">Horizontal</a></li>
+      <li><a href="#miscellaneous-tab" data-toggle="tab">Miscellaneous</a></li>
+    </ul>
+    <div id="progressbarTabContent" class="tab-content">
+      <div id="horizontal-tab" class="tab-pane fade in active">
+        <ng-include src="'templates/states/_ui-progressbars/ui-progressbars-horizontal-tab.html'" onload="update_progressbar()"></ng-include>
+      </div>
+      <div id="miscellaneous-tab" class="tab-pane fade">
+        <ng-include src="'templates/states/_ui-progressbars/ui-progressbars-miscellaneous-tab.html'" onload="update_progressbar()"></ng-include>
+      </div>
+    </div>
+  </div>
+</div>
