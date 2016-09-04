@@ -54,7 +54,7 @@ public class PersistentCourseDao extends CourseDaoDecorator {
   }
 
   public Course get(final String pId) throws Exception {
-    String query = SELECT_ALL + "WHERE COURSE_ID = ? ";
+    String query = SELECT_ALL + "WHERE MST_COURSE.COURSE_ID = ? And MST_COURSE.COURSE_ID=COURSE_SYLLABUS_MAP.COURSE_ID";
     return mJdbcTemplate.queryForObject(query, new Object[]{pId}, new CourseRowMapper());
   }
 

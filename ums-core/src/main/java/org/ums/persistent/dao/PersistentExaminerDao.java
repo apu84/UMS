@@ -26,16 +26,16 @@ public class PersistentExaminerDao extends AbstractAssignedTeacherDao<Examiner, 
           "       t4.id\n" +
           "  FROM    (  SELECT t1.SEMESTER_ID,\n" +
           "                    T2.COURSE_ID\n" +
-          "               FROM semester_syllabus_map t1, mst_course t2\n" +
+          "               FROM semester_syllabus_map t1, mst_course t2,COURSE_SYLLABUS_MAP t3\n" +
           "              WHERE     t1.program_id = ?\n" +
           "                    AND t1.semester_id = ?\n" +
-          "                    AND t1.syllabus_id = t2.syllabus_id\n" +
+          "                    AND t1.syllabus_id = t3.syllabus_id\n" +
           "                    AND t1.year = t2.year\n" +
           "                    AND T1.SEMESTER = t2.semester\n" +
+          "                    AND T2.COURSE_ID=T3.COURSE_ID\n"+
           "%s" +
           "%s" +
-          "           ORDER BY t2.syllabus_id,\n" +
-          "                    t2.syllabus_id,\n" +
+          "           ORDER BY t3.syllabus_id,\n" +
           "                    t2.year,\n" +
           "                    t2.semester) t3\n" +
           "       LEFT JOIN\n" +
