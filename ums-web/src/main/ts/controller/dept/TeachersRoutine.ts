@@ -7,9 +7,9 @@ module ums{
 
   class TeachersRoutine{
 
-    public static $inject = ['appConstants','HttpClient','$scope','$q','notify','$timeout','$sce','$window','classRoutineService'];
+    public static $inject = ['appConstants','HttpClient','$scope','$q','notify','$sce','$window','classRoutineService'];
     constructor(private appConstants: any, private httpClient: HttpClient, private $scope: ITeachersRoutine,
-                private $q:ng.IQService, private notify: Notify,private $timeout:ITimeoutService,
+                private $q:ng.IQService, private notify: Notify,
                 private $sce:ng.ISCEService,private $window:ng.IWindowService,private classRoutineService:ClassRoutineService) {
 
       $scope.getTeachersRoutine = this.getTeachersRoutine.bind(this);

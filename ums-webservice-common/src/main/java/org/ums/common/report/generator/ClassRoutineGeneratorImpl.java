@@ -10,10 +10,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.UnauthenticatedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.ums.domain.model.immutable.AppSetting;
-import org.ums.domain.model.immutable.Department;
-import org.ums.domain.model.immutable.Semester;
-import org.ums.domain.model.immutable.Teacher;
+import org.ums.domain.model.immutable.*;
 import org.ums.manager.*;
 
 import java.io.ByteArrayOutputStream;
@@ -21,6 +18,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -49,6 +48,9 @@ public class ClassRoutineGeneratorImpl implements ClassRoutineGenerator {
   @Autowired
   AppSettingManager mAppSettingManager;
 
+  @Autowired
+  UserManager mUserManager;
+
   @Override
   public void createClassRoutineStudentReport(OutputStream pOutputStream) throws Exception, IOException, DocumentException {
 
@@ -56,10 +58,11 @@ public class ClassRoutineGeneratorImpl implements ClassRoutineGenerator {
 
   @Override
   public void createClassRoutineTeacherReport(OutputStream pOutputStream) throws Exception, IOException, DocumentException {
-    String teacherId= SecurityUtils.getSecurityManager().toString();
-    Teacher teacher = mTeacherManager.get(teacherId);
+    String teacherId= SecurityUtils.getSubject().getPrincipal().toString();
+    User user = mUserManager.get(teacherId);
+    Teacher teacher = mTeacherManager.get(user.getEmployeeId());
 
-    Department department = mDepartmentManager.get(teacher.getDepartmentId());
+    Department department = mDepartmentManager.get(teacher.getDepartment().getId());
 
     List<Semester> semesterList = mSemesterManager.getAll().stream()
                                                     .filter(pSemester -> {
@@ -77,8 +80,9 @@ public class ClassRoutineGeneratorImpl implements ClassRoutineGenerator {
     Map<String,String> appSettingMap = mAppSettingManager.getAll().stream()
                                                       .collect(Collectors.toMap(AppSetting::getParameterName,AppSetting::getParameterValue));
 
-    Timestamp startTime = Timestamp.valueOf(appSettingMap.get("class start time"));
-    Timestamp endTime = Timestamp.valueOf(appSettingMap.get("class end time"));
+    DateFormat timeFormat = new SimpleDateFormat("HH:mm a");
+    Time startTime = new Time(timeFormat.parse(appSettingMap.get("class start time")).getTime());
+    Time endTime =new Time(timeFormat.parse(appSettingMap.get("class start end")).getTime());
     int classDuration = Integer.parseInt(appSettingMap.get("class duration"));
 
     Document document = new Document();
@@ -112,7 +116,7 @@ public class ClassRoutineGeneratorImpl implements ClassRoutineGenerator {
     PdfPCell dayTimeCell = new PdfPCell(new Paragraph("Time/Day",tableDataFont));
     table.addCell(dayTimeCell);
 
-    Timestamp timeInitializer = Timestamp.valueOf(appSettingMap.get("class start time"));
+    Time timeInitializer = new Time(timeFormat.parse(appSettingMap.get("class start time")).getTime());
 
     while(true){
       if(timeInitializer==endTime){
