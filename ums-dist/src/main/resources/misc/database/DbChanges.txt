@@ -369,3 +369,30 @@ Insert into DB_IUMS.CLASS_ROUTINE
     'R-5A03', '1', 110500, 50);
 COMMIT;
 
+
+
+
+
+
+
+
+Insert into DB_IUMS.MAIN_NAVIGATION
+   (NAVIGATION_ID, MENU_TITLE, PERMISSION, LOCATION, PARENT_MENU,
+    ICON_IMG_CLASS, ICON_COLOR_CLASS, VIEW_ORDER, STATUS, LAST_MODIFIED)
+ Values
+   (2044, 'Grade Submission Deadline', 'coe:gradeSubmissionDeadLine', '/gradeSubmissionDeadLine', 0,
+    'fa-plus-square-o', 'bg-pink', 30, 1, NULL);
+Insert into DB_IUMS.MAIN_NAVIGATION
+   (NAVIGATION_ID, MENU_TITLE, PERMISSION, LOCATION, PARENT_MENU,
+    ICON_IMG_CLASS, ICON_COLOR_CLASS, VIEW_ORDER, STATUS, LAST_MODIFIED)
+ Values
+   (2046, 'Teacher''s Routine', 'teacher:teachersRoutine', '/teachersRoutine', 0,
+    'fa fa-file-word-o', 'bg-blue', 31, 1, NULL);
+
+
+
+
+ Insert into DB_IUMS.PERMISSIONS
+    (ROLE_ID, PERMISSIONS, PERMISSION_ID, LAST_MODIFIED)
+  Values
+    (21, 'teacher:grade,teacher:courseMaterial,teacher:teachersRoutine', 1004, NULL);
