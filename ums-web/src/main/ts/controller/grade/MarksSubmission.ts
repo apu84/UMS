@@ -1,4 +1,5 @@
 ///<reference path="../../service/HttpClient.ts"/>
+///<reference path="../../service/CommonService.ts"/>
 module ums {
   export interface IMarksSubmissionScope extends ng.IScope {
     data:any;
@@ -130,11 +131,11 @@ module ums {
     shortName:string;
   }
   export class MarksSubmission {
-    public static $inject = ['$scope', 'appConstants', 'HttpClient','$stateParams', '$window', '$sce', '$q', 'notify'];
+    public static $inject = ['$scope', 'appConstants', 'HttpClient','$stateParams', '$window', '$sce', '$q', 'notify','commonService'];
 
     constructor(private $scope:IMarksSubmissionScope,
                 private appConstants:any,
-                private httpClient:HttpClient, private $stateParams:any,private $window: ng.IWindowService, private $sce: ng.ISCEService,private $q:ng.IQService,private notify: Notify) {
+                private httpClient:HttpClient, private $stateParams:any,private $window: ng.IWindowService, private $sce: ng.ISCEService,private $q:ng.IQService,private notify: Notify,private commonService:CommonService) {
 
       //console.clear();
       console.log($stateParams["1"]);
@@ -238,7 +239,7 @@ module ums {
 
       return style;
     }
-
+/*
     private fetchCurrentUser():ng.IPromise<any> {
       var url="/ums-webservice-common/users/current";
       var defer = this.$q.defer();
@@ -253,7 +254,7 @@ module ums {
       return defer.promise;
     }
 
-
+*/
     private loadSemesters():void{
       console.log("~~~~~~~~~~~~ddd~~~~~asdfsadasadfasdfafsdf~~");
       this.fetchSemesters(this.$scope.inputParams.program_type).then((semesters:Array<IOption>)=> {
@@ -264,7 +265,7 @@ module ums {
       if(this.$scope.inputParams.program_type==11) {
         if(this.$scope.userRole=="H") {
 
-          this.fetchCurrentUser().then((departmentJson:any)=> {
+            this.commonService.fetchCurrentUser().then((departmentJson:any)=> {
             this.$scope.data.depts = [departmentJson];
             this.$scope.inputParams.dept_id=departmentJson.id;
             this.loadPrograms();

@@ -38,7 +38,7 @@ module ums {
                     createFolder: true,
                     pickFiles: true,
                     pickFolders: true
-                  }),
+                  })
             });
       }]);
 
@@ -188,7 +188,7 @@ module ums {
                   'vendors/jquery-validate/jquery.validate.min.js',
                   'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
                   'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
-                  'vendors/bootstrap-daterangepicker/daterangepicker.js',
+                  'vendors/bootstrap-daterangepicker/daterangepicker.js'
                 ]
               });
             }]
@@ -207,7 +207,7 @@ module ums {
                   'vendors/jquery-validate/jquery.validate.min.js',
                   'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
                   'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
-                  'vendors/bootstrap-daterangepicker/daterangepicker.js',
+                  'vendors/bootstrap-daterangepicker/daterangepicker.js'
                 ]
               });
             }]
