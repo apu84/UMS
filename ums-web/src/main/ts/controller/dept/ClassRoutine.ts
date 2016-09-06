@@ -97,6 +97,7 @@ module ums {
       this.$scope.showTable = true;
       this.$scope.showSelection = true;
       this.loadData();
+      this.getCourseId();
 
     }
 
@@ -104,10 +105,15 @@ module ums {
     private getCourseId(): void {
       var defer = this.$q.defer();
       var courseArr: Array<ICourse>;
+      alert(" whatever");
       this.httpClient.get('/ums-webservice-common/academic/course/semester/'
           + this.$scope.courseTeacherSearchParamModel.semesterId
           + '/program/'
-          + this.$scope.courseTeacherSearchParamModel.programSelector.programId,
+          + this.$scope.courseTeacherSearchParamModel.programSelector.programId
+          + '/year/'
+          + this.$scope.courseTeacherSearchParamModel.academicYearId
+          + '/academicSemester/'
+          + this.$scope.courseTeacherSearchParamModel.academicSemesterId,
           HttpClient.MIME_TYPE_JSON,
           (json: any) => {
             courseArr = json.entries;

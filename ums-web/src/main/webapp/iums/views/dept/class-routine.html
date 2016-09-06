@@ -21,7 +21,7 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label">Students Year</label>
                         <div class="col-md-8">
-                            <select class="form-control required" data-ng-change="getCourseId()" data-ng-model="courseTeacherSearchParamModel.academicYearId" ng-init="academicYear=''">
+                            <select class="form-control required" data-ng-model="courseTeacherSearchParamModel.academicYearId" ng-init="academicYear=''">
                                 <option data-ng-repeat="year in data.academicYear" value="{{year.id}}">
                                     {{year.name}}
                                 </option>
