@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row" data-ng-init="getSemesters()">
     <div class="orgLeftClass pull-left panel panel-green" id="leftDiv">
         <div class="panel-heading">
             <h3 class="panel-title">Select </h3>
@@ -7,13 +7,22 @@
             <form action="" class="form-horizontal">
                 <div class="form-body pal">
 
-                    <div data-program-selector="" data-model="courseTeacherSearchParamModel.programSelector"></div>
-
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Program Type</label>
+                        <div class="col-md-8">
+                            <select class="form-control required" data-ng-model="programType">
+                                <option value="">Select Program Type</option>
+                                <option value="1">Undergraduate</option>
+                                <option value="2">Postgraduate</option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="form-group">
                         <label class="col-md-4 control-label">Academic Semester</label>
                         <div class="col-md-8">
-                            <select class="form-control required" data-ng-change="getRoomNo()" data-ng-model="courseTeacherSearchParamModel.semesterId" ng-init="newSyllabusModel.semesterId=''" >
-                                <option data-ng-repeat="semester in courseTeacherSearchParamModel.programSelector.getSemesters()" value="{{semester.id}}">{{semester.name}}</option>
+                            <select class="form-control required" data-ng-model="semesterId">
+                                <option value="">Selected a Semester</option>
+                                <option data-ng-repeat="s in semesterArr" value="s.id">{{s.name}}</option>
                             </select>
                         </div>
                     </div>
@@ -21,20 +30,37 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label">Students Year</label>
                         <div class="col-md-8">
-                            <select class="form-control required" data-ng-model="courseTeacherSearchParamModel.academicYearId" ng-init="academicYear=''">
-                                <option data-ng-repeat="year in data.academicYear" value="{{year.id}}">
-                                    {{year.name}}
-                                </option>
+                            <select class="form-control required" data-ng-model="studentsYear">
+                                <option value="">Select Student Year</option>
+                                <option value="1">1st year</option>
+                                <option value="2">2nd year</option>
+                                <option value="3">3rd year</option>
+                                <option value="4">4th year</option>
+                                <option value="5">5th year</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-4 control-label">Students Semester</label>
                         <div class="col-md-8">
-                            <select class="form-control required" data-ng-model="courseTeacherSearchParamModel.academicSemesterId" ng-init="academicSemester=''">
-                                <option data-ng-repeat="semester in data.academicSemester" value="{{semester.id}}">
-                                    {{semester.name}}
-                                </option>
+                            <select class="form-control required" data-ng-model="studentsSemester">
+                                <option value="">Select Student Semester</option>
+                                <option value="1">1st semester</option>
+                                <option value="2">2nd semester</option>
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Theory Section</label>
+                        <div class="col-md-8">
+                            <select class="form-control required" data-ng-model="section">
+                                <option value="">Select Student Theory Section</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+
                             </select>
                         </div>
                     </div>
