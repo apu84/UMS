@@ -239,7 +239,16 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
         return mJdbcTemplate.update(query,pExamType,pSemesterId,pExamDate);
     }
 
-    @Override
+
+  @Override
+  public String getGradeSubmissionDeadLine(String pCourseId, int pSemesterId, ExamType pExamType) {
+    String query = "select to_char(LAST_SUBMISSION_DATE,'dd-mm-YYYY') from MARKS_SUBMISSION_STATUS " +
+        "WHERE COURSE_ID=? AND SEMESTER_ID=? AND EXAM_TYPE=?";
+    List<String> deadLienDate = mJdbcTemplate.queryForList(query,new Object[]{pCourseId,pSemesterId,pExamType}, String.class);
+    return deadLienDate.get(0);
+  }
+
+  @Override
     public List<MarksSubmissionStatusDto> getGradeSubmissionDeadLine(Integer pSemesterId, Integer pExamType, String pExamDate) {
         String query= SELECT_EXAM_GRADE_DEAD_LINE;
         return mJdbcTemplate.query(query,new Object[]{pSemesterId,pExamDate,pSemesterId,pExamType},new GradeSubmissionDeadlineRowMapper());
@@ -719,6 +728,15 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
             submissionStatusDto.setLastSubmissionDate(pResultSet.getString("last_submission_date"));
             return submissionStatusDto;
         }
+    }
+
+    class GradeSubmissionDeadlineDateRowMapper implements RowMapper<MarksSubmissionStatusDto>{
+      @Override
+      public MarksSubmissionStatusDto mapRow(ResultSet pResultSet, int pI) throws SQLException {
+        MarksSubmissionStatusDto submissionStatusDto= new MarksSubmissionStatusDto();
+        submissionStatusDto.setLastSubmissionDate("last_submission_date");
+        return submissionStatusDto;
+      }
     }
 
 

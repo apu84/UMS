@@ -7,6 +7,7 @@ import org.ums.domain.model.immutable.ExamGrade;
 import org.ums.domain.model.mutable.MutableExamGrade;
 import org.ums.enums.CourseMarksSubmissionStatus;
 import org.ums.enums.CourseType;
+import org.ums.enums.ExamType;
 import org.ums.manager.ExamGradeManager;
 
 import java.util.List;
@@ -114,5 +115,10 @@ public class ExamGradeDaoDecorator  extends ContentDaoDecorator<ExamGrade, Mutab
     @Override
     public int updateForGradeSubmissionDeadLine(List<MarksSubmissionStatusDto> pMarksSubmissionStatusDtos) throws Exception{
         return getManager().updateForGradeSubmissionDeadLine(pMarksSubmissionStatusDtos);
+    }
+
+    @Override
+    public String getGradeSubmissionDeadLine(String pCourseId, int pSemesterId, ExamType pExamType) {
+        return getManager().getGradeSubmissionDeadLine(pCourseId,pSemesterId,pExamType);
     }
 }
