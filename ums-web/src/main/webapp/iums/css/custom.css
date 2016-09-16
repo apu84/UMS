@@ -335,7 +335,7 @@ div.ui-jqgrid-view table.ui-jqgrid-btable th {
 /*== End ==*/
 
 .page-title-breadcrumb{
-    height: 40px !important;
+    height: 42px !important;
 }
 .page-title-breadcrumb .breadcrumb {
     padding-top: 10px !important;
@@ -350,4 +350,14 @@ div.ui-jqgrid-view table.ui-jqgrid-btable th {
 }
 .form-control {
     font-size: 13px !important;
+}
+.tooltip-inner{
+    padding-bottom: 1px !important;
+}
+
+/* Tooltips */
+.img_tooltip{
+    content:url(../images/icons/stop_round.png);
+    height: 16px;
+    width: 16px;
 }

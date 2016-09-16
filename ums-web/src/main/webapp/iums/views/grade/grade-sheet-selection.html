@@ -11,13 +11,6 @@
         background:#fff;
         border: 1px solid #efefef;
     }
-
-    .panel_overlay{
-        display:none;
-        position:absolute;
-        background:#fff;
-        border: 1px solid #efefef;
-    }
     .scrollableContainer { height: inherit; }
     .orgLeftClass {
         width: 30%;
@@ -46,7 +39,7 @@
 <div class="row" id="selection1">
     <div class="orgLeftClass pull-left panel panel-green" id="leftDiv">
         <div class="panel-heading">
-            <h3 class="panel-title">Select </h3>
+            <h3 class="panel-title">Select Parameters</h3>
         </div>
         <div class="panel-body pan">
             <form action="" class="form-horizontal">
@@ -68,13 +61,11 @@
                             <select class="form-control required" data-ng-model="inputParams.semester_id" data-convert-to-number >
                                 <option data-ng-repeat="semester in data.semesters" value="{{semester.id}}">{{semester.name}}</option>
                             </select>
-                            <!--                                <option  value="11012016">Spring, 2016</option>-->
                         </div>
 
                     </div>
                     <div class="form-group">
                         <label class="col-md-4 control-label">Exam Type</label>
-
                         <div class="col-md-8">
                             <select class="form-control required" data-ng-model="inputParams.exam_type" data-convert-to-number>
                                 <option  value="1">Semester Final</option>
@@ -122,7 +113,7 @@
     <div class="orgRightClass pull-left" id="rightDiv">
 
         <div class="panel">
-            <div class="panel-heading">Teacher's Different Roles for different courses of Online Grade Submission<span
+            <div class="panel-heading">Assigned Course List<span
                     class="subtitle"></span></div>
             <div class="panel-body shadowPanel"   style="min-height: 490px;">
 
@@ -130,11 +121,11 @@
                     <thead>
                     <tr>
                         <th width="8%">Course No</th>
-                        <th width="25%">Course Title</th>
+                        <th width="24%">Course Title</th>
                         <th width="5%" style="text-align: center;">Y-S</th>
-                        <th width="5%" style="text-align: center;">Program.</th>
+                        <th width="8%" style="text-align: center;">Program.</th>
                         <th width="20%">Course Teacher</th>
-                        <th width="20%">Preparer-Scrutinizer</th>
+                        <th width="18%">Preparer-Scrutinizer</th>
                         <th width="15%">Status</th>
                     </tr>
 
@@ -175,19 +166,28 @@
 
     <div class="col-md-12">
 
-
-
         <div class="panel panel-default">
             <div id='outer_container' style="position: absolute;top: 40px; right: 55px;z-index: 99999;">
                 <a class="menu_button" href="javascript:void(0)" title="Toggle"><span>Menu Toggle</span></a>
                 <ul class="menu_option">
-                    <li><a href="javascript:void(0)" data-ng-click="downloadPdf()"  style="background: #ea4c3a"><span style="background-image:  url('vendors/pieMenu/pdf-256.png')">Item</span></a></li>
-                    <li><a href="#" style="background: transparent;"><span style="background-image:  url('vendors/pieMenu/chart.png')">Item</span></a></li>
-                    <li><a href="javascript:void(0)" data-target="#modal-prompt" data-toggle="modal" style="background: transparent;">
-                        <span style="background-image:  url('vendors/pieMenu/excel-paste.png')">Item</span></a></li>
-                    <li><a href="#"><span>Item</span></a></li>
-                    <li><a  href="javascript:void(0)" data-ng-click="generateXls()"><span>Xls</span></a></li>
-
+                    <li>
+                        <a href="javascript:void(0)" data-ng-click="downloadPdf()"  style="background: #ea4c3a" title="Download Pdf">
+                            <span style="background-image:  url('vendors/pieMenu/pdf-256.png')">Item</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)"data-ng-click="generateXls()"style="background: transparent;" title="Download Excel">
+                            <span style="background-image:  url('vendors/pieMenu/excel-download.png')" >Item</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" data-target="#modal-prompt" data-toggle="modal" style="background: transparent;" title="Upload Excel Data">
+                            <span style="background-image:  url('vendors/pieMenu/excel-paste.png')">Item</span>
+                        </a>
+                    </li>
+                    <li><a href="javascript:void(0)"  style="background: transparent;">
+                        <span style="background-image:  url('vendors/pieMenu/chart.png')">Item</span></a></li>
+                    <li><a href="javascript:void(0)"><span>Item</span></a></li>
                 </ul>
             </div>
             <div class="panel-body shadowPanel" style="min-height: 400px;line-height: 100px;font-size: 20px;text-align: center;color: maroon;"  data-ng-if="gradeSubmissionStatus =='0' && currentActor!='preparer'">
@@ -195,10 +195,11 @@
                 <button type="button" class="btn btn-default btn-square" onclick='goBack()'>Back to Grade Sheet Selection</button>
             </div>
 
-
+            <div id="loading_panel" class="panel-body shadowPanel" style="height: 90%;text-align: center">
+                <div data-spinner=""></div>
+            </div>
 
             <div id="panel_top" class="panel-body shadowPanel" style="position: relative;"  data-ng-if="gradeSubmissionStatus !='0' || currentActor=='preparer'" >
-                <div class="panel_overlay"></div>
                 <table width="90%" align="center" style="margin-bottom: 10px;">
                     <tr>
                         <td colspan="4" align="center" style="height: 30px;">
@@ -224,22 +225,30 @@
                             </select>
 
 
-                            <div style="float: left;" ng-="partDiv" data-ng-show="courseType=='THEORY'">
-                                Part-A  <input type="text" style="width: 50px;border:1px solid grey;text-align: center;" data-ng-model="data.part_a_total"  data-ng-if="(gradeSubmissionStatus =='0' && currentActor=='preparer')"/>
+                            <div style="float: left; margin-left: 10px;" ng-="partDiv" data-ng-show="courseType=='THEORY'">
+                                Part-A
+                                <input type="text" style="width: 50px;border:1px solid grey;text-align: center;" data-ng-model="data.part_a_total"  data-ng-if="(gradeSubmissionStatus =='0' && currentActor=='preparer')" >
+                                <img  class='img_tooltip'  id="tooltip_partA_"/>
+
                                 <span data-ng-if="(gradeSubmissionStatus !='0' || currentActor!='preparer')">{{data.part_a_total}}</span>&nbsp;&nbsp;
                             <span data-ng-if="(data.total_part=='2')">
                             Part-B  <input type="text" style="width: 50px;border:1px solid grey;text-align: center;" data-ng-model="data.part_b_total" data-ng-if="(gradeSubmissionStatus =='0' && currentActor=='preparer')"/>
+                                <img  class='img_tooltip'  id="tooltip_partB_"/>
+
                                     <span data-ng-if="(gradeSubmissionStatus !='0' || currentActor!='preparer')">{{data.part_b_total}}</span>
                             </span>
                             </div>
+                            <script>
 
+
+                            </script>
                         </td>
                     </tr>
                 </table>
                 <!-- Grade Sheet Preparer Block (Fresh/New Grade Submission , Requested for recheck grades are not here) -->
                 <div ng-if="noneSubmittedGrades.length>0 &&  (gradeSubmissionStatus =='0' && currentActor=='preparer')">
 
-                    <div class="btn btn-blue reportrange" style="margin-top: 20px;">
+                    <div class="btn btn-blue" style="margin-top: 20px;">
                         <i class="fa fa-check-circle-o"></i>
                         <span style="padding-right: 100px;">{{gradeTitle}}</span>
                     </div>
@@ -251,45 +260,50 @@
                             <thead>
                             <tr>
                                 <th sortable-header col="studentId" width="10%">Student Id</th>
-                                <th sortable-header col="studentName" width="40%">Student Name</th>
+                                <th sortable-header col="studentName" width="30%">Student Name</th>
                                 <th sortable-header col="quiz" width="10%" style="text-align: center;" data-ng-show="courseType=='THEORY'">Quiz (20)</th>
                                 <th sortable-header col="classPerformance" width="10%" style="text-align: center;" data-ng-show="courseType=='THEORY'">Class Perf. (10)</th>
                                 <th sortable-header col="partA" width="10%" style="text-align: center;" data-ng-show="courseType=='THEORY'">Part-A ({{data.part_a_total}})</th>
                                 <th sortable-header col="partB" width="10%" style="text-align: center;" ng-show="toggleColumn && courseType=='THEORY'">Part-B ({{data.part_b_total}})</th>
-                                <th sortable-header col="total" width="5%" style="text-align: center;">Total</th>
+                                <th sortable-header col="total" width="10%" style="text-align: center;">Total</th>
                                 <th sortable-header col="gradeLetter" width="5%" style="text-align: center;">Grade Letter</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="response in noneSubmittedGrades" row-id="{{response.studentId}}" id="row_{{response.studentId}}">
-                                <td id="sid_{{response.studentId}}" ng-style="calculateStyle(response.regType)">{{response.studentId}}</td>
+                            <tr ng-repeat="response in noneSubmittedGrades" row-id="{{response.studentId}}" id="row_{{response.studentId}}" data-emit-last-repeater-element>
+                                <td id="sid_{{response.studentId}}" ng-style="calculateStyle(response.regType)">{{response.studentId}}-</td>
                                 <td id="td_sname_{{response.studentId}}">{{ response.studentName }}</td>
-                                <td id="td_quiz_{{response.studentId}}" data-ng-show="courseType=='THEORY'">
+                                <td id="td_quiz_{{response.studentId}}" data-ng-show="courseType=='THEORY'" style="text-align: center;">
                                     <input type="text"  style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="quiz_{{response.studentId}}"
-                                           value="{{response.quiz}}" data-ng-change="calculateTotalAndGradeLetter('{{response.studentId}}')" data-ng-model="response.quiz" maxlength="2"/>
+                                           value="{{response.quiz}}" onchange="calculateTotalAndGradeLetter(this.id)" maxlength="2"/>
+                                    <img  class='img_tooltip'  id="tooltip_quiz_{{response.studentId}}"/>
                                 </td>
-                                <td id="td_cperf_{{response.studentId}}" data-ng-show="courseType=='THEORY'">
+                                <td id="td_cperf_{{response.studentId}}" data-ng-show="courseType=='THEORY'" style="text-align: center;">
                                     <input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="class_perf_{{response.studentId}}"
-                                           value="{{response.classPerformance}}"  data-ng-change="calculateTotalAndGradeLetter('{{response.studentId}}')" data-ng-model="response.classPerformance" maxlength="2"/>
+                                           value="{{response.classPerformance}}"  onchange="calculateTotalAndGradeLetter(this.id)" maxlength="2"/>
+                                    <img  class='img_tooltip'  id="tooltip_class_perf_{{response.studentId}}"/>
                                 </td>
-                                <td id="td_parta_{{response.studentId}}" data-ng-show="courseType=='THEORY'">
+                                <td id="td_parta_{{response.studentId}}" data-ng-show="courseType=='THEORY'" style="text-align: center;">
                                     <input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="part_a_{{response.studentId}}"
-                                           value="{{response.partA}}" data-ng-change="calculateTotalAndGradeLetter('{{response.studentId}}')" data-ng-model="response.partA" maxlength="2"/>
+                                           value="{{response.partA}}" onchange="calculateTotalAndGradeLetter(this.id)" maxlength="2"/>
+                                    <img  class='img_tooltip'  id="tooltip_part_a_{{response.studentId}}"/>
                                 </td>
-                                <td id="td_partb_{{response.studentId}}" ng-show="toggleColumn && courseType=='THEORY'">
+                                <td id="td_partb_{{response.studentId}}" ng-show="toggleColumn && courseType=='THEORY'" style="text-align: center;">
                                     <input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="part_b_{{response.studentId}}"
-                                           value="{{response.partB}}" data-ng-change="calculateTotalAndGradeLetter('{{response.studentId}}')" data-ng-model="response.partB" maxlength="2"/>
+                                           value="{{response.partB}}" onchange="calculateTotalAndGradeLetter(this.id)" maxlength="2"/>
+                                    <img  class='img_tooltip'  id="tooltip_part_b_{{response.studentId}}"/>
                                 </td>
                                 <td id="td_total_{{response.studentId}}" style="text-align: center;">
                                     <input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" data-ng-disabled="courseType=='THEORY'"
-                                           id="total_{{response.studentId}}" value="{{response.total}}" data-ng-model="response.total"
-                                           data-ng-change="calculateTotalAndGradeLetter('{{response.studentId}}')" maxlength="3"/>
+                                           id="total_{{response.studentId}}" value="{{response.total}}" onchange="calculateTotalAndGradeLetter(this.id,)" maxlength="3"/>
+                                    <img  class='img_tooltip'  id="tooltip_total_{{response.studentId}}"/>
                                 </td>
                                 <td id="td_grade_letter_{{response.studentId}}" style="text-align: center;">
                                     <select  style="width: 100px;border: 1px solid grey;padding: 0px;height: 23px;" id="grade_letter_{{response.studentId}}" disabled="disabled">
                                         <option value="">Select Grade</option>
                                         <option ng-selected="{{gradeLetter.id == response.gradeLetter}}" data-ng-repeat="gradeLetter in data.gradeLetterOptions" value="{{gradeLetter.id}}">{{gradeLetter.name}}</option>
                                     </select>
+                                    <img  class='img_tooltip'  id="tooltip_grade_letter_{{response.studentId}}"/>
                                     <input type="hidden" id="reg_type_{{response.studentId}}" value="{{response.regType}}"/>
                                 </td>
                             </tr>
@@ -318,8 +332,8 @@
                 <div ng-if="candidatesGrades.length>0 &&  (gradeSubmissionStatus =='1' && currentActor=='scrutinizer') || (gradeSubmissionStatus =='3' && currentActor=='head') ||
                      (gradeSubmissionStatus =='5' && currentActor=='coe')"  id="top_div">
 
-                    <div class="btn btn-blue reportrange" style="margin-top: 20px;">
-                        <i class="fa fa-check-circle-o"></i>
+                    <div class="btn btn-blue" style="margin-top: 20px;">
+                        <i class="fa fa fa-spinner"></i>
                         <span style="padding-right: 100px;">{{gradeTitle}}</span>
                     </div>
                     <data-course-reg-type-legend examtype="{{current_examType}}"></data-course-reg-type-legend>
@@ -343,7 +357,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="response in candidatesGrades">
+                            <tr ng-repeat="response in candidatesGrades" data-emit-last-repeater-element>
                                 <td ng-style="calculateStyle(response.regType)">{{response.studentId}}</td>
                                 <td>{{ response.studentName }}</td>
                                 <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.quiz}}</td>
@@ -360,8 +374,7 @@
                             </tbody>
                         </table>
                         <div class="table_overlay"></div>
-                        <!--<div id="msg_div24" style="position: absolute;background-color:wheat;padding:20px;">Showing message here...</div>-->
-                        <div class="modal-dialog" id="msg_div24"  style="position: absolute;">
+                        <div class="modal-dialog" id="msg_div"  style="position: absolute;">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <button class="close" aria-hidden="true" data-dismiss="modal" type="button" data-ng-click="closePopupModal()">×</button>
@@ -399,8 +412,8 @@
 
                 <!-- Start of Recheck Candidates Grades -->
                 <div ng-if="recheckCandidatesGrades.length >0 &&  ((gradeSubmissionStatus =='2' || gradeSubmissionStatus =='4' || gradeSubmissionStatus =='6') && currentActor!='preparer')">
-                    <div class="btn btn-blue reportrange" style="margin-top: 20px;">
-                        <i class="fa fa-check-circle-o"></i>
+                    <div class="btn btn-blue" style="margin-top: 20px;">
+                        <i class="fa fa-check-square-o"></i>
                         <span style="padding-right: 100px;">Requested for Recheck Grades</span>
                     </div>
                     <data-course-reg-type-legend examtype="{{current_examType}}"></data-course-reg-type-legend>
@@ -440,9 +453,9 @@
                     </div>
                 </div>
 
-                <div ng-if="recheckCandidatesGrades.length >0 &&  ((gradeSubmissionStatus =='2' || gradeSubmissionStatus =='4' || gradeSubmissionStatus =='6') && currentActor=='preparer')">
-                    <div class="btn btn-blue reportrange" style="margin-top: 20px;">
-                        <i class="fa fa-check-circle-o"></i>
+                <div ng-if="recheckCandidatesGrades.length >0 &&  ((gradeSubmissionStatus =='2' || gradeSubmissionStatus =='4' || gradeSubmissionStatus =='6') && currentActor=='preparer')" id="top_div" >
+                    <div class="btn btn-blue" style="margin-top: 20px;" >
+                        <i class="fa fa-check-square-o"></i>
                         <span style="padding-right: 100px;">Requested for Recheck Grades</span>
                     </div>
                     <data-course-reg-type-legend examtype="{{current_examType}}"></data-course-reg-type-legend>
@@ -471,34 +484,42 @@
                                 <td id="td_quiz_{{response.studentId}}" data-ng-show="courseType=='THEORY'">
                                     <input type="text"  style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="quiz_{{response.studentId}}"
                                            value="{{response.quiz}}" data-ng-change="calculateTotalAndGradeLetter('{{response.studentId}}')" data-ng-model="response.quiz" maxlength="2"/>
+                                    <img  class='img_tooltip'  id="tooltip_quiz_{{response.studentId}}"/>
                                 </td>
                                 <td id="td_cperf_{{response.studentId}}" data-ng-show="courseType=='THEORY'">
                                     <input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="class_perf_{{response.studentId}}"
                                            value="{{response.classPerformance}}"  data-ng-change="calculateTotalAndGradeLetter('{{response.studentId}}')" data-ng-model="response.classPerformance" maxlength="2"/>
+                                    <img  class='img_tooltip'  id="tooltip_class_perf_{{response.studentId}}"/>
                                 </td>
                                 <td id="td_parta_{{response.studentId}}" data-ng-show="courseType=='THEORY'">
                                     <input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="part_a_{{response.studentId}}"
                                            value="{{response.partA}}" data-ng-change="calculateTotalAndGradeLetter('{{response.studentId}}')" data-ng-model="response.partA" maxlength="2"/>
+                                    <img  class='img_tooltip'  id="tooltip_part_a_{{response.studentId}}"/>
                                 </td>
                                 <td id="td_partb_{{response.studentId}}" ng-show="toggleColumn && courseType=='THEORY'">
                                     <input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="part_b_{{response.studentId}}"
                                            value="{{response.partB}}" data-ng-change="calculateTotalAndGradeLetter('{{response.studentId}}')" data-ng-model="response.partB" maxlength="2"/>
+                                    <img  class='img_tooltip'  id="tooltip_part_b_{{response.studentId}}"/>
                                 </td>
                                 <td id="td_total_{{response.studentId}}">
-                                    <input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" disabled="disabled" id="total_{{response.studentId}}" value="{{response.total}}"/>
+                                    <input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" data-ng-disabled="courseType=='THEORY'" id="total_{{response.studentId}}" value="{{response.total}}"/>
+                                    <img  class='img_tooltip'  id="tooltip_total_{{response.studentId}}"/>
                                 </td>
                                 <td id="td_grade_letter_{{response.studentId}}">
                                     <select  style="width: 100px;border: 1px solid grey;padding: 0px;height: 23px;" id="grade_letter_{{response.studentId}}" disabled="disabled">
                                         <option value="">Select Grade</option>
                                         <option ng-selected="{{gradeLetter.id == response.gradeLetter}}" data-ng-repeat="gradeLetter in data.gradeLetterOptions" value="{{gradeLetter.id}}">{{gradeLetter.name}}</option>
                                     </select>
+                                    <img  class='img_tooltip'  id="tooltip_grade_letter_{{response.studentId}}"/>
+                                    <input type="hidden" id="reg_type_{{response.studentId}}" value="{{response.regType}}"/>
                                 </td>
                                 <td style="text-align: center;">
-                                    <input type="checkbox" id="recheck_{{response.studentId}}" data-ng-click="onRecheckClick(currentActor,response)" ng-checked="response.statusId==1"/>
+                                    <input type="checkbox" id="rechecked_{{response.studentId}}"  ng-checked="response.statusId==1"/>
                                 </td>
                             </tr>
                             </tbody>
                         </table>
+
                     </scrollable-table>
                     <br/><br/>
                     <div class="row">
@@ -507,7 +528,11 @@
                         </div>
                         <div class="col-md-6" style="text-align: right;">
                             <button type="button" class="btn btn-grey btn-square" data-ng-click="saveGradeSheet()">Save Data</button>
+                            <modal data-handler="modalSettings.submitHandler" data-body="modalSettings.submitBody"  data-header="modalSettings.header" data-ng-click-right-button="modalSettings.submitRightButton()"></modal>
+                            <a data-target="#{{modalSettings.submitHandler}}" role="button" class="btn btn-green btn-square" data-toggle="modal">Save & Send to Scrutinizer</a>
+                            <!--
                             <button type="button" class="btn btn-green btn-square" data-ng-click="saveAndSendToScrutinizer()">Save & Send to Scrutinizer</button>
+                            -->
                         </div>
                     </div>
                     <br/><br/>
@@ -516,7 +541,7 @@
 
                 <!-- Start of Submitted Grades -->
                 <div ng-if="submittedGrades.length>0  &&  ((currentActor=='scrutinizer' && gradeSubmissionStatus !='1') || (currentActor!='scrutinizer')) ">
-                    <div class="btn btn-blue reportrange" style="margin-top: 20px;">
+                    <div class="btn btn-blue" style="margin-top: 20px;">
                         <i class="fa fa-check-circle-o"></i>
                         <span style="padding-right: 100px;">Submitted Grades</span>
                     </div>
@@ -533,13 +558,13 @@
                                 <th sortable-header col="classPerformance" width="10%" style="text-align: center;" data-ng-show="courseType=='THEORY'">Class Perf. (10)</th>
                                 <th sortable-header col="partA" width="10%" style="text-align: center;" data-ng-show="courseType=='THEORY'">Part-A ({{data.part_a_total}})</th>
                                 <th sortable-header col="partB" width="10%" style="text-align: center;" ng-show="toggleColumn && courseType=='THEORY'">Part-B ({{data.part_b_total}})</th>
-                                <th sortable-header col="total" width="5%" style="text-align: center;">Total</th>
-                                <th sortable-header col="gradeLetter" width="10%" style="text-align: center;">Grade Letter</th>
+                                <th sortable-header col="total" width="8%" style="text-align: center;">Total</th>
+                                <th sortable-header col="gradeLetter" width="7%" style="text-align: center;">Grade Letter</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="response in submittedGrades">
-                                <td ng-style="calculateStyle(response.regType)">{{response.studentId}}</td>
+                            <tr ng-repeat="response in submittedGrades" data-emit-last-repeater-element>
+                                <td ng-style="calculateStyle(response.regType)" style="text-align: center;">{{response.studentId}}</td>
                                 <td>{{ response.studentName }}</td>
                                 <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.quiz}}</td>
                                 <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.classPerformance}}</td>
@@ -560,9 +585,9 @@
                 </div>
                 <!-- End of Submitted Grades -->
 
-                <!-- Start of Scrutnized Grades -->
+                <!-- Start of Scrutinized Grades -->
                 <div ng-if="scrutinizedGrades.length>0  &&  ((currentActor=='head' && gradeSubmissionStatus !='3') || (currentActor!='head')) ">
-                    <div class="btn btn-blue reportrange" style="margin-top: 20px;">
+                    <div class="btn btn-blue" style="margin-top: 20px;">
                         <i class="fa fa-check-circle-o"></i>
                         <span style="padding-right: 100px;">Scrutinized Grades</span>
                     </div>
@@ -584,7 +609,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="response in scrutinizedGrades">
+                            <tr ng-repeat="response in scrutinizedGrades" data-emit-last-repeater-element>
                                 <td ng-style="calculateStyle(response.regType)">{{response.studentId}}</td>
                                 <td>{{ response.studentName }}</td>
                                 <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.quiz}}</td>
@@ -608,7 +633,7 @@
 
                 <!-- Start of Approved Grades -->
                 <div ng-if="approvedGrades.length>0 &&  ((currentActor=='coe' && gradeSubmissionStatus !='5') || (currentActor!='coe')) ">
-                    <div class="btn btn-blue reportrange" style="margin-top: 20px;">
+                    <div class="btn btn-blue" style="margin-top: 20px;">
                         <i class="fa fa-check-circle-o"></i>
                         <span style="padding-right: 100px;">Approved(by Head) Grades</span>
                     </div>
@@ -630,7 +655,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="response in approvedGrades">
+                            <tr ng-repeat="response in approvedGrades" data-emit-last-repeater-element>
                                 <td ng-style="calculateStyle(response.regType)">{{response.studentId}}</td>
                                 <td>{{ response.studentName }}</td>
                                 <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.quiz}}</td>
@@ -654,7 +679,7 @@
 
                 <!-- Start of Accepted Grades -->
                 <div ng-if="acceptedGrades.length>0">
-                    <div class="btn btn-blue reportrange" style="margin-top: 20px;">
+                    <div class="btn btn-blue" style="margin-top: 20px;">
                         <i class="fa fa-check-circle"></i>
                         <span style="padding-right: 100px;">Accepted(by CoE) Grades</span>
                     </div>
@@ -675,7 +700,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="response in acceptedGrades" id="{{response.studentId}}">
+                            <tr ng-repeat="response in acceptedGrades" id="{{response.studentId}}" data-emit-last-repeater-element>
                                 <td ng-style="calculateStyle(response.regType)">{{response.studentId}}</td>
                                 <td>{{ response.studentName }}</td>
                                 <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.quiz}}</td>
@@ -696,7 +721,7 @@
                     </div>
 
                     <div ng-if="acceptedGrades.length>0 &&  (gradeSubmissionStatus =='7' && currentActor=='coe') ">
-                        <div class="btn btn-red reportrange" style="margin-top: 20px;">
+                        <div class="btn btn-red" style="margin-top: 20px;">
                             <i class="fa fa-check-circle"></i>
                             <span style="padding-right: 30px;">Recheck Accepted Grades(Pending) <input type="'textbox" style="width:150px;border:1px solid white;color:black;margin-left:10px"  ng-keypress="($event.which === 13)?copyGradeRow():0" data-ng-model="data.recheck_accepted_studentId"/></span>
                         </div>
@@ -747,7 +772,7 @@
                     </div>
 
                     <div ng-if="recheckAcceptedGrades.length>0 &&  gradeSubmissionStatus =='8' ">
-                        <div class="btn btn-red reportrange" style="margin-top: 20px;">
+                        <div class="btn btn-red" style="margin-top: 20px;">
                             <i class="fa fa-check-circle"></i>
                             <span style="padding-right: 30px;">Recheck Request for Accepted Grades(Pending)</span>
                         </div>
@@ -1014,4 +1039,14 @@
     }
     $('.page-title.ng-binding').html("Grade Sheet Selection");
     $("#btn_stat").focus();
+
+    function calculateTotalAndGradeLetter(fieldId){
+        var arr=fieldId.split("_");
+
+        var scope = angular.element(document.getElementById(fieldId)).scope();
+        scope.$apply(function () {
+            scope.calculateTotalAndGradeLetter(arr[arr.length-1]);
+        });
+    }
+
 </script>
