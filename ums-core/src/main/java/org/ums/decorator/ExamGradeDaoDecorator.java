@@ -7,6 +7,7 @@ import org.ums.domain.model.immutable.ExamGrade;
 import org.ums.domain.model.mutable.MutableExamGrade;
 import org.ums.enums.CourseMarksSubmissionStatus;
 import org.ums.enums.CourseType;
+import org.ums.enums.ExamType;
 import org.ums.manager.ExamGradeManager;
 
 import java.util.List;
@@ -127,5 +128,9 @@ public class ExamGradeDaoDecorator  extends ContentDaoDecorator<ExamGrade, Mutab
 
     public int getTotalStudentCount(final Integer pSemesterId, final String pCourseId, final Integer pExamType, final CourseType courseType) throws Exception{
         return getManager().getTotalStudentCount(pSemesterId,pCourseId,pExamType,courseType);
+    }
+    @Override
+    public String getGradeSubmissionDeadLine(String pCourseId, int pSemesterId, ExamType pExamType) {
+        return getManager().getGradeSubmissionDeadLine(pCourseId,pSemesterId,pExamType);
     }
 }

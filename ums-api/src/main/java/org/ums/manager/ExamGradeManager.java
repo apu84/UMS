@@ -7,6 +7,7 @@ import org.ums.domain.model.immutable.ExamGrade;
 import org.ums.domain.model.mutable.MutableExamGrade;
 import org.ums.enums.CourseMarksSubmissionStatus;
 import org.ums.enums.CourseType;
+import org.ums.enums.ExamType;
 
 import java.util.List;
 
@@ -43,5 +44,6 @@ public interface ExamGradeManager extends ContentManager<ExamGrade, MutableExamG
     public List<MarksSubmissionStatusDto> getGradeSubmissionDeadLine(Integer pSemesterId, Integer pExamType, String pExamDate);
     public int updateForGradeSubmissionDeadLine(List<MarksSubmissionStatusDto> pMarksSubmissionStatusDtos) throws Exception;
     public int getTotalStudentCount(final Integer pSemesterId, final String pCourseId, final Integer pExamType, final CourseType courseType) throws Exception;
+    public String getGradeSubmissionDeadLine(String pCourseId, int pSemesterId, ExamType pExamType);
 }
 
