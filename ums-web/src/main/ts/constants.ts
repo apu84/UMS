@@ -442,7 +442,7 @@ module ums {
           ACCEPT: 7,
           ACCEPTED: 8
         },
-        regType:{
+        courseRegType:{
           REGULAR:1,
           CLEARANCE:2,
           CARRY:3,

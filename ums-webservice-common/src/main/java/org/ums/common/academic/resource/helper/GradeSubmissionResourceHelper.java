@@ -2,6 +2,7 @@ package org.ums.common.academic.resource.helper;
 
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,6 +26,7 @@ import org.ums.manager.SemesterManager;
 import org.ums.manager.UserManager;
 import org.ums.persistent.model.PersistentExamGrade;
 import org.ums.services.academic.GradeSubmissionService;
+import org.ums.util.Constants;
 
 import javax.json.*;
 import javax.ws.rs.core.Response;
@@ -132,12 +134,21 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
 
     MarksSubmissionStatusDto marksSubmissionStatus = getContentManager().getMarksSubmissionStatus(partInfoDto.getSemesterId(), partInfoDto.getCourseId(), partInfoDto.getExamType());
     //User Role Validation
-    gradeSubmissionService.getActorForCurrentUser(SecurityUtils.getSubject().getPrincipal().toString(), userRole, partInfoDto.getSemesterId(), partInfoDto.getCourseId());
+    String currentActorRole=gradeSubmissionService.getActorForCurrentUser(SecurityUtils.getSubject().getPrincipal().toString(), userRole, partInfoDto.getSemesterId(), partInfoDto.getCourseId());
+    if(!currentActorRole.equalsIgnoreCase(Constants.GRADE_PREPARER)){
+      throw new UnauthorizedException("Invalid Role");
+    }
     // Need to do Grade Submission Deadline validation here
     //Need to validate grade here
 
 
-    if (partInfoDto.getCourseType() == CourseType.THEORY) {
+    if ((partInfoDto.getCourseType() == CourseType.THEORY )
+        &&
+        (marksSubmissionStatus.getStatus()==CourseMarksSubmissionStatus.NOT_SUBMITTED
+            || marksSubmissionStatus.getStatus()==CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_SCRUTINIZER
+            || marksSubmissionStatus.getStatus()==CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_HEAD
+            || marksSubmissionStatus.getStatus()==CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_COE)) {
+        gradeSubmissionService.validatePartInfo(partInfoDto.getTotal_part(), partInfoDto.getPart_a_total(), partInfoDto.getPart_b_total());
         getContentManager().updatePartInfo(partInfoDto.getSemesterId(), partInfoDto.getCourseId(), partInfoDto.getExamType(), partInfoDto.getTotal_part(), partInfoDto.getPart_a_total(), partInfoDto.getPart_b_total());
     }
     getContentManager().saveGradeSheet(partInfoDto.getSemesterId(), partInfoDto.getCourseId(), partInfoDto.getExamType(), partInfoDto.getCourseType(), gradeList);

@@ -20,9 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-/**
- * Created by ikh on 4/29/2016.
- */
 public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
 
     String SELECT_THEORY_MARKS = "Select UG_THEORY_MARKS.*,FULL_NAME From UG_THEORY_MARKS,STUDENTS  Where UG_THEORY_MARKS.STUDENT_ID=STUDENTS.STUDENT_ID AND Semester_Id=? and Course_Id=? and Exam_Type=? ";
@@ -43,9 +40,9 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
     String UPDATE_MARKS_SUBMISSION_STATUS="Update MARKS_SUBMISSION_STATUS Set STATUS=? Where SEMESTER_ID=? and COURSE_ID=? and EXAM_TYPE=? ";
 
     String UPDATE_THEORY_MARKS="Update  UG_THEORY_MARKS Set Quiz=?,Class_Performance=?,Part_A=?,Part_B=?,Total=?,Grade_Letter=?,Status=? " +
-            " Where Semester_Id=? And Course_Id=? and Exam_Type=? and Student_Id=?";
+            " Where Semester_Id=? And Course_Id=? and Exam_Type=? and Student_Id=? and status in (0,1)"; //None and Submit grades marks are allowed to update
     String UPDATE_SESSIONAL_MARKS="Update  UG_SESSIONAL_MARKS Set Total=?,Grade_Letter=?,Status=? " +
-            " Where Semester_Id=? And Course_Id=? and Exam_Type=? and Student_Id=?";
+            " Where Semester_Id=? And Course_Id=? and Exam_Type=? and Student_Id=? and status in (0,1)"; //None and Submit grades marks are allowed to update
 
     String SELECT_GRADE_SUBMISSION_TABLE_TEACHER="Select tmp5.*,Status,Exam_Type From ( " +
             "Select tmp4.*,MVIEW_TEACHERS.TEACHER_NAME Scrutinizer_Name,getCourseTeacher(semester_id,course_id) Course_Teachers From " +
@@ -204,6 +201,10 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
 
     String MARKS_SUBMISSION_STATUS_LOG="Insert Into Marks_Submission_Status_Log(USER_ID, SEMESTER_ID, COURSE_ID, EXAM_TYPE,STATUS) "+
         " Values(?,?,?,?,?) ";
+
+    String THEORY_NONE_SUBMITTED_COUNT="Select Count(Student_Id) From UG_THEORY_MARKS Where Semester_Id=? and Course_Id=? and Exam_Type=1 and Status in (0,1)";
+    String SESSIONAL_NONE_SUBMITTED_COUNT="Select Count(Student_Id) From UG_SESSIONAL_MARKS Where Semester_Id=? and Course_Id=? and Exam_Type=1 and Status in (0,1)";
+
 
     private JdbcTemplate mJdbcTemplate;
 
@@ -818,5 +819,16 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
             status.getId());
     }
 
+
+    @Override
+    public int getTotalStudentCount(final Integer pSemesterId, final String pCourseId, final Integer pExamType, final CourseType courseType) {
+        String sql="";
+        if(courseType==CourseType.THEORY)
+            sql = THEORY_NONE_SUBMITTED_COUNT;
+        else if(courseType==CourseType.SESSIONAL)
+            sql = SESSIONAL_NONE_SUBMITTED_COUNT;
+
+        return mJdbcTemplate.queryForObject(sql,Integer.class,pSemesterId,pCourseId,pExamType);
+    }
 
 }

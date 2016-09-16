@@ -124,4 +124,8 @@ public class ExamGradeDaoDecorator  extends ContentDaoDecorator<ExamGrade, Mutab
     public int updateForGradeSubmissionDeadLine(List<MarksSubmissionStatusDto> pMarksSubmissionStatusDtos) throws Exception{
         return getManager().updateForGradeSubmissionDeadLine(pMarksSubmissionStatusDtos);
     }
+
+    public int getTotalStudentCount(final Integer pSemesterId, final String pCourseId, final Integer pExamType, final CourseType courseType) throws Exception{
+        return getManager().getTotalStudentCount(pSemesterId,pCourseId,pExamType,courseType);
+    }
 }

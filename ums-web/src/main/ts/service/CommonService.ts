@@ -28,16 +28,17 @@ module ums{
       return defer.promise;
     }
     public getGradeLetter(total_marks:number,reg_type:number):string {
-      if (total_marks >= 80 && reg_type==1) return "A+";
-      else if (total_marks >= 75 && total_marks < 80 && reg_type==1) return "A";
-      else if (total_marks >= 70 && total_marks < 75 && reg_type==1) return "A-";
-      else if (total_marks >= 65 && total_marks < 70 && reg_type==1) return "B+";
-      else if (total_marks >= 60 && total_marks < 65 && reg_type==1) return "B";
-      else if (total_marks >= 60 &&  reg_type==5) return "B"; // Improvement
-      else if (total_marks >= 55 && total_marks < 60 && (reg_type==1 || reg_type==5)) return "B-";
-      else if (total_marks >= 50 && total_marks < 55 && (reg_type==1 || reg_type==5)) return "C+";
+      var regType:any=this.appConstants.courseRegType;
+      if (total_marks >= 80 && reg_type==regType.REGULAR) return "A+";
+      else if (total_marks >= 75 && total_marks < 80 && reg_type==regType.REGULAR) return "A";
+      else if (total_marks >= 70 && total_marks < 75 && reg_type==regType.REGULAR) return "A-";
+      else if (total_marks >= 65 && total_marks < 70 && reg_type==regType.REGULAR) return "B+";
+      else if (total_marks >= 60 && total_marks < 65 && reg_type==regType.REGULAR) return "B";
+      else if (total_marks >= 60 &&  reg_type==regType.IMPROVEMENT) return "B"; // Improvement
+      else if (total_marks >= 55 && total_marks < 60 && (reg_type==regType.REGULAR || reg_type==regType.IMPROVEMENT)) return "B-";
+      else if (total_marks >= 50 && total_marks < 55 && (reg_type==regType.REGULAR || reg_type==regType.IMPROVEMENT)) return "C+";
       else if (total_marks >= 45 && total_marks < 50) return "C";
-      else if (total_marks >= 45 && (reg_type==2 || reg_type==3  || reg_type==4)) return "C";  //Carry,Clearance, Special Carry
+      else if (total_marks >= 45 && (reg_type==regType.CLEARANCE  || reg_type==regType.CARRY  || reg_type==regType.SPECIAL_CARRY)) return "C";  //Carry,Clearance, Special Carry
       else if (total_marks >= 40 && total_marks < 45) return "D";
       else if (total_marks < 40) return "F";
 

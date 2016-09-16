@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import org.ums.domain.model.dto.StudentGradeDto;
 import org.ums.domain.model.immutable.User;
 import org.ums.enums.CourseMarksSubmissionStatus;
+import org.ums.enums.CourseType;
 import org.ums.enums.RecheckStatus;
 import org.ums.enums.StudentMarksSubmissionStatus;
 import org.ums.manager.ExamGradeManager;
@@ -14,6 +15,7 @@ import org.ums.util.Constants;
 
 import javax.json.*;
 import java.io.StringReader;
+import java.security.InvalidParameterException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -119,6 +121,30 @@ public class GradeSubmissionService {
       throw new UnauthorizedException("Unauthorized Access Detected.");
     else
       return role;
+  }
+
+  public void validatePartInfo(final Integer pTotalPart, final Integer pPartATotal, final Integer pPartBTotal) throws Exception{
+    if(pTotalPart!=1 && pTotalPart!=2)
+      throw new Exception("Part Information is wrong.");
+
+    if(pTotalPart==1 && (pPartATotal==0 || pPartATotal>70)){
+      throw new Exception("Part Information is wrong.");
+    }
+    else if(pTotalPart==2){
+      if(pPartATotal==0||pPartBTotal==0 || pPartATotal+pPartBTotal>70){
+        throw new Exception("Part Information is wrong.");
+      }
+    }
+  }
+
+
+  public void validateSubmittedGrades(
+      final Integer pSemesterId, final String pCourseId, final Integer examType, final CourseType courseType,
+      final Integer pTotalPart, final Integer pPartATotal, final Integer pPartBTotal,List<StudentGradeDto> gradeList ) throws Exception{
+
+    //Validate all the grades been submitted or not
+    int totalStudents=mManager.getTotalStudentCount(pSemesterId,pCourseId,examType,courseType);
+    //Validate by Theory Sessional and considering Regular, Clearance, Carry, Special Carry Exam...
   }
 
 }
