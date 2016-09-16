@@ -775,6 +775,11 @@ declare module JQueryUI {
         show?: any; // boolean, number, string or object
         tooltipClass?: string;
         track?: boolean;
+
+        // Added below 3 options for Bootstrap Tooltips
+        placement : string;
+        trigger : string;
+        title : string;
     }
 
     interface TooltipUIParams {

@@ -3,9 +3,9 @@ package org.ums.common.academic.resource.helper;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
-import org.glassfish.jersey.server.Uri;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.ums.cache.LocalCache;
 import org.ums.common.ResourceHelper;
 import org.ums.common.builder.ExamGradeBuilder;
@@ -24,6 +24,7 @@ import org.ums.manager.ExamGradeManager;
 import org.ums.manager.SemesterManager;
 import org.ums.manager.UserManager;
 import org.ums.persistent.model.PersistentExamGrade;
+import org.ums.services.academic.GradeSubmissionService;
 
 import javax.json.*;
 import javax.ws.rs.core.Response;
@@ -34,10 +35,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-/**
- * Created by ikh on 4/29/2016.
- */
+
 @Component
 public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, MutableExamGrade, Object> {
 
@@ -53,9 +54,12 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
   @Autowired
   private SemesterManager mSemesterManager;
 
+  @Autowired
+  private GradeSubmissionService gradeSubmissionService;
+
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
-    throw new NotImplementedException("Post method is not implemented for GradeSubmissonResourceHelper");
+    throw new NotImplementedException("Post method is not implemented for GradeSubmissionResourceHelper");
   }
 
   @Override
@@ -77,150 +81,81 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
   public JsonObject getGradeList(final String pRequestedRoleId, final Integer pSemesterId, final String pCourseId, final Integer pExamType) throws Exception {
 
     MarksSubmissionStatusDto marksSubmissionStatusDto = getContentManager().getMarksSubmissionStatus(pSemesterId, pCourseId, pExamType);
+    String currentActor = gradeSubmissionService.getActorForCurrentUser(SecurityUtils.getSubject().getPrincipal().toString(), pRequestedRoleId, pSemesterId, pCourseId);
+
     JsonReader jsonReader = Json.createReader(new StringReader(marksSubmissionStatusDto.toString()));
-    JsonObject object1 = jsonReader.readObject();
-    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonObject jsonObject = jsonReader.readObject();
+    JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
     jsonReader.close();
-    object.add("part_info", object1);
+    objectBuilder.add("part_info", jsonObject);
+    objectBuilder.add("current_actor", currentActor);
+    objectBuilder.add("current_course_status", marksSubmissionStatusDto.getStatusId());
 
+    gradeSubmissionService.prepareGradeGroups(objectBuilder,getContentManager().getAllGrades(pSemesterId, pCourseId, pExamType, marksSubmissionStatusDto.getCourseType()),
+        CourseMarksSubmissionStatus.values()[marksSubmissionStatusDto.getStatusId()],currentActor );
 
-    List<StudentGradeDto> examGradeList = getContentManager().getAllGrades(pSemesterId, pCourseId, pExamType, marksSubmissionStatusDto.getCourseType());
-    String currentActor = getActorForCurrentUser(SecurityUtils.getSubject().getPrincipal().toString(), pRequestedRoleId, pSemesterId, pCourseId);
-    object.add("current_actor", currentActor);
-    object.add("current_course_status", marksSubmissionStatusDto.getStatusId());
-
-
-    JsonArrayBuilder noneAndSubmitArrayBuilder = Json.createArrayBuilder();
-    JsonArrayBuilder scrutinizeCandidatesArrayBuilder = Json.createArrayBuilder();
-    JsonArrayBuilder approveCandidatesArrayBuilder = Json.createArrayBuilder();
-    JsonArrayBuilder acceptCandidatesArrayBuilder = Json.createArrayBuilder();
-    JsonArrayBuilder recheckCandidatesArrayBuilder = Json.createArrayBuilder();
-
-    JsonArrayBuilder submittedArrayBuilder = Json.createArrayBuilder();
-    JsonArrayBuilder scrutinizedArrayBuilder = Json.createArrayBuilder();
-    JsonArrayBuilder approvedArrayBuilder = Json.createArrayBuilder();
-    JsonArrayBuilder acceptedArrayBuilder = Json.createArrayBuilder();
-
-    JsonArrayBuilder recheckAcceptedArrayBuilder = Json.createArrayBuilder();
-
-    StudentMarksSubmissionStatus gradeStatus;
-    CourseMarksSubmissionStatus courseStatus;
-
-    for (StudentGradeDto gradeDto : examGradeList) {
-      jsonReader = Json.createReader(new StringReader(gradeDto.toString()));
-      object1 = jsonReader.readObject();
-      jsonReader.close();
-      gradeStatus = gradeDto.getStatus();
-      courseStatus = CourseMarksSubmissionStatus.values()[marksSubmissionStatusDto.getStatusId()];
-
-
-      if (gradeStatus == StudentMarksSubmissionStatus.NONE || gradeStatus == StudentMarksSubmissionStatus.SUBMIT && gradeDto.getRecheckStatusId() == 0 && currentActor.equalsIgnoreCase("preparer"))
-        noneAndSubmitArrayBuilder.add(object1);
-      else if ((gradeStatus == StudentMarksSubmissionStatus.SUBMITTED || gradeStatus == StudentMarksSubmissionStatus.SCRUTINIZE) && currentActor.equalsIgnoreCase("scrutinizer"))
-        scrutinizeCandidatesArrayBuilder.add(object1);
-      else if ((gradeStatus == StudentMarksSubmissionStatus.SCRUTINIZED || gradeStatus == StudentMarksSubmissionStatus.APPROVE) && currentActor.equalsIgnoreCase("head"))
-        approveCandidatesArrayBuilder.add(object1);
-      else if ((gradeStatus == StudentMarksSubmissionStatus.APPROVED || gradeStatus == StudentMarksSubmissionStatus.ACCEPT) && currentActor.equalsIgnoreCase("coe"))
-        acceptCandidatesArrayBuilder.add(object1);
-
-      if ((gradeStatus == StudentMarksSubmissionStatus.SUBMITTED || gradeStatus == StudentMarksSubmissionStatus.SCRUTINIZE))//&& !currentActor.equalsIgnoreCase("scrutinizer")
-        submittedArrayBuilder.add(object1);
-      else if ((gradeStatus == StudentMarksSubmissionStatus.SCRUTINIZED || gradeStatus == StudentMarksSubmissionStatus.APPROVE)) // && !currentActor.equalsIgnoreCase("head")
-        scrutinizedArrayBuilder.add(object1);
-      else if ((gradeStatus == StudentMarksSubmissionStatus.APPROVED || gradeStatus == StudentMarksSubmissionStatus.ACCEPT)) //&& !currentActor.equalsIgnoreCase("coe")
-        approvedArrayBuilder.add(object1);
-      else if (gradeStatus == StudentMarksSubmissionStatus.ACCEPTED) {
-        //acceptedArrayBuilder.add(object1);
-        if (gradeDto.getRecheckStatus() == RecheckStatus.RECHECK_TRUE)
-          recheckAcceptedArrayBuilder.add(object1);
-        else
-          acceptedArrayBuilder.add(object1);
-      }
-//            else if(gradeStatus == StudentMarksSubmissionStatus.ACCEPTED )
-//                acceptedArrayBuilder.add(object1);
-
-      if ((courseStatus == CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_SCRUTINIZER || courseStatus == CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_HEAD
-          || courseStatus == CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_COE) && gradeDto.getRecheckStatus() == RecheckStatus.RECHECK_TRUE) {
-        recheckCandidatesArrayBuilder.add(object1);
-      }
-    }
-
-    object.add("none_and_submit_grades", noneAndSubmitArrayBuilder);
-
-
-    object.add("scrutinize_candidates_grades", scrutinizeCandidatesArrayBuilder);
-    object.add("approve_candidates_grades", approveCandidatesArrayBuilder);
-    object.add("accept_candidates_grades", acceptCandidatesArrayBuilder);
-    object.add("recheck_candidates_grades", recheckCandidatesArrayBuilder);
-
-    object.add("submitted_grades", submittedArrayBuilder);
-    object.add("scrutinized_grades", scrutinizedArrayBuilder);
-    object.add("approved_grades", approvedArrayBuilder);
-    object.add("accepted_grades", acceptedArrayBuilder);
-    object.add("recheck_accepted_grades", recheckAcceptedArrayBuilder);
-
-
-    return object.build();
+    return objectBuilder.build();
   }
 
 
-  public JsonObject getGradeSubmissionStatus(final Integer pSemesterId, final Integer pExamType, final String deptId, final String pUserRole,final int pStatus) throws Exception {
-
-    String userId = "";
-    Subject subject = SecurityUtils.getSubject();
-    if (subject != null) {
-      userId = subject.getPrincipal().toString();
-    }
-    User user = mUserManager.get(userId);
-    List<MarksSubmissionStatusDto> examGradeStatusList = getContentManager().getMarksSubmissionStatus(pSemesterId, pExamType, user.getEmployeeId(), deptId, pUserRole,pStatus);
-
+  public JsonObject getGradeSubmissionStatus(final Integer pSemesterId, final Integer pExamType,final Integer pProgramId, final String deptId, final String pUserRole,final int pStatus) throws Exception {
+    User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
+    List<MarksSubmissionStatusDto> examGradeStatusList = getContentManager().getMarksSubmissionStatus(pSemesterId, pExamType,pProgramId, user.getEmployeeId(), deptId, pUserRole,pStatus);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
-
     JsonReader jsonReader;
-    JsonObject object1;
+    JsonObject jsonObject;
 
     for (MarksSubmissionStatusDto statusDto : examGradeStatusList) {
       jsonReader = Json.createReader(new StringReader(statusDto.toString()));
-      object1 = jsonReader.readObject();
+      jsonObject = jsonReader.readObject();
       jsonReader.close();
-      children.add(object1);
+      children.add(jsonObject);
     }
     object.add("entries", children);
-
     return object.build();
   }
 
-
+  /**
+   * This method will only be used by Grade Sheet Preparer during saving or submitting grades.
+   * @param pJsonObject
+   * @return
+   * @throws Exception
+   */
+  @Transactional
   public Response saveGradeSheet(final JsonObject pJsonObject) throws Exception {
-
-    //Should do the validation
-    //. Is he the right person
-    //. have the time period to do the operation
-    //. other validations...
     List<StudentGradeDto> gradeList = getBuilder().build(pJsonObject);
     MarksSubmissionStatusDto partInfoDto = new MarksSubmissionStatusDto();
     getBuilder().build(partInfoDto, pJsonObject);
-
     String action = pJsonObject.getString("action");
+    String userRole=pJsonObject.getString("role");
+
+    MarksSubmissionStatusDto marksSubmissionStatus = getContentManager().getMarksSubmissionStatus(partInfoDto.getSemesterId(), partInfoDto.getCourseId(), partInfoDto.getExamType());
+    //User Role Validation
+    gradeSubmissionService.getActorForCurrentUser(SecurityUtils.getSubject().getPrincipal().toString(), userRole, partInfoDto.getSemesterId(), partInfoDto.getCourseId());
+    // Need to do Grade Submission Deadline validation here
+    //Need to validate grade here
 
 
     if (partInfoDto.getCourseType() == CourseType.THEORY) {
-      int aa = getContentManager().updatePartInfo(partInfoDto.getSemesterId(), partInfoDto.getCourseId(), partInfoDto.getExamType(), partInfoDto.getTotal_part(), partInfoDto.getPart_a_total(), partInfoDto.getPart_b_total());
+        getContentManager().updatePartInfo(partInfoDto.getSemesterId(), partInfoDto.getCourseId(), partInfoDto.getExamType(), partInfoDto.getTotal_part(), partInfoDto.getPart_a_total(), partInfoDto.getPart_b_total());
     }
-    boolean updateStatus = getContentManager().saveGradeSheet(partInfoDto.getSemesterId(), partInfoDto.getCourseId(), partInfoDto.getExamType(), partInfoDto.getCourseType(), gradeList);
+    getContentManager().saveGradeSheet(partInfoDto.getSemesterId(), partInfoDto.getCourseId(), partInfoDto.getExamType(), partInfoDto.getCourseType(), gradeList);
 
     if (action.equalsIgnoreCase("submit")) {
-      //do the status update work here....
-      int bb = getContentManager().updateCourseMarksSubmissionStatus(partInfoDto.getSemesterId(), partInfoDto.getCourseId(), partInfoDto.getExamType(), partInfoDto.getCourseType(), CourseMarksSubmissionStatus.WAITING_FOR_SCRUTINY);
+      getContentManager().updateCourseMarksSubmissionStatus(partInfoDto.getSemesterId(), partInfoDto.getCourseId(), partInfoDto.getExamType(), partInfoDto.getCourseType(), CourseMarksSubmissionStatus.WAITING_FOR_SCRUTINY);
+      getContentManager().insertGradeLog(SecurityUtils.getSubject().getPrincipal().toString(), partInfoDto.getSemesterId(), partInfoDto.getCourseId(),
+          partInfoDto.getExamType(), partInfoDto.getCourseType(), marksSubmissionStatus.getStatus(), gradeList);
+      getContentManager().insertMarksSubmissionStatusLog(SecurityUtils.getSubject().getPrincipal().toString(), partInfoDto.getSemesterId(),
+          partInfoDto.getCourseId(), partInfoDto.getExamType(), marksSubmissionStatus.getStatus());
     }
 
     Response.ResponseBuilder builder = Response.created(null);
     builder.status(Response.Status.CREATED);
-
     return builder.build();
   }
 
+  @Transactional
   public Response updateGradeStatus(final JsonObject pJsonObject) throws Exception {
 
     //Should do the validation
@@ -235,20 +170,34 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
     MarksSubmissionStatusDto partInfoDto = new MarksSubmissionStatusDto();
     getBuilder().build(partInfoDto, pJsonObject);
 
+    MarksSubmissionStatusDto marksSubmissionStatus = getContentManager().getMarksSubmissionStatus(partInfoDto.getSemesterId(),partInfoDto.getCourseId(),partInfoDto.getExamType());
 
     boolean updateStatus;
     //Need to improve this if else logic here....
     if (action.equals("save"))  // Scrutinizer, Head, CoE  Press the Save Button
       updateStatus = getContentManager().updateGradeStatus_Save(partInfoDto.getSemesterId(), partInfoDto.getCourseId(), partInfoDto.getExamType(), partInfoDto.getCourseType(), gradeList.get(0), gradeList.get(1));
-    else if (action.equals("recheck")) {  //Scrutnizer, Head, CoE Press the Recheck Button
-      updateStatus = getContentManager().updateGradeStatus_Recheck(partInfoDto.getSemesterId(), partInfoDto.getCourseId(), partInfoDto.getExamType(), partInfoDto.getCourseType(), gradeList.get(0), gradeList.get(1));
-      int bb = getContentManager().updateCourseMarksSubmissionStatus(partInfoDto.getSemesterId(), partInfoDto.getCourseId(), partInfoDto.getExamType(), partInfoDto.getCourseType(), getCourseMarksSubmissionNextStatus(actor, action, CourseMarksSubmissionStatus.values()[current_course_status]));
-    } else if (action.equals("approve")) { //Scrutnizer, Head, CoE Press the Approve Button
-      updateStatus = getContentManager().updateGradeStatus_Approve(partInfoDto.getSemesterId(), partInfoDto.getCourseId(), partInfoDto.getExamType(), partInfoDto.getCourseType(), gradeList.get(0), gradeList.get(1));
-      int bb = getContentManager().updateCourseMarksSubmissionStatus(partInfoDto.getSemesterId(), partInfoDto.getCourseId(), partInfoDto.getExamType(), partInfoDto.getCourseType(), getCourseMarksSubmissionNextStatus(actor, action, CourseMarksSubmissionStatus.values()[current_course_status]));
-    } else if (action.equals("recheck_request_submit")) { // CoE Press the "Send Recheck Requst to VC" Button
-      updateStatus = getContentManager().updateGradeStatus_Recheck(partInfoDto.getSemesterId(), partInfoDto.getCourseId(), partInfoDto.getExamType(), partInfoDto.getCourseType(), gradeList.get(0), gradeList.get(1));
-      int bb = getContentManager().updateCourseMarksSubmissionStatus(partInfoDto.getSemesterId(), partInfoDto.getCourseId(), partInfoDto.getExamType(), partInfoDto.getCourseType(), getCourseMarksSubmissionNextStatus(actor, action, CourseMarksSubmissionStatus.values()[current_course_status]));
+    else {
+      if (action.equals("recheck")) {  //Scrutinizer, Head, CoE Press the Recheck Button
+        updateStatus = getContentManager().updateGradeStatus_Recheck(partInfoDto.getSemesterId(), partInfoDto.getCourseId(), partInfoDto.getExamType(), partInfoDto.getCourseType(), gradeList.get(0), gradeList.get(1));
+        int bb = getContentManager().updateCourseMarksSubmissionStatus(partInfoDto.getSemesterId(), partInfoDto.getCourseId(), partInfoDto.getExamType(), partInfoDto.getCourseType(), getCourseMarksSubmissionNextStatus(actor, action, CourseMarksSubmissionStatus.values()[current_course_status]));
+      } else if (action.equals("approve")) { //Scrutinizer, Head, CoE Press the Approve Button
+        updateStatus = getContentManager().updateGradeStatus_Approve(partInfoDto.getSemesterId(), partInfoDto.getCourseId(), partInfoDto.getExamType(), partInfoDto.getCourseType(), gradeList.get(0), gradeList.get(1));
+        int bb = getContentManager().updateCourseMarksSubmissionStatus(partInfoDto.getSemesterId(), partInfoDto.getCourseId(), partInfoDto.getExamType(), partInfoDto.getCourseType(), getCourseMarksSubmissionNextStatus(actor, action, CourseMarksSubmissionStatus.values()[current_course_status]));
+      } else if (action.equals("recheck_request_submit")) { // CoE Press the "Send Recheck Request to VC" Button
+        updateStatus = getContentManager().updateGradeStatus_Recheck(partInfoDto.getSemesterId(), partInfoDto.getCourseId(), partInfoDto.getExamType(), partInfoDto.getCourseType(), gradeList.get(0), gradeList.get(1));
+        int bb = getContentManager().updateCourseMarksSubmissionStatus(partInfoDto.getSemesterId(), partInfoDto.getCourseId(), partInfoDto.getExamType(), partInfoDto.getCourseType(), getCourseMarksSubmissionNextStatus(actor, action, CourseMarksSubmissionStatus.values()[current_course_status]));
+      }
+
+      List<StudentGradeDto> recheckList=gradeList.get(0);
+      List<StudentGradeDto> approveList=gradeList.get(1);
+      recheckList.stream().forEach(g -> {g.setRecheckStatusId(1);});
+      approveList.stream().forEach(g -> {g.setRecheckStatusId(0);});
+      List<StudentGradeDto> allGradeList = Stream.concat(recheckList.stream(), approveList.stream()).collect(Collectors.toList());
+
+
+      boolean bbc=getContentManager().insertGradeLog(SecurityUtils.getSubject().getPrincipal().toString(), partInfoDto.getSemesterId(), partInfoDto.getCourseId(), partInfoDto.getExamType(), partInfoDto.getCourseType(), marksSubmissionStatus.getStatus(), allGradeList);
+      getContentManager().insertMarksSubmissionStatusLog(SecurityUtils.getSubject().getPrincipal().toString(),partInfoDto.getSemesterId(), partInfoDto.getCourseId(), partInfoDto.getExamType(), marksSubmissionStatus.getStatus());
+
     }
 
     Response.ResponseBuilder builder = Response.created(null);
@@ -315,35 +264,6 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
     return nextStatus;
   }
 
-  public String getActorForCurrentUser(String userId, String requestedRole, int semesterId, String courseId) throws Exception {
-    if (requestedRole.equalsIgnoreCase("T")) {
-      User user = mUserManager.get(userId);
-      List<String> roleList = mManager.getRoleForTeacher(user.getEmployeeId(), semesterId, courseId);
-      if (roleList.size() == 0)
-        return "Invalid";
-      else
-        return roleList.get(0);
-    } else if (requestedRole.equalsIgnoreCase("H")) {
-      List<String> roleList = mManager.getRoleForHead(userId);
-      if (roleList.size() == 0)
-        return "Invalid";
-      else
-        return roleList.get(0);
-    } else if (requestedRole.equalsIgnoreCase("C")) {
-      List<String> roleList = mManager.getRoleForCoE(userId);
-      if (roleList.size() == 0)
-        return "Invalid";
-      else
-        return roleList.get(0);
-    } else if (requestedRole.equalsIgnoreCase("V")) {
-      List<String> roleList = mManager.getRoleForVC(userId);
-      if (roleList.size() == 0)
-        return "Invalid";
-      else
-        return roleList.get(0);
-    }
-    return "Invalid";
-  }
 
   public JsonObject getChartData(final Integer pSemesterId, final String pCourseId, final Integer pExamType, final Integer courseType) throws Exception {
 

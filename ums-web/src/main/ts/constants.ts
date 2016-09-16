@@ -84,14 +84,14 @@ module ums {
           '06': 'THURSDAY',
           '07': 'FRIDAY'
         },
-        weekday:{
-          1:'SATURDAY',
-          2:'SUNDAY',
-          3:'MONDAY',
-          4:'TUESDAY',
-          5:'WEDNESDAY',
-          6:'THURSDAY',
-          7:'FRIDAY'
+        weekday: {
+          1: 'SATURDAY',
+          2: 'SUNDAY',
+          3: 'MONDAY',
+          4: 'TUESDAY',
+          5: 'WEDNESDAY',
+          6: 'THURSDAY',
+          7: 'FRIDAY'
         },
         officeShort: {
           '80': 'RO',
@@ -343,7 +343,7 @@ module ums {
             ]
           }
         ],
-        pgPrograms:[],
+        pgPrograms: [],
         theorySectionsGrid: ":None;A:A;B:B;C:C;D:D",
         theorySections: [
           {id: "A", name: "A"},
@@ -408,19 +408,59 @@ module ums {
           {id: "D", name: "D"},
           {id: "F", name: "F"}
         ],
-        marksSubmissionStatus:[
-          {id:"-1",name:"All"},
-          {id:"0",name:"Not Submitted"},
-          {id:"1",name:"Waiting for Scrutiny"},
-          {id:"2",name:"Requested for recheck by Scrutinizer"},
-          {id:"3",name:"Waiting for Head's Approval"},
-          {id:"4",name:"Requested for recheck by Head"},
-          {id:"5",name:"Waiting for CoE's Approval"},
-          {id:"6",name:"Requested for recheck by CoE"},
-          {id:"7",name:"Accepted by CoE"},
-          {id:"8",name:"Waiting for recheck request approval"}
-        ]
-      };
+        marksSubmissionStatus: [
+          {id: "-1", name: "All"},
+          {id: "0", name: "Not Submitted"},
+          {id: "1", name: "Waiting for Scrutiny"},
+          {id: "2", name: "Requested for recheck by Scrutinizer"},
+          {id: "3", name: "Waiting for Head's Approval"},
+          {id: "4", name: "Requested for recheck by Head"},
+          {id: "5", name: "Waiting for CoE's Approval"},
+          {id: "6", name: "Requested for recheck by CoE"},
+          {id: "7", name: "Accepted by CoE"},
+          {id: "8", name: "Waiting for recheck request approval"}
+        ],
+        marksSubmissionStatusEnum: { //Course Marks Submission Status
+          NOT_SUBMITTED: 0,
+          WAITING_FOR_SCRUTINY: 1,
+          REQUESTED_FOR_RECHECK_BY_SCRUTINIZER: 2,
+          WAITING_FOR_HEAD_APPROVAL: 3,
+          REQUESTED_FOR_RECHECK_BY_HEAD: 4,
+          WAITING_FOR_COE_APPROVAL: 5,
+          REQUESTED_FOR_RECHECK_BY_COE: 6,
+          ACCEPTED_BY_COE: 7,
+          WAITING_FOR_RECHECK_REQUEST_APPROVAL: 8
+        },
+        marksStatusEnum: { //Student's Marks Status  slkjasdljflasdfjlj
+          NONE: 0,
+          SUBMIT: 1,
+          SUBMITTED: 2,
+          SCRUTINIY: 3,
+          SCRUTINIZED: 4,
+          APPROVE: 5,
+          APPROVED: 6,
+          ACCEPT: 7,
+          ACCEPTED: 8
+        },
+        regType:{
+          REGULAR:1,
+          CLEARANCE:2,
+          CARRY:3,
+          SPECIAL_CARRY:4,
+          IMPROVEMENT:5
+        },
+        regColorCode:{
+          CLEARANCE:"#BBFFFF",
+          CARRY:"#CCCCFF",
+          SPECIAL_CARRY:"#00FF00",
+          IMPROVEMENT:"#FFF68F"
+        },
+        programTypeEnum:{
+          UG:11,
+          PG:22
+        }
+
+      }
     }
   }
 }
