@@ -22,6 +22,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, String> {
@@ -93,6 +94,20 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
   public JsonObject getBySemesterProgram(final String pSemesterId,final String pProgramId, final Request pRequest, final UriInfo pUriInfo) throws Exception {
     List<Course> courses = getContentManager().getBySemesterProgram(pSemesterId,pProgramId);
 
+    return convertToJson(courses,pUriInfo);
+  }
+
+  public JsonObject getCourses(final String pSemesterId, final String pProgramId, final int pProgramType, final Request pRequest, final UriInfo pUriInfo) throws Exception{
+    List<Course> courses = getContentManager().
+        getBySemesterProgram(pSemesterId,pProgramId)
+        .stream()
+        .filter(course->course.getCourseType().getValue()==pProgramType)
+        .collect(Collectors.toList());
+
+    return convertToJson(courses,pUriInfo);
+  }
+
+  private JsonObject convertToJson(List<Course> courses, final UriInfo pUriInfo) throws Exception{
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
@@ -108,16 +123,7 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
   public JsonObject getByYearSemester(final String pSemesterId, final String pProgramId, final int year,final int semester,final Request pRequest, final UriInfo pUriInfo)throws Exception{
     List<Course> courses = getContentManager().getByYearSemester(pSemesterId,pProgramId,year,semester);
 
-    JsonObjectBuilder object = Json.createObjectBuilder();
-    JsonArrayBuilder children = Json.createArrayBuilder();
-    LocalCache localCache = new LocalCache();
-    for (Course course : courses) {
-      children.add(toJson(course, pUriInfo, localCache));
-    }
-    object.add("entries", children);
-    localCache.invalidate();
-
-    return object.build();
+    return convertToJson(courses,pUriInfo);
   }
 
 
@@ -127,46 +133,21 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
     Syllabus syllabus=mSemesterSyllabusMapManager.getSyllabusForSemester(pSemesterId,pProgramId,pYear,pSemester);
     List<Course> courses = getContentManager().getOptionalCourseList(syllabus.getId(), pYear,pSemester) ;
 
-    JsonObjectBuilder object = Json.createObjectBuilder();
-    JsonArrayBuilder children = Json.createArrayBuilder();
-    LocalCache localCache = new LocalCache();
-    for (Course course : courses) {
-      children.add(toJson(course, pUriInfo, localCache));
-    }
-    object.add("entries", children);
-    localCache.invalidate();
-
-    return object.build();
+    return convertToJson(courses,pUriInfo);
   }
 
   public JsonObject getOfferedCourses(final Integer pSemesterId,final Integer pProgramId,final Integer pYear,final Integer pSemester, final UriInfo pUriInfo) throws Exception {
 
     List<Course> courses = getContentManager().getOfferedCourseList(pSemesterId, pProgramId, pYear, pSemester);
 
-    JsonObjectBuilder object = Json.createObjectBuilder();
-    JsonArrayBuilder children = Json.createArrayBuilder();
-    LocalCache localCache = new LocalCache();
-    for (Course course : courses) {
-      children.add(toJson(course, pUriInfo, localCache));
-    }
-    object.add("entries", children);
-    localCache.invalidate();
-    return object.build();
+    return convertToJson(courses,pUriInfo);
   }
 
   public JsonObject getCallForApplicationCourses(final Integer pSemesterId,final Integer pProgramId,final Integer pYear,final Integer pSemester, final UriInfo pUriInfo) throws Exception {
 
     List<Course> courses = getContentManager().getCallForApplicationCourseList(pSemesterId, pProgramId, pYear, pSemester);
 
-    JsonObjectBuilder object = Json.createObjectBuilder();
-    JsonArrayBuilder children = Json.createArrayBuilder();
-    LocalCache localCache = new LocalCache();
-    for (Course course : courses) {
-      children.add(toJson(course, pUriInfo, localCache));
-    }
-    object.add("entries", children);
-    localCache.invalidate();
-    return object.build();
+    return convertToJson(courses,pUriInfo);
   }
 
 
@@ -175,30 +156,14 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
 
     List<Course> courses = getContentManager().getApprovedCourseList(pSemesterId, pProgramId, pYear, pSemester);
 
-    JsonObjectBuilder object = Json.createObjectBuilder();
-    JsonArrayBuilder children = Json.createArrayBuilder();
-    LocalCache localCache = new LocalCache();
-    for (Course course : courses) {
-      children.add(toJson(course,pUriInfo, localCache));
-    }
-    object.add("entries", children);
-    localCache.invalidate();
-    return object.build();
+    return convertToJson(courses,pUriInfo);
   }
 
   public JsonObject getApprovedCallForApplicationCourseList(final Integer pSemesterId,final Integer pProgramId,final Integer pYear,final Integer pSemester, final UriInfo pUriInfo) throws Exception {
 
     List<Course> courses = getContentManager().getApprovedCallForApplicationCourseList(pSemesterId, pProgramId, pYear, pSemester);
 
-    JsonObjectBuilder object = Json.createObjectBuilder();
-    JsonArrayBuilder children = Json.createArrayBuilder();
-    LocalCache localCache = new LocalCache();
-    for (Course course : courses) {
-      children.add(toJson(course,pUriInfo, localCache));
-    }
-    object.add("entries", children);
-    localCache.invalidate();
-    return object.build();
+    return convertToJson(courses,pUriInfo);
   }
 
 
