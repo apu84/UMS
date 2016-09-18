@@ -184,8 +184,8 @@ public class UgGradeSheetGenerator {
 
       student = studentList.get(i);
 
-      if (prevCourseRegType != null && prevCourseRegType != CourseRegType.get(student.getRegType()) && examTypeId != 1) {
-        p = new Paragraph(CourseRegType.get(student.getRegType()).getLabel(), gradeSheetHeader);
+      if (prevCourseRegType != null && prevCourseRegType != student.getRegType() && examTypeId != 1) {
+        p = new Paragraph(student.getRegType().getLabel(), gradeSheetHeader);
         cell = new PdfPCell(p);
         cell.setHorizontalAlignment(Element.ALIGN_LEFT);
         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
@@ -194,7 +194,7 @@ public class UgGradeSheetGenerator {
         table.addCell(cell);
 
       }
-      prevCourseRegType = CourseRegType.get(student.getRegType());
+      prevCourseRegType = student.getRegType();
 
       p = new Paragraph(studentList.get(i).getStudentId(), nbFont);
       cell = new PdfPCell(p);

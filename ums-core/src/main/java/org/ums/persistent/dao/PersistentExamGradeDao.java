@@ -4,10 +4,7 @@ import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.ExamGradeDaoDecorator;
-import org.ums.domain.model.dto.CourseTeacherDto;
-import org.ums.domain.model.dto.GradeChartDataDto;
-import org.ums.domain.model.dto.MarksSubmissionStatusDto;
-import org.ums.domain.model.dto.StudentGradeDto;
+import org.ums.domain.model.dto.*;
 import org.ums.domain.model.immutable.Course;
 import org.ums.domain.model.mutable.MutableCourse;
 import org.ums.enums.*;
@@ -26,7 +23,7 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
     String SELECT_SESSIONAL_MARKS = "Select UG_SESSIONAL_MARKS.*,FULL_NAME From UG_SESSIONAL_MARKS,STUDENTS  Where UG_SESSIONAL_MARKS.STUDENT_ID=STUDENTS.STUDENT_ID AND Semester_Id=? and Course_Id=? and Exam_Type=? ";
 
 
-    String SELECT_PART_INFO="Select MARKS_SUBMISSION_STATUS.*,COURSE_TYPE,COURSE_TITLE,COURSE_NO,CRHR,LONG_NAME,SEMESTER_NAME " +
+    String SELECT_PART_INFO="Select MARKS_SUBMISSION_STATUS.*,TO_CHAR(LAST_SUBMISSION_DATE,'DD-MM-YYYY')  LAST_SUBMISSION_DATE_EXT,COURSE_TYPE,COURSE_TITLE,COURSE_NO,CRHR,LONG_NAME,SEMESTER_NAME " +
         "From MARKS_SUBMISSION_STATUS,MST_COURSE,COURSE_SYLLABUS_MAP,MST_SYLLABUS,MST_PROGRAM,MST_DEPT_OFFICE,MST_SEMESTER " +
         " Where MST_COURSE.Course_Id=MARKS_SUBMISSION_STATUS.Course_Id  " +
         "AND MST_COURSE.Course_Id = COURSE_SYLLABUS_MAP.Course_Id "+
@@ -152,59 +149,33 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
         "Select 'F' Grade_Letter, 0 Total, '#2A0CD0' Color From Dual  " +
         ")Tmp Group by Grade_Letter Order by Decode(Grade_Letter,'A+',1,'A',2,'A-',3,'B+',4,'B',5,'B-',6,'C+',7,'C',8,'D',9,'F',10)  " ;
 
-
-    String SELECT_EXAM_GRADE_DEAD_LINE="" +
-        "select  " +
-        "  to_char(EXAM_ROUTINE.EXAM_DATE,'dd-mm-yyyy') Exam_date,  " +
-        "  MST_PROGRAM.PROGRAM_SHORT_NAME,  " +
-        "  MST_COURSE.COURSE_ID,"+
-        "  MST_COURSE.COURSE_NO,  " +
-        "  MST_COURSE.COURSE_TITLE,  " +
-        "  MST_COURSE.CRHR,  " +
-        "  ugRegistrationResult.total_students,  " +
-        "  to_char(marksSubmissionStatus.last_submission_date,'dd-mm-yyyy') last_submission_date  " +
-        "  " +
-        "from  " +
-        "  EXAM_ROUTINE,  " +
-        "  MST_PROGRAM,  " +
-        "  MST_COURSE,  " +
-        "    (  " +
-        "        select  " +
-        "        COURSE_ID,count(COURSE_ID) total_students  " +
-        "        from UG_REGISTRATION_RESULT  " +
-        "        WHERE SEMESTER_ID=? GROUP BY  COURSE_ID  " +
-        "    ) ugRegistrationResult,  " +
-        "  (  " +
-        "    select  " +
-        "      SEMESTER_ID,  " +
-        "      COURSE_ID,  " +
-        "      last_submission_date  " +
-        "    from MARKS_SUBMISSION_STATUS  " +
-        "    ) marksSubmissionStatus  " +
-        "where  " +
-        "  EXAM_ROUTINE.EXAM_DATE=to_date(?,'dd-mm-yyyy') AND  " +
-        "  MST_PROGRAM.PROGRAM_ID = EXAM_ROUTINE.PROGRAM_ID AND  " +
-        "  MST_COURSE.COURSE_ID=EXAM_ROUTINE.COURSE_ID AND  " +
-        "  EXAM_ROUTINE.COURSE_ID=ugRegistrationResult.COURSE_ID AND  " +
-        "  exam_routine.SEMESTER=? AND  " +
-        "  exam_routine.exam_type=? and "+
-        "  marksSubmissionStatus.SEMESTER_ID=EXAM_ROUTINE.SEMESTER AND  " +
-        "  marksSubmissionStatus.COURSE_ID = EXAM_ROUTINE.COURSE_ID";
-
     String THEORY_LOG ="Insert InTo UG_THEORY_MARKS_LOG(USER_ID, SEMESTER_ID,COURSE_ID, STUDENT_ID, EXAM_TYPE, QUIZ, CLASS_PERFORMANCE, " +
         "PART_A, PART_B, TOTAL, GRADE_LETTER, STATUS,RECHECK_STATUS) " +
         "Values(?,?,?,?,?,?,?,?,?,?,?,?,?) ";
 
-    String SESSIONAL_LOG="Insert InTo UG_SESSIONAL_MARKS_LOG(USER_ID, SEMESTER_ID, COURSE_ID,  " +
+    String SESSIONAL_LOG="Insert InTo UG_SESSIONAL_MARKS_LOG(USER_ID, ROLE,SEMESTER_ID, COURSE_ID,  " +
         "STUDENT_ID, EXAM_TYPE, TOTAL, GRADE_LETTER,STATUS, RECHECK_STATUS)  " +
-        "Value(?,?,?,?,?,?,?,?,?) ";
+        "Value(?,?,?,?,?,?,?,?,?,?) ";
 
-    String MARKS_SUBMISSION_STATUS_LOG="Insert Into Marks_Submission_Status_Log(USER_ID, SEMESTER_ID, COURSE_ID, EXAM_TYPE,STATUS) "+
-        " Values(?,?,?,?,?) ";
+    String INSERT_MARKS_SUBMISSION_STATUS_LOG="Insert Into Marks_Submission_Status_Log(USER_ID, ROLE,SEMESTER_ID, COURSE_ID, EXAM_TYPE,STATUS) "+
+        " Values(?,?,?,?,?,?) ";
 
-    String THEORY_NONE_SUBMITTED_COUNT="Select Count(Student_Id) From UG_THEORY_MARKS Where Semester_Id=? and Course_Id=? and Exam_Type=1 and Status in (0,1)";
-    String SESSIONAL_NONE_SUBMITTED_COUNT="Select Count(Student_Id) From UG_SESSIONAL_MARKS Where Semester_Id=? and Course_Id=? and Exam_Type=1 and Status in (0,1)";
+    String THEORY_NONE_SUBMITTED_COUNT="Select Count(Student_Id) From UG_THEORY_MARKS Where Semester_Id=? and Course_Id=? and Exam_Type=? and Status in (0,1)";
+    String SESSIONAL_NONE_SUBMITTED_COUNT="Select Count(Student_Id) From UG_SESSIONAL_MARKS Where Semester_Id=? and Course_Id=? and Exam_Type=? and Status in (0,1)";
 
+    String SELECT_MARKS_SUBMISSION_STATUS_LOG="  SELECT MARKS_SUBMISSION_STATUS_LOG.User_Id, " +
+        "         EMPLOYEES.EMPLOYEE_NAME, ROLE, " +
+        "         TO_CHAR (MARKS_SUBMISSION_STATUS_LOG.Inserted_On, " +
+        "                  'DD-MM-YYYY HH:MI:SS AM') " +
+        "            Inserted_On, " +
+        "         MARKS_SUBMISSION_STATUS_LOG.Status " +
+        "    FROM MARKS_SUBMISSION_STATUS_LOG, EMPLOYEES, USERS " +
+        "    WHERE     MARKS_SUBMISSION_STATUS_LOG.User_Id = Users.User_Id " +
+        "         AND USERS.EMPLOYEE_ID = EMPLOYEES.EMPLOYEE_ID " +
+        "         AND Semester_Id = ?" +
+        "         AND Course_Id = ? " +
+        "         AND Exam_Type = ? " +
+        "ORDER BY Inserted_On ";
 
     private JdbcTemplate mJdbcTemplate;
 
@@ -256,12 +227,6 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
             "    and SEMESTER=?  " +
             "    and EXAM_DATE=TO_DATE(?,'dd-mm-yyyy')";
         return mJdbcTemplate.update(query,pExamType,pSemesterId,pExamDate);
-    }
-
-    @Override
-    public List<MarksSubmissionStatusDto> getGradeSubmissionDeadLine(Integer pSemesterId, Integer pExamType, String pExamDate) {
-        String query= SELECT_EXAM_GRADE_DEAD_LINE;
-        return mJdbcTemplate.query(query,new Object[]{pSemesterId,pExamDate,pSemesterId,pExamType},new GradeSubmissionDeadlineRowMapper());
     }
 
     @Override
@@ -554,10 +519,10 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
 
 
   @Override
-  public int updateForGradeSubmissionDeadLine(List<MarksSubmissionStatusDto> pMarksSubmissionStatusDtos) throws Exception {
+  public int updateForGradeSubmissionDeadLine(List<MarksSubmissionStatusDto> deadLineList) throws Exception {
     String query="update MARKS_SUBMISSION_STATUS SET last_submission_date=to_date(?,'dd-mm-yyyy') " +
         "where SEMESTER_ID=? AND EXAM_TYPE=? AND COURSE_ID=?";
-    return mJdbcTemplate.batchUpdate(query,getUpdateParamListForGradeSubmissionDeadLine(pMarksSubmissionStatusDtos)).length;
+    return mJdbcTemplate.batchUpdate(query,getUpdateParamListForGradeSubmissionDeadLine(deadLineList)).length;
   }
 
   public void batchUpdateGradeStatus_Recheck(int pSemesterId, String pCourseId, int pExamType, CourseType courseType, List<StudentGradeDto> recheckList, List<StudentGradeDto> approveList){
@@ -668,7 +633,7 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
             statusDto.setDeptSchoolName(resultSet.getString("LONG_NAME"));
             statusDto.setSemesterName(resultSet.getString("SEMESTER_NAME"));
             statusDto.setcRhR(resultSet.getFloat("CRHR"));
-
+            statusDto.setLastSubmissionDate(resultSet.getString("LAST_SUBMISSION_DATE_EXT"));
             AtomicReference<MarksSubmissionStatusDto> atomicReference = new AtomicReference<>(statusDto);
             return atomicReference.get();
         }
@@ -718,24 +683,6 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
 
             AtomicReference<String> atomicReference = new AtomicReference<>(a);
             return atomicReference.get();
-        }
-    }
-
-
-    class GradeSubmissionDeadlineRowMapper implements RowMapper<MarksSubmissionStatusDto>{
-        @Override
-        public MarksSubmissionStatusDto mapRow(ResultSet pResultSet, int pI) throws SQLException {
-            MarksSubmissionStatusDto submissionStatusDto= new MarksSubmissionStatusDto();
-
-            submissionStatusDto.setExamDate(pResultSet.getString("exam_date"));
-            submissionStatusDto.setProgramShortname(pResultSet.getString("program_short_name"));
-            submissionStatusDto.setCourseId(pResultSet.getString("course_id"));
-            submissionStatusDto.setCourseNo(pResultSet.getString("course_no"));
-            submissionStatusDto.setCourseTitle(pResultSet.getString("course_title"));
-            submissionStatusDto.setCourseCreditHour(pResultSet.getInt("crhr"));
-            submissionStatusDto.setTotalStudents(pResultSet.getInt("total_students"));
-            submissionStatusDto.setLastSubmissionDate(pResultSet.getString("last_submission_date"));
-            return submissionStatusDto;
         }
     }
 
@@ -810,9 +757,10 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
     }
 
     @Override
-    public int insertMarksSubmissionStatusLog(String pUserId,int pSemesterId,String pCourseId,int pExamType,CourseMarksSubmissionStatus status) throws Exception {
-        return mJdbcTemplate.update(MARKS_SUBMISSION_STATUS_LOG,
+    public int insertMarksSubmissionStatusLog(String pUserId,String pRole,int pSemesterId,String pCourseId,int pExamType,CourseMarksSubmissionStatus status) throws Exception {
+        return mJdbcTemplate.update(INSERT_MARKS_SUBMISSION_STATUS_LOG,
             pUserId,
+            pRole,
             pSemesterId,
             pCourseId,
             pExamType,
@@ -831,4 +779,26 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
         return mJdbcTemplate.queryForObject(sql,Integer.class,pSemesterId,pCourseId,pExamType);
     }
 
+
+    @Override
+    public List<MarksSubmissionStatusLogDto> getMarksSubmissionLogs(Integer pSemesterId, String pCourseId,Integer pExamType) throws Exception {
+            return mJdbcTemplate.query(SELECT_MARKS_SUBMISSION_STATUS_LOG,
+                new Object[] {pSemesterId,pCourseId,pExamType},new MarksSubmissionStatusLogRowMapper());
+    }
+
+    class MarksSubmissionStatusLogRowMapper implements RowMapper<MarksSubmissionStatusLogDto> {
+        @Override
+        public MarksSubmissionStatusLogDto mapRow(ResultSet resultSet, int i) throws SQLException {
+            MarksSubmissionStatusLogDto log = new MarksSubmissionStatusLogDto();
+
+            log.setUserId(resultSet.getString("USER_ID"));
+            log.setUserName(resultSet.getString("EMPLOYEE_NAME"));
+            log.setRoleName(resultSet.getString("ROLE"));
+            log.setInsertedOn(resultSet.getString("INSERTED_ON"));
+            log.setStatus(CourseMarksSubmissionStatus.values()[resultSet.getInt("STATUS")]);
+            log.setStatusName(CourseMarksSubmissionStatus.values()[resultSet.getInt("STATUS")].getLabel());
+            AtomicReference<MarksSubmissionStatusLogDto> atomicReference = new AtomicReference<>(log);
+            return atomicReference.get();
+        }
+    }
 }
