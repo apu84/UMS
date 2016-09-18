@@ -12,7 +12,7 @@ import java.io.Serializable;
  */
 public interface SeatPlan extends Serializable,LastModifier,EditType<MutableSeatPlan>,Identifier<Integer> {
   ClassRoom getClassRoom() throws Exception;
-  SpStudent getStudent() throws Exception;
+  Student getStudent() throws Exception;
   Semester getSemester() throws Exception;
   int getClassRoomId();
   int getRowNo();

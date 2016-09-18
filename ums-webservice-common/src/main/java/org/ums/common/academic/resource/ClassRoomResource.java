@@ -40,10 +40,9 @@ public class ClassRoomResource  extends MutableClassRoomResource {
   }
 
   @GET
-  @Path("/program/{program-id}")
-  public JsonObject getByProgram(final @Context Request pRequest,
-                                final @PathParam("program-id") Integer programId) throws Exception{
-    return mResourceHelper.getRooms(programId,mUriInfo);
+  @Path("/program")
+  public JsonObject getByProgram(final @Context Request pRequest) throws Exception{
+    return mResourceHelper.getRooms(mUriInfo);
   }
 
 }

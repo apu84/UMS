@@ -65,7 +65,7 @@ module ums {
         this.$scope.courseArr=[];
         this.$scope.courseArr=courseArr;
 
-        this.classRoomService.getClassRooms()
+
       });
     }
 

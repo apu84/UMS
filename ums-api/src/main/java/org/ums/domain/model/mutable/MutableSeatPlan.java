@@ -2,17 +2,14 @@ package org.ums.domain.model.mutable;
 
 import org.ums.domain.model.common.Mutable;
 import org.ums.domain.model.common.MutableIdentifier;
-import org.ums.domain.model.immutable.ClassRoom;
-import org.ums.domain.model.immutable.SeatPlan;
-import org.ums.domain.model.immutable.Semester;
-import org.ums.domain.model.immutable.SpStudent;
+import org.ums.domain.model.immutable.*;
 
 /**
  * Created by My Pc on 5/8/2016.
  */
 public interface MutableSeatPlan extends SeatPlan,Mutable,MutableLastModifier,MutableIdentifier<Integer> {
   void setClassRoom(final ClassRoom pClassRoom);
-  void setStudent(final SpStudent pStudent);
+  void setStudent(final Student pStudent);
   void setSemester(final Semester pSemester);
   void setClassRoomId(final int pClassRoomId);
   void setRowNo(final int pRowNo);

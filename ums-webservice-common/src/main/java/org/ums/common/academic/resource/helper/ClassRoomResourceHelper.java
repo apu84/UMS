@@ -1,7 +1,12 @@
 package org.ums.common.academic.resource.helper;
 
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ums.domain.model.immutable.Employee;
+import org.ums.domain.model.immutable.Program;
+import org.ums.manager.EmployeeManager;
+import org.ums.manager.ProgramManager;
 import org.ums.persistent.model.PersistentClassRoom;
 import org.ums.cache.LocalCache;
 import org.ums.common.ResourceHelper;
@@ -28,6 +33,12 @@ public class ClassRoomResourceHelper extends ResourceHelper<ClassRoom, MutableCl
 
   @Autowired
   private ClassRoomBuilder mBuilder;
+
+  @Autowired
+  private EmployeeManager mEmployeeManager;
+
+  @Autowired
+  private ProgramManager mProgramManager;
 
   @Override
   public ClassRoomManager getContentManager() {
@@ -61,12 +72,19 @@ public class ClassRoomResourceHelper extends ResourceHelper<ClassRoom, MutableCl
 
   }
 
-  public JsonObject getRooms(final int pProgramId, UriInfo pUriInfo) throws Exception{
+  public JsonObject getRooms(UriInfo pUriInfo) throws Exception{
 
+    Employee employee = mEmployeeManager.get(SecurityUtils.getSubject().getPrincipal().toString());
+    String deptId = employee.getDepartment().getId();
+    List<Program> programs = mProgramManager
+        .getAll()
+        .stream()
+        .filter(pProgram -> pProgram.getDepartmentId().equals(deptId))
+        .collect(Collectors.toList());
     List<ClassRoom> roomList = getContentManager()
         .getAll()
         .stream()
-        .filter(room-> Integer.parseInt(room.getDeptId())==pProgramId)
+        .filter(room-> Integer.parseInt(room.getDeptId())==programs.get(0).getId())
         .sorted(Comparator.comparing(ClassRoom::getId))
         .collect(Collectors.toList());
 

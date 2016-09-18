@@ -64,4 +64,8 @@ public interface MutableStudent extends Student, Mutable, MutableIdentifier<Stri
   void setTheorySection(final String pTheorySection);
 
   void setSessionalSection(final String pSessionalSection);
+
+  void setApplicationType(final Integer pApplicationType);
+
+  void setProgramShortName(final String pProgramShortName);
 }

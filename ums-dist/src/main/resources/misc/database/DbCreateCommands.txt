@@ -27,7 +27,10 @@ imp  DB_IUMS/ig100@XE  STATISTICS=NONE FILE='H:\IUMS-Source2\UMS\ums-dist\src\ma
 exp DB_IUMS/ig100@XE  STATISTICS=NONE FILE='I:\DB_IUMS4.dmp' LOG=H:\backuplog.txt
 
 
-imp  DB_IUMS/ig100@XE  STATISTICS=NONE FILE='I:\DB_IUMS2.dmp' LOG=H:\backuplog.txt
+imp  DB_IUMS/ig100@XE  STATISTICS=NONE FILE='I:\DB_IUMS3.dmp' LOG=H:\backuplog.txt
+
+
+
 
 
 

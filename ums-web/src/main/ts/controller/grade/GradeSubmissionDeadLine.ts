@@ -91,8 +91,20 @@ module ums{
     }
 
     private cancel(){
+      this.$scope.examGradeStatisticsArr = [];
+
       this.$scope.examGradeStatisticsArr=angular.copy(this.$scope.examGradeStatisticsArrTemp);
       this.$scope.showButton=false;
+      this.initializeDatePickers();
+    }
+
+    private initializeDatePickers(){
+      setTimeout(function () {
+        $('.datepicker-default').datepicker();
+        $('.datepicker-default').on('change', function () {
+          $('.datepicker').hide();
+        });
+      }, 200);
     }
 
     private getExamDates():void{
@@ -155,12 +167,7 @@ module ums{
 
             console.log(outputArr);
 
-            setTimeout(function () {
-              $('.datepicker-default').datepicker();
-              $('.datepicker-default').on('change', function () {
-                $('.datepicker').hide();
-              });
-            }, 200);
+            this.initializeDatePickers();
           }
 
 

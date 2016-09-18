@@ -20,7 +20,7 @@ public class PersistentSeatPlanGroupDao extends SeatPlanGroupDaoDecorator {
   String INSERT_ONE = "INSERT INTO SP_GROUP (SEMESTER_ID,PROGRAM_ID,YEAR,SEMESTER,GROUP_NO,LAST_UPDATED,TYPE,PROGRAM_SHORT_NAME,TOTAL_STUDENT) VALUES(?,?,?,?,?, systimestamp,?,?,?)";
   String UPDATE_ONE = "UPDATE SP_GROUP SET SEMESTER_ID=?,PROGRAM_ID=?,YEAR=?, SEMESTER=?, GROUP_NO=?, LAST_UPDATED = systimestamp, TYPE=?,PROGRAM_SHORT_NAME=?,TOTAL_STUDENT=?";
   String DELETE_ONE = "DELETE  FROM SP_GROUP";
-  String SELECT_ALL_FROM_EXAM_ROTINE ="select tmp5.*,program_short_name from " +
+  String SELECT_ALL_FROM_EXAM_ROTINE =" select tmp5.*,program_short_name from " +
       "             (      " +
       "             select group_name,tmp4.program_id,tmp4.semester,tmp4.exam_type,course_year,course_semester,count(student_id) total_student from      " +
       "             (      " +
@@ -41,9 +41,9 @@ public class PersistentSeatPlanGroupDao extends SeatPlanGroupDaoDecorator {
       "             )tmp2      " +
       "             where tmp1.exam_date = tmp2.exam_date )      " +
       "             order by group_name      " +
-      "             )tmp3, students,UG_REGISTRATION_RESULT " +
+      "             )tmp3, students,(select distinct(STUDENT_ID) from UG_REGISTRATION_RESULT) ugRegistrationResult " +
       "             where " +
-      "             STUDENTS.STUDENT_ID = UG_REGISTRATION_RESULT.STUDENT_ID and " +
+      "             STUDENTS.STUDENT_ID = ugRegistrationResult.STUDENT_ID and " +
       "             tmp3.program_id =  students.program_id " +
       "             and tmp3.course_year =  students.CURRENT_YEAR " +
       "             and tmp3.course_semester =  students.CURRENT_SEMESTER " +

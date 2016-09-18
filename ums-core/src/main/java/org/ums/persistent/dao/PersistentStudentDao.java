@@ -227,6 +227,16 @@ public class PersistentStudentDao extends StudentDaoDecorator {
   }
 
 
+  @Override
+  public List<Student> getStudentByCourseIdAndSemesterIdForSeatPlanForCCI(String pCourseId, int pSemesterId) {
+    String query2=" select s.student_id,p.program_short_name,s.year,s.semester,application_type,s.program_id from STUDENTS s,mst_program p,(  " +
+        "         select course_no,student_id,application_type from exam_routine r,mst_course c,        " +
+        "         (select distinct(course_id),student_id,application_type from application_cci where semester_id=? ) a          " +
+        "         where exam_type=2 and exam_date = to_date(?,'MM-DD-YYYY') and r.course_id=c.course_id and a.course_id=c.course_id order by c.course_no,a.student_id) a        " +
+        "         where a.student_id=s.student_id and s.program_id=p.program_id";
+    return mJdbcTemplate.query(query2,new Object[]{pSemesterId,pCourseId},new SpStudentRowMapperForCCI());
+  }
+
   class StudentRowMapper implements RowMapper<Student> {
     @Override
     public Student mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -268,6 +278,47 @@ public class PersistentStudentDao extends StudentDaoDecorator {
 
       AtomicReference<Student> atomicReference = new AtomicReference<>(student);
       return atomicReference.get();
+    }
+  }
+
+  class SpStudentRowMapper implements RowMapper<Student>{
+    @Override
+    public Student mapRow(ResultSet pResultSet, int pI) throws SQLException {
+      PersistentStudent spStudent = new PersistentStudent();
+      spStudent.setId(pResultSet.getString("STUDENT_ID"));
+      spStudent.setProgramId(pResultSet.getInt("PROGRAM_ID"));
+      spStudent.setSemesterId(pResultSet.getInt("SEMESTER_ID"));
+      spStudent.setCurrentYear(pResultSet.getInt("YEAR"));
+      spStudent.setCurrentAcademicSemester(pResultSet.getInt("SEMESTER"));
+     // spStudent.setStatus(pResultSet.getInt("ACTIVE"));
+      spStudent.setLastModified(pResultSet.getString("LAST_MODIFIED"));
+      return spStudent;
+    }
+  }
+
+  class SpStudentRowMapperForCCI implements RowMapper<Student>{
+    @Override
+    public Student mapRow(ResultSet pResultSet, int pI) throws SQLException {
+      PersistentStudent student = new PersistentStudent();
+      student.setId(pResultSet.getString("student_id"));
+      student.setProgramShortName(pResultSet.getString("program_short_name"));
+      student.setCurrentYear(pResultSet.getInt("year"));
+      student.setCurrentAcademicSemester(pResultSet.getInt("semester"));
+      student.setApplicationType(pResultSet.getInt("application_type"));
+      return student;
+    }
+  }
+  class SpStudentRowMapperForCCI2 implements RowMapper<Student>{
+    @Override
+    public Student mapRow(ResultSet pResultSet, int pI) throws SQLException {
+      PersistentStudent student = new PersistentStudent();
+      student.setId(pResultSet.getString("student_id"));
+      student.setProgramShortName(pResultSet.getString("program_short_name"));
+      student.setCurrentYear(pResultSet.getInt("year"));
+      student.setCurrentAcademicSemester(pResultSet.getInt("semester"));
+      student.setApplicationType(pResultSet.getInt("application_type"));
+      student.setProgramId(pResultSet.getInt("program_id"));
+      return student;
     }
   }
 }

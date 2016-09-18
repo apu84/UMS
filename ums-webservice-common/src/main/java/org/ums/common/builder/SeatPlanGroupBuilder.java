@@ -37,7 +37,7 @@ public class SeatPlanGroupBuilder implements Builder<SeatPlanGroup,MutableSeatPl
     pBuilder.add("groupId",pReadOnly.getId());
     pBuilder.add("semesterId",pReadOnly.getSemester().getId());
     pBuilder.add("programId",pReadOnly.getProgram().getId());
-    pBuilder.add("programName",pReadOnly.getProgramName());
+    pBuilder.add("programName",pReadOnly.getProgramName().replaceAll("BSc in ",""));
     pBuilder.add("year",pReadOnly.getAcademicYear());
     pBuilder.add("semester",pReadOnly.getAcademicSemester());
     pBuilder.add("groupNo",pReadOnly.getGroupNo());
