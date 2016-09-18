@@ -1,5 +1,6 @@
 package org.ums.common.academic.resource.helper;
 
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
@@ -7,10 +8,11 @@ import org.ums.common.ResourceHelper;
 import org.ums.common.academic.resource.SemesterResource;
 import org.ums.common.builder.CourseBuilder;
 import org.ums.domain.model.immutable.Course;
+import org.ums.domain.model.immutable.Employee;
+import org.ums.domain.model.immutable.Program;
 import org.ums.domain.model.immutable.Syllabus;
 import org.ums.domain.model.mutable.MutableCourse;
-import org.ums.manager.CourseManager;
-import org.ums.manager.SemesterSyllabusMapManager;
+import org.ums.manager.*;
 import org.ums.persistent.model.PersistentCourse;
 
 import javax.json.Json;
@@ -31,6 +33,15 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
 
   @Autowired
   private SemesterSyllabusMapManager mSemesterSyllabusMapManager;
+
+  @Autowired
+  private EmployeeManager mEmployeeManager;
+
+  @Autowired
+  private ProgramManager mProgramManager;
+
+  @Autowired
+  private DepartmentManager mDepartmentManager;
 
   @Autowired
   private CourseBuilder mBuilder;
@@ -64,7 +75,7 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
     return "";
   }
 
-  public JsonObject buildCourses(final List<Course> pCourses, final UriInfo pUriInfo) throws Exception {
+ /* public JsonObject buildCourses(final List<Course> pCourses, final UriInfo pUriInfo) throws Exception {
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
@@ -74,7 +85,7 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
     object.add("entries", children);
     localCache.invalidate();
     return object.build();
-  }
+  }*/
 
   public JsonObject getBySyllabus(final String pSyllabusId, final Request pRequest, final UriInfo pUriInfo) throws Exception {
     List<Course> courses = getContentManager().getBySyllabus(pSyllabusId);
@@ -94,20 +105,76 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
   public JsonObject getBySemesterProgram(final String pSemesterId,final String pProgramId, final Request pRequest, final UriInfo pUriInfo) throws Exception {
     List<Course> courses = getContentManager().getBySemesterProgram(pSemesterId,pProgramId);
 
-    return convertToJson(courses,pUriInfo);
+    return buildCourse(courses,pUriInfo);
   }
 
-  public JsonObject getCourses(final String pSemesterId, final String pProgramId, final int pProgramType, final Request pRequest, final UriInfo pUriInfo) throws Exception{
+  public JsonObject getCourses(final Integer pSemesterId, final int pProgramType, final Request pRequest, final UriInfo pUriInfo) throws Exception{
+    String employeeId = SecurityUtils.getSubject().getPrincipal().toString();
+    Employee employee = mEmployeeManager.get(employeeId);
+    String deptId = employee.getDepartment().getId();
+    List<Program> program = mProgramManager
+        .getAll()
+        .stream()
+        .filter(pProgram ->pProgram.getDepartmentId().equals(deptId))
+        .collect(Collectors.toList());
     List<Course> courses = getContentManager().
-        getBySemesterProgram(pSemesterId,pProgramId)
+        getBySemesterProgram(pSemesterId.toString(),program.get(0).getId().toString())
         .stream()
         .filter(course->course.getCourseType().getValue()==pProgramType)
         .collect(Collectors.toList());
 
-    return convertToJson(courses,pUriInfo);
+    return buildCourse(courses,pUriInfo);
   }
 
-  private JsonObject convertToJson(List<Course> courses, final UriInfo pUriInfo) throws Exception{
+
+  public JsonObject getByYearSemester(final String pSemesterId, final String pProgramId, final int year,final int semester,final Request pRequest, final UriInfo pUriInfo)throws Exception{
+    List<Course> courses = getContentManager().getByYearSemester(pSemesterId,pProgramId,year,semester);
+
+    return buildCourse(courses,pUriInfo);
+  }
+
+
+
+
+  public JsonObject getOptionalCourses(final Integer pSemesterId,final Integer pProgramId,final Integer pYear,final Integer pSemester,  final Request pRequest, final UriInfo pUriInfo) throws Exception {
+    Syllabus syllabus=mSemesterSyllabusMapManager.getSyllabusForSemester(pSemesterId,pProgramId,pYear,pSemester);
+    List<Course> courses = getContentManager().getOptionalCourseList(syllabus.getId(), pYear,pSemester) ;
+
+    return buildCourse(courses,pUriInfo);
+  }
+
+  public JsonObject getOfferedCourses(final Integer pSemesterId,final Integer pProgramId,final Integer pYear,final Integer pSemester, final UriInfo pUriInfo) throws Exception {
+
+    List<Course> courses = getContentManager().getOfferedCourseList(pSemesterId, pProgramId, pYear, pSemester);
+
+    return buildCourse(courses,pUriInfo);
+  }
+
+  public JsonObject getCallForApplicationCourses(final Integer pSemesterId,final Integer pProgramId,final Integer pYear,final Integer pSemester, final UriInfo pUriInfo) throws Exception {
+
+    List<Course> courses = getContentManager().getCallForApplicationCourseList(pSemesterId, pProgramId, pYear, pSemester);
+
+    return buildCourse(courses,pUriInfo);
+  }
+
+
+
+  public JsonObject getApprovedCourses(final Integer pSemesterId,final Integer pProgramId,final Integer pYear,final Integer pSemester, final UriInfo pUriInfo) throws Exception {
+
+    List<Course> courses = getContentManager().getApprovedCourseList(pSemesterId, pProgramId, pYear, pSemester);
+
+    return buildCourse(courses,pUriInfo);
+  }
+
+  public JsonObject getApprovedCallForApplicationCourseList(final Integer pSemesterId,final Integer pProgramId,final Integer pYear,final Integer pSemester, final UriInfo pUriInfo) throws Exception {
+
+    List<Course> courses = getContentManager().getApprovedCallForApplicationCourseList(pSemesterId, pProgramId, pYear, pSemester);
+
+    return buildCourse(courses,pUriInfo);
+  }
+
+
+  private JsonObject buildCourse(List<Course> courses, final UriInfo pUriInfo) throws Exception{
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
@@ -118,52 +185,6 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
     localCache.invalidate();
 
     return object.build();
-  }
-
-  public JsonObject getByYearSemester(final String pSemesterId, final String pProgramId, final int year,final int semester,final Request pRequest, final UriInfo pUriInfo)throws Exception{
-    List<Course> courses = getContentManager().getByYearSemester(pSemesterId,pProgramId,year,semester);
-
-    return convertToJson(courses,pUriInfo);
-  }
-
-
-
-
-  public JsonObject getOptionalCourses(final Integer pSemesterId,final Integer pProgramId,final Integer pYear,final Integer pSemester,  final Request pRequest, final UriInfo pUriInfo) throws Exception {
-    Syllabus syllabus=mSemesterSyllabusMapManager.getSyllabusForSemester(pSemesterId,pProgramId,pYear,pSemester);
-    List<Course> courses = getContentManager().getOptionalCourseList(syllabus.getId(), pYear,pSemester) ;
-
-    return convertToJson(courses,pUriInfo);
-  }
-
-  public JsonObject getOfferedCourses(final Integer pSemesterId,final Integer pProgramId,final Integer pYear,final Integer pSemester, final UriInfo pUriInfo) throws Exception {
-
-    List<Course> courses = getContentManager().getOfferedCourseList(pSemesterId, pProgramId, pYear, pSemester);
-
-    return convertToJson(courses,pUriInfo);
-  }
-
-  public JsonObject getCallForApplicationCourses(final Integer pSemesterId,final Integer pProgramId,final Integer pYear,final Integer pSemester, final UriInfo pUriInfo) throws Exception {
-
-    List<Course> courses = getContentManager().getCallForApplicationCourseList(pSemesterId, pProgramId, pYear, pSemester);
-
-    return convertToJson(courses,pUriInfo);
-  }
-
-
-
-  public JsonObject getApprovedCourses(final Integer pSemesterId,final Integer pProgramId,final Integer pYear,final Integer pSemester, final UriInfo pUriInfo) throws Exception {
-
-    List<Course> courses = getContentManager().getApprovedCourseList(pSemesterId, pProgramId, pYear, pSemester);
-
-    return convertToJson(courses,pUriInfo);
-  }
-
-  public JsonObject getApprovedCallForApplicationCourseList(final Integer pSemesterId,final Integer pProgramId,final Integer pYear,final Integer pSemester, final UriInfo pUriInfo) throws Exception {
-
-    List<Course> courses = getContentManager().getApprovedCallForApplicationCourseList(pSemesterId, pProgramId, pYear, pSemester);
-
-    return convertToJson(courses,pUriInfo);
   }
 
 

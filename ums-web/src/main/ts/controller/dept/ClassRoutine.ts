@@ -61,7 +61,12 @@ module ums {
       var programType = +this.$scope.programType;
       var year = +this.$scope.studentsYear;
       var semester = +this.$scope.studentsSemester;
-      //this.courseService.getCourse()
+      this.courseService.getCourse(this.$scope.semesterId,programType).then((courseArr:Array<ICourse>)=>{
+        this.$scope.courseArr=[];
+        this.$scope.courseArr=courseArr;
+
+        this.classRoomService.getClassRooms()
+      });
     }
 
 
