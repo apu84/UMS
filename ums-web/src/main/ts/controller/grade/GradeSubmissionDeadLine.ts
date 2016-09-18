@@ -77,6 +77,8 @@ module ums{
 
     private saveChanges(){
       this.convertToJson().then((json:any)=>{
+        this.$scope.examGradeStatisticsArrTemp=[];
+        this.$scope.examGradeStatisticsArrTemp=angular.copy(this.$scope.examGradeStatisticsArr);
         console.log(json);
         this.examGradeService.updateGradeSubmissionDeadLine(json).then((message:any)=>{
           this.notify.success(message);
@@ -105,7 +107,7 @@ module ums{
           $('.datepicker').hide();
         });
       }, 200);
-    }
+    }   
 
     private getExamDates():void{
 
