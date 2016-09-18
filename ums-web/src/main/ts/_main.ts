@@ -98,7 +98,8 @@
 ///<reference path='service/SeatPlanService.ts'/>
 ///<reference path='service/ExamGradeService.ts'/>
 ///<reference path='service/ExamRoutineService.ts'/>
-  
+
+///<reference path='model/ExamRoutineModel.ts'/>
 
 
 
