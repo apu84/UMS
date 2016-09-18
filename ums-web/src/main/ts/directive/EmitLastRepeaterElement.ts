@@ -10,7 +10,6 @@ module ums {
         scope.$emit('LastRepeaterElement');
       }
     };
-ZZR
   }
 
   UMS.directive("emitLastRepeaterElement", [() => new EmitLastRepeaterElement()]);

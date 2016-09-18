@@ -83,6 +83,7 @@
 /// <reference path='directive/Modal.ts'/>
 /// <reference path='directive/CourseRegTypeLegend.ts'/>
 /// <reference path='directive/Notification.ts'/>
+/// <reference path='directive/EmitLastRepeaterElement.ts'/>
 
 /// <reference path='interceptor/Unauthorized.ts'/>
 /// <reference path='interceptor/ValidationExceptions.ts'/>
