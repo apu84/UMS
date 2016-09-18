@@ -65,13 +65,14 @@ public class RoutineResource extends MutableRoutineResource{
   }
 
   @GET
-  @Path("/routineForEmployee/semester/{semesterId}/program/{programId}/year/{year}/semester/{semester}")
+  @Path("/routineForEmployee/semester/{semesterId}/program/{programId}/year/{year}/semester/{semester}/section/{section}")
   public JsonObject getRoutineForEmployee(final @Context Request pRequest,
                                           final @PathParam("semesterId") String semesterId,
                                           final @PathParam("programId") String programId,
                                           final @PathParam("year") String year,
-                                          final @PathParam("semester") String semester)throws Exception{
-    return mRoutineResourceHelper.getRoutineForEmployee(Integer.parseInt(semesterId),Integer.parseInt(programId),Integer.parseInt(year),Integer.parseInt(semester),pRequest,mUriInfo);
+                                          final @PathParam("semester") String semester,
+                                          final @PathParam("section") String section)throws Exception{
+    return mRoutineResourceHelper.getRoutineForEmployee(Integer.parseInt(semesterId),Integer.parseInt(programId),Integer.parseInt(year),Integer.parseInt(semester),section,pRequest,mUriInfo);
   }
 
   @GET

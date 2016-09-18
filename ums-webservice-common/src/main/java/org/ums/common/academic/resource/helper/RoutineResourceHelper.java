@@ -1,6 +1,10 @@
 package org.ums.common.academic.resource.helper;
 
+import org.apache.commons.jexl2.UnifiedJEXL;
 import org.apache.shiro.SecurityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.NullValueInNestedPathException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
@@ -29,13 +33,17 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.io.OutputStream;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
 @Component
 public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutine, String> {
 
+  private static final Logger mLogger = LoggerFactory.getLogger(RoutineResourceHelper.class);
   @Autowired
   private RoutineManager mManager;
 
@@ -116,7 +124,13 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
   public JsonObject getRoutineForStudent() throws Exception {
     String mStudentId = SecurityUtils.getSubject().getPrincipal().toString();
     Student student = mStudentManager.get(mStudentId);
-    List<Routine> routines = getContentManager().getStudentRoutine(student);
+    List<Routine> routines = new ArrayList<>();
+
+    try{
+      routines= getContentManager().getStudentRoutine(student);
+    }catch (Exception e){
+
+    }
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
@@ -128,9 +142,26 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
     return object.build();
   }
 
-  public JsonObject getRoutineForEmployee(final int semesterId, final int programId, final int academicYear,
-                                          final int academicSemester, final Request pRequest, final UriInfo pUriInfo) throws Exception {
-    List<Routine> routines = getContentManager().getEmployeeRoutine(semesterId, programId, academicYear, academicSemester);
+  public JsonObject getRoutineForEmployee(final int semesterId, final int programId,
+                                          final int academicYear,
+                                          final int academicSemester,
+                                          final String section,
+                                          final Request pRequest,
+                                          final UriInfo pUriInfo) throws Exception {
+    List<Routine> routines = new ArrayList<>();
+    try{
+      routines = getContentManager().
+          getEmployeeRoutine(semesterId, programId, academicYear, academicSemester).stream()
+          .filter(routine-> routine.getSection().charAt(0)== section.charAt(0))
+          .sorted(Comparator.comparing(Routine::getDay).thenComparing(Routine::getStartTime))
+          .collect(Collectors.toList());
+
+    }catch (Exception e){
+
+      //// TODO: 17-Sep-16 : check for catching proper exception
+
+      mLogger.error(e.getMessage());
+    }
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();

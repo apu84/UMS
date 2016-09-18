@@ -16,7 +16,9 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.io.StringReader;
 import java.net.URI;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class ClassRoomResourceHelper extends ResourceHelper<ClassRoom, MutableClassRoom, Integer> {
@@ -57,6 +59,26 @@ public class ClassRoomResourceHelper extends ResourceHelper<ClassRoom, MutableCl
     return object.build();
 
 
+  }
+
+  public JsonObject getRooms(final int pProgramId, UriInfo pUriInfo) throws Exception{
+
+    List<ClassRoom> roomList = getContentManager()
+        .getAll()
+        .stream()
+        .filter(room-> Integer.parseInt(room.getDeptId())==pProgramId)
+        .sorted(Comparator.comparing(ClassRoom::getId))
+        .collect(Collectors.toList());
+
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+    for (ClassRoom room : roomList) {
+      children.add(toJson(room, pUriInfo, localCache));
+    }
+    object.add("entries",children);
+    localCache.invalidate();
+    return object.build();
   }
 
   private static JsonObject jsonFromString(String jsonObjectStr) {
@@ -110,6 +132,8 @@ public class ClassRoomResourceHelper extends ResourceHelper<ClassRoom, MutableCl
     localCache.invalidate();
     return object.build();
   }
+
+
 
 
   public JsonObject getByRoomId(final Integer pRoomId,final UriInfo pUriInfo) throws Exception{

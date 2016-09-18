@@ -25,6 +25,34 @@ module ums{
 
       return defer.promise;
     }
+    
+    public getClassRoutineForStudents():ng.IPromise<any>{
+      var defer = this.$q.defer();
+
+
+      return defer.promise;
+    }
+
+    public getClassRoutineForEmployee(semesterId:number,
+                                      programId:number,
+                                      year:number,
+                                      semester:number,
+                                      section:string):ng.IPromise<any>{
+      var defer = this.$q.defer();
+      var routines:any={};
+      this.httpClient.get("/ums-webservice-common/academic/routine/routineForEmployee/semester/"
+          +semesterId+"/program/"+programId+"/year/"+year+"/semester/"+semester+"/section/"+section,'application/json',
+          (data:any,etag:string)=>{
+            routines = data.entries;
+            defer.resolve(routines);
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>)=>{
+            console.error(response);
+            this.notify.error("Error in fetching routine data");
+          });
+
+      return defer.promise;
+    }
 
   }
 
