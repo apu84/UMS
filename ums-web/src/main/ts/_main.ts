@@ -91,6 +91,10 @@
 /// <reference path='util/UmsUtil.ts'/>
 
 /// <reference path='service/Notify.ts'/>
+///<reference path='service/ClassRoomService.ts'/>
+///<reference path='service/ClassRoutineService.ts'/>
+///<reference path='service/CourseServices.ts'/>
+
 
 
 /// <reference path='grid/GridConfig.ts'/>
