@@ -27,7 +27,7 @@ module ums{
 
     }
 
-    public getCourse(semesterId:number, programType:number):ng.IPromise<any>{
+    public getCourseBySemesterAndProgramType(semesterId:number, programType:number):ng.IPromise<any>{
       var defer = this.$q.defer();
       var courses:any={};
       this.httpClient.get('/ums-webservice-common/academic/course/semester'+semesterId+'/programType/'+programType,'application/json',

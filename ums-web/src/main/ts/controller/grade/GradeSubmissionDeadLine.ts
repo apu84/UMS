@@ -107,7 +107,7 @@ module ums{
           $('.datepicker').hide();
         });
       }, 200);
-    }   
+    }
 
     private getExamDates():void{
 
