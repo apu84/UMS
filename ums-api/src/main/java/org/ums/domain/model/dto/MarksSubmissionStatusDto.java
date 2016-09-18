@@ -6,9 +6,6 @@ import org.ums.enums.CourseType;
 
 import java.util.List;
 
-/**
- * Created by ikh on 5/1/2016.
- */
 public class MarksSubmissionStatusDto {
     private String courseId;
     private String courseNo;
@@ -31,8 +28,6 @@ public class MarksSubmissionStatusDto {
     private String programShortname;
     private String examDate;
     private Integer totalStudents;
-
-
 
     private String preparerId;
     private String preparerName;

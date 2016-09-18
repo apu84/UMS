@@ -2,6 +2,7 @@ package org.ums.decorator;
 
 import org.ums.domain.model.dto.GradeChartDataDto;
 import org.ums.domain.model.dto.MarksSubmissionStatusDto;
+import org.ums.domain.model.dto.MarksSubmissionStatusLogDto;
 import org.ums.domain.model.dto.StudentGradeDto;
 import org.ums.domain.model.immutable.ExamGrade;
 import org.ums.domain.model.mutable.MutableExamGrade;
@@ -47,8 +48,8 @@ public class ExamGradeDaoDecorator  extends ContentDaoDecorator<ExamGrade, Mutab
     }
 
     @Override
-    public int insertMarksSubmissionStatusLog(String pUserId,int pSemesterId,String pCourseId,int pExamType,CourseMarksSubmissionStatus status) throws Exception {
-        return getManager().insertMarksSubmissionStatusLog(pUserId, pSemesterId, pCourseId, pExamType, status);
+    public int insertMarksSubmissionStatusLog(String pUserId,String pRole,int pSemesterId,String pCourseId,int pExamType,CourseMarksSubmissionStatus status) throws Exception {
+        return getManager().insertMarksSubmissionStatusLog(pUserId,pRole, pSemesterId, pCourseId, pExamType, status);
     }
     @Override
     public boolean updateGradeStatus_Save(int pSemesterId,String pCourseId,int pExamType,CourseType courseType,List<StudentGradeDto> recheckList,List<StudentGradeDto> approveList) throws Exception {
@@ -129,8 +130,9 @@ public class ExamGradeDaoDecorator  extends ContentDaoDecorator<ExamGrade, Mutab
     public int getTotalStudentCount(final Integer pSemesterId, final String pCourseId, final Integer pExamType, final CourseType courseType) throws Exception{
         return getManager().getTotalStudentCount(pSemesterId,pCourseId,pExamType,courseType);
     }
-    @Override
-    public String getGradeSubmissionDeadLine(String pCourseId, int pSemesterId, ExamType pExamType) {
-        return getManager().getGradeSubmissionDeadLine(pCourseId,pSemesterId,pExamType);
+
+    public List<MarksSubmissionStatusLogDto> getMarksSubmissionLogs(Integer pSemesterId, String pCourseId,Integer pExamType) throws Exception {
+        return getManager().getMarksSubmissionLogs(pSemesterId, pCourseId, pExamType);
     }
+
 }

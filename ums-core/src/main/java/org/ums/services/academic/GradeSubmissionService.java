@@ -3,20 +3,23 @@ package org.ums.services.academic;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ums.domain.model.dto.MarksSubmissionStatusDto;
 import org.ums.domain.model.dto.StudentGradeDto;
 import org.ums.domain.model.immutable.User;
-import org.ums.enums.CourseMarksSubmissionStatus;
-import org.ums.enums.CourseType;
-import org.ums.enums.RecheckStatus;
-import org.ums.enums.StudentMarksSubmissionStatus;
+import org.ums.enums.*;
 import org.ums.manager.ExamGradeManager;
 import org.ums.manager.UserManager;
+import org.ums.services.UtilsService;
 import org.ums.util.Constants;
 
 import javax.json.*;
+import javax.xml.bind.ValidationException;
 import java.io.StringReader;
 import java.security.InvalidParameterException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @Component("gradeSubmissionService")
@@ -26,6 +29,8 @@ public class GradeSubmissionService {
   private ExamGradeManager mManager;
   @Autowired
   private UserManager mUserManager;
+  @Autowired
+  private UtilsService mUtilsService;
 
   public void prepareGradeGroups(JsonObjectBuilder objectBuilder,List<StudentGradeDto> examGradeList,CourseMarksSubmissionStatus courseStatus,String currentActor ){
 
@@ -137,14 +142,103 @@ public class GradeSubmissionService {
     }
   }
 
+  public void validateGradeSubmissionDeadline(String lastDateOfSubmission) throws  Exception{
+
+    if(lastDateOfSubmission==null || lastDateOfSubmission.equalsIgnoreCase("")) return;
+    try{
+      SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+      Date currentDate = new Date();
+      Date deadLine = sdf.parse(lastDateOfSubmission+" 23:59:59");
+      if(currentDate.compareTo(deadLine)>0){
+        throw new ValidationException("Grade Submission Deadline is Over.");
+      }
+    }catch(ParseException ex){
+      ex.printStackTrace();
+    }
+
+  }
 
   public void validateSubmittedGrades(
       final Integer pSemesterId, final String pCourseId, final Integer examType, final CourseType courseType,
-      final Integer pTotalPart, final Integer pPartATotal, final Integer pPartBTotal,List<StudentGradeDto> gradeList ) throws Exception{
+      MarksSubmissionStatusDto partInfo,List<StudentGradeDto> gradeList ) throws Exception {
 
     //Validate all the grades been submitted or not
-    int totalStudents=mManager.getTotalStudentCount(pSemesterId,pCourseId,examType,courseType);
-    //Validate by Theory Sessional and considering Regular, Clearance, Carry, Special Carry Exam...
+    int totalStudents = mManager.getTotalStudentCount(pSemesterId, pCourseId, examType, courseType);
+    if (gradeList.size() != totalStudents)
+      throw new Exception("Wrong number of grades been submitted.");
+    boolean error = false;
+    gradeList.forEach((gradeDTO) -> {
+          try {
+            validateMarks(error, gradeDTO, partInfo, courseType);
+          } catch (Exception ex) {
+            throw new RuntimeException(ex);
+          }
+        }
+    );
+
+  }
+
+   private boolean validateMarks(boolean error,StudentGradeDto gradeDTO,MarksSubmissionStatusDto partInfo,CourseType courseType) throws Exception{
+     if(courseType==CourseType.THEORY) {
+       error = error && validateQuiz(error, gradeDTO.getQuiz(), gradeDTO.getRegType());
+       error = error && validateClassPerformance(error, gradeDTO.getClassPerformance(), gradeDTO.getRegType());
+       error = error && validatePartA(error, gradeDTO.getPartA(), partInfo.getPart_a_total(), gradeDTO.getRegType());
+       error = error && validatePartB(error, gradeDTO.getPartB(), partInfo.getTotal_part(), partInfo.getPart_b_total(), gradeDTO.getRegType());
+       error = error && validateTheoryTotal(error, gradeDTO);
+     }
+     else if(courseType==CourseType.SESSIONAL) {
+       error = error && validateSessionalTotal(error, gradeDTO);
+     }
+     error = error && validateGradeLetter(error,gradeDTO);
+     return error;
+   }
+    private boolean validateQuiz(boolean error,Float quiz,CourseRegType regType){
+      if(quiz>20 && regType==CourseRegType.REGULAR){
+        error = error && Boolean.FALSE;
+      }
+      return error;
+    }
+  private boolean validateClassPerformance(boolean error,Float classPerf,CourseRegType regType){
+    if(classPerf>20 && regType==CourseRegType.REGULAR){
+      error = error && Boolean.FALSE;
+    }
+    return error;
+  }
+  private boolean validatePartA(boolean error,Float partA,Integer partAMax,CourseRegType regType){
+    if(partA>partAMax){
+      error = error && Boolean.FALSE;
+    }
+    return error;
+  }
+  private boolean validatePartB(boolean error,Float partB,Integer totalPartCount,Integer partBMax,CourseRegType regType){
+    if(totalPartCount==2 && (partB>partBMax)){
+      error = error && Boolean.FALSE;
+    }
+    if(totalPartCount==1 && (partB>0)){
+      error = error && Boolean.FALSE;
+    }
+    return error;
+  }
+
+  private boolean validateTheoryTotal(boolean error,StudentGradeDto gradeDTO){
+    if(gradeDTO.getTotal()>100 ||  gradeDTO.getTotal() != gradeDTO.getQuiz() +gradeDTO.getClassPerformance() +gradeDTO.getPartA() + gradeDTO.getPartB()){
+      error = error && Boolean.FALSE;
+    }
+    return error;
+  }
+
+  private boolean validateSessionalTotal(boolean error,StudentGradeDto gradeDTO){
+    if(gradeDTO.getTotal()>100){
+      error = error && Boolean.FALSE;
+    }
+    return error;
+  }
+
+  private boolean validateGradeLetter(boolean error,StudentGradeDto gradeDTO) throws  Exception{
+    if(mUtilsService.getGradeLetter(Math.round(gradeDTO.getTotal()),gradeDTO.getRegType()).equalsIgnoreCase(gradeDTO.getGradeLetter())) {
+      error = error && Boolean.FALSE;
+    }
+    return error;
   }
 
 }

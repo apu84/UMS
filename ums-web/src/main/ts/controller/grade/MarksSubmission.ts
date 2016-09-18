@@ -25,6 +25,7 @@ module ums {
     acceptedGrades: any;
     recheckAcceptedGrades:any;
     allMarksSubmissionStatus:any;
+    marksSubmissionStatusLogs:any;
     toggleColumn:boolean;
     excel_copy_paste_error_div:boolean;
     gradeSubmissionStatus:number;  //Grade Submission Status for the current Course
@@ -43,6 +44,7 @@ module ums {
     saveAndSendToScrutinizer:Function;
     fetchGradeSubmissionTable:Function;
     calculateTotalAndGradeLetter:Function;
+    fetchMarksSubmissionLog:Function;
 
     recheckAll:Function;
     approveAll:Function;
@@ -181,6 +183,7 @@ module ums {
       $scope.saveAndSendToScrutinizer = this.saveAndSendToScrutinizer.bind(this);
       $scope.fetchGradeSubmissionTable = this.fetchGradeSubmissionTable.bind(this);
       $scope.calculateTotalAndGradeLetter = this.calculateTotalAndGradeLetter.bind(this);
+      $scope.fetchMarksSubmissionLog = this.fetchMarksSubmissionLog.bind(this);
       $scope.recheckAll=this.recheckAll.bind(this);
       $scope.approveAll=this.approveAll.bind(this);
 
@@ -347,6 +350,7 @@ module ums {
           "/status/"+status,
           this.appConstants.mimeTypeJson,
           (data:any, etag:string)=> {
+            console.log(data.entries);
             this.$scope.allMarksSubmissionStatus = data.entries;
           });
 
@@ -356,6 +360,7 @@ module ums {
       $("#rightDiv").removeClass("orgRightClass");
       $("#rightDiv").addClass("newRightClass");
     }
+
 
     //Refresh used for straightforward Refresh purpose
     private refreshGradeSheet():void{
@@ -1257,6 +1262,20 @@ module ums {
         }
       }
     }
+
+    //MarksSubmissionLog
+    private fetchMarksSubmissionLog():void {
+      this.httpClient.get("academic/gradeSubmission/semester/"+this.$scope.inputParams.semester_id+
+          "/courseid/"+ this.$scope.current_courseId+
+          "/examType/"+this.$scope.inputParams.exam_type,
+          this.appConstants.mimeTypeJson,
+          (data:any, etag:string)=> {
+            console.log(data.entries);
+            this.$scope.marksSubmissionStatusLogs = data.entries;
+          });
+    }
+
+
 
     // Start of Selection Panel Components Initialization
 
