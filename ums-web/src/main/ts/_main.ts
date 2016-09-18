@@ -51,6 +51,8 @@
 /// <reference path='controller/course-material/CourseMaterial.ts'/>
 /// <reference path='controller/course-material/StudentCourseMaterial.ts'/>
 /// <reference path='controller/grade/MarksSubmission.ts'/>
+/// <reference path='controller/grade/GradeSubmissionDeadLine.ts'/>
+
 /// <reference path='Utils.ts'/>
 
 
@@ -100,7 +102,6 @@
 ///<reference path='service/ExamRoutineService.ts'/>
 
 ///<reference path='model/ExamRoutineModel.ts'/>
-
 
 
 /// <reference path='grid/GridConfig.ts'/>
