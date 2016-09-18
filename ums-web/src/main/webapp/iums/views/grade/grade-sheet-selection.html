@@ -191,7 +191,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="javascript:void(0)">
+                        <a href="javascript:void(0)" data-target="#modal-marks_status_log" data-toggle="modal" style="background: transparent;" title="Marks Log">
                             <span style="background-image:  url('vendors/pieMenu/log2.png')">Item</span>
                         </a>
                     </li>
@@ -1017,7 +1017,7 @@
     </div>
 </div>
 
-<!--Modal for -->
+<!--Modal for Marks Submission Status Log-->
 <div id="modal-marks_submission_status_log" tabindex="-1" role="dialog" aria-labelledby="modal-prompt-label"
      aria-hidden="true" class="modal fade">
     <div class="modal-dialog">
@@ -1053,6 +1053,44 @@
         </div>
     </div>
 </div>
+
+<!--Modal for Grade  Status Log-->
+<div id="modal-marks_status_log" tabindex="-1" role="dialog" aria-labelledby="modal-prompt-label"
+     aria-hidden="true" class="modal fade">
+    <div class="modal-dialog modal-wide-width">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" data-dismiss="modal" aria-hidden="true"
+                        class="close">&times;</button>
+                <h4 id="modal-marks_status_log-label" class="modal-title">Marks Submission Status Log</h4></div>
+            <div class="modal-body">
+                <table class="table table-hover table-condensed">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Status</th>
+                        <th>Date-Time</th>
+                        <th>Actor</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="log in marksSubmissionStatusLogs track by $index">
+                        <td>{{$index + 1}}</td>
+                        <td>{{log.statusName}}</td>
+                        <td>{{log.insertedOn}}</td>
+                        <td>{{log.userName}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <link rel="stylesheet" href="vendors/pieMenu/css/piemenu.css">
 <script src="vendors/pieMenu/js/jquery.menu.js"></script>
