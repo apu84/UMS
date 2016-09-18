@@ -1,9 +1,6 @@
 package org.ums.manager;
 
-import org.ums.domain.model.dto.GradeChartDataDto;
-import org.ums.domain.model.dto.MarksSubmissionStatusDto;
-import org.ums.domain.model.dto.MarksSubmissionStatusLogDto;
-import org.ums.domain.model.dto.StudentGradeDto;
+import org.ums.domain.model.dto.*;
 import org.ums.domain.model.immutable.ExamGrade;
 import org.ums.domain.model.mutable.MutableExamGrade;
 import org.ums.enums.CourseMarksSubmissionStatus;
@@ -22,7 +19,7 @@ public interface ExamGradeManager extends ContentManager<ExamGrade, MutableExamG
     public MarksSubmissionStatusDto getMarksSubmissionStatus(int semesterId,String courseId,int examType) throws Exception;
     public List<MarksSubmissionStatusDto> getMarksSubmissionStatus(int pSemesterId,int pExamType,int pProgramId,String teacherId,String deptId,String userRole,int status) throws Exception;
     public boolean saveGradeSheet(int semesterId,String courseId,int examType,CourseType courseType,List<StudentGradeDto> gradeList) throws Exception;
-    public boolean insertGradeLog(String userId,int semesterId,String courseId,int examType,CourseType courseType,CourseMarksSubmissionStatus currentStatus,List<StudentGradeDto> gradeList) throws Exception;
+    public boolean insertGradeLog(String userId,String role,int semesterId,String courseId,int examType,CourseType courseType,CourseMarksSubmissionStatus currentStatus,List<StudentGradeDto> gradeList) throws Exception;
     public int insertMarksSubmissionStatusLog(String pUserId,String pRole,int pSemesterId,String pCourseId,int pExamType,CourseMarksSubmissionStatus status) throws Exception ;
     public boolean updateGradeStatus_Save(int pSemesterId,String pCourseId,int pExamType,CourseType courseType,List<StudentGradeDto> recheckList,List<StudentGradeDto> approveList) throws Exception ;
     public boolean updateGradeStatus_Recheck(int pSemesterId,String pCourseId,int pExamType,CourseType courseType,List<StudentGradeDto> recheckList,List<StudentGradeDto> approveList) throws Exception ;
@@ -46,5 +43,6 @@ public interface ExamGradeManager extends ContentManager<ExamGrade, MutableExamG
     public int updateForGradeSubmissionDeadLine(List<MarksSubmissionStatusDto> pMarksSubmissionStatusDtos) throws Exception;
     public int getTotalStudentCount(final Integer pSemesterId, final String pCourseId, final Integer pExamType, final CourseType courseType) throws Exception;
     public List<MarksSubmissionStatusLogDto> getMarksSubmissionLogs(Integer pSemesterId, String pCourseId,Integer pExamType) throws Exception ;
-}
+    public List<MarksLogDto> getMarksLogs(Integer pSemesterId,String pCourseId,Integer pExamType,String pStudentId, CourseType pCourseType) throws Exception ;
+    }
 

@@ -1273,9 +1273,25 @@ module ums {
             console.log(data.entries);
             this.$scope.marksSubmissionStatusLogs = data.entries;
           });
+
+      this.fetchMarksLog();
     }
 
+    //MarksLog
+    private fetchMarksLog():void {
+      this.httpClient.get("academic/gradeSubmission/semester/"+this.$scope.inputParams.semester_id+
+          "/courseid/"+ this.$scope.current_courseId+
+          "/examType/"+this.$scope.inputParams.exam_type+
+          "/studentid/160106165"+this.$scope.inputParams.exam_type,
+          this.appConstants.mimeTypeJson,
+          (data:any, etag:string)=> {
+            console.log(data.entries);
+            //this.$scope.marksSubmissionStatusLogs = data.entries;
+            console.log("~~~~~~~~~");
+            console.log(data.entries);
 
+          });
+    }
 
     // Start of Selection Panel Components Initialization
 

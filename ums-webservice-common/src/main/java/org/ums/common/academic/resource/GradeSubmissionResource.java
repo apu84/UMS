@@ -70,4 +70,13 @@ public class GradeSubmissionResource extends MutableGradeSubmissionResource {
     return mResourceHelper.getMarksSubmissionLogs(pSemesterId,pCourseId,pExamType);
   }
 
+  @GET
+  @Path("/semester/{semester-id}/courseid/{course-id}/examType/{exam-type}/studentid/{student-id}")
+  public JsonObject getMarksLogs(final @Context Request pRequest,
+                                           final @PathParam("semester-id") Integer pSemesterId,
+                                           final @PathParam("course-id") String pCourseId,
+                                           final @PathParam("exam-type") Integer pExamType,
+                                           final @PathParam("student-id") String pStudentId) throws Exception{
+    return mResourceHelper.getMarksLogs(pSemesterId, pCourseId, pExamType, pStudentId);
+  }
 }
