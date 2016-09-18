@@ -10,10 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.ums.cache.LocalCache;
 import org.ums.common.ResourceHelper;
 import org.ums.common.builder.ExamGradeBuilder;
-import org.ums.domain.model.dto.GradeChartDataDto;
-import org.ums.domain.model.dto.MarksSubmissionStatusDto;
-import org.ums.domain.model.dto.MarksSubmissionStatusLogDto;
-import org.ums.domain.model.dto.StudentGradeDto;
+import org.ums.domain.model.dto.*;
 import org.ums.domain.model.immutable.ExamGrade;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.User;
@@ -158,7 +155,7 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
 
     if (action.equalsIgnoreCase("submit")) {
       getContentManager().updateCourseMarksSubmissionStatus(partInfoDto.getSemesterId(), partInfoDto.getCourseId(), partInfoDto.getExamType(), partInfoDto.getCourseType(), CourseMarksSubmissionStatus.WAITING_FOR_SCRUTINY);
-      getContentManager().insertGradeLog(SecurityUtils.getSubject().getPrincipal().toString(), partInfoDto.getSemesterId(), partInfoDto.getCourseId(),
+      getContentManager().insertGradeLog(SecurityUtils.getSubject().getPrincipal().toString(), currentActorRole,partInfoDto.getSemesterId(), partInfoDto.getCourseId(),
           partInfoDto.getExamType(), partInfoDto.getCourseType(), marksSubmissionStatus.getStatus(), gradeList);
       getContentManager().insertMarksSubmissionStatusLog(SecurityUtils.getSubject().getPrincipal().toString(), userRole,partInfoDto.getSemesterId(),
           partInfoDto.getCourseId(), partInfoDto.getExamType(),  CourseMarksSubmissionStatus.WAITING_FOR_SCRUTINY);
@@ -212,7 +209,7 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
       List<StudentGradeDto> allGradeList = Stream.concat(recheckList.stream(), approveList.stream()).collect(Collectors.toList());
 
 
-      getContentManager().insertGradeLog(SecurityUtils.getSubject().getPrincipal().toString(), partInfoDto.getSemesterId(), partInfoDto.getCourseId(), partInfoDto.getExamType(), partInfoDto.getCourseType(), marksSubmissionStatus.getStatus(), allGradeList);
+      getContentManager().insertGradeLog(SecurityUtils.getSubject().getPrincipal().toString(),actor, partInfoDto.getSemesterId(), partInfoDto.getCourseId(), partInfoDto.getExamType(), partInfoDto.getCourseType(), marksSubmissionStatus.getStatus(), allGradeList);
       getContentManager().insertMarksSubmissionStatusLog(SecurityUtils.getSubject().getPrincipal().toString(),actor,partInfoDto.getSemesterId(), partInfoDto.getCourseId(), partInfoDto.getExamType(), nextStatus);
 
     }
@@ -410,6 +407,25 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
     JsonObject jsonObject;
 
     for (MarksSubmissionStatusLogDto log : logList) {
+      jsonReader = Json.createReader(new StringReader(log.toString()));
+      jsonObject = jsonReader.readObject();
+      jsonReader.close();
+      children.add(jsonObject);
+    }
+    object.add("entries", children);
+    return object.build();
+  }
+
+  public JsonObject getMarksLogs(final Integer pSemesterId,final String pCourseId,final Integer pExamType,final String pStudentId) throws Exception {
+    MarksSubmissionStatusDto marksSubmissionStatusDto = getContentManager().getMarksSubmissionStatus(pSemesterId, pCourseId, pExamType);
+
+    List<MarksLogDto> logList = getContentManager().getMarksLogs(pSemesterId, pCourseId, pExamType, pStudentId, marksSubmissionStatusDto.getCourseType());
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    JsonReader jsonReader;
+    JsonObject jsonObject;
+
+    for (MarksLogDto log : logList) {
       jsonReader = Json.createReader(new StringReader(log.toString()));
       jsonObject = jsonReader.readObject();
       jsonReader.close();

@@ -1,9 +1,6 @@
 package org.ums.decorator;
 
-import org.ums.domain.model.dto.GradeChartDataDto;
-import org.ums.domain.model.dto.MarksSubmissionStatusDto;
-import org.ums.domain.model.dto.MarksSubmissionStatusLogDto;
-import org.ums.domain.model.dto.StudentGradeDto;
+import org.ums.domain.model.dto.*;
 import org.ums.domain.model.immutable.ExamGrade;
 import org.ums.domain.model.mutable.MutableExamGrade;
 import org.ums.enums.CourseMarksSubmissionStatus;
@@ -43,8 +40,8 @@ public class ExamGradeDaoDecorator  extends ContentDaoDecorator<ExamGrade, Mutab
     }
 
     @Override
-    public boolean insertGradeLog(String userId,int semesterId,String courseId,int examType,CourseType courseType,CourseMarksSubmissionStatus currentStatus,List<StudentGradeDto> gradeList) throws Exception {
-        return getManager().insertGradeLog(userId,semesterId, courseId, examType, courseType,currentStatus, gradeList);
+    public boolean insertGradeLog(String userId,String role, int semesterId,String courseId,int examType,CourseType courseType,CourseMarksSubmissionStatus currentStatus,List<StudentGradeDto> gradeList) throws Exception {
+        return getManager().insertGradeLog(userId,role,semesterId, courseId, examType, courseType,currentStatus, gradeList);
     }
 
     @Override
@@ -135,4 +132,7 @@ public class ExamGradeDaoDecorator  extends ContentDaoDecorator<ExamGrade, Mutab
         return getManager().getMarksSubmissionLogs(pSemesterId, pCourseId, pExamType);
     }
 
+    public List<MarksLogDto> getMarksLogs(Integer pSemesterId,String pCourseId,Integer pExamType,String pStudentId, CourseType pCourseType) throws Exception {
+        return getManager().getMarksLogs(pSemesterId, pCourseId, pExamType,pStudentId,pCourseType);
+    }
 }
