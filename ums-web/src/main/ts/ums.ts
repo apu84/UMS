@@ -686,6 +686,7 @@ module ums {
             }]
           }
         })
+
         .state('gradeSheetSelectionCoE', {
           url: "/gradeSheetSelectionCoE/:1",
           templateUrl: 'views/grade/grade-sheet-selection.html',

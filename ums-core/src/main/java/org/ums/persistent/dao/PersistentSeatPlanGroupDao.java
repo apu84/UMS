@@ -71,7 +71,7 @@ public class PersistentSeatPlanGroupDao extends SeatPlanGroupDaoDecorator {
 
   @Override
   public List<SeatPlanGroup> getGroupBySemesterTypeFromDb(int pSemesterId, int pExamType) {
-    String query = SELECT_ALL+" WHERE SEMESTER_ID=? AND TYPE=?";
+    String query = SELECT_ALL+" WHERE SEMESTER_ID=? AND TYPE=? order by group_no,program_id,year,semester";
     return mJdbcTemplate.query(
         query,
         new Object[]{pSemesterId,pExamType},
