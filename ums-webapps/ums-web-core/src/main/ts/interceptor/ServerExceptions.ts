@@ -11,8 +11,9 @@ module ums {
         if (response.status == 500) {
           var responseJson:ExceptionMessageModel = response.data;
           $log.debug("Internal Server Exception Occured.");
-//          notify.error("Internal Server Exception Occured.");
-          notify.error(responseJson.message);
+          if(responseJson.message) {
+            notify.error(responseJson.message);
+          }
         }
         return $q.reject(response);
       }
