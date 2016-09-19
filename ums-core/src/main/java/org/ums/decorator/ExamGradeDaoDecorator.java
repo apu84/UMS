@@ -40,8 +40,8 @@ public class ExamGradeDaoDecorator  extends ContentDaoDecorator<ExamGrade, Mutab
     }
 
     @Override
-    public boolean insertGradeLog(String userId,String role, int semesterId,String courseId,int examType,CourseType courseType,CourseMarksSubmissionStatus currentStatus,List<StudentGradeDto> gradeList) throws Exception {
-        return getManager().insertGradeLog(userId,role,semesterId, courseId, examType, courseType,currentStatus, gradeList);
+    public boolean insertGradeLog(String userId,String role, int semesterId,String courseId,int examType,CourseType courseType,CourseMarksSubmissionStatus currentStatus,CourseMarksSubmissionStatus nextStatus,List<StudentGradeDto> gradeList) throws Exception {
+        return getManager().insertGradeLog(userId,role,semesterId, courseId, examType, courseType,currentStatus,nextStatus, gradeList);
     }
 
     @Override

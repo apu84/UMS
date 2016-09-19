@@ -1,5 +1,6 @@
 package org.ums.persistent.dao;
 
+import org.apache.commons.lang.WordUtils;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -764,11 +765,11 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
   }
 
   @Override
-  public boolean insertGradeLog(String userId,String pRole,int pSemesterId,String pCourseId,int pExamType,CourseType courseType,CourseMarksSubmissionStatus currentStatus,List<StudentGradeDto> pGradeList) throws Exception {
-    batchInsertGradeLog(userId,pRole,pSemesterId, pCourseId, pExamType,courseType,currentStatus, pGradeList);
+  public boolean insertGradeLog(String userId,String pRole,int pSemesterId,String pCourseId,int pExamType,CourseType courseType,CourseMarksSubmissionStatus currentStatus,CourseMarksSubmissionStatus nextStatus,List<StudentGradeDto> pGradeList) throws Exception {
+    batchInsertGradeLog(userId,pRole,pSemesterId, pCourseId, pExamType,courseType,currentStatus,nextStatus, pGradeList);
     return true;
   }
-  public void batchInsertGradeLog(String userId,String pRole, int pSemesterId,String pCourseId,int pExamType,CourseType courseType,CourseMarksSubmissionStatus currentStatus,List<StudentGradeDto> pGradeList){
+  public void batchInsertGradeLog(String userId,String pRole, int pSemesterId,String pCourseId,int pExamType,CourseType courseType,CourseMarksSubmissionStatus currentStatus,CourseMarksSubmissionStatus nextStatus,List<StudentGradeDto> pGradeList){
     String sql ="";
     if(courseType==CourseType.THEORY)
       sql=INSERT_THEORY_LOG;
@@ -797,19 +798,18 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
             else ps.setFloat(10, gradeDto.getPartB());
             ps.setFloat(11, gradeDto.getTotal());
             ps.setString(12, gradeDto.getGradeLetter());
-            ps.setInt(13, gradeDto.getStatusId());
+            ps.setInt(13, nextStatus.getId());
             ps.setInt(14, gradeDto.getRecheckStatusId());
           }
           else{
-            ps.setNull(6, Types.NULL);
             ps.setNull(7, Types.NULL);
             ps.setNull(8, Types.NULL);
             ps.setNull(9, Types.NULL);
             ps.setNull(10, Types.NULL);
             ps.setNull(11, Types.NULL);
-            ps.setInt(12, gradeDto.getStatus().getId());
-            ps.setInt(13, gradeDto.getRecheckStatusId());
-
+            ps.setNull(12, Types.NULL);
+            ps.setInt(13, nextStatus.getId());
+            ps.setInt(14, gradeDto.getRecheckStatusId());
           }
         }
         if(courseType==CourseType.SESSIONAL) {
@@ -896,16 +896,21 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
     @Override
     public MarksLogDto mapRow(ResultSet resultSet, int i) throws SQLException {
       MarksLogDto log = new MarksLogDto();
-
+      Float nullValue=null;
       log.setUserId(resultSet.getString("USER_ID"));
-      log.setRoleName(resultSet.getString("ROLE"));
+      log.setRoleName(WordUtils.capitalize(resultSet.getString("ROLE")));
       log.setUserName(resultSet.getString("EMPLOYEE_NAME"));
       log.setInsertedOn(resultSet.getString("INSERTED_ON"));
       log.setQuiz(resultSet.getFloat("QUIZ"));
+      if(resultSet.wasNull()) { log.setQuiz(nullValue);}
       log.setClassPerformance(resultSet.getFloat("CLASS_PERFORMANCE"));
+      if(resultSet.wasNull()) { log.setClassPerformance(nullValue);}
       log.setPartA(resultSet.getFloat("PART_A"));
+      if(resultSet.wasNull()) { log.setPartA(nullValue);}
       log.setPartB(resultSet.getFloat("PART_B"));
+      if(resultSet.wasNull()) { log.setPartB(nullValue);}
       log.setTotal(resultSet.getFloat("TOTAL"));
+      if(resultSet.wasNull()) { log.setTotal(nullValue);}
       log.setGradeLetter(resultSet.getString("GRADE_LETTER"));
       log.setStatus(CourseMarksSubmissionStatus.values()[resultSet.getInt("STATUS")]);
       log.setStatusName(CourseMarksSubmissionStatus.values()[resultSet.getInt("STATUS")].getLabel());

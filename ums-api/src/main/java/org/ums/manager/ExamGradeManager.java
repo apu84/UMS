@@ -19,7 +19,7 @@ public interface ExamGradeManager extends ContentManager<ExamGrade, MutableExamG
     public MarksSubmissionStatusDto getMarksSubmissionStatus(int semesterId,String courseId,int examType) throws Exception;
     public List<MarksSubmissionStatusDto> getMarksSubmissionStatus(int pSemesterId,int pExamType,int pProgramId,String teacherId,String deptId,String userRole,int status) throws Exception;
     public boolean saveGradeSheet(int semesterId,String courseId,int examType,CourseType courseType,List<StudentGradeDto> gradeList) throws Exception;
-    public boolean insertGradeLog(String userId,String role,int semesterId,String courseId,int examType,CourseType courseType,CourseMarksSubmissionStatus currentStatus,List<StudentGradeDto> gradeList) throws Exception;
+    public boolean insertGradeLog(String userId,String role,int semesterId,String courseId,int examType,CourseType courseType,CourseMarksSubmissionStatus currentStatus,CourseMarksSubmissionStatus nextStatus,List<StudentGradeDto> gradeList) throws Exception;
     public int insertMarksSubmissionStatusLog(String pUserId,String pRole,int pSemesterId,String pCourseId,int pExamType,CourseMarksSubmissionStatus status) throws Exception ;
     public boolean updateGradeStatus_Save(int pSemesterId,String pCourseId,int pExamType,CourseType courseType,List<StudentGradeDto> recheckList,List<StudentGradeDto> approveList) throws Exception ;
     public boolean updateGradeStatus_Recheck(int pSemesterId,String pCourseId,int pExamType,CourseType courseType,List<StudentGradeDto> recheckList,List<StudentGradeDto> approveList) throws Exception ;
