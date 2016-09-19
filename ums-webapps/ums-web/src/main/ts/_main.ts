@@ -80,6 +80,9 @@
 /// <reference path='service/ExamRoutineService.ts'/>
 /// <reference path='service/SeatPlanService.ts'/>
 /// <reference path='service/SemesterService.ts'/>
+/// <reference path='service/CommonService.ts'/>
+/// <reference path='service/ClassRoutineService.ts'/>
+/// <reference path='service/ExamGradeService.ts'/>
 
 /// <reference path='controller/student/NewStudent.ts'/>
 /// <reference path='controller/semester/NewSemester.ts'/>
@@ -95,6 +98,7 @@
 /// <reference path='controller/dept/TeacherAssignment.ts'/>
 /// <reference path='controller/dept/CourseTeacher.ts'/>
 /// <reference path='controller/dept/Examiner.ts'/>
+/// <reference path='controller/dept/TeachersRoutine.ts'/>
 
 
 /// <reference path='controller/common/academic/ClassRoomInfo.ts'/>

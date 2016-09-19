@@ -1,5 +1,3 @@
-///<reference path="../../service/HttpClient.ts"/>
-///<reference path="../../service/CommonService.ts"/>
 module ums {
   export interface IMarksSubmissionScope extends ng.IScope {
     data:any;
@@ -870,7 +868,7 @@ module ums {
 
       var parentRow = document.getElementById("row_" + student_id);
       console.log(parentRow);
-      var tdArray = parentRow.getElementsByTagName('td');
+      var tdArray:HTMLTableColElement[] = parentRow.getElementsByTagName('td');
 
       if (row_error == true) {
         for (var i = 0; i < tdArray.length; i++) {
