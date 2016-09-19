@@ -7,10 +7,7 @@ import org.ums.cache.LocalCache;
 import org.ums.common.ResourceHelper;
 import org.ums.common.academic.resource.SemesterResource;
 import org.ums.common.builder.CourseBuilder;
-import org.ums.domain.model.immutable.Course;
-import org.ums.domain.model.immutable.Employee;
-import org.ums.domain.model.immutable.Program;
-import org.ums.domain.model.immutable.Syllabus;
+import org.ums.domain.model.immutable.*;
 import org.ums.domain.model.mutable.MutableCourse;
 import org.ums.manager.*;
 import org.ums.persistent.model.PersistentCourse;
@@ -30,6 +27,9 @@ import java.util.stream.Collectors;
 public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, String> {
   @Autowired
   private CourseManager mManager;
+
+  @Autowired
+  private UserManager mUserManager;
 
   @Autowired
   private SemesterSyllabusMapManager mSemesterSyllabusMapManager;
@@ -109,8 +109,10 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
   }
 
   public JsonObject getCourses(final Integer pSemesterId, final int pProgramType, final Request pRequest, final UriInfo pUriInfo) throws Exception{
-    String employeeId = SecurityUtils.getSubject().getPrincipal().toString();
-    Employee employee = mEmployeeManager.get(employeeId);
+    String userId = SecurityUtils.getSubject().getPrincipal().toString();
+    User user = mUserManager.get(userId);
+    String employeeId = user.getEmployeeId();
+    Employee employee = mEmployeeManager.getByEmployeeId(employeeId);
     String deptId = employee.getDepartment().getId();
     List<Program> program = mProgramManager
         .getAll()

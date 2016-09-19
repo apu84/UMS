@@ -5,8 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.immutable.Program;
+import org.ums.domain.model.immutable.User;
 import org.ums.manager.EmployeeManager;
 import org.ums.manager.ProgramManager;
+import org.ums.manager.UserManager;
 import org.ums.persistent.model.PersistentClassRoom;
 import org.ums.cache.LocalCache;
 import org.ums.common.ResourceHelper;
@@ -30,6 +32,9 @@ public class ClassRoomResourceHelper extends ResourceHelper<ClassRoom, MutableCl
 
   @Autowired
   private ClassRoomManager mManager;
+
+  @Autowired
+  private UserManager mUserManager;
 
   @Autowired
   private ClassRoomBuilder mBuilder;
@@ -74,7 +79,10 @@ public class ClassRoomResourceHelper extends ResourceHelper<ClassRoom, MutableCl
 
   public JsonObject getRooms(UriInfo pUriInfo) throws Exception{
 
-    Employee employee = mEmployeeManager.get(SecurityUtils.getSubject().getPrincipal().toString());
+    String userId = SecurityUtils.getSubject().getPrincipal().toString();
+    User user = mUserManager.get(userId);
+    String employeeId = user.getEmployeeId();
+    Employee employee = mEmployeeManager.getByEmployeeId(employeeId);
     String deptId = employee.getDepartment().getId();
     List<Program> programs = mProgramManager
         .getAll()
@@ -84,7 +92,7 @@ public class ClassRoomResourceHelper extends ResourceHelper<ClassRoom, MutableCl
     List<ClassRoom> roomList = getContentManager()
         .getAll()
         .stream()
-        .filter(room-> Integer.parseInt(room.getDeptId())==programs.get(0).getId())
+        .filter(room-> room.getDeptId().equals(deptId))
         .sorted(Comparator.comparing(ClassRoom::getId))
         .collect(Collectors.toList());
 

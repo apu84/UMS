@@ -86,6 +86,7 @@
 /// <reference path='directive/CourseRegTypeLegend.ts'/>
 /// <reference path='directive/Notification.ts'/>
 /// <reference path='directive/EmitLastRepeaterElement.ts'/>
+/// <reference path='directive/TimeLogging.ts'/>
 
 /// <reference path='interceptor/Unauthorized.ts'/>
 /// <reference path='interceptor/ValidationExceptions.ts'/>
@@ -101,6 +102,7 @@
 ///<reference path='service/SeatPlanService.ts'/>
 ///<reference path='service/ExamGradeService.ts'/>
 ///<reference path='service/ExamRoutineService.ts'/>
+///<reference path='service/TimeTracker.ts'/>
 
 ///<reference path='model/ExamRoutineModel.ts'/>
 

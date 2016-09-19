@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.NullValueInNestedPathException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
 import org.ums.common.ResourceHelper;
@@ -13,13 +14,11 @@ import org.ums.common.academic.resource.RoutineResource;
 import org.ums.common.builder.Builder;
 import org.ums.common.builder.RoutineBuilder;
 import org.ums.common.report.generator.ClassRoutineGenerator;
-import org.ums.domain.model.immutable.Routine;
-import org.ums.domain.model.immutable.Student;
+import org.ums.domain.model.immutable.*;
 import org.ums.domain.model.mutable.MutableProgram;
 import org.ums.domain.model.mutable.MutableRoutine;
 import org.ums.domain.model.mutable.MutableSemester;
-import org.ums.manager.RoutineManager;
-import org.ums.manager.StudentManager;
+import org.ums.manager.*;
 import org.ums.persistent.model.PersistentProgram;
 import org.ums.persistent.model.PersistentRoutine;
 import org.ums.persistent.model.PersistentSemester;
@@ -48,7 +47,19 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
   private RoutineManager mManager;
 
   @Autowired
+  private UserManager mUserManager;
+
+  @Autowired
   private StudentManager mStudentManager;
+
+  @Autowired
+  private EmployeeManager mEmployeeManager;
+
+  @Autowired
+  private DepartmentManager mDepartmentManager;
+
+  @Autowired
+  private ProgramManager mProgramManager;
 
   @Autowired
   private RoutineBuilder mBuilder;
@@ -142,21 +153,31 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
     return object.build();
   }
 
-  public JsonObject getRoutineForEmployee(final int semesterId, final int programId,
+  public JsonObject getRoutineForEmployee(final int semesterId,
                                           final int academicYear,
                                           final int academicSemester,
                                           final String section,
                                           final Request pRequest,
                                           final UriInfo pUriInfo) throws Exception {
     List<Routine> routines = new ArrayList<>();
+    String userId = SecurityUtils.getSubject().getPrincipal().toString();
+    User user = mUserManager.get(userId);
+    String employeeId = user.getEmployeeId();
+    Employee employee = mEmployeeManager.getByEmployeeId(employeeId);
+    String deptId = employee.getDepartment().getId();
+    List<Program> programLIst = mProgramManager
+        .getAll()
+        .stream()
+        .filter(pProgram -> pProgram.getDepartmentId().equals(deptId))
+        .collect(Collectors.toList());
     try{
       routines = getContentManager().
-          getEmployeeRoutine(semesterId, programId, academicYear, academicSemester).stream()
+          getEmployeeRoutine(semesterId, programLIst.get(0).getId(), academicYear, academicSemester).stream()
           .filter(routine-> routine.getSection().charAt(0)== section.charAt(0))
           .sorted(Comparator.comparing(Routine::getDay).thenComparing(Routine::getStartTime))
           .collect(Collectors.toList());
 
-    }catch (Exception e){
+    }catch (EmptyResultDataAccessException e){
 
       //// TODO: 17-Sep-16 : check for catching proper exception
 

@@ -22,7 +22,7 @@
                         <div class="col-md-8">
                             <select class="form-control required" data-ng-model="semesterId">
                                 <option value="">Selected a Semester</option>
-                                <option data-ng-repeat="s in semesterArr" value="s.id">{{s.name}}</option>
+                                <option data-ng-repeat="s in semesterArr" value="{{s.id}}">{{s.name}}</option>
                             </select>
                         </div>
                     </div>
@@ -68,13 +68,13 @@
 
                 </div>
                 <div class="form-actions text-right pal">
-                    <button type="button" class="btn btn-success" data-ng-click="fetchGrid()">Search</button>
+                    <button type="button" class="btn btn-success" data-ng-click="searchForRoutineData()">Search</button>
                 </div>
             </form>
         </div>
     </div>
-    <div class="arrowClass pull-left" data-ng-click="resetDivs()" id="arrowDiv"><i
-            class="fa fa-angle-double-right fa-4x"></i></i> </div>
+    <div class="arrowClass pull-left" data-ng-click="resetDivs()" id="arrowDiv">
+        <i class="fa fa-angle-double-right fa-4x"></i>  </div>
 
     <div class="orgRightClass pull-left" id="rightDiv">
 
@@ -82,16 +82,28 @@
             <div class="panel-heading">Class Routine<span
                         class="subtitle"></span></div>
             <div class="panel-body">
-                <div data-jq-grid=""
-                     data-config="gridOptions"
-                     data-addnew="true"
-                     data="classRoutineData"
-                     gridid="classRoutine"
-                     pagerid="classRoutinePager"
-                     grid="grid"
-                     inline-nav-options="inlineNavOptions"
-                     data-ng-if="gridOptions">
+                <div class="row">
+                    <button class="btn btn-success">Add Data</button>
+                </div>
+                <div class="row">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Day</th>
+                                <th>Section</th>
+                                <th>Course No</th>
+                                <th>Start Time</th>
+                                <th>End Time</th>
+                                <th>Room No</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="r in routineArr">
+                                <th>{{dates[r.day]}}</th>
 
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

@@ -237,6 +237,22 @@ public class PersistentStudentDao extends StudentDaoDecorator {
     return mJdbcTemplate.query(query2,new Object[]{pSemesterId,pCourseId},new SpStudentRowMapperForCCI());
   }
 
+  @Override
+  public List<Student> getStudentBySemesterIdAndExamDateForCCI(Integer pSemesterId, String pExamDate) {
+    String query = "select distinct(s.student_id),p.program_short_name,s.year,s.semester,a.application_type,p.program_id from sp_student s,mst_program p, " +
+        "(select distinct(application_cci.course_id),student_id,application_type,exam_date from application_cci,exam_routine where application_cci.course_id=exam_routine.course_id and exam_routine.exam_type=2 and exam_date=to_date(?,'MM-DD-YYYY') and semester_id=? )a  " +
+        "where a.student_id=s.student_id and s.program_id=p.program_id  order by  p.program_short_name,s.student_id";
+
+    String query2= " select s.student_id,p.program_short_name,s.CURRENT_YEAR,s.CURRENT_SEMESTER,application_type,s.program_id from STUDENTS s,mst_program p,( " +
+        "         select course_no,student_id,application_type from exam_routine r,mst_course c,       " +
+        "         (select distinct(course_id),student_id,application_type from application_cci where semester_id=? ) a         " +
+        "         where exam_type=2 and exam_date = to_date(?,'MM-DD-YYYY') and r.course_id=c.course_id and a.course_id=c.course_id order by c.course_no,a.student_id) a       " +
+        "         where a.student_id=s.student_id and s.program_id=p.program_id";
+
+    return mJdbcTemplate.query(query2,new Object[]{pSemesterId,pExamDate},new SpStudentRowMapperForCCI2());
+
+  }
+
   class StudentRowMapper implements RowMapper<Student> {
     @Override
     public Student mapRow(ResultSet rs, int rowNum) throws SQLException {
