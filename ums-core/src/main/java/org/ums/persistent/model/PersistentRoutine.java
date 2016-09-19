@@ -35,6 +35,7 @@ public class PersistentRoutine implements MutableRoutine {
   private String mLastModified;
   private Integer mSemesterId;
   private String mCourseId;
+  private String mCourseNo;
   private int mDuration;
   private String mRoomNo;
   private int mProgramId;
@@ -57,6 +58,7 @@ public class PersistentRoutine implements MutableRoutine {
     mLastModified = pPersistentRoutine.getLastModified();
     mSemesterId = pPersistentRoutine.getSemesterId();
     mCourseId = pPersistentRoutine.getCourseId();
+    mCourseNo = pPersistentRoutine.getCourseNo();
     mDuration = pPersistentRoutine.getDuration();
     mRoomNo = pPersistentRoutine.getRoomNo();
     mDay= pPersistentRoutine.getDay();
@@ -83,6 +85,21 @@ public class PersistentRoutine implements MutableRoutine {
 
     mDuration = Integer.valueOf(duration);
     return mDuration;
+  }
+
+  @Override
+  public void setDuration(int pDuration) {
+    mDuration = pDuration;
+  }
+
+  @Override
+  public void setCourseNo(String pCourseNo) {
+    mCourseNo = pCourseNo;
+  }
+
+  @Override
+  public String getCourseNo() {
+    return mCourseNo;
   }
 
   @Override

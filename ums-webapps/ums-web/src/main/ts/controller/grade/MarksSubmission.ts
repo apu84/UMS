@@ -1,4 +1,5 @@
-///<reference path="../../../../../../ums-web-core/src/main/ts/service/HttpClient.ts"/>
+///<reference path="../../service/HttpClient.ts"/>
+///<reference path="../../service/CommonService.ts"/>
 module ums {
   export interface IMarksSubmissionScope extends ng.IScope {
     data:any;
@@ -130,11 +131,11 @@ module ums {
     shortName:string;
   }
   export class MarksSubmission {
-    public static $inject = ['$scope', 'appConstants', 'HttpClient','$stateParams', '$window', '$sce', '$q', 'notify'];
+    public static $inject = ['$scope', 'appConstants', 'HttpClient','$stateParams', '$window', '$sce', '$q', 'notify','commonService'];
 
     constructor(private $scope:IMarksSubmissionScope,
                 private appConstants:any,
-                private httpClient:HttpClient, private $stateParams:any,private $window: ng.IWindowService, private $sce: ng.ISCEService,private $q:ng.IQService,private notify: Notify) {
+                private httpClient:HttpClient, private $stateParams:any,private $window: ng.IWindowService, private $sce: ng.ISCEService,private $q:ng.IQService,private notify: Notify,private commonService:CommonService) {
 
       //console.clear();
       console.log($stateParams["1"]);
@@ -215,7 +216,7 @@ module ums {
     }
 
     private generateXls(): void {
-      this.httpClient.get("/ums-webservice-academic/gradeReport/xls/semester/"+this.$scope.inputParams.semester_id+"/courseid/"+this.$scope.current_courseId+"/examtype/"+this.$scope.inputParams.exam_type+"/coursetype/"+(this.$scope.courseType=="THEORY"?"1":"2")+"/role/"+this.$scope.currentActor, 'application/vnd.ms-excel',
+      this.httpClient.get("/ums-webservice-common/gradeReport/xls/semester/"+this.$scope.inputParams.semester_id+"/courseid/"+this.$scope.current_courseId+"/examtype/"+this.$scope.inputParams.exam_type+"/coursetype/"+(this.$scope.courseType=="THEORY"?"1":"2")+"/role/"+this.$scope.currentActor, 'application/vnd.ms-excel',
           (data: any, etag: string) => {
             var file = new Blob([data], {type: 'application/vnd.ms-excel'});
             var reader = new FileReader();
@@ -238,9 +239,9 @@ module ums {
 
       return style;
     }
-
+/*
     private fetchCurrentUser():ng.IPromise<any> {
-      var url="/ums-webservice-academic/users/current";
+      var url="/ums-webservice-common/users/current";
       var defer = this.$q.defer();
       this.httpClient.get(url, this.appConstants.mimeTypeJson,
           (json:any, etag:string) => {
@@ -253,7 +254,7 @@ module ums {
       return defer.promise;
     }
 
-
+*/
     private loadSemesters():void{
       console.log("~~~~~~~~~~~~ddd~~~~~asdfsadasadfasdfafsdf~~");
       this.fetchSemesters(this.$scope.inputParams.program_type).then((semesters:Array<IOption>)=> {
@@ -264,7 +265,7 @@ module ums {
       if(this.$scope.inputParams.program_type==11) {
         if(this.$scope.userRole=="H") {
 
-          this.fetchCurrentUser().then((departmentJson:any)=> {
+            this.commonService.fetchCurrentUser().then((departmentJson:any)=> {
             this.$scope.data.depts = [departmentJson];
             this.$scope.inputParams.dept_id=departmentJson.id;
             this.loadPrograms();
@@ -287,7 +288,7 @@ module ums {
     }
 
     private fetchSemesters(programType:number):ng.IPromise<any> {
-      var url="/ums-webservice-academic/academic/semester/program-type/"+programType+"/limit/0";
+      var url="/ums-webservice-common/academic/semester/program-type/"+programType+"/limit/0";
       var defer = this.$q.defer();
       this.httpClient.get(url, this.appConstants.mimeTypeJson,
           (json:any, etag:string) => {
@@ -441,7 +442,7 @@ module ums {
 
 
     private downloadPdf():void {
-      this.httpClient.get("/ums-webservice-academic/gradeReport/pdf/semester/"+this.$scope.inputParams.semester_id+"/courseid/"+this.$scope.current_courseId+"/examtype/"+this.$scope.current_examType+"/role/"+this.$scope.currentActor, 'application/pdf',
+      this.httpClient.get("/ums-webservice-common/gradeReport/pdf/semester/"+this.$scope.inputParams.semester_id+"/courseid/"+this.$scope.current_courseId+"/examtype/"+this.$scope.current_examType+"/role/"+this.$scope.currentActor, 'application/pdf',
 
           (data:any, etag:string) => {
             var file = new Blob([data], {type: 'application/pdf'});

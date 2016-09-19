@@ -14,6 +14,7 @@ public interface Routine extends Serializable,LastModifier,EditType<MutableRouti
   Semester getSemester() throws Exception;
   Program getProgram() throws Exception;
   String getCourseId();
+  String getCourseNo();
   int getDay();
   String getSection();
   int getAcademicYear();

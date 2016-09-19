@@ -36,5 +36,11 @@ public class MutableGradeSubmissionResource extends Resource {
         return mResourceHelper.recheckRequestApprove(pJsonObject);
     }
 
+    @PUT
+    @Path("/gradeSubmissionDeadLine")
+    public Response updateGradeSubmissionDeadLine(final JsonObject pJsonObject) throws Exception{
+        return mResourceHelper.updateGradeSubmissionDeadLine(pJsonObject,mUriInfo);
+    }
+
 
 }

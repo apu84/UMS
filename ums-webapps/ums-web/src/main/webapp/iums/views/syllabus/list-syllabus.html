@@ -14,6 +14,7 @@
                 <div class="table-container" >
                     <div class="row mbl">
                         <div class="col-lg-6">
+                            <!--
                             <div class="input-group input-group-sm mbs"><span class="input-group-btn">
                       <button type="button" data-toggle="dropdown" class="btn btn-danger dropdown-toggle">
                           Filter
@@ -33,12 +34,14 @@
                       <button type="button" data-toggle="dropdown" class="btn btn-success dropdown-toggle">Search
                       </button></span>
                             </div>
+                            -->
                         </div>
                         <div class="col-lg-6">
                             <div class="actions" style="text-align: right;"><a href="#/createSyllabus" class="btn btn-info btn-sm"><i
                                     class="fa fa-plus"></i>&nbsp;
                                 New Syllabus</a>&nbsp;
-                                <div class="btn-group"><a href="javascript:void(0);" data-toggle="dropdown"
+                                <div class="btn-group" style="display: none;">
+                                    <a href="javascript:void(0);" data-toggle="dropdown"
                                                           class="btn btn-warning btn-sm dropdown-toggle"><i class="fa fa-wrench"></i>&nbsp;
                                     Tools</a>
                                     <ul class="dropdown-menu pull-right">
@@ -70,13 +73,14 @@
                                 <td>{{syllabus.program_name}}</td>
                                 <td>{{syllabus.semester_name}}</td>
                                 <td>
+                                    <!--
                                     <button type="button" class="btn btn-default btn-xs"><i class="fa fa-edit"></i>&nbsp;
                                         Edit
                                     </button>
                                     <button type="button" class="btn btn-default btn-xs"><i class="fa fa-times"></i>&nbsp;
                                         Delete
                                     </button>
-
+                                    -->
                                     <a href="#/viewFullSyllabus/{{syllabus.id}}" class="btn btn-default btn-xs"><i class="fa fa-book"></i>&nbsp;
                                         Show Courses</a>
                                     </button>
@@ -90,7 +94,7 @@
                         </table>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" style="display: none;">
                     <div class="col-lg-6">
                         <div class="pagination-panel">
                             Page

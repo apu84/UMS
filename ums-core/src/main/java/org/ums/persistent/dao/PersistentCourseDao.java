@@ -16,8 +16,8 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentCourseDao extends CourseDaoDecorator {
-  static String SELECT_ALL = "SELECT COURSE_ID, COURSE_NO, COURSE_TITLE, CRHR, SYLLABUS_ID, OPT_GROUP_ID, OFFER_BY," +
-      "VIEW_ORDER, YEAR, SEMESTER, COURSE_TYPE, COURSE_CATEGORY,PAIR_COURSE_ID, LAST_MODIFIED,null as TOTAL_APPLIED FROM MST_COURSE ";
+  static String SELECT_ALL = "SELECT MST_COURSE.COURSE_ID, COURSE_NO, COURSE_TITLE, CRHR, SYLLABUS_ID, OPT_GROUP_ID, OFFER_BY," +
+      "VIEW_ORDER, YEAR, SEMESTER, COURSE_TYPE, COURSE_CATEGORY,PAIR_COURSE_ID, LAST_MODIFIED,null as TOTAL_APPLIED FROM MST_COURSE,COURSE_SYLLABUS_MAP ";
   static String UPDATE_ONE = "UPDATE MST_COURSE SET COURSE_NO = ?, COURSE_TITLE = ?, CRHR = ?, SYLLABUS_ID = ?, " +
       "OPT_GROUP_ID = ?, OFFER_BY = ?, VIEW_ORDER = ?, YEAR = ?, SEMESTER = ?, COURSE_TYPE = ?, LAST_MODIFIED = " + getLastModifiedSql() + " ";
   static String DELETE_ONE = "DELETE FROM MST_COURSE ";
@@ -54,7 +54,7 @@ public class PersistentCourseDao extends CourseDaoDecorator {
   }
 
   public Course get(final String pId) throws Exception {
-    String query = SELECT_ALL + "WHERE COURSE_ID = ? ";
+    String query = SELECT_ALL + "WHERE MST_COURSE.COURSE_ID = ? And MST_COURSE.COURSE_ID=COURSE_SYLLABUS_MAP.COURSE_ID";
     return mJdbcTemplate.queryForObject(query, new Object[]{pId}, new CourseRowMapper());
   }
 
@@ -102,7 +102,7 @@ public class PersistentCourseDao extends CourseDaoDecorator {
 
   @Override
   public List<Course> getBySyllabus(String pSyllabusId) {
-    String query = SELECT_ALL + "WHERE SYLLABUS_ID = ? " + ORDER_BY;
+    String query = SELECT_ALL + "WHERE SYLLABUS_ID = ?  And COURSE_SYLLABUS_MAP.Course_Id=MST_COURSE.Course_Id " + ORDER_BY;
     return mJdbcTemplate.query(query, new Object[]{pSyllabusId}, new CourseRowMapper());
   }
 

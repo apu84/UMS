@@ -11,6 +11,7 @@ import org.ums.domain.model.dto.GradeChartDataDto;
 import org.ums.domain.model.dto.MarksSubmissionStatusDto;
 import org.ums.domain.model.dto.StudentGradeDto;
 import org.ums.domain.model.immutable.ExamGrade;
+import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.User;
 import org.ums.domain.model.mutable.MutableExamGrade;
 import org.ums.enums.CourseMarksSubmissionStatus;
@@ -18,6 +19,7 @@ import org.ums.enums.CourseType;
 import org.ums.enums.RecheckStatus;
 import org.ums.enums.StudentMarksSubmissionStatus;
 import org.ums.manager.ExamGradeManager;
+import org.ums.manager.SemesterManager;
 import org.ums.manager.UserManager;
 import org.ums.persistent.model.PersistentExamGrade;
 import org.ums.resource.ResourceHelper;
@@ -26,7 +28,10 @@ import javax.json.*;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.io.StringReader;
+import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -43,6 +48,9 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
 
   @Autowired
   private UserManager mUserManager;
+
+  @Autowired
+  private SemesterManager mSemesterManager;
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
@@ -378,6 +386,18 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
     }
 
 
+    Collections.sort(marksSubmissionStatusDtoList, new Comparator<MarksSubmissionStatusDto>() {
+
+      @Override
+      public int compare(MarksSubmissionStatusDto o1, MarksSubmissionStatusDto o2) {
+        int c;
+        c = o1.getProgramShortname().compareTo(o2.getProgramShortname());
+        if(c==0)
+          c=o1.getCourseNo().compareTo(o2.getCourseNo());
+        return c;
+      }
+    });
+
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
@@ -386,6 +406,7 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
       PersistentExamGrade examGrade= new PersistentExamGrade();
       examGrade.setExamDate(marksSubmissionStatusDto.getExamDate());
       examGrade.setProgramShortName(marksSubmissionStatusDto.getProgramShortname());
+      examGrade.setCourseId(marksSubmissionStatusDto.getCourseId());
       examGrade.setCourseNo(marksSubmissionStatusDto.getCourseNo());
       examGrade.setCourseTitle(marksSubmissionStatusDto.getCourseTitle());
       examGrade.setCourseCreditHour(marksSubmissionStatusDto.getCourseCreditHour());
@@ -400,6 +421,47 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
     object.add("entries", children);
     localCache.invalidate();
     return object.build();
+  }
+
+
+  public Response updateGradeSubmissionDeadLine(JsonObject pJsonObject,UriInfo pUriInfo) throws Exception{
+
+    JsonArray entries = pJsonObject.getJsonArray("entries");
+    List<MarksSubmissionStatusDto> marksSubmissionStatusDtos = new ArrayList<>();
+
+
+    boolean isSemesterValid=true;
+    for(int i=0;i<entries.size();i++){
+      JsonObject jsonObject = entries.getJsonObject(i);
+      MutableExamGrade examGrade = new PersistentExamGrade();
+      LocalCache  localCache = new LocalCache();
+      getBuilder().build(examGrade,jsonObject,localCache);
+      if(i==0){
+        Semester semester = mSemesterManager.get(examGrade.getSemesterId());
+        if(semester.getStatus().getValue()!=1 ){
+          isSemesterValid=false;
+          break;
+        }
+      }
+
+      MarksSubmissionStatusDto marksSubmissionStatusDto = new MarksSubmissionStatusDto();
+      marksSubmissionStatusDto.setExamDate(examGrade.getExamDate());
+      marksSubmissionStatusDto.setSemesterId(examGrade.getSemesterId());
+      marksSubmissionStatusDto.setExamType(examGrade.getExamTypeId());
+      marksSubmissionStatusDto.setCourseId(examGrade.getCourseId());
+      marksSubmissionStatusDtos.add(marksSubmissionStatusDto);
+    }
+
+    if(isSemesterValid){
+      getContentManager().updateForGradeSubmissionDeadLine(marksSubmissionStatusDtos);
+
+    }
+
+
+    URI contextURI = null;
+    Response.ResponseBuilder builder = Response.created(contextURI);
+    builder.status(Response.Status.CREATED);
+    return builder.build();
   }
 
 }

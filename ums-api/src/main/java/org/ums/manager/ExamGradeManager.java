@@ -39,6 +39,6 @@ public interface ExamGradeManager extends ContentManager<ExamGrade, MutableExamG
     public int checkSize(Integer pSemesterId,Integer pExamType, String pExamDate);
     public int insertGradeSubmissionDeadLineInfo(Integer pSemesterId,Integer pExamType, String pExamDate);
     public List<MarksSubmissionStatusDto> getGradeSubmissionDeadLine(Integer pSemesterId, Integer pExamType, String pExamDate);
-
+    public int updateForGradeSubmissionDeadLine(List<MarksSubmissionStatusDto> pMarksSubmissionStatusDtos) throws Exception;
 }
 

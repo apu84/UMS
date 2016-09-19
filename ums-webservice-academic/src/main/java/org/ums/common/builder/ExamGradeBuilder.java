@@ -35,6 +35,10 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
             pBuilder.add("programShortName",pReadOnly.getProgramShortName());
         }
 
+        if(pReadOnly.getCourseId()!=null){
+            pBuilder.add("courseId",pReadOnly.getCourseId());
+        }
+
         if(pReadOnly.getCourseNo()!=null){
             pBuilder.add("courseNo",pReadOnly.getCourseNo());
         }
@@ -59,6 +63,16 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
 
     @Override
     public void build(MutableExamGrade pMutable, JsonObject pJsonObject, final LocalCache pLocalCache) throws Exception {
+        if(pJsonObject.getString("lastSubmissionDate")!=null){
+            pMutable.setExamDate(pJsonObject.getString("lastSubmissionDate"));
+        }
+        if(pJsonObject.getString("semesterId")!=null){
+            pMutable.setSemesterId(Integer.parseInt(pJsonObject.getString("semesterId")));
+        }
+        pMutable.setExamTypeId(pJsonObject.getInt("examType"));
+        if(pJsonObject.getString("courseId")!=null){
+            pMutable.setCourseId(pJsonObject.getString("courseId"));
+        }
     }
 
     public void build(MarksSubmissionStatusDto partInfoDto,JsonObject pJsonObject) throws Exception{

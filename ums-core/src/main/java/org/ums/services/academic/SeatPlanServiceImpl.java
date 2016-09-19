@@ -15,6 +15,7 @@ import org.ums.response.type.GenericMessageResponse;
 import org.ums.response.type.GenericResponse;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by Monjur-E-Morshed Pc on 4/21/2016.
@@ -624,6 +625,9 @@ public class SeatPlanServiceImpl implements SeatPlanService {
       List<SpStudent> students = mSpStudentManager.getStudentByCourseIdAndSemesterIdForSeatPlanForCCI(app.getCourseId(),pSemester);
       studentMap.put(app.getCourseId(),students);
     }
+
+
+
     return studentMap;
   }
   Map<String,List<SpStudent>> initiateStudentsBasedOnProgramYearSemesterStatus() throws Exception{

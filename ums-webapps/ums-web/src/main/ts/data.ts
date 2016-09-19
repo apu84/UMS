@@ -34,7 +34,9 @@
     '/publishSeatPlan': {title: 'Publish Seat Plan', 'breadcrumb': ['Seat Plan','Publish']},
     '/examiner': {title: 'Assign Preparer-Scrutinizer', 'breadcrumb': ['Preparer-Scrutinizer']},
     '/courseMaterial': {title: 'Course Materials', 'breadcrumb': ['Course Materials']},
-    '/studentCourseMaterial': {title: 'Course Materials', 'breadcrumb': ['Course Materials']}
+    '/studentCourseMaterial': {title: 'Course Materials', 'breadcrumb': ['Course Materials']},
+    '/gradeSubmissionDeadLine': {title: 'Grade Submission Deadline', 'breadcrumb': ['Grade Submission Deadline']}
+
   };
 
   $.fn.Data.get = function (id) {

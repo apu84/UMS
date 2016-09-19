@@ -215,6 +215,13 @@ public class UMSContext {
   }
 
   @Bean
+  AppSettingManager appSettingManager(){
+    AppSettingCache appSettingCache = new AppSettingCache(mCacheFactory.getCacheManager());
+    appSettingCache.setManager(new PersistentAppSettingDao(mTemplateFactory.getJdbcTemplate()));
+    return appSettingCache;
+  }
+
+  @Bean
   CourseTeacherManager courseTeacherManager() {
     CourseTeacherCache courseTeacherCache = new CourseTeacherCache(mCacheFactory.getCacheManager());
     courseTeacherCache.setManager(new PersistentCourseTeacherDao(mTemplateFactory.getJdbcTemplate()));

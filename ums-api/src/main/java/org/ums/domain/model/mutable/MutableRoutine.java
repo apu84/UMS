@@ -13,6 +13,7 @@ public interface MutableRoutine extends Routine,Mutable,MutableLastModifier,Muta
   void setSemester(final Semester pSemester);
   void setProgram(final Program pProgram);
   void setCourseId(final String courseId);
+  void setCourseNo(final String pCourseNo);
   void setDay(final int dayId);
   void setSection(final String pSection);
   void setAcademicYear(final int pAcademicYear);
@@ -20,4 +21,5 @@ public interface MutableRoutine extends Routine,Mutable,MutableLastModifier,Muta
   void setStartTime(final String pStartTime);
   void setEndTime(final String pEndTime);
   void setRoomNo(final String pRoomNo);
+  void setDuration(final int mDuration);
 }

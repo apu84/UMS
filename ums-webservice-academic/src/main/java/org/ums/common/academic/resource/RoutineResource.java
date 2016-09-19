@@ -1,15 +1,21 @@
 package org.ums.common.academic.resource;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import org.ums.common.Resource;
 import org.ums.manager.RoutineManager;
-import org.ums.resource.Resource;
+import org.ums.statistics.LoggerFactory;
 
 import javax.json.JsonObject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.StreamingOutput;
+import java.io.IOException;
+import java.io.OutputStream;
 
 
 @Component
@@ -18,6 +24,7 @@ import javax.ws.rs.core.Response;
 @Consumes(Resource.MIME_TYPE_JSON)
 public class RoutineResource extends MutableRoutineResource{
 
+  private static Logger mLogger = org.slf4j.LoggerFactory.getLogger(RoutineResource.class);
   @Autowired
   RoutineManager mManager;
 
@@ -32,6 +39,23 @@ public class RoutineResource extends MutableRoutineResource{
   @Path("/routineForTeacher/{teacherId}")
   public JsonObject getRoutineForTeachers(final @Context Request pRequest, final @PathParam("teacherId") String teacherId) throws Exception{
     return mRoutineResourceHelper.getRoutineForTeacher(teacherId,pRequest,mUriInfo);
+  }
+
+  @GET
+  @Path("/routineReportTeacher")
+  @Produces("application/pdf")
+  public StreamingOutput createTeacherRoutineReport(final @Context Request pRequest) throws Exception{
+    return new StreamingOutput() {
+      @Override
+      public void write(OutputStream pOutputStream) throws IOException, WebApplicationException {
+        try{
+          mRoutineResourceHelper.getRoutineReportForTeacher(pOutputStream,pRequest,mUriInfo);
+        }catch(Exception e){
+          mLogger.error(e.getMessage());
+          throw new WebApplicationException(e);
+        }
+      }
+    };
   }
 
   @GET

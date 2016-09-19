@@ -153,11 +153,12 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
         "select  " +
         "  to_char(EXAM_ROUTINE.EXAM_DATE,'dd-mm-yyyy') Exam_date,  " +
         "  MST_PROGRAM.PROGRAM_SHORT_NAME,  " +
+        "  MST_COURSE.COURSE_ID,"+
         "  MST_COURSE.COURSE_NO,  " +
         "  MST_COURSE.COURSE_TITLE,  " +
         "  MST_COURSE.CRHR,  " +
         "  ugRegistrationResult.total_students,  " +
-        "  marksSubmissionStatus.last_submission_date  " +
+        "  to_char(marksSubmissionStatus.last_submission_date,'dd-mm-yyyy') last_submission_date  " +
         "  " +
         "from  " +
         "  EXAM_ROUTINE,  " +
@@ -532,7 +533,16 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
             " and RECHECK_STATUS="+RecheckStatus.RECHECK_TRUE .getId();
         return mJdbcTemplate.update(query,pSemesterId,pCourseId,pExamType);
     }
-    public void batchUpdateGradeStatus_Recheck(int pSemesterId,String pCourseId,int pExamType,CourseType courseType,List<StudentGradeDto> recheckList,List<StudentGradeDto> approveList){
+
+
+  @Override
+  public int updateForGradeSubmissionDeadLine(List<MarksSubmissionStatusDto> pMarksSubmissionStatusDtos) throws Exception {
+    String query="update MARKS_SUBMISSION_STATUS SET last_submission_date=to_date(?,'dd-mm-yyyy') " +
+        "where SEMESTER_ID=? AND EXAM_TYPE=? AND COURSE_ID=?";
+    return mJdbcTemplate.batchUpdate(query,getUpdateParamListForGradeSubmissionDeadLine(pMarksSubmissionStatusDtos)).length;
+  }
+
+  public void batchUpdateGradeStatus_Recheck(int pSemesterId, String pCourseId, int pExamType, CourseType courseType, List<StudentGradeDto> recheckList, List<StudentGradeDto> approveList){
 
         String query =getQuery(UPDATE_STATUS_RECHECK_RECHECK,courseType);
         mJdbcTemplate.batchUpdate(query, new BatchPreparedStatementSetter() {
@@ -577,6 +587,8 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
         });
     }
 
+
+
     @Override
     public boolean updateGradeStatus_Approve(int pSemesterId,String pCourseId,int pExamType,CourseType courseType,List<StudentGradeDto> recheckList,List<StudentGradeDto> approveList) throws Exception {
         batchUpdateGradeStatus_Approve(pSemesterId, pCourseId, pExamType,courseType, recheckList, approveList);
@@ -604,6 +616,23 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
 
         });
     }
+
+
+
+
+
+  private List<Object[]> getUpdateParamListForGradeSubmissionDeadLine(List<MarksSubmissionStatusDto> pMarksSubmissionStatusDtos)throws Exception{
+    List<Object[]> params = new ArrayList<>();
+    for(MarksSubmissionStatusDto app: pMarksSubmissionStatusDtos){
+      params.add(new Object[]{
+          app.getExamDate(),
+          app.getSemesterId(),
+          app.getExamType(),
+          app.getCourseId()
+      });
+    }
+    return params;
+  }
     class MarksSubmissionStatusRowMapper implements RowMapper<MarksSubmissionStatusDto> {
         @Override
         public MarksSubmissionStatusDto mapRow(ResultSet resultSet, int i) throws SQLException {
@@ -682,6 +711,7 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
 
             submissionStatusDto.setExamDate(pResultSet.getString("exam_date"));
             submissionStatusDto.setProgramShortname(pResultSet.getString("program_short_name"));
+            submissionStatusDto.setCourseId(pResultSet.getString("course_id"));
             submissionStatusDto.setCourseNo(pResultSet.getString("course_no"));
             submissionStatusDto.setCourseTitle(pResultSet.getString("course_title"));
             submissionStatusDto.setCourseCreditHour(pResultSet.getInt("crhr"));

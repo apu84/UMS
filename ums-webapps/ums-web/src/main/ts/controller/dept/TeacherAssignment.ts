@@ -155,6 +155,8 @@ module ums {
         assignedTeacher.teachers = this.teachersList[assignedTeacher.courseOfferedByDepartmentId];
         defer.resolve(null);
       } else {
+        console.log("================>>");
+        console.log(assignedTeacher);
         this.httpClient.get("academic/teacher/department/" + assignedTeacher.courseOfferedByDepartmentId, this.appConstants.mimeTypeJson,
             (data: ITeachers, etag: string) => {
               this.teachersList[assignedTeacher.courseOfferedByDepartmentId] = data.entries;
