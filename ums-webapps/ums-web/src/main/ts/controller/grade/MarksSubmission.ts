@@ -868,7 +868,7 @@ module ums {
 
       var parentRow = document.getElementById("row_" + student_id);
       console.log(parentRow);
-      var tdArray:HTMLTableColElement[] = parentRow.getElementsByTagName('td');
+      var tdArray:any = parentRow.getElementsByTagName('td');
 
       if (row_error == true) {
         for (var i = 0; i < tdArray.length; i++) {

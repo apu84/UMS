@@ -99,7 +99,7 @@
 /// <reference path='controller/dept/CourseTeacher.ts'/>
 /// <reference path='controller/dept/Examiner.ts'/>
 /// <reference path='controller/dept/TeachersRoutine.ts'/>
-
+/// <reference path='controller/dept/StudentsRoutine.ts'/>
 
 /// <reference path='controller/common/academic/ClassRoomInfo.ts'/>
 /// <reference path='controller/common/academic/ExamRoutine.ts'/>
@@ -128,3 +128,11 @@
 /// <reference path='model/NewStudentModel.ts'/>
 /// <reference path='model/NewSyllabusModel.ts'/>
 /// <reference path='model/ParameterSetting.ts'/>
+/// <reference path='model/master_data/ClassRoom.ts'/>
+/// <reference path='model/master_data/Course.ts'/>
+/// <reference path='model/master_data/Employee.ts'/>
+/// <reference path='model/master_data/Parameter.ts'/>
+/// <reference path='model/master_data/Routine.ts'/>
+/// <reference path='model/master_data/Semester.ts'/>
+/// <reference path='model/master_data/Student.ts'/>
+/// <reference path='model/master_data/Syllabus.ts'/>

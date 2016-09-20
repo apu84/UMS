@@ -2,11 +2,9 @@ package org.ums.common.academic.resource;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import org.ums.common.Resource;
 import org.ums.manager.RoutineManager;
-import org.ums.statistics.LoggerFactory;
+import org.ums.resource.Resource;
 
 import javax.json.JsonObject;
 import javax.ws.rs.*;
@@ -60,7 +58,8 @@ public class RoutineResource extends MutableRoutineResource{
 
   @GET
   @Path("/routineForStudent")
-  public JsonObject getRoutineForStudents(final @Context Request pRequest, final @PathParam("semesterId") String semesterId,final @PathParam("programId") String programId)throws Exception{
+  public JsonObject getRoutineForStudents(final @Context Request pRequest, final @PathParam("semesterId") String semesterId,
+                                          final @PathParam("programId") String programId) throws Exception {
     return mRoutineResourceHelper.getRoutineForStudent();
   }
 
