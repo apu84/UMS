@@ -1,36 +1,53 @@
 package org.ums.services.academic;
 
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.UnauthorizedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.domain.model.dto.MarksSubmissionStatusDto;
 import org.ums.domain.model.dto.StudentGradeDto;
+import org.ums.domain.model.immutable.Notification;
+import org.ums.domain.model.immutable.UGRegistrationResult;
 import org.ums.domain.model.immutable.User;
 import org.ums.enums.*;
+import org.ums.exceptions.ValidationException;
 import org.ums.manager.ExamGradeManager;
 import org.ums.manager.UserManager;
+import org.ums.message.MessageResource;
+import org.ums.services.NotificationGenerator;
+import org.ums.services.Notifier;
 import org.ums.services.UtilsService;
 import org.ums.util.Constants;
 
 import javax.json.*;
-import javax.xml.bind.ValidationException;
 import java.io.StringReader;
-import java.security.InvalidParameterException;
+import java.nio.file.Path;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 @Component("gradeSubmissionService")
 public class GradeSubmissionService {
-
+  private Logger mLogger = LoggerFactory.getLogger(GradeSubmissionService.class);
   @Autowired
   private ExamGradeManager mManager;
   @Autowired
   private UserManager mUserManager;
   @Autowired
+  private MessageResource mMessageResource;
+
+  @Autowired
   private UtilsService mUtilsService;
+
+  @Autowired
+  private NotificationGenerator mNotificationGenerator;
+
+
 
   public void prepareGradeGroups(JsonObjectBuilder objectBuilder,List<StudentGradeDto> examGradeList,CourseMarksSubmissionStatus courseStatus,String currentActor ){
 
@@ -165,7 +182,7 @@ public class GradeSubmissionService {
     //Validate all the grades been submitted or not
     int totalStudents = mManager.getTotalStudentCount(pSemesterId, pCourseId, examType, courseType);
     if (gradeList.size() != totalStudents)
-      throw new Exception("Wrong number of grades been submitted.");
+      throw new ValidationException("Wrong number of grades been submitted.");
     boolean error = false;
     gradeList.forEach((gradeDTO) -> {
           try {
@@ -240,5 +257,72 @@ public class GradeSubmissionService {
     }
     return error;
   }
+
+  public CourseMarksSubmissionStatus getCourseMarksSubmissionNextStatus(String actor, String action, CourseMarksSubmissionStatus currentStatus) {
+    CourseMarksSubmissionStatus nextStatus = null;
+    if (actor.equalsIgnoreCase("scrutinizer")) {
+      if (action.equalsIgnoreCase("recheck") && currentStatus == CourseMarksSubmissionStatus.WAITING_FOR_SCRUTINY)
+        nextStatus = CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_SCRUTINIZER;
+      else if (action.equalsIgnoreCase("approve") && currentStatus == CourseMarksSubmissionStatus.WAITING_FOR_SCRUTINY)
+        nextStatus = CourseMarksSubmissionStatus.WAITING_FOR_HEAD_APPROVAL;
+    } else if (actor.equalsIgnoreCase("head")) {
+      if (action.equalsIgnoreCase("recheck") && currentStatus == CourseMarksSubmissionStatus.WAITING_FOR_HEAD_APPROVAL)
+        nextStatus = CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_HEAD;
+      else if (action.equalsIgnoreCase("approve") && currentStatus == CourseMarksSubmissionStatus.WAITING_FOR_HEAD_APPROVAL)
+        nextStatus = CourseMarksSubmissionStatus.WAITING_FOR_COE_APPROVAL;
+    } else if (actor.equalsIgnoreCase("coe")) {
+      if (action.equalsIgnoreCase("recheck") && currentStatus == CourseMarksSubmissionStatus.WAITING_FOR_COE_APPROVAL)
+        nextStatus = CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_COE;
+      else if (action.equalsIgnoreCase("approve") && currentStatus == CourseMarksSubmissionStatus.WAITING_FOR_COE_APPROVAL)
+        nextStatus = CourseMarksSubmissionStatus.ACCEPTED_BY_COE;
+      else if (action.equalsIgnoreCase("recheck_request_submit") && currentStatus == CourseMarksSubmissionStatus.ACCEPTED_BY_COE)
+        nextStatus = CourseMarksSubmissionStatus.WAITING_FOR_RECHECK_REQUEST_APPROVAL;
+    } else if (actor.equalsIgnoreCase("vc")) {
+      if (action.equalsIgnoreCase("recheck_request_rejected") && currentStatus == CourseMarksSubmissionStatus.WAITING_FOR_RECHECK_REQUEST_APPROVAL)
+        nextStatus = CourseMarksSubmissionStatus.ACCEPTED_BY_COE;
+      else if (action.equalsIgnoreCase("recheck_request_approved") && currentStatus == CourseMarksSubmissionStatus.WAITING_FOR_RECHECK_REQUEST_APPROVAL)
+        nextStatus = CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_COE;
+    }
+
+    return nextStatus;
+  }
+
+  public void sendNotification(){
+    Notifier notifier = new Notifier() {
+      @Override
+      public List<String> consumers() throws Exception {
+        List<String> users = new ArrayList<>();
+        users.add("s1");
+        return users;
+      }
+
+      @Override
+      public String producer() throws Exception {
+        return SecurityUtils.getSubject().getPrincipal().toString();
+      }
+
+      @Override
+      public String notificationType() {
+        return new StringBuilder(Notification.Type.GRADE_SUBMISSION.getValue()).toString();
+      }
+
+      @Override
+      public String payload() {
+        try {
+          User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
+          return "Grade Submitted";
+        } catch (Exception e) {
+          mLogger.error("Exception while looking for user: ", e);
+        }
+        return null;
+      }
+    };
+    try {
+      mNotificationGenerator.notify(notifier);
+    } catch (Exception e) {
+      mLogger.error("Failed to generate notification", e);
+    }
+  }
+
 
 }

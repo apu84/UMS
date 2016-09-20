@@ -172,27 +172,27 @@
                 <ul class="menu_option">
                     <li> 
                         <a href="javascript:void(0)" data-ng-click="downloadPdf()"  style="background: #ea4c3a" title="Download Pdf">
-                            <span style="background-image:  url('../../images/icons/pieMenu-marksSubmission/pdf-256.png')">Item</span>
+                            <span style="background-image:  url('images/icons/pieMenu-marksSubmission/pdf-256.png')">Item</span>
                         </a>
                     </li>
                     <li>
                         <a href="javascript:void(0)"data-ng-click="generateXls()"style="background: transparent;" title="Download Excel">
-                            <span style="background-image:  url('../../images/icons/pieMenu-marksSubmission/excel-download.png')" >Item</span>
+                            <span style="background-image:  url('images/icons/pieMenu-marksSubmission/excel-download.png')" >Item</span>
                         </a>
                     </li>
                     <li>
                         <a href="javascript:void(0)" data-target="#modal-prompt" data-toggle="modal" style="background: transparent;" title="Upload Excel Data">
-                            <span style="background-image:  url('../../images/icons/pieMenu-marksSubmission/excel-paste.png')">Item</span>
+                            <span style="background-image:  url('images/icons/pieMenu-marksSubmission/excel-paste.png')">Item</span>
                         </a>
                     </li>
                     <li>
                         <a href="javascript:void(0)" data-ng-click="fetchMarksSubmissionLog()" data-target="#modal-marks_submission_status_log" data-toggle="modal" style="background: transparent;" title="Marks Submission Status Log">
-                            <span style="background-image:  url('../../images/icons/pieMenu-marksSubmission/log1.png')">Item</span>
+                            <span style="background-image:  url('images/icons/pieMenu-marksSubmission/log1.png')">Item</span>
                         </a>
                     </li>
                     <li>
-                        <a href="javascript:void(0)" data-target="#modal-marks_status_log" data-toggle="modal" style="background: transparent;" title="Marks Log">
-                            <span style="background-image:  url('../../images/icons/pieMenu-marksSubmission/log2.png')">Item</span>
+                        <a href="javascript:void(0)"  data-target="#modal-marks_status_log" data-toggle="modal" style="background: transparent;" title="Marks Log">
+                            <span style="background-image:  url('images/icons/pieMenu-marksSubmission/log2.png')">Item</span>
                         </a>
                     </li>
                 </ul>
@@ -217,8 +217,8 @@
                     <tr>
                         <td width="15%"><b>Course Title :</b></td>
                         <td width="40%">{{data.course_title}}</td>
-                        <td width="15%"><b>Course Number :</b></td>
-                        <td width="30%">{{data.course_no}}</td>
+                        <td width="20%"><b>Course Number :</b></td>
+                        <td width="25%">{{data.course_no}}</td>
 
                     </tr>
                     <tr>
@@ -226,13 +226,15 @@
                         <td>{{data.crhr}} <a href="Javascript:void(0)" data-ng-click="refreshGradeSheet()">Reload</a></td>
                         <td data-ng-if="courseType=='THEORY'"><b>Total Part <span data-ng-if="(gradeSubmissionStatus !='0')">({{data.total_part}})</span> :</b></td>
                         <td data-ng-if="courseType=='THEORY'">
-                            <select id="total_part" data-ng-model="data.total_part" data-ng-change="onTotalPartChange()"   style="float: left;border:1px solid grey;text-align: center;height: 22px;" data-ng-if="(gradeSubmissionStatus =='0' && currentActor=='preparer')" data-convert-to-number>
+                            <select id="total_part" data-ng-model="data.total_part" data-ng-change="onTotalPartChange()"
+                                    style="float: left;margin-right:5px;border:1px solid grey;text-align: center;height: 22px;"
+                                    data-ng-if="(gradeSubmissionStatus =='0' && currentActor=='preparer')" data-convert-to-number>
                                 <option value="1">&nbsp;1&nbsp;</option>
                                 <option value="2">&nbsp;2&nbsp;</option>
                             </select>
 
 
-                            <div style="float: left; margin-left: 10px;" ng-="partDiv" data-ng-show="courseType=='THEORY'">
+                            <div style="float: left;" ng-="partDiv" data-ng-show="courseType=='THEORY'">
                                 Part-A
                                 <input type="text" style="width: 50px;border:1px solid grey;text-align: center;" data-ng-model="data.part_a_total"  data-ng-if="(gradeSubmissionStatus =='0' && currentActor=='preparer')" >
                                 <img  class='img_tooltip'  id="tooltip_partA_"/>
@@ -1062,23 +1064,51 @@
             <div class="modal-header">
                 <button type="button" data-dismiss="modal" aria-hidden="true"
                         class="close">&times;</button>
-                <h4 id="modal-marks_status_log-label" class="modal-title">Marks Submission Status Log</h4></div>
+                <h4 id="modal-marks_status_log-label" class="modal-title">Student's Marks Submission Log</h4></div>
             <div class="modal-body">
+                <div class="form-body pal">
+                    <div class="form-group">
+                        <label class="col-md-2 control-label" style="margin-top: 7px;font-weight: bold;">Student Id</label>
+                        <div class="col-md-3">
+                           <input
+                                    id="studentId_log" type="text" placeholder="" class="form-control" style="text-align:center;font-weight: bold;color: blue;"/>
+
+                        </div>
+                        <div class="col-md-2">
+                            <button type="button" id="btnLog" class="btn btn-green btn-square" onclick="fetchMarksLog()">Search</button>
+                        </div>
+                    </div>
+                </div>
+                <hr class="style-two">
                 <table class="table table-hover table-condensed">
                     <thead>
                     <tr>
                         <th>#</th>
                         <th>Status</th>
                         <th>Date-Time</th>
-                        <th>Actor</th>
+                        <th>Actor Role</th>
+                        <th>Name</th>
+                        <th>Quiz</th>
+                        <th>Class Perf.</th>
+                        <th>Part-A</th>
+                        <th>Part-B</th>
+                        <th>Total</th>
+                        <th>Grade Letter</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="log in marksSubmissionStatusLogs track by $index">
+                    <tr ng-repeat="log in marksLogs track by $index">
                         <td>{{$index + 1}}</td>
                         <td>{{log.statusName}}</td>
                         <td>{{log.insertedOn}}</td>
+                        <td>{{log.roleName}}</td>
                         <td>{{log.userName}}</td>
+                        <td>{{log.quiz}}</td>
+                        <td>{{log.classPerformance}}</td>
+                        <td>{{log.partA}}</td>
+                        <td>{{log.partB}}</td>
+                        <td>{{log.total}}</td>
+                        <td>{{log.gradeLetter}}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -1123,10 +1153,16 @@
 
     function calculateTotalAndGradeLetter(fieldId){
         var arr=fieldId.split("_");
-
         var scope = angular.element(document.getElementById(fieldId)).scope();
         scope.$apply(function () {
             scope.calculateTotalAndGradeLetter(arr[arr.length-1]);
+        });
+    }
+
+    function fetchMarksLog(){
+        var scope = angular.element(document.getElementById("btnLog")).scope();
+        scope.$apply(function () {
+            scope.fetchMarksLog($("#studentId_log").val());
         });
     }
 

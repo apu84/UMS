@@ -420,4 +420,5 @@ public class UMSContext {
   NotificationGenerator notificationGenerator() {
     return new NotificationGeneratorImpl(notificationManager());
   }
+
 }

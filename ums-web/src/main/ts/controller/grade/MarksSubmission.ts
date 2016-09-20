@@ -26,6 +26,7 @@ module ums {
     recheckAcceptedGrades:any;
     allMarksSubmissionStatus:any;
     marksSubmissionStatusLogs:any;
+    marksLogs:any;
     toggleColumn:boolean;
     excel_copy_paste_error_div:boolean;
     gradeSubmissionStatus:number;  //Grade Submission Status for the current Course
@@ -45,6 +46,7 @@ module ums {
     fetchGradeSubmissionTable:Function;
     calculateTotalAndGradeLetter:Function;
     fetchMarksSubmissionLog:Function;
+    fetchMarksLog:Function;
 
     recheckAll:Function;
     approveAll:Function;
@@ -184,6 +186,9 @@ module ums {
       $scope.fetchGradeSubmissionTable = this.fetchGradeSubmissionTable.bind(this);
       $scope.calculateTotalAndGradeLetter = this.calculateTotalAndGradeLetter.bind(this);
       $scope.fetchMarksSubmissionLog = this.fetchMarksSubmissionLog.bind(this);
+      $scope.fetchMarksLog = this.fetchMarksLog.bind(this);
+
+
       $scope.recheckAll=this.recheckAll.bind(this);
       $scope.approveAll=this.approveAll.bind(this);
 
@@ -1274,25 +1279,24 @@ module ums {
             this.$scope.marksSubmissionStatusLogs = data.entries;
           });
 
-      this.fetchMarksLog();
+
     }
 
     //MarksLog
-    private fetchMarksLog():void {
+    private fetchMarksLog(studentId):void {
+      if(studentId=="") this.notify.info("Please provide Student Id");
       this.httpClient.get("academic/gradeSubmission/semester/"+this.$scope.inputParams.semester_id+
           "/courseid/"+ this.$scope.current_courseId+
           "/examType/"+this.$scope.inputParams.exam_type+
-          "/studentid/160106165"+this.$scope.inputParams.exam_type,
+          "/studentid/"+studentId,
           this.appConstants.mimeTypeJson,
           (data:any, etag:string)=> {
-            console.log(data.entries);
-            //this.$scope.marksSubmissionStatusLogs = data.entries;
-            console.log("~~~~~~~~~");
-            console.log(data.entries);
-
+            if(data.entries.length==0)
+              this.notify.info("No log found");
+            else
+              this.$scope.marksLogs = data.entries;
           });
     }
-
     // Start of Selection Panel Components Initialization
 
     private loadSemesters():void{
@@ -1311,7 +1315,7 @@ module ums {
         else
           this.$scope.data.depts = this.$scope.data.ugDepts;
       }
-      else if(this.$scope.inputParams.program_type==22)
+      else if(this.$scope.inputParams.program_type==this.appConstants.programTypeEnum.pgDepts)
         this.$scope.data.depts=this.$scope.data.pgDepts;
     }
 

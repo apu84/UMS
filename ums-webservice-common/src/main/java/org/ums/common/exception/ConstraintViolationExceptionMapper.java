@@ -1,8 +1,5 @@
 package org.ums.common.exception;
 
-import org.apache.shiro.authz.UnauthorizedException;
-import org.ums.common.validator.ValidationException;
-
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
