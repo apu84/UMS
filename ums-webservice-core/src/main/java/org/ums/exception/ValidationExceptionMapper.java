@@ -1,6 +1,6 @@
 package org.ums.exception;
 
-import org.ums.validator.ValidationException;
+import org.ums.exceptions.ValidationException;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;

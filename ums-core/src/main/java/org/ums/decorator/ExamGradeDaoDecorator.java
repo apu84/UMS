@@ -1,12 +1,11 @@
 package org.ums.decorator;
 
-import org.ums.domain.model.dto.GradeChartDataDto;
-import org.ums.domain.model.dto.MarksSubmissionStatusDto;
-import org.ums.domain.model.dto.StudentGradeDto;
+import org.ums.domain.model.dto.*;
 import org.ums.domain.model.immutable.ExamGrade;
 import org.ums.domain.model.mutable.MutableExamGrade;
 import org.ums.enums.CourseMarksSubmissionStatus;
 import org.ums.enums.CourseType;
+import org.ums.enums.ExamType;
 import org.ums.manager.ExamGradeManager;
 
 import java.util.List;
@@ -31,8 +30,8 @@ public class ExamGradeDaoDecorator  extends ContentDaoDecorator<ExamGrade, Mutab
     }
 
     @Override
-    public List<MarksSubmissionStatusDto> getMarksSubmissionStatus(int pSemesterId,int pExamType,String teacherId,String deptId,String userRole,int status) throws Exception {
-        return getManager().getMarksSubmissionStatus(pSemesterId,pExamType,teacherId,deptId,userRole,status);
+    public List<MarksSubmissionStatusDto> getMarksSubmissionStatus(int pSemesterId,int pExamType,int pProgramId,String teacherId,String deptId,String userRole,int status) throws Exception {
+        return getManager().getMarksSubmissionStatus(pSemesterId,pExamType,pProgramId,teacherId,deptId,userRole,status);
     }
 
     @Override
@@ -40,6 +39,15 @@ public class ExamGradeDaoDecorator  extends ContentDaoDecorator<ExamGrade, Mutab
         return getManager().saveGradeSheet(semesterId, courseId, examType, courseType,gradeList);
     }
 
+    @Override
+    public boolean insertGradeLog(String userId,String role, int semesterId,String courseId,int examType,CourseType courseType,CourseMarksSubmissionStatus currentStatus,CourseMarksSubmissionStatus nextStatus,List<StudentGradeDto> gradeList) throws Exception {
+        return getManager().insertGradeLog(userId,role,semesterId, courseId, examType, courseType,currentStatus,nextStatus, gradeList);
+    }
+
+    @Override
+    public int insertMarksSubmissionStatusLog(String pUserId,String pRole,int pSemesterId,String pCourseId,int pExamType,CourseMarksSubmissionStatus status) throws Exception {
+        return getManager().insertMarksSubmissionStatusLog(pUserId,pRole, pSemesterId, pCourseId, pExamType, status);
+    }
     @Override
     public boolean updateGradeStatus_Save(int pSemesterId,String pCourseId,int pExamType,CourseType courseType,List<StudentGradeDto> recheckList,List<StudentGradeDto> approveList) throws Exception {
         return getManager().updateGradeStatus_Save(pSemesterId, pCourseId, pExamType,courseType, recheckList,approveList);
@@ -114,5 +122,17 @@ public class ExamGradeDaoDecorator  extends ContentDaoDecorator<ExamGrade, Mutab
     @Override
     public int updateForGradeSubmissionDeadLine(List<MarksSubmissionStatusDto> pMarksSubmissionStatusDtos) throws Exception{
         return getManager().updateForGradeSubmissionDeadLine(pMarksSubmissionStatusDtos);
+    }
+
+    public int getTotalStudentCount(final Integer pSemesterId, final String pCourseId, final Integer pExamType, final CourseType courseType) throws Exception{
+        return getManager().getTotalStudentCount(pSemesterId,pCourseId,pExamType,courseType);
+    }
+
+    public List<MarksSubmissionStatusLogDto> getMarksSubmissionLogs(Integer pSemesterId, String pCourseId,Integer pExamType) throws Exception {
+        return getManager().getMarksSubmissionLogs(pSemesterId, pCourseId, pExamType);
+    }
+
+    public List<MarksLogDto> getMarksLogs(Integer pSemesterId,String pCourseId,Integer pExamType,String pStudentId, CourseType pCourseType) throws Exception {
+        return getManager().getMarksLogs(pSemesterId, pCourseId, pExamType,pStudentId,pCourseType);
     }
 }

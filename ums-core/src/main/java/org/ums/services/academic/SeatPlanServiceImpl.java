@@ -49,6 +49,9 @@ public class SeatPlanServiceImpl implements SeatPlanService {
   ClassRoomManager mClassRoomManager;
 
   @Autowired
+  StudentManager mStudentManager;
+
+  @Autowired
   SubGroupCCIManager mSubGroupCCIManager;
 
   @Autowired
@@ -82,18 +85,18 @@ public class SeatPlanServiceImpl implements SeatPlanService {
       }
     }
 
-   /* Map<String,List<SpStudent>> studentsByProgramYearSemesterStatusList = initiateStudentsBasedOnProgramYearSemesterStatus();
-    Map<String,List<SpStudent>> studentsByProgramYearSemesterStatusList2 = initiateStudentsBasedOnProgramYearSemesterStatus();
+   /* Map<String,List<Student>> studentsByProgramYearSemesterStatusList = initiateStudentsBasedOnProgramYearSemesterStatus();
+    Map<String,List<Student>> studentsByProgramYearSemesterStatusList2 = initiateStudentsBasedOnProgramYearSemesterStatus();
 
-    Map<Integer,List<SpStudent>> subGroupWithStudents = getStudentsOfTheSubGroups(pSemesterId,pGroupNo,pExamType,pExamDate,numberOfSubGroups,studentsByProgramYearSemesterStatusList);
-    Map<Integer,List<SpStudent>> tempSubGroupWithStudents =getStudentsOfTheSubGroups(pSemesterId,pGroupNo,pExamType,pExamDate,numberOfSubGroups,studentsByProgramYearSemesterStatusList2);*/
+    Map<Integer,List<Student>> subGroupWithStudents = getStudentsOfTheSubGroups(pSemesterId,pGroupNo,pExamType,pExamDate,numberOfSubGroups,studentsByProgramYearSemesterStatusList);
+    Map<Integer,List<Student>> tempSubGroupWithStudents =getStudentsOfTheSubGroups(pSemesterId,pGroupNo,pExamType,pExamDate,numberOfSubGroups,studentsByProgramYearSemesterStatusList2);*/
 
 
-    Map<String,List<SpStudent>> studentsByProgramYearSemesterStatusList= new HashMap<>();
-    Map<String,List<SpStudent>> studentsByProgramYearSemesterStatusList2 = new HashMap<>();
+    Map<String,List<Student>> studentsByProgramYearSemesterStatusList= new HashMap<>();
+    Map<String,List<Student>> studentsByProgramYearSemesterStatusList2 = new HashMap<>();
 
-    Map<Integer,List<SpStudent>> subGroupWithStudents = new HashMap<>();
-    Map<Integer,List<SpStudent>> tempSubGroupWithStudents = new HashMap<>();
+    Map<Integer,List<Student>> subGroupWithStudents = new HashMap<>();
+    Map<Integer,List<Student>> tempSubGroupWithStudents = new HashMap<>();
 
     if(pGroupNo==0){
       studentsByProgramYearSemesterStatusList = initiateStudentsForCCIBasedOnExamDate(pSemesterId,pExamDate);
@@ -160,7 +163,7 @@ public class SeatPlanServiceImpl implements SeatPlanService {
                   }
                 }
                 roomStructure[i][j] = Integer.toString(evenRow);
-                List<SpStudent> tempStudentOfTheSubgroup = tempSubGroupWithStudents.get(evenRow);
+                List<Student> tempStudentOfTheSubgroup = tempSubGroupWithStudents.get(evenRow);
                 tempStudentOfTheSubgroup.remove(0);
                 tempSubGroupWithStudents.put(evenRow,tempStudentOfTheSubgroup);
                 if(evenRow==divider){
@@ -217,7 +220,7 @@ public class SeatPlanServiceImpl implements SeatPlanService {
                 }
 
                 roomStructure[i][j] = Integer.toString(oddRow);
-                List<SpStudent> studentsOfTheSubGroup = tempSubGroupWithStudents.get(oddRow);
+                List<Student> studentsOfTheSubGroup = tempSubGroupWithStudents.get(oddRow);
                 studentsOfTheSubGroup.remove(0);
                 tempSubGroupWithStudents.put(oddRow,studentsOfTheSubGroup);
                 if(oddRow>=numberOfSubGroups){
@@ -272,8 +275,8 @@ public class SeatPlanServiceImpl implements SeatPlanService {
                     if(roomStructure[roomRow][roomColumn]!=null){
                       if(roomStructure[roomRow][roomColumn].equals(Integer.toString(subGroup))){
                         if(subGroupWithStudents.get(subGroup)!=null){
-                          List<SpStudent> studentsOfTheSubGroup = subGroupWithStudents.get(subGroup);
-                          SpStudent student = studentsOfTheSubGroup.get(0);
+                          List<Student> studentsOfTheSubGroup = subGroupWithStudents.get(subGroup);
+                          Student student = studentsOfTheSubGroup.get(0);
                           roomStructure[roomRow][roomColumn] = student.getId();
                           MutableSeatPlan seatPlan = new PersistentSeatPlan();
                           PersistentClassRoom classRoom = new PersistentClassRoom();
@@ -281,7 +284,7 @@ public class SeatPlanServiceImpl implements SeatPlanService {
                           seatPlan.setClassRoom(classRoom);
                           seatPlan.setRowNo(roomRow+1);
                           seatPlan.setColumnNo(roomColumn+1);
-                          PersistentSpStudent spStudent = new PersistentSpStudent();
+                          PersistentStudent spStudent = new PersistentStudent();
                           spStudent.setId(student.getId());
                           seatPlan.setStudent(spStudent);
                           seatPlan.setExamType(pExamType);
@@ -490,12 +493,12 @@ public class SeatPlanServiceImpl implements SeatPlanService {
 
 
 
-  Map<Integer,List<SpStudent>> getStudentsOfTheSubGroups(int pSemesterId, int pGroupNo,int pExamType,String examDate,int numberOfSubGroups,Map<String,List<SpStudent>> studentsByProgramYearSemesterStatusList)throws Exception{
+  Map<Integer,List<Student>> getStudentsOfTheSubGroups(int pSemesterId, int pGroupNo,int pExamType,String examDate,int numberOfSubGroups,Map<String,List<Student>> studentsByProgramYearSemesterStatusList)throws Exception{
 
-    Map<Integer,List<SpStudent>> subGroupMap = new HashMap<>();
+    Map<Integer,List<Student>> subGroupMap = new HashMap<>();
 
     for(int subGroupNumberIterator=1;subGroupNumberIterator<=numberOfSubGroups;subGroupNumberIterator++) {
-      List<SpStudent> studentsOfTheSubGroup = new LinkedList<>();
+      List<Student> studentsOfTheSubGroup = new LinkedList<>();
       if(examDate.equals("null")){
       List<SubGroup> subGroupMembers = mSubGroupManager.getSubGroupMembers(pSemesterId, pExamType, pGroupNo, subGroupNumberIterator);
 
@@ -503,13 +506,13 @@ public class SeatPlanServiceImpl implements SeatPlanService {
       for (SubGroup member : subGroupMembers) {
         SeatPlanGroup group = mSeatPlanGroupManager.get(member.getGroupId());
         String key = group.getProgram().getId() + "" + group.getAcademicYear() + "" + group.getAcademicSemester() + "" + 1;
-        List<SpStudent> studentsOfTheGroup = new ArrayList<>();
-        List<SpStudent> existingStudents = studentsByProgramYearSemesterStatusList.get(key);
+        List<Student> studentsOfTheGroup = new ArrayList<>();
+        List<Student> existingStudents = studentsByProgramYearSemesterStatusList.get(key);
 
         int studentCounter = 0;
         int totalExistingStudentSize = existingStudents.size();
         for (int m = 0; m < totalExistingStudentSize; m++) {
-          SpStudent existingStudent = existingStudents.get(0);
+          Student existingStudent = existingStudents.get(0);
           studentsOfTheGroup.add(existingStudent);
           existingStudents.remove(0);
           studentCounter += 1;
@@ -539,13 +542,13 @@ public class SeatPlanServiceImpl implements SeatPlanService {
 
 
           //String key = member.getId()+member.getCourseId();
-          List<SpStudent> studentsOfTheGroup = new ArrayList<>();
-          List<SpStudent> existingStudents = studentsByProgramYearSemesterStatusList.get(member.getCourseId());
+          List<Student> studentsOfTheGroup = new ArrayList<>();
+          List<Student> existingStudents = studentsByProgramYearSemesterStatusList.get(member.getCourseId());
 
           int studentCounter = 0;
           int totalExistingStudentSize = existingStudents.size();
           for (int m = 0; m < totalExistingStudentSize; m++) {
-            SpStudent existingStudent = existingStudents.get(0);
+            Student existingStudent = existingStudents.get(0);
             studentsOfTheGroup.add(existingStudent);
             existingStudents.remove(0);
             studentCounter += 1;
@@ -570,9 +573,9 @@ public class SeatPlanServiceImpl implements SeatPlanService {
     return subGroupMap;
   }
 
-  Map<Integer,List<SpStudent>> getStudentsOfTheSubGroupsCCI(int pSemesterId, int pGroupNo,int pExamType,String examDate,int numberOfSubGroups,Map<String,List<SpStudent>> studentsByProgramYearSemesterStatusList)throws Exception{
+  Map<Integer,List<Student>> getStudentsOfTheSubGroupsCCI(int pSemesterId, int pGroupNo,int pExamType,String examDate,int numberOfSubGroups,Map<String,List<Student>> studentsByProgramYearSemesterStatusList)throws Exception{
     List<SubGroupCCI> subGroupMembers = mSubGroupCCIManager.getBySemesterAndExamDate(pSemesterId,examDate);
-    Map<Integer,List<SpStudent>> subGroupNumberWithStudentsMap = new HashMap<>();
+    Map<Integer,List<Student>> subGroupNumberWithStudentsMap = new HashMap<>();
     Integer numberOfZeroValuedSubGroups = mSubGroupCCIManager.checkForHalfFinishedSubGroup(pSemesterId,examDate);
 
 
@@ -581,13 +584,13 @@ public class SeatPlanServiceImpl implements SeatPlanService {
     * So, there must be a provision for checking.
     * For that process, check if there is any sub group number with value '0', if, then, the sub group number must be omitted in the loop.*/
     for(SubGroupCCI member: subGroupMembers){
-      List<SpStudent> students = studentsByProgramYearSemesterStatusList.get(member.getCourseId());
+      List<Student> students = studentsByProgramYearSemesterStatusList.get(member.getCourseId());
       for(int i=1;i<=numberOfSubGroups;i++){
         if(i==member.getSubGroupNo()){
           if(subGroupNumberWithStudentsMap.get(i)!=null){
-            List<SpStudent> studentsOfTheSubGroup = subGroupNumberWithStudentsMap.get(i);
+            List<Student> studentsOfTheSubGroup = subGroupNumberWithStudentsMap.get(i);
             for(int j=0;j<member.getTotalStudent();j++){
-              SpStudent spStudent = students.get(0);
+              Student spStudent = students.get(0);
               students.remove(0);
               studentsOfTheSubGroup.add(spStudent);
             }
@@ -595,10 +598,10 @@ public class SeatPlanServiceImpl implements SeatPlanService {
             subGroupNumberWithStudentsMap.put(i,studentsOfTheSubGroup);
           }
           else{
-            List<SpStudent> studentsOfTheSubGroup = new ArrayList<>();
+            List<Student> studentsOfTheSubGroup = new ArrayList<>();
             for(int j=0;j<member.getTotalStudent();j++)
             {
-              SpStudent spStudent1 = students.get(0);
+              Student spStudent1 = students.get(0);
               students.remove(0);
               studentsOfTheSubGroup.add(spStudent1);
             }
@@ -618,11 +621,11 @@ public class SeatPlanServiceImpl implements SeatPlanService {
     return subGroupNumberWithStudentsMap;
   }
 
-  Map<String,List<SpStudent>> initiateStudentsForCCIBasedOnExamDate(int pSemester,String pExamDate) throws Exception{
-    Map<String,List<SpStudent>> studentMap = new HashMap<>();
+  Map<String,List<Student>> initiateStudentsForCCIBasedOnExamDate(int pSemester,String pExamDate) throws Exception{
+    Map<String,List<Student>> studentMap = new HashMap<>();
     List<ApplicationCCI> applicationCCIs = mApplicationCCIManager.getBySemesterAndExamDate(pSemester,pExamDate) ;
     for(ApplicationCCI app : applicationCCIs){
-      List<SpStudent> students = mSpStudentManager.getStudentByCourseIdAndSemesterIdForSeatPlanForCCI(app.getCourseId(),pSemester);
+      List<Student> students = mStudentManager.getStudentByCourseIdAndSemesterIdForSeatPlanForCCI(app.getCourseId(),pSemester);
       studentMap.put(app.getCourseId(),students);
     }
 
@@ -630,21 +633,21 @@ public class SeatPlanServiceImpl implements SeatPlanService {
 
     return studentMap;
   }
-  Map<String,List<SpStudent>> initiateStudentsBasedOnProgramYearSemesterStatus() throws Exception{
+  Map<String,List<Student>> initiateStudentsBasedOnProgramYearSemesterStatus() throws Exception{
 
-    Map<String,List<SpStudent>> studentInfoMap = new HashMap<>();
+    Map<String,List<Student>> studentInfoMap = new HashMap<>();
 
-    List<SpStudent> allStudents = mSpStudentManager.getAll();
+    List<Student> allStudents = mStudentManager.getAll();
 
-    for(SpStudent student: allStudents){
-      String keyWithProgramYearSemesterStatus = student.getProgram().getId()+""+student.getAcademicYear()+""+student.getAcademicSemester()+""+student.getStatus();
+    for(Student student: allStudents){
+      String keyWithProgramYearSemesterStatus = student.getProgram().getId()+""+student.getCurrentYear()+""+student.getCurrentAcademicSemester();
       if(studentInfoMap.size()==0 || studentInfoMap.get(keyWithProgramYearSemesterStatus)==null){
-        List<SpStudent> studentList = new ArrayList<>();
+        List<Student> studentList = new ArrayList<>();
 
         studentList.add(student);
         studentInfoMap.put(keyWithProgramYearSemesterStatus,studentList);
       }else{
-        List<SpStudent> studentList = studentInfoMap.get(keyWithProgramYearSemesterStatus);
+        List<Student> studentList = studentInfoMap.get(keyWithProgramYearSemesterStatus);
         studentList.add(student);
         studentInfoMap.put(keyWithProgramYearSemesterStatus,studentList);
       }

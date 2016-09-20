@@ -83,6 +83,9 @@
 /// <reference path='service/CommonService.ts'/>
 /// <reference path='service/ClassRoutineService.ts'/>
 /// <reference path='service/ExamGradeService.ts'/>
+/// <reference path='service/ClassRoomService.ts'/>
+/// <reference path='service/CourseServices.ts'/>
+/// <reference path='service/TimeTracker.ts'/>
 
 /// <reference path='controller/student/NewStudent.ts'/>
 /// <reference path='controller/semester/NewSemester.ts'/>
@@ -136,3 +139,9 @@
 /// <reference path='model/master_data/Semester.ts'/>
 /// <reference path='model/master_data/Student.ts'/>
 /// <reference path='model/master_data/Syllabus.ts'/>
+
+/// <reference path='directive/ContextMenuSeatplan.ts'/>
+/// <reference path='directive/CourseRegTypeLegend.ts'/>
+/// <reference path='directive/EmitLastRepeaterElement.ts'/>
+/// <reference path='directive/SubGroupSortable.ts'/>
+/// <reference path='directive/TimeLogging.ts'/>

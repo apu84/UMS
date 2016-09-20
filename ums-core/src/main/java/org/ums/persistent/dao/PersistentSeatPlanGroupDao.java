@@ -20,36 +20,38 @@ public class PersistentSeatPlanGroupDao extends SeatPlanGroupDaoDecorator {
   String INSERT_ONE = "INSERT INTO SP_GROUP (SEMESTER_ID,PROGRAM_ID,YEAR,SEMESTER,GROUP_NO,LAST_UPDATED,TYPE,PROGRAM_SHORT_NAME,TOTAL_STUDENT) VALUES(?,?,?,?,?, systimestamp,?,?,?)";
   String UPDATE_ONE = "UPDATE SP_GROUP SET SEMESTER_ID=?,PROGRAM_ID=?,YEAR=?, SEMESTER=?, GROUP_NO=?, LAST_UPDATED = systimestamp, TYPE=?,PROGRAM_SHORT_NAME=?,TOTAL_STUDENT=?";
   String DELETE_ONE = "DELETE  FROM SP_GROUP";
-  String SELECT_ALL_FROM_EXAM_ROTINE ="select tmp5.*,program_short_name from\n" +
-      "      (  " +
-      "      select group_name,tmp4.program_id,tmp4.semester,tmp4.exam_type,course_year,course_semester,count(student_id) total_student from  " +
-      "      (  " +
-      "      select tmp3.*,student_id from   " +
-      "      (select distinct semester,exam_type,program_id,course_year,course_semester,group_name from  " +
-      "      (select * from   " +
-      "      (Select EXAM_ROUTINE.*,YEAR COURSE_YEAR,MST_COURSE.SEMESTER COURSE_SEMESTER From EXAM_ROUTINE,MST_COURSE  " +
-      "      Where EXAM_ROUTINE.COURSE_ID=MST_COURSE.COURSE_ID and EXAM_ROUTINE.EXAM_TYPE=? and EXAM_ROUTINE.SEMESTER=? " +
-      "      order by exam_date  " +
-      "      ) tmp1,  " +
-      "      (select exam_date,  " +
-      "      CASE WHEN mod(ind,3)=0 THEN 3 ELSE mod(ind,3) END AS Group_name  " +
-      "      from (  " +
-      "      select tmp.exam_date,tmp.exam_type,rownum ind from (  " +
-      "      Select Distinct Exam_Date,Exam_type From EXAM_ROUTINE  where exam_date not in ( select exclude_date from sp_parameter where exam_type=? and semester_id=?)  Order by Exam_Date  " +
-      "      ) tmp)   " +
-      "      )tmp2  " +
-      "      where tmp1.exam_date = tmp2.exam_date )  " +
-      "      order by group_name  " +
-      "      )tmp3,sp_student  " +
-      "      where  " +
-      "      tmp3.program_id = sp_student.program_id  " +
-      "      and tmp3.course_year = sp_student.year  " +
-      "      and tmp3.course_semester = sp_student.semester  " +
-      "      )tmp4 group by group_name,  " +
-      "      tmp4.program_id,tmp4.semester,tmp4.exam_type,course_year,course_semester  " +
-      "      )tmp5,mst_program  " +
-      "      where tmp5.program_id = mst_program.program_id  " +
-      "      order by group_name,program_short_name,course_year,course_semester";
+  String SELECT_ALL_FROM_EXAM_ROTINE =" select tmp5.*,program_short_name from " +
+      "             (      " +
+      "             select group_name,tmp4.program_id,tmp4.semester,tmp4.exam_type,course_year,course_semester,count(student_id) total_student from      " +
+      "             (      " +
+      "             select tmp3.*,students.student_id from " +
+      "             (select distinct semester,exam_type,program_id,course_year,course_semester,group_name from      " +
+      "             (select * from       " +
+      "             (Select EXAM_ROUTINE.*,YEAR COURSE_YEAR,MST_COURSE.SEMESTER COURSE_SEMESTER From EXAM_ROUTINE,MST_COURSE      " +
+      "             Where EXAM_ROUTINE.COURSE_ID=MST_COURSE.COURSE_ID and EXAM_ROUTINE.EXAM_TYPE=? and EXAM_ROUTINE.SEMESTER=?     " +
+      "             order by exam_date      " +
+      "             ) tmp1,      " +
+      "             (select exam_date,      " +
+      "             CASE WHEN mod(ind,3)=0 THEN 3 ELSE mod(ind,3) END AS Group_name      " +
+      "             from (      " +
+      "             select tmp.exam_date,tmp.exam_type,rownum ind from (      " +
+      "             Select Distinct Exam_Date,Exam_type From EXAM_ROUTINE  where exam_date not in " +
+      "                           ( select exclude_date from sp_parameter where exam_type=? and semester_id=?)  Order by Exam_Date " +
+      "             ) tmp)       " +
+      "             )tmp2      " +
+      "             where tmp1.exam_date = tmp2.exam_date )      " +
+      "             order by group_name      " +
+      "             )tmp3, students,(select distinct(STUDENT_ID) from UG_REGISTRATION_RESULT) ugRegistrationResult " +
+      "             where " +
+      "             STUDENTS.STUDENT_ID = ugRegistrationResult.STUDENT_ID and " +
+      "             tmp3.program_id =  students.program_id " +
+      "             and tmp3.course_year =  students.CURRENT_YEAR " +
+      "             and tmp3.course_semester =  students.CURRENT_SEMESTER " +
+      "             )tmp4 group by group_name,      " +
+      "             tmp4.program_id,tmp4.semester,tmp4.exam_type,course_year,course_semester      " +
+      "             )tmp5,mst_program      " +
+      "             where tmp5.program_id = mst_program.program_id      " +
+      "             order by group_name,program_short_name,course_year,course_semester";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -69,7 +71,7 @@ public class PersistentSeatPlanGroupDao extends SeatPlanGroupDaoDecorator {
 
   @Override
   public List<SeatPlanGroup> getGroupBySemesterTypeFromDb(int pSemesterId, int pExamType) {
-    String query = SELECT_ALL+" WHERE SEMESTER_ID=? AND TYPE=?";
+    String query = SELECT_ALL+" WHERE SEMESTER_ID=? AND TYPE=? order by group_no,program_id,year,semester";
     return mJdbcTemplate.query(
         query,
         new Object[]{pSemesterId,pExamType},

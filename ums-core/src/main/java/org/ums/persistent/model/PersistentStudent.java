@@ -59,6 +59,8 @@ public class PersistentStudent implements MutableStudent {
   private Semester mCurrentEnrolledSemester;
   private String mTheorySection;
   private String mSessionalSection;
+  private Integer mApplicationType;
+  private String mProgramShortName;
 
   public PersistentStudent() {
 
@@ -91,8 +93,29 @@ public class PersistentStudent implements MutableStudent {
     setCurrentAcademicSemester(pMutableStudent.getCurrentAcademicSemester());
     setCurrentEnrolledSemesterId(pMutableStudent.getCurrentEnrolledSemesterId());
     setCurrentEnrolledSemester(pMutableStudent.getCurrentEnrolledSemester());
+    setApplicationType(pMutableStudent.getApplicationType());
+    setProgramShortName(pMutableStudent.getProgramShortName());
   }
 
+  @Override
+  public String getProgramShortName() {
+    return mProgramShortName;
+  }
+
+  @Override
+  public void setProgramShortName(String pProgramShortName) {
+    mProgramShortName = pProgramShortName;
+  }
+
+  @Override
+  public Integer getApplicationType() {
+    return mApplicationType;
+  }
+
+  @Override
+  public void setApplicationType(Integer pApplicationType) {
+    mApplicationType = pApplicationType;
+  }
 
   @Override
   public void commit(boolean update) throws Exception {

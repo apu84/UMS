@@ -39,4 +39,10 @@ public class ClassRoomResource  extends MutableClassRoomResource {
     return mResourceHelper.getByRoomId(roomId,mUriInfo);
   }
 
+  @GET
+  @Path("/program")
+  public JsonObject getByProgram(final @Context Request pRequest) throws Exception{
+    return mResourceHelper.getRooms(mUriInfo);
+  }
+
 }

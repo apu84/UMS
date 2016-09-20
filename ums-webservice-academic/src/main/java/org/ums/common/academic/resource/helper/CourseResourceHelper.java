@@ -1,15 +1,14 @@
 package org.ums.common.academic.resource.helper;
 
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
 import org.ums.common.academic.resource.SemesterResource;
 import org.ums.common.builder.CourseBuilder;
-import org.ums.domain.model.immutable.Course;
-import org.ums.domain.model.immutable.Syllabus;
+import org.ums.domain.model.immutable.*;
 import org.ums.domain.model.mutable.MutableCourse;
-import org.ums.manager.CourseManager;
-import org.ums.manager.SemesterSyllabusMapManager;
+import org.ums.manager.*;
 import org.ums.persistent.model.PersistentCourse;
 import org.ums.resource.ResourceHelper;
 
@@ -22,6 +21,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, String> {
@@ -29,7 +29,19 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
   private CourseManager mManager;
 
   @Autowired
+  private UserManager mUserManager;
+
+  @Autowired
   private SemesterSyllabusMapManager mSemesterSyllabusMapManager;
+
+  @Autowired
+  private EmployeeManager mEmployeeManager;
+
+  @Autowired
+  private ProgramManager mProgramManager;
+
+  @Autowired
+  private DepartmentManager mDepartmentManager;
 
   @Autowired
   private CourseBuilder mBuilder;
@@ -63,7 +75,7 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
     return "";
   }
 
-  public JsonObject buildCourses(final List<Course> pCourses, final UriInfo pUriInfo) throws Exception {
+ /* public JsonObject buildCourses(final List<Course> pCourses, final UriInfo pUriInfo) throws Exception {
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
@@ -73,7 +85,7 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
     object.add("entries", children);
     localCache.invalidate();
     return object.build();
-  }
+  }*/
 
   public JsonObject getBySyllabus(final String pSyllabusId, final Request pRequest, final UriInfo pUriInfo) throws Exception {
     List<Course> courses = getContentManager().getBySyllabus(pSyllabusId);
@@ -93,77 +105,58 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
   public JsonObject getBySemesterProgram(final String pSemesterId,final String pProgramId, final Request pRequest, final UriInfo pUriInfo) throws Exception {
     List<Course> courses = getContentManager().getBySemesterProgram(pSemesterId,pProgramId);
 
-    JsonObjectBuilder object = Json.createObjectBuilder();
-    JsonArrayBuilder children = Json.createArrayBuilder();
-    LocalCache localCache = new LocalCache();
-    for (Course course : courses) {
-      children.add(toJson(course, pUriInfo, localCache));
-    }
-    object.add("entries", children);
-    localCache.invalidate();
-
-    return object.build();
+    return buildCourse(courses,pUriInfo);
   }
+
+  public JsonObject getCourses(final Integer pSemesterId, final int pProgramType, final Request pRequest, final UriInfo pUriInfo) throws Exception{
+    String userId = SecurityUtils.getSubject().getPrincipal().toString();
+    User user = mUserManager.get(userId);
+    String employeeId = user.getEmployeeId();
+    Employee employee = mEmployeeManager.getByEmployeeId(employeeId);
+    String deptId = employee.getDepartment().getId();
+    List<Program> program = mProgramManager
+        .getAll()
+        .stream()
+        .filter(pProgram ->pProgram.getDepartmentId().equals(deptId))
+        .collect(Collectors.toList());
+    List<Course> courses = getContentManager().
+        getBySemesterProgram(pSemesterId.toString(),program.get(0).getId().toString())
+        .stream()
+        .filter(course->course.getCourseType().getValue()==pProgramType)
+        .collect(Collectors.toList());
+
+    return buildCourse(courses,pUriInfo);
+  }
+
 
   public JsonObject getByYearSemester(final String pSemesterId, final String pProgramId, final int year,final int semester,final Request pRequest, final UriInfo pUriInfo)throws Exception{
     List<Course> courses = getContentManager().getByYearSemester(pSemesterId,pProgramId,year,semester);
 
-    JsonObjectBuilder object = Json.createObjectBuilder();
-    JsonArrayBuilder children = Json.createArrayBuilder();
-    LocalCache localCache = new LocalCache();
-    for (Course course : courses) {
-      children.add(toJson(course, pUriInfo, localCache));
-    }
-    object.add("entries", children);
-    localCache.invalidate();
-
-    return object.build();
+    return buildCourse(courses,pUriInfo);
   }
+
+
+
 
   public JsonObject getOptionalCourses(final Integer pSemesterId,final Integer pProgramId,final Integer pYear,final Integer pSemester,  final Request pRequest, final UriInfo pUriInfo) throws Exception {
     Syllabus syllabus=mSemesterSyllabusMapManager.getSyllabusForSemester(pSemesterId,pProgramId,pYear,pSemester);
     List<Course> courses = getContentManager().getOptionalCourseList(syllabus.getId(), pYear,pSemester) ;
 
-    JsonObjectBuilder object = Json.createObjectBuilder();
-    JsonArrayBuilder children = Json.createArrayBuilder();
-    LocalCache localCache = new LocalCache();
-    for (Course course : courses) {
-      children.add(toJson(course, pUriInfo, localCache));
-    }
-    object.add("entries", children);
-    localCache.invalidate();
-
-    return object.build();
+    return buildCourse(courses,pUriInfo);
   }
 
   public JsonObject getOfferedCourses(final Integer pSemesterId,final Integer pProgramId,final Integer pYear,final Integer pSemester, final UriInfo pUriInfo) throws Exception {
 
     List<Course> courses = getContentManager().getOfferedCourseList(pSemesterId, pProgramId, pYear, pSemester);
 
-    JsonObjectBuilder object = Json.createObjectBuilder();
-    JsonArrayBuilder children = Json.createArrayBuilder();
-    LocalCache localCache = new LocalCache();
-    for (Course course : courses) {
-      children.add(toJson(course, pUriInfo, localCache));
-    }
-    object.add("entries", children);
-    localCache.invalidate();
-    return object.build();
+    return buildCourse(courses,pUriInfo);
   }
 
   public JsonObject getCallForApplicationCourses(final Integer pSemesterId,final Integer pProgramId,final Integer pYear,final Integer pSemester, final UriInfo pUriInfo) throws Exception {
 
     List<Course> courses = getContentManager().getCallForApplicationCourseList(pSemesterId, pProgramId, pYear, pSemester);
 
-    JsonObjectBuilder object = Json.createObjectBuilder();
-    JsonArrayBuilder children = Json.createArrayBuilder();
-    LocalCache localCache = new LocalCache();
-    for (Course course : courses) {
-      children.add(toJson(course, pUriInfo, localCache));
-    }
-    object.add("entries", children);
-    localCache.invalidate();
-    return object.build();
+    return buildCourse(courses,pUriInfo);
   }
 
 
@@ -172,29 +165,27 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
 
     List<Course> courses = getContentManager().getApprovedCourseList(pSemesterId, pProgramId, pYear, pSemester);
 
-    JsonObjectBuilder object = Json.createObjectBuilder();
-    JsonArrayBuilder children = Json.createArrayBuilder();
-    LocalCache localCache = new LocalCache();
-    for (Course course : courses) {
-      children.add(toJson(course,pUriInfo, localCache));
-    }
-    object.add("entries", children);
-    localCache.invalidate();
-    return object.build();
+    return buildCourse(courses,pUriInfo);
   }
 
   public JsonObject getApprovedCallForApplicationCourseList(final Integer pSemesterId,final Integer pProgramId,final Integer pYear,final Integer pSemester, final UriInfo pUriInfo) throws Exception {
 
     List<Course> courses = getContentManager().getApprovedCallForApplicationCourseList(pSemesterId, pProgramId, pYear, pSemester);
 
+    return buildCourse(courses,pUriInfo);
+  }
+
+
+  private JsonObject buildCourse(List<Course> courses, final UriInfo pUriInfo) throws Exception{
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
     for (Course course : courses) {
-      children.add(toJson(course,pUriInfo, localCache));
+      children.add(toJson(course, pUriInfo, localCache));
     }
     object.add("entries", children);
     localCache.invalidate();
+
     return object.build();
   }
 

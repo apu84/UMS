@@ -30,4 +30,14 @@ public class StudentCache extends ContentCache<Student, MutableStudent, String, 
   public List<Student> getStudentListFromStudentsString(String pStudents) throws Exception {
     return getManager().getStudentListFromStudentsString(pStudents);
   }
+
+  @Override
+  public List<Student> getStudentByCourseIdAndSemesterIdForSeatPlanForCCI(String pCourseId, int pSemesterId) {
+    return getManager().getStudentByCourseIdAndSemesterIdForSeatPlanForCCI(pCourseId,pSemesterId);
+  }
+
+  @Override
+  public List<Student> getStudentBySemesterIdAndExamDateForCCI(Integer pSemesterId, String pExamDate) {
+    return getManager().getStudentBySemesterIdAndExamDateForCCI(pSemesterId,pExamDate);
+  }
 }

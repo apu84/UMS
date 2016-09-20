@@ -14,4 +14,13 @@ public class StudentDaoDecorator extends ContentDaoDecorator<Student, MutableStu
         return getManager().getStudentListFromStudentsString(pStudents);
     }
 
+    @Override
+    public List<Student> getStudentByCourseIdAndSemesterIdForSeatPlanForCCI(String pCourseId, int pSemesterId) {
+        return getManager().getStudentByCourseIdAndSemesterIdForSeatPlanForCCI(pCourseId,pSemesterId);
+    }
+
+    @Override
+    public List<Student> getStudentBySemesterIdAndExamDateForCCI(Integer pSemesterId, String pExamDate) {
+        return getManager().getStudentBySemesterIdAndExamDateForCCI(pSemesterId,pExamDate);
+    }
 }

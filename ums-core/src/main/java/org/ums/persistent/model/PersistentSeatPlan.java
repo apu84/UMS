@@ -4,12 +4,12 @@ import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.ClassRoom;
 import org.ums.domain.model.immutable.Semester;
-import org.ums.domain.model.immutable.SpStudent;
+import org.ums.domain.model.immutable.Student;
 import org.ums.domain.model.mutable.MutableSeatPlan;
 import org.ums.manager.ClassRoomManager;
 import org.ums.manager.SeatPlanManager;
 import org.ums.manager.SemesterManager;
-import org.ums.manager.SpStudentManager;
+import org.ums.manager.StudentManager;
 
 /**
  * Created by My Pc on 5/8/2016.
@@ -17,14 +17,14 @@ import org.ums.manager.SpStudentManager;
 public class PersistentSeatPlan implements MutableSeatPlan {
 
   private static ClassRoomManager sClassRoomManager;
-  private static SpStudentManager sSpStudentManager;
+  private static StudentManager sStudentManager;
   private static SemesterManager sSemesterManager;
   private static SeatPlanManager sSeatPlanManager;
 
   static{
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sClassRoomManager = applicationContext.getBean("classRoomManager",ClassRoomManager.class);
-    sSpStudentManager = applicationContext.getBean("spStudentManager",SpStudentManager.class);
+    sStudentManager = applicationContext.getBean("studentManager",StudentManager.class);
     sSemesterManager = applicationContext.getBean("semesterManager",SemesterManager.class);
     sSeatPlanManager = applicationContext.getBean("seatPlanManager",SeatPlanManager.class);
   }
@@ -32,7 +32,7 @@ public class PersistentSeatPlan implements MutableSeatPlan {
   private int mId;
   private ClassRoom mClassRoom;
   private int mClassRoomId;
-  private SpStudent mSpStudent;
+  private Student mStudent;
   private String mStudentId;
   private Semester mSemester;
   private int mSemesterId;
@@ -53,7 +53,7 @@ public class PersistentSeatPlan implements MutableSeatPlan {
     mId = pPersistentSeatPlan.getId();
     mClassRoom = pPersistentSeatPlan.getClassRoom();
     mClassRoomId = pPersistentSeatPlan.getClassRoomId();
-    mSpStudent = pPersistentSeatPlan.getStudent();
+    mStudent = pPersistentSeatPlan.getStudent();
     mStudentId = pPersistentSeatPlan.getStudentId();
     mSemester = pPersistentSeatPlan.getSemester();
     mSemesterId = pPersistentSeatPlan.getSemesterId();
@@ -117,8 +117,8 @@ public class PersistentSeatPlan implements MutableSeatPlan {
   }
 
   @Override
-  public void setStudent(SpStudent pStudent) {
-    mSpStudent = pStudent;
+  public void setStudent(Student pStudent) {
+    mStudent = pStudent;
   }
 
   @Override
@@ -176,8 +176,8 @@ public class PersistentSeatPlan implements MutableSeatPlan {
   }
 
   @Override
-  public SpStudent getStudent() throws Exception {
-    return mSpStudent==null? sSpStudentManager.get(mStudentId):sSpStudentManager.validate(mSpStudent);
+  public Student getStudent() throws Exception {
+    return mStudent==null? sStudentManager.get(mStudentId):sStudentManager.validate(mStudent);
   }
 
   @Override

@@ -70,6 +70,10 @@ public interface Student extends Serializable, EditType<MutableStudent>, Identif
 
   String getSessionalSection();
 
+  Integer getApplicationType();
+
+  String getProgramShortName();
+
   enum EnrollmentType {
     ACTUAL(1),
     TEMPORARY(0);

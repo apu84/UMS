@@ -1,6 +1,7 @@
 package org.ums.domain.model.dto;
 
 import com.google.gson.Gson;
+import org.ums.enums.CourseRegType;
 import org.ums.enums.RecheckStatus;
 import org.ums.enums.StudentMarksSubmissionStatus;
 
@@ -153,8 +154,8 @@ public class StudentGradeDto {
         return recheckStatusId;
     }
 
-    public int getRegType() {
-        return regType;
+    public CourseRegType getRegType() {
+        return CourseRegType.get(regType);
     }
 
     public void setRegType(int regType) {

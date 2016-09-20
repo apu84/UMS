@@ -200,7 +200,7 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
             if(action.equals("save") && gradeType.equals("approve"))
                 return StudentMarksSubmissionStatus.APPROVE;
             else if(action.equals("recheck")  && gradeType.equals("recheck"))
-                return StudentMarksSubmissionStatus.SUBMITTED;
+                return StudentMarksSubmissionStatus.NONE;
             else if(action.equals("recheck")  && gradeType.equals("approve"))
                 return StudentMarksSubmissionStatus.APPROVE;
             else if(action.equals("approve") && gradeType.equals("approve"))
@@ -210,7 +210,7 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
             if(action.equals("save") && gradeType.equals("approve"))
                 return StudentMarksSubmissionStatus.ACCEPT;
             else if(action.equals("recheck")  && gradeType.equals("recheck"))
-                return StudentMarksSubmissionStatus.SCRUTINIZED;
+                return StudentMarksSubmissionStatus.NONE;
             else if(action.equals("recheck")  && gradeType.equals("approve"))
                 return StudentMarksSubmissionStatus.ACCEPT;
             else if(action.equals("approve")  && gradeType.equals("approve"))

@@ -357,45 +357,45 @@ module ums {
           }
         })
         .state('semesterSettingParameter',{
-                   url:"/semesterSettingParameter",
-                 controller:'SemesterSettingParameter',
-                 templateUrl:'views/semester/semester-setting-parameter.html',
-                 resolve: {
-                 loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-                     return $ocLazyLoad.load({
-                           files: [
-                            'vendors/bootstrap-colorpicker/css/colorpicker.css',
-                            'vendors/bootstrap-datepicker/css/datepicker.css',
-                            'vendors/bootstrap-daterangepicker/daterangepicker-bs3.css',
-                            'vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css',
-                            'vendors/bootstrap-timepicker/css/bootstrap-timepicker.min.css',
-                            'vendors/bootstrap-clockface/css/clockface.css',
-                            'vendors/bootstrap-switch/css/bootstrap-switch.css',
-                            'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
-                            'vendors/bootstrap-daterangepicker/daterangepicker.js',
-                            'vendors/moment/moment.js',
-                            'vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
-                            'vendors/bootstrap-timepicker/js/bootstrap-timepicker.js',
-                            'vendors/bootstrap-clockface/js/clockface.js',
-                            'vendors/bootstrap-colorpicker/js/bootstrap-colorpicker.js',
-                            'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
-                            'vendors/jquery-maskedinput/jquery-maskedinput.js',
-                           'vendors/charCount.js',
-                            'vendors/bootstrap-datepicker/css/datepicker.css',
-                            'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
-                            'vendors/select2/select2-madmin.css',
-                            'vendors/bootstrap-select/bootstrap-select.min.css',
-                            'vendors/multi-select/css/multi-select-madmin.css',
-                            'vendors/select2/select2.min.js',
-                            'vendors/bootstrap-switch/css/bootstrap-switch.css',
-                            'vendors/bootstrap-datepicker/css/datepicker.css',
-                            'vendors/jquery-validate/jquery.validate.min.js',
-                            'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
-                          ]
-                      });
-                    }]
-                }
-            })
+          url:"/semesterSettingParameter",
+          controller:'SemesterSettingParameter',
+          templateUrl:'views/semester/semester-setting-parameter.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: [
+                  'vendors/bootstrap-colorpicker/css/colorpicker.css',
+                  'vendors/bootstrap-datepicker/css/datepicker.css',
+                  'vendors/bootstrap-daterangepicker/daterangepicker-bs3.css',
+                  'vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css',
+                  'vendors/bootstrap-timepicker/css/bootstrap-timepicker.min.css',
+                  'vendors/bootstrap-clockface/css/clockface.css',
+                  'vendors/bootstrap-switch/css/bootstrap-switch.css',
+                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                  'vendors/bootstrap-daterangepicker/daterangepicker.js',
+                  'vendors/moment/moment.js',
+                  'vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
+                  'vendors/bootstrap-timepicker/js/bootstrap-timepicker.js',
+                  'vendors/bootstrap-clockface/js/clockface.js',
+                  'vendors/bootstrap-colorpicker/js/bootstrap-colorpicker.js',
+                  'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
+                  'vendors/jquery-maskedinput/jquery-maskedinput.js',
+                  'vendors/charCount.js',
+                  'vendors/bootstrap-datepicker/css/datepicker.css',
+                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                  'vendors/select2/select2-madmin.css',
+                  'vendors/bootstrap-select/bootstrap-select.min.css',
+                  'vendors/multi-select/css/multi-select-madmin.css',
+                  'vendors/select2/select2.min.js',
+                  'vendors/bootstrap-switch/css/bootstrap-switch.css',
+                  'vendors/bootstrap-datepicker/css/datepicker.css',
+                  'vendors/jquery-validate/jquery.validate.min.js',
+                  'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
+                ]
+              });
+            }]
+          }
+        })
         .state('semesterWithdrawAppStd', {
           url: "/semesterWithdrawAppStd",
           controller: 'SemesterWithdrawAppStd',
@@ -416,25 +416,25 @@ module ums {
           }
         })
 
-     .state('semesterWithdrawApp', {
-      url: "/semesterWithdrawApp",
-      controller: 'SemesterWithdrawAppEmp',
-      templateUrl: 'views/semester/semester-withdraw-app-emp.html',
-      resolve: {
-        loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-          return $ocLazyLoad.load({
-            files: [
-              'vendors/bootstrap-switch/css/bootstrap-switch.css',
-              'vendors/bootstrap-datepicker/css/datepicker.css',
-              'vendors/jquery-validate/jquery.validate.min.js',
-              'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
-              'vendors/ckeditor/ckeditor.js',
-              'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
-            ]
-          });
-        }]
-      }
-    })
+        .state('semesterWithdrawApp', {
+          url: "/semesterWithdrawApp",
+          controller: 'SemesterWithdrawAppEmp',
+          templateUrl: 'views/semester/semester-withdraw-app-emp.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: [
+                  'vendors/bootstrap-switch/css/bootstrap-switch.css',
+                  'vendors/bootstrap-datepicker/css/datepicker.css',
+                  'vendors/jquery-validate/jquery.validate.min.js',
+                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                  'vendors/ckeditor/ckeditor.js',
+                  'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
+                ]
+              });
+            }]
+          }
+        })
         .state('semesterSyllabusMap', {
           url: "/semesterSyllabusMap",
           controller: 'SemesterSyllabusMap',
@@ -651,7 +651,7 @@ module ums {
               return $ocLazyLoad.load({
                 files: [
                   'vendors/amcharts/amcharts.js',
-                    'vendors/amcharts/serial.js'
+                  'vendors/amcharts/serial.js'
                 ]
               });
             }]
@@ -672,6 +672,7 @@ module ums {
             }]
           }
         })
+
         .state('gradeSheetSelectionCoE', {
           url: "/gradeSheetSelectionCoE/:1",
           templateUrl: 'views/grade/grade-sheet-selection.html',
@@ -688,19 +689,19 @@ module ums {
           }
         })
         .state('gradeSheetSelectionVC', {
-            url: "/gradeSheetSelectionVC/:1",
-            templateUrl: 'views/grade/grade-sheet-selection.html',
-            controller: 'MarksSubmission',
-            resolve: {
-                loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load({
-                        files: [
-                            'vendors/amcharts/amcharts.js',
-                            'vendors/amcharts/serial.js'
-                        ]
-                    });
-                }]
-            }
+          url: "/gradeSheetSelectionVC/:1",
+          templateUrl: 'views/grade/grade-sheet-selection.html',
+          controller: 'MarksSubmission',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: [
+                  'vendors/amcharts/amcharts.js',
+                  'vendors/amcharts/serial.js'
+                ]
+              });
+            }]
+          }
         })
         .state('loggerGrid', {
           url: "/loggerGrid",
@@ -734,9 +735,9 @@ module ums {
             }]
           }
         })
-        //In database use /dummyController/H or /dummyController/T in the location column
-        //https://localhost/ums-web/iums/#/dummyConroller/T
-        //https://localhost/ums-web/iums/#/dummyConroller/H
+      //In database use /dummyController/H or /dummyController/T in the location column
+      //https://localhost/ums-web/iums/#/dummyConroller/T
+      //https://localhost/ums-web/iums/#/dummyConroller/H
         .state('dummyController', {
           url: "/dummyConroller/:1",
           controller: 'DummyController',

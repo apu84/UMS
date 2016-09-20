@@ -1,5 +1,7 @@
 package org.ums.validator;
 
+import org.ums.exceptions.ValidationException;
+
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;

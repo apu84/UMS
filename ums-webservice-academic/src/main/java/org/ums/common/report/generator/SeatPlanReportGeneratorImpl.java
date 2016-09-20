@@ -53,7 +53,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
   private ProgramManager mProgramManager;
 
   @Autowired
-  private SpStudentManager mSpStudentManager;
+  private StudentManager mSpStudentManager;
 
   @Autowired
   private CourseManager mCourseManager;
@@ -102,7 +102,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
       seatPlans= mSeatPlanManager.getBySemesterAndGroupAndExamType(pSemesterId,groupNo,type);
 
     }
-    java.util.List<SpStudent> students;
+    java.util.List<Student> students;
     if(groupNo!=0){
      students = mSpStudentManager.getAll();
     }else{
@@ -111,7 +111,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
     java.util.List<Program> programs = mProgramManager.getAll();
 
     java.util.List<Integer> roomsOfTheSeatPlan = new ArrayList<>();
-    Map<String,SpStudent> studentIdWIthStuddentInfoMap = new HashMap<>();
+    Map<String,Student> studentIdWIthStuddentInfoMap = new HashMap<>();
     Map<String,SeatPlan> roomRowColWithSeatPlanMap = new HashMap<>();
     Map<Integer,Program> programIdWithProgramInfoMap = new HashMap<>();
     long startTime = System.currentTimeMillis();
@@ -124,7 +124,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
     }
     long endTime = System.currentTimeMillis();
     long totalTime = endTime - startTime;
-    for(SpStudent student: students){
+    for(Student student: students){
       studentIdWIthStuddentInfoMap.put(student.getId(),student);
     }
     for(Program program: programs){
@@ -220,21 +220,21 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
 
               if(seatPlanOfTheRowAndCol!=null){
                 SeatPlan seatPlan = seatPlanOfTheRowAndCol;                                  //roomRowColWithSeatPlanMap.get(room.getId()+""+i+""+j) ;
-                SpStudent student = studentIdWIthStuddentInfoMap.get(seatPlan.getStudent().getId());
+                Student student = studentIdWIthStuddentInfoMap.get(seatPlan.getStudent().getId());
                 Program program ;
                 String dept;
                 String deptName;
                 if(groupNo==0){
-                  dept = student.getProgramShortName()+" "+student.getAcademicYear()+"/"+student.getAcademicSemester();
+                  dept = student.getProgramShortName()+" "+student.getCurrentYear()+"/"+student.getCurrentAcademicSemester();
                   deptName=student.getProgramShortName();
                 }
                 else{
                   program = programIdWithProgramInfoMap.get(student.getProgram().getId());
-                  dept = program.getShortName()+" "+student.getAcademicYear()+"/"+student.getAcademicSemester();
+                  dept = program.getShortName()+" "+student.getCurrentYear()+"/"+student.getCurrentAcademicSemester();
                   deptName = program.getShortName();
 
                 }
-                String yearSemester = student.getAcademicYear()+"/"+student.getAcademicSemester();
+                String yearSemester = student.getCurrentYear()+"/"+student.getCurrentAcademicSemester();
                 if(deptList.size()==0){
                   deptList.add(dept);
                   java.util.List<String> studentList = new ArrayList<>();
@@ -466,7 +466,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
 
                 SeatPlan seatPlan = seatPlanLists.get(0);*/
 
-                SpStudent student = studentIdWIthStuddentInfoMap.get(seatPlan.getStudent().getId());
+                Student student = studentIdWIthStuddentInfoMap.get(seatPlan.getStudent().getId());
                 Program program = programIdWithProgramInfoMap.get(student.getProgram().getId());
 
 
@@ -474,7 +474,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
 
                 PdfPCell lowerCell = new PdfPCell();
 
-                String upperPart = program.getShortName()+" "+student.getAcademicYear()+"/"+student.getAcademicSemester();
+                String upperPart = program.getShortName()+" "+student.getCurrentYear()+"/"+student.getCurrentAcademicSemester();
                 Paragraph upperParagraph = new Paragraph(upperPart,FontFactory.getFont(FontFactory.TIMES_ROMAN,fontSize));
                 upperParagraph.setSpacingBefore(-1f);
                 String lowerPart = student.getId();
@@ -505,14 +505,14 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator{
               else{
 
 
-                SpStudent student2 = studentIdWIthStuddentInfoMap.get(seatPlan2.getStudent().getId());
+                Student student2 = studentIdWIthStuddentInfoMap.get(seatPlan2.getStudent().getId());
                 Program program2 = programIdWithProgramInfoMap.get(student2.getProgram().getId());
 
                 PdfPCell upperCell = new PdfPCell();
                 upperCell.setColspan(10);
                 PdfPCell lowerCell = new PdfPCell();
                 lowerCell.setColspan(10);
-                String upperPart = program2.getShortName()+" "+student2.getAcademicYear()+"/"+student2.getAcademicSemester();
+                String upperPart = program2.getShortName()+" "+student2.getCurrentYear()+"/"+student2.getCurrentAcademicSemester();
                 Paragraph upperParagraph = new Paragraph(upperPart,FontFactory.getFont(FontFactory.TIMES_ROMAN,fontSize));
                 upperParagraph.setSpacingBefore(-1f);
                 String lowerPart = student2.getId();
