@@ -12,23 +12,32 @@
         border: 1px solid #efefef;
     }
     .scrollableContainer { height: inherit; }
-    .orgLeftClass {
-        width: 30%;
+    #arrowDiv {
+           display: none;
+           cursor: pointer;
+           float:left;
+           width:20px;
+           margin-right: 15px;
+        margin-left: 10px;
+        }
+    #leftDiv {
+        float:left;
+        width:30%;
+        margin-right: 12px;
+        margin-left: 12px;
     }
-    .orgRightClass {
-        width: 66%;
+
+    #rightDiv {
+        overflow:hidden;
     }
-    .arrowClass {
-        display: none;
-        cursor: pointer;
+    @media screen and (max-width: 900px) {
+        #leftDiv {
+            margin-left: 12px;
+            float: none;
+            width:auto;
+        }
     }
-    .orgLeftClass, .arrowClass {
-        margin-right: 25px;
-        margin-left: 8px;
-    }
-    .newRightClass {
-        width: 94%;
-    }
+
     .bootstrap-select.btn-group:not(.input-group-btn), .bootstrap-select.btn-group[class*="span"] {
         margin-bottom: 0px !important;
     }
@@ -37,7 +46,9 @@
     }
 </style>
 <div class="row" id="selection1">
-    <div class="orgLeftClass pull-left panel panel-green" id="leftDiv">
+    <div onclick="resetDivs()" id="arrowDiv"><i
+            class="fa fa-angle-double-right fa-4x"></i></i> </div>
+    <div class="panel panel-green" id="leftDiv">
         <div class="panel-heading">
             <h3 class="panel-title">Select Parameters</h3>
         </div>
@@ -116,10 +127,7 @@
             </form>
         </div>
     </div>
-    <div class="arrowClass pull-left" onclick="resetDivs()" id="arrowDiv"><i
-            class="fa fa-angle-double-right fa-4x"></i></i> </div>
-    <div class="orgRightClass pull-left" id="rightDiv">
-
+    <div id="rightDiv">
         <div class="panel">
             <div class="panel-heading">Assigned Course List<span
                     class="subtitle"></span></div>
