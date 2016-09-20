@@ -43,3 +43,6 @@ Network Trash Folder
 Temporary Items
 .apdisk
 /ums-web/.tscache
+
+#Project specefic
+*.iml
