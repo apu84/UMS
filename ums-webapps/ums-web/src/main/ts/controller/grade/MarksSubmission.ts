@@ -394,7 +394,7 @@ module ums {
       var recheckRequestStudentList:Array<IStudent> = new Array<IStudent>();
       var approveStudentList:Array<IStudent> = new Array<IStudent>();
       var student:IStudent;
-      $("#tbl_recheck_accepted  tbody tr[id^='recheck_accepted_']").each(function (i, el) {
+      $("#tbl_recheck_accepted  tbody tr[id^='recheck_accepted_']").each(function (i, el: any) {
         student={studentId:""}
         student.studentId=el.id.substr(17,9);
         recheckRequestStudentList.push(student);
