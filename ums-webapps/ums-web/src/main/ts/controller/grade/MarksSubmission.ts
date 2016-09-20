@@ -131,6 +131,7 @@ module ums {
     dept_id:string;
     program_id:number;
     status:number;
+    year_semester:string;
   }
   interface IOption{
     id:number;
@@ -163,7 +164,8 @@ module ums {
         ugPrograms: appConstants.ugPrograms,
         pgPrograms: appConstants.pgPrograms,
         programs:Array<IOption>(),
-        markSubmissionStatus:appConstants.marksSubmissionStatus
+        markSubmissionStatus:appConstants.marksSubmissionStatus,
+        yearSemester:appConstants.yearSemester
       };
 
       $scope.modalSettings = {};
@@ -215,7 +217,9 @@ module ums {
         exam_type:1,
         dept_id:'',
         program_id:1,
-        status:-1};
+        status:-1,
+        year_semester:''
+      };
 
       this.loadSemesters();
 
@@ -1309,9 +1313,12 @@ module ums {
             this.$scope.inputParams.dept_id=departmentJson.id;
             this.loadPrograms();
           });
-        }
-        else
+          this.$scope.inputParams.status=this.appConstants.marksSubmissionStatusEnum.WAITING_FOR_HEAD_APPROVAL;
+      }
+      else if(this.$scope.userRole=="C" ) {
+          this.$scope.inputParams.status = this.appConstants.marksSubmissionStatusEnum.WAITING_FOR_COE_APPROVAL;
           this.$scope.data.depts = this.$scope.data.ugDepts;
+        }
       }
       else if(this.$scope.inputParams.program_type==this.appConstants.programTypeEnum.pgDepts)
         this.$scope.data.depts=this.$scope.data.pgDepts;

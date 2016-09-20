@@ -92,13 +92,21 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-group"  data-ng-if="userRole!='T'">
-                        <label class="col-md-4 control-label">Status</label>
 
+                    <div class="form-group"  data-ng-if="userRole!='T'">
+                        <label class="col-md-4 control-label">Year-Semester</label>
                         <div class="col-md-8">
-                            <select class="form-control required" data-ng-model="inputParams.status" data-convert-to-number>
-                                <option data-ng-repeat="status in data.markSubmissionStatus" value="{{status.id}}">{{status.name}}</option>
+                            <select class="form-control required" data-ng-model="inputParams.yearSemester">
+                                <option data-ng-repeat="ys in data.yearSemester" value="{{ys.id}}">{{ys.name}}</option>
                             </select>
+                         </div>
+                        </div>
+                    <div class="form-group"  data-ng-if="userRole!='T'">
+                            <label class="col-md-4 control-label">Status</label>
+                            <div class="col-md-8">
+                                <select class="form-control required" data-ng-model="inputParams.status" data-convert-to-number>
+                                    <option data-ng-repeat="status in data.markSubmissionStatus" value="{{status.id}}">{{status.name}}</option>
+                                </select>
                         </div>
                     </div>
                 </div>

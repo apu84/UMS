@@ -16,7 +16,7 @@ module ums{
       console.log(padLeft(23,5,'>>'));  //=> '>>>>>>23' */
     }
     public fetchCurrentUser():ng.IPromise<any> {
-      var url="/ums-webservice-common/users/current";
+      var url="/ums-webservice-academic/users/current";
       var defer = this.$q.defer();
       this.httpClient.get(url, this.appConstants.mimeTypeJson,
           (json:any, etag:string) => {
