@@ -97,9 +97,16 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
   }
 
 
-  public JsonObject getGradeSubmissionStatus(final Integer pSemesterId, final Integer pExamType,final Integer pProgramId, final String deptId, final String pUserRole,final int pStatus) throws Exception {
+  public JsonObject getGradeSubmissionStatus(final Integer pSemesterId, final Integer pExamType,final Integer pProgramId,final Integer pYearSemester, final String deptId, final String pUserRole,final int pStatus) throws Exception {
     User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
-    List<MarksSubmissionStatusDto> examGradeStatusList = getContentManager().getMarksSubmissionStatus(pSemesterId, pExamType,pProgramId, user.getEmployeeId(), deptId, pUserRole,pStatus);
+    Integer year = 0;
+    Integer semester = 0;
+
+    if (pYearSemester!=0){
+      year = Integer.valueOf((pYearSemester.toString()) .charAt(0)+"");
+      semester = Integer.valueOf((pYearSemester.toString()).charAt(1)+"");
+  }
+    List<MarksSubmissionStatusDto> examGradeStatusList = getContentManager().getMarksSubmissionStatus(pSemesterId, pExamType,pProgramId, year,semester,user.getEmployeeId(), deptId, pUserRole,pStatus);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     JsonReader jsonReader;

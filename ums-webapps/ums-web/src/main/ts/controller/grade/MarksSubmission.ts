@@ -131,7 +131,7 @@ module ums {
     dept_id:string;
     program_id:number;
     status:number;
-    year_semester:string;
+    year_semester:number;
   }
   interface IOption{
     id:number;
@@ -212,13 +212,14 @@ module ums {
       $scope.destroyErrorTooltip=this.destroyErrorTooltip.bind(this);
 
 
-      $scope.inputParams={program_type:this.appConstants.programTypeEnum.UG,
+      $scope.inputParams={
+        program_type:this.appConstants.programTypeEnum.UG,
         semester_id:11,
         exam_type:1,
         dept_id:'',
         program_id:1,
         status:-1,
-        year_semester:''
+        year_semester:0
       };
 
       this.loadSemesters();
@@ -353,6 +354,7 @@ module ums {
           "/examtype/"+this.$scope.inputParams.exam_type+
           "/dept/"+this.commonService.padLeft(Number(this.$scope.inputParams.dept_id),2,'0')+
           "/program/"+this.$scope.inputParams.program_id+
+          "/yearsemester/"+this.$scope.inputParams.year_semester+
           "/role/"+this.$scope.userRole+
           "/status/"+status,
           this.appConstants.mimeTypeJson,

@@ -107,7 +107,7 @@
                     <div class="form-group"  data-ng-if="userRole!='T'">
                         <label class="col-md-4 control-label">Year-Semester</label>
                         <div class="col-md-8">
-                            <select class="form-control required" data-ng-model="inputParams.yearSemester">
+                            <select class="form-control required" data-ng-model="inputParams.year_semester" data-convert-to-number>
                                 <option data-ng-repeat="ys in data.yearSemester" value="{{ys.id}}">{{ys.name}}</option>
                             </select>
                          </div>

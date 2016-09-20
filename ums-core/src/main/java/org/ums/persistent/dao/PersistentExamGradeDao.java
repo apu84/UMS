@@ -66,7 +66,7 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
       "And tmp5.SEMESTER_ID=MARKS_SUBMISSION_STATUS.SEMESTER_ID(+)  "+
       "And Exam_Type=?";
 
-  String SELECT_GRADE_SUBMISSION_TABLE_HEAD="Select Ms_Status.Semester_Id,Exam_Type,Mst_Course.Course_Id,Course_No,Course_Title ,CrHr,Course_Type,Course_Category,Offer_By,Year,Semester,COURSE_SYLLABUS_MAP.Syllabus_Id, " +
+  String SELECT_GRADE_SUBMISSION_TABLE_HEAD="Select Ms_Status.Semester_Id,Exam_Type,Mst_Course.Course_Id,Course_No,Course_Title ,CrHr,Course_Type,Course_Category,Offer_By,Ms_Status.Year,Ms_Status.Semester,COURSE_SYLLABUS_MAP.Syllabus_Id, " +
       "getCourseTeacher(Ms_Status.semester_id,Mst_Course.course_id) Course_Teachers, " +
       "MST_PROGRAM.PROGRAM_SHORT_NAME,getPreparerScrutinizer(Ms_Status.Semester_Id,Mst_Course.Course_Id,'P') PREPARER_NAME, " +
       "getPreparerScrutinizer(Ms_Status.Semester_Id,Mst_Course.Course_Id,'S') SCRUTINIZER_NAME,STATUS  " +
@@ -80,7 +80,7 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
       "And Offer_By in " +
       "(Select dept_id From MVIEW_Teachers  where Teacher_Id =?) ";
 
-  String SELECT_GRADE_SUBMISSION_TABLE_CoE="Select Ms_Status.Semester_Id,Exam_Type,Mst_Course.Course_Id,Course_No,Course_Title ,CrHr,Course_Type,Course_Category,Offer_By,Year,Semester,COURSE_SYLLABUS_MAP.Syllabus_Id, " +
+  String SELECT_GRADE_SUBMISSION_TABLE_CoE="Select Ms_Status.Semester_Id,Exam_Type,Mst_Course.Course_Id,Course_No,Course_Title ,CrHr,Course_Type,Course_Category,Offer_By,Ms_Status.Year,Ms_Status.Semester,COURSE_SYLLABUS_MAP.Syllabus_Id, " +
       "getCourseTeacher(Ms_Status.semester_id,Mst_Course.course_id) Course_Teachers, " +
       "MST_PROGRAM.PROGRAM_SHORT_NAME,getPreparerScrutinizer(Ms_Status.Semester_Id,Mst_Course.Course_Id,'P') PREPARER_NAME, " +
       "getPreparerScrutinizer(Ms_Status.Semester_Id,Mst_Course.Course_Id,'S') SCRUTINIZER_NAME, STATUS  " +
@@ -338,7 +338,7 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
   }
 
   @Override
-  public List<MarksSubmissionStatusDto> getMarksSubmissionStatus(int pSemesterId,int pExamType,int pProgramId,String teacherId,String deptId,String userRole,int status) throws Exception {
+  public List<MarksSubmissionStatusDto> getMarksSubmissionStatus(Integer pSemesterId,Integer pExamType,Integer pProgramId,Integer year,Integer semester,String teacherId,String deptId,String userRole,Integer status) throws Exception {
     String query="";
     if(userRole.equals("T")){  //Teacher
       query = SELECT_GRADE_SUBMISSION_TABLE_TEACHER;
@@ -347,11 +347,13 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
     else if(userRole.equals("H")){  //Head
       query = SELECT_GRADE_SUBMISSION_TABLE_HEAD;
       if(status!=-1){query+="  And Ms_Status.Status=0"+status;}
+      if(year!=0){query+="  And Ms_Status.Year="+year+" And Ms_Status.Semester="+semester;}
       return mJdbcTemplate.query(query, new Object[]{pSemesterId,pExamType,pProgramId,teacherId},new MarksSubmissionStatusTableRowMapper());
     }
     else if(userRole.equals("C")){  //CoE
       query = SELECT_GRADE_SUBMISSION_TABLE_CoE;
       if(status!=-1){query+="  And Ms_Status.Status=0"+status;}
+      if(year!=0){query+="  And Ms_Status.Year="+year+" And Ms_Status.Semester="+semester;}
       return mJdbcTemplate.query(query,new Object[]{pSemesterId,pExamType,pProgramId,deptId} ,new MarksSubmissionStatusTableRowMapper());
     }
     else if(userRole.equals("V")){  //CoE

@@ -460,15 +460,15 @@ module ums {
           PG:22
         },
         yearSemester: [
-          {id: '', name: 'Select Year-Semester'},
-          {id: '1-1', name: '1-1'},
-          {id: '1-2', name: '1-2'},
-          {id: '2-1', name: '2-1'},
-          {id: '2-2', name: '2-2'},
-          {id: '3-1', name: '3-1'},
-          {id: '3-2', name: '3-2'},
-          {id: '4-1', name: '4-1'},
-          {id: '4-2', name: '4-2'},
+          {id: "0", name: "Select Year-Semester"},
+          {id: "11", name: "1-1"},
+          {id: "12", name: "1-2"},
+          {id: "21", name: "2-1"},
+          {id: "22", name: "2-2"},
+          {id: "31", name: "3-1"},
+          {id: "32", name: "3-2"},
+          {id: "41", name: "4-1"},
+          {id: "42", name: "4-2"},
         ]
 
       }

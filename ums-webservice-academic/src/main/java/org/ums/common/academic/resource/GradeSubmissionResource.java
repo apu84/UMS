@@ -29,15 +29,16 @@ public class GradeSubmissionResource extends MutableGradeSubmissionResource {
     }
 
     @GET
-    @Path("/semester/{semester-id}/examtype/{exam-type}/dept/{dept-id}/program/{program-id}/role/{role}/status/{status}")
+    @Path("/semester/{semester-id}/examtype/{exam-type}/dept/{dept-id}/program/{program-id}/yearsemester/{year-semester}/role/{role}/status/{status}")
     public JsonObject getGradeSubmissionStatus(final @Context Request pRequest,
                                    final @PathParam("semester-id") Integer pSemesterId,
                                    final @PathParam("exam-type") Integer pExamTypeId,
                                    final @PathParam("program-id") Integer pProgramId,
+                                   final @PathParam("year-semester") Integer pYearSemester,
                                    final @PathParam("dept-id") String pDeptId,
                                    final @PathParam("role") String pUserRole,
                                    final @PathParam("status") int pStatus) throws Exception {
-        return mResourceHelper.getGradeSubmissionStatus( pSemesterId, pExamTypeId,pProgramId,pDeptId,pUserRole,pStatus);
+        return mResourceHelper.getGradeSubmissionStatus( pSemesterId, pExamTypeId,pProgramId,pYearSemester,pDeptId,pUserRole,pStatus);
 
     }
 
