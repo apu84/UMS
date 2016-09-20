@@ -80,6 +80,7 @@ public class ClassRoomResourceHelper extends ResourceHelper<ClassRoom, MutableCl
   public JsonObject getRooms(UriInfo pUriInfo) throws Exception{
 
     String userId = SecurityUtils.getSubject().getPrincipal().toString();
+
     User user = mUserManager.get(userId);
     String employeeId = user.getEmployeeId();
     Employee employee = mEmployeeManager.getByEmployeeId(employeeId);
