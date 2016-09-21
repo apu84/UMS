@@ -37,6 +37,7 @@ module ums {
           this.formattedMap[examiners[i].courseId].editMode = false;
           this.formattedMap[examiners[i].courseId].updated = false;
           this.formattedMap[examiners[i].courseId].deleted = false;
+          this.formattedMap[examiners[i].courseId].modified = false;
 
           // console.debug('%o',this.formattedMap[examiners[i].courseId]);
         }
@@ -59,6 +60,7 @@ module ums {
     public editTeacher(courseId: string): void {
       this.populateTeachers(courseId);
       this.formattedMap[courseId].editMode = true;
+      this.formattedMap[courseId].modified = true;
     }
 
     public removeTeacher(courseId: string): void {
@@ -69,10 +71,59 @@ module ums {
       this.formattedMap[courseId].deleted = true;
     }
 
-    public saveTeacher(courseId: string): void {
-      //initialize what needs to be posted
+    public saveTeachers(): void {
       var savedExaminer: IPostExaminerEntries = {};
       savedExaminer.entries = [];
+
+      for (var courseId in this.formattedMap) {
+        if (this.formattedMap.hasOwnProperty(courseId)) {
+          savedExaminer = this.buildSaveList(courseId, savedExaminer);
+          if (!savedExaminer) {
+            return;
+          }
+        }
+      }
+      if (savedExaminer.entries.length > 0) {
+        this.postTeacher(savedExaminer)
+            .success(
+                () => {
+                  this.fetchTeacherInfo();
+                })
+            .error(
+                (error) => {
+                  console.error(error);
+                });
+      }
+
+    }
+
+    public saveTeacher(courseId: string): void {
+      //initialize what needs to be posted
+      var saveExaminer: IPostExaminerEntries = this.buildSaveList(courseId);
+      if (saveExaminer) {
+        this.postTeacher(saveExaminer)
+            .success(
+                () => {
+                  this.$scope.teacherSearchParamModel.courseId = courseId;
+                  this.fetchTeacherInfo();
+                })
+            .error(
+                (error) => {
+                  console.error(error);
+                });
+      }
+    }
+
+    private buildSaveList(courseId: string,
+                          pSavedExaminer?: IPostExaminerEntries): IPostExaminerEntries {
+      var savedExaminer: IPostExaminerEntries;
+      if (!pSavedExaminer) {
+        savedExaminer = {};
+        savedExaminer.entries = [];
+      }
+      else {
+        savedExaminer = pSavedExaminer;
+      }
 
       var saved: IExaminer = this.savedCopy[courseId];
       var modified: IExaminer = this.formattedMap[courseId];
@@ -80,45 +131,47 @@ module ums {
       if (!this.validate(modified, saved)) {
         return;
       }
-      if (saved.id) {
-        var updateType = 'update';
-        if (modified.preparerId == '-1' && modified.scrutinizerId == '-1') {
-          updateType = 'delete';
+
+      if(modified.modified) {
+        if (saved.id) {
+          var updateType = 'update';
+          if (modified.preparerId == '-1' && modified.scrutinizerId == '-1') {
+            updateType = 'delete';
+          }
+          savedExaminer.entries.push({
+            id: saved.id,
+            courseId: courseId,
+            programId: this.$scope.teacherSearchParamModel.programSelector.programId,
+            semesterId: this.$scope.teacherSearchParamModel.semesterId,
+            preparerId: modified.preparerId,
+            scrutinizerId: modified.scrutinizerId,
+            updateType: updateType
+          });
+        } else {
+          savedExaminer.entries.push({
+            courseId: courseId,
+            programId: this.$scope.teacherSearchParamModel.programSelector.programId,
+            semesterId: this.$scope.teacherSearchParamModel.semesterId,
+            preparerId: modified.preparerId,
+            scrutinizerId: modified.scrutinizerId,
+            updateType: 'insert'
+          });
         }
-        savedExaminer.entries.push({
-          id: saved.id,
-          courseId: courseId,
-          programId: this.$scope.teacherSearchParamModel.programSelector.programId,
-          semesterId: this.$scope.teacherSearchParamModel.semesterId,
-          preparerId: modified.preparerId,
-          scrutinizerId: modified.scrutinizerId,
-          updateType: updateType
-        });
-      } else {
-        savedExaminer.entries.push({
-          courseId: courseId,
-          programId: this.$scope.teacherSearchParamModel.programSelector.programId,
-          semesterId: this.$scope.teacherSearchParamModel.semesterId,
-          preparerId: modified.preparerId,
-          scrutinizerId: modified.scrutinizerId,
-          updateType: 'insert'
-        });
       }
-      this.postTeacher(savedExaminer);
+      return savedExaminer;
     }
 
-
     public validate(modifiedVal: IExaminer, saved: IExaminer): boolean {
-
-      if (UmsUtil.isEmptyString(modifiedVal.preparerId)) {
-        this.notify.warn("Please select Gradesheet Preparer");
-        return false;
+      if (modifiedVal.modified) {
+        if (UmsUtil.isEmptyString(modifiedVal.preparerId)) {
+          this.notify.warn("Please select Gradesheet Preparer for " + modifiedVal.courseNo);
+          return false;
+        }
+        if (UmsUtil.isEmptyString(modifiedVal.scrutinizerId)) {
+          this.notify.warn("Please select Gradesheet Scrutinizer for " + modifiedVal.courseNo);
+          return false;
+        }
       }
-      if (UmsUtil.isEmptyString(modifiedVal.scrutinizerId)) {
-        this.notify.warn("Please select Gradesheet Scrutinizer");
-        return false;
-      }
-
       return true;
     }
 
