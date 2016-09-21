@@ -192,9 +192,9 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
       "PART_A, PART_B, TOTAL, GRADE_LETTER, STATUS,RECHECK_STATUS) " +
       "Values(?,?,?,?,?,?,?,?,?,?,?,?,?,?) ";
 
-  String INSERT_SESSIONAL_LOG="Insert InTo UG_SESSIONAL_MARKS_LOG(USER_ID, ROLE,ROLE,SEMESTER_ID, COURSE_ID,  " +
+  String INSERT_SESSIONAL_LOG="Insert InTo UG_SESSIONAL_MARKS_LOG(USER_ID,ROLE,SEMESTER_ID, COURSE_ID,  " +
       "STUDENT_ID, EXAM_TYPE, TOTAL, GRADE_LETTER,STATUS, RECHECK_STATUS)  " +
-      "Value(?,?,?,?,?,?,?,?,?,?,?) ";
+      "Value(?,?,?,?,?,?,?,?,?,?) ";
 
   String INSERT_MARKS_SUBMISSION_STATUS_LOG="Insert Into Marks_Submission_Status_Log(USER_ID, ROLE,SEMESTER_ID, COURSE_ID, EXAM_TYPE,STATUS) "+
       " Values(?,?,?,?,?,?) ";
@@ -782,13 +782,14 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
       @Override
       public void setValues(PreparedStatement ps, int i) throws SQLException {
         StudentGradeDto gradeDto = pGradeList.get(i);
+        ps.setString(1, userId);
+        ps.setString(2, pRole);
+        ps.setInt(3, pSemesterId);
+        ps.setString(4, pCourseId);
+        ps.setString(5, gradeDto.getStudentId());
+        ps.setInt(6, pExamType);
+
         if(courseType==CourseType.THEORY) {
-          ps.setString(1, userId);
-          ps.setString(2, pRole);
-          ps.setInt(3, pSemesterId);
-          ps.setString(4, pCourseId);
-          ps.setString(5, gradeDto.getStudentId());
-          ps.setInt(6, pExamType);
           if(currentStatus == CourseMarksSubmissionStatus.NOT_SUBMITTED
               || currentStatus == CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_SCRUTINIZER
               || currentStatus == CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_HEAD
@@ -815,24 +816,27 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
           }
         }
         if(courseType==CourseType.SESSIONAL) {
-          //nEED TO FIX THIS PORTION
-          if (gradeDto.getTotal() == -1) ps.setNull(1, Types.NULL);
-          else ps.setFloat(1, gradeDto.getTotal());
-
-          ps.setString(2, gradeDto.getGradeLetter());
-          ps.setInt(3, gradeDto.getStatusId());
-
-          ps.setInt(4, pSemesterId);
-          ps.setString(5, pCourseId);
-          ps.setInt(6, pExamType);
-          ps.setString(7, gradeDto.getStudentId());
+          if(currentStatus == CourseMarksSubmissionStatus.NOT_SUBMITTED
+              || currentStatus == CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_SCRUTINIZER
+              || currentStatus == CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_HEAD
+              || currentStatus == CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_COE) {
+            ps.setFloat(7, gradeDto.getTotal());
+            ps.setString(8, gradeDto.getGradeLetter());
+            ps.setInt(9, nextStatus.getId());
+            ps.setInt(10, gradeDto.getRecheckStatusId());
+          }
+          else{
+            ps.setNull(7, Types.NULL);
+            ps.setNull(8, Types.NULL);
+            ps.setInt(9, nextStatus.getId());
+            ps.setInt(10, gradeDto.getRecheckStatusId());
+          }
         }
       }
       @Override
       public int getBatchSize() {
         return pGradeList.size();
       }
-
     });
   }
 
