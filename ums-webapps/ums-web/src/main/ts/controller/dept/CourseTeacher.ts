@@ -121,10 +121,53 @@ module ums {
       }
     }
 
-    public saveTeacher(courseId: string): void {
-      //initialize what needs to be posted
+    public saveTeachers(): void {
       var savedCourseTeacher: IPostCourseTeacherEntries = {};
       savedCourseTeacher.entries = [];
+
+      for (var courseId in this.formattedMap) {
+        if (this.formattedMap.hasOwnProperty(courseId)) {
+          savedCourseTeacher = this.buildSaveList(courseId, savedCourseTeacher);
+        }
+      }
+
+      this.postTeacher(savedCourseTeacher, courseId)
+          .success(
+              () => {
+                this.fetchTeacherInfo();
+              })
+          .error(
+              (error) => {
+                console.error(error);
+              });
+    }
+
+    public saveTeacher(courseId: string): void {
+      var saveList: IPostCourseTeacherEntries = this.buildSaveList(courseId);
+      this.postTeacher(saveList, courseId)
+          .success(
+              () => {
+                this.$scope.teacherSearchParamModel.courseId = courseId;
+                this.fetchTeacherInfo();
+              })
+          .error(
+              (error) => {
+                console.error(error);
+              });
+    }
+
+    private buildSaveList(courseId: string,
+                          pSavedCourseTeacher?: IPostCourseTeacherEntries): IPostCourseTeacherEntries {
+      //initialize what needs to be posted
+      var savedCourseTeacher: IPostCourseTeacherEntries;
+
+      if (pSavedCourseTeacher) {
+        savedCourseTeacher = pSavedCourseTeacher;
+      }
+      else {
+        savedCourseTeacher = {};
+        savedCourseTeacher.entries = [];
+      }
 
       var saved: ICourseTeacher = this.savedCopy[courseId];
       var modified: ICourseTeacher = this.formattedMap[courseId];
@@ -237,9 +280,8 @@ module ums {
         }
       }
 
-      this.postTeacher(savedCourseTeacher, courseId);
+      return savedCourseTeacher;
     }
-
 
     public validate(modifiedVal: ICourseTeacher, saved: ICourseTeacher): boolean {
       if (UmsUtil.isEmpty(modifiedVal.selectedTeachers)) {

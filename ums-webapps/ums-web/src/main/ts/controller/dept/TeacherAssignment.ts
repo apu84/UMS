@@ -101,7 +101,7 @@ module ums {
     }
 
 
-    private fetchTeacherInfo(): void {
+    public fetchTeacherInfo(): void {
       $("#leftDiv").hide();
       $("#arrowDiv").show();
       $("#rightDiv").removeClass("orgRightClass").addClass("newRightClass").removeClass('hidden');
@@ -188,14 +188,8 @@ module ums {
       throw new Error('Method not implemented');
     }
 
-    public postTeacher(save: IPostExaminerEntries, courseId: string): void {
-      this.httpClient.post(this.getPostUri(), save, 'application/json')
-          .success(() => {
-            this.$scope.teacherSearchParamModel.courseId = courseId;
-            this.fetchTeacherInfo();
-          }).error((error) => {
-            console.error(error);
-          });
+    public postTeacher(save: IPostExaminerEntries, courseId: string): ng.IHttpPromise<any> {
+      return this.httpClient.post(this.getPostUri(), save, 'application/json');
     }
 
     private renderHeader(): void {
