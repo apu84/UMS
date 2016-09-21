@@ -159,7 +159,9 @@ public final class BearerTokenAuthenticatingFilter extends UMSHttpAuthentication
 
   @Override
   protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
-    return !(!isLoginRequest(request, response) && isPermissive(mappedValue) && hasAuthorizationToken(request)) && (super.isAccessAllowed(request, response, mappedValue) || (!isLoginRequest(request, response) && isPermissive(mappedValue) && !hasAuthorizationToken(request)));
+    return !(!isLoginRequest(request, response) && isPermissive(mappedValue) && hasAuthorizationToken(request))
+        && (super.isAccessAllowed(request, response, mappedValue)
+                    || (!isLoginRequest(request, response) && isPermissive(mappedValue) && !hasAuthorizationToken(request)));
   }
 
 }

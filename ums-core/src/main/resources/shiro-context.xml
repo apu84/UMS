@@ -64,7 +64,7 @@
   <bean id="passThrough" class="java.util.ArrayList">
     <constructor-arg>
       <list>
-        <value>/forgotPassword</value>
+        <value>/forgotPassword/**</value>
         <value>/academic/courseMaterial/download/**</value>
         <value>/academic/student/courseMaterial/download/**</value>
         <!--        <value>/logout</value>-->

@@ -51,7 +51,7 @@ public class UMSLogin {
     }
 
     String newToken = UUID.randomUUID().toString();
-    MutableBearerAccessToken accessToken = new PersistentBearerAccessToken();
+      MutableBearerAccessToken accessToken = new PersistentBearerAccessToken();
     accessToken.setUserId(userName);
     accessToken.setId(newToken);
     accessToken.commit(false);

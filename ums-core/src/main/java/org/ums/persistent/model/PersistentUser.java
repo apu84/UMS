@@ -51,7 +51,6 @@ public class PersistentUser implements MutableUser {
   public PersistentUser(final PersistentUser pPersistentUser) throws Exception {
     mId = pPersistentUser.getId();
     mPassword = pPersistentUser.getPassword();
-    mTemporaryPassword = pPersistentUser.getTemporaryPassword();
     mRoleIds = pPersistentUser.getRoleIds();
     mRoles = pPersistentUser.getRoles();
     mActive = pPersistentUser.isActive();
@@ -60,6 +59,11 @@ public class PersistentUser implements MutableUser {
     mDepartment = pPersistentUser.getDepartment();
     mName = pPersistentUser.getName();
     mEmployeeId = pPersistentUser.getEmployeeId();
+
+    mTemporaryPassword = pPersistentUser.getTemporaryPassword();
+    mPasswordResetToken=pPersistentUser.getPasswordResetToken();
+    mPasswordTokenGenerateDateTime= pPersistentUser.getPasswordTokenGenerateDateTime();
+
   }
 
   @Override
