@@ -140,10 +140,11 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
         .stream()
         .filter(pProgram ->pProgram.getDepartmentId().equals(deptId))
         .collect(Collectors.toList());
+    List<Course> courses2 = getContentManager().getBySemesterProgram(pSemesterId.toString(),program.get(0).getId().toString());
     List<Course> courses = getContentManager().
         getBySemesterProgram(pSemesterId.toString(),program.get(0).getId().toString())
         .stream()
-        .filter(course->course.getCourseType().getValue()==pProgramType && course.getYear()==pYear && course.getSemester()==pSemester)
+        .filter(course-> course.getYear()==pYear && course.getSemester()==pSemester)
         .collect(Collectors.toList());
 
     return buildCourse(courses,pUriInfo);

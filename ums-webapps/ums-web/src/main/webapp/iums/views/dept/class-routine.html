@@ -80,28 +80,87 @@
 
         <div class="panel" style="min-height: 490px;">
             <div class="panel-heading">Class Routine<span
-                        class="subtitle"></span></div>
+                    class="subtitle"></span></div>
             <div class="panel-body">
                 <div class="row">
                     <button class="btn btn-success">Add Data</button>
+                    <br>
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>Day</th>
+                            <th>Course No</th>
+                            <th>Section</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th>Room No</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr >
+                            <th>
+                                <select data-ng-model="addedDate">
+                                    <option value="">Select Date</option>
+                                    <option data-ng-repeat="d in dates" value="{{d.id}}">{{d.dateName}}</option>
+                                </select>
+                            </th>
+                            <th>
+                                <select data-ng-model="addedCourse" data-ng-change="courseSelected()" >
+                                    <option value="">Select Course</option>
+                                    <option data-ng-repeat="c in courseArr" value="{{c.id}}">{{courseIdMapCourseNo[c.id]}}</option>
+                                </select>
+                            </th>
+                            <th>
+                                <div data-ng-if="courseType=='THEORY'">
+                                    {{section}}
+                                </div>
+                                <div data-ng-if="courseType=='SESSIONAL'">
+                                    <select value="addedSection">
+                                        <option data-ng-model="">Select Section</option>
+                                        <option data-ng-repeat="s in sessionalSections" value="{{s.id}}">{{s.name}}</option>
+                                    </select>
+                                </div>
+                            </th>
+                            <th>
+                                <select data-ng-model="addedStartTime">
+                                    <option value="">Select Start Time</option>
+                                    <option data-ng-repeat="t in times" value="{{t.id}}">{{t.val}}</option>
+                                </select>
+                            </th>
+                            <th>
+                                <select data-ng-model="addedEndTime">
+                                    <option value="">Select End Time</option>
+                                    <option data-ng-repeat="t in times" value="{{t.id}}">{{t.val}}</option>
+                                </select>
+                            </th>
+                            <th>
+                                <select data-ng-model="addedRoomNo">
+                                    <option value="">Select Room No</option>
+                                    <option data-ng-repeat="r in roomArr" value="{{r.roomNo}}">{{r.roomNo}}</option>
+                                </select>
+                            </th>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
                 <div class="row">
                     <table class="table table-bordered">
                         <thead>
-                            <tr>
-                                <th>Day</th>
-                                <th>Section</th>
-                                <th>Course No</th>
-                                <th>Start Time</th>
-                                <th>End Time</th>
-                                <th>Room No</th>
-                            </tr>
+                        <tr>
+                            <th>Day</th>
+                            <th>Section</th>
+                            <th>Course No</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th>Room No</th>
+                        </tr>
                         </thead>
                         <tbody>
-                            <tr data-ng-repeat="r in routineArr">
-                                <th>{{dates[r.day]}}</th>
-
-                            </tr>
+                        <tr data-ng-repeat="r in routineArr">
+                            <th>{{dates[r.day]}}</th>
+                            <th>{{r.section}}</th>
+                            <th></th>
+                        </tr>
                         </tbody>
                     </table>
                 </div>

@@ -363,6 +363,20 @@ module ums {
           {id: "C2", name: "C2"},
           {id: "D2", name: "D2"}
         ],
+        sessionalSectionsA:[
+          {id:'A1',name:'A1'},
+          {id:'A2',name:'A2'}
+        ],
+        sessionalSectionsB:[
+          {id:'B1',name:'B1'},
+          {id:'B2',name:'B2'}
+        ],sessionalSectionsC:[
+          {id:'C1',name:'C1'},
+          {id:'C2',name:'C2'}
+        ],sessionalSectionsD:[
+          {id:'D1',name:'D1'},
+          {id:'D2',name:'D2'}
+        ],
         mimeTypeJson: 'application/json',
         mimeTypePdf: 'application/pdf',
         semesterEnrollmentTypes: [
