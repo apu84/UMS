@@ -84,15 +84,15 @@ module ums {
           '06': 'THURSDAY',
           '07': 'FRIDAY'
         },
-        weekday: {
-          1: 'SATURDAY',
-          2: 'SUNDAY',
-          3: 'MONDAY',
-          4: 'TUESDAY',
-          5: 'WEDNESDAY',
-          6: 'THURSDAY',
-          7: 'FRIDAY'
-        },
+        weekday: [
+          {id:1,dateName: 'SATURDAY'},
+          {id:2,dateName: 'SUNDAY'},
+          {id:3,dateName: 'MONDAY'},
+          {id:4,dateName: 'TUESDAY'},
+          {id:5,dateName: 'WEDNESDAY'},
+          {id:6,dateName: 'THURSDAY'},
+          {id:7,dateName: 'FRIDAY'}
+        ],
         officeShort: {
           '80': 'RO',
           '81': 'CO',
@@ -468,7 +468,7 @@ module ums {
           {id: "31", name: "3-1"},
           {id: "32", name: "3-2"},
           {id: "41", name: "4-1"},
-          {id: "42", name: "4-2"},
+          {id: "42", name: "4-2"}
         ]
 
       }

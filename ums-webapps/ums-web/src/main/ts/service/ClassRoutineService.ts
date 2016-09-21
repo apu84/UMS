@@ -11,7 +11,7 @@ module ums{
     public getClassRoutineReportForTeacher():ng.IPromise<any>{
       var defer= this.$q.defer();
 
-      this.httpClient.get("/ums-webservice-common/academic/routine/routineReportTeacher",  'application/pdf',
+      this.httpClient.get("/ums-webservice-academic/academic/routine/routineReportTeacher",  'application/pdf',
           (data:any, etag:string) => {
             var file = new Blob([data], {type: 'application/pdf'});
             var fileURL = this.$sce.trustAsResourceUrl(URL.createObjectURL(file));
@@ -25,7 +25,7 @@ module ums{
 
       return defer.promise;
     }
-    
+
     public getClassRoutineForStudents():ng.IPromise<any>{
       var defer = this.$q.defer();
 
@@ -39,7 +39,7 @@ module ums{
                                       section:string):ng.IPromise<any>{
       var defer = this.$q.defer();
       var routines:any={};
-      this.httpClient.get("/ums-webservice-common/academic/routine/routineForEmployee/semester/"
+      this.httpClient.get("/ums-webservice-academic/academic/routine/routineForEmployee/semester/"
           +semesterId+"/year/"+year+"/semester/"+semester+"/section/"+section,'application/json',
           (data:any,etag:string)=>{
             routines = data.entries;

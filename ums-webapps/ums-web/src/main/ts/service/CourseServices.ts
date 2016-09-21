@@ -12,7 +12,7 @@ module ums{
 
       var defer = this.$q.defer();
       var courses:any={};
-      this.httpClient.get("/ums-webservice-common/academic/course/semester/"+
+      this.httpClient.get("/ums-webservice-academic/academic/course/semester/"+
           semesterId+"/program/"+programId+"/year/"+year+"/semester/"+semester,
           'application/json',
           (json:any,etag:string)=>{
@@ -32,7 +32,24 @@ module ums{
       console.log(semesterId);
       var defer = this.$q.defer();
       var courses:any={};
-      this.httpClient.get('/ums-webservice-common/academic/course/semester/'+semesterId+'/programType/'+programType,'application/json',
+      this.httpClient.get('/ums-webservice-academic/academic/course/semester/'+semesterId+'/programType/'+programType,'application/json',
+          (json:any,etag:string)=>{
+            courses=json.entries;
+            defer.resolve(courses);
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>)=>{
+            console.error(response);
+            this.notify.error("Error in fetching course data");
+          });
+
+      return defer.promise;
+    }
+
+    public getCourseBySemesterProgramTypeYearSemester(semesterId:number, programType:number,year:number,semester:number):ng.IPromise<any>{
+      console.log(semesterId);
+      var defer = this.$q.defer();
+      var courses:any={};
+      this.httpClient.get('/ums-webservice-academic/academic/course/semesterId/'+semesterId+'/programType/'+programType+'/year/'+year+'/semester/'+semester,'application/json',
           (json:any,etag:string)=>{
             courses=json.entries;
             defer.resolve(courses);

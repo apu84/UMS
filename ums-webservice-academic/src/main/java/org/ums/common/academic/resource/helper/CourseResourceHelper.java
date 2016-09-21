@@ -129,6 +129,27 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
   }
 
 
+  public JsonObject getCourses(final Integer pSemesterId, final int pProgramType,final int pYear,final int pSemester, final Request pRequest, final UriInfo pUriInfo) throws Exception{
+    String userId = SecurityUtils.getSubject().getPrincipal().toString();
+    User user = mUserManager.get(userId);
+    String employeeId = user.getEmployeeId();
+    Employee employee = mEmployeeManager.getByEmployeeId(employeeId);
+    String deptId = employee.getDepartment().getId();
+    List<Program> program = mProgramManager
+        .getAll()
+        .stream()
+        .filter(pProgram ->pProgram.getDepartmentId().equals(deptId))
+        .collect(Collectors.toList());
+    List<Course> courses = getContentManager().
+        getBySemesterProgram(pSemesterId.toString(),program.get(0).getId().toString())
+        .stream()
+        .filter(course->course.getCourseType().getValue()==pProgramType && course.getYear()==pYear && course.getSemester()==pSemester)
+        .collect(Collectors.toList());
+
+    return buildCourse(courses,pUriInfo);
+  }
+
+
   public JsonObject getByYearSemester(final String pSemesterId, final String pProgramId, final int year,final int semester,final Request pRequest, final UriInfo pUriInfo)throws Exception{
     List<Course> courses = getContentManager().getByYearSemester(pSemesterId,pProgramId,year,semester);
 
