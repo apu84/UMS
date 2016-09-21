@@ -104,7 +104,7 @@ module ums {
           updateType: 'insert'
         });
       }
-      this.postTeacher(savedExaminer, courseId);
+      this.postTeacher(savedExaminer);
     }
 
 

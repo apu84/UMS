@@ -97,6 +97,7 @@ module ums {
     public addTeacher(courseId: string): void {
       this.populateTeachers(courseId);
       this.$scope.entries[courseId].editMode = true;
+      this.$scope.entries[courseId].modified = true;
       this.newTeacherId = this.newTeacherId - 1;
       this.formattedMap[courseId].selectedTeachers[this.newTeacherId] = {};
       this.formattedMap[courseId].selectedTeachers[this.newTeacherId].id = this.newTeacherId + "";
@@ -128,32 +129,40 @@ module ums {
       for (var courseId in this.formattedMap) {
         if (this.formattedMap.hasOwnProperty(courseId)) {
           savedCourseTeacher = this.buildSaveList(courseId, savedCourseTeacher);
+          if (!savedCourseTeacher) {
+            return;
+          }
         }
       }
 
-      this.postTeacher(savedCourseTeacher, courseId)
-          .success(
-              () => {
-                this.fetchTeacherInfo();
-              })
-          .error(
-              (error) => {
-                console.error(error);
-              });
+      if (savedCourseTeacher.entries.length > 0) {
+        this.postTeacher(savedCourseTeacher)
+            .success(
+                () => {
+                  this.fetchTeacherInfo();
+                })
+            .error(
+                (error) => {
+                  console.error(error);
+                });
+      }
+
     }
 
     public saveTeacher(courseId: string): void {
       var saveList: IPostCourseTeacherEntries = this.buildSaveList(courseId);
-      this.postTeacher(saveList, courseId)
-          .success(
-              () => {
-                this.$scope.teacherSearchParamModel.courseId = courseId;
-                this.fetchTeacherInfo();
-              })
-          .error(
-              (error) => {
-                console.error(error);
-              });
+      if (saveList) {
+        this.postTeacher(saveList)
+            .success(
+                () => {
+                  this.$scope.teacherSearchParamModel.courseId = courseId;
+                  this.fetchTeacherInfo();
+                })
+            .error(
+                (error) => {
+                  console.error(error);
+                });
+      }
     }
 
     private buildSaveList(courseId: string,
@@ -284,30 +293,31 @@ module ums {
     }
 
     public validate(modifiedVal: ICourseTeacher, saved: ICourseTeacher): boolean {
-      if (UmsUtil.isEmpty(modifiedVal.selectedTeachers)) {
-        if (UmsUtil.isEmpty(saved.selectedTeachers)) {
-          this.notify.warn("Please select teacher/s");
-          return false;
-        } else {
-          return true;
-        }
-      }
-
-      for (var key in modifiedVal.selectedTeachers) {
-        if (modifiedVal.selectedTeachers.hasOwnProperty(key)) {
-          if (parseInt(key) < 0 && modifiedVal.selectedTeachers[key].id == null) {
-            this.notify.warn("Please select teacher/s");
+      if (modifiedVal.modified) {
+        if (UmsUtil.isEmpty(modifiedVal.selectedTeachers)) {
+          if (UmsUtil.isEmpty(saved.selectedTeachers)) {
+            this.notify.warn("Please select teacher/s for " + saved.courseNo);
             return false;
           } else {
-            var selectedSections = modifiedVal.selectedTeachers[key].sections;
-            if (!selectedSections || selectedSections.length == 0) {
-              this.notify.warn("Please select section/s");
+            return true;
+          }
+        }
+
+        for (var key in modifiedVal.selectedTeachers) {
+          if (modifiedVal.selectedTeachers.hasOwnProperty(key)) {
+            if (parseInt(key) < 0 && modifiedVal.selectedTeachers[key].id == null) {
+              this.notify.warn("Please select teacher/s"+ modifiedVal.courseNo);
               return false;
+            } else {
+              var selectedSections = modifiedVal.selectedTeachers[key].sections;
+              if (!selectedSections || selectedSections.length == 0) {
+                this.notify.warn("Please select section/s for "+ modifiedVal.courseNo);
+                return false;
+              }
             }
           }
         }
       }
-
       return true;
     }
 

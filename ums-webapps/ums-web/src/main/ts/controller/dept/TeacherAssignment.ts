@@ -11,6 +11,7 @@ module ums {
     editTeacher: Function;
     removeTeacher: Function;
     saveTeacher: Function;
+    saveTeachers: Function;
     programName: string;
     departmentName: string;
     semesterName: string;
@@ -40,6 +41,7 @@ module ums {
 
     editMode: boolean;
     updated: boolean;
+    modified: boolean;
   }
 
   interface IAssignedTeachers {
@@ -92,12 +94,13 @@ module ums {
       $scope.editTeacher = this.editTeacher.bind(this);
       $scope.removeTeacher = this.removeTeacher.bind(this);
       $scope.saveTeacher = this.saveTeacher.bind(this);
+      $scope.saveTeachers = this.saveTeachers.bind(this);
       $scope.isEmpty = UmsUtil.isEmpty;
 
       this.teachersList = {};
       this.formattedMap = {};
 
-      //this.fetchTeacherInfo();
+      // this.fetchTeacherInfo();
     }
 
 
@@ -121,6 +124,7 @@ module ums {
           (data: IAssignedTeachers, etag: string)=> {
             if (!UmsUtil.isEmptyString(this.$scope.teacherSearchParamModel.courseId)) {
               this.formattedMap[this.$scope.teacherSearchParamModel.courseId].updated = true;
+              this.formattedMap[this.$scope.teacherSearchParamModel.courseId].modified = false;
               this.formatTeacher(data.entries, this.$scope.teacherSearchParamModel['courseId']);
               delete this.$scope.teacherSearchParamModel['courseId'];
             } else {
@@ -155,8 +159,6 @@ module ums {
         assignedTeacher.teachers = this.teachersList[assignedTeacher.courseOfferedByDepartmentId];
         defer.resolve(null);
       } else {
-        console.log("================>>");
-        console.log(assignedTeacher);
         this.httpClient.get("academic/teacher/department/" + assignedTeacher.courseOfferedByDepartmentId, this.appConstants.mimeTypeJson,
             (data: ITeachers, etag: string) => {
               this.teachersList[assignedTeacher.courseOfferedByDepartmentId] = data.entries;
@@ -188,7 +190,11 @@ module ums {
       throw new Error('Method not implemented');
     }
 
-    public postTeacher(save: IPostExaminerEntries, courseId: string): ng.IHttpPromise<any> {
+    public saveTeachers(): void {
+      throw new Error('Method not implemented');
+    }
+
+    public postTeacher(save: IPostExaminerEntries): ng.IHttpPromise<any> {
       return this.httpClient.post(this.getPostUri(), save, 'application/json');
     }
 
@@ -235,7 +241,7 @@ module ums {
     }
 
     private uriBuilder(param: CourseTeacherSearchParamModel): string {
-      //var fetchUri: string = this.getBaseUri() + "/programId/" + '110500' + "/semesterId/" + '11012015' + '/year/4';
+      // var fetchUri: string = this.getBaseUri() + "/programId/" + '110500' + "/semesterId/" + '11012016' + '/year/1';
       var fetchUri = this.getBaseUri() + "/programId/" + param.programSelector.programId + "/semesterId/" + param.semesterId;
 
       if (!UmsUtil.isEmptyString(param.courseId)) {
