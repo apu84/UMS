@@ -82,10 +82,16 @@
             <div class="panel-heading">Class Routine<span
                     class="subtitle"></span></div>
             <div class="panel-body">
-                <div class="row">
-                    <button class="btn btn-success">Add Data</button>
+                <div class="row" data-ng-if="showLoader==true" align="center">
+                    <i class="fa fa-spinner fa-spin fa-5x fa-fw"></i>
+                    <span class="sr-only">Loading...</span>
+                </div>
+                <div class="row" data-ng-if="showLoader==false">
+                    <div style="padding-left: 3%">
+                        <button class="btn btn-success" data-ng-click="addNewData()" >Add Data</button>
+                    </div>
                     <br>
-                    <table class="table table-bordered">
+                    <table class="table table-bordered" data-ng-if="addDataButtonClicked==true">
                         <thead>
                         <tr>
                             <th>Day</th>
@@ -94,18 +100,19 @@
                             <th>Start Time</th>
                             <th>End Time</th>
                             <th>Room No</th>
+                            <th>Action</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr >
                             <th>
-                                <select data-ng-model="addedDate">
+                                <select data-ng-model="addedDate" data-ng-change="dateSelected(addedDate)">
                                     <option value="">Select Date</option>
                                     <option data-ng-repeat="d in dates" value="{{d.id}}">{{d.dateName}}</option>
                                 </select>
                             </th>
                             <th>
-                                <select data-ng-model="addedCourse" data-ng-change="courseSelected()" >
+                                <select data-ng-model="addedCourse" data-ng-change="courseSelected(addedCourse)" >
                                     <option value="">Select Course</option>
                                     <option data-ng-repeat="c in courseArr" value="{{c.id}}">{{courseIdMapCourseNo[c.id]}}</option>
                                 </select>
@@ -115,54 +122,126 @@
                                     {{section}}
                                 </div>
                                 <div data-ng-if="courseType=='SESSIONAL'">
-                                    <select value="addedSection">
-                                        <option data-ng-model="">Select Section</option>
-                                        <option data-ng-repeat="s in sessionalSections" value="{{s.id}}">{{s.name}}</option>
+                                    <select data-ng-model="addedSection" data-ng-change="sectionChanged(addedSection)">
+                                        <option value="">Select Section</option>
+                                        <option data-ng-repeat="s in sessionalSections" value="{{s.name}}">{{s.name}}</option>
                                     </select>
                                 </div>
                             </th>
                             <th>
-                                <select data-ng-model="addedStartTime">
+                                <select data-ng-model="addedStartTime" data-ng-change="startTimeSelected(addedStartTime)">
                                     <option value="">Select Start Time</option>
                                     <option data-ng-repeat="t in times" value="{{t.id}}">{{t.val}}</option>
                                 </select>
                             </th>
                             <th>
-                                <select data-ng-model="addedEndTime">
+                                <select data-ng-model="addedEndTime" data-ng-change="endTimeSelected(addedEndTime)">
                                     <option value="">Select End Time</option>
                                     <option data-ng-repeat="t in times" value="{{t.id}}">{{t.val}}</option>
                                 </select>
                             </th>
                             <th>
-                                <select data-ng-model="addedRoomNo">
+                                <select data-ng-model="addedRoomNo" data-ng-change="roomNoSelected(addedRoomNo)">
                                     <option value="">Select Room No</option>
                                     <option data-ng-repeat="r in roomArr" value="{{r.roomNo}}">{{r.roomNo}}</option>
                                 </select>
+                            </th>
+                            <th>
+                                <form>
+                                    <button class="btn btn-primary btn-xs" data-ng-click="addData()"><i class="fa fa-check" aria-hidden="true"></i></button>
+                                    <button class="btn btn-primary btn-xs" data-ng-click="cancelData()"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                </form>
+
                             </th>
                         </tr>
                         </tbody>
                     </table>
                 </div>
-                <div class="row">
+
+                <hr>
+                <div class="row" data-ng-if="showLoader==false && showRoutineTable==true">
                     <table class="table table-bordered">
                         <thead>
-                        <tr>
-                            <th>Day</th>
-                            <th>Section</th>
-                            <th>Course No</th>
-                            <th>Start Time</th>
-                            <th>End Time</th>
-                            <th>Room No</th>
-                        </tr>
+                            <tr>
+                                <th>Day</th>
+                                <th>Course No</th>
+                                <th>Section</th>
+                                <th>Start Time</th>
+                                <th>End Time</th>
+                                <th>Room No</th>
+                                <th>Action</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        <tr data-ng-repeat="r in routineArr">
-                            <th>{{dates[r.day]}}</th>
-                            <th>{{r.section}}</th>
-                            <th></th>
+                        <tr data-ng-repeat="r in routineArr" data-ng-if="r.status!='deleted'">
+                            <th data-ng-if="r.editRoutine!=true">{{dateMap[r.day]}}</th>
+                            <th data-ng-if="r.editRoutine!=true">{{courseIdMapCourseNo[r.courseId]}}</th>
+                            <th data-ng-if="r.editRoutine!=true">{{r.section}}</th>
+                            <th data-ng-if="r.editRoutine!=true">{{r.startTime}}</th>
+                            <th data-ng-if="r.editRoutine!=true">{{r.endTime}}</th>
+                            <th data-ng-if="r.editRoutine!=true">{{r.roomNo}}</th>
+
+
+
+                            <th data-ng-if="r.editRoutine==true">
+                                <select data-ng-model="addedDate" data-ng-change="dateSelected(addedDate)">
+                                    <option value="">Select Date</option>
+                                    <option data-ng-repeat="d in dates" value="{{d.id}}">{{d.dateName}}</option>
+                                </select>
+                            </th>
+                            <th data-ng-if="r.editRoutine==true"  >
+                                <select data-ng-model="addedCourse" data-ng-change="courseSelected(addedCourse)" >
+                                    <option value="">Select Course</option>
+                                    <option data-ng-repeat="c in courseArr" value="{{c.id}}">{{courseIdMapCourseNo[c.id]}}</option>
+                                </select>
+                            </th>
+                            <th data-ng-if="r.editRoutine==true">
+                                <div data-ng-if="courseType=='THEORY'">
+                                    {{addedSection}}
+                                </div>
+                                <div data-ng-if="courseType=='SESSIONAL'">
+                                    <select data-ng-model="addedSection"  data-ng-change="sectionChanged(addedSection)" >
+                                        <option value="">Select Section</option>
+                                        <option data-ng-repeat="s in sessionalSections" value="{{s.name}}">{{s.name}}</option>
+                                    </select>
+                                </div>
+                            </th>
+                            <th data-ng-if="r.editRoutine==true">
+                                <select data-ng-model="addedStartTime" data-ng-change="startTimeSelected(addedStartTime)">
+                                    <option value="">Select Start Time</option>
+                                    <option data-ng-repeat="t in times" value="{{t.id}}">{{t.val}}</option>
+                                </select>
+                            </th>
+                            <th data-ng-if="r.editRoutine==true">
+                                <select data-ng-model="addedEndTime" data-ng-change="endTimeSelected(addedEndTime)">
+                                    <option value="">Select End Time</option>
+                                    <option data-ng-repeat="t in times" value="{{t.id}}">{{t.val}}</option>
+                                </select>
+                            </th>
+                            <th data-ng-if="r.editRoutine==true">
+                                <select data-ng-model="addedRoomNo" data-ng-change="roomNoSelected(addedRoomNo)">
+                                    <option value="">Select Room No</option>
+                                    <option data-ng-repeat="rx in roomArr" value="{{rx.roomNo}}">{{rx.roomNo}}</option>
+                                </select>
+                            </th>
+
+
+                            <th>
+                                <form>
+                                    <button data-ng-if="r.showEditButton!=false" class="btn btn-primary btn-xs" data-ng-click="editRoutineData(r)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                                    <button data-ng-if="r.showAddButton" class="btn btn-primary btn-xs" data-ng-click="addRoutineData(r)"><i class="fa fa-check" aria-hidden="true"></i></button>
+                                    <button data-ng-if="r.showCancelButton" class="btn btn-primary btn-xs" data-ng-click="cancelRoutineData(r)"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                    <button class="btn btn-primary btn-xs" data-ng-click="deleteRoutineData(r)"><i class="fa fa-ban" aria-hidden="true"></i></button>
+                                </form>
+                            </th>
                         </tr>
                         </tbody>
                     </table>
+                </div>
+                <div class="row" align="right" data-ng-if="showSaveButton==true">
+                    <form style="padding-right: 5%">
+                        <button class="btn btn-success" data-ng-click="saveClassRoutine()" >Save</button>
+                    </form>
                 </div>
             </div>
         </div>

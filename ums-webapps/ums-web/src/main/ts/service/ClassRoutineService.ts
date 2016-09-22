@@ -1,5 +1,8 @@
 module ums{
+
   export class ClassRoutineService{
+
+    private routineUrl:string='/ums-webservice-academic/academic/routine';
     public static $inject = ['appConstants','HttpClient','$q','notify','$sce','$window'];
     constructor(private appConstants: any, private httpClient: HttpClient,
                 private $q:ng.IQService, private notify: Notify,
@@ -26,6 +29,8 @@ module ums{
       return defer.promise;
     }
 
+
+
     public getClassRoutineForStudents():ng.IPromise<any>{
       var defer = this.$q.defer();
 
@@ -43,11 +48,27 @@ module ums{
           +semesterId+"/year/"+year+"/semester/"+semester+"/section/"+section,'application/json',
           (data:any,etag:string)=>{
             routines = data.entries;
+            for(var i=0;i<routines.length;i++){
+              routines.status="exist";
+              routines.updated=false;
+            }
             defer.resolve(routines);
           },
           (response:ng.IHttpPromiseCallbackArg<any>)=>{
             console.error(response);
             this.notify.error("Error in fetching routine data");
+          });
+
+      return defer.promise;
+    }
+
+    public saveClassRoutine(json:any):ng.IPromise<any>{
+      var defer=this.$q.defer();
+      this.httpClient.post(this.routineUrl,json,'application/json')
+          .success(()=>{
+            defer.resolve("success");
+          }).error((data)=>{
+            defer.resolve("error");
           });
 
       return defer.promise;

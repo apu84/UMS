@@ -10,6 +10,7 @@ import org.ums.persistent.model.PersistentRoutine;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -124,6 +125,84 @@ public class PersistentRoutineDao extends RoutineDaoDecorator {
   public int delete(final MutableRoutine pMutable) throws Exception {
     String query = DELETE_ONE + " WHERE ROUTINE_ID=?";
     return mJdbcTemplate.update(query, pMutable.getId());
+  }
+
+
+  @Override
+  public int update(List<MutableRoutine> pMutableList) throws Exception {
+    String update = UPDATE_ONE+ " where routine_id=?";
+    return mJdbcTemplate.batchUpdate(update,getUpdateParamList(pMutableList)).length;
+  }
+
+  @Override
+  public int delete(List<MutableRoutine> pMutableList) throws Exception {
+    String query=DELETE_ONE+" where routine_id=?";
+    return mJdbcTemplate.batchUpdate(query,getDeleteParamList(pMutableList)).length;
+  }
+
+  @Override
+  public int create(List<MutableRoutine> pMutableList) throws Exception {
+    String query = INSERT_ONE;
+    return mJdbcTemplate.batchUpdate(query,getInsertParamList(pMutableList)).length;
+  }
+
+
+  private List<Object[]> getInsertParamList(List<MutableRoutine> pRoutines) throws Exception{
+    List<Object[]> params = new ArrayList<>();
+
+    for(Routine routine: pRoutines){
+      params.add(new Object[]{
+          routine.getSemester().getId(),
+          routine.getProgram().getId(),
+          routine.getCourseId(),
+          routine.getDay(),
+          routine.getSection(),
+          routine.getAcademicYear(),
+          routine.getAcademicSemester(),
+          routine.getStartTime(),
+          routine.getEndTime(),
+          routine.getDuration(),
+          routine.getRoomNo()
+      });
+    }
+
+    return params;
+  }
+
+  private List<Object[]> getUpdateParamList(List<MutableRoutine> pRoutines) throws Exception{
+    List<Object[]> params = new ArrayList<>();
+
+    for(Routine routine: pRoutines){
+      params.add(new Object[]{
+          routine.getSemester().getId(),
+          routine.getProgram().getId(),
+          routine.getProgram().getId(),
+          routine.getCourseId(),
+          routine.getDay(),
+          routine.getSection(),
+          routine.getAcademicYear(),
+          routine.getAcademicSemester(),
+          routine.getStartTime(),
+          routine.getEndTime(),
+          routine.getDuration(),
+          routine.getRoomNo(),
+          routine.getId()
+      });
+    }
+
+    return params;
+  }
+
+  private List<Object[]> getDeleteParamList(List<MutableRoutine> pRoutines) throws Exception{
+    List<Object[]> params = new ArrayList<>();
+
+    for(Routine routine: pRoutines){
+      params.add(new Object[]{
+          routine.getId()
+      });
+    }
+
+    return params;
   }
 
   class RoutineRowMapper implements RowMapper<Routine> {

@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.NullValueInNestedPathException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
@@ -23,10 +24,7 @@ import org.ums.persistent.model.PersistentRoutine;
 import org.ums.persistent.model.PersistentSemester;
 import org.ums.resource.ResourceHelper;
 
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
+import javax.json.*;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
@@ -35,6 +33,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -70,11 +69,61 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
-    MutableRoutine mutableRoutine = new PersistentRoutine();
+    /*MutableRoutine mutableRoutine = new PersistentRoutine();
     LocalCache localCache = new LocalCache();
     getBuilder().build(mutableRoutine, pJsonObject, localCache);
-    mutableRoutine.commit(false);
-    URI contextURI = pUriInfo.getBaseUriBuilder().path(RoutineResource.class).path(RoutineResource.class, "get").build(mutableRoutine.getId());
+    mutableRoutine.commit(false);*/
+    List<PersistentRoutine> routines = new ArrayList<>();
+    JsonArray entries = pJsonObject.getJsonArray("entries");
+
+    for(int i=0;i<entries.size();i++){
+      LocalCache localCache = new LocalCache();
+      JsonObject jsonObject = entries.getJsonObject(i);
+      PersistentRoutine routine = new PersistentRoutine();
+      getBuilder().build(routine,jsonObject,localCache);
+      routines.add(routine);
+    }
+
+    Map<String,List<PersistentRoutine>> statusWithRoutine = routines
+        .stream()
+        .collect(Collectors.groupingBy(Routine::getStatus));
+
+    if(statusWithRoutine.get("created")!=null){
+      List<PersistentRoutine> pRoutines = statusWithRoutine.get("created");
+      List<MutableRoutine> mutableRoutines = new ArrayList<>();
+
+      for(int i=0;i<pRoutines.size();i++){
+        MutableRoutine mutableRoutine = pRoutines.get(i);
+        mutableRoutines.add(mutableRoutine);
+      }
+
+      getContentManager().create(mutableRoutines);
+    }
+
+    if(statusWithRoutine.get("deleted")!=null){
+      List<PersistentRoutine> pRoutines = statusWithRoutine.get("created");
+      List<MutableRoutine> mutableRoutines = new ArrayList<>();
+
+      for(int i=0;i<pRoutines.size();i++){
+        MutableRoutine mutableRoutine = pRoutines.get(i);
+        mutableRoutines.add(mutableRoutine);
+      }
+      getContentManager().delete(mutableRoutines);
+    }
+
+    if(statusWithRoutine.get("exist")!=null){
+      List<PersistentRoutine> pRoutines = statusWithRoutine.get("created");
+      List<MutableRoutine> mutableRoutines = new ArrayList<>();
+
+      for(int i=0;i<pRoutines.size();i++){
+        MutableRoutine mutableRoutine = pRoutines.get(i);
+        mutableRoutines.add(mutableRoutine);
+      }
+
+      getContentManager().update(mutableRoutines);
+    }
+
+    URI contextURI = null;
     Response.ResponseBuilder builder = Response.created(contextURI);
     builder.status(Response.Status.CREATED);
     return builder.build();

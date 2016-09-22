@@ -85,13 +85,13 @@ module ums {
           '07': 'FRIDAY'
         },
         weekday: [
-          {id:1,dateName: 'SATURDAY'},
-          {id:2,dateName: 'SUNDAY'},
-          {id:3,dateName: 'MONDAY'},
-          {id:4,dateName: 'TUESDAY'},
-          {id:5,dateName: 'WEDNESDAY'},
-          {id:6,dateName: 'THURSDAY'},
-          {id:7,dateName: 'FRIDAY'}
+          {id:"1",dateName: 'SATURDAY'},
+          {id:"2",dateName: 'SUNDAY'},
+          {id:"3",dateName: 'MONDAY'},
+          {id:"4",dateName: 'TUESDAY'},
+          {id:"5",dateName: 'WEDNESDAY'},
+          {id:"6",dateName: 'THURSDAY'},
+          {id:"7",dateName: 'FRIDAY'}
         ],
         officeShort: {
           '80': 'RO',
@@ -146,46 +146,50 @@ module ums {
         timeChecker: [
           {
             id: '08.00 AM',
-            val: '08.50 AM'
+            val: '08.00 AM'
           },
           {
             id: '08.50 AM',
-            val: '09.40 AM'
+            val: '08.50 AM'
           },
           {
             id: '09.40 AM',
-            val: '10.30 AM'
+            val: '09.40 AM'
           },
           {
             id: '10.30 AM',
-            val: '11.20 AM'
+            val: '10.30 AM'
           },
           {
             id: '11.20 AM',
+            val: '11.20 AM'
+          },
+          {
+            id: '12.10 AM',
             val: '12.10 PM'
           },
           {
-            id: '12.10 PM',
+            id: '01.00 PM',
             val: '01.00 PM'
           },
           {
-            id: '01.00 PM',
+            id: '01.50 PM',
             val: '01.50 PM'
           },
           {
-            id: '01.50 PM',
+            id: '02.40 PM',
             val: '02.40 PM'
           },
           {
-            id: '02.40 PM',
+            id: '03.30 PM',
             val: '03.30 PM'
           },
           {
-            id: '03.30 PM',
+            id: '04.20 PM',
             val: '04.20 PM'
           },
           {
-            id: '04.20 PM',
+            id: '05.00 PM',
             val: '05.00 PM'
           }
         ],

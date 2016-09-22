@@ -26,7 +26,7 @@ module ums{
 
     public updateGradeSubmissionDeadLine(json:any):ng.IPromise<any>{
       var defer = this.$q.defer();
-      this.httpClient.put('/ums-webservice-common/academic/gradeSubmission/gradeSubmissionDeadLine',json,'application/json')
+      this.httpClient.put('/ums-webservice-academic/academic/gradeSubmission/gradeSubmissionDeadLine',json,'application/json')
         .success(()=>{
             defer.resolve("Successfully saved");
         }).error((data)=>{

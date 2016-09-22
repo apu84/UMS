@@ -22,4 +22,5 @@ public interface MutableRoutine extends Routine,Mutable,MutableLastModifier,Muta
   void setEndTime(final String pEndTime);
   void setRoomNo(final String pRoomNo);
   void setDuration(final int mDuration);
+  void setStatus(final String pStatus);
 }

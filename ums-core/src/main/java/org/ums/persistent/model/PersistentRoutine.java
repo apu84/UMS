@@ -40,6 +40,7 @@ public class PersistentRoutine implements MutableRoutine {
   private String mRoomNo;
   private int mProgramId;
   private int mDay;
+  private String mStatus;
 
   public PersistentRoutine(){
 
@@ -62,6 +63,7 @@ public class PersistentRoutine implements MutableRoutine {
     mDuration = pPersistentRoutine.getDuration();
     mRoomNo = pPersistentRoutine.getRoomNo();
     mDay= pPersistentRoutine.getDay();
+    mStatus = pPersistentRoutine.getStatus();
   }
 
 
@@ -85,6 +87,17 @@ public class PersistentRoutine implements MutableRoutine {
 
     mDuration = Integer.valueOf(duration);
     return mDuration;
+  }
+
+
+  @Override
+  public String getStatus() {
+    return mStatus;
+  }
+
+  @Override
+  public void setStatus(String pStatus) {
+    mStatus = pStatus;
   }
 
   @Override
