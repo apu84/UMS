@@ -7,7 +7,9 @@ import org.ums.enums.CourseMarksSubmissionStatus;
 import org.ums.enums.CourseType;
 import org.ums.enums.ExamType;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by ikh on 4/30/2016.
@@ -44,5 +46,7 @@ public interface ExamGradeManager extends ContentManager<ExamGrade, MutableExamG
     public int getTotalStudentCount(final Integer pSemesterId, final String pCourseId, final Integer pExamType, final CourseType courseType) throws Exception;
     public List<MarksSubmissionStatusLogDto> getMarksSubmissionLogs(Integer pSemesterId, String pCourseId,Integer pExamType) throws Exception ;
     public List<MarksLogDto> getMarksLogs(Integer pSemesterId,String pCourseId,Integer pExamType,String pStudentId, CourseType pCourseType) throws Exception ;
-    }
+    public Map getUserRoleList(Integer pSemesterId, String pCourseId) throws Exception;
+
+}
 

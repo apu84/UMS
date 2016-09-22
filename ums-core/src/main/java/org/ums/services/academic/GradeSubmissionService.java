@@ -1,5 +1,6 @@
 package org.ums.services.academic;
 
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.slf4j.Logger;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.domain.model.dto.MarksSubmissionStatusDto;
 import org.ums.domain.model.dto.StudentGradeDto;
+import org.ums.domain.model.dto.UserDto;
 import org.ums.domain.model.immutable.Notification;
 import org.ums.domain.model.immutable.UGRegistrationResult;
 import org.ums.domain.model.immutable.User;
@@ -26,10 +28,7 @@ import java.io.StringReader;
 import java.nio.file.Path;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Component("gradeSubmissionService")
 public class GradeSubmissionService {
@@ -111,6 +110,31 @@ public class GradeSubmissionService {
     objectBuilder.add("accepted_grades", acceptedArrayBuilder);
     objectBuilder.add("recheck_accepted_grades", recheckAcceptedArrayBuilder);
   }
+
+  public String getActingRoleForCourse(CourseMarksSubmissionStatus currentStatus){
+    String actingRole="";
+    switch(currentStatus){
+      case NOT_SUBMITTED:
+      case REQUESTED_FOR_RECHECK_BY_SCRUTINIZER:
+      case REQUESTED_FOR_RECHECK_BY_HEAD:
+      case REQUESTED_FOR_RECHECK_BY_COE:
+        actingRole=Constants.GRADE_PREPARER;
+        break;
+      case WAITING_FOR_SCRUTINY:
+        actingRole= Constants.GRADE_SCRUTINIZER;
+        break;
+      case WAITING_FOR_HEAD_APPROVAL:
+        actingRole= Constants.HEAD;
+        break;
+      case WAITING_FOR_COE_APPROVAL:
+        actingRole= Constants.COE;
+        break;
+      case WAITING_FOR_RECHECK_REQUEST_APPROVAL:
+        actingRole = Constants.VC;
+        break;
+    }
+    return actingRole;
+  }
   public String getActorForCurrentUser(String userId, String requestedRole, int semesterId, String courseId) throws Exception {
     String role = "Invalid";
     List<String> roleList;
@@ -175,6 +199,46 @@ public class GradeSubmissionService {
 
   }
 
+  public void validateGradeSubmission(String userId,String userRoleFromClient,Integer semesterId,String courseId, MarksSubmissionStatusDto clientStatus,MarksSubmissionStatusDto serverStatus,
+                                      List<StudentGradeDto> gradeList,String operation) throws Exception {
+    //operation can be either SUBMIT OR SAVE
+
+    //Checking the role, requested from client side is valid for the user who is trying to do some operation on grades
+    //Role Validation
+    String currentActorRole=getActorForCurrentUser(userId, userRoleFromClient, semesterId, courseId);
+    String actingRole=getActingRoleForCourse(serverStatus.getStatus());
+    if(!currentActorRole.equalsIgnoreCase(actingRole)){
+      throw new ValidationException("Sorry, you are not allowed for this operation.");
+    }
+
+    //Deadline && Part Info Validation
+    if(serverStatus.getStatus()==CourseMarksSubmissionStatus.NOT_SUBMITTED && operation.equals("SUBMIT")) {
+      validateGradeSubmissionDeadline(serverStatus.getLastSubmissionDate());
+      validatePartInfo(clientStatus.getTotal_part(), clientStatus.getPart_a_total(), clientStatus.getPart_b_total());
+    }
+
+    //Submitted Grade Validation
+    if(serverStatus.getStatus()==CourseMarksSubmissionStatus.NOT_SUBMITTED  || serverStatus.getStatus()==CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_SCRUTINIZER
+        || serverStatus.getStatus()==CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_HEAD  || serverStatus.getStatus()==CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_COE){
+      validateSubmittedGrades(serverStatus.getSemesterId(), serverStatus.getCourseId(), serverStatus.getExamType(), serverStatus.getCourseType(), clientStatus,gradeList );
+    }
+
+    //If Current Status is Not_Submitted then we will validate part information
+    //Part Info Validation
+
+
+    //Validate Submitted Grades
+
+
+    //Validate in case of recheck/approval
+    //Total grade equal to toal students
+    //total appprove update should be equal to database update operation
+    //total recheck update should be eqaual to database upate operation...
+
+
+
+
+  }
   public void validateSubmittedGrades(
       final Integer pSemesterId, final String pCourseId, final Integer examType, final CourseType courseType,
       MarksSubmissionStatusDto partInfo,List<StudentGradeDto> gradeList ) throws Exception {
@@ -287,12 +351,39 @@ public class GradeSubmissionService {
     return nextStatus;
   }
 
-  public void sendNotification(){
+  public String getUserIdForNotification(Integer pSemesterId,String pCourseId,CourseMarksSubmissionStatus pNextStatus) throws  Exception{
+    String userId="";
+    Map RoleMap=  mManager.getUserRoleList(pSemesterId,pCourseId);
+    switch(pNextStatus){
+      case WAITING_FOR_SCRUTINY :
+          userId=RoleMap.get("Scrutinizer").toString();
+          break;
+      case WAITING_FOR_HEAD_APPROVAL :
+        userId=RoleMap.get("Head").toString();
+        break;
+      case WAITING_FOR_COE_APPROVAL:
+        userId=RoleMap.get("CoE").toString();
+        break;
+      case REQUESTED_FOR_RECHECK_BY_SCRUTINIZER:
+      case REQUESTED_FOR_RECHECK_BY_HEAD:
+      case REQUESTED_FOR_RECHECK_BY_COE:
+        userId=RoleMap.get("Preparer").toString();
+        break;
+      case WAITING_FOR_RECHECK_REQUEST_APPROVAL:
+        userId=RoleMap.get("VC").toString();
+        break;
+    }
+
+    return userId;
+  }
+
+
+  public void sendNotification(String userId,String courseNumber){
     Notifier notifier = new Notifier() {
       @Override
       public List<String> consumers() throws Exception {
         List<String> users = new ArrayList<>();
-        users.add("s1");
+        users.add(userId);
         return users;
       }
 
@@ -309,8 +400,7 @@ public class GradeSubmissionService {
       @Override
       public String payload() {
         try {
-          User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
-          return "Grade Submitted";
+          return "Grades for Course Number : "+courseNumber+" is waiting for your approval.";
         } catch (Exception e) {
           mLogger.error("Exception while looking for user: ", e);
         }

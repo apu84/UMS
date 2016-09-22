@@ -1,8 +1,10 @@
 package org.ums.persistent.dao;
 
 import org.apache.commons.lang.WordUtils;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.ExamGradeDaoDecorator;
 import org.ums.domain.model.dto.*;
@@ -15,7 +17,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
@@ -230,6 +234,25 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
 
   String SELECT_SESSIONAL_LOG="";
 
+  String USER_ROLE_QUERY="Select User_Id,'Preparer' Role From Users Where Employee_Id in ( " +
+      "Select Preparer From Preparer_Scrutinizer Where Semester_Id=? and  Course_Id=?) " +
+      " and Status=1 " +
+          "Union " +
+      "Select User_Id,'Scrutinizer' Role From Users Where Employee_Id in ( " +
+      "Select Scrutinizer From Preparer_Scrutinizer Where Semester_Id=? and  Course_Id=?) " +
+      "and Status=1  " +
+          "Union " +
+      "select user_id,'Head' Role from ADDITIONAL_ROLE_PERMISSIONS where role_id=22 And Sysdate<=Valid_To And Sysdate>=Valid_From " +
+          "Union " +
+      "select user_id,'CoE' Role from ADDITIONAL_ROLE_PERMISSIONS where role_id=71 And Sysdate<=Valid_To And Sysdate>=Valid_From " +
+          "Union " +
+      "Select User_Id,'CoE' Role From Users,EMPLOYEES " +
+      "Where USERS.EMPLOYEE_ID=EMPLOYEES.EMPLOYEE_ID " +
+      "And EMPLOYEES.STATUS=1 And USERS.STATUS=1 " +
+      "And Designation = 202 " +
+          "Union " +
+      "Select user_id,'VC' Role From Users Where Role_Id=99 and Status=1 ";
+
 
 
   private JdbcTemplate mJdbcTemplate;
@@ -346,20 +369,20 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
     }
     else if(userRole.equals("H")){  //Head
       query = SELECT_GRADE_SUBMISSION_TABLE_HEAD;
-      if(status!=-1){query+="  And Ms_Status.Status=0"+status;}
+      if(status!=-1){query+="  And Ms_Status.Status="+status;}
       if(year!=0){query+="  And Ms_Status.Year="+year+" And Ms_Status.Semester="+semester;}
       return mJdbcTemplate.query(query, new Object[]{pSemesterId,pExamType,pProgramId,teacherId},new MarksSubmissionStatusTableRowMapper());
     }
     else if(userRole.equals("C")){  //CoE
       query = SELECT_GRADE_SUBMISSION_TABLE_CoE;
-      if(status!=-1){query+="  And Ms_Status.Status=0"+status;}
+      if(status!=-1){query+="  And Ms_Status.Status="+status;}
       if(year!=0){query+="  And Ms_Status.Year="+year+" And Ms_Status.Semester="+semester;}
       return mJdbcTemplate.query(query,new Object[]{pSemesterId,pExamType,pProgramId,deptId} ,new MarksSubmissionStatusTableRowMapper());
     }
     else if(userRole.equals("V")){  //CoE
       query = SELECT_GRADE_SUBMISSION_TABLE_CoE;
-      if(status!=-1){query+="  And Ms_Status.Status=0"+status;}
-      return mJdbcTemplate.query(query,new Object[]{pSemesterId,pExamType,deptId} ,new MarksSubmissionStatusTableRowMapper());
+      if(status!=-1){query+="  And Ms_Status.Status="+status;}
+      return mJdbcTemplate.query(query,new Object[]{pSemesterId,pExamType,pProgramId,deptId} ,new MarksSubmissionStatusTableRowMapper());
     }
     return null;
   }
@@ -924,6 +947,25 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
       AtomicReference<MarksLogDto> atomicReference = new AtomicReference<>(log);
       return atomicReference.get();
     }
+  }
+
+  @Override
+  public Map getUserRoleList(Integer pSemesterId, String pCourseId) throws Exception {
+    return mJdbcTemplate.query(USER_ROLE_QUERY,
+        new Object[] {pSemesterId,pCourseId,pSemesterId,pCourseId},new UserRoleRowExtractor());
+  }
+
+  class UserRoleRowExtractor implements ResultSetExtractor<Map> {
+
+    @Override
+    public Map extractData(ResultSet rs) throws SQLException,DataAccessException {
+      HashMap<String,String> mapRet= new HashMap<String,String>();
+      while(rs.next()){
+        mapRet.put(rs.getString("ROLE"),rs.getString("USER_ID"));
+      }
+      return mapRet;
+    }
+
   }
 
 }

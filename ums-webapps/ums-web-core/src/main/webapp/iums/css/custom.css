@@ -361,3 +361,11 @@ div.ui-jqgrid-view table.ui-jqgrid-btable th {
     height: 16px;
     width: 16px;
 }
+
+/* Notification modal */
+#topbar .navbar-top-links li .dropdown-menu li a{
+    color: black !important;
+}
+#topbar .navbar-top-links ul.dropdown-alerts{
+    width:400px !important;
+}

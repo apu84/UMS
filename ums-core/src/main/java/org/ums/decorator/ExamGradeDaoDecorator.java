@@ -8,7 +8,9 @@ import org.ums.enums.CourseType;
 import org.ums.enums.ExamType;
 import org.ums.manager.ExamGradeManager;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by ikh on 4/30/2016.
@@ -135,4 +137,9 @@ public class ExamGradeDaoDecorator  extends ContentDaoDecorator<ExamGrade, Mutab
     public List<MarksLogDto> getMarksLogs(Integer pSemesterId,String pCourseId,Integer pExamType,String pStudentId, CourseType pCourseType) throws Exception {
         return getManager().getMarksLogs(pSemesterId, pCourseId, pExamType,pStudentId,pCourseType);
     }
+
+    public Map getUserRoleList(Integer pSemesterId, String pCourseId) throws Exception {
+        return getManager().getUserRoleList(pSemesterId, pCourseId);
+    }
+
 }

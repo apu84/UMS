@@ -1317,8 +1317,12 @@ module ums {
           });
           this.$scope.inputParams.status=this.appConstants.marksSubmissionStatusEnum.WAITING_FOR_HEAD_APPROVAL;
       }
-      else if(this.$scope.userRole=="C" ) {
-          this.$scope.inputParams.status = this.appConstants.marksSubmissionStatusEnum.WAITING_FOR_COE_APPROVAL;
+      else if(this.$scope.userRole=="C" || this.$scope.userRole=="V" ) {
+          if(this.$scope.userRole=="C")
+            this.$scope.inputParams.status = this.appConstants.marksSubmissionStatusEnum.WAITING_FOR_COE_APPROVAL;
+          else if(this.$scope.userRole=="V")
+            this.$scope.inputParams.status = this.appConstants.marksSubmissionStatusEnum.ACCEPTED_BY_COE;
+
           this.$scope.data.depts = this.$scope.data.ugDepts;
         }
       }
@@ -1388,3 +1392,4 @@ module ums {
   }
   UMS.controller('MarksSubmission', MarksSubmission);
 }
+//sdfsafsafsad asdf sadf sda fs

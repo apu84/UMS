@@ -133,25 +133,19 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
     String userRole=pJsonObject.getString("role");
 
     MarksSubmissionStatusDto marksSubmissionStatus = getContentManager().getMarksSubmissionStatus(partInfoDto.getSemesterId(), partInfoDto.getCourseId(), partInfoDto.getExamType());
-    //User Role Validation
+    //User Role Validation  --Shifted
     String currentActorRole=gradeSubmissionService.getActorForCurrentUser(SecurityUtils.getSubject().getPrincipal().toString(), userRole, partInfoDto.getSemesterId(), partInfoDto.getCourseId());
     if(!currentActorRole.equalsIgnoreCase(Constants.GRADE_PREPARER)){
       throw new ValidationException("Invalid Role");
     }
-    // Deadline Validation
+    // Deadline Validation -- Shifted (conditional)
     gradeSubmissionService.validateGradeSubmissionDeadline(marksSubmissionStatus.getLastSubmissionDate());
-
-    //Need to validate grade here
 
     if ((partInfoDto.getCourseType() == CourseType.THEORY )
         &&
-        (marksSubmissionStatus.getStatus()==CourseMarksSubmissionStatus.NOT_SUBMITTED
-//            || marksSubmissionStatus.getStatus()==CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_SCRUTINIZER
-//            || marksSubmissionStatus.getStatus()==CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_HEAD
-//            || marksSubmissionStatus.getStatus()==CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_COE)
-        )) {
+        (marksSubmissionStatus.getStatus()==CourseMarksSubmissionStatus.NOT_SUBMITTED)) {
 
-        //Validate Part-Info
+        //Validate Part-Info -- Shifted (Conditional)
         gradeSubmissionService.validatePartInfo(partInfoDto.getTotal_part(), partInfoDto.getPart_a_total(), partInfoDto.getPart_b_total());
         getContentManager().updatePartInfo(partInfoDto.getSemesterId(), partInfoDto.getCourseId(), partInfoDto.getExamType(), partInfoDto.getTotal_part(), partInfoDto.getPart_a_total(), partInfoDto.getPart_b_total());
     }
@@ -165,10 +159,13 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
           partInfoDto.getExamType(), partInfoDto.getCourseType(), marksSubmissionStatus.getStatus(),CourseMarksSubmissionStatus.WAITING_FOR_SCRUTINY, gradeList);
       getContentManager().insertMarksSubmissionStatusLog(SecurityUtils.getSubject().getPrincipal().toString(), currentActorRole,partInfoDto.getSemesterId(),
           partInfoDto.getCourseId(), partInfoDto.getExamType(),  CourseMarksSubmissionStatus.WAITING_FOR_SCRUTINY);
+
+      String userId=gradeSubmissionService.getUserIdForNotification(partInfoDto.getSemesterId(), partInfoDto.getCourseId(), CourseMarksSubmissionStatus.WAITING_FOR_SCRUTINY);
+      gradeSubmissionService.sendNotification(userId,marksSubmissionStatus.getCourseNo());
     }
     getContentManager().saveGradeSheet(partInfoDto.getSemesterId(), partInfoDto.getCourseId(), partInfoDto.getExamType(), partInfoDto.getCourseType(), gradeList);
 
-    gradeSubmissionService.sendNotification();
+
     Response.ResponseBuilder builder = Response.created(null);
     builder.status(Response.Status.CREATED);
     return builder.build();
@@ -185,11 +182,10 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
     getBuilder().build(partInfoDto, pJsonObject);
 
     MarksSubmissionStatusDto marksSubmissionStatus = getContentManager().getMarksSubmissionStatus(partInfoDto.getSemesterId(),partInfoDto.getCourseId(),partInfoDto.getExamType());
+    CourseMarksSubmissionStatus nextStatus=gradeSubmissionService.getCourseMarksSubmissionNextStatus(actor, action, marksSubmissionStatus.getStatus());
 
     List<StudentGradeDto> recheckList=null;
     List<StudentGradeDto> approveList=null;
-
-    CourseMarksSubmissionStatus nextStatus=gradeSubmissionService.getCourseMarksSubmissionNextStatus(actor, action, marksSubmissionStatus.getStatus());
 
     //Need to improve this if else logic here....
     if (action.equals("save"))  // Scrutinizer, Head, CoE  Press the Save Button
@@ -214,8 +210,12 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
       List<StudentGradeDto> allGradeList =
           Stream.concat(recheckList==null?Stream.empty():recheckList.stream(), approveList==null?Stream.empty():approveList.stream()).collect(Collectors.toList());
 
+      String userId=gradeSubmissionService.getUserIdForNotification(partInfoDto.getSemesterId(), partInfoDto.getCourseId(), nextStatus);
+      if(!userId.equals(""))
+      gradeSubmissionService.sendNotification(userId,marksSubmissionStatus.getCourseNo());
 
-      getContentManager().insertGradeLog(SecurityUtils.getSubject().getPrincipal().toString(),actor, partInfoDto.getSemesterId(), partInfoDto.getCourseId(), partInfoDto.getExamType(), partInfoDto.getCourseType(), marksSubmissionStatus.getStatus(), nextStatus,allGradeList);
+      getContentManager().insertGradeLog(SecurityUtils.getSubject().getPrincipal().toString(),actor, partInfoDto.getSemesterId(), partInfoDto.getCourseId(), partInfoDto.getExamType(), partInfoDto.getCourseType(),
+          marksSubmissionStatus.getStatus(), nextStatus,allGradeList);
       getContentManager().insertMarksSubmissionStatusLog(SecurityUtils.getSubject().getPrincipal().toString(),actor,partInfoDto.getSemesterId(), partInfoDto.getCourseId(), partInfoDto.getExamType(), nextStatus);
     }
 
@@ -225,17 +225,16 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
     return builder.build();
   }
 
+  @Transactional
   public Response recheckRequestApprove(final JsonObject pJsonObject) throws Exception {
-
-    //Should do the validation
-    //. Is he the right person
-    //. have the time period to do the operation
 
     String action = pJsonObject.getString("action");
     String actor = pJsonObject.getString("actor");
 
     MarksSubmissionStatusDto partInfoDto = new MarksSubmissionStatusDto();
     getBuilder().build(partInfoDto, pJsonObject);
+
+    CourseMarksSubmissionStatus nextStatus=gradeSubmissionService.getCourseMarksSubmissionNextStatus(actor, action, partInfoDto.getStatus());
 
     int current_course_status = pJsonObject.getInt("course_current_status");
 
@@ -246,15 +245,20 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
     } else if (action.equals("recheck_request_approved")) {  // VC Sir Approved the whole recheck request
       int b = getContentManager().approveRecheckRequest(partInfoDto.getSemesterId(), partInfoDto.getCourseId(), partInfoDto.getExamType(), partInfoDto.getCourseType());
     }
-    int bb = getContentManager().updateCourseMarksSubmissionStatus(partInfoDto.getSemesterId(), partInfoDto.getCourseId(), partInfoDto.getExamType(), partInfoDto.getCourseType(), gradeSubmissionService.getCourseMarksSubmissionNextStatus(actor, action, CourseMarksSubmissionStatus.values()[current_course_status]));
+    int bb = getContentManager().updateCourseMarksSubmissionStatus(partInfoDto.getSemesterId(), partInfoDto.getCourseId(), partInfoDto.getExamType(), partInfoDto.getCourseType(),
+        gradeSubmissionService.getCourseMarksSubmissionNextStatus(actor, action, CourseMarksSubmissionStatus.values()[current_course_status]));
+
+    String userId=gradeSubmissionService.getUserIdForNotification(partInfoDto.getSemesterId(), partInfoDto.getCourseId(), nextStatus);
+    if(!userId.equals(""))
+      gradeSubmissionService.sendNotification(userId,partInfoDto.getCourseNo());
+
+
 
     Response.ResponseBuilder builder = Response.created(null);
     builder.status(Response.Status.CREATED);
 
     return builder.build();
   }
-
-
 
   public JsonObject getChartData(final Integer pSemesterId, final String pCourseId, final Integer pExamType, final Integer courseType) throws Exception {
 
