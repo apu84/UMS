@@ -124,6 +124,7 @@ public class GradeSubmissionService {
         actingRole= Constants.HEAD;
         break;
       case WAITING_FOR_COE_APPROVAL:
+      case ACCEPTED_BY_COE:
         actingRole= Constants.COE;
         break;
       case WAITING_FOR_RECHECK_REQUEST_APPROVAL:
