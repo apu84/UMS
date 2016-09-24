@@ -196,7 +196,7 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
 
   String INSERT_SESSIONAL_LOG="Insert InTo UG_SESSIONAL_MARKS_LOG(USER_ID,ROLE,SEMESTER_ID, COURSE_ID,  " +
       "STUDENT_ID, EXAM_TYPE, TOTAL, GRADE_LETTER,STATUS, RECHECK_STATUS)  " +
-      "Value(?,?,?,?,?,?,?,?,?,?) ";
+      "Values(?,?,?,?,?,?,?,?,?,?) ";
 
   String INSERT_MARKS_SUBMISSION_STATUS_LOG="Insert Into Marks_Submission_Status_Log(USER_ID, ROLE,SEMESTER_ID, COURSE_ID, EXAM_TYPE,STATUS) "+
       " Values(?,?,?,?,?,?) ";
