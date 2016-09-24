@@ -48,49 +48,51 @@ public class StudentFileContentPermission extends AbstractSectionPermission {
     Student student;
 
     Object list = super.list(pPath, pDomain, pRootPath);
-    try {
-      student = getStudent();
-      Path targetDirectory = getQualifiedPath(pDomain, buildPath(pPath, pRootPath));
-      String semesterIdString = getUserDefinedProperty(SEMESTER_ID, targetDirectory);
-      String courseIdString = getUserDefinedProperty(COURSE_ID, targetDirectory);
-      if (StringUtils.isEmpty(semesterIdString) || StringUtils.isEmpty(courseIdString)) {
-        throw new Exception("Can not find semesterId and courseId for directory " + pPath);
-      }
-      Integer semesterId = Integer.parseInt(semesterIdString);
-      List<UGRegistrationResult> registeredCourses
-          = mUGRegistrationResultManager.getRegisteredCourseByStudent(semesterId, student.getId(), CourseRegType.REGULAR);
-
-      boolean courseFound = false;
-      Course course = null;
-      for (UGRegistrationResult registeredCourse : registeredCourses) {
-        if (registeredCourse.getCourse().getId().equalsIgnoreCase(courseIdString)) {
-          courseFound = true;
-          course = registeredCourse.getCourse();
-          break;
+    if (!pPath.equalsIgnoreCase("/")) {
+      try {
+        student = getStudent();
+        Path targetDirectory = getQualifiedPath(pDomain, buildPath(pPath, pRootPath));
+        String semesterIdString = getUserDefinedProperty(SEMESTER_ID, targetDirectory);
+        String courseIdString = getUserDefinedProperty(COURSE_ID, targetDirectory);
+        if (StringUtils.isEmpty(semesterIdString) || StringUtils.isEmpty(courseIdString)) {
+          throw new Exception("Can not find semesterId and courseId for directory " + pPath);
         }
-      }
+        Integer semesterId = Integer.parseInt(semesterIdString);
+        List<UGRegistrationResult> registeredCourses
+            = mUGRegistrationResultManager.getRegisteredCourseByStudent(semesterId, student.getId(), CourseRegType.REGULAR);
 
-      if (!courseFound) {
-        throw new Exception(student.getId() + " has no registered course named " + courseName);
-      }
-
-      List<Map<String, Object>> folderList = (List<Map<String, Object>>) list;
-      Iterator<Map<String, Object>> iterator = folderList.iterator();
-
-      while (iterator.hasNext()) {
-        String name = iterator.next().get("name").toString();
-        Path path = getQualifiedPath(pDomain, buildPath(pPath, pRootPath));
-        path = Paths.get(path.toString(), name);
-        List<String> permittedSections = permittedSections(getUserDefinedProperty(OWNER, path), semesterId, course.getId());
-
-        if (!hasPermission(path, permittedSections, student)) {
-          iterator.remove();
+        boolean courseFound = false;
+        Course course = null;
+        for (UGRegistrationResult registeredCourse : registeredCourses) {
+          if (registeredCourse.getCourse().getId().equalsIgnoreCase(courseIdString)) {
+            courseFound = true;
+            course = registeredCourse.getCourse();
+            break;
+          }
         }
-      }
 
-    } catch (Exception e) {
-      mLogger.error("Exception while listing folders", e);
-      return error(mMessageResource.getMessage("folder.listing.failed"));
+        if (!courseFound) {
+          throw new Exception(student.getId() + " has no registered course named " + courseName);
+        }
+
+        List<Map<String, Object>> folderList = (List<Map<String, Object>>) list;
+        Iterator<Map<String, Object>> iterator = folderList.iterator();
+
+        while (iterator.hasNext()) {
+          String name = iterator.next().get("name").toString();
+          Path path = getQualifiedPath(pDomain, buildPath(pPath, pRootPath));
+          path = Paths.get(path.toString(), name);
+          List<String> permittedSections = permittedSections(getUserDefinedProperty(OWNER, path), semesterId, course.getId());
+
+          if (!hasPermission(path, permittedSections, student)) {
+            iterator.remove();
+          }
+        }
+
+      } catch (Exception e) {
+        mLogger.error("Exception while listing folders", e);
+        return error(mMessageResource.getMessage("folder.listing.failed"));
+      }
     }
 
     return addOwnerToken(list);
