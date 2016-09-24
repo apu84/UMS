@@ -12,6 +12,7 @@ import org.ums.domain.model.immutable.Course;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.enums.CourseRegType;
 import org.ums.enums.CourseType;
+import org.ums.enums.ExamType;
 import org.ums.manager.CourseManager;
 import org.ums.manager.ExamGradeManager;
 import org.ums.manager.SemesterManager;
@@ -43,7 +44,7 @@ public class UgGradeSheetGenerator {
    * @throws DocumentException
    * @throws IOException
    */
-  public void createPdf(Integer semesterId, String courseId, Integer examTypeId, String userRole, OutputStream outputStream)
+  public void createPdf(Integer semesterId, String courseId, ExamType examType, String userRole, OutputStream outputStream)
       throws DocumentException, IOException, Exception {
 
     //Validation goes here
@@ -63,7 +64,7 @@ public class UgGradeSheetGenerator {
 
     Course course = courseManager.get(courseId);
     Semester semester = semesterManager.get(semesterId);
-    List<StudentGradeDto> gradeList = examGradeManager.getAllGrades(semesterId, courseId, examTypeId, course.getCourseType());
+    List<StudentGradeDto> gradeList = examGradeManager.getAllGrades(semesterId, courseId, examType, course.getCourseType());
 
     document.open();
     for (int i = 0; i < (gradeList.size() / 90); i++) {
@@ -83,7 +84,7 @@ public class UgGradeSheetGenerator {
       mainTable.addCell(cell);
 
       cell = new PdfPCell();
-      cell.addElement(getGradeTable(gradeList, i * 90, 45, course.getCourseType(), examTypeId));
+      cell.addElement(getGradeTable(gradeList, i * 90, 45, course.getCourseType(), examType));
       cell.setPadding(0);
       cell.setBorder(Rectangle.NO_BORDER);
       mainTable.addCell(cell);
@@ -93,7 +94,7 @@ public class UgGradeSheetGenerator {
       mainTable.addCell(cell);
 
       cell = new PdfPCell();
-      cell.addElement(getGradeTable(gradeList, i * 90 + 46, 45, course.getCourseType(), examTypeId));
+      cell.addElement(getGradeTable(gradeList, i * 90 + 46, 45, course.getCourseType(), examType));
       cell.setPadding(0);
       cell.setBorder(Rectangle.NO_BORDER);
       mainTable.addCell(cell);
@@ -119,7 +120,7 @@ public class UgGradeSheetGenerator {
     return table;
   }
 
-  public PdfPTable getGradeTable(java.util.List<StudentGradeDto> studentList, int startIndex, int total, CourseType courseType, int examTypeId) throws DocumentException {
+  public PdfPTable getGradeTable(java.util.List<StudentGradeDto> studentList, int startIndex, int total, CourseType courseType, ExamType examType) throws DocumentException {
     // a table with three columns
     if (startIndex > studentList.size())
       return null;
@@ -184,7 +185,7 @@ public class UgGradeSheetGenerator {
 
       student = studentList.get(i);
 
-      if (prevCourseRegType != null && prevCourseRegType != student.getRegType() && examTypeId != 1) {
+      if (prevCourseRegType != null && prevCourseRegType != student.getRegType() && examType.getId() != 1) {
         p = new Paragraph(student.getRegType().getLabel(), gradeSheetHeader);
         cell = new PdfPCell(p);
         cell.setHorizontalAlignment(Element.ALIGN_LEFT);

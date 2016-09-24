@@ -7,32 +7,41 @@ import java.util.Map;
 /**
  * Created by ikh on 4/29/2016.
  */
+
 public enum ExamType {
-    SEMESTER_FINAL(1),
-    CLEARANCE_CARRY_IMPROVEMENT(2),
-    SEMESTER_FINAL_CIVIL_SPECIAL(3);
+
+    SEMESTER_FINAL(1,"Semester Final"),
+    CLEARANCE_CARRY_IMPROVEMENT(2,"Carry/Clearance/Improvement"),
+    SEMESTER_FINAL_CIVIL_SPECIAL(3,"Civil Final");
+
+    private String label;
+    private int id;
+
+    private ExamType(int id, String label) {
+        this.id=id;
+        this.label = label;
+    }
+
 
     private static final Map<Integer, ExamType> lookup
-            = new HashMap<>();
+        = new HashMap<>();
 
     static {
         for (ExamType c : EnumSet.allOf(ExamType.class)) {
-            lookup.put(c.getValue(), c);
+            lookup.put(c.getId(), c);
         }
     }
 
 
-    private int pEamTypeCode;
-
-    private ExamType(int pEamTypeCode) {
-        this.pEamTypeCode = pEamTypeCode;
+    public static ExamType get(final int pId) {
+        return lookup.get(pId);
+    }
+    public String getLabel() {
+        return this.label;
+    }
+    public int getId() {
+        return this.id;
     }
 
-    public static ExamType get(final int pEamTypeCode) {
-        return lookup.get(pEamTypeCode);
-    }
 
-    public int getValue() {
-        return this.pEamTypeCode;
-    }
 }

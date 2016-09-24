@@ -33,7 +33,7 @@ public class PersistentUGTheoryMarksDao extends UGTheoryMarksDaoDecorator {
           theoryMarks.getSemester().getId(),
           theoryMarks.getCourse().getId(),
           theoryMarks.getGradeLetter(),
-          theoryMarks.getExamType().getValue(),
+          theoryMarks.getExamType().getId(),
           theoryMarks.getType().getId()
       });
     }
@@ -52,7 +52,7 @@ public class PersistentUGTheoryMarksDao extends UGTheoryMarksDaoDecorator {
       params.add(new Object[]{
           theoryMarks.getStudent().getId(),
           theoryMarks.getSemester().getId(),
-          theoryMarks.getExamType().getValue(),
+          theoryMarks.getExamType().getId(),
           theoryMarks.getType().getId()
       });
     }

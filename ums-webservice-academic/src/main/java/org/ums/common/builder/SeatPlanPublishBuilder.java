@@ -24,7 +24,7 @@ public class SeatPlanPublishBuilder implements Builder<SeatPlanPublish,MutableSe
     if(pReadOnly.getSemesterId()!=null)
         pBuilder.add("semesterId",pReadOnly.getSemesterId());
     if(pReadOnly.getExamType()!=null)
-        pBuilder.add("examType",pReadOnly.getExamType().getValue());
+        pBuilder.add("examType",pReadOnly.getExamType().getId());
     if(pReadOnly.getExamDate()!=null)
         pBuilder.add("examDate",pReadOnly.getExamDate());
     if(pReadOnly.getPublishStatus()!=null)

@@ -8,6 +8,7 @@ import org.ums.domain.model.dto.StudentGradeDto;
 import org.ums.domain.model.immutable.ExamGrade;
 import org.ums.domain.model.mutable.MutableExamGrade;
 import org.ums.enums.CourseType;
+import org.ums.enums.ExamType;
 import org.ums.enums.RecheckStatus;
 import org.ums.enums.StudentMarksSubmissionStatus;
 
@@ -79,11 +80,11 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
         JsonObject course=pJsonObject.getJsonObject("courseInfo");
         partInfoDto.setCourseId(course.getString("course_id"));
         partInfoDto.setSemesterId(course.getInt("semester_id"));
-        partInfoDto.setExamType(course.getInt("exam_type"));
+        partInfoDto.setExamType(ExamType.get(course.getInt("exam_typeId")));
         partInfoDto.setTotal_part(course.getInt("total_part"));
         partInfoDto.setPart_a_total(course.getInt("part_a_total"));
         partInfoDto.setPart_b_total(course.getInt("part_b_total"));
-        partInfoDto.setCourseType(CourseType.get(course.getInt("course_type")));
+        partInfoDto.setCourseType(CourseType.get(course.getInt("course_typeId")));
     }
 
     public List<StudentGradeDto> build(JsonObject pJsonObject) throws Exception {
@@ -96,7 +97,7 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
             JsonObject jsonObject = entries.getJsonObject(i);
             StudentGradeDto grade = new StudentGradeDto();
             grade.setStudentId(jsonObject.getString("studentId"));
-            if(courseInfo.getInt("course_type")==1) { // For  only theory courses
+            if(courseInfo.getInt("course_typeId")==1) { // For  only theory courses
                 grade.setQuiz((jsonObject.getString("quiz") == null || jsonObject.getString("quiz").equalsIgnoreCase("")) ? -1 : Float.parseFloat(jsonObject.getString("quiz")));
                 grade.setClassPerformance((jsonObject.getString("classPerformance") == null || jsonObject.getString("classPerformance").equalsIgnoreCase("")) ? -1 : Float.parseFloat(jsonObject.getString("classPerformance")));
                 grade.setPartA((jsonObject.getString("partA") == null || jsonObject.getString("partA").equalsIgnoreCase("")) ? -1 : Float.parseFloat(jsonObject.getString("partA")));
@@ -229,7 +230,8 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
             return StudentMarksSubmissionStatus.SCRUTINIZED.getId()+","+StudentMarksSubmissionStatus.APPROVE.getId();
         if(actor.equals("coe"))
             return StudentMarksSubmissionStatus.APPROVED.getId()+","+StudentMarksSubmissionStatus.ACCEPT.getId();
-
+        if(actor.equals("vc"))
+            return StudentMarksSubmissionStatus.ACCEPTED.getId()+"";
         return null;
     }
     private String getPrevMarksSubmissionStatus(String actor,String action){

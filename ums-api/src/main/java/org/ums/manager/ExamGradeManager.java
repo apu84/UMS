@@ -15,23 +15,23 @@ import java.util.Map;
  * Created by ikh on 4/30/2016.
  */
 public interface ExamGradeManager extends ContentManager<ExamGrade, MutableExamGrade, Object> {
-    public List<GradeChartDataDto> getChartData(int semesterId,String courseId,int examType,CourseType courseType) throws Exception;
-    public List<StudentGradeDto> getAllGrades(int semesterId,String courseId,int examType,CourseType courseType) throws Exception;
+    public List<GradeChartDataDto> getChartData(int semesterId,String courseId,ExamType examType,CourseType courseType) throws Exception;
+    public List<StudentGradeDto> getAllGrades(int semesterId,String courseId,ExamType examType,CourseType courseType) throws Exception;
 
-    public MarksSubmissionStatusDto getMarksSubmissionStatus(int semesterId,String courseId,int examType) throws Exception;
+    public MarksSubmissionStatusDto getMarksSubmissionStatus(int semesterId,String courseId,ExamType examType) throws Exception;
     public List<MarksSubmissionStatusDto> getMarksSubmissionStatus(Integer pSemesterId,Integer pExamType,Integer pProgramId,Integer year, Integer semester,String teacherId,String deptId,String userRole,Integer status) throws Exception;
-    public boolean saveGradeSheet(int semesterId,String courseId,int examType,CourseType courseType,List<StudentGradeDto> gradeList) throws Exception;
-    public boolean insertGradeLog(String userId,String role,int semesterId,String courseId,int examType,CourseType courseType,CourseMarksSubmissionStatus currentStatus,CourseMarksSubmissionStatus nextStatus,List<StudentGradeDto> gradeList) throws Exception;
-    public int insertMarksSubmissionStatusLog(String pUserId,String pRole,int pSemesterId,String pCourseId,int pExamType,CourseMarksSubmissionStatus status) throws Exception ;
-    public boolean updateGradeStatus_Save(int pSemesterId,String pCourseId,int pExamType,CourseType courseType,List<StudentGradeDto> recheckList,List<StudentGradeDto> approveList) throws Exception ;
-    public boolean updateGradeStatus_Recheck(int pSemesterId,String pCourseId,int pExamType,CourseType courseType,List<StudentGradeDto> recheckList,List<StudentGradeDto> approveList) throws Exception ;
-    public boolean updateGradeStatus_Approve(int pSemesterId,String pCourseId,int pExamType,CourseType courseType,List<StudentGradeDto> recheckList,List<StudentGradeDto> approveList) throws Exception ;
-    public int updateCourseMarksSubmissionStatus(int semesterId,String courseId,int examType,CourseType courseType,CourseMarksSubmissionStatus status) throws Exception;
-    public int updatePartInfo(int pSemesterId,String pCourseId,int pExamType,int pTotalPart,int partA,int partB) throws Exception;
+    public boolean saveGradeSheet(MarksSubmissionStatusDto actualStatusDTO,List<StudentGradeDto> gradeList) throws Exception;
+    public boolean insertGradeLog(String userId,String userRole,MarksSubmissionStatusDto actualStatusDTO,CourseMarksSubmissionStatus nextStatus,List<StudentGradeDto> gradeList) throws Exception;
+    public int insertMarksSubmissionStatusLog(String userId,String userRole,MarksSubmissionStatusDto actualStatusDTO,CourseMarksSubmissionStatus status) throws Exception ;
+    public boolean updateGradeStatus_Save(MarksSubmissionStatusDto actualStatusDTO,List<StudentGradeDto> recheckList,List<StudentGradeDto> approveList) throws Exception ;
+    public boolean updateGradeStatus_Recheck(MarksSubmissionStatusDto actualStatusDTO,List<StudentGradeDto> recheckList,List<StudentGradeDto> approveList) throws Exception ;
+    public boolean updateGradeStatus_Approve(MarksSubmissionStatusDto actualStatusDTO,List<StudentGradeDto> recheckList,List<StudentGradeDto> approveList) throws Exception ;
+    public int updateCourseMarksSubmissionStatus(MarksSubmissionStatusDto actualStatusDTO,CourseMarksSubmissionStatus status) throws Exception;
+    public int updatePartInfo(MarksSubmissionStatusDto requestedStatusDTO) throws Exception;
 
 
-    public int approveRecheckRequest(int pSemesterId,String pCourseId,int pExamType,CourseType courseType) throws Exception ;
-    public int rejectRecheckRequest(int pSemesterId,String pCourseId,int pExamType,CourseType courseType) throws Exception ;
+    public int approveRecheckRequest(int pSemesterId,String pCourseId,ExamType pExamType,CourseType courseType) throws Exception ;
+    public int rejectRecheckRequest(int pSemesterId,String pCourseId,ExamType pExamType,CourseType courseType) throws Exception ;
 
     public List<String> getRoleForTeacher(String pTeacherId,int  pSemesterId,String pCourseId) throws Exception;
     public List<String> getRoleForHead(String pUserId) throws Exception;
@@ -39,13 +39,13 @@ public interface ExamGradeManager extends ContentManager<ExamGrade, MutableExamG
     public List<String> getRoleForVC(String pUserId) throws Exception;
 
 
-    public int checkSize(Integer pSemesterId,Integer pExamType, String pExamDate);
-    public int insertGradeSubmissionDeadLineInfo(Integer pSemesterId,Integer pExamType, String pExamDate);
-    public List<MarksSubmissionStatusDto> getGradeSubmissionDeadLine(Integer pSemesterId, Integer pExamType, String pExamDate);
+    public int checkSize(Integer pSemesterId,ExamType pExamType, String pExamDate);
+    public int insertGradeSubmissionDeadLineInfo(Integer pSemesterId,ExamType pExamType, String pExamDate);
+    public List<MarksSubmissionStatusDto> getGradeSubmissionDeadLine(Integer pSemesterId, ExamType pExamType, String pExamDate);
     public int updateForGradeSubmissionDeadLine(List<MarksSubmissionStatusDto> pMarksSubmissionStatusDtos) throws Exception;
-    public int getTotalStudentCount(final Integer pSemesterId, final String pCourseId, final Integer pExamType, final CourseType courseType) throws Exception;
+    public int getTotalStudentCount(MarksSubmissionStatusDto actualStatusDTO) throws Exception;
     public List<MarksSubmissionStatusLogDto> getMarksSubmissionLogs(Integer pSemesterId, String pCourseId,Integer pExamType) throws Exception ;
-    public List<MarksLogDto> getMarksLogs(Integer pSemesterId,String pCourseId,Integer pExamType,String pStudentId, CourseType pCourseType) throws Exception ;
+    public List<MarksLogDto> getMarksLogs(Integer pSemesterId,String pCourseId,ExamType pExamType,String pStudentId, CourseType pCourseType) throws Exception ;
     public Map getUserRoleList(Integer pSemesterId, String pCourseId) throws Exception;
 
 }

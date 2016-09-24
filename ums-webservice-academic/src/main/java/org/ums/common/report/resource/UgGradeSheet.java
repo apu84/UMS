@@ -3,6 +3,7 @@ package org.ums.common.report.resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.common.report.generator.UgGradeSheetGenerator;
+import org.ums.enums.ExamType;
 import org.ums.resource.Resource;
 
 import javax.ws.rs.*;
@@ -33,7 +34,7 @@ public class UgGradeSheet extends Resource {
     return new StreamingOutput() {
       public void write(OutputStream output) throws IOException, WebApplicationException {
         try {
-          mUgGradeSheetGenerator.createPdf(pSemesterId,pCourseId,pExamTypeId,pRequestedRole,output);
+          mUgGradeSheetGenerator.createPdf(pSemesterId,pCourseId, ExamType.get(pExamTypeId),pRequestedRole,output);
         } catch (Exception e) {
           throw new WebApplicationException(e);
         }

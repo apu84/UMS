@@ -1,6 +1,7 @@
 package org.ums.common.academic.resource;
 
 import org.springframework.stereotype.Component;
+import org.ums.enums.ExamType;
 import org.ums.resource.Resource;
 
 import javax.json.JsonObject;
@@ -24,7 +25,7 @@ public class GradeSubmissionResource extends MutableGradeSubmissionResource {
                                      final @PathParam("course-id") String pCourseId,
                                      final @PathParam("exam-type") Integer pExamTypeId,
                                      final @PathParam("role") String pRequestedRole) throws Exception {
-        return mResourceHelper.getGradeList(pRequestedRole,pSemesterId,pCourseId,pExamTypeId);
+        return mResourceHelper.getGradeList(pRequestedRole,pSemesterId,pCourseId, ExamType.get(pExamTypeId));
 
     }
 
@@ -59,7 +60,7 @@ public class GradeSubmissionResource extends MutableGradeSubmissionResource {
                                                final @PathParam("semester-id") Integer pSemesterId,
                                                final @PathParam("exam-type") Integer pExamType,
                                                final @PathParam("exam-date") String pExamDate) throws Exception{
-    return mResourceHelper.getGradeSubmissionDeadline(pSemesterId,pExamType,pExamDate,mUriInfo);
+    return mResourceHelper.getGradeSubmissionDeadline(pSemesterId, ExamType.get(pExamType), pExamDate, mUriInfo);
   }
 
   @GET
@@ -78,6 +79,6 @@ public class GradeSubmissionResource extends MutableGradeSubmissionResource {
                                            final @PathParam("course-id") String pCourseId,
                                            final @PathParam("exam-type") Integer pExamType,
                                            final @PathParam("student-id") String pStudentId) throws Exception{
-    return mResourceHelper.getMarksLogs(pSemesterId, pCourseId, pExamType, pStudentId);
+    return mResourceHelper.getMarksLogs(pSemesterId, pCourseId, ExamType.get(pExamType), pStudentId);
   }
 }

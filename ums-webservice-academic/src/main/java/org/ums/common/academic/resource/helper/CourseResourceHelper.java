@@ -122,7 +122,7 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
     List<Course> courses = getContentManager().
         getBySemesterProgram(pSemesterId.toString(),program.get(0).getId().toString())
         .stream()
-        .filter(course->course.getCourseType().getValue()==pProgramType)
+        .filter(course->course.getCourseType().getId()==pProgramType)
         .collect(Collectors.toList());
 
     return buildCourse(courses,pUriInfo);

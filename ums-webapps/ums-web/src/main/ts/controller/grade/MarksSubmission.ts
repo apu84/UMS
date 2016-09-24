@@ -7,7 +7,7 @@ module ums {
     inputParams:IInputParams;
     current_courseId:string;
     current_semesterId:number;
-    current_examType:number;
+    current_examTypeId:number;
     noneSubmittedGrades: any;
     waitingForScrutinyGrades :any;
     waitingForHeadApprovalGrades :any;
@@ -104,7 +104,7 @@ module ums {
     courseTitle:string;
     semesterId:number;
     semesterName:string;
-    examType:number;
+    examTypeId:number;
     examTypeName:string;
     statusId:number;
     statusName:string;
@@ -118,16 +118,16 @@ module ums {
   interface ICourseInfo{
     course_id:string;
     semester_id:number;
-    exam_type:number;
+    exam_typeId:number;
     total_part:number;
     part_a_total:number;
     part_b_total:number;
-    course_type:number
+    course_typeId:number
   }
   interface IInputParams{
     program_type:number;
     semester_id:number;
-    exam_type:number;
+    exam_typeId:number;
     dept_id:string;
     program_id:number;
     status:number;
@@ -215,7 +215,7 @@ module ums {
       $scope.inputParams={
         program_type:this.appConstants.programTypeEnum.UG,
         semester_id:11,
-        exam_type:1,
+        exam_typeId:1,
         dept_id:'',
         program_id:1,
         status:-1,
@@ -272,7 +272,7 @@ module ums {
 
     private fetchChartData():ng.IPromise<any> {
 
-      var url="academic/gradeSubmission/chartdata/semester/"+this.$scope.inputParams.semester_id+"/courseid/"+this.$scope.current_courseId+"/examtype/"+this.$scope.inputParams.exam_type+"/coursetype/"+(this.$scope.courseType=="THEORY"?"1":"2");
+      var url="academic/gradeSubmission/chartdata/semester/"+this.$scope.current_semesterId+"/courseid/"+this.$scope.current_courseId+"/examtype/"+this.$scope.current_examTypeId+"/coursetype/"+(this.$scope.courseType=="THEORY"?"1":"2");
       var defer = this.$q.defer();
       this.httpClient.get(url, this.appConstants.mimeTypeJson,
           (json:any, etag:string) => {
@@ -331,7 +331,7 @@ module ums {
 
 
     private downloadPdf():void {
-      this.httpClient.get("gradeReport/pdf/semester/"+this.$scope.inputParams.semester_id+"/courseid/"+this.$scope.current_courseId+"/examtype/"+this.$scope.current_examType+"/role/"+this.$scope.currentActor, 'application/pdf',
+      this.httpClient.get("gradeReport/pdf/semester/"+this.$scope.current_semesterId+"/courseid/"+this.$scope.current_courseId+"/examtype/"+this.$scope.current_examTypeId+"/role/"+this.$scope.currentActor, 'application/pdf',
 
           (data:any, etag:string) => {
             var file = new Blob([data], {type: 'application/pdf'});
@@ -351,7 +351,7 @@ module ums {
       }
 
       this.httpClient.get("academic/gradeSubmission/semester/"+this.$scope.inputParams.semester_id+
-          "/examtype/"+this.$scope.inputParams.exam_type+
+          "/examtype/"+this.$scope.inputParams.exam_typeId+
           "/dept/"+this.commonService.padLeft(Number(this.$scope.inputParams.dept_id),2,'0')+
           "/program/"+this.$scope.inputParams.program_id+
           "/yearsemester/"+this.$scope.inputParams.year_semester+
@@ -373,27 +373,28 @@ module ums {
 
     //Refresh used for straightforward Refresh purpose
     private refreshGradeSheet():void{
-      this.fetchGradeSheet(this.$scope.current_courseId,this.$scope.current_semesterId,this.$scope.current_examType);
+      this.fetchGradeSheet(this.$scope.current_courseId,this.$scope.current_semesterId,this.$scope.current_examTypeId);
     }
 
     //Reload use for refresh a grade sheet with some time delay
     private reloadGradeSheet(that:any){
       setTimeout(function(){
-        that.fetchGradeSheet(that.$scope.current_courseId,that.$scope.current_semesterId,that.$scope.current_examType);
+        that.fetchGradeSheet(that.$scope.current_courseId,that.$scope.current_semesterId,that.$scope.current_examTypeId);
       }, 1000);
     }
 
-    private fetchGradeSheet(courseId:string,semesterId:number,examType:number):void {
+    private fetchGradeSheet(courseId:string,semesterId:number,examTypeId:number):void {
       $("#panel_top").hide();
       $("#loading_panel").show();
       this.$scope.current_courseId=courseId;
       this.$scope.current_semesterId=semesterId;
-      this.$scope.current_examType=examType;
+      this.$scope.current_examTypeId=examTypeId;
+
 
       $('.page-title.ng-binding').html("Online Grade Submission/Approval");
 
       this.$scope.toggleColumn = true;
-      var url="academic/gradeSubmission/semester/"+semesterId+"/courseid/"+this.$scope.current_courseId+"/examtype/"+examType+"/role/"+this.$scope.userRole;
+      var url="academic/gradeSubmission/semester/"+semesterId+"/courseid/"+courseId+"/examtype/"+examTypeId+"/role/"+this.$scope.userRole;
       this.httpClient.get(url,
           this.appConstants.mimeTypeJson,
           (data:any, etag:string)=> {
@@ -505,6 +506,7 @@ module ums {
       var pattern = /^\d+(.\d{1,2})?$/;
       return pattern.test(sNum);
     }
+//asfsadfsadfdsaffs   aasdfasdfasd fasdfasdf asdf asdfsadf sd
 
     private toggleStatRules(table_id:string) {
       $("#tbl_stat").hide();
@@ -940,16 +942,16 @@ module ums {
       var courseInfo:ICourseInfo = {
         course_id: '',
         semester_id: 0,
-        exam_type: 0,
+        exam_typeId: 0,
         total_part: 0,
         part_a_total: 0,
         part_b_total: 0,
-        course_type:0
+        course_typeId:0
       };
       courseInfo.course_id = this.$scope.current_courseId;
-      courseInfo.semester_id = Number(this.$scope.inputParams.semester_id);
-      courseInfo.exam_type = Number(this.$scope.inputParams.exam_type);
-      courseInfo.course_type=this.$scope.courseType=="THEORY"?1:2;
+      courseInfo.semester_id = Number(this.$scope.current_semesterId);
+      courseInfo.exam_typeId = Number(this.$scope.current_examTypeId);
+      courseInfo.course_typeId=this.$scope.courseType=="THEORY"?1:2;
       courseInfo.total_part = Number(this.$scope.data.total_part);
       courseInfo.part_a_total = Number(this.$scope.data.part_a_total);
       courseInfo.part_b_total = Number(this.$scope.data.part_b_total);
@@ -1274,9 +1276,9 @@ module ums {
 
     //MarksSubmissionLog
     private fetchMarksSubmissionLog():void {
-      this.httpClient.get("academic/gradeSubmission/semester/"+this.$scope.inputParams.semester_id+
+      this.httpClient.get("academic/gradeSubmission/semester/"+this.$scope.current_semesterId+
           "/courseid/"+ this.$scope.current_courseId+
-          "/examType/"+this.$scope.inputParams.exam_type,
+          "/examType/"+this.$scope.current_examTypeId,
           this.appConstants.mimeTypeJson,
           (data:any, etag:string)=> {
             console.log(data.entries);
@@ -1289,9 +1291,9 @@ module ums {
     //MarksLog
     private fetchMarksLog(studentId):void {
       if(studentId=="") this.notify.info("Please provide Student Id");
-      this.httpClient.get("academic/gradeSubmission/semester/"+this.$scope.inputParams.semester_id+
+      this.httpClient.get("academic/gradeSubmission/semester/"+this.$scope.current_semesterId+
           "/courseid/"+ this.$scope.current_courseId+
-          "/examType/"+this.$scope.inputParams.exam_type+
+          "/examType/"+this.$scope.current_examTypeId+
           "/studentid/"+studentId,
           this.appConstants.mimeTypeJson,
           (data:any, etag:string)=> {
@@ -1367,7 +1369,7 @@ module ums {
 
     //Download GradeSheet in Excel Format
     private generateXls(): void {
-      this.httpClient.get("gradeReport/xls/semester/"+this.$scope.inputParams.semester_id+"/courseid/"+this.$scope.current_courseId+"/examtype/"+this.$scope.inputParams.exam_type+"/coursetype/"+(this.$scope.courseType=="THEORY"?"1":"2")+"/role/"+this.$scope.currentActor, 'application/vnd.ms-excel',
+      this.httpClient.get("gradeReport/xls/semester/"+this.$scope.current_semesterId+"/courseid/"+this.$scope.current_courseId+"/examtype/"+this.$scope.current_examTypeId+"/coursetype/"+(this.$scope.courseType=="THEORY"?"1":"2")+"/role/"+this.$scope.currentActor, 'application/vnd.ms-excel',
           (data: any, etag: string) => {
             var file = new Blob([data], {type: 'application/vnd.ms-excel'});
             var reader = new FileReader();

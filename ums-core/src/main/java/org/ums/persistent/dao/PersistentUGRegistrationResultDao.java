@@ -94,7 +94,7 @@ public class PersistentUGRegistrationResultDao extends UGRegistrationResultDaoDe
           registrationResult.getSemester().getId(),
           registrationResult.getCourse().getId(),
           registrationResult.getGradeLetter(),
-          registrationResult.getExamType().getValue(),
+          registrationResult.getExamType().getId(),
           registrationResult.getType().getId()
       });
     }
@@ -113,7 +113,7 @@ public class PersistentUGRegistrationResultDao extends UGRegistrationResultDaoDe
       params.add(new Object[]{
           registrationResult.getStudent().getId(),
           registrationResult.getSemester().getId(),
-          registrationResult.getExamType().getValue(),
+          registrationResult.getExamType().getId(),
           registrationResult.getType().getId()
       });
     }

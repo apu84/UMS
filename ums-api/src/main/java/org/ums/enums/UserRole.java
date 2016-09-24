@@ -11,7 +11,7 @@ public enum UserRole {
 
   HEAD(1,"Head"),
   COE(2,"CoE"),
-  VC(2,"VC");;
+  VC(3,"VC");
 
   private String label;
   private int id;
@@ -42,6 +42,8 @@ public enum UserRole {
     return this.id;
   }
 
-
+public static void main(String[] args){
+  System.out.println(UserRole.COE.getId()+UserRole.COE.getLabel()+UserRole.get(1).getLabel());
+}
 
 }

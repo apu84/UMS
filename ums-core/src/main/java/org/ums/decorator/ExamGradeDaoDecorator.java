@@ -12,22 +12,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by ikh on 4/30/2016.
- */
+
 public class ExamGradeDaoDecorator  extends ContentDaoDecorator<ExamGrade, MutableExamGrade, Object, ExamGradeManager> implements ExamGradeManager {
 
     @Override
-    public List<StudentGradeDto> getAllGrades(int semesterId,String courseId, int examType,CourseType courseType) throws Exception {
+    public List<StudentGradeDto> getAllGrades(int semesterId,String courseId, ExamType examType,CourseType courseType) throws Exception {
         return getManager().getAllGrades(semesterId, courseId, examType,courseType);
     }
 
     @Override
-    public List<GradeChartDataDto> getChartData(int semesterId,String courseId, int examType,CourseType courseType) throws Exception {
+    public List<GradeChartDataDto> getChartData(int semesterId,String courseId, ExamType examType,CourseType courseType) throws Exception {
         return getManager().getChartData(semesterId, courseId, examType,courseType);
     }
     @Override
-    public MarksSubmissionStatusDto getMarksSubmissionStatus(int semesterId,String courseId, int examType) throws Exception {
+    public MarksSubmissionStatusDto getMarksSubmissionStatus(int semesterId,String courseId, ExamType examType) throws Exception {
         return getManager().getMarksSubmissionStatus(semesterId,courseId, examType);
     }
 
@@ -37,50 +35,50 @@ public class ExamGradeDaoDecorator  extends ContentDaoDecorator<ExamGrade, Mutab
     }
 
     @Override
-    public boolean saveGradeSheet(int semesterId,String courseId,int examType,CourseType courseType,List<StudentGradeDto> gradeList) throws Exception {
-        return getManager().saveGradeSheet(semesterId, courseId, examType, courseType,gradeList);
+    public boolean saveGradeSheet(MarksSubmissionStatusDto actualStatusDTO,List<StudentGradeDto> gradeList) throws Exception {
+        return getManager().saveGradeSheet(actualStatusDTO,gradeList);
     }
 
     @Override
-    public boolean insertGradeLog(String userId,String role, int semesterId,String courseId,int examType,CourseType courseType,CourseMarksSubmissionStatus currentStatus,CourseMarksSubmissionStatus nextStatus,List<StudentGradeDto> gradeList) throws Exception {
-        return getManager().insertGradeLog(userId,role,semesterId, courseId, examType, courseType,currentStatus,nextStatus, gradeList);
+    public boolean insertGradeLog(String userId,String userRole,MarksSubmissionStatusDto actualStatusDTO,CourseMarksSubmissionStatus nextStatus,List<StudentGradeDto> gradeList) throws Exception {
+        return getManager().insertGradeLog(userId,userRole,actualStatusDTO,nextStatus, gradeList);
     }
 
     @Override
-    public int insertMarksSubmissionStatusLog(String pUserId,String pRole,int pSemesterId,String pCourseId,int pExamType,CourseMarksSubmissionStatus status) throws Exception {
-        return getManager().insertMarksSubmissionStatusLog(pUserId,pRole, pSemesterId, pCourseId, pExamType, status);
+    public int insertMarksSubmissionStatusLog(String userId,String userRole,MarksSubmissionStatusDto actualStatusDTO,CourseMarksSubmissionStatus status) throws Exception {
+        return getManager().insertMarksSubmissionStatusLog(userId,userRole,actualStatusDTO, status);
     }
     @Override
-    public boolean updateGradeStatus_Save(int pSemesterId,String pCourseId,int pExamType,CourseType courseType,List<StudentGradeDto> recheckList,List<StudentGradeDto> approveList) throws Exception {
-        return getManager().updateGradeStatus_Save(pSemesterId, pCourseId, pExamType,courseType, recheckList,approveList);
+    public boolean updateGradeStatus_Save(MarksSubmissionStatusDto actualStatusDTO,List<StudentGradeDto> recheckList,List<StudentGradeDto> approveList) throws Exception {
+        return getManager().updateGradeStatus_Save(actualStatusDTO, recheckList,approveList);
     }
     @Override
-    public boolean updateGradeStatus_Recheck(int pSemesterId,String pCourseId,int pExamType,CourseType courseType,List<StudentGradeDto> recheckList,List<StudentGradeDto> approveList) throws Exception {
-        return getManager().updateGradeStatus_Recheck(pSemesterId, pCourseId, pExamType,courseType, recheckList,approveList);
-    }
-
-    @Override
-    public boolean updateGradeStatus_Approve(int pSemesterId,String pCourseId,int pExamType,CourseType courseType,List<StudentGradeDto> recheckList,List<StudentGradeDto> approveList) throws Exception {
-        return getManager().updateGradeStatus_Approve(pSemesterId, pCourseId, pExamType,courseType, recheckList,approveList);
+    public boolean updateGradeStatus_Recheck(MarksSubmissionStatusDto actualStatusDTO,List<StudentGradeDto> recheckList,List<StudentGradeDto> approveList) throws Exception {
+        return getManager().updateGradeStatus_Recheck(actualStatusDTO, recheckList,approveList);
     }
 
     @Override
-    public int updateCourseMarksSubmissionStatus(int semesterId,String courseId,int examType,CourseType courseType,CourseMarksSubmissionStatus status) throws Exception {
-        return getManager().updateCourseMarksSubmissionStatus(semesterId, courseId, examType,courseType, status);
+    public boolean updateGradeStatus_Approve(MarksSubmissionStatusDto actualStatusDTO,List<StudentGradeDto> recheckList,List<StudentGradeDto> approveList) throws Exception {
+        return getManager().updateGradeStatus_Approve(actualStatusDTO, recheckList,approveList);
     }
 
     @Override
-    public int updatePartInfo(int pSemesterId,String pCourseId,int pExamType,int pTotalPart,int partA,int partB) throws Exception {
-        return getManager().updatePartInfo(pSemesterId, pCourseId,pExamType, pTotalPart, partA,partB);
+    public int updateCourseMarksSubmissionStatus(MarksSubmissionStatusDto actualStatusDTO,CourseMarksSubmissionStatus status) throws Exception {
+        return getManager().updateCourseMarksSubmissionStatus(actualStatusDTO, status);
     }
 
     @Override
-    public int rejectRecheckRequest(int semesterId,String courseId,int examType,CourseType courseType) throws Exception {
+    public int updatePartInfo(MarksSubmissionStatusDto requestedStatusDTO) throws Exception {
+        return getManager().updatePartInfo(requestedStatusDTO);
+    }
+
+    @Override
+    public int rejectRecheckRequest(int semesterId,String courseId,ExamType examType,CourseType courseType) throws Exception {
         return getManager().rejectRecheckRequest(semesterId, courseId, examType,courseType);
     }
 
     @Override
-    public int approveRecheckRequest(int semesterId,String courseId,int examType,CourseType courseType) throws Exception {
+    public int approveRecheckRequest(int semesterId,String courseId,ExamType examType,CourseType courseType) throws Exception {
         return getManager().approveRecheckRequest(semesterId, courseId, examType,courseType);
     }
 
@@ -107,17 +105,17 @@ public class ExamGradeDaoDecorator  extends ContentDaoDecorator<ExamGrade, Mutab
     }
 
     @Override
-    public int checkSize(Integer pSemesterId, Integer pExamType, String pExamDate) {
+    public int checkSize(Integer pSemesterId, ExamType pExamType, String pExamDate) {
         return getManager().checkSize(pSemesterId,pExamType,pExamDate);
     }
 
     @Override
-    public int insertGradeSubmissionDeadLineInfo(Integer pSemesterId, Integer pExamType, String pExamDate) {
+    public int insertGradeSubmissionDeadLineInfo(Integer pSemesterId, ExamType pExamType, String pExamDate) {
         return getManager().insertGradeSubmissionDeadLineInfo(pSemesterId,pExamType,pExamDate);
     }
 
     @Override
-    public List<MarksSubmissionStatusDto> getGradeSubmissionDeadLine(Integer pSemesterId, Integer pExamType, String pExamDate) {
+    public List<MarksSubmissionStatusDto> getGradeSubmissionDeadLine(Integer pSemesterId, ExamType pExamType, String pExamDate) {
         return getManager().getGradeSubmissionDeadLine(pSemesterId,pExamType,pExamDate);
     }
 
@@ -126,15 +124,15 @@ public class ExamGradeDaoDecorator  extends ContentDaoDecorator<ExamGrade, Mutab
         return getManager().updateForGradeSubmissionDeadLine(pMarksSubmissionStatusDtos);
     }
 
-    public int getTotalStudentCount(final Integer pSemesterId, final String pCourseId, final Integer pExamType, final CourseType courseType) throws Exception{
-        return getManager().getTotalStudentCount(pSemesterId,pCourseId,pExamType,courseType);
+    public int getTotalStudentCount(MarksSubmissionStatusDto actualStatusDTO) throws Exception{
+        return getManager().getTotalStudentCount(actualStatusDTO);
     }
 
     public List<MarksSubmissionStatusLogDto> getMarksSubmissionLogs(Integer pSemesterId, String pCourseId,Integer pExamType) throws Exception {
         return getManager().getMarksSubmissionLogs(pSemesterId, pCourseId, pExamType);
     }
 
-    public List<MarksLogDto> getMarksLogs(Integer pSemesterId,String pCourseId,Integer pExamType,String pStudentId, CourseType pCourseType) throws Exception {
+    public List<MarksLogDto> getMarksLogs(Integer pSemesterId,String pCourseId,ExamType pExamType,String pStudentId, CourseType pCourseType) throws Exception {
         return getManager().getMarksLogs(pSemesterId, pCourseId, pExamType,pStudentId,pCourseType);
     }
 

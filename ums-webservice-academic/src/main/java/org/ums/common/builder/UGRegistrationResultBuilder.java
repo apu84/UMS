@@ -18,7 +18,7 @@ public class UGRegistrationResultBuilder implements Builder<UGRegistrationResult
     pBuilder.add("studentId", pReadOnly.getStudentId());
     pBuilder.add("courseId", pReadOnly.getCourseId());
     pBuilder.add("gradeLetter", pReadOnly.getGradeLetter());
-    pBuilder.add("examType", pReadOnly.getExamType().getValue());
+    pBuilder.add("examType", pReadOnly.getExamType().getId());
     pBuilder.add("type", pReadOnly.getType().getId());
     pBuilder.add("courseNo", pReadOnly.getCourseNo());
     pBuilder.add("courseTitle", pReadOnly.getCourseTitle());

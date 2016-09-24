@@ -33,7 +33,7 @@ public class PersistentUGSessionalMarksDao extends UGSessionalMarksDaoDecorator 
           sessionalMarks.getSemester().getId(),
           sessionalMarks.getCourse().getId(),
           sessionalMarks.getGradeLetter(),
-          sessionalMarks.getExamType().getValue(),
+          sessionalMarks.getExamType().getId(),
           sessionalMarks.getType().getId()
       });
     }
@@ -52,7 +52,7 @@ public class PersistentUGSessionalMarksDao extends UGSessionalMarksDaoDecorator 
       params.add(new Object[]{
           sessionalMarks.getStudent().getId(),
           sessionalMarks.getSemester().getId(),
-          sessionalMarks.getExamType().getValue(),
+          sessionalMarks.getExamType().getId(),
           sessionalMarks.getType().getId()
       });
     }

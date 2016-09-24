@@ -3,6 +3,7 @@ package org.ums.domain.model.dto;
 import com.google.gson.Gson;
 import org.ums.enums.CourseMarksSubmissionStatus;
 import org.ums.enums.CourseType;
+import org.ums.enums.ExamType;
 
 import java.util.List;
 
@@ -14,8 +15,6 @@ public class MarksSubmissionStatusDto {
     private String semesterName;
     private float cRhR;
     private String deptSchoolName;
-    private int examType;
-    private String examTypeName;
     private int total_part;
     private int part_a_total;
     private int part_b_total;
@@ -24,6 +23,13 @@ public class MarksSubmissionStatusDto {
     private String statusName;
     private String action;
     private CourseType courseType;
+    private ExamType examType;
+
+    private int courseTypeId;
+    private int examTypeId;
+    private String courseTypeName;
+    private String examTypeName;
+
     private Integer courseCreditHour;
     private String programShortname;
     private String examDate;
@@ -96,15 +102,15 @@ public class MarksSubmissionStatusDto {
         this.semesterId = semesterId;
     }
 
-    public int getExamType() {
-        return examType;
-    }
+  public ExamType getExamType() {
+    return examType;
+  }
 
-    public void setExamType(int examType) {
-        this.examType = examType;
-    }
+  public void setExamType(ExamType examType) {
+    this.examType = examType;
+  }
 
-    public int getTotal_part() {
+  public int getTotal_part() {
         return total_part;
     }
 
@@ -158,14 +164,6 @@ public class MarksSubmissionStatusDto {
 
     public void setSemesterName(String semesterName) {
         this.semesterName = semesterName;
-    }
-
-    public String getExamTypeName() {
-        return examTypeName;
-    }
-
-    public void setExamTypeName(String examTypeName) {
-        this.examTypeName = examTypeName;
     }
 
     public String getPreparerId() {
@@ -280,7 +278,39 @@ public class MarksSubmissionStatusDto {
         this.deptSchoolName = deptSchoolName;
     }
 
-    public String toString() {
+  public int getCourseTypeId() {
+    return courseTypeId;
+  }
+
+  public void setCourseTypeId(int courseTypeId) {
+    this.courseTypeId = courseTypeId;
+  }
+
+  public int getExamTypeId() {
+    return examTypeId;
+  }
+
+  public void setExamTypeId(int examTypeId) {
+    this.examTypeId = examTypeId;
+  }
+
+  public String getCourseTypeName() {
+    return courseTypeName;
+  }
+
+  public void setCourseTypeName(String courseTypeName) {
+    this.courseTypeName = courseTypeName;
+  }
+
+  public String getExamTypeName() {
+    return examTypeName;
+  }
+
+  public void setExamTypeName(String examTypeName) {
+    this.examTypeName = examTypeName;
+  }
+
+  public String toString() {
         Gson gson = new Gson();
         return gson.toJson(this);
     }

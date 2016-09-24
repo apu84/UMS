@@ -6,6 +6,7 @@ import org.ums.common.report.generator.UgGradeSheetGenerator;
 import org.ums.domain.model.dto.StudentGradeDto;
 import org.ums.dummy.webservice.DummyXLSGenerator;
 import org.ums.enums.CourseType;
+import org.ums.enums.ExamType;
 import org.ums.generator.XlsGenerator;
 import org.ums.manager.ExamGradeManager;
 import org.ums.resource.Resource;
@@ -42,7 +43,7 @@ public class UgGradeSheetXls extends Resource {
                              final @PathParam("exam-type") Integer pExamTypeId,
                              final @PathParam("course-type") Integer pCourseType,
                              final @PathParam("role") String pRequestedRole) throws Exception {
-    List<StudentGradeDto> gradeList = mExamGradeManager.getAllGrades(pSemesterId,pCourseId,pExamTypeId, CourseType.get(pCourseType));
+    List<StudentGradeDto> gradeList = mExamGradeManager.getAllGrades(pSemesterId, pCourseId, ExamType.get(pExamTypeId), CourseType.get(pCourseType));
     return new StreamingOutput() {
       public void write(OutputStream output) throws IOException, WebApplicationException {
         try {

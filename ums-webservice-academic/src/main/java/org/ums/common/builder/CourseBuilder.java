@@ -41,7 +41,7 @@ public class CourseBuilder implements Builder<Course, MutableCourse> {
     pBuilder.add("title", pReadOnly.getTitle());
     pBuilder.add("crhr", pReadOnly.getCrHr());
     pBuilder.add("type", pReadOnly.getCourseType().toString());
-    pBuilder.add("type_value", pReadOnly.getCourseType().getValue());
+    pBuilder.add("type_value", pReadOnly.getCourseType().getId());
     pBuilder.add("category", pReadOnly.getCourseCategory().toString());
     pBuilder.add("category_value", pReadOnly.getCourseCategory().getValue());
     pBuilder.add("year", pReadOnly.getYear());

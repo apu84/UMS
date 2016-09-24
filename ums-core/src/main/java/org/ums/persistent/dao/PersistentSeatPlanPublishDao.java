@@ -71,7 +71,7 @@ public class PersistentSeatPlanPublishDao extends SeatPlanPublishDaoDecorator{
     for(SeatPlanPublish publish: pMutableSeatPlanPublishs){
       params.add(new Object[]{
           publish.getSemesterId(),
-          publish.getExamType().getValue(),
+          publish.getExamType().getId(),
           publish.getExamDate(),
           publish.getPublishStatus(),
       });

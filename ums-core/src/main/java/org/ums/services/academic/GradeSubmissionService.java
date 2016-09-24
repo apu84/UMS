@@ -22,6 +22,7 @@ import org.ums.util.Constants;
 
 import javax.json.*;
 import java.io.StringReader;
+import java.nio.file.Path;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -85,7 +86,7 @@ public class GradeSubmissionService {
       else if (gradeStatus == StudentMarksSubmissionStatus.ACCEPTED) {
         //acceptedArrayBuilder.add(object1);
         if (gradeDto.getRecheckStatus() == RecheckStatus.RECHECK_TRUE)
-          recheckAcceptedArrayBuilder.add(objectBuilder);
+          recheckAcceptedArrayBuilder.add(jsonObject);
         else
           acceptedArrayBuilder.add(jsonObject);
       }
@@ -157,10 +158,10 @@ public class GradeSubmissionService {
           role = roleList.get(0);
         break;
       default:
-        throw new UnauthorizedException("Unauthorized Access Detected.");
+        throw new ValidationException("Unauthorized Access Detected.");
     }
     if (!Arrays.asList(Constants.validRolesForGradeAccess).contains(role))
-      throw new UnauthorizedException("Unauthorized Access Detected.");
+      throw new ValidationException("Unauthorized Access Detected.");
     else
       return role;
   }
@@ -195,86 +196,71 @@ public class GradeSubmissionService {
 
   }
 
-  public void validateGradeSubmission(String userId,String userRoleFromClient,Integer semesterId,String courseId, MarksSubmissionStatusDto clientStatus,MarksSubmissionStatusDto serverStatus,
+  public void validateGradeSubmission(String actingRoleForCurrentUser,MarksSubmissionStatusDto requestedStatusDTO,MarksSubmissionStatusDto actualStatusDTO,
                                       List<StudentGradeDto> gradeList,String operation) throws Exception {
-    //operation can be either SUBMIT OR SAVE
 
+    //operation can be either submit OR save
     //Checking the role, requested from client side is valid for the user who is trying to do some operation on grades
     //Role Validation
-    String currentActorRole=getActorForCurrentUser(userId, userRoleFromClient, semesterId, courseId);
-    String actingRole=getActingRoleForCourse(serverStatus.getStatus());
-    if(!currentActorRole.equalsIgnoreCase(actingRole)){
+    String actualActingRole=getActingRoleForCourse(actualStatusDTO.getStatus());
+    if(!actingRoleForCurrentUser.equalsIgnoreCase(actualActingRole)){
       throw new ValidationException("Sorry, you are not allowed for this operation.");
     }
 
     //Deadline && Part Info Validation
-    if(serverStatus.getStatus()==CourseMarksSubmissionStatus.NOT_SUBMITTED && operation.equals("SUBMIT")) {
-      validateGradeSubmissionDeadline(serverStatus.getLastSubmissionDate());
-      validatePartInfo(clientStatus.getTotal_part(), clientStatus.getPart_a_total(), clientStatus.getPart_b_total());
+    if(actualStatusDTO.getStatus()==CourseMarksSubmissionStatus.NOT_SUBMITTED && operation.equals("submit")) {
+      validateGradeSubmissionDeadline(actualStatusDTO.getLastSubmissionDate());
+      validatePartInfo(requestedStatusDTO.getTotal_part(), requestedStatusDTO.getPart_a_total(), requestedStatusDTO.getPart_b_total());
     }
 
     //Submitted Grade Validation
-    if(serverStatus.getStatus()==CourseMarksSubmissionStatus.NOT_SUBMITTED  || serverStatus.getStatus()==CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_SCRUTINIZER
-        || serverStatus.getStatus()==CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_HEAD  || serverStatus.getStatus()==CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_COE){
-      validateSubmittedGrades(serverStatus.getSemesterId(), serverStatus.getCourseId(), serverStatus.getExamType(), serverStatus.getCourseType(), clientStatus,gradeList );
-    }
-
-    //If Current Status is Not_Submitted then we will validate part information
-    //Part Info Validation
-
-
-    //Validate Submitted Grades
-
-
-    //Validate in case of recheck/approval
-    //Total grade equal to toal students
-    //total appprove update should be equal to database update operation
-    //total recheck update should be eqaual to database upate operation...
-
-
-
+    validateSubmittedGrades(actualStatusDTO,gradeList );
 
   }
-  public void validateSubmittedGrades(
-      final Integer pSemesterId, final String pCourseId, final Integer examType, final CourseType courseType,
-      MarksSubmissionStatusDto partInfo,List<StudentGradeDto> gradeList ) throws Exception {
+  public void validateSubmittedGrades(MarksSubmissionStatusDto actualStatusDTO,List<StudentGradeDto> gradeList ) throws Exception {
 
     //Validate all the grades been submitted or not
-    int totalStudents = mManager.getTotalStudentCount(pSemesterId, pCourseId, examType, courseType);
-    if (gradeList.size() != totalStudents)
+    int totalStudents = mManager.getTotalStudentCount(actualStatusDTO);
+    if (actualStatusDTO.getStatus()==CourseMarksSubmissionStatus.NOT_SUBMITTED   && gradeList.size() != totalStudents ) {
       throw new ValidationException("Wrong number of grades been submitted.");
-    boolean error = false;
-    gradeList.forEach((gradeDTO) -> {
-          try {
-            validateMarks(error, gradeDTO, partInfo, courseType);
-          } catch (Exception ex) {
-            throw new RuntimeException(ex);
+    }
+
+    //|| partInfo.getStatus()==CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_SCRUTINIZER
+    //|| partInfo.getStatus()==CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_HEAD  || partInfo.getStatus()==CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_COE
+    if(actualStatusDTO.getStatus()==CourseMarksSubmissionStatus.NOT_SUBMITTED  ){
+      boolean error = false;
+      gradeList.forEach((gradeDTO) -> {
+            try {
+              validateMarks(error, gradeDTO, actualStatusDTO);
+            } catch (Exception ex) {
+              throw new RuntimeException(ex);
+            }
           }
-        }
-    );
+      );
+    }
 
   }
 
-   private boolean validateMarks(boolean error,StudentGradeDto gradeDTO,MarksSubmissionStatusDto partInfo,CourseType courseType) throws Exception{
-     if(courseType==CourseType.THEORY) {
-       error = error && validateQuiz(error, gradeDTO.getQuiz(), gradeDTO.getRegType());
-       error = error && validateClassPerformance(error, gradeDTO.getClassPerformance(), gradeDTO.getRegType());
-       error = error && validatePartA(error, gradeDTO.getPartA(), partInfo.getPart_a_total(), gradeDTO.getRegType());
-       error = error && validatePartB(error, gradeDTO.getPartB(), partInfo.getTotal_part(), partInfo.getPart_b_total(), gradeDTO.getRegType());
-       error = error && validateTheoryTotal(error, gradeDTO);
-     }
-     else if(courseType==CourseType.SESSIONAL) {
-       error = error && validateSessionalTotal(error, gradeDTO);
-     }
-     error = error && validateGradeLetter(error,gradeDTO);
-     return error;
-   }
-    private boolean validateQuiz(boolean error,Float quiz,CourseRegType regType){
-      if(quiz>20 && regType==CourseRegType.REGULAR){
-        error = error && Boolean.FALSE;
-      }
-      return error;
+  private boolean validateMarks(boolean error,StudentGradeDto gradeDTO,MarksSubmissionStatusDto partInfo) throws Exception{
+    if(partInfo.getCourseType()==CourseType.THEORY) {
+      error = error && validateQuiz(error, gradeDTO.getQuiz(), gradeDTO.getRegType());
+      error = error && validateClassPerformance(error, gradeDTO.getClassPerformance(), gradeDTO.getRegType());
+      error = error && validatePartA(error, gradeDTO.getPartA(), partInfo.getPart_a_total(), gradeDTO.getRegType());
+      error = error && validatePartB(error, gradeDTO.getPartB(), partInfo.getTotal_part(), partInfo.getPart_b_total(), gradeDTO.getRegType());
+      error = error && validateTheoryTotal(error, gradeDTO);
     }
+    else if(partInfo.getCourseType()==CourseType.SESSIONAL) {
+      error = error && validateSessionalTotal(error, gradeDTO);
+    }
+    error = error && validateGradeLetter(error,gradeDTO);
+    return error;
+  }
+  private boolean validateQuiz(boolean error,Float quiz,CourseRegType regType){
+    if(quiz>20 && regType==CourseRegType.REGULAR){
+      error = error && Boolean.FALSE;
+    }
+    return error;
+  }
   private boolean validateClassPerformance(boolean error,Float classPerf,CourseRegType regType){
     if(classPerf>20 && regType==CourseRegType.REGULAR){
       error = error && Boolean.FALSE;
@@ -352,8 +338,8 @@ public class GradeSubmissionService {
     Map RoleMap=  mManager.getUserRoleList(pSemesterId,pCourseId);
     switch(pNextStatus){
       case WAITING_FOR_SCRUTINY :
-          userId=RoleMap.get("Scrutinizer").toString();
-          break;
+        userId=RoleMap.get("Scrutinizer").toString();
+        break;
       case WAITING_FOR_HEAD_APPROVAL :
         userId=RoleMap.get("Head").toString();
         break;

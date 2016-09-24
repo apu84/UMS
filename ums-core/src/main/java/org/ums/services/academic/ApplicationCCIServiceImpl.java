@@ -108,7 +108,7 @@ public class ApplicationCCIServiceImpl implements ApplicationCCIService {
         for(UGRegistrationResult result: results){
           if(applicationCCI.getCourseId()==result.getCourseId()){
 
-            if(applicationCCI.getApplicationType().getValue()!=result.getExamType().getValue()){
+            if(applicationCCI.getApplicationType().getValue()!=result.getExamType().getId()){
               applicationCCI.setMessage("invalid type, possible reason: unauthorized rest message");
               appsList.add(applicationCCI);
             }
