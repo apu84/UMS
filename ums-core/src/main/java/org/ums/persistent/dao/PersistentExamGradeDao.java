@@ -601,7 +601,7 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
   public int approveRecheckRequest(int pSemesterId,String pCourseId,ExamType pExamType,CourseType courseType) throws Exception {
     String query = "Update  UG_THEORY_MARKS Set STATUS="+StudentMarksSubmissionStatus.NONE.getId()+"  Where Semester_Id=? And Course_Id=? and Exam_Type=? and Status=  " +StudentMarksSubmissionStatus.ACCEPTED.getId()+
         " and RECHECK_STATUS="+RecheckStatus.RECHECK_TRUE .getId();
-    return mJdbcTemplate.update(query,pSemesterId,pCourseId,pExamType);
+    return mJdbcTemplate.update(query,pSemesterId,pCourseId,pExamType.getId());
   }
 
 
