@@ -1,6 +1,5 @@
 package org.ums.services.academic;
 
-import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.slf4j.Logger;
@@ -9,9 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.domain.model.dto.MarksSubmissionStatusDto;
 import org.ums.domain.model.dto.StudentGradeDto;
-import org.ums.domain.model.dto.UserDto;
 import org.ums.domain.model.immutable.Notification;
-import org.ums.domain.model.immutable.UGRegistrationResult;
 import org.ums.domain.model.immutable.User;
 import org.ums.enums.*;
 import org.ums.exceptions.ValidationException;
@@ -25,7 +22,6 @@ import org.ums.util.Constants;
 
 import javax.json.*;
 import java.io.StringReader;
-import java.nio.file.Path;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
