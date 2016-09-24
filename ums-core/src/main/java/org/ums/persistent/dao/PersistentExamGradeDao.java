@@ -944,7 +944,7 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
       sql=SELECT_SESSIONAL_LOG;
 
     return mJdbcTemplate.query(sql,
-        new Object[] {pSemesterId,pCourseId,pExamType,pStudentId},new MarksStatusLogRowMapper());
+        new Object[] {pSemesterId,pCourseId,pExamType.getId(),pStudentId},new MarksStatusLogRowMapper());
   }
 
   class MarksStatusLogRowMapper implements RowMapper<MarksLogDto> {
