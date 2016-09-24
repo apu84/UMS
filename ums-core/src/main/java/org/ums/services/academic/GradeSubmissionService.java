@@ -124,6 +124,7 @@ public class GradeSubmissionService {
         actingRole= Constants.HEAD;
         break;
       case WAITING_FOR_COE_APPROVAL:
+      case ACCEPTED_BY_COE:
         actingRole= Constants.COE;
         break;
       case WAITING_FOR_RECHECK_REQUEST_APPROVAL:
@@ -210,7 +211,8 @@ public class GradeSubmissionService {
     //Deadline && Part Info Validation
     if(actualStatusDTO.getStatus()==CourseMarksSubmissionStatus.NOT_SUBMITTED && operation.equals("submit")) {
       validateGradeSubmissionDeadline(actualStatusDTO.getLastSubmissionDate());
-      validatePartInfo(requestedStatusDTO.getTotal_part(), requestedStatusDTO.getPart_a_total(), requestedStatusDTO.getPart_b_total());
+      if(actualStatusDTO.getCourseType()==CourseType.THEORY)
+        validatePartInfo(requestedStatusDTO.getTotal_part(), requestedStatusDTO.getPart_a_total(), requestedStatusDTO.getPart_b_total());
     }
 
     //Submitted Grade Validation

@@ -23,7 +23,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
 
   String SELECT_THEORY_MARKS = "Select UG_THEORY_MARKS.*,FULL_NAME From UG_THEORY_MARKS,STUDENTS  Where UG_THEORY_MARKS.STUDENT_ID=STUDENTS.STUDENT_ID AND UG_THEORY_MARKS.Semester_Id=? and Course_Id=? and Exam_Type=? ";
-  String SELECT_SESSIONAL_MARKS = "Select UG_SESSIONAL_MARKS.*,FULL_NAME From UG_SESSIONAL_MARKS,STUDENTS  Where UG_SESSIONAL_MARKS.STUDENT_ID=STUDENTS.STUDENT_ID AND UG_THEORY_MARKS.Semester_Id=? and Course_Id=? and Exam_Type=? ";
+  String SELECT_SESSIONAL_MARKS = "Select UG_SESSIONAL_MARKS.*,FULL_NAME From UG_SESSIONAL_MARKS,STUDENTS  Where UG_SESSIONAL_MARKS.STUDENT_ID=STUDENTS.STUDENT_ID AND UG_SESSIONAL_MARKS.Semester_Id=? and Course_Id=? and Exam_Type=? ";
 
 
   String SELECT_PART_INFO="Select MARKS_SUBMISSION_STATUS.*,TO_CHAR(LAST_SUBMISSION_DATE,'DD-MM-YYYY')  LAST_SUBMISSION_DATE_EXT,COURSE_TYPE,COURSE_TITLE,COURSE_NO,CRHR,LONG_NAME,SEMESTER_NAME " +
@@ -196,7 +196,7 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
 
   String INSERT_SESSIONAL_LOG="Insert InTo UG_SESSIONAL_MARKS_LOG(USER_ID,ROLE,SEMESTER_ID, COURSE_ID,  " +
       "STUDENT_ID, EXAM_TYPE, TOTAL, GRADE_LETTER,STATUS, RECHECK_STATUS)  " +
-      "Value(?,?,?,?,?,?,?,?,?,?) ";
+      "Values(?,?,?,?,?,?,?,?,?,?) ";
 
   String INSERT_MARKS_SUBMISSION_STATUS_LOG="Insert Into Marks_Submission_Status_Log(USER_ID, ROLE,SEMESTER_ID, COURSE_ID, EXAM_TYPE,STATUS) "+
       " Values(?,?,?,?,?,?) ";
@@ -601,7 +601,7 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
   public int approveRecheckRequest(int pSemesterId,String pCourseId,ExamType pExamType,CourseType courseType) throws Exception {
     String query = "Update  UG_THEORY_MARKS Set STATUS="+StudentMarksSubmissionStatus.NONE.getId()+"  Where Semester_Id=? And Course_Id=? and Exam_Type=? and Status=  " +StudentMarksSubmissionStatus.ACCEPTED.getId()+
         " and RECHECK_STATUS="+RecheckStatus.RECHECK_TRUE .getId();
-    return mJdbcTemplate.update(query,pSemesterId,pCourseId,pExamType);
+    return mJdbcTemplate.update(query,pSemesterId,pCourseId,pExamType.getId());
   }
 
 
@@ -944,7 +944,7 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
       sql=SELECT_SESSIONAL_LOG;
 
     return mJdbcTemplate.query(sql,
-        new Object[] {pSemesterId,pCourseId,pExamType,pStudentId},new MarksStatusLogRowMapper());
+        new Object[] {pSemesterId,pCourseId,pExamType.getId(),pStudentId},new MarksStatusLogRowMapper());
   }
 
   class MarksStatusLogRowMapper implements RowMapper<MarksLogDto> {
