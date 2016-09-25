@@ -36,7 +36,7 @@ public class DummyXLSGenerator {
     return new StreamingOutput() {
       public void write(OutputStream output) throws IOException, WebApplicationException {
         try {
-          xlsGenerator.build(teacherList, output, DummyXLSGenerator.class.getResourceAsStream("/report/xls/template/teacher_list.xls"));
+          xlsGenerator.build(teacherList, output, DummyXLSGenerator.class.getResourceAsStream("/report/xls/template/teacher_list.xlsx"));
         } catch (Exception e) {
           throw new WebApplicationException(e);
         }

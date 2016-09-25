@@ -122,6 +122,8 @@
 /// <reference path='controller/semester/SemesterEnrollment.ts'/>
 /// <reference path='controller/student/StudentProfile.ts'/>
 
+/// <reference path='dummy/DummyController.ts'/>
+
 /// <reference path='model/TeacherAssignmentSearchParamModel.ts'/>
 /// <reference path='model/CourseTeacherSearchParamModel.ts'/>
 /// <reference path='model/LoggedInUser.ts'/>
