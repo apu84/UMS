@@ -114,6 +114,7 @@
 /// <reference path='controller/course-material/CourseMaterial.ts'/>
 /// <reference path='controller/course-material/StudentCourseMaterial.ts'/>
 /// <reference path='controller/grade/MarksSubmission.ts'/>
+/// <reference path='controller/grade/GradeSubmissionDeadLine.ts'/>
 /// <reference path='Utils.ts'/>
 
 /// <reference path='controller/syllabus/FullSyllabus.ts'/>
