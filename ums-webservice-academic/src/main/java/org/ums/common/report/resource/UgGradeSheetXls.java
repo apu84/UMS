@@ -27,8 +27,7 @@ import java.util.List;
 @Path("/gradeReport/xls/")
 @Produces({"application/vnd.ms-excel"})
 public class UgGradeSheetXls extends Resource {
-  @Autowired
-  UgGradeSheetGenerator mUgGradeSheetGenerator;
+
   @Autowired
   ExamGradeManager mExamGradeManager;
 
@@ -47,7 +46,7 @@ public class UgGradeSheetXls extends Resource {
     return new StreamingOutput() {
       public void write(OutputStream output) throws IOException, WebApplicationException {
         try {
-          InputStream a=DummyXLSGenerator.class.getResourceAsStream("/report/xls/template/"+CourseType.get(pCourseType).toString().toLowerCase()+".xls");
+          InputStream a=UgGradeSheetXls.class.getResourceAsStream("/report/xls/template/"+CourseType.get(pCourseType).getLabel()+".xls");
           xlsGenerator.build(gradeList, output, a);
         } catch (Exception e) {
           throw new WebApplicationException(e);

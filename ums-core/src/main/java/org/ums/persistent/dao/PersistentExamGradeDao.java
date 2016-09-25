@@ -317,21 +317,9 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
     String query="";
     if(courseType==CourseType.THEORY) {
       query = SELECT_THEORY_MARKS + " Order by decode(Reg_Type,1,1,2,2,3,3,4,4,5,5,6,6),UG_THEORY_MARKS.Student_Id,Status  ";
-            /*
-            if(ExamType.SEMESTER_FINAL == ExamType.get(pExamType))
-                query = SELECT_THEORY_MARKS + " Order by UG_THEORY_MARKS.Student_Id,Status  ";
-            else
-                query = SELECT_THEORY_MARKS + " Order by decode(Reg_Type,1,1,2,2,3,3,4,4,5,5,6,6),UG_THEORY_MARKS.Student_Id,Status  ";
-                */
     }
     else if(courseType==CourseType.SESSIONAL) {
       query = SELECT_SESSIONAL_MARKS + " Order by decode(Reg_Type,1,1,2,2,3,3,4,4,5,5,6,6),UG_SESSIONAL_MARKS.Student_Id,Status  ";
-            /*
-            if(ExamType.SEMESTER_FINAL == ExamType.get(pExamType))
-                query = SELECT_SESSIONAL_MARKS + " Order by UG_SESSIONAL_MARKS.Student_Id,Status  ";
-            else
-                query = SELECT_SESSIONAL_MARKS + " Order by decode(Reg_Type,1,1,2,2,3,3,4,4,5,5,6,6),UG_SESSIONAL_MARKS.Student_Id,Status  ";
-                */
     }
 
     return mJdbcTemplate.query(query,new Object[]{pSemesterId,pCourseId,pExamType.getId()}, new StudentMarksRowMapper(courseType));
@@ -592,16 +580,23 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
   }
 
   @Override
-  public int rejectRecheckRequest(int pSemesterId,String pCourseId,ExamType pExamType,CourseType courseType) throws Exception {
-    String query = "Update  UG_THEORY_MARKS Set RECHECK_STATUS="+RecheckStatus.RECHECK_FALSE.getId()+"  Where Semester_Id=? And Course_Id=? and Exam_Type=? ";
-    return mJdbcTemplate.update(query,pSemesterId,pCourseId,pExamType);
+  public int rejectRecheckRequest(MarksSubmissionStatusDto actualStatusDTO) throws Exception {
+    String query = "Update  "+getTableName(actualStatusDTO.getCourseType())+" Set RECHECK_STATUS="+RecheckStatus.RECHECK_FALSE.getId()+"  Where Semester_Id=? And Course_Id=? and Exam_Type=? ";
+    return mJdbcTemplate.update(query,actualStatusDTO.getSemesterId(),actualStatusDTO.getCourseId(),actualStatusDTO.getExamType().getId());
 
   }
   @Override
-  public int approveRecheckRequest(int pSemesterId,String pCourseId,ExamType pExamType,CourseType courseType) throws Exception {
-    String query = "Update  UG_THEORY_MARKS Set STATUS="+StudentMarksSubmissionStatus.NONE.getId()+"  Where Semester_Id=? And Course_Id=? and Exam_Type=? and Status=  " +StudentMarksSubmissionStatus.ACCEPTED.getId()+
+  public int approveRecheckRequest(MarksSubmissionStatusDto actualStatusDTO) throws Exception {
+    String query = "Update  "+getTableName(actualStatusDTO.getCourseType())+" Set STATUS="+StudentMarksSubmissionStatus.NONE.getId()+"  Where Semester_Id=? And Course_Id=? and Exam_Type=? and Status=  " +StudentMarksSubmissionStatus.ACCEPTED.getId()+
         " and RECHECK_STATUS="+RecheckStatus.RECHECK_TRUE .getId();
-    return mJdbcTemplate.update(query,pSemesterId,pCourseId,pExamType.getId());
+    return mJdbcTemplate.update(query,actualStatusDTO.getSemesterId(),actualStatusDTO.getCourseId(), actualStatusDTO.getExamType().getId());
+  }
+
+  private String getTableName(CourseType courseType){
+    if(courseType==CourseType.THEORY)
+      return "UG_THEORY_MARKS";
+    else
+      return "UG_SESSIONAL_MARKS";
   }
 
 

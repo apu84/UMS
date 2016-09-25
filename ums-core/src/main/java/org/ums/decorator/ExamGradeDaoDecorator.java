@@ -73,13 +73,13 @@ public class ExamGradeDaoDecorator  extends ContentDaoDecorator<ExamGrade, Mutab
     }
 
     @Override
-    public int rejectRecheckRequest(int semesterId,String courseId,ExamType examType,CourseType courseType) throws Exception {
-        return getManager().rejectRecheckRequest(semesterId, courseId, examType,courseType);
+    public int rejectRecheckRequest(MarksSubmissionStatusDto actualStatusDTO) throws Exception {
+        return getManager().rejectRecheckRequest(actualStatusDTO);
     }
 
     @Override
-    public int approveRecheckRequest(int semesterId,String courseId,ExamType examType,CourseType courseType) throws Exception {
-        return getManager().approveRecheckRequest(semesterId, courseId, examType,courseType);
+    public int approveRecheckRequest(MarksSubmissionStatusDto actualStatusDTO) throws Exception {
+        return getManager().approveRecheckRequest(actualStatusDTO);
     }
 
 

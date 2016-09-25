@@ -30,8 +30,8 @@ public interface ExamGradeManager extends ContentManager<ExamGrade, MutableExamG
     public int updatePartInfo(MarksSubmissionStatusDto requestedStatusDTO) throws Exception;
 
 
-    public int approveRecheckRequest(int pSemesterId,String pCourseId,ExamType pExamType,CourseType courseType) throws Exception ;
-    public int rejectRecheckRequest(int pSemesterId,String pCourseId,ExamType pExamType,CourseType courseType) throws Exception ;
+    public int approveRecheckRequest(MarksSubmissionStatusDto actualStatusDTO) throws Exception ;
+    public int rejectRecheckRequest(MarksSubmissionStatusDto actualStatusDTO) throws Exception ;
 
     public List<String> getRoleForTeacher(String pTeacherId,int  pSemesterId,String pCourseId) throws Exception;
     public List<String> getRoleForHead(String pUserId) throws Exception;
