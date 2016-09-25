@@ -46,7 +46,9 @@ module ums {
       )
     }
 
-    private initFileManager(courseNo: string): void {
+    private initFileManager(courseNo: string,
+                            semesterId: string,
+                            courseId: string): void {
       var semesterName = this.getSelectedSemester();
       var baseUri: string = '/ums-webservice-academic/academic/student/courseMaterial/semester/' + semesterName + "/course/" + courseNo;
       var downloadBaseUri: string = '/ums-webservice-academic/academic/student/courseMaterial/download/semester/' + semesterName + "/course/" + courseNo;
@@ -61,6 +63,10 @@ module ums {
         multipleDownloadFileName: 'CourseMaterial-' + semesterName + "-" + courseNo + '.zip',
         searchForm: true,
         languageSelection: false,
+        additionalParams: {
+          semesterId: semesterId,
+          courseId: courseId
+        },
         allowedActions: angular.extend(FILEMANAGER_CONFIG.$get().allowedActions, {
           createAssignmentFolder: false,
           upload: true,

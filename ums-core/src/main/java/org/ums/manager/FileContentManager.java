@@ -81,7 +81,7 @@ public class FileContentManager extends BinaryContentDecorator {
 
 
   @Override
-  public Object list(String pPath, Domain pDomain, String... pRootPath) {
+  public Object list(String pPath, Map<String, String> pAdditionalParams, Domain pDomain, String... pRootPath) {
     try {
       /*
       This is to make sure course material gets into folder structure like {/coursematerial/semestername/coursename/}.
@@ -89,6 +89,7 @@ public class FileContentManager extends BinaryContentDecorator {
        */
       if (pPath.equalsIgnoreCase("/")) {
         createIfNotExist(pDomain, buildPath(pPath, pRootPath));
+        addAdditionalParams(getQualifiedPath(pDomain, buildPath(pPath,pRootPath)), pAdditionalParams);
       }
 
     } catch (Exception e) {

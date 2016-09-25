@@ -46,7 +46,9 @@ public abstract class AbstractCourseMaterialResource extends Resource {
       switch (pJsonObject.getString("action")) {
 
         case "list":
+          Map<String, String> additionalListParams = buildAdditionalParams(pJsonObject);
           result.put("result", getBinaryContentManager().list(pJsonObject.getString("path"),
+              additionalListParams,
               BinaryContentManager.Domain.COURSE_MATERIAL, pSemesterName, pCourseNo));
           break;
 
@@ -68,12 +70,7 @@ public abstract class AbstractCourseMaterialResource extends Resource {
           break;
 
         case "createFolder":
-          HashMap<String, String> additionalParams = null;
-          if (pJsonObject.containsKey("additionalParams")) {
-            pJsonObject.getJsonObject("additionalParams");
-            additionalParams = new ObjectMapper().readValue(
-                pJsonObject.getJsonObject("additionalParams").toString(), HashMap.class);
-          }
+          Map<String, String> additionalParams = buildAdditionalParams(pJsonObject);
           result.put("result", getBinaryContentManager().createFolder(pJsonObject.getString("newPath"),
               additionalParams,
               BinaryContentManager.Domain.COURSE_MATERIAL,
@@ -82,12 +79,7 @@ public abstract class AbstractCourseMaterialResource extends Resource {
           break;
 
         case "createAssignmentFolder":
-          HashMap<String, String> additionalAssignmentParams = null;
-          if (pJsonObject.containsKey("additionalParams")) {
-            pJsonObject.getJsonObject("additionalParams");
-            additionalAssignmentParams = new ObjectMapper().readValue(
-                pJsonObject.getJsonObject("additionalParams").toString(), HashMap.class);
-          }
+          Map<String, String> additionalAssignmentParams = buildAdditionalParams(pJsonObject);
           result.put("result", getBinaryContentManager().createAssignmentFolder(pJsonObject.getString("newPath"),
               mDateFormat.parse(pJsonObject.getString("startDate")),
               mDateFormat.parse(pJsonObject.getString("endDate")),
@@ -255,6 +247,14 @@ public abstract class AbstractCourseMaterialResource extends Resource {
       actionItems.add(actionItem);
     }
     return actionItems;
+  }
+
+  private Map<String, String> buildAdditionalParams(JsonObject pJsonObject) throws Exception {
+    if (pJsonObject.containsKey("additionalParams")) {
+      pJsonObject.getJsonObject("additionalParams");
+      return new ObjectMapper().readValue(pJsonObject.getJsonObject("additionalParams").toString(), HashMap.class);
+    }
+    return null;
   }
 
   protected abstract BinaryContentManager<byte[]> getBinaryContentManager();

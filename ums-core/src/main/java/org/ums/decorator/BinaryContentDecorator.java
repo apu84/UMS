@@ -66,8 +66,8 @@ public abstract class BinaryContentDecorator implements BinaryContentManager<byt
   }
 
   @Override
-  public Object list(String pPath, Domain pDomain, String... pRootPath) {
-    return getManager().list(pPath, pDomain, pRootPath);
+  public Object list(String pPath, Map<String, String> pAdditionalParams, Domain pDomain, String... pRootPath) {
+    return getManager().list(pPath, pAdditionalParams, pDomain, pRootPath);
   }
 
   @Override
@@ -167,6 +167,18 @@ public abstract class BinaryContentDecorator implements BinaryContentManager<byt
         buf.flip();
         return Charset.defaultCharset().decode(buf).toString();
       }
+    } catch (Exception e) {
+      mLogger.error("Can not find user defined property named " + pPropertyName, e);
+    }
+    return null;
+  }
+
+  protected String getUserDefinedProperty(final String pPropertyName, final Path pTargetPath, final Path pParentPath) {
+    try {
+      String propertyValue = getUserDefinedProperty(pPropertyName, pTargetPath);
+      return propertyValue == null
+          ? (Files.isSameFile(pParentPath, pTargetPath) ? null : getUserDefinedProperty(pPropertyName, pTargetPath.getParent()))
+          : propertyValue;
     } catch (Exception e) {
       mLogger.error("Can not find user defined property named " + pPropertyName, e);
     }

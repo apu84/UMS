@@ -40,7 +40,7 @@ public interface BinaryContentManager<T> {
     }
   }
 
-  Object list(String pPath, Domain pDomain, String... pRootPath);
+  Object list(String pPath, Map<String, String> pAdditionalParams, Domain pDomain, String... pRootPath);
 
   Map<String, Object> rename(String pOldPath, String pNewPath, Domain pDomain, String... pRootPath);
 

@@ -125,8 +125,8 @@ public class FileContentPermission extends BaseFileContentPermission {
   }
 
   @Override
-  public Object list(String pPath, Domain pDomain, String... pRootPath) {
-    Object folderList = super.list(pPath, pDomain, pRootPath);
+  public Object list(String pPath, Map<String, String> pAdditionalParams, Domain pDomain, String... pRootPath) {
+    Object folderList = super.list(pPath, pAdditionalParams, pDomain, pRootPath);
     return addOwnerToken(folderList);
   }
 

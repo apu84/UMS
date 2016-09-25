@@ -5,14 +5,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 import org.ums.configuration.UMSConfiguration;
-import org.ums.domain.model.immutable.*;
+import org.ums.domain.model.immutable.Course;
+import org.ums.domain.model.immutable.Student;
+import org.ums.domain.model.immutable.UGRegistrationResult;
 import org.ums.enums.CourseRegType;
 import org.ums.message.MessageResource;
 
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 public class StudentFileContentPermission extends AbstractSectionPermission {
   private static Logger mLogger = LoggerFactory.getLogger(StudentFileContentPermission.class);
@@ -41,60 +46,57 @@ public class StudentFileContentPermission extends AbstractSectionPermission {
   }
 
   @Override
-  public Object list(String pPath, Domain pDomain, String... pRootPath) {
+  public Object list(String pPath, Map<String, String> pAdditionalParams, Domain pDomain, String... pRootPath) {
     // Student should only able to see course material of course he/she has registered
     String semesterName = pRootPath[0];
     String courseName = pRootPath[1];
     Student student;
 
-    Object list = super.list(pPath, pDomain, pRootPath);
-    if (!pPath.equalsIgnoreCase("/")) {
-      try {
-        student = getStudent();
-        Path targetDirectory = getQualifiedPath(pDomain, buildPath(pPath, pRootPath));
-        String semesterIdString = getUserDefinedProperty(SEMESTER_ID, targetDirectory);
-        String courseIdString = getUserDefinedProperty(COURSE_ID, targetDirectory);
-        if (StringUtils.isEmpty(semesterIdString) || StringUtils.isEmpty(courseIdString)) {
-          throw new Exception("Can not find semesterId and courseId for directory " + pPath);
-        }
-        Integer semesterId = Integer.parseInt(semesterIdString);
-        List<UGRegistrationResult> registeredCourses
-            = mUGRegistrationResultManager.getRegisteredCourseByStudent(semesterId, student.getId(), CourseRegType.REGULAR);
-
-        boolean courseFound = false;
-        Course course = null;
-        for (UGRegistrationResult registeredCourse : registeredCourses) {
-          if (registeredCourse.getCourse().getId().equalsIgnoreCase(courseIdString)) {
-            courseFound = true;
-            course = registeredCourse.getCourse();
-            break;
-          }
-        }
-
-        if (!courseFound) {
-          throw new Exception(student.getId() + " has no registered course named " + courseName);
-        }
-
-        List<Map<String, Object>> folderList = (List<Map<String, Object>>) list;
-        Iterator<Map<String, Object>> iterator = folderList.iterator();
-
-        while (iterator.hasNext()) {
-          String name = iterator.next().get("name").toString();
-          Path path = getQualifiedPath(pDomain, buildPath(pPath, pRootPath));
-          path = Paths.get(path.toString(), name);
-          List<String> permittedSections = permittedSections(getUserDefinedProperty(OWNER, path), semesterId, course.getId());
-
-          if (!hasPermission(path, permittedSections, student)) {
-            iterator.remove();
-          }
-        }
-
-      } catch (Exception e) {
-        mLogger.error("Exception while listing folders", e);
-        return error(mMessageResource.getMessage("folder.listing.failed"));
+    Object list = super.list(pPath, pAdditionalParams, pDomain, pRootPath);
+    try {
+      student = getStudent();
+      Path targetDirectory = getQualifiedPath(pDomain, buildPath(pPath, pRootPath));
+      String semesterIdString = getUserDefinedProperty(SEMESTER_ID, targetDirectory, getQualifiedPath(pDomain, pRootPath));
+      String courseIdString = getUserDefinedProperty(COURSE_ID, targetDirectory, getQualifiedPath(pDomain, pRootPath));
+      if (StringUtils.isEmpty(semesterIdString) || StringUtils.isEmpty(courseIdString)) {
+        throw new Exception("Can not find semesterId and courseId for directory " + pPath);
       }
-    }
+      Integer semesterId = Integer.parseInt(semesterIdString);
+      List<UGRegistrationResult> registeredCourses
+          = mUGRegistrationResultManager.getRegisteredCourseByStudent(semesterId, student.getId(), CourseRegType.REGULAR);
 
+      boolean courseFound = false;
+      Course course = null;
+      for (UGRegistrationResult registeredCourse : registeredCourses) {
+        if (registeredCourse.getCourse().getId().equalsIgnoreCase(courseIdString)) {
+          courseFound = true;
+          course = registeredCourse.getCourse();
+          break;
+        }
+      }
+
+      if (!courseFound) {
+        throw new Exception(student.getId() + " has no registered course named " + courseName);
+      }
+
+      List<Map<String, Object>> folderList = (List<Map<String, Object>>) list;
+      Iterator<Map<String, Object>> iterator = folderList.iterator();
+
+      while (iterator.hasNext()) {
+        String name = iterator.next().get("name").toString();
+        Path path = getQualifiedPath(pDomain, buildPath(pPath, pRootPath));
+        path = Paths.get(path.toString(), name);
+        List<String> permittedSections = permittedSections(getUserDefinedProperty(OWNER, path), semesterId, course.getId());
+
+        if (!hasPermission(path, permittedSections, student)) {
+          iterator.remove();
+        }
+      }
+
+    } catch (Exception e) {
+      mLogger.error("Exception while listing folders", e);
+      return error(mMessageResource.getMessage("folder.listing.failed"));
+    }
     return addOwnerToken(list);
   }
 
