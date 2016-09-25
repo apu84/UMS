@@ -444,13 +444,16 @@ module ums {
               this.$scope.chartData=chartData;
             });
 
-
+            if(this.$scope.gradeSubmissionStatus == this.appConstants.marksSubmissionStatusEnum.NOT_SUBMITTED)
+              $("#loading_panel").hide();
           });
 
       $("#selection1").hide();
       $("#selection2").show();
       //$("#btn_stat").focus();
       $(window).scrollTop($('#panel_top').offset().top - 56);
+
+
     }
 
     private calculateTotalAndGradeLetter(student_id:string):void {
@@ -498,7 +501,6 @@ module ums {
         this.$scope.toggleColumn = true;
         $("#partDiv").show();
       }
-
       this.$scope.$broadcast("renderScrollableTable");
     }
 
