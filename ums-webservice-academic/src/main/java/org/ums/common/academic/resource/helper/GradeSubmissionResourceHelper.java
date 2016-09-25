@@ -353,7 +353,7 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
       MarksSubmissionStatusDto marksSubmissionStatusDto = new MarksSubmissionStatusDto();
       marksSubmissionStatusDto.setExamDate(examGrade.getExamDate());
       marksSubmissionStatusDto.setSemesterId(examGrade.getSemesterId());
-      marksSubmissionStatusDto.setExamType(ExamType.get(examGrade.getExamTypeId()));
+      marksSubmissionStatusDto.setExamType(ExamType.get(examGrade.getExamType().getId()));
       marksSubmissionStatusDto.setCourseId(examGrade.getCourseId());
       deadlineList.add(marksSubmissionStatusDto);
     }

@@ -302,7 +302,7 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
         "    where EXAM_TYPE=?  " +
         "    and SEMESTER=?  " +
         "    and EXAM_DATE=TO_DATE(?,'dd-mm-yyyy')";
-    return mJdbcTemplate.update(query,pExamType,pSemesterId,pExamDate);
+    return mJdbcTemplate.update(query,pExamType.getId(),pSemesterId,pExamDate);
   }
 
   @Override
@@ -697,7 +697,7 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
       params.add(new Object[]{
           app.getExamDate(),
           app.getSemesterId(),
-          app.getExamType(),
+          app.getExamType().getId(),
           app.getCourseId()
       });
     }

@@ -70,7 +70,8 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
         if(pJsonObject.getString("semesterId")!=null){
             pMutable.setSemesterId(Integer.parseInt(pJsonObject.getString("semesterId")));
         }
-        pMutable.setExamTypeId(pJsonObject.getInt("examType"));
+        //pMutable.setExamTypeId(pJsonObject.getInt("examType"));
+        pMutable.setExamType(ExamType.get(pJsonObject.getInt("examType")));
         if(pJsonObject.getString("courseId")!=null){
             pMutable.setCourseId(pJsonObject.getString("courseId"));
         }
