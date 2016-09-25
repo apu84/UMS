@@ -5,6 +5,7 @@ import org.ums.context.AppContext;
 import org.ums.domain.model.dto.StudentGradeDto;
 import org.ums.domain.model.mutable.MutableExamGrade;
 import org.ums.domain.model.mutable.MutableExamRoutine;
+import org.ums.enums.ExamType;
 import org.ums.manager.ExamGradeManager;
 import org.ums.manager.ExamRoutineManager;
 
@@ -26,6 +27,7 @@ public class PersistentExamGrade implements MutableExamGrade {
     private List<StudentGradeDto> mGradeList;
     private String mExamTypeName;
     private int mExamTypeId;
+    private ExamType mExamType;
     private int mSemesterId;
     private String mSemesterName;
     private String mCourseId;
@@ -52,6 +54,16 @@ public class PersistentExamGrade implements MutableExamGrade {
 
        // sExamRoutineManager.create(this);
 
+    }
+
+    @Override
+    public void setExamType(ExamType pExamType) {
+        mExamType = pExamType;
+    }
+
+    @Override
+    public ExamType getExamType() {
+        return mExamType;
     }
 
     @Override

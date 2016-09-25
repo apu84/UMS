@@ -141,6 +141,7 @@ module ums{
     }
 
     private search():void{
+      this.$scope.showButton=false
       this.$scope.examGradeStatisticsArr=[];
       this.$scope.examGradeStatisticsArrTemp=[];
       var examType=+this.$scope.examType;

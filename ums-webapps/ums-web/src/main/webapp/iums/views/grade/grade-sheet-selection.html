@@ -250,7 +250,7 @@
                             </select>
 
 
-                            <div style="float: left;" ng-="partDiv" data-ng-show="courseType=='THEORY'">
+                            <div style="float: left;" id="partDiv" data-ng-show="courseType=='THEORY'">
                                 Part-A
                                 <input type="text" style="width: 50px;border:1px solid grey;text-align: center;" data-ng-model="data.part_a_total"  data-ng-if="(gradeSubmissionStatus =='0' && currentActor=='preparer')" >
                                 <img  class='img_tooltip'  id="tooltip_partA_"/>
@@ -259,7 +259,6 @@
                             <span data-ng-if="(data.total_part=='2')">
                             Part-B  <input type="text" style="width: 50px;border:1px solid grey;text-align: center;" data-ng-model="data.part_b_total" data-ng-if="(gradeSubmissionStatus =='0' && currentActor=='preparer')"/>
                                 <img  class='img_tooltip'  id="tooltip_partB_"/>
-
                                     <span data-ng-if="(gradeSubmissionStatus !='0' || currentActor!='preparer')">{{data.part_b_total}}</span>
                             </span>
                             </div>
@@ -296,7 +295,7 @@
                             </thead>
                             <tbody>
                             <tr ng-repeat="response in noneSubmittedGrades" row-id="{{response.studentId}}" id="row_{{response.studentId}}" data-emit-last-repeater-element>
-                                <td id="sid_{{response.studentId}}" ng-style="calculateStyle(response.regType)">{{response.studentId}}-</td>
+                                <td id="sid_{{response.studentId}}" ng-style="calculateStyle(response.regType)">{{response.studentId}}</td>
                                 <td id="td_sname_{{response.studentId}}">{{ response.studentName }}</td>
                                 <td id="td_quiz_{{response.studentId}}" data-ng-show="courseType=='THEORY'" style="text-align: center;">
                                     <input type="text"  style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="quiz_{{response.studentId}}"

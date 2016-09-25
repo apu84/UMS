@@ -3,6 +3,7 @@ package org.ums.domain.model.mutable;
 import org.ums.domain.model.common.Mutable;
 import org.ums.domain.model.dto.StudentGradeDto;
 import org.ums.domain.model.immutable.ExamGrade;
+import org.ums.enums.ExamType;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ public interface MutableExamGrade extends ExamGrade, Mutable {
     void setSemesterId(int pSemesterId);
     void getSemesterName(String pSemesterName);
     void setExamTypeId(int pExamTypeId);
+    void setExamType(ExamType pExamType);
     void setExamTypeName(String pExamTypeName);
     void setCourseId(String  pCourseId);
     void setCourseTitle(String pCourseTitle);
