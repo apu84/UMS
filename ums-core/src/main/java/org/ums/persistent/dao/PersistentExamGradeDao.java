@@ -274,7 +274,7 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
         "  ) examRoutine  " +
         "where MARKS_SUBMISSION_STATUS.COURSE_ID = examRoutine.COURSE_ID  " +
         "  and MARKS_SUBMISSION_STATUS.SEMESTER_ID=examRoutine.SEMESTER";
-    return mJdbcTemplate.queryForObject(query,Integer.class,pSemesterId,pExamDate,pExamType);
+    return mJdbcTemplate.queryForObject(query,Integer.class,pSemesterId,pExamDate,pExamType.getId());
   }
 
 
@@ -308,7 +308,7 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
   @Override
   public List<MarksSubmissionStatusDto> getGradeSubmissionDeadLine(Integer pSemesterId, ExamType pExamType, String pExamDate) {
     String query= SELECT_EXAM_GRADE_DEAD_LINE;
-    return mJdbcTemplate.query(query,new Object[]{pSemesterId,pExamDate,pSemesterId,pExamType},new GradeSubmissionDeadlineRowMapper());
+    return mJdbcTemplate.query(query,new Object[]{pSemesterId,pExamDate,pSemesterId,pExamType.getId()},new GradeSubmissionDeadlineRowMapper());
   }
 
   @Override

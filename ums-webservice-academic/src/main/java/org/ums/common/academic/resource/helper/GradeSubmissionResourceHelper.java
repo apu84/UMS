@@ -283,7 +283,7 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
   public JsonObject getGradeSubmissionDeadline(final Integer pSemesterId, final ExamType pExamType, final String pExamDate, final UriInfo pUriInfo) throws Exception{
 
     List<MarksSubmissionStatusDto> marksSubmissionStatusDtoList = new ArrayList<>();
-    Integer size = getContentManager().checkSize(pSemesterId,pExamType,pExamDate);
+    int size = getContentManager().checkSize(pSemesterId,pExamType,pExamDate);
 
     if(size==0){
       getContentManager().insertGradeSubmissionDeadLineInfo(pSemesterId,pExamType,pExamDate);
