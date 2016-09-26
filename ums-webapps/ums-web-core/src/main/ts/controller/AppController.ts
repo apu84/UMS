@@ -24,7 +24,7 @@ module ums {
         header_topbar: 'header-fixed',   //static or header-fixed // changed by ifti
         menu_style: 'sidebar-colors',
         menu_collapse: '',
-        menu_style_restore: 'sidebar-default',
+        menu_style_restore: 'sidebar-colors', // sidebar-default [changed by ifti]
         layout_horizontal_menu: '',
 
         toggle: function (k) {

@@ -44,6 +44,15 @@
     .table tbody tr td {
         border-top: none !important;
     }
+    .timeOver{
+        background-color: #FDEDEC;
+    }
+
+
+    .redColor{
+        color: #ff0000;
+        font-weight: bold;
+    }
 </style>
 <div class="row" id="selection1">
     <div onclick="resetDivs()" id="arrowDiv"><i
@@ -137,20 +146,21 @@
                     <thead>
                     <tr>
                         <th width="8%">Course No</th>
-                        <th width="24%">Course Title</th>
+                        <th width="20%">Course Title</th>
                         <th width="5%" style="text-align: center;">Y-S</th>
                         <th width="8%" style="text-align: center;">Program.</th>
                         <th width="20%">Course Teacher</th>
                         <th width="18%">Preparer-Scrutinizer</th>
-                        <th width="15%">Status</th>
+                        <th width="12%">Status</th>
+                        <th width="8%">Deadline</th>
                     </tr>
 
                     </thead>
                     <tbody>
 
-                    <tr ng-repeat="marksSubmission in allMarksSubmissionStatus">
+                    <tr ng-repeat="marksSubmission in allMarksSubmissionStatus" data-ng-class="{'timeOver':marksSubmission.isSubmissionDateOver}" >
                         <td>
-                            <a href="javascript:void(0)" data-ng-click="fetchGradeSheet(marksSubmission.courseId,marksSubmission.semesterId,marksSubmission.examTypeId)">
+                            <a href="javascript:void(0)" data-ng-click="fetchGradeSheet(marksSubmission.courseId,marksSubmission.semesterId,marksSubmission.examTypeId)" style="color: blue;">
                                 {{marksSubmission.courseNo}}
                             </a>
                         </td>
@@ -166,6 +176,9 @@
                         <td>{{marksSubmission.preparerName}} <span class="badge badge-warning">P</span> <br/>
                             {{marksSubmission.scrutinizerName}} <span class="badge badge-info">S</span></td>
                         <td>{{marksSubmission.statusName}}</td>
+                        <td data-ng-class="{'redColor':marksSubmission.isSubmissionDateOver}" >
+                            {{marksSubmission.lastSubmissionDate}}
+                        </td>
                     </tr>
                     </tbody>
                 </table>
@@ -183,6 +196,9 @@
     <div class="col-md-12">
 
         <div class="panel panel-default">
+            <div id='back_container'  style="position: absolute;top: 0px; left: 20px;cursor: pointer;z-index: 99999;" onclick='goBack()'>
+                <img src="images/icons/back.png"  />
+            </div>
             <div id='outer_container' style="position: absolute;top: 40px; right: 55px;z-index: 99999;">
                 <a class="menu_button" href="javascript:void(0)" title="Toggle"><span>Menu Toggle</span></a>
                 <ul class="menu_option">
