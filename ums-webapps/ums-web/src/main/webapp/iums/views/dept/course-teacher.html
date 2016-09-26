@@ -1,5 +1,6 @@
 <div class="row">
-  <div class="orgLeftClass pull-left panel panel-green" id="leftDiv">
+  <div onclick="resetDivs()" id="arrowDiv">
+    <div class="panel panel-green" id="leftDiv">
     <div class="panel-heading">
       <h3 class="panel-title">Select </h3>
     </div>
@@ -7,9 +8,9 @@
       <div data-ng-include="" data-src="'views/dept/assigned-teacher-selector.html'"></div>
     </div>
   </div>
-  <div class="arrowClass pull-left" onclick="resetDivs()" id="arrowDiv">
+
     <i class="fa fa-angle-double-right fa-4x"></i></i> </div>
-  <div class="orgRightClass pull-left hidden" id="rightDiv">
+  <div id="rightDiv">
 
     <div class="panel" style="min-height: 490px;">
       <div class="panel-heading">Course Teacher List For "{{programName}}" Program of {{departmentName}} Department -
@@ -129,29 +130,30 @@
 </div>
 <style type="text/css">
 
-  .orgLeftClass {
-    width: 30%;
-
-  }
-
-  .orgRightClass {
-    width: 66%;
-  }
-
-  .arrowClass {
+  #arrowDiv {
     display: none;
     cursor: pointer;
+    float:left;
+    width:20px;
+    margin-right: 15px;
+    margin-left: 10px;
+  }
+  #leftDiv {
+    float:left;
+    width:30%;
+    margin-right: 12px;
+    margin-left: 12px;
   }
 
-  .orgLeftClass, .arrowClass {
-    margin-right: 25px;
-    margin-left: 8px;
-  "
-
+  #rightDiv {
+    overflow:hidden;
   }
-
-  .newRightClass {
-    width: 94%;
+  @media screen and (max-width: 900px) {
+    #leftDiv {
+      margin-left: 12px;
+      float: none;
+      width:auto;
+    }
   }
 
   .bootstrap-select.btn-group:not(.input-group-btn), .bootstrap-select.btn-group[class*="span"] {
