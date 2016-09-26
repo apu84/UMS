@@ -1,6 +1,5 @@
 <div class="row">
-  <div onclick="resetDivs()" id="arrowDiv">
-    <div class="panel panel-green" id="leftDiv">
+  <div class="orgLeftClass pull-left panel panel-green" id="leftDiv">
     <div class="panel-heading">
       <h3 class="panel-title">Select </h3>
     </div>
@@ -8,14 +7,14 @@
       <div data-ng-include="" data-src="'views/dept/assigned-teacher-selector.html'"></div>
     </div>
   </div>
-
+  <div class="arrowClass pull-left" onclick="resetDivs()" id="arrowDiv">
     <i class="fa fa-angle-double-right fa-4x"></i></i> </div>
-  <div id="rightDiv">
+  <div class="orgRightClass pull-left hidden" id="rightDiv">
 
     <div class="panel" style="min-height: 490px;">
       <div class="panel-heading">Course Teacher List For "{{programName}}" Program of {{departmentName}} Department -
         {{semesterName}}<span
-            class="subtitle"></span></div>
+                class="subtitle"></span></div>
       <div class="panel-body">
 
         <div class="spinner" ng-show="loadingVisibility">
@@ -24,98 +23,98 @@
           <div class="bounce3"></div>
         </div>
         <div data-ng-if="contentVisibility">
-        <div class="alert alert-success" style="color: #3c763d;font-weight: bold;padding: 5px;">
-          {{academicYear}} {{academicSemester? "- "+ academicSemester: ""}} : {{courseCategory}} Courses
-        </div>
-        <table class="table table-hover table-bordered table-advanced">
-          <thead>
-          <tr role="row" class="heading">
-            <th width="10%" class="sorting">CourseNo</th>
-            <th width="25%" class="sorting_asc">Course Title</th>
-            <th width="4%" class="sorting">CrHr</th>
-            <th width="50%" class="sorting">
-              <table class="course-teacher-inner-header">
-                <tr>
-                  <td width="74%">Course Teacher</td>
-                  <td width="26%">Sections</td>
-                </tr>
-              </table>
-            </th>
-            <th width="8%" class="sorting">Actions</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr data-ng-repeat="(courseId, courseTeacher) in entries">
-            <td>{{courseTeacher.courseNo}}</td>
-            <td>{{courseTeacher.courseTitle}}</td>
-            <td>{{courseTeacher.courseCrHr}}</td>
-            <td>
-              <table class="course-teacher-inner">
-                <tr data-ng-repeat="selectedTeacher in courseTeacher.selectedTeachers">
-                  <td width="70%">
-                    <div class="input-group">
-                      <div class="input-group-addon"><i class="fa fa-user"></i></div>
-                      <select class="form-control" data-ng-if="courseTeacher.editMode"
-                              data-select="select2"
-                              data-ng-model="selectedTeacher.id"
-                              data-ng-options="teacher.id as teacher.name for teacher in courseTeacher.teachers">
+          <div class="alert alert-success" style="color: #3c763d;font-weight: bold;padding: 5px;">
+            {{academicYear}} {{academicSemester? "- "+ academicSemester: ""}} : {{courseCategory}} Courses
+          </div>
+          <table class="table table-hover table-bordered table-advanced">
+            <thead>
+            <tr role="row" class="heading">
+              <th width="10%" class="sorting">CourseNo</th>
+              <th width="25%" class="sorting_asc">Course Title</th>
+              <th width="4%" class="sorting">CrHr</th>
+              <th width="50%" class="sorting">
+                <table class="course-teacher-inner-header">
+                  <tr>
+                    <td width="74%">Course Teacher</td>
+                    <td width="26%">Sections</td>
+                  </tr>
+                </table>
+              </th>
+              <th width="8%" class="sorting">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr data-ng-repeat="(courseId, courseTeacher) in entries">
+              <td>{{courseTeacher.courseNo}}</td>
+              <td>{{courseTeacher.courseTitle}}</td>
+              <td>{{courseTeacher.courseCrHr}}</td>
+              <td>
+                <table class="course-teacher-inner">
+                  <tr data-ng-repeat="selectedTeacher in courseTeacher.selectedTeachers">
+                    <td width="70%">
+                      <div class="input-group">
+                        <div class="input-group-addon"><i class="fa fa-user"></i></div>
+                        <select class="form-control" data-ng-if="courseTeacher.editMode"
+                                data-select="select2"
+                                data-ng-model="selectedTeacher.id"
+                                data-ng-options="teacher.id as teacher.name for teacher in courseTeacher.teachers">
+                        </select>
+                        <div style="padding-left:5px;padding-top:5px;" data-ng-if="!courseTeacher.editMode">{{selectedTeacher.name}}</div>
+                      </div>
+                    </td>
+                    <td width="5%">&nbsp;</td>
+                    <td width="20%">
+                      <select multiple="multiple" data-ng-if="courseTeacher.editMode"
+                              data-style="btn-white"
+                              data-select="select-picker"
+                              class="form-control" data-ng-model="selectedTeacher.sections"
+                              style="width:50px;"
+                              data-ng-options="section.name as section.name for section in courseTeacher.sections">
                       </select>
-                      <div style="padding-left:5px;padding-top:5px;" data-ng-if="!courseTeacher.editMode">{{selectedTeacher.name}}</div>
-                    </div>
-                  </td>
-                  <td width="5%">&nbsp;</td>
-                  <td width="20%">
-                    <select multiple="multiple" data-ng-if="courseTeacher.editMode"
-                            data-style="btn-white"
-                            data-select="select-picker"
-                            class="form-control" data-ng-model="selectedTeacher.sections"
-                            style="width:50px;"
-                            data-ng-options="section.name as section.name for section in courseTeacher.sections">
-                    </select>
-                    <span data-ng-if="!courseTeacher.editMode" data-ng-repeat="section in selectedTeacher.sections">{{section}}{{$last ? '' : ', '}}</span>
-                  </td>
-                  <td width="5%" style="padding-left: 5px;">
-                    <a href="javascript:void(0);" class="btn btn-xs btn-default" data-ng-if="courseTeacher.editMode"
-                       data-ng-click="removeTeacher(courseId, selectedTeacher.id)">
-                      <i class="fa fa-times" style="color: red;"></i>
-                    </a>
-                  </td>
-                </tr>
-              </table>
-            </td>
-            <td>
-              <div class="mbs">
-                <button class="btn btn-xs btn-success filter-submit" data-ng-click="editTeacher(courseId)"
-                        data-ng-if="!courseTeacher.editMode && !isEmpty(courseTeacher.selectedTeachers)">
-                  <i class="fa fa-plus-square-o"></i>
-                  Edit
-                </button>
-              </div>
-              <div class="mbs" data-ng-if="courseTeacher.editMode || isEmpty(courseTeacher.selectedTeachers)">
-                <button class="btn btn-xs btn-success filter-submit" data-ng-click="addTeacher(courseId)">
-                  <i class="fa fa-plus-square-o"></i>
-                  Add
-                </button>
-              </div>
-              <div class="mbs" data-ng-if="courseTeacher.editMode">
-                <a href="javascript:void(0);" class="btn btn-xs btn-default"
-                   data-ng-click="saveTeacher(courseId);">
-                  <i class="fa fa-save"></i>&nbsp;
-                  Save
-                </a>
-              </div>
-              <div class="mbs" data-ng-if="courseTeacher.editMode">
-                <a href="javascript:void(0);" class="btn btn-xs btn-default"
-                   data-ng-click="fetchTeacherInfo()">
-                  <i class="fa fa-reply"></i>&nbsp;
-                  Cancel
-                </a>
-              </div>
+                      <span data-ng-if="!courseTeacher.editMode" data-ng-repeat="section in selectedTeacher.sections">{{section}}{{$last ? '' : ', '}}</span>
+                    </td>
+                    <td width="5%" style="padding-left: 5px;">
+                      <a href="javascript:void(0);" class="btn btn-xs btn-default" data-ng-if="courseTeacher.editMode"
+                         data-ng-click="removeTeacher(courseId, selectedTeacher.id)">
+                        <i class="fa fa-times" style="color: red;"></i>
+                      </a>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+              <td>
+                <div class="mbs">
+                  <button class="btn btn-xs btn-success filter-submit" data-ng-click="editTeacher(courseId)"
+                          data-ng-if="!courseTeacher.editMode && !isEmpty(courseTeacher.selectedTeachers)">
+                    <i class="fa fa-plus-square-o"></i>
+                    Edit
+                  </button>
+                </div>
+                <div class="mbs" data-ng-if="courseTeacher.editMode || isEmpty(courseTeacher.selectedTeachers)">
+                  <button class="btn btn-xs btn-success filter-submit" data-ng-click="addTeacher(courseId)">
+                    <i class="fa fa-plus-square-o"></i>
+                    Add
+                  </button>
+                </div>
+                <div class="mbs" data-ng-if="courseTeacher.editMode">
+                  <a href="javascript:void(0);" class="btn btn-xs btn-default"
+                     data-ng-click="saveTeacher(courseId);">
+                    <i class="fa fa-save"></i>&nbsp;
+                    Save
+                  </a>
+                </div>
+                <div class="mbs" data-ng-if="courseTeacher.editMode">
+                  <a href="javascript:void(0);" class="btn btn-xs btn-default"
+                     data-ng-click="fetchTeacherInfo()">
+                    <i class="fa fa-reply"></i>&nbsp;
+                    Cancel
+                  </a>
+                </div>
 
-            </td>
-          </tr>
-          </tbody>
-        </table>
+              </td>
+            </tr>
+            </tbody>
+          </table>
         </div>
 
       </div>
@@ -130,30 +129,29 @@
 </div>
 <style type="text/css">
 
-  #arrowDiv {
-    display: none;
-    cursor: pointer;
-    float:left;
-    width:20px;
-    margin-right: 15px;
-    margin-left: 10px;
-  }
-  #leftDiv {
-    float:left;
-    width:30%;
-    margin-right: 12px;
-    margin-left: 12px;
+  .orgLeftClass {
+    width: 30%;
+
   }
 
-  #rightDiv {
-    overflow:hidden;
+  .orgRightClass {
+    width: 66%;
   }
-  @media screen and (max-width: 900px) {
-    #leftDiv {
-      margin-left: 12px;
-      float: none;
-      width:auto;
-    }
+
+  .arrowClass {
+    display: none;
+    cursor: pointer;
+  }
+
+  .orgLeftClass, .arrowClass {
+    margin-right: 25px;
+    margin-left: 8px;
+  "
+
+  }
+
+  .newRightClass {
+    width: 94%;
   }
 
   .bootstrap-select.btn-group:not(.input-group-btn), .bootstrap-select.btn-group[class*="span"] {
