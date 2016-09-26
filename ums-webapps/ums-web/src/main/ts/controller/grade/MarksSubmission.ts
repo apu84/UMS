@@ -232,6 +232,7 @@ module ums {
         $("#loading_panel").hide();
         $(".img_tooltip").hide();
       });
+
     }
 
 
@@ -391,7 +392,7 @@ module ums {
       this.$scope.current_examTypeId=examTypeId;
 
 
-      $('.page-title.ng-binding').html("Online Grade Submission/Approval");
+      $('.page-title.ng-binding').html("Online Grade Preparation/Scrutiny/Approval");
 
       this.$scope.toggleColumn = true;
       var url="academic/gradeSubmission/semester/"+semesterId+"/courseid/"+courseId+"/examtype/"+examTypeId+"/role/"+this.$scope.userRole;
@@ -508,8 +509,6 @@ module ums {
       var pattern = /^\d+(.\d{1,2})?$/;
       return pattern.test(sNum);
     }
-//asfsadfsadfdsaffs   aasdfasdfasd fasdfasdf asdf asdfsadf sd
-
     private toggleStatRules(table_id:string) {
       $("#tbl_stat").hide();
       $("#tbl_rules").hide();
