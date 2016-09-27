@@ -37,9 +37,13 @@ public class RoutineBuilder implements Builder<Routine, MutableRoutine> {
 
   @Override
   public void build(JsonObjectBuilder pBuilder, Routine pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) throws Exception {
+    if(pReadOnly.getId()!=null)
     pBuilder.add("id", pReadOnly.getId());
+    if(pReadOnly.getSemester().getId()!=null)
     pBuilder.add("semesterId", pReadOnly.getSemester().getId());
+    if(pReadOnly.getCourseId()!=null)
     pBuilder.add("courseId", pReadOnly.getCourseId());
+    if(pReadOnly.getProgram().getId()!=null)
     pBuilder.add("programId", pReadOnly.getProgram().getId());
 
     pBuilder.add("day", pReadOnly.getDay());

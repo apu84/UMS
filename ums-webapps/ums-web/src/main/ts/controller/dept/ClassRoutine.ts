@@ -163,11 +163,20 @@ module ums {
     }
 
     private startTimeSelected(startTime:string){
-      this.$scope.addedStartTime = startTime;
+      if(startTime==this.$scope.addedEndTime){
+        this.notify.warn("Start time and End time can't be same",true);
+        this.$scope.addedStartTime="";
+      }else{
+        this.$scope.addedStartTime = startTime;
+      }
     }
 
     private endTimeSelected(endTime:string){
-      this.$scope.addedEndTime = endTime;
+      if(endTime==this.$scope.addedStartTime){
+        this.notify.warn("Start Time and End Time can't be same",true);
+      }else{
+        this.$scope.addedEndTime = endTime;
+      }
     }
 
     private roomNoSelected(roomNo:string){
@@ -178,7 +187,7 @@ module ums {
       this.$scope.addedSection=section;
     }
     private editRoutineData(routine:IClassRoutine){
-      this.$scope.courseType
+      //this.$scope.courseType
       this.$scope.showSaveButton=true;
       this.$scope.addDataButtonClicked=false;
       this.initializeAddVariables();
@@ -236,30 +245,55 @@ module ums {
     }
 
     private addData():void{
-      this.$scope.showSaveButton=true;
-      this.$scope.showRoutineTable=true;
 
-      console.log(this.$scope.addedDate);
-      console.log(this.$scope.addedCourse);
-      console.log(this.$scope.addedSection);
-      console.log(this.$scope.addedStartTime);
-      console.log(this.$scope.addedEndTime);
-      console.log(this.$scope.addedEndTime);
-      console.log(this.$scope.addedRoomNo);
-      var routine:any={};
-      routine.day=+this.$scope.addedDate;
-      routine.courseId = this.$scope.addedCourse;
-      routine.section= this.$scope.addedSection;
-      routine.startTime = this.$scope.addedStartTime;
-      routine.endTime=this.$scope.addedEndTime;
-      routine.roomNo = this.$scope.addedRoomNo;
-      routine.updated=true;
-      routine.courseType=this.$scope.courseType;
+      this.checkIfAllFieldIsAssigned().then((message)=>{
+        if(message=="true"){
+          this.$scope.showSaveButton=true;
+          this.$scope.showRoutineTable=true;
 
-      console.log("Routine object");
-      console.log(routine);
-      routine.status='created';
-      this.$scope.routineArr.push(routine);
+          var routine:any={};
+          routine.day=+this.$scope.addedDate;
+          routine.courseId = this.$scope.addedCourse;
+          routine.section= this.$scope.addedSection;
+          routine.startTime = this.$scope.addedStartTime;
+          routine.endTime=this.$scope.addedEndTime;
+          routine.roomNo = this.$scope.addedRoomNo;
+          routine.updated=true;
+          routine.courseType=this.$scope.courseType;
+
+          console.log("Routine object");
+          console.log(routine);
+          routine.status='created';
+          this.$scope.routineArr.push(routine);
+          this.$scope.addedCourse="";
+          this.$scope.addedSection="";
+          this.$scope.addedStartTime="";
+          this.$scope.addedEndTime="";
+          //this.addNewData();
+        }
+        else{
+          this.notify.error("Please select all the fields",true);
+        }
+      })
+
+
+    }
+
+    private checkIfAllFieldIsAssigned():ng.IPromise<any>{
+      var defer = this.$q.defer();
+
+      if(this.$scope.addedStartTime=="" ||
+          this.$scope.addedDate=="" ||
+          this.$scope.addedCourse=="" ||
+          this.$scope.addedSection=="" ||
+          this.$scope.addedEndTime=="" ||
+          this.$scope.addedRoomNo=="" ){
+        defer.resolve("false");
+      }else{
+        defer.resolve("true");
+      }
+
+      return defer.promise;
     }
 
     private cancelData():void{
@@ -350,6 +384,7 @@ module ums {
       this.courseService.getCourseBySemesterProgramTypeYearSemester(this.$scope.semesterId,programType,year,semester).then((courseArr:Array<ICourse>)=>{
         this.$scope.courseIdMapCourseNo={};
         this.$scope.courseArr=[];
+
         this.$scope.courseArr=courseArr;
         console.log(courseArr);
 
@@ -398,6 +433,7 @@ module ums {
       this.$scope.addedEndTime="";
       this.$scope.courseType="";
       this.$scope.addedRoomNo="";
+
     }
 
     private saveClassRoutine():void{
