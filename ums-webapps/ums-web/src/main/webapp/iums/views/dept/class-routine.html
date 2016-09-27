@@ -174,12 +174,12 @@
                         </thead>
                         <tbody>
                         <tr data-ng-repeat="r in routineArr" data-ng-if="r.status!='deleted'">
-                            <th data-ng-if="r.editRoutine!=true">{{dateMap[r.day]}}</th>
-                            <th data-ng-if="r.editRoutine!=true">{{courseIdMapCourseNo[r.courseId]}}</th>
-                            <th data-ng-if="r.editRoutine!=true">{{r.section}}</th>
-                            <th data-ng-if="r.editRoutine!=true">{{r.startTime}}</th>
-                            <th data-ng-if="r.editRoutine!=true">{{r.endTime}}</th>
-                            <th data-ng-if="r.editRoutine!=true">{{r.roomNo}}</th>
+                            <td data-ng-if="r.editRoutine!=true">{{dateMap[r.day]}}</td>
+                            <td data-ng-if="r.editRoutine!=true">{{courseIdMapCourseNo[r.courseId]}}</td>
+                            <td data-ng-if="r.editRoutine!=true">{{r.section}}</td>
+                            <td data-ng-if="r.editRoutine!=true">{{r.startTime}}</td>
+                            <td data-ng-if="r.editRoutine!=true">{{r.endTime}}</td>
+                            <td data-ng-if="r.editRoutine!=true">{{r.roomNo}}</td>
 
 
 

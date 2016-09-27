@@ -187,7 +187,7 @@ module ums {
       this.$scope.addedStartTime = routine.startTime;
       this.$scope.addedEndTime = routine.endTime;
       this.$scope.addedRoomNo = routine.roomNo;
-      this.$scope.courseType=routine.courseType;
+      this.$scope.courseType=this.fetchCourseType(routine.courseId);
       this.$scope.addedSection=routine.section;
 
 
@@ -201,14 +201,15 @@ module ums {
       console.log(this.$scope.addedSection);
     }
 
-    private fetchCOurseType(courseId:string):void{
+    private fetchCourseType(courseId:string):string{
       var courseType:string="";
       for(var i=0;i<this.$scope.courseArr.length;i++){
         if(this.$scope.courseArr[i].id==courseId){
-         // this.courseType = this.$scope.courseArr[i].type;
+         courseType = this.$scope.courseArr[i].type;
           break;
         }
       }
+      return courseType;
     }
 
     private addRoutineData(routine:IClassRoutine){
