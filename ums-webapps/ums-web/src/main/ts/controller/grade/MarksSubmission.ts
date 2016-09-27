@@ -466,9 +466,9 @@ module ums {
         var part_a:number = Number($("#part_a_" + student_id).val()) || 0;
         var part_b:number = 0;
 
-        if (this.$scope.data.total_part == 1)
-          part_b = 0;
-        else if (this.$scope.data.total_part == 2)
+        if ($("#total_part") && $("#total_part").val() == 2)
+          part_b = Number($("#part_b_" + student_id).val()) || 0;
+        if (this.$scope.data.total_part == 2)
           part_b = Number($("#part_b_" + student_id).val()) || 0;
 
         total = quiz + class_perf + part_a + part_b;
@@ -521,7 +521,12 @@ module ums {
       var rows = data.split("\n");
       var regType:number;
       var rowError = false;
+      var partBMarks=0;
+      var total=0;
       for (var y = 0; y < rows.length; y++) {
+        partBMarks=0;
+        total=0;
+
         if (rows[y] == "") continue;
         var row = rows[y].split("\t");
         if (y == 0) {
@@ -538,21 +543,35 @@ module ums {
           this.setFieldValue("quiz_" + studentId, row[2]);
           this.setFieldValue("class_perf_" + studentId, row[3]);
           this.setFieldValue("part_a_" + studentId, row[4]);
-          if (this.$scope.data.total_part == 2)
+          if (this.$scope.data.total_part == 2) {
             this.setFieldValue("part_b_" + studentId, row[5]);
-          this.setFieldValue("total_" + studentId, row[6]);
+            partBMarks= Number(row[5]);
+          }
+          if(row[6]=="") {
+            try {
+              total=Number(row[2]) + Number(row[3]) + Number(row[4]) + partBMarks;
+              this.setFieldValue("total_" + studentId, total);
+            }catch(Exception){
+            }
+          }
+          else {
+            this.setFieldValue("total_" + studentId, row[6]);
+            total= Number(row[6]);
+          }
+
           if (row[7] != "")
             this.setFieldValue("grade_letter_" + studentId, row[7]);
           else
-            this.setFieldValue("grade_letter_" + studentId, this.commonService.getGradeLetter(Number(row[6]),regType));
+            this.setFieldValue("grade_letter_" + studentId, this.commonService.getGradeLetter(total,regType));
 
-
-          this.validateGrade(false, studentId, row[2], row[3], row[4], row[5], row[6], $("#grade_letter_" + studentId).val(),regType);
+          this.validateGrade(false, studentId, row[2], row[3], row[4], row[5], total.toString(), $("#grade_letter_" + studentId).val(),regType);
         }
         else{
           this.setFieldValue("total_" + studentId, row[2]);
+
           if (row[3] != "")
             this.setFieldValue("grade_letter_" + studentId, row[3]);
+
           else
             this.setFieldValue("grade_letter_" + studentId, this.commonService.getGradeLetter(Number(row[2]),regType));
 
@@ -583,9 +602,9 @@ module ums {
         else if(this.$scope.data.total_part == 2 &&
             this.checkNumber(this.$scope.data.part_a_total ) == true &&
             this.checkNumber(this.$scope.data.part_b_total ) == true &&
-            Number(this.$scope.data.part_a_total )+Number(this.$scope.data.part_b_total )>70) {
+            Number(this.$scope.data.part_a_total )+Number(this.$scope.data.part_b_total )!=70) {
           errorA = true;
-          messageA = "Total should not greater than 70.";
+          messageA = "Total should be equal to 70.";
         }
       }
       if(errorA==true)

@@ -175,7 +175,7 @@ public class GradeSubmissionService {
       throw new Exception("Part Information is wrong.");
     }
     else if(pTotalPart==2){
-      if(pPartATotal==0||pPartBTotal==0 || pPartATotal+pPartBTotal>70){
+      if(pPartATotal==0||pPartBTotal==0 || pPartATotal+pPartBTotal!=70){
         throw new Exception("Part Information is wrong.");
       }
     }
