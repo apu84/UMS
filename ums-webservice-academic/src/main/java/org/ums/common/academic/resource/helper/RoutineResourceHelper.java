@@ -101,7 +101,7 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
     }
 
     if(statusWithRoutine.get("deleted")!=null){
-      List<PersistentRoutine> pRoutines = statusWithRoutine.get("created");
+      List<PersistentRoutine> pRoutines = statusWithRoutine.get("deleted");
       List<MutableRoutine> mutableRoutines = new ArrayList<>();
 
       for(int i=0;i<pRoutines.size();i++){
@@ -112,7 +112,7 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
     }
 
     if(statusWithRoutine.get("exist")!=null){
-      List<PersistentRoutine> pRoutines = statusWithRoutine.get("created");
+      List<PersistentRoutine> pRoutines = statusWithRoutine.get("exist");
       List<MutableRoutine> mutableRoutines = new ArrayList<>();
 
       for(int i=0;i<pRoutines.size();i++){

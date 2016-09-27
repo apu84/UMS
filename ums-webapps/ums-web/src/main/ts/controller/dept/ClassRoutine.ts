@@ -183,11 +183,13 @@ module ums {
       this.initializeAddVariables();
       this.$scope.addedDate=routine.day.toString();
       this.$scope.addedCourse=routine.courseId;
-      this.$scope.addedSection=routine.section;
       this.$scope.addedStartTime = routine.startTime;
       this.$scope.addedEndTime = routine.endTime;
       this.$scope.addedRoomNo = routine.roomNo;
       this.$scope.courseType=routine.courseType;
+      this.$scope.addedSection=routine.section;
+
+
 
       routine.editRoutine=true;
       routine.showEditButton=false;
@@ -203,6 +205,7 @@ module ums {
       routine.endTime=this.$scope.addedEndTime;
       routine.roomNo = this.$scope.addedRoomNo;
       routine.updated=true;
+      routine.status="exist";
 
       routine.editRoutine=false;
       routine.showAddButton=false;

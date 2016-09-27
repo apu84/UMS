@@ -176,7 +176,6 @@ public class PersistentRoutineDao extends RoutineDaoDecorator {
       params.add(new Object[]{
           routine.getSemester().getId(),
           routine.getProgram().getId(),
-          routine.getProgram().getId(),
           routine.getCourseId(),
           routine.getDay(),
           routine.getSection(),

@@ -20,8 +20,8 @@ imp  DB_IUMS/ig100@XE   STATISTICS=NONE FILE='E:\Projects\UMS\ums-dist\src\main\
 
 Munna
 -----
-exp DB_IUMS/ig100@XE  STATISTICS=NONE FILE='H:\IUMS-Source2\UMS\ums-dist\src\main\resources\misc\database\DB_IUMS.dmp' LOG=H:\backuplog.txt
-imp  DB_IUMS/ig100@XE  STATISTICS=NONE FILE='H:\IUMS-Source2\UMS\ums-dist\src\main\resources\misc\database\DB_IUMS.dmp' LOG=H:\backuplog.txt
+exp DB_IUMS/ig100@XE  STATISTICS=NONE FILE='H:\IUMS-Source3\UMS\ums-dist\src\main\resources\misc\database\DB_IUMS.dmp' LOG=H:\backuplog.txt
+imp  DB_IUMS/ig100@XE  STATISTICS=NONE FILE='H:\IUMS-Source3\UMS\ums-dist\src\main\resources\misc\database\DB_IUMS.dmp' LOG=H:\backuplog.txt
 
 
 exp DB_IUMS/ig100@XE  STATISTICS=NONE FILE='I:\DB_IUMS4.dmp' LOG=H:\backuplog.txt

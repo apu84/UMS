@@ -465,9 +465,9 @@ module ums {
         var part_a:number = Number($("#part_a_" + student_id).val()) || 0;
         var part_b:number = 0;
 
-        if ($("#total_part") && $("#total_part").val() == 2)
-          part_b = Number($("#part_b_" + student_id).val()) || 0;
-        if (this.$scope.data.total_part == 2)
+        if (this.$scope.data.total_part == 1)
+          part_b = 0;
+        else if (this.$scope.data.total_part == 2)
           part_b = Number($("#part_b_" + student_id).val()) || 0;
 
         total = quiz + class_perf + part_a + part_b;
