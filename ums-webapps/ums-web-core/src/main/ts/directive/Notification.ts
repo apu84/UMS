@@ -15,6 +15,7 @@ module ums {
   }
   export class Notification implements ng.IDirective {
     public scope: NotificationScope;
+    private intervalPromise: ng.IPromise<any>;
 
     constructor(private httpClient: HttpClient,
                 private $q: ng.IQService,
@@ -27,7 +28,7 @@ module ums {
     public link = ($scope: NotificationScope, element: JQuery, attributes: any) => {
       this.scope = $scope;
       this.scope.numOfUnreadNotification = 0;
-      this.$interval(()=> {
+      this.intervalPromise = this.$interval(()=> {
         this.getNotification();
       }, 10000);
 
@@ -55,6 +56,11 @@ module ums {
               this.scope.numOfUnreadNotification = tempCount;
             }
             this.scope.notifications = response.entries;
+          },
+          (response: ng.IHttpPromiseCallbackArg<any>) => {
+            if (response.status === 401) {
+              this.$interval.cancel(this.intervalPromise);
+            }
           });
     }
 
