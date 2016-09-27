@@ -28,10 +28,8 @@ module ums {
 
     private fetchCourseInfo(): void {
 
-      $("#leftDiv").hide();
-      $("#arrowDiv").show();
-      $("#rightDiv").removeClass("orgRightClass");
-      $("#rightDiv").addClass("newRightClass");
+      $("#leftDiv").hide(100);
+      $("#arrowDiv").show(50);
 
       this.$scope.loadingVisibility = true;
       this.$scope.contentVisibility = false;
@@ -69,6 +67,9 @@ module ums {
       var baseUri: string = '/ums-webservice-academic/academic/courseMaterial/semester/' + semesterName + "/course/" + courseNo;
       var downloadBaseUri: string = '/ums-webservice-academic/academic/courseMaterial/download/semester/' + semesterName + "/course/" + courseNo;
 
+      $("#courseSelectionDiv").hide(80);
+      $("#topArrowDiv").show(50); 
+
       FILEMANAGER_CONFIG.set({
         appName: semesterName + ' > ' + courseNo,
         listUrl: baseUri,
@@ -90,13 +91,16 @@ module ums {
           createAssignmentFolder: true,
           changePermissions: false
         }),
-        additionalParams : {
+        additionalParams: {
           semesterId: semesterId,
           courseId: courseId
         }
       });
-
       this.$scope.reloadOn = courseNo;
+
+
+
+
     }
   }
 

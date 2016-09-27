@@ -369,3 +369,32 @@ div.ui-jqgrid-view table.ui-jqgrid-btable th {
 #topbar .navbar-top-links ul.dropdown-alerts{
     width:400px !important;
 }
+
+/** Collapsible divs (for example - grade submission table select query **/
+#arrowDiv {
+    display: none;
+    cursor: pointer;
+    float:left;
+    width:20px;
+    margin-right: 15px;
+    margin-left: 10px;
+}
+#leftDiv {
+    float:left;
+    width:30%;
+    margin-right: 12px;
+    margin-left: 12px;
+}
+
+#rightDiv {
+    overflow:hidden;
+}
+@media screen and (max-width: 900px) {
+    #leftDiv {
+        margin-left: 12px;
+        float: none;
+        width:auto;
+    }
+}
+
+/* End*/

@@ -366,9 +366,6 @@ module ums {
 
       $("#leftDiv").hide();
       $("#arrowDiv").show();
-
-      $("#rightDiv").removeClass("orgRightClass");
-      $("#rightDiv").addClass("newRightClass");
     }
 
 
