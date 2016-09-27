@@ -538,7 +538,8 @@ module ums {
           this.setFieldValue("quiz_" + studentId, row[2]);
           this.setFieldValue("class_perf_" + studentId, row[3]);
           this.setFieldValue("part_a_" + studentId, row[4]);
-          this.setFieldValue("part_b_" + studentId, row[5]);
+          if (this.$scope.data.total_part == 2)
+            this.setFieldValue("part_b_" + studentId, row[5]);
           this.setFieldValue("total_" + studentId, row[6]);
           if (row[7] != "")
             this.setFieldValue("grade_letter_" + studentId, row[7]);

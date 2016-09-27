@@ -178,6 +178,7 @@ module ums {
       this.$scope.addedSection=section;
     }
     private editRoutineData(routine:IClassRoutine){
+      this.$scope.courseType
       this.$scope.showSaveButton=true;
       this.$scope.addDataButtonClicked=false;
       this.initializeAddVariables();
@@ -195,6 +196,19 @@ module ums {
       routine.showEditButton=false;
       routine.showAddButton=true;
       routine.showCancelButton=true;
+
+      console.log(this.$scope.courseType);
+      console.log(this.$scope.addedSection);
+    }
+
+    private fetchCOurseType(courseId:string):void{
+      var courseType:string="";
+      for(var i=0;i<this.$scope.courseArr.length;i++){
+        if(this.$scope.courseArr[i].id==courseId){
+         // this.courseType = this.$scope.courseArr[i].type;
+          break;
+        }
+      }
     }
 
     private addRoutineData(routine:IClassRoutine){

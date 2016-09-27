@@ -196,10 +196,10 @@
                                 </select>
                             </th>
                             <th data-ng-if="r.editRoutine==true">
-                                <div data-ng-if="courseType=='THEORY'">
+                                <div data-ng-if="courseType =='THEORY'">
                                     {{addedSection}}
                                 </div>
-                                <div data-ng-if="courseType=='SESSIONAL'">
+                                <div data-ng-if="courseType =='SESSIONAL'">
                                     <select data-ng-model="addedSection"  data-ng-change="sectionChanged(addedSection)" >
                                         <option value="">Select Section</option>
                                         <option data-ng-repeat="s in sessionalSections" value="{{s.name}}">{{s.name}}</option>
