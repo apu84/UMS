@@ -13,6 +13,9 @@ module ums {
           (response: LoggedInUser) => {
             this.courseMaterialSearchParamModel = new CourseTeacherSearchParamModel(this.appConstants, this.httpClient);
             this.courseMaterialSearchParamModel.programSelector.setDepartment(response.departmentId);
+            // Program selector is not required. Setting it to null doesn't make sense,
+            // probably adding some show/hide mechanism makes it more clear to understand
+            this.courseMaterialSearchParamModel.programSelector.setProgramId(null);
             this.currentUser = response;
             this.$scope.courseMaterialSearchParamModel = this.courseMaterialSearchParamModel;
           });
