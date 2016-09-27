@@ -45,6 +45,8 @@ public class MarksSubmissionStatusDto {
     private String lastSubmissionDate;
     private List<CourseTeacherDto> courseTeacherList;
 
+    private boolean isSubmissionDateOver;
+
 
   public Integer getTotalStudents() {
     return totalStudents;
@@ -308,6 +310,14 @@ public class MarksSubmissionStatusDto {
 
   public void setExamTypeName(String examTypeName) {
     this.examTypeName = examTypeName;
+  }
+
+  public boolean isSubmissionDateOver() {
+    return isSubmissionDateOver;
+  }
+
+  public void setSubmissionDateOver(boolean isSubmissionDateOver) {
+    this.isSubmissionDateOver = isSubmissionDateOver;
   }
 
   public String toString() {

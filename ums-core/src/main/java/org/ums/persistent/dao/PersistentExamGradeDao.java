@@ -9,15 +9,14 @@ import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.ExamGradeDaoDecorator;
 import org.ums.domain.model.dto.*;
 import org.ums.enums.*;
+import org.ums.exceptions.ValidationException;
+import org.ums.util.Constants;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
@@ -44,7 +43,7 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
   String UPDATE_SESSIONAL_MARKS="Update  UG_SESSIONAL_MARKS Set Total=?,Grade_Letter=?,Status=? " +
       " Where Semester_Id=? And Course_Id=? and Exam_Type=? and Student_Id=? and status in (0,1)"; //None and Submit grades marks are allowed to update
 
-  String SELECT_GRADE_SUBMISSION_TABLE_TEACHER="Select tmp5.*,Status,Exam_Type From ( " +
+  String SELECT_GRADE_SUBMISSION_TABLE_TEACHER="Select tmp5.*,Status,Exam_Type,to_char(last_submission_date,'dd Mon, YY') last_submission_date From ( " +
       "Select tmp4.*,MVIEW_TEACHERS.TEACHER_NAME Scrutinizer_Name,getCourseTeacher(semester_id,course_id) Course_Teachers From " +
       "( " +
       "Select tmp3.*,MVIEW_TEACHERS.TEACHER_NAME Preparer_name From  " +
@@ -776,6 +775,19 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
       statusDto.setStatusId(resultSet.getInt("STATUS"));
       statusDto.setStatusName(CourseMarksSubmissionStatus.values()[resultSet.getInt("STATUS")].getLabel());
 
+      statusDto.setLastSubmissionDate(resultSet.getString("LAST_SUBMISSION_DATE"));
+      if(resultSet.getString("LAST_SUBMISSION_DATE")!=null){
+        Date currentDate = new Date();
+        try {
+          Date deadLine = Constants.DF_dd_Mon_YY_Time.parse(resultSet.getString("LAST_SUBMISSION_DATE").toUpperCase()+" 23:59:59");
+          if (currentDate.compareTo(deadLine) > 0) {
+            statusDto.setSubmissionDateOver(true);
+          }
+          else
+            statusDto.setSubmissionDateOver(false);
+        }catch(Exception ex){
+        }
+      }
       String courseTeachers=resultSet.getString("Course_Teachers");
       ArrayList<CourseTeacherDto> teacherList=new ArrayList();
       if(courseTeachers!=null && !courseTeachers.equalsIgnoreCase("")) {
