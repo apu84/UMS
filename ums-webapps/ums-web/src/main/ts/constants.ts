@@ -85,6 +85,7 @@ module ums {
           '07': 'FRIDAY'
         },
         weekday: [
+          {id:"",dateName:'Select a date'},
           {id:"1",dateName: 'SATURDAY'},
           {id:"2",dateName: 'SUNDAY'},
           {id:"3",dateName: 'MONDAY'},
@@ -144,6 +145,10 @@ module ums {
           {id: '05', name: 'EEE'}
         ],
         timeChecker: [
+          {
+            id:'',
+            val:'Select time'
+          },
           {
             id: '08.00 AM',
             val: '08.00 AM'
