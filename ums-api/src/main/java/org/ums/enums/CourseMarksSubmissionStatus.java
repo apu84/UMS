@@ -1,9 +1,5 @@
 package org.ums.enums;
 
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Created by ikh on 4/29/2016.
  */

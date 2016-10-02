@@ -61,6 +61,7 @@
         <include>org.jxls:jxls</include>
         <include>org.jxls:jxls-poi</include>
         <include>org.springframework.data:spring-data-mongodb</include>
+        <include>com.itextpdf:itextpdf</include>
       </includes>
       <outputDirectory>lib</outputDirectory>
       <useTransitiveDependencies>true</useTransitiveDependencies>

@@ -67,7 +67,7 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
       "And tmp5.SEMESTER_ID=MARKS_SUBMISSION_STATUS.SEMESTER_ID(+)  "+
       "And Exam_Type=?";
 
-  String SELECT_GRADE_SUBMISSION_TABLE_HEAD="Select Ms_Status.Semester_Id,Exam_Type,Mst_Course.Course_Id,Course_No,Course_Title ,CrHr,Course_Type,Course_Category,Offer_By,Ms_Status.Year,Ms_Status.Semester,COURSE_SYLLABUS_MAP.Syllabus_Id, " +
+  String SELECT_GRADE_SUBMISSION_TABLE_HEAD="Select to_char(last_submission_date,'dd Mon, YY') last_submission_date, Ms_Status.Semester_Id,Exam_Type,Mst_Course.Course_Id,Course_No,Course_Title ,CrHr,Course_Type,Course_Category,Offer_By,Ms_Status.Year,Ms_Status.Semester,COURSE_SYLLABUS_MAP.Syllabus_Id, " +
       "getCourseTeacher(Ms_Status.semester_id,Mst_Course.course_id) Course_Teachers, " +
       "MST_PROGRAM.PROGRAM_SHORT_NAME,getPreparerScrutinizer(Ms_Status.Semester_Id,Mst_Course.Course_Id,'P') PREPARER_NAME, " +
       "getPreparerScrutinizer(Ms_Status.Semester_Id,Mst_Course.Course_Id,'S') SCRUTINIZER_NAME,STATUS  " +
@@ -81,7 +81,7 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
       "And Offer_By in " +
       "(Select dept_id From MVIEW_Teachers  where Teacher_Id =?) ";
 
-  String SELECT_GRADE_SUBMISSION_TABLE_CoE="Select Ms_Status.Semester_Id,Exam_Type,Mst_Course.Course_Id,Course_No,Course_Title ,CrHr,Course_Type,Course_Category,Offer_By,Ms_Status.Year,Ms_Status.Semester,COURSE_SYLLABUS_MAP.Syllabus_Id, " +
+  String SELECT_GRADE_SUBMISSION_TABLE_CoE="Select to_char(last_submission_date,'dd Mon, YY') last_submission_date, Ms_Status.Semester_Id,Exam_Type,Mst_Course.Course_Id,Course_No,Course_Title ,CrHr,Course_Type,Course_Category,Offer_By,Ms_Status.Year,Ms_Status.Semester,COURSE_SYLLABUS_MAP.Syllabus_Id, " +
       "getCourseTeacher(Ms_Status.semester_id,Mst_Course.course_id) Course_Teachers, " +
       "MST_PROGRAM.PROGRAM_SHORT_NAME,getPreparerScrutinizer(Ms_Status.Semester_Id,Mst_Course.Course_Id,'P') PREPARER_NAME, " +
       "getPreparerScrutinizer(Ms_Status.Semester_Id,Mst_Course.Course_Id,'S') SCRUTINIZER_NAME, STATUS  " +
