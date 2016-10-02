@@ -90,7 +90,11 @@ public class PersistentEmployeeDao  extends EmployeeDaoDecorator{
   }
 
 
-
+  @Override
+  public List<Employee> getActiveTeachersOfDept(String deptId) {
+    String query=SELECT_ALL+" WHERE DEPT_OFFICE=? AND STATUS=1 ORDER BY DESIGNATION";
+    return mJdbcTemplate.query(query,new Object[]{deptId}, new EmployeeRowmapper());
+  }
 
   class EmployeeRowmapper implements RowMapper<Employee>{
 
