@@ -130,9 +130,6 @@ public class ApplicationCCIResourceHelper extends ResourceHelper<ApplicationCCI,
 
     }
 
-
-
-
     List<PersistentApplicationCCI> applicationAfterValidationByService = mApplicationCCIService.validateForAnomalies(persistentApplicationCCIs,results,student);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
@@ -153,8 +150,6 @@ public class ApplicationCCIResourceHelper extends ResourceHelper<ApplicationCCI,
             rr.setGradeLetter(r.getGradeLetter());
             rr.setExamType(r.getExamType());
             rr.setType(r.getType());
-            rr.setCourseNo(r.getCourseNo());
-            rr.setCourseTitle(r.getCourseTitle());
             rr.setExamDate(r.getExamDate());
             rr.setMessage(appsForJsonIterator.getMessage());
 

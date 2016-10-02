@@ -138,8 +138,6 @@ public class PersistentUGRegistrationResultDao extends UGRegistrationResultDaoDe
       result.setGradeLetter(pResultSet.getString("GRADE_LETTER"));
       result.setExamType(ExamType.get(pResultSet.getInt("EXAM_TYPE")));
       result.setType(CourseRegType.get(pResultSet.getInt("REG_TYPE")));
-      result.setCourseNo(pResultSet.getString("COURSE_NO"));
-      result.setCourseTitle(pResultSet.getString("COURSE_TITLE"));
       result.setExamDate(pResultSet.getString("EXAM_DATE"));
       return result;
     }

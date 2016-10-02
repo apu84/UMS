@@ -5,7 +5,6 @@ import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.Course;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.Student;
-import org.ums.domain.model.immutable.UGBaseRegistration;
 import org.ums.domain.model.mutable.MutableUGBaseRegistration;
 import org.ums.enums.CourseRegType;
 import org.ums.enums.ExamType;
@@ -27,9 +26,7 @@ public abstract class AbstractUGBaseRegistration implements MutableUGBaseRegistr
 
   private Integer mId;
   private String mCourseId;
-  private String mCourseTitle;
   private Course mCourse;
-  private String mCourseNo;
   private Integer mSemesterId;
   private Semester mSemester;
   private String mStudentId;
@@ -46,7 +43,6 @@ public abstract class AbstractUGBaseRegistration implements MutableUGBaseRegistr
 
   public AbstractUGBaseRegistration(final MutableUGBaseRegistration pMutableUGBaseRegistration) {
     setCourseId(pMutableUGBaseRegistration.getCourseId());
-    setCourseNo(pMutableUGBaseRegistration.getCourseNo());
     setSemesterId(pMutableUGBaseRegistration.getSemesterId());
     setStudentId(pMutableUGBaseRegistration.getStudentId());
     setGradeLetter(pMutableUGBaseRegistration.getGradeLetter());
@@ -76,26 +72,6 @@ public abstract class AbstractUGBaseRegistration implements MutableUGBaseRegistr
   @Override
   public String getExamDate() {
     return mExamDate;
-  }
-
-  @Override
-  public String getCourseTitle() {
-    return mCourseTitle;
-  }
-
-  @Override
-  public void setCourseTitle(String pCourseTitle) {
-    mCourseTitle = pCourseTitle;
-  }
-
-  @Override
-  public void setCourseNo(String pCourseNo) {
-    mCourseNo = pCourseNo;
-  }
-
-  @Override
-  public String getCourseNo() {
-    return mCourseNo;
   }
 
   @Override

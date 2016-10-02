@@ -25,10 +25,6 @@ public interface MutableUGBaseRegistration extends UGBaseRegistration, Mutable, 
 
   void setType(final CourseRegType pType);
 
-  void setCourseNo(final String pCourseNo);
-
-  void setCourseTitle(final String pCourseTitle);
-
   void setExamDate(final String pExamDate);
 
   void setMessage(final String pMessage);
