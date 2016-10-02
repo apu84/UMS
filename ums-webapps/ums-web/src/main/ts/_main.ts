@@ -107,6 +107,7 @@
 /// <reference path='controller/common/academic/ClassRoomInfo.ts'/>
 /// <reference path='controller/common/academic/ExamRoutine.ts'/>
 /// <reference path='controller/dept/StudentsRoutine.ts'/>
+/// <reference path='controller/dept/StudentAdviser.ts'/>
 /// <reference path='controller/dept/OptionalCoursesOffer.ts'/>
 /// <reference path='controller/semester/SemesterSettingParameter.ts'/>
 /// <reference path='controller/dept/ClassRoutine.ts'/>

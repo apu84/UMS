@@ -35,7 +35,9 @@
     '/examiner': {title: 'Assign Preparer-Scrutinizer', 'breadcrumb': ['Preparer-Scrutinizer']},
     '/courseMaterial': {title: 'Course Materials', 'breadcrumb': ['Course Materials']},
     '/studentCourseMaterial': {title: 'Course Materials', 'breadcrumb': ['Course Materials']},
-    '/gradeSubmissionDeadLine': {title: 'Grade Submission Deadline', 'breadcrumb': ['Grade Submission Deadline']}
+    '/gradeSubmissionDeadLine': {title: 'Grade Submission Deadline', 'breadcrumb': ['Grade Submission Deadline']},
+    '/studentAdviser': {title: 'Students Adviser', 'breadcrumb': ['Students Adviser']}
+
 
   };
 

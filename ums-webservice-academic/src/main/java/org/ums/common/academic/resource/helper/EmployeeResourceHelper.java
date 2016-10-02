@@ -54,10 +54,8 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
 
   public JsonObject getByEmployeeId(final UriInfo pUriInfo)throws Exception{
     //String employeeId = SecurityUtils.getSubject().getPrincipal().toString();
-    String userId = SecurityUtils.getSubject().getPrincipal().toString();
-    User user = mUserManager.get(userId);
-    String employeeId=user.getEmployeeId();
-    Employee employee = getContentManager().getByEmployeeId(employeeId);
+    Employee employee = getSignedEmployeeInfo();
+
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
@@ -67,8 +65,27 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
     return object.build();
   }
 
+  public JsonObject getActiveTeachersByDept(final UriInfo pUriInfo) throws Exception{
+    Employee employee = getSignedEmployeeInfo();
+    List<Employee> employees = getContentManager().getActiveTeachersOfDept(employee.getDepartment().getId());
+
+    return convertToJson(employees,pUriInfo);
+  }
+
   public JsonObject getByDesignation(final String designationId,final Request pRequest,final UriInfo pUriInfo) throws Exception{
     List<Employee> employees = getContentManager().getByDesignation(designationId);
+    return convertToJson(employees,pUriInfo);
+  }
+
+  private Employee getSignedEmployeeInfo() throws Exception{
+    String userId = SecurityUtils.getSubject().getPrincipal().toString();
+    User user = mUserManager.get(userId);
+    String employeeId=user.getEmployeeId();
+    Employee employee = getContentManager().getByEmployeeId(employeeId);
+    return employee;
+  }
+
+  private JsonObject convertToJson(List<Employee> employees,UriInfo pUriInfo)throws Exception{
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();

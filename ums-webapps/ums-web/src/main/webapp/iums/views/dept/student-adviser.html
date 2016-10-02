@@ -1,0 +1,186 @@
+<div class="panel panel-blue" data-ng-init="getActiveTeachers()">
+    <div class="panel-heading">
+        Student's Advisor Assignment
+    </div>
+    <div class="panel-body panel-height" >
+        <div class="row" >
+            <div class="col-md-8">
+
+            </div>
+            <div class="col-md-4" align="right">
+                <div  class="btn-group"  align="right">
+                    <button  type="button" class="btn btn-primary" title="Shifting" data-ng-click="showShiftUI()"><i class="fa fa-exchange " aria-hidden="true"></i></button>
+                    <button type="button" class="btn btn-primary"  title="Change a single student" data-ng-click="showChangeUI()"><i class="fa fa-random " aria-hidden="true"></i></button>
+                    <button type="button" class="btn btn-primary"  title="BULK assign / Shifting" data-ng-click="showBulkAssignmentUI()"><i class="fa fa-users " aria-hidden="true"></i></button>
+                </div>
+            </div>
+
+
+        </div>
+
+        <br>
+        <br>
+        <div class="row">
+            <div class="col-md-12">
+
+
+                        <div data-ng-if="shiftOptionSelected">
+
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>From</th>
+                                        <th>To</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <div class="col-md-12">
+                                                <div class="row" align="center">
+
+                                                    <select data-ng-model="teacherId">
+                                                        <option value="">Select an adviser</option>
+                                                        <option data-ng-repeat="t in teachers track by t.id" value="{{t.id}}">{{t.employeeName}}</option>
+                                                    </select>
+                                                </div>
+                                                <br>
+                                                <div class="row" align="right">
+                                                    <button type="button" class="btn btn-default btn-xs">View By <br>Student Id</button>
+                                                    <button type="button" class="btn btn-default btn-xs">View By <br>Student Id & Name</button>
+                                                </div>
+                                                <div class="row">
+                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
+                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
+                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
+                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
+                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
+                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
+                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
+                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
+                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
+                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
+                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
+                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
+                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
+                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
+                                                </div>
+                                            </div>
+
+                                        </td>
+                                        <td>
+                                            <div class="col-md-12">
+                                                <div class="row" align="center">
+                                                    <select data-ng-model="teacherId">
+                                                        <option value="">Select an adviser</option>
+                                                        <option data-ng-repeat="t in teachers track by t.id" value="{{t.id}}">{{t.employeeName}}</option>
+                                                    </select>
+                                                </div>
+                                                <br>
+                                                <div class="row" align="right">
+                                                    <button type="button" class="btn btn-default btn-xs">View By <br>Student Id</button>
+                                                    <button type="button" class="btn btn-default btn-xs">View By <br>Student Id & Name</button>
+                                                </div>
+                                                <div class="row">
+                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
+                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
+                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
+                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
+                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
+                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
+                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
+                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
+                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
+                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
+                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
+                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
+                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
+                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
+
+                                                </div>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                        <div data-ng-if="changeOptionSelected">
+                            <div class="col-md-12">
+                                <h5  style="background-color: darkgrey; color: ghostwhite"><p class="labels">Change a Student's adviser</p></h5>
+                                <p>Student ID: <input data-ng-model="changeStudentID" /> <button type="button" class="btn btn-primary">Search</button></p>
+                                <p><label class="labels" style="background-color: darkslategray;color: whitesmoke;">Current Adviser</label></p>
+                                <p>Prof. Dr. Abdur Rahim Mollah</p>
+                                <p><label class="labels" style="background-color: darkslategray;color: whitesmoke;">New Adviser</label></p>
+                                <p>
+                                    <label>Select an adviser</label>
+                                    <select data-ng-model="teacherId">
+                                        <option value="">Select an adviser</option>
+                                        <option data-ng-repeat="t in teachers track by t.id" value="{{t.id}}">{{t.employeeName}}</option>
+                                    </select>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div data-ng-if="bulkAssignmentOptionSelected">
+                            <div class="row">
+                                <div class="col-md-2" align="left">
+                                    <p>Select an adviser</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <select data-ng-model="teacherId">
+                                        <option value="">Select an adviser</option>
+                                        <option data-ng-repeat="t in teachers track by t.id" value="{{t.id}}">{{t.employeeName}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h5  style="background-color: darkgrey; color: ghostwhite"><p class="labels">Bulk Student Assignment</p></h5>
+                                    <br>
+                                    <p>Student Id <input data-ng-model="fromStudentId"/> to <input data-ng-model="toStudentId" />  <button type="button" class="btn btn-default">ADD</button></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8">
+                                </div>
+                                <div class="col-md-4" align="right">
+                                    <button type="button" class="btn btn-primary btn-xs" title="View by student's id"><i class="fa fa-user" aria-hidden="true"></i></button>
+                                    <button type="button" class="btn btn-primary btn-xs" title="View by student's id and name">
+                                        <i class="fa fa-user" aria-hidden="true"></i>
+                                        <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h5  style="background-color: darkgrey; color: ghostwhite"><p class="labels">Current Students</p></h5>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h5  style="background-color: darkgrey; color: ghostwhite"><p class="labels">new Students</p></h5>
+                                </div>
+                            </div>
+                        </div>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+</div>
+
+<style>
+    .panel-height{
+        min-height: 400px;
+    }
+
+    .labels{
+        padding:1%;
+    }
+
+</style>

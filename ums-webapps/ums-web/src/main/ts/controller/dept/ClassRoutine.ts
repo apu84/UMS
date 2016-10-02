@@ -251,33 +251,46 @@ module ums {
           this.$scope.showSaveButton=true;
           this.$scope.showRoutineTable=true;
 
-          var routine:any={};
-          routine.day=+this.$scope.addedDate;
-          routine.courseId = this.$scope.addedCourse;
-          routine.section= this.$scope.addedSection;
-          routine.startTime = this.$scope.addedStartTime;
-          routine.endTime=this.$scope.addedEndTime;
-          routine.roomNo = this.$scope.addedRoomNo;
-          routine.updated=true;
-          routine.courseType=this.$scope.courseType;
+          this.assignValueToRoutine().then((message)=>{
+            //this.initializeAddVariables();
+          })
 
-          console.log("Routine object");
-          console.log(routine);
-          routine.status='created';
-          this.$scope.routineArr.push(routine);
-          this.$scope.addedCourse="";
-          this.$scope.addedSection="";
-          this.$scope.addedStartTime="";
-          this.$scope.addedEndTime="";
+
+
           //this.addNewData();
         }
         else{
           this.notify.error("Please select all the fields",true);
         }
-      })
+      });
 
 
     }
+
+
+    private assignValueToRoutine():ng.IPromise<any>{
+      var defer = this.$q.defer();
+      var routine:any={};
+      routine.day=+this.$scope.addedDate;
+      routine.courseId = this.$scope.addedCourse;
+      routine.section= this.$scope.addedSection;
+      routine.startTime = this.$scope.addedStartTime;
+      routine.endTime=this.$scope.addedEndTime;
+      routine.roomNo = this.$scope.addedRoomNo;
+      routine.updated=true;
+      routine.courseType=this.$scope.courseType;
+
+      console.log("Routine object");
+      console.log(routine);
+      routine.status='created';
+      this.$scope.routineArr.push(routine);
+      defer.resolve("done");
+      return defer.promise;
+    }
+
+
+
+
 
     private checkIfAllFieldIsAssigned():ng.IPromise<any>{
       var defer = this.$q.defer();
@@ -385,10 +398,12 @@ module ums {
         this.$scope.courseIdMapCourseNo={};
         this.$scope.courseArr=[];
 
-        this.$scope.courseArr=courseArr;
+        //this.$scope.courseArr=courseArr;
         console.log(courseArr);
 
+
         for(var i=0;i<courseArr.length;i++){
+          this.$scope.courseArr.push((courseArr[i]));
           this.$scope.courseIdMapCourseNo[courseArr[i].id] = courseArr[i].no;
         }
 
@@ -416,6 +431,8 @@ module ums {
 
       });
     }
+
+
 
     private initializeDate():void{
       this.$scope.dates = this.appConstants.weekday;

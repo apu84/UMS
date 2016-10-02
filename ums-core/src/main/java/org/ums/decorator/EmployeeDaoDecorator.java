@@ -19,4 +19,9 @@ public class EmployeeDaoDecorator extends ContentDaoDecorator<Employee,MutableEm
   public List<Employee> getByDesignation(String pDesignationId) {
     return getManager().getByDesignation(pDesignationId);
   }
+
+  @Override
+  public List<Employee> getActiveTeachersOfDept(String deptId) {
+    return getManager().getActiveTeachersOfDept(deptId);
+  }
 }
