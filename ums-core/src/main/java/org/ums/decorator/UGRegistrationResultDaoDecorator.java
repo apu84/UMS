@@ -54,4 +54,9 @@ public class UGRegistrationResultDaoDecorator
       String pStudentId, CourseRegType pCourseRegType) {
     return getManager().getRegisteredCourseByStudent(pSemesterId, pStudentId, pCourseRegType);
   }
+
+  @Override
+  public List<UGRegistrationResult> getRegisteredCourses(String pStudentId) throws Exception{
+    return getManager().getRegisteredCourses(pStudentId);
+  }
 }
