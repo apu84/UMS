@@ -12,7 +12,7 @@ module ums{
 
       var defer = this.$q.defer();
       var courses:any={};
-      this.httpClient.get("/ums-webservice-academic/academic/course/semester/"+
+      this.httpClient.get("academic/course/semester/"+
           semesterId+"/program/"+programId+"/year/"+year+"/semester/"+semester,
           'application/json',
           (json:any,etag:string)=>{
@@ -21,7 +21,7 @@ module ums{
           },
           (response:ng.IHttpPromiseCallbackArg<any>)=> {
             console.log(response);
-          })
+          });
 
       return defer.promise;
 

@@ -14,7 +14,7 @@ module ums{
     public getClassRoutineReportForTeacher():ng.IPromise<any>{
       var defer= this.$q.defer();
 
-      this.httpClient.get("/ums-webservice-academic/academic/routine/routineReportTeacher",  'application/pdf',
+      this.httpClient.get("academic/routine/routineReportTeacher",  'application/pdf',
           (data:any, etag:string) => {
             var file = new Blob([data], {type: 'application/pdf'});
             var fileURL = this.$sce.trustAsResourceUrl(URL.createObjectURL(file));

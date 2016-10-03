@@ -12,7 +12,7 @@ module ums{
       var defer = this.$q.defer();
       var gradeSubmissionStatisticsArr:any={};
 
-      this.httpClient.get('/ums-webservice-academic/academic/gradeSubmission/deadline/semester/'+semesterId+'/examType/'+examType+'/examDate/'+examDate,'application/json',
+      this.httpClient.get('academic/gradeSubmission/deadline/semester/'+semesterId+'/examType/'+examType+'/examDate/'+examDate,'application/json',
           (json:any,etag:string)=>{
             gradeSubmissionStatisticsArr = json.entries;
             defer.resolve(gradeSubmissionStatisticsArr);

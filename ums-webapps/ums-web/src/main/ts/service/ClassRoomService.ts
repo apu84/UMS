@@ -10,7 +10,7 @@ module ums{
     public getClassRooms():ng.IPromise<any>{
       var defer = this.$q.defer();
       var rooms:any={};
-      this.httpClient.get("/ums-webservice-academic/academic/classroom/program",'application/json',
+      this.httpClient.get("academic/classroom/program",'application/json',
           (json:any,etag:string)=>{
             rooms = json.entries;
             defer.resolve(rooms);

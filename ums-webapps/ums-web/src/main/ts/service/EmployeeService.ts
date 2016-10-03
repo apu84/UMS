@@ -13,7 +13,7 @@ module ums{
     public getActiveTeacherByDept():ng.IPromise<any>{
       var defer = this.$q.defer();
       var teachers:any={};
-      this.httpClient.get("/ums-webservice-academic/academic/employee/getActiveTeachersByDept",'application/json',
+      this.httpClient.get("academic/employee/getActiveTeachersByDept",'application/json',
           (json:any,etag:string)=>{
             teachers = json.entries;
             defer.resolve(teachers);
