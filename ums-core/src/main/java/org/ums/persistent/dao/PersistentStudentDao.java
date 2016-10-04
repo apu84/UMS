@@ -50,7 +50,7 @@ public class PersistentStudentDao extends StudentDaoDecorator {
       "  CURR_ENROLLED_SEMESTER," +
       "  THEORY_SECTION," +
       "  SESSIONAL_SECTION," +
-      "  ADVISER"+
+      "  ADVISER,"+
       "  STATUS"+
       "  FROM STUDENTS ";
 
@@ -181,6 +181,12 @@ public class PersistentStudentDao extends StudentDaoDecorator {
   }
 
   @Override
+  public List<Student> getActiveStudents() {
+    String query = SELECT_ALL+" where status=1";
+    return mJdbcTemplate.query(query,new StudentRowMapper());
+  }
+
+  @Override
   public int update(List<MutableStudent> pStudentList) throws Exception {
     String query = UPDATE_ALL + " WHERE STUDENT_ID = ?";
     return mJdbcTemplate.batchUpdate(query, getUpdateParamArray(pStudentList)).length;
@@ -231,6 +237,7 @@ public class PersistentStudentDao extends StudentDaoDecorator {
         ") ";
     return mJdbcTemplate.query(query, new Object[]{pStudents,pStudents},new StudentRowMapper());
   }
+
 
 
   @Override

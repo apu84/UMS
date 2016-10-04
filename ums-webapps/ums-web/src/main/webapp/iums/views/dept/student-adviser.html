@@ -1,4 +1,4 @@
-<div class="panel panel-blue" data-ng-init="getActiveTeachers()">
+<div class="panel panel-blue" data-ng-init="getActiveTeachers();getActiveStudentsOfDept()">
     <div class="panel-heading">
         Student's Advisor Assignment
     </div>
@@ -146,11 +146,27 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-12">
+
                                     <h5  style="background-color: darkgrey; color: ghostwhite"><p class="labels">Bulk Student Assignment</p></h5>
                                     <br>
-                                    <p>Student Id <input data-ng-model="fromStudentId"/> to <input data-ng-model="toStudentId" />  <button type="button" class="btn btn-default">ADD</button></p>
-                                </div>
+                                    <div class="col-md-5" align="right">
+                                        <div class="ui-widget">
+                                            <label for="fromStudentId">Student Id: </label>
+                                            <input id="fromStudentId" data-ng-model="fromStudentId">
+                                        </div>
+                                        <button class="btn btn-default" >Add the student</button>
+                                    </div>
+                                    <div class="col-md-1">
+                                        to
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="ui-widget">
+                                            <label for="toStudentId">Student Id:</label>
+                                            <input id="toStudentId" data-ng-model="toStudentId">
+                                        </div>
+
+                                    </div>
+
                             </div>
                             <div class="row">
                                 <div class="col-md-8">
@@ -165,7 +181,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <h5  style="background-color: darkgrey; color: ghostwhite"><p class="labels">Current Students</p></h5>
+                                    <h5  style="background-color: darkgrey; color: ghostwhite"><p class="labels">Added Students</p></h5>
                                 </div>
                             </div>
                             <div class="row">

@@ -25,7 +25,7 @@ public class StudentDaoDecorator extends ContentDaoDecorator<Student, MutableStu
     }
 
     @Override
-    public List<Student> getActiveStudents(int pProgramId) {
-        return getManager().getActiveStudents(pProgramId);
+    public List<Student> getActiveStudents() {
+        return getManager().getActiveStudents();
     }
 }

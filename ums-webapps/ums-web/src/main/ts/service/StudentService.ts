@@ -27,6 +27,26 @@ module ums{
       return defer.promise;
     }
 
+
+    public getActiveStudentsByDepartment():ng.IPromise<any>{
+
+      var defer = this.$q.defer();
+      var students:any={};
+      this.httpClient.get('/ums-webservice-academic/academic/student/getStudentsByDept', 'application/json',
+          (json:any, etag:string) => {
+            students = json.entries;
+            defer.resolve(students);
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>) => {
+            console.error(response);
+            this.notify.error("Error in getting student data");
+          });
+
+      return defer.promise;
+    }
+
+
+
   }
 
   UMS.service("studentService",StudentService);

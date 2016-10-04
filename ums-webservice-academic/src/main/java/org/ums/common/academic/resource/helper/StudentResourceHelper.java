@@ -9,14 +9,14 @@ import org.springframework.transaction.annotation.Transactional;
 import org.ums.cache.LocalCache;
 import org.ums.common.academic.resource.StudentResource;
 import org.ums.common.builder.StudentBuilder;
+import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.immutable.Student;
 import org.ums.domain.model.immutable.StudentRecord;
+import org.ums.domain.model.immutable.User;
 import org.ums.domain.model.mutable.MutableStudent;
 import org.ums.domain.model.mutable.MutableStudentRecord;
 import org.ums.domain.model.mutable.MutableUser;
-import org.ums.manager.BinaryContentManager;
-import org.ums.manager.RoleManager;
-import org.ums.manager.StudentManager;
+import org.ums.manager.*;
 import org.ums.persistent.model.PersistentStudent;
 import org.ums.persistent.model.PersistentStudentRecord;
 import org.ums.persistent.model.PersistentUser;
@@ -31,6 +31,8 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.Base64;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @Qualifier("StudentResourceHelper")
@@ -44,6 +46,12 @@ public class StudentResourceHelper extends ResourceHelper<Student, MutableStuden
 
   @Autowired
   private StudentManager mManager;
+
+  @Autowired
+  private UserManager mUserManager;
+
+  @Autowired
+  private EmployeeManager mEmployeeManager;
 
   @Autowired
   @Qualifier("StudentBuilder")
@@ -105,6 +113,37 @@ public class StudentResourceHelper extends ResourceHelper<Student, MutableStuden
     object.add("entries", children);
     localCache.invalidate();
     return object.build();
+  }
+
+
+  public JsonObject getActiveStudentsByDepartment(final UriInfo pUriInfo) throws Exception{
+    Employee employee = getLoggedEmployee();
+    String deptId = employee.getDepartment().getId();
+    List<Student> students = getContentManager()
+        .getActiveStudents()
+        .parallelStream()
+        .filter(s-> s.getDepartmentId().equals(deptId))
+        .collect(Collectors.toList());
+
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+
+    for(Student student : students){
+      children.add(toJson(student,pUriInfo,localCache));
+    }
+    object.add("entries",children);
+    localCache.invalidate();
+    return object.build();
+  }
+
+
+
+  private Employee getLoggedEmployee() throws Exception{
+    String userId = SecurityUtils.getSubject().getPrincipal().toString();
+    User user = mUserManager.get(userId);
+    Employee employee = mEmployeeManager.getByEmployeeId(user.getEmployeeId());
+    return employee;
   }
 
   @Override

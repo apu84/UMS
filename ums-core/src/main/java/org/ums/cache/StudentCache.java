@@ -42,7 +42,7 @@ public class StudentCache extends ContentCache<Student, MutableStudent, String, 
   }
 
   @Override
-  public List<Student> getActiveStudents(int pProgramId) {
-    return getManager().getActiveStudents(pProgramId);
+  public List<Student> getActiveStudents() {
+    return getManager().getActiveStudents();
   }
 }

@@ -15,6 +15,18 @@ module ums{
     teachers:Array<IEmployee>;
     teacherId:string;
     getActiveTeachers:Function;
+
+
+    students:Array<IStudent>;
+    fromStudentId:string;
+    toStudentId:string;
+    getActiveStudentsOfDept:Function;
+
+  }
+
+  interface IStudent{
+    id:string;
+    fullName:string;
   }
 
 
@@ -24,10 +36,11 @@ module ums{
   }
 
   class StudentAdviser{
-    public static $inject = ['appConstants','HttpClient','$scope','$q','notify','semesterService','employeeService'];
+    public static $inject = ['appConstants','HttpClient','$scope','$q','notify','semesterService','employeeService','studentService'];
     constructor(private appConstants: any, private httpClient: HttpClient, private $scope: IStudentAdviser,
                 private $q:ng.IQService, private notify: Notify, private semesterService:SemesterService,
-                private employeeService:EmployeeService) {
+                private employeeService:EmployeeService,
+                private studentService:StudentService) {
 
       $scope.shiftOptionSelected=false;
       $scope.changeOptionSelected=false;
@@ -36,6 +49,7 @@ module ums{
       $scope.showChangeUI = this.showChangeUI.bind(this);
       $scope.showBulkAssignmentUI = this.showBulkAssignmentUI.bind(this);
       $scope.getActiveTeachers = this.getActiveTeachers.bind(this);
+      $scope.getActiveStudentsOfDept = this.getActiveStudentsOfDept.bind(this);
 
     }
 
@@ -75,6 +89,8 @@ module ums{
       this.activateUI(3);
     }
 
+
+
     private getActiveTeachers(){
       this.employeeService.getActiveTeacherByDept().then((teachers:Array<IEmployee>)=>{
         this.$scope.teachers=[];
@@ -82,6 +98,16 @@ module ums{
         this.$scope.teachers = teachers;
       });
     }
+
+    private getActiveStudentsOfDept(){
+      this.studentService.getActiveStudentsByDepartment().then((students:Array<IStudent>)=>{
+        this.$scope.students=[];
+        this.$scope.students = students;
+        console.log(students);
+      });
+    }
+
+
 
   }
 

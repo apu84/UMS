@@ -74,6 +74,12 @@ public class StudentBuilder implements Builder<Student, MutableStudent> {
     pBuilder.add("guardianPhoneNo", pStudent.getGuardianPhoneNo());
     pBuilder.add("guardianEmail", pStudent.getGuardianEmail());
 
+    if(pStudent.getAdviser().getId()!=null){
+      pBuilder.add("adviser",pStudent.getAdviser().getId());
+    }
+
+    pBuilder.add("status",pStudent.getStatus().getId());
+
   }
 
   public void build(final MutableStudent pMutableStudent,
