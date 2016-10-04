@@ -40,4 +40,9 @@ public class StudentCache extends ContentCache<Student, MutableStudent, String, 
   public List<Student> getStudentBySemesterIdAndExamDateForCCI(Integer pSemesterId, String pExamDate) {
     return getManager().getStudentBySemesterIdAndExamDateForCCI(pSemesterId,pExamDate);
   }
+
+  @Override
+  public List<Student> getActiveStudents(int pProgramId) {
+    return getManager().getActiveStudents(pProgramId);
+  }
 }

@@ -6,9 +6,13 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.StudentDaoDecorator;
+import org.ums.domain.model.immutable.ProgramType;
 import org.ums.domain.model.immutable.Student;
 import org.ums.domain.model.mutable.MutableStudent;
+import org.ums.enums.StudentStatus;
+import org.ums.persistent.model.PersistentEmployee;
 import org.ums.persistent.model.PersistentStudent;
+import org.ums.persistent.model.PersistentTeacher;
 import org.ums.util.Constants;
 
 import java.sql.ResultSet;
@@ -45,7 +49,9 @@ public class PersistentStudentDao extends StudentDaoDecorator {
       "  CURR_SEMESTER," +
       "  CURR_ENROLLED_SEMESTER," +
       "  THEORY_SECTION," +
-      "  SESSIONAL_SECTION" +
+      "  SESSIONAL_SECTION," +
+      "  ADVISER"+
+      "  STATUS"+
       "  FROM STUDENTS ";
 
   static String UPDATE_ALL = "UPDATE STUDENTS SET" +
@@ -292,6 +298,11 @@ public class PersistentStudentDao extends StudentDaoDecorator {
       student.setTheorySection(rs.getString("THEORY_SECTION"));
       student.setSessionalSection(rs.getString("SESSIONAL_SECTION"));
 
+      String teacherId = rs.getString("ADVISER");
+      PersistentTeacher teacher = new PersistentTeacher();
+      teacher.setId(teacherId);
+      student.setAdviser(teacher);
+      student.setStatus( rs.getInt("STATUS"));
       AtomicReference<Student> atomicReference = new AtomicReference<>(student);
       return atomicReference.get();
     }

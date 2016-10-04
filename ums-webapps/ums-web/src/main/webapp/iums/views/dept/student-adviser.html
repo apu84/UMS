@@ -110,16 +110,26 @@
                             <div class="col-md-12">
                                 <h5  style="background-color: darkgrey; color: ghostwhite"><p class="labels">Change a Student's adviser</p></h5>
                                 <p>Student ID: <input data-ng-model="changeStudentID" /> <button type="button" class="btn btn-primary">Search</button></p>
-                                <p><label class="labels" style="background-color: darkslategray;color: whitesmoke;">Current Adviser</label></p>
-                                <p>Prof. Dr. Abdur Rahim Mollah</p>
-                                <p><label class="labels" style="background-color: darkslategray;color: whitesmoke;">New Adviser</label></p>
-                                <p>
-                                    <label>Select an adviser</label>
-                                    <select data-ng-model="teacherId">
-                                        <option value="">Select an adviser</option>
-                                        <option data-ng-repeat="t in teachers track by t.id" value="{{t.id}}">{{t.employeeName}}</option>
-                                    </select>
-                                </p>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <img src="https://s17.postimg.org/my90ud8db/DB_24944_Munna_copy.jpg" class="img-circle">
+                                        <p>Student Name: Monjur-E-Morshed </p>
+                                        <p>Year:1, Semester: 2</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p><label class="labels" style="background-color: darkslategray;color: whitesmoke;">Current Adviser</label></p>
+                                        <p>Prof. Dr. Abdur Rahim Mollah</p>
+                                        <p><label class="labels" style="background-color: darkslategray;color: whitesmoke;">New Adviser</label></p>
+                                        <p>
+                                            <label>Select an adviser</label>
+                                            <select data-ng-model="teacherId">
+                                                <option value="">Select an adviser</option>
+                                                <option data-ng-repeat="t in teachers track by t.id" value="{{t.id}}">{{t.employeeName}}</option>
+                                            </select>
+                                        </p>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
 

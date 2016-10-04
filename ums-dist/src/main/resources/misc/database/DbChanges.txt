@@ -1,0 +1,14 @@
+//adding 'status' column which will define whether a student is currently active or not
+alter table students
+add status number;
+
+update students
+set status=1;
+
+//in students table, 'adviser' data type is set to number, but, the adviser will be the employee, so as employee_id is varchar2(15), so adviser data type is changed to varchar2(15)
+
+
+alter table students
+modify(
+  adviser varchar2(15)
+);

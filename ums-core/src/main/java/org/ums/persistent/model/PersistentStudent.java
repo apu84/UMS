@@ -2,11 +2,9 @@ package org.ums.persistent.model;
 
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
-import org.ums.domain.model.immutable.Department;
-import org.ums.domain.model.immutable.Program;
-import org.ums.domain.model.immutable.Semester;
-import org.ums.domain.model.immutable.User;
+import org.ums.domain.model.immutable.*;
 import org.ums.domain.model.mutable.MutableStudent;
+import org.ums.enums.StudentStatus;
 import org.ums.manager.DepartmentManager;
 import org.ums.manager.ProgramManager;
 import org.ums.manager.SemesterManager;
@@ -61,12 +59,14 @@ public class PersistentStudent implements MutableStudent {
   private String mSessionalSection;
   private Integer mApplicationType;
   private String mProgramShortName;
+  private Teacher mAdviser;
+  private StudentStatus mStatus;
 
   public PersistentStudent() {
 
   }
 
-  public PersistentStudent(final MutableStudent pMutableStudent) {
+  public PersistentStudent(final MutableStudent pMutableStudent) throws Exception{
     setId(pMutableStudent.getId());
     setUser(pMutableStudent.getUser());
     setFullName(pMutableStudent.getFullName());
@@ -95,6 +95,27 @@ public class PersistentStudent implements MutableStudent {
     setCurrentEnrolledSemester(pMutableStudent.getCurrentEnrolledSemester());
     setApplicationType(pMutableStudent.getApplicationType());
     setProgramShortName(pMutableStudent.getProgramShortName());
+    setAdviser(pMutableStudent.getAdviser());
+  }
+
+  @Override
+  public StudentStatus getStatus() {
+    return mStatus;
+  }
+
+  @Override
+  public void setStatus(int pStatus) {
+    mStatus = StudentStatus.get(pStatus);
+  }
+
+  @Override
+  public Teacher getAdviser()  {
+    return mAdviser;
+  }
+
+  @Override
+  public void setAdviser(Teacher pTeacher){
+    mAdviser = pTeacher;
   }
 
   @Override

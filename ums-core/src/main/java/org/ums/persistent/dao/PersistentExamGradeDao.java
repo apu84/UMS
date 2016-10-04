@@ -315,10 +315,10 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
 
     String query="";
     if(courseType==CourseType.THEORY) {
-      query = SELECT_THEORY_MARKS + " Order by decode(Reg_Type,1,1,2,2,3,3,4,4,5,5,6,6),UG_THEORY_MARKS.Student_Id,Status  ";
+      query = SELECT_THEORY_MARKS + " Order by decode(Reg_Type,1,1,2,2,3,3,4,4,5,5,6,6),UG_THEORY_MARKS.Student_Id,UG_THEORY_MARKS.Status  ";
     }
     else if(courseType==CourseType.SESSIONAL) {
-      query = SELECT_SESSIONAL_MARKS + " Order by decode(Reg_Type,1,1,2,2,3,3,4,4,5,5,6,6),UG_SESSIONAL_MARKS.Student_Id,Status  ";
+      query = SELECT_SESSIONAL_MARKS + " Order by decode(Reg_Type,1,1,2,2,3,3,4,4,5,5,6,6),UG_SESSIONAL_MARKS.Student_Id,UG_SESSIONAL_MARKS.Status  ";
     }
 
     return mJdbcTemplate.query(query,new Object[]{pSemesterId,pCourseId,pExamType.getId()}, new StudentMarksRowMapper(courseType));

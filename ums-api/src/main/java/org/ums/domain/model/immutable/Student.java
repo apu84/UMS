@@ -4,6 +4,7 @@ import org.ums.domain.model.common.EditType;
 import org.ums.domain.model.common.Identifier;
 import org.ums.domain.model.common.LastModifier;
 import org.ums.domain.model.mutable.MutableStudent;
+import org.ums.enums.StudentStatus;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -73,6 +74,10 @@ public interface Student extends Serializable, EditType<MutableStudent>, Identif
   Integer getApplicationType();
 
   String getProgramShortName();
+
+  Teacher getAdviser() ;
+
+  StudentStatus getStatus();
 
   enum EnrollmentType {
     ACTUAL(1),

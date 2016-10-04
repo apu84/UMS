@@ -85,7 +85,8 @@
 /// <reference path='service/ExamGradeService.ts'/>
 /// <reference path='service/ClassRoomService.ts'/>
 /// <reference path='service/CourseServices.ts'/>
-/// <reference path='service/TimeTracker.ts'/>
+/// <reference path='service/StudentService.ts'/>
+/// <reference path='service/TimeTracker.ts'/>    
 
 /// <reference path='controller/student/NewStudent.ts'/>
 /// <reference path='controller/semester/NewSemester.ts'/>
