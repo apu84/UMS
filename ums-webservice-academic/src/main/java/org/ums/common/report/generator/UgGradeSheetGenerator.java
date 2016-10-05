@@ -185,7 +185,7 @@ public class UgGradeSheetGenerator {
 
       student = studentList.get(i);
 
-      if (prevCourseRegType != null && prevCourseRegType != student.getRegType() && examType.getId() != 1) {
+      if (prevCourseRegType != null && prevCourseRegType != student.getRegType() && examType.getId() != ExamType.SEMESTER_FINAL.getId()) {
         p = new Paragraph(student.getRegType().getLabel(), gradeSheetHeader);
         cell = new PdfPCell(p);
         cell.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -203,17 +203,17 @@ public class UgGradeSheetGenerator {
       cell.setHorizontalAlignment(Element.ALIGN_LEFT);
       table.addCell(cell);
       if (courseType == CourseType.THEORY) {
-        p = new Paragraph(student.getQuiz() == null ? "" : String.valueOf(Math.round(student.getQuiz())), nFont);
+        p = new Paragraph(student.getQuiz() == null ? "" : String.valueOf(student.getQuiz()), nFont);
         cell = new PdfPCell(p);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);
 
-        p = new Paragraph(student.getClassPerformance() == null ? "" : String.valueOf(Math.round(student.getClassPerformance())), nFont);
+        p = new Paragraph(student.getClassPerformance() == null ? "" : String.valueOf(student.getClassPerformance()), nFont);
         cell = new PdfPCell(p);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);
 
-        p = new Paragraph(String.valueOf(Math.round(student.getPartA() + student.getPartB())), nFont);
+        p = new Paragraph(String.valueOf(student.getPartA() + student.getPartB()), nFont);
         cell = new PdfPCell(p);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);

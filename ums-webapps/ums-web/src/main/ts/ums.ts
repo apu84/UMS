@@ -754,6 +754,12 @@ module ums {
             }]
           }
         })
+        .state('resultProcessing', {
+          url: "/resultProcessing",
+          controller: 'ResultProcessing',
+          templateUrl: 'views/result/result-processing.html'
+        })
+
       //In database use /dummyController/H or /dummyController/T in the location column
       //https://localhost/ums-web/iums/#/dummyConroller/T
       //https://localhost/ums-web/iums/#/dummyConroller/H

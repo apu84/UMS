@@ -1,0 +1,174 @@
+<div class="row">
+    <div id="arrowDiv" onclick="resetDivs()" >
+        <i class="fa fa-angle-double-right fa-4x"></i></i>
+    </div>
+<div  id="leftDiv" class="panel panel-green">
+    <div class="panel-heading">
+        <h3 class="panel-title">Select Parameters</h3>
+    </div>
+    <div class="panel-body pan">
+        <form action="" class="form-horizontal">
+            <div class="form-body pal">
+                <div class="form-group">
+                    <label class="col-md-4 control-label">Program Type</label>
+                    <div class="col-md-8">
+                        <select class="form-control required" data-ng-model="inputParams.program_type"  data-convert-to-number >
+                            <option  value="11">Undergraduate</option>
+                            <option  value="22">Postgraduate</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-4 control-label">Semester</label>
+                    <div class="col-md-8">
+                        <select class="form-control required" data-ng-model="inputParams.program_type" data-convert-to-number >
+                            <option  value="11012016">Spring, 2016</option>
+                            <option  value="11022015">Fall, 2015</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-4 control-label">Dept./School</label>
+                    <div class="col-md-8">
+                        <select class="form-control required" data-ng-model="inputParams.program_type" data-convert-to-number >
+                            <option  value="11012016">All</option>
+                            <option  value="11012016">CSE</option>
+                            <option  value="11022015">EEE</option>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+            <div class="form-actions text-right pal">
+                <button type="button" class="btn btn-success" data-ng-click="fetchStatusInfo()">Next</button>
+            </div>
+        </form>
+    </div>
+</div>
+<div id="rightDiv">
+    <div class="panel">
+        <div class="panel-heading">Process Status<span
+                class="subtitle"></span></div>
+        <div class="panel-body shadowPanel"   style="min-height: 490px;text-align: center;">
+                <img src="images/matrix_white.gif"  data-ng-show="showGif"/>
+               <div  id="allDept" data-ng-show="showAllDept">
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <div class="panel panel-default">
+                                        <div class="panel-body"><strong class="text-uppercase">Arch</strong>
+                                            <br/><br/>
+                                            <img src="images/processed.jpg" height="64" width="64" />
+                                            <br/><br/>
+                                            <div class="col-lg-12">
+                                                <div class="well well-sm">Processed on 21 Sep, 2016</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="panel panel-default">
+                                        <div class="panel-body"><strong class="text-uppercase">BBA</strong>
+                                            <br/><br/>
+                                            <img src="images/processed.jpg" height="64" width="64" />
+                                            <br/><br/>
+                                            <div class="col-lg-12">
+                                                <div class="well well-sm">Processed on 21 Sep, 2016</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="panel panel-default">
+                                        <div class="panel-body"><strong class="text-uppercase">CE</strong>
+                                            <br/><br/>
+
+                                            <img src="images/notProcessed.png" height="64" width="64" />
+                                            <br/><br/>
+                                            <div class="col-lg-12">
+                                                <div class="well well-sm" style="color: red;">Unprocessed</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="panel panel-default">
+                                        <div class="panel-body"><strong class="text-uppercase">CSE</strong>
+                                            <br/><br/>
+                                            <img src="images/processed.jpg" height="64" width="64" />
+                                            <br/><br/>
+                                            <div class="col-lg-12">
+                                                <div class="well well-sm">Processed on 21 Sep, 2016</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                   <div class="row">
+                       <div class="col-lg-3">
+                           <div class="panel panel-default">
+                               <div class="panel-body"><strong class="text-uppercase">EEE</strong>
+                                   <br/><br/>
+
+                                   <img src="images/readyForProcess.png" height="64" width="64" />
+                                   <br/><br/>
+                                   <div class="col-lg-12">
+                                       <div class="well well-sm" style="color: blue;">Ready to be processed</div>
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+                       <div class="col-lg-3">
+                           <div class="panel panel-default">
+                               <div class="panel-body"><strong class="text-uppercase">TX</strong>
+                                   <br/><br/>
+                                   <img src="images/readyForProcess.png" height="64" width="64" />
+                                   <br/><br/>
+                                   <div class="col-lg-12">
+                                       <div class="well well-sm" style="color: blue;">Ready to be processed</div>
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+                       <div class="col-lg-3">
+                           <div class="panel panel-default">
+                               <div class="panel-body"><strong class="text-uppercase">ME</strong>
+                                   <br/><br/>
+                                   <img src="images/readyForProcess.png" height="64" width="64" />
+                                   <br/><br/>
+                                   <div class="col-lg-12">
+                                       <div class="well well-sm" style="color: blue;">Ready to be processed</div>
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+                       <div class="col-lg-3">
+                           <div class="panel panel-default">
+                               <div class="panel-body"><strong class="text-uppercase">IPE</strong>
+                                   <br/><br/>
+                                   <img src="images/processed.jpg" height="64" width="64" />
+                                   <br/><br/>
+                                   <div class="col-lg-12">
+                                       <div class="well well-sm">Processed on 21 Sep, 2016</div>
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+
+                   </div>
+
+
+               </div>
+
+        </div>
+
+    </div>
+</div>
+</div>
+
+<script type="text/javascript">
+    function resetDivs() {
+        $("#arrowDiv").hide(50);
+        $("#leftDiv").show(100);
+    }
+</script>

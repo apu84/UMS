@@ -110,6 +110,7 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
             grade.setStatusId(jsonObject.getInt("statusId"));
             grade.setStatus(StudentMarksSubmissionStatus.values()[jsonObject.getInt("statusId")]);
 
+            grade.setRegType(Integer.parseInt(jsonObject.getString("regType")));
             //grade.setrec(RecheckStatus.values()[jsonObject.getInt("status")]);
             //grade.setStatus(StudentMarksSubmissionStatus.values()[jsonObject.getInt("status")]);
 

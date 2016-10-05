@@ -26,10 +26,8 @@ module ums {
     }
 
     private fetchCourseInfo(courseNo: string): void {
-      $("#leftDiv").hide();
-      $("#arrowDiv").show();
-      $("#rightDiv").removeClass("orgRightClass");
-      $("#rightDiv").addClass("newRightClass");
+      $("#leftDiv").hide(100);
+      $("#arrowDiv").show(50);
 
       this.$scope.loadingVisibility = true;
       this.$scope.contentVisibility = false;
@@ -52,6 +50,10 @@ module ums {
       var semesterName = this.getSelectedSemester();
       var baseUri: string = '/ums-webservice-academic/academic/student/courseMaterial/semester/' + semesterName + "/course/" + courseNo;
       var downloadBaseUri: string = '/ums-webservice-academic/academic/student/courseMaterial/download/semester/' + semesterName + "/course/" + courseNo;
+
+      $("#courseSelectionDiv").hide(80);
+      $("#topArrowDiv").show(50);
+
       FILEMANAGER_CONFIG.set({
         appName: semesterName + ' > ' + courseNo,
         listUrl: baseUri,

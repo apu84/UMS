@@ -230,78 +230,88 @@ public class GradeSubmissionService {
     //|| partInfo.getStatus()==CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_SCRUTINIZER
     //|| partInfo.getStatus()==CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_HEAD  || partInfo.getStatus()==CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_COE
     if(actualStatusDTO.getStatus()==CourseMarksSubmissionStatus.NOT_SUBMITTED  ){
-      boolean error = false;
-      gradeList.forEach((gradeDTO) -> {
-            try {
-              validateMarks(error, gradeDTO, actualStatusDTO);
-            } catch (Exception ex) {
-              throw new RuntimeException(ex);
-            }
-          }
-      );
-    }
+      boolean hasError = false;
+      for(StudentGradeDto gradeDTO:gradeList){
+        try {
+          hasError = validateMarks(hasError, gradeDTO, actualStatusDTO);
+        } catch (Exception ex) {
+          throw new RuntimeException(ex);
+        }
+      }
+//      gradeList.forEach((gradeDTO) -> {
+//            try {
+//              validateMarks(hasError, gradeDTO, actualStatusDTO);
+//            } catch (Exception ex) {
+//              throw new RuntimeException(ex);
+//            }
+//          }
+//      );
 
+      if(hasError==true){
+        throw new ValidationException("Grade validation failed.");
+      }
+    }
   }
 
-  private boolean validateMarks(boolean error,StudentGradeDto gradeDTO,MarksSubmissionStatusDto partInfo) throws Exception{
+  private Boolean validateMarks(Boolean hasError,StudentGradeDto gradeDTO,MarksSubmissionStatusDto partInfo) throws Exception{
     if(partInfo.getCourseType()==CourseType.THEORY) {
-      error = error && validateQuiz(error, gradeDTO.getQuiz(), gradeDTO.getRegType());
-      error = error && validateClassPerformance(error, gradeDTO.getClassPerformance(), gradeDTO.getRegType());
-      error = error && validatePartA(error, gradeDTO.getPartA(), partInfo.getPart_a_total(), gradeDTO.getRegType());
-      error = error && validatePartB(error, gradeDTO.getPartB(), partInfo.getTotal_part(), partInfo.getPart_b_total(), gradeDTO.getRegType());
-      error = error && validateTheoryTotal(error, gradeDTO);
+      hasError = validateQuiz(hasError, gradeDTO.getQuiz(), gradeDTO.getRegType());
+      hasError = validateClassPerformance(hasError, gradeDTO.getClassPerformance(), gradeDTO.getRegType());
+      hasError = validatePartA(hasError, gradeDTO.getPartA(), partInfo.getPart_a_total(), gradeDTO.getRegType());
+      hasError = validatePartB(hasError, gradeDTO.getPartB(), partInfo.getTotal_part(), partInfo.getPart_b_total(), gradeDTO.getRegType());
+      hasError = validateTheoryTotal(hasError, gradeDTO);
     }
     else if(partInfo.getCourseType()==CourseType.SESSIONAL) {
-      error = error && validateSessionalTotal(error, gradeDTO);
+      hasError = validateSessionalTotal(hasError, gradeDTO);
     }
-    error = error && validateGradeLetter(error,gradeDTO);
-    return error;
+    hasError = validateGradeLetter(hasError,gradeDTO);
+    return hasError;
   }
-  private boolean validateQuiz(boolean error,Float quiz,CourseRegType regType){
+  private Boolean validateQuiz(Boolean error,Float quiz,CourseRegType regType){
     if(quiz>20 && regType==CourseRegType.REGULAR){
-      error = error && Boolean.FALSE;
+      error = Boolean.TRUE;
     }
     return error;
   }
-  private boolean validateClassPerformance(boolean error,Float classPerf,CourseRegType regType){
-    if(classPerf>20 && regType==CourseRegType.REGULAR){
-      error = error && Boolean.FALSE;
+  private Boolean validateClassPerformance(Boolean error,Float classPerf,CourseRegType regType){
+    if(classPerf>10 && regType==CourseRegType.REGULAR){
+      error = Boolean.TRUE;
     }
     return error;
   }
-  private boolean validatePartA(boolean error,Float partA,Integer partAMax,CourseRegType regType){
+  private Boolean validatePartA(Boolean error,Float partA,Integer partAMax,CourseRegType regType){
     if(partA>partAMax){
-      error = error && Boolean.FALSE;
+      error = Boolean.TRUE;
     }
     return error;
   }
-  private boolean validatePartB(boolean error,Float partB,Integer totalPartCount,Integer partBMax,CourseRegType regType){
+  private Boolean validatePartB(Boolean error,Float partB,Integer totalPartCount,Integer partBMax,CourseRegType regType){
     if(totalPartCount==2 && (partB>partBMax)){
-      error = error && Boolean.FALSE;
+      error = Boolean.TRUE;
     }
     if(totalPartCount==1 && (partB>0)){
-      error = error && Boolean.FALSE;
+      error = Boolean.TRUE;
     }
     return error;
   }
 
-  private boolean validateTheoryTotal(boolean error,StudentGradeDto gradeDTO){
-    if(gradeDTO.getTotal()>100 ||  gradeDTO.getTotal() != gradeDTO.getQuiz() +gradeDTO.getClassPerformance() +gradeDTO.getPartA() + gradeDTO.getPartB()){
-      error = error && Boolean.FALSE;
+  private Boolean validateTheoryTotal(Boolean error,StudentGradeDto gradeDTO){
+    if(gradeDTO.getTotal()>100 ||  gradeDTO.getTotal() != Math.round(gradeDTO.getQuiz() +gradeDTO.getClassPerformance() +gradeDTO.getPartA() + gradeDTO.getPartB())){
+      error = Boolean.TRUE;
     }
     return error;
   }
 
-  private boolean validateSessionalTotal(boolean error,StudentGradeDto gradeDTO){
+  private Boolean validateSessionalTotal(Boolean error,StudentGradeDto gradeDTO){
     if(gradeDTO.getTotal()>100){
-      error = error && Boolean.FALSE;
+      error = Boolean.TRUE;
     }
     return error;
   }
 
-  private boolean validateGradeLetter(boolean error,StudentGradeDto gradeDTO) throws  Exception{
-    if(mUtilsService.getGradeLetter(Math.round(gradeDTO.getTotal()),gradeDTO.getRegType()).equalsIgnoreCase(gradeDTO.getGradeLetter())) {
-      error = error && Boolean.FALSE;
+  private Boolean validateGradeLetter(Boolean error,StudentGradeDto gradeDTO) throws  Exception{
+    if(!mUtilsService.getGradeLetter(Math.round(gradeDTO.getTotal()),gradeDTO.getRegType()).equalsIgnoreCase(gradeDTO.getGradeLetter())) {
+      error = Boolean.TRUE;
     }
     return error;
   }
