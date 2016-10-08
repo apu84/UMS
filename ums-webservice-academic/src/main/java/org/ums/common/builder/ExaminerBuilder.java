@@ -5,10 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
-import org.ums.domain.model.immutable.Course;
-import org.ums.domain.model.immutable.Department;
-import org.ums.domain.model.immutable.Examiner;
-import org.ums.domain.model.immutable.Teacher;
+import org.ums.domain.model.immutable.*;
 import org.ums.domain.model.mutable.MutableExaminer;
 import org.ums.manager.CourseManager;
 import org.ums.manager.SemesterManager;
@@ -65,6 +62,18 @@ public class ExaminerBuilder implements Builder<Examiner, MutableExaminer> {
 
     pBuilder.add("courseOfferedByDepartmentId", department.getId());
     pBuilder.add("courseOfferedByDepartmentName", department.getShortName());
+
+    Syllabus syllabus = (Syllabus) pLocalCache.cache(() -> course.getSyllabus(),
+        course.getSyllabusId(), Syllabus.class);
+
+    Program program = (Program) pLocalCache.cache(() -> syllabus.getProgram(),
+        syllabus.getProgramId(), Program.class);
+
+    Department offeredToDepartment = (Department) pLocalCache.cache(() -> program.getDepartment(),
+        program.getDepartmentId(), Department.class);
+
+    pBuilder.add("courseOfferedToDepartmentId", offeredToDepartment.getId());
+    pBuilder.add("courseOfferedToDepartmentName", offeredToDepartment.getShortName());
   }
 
   @Override

@@ -91,6 +91,7 @@
 /// <reference path='service/TimeTracker.ts'/>
 /// <reference path='service/EmployeeService.ts'/>
 /// <reference path='service/StudentService.ts'/>
+/// <reference path='service/TeacherService.ts'/>
 
 
 
