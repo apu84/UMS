@@ -16,27 +16,11 @@
 ///<reference path='lib/angular-ui-sortable.d.ts'/>
 ///<reference path='lib/moment.d.ts'/>
 
-/// <reference path='ums.ts'/>
-/// <reference path='data.ts'/>
 /// <reference path='controller/AppController.ts'/>
 /// <reference path='controller/MainController.ts'/>
 
-/// <reference path='controller/student/NewStudent.ts'/>
-/// <reference path='controller/semester/NewSemester.ts'/>
-/// <reference path='controller/semester/SemesterInfo.ts'/>
-/// <reference path='controller/semester/SemesterSyllabusMap.ts'/>
-/// <reference path='controller/semester/ExamSeatPlan.ts'/>
-
-/// <reference path='controller/course/NewCourseUg.ts'/>
-/// <reference path='controller/course/NewCoursePg.ts'/>
-
-/// <reference path='controller/common/ChangePassword.ts'/>
-/// <reference path='controller/common/Logout.ts'/>
-/// <reference path='controller/common/PasswordReport.ts'/>
-/// <reference path='controller/common/AssignRole.ts'/>
-/// <reference path='controller/dept/TeacherAssignment.ts'/>
-/// <reference path='controller/dept/CourseTeacher.ts'/>
-/// <reference path='controller/dept/Examiner.ts'/>
+/// <reference path='controller/ChangePassword.ts'/>
+/// <reference path='controller/Logout.ts'/>
 
 /// <reference path='lib/jquery.dragNdrop.d.ts'/>
 /// <reference path='lib/jquery.tab.d.ts'/>
@@ -49,6 +33,7 @@
 /// <reference path='service/HttpClient.ts'/>
 /// <reference path='service/FileUpload.ts'/>
 /// <reference path='service/CookieService.ts'/>
+/// <reference path='service/Settings.ts'/>
 
 /// <reference path='controller/AppController.ts'/>
 /// <reference path='controller/MainController.ts'/>

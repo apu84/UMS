@@ -26,6 +26,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/service/HttpClient.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/FileUpload.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/CookieService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/Settings.ts'/>
 
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/AppController.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/MainController.ts'/>
