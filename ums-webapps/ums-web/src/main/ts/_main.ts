@@ -123,6 +123,8 @@
 /// <reference path='controller/course-material/StudentCourseMaterial.ts'/>
 /// <reference path='controller/grade/MarksSubmission.ts'/>
 /// <reference path='controller/grade/GradeSubmissionDeadLine.ts'/>
+/// <reference path='controller/result/ResultProcessing.ts'/>
+
 /// <reference path='Utils.ts'/>
 
 /// <reference path='controller/syllabus/FullSyllabus.ts'/>
