@@ -22,12 +22,13 @@ module ums {
   }
 
   export class Examiner extends TeacherAssignment<IExaminer> {
-    public static $inject = ['appConstants', 'HttpClient', '$scope', '$q', 'notify'];
+    public static $inject = ['appConstants', 'HttpClient', '$scope', '$q', 'notify', 'TeacherService'];
 
     constructor(appConstants: any, httpClient: HttpClient,
                 $scope: ITeacherAssignmentScope, $q: ng.IQService,
-                notify: Notify) {
-      super(appConstants, httpClient, $scope, $q, notify);
+                notify: Notify,
+                teacherService: TeacherService) {
+      super(appConstants, httpClient, $scope, $q, notify, teacherService);
     }
 
     public formatTeacher(examiners: Array<IExaminer>, courseId?: string): void {

@@ -21,45 +21,48 @@ public abstract class AbstractAssignedTeacherDao<R extends Identifier<I>, M exte
   protected abstract String getSelectBySemesterProgram();
 
   @Override
-  public List<R> getAssignedTeachers(Integer pProgramId, Integer pSemesterId) {
+  public List<R> getAssignedTeachers(Integer pProgramId, Integer pSemesterId, String pOfferedBy) {
     String query = String.format(getSelectBySemesterProgram(), "", "");
-    return mJdbcTemplate.query(query, new Object[]{pProgramId, pSemesterId}, getRowMapper());
+    return mJdbcTemplate.query(query, new Object[]{pProgramId, pSemesterId, pOfferedBy}, getRowMapper());
   }
 
   @Override
-  public List<R> getAssignedTeachers(Integer pProgramId, Integer pSemesterId, Integer pYear, Integer pSemester) {
+  public List<R> getAssignedTeachers(Integer pProgramId, Integer pSemesterId, Integer pYear, Integer pSemester, String pOfferedBy) {
     String query = String.format(getSelectBySemesterProgram(), " AND t2.year = ? AND T2.SEMESTER = ? ", "", "");
-    return mJdbcTemplate.query(query, new Object[]{pProgramId, pSemesterId, pYear, pSemester}, getRowMapper());
+    return mJdbcTemplate.query(query, new Object[]{pProgramId, pSemesterId, pYear, pSemester, pOfferedBy}, getRowMapper());
   }
 
   @Override
-  public List<R> getAssignedTeachers(Integer pProgramId, Integer pSemesterId, Integer pYear) {
+  public List<R> getAssignedTeachers(Integer pProgramId, Integer pSemesterId, Integer pYear, String pOfferedBy) {
     String query = String.format(getSelectBySemesterProgram(), " AND t2.year = ? ", "", "");
-    return mJdbcTemplate.query(query, new Object[]{pProgramId, pSemesterId, pYear}, getRowMapper());
+    return mJdbcTemplate.query(query, new Object[]{pProgramId, pSemesterId, pYear, pOfferedBy}, getRowMapper());
   }
 
   @Override
-  public List<R> getAssignedTeachers(Integer pProgramId, Integer pSemesterId, Integer pYear, CourseCategory pCourseCategory) {
+  public List<R> getAssignedTeachers(Integer pProgramId, Integer pSemesterId, Integer pYear, CourseCategory pCourseCategory, String pOfferedBy) {
     String query = String.format(getSelectBySemesterProgram(), " AND t2.year = ? ", " AND t2.COURSE_CATEGORY = ? ", "");
-    return mJdbcTemplate.query(query, new Object[]{pProgramId, pSemesterId, pYear, pCourseCategory.getValue()}, getRowMapper());
+    return mJdbcTemplate.query(query,
+        new Object[]{pProgramId, pSemesterId, pYear, pCourseCategory.getValue(), pOfferedBy}, getRowMapper());
   }
 
   @Override
-  public List<R> getAssignedTeachers(Integer pProgramId, Integer pSemesterId, Integer pYear, Integer pSemester, CourseCategory pCourseCategory) {
+  public List<R> getAssignedTeachers(Integer pProgramId, Integer pSemesterId, Integer pYear, Integer pSemester, CourseCategory pCourseCategory, String pOfferedBy) {
     String query = String.format(getSelectBySemesterProgram(), " AND t2.year = ? AND t2.semester = ? ", " AND t2.COURSE_CATEGORY = ? ", "");
-    return mJdbcTemplate.query(query, new Object[]{pProgramId, pSemesterId, pYear, pSemester, pCourseCategory.getValue()}, getRowMapper());
+    return mJdbcTemplate.query(query,
+        new Object[]{pProgramId, pSemesterId, pYear, pSemester, pCourseCategory.getValue(), pOfferedBy}, getRowMapper());
   }
 
   @Override
-  public List<R> getAssignedTeachers(Integer pProgramId, Integer pSemesterId, CourseCategory pCourseCategory) {
+  public List<R> getAssignedTeachers(Integer pProgramId, Integer pSemesterId, CourseCategory pCourseCategory, String pOfferedBy) {
     String query = String.format(getSelectBySemesterProgram(), "", " AND t2.COURSE_CATEGORY = ? ", "");
-    return mJdbcTemplate.query(query, new Object[]{pProgramId, pSemesterId, pCourseCategory.getValue()}, getRowMapper());
+    return mJdbcTemplate.query(query,
+        new Object[]{pProgramId, pSemesterId, pCourseCategory.getValue(), pOfferedBy}, getRowMapper());
   }
 
   @Override
-  public List<R> getAssignedTeachers(Integer pProgramId, Integer pSemesterId, String pCourseId) {
+  public List<R> getAssignedTeachers(Integer pProgramId, Integer pSemesterId, String pCourseId, String pOfferedBy) {
     String query = String.format(getSelectBySemesterProgram(), "", "", " WHERE t3.course_id = ? ");
-    return mJdbcTemplate.query(query, new Object[]{pProgramId, pSemesterId, pCourseId}, getRowMapper());
+    return mJdbcTemplate.query(query, new Object[]{pProgramId, pSemesterId, pOfferedBy, pCourseId}, getRowMapper());
   }
 
   @Override

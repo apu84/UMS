@@ -32,38 +32,38 @@ public class AssignedTeacherCache<R extends Identifier<I> & LastModifier, M exte
   }
 
   @Override
-  public List<R> getAssignedTeachers(Integer pProgramId, Integer pSemesterId) {
-    return getManager().getAssignedTeachers(pProgramId, pSemesterId);
+  public List<R> getAssignedTeachers(Integer pProgramId, Integer pSemesterId, String pOfferedBy) {
+    return getManager().getAssignedTeachers(pProgramId, pSemesterId, pOfferedBy);
   }
 
   @Override
-  public List<R> getAssignedTeachers(Integer pProgramId, Integer pSemesterId, CourseCategory pCourseCategory) {
-    return getManager().getAssignedTeachers(pProgramId, pSemesterId, pCourseCategory);
+  public List<R> getAssignedTeachers(Integer pProgramId, Integer pSemesterId, CourseCategory pCourseCategory, String pOfferedBy) {
+    return getManager().getAssignedTeachers(pProgramId, pSemesterId, pCourseCategory, pOfferedBy);
   }
 
   @Override
-  public List<R> getAssignedTeachers(Integer pProgramId, Integer pSemesterId, Integer pYear) {
-    return getManager().getAssignedTeachers(pProgramId, pSemesterId, pYear);
+  public List<R> getAssignedTeachers(Integer pProgramId, Integer pSemesterId, Integer pYear, String pOfferedBy) {
+    return getManager().getAssignedTeachers(pProgramId, pSemesterId, pYear, pOfferedBy);
   }
 
   @Override
-  public List<R> getAssignedTeachers(Integer pProgramId, Integer pSemesterId, Integer pYear, CourseCategory pCourseCategory) {
-    return getManager().getAssignedTeachers(pProgramId, pSemesterId, pYear, pCourseCategory);
+  public List<R> getAssignedTeachers(Integer pProgramId, Integer pSemesterId, Integer pYear, CourseCategory pCourseCategory, String pOfferedBy) {
+    return getManager().getAssignedTeachers(pProgramId, pSemesterId, pYear, pCourseCategory, pOfferedBy);
   }
 
   @Override
-  public List<R> getAssignedTeachers(Integer pProgramId, Integer pSemesterId, Integer pYear, Integer pSemester) {
-    return getManager().getAssignedTeachers(pProgramId, pSemesterId, pYear, pSemester);
+  public List<R> getAssignedTeachers(Integer pProgramId, Integer pSemesterId, Integer pYear, Integer pSemester, String pOfferedBy) {
+    return getManager().getAssignedTeachers(pProgramId, pSemesterId, pYear, pSemester, pOfferedBy);
   }
 
   @Override
-  public List<R> getAssignedTeachers(Integer pProgramId, Integer pSemesterId, Integer pYear, Integer pSemester, CourseCategory pCourseCategory) {
-    return getManager().getAssignedTeachers(pProgramId, pSemesterId, pYear, pSemester, pCourseCategory);
+  public List<R> getAssignedTeachers(Integer pProgramId, Integer pSemesterId, Integer pYear, Integer pSemester, CourseCategory pCourseCategory, String pOfferedBy) {
+    return getManager().getAssignedTeachers(pProgramId, pSemesterId, pYear, pSemester, pCourseCategory, pOfferedBy);
   }
 
   @Override
-  public List<R> getAssignedTeachers(Integer pProgramId, Integer pSemesterId, String pCourseId) {
-    return getManager().getAssignedTeachers(pProgramId, pSemesterId, pCourseId);
+  public List<R> getAssignedTeachers(Integer pProgramId, Integer pSemesterId, String pCourseId, String pOfferedBy) {
+    return getManager().getAssignedTeachers(pProgramId, pSemesterId, pCourseId, pOfferedBy);
   }
 
   @Override

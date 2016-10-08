@@ -1,5 +1,6 @@
 package org.ums.common.academic.resource.helper;
 
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -7,9 +8,11 @@ import org.springframework.util.StringUtils;
 import org.ums.cache.LocalCache;
 import org.ums.common.builder.ExaminerBuilder;
 import org.ums.domain.model.immutable.Examiner;
+import org.ums.domain.model.immutable.User;
 import org.ums.domain.model.mutable.MutableExaminer;
 import org.ums.exceptions.ValidationException;
 import org.ums.manager.AssignedTeacherManager;
+import org.ums.manager.UserManager;
 import org.ums.message.MessageResource;
 import org.ums.persistent.model.PersistentExaminer;
 
@@ -31,6 +34,9 @@ public class ExaminerResourceHelper
 
   @Autowired
   private MessageResource mMessageResource;
+
+  @Autowired
+  private UserManager mUserManager;
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
@@ -64,12 +70,15 @@ public class ExaminerResourceHelper
       Integer programId = Integer.parseInt(jsonObject.getString("programId"));
       MutableExaminer mutableExaminer = new PersistentExaminer();
       getBuilder().build(mutableExaminer, jsonObject, localCache);
-
+      User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
       switch (updateType) {
         case "insert":
           //First validate whether there is already an entry for this course
           List<Examiner> examiners
-              = mExaminerManager.getAssignedTeachers(programId, mutableExaminer.getSemesterId(), mutableExaminer.getCourseId());
+              = mExaminerManager.getAssignedTeachers(programId,
+              mutableExaminer.getSemesterId(),
+              mutableExaminer.getCourseId(),
+              user.getDepartment().getId());
           if (examiners.size() > 0
               && (!StringUtils.isEmpty(examiners.get(0).getPreparerId())
               || !StringUtils.isEmpty(examiners.get(0).getScrutinizerId()))) {

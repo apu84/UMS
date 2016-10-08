@@ -5,10 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
-import org.ums.domain.model.immutable.Course;
-import org.ums.domain.model.immutable.CourseTeacher;
-import org.ums.domain.model.immutable.Department;
-import org.ums.domain.model.immutable.Teacher;
+import org.ums.domain.model.immutable.*;
 import org.ums.domain.model.mutable.MutableCourseTeacher;
 import org.ums.manager.CourseManager;
 import org.ums.manager.SemesterManager;
@@ -43,7 +40,7 @@ public class CourseTeacherBuilder implements Builder<CourseTeacher, MutableCours
     pBuilder.add("year", course.getYear());
     pBuilder.add("semester", course.getSemester());
     pBuilder.add("syllabusId", course.getSyllabusId());
-    pBuilder.add("programName", course.getSyllabus().getProgram().getShortName());
+
 
     if (!StringUtils.isEmpty(pReadOnly.getTeacherId())) {
       Teacher teacher = (Teacher) pLocalCache.cache(() -> pReadOnly.getTeacher(),
@@ -59,8 +56,21 @@ public class CourseTeacherBuilder implements Builder<CourseTeacher, MutableCours
     Department department = (Department) pLocalCache.cache(() -> course.getOfferedBy(),
         course.getOfferedDepartmentId(), Department.class);
 
+    Syllabus syllabus = (Syllabus) pLocalCache.cache(() -> course.getSyllabus(),
+        course.getSyllabusId(), Syllabus.class);
+
+    Program program = (Program) pLocalCache.cache(() -> syllabus.getProgram(),
+        syllabus.getProgramId(), Program.class);
+
+    pBuilder.add("programName", program.getShortName());
+
+    Department offeredToDepartment = (Department) pLocalCache.cache(() -> program.getDepartment(),
+        program.getDepartmentId(), Department.class);
+
     pBuilder.add("courseOfferedByDepartmentId", department.getId());
     pBuilder.add("courseOfferedByDepartmentName", department.getShortName());
+    pBuilder.add("courseOfferedToDepartmentId", offeredToDepartment.getId());
+    pBuilder.add("courseOfferedToDepartmentName", offeredToDepartment.getShortName());
     pBuilder.add("semesterName", pReadOnly.getSemester().getName());
   }
 
