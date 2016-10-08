@@ -39,6 +39,8 @@
                 <argument>--out</argument>
                 <argument>${webappDirectory}/iums/js/main.js</argument>
                 <argument>${basedir}/src/main/ts/_main.ts</argument>
+                <argument>--target</argument>
+                <argument>es5</argument>
               </arguments>
             </configuration>
           </execution>
