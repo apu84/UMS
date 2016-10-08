@@ -43,8 +43,10 @@ private showDefault(deptId:String):void{
 
   setTimeout(function(){
     $("#"+deptId+"_view1").fadeIn(200);
-    if($("#"+deptId+"_download")){
-      $("#"+deptId+"_download").fadeIn(100);
+    if($("#"+deptId+"_download")) {
+      $("#" + deptId + "_download").fadeIn(100);
+    }
+    $("#"+deptId+"").fadeIn(100);
     if($("#"+deptId+"_publish")){
       $("#"+deptId+"_publish").fadeIn(100);
     }

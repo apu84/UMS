@@ -350,6 +350,16 @@ module ums {
                 longName: "Bachelor in Mechanical Engineering"
               }
             ]
+          },
+          {
+            deptId: "07-ForExamRoutine",
+            programs: [
+              {
+                id: "110708",
+                shortName: "BSC in ME",
+                longName: "Bachelor in Mechanical Engineering"
+              }
+            ]
           }
         ],
         pgPrograms: [],

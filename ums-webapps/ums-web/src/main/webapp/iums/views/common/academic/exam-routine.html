@@ -17,25 +17,25 @@
 </style>
 <div class="row">
     <div class="col-md-12">
-            <div class="panel panel-default">
-                <div class="panel-body shadowPanel" style="min-height: 600px;">
+        <div class="panel panel-default">
+            <div class="panel-body shadowPanel" style="min-height: 600px;">
                 <div class="row">
                     <div class="col-md-6">
-                            <font color="blue"> Semester :</font>
-                            <select data-ng-model="routine.semester" data-ng-change="fetchSavedRoutine()">
-                                <option value="0" ng-selected="true">Select a Semester</option>
-                                <option value="11012016">Spring, 2016</option>
-                                <option value="11020106">Fall, 2016</option>
-                                <option value="11012015">Spring, 2015</option>
-                                <option value="11022015">Fall, 2015</option>
-                            </select>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <font color="blue">Exam Type :</font>
-                            <select data-ng-model="routine.examType" data-ng-change="fetchSavedRoutine()">
-                                <option value="0" ng-selected="true">Select Exam Type</option>
-                                <option value="1">Regular Exam</option>
-                                <option value="2">Carry/Improvement</option>
-                            </select>
+                        <font color="blue"> Semester :</font>
+                        <select data-ng-model="routine.semester" data-ng-change="fetchSavedRoutine()">
+                            <option value="0" ng-selected="true">Select a Semester</option>
+                            <option value="11012016">Spring, 2016</option>
+                            <option value="11020106">Fall, 2016</option>
+                            <option value="11012015">Spring, 2015</option>
+                            <option value="11022015">Fall, 2015</option>
+                        </select>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <font color="blue">Exam Type :</font>
+                        <select data-ng-model="routine.examType" data-ng-change="fetchSavedRoutine()">
+                            <option value="0" ng-selected="true">Select Exam Type</option>
+                            <option value="1">Regular Exam</option>
+                            <option value="2">Carry/Improvement</option>
+                        </select>
                     </div>
                     <div class="col-md-6" style="text-align: right;">
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -60,27 +60,36 @@
                         <th width="6%" class="sorting">Semester<br/>(Student's)</th>
                         <th width="13%" class="sorting">Course No.</th>
                         <th width="33%" class="sorting">Course Title</th>
-                        <th width="6%" class="sorting">Delete321</th>
+                        <th width="6%" class="sorting">Delete</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr ng-repeat="date_time in routine.date_times ">
                         <td align="center">
-                            <div class="input-icon right">
+                            <div class="input-icon right" data-ng-hide="date_time.readOnly">
                                 <i class="fa fa-calendar"></i>
-                                <input  id="date_{{::date_time.index}}" type="text"  data-ng-model="date_time.examDate" data-date-format="dd/mm/yyyy" placeholder="DD/MM/YYYY" class="datepicker-default form-control required" autocomplete="off"/><br/>
+                                <input  id="date_{{::date_time.index}}" type="text"  data-ng-model="date_time.examDate" data-date-format="dd/mm/yyyy"
+                                        placeholder="DD/MM/YYYY" class="datepicker-default form-control required" autocomplete="off"/><br/>
+                            </div>
+                            <div class="input-icon right" data-ng-show="date_time.readOnly">
+                                {{date_time.examDate}}
                             </div>
 
-                            <select class="form-control" data-ng-model="date_time.examTime">
+
+                            <select class="form-control" data-ng-model="date_time.examTime" data-ng-hide="date_time.readOnly">
                                 <option data-ng-repeat="examTime in data.examTimeOptions" value="{{::examTime.id}}">{{::examTime.name}}</option>
                             </select>
+                            <div class="input-icon right" data-ng-show="date_time.readOnly" >
+                                {{date_time.examTime}}
+                            </div>
+
                             <br/><br/>
                             <a href="javascript:;" class="btn btn-xs btn-default btn-round"
-                               data-ng-click="addNewProgram(date_time.index)" style="border-radius: 15px;">
+                               data-ng-click="addNewProgram(date_time.index)" style="border-radius: 15px;" data-ng-hide="date_time.readOnly">
                                 <i class="fa fa-plus-circle" style="color: blue;"></i>
                             </a>
                             <a href="javascript:;" class="btn btn-xs btn-default btn-round disabled"
-                               style="border-radius: 15px;">
+                               style="border-radius: 15px;" data-ng-show="date_time.readOnly">
                                 <i class="fa fa-plus-circle" style="color: darkslategrey;"></i>
                             </a>
 
@@ -89,11 +98,10 @@
                                 <i class="fa fa-floppy-o" style="color: green;"></i>
                             </a>
                             <a href="javascript:;" class="btn btn-xs btn-default btn-round"
-                               data-ng-click="editDateTime(date_time)">
+                               data-ng-click="editDateTime(date_time)" data-ng-show="date_time.readOnly">
                                 <i class="fa fa-edit" style="color: orange;"></i>
                             </a>
-                            <a href="javascript:;" class="btn btn-xs btn-default btn-round disabled"
-                               >
+                            <a href="javascript:;" class="btn btn-xs btn-default btn-round disabled" data-ng-hide="date_time.readOnly">
                                 <i class="fa fa-edit" style="color: darkslategrey;"></i>
                             </a>
 
@@ -107,18 +115,15 @@
                                     <td width="19%" align="center" style="vertical-align: top;padding-top: 20px;padding-bottom: 20px; ">
 
 
-                                        <select id="program_{{::date_time.index}}{{::program.index}}"  class="form-control"  style="width: 80%"  data-ng-model="exam_program"
-                                            ng-change="programSelectionChanged(date_time,program)"
-                                            ng-options="ugProgram.programs[0].shortName for ugProgram in data.ugPrograms track by ugProgram.programs[0].id">
+                                        <select id="program_{{date_time.index}}{{program.index}}" data-ng-hide="date_time.readOnly" class="form-control"  style="width: 80%" data-ng-model="program.programId"
+                                                ng-change="programSelectionChanged(program,date_time)">
+                                            <option data-ng-repeat="ugProgram in data.ugPrograms" value="{{ugProgram.programs[0].id}}">{{ugProgram.programs[0].shortName}}</option>
                                         </select>
-
-                                        <!--
-                                        <select id="program_{{date_time.index}}{{program.index}}"  data-ng-hide="date_time.readOnly" class="form-control"  style="width: 80%"  data-ng-model="exam_program"
-                                                ng-change="programSelectionChanged(date_time,program)"
-                                                ng-options="ugProgram.programs[0].shortName for ugProgram in data.ugPrograms track by ugProgram.programs[0].id">
-                                        </select >
-                                        -->
+                                        <div  data-ng-show="date_time.readOnly">
+                                            {{program.programName}}
+                                        </div>
                                         <br/>
+
                                         <a href="javascript:;" class="btn btn-xs btn-default"
                                            data-ng-click="addNewCourse(date_time,program)">
                                             &nbsp;&nbsp;Add&nbsp;&nbsp; <i class="fa fa-plus-circle" style="color: blue;"></i>
@@ -139,19 +144,28 @@
                                         <table width="100%">
                                             <tr ng-repeat="course in program.courses">
                                                 <td width="11%" align="center" style="padding-top: 5px;padding-bottom: 5px;height: 45px;" height="45px">
-                                                    <input id="year_{{::date_time.index}}{{::program.index}}{{::course.index}}" type="text" class="form-control" style="width: 80%;height: 25px;text-align: center;padding: 0px;" data-ng-model="course.year" />
+                                                    <input id="year_{{::date_time.index}}{{::program.index}}{{::course.index}}" type="text" class="form-control" style="width: 80%;height: 25px;text-align: center;padding: 0px;" data-ng-model="course.year"  data-ng-hide="date_time.readOnly"/>
+                                                    <div  data-ng-show="date_time.readOnly">
+                                                        {{course.year}}
+                                                    </div>
+
                                                 </td>
                                                 <td width="11%" align="center" style="padding-top: 5px;padding-bottom: 5px;">
-                                                    <input id="semester_{{::date_time.index}}{{::program.index}}{{::course.index}}" type="text" class="form-control" style="width: 80%;height: 25px;text-align: center;padding: 0px;" data-ng-model="course.semester" />
-
+                                                    <input id="semester_{{::date_time.index}}{{::program.index}}{{::course.index}}" type="text" class="form-control" style="width: 80%;height: 25px;text-align: center;padding: 0px;" data-ng-model="course.semester"  data-ng-hide="date_time.readOnly"//>
+                                                    <div  data-ng-show="date_time.readOnly">
+                                                        {{course.semester}}
+                                                    </div>
                                                 </td>
-                                                <td width="18%" align="center" style="padding-top: 5px;padding-bottom: 5px;">
-                                                    <select id="course_{{::date_time.index}}{{::program.index}}{{::course.index}}"
-                                                            class="select2-size form-control" style="width: 90%;height: 25px;text-align: center;padding: 0px;"
-                                                                       ng-model="exam_course_id" data-ng-change="courseSelectionChanged(program,course,exam_course_id)" >
-                                                    <option data-ng-repeat="exam_course in courseArr" value="{{::exam_course.id}}">{{::exam_course.no}}</option>
-                                                </select>
 
+                                                <td width="18%" align="center" style="padding-top: 5px;padding-bottom: 5px;">
+                                                    <select id="course_{{date_time.index}}{{program.index}}{{course.index}}" data-ng-hide="date_time.readOnly" class="select2-size form-control" style="width: 90%;height: 25px;text-align: center;padding: 0px;"
+                                                            ng-model="exam_course.id" data-ng-change="courseSelectionChanged(program,course,exam_course.id)">
+                                                        <option data-ng-repeat="exam_course in program.courseArr" value="{{exam_course.id}}">{{exam_course.no}}</option>
+                                                    </select>
+
+                                                    <div  data-ng-show="date_time.readOnly">
+                                                        {{course.no}}
+                                                    </div>
                                                 </td>
                                                 <td width="53%" align="left" style="padding-left:10px;padding-top: 5px;padding-bottom: 5px;">{{course.title}}</td>
                                                 <td width="12%" align="center" style="padding-top: 5px;padding-bottom: 5px;">
