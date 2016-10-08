@@ -60,11 +60,13 @@
         <value>classpath:mail-config.properties</value>
         <value>classpath:caching.properties</value>
         <value>classpath:mongodb.properties</value>
+        <value>classpath:notification.properties</value>
         <value>${UMS_CONFIG}/jdbc.properties</value>
         <value>${UMS_CONFIG}/common.properties</value>
         <value>${UMS_CONFIG}/mail-config.properties</value>
         <value>${UMS_CONFIG}/caching.properties</value>
         <value>${UMS_CONFIG}/mongodb.properties</value>
+        <value>${UMS_CONFIG}/notification.properties</value>
       </list>
     </property>
     <property name="ignoreUnresolvablePlaceholders" value="true"/>

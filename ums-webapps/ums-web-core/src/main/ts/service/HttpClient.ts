@@ -94,7 +94,7 @@ module ums {
                 error?: (response: ng.IHttpPromiseCallbackArg<any>) => void,
                 responseType?: string): void {
       var token = this.$http.defaults.headers.common['X-Authorization'];
-      $.ajax(url, {
+      $.ajax(this.baseURI.toAbsolute(url), {
         beforeSend: function (xhr) {
           xhr.setRequestHeader("X-Authorization", token);
           xhr.setRequestHeader("Accept", contentType);

@@ -19,7 +19,8 @@ module ums {
 
     constructor(private httpClient: HttpClient,
                 private $q: ng.IQService,
-                private $interval: ng.IIntervalService) {
+                private $interval: ng.IIntervalService,
+                private settings: Settings) {
 
     }
 
@@ -28,9 +29,15 @@ module ums {
     public link = ($scope: NotificationScope, element: JQuery, attributes: any) => {
       this.scope = $scope;
       this.scope.numOfUnreadNotification = 0;
-      this.intervalPromise = this.$interval(()=> {
-        this.getNotification();
-      }, 10000);
+      
+      this.settings.settings.then((appSettings: {[key: string]: any}) => {
+        if (appSettings['notification.enabled']) {
+          this.getNotification();
+          this.intervalPromise = this.$interval(()=> {
+            this.getNotification();
+          }, appSettings['polling.interval']);
+        }
+      });
 
       this.scope.setReadStatus = this.setReadStatus.bind(this);
     };
@@ -38,7 +45,7 @@ module ums {
     public templateUrl = "./views/directive/notification.html";
 
     private getNotification() {
-      this.httpClient.poll("/ums-webservice-academic/notification/10/", HttpClient.MIME_TYPE_JSON,
+      this.httpClient.poll("notification/10/", HttpClient.MIME_TYPE_JSON,
           (response: NotificationEntries)=> {
             var tempCount: number = 0;
             for (var i = 0; i < response.entries.length; i++) {
@@ -72,7 +79,12 @@ module ums {
           });
     }
   }
-  UMS.directive("notification", ['HttpClient', '$q', '$interval', (httpClient, $q, $interval)=> {
-    return new Notification(httpClient, $q, $interval);
+  UMS.directive("notification",
+      ['HttpClient',
+        '$q',
+        '$interval',
+        'Settings',
+        (httpClient, $q, $interval, settings: Settings)=> {
+          return new Notification(httpClient, $q, $interval, settings);
   }]);
 }

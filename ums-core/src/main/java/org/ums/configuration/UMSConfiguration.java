@@ -14,6 +14,12 @@ public class UMSConfiguration {
   @Value("${enable.objectDb}")
   private boolean mEnableObjectDb;
 
+  @Value("${notification.service.enabled}")
+  private boolean mNotificationServiceEnabled;
+
+  @Value("${pollingInterval}")
+  private int mPollingInterval;
+
   public boolean isOwnerOnlyModification() {
     return mOwnerOnlyModification;
   }
@@ -28,5 +34,13 @@ public class UMSConfiguration {
 
   public void setEnableObjectDb(boolean pEnableObjectDb) {
     mEnableObjectDb = pEnableObjectDb;
+  }
+
+  public boolean isNotificationServiceEnabled() {
+    return mNotificationServiceEnabled;
+  }
+
+  public int getPollingInterval() {
+    return mPollingInterval;
   }
 }
