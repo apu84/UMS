@@ -14,6 +14,12 @@
         margin-top: -2px !important;
     }
 
+    table#routineTable>tbody>tr>td {
+        border: 1px solid black;
+    }
+    table#programTable>tbody>tr>td {
+        border: 1px solid black;
+    }
 </style>
 <div class="row">
     <div class="col-md-12">
@@ -51,7 +57,7 @@
                     </div>
                 </div>
 
-                <table class="table table-hover table-bordered table-advanced" style="margin-top: 20px;border-collapse: collapse;" cellpadding="0" cellspacing="0">
+                <table id="routineTable" class="table table-hover table-bordered table-advanced" style="margin-top: 20px;border-collapse: collapse;" cellpadding="0" cellspacing="0">
                     <thead>
                     <tr role="row" class="heading">
                         <th width="17%" class="sorting">Date-Time</th>
@@ -65,7 +71,7 @@
                     </thead>
                     <tbody>
                     <tr ng-repeat="date_time in routine.date_times ">
-                        <td align="center">
+                        <td align="center" style="border-right: none;">
                             <div class="input-icon right" data-ng-hide="date_time.readOnly">
                                 <i class="fa fa-calendar"></i>
                                 <input  id="date_{{::date_time.index}}" type="text"  data-ng-model="date_time.examDate" data-date-format="dd/mm/yyyy"
@@ -109,10 +115,10 @@
                                data-ng-click="removeDateTime(date_time.index)">
                                 <i class="fa fa-times" style="color: red;"></i>
                             </a>
-                        <td colspan="6" style="padding: 0px;">
-                            <table width="100%">
+                        <td colspan="6" style="padding: 0px;border: none;">
+                            <table width="100%" id="programTable">
                                 <tr ng-repeat="program in date_time.programs">
-                                    <td width="19%" align="center" style="vertical-align: top;padding-top: 20px;padding-bottom: 20px; ">
+                                    <td width="19%" align="center" style="vertical-align: top;padding-top: 20px;padding-bottom: 20px; border-bottom: none;">
 
 
                                         <select id="program_{{date_time.index}}{{program.index}}" data-ng-hide="date_time.readOnly" class="form-control"  style="width: 80%" data-ng-model="program.programId"
@@ -124,23 +130,28 @@
                                         </div>
                                         <br/>
 
-                                        <a href="javascript:;" class="btn btn-xs btn-default"
+                                        <a href="javascript:;" class="btn btn-xs btn-default btn-round"
+                                           data-ng-click="addNewProgram(date_time.index)" style="border-radius: 15px;" data-ng-hide="date_time.readOnly">
+                                            <i class="fa fa-plus-circle" style="color: blue;"></i>
+                                        </a>
+
+                                        <a href="javascript:;" class="btn btn-xs btn-default btn-round"
                                            data-ng-click="addNewCourse(date_time,program)">
-                                            &nbsp;&nbsp;Add&nbsp;&nbsp; <i class="fa fa-plus-circle" style="color: blue;"></i>
+                                            <i class="fa fa-plus-circle" style="color: blue;"></i>
                                         </a>
-                                        <a href="javascript:;" class="btn btn-xs btn-default disabled" >
-                                            &nbsp;&nbsp;Add&nbsp;&nbsp;<i class="fa fa-plus-circle" style="color: darkslategrey;"></i>
+                                        <a href="javascript:;" class="btn btn-xs btn-default btn-round disabled" >
+                                            <i class="fa fa-plus-circle" style="color: darkslategrey;"></i>
                                         </a>
-                                        <a href="javascript:;" class="btn btn-xs btn-default"
+                                        <a href="javascript:;" class="btn btn-xs btn-default btn-round"
                                            data-ng-click="saveByProgram(date_time,program)">
-                                            Save <i class="fa fa-floppy-o" style="color: green;"></i>
+                                            <i class="fa fa-floppy-o" style="color: green;"></i>
                                         </a>
-                                        <a href="javascript:;" class="btn btn-xs btn-default"
+                                        <a href="javascript:;" class="btn btn-xs btn-default btn-round"
                                            data-ng-click="removeProgram(date_time.index,program.index)">
-                                            Delete <i class="fa fa-times" style="color: red;"></i>
+                                            <i class="fa fa-times" style="color: red;"></i>
                                         </a>
                                     </td>
-                                    <td width="73%" style="padding-top: 10px;vertical-align: top;" >
+                                    <td width="73%" style="vertical-align: top;" >
                                         <table width="100%">
                                             <tr ng-repeat="course in program.courses">
                                                 <td width="11%" align="center" style="padding-top: 5px;padding-bottom: 5px;height: 45px;" height="45px">
@@ -169,10 +180,12 @@
                                                 </td>
                                                 <td width="53%" align="left" style="padding-left:10px;padding-top: 5px;padding-bottom: 5px;">{{course.title}}</td>
                                                 <td width="12%" align="center" style="padding-top: 5px;padding-bottom: 5px;">
-                                                    <a href="javascript:;" class="btn btn-xs btn-default"
+                                                    <a href="javascript:;" class="btn btn-xs btn-default btn-round"
                                                        data-ng-click="removeCourse(date_time.index,program.index,course.index)">
-                                                        Delete <i class="fa fa-times" style="color: red;"></i>
+                                                        <i class="fa fa-times" style="color: red;"></i>
                                                     </a>
+
+
                                                 </td>
                                             </tr>
                                         </table>
