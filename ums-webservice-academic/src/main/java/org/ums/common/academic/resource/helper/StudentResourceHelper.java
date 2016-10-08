@@ -31,6 +31,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.Base64;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -121,7 +122,8 @@ public class StudentResourceHelper extends ResourceHelper<Student, MutableStuden
     String deptId = employee.getDepartment().getId();
     List<Student> students = getContentManager()
         .getActiveStudents()
-        .parallelStream()
+        .stream()
+        .sorted(Comparator.comparing(Student::getId))
         .filter(s-> s.getDepartmentId().equals(deptId))
         .collect(Collectors.toList());
 

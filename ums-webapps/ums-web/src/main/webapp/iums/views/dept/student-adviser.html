@@ -1,3 +1,34 @@
+<style>
+    .panel-height{
+        min-height: 400px;
+    }
+
+    .labels{
+        padding:1%;
+    }
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .rounded{
+        display:inline-block;
+        padding:0.5%;
+        margin:0 0 10px 0;
+        border-radius: 10%;
+        background: #DEF;
+        color: black;
+        border-style: solid;
+        border-color: black;
+    }
+
+
+
+
+</style>
+
+
 <div class="panel panel-blue" data-ng-init="getActiveTeachers();getActiveStudentsOfDept()">
     <div class="panel-heading">
         Student's Advisor Assignment
@@ -134,38 +165,23 @@
                         </div>
 
                         <div data-ng-if="bulkAssignmentOptionSelected">
-                            <div class="row">
-                                <div class="col-md-2" align="left">
-                                    <p>Select an adviser</p>
-                                </div>
-                                <div class="col-md-4">
-                                    <select data-ng-model="teacherId">
-                                        <option value="">Select an adviser</option>
-                                        <option data-ng-repeat="t in teachers track by t.id" value="{{t.id}}">{{t.employeeName}}</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="row">
+
+                            <div class="row ">
 
                                     <h5  style="background-color: darkgrey; color: ghostwhite"><p class="labels">Bulk Student Assignment</p></h5>
                                     <br>
-                                    <div class="col-md-5" align="right">
-                                        <div class="ui-widget">
-                                            <label for="fromStudentId">Student Id: </label>
-                                            <input id="fromStudentId" data-ng-model="fromStudentId">
-                                        </div>
-                                        <button class="btn btn-default" >Add the student</button>
-                                    </div>
-                                    <div class="col-md-1">
-                                        to
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="ui-widget">
-                                            <label for="toStudentId">Student Id:</label>
-                                            <input id="toStudentId" data-ng-model="toStudentId">
-                                        </div>
 
+                                    <div auto-complete
+                                         ids="studentIds"
+                                         add-first="setFirstAutoCompleteValue(id)"
+                                         add-second="setSecondAutoCompleteValue(id)"
+                                         add-one="addAStudent()"
+                                         add-range="addStudents()"
+                                         x="addedStudents"
+                                         class="col-md-12" align="right">
                                     </div>
+
+
 
                             </div>
                             <div class="row">
@@ -179,9 +195,40 @@
                                     </button>
                                 </div>
                             </div>
+
                             <div class="row">
                                 <div class="col-md-12">
-                                    <h5  style="background-color: darkgrey; color: ghostwhite"><p class="labels">Added Students</p></h5>
+                                    <h5  style="background-color: darkgrey; color: ghostwhite"><p class="labels">Adviser</p></h5><br>
+
+                                    <div class="col-md-2" align="right">
+                                        <p>Select an adviser</p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <select data-ng-model="teacherId" class="form-control">
+                                            <option value="">Select an adviser</option>
+                                            <option data-ng-repeat="t in teachers track by t.id" value="{{t.id}}">{{t.employeeName}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h5  style="background-color: darkgrey; color: ghostwhite"><p class="labels">Added Students</p></h5><br>
+                                    <ul>
+                                        <li  class="rounded" data-ng-repeat="a in addedStudents track by a.id">
+                                            <div >{{a.id}}<button type="btn" class="btn btn-default btn-xs" data-ng-click="removeFromAddedList(a)">X</button></div>
+                                            <div  data-ng-if="showStudentName">
+                                                {{a.id}}<button type="btn" class="btn btn-default btn-xs" data-ng-click="removeFromAddedList(a)">X</button><br>{{a.fullName}}
+                                                <div data-ng-if="showAdviserName">
+
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+
+
                                 </div>
                             </div>
                             <div class="row">
@@ -200,13 +247,3 @@
     </div>
 </div>
 
-<style>
-    .panel-height{
-        min-height: 400px;
-    }
-
-    .labels{
-        padding:1%;
-    }
-
-</style>
