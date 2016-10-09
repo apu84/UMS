@@ -12,6 +12,7 @@ import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.Student;
 import org.ums.domain.model.mutable.MutableStudent;
 import org.ums.manager.BinaryContentManager;
+import org.ums.persistent.model.PersistentTeacher;
 import org.ums.validator.Validator;
 
 import javax.json.JsonObject;
@@ -91,9 +92,15 @@ public class StudentBuilder implements Builder<Student, MutableStudent> {
 
     pMutableStudent.setId(pJsonObject.getString("id"));
     pMutableStudent.setFullName(pJsonObject.getString("fullName"));
-    pMutableStudent.setDepartmentId(pJsonObject.getJsonObject("programSelector").getString("departmentId"));
+    if(pJsonObject.getJsonObject("programSelector")!=null){
+      pMutableStudent.setDepartmentId(pJsonObject.getJsonObject("programSelector").getString("departmentId"));
+      pMutableStudent.setProgramId(Integer.parseInt(pJsonObject.getJsonObject("programSelector").getString("programId")));
+    }else{
+
+      pMutableStudent.setDepartmentId(pJsonObject.getString("departmentId"));
+      pMutableStudent.setProgramId(pJsonObject.getInt("programId"));
+    }
     pMutableStudent.setSemesterId(Integer.parseInt(pJsonObject.getString("semesterId")));
-    pMutableStudent.setProgramId(Integer.parseInt(pJsonObject.getJsonObject("programSelector").getString("programId")));
     pMutableStudent.setFatherName(pJsonObject.getString("fatherName"));
     pMutableStudent.setMotherName(pJsonObject.getString("motherName"));
     pMutableStudent.setDateOfBirth(mDateFormat.parse(pJsonObject.getString("dateOfBirth")));
@@ -108,6 +115,11 @@ public class StudentBuilder implements Builder<Student, MutableStudent> {
     pMutableStudent.setGuardianMobileNo(pJsonObject.getString("guardianMobileNo"));
     pMutableStudent.setGuardianPhoneNo(pJsonObject.getString("guardianPhoneNo"));
     pMutableStudent.setGuardianEmail(pJsonObject.getString("guardianEmail"));
+    if(pJsonObject.getString("adviser")!=null){
+      PersistentTeacher teacher = new PersistentTeacher();
+      teacher.setId(pJsonObject.getString("adviser"));
+      pMutableStudent.setAdviser(teacher);
+    }
   }
 
 }

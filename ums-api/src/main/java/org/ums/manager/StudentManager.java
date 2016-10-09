@@ -1,6 +1,5 @@
 package org.ums.manager;
 
-import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.mutable.MutableStudent;
 import org.ums.domain.model.immutable.Student;
 
@@ -12,4 +11,6 @@ public interface StudentManager extends ContentManager<Student, MutableStudent, 
   public List<Student> getStudentByCourseIdAndSemesterIdForSeatPlanForCCI(String pCourseId, int pSemesterId);
   public List<Student> getStudentBySemesterIdAndExamDateForCCI(Integer pSemesterId,String pExamDate);
   public List<Student> getActiveStudents();
+  public int updateStudentsAdviser(List<MutableStudent> pStudents) throws Exception;
+
 }

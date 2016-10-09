@@ -28,4 +28,9 @@ public class StudentDaoDecorator extends ContentDaoDecorator<Student, MutableStu
     public List<Student> getActiveStudents() {
         return getManager().getActiveStudents();
     }
+
+    @Override
+    public int updateStudentsAdviser(List<MutableStudent> pStudents) throws Exception {
+        return getManager().updateStudentsAdviser(pStudents);
+    }
 }

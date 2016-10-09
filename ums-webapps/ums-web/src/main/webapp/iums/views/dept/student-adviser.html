@@ -173,6 +173,8 @@
 
                                     <div auto-complete
                                          ids="studentIds"
+                                         first="fromStudentId"
+                                         second="toStudentId"
                                          add-first="setFirstAutoCompleteValue(id)"
                                          add-second="setSecondAutoCompleteValue(id)"
                                          add-one="addAStudent()"
@@ -188,14 +190,45 @@
                                 <div class="col-md-8">
                                 </div>
                                 <div class="col-md-4" align="right">
-                                    <button type="button" class="btn btn-primary btn-xs" title="View by student's id"><i class="fa fa-user" aria-hidden="true"></i></button>
-                                    <button type="button" class="btn btn-primary btn-xs" title="View by student's id and name">
+                                    <button type="button" class="btn btn-primary btn-xs" title="View by student's id" data-ng-click="viewStudentById()"><i class="fa fa-user" aria-hidden="true"></i></button>
+                                    <button type="button" class="btn btn-primary btn-xs" title="View by student's id and name" data-ng-click="viewStudentByIdAndName()">
                                         <i class="fa fa-user" aria-hidden="true"></i>
                                         <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-primary btn-xs" title="Clear added students" data-ng-click="clearAddedStudents()">
+                                        <i class="fa fa-eraser" aria-hidden="true"></i>
                                     </button>
                                 </div>
                             </div>
 
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h5  style="background-color: darkgrey; color: ghostwhite"><p class="labels">Added Students</p></h5><br>
+                                    <div data-ng-if="showLoader==true" align="center">
+                                        <p>Loader...</p>
+                                        <i class="fa fa-spinner fa-spin fa-4x fa-fw"></i>
+                                        <span class="sr-only">Loading...</span>
+
+                                    </div>
+                                    <div data-ng-if="showLoader==false">
+                                        <ul data-ng-if="showLoader==false">
+                                            <li  class="rounded" data-ng-repeat="a in addedStudents track by a.id">
+                                                <div  data-ng-if="showStudentId">{{a.id}}<button type="btn" class="btn btn-default btn-xs" data-ng-click="removeFromAddedList(a)">X</button></div>
+                                                <div  data-ng-if="showStudentName">
+                                                    {{a.id}}<button type="btn" class="btn btn-default btn-xs" data-ng-click="removeFromAddedList(a)">X</button><br>{{a.fullName}}
+                                                    <div data-ng-if="showAdviserName">
+
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+
+
+                                </div>
+                            </div>
                             <div class="row">
                                 <div class="col-md-12">
                                     <h5  style="background-color: darkgrey; color: ghostwhite"><p class="labels">Adviser</p></h5><br>
@@ -204,38 +237,24 @@
                                         <p>Select an adviser</p>
                                     </div>
                                     <div class="col-md-4">
-                                        <select data-ng-model="teacherId" class="form-control">
+                                        <select data-ng-model="teacherId" class="form-control required" name="teacher" data-ng-change="enableSaveButton();assignTeacherId(teacherId)">
                                             <option value="">Select an adviser</option>
                                             <option data-ng-repeat="t in teachers track by t.id" value="{{t.id}}">{{t.employeeName}}</option>
                                         </select>
+                                      <!--  <select data-ng-model="selectedTeacher" class="form-control" data-ng-options=" t as t.employeeName for t in teachers" data-ng-change="enableSaveButton();assignTeacherId(t);">
+                                            <option value="">Select a teacher</option>
+                                        </select>-->
                                     </div>
+
+                                </div>
+                                <br>
+                                <div data-ng-if="showSaveButton" align="right" style="padding: 5%">
+                                    <hr>
+                                    <button type="button" class="btn btn-primary" data-ng-click="save()">Save</button>
                                 </div>
 
                             </div>
 
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <h5  style="background-color: darkgrey; color: ghostwhite"><p class="labels">Added Students</p></h5><br>
-                                    <ul>
-                                        <li  class="rounded" data-ng-repeat="a in addedStudents track by a.id">
-                                            <div >{{a.id}}<button type="btn" class="btn btn-default btn-xs" data-ng-click="removeFromAddedList(a)">X</button></div>
-                                            <div  data-ng-if="showStudentName">
-                                                {{a.id}}<button type="btn" class="btn btn-default btn-xs" data-ng-click="removeFromAddedList(a)">X</button><br>{{a.fullName}}
-                                                <div data-ng-if="showAdviserName">
-
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-
-
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <h5  style="background-color: darkgrey; color: ghostwhite"><p class="labels">new Students</p></h5>
-                                </div>
-                            </div>
                         </div>
 
             </div>

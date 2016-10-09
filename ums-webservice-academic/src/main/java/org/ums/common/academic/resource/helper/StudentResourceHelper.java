@@ -2,6 +2,8 @@ package org.ums.common.academic.resource.helper;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.web.filter.AccessControlFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -23,13 +25,11 @@ import org.ums.persistent.model.PersistentUser;
 import org.ums.resource.ResourceHelper;
 import org.ums.util.UmsUtils;
 
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
+import javax.json.*;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Comparator;
 import java.util.List;
@@ -141,11 +141,39 @@ public class StudentResourceHelper extends ResourceHelper<Student, MutableStuden
 
 
 
+  //// TODO: 09-Oct-16 Grant access via accessControl.
+  @RequiresPermissions("assign:adviser")
+  public Response modifyStudentAdviser(JsonObject pJsonObject) throws Exception{
+    User user = getLoggedUser();
+    LocalCache localCache = new LocalCache();
+    JsonArray entries = pJsonObject.getJsonArray("entries");
+    List<MutableStudent> students = new ArrayList<>();
+    for(int i=0;i<entries.size();i++){
+      JsonObject jsonObject = entries.getJsonObject(i);
+      PersistentStudent student = new PersistentStudent();
+      mBuilder.build(student,jsonObject,localCache);
+      students.add(student);
+    }
+
+    getContentManager().updateStudentsAdviser(students);
+
+    localCache.invalidate();
+    return Response.noContent().build();
+  }
+
+
+
+
   private Employee getLoggedEmployee() throws Exception{
-    String userId = SecurityUtils.getSubject().getPrincipal().toString();
-    User user = mUserManager.get(userId);
+    User user = getLoggedUser();
     Employee employee = mEmployeeManager.getByEmployeeId(user.getEmployeeId());
     return employee;
+  }
+
+  private User getLoggedUser()throws Exception{
+    String userId = SecurityUtils.getSubject().getPrincipal().toString();
+    User user = mUserManager.get(userId);
+    return user;
   }
 
   @Override

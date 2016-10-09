@@ -12,6 +12,8 @@ module ums{
     public scope={
       autoSuggestionList:'=ids',
       addedStudents:'=x',
+      firstSelected:'=first',
+      secondSelected:'=second',
       addFirstSelectedValue:'&addFirst',
       addSecondSelectedValue:'&addSecond',
       addOneStudent:'&addOne',
@@ -24,9 +26,12 @@ module ums{
       console.log("Hello there");
       console.log($scope);
       $scope.selected={};
+      var currentScope = this;
 
 
 
+      //$scope.$watch('firstSelected',(value, oldValue)=>{
+        console.log("value changed");
         $( "#tags" ).autocomplete({
           source: $scope.autoSuggestionList,
 
@@ -35,9 +40,12 @@ module ums{
             console.log($scope);
             console.log(ui.item.value);
             $scope.addFirstSelectedValue({id:ui.item.value});
+
           }
         });
+      //});
 
+      //$scope.$watch('secondSelected',(value)=>{
         $( "#tags2" ).autocomplete({
           source: $scope.autoSuggestionList,
 
@@ -46,12 +54,15 @@ module ums{
             console.log($scope);
             console.log(ui.item.value);
             $scope.addSecondSelectedValue({id:ui.item.value});
+
           }
         });
+      //});
 
-        var currentScope = this;
 
-        $scope.$watch('addedStudents',function(value){
+
+
+        //$scope.$watch('addedStudents',(value)=>{
           currentScope.$timeout(()=>{
             $("#addOneBtn").click(()=>{
               console.log("in the click event");
@@ -62,8 +73,8 @@ module ums{
               console.log("in the click event");
               $scope.addRangeStudent();
             });
-          },1000);
-        });
+          });
+        //});
 
 
 
@@ -71,7 +82,7 @@ module ums{
 
     };
 
-    public templateUrl:string = "./views/directive/student-adviser-students.html";
+    public templateUrl:string = "./views/directive/auto-completion.html";
   }
 
   UMS.directive("autoComplete", ['$timeout',($timeout:ng.ITimeoutService) => new AutoComplete($timeout) ]);

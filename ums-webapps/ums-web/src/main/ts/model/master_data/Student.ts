@@ -5,6 +5,7 @@ module ums {
     programTypeId: string;
     programTypeName: string;
     deptId: string;
+    departmentId:string;
     department: string;
     departmentName:string;
     programName: string;
@@ -12,6 +13,7 @@ module ums {
     semesterId: string;
     semesterName: string;
     year: number;
+    adviser:string;
     academicSemester: number;
     fatherName: string;
     motherName: string;
@@ -27,6 +29,8 @@ module ums {
     guardianName: string;
     guardianEmail: string;
     guardianMobile: string;
+    guardianMobileNo:string;
+    guardianPhoneNo:string;
     theorySection:string;
     sessionalSection:string;
   }

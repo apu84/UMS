@@ -47,6 +47,25 @@ module ums{
 
 
 
+    public updateStudentsAdviser(json:any):ng.IPromise<any>{
+      var defer = this.$q.defer();
+      this.httpClient.put("academic/student/adviser",json,'application/json')
+          .success(()=>{
+            this.notify.success("Successfully Saved");
+            defer.resolve('success');
+          })
+          .error((data)=>{
+            console.log(data);
+            this.notify.error("Problem in saving data");
+            defer.resolve('failure');
+          });
+      return defer.promise;
+    }
+
+
+
+
+
   }
 
   UMS.service("studentService",StudentService);

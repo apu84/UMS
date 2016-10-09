@@ -2,15 +2,11 @@ package org.ums.persistent.dao;
 
 
 import com.google.common.collect.Lists;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.StudentDaoDecorator;
-import org.ums.domain.model.immutable.ProgramType;
 import org.ums.domain.model.immutable.Student;
 import org.ums.domain.model.mutable.MutableStudent;
-import org.ums.enums.StudentStatus;
-import org.ums.persistent.model.PersistentEmployee;
 import org.ums.persistent.model.PersistentStudent;
 import org.ums.persistent.model.PersistentTeacher;
 import org.ums.util.Constants;
@@ -190,6 +186,26 @@ public class PersistentStudentDao extends StudentDaoDecorator {
   public int update(List<MutableStudent> pStudentList) throws Exception {
     String query = UPDATE_ALL + " WHERE STUDENT_ID = ?";
     return mJdbcTemplate.batchUpdate(query, getUpdateParamArray(pStudentList)).length;
+  }
+
+  @Override
+  public int updateStudentsAdviser(List<MutableStudent> pStudents) throws Exception {
+    String query = "UPDATE STUDENTS SET ADVISER=? WHERE STUDENT_ID=?";
+    return mJdbcTemplate.batchUpdate(query,getUpdateParamArrayForAdviser(pStudents)).length;
+  }
+
+  private List<Object[]> getUpdateParamArrayForAdviser(List<MutableStudent> pStudents){
+    List<Object[]> params = new ArrayList<>();
+
+    for(Student student: pStudents){
+      params.add(new Object[]{
+          student.getAdviser().getId(),
+          student.getId()
+      });
+
+    }
+
+    return params;
   }
 
   private List<Object[]> getUpdateParamArray(List<MutableStudent> pStudents) {

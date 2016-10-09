@@ -1,6 +1,12 @@
 module ums{
   interface IStudentAdviser extends ng.IScope{
 
+    showSaveButton:boolean;
+    enableSaveButton:Function;
+    save:Function;
+    showLoader:boolean;
+
+
     shiftOptionSelected:boolean;
     showShiftUI:Function;
 
@@ -16,17 +22,19 @@ module ums{
 
     teachers:Array<IEmployee>;
     teacherId:string;
+    selectedTeacher:any;
     getActiveTeachers:Function;
+    assignTeacherId:Function;
 
 
-    students:Array<IStudent>;
-    addedStudents:Array<IStudent>;
+    students:Array<Student>;
+    addedStudents:Array<Student>;
     studentIds:Array<string>;
     studentIdsExt :Array<string>;
     addedStudentIdMap:any;
     autoCompleteResult:string;
     fromStudent:any;
-    toStudent:IStudent;
+    toStudent:Student;
     fromStudentId:string;
     setFromStudentId:Function;
     toStudentId:string;
@@ -35,15 +43,23 @@ module ums{
     getActiveStudentsOfDept:Function;
     addAStudent:Function;
     addStudents:Function;
+    viewStudentById:Function;
+    viewStudentByIdAndName:Function;
+    clearAddedStudents:Function;
     showStudentName:boolean;
+    showStudentId:boolean;
     showAdviserName:boolean;
     removeFromAddedList:boolean;
+
+
 
   }
 
   interface IStudent{
     id:string;
     fullName:string;
+    departmentId:string;
+    department:string;
     adviser:string;
     status:number;
   }
@@ -62,6 +78,10 @@ module ums{
                 private studentService:StudentService) {
 
       $scope.fromStudent={};
+      $scope.showLoader = false;
+      $scope.showStudentId=true;
+      $scope.showStudentName = false;
+      $scope.showSaveButton=false;
       $scope.shiftOptionSelected=false;
       $scope.changeOptionSelected=false;
       $scope.bulkAssignmentOptionSelected=false;
@@ -77,6 +97,12 @@ module ums{
       $scope.setSecondAutoCompleteValue = this.setSecondAutoCompleteValue.bind(this);
       $scope.removeFromAddedList = this.removeFromAddedList.bind(this);
       $scope.addStudents = this.addStudents.bind(this);
+      $scope.viewStudentById = this.viewStudentById.bind(this);
+      $scope.viewStudentByIdAndName = this.viewStudentByIdAndName.bind(this);
+      $scope.enableSaveButton = this.enableSaveButton.bind(this);
+      $scope.clearAddedStudents = this.clearAddedStudents.bind(this);
+      $scope.save = this.save.bind(this);
+      $scope.assignTeacherId = this.assignTeacherId.bind(this);
       //this.enableSelectPicker();
 
       $('.selectpicker').selectpicker({
@@ -85,6 +111,22 @@ module ums{
       });
     }
 
+
+    private viewStudentById(){
+      this.$scope.showStudentId=true;
+      this.$scope.showStudentName=false;
+    }
+
+    private viewStudentByIdAndName(){
+      this.$scope.showStudentName=true;
+      this.$scope.showStudentId=false;
+    }
+
+    private assignTeacherId(teacher:any){
+      this.$scope.teacherId = teacher;
+      console.log("THis is new teacher id:");
+      console.log(this.$scope.teacherId);
+    }
 
 
     private activateUI(activateNumber:number){
@@ -101,7 +143,7 @@ module ums{
 
     }
 
-    private removeFromAddedList(student:IStudent){
+    private removeFromAddedList(student:Student){
       for(var i=0;i<this.$scope.addedStudents.length;i++){
         if(this.$scope.addedStudents[i]==student){
           this.$scope.addedStudentIdMap[student.id]=null;
@@ -130,8 +172,7 @@ module ums{
 
     private showBulkAssignmentUI(){
       //this.enableSelectPicker();
-      this.$scope.addedStudentIdMap={};
-      this.$scope.addedStudents=[];
+      this.initialize();
       this.activateUI(3);
     }
 
@@ -145,16 +186,16 @@ module ums{
       });
     }
 
-    private setFromStudentId(student:IStudent){
+    private setFromStudentId(student:Student){
       this.$scope.fromStudentId=student.id;
     }
 
-    private setToStudentId(student:IStudent){
+    private setToStudentId(student:Student){
       this.$scope.toStudentId = student.id;
     }
 
     private getActiveStudentsOfDept(){
-      this.studentService.getActiveStudentsByDepartment().then((students:Array<IStudent>)=>{
+      this.studentService.getActiveStudentsByDepartment().then((students:Array<Student>)=>{
         this.$scope.students=[];
         this.$scope.studentIds=[];
         this.$scope.studentIdsExt=[];
@@ -173,6 +214,7 @@ module ums{
     }
 
     private addAStudent(){
+      //this.enableSaveButton();
       var fromStudentId = this.$scope.fromStudentId;
       if(this.$scope.addedStudentIdMap[fromStudentId]==null){
         this.$scope.addedStudents.push(this.$scope.studentIdWithStudentMap[fromStudentId]);
@@ -186,18 +228,37 @@ module ums{
 
     private addStudents(){
       console.log("** in the addStudents() **");
+      console.log("showing loader");
+      this.$scope.showLoader=true;
+      this.addStudentOfRange().then((data:any)=>{
+        this.$scope.showLoader=false;
+        console.log(this.$scope.showLoader);
+      });
+      //this.enableSaveButton();
 
-      for(var i=+this.$scope.fromStudentId;i<=+this.$scope.toStudentId;i++){
-        if(this.$scope.studentIdWithStudentMap[i.toString()]!=null){
-          this.$scope.addedStudents.push(this.$scope.studentIdWithStudentMap[i.toString()]);
-          this.$scope.addedStudentIdMap[i.toString()]='added';
-        }
-      }
 
       console.log("Added students");
       console.log(this.$scope.addedStudents);
       //this.$scope.$apply();
 
+    }
+
+    private clearAddedStudents(){
+      this.$scope.addedStudents=[];
+      this.$scope.addedStudentIdMap={};
+    }
+
+    private addStudentOfRange():ng.IPromise<any>{
+      var defer = this.$q.defer();
+      for(var i=+this.$scope.fromStudentId;i<=+this.$scope.toStudentId;i++){
+        if(this.$scope.studentIdWithStudentMap[i.toString()]!=null && this.$scope.addedStudentIdMap[i.toString()]==null){
+          this.$scope.addedStudents.push(this.$scope.studentIdWithStudentMap[i.toString()]);
+          this.$scope.addedStudentIdMap[i.toString()]='added';
+        }
+      }
+
+      defer.resolve('success');
+      return defer.promise;
     }
 
     private setFirstAutoCompleteValue(fromStudentId:any){
@@ -210,6 +271,74 @@ module ums{
       this.$scope.toStudentId = fromStudentId
 
     }
+
+    private enableSaveButton(){
+      console.log("I am in the enable save section");
+      console.log("teacher id--->"+this.$scope.teacherId);
+      if(this.$scope.addedStudents.length>0){
+        this.$scope.showSaveButton=true;
+      }
+
+      console.log(this.$scope.showSaveButton);
+    }
+
+    private save(){
+      if(this.$scope.teacherId!=null){
+        this.convertToJson().then((jsonData)=>{
+          this.studentService.updateStudentsAdviser(jsonData).then((data)=>{
+              this.initialize();
+          })
+        });
+      }else{
+        this.notify.warn("Adviser is not selected");
+      }
+    }
+
+    private initialize(){
+      this.$scope.addedStudents=[];
+      this.$scope.addedStudentIdMap={};
+      /*this.$scope.fromStudentId=null;
+      this.$scope.toStudentId=null;*/
+      this.$scope.selectedTeacher={};
+    }
+
+    private convertToJson():ng.IPromise<any>{
+      var defer = this.$q.defer();
+      var completeJson={};
+      var jsonObject = [];
+
+      for(var i=0;i<this.$scope.addedStudents.length;i++){
+        var item:any={};
+        var student:Student = this.$scope.addedStudents[i];
+        item['id'] = student.id;
+        item['fullName'] = student.fullName;
+        item['departmentId'] = student.departmentId;
+        item['semesterId'] = student.semesterId.toString();
+        item['programId'] = student.programId;
+        item['fatherName'] = student.fatherName;
+        item['motherName'] = student.motherName;
+        item['dateOfBirth'] = student.dateOfBirth;
+        item['gender'] = student.gender;
+        item['presentAddress'] = student.presentAddress;
+        item['permanentAddress'] = student.permanentAddress;
+        item['mobileNo'] = student.mobileNo;
+        item['phoneNo'] = student.phoneNo;
+        item['bloodGroup'] = student.bloodGroup;
+        item['email'] = student.email;
+        item['guardianName'] = student.guardianName;
+        item['guardianMobileNo'] = student.guardianMobileNo;
+        item['guardianPhoneNo'] = student.guardianPhoneNo;
+        item['guardianEmail'] = student.guardianEmail;
+        item['adviser'] = this.$scope.teacherId;
+        jsonObject.push(item);
+      }
+
+      console.log(jsonObject);
+      completeJson["entries"] = jsonObject;
+      defer.resolve(completeJson);
+      return defer.promise;
+    }
+
 
   }
 

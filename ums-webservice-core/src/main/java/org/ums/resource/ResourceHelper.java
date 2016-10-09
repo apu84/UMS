@@ -96,6 +96,7 @@ public abstract class ResourceHelper<R extends EditType<M>, M extends Mutable, I
     return Response.noContent().build();
   }
 
+
   public abstract Response post(final JsonObject pJsonObject, final UriInfo pUriInfo) throws Exception;
 
   protected abstract ContentManager<R, M, I> getContentManager();

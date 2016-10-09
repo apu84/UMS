@@ -7,6 +7,7 @@ import org.ums.common.academic.resource.helper.StudentResourceHelper;
 import org.ums.resource.Resource;
 
 import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
@@ -32,9 +33,18 @@ public class MutableStudentResource extends Resource {
     return mResourceHelper.put(pObjectId, pRequest, pIfMatchHeader, pJsonObject);
   }
 
+
+
   @DELETE
   @Path(PATH_PARAM_OBJECT_ID)
   public Response delete(final @PathParam("object-id") String pObjectId) throws Exception {
     return mResourceHelper.delete(pObjectId);
+  }
+
+
+  @PUT
+  @Path("/adviser")
+  public Response updateStudentsAdviser(final JsonObject pJsonObject) throws Exception{
+    return mResourceHelper.modifyStudentAdviser(pJsonObject);
   }
 }
