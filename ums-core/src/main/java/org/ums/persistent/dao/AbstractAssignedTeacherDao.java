@@ -22,7 +22,7 @@ public abstract class AbstractAssignedTeacherDao<R extends Identifier<I>, M exte
 
   @Override
   public List<R> getAssignedTeachers(Integer pProgramId, Integer pSemesterId, String pOfferedBy) {
-    String query = String.format(getSelectBySemesterProgram(), "", "");
+    String query = String.format(getSelectBySemesterProgram(), "", "", "");
     return mJdbcTemplate.query(query, new Object[]{pProgramId, pSemesterId, pOfferedBy}, getRowMapper());
   }
 
