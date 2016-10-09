@@ -35,6 +35,7 @@ public class PersistentExaminerDao extends AbstractAssignedTeacherDao<Examiner, 
           "                    AND T2.COURSE_ID=T3.COURSE_ID\n"+
           "%s" +
           "%s" +
+          "                    AND T2.OFFER_BY = ? " +
           "           ORDER BY t3.syllabus_id,\n" +
           "                    t2.year,\n" +
           "                    t2.semester) t3\n" +

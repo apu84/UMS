@@ -43,14 +43,16 @@ module ums {
   }
 
   export class CourseTeacher extends TeacherAssignment<ICourseTeacher> {
-    public static $inject = ['appConstants', 'HttpClient', '$scope', '$q', 'notify'];
+    public static $inject = ['appConstants', 'HttpClient', '$scope', '$q', 'notify', 'TeacherService'];
 
     private newTeacherId: number = 0;
 
     constructor(appConstants: any, httpClient: HttpClient,
-                $scope: ITeacherAssignmentScope, $q: ng.IQService,
-                notify: Notify) {
-      super(appConstants, httpClient, $scope, $q, notify);
+                $scope: ITeacherAssignmentScope,
+                $q: ng.IQService,
+                notify: Notify,
+                teacherService: TeacherService) {
+      super(appConstants, httpClient, $scope, $q, notify, teacherService);
     }
 
     public formatTeacher(courseTeachers: Array<ICourseTeacher>, courseId?: string): void {

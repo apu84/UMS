@@ -21,11 +21,6 @@ module ums {
     isEmpty: Function;
   }
 
-  export interface ITeacher {
-    id?: string;
-    name?: string;
-  }
-
   export interface IAssignedTeacher {
     id: string;
     courseId: string;
@@ -37,6 +32,8 @@ module ums {
     syllabusId: string;
     courseOfferedByDepartmentId: string;
     courseOfferedByDepartmentName: string;
+    courseOfferedToDepartmentId: string;
+    courseOfferedToDepartmentName: string;
     teachers: Array<ITeacher>;
 
     editMode: boolean;
@@ -49,11 +46,7 @@ module ums {
   }
 
   interface ITeachersMap {
-    [key: string]: Array<ITeacher>;
-  }
-
-  interface ITeachers {
-    entries : Array<ITeacher>;
+    [key: string]: ITeachers;
   }
 
   interface IFormattedTeacherMap<T> {
@@ -77,9 +70,12 @@ module ums {
     public formattedMap: IFormattedTeacherMap<T>;
     public savedCopy: IFormattedTeacherMap<T>;
 
-    constructor(public appConstants: any, public httpClient: HttpClient,
-                public $scope: ITeacherAssignmentScope, public $q: ng.IQService,
-                public notify: Notify) {
+    constructor(public appConstants: any,
+                public httpClient: HttpClient,
+                public $scope: ITeacherAssignmentScope,
+                public $q: ng.IQService,
+                public notify: Notify,
+                public teacherService: TeacherService) {
       $scope.teacherSearchParamModel = new TeacherAssignmentSearchParamModel(this.appConstants, this.httpClient);
       $scope.data = {
         courseCategoryOptions: appConstants.courseCategory,
@@ -144,30 +140,56 @@ module ums {
 
     public populateTeachers(courseId: string): void {
       if (this.$scope.entries.hasOwnProperty(courseId)) {
-        this.getTeachers(this.$scope.entries[courseId]).then(()=> {
-          //do nothing
-        });
+        this.getTeachers(this.$scope.entries[courseId]);
       }
     }
 
-    private getTeachers(assignedTeacher: IAssignedTeacher): ng.IPromise<any> {
-      var defer = this.$q.defer();
+    private getTeachers(assignedTeacher: IAssignedTeacher): void {
 
       this.decorateTeacher(assignedTeacher);
 
-      if (this.teachersList[assignedTeacher.courseOfferedByDepartmentId]) {
-        assignedTeacher.teachers = this.teachersList[assignedTeacher.courseOfferedByDepartmentId];
-        defer.resolve(null);
-      } else {
-        this.httpClient.get("academic/teacher/department/" + assignedTeacher.courseOfferedByDepartmentId, this.appConstants.mimeTypeJson,
-            (data: ITeachers, etag: string) => {
-              this.teachersList[assignedTeacher.courseOfferedByDepartmentId] = data.entries;
-              assignedTeacher.teachers = this.teachersList[assignedTeacher.courseOfferedByDepartmentId];
-              defer.resolve(null);
+      if (!this.teachersList[assignedTeacher.courseOfferedByDepartmentId]) {
+        this.listTeachers(assignedTeacher.courseOfferedByDepartmentId)
+            .then((teachers: ITeachers) => {
+              assignedTeacher.teachers = teachers.entries;
+              this.teachersList[assignedTeacher.courseOfferedByDepartmentId] = teachers;
+
+              if (assignedTeacher.courseOfferedByDepartmentId != assignedTeacher.courseOfferedToDepartmentId) {
+                if (!this.teachersList[assignedTeacher.courseOfferedToDepartmentId]) {
+                  this.listTeachers(assignedTeacher.courseOfferedToDepartmentId)
+                      .then((teachers: ITeachers) => {
+                        assignedTeacher.teachers.push.apply(assignedTeacher.teachers, teachers.entries);
+                        this.teachersList[assignedTeacher.courseOfferedToDepartmentId] = teachers;
+                      });
+                }
+                else {
+                  assignedTeacher.teachers = this.teachersList[assignedTeacher.courseOfferedToDepartmentId].entries;
+                }
+              }
             });
       }
+      else {
+        assignedTeacher.teachers = this.teachersList[assignedTeacher.courseOfferedByDepartmentId].entries;
+        if (assignedTeacher.courseOfferedByDepartmentId != assignedTeacher.courseOfferedToDepartmentId) {
+          assignedTeacher.teachers.push.apply(assignedTeacher.teachers,
+              this.teachersList[assignedTeacher.courseOfferedToDepartmentId].entries);
+        }
+      }
+    }
 
-      return defer.promise;
+    private listTeachers(departmentId: string): ng.IPromise<ITeachers> {
+      if (this.teachersList[departmentId]) {
+        return this.$q.when(this.teachersList[departmentId]);
+      }
+      else {
+        var defer = this.$q.defer();
+        this.teacherService
+            .getByDepartment(departmentId)
+            .then((response: ITeachers) => {
+              defer.resolve(response);
+            });
+        return defer.promise;
+      }
     }
 
     public decorateTeacher(assignedTeacher: IAssignedTeacher): void {

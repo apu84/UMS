@@ -4,10 +4,10 @@ package org.ums.persistent.model;
 import org.springframework.context.ApplicationContext;
 import org.springframework.util.StringUtils;
 import org.ums.context.AppContext;
-import org.ums.domain.model.mutable.MutableCourse;
 import org.ums.domain.model.immutable.CourseGroup;
 import org.ums.domain.model.immutable.Department;
 import org.ums.domain.model.immutable.Syllabus;
+import org.ums.domain.model.mutable.MutableCourse;
 import org.ums.enums.CourseCategory;
 import org.ums.enums.CourseType;
 import org.ums.manager.CourseGroupManager;
@@ -115,7 +115,9 @@ public class PersistentCourse implements MutableCourse {
 
   @Override
   public Department getOfferedTo() throws Exception {
-    return mOfferedTo == null && !StringUtils.isEmpty(mDepartmentId) ? sDepartmentManager.get(mDepartmentId) : mOfferedTo;
+    return mOfferedTo == null && !StringUtils.isEmpty(mSyllabusId)
+        ? sSyllabusManager.get(mSyllabusId).getProgram().getDepartment()
+        : mOfferedTo;
   }
 
   @Override
