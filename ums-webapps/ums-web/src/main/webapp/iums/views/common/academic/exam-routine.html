@@ -14,28 +14,35 @@
         margin-top: -2px !important;
     }
 
+    table#routineTable>tbody>tr>td {
+        border: 1px solid black;
+    }
+    table#programTable>tbody>tr>td {
+        border: 1px solid black;
+    }
+    #divOverlay { display: none; background-color:Silver; text-align:center;  position:absolute; z-index:10000; opacity:0.5; }
 </style>
 <div class="row">
     <div class="col-md-12">
-            <div class="panel panel-default">
-                <div class="panel-body shadowPanel" style="min-height: 600px;">
+        <div class="panel panel-default">
+            <div class="panel-body shadowPanel" style="min-height: 600px;">
                 <div class="row">
                     <div class="col-md-6">
-                            <font color="blue"> Semester :</font>
-                            <select data-ng-model="routine.semester" data-ng-change="fetchSavedRoutine()">
-                                <option value="0" ng-selected="true">Select a Semester</option>
-                                <option value="11012016">Spring, 2016</option>
-                                <option value="11020106">Fall, 2016</option>
-                                <option value="11012015">Spring, 2015</option>
-                                <option value="11022015">Fall, 2015</option>
-                            </select>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <font color="blue">Exam Type :</font>
-                            <select data-ng-model="routine.examType" data-ng-change="fetchSavedRoutine()">
-                                <option value="0" ng-selected="true">Select Exam Type</option>
-                                <option value="1">Regular Exam</option>
-                                <option value="2">Carry/Improvement</option>
-                            </select>
+                        <font color="blue"> Semester :</font>
+                        <select data-ng-model="routine.semester" data-ng-change="fetchSavedRoutine()">
+                            <option value="0" ng-selected="true">Select a Semester</option>
+                            <option value="11012016">Spring, 2016</option>
+                            <option value="11020106">Fall, 2016</option>
+                            <option value="11012015">Spring, 2015</option>
+                            <option value="11022015">Fall, 2015</option>
+                        </select>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <font color="blue">Exam Type :</font>
+                        <select data-ng-model="routine.examType" data-ng-change="fetchSavedRoutine()">
+                            <option value="0" ng-selected="true">Select Exam Type</option>
+                            <option value="1">Regular Exam</option>
+                            <option value="2">Carry/Improvement</option>
+                        </select>
                     </div>
                     <div class="col-md-6" style="text-align: right;">
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -51,36 +58,56 @@
                     </div>
                 </div>
 
-                <table class="table table-hover table-bordered table-advanced" style="margin-top: 20px;border-collapse: collapse;" cellpadding="0" cellspacing="0">
+                <table id="routineTable" class="table table-hover table-bordered table-advanced" style="margin-top: 20px;border-collapse: collapse;" cellpadding="0" cellspacing="0">
                     <thead>
                     <tr role="row" class="heading">
-                        <th width="17%" class="sorting">Date-Time</th>
+                        <th width="17%" class="sorting">Date-Time-Group</th>
                         <th width="17%" class="sorting_asc">Program</th>
                         <th width="6%" class="sorting">Year<br/>(Student's)</th>
                         <th width="6%" class="sorting">Semester<br/>(Student's)</th>
                         <th width="13%" class="sorting">Course No.</th>
                         <th width="33%" class="sorting">Course Title</th>
-                        <th width="6%" class="sorting">Delete321</th>
+                        <th width="6%" class="sorting">Delete</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="date_time in routine.date_times ">
-                        <td align="center">
-                            <div class="input-icon right">
-                                <i class="fa fa-calendar"></i>
-                                <input  id="date_{{::date_time.index}}" type="text"  data-ng-model="date_time.examDate" data-date-format="dd/mm/yyyy" placeholder="DD/MM/YYYY" class="datepicker-default form-control required" autocomplete="off"/><br/>
-                            </div>
+                    <tr ng-repeat="date_time in routine.date_times "  id="row{{date_time.index}}">
+                        <td align="center" style="border-right: none;">
 
-                            <select class="form-control" data-ng-model="date_time.examTime">
-                                <option data-ng-repeat="examTime in data.examTimeOptions" value="{{::examTime.id}}">{{::examTime.name}}</option>
-                            </select>
-                            <br/><br/>
+
+                            <div  data-ng-hide="date_time.readOnly" style="width: 190px;">
+                                <div class="input-icon right" >
+                                    <i class="fa fa-calendar"></i>
+                                    <input  id="date_{{::date_time.index}}" type="text"  data-ng-model="date_time.examDate" data-date-format="dd/mm/yyyy"
+                                            placeholder="DD/MM/YYYY" class="datepicker-default form-control required" autocomplete="off" /><br/>
+                                </div>
+                            <select data-ng-model="date_time.examTime"style="width: 135px;float: left">
+                                        <option data-ng-repeat="examTime in data.examTimeOptions" value="{{::examTime.id}}">{{::examTime.name}}</option>
+                                    </select>
+                                    <select style="width: 50px;float: left; margin-left: 2px;">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                    </select>
+                            </div>
+                    .<div data-ng-show="date_time.readOnly" style="clear: both;">
+                            <div class="input-icon right" >
+                                {{date_time.examDate}}
+                            </div>
+                            <div class="input-icon right" >
+                                {{date_time.examTime}}
+                            </div>
+                            <div class="input-icon right" >
+                                Group : 1
+                            </div>
+                        </div>
+            <br/>
                             <a href="javascript:;" class="btn btn-xs btn-default btn-round"
-                               data-ng-click="addNewProgram(date_time.index)" style="border-radius: 15px;">
+                               data-ng-click="addNewProgram(date_time.index)" style="border-radius: 15px;" data-ng-hide="date_time.readOnly">
                                 <i class="fa fa-plus-circle" style="color: blue;"></i>
                             </a>
                             <a href="javascript:;" class="btn btn-xs btn-default btn-round disabled"
-                               style="border-radius: 15px;">
+                               style="border-radius: 15px;" data-ng-show="date_time.readOnly">
                                 <i class="fa fa-plus-circle" style="color: darkslategrey;"></i>
                             </a>
 
@@ -89,79 +116,93 @@
                                 <i class="fa fa-floppy-o" style="color: green;"></i>
                             </a>
                             <a href="javascript:;" class="btn btn-xs btn-default btn-round"
-                               data-ng-click="editDateTime(date_time)">
+                               data-ng-click="editDateTime(date_time)" data-ng-show="date_time.readOnly">
                                 <i class="fa fa-edit" style="color: orange;"></i>
                             </a>
-                            <a href="javascript:;" class="btn btn-xs btn-default btn-round disabled"
-                               >
-                                <i class="fa fa-edit" style="color: darkslategrey;"></i>
+                            <a href="javascript:;" class="btn btn-xs btn-default btn-round" data-ng-hide="date_time.readOnly"  data-ng-click="date_time.readOnly=true;">
+                                <i class="fa fa-arrow-circle-left" style="color: green;"></i>
                             </a>
 
                             <a href="javascript:;" class="btn btn-xs btn-default btn-round"
                                data-ng-click="removeDateTime(date_time.index)">
                                 <i class="fa fa-times" style="color: red;"></i>
                             </a>
-                        <td colspan="6" style="padding: 0px;">
-                            <table width="100%">
-                                <tr ng-repeat="program in date_time.programs">
-                                    <td width="19%" align="center" style="vertical-align: top;padding-top: 20px;padding-bottom: 20px; ">
+                        <td colspan="6" style="padding: 0px;border: none;">
+                            <table width="100%" id="programTable">
+                                <tr ng-repeat="program in date_time.programs" >
+                                    <td width="19%" align="center" style="vertical-align: top;padding-top: 20px;padding-bottom: 20px; border-bottom: none;">
 
 
-                                        <select id="program_{{::date_time.index}}{{::program.index}}"  class="form-control"  style="width: 80%"  data-ng-model="exam_program"
-                                            ng-change="programSelectionChanged(date_time,program)"
-                                            ng-options="ugProgram.programs[0].shortName for ugProgram in data.ugPrograms track by ugProgram.programs[0].id">
+                                        <select id="program_{{date_time.index}}{{program.index}}" data-ng-hide="date_time.readOnly" class="form-control"  style="width: 80%" data-ng-model="program.programId"
+                                                ng-change="programSelectionChanged(program,date_time)">
+                                            <option data-ng-repeat="ugProgram in data.ugPrograms" value="{{ugProgram.programs[0].id}}">{{ugProgram.programs[0].shortName}}</option>
                                         </select>
-
-                                        <!--
-                                        <select id="program_{{date_time.index}}{{program.index}}"  data-ng-hide="date_time.readOnly" class="form-control"  style="width: 80%"  data-ng-model="exam_program"
-                                                ng-change="programSelectionChanged(date_time,program)"
-                                                ng-options="ugProgram.programs[0].shortName for ugProgram in data.ugPrograms track by ugProgram.programs[0].id">
-                                        </select >
-                                        -->
+                                        <div  data-ng-show="date_time.readOnly">
+                                            {{program.programName}}
+                                        </div>
                                         <br/>
-                                        <a href="javascript:;" class="btn btn-xs btn-default"
+
+                                        <a href="javascript:;" class="btn btn-xs btn-default btn-round"
+                                           data-ng-click="addNewProgram(date_time.index)" style="border-radius: 15px;" data-ng-hide="date_time.readOnly">
+                                            <i class="fa fa-plus-circle" style="color: blue;"></i>
+                                        </a>
+
+                                        <a href="javascript:;" class="btn btn-xs btn-default btn-round"
                                            data-ng-click="addNewCourse(date_time,program)">
-                                            &nbsp;&nbsp;Add&nbsp;&nbsp; <i class="fa fa-plus-circle" style="color: blue;"></i>
+                                            <i class="fa fa-plus-circle" style="color: blue;"></i>
                                         </a>
-                                        <a href="javascript:;" class="btn btn-xs btn-default disabled" >
-                                            &nbsp;&nbsp;Add&nbsp;&nbsp;<i class="fa fa-plus-circle" style="color: darkslategrey;"></i>
+                                        <a href="javascript:;" class="btn btn-xs btn-default btn-round disabled" >
+                                            <i class="fa fa-plus-circle" style="color: darkslategrey;"></i>
                                         </a>
-                                        <a href="javascript:;" class="btn btn-xs btn-default"
+                                        <a href="javascript:;" class="btn btn-xs btn-default btn-round"
                                            data-ng-click="saveByProgram(date_time,program)">
-                                            Save <i class="fa fa-floppy-o" style="color: green;"></i>
+                                            <i class="fa fa-floppy-o" style="color: green;"></i>
                                         </a>
-                                        <a href="javascript:;" class="btn btn-xs btn-default"
+                                        <a href="javascript:;" class="btn btn-xs btn-default btn-round"
                                            data-ng-click="removeProgram(date_time.index,program.index)">
-                                            Delete <i class="fa fa-times" style="color: red;"></i>
+                                            <i class="fa fa-times" style="color: red;"></i>
                                         </a>
                                     </td>
-                                    <td width="73%" style="padding-top: 10px;vertical-align: top;" >
+                                    <td width="73%" style="vertical-align: top;" >
+                                        <div style="min-height: 160px;">
                                         <table width="100%">
                                             <tr ng-repeat="course in program.courses">
                                                 <td width="11%" align="center" style="padding-top: 5px;padding-bottom: 5px;height: 45px;" height="45px">
-                                                    <input id="year_{{::date_time.index}}{{::program.index}}{{::course.index}}" type="text" class="form-control" style="width: 80%;height: 25px;text-align: center;padding: 0px;" data-ng-model="course.year" />
+                                                    <input id="year_{{::date_time.index}}{{::program.index}}{{::course.index}}" type="text" class="form-control" style="width: 80%;height: 25px;text-align: center;padding: 0px;" data-ng-model="course.year"  data-ng-hide="date_time.readOnly"/>
+                                                    <div  data-ng-show="date_time.readOnly">
+                                                        {{course.year}}
+                                                    </div>
+
                                                 </td>
                                                 <td width="11%" align="center" style="padding-top: 5px;padding-bottom: 5px;">
-                                                    <input id="semester_{{::date_time.index}}{{::program.index}}{{::course.index}}" type="text" class="form-control" style="width: 80%;height: 25px;text-align: center;padding: 0px;" data-ng-model="course.semester" />
-
+                                                    <input id="semester_{{::date_time.index}}{{::program.index}}{{::course.index}}" type="text" class="form-control" style="width: 80%;height: 25px;text-align: center;padding: 0px;" data-ng-model="course.semester"  data-ng-hide="date_time.readOnly"//>
+                                                    <div  data-ng-show="date_time.readOnly">
+                                                        {{course.semester}}
+                                                    </div>
                                                 </td>
-                                                <td width="18%" align="center" style="padding-top: 5px;padding-bottom: 5px;">
-                                                    <select id="course_{{::date_time.index}}{{::program.index}}{{::course.index}}"
-                                                            class="select2-size form-control" style="width: 90%;height: 25px;text-align: center;padding: 0px;"
-                                                                       ng-model="exam_course_id" data-ng-change="courseSelectionChanged(program,course,exam_course_id)" >
-                                                    <option data-ng-repeat="exam_course in courseArr" value="{{::exam_course.id}}">{{::exam_course.no}}</option>
-                                                </select>
 
+                                                <td width="18%" align="center" style="padding-top: 5px;padding-bottom: 5px;">
+                                                    <select id="course_{{date_time.index}}{{program.index}}{{course.index}}" data-ng-hide="date_time.readOnly" class="select2-size form-control" style="width: 90%;height: 25px;text-align: center;padding: 0px;"
+                                                            ng-model="exam_course.id" data-ng-change="courseSelectionChanged(program,course,exam_course.id)">
+                                                        <option data-ng-repeat="exam_course in program.courseArr" value="{{exam_course.id}}">{{exam_course.no}}</option>
+                                                    </select>
+
+                                                    <div  data-ng-show="date_time.readOnly">
+                                                        {{course.no}}
+                                                    </div>
                                                 </td>
                                                 <td width="53%" align="left" style="padding-left:10px;padding-top: 5px;padding-bottom: 5px;">{{course.title}}</td>
                                                 <td width="12%" align="center" style="padding-top: 5px;padding-bottom: 5px;">
-                                                    <a href="javascript:;" class="btn btn-xs btn-default"
+                                                    <a href="javascript:;" class="btn btn-xs btn-default btn-round"
                                                        data-ng-click="removeCourse(date_time.index,program.index,course.index)">
-                                                        Delete <i class="fa fa-times" style="color: red;"></i>
+                                                        <i class="fa fa-times" style="color: red;"></i>
                                                     </a>
+
+
                                                 </td>
                                             </tr>
                                         </table>
+                                        </div>
 
                                     </td>
                                 </tr>
@@ -176,6 +217,7 @@
                     <div class="bounce2"></div>
                     <div class="bounce3"></div>
                 </div>
+                <div id="divOverlay" style=""><div data-spinner=""></div></div>
             </div>
         </div>
     </div>

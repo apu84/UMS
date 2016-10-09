@@ -1,0 +1,334 @@
+<style>
+    .list-group .list-group-item {
+        color: black !important;
+    }
+    .list-group-item {
+        padding: 5px 16px !important;
+    }
+</style>
+<div class="row">
+    <div id="arrowDiv" onclick="resetDivs()" >
+        <i class="fa fa-angle-double-right fa-4x"></i></i>
+    </div>
+<div  id="leftDiv" class="panel panel-green">
+    <div class="panel-heading">
+        <h3 class="panel-title">Select Parameters</h3>
+    </div>
+    <div class="panel-body pan">
+        <form action="" class="form-horizontal">
+            <div class="form-body pal">
+                <div class="form-group">
+                    <label class="col-md-4 control-label">Program Type</label>
+                    <div class="col-md-8">
+                        <select class="form-control required" data-ng-model="inputParams.program_type"  data-convert-to-number >
+                            <option  value="11">Undergraduate</option>
+                            <option  value="22">Postgraduate</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-4 control-label">Semester</label>
+                    <div class="col-md-8">
+                        <select class="form-control required" data-ng-model="inputParams.program_type" data-convert-to-number >
+                            <option  value="11012016">Spring, 2016</option>
+                            <option  value="11022015">Fall, 2015</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-4 control-label">Dept./School</label>
+                    <div class="col-md-8">
+                        <select class="form-control required" data-ng-model="inputParams.program_type" data-convert-to-number >
+                            <option  value="11012016">All</option>
+                            <option  value="11012016">CSE</option>
+                            <option  value="11022015">EEE</option>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+            <div class="form-actions text-right pal">
+                <button type="button" class="btn btn-success" data-ng-click="fetchStatusInfo()">Next</button>
+            </div>
+        </form>
+    </div>
+</div>
+<div id="rightDiv">
+    <div class="panel">
+        <div class="panel-heading" style="height: 43px;">
+            <div>Process Status<span   class="subtitle"></span></div>
+        </div>
+        <div class="panel-body shadowPanel"   style="min-height: 490px;text-align: center;">
+                <img src="images/matrix_white.gif"  data-ng-show="showGif"/>
+               <div  id="allDept" data-ng-show="showAllDept">
+                            <div class="row">
+                                <!-- Arch Start -->
+                                <div class="col-lg-3">
+                                    <div class="panel panel-default">
+                                        <div class="panel-body" style="min-height: 240px;">
+                                            <img id="01_download" src="images/pdf_square.png" class="download_tooltip"  style="position: absolute;top: 0px;right: 0px;cursor: pointer;"/>
+                                            <div id="01_view1">
+                                                    <strong class="text-uppercase">Arch</strong><br/>
+                                                    <img src="images/processed.jpg" height="64" width="64" data-ng-click="showYearSemesterWise('01')"  style="margin: 20px 0px;clear: both;cursor: pointer;"/>
+                                                    <div class="col-lg-12">
+                                                        <div class="well well-sm">Processed on 21 Sep, 2016
+                                                        Published on 22 Sep, 2016
+                                                        </div>
+                                                    </div>
+                                            </div>
+                                            <div id="01_view2" style="display: none;">
+                                                <img src="images/processed.jpg" height="36" width="36" style="position: absolute;top: 0px;left: 10px;cursor: pointer;z-index: 999;"/>
+                                                <div class="row">
+                                                    <strong class="text-uppercase">Arch</strong> (Promotion List)<br/><br/>
+                                                    <div class="col-md-6">
+                                                            <ul class="list-group">
+                                                        <li class="list-group-item">1-1  <img src="images/pdf_mini.png" style="margin-left: 20px;" width="12" height="12"/></li>
+                                                        <li class="list-group-item">2-1 <img src="images/pdf_mini.png" style="margin-left: 20px;" width="12" height="12"/></li>
+                                                        <li class="list-group-item">3-1 <img src="images/pdf_mini.png" style="margin-left: 20px;" width="12" height="12"/></li>
+                                                        <li class="list-group-item">4-1 <img src="images/pdf_mini.png" style="margin-left: 20px;" width="12" height="12"/></li>
+                                                        <li class="list-group-item">5-1 <img src="images/pdf_mini.png" style="margin-left: 20px;" width="12" height="12"/></li>
+                                                    </ul>
+                                                        </div>
+                                                    <div class="col-md-6">
+                                                <ul class="list-group">
+                                                    <li class="list-group-item">1-2 <img src="images/pdf_mini.png" style="margin-left: 20px;" width="12" height="12"/></li>
+                                                    <li class="list-group-item">2-2 <img src="images/pdf_mini.png" style="margin-left: 20px;" width="12" height="12"/></li>
+                                                    <li class="list-group-item">3-2 <img src="images/pdf_mini.png" style="margin-left: 20px;" width="12" height="12"/></li>
+                                                    <li class="list-group-item">4-2 <img src="images/pdf_mini.png" style="margin-left: 20px;" width="12" height="12"/></li>
+                                                    <li class="list-group-item">5-2 <img src="images/pdf_mini.png" style="margin-left: 20px;" width="12" height="12"/></li>
+                                                </ul>
+                                                        </div>
+                                                    </div>
+                                                <img src="images/back.png" data-ng-click="showDefault('01')"  style="clear: both;cursor: pointer;"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Arch End -->
+
+                                <!-- BBA Start -->
+                                <div class="col-lg-3">
+                                    <div class="panel panel-default">
+                                        <div class="panel-body" style="min-height: 240px;">
+                                            <img id="02_download" src="images/pdf_square.png" class="download_tooltip"  style="position: absolute;top: 0px;right: 0px;cursor: pointer;"/>
+                                            <img id="02_publish" src="images/publish.png" class="publish_tooltip"  style="position: absolute;top: 40px;right: 0px;cursor: pointer;"/>
+
+                                            <div id="02_view1">
+                                                <strong class="text-uppercase">BBA</strong><br/>
+                                                <img src="images/processed_notPublished.png" height="64" width="64" data-ng-click="showYearSemesterWise('02')"  style="margin: 20px 0px;clear: both;cursor: pointer;"/>
+                                                <div class="col-lg-12">
+                                                    <div class="well well-sm">Processed on 21 Sep, 2016
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="02_view2" style="display: none;">
+                                                <img src="images/processed_notPublished.png" height="36" width="36" style="position: absolute;top: 0px;left: 10px;cursor: pointer;z-index: 999;"/>
+                                                <div class="row">
+                                                    <strong class="text-uppercase">BBA</strong> (Promotion List)<br/><br/>
+                                                    <div class="col-md-6">
+                                                        <ul class="list-group">
+                                                            <li class="list-group-item">1-1  <img src="images/pdf_mini.png" style="margin-left: 20px;" width="12" height="12"/></li>
+                                                            <li class="list-group-item">2-1 <img src="images/pdf_mini.png" style="margin-left: 20px;" width="12" height="12"/></li>
+                                                            <li class="list-group-item">3-1 <img src="images/pdf_mini.png" style="margin-left: 20px;" width="12" height="12"/></li>
+                                                            <li class="list-group-item">4-1 <img src="images/pdf_mini.png" style="margin-left: 20px;" width="12" height="12"/></li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <ul class="list-group">
+                                                            <li class="list-group-item">1-2 <img src="images/pdf_mini.png" style="margin-left: 20px;" width="12" height="12"/></li>
+                                                            <li class="list-group-item">2-2 <img src="images/pdf_mini.png" style="margin-left: 20px;" width="12" height="12"/></li>
+                                                            <li class="list-group-item">3-2 <img src="images/pdf_mini.png" style="margin-left: 20px;" width="12" height="12"/></li>
+                                                            <li class="list-group-item">4-2 <img src="images/pdf_mini.png" style="margin-left: 20px;" width="12" height="12"/></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <img src="images/back.png" data-ng-click="showDefault('02')"  style="clear: both;cursor: pointer;"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- BBA End  -->
+
+                                <!-- CE Start -->
+                                <div class="col-lg-3">
+                                    <div class="panel panel-default">
+                                        <div class="panel-body" style="min-height: 240px;">
+                                            <div id="03_view1">
+                                                <strong class="text-uppercase">CE</strong><br/>
+                                                <img src="images/notProcessed.png" height="64" width="64" data-ng-click="showYearSemesterWise('03')"  style="margin: 20px 0px;clear: both;cursor: pointer;"/>
+                                                <div class="col-lg-12">
+                                                    <div class="well well-sm">Unprocessed </div>
+                                                </div>
+                                            </div>
+                                            <div id="03_view2" style="display: none;">
+                                                <img src="images/notProcessed.png" height="36" width="36" style="position: absolute;top: 0px;left: 10px;cursor: pointer;z-index: 999;"/>
+                                                <div class="row">
+                                                    <strong class="text-uppercase">CE</strong> (Grade Submission Status)<br/><br/>
+                                                    <div class="col-md-6">
+                                                        <ul class="list-group">
+                                                            <li class="list-group-item">1-1  <img src="images/check.png" style="margin-left: 20px;" width="12" height="12"/></li>
+                                                            <li class="list-group-item">2-1 <img src="images/check.png" style="margin-left: 20px;" width="12" height="12"/></li>
+                                                            <li class="list-group-item">3-1 <img src="images/check.png" style="margin-left: 20px;" width="12" height="12"/></li>
+                                                            <li class="list-group-item">4-1
+                                                                <img src="images/error.png" style="margin-left: 20px;cursor: pointer" width="12" height="12" data-target="#modal-course_wise_status" data-toggle="modal"/>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <ul class="list-group">
+                                                            <li class="list-group-item">1-2 <img src="images/check.png" style="margin-left: 20px;" width="12" height="12"/></li>
+                                                            <li class="list-group-item">2-2 <img src="images/error.png" style="margin-left: 20px;" width="12" height="12"/></li>
+                                                            <li class="list-group-item">3-2 <img src="images/error.png" style="margin-left: 20px;" width="12" height="12"/></li>
+                                                            <li class="list-group-item">4-2 <img src="images/error.png" style="margin-left: 20px;" width="12" height="12"/></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <img src="images/back.png" data-ng-click="showDefault('03')"  style="clear: both;cursor: pointer;"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- CE End  -->
+
+                                <div class="col-lg-3">
+                                    <div class="panel panel-default">
+                                        <img src="images/pdf_square.png"  style="position: absolute;top: 0px;right: 0px;"/>
+                                        <div class="panel-body"><strong class="text-uppercase">CSE</strong>
+                                            <br/><br/>
+                                            <img src="images/processed.jpg" height="64" width="64" />
+                                            <br/><br/>
+                                            <div class="col-lg-12">
+                                                <div class="well well-sm">Processed on 21 Sep, 2016</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                   <div class="row">
+                       <div class="col-lg-3">
+                           <div class="panel panel-default">
+                               <img class="process_tooltip"  src="images/process2.png" style="position: absolute;top: 0px;right: 0px;cursor: pointer;" />
+                               <div class="panel-body"><strong class="text-uppercase">EEE</strong>
+                                   <br/><br/>
+
+                                   <img src="images/readyForProcess.png" height="64" width="64" />
+                                   <br/><br/>
+                                   <div class="col-lg-12">
+                                       <div class="well well-sm" style="color: blue;">Ready to be processed</div>
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+                       <div class="col-lg-3">
+                           <div class="panel panel-default">
+                               <img class="process_tooltip"  src="images/process2.png" style="position: absolute;top: 0px;right: 0px;cursor: pointer;" />
+                               <div class="panel-body"><strong class="text-uppercase">TX</strong>
+                                   <br/><br/>
+                                   <img src="images/readyForProcess.png" height="64" width="64" />
+                                   <br/><br/>
+                                   <div class="col-lg-12">
+                                       <div class="well well-sm" style="color: blue;">Ready to be processed</div>
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+                       <div class="col-lg-3">
+                           <div class="panel panel-default">
+                               <img class="process_tooltip"  src="images/process2.png" style="position: absolute;top: 0px;right: 0px;cursor: pointer;" />
+                               <div class="panel-body"><strong class="text-uppercase">ME</strong>
+                                   <br/><br/>
+                                   <img src="images/readyForProcess.png" height="64" width="64" />
+                                   <br/><br/>
+                                   <div class="col-lg-12">
+                                       <div class="well well-sm" style="color: blue;">Ready to be processed</div>
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+                       <div class="col-lg-3">
+                           <div class="panel panel-default">
+                               <img src="images/pdf_square.png"  style="position: absolute;top: 0px;right: 0px;"/>
+                               <div class="panel-body"><strong class="text-uppercase">IPE</strong>
+                                   <br/><br/>
+                                   <img src="images/processed.jpg" height="64" width="64" />
+                                   <br/><br/>
+                                   <div class="col-lg-12">
+                                       <div class="well well-sm">Processed on 21 Sep, 2016</div>
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+
+                   </div>
+
+
+               </div>
+
+        </div>
+
+    </div>
+
+    <!--Modal for Marks Submission Status Log-->
+    <div id="modal-course_wise_status" tabindex="-1" role="dialog" aria-labelledby="modal-prompt-label"
+         aria-hidden="true" class="modal fade">
+        <div class="modal-dialog modal-wide-width">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" data-dismiss="modal" aria-hidden="true"
+                            class="close">&times;</button>
+                    <h4 id="modal-marks_submission_status_log-label" class="modal-title">Marks Submission Status - CSE 1-1</h4></div>
+                <div class="modal-body">
+                    <table class="table table-hover table-condensed">
+                        <thead>
+                        <tr>
+                            <th>Course No</th>
+                            <th>Course Title</th>
+                            <th>Status</th>
+                            <th>Deadline</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>CSE 1101</td>
+                            <td>Elementary Structured Programming</td>
+                            <td><img src="images/error.png" />Waiting for Head's Approval</td>
+                            <td>10 Oct, 2016</td>
+                        </tr>
+                        <tr>
+                            <td>CSE 1102</td>
+                            <td>Elementary Structured Programming Lab</td>
+                            <td><img src="images/check.png" /> Accepted by CoE</td>
+                            <td>10 Oct, 2016</td>
+                        </tr>
+                        <tr>
+                            <td>CSE 1108</td>
+                            <td>Introduction to Computer Systems</td>
+                            <td><img src="images/error.png" /> Not Submitted</td>
+                            <td>10 Oct, 2016</td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+</div>
+
+<script type="text/javascript">
+    function resetDivs() {
+        $("#arrowDiv").hide(50);
+        $("#leftDiv").show(100);
+    }
+    setTimeout(function () {$(".download_tooltip").tooltip({placement : 'top', trigger : 'hover', title : "Download Promotion List"});}, 100);
+    setTimeout(function () {$(".publish_tooltip").tooltip({placement : 'top', trigger : 'hover', title : "Publish Promotion List"});}, 100);
+    setTimeout(function () {$(".process_tooltip").tooltip({placement : 'top', trigger : 'hover', title : "Process"});}, 100);
+
+</script>

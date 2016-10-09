@@ -11,14 +11,14 @@ import org.ums.enums.StudentMarksSubmissionStatus;
 public class StudentGradeDto {
     private String studentId;
     private String studentName;
-    private Float quiz;
-    private Float classPerformance;
-    private Float partA;
-    private Float partB;
-    private Float partTotal;
-    private Float total;
+    private Double quiz;
+    private Double classPerformance;
+    private Double partA;
+    private Double partB;
+    private Double partTotal;
+    private Double total;
     private String gradeLetter;
-    private Float gradePoint;
+    private Double gradePoint;
     private StudentMarksSubmissionStatus status;
     private int statusId;
     private String statusName;
@@ -46,51 +46,51 @@ public class StudentGradeDto {
         this.studentName = studentName;
     }
 
-    public Float getQuiz() {
+    public Double getQuiz() {
         return quiz;
     }
 
-    public void setQuiz(Float quiz) {
+    public void setQuiz(Double quiz) {
         this.quiz = quiz;
     }
 
-    public Float getClassPerformance() {
+    public Double getClassPerformance() {
         return classPerformance;
     }
 
-    public void setClassPerformance(Float classPerformance) {
+    public void setClassPerformance(Double classPerformance) {
         this.classPerformance = classPerformance;
     }
 
-    public Float getPartA() {
+    public Double getPartA() {
         return partA;
     }
 
-    public void setPartA(Float partA) {
+    public void setPartA(Double partA) {
         this.partA = partA;
     }
 
-    public Float getPartB() {
+    public Double getPartB() {
         return partB;
     }
 
-    public void setPartB(Float partB) {
+    public void setPartB(Double partB) {
         this.partB = partB;
     }
 
-    public Float getPartTotal() {
+    public Double getPartTotal() {
         return partTotal;
     }
 
-    public void setPartTotal(Float partTotal) {
+    public void setPartTotal(Double partTotal) {
         this.partTotal = partTotal;
     }
 
-    public Float getTotal() {
+    public Double getTotal() {
         return total;
     }
 
-    public void setTotal(Float total) {
+    public void setTotal(Double total) {
         this.total = total;
     }
 
@@ -102,11 +102,11 @@ public class StudentGradeDto {
         this.gradeLetter = gradeLetter;
     }
 
-    public Float getGradePoint() {
+    public Double getGradePoint() {
         return gradePoint;
     }
 
-    public void setGradePoint(Float gradePoint) {
+    public void setGradePoint(Double gradePoint) {
         this.gradePoint = gradePoint;
     }
 

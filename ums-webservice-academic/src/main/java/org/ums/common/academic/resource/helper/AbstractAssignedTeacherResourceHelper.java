@@ -28,45 +28,59 @@ public abstract class AbstractAssignedTeacherResourceHelper<R extends EditType<M
     return builder.build();
   }
 
-  public JsonObject getAssignedTeachers(final Integer pProgramId, final Integer pSemesterId, final UriInfo pUriInfo) throws Exception {
-    List<R> assignedTeachers = getContentManager().getAssignedTeachers(pProgramId, pSemesterId);
+  public JsonObject getAssignedTeachers(final Integer pProgramId, final Integer pSemesterId,
+                                        final String pOfferedBy, final UriInfo pUriInfo) throws Exception {
+
+    List<R> assignedTeachers = getContentManager().getAssignedTeachers(pProgramId, pSemesterId, pOfferedBy);
     return buildJsonResponse(assignedTeachers, pUriInfo);
   }
 
   public JsonObject getAssignedTeachers(final Integer pProgramId, final Integer pSemesterId,
-                                        final Integer pYear, final UriInfo pUriInfo) throws Exception {
-    List<R> assignedTeachers = getContentManager().getAssignedTeachers(pProgramId, pSemesterId, pYear);
-    return buildJsonResponse(assignedTeachers, pUriInfo);
-  }
-
-  public JsonObject getAssignedTeachers(final Integer pProgramId, final Integer pSemesterId,
-                                        final Integer pYear, final Integer pSemester, final UriInfo pUriInfo) throws Exception {
-    List<R> assignedTeachers = getContentManager().getAssignedTeachers(pProgramId, pSemesterId, pYear, pSemester);
-    return buildJsonResponse(assignedTeachers, pUriInfo);
-  }
-
-  public JsonObject getAssignedTeachers(final Integer pProgramId, final Integer pSemesterId,
-                                        final CourseCategory pCourseCategory, final UriInfo pUriInfo) throws Exception {
-    List<R> assignedTeachers = getContentManager().getAssignedTeachers(pProgramId, pSemesterId, pCourseCategory);
-    return buildJsonResponse(assignedTeachers, pUriInfo);
-  }
-
-  public JsonObject getAssignedTeachers(final Integer pProgramId, final Integer pSemesterId,
-                                        final String pCourseId, final UriInfo pUriInfo) throws Exception {
-    List<R> assignedTeachers = getContentManager().getAssignedTeachers(pProgramId, pSemesterId, pCourseId);
-    return buildJsonResponse(assignedTeachers, pUriInfo);
-  }
-
-  public JsonObject getAssignedTeachers(final Integer pProgramId, final Integer pSemesterId, final Integer pYear,
-                                        final CourseCategory pCourseCategory, final UriInfo pUriInfo) throws Exception {
-    List<R> assignedTeachers = getContentManager().getAssignedTeachers(pProgramId, pSemesterId, pYear, pCourseCategory);
-    return buildJsonResponse(assignedTeachers, pUriInfo);
-  }
-
-  public JsonObject getAssignedTeachers(final Integer pProgramId, final Integer pSemesterId, final Integer pYear,
-                                        final Integer pSemester, final CourseCategory pCourseCategory,
+                                        final Integer pYear,
+                                        final String pOfferedBy,
                                         final UriInfo pUriInfo) throws Exception {
-    List<R> assignedTeachers = getContentManager().getAssignedTeachers(pProgramId, pSemesterId, pYear, pSemester, pCourseCategory);
+    List<R> assignedTeachers = getContentManager().getAssignedTeachers(pProgramId, pSemesterId, pYear, pOfferedBy);
+    return buildJsonResponse(assignedTeachers, pUriInfo);
+  }
+
+  public JsonObject getAssignedTeachers(final Integer pProgramId, final Integer pSemesterId,
+                                        final Integer pYear, final Integer pSemester,
+                                        final String pOfferedBy, final UriInfo pUriInfo) throws Exception {
+    List<R> assignedTeachers = getContentManager().getAssignedTeachers(pProgramId, pSemesterId, pYear, pSemester, pOfferedBy);
+    return buildJsonResponse(assignedTeachers, pUriInfo);
+  }
+
+  public JsonObject getAssignedTeachers(final Integer pProgramId, final Integer pSemesterId,
+                                        final CourseCategory pCourseCategory,
+                                        final String pOfferedBy,
+                                        final UriInfo pUriInfo) throws Exception {
+    List<R> assignedTeachers = getContentManager().getAssignedTeachers(pProgramId, pSemesterId, pCourseCategory, pOfferedBy);
+    return buildJsonResponse(assignedTeachers, pUriInfo);
+  }
+
+  public JsonObject getAssignedTeachers(final Integer pProgramId, final Integer pSemesterId,
+                                        final String pCourseId,
+                                        final String pOfferedBy,
+                                        final UriInfo pUriInfo) throws Exception {
+    List<R> assignedTeachers = getContentManager().getAssignedTeachers(pProgramId, pSemesterId, pCourseId, pOfferedBy);
+    return buildJsonResponse(assignedTeachers, pUriInfo);
+  }
+
+  public JsonObject getAssignedTeachers(final Integer pProgramId, final Integer pSemesterId, final Integer pYear,
+                                        final CourseCategory pCourseCategory,
+                                        final String pOfferedBy,
+                                        final UriInfo pUriInfo) throws Exception {
+    List<R> assignedTeachers = getContentManager().getAssignedTeachers(pProgramId, pSemesterId, pYear, pCourseCategory, pOfferedBy);
+    return buildJsonResponse(assignedTeachers, pUriInfo);
+  }
+
+  public JsonObject getAssignedTeachers(final Integer pProgramId, final Integer pSemesterId, final Integer pYear,
+                                        final Integer pSemester,
+                                        final CourseCategory pCourseCategory,
+                                        final String pOfferedBy,
+                                        final UriInfo pUriInfo) throws Exception {
+    List<R> assignedTeachers
+        = getContentManager().getAssignedTeachers(pProgramId, pSemesterId, pYear, pSemester, pCourseCategory, pOfferedBy);
     return buildJsonResponse(assignedTeachers, pUriInfo);
   }
 

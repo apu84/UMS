@@ -12,11 +12,11 @@ public class MarksLogDto {
   private CourseMarksSubmissionStatus status;
   private String statusName;
 
-  private Float quiz;
-  private Float classPerformance;
-  private Float partA;
-  private Float partB;
-  private Float total;
+  private Double quiz;
+  private Double classPerformance;
+  private Double partA;
+  private Double partB;
+  private Double total;
   private String gradeLetter;
   private int recheckStatus;
 
@@ -68,43 +68,43 @@ public class MarksLogDto {
     this.statusName = statusName;
   }
 
-  public Float getQuiz() {
+  public Double getQuiz() {
     return quiz;
   }
 
-  public void setQuiz(Float quiz) {
+  public void setQuiz(Double quiz) {
     this.quiz = quiz;
   }
 
-  public Float getClassPerformance() {
+  public Double getClassPerformance() {
     return classPerformance;
   }
 
-  public void setClassPerformance(Float classPerformance) {
+  public void setClassPerformance(Double classPerformance) {
     this.classPerformance = classPerformance;
   }
 
-  public Float getPartA() {
+  public Double getPartA() {
     return partA;
   }
 
-  public void setPartA(Float partA) {
+  public void setPartA(Double partA) {
     this.partA = partA;
   }
 
-  public Float getPartB() {
+  public Double getPartB() {
     return partB;
   }
 
-  public void setPartB(Float partB) {
+  public void setPartB(Double partB) {
     this.partB = partB;
   }
 
-  public Float getTotal() {
+  public Double getTotal() {
     return total;
   }
 
-  public void setTotal(Float total) {
+  public void setTotal(Double total) {
     this.total = total;
   }
 

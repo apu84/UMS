@@ -54,6 +54,7 @@ module ums {
 
     constructor(private appConstants:any, private httpClient:HttpClient, private $scope:IExamRoutineScope, private $q:ng.IQService) {
 
+      //localStorage.clear();
       $scope.data = {
         examTimeOptions: appConstants.examTime,
         ugPrograms: appConstants.ugPrograms
@@ -104,15 +105,15 @@ module ums {
       this.httpClient.get("academic/examroutine/semester/"+this.$scope.routine.semester+"/examtype/"+exam_type, this.appConstants.mimeTypeJson,
           (json:any, etag:string) => {
             var tempVar = json;
-            console.log('---temp var length---');
-            console.log(tempVar.entries[0]);
+            //console.log('---temp var length---');
+            //console.log(tempVar.entries[0]);
             if(tempVar.entries[0]==']'){
               var dateTimeArr:Array<IDateTime> = [];
             }
             else{
               var dateTimeArr:Array<IDateTime>=eval(json.entries);
             }
-            console.log(dateTimeArr);
+          //  console.log(dateTimeArr);
             defer.resolve(dateTimeArr);
           },
           (response:ng.IHttpPromiseCallbackArg<any>) => {
@@ -172,7 +173,7 @@ module ums {
       var courseRow = this.getNewCourseRow(index);
       this.$scope.routine.date_times[dateTimeTargetIndex].programs[programTargetIndex].courses.splice(0, 0, courseRow);
 
-      console.log("program_courses_"+program_row_obj.programId);
+      //console.log("program_courses_"+program_row_obj.programId);
 
 
       if (localStorage.getItem("program_courses_"+program_row_obj.programId) != null) {
@@ -187,9 +188,9 @@ module ums {
         return;
       }
 
-      this.getCourseArr(program_row_obj.programId).then((courseArr:Array<ICourse>)=> {
-        this.$scope.routine.date_times[dateTimeTargetIndex].programs[programTargetIndex].courseArr = courseArr;
-        localStorage["program_courses_"+program_row_obj.programId] = JSON.stringify(courseArr);
+      this.getCourseArr(program_row_obj.programId).then((courseResponse:any)=> {
+        this.$scope.routine.date_times[dateTimeTargetIndex].programs[programTargetIndex].courseArr = courseResponse.courseArr;
+        //localStorage["program_courses_"+program_row_obj.programId] = JSON.stringify(courseResponse.courseArr);
         setTimeout(function () {
           $('#' + 'course_' + date_time_row_obj.index + program_row_obj.index + courseRow.index).select2({
             placeholder: "Select an option",
@@ -212,28 +213,43 @@ module ums {
       this.$scope.routine.date_times[dateTimeTargetIndex].programs[programTargetIndex].courses.splice(courseTargetIndex, 1);
     }
 
-    private programSelectionChanged(date_time:IDateTime,program_obj_row:IProgram):void {
-console.clear();
-      console.log(program_obj_row);
-      //if(program_obj_row.programId==null)
-        program_obj_row.programId = $("#program_" + date_time.index + program_obj_row.index).val() == "?" ? null : parseInt($("#program_" + date_time.index + program_obj_row.index).val());
-      console.log("------------>>" + program_obj_row.programId);
-      console.log(program_obj_row);
+    private programSelectionChanged(program_obj_row:IProgram,date_time:IDateTime):void {
+//console.clear();
+ //       program_obj_row.programId = $("#program_" + date_time.index + program_obj_row.index).val() == "?" ? null : Number($("#program_" + date_time.index + program_obj_row.index).val());
+     // console.log("------------>>" + program_obj_row.programId);
+  //    console.log(program_obj_row.programId );
+
       for (var ind in program_obj_row.courses) {
         var course:ICourse = program_obj_row.courses[ind];
         course.year = null;
         course.semester = null;
         course.title = null;
+        course.no=null;
       }
       //program_obj_row.programId= $("#program_"+program_obj_row.index+date_time.index).val();
       program_obj_row.courseArr = null;
 
-      this.getCourseArr(program_obj_row.programId).then((courseArr:Array<ICourse>)=> {
-        program_obj_row.courseArr = courseArr;
+      this.getCourseArr(program_obj_row.programId,program_obj_row).then((courseResponse:any)=> {
+
+        localStorage["program_courses_"+courseResponse.program.programId] = JSON.stringify(courseResponse.courseArr);
+        program_obj_row.courseArr = courseResponse.courseArr;
         for (var ind in program_obj_row.courses) {
-          $("#" + program_obj_row.index + "select" + ind).select2("destroy").select2();
+          //$("#" + program_obj_row.index + "select" + ind).select2("destroy").select2("val","");
+          console.log("#########");
+          $("#course_" + date_time.index+program_obj_row.index+ind).select2("destroy").select2("val","");
+
         }
       });
+
+      setTimeout(function () {
+        for (var ind in program_obj_row.courses) {
+          $("#course_" + date_time.index+program_obj_row.index+ind).select2(
+              {
+                placeholder: "Select an option",
+                allowClear: true
+              });
+        }
+      }, 100);
 
 
     }
@@ -289,21 +305,21 @@ console.clear();
 
 
 
-    private getCourseArr(program_id:number):ng.IPromise<any> {
+    private getCourseArr(program_id:number,program?:IProgram):ng.IPromise<any> {
       var defer = this.$q.defer();
       var courseArr:Array<any>;
-      console.log('-----inside courseArr-22222222222222sadf asasdf sadf---')
-      console.log(this.$scope.routine.semester);
 
-
-      console.log(program_id);
-
-
+      if(localStorage.getItem("program_courses_"+program_id)!=null){
+        var courseArr:Array<any>=JSON.parse(localStorage.getItem("program_courses_"+program_id) );
+        defer.resolve({program:program,courseArr:courseArr});
+        return defer.promise;
+      }
       this.httpClient.get('academic/course/semester/'+ this.$scope.routine.semester+'/program/' + program_id, 'application/json',
           (json:any, etag:string) => {
             courseArr = json.entries;
             this.$scope.courseArr = courseArr;
-            defer.resolve(courseArr);
+            localStorage["program_courses_"+program_id] = JSON.stringify(courseArr);
+            defer.resolve({program:program,courseArr:courseArr});
           },
           (response:ng.IHttpPromiseCallbackArg<any>) => {
             console.error(response);
@@ -313,8 +329,14 @@ console.clear();
     }
 
     private courseSelectionChanged(program_row:IProgram,course_row:ICourse, selected_course_id:string) {
+     // console.log(selected_course_id);
+
+      var courseArr:Array<any>=JSON.parse(localStorage.getItem("program_courses_"+program_row.programId) );
+      console.log("~~~~~~");
+      console.log(courseArr);
       console.log(selected_course_id);
-      var course:ICourse=this.arrayLookup(this.$scope.courseArr,'id',selected_course_id);
+      var course:ICourse=this.arrayLookup(courseArr,'id',selected_course_id);
+      console.log(course);
       course_row.year = course.year;
       course_row.semester = course.semester;
       course_row.title = course.title;
@@ -401,17 +423,17 @@ console.clear();
     private convertToJson(dateTimeArr:Array<IDateTime>,insertType:string):any {
       var jsonObj = [];
       for (var indx_date_time in dateTimeArr) {
-        console.log("Row :" + indx_date_time);
-        console.log("----------------------");
-        console.log("Exam Date: " + dateTimeArr[indx_date_time].examDate);
-        console.log("Exam Time: " + dateTimeArr[indx_date_time].examTime);
+        //console.log("Row :" + indx_date_time);
+        //console.log("----------------------");
+        //console.log("Exam Date: " + dateTimeArr[indx_date_time].examDate);
+        //console.log("Exam Time: " + dateTimeArr[indx_date_time].examTime);
         for (var indx_program in dateTimeArr[indx_date_time].programs) {
           var program:IProgram = dateTimeArr[indx_date_time].programs[indx_program];
-          console.log("~~~~~~~~~~~~~~~~");
-          console.log("Program : " + program.programId);
+          //console.log("~~~~~~~~~~~~~~~~");
+          //console.log("Program : " + program.programId);
           for (var indx_course in program.courses) {
             var course:ICourse = program.courses[indx_course];
-            console.log("Course Id  :" + course.id);
+            //console.log("Course Id  :" + course.id);
             var item = {}
             item ["date"] = dateTimeArr[indx_date_time].examDate;
             item ["time"] = dateTimeArr[indx_date_time].examTime;
@@ -427,7 +449,7 @@ console.clear();
       complete_json["semesterId"] = this.$scope.routine.semester;
       complete_json["examType"] = this.$scope.routine.examType;
       complete_json["insertType"] = insertType;
-      console.log(complete_json);
+      //console.log(complete_json);
       return complete_json;
     }
 
@@ -441,7 +463,7 @@ console.clear();
           if(programRow.programId==null)
               programRow.programId = $("#program_" + dateTimeRow.index + programRow.index).val() == "?" ? null : $("#program_" + dateTimeRow.index + programRow.index).val();
         }
-        console.log(dateTimeRow);
+       // console.log(dateTimeRow);
         validate = this.validateSingleRow(dateTimeRow) && validate;
 //        validate = this.validateProgramDuplicate(routine,date_time, program) && validate;
 
@@ -509,7 +531,7 @@ console.clear();
         }
       }
       else if (field_prefix == "year") {
-        console.log(field_prefix + "_" + indx_date_time + indx_program + indx_course);
+      //  console.log(field_prefix + "_" + indx_date_time + indx_program + indx_course);
         element = $("#" + field_prefix + "_" + indx_date_time + indx_program + indx_course);
         if (value == null) {
           this.putKoColor(element);
@@ -588,31 +610,70 @@ console.clear();
     }
 
     private editDateTime(date_time_row_obj:IDateTime):void {
+
+      this.showOverlay(date_time_row_obj.index);
+
       date_time_row_obj.readOnly = false;
       for (var ind in date_time_row_obj.programs) {
         var program:IProgram = date_time_row_obj.programs[ind];
+        //console.log(program);
+        this.getCourseArr(program.programId,program).then((courseResponse:any)=> {
+          //console.log("---inside the thief---");
+          //console.log(courseResponse);
+          //console.log( courseResponse.program);
+          var courseArr:Array<ICourse>=courseResponse.courseArr;
 
-        this.getCourseArr(program.programId).then((courseArr:Array<ICourse>)=> {
-          console.log("---inside the thief---");
-          program.courseArr = this.$scope.courseArr;
-          console.log(program.courseArr);
+
+          courseResponse.program.courseArr = courseArr;
+          //program.courseArr = this.$scope.courseArr;
+         // console.log(program.courseArr);
+         // console.log(courseArr.length);
+          this.setSelect2Courses(date_time_row_obj);
         });
 
       }
 
-setTimeout(function() {
+      var that=this;
+
+//alert($("#program_10").val());
+    }
+
+    private setSelect2Courses(date_time_row_obj:IDateTime):void {
       for (var ind1 in date_time_row_obj.programs) {
         var program:IProgram = date_time_row_obj.programs[ind1];
         console.log(program);
         $("#program_"+date_time_row_obj.index+program.index).val(program.programId+'');
-      for (var ind2 in program.courses) {
+        for (var ind2 in program.courses) {
           var course:ICourse =program.courses[ind2];
+          //  console.log("#course_" + date_time_row_obj.index + program.index + course.index); /////alsdkfja
           $("#course_" + date_time_row_obj.index + program.index + course.index).select2().select2('val',course.id);
         }
       }
-},
-1000);
-//alert($("#program_10").val());
+      this.hideOverlay(date_time_row_obj);
+
+    }
+    private showOverlay(rowIndex:number):void{
+      var $divOverlay = $('#divOverlay');
+      var bottomWidth = $("#row"+rowIndex).css('width');
+      var bottomHeight = $("#row"+rowIndex).css('height');
+      var rowPos = $("#row"+rowIndex).position();
+      var bottomTop = rowPos.top;
+      var bottomLeft = rowPos.left;
+      $divOverlay.css({
+        position: 'absolute',
+        top: bottomTop,
+        left: bottomLeft,
+        width: '95%',
+        height: bottomHeight
+      });
+      $('#info').text('Top: ' + bottomTop + ' Left: ' + bottomLeft);
+      $divOverlay.delay(100).slideDown('fast');
+    }
+
+    private hideOverlay(date_time_row_obj:any):void{
+      var $divOverlay = $('#divOverlay');
+      $divOverlay.hide(100);
+     // date_time_row_obj.readOnly=true;
     }
   }
   UMS.controller('ExamRoutine', ExamRoutine);

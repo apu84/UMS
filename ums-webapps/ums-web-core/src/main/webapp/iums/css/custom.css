@@ -396,5 +396,8 @@ div.ui-jqgrid-view table.ui-jqgrid-btable th {
         width:auto;
     }
 }
-
+#topArrowDiv {
+    display: none;
+    margin-top: -10px;
+}
 /* End*/

@@ -1,14 +1,9 @@
-<style>
-
-    #topArrowDiv {
-        display: none;
-        margin-top: -10px;
-    }
-</style>
-
 <div class="row" id="topArrowDiv">
+
     <div class="col-md-2 col-md-offset-5">
+        <center>
         <i class="fa fa-chevron-down" aria-hidden="true" onclick="resetTopBottomDivs()"  style="cursor: pointer;"></i>
+            </center>
     </div>
 </div>
 
@@ -109,10 +104,9 @@
     function resetTopBottomDivs(){
         $("#topArrowDiv").hide(10);
         $("#courseSelectionDiv").show(200);
-
     }
 </script>
-<div class="row">
+<div class="row" style="padding-left: 10px;">
     <angular-filemanager data-ng-if="reloadOn"></angular-filemanager>
 </div>
 

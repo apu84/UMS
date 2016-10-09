@@ -137,13 +137,13 @@ public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, Mut
 
     MarksSubmissionStatusDto actualStatusDTO = getContentManager().getMarksSubmissionStatus(requestedStatusDTO.getSemesterId(), requestedStatusDTO.getCourseId(), requestedStatusDTO.getExamType());
     String actingRoleForCurrentUser=gradeSubmissionService.getActorForCurrentUser(userId, userRole, actualStatusDTO.getSemesterId(), actualStatusDTO.getCourseId());
-    gradeSubmissionService.validateGradeSubmission(actingRoleForCurrentUser,requestedStatusDTO,actualStatusDTO,gradeList, action);
 
     if ((actualStatusDTO.getCourseType() == CourseType.THEORY )  &&   (actualStatusDTO.getStatus()==CourseMarksSubmissionStatus.NOT_SUBMITTED)) {
         getContentManager().updatePartInfo(requestedStatusDTO);
     }
 
     if (action.equalsIgnoreCase("submit")) {
+      gradeSubmissionService.validateGradeSubmission(actingRoleForCurrentUser,requestedStatusDTO,actualStatusDTO,gradeList, action);
       getContentManager().updateCourseMarksSubmissionStatus(actualStatusDTO, CourseMarksSubmissionStatus.WAITING_FOR_SCRUTINY);
 
       getContentManager().insertGradeLog(userId, actingRoleForCurrentUser,actualStatusDTO,CourseMarksSubmissionStatus.WAITING_FOR_SCRUTINY, gradeList);

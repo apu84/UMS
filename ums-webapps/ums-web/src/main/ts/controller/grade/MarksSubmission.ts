@@ -469,6 +469,7 @@ module ums {
           part_b = Number($("#part_b_" + student_id).val()) || 0;
 
         total = quiz + class_perf + part_a + part_b;
+        total = Math.round(total);
         $("#total_" + student_id).val(String(total));
         var grade_letter:string = this.commonService.getGradeLetter(total,regType);
         $("#grade_letter_" + student_id).val(grade_letter);
@@ -503,7 +504,7 @@ module ums {
     }
 
     private checkNumber(sNum):boolean {
-      var pattern = /^\d+(.\d{1,2})?$/;
+      var pattern = /^\d+(.\d{1,3})?$/;
       return pattern.test(sNum);
     }
     private toggleStatRules(table_id:string) {
@@ -547,6 +548,7 @@ module ums {
           if(row[6]=="") {
             try {
               total=Number(row[2]) + Number(row[3]) + Number(row[4]) + partBMarks;
+              total=Math.round(total);
               this.setFieldValue("total_" + studentId, total);
             }catch(Exception){
             }
@@ -560,6 +562,7 @@ module ums {
             this.setFieldValue("grade_letter_" + studentId, row[7]);
           else
             this.setFieldValue("grade_letter_" + studentId, this.commonService.getGradeLetter(total,regType));
+
 
           this.validateGrade(false, studentId, row[2], row[3], row[4], row[5], total.toString(), $("#grade_letter_" + studentId).val(),regType);
         }
@@ -728,7 +731,7 @@ module ums {
 
         //Total
         if (total != "" || force_validate) {
-          if (this.checkNumber(total) == false || Number(total) >100 ||Number(total) != Number(quiz) + Number(class_performance) + Number(part_a) + Number(part_b)) {
+          if (this.checkNumber(total) == false || Number(total) >100 ||Number(total) != Math.round(Number(quiz) + Number(class_performance) + Number(part_a) + Number(part_b)) ) {
             $("#total_" + student_id).css(border_error);
             row_error = true;
 

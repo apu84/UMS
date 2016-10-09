@@ -26,6 +26,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/service/HttpClient.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/FileUpload.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/CookieService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/Settings.ts'/>
 
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/AppController.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/MainController.ts'/>
@@ -91,6 +92,7 @@
 /// <reference path='service/TimeTracker.ts'/>
 /// <reference path='service/EmployeeService.ts'/>
 /// <reference path='service/StudentService.ts'/>
+/// <reference path='service/TeacherService.ts'/>
 
 
 
@@ -123,6 +125,8 @@
 /// <reference path='controller/course-material/StudentCourseMaterial.ts'/>
 /// <reference path='controller/grade/MarksSubmission.ts'/>
 /// <reference path='controller/grade/GradeSubmissionDeadLine.ts'/>
+/// <reference path='controller/result/ResultProcessing.ts'/>
+
 /// <reference path='Utils.ts'/>
 
 /// <reference path='controller/syllabus/FullSyllabus.ts'/>

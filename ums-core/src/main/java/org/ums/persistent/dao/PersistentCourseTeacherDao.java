@@ -39,6 +39,7 @@ implements CourseTeacherManager{
           "%s" +
           "%s" +
           "                    AND t1.syllabus_id = t3.syllabus_id\n" +
+          "                    AND t2.OFFER_BY = ? " +
           "           ORDER BY t3.syllabus_id,\n" +
           "                    t2.year,\n" +
           "                    t2.semester) t3\n" +
