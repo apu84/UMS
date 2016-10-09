@@ -610,6 +610,9 @@ module ums {
     }
 
     private editDateTime(date_time_row_obj:IDateTime):void {
+
+      this.showOverlay(date_time_row_obj.index);
+
       date_time_row_obj.readOnly = false;
       for (var ind in date_time_row_obj.programs) {
         var program:IProgram = date_time_row_obj.programs[ind];
@@ -624,27 +627,53 @@ module ums {
           courseResponse.program.courseArr = courseArr;
           //program.courseArr = this.$scope.courseArr;
          // console.log(program.courseArr);
-///////waefasfsadfsadfsadf sf asdf asdads f
          // console.log(courseArr.length);
-
+          this.setSelect2Courses(date_time_row_obj);
         });
 
       }
 
-setTimeout(function() {
+      var that=this;
+
+//alert($("#program_10").val());
+    }
+
+    private setSelect2Courses(date_time_row_obj:IDateTime):void {
       for (var ind1 in date_time_row_obj.programs) {
         var program:IProgram = date_time_row_obj.programs[ind1];
         console.log(program);
         $("#program_"+date_time_row_obj.index+program.index).val(program.programId+'');
-      for (var ind2 in program.courses) {
+        for (var ind2 in program.courses) {
           var course:ICourse =program.courses[ind2];
-      //  console.log("#course_" + date_time_row_obj.index + program.index + course.index); /////alsdkfja
+          //  console.log("#course_" + date_time_row_obj.index + program.index + course.index); /////alsdkfja
           $("#course_" + date_time_row_obj.index + program.index + course.index).select2().select2('val',course.id);
         }
       }
-},
-5000);
-//alert($("#program_10").val());
+      this.hideOverlay(date_time_row_obj);
+
+    }
+    private showOverlay(rowIndex:number):void{
+      var $divOverlay = $('#divOverlay');
+      var bottomWidth = $("#row"+rowIndex).css('width');
+      var bottomHeight = $("#row"+rowIndex).css('height');
+      var rowPos = $("#row"+rowIndex).position();
+      var bottomTop = rowPos.top;
+      var bottomLeft = rowPos.left;
+      $divOverlay.css({
+        position: 'absolute',
+        top: bottomTop,
+        left: bottomLeft,
+        width: '95%',
+        height: bottomHeight
+      });
+      $('#info').text('Top: ' + bottomTop + ' Left: ' + bottomLeft);
+      $divOverlay.delay(100).slideDown('fast');
+    }
+
+    private hideOverlay(date_time_row_obj:any):void{
+      var $divOverlay = $('#divOverlay');
+      $divOverlay.hide(100);
+     // date_time_row_obj.readOnly=true;
     }
   }
   UMS.controller('ExamRoutine', ExamRoutine);

@@ -19,6 +19,7 @@ import org.ums.services.NotificationGenerator;
 import org.ums.services.Notifier;
 import org.ums.services.UtilsService;
 import org.ums.util.Constants;
+import org.ums.util.UmsUtils;
 
 import javax.json.*;
 import java.io.StringReader;
@@ -267,25 +268,25 @@ public class GradeSubmissionService {
     hasError = validateGradeLetter(hasError,gradeDTO);
     return hasError;
   }
-  private Boolean validateQuiz(Boolean error,Float quiz,CourseRegType regType){
+  private Boolean validateQuiz(Boolean error,Double quiz,CourseRegType regType){
     if(quiz>20 && regType==CourseRegType.REGULAR){
       error = Boolean.TRUE;
     }
     return error;
   }
-  private Boolean validateClassPerformance(Boolean error,Float classPerf,CourseRegType regType){
+  private Boolean validateClassPerformance(Boolean error,Double classPerf,CourseRegType regType){
     if(classPerf>10 && regType==CourseRegType.REGULAR){
       error = Boolean.TRUE;
     }
     return error;
   }
-  private Boolean validatePartA(Boolean error,Float partA,Integer partAMax,CourseRegType regType){
+  private Boolean validatePartA(Boolean error,Double partA,Integer partAMax,CourseRegType regType){
     if(partA>partAMax){
       error = Boolean.TRUE;
     }
     return error;
   }
-  private Boolean validatePartB(Boolean error,Float partB,Integer totalPartCount,Integer partBMax,CourseRegType regType){
+  private Boolean validatePartB(Boolean error,Double partB,Integer totalPartCount,Integer partBMax,CourseRegType regType){
     if(totalPartCount==2 && (partB>partBMax)){
       error = Boolean.TRUE;
     }
@@ -310,7 +311,7 @@ public class GradeSubmissionService {
   }
 
   private Boolean validateGradeLetter(Boolean error,StudentGradeDto gradeDTO) throws  Exception{
-    if(!mUtilsService.getGradeLetter(Math.round(gradeDTO.getTotal()),gradeDTO.getRegType()).equalsIgnoreCase(gradeDTO.getGradeLetter())) {
+    if(!mUtilsService.getGradeLetter(UmsUtils.round(gradeDTO.getTotal()),gradeDTO.getRegType()).equalsIgnoreCase(gradeDTO.getGradeLetter())) {
       error = Boolean.TRUE;
     }
     return error;

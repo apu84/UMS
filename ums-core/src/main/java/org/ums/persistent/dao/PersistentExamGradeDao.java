@@ -431,21 +431,21 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
       marks.setStudentName(resultSet.getString("FULL_NAME"));
 
       if(courseType==CourseType.THEORY) {
-        float quiz = resultSet.getFloat("QUIZ");
+        Double quiz = resultSet.getDouble("QUIZ");
         marks.setQuiz(resultSet.wasNull() ? null : quiz);
 
-        float classPerformance = resultSet.getFloat("CLASS_PERFORMANCE");
+        Double classPerformance = resultSet.getDouble("CLASS_PERFORMANCE");
         marks.setClassPerformance(resultSet.wasNull() ? null : classPerformance);
 
-        float partA = resultSet.getFloat("PART_A");
+        Double partA = resultSet.getDouble("PART_A");
         marks.setPartA(resultSet.wasNull() ? null : partA);
 
-        float partB = resultSet.getFloat("PART_B");
+        Double partB = resultSet.getDouble("PART_B");
         marks.setPartB(resultSet.wasNull() ? null : partB);
 
-        marks.setPartTotal(resultSet.getFloat("PART_TOTAL"));
+        marks.setPartTotal(resultSet.getDouble("PART_TOTAL"));
       }
-      float total = resultSet.getFloat("TOTAL");
+      Double total = resultSet.getDouble("TOTAL");
       marks.setTotal(resultSet.wasNull() ? null : total);
 
       marks.setGradeLetter(resultSet.getString("GRADE_LETTER"));
@@ -483,15 +483,15 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
           if (gradeDto.getQuiz() == -1)
             ps.setNull(1, Types.NULL);
           else
-            ps.setFloat(1, gradeDto.getQuiz());
+            ps.setDouble(1, gradeDto.getQuiz());
           if (gradeDto.getClassPerformance() == -1) ps.setNull(2, Types.NULL);
-          else ps.setFloat(2, gradeDto.getClassPerformance());
+          else ps.setDouble(2, gradeDto.getClassPerformance());
           if (gradeDto.getPartA() == -1) ps.setNull(3, Types.NULL);
-          else ps.setFloat(3, gradeDto.getPartA());
+          else ps.setDouble(3, gradeDto.getPartA());
           if (gradeDto.getPartB() == -1) ps.setNull(4, Types.NULL);
-          else ps.setFloat(4, gradeDto.getPartB());
+          else ps.setDouble(4, gradeDto.getPartB());
           if (gradeDto.getTotal() == -1) ps.setNull(5, Types.NULL);
-          else ps.setFloat(5, gradeDto.getTotal());
+          else ps.setDouble(5, gradeDto.getTotal());
 
           ps.setString(6, gradeDto.getGradeLetter());
           ps.setInt(7, gradeDto.getStatusId());
@@ -503,7 +503,7 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
         }
         if(courseType==CourseType.SESSIONAL) {
           if (gradeDto.getTotal() == -1) ps.setNull(1, Types.NULL);
-          else ps.setFloat(1, gradeDto.getTotal());
+          else ps.setDouble(1, gradeDto.getTotal());
 
           ps.setString(2, gradeDto.getGradeLetter());
           ps.setInt(3, gradeDto.getStatusId());
@@ -843,12 +843,12 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
               || actualStatusDTO.getStatus() == CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_SCRUTINIZER
               || actualStatusDTO.getStatus() == CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_HEAD
               || actualStatusDTO.getStatus() == CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_COE) {
-            ps.setFloat(7, gradeDto.getQuiz());
-            ps.setFloat(8, gradeDto.getClassPerformance());
-            ps.setFloat(9, gradeDto.getPartA());
+            ps.setDouble(7, gradeDto.getQuiz());
+            ps.setDouble(8, gradeDto.getClassPerformance());
+            ps.setDouble(9, gradeDto.getPartA());
             if (gradeDto.getPartB() == -1) ps.setNull(10, Types.NULL);
-            else ps.setFloat(10, gradeDto.getPartB());
-            ps.setFloat(11, gradeDto.getTotal());
+            else ps.setDouble(10, gradeDto.getPartB());
+            ps.setDouble(11, gradeDto.getTotal());
             ps.setString(12, gradeDto.getGradeLetter());
             ps.setInt(13, nextStatus.getId());
             ps.setInt(14, gradeDto.getRecheckStatusId());
@@ -869,7 +869,7 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
               || actualStatusDTO.getStatus() == CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_SCRUTINIZER
               || actualStatusDTO.getStatus() == CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_HEAD
               || actualStatusDTO.getStatus() == CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_COE) {
-            ps.setFloat(7, gradeDto.getTotal());
+            ps.setDouble(7, gradeDto.getTotal());
             ps.setString(8, gradeDto.getGradeLetter());
             ps.setInt(9, nextStatus.getId());
             ps.setInt(10, gradeDto.getRecheckStatusId());
@@ -958,20 +958,20 @@ public class PersistentExamGradeDao  extends ExamGradeDaoDecorator {
     @Override
     public MarksLogDto mapRow(ResultSet resultSet, int i) throws SQLException {
       MarksLogDto log = new MarksLogDto();
-      Float nullValue=null;
+      Double nullValue=null;
       log.setUserId(resultSet.getString("USER_ID"));
       log.setRoleName(WordUtils.capitalize(resultSet.getString("ROLE")));
       log.setUserName(resultSet.getString("EMPLOYEE_NAME"));
       log.setInsertedOn(resultSet.getString("INSERTED_ON"));
-      log.setQuiz(resultSet.getFloat("QUIZ"));
+      log.setQuiz(resultSet.getDouble("QUIZ"));
       if(resultSet.wasNull()) { log.setQuiz(nullValue);}
-      log.setClassPerformance(resultSet.getFloat("CLASS_PERFORMANCE"));
+      log.setClassPerformance(resultSet.getDouble("CLASS_PERFORMANCE"));
       if(resultSet.wasNull()) { log.setClassPerformance(nullValue);}
-      log.setPartA(resultSet.getFloat("PART_A"));
+      log.setPartA(resultSet.getDouble("PART_A"));
       if(resultSet.wasNull()) { log.setPartA(nullValue);}
-      log.setPartB(resultSet.getFloat("PART_B"));
+      log.setPartB(resultSet.getDouble("PART_B"));
       if(resultSet.wasNull()) { log.setPartB(nullValue);}
-      log.setTotal(resultSet.getFloat("TOTAL"));
+      log.setTotal(resultSet.getDouble("TOTAL"));
       if(resultSet.wasNull()) { log.setTotal(nullValue);}
       log.setGradeLetter(resultSet.getString("GRADE_LETTER"));
       log.setStatus(CourseMarksSubmissionStatus.values()[resultSet.getInt("STATUS")]);

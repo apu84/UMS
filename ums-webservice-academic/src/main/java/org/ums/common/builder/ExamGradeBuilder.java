@@ -99,13 +99,13 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
             StudentGradeDto grade = new StudentGradeDto();
             grade.setStudentId(jsonObject.getString("studentId"));
             if(courseInfo.getInt("course_typeId")==1) { // For  only theory courses
-                grade.setQuiz((jsonObject.getString("quiz") == null || jsonObject.getString("quiz").equalsIgnoreCase("")) ? -1 : Float.parseFloat(jsonObject.getString("quiz")));
-                grade.setClassPerformance((jsonObject.getString("classPerformance") == null || jsonObject.getString("classPerformance").equalsIgnoreCase("")) ? -1 : Float.parseFloat(jsonObject.getString("classPerformance")));
-                grade.setPartA((jsonObject.getString("partA") == null || jsonObject.getString("partA").equalsIgnoreCase("")) ? -1 : Float.parseFloat(jsonObject.getString("partA")));
+                grade.setQuiz((jsonObject.getString("quiz") == null || jsonObject.getString("quiz").equalsIgnoreCase("")) ? -1 : Double.parseDouble(jsonObject.getString("quiz")));
+                grade.setClassPerformance((jsonObject.getString("classPerformance") == null || jsonObject.getString("classPerformance").equalsIgnoreCase("")) ? -1 : Double.parseDouble(jsonObject.getString("classPerformance")));
+                grade.setPartA((jsonObject.getString("partA") == null || jsonObject.getString("partA").equalsIgnoreCase("")) ? -1 : Double.parseDouble(jsonObject.getString("partA")));
                 if (courseInfo.getInt("total_part") == 2)
-                    grade.setPartB((jsonObject.getString("partB") == null || jsonObject.getString("partB").equalsIgnoreCase("")) ? -1 : Float.parseFloat(jsonObject.getString("partB")));
+                    grade.setPartB((jsonObject.getString("partB") == null || jsonObject.getString("partB").equalsIgnoreCase("")) ? -1 : Double.parseDouble(jsonObject.getString("partB")));
             }
-            grade.setTotal((jsonObject.getString("total") == null || jsonObject.getString("total").equalsIgnoreCase("")) ? -1 : Float.parseFloat(jsonObject.getString("total")));
+            grade.setTotal((jsonObject.getString("total") == null || jsonObject.getString("total").equalsIgnoreCase("")) ? -1 : Double.parseDouble(jsonObject.getString("total")));
             grade.setGradeLetter((jsonObject.getString("gradeLetter")==null  || jsonObject.getString("gradeLetter").equalsIgnoreCase("") )? "" :jsonObject.getString("gradeLetter"));
             grade.setStatusId(jsonObject.getInt("statusId"));
             grade.setStatus(StudentMarksSubmissionStatus.values()[jsonObject.getInt("statusId")]);
