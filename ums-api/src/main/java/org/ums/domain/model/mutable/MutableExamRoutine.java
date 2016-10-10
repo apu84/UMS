@@ -18,4 +18,5 @@ public interface MutableExamRoutine extends ExamRoutine, Mutable {
   void setCourseTitle(final String pCourseTitle);
   void setCourseYear(final Integer pCourseYear);
   void setCourseSemester(final Integer pCourseSemester);
+  void setExamGroup(final Integer pExamGroup);
 }

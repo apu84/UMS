@@ -21,4 +21,5 @@ public interface ExamRoutine extends Serializable, EditType<MutableExamRoutine> 
   String getCourseTitle();
   Integer getCourseYear();
   Integer getCourseSemester();
+  Integer getExamGroup();
 }

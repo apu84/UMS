@@ -81,10 +81,10 @@
                                     <input  id="date_{{::date_time.index}}" type="text"  data-ng-model="date_time.examDate" data-date-format="dd/mm/yyyy"
                                             placeholder="DD/MM/YYYY" class="datepicker-default form-control required" autocomplete="off" /><br/>
                                 </div>
-                            <select data-ng-model="date_time.examTime"style="width: 135px;float: left">
+                                    <select data-ng-model="date_time.examTime" style="width: 135px;float: left">
                                         <option data-ng-repeat="examTime in data.examTimeOptions" value="{{::examTime.id}}">{{::examTime.name}}</option>
                                     </select>
-                                    <select style="width: 50px;float: left; margin-left: 2px;">
+                                    <select data-ng-model="date_time.examGroup" style="width: 50px;float: left; margin-left: 2px;" data-convert-to-number>
                                         <option value="1">1</option>
                                         <option value="2">2</option>
                                         <option value="3">3</option>
@@ -98,7 +98,7 @@
                                 {{date_time.examTime}}
                             </div>
                             <div class="input-icon right" >
-                                Group : 1
+                                Group : {{date_time.examGroup}}
                             </div>
                         </div>
             <br/>
@@ -112,21 +112,33 @@
                             </a>
 
                             <a href="javascript:;" class="btn btn-xs btn-default btn-round"
-                               data-ng-click="saveByDateTime(date_time)">
-                                <i class="fa fa-floppy-o" style="color: green;"></i>
+                               data-ng-click="saveByDateTime(date_time)" style="border-radius: 15px;" data-ng-hide="date_time.readOnly">
+                                <i class="fa fa-floppy-o" style="color: blue;"></i>
                             </a>
+                            <a href="javascript:;" class="btn btn-xs btn-default btn-round disabled"
+                               style="border-radius: 15px;" data-ng-show="date_time.readOnly">
+                                <i class="fa fa-floppy-o" style="color: darkslategrey;"></i>
+                            </a>
+
+
                             <a href="javascript:;" class="btn btn-xs btn-default btn-round"
                                data-ng-click="editDateTime(date_time)" data-ng-show="date_time.readOnly">
-                                <i class="fa fa-edit" style="color: orange;"></i>
+                                <i class="fa fa-edit" style="color: blue;"></i>
                             </a>
                             <a href="javascript:;" class="btn btn-xs btn-default btn-round" data-ng-hide="date_time.readOnly"  data-ng-click="date_time.readOnly=true;">
                                 <i class="fa fa-arrow-circle-left" style="color: green;"></i>
                             </a>
 
                             <a href="javascript:;" class="btn btn-xs btn-default btn-round"
-                               data-ng-click="removeDateTime(date_time.index)">
+                               style="border-radius: 15px;" data-ng-click="removeDateTime(date_time.index)" data-ng-hide="date_time.readOnly">
                                 <i class="fa fa-times" style="color: red;"></i>
                             </a>
+                            <a href="javascript:;" class="btn btn-xs btn-default btn-round disabled"
+                               style="border-radius: 15px;" data-ng-click="removeDateTime(date_time.index)" data-ng-show="date_time.readOnly">
+                                <i class="fa fa-times" style="color: darkslategrey;"></i>
+                            </a>
+
+
                         <td colspan="6" style="padding: 0px;border: none;">
                             <table width="100%" id="programTable">
                                 <tr ng-repeat="program in date_time.programs" >
@@ -140,31 +152,40 @@
                                         <div  data-ng-show="date_time.readOnly">
                                             {{program.programName}}
                                         </div>
+                                        {{date_time.readOnly}}
                                         <br/>
 
+
                                         <a href="javascript:;" class="btn btn-xs btn-default btn-round"
-                                           data-ng-click="addNewProgram(date_time.index)" style="border-radius: 15px;" data-ng-hide="date_time.readOnly">
+                                           style="border-radius: 15px;" data-ng-click="addNewCourse(date_time,program)" data-ng-hide="date_time.readOnly">
                                             <i class="fa fa-plus-circle" style="color: blue;"></i>
+                                        </a>
+                                        <a href="javascript:;" class="btn btn-xs btn-default btn-round disabled"
+                                           style="border-radius: 15px;" data-ng-show="date_time.readOnly">
+                                            <i class="fa fa-plus-circle" style="color: darkslategrey;"></i>
                                         </a>
 
                                         <a href="javascript:;" class="btn btn-xs btn-default btn-round"
-                                           data-ng-click="addNewCourse(date_time,program)">
-                                            <i class="fa fa-plus-circle" style="color: blue;"></i>
+                                           style="border-radius: 15px;" data-ng-click="saveByProgram(date_time,program)" data-ng-hide="date_time.readOnly">
+                                            <i class="fa fa-floppy-o" style="color: blue;"></i>
                                         </a>
-                                        <a href="javascript:;" class="btn btn-xs btn-default btn-round disabled" >
-                                            <i class="fa fa-plus-circle" style="color: darkslategrey;"></i>
+                                        <a href="javascript:;" class="btn btn-xs btn-default btn-round disabled"
+                                           style="border-radius: 15px;" data-ng-click="saveByProgram(date_time,program)" data-ng-show="date_time.readOnly">
+                                            <i class="fa fa-floppy-o" style="color: darkslategrey;"></i>
                                         </a>
+
                                         <a href="javascript:;" class="btn btn-xs btn-default btn-round"
-                                           data-ng-click="saveByProgram(date_time,program)">
-                                            <i class="fa fa-floppy-o" style="color: green;"></i>
-                                        </a>
-                                        <a href="javascript:;" class="btn btn-xs btn-default btn-round"
-                                           data-ng-click="removeProgram(date_time.index,program.index)">
+                                           style="border-radius: 15px;" data-ng-click="removeProgram(date_time.index,program.index)" data-ng-hide="date_time.readOnly">
                                             <i class="fa fa-times" style="color: red;"></i>
+                                        </a>
+
+                                        <a href="javascript:;" class="btn btn-xs btn-default btn-round disabled"
+                                           style="border-radius: 15px;" data-ng-show="date_time.readOnly">
+                                            <i class="fa fa-times" style="color: darkslategrey;"></i>
                                         </a>
                                     </td>
                                     <td width="73%" style="vertical-align: top;" >
-                                        <div style="min-height: 160px;">
+                                        <div><!--style="min-height: 160px;"-->
                                         <table width="100%">
                                             <tr ng-repeat="course in program.courses">
                                                 <td width="11%" align="center" style="padding-top: 5px;padding-bottom: 5px;height: 45px;" height="45px">
@@ -194,9 +215,15 @@
                                                 <td width="53%" align="left" style="padding-left:10px;padding-top: 5px;padding-bottom: 5px;">{{course.title}}</td>
                                                 <td width="12%" align="center" style="padding-top: 5px;padding-bottom: 5px;">
                                                     <a href="javascript:;" class="btn btn-xs btn-default btn-round"
-                                                       data-ng-click="removeCourse(date_time.index,program.index,course.index)">
+                                                       style="border-radius: 15px;" data-ng-click="removeCourse(date_time.index,program.index,course.index)" data-ng-hide="date_time.readOnly">
                                                         <i class="fa fa-times" style="color: red;"></i>
                                                     </a>
+
+                                                    <a href="javascript:;" class="btn btn-xs btn-default btn-round disabled"
+                                                       style="border-radius: 15px;" data-ng-show="date_time.readOnly">
+                                                        <i class="fa fa-times" style="color: darkslategrey;"></i>
+                                                    </a>
+
 
 
                                                 </td>

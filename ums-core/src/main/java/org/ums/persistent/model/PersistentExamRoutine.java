@@ -32,7 +32,7 @@ public class PersistentExamRoutine implements MutableExamRoutine {
   private String mCourseTitle;
   private Integer mCourseYear;
   private Integer mCourseSemester;
-
+  private Integer mExamGroup;
 
   public PersistentExamRoutine() {
   }
@@ -202,5 +202,16 @@ public class PersistentExamRoutine implements MutableExamRoutine {
   @Override
   public void setExamTypeName(String mExamTypeName) {
     this.mExamTypeName = mExamTypeName;
+  }
+
+
+  @Override
+  public Integer getExamGroup() {
+    return mExamGroup;
+  }
+
+  @Override
+  public void setExamGroup(Integer mExamGroup) {
+    this.mExamGroup = mExamGroup;
   }
 }

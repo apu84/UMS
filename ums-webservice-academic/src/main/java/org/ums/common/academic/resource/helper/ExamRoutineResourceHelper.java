@@ -175,7 +175,7 @@ public class ExamRoutineResourceHelper extends ResourceHelper<ExamRoutine, Mutab
     String programString = "";
     String courseString = "";
     for (ExamRoutineDto routineDto : routineList) {
-      routineDto.toString();
+//      routineDto.toString();
       currDateTime = routineDto.getExamDate() + routineDto.getExamTime();
       currProgram = routineDto.getProgramId();
       if (prevDateTime.equalsIgnoreCase(currDateTime) && counter != 0) {
@@ -209,7 +209,7 @@ public class ExamRoutineResourceHelper extends ResourceHelper<ExamRoutine, Mutab
         }
         programCounter = 0;
         courseCounter = 0;
-        dateTimeString = "{\"index\":" + dateTimeCounter + ",\"examDate\":\"" + routineDto.getExamDate() + "\",\"examTime\":\"" + routineDto.getExamTime() + "\",\"readOnly\":true,";
+        dateTimeString = "{\"index\":" + dateTimeCounter + ",\"examDate\":\"" + routineDto.getExamDate() + "\",\"examTime\":\"" + routineDto.getExamTime() + "\",\"examGroup\":" + routineDto.getExamGroup() + ",\"readOnly\":true,";
         programString = "\"programs\":[{\"index\":" + programCounter + ",\"programId\":" + routineDto.getProgramId() + ",\"programName\":\"" + routineDto.getProgramName() + "\",\"readOnly\":true";
         courseString = ",\"courses\":[{\"index\":" + courseCounter + ",\"id\":\"" + routineDto.getCourseId() + "\",\"no\":\"" + routineDto.getCourseNumber() + "\",\"title\":\"" + routineDto.getCourseTitle() + "\",\"year\":" + routineDto.getCourseYear() + ",\"semester\":\"" + routineDto.getCourseSemester() + "\",\"readOnly\":true},";
         programCounter++;
@@ -220,7 +220,8 @@ public class ExamRoutineResourceHelper extends ResourceHelper<ExamRoutine, Mutab
       prevProgram = currProgram;
       // children.add(routineDto.toString());
     }
-    if (!dateTimeString.equalsIgnoreCase("")) {
+//    if (!dateTimeString.equalsIgnoreCase("")) {
+    if (!programString.equalsIgnoreCase("")) {
       if (courseString.length() > 0)
         courseString = courseString.substring(0, courseString.length() - 1);
       totalString += dateTimeString + programString + courseString + "]}]}]";

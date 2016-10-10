@@ -29,15 +29,18 @@ module ums {
     index: number;
     examDate: string;
     examTime: string;
+    examGroup:number;
     programs: Array<IProgram>;
   }
   interface IProgram {
     readOnly: boolean;
     index:number;
     programId: number;
+    programName:string;
     courses : Array<ICourse>;
     courseArr: Array<ICourse>;
   }
+
   interface ICourse {
     readOnly: boolean;
     index: number;
@@ -219,6 +222,8 @@ module ums {
      // console.log("------------>>" + program_obj_row.programId);
   //    console.log(program_obj_row.programId );
 
+      program_obj_row.programName=
+
       for (var ind in program_obj_row.courses) {
         var course:ICourse = program_obj_row.courses[ind];
         course.year = null;
@@ -272,16 +277,18 @@ module ums {
         index: index,
         examDate: '',
         examTime: '9:30 a.m. to 12:30 p.m',
+        examGroup:1,
         programs: Array<IProgram>()
       }
       return dateTimeRow;
     }
 
     private getNewProgramRow(index:number) {
-      var programRow:IProgram = {
-        readOnly: false,
+      var programRow:IProgram= {
+        readOnly: true,
         index: index,
         programId: null,
+        programName:'',
         courses: Array<ICourse>(),
         courseArr: Array<ICourse>()
       }
@@ -372,6 +379,7 @@ module ums {
         index: date_time.index,
         examDate: date_time.examDate,
         examTime: date_time.examTime,
+        examGroup:date_time.examGroup,
         programs: [program]
       }
       var validate:boolean = true;
@@ -437,7 +445,8 @@ module ums {
             var item = {}
             item ["date"] = dateTimeArr[indx_date_time].examDate;
             item ["time"] = dateTimeArr[indx_date_time].examTime;
-            item ["program"] = program.programId;
+            item ["group"] = dateTimeArr[indx_date_time].examGroup;
+            item ["program"] = Number(program.programId);
             item ["course"] = course.id;
             jsonObj.push(item);
           }
@@ -454,21 +463,22 @@ module ums {
     }
 
 
-    private validateExamRoutine(dateTimeArr:Array<IDateTime>) {
+    private validateExamRoutine(dateTimeArr:Array<IDateTime>):boolean {
       var validate:boolean = true;
       for (var ind_date_time in dateTimeArr) {
         var dateTimeRow:IDateTime = dateTimeArr[ind_date_time];
         for (var ind_program in dateTimeRow.programs) {
           var programRow:IProgram = dateTimeArr[ind_date_time].programs[ind_program];
           if(programRow.programId==null)
-              programRow.programId = $("#program_" + dateTimeRow.index + programRow.index).val() == "?" ? null : $("#program_" + dateTimeRow.index + programRow.index).val();
+              programRow.programId = $("#program_" + dateTimeRow.index + programRow.index).val().indexOf("?")>=0  ? null : $("#program_" + dateTimeRow.index + programRow.index).val();
+
+          validate = validate && this.validateSingleRow(dateTimeRow) ;
         }
        // console.log(dateTimeRow);
-        validate = this.validateSingleRow(dateTimeRow) && validate;
+
 //        validate = this.validateProgramDuplicate(routine,date_time, program) && validate;
 
       }
-
       return validate;
     }
 
@@ -476,16 +486,17 @@ module ums {
     private validateSingleRow(dateTime:IDateTime):boolean {
       var validate:boolean = true;
       var indx_date_time:number = dateTime.index;
-      this.validateFields("date", dateTime.examDate, indx_date_time, null, null);
+      validate=validate && this.validateFields("date", dateTime.examDate, indx_date_time, null, null);
       for (var ind in dateTime.programs) {
         var program:IProgram = dateTime.programs[ind];
-        this.validateFields("program", program.programId, indx_date_time, program.index, null);
-        validate = this.validateFields("program", program.programId, indx_date_time, program.index, null) && validate;
+        //this.validateFields("program", program.programId, indx_date_time, program.index, null);
+        validate = validate && this.validateFields("program", program.programId, indx_date_time, program.index, null) ;
+        if(program.courses.length==0) validate=false;
         for (var ind in program.courses) {
           var course:ICourse = program.courses[ind];
-          validate = this.validateFields("year", course.year, indx_date_time, program.index, course.index) && validate;
-          validate = this.validateFields("semester", course.semester, indx_date_time, program.index, course.index) && validate;
-          validate = this.validateFields("course", course.id, indx_date_time, program.index, course.index) && validate;
+          validate = validate && this.validateFields("year", course.year, indx_date_time, program.index, course.index) ;
+          validate = validate && this.validateFields("semester", course.semester, indx_date_time, program.index, course.index) ;
+          validate = validate && this.validateFields("course", course.id, indx_date_time, program.index, course.index) ;
         }
         return validate;
       }
@@ -512,56 +523,57 @@ module ums {
         element = $("#" + field_prefix + "_" + indx_date_time);
         if (value == "") {
           this.putKoColor(element);
-          validate = validate && false;
+          validate = false;
         }
         else {
           this.putOkColor(element);
-          validate = validate && true;
+          validate = true;
         }
       }
       else if (field_prefix == "program") {
         element = $("#" + field_prefix + "_" + indx_date_time + indx_program);
         if (value == null) {
           this.putKoColor(element);
-          validate = validate && false;
+          validate =  false;
         }
         else {
           this.putOkColor(element);
-          validate = validate && true;
+          validate =  true;
         }
+
       }
       else if (field_prefix == "year") {
       //  console.log(field_prefix + "_" + indx_date_time + indx_program + indx_course);
         element = $("#" + field_prefix + "_" + indx_date_time + indx_program + indx_course);
         if (value == null) {
           this.putKoColor(element);
-          validate = validate && false;
+          validate = false;
         }
         else {
           this.putOkColor(element);
-          validate = validate && true;
+          validate =  true;
         }
       }
       else if (field_prefix == "semester") {
         element = $("#" + field_prefix + "_" + indx_date_time + indx_program + indx_course);
         if (value == null) {
           this.putKoColor(element);
-          validate = validate && false;
+          validate = false;
         }
         else {
           this.putOkColor(element);
-          validate = validate && true;
+          validate = true;
         }
       }
       else if (field_prefix == "course") {
         element = $("#" + field_prefix + "_" + indx_date_time + indx_program + indx_course);
         if (value == "") {
           this.putKoColor(element);
-          validate = validate && false;
+          validate =  false;
         }
         else {
           this.putOkColor(element);
-          validate = validate && true;
+          validate = true;
         }
       }
 
@@ -611,9 +623,10 @@ module ums {
 
     private editDateTime(date_time_row_obj:IDateTime):void {
 
-      this.showOverlay(date_time_row_obj.index);
-
+     this.showOverlay(date_time_row_obj.index);
       date_time_row_obj.readOnly = false;
+      var that=this;
+
       for (var ind in date_time_row_obj.programs) {
         var program:IProgram = date_time_row_obj.programs[ind];
         //console.log(program);
@@ -628,12 +641,13 @@ module ums {
           //program.courseArr = this.$scope.courseArr;
          // console.log(program.courseArr);
          // console.log(courseArr.length);
-          this.setSelect2Courses(date_time_row_obj);
+
+
         });
 
       }
+      setTimeout(function(){that.setSelect2Courses(date_time_row_obj);},1000);
 
-      var that=this;
 
 //alert($("#program_10").val());
     }
@@ -649,7 +663,7 @@ module ums {
           $("#course_" + date_time_row_obj.index + program.index + course.index).select2().select2('val',course.id);
         }
       }
-      this.hideOverlay(date_time_row_obj);
+     this.hideOverlay(date_time_row_obj);
 
     }
     private showOverlay(rowIndex:number):void{

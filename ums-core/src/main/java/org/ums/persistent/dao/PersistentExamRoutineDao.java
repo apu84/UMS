@@ -19,7 +19,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class PersistentExamRoutineDao  extends ExamRoutineDaoDecorator {
 
   static String SELECT_ALL="Select TO_CHAR(EXAM_DATE,'DD/MM/YYYY') EXAM_DATE,EXAM_TIME,MST_PROGRAM.PROGRAM_ID,PROGRAM_SHORT_NAME, " +
-      "YEAR,MST_COURSE.SEMESTER,COURSE_NO,COURSE_TITLE,MST_COURSE.COURSE_ID " +
+      "YEAR,MST_COURSE.SEMESTER,COURSE_NO,COURSE_TITLE,MST_COURSE.COURSE_ID,EXAM_GROUP " +
       "From EXAM_ROUTINE,MST_COURSE,MST_SYLLABUS,MST_PROGRAM,COURSE_SYLLABUS_MAP " +
       "Where EXAM_ROUTINE.SEMESTER=? " +
       "And Exam_Type=? " +
@@ -31,8 +31,8 @@ public class PersistentExamRoutineDao  extends ExamRoutineDaoDecorator {
 
 
 
-  static String INSERT_ONE = "INSERT INTO EXAM_ROUTINE(SEMESTER,EXAM_TYPE,EXAM_DATE,EXAM_TIME,PROGRAM_ID,COURSE_ID) " +
-      "VALUES(?,?,to_date(?,'dd/MM/YYYY'),?,?,?)";
+  static String INSERT_ONE = "INSERT INTO EXAM_ROUTINE(SEMESTER,EXAM_TYPE,EXAM_DATE,EXAM_TIME,PROGRAM_ID,COURSE_ID,EXAM_GROUP) " +
+      "VALUES(?,?,to_date(?,'dd/MM/YYYY'),?,?,?,?)";
 
   static String DELETE="DELETE EXAM_ROUTINE Where SEMESTER=? And Exam_Type=? ";
 
@@ -147,6 +147,7 @@ public class PersistentExamRoutineDao  extends ExamRoutineDaoDecorator {
         ps.setString(4, routine.getExamTime());
         ps.setInt(5, routine.getProgramId());
         ps.setString(6, routine.getCourseId());
+        ps.setInt(7, routine.getExamGroup());
 
       }
 
@@ -171,6 +172,7 @@ public class PersistentExamRoutineDao  extends ExamRoutineDaoDecorator {
       routine.setCourseNumber(resultSet.getString("COURSE_NO"));
       routine.setCourseId(resultSet.getString("COURSE_ID"));
       routine.setCourseTitle(resultSet.getString("COURSE_TITLE"));
+      routine.setExamGroup(resultSet.getInt("EXAM_GROUP"));
       AtomicReference<ExamRoutineDto> atomicReference = new AtomicReference<>(routine);
       return atomicReference.get();
     }

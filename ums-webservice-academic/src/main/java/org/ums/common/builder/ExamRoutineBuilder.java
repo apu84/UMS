@@ -62,6 +62,10 @@ public class ExamRoutineBuilder  implements Builder<ExamRoutine, MutableExamRout
     if(pReadOnly.getExamDateOriginal()!=null){
       pBuilder.add("examDateOriginal",pReadOnly.getExamDateOriginal());
     }
+
+    if(pReadOnly.getExamGroup()!=null){
+      pBuilder.add("examGroup",pReadOnly.getExamGroup());
+    }
   }
 
   @Override
@@ -78,8 +82,9 @@ public class ExamRoutineBuilder  implements Builder<ExamRoutine, MutableExamRout
       routine = new ExamRoutineDto();
       routine.setExamDate(jsonObject.getString("date"));
       routine. setExamTime(jsonObject.getString("time"));
-      routine.setProgramId(Integer.parseInt(jsonObject.getString("program")));
+      routine.setProgramId(jsonObject.getInt("program"));
       routine.setCourseId(jsonObject.getString("course"));
+      routine.setExamGroup(jsonObject.getInt("group"));
 
       routineList.add(routine);
     }
