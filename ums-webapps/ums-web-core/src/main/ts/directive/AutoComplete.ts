@@ -55,7 +55,7 @@ module ums{
             console.log(ui.item.value);
             $scope.addSecondSelectedValue({id:ui.item.value});
 
-          }
+          } 
         });
       //});
 

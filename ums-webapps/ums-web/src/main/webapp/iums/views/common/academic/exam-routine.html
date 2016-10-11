@@ -15,10 +15,10 @@
     }
 
     table#routineTable>tbody>tr>td {
-        border: 1px solid black;
+        border: 1px solid #736F6E;
     }
     table#programTable>tbody>tr>td {
-        border: 1px solid black;
+        border: 1px solid #736F6E;
     }
     #divOverlay { display: none; background-color:Silver; text-align:center;  position:absolute; z-index:10000; opacity:0.5; }
 </style>
@@ -26,45 +26,48 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-body shadowPanel" style="min-height: 600px;">
+
                 <div class="row">
-                    <div class="col-md-6">
-                        <font color="blue"> Semester :</font>
-                        <select data-ng-model="routine.semester" data-ng-change="fetchSavedRoutine()">
-                            <option value="0" ng-selected="true">Select a Semester</option>
-                            <option value="11012016">Spring, 2016</option>
-                            <option value="11020106">Fall, 2016</option>
-                            <option value="11012015">Spring, 2015</option>
-                            <option value="11022015">Fall, 2015</option>
-                        </select>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <font color="blue">Exam Type :</font>
-                        <select data-ng-model="routine.examType" data-ng-change="fetchSavedRoutine()">
-                            <option value="0" ng-selected="true">Select Exam Type</option>
-                            <option value="1">Regular Exam</option>
-                            <option value="2">Carry/Improvement</option>
-                        </select>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label" style="font-weight: bold;">Semester</label>
+                            <select class="form-control" data-ng-model="routine.semester" data-ng-change="fetchSavedRoutine()" data-convert-to-number>
+                                <option data-ng-repeat="semester in data.semesters" value="{{semester.id}}">{{semester.name}}</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="col-md-6" style="text-align: right;">
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <a href="javascript:;" class="btn btn-xs btn-default"
-                           data-ng-click="addNewDateTime()"  data-ng-disabled="routine.addButtonDisable">
-                            Add New Date <i class="fa fa-plus-circle" style="color: blue;"></i>
-                        </a>
-                        <a href="javascript:;" class="btn btn-xs btn-default"
-                           data-ng-click="saveAll()" data-ng-disabled="routine.saveButtonDisable">
-                            &nbsp;&nbsp;Save All &nbsp;
-                            <i class="fa fa-floppy-o" style="color: green;"></i>
-                        </a>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label" style="font-weight: bold;">Exam Type</label>
+                            <select class="form-control" data-ng-model="routine.examType" data-ng-change="fetchSavedRoutine()" data-convert-to-number>
+                                <option value="0" ng-selected="true">Select Exam Type</option>
+                                <option value="1">Regular Exam</option>
+                                <option value="2">Carry/Improvement</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <span data-ng-show="data.editable">
+                            <div class="form-group">
+                                <label class="control-label" style="font-weight: bold;">Operations</label>
+                                <div class="form-control"  style="border: none;padding: 0px;">
+                                    <button type="button"   class="btn btn-success" data-ng-click="addNewDateTime()"   data-ng-disabled="routine.addButtonDisable"> Add New Date</button>
+                                    <button type="button" class="btn btn-grey btn-square" data-ng-click="saveAll()" data-ng-disabled="routine.saveButtonDisable">Save All</button>
+                                </div>
+                            </div>
+                        </span>
                     </div>
                 </div>
+
+
 
                 <table id="routineTable" class="table table-hover table-bordered table-advanced" style="margin-top: 20px;border-collapse: collapse;" cellpadding="0" cellspacing="0">
                     <thead>
                     <tr role="row" class="heading">
                         <th width="17%" class="sorting">Date-Time-Group</th>
                         <th width="17%" class="sorting_asc">Program</th>
-                        <th width="6%" class="sorting">Year<br/>(Student's)</th>
-                        <th width="6%" class="sorting">Semester<br/>(Student's)</th>
+                        <th width="6%" class="sorting">Year</th>
+                        <th width="6%" class="sorting">Semester</th>
                         <th width="13%" class="sorting">Course No.</th>
                         <th width="33%" class="sorting">Course Title</th>
                         <th width="6%" class="sorting">Delete</th>
@@ -102,42 +105,46 @@
                             </div>
                         </div>
             <br/>
-                            <a href="javascript:;" class="btn btn-xs btn-default btn-round"
-                               data-ng-click="addNewProgram(date_time.index)" style="border-radius: 15px;" data-ng-hide="date_time.readOnly">
-                                <i class="fa fa-plus-circle" style="color: blue;"></i>
-                            </a>
-                            <a href="javascript:;" class="btn btn-xs btn-default btn-round disabled"
-                               style="border-radius: 15px;" data-ng-show="date_time.readOnly">
-                                <i class="fa fa-plus-circle" style="color: darkslategrey;"></i>
-                            </a>
 
-                            <a href="javascript:;" class="btn btn-xs btn-default btn-round"
-                               data-ng-click="saveByDateTime(date_time)" style="border-radius: 15px;" data-ng-hide="date_time.readOnly">
-                                <i class="fa fa-floppy-o" style="color: blue;"></i>
-                            </a>
-                            <a href="javascript:;" class="btn btn-xs btn-default btn-round disabled"
-                               style="border-radius: 15px;" data-ng-show="date_time.readOnly">
-                                <i class="fa fa-floppy-o" style="color: darkslategrey;"></i>
-                            </a>
+                            <span data-ng-show="data.editable">
+                            <div data-ng-show="date_time.readOnly">
+                                <a href="javascript:;" class="btn btn-xs btn-default btn-round disabled"
+                                   style="border-radius: 15px;" >
+                                    <i class="fa fa-plus-circle" style="color: darkslategrey;"></i>
+                                </a>
+                                <a href="javascript:;" class="btn btn-xs btn-default btn-round disabled"
+                                   style="border-radius: 15px;">
+                                    <i class="fa fa-floppy-o" style="color: darkslategrey;"></i>
+                                </a>
+                                <a href="javascript:;" class="btn btn-xs btn-default btn-round"
+                                   data-ng-click="editDateTime(date_time)">
+                                    <i class="fa fa-edit" style="color: blue;"></i>
+                                </a>
+                                <a href="javascript:;" class="btn btn-xs btn-default btn-round disabled"
+                                   style="border-radius: 15px;" >
+                                    <i class="fa fa-times" style="color: darkslategrey;"></i>
+                                </a>
+                            </div>
 
-
-                            <a href="javascript:;" class="btn btn-xs btn-default btn-round"
-                               data-ng-click="editDateTime(date_time)" data-ng-show="date_time.readOnly">
-                                <i class="fa fa-edit" style="color: blue;"></i>
-                            </a>
-                            <a href="javascript:;" class="btn btn-xs btn-default btn-round" data-ng-hide="date_time.readOnly"  data-ng-click="date_time.readOnly=true;">
-                                <i class="fa fa-arrow-circle-left" style="color: green;"></i>
-                            </a>
-
-                            <a href="javascript:;" class="btn btn-xs btn-default btn-round"
-                               style="border-radius: 15px;" data-ng-click="removeDateTime(date_time.index)" data-ng-hide="date_time.readOnly">
-                                <i class="fa fa-times" style="color: red;"></i>
-                            </a>
-                            <a href="javascript:;" class="btn btn-xs btn-default btn-round disabled"
-                               style="border-radius: 15px;" data-ng-click="removeDateTime(date_time.index)" data-ng-show="date_time.readOnly">
-                                <i class="fa fa-times" style="color: darkslategrey;"></i>
-                            </a>
-
+                            <div data-ng-hide="date_time.readOnly">
+                                <a href="javascript:;" class="btn btn-xs btn-default btn-round"
+                                   data-ng-click="addNewProgram(date_time.index)" style="border-radius: 15px;" >
+                                    <i class="fa fa-plus-circle" style="color: blue;"></i>
+                                </a>
+                                <a href="javascript:;" class="btn btn-xs btn-default btn-round"
+                                   data-ng-click="saveByDateTime(date_time)"  style="border-radius: 15px;">
+                                    <i class="fa fa-floppy-o" style="color: blue;"></i>
+                                </a>
+                                <a href="javascript:;" class="btn btn-xs btn-default btn-round"
+                                   data-ng-click="date_time.readOnly=true;">
+                                    <i class="fa fa-arrow-circle-left" style="color: blue;"></i>
+                                </a>
+                                <a href="javascript:;" class="btn btn-xs btn-default btn-round"
+                                   style="border-radius: 15px;" data-ng-click="removeDateTime(date_time.index)">
+                                    <i class="fa fa-times" style="color: red;"></i>
+                                </a>
+                            </div>
+                            </span>
 
                         <td colspan="6" style="padding: 0px;border: none;">
                             <table width="100%" id="programTable">
@@ -152,37 +159,38 @@
                                         <div  data-ng-show="date_time.readOnly">
                                             {{program.programName}}
                                         </div>
-                                        {{date_time.readOnly}}
                                         <br/>
 
-
-                                        <a href="javascript:;" class="btn btn-xs btn-default btn-round"
-                                           style="border-radius: 15px;" data-ng-click="addNewCourse(date_time,program)" data-ng-hide="date_time.readOnly">
-                                            <i class="fa fa-plus-circle" style="color: blue;"></i>
-                                        </a>
-                                        <a href="javascript:;" class="btn btn-xs btn-default btn-round disabled"
-                                           style="border-radius: 15px;" data-ng-show="date_time.readOnly">
-                                            <i class="fa fa-plus-circle" style="color: darkslategrey;"></i>
-                                        </a>
-
-                                        <a href="javascript:;" class="btn btn-xs btn-default btn-round"
-                                           style="border-radius: 15px;" data-ng-click="saveByProgram(date_time,program)" data-ng-hide="date_time.readOnly">
-                                            <i class="fa fa-floppy-o" style="color: blue;"></i>
-                                        </a>
-                                        <a href="javascript:;" class="btn btn-xs btn-default btn-round disabled"
-                                           style="border-radius: 15px;" data-ng-click="saveByProgram(date_time,program)" data-ng-show="date_time.readOnly">
-                                            <i class="fa fa-floppy-o" style="color: darkslategrey;"></i>
-                                        </a>
-
-                                        <a href="javascript:;" class="btn btn-xs btn-default btn-round"
-                                           style="border-radius: 15px;" data-ng-click="removeProgram(date_time.index,program.index)" data-ng-hide="date_time.readOnly">
-                                            <i class="fa fa-times" style="color: red;"></i>
-                                        </a>
-
-                                        <a href="javascript:;" class="btn btn-xs btn-default btn-round disabled"
-                                           style="border-radius: 15px;" data-ng-show="date_time.readOnly">
-                                            <i class="fa fa-times" style="color: darkslategrey;"></i>
-                                        </a>
+                                        <span data-ng-show="data.editable">
+                                                <div data-ng-show="date_time.readOnly">
+                                                    <a href="javascript:;" class="btn btn-xs btn-default btn-round disabled"
+                                                       style="border-radius: 15px;" data-ng-show="date_time.readOnly">
+                                                        <i class="fa fa-plus-circle" style="color: darkslategrey;"></i>
+                                                    </a>
+                                                    <a href="javascript:;" class="btn btn-xs btn-default btn-round disabled"
+                                                       style="border-radius: 15px;"  data-ng-show="date_time.readOnly">
+                                                        <i class="fa fa-floppy-o" style="color: darkslategrey;"></i>
+                                                    </a>
+                                                    <a href="javascript:;" class="btn btn-xs btn-default btn-round disabled"
+                                                       style="border-radius: 15px;" data-ng-show="date_time.readOnly">
+                                                        <i class="fa fa-times" style="color: darkslategrey;"></i>
+                                                    </a>
+                                                </div>
+                                                <div data-ng-hide="date_time.readOnly">
+                                                    <a href="javascript:;" class="btn btn-xs btn-default btn-round"
+                                                       style="border-radius: 15px;" data-ng-click="addNewCourse(date_time,program)" data-ng-hide="date_time.readOnly">
+                                                        <i class="fa fa-plus-circle" style="color: blue;"></i>
+                                                    </a>
+                                                    <a href="javascript:;" class="btn btn-xs btn-default btn-round"
+                                                       style="border-radius: 15px;" data-ng-click="saveByProgram(date_time,program)" data-ng-hide="date_time.readOnly">
+                                                        <i class="fa fa-floppy-o" style="color: blue;"></i>
+                                                    </a>
+                                                    <a href="javascript:;" class="btn btn-xs btn-default btn-round"
+                                                       style="border-radius: 15px;" data-ng-click="removeProgram(date_time.index,program.index)" data-ng-hide="date_time.readOnly">
+                                                        <i class="fa fa-times" style="color: red;"></i>
+                                                    </a>
+                                                </div>
+                                        </span>
                                     </td>
                                     <td width="73%" style="vertical-align: top;" >
                                         <div><!--style="min-height: 160px;"-->

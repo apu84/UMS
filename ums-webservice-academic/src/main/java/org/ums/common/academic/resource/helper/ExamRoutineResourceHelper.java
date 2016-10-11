@@ -2,13 +2,16 @@ package org.ums.common.academic.resource.helper;
 
 import org.apache.commons.lang.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.ums.cache.LocalCache;
 import org.ums.common.builder.ExamRoutineBuilder;
 import org.ums.domain.model.dto.ExamRoutineDto;
 import org.ums.domain.model.immutable.ExamRoutine;
 import org.ums.domain.model.immutable.SeatPlanGroup;
 import org.ums.domain.model.mutable.MutableExamRoutine;
+import org.ums.exceptions.ValidationException;
 import org.ums.manager.ExamRoutineManager;
 import org.ums.manager.SeatPlanGroupManager;
 import org.ums.manager.SubGroupManager;
@@ -187,7 +190,7 @@ public class ExamRoutineResourceHelper extends ResourceHelper<ExamRoutine, Mutab
             if (courseString.length() > 0)
               courseString = courseString.substring(0, courseString.length() - 1);
             totalString += dateTimeString + programString + courseString + "]},";
-            System.out.println(totalString);
+//            System.out.println(totalString);
           }
           //dateTimeString="{\"index\":"+dateTimeCounter+",\"examDate\":\""+routineDto.getExamDate()+"\",\"examTime\":\""+routineDto.getExamTime()+"\",\"readOnly\":true,";
           dateTimeString = "";
@@ -205,7 +208,7 @@ public class ExamRoutineResourceHelper extends ResourceHelper<ExamRoutine, Mutab
           if (courseString.length() > 0)
             courseString = courseString.substring(0, courseString.length() - 1);
           totalString += dateTimeString + programString + courseString + "]}]},"; // first "]" is for ending the course array , second "}" is for ending the current program ,third  "]" is for ending the program array and the last '}' is for ending the current date time entry.
-          System.out.println(totalString);
+//          System.out.println(totalString);
         }
         programCounter = 0;
         courseCounter = 0;
@@ -228,7 +231,7 @@ public class ExamRoutineResourceHelper extends ResourceHelper<ExamRoutine, Mutab
     } else
       totalString = totalString.substring(0,totalString.length()-1) +"]}"+ "]";
 
-    System.out.println(totalString);
+//    System.out.println(totalString);
 
 
     object.add("entries", totalString);
@@ -237,6 +240,7 @@ public class ExamRoutineResourceHelper extends ResourceHelper<ExamRoutine, Mutab
   }
 
 
+  @Transactional
   public Response save(final JsonObject pJsonObject,int pSemesterId,int pExamType) throws Exception {
     //check if the group for the exam is already created, if created, the group will be deleted
     List<SeatPlanGroup> groups = mSeatPlanGroupManager.getGroupBySemester(pSemesterId,pExamType);
@@ -248,8 +252,13 @@ public class ExamRoutineResourceHelper extends ResourceHelper<ExamRoutine, Mutab
     }
     PersistentExamRoutine mutable = new PersistentExamRoutine();
     getBuilder().build(mutable, pJsonObject, null);
-    mutable.delete();
-    mutable.save();
+    try {
+      mutable.delete();
+      mutable.save();
+    }
+    catch(DuplicateKeyException ex){
+      throw new ValidationException("Duplicate entry found.");
+    }
     return Response.noContent().build();
   }
 

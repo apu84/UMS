@@ -132,7 +132,7 @@
       var defer = this.$q.defer();
 
 
-      this.semesterService.getSemesterByProgramType(this.$scope.programType).then((semesterArr:Array<Semester>)=>{
+      this.semesterService.fetchSemesters(Utils.UG).then((semesterArr:Array<Semester>)=>{
         this.$scope.semesterList = semesterArr;
 
         defer.resolve(this.$scope.semesterList);

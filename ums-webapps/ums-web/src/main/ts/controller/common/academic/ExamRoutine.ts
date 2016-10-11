@@ -1,7 +1,3 @@
-///<reference path="../../../../../../../ums-web-core/src/main/ts/service/HttpClient.ts"/>
-///<reference path="../../../../../../../ums-web-core/src/main/ts/lib/jquery.notific8.d.ts"/>
-///<reference path="../../../../../../../ums-web-core/src/main/ts/lib/jquery.notify.d.ts"/>
-///<reference path="../../../../../../../ums-web-core/src/main/ts/lib/jquery.jqGrid.d.ts"/>
 module ums {
 
   interface IExamRoutineScope extends ng.IScope {
@@ -53,11 +49,13 @@ module ums {
   }
 
   export class ExamRoutine {
-    public static $inject = ['appConstants', 'HttpClient', '$scope', '$q'];
+    public static $inject = ['appConstants', 'HttpClient', '$scope', '$q', 'notify','semesterService'];
+    public validationErrorMessage="Please provide all information.";
 
-    constructor(private appConstants:any, private httpClient:HttpClient, private $scope:IExamRoutineScope, private $q:ng.IQService) {
+    constructor(private appConstants:any, private httpClient:HttpClient, private $scope:IExamRoutineScope, private $q:ng.IQService,private notify: Notify,private semesterService:SemesterService) {
 
-      //localStorage.clear();
+     this.clearLocalStorage();
+
       $scope.data = {
         examTimeOptions: appConstants.examTime,
         ugPrograms: appConstants.ugPrograms
@@ -85,14 +83,22 @@ module ums {
       $scope.saveAll = this.saveAll.bind(this);
       $scope.editDateTime = this.editDateTime.bind(this);
       $scope.fetchSavedRoutine=this.fetchSavedRoutine.bind(this);
+      this.loadSemesters();
 
+    }
+    private loadSemesters(){
+      this.semesterService.fetchSemesters(Utils.UG,5).then((semesters:Array<any>)=> {
+        this.$scope.data.semesters=semesters;
+        this.$scope.routine.semester=semesters[0].id;
+        this.$scope.routine.examType=Utils.EXAM_TYPE_REGULAR;
+        this.fetchSavedRoutine();
+      });
     }
     private fetchSavedRoutine():void{
 
       this.$scope.routine.date_times=new Array<IDateTime>();
       if(this.$scope.routine.semester==0 || this.$scope.routine.examType==0)
         return;
-
       this.$scope.loadingVisibility=true;
       this.getRoutine(this.$scope.routine.semester,this.$scope.routine.examType).then((dateTimeArr:Array<IDateTime>)=> {
         this.$scope.routine.date_times =dateTimeArr;
@@ -104,19 +110,24 @@ module ums {
 
 
     private getRoutine(semester_id:number,exam_type:number):ng.IPromise<any> {
+      var semester= this.$scope.data.semesters[Utils.findIndex(this.$scope.data.semesters,String(semester_id))];
+      if(semester.status==Utils.SEMESTER_STATUS_ACTIVE)
+        this.$scope.data.editable=true;
+      else
+        this.$scope.data.editable=false;
+
+
+
       var defer = this.$q.defer();
       this.httpClient.get("academic/examroutine/semester/"+this.$scope.routine.semester+"/examtype/"+exam_type, this.appConstants.mimeTypeJson,
           (json:any, etag:string) => {
             var tempVar = json;
-            //console.log('---temp var length---');
-            //console.log(tempVar.entries[0]);
             if(tempVar.entries[0]==']'){
               var dateTimeArr:Array<IDateTime> = [];
             }
             else{
               var dateTimeArr:Array<IDateTime>=eval(json.entries);
             }
-          //  console.log(dateTimeArr);
             defer.resolve(dateTimeArr);
           },
           (response:ng.IHttpPromiseCallbackArg<any>) => {
@@ -164,7 +175,6 @@ module ums {
     }
 
     private addNewCourse(date_time_row_obj:IDateTime, program_row_obj:IProgram):void {
-      // console.log(date_time_index+"--"+program_index+"---");
 
       var date_time_Arr = eval(this.$scope.routine.date_times);
       var dateTimeTargetIndex = this.findIndex(date_time_Arr, date_time_row_obj.index);
@@ -176,8 +186,7 @@ module ums {
       var courseRow = this.getNewCourseRow(index);
       this.$scope.routine.date_times[dateTimeTargetIndex].programs[programTargetIndex].courses.splice(0, 0, courseRow);
 
-      //console.log("program_courses_"+program_row_obj.programId);
-
+      if(program_row_obj.programId==null) return;
 
       if (localStorage.getItem("program_courses_"+program_row_obj.programId) != null) {
         var courseArr:Array<any>=JSON.parse(localStorage.getItem("program_courses_"+program_row_obj.programId) );
@@ -193,7 +202,6 @@ module ums {
 
       this.getCourseArr(program_row_obj.programId).then((courseResponse:any)=> {
         this.$scope.routine.date_times[dateTimeTargetIndex].programs[programTargetIndex].courseArr = courseResponse.courseArr;
-        //localStorage["program_courses_"+program_row_obj.programId] = JSON.stringify(courseResponse.courseArr);
         setTimeout(function () {
           $('#' + 'course_' + date_time_row_obj.index + program_row_obj.index + courseRow.index).select2({
             placeholder: "Select an option",
@@ -217,12 +225,9 @@ module ums {
     }
 
     private programSelectionChanged(program_obj_row:IProgram,date_time:IDateTime):void {
-//console.clear();
- //       program_obj_row.programId = $("#program_" + date_time.index + program_obj_row.index).val() == "?" ? null : Number($("#program_" + date_time.index + program_obj_row.index).val());
-     // console.log("------------>>" + program_obj_row.programId);
-  //    console.log(program_obj_row.programId );
 
-      program_obj_row.programName=
+      var programName=(this.appConstants.ugProgramMap[program_obj_row.programId])[0];
+      program_obj_row.programName=programName;
 
       for (var ind in program_obj_row.courses) {
         var course:ICourse = program_obj_row.courses[ind];
@@ -231,7 +236,6 @@ module ums {
         course.title = null;
         course.no=null;
       }
-      //program_obj_row.programId= $("#program_"+program_obj_row.index+date_time.index).val();
       program_obj_row.courseArr = null;
 
       this.getCourseArr(program_obj_row.programId,program_obj_row).then((courseResponse:any)=> {
@@ -239,10 +243,7 @@ module ums {
         localStorage["program_courses_"+courseResponse.program.programId] = JSON.stringify(courseResponse.courseArr);
         program_obj_row.courseArr = courseResponse.courseArr;
         for (var ind in program_obj_row.courses) {
-          //$("#" + program_obj_row.index + "select" + ind).select2("destroy").select2("val","");
-          console.log("#########");
           $("#course_" + date_time.index+program_obj_row.index+ind).select2("destroy").select2("val","");
-
         }
       });
 
@@ -313,6 +314,7 @@ module ums {
 
 
     private getCourseArr(program_id:number,program?:IProgram):ng.IPromise<any> {
+
       var defer = this.$q.defer();
       var courseArr:Array<any>;
 
@@ -336,12 +338,8 @@ module ums {
     }
 
     private courseSelectionChanged(program_row:IProgram,course_row:ICourse, selected_course_id:string) {
-     // console.log(selected_course_id);
 
       var courseArr:Array<any>=JSON.parse(localStorage.getItem("program_courses_"+program_row.programId) );
-      console.log("~~~~~~");
-      console.log(courseArr);
-      console.log(selected_course_id);
       var course:ICourse=this.arrayLookup(courseArr,'id',selected_course_id);
       console.log(course);
       course_row.year = course.year;
@@ -363,12 +361,12 @@ module ums {
       var validate:boolean = true;
       validate = this.validateExamRoutine([date_time]);
       if(validate==false){
-        alert("Please correct data.");
+        this.notify.error(this.validationErrorMessage);
         return;
       }
       var json:any = this.convertToJson([date_time],"byDateTime");
       this.saveRoutine(json).then((message:string)=> {
-        $.notific8(message);
+        this.notify.success(message);
         this.readOnlyRow([date_time]);
       });
 
@@ -385,12 +383,12 @@ module ums {
       var validate:boolean = true;
       validate = this.validateExamRoutine([dateTimeRow]);
       if(validate==false){
-        alert("Please correct data.");
+        this.notify.error(this.validationErrorMessage);
         return;
       }
       var json:any = this.convertToJson([date_time],"byProgram");
       this.saveRoutine(json).then((message:string)=> {
-        $.notific8(message);
+        this.notify.success(message);
         this.readOnlyRow([date_time]);
       });
     }
@@ -399,12 +397,12 @@ module ums {
       var validate:boolean = true;
       var validate = this.validateExamRoutine(this.$scope.routine.date_times);
       if(validate==false){
-        alert("Please correct data.");
+        this.notify.error(this.validationErrorMessage);
         return;
       }
       var json:any = this.convertToJson(this.$scope.routine.date_times,"all");
       this.saveRoutine(json).then((message:string)=> {
-        $.notific8(message);
+        this.notify.success(message);
         this.readOnlyRow(this.$scope.routine.date_times);
       });
     }
@@ -431,17 +429,10 @@ module ums {
     private convertToJson(dateTimeArr:Array<IDateTime>,insertType:string):any {
       var jsonObj = [];
       for (var indx_date_time in dateTimeArr) {
-        //console.log("Row :" + indx_date_time);
-        //console.log("----------------------");
-        //console.log("Exam Date: " + dateTimeArr[indx_date_time].examDate);
-        //console.log("Exam Time: " + dateTimeArr[indx_date_time].examTime);
         for (var indx_program in dateTimeArr[indx_date_time].programs) {
           var program:IProgram = dateTimeArr[indx_date_time].programs[indx_program];
-          //console.log("~~~~~~~~~~~~~~~~");
-          //console.log("Program : " + program.programId);
           for (var indx_course in program.courses) {
             var course:ICourse = program.courses[indx_course];
-            //console.log("Course Id  :" + course.id);
             var item = {}
             item ["date"] = dateTimeArr[indx_date_time].examDate;
             item ["time"] = dateTimeArr[indx_date_time].examTime;
@@ -458,7 +449,6 @@ module ums {
       complete_json["semesterId"] = this.$scope.routine.semester;
       complete_json["examType"] = this.$scope.routine.examType;
       complete_json["insertType"] = insertType;
-      //console.log(complete_json);
       return complete_json;
     }
 
@@ -467,55 +457,44 @@ module ums {
       var validate:boolean = true;
       for (var ind_date_time in dateTimeArr) {
         var dateTimeRow:IDateTime = dateTimeArr[ind_date_time];
-        for (var ind_program in dateTimeRow.programs) {
-          var programRow:IProgram = dateTimeArr[ind_date_time].programs[ind_program];
-          if(programRow.programId==null)
-              programRow.programId = $("#program_" + dateTimeRow.index + programRow.index).val().indexOf("?")>=0  ? null : $("#program_" + dateTimeRow.index + programRow.index).val();
-
-          validate = validate && this.validateSingleRow(dateTimeRow) ;
-        }
-       // console.log(dateTimeRow);
-
-//        validate = this.validateProgramDuplicate(routine,date_time, program) && validate;
-
+        if (dateTimeRow.programs.length == 0) {
+          validate = false;
+          validate=this.validateFields("date", dateTimeRow, dateTimeRow.index, null, null) && validate;
       }
+        else
+        {
+            validate =  this.validateDateTime(dateTimeRow) && validate;
+          }
+        }
+
       return validate;
     }
 
 
-    private validateSingleRow(dateTime:IDateTime):boolean {
+    private validateDateTime(dateTime:IDateTime):boolean {
       var validate:boolean = true;
       var indx_date_time:number = dateTime.index;
-      validate=validate && this.validateFields("date", dateTime.examDate, indx_date_time, null, null);
+      validate=this.validateFields("date", dateTime.examDate, indx_date_time, null, null) && validate;
       for (var ind in dateTime.programs) {
         var program:IProgram = dateTime.programs[ind];
-        //this.validateFields("program", program.programId, indx_date_time, program.index, null);
-        validate = validate && this.validateFields("program", program.programId, indx_date_time, program.index, null) ;
-        if(program.courses.length==0) validate=false;
-        for (var ind in program.courses) {
-          var course:ICourse = program.courses[ind];
-          validate = validate && this.validateFields("year", course.year, indx_date_time, program.index, course.index) ;
-          validate = validate && this.validateFields("semester", course.semester, indx_date_time, program.index, course.index) ;
-          validate = validate && this.validateFields("course", course.id, indx_date_time, program.index, course.index) ;
-        }
-        return validate;
+        validate = this.validateFields("program", program.programId, indx_date_time, program.index, null) && validate;
+        if (program.courses.length == 0) {
+        validate = false;
       }
+        else {
+          for (var ind in program.courses) {
+            var course:ICourse = program.courses[ind];
+            validate = this.validateFields("year", course.year, indx_date_time, program.index, course.index)  && validate;
+            validate = this.validateFields("semester", course.semester, indx_date_time, program.index, course.index) && validate;
+            validate = this.validateFields("course", course.id, indx_date_time, program.index, course.index) && validate;
+          }
+        }
+
+      }
+
+      return validate;
     }
 
-    /*
-     private validateProgramFields(program:IProgram,indx_date_time:number):boolean {
-     var validate:boolean = true;
-     this.validateFields("program", program.programId, indx_date_time, program.index, null);
-     validate =  this.validateFields("program", program.programId, indx_date_time, program.index, null) && validate;
-     for (var ind in program.courses) {
-     var course:ICourse = program.courses[ind];
-     validate =  this.validateFields("year", course.year, indx_date_time, program.index, course.index) && validate;
-     validate = this.validateFields("semester", course.semester, indx_date_time, program.index, course.index) && validate;
-     validate = this.validateFields("course", course.id, indx_date_time, program.index, course.index) && validate;
-     }
-     return validate;
-     }
-     */
     private validateFields(field_prefix:string, value:any, indx_date_time:number, indx_program:number, indx_course:number):boolean {
       var element:any;
       var validate:boolean = true;
@@ -543,7 +522,6 @@ module ums {
 
       }
       else if (field_prefix == "year") {
-      //  console.log(field_prefix + "_" + indx_date_time + indx_program + indx_course);
         element = $("#" + field_prefix + "_" + indx_date_time + indx_program + indx_course);
         if (value == null) {
           this.putKoColor(element);
@@ -597,29 +575,7 @@ module ums {
       return val;
     }
 
-    private validateProgramDuplicate(routine:any, date_time:IDateTime, program:IProgram) {
-      for (var ind1 in this.$scope.routine.date_times) {
-        var dateTime:IDateTime = this.$scope.routine.date_times[ind1];
-        for (var ind2 in dateTime.programs) {
-          //alert(dateTime.programs[ind1].programId+"-----"+program.programId+"@@@"+dateTime.examDate+"-----"+routine.examDate+"@@@"+dateTime.examTime+"-----"+routine.examTime+"@@@"+dateTime.index+"-----"+routine.index);
-          if (dateTime.programs[ind2].programId == program.programId && dateTime.examDate == routine.examDate && dateTime.examTime == routine.examTime) {
-            if (dateTime.index == routine.index) {
-              if (dateTime.programs[ind2].index == routine.programs[0].index) {
-                this.putOkColor($("#program" + dateTime.index + dateTime.programs[ind2].index));
-                continue;
-              }
-            }
-            this.putKoColor($("#program" + dateTime.index + dateTime.programs[ind2].index));
-            this.putKoColor($("#program" + dateTime.index + program.index));
-            alert("duplicate program name in same date found.");
-            return;
-          }
-          else {
-            this.putOkColor($("#program" + dateTime.index + dateTime.programs[ind2].index));
-          }
-        }
-      }
-    }
+
 
     private editDateTime(date_time_row_obj:IDateTime):void {
 
@@ -629,27 +585,13 @@ module ums {
 
       for (var ind in date_time_row_obj.programs) {
         var program:IProgram = date_time_row_obj.programs[ind];
-        //console.log(program);
         this.getCourseArr(program.programId,program).then((courseResponse:any)=> {
-          //console.log("---inside the thief---");
-          //console.log(courseResponse);
-          //console.log( courseResponse.program);
           var courseArr:Array<ICourse>=courseResponse.courseArr;
-
-
           courseResponse.program.courseArr = courseArr;
-          //program.courseArr = this.$scope.courseArr;
-         // console.log(program.courseArr);
-         // console.log(courseArr.length);
-
-
         });
 
       }
       setTimeout(function(){that.setSelect2Courses(date_time_row_obj);},1000);
-
-
-//alert($("#program_10").val());
     }
 
     private setSelect2Courses(date_time_row_obj:IDateTime):void {
@@ -659,7 +601,6 @@ module ums {
         $("#program_"+date_time_row_obj.index+program.index).val(program.programId+'');
         for (var ind2 in program.courses) {
           var course:ICourse =program.courses[ind2];
-          //  console.log("#course_" + date_time_row_obj.index + program.index + course.index); /////alsdkfja
           $("#course_" + date_time_row_obj.index + program.index + course.index).select2().select2('val',course.id);
         }
       }
@@ -687,7 +628,12 @@ module ums {
     private hideOverlay(date_time_row_obj:any):void{
       var $divOverlay = $('#divOverlay');
       $divOverlay.hide(100);
-     // date_time_row_obj.readOnly=true;
+    }
+
+    private clearLocalStorage():void{
+      for(var indx in this.appConstants.ugPrograms){
+        localStorage.removeItem("program_courses_"+this.appConstants.ugPrograms[indx].programs[0].programId);
+      }
     }
   }
   UMS.controller('ExamRoutine', ExamRoutine);

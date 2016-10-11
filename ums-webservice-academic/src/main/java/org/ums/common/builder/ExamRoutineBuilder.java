@@ -70,8 +70,8 @@ public class ExamRoutineBuilder  implements Builder<ExamRoutine, MutableExamRout
 
   @Override
   public void build(MutableExamRoutine pMutable, JsonObject pJsonObject, final LocalCache pLocalCache) throws Exception {
-    pMutable.setSemesterId(Integer.parseInt(pJsonObject.getString("semesterId")));
-    pMutable.setExamTypeId(Integer.parseInt(pJsonObject.getString("examType")));
+    pMutable.setSemesterId(pJsonObject.getInt("semesterId"));
+    pMutable.setExamTypeId(pJsonObject.getInt("examType"));
     pMutable.setInsertType(pJsonObject.getString("insertType"));
 
     JsonArray entries=pJsonObject.getJsonArray("entries");

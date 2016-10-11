@@ -66,7 +66,7 @@ module ums{
       this.$scope.semesterList=[];
       var defer = this.$q.defer();
 
-      this.semesterService.getAllSemesters().then((semesterArr:Array<Semester>)=>{
+      this.semesterService.fetchSemesters(Utils.UG).then((semesterArr:Array<Semester>)=>{
         this.$scope.semesterList = semesterArr;
         defer.resolve(semesterArr);
       });

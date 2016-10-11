@@ -8,38 +8,22 @@ module ums{
                 private $sce:ng.ISCEService,private $window:ng.IWindowService) {
 
     }
+    public fetchSemesters(programType:number,limit?:number):ng.IPromise<any> {
+      if(!limit){
+        limit=Utils.DEFAULT_SEMESTER_COUNT;
+      }
 
-    public getSemesterByProgramType(programType:string):ng.IPromise<any>{
-      var programTypeNumeric=+programType;
+      var url="academic/semester/program-type/"+programType+"/limit/"+limit;
       var defer = this.$q.defer();
-      var limit=0;
-      var semesterArr:Array<Semester>=[];
-      this.httpClient.get('/academic/semester/program-type/'+programTypeNumeric+'/limit/'+0, 'application/json',
+      this.httpClient.get(url, this.appConstants.mimeTypeJson,
           (json:any, etag:string) => {
-            semesterArr = json.entries;
-            defer.resolve(semesterArr);
+            var semesters:any = json.entries;
+            defer.resolve(semesters);
           },
           (response:ng.IHttpPromiseCallbackArg<any>) => {
             console.error(response);
           });
-
       return defer.promise;
-    }
-
-    public getAllSemesters():ng.IPromise<any>{
-      var defer = this.$q.defer();
-      var semesterArr:Array<Semester>=[];
-      this.httpClient.get('/academic/semester/all', 'application/json',
-          (json:any, etag:string) => {
-            semesterArr = json.entries;
-            defer.resolve(semesterArr);
-          },
-          (response:ng.IHttpPromiseCallbackArg<any>) => {
-            console.error(response);
-          });
-
-      return defer.promise;
-
     }
   }
 

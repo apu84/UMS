@@ -96,8 +96,8 @@ public class PersistentSemesterDao extends SemesterDaoDecorator {
 
   @Override
   public List<Semester> getSemesters(Integer pProgramType, Integer pLimit) throws Exception {
-    String query = SELECT_ALL + "WHERE PROGRAM_TYPE = ? Order By START_DATE desc";
-    return mJdbcTemplate.query(query, new Object[]{pProgramType}, new SemesterRowMapper());
+    String query = "Select * from ( "+SELECT_ALL + "WHERE PROGRAM_TYPE = ? Order By START_DATE desc) Where RowNum<=?";
+    return mJdbcTemplate.query(query, new Object[]{pProgramType,pLimit}, new SemesterRowMapper());
   }
 
   @Override

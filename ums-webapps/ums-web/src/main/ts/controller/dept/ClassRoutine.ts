@@ -370,7 +370,7 @@ module ums {
       console.log("In the semester");
 
       this.$scope.semesterArr=[];
-      this.semesterService.getAllSemesters().then((semesterArr:Array<any>)=>{
+      this.semesterService.fetchSemesters (Utils.UG).then((semesterArr:Array<any>)=>{
         this.$scope.semesterArr = semesterArr;
         console.log(semesterArr);
       });

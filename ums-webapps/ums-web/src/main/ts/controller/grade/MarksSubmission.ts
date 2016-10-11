@@ -1,3 +1,4 @@
+
 module ums {
   export interface IMarksSubmissionScope extends ng.IScope {
     data:any;
@@ -139,11 +140,12 @@ module ums {
     shortName:string;
   }
   export class MarksSubmission {
-    public static $inject = ['$scope', 'appConstants', 'HttpClient','$stateParams', '$window', '$sce', '$q', 'notify','commonService'];
+    public static $inject = ['$scope', 'appConstants', 'HttpClient','$stateParams', '$window', '$sce', '$q', 'notify','commonService','semesterService'];
 
     constructor(private $scope:IMarksSubmissionScope,
                 private appConstants:any,
-                private httpClient:HttpClient, private $stateParams:any,private $window: ng.IWindowService, private $sce: ng.ISCEService,private $q:ng.IQService,private notify: Notify,private commonService:CommonService) {
+                private httpClient:HttpClient, private $stateParams:any,private $window: ng.IWindowService, private $sce: ng.ISCEService,private $q:ng.IQService,private notify: Notify,private commonService:CommonService,
+                private semesterService:SemesterService) {
 
       this.$scope.userRole = $stateParams["1"];
       $scope.data = {
@@ -1333,7 +1335,7 @@ module ums {
     // Start of Selection Panel Components Initialization
 
     private loadSemesters():void{
-      this.fetchSemesters(this.$scope.inputParams.program_type).then((semesters:Array<IOption>)=> {
+      this.semesterService.fetchSemesters(this.$scope.inputParams.program_type).then((semesters:Array<IOption>)=> {
         this.$scope.data.semesters=semesters;
         this.$scope.inputParams.semester_id=semesters[0].id;
       });
@@ -1359,22 +1361,10 @@ module ums {
         this.$scope.data.depts=this.$scope.data.pgDepts;
     }
 
-    private fetchSemesters(programType:number):ng.IPromise<any> {
-      var url="academic/semester/program-type/"+programType+"/limit/0";
-      var defer = this.$q.defer();
-      this.httpClient.get(url, this.appConstants.mimeTypeJson,
-          (json:any, etag:string) => {
-            var semesters:any = json.entries;
-            defer.resolve(semesters);
-          },
-          (response:ng.IHttpPromiseCallbackArg<any>) => {
-            console.error(response);
-          });
-      return defer.promise;
-    }
+
 
     private loadDepartments():void{
-      this.fetchSemesters(this.$scope.inputParams.program_type).then((semesters:Array<IOption>)=> {
+      this.semesterService.fetchSemesters(this.$scope.inputParams.program_type).then((semesters:Array<IOption>)=> {
         this.$scope.data.semesters=semesters;
       });
     }

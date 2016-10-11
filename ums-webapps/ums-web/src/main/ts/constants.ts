@@ -363,6 +363,15 @@ module ums {
           }
         ],
         pgPrograms: [],
+        ugProgramMap : {'110100':['BSC in ARC'],
+                                      '110200':['BBA'],
+                                      '110300':['BSc in CE'],
+                                      '110400':['BSc in CSE'],
+                                      '110500':['BSc in EEE'],
+                                      '110600':['BSc in TE'],
+                                      '110700':['BSc in IPE'],
+                                      '110800':['BSc in ME']
+        },
         theorySectionsGrid: ":None;A:A;B:B;C:C;D:D",
         theorySections: [
           {id: "A", name: "A"},

@@ -218,7 +218,6 @@ public class GradeSubmissionService {
 
     //Submitted Grade Validation
     validateSubmittedGrades(actualStatusDTO,gradeList );
-
   }
   public void validateSubmittedGrades(MarksSubmissionStatusDto actualStatusDTO,List<StudentGradeDto> gradeList ) throws Exception {
 
