@@ -33,30 +33,23 @@ module ums{
       //$scope.$watch('firstSelected',(value, oldValue)=>{
         console.log("value changed");
         $( "#tags" ).autocomplete({
-          source: $scope.autoSuggestionList,
-
-          select:(event,ui)=>{
-            var id= ui.item.value;
-            console.log($scope);
-            console.log(ui.item.value);
-            $scope.addFirstSelectedValue({id:ui.item.value});
-
-          }
+          source: $scope.autoSuggestionList
         });
+        $('#tags').on('select', function (event,ui) {
+          var id= ui.item.value;
+          $scope.addFirstSelectedValue({id:ui.item.value});
+        }).select();
       //});
 
       //$scope.$watch('secondSelected',(value)=>{
         $( "#tags2" ).autocomplete({
-          source: $scope.autoSuggestionList,
-
-          select:(event,ui)=>{
-            var id= ui.item.value;
-            console.log($scope);
-            console.log(ui.item.value);
-            $scope.addSecondSelectedValue({id:ui.item.value});
-
-          } 
+          source: $scope.autoSuggestionList
         });
+        $('#tags2').on('select', function (event,ui) {
+          var id= ui.item.value;
+          $scope.addSecondSelectedValue({id:ui.item.value});
+        }).select();
+
       //});
 
 

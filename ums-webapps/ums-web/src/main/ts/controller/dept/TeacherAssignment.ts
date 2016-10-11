@@ -101,9 +101,8 @@ module ums {
 
 
     public fetchTeacherInfo(): void {
-      $("#leftDiv").hide();
-      $("#arrowDiv").show();
-      $("#rightDiv").removeClass("orgRightClass").addClass("newRightClass").removeClass('hidden');
+      $("#leftDiv").hide(100);
+      $("#arrowDiv").show(50);
 
       this.$scope.loadingVisibility = true;
       this.$scope.contentVisibility = false;
@@ -223,7 +222,7 @@ module ums {
     private renderHeader(): void {
       for (var i = 0; i < this.$scope.teacherSearchParamModel.programSelector.getPrograms().length; i++) {
         if (this.$scope.teacherSearchParamModel.programSelector.getPrograms()[i].id == this.$scope.teacherSearchParamModel.programSelector.programId) {
-          this.$scope.programName = this.$scope.teacherSearchParamModel.programSelector.getPrograms()[i].longName;
+          this.$scope.programName = this.$scope.teacherSearchParamModel.programSelector.getPrograms()[i].shortName;
         }
       }
 
