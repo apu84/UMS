@@ -15,7 +15,7 @@ module ums{
     //functions
     getSemesters:Function;
     getExamDates:Function;
-    search:Function;
+    fetchDeadlineInformation:Function;
     dateChanged:Function;
     saveChanges:Function;
     cancel:Function;
@@ -52,7 +52,7 @@ module ums{
       $scope.editable=false;
       $scope.getSemesters = this.getSemesters.bind(this);
       $scope.getExamDates = this.getExamDates.bind(this);
-      $scope.search = this.search.bind(this);
+      $scope.fetchDeadlineInformation = this.fetchDeadlineInformation.bind(this);
       $scope.dateChanged = this.dateChanged.bind(this);
       $scope.cancel = this.cancel.bind(this);
       $scope.convertToJson =this.convertToJson.bind(this);
@@ -111,20 +111,12 @@ module ums{
 
     private getExamDates():void{
 
-      if(this.$scope.semesterId!=null){
-        for(var i=0;i<this.$scope.semesterList.length;i++){
-          if(this.$scope.semesterId==this.$scope.semesterList[i].semesterId){
+      var semester= this.$scope.semesterList[Utils.findIndex(this.$scope.semesterList,String(this.$scope.semesterId))];
+      if(semester.status==Utils.SEMESTER_STATUS_ACTIVE)
+        this.$scope.editable=true;
+      else
+        this.$scope.editable=false;
 
-            if(this.$scope.semesterList[i].status==1){
-              this.$scope.editable=true;
-            }else{
-              this.$scope.editable=false;
-            }
-
-            break;
-          }
-        }
-      }
       var examType = + this.$scope.examType;
       this.$scope.examDate=null;
       console.log(examType);
@@ -140,7 +132,10 @@ module ums{
 
     }
 
-    private search():void{
+    private fetchDeadlineInformation():void{
+
+    Utils.expandRightDiv();
+
       this.$scope.showButton=false
       this.$scope.examGradeStatisticsArr=[];
       this.$scope.examGradeStatisticsArrTemp=[];
