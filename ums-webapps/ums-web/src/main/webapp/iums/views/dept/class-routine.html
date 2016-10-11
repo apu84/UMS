@@ -1,5 +1,9 @@
 <div class="row" data-ng-init="getSemesters()">
-    <div class="orgLeftClass pull-left panel panel-green" id="leftDiv">
+    <div onclick="resetCommonCollapsibleDivs()" id="arrowDiv">
+        <i class="fa fa-angle-double-right fa-4x"></i></i>
+    </div>
+
+    <div class="panel panel-green" id="leftDiv">
         <div class="panel-heading">
             <h3 class="panel-title">Select </h3>
         </div>
@@ -73,10 +77,8 @@
             </form>
         </div>
     </div>
-    <div class="arrowClass pull-left" data-ng-click="resetDivs()" id="arrowDiv">
-        <i class="fa fa-angle-double-right fa-4x"></i>  </div>
 
-    <div class="orgRightClass pull-left" id="rightDiv">
+    <div  id="rightDiv">
 
         <div class="panel" style="min-height: 490px;">
             <div class="panel-heading">Class Routine<span
@@ -241,40 +243,3 @@
         </div>
     </div>
 </div>
-
-
-<style type="text/css">
-
-    .orgLeftClass {
-        width: 30%;
-
-    }
-
-    .orgRightClass {
-        width: 66%;
-    }
-
-    .arrowClass {
-        display: none;
-        cursor: pointer;
-    }
-
-    .orgLeftClass, .arrowClass {
-        margin-right: 25px;
-        margin-left: 8px;
-    "
-
-    }
-
-    .newRightClass {
-        width: 94%;
-    }
-
-    .bootstrap-select.btn-group:not(.input-group-btn), .bootstrap-select.btn-group[class*="span"] {
-        margin-bottom: 0px !important;
-    }
-
-    .table tbody tr td {
-        border-top: none !important;
-    }
-</style>

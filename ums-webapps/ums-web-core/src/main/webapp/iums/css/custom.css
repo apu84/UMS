@@ -401,3 +401,10 @@ div.ui-jqgrid-view table.ui-jqgrid-btable th {
     margin-top: -10px;
 }
 /* End*/
+
+.bootstrap-select.btn-group:not(.input-group-btn), .bootstrap-select.btn-group[class*="span"] {
+    margin-bottom: 0px !important;
+}
+.table tbody tr td {
+    border-top: none !important;
+}
