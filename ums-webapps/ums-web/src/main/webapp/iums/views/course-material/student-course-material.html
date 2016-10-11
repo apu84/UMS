@@ -7,7 +7,7 @@
 </div>
 
 <div class="row" id="courseSelectionDiv">
-    <div  onclick="resetDivs()" id="arrowDiv"><i
+    <div  onclick="resetCommonCollapsibleDivs()" id="arrowDiv"><i
             class="fa fa-angle-double-right fa-4x"></i></i> </div>
     <div class="panel panel-green"  id="leftDiv">
         <div class="panel-heading">
@@ -93,10 +93,6 @@
     }
 </style>
 <script type="text/javascript">
-    function resetDivs() {
-        $("#arrowDiv").hide(10);
-        $("#leftDiv").show(200);
-    }
     function resetTopBottomDivs(){
         $("#topArrowDiv").hide(10);
         $("#courseSelectionDiv").show(200);

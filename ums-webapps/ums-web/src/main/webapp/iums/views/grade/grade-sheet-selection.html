@@ -28,7 +28,7 @@
     }
 </style>
 <div class="row" id="selection1">
-    <div onclick="resetDivs()" id="arrowDiv"><i
+    <div onclick="resetCommonCollapsibleDivs()" id="arrowDiv"><i
             class="fa fa-angle-double-right fa-4x"></i></i> </div>
     <div class="panel panel-green" id="leftDiv">
         <div class="panel-heading">
@@ -1138,10 +1138,7 @@
     function removeTableRow(rowid){
         $('#'+rowid).remove();
     }
-    function resetDivs() {
-        $("#arrowDiv").hide();
-        $("#leftDiv").show();
-    }
+
     function goBack(){
         document.getElementById('selection1').style.display='block';
         document.getElementById('selection2').style.display='none';

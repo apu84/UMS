@@ -7,7 +7,7 @@
     }
 </style>
 <div class="row">
-    <div id="arrowDiv" onclick="resetDivs()" >
+    <div id="arrowDiv" onclick="resetCommonCollapsibleDivs()" >
         <i class="fa fa-angle-double-right fa-4x"></i></i>
     </div>
 <div  id="leftDiv" class="panel panel-green">
@@ -323,10 +323,7 @@
 </div>
 
 <script type="text/javascript">
-    function resetDivs() {
-        $("#arrowDiv").hide(50);
-        $("#leftDiv").show(100);
-    }
+
     setTimeout(function () {$(".download_tooltip").tooltip({placement : 'top', trigger : 'hover', title : "Download Promotion List"});}, 100);
     setTimeout(function () {$(".publish_tooltip").tooltip({placement : 'top', trigger : 'hover', title : "Publish Promotion List"});}, 100);
     setTimeout(function () {$(".process_tooltip").tooltip({placement : 'top', trigger : 'hover', title : "Process"});}, 100);
