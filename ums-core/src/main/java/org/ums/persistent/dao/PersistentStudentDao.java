@@ -255,6 +255,11 @@ public class PersistentStudentDao extends StudentDaoDecorator {
   }
 
 
+  @Override
+  public List<Student> getActiveStudentsByAdviser(String pTeacherId) {
+    String query = SELECT_ALL+" where adviser=? and status=1";
+    return mJdbcTemplate.query(query, new Object[]{pTeacherId},new StudentRowMapper());
+  }
 
   @Override
   public List<Student> getStudentByCourseIdAndSemesterIdForSeatPlanForCCI(String pCourseId, int pSemesterId) {

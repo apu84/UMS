@@ -17,7 +17,7 @@
         padding:0.5%;
         margin:0 0 10px 0;
         border-radius: 10%;
-        background: #DEF;
+        //background: #DEF;
         color: black;
         border-style: solid;
         border-color: black;
@@ -70,31 +70,33 @@
                                             <div class="col-md-12">
                                                 <div class="row" align="center">
 
-                                                    <select data-ng-model="teacherId">
+                                                    <select data-ng-model="fromTeacherId" data-ng-change="getStudentsOfTheFirstTeacher(fromTeacherId)">
                                                         <option value="">Select an adviser</option>
                                                         <option data-ng-repeat="t in teachers track by t.id" value="{{t.id}}">{{t.employeeName}}</option>
                                                     </select>
                                                 </div>
                                                 <br>
                                                 <div class="row" align="right">
-                                                    <button type="button" class="btn btn-default btn-xs">View By <br>Student Id</button>
-                                                    <button type="button" class="btn btn-default btn-xs">View By <br>Student Id & Name</button>
+                                                    <button type="button" class="btn btn-primary btn-xs" title="View by student's id" data-ng-click="viewStudentById()"><i class="fa fa-user" aria-hidden="true"></i></button>
+                                                    <button type="button" class="btn btn-primary btn-xs" title="View by student's id and name" data-ng-click="viewStudentByIdAndName()">
+                                                        <i class="fa fa-user" aria-hidden="true"></i>
+                                                        <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                                    </button>
                                                 </div>
                                                 <div class="row">
-                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
-                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
-                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
-                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
-                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
-                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
-                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
-                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
-                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
-                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
-                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
-                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
-                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
-                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
+                                                    <div data-ng-if="showLoader==false">
+                                                        <ul data-ng-if="showLoader==false">
+                                                            <li  class="rounded" ng-style="{background:a.backgroundColor}" data-ng-repeat="a in fromStudents track by a.id" ng-click="changeColor(a)">
+                                                                <div  data-ng-if="showStudentId">{{a.id}}</div>
+                                                                <div  data-ng-if="showStudentName">
+                                                                    {{a.id}}<button type="btn" class="btn btn-default btn-xs" data-ng-click="removeFromAddedList(a)">X</button><br>{{a.fullName}}
+                                                                    <div data-ng-if="showAdviserName">
+
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
                                                 </div>
                                             </div>
 
@@ -102,31 +104,31 @@
                                         <td>
                                             <div class="col-md-12">
                                                 <div class="row" align="center">
-                                                    <select data-ng-model="teacherId">
+                                                    <select data-ng-model="toTeacherId" data-ng-change="getStudentsOfTheSecondTeacher(toTeacherId)">
                                                         <option value="">Select an adviser</option>
                                                         <option data-ng-repeat="t in teachers track by t.id" value="{{t.id}}">{{t.employeeName}}</option>
                                                     </select>
                                                 </div>
                                                 <br>
                                                 <div class="row" align="right">
-                                                    <button type="button" class="btn btn-default btn-xs">View By <br>Student Id</button>
-                                                    <button type="button" class="btn btn-default btn-xs">View By <br>Student Id & Name</button>
+                                                    <button type="button" class="btn btn-primary btn-xs" title="View by student's id" data-ng-click="viewStudentById()"><i class="fa fa-user" aria-hidden="true"></i></button>
+                                                    <button type="button" class="btn btn-primary btn-xs" title="View by student's id and name" data-ng-click="viewStudentByIdAndName()">
+                                                        <i class="fa fa-user" aria-hidden="true"></i>
+                                                        <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                                    </button>
                                                 </div>
                                                 <div class="row">
-                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
-                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
-                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
-                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
-                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
-                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
-                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
-                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
-                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
-                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
-                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
-                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
-                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
-                                                    <button type="button" class="btn btn-primary btn-xs">11001</button>
+                                                    <ul data-ng-if="showLoader==false">
+                                                        <li  class="rounded" ng-style="{background:a.backgroundColor}" data-ng-repeat="a in toStudents track by a.id" >
+                                                            <div  data-ng-if="showStudentId">{{a.id}}</div>
+                                                            <div  data-ng-if="showStudentName">
+                                                                {{a.id}}<button type="btn" class="btn btn-default btn-xs" data-ng-click="removeFromAddedList(a)">X</button><br>{{a.fullName}}
+                                                                <div data-ng-if="showAdviserName">
+
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
 
                                                 </div>
                                             </div>
@@ -135,6 +137,12 @@
                                     </tr>
                                 </tbody>
                             </table>
+                            <div class="row" align="right">
+                                <br>
+                                <hr>
+                                <button type="button" class="btn btn-primary" ng-click="addAndSave()"> Add & Save</button>
+                                <button type="button" class="btn btn-primary" ng-click="cancelAddAndSave()"> Cancel</button>
+                            </div>
 
                         </div>
                         <div data-ng-if="changeOptionSelected">

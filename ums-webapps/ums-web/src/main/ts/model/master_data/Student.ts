@@ -33,5 +33,6 @@ module ums {
     guardianPhoneNo:string;
     theorySection:string;
     sessionalSection:string;
+    backgroundColor:string;
   }
 }

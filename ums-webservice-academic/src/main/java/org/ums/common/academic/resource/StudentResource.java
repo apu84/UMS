@@ -39,6 +39,12 @@ public class StudentResource extends MutableStudentResource {
   }
 
   @GET
+  @Path("/getStudents/adviser/{teacher-id}")
+  public JsonObject getActiveStudentsByTeacher(final @PathParam("teacher-id") String pTeacherId) throws Exception {
+    return mResourceHelper.getActiveStudentsByAdviser(pTeacherId,mUriInfo);
+  }
+
+  @GET
   @Path(PATH_PARAM_OBJECT_ID)
   public Response get(final @Context Request pRequest, final @PathParam("object-id") String pObjectId) throws Exception {
     return mResourceHelper.get(pObjectId, pRequest, mUriInfo);

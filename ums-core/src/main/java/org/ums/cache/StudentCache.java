@@ -50,4 +50,9 @@ public class StudentCache extends ContentCache<Student, MutableStudent, String, 
   public int updateStudentsAdviser(List<MutableStudent> pStudents) throws Exception {
     return getManager().updateStudentsAdviser(pStudents);
   }
+
+  @Override
+  public List<Student> getActiveStudentsByAdviser(String pTeacherId) {
+    return getManager().getActiveStudentsByAdviser(pTeacherId);
+  }
 }

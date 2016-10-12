@@ -1,5 +1,6 @@
 package org.ums.common.academic.resource.helper;
 
+import org.apache.commons.jexl2.UnifiedJEXL;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -127,22 +128,20 @@ public class StudentResourceHelper extends ResourceHelper<Student, MutableStuden
         .filter(s-> s.getDepartmentId().equals(deptId))
         .collect(Collectors.toList());
 
-    JsonObjectBuilder object = Json.createObjectBuilder();
-    JsonArrayBuilder children = Json.createArrayBuilder();
-    LocalCache localCache = new LocalCache();
+    return studentJsonCreator(students,pUriInfo);
+  }
 
-    for(Student student : students){
-      children.add(toJson(student,pUriInfo,localCache));
-    }
-    object.add("entries",children);
-    localCache.invalidate();
-    return object.build();
+
+  public JsonObject getActiveStudentsByAdviser(final String pTeacherId, final UriInfo pUriInfo) throws Exception{
+    List<Student> students = getContentManager().getActiveStudentsByAdviser(pTeacherId);
+
+    return studentJsonCreator(students,pUriInfo);
   }
 
 
 
   //// TODO: 09-Oct-16 Grant access via accessControl.
-  @RequiresPermissions("assign:adviser")
+  //@RequiresPermissions("assign:adviser")
   public Response modifyStudentAdviser(JsonObject pJsonObject) throws Exception{
     User user = getLoggedUser();
     LocalCache localCache = new LocalCache();
@@ -162,6 +161,18 @@ public class StudentResourceHelper extends ResourceHelper<Student, MutableStuden
   }
 
 
+  private JsonObject studentJsonCreator(List<Student> students,UriInfo pUriInfo) throws Exception{
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+
+    for(Student student : students){
+      children.add(toJson(student,pUriInfo,localCache));
+    }
+    object.add("entries",children);
+    localCache.invalidate();
+    return object.build();
+  }
 
 
   private Employee getLoggedEmployee() throws Exception{

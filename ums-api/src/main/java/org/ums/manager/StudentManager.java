@@ -12,5 +12,5 @@ public interface StudentManager extends ContentManager<Student, MutableStudent, 
   public List<Student> getStudentBySemesterIdAndExamDateForCCI(Integer pSemesterId,String pExamDate);
   public List<Student> getActiveStudents();
   public int updateStudentsAdviser(List<MutableStudent> pStudents) throws Exception;
-
+  public List<Student> getActiveStudentsByAdviser(String pTeacherId);
 }

@@ -87,8 +87,8 @@ public class StudentBuilder implements Builder<Student, MutableStudent> {
                     final JsonObject pJsonObject,
                     final LocalCache pLocalCache) throws Exception {
 
-    Validator validator = new StudentValidator();
-    validator.validate(pJsonObject);
+    /*Validator validator = new StudentValidator();
+    validator.validate(pJsonObject);*/
 
     pMutableStudent.setId(pJsonObject.getString("id"));
     pMutableStudent.setFullName(pJsonObject.getString("fullName"));

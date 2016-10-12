@@ -31,43 +31,50 @@ module ums{
 
 
       //$scope.$watch('firstSelected',(value, oldValue)=>{
-        console.log("value changed");
-        $( "#tags" ).autocomplete({
-          source: $scope.autoSuggestionList
-        });
-        $('#tags').on('select', function (event,ui) {
+      console.log("value changed");
+      $( "#tags" ).autocomplete({
+        source: $scope.autoSuggestionList,
+
+        select:(event,ui)=>{
           var id= ui.item.value;
+          console.log($scope);
+          console.log(ui.item.value);
           $scope.addFirstSelectedValue({id:ui.item.value});
-        }).select();
+
+        }
+      });
       //});
 
       //$scope.$watch('secondSelected',(value)=>{
-        $( "#tags2" ).autocomplete({
-          source: $scope.autoSuggestionList
-        });
-        $('#tags2').on('select', function (event,ui) {
-          var id= ui.item.value;
-          $scope.addSecondSelectedValue({id:ui.item.value});
-        }).select();
+      $( "#tags2" ).autocomplete({
+        source: $scope.autoSuggestionList,
 
+        select:(event,ui)=>{
+          var id= ui.item.value;
+          console.log($scope);
+          console.log(ui.item.value);
+          $scope.addSecondSelectedValue({id:ui.item.value});
+
+        }
+      });
       //});
 
 
 
 
-        //$scope.$watch('addedStudents',(value)=>{
-          currentScope.$timeout(()=>{
-            $("#addOneBtn").click(()=>{
-              console.log("in the click event");
-              $scope.addOneStudent();
-            });
+      //$scope.$watch('addedStudents',(value)=>{
+      currentScope.$timeout(()=>{
+        $("#addOneBtn").click(()=>{
+          console.log("in the click event");
+          $scope.addOneStudent();
+        });
 
-            $("#addRangeBtn").click(()=>{
-              console.log("in the click event");
-              $scope.addRangeStudent();
-            });
-          });
-        //});
+        $("#addRangeBtn").click(()=>{
+          console.log("in the click event");
+          $scope.addRangeStudent();
+        });
+      });
+      //});
 
 
 

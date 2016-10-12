@@ -45,11 +45,27 @@ module ums{
       return defer.promise;
     }
 
+    public getActiveStudentsOfTheTeacher(teacherId:string):ng.IPromise<any>{
+      var defer = this.$q.defer();
+      var students:any={};
+      this.httpClient.get('academic/student/getStudents/adviser/'+teacherId, 'application/json',
+          (json:any, etag:string) => {
+              students = json.entries;
+              defer.resolve(students);
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>) => {
+              console.error(response);
+              this.notify.error("Error in getting student data");
+          });
+
+      return defer.promise;
+  }
+
 
 
     public updateStudentsAdviser(json:any):ng.IPromise<any>{
       var defer = this.$q.defer();
-      this.httpClient.put("academic/student/adviser",json,'application/json')
+      this.httpClient.put("/ums-webservice-academic/academic/student/adviser",json,'application/json')
           .success(()=>{
             this.notify.success("Successfully Saved");
             defer.resolve('success');
