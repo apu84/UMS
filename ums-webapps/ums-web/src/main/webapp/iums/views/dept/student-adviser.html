@@ -15,7 +15,7 @@
     .rounded{
         display:inline-block;
         padding:0.5%;
-        margin:0 0 10px 0;
+        margin:0 0 2px 0;
         border-radius: 10%;
         //background: #DEF;
         color: black;
@@ -90,7 +90,7 @@
                                                             <li  class="rounded" ng-style="{background:a.backgroundColor}" data-ng-repeat="a in fromStudents track by a.id" ng-click="changeColor(a)">
                                                                 <div  data-ng-if="showStudentId">{{a.id}}</div>
                                                                 <div  data-ng-if="showStudentName">
-                                                                    {{a.id}}<button type="btn" class="btn btn-default btn-xs" data-ng-click="removeFromAddedList(a)">X</button><br>{{a.fullName}}
+                                                                    {{a.id}}<br>{{a.fullName}}
                                                                     <div data-ng-if="showAdviserName">
 
                                                                     </div>
@@ -117,7 +117,7 @@
                                                         <li  class="rounded" ng-style="{background:a.backgroundColor}" data-ng-repeat="a in toStudents track by a.id" >
                                                             <div  data-ng-if="showStudentId">{{a.id}}</div>
                                                             <div  data-ng-if="showStudentName">
-                                                                {{a.id}}<button type="btn" class="btn btn-default btn-xs" data-ng-click="removeFromAddedList(a)">X</button><br>{{a.fullName}}
+                                                                {{a.id}}<br>{{a.fullName}}
                                                                 <div data-ng-if="showAdviserName">
 
                                                                 </div>
