@@ -56,7 +56,7 @@ module ums{
       $scope.cancel = this.cancel.bind(this);
       $scope.convertToJson =this.convertToJson.bind(this);
       $scope.saveChanges=this.saveChanges.bind(this);
-      //Utils.setValidationOptions("form-horizontal");
+      Utils.setValidationOptions("form-horizontal");
     }
 
 

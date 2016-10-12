@@ -74,25 +74,15 @@ module ums {
         days: ':None;1:Saturday;2:Sunday;3:Monday;4:Tuesday;5:Wednesday;6:Thursday;7:Friday',
         startTime: ':None;08.00 AM:08.00 AM;08.50 AM:08.50 AM;09.40 AM:09.40 AM;10.30 AM:10.30 AM;11.20 AM:11.20 AM;12.10 PM:12.10 PM;01.00 PM:01.00 PM;01.50 PM:01.50 PM;02.40 PM:02.40 PM;03.30 PM:03.30 PM;04.20 PM:04.20 PM;05.10 PM:05.10 PM;06.00 PM:06.00 PM',
         endTime: ':None;08.00 AM:08.00 AM;08.50 AM:08.50 AM;09.40 AM:09.40 AM;10.30 AM:10.30 AM;11.20 AM:11.20 AM;12.10 PM:12.10 PM;01.00 PM:01.00 PM;01.50 PM:01.50 PM;02.40 PM:02.40 PM;03.30 PM:03.30 PM;04.20 PM:04.20 PM;05.10 PM:05.10 PM;06.00 PM:06.00 PM',
-
-        day: {
-          '01': 'SATURDAY',
-          '02': 'SUNDAY',
-          '03': 'MONDAY',
-          '04': 'TUESDAY',
-          '05': 'WEDNESDAY',
-          '06': 'THURSDAY',
-          '07': 'FRIDAY'
-        },
         weekday: [
-          {id:"",dateName:'Select a date'},
-          {id:"1",dateName: 'SATURDAY'},
-          {id:"2",dateName: 'SUNDAY'},
-          {id:"3",dateName: 'MONDAY'},
-          {id:"4",dateName: 'TUESDAY'},
-          {id:"5",dateName: 'WEDNESDAY'},
-          {id:"6",dateName: 'THURSDAY'},
-          {id:"7",dateName: 'FRIDAY'}
+          {id:"",name:'Select a Day'},
+          {id:"1",name: 'Saturday'},
+          {id:"2",name: 'Sunday'},
+          {id:"3",name: 'Monday'},
+          {id:"4",name: 'Tuesday'},
+          {id:"5",name: 'Wednesday'},
+          {id:"6",name: 'Thursday'},
+          {id:"7",name: 'Friday'}
         ],
         officeShort: {
           '80': 'RO',

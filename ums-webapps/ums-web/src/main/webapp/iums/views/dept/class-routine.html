@@ -1,6 +1,6 @@
 <div class="row" data-ng-init="getSemesters()">
     <div onclick="resetCommonCollapsibleDivs()" id="arrowDiv">
-        <i class="fa fa-angle-double-right fa-4x"></i></i>
+        <i class="fa fa-angle-double-right fa-cx"></i></i>
     </div>
 
     <div class="panel panel-green" id="leftDiv">
@@ -8,13 +8,13 @@
             <h3 class="panel-title">Select </h3>
         </div>
         <div class="panel-body pan">
-            <form action="" class="form-horizontal">
+            <form action="" class="form-horizontal" data-validate=""  data-onvalidate="searchForRoutineData" >
                 <div class="form-body pal">
 
                     <div class="form-group">
                         <label class="col-md-4 control-label">Program Type</label>
                         <div class="col-md-8">
-                            <select class="form-control required" data-ng-model="programType">
+                            <select name="programType" class="form-control required" data-ng-model="programType">
                                 <option value="">Select Program Type</option>
                                 <option value="1">Undergraduate</option>
                                 <option value="2">Postgraduate</option>
@@ -22,9 +22,9 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-md-4 control-label">Academic Semester</label>
+                        <label class="col-md-4 control-label">Semester</label>
                         <div class="col-md-8">
-                            <select class="form-control required" data-ng-model="semesterId">
+                            <select name="academicSemester" class="form-control required" data-ng-model="semesterId">
                                 <option value="">Selected a Semester</option>
                                 <option data-ng-repeat="s in semesterArr" value="{{s.id}}">{{s.name}}</option>
                             </select>
@@ -32,10 +32,10 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="col-md-4 control-label">Students Year</label>
+                        <label class="col-md-4 control-label">Year</label>
                         <div class="col-md-8">
-                            <select class="form-control required" data-ng-model="studentsYear">
-                                <option value="">Select Student Year</option>
+                            <select name="year" class="form-control required" data-ng-model="studentsYear">
+                                <option value="">Select Year</option>
                                 <option value="1">1st year</option>
                                 <option value="2">2nd year</option>
                                 <option value="3">3rd year</option>
@@ -45,10 +45,10 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-md-4 control-label">Students Semester</label>
+                        <label class="col-md-4 control-label">Semester</label>
                         <div class="col-md-8">
-                            <select class="form-control required" data-ng-model="studentsSemester">
-                                <option value="">Select Student Semester</option>
+                            <select name="semester" class="form-control required" data-ng-model="studentsSemester">
+                                <option value="">Select Semester</option>
                                 <option value="1">1st semester</option>
                                 <option value="2">2nd semester</option>
 
@@ -58,13 +58,12 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label">Theory Section</label>
                         <div class="col-md-8">
-                            <select class="form-control required" data-ng-model="section">
+                            <select name="section" class="form-control required" data-ng-model="section">
                                 <option value="">Select Student Theory Section</option>
                                 <option value="A">A</option>
                                 <option value="B">B</option>
                                 <option value="C">C</option>
                                 <option value="D">D</option>
-
                             </select>
                         </div>
                     </div>
@@ -72,7 +71,7 @@
 
                 </div>
                 <div class="form-actions text-right pal">
-                    <button type="button" class="btn btn-success" data-ng-click="searchForRoutineData()">Search</button>
+                    <button type="button" class="btn btn-success">Search</button>
                 </div>
             </form>
         </div>
@@ -81,19 +80,37 @@
     <div  id="rightDiv">
 
         <div class="panel" style="min-height: 490px;">
-            <div class="panel-heading">Class Routine<span
+            <div class="panel-heading">Here goes Information about Program Type,Year-Semester, Academic Semester and Section <span
                     class="subtitle"></span></div>
             <div class="panel-body">
                 <div class="row" data-ng-if="showLoader==true" align="center">
                     <i class="fa fa-spinner fa-spin fa-5x fa-fw"></i>
                     <span class="sr-only">Loading...</span>
                 </div>
-                <div class="row" data-ng-if="showLoader==false">
-                    <div style="padding-left: 3%">
-                        <button class="btn btn-success" data-ng-click="addNewData()" >Add Data</button>
-                    </div>
-                    <br>
-                    <table class="table table-bordered" data-ng-if="addDataButtonClicked==true">
+                <div class="row" data-ng-show="showLoader==false">
+                    <div class="col-md-12" style="padding: 0px 15px;">
+
+                        <div class="row" style="margin-top: -15px;" id="downArrowDiv">
+                            <div class="col-md-2 col-md-offset-5">
+                                <center>
+                                    <a href="javascript:void(0)" data-toggle="tooltip" data-placement="top" title="Show Add Form" class="tooltips">
+                                        <i  class="fa fa-chevron-down" aria-hidden="true" data-ng-click="addDivControl('show')" style="cursor: pointer;"></i>
+                                    </a>
+                                </center>
+                            </div>
+                        </div>
+
+                        <div class="row" style="margin-top: -15px;display: none;" id="upArrowDiv">
+                            <div class="col-md-2 col-md-offset-5">
+                                <center>
+                                    <a href="javascript:void(0)" data-toggle="tooltip" data-placement="top" title="Hide Add Form" class="tooltips">
+                                        <i  class="fa fa-chevron-up" aria-hidden="true" data-ng-click="addDivControl('hide')" style="cursor: pointer;"></i>
+                                    </a>
+                                </center>
+                            </div>
+                        </div>
+
+                    <table class="table table-bordered" id="addNewDataTable" style="display: none;">
                         <thead>
                         <tr>
                             <th>Day</th>
@@ -109,7 +126,7 @@
                         <tr >
                             <th>
                                 <select data-ng-model="addedDate" data-ng-change="dateSelected(addedDate)">
-                                    <option data-ng-repeat="d in dates" value="{{d.id}}">{{d.dateName}}</option>
+                                    <option data-ng-repeat="date in dates" value="{{date.id}}">{{date.name}}</option>
                                 </select>
                             </th>
                             <th>
@@ -155,11 +172,12 @@
                         </tr>
                         </tbody>
                     </table>
+                    </div>
                 </div>
 
-                <hr>
                 <div class="row" data-ng-if="showLoader==false && showRoutineTable==true">
-                    <table class="table table-bordered">
+                    <div class="col-md-12" style="padding: 0px 15px;">
+                        <table class="table table-bordered">
                         <thead>
                             <tr>
                                 <th>Day</th>
@@ -184,7 +202,7 @@
 
                             <th data-ng-if="r.editRoutine==true">
                                 <select data-ng-model="addedDate" data-ng-change="dateSelected(addedDate)">
-                                    <option data-ng-repeat="d in dates" value="{{d.id}}">{{d.dateName}}</option>
+                                    <option data-ng-repeat="date in dates" value="{{date.id}}">{{date.name}}</option>
                                 </select>
                             </th>
                             <th data-ng-if="r.editRoutine==true"  >
@@ -233,6 +251,7 @@
                         </tr>
                         </tbody>
                     </table>
+                        </div>
                 </div>
                 <div class="row" align="right" data-ng-if="showSaveButton==true">
                     <form style="padding-right: 5%">
@@ -243,3 +262,8 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+//    setTimeout(function () {$(".fa+.fa-chevron-down").tooltip({placement : 'top', trigger : 'hover', title : "Download Promotion List"});}, 100);
+$(".tooltips").tooltip();
+</script>

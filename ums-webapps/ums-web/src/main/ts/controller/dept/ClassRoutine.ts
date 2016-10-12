@@ -28,10 +28,7 @@ module ums {
     //map
     courseIdMapCourseNo:any;
     dateMap:any;
-
-
-    addDataButtonClicked:boolean;
-    addNewData:Function;
+    addDivControl:Function;
 
     getSemesters:Function;
     searchForRoutineData:Function;
@@ -73,7 +70,7 @@ module ums {
 
   interface IDate{
     id:number;
-    dateName:string;
+    name:string;
   }
 
   interface ITime{
@@ -138,13 +135,25 @@ module ums {
       $scope.endTimeSelected = this.endTimeSelected.bind(this);
       $scope.roomNoSelected = this.roomNoSelected.bind(this) ;
       $scope.deleteRoutineData = this.deleteRoutinedata.bind(this);
-      $scope.addNewData = this.addNewData.bind(this);
+      $scope.addDivControl = this.addDivControl.bind(this);
       $scope.saveClassRoutine=this.saveClassRoutine.bind(this);
+
+      Utils.setValidationOptions("form-horizontal");
+      this.initializeAddVariables();
     }
 
-    private addNewData():void{
-      this.initializeAddVariables();
-      this.$scope.addDataButtonClicked=true;
+    private addDivControl(operation:string):void{
+      if(operation=="show"){
+        $("#downArrowDiv").slideUp(100);
+        $("#upArrowDiv").slideDown(200);
+        $("#addNewDataTable").fadeIn(200);
+      }
+      else if(operation=="hide"){
+        $("#downArrowDiv").slideDown(200);
+        $("#upArrowDiv").slideUp(100);
+        $("#addNewDataTable").fadeOut(200);
+      }
+
     }
 
     private deleteRoutinedata(routine:IClassRoutine){
@@ -189,7 +198,6 @@ module ums {
     private editRoutineData(routine:IClassRoutine){
       //this.$scope.courseType
       this.$scope.showSaveButton=true;
-      this.$scope.addDataButtonClicked=false;
       this.initializeAddVariables();
       this.$scope.addedDate=routine.day.toString();
       this.$scope.addedCourse=routine.courseId;
@@ -387,9 +395,7 @@ module ums {
       this.initializeDate();
       this.$scope.times = this.appConstants.timeChecker;
 
-      $("#leftDiv").hide();
-      $("#arrowDiv").show();
-      $("#rightDiv").removeClass("orgRightClass").addClass("newRightClass");
+      Utils.expandRightDiv();
 
       var programType = +this.$scope.programType;
       var year = +this.$scope.studentsYear;
@@ -438,7 +444,7 @@ module ums {
       this.$scope.dates = this.appConstants.weekday;
       this.$scope.dateMap={};
       for(var i=0;i<this.$scope.dates.length;i++){
-        this.$scope.dateMap[this.$scope.dates[i].id]=this.$scope.dates[i].dateName;
+        this.$scope.dateMap[this.$scope.dates[i].id]=this.$scope.dates[i].name;
       }
     }
 
