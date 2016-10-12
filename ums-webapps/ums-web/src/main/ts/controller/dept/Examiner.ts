@@ -29,6 +29,7 @@ module ums {
                 notify: Notify,
                 teacherService: TeacherService) {
       super(appConstants, httpClient, $scope, $q, notify, teacherService);
+      Utils.setValidationOptions("form-horizontal");
     }
 
     public formatTeacher(examiners: Array<IExaminer>, courseId?: string): void {

@@ -64,6 +64,7 @@ module ums {
 
       this.setDepartments = (pDepartments: any) => {
         departments = pDepartments;
+        setTimeout(function(){$("#dept_id").val("");},200);
       };
 
       this.setPrograms = (pPrograms: any) => {
@@ -73,6 +74,7 @@ module ums {
       this.setSemesters = (pSemesters: any) => {
         semesters = pSemesters;
         semesters.splice(0, 0, appConstants.initSemester[0]);
+        setTimeout(function(){$("#semester_id").val("");},200);
       };
 
       this.getAppConstants = (): Constants => {

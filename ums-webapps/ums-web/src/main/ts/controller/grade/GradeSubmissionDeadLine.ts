@@ -45,7 +45,6 @@ module ums{
                 private examRoutineService:ExamRoutineService,
                 private examGradeService:ExamGradeService) {
 
-
       $scope.showLoader=false;
       $scope.showTable=false;
       $scope.showButton=false;
@@ -57,6 +56,7 @@ module ums{
       $scope.cancel = this.cancel.bind(this);
       $scope.convertToJson =this.convertToJson.bind(this);
       $scope.saveChanges=this.saveChanges.bind(this);
+      //Utils.setValidationOptions("form-horizontal");
     }
 
 
@@ -68,6 +68,9 @@ module ums{
 
       this.semesterService.fetchSemesters(Utils.UG).then((semesterArr:Array<Semester>)=>{
         this.$scope.semesterList = semesterArr;
+        this.$scope.semesterId=semesterArr[0].id;
+        this.$scope.examType=Utils.EXAM_TYPE_REGULAR;
+        this.getExamDates();
         defer.resolve(semesterArr);
       });
 
@@ -135,17 +138,11 @@ module ums{
     private fetchDeadlineInformation():void{
 
     Utils.expandRightDiv();
-
       this.$scope.showButton=false
       this.$scope.examGradeStatisticsArr=[];
       this.$scope.examGradeStatisticsArrTemp=[];
       var examType=+this.$scope.examType;
 
-      if(this.$scope.semesterId==null || this.$scope.examType==null || this.$scope.examDate==null){
-        this.notify.error("Please select all the necessary fields");
-        this.$scope.showTable=false;
-      }
-      else{
         this.$scope.showLoader=true;
         this.examGradeService.getGradeSubmissionDeadLine(this.$scope.semesterId,examType,this.$scope.examDate).then((outputArr:Array<IExamGrade>)=>{
 
@@ -170,7 +167,6 @@ module ums{
 
 
         });
-      }
 
     }
 

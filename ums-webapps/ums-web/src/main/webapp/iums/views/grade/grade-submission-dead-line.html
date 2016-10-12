@@ -6,14 +6,14 @@
 
 <div class="row" data-ng-init="getSemesters()">
     <div onclick="resetCommonCollapsibleDivs()" id="arrowDiv">
-        <i class="fa fa-angle-double-right fa-4x"></i></i>
+        <i class="fa fa-angle-double-right fa-cx"></i></i>
     </div>
     <div class="panel panel-green" id="leftDiv">
         <div class="panel-heading">
             <h3 class="panel-title">Select </h3>
         </div>
         <div class="panel-body pan">
-            <form action="" class="form-horizontal">
+            <form action="" class="form-horizontal" data-validate=""  data-onvalidate="fetchDeadlineInformation" >
                 <div class="form-body pal">
                     <div class="form-group">
                         <label class="col-md-4 control-label">Semester</label>
@@ -28,7 +28,7 @@
                         <label class="col-md-4 control-label">Exam Type</label>
                         <div class="col-md-8">
                             <select class="form-control required" name="examType" data-ng-model="examType" data-ng-change="getExamDates()"  data-convert-to-number>
-                                <option value="1">Regular</option>
+                                <option value="1">Semester Final</option>
                                 <option value="2">Carry/Clearance/Improvement</option>
                             </select>
                         </div>
@@ -44,7 +44,7 @@
                     </div>
                 </div>
                 <div class="form-actions text-right pal">
-                    <button type="button" class="btn btn-success" data-ng-click="fetchDeadlineInformation()">Search</button>
+                    <button type="button" class="btn btn-success">Search</button>
                 </div>
             </form>
          </div>

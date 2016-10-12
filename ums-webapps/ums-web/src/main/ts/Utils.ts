@@ -71,6 +71,21 @@ module ums {
       $("#arrowDiv").show(50);
     }
 
+    public static setValidationOptions(formClass:string):void{
+      $("."+formClass).validate({
+        errorPlacement: function(error, element){
+          error.insertAfter(element);
+        },
+        unhighlight: function(element, errorClass) {
+          var $element = $(element);
+          $element.siblings(".error_status").removeClass("check");
+        },
+        success: function(label,element) {
+          label.parent().removeClass('state-error');
+          label.remove();
+        }
+      });
+    }
 
   }
 }

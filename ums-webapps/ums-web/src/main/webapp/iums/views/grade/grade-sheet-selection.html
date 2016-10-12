@@ -22,19 +22,18 @@
 </style>
 <div class="row" id="selection1">
     <div onclick="resetCommonCollapsibleDivs()" id="arrowDiv"><i
-            class="fa fa-angle-double-right fa-4x"></i></i> </div>
+            class="fa fa-angle-double-right fa-cx"></i></i> </div>
     <div class="panel panel-green" id="leftDiv">
         <div class="panel-heading">
             <h3 class="panel-title">Select Parameters</h3>
         </div>
         <div class="panel-body pan">
-            <form action="" class="form-horizontal">
+            <form action="" class="form-horizontal" data-validate=""  data-onvalidate="fetchGradeSubmissionTable" >
                 <div class="form-body pal">
-
                     <div class="form-group">
                         <label class="col-md-4 control-label">Program Type</label>
                         <div class="col-md-8">
-                            <select class="form-control required" data-ng-model="inputParams.program_type" data-ng-change="loadSemesters()" data-convert-to-number >
+                            <select name="programType" class="form-control required" data-ng-model="inputParams.program_type" data-ng-change="loadSemesters()" data-convert-to-number >
                                 <option  value="11">Undergraduate</option>
                                 <option  value="22">Postgraduate</option>
                             </select>
@@ -44,7 +43,7 @@
                         <label class="col-md-4 control-label">Semester</label>
 
                         <div class="col-md-8">
-                            <select class="form-control required" data-ng-model="inputParams.semester_id" data-convert-to-number >
+                            <select name="semester" class="form-control required" data-ng-model="inputParams.semester_id" data-convert-to-number >
                                 <option data-ng-repeat="semester in data.semesters" value="{{semester.id}}">{{semester.name}}</option>
                             </select>
                         </div>
@@ -53,7 +52,7 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label">Exam Type</label>
                         <div class="col-md-8">
-                            <select class="form-control required" data-ng-model="inputParams.exam_typeId" data-convert-to-number>
+                            <select name="examType" class="form-control required" data-ng-model="inputParams.exam_typeId" data-convert-to-number>
                                 <option  value="1">Semester Final</option>
                                 <option  value="2">Clearance/Carry/Improvement</option>
                             </select>
@@ -85,19 +84,19 @@
                             <select class="form-control required" data-ng-model="inputParams.year_semester" data-convert-to-number>
                                 <option data-ng-repeat="ys in data.yearSemester" value="{{ys.id}}">{{ys.name}}</option>
                             </select>
-                         </div>
                         </div>
+                    </div>
                     <div class="form-group"  data-ng-if="userRole!='T'">
-                            <label class="col-md-4 control-label">Status</label>
-                            <div class="col-md-8">
-                                <select class="form-control required" data-ng-model="inputParams.status" data-convert-to-number>
-                                    <option data-ng-repeat="status in data.markSubmissionStatus" value="{{status.id}}">{{status.name}}</option>
-                                </select>
+                        <label class="col-md-4 control-label">Status</label>
+                        <div class="col-md-8">
+                            <select class="form-control required" data-ng-model="inputParams.status" data-convert-to-number>
+                                <option data-ng-repeat="status in data.markSubmissionStatus" value="{{status.id}}">{{status.name}}</option>
+                            </select>
                         </div>
                     </div>
                 </div>
                 <div class="form-actions text-right pal">
-                    <button type="button" class="btn btn-success" data-ng-click="fetchGradeSubmissionTable()">Search</button>
+                    <button type="button" class="btn btn-success" >Search</button>
                 </div>
             </form>
         </div>
@@ -168,7 +167,7 @@
             <div id='outer_container' style="position: absolute;top: 40px; right: 55px;z-index: 99999;">
                 <a class="menu_button" href="javascript:void(0)" title="Toggle"><span>Menu Toggle</span></a>
                 <ul class="menu_option">
-                    <li> 
+                    <li>
                         <a href="javascript:void(0)" data-ng-click="downloadPdf()"  style="background: #ea4c3a" title="Download Pdf">
                             <span style="background-image:  url('images/icons/pieMenu-marksSubmission/pdf-256.png')">Item</span>
                         </a>
@@ -1067,7 +1066,7 @@
                     <div class="form-group">
                         <label class="col-md-2 control-label" style="margin-top: 7px;font-weight: bold;">Student Id</label>
                         <div class="col-md-3">
-                           <input
+                            <input
                                     id="studentId_log" type="text" placeholder="" class="form-control" style="text-align:center;font-weight: bold;color: blue;"/>
 
                         </div>

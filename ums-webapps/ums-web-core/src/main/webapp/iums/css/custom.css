@@ -376,8 +376,8 @@ div.ui-jqgrid-view table.ui-jqgrid-btable th {
     cursor: pointer;
     float:left;
     width:20px;
-    margin-right: 15px;
-    margin-left: 10px;
+    margin-right: 4px;
+    margin-left: 4px;
 }
 #leftDiv {
     float:left;
@@ -407,4 +407,9 @@ div.ui-jqgrid-view table.ui-jqgrid-btable th {
 }
 .table tbody tr td {
     border-top: none !important;
+}
+/* Select Option arrow style */
+.fa-cx {
+    font-weight: bold;
+    font-size: 2.2em;
 }

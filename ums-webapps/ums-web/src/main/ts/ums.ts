@@ -89,7 +89,6 @@ module ums {
                 files: [
                   'vendors/bootstrap-switch/css/bootstrap-switch.css',
                   'vendors/bootstrap-datepicker/css/datepicker.css',
-                  'vendors/jquery-validate/jquery.validate.min.js',
                   'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
                   'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
                   'vendors/jquery-notify/jquery.notify.js'
@@ -113,7 +112,6 @@ module ums {
                 files: [
                   'vendors/bootstrap-switch/css/bootstrap-switch.css',
                   'vendors/bootstrap-datepicker/css/datepicker.css',
-                  'vendors/jquery-validate/jquery.validate.min.js',
                   'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
                   'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
                 ]
@@ -129,33 +127,14 @@ module ums {
             loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
               return $ocLazyLoad.load({
                 files: [
-                  'vendors/bootstrap-colorpicker/css/colorpicker.css',
-                  'vendors/bootstrap-datepicker/css/datepicker.css',
                   'vendors/bootstrap-daterangepicker/daterangepicker-bs3.css',
                   'vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css',
-                  'vendors/bootstrap-timepicker/css/bootstrap-timepicker.min.css',
-                  'vendors/bootstrap-clockface/css/clockface.css',
-                  'vendors/bootstrap-switch/css/bootstrap-switch.css',
                   'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
                   'vendors/bootstrap-daterangepicker/daterangepicker.js',
-                  'vendors/moment/moment.js',
                   'vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
-                  'vendors/bootstrap-timepicker/js/bootstrap-timepicker.js',
-                  'vendors/bootstrap-clockface/js/clockface.js',
-                  'vendors/bootstrap-colorpicker/js/bootstrap-colorpicker.js',
-                  'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
                   'vendors/jquery-maskedinput/jquery-maskedinput.js',
-                  'vendors/charCount.js',
                   'vendors/bootstrap-datepicker/css/datepicker.css',
-                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
-                  'vendors/select2/select2-madmin.css',
-                  'vendors/bootstrap-select/bootstrap-select.min.css',
-                  'vendors/multi-select/css/multi-select-madmin.css',
-                  'vendors/select2/select2.min.js',
-                  'vendors/bootstrap-switch/css/bootstrap-switch.css',
-                  'vendors/bootstrap-datepicker/css/datepicker.css',
-                  'vendors/jquery-validate/jquery.validate.min.js',
-                  'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
+                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js'
                 ]
               });
             }]
@@ -171,7 +150,6 @@ module ums {
                 files: [
                   'vendors/bootstrap-switch/css/bootstrap-switch.css',
                   'vendors/bootstrap-datepicker/css/datepicker.css',
-                  'vendors/jquery-validate/jquery.validate.min.js',
                   'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
                   'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
                   'vendors/bootstrap-daterangepicker/daterangepicker.js'
@@ -190,7 +168,6 @@ module ums {
                 files: [
                   'vendors/bootstrap-switch/css/bootstrap-switch.css',
                   'vendors/bootstrap-datepicker/css/datepicker.css',
-                  'vendors/jquery-validate/jquery.validate.min.js',
                   'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
                   'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
                   'vendors/bootstrap-daterangepicker/daterangepicker.js'
@@ -228,7 +205,6 @@ module ums {
                 files: [
                   'vendors/bootstrap-switch/css/bootstrap-switch.css',
                   'vendors/bootstrap-datepicker/css/datepicker.css',
-                  'vendors/jquery-validate/jquery.validate.min.js',
                   'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
                   'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
                 ]
@@ -246,7 +222,6 @@ module ums {
                 files: [
                   'vendors/bootstrap-switch/css/bootstrap-switch.css',
                   'vendors/bootstrap-datepicker/css/datepicker.css',
-                  'vendors/jquery-validate/jquery.validate.min.js',
                   'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
                   'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
                 ]
@@ -264,7 +239,6 @@ module ums {
                 files: [
                   'vendors/bootstrap-switch/css/bootstrap-switch.css',
                   'vendors/bootstrap-datepicker/css/datepicker.css',
-                  'vendors/jquery-validate/jquery.validate.min.js',
                   'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
                   'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
                 ]
@@ -282,7 +256,6 @@ module ums {
                 files: [
                   'vendors/bootstrap-switch/css/bootstrap-switch.css',
                   'vendors/bootstrap-datepicker/css/datepicker.css',
-                  'vendors/jquery-validate/jquery.validate.min.js',
                   'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
                   'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
                 ]
@@ -301,7 +274,6 @@ module ums {
                   'vendors/bootstrap-switch/css/bootstrap-switch.css',
                   'vendors/bootstrap-datepicker/css/datepicker.css',
                   'vendors/jquery-tablesorter/themes/blue/style-custom.css',
-                  'vendors/jquery-validate/jquery.validate.min.js',
                   'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
                   'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
                   'vendors/jquery-tablesorter/jquery.tablesorter.js'
@@ -320,7 +292,6 @@ module ums {
                 files: [
                   'vendors/bootstrap-switch/css/bootstrap-switch.css',
                   'vendors/bootstrap-datepicker/css/datepicker.css',
-                  'vendors/jquery-validate/jquery.validate.min.js',
                   'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
                   'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
                 ]
@@ -338,7 +309,6 @@ module ums {
                 files: [
                   'vendors/bootstrap-switch/css/bootstrap-switch.css',
                   'vendors/bootstrap-datepicker/css/datepicker.css',
-                  'vendors/jquery-validate/jquery.validate.min.js',
                   'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
                   'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
                   'vendors/jquery-maskedinput/jquery-maskedinput.js'
@@ -350,30 +320,12 @@ module ums {
         .state('createUgCourse', {
           url: "/createUgCourse",
           controller: 'NewCourseUg',
-          templateUrl: 'views/course/new-course-ug.html',
-          resolve: {
-            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-              return $ocLazyLoad.load({
-                files: [
-                  'vendors/jquery-validate/jquery.validate.min.js'
-                ]
-              });
-            }]
-          }
+          templateUrl: 'views/course/new-course-ug.html'
         })
         .state('createPgCourse', {
           url: "/createPgCourse",
           controller: 'NewCoursePg',
-          templateUrl: 'views/course/new-course-pg.html',
-          resolve: {
-            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-              return $ocLazyLoad.load({
-                files: [
-                  'vendors/jquery-validate/jquery.validate.min.js'
-                ]
-              });
-            }]
-          }
+          templateUrl: 'views/course/new-course-pg.html'
         })
         .state('semesterSettingParameter',{
           url:"/semesterSettingParameter",
@@ -408,7 +360,6 @@ module ums {
                   'vendors/select2/select2.min.js',
                   'vendors/bootstrap-switch/css/bootstrap-switch.css',
                   'vendors/bootstrap-datepicker/css/datepicker.css',
-                  'vendors/jquery-validate/jquery.validate.min.js',
                   'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
                 ]
               });
@@ -425,7 +376,6 @@ module ums {
                 files: [
                   'vendors/bootstrap-switch/css/bootstrap-switch.css',
                   'vendors/bootstrap-datepicker/css/datepicker.css',
-                  'vendors/jquery-validate/jquery.validate.min.js',
                   'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
                   'vendors/ckeditor/ckeditor.js',
                   'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
@@ -445,7 +395,6 @@ module ums {
                 files: [
                   'vendors/bootstrap-switch/css/bootstrap-switch.css',
                   'vendors/bootstrap-datepicker/css/datepicker.css',
-                  'vendors/jquery-validate/jquery.validate.min.js',
                   'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
                   'vendors/ckeditor/ckeditor.js',
                   'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
@@ -464,7 +413,6 @@ module ums {
                 files: [
                   'vendors/bootstrap-switch/css/bootstrap-switch.css',
                   'vendors/bootstrap-datepicker/css/datepicker.css',
-                  'vendors/jquery-validate/jquery.validate.min.js',
                   'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
                   'vendors/bootstrap-switch/js/bootstrap-switch.min.js'
                 ]
@@ -475,30 +423,12 @@ module ums {
         .state('changePassword', {
           url: "/changePassword",
           controller: 'ChangePassword',
-          templateUrl: 'views/common/change-password.html',
-          resolve: {
-            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-              return $ocLazyLoad.load({
-                files: [
-                  'vendors/jquery-validate/jquery.validate.min.js'
-                ]
-              });
-            }]
-          }
+          templateUrl: 'views/common/change-password.html'
         })
         .state('passwordReport', {
           url: "/passwordReport",
           controller: 'PasswordReport',
-          templateUrl: 'views/common/password-report.html',
-          resolve: {
-            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-              return $ocLazyLoad.load({
-                files: [
-                  'vendors/jquery-validate/jquery.validate.min.js'
-                ]
-              });
-            }]
-          }
+          templateUrl: 'views/common/password-report.html'
         })
         .state('passwordReport.singleUserPassword', {
           controller: 'PasswordReport',
@@ -575,16 +505,7 @@ module ums {
         .state('studentProfile', {
           url: "/studentProfile",
           controller: "StudentProfile",
-          templateUrl: 'views/student/student-profile.html',
-          resolve: {
-            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-              return $ocLazyLoad.load({
-                files: [
-                  'vendors/jquery-validate/jquery.validate.min.js'
-                ]
-              });
-            }]
-          }
+          templateUrl: 'views/student/student-profile.html'
         })
         .state('assignRole', {
           url: "/assignRole",
@@ -596,7 +517,6 @@ module ums {
                 files: [
                   'vendors/bootstrap-switch/css/bootstrap-switch.css',
                   'vendors/bootstrap-datepicker/css/datepicker.css',
-                  'vendors/jquery-validate/jquery.validate.min.js',
                   'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
                   'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
                   'vendors/jquery-notify/jquery.notify.js',
@@ -646,16 +566,7 @@ module ums {
         .state('semesterEnrollment', {
           url: "/semesterEnrollment",
           templateUrl: 'views/semester/semester-enrollment.html',
-          controller: 'SemesterEnrollment',
-          resolve: {
-            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-              return $ocLazyLoad.load({
-                files: [
-                  'vendors/jquery-validate/jquery.validate.min.js'
-                ]
-              });
-            }]
-          }
+          controller: 'SemesterEnrollment'
         })
         .state('flushCache', {
           url: "/flushCache",
