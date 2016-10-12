@@ -56,7 +56,14 @@
 
 
                         <div data-ng-if="shiftOptionSelected">
-
+                            <h5  style="background-color: darkgrey; color: ghostwhite"><p class="labels">Shift Student's Adviser</p></h5>
+                            <div class="row" align="right" style="padding:2%;">
+                                <button type="button" class="btn btn-primary btn-xs" title="View by student's id" data-ng-click="viewStudentById()"><i class="fa fa-user" aria-hidden="true"></i></button>
+                                <button type="button" class="btn btn-primary btn-xs" title="View by student's id and name" data-ng-click="viewStudentByIdAndName()">
+                                    <i class="fa fa-user" aria-hidden="true"></i>
+                                    <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                </button>
+                            </div>
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
@@ -76,13 +83,7 @@
                                                     </select>
                                                 </div>
                                                 <br>
-                                                <div class="row" align="right">
-                                                    <button type="button" class="btn btn-primary btn-xs" title="View by student's id" data-ng-click="viewStudentById()"><i class="fa fa-user" aria-hidden="true"></i></button>
-                                                    <button type="button" class="btn btn-primary btn-xs" title="View by student's id and name" data-ng-click="viewStudentByIdAndName()">
-                                                        <i class="fa fa-user" aria-hidden="true"></i>
-                                                        <i class="fa fa-plus-circle" aria-hidden="true"></i>
-                                                    </button>
-                                                </div>
+
                                                 <div class="row">
                                                     <div data-ng-if="showLoader==false">
                                                         <ul data-ng-if="showLoader==false">
@@ -110,13 +111,7 @@
                                                     </select>
                                                 </div>
                                                 <br>
-                                                <div class="row" align="right">
-                                                    <button type="button" class="btn btn-primary btn-xs" title="View by student's id" data-ng-click="viewStudentById()"><i class="fa fa-user" aria-hidden="true"></i></button>
-                                                    <button type="button" class="btn btn-primary btn-xs" title="View by student's id and name" data-ng-click="viewStudentByIdAndName()">
-                                                        <i class="fa fa-user" aria-hidden="true"></i>
-                                                        <i class="fa fa-plus-circle" aria-hidden="true"></i>
-                                                    </button>
-                                                </div>
+
                                                 <div class="row">
                                                     <ul data-ng-if="showLoader==false">
                                                         <li  class="rounded" ng-style="{background:a.backgroundColor}" data-ng-repeat="a in toStudents track by a.id" >
