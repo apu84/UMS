@@ -66,5 +66,11 @@ module ums {
       return val;
     }
 
+    public static expandRightDiv(){
+      $("#leftDiv").hide(100);
+      $("#arrowDiv").show(50);
+    }
+
+
   }
 }

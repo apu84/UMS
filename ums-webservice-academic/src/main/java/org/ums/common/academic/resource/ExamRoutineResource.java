@@ -30,16 +30,16 @@ public class ExamRoutineResource  extends MutableExamRoutineResource {
   @Path("/simplified/semester/{semester-id}/examtype/{exam-type}")
   public JsonObject getExamRoutineSimplified(final @Context Request pRequest,
                                    final @PathParam("semester-id") Integer pSemesterId,
-                                   final @PathParam("exam-type") String pExamTypeId) throws Exception {
-    return mResourceHelper.getExamRoutineWithSemesterAndExamType(pSemesterId,Integer.parseInt(pExamTypeId),pRequest,mUriInfo);
+                                   final @PathParam("exam-type") Integer pExamTypeId) throws Exception {
+    return mResourceHelper.getExamRoutineWithSemesterAndExamType(pSemesterId,pExamTypeId,pRequest,mUriInfo);
   }
 
   @GET
   @Path("/examdates/semester/{semester-id}/examtype/{exam-type}")
   public JsonObject getExamDates(final @Context Request pRequest,
                                              final @PathParam("semester-id") Integer pSemesterId,
-                                             final @PathParam("exam-type") String pExamTypeId) throws Exception {
-    return mResourceHelper.getExamDateBySemesterAndExamType(pSemesterId,Integer.parseInt(pExamTypeId),pRequest,mUriInfo);
+                                             final @PathParam("exam-type") Integer pExamTypeId) throws Exception {
+    return mResourceHelper.getExamDateBySemesterAndExamType(pSemesterId,pExamTypeId,pRequest,mUriInfo);
   }
 
 
