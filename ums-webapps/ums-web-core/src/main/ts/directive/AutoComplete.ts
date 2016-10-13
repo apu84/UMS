@@ -31,11 +31,11 @@ module ums{
 
 
       //$scope.$watch('firstSelected',(value, oldValue)=>{
-      console.log("value changed");
+   /*   console.log("value changed");
       $( "#tags" ).autocomplete({
         source: $scope.autoSuggestionList,
 
-        select:(event,ui)=>{
+        select:(event:any,ui:any)=>{
           var id= ui.item.value;
           console.log($scope);
           console.log(ui.item.value);
@@ -56,7 +56,7 @@ module ums{
           $scope.addSecondSelectedValue({id:ui.item.value});
 
         }
-      });
+      });*/
       //});
 
 
