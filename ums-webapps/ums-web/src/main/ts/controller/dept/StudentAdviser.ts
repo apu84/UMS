@@ -59,49 +59,40 @@ module ums{
     showStudentId:boolean;
     showAdviserName:boolean;
     removeFromAddedList:boolean;
+    showStudentsByYearSemester:boolean;
     changeColor:Function;
     addAndSave:Function;
     cancelAddAndSave:Function;
+    viewStudentByYearSemester:Function;
+    viewStudentWithoutYearSemester:Function;
 
+    from11Student:Array<Student>;
+    from12Student:Array<Student>;
+    from21Student:Array<Student>;
+    from22Student:Array<Student>;
+    from31Student:Array<Student>;
+    from32Student:Array<Student>;
+    from41Student:Array<Student>;
+    from42Student:Array<Student>;
+    from51Student:Array<Student>;
+    from52Student:Array<Student>;
+
+
+    to11Student:Array<Student>;
+    to12Student:Array<Student>;
+    to21Student:Array<Student>;
+    to22Student:Array<Student>;
+    to31Student:Array<Student>;
+    to32Student:Array<Student>;
+    to41Student:Array<Student>;
+    to42Student:Array<Student>;
+    to51Student:Array<Student>;
+    to52Student:Array<Student>;
 
 
   }
 
-  interface IStudent{
-    fullName:string;
-    id:string;
-    programTypeId: string;
-    programTypeName: string;
-    deptId: string;
-    departmentId:string;
-    department: string;
-    departmentName:string;
-    programName: string;
-    programId: string;
-    semesterId: string;
-    semesterName: string;
-    year: number;
-    adviser:string;
-    academicSemester: number;
-    fatherName: string;
-    motherName: string;
-    dateOfBirth: string;
-    gender: string;
-    mobileNo: string;
-    phoneNo: string;
-    bloodGroup: string;
-    email: string;
-    presentAddress: string;
-    permanentAddress: string;
-    guardianPhone: string;
-    guardianName: string;
-    guardianEmail: string;
-    guardianMobile: string;
-    guardianMobileNo:string;
-    guardianPhoneNo:string;
-    theorySection:string;
-    sessionalSection:string;
-  }
+
 
 
   interface IEmployee{
@@ -148,6 +139,8 @@ module ums{
       $scope.changeColor = this.changeColor.bind(this);
       $scope.addAndSave = this.addAndSave.bind(this);
       $scope.cancelAddAndSave = this.cancelAddAndSave.bind(this);
+      $scope.viewStudentByYearSemester = this.viewStudentByYearSemester.bind(this);
+      $scope.viewStudentWithoutYearSemester = this.viewStudentWithoutYearSemester.bind(this);
       //this.enableSelectPicker();
 
       $('.selectpicker').selectpicker({
@@ -164,7 +157,7 @@ module ums{
         if(this.$scope.addedStudents.length>0){
           this.convertToJson().then((data)=>{
             this.studentService.updateStudentsAdviser(data);
-            this.initializeFromAndToStudents().then((data)=>{
+            this.initializeFromAndToStudents(3).then((data)=>{
               this.getStudentsOfTheFirstTeacher(this.$scope.fromTeacherId);
               this.getStudentsOfTheSecondTeacher(this.$scope.toTeacherId);
             });
@@ -174,10 +167,69 @@ module ums{
       });
     }
 
-    private initializeFromAndToStudents():ng.IPromise<any>{
+    private initializeFromAndToStudents(type:number):ng.IPromise<any>{
+
+      //type 1 indicates : first teacher's students
+      //type 2 indicates : second teacher's students
+      //type 3 is for global, that is, it will initialize all.
       var defer = this.$q.defer();
-      this.$scope.fromStudents=[];
-      this.$scope.toStudents=[];
+      if(type==1){
+        this.$scope.fromStudents=[];
+        this.$scope.from11Student=[];
+        this.$scope.from12Student=[];
+        this.$scope.from31Student=[];
+        this.$scope.from32Student=[];
+        this.$scope.from41Student=[];
+        this.$scope.from42Student=[];
+        this.$scope.from21Student=[];
+        this.$scope.from22Student=[];
+        this.$scope.from51Student=[];
+        this.$scope.from52Student=[];
+      }
+      else if (type==2){
+        this.$scope.toStudents=[];
+        this.$scope.to11Student=[];
+        this.$scope.to12Student=[];
+        this.$scope.to21Student=[];
+        this.$scope.to22Student=[];
+        this.$scope.to31Student=[];
+        this.$scope.to32Student=[];
+        this.$scope.to41Student=[];
+        this.$scope.to42Student=[];
+        this.$scope.to51Student=[];
+        this.$scope.to52Student=[];
+      }
+      else{
+        this.$scope.fromStudents=[];
+        this.$scope.toStudents = [];
+
+        this.$scope.from11Student=[];
+        this.$scope.from12Student=[];
+        this.$scope.from31Student=[];
+        this.$scope.from32Student=[];
+        this.$scope.from41Student=[];
+        this.$scope.from42Student=[];
+        this.$scope.from21Student=[];
+        this.$scope.from22Student=[];
+        this.$scope.from51Student=[];
+        this.$scope.from52Student=[];
+
+        this.$scope.to11Student=[];
+        this.$scope.to12Student=[];
+        this.$scope.to21Student=[];
+        this.$scope.to22Student=[];
+        this.$scope.to31Student=[];
+        this.$scope.to32Student=[];
+        this.$scope.to41Student=[];
+        this.$scope.to42Student=[];
+        this.$scope.to51Student=[];
+        this.$scope.to52Student=[];
+      }
+
+      this.$scope.addedStudents=[];
+
+
+
       defer.resolve("success");
       return defer.promise;
     }
@@ -208,6 +260,7 @@ module ums{
     private viewStudentById(){
       this.$scope.showStudentId=true;
       this.$scope.showStudentName=false;
+      this.$scope.showStudentsByYearSemester;
     }
 
     private viewStudentByIdAndName(){
@@ -260,12 +313,84 @@ module ums{
 
         });
       }else{
-        this.$scope.fromStudents=[];
-        this.getStudentsOfATeacher(teacherId,1).then((students:Array<Student>)=>{
+        this.initializeFromAndToStudents(1).then((data)=>{
+          this.getStudentsOfATeacher(teacherId,1).then((students:Array<Student>)=>{
+          });
         });
+
       }
 
 
+    }
+
+
+
+    private insertIntoFromStudentsWithYearSemester(student:Student){
+      if(student.year==1 && student.academicSemester==1){
+        this.$scope.from11Student.push(student);
+      }
+      else if(student.year==1 && student.academicSemester==2){
+        this.$scope.from12Student.push(student);
+      }
+      else if(student.year==2 && student.academicSemester==1){
+        this.$scope.from21Student.push(student);
+      }
+      else if(student.year==2 && student.academicSemester==2){
+        this.$scope.from22Student.push(student);
+      }
+      else if(student.year==3 && student.academicSemester==1){
+        this.$scope.from31Student.push(student);
+      }
+      else if(student.year==3 && student.academicSemester==2){
+        this.$scope.from32Student.push(student);
+      }
+      else if(student.year==4 && student.academicSemester==1){
+        this.$scope.from41Student.push(student);
+      }
+      else if(student.year==4 && student.academicSemester==2){
+        this.$scope.from42Student.push(student);
+      }
+      else if(student.year==5 && student.academicSemester==1){
+        this.$scope.from51Student.push(student);
+      }
+      else{
+        this.$scope.from52Student.push(student);
+      }
+    }
+
+
+
+    private insertIntoToStudentsWithYearSemester(student:Student){
+      if(student.year==1 && student.academicSemester==1){
+        this.$scope.to11Student.push(student);
+      }
+      else if(student.year==1 && student.academicSemester==2){
+        this.$scope.to12Student.push(student);
+      }
+      else if(student.year==2 && student.academicSemester==1){
+        this.$scope.to21Student.push(student);
+      }
+      else if(student.year==2 && student.academicSemester==2){
+        this.$scope.to22Student.push(student);
+      }
+      else if(student.year==3 && student.academicSemester==1){
+        this.$scope.to31Student.push(student);
+      }
+      else if(student.year==3 && student.academicSemester==2){
+        this.$scope.to32Student.push(student);
+      }
+      else if(student.year==4 && student.academicSemester==1){
+        this.$scope.to41Student.push(student);
+      }
+      else if(student.year==4 && student.academicSemester==2){
+        this.$scope.to42Student.push(student);
+      }
+      else if(student.year==5 && student.academicSemester==1){
+        this.$scope.to51Student.push(student);
+      }
+      else{
+        this.$scope.to52Student.push(student);
+      }
     }
 
     private getStudentsOfATeacher(teacherId:string,type:number):ng.IPromise<any>{
@@ -273,13 +398,17 @@ module ums{
       this.studentService.getActiveStudentsOfTheTeacher(teacherId).then((students:Array<Student>)=>{
         for(var i=0;i<students.length;i++){
           students[i].backgroundColor="#DEF";
+
+          if(type==1){
+            this.$scope.fromStudents.push(students[i]);
+            this.insertIntoFromStudentsWithYearSemester(students[i]);
+          }else{
+            this.$scope.toStudents.push(students[i]);
+            this.insertIntoToStudentsWithYearSemester(students[i]);
+          }
         }
 
-        if(type==1){
-          this.$scope.fromStudents=students;
-        }else{
-          this.$scope.toStudents = students;
-        }
+
 
         defer.resolve(students);
       });
@@ -295,12 +424,22 @@ module ums{
 
         });
       }else{
-        this.$scope.toStudents=[];
-        this.getStudentsOfATeacher(teacherId,2).then((students:Array<Student>)=>{
+        this.initializeFromAndToStudents(2).then((data)=>{
+          this.getStudentsOfATeacher(teacherId,2).then((students:Array<Student>)=>{
+
+          });
         });
       }
     }
 
+    private viewStudentByYearSemester(){
+      this.$scope.showStudentsByYearSemester = true;
+
+    }
+
+    private viewStudentWithoutYearSemester(){
+      this.$scope.showStudentsByYearSemester = false;
+    }
 
 
     private disableAllUI():ng.IPromise<any>{
@@ -314,6 +453,8 @@ module ums{
     }
 
     private showShiftUI(){
+      this.$scope.showStudentsByYearSemester=false;
+      this.initializeFromAndToStudents(3);
       this.activateUI(1);
     }
 
