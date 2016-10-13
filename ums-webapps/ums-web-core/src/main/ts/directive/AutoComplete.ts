@@ -10,10 +10,11 @@ module ums{
     }
     public restrict:string="A";
     public scope={
-      autoSuggestionList:'=ids',
+      autoSuggestionList:'=suggestionList',
       addedStudents:'=x',
-      firstSelected:'=first',
-      secondSelected:'=second',
+      firstSelected:'=firstSelected',
+      secondSelected:'=secondSelected',
+      showOneInputArea:'=showOneInputArea',
       addFirstSelectedValue:'&addFirst',
       addSecondSelectedValue:'&addSecond',
       addOneStudent:'&addOne',
@@ -28,10 +29,21 @@ module ums{
       $scope.selected={};
       var currentScope = this;
 
+      $scope.$watch('showOneInputArea',(value,oldValue)=>{
+        console.log("Showing the input area");
+        console.log($scope.showOneInputArea);
+        if($scope.showOneInputArea==true){
+          $("#showTwo").hide();
+        }else{
+          $("#showOne").hide();
+          console.log("Hiding");
+        }
+      });
+
 
 
       //$scope.$watch('firstSelected',(value, oldValue)=>{
-   /*   console.log("value changed");
+      console.log("value changed");
       $( "#tags" ).autocomplete({
         source: $scope.autoSuggestionList,
 
@@ -56,7 +68,19 @@ module ums{
           $scope.addSecondSelectedValue({id:ui.item.value});
 
         }
-      });*/
+      });
+
+      $( "#tags3" ).autocomplete({
+        source: $scope.autoSuggestionList,
+
+        select:(event:any,ui:any)=>{
+          var id= ui.item.value;
+          console.log($scope);
+          console.log(ui.item.value);
+          $scope.addFirstSelectedValue({id:ui.item.value});
+
+        }
+      });
       //});
 
 
@@ -65,6 +89,11 @@ module ums{
       //$scope.$watch('addedStudents',(value)=>{
       currentScope.$timeout(()=>{
         $("#addOneBtn").click(()=>{
+          console.log("in the click event");
+          $scope.addOneStudent();
+        });
+
+        $("#addSrcBtn").click(()=>{
           console.log("in the click event");
           $scope.addOneStudent();
         });

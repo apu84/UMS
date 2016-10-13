@@ -17,10 +17,13 @@
         padding:0.5%;
         margin:0 0 2px 0;
         border-radius: 10%;
-        //background: #DEF;
+        /*//background: #DEF;*/
         color: black;
         border-style: solid;
         border-color: black;
+        /*max-width: 80px;*/
+
+
     }
 
 
@@ -73,8 +76,8 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>
-                                            <div class="col-md-12">
+                                        <td style="width:50%">
+                                            <div class="col-md-12" >
                                                 <div class="row" align="center">
 
                                                     <select data-ng-model="fromTeacherId" data-ng-change="getStudentsOfTheFirstTeacher(fromTeacherId)">
@@ -88,7 +91,7 @@
                                                     <div data-ng-if="showLoader==false">
                                                         <ul data-ng-if="showLoader==false">
                                                             <li  class="rounded" ng-style="{background:a.backgroundColor}" data-ng-repeat="a in fromStudents track by a.id" ng-click="changeColor(a)">
-                                                                <div  data-ng-if="showStudentId">{{a.id}}</div>
+                                                                <div style="padding: 2%"  data-ng-if="showStudentId">{{a.id}}</div>
                                                                 <div  data-ng-if="showStudentName">
                                                                     {{a.id}}<br>{{a.fullName}}
                                                                     <div data-ng-if="showAdviserName">
@@ -102,8 +105,8 @@
                                             </div>
 
                                         </td>
-                                        <td>
-                                            <div class="col-md-12">
+                                        <td style="width:50%">
+                                            <div class="col-md-12" >
                                                 <div class="row" align="center">
                                                     <select data-ng-model="toTeacherId" data-ng-change="getStudentsOfTheSecondTeacher(toTeacherId)">
                                                         <option value="">Select an adviser</option>
@@ -143,26 +146,48 @@
                         <div data-ng-if="changeOptionSelected">
                             <div class="col-md-12">
                                 <h5  style="background-color: darkgrey; color: ghostwhite"><p class="labels">Change a Student's adviser</p></h5>
-                                <p>Student ID: <input data-ng-model="changeStudentID" /> <button type="button" class="btn btn-primary">Search</button></p>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <img src="https://s17.postimg.org/my90ud8db/DB_24944_Munna_copy.jpg" class="img-circle">
-                                        <p>Student Name: Monjur-E-Morshed </p>
-                                        <p>Year:1, Semester: 2</p>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <p><label class="labels" style="background-color: darkslategray;color: whitesmoke;">Current Adviser</label></p>
-                                        <p>Prof. Dr. Abdur Rahim Mollah</p>
-                                        <p><label class="labels" style="background-color: darkslategray;color: whitesmoke;">New Adviser</label></p>
-                                        <p>
-                                            <label>Select an adviser</label>
-                                            <select data-ng-model="teacherId">
-                                                <option value="">Select an adviser</option>
-                                                <option data-ng-repeat="t in teachers track by t.id" value="{{t.id}}">{{t.employeeName}}</option>
-                                            </select>
-                                        </p>
-                                    </div>
+                                <div auto-complete
+                                     suggestion-list="studentIds"
+                                     first-selected="fromStudentId"
+                                     add-first="setFirstAutoCompleteValue(id)"
+                                     add-one="addAStudent()"
+                                     x="addedStudents"
+                                     show-one-input-area="showOneInputArea"
+                                     >
                                 </div>
+                                <div class="row">
+                                    <div data-ng-repeat="s in addedStudents">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <img src="https://s17.postimg.org/my90ud8db/DB_24944_Munna_copy.jpg" class="img-circle">
+                                                <p>Student Name: {{s.fullName}} </p>
+                                                <p>Year:{{s.year}}, Semester: {{s.academicSemester}}</p>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p><label class="labels" style="background-color: darkslategray;color: whitesmoke;">Current Adviser</label></p>
+                                                <p>{{teacherIdWithTeacherMap[s.adviser].employeeName}}</p>
+                                                <p><label class="labels" style="background-color: darkslategray;color: whitesmoke;">New Adviser</label></p>
+                                                <p>
+                                                    <label>Select an adviser</label>
+                                                    <select data-ng-model="teacherId" data-ng-change="assignTeacherId(teacherId)">
+                                                        <option value="">Select an adviser</option>
+                                                        <option data-ng-repeat="t in teachers track by t.id" value="{{t.id}}">{{t.employeeName}}</option>
+                                                    </select>
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <br>
+                                        <div  align="right" clas="row">
+                                            <div class="col-md-12">
+                                                <hr>
+                                                <button type="button" class="btn btn-primary" data-ng-click="save()">Change Adviser</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
 
                             </div>
                         </div>
@@ -175,14 +200,15 @@
                                     <br>
 
                                     <div auto-complete
-                                         ids="studentIds"
-                                         first="fromStudentId"
-                                         second="toStudentId"
+                                         suggestion-list="studentIds"
+                                         first-selected="fromStudentId"
+                                         second-selected="toStudentId"
                                          add-first="setFirstAutoCompleteValue(id)"
                                          add-second="setSecondAutoCompleteValue(id)"
                                          add-one="addAStudent()"
                                          add-range="addStudents()"
                                          x="addedStudents"
+                                         show-one-input-area="showOneInputArea"
                                          class="col-md-12" align="right">
                                     </div>
 

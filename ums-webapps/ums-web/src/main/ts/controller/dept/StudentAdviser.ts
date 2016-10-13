@@ -5,6 +5,7 @@ module ums{
     enableSaveButton:Function;
     save:Function;
     showLoader:boolean;
+    showOneInputArea:boolean;
 
 
     shiftOptionSelected:boolean;
@@ -25,6 +26,7 @@ module ums{
     selectedTeacher:any;
     fromTeacherId:string;
     toTeacherId:string;
+    teacherIdWithTeacherMap:any;
     getActiveTeachers:Function;
     assignTeacherId:Function;
     getStudentsOfTheTeacher:Function;
@@ -120,6 +122,7 @@ module ums{
       $scope.showStudentName = false;
       $scope.showSaveButton=false;
       $scope.shiftOptionSelected=false;
+      $scope.showOneInputArea=false;
       $scope.changeOptionSelected=false;
       $scope.bulkAssignmentOptionSelected=false;
       $scope.showShiftUI=this.showShiftUI.bind(this);
@@ -315,11 +318,13 @@ module ums{
     }
 
     private showChangeUI(){
+      this.$scope.showOneInputArea=true;
       this.activateUI(2);
     }
 
     private showBulkAssignmentUI(){
       //this.enableSelectPicker();
+      this.$scope.showOneInputArea=false;
       this.initialize();
       this.activateUI(3);
     }
@@ -330,7 +335,12 @@ module ums{
       this.employeeService.getActiveTeacherByDept().then((teachers:Array<IEmployee>)=>{
         this.$scope.teachers=[];
         console.log(teachers);
-        this.$scope.teachers = teachers;
+        this.$scope.teacherIdWithTeacherMap={};
+        //this.$scope.teachers = teachers;
+        for(var i=0;i<teachers.length;i++){
+          this.$scope.teachers.push(teachers[i]);
+          this.$scope.teacherIdWithTeacherMap[teachers[i].id] = teachers[i];
+        }
       });
     }
 
@@ -344,6 +354,7 @@ module ums{
 
     private getActiveStudentsOfDept(){
       this.studentService.getActiveStudentsByDepartment().then((students:Array<Student>)=>{
+        //console.log(students);
         this.$scope.students=[];
         this.$scope.studentIds=[];
         this.$scope.studentIdsExt=[];
@@ -411,7 +422,11 @@ module ums{
     }
 
     private setFirstAutoCompleteValue(fromStudentId:any){
-      this.$scope.fromStudentId = fromStudentId
+      this.$scope.fromStudentId = fromStudentId;
+
+      if(this.$scope.showChangeUI){
+        this.$scope.addedStudents=[];
+      }
 
 
     }
@@ -439,7 +454,7 @@ module ums{
           })
         });
       }else{
-        this.notify.warn("Adviser is not selected");
+        this.notify.warn("All fields are not selected");
       }
     }
 
@@ -453,6 +468,7 @@ module ums{
       this.$scope.toStudents=[];
       this.$scope.fromTeacherId="";
       this.$scope.toTeacherId="";
+      this.$scope.teacherId="";
     }
 
     private convertToJson():ng.IPromise<any>{
@@ -484,6 +500,7 @@ module ums{
         item['guardianPhoneNo'] = student.guardianPhoneNo;
         item['guardianEmail'] = student.guardianEmail;
         item['adviser'] = this.$scope.teacherId;
+        this.$scope.addedStudents[i].adviser=this.$scope.teacherId;
         jsonObject.push(item);
       }
 
