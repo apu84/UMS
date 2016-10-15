@@ -24,7 +24,7 @@ module ums{
     public link = ($scope:any, element:any, attributes:any) => {
 
 
-      console.log("Hello there");
+     /* console.log("Hello there");
       console.log($scope);
       $scope.selected={};
       var currentScope = this;
@@ -83,7 +83,7 @@ module ums{
       });
       //});
 
-
+*/
 
 
       //$scope.$watch('addedStudents',(value)=>{
