@@ -24,12 +24,12 @@ module ums{
     public link = ($scope:any, element:any, attributes:any) => {
 
 
-     /* console.log("Hello there");
+      console.log("Hello there");
       console.log($scope);
       $scope.selected={};
       var currentScope = this;
 
-      $scope.$watch('showOneInputArea',(value,oldValue)=>{
+     /* $scope.$watch('showOneInputArea',(value,oldValue)=>{
         console.log("Showing the input area");
         console.log($scope.showOneInputArea);
         if($scope.showOneInputArea==true){
@@ -82,12 +82,12 @@ module ums{
         }
       });
       //});
-
 */
 
 
+
       //$scope.$watch('addedStudents',(value)=>{
-      currentScope.$timeout(()=>{
+      currentScope.$timeout(()=>{   
         $("#addOneBtn").click(()=>{
           console.log("in the click event");
           $scope.addOneStudent();
