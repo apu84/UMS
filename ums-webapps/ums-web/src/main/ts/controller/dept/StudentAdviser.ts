@@ -2,6 +2,7 @@ module ums{
   interface IStudentAdviser extends ng.IScope{
 
     showSaveButton:boolean;
+    showAdviser:boolean;
     enableSaveButton:Function;
     save:Function;
     showLoader:boolean;
@@ -54,6 +55,7 @@ module ums{
     addStudents:Function;
     viewStudentById:Function;
     viewStudentByIdAndName:Function;
+    viewStudentByIdAndAdviser:Function;
     clearAddedStudents:Function;
     showStudentName:boolean;
     showStudentId:boolean;
@@ -65,6 +67,9 @@ module ums{
     cancelAddAndSave:Function;
     viewStudentByYearSemester:Function;
     viewStudentWithoutYearSemester:Function;
+    getExistingStudentsOfAdviser:Function;
+    existingStudetsOfAdivser:Array<Student>;
+    assignedStudentsOfTheAdviser:number;
 
     from11Student:Array<Student>;
     from12Student:Array<Student>;
@@ -111,6 +116,7 @@ module ums{
       $scope.showLoader = false;
       $scope.showStudentId=true;
       $scope.showStudentName = false;
+      $scope.showAdviserName=false;
       $scope.showSaveButton=false;
       $scope.shiftOptionSelected=false;
       $scope.showOneInputArea=false;
@@ -141,6 +147,8 @@ module ums{
       $scope.cancelAddAndSave = this.cancelAddAndSave.bind(this);
       $scope.viewStudentByYearSemester = this.viewStudentByYearSemester.bind(this);
       $scope.viewStudentWithoutYearSemester = this.viewStudentWithoutYearSemester.bind(this);
+      $scope.getExistingStudentsOfAdviser = this.getExistingStudentsOfAdviser.bind(this);
+      $scope.viewStudentByIdAndAdviser = this.viewStudentByIdAndAdviser.bind(this);
       //this.enableSelectPicker();
 
       $('.selectpicker').selectpicker({
@@ -185,6 +193,7 @@ module ums{
         this.$scope.from22Student=[];
         this.$scope.from51Student=[];
         this.$scope.from52Student=[];
+
       }
       else if (type==2){
         this.$scope.toStudents=[];
@@ -198,10 +207,11 @@ module ums{
         this.$scope.to42Student=[];
         this.$scope.to51Student=[];
         this.$scope.to52Student=[];
+
       }
       else{
         this.$scope.fromStudents=[];
-        this.$scope.toStudents = [];
+        //this.$scope.toStudents = [];
 
         this.$scope.from11Student=[];
         this.$scope.from12Student=[];
@@ -226,9 +236,9 @@ module ums{
         this.$scope.to52Student=[];
       }
 
+
+
       this.$scope.addedStudents=[];
-
-
 
       defer.resolve("success");
       return defer.promise;
@@ -261,11 +271,20 @@ module ums{
       this.$scope.showStudentId=true;
       this.$scope.showStudentName=false;
       this.$scope.showStudentsByYearSemester;
+      this.$scope.showAdviserName=false;
     }
 
     private viewStudentByIdAndName(){
       this.$scope.showStudentName=true;
       this.$scope.showStudentId=false;
+      this.$scope.showAdviserName=false;
+    }
+
+    private viewStudentByIdAndAdviser(){
+      console.log("here u will see adviser names...");
+      this.$scope.showAdviserName = true;
+      this.$scope.showStudentId=false;
+      this.$scope.showStudentName=false;
     }
 
     private assignTeacherId(teacher:any){
@@ -396,15 +415,21 @@ module ums{
     private getStudentsOfATeacher(teacherId:string,type:number):ng.IPromise<any>{
       var defer = this.$q.defer();
       this.studentService.getActiveStudentsOfTheTeacher(teacherId).then((students:Array<Student>)=>{
+        this.$scope.assignedStudentsOfTheAdviser = angular.copy(students.length);
+        console.log("Student number");
+        console.log(this.$scope.assignedStudentsOfTheAdviser);
         for(var i=0;i<students.length;i++){
           students[i].backgroundColor="#DEF";
 
           if(type==1){
             this.$scope.fromStudents.push(students[i]);
             this.insertIntoFromStudentsWithYearSemester(students[i]);
-          }else{
+          }else if(type==2){
             this.$scope.toStudents.push(students[i]);
             this.insertIntoToStudentsWithYearSemester(students[i]);
+          }
+          else{
+            this.$scope.existingStudetsOfAdivser.push(students[i]);
           }
         }
 
@@ -565,7 +590,7 @@ module ums{
     private setFirstAutoCompleteValue(fromStudentId:any){
       this.$scope.fromStudentId = fromStudentId;
 
-      if(this.$scope.showChangeUI){
+      if(this.$scope.changeOptionSelected){
         this.$scope.addedStudents=[];
       }
 
@@ -580,6 +605,7 @@ module ums{
     private enableSaveButton(){
       console.log("I am in the enable save section");
       console.log("teacher id--->"+this.$scope.teacherId);
+      console.log(this.$scope.existingStudetsOfAdivser);
       if(this.$scope.addedStudents.length>0){
         this.$scope.showSaveButton=true;
       }
@@ -592,6 +618,7 @@ module ums{
         this.convertToJson().then((jsonData)=>{
           this.studentService.updateStudentsAdviser(jsonData).then((data)=>{
               this.initialize();
+              this.initializeFromAndToStudents(3);
           })
         });
       }else{
@@ -600,6 +627,7 @@ module ums{
     }
 
     private initialize(){
+      this.$scope.existingStudetsOfAdivser=[];
       this.$scope.addedStudents=[];
       this.$scope.addedStudentIdMap={};
       /*this.$scope.fromStudentId=null;
@@ -610,6 +638,29 @@ module ums{
       this.$scope.fromTeacherId="";
       this.$scope.toTeacherId="";
       this.$scope.teacherId="";
+     /* this.$scope.toStudentId="";
+      this.$scope.fromStudentId="";*/
+
+      this.initializeFromAndToStudents(3);
+
+     // this.initializeTeachersStudentForBulkAssignment();
+    }
+
+    private initializeExistingStudentsOfAdviser():ng.IPromise<any>{
+      var defer = this.$q.defer();
+      this.$scope.existingStudetsOfAdivser=[];
+      defer.resolve("success");
+      return defer.promise;
+    }
+
+    private getExistingStudentsOfAdviser(teacherId:string){
+      this.initializeExistingStudentsOfAdviser().then((data)=>{
+        this.getStudentsOfATeacher(teacherId,3);
+      });
+    }
+
+    private initializeTeachersStudentForBulkAssignment(){
+      this.$scope.toStudents=[];
     }
 
     private convertToJson():ng.IPromise<any>{
