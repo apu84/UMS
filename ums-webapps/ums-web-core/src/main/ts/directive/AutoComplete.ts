@@ -3,7 +3,6 @@
  */
 module ums{
   class AutoComplete implements ng.IDirective{
-    //studentIds:any;
     static $inject=['$timeout'];
     constructor(public $timeout:ng.ITimeoutService){
 
@@ -29,7 +28,7 @@ module ums{
       $scope.selected={};
       var currentScope = this;
 
-     /* $scope.$watch('showOneInputArea',(value,oldValue)=>{
+      $scope.$watch('showOneInputArea',(value,oldValue)=>{
         console.log("Showing the input area");
         console.log($scope.showOneInputArea);
         if($scope.showOneInputArea==true){
@@ -42,9 +41,9 @@ module ums{
 
 
 
-      //$scope.$watch('firstSelected',(value, oldValue)=>{
-      console.log("value changed");
-      $( "#tags" ).autocomplete({
+
+
+      var firstSelectable = {
         source: $scope.autoSuggestionList,
 
         select:(event:any,ui:any)=>{
@@ -54,11 +53,12 @@ module ums{
           $scope.addFirstSelectedValue({id:ui.item.value});
 
         }
-      });
-      //});
+      };
+      console.log("value changed");
+      $( "#tags" ).autocomplete(firstSelectable);
 
-      //$scope.$watch('secondSelected',(value)=>{
-      $( "#tags2" ).autocomplete({
+
+      var secondSelectable = {
         source: $scope.autoSuggestionList,
 
         select:(event,ui)=>{
@@ -68,9 +68,10 @@ module ums{
           $scope.addSecondSelectedValue({id:ui.item.value});
 
         }
-      });
+      };
+      $( "#tags2" ).autocomplete(secondSelectable);
 
-      $( "#tags3" ).autocomplete({
+      var oneSelectable = {
         source: $scope.autoSuggestionList,
 
         select:(event:any,ui:any)=>{
@@ -80,14 +81,15 @@ module ums{
           $scope.addFirstSelectedValue({id:ui.item.value});
 
         }
-      });
-      //});
-*/
+      };
+
+      $( "#tags3" ).autocomplete(oneSelectable);
+
 
 
 
       //$scope.$watch('addedStudents',(value)=>{
-      currentScope.$timeout(()=>{   
+      currentScope.$timeout(()=>{
         $("#addOneBtn").click(()=>{
           console.log("in the click event");
           $scope.addOneStudent();
