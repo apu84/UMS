@@ -105,7 +105,20 @@ module ums {
         this.$scope.loadingVisibility=false;
         this.$scope.routine.addButtonDisable=false;
         this.$scope.routine.saveButtonDisable=false;
+
+        setTimeout(function () {
+          $('.select2-size').select2({
+            placeholder: "Select an option",
+            allowClear: true
+          });
+        }, 1000);
+
+
       });
+
+
+
+
     }
 
 
@@ -592,7 +605,28 @@ module ums {
 
       }
       setTimeout(function(){that.setSelect2Courses(date_time_row_obj);},1000);
+      //this.doSomeTask(date_time_row_obj,that).then((dateTimeArr:any)=> {
+      //  //setTimeout(function(){that.setSelect2Courses(date_time_row_obj);},1000);
+      //
+      //});
     }
+    //private doSomeTask(date_time_row_obj:any,that:any):ng.IPromise<any> {
+    //
+    //  var defer = this.$q.defer();
+    //  for (var ind in date_time_row_obj.programs) {
+    //    var program:IProgram = date_time_row_obj.programs[ind];
+    //    this.getCourseArr(program.programId,program).then((courseResponse:any)=> {
+    //      var courseArr:Array<ICourse>=courseResponse.courseArr;
+    //      courseResponse.program.courseArr = courseArr;
+    //    });
+    //
+    //  }
+    //  setTimeout(function(){that.setSelect2Courses(date_time_row_obj);},1000);
+    //
+    //
+    //  defer.resolve(null);
+    //  return defer.promise;
+    //}
 
     private setSelect2Courses(date_time_row_obj:IDateTime):void {
       for (var ind1 in date_time_row_obj.programs) {
@@ -601,7 +635,8 @@ module ums {
         $("#program_"+date_time_row_obj.index+program.index).val(program.programId+'');
         for (var ind2 in program.courses) {
           var course:ICourse =program.courses[ind2];
-          $("#course_" + date_time_row_obj.index + program.index + course.index).select2().select2('val',course.id);
+          //$("#course_" + date_time_row_obj.index + program.index + course.index).select2().select2('val',course.id);
+          $("#course_" + date_time_row_obj.index + program.index + course.index).val(course.id).trigger("change");  
         }
       }
      this.hideOverlay(date_time_row_obj);

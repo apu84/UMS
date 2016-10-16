@@ -15,10 +15,10 @@
     }
 
     table#routineTable>tbody>tr>td {
-        border: 1px solid #736F6E;
+        border: 1px solid #C0C0C0;
     }
     table#programTable>tbody>tr>td {
-        border: 1px solid #736F6E;
+        border: 1px solid #C0C0C0;
     }
     #divOverlay { display: none; background-color:Silver; text-align:center;  position:absolute; z-index:10000; opacity:0.5; }
 </style>
@@ -61,7 +61,7 @@
 
 
 
-                <table id="routineTable" class="table table-hover table-bordered table-advanced" style="margin-top: 20px;border-collapse: collapse;" cellpadding="0" cellspacing="0">
+                <table id="routineTable" class="table table-bordered table-advanced" style="margin-top: 20px;border-collapse: collapse;" cellpadding="0" cellspacing="0">
                     <thead>
                     <tr role="row" class="heading">
                         <th width="17%" class="sorting">Date-Time-Group</th>
@@ -126,7 +126,7 @@
                                 </a>
                             </div>
 
-                            <div data-ng-hide="date_time.readOnly">
+                            <div data-ng-hide="date_time.readOnly" style="padding-top: 25px;">
                                 <a href="javascript:;" class="btn btn-xs btn-default btn-round"
                                    data-ng-click="addNewProgram(date_time.index)" style="border-radius: 15px;" >
                                     <i class="fa fa-plus-circle" style="color: blue;"></i>
@@ -211,7 +211,7 @@
                                                 </td>
 
                                                 <td width="18%" align="center" style="padding-top: 5px;padding-bottom: 5px;">
-                                                    <select id="course_{{date_time.index}}{{program.index}}{{course.index}}" data-ng-hide="date_time.readOnly" class="select2-size form-control" style="width: 90%;height: 25px;text-align: center;padding: 0px;"
+                                                    <select id="course_{{date_time.index}}{{program.index}}{{course.index}}" data-ng-hide="date_time.readOnly" class="select2-size" style="width: 90%;height: 25px;text-align: center;padding: 0px;"
                                                             ng-model="exam_course.id" data-ng-change="courseSelectionChanged(program,course,exam_course.id)">
                                                         <option data-ng-repeat="exam_course in program.courseArr" value="{{exam_course.id}}">{{exam_course.no}}</option>
                                                     </select>
