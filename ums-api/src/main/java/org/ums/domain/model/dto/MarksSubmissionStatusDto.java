@@ -5,6 +5,7 @@ import org.ums.enums.CourseMarksSubmissionStatus;
 import org.ums.enums.CourseType;
 import org.ums.enums.ExamType;
 
+import java.util.Date;
 import java.util.List;
 
 public class MarksSubmissionStatusDto {
@@ -42,10 +43,20 @@ public class MarksSubmissionStatusDto {
   private int year;
   private int semester;
   private String offeredTo;
-  private String lastSubmissionDate;
+  private Date lastSubmissionDate;
   private List<CourseTeacherDto> courseTeacherList;
 
   private boolean isSubmissionDateOver;
+
+  private int mId;
+
+  public int getId() {
+    return mId;
+  }
+
+  public void setId(int pId) {
+    mId = pId;
+  }
 
   public Integer getTotalStudents() {
     return totalStudents;
@@ -79,11 +90,11 @@ public class MarksSubmissionStatusDto {
     examDate = pExamDate;
   }
 
-  public String getLastSubmissionDate() {
+  public Date getLastSubmissionDate() {
     return lastSubmissionDate;
   }
 
-  public void setLastSubmissionDate(String pLastSubmissionDate) {
+  public void setLastSubmissionDate(Date pLastSubmissionDate) {
     lastSubmissionDate = pLastSubmissionDate;
   }
 

@@ -129,9 +129,9 @@ public class PersistentUGRegistrationResultDao extends UGRegistrationResultDaoDe
   }
 
   @Override
-  public List<UGRegistrationResult> getRegisteredCourses(String pStudentId) {
+  public List<UGRegistrationResult> getRegisteredCoursesWithResult(String pStudentId) {
     String query = SELECT_ALL + " WHERE STUDENT_ID = ?";
-    return mJdbcTemplate.query(query, new Object[]{pStudentId}, new UGRegistrationResultRowMapperWithoutResult());
+    return mJdbcTemplate.query(query, new Object[]{pStudentId}, new UGRegistrationResultRowMapperWithResult());
   }
 
   //this will only work with Carry, Clearance and Improvement applications.
@@ -152,17 +152,30 @@ public class PersistentUGRegistrationResultDao extends UGRegistrationResultDaoDe
   }
 
   class UGRegistrationResultRowMapperWithoutResult implements RowMapper<UGRegistrationResult> {
-    @Override
-    public UGRegistrationResult mapRow(ResultSet pResultSet, int pI) throws SQLException {
-      PersistentUGRegistrationResult result = new PersistentUGRegistrationResult();
+    protected MutableUGRegistrationResult build(ResultSet pResultSet) throws SQLException{
+      MutableUGRegistrationResult result = new PersistentUGRegistrationResult();
       result.setStudentId(pResultSet.getString("STUDENT_ID"));
       result.setCourseId(pResultSet.getString("COURSE_ID"));
       result.setExamType(ExamType.get(pResultSet.getInt("EXAM_TYPE")));
       result.setType(CourseRegType.get(pResultSet.getInt("REG_TYPE")));
       result.setSemesterId(pResultSet.getInt("SEMESTER_ID"));
       result.setLastModified(pResultSet.getString("LAST_MODIFIED"));
-      AtomicReference<UGRegistrationResult> registrationResult = new AtomicReference<>(result);
+      return result;
+    }
+    @Override
+    public UGRegistrationResult mapRow(ResultSet pResultSet, int pI) throws SQLException {
+      AtomicReference<UGRegistrationResult> registrationResult = new AtomicReference<>(build(pResultSet));
       return registrationResult.get();
+    }
+  }
+
+  class UGRegistrationResultRowMapperWithResult extends UGRegistrationResultRowMapperWithoutResult {
+    @Override
+    public UGRegistrationResult mapRow(ResultSet pResultSet, int pI) throws SQLException {
+      MutableUGRegistrationResult registrationResult = build(pResultSet);
+      registrationResult.setGradeLetter(pResultSet.getString("GRADE_LETTER"));
+      AtomicReference<UGRegistrationResult> result = new AtomicReference<>(registrationResult);
+      return result.get();
     }
   }
 

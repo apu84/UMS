@@ -19,7 +19,7 @@ public class MarksSubmissionStatusCache
 
   @Override
   protected CacheManager<MarksSubmissionStatus, Integer> getCacheManager() {
-    return mCacheManager;
+    return null;
   }
 
   @Override
