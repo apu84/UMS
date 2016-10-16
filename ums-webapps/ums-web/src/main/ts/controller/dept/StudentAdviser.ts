@@ -298,11 +298,20 @@ module ums{
       this.disableAllUI().then((message:string)=>{
         if(activateNumber===1){
           this.$scope.shiftOptionSelected=true;
+          $("#shift").show(1000);
+          $("#change").hide(1000);
+          $("#bulk").hide(1000);
         }else if(activateNumber===2){
           this.$scope.changeOptionSelected=true;
+          $("#shift").hide(1000);
+          $("#change").show(1000);
+          $("#bulk").hide(1000);
 
         }else{
           this.$scope.bulkAssignmentOptionSelected=true;
+          $("#shift").hide(1000);
+          $("#change").hide(1000);
+          $("#bulk").show(1000);
         }
       });
 
