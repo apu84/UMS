@@ -125,13 +125,13 @@
                         <tbody>
                         <tr >
                             <th>
-                                <select data-ng-model="addedDate" data-ng-change="dateSelected(addedDate,addedRoutine)">
+                                <select data-ng-model="addedRoutine.day" data-ng-change="dateSelected(addedRoutine.day,addedRoutine)">
                                     <option value="">Select day</option>
                                     <option data-ng-repeat="date in dates" value="{{date.name}}">{{date.name}}</option>
                                 </select>
                             </th>
                             <th>
-                                <select data-ng-model="addedCourse" data-ng-change="courseSelected(addedCourse,addedRoutine)" >
+                                <select data-ng-model="addedRoutine.courseNo" data-ng-change="courseSelected(addedRoutine.courseNo,addedRoutine)" >
                                     <option value="">Select a course</option>
                                     <option data-ng-repeat="c in courseArr" value="{{c.no}}">{{c.no}}</option>
                                 </select>
@@ -141,24 +141,24 @@
                                     {{section}}
                                 </div>
                                 <div data-ng-if="courseType=='SESSIONAL'">
-                                    <select data-ng-model="addedSection" data-ng-change="sectionChanged(addedSection,addedRoutine)">
+                                    <select data-ng-model="addedRoutine.section" data-ng-change="sectionChanged(addedRoutine.section,addedRoutine)">
                                         <option value="">Select a section</option>
                                         <option data-ng-repeat="s in sessionalSections" value="{{s.name}}">{{s.name}}</option>
                                     </select>
                                 </div>
                             </th>
                             <th>
-                                <select data-ng-model="addedStartTime" data-ng-change="startTimeSelected(addedStartTime,addedRoutine)">
+                                <select data-ng-model="addedRoutine.startTime" data-ng-change="startTimeSelected(addedRoutine.startTime,addedRoutine)">
                                     <option data-ng-repeat="t in times" value="{{t.id}}">{{t.val}}</option>
                                 </select>
                             </th>
                             <th>
-                                <select data-ng-model="addedEndTime" data-ng-change="endTimeSelected(addedEndTime,addedRoutine)">
+                                <select data-ng-model="addedRoutine.endTime" data-ng-change="endTimeSelected(addedRoutine.endTime,addedRoutine)">
                                     <option data-ng-repeat="t in times" value="{{t.id}}">{{t.val}}</option>
                                 </select>
                             </th>
                             <th>
-                                <select data-ng-model="addedRoomNo" data-ng-change="roomNoSelected(addedRoomNo,addedRoutine)">
+                                <select data-ng-model="addedRoutine.roomNo" data-ng-change="roomNoSelected(addedRoutine.roomNo,addedRoutine)">
                                     <option value="">Select Room No</option>
                                     <option data-ng-repeat="r in roomArr" value="{{r.roomNo}}">{{r.roomNo}}</option>
                                 </select>

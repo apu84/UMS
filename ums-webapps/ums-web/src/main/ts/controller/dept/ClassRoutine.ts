@@ -203,10 +203,13 @@ module ums {
             }
             else if(found && count !=globalCounter){
               count+=1;
-            }else{
+            }else if(count==globalCounter){
+              console.log(this.$scope.times[i]);
               console.log("Found match");
-              routine.endTime = this.$scope.times[i].id;
+              routine.endTime = this.$scope.times[i].val;
               break;
+            }else{
+
             }
 
           }
@@ -513,7 +516,7 @@ module ums {
 
     private initializeAddVariables():void{
       var routine=this.$scope.addedRoutine;
-      routine.courseId="";
+      routine.courseNo="";
       routine.startTime="";
       routine.endTime="";
       routine.section="";
