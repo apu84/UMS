@@ -29,6 +29,9 @@ module ums {
     //map
     courseIdMapCourseNo:any;
     dateMap:any;
+    dateMapFromDateToNumber:any;
+    courseNoMapCourseId:any;
+    courseNoMapCourse:any;
     addDivControl:Function;
 
     getSemesters:Function;
@@ -88,6 +91,7 @@ module ums {
     semesterId:number;
     section:string;
     courseId:string;
+    courseNo:string;
     programId:number;
     day:string;
     academicYear:number;
@@ -121,6 +125,8 @@ module ums {
       $scope.addedRoutine={};
 
       $scope.courseIdMapCourseNo={};
+      $scope.courseNoMapCourseId={};
+      $scope.dateMapFromDateToNumber={};
       $scope.getSemesters = this.getSemesters.bind(this);
       $scope.searchForRoutineData = this.searchForRoutineData.bind(this);
       $scope.resetDivs = this.resetDivs.bind(this);
@@ -179,6 +185,36 @@ module ums {
         routine.startTime="";
       }else{
         routine.startTime=startTime;
+        var courseType = this.$scope.courseNoMapCourse[routine.courseNo].type;
+
+          var globalCounter:number;
+        if(courseType=="SESSIONAL"){
+          globalCounter=3;
+        }else{
+          globalCounter=1;
+        }
+          var count=0;
+          var found=false;
+
+          for(var i=0;i<this.$scope.times.length;i++){
+            if(this.$scope.times[i].val== startTime){
+              var found=true;
+              count=1;
+            }
+            else if(found && count !=globalCounter){
+              count+=1;
+            }else{
+              console.log("Found match");
+              routine.endTime = this.$scope.times[i].id;
+              break;
+            }
+
+          }
+
+          console.log("In the start time selected");
+        console.log(routine);
+
+
       }
     }
 
@@ -327,22 +363,23 @@ module ums {
 
     private cancelData():void{
       var routine = this.$scope.addedRoutine;
-      routine.courseId="";
-      routine.day = null;
+      routine.courseNo="";
+      routine.day = "";
       routine.startTime="";
       routine.endTime="";
       routine.roomNo="";
     }
 
 
-    private courseSelected(courseId:string,routine:IClassRoutine):void{
+    private courseSelected(courseNo:string,routine:IClassRoutine):void{
       routine.section="";
       console.log("Course id");
-      routine.courseId=courseId;
+      routine.courseId=this.$scope.courseNoMapCourseId[courseNo];
+      routine.courseNo = courseNo;
 
       //this.$scope.courseType="";
       for(var i=0;i<this.$scope.courseArr.length;i++){
-        if(this.$scope.courseArr[i].id==courseId){
+        if(this.$scope.courseArr[i].id==this.$scope.courseNoMapCourseId[courseNo]){
           this.$scope.courseType = angular.copy(this.$scope.courseArr[i].type);
           console.log("In the course type selection");
           console.log(this.$scope.courseArr[i]);
@@ -405,7 +442,7 @@ module ums {
       this.courseService.getCourseBySemesterProgramTypeYearSemester(this.$scope.semesterId,programType,year,semester).then((courseArr:Array<ICourse>)=>{
         this.$scope.courseIdMapCourseNo={};
         this.$scope.courseArr=[];
-
+        this.$scope.courseNoMapCourse={};
         //this.$scope.courseArr=courseArr;
         console.log(courseArr);
 
@@ -413,6 +450,8 @@ module ums {
         for(var i=0;i<courseArr.length;i++){
           this.$scope.courseArr.push((courseArr[i]));
           this.$scope.courseIdMapCourseNo[courseArr[i].id] = courseArr[i].no;
+          this.$scope.courseNoMapCourseId[courseArr[i].no] = courseArr[i].id;
+          this.$scope.courseNoMapCourse[courseArr[i].no]= courseArr[i];
         }
 
 
@@ -423,15 +462,21 @@ module ums {
           this.$scope.roomArr = rooms;
 
 
-
+          this.$scope.routineArr=[];
           this.classRoutineService.getClassRoutineForEmployee(this.$scope.semesterId,year,semester,this.$scope.section)
-              .then((routineArr:Array<any>)=>{
-                this.$scope.routineArr=[];
-                /*for(var k=0;k<routineArr.length;k++){
-                  routineArr[k].day = String(routineArr[k]);
-                  this.$scope.routineArr.push(routineArr[i]);
-                }*/
-                this.$scope.routineArr = routineArr;
+              .then((routineArr:Array<IClassRoutine>)=>{
+                console.log("---first---");
+                console.log(routineArr);
+                for(var k=0;k<routineArr.length;k++){
+                  routineArr[k].day = this.$scope.dateMap[String(routineArr[k].day)];
+                  console.log("date");
+                  console.log(this.$scope.dateMap[routineArr[k].day]);
+                  routineArr[k].courseNo = this.$scope.courseIdMapCourseNo[routineArr[k].courseId];
+                  this.$scope.routineArr.push(routineArr[k]);
+                  console.log(this.$scope.routineArr[k]);
+                }
+
+
                 this.$scope.showLoader=false;
 
                 if(routineArr.length>0){
@@ -456,6 +501,14 @@ module ums {
       date["4"] = "Tuesday";
       date["5"] = "Wednesday";
       date["6"]="Thursday";
+
+      var dateStr = this.$scope.dateMapFromDateToNumber;
+      dateStr["Saturday"]=1;
+      dateStr["Sunday"]=2;
+      dateStr["Monday"]=3;
+      dateStr["Tuesday"]=4;
+      dateStr["Wednesday"]=5;
+      dateStr["Thursday"]=6;
       }
 
     private initializeAddVariables():void{
@@ -513,8 +566,8 @@ module ums {
             item['id']=r.id;
           }
           item['semesterId']=this.$scope.semesterId;
-          item['courseId']=r.courseId;
-          item['day']=Number(r.day);
+          item['courseId']=this.$scope.courseNoMapCourseId[r.courseNo];
+          item['day']=Number(this.$scope.dateMapFromDateToNumber[r.day]);
           item['section']=r.section;
           item['academicYear']=this.$scope.studentsYear;
           item['academicSemester']=this.$scope.studentsSemester;
@@ -522,6 +575,7 @@ module ums {
           item['endTime'] = r.endTime;
           item['roomNo']=r.roomNo;
           item['status'] = r.status;
+          console.log(item);
           jsonObject.push(item);
         }
 
