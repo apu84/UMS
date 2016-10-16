@@ -355,8 +355,8 @@ module ums {
                                       '110400':['BSc in CSE'],
                                       '110500':['BSc in EEE'],
                                       '110600':['BSc in TE'],
-                                      '110700':['BSc in IPE'],
-                                      '110800':['BSc in ME']
+                                      '110707':['BSc in IPE'],
+                                      '110708':['BSc in ME']
         },
         theorySectionsGrid: ":None;A:A;B:B;C:C;D:D",
         theorySections: [

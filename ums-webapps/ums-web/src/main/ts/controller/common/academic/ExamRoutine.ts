@@ -251,17 +251,20 @@ module ums {
       }
       program_obj_row.courseArr = null;
 
+      console.log(program_obj_row.programId);
       this.getCourseArr(program_obj_row.programId,program_obj_row).then((courseResponse:any)=> {
 
         localStorage["program_courses_"+courseResponse.program.programId] = JSON.stringify(courseResponse.courseArr);
         program_obj_row.courseArr = courseResponse.courseArr;
-        for (var ind in program_obj_row.courses) {
-          $("#course_" + date_time.index+program_obj_row.index+ind).select2("destroy").select2("val","");
-        }
+        //for (var ind in program_obj_row.courses) {
+          //$("#course_" + date_time.index+program_obj_row.index+ind).select2("destroy").select2("val","");
+       // }
       });
 
       setTimeout(function () {
         for (var ind in program_obj_row.courses) {
+          $("#course_" + date_time.index+program_obj_row.index+ind).select2("destroy").select2("val","");
+         //$("#course_" + date_time.index + program_obj_row.index + ind).val("").trigger("change");
           $("#course_" + date_time.index+program_obj_row.index+ind).select2(
               {
                 placeholder: "Select an option",
@@ -636,7 +639,7 @@ module ums {
         for (var ind2 in program.courses) {
           var course:ICourse =program.courses[ind2];
           //$("#course_" + date_time_row_obj.index + program.index + course.index).select2().select2('val',course.id);
-          $("#course_" + date_time_row_obj.index + program.index + course.index).val(course.id).trigger("change");  
+          $("#course_" + date_time_row_obj.index + program.index + course.index).val(course.id).trigger("change");
         }
       }
      this.hideOverlay(date_time_row_obj);
