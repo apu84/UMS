@@ -28,6 +28,7 @@
   #sidebar {
     z-index: 99999;
     position: relative;
+    width: 100%; /* Added by Ifti */
   }
   #page-wrapper {
     margin-top: 50px;
