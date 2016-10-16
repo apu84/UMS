@@ -75,4 +75,9 @@ public class UGRegistrationResultCache
       String pStudentId, CourseRegType pCourseRegType) {
     return getManager().getRegisteredCourseByStudent(pSemesterId, pStudentId, pCourseRegType);
   }
+
+  @Override
+  public List<UGRegistrationResult> getRegisteredCoursesWithResult(String pStudentId) throws Exception {
+    return getManager().getRegisteredCoursesWithResult(pStudentId);
+  }
 }

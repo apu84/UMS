@@ -56,7 +56,7 @@ public class UGRegistrationResultDaoDecorator
   }
 
   @Override
-  public List<UGRegistrationResult> getRegisteredCourses(String pStudentId) throws Exception{
-    return getManager().getRegisteredCourses(pStudentId);
+  public List<UGRegistrationResult> getRegisteredCoursesWithResult(String pStudentId) throws Exception{
+    return getManager().getRegisteredCoursesWithResult(pStudentId);
   }
 }

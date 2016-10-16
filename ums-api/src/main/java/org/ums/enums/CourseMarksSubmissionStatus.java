@@ -1,5 +1,9 @@
 package org.ums.enums;
 
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by ikh on 4/29/2016.
  */
@@ -14,10 +18,18 @@ public enum CourseMarksSubmissionStatus {
   ACCEPTED_BY_COE(7, "Accepted by CoE"),
   WAITING_FOR_RECHECK_REQUEST_APPROVAL(8, "Waiting for recheck request approval");
 
+  private static final Map<Integer, CourseMarksSubmissionStatus> lookup = new HashMap<>();
+
+  static {
+    for (CourseMarksSubmissionStatus c : EnumSet.allOf(CourseMarksSubmissionStatus.class)) {
+      lookup.put(c.getId(), c);
+    }
+  }
+
   private String label;
   private int id;
 
-  private CourseMarksSubmissionStatus(int id, String label) {
+  CourseMarksSubmissionStatus(int id, String label) {
     this.id = id;
     this.label = label;
   }
@@ -28,5 +40,9 @@ public enum CourseMarksSubmissionStatus {
 
   public int getId() {
     return id;
+  }
+
+  public static CourseMarksSubmissionStatus get(final int pTypeCode) {
+    return lookup.get(pTypeCode);
   }
 }

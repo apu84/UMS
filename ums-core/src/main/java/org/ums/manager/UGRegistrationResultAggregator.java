@@ -1,33 +1,31 @@
-package org.ums.services.academic;
+package org.ums.manager;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.ums.decorator.UGRegistrationResultDaoDecorator;
+import org.ums.domain.model.immutable.EquivalentCourse;
 import org.ums.domain.model.immutable.UGRegistrationResult;
-import org.ums.manager.SemesterManager;
-import org.ums.manager.StudentManager;
 
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecorator {
   private static final Logger mLogger = LoggerFactory.getLogger(UGRegistrationResultAggregator.class);
-  private SemesterManager mSemesterManager;
-  private StudentManager mStudentManager;
+  private EquivalentCourseManager mEquivalentCourseManager;
 
-  public UGRegistrationResultAggregator(final SemesterManager pSemesterManager,
-                                        final StudentManager pStudentManager) {
-    mSemesterManager = pSemesterManager;
-    mStudentManager = pStudentManager;
+  public UGRegistrationResultAggregator(final EquivalentCourseManager pEquivalentCourseManager) {
+    mEquivalentCourseManager = pEquivalentCourseManager;
   }
 
   @Override
-  public List<UGRegistrationResult> getRegisteredCourses(String pStudentId) throws Exception {
-    List<UGRegistrationResult> resultList = super.getRegisteredCourses(pStudentId);
+  public List<UGRegistrationResult> getRegisteredCoursesWithResult(String pStudentId) throws Exception {
+    List<UGRegistrationResult> resultList = super.getRegisteredCoursesWithResult(pStudentId);
     Collections.sort(resultList, new ResultComparator());
-    return resultList;
+    return aggregateResults(resultList);
   }
 
-  private List<UGRegistrationResult> aggregateResults(List<UGRegistrationResult> pResults) {
+  private List<UGRegistrationResult> aggregateResults(List<UGRegistrationResult> pResults) throws Exception {
     Map<String, UGRegistrationResult> resultMap = new HashMap<>();
     for (UGRegistrationResult result : pResults) {
       if (!resultMap.containsKey(result.getCourseId())) {
@@ -35,11 +33,22 @@ public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecor
       }
     }
 
-    return equivalent(new ArrayList<>(resultMap.values()));
+    return equivalent(resultMap);
   }
 
-  private List<UGRegistrationResult> equivalent(List<UGRegistrationResult> pResults) {
-    return pResults;
+  private List<UGRegistrationResult> equivalent(Map<String, UGRegistrationResult> pResults) throws Exception {
+    List<EquivalentCourse> equivalentCourses = mEquivalentCourseManager.getAll();
+    Map<String, EquivalentCourse> equivalentCourseMap = equivalentCourses.stream().collect(
+        Collectors.toMap(EquivalentCourse::getOldCourseId, Function.identity()));
+
+    for (EquivalentCourse course : equivalentCourseMap.values()) {
+      if (pResults.containsKey(course.getOldCourseId())
+          && pResults.containsKey(course.getNewCourseId())) {
+        pResults.remove(course.getOldCourseId());
+      }
+    }
+
+    return new ArrayList<>(pResults.values());
   }
 
   private class ResultComparator implements Comparator<UGRegistrationResult> {
@@ -57,7 +66,7 @@ public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecor
           }
         }
       } catch (Exception e) {
-        mLogger.error(e.getMessage());
+        mLogger.error(e.getMessage(), e);
       }
       throw new NullPointerException("Can not sort result");
     }

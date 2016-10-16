@@ -385,7 +385,9 @@ public class UMSContext {
 
   @Bean
   UGRegistrationResultManager registrationResultManager() {
-    return new PersistentUGRegistrationResultDao(mTemplateFactory.getJdbcTemplate());
+    UGRegistrationResultAggregator resultAggregator = new UGRegistrationResultAggregator(equivalentCourseManager());
+    resultAggregator.setManager(new PersistentUGRegistrationResultDao(mTemplateFactory.getJdbcTemplate()));
+    return resultAggregator;
   }
 
   @Bean
@@ -446,6 +448,20 @@ public class UMSContext {
   @Lazy
   NotificationGenerator notificationGenerator() {
     return new NotificationGeneratorImpl(notificationManager());
+  }
+
+  @Bean
+  EquivalentCourseManager equivalentCourseManager() {
+    EquivalentCourseCache equivalentCourseCache = new EquivalentCourseCache(mCacheFactory.getCacheManager());
+    equivalentCourseCache.setManager(new EquivalentCourseDao(mTemplateFactory.getJdbcTemplate()));
+    return equivalentCourseCache;
+  }
+
+  @Bean
+  MarksSubmissionStatusManager marksSubmissionStatusManager() {
+    MarksSubmissionStatusCache cache = new MarksSubmissionStatusCache(mCacheFactory.getCacheManager());
+    cache.setManager(new PersistentMarkSubmissionStatusDao(mTemplateFactory.getJdbcTemplate(), getGenericDateFormat()));
+    return cache;
   }
 
 }

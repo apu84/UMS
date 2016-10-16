@@ -180,4 +180,17 @@ public abstract class ContentCache<R extends Identifier<I> & LastModifier, M ext
 
     }
   }
+
+  protected R cachedEntity(final String pCacheKey, Callable<R> pCallable) throws Exception {
+    String referredKey = getCacheManager().getReferred(pCacheKey);
+    if (StringUtils.isEmpty(referredKey)) {
+      R readonly = pCallable.call();
+      String idCacheKey = getCacheKey(readonly.getId());
+      getCacheManager().put(idCacheKey, readonly);
+      getCacheManager().putReferrerKey(pCacheKey, idCacheKey);
+      return readonly;
+    } else {
+      return getCacheManager().get(referredKey);
+    }
+  }
 }
