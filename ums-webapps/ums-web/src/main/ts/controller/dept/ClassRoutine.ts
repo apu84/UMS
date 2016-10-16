@@ -7,7 +7,7 @@ module ums {
     routineArr:Array<IClassRoutine>;
     addedRoutine:any;
     semesterId:number;
-    programType:number;
+    programTypeId:number;
     studentsYear:number;
     studentsSemester:number;
     section:string;
@@ -52,7 +52,7 @@ module ums {
 
     showSaveButton:boolean;
     saveClassRoutine:Function;
-
+    data:any;
   }
 
   interface ISemester{
@@ -123,6 +123,9 @@ module ums {
       $scope.showSaveButton=false;
       $scope.showRoutineTable=false;
       $scope.addedRoutine={};
+      $scope.data = {
+        programTypeOptions:appConstants.programType
+      };
 
       $scope.courseIdMapCourseNo={};
       $scope.courseNoMapCourseId={};
@@ -147,6 +150,9 @@ module ums {
 
       Utils.setValidationOptions("form-horizontal");
       this.initializeAddVariables();
+      this.$scope.programTypeId=Utils.UG;
+      this.getSemesters();
+
     }
 
     private addDivControl(operation:string):void{
@@ -196,7 +202,10 @@ module ums {
           var count=0;
           var found=false;
 
+        console.log("------->>");
+        console.log(this.$scope.times);
           for(var i=0;i<this.$scope.times.length;i++){
+            console.log(i);
             if(this.$scope.times[i].val== startTime){
               var found=true;
               count=1;
@@ -207,6 +216,7 @@ module ums {
               console.log(this.$scope.times[i]);
               console.log("Found match");
               routine.endTime = this.$scope.times[i].val;
+              console.log(routine.endTime);
               break;
             }else{
 
@@ -422,7 +432,7 @@ module ums {
       this.$scope.semesterArr=[];
       this.semesterService.fetchSemesters (Utils.UG).then((semesterArr:Array<any>)=>{
         this.$scope.semesterArr = semesterArr;
-        console.log(semesterArr);
+        this.$scope.semesterId=semesterArr[0].id;
       });
     }
 
@@ -439,10 +449,7 @@ module ums {
 
       Utils.expandRightDiv();
 
-      var programType = +this.$scope.programType;
-      var year = +this.$scope.studentsYear;
-      var semester = +this.$scope.studentsSemester;
-      this.courseService.getCourseBySemesterProgramTypeYearSemester(this.$scope.semesterId,programType,year,semester).then((courseArr:Array<ICourse>)=>{
+      this.courseService.getCourseBySemesterProgramTypeYearSemester(this.$scope.semesterId,this.$scope.programTypeId,this.$scope.studentsYear,this.$scope.studentsSemester).then((courseArr:Array<ICourse>)=>{
         this.$scope.courseIdMapCourseNo={};
         this.$scope.courseArr=[];
         this.$scope.courseNoMapCourse={};
@@ -466,7 +473,7 @@ module ums {
 
 
           this.$scope.routineArr=[];
-          this.classRoutineService.getClassRoutineForEmployee(this.$scope.semesterId,year,semester,this.$scope.section)
+          this.classRoutineService.getClassRoutineForEmployee(this.$scope.semesterId,this.$scope.studentsYear,this.$scope.studentsSemester,this.$scope.section)
               .then((routineArr:Array<IClassRoutine>)=>{
                 console.log("---first---");
                 console.log(routineArr);

@@ -14,17 +14,15 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label">Program Type</label>
                         <div class="col-md-8">
-                            <select name="programType" class="form-control required" data-ng-model="programType">
-                                <option value="">Select Program Type</option>
-                                <option value="1">Undergraduate</option>
-                                <option value="2">Postgraduate</option>
+                            <select name="programType" class="form-control required" data-ng-model="programTypeId" data-convert-to-number>
+                                <option data-ng-repeat="programType in data.programTypeOptions" value="{{programType.id}}">{{programType.name}}</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-4 control-label">Semester</label>
                         <div class="col-md-8">
-                            <select name="academicSemester" class="form-control required" data-ng-model="semesterId">
+                            <select name="academicSemester" class="form-control required" data-ng-model="semesterId" data-convert-to-number>
                                 <option value="">Selected a Semester</option>
                                 <option data-ng-repeat="s in semesterArr" value="{{s.id}}">{{s.name}}</option>
                             </select>
@@ -88,7 +86,7 @@
                     <span class="sr-only">Loading...</span>
                 </div>
                 <div class="row" data-ng-show="showLoader==false">
-                    <div class="col-md-12" style="padding: 0px 15px;">
+                    <div class="col-md-12" style="padding: 0px 25px;">
 
                         <div class="row" style="margin-top: -15px;" id="downArrowDiv">
                             <div class="col-md-2 col-md-offset-5">
@@ -110,9 +108,15 @@
                             </div>
                         </div>
 
-                    <table class="table table-bordered" id="addNewDataTable" style="display: none;">
+                        <div id="addNewDataTable" style="display: none;">
+                            <div class="btn btn-blue" style="margin-top: 20px;">
+                                <i class="fa fa-check-circle-o"></i>
+                                <span style="padding-right: 100px;">New Record</span>
+                            </div>
+                            <div class="clearfix"></div>
+                        <table class="table table-bordered table-advanced" >
                         <thead>
-                        <tr>
+                        <tr  role="row"  class="heading">
                             <th>Day</th>
                             <th>Course No</th>
                             <th>Section</th>
@@ -124,19 +128,19 @@
                         </thead>
                         <tbody>
                         <tr >
-                            <th>
+                            <td style="width: 150px;">
                                 <select data-ng-model="addedRoutine.day" data-ng-change="dateSelected(addedRoutine.day,addedRoutine)">
                                     <option value="">Select day</option>
                                     <option data-ng-repeat="date in dates" value="{{date.name}}">{{date.name}}</option>
                                 </select>
-                            </th>
-                            <th>
+                            </td>
+                            <td style="width: 150px;">
                                 <select data-ng-model="addedRoutine.courseNo" data-ng-change="courseSelected(addedRoutine.courseNo,addedRoutine)" >
                                     <option value="">Select a course</option>
                                     <option data-ng-repeat="c in courseArr" value="{{c.no}}">{{c.no}}</option>
                                 </select>
-                            </th>
-                            <th>
+                            </td>
+                            <td style="width: 150px;">
                                 <div data-ng-if="courseType=='THEORY'">
                                     {{section}}
                                 </div>
@@ -146,30 +150,33 @@
                                         <option data-ng-repeat="s in sessionalSections" value="{{s.name}}">{{s.name}}</option>
                                     </select>
                                 </div>
-                            </th>
-                            <th>
+                            </td>
+                            <td style="width: 150px;">
                                 <select data-ng-model="addedRoutine.startTime" data-ng-change="startTimeSelected(addedRoutine.startTime,addedRoutine)">
                                     <option data-ng-repeat="t in times" value="{{t.id}}">{{t.val}}</option>
                                 </select>
-                            </th>
-                            <th>
+                            </td>
+                            <td style="width: 150px;">
                                 <select data-ng-model="addedRoutine.endTime" data-ng-change="endTimeSelected(addedRoutine.endTime,addedRoutine)">
                                     <option data-ng-repeat="t in times" value="{{t.id}}">{{t.val}}</option>
                                 </select>
-                            </th>
-                            <th>
+                            </td>
+                            <td style="width: 150px;">
                                 <select data-ng-model="addedRoutine.roomNo" data-ng-change="roomNoSelected(addedRoutine.roomNo,addedRoutine)">
                                     <option value="">Select Room No</option>
                                     <option data-ng-repeat="r in roomArr" value="{{r.roomNo}}">{{r.roomNo}}</option>
                                 </select>
-                            </th>
-                            <th>
-                                <form>
-                                    <button class="btn btn-primary btn-xs" data-ng-click="addData()"><i class="fa fa-check" aria-hidden="true"></i></button>
-                                    <button class="btn btn-primary btn-xs" data-ng-click="cancelData()"><i class="fa fa-times" aria-hidden="true"></i></button>
-                                </form>
-
-                            </th>
+                            </td>
+                            <td style="width: 140px;">
+                                <a href="javascript:;" class="btn btn-xs btn-default btn-round"
+                                   data-ng-click="addData()" style="border-radius: 15px;" >
+                                    <i class="fa fa-plus-circle" style="color: blue;"></i>
+                                </a>
+                                <a href="javascript:;" class="btn btn-xs btn-default btn-round"
+                                   data-ng-click="cancelData()" style="border-radius: 15px;" >
+                                    <i class="fa fa-eraser" style="color: blue;"></i>
+                                </a>
+                            </td>
                         </tr>
                         </tbody>
                     </table>
@@ -177,18 +184,24 @@
                 </div>
 
                 <div class="row" data-ng-if="showLoader==false && showRoutineTable==true">
-                    <div class="col-md-12" style="padding: 0px 15px;">
-                        <table class="table table-bordered">
+                    <div class="col-md-12" style="padding: 0px 25px;">
+                        <div class="btn btn-blue" style="margin-top: 20px;">
+                            <i class="fa fa-check-circle-o"></i>
+                            <span style="padding-right: 100px;">Saved Routine</span>
+                        </div>
+                        <div class="clearfix"></div>
+
+                        <table class="table table-bordered table-advanced">
                         <thead>
-                            <tr>
-                                <th>Day</th>
-                                <th>Course No</th>
-                                <th>Section</th>
-                                <th>Start Time</th>
-                                <th>End Time</th>
-                                <th>Room No</th>
-                                <th>Action</th>
-                            </tr>
+                        <tr  role="row"  class="heading">
+                            <th style="width: 150px;">Day</th>
+                            <th style="width: 150px;">Course No</th>
+                            <th style="width: 150px;">Section</th>
+                            <th style="width: 150px;">Start Time</th>
+                            <th style="width: 150px;">End Time</th>
+                            <th style="width: 150px;">Room No</th>
+                            <th style="width: 150px;">Action</th>
+                        </tr>
                         </thead>
                         <tbody>
                         <tr data-ng-repeat="r in routineArr" data-ng-if="r.status!='deleted'">
@@ -201,60 +214,70 @@
 
 
 
-                            <th data-ng-if="r.editRoutine==true">
-                                <select data-ng-model="r.day" data-ng-change="dateSelected(r.day,r)">
+                            <td data-ng-if="r.editRoutine==true">
+                                <select data-ng-model="r.day" data-ng-change="dateSelected(r.day,r)" style="width: 140px;">
                                     <option value="">Select day</option>
                                     <option data-ng-repeat="date in dates" value="{{date.name}}">{{date.name}}</option>
                                 </select>
-                            </th>
-                            <th data-ng-if="r.editRoutine==true"  >
-                                <select data-ng-model="r.courseNo" data-ng-change="courseSelected(r.courseNo,r)" >
+                            </td>
+                            <td data-ng-if="r.editRoutine==true"  >
+                                <select data-ng-model="r.courseNo" data-ng-change="courseSelected(r.courseNo,r)" style="width: 140px;">
                                     <option value="">Select a course</option>
                                     <option data-ng-repeat="c in courseArr track by c.id" value="{{c.no}}">{{c.no}}</option>
                                 </select>
-                            </th>
-                            <th data-ng-if="r.editRoutine==true">
+                            </td>
+                            <td data-ng-if="r.editRoutine==true">
                                 <div data-ng-if="courseType =='THEORY'">
                                     {{r.section}}
                                 </div>
                                 <div data-ng-if="courseType =='SESSIONAL'">
-                                    <select data-ng-model="r.section"  data-ng-change="sectionChanged(r.section,r)" >
+                                    <select data-ng-model="r.section"  data-ng-change="sectionChanged(r.section,r)" style="width: 140px;">
                                         <option value="">Select a section</option>
                                         <option data-ng-repeat="s in sessionalSections" value="{{s.name}}">{{s.name}}</option>
                                     </select>
                                 </div>
-                            </th>
+                            </td>
                             <!--<th data-ng-if="r.editRoutine==true">
                                 <select data-ng-model="r.startTime" data-ng-change="startTimeSelected(addedStartTime,r)">
                                     <option data-ng-repeat="t in times" value="{{t.id}} track by t.id">{{t.val}}</option>
                                 </select>
                             </th>-->
-                            <th data-ng-if="r.editRoutine==true">
-                                <select data-ng-model="r.startTime" data-ng-change="startTimeSelected(r.startTime,r)">
+                            <td data-ng-if="r.editRoutine==true">
+                                <select data-ng-model="r.startTime" data-ng-change="startTimeSelected(r.startTime,r)" style="width: 140px;">
                                     <option data-ng-repeat="t in times" value="{{t.id}} ">{{t.val}}</option>
                                 </select>
-                            </th>
-                            <th data-ng-if="r.editRoutine==true">
-                                <select data-ng-model="r.endTime" data-ng-change="endTimeSelected(r.endTime,r)">
+                            </td>
+                            <td data-ng-if="r.editRoutine==true">
+                                <select data-ng-model="r.endTime" data-ng-change="endTimeSelected(r.endTime,r)" style="width: 140px;">
                                     <option data-ng-repeat="t in times" value="{{t.id}} ">{{t.val}}</option>
                                 </select>
-                            </th>
-                            <th data-ng-if="r.editRoutine==true">
-                                <select data-ng-model="r.roomNo" data-ng-change="roomNoSelected(r.roomNo,r)">
+                            </td>
+                            <td data-ng-if="r.editRoutine==true">
+                                <select data-ng-model="r.roomNo" data-ng-change="roomNoSelected(r.roomNo,r)" style="width: 140px;">
                                     <option value="">Select Room No</option>
                                     <option data-ng-repeat="rx in roomArr" value="{{rx.roomNo}}">{{rx.roomNo}}</option>
                                 </select>
-                            </th>
+                            </td>
 
 
-                            <th>
-                                <form>
-                                    <button data-ng-if="r.showEditButton!=false" class="btn btn-primary btn-xs" data-ng-click="editRoutineData(r)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
-                                    <button data-ng-if="r.showAddButton" class="btn btn-primary btn-xs" data-ng-click="addRoutineData(r)"><i class="fa fa-check" aria-hidden="true"></i></button>
-                                    <button data-ng-if="r.showCancelButton" class="btn btn-primary btn-xs" data-ng-click="cancelRoutineData(r)"><i class="fa fa-times" aria-hidden="true"></i></button>
-                                    <button class="btn btn-primary btn-xs" data-ng-click="deleteRoutineData(r)"><i class="fa fa-ban" aria-hidden="true"></i></button>
-                                </form>
-                            </th>
+                            <td>
+                                <a data-ng-if="r.showEditButton!=false"  href="javascript:;" class="btn btn-xs btn-default btn-round"
+                                   data-ng-click="editRoutineData(r)" style="border-radius: 15px;" >
+                                    <i class="fa fa-pencil-square-o" style="color: blue;" aria-hidden="true"></i>
+                                </a>
+                                <a data-ng-if="r.showAddButton" href="javascript:;" class="btn btn-xs btn-default btn-round"
+                                   data-ng-click="addRoutineData(r)" style="border-radius: 15px;" >
+                                    <i class="fa fa-check-circle-o" style="color: blue;" aria-hidden="true"></i>
+                                </a>
+                                <a data-ng-if="r.showCancelButton"  href="javascript:;" class="btn btn-xs btn-default btn-round"
+                                   data-ng-click="cancelRoutineData(r)" style="border-radius: 15px;" >
+                                    <i class="fa fa fa-arrow-circle-left" style="color: blue;" aria-hidden="true"></i>
+                                </a>
+                                <a href="javascript:;" class="btn btn-xs btn-default btn-round"
+                                   style="border-radius: 15px;" data-ng-click="deleteRoutineData(r)">
+                                    <i class="fa fa-trash-o" style="color: red;"></i>
+                                </a>
+                            </td>
                         </tr>
                         </tbody>
                     </table>

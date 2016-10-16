@@ -72,8 +72,6 @@ module ums {
         },
         dept4JqGridSelectBox: ':None;01:ARC;02:BBA;03:CE;04:CSE;05:EEE;06:TE;07:MPE',
         days: ':None;1:Saturday;2:Sunday;3:Monday;4:Tuesday;5:Wednesday;6:Thursday;7:Friday',
-        startTime: ':None;08.00 AM:08.00 AM;08.50 AM:08.50 AM;09.40 AM:09.40 AM;10.30 AM:10.30 AM;11.20 AM:11.20 AM;12.10 PM:12.10 PM;01.00 PM:01.00 PM;01.50 PM:01.50 PM;02.40 PM:02.40 PM;03.30 PM:03.30 PM;04.20 PM:04.20 PM;05.10 PM:05.10 PM;06.00 PM:06.00 PM',
-        endTime: ':None;08.00 AM:08.00 AM;08.50 AM:08.50 AM;09.40 AM:09.40 AM;10.30 AM:10.30 AM;11.20 AM:11.20 AM;12.10 PM:12.10 PM;01.00 PM:01.00 PM;01.50 PM:01.50 PM;02.40 PM:02.40 PM;03.30 PM:03.30 PM;04.20 PM:04.20 PM;05.10 PM:05.10 PM;06.00 PM:06.00 PM',
         weekday: [
           {id:"1",name: 'Saturday'},
           {id:"2",name: 'Sunday'},

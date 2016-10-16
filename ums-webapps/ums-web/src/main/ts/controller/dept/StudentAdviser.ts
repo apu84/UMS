@@ -492,24 +492,44 @@ module ums{
     }
 
     private showShiftUI(){
+      this.resetMainSelections();
       this.$scope.showStudentsByYearSemester=false;
       this.initializeFromAndToStudents(3);
       this.activateUI(1);
+      this.setSelection("shiftingAnchor","shiftingIcon");
     }
 
     private showChangeUI(){
+      this.resetMainSelections();
       this.$scope.showOneInputArea=true;
       this.activateUI(2);
+      this.setSelection("singleAnchor","singleIcon");
     }
 
     private showBulkAssignmentUI(){
+      this.resetMainSelections();
       //this.enableSelectPicker();
       this.$scope.showOneInputArea=false;
       this.initialize();
       this.activateUI(3);
+      this.setSelection("bulkAnchor","bulkIcon");
     }
 
 
+    private resetMainSelections(){
+      $("#singleAnchor").css({"background-color":"white"});
+      $("#bulkAnchor").css({"background-color":"white"});
+      $("#shiftingAnchor").css({"background-color":"white"});
+
+      $("#singleIcon").css({"color":"black"});
+      $("#bulkIcon").css({"color":"black"});
+      $("#shiftingIcon").css({"color":"black"});
+    }
+
+    private setSelection(icon1,icon2){
+      $("#"+icon1).css({"background-color":"black"});
+      $("#"+icon2).css({"color":"white"});
+    }
 
     private getActiveTeachers(){
       this.employeeService.getActiveTeacherByDept().then((teachers:Array<IEmployee>)=>{
