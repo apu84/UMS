@@ -45,11 +45,12 @@ module ums{
 
       var firstSelectable = {
         source: $scope.autoSuggestionList,
-
+        minLength:2,
+        maxLength:10,
+        autoFocus:true,
         select:(event:any,ui:any)=>{
           var id= ui.item.value;
-          console.log($scope);
-          console.log(ui.item.value);
+          console.log(event);
           $scope.addFirstSelectedValue({id:ui.item.value});
 
         }
@@ -76,8 +77,7 @@ module ums{
 
         select:(event:any,ui:any)=>{
           var id= ui.item.value;
-          console.log($scope);
-          console.log(ui.item.value);
+          console.log(event);
           $scope.addFirstSelectedValue({id:ui.item.value});
 
         }

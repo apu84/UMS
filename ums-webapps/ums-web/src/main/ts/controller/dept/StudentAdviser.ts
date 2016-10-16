@@ -155,6 +155,11 @@ module ums{
         iconBase: 'fa',
         tickIcon: 'fa-check'
       });
+
+
+      $("#shift").hide();
+      $("#change").hide();
+      $("#bulk").hide();
     }
 
 
@@ -298,20 +303,20 @@ module ums{
       this.disableAllUI().then((message:string)=>{
         if(activateNumber===1){
           this.$scope.shiftOptionSelected=true;
-          $("#shift").show(1000);
-          $("#change").hide(1000);
-          $("#bulk").hide(1000);
+          $("#shift").show(300);
+          $("#change").hide(300);
+          $("#bulk").hide(300);
         }else if(activateNumber===2){
           this.$scope.changeOptionSelected=true;
-          $("#shift").hide(1000);
-          $("#change").show(1000);
-          $("#bulk").hide(1000);
+          $("#shift").hide(300);
+          $("#change").show(300);
+          $("#bulk").hide(300);
 
         }else{
           this.$scope.bulkAssignmentOptionSelected=true;
-          $("#shift").hide(1000);
-          $("#change").hide(1000);
-          $("#bulk").show(1000);
+          $("#shift").hide(300);
+          $("#change").hide(300);
+          $("#bulk").show(300);
         }
       });
 
@@ -556,7 +561,7 @@ module ums{
         this.$scope.addedStudentIdMap[fromStudentId]='added';
       }
       else{
-        this.notify.warn("Already added!");
+        //do nothing
       }
       this.$scope.$apply();
     }
@@ -597,17 +602,30 @@ module ums{
     }
 
     private setFirstAutoCompleteValue(fromStudentId:any){
-      this.$scope.fromStudentId = fromStudentId;
 
-      if(this.$scope.changeOptionSelected){
-        this.$scope.addedStudents=[];
+      if(this.$scope.studentIdWithStudentMap[fromStudentId]!=null){
+        this.$scope.fromStudentId = fromStudentId;
+
+
+        if(this.$scope.changeOptionSelected){
+          this.$scope.addedStudents=[];
+          this.$scope.addedStudentIdMap={};
+        }
+      }else{
+        this.notify.error("Not a valid student id");
       }
+
 
 
     }
 
     private setSecondAutoCompleteValue(fromStudentId:any){
-      this.$scope.toStudentId = fromStudentId
+      if(this.$scope.studentIdWithStudentMap[fromStudentId]!=null){
+        this.$scope.toStudentId = fromStudentId
+      }
+      else{
+        this.notify.error("Not a valid student id");
+      }
 
     }
 

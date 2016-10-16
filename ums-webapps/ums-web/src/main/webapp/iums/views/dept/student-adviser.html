@@ -280,7 +280,7 @@
                                                 <div class="row" align="center">
                                                     <select data-ng-model="toTeacherId" data-ng-change="getStudentsOfTheSecondTeacher(toTeacherId)">
                                                         <option value="">Select an adviser</option>
-                                                        <option data-ng-repeat="t in teachers track by t.id" value="{{t.id}}">{{t.employeeName}}</option>
+                                                        <option data-ng-repeat="t in teachers track by t.id" value="{{t.id}}" data-ng-if="t.id!=fromTeacherId">{{t.employeeName}}</option>
                                                     </select>
                                                 </div>
                                                 <br>
