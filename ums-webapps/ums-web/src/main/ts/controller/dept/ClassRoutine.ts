@@ -311,11 +311,19 @@ module ums {
 
       this.checkIfAllFieldIsAssigned().then((message)=>{
         if(message=="true"){
-          this.$scope.showSaveButton=true;
-          this.$scope.showRoutineTable=true;
 
-          this.assignValueToRoutine().then((message)=>{
-            this.initializeAddVariables();
+          this.checkForOverlap(this.$scope.addedRoutine).then((found:boolean)=>{
+            if(found==false){
+              this.$scope.showSaveButton=true;
+              this.$scope.showRoutineTable=true;
+
+              this.assignValueToRoutine().then((message)=>{
+                this.initializeAddVariables();
+              });
+
+            }else{
+              this.notify.error("Time overlapping is not allowed");
+            }
           });
 
 
@@ -328,6 +336,27 @@ module ums {
       });
 
 
+    }
+
+
+    private checkForOverlap(routine:IClassRoutine):ng.IPromise<any>{
+      console.log("Checking..for overlap");
+      var defer = this.$q.defer();
+
+      var foundOccurrence:boolean = false;
+      for(var i=0;i<this.$scope.routineArr.length;i++){
+        if(this.$scope.routineArr[i].day=routine.day){
+          if(Number(this.$scope.timeWithTimeIdMap[routine.startTime])>= Number(this.$scope.timeWithTimeIdMap[this.$scope.routineArr[i].startTime]) &&
+              Number(this.$scope.timeWithTimeIdMap[routine.endTime])<= Number(this.$scope.timeWithTimeIdMap[this.$scope.routineArr[i].endTime]) &&
+              this.$scope.routineArr[i].roomNo== routine.roomNo){
+            foundOccurrence=true;
+            break;
+          }
+        }
+      }
+
+      defer.resolve(foundOccurrence);
+      return defer.promise;
     }
 
 
@@ -382,38 +411,62 @@ module ums {
 
 
     private courseSelected(courseNo:string,routine:IClassRoutine):void{
-      routine.section="";
-      routine.courseId=this.$scope.courseNoMapCourseId[courseNo];
-      routine.courseNo = courseNo;
 
-      //this.$scope.courseType="";
-      for(var i=0;i<this.$scope.courseArr.length;i++){
-        if(this.$scope.courseArr[i].id==this.$scope.courseNoMapCourseId[courseNo]){
-          this.$scope.courseType = angular.copy(this.$scope.courseArr[i].type);
-          break;
-        }
-      }
+      this.checkIfTheCourseIsAlreadySelectedInTheSameDate(courseNo,routine).then((found:boolean)=>{
+        if(found==false){
+          routine.section="";
+          routine.courseId=this.$scope.courseNoMapCourseId[courseNo];
+          routine.courseNo = courseNo;
+
+          //this.$scope.courseType="";
+          for(var i=0;i<this.$scope.courseArr.length;i++){
+            if(this.$scope.courseArr[i].id==this.$scope.courseNoMapCourseId[courseNo]){
+              this.$scope.courseType = angular.copy(this.$scope.courseArr[i].type);
+              break;
+            }
+          }
 
 
-      if(this.$scope.courseType=="SESSIONAL"){
-        this.$scope.sessionalSections=[];
-        if(this.$scope.section=='A'){
-          this.$scope.sessionalSections=this.appConstants.sessionalSectionsA;
-        }
-        else if(this.$scope.section=='B'){
-          this.$scope.sessionalSections= this.appConstants.sessionalSectionsB;
-        }
-        else if(this.$scope.section=='C'){
-          this.$scope.sessionalSections= this.appConstants.sessionalSectionsC ;
+          if(this.$scope.courseType=="SESSIONAL"){
+            this.$scope.sessionalSections=[];
+            if(this.$scope.section=='A'){
+              this.$scope.sessionalSections=this.appConstants.sessionalSectionsA;
+            }
+            else if(this.$scope.section=='B'){
+              this.$scope.sessionalSections= this.appConstants.sessionalSectionsB;
+            }
+            else if(this.$scope.section=='C'){
+              this.$scope.sessionalSections= this.appConstants.sessionalSectionsC ;
+            }
+            else{
+              this.$scope.sessionalSections= this.appConstants.sessionalSectionsD;
+            }
+          }else{
+            routine.section = this.$scope.section;
+          }
         }
         else{
-          this.$scope.sessionalSections= this.appConstants.sessionalSectionsD;
+          this.notify.error("The course is already assigned in the current date");
         }
-      }else{
-        routine.section = this.$scope.section;
+      });
+
+
+
+    }
+
+    private checkIfTheCourseIsAlreadySelectedInTheSameDate(courseNo:string,routine:IClassRoutine):ng.IPromise<any>{
+      var defer = this.$q.defer();
+      var occuranceFound:boolean=false;
+      for(var i=0;i<this.$scope.routineArr.length;i++){
+        if(this.$scope.routineArr[i].day==routine.day){
+          if(this.$scope.routineArr[i].courseNo==courseNo){
+            occuranceFound=true;
+            break;
+          }
+        }
       }
-
-
+      defer.resolve(occuranceFound);
+      return defer.promise;
     }
 
     private getSemesters():void{
