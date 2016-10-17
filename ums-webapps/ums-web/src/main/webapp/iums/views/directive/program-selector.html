@@ -1,8 +1,8 @@
 <div class="form-group" data-ng-if="!model.isProgramTypePreset()">
   <label class="col-md-4 control-label">Program Type</label>
   <div class="col-md-8">
-    <select class="form-control required" name="programType" data-ng-model="model.programTypeId"
-            data-ng-change="model.loadDepartments()">
+    <select class="form-control required" name="programType" id="programTypeId" data-ng-model="model.programTypeId"
+            data-ng-change="model.loadDepartments()" data-convert-to-number>
       <option data-ng-repeat="programType in model.getProgramTypes()" value="{{programType.id}}">{{programType.name}}
       </option>
     </select>
@@ -11,7 +11,7 @@
 <div class="form-group" data-ng-if="!model.isDepartmentPreset()">
   <label class="col-md-4 control-label">Dept./School</label>
   <div class="col-md-8">
-    <select name="dept" id="dept_id" class="form-control required" data-ng-model="model.departmentId" data-ng-change="model.loadPrograms()">
+    <select name="dept" id="dept_id" class="form-control required" data-ng-model="model.departmentId" data-ng-change="model.loadPrograms()" >
       <option data-ng-repeat="department in model.getDepartments()" value="{{department.id}}">{{department.name}}</option>
     </select>
   </div>
@@ -19,7 +19,7 @@
 <div class="form-group" data-ng-if="!model.isProgramPreset()">
   <label class="col-md-4 control-label">Program Name</label>
   <div class="col-md-8">
-    <select class="form-control required" data-ng-model="model.programId" id="dirProgram">
+    <select class="form-control required" data-ng-model="model.programId" id="dirProgram" data-convert-to-number>
       <option data-ng-repeat="program in model.getPrograms()" value="{{program.id}}">{{program.longName}}</option>
     </select>
   </div>

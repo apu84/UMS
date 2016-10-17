@@ -31,6 +31,13 @@ module ums {
 
   UMS.constant("appConstants", Constants.Default());
 
+
+  UMS.filter('$split', function() {
+    return function(input) {
+      return input.split(',');
+    }
+  });
+
   UMS.config(($stateProvider, $urlRouterProvider, $locationProvider) => {
     //
     // For any unmatched url, redirect to /state1
@@ -669,6 +676,19 @@ module ums {
           url: "/resultProcessing",
           controller: 'ResultProcessing',
           templateUrl: 'views/result/result-processing.html'
+        })
+        .state('attendanceSheet', {
+          url: "/attendanceSheet",
+          controller: 'AttendanceSheet',
+          templateUrl: 'views/dept/attendance-sheet.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: ['vendors/bootstrap-datepicker/css/datepicker.css',
+                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js']
+              });
+            }]
+          }
         })
 
       //In database use /dummyController/H or /dummyController/T in the location column
