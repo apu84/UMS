@@ -136,52 +136,52 @@ module ums {
             val:'Select time'
           },
           {
-            id: '08.00 AM',
-            val: '08.00 AM'
+            id: '08:00 AM',
+            val: '08:00 AM'
           },
           {
-            id: '08.50 AM',
-            val: '08.50 AM'
+            id: '08:50 AM',
+            val: '08:50 AM'
           },
           {
-            id: '09.40 AM',
-            val: '09.40 AM'
+            id: '09:40 AM',
+            val: '09:40 AM'
           },
           {
-            id: '10.30 AM',
-            val: '10.30 AM'
+            id: '10:30 AM',
+            val: '10:30 AM'
           },
           {
-            id: '11.20 AM',
-            val: '11.20 AM'
+            id: '11:20 AM',
+            val: '11:20 AM'
           },
           {
-            id: '12.10 PM',
-            val: '12.10 PM'
+            id: '12:10 PM',
+            val: '12:10 PM'
           },
           {
-            id: '01.00 PM',
-            val: '01.00 PM'
+            id: '01:00 PM',
+            val: '01:00 PM'
           },
           {
-            id: '01.50 PM',
-            val: '01.50 PM'
+            id: '01:50 PM',
+            val: '01:50 PM'
           },
           {
-            id: '02.40 PM',
-            val: '02.40 PM'
+            id: '02:40 PM',
+            val: '02:40 PM'
           },
           {
-            id: '03.30 PM',
-            val: '03.30 PM'
+            id: '03:30 PM',
+            val: '03:30 PM'
           },
           {
-            id: '04.20 PM',
-            val: '04.20 PM'
+            id: '04:20 PM',
+            val: '04:20 PM'
           },
           {
-            id: '05.00 PM',
-            val: '05.00 PM'
+            id: '05:00 PM',
+            val: '05:00 PM'
           }
         ],
         routineTime: [

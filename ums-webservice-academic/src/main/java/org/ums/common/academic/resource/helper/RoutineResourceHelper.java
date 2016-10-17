@@ -1,6 +1,8 @@
 package org.ums.common.academic.resource.helper;
 
+import com.itextpdf.text.DocumentException;
 import org.apache.commons.jexl2.UnifiedJEXL;
+import org.apache.commons.jexl2.parser.ParseException;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,11 +32,11 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.io.OutputStream;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.sql.Time;
 import java.util.stream.Stream;
 
 
@@ -219,11 +221,16 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
         .stream()
         .filter(pProgram -> pProgram.getDepartmentId().equals(deptId))
         .collect(Collectors.toList());
+    //DateFormat timeFormat = new SimpleDateFormat("hh:mm a");
+
+
+
     try{
+
       routines = getContentManager().
           getEmployeeRoutine(semesterId, programLIst.get(0).getId(), academicYear, academicSemester).stream()
           .filter(routine-> routine.getSection().charAt(0)== section.charAt(0))
-          .sorted(Comparator.comparing(Routine::getDay).thenComparing(Routine::getStartTime))
+          .sorted(Comparator.comparing(Routine::getDay).thenComparing( r->r.getStartTime().substring(Math.max(r.getStartTime().length()-2,0))).thenComparing(Routine::getStartTime))
           .collect(Collectors.toList());
 
     }catch (EmptyResultDataAccessException e){
