@@ -156,7 +156,7 @@ module ums {
             val: '11.20 AM'
           },
           {
-            id: '12.10 AM',
+            id: '12.10 PM',
             val: '12.10 PM'
           },
           {

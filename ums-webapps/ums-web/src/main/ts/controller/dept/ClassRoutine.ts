@@ -32,6 +32,8 @@ module ums {
     dateMapFromDateToNumber:any;
     courseNoMapCourseId:any;
     courseNoMapCourse:any;
+    timeIdWithTimeMap:any;
+    timeWithTimeIdMap:any;
     addDivControl:Function;
 
     getSemesters:Function;
@@ -126,9 +128,13 @@ module ums {
       $scope.data = {
         programTypeOptions:appConstants.programType
       };
-
+      $scope.dates = appConstants.weekday;
+      $scope.times = appConstants.timeChecker;
       $scope.courseIdMapCourseNo={};
       $scope.courseNoMapCourseId={};
+      $scope.timeIdWithTimeMap={};
+      $scope.timeWithTimeIdMap={};
+      $scope.dateMap={};
       $scope.dateMapFromDateToNumber={};
       $scope.getSemesters = this.getSemesters.bind(this);
       $scope.searchForRoutineData = this.searchForRoutineData.bind(this);
@@ -191,43 +197,25 @@ module ums {
         routine.startTime="";
       }else{
         routine.startTime=startTime;
-        var courseType = this.$scope.courseNoMapCourse[routine.courseNo].type;
+        this.getEndTimeFromStartTime(startTime,routine);
+      }
+    }
 
-          var globalCounter:number;
-        if(courseType=="SESSIONAL"){
-          globalCounter=3;
-        }else{
-          globalCounter=1;
-        }
-          var count=0;
-          var found=false;
+    private getEndTimeFromStartTime(startTime:string,routine:IClassRoutine):any{
+      var courseType = this.$scope.courseNoMapCourse[routine.courseNo].type;
 
-        console.log("------->>");
-        console.log(this.$scope.times);
-          for(var i=0;i<this.$scope.times.length;i++){
-            console.log(i);
-            if(this.$scope.times[i].val== startTime){
-              var found=true;
-              count=1;
-            }
-            else if(found && count !=globalCounter){
-              count+=1;
-            }else if(count==globalCounter){
-              console.log(this.$scope.times[i]);
-              console.log("Found match");
-              routine.endTime = this.$scope.times[i].val;
-              console.log(routine.endTime);
-              break;
-            }else{
-
-            }
-
-          }
-
-          console.log("In the start time selected");
-        console.log(routine);
-
-
+      console.log("In the end time processing unit");
+      console.log(this.$scope.timeWithTimeIdMap);
+      console.log(" time id with time map");
+      console.log(this.$scope.timeIdWithTimeMap);
+      if(courseType=="SESSIONAL"){
+        routine.endTime = this.$scope.timeIdWithTimeMap[String(this.$scope.timeWithTimeIdMap[startTime]+3)];
+      }else{
+        console.log("the supposed end time");
+        console.log(this.$scope.timeWithTimeIdMap[startTime]);
+        console.log(this.$scope.timeIdWithTimeMap[String(this.$scope.timeWithTimeIdMap[startTime]+1)]);
+        routine.endTime = this.$scope.timeIdWithTimeMap[String(this.$scope.timeWithTimeIdMap[startTime]+1)];
+        console.log(routine.endTime);
       }
     }
 
@@ -444,7 +432,7 @@ module ums {
       this.$scope.dates=[];
       this.$scope.times =[];
 
-      this.initializeDate();
+      this.initializeDateAndTime();
       this.$scope.times = this.appConstants.timeChecker;
 
       Utils.expandRightDiv();
@@ -501,25 +489,33 @@ module ums {
 
 
 
-    private initializeDate():void{
-      this.$scope.dates = this.appConstants.weekday;
-      this.$scope.dateMap={};
-      var date = this.$scope.dateMap;
-      date["1"]="Saturday";
-      date["2"]="Sunday";
-      date["3"]="Monday";
-      date["4"] = "Tuesday";
-      date["5"] = "Wednesday";
-      date["6"]="Thursday";
-
-      var dateStr = this.$scope.dateMapFromDateToNumber;
-      dateStr["Saturday"]=1;
-      dateStr["Sunday"]=2;
-      dateStr["Monday"]=3;
-      dateStr["Tuesday"]=4;
-      dateStr["Wednesday"]=5;
-      dateStr["Thursday"]=6;
+    private initializeDateAndTime():void{
+      //this.$scope.dates = this.appConstants.weekday;
+      this.createDayMaps();
+      this.createTimeMaps();
       }
+
+    private createDayMaps():void{
+      console.log("dates");
+      this.$scope.dates = this.appConstants.weekday;
+
+      console.log(this.$scope.dates);  
+      for(var i=0;i<this.$scope.dates.length;i++){
+        this.$scope.dateMap[String(i+1)] = this.$scope.dates[i].name;
+        this.$scope.dateMapFromDateToNumber[this.$scope.dates[i].name] = i+1;
+      }
+    }
+
+
+    private createTimeMaps():void{
+      console.log("times---");
+      this.$scope.times = this.appConstants.timeChecker;
+      console.log(this.$scope.times);
+      for(var i=1;i<this.$scope.times.length;i++){
+        this.$scope.timeIdWithTimeMap[String(i)] = this.$scope.times[i].val;
+        this.$scope.timeWithTimeIdMap[this.$scope.times[i].val] = i;
+      }
+    }
 
     private initializeAddVariables():void{
       var routine=this.$scope.addedRoutine;
