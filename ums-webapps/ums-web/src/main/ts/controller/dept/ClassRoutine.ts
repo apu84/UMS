@@ -286,12 +286,7 @@ module ums {
     }
 
     private addRoutineData(routine:IClassRoutine){
-      /*routine.day=this.$scope.addedDate;
-      routine.courseId = this.$scope.addedCourse;
-      routine.section= this.$scope.addedSection;
-      routine.startTime = this.$scope.addedStartTime;
-      routine.endTime=this.$scope.addedEndTime;
-      routine.roomNo = this.$scope.addedRoomNo;*/
+
       routine.updated=true;
       if(routine.status!="created"){
         routine.status="exist";
@@ -317,12 +312,10 @@ module ums {
 
     private cancelRoutineData(routine:IClassRoutine){
 
-      console.log("In the cancel routine data");
-      console.log(this.$scope.tmpRoutineArr);
+
 
       for(var i=0;i<this.$scope.tmpRoutineArr.length;i++){
         if(this.$scope.tmpRoutineArr[i].id==routine.id){
-          console.log("found match");
           routine.courseNo = angular.copy(this.$scope.tmpRoutineArr[i].courseNo);
           routine.courseId = angular.copy(this.$scope.tmpRoutineArr[i].courseId);
           routine.day = angular.copy(this.$scope.tmpRoutineArr[i].day);
@@ -335,7 +328,6 @@ module ums {
           routine.showEditButton=true;
           routine.editRoutine=false;
 
-          console.log(routine);
           break;
         }
       }
@@ -376,7 +368,6 @@ module ums {
 
 
     private checkForOverlap(routine:IClassRoutine):ng.IPromise<any>{
-      console.log("Checking..for overlap");
       var defer = this.$q.defer();
 
       var foundOccurrence:boolean = false;

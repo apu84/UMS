@@ -63,7 +63,13 @@ public class ClassRoutineGeneratorImpl implements ClassRoutineGenerator {
     User user = mUserManager.get(teacherId);
     Teacher teacher = mTeacherManager.get(user.getEmployeeId());
 
-    List<Routine> routines = mRoutineManager.getTeacherRoutine(teacher.getId());
+    List<Routine> routines = mRoutineManager.getTeacherRoutine(teacher.getId())
+        .stream()
+        .sorted(Comparator.comparing(Routine::getDay)
+            .thenComparing( r->r.getStartTime().substring(Math.max(r.getStartTime().length()-2,0)))
+            .thenComparing(Routine::getStartTime)
+            .thenComparing(Routine::getSection))
+        .collect(Collectors.toList());
 
     Department department = mDepartmentManager.get(teacher.getDepartment().getId());
 
@@ -110,7 +116,7 @@ public class ClassRoutineGeneratorImpl implements ClassRoutineGenerator {
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     PdfWriter writer = PdfWriter.getInstance(document,baos);
 
-    Font tableDataFont = new Font(Font.FontFamily.TIMES_ROMAN,10);
+    Font tableDataFont = new Font(Font.FontFamily.TIMES_ROMAN,7);
     Font tableDataFontTime = new Font(Font.FontFamily.TIMES_ROMAN,11);
 
     Font universityNameFont = new Font(FontFactory.getFont(FontFactory.TIMES_BOLD,20));
@@ -163,7 +169,7 @@ public class ClassRoutineGeneratorImpl implements ClassRoutineGenerator {
       }
     }
 
-    SimpleDateFormat routineTimeFormat= new SimpleDateFormat("hh.mm a");
+    SimpleDateFormat routineTimeFormat= new SimpleDateFormat("hh:mm a");
 
     Time routineTime = new Time(routineTimeFormat.parse(routines.get(0).getStartTime()).getTime());
     for(int i=1;i<=6;i++){
@@ -181,8 +187,10 @@ public class ClassRoutineGeneratorImpl implements ClassRoutineGenerator {
         }else{
           if(routines.size()!=0){
             if(routineTime.equals(timeInitializer) && routines.get(0).getDay()==i){
+              List<String> sectionList = new ArrayList<>();
               String courseNo = routines.get(0).getCourseNo();
               String courseId= routines.get(0).getCourseId();
+              sectionList.add(routines.get(0).getSection());
               String sections= routines.get(0).getSection();
               String roomNo = routines.get(0).getRoomNo();
               int duration  = routines.get(0).getDuration();
@@ -191,7 +199,11 @@ public class ClassRoutineGeneratorImpl implements ClassRoutineGenerator {
               while(true){
                 if(routines.size()>1){
                   if(routines.get(routineIterator).getCourseId().equals(courseId) && routines.get(routineIterator).getDay()==i){
-                    sections = sections+"+"+routines.get(routineIterator).getSection();
+                    if(sectionList.contains(routines.get(routineIterator).getSection())==false)
+                    {
+                      sections = sections+"+"+routines.get(routineIterator).getSection();
+                      sectionList.add(routines.get(routineIterator).getSection());
+                    }
                     routines.remove(0);
                   }else{
                     break;
