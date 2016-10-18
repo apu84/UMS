@@ -10,6 +10,7 @@ module ums {
     'scrollable-table',
     'amChartsDirective',
     'FileManagerApp',
-    'ui.sortable'
+    'ui.sortable',
+    'ngHandsontableApp'
   ]);
 }

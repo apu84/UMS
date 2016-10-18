@@ -81,6 +81,11 @@
             <div class="panel-heading">Here goes Information about Program Type,Year-Semester, Academic Semester and Section <span
                     class="subtitle"></span></div>
             <div class="panel-body">
+                <hot-table col-headers="true"
+                           datarows="ctrl.items"
+                           columns="ctrl.columns">
+                </hot-table>
+===
                 <div class="row" data-ng-if="showLoader==true" align="center">
                     <i class="fa fa-spinner fa-spin fa-5x fa-fw"></i>
                     <span class="sr-only">Loading...</span>

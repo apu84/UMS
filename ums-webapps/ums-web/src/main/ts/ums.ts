@@ -29,6 +29,9 @@ module ums {
             });
       }]);
 
+
+  angular.module('ngHandsontableApp', ['ngHandsontable']);
+
   UMS.constant("appConstants", Constants.Default());
 
 
