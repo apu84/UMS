@@ -3,6 +3,9 @@
         padding-bottom: 5px !important;
         padding-top: 5px !important;
     }
+    .handsontableInput {
+        box-shadow: 0 0 0 2px #5292F7 inset !important;
+    }
 </style>
 <div class="row" id="topArrowDiv">
     <div class="col-md-2 col-md-offset-5">
@@ -106,7 +109,12 @@
     }
 </script>
 <div class="row" style="padding-left: 10px;">
-    <angular-filemanager data-ng-if="reloadOn"></angular-filemanager>
+    <hot-table col-headers="true" hot-id="foo"
+               datarows="data.items"
+               columns="data.columns">
+    </hot-table>
+
+    <button data-ng-click="test123()" >Click Me</button>
 </div>
 
 
