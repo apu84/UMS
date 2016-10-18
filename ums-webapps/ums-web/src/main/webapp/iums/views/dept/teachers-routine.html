@@ -1,6 +1,7 @@
-<div class="panel panel-default">
-    <div class="panel-headline">Class Routine</div>
+<div class="panel panel-blue" data-ng-init="getTeachersRoutine()">
+    <div class="panel-heading">Class Routine</div>
     <div class="panel-body">
-        <button class="btn btn-success" ng-click="getTeachersRoutine()">Get Routine</button>
+        <embed data-ng-src="{{pdfFile}}" width="100%" height="500px" />
+        <!--<button class="btn btn-success" ng-click="getTeachersRoutine()">Get Routine</button>-->
     </div>
 </div>

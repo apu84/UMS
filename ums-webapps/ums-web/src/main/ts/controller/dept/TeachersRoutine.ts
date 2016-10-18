@@ -3,6 +3,7 @@ module ums{
   interface ITeachersRoutine extends ng.IScope{
 
     getTeachersRoutine:Function;
+    pdfFile:any;
   }
 
   class TeachersRoutine{
@@ -18,9 +19,10 @@ module ums{
 
 
     private getTeachersRoutine(){
-      this.classRoutineService.getClassRoutineReportForTeacher().then((message:string)=>{
-        if(message=="success"){
-
+      this.$scope.pdfFile;
+      this.classRoutineService.getClassRoutineReportForTeacher().then((file:any)=>{
+        if(file!="failure"){
+            this.$scope.pdfFile=file;
         }else{
           this.notify.error("Error in generating routine report");
         }

@@ -18,8 +18,8 @@ module ums{
           (data:any, etag:string) => {
             var file = new Blob([data], {type: 'application/pdf'});
             var fileURL = this.$sce.trustAsResourceUrl(URL.createObjectURL(file));
-            this.$window.open(fileURL);
-            defer.resolve("success");
+            //this.$window.open(fileURL);
+            defer.resolve(fileURL);
           },
           (response:ng.IHttpPromiseCallbackArg<any>) => {
             console.error(response);
