@@ -4,12 +4,14 @@ module ums {
     semesterArr:Array<ISemester>;
     courseArr:Array<ICourse>;
     roomArr:Array<IClassRoom>;
+    tmpRoutineArr:Array<IClassRoutine>;
     routineArr:Array<IClassRoutine>;
     addedRoutine:any;
     semesterId:number;
     programTypeId:number;
     studentsYear:number;
     studentsSemester:number;
+    tempId:number;
     section:string;
     semesterStatus:number;
     dates:Array<IDate>;
@@ -291,7 +293,11 @@ module ums {
       routine.endTime=this.$scope.addedEndTime;
       routine.roomNo = this.$scope.addedRoomNo;*/
       routine.updated=true;
-      routine.status="exist";
+      if(routine.status!="created"){
+        routine.status="exist";
+      }
+
+      this.updateTmpRoutine(routine);
 
       routine.editRoutine=false;
       routine.showAddButton=false;
@@ -300,11 +306,39 @@ module ums {
       this.$scope.showSaveButton=true;
     }
 
+    private updateTmpRoutine(routine:IClassRoutine){
+      for(var i=0;i<this.$scope.tmpRoutineArr.length;i++){
+        if(this.$scope.tmpRoutineArr[i].id==routine.id){
+          this.$scope.tmpRoutineArr[i]=angular.copy(routine);
+          break;
+        }
+      }
+    }
+
     private cancelRoutineData(routine:IClassRoutine){
-      routine.editRoutine=false;
-      routine.showAddButton=false;
-      routine.showCancelButton=false;
-      routine.showEditButton=true;
+
+      console.log("In the cancel routine data");
+      console.log(this.$scope.tmpRoutineArr);
+
+      for(var i=0;i<this.$scope.tmpRoutineArr.length;i++){
+        if(this.$scope.tmpRoutineArr[i].id==routine.id){
+          console.log("found match");
+          routine.courseNo = angular.copy(this.$scope.tmpRoutineArr[i].courseNo);
+          routine.courseId = angular.copy(this.$scope.tmpRoutineArr[i].courseId);
+          routine.day = angular.copy(this.$scope.tmpRoutineArr[i].day);
+          routine.startTime = angular.copy(this.$scope.tmpRoutineArr[i].startTime)
+          routine.section = angular.copy(this.$scope.tmpRoutineArr[i].section);
+          routine.endTime = angular.copy(this.$scope.tmpRoutineArr[i].endTime);
+          routine.roomNo = angular.copy(this.$scope.tmpRoutineArr[i].roomNo);
+          routine.showAddButton=false;
+          routine.showCancelButton=false;
+          routine.showEditButton=true;
+          routine.editRoutine=false;
+
+          console.log(routine);
+          break;
+        }
+      }
     }
 
     private addData():void{
@@ -316,6 +350,8 @@ module ums {
             if(found==false){
               this.$scope.showSaveButton=true;
               this.$scope.showRoutineTable=true;
+              this.$scope.addedRoutine.id=this.$scope.tempId;
+              this.$scope.tempId+=1;
 
               this.assignValueToRoutine().then((message)=>{
                 this.initializeAddVariables();
@@ -375,6 +411,7 @@ module ums {
 
       routine.status='created';
       this.$scope.routineArr.push(routine);
+      this.$scope.tmpRoutineArr.push(angular.copy(routine));
       defer.resolve("done");
       return defer.promise;
     }
@@ -480,6 +517,8 @@ module ums {
 
 
     private searchForRoutineData():void{
+
+      this.$scope.tempId=-2000;
       this.$scope.showRoutineTable=false;
       this.$scope.showLoader=true;
 
@@ -513,12 +552,14 @@ module ums {
 
 
           this.$scope.routineArr=[];
+          this.$scope.tmpRoutineArr=[];
           this.classRoutineService.getClassRoutineForEmployee(this.$scope.semesterId,this.$scope.studentsYear,this.$scope.studentsSemester,this.$scope.section)
               .then((routineArr:Array<IClassRoutine>)=>{
                 for(var k=0;k<routineArr.length;k++){
                   routineArr[k].day = this.$scope.dateMap[String(routineArr[k].day)];
                   routineArr[k].courseNo = this.$scope.courseIdMapCourseNo[routineArr[k].courseId];
                   this.$scope.routineArr.push(routineArr[k]);
+                  this.$scope.tmpRoutineArr.push(angular.copy(routineArr[k]));
                 }
 
 
@@ -609,7 +650,7 @@ module ums {
 
         if(r.updated==true || r.status=='deleted' || r.status=='created'){
           var item:any={};
-          if(r.id==null){
+          if(r.id==null || r.id<0 ){
             item['id']="";
           }else{
             item['id']=r.id;
