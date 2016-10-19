@@ -213,9 +213,9 @@ module ums {
     private checkIfTheTimeIsAlreadyAssigned(startTime:string,routine:IClassRoutine):ng.IPromise<any>{
       var defer = this.$q.defer();
       var foundOccurance:boolean=false;
-      for(var i=0;i<this.$scope.routineArr.length;i++){
-        if(this.$scope.routineArr[i].day==routine.day){
-          if(this.$scope.routineArr[i].startTime==startTime){
+      for(var i=0;i<this.$scope.tmpRoutineArr.length;i++){
+        if(this.$scope.tmpRoutineArr[i].day==routine.day){
+          if(this.$scope.tmpRoutineArr[i].startTime==startTime){
             foundOccurance=true;
             break;
           }
@@ -287,6 +287,7 @@ module ums {
 
     private addRoutineData(routine:IClassRoutine){
 
+
       routine.updated=true;
       if(routine.status!="created"){
         routine.status="exist";
@@ -319,6 +320,7 @@ module ums {
           routine.courseNo = angular.copy(this.$scope.tmpRoutineArr[i].courseNo);
           routine.courseId = angular.copy(this.$scope.tmpRoutineArr[i].courseId);
           routine.day = angular.copy(this.$scope.tmpRoutineArr[i].day);
+          routine.courseType=angular.copy(this.$scope.tmpRoutineArr[i].courseType);
           routine.startTime = angular.copy(this.$scope.tmpRoutineArr[i].startTime)
           routine.section = angular.copy(this.$scope.tmpRoutineArr[i].section);
           routine.endTime = angular.copy(this.$scope.tmpRoutineArr[i].endTime);
@@ -371,11 +373,11 @@ module ums {
       var defer = this.$q.defer();
 
       var foundOccurrence:boolean = false;
-      for(var i=0;i<this.$scope.routineArr.length;i++){
-        if(this.$scope.routineArr[i].day=routine.day){
-          if(Number(this.$scope.timeWithTimeIdMap[routine.startTime])>= Number(this.$scope.timeWithTimeIdMap[this.$scope.routineArr[i].startTime]) &&
-              Number(this.$scope.timeWithTimeIdMap[routine.endTime])<= Number(this.$scope.timeWithTimeIdMap[this.$scope.routineArr[i].endTime]) &&
-              this.$scope.routineArr[i].roomNo== routine.roomNo){
+      for(var i=0;i<this.$scope.tmpRoutineArr.length;i++){
+        if(this.$scope.tmpRoutineArr[i].day==routine.day){
+          if(Number(this.$scope.timeWithTimeIdMap[routine.startTime])>= Number(this.$scope.timeWithTimeIdMap[this.$scope.tmpRoutineArr[i].startTime]) &&
+              Number(this.$scope.timeWithTimeIdMap[routine.endTime])<= Number(this.$scope.timeWithTimeIdMap[this.$scope.tmpRoutineArr[i].endTime]) &&
+              this.$scope.tmpRoutineArr[i].roomNo== routine.roomNo){
             foundOccurrence=true;
             break;
           }
@@ -445,7 +447,7 @@ module ums {
           routine.section="";
           routine.courseId=this.$scope.courseNoMapCourseId[courseNo];
           routine.courseNo = courseNo;
-
+          routine.courseType=this.$scope.courseNoMapCourse[this.$scope.courseIdMapCourseNo[routine.courseId]].type;
           //this.$scope.courseType="";
           for(var i=0;i<this.$scope.courseArr.length;i++){
             if(this.$scope.courseArr[i].id==this.$scope.courseNoMapCourseId[courseNo]){
@@ -485,9 +487,9 @@ module ums {
     private checkIfTheCourseIsAlreadySelectedInTheSameDate(courseNo:string,routine:IClassRoutine):ng.IPromise<any>{
       var defer = this.$q.defer();
       var occuranceFound:boolean=false;
-      for(var i=0;i<this.$scope.routineArr.length;i++){
-        if(this.$scope.routineArr[i].day==routine.day){
-          if(this.$scope.routineArr[i].courseNo==courseNo){
+      for(var i=0;i<this.$scope.tmpRoutineArr.length;i++){
+        if(this.$scope.tmpRoutineArr[i].day==routine.day){
+          if(this.$scope.tmpRoutineArr[i].courseNo==courseNo){
             occuranceFound=true;
             break;
           }
@@ -546,13 +548,16 @@ module ums {
           this.$scope.tmpRoutineArr=[];
           this.classRoutineService.getClassRoutineForEmployee(this.$scope.semesterId,this.$scope.studentsYear,this.$scope.studentsSemester,this.$scope.section)
               .then((routineArr:Array<IClassRoutine>)=>{
+                console.log(this.$scope.courseNoMapCourse);
                 for(var k=0;k<routineArr.length;k++){
                   routineArr[k].day = this.$scope.dateMap[String(routineArr[k].day)];
                   routineArr[k].courseNo = this.$scope.courseIdMapCourseNo[routineArr[k].courseId];
+                  routineArr[k].courseType = this.$scope.courseNoMapCourse[this.$scope.courseIdMapCourseNo[routineArr[k].courseId]].type;
                   this.$scope.routineArr.push(routineArr[k]);
                   this.$scope.tmpRoutineArr.push(angular.copy(routineArr[k]));
                 }
 
+                console.log(this.$scope.routineArr);
 
                 this.$scope.showLoader=false;
 
