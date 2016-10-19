@@ -258,6 +258,7 @@ public class GradeSubmissionService {
       hasError = validateQuiz(hasError, gradeDTO.getQuiz(), gradeDTO.getRegType());
       hasError = validateClassPerformance(hasError, gradeDTO.getClassPerformance(), gradeDTO.getRegType());
       hasError = validatePartA(hasError, gradeDTO.getPartA(), partInfo.getPart_a_total(), gradeDTO.getRegType());
+      if(partInfo.getTotal_part()==2 && partInfo.getCourseType()==CourseType.THEORY)
       hasError = validatePartB(hasError, gradeDTO.getPartB(), partInfo.getTotal_part(), partInfo.getPart_b_total(), gradeDTO.getRegType());
       hasError = validateTheoryTotal(hasError, gradeDTO);
     }
@@ -296,7 +297,7 @@ public class GradeSubmissionService {
   }
 
   private Boolean validateTheoryTotal(Boolean error,StudentGradeDto gradeDTO){
-    if(gradeDTO.getTotal()>100 ||  gradeDTO.getTotal() != Math.round(gradeDTO.getQuiz() +gradeDTO.getClassPerformance() +gradeDTO.getPartA() + gradeDTO.getPartB())){
+    if(gradeDTO.getTotal()>100 ||  gradeDTO.getTotal() != Math.round(gradeDTO.getQuiz() +gradeDTO.getClassPerformance() +gradeDTO.getPartA() + (gradeDTO.getPartB()==null?0:gradeDTO.getPartB()))){
       error = Boolean.TRUE;
     }
     return error;
