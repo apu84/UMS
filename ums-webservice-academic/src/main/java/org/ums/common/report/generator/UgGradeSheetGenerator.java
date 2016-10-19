@@ -67,7 +67,7 @@ public class UgGradeSheetGenerator {
     List<StudentGradeDto> gradeList = examGradeManager.getAllGrades(semesterId, courseId, examType, course.getCourseType());
 
     document.open();
-    for (int i = 0; i < (gradeList.size() / 90); i++) {
+    for (int i = 0; i < (gradeList.size() / 90) || (gradeList.size()<90 && i==0); i++) {
       if (i != 0)
         document.newPage();
       PdfPTable mainTable = getMainTable();
@@ -213,7 +213,7 @@ public class UgGradeSheetGenerator {
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);
 
-        p = new Paragraph(String.valueOf(student.getPartA() + student.getPartB()), nFont);
+        p = new Paragraph(String.valueOf(student.getPartA() + (student.getPartB()==null?0:student.getPartB())), nFont);
         cell = new PdfPCell(p);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);
