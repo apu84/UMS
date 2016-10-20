@@ -87,8 +87,10 @@
                                         <i class="fa fa-file-pdf-o" style="color: red;" aria-hidden="true" id="bulkIcon"></i>
                                     </a>
                                     <a data-ng-if="r.showEditButton!=false" href="javascript:;" class="btn btn-xs btn-default"
-                                       data-ng-click="showBulkAssignmentUI()" style="background-color: #ffffff;border: 1px solid blue;margin-top: -5px;" id="bulkAnchor">
+                                       data-ng-click="showAttendanceSheet()" style="background-color: #ffffff;border: 1px solid blue;margin-top: -5px;" id="bulkAnchor">
                                         <i class="fa fa-edit" style="color: blue;" aria-hidden="true" id="bulkIcon"></i>
+
+
                                     </a>
 
                             </td>
@@ -108,13 +110,16 @@
         $("#courseSelectionDiv").show(200);
     }
 </script>
-<div class="row" style="padding-left: 10px;">
-    <hot-table col-headers="true" hot-id="foo"
+<div class="row">
+    <div class="col-md-12" >
+    <hot-table hot-id="foo"
+               settings="data.settings"
                datarows="data.items"
                columns="data.columns">
     </hot-table>
 
-    <button data-ng-click="test123()" >Click Me</button>
+</div>
+    <button data-ng-click="test123()" >Click Me1133333</button>
 </div>
 
 
