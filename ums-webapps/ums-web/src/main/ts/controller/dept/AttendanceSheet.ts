@@ -5,6 +5,7 @@ module ums {
     contentVisibility:any;
     data:any;
     attendanceSearchParamModel:any;
+    showAttendanceSheet:Function;
     fetchCourseInfo:any;
     selectedCourseNo:any;
     entries:any;
@@ -22,25 +23,42 @@ module ums {
       $scope.loadingVisibility = false;
       $scope.contentVisibility = false;
       $scope.test123=this.test123.bind(this);
+      $scope.showAttendanceSheet=this.showAttendanceSheet.bind(this);
       $scope.data = {
-        items:[{'sId':'160105001','sName':'Sadia Sultana','date11012016':'Y','date21022016':'Y','date01032016':'Y','date10042016':'Y','date15052016':'Y','date22062016':'Y'},
-          {'sId':'160105002','sName':'Md. Ferdous Wahed','date11012016':'Y','date21022016':'Y','date01032016':'N','date10042016':'Y','date15052016':'N','date22062016':'Y'},
-          {'sId':'160105003','sName':'Tahsin Sarwar','date11012016':'Y','date21022016':'Y','date01032016':'Y','date10042016':'Y','date15052016':'Y','date22062016':'Y'},
-          {'sId':'160105004','sName':'Abid Mahmud','date11012016':'N','date21022016':'Y','date01032016':'Y','date10042016':'Y','date15052016':'Y','date22062016':'Y'},
-          {'sId':'160105005','sName':'Sudipta Mondal','date11012016':'Y','date21022016':'N','date01032016':'Y','date10042016':'Y','date15052016':'Y','date22062016':'Y'},
-          {'sId':'160105006','sName':'Md. Farhan Fardus','date11012016':'Y','date21022016':'Y','date01032016':'Y','date10042016':'Y','date15052016':'Y','date22062016':'Y'},
-          {'sId':'160105007','sName':'Farah Farzana Mou','date11012016':'Y','date21022016':'Y','date01032016':'N','date10042016':'Y','date15052016':'Y','date22062016':'Y'},
-          {'sId':'160105008','sName':'Afsana Akter','date11012016':'Y','date21022016':'Y','date01032016':'Y','date10042016':'Y','date15052016':'Y','date22062016':'Y'},
-          {'sId':'160105009','sName':'Md. Golam Saklaen','date11012016':'Y','date21022016':'Y','date01032016':'Y','date10042016':'Y','date15052016':'Y','date22062016':'Y'},
-          {'sId':'160105010','sName':'Mir Hasibul Hasan','date11012016':'Y','date21022016':'Y','date01032016':'Y','date10042016':'Y','date15052016':'Y','date22062016':'N'},
-          {'sId':'160105011','sName':'Syeda Meherin Haider','date11012016':'Y','date21022016':'Y','date01032016':'Y','date10042016':'Y','date15052016':'Y','date22062016':'Y'},
-          {'sId':'160105012','sName':'Zannatul Mashrekee Hossain Kristy','date11012016':'Y','date21022016':'Y','date01032016':'Y','date10042016':'Y','date15052016':'Y','date22062016':'Y'},
-          {'sId':'160105013','sName':'Ankit Dev','date11012016':'Y','date21022016':'Y','date01032016':'Y','date10042016':'N','date15052016':'Y','date22062016':'Y'},
-          {'sId':'160105014','sName':'Farhana Islam Chowdhury Prity','date11012016':'Y','date21022016':'Y','date01032016':'Y','date10042016':'Y','date15052016':'N','date22062016':'Y'},
-          {'sId':'160105015','sName':'Md Ashfaqur Rahman Khan','date11012016':'Y','date21022016':'Y','date01032016':'Y','date10042016':'Y','date15052016':'Y','date22062016':'N'},
-          {'sId':'160105016','sName':'Mahzabin Musfikamomo','date11012016':'N','date21022016':'Y','date01032016':'Y','date10042016':'Y','date15052016':'Y','date22062016':'Y'},
-          {'sId':'160105017','sName':'Miftahul Islam','date11012016':'Y','date21022016':'Y','date01032016':'Y','date10042016':'Y','date15052016':'Y','date22062016':'Y'},
-          {'sId':'160105017','sName':'Rahul Khan','date11012016':'Y','date21022016':'Y','date01032016':'Y','date10042016':'Y','date15052016':'Y','date22062016':'Y'}],
+       settings:{
+         colHeaders: true,
+         rowHeaders: true,
+         fixedColumnsLeft: 2,
+         width: 600,
+         height:400
+       },
+        items:[{'sId':'160105001','sName':'Sadia Sultana','date11012016':'Y','date21022016':'Y','date01032016':'Y','date10042016':'Y','date15052016':'Y','date22052016':'Y','date01062016':'Y','date07062016':'Y','date12062016':'Y','date25062016':'Y','date01072016':'Y','date03072016':'Y','date05072016':'Y','date07072016':'Y','date09072016':'Y','date11072016':'Y','date13072016':'Y'},
+          {'sId':'160105002','sName':'Md. Ferdous Wahed','date11012016':'Y','date21022016':'Y','date01032016':'N','date10042016':'Y','date15052016':'N','date22052016':'Y','date01062016':'Y','date07062016':'Y','date12062016':'Y','date25062016':'Y','date01072016':'Y','date03072016':'Y','date05072016':'Y','date07072016':'Y','date09072016':'Y','date11072016':'Y','date13072016':'Y'},
+          {'sId':'160105003','sName':'Tahsin Sarwar','date11012016':'Y','date21022016':'Y','date01032016':'Y','date10042016':'Y','date15052016':'Y','date22052016':'Y','date01062016':'Y','date07062016':'Y','date12062016':'Y','date25062016':'Y','date01072016':'Y','date03072016':'Y','date05072016':'Y','date07072016':'Y','date09072016':'Y','date11072016':'Y','date13072016':'Y'},
+          {'sId':'160105004','sName':'Abid Mahmud','date11012016':'N','date21022016':'Y','date01032016':'Y','date10042016':'Y','date15052016':'Y','date22052016':'Y','date01062016':'Y','date07062016':'Y','date12062016':'Y','date25062016':'Y','date01072016':'Y','date03072016':'Y','date05072016':'Y','date07072016':'Y','date09072016':'Y','date11072016':'Y','date13072016':'Y'},
+          {'sId':'160105005','sName':'Sudipta Mondal','date11012016':'Y','date21022016':'N','date01032016':'Y','date10042016':'Y','date15052016':'Y','date22052016':'Y','date01062016':'Y','date07062016':'Y','date12062016':'Y','date25062016':'Y','date01072016':'Y','date03072016':'Y','date05072016':'Y','date07072016':'Y','date09072016':'Y','date11072016':'Y','date13072016':'Y'},
+          {'sId':'160105006','sName':'Md. Farhan Fardus','date11012016':'Y','date21022016':'Y','date01032016':'Y','date10042016':'Y','date15052016':'Y','date22052016':'Y','date01062016':'Y','date07062016':'Y','date12062016':'Y','date25062016':'Y','date01072016':'Y','date03072016':'Y','date05072016':'Y','date07072016':'Y','date09072016':'Y','date11072016':'Y','date13072016':'Y'},
+          {'sId':'160105007','sName':'Farah Farzana Mou','date11012016':'Y','date21022016':'Y','date01032016':'N','date10042016':'Y','date15052016':'Y','date22052016':'Y','date01062016':'Y','date07062016':'Y','date12062016':'Y','date25062016':'Y','date01072016':'Y','date03072016':'Y','date05072016':'Y','date07072016':'Y','date09072016':'Y','date11072016':'Y','date13072016':'Y'},
+          {'sId':'160105008','sName':'Afsana Akter','date11012016':'Y','date21022016':'Y','date01032016':'Y','date10042016':'Y','date15052016':'Y','date22052016':'Y','date01062016':'Y','date07062016':'Y','date12062016':'Y','date25062016':'Y','date01072016':'Y','date03072016':'Y','date05072016':'Y','date07072016':'Y','date09072016':'Y','date11072016':'Y','date13072016':'Y'},
+          {'sId':'160105009','sName':'Md. Golam Saklaen','date11012016':'Y','date21022016':'Y','date01032016':'Y','date10042016':'Y','date15052016':'Y','date22052016':'Y','date01062016':'Y','date07062016':'Y','date12062016':'Y','date25062016':'Y','date01072016':'Y','date03072016':'Y','date05072016':'Y','date07072016':'Y','date09072016':'Y','date11072016':'Y','date13072016':'Y'},
+          {'sId':'160105010','sName':'Mir Hasibul Hasan','date11012016':'Y','date21022016':'Y','date01032016':'Y','date10042016':'Y','date15052016':'Y','date22052016':'N','date01062016':'Y','date07062016':'Y','date12062016':'Y','date25062016':'Y','date01072016':'Y','date03072016':'Y','date05072016':'Y','date07072016':'Y','date09072016':'Y','date11072016':'Y','date13072016':'Y'},
+          {'sId':'160105011','sName':'Syeda Meherin Haider','date11012016':'Y','date21022016':'Y','date01032016':'Y','date10042016':'Y','date15052016':'Y','date22052016':'Y','date01062016':'Y','date07062016':'Y','date12062016':'Y','date25062016':'Y','date01072016':'Y','date03072016':'Y','date05072016':'Y','date07072016':'Y','date09072016':'Y','date11072016':'Y','date13072016':'Y'},
+          {'sId':'160105012','sName':'Zannatul Mashrekee Hossain Kristy','date11012016':'Y','date21022016':'Y','date01032016':'Y','date10042016':'Y','date15052016':'Y','date22052016':'Y','date01062016':'Y','date07062016':'Y','date12062016':'Y','date25062016':'Y','date01072016':'Y','date03072016':'Y','date05072016':'Y','date07072016':'Y','date09072016':'Y','date11072016':'Y','date13072016':'Y'},
+          {'sId':'160105013','sName':'Ankit Dev','date11012016':'Y','date21022016':'Y','date01032016':'Y','date10042016':'N','date15052016':'Y','date22052016':'Y','date01062016':'Y','date07062016':'Y','date12062016':'Y','date25062016':'Y','date01072016':'Y','date03072016':'Y','date05072016':'Y','date07072016':'Y','date09072016':'Y','date11072016':'Y','date13072016':'Y'},
+          {'sId':'160105014','sName':'Farhana Islam Chowdhury Prity','date11012016':'Y','date21022016':'Y','date01032016':'Y','date10042016':'Y','date15052016':'N','date22052016':'Y','date01062016':'Y','date07062016':'Y','date12062016':'Y','date25062016':'Y','date01072016':'Y','date03072016':'Y','date05072016':'Y','date07072016':'Y','date09072016':'Y','date11072016':'Y','date13072016':'Y'},
+          {'sId':'160105015','sName':'Md Ashfaqur Rahman Khan','date11012016':'Y','date21022016':'Y','date01032016':'Y','date10042016':'Y','date15052016':'Y','date22052016':'N','date01062016':'Y','date07062016':'Y','date12062016':'Y','date25062016':'Y','date01072016':'Y','date03072016':'Y','date05072016':'Y','date07072016':'Y','date09072016':'Y','date11072016':'Y','date13072016':'Y'},
+          {'sId':'160105016','sName':'Mahzabin Musfikamomo','date11012016':'N','date21022016':'Y','date01032016':'Y','date10042016':'Y','date15052016':'Y','date22052016':'Y','date01062016':'Y','date07062016':'Y','date12062016':'Y','date25062016':'Y','date01072016':'Y','date03072016':'Y','date05072016':'Y','date07072016':'Y','date09072016':'Y','date11072016':'Y','date13072016':'Y'},
+          {'sId':'160105017','sName':'Miftahul Islam','date11012016':'Y','date21022016':'Y','date01032016':'Y','date10042016':'Y','date15052016':'Y','date22052016':'Y','date01062016':'Y','date07062016':'Y','date12062016':'Y','date25062016':'Y','date01072016':'Y','date03072016':'Y','date05072016':'Y','date07072016':'Y','date09072016':'Y','date11072016':'Y','date13072016':'Y'},
+          {'sId':'160105018','sName':'Rahul Khan','date11012016':'Y','date21022016':'Y','date01032016':'Y','date10042016':'Y','date15052016':'Y','date22052016':'Y','date01062016':'Y','date07062016':'Y','date12062016':'Y','date25062016':'Y','date01072016':'Y','date03072016':'Y','date05072016':'Y','date07072016':'Y','date09072016':'Y','date11072016':'Y','date13072016':'Y'},
+          {'sId':'160105019','sName':'Mir Hasibul Hasan','date11012016':'Y','date21022016':'Y','date01032016':'Y','date10042016':'Y','date15052016':'Y','date22052016':'N','date01062016':'Y','date07062016':'Y','date12062016':'Y','date25062016':'Y','date01072016':'Y','date03072016':'Y','date05072016':'Y','date07072016':'Y','date09072016':'Y','date11072016':'Y','date13072016':'Y'},
+          {'sId':'160105020','sName':'Syeda Meherin Haider','date11012016':'Y','date21022016':'Y','date01032016':'Y','date10042016':'Y','date15052016':'Y','date22062016':'Y','date01062016':'Y','date07062016':'Y','date12062016':'Y','date25062016':'Y','date01072016':'Y','date03072016':'Y','date05072016':'Y','date07072016':'Y','date09072016':'Y','date11072016':'Y','date13072016':'Y'},
+          {'sId':'160105021','sName':'Zannatul Mashrekee Hossain Kristy','date11012016':'Y','date21022016':'Y','date01032016':'Y','date10042016':'Y','date15052016':'Y','date22052016':'Y','date01062016':'Y','date07062016':'Y','date12062016':'Y','date25062016':'Y','date01072016':'Y','date03072016':'Y','date05072016':'Y','date07072016':'Y','date09072016':'Y','date11072016':'Y','date13072016':'Y'},
+          {'sId':'160105022','sName':'Ankit Dev','date11012016':'Y','date21022016':'Y','date01032016':'Y','date10042016':'N','date15052016':'Y','date22052016':'Y','date01062016':'Y','date07062016':'Y','date12062016':'Y','date25062016':'Y','date01072016':'Y','date03072016':'Y','date05072016':'Y','date07072016':'Y','date09072016':'Y','date11072016':'Y','date13072016':'Y'},
+          {'sId':'160105023','sName':'Farhana Islam Chowdhury Prity','date11012016':'Y','date21022016':'Y','date01032016':'Y','date10042016':'Y','date15052016':'N','date22052016':'Y','date01062016':'Y','date07062016':'Y','date12062016':'Y','date25062016':'Y','date01072016':'Y','date03072016':'Y','date05072016':'Y','date07072016':'Y','date09072016':'Y','date11072016':'Y','date13072016':'Y'},
+          {'sId':'160105024','sName':'Md Ashfaqur Rahman Khan','date11012016':'Y','date21022016':'Y','date01032016':'Y','date10042016':'Y','date15052016':'Y','date22052016':'N','date01062016':'Y','date07062016':'Y','date12062016':'Y','date25062016':'Y','date01072016':'Y','date03072016':'Y','date05072016':'Y','date07072016':'Y','date09072016':'Y','date11072016':'Y','date13072016':'Y'},
+          {'sId':'160105025','sName':'Mahzabin Musfikamomo','date11012016':'N','date21022016':'Y','date01032016':'Y','date10042016':'Y','date15052016':'Y','date22052016':'Y','date01062016':'Y','date07062016':'Y','date12062016':'Y','date25062016':'Y','date01072016':'Y','date03072016':'Y','date05072016':'Y','date07072016':'Y','date09072016':'Y','date11072016':'Y','date13072016':'Y'},
+          {'sId':'160105026','sName':'Miftahul Islam','date11012016':'Y','date21022016':'Y','date01032016':'Y','date10042016':'Y','date15052016':'Y','date22052016':'Y','date01062016':'Y','date07062016':'Y','date12062016':'Y','date25062016':'Y','date01072016':'Y','date03072016':'Y','date05072016':'Y','date07072016':'Y','date09072016':'Y','date11072016':'Y','date13072016':'Y'},
+          {'sId':'160105027','sName':'Rahul Khan','date11012016':'Y','date21022016':'Y','date01032016':'Y','date10042016':'Y','date15052016':'Y','date22052016':'Y','date01062016':'Y','date07062016':'Y','date12062016':'Y','date25062016':'Y','date01072016':'Y','date03072016':'Y','date05072016':'Y','date07072016':'Y','date09072016':'Y','date11072016':'Y','date13072016':'Y'}],
         columns: [
           {
             data: 'sId',
@@ -76,10 +94,65 @@ module ums {
             renderer: this.imageRenderer
           },
           {
-            data: 'date22062016',
+            data: 'date22052016',
             title: '22 May, 16',
             renderer: this.imageRenderer
           },
+          {
+            data: 'date01062016',
+            title: '01 Jun, 16',
+            renderer: this.imageRenderer
+          },
+          {
+            data: 'date07062016',
+            title: '07 Jun, 16',
+            renderer: this.imageRenderer
+          },
+          {
+            data: 'date12062016',
+            title: '12 Jun, 16',
+            renderer: this.imageRenderer
+          },
+          {
+            data: 'date25062016',
+            title: '25 Jun, 16',
+            renderer: this.imageRenderer
+          },
+          {
+            data: 'date01072016',
+            title: '01 Jul, 16',
+            renderer: this.imageRenderer
+          },
+          {
+            data: 'date03072016',
+            title: '03 Jul, 16',
+            renderer: this.imageRenderer
+          },
+          {
+            data: 'date05072016',
+            title: '05 Jul, 16',
+            renderer: this.imageRenderer
+          },
+          {
+            data: 'date07072016',
+            title: '07 Jul, 16',
+            renderer: this.imageRenderer
+          },
+          {
+            data: 'date09072016',
+            title: '09 Jul, 16',
+            renderer: this.imageRenderer
+          },
+          {
+            data: 'date11072016',
+            title: '11 Jul, 16',
+            renderer: this.imageRenderer
+          },
+          {
+            data: 'date13072016',
+            title: '13 Jul, 16',
+            renderer: this.imageRenderer
+          }
         ]
       };
 
@@ -177,7 +250,10 @@ module ums {
       return courseList;
     }
 
-
+private showAttendanceSheet(){
+  $("#courseSelectionDiv").hide(80);
+  $("#topArrowDiv").show(50);
+}
   }
 
   UMS.controller("AttendanceSheet", AttendanceSheet);

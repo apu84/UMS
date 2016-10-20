@@ -454,7 +454,6 @@ module ums {
       //$("#btn_stat").focus();
       $(window).scrollTop($('#panel_top').offset().top - 56);
 
-
     }
 
     private calculateTotalAndGradeLetter(student_id:string):void {
