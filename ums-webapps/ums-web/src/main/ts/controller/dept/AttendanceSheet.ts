@@ -29,8 +29,8 @@ module ums {
          colHeaders: true,
          rowHeaders: true,
          fixedColumnsLeft: 2,
-         width: 600,
-         height:400
+         width: $(".page-content").width(),
+         height:$( window ).height()-200
        },
         items:[{'sId':'160105001','sName':'Sadia Sultana','date11012016':'Y','date21022016':'Y','date01032016':'Y','date10042016':'Y','date15052016':'Y','date22052016':'Y','date01062016':'Y','date07062016':'Y','date12062016':'Y','date25062016':'Y','date01072016':'Y','date03072016':'Y','date05072016':'Y','date07072016':'Y','date09072016':'Y','date11072016':'Y','date13072016':'Y'},
           {'sId':'160105002','sName':'Md. Ferdous Wahed','date11012016':'Y','date21022016':'Y','date01032016':'N','date10042016':'Y','date15052016':'N','date22052016':'Y','date01062016':'Y','date07062016':'Y','date12062016':'Y','date25062016':'Y','date01072016':'Y','date03072016':'Y','date05072016':'Y','date07072016':'Y','date09072016':'Y','date11072016':'Y','date13072016':'Y'},
