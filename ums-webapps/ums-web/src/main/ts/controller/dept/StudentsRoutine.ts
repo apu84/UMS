@@ -26,6 +26,8 @@ module  ums{
     checker:any;
     routineStore:any;
     courseArr:Array<ICourse>
+    courseIdMapCourse:any;
+    department:any;
   }
 
   class IRoutineStore{
@@ -58,8 +60,8 @@ module  ums{
       $scope.checker = appConstants.timeChecker;
       var times:string[]=['08:00 am'];
       $scope.routineTime = appConstants.routineTime;
-      console.log('for day');
-      console.log($scope.days);
+      $scope.courseIdMapCourse={};
+      $scope.department=appConstants.deptLong;
       $scope.studentsRoutine = this.studentsRoutine.bind(this);
       $scope.getCourses = this.getCourses.bind(this);
 
@@ -68,43 +70,37 @@ module  ums{
     }
 
     private studentsRoutine(){
-      this.$scope.times=["08.00 AM","08.50 AM","09.40 AM","10.30 AM","11.20 AM","12.10 PM","01.00 PM","01.50 PM","02.40 PM","03.30 PM","04:20 PM","05.10 PM"];
+      this.$scope.times=["08:00 AM","08:50 AM","09:40 AM","10:30 AM","11:20 AM","12:10 PM","01:00 PM","01:50 PM","02:40 PM","03:30 PM","04:20 PM","05:10 PM"];
       this.$scope.timeChecker="08.00 AM";
       this.$scope.colspan=1;
 
-      this.getStudentInfo();
+      this.getStudentInfo().then((studentArr:Student)=>{
+
+      });
 
     }
 
     private createStudentsRoutine(routine:Array<IRoutine>){
 
-      console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!');
-      console.log(routine);
       var routineStoreArr: IRoutineStore[] = [];
-      console.log("-----course--arr-----");
-      console.log(this.$scope.courseArr);
+
 
       for(var d=0;d<this.$scope.days.length;d++){
 
         for(var i=0;i<12;i++){
           var found:boolean = false;
           for(var routines=0;routines<routine.length; routines++){
-            if(routine[routines].startTime == this.$scope.times[i] && routine[routines].day== this.$scope.days[d].id){
+
+            if(routine[routines].startTime == this.$scope.times[i] && routine[routines].day== Number(this.$scope.days[d].id)){
               var routineStore = new IRoutineStore();
               routineStore.day = "0"+routine[routines].day.toString();
               routineStore.colspan= routine[routines].duration.toString();   //routine[routines].courseId;
-              for(var course = 0; course<this.$scope.courseArr.length; course++){
-                if(this.$scope.courseArr[course].id == routine[routines].courseId){
-                  routineStore.courseId = this.$scope.courseArr[course].no;
-                }
-              }
-              console.log("----------");
-              console.log(routineStore.courseId);
+
+              routineStore.courseId = this.$scope.courseIdMapCourse[routine[routines].courseId].no;
+
               routineStore.roomNo = routine[routines].roomNo;
-              //console.log(routineStore);
               routineStoreArr.push(routineStore);
               i=i+(routine[routines].duration-1);
-              console.log(i);
               found = true;
               break;
             }
@@ -119,19 +115,16 @@ module  ums{
           }
         }
       }
-      console.log("ohh nooo");
 
 
       this.$scope.routineStore = routineStoreArr;
-      console.log(this.$scope.routineStore);
+
     }
 
     private getStudentRoutineBySemesterAndProgram(){
       this.httpClient.get('academic/routine/routineForStudent','application/json',(json:any,etag:string)=>{
             this.$scope.routines = json.entries;
-            console.log("*******routines***********");
-            console.log(this.$scope.routines);
-            console.log("*********routines*******");
+
             this.getCourses().then((courseArr:Array<ICourse>)=>{
               this.createStudentsRoutine(this.$scope.routines);
             });
@@ -157,31 +150,35 @@ module  ums{
           });
     }
 */
-    private getStudentInfo():void{
+    private getStudentInfo():ng.IPromise<any>{
       var defer = this.$q.defer();
       var studentArr: Array<any>;
-      this.httpClient.get('academic/student','application/json',(json:any,etag:string)=>{
-            this.$scope.student = json;
+      this.httpClient.get('academic/student/getStudentInfoById','application/json',(json:any,etag:string)=>{
+            this.$scope.student = json.entries;
+
             this.getStudentRoutineBySemesterAndProgram();
-            console.log("student: ");
             console.log(this.$scope.student);
+            defer.resolve(this.$scope.student);
 
           },
           (response:ng.IHttpPromiseCallbackArg<any>)=>{
             console.error(response);
           });
+      return defer.promise;
     }
 
     private getCourses():ng.IPromise<any>{
       var defer = this.$q.defer();
       var courseArr:Array<ICourse>;
-      this.httpClient.get('/ums-webservice-common/academic/course/semester/'+this.$scope.student.semesterId+'/program/'+this.$scope.student.programId+'/year/'+this.$scope.student.year+'/academicSemester/'+this.$scope.student.academicSemester, 'application/json',
+      this.httpClient.get('academic/course/semester/'+this.$scope.student[0].semesterId+'/program/'+this.$scope.student[0].programId+'/year/'+this.$scope.student[0].year+'/academicSemester/'+this.$scope.student[0].academicSemester, 'application/json',
           (json:any, etag:string) => {
             courseArr = json.entries;
-            this.$scope.courseArr = courseArr;
-            console.log("****courses*****");
-            console.log(courseArr);
-            console.log("****courses****");
+            this.$scope.courseArr=[];
+            for(var i=0;i<courseArr.length;i++){
+              this.$scope.courseIdMapCourse[courseArr[i].id] = courseArr[i];
+              this.$scope.courseArr.push(courseArr[i]);
+            }
+
             defer.resolve(courseArr);
           },
           (response:ng.IHttpPromiseCallbackArg<any>) => {

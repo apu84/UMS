@@ -78,6 +78,9 @@ public class StudentBuilder implements Builder<Student, MutableStudent> {
     if(pStudent.getAdviser().getId()!=null){
       pBuilder.add("adviser",pStudent.getAdviser().getId());
     }
+    if(pStudent.getTheorySection()!=null){
+      pBuilder.add("section",pStudent.getTheorySection());
+    }
 
     pBuilder.add("status",pStudent.getStatus().getId());
 

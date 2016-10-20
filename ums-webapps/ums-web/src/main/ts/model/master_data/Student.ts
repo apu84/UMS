@@ -10,6 +10,7 @@ module ums {
     departmentName:string;
     programName: string;
     programId: string;
+    section:string;
     semesterId: string;
     semesterName: string;
     year: number;

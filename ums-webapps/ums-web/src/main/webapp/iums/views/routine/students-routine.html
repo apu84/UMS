@@ -17,14 +17,14 @@
                         <div class="container">
                             <div class="text-center">
                                 <h4>AHSANULLAH UNIVERSITY OF SCIENCE AND TECHNOLOGY</h4>
-                                <h5>DEPARTMENT OF ELECTRICAL AND ELECTRONIC ENGINEERING</h5>
+                                <h5>{{department[student[0].departmentId]}}</h5>
                                 <h5></h5>
-                                <h5>CLASS SCHEDULE (Spring, 2016)</h5>
+                                <h5>CLASS SCHEDULE ({{student[0].semesterName}})</h5>
                                 <!--{{semesterName}}-->
                             </div>
                             <div class="row">
                                 <div class="text-center">
-                                    YEAR: 1    SEMESTER: 1    SECTION:A
+                                    YEAR: {{student[0].year}}    SEMESTER: {{student[0].academicSemester}}    SECTION:{{student[0].section}}
                                 </div>
                             </div>
                         </div>
