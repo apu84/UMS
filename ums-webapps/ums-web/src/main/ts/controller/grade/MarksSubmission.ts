@@ -236,6 +236,8 @@ module ums {
       });
 
       Utils.setValidationOptions("form-horizontal");
+
+
     }
 
 
@@ -435,6 +437,10 @@ module ums {
             this.$scope.gradeSubmissionStatus=part_info.statusId;
             this.$scope.courseType=part_info.courseType;
             this.$scope.currentActor = data.current_actor;
+
+            if(this.$scope.data.total_part==1)
+              this.$scope.toggleColumn = false;
+
             $("#partDiv").show();
 
             //Initialize ModalWindows
@@ -453,6 +459,7 @@ module ums {
       $("#selection2").show();
       //$("#btn_stat").focus();
       $(window).scrollTop($('#panel_top').offset().top - 56);
+
 
     }
 
@@ -865,14 +872,16 @@ module ums {
         allStudents = this.$scope.noneSubmittedGrades;
       else if(this.$scope.gradeSubmissionStatus == this.appConstants.marksSubmissionStatusEnum.REQUESTED_FOR_RECHECK_BY_SCRUTINIZER
           || this.$scope.gradeSubmissionStatus == this.appConstants.marksSubmissionStatusEnum.REQUESTED_FOR_RECHECK_BY_HEAD
-          || this.$scope.gradeSubmissionStatus == this.appConstants.marksSubmissionStatusEnum.REQUESTED_FOR_RECHECK_BY_COE)
+          || this.$scope.gradeSubmissionStatus == this.appConstants.marksSubmissionStatusEnum.REQUESTED_FOR_RECHECK_BY_COE) {
         allStudents = this.$scope.recheckCandidatesGrades;
-
+        console.log(this.$scope.recheckCandidatesGrades);
+      }
       for (var ind in allStudents) {
         var currentStudent:IStudentMarks = allStudents[ind];
         var studentMark:IStudentMarks;
         if (currentStudent.statusId == this.appConstants.marksStatusEnum.NONE
-            || currentStudent.statusId == this.appConstants.marksStatusEnum.SUBMIT) {
+            || currentStudent.statusId == this.appConstants.marksStatusEnum.SUBMIT
+            || this.appConstants.marksStatusEnum.SUBMITTED) {
           studentMark = <IStudentMarks>{};
           studentId = currentStudent.studentId;
           studentMark.studentId = studentId;
@@ -905,6 +914,7 @@ module ums {
 
     private saveAndSendToScrutinizer():void {
       var gradeList:Array<IStudentMarks> = this.getTargetGradeList(this.appConstants.marksStatusEnum.SUBMITTED);
+      console.log(gradeList);
       var validate:boolean = true;
       if(this.$scope.courseType=="THEORY") {
 

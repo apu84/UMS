@@ -70,6 +70,10 @@ module ums{
     getExistingStudentsOfAdviser:Function;
     existingStudetsOfAdivser:Array<Student>;
     assignedStudentsOfTheAdviser:number;
+    yearSemesterMapForFromStudents:any;   //probably not needed
+    yearSemestermapForToStudents:any;     // probably not needed
+    categorizedFormStudents:Array<ICategorizedStudents>;
+    categorizedToStudents:Array<ICategorizedStudents>;
 
     from11Student:Array<Student>;
     from12Student:Array<Student>;
@@ -97,6 +101,11 @@ module ums{
 
   }
 
+  interface ICategorizedStudents{
+    header:string;
+    key:number;
+    students:Array<Student>;
+  }
 
 
 
@@ -244,6 +253,10 @@ module ums{
 
 
       this.$scope.addedStudents=[];
+      this.$scope.yearSemesterMapForFromStudents={};
+      this.$scope.yearSemestermapForToStudents={};
+      this.$scope.categorizedFormStudents=[];
+      this.$scope.categorizedToStudents=[];
 
       defer.resolve("success");
       return defer.promise;
@@ -359,39 +372,42 @@ module ums{
 
 
     private insertIntoFromStudentsWithYearSemester(student:Student){
-      if(student.year==1 && student.academicSemester==1){
-        this.$scope.from11Student.push(student);
-      }
-      else if(student.year==1 && student.academicSemester==2){
-        this.$scope.from12Student.push(student);
-      }
-      else if(student.year==2 && student.academicSemester==1){
-        this.$scope.from21Student.push(student);
-      }
-      else if(student.year==2 && student.academicSemester==2){
-        this.$scope.from22Student.push(student);
-      }
-      else if(student.year==3 && student.academicSemester==1){
-        this.$scope.from31Student.push(student);
-      }
-      else if(student.year==3 && student.academicSemester==2){
-        this.$scope.from32Student.push(student);
-      }
-      else if(student.year==4 && student.academicSemester==1){
-        this.$scope.from41Student.push(student);
-      }
-      else if(student.year==4 && student.academicSemester==2){
-        this.$scope.from42Student.push(student);
-      }
-      else if(student.year==5 && student.academicSemester==1){
-        this.$scope.from51Student.push(student);
+      var header:string = student.year+" Year,"+student.academicSemester+" Semester";
+      var key= Number(String(student.year).concat(String(student.academicSemester)));
+      if(this.$scope.categorizedFormStudents.length==0){
+        this.$scope.categorizedFormStudents.push(this.pushNewValueIntoCategorizedStudents(student,header, key));
       }
       else{
-        this.$scope.from52Student.push(student);
+        var foundKey:boolean=false;
+        for(var i=0;i<this.$scope.categorizedFormStudents.length;i++){
+          if(this.$scope.categorizedFormStudents[i].key==key){
+            this.pushStudentIntoExistingCategorizedStudents(student,this.$scope.categorizedFormStudents[i]);
+            foundKey=true;
+            break;
+          }
+
+        }
+        if(foundKey==false){
+          this.pushNewValueIntoCategorizedStudents(student,header,key);
+        }
       }
+
     }
 
 
+    private pushNewValueIntoCategorizedStudents(student:Student,header,key):ICategorizedStudents{
+      var categorizedFromStudents=<ICategorizedStudents>{} ;
+      categorizedFromStudents.header=header;
+      categorizedFromStudents.key=key;
+      categorizedFromStudents.students=[];
+      categorizedFromStudents.students.push(student);
+      return categorizedFromStudents;
+    }
+
+
+    private pushStudentIntoExistingCategorizedStudents(student:Student,categorizedStudents:ICategorizedStudents){
+      categorizedStudents.students.push(student);
+    }
 
     private insertIntoToStudentsWithYearSemester(student:Student){
       if(student.year==1 && student.academicSemester==1){
