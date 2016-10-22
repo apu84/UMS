@@ -67,10 +67,14 @@ public class UgGradeSheetGenerator {
     List<StudentGradeDto> gradeList = examGradeManager.getAllGrades(semesterId, courseId, examType, course.getCourseType());
 
     document.open();
-    for (int i = 0; i < (gradeList.size() / 90) || (gradeList.size()<90 && i==0); i++) {
+    double totalPage=Math.ceil(Float.valueOf(gradeList.size()) / 90);
+    for (int i = 0; i < totalPage || (gradeList.size()<90 && i==0); i++) {
       if (i != 0)
         document.newPage();
-      PdfPTable mainTable = getMainTable();
+
+      PdfPTable secondColumnGradeTable=getGradeTable(gradeList, i * 90 + 46, 45, course.getCourseType(), examType);
+
+      PdfPTable mainTable = getMainTable(secondColumnGradeTable==null?1:3);
       PdfPCell cell = new PdfPCell(getSubTableHeader(course, gradeList.size(), semester.getName()));
       cell.setPadding(0);
       mainTable.addCell(cell);
@@ -79,9 +83,12 @@ public class UgGradeSheetGenerator {
       cell.setBorder(Rectangle.NO_BORDER);
       mainTable.addCell(cell);
 
-      cell = new PdfPCell(getSubTableHeader(course, gradeList.size(), semester.getName()));
-      cell.setPadding(0);
-      mainTable.addCell(cell);
+      if(secondColumnGradeTable!=null) {
+        cell = new PdfPCell(getSubTableHeader(course, gradeList.size(), semester.getName()));
+        cell.setPadding(0);
+        mainTable.addCell(cell);
+      }
+
 
       cell = new PdfPCell();
       cell.addElement(getGradeTable(gradeList, i * 90, 45, course.getCourseType(), examType));
@@ -89,15 +96,20 @@ public class UgGradeSheetGenerator {
       cell.setBorder(Rectangle.NO_BORDER);
       mainTable.addCell(cell);
 
-      cell = new PdfPCell(new Paragraph(""));
-      cell.setBorder(Rectangle.NO_BORDER);
-      mainTable.addCell(cell);
 
-      cell = new PdfPCell();
-      cell.addElement(getGradeTable(gradeList, i * 90 + 46, 45, course.getCourseType(), examType));
-      cell.setPadding(0);
-      cell.setBorder(Rectangle.NO_BORDER);
-      mainTable.addCell(cell);
+      if(secondColumnGradeTable!=null) {
+
+        cell = new PdfPCell(new Paragraph(""));
+        cell.setBorder(Rectangle.NO_BORDER);
+        mainTable.addCell(cell);
+
+
+        cell = new PdfPCell();
+        cell.addElement(secondColumnGradeTable);
+        cell.setPadding(0);
+        cell.setBorder(Rectangle.NO_BORDER);
+        mainTable.addCell(cell);
+      }
 
       document.add(mainTable);
 
@@ -110,11 +122,18 @@ public class UgGradeSheetGenerator {
     baos.writeTo(outputStream);
   }
 
-  public static PdfPTable getMainTable() throws DocumentException {
+  public static PdfPTable getMainTable(int totalGradeColumn) throws DocumentException {
     // a table with three columns
-    PdfPTable table = new PdfPTable(3);
-    table.setWidths(new int[]{9, 2, 9});
-    table.setWidthPercentage(100);
+    PdfPTable table = new PdfPTable(totalGradeColumn);
+    if(totalGradeColumn==3) {
+      table.setWidths(new int[]{9, 2, 9});
+      table.setWidthPercentage(100);
+    }
+    else {
+      table.setWidths(new int[]{1});
+      table.setWidthPercentage(45);
+    }
+
     // cell 1: location and times
 
     return table;
