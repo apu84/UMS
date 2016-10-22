@@ -23,4 +23,6 @@ public interface UGRegistrationResultManager extends ContentManager<UGRegistrati
   List<UGRegistrationResult> getRegisteredCourseByStudent(int pSemesterId, String pStudentId, CourseRegType pCourseRegType);
 
   List<UGRegistrationResult> getRegisteredCoursesWithResult(String pStudentId) throws Exception;
+
+  List<UGRegistrationResult> getResults(Integer pProgramId, Integer pSemesterId) throws Exception;
 }

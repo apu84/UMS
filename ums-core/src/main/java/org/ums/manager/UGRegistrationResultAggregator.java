@@ -21,8 +21,25 @@ public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecor
   @Override
   public List<UGRegistrationResult> getRegisteredCoursesWithResult(String pStudentId) throws Exception {
     List<UGRegistrationResult> resultList = super.getRegisteredCoursesWithResult(pStudentId);
-    Collections.sort(resultList, new ResultComparator());
+
     return aggregateResults(resultList);
+  }
+
+  @Override
+  public List<UGRegistrationResult> getResults(Integer pProgramId, Integer pSemesterId) throws Exception {
+    List<UGRegistrationResult> resultList = super.getResults(pProgramId, pSemesterId);
+
+    Map<String, List<UGRegistrationResult>> studentCourseGradeMap
+        = resultList.stream().collect(Collectors.groupingBy(UGRegistrationResult::getStudentId));
+
+    for (String studentId : studentCourseGradeMap.keySet()) {
+      Collections.sort(studentCourseGradeMap.get(studentId), new ResultComparator());
+      aggregateResults(studentCourseGradeMap.get(studentId));
+    }
+
+    return studentCourseGradeMap.values().stream()
+        .flatMap(List::stream)
+        .collect(Collectors.toList());
   }
 
   private List<UGRegistrationResult> aggregateResults(List<UGRegistrationResult> pResults) throws Exception {
@@ -68,7 +85,7 @@ public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecor
       } catch (Exception e) {
         mLogger.error(e.getMessage(), e);
       }
-      throw new NullPointerException("Can not sort result");
+      throw new NullPointerException("Can not sort result for processing grades");
     }
   }
 }
