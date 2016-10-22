@@ -75,28 +75,7 @@ module ums{
     categorizedFormStudents:Array<ICategorizedStudents>;
     categorizedToStudents:Array<ICategorizedStudents>;
 
-    from11Student:Array<Student>;
-    from12Student:Array<Student>;
-    from21Student:Array<Student>;
-    from22Student:Array<Student>;
-    from31Student:Array<Student>;
-    from32Student:Array<Student>;
-    from41Student:Array<Student>;
-    from42Student:Array<Student>;
-    from51Student:Array<Student>;
-    from52Student:Array<Student>;
 
-
-    to11Student:Array<Student>;
-    to12Student:Array<Student>;
-    to21Student:Array<Student>;
-    to22Student:Array<Student>;
-    to31Student:Array<Student>;
-    to32Student:Array<Student>;
-    to41Student:Array<Student>;
-    to42Student:Array<Student>;
-    to51Student:Array<Student>;
-    to52Student:Array<Student>;
 
 
   }
@@ -197,57 +176,19 @@ module ums{
       var defer = this.$q.defer();
       if(type==1){
         this.$scope.fromStudents=[];
-        this.$scope.from11Student=[];
-        this.$scope.from12Student=[];
-        this.$scope.from31Student=[];
-        this.$scope.from32Student=[];
-        this.$scope.from41Student=[];
-        this.$scope.from42Student=[];
-        this.$scope.from21Student=[];
-        this.$scope.from22Student=[];
-        this.$scope.from51Student=[];
-        this.$scope.from52Student=[];
+
 
       }
       else if (type==2){
         this.$scope.toStudents=[];
-        this.$scope.to11Student=[];
-        this.$scope.to12Student=[];
-        this.$scope.to21Student=[];
-        this.$scope.to22Student=[];
-        this.$scope.to31Student=[];
-        this.$scope.to32Student=[];
-        this.$scope.to41Student=[];
-        this.$scope.to42Student=[];
-        this.$scope.to51Student=[];
-        this.$scope.to52Student=[];
+
 
       }
       else{
         this.$scope.fromStudents=[];
         //this.$scope.toStudents = [];
 
-        this.$scope.from11Student=[];
-        this.$scope.from12Student=[];
-        this.$scope.from31Student=[];
-        this.$scope.from32Student=[];
-        this.$scope.from41Student=[];
-        this.$scope.from42Student=[];
-        this.$scope.from21Student=[];
-        this.$scope.from22Student=[];
-        this.$scope.from51Student=[];
-        this.$scope.from52Student=[];
 
-        this.$scope.to11Student=[];
-        this.$scope.to12Student=[];
-        this.$scope.to21Student=[];
-        this.$scope.to22Student=[];
-        this.$scope.to31Student=[];
-        this.$scope.to32Student=[];
-        this.$scope.to41Student=[];
-        this.$scope.to42Student=[];
-        this.$scope.to51Student=[];
-        this.$scope.to52Student=[];
       }
 
 
@@ -299,7 +240,6 @@ module ums{
     }
 
     private viewStudentByIdAndAdviser(){
-      console.log("here u will see adviser names...");
       this.$scope.showAdviserName = true;
       this.$scope.showStudentId=false;
       this.$scope.showStudentName=false;
@@ -307,8 +247,6 @@ module ums{
 
     private assignTeacherId(teacher:any){
       this.$scope.teacherId = teacher;
-      console.log("THis is new teacher id:");
-      console.log(this.$scope.teacherId);
     }
 
 
@@ -373,7 +311,7 @@ module ums{
 
     private insertIntoFromStudentsWithYearSemester(student:Student){
       var header:string = student.year+" Year,"+student.academicSemester+" Semester";
-      var key= Number(String(student.year).concat(String(student.academicSemester)));
+      var key= Number(String(student.year)+""+(String(student.academicSemester)));
       if(this.$scope.categorizedFormStudents.length==0){
         this.$scope.categorizedFormStudents.push(this.pushNewValueIntoCategorizedStudents(student,header, key));
       }
@@ -388,9 +326,13 @@ module ums{
 
         }
         if(foundKey==false){
-          this.pushNewValueIntoCategorizedStudents(student,header,key);
+          this.$scope.categorizedFormStudents.push(this.pushNewValueIntoCategorizedStudents(student,header,key));
         }
       }
+
+      this.$scope.categorizedToStudents.sort((a,b)=>{
+        return Number(b.key)-Number(a.key);
+      });
 
     }
 
@@ -410,44 +352,36 @@ module ums{
     }
 
     private insertIntoToStudentsWithYearSemester(student:Student){
-      if(student.year==1 && student.academicSemester==1){
-        this.$scope.to11Student.push(student);
-      }
-      else if(student.year==1 && student.academicSemester==2){
-        this.$scope.to12Student.push(student);
-      }
-      else if(student.year==2 && student.academicSemester==1){
-        this.$scope.to21Student.push(student);
-      }
-      else if(student.year==2 && student.academicSemester==2){
-        this.$scope.to22Student.push(student);
-      }
-      else if(student.year==3 && student.academicSemester==1){
-        this.$scope.to31Student.push(student);
-      }
-      else if(student.year==3 && student.academicSemester==2){
-        this.$scope.to32Student.push(student);
-      }
-      else if(student.year==4 && student.academicSemester==1){
-        this.$scope.to41Student.push(student);
-      }
-      else if(student.year==4 && student.academicSemester==2){
-        this.$scope.to42Student.push(student);
-      }
-      else if(student.year==5 && student.academicSemester==1){
-        this.$scope.to51Student.push(student);
+      var header:string = student.year+" Year,"+student.academicSemester+" Semester";
+      var key= Number(String(student.year)+""+(String(student.academicSemester)));
+      if(this.$scope.categorizedToStudents.length==0){
+        this.$scope.categorizedToStudents.push(this.pushNewValueIntoCategorizedStudents(student,header, key));
       }
       else{
-        this.$scope.to52Student.push(student);
+        var foundKey:boolean=false;
+        for(var i=0;i<this.$scope.categorizedToStudents.length;i++){
+          if(this.$scope.categorizedToStudents[i].key==key){
+            this.pushStudentIntoExistingCategorizedStudents(student,this.$scope.categorizedToStudents[i]);
+            foundKey=true;
+            break;
+          }
+
+        }
+        if(foundKey==false){
+           this.$scope.categorizedToStudents.push(this.pushNewValueIntoCategorizedStudents(student,header,key)) ;
+        }
       }
+
+      this.$scope.categorizedToStudents.sort((a,b)=>{
+        return Number(b.key)-Number(a.key);
+      });
     }
 
     private getStudentsOfATeacher(teacherId:string,type:number):ng.IPromise<any>{
       var defer = this.$q.defer();
       this.studentService.getActiveStudentsOfTheTeacher(teacherId).then((students:Array<Student>)=>{
         this.$scope.assignedStudentsOfTheAdviser = angular.copy(students.length);
-        console.log("Student number");
-        console.log(this.$scope.assignedStudentsOfTheAdviser);
+
         for(var i=0;i<students.length;i++){
           students[i].backgroundColor="#DEF";
 
@@ -550,7 +484,6 @@ module ums{
     private getActiveTeachers(){
       this.employeeService.getActiveTeacherByDept().then((teachers:Array<IEmployee>)=>{
         this.$scope.teachers=[];
-        console.log(teachers);
         this.$scope.teacherIdWithTeacherMap={};
         //this.$scope.teachers = teachers;
         for(var i=0;i<teachers.length;i++){
@@ -570,7 +503,6 @@ module ums{
 
     private getActiveStudentsOfDept(){
       this.studentService.getActiveStudentsByDepartment().then((students:Array<Student>)=>{
-        //console.log(students);
         this.$scope.students=[];
         this.$scope.studentIds=[];
         this.$scope.studentIdsExt=[];
@@ -603,19 +535,15 @@ module ums{
     }
 
     private addStudents(){
-      console.log("** in the addStudents() **");
-      console.log("showing loader");
+
       this.$scope.showLoader=true;
       this.addStudentOfRange().then((data:any)=>{
         this.$scope.showLoader=false;
-        console.log(this.$scope.showLoader);
       });
       //this.enableSaveButton();
 
 
-      console.log("Added students");
-      console.log(this.$scope.addedStudents);
-      //this.$scope.$apply();
+
 
     }
 
@@ -666,14 +594,11 @@ module ums{
     }
 
     private enableSaveButton(){
-      console.log("I am in the enable save section");
-      console.log("teacher id--->"+this.$scope.teacherId);
-      console.log(this.$scope.existingStudetsOfAdivser);
+
       if(this.$scope.addedStudents.length>0){
         this.$scope.showSaveButton=true;
       }
 
-      console.log(this.$scope.showSaveButton);
     }
 
     private save(){
@@ -759,7 +684,6 @@ module ums{
         jsonObject.push(item);
       }
 
-      console.log(jsonObject);
       completeJson["entries"] = jsonObject;
       defer.resolve(completeJson);
       return defer.promise;

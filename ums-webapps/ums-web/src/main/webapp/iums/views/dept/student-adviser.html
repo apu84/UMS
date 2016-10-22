@@ -186,8 +186,7 @@
                                     </div>
                                     <br>
 
-                                    <div class="row">
-                                        <div data-ng-if="showLoader==false && showStudentsByYearSemester==false">
+                                    <div class="row"  data-ng-if="showLoader==false && showStudentsByYearSemester==false">
                                             <ul>
                                                 <li class="rounded" ng-style="{background:a.backgroundColor}"
                                                     data-ng-repeat="a in fromStudents track by a.id"
@@ -201,222 +200,29 @@
                                                     </div>
                                                 </li>
                                             </ul>
-                                        </div>
-                                        <!--**************************************************-->
+
+
+                                    </div>
+                                    <div class="row" data-ng-if="showLoader==false && showStudentsByYearSemester==true">
                                         <div data-ng-if="showLoader==false && showStudentsByYearSemester==true">
-                                            <div data-ng-if="from11Student.length>0">
+                                            <div data-ng-repeat="s in categorizedFormStudents">
                                                 <hr>
-                                                <label class="labels"
-                                                       style="background-color: darkslategray;color: whitesmoke;">1st
-                                                    Year 1st Semester</label>
-                                                <ul>
-                                                    <li class="rounded" ng-style="{background:a.backgroundColor}"
-                                                        data-ng-repeat="a in from11Student track by a.id"
-                                                        ng-click="changeColor(a)">
-                                                        <div style="padding: 2%" data-ng-if="showStudentId">{{a.id}}
-                                                        </div>
-                                                        <div data-ng-if="showStudentName">
-                                                            {{a.id}}<br>{{a.fullName}}
-                                                            <div data-ng-if="showAdviserName">
+                                                <b>{{s.header}}</b><br>
+                                                <li class="rounded" ng-style="{background:a.backgroundColor}"
+                                                    data-ng-repeat="a in s.students track by a.id"
+                                                    ng-click="changeColor(a)">
+                                                    <div style="padding: 2%" data-ng-if="showStudentId">{{a.id}}
+                                                    </div>
+                                                    <div data-ng-if="showStudentName">
+                                                        {{a.id}}<br>{{a.fullName}}
+                                                        <div data-ng-if="showAdviserName">
 
-                                                            </div>
                                                         </div>
-                                                    </li>
-                                                </ul>
-                                                <br>
-
+                                                    </div>
+                                                </li>
                                             </div>
-                                            <div data-ng-if="from12Student.length>0">
-                                                <hr>
-                                                <label class="labels"
-                                                       style="background-color: darkslategray;color: whitesmoke;">1st
-                                                    Year 1st Semester</label>
-                                                <ul>
-                                                    <li class="rounded" ng-style="{background:a.backgroundColor}"
-                                                        data-ng-repeat="a in from12Student track by a.id"
-                                                        ng-click="changeColor(a)">
-                                                        <div style="padding: 2%" data-ng-if="showStudentId">{{a.id}}
-                                                        </div>
-                                                        <div data-ng-if="showStudentName">
-                                                            {{a.id}}<br>{{a.fullName}}
-                                                            <div data-ng-if="showAdviserName">
-
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                                <br>
-                                            </div>
-                                            <div data-ng-if="from21Student.length>0">
-                                                <hr>
-                                                <label class="labels"
-                                                       style="background-color: darkslategray;color: whitesmoke;">2nd
-                                                    Year 1st Semester</label>
-                                                <ul>
-                                                    <li class="rounded" ng-style="{background:a.backgroundColor}"
-                                                        data-ng-repeat="a in from21Student track by a.id"
-                                                        ng-click="changeColor(a)">
-                                                        <div style="padding: 2%" data-ng-if="showStudentId">{{a.id}}
-                                                        </div>
-                                                        <div data-ng-if="showStudentName">
-                                                            {{a.id}}<br>{{a.fullName}}
-                                                            <div data-ng-if="showAdviserName">
-
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                                <br>
-                                            </div>
-                                            <div data-ng-if="from22Student.length>0">
-                                                <hr>
-                                                <label class="labels"
-                                                       style="background-color: darkslategray;color: whitesmoke;">2nd
-                                                    Year 2nd Semester</label>
-                                                <ul>
-                                                    <li class="rounded" ng-style="{background:a.backgroundColor}"
-                                                        data-ng-repeat="a in from22Student track by a.id"
-                                                        ng-click="changeColor(a)">
-                                                        <div style="padding: 2%" data-ng-if="showStudentId">{{a.id}}
-                                                        </div>
-                                                        <div data-ng-if="showStudentName">
-                                                            {{a.id}}<br>{{a.fullName}}
-                                                            <div data-ng-if="showAdviserName">
-
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                                <br>
-                                            </div>
-                                            <div data-ng-if="from31Student.length>0">
-                                                <hr>
-                                                <label class="labels"
-                                                       style="background-color: darkslategray;color: whitesmoke;">3rd
-                                                    Year 1st Semester</label>
-                                                <ul>
-                                                    <li class="rounded" ng-style="{background:a.backgroundColor}"
-                                                        data-ng-repeat="a in from31Student track by a.id"
-                                                        ng-click="changeColor(a)">
-                                                        <div style="padding: 2%" data-ng-if="showStudentId">{{a.id}}
-                                                        </div>
-                                                        <div data-ng-if="showStudentName">
-                                                            {{a.id}}<br>{{a.fullName}}
-                                                            <div data-ng-if="showAdviserName">
-
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                                <br>
-                                            </div>
-                                            <div data-ng-if="from32Student.length>0">
-                                                <hr>
-                                                <label class="labels"
-                                                       style="background-color: darkslategray;color: whitesmoke;">3rd
-                                                    2nd Semester</label>
-                                                <ul>
-                                                    <li class="rounded" ng-style="{background:a.backgroundColor}"
-                                                        data-ng-repeat="a in from32Student track by a.id"
-                                                        ng-click="changeColor(a)">
-                                                        <div style="padding: 2%" data-ng-if="showStudentId">{{a.id}}
-                                                        </div>
-                                                        <div data-ng-if="showStudentName">
-                                                            {{a.id}}<br>{{a.fullName}}
-                                                            <div data-ng-if="showAdviserName">
-
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                                <br>
-                                            </div>
-                                            <div data-ng-if="from41Student.length>0">
-                                                <hr>
-                                                <label class="labels"
-                                                       style="background-color: darkslategray;color: whitesmoke;">4th
-                                                    Year 1st Semester</label>
-                                                <ul>
-                                                    <li class="rounded" ng-style="{background:a.backgroundColor}"
-                                                        data-ng-repeat="a in from41Student track by a.id"
-                                                        ng-click="changeColor(a)">
-                                                        <div style="padding: 2%" data-ng-if="showStudentId">{{a.id}}
-                                                        </div>
-                                                        <div data-ng-if="showStudentName">
-                                                            {{a.id}}<br>{{a.fullName}}
-                                                            <div data-ng-if="showAdviserName">
-
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                                <br>
-                                            </div>
-                                            <div data-ng-if="from42Student.length>0">
-                                                <hr>
-                                                <label class="labels"
-                                                       style="background-color: darkslategray;color: whitesmoke;">4th
-                                                    year 2nd Semester</label>
-                                                <ul>
-                                                    <li class="rounded" ng-style="{background:a.backgroundColor}"
-                                                        data-ng-repeat="a in from42Student track by a.id"
-                                                        ng-click="changeColor(a)">
-                                                        <div style="padding: 2%" data-ng-if="showStudentId">{{a.id}}
-                                                        </div>
-                                                        <div data-ng-if="showStudentName">
-                                                            {{a.id}}<br>{{a.fullName}}
-                                                            <div data-ng-if="showAdviserName">
-
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                                <br>
-                                            </div>
-                                            <div data-ng-if="from51Student.length>0">
-                                                <hr>
-                                                <label class="labels"
-                                                       style="background-color: darkslategray;color: whitesmoke;">5th
-                                                    Year 1st Semester</label>
-                                                <ul>
-                                                    <li class="rounded" ng-style="{background:a.backgroundColor}"
-                                                        data-ng-repeat="a in from51Student track by a.id"
-                                                        ng-click="changeColor(a)">
-                                                        <div style="padding: 2%" data-ng-if="showStudentId">{{a.id}}
-                                                        </div>
-                                                        <div data-ng-if="showStudentName">
-                                                            {{a.id}}<br>{{a.fullName}}
-                                                            <div data-ng-if="showAdviserName">
-
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                                <br>
-                                            </div>
-                                            <div data-ng-if="from52Student.length>0">
-                                                <hr>
-                                                <label class="labels"
-                                                       style="background-color: darkslategray;color: whitesmoke;">1st
-                                                    Year 1st Semester</label>
-                                                <ul>
-                                                    <li class="rounded" ng-style="{background:a.backgroundColor}"
-                                                        data-ng-repeat="a in from52Student track by a.id"
-                                                        ng-click="changeColor(a)">
-                                                        <div style="padding: 2%" data-ng-if="showStudentId">{{a.id}}
-                                                        </div>
-                                                        <div data-ng-if="showStudentName">
-                                                            {{a.id}}<br>{{a.fullName}}
-                                                            <div data-ng-if="showAdviserName">
-
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                                <br>
-                                            </div>
-
                                         </div>
+
                                     </div>
                                 </div>
 
@@ -452,208 +258,21 @@
                                     </div>
                                     <div class="row" data-ng-if="showLoader==false && showStudentsByYearSemester==true">
                                         <div data-ng-if="showLoader==false && showStudentsByYearSemester==true">
-                                            <div data-ng-if="to11Student.length>0">
+                                            <div data-ng-repeat="s in categorizedToStudents">
                                                 <hr>
-                                                <label class="labels"
-                                                       style="background-color: darkslategray;color: whitesmoke;">1st
-                                                    Year 1st Semester</label>
-                                                <ul>
-                                                    <li class="rounded" ng-style="{background:a.backgroundColor}"
-                                                        data-ng-repeat="a in to11Student track by a.id">
-                                                        <div style="padding: 2%" data-ng-if="showStudentId">{{a.id}}
-                                                        </div>
-                                                        <div data-ng-if="showStudentName">
-                                                            {{a.id}}<br>{{a.fullName}}
-                                                            <div data-ng-if="showAdviserName">
+                                                <b>{{s.header}}</b><br>
+                                                <li class="rounded" ng-style="{background:a.backgroundColor}"
+                                                    data-ng-repeat="a in s.students track by a.id">
+                                                    <div style="padding: 2%" data-ng-if="showStudentId">{{a.id}}
+                                                    </div>
+                                                    <div data-ng-if="showStudentName">
+                                                        {{a.id}}<br>{{a.fullName}}
+                                                        <div data-ng-if="showAdviserName">
 
-                                                            </div>
                                                         </div>
-                                                    </li>
-                                                </ul>
-                                                <br>
-
+                                                    </div>
+                                                </li>
                                             </div>
-                                            <div data-ng-if="to12Student.length>0">
-                                                <hr>
-                                                <label class="labels"
-                                                       style="background-color: darkslategray;color: whitesmoke;">1st
-                                                    Year 1st Semester</label>
-                                                <ul>
-                                                    <li class="rounded" ng-style="{background:a.backgroundColor}"
-                                                        data-ng-repeat="a in to12Student track by a.id">
-                                                        <div style="padding: 2%" data-ng-if="showStudentId">{{a.id}}
-                                                        </div>
-                                                        <div data-ng-if="showStudentName">
-                                                            {{a.id}}<br>{{a.fullName}}
-                                                            <div data-ng-if="showAdviserName">
-
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                                <br>
-                                            </div>
-                                            <div data-ng-if="to21Student.length>0">
-                                                <hr>
-                                                <label class="labels"
-                                                       style="background-color: darkslategray;color: whitesmoke;">2nd
-                                                    Year 1st Semester</label>
-                                                <ul>
-                                                    <li class="rounded" ng-style="{background:a.backgroundColor}"
-                                                        data-ng-repeat="a in to21Student track by a.id">
-                                                        <div style="padding: 2%" data-ng-if="showStudentId">{{a.id}}
-                                                        </div>
-                                                        <div data-ng-if="showStudentName">
-                                                            {{a.id}}<br>{{a.fullName}}
-                                                            <div data-ng-if="showAdviserName">
-
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                                <br>
-                                            </div>
-                                            <div data-ng-if="to22Student.length>0">
-                                                <hr>
-                                                <label class="labels"
-                                                       style="background-color: darkslategray;color: whitesmoke;">2nd
-                                                    Year 2nd Semester</label>
-                                                <ul>
-                                                    <li class="rounded" ng-style="{background:a.backgroundColor}"
-                                                        data-ng-repeat="a in to22Student track by a.id">
-                                                        <div style="padding: 2%" data-ng-if="showStudentId">{{a.id}}
-                                                        </div>
-                                                        <div data-ng-if="showStudentName">
-                                                            {{a.id}}<br>{{a.fullName}}
-                                                            <div data-ng-if="showAdviserName">
-
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                                <br>
-                                            </div>
-                                            <div data-ng-if="to31Student.length>0">
-                                                <hr>
-                                                <label class="labels"
-                                                       style="background-color: darkslategray;color: whitesmoke;">3rd
-                                                    Year 1st Semester</label>
-                                                <ul>
-                                                    <li class="rounded" ng-style="{background:a.backgroundColor}"
-                                                        data-ng-repeat="a in to31Student track by a.id">
-                                                        <div style="padding: 2%" data-ng-if="showStudentId">{{a.id}}
-                                                        </div>
-                                                        <div data-ng-if="showStudentName">
-                                                            {{a.id}}<br>{{a.fullName}}
-                                                            <div data-ng-if="showAdviserName">
-
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                                <br>
-                                            </div>
-                                            <div data-ng-if="to32Student.length>0">
-                                                <hr>
-                                                <label class="labels"
-                                                       style="background-color: darkslategray;color: whitesmoke;">3rd
-                                                    2nd Semester</label>
-                                                <ul>
-                                                    <li class="rounded" ng-style="{background:a.backgroundColor}"
-                                                        data-ng-repeat="a in to32Student track by a.id">
-                                                        <div style="padding: 2%" data-ng-if="showStudentId">{{a.id}}
-                                                        </div>
-                                                        <div data-ng-if="showStudentName">
-                                                            {{a.id}}<br>{{a.fullName}}
-                                                            <div data-ng-if="showAdviserName">
-
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                                <br>
-                                            </div>
-                                            <div data-ng-if="to41Student.length>0">
-                                                <hr>
-                                                <label class="labels"
-                                                       style="background-color: darkslategray;color: whitesmoke;">4th
-                                                    Year 1st Semester</label>
-                                                <ul>
-                                                    <li class="rounded" ng-style="{background:a.backgroundColor}"
-                                                        data-ng-repeat="a in to41Student track by a.id">
-                                                        <div style="padding: 2%" data-ng-if="showStudentId">{{a.id}}
-                                                        </div>
-                                                        <div data-ng-if="showStudentName">
-                                                            {{a.id}}<br>{{a.fullName}}
-                                                            <div data-ng-if="showAdviserName">
-
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                                <br>
-                                            </div>
-                                            <div data-ng-if="to42Student.length>0">
-                                                <hr>
-                                                <label class="labels"
-                                                       style="background-color: darkslategray;color: whitesmoke;">4th
-                                                    year 2nd Semester</label>
-                                                <ul>
-                                                    <li class="rounded" ng-style="{background:a.backgroundColor}"
-                                                        data-ng-repeat="a in to42Student track by a.id">
-                                                        <div style="padding: 2%" data-ng-if="showStudentId">{{a.id}}
-                                                        </div>
-                                                        <div data-ng-if="showStudentName">
-                                                            {{a.id}}<br>{{a.fullName}}
-                                                            <div data-ng-if="showAdviserName">
-
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                                <br>
-                                            </div>
-                                            <div data-ng-if="to51Student.length>0">
-                                                <hr>
-                                                <label class="labels"
-                                                       style="background-color: darkslategray;color: whitesmoke;">5th
-                                                    Year 1st Semester</label>
-                                                <ul>
-                                                    <li class="rounded" ng-style="{background:a.backgroundColor}"
-                                                        data-ng-repeat="a in to51Student track by a.id">
-                                                        <div style="padding: 2%" data-ng-if="showStudentId">{{a.id}}
-                                                        </div>
-                                                        <div data-ng-if="showStudentName">
-                                                            {{a.id}}<br>{{a.fullName}}
-                                                            <div data-ng-if="showAdviserName">
-
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                                <br>
-                                            </div>
-                                            <div data-ng-if="to52Student.length>0">
-                                                <hr>
-                                                <label class="labels"
-                                                       style="background-color: darkslategray;color: whitesmoke;">1st
-                                                    Year 1st Semester</label>
-                                                <ul>
-                                                    <li class="rounded" ng-style="{background:a.backgroundColor}"
-                                                        data-ng-repeat="a in to52Student track by a.id">
-                                                        <div style="padding: 2%" data-ng-if="showStudentId">{{a.id}}
-                                                        </div>
-                                                        <div data-ng-if="showStudentName">
-                                                            {{a.id}}<br>{{a.fullName}}
-                                                            <div data-ng-if="showAdviserName">
-
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                                <br>
-                                            </div>
-
                                         </div>
 
                                     </div>
