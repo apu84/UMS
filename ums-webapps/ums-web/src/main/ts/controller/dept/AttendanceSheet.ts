@@ -1,6 +1,7 @@
 module ums {
   interface IAttr extends ng.IScope {
     test123:Function;
+    insertColo:Function;
     loadingVisibility:any;
     contentVisibility:any;
     data:any;
@@ -23,15 +24,20 @@ module ums {
       $scope.loadingVisibility = false;
       $scope.contentVisibility = false;
       $scope.test123=this.test123.bind(this);
+      $scope.insertColo=this.insertColo.bind(this);
+
+
       $scope.showAttendanceSheet=this.showAttendanceSheet.bind(this);
       $scope.data = {
        settings:{
          colHeaders: true,
          rowHeaders: true,
          fixedColumnsLeft: 2,
-         width: 600,
-         height:400
+         width: $(".page-content").width(),
+         height:$( window ).height()-200
        },
+       // items:[["160105001","Sadia Sultana","Y","N","Y","Y","N","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y"]]
+
         items:[{'sId':'160105001','sName':'Sadia Sultana','date11012016':'Y','date21022016':'Y','date01032016':'Y','date10042016':'Y','date15052016':'Y','date22052016':'Y','date01062016':'Y','date07062016':'Y','date12062016':'Y','date25062016':'Y','date01072016':'Y','date03072016':'Y','date05072016':'Y','date07072016':'Y','date09072016':'Y','date11072016':'Y','date13072016':'Y'},
           {'sId':'160105002','sName':'Md. Ferdous Wahed','date11012016':'Y','date21022016':'Y','date01032016':'N','date10042016':'Y','date15052016':'N','date22052016':'Y','date01062016':'Y','date07062016':'Y','date12062016':'Y','date25062016':'Y','date01072016':'Y','date03072016':'Y','date05072016':'Y','date07072016':'Y','date09072016':'Y','date11072016':'Y','date13072016':'Y'},
           {'sId':'160105003','sName':'Tahsin Sarwar','date11012016':'Y','date21022016':'Y','date01032016':'Y','date10042016':'Y','date15052016':'Y','date22052016':'Y','date01062016':'Y','date07062016':'Y','date12062016':'Y','date25062016':'Y','date01072016':'Y','date03072016':'Y','date05072016':'Y','date07072016':'Y','date09072016':'Y','date11072016':'Y','date13072016':'Y'},
@@ -59,6 +65,7 @@ module ums {
           {'sId':'160105025','sName':'Mahzabin Musfikamomo','date11012016':'N','date21022016':'Y','date01032016':'Y','date10042016':'Y','date15052016':'Y','date22052016':'Y','date01062016':'Y','date07062016':'Y','date12062016':'Y','date25062016':'Y','date01072016':'Y','date03072016':'Y','date05072016':'Y','date07072016':'Y','date09072016':'Y','date11072016':'Y','date13072016':'Y'},
           {'sId':'160105026','sName':'Miftahul Islam','date11012016':'Y','date21022016':'Y','date01032016':'Y','date10042016':'Y','date15052016':'Y','date22052016':'Y','date01062016':'Y','date07062016':'Y','date12062016':'Y','date25062016':'Y','date01072016':'Y','date03072016':'Y','date05072016':'Y','date07072016':'Y','date09072016':'Y','date11072016':'Y','date13072016':'Y'},
           {'sId':'160105027','sName':'Rahul Khan','date11012016':'Y','date21022016':'Y','date01032016':'Y','date10042016':'Y','date15052016':'Y','date22052016':'Y','date01062016':'Y','date07062016':'Y','date12062016':'Y','date25062016':'Y','date01072016':'Y','date03072016':'Y','date05072016':'Y','date07072016':'Y','date09072016':'Y','date11072016':'Y','date13072016':'Y'}],
+
         columns: [
           {
             data: 'sId',
@@ -212,6 +219,116 @@ module ums {
       var exportPlugin = hot_instance.getPlugin('exportFile');
       console.log(data);
       exportPlugin.downloadFile('csv', {filename: 'MyFile'});
+    }
+
+    private insertColo(){
+      var hot = this.hotRegisterer.getInstance("foo");
+      hot.updateSettings({
+        columns: [
+          {
+            data: 'sId',
+            title: 'Student Id'
+          },
+          {
+            data: 'sName',
+            title: 'Student Name'
+          },
+          {
+            data: 'new',
+            title: 'new',
+            renderer: this.imageRenderer
+          },
+          {
+            data: 'date11012016',
+            title: '11 Jan, 16',
+            renderer: this.imageRenderer
+          },
+          {
+            data: 'date21022016',
+            title: '21 Feb, 16',
+            renderer: this.imageRenderer
+          },
+          {
+            data: 'date01032016',
+            title: '01 Mar, 16',
+            renderer: this.imageRenderer
+          },
+          {
+            data: 'date10042016',
+            title: '10 Apr, 16',
+            renderer: this.imageRenderer
+          },
+          {
+            data: 'date15052016',
+            title: '15 Mar, 16',
+            renderer: this.imageRenderer
+          },
+          {
+            data: 'date22052016',
+            title: '22 May, 16',
+            renderer: this.imageRenderer
+          },
+          {
+            data: 'date01062016',
+            title: '01 Jun, 16',
+            renderer: this.imageRenderer
+          },
+          {
+            data: 'date07062016',
+            title: '07 Jun, 16',
+            renderer: this.imageRenderer
+          },
+          {
+            data: 'date12062016',
+            title: '12 Jun, 16',
+            renderer: this.imageRenderer
+          },
+          {
+            data: 'date25062016',
+            title: '25 Jun, 16',
+            renderer: this.imageRenderer
+          },
+          {
+            data: 'date01072016',
+            title: '01 Jul, 16',
+            renderer: this.imageRenderer
+          },
+          {
+            data: 'date03072016',
+            title: '03 Jul, 16',
+            renderer: this.imageRenderer
+          },
+          {
+            data: 'date05072016',
+            title: '05 Jul, 16',
+            renderer: this.imageRenderer
+          },
+          {
+            data: 'date07072016',
+            title: '07 Jul, 16',
+            renderer: this.imageRenderer
+          },
+          {
+            data: 'date09072016',
+            title: '09 Jul, 16',
+            renderer: this.imageRenderer
+          },
+          {
+            data: 'date11072016',
+            title: '11 Jul, 16',
+            renderer: this.imageRenderer
+          },
+          {
+            data: 'date13072016',
+            title: '13 Jul, 16',
+            renderer: this.imageRenderer
+          }
+        ]
+      });
+      var a=hot.countRows();
+      for(var i=0;i<a;i++){
+        hot.setDataAtCell(i,2,'Y');
+      }
     }
     private fetchCourseInfo(): void {
 

@@ -121,6 +121,7 @@
 /// <reference path='controller/dept/OptionalCoursesOffer.ts'/>
 /// <reference path='controller/semester/SemesterSettingParameter.ts'/>
 /// <reference path='controller/dept/ClassRoutine.ts'/>
+/// <reference path='controller/dept/AttendanceSheet.ts'/>
 /// <reference path='controller/logger/LoggerGrid.ts'/>
 /// <reference path='controller/course-material/CourseMaterial.ts'/>
 /// <reference path='controller/course-material/StudentCourseMaterial.ts'/>
@@ -155,6 +156,9 @@
 /// <reference path='model/master_data/Semester.ts'/>
 /// <reference path='model/master_data/Student.ts'/>
 /// <reference path='model/master_data/Syllabus.ts'/>
+
+
+
 
 /// <reference path='directive/ContextMenuSeatplan.ts'/>
 /// <reference path='directive/CourseRegTypeLegend.ts'/>
