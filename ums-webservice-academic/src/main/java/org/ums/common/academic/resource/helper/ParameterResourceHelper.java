@@ -22,7 +22,7 @@ import java.net.URI;
  * Created by My Pc on 3/13/2016.
  */
 @Component
-public class ParameterResourceHelper extends ResourceHelper<Parameter,MutableParameter,String> {
+public class ParameterResourceHelper extends ResourceHelper<Parameter, MutableParameter, String> {
 
   @Autowired
   private ParameterManager mManager;
@@ -31,18 +31,18 @@ public class ParameterResourceHelper extends ResourceHelper<Parameter,MutablePar
   private ParameterBuilder mBuilder;
 
   @Override
-  public  Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
     MutableParameter mutableParameter = new PersistentParameter();
     LocalCache localCache = new LocalCache();
-    getBuilder().build(mutableParameter,pJsonObject,localCache);
+    getBuilder().build(mutableParameter, pJsonObject, localCache);
     mutableParameter.commit(false);
-    URI contextURI = pUriInfo.getBaseUriBuilder().path(ParameterResource.class,"get").build(mutableParameter.getId());
+    URI contextURI =
+        pUriInfo.getBaseUriBuilder().path(ParameterResource.class, "get")
+            .build(mutableParameter.getId());
     Response.ResponseBuilder builder = Response.created(contextURI);
     builder.status(Response.Status.CREATED);
     return builder.build();
   }
-
-
 
   @Override
   public ContentManager<Parameter, MutableParameter, String> getContentManager() {

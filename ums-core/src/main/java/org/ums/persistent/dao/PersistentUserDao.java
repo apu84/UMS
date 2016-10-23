@@ -14,14 +14,19 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentUserDao extends UserDaoDecorator {
-  static String SELECT_ALL = "SELECT USER_ID, PASSWORD, ROLE_ID,EMPLOYEE_ID, STATUS, TEMP_PASSWORD,PR_TOKEN,TOKEN_GENERATED_ON FROM USERS ";
-  static String UPDATE_ALL = "UPDATE USERS SET PASSWORD = ?, ROLE_ID = ?, STATUS = ?, TEMP_PASSWORD = ? ";
+  static String SELECT_ALL =
+      "SELECT USER_ID, PASSWORD, ROLE_ID,EMPLOYEE_ID, STATUS, TEMP_PASSWORD,PR_TOKEN,TOKEN_GENERATED_ON FROM USERS ";
+  static String UPDATE_ALL =
+      "UPDATE USERS SET PASSWORD = ?, ROLE_ID = ?, STATUS = ?, TEMP_PASSWORD = ? ";
   static String UPDATE_PASSWORD = "UPDATE USERS SET PASSWORD=? ";
-  static String CLEAR_PASSWORD_RESET_TOKEN = "UPDATE USERS SET PR_TOKEN=NULL,TOKEN_GENERATED_ON=NULL  ";
+  static String CLEAR_PASSWORD_RESET_TOKEN =
+      "UPDATE USERS SET PR_TOKEN=NULL,TOKEN_GENERATED_ON=NULL  ";
   static String DELETE_ALL = "DELETE FROM USERS ";
-  static String INSERT_ALL = "INSERT INTO USERS(USER_ID, PASSWORD, ROLE_ID, STATUS, TEMP_PASSWORD) VALUES " +
-      "(?, ?, ?, ?, ?)";
-  static String UPDATE_PASSWORD_RESET_TOKEN = "Update USERS Set PR_TOKEN=?,TOKEN_GENERATED_ON=SYSDATE Where User_Id=? ";
+  static String INSERT_ALL =
+      "INSERT INTO USERS(USER_ID, PASSWORD, ROLE_ID, STATUS, TEMP_PASSWORD) VALUES "
+          + "(?, ?, ?, ?, ?)";
+  static String UPDATE_PASSWORD_RESET_TOKEN =
+      "Update USERS Set PR_TOKEN=?,TOKEN_GENERATED_ON=SYSDATE Where User_Id=? ";
   String EXISTS = "SELECT COUNT(USER_ID) EXIST FROM USERS ";
 
   private JdbcTemplate mJdbcTemplate;
@@ -39,15 +44,17 @@ public class PersistentUserDao extends UserDaoDecorator {
   @Override
   public User get(String pId) throws Exception {
     String query = SELECT_ALL + "WHERE USER_ID = ?";
-    return mJdbcTemplate.queryForObject(query, new Object[]{pId}, new UserRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new UserRowMapper());
   }
 
   @Override
   public int update(MutableUser pMutable) throws Exception {
     String query = UPDATE_ALL + "WHERE USER_ID = ?";
-    return mJdbcTemplate.update(query, pMutable.getPassword() == null ? "" : String.valueOf(pMutable.getPassword()),
-        pMutable.getPrimaryRole().getId(), pMutable.isActive(),
-        pMutable.getTemporaryPassword() == null ? "" : String.valueOf(pMutable.getPassword()), pMutable.getId());
+    return mJdbcTemplate.update(query,
+        pMutable.getPassword() == null ? "" : String.valueOf(pMutable.getPassword()), pMutable
+            .getPrimaryRole().getId(), pMutable.isActive(),
+        pMutable.getTemporaryPassword() == null ? "" : String.valueOf(pMutable.getPassword()),
+        pMutable.getId());
   }
 
   @Override
@@ -62,7 +69,6 @@ public class PersistentUserDao extends UserDaoDecorator {
     return mJdbcTemplate.update(query, pUserId);
   }
 
-
   @Override
   public int delete(MutableUser pMutable) throws Exception {
     String query = DELETE_ALL + "WHERE USER_ID = ?";
@@ -76,8 +82,14 @@ public class PersistentUserDao extends UserDaoDecorator {
 
   @Override
   public int create(MutableUser pMutable) throws Exception {
-    return mJdbcTemplate.update(INSERT_ALL, pMutable.getId(), pMutable.getPassword() == null ? "" : String.valueOf(pMutable.getPassword()),
-        pMutable.getPrimaryRole().getId(), pMutable.isActive(), pMutable.getTemporaryPassword() == null ? "" : String.valueOf(pMutable.getTemporaryPassword()));
+    return mJdbcTemplate.update(
+        INSERT_ALL,
+        pMutable.getId(),
+        pMutable.getPassword() == null ? "" : String.valueOf(pMutable.getPassword()),
+        pMutable.getPrimaryRole().getId(),
+        pMutable.isActive(),
+        pMutable.getTemporaryPassword() == null ? "" : String.valueOf(pMutable
+            .getTemporaryPassword()));
   }
 
   @Override
@@ -97,14 +109,16 @@ public class PersistentUserDao extends UserDaoDecorator {
     public User mapRow(ResultSet rs, int rowNum) throws SQLException {
       MutableUser user = new PersistentUser();
       user.setId(rs.getString("USER_ID"));
-      user.setPassword(rs.getString("PASSWORD") == null ? null : rs.getString("PASSWORD").toCharArray());
+      user.setPassword(rs.getString("PASSWORD") == null ? null : rs.getString("PASSWORD")
+          .toCharArray());
       user.setPrimaryRoleId(rs.getInt("ROLE_ID"));
       user.setActive(rs.getBoolean("STATUS"));
-      user.setTemporaryPassword((rs.getString("TEMP_PASSWORD") == null ? null : rs.getString("TEMP_PASSWORD").toCharArray()));
+      user.setTemporaryPassword((rs.getString("TEMP_PASSWORD") == null ? null : rs.getString(
+          "TEMP_PASSWORD").toCharArray()));
       user.setPasswordResetToken(rs.getString("PR_TOKEN"));
-      user.setEmployeeId(rs.getString("EMPLOYEE_ID")==null?"":rs.getString("EMPLOYEE_ID"));
+      user.setEmployeeId(rs.getString("EMPLOYEE_ID") == null ? "" : rs.getString("EMPLOYEE_ID"));
       Timestamp timestamp = rs.getTimestamp("TOKEN_GENERATED_ON");
-      if (timestamp != null)
+      if(timestamp != null)
         user.setPasswordTokenGenerateDateTime(new java.util.Date(timestamp.getTime()));
 
       AtomicReference<User> atomicReference = new AtomicReference<>(user);

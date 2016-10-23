@@ -86,19 +86,22 @@ public class StudentBuilder implements Builder<Student, MutableStudent> {
 
   }
 
-  public void build(final MutableStudent pMutableStudent,
-                    final JsonObject pJsonObject,
-                    final LocalCache pLocalCache) throws Exception {
+  public void build(final MutableStudent pMutableStudent, final JsonObject pJsonObject,
+      final LocalCache pLocalCache) throws Exception {
 
-    /*Validator validator = new StudentValidator();
-    validator.validate(pJsonObject);*/
+    /*
+     * Validator validator = new StudentValidator(); validator.validate(pJsonObject);
+     */
 
     pMutableStudent.setId(pJsonObject.getString("id"));
     pMutableStudent.setFullName(pJsonObject.getString("fullName"));
-    if(pJsonObject.getJsonObject("programSelector")!=null){
-      pMutableStudent.setDepartmentId(pJsonObject.getJsonObject("programSelector").getString("departmentId"));
-      pMutableStudent.setProgramId(Integer.parseInt(pJsonObject.getJsonObject("programSelector").getString("programId")));
-    }else{
+    if(pJsonObject.getJsonObject("programSelector") != null) {
+      pMutableStudent.setDepartmentId(pJsonObject.getJsonObject("programSelector").getString(
+          "departmentId"));
+      pMutableStudent.setProgramId(Integer.parseInt(pJsonObject.getJsonObject("programSelector")
+          .getString("programId")));
+    }
+    else {
 
       pMutableStudent.setDepartmentId(pJsonObject.getString("departmentId"));
       pMutableStudent.setProgramId(pJsonObject.getInt("programId"));
@@ -118,7 +121,7 @@ public class StudentBuilder implements Builder<Student, MutableStudent> {
     pMutableStudent.setGuardianMobileNo(pJsonObject.getString("guardianMobileNo"));
     pMutableStudent.setGuardianPhoneNo(pJsonObject.getString("guardianPhoneNo"));
     pMutableStudent.setGuardianEmail(pJsonObject.getString("guardianEmail"));
-    if(pJsonObject.getString("adviser")!=null){
+    if(pJsonObject.getString("adviser") != null) {
       PersistentTeacher teacher = new PersistentTeacher();
       teacher.setId(pJsonObject.getString("adviser"));
       pMutableStudent.setAdviser(teacher);

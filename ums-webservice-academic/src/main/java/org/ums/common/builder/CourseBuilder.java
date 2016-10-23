@@ -81,45 +81,49 @@ public class CourseBuilder implements Builder<Course, MutableCourse> {
   }
 
   @Override
-  public void build(final MutableCourse pMutable, final JsonObject pJsonObject, final LocalCache pLocalCache) throws Exception {
+  public void build(final MutableCourse pMutable, final JsonObject pJsonObject,
+      final LocalCache pLocalCache) throws Exception {
 
-    //pMutable.setId(pJsonObject.getString("courseId"));
-    String couseIdMiddle=(pJsonObject.getString("syllabusId").substring(4,8)).equalsIgnoreCase("01")?"S":"F"+pJsonObject.getString("syllabusId").substring(4,8);
-    pMutable.setId(pJsonObject.getString("courseNumber").trim()+"_"+couseIdMiddle+"_"+pJsonObject.getString("programId"));
+    // pMutable.setId(pJsonObject.getString("courseId"));
+    String couseIdMiddle =
+        (pJsonObject.getString("syllabusId").substring(4, 8)).equalsIgnoreCase("01") ? "S" : "F"
+            + pJsonObject.getString("syllabusId").substring(4, 8);
+    pMutable.setId(pJsonObject.getString("courseNumber").trim() + "_" + couseIdMiddle + "_"
+        + pJsonObject.getString("programId"));
     pMutable.setNo(pJsonObject.getString("courseNumber"));
     pMutable.setTitle(pJsonObject.getString("courseTitle"));
     pMutable.setCrHr(Float.parseFloat(pJsonObject.getString("creditHour")));
-    pMutable.setCourseType(CourseType.values()[Integer.parseInt(pJsonObject.getString("courseTypeId"))]);
-    pMutable.setCourseCategory(CourseCategory.values()[Integer.parseInt(pJsonObject.getString("courseCategoryId"))]);
+    pMutable.setCourseType(CourseType.values()[Integer.parseInt(pJsonObject
+        .getString("courseTypeId"))]);
+    pMutable.setCourseCategory(CourseCategory.values()[Integer.parseInt(pJsonObject
+        .getString("courseCategoryId"))]);
     pMutable.setYear(Integer.parseInt(pJsonObject.getString("academicYearId")));
     pMutable.setSemester(Integer.parseInt(pJsonObject.getString("academicSemesterId")));
 
-    PersistentDepartment persistentDepartment=new PersistentDepartment();
+    PersistentDepartment persistentDepartment = new PersistentDepartment();
     persistentDepartment.setId(pJsonObject.getString("offerByDeptId"));
     pMutable.setOfferedBy(persistentDepartment);
 
-    persistentDepartment=new PersistentDepartment();
+    persistentDepartment = new PersistentDepartment();
     persistentDepartment.setId(pJsonObject.getString("offerToDeptId"));
     pMutable.setOfferedTo(persistentDepartment);
 
     pMutable.setSyllabusId(pJsonObject.getString("syllabusId"));
     pMutable.setViewOrder(Integer.parseInt(pJsonObject.getString("viewOrder")));
-    Integer groupId = StringUtils.isEmpty(pJsonObject.getString("optionalGroupId")) ? Types.NULL: Integer.parseInt(pJsonObject.getString("optionalGroupId"));
+    Integer groupId =
+        StringUtils.isEmpty(pJsonObject.getString("optionalGroupId")) ? Types.NULL : Integer
+            .parseInt(pJsonObject.getString("optionalGroupId"));
     pMutable.setCourseGroupId(groupId);
 
-
-
-
-    //Unnecessary. No use of it in any Use Case. If any Use case need this then we will open it again
+    // Unnecessary. No use of it in any Use Case. If any Use case need this then we will open it
+    // again
     /*
-    if (pJsonObject.containsKey("offerdBy")) {
-      pMutable.setOfferedBy(mDepartmentManager.get(pJsonObject.getInt("offeredBy")));
-    }
-    if (pJsonObject.containsKey("group")) {
-      pMutable.setCourseGroup(mCourseGroupManager.get(pJsonObject.getInt("group")));
-    }
-        pMutable.setSyllabus(mSyllabusManager.get(pJsonObject.getString("syllabus")));
-    */
+     * if (pJsonObject.containsKey("offerdBy")) {
+     * pMutable.setOfferedBy(mDepartmentManager.get(pJsonObject.getInt("offeredBy"))); } if
+     * (pJsonObject.containsKey("group")) {
+     * pMutable.setCourseGroup(mCourseGroupManager.get(pJsonObject.getInt("group"))); }
+     * pMutable.setSyllabus(mSyllabusManager.get(pJsonObject.getString("syllabus")));
+     */
 
   }
 }

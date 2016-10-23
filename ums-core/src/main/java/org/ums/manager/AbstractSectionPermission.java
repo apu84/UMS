@@ -14,27 +14,26 @@ public abstract class AbstractSectionPermission extends BaseFileContentPermissio
   protected CourseTeacherManager mCourseTeacherManager;
 
   public AbstractSectionPermission(final BearerAccessTokenManager pBearerAccessTokenManager,
-                           final UserManager pUserManager,
-                           final MessageResource pMessageResource,
-                           final CourseTeacherManager pCourseTeacherManager) {
+      final UserManager pUserManager, final MessageResource pMessageResource,
+      final CourseTeacherManager pCourseTeacherManager) {
     super(pBearerAccessTokenManager, pUserManager, pMessageResource);
     mCourseTeacherManager = pCourseTeacherManager;
   }
 
-  protected boolean hasPermission(final Path pTargetPath,
-                                  final List<String> pSections,
-                                  final Student pStudent) throws Exception {
+  protected boolean hasPermission(final Path pTargetPath, final List<String> pSections,
+      final Student pStudent) throws Exception {
     String type = getUserDefinedProperty(FOLDER_TYPE, pTargetPath);
 
-    if (!StringUtils.isEmpty(type)) {
-      switch (type) {
+    if(!StringUtils.isEmpty(type)) {
+      switch(type) {
         case FOLDER_TYPE_ASSIGNMENT:
           boolean hasSectionPermission = false;
-          for (String section : pSections) {
-            //need to check optional courses section as well
-            if ((!StringUtils.isEmpty(pStudent.getTheorySection()) && !StringUtils.isEmpty(pStudent.getSessionalSection()))
-                && (section.equalsIgnoreCase(pStudent.getTheorySection())
-                || section.equalsIgnoreCase(pStudent.getSessionalSection()))) {
+          for(String section : pSections) {
+            // need to check optional courses section as well
+            if((!StringUtils.isEmpty(pStudent.getTheorySection()) && !StringUtils.isEmpty(pStudent
+                .getSessionalSection()))
+                && (section.equalsIgnoreCase(pStudent.getTheorySection()) || section
+                    .equalsIgnoreCase(pStudent.getSessionalSection()))) {
               hasSectionPermission = true;
             }
           }
@@ -48,12 +47,12 @@ public abstract class AbstractSectionPermission extends BaseFileContentPermissio
   }
 
   protected List<String> permittedSections(final String pOwner, final Integer pSemesterId,
-                                           final String pCourseId) throws Exception {
+      final String pCourseId) throws Exception {
     User creator = mUserManager.get(pOwner);
-    List<CourseTeacher> courseTeacherSections
-        = mCourseTeacherManager.getAssignedSections(pSemesterId, pCourseId, creator.getEmployeeId());
+    List<CourseTeacher> courseTeacherSections =
+        mCourseTeacherManager.getAssignedSections(pSemesterId, pCourseId, creator.getEmployeeId());
     List<String> sectionList = new ArrayList<>();
-    for (CourseTeacher courseTeacher : courseTeacherSections) {
+    for(CourseTeacher courseTeacher : courseTeacherSections) {
       sectionList.add(courseTeacher.getSection());
     }
     return sectionList;

@@ -28,8 +28,8 @@ import java.util.List;
  * Created by My Pc on 3/15/2016.
  */
 @Component
-public class ParameterSettingResourceHelper extends ResourceHelper<ParameterSetting,MutableParameterSetting,String> {
-
+public class ParameterSettingResourceHelper extends
+    ResourceHelper<ParameterSetting, MutableParameterSetting, String> {
 
   @Autowired
   private ParameterSettingManager mManager;
@@ -40,82 +40,85 @@ public class ParameterSettingResourceHelper extends ResourceHelper<ParameterSett
   @Autowired
   private ParameterSettingBuilder mBuilder;
 
-
   @Override
-  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception
-  {
+  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
     MutableParameterSetting mutableParameterSetting = new PersistentParameterSetting();
     LocalCache localCache = new LocalCache();
-    getBuilder().build(mutableParameterSetting,pJsonObject,localCache);
+    getBuilder().build(mutableParameterSetting, pJsonObject, localCache);
     mutableParameterSetting.commit(false);
 
-    URI contextURI = pUriInfo.getBaseUriBuilder().path(ParameterSettingResource.class).path(ParameterSettingResource.class,"get").build("0");
+    URI contextURI =
+        pUriInfo.getBaseUriBuilder().path(ParameterSettingResource.class)
+            .path(ParameterSettingResource.class, "get").build("0");
     Response.ResponseBuilder builder = Response.created(contextURI);
     builder.status(Response.Status.CREATED);
     return builder.build();
   }
 
-  public JsonObject getBySemester(final int pSemesterId, final Request pRequest, final UriInfo pUriInfo) throws Exception{
+  public JsonObject getBySemester(final int pSemesterId, final Request pRequest,
+      final UriInfo pUriInfo) throws Exception {
     List<ParameterSetting> parameterSettings = getContentManager().getBySemester(pSemesterId);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-    for(ParameterSetting parameters: parameterSettings){
-      children.add(toJson(parameters,pUriInfo,localCache));
+    for(ParameterSetting parameters : parameterSettings) {
+      children.add(toJson(parameters, pUriInfo, localCache));
     }
 
-    object.add("entries",children);
+    object.add("entries", children);
     localCache.invalidate();
 
     return object.build();
   }
 
-  public JsonObject getByParameterIdAndSemesterId(final int pParameterId,final int pSemesterId, final Request pRequest, final UriInfo pUriInfo) throws Exception{
-    ParameterSetting parameterSettings = getContentManager().getBySemesterAndParameterId(pParameterId,pSemesterId);
+  public JsonObject getByParameterIdAndSemesterId(final int pParameterId, final int pSemesterId,
+      final Request pRequest, final UriInfo pUriInfo) throws Exception {
+    ParameterSetting parameterSettings =
+        getContentManager().getBySemesterAndParameterId(pParameterId, pSemesterId);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
 
-    children.add(toJson(parameterSettings,pUriInfo,localCache));
+    children.add(toJson(parameterSettings, pUriInfo, localCache));
 
-    object.add("entries",children);
+    object.add("entries", children);
     localCache.invalidate();
 
     return object.build();
   }
 
-
-  public JsonObject getByParameterAndSemesterId(final String parameter, final Request pRequest, final UriInfo pUriInfo) throws Exception{
+  public JsonObject getByParameterAndSemesterId(final String parameter, final Request pRequest,
+      final UriInfo pUriInfo) throws Exception {
     String mStudentId = SecurityUtils.getSubject().getPrincipal().toString();
     Student student = mStudentManager.get(mStudentId);
-    ParameterSetting parameterSettings = getContentManager().getByParameterAndSemesterId(parameter,student.getSemester().getId());
+    ParameterSetting parameterSettings =
+        getContentManager().getByParameterAndSemesterId(parameter, student.getSemester().getId());
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
 
-    children.add(toJson(parameterSettings,pUriInfo,localCache));
+    children.add(toJson(parameterSettings, pUriInfo, localCache));
 
-    object.add("entries",children);
+    object.add("entries", children);
     localCache.invalidate();
 
     return object.build();
   }
 
-  public JsonObject getAllInfo(final UriInfo pUriInfo) throws Exception{
+  public JsonObject getAllInfo(final UriInfo pUriInfo) throws Exception {
     List<ParameterSetting> parameterSettings = getContentManager().getAll();
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-    for(ParameterSetting parameters: parameterSettings){
-      children.add(toJson(parameters,pUriInfo,localCache));
+    for(ParameterSetting parameters : parameterSettings) {
+      children.add(toJson(parameters, pUriInfo, localCache));
     }
 
-    object.add("entries",children);
+    object.add("entries", children);
     localCache.invalidate();
 
     return object.build();
   }
-
 
   @Override
   public ParameterSettingManager getContentManager() {

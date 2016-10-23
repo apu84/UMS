@@ -13,7 +13,8 @@ import java.util.Map;
 public interface UGBaseRegistration extends Serializable, Identifier<Integer>, LastModifier {
   String getCourseId();
 
-  Course getCourse() throws Exception;   // will provide course_id,course_no and course_title for UG_Registration_Result.
+  Course getCourse() throws Exception; // will provide course_id,course_no and course_title for
+                                       // UG_Registration_Result.
 
   Integer getSemesterId();
 
@@ -27,13 +28,13 @@ public interface UGBaseRegistration extends Serializable, Identifier<Integer>, L
 
   ExamType getExamType();
 
-  CourseRegType getType(); //Type="Carry","Clearance","Improvement"
+  CourseRegType getType(); // Type="Carry","Clearance","Improvement"
 
   String getCourseNo();
 
   String getCourseTitle();
 
-  String getExamDate(); //is required for getting exam date for clearance exam.
+  String getExamDate(); // is required for getting exam date for clearance exam.
 
   String getMessage();
 }

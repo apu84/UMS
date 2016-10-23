@@ -7,8 +7,7 @@ import org.ums.resource.Resource;
 /**
  * Created by My Pc on 08-Aug-16.
  */
-public class MutableStudentRecordResource extends Resource{
-
+public class MutableStudentRecordResource extends Resource {
 
   @Autowired
   StudentRecordResourceHelper mHelper;

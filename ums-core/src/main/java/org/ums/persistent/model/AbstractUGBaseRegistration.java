@@ -41,8 +41,7 @@ public abstract class AbstractUGBaseRegistration implements MutableUGBaseRegistr
   private String mLastModified;
   private String mMessage;
 
-  public AbstractUGBaseRegistration() {
-  }
+  public AbstractUGBaseRegistration() {}
 
   public AbstractUGBaseRegistration(final MutableUGBaseRegistration pMutableUGBaseRegistration) {
     setCourseId(pMutableUGBaseRegistration.getCourseId());
@@ -57,7 +56,7 @@ public abstract class AbstractUGBaseRegistration implements MutableUGBaseRegistr
 
   @Override
   public String getMessage() {
-    if (mMessage == null) {
+    if(mMessage == null) {
       mMessage = "null";
     }
     return mMessage;
@@ -102,7 +101,6 @@ public abstract class AbstractUGBaseRegistration implements MutableUGBaseRegistr
   public Integer getId() {
     return mId;
   }
-
 
   @Override
   public void setType(CourseRegType pType) {
@@ -150,7 +148,8 @@ public abstract class AbstractUGBaseRegistration implements MutableUGBaseRegistr
 
   @Override
   public Semester getSemester() throws Exception {
-    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager.validate(mSemester);
+    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
+        .validate(mSemester);
   }
 
   @Override

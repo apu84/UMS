@@ -23,9 +23,9 @@ public class AdditionalRolePermissionsResource extends Resource {
   @GET
   @Path(PATH_PARAM_OBJECT_ID)
   public JsonObject getAdditionalRolePermissions(final @Context Request pRequest,
-                                          final @PathParam("object-id") String pUserId) throws Exception {
-    return mAdditionalRolePermissionsHelper
-        .getUserAdditionalRolePermissionsByAssignedBy(pUserId, SecurityUtils.getSubject().getPrincipal().toString(), mUriInfo);
+      final @PathParam("object-id") String pUserId) throws Exception {
+    return mAdditionalRolePermissionsHelper.getUserAdditionalRolePermissionsByAssignedBy(pUserId,
+        SecurityUtils.getSubject().getPrincipal().toString(), mUriInfo);
   }
 
   @POST

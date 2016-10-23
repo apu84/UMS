@@ -10,6 +10,7 @@ import javax.ws.rs.ext.Provider;
 public class ValidationExceptionMapper implements ExceptionMapper<ValidationException> {
   @Override
   public Response toResponse(ValidationException e) {
-    return Response.status(Response.Status.BAD_REQUEST).entity(new ExceptionResponse("ValidationException", e.getMessage())).build();
+    return Response.status(Response.Status.BAD_REQUEST)
+        .entity(new ExceptionResponse("ValidationException", e.getMessage())).build();
   }
 }

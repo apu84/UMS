@@ -1,6 +1,5 @@
 package org.ums.common.builder;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
@@ -40,17 +39,18 @@ public class SemesterBuilder implements Builder<Semester, MutableSemester> {
         .path(String.valueOf(pSemester.getId())).build().toString());
   }
 
-  public void build(final MutableSemester pMutableSemester, JsonObject pJsonObject, final LocalCache pLocalCache) throws Exception {
+  public void build(final MutableSemester pMutableSemester, JsonObject pJsonObject,
+      final LocalCache pLocalCache) throws Exception {
     int id = Integer.parseInt(pJsonObject.getString("id"));
     String name = pJsonObject.getString("name");
     String startDate = pJsonObject.getString("startDate");
-    //int program = Integer.parseInt(pJsonObject.getString("programTypeId"));
+    // int program = Integer.parseInt(pJsonObject.getString("programTypeId"));
     int program = Integer.parseInt(pJsonObject.getString("programTypeId"));
     Semester.Status status = Semester.Status.get(Integer.parseInt(pJsonObject.getString("status")));
     pMutableSemester.setId(id);
     pMutableSemester.setName(name);
     pMutableSemester.setStartDate(mDateFormat.parse(startDate));
-    if (pJsonObject.containsKey("endDate")) {
+    if(pJsonObject.containsKey("endDate")) {
       String endDate = pJsonObject.getString("endDate");
       pMutableSemester.setEndDate(mDateFormat.parse(endDate));
     }

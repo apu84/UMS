@@ -10,7 +10,7 @@ public class UserService {
   public String getUser() {
     String userId = "";
     Subject subject = SecurityUtils.getSubject();
-    if (subject != null)
+    if(subject != null)
       userId = subject.getPrincipal().toString();
     return userId;
   }

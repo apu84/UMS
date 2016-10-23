@@ -32,7 +32,7 @@ public class PersistentRoleDao extends RoleDaoDecorator {
   @Override
   public Role get(Integer pId) throws Exception {
     String query = SELECT_ALL + "WHERE ROLE_ID = ?";
-    return mJdbcTemplate.queryForObject(query, new Object[]{pId}, new RoleRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new RoleRowMapper());
   }
 
   @Override

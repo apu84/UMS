@@ -1,6 +1,5 @@
 package org.ums.resource;
 
-
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.common.EditType;
@@ -23,25 +22,26 @@ public abstract class ResourceHelper<R extends EditType<M>, M extends Mutable, I
     return getContentManager().get(pObjectId);
   }
 
-  public Response get(final I pObjectId, final Request pRequest, final UriInfo pUriInfo) throws Exception {
+  public Response get(final I pObjectId, final Request pRequest, final UriInfo pUriInfo)
+      throws Exception {
     R readOnly = load(pObjectId);
     Response.ResponseBuilder builder;
-    //Calculate the ETag on last modified date of user resource
+    // Calculate the ETag on last modified date of user resource
     EntityTag etag = new EntityTag(getEtag(readOnly));
-    //Verify if it matched with etag available in http request
+    // Verify if it matched with etag available in http request
     builder = pRequest.evaluatePreconditions(etag);
     builder = null;
-    if (builder == null) {
+    if(builder == null) {
       LocalCache localCache = new LocalCache();
       builder = Response.ok(toJson(readOnly, pUriInfo, localCache));
       builder.tag(etag);
       localCache.invalidate();
     }
 
-//    CacheControl cacheControl = new CacheControl();
-//    cacheControl.setMaxAge(86400);
-//    cacheControl.setPrivate(true);
-//    builder.cacheControl(cacheControl);
+    // CacheControl cacheControl = new CacheControl();
+    // cacheControl.setMaxAge(86400);
+    // cacheControl.setPrivate(true);
+    // builder.cacheControl(cacheControl);
 
     return builder.build();
   }
@@ -51,8 +51,8 @@ public abstract class ResourceHelper<R extends EditType<M>, M extends Mutable, I
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-    int count=0;
-    for (R readOnly : readOnlys) {
+    int count = 0;
+    for(R readOnly : readOnlys) {
       children.add(toJson(readOnly, pUriInfo, localCache));
       count++;
     }
@@ -61,7 +61,8 @@ public abstract class ResourceHelper<R extends EditType<M>, M extends Mutable, I
     return object.build();
   }
 
-  protected JsonObject toJson(final R pObject, final UriInfo pUriInfo, final LocalCache pLocalCache) throws Exception {
+  protected JsonObject toJson(final R pObject, final UriInfo pUriInfo, final LocalCache pLocalCache)
+      throws Exception {
     JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
     getBuilder().build(jsonObjectBuilder, pObject, pUriInfo, pLocalCache);
     return jsonObjectBuilder.build();
@@ -73,17 +74,18 @@ public abstract class ResourceHelper<R extends EditType<M>, M extends Mutable, I
     return Response.noContent().build();
   }
 
-  public Response put(final I pObjectId, final Request pRequest,
-                         final String pIfMatch, final JsonObject pJsonObject) throws Exception {
-    if (pIfMatch == null) {
-      return Response.status(Response.Status.BAD_REQUEST).entity("No If-Match header found.").build();
+  public Response put(final I pObjectId, final Request pRequest, final String pIfMatch,
+      final JsonObject pJsonObject) throws Exception {
+    if(pIfMatch == null) {
+      return Response.status(Response.Status.BAD_REQUEST).entity("No If-Match header found.")
+          .build();
     }
     R readOnly = load(pObjectId);
     EntityTag etag = new EntityTag(getEtag(readOnly));
 
     Response.ResponseBuilder preconditionResponse = pRequest.evaluatePreconditions(etag);
     // client is not up to date (send back 412)
-    if (preconditionResponse != null) {
+    if(preconditionResponse != null) {
       return preconditionResponse.build();
     }
 
@@ -96,8 +98,8 @@ public abstract class ResourceHelper<R extends EditType<M>, M extends Mutable, I
     return Response.noContent().build();
   }
 
-
-  public abstract Response post(final JsonObject pJsonObject, final UriInfo pUriInfo) throws Exception;
+  public abstract Response post(final JsonObject pJsonObject, final UriInfo pUriInfo)
+      throws Exception;
 
   protected abstract ContentManager<R, M, I> getContentManager();
 

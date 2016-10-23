@@ -11,11 +11,13 @@ import java.util.List;
 /**
  * Created by My Pc on 7/23/2016.
  */
-public class SubGroupCCICache extends ContentCache<SubGroupCCI,MutableSubGroupCCI,Integer,SubGroupCCIManager> implements SubGroupCCIManager {
+public class SubGroupCCICache extends
+    ContentCache<SubGroupCCI, MutableSubGroupCCI, Integer, SubGroupCCIManager> implements
+    SubGroupCCIManager {
 
-  CacheManager<SubGroupCCI,Integer> mCacheManager;
+  CacheManager<SubGroupCCI, Integer> mCacheManager;
 
-  public SubGroupCCICache(CacheManager<SubGroupCCI,Integer> pCacheManager){
+  public SubGroupCCICache(CacheManager<SubGroupCCI, Integer> pCacheManager) {
     mCacheManager = pCacheManager;
   }
 
@@ -26,32 +28,31 @@ public class SubGroupCCICache extends ContentCache<SubGroupCCI,MutableSubGroupCC
 
   @Override
   protected String getCacheKey(Integer pId) {
-    return CacheUtil.getCacheKey(SubGroupCCI.class,pId);
+    return CacheUtil.getCacheKey(SubGroupCCI.class, pId);
   }
 
   @Override
   public List<SubGroupCCI> getBySemesterAndExamDate(Integer pSemesterId, String pExamDate) {
-    return getManager().getBySemesterAndExamDate(pSemesterId,pExamDate);
+    return getManager().getBySemesterAndExamDate(pSemesterId, pExamDate);
   }
 
   @Override
   public Integer checkOccuranceBySemesterAndExamDate(Integer pSemesterId, String pExamDate) {
-    return getManager().checkOccuranceBySemesterAndExamDate(pSemesterId,pExamDate);
+    return getManager().checkOccuranceBySemesterAndExamDate(pSemesterId, pExamDate);
   }
 
   @Override
   public Integer deleteBySemesterAndExamDate(Integer pSemesterId, String pExamDate) {
-    return getManager().deleteBySemesterAndExamDate(pSemesterId,pExamDate);
+    return getManager().deleteBySemesterAndExamDate(pSemesterId, pExamDate);
   }
 
   @Override
   public Integer checkSubGroupNumber(Integer pSemesterId, String pExamDate) {
-    return getManager().checkSubGroupNumber(pSemesterId,pExamDate);
+    return getManager().checkSubGroupNumber(pSemesterId, pExamDate);
   }
 
   @Override
   public Integer checkForHalfFinishedSubGroup(Integer pSemesterId, String pExamDate) {
-    return getManager().checkForHalfFinishedSubGroup(pSemesterId,pExamDate);
+    return getManager().checkForHalfFinishedSubGroup(pSemesterId, pExamDate);
   }
 }
-

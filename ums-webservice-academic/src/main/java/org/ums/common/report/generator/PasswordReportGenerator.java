@@ -1,6 +1,5 @@
 package org.ums.common.report.generator;
 
-
 import org.pentaho.reporting.engine.classic.core.DataFactory;
 import org.pentaho.reporting.engine.classic.core.MasterReport;
 import org.pentaho.reporting.engine.classic.core.modules.misc.datafactory.sql.DriverConnectionProvider;
@@ -30,15 +29,15 @@ public class PasswordReportGenerator extends AbstractReportGenerator {
   public MasterReport getReportDefinition() throws Exception {
     // Using the classloader, get the URL to the reportDefinition file
     final ClassLoader classloader = this.getClass().getClassLoader();
-    final URL reportDefinitionURL = classloader.getResource("report/password/generatedPassword.prpt");
+    final URL reportDefinitionURL =
+        classloader.getResource("report/password/generatedPassword.prpt");
 
     // Parse the report file
     final ResourceManager resourceManager = new ResourceManager();
-    final Resource directly = resourceManager.createDirectly(reportDefinitionURL, MasterReport.class);
+    final Resource directly =
+        resourceManager.createDirectly(reportDefinitionURL, MasterReport.class);
     return (MasterReport) directly.getResource();
   }
-
-
 
   public DataFactory getDataFactory(String reportQuery) {
     // TODO : Refactor this connection to use the common connection used for the application
@@ -48,35 +47,29 @@ public class PasswordReportGenerator extends AbstractReportGenerator {
     sampleDriverConnectionProvider.setProperty("user", "DB_IUMS");
     sampleDriverConnectionProvider.setProperty("password", "ig100");
 
-    final SQLReportDataFactory dataFactory = new SQLReportDataFactory(sampleDriverConnectionProvider);
-    dataFactory.setQuery(QUERY_NAME,reportQuery);
+    final SQLReportDataFactory dataFactory =
+        new SQLReportDataFactory(sampleDriverConnectionProvider);
+    dataFactory.setQuery(QUERY_NAME, reportQuery);
 
     return dataFactory;
   }
 
   @Override
-  public Map<String, Object> getReportParameters(Object... pParameter)
-  {
+  public Map<String, Object> getReportParameters(Object... pParameter) {
     return null;
   }
 
   /*
-  public Map<String, Object> getReportParameters(Object... pParameter) throws Exception {
-    final Map<String, Object> parameters = new HashMap<>();
-    if (pParameter.length > 0) {
-      User user = mUserManager.get(pParameter[0].toString());
-      parameters.put("user id", user.getId());
-      parameters.put("credential", String.valueOf(user.getTemporaryPassword()));
-
-      Student student = mStudentManager.get(pParameter[0].toString());
-      parameters.put("user name", student.getFullName());
-      parameters.put("role name", user.getRole().getName());
-      parameters.put("created on", new Date());
-      parameters.put("department", student.getDepartment().getShortName());
-      parameters.put("semester", "1st year, 1st semester");
-      parameters.put("role", user.getRole().getName());
-    }
-    return parameters;
-  }*/
+   * public Map<String, Object> getReportParameters(Object... pParameter) throws Exception { final
+   * Map<String, Object> parameters = new HashMap<>(); if (pParameter.length > 0) { User user =
+   * mUserManager.get(pParameter[0].toString()); parameters.put("user id", user.getId());
+   * parameters.put("credential", String.valueOf(user.getTemporaryPassword()));
+   * 
+   * Student student = mStudentManager.get(pParameter[0].toString()); parameters.put("user name",
+   * student.getFullName()); parameters.put("role name", user.getRole().getName());
+   * parameters.put("created on", new Date()); parameters.put("department",
+   * student.getDepartment().getShortName()); parameters.put("semester", "1st year, 1st semester");
+   * parameters.put("role", user.getRole().getName()); } return parameters; }
+   */
 
 }

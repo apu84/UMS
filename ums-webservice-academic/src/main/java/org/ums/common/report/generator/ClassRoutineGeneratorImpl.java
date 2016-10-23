@@ -53,7 +53,8 @@ public class ClassRoutineGeneratorImpl implements ClassRoutineGenerator {
   UserManager mUserManager;
 
   @Override
-  public void createClassRoutineStudentReport(OutputStream pOutputStream) throws Exception, IOException, DocumentException {
+  public void createClassRoutineStudentReport(OutputStream pOutputStream) throws Exception,
+      IOException, DocumentException {
 
   }
 

@@ -15,32 +15,35 @@ import java.util.List;
  */
 public class PersistentAppSettingDao extends AppSettingDaoDecorator {
 
-  static String SELECT_ALL = "SELECT ID,PARAMETER_NAME,PARAMETER_VALUE,DESCRIPTION,DATA_TYPE,LAST_MODIFIED FROM APP_SETTING ";
-  static String INSERT_ONE = "INSERT INTO APP_SETTING (PARAMETER_NAME,PARAMETER_VALUE,DESCRIPTION,DATA_TYPE,LAST_MODIFIED) " +
-      " VALUES (?,?,?,?,"+getLastModifiedSql()+")";
+  static String SELECT_ALL =
+      "SELECT ID,PARAMETER_NAME,PARAMETER_VALUE,DESCRIPTION,DATA_TYPE,LAST_MODIFIED FROM APP_SETTING ";
+  static String INSERT_ONE =
+      "INSERT INTO APP_SETTING (PARAMETER_NAME,PARAMETER_VALUE,DESCRIPTION,DATA_TYPE,LAST_MODIFIED) "
+          + " VALUES (?,?,?,?," + getLastModifiedSql() + ")";
   static String DELETE_ALL = "DELETE FROM APP_SETTING ";
-  static String UPDATE_ONE = "UPDATE APP_SETTING SET PARAMETER_NAME=?,PARAMETER_VALUE=?,DESCRIPTION=?,DATA_TYPE=?, LAST_MODIFIED= "+getLastModifiedSql()+" ";
-
+  static String UPDATE_ONE =
+      "UPDATE APP_SETTING SET PARAMETER_NAME=?,PARAMETER_VALUE=?,DESCRIPTION=?,DATA_TYPE=?, LAST_MODIFIED= "
+          + getLastModifiedSql() + " ";
 
   private JdbcTemplate mJdbcTemplate;
 
-  public PersistentAppSettingDao(final JdbcTemplate pJdbcTemplate){
+  public PersistentAppSettingDao(final JdbcTemplate pJdbcTemplate) {
     mJdbcTemplate = pJdbcTemplate;
   }
 
   @Override
   public List<AppSetting> getAll() throws Exception {
     String query = SELECT_ALL;
-    return mJdbcTemplate.query(query,new AppSettingRowMapper());
+    return mJdbcTemplate.query(query, new AppSettingRowMapper());
   }
 
   @Override
   public AppSetting get(Integer pId) throws Exception {
-    String query = SELECT_ALL+" where id=?";
-    return mJdbcTemplate.queryForObject(query,new Object[]{pId},new AppSettingRowMapper());
+    String query = SELECT_ALL + " where id=?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new AppSettingRowMapper());
   }
 
-  class AppSettingRowMapper implements RowMapper<AppSetting>{
+  class AppSettingRowMapper implements RowMapper<AppSetting> {
     @Override
     public AppSetting mapRow(ResultSet pResultSet, int pI) throws SQLException {
       PersistentAppSetting appSetting = new PersistentAppSetting();

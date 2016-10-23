@@ -9,8 +9,9 @@ import java.util.List;
 /**
  * Created by My Pc on 8/2/2016.
  */
-public class SeatPlanPublishDaoDecorator extends ContentDaoDecorator<SeatPlanPublish,MutableSeatPlanPublish,Integer,SeatPlanPublishManager>
-    implements SeatPlanPublishManager{
+public class SeatPlanPublishDaoDecorator extends
+    ContentDaoDecorator<SeatPlanPublish, MutableSeatPlanPublish, Integer, SeatPlanPublishManager>
+    implements SeatPlanPublishManager {
 
   @Override
   public List<SeatPlanPublish> getBySemester(Integer pSemesterId) {

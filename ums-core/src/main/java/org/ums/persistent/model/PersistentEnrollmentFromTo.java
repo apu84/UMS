@@ -1,6 +1,5 @@
 package org.ums.persistent.model;
 
-
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.mutable.MutableEnrollmentFromTo;
@@ -15,7 +14,8 @@ public class PersistentEnrollmentFromTo implements MutableEnrollmentFromTo {
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sProgramManager = applicationContext.getBean("programManager", ProgramManager.class);
-    sEnrollmentFromToManager = applicationContext.getBean("enrollmentFromToManager", EnrollmentFromToManager.class);
+    sEnrollmentFromToManager =
+        applicationContext.getBean("enrollmentFromToManager", EnrollmentFromToManager.class);
   }
 
   private Integer mId;
@@ -27,8 +27,7 @@ public class PersistentEnrollmentFromTo implements MutableEnrollmentFromTo {
   private Integer mToSemester;
   private String mLastModified;
 
-  public PersistentEnrollmentFromTo() {
-  }
+  public PersistentEnrollmentFromTo() {}
 
   public PersistentEnrollmentFromTo(final PersistentEnrollmentFromTo pEnrollmentFromTo) {
     setId(pEnrollmentFromTo.getId());
@@ -127,9 +126,10 @@ public class PersistentEnrollmentFromTo implements MutableEnrollmentFromTo {
 
   @Override
   public void commit(boolean update) throws Exception {
-    if (update) {
+    if(update) {
       sEnrollmentFromToManager.update(this);
-    } else {
+    }
+    else {
       sEnrollmentFromToManager.create(this);
     }
   }

@@ -14,7 +14,8 @@ public class PersistentCourseGroup implements MutableCourseGroup {
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sSyllabusManager = applicationContext.getBean("syllabusManager", SyllabusManager.class);
-    sCourseGroupManager = applicationContext.getBean("courseGroupManager", CourseGroupManager.class);
+    sCourseGroupManager =
+        applicationContext.getBean("courseGroupManager", CourseGroupManager.class);
   }
 
   private int mId;
@@ -55,7 +56,8 @@ public class PersistentCourseGroup implements MutableCourseGroup {
 
   @Override
   public Syllabus getSyllabus() throws Exception {
-    return mSyllabus == null ? sSyllabusManager.get(mSyllabusId) : sSyllabusManager.validate(mSyllabus);
+    return mSyllabus == null ? sSyllabusManager.get(mSyllabusId) : sSyllabusManager
+        .validate(mSyllabus);
   }
 
   @Override
@@ -79,9 +81,10 @@ public class PersistentCourseGroup implements MutableCourseGroup {
 
   @Override
   public void commit(boolean update) throws Exception {
-    if (update) {
+    if(update) {
       sCourseGroupManager.update(this);
-    } else {
+    }
+    else {
       sCourseGroupManager.create(this);
     }
   }

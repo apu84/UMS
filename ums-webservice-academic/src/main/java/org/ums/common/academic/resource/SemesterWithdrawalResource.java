@@ -1,6 +1,5 @@
 package org.ums.common.academic.resource;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.manager.SemesterWithDrawalManager;
@@ -16,38 +15,39 @@ import javax.ws.rs.core.Response;
 @Path("academic/semesterWithdraw")
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
-public class SemesterWithdrawalResource extends MutableSemesterWithdrawalResource{
+public class SemesterWithdrawalResource extends MutableSemesterWithdrawalResource {
 
   @Autowired
   SemesterWithDrawalManager mManager;
 
   @GET
   @Path("/all")
-  public JsonObject getAll() throws Exception{
+  public JsonObject getAll() throws Exception {
     return mHelper.getAll(mUriInfo);
   }
 
   @GET
   @Path("/studentInfo/semester/{semesterId}/year/{year}/academicSemester/{semester}")
   public JsonObject getStudentRecord(final @Context Request pRequest,
-                                          final @PathParam("semesterId") String semesterId,
-                                          final @PathParam("year") String year,
-                                          final @PathParam("semester") String semester)throws Exception{
-    return mHelper.getStudentRecord(Integer.parseInt(semesterId),Integer.parseInt(year),Integer.parseInt(semester),pRequest,mUriInfo);
+      final @PathParam("semesterId") String semesterId, final @PathParam("year") String year,
+      final @PathParam("semester") String semester) throws Exception {
+    return mHelper.getStudentRecord(Integer.parseInt(semesterId), Integer.parseInt(year),
+        Integer.parseInt(semester), pRequest, mUriInfo);
   }
 
   @GET
   @Path("/deptId/{deptId}")
   public JsonObject getByDeptForEmployee(final @Context Request pRequest,
-                                     final @PathParam("deptId") String deptId)throws Exception{
+      final @PathParam("deptId") String deptId) throws Exception {
 
-    String dId="05";
-    return mHelper.getRoutineByDeptForEmployee(dId,pRequest,mUriInfo);
+    String dId = "05";
+    return mHelper.getRoutineByDeptForEmployee(dId, pRequest, mUriInfo);
   }
 
   @GET
   @Path(PATH_PARAM_OBJECT_ID)
-  public Response get(final @Context Request pRequest, final @PathParam("object-id") int pObjectId)throws Exception{
-    return mHelper.get(pObjectId,pRequest,mUriInfo);
+  public Response get(final @Context Request pRequest, final @PathParam("object-id") int pObjectId)
+      throws Exception {
+    return mHelper.get(pObjectId, pRequest, mUriInfo);
   }
 }

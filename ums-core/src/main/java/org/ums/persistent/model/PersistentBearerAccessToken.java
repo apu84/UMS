@@ -1,6 +1,5 @@
 package org.ums.persistent.model;
 
-
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.mutable.MutableBearerAccessToken;
@@ -13,7 +12,8 @@ public class PersistentBearerAccessToken implements MutableBearerAccessToken {
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sBearerAccessTokenManager = applicationContext.getBean("bearerAccessTokenManager", BearerAccessTokenManager.class);
+    sBearerAccessTokenManager =
+        applicationContext.getBean("bearerAccessTokenManager", BearerAccessTokenManager.class);
   }
 
   private String mId;
@@ -21,8 +21,7 @@ public class PersistentBearerAccessToken implements MutableBearerAccessToken {
   private Date mLastAccessTime;
   private String mLastModified;
 
-  public PersistentBearerAccessToken() {
-  }
+  public PersistentBearerAccessToken() {}
 
   public PersistentBearerAccessToken(final PersistentBearerAccessToken pPersistentBearerAccessToken) {
     setId(pPersistentBearerAccessToken.getId());
@@ -67,9 +66,10 @@ public class PersistentBearerAccessToken implements MutableBearerAccessToken {
 
   @Override
   public void commit(boolean update) throws Exception {
-    if (update) {
+    if(update) {
       sBearerAccessTokenManager.update(this);
-    } else {
+    }
+    else {
       sBearerAccessTokenManager.create(this);
     }
   }

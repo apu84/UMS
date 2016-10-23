@@ -16,20 +16,16 @@ import javax.ws.rs.core.Request;
 @Path("/academic/seatPlanGroup")
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
-public class SeatPlanGroupResource extends MutableSeatPlanGroupResource{
-
-
+public class SeatPlanGroupResource extends MutableSeatPlanGroupResource {
 
   @GET
   @Path("/semester/{semester-id}/type/{type}/update/{update}")
   public JsonObject getSemesterList(final @Context Request pRequest,
-                                    final @PathParam("semester-id") int pSemesterId,final @PathParam("type") int type,final @PathParam("update") int update) throws Exception {
+      final @PathParam("semester-id") int pSemesterId, final @PathParam("type") int type,
+      final @PathParam("update") int update) throws Exception {
 
-
-
-    return mResourceHelper.getSeatPlanGroupBySemester(pSemesterId,type,update,pRequest,mUriInfo);
+    return mResourceHelper
+        .getSeatPlanGroupBySemester(pSemesterId, type, update, pRequest, mUriInfo);
   }
-
-
 
 }

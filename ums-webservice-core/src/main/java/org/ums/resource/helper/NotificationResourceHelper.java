@@ -20,7 +20,8 @@ import java.util.Date;
 import java.util.List;
 
 @Component
-public class NotificationResourceHelper extends ResourceHelper<Notification, MutableNotification, String> {
+public class NotificationResourceHelper extends
+    ResourceHelper<Notification, MutableNotification, String> {
   @Autowired
   NotificationManager mNotificationManager;
 
@@ -47,13 +48,15 @@ public class NotificationResourceHelper extends ResourceHelper<Notification, Mut
     return pReadonly.getLastModified();
   }
 
-  public JsonObject getNotifications(String pConsumerId, String pNotificationType, UriInfo pUriInfo) throws Exception {
-    List<Notification> notifications = mNotificationManager.getNotifications(pConsumerId, pNotificationType);
+  public JsonObject getNotifications(String pConsumerId, String pNotificationType, UriInfo pUriInfo)
+      throws Exception {
+    List<Notification> notifications =
+        mNotificationManager.getNotifications(pConsumerId, pNotificationType);
 
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-    for (Notification readOnly : notifications) {
+    for(Notification readOnly : notifications) {
       children.add(toJson(readOnly, pUriInfo, localCache));
     }
     object.add("entries", children);
@@ -61,13 +64,15 @@ public class NotificationResourceHelper extends ResourceHelper<Notification, Mut
     return object.build();
   }
 
-  public JsonObject getNotifications(String pConsumerId, Integer pNumOfLatestNotification, UriInfo pUriInfo) throws Exception {
-    List<Notification> notifications = mNotificationManager.getNotifications(pConsumerId, pNumOfLatestNotification);
+  public JsonObject getNotifications(String pConsumerId, Integer pNumOfLatestNotification,
+      UriInfo pUriInfo) throws Exception {
+    List<Notification> notifications =
+        mNotificationManager.getNotifications(pConsumerId, pNumOfLatestNotification);
 
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-    for (Notification readOnly : notifications) {
+    for(Notification readOnly : notifications) {
       children.add(toJson(readOnly, pUriInfo, localCache));
     }
     object.add("entries", children);
@@ -77,7 +82,7 @@ public class NotificationResourceHelper extends ResourceHelper<Notification, Mut
 
   public void updateReadStatus(JsonArray pJsonArray) throws Exception {
     List<MutableNotification> notifications = new ArrayList<>();
-    for (int i = 0; i < pJsonArray.size(); i++) {
+    for(int i = 0; i < pJsonArray.size(); i++) {
       JsonObject notificationObject = pJsonArray.getJsonObject(i);
       Notification notification = mNotificationManager.get(notificationObject.getString("id"));
       MutableNotification mutableNotification = notification.edit();

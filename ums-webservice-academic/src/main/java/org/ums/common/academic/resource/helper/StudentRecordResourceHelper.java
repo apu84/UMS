@@ -30,7 +30,8 @@ import java.util.List;
  */
 
 @Component
-public class StudentRecordResourceHelper extends ResourceHelper<StudentRecord,MutableStudentRecord,Integer> {
+public class StudentRecordResourceHelper extends
+    ResourceHelper<StudentRecord, MutableStudentRecord, Integer> {
 
   @Autowired
   private StudentRecordManager mManager;
@@ -44,17 +45,15 @@ public class StudentRecordResourceHelper extends ResourceHelper<StudentRecord,Mu
   @Autowired
   private SemesterManager mSemesterManager;
 
-
-
-
-
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
     return null;
   }
 
   /**
-   * This method will return the information whether a student is registered in the current semester or not.
+   * This method will return the information whether a student is registered in the current semester
+   * or not.
+   * 
    * @param pStudentId
    * @param pSemesterId
    * @param pYear
@@ -65,29 +64,34 @@ public class StudentRecordResourceHelper extends ResourceHelper<StudentRecord,Mu
    * @throws Exception
    */
 
-  public JsonObject getStudentRecord(String pStudentId, Integer pSemesterId, Integer pYear, Integer pSemester, final Request pRequest, final UriInfo pUriInfo) throws Exception{
+  public JsonObject getStudentRecord(String pStudentId, Integer pSemesterId, Integer pYear,
+      Integer pSemester, final Request pRequest, final UriInfo pUriInfo) throws Exception {
     String studentId = SecurityUtils.getSubject().getPrincipal().toString();
     Student student = mStudentManager.get(studentId);
     Semester studentsSemester = mSemesterManager.get(student.getCurrentEnrolledSemesterId());
-    Semester activeSemester = mSemesterManager.getActiveSemester(studentsSemester.getProgramTypeId()) ;
+    Semester activeSemester =
+        mSemesterManager.getActiveSemester(studentsSemester.getProgramTypeId());
 
     List<StudentRecord> studentRecords;
     int stId = studentsSemester.getId();
     int aId = activeSemester.getId();
 
-    if(stId==aId){
-      studentRecords = getContentManager().getStudentRecords(studentId,studentsSemester.getId(),pYear,pSemester);
-    }else{
-      studentRecords=new ArrayList<>();
+    if(stId == aId) {
+      studentRecords =
+          getContentManager().getStudentRecords(studentId, studentsSemester.getId(), pYear,
+              pSemester);
+    }
+    else {
+      studentRecords = new ArrayList<>();
     }
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-    for(StudentRecord studentRecord: studentRecords){
-      children.add(toJson(studentRecord,pUriInfo,localCache));
+    for(StudentRecord studentRecord : studentRecords) {
+      children.add(toJson(studentRecord, pUriInfo, localCache));
     }
 
-    object.add("entries",children);
+    object.add("entries", children);
     localCache.invalidate();
     return object.build();
   }

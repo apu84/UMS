@@ -1,6 +1,5 @@
 package org.ums.manager;
 
-
 import java.util.List;
 
 public interface CacheManager<R, I> {

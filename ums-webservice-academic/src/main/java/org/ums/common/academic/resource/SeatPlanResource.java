@@ -20,36 +20,34 @@ import java.io.*;
  */
 @Component
 @Path("/academic/seatplan")
-public class SeatPlanResource extends MutableSeatPlanResource{
+public class SeatPlanResource extends MutableSeatPlanResource {
   private static final Logger mLogger = LoggerFactory.getLogger(SeatPlanResource.class);
   private static final String FILE_PATH = "I:/pdf/seat_plan_report.pdf";
   @Autowired
   SeatPlanManager mManager;
 
-
-
   @GET
   @Path("/all")
-  public JsonObject getAll() throws Exception{
+  public JsonObject getAll() throws Exception {
     return mSeatPlanResourceHelper.getAll(mUriInfo);
   }
 
   @GET
   @Path("/semesterId/{semesterId}/groupNo/{groupNo}/type/{type}/examDate/{exam-date}")
   @Produces("application/pdf")
-  public StreamingOutput createOrViewSeatPlan(final @Context Request pRequest, final @PathParam("semesterId") String pSemesterId,
-                                                       final @PathParam("groupNo") String pGroupNo,
-                                                       final @PathParam("type") String pType,
-                                                       final @PathParam("exam-date") String pExamDate)throws Exception{
+  public StreamingOutput createOrViewSeatPlan(final @Context Request pRequest,
+      final @PathParam("semesterId") String pSemesterId,
+      final @PathParam("groupNo") String pGroupNo, final @PathParam("type") String pType,
+      final @PathParam("exam-date") String pExamDate) throws Exception {
 
     return new StreamingOutput() {
       @Override
       public void write(OutputStream pOutputStream) throws IOException, WebApplicationException {
-        try{
+        try {
           mSeatPlanResourceHelper.createOrCheckSeatPlanAndReturnRoomList(
-              Integer.parseInt(pSemesterId),Integer.parseInt(pGroupNo),Integer.parseInt(pType),pExamDate,pOutputStream,pRequest,mUriInfo
-          );
-        }catch (Exception e){
+              Integer.parseInt(pSemesterId), Integer.parseInt(pGroupNo), Integer.parseInt(pType),
+              pExamDate, pOutputStream, pRequest, mUriInfo);
+        } catch(Exception e) {
           mLogger.error(e.getMessage());
           throw new WebApplicationException(e);
         }
@@ -61,61 +59,61 @@ public class SeatPlanResource extends MutableSeatPlanResource{
   @Path("/programType/{program-type}/semesterId/{semester-id}/examType/{exam-type}/examDate/{exam-date}")
   @Produces("application/pdf")
   public StreamingOutput getSeatPlanAttendenceSheetReport(final @Context Request pRequest,
-                                                          final @PathParam("program-type") Integer pProgramType,
-                                                          final @PathParam("semester-id") Integer pSemesterId,
-                                                          final @PathParam("exam-type") Integer pExamType,
-                                                          final @PathParam("exam-date") String pExamDate) throws Exception{
+      final @PathParam("program-type") Integer pProgramType,
+      final @PathParam("semester-id") Integer pSemesterId,
+      final @PathParam("exam-type") Integer pExamType,
+      final @PathParam("exam-date") String pExamDate) throws Exception {
     return new StreamingOutput() {
       @Override
       public void write(OutputStream pOutputStream) throws IOException, WebApplicationException {
-        try{
-          mSeatPlanResourceHelper.getSeatPlanAttendenceSheetReport(pProgramType,pSemesterId,pExamType,pExamDate,pOutputStream,pRequest,mUriInfo);
-        }catch(Exception e){
+        try {
+          mSeatPlanResourceHelper.getSeatPlanAttendenceSheetReport(pProgramType, pSemesterId,
+              pExamType, pExamDate, pOutputStream, pRequest, mUriInfo);
+        } catch(Exception e) {
           mLogger.error(e.getMessage());
           throw new WebApplicationException(e);
         }
       }
     };
   }
-
 
   @GET
   @Path("topsheet/programType/{program-type}/semesterId/{semester-id}/examType/{exam-type}/examDate/{exam-date}")
   @Produces("application/pdf")
   public StreamingOutput getSeatPlanTopSheetReport(final @Context Request pRequest,
-                                                          final @PathParam("program-type") Integer pProgramType,
-                                                          final @PathParam("semester-id") Integer pSemesterId,
-                                                          final @PathParam("exam-type") Integer pExamType,
-                                                          final @PathParam("exam-date") String pExamDate) throws Exception{
+      final @PathParam("program-type") Integer pProgramType,
+      final @PathParam("semester-id") Integer pSemesterId,
+      final @PathParam("exam-type") Integer pExamType,
+      final @PathParam("exam-date") String pExamDate) throws Exception {
     return new StreamingOutput() {
       @Override
       public void write(OutputStream pOutputStream) throws IOException, WebApplicationException {
-        try{
-          mSeatPlanResourceHelper.getSeatPlanTopSheetReport(pProgramType,pSemesterId,pExamType,pExamDate,pOutputStream,pRequest,mUriInfo);
-        }catch(Exception e){
+        try {
+          mSeatPlanResourceHelper.getSeatPlanTopSheetReport(pProgramType, pSemesterId, pExamType,
+              pExamDate, pOutputStream, pRequest, mUriInfo);
+        } catch(Exception e) {
           mLogger.error(e.getMessage());
           throw new WebApplicationException(e);
         }
       }
     };
   }
-
-
 
   @GET
   @Path("sticker/programType/{program-type}/semesterId/{semester-id}/examType/{exam-type}/examDate/{exam-date}")
   @Produces("application/pdf")
   public StreamingOutput getSeatStudentStickerReport(final @Context Request pRequest,
-                                                   final @PathParam("program-type") Integer pProgramType,
-                                                   final @PathParam("semester-id") Integer pSemesterId,
-                                                   final @PathParam("exam-type") Integer pExamType,
-                                                   final @PathParam("exam-date") String pExamDate) throws Exception{
+      final @PathParam("program-type") Integer pProgramType,
+      final @PathParam("semester-id") Integer pSemesterId,
+      final @PathParam("exam-type") Integer pExamType,
+      final @PathParam("exam-date") String pExamDate) throws Exception {
     return new StreamingOutput() {
       @Override
       public void write(OutputStream pOutputStream) throws IOException, WebApplicationException {
-        try{
-          mSeatPlanResourceHelper.getSeatPlanStudentStickerReport(pProgramType,pSemesterId,pExamType,pExamDate,pOutputStream,pRequest,mUriInfo);
-        }catch(Exception e){
+        try {
+          mSeatPlanResourceHelper.getSeatPlanStudentStickerReport(pProgramType, pSemesterId,
+              pExamType, pExamDate, pOutputStream, pRequest, mUriInfo);
+        } catch(Exception e) {
           mLogger.error(e.getMessage());
           throw new WebApplicationException(e);
         }
@@ -123,23 +121,23 @@ public class SeatPlanResource extends MutableSeatPlanResource{
     };
   }
 
-
-
   @GET
   @Path("/studentId/{student-id}/semesterId/{semester-id}")
   public JsonObject getSeatPlanInfoForSeatPlanViewing(final @Context Request pRequest,
-                                                      final @PathParam("student-id") String pStudentId,
-                                                      final @PathParam("semester-id") Integer pSemesterId) throws Exception{
-    return mSeatPlanResourceHelper.getSeatPlanForStudentsSeatPlanView(pStudentId,pSemesterId,mUriInfo);
+      final @PathParam("student-id") String pStudentId,
+      final @PathParam("semester-id") Integer pSemesterId) throws Exception {
+    return mSeatPlanResourceHelper.getSeatPlanForStudentsSeatPlanView(pStudentId, pSemesterId,
+        mUriInfo);
   }
 
   @GET
   @Path("/studentId/{student-id}/semesterId/{semester-id}/examDate/{exam-date}")
   public JsonObject getSeatPlanForStudentAndCCIExam(final @Context Request pRequest,
-                                                      final @PathParam("student-id") String pStudentId,
-                                                      final @PathParam("semester-id") Integer pSemesterId,
-                                                      final @PathParam("exam-date") String pExamDate) throws Exception{
-    return mSeatPlanResourceHelper.getSeatPlanForStudentAndCCIExam(pStudentId,pSemesterId,pExamDate,mUriInfo);
+      final @PathParam("student-id") String pStudentId,
+      final @PathParam("semester-id") Integer pSemesterId,
+      final @PathParam("exam-date") String pExamDate) throws Exception {
+    return mSeatPlanResourceHelper.getSeatPlanForStudentAndCCIExam(pStudentId, pSemesterId,
+        pExamDate, mUriInfo);
   }
 
 }

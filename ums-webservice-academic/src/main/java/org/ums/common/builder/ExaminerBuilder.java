@@ -77,19 +77,21 @@ public class ExaminerBuilder implements Builder<Examiner, MutableExaminer> {
   }
 
   @Override
-  public void build(MutableExaminer pMutable, JsonObject pJsonObject, LocalCache pLocalCache) throws Exception {
-    if (pJsonObject.containsKey("id")) {
+  public void build(MutableExaminer pMutable, JsonObject pJsonObject, LocalCache pLocalCache)
+      throws Exception {
+    if(pJsonObject.containsKey("id")) {
       pMutable.setId(pJsonObject.getInt("id"));
     }
     pMutable.setCourse(mCourseManager.get(pJsonObject.getString("courseId")));
     pMutable.setCourseId(pJsonObject.getString("courseId"));
-    if (!pJsonObject.getString("preparerId").equalsIgnoreCase("-1")) {
+    if(!pJsonObject.getString("preparerId").equalsIgnoreCase("-1")) {
       pMutable.setPreparer(mTeacherManager.get(pJsonObject.getString("preparerId")));
     }
-    if (!pJsonObject.getString("scrutinizerId").equalsIgnoreCase("-1")) {
+    if(!pJsonObject.getString("scrutinizerId").equalsIgnoreCase("-1")) {
       pMutable.setScrutinizer(mTeacherManager.get(pJsonObject.getString("scrutinizerId")));
     }
-    pMutable.setSemester(mSemesterManager.get(Integer.parseInt(pJsonObject.getString("semesterId"))));
+    pMutable
+        .setSemester(mSemesterManager.get(Integer.parseInt(pJsonObject.getString("semesterId"))));
     pMutable.setSemesterId(Integer.parseInt(pJsonObject.getString("semesterId")));
   }
 }

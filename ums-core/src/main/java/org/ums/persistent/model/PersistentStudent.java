@@ -66,7 +66,7 @@ public class PersistentStudent implements MutableStudent {
 
   }
 
-  public PersistentStudent(final MutableStudent pMutableStudent) throws Exception{
+  public PersistentStudent(final MutableStudent pMutableStudent) throws Exception {
     setId(pMutableStudent.getId());
     setUser(pMutableStudent.getUser());
     setFullName(pMutableStudent.getFullName());
@@ -109,12 +109,12 @@ public class PersistentStudent implements MutableStudent {
   }
 
   @Override
-  public Teacher getAdviser()  {
+  public Teacher getAdviser() {
     return mAdviser;
   }
 
   @Override
-  public void setAdviser(Teacher pTeacher){
+  public void setAdviser(Teacher pTeacher) {
     mAdviser = pTeacher;
   }
 
@@ -140,9 +140,10 @@ public class PersistentStudent implements MutableStudent {
 
   @Override
   public void commit(boolean update) throws Exception {
-    if (update) {
+    if(update) {
       sStudentManager.update(this);
-    } else {
+    }
+    else {
       sStudentManager.create(this);
     }
   }
@@ -184,7 +185,8 @@ public class PersistentStudent implements MutableStudent {
 
   @Override
   public Department getDepartment() throws Exception {
-    return mDepartment == null ? sDepartmentManager.get(mDepartmentId) : sDepartmentManager.validate(mDepartment);
+    return mDepartment == null ? sDepartmentManager.get(mDepartmentId) : sDepartmentManager
+        .validate(mDepartment);
   }
 
   @Override
@@ -204,7 +206,8 @@ public class PersistentStudent implements MutableStudent {
 
   @Override
   public Semester getSemester() throws Exception {
-    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager.validate(mSemester);
+    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
+        .validate(mSemester);
   }
 
   @Override

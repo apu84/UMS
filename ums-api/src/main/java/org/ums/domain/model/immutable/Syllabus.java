@@ -7,7 +7,8 @@ import org.ums.domain.model.mutable.MutableSyllabus;
 
 import java.io.Serializable;
 
-public interface Syllabus extends Serializable, EditType<MutableSyllabus>, LastModifier, Identifier<String> {
+public interface Syllabus extends Serializable, EditType<MutableSyllabus>, LastModifier,
+    Identifier<String> {
 
   Semester getSemester() throws Exception;
 

@@ -11,8 +11,7 @@ public class GenericMessageResponse implements GenericResponse<Map> {
     this(pResponseType, pResponseType.toString());
   }
 
-  public GenericMessageResponse(final ResponseType pResponseType,
-                                final String pMessage) {
+  public GenericMessageResponse(final ResponseType pResponseType, final String pMessage) {
     mResponseType = pResponseType;
     mMessage = pMessage;
   }

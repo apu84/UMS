@@ -7,7 +7,8 @@ import org.ums.domain.model.mutable.MutableNavigation;
 
 import java.io.Serializable;
 
-public interface Navigation extends Serializable, Identifier<Integer>, LastModifier, EditType<MutableNavigation> {
+public interface Navigation extends Serializable, Identifier<Integer>, LastModifier,
+    EditType<MutableNavigation> {
   String getTitle();
 
   String getPermission();

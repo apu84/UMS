@@ -5,5 +5,6 @@ import org.ums.domain.model.mutable.MutableExaminer;
 import org.ums.manager.AssignedTeacherManager;
 
 public class ExaminerDaoDecorator
-    extends AssignedTeacherDaoDecorator<Examiner, MutableExaminer, Integer, AssignedTeacherManager<Examiner, MutableExaminer, Integer>> {
+    extends
+    AssignedTeacherDaoDecorator<Examiner, MutableExaminer, Integer, AssignedTeacherManager<Examiner, MutableExaminer, Integer>> {
 }

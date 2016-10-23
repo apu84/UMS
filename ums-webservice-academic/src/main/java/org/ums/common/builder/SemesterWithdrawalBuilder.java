@@ -1,6 +1,5 @@
 package org.ums.common.builder;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
@@ -18,34 +17,37 @@ import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
 
 @Component
-public class SemesterWithdrawalBuilder implements Builder<SemesterWithdrawal,MutableSemesterWithdrawal> {
+public class SemesterWithdrawalBuilder implements
+    Builder<SemesterWithdrawal, MutableSemesterWithdrawal> {
 
   @Autowired
   StudentManager mStudentManager;
 
   @Override
-  public void build(JsonObjectBuilder pBuilder, SemesterWithdrawal pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) throws Exception {
-    pBuilder.add("id",pReadOnly.getId());
-    pBuilder.add("semesterId",pReadOnly.getSemester().getId());
-    pBuilder.add("programId",pReadOnly.getProgram().getId());
-    pBuilder.add("studentId",pReadOnly.getStudent().getId());
+  public void build(JsonObjectBuilder pBuilder, SemesterWithdrawal pReadOnly, UriInfo pUriInfo,
+      LocalCache pLocalCache) throws Exception {
+    pBuilder.add("id", pReadOnly.getId());
+    pBuilder.add("semesterId", pReadOnly.getSemester().getId());
+    pBuilder.add("programId", pReadOnly.getProgram().getId());
+    pBuilder.add("studentId", pReadOnly.getStudent().getId());
     Student student = mStudentManager.get(pReadOnly.getStudent().getId());
-    pBuilder.add("studentName",student.getFullName());
-    pBuilder.add("year",pReadOnly.getStudent().getCurrentYear());
-    pBuilder.add("semester",pReadOnly.getStudent().getCurrentAcademicSemester());
-    pBuilder.add("cause",pReadOnly.getCause());
-    pBuilder.add("appDate",pReadOnly.getAppDate());
-    pBuilder.add("status",pReadOnly.getStatus());
-    pBuilder.add("comments",pReadOnly.getComment());
-    pBuilder.add("self", pUriInfo.getBaseUriBuilder().path("academic").path("semesterWithdraw").path(pReadOnly.getId().toString()).build().toString());
+    pBuilder.add("studentName", student.getFullName());
+    pBuilder.add("year", pReadOnly.getStudent().getCurrentYear());
+    pBuilder.add("semester", pReadOnly.getStudent().getCurrentAcademicSemester());
+    pBuilder.add("cause", pReadOnly.getCause());
+    pBuilder.add("appDate", pReadOnly.getAppDate());
+    pBuilder.add("status", pReadOnly.getStatus());
+    pBuilder.add("comments", pReadOnly.getComment());
+    pBuilder.add("self", pUriInfo.getBaseUriBuilder().path("academic").path("semesterWithdraw")
+        .path(pReadOnly.getId().toString()).build().toString());
 
   }
 
   @Override
-  public void build(MutableSemesterWithdrawal pMutable, JsonObject pJsonObject, LocalCache pLocalCache) throws Exception {
+  public void build(MutableSemesterWithdrawal pMutable, JsonObject pJsonObject,
+      LocalCache pLocalCache) throws Exception {
     int id = pJsonObject.getInt("id");
-    if(id!=0)
-    {
+    if(id != 0) {
       pMutable.setId(id);
     }
     int semId = pJsonObject.getInt("semesterId");
@@ -56,7 +58,7 @@ public class SemesterWithdrawalBuilder implements Builder<SemesterWithdrawal,Mut
     program.setId(pJsonObject.getInt("programId"));
     pMutable.setProgram(program);
     PersistentStudent student = new PersistentStudent();
-    //int studentId = (pJsonObject.getInt("studentId"));
+    // int studentId = (pJsonObject.getInt("studentId"));
     student.setId(pJsonObject.getString("studentId"));
     student.setCurrentYear(pJsonObject.getInt("year"));
     student.setCurrentAcademicSemester(pJsonObject.getInt("semester"));

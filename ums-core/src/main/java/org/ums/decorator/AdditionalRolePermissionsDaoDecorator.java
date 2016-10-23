@@ -11,7 +11,8 @@ import java.util.List;
 import java.util.Set;
 
 public class AdditionalRolePermissionsDaoDecorator
-    extends ContentDaoDecorator<AdditionalRolePermissions, MutableAdditionalRolePermissions, Integer, AdditionalRolePermissionsManager>
+    extends
+    ContentDaoDecorator<AdditionalRolePermissions, MutableAdditionalRolePermissions, Integer, AdditionalRolePermissionsManager>
     implements AdditionalRolePermissionsManager {
   @Override
   public List<AdditionalRolePermissions> getPermissionsByUser(String pUserId) {
@@ -19,7 +20,8 @@ public class AdditionalRolePermissionsDaoDecorator
   }
 
   @Override
-  public List<AdditionalRolePermissions> getUserPermissionsByAssignedUser(String pUserId, String pAssignedBy) {
+  public List<AdditionalRolePermissions> getUserPermissionsByAssignedUser(String pUserId,
+      String pAssignedBy) {
     return getManager().getUserPermissionsByAssignedUser(pUserId, pAssignedBy);
   }
 
@@ -29,7 +31,8 @@ public class AdditionalRolePermissionsDaoDecorator
   }
 
   @Override
-  public int addPermissions(String pUserId, Set<String> pPermissions, User pAssignedBy, Date pFromDate, Date pToDate) {
+  public int addPermissions(String pUserId, Set<String> pPermissions, User pAssignedBy,
+      Date pFromDate, Date pToDate) {
     return getManager().addPermissions(pUserId, pPermissions, pAssignedBy, pFromDate, pToDate);
   }
 

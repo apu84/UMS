@@ -1,6 +1,5 @@
 package org.ums.domain.model.dto;
 
-
 import com.google.gson.Gson;
 import org.ums.enums.CourseMarksSubmissionStatus;
 

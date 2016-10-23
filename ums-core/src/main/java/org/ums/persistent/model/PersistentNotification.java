@@ -1,6 +1,5 @@
 package org.ums.persistent.model;
 
-
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.mutable.MutableNotification;
@@ -17,7 +16,8 @@ public class PersistentNotification implements MutableNotification {
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sNotificationManager = applicationContext.getBean("notificationManager", NotificationManager.class);
+    sNotificationManager =
+        applicationContext.getBean("notificationManager", NotificationManager.class);
   }
   private String mId;
   private String mNotificationType;
@@ -28,10 +28,10 @@ public class PersistentNotification implements MutableNotification {
   private String mProducerId;
   private String mConsumerId;
 
-  public PersistentNotification()  {
-  }
+  public PersistentNotification() {}
 
-  public PersistentNotification(final PersistentNotification pPersistentNotification) throws Exception{
+  public PersistentNotification(final PersistentNotification pPersistentNotification)
+      throws Exception {
     setProducerId(pPersistentNotification.getProducerId());
     setConsumerId(pPersistentNotification.getConsumerId());
     setNotificationType(pPersistentNotification.getNotificationType());
@@ -74,9 +74,10 @@ public class PersistentNotification implements MutableNotification {
 
   @Override
   public void commit(boolean update) throws Exception {
-    if (update) {
+    if(update) {
       sNotificationManager.update(this);
-    } else {
+    }
+    else {
       sNotificationManager.create(this);
     }
   }
@@ -143,8 +144,8 @@ public class PersistentNotification implements MutableNotification {
 
   @Override
   public String toString() {
-    return "Notification [id=" + mId + ", notificationType=" + mNotificationType + ", payload=" + mPayload + ","
-        + " producedOn=" + mDateFormat.format(mProducedOn) + ", consumedOn=" + mDateFormat.format(mConsumedOn)
-        + ", lastModified=" + mLastModified + "]";
+    return "Notification [id=" + mId + ", notificationType=" + mNotificationType + ", payload="
+        + mPayload + "," + " producedOn=" + mDateFormat.format(mProducedOn) + ", consumedOn="
+        + mDateFormat.format(mConsumedOn) + ", lastModified=" + mLastModified + "]";
   }
 }

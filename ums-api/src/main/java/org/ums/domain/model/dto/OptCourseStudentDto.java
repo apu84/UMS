@@ -17,7 +17,6 @@ public class OptCourseStudentDto {
   private int applicationTypeId;
   private String applicationTypeLabel;
 
-
   public String getStudentId() {
     return studentId;
   }

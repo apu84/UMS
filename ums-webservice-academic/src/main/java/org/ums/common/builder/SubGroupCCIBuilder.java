@@ -15,38 +15,38 @@ import javax.ws.rs.core.UriInfo;
  * Created by My Pc on 7/23/2016.
  */
 @Component
-public class SubGroupCCIBuilder implements Builder<SubGroupCCI,MutableSubGroupCCI> {
+public class SubGroupCCIBuilder implements Builder<SubGroupCCI, MutableSubGroupCCI> {
   @Override
-  public void build(JsonObjectBuilder pBuilder, SubGroupCCI pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) throws Exception {
-    if(pReadOnly.getId()!=null)
-      pBuilder.add("id",pReadOnly.getId());
-    if(pReadOnly.getSemesterId()!=null)
-      pBuilder.add("semesterId",pReadOnly.getSemesterId());
-    if(pReadOnly.getSubGroupNo()!=null)
-    {
-      pBuilder.add("subGroupNo",pReadOnly.getSubGroupNo());
-      pBuilder.add("subGroupNumber",pReadOnly.getSubGroupNo());
+  public void build(JsonObjectBuilder pBuilder, SubGroupCCI pReadOnly, UriInfo pUriInfo,
+      LocalCache pLocalCache) throws Exception {
+    if(pReadOnly.getId() != null)
+      pBuilder.add("id", pReadOnly.getId());
+    if(pReadOnly.getSemesterId() != null)
+      pBuilder.add("semesterId", pReadOnly.getSemesterId());
+    if(pReadOnly.getSubGroupNo() != null) {
+      pBuilder.add("subGroupNo", pReadOnly.getSubGroupNo());
+      pBuilder.add("subGroupNumber", pReadOnly.getSubGroupNo());
     }
-    if(pReadOnly.getTotalStudent()!=null)
-    {
-      pBuilder.add("totalStudent",pReadOnly.getTotalStudent());
-      pBuilder.add("studentNumber",pReadOnly.getTotalStudent());
+    if(pReadOnly.getTotalStudent() != null) {
+      pBuilder.add("totalStudent", pReadOnly.getTotalStudent());
+      pBuilder.add("studentNumber", pReadOnly.getTotalStudent());
     }
-    if(pReadOnly.getCourseId()!=null)
-      pBuilder.add("courseId",pReadOnly.getCourseId());
-    if(pReadOnly.getExamDate()!=null)
-      pBuilder.add("examDate",pReadOnly.getExamDate());
-    if(pReadOnly.getCourseNo()!=null){
-      pBuilder.add("courseNo",pReadOnly.getCourseNo());
+    if(pReadOnly.getCourseId() != null)
+      pBuilder.add("courseId", pReadOnly.getCourseId());
+    if(pReadOnly.getExamDate() != null)
+      pBuilder.add("examDate", pReadOnly.getExamDate());
+    if(pReadOnly.getCourseNo() != null) {
+      pBuilder.add("courseNo", pReadOnly.getCourseNo());
     }
-    if(pReadOnly.getCourseYear()!=null)
-      pBuilder.add("year",pReadOnly.getCourseYear());
-    if(pReadOnly.getCourseSemester()!=null)
-      pBuilder.add("semester",pReadOnly.getCourseSemester());
+    if(pReadOnly.getCourseYear() != null)
+      pBuilder.add("year", pReadOnly.getCourseYear());
+    if(pReadOnly.getCourseSemester() != null)
+      pBuilder.add("semester", pReadOnly.getCourseSemester());
   }
 
   @Override
-  public void build(MutableSubGroupCCI pMutable, JsonObject pJsonObject, LocalCache pLocalCache) throws Exception {
+  public void build(MutableSubGroupCCI pMutable, JsonObject pJsonObject, LocalCache pLocalCache)
+      throws Exception {
     PersistentSemester semester = new PersistentSemester();
     semester.setId(Integer.parseInt(pJsonObject.getString("semesterId")));
     pMutable.setSemester(semester);

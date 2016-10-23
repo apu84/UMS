@@ -67,12 +67,13 @@ public class OptionalCourseApplicationResourceHelper {
     return mBuilder;
   }
 
+  public JsonObject getSemesterWiseCrHrInfo(Integer pSemesterId, Integer pProgramId, Integer pYear,
+      Integer pSemester) throws Exception {
 
-  public JsonObject getSemesterWiseCrHrInfo(Integer pSemesterId,Integer pProgramId,Integer pYear, Integer pSemester) throws Exception {
-
-    Syllabus syllabus=mSemesterSyllabusManager.getSyllabusForSemester(pSemesterId, pProgramId, pYear, pSemester);
-    SemesterWiseCrHrDto crHr = mSemesterWiseCrHrManager.getCrHrInfoByYearSemester(syllabus.getId(),pYear,pSemester);
-
+    Syllabus syllabus =
+        mSemesterSyllabusManager.getSyllabusForSemester(pSemesterId, pProgramId, pYear, pSemester);
+    SemesterWiseCrHrDto crHr =
+        mSemesterWiseCrHrManager.getCrHrInfoByYearSemester(syllabus.getId(), pYear, pSemester);
 
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
@@ -80,20 +81,20 @@ public class OptionalCourseApplicationResourceHelper {
     JsonReader jsonReader;
     JsonObject object1;
 
-      jsonReader = Json.createReader(new StringReader(crHr.toString()));
-      object1 = jsonReader.readObject();
-      jsonReader.close();
+    jsonReader = Json.createReader(new StringReader(crHr.toString()));
+    object1 = jsonReader.readObject();
+    jsonReader.close();
 
     object.add("CrHr", object1);
 
     return object.build();
 
-
   }
 
-  public JsonObject getApplicationStatistics(final Integer pSemesterId, final Integer pProgramId) throws Exception {
-    List<OptionalCourseApplicationStatDto> statList = mManager.getApplicationStatistics(pSemesterId, pProgramId, 1, 1);
-
+  public JsonObject getApplicationStatistics(final Integer pSemesterId, final Integer pProgramId)
+      throws Exception {
+    List<OptionalCourseApplicationStatDto> statList =
+        mManager.getApplicationStatistics(pSemesterId, pProgramId, 1, 1);
 
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
@@ -101,7 +102,7 @@ public class OptionalCourseApplicationResourceHelper {
     JsonReader jsonReader;
     JsonObject object1;
 
-    for (OptionalCourseApplicationStatDto stat : statList) {
+    for(OptionalCourseApplicationStatDto stat : statList) {
       jsonReader = Json.createReader(new StringReader(stat.toString()));
       object1 = jsonReader.readObject();
       jsonReader.close();
@@ -110,11 +111,11 @@ public class OptionalCourseApplicationResourceHelper {
     object.add("entries", children);
     return object.build();
 
-
   }
 
-
-  public Response saveApprovedAndApplicationCourses(final Integer pSemesterId, final Integer pProgramId, int pYear, int pSemester, final JsonObject pJsonObject) throws Exception {
+  public Response saveApprovedAndApplicationCourses(final Integer pSemesterId,
+      final Integer pProgramId, int pYear, int pSemester, final JsonObject pJsonObject)
+      throws Exception {
     OptionalCourseApplicationBuilder builder = getBuilder();
     List<Course> approvedCourseList = new ArrayList<>();
     builder.build(approvedCourseList, pJsonObject, "approved");
@@ -122,23 +123,25 @@ public class OptionalCourseApplicationResourceHelper {
     List<Course> callForApplicationCourseList = new ArrayList<>();
     builder.build(callForApplicationCourseList, pJsonObject, "callForApplication");
 
-
     mManager.deleteApplicationCourses(pSemesterId, pProgramId, pYear, pSemester);
-    mManager.insertApplicationCourses(pSemesterId, pProgramId, pYear, pSemester, callForApplicationCourseList);
+    mManager.insertApplicationCourses(pSemesterId, pProgramId, pYear, pSemester,
+        callForApplicationCourseList);
     mManager.insertApprovedCourses(pSemesterId, pProgramId, pYear, pSemester, approvedCourseList);
 
     return Response.noContent().build();
   }
 
-  public JsonObject getStudentList(int pSemesterId, String pCourseId, String pStatus) throws Exception {
-    List<OptCourseStudentDto> studentList = getContentManager().getStudentList(pSemesterId, pCourseId, pStatus);
+  public JsonObject getStudentList(int pSemesterId, String pCourseId, String pStatus)
+      throws Exception {
+    List<OptCourseStudentDto> studentList =
+        getContentManager().getStudentList(pSemesterId, pCourseId, pStatus);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
 
     JsonReader jsonReader;
     JsonObject object1;
 
-    for (OptCourseStudentDto student : studentList) {
+    for(OptCourseStudentDto student : studentList) {
       jsonReader = Json.createReader(new StringReader(student.toString()));
       object1 = jsonReader.readObject();
       jsonReader.close();
@@ -148,15 +151,17 @@ public class OptionalCourseApplicationResourceHelper {
     return object.build();
   }
 
-  public JsonObject getNonAssignedSectionStudentList(int pSemesterId, int pProgramId, String pCourseId) throws Exception {
-    List<OptCourseStudentDto> studentList = getContentManager().getNonAssignedSectionStudentList(pSemesterId, pProgramId, pCourseId);
+  public JsonObject getNonAssignedSectionStudentList(int pSemesterId, int pProgramId,
+      String pCourseId) throws Exception {
+    List<OptCourseStudentDto> studentList =
+        getContentManager().getNonAssignedSectionStudentList(pSemesterId, pProgramId, pCourseId);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
 
     JsonReader jsonReader;
     JsonObject object1;
 
-    for (OptCourseStudentDto student : studentList) {
+    for(OptCourseStudentDto student : studentList) {
       jsonReader = Json.createReader(new StringReader(student.toString()));
       object1 = jsonReader.readObject();
       jsonReader.close();
@@ -166,16 +171,19 @@ public class OptionalCourseApplicationResourceHelper {
     return object.build();
   }
 
-  public JsonObject getOptionalSectionListWithStudents(int pSemesterId, int pProgramId, String pCourseId) throws Exception {
-    List<OptSectionDto> studentList = getContentManager().getOptionalSectionListWithStudents(pSemesterId, pProgramId, pCourseId);
+  public JsonObject getOptionalSectionListWithStudents(int pSemesterId, int pProgramId,
+      String pCourseId) throws Exception {
+    List<OptSectionDto> studentList =
+        getContentManager().getOptionalSectionListWithStudents(pSemesterId, pProgramId, pCourseId);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
 
     JsonReader jsonReader;
     JsonObject object1;
 
-    for (OptSectionDto student : studentList) {
-      student.setStudentList(mStudentManager.getStudentListFromStudentsString(student.getStudents()));
+    for(OptSectionDto student : studentList) {
+      student
+          .setStudentList(mStudentManager.getStudentListFromStudentsString(student.getStudents()));
       jsonReader = Json.createReader(new StringReader(student.toString()));
       object1 = jsonReader.readObject();
       jsonReader.close();
@@ -185,15 +193,20 @@ public class OptionalCourseApplicationResourceHelper {
     return object.build();
   }
 
-  public Response deleteSection(int pSemesterId, int pProgramId, String pCourseId, String pSectionName) throws Exception {
+  public Response deleteSection(int pSemesterId, int pProgramId, String pCourseId,
+      String pSectionName) throws Exception {
     mManager.deleteSection(pSemesterId, pProgramId, pCourseId, pSectionName);
     return Response.noContent().build();
   }
 
-  public Response mergeSelection(int pSemesterId, int pProgramId, String pCourseId, String pSectionName, JsonObject pStudents) throws Exception {
+  public Response mergeSelection(int pSemesterId, int pProgramId, String pCourseId,
+      String pSectionName, JsonObject pStudents) throws Exception {
 
-    mManager.mergeSection(pSemesterId, pProgramId, pCourseId, pSectionName, pStudents.getString("students"));
-    //URI contextURI = pUriInfo.getBaseUriBuilder().path(StudentResource.class).path(StudentResource.class, "get").build(mutableStudent.getId());
+    mManager.mergeSection(pSemesterId, pProgramId, pCourseId, pSectionName,
+        pStudents.getString("students"));
+    // URI contextURI =
+    // pUriInfo.getBaseUriBuilder().path(StudentResource.class).path(StudentResource.class,
+    // "get").build(mutableStudent.getId());
     URI contextURI = new URI("");
     Response.ResponseBuilder builder = Response.created(contextURI);
     builder.status(Response.Status.CREATED);
@@ -202,25 +215,28 @@ public class OptionalCourseApplicationResourceHelper {
   }
 
   public JsonObject getApplicationStatus(String pStudentId, int pSemesterId) throws Exception {
-    OptCourseApplicationStatus status = getContentManager().getApplicationStatus(pStudentId, pSemesterId);
-    JsonObject object = Json.createObjectBuilder()
-        .add("status_id", status.getId())
-        .add("status_name", status.getLabel())
-        .build();
+    OptCourseApplicationStatus status =
+        getContentManager().getApplicationStatus(pStudentId, pSemesterId);
+    JsonObject object =
+        Json.createObjectBuilder().add("status_id", status.getId())
+            .add("status_name", status.getLabel()).build();
 
     return object;
   }
 
-  public JsonObject getAppliedCoursesByStudent(String pStudentId, int pSemesterId, int pProgramId) throws Exception {
-    //Todo: Need to verify that the user requested for the resource is in the same department under the requested program Id.
-    List<OptCourseStudentDto> courseList = getContentManager().getAppliedCoursesByStudent(pStudentId, pSemesterId);
+  public JsonObject getAppliedCoursesByStudent(String pStudentId, int pSemesterId, int pProgramId)
+      throws Exception {
+    // Todo: Need to verify that the user requested for the resource is in the same department under
+    // the requested program Id.
+    List<OptCourseStudentDto> courseList =
+        getContentManager().getAppliedCoursesByStudent(pStudentId, pSemesterId);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
 
     JsonReader jsonReader;
     JsonObject object1;
 
-    for (OptCourseStudentDto course : courseList) {
+    for(OptCourseStudentDto course : courseList) {
       jsonReader = Json.createReader(new StringReader(course.toString()));
       object1 = jsonReader.readObject();
       jsonReader.close();
@@ -231,7 +247,8 @@ public class OptionalCourseApplicationResourceHelper {
   }
 
   @Transactional
-  public GenericResponse<Map> updateApplicationStatusByCourse(int pSemesterId, String pCourseId, final JsonObject pJsonObject) throws Exception {
+  public GenericResponse<Map> updateApplicationStatusByCourse(int pSemesterId, String pCourseId,
+      final JsonObject pJsonObject) throws Exception {
 
     OptionalCourseApplicationBuilder builder = getBuilder();
     List<String> approveStudentList = new ArrayList<>();
@@ -245,24 +262,33 @@ public class OptionalCourseApplicationResourceHelper {
 
     Course course = mCourseManager.get(pCourseId);
 
-    mManager.updateCourseStatus(pSemesterId, pCourseId, approveStudentList, OptCourseCourseStatus.APPROVED.getId());
-    mManager.updateCourseStatus(pSemesterId, pCourseId, rejectStudentList, OptCourseCourseStatus.REJECTED.getId());
-    mManager.updateCourseStatusForDependentCourse(pSemesterId, pCourseId, removeStudentList, OptCourseCourseStatus.REJECTED.getId());
+    mManager.updateCourseStatus(pSemesterId, pCourseId, approveStudentList,
+        OptCourseCourseStatus.APPROVED.getId());
+    mManager.updateCourseStatus(pSemesterId, pCourseId, rejectStudentList,
+        OptCourseCourseStatus.REJECTED.getId());
+    mManager.updateCourseStatusForDependentCourse(pSemesterId, pCourseId, removeStudentList,
+        OptCourseCourseStatus.REJECTED.getId());
     mManager.deleteCourseAppliedByTeacher(pSemesterId, pCourseId, removeStudentList);
 
-    if (course.getPairCourseId() != null && !course.getPairCourseId().equalsIgnoreCase("")) {
-      mManager.updateCourseStatus(pSemesterId, course.getPairCourseId(), approveStudentList, OptCourseCourseStatus.APPROVED.getId());
-      mManager.updateCourseStatus(pSemesterId, course.getPairCourseId(), rejectStudentList, OptCourseCourseStatus.REJECTED.getId());
-      mManager.updateCourseStatusForDependentCourse(pSemesterId, course.getPairCourseId(), removeStudentList, OptCourseCourseStatus.REJECTED.getId());
-      mManager.deleteCourseAppliedByTeacher(pSemesterId, course.getPairCourseId(), removeStudentList);
+    if(course.getPairCourseId() != null && !course.getPairCourseId().equalsIgnoreCase("")) {
+      mManager.updateCourseStatus(pSemesterId, course.getPairCourseId(), approveStudentList,
+          OptCourseCourseStatus.APPROVED.getId());
+      mManager.updateCourseStatus(pSemesterId, course.getPairCourseId(), rejectStudentList,
+          OptCourseCourseStatus.REJECTED.getId());
+      mManager.updateCourseStatusForDependentCourse(pSemesterId, course.getPairCourseId(),
+          removeStudentList, OptCourseCourseStatus.REJECTED.getId());
+      mManager.deleteCourseAppliedByTeacher(pSemesterId, course.getPairCourseId(),
+          removeStudentList);
     }
 
-    return new GenericMessageResponse(GenericResponse.ResponseType.SUCCESS, "Successfully Updated Information.");
-    //return Response.noContent().build();
+    return new GenericMessageResponse(GenericResponse.ResponseType.SUCCESS,
+        "Successfully Updated Information.");
+    // return Response.noContent().build();
   }
 
   @Transactional
-  public Response updateApplicationStatusByStudent(int pSemesterId, String pStudentId, final JsonObject pJsonObject) throws Exception {
+  public Response updateApplicationStatusByStudent(int pSemesterId, String pStudentId,
+      final JsonObject pJsonObject) throws Exception {
 
     OptionalCourseApplicationBuilder builder = getBuilder();
     StringBuilder approveCourse = new StringBuilder("");
@@ -279,91 +305,108 @@ public class OptionalCourseApplicationResourceHelper {
 
     Course course;
 
-    if (!approveCourse.toString().equalsIgnoreCase("")) {
-      mManager.updateCourseStatus(pSemesterId, approveCourse.toString(), studentList, OptCourseCourseStatus.APPROVED.getId());
+    if(!approveCourse.toString().equalsIgnoreCase("")) {
+      mManager.updateCourseStatus(pSemesterId, approveCourse.toString(), studentList,
+          OptCourseCourseStatus.APPROVED.getId());
       course = mCourseManager.get(approveCourse.toString());
-      if (course.getPairCourseId() != null && !course.getPairCourseId().equalsIgnoreCase("")) {
-        mManager.updateCourseStatus(pSemesterId, course.getPairCourseId(), studentList, OptCourseCourseStatus.APPROVED.getId());
+      if(course.getPairCourseId() != null && !course.getPairCourseId().equalsIgnoreCase("")) {
+        mManager.updateCourseStatus(pSemesterId, course.getPairCourseId(), studentList,
+            OptCourseCourseStatus.APPROVED.getId());
       }
     }
 
-    if (!rejectCourse.toString().equalsIgnoreCase("")) {
-      mManager.updateCourseStatus(pSemesterId, rejectCourse.toString(), studentList, OptCourseCourseStatus.REJECTED.getId());
+    if(!rejectCourse.toString().equalsIgnoreCase("")) {
+      mManager.updateCourseStatus(pSemesterId, rejectCourse.toString(), studentList,
+          OptCourseCourseStatus.REJECTED.getId());
       course = mCourseManager.get(rejectCourse.toString());
-      if (course.getPairCourseId() != null && !course.getPairCourseId().equalsIgnoreCase("")) {
-        mManager.updateCourseStatus(pSemesterId, course.getPairCourseId(), studentList, OptCourseCourseStatus.REJECTED.getId());
+      if(course.getPairCourseId() != null && !course.getPairCourseId().equalsIgnoreCase("")) {
+        mManager.updateCourseStatus(pSemesterId, course.getPairCourseId(), studentList,
+            OptCourseCourseStatus.REJECTED.getId());
       }
     }
-    if (!removeCourse.toString().equalsIgnoreCase("")) {
-      mManager.updateCourseStatusForDependentCourse(pSemesterId, removeCourse.toString(), studentList, OptCourseCourseStatus.REJECTED.getId());
+    if(!removeCourse.toString().equalsIgnoreCase("")) {
+      mManager.updateCourseStatusForDependentCourse(pSemesterId, removeCourse.toString(),
+          studentList, OptCourseCourseStatus.REJECTED.getId());
       mManager.deleteCourseAppliedByTeacher(pSemesterId, removeCourse.toString(), studentList);
       course = mCourseManager.get(removeCourse.toString());
-      if (course.getPairCourseId() != null && !course.getPairCourseId().equalsIgnoreCase("")) {
-        mManager.updateCourseStatusForDependentCourse(pSemesterId, course.getPairCourseId(), studentList, OptCourseCourseStatus.REJECTED.getId());
+      if(course.getPairCourseId() != null && !course.getPairCourseId().equalsIgnoreCase("")) {
+        mManager.updateCourseStatusForDependentCourse(pSemesterId, course.getPairCourseId(),
+            studentList, OptCourseCourseStatus.REJECTED.getId());
         mManager.deleteCourseAppliedByTeacher(pSemesterId, course.getPairCourseId(), studentList);
       }
     }
     return Response.noContent().build();
   }
 
-
   @Transactional
-  public Response shiftStudents(int pSemesterId, String pSourceCourseId, String pTargetCourseId, final JsonObject pJsonObject) throws Exception {
-    //Todo: need to make sure if the source code has a pair course id then the target course must have a pair course id.
+  public Response shiftStudents(int pSemesterId, String pSourceCourseId, String pTargetCourseId,
+      final JsonObject pJsonObject) throws Exception {
+    // Todo: need to make sure if the source code has a pair course id then the target course must
+    // have a pair course id.
 
     OptionalCourseApplicationBuilder builder = getBuilder();
     List<String> studentList = new ArrayList<>();
     builder.buildStudent(studentList, pJsonObject, "students");
 
-    mManager.updateCourseStatus(pSemesterId, pSourceCourseId, studentList, OptCourseCourseStatus.REJECTED_SHIFTED.getId());
+    mManager.updateCourseStatus(pSemesterId, pSourceCourseId, studentList,
+        OptCourseCourseStatus.REJECTED_SHIFTED.getId());
     mManager.insertShiftApplication(pSemesterId, pTargetCourseId, pSourceCourseId, studentList);
 
     Course course = mCourseManager.get(pSourceCourseId);
-    if (course.getPairCourseId() != null && !course.getPairCourseId().equalsIgnoreCase("")) {
+    if(course.getPairCourseId() != null && !course.getPairCourseId().equalsIgnoreCase("")) {
       Course targetCourse = mCourseManager.get(pTargetCourseId);
-      if (targetCourse.getPairCourseId() != null && !targetCourse.getPairCourseId().equalsIgnoreCase("")) {
-        mManager.updateCourseStatus(pSemesterId, course.getPairCourseId(), studentList, OptCourseCourseStatus.REJECTED_SHIFTED.getId());
-        mManager.insertShiftApplication(pSemesterId, targetCourse.getPairCourseId(), course.getPairCourseId(), studentList);
+      if(targetCourse.getPairCourseId() != null
+          && !targetCourse.getPairCourseId().equalsIgnoreCase("")) {
+        mManager.updateCourseStatus(pSemesterId, course.getPairCourseId(), studentList,
+            OptCourseCourseStatus.REJECTED_SHIFTED.getId());
+        mManager.insertShiftApplication(pSemesterId, targetCourse.getPairCourseId(),
+            course.getPairCourseId(), studentList);
       }
     }
-
 
     return Response.noContent().build();
   }
 
-  public JsonObject getDataForStudent(Request pRequest,UriInfo mUriInfo) throws Exception {
+  public JsonObject getDataForStudent(Request pRequest, UriInfo mUriInfo) throws Exception {
 
-    String mStudentId=SecurityUtils.getSubject().getPrincipal().toString();
-    Semester mSemester=mSemesterManager.getSemesterByStatus(ProgramType.UG, SemesterStatus.NEWLY_CREATED);
-    OptCourseApplicationStatus mApplicationStatus=mManager.getApplicationStatus(mStudentId,mSemester.getId());
-    JsonObject  mStudentCourses=getAppliedCoursesByStudent(mStudentId,mSemester.getId(),110500);
-    JsonObject mCallForApplicationCourses=mCourseResourceHelper.getCallForApplicationCourses(mSemester.getId(),110500,4,1,mUriInfo);
+    String mStudentId = SecurityUtils.getSubject().getPrincipal().toString();
+    Semester mSemester =
+        mSemesterManager.getSemesterByStatus(ProgramType.UG, SemesterStatus.NEWLY_CREATED);
+    OptCourseApplicationStatus mApplicationStatus =
+        mManager.getApplicationStatus(mStudentId, mSemester.getId());
+    JsonObject mStudentCourses = getAppliedCoursesByStudent(mStudentId, mSemester.getId(), 110500);
+    JsonObject mCallForApplicationCourses =
+        mCourseResourceHelper.getCallForApplicationCourses(mSemester.getId(), 110500, 4, 1,
+            mUriInfo);
 
-    JsonObject object = Json.createObjectBuilder()
-        .add("application_status", mApplicationStatus.getLabel())
-        .add("applied_courses", mStudentCourses.get("entries"))
-        .add("callForApplication_courses", mCallForApplicationCourses.get("entries"))
-        .build();
+    JsonObject object =
+        Json.createObjectBuilder().add("application_status", mApplicationStatus.getLabel())
+            .add("applied_courses", mStudentCourses.get("entries"))
+            .add("callForApplication_courses", mCallForApplicationCourses.get("entries")).build();
 
     return object;
   }
 
   @Transactional
-  public Response saveStudentApplication(Integer status, final JsonObject pJsonObject) throws Exception {
+  public Response saveStudentApplication(Integer status, final JsonObject pJsonObject)
+      throws Exception {
 
-    String mStudentId=SecurityUtils.getSubject().getPrincipal().toString();
-    Semester mSemester = mSemesterManager.getSemesterByStatus(ProgramType.UG, SemesterStatus.NEWLY_CREATED);
+    String mStudentId = SecurityUtils.getSubject().getPrincipal().toString();
+    Semester mSemester =
+        mSemesterManager.getSemesterByStatus(ProgramType.UG, SemesterStatus.NEWLY_CREATED);
 
-    //ToDo: Below validation need to be done
-    //ToDo: Check the Application Date time. I mean if the student can save or submit it in this time period?
-    //TODo: Check whether the student's current year -semester can apply
-    //ToDo: Check the student's submitted courses against the dept-program offered course list
+    // ToDo: Below validation need to be done
+    // ToDo: Check the Application Date time. I mean if the student can save or submit it in this
+    // time period?
+    // TODo: Check whether the student's current year -semester can apply
+    // ToDo: Check the student's submitted courses against the dept-program offered course list
 
     List<String> mCourseList = new ArrayList<>();
     getBuilder().buildCourseId(mCourseList, pJsonObject);
-    mManager.deleteCoursesAppliedByStudent(mStudentId,mSemester.getId());
+    mManager.deleteCoursesAppliedByStudent(mStudentId, mSemester.getId());
     mManager.saveStudentApplication(mStudentId, mSemester.getId(), mCourseList);
-    mManager.updateStatus(mStudentId, mSemester.getId(), OptCourseApplicationStatus.values()[status]);
+    mManager.updateStatus(mStudentId, mSemester.getId(),
+        OptCourseApplicationStatus.values()[status]);
 
     return Response.noContent().build();
   }

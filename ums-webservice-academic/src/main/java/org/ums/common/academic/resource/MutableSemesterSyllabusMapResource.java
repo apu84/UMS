@@ -20,7 +20,7 @@ import javax.ws.rs.core.Response;
 public class MutableSemesterSyllabusMapResource extends Resource {
 
   @Autowired
-  SemesterSyllabusMapResourceHelper  mResourceHelper;
+  SemesterSyllabusMapResourceHelper mResourceHelper;
 
   @Autowired
   SemesterSyllabusMapManager mManager;
@@ -28,15 +28,14 @@ public class MutableSemesterSyllabusMapResource extends Resource {
   @PUT
   @Path(PATH_PARAM_OBJECT_ID)
   public Response updateMap(final @PathParam("object-id") int pObjectId,
-                                 final @Context Request pRequest,
-                                 final JsonObject pJsonObject) throws Exception {
+      final @Context Request pRequest, final JsonObject pJsonObject) throws Exception {
 
     return mResourceHelper.put(pJsonObject);
   }
 
   @POST
-  public Response copyMapping(final @Context Request pRequest,
-                                 final JsonObject pJsonObject) throws Exception {
+  public Response copyMapping(final @Context Request pRequest, final JsonObject pJsonObject)
+      throws Exception {
 
     return mResourceHelper.post(pJsonObject, mUriInfo);
   }

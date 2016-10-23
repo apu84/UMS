@@ -55,14 +55,13 @@ public class ClassRoomResourceHelper extends ResourceHelper<ClassRoom, MutableCl
     return mBuilder;
   }
 
-
   public JsonObject getAll(final UriInfo pUriInfo) throws Exception {
     List<ClassRoom> roomList = getContentManager().getAll();
 
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-    for (ClassRoom room : roomList) {
+    for(ClassRoom room : roomList) {
       children.add(toJson(room, pUriInfo, localCache));
     }
     object.add("rows", children);
@@ -70,10 +69,8 @@ public class ClassRoomResourceHelper extends ResourceHelper<ClassRoom, MutableCl
     object.add("total", roomList.size());
     object.add("records", roomList.size());
 
-
     localCache.invalidate();
     return object.build();
-
 
   }
 
@@ -124,7 +121,9 @@ public class ClassRoomResourceHelper extends ResourceHelper<ClassRoom, MutableCl
     getBuilder().build(mutableClassRoom, pJsonObject, localCache);
     mutableClassRoom.commit(false);
 
-    URI contextURI = pUriInfo.getBaseUriBuilder().path(SemesterResource.class).path(SemesterResource.class, "get").build(mutableClassRoom.getId());
+    URI contextURI =
+        pUriInfo.getBaseUriBuilder().path(SemesterResource.class)
+            .path(SemesterResource.class, "get").build(mutableClassRoom.getId());
     Response.ResponseBuilder builder = Response.created(contextURI);
     builder.status(Response.Status.CREATED);
 
@@ -136,11 +135,12 @@ public class ClassRoomResourceHelper extends ResourceHelper<ClassRoom, MutableCl
     return "";
   }
 
-  public JsonObject buildClassRooms(final List<ClassRoom> pClassRooms, final UriInfo pUriInfo) throws Exception {
+  public JsonObject buildClassRooms(final List<ClassRoom> pClassRooms, final UriInfo pUriInfo)
+      throws Exception {
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-    for (ClassRoom readOnly : pClassRooms) {
+    for(ClassRoom readOnly : pClassRooms) {
       children.add(toJson(readOnly, pUriInfo, localCache));
     }
     object.add("entries", children);
@@ -148,25 +148,24 @@ public class ClassRoomResourceHelper extends ResourceHelper<ClassRoom, MutableCl
     return object.build();
   }
 
-  public JsonObject getByRoomNo(final String pRoomNo,final UriInfo pUriInfo) throws Exception{
+  public JsonObject getByRoomNo(final String pRoomNo, final UriInfo pUriInfo) throws Exception {
     ClassRoom room = getContentManager().getByRoomNo(pRoomNo);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-    children.add(toJson(room,pUriInfo,localCache));
+    children.add(toJson(room, pUriInfo, localCache));
 
     object.add("entries", children);
     localCache.invalidate();
     return object.build();
   }
 
-
-  public JsonObject getByRoomId(final Integer pRoomId,final UriInfo pUriInfo) throws Exception{
+  public JsonObject getByRoomId(final Integer pRoomId, final UriInfo pUriInfo) throws Exception {
     ClassRoom room = getContentManager().get(pRoomId);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-    children.add(toJson(room,pUriInfo,localCache));
+    children.add(toJson(room, pUriInfo, localCache));
 
     object.add("entries", children);
     localCache.invalidate();

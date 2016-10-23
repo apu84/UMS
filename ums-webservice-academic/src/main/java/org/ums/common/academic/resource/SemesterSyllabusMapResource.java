@@ -15,7 +15,8 @@ import javax.ws.rs.core.Response;
  * Created by Ifti on 08-Jan-16.
  */
 @Component
-@Path("/academic/ssmap")  //SemesterSyllabusMap (ssmap)
+@Path("/academic/ssmap")
+// SemesterSyllabusMap (ssmap)
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
 public class SemesterSyllabusMapResource extends MutableSemesterSyllabusMapResource {
@@ -24,12 +25,12 @@ public class SemesterSyllabusMapResource extends MutableSemesterSyllabusMapResou
 
   @GET
   @Path("/program/{program-id}/semester/{semester-id}")
-  public JsonObject getMapsByProgramSemester(final @Context Request pRequest, final @PathParam("program-id") int pProgramId,
-                                   final @PathParam("semester-id") int pSemesterId)
+  public JsonObject getMapsByProgramSemester(final @Context Request pRequest,
+      final @PathParam("program-id") int pProgramId, final @PathParam("semester-id") int pSemesterId)
       throws Exception {
-        return mResourceHelper.buildMaps(mManager.getMapsByProgramSemester(pProgramId, pSemesterId), mUriInfo);
+    return mResourceHelper.buildMaps(mManager.getMapsByProgramSemester(pProgramId, pSemesterId),
+        mUriInfo);
   }
-
 
   @GET
   @Path("/{map-id}")
@@ -37,6 +38,5 @@ public class SemesterSyllabusMapResource extends MutableSemesterSyllabusMapResou
       throws Exception {
     return mResourceHelper.get(pMapId, pRequest, mUriInfo);
   }
-
 
 }

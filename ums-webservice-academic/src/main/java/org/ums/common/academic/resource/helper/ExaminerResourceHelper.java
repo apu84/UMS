@@ -24,7 +24,8 @@ import java.util.List;
 
 @Component
 public class ExaminerResourceHelper
-    extends AbstractAssignedTeacherResourceHelper<Examiner, MutableExaminer, Integer, AssignedTeacherManager<Examiner, MutableExaminer, Integer>> {
+    extends
+    AbstractAssignedTeacherResourceHelper<Examiner, MutableExaminer, Integer, AssignedTeacherManager<Examiner, MutableExaminer, Integer>> {
   @Autowired
   @Qualifier("examinerManager")
   AssignedTeacherManager<Examiner, MutableExaminer, Integer> mExaminerManager;
@@ -64,24 +65,22 @@ public class ExaminerResourceHelper
     LocalCache localCache = new LocalCache();
     JsonArray entries = pJsonObject.getJsonArray("entries");
 
-    for (int i = 0; i < entries.size(); i++) {
+    for(int i = 0; i < entries.size(); i++) {
       JsonObject jsonObject = entries.getJsonObject(i);
       String updateType = jsonObject.getString("updateType");
       Integer programId = Integer.parseInt(jsonObject.getString("programId"));
       MutableExaminer mutableExaminer = new PersistentExaminer();
       getBuilder().build(mutableExaminer, jsonObject, localCache);
       User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
-      switch (updateType) {
+      switch(updateType) {
         case "insert":
-          //First validate whether there is already an entry for this course
-          List<Examiner> examiners
-              = mExaminerManager.getAssignedTeachers(programId,
-              mutableExaminer.getSemesterId(),
-              mutableExaminer.getCourseId(),
-              user.getDepartment().getId());
-          if (examiners.size() > 0
-              && (!StringUtils.isEmpty(examiners.get(0).getPreparerId())
-              || !StringUtils.isEmpty(examiners.get(0).getScrutinizerId()))) {
+          // First validate whether there is already an entry for this course
+          List<Examiner> examiners =
+              mExaminerManager.getAssignedTeachers(programId, mutableExaminer.getSemesterId(),
+                  mutableExaminer.getCourseId(), user.getDepartment().getId());
+          if(examiners.size() > 0
+              && (!StringUtils.isEmpty(examiners.get(0).getPreparerId()) || !StringUtils
+                  .isEmpty(examiners.get(0).getScrutinizerId()))) {
             throw new ValidationException(mMessageResource.getMessage("examiner.already.assigned",
                 mutableExaminer.getCourse().getNo()));
           }

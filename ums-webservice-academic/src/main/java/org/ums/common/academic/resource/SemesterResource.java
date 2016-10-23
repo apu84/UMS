@@ -29,17 +29,19 @@ public class SemesterResource extends MutableSemesterResource {
 
   @GET
   @Path("/program-type/{program-type}/limit/{list-limit}")
-  public JsonObject getSemesterList(final @Context Request pRequest, final @PathParam("program-type") int pProgramType, final @PathParam("list-limit") int pListLimit)
-      throws Exception {
-    List<Semester> semesters = mManager.getSemesters(pProgramType,pListLimit);
-    return mResourceHelper.buildSemesters(mManager.getSemesters(pProgramType, pListLimit), mUriInfo);
+  public JsonObject getSemesterList(final @Context Request pRequest,
+      final @PathParam("program-type") int pProgramType,
+      final @PathParam("list-limit") int pListLimit) throws Exception {
+    List<Semester> semesters = mManager.getSemesters(pProgramType, pListLimit);
+    return mResourceHelper
+        .buildSemesters(mManager.getSemesters(pProgramType, pListLimit), mUriInfo);
   }
 
   @GET
   @Path(PATH_PARAM_OBJECT_ID)
-  public Response get(final @Context Request pRequest, final @PathParam("object-id") int pObjectId) throws Exception {
+  public Response get(final @Context Request pRequest, final @PathParam("object-id") int pObjectId)
+      throws Exception {
     return mResourceHelper.get(pObjectId, pRequest, mUriInfo);
   }
-
 
 }

@@ -10,9 +10,13 @@ import java.io.Serializable;
 /**
  * Created by My Pc on 30-Aug-16.
  */
-public interface AppSetting extends Serializable,LastModifier,EditType<MutableAppSetting>, Identifier<Integer>{
+public interface AppSetting extends Serializable, LastModifier, EditType<MutableAppSetting>,
+    Identifier<Integer> {
   String getParameterName();
+
   String getParameterValue();
+
   String getDescription();
+
   String getDataType();
 }

@@ -8,7 +8,8 @@ import org.ums.util.CacheUtil;
 
 import java.util.List;
 
-public class EnrollmentFromToCache extends ContentCache<EnrollmentFromTo, MutableEnrollmentFromTo, Integer, EnrollmentFromToManager>
+public class EnrollmentFromToCache extends
+    ContentCache<EnrollmentFromTo, MutableEnrollmentFromTo, Integer, EnrollmentFromToManager>
     implements EnrollmentFromToManager {
   private CacheManager<EnrollmentFromTo, Integer> mCacheManager;
 

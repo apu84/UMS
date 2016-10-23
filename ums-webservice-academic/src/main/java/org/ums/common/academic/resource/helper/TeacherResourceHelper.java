@@ -51,14 +51,15 @@ public class TeacherResourceHelper extends ResourceHelper<Teacher, MutableTeache
     return pReadonly.getLastModified();
   }
 
-  public JsonObject getByDepartment(final String pDepartmentId, final UriInfo pUriInfo) throws Exception {
+  public JsonObject getByDepartment(final String pDepartmentId, final UriInfo pUriInfo)
+      throws Exception {
     Department department = mDepartmentManager.get(pDepartmentId);
     List<Teacher> teachers = getContentManager().getByDepartment(department);
 
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-    for (Teacher teacher : teachers) {
+    for(Teacher teacher : teachers) {
       children.add(toJson(teacher, pUriInfo, localCache));
     }
     object.add("entries", children);

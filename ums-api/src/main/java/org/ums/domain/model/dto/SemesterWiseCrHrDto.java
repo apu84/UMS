@@ -10,7 +10,7 @@ public class SemesterWiseCrHrDto {
   private String syllabus_id;
   private Integer year;
   private Integer semester;
-  private Float   totalCrHr;
+  private Float totalCrHr;
   private Float theoryChHr;
   private Float sessionalCrHr;
   private Float optionalCrHr;

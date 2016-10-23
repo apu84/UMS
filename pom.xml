@@ -25,6 +25,7 @@
     <jxls-version>2.3.0</jxls-version>
     <jxls-poi-version>1.0.9</jxls-poi-version>
     <spring-data-mongodb-version>1.9.2.RELEASE</spring-data-mongodb-version>
+    <main.basedir>${project.basedir}</main.basedir>
   </properties>
 
  <!-- <repositories>
@@ -51,10 +52,16 @@
       <id>pentaho-releases</id>
       <url>http://repository.pentaho.org/artifactory/repo/</url>
     </repository>
+    <repository>
+      <id>central.maven.org</id>
+      <name>central.maven.org</name>
+      <url>http://central.maven.org/maven2/</url>
+    </repository>
   </repositories>
 
 
   <modules>
+    <module>build-tools</module>
     <module>ums-api</module>
     <module>ums-core</module>
     <module>ums-webservice-core</module>
@@ -494,8 +501,33 @@
             </webResources>
           </configuration>
         </plugin>
+        <plugin><!-- mvn java-formatter:format -->
+          <groupId>com.googlecode.maven-java-formatter-plugin</groupId>
+          <artifactId>maven-java-formatter-plugin</artifactId>
+          <version>0.4</version>
+          <configuration>
+            <configFile>${main.basedir}/build-tools/src/main/resources/eclipse/eclipse-java-google-style.xml</configFile>
+            <encoding>UTF-8</encoding>
+          </configuration>
+        </plugin>
       </plugins>
     </pluginManagement>
+
+    <plugins>
+      <plugin>
+        <groupId>com.googlecode.maven-java-formatter-plugin</groupId>
+        <artifactId>maven-java-formatter-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>format</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>format</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
   </build>
 
 </project>

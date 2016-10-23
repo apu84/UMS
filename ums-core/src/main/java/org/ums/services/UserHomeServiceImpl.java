@@ -6,7 +6,6 @@ import org.ums.processor.userhome.UserHomeProcessor;
 import java.util.List;
 import java.util.Map;
 
-
 public class UserHomeServiceImpl implements UserHomeService {
   private List<UserHomeProcessor> mUserHomeProcessors;
 
@@ -20,8 +19,8 @@ public class UserHomeServiceImpl implements UserHomeService {
 
   @Override
   public List<Map<String, String>> process(Subject pCurrentSubject) throws Exception {
-    for (UserHomeProcessor homeProcessor : mUserHomeProcessors) {
-      if (homeProcessor.supports(pCurrentSubject)) {
+    for(UserHomeProcessor homeProcessor : mUserHomeProcessors) {
+      if(homeProcessor.supports(pCurrentSubject)) {
         return homeProcessor.process(pCurrentSubject);
       }
     }

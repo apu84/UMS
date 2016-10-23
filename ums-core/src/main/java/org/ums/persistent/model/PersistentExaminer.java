@@ -20,8 +20,7 @@ public class PersistentExaminer extends AbstractAssignedTeacher implements Mutab
   private String mScrutinizerId;
   private Teacher mScrutinizer;
 
-  public PersistentExaminer() {
-  }
+  public PersistentExaminer() {}
 
   public PersistentExaminer(final PersistentExaminer pPersistentExaminer) throws Exception {
     this.mId = pPersistentExaminer.getId();
@@ -57,7 +56,8 @@ public class PersistentExaminer extends AbstractAssignedTeacher implements Mutab
 
   @Override
   public Teacher getPreparer() throws Exception {
-    return mPreparer == null ? sTeacherManager.get(mPreparerId) : sTeacherManager.validate(mPreparer);
+    return mPreparer == null ? sTeacherManager.get(mPreparerId) : sTeacherManager
+        .validate(mPreparer);
   }
 
   @Override
@@ -67,7 +67,8 @@ public class PersistentExaminer extends AbstractAssignedTeacher implements Mutab
 
   @Override
   public Teacher getScrutinizer() throws Exception {
-    return mScrutinizer == null ? sTeacherManager.get(mScrutinizerId) : sTeacherManager.validate(mScrutinizer);
+    return mScrutinizer == null ? sTeacherManager.get(mScrutinizerId) : sTeacherManager
+        .validate(mScrutinizer);
   }
 
   @Override
@@ -82,9 +83,10 @@ public class PersistentExaminer extends AbstractAssignedTeacher implements Mutab
 
   @Override
   public void commit(boolean update) throws Exception {
-    if (update) {
+    if(update) {
       sExaminerManager.update(this);
-    } else {
+    }
+    else {
       sExaminerManager.create(this);
     }
   }

@@ -1,6 +1,5 @@
 package org.ums.common.academic.resource;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.ums.common.academic.resource.helper.StudentResourceHelper;
@@ -21,19 +20,16 @@ public class MutableStudentResource extends Resource {
   @POST
   public Response create(final JsonObject pJsonObject) throws Exception {
 
-    return  mResourceHelper.post(pJsonObject, mUriInfo);
+    return mResourceHelper.post(pJsonObject, mUriInfo);
   }
 
   @PUT
   @Path(PATH_PARAM_OBJECT_ID)
   public Response update(final @PathParam("object-id") String pObjectId,
-                         final @Context Request pRequest,
-                         final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader,
-                         final JsonObject pJsonObject) throws Exception {
+      final @Context Request pRequest, final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader,
+      final JsonObject pJsonObject) throws Exception {
     return mResourceHelper.put(pObjectId, pRequest, pIfMatchHeader, pJsonObject);
   }
-
-
 
   @DELETE
   @Path(PATH_PARAM_OBJECT_ID)
@@ -41,10 +37,9 @@ public class MutableStudentResource extends Resource {
     return mResourceHelper.delete(pObjectId);
   }
 
-
   @PUT
   @Path("/adviser")
-  public Response updateStudentsAdviser(final JsonObject pJsonObject) throws Exception{
+  public Response updateStudentsAdviser(final JsonObject pJsonObject) throws Exception {
     return mResourceHelper.modifyStudentAdviser(pJsonObject);
   }
 }

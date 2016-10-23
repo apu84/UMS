@@ -11,7 +11,9 @@ import java.util.List;
 /**
  * Created by Ifti on 27-Dec-15.
  */
-public class SemesterDaoDecorator extends ContentDaoDecorator<Semester, MutableSemester, Integer, SemesterManager> implements SemesterManager {
+public class SemesterDaoDecorator extends
+    ContentDaoDecorator<Semester, MutableSemester, Integer, SemesterManager> implements
+    SemesterManager {
   @Override
   public List<Semester> getSemesters(Integer pProgramType, Integer pLimit) throws Exception {
     return getManager().getSemesters(pProgramType, pLimit);
@@ -23,7 +25,8 @@ public class SemesterDaoDecorator extends ContentDaoDecorator<Semester, MutableS
   }
 
   @Override
-  public Semester getSemesterByStatus( ProgramType programType,SemesterStatus status) throws Exception {
+  public Semester getSemesterByStatus(ProgramType programType, SemesterStatus status)
+      throws Exception {
     return getManager().getSemesterByStatus(programType, status);
   }
 

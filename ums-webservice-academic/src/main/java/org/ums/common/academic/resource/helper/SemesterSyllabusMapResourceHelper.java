@@ -27,7 +27,8 @@ import java.util.List;
  */
 
 @Component
-public class SemesterSyllabusMapResourceHelper extends ResourceHelper<SemesterSyllabusMap, MutableSemesterSyllabusMap, Integer> {
+public class SemesterSyllabusMapResourceHelper extends
+    ResourceHelper<SemesterSyllabusMap, MutableSemesterSyllabusMap, Integer> {
   @Autowired
   private SemesterSyllabusMapManager mManager;
 
@@ -39,14 +40,17 @@ public class SemesterSyllabusMapResourceHelper extends ResourceHelper<SemesterSy
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
-    MutableSemesterSyllabusMapDto mutableSemesterSyllabusMap = new org.ums.domain.model.dto.SemesterSyllabusMap();
+    MutableSemesterSyllabusMapDto mutableSemesterSyllabusMap =
+        new org.ums.domain.model.dto.SemesterSyllabusMap();
     LocalCache localCache = new LocalCache();
     mMapBuilder.build(mutableSemesterSyllabusMap, pJsonObject, localCache);
 
     mManager.copySyllabus(mutableSemesterSyllabusMap);
 
-    URI contextURI = pUriInfo.getBaseUriBuilder().path(SemesterResource.class).path(SemesterResource.class, "get")
-        .build(mutableSemesterSyllabusMap.getAcademicSemester().getId());
+    URI contextURI =
+        pUriInfo.getBaseUriBuilder().path(SemesterResource.class)
+            .path(SemesterResource.class, "get")
+            .build(mutableSemesterSyllabusMap.getAcademicSemester().getId());
     Response.ResponseBuilder builder = Response.created(contextURI);
     builder.status(Response.Status.CREATED);
 
@@ -59,7 +63,7 @@ public class SemesterSyllabusMapResourceHelper extends ResourceHelper<SemesterSy
   }
 
   public Response put(final JsonObject pJsonObject) throws Exception {
-    MutableSemesterSyllabusMap mutable =new PersistentSemesterSyllabusMap();
+    MutableSemesterSyllabusMap mutable = new PersistentSemesterSyllabusMap();
     getBuilder().build(mutable, pJsonObject, null);
     SemesterSyllabusMap readOnly = load(mutable.getId());
     System.out.println(readOnly.getAcademicSemester().getStatus());
@@ -67,16 +71,18 @@ public class SemesterSyllabusMapResourceHelper extends ResourceHelper<SemesterSy
     mutable.commit(true);
     return Response.noContent().build();
   }
+
   @Override
   protected SemesterSyllabusMapBuilder getBuilder() {
     return mBuilder;
   }
 
-  public JsonObject buildMaps(final List<SemesterSyllabusMap> pSyllabuses, final UriInfo pUriInfo) throws Exception {
+  public JsonObject buildMaps(final List<SemesterSyllabusMap> pSyllabuses, final UriInfo pUriInfo)
+      throws Exception {
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-    for (SemesterSyllabusMap readOnly : pSyllabuses) {
+    for(SemesterSyllabusMap readOnly : pSyllabuses) {
       children.add(toJson(readOnly, pUriInfo, localCache));
     }
     object.add("entries", children);

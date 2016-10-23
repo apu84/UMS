@@ -31,8 +31,7 @@ public class PersistentClassRoom implements MutableClassRoom {
   private boolean mExamSeatPlan;
   private String mLastModified;
 
-  public PersistentClassRoom() {
-  }
+  public PersistentClassRoom() {}
 
   public PersistentClassRoom(final PersistentClassRoom pOriginal) throws Exception {
     mId = pOriginal.getId();
@@ -56,7 +55,6 @@ public class PersistentClassRoom implements MutableClassRoom {
   public void setId(Integer pId) {
     mId = pId;
   }
-
 
   @Override
   public void setRoomNo(String pRoomNo) {
@@ -125,7 +123,7 @@ public class PersistentClassRoom implements MutableClassRoom {
 
   @Override
   public int getCapacity() {
-    return mTotalColumn*mTotalRow;
+    return mTotalColumn * mTotalRow;
   }
 
   @Override
@@ -148,7 +146,6 @@ public class PersistentClassRoom implements MutableClassRoom {
     return mExamSeatPlan;
   }
 
-
   @Override
   public String getLastModified() {
     return mLastModified;
@@ -164,9 +161,10 @@ public class PersistentClassRoom implements MutableClassRoom {
   }
 
   public void commit(final boolean update) throws Exception {
-    if (update) {
+    if(update) {
       sClassRoomManager.update(this);
-    } else {
+    }
+    else {
       sClassRoomManager.create(this);
     }
   }

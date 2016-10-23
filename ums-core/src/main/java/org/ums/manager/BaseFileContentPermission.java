@@ -1,6 +1,5 @@
 package org.ums.manager;
 
-
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,8 +25,7 @@ public abstract class BaseFileContentPermission extends BinaryContentDecorator {
   protected MessageResource mMessageResource;
 
   public BaseFileContentPermission(final BearerAccessTokenManager pBearerAccessTokenManager,
-                                   final UserManager pUserManager,
-                                   final MessageResource pMessageResource) {
+      final UserManager pUserManager, final MessageResource pMessageResource) {
     mBearerAccessTokenManager = pBearerAccessTokenManager;
     mUserManager = pUserManager;
     mMessageResource = pMessageResource;
@@ -54,16 +52,16 @@ public abstract class BaseFileContentPermission extends BinaryContentDecorator {
       String decodedToken = decrypt(pToken);
       String[] splitToken = decodedToken.split(":");
 
-      if (splitToken.length == 2) {
+      if(splitToken.length == 2) {
         BearerAccessToken userToken = mBearerAccessTokenManager.getByUser(splitToken[0]);
-        if (userToken != null) {
-          if (userToken.getId().equals(splitToken[1])) {
+        if(userToken != null) {
+          if(userToken.getId().equals(splitToken[1])) {
             return true;
           }
         }
 
       }
-    } catch (Exception e) {
+    } catch(Exception e) {
       mLogger.info("Token is not valid", e);
     }
     return false;
@@ -75,20 +73,20 @@ public abstract class BaseFileContentPermission extends BinaryContentDecorator {
     try {
       String encryptedToken = encrypt(userId + ":" + accessToken);
 
-      if (folderList instanceof List) {
+      if(folderList instanceof List) {
         List list = (List) folderList;
-        for (Object folder : list) {
-          if (folder instanceof Map) {
+        for(Object folder : list) {
+          if(folder instanceof Map) {
             ((Map) folder).put(TOKEN, encryptedToken);
             String owner = ((Map<String, String>) folder).get(OWNER);
-            if (!StringUtils.isEmpty(owner)) {
+            if(!StringUtils.isEmpty(owner)) {
               owner = mUserManager.get(owner).getName();
             }
             ((Map<String, String>) folder).put(OWNER, owner);
           }
         }
       }
-    } catch (Exception e) {
+    } catch(Exception e) {
       return error(mMessageResource.getMessage("folder.listing.failed"));
     }
     return folderList;

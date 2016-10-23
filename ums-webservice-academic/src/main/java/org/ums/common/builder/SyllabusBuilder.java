@@ -47,22 +47,25 @@ public class SyllabusBuilder implements Builder<Syllabus, MutableSyllabus> {
   }
 
   @Override
-  public void build(MutableSyllabus pMutable, JsonObject pJsonObject, final LocalCache pLocalCache) throws Exception {
+  public void build(MutableSyllabus pMutable, JsonObject pJsonObject, final LocalCache pLocalCache)
+      throws Exception {
     String id = pJsonObject.getString("syllabusId");
     int semesterId = Integer.parseInt(pJsonObject.getString("semesterId"));
-    int programId = Integer.parseInt(pJsonObject.getJsonObject("programSelector").getString("programId"));
+    int programId =
+        Integer.parseInt(pJsonObject.getJsonObject("programSelector").getString("programId"));
     pMutable.setId(id);
 
-    PersistentSemester pSemester=new PersistentSemester();
+    PersistentSemester pSemester = new PersistentSemester();
     pSemester.setId(semesterId);
     pMutable.setSemester(pSemester);
-    PersistentProgram persistentProgram=new PersistentProgram();
+    PersistentProgram persistentProgram = new PersistentProgram();
     persistentProgram.setId(programId);
     pMutable.setSemester(pSemester);
     pMutable.setProgram(persistentProgram);
 
-    //Unnecessary. No use of it in any Use Case. If any Use case need this then we will open it again
-    //pMutable.setSemester(mSemesterManager.get(semesterId));
-    //pMutable.setProgram(mProgramManager.get(programId));
+    // Unnecessary. No use of it in any Use Case. If any Use case need this then we will open it
+    // again
+    // pMutable.setSemester(mSemesterManager.get(semesterId));
+    // pMutable.setProgram(mProgramManager.get(programId));
   }
 }

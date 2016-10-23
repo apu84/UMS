@@ -9,71 +9,90 @@ import java.util.List;
 /**
  * Created by My Pc on 5/8/2016.
  */
-public class SeatPlanDaoDecorator extends ContentDaoDecorator<SeatPlan,MutableSeatPlan,Integer,SeatPlanManager> implements SeatPlanManager {
-
+public class SeatPlanDaoDecorator extends
+    ContentDaoDecorator<SeatPlan, MutableSeatPlan, Integer, SeatPlanManager> implements
+    SeatPlanManager {
 
   @Override
-  public int createSeatPlanForCCI(List<MutableSeatPlan> pSeatPlans) throws Exception{
+  public int createSeatPlanForCCI(List<MutableSeatPlan> pSeatPlans) throws Exception {
     return getManager().createSeatPlanForCCI(pSeatPlans);
   }
 
   @Override
-  public List<SeatPlan> getBySemesterAndGroupAndExamType(int pSemesterId, int pGropNo,int pExamType)throws Exception {
-    return getManager().getBySemesterAndGroupAndExamType(pSemesterId,pGropNo,pExamType);
+  public List<SeatPlan> getBySemesterAndGroupAndExamType(int pSemesterId, int pGropNo, int pExamType)
+      throws Exception {
+    return getManager().getBySemesterAndGroupAndExamType(pSemesterId, pGropNo, pExamType);
   }
 
   @Override
-  public List<SeatPlan> getByRoomSemesterGroupExamType(int pRoomId, int pSemesterId, int pGroupNo,int pExamType) throws Exception{
-    return getManager().getByRoomSemesterGroupExamType(pRoomId,pSemesterId,pGroupNo,pExamType);
+  public List<SeatPlan> getByRoomSemesterGroupExamType(int pRoomId, int pSemesterId, int pGroupNo,
+      int pExamType) throws Exception {
+    return getManager().getByRoomSemesterGroupExamType(pRoomId, pSemesterId, pGroupNo, pExamType);
   }
 
   @Override
-  public int deleteBySemesterGroupExamType(int pSemesterId, int pGroupNo, int pExamType) throws Exception{
-    return getManager().deleteBySemesterGroupExamType(pSemesterId,pGroupNo,pExamType);
+  public int deleteBySemesterGroupExamType(int pSemesterId, int pGroupNo, int pExamType)
+      throws Exception {
+    return getManager().deleteBySemesterGroupExamType(pSemesterId, pGroupNo, pExamType);
   }
 
   @Override
-  public int deleteBySemesterGroupExamTypeAndExamDate(int pSemesterId, int pGroupNo, int pExamType, String pExamDate) throws Exception{
-    return getManager().deleteBySemesterGroupExamTypeAndExamDate(pSemesterId,pGroupNo,pExamType,pExamDate);
+  public int deleteBySemesterGroupExamTypeAndExamDate(int pSemesterId, int pGroupNo, int pExamType,
+      String pExamDate) throws Exception {
+    return getManager().deleteBySemesterGroupExamTypeAndExamDate(pSemesterId, pGroupNo, pExamType,
+        pExamDate);
   }
 
   @Override
-  public List<SeatPlan> getBySemesterGroupTypeRoomRowAndCol(int pSemesterId, int pGroupNo, int pType, int pRoomId, int pRow, int pCol) throws Exception{
-    return getManager().getBySemesterGroupTypeRoomRowAndCol(pSemesterId,pGroupNo,pType,pRoomId,pRow,pCol);
+  public List<SeatPlan> getBySemesterGroupTypeRoomRowAndCol(int pSemesterId, int pGroupNo,
+      int pType, int pRoomId, int pRow, int pCol) throws Exception {
+    return getManager().getBySemesterGroupTypeRoomRowAndCol(pSemesterId, pGroupNo, pType, pRoomId,
+        pRow, pCol);
   }
 
   @Override
-  public int checkIfExistsBySemesterGroupTypeRoomRowAndCol(int pSemesterId, int pGroupNo, int pType, int pRoomId, int pRow, int pCol) throws Exception{
-    return getManager().checkIfExistsBySemesterGroupTypeRoomRowAndCol(pSemesterId,pGroupNo,pType,pRoomId,pRow,pCol);
+  public int checkIfExistsBySemesterGroupTypeRoomRowAndCol(int pSemesterId, int pGroupNo,
+      int pType, int pRoomId, int pRow, int pCol) throws Exception {
+    return getManager().checkIfExistsBySemesterGroupTypeRoomRowAndCol(pSemesterId, pGroupNo, pType,
+        pRoomId, pRow, pCol);
   }
 
   @Override
-  public int checkIfExistsByRoomSemesterGroupExamType(int pRoomId, int pSemesterId, int pGroupNo, int pExamType) throws Exception{
-    return getManager().checkIfExistsByRoomSemesterGroupExamType(pRoomId,pSemesterId,pGroupNo,pExamType);
+  public int checkIfExistsByRoomSemesterGroupExamType(int pRoomId, int pSemesterId, int pGroupNo,
+      int pExamType) throws Exception {
+    return getManager().checkIfExistsByRoomSemesterGroupExamType(pRoomId, pSemesterId, pGroupNo,
+        pExamType);
   }
 
   @Override
-  public List<SeatPlan> getBySemesterAndGroupAndExamTypeAndExamDate(int pSemesterId, int pGropuNo, int pExamType, String pExamDate) throws Exception{
-    return getManager().getBySemesterAndGroupAndExamTypeAndExamDate(pSemesterId,pGropuNo,pExamType,pExamDate);
+  public List<SeatPlan> getBySemesterAndGroupAndExamTypeAndExamDate(int pSemesterId, int pGropuNo,
+      int pExamType, String pExamDate) throws Exception {
+    return getManager().getBySemesterAndGroupAndExamTypeAndExamDate(pSemesterId, pGropuNo,
+        pExamType, pExamDate);
   }
 
   @Override
-  public int checkIfExistsBySemesterGroupTypeExamDateRoomRowAndCol(int pSemesterId, int pGroupNo, int pType, String pExamDate, int pRoomId, int pRow, int pCol)throws Exception {
-    return getManager().checkIfExistsBySemesterGroupTypeExamDateRoomRowAndCol(pSemesterId,pGroupNo,pType,pExamDate,pRoomId,pRow,pCol);
+  public int checkIfExistsBySemesterGroupTypeExamDateRoomRowAndCol(int pSemesterId, int pGroupNo,
+      int pType, String pExamDate, int pRoomId, int pRow, int pCol) throws Exception {
+    return getManager().checkIfExistsBySemesterGroupTypeExamDateRoomRowAndCol(pSemesterId,
+        pGroupNo, pType, pExamDate, pRoomId, pRow, pCol);
   }
 
   @Override
-  public List<SeatPlan> getForStudent(String pStudentId, Integer pSemesterId) throws Exception{
-    return getManager().getForStudent(pStudentId,pSemesterId);
+  public List<SeatPlan> getForStudent(String pStudentId, Integer pSemesterId) throws Exception {
+    return getManager().getForStudent(pStudentId, pSemesterId);
   }
 
   @Override
-  public List<SeatPlan> getForStudentAndCCIExam(String pStudentId, Integer pSemesterid, String pExamDate) throws Exception{
-    return getManager().getForStudentAndCCIExam(pStudentId,pSemesterid,pExamDate);
+  public List<SeatPlan> getForStudentAndCCIExam(String pStudentId, Integer pSemesterid,
+      String pExamDate) throws Exception {
+    return getManager().getForStudentAndCCIExam(pStudentId, pSemesterid, pExamDate);
   }
 
   @Override
-  public List<SeatPlan> getSeatPlanOrderByExamDateAndCourseAndYearAndSemesterAndStudentId(Integer pSemesterId, Integer pExamType) throws Exception {
-    return getManager().getSeatPlanOrderByExamDateAndCourseAndYearAndSemesterAndStudentId(pSemesterId,pExamType);
+  public List<SeatPlan> getSeatPlanOrderByExamDateAndCourseAndYearAndSemesterAndStudentId(
+      Integer pSemesterId, Integer pExamType) throws Exception {
+    return getManager().getSeatPlanOrderByExamDateAndCourseAndYearAndSemesterAndStudentId(
+        pSemesterId, pExamType);
   }
 }

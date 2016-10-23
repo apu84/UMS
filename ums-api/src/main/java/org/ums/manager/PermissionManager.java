@@ -1,6 +1,5 @@
 package org.ums.manager;
 
-
 import org.ums.domain.model.mutable.MutablePermission;
 import org.ums.domain.model.immutable.Permission;
 import org.ums.domain.model.immutable.Role;

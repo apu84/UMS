@@ -6,6 +6,7 @@ import org.ums.domain.model.mutable.MutableSemesterWithdrawalLog;
 /**
  * Created by My Pc on 3/25/2016.
  */
-public interface SemesterWithdrawalLogManager extends ContentManager<SemesterWithdrawalLog,MutableSemesterWithdrawalLog,Integer> {
+public interface SemesterWithdrawalLogManager extends
+    ContentManager<SemesterWithdrawalLog, MutableSemesterWithdrawalLog, Integer> {
   public SemesterWithdrawalLog getBySemesterWithdrawalId(int pSemesterWithdrawalId);
 }

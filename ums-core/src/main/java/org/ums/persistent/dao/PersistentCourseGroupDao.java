@@ -1,6 +1,5 @@
 package org.ums.persistent.dao;
 
-
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.persistent.model.PersistentCourseGroup;
@@ -15,11 +14,15 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentCourseGroupDao extends CourseGroupDaoDecorator {
 
-  static String SELECT_ALL = "SELECT SYLLABUS_ID, GROUP_ID, GROUP_NAME, LAST_MODIFIED FROM OPT_COURSE_GROUP ";
-  static String UPDATE_ONE = "UPDATE OPT_COURSE_GROUP SET SYLLABUS_ID = ?, GROUP_NAME = ?, LAST_MODIFIED = " + getLastModifiedSql() + " ";
+  static String SELECT_ALL =
+      "SELECT SYLLABUS_ID, GROUP_ID, GROUP_NAME, LAST_MODIFIED FROM OPT_COURSE_GROUP ";
+  static String UPDATE_ONE =
+      "UPDATE OPT_COURSE_GROUP SET SYLLABUS_ID = ?, GROUP_NAME = ?, LAST_MODIFIED = "
+          + getLastModifiedSql() + " ";
   static String DELETE_ONE = "DELETE FROM OPT_COURSE_GROUP ";
-  static String INSERT_ONE = "INSERT INTO OPT_COURSE_GROUP(SYLLABUS_ID, GROUP_ID, GROUP_NAME, LAST_MODIFIED) " +
-      "VALUES(?, ?, ?, " + getLastModifiedSql() + ")";
+  static String INSERT_ONE =
+      "INSERT INTO OPT_COURSE_GROUP(SYLLABUS_ID, GROUP_ID, GROUP_NAME, LAST_MODIFIED) "
+          + "VALUES(?, ?, ?, " + getLastModifiedSql() + ")";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -30,13 +33,14 @@ public class PersistentCourseGroupDao extends CourseGroupDaoDecorator {
   @Override
   public CourseGroup get(final Integer pId) throws Exception {
     String query = SELECT_ALL + "WHERE GROUP_ID = ?";
-    return mJdbcTemplate.queryForObject(query, new Object[]{pId}, new CourseGroupRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new CourseGroupRowMapper());
   }
 
   @Override
   public CourseGroup getBySyllabus(final Integer pId, final String pSyllabusId) throws Exception {
     String query = SELECT_ALL + "WHERE GROUP_ID = ? AND SYLLABUS_ID = ? ";
-    return mJdbcTemplate.queryForObject(query, new Object[]{pId, pSyllabusId}, new CourseGroupRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId, pSyllabusId},
+        new CourseGroupRowMapper());
   }
 
   @Override
@@ -48,9 +52,7 @@ public class PersistentCourseGroupDao extends CourseGroupDaoDecorator {
   @Override
   public int update(final MutableCourseGroup pCourseGroup) throws Exception {
     String query = UPDATE_ONE + "WHERE GORUP_ID = ?";
-    return mJdbcTemplate.update(query,
-        pCourseGroup.getSyllabus().getId(),
-        pCourseGroup.getName(),
+    return mJdbcTemplate.update(query, pCourseGroup.getSyllabus().getId(), pCourseGroup.getName(),
         pCourseGroup.getId());
   }
 
@@ -61,10 +63,8 @@ public class PersistentCourseGroupDao extends CourseGroupDaoDecorator {
 
   @Override
   public int create(final MutableCourseGroup pCourseGroup) throws Exception {
-    return mJdbcTemplate.update(INSERT_ONE,
-        pCourseGroup.getSyllabus().getId(),
-        pCourseGroup.getId(),
-        pCourseGroup.getName());
+    return mJdbcTemplate.update(INSERT_ONE, pCourseGroup.getSyllabus().getId(),
+        pCourseGroup.getId(), pCourseGroup.getName());
   }
 
   class CourseGroupRowMapper implements RowMapper<CourseGroup> {

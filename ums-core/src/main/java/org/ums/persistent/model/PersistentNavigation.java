@@ -6,7 +6,6 @@ import org.ums.domain.model.mutable.MutableNavigation;
 import org.ums.domain.model.immutable.Navigation;
 import org.ums.manager.NavigationManager;
 
-
 public class PersistentNavigation implements MutableNavigation {
   private static NavigationManager sNavigationManager;
 
@@ -27,8 +26,7 @@ public class PersistentNavigation implements MutableNavigation {
   private String mLastModified;
   private Integer mParentId;
 
-  public PersistentNavigation() {
-  }
+  public PersistentNavigation() {}
 
   public PersistentNavigation(final Navigation pNavigation) {
     setId(pNavigation.getId());
@@ -120,7 +118,8 @@ public class PersistentNavigation implements MutableNavigation {
 
   @Override
   public Navigation getParent() throws Exception {
-    return mNavigation == null ? mParentId > 0 ? sNavigationManager.get(mParentId) : null : sNavigationManager.validate(mNavigation);
+    return mNavigation == null ? mParentId > 0 ? sNavigationManager.get(mParentId) : null
+        : sNavigationManager.validate(mNavigation);
   }
 
   @Override
@@ -150,9 +149,10 @@ public class PersistentNavigation implements MutableNavigation {
 
   @Override
   public void commit(boolean update) throws Exception {
-    if (update) {
+    if(update) {
       sNavigationManager.update(this);
-    } else {
+    }
+    else {
       sNavigationManager.create(this);
     }
   }

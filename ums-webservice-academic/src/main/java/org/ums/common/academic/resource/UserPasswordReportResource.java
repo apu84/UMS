@@ -20,7 +20,6 @@ public class UserPasswordReportResource {
 
   private static final String FILE_PATH = "e:\\1.pdf";
 
-
   @POST
   @Consumes("application/json")
   @Produces("application/pdf")
@@ -30,25 +29,24 @@ public class UserPasswordReportResource {
       public void write(OutputStream output) throws IOException, WebApplicationException {
 
         byte[] bFile = new byte[(int) file.length()];
-        FileInputStream fileInputStream=null;
+        FileInputStream fileInputStream = null;
         try {
-          //convert file into array of bytes
+          // convert file into array of bytes
           fileInputStream = new FileInputStream(file);
           fileInputStream.read(bFile);
           fileInputStream.close();
           System.out.println("Done");
-        }catch(Exception e){
+        } catch(Exception e) {
           e.printStackTrace();
         }
 
         try {
           output.write(bFile);
-        } catch (Exception e) {
+        } catch(Exception e) {
           throw new WebApplicationException(e);
         }
       }
     };
   }
-
 
 }

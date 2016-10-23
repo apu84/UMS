@@ -32,7 +32,8 @@ public class TeacherBuilder implements Builder<Teacher, MutableTeacher> {
   }
 
   @Override
-  public void build(MutableTeacher pMutable, JsonObject pJsonObject, LocalCache pLocalCache) throws Exception {
+  public void build(MutableTeacher pMutable, JsonObject pJsonObject, LocalCache pLocalCache)
+      throws Exception {
 
   }
 }

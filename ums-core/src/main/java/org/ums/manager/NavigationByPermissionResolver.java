@@ -1,6 +1,5 @@
 package org.ums.manager;
 
-
 import org.apache.shiro.authz.Permission;
 import org.apache.shiro.authz.permission.PermissionResolver;
 import org.apache.shiro.realm.AuthorizingRealm;
@@ -25,17 +24,18 @@ public class NavigationByPermissionResolver extends NavigationDaoDecorator {
 
     PermissionResolver permissionResolver = mAuthorizingRealm.getPermissionResolver();
 
-    if (navigationList != null && navigationList.size() > 0) {
+    if(navigationList != null && navigationList.size() > 0) {
       permittedNavigation = new ArrayList<>();
 
-      if (pPermissions != null) {
-        for (String permissionString : pPermissions) {
+      if(pPermissions != null) {
+        for(String permissionString : pPermissions) {
           Permission permission = permissionResolver.resolvePermission(permissionString);
 
-          for (Navigation navigation : navigationList) {
+          for(Navigation navigation : navigationList) {
             String navigationPermissionString = navigation.getPermission();
-            Permission navigationPermission = permissionResolver.resolvePermission(navigationPermissionString);
-            if (permission.implies(navigationPermission)) {
+            Permission navigationPermission =
+                permissionResolver.resolvePermission(navigationPermissionString);
+            if(permission.implies(navigationPermission)) {
               permittedNavigation.add(navigation);
             }
           }

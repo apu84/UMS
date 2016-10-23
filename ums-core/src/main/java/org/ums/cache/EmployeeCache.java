@@ -8,12 +8,12 @@ import org.ums.util.CacheUtil;
 
 import java.util.List;
 
-
-public class EmployeeCache extends ContentCache<Employee,MutableEmployee,String,EmployeeManager> implements EmployeeManager {
+public class EmployeeCache extends ContentCache<Employee, MutableEmployee, String, EmployeeManager>
+    implements EmployeeManager {
 
   private CacheManager<Employee, String> mCacheManager;
 
-  public EmployeeCache(final CacheManager<Employee, String> pCacheManager){
+  public EmployeeCache(final CacheManager<Employee, String> pCacheManager) {
     mCacheManager = pCacheManager;
   }
 
@@ -24,7 +24,7 @@ public class EmployeeCache extends ContentCache<Employee,MutableEmployee,String,
 
   @Override
   protected String getCacheKey(String pId) {
-    return CacheUtil.getCacheKey(Employee.class,pId);
+    return CacheUtil.getCacheKey(Employee.class, pId);
   }
 
   @Override

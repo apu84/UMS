@@ -1,6 +1,5 @@
 package org.ums.logging.applog;
 
-
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
@@ -21,7 +20,7 @@ public class UMSLogger {
   public static void setLogger(final String pPackageName, final Level pLevel) {
     Logger rootLogger = loggerContext.getLogger(pPackageName);
     rootLogger.setLevel(pLevel);
-    if (mLogger.isDebugEnabled()) {
+    if(mLogger.isDebugEnabled()) {
       mLogger.debug("Setting log level for " + pPackageName + " to " + pLevel.levelStr);
     }
   }

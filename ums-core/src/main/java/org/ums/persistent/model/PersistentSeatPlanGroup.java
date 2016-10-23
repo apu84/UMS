@@ -19,12 +19,12 @@ public class PersistentSeatPlanGroup implements MutableSeatPlanGroup {
   private static ProgramManager sProgramManager;
   private static SeatPlanGroupManager sSeatPlanGroupManager;
 
-
-  static{
+  static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
     sProgramManager = applicationContext.getBean("programManager", ProgramManager.class);
-    sSeatPlanGroupManager = applicationContext.getBean("seatPlanGroupManager", SeatPlanGroupManager.class);
+    sSeatPlanGroupManager =
+        applicationContext.getBean("seatPlanGroupManager", SeatPlanGroupManager.class);
   }
 
   private int mId;
@@ -41,11 +41,12 @@ public class PersistentSeatPlanGroup implements MutableSeatPlanGroup {
   private int mTotalStudentNumber;
   private String mProgramShortName;
 
-  public PersistentSeatPlanGroup(){
+  public PersistentSeatPlanGroup() {
 
   }
 
-  public PersistentSeatPlanGroup(final PersistentSeatPlanGroup pPersistentSeatPlanGroup) throws Exception{
+  public PersistentSeatPlanGroup(final PersistentSeatPlanGroup pPersistentSeatPlanGroup)
+      throws Exception {
     mId = pPersistentSeatPlanGroup.getId();
     mSemester = pPersistentSeatPlanGroup.getSemester();
     mSemesterId = pPersistentSeatPlanGroup.getSemesterId();
@@ -58,7 +59,6 @@ public class PersistentSeatPlanGroup implements MutableSeatPlanGroup {
     mProgramShortName = pPersistentSeatPlanGroup.getProgramName();
     mLastUpdateDate = pPersistentSeatPlanGroup.getLastUpdateDate();
   }
-
 
   @Override
   public void setTotalStudentNumber(int pTotalStudentNumber) {
@@ -153,9 +153,10 @@ public class PersistentSeatPlanGroup implements MutableSeatPlanGroup {
 
   @Override
   public void commit(boolean update) throws Exception {
-    if (update) {
+    if(update) {
       sSeatPlanGroupManager.update(this);
-    } else {
+    }
+    else {
       sSeatPlanGroupManager.create(this);
     }
   }
@@ -177,13 +178,14 @@ public class PersistentSeatPlanGroup implements MutableSeatPlanGroup {
 
   @Override
   public Semester getSemester() throws Exception {
-    return mSemester==null?sSemesterManager.get(mSemesterId): sSemesterManager.validate(mSemester);
+    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
+        .validate(mSemester);
 
   }
 
   @Override
   public Program getProgram() throws Exception {
-    return mProgram==null?sProgramManager.get(mProgramId): sProgramManager.validate(mProgram);
+    return mProgram == null ? sProgramManager.get(mProgramId) : sProgramManager.validate(mProgram);
 
   }
 

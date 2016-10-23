@@ -1,22 +1,22 @@
 package org.ums.persistent.model;
 
-
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.mutable.MutableUGBaseRegistration;
 import org.ums.domain.model.mutable.MutableUGTheoryMarks;
 import org.ums.manager.UGTheoryMarksManager;
 
-public class PersistentUGTheoryMarks extends AbstractUGBaseRegistration implements MutableUGTheoryMarks {
+public class PersistentUGTheoryMarks extends AbstractUGBaseRegistration implements
+    MutableUGTheoryMarks {
   private static UGTheoryMarksManager sTheoryMarksManager;
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sTheoryMarksManager = applicationContext.getBean("theoryMarksManager", UGTheoryMarksManager.class);
+    sTheoryMarksManager =
+        applicationContext.getBean("theoryMarksManager", UGTheoryMarksManager.class);
   }
 
-  public PersistentUGTheoryMarks() {
-  }
+  public PersistentUGTheoryMarks() {}
 
   public PersistentUGTheoryMarks(MutableUGBaseRegistration pMutableUGBaseRegistration) {
     super(pMutableUGBaseRegistration);
@@ -29,9 +29,10 @@ public class PersistentUGTheoryMarks extends AbstractUGBaseRegistration implemen
 
   @Override
   public void commit(boolean update) throws Exception {
-    if (update) {
+    if(update) {
       sTheoryMarksManager.update(this);
-    } else {
+    }
+    else {
       sTheoryMarksManager.create(this);
     }
   }

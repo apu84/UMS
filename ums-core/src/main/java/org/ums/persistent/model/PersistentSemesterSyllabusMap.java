@@ -16,7 +16,8 @@ public class PersistentSemesterSyllabusMap implements MutableSemesterSyllabusMap
   private static SemesterSyllabusMapManager sSemesterSyllabusMapManager;
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sSemesterSyllabusMapManager = applicationContext.getBean("semesterSyllabusMapManager", SemesterSyllabusMapManager.class);
+    sSemesterSyllabusMapManager =
+        applicationContext.getBean("semesterSyllabusMapManager", SemesterSyllabusMapManager.class);
   }
 
   private int mId;
@@ -31,7 +32,8 @@ public class PersistentSemesterSyllabusMap implements MutableSemesterSyllabusMap
 
   }
 
-  public PersistentSemesterSyllabusMap(final PersistentSemesterSyllabusMap pOriginal) throws Exception {
+  public PersistentSemesterSyllabusMap(final PersistentSemesterSyllabusMap pOriginal)
+      throws Exception {
     mId = pOriginal.getId();
     mAcademicSemester = pOriginal.getAcademicSemester();
     mProgram = pOriginal.getProgram();
@@ -39,8 +41,6 @@ public class PersistentSemesterSyllabusMap implements MutableSemesterSyllabusMap
     mYear = pOriginal.getYear();
     mSemester = pOriginal.getSemester();
   }
-
-
 
   public Integer getId() {
     return mId;
@@ -89,14 +89,16 @@ public class PersistentSemesterSyllabusMap implements MutableSemesterSyllabusMap
   public void setSemester(int mSemester) {
     this.mSemester = mSemester;
   }
+
   public void delete() throws Exception {
     sSemesterSyllabusMapManager.delete(this);
   }
 
   public void commit(final boolean update) throws Exception {
-    if (update) {
+    if(update) {
       sSemesterSyllabusMapManager.update(this);
-    } else {
+    }
+    else {
       sSemesterSyllabusMapManager.create(this);
     }
   }

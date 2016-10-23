@@ -12,25 +12,25 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
 
-
 @Component
-public class ParameterSettingBuilder implements Builder<ParameterSetting,MutableParameterSetting> {
+public class ParameterSettingBuilder implements Builder<ParameterSetting, MutableParameterSetting> {
   @Override
-  public void build(JsonObjectBuilder pBuilder, ParameterSetting pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) throws Exception {
-    pBuilder.add("id",pReadOnly.getId());
-    pBuilder.add("semesterId",pReadOnly.getSemester().getId());
-    pBuilder.add("parameterId",pReadOnly.getParameter().getId());
-    pBuilder.add("startDate",pReadOnly.getStartDate());
-    pBuilder.add("endDate",pReadOnly.getEndDate());
+  public void build(JsonObjectBuilder pBuilder, ParameterSetting pReadOnly, UriInfo pUriInfo,
+      LocalCache pLocalCache) throws Exception {
+    pBuilder.add("id", pReadOnly.getId());
+    pBuilder.add("semesterId", pReadOnly.getSemester().getId());
+    pBuilder.add("parameterId", pReadOnly.getParameter().getId());
+    pBuilder.add("startDate", pReadOnly.getStartDate());
+    pBuilder.add("endDate", pReadOnly.getEndDate());
     pBuilder.add("self", pUriInfo.getBaseUriBuilder().path("academic").path("parameterSetting")
         .path(String.valueOf(pReadOnly.getId())).build().toString());
   }
 
   @Override
-  public void build(MutableParameterSetting pMutable, JsonObject pJsonObject, LocalCache pLocalCache) throws Exception {
+  public void build(MutableParameterSetting pMutable, JsonObject pJsonObject, LocalCache pLocalCache)
+      throws Exception {
 
-
-    if(pJsonObject.getString("id")!=null){
+    if(pJsonObject.getString("id") != null) {
       pMutable.setId(pJsonObject.getString("id"));
     }
     PersistentSemester semester = new PersistentSemester();

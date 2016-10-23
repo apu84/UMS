@@ -1,6 +1,5 @@
 package org.ums.persistent.model;
 
-
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.mutable.MutableProgramType;
@@ -49,9 +48,10 @@ public class PersistentProgramType implements MutableProgramType {
   }
 
   public void commit(final boolean pUpdate) throws Exception {
-    if (pUpdate) {
+    if(pUpdate) {
       sManager.update(this);
-    } else {
+    }
+    else {
       sManager.create(this);
     }
   }

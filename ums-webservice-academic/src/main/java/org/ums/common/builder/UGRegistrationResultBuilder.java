@@ -11,10 +11,12 @@ import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
 
 @Component
-public class UGRegistrationResultBuilder implements Builder<UGRegistrationResult, MutableUGRegistrationResult> {
+public class UGRegistrationResultBuilder implements
+    Builder<UGRegistrationResult, MutableUGRegistrationResult> {
 
   @Override
-  public void build(JsonObjectBuilder pBuilder, UGRegistrationResult pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) throws Exception {
+  public void build(JsonObjectBuilder pBuilder, UGRegistrationResult pReadOnly, UriInfo pUriInfo,
+      LocalCache pLocalCache) throws Exception {
     pBuilder.add("studentId", pReadOnly.getStudentId());
     pBuilder.add("courseId", pReadOnly.getCourseId());
     pBuilder.add("gradeLetter", pReadOnly.getGradeLetter());
@@ -23,17 +25,19 @@ public class UGRegistrationResultBuilder implements Builder<UGRegistrationResult
     pBuilder.add("courseNo", pReadOnly.getCourseNo());
     pBuilder.add("courseTitle", pReadOnly.getCourseTitle());
     pBuilder.add("examDate", pReadOnly.getExamDate());
-    if (pReadOnly.getMessage() == null) {
+    if(pReadOnly.getMessage() == null) {
       pBuilder.add("message", "null");
 
-    } else {
+    }
+    else {
       pBuilder.add("message", pReadOnly.getMessage());
     }
 
   }
 
   @Override
-  public void build(MutableUGRegistrationResult pMutable, JsonObject pJsonObject, LocalCache pLocalCache) throws Exception {
+  public void build(MutableUGRegistrationResult pMutable, JsonObject pJsonObject,
+      LocalCache pLocalCache) throws Exception {
 
   }
 }

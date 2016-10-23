@@ -15,14 +15,17 @@ import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
 
 @Component
-public class SemesterSyllabusMapsBuilder implements Builder<SemesterSyllabusMapDto, MutableSemesterSyllabusMapDto> {
+public class SemesterSyllabusMapsBuilder implements
+    Builder<SemesterSyllabusMapDto, MutableSemesterSyllabusMapDto> {
   @Override
-  public void build(JsonObjectBuilder pBuilder, SemesterSyllabusMapDto pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) throws Exception {
+  public void build(JsonObjectBuilder pBuilder, SemesterSyllabusMapDto pReadOnly, UriInfo pUriInfo,
+      LocalCache pLocalCache) throws Exception {
 
   }
 
   @Override
-  public void build(MutableSemesterSyllabusMapDto pMutable, JsonObject pJsonObject, LocalCache pLocalCache) throws Exception {
+  public void build(MutableSemesterSyllabusMapDto pMutable, JsonObject pJsonObject,
+      LocalCache pLocalCache) throws Exception {
     MutableSemester semester = new PersistentSemester();
     semester.setId(pJsonObject.getInt("semesterId"));
     pMutable.setAcademicSemester(semester);

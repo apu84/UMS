@@ -21,7 +21,7 @@ public final class BearerTokenAuthenticatingFilter extends UMSHttpAuthentication
   private static final String AUTHORIZATION_PARAM = "ums_auth";
   private static final String AUTHORIZATION_SCHEME = "UMSTOKEN";
   private static final String AUTHORIZATION_SCHEME_ALT = "Basic";
-
+  private static final String LOGIN_AS_SEPARATOR = ">";
   private String usernameParam;
   private String passwordParam;
 
@@ -43,22 +43,25 @@ public final class BearerTokenAuthenticatingFilter extends UMSHttpAuthentication
 
   @Override
   protected AuthenticationToken createToken(ServletRequest request, ServletResponse response) {
-    if (isLoginRequest(request, response)) {
+    if(isLoginRequest(request, response)) {
       return super.createToken(request, response);
-    } else {
+    }
+    else {
       String authorizeHeader = getAuthorizationHeader(request);
       String authorizeParameter = getAuthorizationParameter(request);
       String[] principlesAndCredentials;
 
-      if (isHeaderLoginAttempt(authorizeHeader)) {
+      if(isHeaderLoginAttempt(authorizeHeader)) {
         principlesAndCredentials = this.getHeaderPrincipalsAndCredentials(authorizeHeader);
-      } else if (isParameterLoginAttempt(authorizeParameter)) {
+      }
+      else if(isParameterLoginAttempt(authorizeParameter)) {
         principlesAndCredentials = this.getParameterPrincipalsAndCredentials(authorizeParameter);
-      } else {
+      }
+      else {
         return null;
       }
 
-      if (principlesAndCredentials == null || principlesAndCredentials.length != 2) {
+      if(principlesAndCredentials == null || principlesAndCredentials.length != 2) {
         return null;
       }
 
@@ -70,32 +73,39 @@ public final class BearerTokenAuthenticatingFilter extends UMSHttpAuthentication
   }
 
   @Override
-  protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
+  protected boolean onAccessDenied(ServletRequest request, ServletResponse response)
+      throws Exception {
     boolean authHasToken = hasAuthorizationToken(request);
     boolean isLogin = isLoginRequest(request, response);
-    if (authHasToken || isLogin) {
+    if(authHasToken || isLogin) {
       return executeLogin(request, response);
-    } else {
+    }
+    else {
       HTTP.writeError(response, HTTP.Status.UNAUTHORIZED);
       return false;
     }
   }
 
   @Override
-  protected boolean onLoginFailure(AuthenticationToken token, AuthenticationException e, ServletRequest request, ServletResponse response) {
+  protected boolean onLoginFailure(AuthenticationToken token, AuthenticationException e,
+      ServletRequest request, ServletResponse response) {
     boolean isLogin = isLoginRequest(request, response);
-    if (isLogin) {
+    if(isLogin) {
       HTTP.writeError(response, HTTP.Status.UNAUTHORIZED);
-    } else {
-      HTTP.write(response, MimeTypes.PLAINTEXT, HTTP.Status.UNAUTHORIZED, Messages.Status.EXPIRED_TOKEN.toString());
+    }
+    else {
+      HTTP.write(response, MimeTypes.PLAINTEXT, HTTP.Status.UNAUTHORIZED,
+          Messages.Status.EXPIRED_TOKEN.toString());
     }
 
     return false;
   }
 
   @Override
-  public boolean onPreHandle(ServletRequest request, ServletResponse response, Object mappedValue) throws Exception {
-    return isLoginRequest(request, response) && hasAuthorizationToken(request) || super.onPreHandle(request, response, mappedValue);
+  public boolean onPreHandle(ServletRequest request, ServletResponse response, Object mappedValue)
+      throws Exception {
+    return isLoginRequest(request, response) && hasAuthorizationToken(request)
+        || super.onPreHandle(request, response, mappedValue);
   }
 
   boolean hasAuthorizationToken(ServletRequest request) {
@@ -115,7 +125,8 @@ public final class BearerTokenAuthenticatingFilter extends UMSHttpAuthentication
   }
 
   boolean isHeaderLoginAttempt(String authorizeHeader) {
-    if (authorizeHeader == null) return false;
+    if(authorizeHeader == null)
+      return false;
     String authorizeScheme = AUTHORIZATION_SCHEME.toLowerCase(Locale.ENGLISH);
     String authorizeSchemeAlt = AUTHORIZATION_SCHEME_ALT.toLowerCase(Locale.ENGLISH);
     String test = authorizeHeader.toLowerCase(Locale.ENGLISH);
@@ -127,18 +138,18 @@ public final class BearerTokenAuthenticatingFilter extends UMSHttpAuthentication
   }
 
   String[] getHeaderPrincipalsAndCredentials(String authorizeHeader) {
-    if (authorizeHeader == null) {
+    if(authorizeHeader == null) {
       return null;
     }
     String[] authTokens = authorizeHeader.split(" ");
-    if (authTokens == null || authTokens.length < 2) {
+    if(authTokens == null || authTokens.length < 2) {
       return null;
     }
     return getPrincipalsAndCredentials(authTokens[1]);
   }
 
   String[] getParameterPrincipalsAndCredentials(String authorizeParam) {
-    if (authorizeParam == null) {
+    if(authorizeParam == null) {
       return null;
     }
     return getPrincipalsAndCredentials(authorizeParam);
@@ -146,7 +157,11 @@ public final class BearerTokenAuthenticatingFilter extends UMSHttpAuthentication
 
   String[] getPrincipalsAndCredentials(String encoded) {
     String decoded = Base64.decodeToString(encoded);
-    return decoded.split(":", 2);
+    String[] decodedArray = decoded.split(":", 2);
+    if(decodedArray[0].contains(LOGIN_AS_SEPARATOR)) {
+      decodedArray[0] = decodedArray[0].split(LOGIN_AS_SEPARATOR)[1];
+    }
+    return decodedArray;
   }
 
   String getUsername(ServletRequest request) {
@@ -158,11 +173,11 @@ public final class BearerTokenAuthenticatingFilter extends UMSHttpAuthentication
   }
 
   @Override
-  protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
+  protected boolean isAccessAllowed(ServletRequest request, ServletResponse response,
+      Object mappedValue) {
     return !(!isLoginRequest(request, response) && isPermissive(mappedValue) && hasAuthorizationToken(request))
-        && (super.isAccessAllowed(request, response, mappedValue)
-                    || (!isLoginRequest(request, response) && isPermissive(mappedValue) && !hasAuthorizationToken(request)));
+        && (super.isAccessAllowed(request, response, mappedValue) || (!isLoginRequest(request,
+            response) && isPermissive(mappedValue) && !hasAuthorizationToken(request)));
   }
 
 }
-

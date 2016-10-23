@@ -10,9 +10,9 @@ import org.ums.util.CacheUtil;
 import java.util.List;
 import java.util.Set;
 
-
-public class NavigationCache extends ContentCache<Navigation, MutableNavigation, Integer, NavigationManager>
-    implements NavigationManager {
+public class NavigationCache extends
+    ContentCache<Navigation, MutableNavigation, Integer, NavigationManager> implements
+    NavigationManager {
 
   private CacheManager<Navigation, Integer> mCacheManager;
 

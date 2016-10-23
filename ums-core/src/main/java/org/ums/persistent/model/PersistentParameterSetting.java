@@ -9,17 +9,17 @@ import org.ums.manager.ParameterManager;
 import org.ums.manager.ParameterSettingManager;
 import org.ums.manager.SemesterManager;
 
-
-public class PersistentParameterSetting implements MutableParameterSetting{
+public class PersistentParameterSetting implements MutableParameterSetting {
   private static SemesterManager sSemesterManager;
   private static ParameterManager sParameterManager;
   private static ParameterSettingManager sParameterSettingManager;
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sSemesterManager = applicationContext.getBean("semesterManager",SemesterManager.class);
-    sParameterManager = applicationContext.getBean("parameterManager",ParameterManager.class);
-    sParameterSettingManager = applicationContext.getBean("parameterSettingManager",ParameterSettingManager.class);
+    sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
+    sParameterManager = applicationContext.getBean("parameterManager", ParameterManager.class);
+    sParameterSettingManager =
+        applicationContext.getBean("parameterSettingManager", ParameterSettingManager.class);
   }
 
   private String mId;
@@ -31,11 +31,12 @@ public class PersistentParameterSetting implements MutableParameterSetting{
   private String mEndDate;
   private String mLastModified;
 
- public PersistentParameterSetting(){
+  public PersistentParameterSetting() {
 
- }
+  }
 
-  public PersistentParameterSetting(final PersistentParameterSetting pPersistentParameterSetting) throws Exception{
+  public PersistentParameterSetting(final PersistentParameterSetting pPersistentParameterSetting)
+      throws Exception {
     mId = pPersistentParameterSetting.getId();
     mSemester = pPersistentParameterSetting.getSemester();
     mSemesterId = pPersistentParameterSetting.getSemesterId();
@@ -89,9 +90,10 @@ public class PersistentParameterSetting implements MutableParameterSetting{
 
   @Override
   public void commit(boolean update) throws Exception {
-    if(update){
+    if(update) {
       sParameterSettingManager.update(this);
-    }else{
+    }
+    else {
       sParameterSettingManager.create(this);
     }
   }
@@ -113,12 +115,14 @@ public class PersistentParameterSetting implements MutableParameterSetting{
 
   @Override
   public Semester getSemester() throws Exception {
-    return mSemester==null?sSemesterManager.get(mSemesterId): sSemesterManager.validate(mSemester);
+    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
+        .validate(mSemester);
   }
 
   @Override
   public Parameter getParameter() throws Exception {
-    return mParameter==null?sParameterManager.get(mParameterId):sParameterManager.validate(mParameter);
+    return mParameter == null ? sParameterManager.get(mParameterId) : sParameterManager
+        .validate(mParameter);
   }
 
   @Override

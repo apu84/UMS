@@ -1,6 +1,5 @@
 package org.ums.manager;
 
-
 import org.ums.domain.model.immutable.Notification;
 import org.ums.domain.model.immutable.User;
 import org.ums.domain.model.mutable.MutableNotification;
@@ -10,7 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public interface NotificationManager extends ContentManager<Notification, MutableNotification, String> {
+public interface NotificationManager extends
+    ContentManager<Notification, MutableNotification, String> {
   List<Notification> getNotifications(String pConsumerId, String pNotificationType);
 
   List<Notification> getNotifications(String pConsumerId, Integer pNumOfLatestNotification);

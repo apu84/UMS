@@ -25,4 +25,3 @@ public class UserHomeResource extends Resource {
     return mUserHomeService.process(SecurityUtils.getSubject());
   }
 }
-

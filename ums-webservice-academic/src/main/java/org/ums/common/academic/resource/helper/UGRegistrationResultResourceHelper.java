@@ -27,7 +27,8 @@ import java.util.List;
  */
 
 @Component
-public class UGRegistrationResultResourceHelper extends ResourceHelper<UGRegistrationResult, MutableUGRegistrationResult, Integer> {
+public class UGRegistrationResultResourceHelper extends
+    ResourceHelper<UGRegistrationResult, MutableUGRegistrationResult, Integer> {
 
   @Autowired
   UGRegistrationResultManager mManager;
@@ -43,42 +44,45 @@ public class UGRegistrationResultResourceHelper extends ResourceHelper<UGRegistr
     return null;
   }
 
-  public JsonObject getResultForCarryClearanceAndImprovement(final Request pRequest,final UriInfo pUriInfo) throws Exception{
+  public JsonObject getResultForCarryClearanceAndImprovement(final Request pRequest,
+      final UriInfo pUriInfo) throws Exception {
 
     String mStudentId = SecurityUtils.getSubject().getPrincipal().toString();
     Student student = mStudentManager.get(mStudentId);
-    List<UGRegistrationResult> results = mManager.getCarryClearanceImprovementCoursesByStudent(student.getSemesterId(),student.getId());
+    List<UGRegistrationResult> results =
+        mManager.getCarryClearanceImprovementCoursesByStudent(student.getSemesterId(),
+            student.getId());
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
 
-    for(UGRegistrationResult result:results){
+    for(UGRegistrationResult result : results) {
       children.add(toJson(result, pUriInfo, localCache));
 
     }
 
-    object.add("entries",children);
+    object.add("entries", children);
     localCache.invalidate();
 
     return object.build();
   }
 
-  public JsonObject getResultForApplicationCCIOfCarryClearanceAndImprovement(List<UGRegistrationResult> results,final UriInfo pUriInfo)throws Exception{
+  public JsonObject getResultForApplicationCCIOfCarryClearanceAndImprovement(
+      List<UGRegistrationResult> results, final UriInfo pUriInfo) throws Exception {
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
 
-    for(UGRegistrationResult result:results){
+    for(UGRegistrationResult result : results) {
       children.add(toJson(result, pUriInfo, localCache));
 
     }
 
-    object.add("entries",children);
+    object.add("entries", children);
     localCache.invalidate();
 
     return object.build();
   }
-
 
   @Override
   protected UGRegistrationResultManager getContentManager() {

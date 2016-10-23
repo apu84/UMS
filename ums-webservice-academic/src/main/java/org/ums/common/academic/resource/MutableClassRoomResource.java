@@ -15,7 +15,6 @@ public class MutableClassRoomResource extends Resource {
   @Autowired
   ClassRoomResourceHelper mResourceHelper;
 
-
   @POST
   public Response createClassRoom(final JsonObject pJsonObject) throws Exception {
     return mResourceHelper.post(pJsonObject, mUriInfo);
@@ -23,9 +22,10 @@ public class MutableClassRoomResource extends Resource {
 
   @PUT
   public Response updateSemester(final @Context Request pRequest,
-                                 final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader,
-                                 final JsonObject pJsonObject) throws Exception {
-    return mResourceHelper.put(Integer.parseInt(pJsonObject.getString("id")), pRequest, pIfMatchHeader, pJsonObject);
+      final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader, final JsonObject pJsonObject)
+      throws Exception {
+    return mResourceHelper.put(Integer.parseInt(pJsonObject.getString("id")), pRequest,
+        pIfMatchHeader, pJsonObject);
   }
 
   @DELETE

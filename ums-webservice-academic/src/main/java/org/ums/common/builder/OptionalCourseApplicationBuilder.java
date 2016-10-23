@@ -11,15 +11,17 @@ import org.ums.persistent.model.PersistentStudent;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 import java.util.List;
+
 @Component
 public class OptionalCourseApplicationBuilder {
 
-  public void build(List<Course> pCourseList, JsonObject pJsonObject,String courseType) throws Exception {
+  public void build(List<Course> pCourseList, JsonObject pJsonObject, String courseType)
+      throws Exception {
 
-    JsonArray entries=pJsonObject.getJsonArray(courseType);
+    JsonArray entries = pJsonObject.getJsonArray(courseType);
     MutableCourse course;
-    //List<Course> courseList=new ArrayList<>(entries.size());
-    for (int i = 0; i < entries.size(); i++) {
+    // List<Course> courseList=new ArrayList<>(entries.size());
+    for(int i = 0; i < entries.size(); i++) {
       JsonObject jsonObject = entries.getJsonObject(i);
       course = new PersistentCourse();
       course.setId(jsonObject.getString("id"));
@@ -27,12 +29,13 @@ public class OptionalCourseApplicationBuilder {
     }
   }
 
-  public void buildStudent(List<String> pStudentId, JsonObject pJsonObject,String operationType) throws Exception {
-    JsonArray entries=pJsonObject.getJsonArray(operationType);
-    String studentId="";
-    for (int i = 0; i < entries.size(); i++) {
+  public void buildStudent(List<String> pStudentId, JsonObject pJsonObject, String operationType)
+      throws Exception {
+    JsonArray entries = pJsonObject.getJsonArray(operationType);
+    String studentId = "";
+    for(int i = 0; i < entries.size(); i++) {
       if(operationType.equalsIgnoreCase("students"))
-        studentId=entries.getString(i);
+        studentId = entries.getString(i);
       else {
         JsonObject jsonObject = entries.getJsonObject(i);
         studentId = jsonObject.getString("studentId");
@@ -41,17 +44,18 @@ public class OptionalCourseApplicationBuilder {
     }
   }
 
-  public void buildCourseId(StringBuilder pCourseId, JsonObject pJsonObject,String operationType) throws Exception {
-    JsonArray entries=pJsonObject.getJsonArray(operationType);
-    for (int i = 0; i < entries.size(); i++) {
+  public void buildCourseId(StringBuilder pCourseId, JsonObject pJsonObject, String operationType)
+      throws Exception {
+    JsonArray entries = pJsonObject.getJsonArray(operationType);
+    for(int i = 0; i < entries.size(); i++) {
       JsonObject jsonObject = entries.getJsonObject(i);
       pCourseId.append(jsonObject.getString("courseId"));
     }
   }
 
   public void buildCourseId(List<String> pCourseList, JsonObject pJsonObject) throws Exception {
-    JsonArray entries=pJsonObject.getJsonArray("courseList");
-    for (int i = 0; i < entries.size(); i++) {
+    JsonArray entries = pJsonObject.getJsonArray("courseList");
+    for(int i = 0; i < entries.size(); i++) {
       JsonObject jsonObject = entries.getJsonObject(i);
       pCourseList.add(jsonObject.getString("id"));
     }

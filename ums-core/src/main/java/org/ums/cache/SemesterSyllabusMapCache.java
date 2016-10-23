@@ -1,6 +1,5 @@
 package org.ums.cache;
 
-
 import org.ums.domain.model.dto.SemesterSyllabusMapDto;
 import org.ums.domain.model.immutable.SemesterSyllabusMap;
 import org.ums.domain.model.immutable.Syllabus;
@@ -11,11 +10,13 @@ import org.ums.util.CacheUtil;
 
 import java.util.List;
 
-public class SemesterSyllabusMapCache extends ContentCache<SemesterSyllabusMap, MutableSemesterSyllabusMap, Integer, SemesterSyllabusMapManager>
+public class SemesterSyllabusMapCache
+    extends
+    ContentCache<SemesterSyllabusMap, MutableSemesterSyllabusMap, Integer, SemesterSyllabusMapManager>
     implements SemesterSyllabusMapManager {
   private CacheManager<SemesterSyllabusMap, Integer> mCacheManager;
 
-  public SemesterSyllabusMapCache(final CacheManager<SemesterSyllabusMap,Integer> pCacheManager) {
+  public SemesterSyllabusMapCache(final CacheManager<SemesterSyllabusMap, Integer> pCacheManager) {
     mCacheManager = pCacheManager;
   }
 
@@ -30,7 +31,8 @@ public class SemesterSyllabusMapCache extends ContentCache<SemesterSyllabusMap, 
   }
 
   @Override
-  public List<SemesterSyllabusMap> getMapsByProgramSemester(Integer pProgramId, Integer pSemesterId) throws Exception {
+  public List<SemesterSyllabusMap> getMapsByProgramSemester(Integer pProgramId, Integer pSemesterId)
+      throws Exception {
     return getManager().getMapsByProgramSemester(pProgramId, pSemesterId);
   }
 
@@ -45,7 +47,8 @@ public class SemesterSyllabusMapCache extends ContentCache<SemesterSyllabusMap, 
   }
 
   @Override
-  public Syllabus getSyllabusForSemester(Integer pProgramId, Integer pSemesterId, Integer pYear, Integer pSemester) {
+  public Syllabus getSyllabusForSemester(Integer pProgramId, Integer pSemesterId, Integer pYear,
+      Integer pSemester) {
     return getManager().getSyllabusForSemester(pProgramId, pSemesterId, pYear, pSemester);
   }
 }

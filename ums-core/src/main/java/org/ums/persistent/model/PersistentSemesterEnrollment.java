@@ -1,6 +1,5 @@
 package org.ums.persistent.model;
 
-
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.mutable.MutableSemesterEnrollment;
@@ -22,7 +21,8 @@ public class PersistentSemesterEnrollment implements MutableSemesterEnrollment {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sProgramManager = applicationContext.getBean("programManager", ProgramManager.class);
     sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
-    sSemesterEnrollmentManager = applicationContext.getBean("semesterEnrollmentManager", SemesterEnrollmentManager.class);
+    sSemesterEnrollmentManager =
+        applicationContext.getBean("semesterEnrollmentManager", SemesterEnrollmentManager.class);
   }
 
   private Integer mId;
@@ -36,8 +36,7 @@ public class PersistentSemesterEnrollment implements MutableSemesterEnrollment {
   private SemesterEnrollment.Type mType;
   private String mLastModified;
 
-  public PersistentSemesterEnrollment() {
-  }
+  public PersistentSemesterEnrollment() {}
 
   public PersistentSemesterEnrollment(final PersistentSemesterEnrollment pEnrollment) {
     setId(pEnrollment.getId());
@@ -92,9 +91,10 @@ public class PersistentSemesterEnrollment implements MutableSemesterEnrollment {
 
   @Override
   public void commit(boolean update) throws Exception {
-    if (update) {
+    if(update) {
       sSemesterEnrollmentManager.update(this);
-    } else {
+    }
+    else {
       sSemesterEnrollmentManager.create(this);
     }
   }
@@ -121,7 +121,8 @@ public class PersistentSemesterEnrollment implements MutableSemesterEnrollment {
 
   @Override
   public Semester getSemester() throws Exception {
-    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager.validate(mSemester);
+    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
+        .validate(mSemester);
   }
 
   @Override

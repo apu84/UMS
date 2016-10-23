@@ -5,18 +5,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum ClassRoomType {
-  THEORY(1),
-  SESSIONAL(2),
-  NONE(0);
+  THEORY(1), SESSIONAL(2), NONE(0);
 
-  private static final Map<Integer, ClassRoomType> lookup
-      = new HashMap<>();
+  private static final Map<Integer, ClassRoomType> lookup = new HashMap<>();
 
   static {
-    for (ClassRoomType c : EnumSet.allOf(ClassRoomType.class))
+    for(ClassRoomType c : EnumSet.allOf(ClassRoomType.class))
       lookup.put(c.getValue(), c);
   }
-
 
   private int typeCode;
 

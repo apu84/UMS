@@ -15,19 +15,20 @@ public class DummyRealm extends JdbcRealm {
   UserDao userDao;
 
   @Override
-  protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
+  protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token)
+      throws AuthenticationException {
     // identify account to log to
     UsernamePasswordToken userPassToken = (UsernamePasswordToken) token;
     final String username = userPassToken.getUsername();
 
-    if (username == null) {
+    if(username == null) {
       throw new AuthenticationException("User name is empty");
     }
 
     // read password hash and salt from db
     final User user = userDao.getByName(username);
 
-    if (user == null) {
+    if(user == null) {
       throw new AuthenticationException("Can not find user");
     }
 

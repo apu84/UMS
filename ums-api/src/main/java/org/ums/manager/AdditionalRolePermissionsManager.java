@@ -9,14 +9,18 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-public interface AdditionalRolePermissionsManager extends ContentManager<AdditionalRolePermissions, MutableAdditionalRolePermissions, Integer> {
+public interface AdditionalRolePermissionsManager extends
+    ContentManager<AdditionalRolePermissions, MutableAdditionalRolePermissions, Integer> {
   List<AdditionalRolePermissions> getPermissionsByUser(final String pUserId);
 
-  List<AdditionalRolePermissions> getUserPermissionsByAssignedUser(final String pUserId, final String pAssignedBy);
+  List<AdditionalRolePermissions> getUserPermissionsByAssignedUser(final String pUserId,
+      final String pAssignedBy);
 
-  int addRole(final String pUserId, final Role pRole, final User pAssignedBy, final Date pFromDate, final Date pToDate);
+  int addRole(final String pUserId, final Role pRole, final User pAssignedBy, final Date pFromDate,
+      final Date pToDate);
 
-  int addPermissions(final String pUserId, final Set<String> pPermissions, final User pAssignedBy, final Date pFromDate, final Date pToDate);
+  int addPermissions(final String pUserId, final Set<String> pPermissions, final User pAssignedBy,
+      final Date pFromDate, final Date pToDate);
 
   int removeExistingAdditionalRolePermissions(final String pUserId, final String pAssignedBy);
 }

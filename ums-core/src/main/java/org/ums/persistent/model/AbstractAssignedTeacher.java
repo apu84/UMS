@@ -10,7 +10,6 @@ import org.ums.manager.CourseManager;
 import org.ums.manager.SemesterManager;
 import org.ums.manager.TeacherManager;
 
-
 public abstract class AbstractAssignedTeacher implements MutableAssignedTeacher {
   protected static TeacherManager sTeacherManager;
   protected static CourseManager sCourseManager;
@@ -31,7 +30,6 @@ public abstract class AbstractAssignedTeacher implements MutableAssignedTeacher 
   protected Integer mSemesterId;
   protected String mCourseId;
 
-
   @Override
   public Integer getId() {
     return mId;
@@ -44,7 +42,8 @@ public abstract class AbstractAssignedTeacher implements MutableAssignedTeacher 
 
   @Override
   public Semester getSemester() throws Exception {
-    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager.validate(mSemester);
+    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
+        .validate(mSemester);
   }
 
   @Override

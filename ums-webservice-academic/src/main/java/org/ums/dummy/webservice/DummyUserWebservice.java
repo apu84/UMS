@@ -27,18 +27,18 @@ public class DummyUserWebservice {
   @GET
   @Path("/all")
   public JsonObject getAll() {
-//    if(SecurityUtils.getSubject().isAuthenticated()){
-      List<User> users = userDao.getAll();
-      JsonObjectBuilder object = Json.createObjectBuilder();
-      JsonArrayBuilder children = Json.createArrayBuilder();
-      for (User user : users) {
-        children.add(toJson(user));
-      }
-      object.add("users", children);
-      return object.build();
-  /*  }else {
-      throw new UnauthorizedException("You need to login for this operation");
-    }*/
+    // if(SecurityUtils.getSubject().isAuthenticated()){
+    List<User> users = userDao.getAll();
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    for(User user : users) {
+      children.add(toJson(user));
+    }
+    object.add("users", children);
+    return object.build();
+    /*
+     * }else { throw new UnauthorizedException("You need to login for this operation"); }
+     */
 
   }
 

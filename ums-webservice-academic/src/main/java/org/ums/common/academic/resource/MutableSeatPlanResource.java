@@ -13,29 +13,27 @@ import javax.ws.rs.core.Response;
 /**
  * Created by My Pc on 5/8/2016.
  */
-public class MutableSeatPlanResource extends Resource{
+public class MutableSeatPlanResource extends Resource {
 
   @Autowired
   SeatPlanResourceHelper mSeatPlanResourceHelper;
 
   @POST
-  public Response createOrViewSeatPlan(final JsonObject pJsonObject) throws Exception{
-    return mSeatPlanResourceHelper.post(pJsonObject,mUriInfo);
+  public Response createOrViewSeatPlan(final JsonObject pJsonObject) throws Exception {
+    return mSeatPlanResourceHelper.post(pJsonObject, mUriInfo);
   }
 
   @PUT
-  public Response updateSeatPlan(
-      final @Context Request pRequest,
-      final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader,
-      final JsonObject pJsonObject
-      )throws Exception{
-    return mSeatPlanResourceHelper.put(pJsonObject.getInt("id"), pRequest, pIfMatchHeader, pJsonObject);
+  public Response updateSeatPlan(final @Context Request pRequest,
+      final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader, final JsonObject pJsonObject)
+      throws Exception {
+    return mSeatPlanResourceHelper.put(pJsonObject.getInt("id"), pRequest, pIfMatchHeader,
+        pJsonObject);
   }
-
 
   @DELETE
   @Path(PATH_PARAM_OBJECT_ID)
-  public Response deleteSeatPlan(final @PathParam("object-id") int objectId) throws Exception{
+  public Response deleteSeatPlan(final @PathParam("object-id") int objectId) throws Exception {
     return mSeatPlanResourceHelper.delete(objectId);
   }
 }

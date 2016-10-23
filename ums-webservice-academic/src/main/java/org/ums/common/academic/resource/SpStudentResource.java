@@ -19,29 +19,31 @@ import javax.ws.rs.core.Response;
 @Path("academic/spStudent")
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
-public class SpStudentResource  extends MutableSpStudentResource{
+public class SpStudentResource extends MutableSpStudentResource {
 
   @Autowired
   SpStudentManager mManager;
 
   @GET
   @Path("/all")
-  public JsonObject getAll()throws Exception{
+  public JsonObject getAll() throws Exception {
     return mHelper.getAll(mUriInfo);
   }
 
   @GET
   @Path("/program/{programId}/year/{year}/semester/{semester}/status/{status}")
-  public JsonObject getByProgramYearSemesterStatus(final @Context Request pRequest, final @PathParam("programId") int programId,
-                                                   final @PathParam("year") int year,
-                                                   final @PathParam("semester") int semester,
-                                                   final @PathParam("status") int status)throws Exception{
-    return mHelper.getStudentByProgramYearSemesterStatus(programId,year,semester,status,pRequest,mUriInfo);
+  public JsonObject getByProgramYearSemesterStatus(final @Context Request pRequest,
+      final @PathParam("programId") int programId, final @PathParam("year") int year,
+      final @PathParam("semester") int semester, final @PathParam("status") int status)
+      throws Exception {
+    return mHelper.getStudentByProgramYearSemesterStatus(programId, year, semester, status,
+        pRequest, mUriInfo);
   }
 
   @GET
   @Path(PATH_PARAM_OBJECT_ID)
-  public Response get(final @Context Request pRequest, final @PathParam("object-id") String pObjectId)throws Exception{
-    return mHelper.get(pObjectId,pRequest,mUriInfo);
+  public Response get(final @Context Request pRequest,
+      final @PathParam("object-id") String pObjectId) throws Exception {
+    return mHelper.get(pObjectId, pRequest, mUriInfo);
   }
 }

@@ -10,15 +10,25 @@ import java.io.Serializable;
 /**
  * Created by Munna on 4/20/2016.
  */
-public interface SeatPlanGroup extends Serializable,LastModifier,EditType<MutableSeatPlanGroup>,Identifier<Integer> {
+public interface SeatPlanGroup extends Serializable, LastModifier, EditType<MutableSeatPlanGroup>,
+    Identifier<Integer> {
   Semester getSemester() throws Exception;
+
   Program getProgram() throws Exception;
+
   int getProgramId();
+
   int getAcademicYear();
+
   int getAcademicSemester();
+
   int getGroupNo();
+
   String getLastUpdateDate();
+
   int getExamType();
+
   int getTotalStudentNumber();
+
   String getProgramName();
 }

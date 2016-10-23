@@ -13,7 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-public class TeacherCache extends ContentCache<Teacher, MutableTeacher, String, TeacherManager> implements TeacherManager {
+public class TeacherCache extends ContentCache<Teacher, MutableTeacher, String, TeacherManager>
+    implements TeacherManager {
   private static final Logger mLogger = LoggerFactory.getLogger(TeacherCache.class);
 
   private CacheManager<Teacher, String> mCacheManager;

@@ -59,7 +59,7 @@ public class StudentResourceHelper extends ResourceHelper<Student, MutableStuden
   @Qualifier("StudentBuilder")
   private StudentBuilder mBuilder;
 
-  //TODO: Move this to service layer
+  // TODO: Move this to service layer
   @Override
   @Transactional
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
@@ -85,10 +85,10 @@ public class StudentResourceHelper extends ResourceHelper<Student, MutableStuden
 
     MutableUser studentUser = new PersistentUser();
     studentUser.setId(pJsonObject.getString("id"));
-    //TODO: Use a password generator to generate temporary password
+    // TODO: Use a password generator to generate temporary password
     String random = RandomStringUtils.randomAlphanumeric(10).toUpperCase();
     studentUser.setTemporaryPassword(random.toCharArray());
-    //TODO: Use role name to fetch a particular role, say for Student it should be "student"
+    // TODO: Use role name to fetch a particular role, say for Student it should be "student"
     studentUser.setPrimaryRole(mRoleManager.get(11));
     studentUser.setActive(true);
     studentUser.commit(false);
@@ -97,8 +97,11 @@ public class StudentResourceHelper extends ResourceHelper<Student, MutableStuden
     int contentStartIndex = data.indexOf(encodingPrefix) + encodingPrefix.length();
     byte[] imageData = Base64.getDecoder().decode(data.substring(contentStartIndex));
 
-    mBinaryContentManager.create(imageData, pJsonObject.getString("id"), BinaryContentManager.Domain.PICTURE);
-    URI contextURI = pUriInfo.getBaseUriBuilder().path(StudentResource.class).path(StudentResource.class, "get").build(mutableStudent.getId());
+    mBinaryContentManager.create(imageData, pJsonObject.getString("id"),
+        BinaryContentManager.Domain.PICTURE);
+    URI contextURI =
+        pUriInfo.getBaseUriBuilder().path(StudentResource.class).path(StudentResource.class, "get")
+            .build(mutableStudent.getId());
     Response.ResponseBuilder builder = Response.created(contextURI);
     builder.status(Response.Status.CREATED);
 
@@ -117,7 +120,6 @@ public class StudentResourceHelper extends ResourceHelper<Student, MutableStuden
     return object.build();
   }
 
-
   public JsonObject getActiveStudentsByDepartment(final UriInfo pUriInfo) throws Exception{
     Employee employee = getLoggedEmployee();
     String deptId = employee.getDepartment().getId();
@@ -131,26 +133,24 @@ public class StudentResourceHelper extends ResourceHelper<Student, MutableStuden
     return studentJsonCreator(students,pUriInfo);
   }
 
-
-  public JsonObject getActiveStudentsByAdviser(final String pTeacherId, final UriInfo pUriInfo) throws Exception{
+  public JsonObject getActiveStudentsByAdviser(final String pTeacherId, final UriInfo pUriInfo)
+      throws Exception {
     List<Student> students = getContentManager().getActiveStudentsByAdviser(pTeacherId);
 
-    return studentJsonCreator(students,pUriInfo);
+    return studentJsonCreator(students, pUriInfo);
   }
 
-
-
-  //// TODO: 09-Oct-16 Grant access via accessControl.
-  //@RequiresPermissions("assign:adviser")
-  public Response modifyStudentAdviser(JsonObject pJsonObject) throws Exception{
+  // // TODO: 09-Oct-16 Grant access via accessControl.
+  // @RequiresPermissions("assign:adviser")
+  public Response modifyStudentAdviser(JsonObject pJsonObject) throws Exception {
     User user = getLoggedUser();
     LocalCache localCache = new LocalCache();
     JsonArray entries = pJsonObject.getJsonArray("entries");
     List<MutableStudent> students = new ArrayList<>();
-    for(int i=0;i<entries.size();i++){
+    for(int i = 0; i < entries.size(); i++) {
       JsonObject jsonObject = entries.getJsonObject(i);
       PersistentStudent student = new PersistentStudent();
-      mBuilder.build(student,jsonObject,localCache);
+      mBuilder.build(student, jsonObject, localCache);
       students.add(student);
     }
 
@@ -160,28 +160,26 @@ public class StudentResourceHelper extends ResourceHelper<Student, MutableStuden
     return Response.noContent().build();
   }
 
-
-  private JsonObject studentJsonCreator(List<Student> students,UriInfo pUriInfo) throws Exception{
+  private JsonObject studentJsonCreator(List<Student> students, UriInfo pUriInfo) throws Exception {
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
 
-    for(Student student : students){
-      children.add(toJson(student,pUriInfo,localCache));
+    for(Student student : students) {
+      children.add(toJson(student, pUriInfo, localCache));
     }
-    object.add("entries",children);
+    object.add("entries", children);
     localCache.invalidate();
     return object.build();
   }
 
-
-  private Employee getLoggedEmployee() throws Exception{
+  private Employee getLoggedEmployee() throws Exception {
     User user = getLoggedUser();
     Employee employee = mEmployeeManager.getByEmployeeId(user.getEmployeeId());
     return employee;
   }
 
-  private User getLoggedUser()throws Exception{
+  private User getLoggedUser() throws Exception {
     String userId = SecurityUtils.getSubject().getPrincipal().toString();
     User user = mUserManager.get(userId);
     return user;

@@ -15,7 +15,7 @@ public class LocalCache {
 
     String cacheKey = getCacheKey(pCacheId, pObjectClass);
 
-    if (mLocalCopy.get(cacheKey) == null) {
+    if(mLocalCopy.get(cacheKey) == null) {
       mLocalCopy.put(cacheKey, func.call());
     }
 

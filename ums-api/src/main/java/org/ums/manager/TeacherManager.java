@@ -1,6 +1,5 @@
 package org.ums.manager;
 
-
 import org.ums.domain.model.mutable.MutableTeacher;
 import org.ums.domain.model.immutable.Department;
 import org.ums.domain.model.immutable.Teacher;

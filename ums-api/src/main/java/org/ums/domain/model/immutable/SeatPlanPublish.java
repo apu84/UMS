@@ -11,10 +11,15 @@ import java.io.Serializable;
 /**
  * Created by My Pc on 8/2/2016.
  */
-public interface SeatPlanPublish extends Serializable,LastModifier,EditType<MutableSeatPlanPublish>,Identifier<Integer> {
+public interface SeatPlanPublish extends Serializable, LastModifier,
+    EditType<MutableSeatPlanPublish>, Identifier<Integer> {
   Semester getSemester() throws Exception;
+
   Integer getSemesterId();
+
   ExamType getExamType();
+
   String getExamDate();
+
   Integer getPublishStatus();
 }

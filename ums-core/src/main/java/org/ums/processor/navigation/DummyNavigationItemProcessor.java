@@ -1,6 +1,5 @@
 package org.ums.processor.navigation;
 
-
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -17,13 +16,13 @@ public class DummyNavigationItemProcessor implements NavigationProcessor {
   @Override
   public Navigation process(Navigation pNavigation, Subject pCurrentSubject) throws Exception {
     User currentUser = mUserManager.get(pCurrentSubject.getPrincipal().toString());
-    if (pNavigation.getLocation().contains("studentProfile")
+    if(pNavigation.getLocation().contains("studentProfile")
         && currentUser.getPrimaryRole().getName().equalsIgnoreCase("sadmin")) {
       MutableNavigation mutableNavigation = pNavigation.edit();
       /**
        * Do some processing here
        */
-//      mutableNavigation.setActive(false);
+      // mutableNavigation.setActive(false);
       return mutableNavigation;
     }
 

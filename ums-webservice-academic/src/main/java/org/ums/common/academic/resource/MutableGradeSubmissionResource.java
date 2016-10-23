@@ -14,33 +14,30 @@ import javax.ws.rs.core.Response;
  */
 public class MutableGradeSubmissionResource extends Resource {
 
-    @Autowired
-    GradeSubmissionResourceHelper mResourceHelper;
+  @Autowired
+  GradeSubmissionResourceHelper mResourceHelper;
 
+  @PUT
+  public Response saveGradeSheet(final JsonObject pJsonObject) throws Exception {
+    return mResourceHelper.saveGradeSheet(pJsonObject);
+  }
 
+  @PUT
+  @Path("/recheckApprove")
+  public Response recheckApprove(final JsonObject pJsonObject) throws Exception {
+    return mResourceHelper.updateGradeStatus(pJsonObject);
+  }
 
-    @PUT
-    public Response saveGradeSheet(final JsonObject pJsonObject) throws Exception {
-        return mResourceHelper.saveGradeSheet(pJsonObject);
-    }
+  @PUT
+  @Path("/vc/recheckApprove")
+  public Response recheckRequestApprove(final JsonObject pJsonObject) throws Exception {
+    return mResourceHelper.recheckRequestApprove(pJsonObject);
+  }
 
-    @PUT
-    @Path("/recheckApprove")
-    public Response recheckApprove(final JsonObject pJsonObject) throws Exception {
-        return mResourceHelper.updateGradeStatus(pJsonObject);
-    }
-
-    @PUT
-    @Path("/vc/recheckApprove")
-    public Response recheckRequestApprove(final JsonObject pJsonObject) throws Exception {
-        return mResourceHelper.recheckRequestApprove(pJsonObject);
-    }
-
-    @PUT
-    @Path("/gradeSubmissionDeadLine")
-    public Response updateGradeSubmissionDeadLine(final JsonObject pJsonObject) throws Exception{
-        return mResourceHelper.updateGradeSubmissionDeadLine(pJsonObject,mUriInfo);
-    }
-
+  @PUT
+  @Path("/gradeSubmissionDeadLine")
+  public Response updateGradeSubmissionDeadLine(final JsonObject pJsonObject) throws Exception {
+    return mResourceHelper.updateGradeSubmissionDeadLine(pJsonObject, mUriInfo);
+  }
 
 }

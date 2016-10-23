@@ -6,7 +6,8 @@ import org.ums.domain.model.immutable.*;
 
 import java.util.Date;
 
-public interface MutableStudent extends Student, Mutable, MutableIdentifier<String>, MutableLastModifier {
+public interface MutableStudent extends Student, Mutable, MutableIdentifier<String>,
+    MutableLastModifier {
   void setUser(final User pUser);
 
   void setFullName(final String pFullName);
@@ -69,7 +70,7 @@ public interface MutableStudent extends Student, Mutable, MutableIdentifier<Stri
 
   void setProgramShortName(final String pProgramShortName);
 
-  void setAdviser(final Teacher pTeacher) ;
+  void setAdviser(final Teacher pTeacher);
 
   void setStatus(final int pStatus);
 }

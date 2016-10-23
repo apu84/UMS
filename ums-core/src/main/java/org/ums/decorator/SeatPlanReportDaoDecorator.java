@@ -10,19 +10,24 @@ import java.util.List;
 /**
  * Created by My Pc on 20-Aug-16.
  */
-public class SeatPlanReportDaoDecorator extends ContentDaoDecorator<SeatPlanReport,MutableSeatPlanReport,Object,SeatPlanReportManager> implements SeatPlanReportManager {
+public class SeatPlanReportDaoDecorator extends
+    ContentDaoDecorator<SeatPlanReport, MutableSeatPlanReport, Object, SeatPlanReportManager>
+    implements SeatPlanReportManager {
   @Override
-  public List<SeatPlanReportDto> getSeatPlanDataForAttendenceSheet(Integer pSemesterId, Integer pExamType,String pExamDate) {
-    return getManager().getSeatPlanDataForAttendenceSheet(pSemesterId,pExamType,pExamDate);
+  public List<SeatPlanReportDto> getSeatPlanDataForAttendenceSheet(Integer pSemesterId,
+      Integer pExamType, String pExamDate) {
+    return getManager().getSeatPlanDataForAttendenceSheet(pSemesterId, pExamType, pExamDate);
   }
 
   @Override
-  public List<SeatPlanReportDto> getSeatPlanDataForTopSheet(Integer pSemesterId, Integer pExamType, String pExamDate) {
-    return getManager().getSeatPlanDataForTopSheet(pSemesterId,pExamType,pExamDate);
+  public List<SeatPlanReportDto> getSeatPlanDataForTopSheet(Integer pSemesterId, Integer pExamType,
+      String pExamDate) {
+    return getManager().getSeatPlanDataForTopSheet(pSemesterId, pExamType, pExamDate);
   }
 
   @Override
-  public List<SeatPlanReportDto> getSeatPlanDataForSticker(Integer pSemesterId, Integer pExamType, String pExamDate) {
-    return getManager().getSeatPlanDataForSticker(pSemesterId,pExamType,pExamDate);
+  public List<SeatPlanReportDto> getSeatPlanDataForSticker(Integer pSemesterId, Integer pExamType,
+      String pExamDate) {
+    return getManager().getSeatPlanDataForSticker(pSemesterId, pExamType, pExamDate);
   }
 }

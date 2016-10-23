@@ -7,6 +7,7 @@ import org.ums.domain.model.immutable.UGRegistrationResult;
 import org.ums.enums.CourseRegType;
 import org.ums.enums.ExamType;
 
-public interface MutableUGRegistrationResult extends UGRegistrationResult, MutableUGBaseRegistration {
+public interface MutableUGRegistrationResult extends UGRegistrationResult,
+    MutableUGBaseRegistration {
 
 }

@@ -12,5 +12,4 @@ public class MutableSpStudentResource extends Resource {
   @Autowired
   SpStudentResourceHelper mHelper;
 
-
 }

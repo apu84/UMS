@@ -13,14 +13,16 @@ import javax.ws.rs.core.UriInfo;
 @Component
 public class EnrollmentFromToBuilder implements Builder<EnrollmentFromTo, MutableEnrollmentFromTo> {
   @Override
-  public void build(JsonObjectBuilder pBuilder, EnrollmentFromTo pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) throws Exception {
+  public void build(JsonObjectBuilder pBuilder, EnrollmentFromTo pReadOnly, UriInfo pUriInfo,
+      LocalCache pLocalCache) throws Exception {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("year", pReadOnly.getToYear());
     pBuilder.add("semester", pReadOnly.getToSemester());
   }
 
   @Override
-  public void build(MutableEnrollmentFromTo pMutable, JsonObject pJsonObject, LocalCache pLocalCache) throws Exception {
+  public void build(MutableEnrollmentFromTo pMutable, JsonObject pJsonObject, LocalCache pLocalCache)
+      throws Exception {
 
   }
 }

@@ -1,6 +1,5 @@
 package org.ums.common.academic.resource;
 
-
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -40,18 +39,21 @@ public class StudentResource extends MutableStudentResource {
 
   @GET
   @Path("/getStudents/adviser/{teacher-id}")
-  public JsonObject getActiveStudentsByTeacher(final @PathParam("teacher-id") String pTeacherId) throws Exception {
-    return mResourceHelper.getActiveStudentsByAdviser(pTeacherId,mUriInfo);
+  public JsonObject getActiveStudentsByTeacher(final @PathParam("teacher-id") String pTeacherId)
+      throws Exception {
+    return mResourceHelper.getActiveStudentsByAdviser(pTeacherId, mUriInfo);
   }
 
   @GET
   @Path(PATH_PARAM_OBJECT_ID)
-  public Response get(final @Context Request pRequest, final @PathParam("object-id") String pObjectId) throws Exception {
+  public Response get(final @Context Request pRequest,
+      final @PathParam("object-id") String pObjectId) throws Exception {
     return mResourceHelper.get(pObjectId, pRequest, mUriInfo);
   }
 
   @GET
   public Response get(final @Context Request pRequest) throws Exception {
-    return mResourceHelper.get(SecurityUtils.getSubject().getPrincipal().toString(), pRequest, mUriInfo);
+    return mResourceHelper.get(SecurityUtils.getSubject().getPrincipal().toString(), pRequest,
+        mUriInfo);
   }
 }

@@ -17,31 +17,32 @@ import javax.ws.rs.core.UriInfo;
  */
 
 @Component
-public class SubGroupBuilder implements Builder<SubGroup,MutableSubGroup> {
+public class SubGroupBuilder implements Builder<SubGroup, MutableSubGroup> {
   @Override
-  public void build(JsonObjectBuilder pBuilder, SubGroup pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) throws Exception {
-    pBuilder.add("id",pReadOnly.getId());
-    pBuilder.add("semesterId",pReadOnly.getSemester().getId());
-    pBuilder.add("groupNo",pReadOnly.getGroup().getGroupNo());
-    pBuilder.add("subGroupNumber",pReadOnly.subGroupNo());
-    pBuilder.add("groupId",pReadOnly.getGroup().getId());
-    pBuilder.add("position",pReadOnly.getPosition());
-    pBuilder.add("studentNumber",pReadOnly.getStudentNumber());
-    pBuilder.add("examType",pReadOnly.getExamType());
-    if(pReadOnly.getProgramShortName()!=null){
-      pBuilder.add("programName",pReadOnly.getProgramShortName().replaceAll("BSc in ",""));
+  public void build(JsonObjectBuilder pBuilder, SubGroup pReadOnly, UriInfo pUriInfo,
+      LocalCache pLocalCache) throws Exception {
+    pBuilder.add("id", pReadOnly.getId());
+    pBuilder.add("semesterId", pReadOnly.getSemester().getId());
+    pBuilder.add("groupNo", pReadOnly.getGroup().getGroupNo());
+    pBuilder.add("subGroupNumber", pReadOnly.subGroupNo());
+    pBuilder.add("groupId", pReadOnly.getGroup().getId());
+    pBuilder.add("position", pReadOnly.getPosition());
+    pBuilder.add("studentNumber", pReadOnly.getStudentNumber());
+    pBuilder.add("examType", pReadOnly.getExamType());
+    if(pReadOnly.getProgramShortName() != null) {
+      pBuilder.add("programName", pReadOnly.getProgramShortName().replaceAll("BSc in ", ""));
     }
-    if(pReadOnly.getStudentYear()!=null){
-      pBuilder.add("year",pReadOnly.getStudentYear());
+    if(pReadOnly.getStudentYear() != null) {
+      pBuilder.add("year", pReadOnly.getStudentYear());
     }
-    if(pReadOnly.getStudentSemester()!=null){
-      pBuilder.add("semester",pReadOnly.getStudentSemester());
+    if(pReadOnly.getStudentSemester() != null) {
+      pBuilder.add("semester", pReadOnly.getStudentSemester());
     }
   }
 
   @Override
-  public void build(MutableSubGroup pMutable, JsonObject pJsonObject, LocalCache pLocalCache) throws Exception {
-
+  public void build(MutableSubGroup pMutable, JsonObject pJsonObject, LocalCache pLocalCache)
+      throws Exception {
 
     PersistentSemester semester = new PersistentSemester();
     semester.setId(Integer.parseInt(pJsonObject.getString("semesterId")));

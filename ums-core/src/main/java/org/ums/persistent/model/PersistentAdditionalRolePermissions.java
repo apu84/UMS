@@ -23,7 +23,9 @@ public class PersistentAdditionalRolePermissions implements MutableAdditionalRol
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sUserManager = applicationContext.getBean("userManager", UserManager.class);
     sRoleManager = applicationContext.getBean("roleManager", RoleManager.class);
-    sAdditionalRolePermissionsManager = applicationContext.getBean("additionalRolePermissionsManager", AdditionalRolePermissionsManager.class);
+    sAdditionalRolePermissionsManager =
+        applicationContext.getBean("additionalRolePermissionsManager",
+            AdditionalRolePermissionsManager.class);
   }
 
   private Integer mId;
@@ -40,10 +42,10 @@ public class PersistentAdditionalRolePermissions implements MutableAdditionalRol
   private Integer mRoleId;
   private String mAssignedByUserId;
 
-  public PersistentAdditionalRolePermissions() {
-  }
+  public PersistentAdditionalRolePermissions() {}
 
-  public PersistentAdditionalRolePermissions(final PersistentAdditionalRolePermissions pAdditional) throws Exception {
+  public PersistentAdditionalRolePermissions(final PersistentAdditionalRolePermissions pAdditional)
+      throws Exception {
     setId(pAdditional.getId());
     setUser(pAdditional.getUser());
     setUserId(pAdditional.getUserId());
@@ -98,7 +100,8 @@ public class PersistentAdditionalRolePermissions implements MutableAdditionalRol
 
   @Override
   public Role getRole() throws Exception {
-    return mRole == null ? (StringUtils.isEmpty(mRoleId)? null : sRoleManager.get(mRoleId)) : sRoleManager.validate(mRole);
+    return mRole == null ? (StringUtils.isEmpty(mRoleId) ? null : sRoleManager.get(mRoleId))
+        : sRoleManager.validate(mRole);
   }
 
   @Override
@@ -109,8 +112,8 @@ public class PersistentAdditionalRolePermissions implements MutableAdditionalRol
   @Override
   public Set<String> getPermission() throws Exception {
     Role role = getRole();
-    if (role != null && role.getPermissions() != null) {
-      if (mPermission == null) {
+    if(role != null && role.getPermissions() != null) {
+      if(mPermission == null) {
         mPermission = new HashSet<>();
       }
       mPermission.addAll(role.getPermissions());
@@ -165,7 +168,8 @@ public class PersistentAdditionalRolePermissions implements MutableAdditionalRol
 
   @Override
   public User getAssignedBy() throws Exception {
-    return mAssignedBy == null ? sUserManager.get(mAssignedByUserId) : sUserManager.validate(mAssignedBy);
+    return mAssignedBy == null ? sUserManager.get(mAssignedByUserId) : sUserManager
+        .validate(mAssignedBy);
   }
 
   @Override
@@ -184,9 +188,10 @@ public class PersistentAdditionalRolePermissions implements MutableAdditionalRol
 
   @Override
   public void commit(boolean update) throws Exception {
-    if (update) {
+    if(update) {
       sAdditionalRolePermissionsManager.update(this);
-    } else {
+    }
+    else {
       sAdditionalRolePermissionsManager.create(this);
     }
   }

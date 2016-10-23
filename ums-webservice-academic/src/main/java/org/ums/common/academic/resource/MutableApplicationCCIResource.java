@@ -14,19 +14,19 @@ import javax.ws.rs.core.Response;
 /**
  * Created by My Pc on 7/14/2016.
  */
-public class MutableApplicationCCIResource extends Resource{
+public class MutableApplicationCCIResource extends Resource {
 
   @Autowired
   ApplicationCCIResourceHelper mHelper;
 
   @POST
   @Produces({MediaType.APPLICATION_JSON})
-  public JsonObject createApplicationCCI(final JsonObject pJsonObject) throws Exception{
-    return mHelper.saveAndReturn(pJsonObject,mUriInfo);
+  public JsonObject createApplicationCCI(final JsonObject pJsonObject) throws Exception {
+    return mHelper.saveAndReturn(pJsonObject, mUriInfo);
   }
 
   @DELETE
-  public Response delete()throws Exception{
+  public Response delete() throws Exception {
     return mHelper.deleteByStudentId(mUriInfo);
   }
 }
