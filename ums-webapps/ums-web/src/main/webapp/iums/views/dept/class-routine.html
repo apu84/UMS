@@ -78,7 +78,7 @@
     <div  id="rightDiv">
 
         <div class="panel" style="min-height: 490px;">
-            <div class="panel-heading">Here goes Information about Program Type,Year-Semester, Academic Semester and Section <span
+            <div class="panel-heading">Program Type: {{programTypeName}}, Semester:{{semesterName}}, Year:{{studentsYear}}, Academic Semester:{{studentsSemester}}, Section:{{section}}  <span
                     class="subtitle"></span></div>
             <div class="panel-body">
 
@@ -205,7 +205,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr data-ng-repeat="r in routineArr" data-ng-if="r.status!='deleted'">
+                        <tr data-ng-repeat="r in routineArr" data-ng-if="r.status!='deleted'" data-ng-style="{'background-color':r.backgroundColor}">
                             <td data-ng-if="r.editRoutine!=true">{{r.day}}</td>
                             <td data-ng-if="r.editRoutine!=true">{{r.courseNo}}</td>
                             <td data-ng-if="r.editRoutine!=true">{{r.section}}</td>
@@ -234,7 +234,7 @@
                                 <div data-ng-if="r.courseType =='SESSIONAL'">
                                     <select data-ng-model="r.section"  data-ng-change="sectionChanged(r.section,r)" style="width: 140px;">
                                         <option value="">Select a section</option>
-                                        <option data-ng-repeat="s in sessionalSections" value="{{s.name}}">{{s.name}}</option>
+                                        <option data-ng-repeat="s in sessionalSections" value="{{s.id}}">{{s.name}}</option>
                                     </select>
                                 </div>
                             </td>
@@ -284,9 +284,10 @@
                     </table>
                         </div>
                 </div>
-                <div class="row" align="right" data-ng-if="showSaveButton==true">
+                <div class="row" align="right" >
                     <form style="padding-right: 5%">
-                        <button class="btn btn-success" data-ng-click="saveClassRoutine()" >Save</button>
+                        <button class="btn btn-success" data-ng-if="showSaveButton==true" data-ng-click="saveClassRoutine()" >Save</button>
+                        <button class="btn btn-danger" data-ng-if="showResetButton==true" data-ng-click="resetClassRoutine()">Reset</button>
                     </form>
                 </div>
             </div>

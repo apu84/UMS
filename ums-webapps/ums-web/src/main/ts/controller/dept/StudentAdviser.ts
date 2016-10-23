@@ -174,25 +174,8 @@ module ums{
       //type 2 indicates : second teacher's students
       //type 3 is for global, that is, it will initialize all.
       var defer = this.$q.defer();
-      if(type==1){
-        this.$scope.fromStudents=[];
-
-
-      }
-      else if (type==2){
-        this.$scope.toStudents=[];
-
-
-      }
-      else{
-        this.$scope.fromStudents=[];
-        //this.$scope.toStudents = [];
-
-
-      }
-
-
-
+      this.$scope.fromStudents=[];
+      this.$scope.toStudents=[];
       this.$scope.addedStudents=[];
       this.$scope.yearSemesterMapForFromStudents={};
       this.$scope.yearSemestermapForToStudents={};
@@ -330,8 +313,8 @@ module ums{
         }
       }
 
-      this.$scope.categorizedToStudents.sort((a,b)=>{
-        return Number(b.key)-Number(a.key);
+      this.$scope.categorizedFormStudents.sort((a,b)=>{
+        return Number(a.key)-Number(b.key);
       });
 
     }
@@ -373,7 +356,7 @@ module ums{
       }
 
       this.$scope.categorizedToStudents.sort((a,b)=>{
-        return Number(b.key)-Number(a.key);
+        return Number(a.key)-Number(b.key);
       });
     }
 

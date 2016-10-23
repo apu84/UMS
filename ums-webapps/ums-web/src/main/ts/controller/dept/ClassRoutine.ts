@@ -9,6 +9,8 @@ module ums {
     addedRoutine:any;
     semesterId:number;
     programTypeId:number;
+    programTypeName:string;
+    semesterName:string;
     studentsYear:number;
     studentsSemester:number;
     tempId:number;
@@ -20,6 +22,7 @@ module ums {
     courseType:string;
     showLoader:boolean;
     showRoutineTable:boolean;
+    showResetButton:boolean;
 
     addedDate:string;
     addedCourse:string;
@@ -53,6 +56,7 @@ module ums {
     endTimeSelected:Function;
     roomNoSelected:Function;
     deleteRoutineData:Function;
+    resetClassRoutine:Function;
 
     showSaveButton:boolean;
     saveClassRoutine:Function;
@@ -111,17 +115,18 @@ module ums {
     showCancelButton:boolean;
     courseType:string;
     status:string;
+    backgroundColor:string;
   }
 
 
   export class ClassRoutine  {
 
 
-    public static $inject = ['appConstants','HttpClient','$scope','$q','notify','$sce','$window','semesterService','courseService','classRoomService','classRoutineService'];
+    public static $inject = ['appConstants','HttpClient','$scope','$q','notify','$sce','$window','semesterService','courseService','classRoomService','classRoutineService','$timeout'];
     constructor(private appConstants: any, private httpClient: HttpClient, private $scope: IClassRoutineScope,
                 private $q:ng.IQService, private notify: Notify,
                 private $sce:ng.ISCEService,private $window:ng.IWindowService, private semesterService:SemesterService,
-                private courseService:CourseService, private classRoomService:ClassRoomService, private classRoutineService:ClassRoutineService) {
+                private courseService:CourseService, private classRoomService:ClassRoomService, private classRoutineService:ClassRoutineService,private $timeout : ng.ITimeoutService) {
 
 
       $scope.showSaveButton=false;
@@ -155,6 +160,7 @@ module ums {
       $scope.deleteRoutineData = this.deleteRoutinedata.bind(this);
       $scope.addDivControl = this.addDivControl.bind(this);
       $scope.saveClassRoutine=this.saveClassRoutine.bind(this);
+      $scope.resetClassRoutine = this.resetClassRoutine.bind(this);
 
       Utils.setValidationOptions("form-horizontal");
       this.initializeAddVariables();
@@ -215,7 +221,7 @@ module ums {
       var foundOccurance:boolean=false;
       for(var i=0;i<this.$scope.tmpRoutineArr.length;i++){
         if(this.$scope.tmpRoutineArr[i].day==routine.day){
-          if(this.$scope.tmpRoutineArr[i].startTime==startTime){
+          if(this.$scope.tmpRoutineArr[i].startTime==startTime && this.$scope.tmpRoutineArr[i].section==routine.section && this.$scope.tmpRoutineArr[i].roomNo==routine.roomNo){
             foundOccurance=true;
             break;
           }
@@ -271,6 +277,9 @@ module ums {
       routine.showEditButton=false;
       routine.showAddButton=true;
       routine.showCancelButton=true;
+      if(this.$scope.showResetButton==false){
+        this.$scope.showResetButton=true;
+      }
 
     }
 
@@ -340,21 +349,31 @@ module ums {
       this.checkIfAllFieldIsAssigned().then((message)=>{
         if(message=="true"){
 
-          this.checkForOverlap(this.$scope.addedRoutine).then((found:boolean)=>{
-            if(found==false){
-              this.$scope.showSaveButton=true;
-              this.$scope.showRoutineTable=true;
-              this.$scope.addedRoutine.id=this.$scope.tempId;
-              this.$scope.tempId+=1;
+          this.checkIfTheSameCourseWithSectionIsAlreadyAssignedAtTheSameTime(this.$scope.addedRoutine.courseNo,this.$scope.addedRoutine).then((occurrenceFound:boolean)=>{
+            if(occurrenceFound==false){
+              this.checkForOverlap(this.$scope.addedRoutine).then((found:boolean)=>{
+                if(found==false){
+                  this.$scope.showSaveButton=true;
+                  this.$scope.showRoutineTable=true;
+                  this.$scope.addedRoutine.id=this.$scope.tempId;
+                  this.$scope.tempId+=1;
 
-              this.assignValueToRoutine().then((message)=>{
-                this.initializeAddVariables();
+                  this.assignValueToRoutine().then((message)=>{
+                    this.initializeAddVariables();
+                  });
+
+                }else{
+                  this.notify.error("Time overlapping is not allowed");
+                }
               });
-
-            }else{
-              this.notify.error("Time overlapping is not allowed");
+            }
+            else{
+              this.initializeColor();
+              this.notify.error("Course overlapping not allowed");
             }
           });
+
+
 
 
 
@@ -484,11 +503,47 @@ module ums {
 
     }
 
+    private checkIfTheSameCourseWithSectionIsAlreadyAssignedAtTheSameTime(courseNo:string,routine:IClassRoutine):ng.IPromise<any>{
+      var defer = this.$q.defer();
+      var occuranceFound:boolean=false;
+      for(var i=0;i<this.$scope.tmpRoutineArr.length;i++){
+        if(this.$scope.tmpRoutineArr[i].day==routine.day && this.$scope.tmpRoutineArr[i].section==routine.section && this.$scope.tmpRoutineArr[i].startTime==routine.startTime){
+          if(this.$scope.tmpRoutineArr[i].courseNo==courseNo){
+            this.colorOverlappedRoutine(this.$scope.tmpRoutineArr[i]);
+            occuranceFound=true;
+            break;
+          }
+        }
+      }
+      defer.resolve(occuranceFound);
+      return defer.promise;
+    }
+
+    private colorOverlappedRoutine(routine:IClassRoutine){
+      for(var i=0;i<this.$scope.routineArr.length;i++){
+        if(routine.id==this.$scope.routineArr[i].id){
+          this.$scope.routineArr[i].backgroundColor="yellow";
+        }
+      }
+    }
+
+    private initializeColor():void
+    {
+
+      this.$timeout(()=>{
+        for(var i=0;i<this.$scope.routineArr.length;i++){
+            if(this.$scope.routineArr[i].backgroundColor=='yellow'){
+              console.log("making white");
+              this.$scope.routineArr[i].backgroundColor="white";
+            }
+        }
+      },4000);
+    }
     private checkIfTheCourseIsAlreadySelectedInTheSameDate(courseNo:string,routine:IClassRoutine):ng.IPromise<any>{
       var defer = this.$q.defer();
       var occuranceFound:boolean=false;
       for(var i=0;i<this.$scope.tmpRoutineArr.length;i++){
-        if(this.$scope.tmpRoutineArr[i].day==routine.day){
+        if(this.$scope.tmpRoutineArr[i].day==routine.day && this.$scope.tmpRoutineArr[i].section==routine.section){
           if(this.$scope.tmpRoutineArr[i].courseNo==courseNo){
             occuranceFound=true;
             break;
@@ -508,12 +563,29 @@ module ums {
       });
     }
 
+    private setSemesterNameAndProgramNameAndProgramType(){
+      for(var i=0;i<this.$scope.semesterArr.length;i++){
+        if(this.$scope.semesterArr[i].id==this.$scope.semesterId){
+          this.$scope.semesterName = this.$scope.semesterArr[i].name;
+          break;
+        }
+      }
+
+      if(this.$scope.programTypeId ==11){
+        this.$scope.programTypeName="Undergraduate";
+      }else{
+        this.$scope.programTypeName="Post-Graduate";
+      }
+    }
+
 
     private searchForRoutineData():void{
 
+      this.setSemesterNameAndProgramNameAndProgramType();
       this.$scope.tempId=-2000;
       this.$scope.showRoutineTable=false;
       this.$scope.showLoader=true;
+      this.$scope.showResetButton=false;
 
       this.$scope.dates=[];
       this.$scope.times =[];
@@ -550,10 +622,11 @@ module ums {
               .then((routineArr:Array<IClassRoutine>)=>{
                 console.log(this.$scope.courseNoMapCourse);
                 for(var k=0;k<routineArr.length;k++){
+                  routineArr[k].backgroundColor="white";
                   routineArr[k].day = this.$scope.dateMap[String(routineArr[k].day)];
                   routineArr[k].courseNo = this.$scope.courseIdMapCourseNo[routineArr[k].courseId];
                   routineArr[k].courseType = this.$scope.courseNoMapCourse[this.$scope.courseIdMapCourseNo[routineArr[k].courseId]].type;
-                  this.$scope.routineArr.push(routineArr[k]);
+                  this.$scope.routineArr.push(angular.copy(routineArr[k]));
                   this.$scope.tmpRoutineArr.push(angular.copy(routineArr[k]));
                 }
 
@@ -617,6 +690,7 @@ module ums {
               if(message=='success'){
                 this.notify.success("Routine Data Successfully Saved");
                 this.$scope.showSaveButton=false;
+                this.$scope.showResetButton=false;
 
                 this.searchForRoutineData();
 
@@ -626,6 +700,12 @@ module ums {
               }
             });
       });
+    }
+
+
+    private resetClassRoutine():void{
+      this.$scope.routineArr=angular.copy(this.$scope.tmpRoutineArr);
+      this.$scope.showSaveButton=false;
     }
 
     private resetDivs() {

@@ -145,94 +145,105 @@ public class ClassRoutineGeneratorImpl implements ClassRoutineGenerator {
 
     document.add(paragraph);
     document.add(new Paragraph(" "));
-    PdfPTable table = new PdfPTable(13);
-    table.setWidthPercentage(105);
-    PdfPCell dayTimeCell = new PdfPCell(new Paragraph("Time  /   Day",tableDataFontTime));
-    table.addCell(dayTimeCell);
 
-    Time timeInitializer = new Time(timeFormat.parse(appSettingMap.get("class start time")).getTime());
+    if(routines.size()!=0){
+      PdfPTable table = new PdfPTable(13);
+      table.setWidthPercentage(105);
+      PdfPCell dayTimeCell = new PdfPCell(new Paragraph("Time  /   Day",tableDataFontTime));
+      table.addCell(dayTimeCell);
 
-    while(true){
-      if(timeInitializer.equals(endTime)){
-        break;
-      }else{
-        DateFormat startTimeFormat = new SimpleDateFormat();
-        Time tempTime =  new Time(timeInitializer.getTime()) ;
-        tempTime.setTime(tempTime.getTime()+classDuration*60000);
-        final SimpleDateFormat sdf = new SimpleDateFormat("hh:mm");
-        final Date startTimeFormated = sdf.parse(timeInitializer.toString());
-        final Date endTimeFormated = sdf.parse(tempTime.toString());
-        PdfPCell cell = new PdfPCell(new Paragraph(  new SimpleDateFormat("hh:mm a").format(startTimeFormated)+"-"+new SimpleDateFormat("hh:mm a").format(endTimeFormated),tableDataFontTime));
-        timeInitializer.setTime(timeInitializer.getTime()+classDuration * 60000);
-        //timeInitializer = timeInitializer
-        table.addCell(cell);
-      }
-    }
-
-    SimpleDateFormat routineTimeFormat= new SimpleDateFormat("hh:mm a");
-
-    Time routineTime = new Time(routineTimeFormat.parse(routines.get(0).getStartTime()).getTime());
-    for(int i=1;i<=6;i++){
-      PdfPCell dayCell = new PdfPCell();
-      Paragraph dayParagraph = new Paragraph(dateMap.get(i));
-      dayParagraph.setFont(FontFactory.getFont(FontFactory.TIMES_BOLDITALIC,9));
-      dayCell.addElement(dayParagraph);
-      table.addCell(dayCell);
-
-      timeInitializer =  new Time(timeFormat.parse(appSettingMap.get("class start time")).getTime());
+      Time timeInitializer = new Time(timeFormat.parse(appSettingMap.get("class start time")).getTime());
 
       while(true){
         if(timeInitializer.equals(endTime)){
           break;
         }else{
-          if(routines.size()!=0){
-            if(routineTime.equals(timeInitializer) && routines.get(0).getDay()==i){
-              List<String> sectionList = new ArrayList<>();
-              String courseNo = routines.get(0).getCourseNo();
-              String courseId= routines.get(0).getCourseId();
-              sectionList.add(routines.get(0).getSection());
-              String sections= routines.get(0).getSection();
-              String roomNo = routines.get(0).getRoomNo();
-              int duration  = routines.get(0).getDuration();
+          DateFormat startTimeFormat = new SimpleDateFormat();
+          Time tempTime =  new Time(timeInitializer.getTime()) ;
+          tempTime.setTime(tempTime.getTime()+classDuration*60000);
+          final SimpleDateFormat sdf = new SimpleDateFormat("hh:mm");
+          final Date startTimeFormated = sdf.parse(timeInitializer.toString());
+          final Date endTimeFormated = sdf.parse(tempTime.toString());
+          PdfPCell cell = new PdfPCell(new Paragraph(  new SimpleDateFormat("hh:mm a").format(startTimeFormated)+"-"+new SimpleDateFormat("hh:mm a").format(endTimeFormated),tableDataFontTime));
+          timeInitializer.setTime(timeInitializer.getTime()+classDuration * 60000);
+          //timeInitializer = timeInitializer
+          table.addCell(cell);
+        }
+      }
 
-              int routineIterator=1;
-              while(true){
-                if(routines.size()>1){
-                  if(routines.get(routineIterator).getCourseId().equals(courseId) && routines.get(routineIterator).getDay()==i){
-                    if(sectionList.contains(routines.get(routineIterator).getSection())==false)
-                    {
-                      sections = sections+"+"+routines.get(routineIterator).getSection();
-                      sectionList.add(routines.get(routineIterator).getSection());
+      SimpleDateFormat routineTimeFormat= new SimpleDateFormat("hh:mm a");
+
+      Time routineTime = new Time(routineTimeFormat.parse(routines.get(0).getStartTime()).getTime());
+      for(int i=1;i<=6;i++){
+        PdfPCell dayCell = new PdfPCell();
+        Paragraph dayParagraph = new Paragraph(dateMap.get(i));
+        dayParagraph.setFont(FontFactory.getFont(FontFactory.TIMES_BOLDITALIC,9));
+        dayCell.addElement(dayParagraph);
+        table.addCell(dayCell);
+
+        timeInitializer =  new Time(timeFormat.parse(appSettingMap.get("class start time")).getTime());
+
+        while(true){
+          if(timeInitializer.equals(endTime)){
+            break;
+          }else{
+            if(routines.size()!=0){
+              if(routineTime.equals(timeInitializer) && routines.get(0).getDay()==i){
+                List<String> sectionList = new ArrayList<>();
+                String courseNo = routines.get(0).getCourseNo();
+                String courseId= routines.get(0).getCourseId();
+                sectionList.add(routines.get(0).getSection());
+                String sections= routines.get(0).getSection();
+                String roomNo = routines.get(0).getRoomNo();
+                int duration  = routines.get(0).getDuration();
+
+                int routineIterator=1;
+                while(true){
+                  if(routines.size()>1){
+                    if(routines.get(routineIterator).getCourseId().equals(courseId) && routines.get(routineIterator).getDay()==i){
+                      if(sectionList.contains(routines.get(routineIterator).getSection())==false)
+                      {
+                        sections = sections+"+"+routines.get(routineIterator).getSection();
+                        sectionList.add(routines.get(routineIterator).getSection());
+                      }
+                      routines.remove(0);
+                    }else{
+                      break;
                     }
-                    routines.remove(0);
                   }else{
                     break;
                   }
-                }else{
-                  break;
+
                 }
 
-              }
+                Paragraph upperParagraph = new Paragraph(courseNo+"("+sections+")",tableDataFont);
+                Paragraph lowerParagraph = new Paragraph(roomNo,tableDataFont);
 
-              Paragraph upperParagraph = new Paragraph(courseNo+"("+sections+")",tableDataFont);
-              Paragraph lowerParagraph = new Paragraph(roomNo,tableDataFont);
-
-              upperParagraph.setAlignment(Element.ALIGN_CENTER);
-              lowerParagraph.setAlignment(Element.ALIGN_CENTER);
-              PdfPCell cell = new PdfPCell();
-              cell.addElement(upperParagraph);
-              cell.addElement(lowerParagraph);
-              cell.setColspan(duration);
-              table.addCell(cell);
-              if(routines.size()!=0){
-                routines.remove(0);
+                upperParagraph.setAlignment(Element.ALIGN_CENTER);
+                lowerParagraph.setAlignment(Element.ALIGN_CENTER);
+                PdfPCell cell = new PdfPCell();
+                cell.addElement(upperParagraph);
+                cell.addElement(lowerParagraph);
+                cell.setColspan(duration);
+                table.addCell(cell);
                 if(routines.size()!=0){
-                  routineTime =new Time(routineTimeFormat.parse(routines.get(0).getStartTime()).getTime());
+                  routines.remove(0);
+                  if(routines.size()!=0){
+                    routineTime =new Time(routineTimeFormat.parse(routines.get(0).getStartTime()).getTime());
+                  }
                 }
-              }
-              timeInitializer.setTime(timeInitializer.getTime()+(duration*classDuration) * 60000);
+                timeInitializer.setTime(timeInitializer.getTime()+(duration*classDuration) * 60000);
 
-            }else{
+              }else{
+                PdfPCell cell = new PdfPCell();
+                cell.addElement(new Paragraph(" "));
+                cell.addElement(new Paragraph(" "));
+
+                table.addCell(cell);
+                timeInitializer.setTime(timeInitializer.getTime()+classDuration * 60000);
+              }
+            }
+            else{
               PdfPCell cell = new PdfPCell();
               cell.addElement(new Paragraph(" "));
               cell.addElement(new Paragraph(" "));
@@ -240,23 +251,21 @@ public class ClassRoutineGeneratorImpl implements ClassRoutineGenerator {
               table.addCell(cell);
               timeInitializer.setTime(timeInitializer.getTime()+classDuration * 60000);
             }
-          }
-         else{
-            PdfPCell cell = new PdfPCell();
-            cell.addElement(new Paragraph(" "));
-            cell.addElement(new Paragraph(" "));
 
-            table.addCell(cell);
-            timeInitializer.setTime(timeInitializer.getTime()+classDuration * 60000);
           }
-
         }
+
+
       }
 
-
+      document.add(table);
+    }
+    else{
+      Paragraph noRoutineParagraph= new Paragraph("No Routine Published Yet!");
+      noRoutineParagraph.setAlignment(Element.ALIGN_CENTER);
+      document.add(noRoutineParagraph);
     }
 
-    document.add(table);
 
     document.close();
     baos.writeTo(pOutputStream);
