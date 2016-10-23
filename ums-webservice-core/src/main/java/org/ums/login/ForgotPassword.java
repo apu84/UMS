@@ -19,23 +19,22 @@ import java.util.Map;
 @Path("/forgotPassword")
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
-
 public class ForgotPassword extends Resource {
   @Autowired
   LoginService mLoginService;
 
   @PUT
   public GenericResponse<Map> passwordResetEmailRequest(final @Context Request pRequest,
-                                                        final JsonObject pJsonObject) throws Exception {
+      final JsonObject pJsonObject) throws Exception {
     return mLoginService.checkAndSendPasswordResetEmailToUser(pJsonObject.getString("userId"));
   }
 
   @PUT
   @Path("/resetPassword")
-  public GenericResponse<Map> resetPassword(final @Context Request pRequest, final JsonObject pJsonObject) throws Exception {
+  public GenericResponse<Map> resetPassword(final @Context Request pRequest,
+      final JsonObject pJsonObject) throws Exception {
     return mLoginService.resetPassword(pJsonObject.getString("userId"),
-        pJsonObject.getString("passwordResetToken"),
-        pJsonObject.getString("newPassword"),
+        pJsonObject.getString("passwordResetToken"), pJsonObject.getString("newPassword"),
         pJsonObject.getString("confirmNewPassword"));
   }
 }

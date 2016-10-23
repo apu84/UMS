@@ -11,7 +11,8 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
-public interface Notification extends Serializable, EditType<MutableNotification>, LastModifier, Identifier<String> {
+public interface Notification extends Serializable, EditType<MutableNotification>, LastModifier,
+    Identifier<String> {
   String getProducerId();
 
   String getConsumerId();
@@ -25,14 +26,12 @@ public interface Notification extends Serializable, EditType<MutableNotification
   Date getConsumedOn();
 
   enum Type {
-    COURSE_MATERIAL("CM"),
-    COURSE_ASSIGNMENT("CA"),
-    GRADE_SUBMISSION("GS");
+    COURSE_MATERIAL("CM"), COURSE_ASSIGNMENT("CA"), GRADE_SUBMISSION("GS");
 
     private static final Map<String, Type> lookup = new HashMap<>();
 
     static {
-      for (Type c : EnumSet.allOf(Type.class))
+      for(Type c : EnumSet.allOf(Type.class))
         lookup.put(c.getValue(), c);
     }
 

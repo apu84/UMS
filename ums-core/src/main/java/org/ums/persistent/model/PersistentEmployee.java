@@ -8,19 +8,16 @@ import org.ums.domain.model.mutable.MutableEmployee;
 import org.ums.manager.DepartmentManager;
 import org.ums.manager.EmployeeManager;
 
-
 public class PersistentEmployee implements MutableEmployee {
 
   private static DepartmentManager sDepartmentManager;
   private static EmployeeManager sEmployeeManager;
 
-
-  static{
+  static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sDepartmentManager = applicationContext.getBean("departmentManager",DepartmentManager.class);
-    sEmployeeManager = applicationContext.getBean("employeeManager",EmployeeManager.class);
+    sDepartmentManager = applicationContext.getBean("departmentManager", DepartmentManager.class);
+    sEmployeeManager = applicationContext.getBean("employeeManager", EmployeeManager.class);
   }
-
 
   private String mId;
   private String mEmployeeName;
@@ -43,12 +40,11 @@ public class PersistentEmployee implements MutableEmployee {
   private int mStatus;
   private String mLastModified;
 
-
-  public PersistentEmployee(){
+  public PersistentEmployee() {
 
   }
 
-  public PersistentEmployee(final PersistentEmployee pPersistentEmployee) throws  Exception{
+  public PersistentEmployee(final PersistentEmployee pPersistentEmployee) throws Exception {
     mId = pPersistentEmployee.getId();
     mEmployeeName = pPersistentEmployee.getEmployeeName();
     mDesignation = pPersistentEmployee.getDesignation();
@@ -69,7 +65,6 @@ public class PersistentEmployee implements MutableEmployee {
     mJobParmanentDate = pPersistentEmployee.getJobPermanentDate();
     mStatus = pPersistentEmployee.getStatus();
   }
-
 
   public String getDepartmentId() {
     return mDepartmentId;
@@ -181,7 +176,8 @@ public class PersistentEmployee implements MutableEmployee {
 
   @Override
   public Department getDepartment() throws Exception {
-    return mDepartment == null ? sDepartmentManager.get(mDepartmentId) : sDepartmentManager.validate(mDepartment);
+    return mDepartment == null ? sDepartmentManager.get(mDepartmentId) : sDepartmentManager
+        .validate(mDepartment);
   }
 
   @Override
@@ -267,9 +263,10 @@ public class PersistentEmployee implements MutableEmployee {
   @Override
   public void commit(boolean update) throws Exception {
 
-    if (update) {
+    if(update) {
       sEmployeeManager.update(this);
-    } else {
+    }
+    else {
       sEmployeeManager.create(this);
     }
   }

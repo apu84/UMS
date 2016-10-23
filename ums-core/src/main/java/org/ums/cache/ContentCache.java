@@ -13,13 +13,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-public abstract class ContentCache<R extends Identifier<I> & LastModifier, M extends R, I, C extends ContentManager<R, M, I>> extends ContentDaoDecorator<R, M, I, C> {
+public abstract class ContentCache<R extends Identifier<I> & LastModifier, M extends R, I, C extends ContentManager<R, M, I>>
+    extends ContentDaoDecorator<R, M, I, C> {
   private static final Logger mLogger = LoggerFactory.getLogger(TeacherCache.class);
 
   @Override
   public List<R> getAll() throws Exception {
     List<R> readOnlys = super.getAll();
-    for (R readOnly : readOnlys) {
+    for(R readOnly : readOnlys) {
       getCacheManager().put(getCacheKey(readOnly.getId()), readOnly);
     }
     return readOnlys;
@@ -50,7 +51,7 @@ public abstract class ContentCache<R extends Identifier<I> & LastModifier, M ext
   @Override
   public int delete(List<M> pMutableList) throws Exception {
     int modified = super.delete(pMutableList);
-    for (M mutable : pMutableList) {
+    for(M mutable : pMutableList) {
       invalidate(mutable);
     }
     getCacheManager().invalidateList(getCachedListKey());
@@ -67,7 +68,7 @@ public abstract class ContentCache<R extends Identifier<I> & LastModifier, M ext
   @Override
   public int update(List<M> pMutableList) throws Exception {
     int modified = super.update(pMutableList);
-    for (M mutable : pMutableList) {
+    for(M mutable : pMutableList) {
       invalidate(mutable);
     }
     return modified;
@@ -77,7 +78,7 @@ public abstract class ContentCache<R extends Identifier<I> & LastModifier, M ext
   public R get(I pId) throws Exception {
     String cacheKey = getCacheKey(pId);
     R pReadonly = getCacheManager().get(cacheKey);
-    if (pReadonly == null) {
+    if(pReadonly == null) {
       pReadonly = super.get(pId);
       getCacheManager().put(cacheKey, pReadonly);
     }
@@ -89,10 +90,10 @@ public abstract class ContentCache<R extends Identifier<I> & LastModifier, M ext
     String cacheKey = getCacheKey(pReadonly.getId());
     String lastModified = getCacheManager().getLastModified(cacheKey);
 
-    if (StringUtils.isEmpty(lastModified)
+    if(StringUtils.isEmpty(lastModified)
         || StringUtils.isEmpty(pReadonly.getLastModified())
-        || (!StringUtils.isEmpty(lastModified) && !StringUtils.isEmpty(pReadonly.getLastModified())
-        && lastModified.compareTo(pReadonly.getLastModified()) > 0)) {
+        || (!StringUtils.isEmpty(lastModified) && !StringUtils.isEmpty(pReadonly.getLastModified()) && lastModified
+            .compareTo(pReadonly.getLastModified()) > 0)) {
       R readOnly = super.get(pReadonly.getId());
       getCacheManager().invalidate(cacheKey);
       getCacheManager().put(getCacheKey(pReadonly.getId()), readOnly);
@@ -120,7 +121,7 @@ public abstract class ContentCache<R extends Identifier<I> & LastModifier, M ext
   protected String getCacheKey(final String pEntityName, final Object... args) {
     StringBuilder cacheKeyBuilder = new StringBuilder();
     cacheKeyBuilder.append(pEntityName).append("-");
-    for (Object param : args) {
+    for(Object param : args) {
       cacheKeyBuilder.append(param).append("-");
     }
     return cacheKeyBuilder.toString().replace(" ", "");
@@ -130,47 +131,49 @@ public abstract class ContentCache<R extends Identifier<I> & LastModifier, M ext
     return "all_cached_list";
   }
 
-  protected List<R> cachedList(final String pCacheKey, Callable<List<R>> pCallable) throws Exception {
+  protected List<R> cachedList(final String pCacheKey, Callable<List<R>> pCallable)
+      throws Exception {
     String methodName = Thread.currentThread().getStackTrace()[2].getMethodName();
     String cacheKey = pCacheKey + methodName;
 
     List<I> cachedList = getCacheManager().getList(cacheKey);
 
-    if (cachedList == null || cachedList.size() == 0) {
+    if(cachedList == null || cachedList.size() == 0) {
       // if list is not present in cache
       List<R> entityList = pCallable.call();
-      if (entityList.size() > 0) {
+      if(entityList.size() > 0) {
         List<I> entityCacheIds = new ArrayList<>();
 
-        for (R entity : entityList) {
+        for(R entity : entityList) {
           String entityCacheKey = getCacheKey(entity.getId());
           getCacheManager().put(entityCacheKey, entity);
           entityCacheIds.add(entity.getId());
         }
         getCacheManager().put(cacheKey, entityCacheIds);
 
-        //update list cache
+        // update list cache
         List<String> cachedLists = getCacheManager().getCachedKeyList(getCachedListKey());
-        if (cachedLists == null) {
+        if(cachedLists == null) {
           cachedLists = new ArrayList<>();
         }
-        if (!cachedLists.contains(cacheKey)) {
+        if(!cachedLists.contains(cacheKey)) {
           cachedLists.add(cacheKey);
         }
         getCacheManager().putKeys(getCachedListKey(), cachedLists);
       }
       return entityList;
 
-    } else {
+    }
+    else {
       // list is present in cache
       List<R> entities = new ArrayList<>();
       long currentTime = System.currentTimeMillis();
-      for (I entityId : cachedList) {
+      for(I entityId : cachedList) {
         R entity = get(entityId);
         entities.add(entity);
       }
       long afterTime = System.currentTimeMillis();
-      if (mLogger.isDebugEnabled()) {
+      if(mLogger.isDebugEnabled()) {
         mLogger.debug("Time taken to build cached list: " + (afterTime - currentTime) + " ms");
       }
       return entities;

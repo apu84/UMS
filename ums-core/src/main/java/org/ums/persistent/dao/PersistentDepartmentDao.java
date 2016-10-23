@@ -1,6 +1,5 @@
 package org.ums.persistent.dao;
 
-
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.persistent.model.PersistentDepartment;
@@ -13,7 +12,8 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentDepartmentDao extends DepartmentDaoDecorator {
-  static String SELECT_ALL = "SELECT DEPT_ID, SHORT_NAME, LONG_NAME, TYPE, LAST_MODIFIED FROM MST_DEPT_OFFICE ";
+  static String SELECT_ALL =
+      "SELECT DEPT_ID, SHORT_NAME, LONG_NAME, TYPE, LAST_MODIFIED FROM MST_DEPT_OFFICE ";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -24,7 +24,7 @@ public class PersistentDepartmentDao extends DepartmentDaoDecorator {
   @Override
   public Department get(final String pId) throws Exception {
     String query = SELECT_ALL + " WHERE DEPT_ID = ?";
-    return mJdbcTemplate.queryForObject(query, new Object[]{pId}, new DepartmentRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new DepartmentRowMapper());
   }
 
   @Override

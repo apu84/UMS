@@ -21,13 +21,10 @@ public class UserResource extends Resource {
   @Autowired
   UserResourceHelper mUserResourceHelper;
 
-
   @GET
-  public JsonObject getUsers(final @Context Request pRequest)
-      throws Exception {
+  public JsonObject getUsers(final @Context Request pRequest) throws Exception {
     return mUserResourceHelper.getUsers(mUriInfo);
   }
-
 
   @GET
   @Path("/current")

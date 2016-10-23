@@ -5,26 +5,29 @@ import org.ums.context.AppContext;
 import org.ums.domain.model.mutable.MutableUGRegistrationResult;
 import org.ums.manager.UGRegistrationResultManager;
 
-public class PersistentUGRegistrationResult extends AbstractUGBaseRegistration implements MutableUGRegistrationResult {
+public class PersistentUGRegistrationResult extends AbstractUGBaseRegistration implements
+    MutableUGRegistrationResult {
   private static UGRegistrationResultManager sRegistrationResultManager;
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sRegistrationResultManager = applicationContext.getBean("registrationResultManager", UGRegistrationResultManager.class);
+    sRegistrationResultManager =
+        applicationContext.getBean("registrationResultManager", UGRegistrationResultManager.class);
   }
 
-  public PersistentUGRegistrationResult() {
-  }
+  public PersistentUGRegistrationResult() {}
 
-  public PersistentUGRegistrationResult(final MutableUGRegistrationResult pMutableUGRegistrationResult) {
+  public PersistentUGRegistrationResult(
+      final MutableUGRegistrationResult pMutableUGRegistrationResult) {
     super(pMutableUGRegistrationResult);
   }
 
   @Override
   public void commit(boolean update) throws Exception {
-    if (update) {
+    if(update) {
       sRegistrationResultManager.update(this);
-    } else {
+    }
+    else {
       sRegistrationResultManager.create(this);
     }
   }

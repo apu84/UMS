@@ -51,9 +51,11 @@ public class OptSectionDto {
   public List<Student> getStudentList() {
     return studentList;
   }
+
   public void setStudentList(List<Student> studentList) {
     this.studentList = studentList;
   }
+
   public String getStudents() {
     return students;
   }

@@ -6,16 +6,17 @@ import org.ums.domain.model.mutable.MutableUGBaseRegistration;
 import org.ums.domain.model.mutable.MutableUGSessionalMarks;
 import org.ums.manager.UGSessionalMarksManager;
 
-public class PersistentUGSessionalMarks extends AbstractUGBaseRegistration implements MutableUGSessionalMarks {
+public class PersistentUGSessionalMarks extends AbstractUGBaseRegistration implements
+    MutableUGSessionalMarks {
   private static UGSessionalMarksManager sSessionalMarksManager;
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sSessionalMarksManager = applicationContext.getBean("sessionalMarksManager", UGSessionalMarksManager.class);
+    sSessionalMarksManager =
+        applicationContext.getBean("sessionalMarksManager", UGSessionalMarksManager.class);
   }
 
-  public PersistentUGSessionalMarks() {
-  }
+  public PersistentUGSessionalMarks() {}
 
   public PersistentUGSessionalMarks(MutableUGBaseRegistration pMutableUGBaseRegistration) {
     super(pMutableUGBaseRegistration);
@@ -28,9 +29,10 @@ public class PersistentUGSessionalMarks extends AbstractUGBaseRegistration imple
 
   @Override
   public void commit(boolean update) throws Exception {
-    if (update) {
+    if(update) {
       sSessionalMarksManager.update(this);
-    } else {
+    }
+    else {
       sSessionalMarksManager.create(this);
     }
   }

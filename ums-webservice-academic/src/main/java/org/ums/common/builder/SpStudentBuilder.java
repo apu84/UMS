@@ -17,19 +17,21 @@ import javax.ws.rs.core.UriInfo;
  */
 
 @Component
-public class SpStudentBuilder implements Builder<SpStudent,MutableSpStudent> {
+public class SpStudentBuilder implements Builder<SpStudent, MutableSpStudent> {
   @Override
-  public void build(JsonObjectBuilder pBuilder, SpStudent pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) throws Exception {
-    pBuilder.add("id",pReadOnly.getId());
-    pBuilder.add("programId",pReadOnly.getProgram().getId());
-    pBuilder.add("semesterId",pReadOnly.getSemester().getId());
-    pBuilder.add("year",pReadOnly.getAcademicYear());
-    pBuilder.add("semester",pReadOnly.getAcademicSemester());
-    pBuilder.add("status",pReadOnly.getStatus());
+  public void build(JsonObjectBuilder pBuilder, SpStudent pReadOnly, UriInfo pUriInfo,
+      LocalCache pLocalCache) throws Exception {
+    pBuilder.add("id", pReadOnly.getId());
+    pBuilder.add("programId", pReadOnly.getProgram().getId());
+    pBuilder.add("semesterId", pReadOnly.getSemester().getId());
+    pBuilder.add("year", pReadOnly.getAcademicYear());
+    pBuilder.add("semester", pReadOnly.getAcademicSemester());
+    pBuilder.add("status", pReadOnly.getStatus());
   }
 
   @Override
-  public void build(MutableSpStudent pMutable, JsonObject pJsonObject, LocalCache pLocalCache) throws Exception {
+  public void build(MutableSpStudent pMutable, JsonObject pJsonObject, LocalCache pLocalCache)
+      throws Exception {
     pMutable.setId(pJsonObject.getString("id"));
     PersistentProgram program = new PersistentProgram();
     program.setId(pJsonObject.getInt("programId"));

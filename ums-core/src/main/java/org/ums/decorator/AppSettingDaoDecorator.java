@@ -7,6 +7,8 @@ import org.ums.manager.AppSettingManager;
 /**
  * Created by My Pc on 30-Aug-16.
  */
-public class AppSettingDaoDecorator extends ContentDaoDecorator<AppSetting,MutableAppSetting,Integer,AppSettingManager> implements AppSettingManager{
+public class AppSettingDaoDecorator extends
+    ContentDaoDecorator<AppSetting, MutableAppSetting, Integer, AppSettingManager> implements
+    AppSettingManager {
 
 }

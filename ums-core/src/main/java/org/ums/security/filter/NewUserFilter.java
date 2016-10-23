@@ -29,9 +29,9 @@ public class NewUserFilter extends AuthorizationFilter {
   protected PatternMatcher mPathMatcher = new AntPathMatcher();
 
   @Override
-  protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
-    if (isLoginRequest(request, response)
-        || isPassThrough(request)) {
+  protected boolean isAccessAllowed(ServletRequest request, ServletResponse response,
+      Object mappedValue) {
+    if(isLoginRequest(request, response) || isPassThrough(request)) {
       return true;
     }
 
@@ -39,20 +39,20 @@ public class NewUserFilter extends AuthorizationFilter {
     String userName = subject.getPrincipal().toString();
     try {
       User user = mUserManager.get(userName);
-      if (user.getTemporaryPassword() != null) {
-        if (!isAllowed(request)) {
+      if(user.getTemporaryPassword() != null) {
+        if(!isAllowed(request)) {
           return false;
         }
       }
-    } catch (Exception e) {
+    } catch(Exception e) {
       e.printStackTrace();
     }
     return true;
   }
 
   protected boolean isAllowed(ServletRequest pRequest) {
-    for (String resource : mAllowedResource) {
-      if (mPathMatcher.matches(resource, getPathWithinApplication(pRequest))) {
+    for(String resource : mAllowedResource) {
+      if(mPathMatcher.matches(resource, getPathWithinApplication(pRequest))) {
         return true;
       }
     }
@@ -60,8 +60,8 @@ public class NewUserFilter extends AuthorizationFilter {
   }
 
   protected boolean isPassThrough(ServletRequest pRequest) {
-    for (String resource : mPassThrough) {
-      if (mPathMatcher.matches(resource, getPathWithinApplication(pRequest))) {
+    for(String resource : mPassThrough) {
+      if(mPathMatcher.matches(resource, getPathWithinApplication(pRequest))) {
         return true;
       }
     }

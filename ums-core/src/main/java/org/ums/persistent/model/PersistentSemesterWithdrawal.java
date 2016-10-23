@@ -15,7 +15,6 @@ import org.ums.manager.StudentManager;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class PersistentSemesterWithdrawal implements MutableSemesterWithdrawal {
 
   private static SemesterManager sSemesterManager;
@@ -23,12 +22,13 @@ public class PersistentSemesterWithdrawal implements MutableSemesterWithdrawal {
   private static StudentManager sStudentManager;
   private static SemesterWithDrawalManager sSemesterWithDrawalManager;
 
-  static{
+  static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sSemesterManager = applicationContext.getBean("semesterManager",SemesterManager.class);
-    sProgramManager = applicationContext.getBean("programManager",ProgramManager.class);
-    sStudentManager = applicationContext.getBean("studentManager",StudentManager.class);
-    sSemesterWithDrawalManager = applicationContext.getBean("semesterWithdrawalManager",SemesterWithDrawalManager.class);
+    sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
+    sProgramManager = applicationContext.getBean("programManager", ProgramManager.class);
+    sStudentManager = applicationContext.getBean("studentManager", StudentManager.class);
+    sSemesterWithDrawalManager =
+        applicationContext.getBean("semesterWithdrawalManager", SemesterWithDrawalManager.class);
   }
 
   private int mId;
@@ -47,13 +47,12 @@ public class PersistentSemesterWithdrawal implements MutableSemesterWithdrawal {
   private String mComment;
   private List<SemesterWithdrawalLog> mLogs = new ArrayList<>();
 
-  public PersistentSemesterWithdrawal(){
+  public PersistentSemesterWithdrawal() {
 
   }
 
-
-
-  public PersistentSemesterWithdrawal(final PersistentSemesterWithdrawal pPersistentSemesterWithdrawal)throws Exception{
+  public PersistentSemesterWithdrawal(
+      final PersistentSemesterWithdrawal pPersistentSemesterWithdrawal) throws Exception {
     mId = pPersistentSemesterWithdrawal.getId();
 
     mSemester = pPersistentSemesterWithdrawal.getSemester();
@@ -93,7 +92,7 @@ public class PersistentSemesterWithdrawal implements MutableSemesterWithdrawal {
 
   @Override
   public void setStatus(int pStatus) {
-    mStatus  = pStatus;
+    mStatus = pStatus;
   }
 
   @Override
@@ -132,7 +131,7 @@ public class PersistentSemesterWithdrawal implements MutableSemesterWithdrawal {
 
   @Override
   public Student getStudent() throws Exception {
-    return mStudent==null?sStudentManager.get(mStudentId):sStudentManager.validate(mStudent);
+    return mStudent == null ? sStudentManager.get(mStudentId) : sStudentManager.validate(mStudent);
   }
 
   public int getProgramId() {
@@ -150,7 +149,7 @@ public class PersistentSemesterWithdrawal implements MutableSemesterWithdrawal {
 
   @Override
   public Program getProgram() throws Exception {
-    return mProgram==null? sProgramManager.get(mProgramId): sProgramManager.validate(mProgram);
+    return mProgram == null ? sProgramManager.get(mProgramId) : sProgramManager.validate(mProgram);
   }
 
   public int getSemesterId() {
@@ -161,14 +160,9 @@ public class PersistentSemesterWithdrawal implements MutableSemesterWithdrawal {
     mSemesterId = pSemesterId;
   }
 
-
-
-
   public void setId(int pId) {
     mId = pId;
   }
-
-
 
   @Override
   public void setSemester(Semester pSemester) {
@@ -180,24 +174,16 @@ public class PersistentSemesterWithdrawal implements MutableSemesterWithdrawal {
     mCause = pCause;
   }
 
-
-
-
-
-
   @Override
   public Semester getSemester() throws Exception {
-    return mSemester==null? sSemesterManager.get(mSemesterId): sSemesterManager.validate(mSemester);
+    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
+        .validate(mSemester);
   }
 
   @Override
   public String getCause() {
     return mCause;
   }
-
-
-
-
 
   @Override
   public MutableSemesterWithdrawal edit() throws Exception {
@@ -216,9 +202,10 @@ public class PersistentSemesterWithdrawal implements MutableSemesterWithdrawal {
 
   @Override
   public void commit(boolean update) throws Exception {
-    if(update){
+    if(update) {
       sSemesterWithDrawalManager.update(this);
-    }else{
+    }
+    else {
       sSemesterWithDrawalManager.create(this);
     }
   }

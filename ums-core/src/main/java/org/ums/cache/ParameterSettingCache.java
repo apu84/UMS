@@ -12,16 +12,18 @@ import java.util.List;
 /**
  * Created by My Pc on 3/15/2016.
  */
-public class ParameterSettingCache extends ContentCache<ParameterSetting,MutableParameterSetting,String,ParameterSettingManager> implements ParameterSettingManager {
+public class ParameterSettingCache extends
+    ContentCache<ParameterSetting, MutableParameterSetting, String, ParameterSettingManager>
+    implements ParameterSettingManager {
   private CacheManager<ParameterSetting, String> mCacheManager;
 
-  public ParameterSettingCache(final CacheManager<ParameterSetting, String> pCacheManager){
+  public ParameterSettingCache(final CacheManager<ParameterSetting, String> pCacheManager) {
     mCacheManager = pCacheManager;
   }
 
   @Override
   public ParameterSetting getByParameterAndSemesterId(String parameter, int semesterId) {
-    return getManager().getByParameterAndSemesterId(parameter,semesterId);
+    return getManager().getByParameterAndSemesterId(parameter, semesterId);
   }
 
   @Override
@@ -36,11 +38,11 @@ public class ParameterSettingCache extends ContentCache<ParameterSetting,Mutable
 
   @Override
   protected String getCacheKey(String pId) {
-    return CacheUtil.getCacheKey(ParameterSetting.class,pId);
+    return CacheUtil.getCacheKey(ParameterSetting.class, pId);
   }
 
   @Override
   public ParameterSetting getBySemesterAndParameterId(int parameterId, int semesterId) {
-    return getManager().getBySemesterAndParameterId(parameterId,semesterId);
+    return getManager().getBySemesterAndParameterId(parameterId, semesterId);
   }
 }

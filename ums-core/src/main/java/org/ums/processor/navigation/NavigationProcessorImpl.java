@@ -15,7 +15,7 @@ public class NavigationProcessorImpl implements NavigationProcessor {
 
   @Override
   public Navigation process(Navigation pNavigation, Subject pCurrentSubject) throws Exception {
-    for (NavigationProcessor processor : mProcessorList) {
+    for(NavigationProcessor processor : mProcessorList) {
       pNavigation = processor.process(pNavigation, SecurityUtils.getSubject());
     }
     return pNavigation;

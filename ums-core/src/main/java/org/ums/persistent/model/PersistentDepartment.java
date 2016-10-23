@@ -1,6 +1,5 @@
 package org.ums.persistent.model;
 
-
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.mutable.MutableDepartment;
@@ -33,9 +32,10 @@ public class PersistentDepartment implements MutableDepartment {
 
   @Override
   public void commit(boolean update) throws Exception {
-    if (update) {
+    if(update) {
       sDepartmentManager.update(this);
-    } else {
+    }
+    else {
       sDepartmentManager.create(this);
     }
   }

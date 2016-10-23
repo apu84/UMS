@@ -1,6 +1,5 @@
 package org.ums.persistent.dao;
 
-
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -21,35 +20,42 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentSemesterDao extends SemesterDaoDecorator {
 
-  static String SELECT_ALL = "SELECT SEMESTER_ID, SEMESTER_NAME, START_DATE, END_DATE, PROGRAM_TYPE, STATUS, LAST_MODIFIED FROM MST_SEMESTER  ";
+  static String SELECT_ALL =
+      "SELECT SEMESTER_ID, SEMESTER_NAME, START_DATE, END_DATE, PROGRAM_TYPE, STATUS, LAST_MODIFIED FROM MST_SEMESTER  ";
 
-  static String UPDATE_ONE = "UPDATE MST_SEMESTER SET START_DATE = TO_DATE(?, '" + Constants.DATE_FORMAT + "'), " +
-      "END_DATE= TO_DATE(?, '" + Constants.DATE_FORMAT + "'), LAST_MODIFIED = " + getLastModifiedSql() + ", Status= ? ";
+  static String UPDATE_ONE = "UPDATE MST_SEMESTER SET START_DATE = TO_DATE(?, '"
+      + Constants.DATE_FORMAT + "'), " + "END_DATE= TO_DATE(?, '" + Constants.DATE_FORMAT
+      + "'), LAST_MODIFIED = " + getLastModifiedSql() + ", Status= ? ";
 
   static String DELETE_ONE = "DELETE FROM MST_SEMESTER ";
-  static String INSERT_ONE = "INSERT INTO MST_SEMESTER(SEMESTER_ID, SEMESTER_NAME, START_DATE, END_DATE, PROGRAM_TYPE, STATUS, LAST_MODIFIED) " +
-      "VALUES(?, ?, TO_DATE(?, '" + Constants.DATE_FORMAT + "'), TO_DATE(?, '" + Constants.DATE_FORMAT + "'), ?, ?, " + getLastModifiedSql() + ")";
+  static String INSERT_ONE =
+      "INSERT INTO MST_SEMESTER(SEMESTER_ID, SEMESTER_NAME, START_DATE, END_DATE, PROGRAM_TYPE, STATUS, LAST_MODIFIED) "
+          + "VALUES(?, ?, TO_DATE(?, '"
+          + Constants.DATE_FORMAT
+          + "'), TO_DATE(?, '"
+          + Constants.DATE_FORMAT + "'), ?, ?, " + getLastModifiedSql() + ")";
 
-  static String SELECT_SEMESTER_BY_STATUS = "SELECT SEMESTER_ID, SEMESTER_NAME, START_DATE, END_DATE, PROGRAM_TYPE, STATUS, LAST_MODIFIED FROM MST_SEMESTER ";
-
+  static String SELECT_SEMESTER_BY_STATUS =
+      "SELECT SEMESTER_ID, SEMESTER_NAME, START_DATE, END_DATE, PROGRAM_TYPE, STATUS, LAST_MODIFIED FROM MST_SEMESTER ";
 
   private JdbcTemplate mJdbcTemplate;
   private DateFormat mDateFormat;
 
-  public PersistentSemesterDao(final JdbcTemplate pJdbcTemplate,
-                               final DateFormat pDateFormat) {
+  public PersistentSemesterDao(final JdbcTemplate pJdbcTemplate, final DateFormat pDateFormat) {
     mJdbcTemplate = pJdbcTemplate;
     mDateFormat = pDateFormat;
   }
 
   public Semester get(final Integer pSemesterId) throws Exception {
     String query = SELECT_ALL + "WHERE SEMESTER_ID = ?";
-    return mJdbcTemplate.queryForObject(query, new Object[]{pSemesterId}, new SemesterRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[] {pSemesterId}, new SemesterRowMapper());
   }
 
-  public Semester getSemesterByStatus(final ProgramType pProgramType, SemesterStatus status) throws Exception {
+  public Semester getSemesterByStatus(final ProgramType pProgramType, SemesterStatus status)
+      throws Exception {
     String sql = SELECT_SEMESTER_BY_STATUS + " WHERE  Program_Type=? AND STATUS=?";
-    return mJdbcTemplate.queryForObject(sql, new Object[]{pProgramType.getValue(), status.getId()}, new SemesterRowMapper());
+    return mJdbcTemplate.queryForObject(sql,
+        new Object[] {pProgramType.getValue(), status.getId()}, new SemesterRowMapper());
   }
 
   @Override
@@ -61,11 +67,9 @@ public class PersistentSemesterDao extends SemesterDaoDecorator {
   @Override
   public int update(final MutableSemester pSemester) throws Exception {
     String query = UPDATE_ONE + " Where Semester_Id=? and Status In (1,2)";
-    return mJdbcTemplate.update(query,
-        mDateFormat.format(pSemester.getStartDate()),
-        pSemester.getEndDate() == null ? "" : mDateFormat.format(pSemester.getEndDate()),
-        pSemester.getStatus().getValue(),
-        pSemester.getId());
+    return mJdbcTemplate.update(query, mDateFormat.format(pSemester.getStartDate()), pSemester
+        .getEndDate() == null ? "" : mDateFormat.format(pSemester.getEndDate()), pSemester
+        .getStatus().getValue(), pSemester.getId());
   }
 
   @Override
@@ -78,51 +82,50 @@ public class PersistentSemesterDao extends SemesterDaoDecorator {
   public int create(final MutableSemester pSemester) throws Exception {
 
     try {
-      return mJdbcTemplate.update(INSERT_ONE,
-          pSemester.getId(),
-          pSemester.getName(),
-          mDateFormat.format(pSemester.getStartDate()),
+      return mJdbcTemplate.update(INSERT_ONE, pSemester.getId(), pSemester.getName(), mDateFormat
+          .format(pSemester.getStartDate()),
           pSemester.getEndDate() == null ? "" : mDateFormat.format(pSemester.getEndDate()),
-          pSemester.getProgramType().getId(),
-          pSemester.getStatus().getValue());
-    }
-    catch (DuplicateKeyException exception){
+          pSemester.getProgramType().getId(), pSemester.getStatus().getValue());
+    } catch(DuplicateKeyException exception) {
       throw new SQLIntegrityConstraintViolationException("Semester already exists.");
-    }
-    catch(Exception ex){
-      throw  ex;
+    } catch(Exception ex) {
+      throw ex;
     }
   }
 
   @Override
   public List<Semester> getSemesters(Integer pProgramType, Integer pLimit) throws Exception {
-    String query = "Select * from ( "+SELECT_ALL + "WHERE PROGRAM_TYPE = ? Order By START_DATE desc) Where RowNum<=?";
-    return mJdbcTemplate.query(query, new Object[]{pProgramType,pLimit}, new SemesterRowMapper());
+    String query =
+        "Select * from ( " + SELECT_ALL
+            + "WHERE PROGRAM_TYPE = ? Order By START_DATE desc) Where RowNum<=?";
+    return mJdbcTemplate.query(query, new Object[] {pProgramType, pLimit}, new SemesterRowMapper());
   }
 
   @Override
   public Semester getPreviousSemester(Integer pSemesterId, Integer pProgramTypeId) throws Exception {
-    String query = SELECT_ALL + "WHERE START_DATE =\n" +
-        "              (SELECT MAX (START_DATE)\n" +
-        "                 FROM MST_SEMESTER\n" +
-        "                WHERE START_DATE <\n" +
-        "                         (SELECT START_DATE\n" +
-        "                            FROM MST_SEMESTER\n" +
-        "                           WHERE SEMESTER_ID = ? AND PROGRAM_TYPE = ?))\n" +
-        "       AND PROGRAM_TYPE = ?";
-    return mJdbcTemplate.queryForObject(query, new Object[]{pSemesterId, pProgramTypeId, pProgramTypeId}, new SemesterRowMapper());
+    String query =
+        SELECT_ALL + "WHERE START_DATE =\n" + "              (SELECT MAX (START_DATE)\n"
+            + "                 FROM MST_SEMESTER\n" + "                WHERE START_DATE <\n"
+            + "                         (SELECT START_DATE\n"
+            + "                            FROM MST_SEMESTER\n"
+            + "                           WHERE SEMESTER_ID = ? AND PROGRAM_TYPE = ?))\n"
+            + "       AND PROGRAM_TYPE = ?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pSemesterId, pProgramTypeId,
+        pProgramTypeId}, new SemesterRowMapper());
   }
 
   @Override
   public Semester getBySemesterName(String pSemesterName, Integer pProgramTypeId) throws Exception {
     String query = SELECT_ALL + "WHERE SEMESTER_NAME = ? AND PROGRAM_TYPE = ?";
-    return mJdbcTemplate.queryForObject(query, new Object[]{pSemesterName, pProgramTypeId}, new SemesterRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[] {pSemesterName, pProgramTypeId},
+        new SemesterRowMapper());
   }
 
   @Override
   public Semester getActiveSemester(Integer pProgramType) {
-    String query=SELECT_ALL+" where  STATUS=1 AND PROGRAM_TYPE=?";
-    return mJdbcTemplate.queryForObject(query,new Object[]{pProgramType},new SemesterRowMapper());
+    String query = SELECT_ALL + " where  STATUS=1 AND PROGRAM_TYPE=?";
+    return mJdbcTemplate
+        .queryForObject(query, new Object[] {pProgramType}, new SemesterRowMapper());
   }
 
   class SemesterRowMapper implements RowMapper<Semester> {

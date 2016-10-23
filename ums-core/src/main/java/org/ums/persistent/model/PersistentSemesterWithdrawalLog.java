@@ -1,6 +1,5 @@
 package org.ums.persistent.model;
 
-
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.Employee;
@@ -24,11 +23,14 @@ public class PersistentSemesterWithdrawalLog implements MutableSemesterWithdrawa
   private static SemesterWithdrawalLogManager sSemesterWithdrawalLogManager;
   private static EmployeeManager sEmployeeManager;
 
-  static{
+  static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sSemesterWithdrawalManager = applicationContext.getBean("semesterWithdrawalManager",SemesterWithDrawalManager.class);
-    sEmployeeManager = applicationContext.getBean("employeeManager",EmployeeManager.class);
-    sSemesterWithdrawalLogManager = applicationContext.getBean("semesterWithdrawalLogManager",SemesterWithdrawalLogManager.class);
+    sSemesterWithdrawalManager =
+        applicationContext.getBean("semesterWithdrawalManager", SemesterWithDrawalManager.class);
+    sEmployeeManager = applicationContext.getBean("employeeManager", EmployeeManager.class);
+    sSemesterWithdrawalLogManager =
+        applicationContext.getBean("semesterWithdrawalLogManager",
+            SemesterWithdrawalLogManager.class);
   }
 
   private int mId;
@@ -40,11 +42,12 @@ public class PersistentSemesterWithdrawalLog implements MutableSemesterWithdrawa
   private int mAction;
   private String mLastModified;
 
-  public PersistentSemesterWithdrawalLog(){
+  public PersistentSemesterWithdrawalLog() {
 
   }
 
-  public PersistentSemesterWithdrawalLog(final PersistentSemesterWithdrawalLog pPersistentSemesterWithdrawalLog) throws Exception{
+  public PersistentSemesterWithdrawalLog(
+      final PersistentSemesterWithdrawalLog pPersistentSemesterWithdrawalLog) throws Exception {
     mId = pPersistentSemesterWithdrawalLog.getId();
 
     mSemesterWithdrawal = pPersistentSemesterWithdrawalLog.getSemesterWithdrawal();
@@ -54,13 +57,13 @@ public class PersistentSemesterWithdrawalLog implements MutableSemesterWithdrawa
     mLastModified = pPersistentSemesterWithdrawalLog.getLastModified();
   }
 
-
   @Override
   public void setEventDate(final String mDate) {
-    /*DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");
-    Date date = new Date();
-    System.out.println(dateFormat.format(date)); //2014/08/06 15:59:48
-    mEventDateTime = dateFormat.format(date);*/
+    /*
+     * DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm"); Date date = new Date();
+     * System.out.println(dateFormat.format(date)); //2014/08/06 15:59:48 mEventDateTime =
+     * dateFormat.format(date);
+     */
     mEventDateTime = mDate;
   }
 
@@ -72,10 +75,6 @@ public class PersistentSemesterWithdrawalLog implements MutableSemesterWithdrawa
     mEmployeeId = pEmployeeId;
   }
 
-
-
-
-
   public int getSemesterWithdrawalId() {
     return mSemesterWithdrawalId;
   }
@@ -83,7 +82,6 @@ public class PersistentSemesterWithdrawalLog implements MutableSemesterWithdrawa
   public void setSemesterWithdrawalId(int pSemesterWithdrawalId) {
     mSemesterWithdrawalId = pSemesterWithdrawalId;
   }
-
 
   public void setId(int pId) {
     mId = pId;
@@ -94,14 +92,11 @@ public class PersistentSemesterWithdrawalLog implements MutableSemesterWithdrawa
     mSemesterWithdrawal = pSemesterWithdrawal;
   }
 
-
-
-
   @Override
   public SemesterWithdrawal getSemesterWithdrawal() throws Exception {
-    return mSemesterWithdrawal==null? sSemesterWithdrawalManager.get(mSemesterWithdrawalId): sSemesterWithdrawalManager.validate(mSemesterWithdrawal);
+    return mSemesterWithdrawal == null ? sSemesterWithdrawalManager.get(mSemesterWithdrawalId)
+        : sSemesterWithdrawalManager.validate(mSemesterWithdrawal);
   }
-
 
   @Override
   public void setAction(int pAction) {
@@ -110,9 +105,10 @@ public class PersistentSemesterWithdrawalLog implements MutableSemesterWithdrawa
 
   @Override
   public void commit(boolean update) throws Exception {
-    if(update){
+    if(update) {
       sSemesterWithdrawalLogManager.update(this);
-    }else{
+    }
+    else {
       sSemesterWithdrawalLogManager.create(this);
     }
   }
@@ -132,13 +128,13 @@ public class PersistentSemesterWithdrawalLog implements MutableSemesterWithdrawa
     mLastModified = pLastModified;
   }
 
-
   @Override
   public String getEventDateTime() {
-  /*  DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");
-    Date date = new Date();
-    System.out.println(dateFormat.format(date)); //2014/08/06 15:59:48
-    mEventDateTime = dateFormat.format(date);*/
+    /*
+     * DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm"); Date date = new Date();
+     * System.out.println(dateFormat.format(date)); //2014/08/06 15:59:48 mEventDateTime =
+     * dateFormat.format(date);
+     */
     return mEventDateTime;
   }
 

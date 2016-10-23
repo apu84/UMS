@@ -1,6 +1,5 @@
 package org.ums.common.academic.resource;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.manager.StudentRecordManager;
@@ -18,7 +17,7 @@ import javax.ws.rs.core.Request;
 @Path("/academic/studentrecord")
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
-public class StudentRecordResource extends MutableStudentRecordResource{
+public class StudentRecordResource extends MutableStudentRecordResource {
 
   @Autowired
   StudentRecordManager mManager;
@@ -26,10 +25,9 @@ public class StudentRecordResource extends MutableStudentRecordResource{
   @GET
   @Path("/student/{student-id}/semesterId/{semester-id}/year/{year}/semester/{semester}")
   public JsonObject getStudentRecord(final @Context Request pRequest,
-                                     final @PathParam("student-id") String pStudentId,
-                                     final @PathParam("semester-id") Integer pSemesterId,
-                                     final @PathParam("year") Integer pYear,
-                                     final @PathParam("semester") Integer pSemester) throws Exception{
-    return mHelper.getStudentRecord(pStudentId,pSemesterId,pYear,pSemester,pRequest,mUriInfo);
+      final @PathParam("student-id") String pStudentId,
+      final @PathParam("semester-id") Integer pSemesterId, final @PathParam("year") Integer pYear,
+      final @PathParam("semester") Integer pSemester) throws Exception {
+    return mHelper.getStudentRecord(pStudentId, pSemesterId, pYear, pSemester, pRequest, mUriInfo);
   }
 }

@@ -9,7 +9,9 @@ import java.util.List;
 /**
  * Created by My Pc on 3/14/2016.
  */
-public class ParameterSettingDaoDecorator extends ContentDaoDecorator<ParameterSetting,MutableParameterSetting,String,ParameterSettingManager> implements ParameterSettingManager {
+public class ParameterSettingDaoDecorator extends
+    ContentDaoDecorator<ParameterSetting, MutableParameterSetting, String, ParameterSettingManager>
+    implements ParameterSettingManager {
   @Override
   public List<ParameterSetting> getBySemester(int semesterId) {
     return getManager().getBySemester(semesterId);
@@ -17,11 +19,11 @@ public class ParameterSettingDaoDecorator extends ContentDaoDecorator<ParameterS
 
   @Override
   public ParameterSetting getBySemesterAndParameterId(int parameterId, int semesterId) {
-    return getManager().getBySemesterAndParameterId(parameterId,semesterId);
+    return getManager().getBySemesterAndParameterId(parameterId, semesterId);
   }
 
   @Override
   public ParameterSetting getByParameterAndSemesterId(String parameter, int semesterId) {
-    return getManager().getByParameterAndSemesterId(parameter,semesterId);
+    return getManager().getByParameterAndSemesterId(parameter, semesterId);
   }
 }

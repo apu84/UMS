@@ -1,6 +1,5 @@
 package org.ums.domain.model.immutable;
 
-
 import org.ums.domain.model.common.EditType;
 import org.ums.domain.model.common.Identifier;
 import org.ums.domain.model.common.LastModifier;
@@ -10,7 +9,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
-public interface AdditionalRolePermissions extends Serializable, Identifier<Integer>, LastModifier, EditType<MutableAdditionalRolePermissions> {
+public interface AdditionalRolePermissions extends Serializable, Identifier<Integer>, LastModifier,
+    EditType<MutableAdditionalRolePermissions> {
   User getUser() throws Exception;
 
   String getUserId();

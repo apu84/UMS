@@ -19,7 +19,8 @@ public class PersistentProgram implements MutableProgram {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sDepartmentManger = applicationContext.getBean("departmentManager", DepartmentManager.class);
     sProgramManager = applicationContext.getBean("programManager", ProgramManager.class);
-    sProgramTypeManager = applicationContext.getBean("programTypeManager", ProgramTypeManager.class);
+    sProgramTypeManager =
+        applicationContext.getBean("programTypeManager", ProgramTypeManager.class);
   }
 
   private int mId;
@@ -54,7 +55,8 @@ public class PersistentProgram implements MutableProgram {
   }
 
   public Department getDepartment() throws Exception {
-    return mDepartment == null ? sDepartmentManger.get(mDepartmentId) : sDepartmentManger.validate(mDepartment);
+    return mDepartment == null ? sDepartmentManger.get(mDepartmentId) : sDepartmentManger
+        .validate(mDepartment);
   }
 
   @Override
@@ -82,7 +84,8 @@ public class PersistentProgram implements MutableProgram {
 
   @Override
   public ProgramType getProgramType() throws Exception {
-    return mProgramType == null ? sProgramTypeManager.get(mProgramTypeId) : sProgramTypeManager.validate(mProgramType);
+    return mProgramType == null ? sProgramTypeManager.get(mProgramTypeId) : sProgramTypeManager
+        .validate(mProgramType);
   }
 
   @Override
@@ -113,9 +116,10 @@ public class PersistentProgram implements MutableProgram {
   }
 
   public void commit(final boolean update) throws Exception {
-    if (update) {
+    if(update) {
       sProgramManager.update(this);
-    } else {
+    }
+    else {
       sProgramManager.create(this);
     }
   }

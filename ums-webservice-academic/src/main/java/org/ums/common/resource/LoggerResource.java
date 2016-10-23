@@ -22,8 +22,7 @@ import java.util.List;
 public class LoggerResource extends Resource {
   @GET
   @Path("/levels")
-  public List<Level> getUsers(final @Context Request pRequest)
-      throws Exception {
+  public List<Level> getUsers(final @Context Request pRequest) throws Exception {
     return UMSLogger.getLogLevels();
   }
 
@@ -33,10 +32,9 @@ public class LoggerResource extends Resource {
     JsonArrayBuilder loggerArray = Json.createArrayBuilder();
     List<Logger> loggers = UMSLogger.getLoggers();
 
-    for (Logger logger : loggers) {
+    for(Logger logger : loggers) {
       JsonObjectBuilder loggerObject = Json.createObjectBuilder();
-      if (logger.getLevel() != null
-          && logger.getLevel() != Level.OFF) {
+      if(logger.getLevel() != null && logger.getLevel() != Level.OFF) {
         loggerObject.add("name", logger.getName());
         loggerObject.add("level", logger.getLevel().levelInt);
         loggerArray.add(loggerObject);

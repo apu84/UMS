@@ -6,7 +6,8 @@ import javax.ws.rs.ext.Provider;
 import java.sql.SQLIntegrityConstraintViolationException;
 
 @Provider
-public class ConstraintViolationExceptionMapper implements ExceptionMapper<SQLIntegrityConstraintViolationException> {
+public class ConstraintViolationExceptionMapper implements
+    ExceptionMapper<SQLIntegrityConstraintViolationException> {
 
   @Override
   public Response toResponse(SQLIntegrityConstraintViolationException e) {

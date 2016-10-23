@@ -9,7 +9,8 @@ import org.ums.enums.CourseType;
 
 import java.io.Serializable;
 
-public interface Course extends Serializable, LastModifier, EditType<MutableCourse>, Identifier<String> {
+public interface Course extends Serializable, LastModifier, EditType<MutableCourse>,
+    Identifier<String> {
 
   String getNo();
 

@@ -1,6 +1,5 @@
 package org.ums.cache;
 
-
 import org.ums.domain.model.common.Identifier;
 import org.ums.domain.model.common.LastModifier;
 import org.ums.domain.model.immutable.CourseTeacher;
@@ -12,8 +11,7 @@ import org.ums.util.CacheUtil;
 import java.util.List;
 
 public class AssignedTeacherCache<R extends Identifier<I> & LastModifier, M extends R, I, C extends AssignedTeacherManager<R, M, I>>
-    extends ContentCache<R, M, I, C>
-    implements AssignedTeacherManager<R, M, I> {
+    extends ContentCache<R, M, I, C> implements AssignedTeacherManager<R, M, I> {
 
   private CacheManager<R, I> mCacheManager;
 
@@ -37,32 +35,40 @@ public class AssignedTeacherCache<R extends Identifier<I> & LastModifier, M exte
   }
 
   @Override
-  public List<R> getAssignedTeachers(Integer pProgramId, Integer pSemesterId, CourseCategory pCourseCategory, String pOfferedBy) {
+  public List<R> getAssignedTeachers(Integer pProgramId, Integer pSemesterId,
+      CourseCategory pCourseCategory, String pOfferedBy) {
     return getManager().getAssignedTeachers(pProgramId, pSemesterId, pCourseCategory, pOfferedBy);
   }
 
   @Override
-  public List<R> getAssignedTeachers(Integer pProgramId, Integer pSemesterId, Integer pYear, String pOfferedBy) {
+  public List<R> getAssignedTeachers(Integer pProgramId, Integer pSemesterId, Integer pYear,
+      String pOfferedBy) {
     return getManager().getAssignedTeachers(pProgramId, pSemesterId, pYear, pOfferedBy);
   }
 
   @Override
-  public List<R> getAssignedTeachers(Integer pProgramId, Integer pSemesterId, Integer pYear, CourseCategory pCourseCategory, String pOfferedBy) {
-    return getManager().getAssignedTeachers(pProgramId, pSemesterId, pYear, pCourseCategory, pOfferedBy);
+  public List<R> getAssignedTeachers(Integer pProgramId, Integer pSemesterId, Integer pYear,
+      CourseCategory pCourseCategory, String pOfferedBy) {
+    return getManager().getAssignedTeachers(pProgramId, pSemesterId, pYear, pCourseCategory,
+        pOfferedBy);
   }
 
   @Override
-  public List<R> getAssignedTeachers(Integer pProgramId, Integer pSemesterId, Integer pYear, Integer pSemester, String pOfferedBy) {
+  public List<R> getAssignedTeachers(Integer pProgramId, Integer pSemesterId, Integer pYear,
+      Integer pSemester, String pOfferedBy) {
     return getManager().getAssignedTeachers(pProgramId, pSemesterId, pYear, pSemester, pOfferedBy);
   }
 
   @Override
-  public List<R> getAssignedTeachers(Integer pProgramId, Integer pSemesterId, Integer pYear, Integer pSemester, CourseCategory pCourseCategory, String pOfferedBy) {
-    return getManager().getAssignedTeachers(pProgramId, pSemesterId, pYear, pSemester, pCourseCategory, pOfferedBy);
+  public List<R> getAssignedTeachers(Integer pProgramId, Integer pSemesterId, Integer pYear,
+      Integer pSemester, CourseCategory pCourseCategory, String pOfferedBy) {
+    return getManager().getAssignedTeachers(pProgramId, pSemesterId, pYear, pSemester,
+        pCourseCategory, pOfferedBy);
   }
 
   @Override
-  public List<R> getAssignedTeachers(Integer pProgramId, Integer pSemesterId, String pCourseId, String pOfferedBy) {
+  public List<R> getAssignedTeachers(Integer pProgramId, Integer pSemesterId, String pCourseId,
+      String pOfferedBy) {
     return getManager().getAssignedTeachers(pProgramId, pSemesterId, pCourseId, pOfferedBy);
   }
 

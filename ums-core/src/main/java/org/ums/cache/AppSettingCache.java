@@ -9,16 +9,15 @@ import org.ums.util.CacheUtil;
 /**
  * Created by My Pc on 30-Aug-16.
  */
-public class AppSettingCache extends ContentCache<AppSetting,MutableAppSetting,Integer,AppSettingManager> implements AppSettingManager {
+public class AppSettingCache extends
+    ContentCache<AppSetting, MutableAppSetting, Integer, AppSettingManager> implements
+    AppSettingManager {
 
+  CacheManager<AppSetting, Integer> mCacheManager;
 
-  CacheManager<AppSetting,Integer> mCacheManager;
-
-  public AppSettingCache(CacheManager<AppSetting,Integer> pAppSettingIntegerCacheManager){
+  public AppSettingCache(CacheManager<AppSetting, Integer> pAppSettingIntegerCacheManager) {
     mCacheManager = pAppSettingIntegerCacheManager;
   }
-
-
 
   @Override
   protected CacheManager<AppSetting, Integer> getCacheManager() {
@@ -27,8 +26,7 @@ public class AppSettingCache extends ContentCache<AppSetting,MutableAppSetting,I
 
   @Override
   protected String getCacheKey(Integer pId) {
-    return CacheUtil.getCacheKey(AppSetting.class,pId);
+    return CacheUtil.getCacheKey(AppSetting.class, pId);
   }
-
 
 }

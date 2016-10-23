@@ -9,19 +9,25 @@ import java.util.List;
 /**
  * Created by My Pc on 4/27/2016.
  */
-public class SpStudentDaoDecorator extends ContentDaoDecorator<SpStudent,MutableSpStudent,String,SpStudentManager> implements SpStudentManager {
+public class SpStudentDaoDecorator extends
+    ContentDaoDecorator<SpStudent, MutableSpStudent, String, SpStudentManager> implements
+    SpStudentManager {
   @Override
-  public List<SpStudent> getStudentByProgramYearSemesterStatus(int pProgramId, int pYear, int pSemester, int pStatus) {
-    return getManager().getStudentByProgramYearSemesterStatus(pProgramId,pYear,pSemester,pStatus);
+  public List<SpStudent> getStudentByProgramYearSemesterStatus(int pProgramId, int pYear,
+      int pSemester, int pStatus) {
+    return getManager()
+        .getStudentByProgramYearSemesterStatus(pProgramId, pYear, pSemester, pStatus);
   }
 
   @Override
-  public List<SpStudent> getStudentByCourseIdAndSemesterIdForSeatPlanForCCI(String pCourseId, Integer pSemesterId) {
-    return getManager().getStudentByCourseIdAndSemesterIdForSeatPlanForCCI(pCourseId,pSemesterId);
+  public List<SpStudent> getStudentByCourseIdAndSemesterIdForSeatPlanForCCI(String pCourseId,
+      Integer pSemesterId) {
+    return getManager().getStudentByCourseIdAndSemesterIdForSeatPlanForCCI(pCourseId, pSemesterId);
   }
 
   @Override
-  public List<SpStudent> getStudentBySemesterIdAndExamDateForCCI(Integer pSemesterId, String pExamDate) {
-    return getManager().getStudentBySemesterIdAndExamDateForCCI(pSemesterId,pExamDate);
+  public List<SpStudent> getStudentBySemesterIdAndExamDateForCCI(Integer pSemesterId,
+      String pExamDate) {
+    return getManager().getStudentBySemesterIdAndExamDateForCCI(pSemesterId, pExamDate);
   }
 }

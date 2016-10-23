@@ -27,15 +27,16 @@ public class UgGradeSheet extends Resource {
   @GET
   @Path("/semester/{semester-id}/courseid/{course-id}/examtype/{exam-type}/role/{role}")
   public StreamingOutput get(final @Context Request pRequest,
-                             final @PathParam("semester-id") Integer pSemesterId,
-                             final @PathParam("course-id") String pCourseId,
-                             final @PathParam("exam-type") Integer pExamTypeId,
-                             final @PathParam("role") String pRequestedRole) throws Exception {
+      final @PathParam("semester-id") Integer pSemesterId,
+      final @PathParam("course-id") String pCourseId,
+      final @PathParam("exam-type") Integer pExamTypeId,
+      final @PathParam("role") String pRequestedRole) throws Exception {
     return new StreamingOutput() {
       public void write(OutputStream output) throws IOException, WebApplicationException {
         try {
-          mUgGradeSheetGenerator.createPdf(pSemesterId,pCourseId, ExamType.get(pExamTypeId),pRequestedRole,output);
-        } catch (Exception e) {
+          mUgGradeSheetGenerator.createPdf(pSemesterId, pCourseId, ExamType.get(pExamTypeId),
+              pRequestedRole, output);
+        } catch(Exception e) {
           throw new WebApplicationException(e);
         }
       }

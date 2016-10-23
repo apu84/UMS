@@ -24,7 +24,6 @@ public class DBLogger implements QueryLogger {
 
   final Queue<MutableLoggerEntry> mMutableLoggerEntries = new ConcurrentLinkedQueue<>();
 
-
   @Override
   @Async
   public void log(String pQuery, Object[] pQueryParams, String pUserName, final long pExecutionTime) {
@@ -50,22 +49,21 @@ public class DBLogger implements QueryLogger {
   @Override
   @Async
   public void log(String pQuery, List<Object[]> pQueryParams, String pUserName, long pExecutionTime) {
-    for (Object[] params : pQueryParams) {
+    for(Object[] params : pQueryParams) {
       this.log(pQuery, params, pUserName, pExecutionTime);
     }
   }
 
-
   @Scheduled(fixedDelay = 30000, initialDelay = 60000)
   public void doLog() throws Exception {
     List<MutableLoggerEntry> mutableLoggerEntries = new ArrayList<>();
-    synchronized (mMutableLoggerEntries) {
+    synchronized(mMutableLoggerEntries) {
       MutableLoggerEntry ml;
-      while (!mMutableLoggerEntries.isEmpty()) {
+      while(!mMutableLoggerEntries.isEmpty()) {
         mutableLoggerEntries.add(mMutableLoggerEntries.poll());
       }
     }
-    if (mutableLoggerEntries.size() > 0) {
+    if(mutableLoggerEntries.size() > 0) {
       mLoggerEntryManager.create(mutableLoggerEntries);
     }
   }

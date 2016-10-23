@@ -23,16 +23,16 @@ public class UserDaoImpl implements UserDao {
   public User get(final int userId) {
     String query = SELECT_ALL + " where id = ?";
     JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-    return jdbcTemplate.queryForObject(query, new Object[]{userId}, new UserRowMapper());
+    return jdbcTemplate.queryForObject(query, new Object[] {userId}, new UserRowMapper());
   }
 
   public User getByName(final String pUserName) {
     String query = SELECT_ALL + " where user_id = ?";
     JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-    return jdbcTemplate.queryForObject(query, new Object[]{pUserName}, new UserRowMapper());
+    return jdbcTemplate.queryForObject(query, new Object[] {pUserName}, new UserRowMapper());
   }
 
- // @RequiresPermissions("filesystem:read")
+  // @RequiresPermissions("filesystem:read")
   public List<User> getAll() {
     String query = SELECT_ALL;
     JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
@@ -40,11 +40,12 @@ public class UserDaoImpl implements UserDao {
   }
 
   public void update(User user) {
-    String query = "update dummy_user set first_name = ?, last_name = ?, user_name = ?, gender = ?, employment_status = ? " +
-        "where user_id = ?";
+    String query =
+        "update dummy_user set first_name = ?, last_name = ?, user_name = ?, gender = ?, employment_status = ? "
+            + "where user_id = ?";
     JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-    jdbcTemplate.update(query, user.getFirstName(), user.getLastName(), user.getUserName(), user.getGender(),
-        user.getEmploymentStatus(), user.getUserId());
+    jdbcTemplate.update(query, user.getFirstName(), user.getLastName(), user.getUserName(),
+        user.getGender(), user.getEmploymentStatus(), user.getUserId());
   }
 
   public void remove(User user) {
@@ -54,11 +55,12 @@ public class UserDaoImpl implements UserDao {
   }
 
   public void create(User user) {
-    String query = "insert into dummy_user(user_name, first_name, last_name, gender, employment_status) " +
-        "values (?, ?, ?, ?, ?)";
+    String query =
+        "insert into dummy_user(user_name, first_name, last_name, gender, employment_status) "
+            + "values (?, ?, ?, ?, ?)";
     JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-    jdbcTemplate.update(query, user.getUserName(), user.getFirstName(), user.getLastName(), user.getGender(),
-        user.getEmploymentStatus());
+    jdbcTemplate.update(query, user.getUserName(), user.getFirstName(), user.getLastName(),
+        user.getGender(), user.getEmploymentStatus());
   }
 
   class UserRowMapper implements RowMapper<User> {

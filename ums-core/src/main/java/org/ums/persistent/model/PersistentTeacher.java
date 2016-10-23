@@ -100,7 +100,8 @@ public class PersistentTeacher implements MutableTeacher {
 
   @Override
   public Department getDepartment() throws Exception {
-    return mDepartment == null ? sDepartmentManager.get(mDepartmentId) : sDepartmentManager.validate(mDepartment);
+    return mDepartment == null ? sDepartmentManager.get(mDepartmentId) : sDepartmentManager
+        .validate(mDepartment);
   }
 
   @Override

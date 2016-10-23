@@ -1,6 +1,5 @@
 package org.ums.common.academic.resource;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.ums.common.academic.resource.helper.SemesterResourceHelper;
 import org.ums.resource.Resource;
@@ -23,9 +22,8 @@ public class MutableSemesterResource extends Resource {
   @PUT
   @Path(PATH_PARAM_OBJECT_ID)
   public Response updateSemester(final @PathParam("object-id") String pObjectId,
-                                 final @Context Request pRequest,
-                                 final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader,
-                                 final JsonObject pJsonObject) throws Exception {
+      final @Context Request pRequest, final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader,
+      final JsonObject pJsonObject) throws Exception {
     return mResourceHelper.put(Integer.parseInt(pObjectId), pRequest, pIfMatchHeader, pJsonObject);
   }
 

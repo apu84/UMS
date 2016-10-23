@@ -18,15 +18,13 @@ import javax.ws.rs.core.StreamingOutput;
 @Component
 @Path("/seatPlanReport")
 @Produces({"applciation/pdf"})
-public class SeatPlanReport extends Resource{
+public class SeatPlanReport extends Resource {
 
   @GET
   @Path("/semesterId/{semesterId}/groupNo/{groupNo}/type/{type}")
-  public StreamingOutput getSeatPlan(final @Context Request pRequest, final @PathParam("semesterId") String pSemesterId,
-                                     final @PathParam("groupNo") String groupNo,
-                                     final @PathParam("type") String type)
-  {
-
+  public StreamingOutput getSeatPlan(final @Context Request pRequest,
+      final @PathParam("semesterId") String pSemesterId,
+      final @PathParam("groupNo") String groupNo, final @PathParam("type") String type) {
 
     return null;
   }

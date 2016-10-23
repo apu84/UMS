@@ -17,14 +17,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class PersistentLoggerEntryDao extends ContentDaoDecorator<LoggerEntry, MutableLoggerEntry, Integer, LoggerEntryManager> implements LoggerEntryManager {
+public class PersistentLoggerEntryDao extends
+    ContentDaoDecorator<LoggerEntry, MutableLoggerEntry, Integer, LoggerEntryManager> implements
+    LoggerEntryManager {
   static final String TIME_STAMP_FORMAT = "yyyy-MM-dd HH:mm:ss";
   static final String DB_TIME_STAMP_FORMAT = "yyyy-MM-dd hh24:mi:ss";
-  static String SELECT_ALL = "SELECT ID, SQL, USER_NAME, EXECUTION_TIME, EXECUTION_TIME_STAMP FROM DB_LOGGER ";
-  static String UPDATE_ONE = "UPDATE DB_LOGGER SET SQL = ?, USER_NAME = ?, EXECUTION_TIME = ?, EXECUTION_TIME_STAMP = ? ";
+  static String SELECT_ALL =
+      "SELECT ID, SQL, USER_NAME, EXECUTION_TIME, EXECUTION_TIME_STAMP FROM DB_LOGGER ";
+  static String UPDATE_ONE =
+      "UPDATE DB_LOGGER SET SQL = ?, USER_NAME = ?, EXECUTION_TIME = ?, EXECUTION_TIME_STAMP = ? ";
   static String DELETE_ONE = "DELETE FROM DB_LOGGER ";
-  static String INSERT_ONE = "INSERT INTO DB_LOGGER(SQL, USER_NAME, EXECUTION_TIME, EXECUTION_TIME_STAMP) " +
-      "VALUES(?, ?, ?, TO_DATE(?, '" + DB_TIME_STAMP_FORMAT + "'))";
+  static String INSERT_ONE =
+      "INSERT INTO DB_LOGGER(SQL, USER_NAME, EXECUTION_TIME, EXECUTION_TIME_STAMP) "
+          + "VALUES(?, ?, ?, TO_DATE(?, '" + DB_TIME_STAMP_FORMAT + "'))";
 
   private JdbcTemplate mJdbcTemplate;
   private DateFormat mDateFormat = new SimpleDateFormat(TIME_STAMP_FORMAT);
@@ -40,7 +45,8 @@ public class PersistentLoggerEntryDao extends ContentDaoDecorator<LoggerEntry, M
 
   @Override
   public int create(MutableLoggerEntry pMutable) throws Exception {
-    return mJdbcTemplate.update(INSERT_ONE, getInsertParamList(Lists.newArrayList(pMutable)).get(0));
+    return mJdbcTemplate
+        .update(INSERT_ONE, getInsertParamList(Lists.newArrayList(pMutable)).get(0));
   }
 
   @Override
@@ -52,18 +58,14 @@ public class PersistentLoggerEntryDao extends ContentDaoDecorator<LoggerEntry, M
   @Override
   public int update(MutableLoggerEntry pMutable) throws Exception {
     String query = UPDATE_ONE + "WHERE ID = ?";
-    return mJdbcTemplate.update(query,
-        pMutable.getSql(),
-        pMutable.getUserName(),
-        pMutable.getExecutionTime(),
-        mDateFormat.format(pMutable.getTimestamp()),
-        pMutable.getId());
+    return mJdbcTemplate.update(query, pMutable.getSql(), pMutable.getUserName(),
+        pMutable.getExecutionTime(), mDateFormat.format(pMutable.getTimestamp()), pMutable.getId());
   }
 
   @Override
   public LoggerEntry get(Integer pId) throws Exception {
     String query = SELECT_ALL + "WHERE ID = ? ";
-    return mJdbcTemplate.queryForObject(query, new Object[]{pId}, new LoggerEntryRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new LoggerEntryRowMapper());
   }
 
   @Override
@@ -72,15 +74,12 @@ public class PersistentLoggerEntryDao extends ContentDaoDecorator<LoggerEntry, M
     return mJdbcTemplate.query(query, new LoggerEntryRowMapper());
   }
 
-  private List<Object[]> getInsertParamList(List<MutableLoggerEntry> pMutableLoggerEntries) throws Exception {
+  private List<Object[]> getInsertParamList(List<MutableLoggerEntry> pMutableLoggerEntries)
+      throws Exception {
     List<Object[]> params = new ArrayList<>();
-    for (LoggerEntry entry : pMutableLoggerEntries) {
-      params.add(new Object[]{
-          entry.getSql(),
-          entry.getUserName(),
-          entry.getExecutionTime(),
-          mDateFormat.format(entry.getTimestamp())
-      });
+    for(LoggerEntry entry : pMutableLoggerEntries) {
+      params.add(new Object[] {entry.getSql(), entry.getUserName(), entry.getExecutionTime(),
+          mDateFormat.format(entry.getTimestamp())});
     }
 
     return params;

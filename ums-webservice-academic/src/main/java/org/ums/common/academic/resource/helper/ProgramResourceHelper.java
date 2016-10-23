@@ -1,6 +1,5 @@
 package org.ums.common.academic.resource.helper;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.common.builder.ProgramBuilder;

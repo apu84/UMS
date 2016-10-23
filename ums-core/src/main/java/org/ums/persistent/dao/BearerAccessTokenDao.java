@@ -1,6 +1,5 @@
 package org.ums.persistent.dao;
 
-
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.BearerAccessTokenDaoDecorator;
@@ -14,9 +13,13 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class BearerAccessTokenDao extends BearerAccessTokenDaoDecorator {
-  String SELECT_ALL = "SELECT TOKEN, USER_ID, LAST_ACCESS_TIME, LAST_MODIFIED FROM BEARER_ACCESS_TOKEN ";
-  String INSERT_ALL = "INSERT INTO BEARER_ACCESS_TOKEN(TOKEN, USER_ID, LAST_ACCESS_TIME, LAST_MODIFIED) VALUES (?, ? ,SYSDATE, " + getLastModifiedSql() + ") ";
-  String UPDATE_ALL = "UPDATE BEARER_ACCESS_TOKEN SET LAST_ACCESS_TIME = SYSDATE, LAST_MODIFIED = " + getLastModifiedSql() + " ";
+  String SELECT_ALL =
+      "SELECT TOKEN, USER_ID, LAST_ACCESS_TIME, LAST_MODIFIED FROM BEARER_ACCESS_TOKEN ";
+  String INSERT_ALL =
+      "INSERT INTO BEARER_ACCESS_TOKEN(TOKEN, USER_ID, LAST_ACCESS_TIME, LAST_MODIFIED) VALUES (?, ? ,SYSDATE, "
+          + getLastModifiedSql() + ") ";
+  String UPDATE_ALL = "UPDATE BEARER_ACCESS_TOKEN SET LAST_ACCESS_TIME = SYSDATE, LAST_MODIFIED = "
+      + getLastModifiedSql() + " ";
   String DELETE_ALL = "DELETE FROM BEARER_ACCESS_TOKEN ";
 
   private JdbcTemplate mJdbcTemplate;
@@ -45,7 +48,8 @@ public class BearerAccessTokenDao extends BearerAccessTokenDaoDecorator {
   @Override
   public BearerAccessToken get(String pId) throws Exception {
     String query = SELECT_ALL + "WHERE TOKEN = ?";
-    return mJdbcTemplate.queryForObject(query, new Object[]{pId}, new BearerAccessTokenRowMapper());
+    return mJdbcTemplate
+        .queryForObject(query, new Object[] {pId}, new BearerAccessTokenRowMapper());
   }
 
   @Override
@@ -56,7 +60,8 @@ public class BearerAccessTokenDao extends BearerAccessTokenDaoDecorator {
   @Override
   public BearerAccessToken getByUser(String userId) {
     String query = SELECT_ALL + "WHERE USER_ID = ?";
-    return mJdbcTemplate.queryForObject(query, new Object[]{userId}, new BearerAccessTokenRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[] {userId},
+        new BearerAccessTokenRowMapper());
   }
 
   class BearerAccessTokenRowMapper implements RowMapper<BearerAccessToken> {

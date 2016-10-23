@@ -21,7 +21,8 @@ import javax.ws.rs.core.UriInfo;
 import java.util.List;
 
 @Component
-public class AdditionalRolePermissionsHelper extends ResourceHelper<AdditionalRolePermissions, MutableAdditionalRolePermissions,Integer> {
+public class AdditionalRolePermissionsHelper extends
+    ResourceHelper<AdditionalRolePermissions, MutableAdditionalRolePermissions, Integer> {
   @Autowired
   AdditionalRolePermissionsManager mAdditionalRolePermissionsManager;
 
@@ -34,11 +35,13 @@ public class AdditionalRolePermissionsHelper extends ResourceHelper<AdditionalRo
   @Override
   @Transactional
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
-    MutableAdditionalRolePermissions mutableAdditionalRolePermissions = new PersistentAdditionalRolePermissions();
+    MutableAdditionalRolePermissions mutableAdditionalRolePermissions =
+        new PersistentAdditionalRolePermissions();
     LocalCache localCache = new LocalCache();
     getBuilder().build(mutableAdditionalRolePermissions, pJsonObject, localCache);
-    mAdditionalRolePermissionsManager
-        .removeExistingAdditionalRolePermissions(mutableAdditionalRolePermissions.getUserId(), mutableAdditionalRolePermissions.getAssignedByUserId());
+    mAdditionalRolePermissionsManager.removeExistingAdditionalRolePermissions(
+        mutableAdditionalRolePermissions.getUserId(),
+        mutableAdditionalRolePermissions.getAssignedByUserId());
     mutableAdditionalRolePermissions.commit(false);
 
     Response.ResponseBuilder builder = Response.ok();
@@ -60,17 +63,15 @@ public class AdditionalRolePermissionsHelper extends ResourceHelper<AdditionalRo
     return pReadonly.getLastModified();
   }
 
-
   public JsonObject getUserAdditionalRolePermissionsByAssignedBy(final String pUserId,
-                                                                 final String pAssignedBy,
-                                                                 final UriInfo pUriInfo) throws Exception {
-    List<AdditionalRolePermissions> additionalRolePermissions
-        = mAdditionalRolePermissionsManager.getUserPermissionsByAssignedUser(pUserId, pAssignedBy);
+      final String pAssignedBy, final UriInfo pUriInfo) throws Exception {
+    List<AdditionalRolePermissions> additionalRolePermissions =
+        mAdditionalRolePermissionsManager.getUserPermissionsByAssignedUser(pUserId, pAssignedBy);
 
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-    for (AdditionalRolePermissions readOnly : additionalRolePermissions) {
+    for(AdditionalRolePermissions readOnly : additionalRolePermissions) {
       children.add(toJson(readOnly, pUriInfo, localCache));
     }
     object.add("entries", children);

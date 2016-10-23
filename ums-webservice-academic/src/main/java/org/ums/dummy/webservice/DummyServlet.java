@@ -19,13 +19,17 @@ public class DummyServlet extends javax.servlet.http.HttpServlet implements java
   @Autowired
   private DummyService dummyService;
 
-  protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+  protected void doGet(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
     // For this sample, we simply perform dependency lookup from the current WebApplicationContext.
     // This will query the shared parent context and find the sampleService bean.
     // In a real web app, Spring provide a better way to do dependency injection
     // of your web controllers/actions/whatever your web framework calls them.
-    /*ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(this.getServletContext());
-    DummyService service = (DummyService) ctx.getBean("dummyService");*/
+    /*
+     * ApplicationContext ctx =
+     * WebApplicationContextUtils.getWebApplicationContext(this.getServletContext()); DummyService
+     * service = (DummyService) ctx.getBean("dummyService");
+     */
 
     response.getWriter().println(dummyService.getMessage());
     response.getWriter().println("Using service instance ums-webservice-academic");
@@ -33,7 +37,8 @@ public class DummyServlet extends javax.servlet.http.HttpServlet implements java
   }
 
   public void init(ServletConfig config) {
-    SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
+    SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this,
+        config.getServletContext());
   }
 
 }

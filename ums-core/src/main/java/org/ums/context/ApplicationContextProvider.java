@@ -5,13 +5,11 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
 /**
- * This class provides an application-wide access to the
- * Spring ApplicationContext! The ApplicationContext is
- * injected in a static method of the class "AppContext".
+ * This class provides an application-wide access to the Spring ApplicationContext! The
+ * ApplicationContext is injected in a static method of the class "AppContext".
  * <p>
- * Use AppContext.getApplicationContext() to get access
- * to all Spring Beans.
- *
+ * Use AppContext.getApplicationContext() to get access to all Spring Beans.
+ * 
  * @author Siegfried Bolz
  */
 public class ApplicationContextProvider implements ApplicationContextAware {

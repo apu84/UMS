@@ -7,9 +7,11 @@ import org.ums.manager.NavigationManager;
 import java.util.List;
 import java.util.Set;
 
-public class NavigationDaoDecorator extends ContentDaoDecorator<Navigation, MutableNavigation, Integer, NavigationManager> implements NavigationManager {
+public class NavigationDaoDecorator extends
+    ContentDaoDecorator<Navigation, MutableNavigation, Integer, NavigationManager> implements
+    NavigationManager {
   @Override
-  public List<Navigation> getByPermissions(Set<String> pPermissions) throws Exception{
+  public List<Navigation> getByPermissions(Set<String> pPermissions) throws Exception {
     return getManager().getByPermissions(pPermissions);
   }
 

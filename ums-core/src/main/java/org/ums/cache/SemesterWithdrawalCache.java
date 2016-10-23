@@ -11,12 +11,13 @@ import java.util.List;
 /**
  * Created by My Pc on 3/23/2016.
  */
-public class SemesterWithdrawalCache extends ContentCache<SemesterWithdrawal,MutableSemesterWithdrawal,Integer,SemesterWithDrawalManager> implements SemesterWithDrawalManager {
-
+public class SemesterWithdrawalCache extends
+    ContentCache<SemesterWithdrawal, MutableSemesterWithdrawal, Integer, SemesterWithDrawalManager>
+    implements SemesterWithDrawalManager {
 
   CacheManager<SemesterWithdrawal, Integer> mCacheManager;
 
-  public SemesterWithdrawalCache(CacheManager<SemesterWithdrawal, Integer> pCacheManager){
+  public SemesterWithdrawalCache(CacheManager<SemesterWithdrawal, Integer> pCacheManager) {
     mCacheManager = pCacheManager;
   }
 
@@ -27,7 +28,7 @@ public class SemesterWithdrawalCache extends ContentCache<SemesterWithdrawal,Mut
 
   @Override
   protected String getCacheKey(Integer pId) {
-    return CacheUtil.getCacheKey(SemesterWithdrawal.class,pId);
+    return CacheUtil.getCacheKey(SemesterWithdrawal.class, pId);
   }
 
   @Override
@@ -36,8 +37,9 @@ public class SemesterWithdrawalCache extends ContentCache<SemesterWithdrawal,Mut
   }
 
   @Override
-  public SemesterWithdrawal getStudentsRecord(String studentId,int semesterId,int year,int semester) {
-    return getManager().getStudentsRecord(studentId,semesterId,year,semester);
+  public SemesterWithdrawal getStudentsRecord(String studentId, int semesterId, int year,
+      int semester) {
+    return getManager().getStudentsRecord(studentId, semesterId, year, semester);
   }
 
   @Override

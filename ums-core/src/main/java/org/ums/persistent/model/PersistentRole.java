@@ -1,6 +1,5 @@
 package org.ums.persistent.model;
 
-
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.mutable.MutableRole;
@@ -69,7 +68,8 @@ public class PersistentRole implements MutableRole {
   public void commit(boolean update) throws Exception {
     if(update) {
       sRoleManager.update(this);
-    }else {
+    }
+    else {
       sRoleManager.create(this);
     }
   }

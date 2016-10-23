@@ -7,10 +7,11 @@ import org.ums.manager.EnrollmentFromToManager;
 import java.util.List;
 
 public class EnrollmentFromToDaoDecorator
-    extends ContentDaoDecorator<EnrollmentFromTo, MutableEnrollmentFromTo, Integer, EnrollmentFromToManager>
+    extends
+    ContentDaoDecorator<EnrollmentFromTo, MutableEnrollmentFromTo, Integer, EnrollmentFromToManager>
     implements EnrollmentFromToManager {
-    @Override
-    public List<EnrollmentFromTo> getEnrollmentFromTo(final Integer pProgramId) {
-        return getManager().getEnrollmentFromTo(pProgramId);
-    }
+  @Override
+  public List<EnrollmentFromTo> getEnrollmentFromTo(final Integer pProgramId) {
+    return getManager().getEnrollmentFromTo(pProgramId);
+  }
 }

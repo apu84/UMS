@@ -75,14 +75,16 @@ public class CourseTeacherBuilder implements Builder<CourseTeacher, MutableCours
   }
 
   @Override
-  public void build(MutableCourseTeacher pMutable, JsonObject pJsonObject, LocalCache pLocalCache) throws Exception {
-    if (pJsonObject.containsKey("id")) {
+  public void build(MutableCourseTeacher pMutable, JsonObject pJsonObject, LocalCache pLocalCache)
+      throws Exception {
+    if(pJsonObject.containsKey("id")) {
       pMutable.setId(pJsonObject.getInt("id"));
     }
     pMutable.setCourse(mCourseManager.get(pJsonObject.getString("courseId")));
     pMutable.setTeacher(mTeacherManager.get(pJsonObject.getString("teacherId")));
-    pMutable.setSemester(mSemesterManager.get(Integer.parseInt(pJsonObject.getString("semesterId"))));
-    if (pJsonObject.containsKey("section") && !StringUtils.isEmpty(pJsonObject.getString("section"))) {
+    pMutable
+        .setSemester(mSemesterManager.get(Integer.parseInt(pJsonObject.getString("semesterId"))));
+    if(pJsonObject.containsKey("section") && !StringUtils.isEmpty(pJsonObject.getString("section"))) {
       pMutable.setSection(pJsonObject.getString("section"));
     }
 

@@ -37,18 +37,22 @@ public class UgGradeSheetXls extends Resource {
   @GET
   @Path("/semester/{semester-id}/courseid/{course-id}/examtype/{exam-type}/coursetype/{course-type}/role/{role}")
   public StreamingOutput get(final @Context Request pRequest,
-                             final @PathParam("semester-id") Integer pSemesterId,
-                             final @PathParam("course-id") String pCourseId,
-                             final @PathParam("exam-type") Integer pExamTypeId,
-                             final @PathParam("course-type") Integer pCourseType,
-                             final @PathParam("role") String pRequestedRole) throws Exception {
-    List<StudentGradeDto> gradeList = mExamGradeManager.getAllGrades(pSemesterId, pCourseId, ExamType.get(pExamTypeId), CourseType.get(pCourseType));
+      final @PathParam("semester-id") Integer pSemesterId,
+      final @PathParam("course-id") String pCourseId,
+      final @PathParam("exam-type") Integer pExamTypeId,
+      final @PathParam("course-type") Integer pCourseType,
+      final @PathParam("role") String pRequestedRole) throws Exception {
+    List<StudentGradeDto> gradeList =
+        mExamGradeManager.getAllGrades(pSemesterId, pCourseId, ExamType.get(pExamTypeId),
+            CourseType.get(pCourseType));
     return new StreamingOutput() {
       public void write(OutputStream output) throws IOException, WebApplicationException {
         try {
-          InputStream a=UgGradeSheetXls.class.getResourceAsStream("/report/xls/template/"+CourseType.get(pCourseType).getLabel()+".xls");
+          InputStream a =
+              UgGradeSheetXls.class.getResourceAsStream("/report/xls/template/"
+                  + CourseType.get(pCourseType).getLabel() + ".xls");
           xlsGenerator.build(gradeList, output, a);
-        } catch (Exception e) {
+        } catch(Exception e) {
           throw new WebApplicationException(e);
         }
       }

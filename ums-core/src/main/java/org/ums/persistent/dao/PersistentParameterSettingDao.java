@@ -17,63 +17,64 @@ import java.util.List;
  */
 public class PersistentParameterSettingDao extends ParameterSettingDaoDecorator {
 
-  static String SELECT_ALL ="SELECT PS_ID,SEMESTER_ID,PARAMETER_ID,TO_CHAR(START_DATE,'DD/MM/YYYY') START_DATE,TO_CHAR(END_DATE,'DD/MM/YYYY') END_DATE,LAST_MODIFIED FROM MST_PARAMETER_SETTING" ;
-  static String INSERT_ONE = "INSERT INTO MST_PARAMETER_SETTING(SEMESTER_ID,PARAMETER_ID,START_DATE,END_DATE,LAST_MODIFIED)"+
-      "VALUES(?,?,to_date(?,'DD/MM/YYYY'),to_date(?,'DD/MM/YYYY'),"+ getLastModifiedSql()+")";
-  static String UPDATE_ONE = "UPDATE MST_PARAMETER_SETTING SET SEMESTER_ID=?, PARAMETER_ID=?, START_DATE = to_date(?,'DD/MM/YYYY'), END_DATE = to_date(?,'DD/MM/YYYY'), LAST_MODIFIED="+getLastModifiedSql()+" ";
+  static String SELECT_ALL =
+      "SELECT PS_ID,SEMESTER_ID,PARAMETER_ID,TO_CHAR(START_DATE,'DD/MM/YYYY') START_DATE,TO_CHAR(END_DATE,'DD/MM/YYYY') END_DATE,LAST_MODIFIED FROM MST_PARAMETER_SETTING";
+  static String INSERT_ONE =
+      "INSERT INTO MST_PARAMETER_SETTING(SEMESTER_ID,PARAMETER_ID,START_DATE,END_DATE,LAST_MODIFIED)"
+          + "VALUES(?,?,to_date(?,'DD/MM/YYYY'),to_date(?,'DD/MM/YYYY')," + getLastModifiedSql()
+          + ")";
+  static String UPDATE_ONE =
+      "UPDATE MST_PARAMETER_SETTING SET SEMESTER_ID=?, PARAMETER_ID=?, START_DATE = to_date(?,'DD/MM/YYYY'), END_DATE = to_date(?,'DD/MM/YYYY'), LAST_MODIFIED="
+          + getLastModifiedSql() + " ";
   static String DELETE_ONE = "DELETE FROM MST_PARAMETER_SETTING ";
   static String ORDER_BY = " ORDER BY PS_ID";
 
   private JdbcTemplate mJdbcTemplate;
 
-  public PersistentParameterSettingDao(final JdbcTemplate pJdbcTemplate){
+  public PersistentParameterSettingDao(final JdbcTemplate pJdbcTemplate) {
     mJdbcTemplate = pJdbcTemplate;
   }
 
   @Override
   public List<ParameterSetting> getAll() throws Exception {
     String query = SELECT_ALL + ORDER_BY;
-    List<ParameterSetting> test = mJdbcTemplate.query(query,new ParameterSettingRowMapper());
-    return mJdbcTemplate.query(query,
-        new ParameterSettingRowMapper()
-    );
+    List<ParameterSetting> test = mJdbcTemplate.query(query, new ParameterSettingRowMapper());
+    return mJdbcTemplate.query(query, new ParameterSettingRowMapper());
   }
 
   @Override
   public ParameterSetting get(String pId) throws Exception {
-    String query = SELECT_ALL+" WHERE PS_ID=? ";
-    return mJdbcTemplate.queryForObject(query,new Object[]{pId}, new ParameterSettingRowMapper());
+    String query = SELECT_ALL + " WHERE PS_ID=? ";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new ParameterSettingRowMapper());
   }
 
   @Override
   public ParameterSetting getByParameterAndSemesterId(String parameter, int semesterId) {
-    String query = "SELECT PS.PS_ID,PS.SEMESTER_ID,PS.PARAMETER_ID,TO_CHAR(PS.START_DATE,'MM/DD/YYYY') START_DATE," +
-        "TO_CHAR(PS.END_DATE,'MM/DD/YYYY') END_DATE,PS.LAST_MODIFIED FROM MST_PARAMETER_SETTING PS , MST_PARAMETER P" +
-        " WHERE P.PARAMETER=? AND PS.SEMESTER_ID=?  and P.PARAMETER_ID=PS.PARAMETER_ID" ;
-    return mJdbcTemplate.queryForObject(query,new Object[]{parameter,semesterId}, new ParameterSettingRowMapper());
+    String query =
+        "SELECT PS.PS_ID,PS.SEMESTER_ID,PS.PARAMETER_ID,TO_CHAR(PS.START_DATE,'MM/DD/YYYY') START_DATE,"
+            + "TO_CHAR(PS.END_DATE,'MM/DD/YYYY') END_DATE,PS.LAST_MODIFIED FROM MST_PARAMETER_SETTING PS , MST_PARAMETER P"
+            + " WHERE P.PARAMETER=? AND PS.SEMESTER_ID=?  and P.PARAMETER_ID=PS.PARAMETER_ID";
+    return mJdbcTemplate.queryForObject(query, new Object[] {parameter, semesterId},
+        new ParameterSettingRowMapper());
   }
 
   @Override
   public ParameterSetting getBySemesterAndParameterId(int parameterId, int semesterId) {
-    String query = SELECT_ALL+" WHERE PARAMETER_ID=? AND SEMESTER_ID=?";
-    return mJdbcTemplate.queryForObject(query,new Object[]{parameterId,semesterId},new ParameterSettingRowMapper());
+    String query = SELECT_ALL + " WHERE PARAMETER_ID=? AND SEMESTER_ID=?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {parameterId, semesterId},
+        new ParameterSettingRowMapper());
   }
 
   @Override
   public int update(MutableParameterSetting pMutable) throws Exception {
-    String query = UPDATE_ONE+" WHERE PS_ID=? ";
-    return mJdbcTemplate.update(query,
-          pMutable.getSemester().getId(),
-          pMutable.getParameter().getId(),
-          pMutable.getStartDate(),
-          pMutable.getEndDate(),
-          pMutable.getId()
-        );
+    String query = UPDATE_ONE + " WHERE PS_ID=? ";
+    return mJdbcTemplate.update(query, pMutable.getSemester().getId(), pMutable.getParameter()
+        .getId(), pMutable.getStartDate(), pMutable.getEndDate(), pMutable.getId());
   }
 
   @Override
   public int delete(MutableParameterSetting pMutable) throws Exception {
-    String query = DELETE_ONE+" WHERE PS_ID=?";
+    String query = DELETE_ONE + " WHERE PS_ID=?";
     return mJdbcTemplate.update(query, pMutable.getId());
   }
 
@@ -81,21 +82,17 @@ public class PersistentParameterSettingDao extends ParameterSettingDaoDecorator 
   public int create(MutableParameterSetting pMutable) throws Exception {
 
     String query = INSERT_ONE;
-    return mJdbcTemplate.update(query,
-          pMutable.getSemester().getId(),
-          pMutable.getParameter().getId(),
-          pMutable.getStartDate(),
-          pMutable.getEndDate()
-        );
+    return mJdbcTemplate.update(query, pMutable.getSemester().getId(), pMutable.getParameter()
+        .getId(), pMutable.getStartDate(), pMutable.getEndDate());
   }
 
   @Override
   public List<ParameterSetting> getBySemester(int semesterId) {
-    String query = SELECT_ALL+" WHERE SEMESTER_ID=? ";
-    return mJdbcTemplate.query(query,new Object[]{semesterId}, new ParameterSettingRowMapper());
+    String query = SELECT_ALL + " WHERE SEMESTER_ID=? ";
+    return mJdbcTemplate.query(query, new Object[] {semesterId}, new ParameterSettingRowMapper());
   }
 
-  class ParameterSettingRowMapper implements RowMapper<ParameterSetting>{
+  class ParameterSettingRowMapper implements RowMapper<ParameterSetting> {
     @Override
     public ParameterSetting mapRow(ResultSet pResultSet, int pI) throws SQLException {
       PersistentParameterSetting parameterSetting = new PersistentParameterSetting();

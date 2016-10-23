@@ -20,7 +20,8 @@ public class PersistentStudentRecord implements MutableStudentRecord {
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sStudentRecordManager = applicationContext.getBean("studentRecordManager", StudentRecordManager.class);
+    sStudentRecordManager =
+        applicationContext.getBean("studentRecordManager", StudentRecordManager.class);
     sStudentManager = applicationContext.getBean("studentManager", StudentManager.class);
     sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
     sProgramManager = applicationContext.getBean("programManager", ProgramManager.class);
@@ -41,10 +42,10 @@ public class PersistentStudentRecord implements MutableStudentRecord {
   private Integer mProgramId;
   private Program mProgram;
 
-  public PersistentStudentRecord() {
-  }
+  public PersistentStudentRecord() {}
 
-  public PersistentStudentRecord(final PersistentStudentRecord pPersistentStudentRecord) throws Exception {
+  public PersistentStudentRecord(final PersistentStudentRecord pPersistentStudentRecord)
+      throws Exception {
     setId(pPersistentStudentRecord.getId());
     setStudentId(pPersistentStudentRecord.getStudentId());
     setSemesterId(pPersistentStudentRecord.getSemesterId());
@@ -114,9 +115,10 @@ public class PersistentStudentRecord implements MutableStudentRecord {
 
   @Override
   public void commit(boolean update) throws Exception {
-    if (update) {
+    if(update) {
       sStudentRecordManager.update(this);
-    } else {
+    }
+    else {
       sStudentRecordManager.create(this);
     }
   }
@@ -153,7 +155,8 @@ public class PersistentStudentRecord implements MutableStudentRecord {
 
   @Override
   public Semester getSemester() throws Exception {
-    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager.validate(mSemester);
+    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
+        .validate(mSemester);
   }
 
   @Override

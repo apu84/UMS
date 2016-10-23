@@ -18,11 +18,11 @@ public class PersistentSpStudent implements MutableSpStudent {
   private static SemesterManager sSemesterManager;
   private static SpStudentManager sSpStudentManager;
 
-  static{
+  static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sProgramManager = applicationContext.getBean("programManager",ProgramManager.class);
-    sSemesterManager = applicationContext.getBean("semesterManager",SemesterManager.class);
-    sSpStudentManager = applicationContext.getBean("spStudentManager",SpStudentManager.class);
+    sProgramManager = applicationContext.getBean("programManager", ProgramManager.class);
+    sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
+    sSpStudentManager = applicationContext.getBean("spStudentManager", SpStudentManager.class);
   }
 
   private String mStudentId;
@@ -37,11 +37,11 @@ public class PersistentSpStudent implements MutableSpStudent {
   private Integer mApplicationType;
   private String mLastModified;
 
-  public PersistentSpStudent(){
+  public PersistentSpStudent() {
 
   }
 
-  public PersistentSpStudent(final PersistentSpStudent pPersistentSpStudent)throws Exception{
+  public PersistentSpStudent(final PersistentSpStudent pPersistentSpStudent) throws Exception {
     mStudentId = pPersistentSpStudent.getId();
     mProgram = pPersistentSpStudent.getProgram();
     mProgramId = pPersistentSpStudent.getProgramId();
@@ -58,7 +58,7 @@ public class PersistentSpStudent implements MutableSpStudent {
 
   @Override
   public void setProgramShortName(String pProgramShortName) {
-    mProgramShortname=pProgramShortName;
+    mProgramShortname = pProgramShortName;
   }
 
   @Override
@@ -124,9 +124,10 @@ public class PersistentSpStudent implements MutableSpStudent {
 
   @Override
   public void commit(boolean update) throws Exception {
-    if(update){
+    if(update) {
       sSpStudentManager.update(this);
-    }else{
+    }
+    else {
       sSpStudentManager.create(this);
     }
   }
@@ -148,12 +149,13 @@ public class PersistentSpStudent implements MutableSpStudent {
 
   @Override
   public Program getProgram() throws Exception {
-    return mProgram==null?sProgramManager.get(mProgramId):sProgramManager.validate(mProgram);
+    return mProgram == null ? sProgramManager.get(mProgramId) : sProgramManager.validate(mProgram);
   }
 
   @Override
   public Semester getSemester() throws Exception {
-    return mSemester==null?sSemesterManager.get(mSemesterId):sSemesterManager.validate(mSemester);
+    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
+        .validate(mSemester);
   }
 
   @Override

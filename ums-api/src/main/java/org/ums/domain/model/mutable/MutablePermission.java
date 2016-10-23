@@ -7,7 +7,8 @@ import org.ums.domain.model.immutable.Role;
 
 import java.util.Set;
 
-public interface MutablePermission extends Permission, Mutable, MutableIdentifier<Integer>, MutableLastModifier {
+public interface MutablePermission extends Permission, Mutable, MutableIdentifier<Integer>,
+    MutableLastModifier {
   void setRole(final Role pRole);
 
   void setRoleId(final Integer pRoleId);

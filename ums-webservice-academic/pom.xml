@@ -9,7 +9,9 @@
   <artifactId>ums-webservice-academic</artifactId>
   <version>trunk-SNAPSHOT</version>
   <packaging>war</packaging>
-
+  <properties>
+    <main.basedir>${project.parent.basedir}</main.basedir>
+  </properties>
   <dependencies>
     <dependency>
       <groupId>org.ums</groupId>

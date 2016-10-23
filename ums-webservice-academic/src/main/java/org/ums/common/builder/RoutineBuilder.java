@@ -22,7 +22,6 @@ import javax.ws.rs.core.UriInfo;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 @Component
 public class RoutineBuilder implements Builder<Routine, MutableRoutine> {
 
@@ -36,15 +35,16 @@ public class RoutineBuilder implements Builder<Routine, MutableRoutine> {
   ProgramManager mProgramManager;
 
   @Override
-  public void build(JsonObjectBuilder pBuilder, Routine pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) throws Exception {
-    if(pReadOnly.getId()!=null)
-    pBuilder.add("id", pReadOnly.getId());
-    if(pReadOnly.getSemester().getId()!=null)
-    pBuilder.add("semesterId", pReadOnly.getSemester().getId());
-    if(pReadOnly.getCourseId()!=null)
-    pBuilder.add("courseId", pReadOnly.getCourseId());
-    if(pReadOnly.getProgram().getId()!=null)
-    pBuilder.add("programId", pReadOnly.getProgram().getId());
+  public void build(JsonObjectBuilder pBuilder, Routine pReadOnly, UriInfo pUriInfo,
+      LocalCache pLocalCache) throws Exception {
+    if(pReadOnly.getId() != null)
+      pBuilder.add("id", pReadOnly.getId());
+    if(pReadOnly.getSemester().getId() != null)
+      pBuilder.add("semesterId", pReadOnly.getSemester().getId());
+    if(pReadOnly.getCourseId() != null)
+      pBuilder.add("courseId", pReadOnly.getCourseId());
+    if(pReadOnly.getProgram().getId() != null)
+      pBuilder.add("programId", pReadOnly.getProgram().getId());
 
     pBuilder.add("day", pReadOnly.getDay());
     pBuilder.add("section", pReadOnly.getSection());
@@ -54,10 +54,11 @@ public class RoutineBuilder implements Builder<Routine, MutableRoutine> {
     pBuilder.add("endTime", pReadOnly.getEndTime());
     pBuilder.add("duration", pReadOnly.getDuration());
     pBuilder.add("roomNo", pReadOnly.getRoomNo());
-    if(pReadOnly.getCourseNo()!=null){
-      pBuilder.add("courseNo",pReadOnly.getCourseNo());
+    if(pReadOnly.getCourseNo() != null) {
+      pBuilder.add("courseNo", pReadOnly.getCourseNo());
     }
-    //pBuilder.add("self", pUriInfo.getBaseUriBuilder().path("academic").path("routine").path(pReadOnly.getId().toString()).build().toString());
+    // pBuilder.add("self",
+    // pUriInfo.getBaseUriBuilder().path("academic").path("routine").path(pReadOnly.getId().toString()).build().toString());
   }
 
   @Override
@@ -91,6 +92,4 @@ public class RoutineBuilder implements Builder<Routine, MutableRoutine> {
     pMutable.setRoomNo(pJsonObject.getString("roomNo"));
     pMutable.setStatus(pJsonObject.getString("status"));
   }
-
-
 }

@@ -1,6 +1,5 @@
 package org.ums.common.academic.resource.helper;
 
-
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -38,66 +37,67 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
   @Autowired
   private UserManager mUserManager;
 
-
-
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
     MutableEmployee mutableEmployee = new PersistentEmployee();
     LocalCache localCache = new LocalCache();
     getBuilder().build(mutableEmployee, pJsonObject, localCache);
     mutableEmployee.commit(false);
-    URI contextURI = pUriInfo.getBaseUriBuilder().path(EmployeeResource.class).path(EmployeeResource.class, "get").build(mutableEmployee.getId());
+    URI contextURI =
+        pUriInfo.getBaseUriBuilder().path(EmployeeResource.class)
+            .path(EmployeeResource.class, "get").build(mutableEmployee.getId());
     Response.ResponseBuilder builder = Response.created(contextURI);
     builder.status(Response.Status.CREATED);
     return builder.build();
   }
 
-  public JsonObject getByEmployeeId(final UriInfo pUriInfo)throws Exception{
-    //String employeeId = SecurityUtils.getSubject().getPrincipal().toString();
+  public JsonObject getByEmployeeId(final UriInfo pUriInfo) throws Exception {
+    // String employeeId = SecurityUtils.getSubject().getPrincipal().toString();
     Employee employee = getSignedEmployeeInfo();
 
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-    children.add(toJson(employee,pUriInfo,localCache));
-    object.add("entries",children);
+    children.add(toJson(employee, pUriInfo, localCache));
+    object.add("entries", children);
     localCache.invalidate();
     return object.build();
   }
 
-  public JsonObject getActiveTeachersByDept(final UriInfo pUriInfo) throws Exception{
+  public JsonObject getActiveTeachersByDept(final UriInfo pUriInfo) throws Exception {
     Employee employee = getSignedEmployeeInfo();
-    List<Employee> employees = getContentManager().getActiveTeachersOfDept(employee.getDepartment().getId());
+    List<Employee> employees =
+        getContentManager().getActiveTeachersOfDept(employee.getDepartment().getId());
 
-    return convertToJson(employees,pUriInfo);
+    return convertToJson(employees, pUriInfo);
   }
 
-  public JsonObject getByDesignation(final String designationId,final Request pRequest,final UriInfo pUriInfo) throws Exception{
+  public JsonObject getByDesignation(final String designationId, final Request pRequest,
+      final UriInfo pUriInfo) throws Exception {
     List<Employee> employees = getContentManager().getByDesignation(designationId);
-    return convertToJson(employees,pUriInfo);
+    return convertToJson(employees, pUriInfo);
   }
 
-  private Employee getSignedEmployeeInfo() throws Exception{
+  private Employee getSignedEmployeeInfo() throws Exception {
     String userId = SecurityUtils.getSubject().getPrincipal().toString();
     User user = mUserManager.get(userId);
-    String employeeId=user.getEmployeeId();
+    String employeeId = user.getEmployeeId();
     Employee employee = getContentManager().getByEmployeeId(employeeId);
     return employee;
   }
 
-  private JsonObject convertToJson(List<Employee> employees,UriInfo pUriInfo)throws Exception{
+  private JsonObject convertToJson(List<Employee> employees, UriInfo pUriInfo) throws Exception {
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
 
-    for(Employee employee: employees){
-      children.add(toJson(employee,pUriInfo,localCache));
+    for(Employee employee : employees) {
+      children.add(toJson(employee, pUriInfo, localCache));
     }
-    object.add("entries",children);
+    object.add("entries", children);
     localCache.invalidate();
     return object.build();
   }
-
 
   @Override
   public EmployeeManager getContentManager() {

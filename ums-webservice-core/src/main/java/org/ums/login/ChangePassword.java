@@ -15,15 +15,14 @@ import javax.ws.rs.core.Response;
 @Path("/changePassword")
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
-
 public class ChangePassword extends Resource {
   @Autowired
   LoginHelper mLoginHelper;
 
   @PUT
   public Response changePassword(final @Context Request pRequest,
-                                 final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader,
-                                 final JsonObject pJsonObject) throws Exception {
+      final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader, final JsonObject pJsonObject)
+      throws Exception {
     return mLoginHelper.changePassword(pJsonObject);
   }
 }

@@ -19,7 +19,8 @@ public class SeatPlanPublishResource extends MutableSeatPlanPublishResource {
 
   @GET
   @Path("/semester/{semesterId}")
-  public JsonObject getBySemester(final @Context Request pRequest, final @PathParam("semesterId") Integer pSemesterId) throws Exception{
-    return mHelper.getBySemester(pSemesterId,pRequest,mUriInfo);
+  public JsonObject getBySemester(final @Context Request pRequest,
+      final @PathParam("semesterId") Integer pSemesterId) throws Exception {
+    return mHelper.getBySemester(pSemesterId, pRequest, mUriInfo);
   }
 }

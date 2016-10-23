@@ -11,11 +11,13 @@ import java.util.List;
 /**
  * Created by Munna on 4/20/2016.
  */
-public class SeatPlanGroupCache extends ContentCache<SeatPlanGroup,MutableSeatPlanGroup,Integer,SeatPlanGroupManager> implements SeatPlanGroupManager {
+public class SeatPlanGroupCache extends
+    ContentCache<SeatPlanGroup, MutableSeatPlanGroup, Integer, SeatPlanGroupManager> implements
+    SeatPlanGroupManager {
 
   CacheManager<SeatPlanGroup, Integer> mCacheManager;
 
-  public SeatPlanGroupCache(CacheManager<SeatPlanGroup, Integer> pCacheManager){
+  public SeatPlanGroupCache(CacheManager<SeatPlanGroup, Integer> pCacheManager) {
     mCacheManager = pCacheManager;
   }
 
@@ -26,33 +28,32 @@ public class SeatPlanGroupCache extends ContentCache<SeatPlanGroup,MutableSeatPl
 
   @Override
   protected String getCacheKey(Integer pId) {
-    return CacheUtil.getCacheKey(SeatPlanGroup.class,pId);
+    return CacheUtil.getCacheKey(SeatPlanGroup.class, pId);
   }
 
   @Override
-  public List<SeatPlanGroup> getGroupBySemester(int pSemesterId,int pExamType) {
-    return getManager().getGroupBySemester(pSemesterId,pExamType);
+  public List<SeatPlanGroup> getGroupBySemester(int pSemesterId, int pExamType) {
+    return getManager().getGroupBySemester(pSemesterId, pExamType);
   }
 
   @Override
   public List<SeatPlanGroup> getBySemesterGroupAndType(int pSemesterId, int pGroupNo, int pType) {
-    return getManager().getBySemesterGroupAndType(pSemesterId,pGroupNo,pType);
+    return getManager().getBySemesterGroupAndType(pSemesterId, pGroupNo, pType);
   }
 
   @Override
   public int deleteBySemesterAndExamType(int pSemesterId, int pExamType) {
-    return getManager().deleteBySemesterAndExamType(pSemesterId,pExamType);
+    return getManager().deleteBySemesterAndExamType(pSemesterId, pExamType);
   }
 
   @Override
   public List<SeatPlanGroup> getGroupBySemesterTypeFromDb(int pSemesterId, int pExamType) {
-    return getManager().getGroupBySemesterTypeFromDb(pSemesterId,pExamType);
+    return getManager().getGroupBySemesterTypeFromDb(pSemesterId, pExamType);
   }
 
   @Override
   public int checkSeatPlanGroupDataSize(int pSemesterId, int pExamType) {
-    return getManager().checkSeatPlanGroupDataSize(pSemesterId,pExamType);
+    return getManager().checkSeatPlanGroupDataSize(pSemesterId, pExamType);
   }
-
 
 }

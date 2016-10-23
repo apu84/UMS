@@ -24,7 +24,6 @@ import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.List;
 
-
 /**
  * Created by My Pc on 4/28/2016.
  */
@@ -44,27 +43,31 @@ public class SpStudentResourceHelper extends ResourceHelper<SpStudent, MutableSp
   @Autowired
   private SpStudentBuilder mBuilder;
 
-
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
     MutableSpStudent spStudent = new PersistentSpStudent();
     LocalCache localCache = new LocalCache();
-    getBuilder().build(spStudent,pJsonObject,localCache);
+    getBuilder().build(spStudent, pJsonObject, localCache);
     spStudent.commit(false);
-    URI contextURI = pUriInfo.getBaseUriBuilder().path(SpStudentResource.class).path(SpStudentResource.class,"get").build(spStudent.getId());
+    URI contextURI =
+        pUriInfo.getBaseUriBuilder().path(SpStudentResource.class)
+            .path(SpStudentResource.class, "get").build(spStudent.getId());
     Response.ResponseBuilder builder = Response.created(contextURI);
     builder.status(Response.Status.CREATED);
     return builder.build();
   }
 
-  public JsonObject getStudentByProgramYearSemesterStatus(final int programId, final int academicYear,
-                                          final int academicSemester,final int status, final Request pRequest, final UriInfo pUriInfo) throws Exception {
-    List<SpStudent> spStudents = getContentManager().getStudentByProgramYearSemesterStatus(programId, academicYear, academicSemester,status);
+  public JsonObject getStudentByProgramYearSemesterStatus(final int programId,
+      final int academicYear, final int academicSemester, final int status, final Request pRequest,
+      final UriInfo pUriInfo) throws Exception {
+    List<SpStudent> spStudents =
+        getContentManager().getStudentByProgramYearSemesterStatus(programId, academicYear,
+            academicSemester, status);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
 
-    for (SpStudent routine : spStudents) {
+    for(SpStudent routine : spStudents) {
       children.add(toJson(routine, pUriInfo, localCache));
     }
     object.add("entries", children);

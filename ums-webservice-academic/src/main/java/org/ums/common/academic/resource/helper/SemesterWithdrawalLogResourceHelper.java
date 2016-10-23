@@ -1,6 +1,5 @@
 package org.ums.common.academic.resource.helper;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
@@ -23,7 +22,8 @@ import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 
 @Component
-public class SemesterWithdrawalLogResourceHelper extends ResourceHelper<SemesterWithdrawalLog,MutableSemesterWithdrawalLog,Integer> {
+public class SemesterWithdrawalLogResourceHelper extends
+    ResourceHelper<SemesterWithdrawalLog, MutableSemesterWithdrawalLog, Integer> {
 
   @Autowired
   private SemesterWithdrawalLogManager mManager;
@@ -33,25 +33,26 @@ public class SemesterWithdrawalLogResourceHelper extends ResourceHelper<Semester
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
-    MutableSemesterWithdrawalLog mutableLog= new PersistentSemesterWithdrawalLog();
+    MutableSemesterWithdrawalLog mutableLog = new PersistentSemesterWithdrawalLog();
     LocalCache localCache = new LocalCache();
     getBuilder().build(mutableLog, pJsonObject, localCache);
     mutableLog.commit(false);
-    URI contextURI = pUriInfo.getBaseUriBuilder().path(SemesterWithdrawalLogResource.class).path(SemesterWithdrawalLogResource.class, "get").build(mutableLog.getId());
+    URI contextURI =
+        pUriInfo.getBaseUriBuilder().path(SemesterWithdrawalLogResource.class)
+            .path(SemesterWithdrawalLogResource.class, "get").build(mutableLog.getId());
     Response.ResponseBuilder builder = Response.created(contextURI);
     builder.status(Response.Status.CREATED);
     return builder.build();
   }
 
-
-  public JsonObject getBySemesterWithdrawalId(final int semesterWithdrawalid,final Request pRequest,final UriInfo pUriInfo)throws Exception{
-    SemesterWithdrawalLog mLog = getContentManager().getBySemesterWithdrawalId(semesterWithdrawalid);
-
+  public JsonObject getBySemesterWithdrawalId(final int semesterWithdrawalid,
+      final Request pRequest, final UriInfo pUriInfo) throws Exception {
+    SemesterWithdrawalLog mLog =
+        getContentManager().getBySemesterWithdrawalId(semesterWithdrawalid);
 
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-
 
     children.add(toJson(mLog, pUriInfo, localCache));
     object.add("entries", children);

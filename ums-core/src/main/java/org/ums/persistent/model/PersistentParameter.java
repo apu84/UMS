@@ -12,9 +12,9 @@ public class PersistentParameter implements MutableParameter {
 
   private static ParameterManager sParameterManager;
 
-  static{
+  static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sParameterManager = applicationContext.getBean("parameterManager",ParameterManager.class);
+    sParameterManager = applicationContext.getBean("parameterManager", ParameterManager.class);
   }
 
   private String mId;
@@ -24,18 +24,17 @@ public class PersistentParameter implements MutableParameter {
   private String mLastModified;
   private int mType;
 
-  public PersistentParameter(){
+  public PersistentParameter() {
 
   }
 
-  public PersistentParameter(final PersistentParameter pOriginal)throws Exception{
+  public PersistentParameter(final PersistentParameter pOriginal) throws Exception {
     mId = pOriginal.getId();
     mParameter = pOriginal.getParameter();
     mShortDescription = pOriginal.getShortDescription();
     mLongDescription = pOriginal.getLongDescription();
     mType = pOriginal.getType();
   }
-
 
   @Override
   public void setShortDescription(String pShortDescription) {
@@ -49,12 +48,12 @@ public class PersistentParameter implements MutableParameter {
 
   @Override
   public void setParameter(String pParameter) {
-      mParameter = pParameter;
+    mParameter = pParameter;
   }
 
   @Override
   public void setLongDescription(String pLongDescription) {
-      mLongDescription = pLongDescription;
+    mLongDescription = pLongDescription;
   }
 
   @Override
@@ -94,10 +93,10 @@ public class PersistentParameter implements MutableParameter {
 
   @Override
   public void commit(boolean update) throws Exception {
-    if(update){
+    if(update) {
       sParameterManager.update(this);
     }
-    else{
+    else {
       sParameterManager.create(this);
     }
   }
@@ -114,6 +113,6 @@ public class PersistentParameter implements MutableParameter {
 
   @Override
   public void setLastModified(String pLastModified) {
-      mLastModified = pLastModified;
+    mLastModified = pLastModified;
   }
 }

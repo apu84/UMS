@@ -27,8 +27,7 @@ public class PersistentPermission implements MutablePermission {
 
   private Integer mRoleId;
 
-  public PersistentPermission() {
-  }
+  public PersistentPermission() {}
 
   public PersistentPermission(final PersistentPermission pPersistentPermission) throws Exception {
     setId(pPersistentPermission.getId());
@@ -54,7 +53,7 @@ public class PersistentPermission implements MutablePermission {
 
   @Override
   public void addPermission(String pPermission) {
-    if (mPermissions == null) {
+    if(mPermissions == null) {
       mPermissions = new HashSet<>();
     }
     mPermissions.add(pPermission);
@@ -62,9 +61,10 @@ public class PersistentPermission implements MutablePermission {
 
   @Override
   public void commit(boolean update) throws Exception {
-    if (update) {
+    if(update) {
       sPermissionManager.update(this);
-    } else {
+    }
+    else {
       sPermissionManager.create(this);
     }
   }

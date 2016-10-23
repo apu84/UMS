@@ -27,7 +27,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-
 public class UMSAuthenticationRealm extends JdbcRealm implements ProfileRealm {
   private static final Logger mLogger = LoggerFactory.getLogger(UMSAuthenticationRealm.class);
   private String mSalt;
@@ -63,9 +62,9 @@ public class UMSAuthenticationRealm extends JdbcRealm implements ProfileRealm {
     mPlainPasswordMatcher = pPlainPasswordMatcher;
   }
 
-
   @Override
-  protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
+  protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token)
+      throws AuthenticationException {
 
     SimpleAuthenticationInfo info;
 
@@ -73,13 +72,13 @@ public class UMSAuthenticationRealm extends JdbcRealm implements ProfileRealm {
     String userId = upToken.getUsername();
 
     // Null username is invalid
-    if (StringUtils.isEmpty(userId)) {
+    if(StringUtils.isEmpty(userId)) {
       throw new AccountException("Null username is not allowed by this realm.");
     }
 
     try {
       User adminUser = null;
-      if (userId.contains(LOGIN_AS_SEPARATOR)) {
+      if(userId.contains(LOGIN_AS_SEPARATOR)) {
         userId = userId.split(LOGIN_AS_SEPARATOR)[1];
         adminUser = mUserManager.get(mUMSConfiguration.getAdminUser());
       }
@@ -88,31 +87,34 @@ public class UMSAuthenticationRealm extends JdbcRealm implements ProfileRealm {
 
       User user = mUserManager.get(userId);
 
-      if (user.getPassword() == null) {
+      if(user.getPassword() == null) {
 
-        if (user.getTemporaryPassword() == null) {
+        if(user.getTemporaryPassword() == null) {
           throw new UnknownAccountException("No account found for user [" + userId + "]");
-        } else {
+        }
+        else {
           setCredentialsMatcher(mPlainPasswordMatcher);
           info = new SimpleAuthenticationInfo(userId, user.getTemporaryPassword(), getName());
         }
 
-      } else {
+      }
+      else {
         List<String> userIds = new ArrayList<>();
         userIds.add(userId);
         if(adminUser != null) {
           userIds.add(adminUser.getId());
           info = new SimpleAuthenticationInfo(userIds, adminUser.getPassword(), getName());
-        }else{
+        }
+        else {
           info = new SimpleAuthenticationInfo(userIds, user.getPassword(), getName());
         }
 
-        if (mSalt != null) {
+        if(mSalt != null) {
           info.setCredentialsSalt(ByteSource.Util.bytes(mSalt));
         }
       }
 
-    } catch (Exception e) {
+    } catch(Exception e) {
       mLogger.error("Exception while trying to login ", e);
       throw new AuthenticationException(e);
     }
@@ -125,9 +127,10 @@ public class UMSAuthenticationRealm extends JdbcRealm implements ProfileRealm {
   }
 
   @Override
-  protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) throws AuthorizationException {
-    //null usernames are invalid
-    if (principals == null) {
+  protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals)
+      throws AuthorizationException {
+    // null usernames are invalid
+    if(principals == null) {
       throw new AuthorizationException("PrincipalCollection method argument cannot be null.");
     }
     SimpleAuthorizationInfo info = null;
@@ -135,16 +138,17 @@ public class UMSAuthenticationRealm extends JdbcRealm implements ProfileRealm {
     try {
       User user = mUserManager.get(username);
       info = new SimpleAuthorizationInfo(Sets.newHashSet(user.getPrimaryRole().getName()));
-      List<Permission> rolePermissions = mPermissionManager.getPermissionByRole(user.getPrimaryRole());
+      List<Permission> rolePermissions =
+          mPermissionManager.getPermissionByRole(user.getPrimaryRole());
 
       Set<String> permissions = new HashSet<>();
 
-      for (Permission permission : rolePermissions) {
+      for(Permission permission : rolePermissions) {
         permissions.addAll(permission.getPermissions());
       }
 
       info.setStringPermissions(permissions);
-    } catch (Exception e) {
+    } catch(Exception e) {
       throw new AuthorizationException(e);
     }
     return info;

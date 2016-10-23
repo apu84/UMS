@@ -8,7 +8,8 @@ import org.ums.util.CacheUtil;
 
 import java.util.List;
 
-public class SemesterEnrollmentCache extends ContentCache<SemesterEnrollment, MutableSemesterEnrollment, Integer, SemesterEnrollmentManager>
+public class SemesterEnrollmentCache extends
+    ContentCache<SemesterEnrollment, MutableSemesterEnrollment, Integer, SemesterEnrollmentManager>
     implements SemesterEnrollmentManager {
   private CacheManager<SemesterEnrollment, Integer> mCacheManager;
 
@@ -27,14 +28,16 @@ public class SemesterEnrollmentCache extends ContentCache<SemesterEnrollment, Mu
   }
 
   @Override
-  public List<SemesterEnrollment> getEnrollmentStatus(SemesterEnrollment.Type pType, Integer pProgramId, Integer pSemesterId) {
+  public List<SemesterEnrollment> getEnrollmentStatus(SemesterEnrollment.Type pType,
+      Integer pProgramId, Integer pSemesterId) {
     return getManager().getEnrollmentStatus(pType, pProgramId, pSemesterId);
   }
 
   @Override
-  public SemesterEnrollment getEnrollmentStatus(SemesterEnrollment.Type pType, Integer pProgramId, Integer pSemesterId,
-                                                Integer pYear, Integer pAcademicSemester) {
-    return getManager().getEnrollmentStatus(pType, pProgramId, pSemesterId, pYear, pAcademicSemester);
+  public SemesterEnrollment getEnrollmentStatus(SemesterEnrollment.Type pType, Integer pProgramId,
+      Integer pSemesterId, Integer pYear, Integer pAcademicSemester) {
+    return getManager().getEnrollmentStatus(pType, pProgramId, pSemesterId, pYear,
+        pAcademicSemester);
   }
 
   @Override

@@ -16,25 +16,25 @@ import javax.ws.rs.core.UriInfo;
  */
 
 @Component
-public class SeatPlanPublishBuilder implements Builder<SeatPlanPublish,MutableSeatPlanPublish> {
+public class SeatPlanPublishBuilder implements Builder<SeatPlanPublish, MutableSeatPlanPublish> {
   @Override
-  public void build(JsonObjectBuilder pBuilder, SeatPlanPublish pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) throws Exception {
-    if(pReadOnly.getId()!=null)
-        pBuilder.add("id",pReadOnly.getId());
-    if(pReadOnly.getSemesterId()!=null)
-        pBuilder.add("semesterId",pReadOnly.getSemesterId());
-    if(pReadOnly.getExamType()!=null)
-        pBuilder.add("examType",pReadOnly.getExamType().getId());
-    if(pReadOnly.getExamDate()!=null)
-        pBuilder.add("examDate",pReadOnly.getExamDate());
-    if(pReadOnly.getPublishStatus()!=null)
-    {
-      if(pReadOnly.getPublishStatus()==0){
-        pBuilder.add("published","false");
+  public void build(JsonObjectBuilder pBuilder, SeatPlanPublish pReadOnly, UriInfo pUriInfo,
+      LocalCache pLocalCache) throws Exception {
+    if(pReadOnly.getId() != null)
+      pBuilder.add("id", pReadOnly.getId());
+    if(pReadOnly.getSemesterId() != null)
+      pBuilder.add("semesterId", pReadOnly.getSemesterId());
+    if(pReadOnly.getExamType() != null)
+      pBuilder.add("examType", pReadOnly.getExamType().getId());
+    if(pReadOnly.getExamDate() != null)
+      pBuilder.add("examDate", pReadOnly.getExamDate());
+    if(pReadOnly.getPublishStatus() != null) {
+      if(pReadOnly.getPublishStatus() == 0) {
+        pBuilder.add("published", "false");
 
       }
-      else{
-        pBuilder.add("published","true");
+      else {
+        pBuilder.add("published", "true");
 
       }
 
@@ -42,16 +42,18 @@ public class SeatPlanPublishBuilder implements Builder<SeatPlanPublish,MutableSe
   }
 
   @Override
-  public void build(MutableSeatPlanPublish pMutable, JsonObject pJsonObject, LocalCache pLocalCache) throws Exception {
+  public void build(MutableSeatPlanPublish pMutable, JsonObject pJsonObject, LocalCache pLocalCache)
+      throws Exception {
     /**
-     * In database, id is auto generated type. So, firstly, when there is no data of the element or item, then, there is no need to have any id, as that will be auto generated.
-     * But, for update purpose, we need an id, so, at the client side, we will set id==0, when, there is no id information, i.e. when we are inserting neew data.
-     * While updating, as we need the id, so, we will set the id value from the client side, and will use here.
-     *
-     * so, id==0, when, data is newly inserted.
-     * and id==(any numeric value), when we are updating.
+     * In database, id is auto generated type. So, firstly, when there is no data of the element or
+     * item, then, there is no need to have any id, as that will be auto generated. But, for update
+     * purpose, we need an id, so, at the client side, we will set id==0, when, there is no id
+     * information, i.e. when we are inserting neew data. While updating, as we need the id, so, we
+     * will set the id value from the client side, and will use here.
+     * 
+     * so, id==0, when, data is newly inserted. and id==(any numeric value), when we are updating.
      */
-    if(pJsonObject.getInt("id")!=0){
+    if(pJsonObject.getInt("id") != 0) {
       pMutable.setId(pJsonObject.getInt("id"));
     }
     pMutable.setSemesterId(Integer.parseInt(pJsonObject.getString("semesterId")));

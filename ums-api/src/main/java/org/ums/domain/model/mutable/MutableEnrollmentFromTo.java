@@ -5,7 +5,8 @@ import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.immutable.EnrollmentFromTo;
 import org.ums.domain.model.immutable.Program;
 
-public interface MutableEnrollmentFromTo extends EnrollmentFromTo, MutableLastModifier, MutableIdentifier<Integer>, Mutable {
+public interface MutableEnrollmentFromTo extends EnrollmentFromTo, MutableLastModifier,
+    MutableIdentifier<Integer>, Mutable {
   void setProgramId(final Integer pProgramId);
 
   void setProgram(final Program pProgram);

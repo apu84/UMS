@@ -1,6 +1,5 @@
 package org.ums.navigation.helper;
 
-
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +39,7 @@ public class MainNavigationHelper extends ResourceHelper<Navigation, MutableNavi
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
-    //Do nothing
+    // Do nothing
     return null;
   }
 
@@ -72,13 +71,16 @@ public class MainNavigationHelper extends ResourceHelper<Navigation, MutableNavi
 
     Set<String> permissions = new HashSet<>();
 
-    List<AdditionalRolePermissions> additionalRolePermissions = mAdditionalRolePermissionsManager.getPermissionsByUser(userId);
-    if (additionalRolePermissions.size() > 0) {
-      for (AdditionalRolePermissions additionalRolePermission : additionalRolePermissions) {
-        //if there is any additional role
-        if (additionalRolePermission.getRoleId() != null) {
-          children.add(getRoleWisePermission(additionalRolePermission.getRole(), pUriInfo, "additionalRole"));
-        } else {
+    List<AdditionalRolePermissions> additionalRolePermissions =
+        mAdditionalRolePermissionsManager.getPermissionsByUser(userId);
+    if(additionalRolePermissions.size() > 0) {
+      for(AdditionalRolePermissions additionalRolePermission : additionalRolePermissions) {
+        // if there is any additional role
+        if(additionalRolePermission.getRoleId() != null) {
+          children.add(getRoleWisePermission(additionalRolePermission.getRole(), pUriInfo,
+              "additionalRole"));
+        }
+        else {
           permissions.addAll(additionalRolePermission.getPermission());
           JsonObjectBuilder typedItems = Json.createObjectBuilder();
           typedItems.add("type", "additionalPermission");
@@ -92,11 +94,12 @@ public class MainNavigationHelper extends ResourceHelper<Navigation, MutableNavi
     return root.build();
   }
 
-  private List<Map<String, Object>> insertChildMenu(final List<Navigation> pNavigationList) throws Exception {
+  private List<Map<String, Object>> insertChildMenu(final List<Navigation> pNavigationList)
+      throws Exception {
     List<Map<String, Object>> navigationList = new ArrayList<>();
 
-    for (Navigation navigation : pNavigationList) {
-      if (navigation.getParentId() <= 0) {
+    for(Navigation navigation : pNavigationList) {
+      if(navigation.getParentId() <= 0) {
         Map<String, Object> navigationMap = new HashMap<>();
         navigationMap.put("navigation", navigation);
         navigationMap.put("children", new ArrayList<Navigation>());
@@ -104,13 +107,14 @@ public class MainNavigationHelper extends ResourceHelper<Navigation, MutableNavi
       }
     }
 
-    for (Navigation navigation : pNavigationList) {
-      if (navigation.getParentId() > 0) {
+    for(Navigation navigation : pNavigationList) {
+      if(navigation.getParentId() > 0) {
         Map<String, Object> parent = findParentNavigation(navigationList, navigation);
-        if (parent != null) {
+        if(parent != null) {
           List<Navigation> children = (List<Navigation>) parent.get("children");
           children.add(navigation);
-        } else {
+        }
+        else {
           Map<String, Object> navigationMap = new HashMap<>();
           navigationMap.put("navigation", navigation);
           navigationMap.put("children", new ArrayList<Navigation>());
@@ -123,11 +127,11 @@ public class MainNavigationHelper extends ResourceHelper<Navigation, MutableNavi
   }
 
   private Map<String, Object> findParentNavigation(final List<Map<String, Object>> pNavigationList,
-                                                   final Navigation pTargetNavigation) throws Exception {
+      final Navigation pTargetNavigation) throws Exception {
 
-    for (Map<String, Object> navigationMap : pNavigationList) {
+    for(Map<String, Object> navigationMap : pNavigationList) {
       Navigation navigation = (Navigation) navigationMap.get("navigation");
-      if (navigation.getId().intValue() == pTargetNavigation.getParentId().intValue()) {
+      if(navigation.getId().intValue() == pTargetNavigation.getParentId().intValue()) {
         return navigationMap;
       }
     }
@@ -169,17 +173,18 @@ public class MainNavigationHelper extends ResourceHelper<Navigation, MutableNavi
 
   private JsonObjectBuilder toJsonObjectBuilder(final JsonObject pJsonObject) {
     JsonObjectBuilder job = Json.createObjectBuilder();
-    for (Map.Entry<String, JsonValue> entry : pJsonObject.entrySet()) {
+    for(Map.Entry<String, JsonValue> entry : pJsonObject.entrySet()) {
       job.add(entry.getKey(), entry.getValue());
     }
     return job;
   }
 
-  private JsonObjectBuilder getRoleWisePermission(final Role pRole, final UriInfo pUriInfo, final String pRoleType) throws Exception {
+  private JsonObjectBuilder getRoleWisePermission(final Role pRole, final UriInfo pUriInfo,
+      final String pRoleType) throws Exception {
     JsonObjectBuilder typedItems = Json.createObjectBuilder();
     List<Permission> rolePermissions = mPermissionManager.getPermissionByRole(pRole);
     Set<String> permissions = new HashSet<>();
-    for (Permission permission : rolePermissions) {
+    for(Permission permission : rolePermissions) {
       permissions.addAll(permission.getPermissions());
     }
 

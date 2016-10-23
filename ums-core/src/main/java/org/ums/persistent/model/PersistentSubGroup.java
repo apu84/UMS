@@ -18,11 +18,12 @@ public class PersistentSubGroup implements MutableSubGroup {
   private static SeatPlanGroupManager sSeatPlanGroupManager;
   private static SubGroupManager sSubGroupManager;
 
-  static{
+  static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sSemesterManager = applicationContext.getBean("semesterManager",SemesterManager.class);
-    sSeatPlanGroupManager = applicationContext.getBean("seatPlanGroupManager",SeatPlanGroupManager.class);
-    sSubGroupManager = applicationContext.getBean("subGroupManager",SubGroupManager.class);
+    sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
+    sSeatPlanGroupManager =
+        applicationContext.getBean("seatPlanGroupManager", SeatPlanGroupManager.class);
+    sSubGroupManager = applicationContext.getBean("subGroupManager", SubGroupManager.class);
   }
 
   private int mId;
@@ -40,11 +41,11 @@ public class PersistentSubGroup implements MutableSubGroup {
   private Integer mStudentYear;
   private Integer mStudentSemester;
 
-  public PersistentSubGroup(){
+  public PersistentSubGroup() {
 
   }
 
-  public PersistentSubGroup(final PersistentSubGroup pPersistentSubGroup)throws Exception{
+  public PersistentSubGroup(final PersistentSubGroup pPersistentSubGroup) throws Exception {
     mId = pPersistentSubGroup.getId();
     mSemester = pPersistentSubGroup.getSemester();
     mSemesterId = pPersistentSubGroup.getSemesterId();
@@ -130,7 +131,8 @@ public class PersistentSubGroup implements MutableSubGroup {
 
   @Override
   public Semester getSemester() throws Exception {
-    return mSemester==null? sSemesterManager.get(mSemesterId):sSemesterManager.validate(mSemester);
+    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
+        .validate(mSemester);
   }
 
   @Override
@@ -150,9 +152,10 @@ public class PersistentSubGroup implements MutableSubGroup {
 
   @Override
   public void commit(boolean update) throws Exception {
-    if(update){
+    if(update) {
       sSubGroupManager.update(this);
-    }else{
+    }
+    else {
       sSubGroupManager.create(this);
     }
   }
@@ -174,7 +177,8 @@ public class PersistentSubGroup implements MutableSubGroup {
 
   @Override
   public SeatPlanGroup getGroup() throws Exception {
-    return mSeatPlanGroup==null?sSeatPlanGroupManager.get(mGroupId):sSeatPlanGroupManager.validate(mSeatPlanGroup);
+    return mSeatPlanGroup == null ? sSeatPlanGroupManager.get(mGroupId) : sSeatPlanGroupManager
+        .validate(mSeatPlanGroup);
   }
 
   @Override

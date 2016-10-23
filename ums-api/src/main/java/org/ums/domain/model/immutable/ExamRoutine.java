@@ -8,18 +8,32 @@ import java.util.List;
 
 public interface ExamRoutine extends Serializable, EditType<MutableExamRoutine> {
   List<ExamRoutineDto> getRoutine();
+
   Integer getSemesterId();
+
   String getSemesterName();
+
   Integer getExamTypeId();
+
   String getExamTypeName();
+
   String getInsertType();
+
   Integer getTotalStudent();
+
   String getExamDate();
+
   String getExamDateOriginal();
+
   String getProgramName();
+
   String getCourseNumber();
+
   String getCourseTitle();
+
   Integer getCourseYear();
+
   Integer getCourseSemester();
+
   Integer getExamGroup();
 }

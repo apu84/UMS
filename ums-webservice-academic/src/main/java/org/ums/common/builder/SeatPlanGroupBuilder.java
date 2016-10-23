@@ -21,7 +21,7 @@ import javax.ws.rs.core.UriInfo;
  */
 
 @Component
-public class SeatPlanGroupBuilder implements Builder<SeatPlanGroup,MutableSeatPlanGroup> {
+public class SeatPlanGroupBuilder implements Builder<SeatPlanGroup, MutableSeatPlanGroup> {
 
   @Autowired
   ProgramManager mProgramManager;
@@ -33,24 +33,28 @@ public class SeatPlanGroupBuilder implements Builder<SeatPlanGroup,MutableSeatPl
   SpStudentManager mSpStudentManager;
 
   @Override
-  public void build(JsonObjectBuilder pBuilder, SeatPlanGroup pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) throws Exception {
-    pBuilder.add("id",pReadOnly.getId());
-    pBuilder.add("groupId",pReadOnly.getId());
-    pBuilder.add("semesterId",pReadOnly.getSemester().getId());
-    pBuilder.add("programId",pReadOnly.getProgram().getId());
-    pBuilder.add("programName",pReadOnly.getProgramName().replaceAll("BSc in ",""));
-    pBuilder.add("year",pReadOnly.getAcademicYear());
-    pBuilder.add("semester",pReadOnly.getAcademicSemester());
-    pBuilder.add("groupNo",pReadOnly.getGroupNo());
-    pBuilder.add("type",pReadOnly.getExamType());
-    pBuilder.add("studentNumber",pReadOnly.getTotalStudentNumber());
-    /*String lastUpdated = pReadOnly.getLastUpdateDate();
-    pBuilder.add("lastUpdated",pReadOnly.getLastUpdateDate());*/
+  public void build(JsonObjectBuilder pBuilder, SeatPlanGroup pReadOnly, UriInfo pUriInfo,
+      LocalCache pLocalCache) throws Exception {
+    pBuilder.add("id", pReadOnly.getId());
+    pBuilder.add("groupId", pReadOnly.getId());
+    pBuilder.add("semesterId", pReadOnly.getSemester().getId());
+    pBuilder.add("programId", pReadOnly.getProgram().getId());
+    pBuilder.add("programName", pReadOnly.getProgramName().replaceAll("BSc in ", ""));
+    pBuilder.add("year", pReadOnly.getAcademicYear());
+    pBuilder.add("semester", pReadOnly.getAcademicSemester());
+    pBuilder.add("groupNo", pReadOnly.getGroupNo());
+    pBuilder.add("type", pReadOnly.getExamType());
+    pBuilder.add("studentNumber", pReadOnly.getTotalStudentNumber());
+    /*
+     * String lastUpdated = pReadOnly.getLastUpdateDate();
+     * pBuilder.add("lastUpdated",pReadOnly.getLastUpdateDate());
+     */
   }
 
   @Override
-  public void build(MutableSeatPlanGroup pMutable, JsonObject pJsonObject, LocalCache pLocalCache) throws Exception {
-    PersistentSemester persistentSemester= new PersistentSemester();
+  public void build(MutableSeatPlanGroup pMutable, JsonObject pJsonObject, LocalCache pLocalCache)
+      throws Exception {
+    PersistentSemester persistentSemester = new PersistentSemester();
     persistentSemester.setId(pJsonObject.getInt("semesterId"));
     pMutable.setSemester(persistentSemester);
 

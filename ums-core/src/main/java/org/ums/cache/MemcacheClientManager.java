@@ -1,6 +1,5 @@
 package org.ums.cache;
 
-
 import net.spy.memcached.MemcachedClient;
 import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
@@ -18,22 +17,23 @@ public class MemcacheClientManager<R extends LastModifier, I> implements CacheMa
   private MemcachedClient mObjectCache;
   private MemcachedClient mLastModified;
 
-
   public MemcacheClientManager(final String pObjectCacheUrl, final Integer pObjectCachePort,
-                               final String pLastModifiedCacheUrl, final Integer pLastModifiedCachePort) throws Exception {
+      final String pLastModifiedCacheUrl, final Integer pLastModifiedCachePort) throws Exception {
     Validate.notNull(pObjectCacheUrl);
     Validate.notNull(pObjectCachePort);
     Validate.notNull(pLastModifiedCacheUrl);
     Validate.notNull(pLastModifiedCachePort);
 
     mObjectCache = new MemcachedClient(new InetSocketAddress(pObjectCacheUrl, pObjectCachePort));
-    mLastModified = new MemcachedClient(new InetSocketAddress(pLastModifiedCacheUrl, pLastModifiedCachePort));
+    mLastModified =
+        new MemcachedClient(new InetSocketAddress(pLastModifiedCacheUrl, pLastModifiedCachePort));
   }
 
   @Override
   public void put(String pCacheId, R pReadonly) {
     mObjectCache.set(pCacheId, 0, pReadonly);
-    mLastModified.set(pCacheId, 0, StringUtils.isEmpty(pReadonly.getLastModified()) ? "": pReadonly.getLastModified());
+    mLastModified.set(pCacheId, 0, StringUtils.isEmpty(pReadonly.getLastModified()) ? ""
+        : pReadonly.getLastModified());
   }
 
   @Override

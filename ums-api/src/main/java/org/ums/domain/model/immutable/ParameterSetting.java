@@ -10,10 +10,15 @@ import java.io.Serializable;
 /**
  * Created by My Pc on 3/14/2016.
  */
-public interface ParameterSetting extends Serializable,LastModifier,EditType<MutableParameterSetting>,Identifier<String> {
+public interface ParameterSetting extends Serializable, LastModifier,
+    EditType<MutableParameterSetting>, Identifier<String> {
   Semester getSemester() throws Exception;
+
   Parameter getParameter() throws Exception;
+
   String getStartDate();
+
   String getEndDate();
+
   String getLastModified();
 }

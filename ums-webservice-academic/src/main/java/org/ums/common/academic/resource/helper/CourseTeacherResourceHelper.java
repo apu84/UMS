@@ -17,7 +17,8 @@ import javax.ws.rs.core.UriInfo;
 
 @Component
 public class CourseTeacherResourceHelper
-    extends AbstractAssignedTeacherResourceHelper<CourseTeacher, MutableCourseTeacher, Integer, AssignedTeacherManager<CourseTeacher, MutableCourseTeacher, Integer>> {
+    extends
+    AbstractAssignedTeacherResourceHelper<CourseTeacher, MutableCourseTeacher, Integer, AssignedTeacherManager<CourseTeacher, MutableCourseTeacher, Integer>> {
   @Autowired
   @Qualifier("courseTeacherManager")
   AssignedTeacherManager<CourseTeacher, MutableCourseTeacher, Integer> mCourseTeacherManager;
@@ -51,13 +52,13 @@ public class CourseTeacherResourceHelper
     LocalCache localCache = new LocalCache();
     JsonArray entries = pJsonObject.getJsonArray("entries");
 
-    for (int i = 0; i < entries.size(); i++) {
+    for(int i = 0; i < entries.size(); i++) {
       JsonObject jsonObject = entries.getJsonObject(i);
       String updateType = jsonObject.getString("updateType");
       MutableCourseTeacher mutableCourseTeacher = new PersistentCourseTeacher();
       getBuilder().build(mutableCourseTeacher, jsonObject, localCache);
 
-      switch (updateType) {
+      switch(updateType) {
         case "insert":
           mutableCourseTeacher.commit(false);
           break;

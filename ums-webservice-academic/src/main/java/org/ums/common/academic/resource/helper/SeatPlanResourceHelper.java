@@ -32,13 +32,11 @@ import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 
-
-
 /**
  * Created by My Pc on 5/8/2016.
  */
 @Component
-public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan,MutableSeatPlan,Integer> {
+public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan, MutableSeatPlan, Integer> {
   private static final Logger mLogger = LoggerFactory.getLogger(SeatPlanResourceHelper.class);
   @Autowired
   private SeatPlanManager mManager;
@@ -81,159 +79,167 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan,MutableSeatP
 
   public static final String DEST = "I:/pdf/seat_plan_report.pdf";
 
-
-
-   public JsonObject getSeatPlanForStudentsSeatPlanView(final String pStudentId,final  Integer pSemesterId, final UriInfo mUriInfo)throws Exception{
-    List<SeatPlan> seatPlans = getContentManager().getForStudent(pStudentId,pSemesterId);
+  public JsonObject getSeatPlanForStudentsSeatPlanView(final String pStudentId,
+      final Integer pSemesterId, final UriInfo mUriInfo) throws Exception {
+    List<SeatPlan> seatPlans = getContentManager().getForStudent(pStudentId, pSemesterId);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-    for(SeatPlan seatPlan: seatPlans){
-      children.add(toJson(seatPlan,mUriInfo,localCache));
+    for(SeatPlan seatPlan : seatPlans) {
+      children.add(toJson(seatPlan, mUriInfo, localCache));
     }
-    object.add("entries",children);
+    object.add("entries", children);
     localCache.invalidate();
     return object.build();
   }
 
-  public JsonObject getSeatPlanForStudentAndCCIExam(final String pStudentId,final  Integer pSemesterId,final String pExamDate, final UriInfo mUriInfo)throws Exception{
-    List<SeatPlan> seatPlans = getContentManager().getForStudentAndCCIExam(pStudentId,pSemesterId,pExamDate);
+  public JsonObject getSeatPlanForStudentAndCCIExam(final String pStudentId,
+      final Integer pSemesterId, final String pExamDate, final UriInfo mUriInfo) throws Exception {
+    List<SeatPlan> seatPlans =
+        getContentManager().getForStudentAndCCIExam(pStudentId, pSemesterId, pExamDate);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-    for(SeatPlan seatPlan: seatPlans){
-      children.add(toJson(seatPlan,mUriInfo,localCache));
+    for(SeatPlan seatPlan : seatPlans) {
+      children.add(toJson(seatPlan, mUriInfo, localCache));
     }
-    object.add("entries",children);
+    object.add("entries", children);
     localCache.invalidate();
     return object.build();
   }
-
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
     int groupNo = pJsonObject.getInt("groupNo");
     int semesterId = pJsonObject.getInt("semesterId");
     int type = pJsonObject.getInt("type");
-    String action = pJsonObject.getString("action");  //action will be of two types-> createOrView and -->createNew
+    String action = pJsonObject.getString("action"); // action will be of two types-> createOrView
+                                                     // and -->createNew
     /*
-    action will be of two types-> createOrView and -->createNew.
-    createOrView: it will check, if there is a seatPlan already, if there is, then it just responds positively. Else, it will
-                create new seatPlan and then will assure.
-    create: it will create only. If there is a seatPlan already, then, it will first delete the whole seatPlan and then will create
-             a new one. :)
-    * */
+     * action will be of two types-> createOrView and -->createNew. createOrView: it will check, if
+     * there is a seatPlan already, if there is, then it just responds positively. Else, it will
+     * create new seatPlan and then will assure. create: it will create only. If there is a seatPlan
+     * already, then, it will first delete the whole seatPlan and then will create a new one. :)
+     */
 
     GenericResponse<Map> genericResponse = null, previousResponse = null;
-
 
     List<SeatPlan> allSeatPlans = mManager.getAll();
 
     File file = new File(DEST);
     file.getParentFile().mkdirs();
 
-
-    if(allSeatPlans.size()>0){
-      List<SeatPlan> seatPlanOfTheGroup = mManager.getBySemesterAndGroupAndExamType(semesterId,groupNo,type);
-      if(seatPlanOfTheGroup.size()>0){
-       // new SeatPlanResourceHelper().createPdf(DEST);
-      }else{
+    if(allSeatPlans.size() > 0) {
+      List<SeatPlan> seatPlanOfTheGroup =
+          mManager.getBySemesterAndGroupAndExamType(semesterId, groupNo, type);
+      if(seatPlanOfTheGroup.size() > 0) {
+        // new SeatPlanResourceHelper().createPdf(DEST);
+      }
+      else {
 
       }
-    }else{
-      //new SeatPlanResourceHelper().createPdf(DEST);
+    }
+    else {
+      // new SeatPlanResourceHelper().createPdf(DEST);
     }
 
     return null;
   }
 
-
-  public void createOrCheckSeatPlanAndReturnRoomList(final int pSemesterId, final int groupNo, final int type,final String examDate, OutputStream pOutputStream, final Request pRequest, final UriInfo pUriInfo) throws Exception,IOException{
+  public void createOrCheckSeatPlanAndReturnRoomList(final int pSemesterId, final int groupNo,
+      final int type, final String examDate, OutputStream pOutputStream, final Request pRequest,
+      final UriInfo pUriInfo) throws Exception, IOException {
     GenericResponse<Map> genericResponse = null, previousResponse = null;
 
-
     List<SeatPlan> allSeatPlans = mManager.getAll();
-
 
     File file = new File(DEST);
     file.getParentFile().mkdirs();
     boolean noSeatPlanInfo;
-    boolean seatPlanOfTheGroupFound=false;
-    if(allSeatPlans.size()>0){
-      if(groupNo==0){
-        List<SeatPlan> seatPlanOfTheGroup = mManager.getBySemesterAndGroupAndExamTypeAndExamDate(pSemesterId,groupNo,type,examDate);
-        if(seatPlanOfTheGroup.size()>0){
-          seatPlanOfTheGroupFound=true;
+    boolean seatPlanOfTheGroupFound = false;
+    if(allSeatPlans.size() > 0) {
+      if(groupNo == 0) {
+        List<SeatPlan> seatPlanOfTheGroup =
+            mManager.getBySemesterAndGroupAndExamTypeAndExamDate(pSemesterId, groupNo, type,
+                examDate);
+        if(seatPlanOfTheGroup.size() > 0) {
+          seatPlanOfTheGroupFound = true;
         }
       }
-      else{
-        List<SeatPlan> seatPlanOfTheGroup = mManager.getBySemesterAndGroupAndExamType(pSemesterId,groupNo,type);
-        if(seatPlanOfTheGroup.size()>0){
-          seatPlanOfTheGroupFound=true;
+      else {
+        List<SeatPlan> seatPlanOfTheGroup =
+            mManager.getBySemesterAndGroupAndExamType(pSemesterId, groupNo, type);
+        if(seatPlanOfTheGroup.size() > 0) {
+          seatPlanOfTheGroupFound = true;
         }
       }
 
     }
 
-    if(seatPlanOfTheGroupFound){
+    if(seatPlanOfTheGroupFound) {
 
-        noSeatPlanInfo = false;
-         mSeatPlanReportGenerator.createPdf(DEST,noSeatPlanInfo,pSemesterId,groupNo,type,examDate,pOutputStream);
+      noSeatPlanInfo = false;
+      mSeatPlanReportGenerator.createPdf(DEST, noSeatPlanInfo, pSemesterId, groupNo, type,
+          examDate, pOutputStream);
 
-    }else{
-      if(groupNo==0){
-        List<SubGroupCCI> subGroupCCIs = mSubGroupCCIManager.getBySemesterAndExamDate(pSemesterId,examDate);
-        if(subGroupCCIs.size()>0){
-          genericResponse = mSeatPlanService.generateSeatPlan(pSemesterId,groupNo,type,examDate);
+    }
+    else {
+      if(groupNo == 0) {
+        List<SubGroupCCI> subGroupCCIs =
+            mSubGroupCCIManager.getBySemesterAndExamDate(pSemesterId, examDate);
+        if(subGroupCCIs.size() > 0) {
+          genericResponse = mSeatPlanService.generateSeatPlan(pSemesterId, groupNo, type, examDate);
           noSeatPlanInfo = false;
-        }else{
-          noSeatPlanInfo=true;
+        }
+        else {
+          noSeatPlanInfo = true;
         }
       }
-      else{
-        List<SubGroup> subGroupOfTheGroup = mSubGroupManager.getBySemesterGroupNoAndType(pSemesterId,groupNo,type);
-        if(subGroupOfTheGroup.size()>0){
-          genericResponse = mSeatPlanService.generateSeatPlan(pSemesterId,groupNo,type,examDate);
+      else {
+        List<SubGroup> subGroupOfTheGroup =
+            mSubGroupManager.getBySemesterGroupNoAndType(pSemesterId, groupNo, type);
+        if(subGroupOfTheGroup.size() > 0) {
+          genericResponse = mSeatPlanService.generateSeatPlan(pSemesterId, groupNo, type, examDate);
           noSeatPlanInfo = false;
-        }else{
-          noSeatPlanInfo=true;
+        }
+        else {
+          noSeatPlanInfo = true;
         }
       }
 
-       mSeatPlanReportGenerator.createPdf(DEST,noSeatPlanInfo,pSemesterId,groupNo,type,examDate,pOutputStream);
+      mSeatPlanReportGenerator.createPdf(DEST, noSeatPlanInfo, pSemesterId, groupNo, type,
+          examDate, pOutputStream);
 
     }
 
+  }
+
+  public void getSeatPlanAttendenceSheetReport(Integer pProgramType, Integer pSemesterId,
+      Integer pExamType, String pExamDate, OutputStream pOutputStream, final Request pRequest,
+      final UriInfo mUriInfo) throws Exception, IOException {
+
+    mSeatPlanReportGenerator.createSeatPlanAttendencePdfReport(pProgramType, pSemesterId,
+        pExamType, pExamDate, pOutputStream);
 
   }
 
-  public void getSeatPlanAttendenceSheetReport(Integer pProgramType,Integer pSemesterId,Integer pExamType,String pExamDate,OutputStream pOutputStream, final Request pRequest, final UriInfo mUriInfo) throws Exception,IOException{
+  public void getSeatPlanTopSheetReport(Integer pProgramType, Integer pSemesterId,
+      Integer pExamType, String pExamDate, OutputStream pOutputStream, final Request pRequest,
+      final UriInfo mUriInfo) throws Exception, IOException {
 
-    mSeatPlanReportGenerator.createSeatPlanAttendencePdfReport(pProgramType,pSemesterId,pExamType,pExamDate,pOutputStream);
-
-  }
-
-
-
-  public void getSeatPlanTopSheetReport(Integer pProgramType,Integer pSemesterId,Integer pExamType,String pExamDate,OutputStream pOutputStream, final Request pRequest, final UriInfo mUriInfo) throws Exception,IOException{
-
-    mSeatPlanReportGenerator.createSeatPlanTopSheetPdfReport(pProgramType,pSemesterId,pExamType,pExamDate,pOutputStream);
+    mSeatPlanReportGenerator.createSeatPlanTopSheetPdfReport(pProgramType, pSemesterId, pExamType,
+        pExamDate, pOutputStream);
 
   }
 
+  public void getSeatPlanStudentStickerReport(Integer pProgramType, Integer pSemesterId,
+      Integer pExamType, String pExamDate, OutputStream pOutputStream, final Request pRequest,
+      final UriInfo mUriInfo) throws Exception, IOException {
 
-
-
-  public void getSeatPlanStudentStickerReport(Integer pProgramType,Integer pSemesterId,Integer pExamType,String pExamDate,OutputStream pOutputStream, final Request pRequest, final UriInfo mUriInfo) throws Exception,IOException{
-
-    mSeatPlanReportGenerator.createSeatPlanStickerReport(pProgramType,pSemesterId,pExamType,pExamDate,pOutputStream);
+    mSeatPlanReportGenerator.createSeatPlanStickerReport(pProgramType, pSemesterId, pExamType,
+        pExamDate, pOutputStream);
 
   }
-
-
-
-
-
 
   @Override
   protected SeatPlanManager getContentManager() {

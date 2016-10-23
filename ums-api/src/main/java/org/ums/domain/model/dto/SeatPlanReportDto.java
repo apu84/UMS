@@ -15,7 +15,7 @@ public class SeatPlanReportDto implements Serializable {
   private Integer mCurrentSemester;
   private String mStudentId;
 
-  public SeatPlanReportDto(){
+  public SeatPlanReportDto() {
 
   }
 

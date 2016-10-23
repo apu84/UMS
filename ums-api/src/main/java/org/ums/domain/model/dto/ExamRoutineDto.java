@@ -16,9 +16,9 @@ public class ExamRoutineDto implements Serializable {
   private Integer programId;
   private String programName;
   private Integer totalStudent;
-  private String examDateOriginal; //to retrieve the original examdate without doing anything with the modified examdate
+  private String examDateOriginal; // to retrieve the original examdate without doing anything with
+                                   // the modified examdate
   private Integer examGroup;
-
 
   public String getExamDateOriginal() {
     return examDateOriginal;

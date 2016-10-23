@@ -16,199 +16,193 @@ import java.util.List;
  */
 public class PersistentExamGrade implements MutableExamGrade {
 
-    private static ExamGradeManager sExamGradeManager;
+  private static ExamGradeManager sExamGradeManager;
 
-    static {
-        ApplicationContext applicationContext = AppContext.getApplicationContext();
-        sExamGradeManager = applicationContext.getBean("examGradeManager", ExamGradeManager.class);
-    }
+  static {
+    ApplicationContext applicationContext = AppContext.getApplicationContext();
+    sExamGradeManager = applicationContext.getBean("examGradeManager", ExamGradeManager.class);
+  }
 
+  private List<StudentGradeDto> mGradeList;
+  private String mExamTypeName;
+  private int mExamTypeId;
+  private ExamType mExamType;
+  private int mSemesterId;
+  private String mSemesterName;
+  private String mCourseId;
+  private String mCourseTitle;
+  private String mCourseNo;
+  private String mExamDate;
+  private String mProgramShortname;
+  private Integer mCourseCreditHour;
+  private String mLastSubmissionDate;
+  private Integer mTotalStudents;
 
-    private List<StudentGradeDto> mGradeList;
-    private String mExamTypeName;
-    private int mExamTypeId;
-    private ExamType mExamType;
-    private int mSemesterId;
-    private String mSemesterName;
-    private String mCourseId;
-    private String mCourseTitle;
-    private String mCourseNo;
-    private String mExamDate;
-    private String mProgramShortname;
-    private Integer mCourseCreditHour;
-    private String mLastSubmissionDate;
-    private Integer mTotalStudents;
+  public PersistentExamGrade() {
 
+  }
 
-    public PersistentExamGrade(){
+  public PersistentExamGrade(final MutableExamGrade pOriginal) throws Exception {
+    mGradeList = pOriginal.getGradeList();
+  }
 
-    }
+  public void save() throws Exception {
 
-    public PersistentExamGrade(final MutableExamGrade pOriginal) throws Exception {
-        mGradeList = pOriginal.getGradeList();
-    }
+    // sExamRoutineManager.create(this);
 
+  }
 
+  @Override
+  public void setExamType(ExamType pExamType) {
+    mExamType = pExamType;
+  }
 
-    public void save() throws Exception {
+  @Override
+  public ExamType getExamType() {
+    return mExamType;
+  }
 
-       // sExamRoutineManager.create(this);
+  @Override
+  public void delete() throws Exception {
+    // sExamRoutineManager.delete(this);
 
-    }
+  }
 
-    @Override
-    public void setExamType(ExamType pExamType) {
-        mExamType = pExamType;
-    }
+  @Override
+  public void commit(boolean update) throws Exception {}
 
-    @Override
-    public ExamType getExamType() {
-        return mExamType;
-    }
+  @Override
+  public MutableExamGrade edit() throws Exception {
+    return null;
+  }
 
-    @Override
-    public void delete() throws Exception {
-       // sExamRoutineManager.delete(this);
+  @Override
+  public void setTotalStudents(Integer pTotalStudents) {
+    mTotalStudents = pTotalStudents;
+  }
 
-    }
+  @Override
+  public Integer getTotalStudents() {
+    return mTotalStudents;
+  }
 
+  @Override
+  public void setCourseNo(String pCourseNo) {
+    mCourseNo = pCourseNo;
+  }
 
-    @Override
-    public void commit(boolean update) throws Exception {
-    }
+  @Override
+  public void setCourseCreditHour(Integer pCourseCreditHour) {
+    mCourseCreditHour = pCourseCreditHour;
+  }
 
-    @Override
-    public MutableExamGrade edit() throws Exception {
-        return null;
-    }
+  @Override
+  public void setLastSubmissionDate(String pLastSubmissionDate) {
+    mLastSubmissionDate = pLastSubmissionDate;
+  }
 
-    @Override
-    public void setTotalStudents(Integer pTotalStudents) {
-        mTotalStudents = pTotalStudents;
-    }
+  @Override
+  public void setExamDate(String pExamDate) {
+    mExamDate = pExamDate;
+  }
 
-    @Override
-    public Integer getTotalStudents() {
-        return mTotalStudents;
-    }
+  @Override
+  public void setProgramShortName(String pProgramShortName) {
+    mProgramShortname = pProgramShortName;
+  }
 
-    @Override
-    public void setCourseNo(String pCourseNo) {
-        mCourseNo = pCourseNo;
-    }
+  @Override
+  public String getCourseNo() {
+    return mCourseNo;
+  }
 
-    @Override
-    public void setCourseCreditHour(Integer pCourseCreditHour) {
-        mCourseCreditHour = pCourseCreditHour;
-    }
+  @Override
+  public Integer getCourseCreditHour() {
+    return mCourseCreditHour;
+  }
 
-    @Override
-    public void setLastSubmissionDate(String pLastSubmissionDate) {
-        mLastSubmissionDate = pLastSubmissionDate;
-    }
+  @Override
+  public String getLastSubmissionDate() {
+    return mLastSubmissionDate;
+  }
 
-    @Override
-    public void setExamDate(String pExamDate) {
-        mExamDate = pExamDate;
-    }
+  @Override
+  public String getExamDate() {
+    return mExamDate;
+  }
 
-    @Override
-    public void setProgramShortName(String pProgramShortName) {
-        mProgramShortname = pProgramShortName;
-    }
+  @Override
+  public String getProgramShortName() {
+    return mProgramShortname;
+  }
 
-    @Override
-    public String getCourseNo() {
-        return mCourseNo;
-    }
+  @Override
+  public void setGradeList(List<StudentGradeDto> pGradeList) {
+    mGradeList = pGradeList;
+  }
 
-    @Override
-    public Integer getCourseCreditHour() {
-        return mCourseCreditHour;
-    }
+  @Override
+  public void setSemesterId(int pSemesterId) {
+    mSemesterId = pSemesterId;
+  }
 
-    @Override
-    public String getLastSubmissionDate() {
-        return mLastSubmissionDate;
-    }
+  @Override
+  public void getSemesterName(String pSemesterName) {
+    mSemesterName = pSemesterName;
+  }
 
-    @Override
-    public String getExamDate() {
-        return mExamDate;
-    }
+  @Override
+  public void setExamTypeId(int pExamTypeId) {
+    mExamTypeId = pExamTypeId;
+  }
 
-    @Override
-    public String getProgramShortName() {
-        return mProgramShortname;
-    }
+  @Override
+  public void setExamTypeName(String pExamTypeName) {
+    mExamTypeName = pExamTypeName;
+  }
 
-    @Override
-    public void setGradeList(List<StudentGradeDto> pGradeList) {
-        mGradeList=pGradeList;
-    }
+  @Override
+  public void setCourseId(String pCourseId) {
+    mCourseId = pCourseId;
+  }
 
-    @Override
-    public void setSemesterId(int pSemesterId) {
-        mSemesterId=pSemesterId;
-    }
+  @Override
+  public void setCourseTitle(String pCourseTitle) {
+    mCourseTitle = pCourseTitle;
+  }
 
-    @Override
-    public void getSemesterName(String pSemesterName) {
-        mSemesterName=pSemesterName;
-    }
+  @Override
+  public List<StudentGradeDto> getGradeList() {
+    return mGradeList;
+  }
 
-    @Override
-    public void setExamTypeId(int pExamTypeId) {
-        mExamTypeId=pExamTypeId;
-    }
+  @Override
+  public int getSemesterId() {
+    return mSemesterId;
+  }
 
-    @Override
-    public void setExamTypeName(String pExamTypeName) {
-        mExamTypeName=pExamTypeName;
-    }
+  @Override
+  public String getSemesterName() {
+    return mSemesterName;
+  }
 
-    @Override
-    public void setCourseId(String pCourseId) {
-        mCourseId=pCourseId;
-    }
+  @Override
+  public int getExamTypeId() {
+    return mExamTypeId;
+  }
 
-    @Override
-    public void setCourseTitle(String pCourseTitle) {
-        mCourseTitle=pCourseTitle;
-    }
+  @Override
+  public String getExamTypeName() {
+    return mExamTypeName;
+  }
 
-    @Override
-    public List<StudentGradeDto> getGradeList() {
-        return mGradeList;
-    }
+  @Override
+  public String getCourseId() {
+    return mCourseId;
+  }
 
-    @Override
-    public int getSemesterId() {
-        return mSemesterId;
-    }
-
-    @Override
-    public String getSemesterName() {
-        return mSemesterName;
-    }
-
-    @Override
-    public int getExamTypeId() {
-        return mExamTypeId;
-    }
-
-    @Override
-    public String getExamTypeName() {
-        return mExamTypeName;
-    }
-
-    @Override
-    public String getCourseId() {
-        return mCourseId;
-    }
-
-    @Override
-    public String getCourseTitle() {
-        return mCourseTitle;
-    }
+  @Override
+  public String getCourseTitle() {
+    return mCourseTitle;
+  }
 }

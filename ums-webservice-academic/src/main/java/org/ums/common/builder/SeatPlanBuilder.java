@@ -14,23 +14,24 @@ import javax.ws.rs.core.UriInfo;
  * Created by My Pc on 5/8/2016.
  */
 @Component
-public class SeatPlanBuilder implements Builder<SeatPlan,MutableSeatPlan> {
+public class SeatPlanBuilder implements Builder<SeatPlan, MutableSeatPlan> {
   @Override
-  public void build(JsonObjectBuilder pBuilder, SeatPlan pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) throws Exception {
-    pBuilder.add("id",pReadOnly.getId());
-    pBuilder.add("roomId",pReadOnly.getClassRoom().getId());
-    pBuilder.add("rowNo",pReadOnly.getRowNo());
-    pBuilder.add("colNo",pReadOnly.getColumnNo());
-    pBuilder.add("studentId",pReadOnly.getStudent().getId());
-    pBuilder.add("examType",pReadOnly.getExamType());
-    pBuilder.add("semesterId",pReadOnly.getSemester().getId());
-    pBuilder.add("groupNo",pReadOnly.getGroupNo());
+  public void build(JsonObjectBuilder pBuilder, SeatPlan pReadOnly, UriInfo pUriInfo,
+      LocalCache pLocalCache) throws Exception {
+    pBuilder.add("id", pReadOnly.getId());
+    pBuilder.add("roomId", pReadOnly.getClassRoom().getId());
+    pBuilder.add("rowNo", pReadOnly.getRowNo());
+    pBuilder.add("colNo", pReadOnly.getColumnNo());
+    pBuilder.add("studentId", pReadOnly.getStudent().getId());
+    pBuilder.add("examType", pReadOnly.getExamType());
+    pBuilder.add("semesterId", pReadOnly.getSemester().getId());
+    pBuilder.add("groupNo", pReadOnly.getGroupNo());
   }
 
-
-  //not needed.
+  // not needed.
   @Override
-  public void build(MutableSeatPlan pMutable, JsonObject pJsonObject, LocalCache pLocalCache) throws Exception {
+  public void build(MutableSeatPlan pMutable, JsonObject pJsonObject, LocalCache pLocalCache)
+      throws Exception {
 
   }
 }

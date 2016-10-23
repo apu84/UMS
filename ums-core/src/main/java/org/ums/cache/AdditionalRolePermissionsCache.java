@@ -1,6 +1,5 @@
 package org.ums.cache;
 
-
 import org.ums.domain.model.immutable.AdditionalRolePermissions;
 import org.ums.domain.model.immutable.Role;
 import org.ums.domain.model.immutable.User;
@@ -14,11 +13,13 @@ import java.util.List;
 import java.util.Set;
 
 public class AdditionalRolePermissionsCache
-    extends ContentCache<AdditionalRolePermissions, MutableAdditionalRolePermissions, Integer, AdditionalRolePermissionsManager>
+    extends
+    ContentCache<AdditionalRolePermissions, MutableAdditionalRolePermissions, Integer, AdditionalRolePermissionsManager>
     implements AdditionalRolePermissionsManager {
   private CacheManager<AdditionalRolePermissions, Integer> mCacheManager;
 
-  public AdditionalRolePermissionsCache(final CacheManager<AdditionalRolePermissions, Integer> pCacheManager) {
+  public AdditionalRolePermissionsCache(
+      final CacheManager<AdditionalRolePermissions, Integer> pCacheManager) {
     mCacheManager = pCacheManager;
   }
 
@@ -38,7 +39,8 @@ public class AdditionalRolePermissionsCache
   }
 
   @Override
-  public List<AdditionalRolePermissions> getUserPermissionsByAssignedUser(String pUserId, String pAssignedBy) {
+  public List<AdditionalRolePermissions> getUserPermissionsByAssignedUser(String pUserId,
+      String pAssignedBy) {
     return getManager().getUserPermissionsByAssignedUser(pUserId, pAssignedBy);
   }
 
@@ -48,7 +50,8 @@ public class AdditionalRolePermissionsCache
   }
 
   @Override
-  public int addPermissions(String pUserId, Set<String> pPermissions, User pAssignedBy, Date pFromDate, Date pToDate) {
+  public int addPermissions(String pUserId, Set<String> pPermissions, User pAssignedBy,
+      Date pFromDate, Date pToDate) {
     return getManager().addPermissions(pUserId, pPermissions, pAssignedBy, pFromDate, pToDate);
   }
 

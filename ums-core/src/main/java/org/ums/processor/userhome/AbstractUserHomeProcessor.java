@@ -1,6 +1,5 @@
 package org.ums.processor.userhome;
 
-
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.ums.domain.model.immutable.Role;
@@ -19,17 +18,18 @@ public abstract class AbstractUserHomeProcessor implements UserHomeProcessor {
     String userId = pCurrentSubject.getPrincipal().toString();
     User user = mUserManager.get(userId);
 
-    if (user != null) {
+    if(user != null) {
       Role userRole = user.getPrimaryRole();
-      if (mAllowedRole.contains(ALLOWED_ROLES_SEPARATOR)) {
+      if(mAllowedRole.contains(ALLOWED_ROLES_SEPARATOR)) {
         String[] allowedRoles = mAllowedRole.split(ALLOWED_ROLES_SEPARATOR);
 
-        for (String allowedRole : allowedRoles) {
-          if (allowedRole.equalsIgnoreCase(userRole.getName())) {
+        for(String allowedRole : allowedRoles) {
+          if(allowedRole.equalsIgnoreCase(userRole.getName())) {
             return true;
           }
         }
-      } else {
+      }
+      else {
         return userRole.getName().equalsIgnoreCase(mAllowedRole);
       }
     }

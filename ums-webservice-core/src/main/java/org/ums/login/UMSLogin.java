@@ -42,16 +42,16 @@ public class UMSLogin {
     builder.add("userName", userName);
     builder.add("doSomething", "soemthing");
 
-    //delete any pre-existing token
+    // delete any pre-existing token
     try {
       BearerAccessToken bearerAccessToken = mBearerAccessTokenManager.getByUser(userName);
       mBearerAccessTokenManager.delete(bearerAccessToken.edit());
-    } catch (Exception e) {
+    } catch(Exception e) {
       mLogger.info("No pre existing token for: " + userName, e);
     }
 
     String newToken = UUID.randomUUID().toString();
-      MutableBearerAccessToken accessToken = new PersistentBearerAccessToken();
+    MutableBearerAccessToken accessToken = new PersistentBearerAccessToken();
     accessToken.setUserId(userName);
     accessToken.setId(newToken);
     accessToken.commit(false);

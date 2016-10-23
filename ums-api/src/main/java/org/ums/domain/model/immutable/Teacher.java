@@ -7,8 +7,8 @@ import org.ums.domain.model.mutable.MutableTeacher;
 
 import java.io.Serializable;
 
-
-public interface Teacher extends Serializable, EditType<MutableTeacher>, LastModifier, Identifier<String> {
+public interface Teacher extends Serializable, EditType<MutableTeacher>, LastModifier,
+    Identifier<String> {
   String getName();
 
   String getDesignationId();

@@ -7,23 +7,39 @@ import org.ums.domain.model.mutable.MutableEmployee;
 
 import java.io.Serializable;
 
-
-public interface Employee extends Serializable,LastModifier,EditType<MutableEmployee>,Identifier<String>{
+public interface Employee extends Serializable, LastModifier, EditType<MutableEmployee>,
+    Identifier<String> {
   String getEmployeeName();
+
   int getDesignation();
+
   String getEmploymentType();
+
   Department getDepartment() throws Exception;
+
   String getFatherName();
+
   String getMotherName();
+
   String getBirthDate();
+
   char getGender();
+
   String getBloodGroup();
+
   String getPresentAddress();
+
   String getPermanentAddress();
+
   String getMobileNumber();
+
   String getPhoneNumber();
+
   String getEmailAddress();
+
   String getJoiningDate();
+
   String getJobPermanentDate();
+
   int getStatus();
 }

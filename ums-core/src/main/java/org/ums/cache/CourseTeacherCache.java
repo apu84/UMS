@@ -7,8 +7,8 @@ import org.ums.manager.CourseTeacherManager;
 
 import java.util.List;
 
-public class CourseTeacherCache
-    extends AssignedTeacherCache<CourseTeacher, MutableCourseTeacher, Integer, CourseTeacherManager>
+public class CourseTeacherCache extends
+    AssignedTeacherCache<CourseTeacher, MutableCourseTeacher, Integer, CourseTeacherManager>
     implements CourseTeacherManager {
 
   public CourseTeacherCache(final CacheManager<CourseTeacher, Integer> pCacheManager) {
@@ -16,7 +16,8 @@ public class CourseTeacherCache
   }
 
   @Override
-  public List<CourseTeacher> getAssignedSections(Integer pSemesterId, String pCourseId, String pTeacherId) {
+  public List<CourseTeacher> getAssignedSections(Integer pSemesterId, String pCourseId,
+      String pTeacherId) {
     return getManager().getAssignedSections(pSemesterId, pCourseId, pTeacherId);
   }
 }

@@ -21,12 +21,12 @@ public class PersistentSeatPlan implements MutableSeatPlan {
   private static SemesterManager sSemesterManager;
   private static SeatPlanManager sSeatPlanManager;
 
-  static{
+  static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sClassRoomManager = applicationContext.getBean("classRoomManager",ClassRoomManager.class);
-    sStudentManager = applicationContext.getBean("studentManager",StudentManager.class);
-    sSemesterManager = applicationContext.getBean("semesterManager",SemesterManager.class);
-    sSeatPlanManager = applicationContext.getBean("seatPlanManager",SeatPlanManager.class);
+    sClassRoomManager = applicationContext.getBean("classRoomManager", ClassRoomManager.class);
+    sStudentManager = applicationContext.getBean("studentManager", StudentManager.class);
+    sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
+    sSeatPlanManager = applicationContext.getBean("seatPlanManager", SeatPlanManager.class);
   }
 
   private int mId;
@@ -44,12 +44,11 @@ public class PersistentSeatPlan implements MutableSeatPlan {
   private Integer mApplicationType;
   private String mLastModified;
 
-
-  public PersistentSeatPlan(){
+  public PersistentSeatPlan() {
 
   }
 
-  public PersistentSeatPlan(final PersistentSeatPlan pPersistentSeatPlan) throws Exception{
+  public PersistentSeatPlan(final PersistentSeatPlan pPersistentSeatPlan) throws Exception {
     mId = pPersistentSeatPlan.getId();
     mClassRoom = pPersistentSeatPlan.getClassRoom();
     mClassRoomId = pPersistentSeatPlan.getClassRoomId();
@@ -65,7 +64,6 @@ public class PersistentSeatPlan implements MutableSeatPlan {
     mApplicationType = pPersistentSeatPlan.getApplicationType();
     mLastModified = pPersistentSeatPlan.getLastModified();
   }
-
 
   @Override
   public void setApplicationType(Integer pApplicationType) {
@@ -148,9 +146,10 @@ public class PersistentSeatPlan implements MutableSeatPlan {
 
   @Override
   public void commit(boolean update) throws Exception {
-    if(update){
+    if(update) {
       sSeatPlanManager.update(this);
-    }else{
+    }
+    else {
       sSeatPlanManager.create(this);
     }
   }
@@ -172,17 +171,19 @@ public class PersistentSeatPlan implements MutableSeatPlan {
 
   @Override
   public ClassRoom getClassRoom() throws Exception {
-    return mClassRoom==null?sClassRoomManager.get(mClassRoomId):sClassRoomManager.validate(mClassRoom);
+    return mClassRoom == null ? sClassRoomManager.get(mClassRoomId) : sClassRoomManager
+        .validate(mClassRoom);
   }
 
   @Override
   public Student getStudent() throws Exception {
-    return mStudent==null? sStudentManager.get(mStudentId):sStudentManager.validate(mStudent);
+    return mStudent == null ? sStudentManager.get(mStudentId) : sStudentManager.validate(mStudent);
   }
 
   @Override
   public Semester getSemester() throws Exception {
-    return mSemester==null? sSemesterManager.get(mSemesterId):sSemesterManager.validate(mSemester);
+    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
+        .validate(mSemester);
   }
 
   @Override

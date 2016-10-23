@@ -1,6 +1,5 @@
 package org.ums.login.helper;
 
-
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.credential.PasswordService;
 import org.apache.shiro.subject.Subject;
@@ -44,22 +43,22 @@ public class LoginHelper {
     String newPassword = pJsonObject.getString("newPassword");
     String confirmNewPassword = pJsonObject.getString("confirmNewPassword");
 
-    if (StringUtils.isEmpty(currentPassword)
-        || StringUtils.isEmpty(newPassword)
-        || StringUtils.isEmpty(confirmNewPassword)
-        || !newPassword.equals(confirmNewPassword)) {
+    if(StringUtils.isEmpty(currentPassword) || StringUtils.isEmpty(newPassword)
+        || StringUtils.isEmpty(confirmNewPassword) || !newPassword.equals(confirmNewPassword)) {
       return Response.notModified().build();
     }
-    if (currentUser.getTemporaryPassword() != null) {
-      if (String.valueOf(String.valueOf(currentUser.getTemporaryPassword())).equals(currentPassword)) {
+    if(currentUser.getTemporaryPassword() != null) {
+      if(String.valueOf(String.valueOf(currentUser.getTemporaryPassword())).equals(currentPassword)) {
         String newToken = changePassword(currentUser, newPassword);
         JsonObjectBuilder builder = Json.createObjectBuilder();
         builder.add("token", newToken);
         return Response.ok(builder.build()).build();
       }
-    } else if (mPasswordService.passwordsMatch(currentPassword, String.valueOf(currentUser.getPassword()))) {
+    }
+    else if(mPasswordService.passwordsMatch(currentPassword,
+        String.valueOf(currentUser.getPassword()))) {
       String newToken = changePassword(currentUser, newPassword);
-//      mAuthenticationRealm.getAuthenticationCache().remove(SecurityUtils.getSubject().getPrincipal());
+      // mAuthenticationRealm.getAuthenticationCache().remove(SecurityUtils.getSubject().getPrincipal());
       JsonObjectBuilder builder = Json.createObjectBuilder();
       builder.add("token", newToken);
       return Response.ok(builder.build()).build();
@@ -75,11 +74,12 @@ public class LoginHelper {
     mutableUser.setTemporaryPassword(null);
     mutableUser.commit(true);
 
-    //delete any pre-existing token
+    // delete any pre-existing token
     try {
-      BearerAccessToken bearerAccessToken = mBearerAccessTokenManager.getByUser(pCurrentUser.getId());
+      BearerAccessToken bearerAccessToken =
+          mBearerAccessTokenManager.getByUser(pCurrentUser.getId());
       mBearerAccessTokenManager.delete(bearerAccessToken.edit());
-    } catch (Exception e) {
+    } catch(Exception e) {
       mLogger.info("No pre existing token for: " + pCurrentUser.getId(), e);
     }
 

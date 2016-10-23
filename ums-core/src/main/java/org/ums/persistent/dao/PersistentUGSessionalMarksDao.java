@@ -8,11 +8,12 @@ import org.ums.domain.model.mutable.MutableUGSessionalMarks;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class PersistentUGSessionalMarksDao extends UGSessionalMarksDaoDecorator {
-  String INSERT_ALL = "INSERT INTO UG_SESSIONAL_MARKS(STUDENT_ID, SEMESTER_ID, COURSE_ID, GL, EXAM_TYPE, REG_TYPE, LAST_MODIFIED)" +
-      " VALUES(?, ?, ?, ?, ?, ?, " + getLastModifiedSql() + ")";
-  String DELETE_BY_STUDENT_SEMESTER = "DELETE FROM UG_SESSIONAL_MARKS WHERE STUDENT_ID = ? AND SEMESTER_ID = ? AND EXAM_TYPE = ? AND STATUS = ?";
+  String INSERT_ALL =
+      "INSERT INTO UG_SESSIONAL_MARKS(STUDENT_ID, SEMESTER_ID, COURSE_ID, GL, EXAM_TYPE, REG_TYPE, LAST_MODIFIED)"
+          + " VALUES(?, ?, ?, ?, ?, ?, " + getLastModifiedSql() + ")";
+  String DELETE_BY_STUDENT_SEMESTER =
+      "DELETE FROM UG_SESSIONAL_MARKS WHERE STUDENT_ID = ? AND SEMESTER_ID = ? AND EXAM_TYPE = ? AND STATUS = ?";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -25,17 +26,14 @@ public class PersistentUGSessionalMarksDao extends UGSessionalMarksDaoDecorator 
     return mJdbcTemplate.batchUpdate(INSERT_ALL, getInsertParamList(pMutableList)).length;
   }
 
-  private List<Object[]> getInsertParamList(List<MutableUGSessionalMarks> pSessionalMarks) throws Exception {
+  private List<Object[]> getInsertParamList(List<MutableUGSessionalMarks> pSessionalMarks)
+      throws Exception {
     List<Object[]> params = new ArrayList<>();
-    for (UGSessionalMarks sessionalMarks : pSessionalMarks) {
-      params.add(new Object[]{
-          sessionalMarks.getStudent().getId(),
-          sessionalMarks.getSemester().getId(),
-          sessionalMarks.getCourse().getId(),
-          sessionalMarks.getGradeLetter(),
-          sessionalMarks.getExamType().getId(),
-          sessionalMarks.getType().getId()
-      });
+    for(UGSessionalMarks sessionalMarks : pSessionalMarks) {
+      params.add(new Object[] {sessionalMarks.getStudent().getId(),
+          sessionalMarks.getSemester().getId(), sessionalMarks.getCourse().getId(),
+          sessionalMarks.getGradeLetter(), sessionalMarks.getExamType().getId(),
+          sessionalMarks.getType().getId()});
     }
 
     return params;
@@ -46,15 +44,13 @@ public class PersistentUGSessionalMarksDao extends UGSessionalMarksDaoDecorator 
     return mJdbcTemplate.batchUpdate(DELETE_BY_STUDENT_SEMESTER, getDeleteParamList(pMutableList)).length;
   }
 
-  private List<Object[]> getDeleteParamList(List<MutableUGSessionalMarks> pSessionalMarkses) throws Exception {
+  private List<Object[]> getDeleteParamList(List<MutableUGSessionalMarks> pSessionalMarkses)
+      throws Exception {
     List<Object[]> params = new ArrayList<>();
-    for (UGSessionalMarks sessionalMarks : pSessionalMarkses) {
-      params.add(new Object[]{
-          sessionalMarks.getStudent().getId(),
-          sessionalMarks.getSemester().getId(),
-          sessionalMarks.getExamType().getId(),
-          sessionalMarks.getType().getId()
-      });
+    for(UGSessionalMarks sessionalMarks : pSessionalMarkses) {
+      params.add(new Object[] {sessionalMarks.getStudent().getId(),
+          sessionalMarks.getSemester().getId(), sessionalMarks.getExamType().getId(),
+          sessionalMarks.getType().getId()});
     }
 
     return params;

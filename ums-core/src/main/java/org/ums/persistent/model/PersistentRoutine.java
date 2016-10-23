@@ -17,7 +17,7 @@ public class PersistentRoutine implements MutableRoutine {
   private static ProgramManager sProgramManager;
   private static RoutineManager sRoutineManager;
 
-  static{
+  static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
     sProgramManager = applicationContext.getBean("programManager", ProgramManager.class);
@@ -42,11 +42,11 @@ public class PersistentRoutine implements MutableRoutine {
   private int mDay;
   private String mStatus;
 
-  public PersistentRoutine(){
+  public PersistentRoutine() {
 
   }
 
-  public PersistentRoutine(final PersistentRoutine pPersistentRoutine) throws Exception{
+  public PersistentRoutine(final PersistentRoutine pPersistentRoutine) throws Exception {
     mId = pPersistentRoutine.getId();
     mSemester = pPersistentRoutine.getSemester();
     mProgram = pPersistentRoutine.getProgram();
@@ -62,33 +62,29 @@ public class PersistentRoutine implements MutableRoutine {
     mCourseNo = pPersistentRoutine.getCourseNo();
     mDuration = pPersistentRoutine.getDuration();
     mRoomNo = pPersistentRoutine.getRoomNo();
-    mDay= pPersistentRoutine.getDay();
+    mDay = pPersistentRoutine.getDay();
     mStatus = pPersistentRoutine.getStatus();
   }
 
-
-
-
   @Override
-  public int getDuration() throws Exception{
-    char[] startTimeArray= mStartTime.toCharArray();
-    startTimeArray[2]=':';
-    String startTimeString= String.valueOf(startTimeArray);
+  public int getDuration() throws Exception {
+    char[] startTimeArray = mStartTime.toCharArray();
+    startTimeArray[2] = ':';
+    String startTimeString = String.valueOf(startTimeArray);
     char[] endTimeArray = mEndTime.toCharArray();
-    endTimeArray[2]=':';
+    endTimeArray[2] = ':';
     String endTimeString = String.valueOf(endTimeArray);
     SimpleDateFormat format = new SimpleDateFormat("h:mm a");
     Date date1 = format.parse(startTimeString);
     Date date2 = format.parse(endTimeString);
     long difference = date2.getTime() - date1.getTime();
-    long diffMinutes = (difference / 60000)/50;
+    long diffMinutes = (difference / 60000) / 50;
     String duration = String.valueOf(diffMinutes);
     char[] durationArray = duration.toCharArray();
 
     mDuration = Integer.valueOf(duration);
     return mDuration;
   }
-
 
   @Override
   public String getStatus() {
@@ -154,7 +150,6 @@ public class PersistentRoutine implements MutableRoutine {
     mRoomNo = pRoomNo;
   }
 
-
   public String getCourseId() {
     return mCourseId;
   }
@@ -175,8 +170,6 @@ public class PersistentRoutine implements MutableRoutine {
   public void setSemester(Semester pSemester) {
     mSemester = pSemester;
   }
-
-
 
   @Override
   public void setSection(String pSection) {
@@ -205,16 +198,17 @@ public class PersistentRoutine implements MutableRoutine {
 
   @Override
   public void commit(boolean update) throws Exception {
-    if (update) {
+    if(update) {
       sRoutineManager.update(this);
-    } else {
+    }
+    else {
       sRoutineManager.create(this);
     }
   }
 
   @Override
   public void delete() throws Exception {
-      sRoutineManager.delete(this);
+    sRoutineManager.delete(this);
   }
 
   @Override
@@ -228,11 +222,10 @@ public class PersistentRoutine implements MutableRoutine {
   }
 
   @Override
-  public Semester getSemester()throws Exception {
-    return mSemester==null?sSemesterManager.get(mSemesterId): sSemesterManager.validate(mSemester);
+  public Semester getSemester() throws Exception {
+    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
+        .validate(mSemester);
   }
-
-
 
   @Override
   public String getSection() {

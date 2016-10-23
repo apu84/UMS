@@ -1,6 +1,5 @@
 package org.ums.persistent.model;
 
-
 import org.springframework.context.ApplicationContext;
 import org.springframework.util.StringUtils;
 import org.ums.context.AppContext;
@@ -61,16 +60,17 @@ public class PersistentUser implements MutableUser {
     mEmployeeId = pPersistentUser.getEmployeeId();
 
     mTemporaryPassword = pPersistentUser.getTemporaryPassword();
-    mPasswordResetToken=pPersistentUser.getPasswordResetToken();
-    mPasswordTokenGenerateDateTime= pPersistentUser.getPasswordTokenGenerateDateTime();
+    mPasswordResetToken = pPersistentUser.getPasswordResetToken();
+    mPasswordTokenGenerateDateTime = pPersistentUser.getPasswordTokenGenerateDateTime();
 
   }
 
   @Override
   public void commit(boolean update) throws Exception {
-    if (update) {
+    if(update) {
       sUserManager.update(this);
-    } else {
+    }
+    else {
       sUserManager.create(this);
     }
   }
@@ -103,8 +103,8 @@ public class PersistentUser implements MutableUser {
   @Override
   public List<Role> getRoles() throws Exception {
     mRoles = new ArrayList<>();
-    if (mRoleIds!=null) {
-      for (Integer roleId : mRoleIds) {
+    if(mRoleIds != null) {
+      for(Integer roleId : mRoleIds) {
         mRoles.add(sRoleManager.get(roleId));
       }
     }
@@ -131,7 +131,6 @@ public class PersistentUser implements MutableUser {
     return new PersistentUser(this);
   }
 
-
   @Override
   public String getId() {
     return mId;
@@ -154,7 +153,7 @@ public class PersistentUser implements MutableUser {
 
   @Override
   public void setPasswordResetToken(String pPasswordResetToken) {
-    mPasswordResetToken=pPasswordResetToken;
+    mPasswordResetToken = pPasswordResetToken;
   }
 
   @Override
@@ -164,7 +163,7 @@ public class PersistentUser implements MutableUser {
 
   @Override
   public void setPasswordTokenGenerateDateTime(Date pDateTime) {
-    mPasswordTokenGenerateDateTime=pDateTime;
+    mPasswordTokenGenerateDateTime = pDateTime;
   }
 
   @Override
@@ -189,7 +188,8 @@ public class PersistentUser implements MutableUser {
 
   @Override
   public Role getPrimaryRole() throws Exception {
-    return mPrimaryRole == null ? sRoleManager.get(mPrimaryRoleId) : sRoleManager.validate(mPrimaryRole);
+    return mPrimaryRole == null ? sRoleManager.get(mPrimaryRoleId) : sRoleManager
+        .validate(mPrimaryRole);
   }
 
   @Override
@@ -234,7 +234,8 @@ public class PersistentUser implements MutableUser {
 
   @Override
   public Department getDepartment() throws Exception {
-    return mDepartment == null ? (StringUtils.isEmpty(mDepartmentId) ? null : sDepartmentManager.get(mDepartmentId)) : sDepartmentManager.validate(mDepartment);
+    return mDepartment == null ? (StringUtils.isEmpty(mDepartmentId) ? null : sDepartmentManager
+        .get(mDepartmentId)) : sDepartmentManager.validate(mDepartment);
   }
 
   @Override

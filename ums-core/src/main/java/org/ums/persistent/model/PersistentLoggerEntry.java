@@ -7,13 +7,13 @@ import org.ums.manager.LoggerEntryManager;
 
 import java.util.Date;
 
-
 public class PersistentLoggerEntry implements MutableLoggerEntry {
   private static LoggerEntryManager sLoggerEntryManager;
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sLoggerEntryManager = applicationContext.getBean("loggerEntryManager", LoggerEntryManager.class);
+    sLoggerEntryManager =
+        applicationContext.getBean("loggerEntryManager", LoggerEntryManager.class);
   }
 
   private String mSql;
@@ -22,8 +22,7 @@ public class PersistentLoggerEntry implements MutableLoggerEntry {
   private Date mTimestamp;
   private Integer mId;
 
-  public PersistentLoggerEntry() {
-  }
+  public PersistentLoggerEntry() {}
 
   public PersistentLoggerEntry(final MutableLoggerEntry pLoggerEntry) {
     setId(pLoggerEntry.getId());
@@ -85,9 +84,10 @@ public class PersistentLoggerEntry implements MutableLoggerEntry {
 
   @Override
   public void commit(boolean update) throws Exception {
-    if (update) {
+    if(update) {
       sLoggerEntryManager.update(this);
-    } else {
+    }
+    else {
       sLoggerEntryManager.delete(this);
     }
   }

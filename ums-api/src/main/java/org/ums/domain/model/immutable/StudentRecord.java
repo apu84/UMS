@@ -10,7 +10,8 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
-public interface StudentRecord extends Serializable, Identifier<Integer>, LastModifier, EditType<MutableStudentRecord> {
+public interface StudentRecord extends Serializable, Identifier<Integer>, LastModifier,
+    EditType<MutableStudentRecord> {
   String getStudentId();
 
   Student getStudent() throws Exception;
@@ -36,16 +37,12 @@ public interface StudentRecord extends Serializable, Identifier<Integer>, LastMo
   Status getStatus();
 
   enum Type {
-    REGULAR("R"),
-    READMISSION_REQUIRED("RR"),
-    READMITTED("RA"),
-    TEMPORARY("T");
+    REGULAR("R"), READMISSION_REQUIRED("RR"), READMITTED("RA"), TEMPORARY("T");
 
-    private static final Map<String, Type> lookup
-        = new HashMap<>();
+    private static final Map<String, Type> lookup = new HashMap<>();
 
     static {
-      for (Type c : EnumSet.allOf(Type.class)) {
+      for(Type c : EnumSet.allOf(Type.class)) {
         lookup.put(c.getValue(), c);
       }
     }
@@ -66,16 +63,12 @@ public interface StudentRecord extends Serializable, Identifier<Integer>, LastMo
   }
 
   enum Status {
-    FAILED("F"),
-    PASSED("P"),
-    UNKNOWN("U"),
-    WITHHELD("W");
+    FAILED("F"), PASSED("P"), UNKNOWN("U"), WITHHELD("W");
 
-    private static final Map<String, Status> lookup
-        = new HashMap<>();
+    private static final Map<String, Status> lookup = new HashMap<>();
 
     static {
-      for (Status c : EnumSet.allOf(Status.class)) {
+      for(Status c : EnumSet.allOf(Status.class)) {
         lookup.put(c.getValue(), c);
       }
     }

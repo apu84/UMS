@@ -1,6 +1,5 @@
 package org.ums.persistent.dao;
 
-
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.persistent.model.PersistentProgram;
@@ -13,7 +12,8 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentProgramDao extends ProgramDaoDecorator {
-  static String SELECT_ALL = "SELECT PROGRAM_ID, TYPE_ID, PROGRAM_SHORT_NAME, PROGRAM_LONG_NAME, DEPT_ID, LAST_MODIFIED FROM MST_PROGRAM ";
+  static String SELECT_ALL =
+      "SELECT PROGRAM_ID, TYPE_ID, PROGRAM_SHORT_NAME, PROGRAM_LONG_NAME, DEPT_ID, LAST_MODIFIED FROM MST_PROGRAM ";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -23,7 +23,7 @@ public class PersistentProgramDao extends ProgramDaoDecorator {
 
   public Program get(final Integer pId) throws Exception {
     String query = SELECT_ALL + "WHERE PROGRAM_ID = ?";
-    return mJdbcTemplate.queryForObject(query, new Object[]{pId}, new ProgramRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new ProgramRowMapper());
   }
 
   public List<Program> getAll() throws Exception {

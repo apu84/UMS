@@ -11,34 +11,38 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
 
-
 @Component
-public class EmployeeBuilder implements Builder<Employee,MutableEmployee> {
+public class EmployeeBuilder implements Builder<Employee, MutableEmployee> {
   @Override
-  public void build(JsonObjectBuilder pBuilder, Employee pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) throws Exception {
-    pBuilder.add("id",pReadOnly.getId());
+  public void build(JsonObjectBuilder pBuilder, Employee pReadOnly, UriInfo pUriInfo,
+      LocalCache pLocalCache) throws Exception {
+    pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("employeeName", pReadOnly.getEmployeeName());
-    pBuilder.add("designation",pReadOnly.getDesignation());
-    pBuilder.add("employmentType",pReadOnly.getEmploymentType());
-    pBuilder.add("deptOfficeId",pReadOnly.getDepartment().getId());
-    pBuilder.add("fatherName",pReadOnly.getFatherName());
-    pBuilder.add("motherName",pReadOnly.getMotherName());
-    pBuilder.add("birthDate",pReadOnly.getBirthDate());
-    pBuilder.add("gender",pReadOnly.getGender());
-    pBuilder.add("bloodGroup",pReadOnly.getBloodGroup());
-    pBuilder.add("presentAddress",pReadOnly.getPresentAddress());
-    pBuilder.add("permanentAddress",pReadOnly.getPermanentAddress());
-    pBuilder.add("mobileNumber",pReadOnly.getMobileNumber());
-    pBuilder.add("phoneNumber",pReadOnly.getPhoneNumber());
-    pBuilder.add("emailAddress",pReadOnly.getEmailAddress()==null?"-":pReadOnly.getEmailAddress());
-    pBuilder.add("joiningDate",pReadOnly.getJoiningDate());
-    pBuilder.add("jobPermanentDate",pReadOnly.getJobPermanentDate()==null?"-":pReadOnly.getJobPermanentDate());
-    pBuilder.add("status",pReadOnly.getStatus());
-    pBuilder.add("self", pUriInfo.getBaseUriBuilder().path("academic").path("semesterWithdraw").path(pReadOnly.getId().toString()).build().toString());
+    pBuilder.add("designation", pReadOnly.getDesignation());
+    pBuilder.add("employmentType", pReadOnly.getEmploymentType());
+    pBuilder.add("deptOfficeId", pReadOnly.getDepartment().getId());
+    pBuilder.add("fatherName", pReadOnly.getFatherName());
+    pBuilder.add("motherName", pReadOnly.getMotherName());
+    pBuilder.add("birthDate", pReadOnly.getBirthDate());
+    pBuilder.add("gender", pReadOnly.getGender());
+    pBuilder.add("bloodGroup", pReadOnly.getBloodGroup());
+    pBuilder.add("presentAddress", pReadOnly.getPresentAddress());
+    pBuilder.add("permanentAddress", pReadOnly.getPermanentAddress());
+    pBuilder.add("mobileNumber", pReadOnly.getMobileNumber());
+    pBuilder.add("phoneNumber", pReadOnly.getPhoneNumber());
+    pBuilder.add("emailAddress",
+        pReadOnly.getEmailAddress() == null ? "-" : pReadOnly.getEmailAddress());
+    pBuilder.add("joiningDate", pReadOnly.getJoiningDate());
+    pBuilder.add("jobPermanentDate",
+        pReadOnly.getJobPermanentDate() == null ? "-" : pReadOnly.getJobPermanentDate());
+    pBuilder.add("status", pReadOnly.getStatus());
+    pBuilder.add("self", pUriInfo.getBaseUriBuilder().path("academic").path("semesterWithdraw")
+        .path(pReadOnly.getId().toString()).build().toString());
   }
 
   @Override
-  public void build(MutableEmployee pMutable, JsonObject pJsonObject, LocalCache pLocalCache) throws Exception {
+  public void build(MutableEmployee pMutable, JsonObject pJsonObject, LocalCache pLocalCache)
+      throws Exception {
     pMutable.setId(pJsonObject.getString("id"));
     pMutable.setEmployeeName(pJsonObject.getString("employeeName"));
     pMutable.setDesignation(Integer.parseInt(pJsonObject.getString("designation")));

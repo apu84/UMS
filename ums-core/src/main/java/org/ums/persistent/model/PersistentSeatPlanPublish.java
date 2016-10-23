@@ -16,10 +16,11 @@ public class PersistentSeatPlanPublish implements MutableSeatPlanPublish {
   private static SemesterManager sSemesterManager;
   private static SeatPlanPublishManager sSeatPlanPublishManager;
 
-  static{
+  static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sSemesterManager = applicationContext.getBean("semesterManager",SemesterManager.class);
-    sSeatPlanPublishManager = applicationContext.getBean("seatPlanPublishManager",SeatPlanPublishManager.class);
+    sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
+    sSeatPlanPublishManager =
+        applicationContext.getBean("seatPlanPublishManager", SeatPlanPublishManager.class);
   }
 
   private Integer mId;
@@ -30,11 +31,12 @@ public class PersistentSeatPlanPublish implements MutableSeatPlanPublish {
   private Integer mIsPublished;
   private String mLastModified;
 
-  public PersistentSeatPlanPublish(){
+  public PersistentSeatPlanPublish() {
 
   }
 
-  public PersistentSeatPlanPublish(final MutableSeatPlanPublish pMutableSeatPlanPublish) throws Exception{
+  public PersistentSeatPlanPublish(final MutableSeatPlanPublish pMutableSeatPlanPublish)
+      throws Exception {
     mId = pMutableSeatPlanPublish.getId();
     mSemester = pMutableSeatPlanPublish.getSemester();
     mSemesterId = pMutableSeatPlanPublish.getSemesterId();
@@ -81,10 +83,10 @@ public class PersistentSeatPlanPublish implements MutableSeatPlanPublish {
 
   @Override
   public void commit(boolean update) throws Exception {
-    if(update){
+    if(update) {
       sSeatPlanPublishManager.update(this);
     }
-    else{
+    else {
       sSeatPlanPublishManager.create(this);
     }
   }
@@ -105,8 +107,9 @@ public class PersistentSeatPlanPublish implements MutableSeatPlanPublish {
   }
 
   @Override
-  public Semester getSemester() throws Exception{
-    return mSemester==null?sSemesterManager.get(mSemesterId):sSemesterManager.validate(mSemester);
+  public Semester getSemester() throws Exception {
+    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
+        .validate(mSemester);
   }
 
   @Override

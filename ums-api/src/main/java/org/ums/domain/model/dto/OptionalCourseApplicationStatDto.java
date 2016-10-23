@@ -1,4 +1,5 @@
 package org.ums.domain.model.dto;
+
 import com.google.gson.Gson;
 
 import java.io.Serializable;

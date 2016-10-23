@@ -1,6 +1,5 @@
 package org.ums.persistent.model;
 
-
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.CourseTeacher;
@@ -8,22 +7,24 @@ import org.ums.domain.model.immutable.Teacher;
 import org.ums.domain.model.mutable.MutableCourseTeacher;
 import org.ums.manager.AssignedTeacherManager;
 
-public class PersistentCourseTeacher extends AbstractAssignedTeacher implements MutableCourseTeacher {
+public class PersistentCourseTeacher extends AbstractAssignedTeacher implements
+    MutableCourseTeacher {
   private static AssignedTeacherManager<CourseTeacher, MutableCourseTeacher, Integer> sCourseTeacherManager;
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sCourseTeacherManager = applicationContext.getBean("courseTeacherManager", AssignedTeacherManager.class);
+    sCourseTeacherManager =
+        applicationContext.getBean("courseTeacherManager", AssignedTeacherManager.class);
   }
 
   private String mSection;
   private Teacher mTeacher;
   private String mTeacherId;
 
-  public PersistentCourseTeacher() {
-  }
+  public PersistentCourseTeacher() {}
 
-  public PersistentCourseTeacher(final PersistentCourseTeacher pPersistentCourseTeacher) throws Exception {
+  public PersistentCourseTeacher(final PersistentCourseTeacher pPersistentCourseTeacher)
+      throws Exception {
     this.mId = pPersistentCourseTeacher.getId();
     this.mSemester = pPersistentCourseTeacher.getSemester();
     this.mTeacher = pPersistentCourseTeacher.getTeacher();
@@ -74,9 +75,10 @@ public class PersistentCourseTeacher extends AbstractAssignedTeacher implements 
 
   @Override
   public void commit(boolean update) throws Exception {
-    if (update) {
+    if(update) {
       sCourseTeacherManager.update(this);
-    } else {
+    }
+    else {
       sCourseTeacherManager.create(this);
     }
   }

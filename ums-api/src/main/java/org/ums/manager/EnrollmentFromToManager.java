@@ -5,6 +5,7 @@ import org.ums.domain.model.immutable.EnrollmentFromTo;
 
 import java.util.List;
 
-public interface EnrollmentFromToManager extends ContentManager<EnrollmentFromTo, MutableEnrollmentFromTo, Integer> {
+public interface EnrollmentFromToManager extends
+    ContentManager<EnrollmentFromTo, MutableEnrollmentFromTo, Integer> {
   List<EnrollmentFromTo> getEnrollmentFromTo(final Integer pProgramId);
 }

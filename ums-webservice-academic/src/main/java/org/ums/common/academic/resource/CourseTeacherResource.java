@@ -1,6 +1,5 @@
 package org.ums.common.academic.resource;
 
-
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -42,90 +41,90 @@ public class CourseTeacherResource extends Resource {
   @GET
   @Path("/programId" + "/{program-id}" + "/semesterId" + "/{semester-id}")
   public JsonObject get(final @Context Request pRequest,
-                        final @PathParam("program-id") Integer pProgramId,
-                        final @PathParam("semester-id") Integer pSemesterId) throws Exception {
+      final @PathParam("program-id") Integer pProgramId,
+      final @PathParam("semester-id") Integer pSemesterId) throws Exception {
     User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
-    return mResourceHelper.getAssignedTeachers(pProgramId, pSemesterId,user.getDepartment().getId(), mUriInfo);
+    return mResourceHelper.getAssignedTeachers(pProgramId, pSemesterId, user.getDepartment()
+        .getId(), mUriInfo);
   }
 
   @GET
   @Path("/programId" + "/{program-id}" + "/semesterId" + "/{semester-id}" + "/year" + "/{year}")
   public JsonObject get(final @Context Request pRequest,
-                        final @PathParam("program-id") Integer pProgramId,
-                        final @PathParam("semester-id") Integer pSemesterId,
-                        final @PathParam("year") Integer pYear) throws Exception {
+      final @PathParam("program-id") Integer pProgramId,
+      final @PathParam("semester-id") Integer pSemesterId, final @PathParam("year") Integer pYear)
+      throws Exception {
     User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
-    return mResourceHelper.getAssignedTeachers(pProgramId, pSemesterId, pYear,user.getDepartment().getId(), mUriInfo);
+    return mResourceHelper.getAssignedTeachers(pProgramId, pSemesterId, pYear, user.getDepartment()
+        .getId(), mUriInfo);
   }
 
   @GET
-  @Path("/programId" + "/{program-id}" + "/semesterId" + "/{semester-id}" + "/year" + "/{year}" + "/semester" + "/{semester}")
+  @Path("/programId" + "/{program-id}" + "/semesterId" + "/{semester-id}" + "/year" + "/{year}"
+      + "/semester" + "/{semester}")
   public JsonObject get(final @Context Request pRequest,
-                        final @PathParam("program-id") Integer pProgramId,
-                        final @PathParam("semester-id") Integer pSemesterId,
-                        final @PathParam("year") Integer pYear,
-                        final @PathParam("semester") Integer pSemester) throws Exception {
+      final @PathParam("program-id") Integer pProgramId,
+      final @PathParam("semester-id") Integer pSemesterId, final @PathParam("year") Integer pYear,
+      final @PathParam("semester") Integer pSemester) throws Exception {
     User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
-    return mResourceHelper.getAssignedTeachers(pProgramId, pSemesterId, pYear, pSemester,user.getDepartment().getId(), mUriInfo);
+    return mResourceHelper.getAssignedTeachers(pProgramId, pSemesterId, pYear, pSemester, user
+        .getDepartment().getId(), mUriInfo);
   }
 
   @GET
-  @Path("/programId" + "/{program-id}" + "/semesterId" + "/{semester-id}" + "/category" + "/{category}")
+  @Path("/programId" + "/{program-id}" + "/semesterId" + "/{semester-id}" + "/category"
+      + "/{category}")
   public JsonObject get(final @Context Request pRequest,
-                        final @PathParam("program-id") Integer pProgramId,
-                        final @PathParam("semester-id") Integer pSemesterId,
-                        final @PathParam("category") String pCategory) throws Exception {
+      final @PathParam("program-id") Integer pProgramId,
+      final @PathParam("semester-id") Integer pSemesterId,
+      final @PathParam("category") String pCategory) throws Exception {
     User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
     return mResourceHelper.getAssignedTeachers(pProgramId, pSemesterId,
-        CourseCategory.get(Integer.parseInt(pCategory)),
-       user.getDepartment().getId(),
-        mUriInfo);
+        CourseCategory.get(Integer.parseInt(pCategory)), user.getDepartment().getId(), mUriInfo);
   }
 
   @GET
-  @Path("/programId" + "/{program-id}" + "/semesterId" + "/{semester-id}" + "/year" + "/{year}" + "/category" + "/{category}")
+  @Path("/programId" + "/{program-id}" + "/semesterId" + "/{semester-id}" + "/year" + "/{year}"
+      + "/category" + "/{category}")
   public JsonObject get(final @Context Request pRequest,
-                        final @PathParam("program-id") Integer pProgramId,
-                        final @PathParam("semester-id") Integer pSemesterId,
-                        final @PathParam("year") Integer pYear,
-                        final @PathParam("category") String pCategory) throws Exception {
+      final @PathParam("program-id") Integer pProgramId,
+      final @PathParam("semester-id") Integer pSemesterId, final @PathParam("year") Integer pYear,
+      final @PathParam("category") String pCategory) throws Exception {
     User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
     return mResourceHelper.getAssignedTeachers(pProgramId, pSemesterId, pYear,
-        CourseCategory.get(Integer.parseInt(pCategory)),
-       user.getDepartment().getId(),
-        mUriInfo);
+        CourseCategory.get(Integer.parseInt(pCategory)), user.getDepartment().getId(), mUriInfo);
   }
 
   @GET
-  @Path("/programId" + "/{program-id}" + "/semesterId" + "/{semester-id}" + "/year" + "/{year}" + "/semester" + "/{semester}" + "/category" + "/{category}")
+  @Path("/programId" + "/{program-id}" + "/semesterId" + "/{semester-id}" + "/year" + "/{year}"
+      + "/semester" + "/{semester}" + "/category" + "/{category}")
   public JsonObject get(final @Context Request pRequest,
-                        final @PathParam("program-id") Integer pProgramId,
-                        final @PathParam("semester-id") Integer pSemesterId,
-                        final @PathParam("year") Integer pYear,
-                        final @PathParam("semester") Integer pSemester,
-                        final @PathParam("category") String pCategory) throws Exception {
+      final @PathParam("program-id") Integer pProgramId,
+      final @PathParam("semester-id") Integer pSemesterId, final @PathParam("year") Integer pYear,
+      final @PathParam("semester") Integer pSemester, final @PathParam("category") String pCategory)
+      throws Exception {
     User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
     return mResourceHelper.getAssignedTeachers(pProgramId, pSemesterId, pYear, pSemester,
-        CourseCategory.get(Integer.parseInt(pCategory)),
-       user.getDepartment().getId(),
-        mUriInfo);
+        CourseCategory.get(Integer.parseInt(pCategory)), user.getDepartment().getId(), mUriInfo);
   }
 
   @GET
-  @Path("/programId" + "/{program-id}" + "/semesterId" + "/{semester-id}" + "/courseId" + "/{courseId}")
+  @Path("/programId" + "/{program-id}" + "/semesterId" + "/{semester-id}" + "/courseId"
+      + "/{courseId}")
   public JsonObject getByCourse(final @Context Request pRequest,
-                                final @PathParam("program-id") Integer pProgramId,
-                                final @PathParam("semester-id") Integer pSemesterId,
-                                final @PathParam("courseId") String pCourseId) throws Exception {
+      final @PathParam("program-id") Integer pProgramId,
+      final @PathParam("semester-id") Integer pSemesterId,
+      final @PathParam("courseId") String pCourseId) throws Exception {
     User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
-    return mResourceHelper.getAssignedTeachers(pProgramId, pSemesterId, pCourseId,user.getDepartment().getId(), mUriInfo);
+    return mResourceHelper.getAssignedTeachers(pProgramId, pSemesterId, pCourseId, user
+        .getDepartment().getId(), mUriInfo);
   }
 
   @GET
   @Path("/{semester-id}" + "/{teacher-id}" + "/course")
   public JsonObject getByCourse(final @Context Request pRequest,
-                                final @PathParam("semester-id") Integer pSemesterId,
-                                final @PathParam("teacher-id") String pTeacherId) throws Exception {
+      final @PathParam("semester-id") Integer pSemesterId,
+      final @PathParam("teacher-id") String pTeacherId) throws Exception {
     return mResourceHelper.getAssignedCourses(pSemesterId, pTeacherId, mUriInfo);
   }
 

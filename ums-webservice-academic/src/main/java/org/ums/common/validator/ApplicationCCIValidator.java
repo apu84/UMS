@@ -24,12 +24,9 @@ public class ApplicationCCIValidator extends AbstractValidator {
 
   @Override
   protected void validateFields(JsonObject pJsonObject) {
-    if(pJsonObject.size()==0){
-      addFieldValidationException("message","Can not save empty data");
+    if(pJsonObject.size() == 0) {
+      addFieldValidationException("message", "Can not save empty data");
     }
   }
-
-
-
 
 }

@@ -9,7 +9,6 @@ import org.ums.manager.ProgramManager;
 import org.ums.manager.SemesterManager;
 import org.ums.manager.SyllabusManager;
 
-
 public class PersistentSyllabus implements MutableSyllabus {
   private static SemesterManager sSemesterManager;
   private static ProgramManager sProgramManager;
@@ -42,9 +41,10 @@ public class PersistentSyllabus implements MutableSyllabus {
 
   @Override
   public void commit(boolean update) throws Exception {
-    if (update) {
+    if(update) {
       sSyllabusManager.update(this);
-    } else {
+    }
+    else {
       sSyllabusManager.create(this);
     }
   }
@@ -66,7 +66,8 @@ public class PersistentSyllabus implements MutableSyllabus {
 
   @Override
   public Semester getSemester() throws Exception {
-    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager.validate(mSemester);
+    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
+        .validate(mSemester);
   }
 
   @Override

@@ -13,68 +13,66 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-
 public class PersistentSemesterWithdrawalLogDao extends SemesterWithdrawalLogDaoDecorator {
 
-  static String SELECT_ALL = "SELECT SWL_ID,SW_ID,EMPLOYEE_ID,ACTION,EVENT_DATE_TIME,LAST_MODIFIED FROM SEMESTER_WITHDRAW_LOG ";
+  static String SELECT_ALL =
+      "SELECT SWL_ID,SW_ID,EMPLOYEE_ID,ACTION,EVENT_DATE_TIME,LAST_MODIFIED FROM SEMESTER_WITHDRAW_LOG ";
 
-  static String INSERT_ONE = "INSERT INTO SEMESTER_WITHDRAW_LOG (SW_ID,EMPLOYEE_ID,ACTION,EVENT_DATE_TIME,LAST_MODIFIED)" +
-      "VALUES (?,?,?,systimestamp,"+getLastModifiedSql()+" )";
-  static String UPDATE_ONE = "UPDATE SEMESTER_WITHDRAW_LOG SET SW_ID=?,EMPLOYEE_ID=?,ACTION=?,EVENT_DATE_TIME=systimestamp,LAST_MODIFIED= "+getLastModifiedSql()+" ";
+  static String INSERT_ONE =
+      "INSERT INTO SEMESTER_WITHDRAW_LOG (SW_ID,EMPLOYEE_ID,ACTION,EVENT_DATE_TIME,LAST_MODIFIED)"
+          + "VALUES (?,?,?,systimestamp," + getLastModifiedSql() + " )";
+  static String UPDATE_ONE =
+      "UPDATE SEMESTER_WITHDRAW_LOG SET SW_ID=?,EMPLOYEE_ID=?,ACTION=?,EVENT_DATE_TIME=systimestamp,LAST_MODIFIED= "
+          + getLastModifiedSql() + " ";
   static String DELETE_ONE = "DELETE FROM SEMESTER_WITHDRAW_LOG ";
 
   private JdbcTemplate mJdbcTemplate;
 
-  public PersistentSemesterWithdrawalLogDao(JdbcTemplate pJdbcTemplate){
+  public PersistentSemesterWithdrawalLogDao(JdbcTemplate pJdbcTemplate) {
     mJdbcTemplate = pJdbcTemplate;
   }
 
   @Override
   public List<SemesterWithdrawalLog> getAll() throws Exception {
     String query = SELECT_ALL;
-    return mJdbcTemplate.query(query,new SemesterWithdrawalLogRowMapper());
+    return mJdbcTemplate.query(query, new SemesterWithdrawalLogRowMapper());
   }
 
   @Override
   public SemesterWithdrawalLog get(Integer pId) throws Exception {
-    String query = SELECT_ALL+" WHERE SWL_ID=?";
-    return mJdbcTemplate.queryForObject(query,new Object[]{pId},new SemesterWithdrawalLogRowMapper());
+    String query = SELECT_ALL + " WHERE SWL_ID=?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId},
+        new SemesterWithdrawalLogRowMapper());
   }
 
   @Override
   public int update(MutableSemesterWithdrawalLog pMutable) throws Exception {
-    String query = UPDATE_ONE+" WHERE SWL_ID=?";
-    return mJdbcTemplate.update(query,
-          pMutable.getSemesterWithdrawal().getId(),
-          pMutable.getEmployeeId(),
-          pMutable.getAction(),
-          pMutable.getId()
-        );
+    String query = UPDATE_ONE + " WHERE SWL_ID=?";
+    return mJdbcTemplate.update(query, pMutable.getSemesterWithdrawal().getId(),
+        pMutable.getEmployeeId(), pMutable.getAction(), pMutable.getId());
   }
 
   @Override
   public int delete(MutableSemesterWithdrawalLog pMutable) throws Exception {
-    String query = DELETE_ONE+" WHERE SWL_ID=?";
-    return mJdbcTemplate.update(query,pMutable.getId());
+    String query = DELETE_ONE + " WHERE SWL_ID=?";
+    return mJdbcTemplate.update(query, pMutable.getId());
   }
 
   @Override
   public int create(MutableSemesterWithdrawalLog pMutable) throws Exception {
     String query = INSERT_ONE;
-    return mJdbcTemplate.update(query,
-          pMutable.getSemesterWithdrawal().getId(),
-          pMutable.getEmployeeId(),
-          pMutable.getAction()
-        );
+    return mJdbcTemplate.update(query, pMutable.getSemesterWithdrawal().getId(),
+        pMutable.getEmployeeId(), pMutable.getAction());
   }
 
   @Override
   public SemesterWithdrawalLog getBySemesterWithdrawalId(int pSemesterWithdrawalId) {
-    String query = SELECT_ALL+" WHERE SWL_ID=?";
-    return mJdbcTemplate.queryForObject(query,new Object[]{pSemesterWithdrawalId},new SemesterWithdrawalLogRowMapper());
+    String query = SELECT_ALL + " WHERE SWL_ID=?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pSemesterWithdrawalId},
+        new SemesterWithdrawalLogRowMapper());
   }
 
-  class SemesterWithdrawalLogRowMapper implements RowMapper<SemesterWithdrawalLog>{
+  class SemesterWithdrawalLogRowMapper implements RowMapper<SemesterWithdrawalLog> {
     @Override
     public SemesterWithdrawalLog mapRow(ResultSet pResultSet, int pI) throws SQLException {
       PersistentSemesterWithdrawalLog pLog = new PersistentSemesterWithdrawalLog();

@@ -2,7 +2,6 @@ package org.ums.security.bearertoken;
 
 public class MessageBean {
 
-
   public static final String STATUS = "status";
   public static final String MESSAGE = "message";
   public static final String FAILURE_REASON = "failureReason";

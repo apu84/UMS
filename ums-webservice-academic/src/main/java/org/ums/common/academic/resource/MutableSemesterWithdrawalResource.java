@@ -10,34 +10,29 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 
-
-
-
 public class MutableSemesterWithdrawalResource extends Resource {
 
   @Autowired
   SemesterWithdrawalResourceHelper mHelper;
 
   @POST
-  public Response createSemesterWithdrawApplication(final JsonObject pJsonObject) throws Exception{
-    return mHelper.post(pJsonObject,mUriInfo);
+  public Response createSemesterWithdrawApplication(final JsonObject pJsonObject) throws Exception {
+    return mHelper.post(pJsonObject, mUriInfo);
   }
 
   @PUT
   @Path(PATH_PARAM_OBJECT_ID)
-  public Response updateSemesterWithdrawApplication(
-      final @PathParam("object-id") int pObjectId,
-      final @Context Request pRequest,
-      final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader,
-      final JsonObject pJsonObject
-  )throws Exception{
+  public Response updateSemesterWithdrawApplication(final @PathParam("object-id") int pObjectId,
+      final @Context Request pRequest, final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader,
+      final JsonObject pJsonObject) throws Exception {
 
-    return mHelper.put(pObjectId,pRequest,pIfMatchHeader,pJsonObject);
+    return mHelper.put(pObjectId, pRequest, pIfMatchHeader, pJsonObject);
   }
 
   @DELETE
   @Path(PATH_PARAM_OBJECT_ID)
-  public Response deleteSemesterWithdrawApplication(final @PathParam("object-id") int  objectId) throws Exception{
+  public Response deleteSemesterWithdrawApplication(final @PathParam("object-id") int objectId)
+      throws Exception {
     return mHelper.delete(objectId);
   }
 }

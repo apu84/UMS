@@ -39,7 +39,6 @@ import java.util.stream.Collectors;
 import java.sql.Time;
 import java.util.stream.Stream;
 
-
 @Component
 public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutine, String> {
 
@@ -67,7 +66,6 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
 
   @Autowired
   private ClassRoutineGenerator mRoutineGenerator;
-
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
@@ -131,7 +129,8 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
     return builder.build();
   }
 
-  public Response post(final int semesterId, final int programId, final int academicYear, final int academicSemester, JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+  public Response post(final int semesterId, final int programId, final int academicYear,
+      final int academicSemester, JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
     MutableRoutine mutableRoutine = new PersistentRoutine();
     MutableSemester semester = new PersistentSemester();
     semester.setId(semesterId);
@@ -145,18 +144,20 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
     getBuilder().build(mutableRoutine, pJsonObject, localCache);
 
     mutableRoutine.commit(false);
-    URI contextURI = pUriInfo.getBaseUriBuilder().path(RoutineResource.class).path(RoutineResource.class, "get").build(mutableRoutine.getId());
+    URI contextURI =
+        pUriInfo.getBaseUriBuilder().path(RoutineResource.class).path(RoutineResource.class, "get")
+            .build(mutableRoutine.getId());
     Response.ResponseBuilder builder = Response.created(contextURI);
     builder.status(Response.Status.CREATED);
     return builder.build();
   }
 
-
-  public JsonObject buildRoutines(final List<Routine> pRoutines, final UriInfo pUriInfo) throws Exception {
+  public JsonObject buildRoutines(final List<Routine> pRoutines, final UriInfo pUriInfo)
+      throws Exception {
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-    for (Routine readOnly : pRoutines) {
+    for(Routine readOnly : pRoutines) {
       children.add(toJson(readOnly, pUriInfo, localCache));
     }
     object.add("entries", children);
@@ -164,12 +165,13 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
     return object.build();
   }
 
-  public JsonObject getRoutineForTeacher(final String teacherId, final Request pRequest, final UriInfo pUriInfo) throws Exception {
+  public JsonObject getRoutineForTeacher(final String teacherId, final Request pRequest,
+      final UriInfo pUriInfo) throws Exception {
     List<Routine> routines = getContentManager().getTeacherRoutine(teacherId);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-    for (Routine routine : routines) {
+    for(Routine routine : routines) {
       children.add(toJson(routine, pUriInfo, localCache));
     }
 
@@ -178,9 +180,9 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
     return object.build();
   }
 
-
-  public void getRoutineReportForTeacher(final OutputStream pOutputStream, final Request pRequest, final UriInfo pUriInfo)throws Exception{
-      mRoutineGenerator.createClassRoutineTeacherReport(pOutputStream);
+  public void getRoutineReportForTeacher(final OutputStream pOutputStream, final Request pRequest,
+      final UriInfo pUriInfo) throws Exception {
+    mRoutineGenerator.createClassRoutineTeacherReport(pOutputStream);
   }
 
   public JsonObject getRoutineForStudent() throws Exception {
@@ -188,15 +190,15 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
     Student student = mStudentManager.get(mStudentId);
     List<Routine> routines = new ArrayList<>();
 
-    try{
-      routines= getContentManager().getStudentRoutine(student);
-    }catch (Exception e){
+    try {
+      routines = getContentManager().getStudentRoutine(student);
+    } catch(Exception e) {
 
     }
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-    for (Routine routine : routines) {
+    for(Routine routine : routines) {
       children.add(toJson(routine, null, localCache));
     }
     object.add("entries", children);
@@ -250,7 +252,6 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
     localCache.invalidate();
     return object.build();
   }
-
 
   @Override
   public RoutineManager getContentManager() {

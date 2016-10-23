@@ -13,17 +13,17 @@ import javax.ws.rs.core.Response;
 /**
  * Created by Ifti on 26-Feb-16.
  */
-public class MutableExamRoutineResource  extends Resource {
+public class MutableExamRoutineResource extends Resource {
 
   @Autowired
   ExamRoutineResourceHelper mResourceHelper;
 
   @PUT
-  @Path( "/semester/{semester-id}/examtype/{exam-type}")
+  @Path("/semester/{semester-id}/examtype/{exam-type}")
   public Response saveExamRoutine(final @PathParam("semester-id") Integer pSemesterId,
-                                    final @PathParam("exam-type") Integer pExamType,
-                                    final JsonObject pJsonObject) throws Exception {
-    return mResourceHelper.save(pJsonObject,pSemesterId,pExamType);
+      final @PathParam("exam-type") Integer pExamType, final JsonObject pJsonObject)
+      throws Exception {
+    return mResourceHelper.save(pJsonObject, pSemesterId, pExamType);
   }
 
 }

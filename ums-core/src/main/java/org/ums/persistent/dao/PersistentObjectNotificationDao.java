@@ -56,11 +56,8 @@ public class PersistentObjectNotificationDao extends NotificationDaoDecorator {
   @Override
   public List<Notification> getNotifications(String pConsumerId, String pNotificationType) {
     Query query = new Query();
-    query.addCriteria(
-        new Criteria().andOperator(
-            Criteria.where("mConsumerId").is(pConsumerId),
-            Criteria.where("mNotificationType").is(pNotificationType))
-    );
+    query.addCriteria(new Criteria().andOperator(Criteria.where("mConsumerId").is(pConsumerId),
+        Criteria.where("mNotificationType").is(pNotificationType)));
     return mMongoOperations.find(query, Notification.class);
   }
 

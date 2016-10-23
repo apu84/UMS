@@ -9,7 +9,8 @@ import org.ums.domain.model.immutable.User;
 import java.util.Date;
 import java.util.Set;
 
-public interface MutableAdditionalRolePermissions extends AdditionalRolePermissions, Mutable, MutableLastModifier, MutableIdentifier<Integer> {
+public interface MutableAdditionalRolePermissions extends AdditionalRolePermissions, Mutable,
+    MutableLastModifier, MutableIdentifier<Integer> {
   void setUser(final User pUser);
 
   void setUserId(final String pUserId);

@@ -11,11 +11,13 @@ import java.util.List;
 /**
  * Created by My Pc on 8/2/2016.
  */
-public class SeatPlanPublishCache extends ContentCache<SeatPlanPublish,MutableSeatPlanPublish,Integer,SeatPlanPublishManager> implements SeatPlanPublishManager{
-  private CacheManager<SeatPlanPublish,Integer> mCacheManager;
+public class SeatPlanPublishCache extends
+    ContentCache<SeatPlanPublish, MutableSeatPlanPublish, Integer, SeatPlanPublishManager>
+    implements SeatPlanPublishManager {
+  private CacheManager<SeatPlanPublish, Integer> mCacheManager;
 
-  public SeatPlanPublishCache(final CacheManager<SeatPlanPublish,Integer> pCacheManager){
-      mCacheManager = pCacheManager;
+  public SeatPlanPublishCache(final CacheManager<SeatPlanPublish, Integer> pCacheManager) {
+    mCacheManager = pCacheManager;
   }
 
   @Override
@@ -25,7 +27,7 @@ public class SeatPlanPublishCache extends ContentCache<SeatPlanPublish,MutableSe
 
   @Override
   protected String getCacheKey(Integer pId) {
-    return CacheUtil.getCacheKey(SeatPlanPublish.class,pId);
+    return CacheUtil.getCacheKey(SeatPlanPublish.class, pId);
   }
 
   @Override

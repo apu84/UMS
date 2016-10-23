@@ -8,15 +8,13 @@ import org.ums.manager.AppSettingManager;
 /**
  * Created by My Pc on 30-Aug-16.
  */
-public class PersistentAppSetting implements MutableAppSetting{
-
+public class PersistentAppSetting implements MutableAppSetting {
 
   private static AppSettingManager sAppSettingManager;
 
-
-  static{
+  static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sAppSettingManager = applicationContext.getBean("appSettingManager",AppSettingManager.class);
+    sAppSettingManager = applicationContext.getBean("appSettingManager", AppSettingManager.class);
   }
 
   private Integer mId;
@@ -26,12 +24,11 @@ public class PersistentAppSetting implements MutableAppSetting{
   private String mDataType;
   private String mLastModified;
 
-
-  public PersistentAppSetting(){
+  public PersistentAppSetting() {
 
   }
 
-  public PersistentAppSetting(final PersistentAppSetting pPersistentAppSetting){
+  public PersistentAppSetting(final PersistentAppSetting pPersistentAppSetting) {
     mId = pPersistentAppSetting.getId();
     mParameterName = pPersistentAppSetting.getParameterName();
     mParameterValue = pPersistentAppSetting.getParameterValue();
@@ -39,7 +36,6 @@ public class PersistentAppSetting implements MutableAppSetting{
     mDataType = pPersistentAppSetting.getDataType();
     mLastModified = pPersistentAppSetting.getLastModified();
   }
-
 
   @Override
   public void setDataType(String pDataType) {
@@ -98,9 +94,10 @@ public class PersistentAppSetting implements MutableAppSetting{
 
   @Override
   public void commit(boolean update) throws Exception {
-    if(update){
+    if(update) {
       sAppSettingManager.update(this);
-    }else{
+    }
+    else {
       sAppSettingManager.create(this);
     }
   }

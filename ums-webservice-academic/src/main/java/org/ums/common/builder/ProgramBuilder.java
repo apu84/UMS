@@ -1,6 +1,5 @@
 package org.ums.common.builder;
 
-
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
@@ -36,7 +35,8 @@ public class ProgramBuilder implements Builder<Program, MutableProgram> {
   }
 
   @Override
-  public void build(MutableProgram pMutable, JsonObject pJsonObject, final LocalCache pLocalCache) throws Exception {
-    //Do nothing
+  public void build(MutableProgram pMutable, JsonObject pJsonObject, final LocalCache pLocalCache)
+      throws Exception {
+    // Do nothing
   }
 }

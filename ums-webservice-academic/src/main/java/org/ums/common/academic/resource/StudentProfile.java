@@ -27,14 +27,14 @@ public class StudentProfile extends Resource {
 
   @PUT
   public Response updateProfile(final @Context Request pRequest,
-                                final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader,
-                                final JsonObject pJsonObject) throws Exception {
+      final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader, final JsonObject pJsonObject)
+      throws Exception {
     String studentId = "";
     Subject subject = SecurityUtils.getSubject();
-    if (subject != null) {
+    if(subject != null) {
       studentId = subject.getPrincipal().toString();
     }
-    if (StringUtils.isEmpty(studentId)) {
+    if(StringUtils.isEmpty(studentId)) {
       return Response.status(Response.Status.NOT_FOUND).build();
     }
     return mResourceHelper.put(studentId, pRequest, pIfMatchHeader, pJsonObject);
@@ -44,10 +44,10 @@ public class StudentProfile extends Resource {
   public Response getProfile(final @Context Request pRequest) throws Exception {
     String studentId = "";
     Subject subject = SecurityUtils.getSubject();
-    if (subject != null) {
+    if(subject != null) {
       studentId = subject.getPrincipal().toString();
     }
-    if (StringUtils.isEmpty(studentId)) {
+    if(StringUtils.isEmpty(studentId)) {
       return Response.status(Response.Status.NOT_FOUND).build();
     }
     return mResourceHelper.get(studentId, pRequest, mUriInfo);

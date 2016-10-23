@@ -53,7 +53,7 @@ public class UserResourceHelper extends ResourceHelper<User, MutableUser, String
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-    for (User user : users) {
+    for(User user : users) {
       children.add(toJson(user, pUriInfo, localCache));
     }
     object.add("entries", children);

@@ -10,15 +10,25 @@ import java.io.Serializable;
 /**
  * Created by My Pc on 5/8/2016.
  */
-public interface SeatPlan extends Serializable,LastModifier,EditType<MutableSeatPlan>,Identifier<Integer> {
+public interface SeatPlan extends Serializable, LastModifier, EditType<MutableSeatPlan>,
+    Identifier<Integer> {
   ClassRoom getClassRoom() throws Exception;
+
   Student getStudent() throws Exception;
+
   Semester getSemester() throws Exception;
+
   int getClassRoomId();
+
   int getRowNo();
+
   int getColumnNo();
+
   int getExamType();
+
   int getGroupNo();
+
   String getExamDate();
+
   Integer getApplicationType();
 }

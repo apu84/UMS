@@ -11,20 +11,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
-
 public class UMSHttpAuthenticationFilter extends BasicHttpAuthenticationFilter {
 
   protected List<String> mPassThrough;
 
   protected PatternMatcher mPathMatcher = new AntPathMatcher();
+
   @Override
-  protected boolean isAccessAllowed(ServletRequest request, ServletResponse
-      response, Object mappedValue) {
+  protected boolean isAccessAllowed(ServletRequest request, ServletResponse response,
+      Object mappedValue) {
     HttpServletRequest httpRequest = WebUtils.toHttp(request);
     String httpMethod = httpRequest.getMethod();
-    //TODO: Make this list of unauthenticated resource configurable
-    return "OPTIONS".equalsIgnoreCase(httpMethod)
-        || isPassThrough(request)
+    // TODO: Make this list of unauthenticated resource configurable
+    return "OPTIONS".equalsIgnoreCase(httpMethod) || isPassThrough(request)
         || super.isAccessAllowed(request, response, mappedValue);
   }
 
@@ -36,8 +35,8 @@ public class UMSHttpAuthenticationFilter extends BasicHttpAuthenticationFilter {
   }
 
   protected boolean isPassThrough(ServletRequest pRequest) {
-    for (String resource : mPassThrough) {
-      if (mPathMatcher.matches(resource, getPathWithinApplication(pRequest))) {
+    for(String resource : mPassThrough) {
+      if(mPathMatcher.matches(resource, getPathWithinApplication(pRequest))) {
         return true;
       }
     }

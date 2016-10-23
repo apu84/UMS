@@ -10,8 +10,9 @@ import org.ums.util.CacheUtil;
 
 import java.util.List;
 
-public class PermissionCache extends ContentCache<Permission, MutablePermission, Integer, PermissionManager>
-    implements PermissionManager {
+public class PermissionCache extends
+    ContentCache<Permission, MutablePermission, Integer, PermissionManager> implements
+    PermissionManager {
   private CacheManager<Permission, Integer> mCacheManager;
 
   public PermissionCache(final CacheManager<Permission, Integer> pCacheManager) {

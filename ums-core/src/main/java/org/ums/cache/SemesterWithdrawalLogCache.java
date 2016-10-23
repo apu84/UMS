@@ -6,12 +6,14 @@ import org.ums.manager.CacheManager;
 import org.ums.manager.SemesterWithdrawalLogManager;
 import org.ums.util.CacheUtil;
 
-
-public class SemesterWithdrawalLogCache extends ContentCache<SemesterWithdrawalLog,MutableSemesterWithdrawalLog,Integer,SemesterWithdrawalLogManager> implements SemesterWithdrawalLogManager {
+public class SemesterWithdrawalLogCache
+    extends
+    ContentCache<SemesterWithdrawalLog, MutableSemesterWithdrawalLog, Integer, SemesterWithdrawalLogManager>
+    implements SemesterWithdrawalLogManager {
 
   CacheManager<SemesterWithdrawalLog, Integer> mCacheManager;
 
-  public SemesterWithdrawalLogCache(CacheManager<SemesterWithdrawalLog, Integer> pCachemanager){
+  public SemesterWithdrawalLogCache(CacheManager<SemesterWithdrawalLog, Integer> pCachemanager) {
     mCacheManager = pCachemanager;
   }
 

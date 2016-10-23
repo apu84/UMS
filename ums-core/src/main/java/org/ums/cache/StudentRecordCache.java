@@ -8,8 +8,9 @@ import org.ums.util.CacheUtil;
 
 import java.util.List;
 
-public class StudentRecordCache extends ContentCache<StudentRecord, MutableStudentRecord, Integer, StudentRecordManager>
-    implements StudentRecordManager {
+public class StudentRecordCache extends
+    ContentCache<StudentRecord, MutableStudentRecord, Integer, StudentRecordManager> implements
+    StudentRecordManager {
   private CacheManager<StudentRecord, Integer> mCacheManager;
 
   public StudentRecordCache(final CacheManager<StudentRecord, Integer> pCacheManager) {
@@ -27,9 +28,10 @@ public class StudentRecordCache extends ContentCache<StudentRecord, MutableStude
   }
 
   @Override
-  public List<StudentRecord> getStudentRecords(Integer pProgramId, Integer pSemesterId) throws Exception {
+  public List<StudentRecord> getStudentRecords(Integer pProgramId, Integer pSemesterId)
+      throws Exception {
     List<StudentRecord> readOnlys = getManager().getStudentRecords(pProgramId, pSemesterId);
-    for (StudentRecord readOnly : readOnlys) {
+    for(StudentRecord readOnly : readOnlys) {
       getCacheManager().put(getCacheKey(readOnly.getId()), readOnly);
     }
     return readOnlys;
@@ -37,39 +39,43 @@ public class StudentRecordCache extends ContentCache<StudentRecord, MutableStude
 
   @Override
   public List<StudentRecord> getStudentRecords(Integer pProgramId, Integer pSemesterId,
-                                               StudentRecord.Type pType) throws Exception {
+      StudentRecord.Type pType) throws Exception {
     List<StudentRecord> readOnlys = getManager().getStudentRecords(pProgramId, pSemesterId, pType);
-    for (StudentRecord readOnly : readOnlys) {
+    for(StudentRecord readOnly : readOnlys) {
       getCacheManager().put(getCacheKey(readOnly.getId()), readOnly);
     }
     return readOnlys;
   }
 
   @Override
-  public List<StudentRecord> getStudentRecords(Integer pProgramId, Integer pSemesterId, Integer pYear,
-                                               Integer pAcademicSemester) throws Exception {
-    List<StudentRecord> readOnlys = getManager().getStudentRecords(pProgramId, pSemesterId, pYear, pAcademicSemester);
-    for (StudentRecord readOnly : readOnlys) {
+  public List<StudentRecord> getStudentRecords(Integer pProgramId, Integer pSemesterId,
+      Integer pYear, Integer pAcademicSemester) throws Exception {
+    List<StudentRecord> readOnlys =
+        getManager().getStudentRecords(pProgramId, pSemesterId, pYear, pAcademicSemester);
+    for(StudentRecord readOnly : readOnlys) {
       getCacheManager().put(getCacheKey(readOnly.getId()), readOnly);
     }
     return readOnlys;
   }
 
   @Override
-  public List<StudentRecord> getStudentRecords(Integer pProgramId, Integer pSemesterId, Integer pYear,
-                                               Integer pAcademicSemester, StudentRecord.Type pType) throws Exception {
-    List<StudentRecord> readOnlys = getManager().getStudentRecords(pProgramId, pSemesterId, pYear, pAcademicSemester, pType);
-    for (StudentRecord readOnly : readOnlys) {
+  public List<StudentRecord> getStudentRecords(Integer pProgramId, Integer pSemesterId,
+      Integer pYear, Integer pAcademicSemester, StudentRecord.Type pType) throws Exception {
+    List<StudentRecord> readOnlys =
+        getManager().getStudentRecords(pProgramId, pSemesterId, pYear, pAcademicSemester, pType);
+    for(StudentRecord readOnly : readOnlys) {
       getCacheManager().put(getCacheKey(readOnly.getId()), readOnly);
     }
     return readOnlys;
   }
 
   @Override
-  public List<StudentRecord> getStudentRecords(String pStudentId, Integer pSemesterId, Integer pYear, Integer pAcademicSemester) throws Exception {
-    List<StudentRecord> readOnlys = getManager().getStudentRecords(pStudentId,pSemesterId,pYear,pAcademicSemester);
-    for(StudentRecord readOnly:readOnlys){
-      getCacheManager().put(getCacheKey(readOnly.getId()),readOnly);
+  public List<StudentRecord> getStudentRecords(String pStudentId, Integer pSemesterId,
+      Integer pYear, Integer pAcademicSemester) throws Exception {
+    List<StudentRecord> readOnlys =
+        getManager().getStudentRecords(pStudentId, pSemesterId, pYear, pAcademicSemester);
+    for(StudentRecord readOnly : readOnlys) {
+      getCacheManager().put(getCacheKey(readOnly.getId()), readOnly);
     }
     return readOnlys;
   }

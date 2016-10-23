@@ -10,5 +10,7 @@ import java.util.List;
  * Created by My Pc on 7/18/2016.
  */
 public interface ApplicationCCIService {
-  List<PersistentApplicationCCI> validateForAnomalies(List<PersistentApplicationCCI> pApplicationCCIs, List<UGRegistrationResult> results, Student pStudent) throws Exception;
+  List<PersistentApplicationCCI> validateForAnomalies(
+      List<PersistentApplicationCCI> pApplicationCCIs, List<UGRegistrationResult> results,
+      Student pStudent) throws Exception;
 }

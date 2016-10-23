@@ -20,23 +20,24 @@ public class SemesterWithdrawalLogResource extends MutableSemesterWithdrawalLogR
   @Autowired
   SemesterWithdrawalLogManager mManager;
 
-
   @GET
   @Path("/all")
-  public JsonObject getAll() throws Exception{
+  public JsonObject getAll() throws Exception {
     return mHelper.getAll(mUriInfo);
   }
 
   @GET
   @Path("/semesterWithdrawalId/{semesterWithdrawalId}")
-  public JsonObject getForStudent(final @Context Request pRequest,final @PathParam("semesterWithdrawalId") int semesterWithdrawalId)throws Exception{
-    return mHelper.getBySemesterWithdrawalId(semesterWithdrawalId,pRequest,mUriInfo);
+  public JsonObject getForStudent(final @Context Request pRequest,
+      final @PathParam("semesterWithdrawalId") int semesterWithdrawalId) throws Exception {
+    return mHelper.getBySemesterWithdrawalId(semesterWithdrawalId, pRequest, mUriInfo);
   }
 
   @GET
   @Path(PATH_PARAM_OBJECT_ID)
-  public Response get(final @Context Request pRequest, final @PathParam("object-id") int pObjectId)throws Exception{
-    return mHelper.get(pObjectId,pRequest,mUriInfo);
+  public Response get(final @Context Request pRequest, final @PathParam("object-id") int pObjectId)
+      throws Exception {
+    return mHelper.get(pObjectId, pRequest, mUriInfo);
   }
 
 }

@@ -15,7 +15,6 @@ import javax.ws.rs.Produces;
 @Path("/mainNavigation")
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
-
 public class MainNavigation extends Resource {
   @Autowired
   MainNavigationHelper mNavigationHelper;

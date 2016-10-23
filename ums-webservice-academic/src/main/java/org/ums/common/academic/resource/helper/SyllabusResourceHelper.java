@@ -44,26 +44,30 @@ public class SyllabusResourceHelper extends ResourceHelper<Syllabus, MutableSyll
     getBuilder().build(mutableSyllabus, pJsonObject, localCache);
     mutableSyllabus.commit(false);
 
-    URI contextURI = pUriInfo.getBaseUriBuilder().path(SyllabusResource.class).path(SyllabusResource.class, "get").build(mutableSyllabus.getId());
+    URI contextURI =
+        pUriInfo.getBaseUriBuilder().path(SyllabusResource.class)
+            .path(SyllabusResource.class, "get").build(mutableSyllabus.getId());
     Response.ResponseBuilder builder = Response.created(contextURI);
     builder.status(Response.Status.CREATED);
 
     return builder.build();
   }
-  public JsonObject buildSyllabuses(final List<Syllabus> pSyllabuses, final UriInfo pUriInfo) throws Exception {
+
+  public JsonObject buildSyllabuses(final List<Syllabus> pSyllabuses, final UriInfo pUriInfo)
+      throws Exception {
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-    for (Syllabus readOnly : pSyllabuses) {
+    for(Syllabus readOnly : pSyllabuses) {
       children.add(toJson(readOnly, pUriInfo, localCache));
     }
     object.add("entries", children);
     localCache.invalidate();
     return object.build();
   }
+
   @Override
   protected String getEtag(Syllabus pReadonly) {
     return pReadonly.getLastModified();
   }
 }
-

@@ -26,5 +26,4 @@ public class DummyConfiguration {
     return new UserDaoImpl(dataSource);
   }
 
-
 }

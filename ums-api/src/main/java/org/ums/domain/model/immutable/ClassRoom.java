@@ -11,16 +11,17 @@ import java.io.Serializable;
 /**
  * Created by Ifti on 13-Feb-16.
  */
-public interface ClassRoom extends Serializable, LastModifier, EditType<MutableClassRoom>, Identifier<Integer> {
+public interface ClassRoom extends Serializable, LastModifier, EditType<MutableClassRoom>,
+    Identifier<Integer> {
   String getRoomNo();
 
   String getDescription();
 
-  int getTotalRow() ;
+  int getTotalRow();
 
   int getTotalColumn();
 
-  int getCapacity() ;
+  int getCapacity();
 
   ClassRoomType getRoomType();
 

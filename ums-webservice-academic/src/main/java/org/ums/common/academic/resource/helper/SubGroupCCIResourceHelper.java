@@ -24,7 +24,8 @@ import java.util.List;
  * Created by My Pc on 7/23/2016.
  */
 @Component
-public class SubGroupCCIResourceHelper extends ResourceHelper<SubGroupCCI, MutableSubGroupCCI, Integer> {
+public class SubGroupCCIResourceHelper extends
+    ResourceHelper<SubGroupCCI, MutableSubGroupCCI, Integer> {
 
   @Autowired
   SubGroupCCIManager mManager;
@@ -35,28 +36,29 @@ public class SubGroupCCIResourceHelper extends ResourceHelper<SubGroupCCI, Mutab
   @Autowired
   SeatPlanManager mSeatPlanManager;
 
-
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
-    //int checkIfThereisAnyRecord = getContentManager().checkOccuranceBySemesterAndExamDate()
+    // int checkIfThereisAnyRecord = getContentManager().checkOccuranceBySemesterAndExamDate()
     return null;
   }
 
-  public Response saveData(Integer pSemesterId,String pExamDate, JsonObject pJsonObject, UriInfo pUriInfo)throws Exception{
-    int checkIfThereIsAnyRecord = getContentManager().checkOccuranceBySemesterAndExamDate(pSemesterId,pExamDate);
-    if(checkIfThereIsAnyRecord>0){
-      getContentManager().deleteBySemesterAndExamDate(pSemesterId,pExamDate);
-      mSeatPlanManager.deleteBySemesterGroupExamTypeAndExamDate(pSemesterId,0,2,pExamDate);
+  public Response saveData(Integer pSemesterId, String pExamDate, JsonObject pJsonObject,
+      UriInfo pUriInfo) throws Exception {
+    int checkIfThereIsAnyRecord =
+        getContentManager().checkOccuranceBySemesterAndExamDate(pSemesterId, pExamDate);
+    if(checkIfThereIsAnyRecord > 0) {
+      getContentManager().deleteBySemesterAndExamDate(pSemesterId, pExamDate);
+      mSeatPlanManager.deleteBySemesterGroupExamTypeAndExamDate(pSemesterId, 0, 2, pExamDate);
     }
 
     List<MutableSubGroupCCI> subGroupCCIs = new ArrayList<>();
     JsonArray entries = pJsonObject.getJsonArray("entries");
 
-    for(int i=0;i<entries.size();i++){
+    for(int i = 0; i < entries.size(); i++) {
       LocalCache localCache = new LocalCache();
       JsonObject jsonObject = entries.getJsonObject(i);
       PersistentSubGroupCCI subGroupCCI = new PersistentSubGroupCCI();
-      getBuilder().build(subGroupCCI,jsonObject,localCache);
+      getBuilder().build(subGroupCCI, jsonObject, localCache);
       subGroupCCIs.add(subGroupCCI);
     }
 
@@ -68,20 +70,22 @@ public class SubGroupCCIResourceHelper extends ResourceHelper<SubGroupCCI, Mutab
     return builder.build();
   }
 
-  public Response deleteBySemesterAndExamDate(Integer pSemesterId,String pExamDate)throws Exception{
-    int i= getContentManager().deleteBySemesterAndExamDate(pSemesterId,pExamDate);
-    mSeatPlanManager.deleteBySemesterGroupExamTypeAndExamDate(pSemesterId,0,2,pExamDate);
+  public Response deleteBySemesterAndExamDate(Integer pSemesterId, String pExamDate)
+      throws Exception {
+    int i = getContentManager().deleteBySemesterAndExamDate(pSemesterId, pExamDate);
+    mSeatPlanManager.deleteBySemesterGroupExamTypeAndExamDate(pSemesterId, 0, 2, pExamDate);
     return Response.noContent().build();
   }
 
-
-  public JsonObject getBySemesterAndExamDate(Integer pSemesterId, String pExamDate, final Request pRequest,final UriInfo pUriInfo)throws Exception{
-    List<SubGroupCCI> subGroupCCIs = getContentManager().getBySemesterAndExamDate(pSemesterId,pExamDate);
+  public JsonObject getBySemesterAndExamDate(Integer pSemesterId, String pExamDate,
+      final Request pRequest, final UriInfo pUriInfo) throws Exception {
+    List<SubGroupCCI> subGroupCCIs =
+        getContentManager().getBySemesterAndExamDate(pSemesterId, pExamDate);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-    for(SubGroupCCI subGroupCCI:subGroupCCIs){
-      children.add(toJson(subGroupCCI,pUriInfo,localCache));
+    for(SubGroupCCI subGroupCCI : subGroupCCIs) {
+      children.add(toJson(subGroupCCI, pUriInfo, localCache));
     }
     object.add("entries", children);
     localCache.invalidate();

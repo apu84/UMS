@@ -10,9 +10,13 @@ import java.io.Serializable;
 /**
  * Created by My Pc on 3/13/2016.
  */
-public interface Parameter extends Serializable,LastModifier,EditType<MutableParameter>,Identifier<String> {
+public interface Parameter extends Serializable, LastModifier, EditType<MutableParameter>,
+    Identifier<String> {
   String getParameter();
+
   String getShortDescription();
+
   String getLongDescription();
+
   int getType();
 }

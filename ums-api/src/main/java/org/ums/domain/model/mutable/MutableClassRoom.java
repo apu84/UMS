@@ -9,25 +9,26 @@ import org.ums.enums.ClassRoomType;
 /**
  * Created by Ifti on 13-Feb-16.
  */
-public interface MutableClassRoom  extends ClassRoom, Mutable, MutableLastModifier, MutableIdentifier<Integer> {
+public interface MutableClassRoom extends ClassRoom, Mutable, MutableLastModifier,
+    MutableIdentifier<Integer> {
 
-    void setRoomNo(final String pRoomNo);
+  void setRoomNo(final String pRoomNo);
 
-    void setDescription(final String pDescription);
+  void setDescription(final String pDescription);
 
-    void setTotalRow(final int pTotalRow ) ;
+  void setTotalRow(final int pTotalRow);
 
-    void setTotalColumn(final int pTotalColumn);
+  void setTotalColumn(final int pTotalColumn);
 
-    void setCapacity(final int pTotalCapacity ) ;
+  void setCapacity(final int pTotalCapacity);
 
-    void setRoomType(final ClassRoomType pRoomType);
+  void setRoomType(final ClassRoomType pRoomType);
 
-     void setDeptId(final String pDeptId);
+  void setDeptId(final String pDeptId);
 
-     void setDept(final Department pDept);
+  void setDept(final Department pDept);
 
-    void setExamSeatPlan(final boolean pExamSeatPlan);
+  void setExamSeatPlan(final boolean pExamSeatPlan);
 
-    void setLastModified(final String pLastModified);
-    }
+  void setLastModified(final String pLastModified);
+}

@@ -16,11 +16,14 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentNotificationDao extends NotificationDaoDecorator {
-  String SELECT_ALL = "SELECT ID, PRODUCER_ID, CONSUMER_ID, NOTIFICATION_TYPE, PAYLOAD, PRODUCED_ON, CONSUMED_ON, LAST_MODIFIED FROM NOTIFICATION ";
-  String INSERT_ALL = "INSERT INTO NOTIFICATION (PRODUCER_ID, CONSUMER_ID, NOTIFICATION_TYPE, PAYLOAD, PRODUCED_ON, LAST_MODIFIED) " +
-      "VALUES (?, ?, ?, ?, SYSDATE, " + getLastModifiedSql() + ")";
-  String UPDATE_ALL = "UPDATE NOTIFICATION SET PRODUCER_ID = ?, CONSUMER_ID = ?, NOTIFICATION_TYPE = ?, PAYLOAD = ?," +
-      "CONSUMED_ON = SYSDATE, LAST_MODIFIED = " + getLastModifiedSql() + " ";
+  String SELECT_ALL =
+      "SELECT ID, PRODUCER_ID, CONSUMER_ID, NOTIFICATION_TYPE, PAYLOAD, PRODUCED_ON, CONSUMED_ON, LAST_MODIFIED FROM NOTIFICATION ";
+  String INSERT_ALL =
+      "INSERT INTO NOTIFICATION (PRODUCER_ID, CONSUMER_ID, NOTIFICATION_TYPE, PAYLOAD, PRODUCED_ON, LAST_MODIFIED) "
+          + "VALUES (?, ?, ?, ?, SYSDATE, " + getLastModifiedSql() + ")";
+  String UPDATE_ALL =
+      "UPDATE NOTIFICATION SET PRODUCER_ID = ?, CONSUMER_ID = ?, NOTIFICATION_TYPE = ?, PAYLOAD = ?,"
+          + "CONSUMED_ON = SYSDATE, LAST_MODIFIED = " + getLastModifiedSql() + " ";
 
   String DELETE_ALL = "DELETE FROM NOTIFICATION ";
 
@@ -45,16 +48,12 @@ public class PersistentNotificationDao extends NotificationDaoDecorator {
     return mJdbcTemplate.batchUpdate(query, getUpdateParamArray(pMutableList)).length;
   }
 
-  private List<Object[]> getUpdateParamArray(List<MutableNotification> pMutableList) throws Exception {
+  private List<Object[]> getUpdateParamArray(List<MutableNotification> pMutableList)
+      throws Exception {
     List<Object[]> params = new ArrayList<>();
-    for (Notification notification : pMutableList) {
-      params.add(new Object[]{
-          notification.getProducerId(),
-          notification.getConsumerId(),
-          notification.getNotificationType(),
-          notification.getPayload(),
-          notification.getId()
-      });
+    for(Notification notification : pMutableList) {
+      params.add(new Object[] {notification.getProducerId(), notification.getConsumerId(),
+          notification.getNotificationType(), notification.getPayload(), notification.getId()});
     }
     return params;
   }
@@ -73,12 +72,9 @@ public class PersistentNotificationDao extends NotificationDaoDecorator {
 
   @Override
   public int create(MutableNotification pNotification) throws Exception {
-    return mJdbcTemplate.update(INSERT_ALL,
-        pNotification.getProducerId(),
-        pNotification.getConsumerId(),
-        pNotification.getNotificationType(),
-        pNotification.getPayload(),
-        mDateFormat.format(pNotification.getProducedOn()),
+    return mJdbcTemplate.update(INSERT_ALL, pNotification.getProducerId(),
+        pNotification.getConsumerId(), pNotification.getNotificationType(),
+        pNotification.getPayload(), mDateFormat.format(pNotification.getProducedOn()),
         mDateFormat.format(pNotification.getConsumedOn()));
 
   }
@@ -91,41 +87,41 @@ public class PersistentNotificationDao extends NotificationDaoDecorator {
   @Override
   public Notification get(String pId) throws Exception {
     String query = SELECT_ALL + " WHERE ID = ?";
-    return mJdbcTemplate.queryForObject(query, new Object[]{pId}, new NotificationRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new NotificationRowMapper());
   }
 
   @Override
   public List<Notification> getNotifications(String pConsumerId, String pNotificationType) {
-    String query = SELECT_ALL + " WHERE CONSUMER_ID = ? AND NOTIFICATION_TYPE = ? ORDER BY PRODUCED_ON DESC";
-    return mJdbcTemplate.query(query, new Object[]{pConsumerId, pNotificationType}, new NotificationRowMapper());
+    String query =
+        SELECT_ALL + " WHERE CONSUMER_ID = ? AND NOTIFICATION_TYPE = ? ORDER BY PRODUCED_ON DESC";
+    return mJdbcTemplate.query(query, new Object[] {pConsumerId, pNotificationType},
+        new NotificationRowMapper());
   }
 
   @Override
   public List<Notification> getNotifications(String pConsumerId, Integer pNumOfLatestNotification) {
-    String query = "SELECT * FROM ("
-        + SELECT_ALL + " WHERE CONSUMER_ID = ? ORDER BY PRODUCED_ON DESC) WHERE ROWNUM <= ?";
-    return mJdbcTemplate.query(query, new Object[]{pConsumerId, pNumOfLatestNotification}, new NotificationRowMapper());
+    String query =
+        "SELECT * FROM (" + SELECT_ALL
+            + " WHERE CONSUMER_ID = ? ORDER BY PRODUCED_ON DESC) WHERE ROWNUM <= ?";
+    return mJdbcTemplate.query(query, new Object[] {pConsumerId, pNumOfLatestNotification},
+        new NotificationRowMapper());
   }
 
-  private List<Object[]> getInsertParamArray(List<MutableNotification> pMutableList) throws Exception {
+  private List<Object[]> getInsertParamArray(List<MutableNotification> pMutableList)
+      throws Exception {
     List<Object[]> params = new ArrayList<>();
-    for (Notification notification : pMutableList) {
-      params.add(new Object[]{
-          notification.getProducerId(),
-          notification.getConsumerId(),
-          notification.getNotificationType(),
-          notification.getPayload()
-      });
+    for(Notification notification : pMutableList) {
+      params.add(new Object[] {notification.getProducerId(), notification.getConsumerId(),
+          notification.getNotificationType(), notification.getPayload()});
     }
     return params;
   }
 
-  private List<Object[]> getDeleteParamArray(List<MutableNotification> pMutableList) throws Exception {
+  private List<Object[]> getDeleteParamArray(List<MutableNotification> pMutableList)
+      throws Exception {
     List<Object[]> params = new ArrayList<>();
-    for (Notification notification : pMutableList) {
-      params.add(new Object[]{
-          notification.getId(),
-      });
+    for(Notification notification : pMutableList) {
+      params.add(new Object[] {notification.getId(),});
     }
     return params;
   }
@@ -140,7 +136,8 @@ public class PersistentNotificationDao extends NotificationDaoDecorator {
       notification.setNotificationType(rs.getString("NOTIFICATION_TYPE"));
       notification.setPayload(rs.getString("PAYLOAD"));
       notification.setProducedOn(rs.getTimestamp("PRODUCED_ON"));
-      notification.setConsumedOn(rs.getObject("CONSUMED_ON") == null ? null : rs.getTimestamp("CONSUMED_ON"));
+      notification.setConsumedOn(rs.getObject("CONSUMED_ON") == null ? null : rs
+          .getTimestamp("CONSUMED_ON"));
       notification.setLastModified(rs.getString("LAST_MODIFIED"));
       AtomicReference<Notification> atomicReference = new AtomicReference<>(notification);
       return atomicReference.get();

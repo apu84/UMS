@@ -23,12 +23,13 @@ public class PersistentApplicationCCI implements MutableApplicationCCI {
   private static CourseManager sCourseManager;
   private static ApplicationCCIManager sApplicationCCIManager;
 
-  static{
+  static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sStudentManager = applicationContext.getBean("studentManager",StudentManager.class);
-    sSemesterManager = applicationContext.getBean("semesterManager",SemesterManager.class);
-    sCourseManager = applicationContext.getBean("courseManager",CourseManager.class);
-    sApplicationCCIManager = applicationContext.getBean("applicationCCIManager",ApplicationCCIManager.class);
+    sStudentManager = applicationContext.getBean("studentManager", StudentManager.class);
+    sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
+    sCourseManager = applicationContext.getBean("courseManager", CourseManager.class);
+    sApplicationCCIManager =
+        applicationContext.getBean("applicationCCIManager", ApplicationCCIManager.class);
   }
 
   private int mId;
@@ -51,11 +52,12 @@ public class PersistentApplicationCCI implements MutableApplicationCCI {
   private String mRoomNo;
   private Integer mRoomId;
 
-  public PersistentApplicationCCI(){
+  public PersistentApplicationCCI() {
 
   }
 
-  public PersistentApplicationCCI(final PersistentApplicationCCI pPersistentApplicationCCI) throws Exception{
+  public PersistentApplicationCCI(final PersistentApplicationCCI pPersistentApplicationCCI)
+      throws Exception {
     mId = pPersistentApplicationCCI.getId();
     mSemester = pPersistentApplicationCCI.getSemester();
     mSemesterId = pPersistentApplicationCCI.getSemesterId();
@@ -77,7 +79,6 @@ public class PersistentApplicationCCI implements MutableApplicationCCI {
     mRoomId = pPersistentApplicationCCI.getRoomId();
   }
 
-
   @Override
   public void setRoomId(Integer pRoomId) {
     mRoomId = pRoomId;
@@ -90,7 +91,7 @@ public class PersistentApplicationCCI implements MutableApplicationCCI {
 
   @Override
   public void setRoomNo(String pRoomNo) {
-    mRoomNo= pRoomNo;
+    mRoomNo = pRoomNo;
   }
 
   @Override
@@ -100,7 +101,7 @@ public class PersistentApplicationCCI implements MutableApplicationCCI {
 
   @Override
   public void setCourseYear(Integer pCourseYear) {
-    mCourseYear=pCourseYear;
+    mCourseYear = pCourseYear;
   }
 
   @Override
@@ -140,21 +141,21 @@ public class PersistentApplicationCCI implements MutableApplicationCCI {
 
   @Override
   public void setMessage(String pMessage) {
-    String message = ""+pMessage;
+    String message = "" + pMessage;
     mMessage = message;
   }
 
   @Override
   public String getMessage() {
-    if(mMessage==null){
-      mMessage="";
+    if(mMessage == null) {
+      mMessage = "";
     }
     return mMessage;
   }
 
   @Override
   public void setExamDate(String pExamDate) {
-    mExamDate=pExamDate;
+    mExamDate = pExamDate;
   }
 
   @Override
@@ -228,18 +229,19 @@ public class PersistentApplicationCCI implements MutableApplicationCCI {
   }
 
   @Override
-  public Semester getSemester() throws Exception{
-    return mSemester==null?sSemesterManager.get(mSemesterId):sSemesterManager.validate(mSemester);
+  public Semester getSemester() throws Exception {
+    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
+        .validate(mSemester);
   }
 
   @Override
   public Student getStudent() throws Exception {
-    return mStudent==null?sStudentManager.get(mStudentId):sStudentManager.validate(mStudent);
+    return mStudent == null ? sStudentManager.get(mStudentId) : sStudentManager.validate(mStudent);
   }
 
   @Override
   public Course getCourse() throws Exception {
-    return mCourse ==null ? sCourseManager.get(mCourseId):sCourseManager.validate(mCourse);
+    return mCourse == null ? sCourseManager.get(mCourseId) : sCourseManager.validate(mCourse);
   }
 
   @Override
@@ -279,9 +281,10 @@ public class PersistentApplicationCCI implements MutableApplicationCCI {
 
   @Override
   public void commit(boolean update) throws Exception {
-    if(update){
+    if(update) {
       sApplicationCCIManager.update(this);
-    }else{
+    }
+    else {
       sApplicationCCIManager.create(this);
     }
   }

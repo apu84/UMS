@@ -1,6 +1,5 @@
 package org.ums.manager;
 
-
 import java.util.List;
 
 public interface ContentManager<R, M, I> {

@@ -29,16 +29,15 @@ public class ProfilePicture extends Resource {
   public Response get(final @Context Request pRequest) throws Exception {
     String userId = "";
     Subject subject = SecurityUtils.getSubject();
-    if (subject != null) {
+    if(subject != null) {
       userId = subject.getPrincipal().toString();
     }
     byte[] imageData;
     try {
       imageData = mBinaryContentManager.get(userId, BinaryContentManager.Domain.PICTURE);
-    } catch (FileNotFoundException fl) {
+    } catch(FileNotFoundException fl) {
       return Response.status(Response.Status.NOT_FOUND).build();
     }
     return Response.ok(new ByteArrayInputStream(imageData)).build();
   }
 }
-

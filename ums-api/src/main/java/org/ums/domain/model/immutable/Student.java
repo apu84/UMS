@@ -12,7 +12,8 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
-public interface Student extends Serializable, EditType<MutableStudent>, Identifier<String>, LastModifier {
+public interface Student extends Serializable, EditType<MutableStudent>, Identifier<String>,
+    LastModifier {
   User getUser();
 
   String getFullName();
@@ -75,23 +76,20 @@ public interface Student extends Serializable, EditType<MutableStudent>, Identif
 
   String getProgramShortName();
 
-  Teacher getAdviser() ;
+  Teacher getAdviser();
 
   StudentStatus getStatus();
 
   enum EnrollmentType {
-    ACTUAL(1),
-    TEMPORARY(0);
+    ACTUAL(1), TEMPORARY(0);
 
-    private static final Map<Integer, EnrollmentType> lookup
-        = new HashMap<>();
+    private static final Map<Integer, EnrollmentType> lookup = new HashMap<>();
 
     static {
-      for (EnrollmentType c : EnumSet.allOf(EnrollmentType.class)) {
+      for(EnrollmentType c : EnumSet.allOf(EnrollmentType.class)) {
         lookup.put(c.getValue(), c);
       }
     }
-
 
     private int typeCode;
 

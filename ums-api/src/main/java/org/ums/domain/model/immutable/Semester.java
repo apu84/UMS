@@ -11,7 +11,8 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
-public interface Semester extends Serializable, EditType<MutableSemester>, LastModifier, Identifier<Integer> {
+public interface Semester extends Serializable, EditType<MutableSemester>, LastModifier,
+    Identifier<Integer> {
 
   String getName() throws Exception;
 
@@ -26,15 +27,12 @@ public interface Semester extends Serializable, EditType<MutableSemester>, LastM
   Status getStatus() throws Exception;
 
   enum Status {
-    ACTIVE(1),
-    INACTIVE(0),
-    NEWLY_CREATED(2);
+    ACTIVE(1), INACTIVE(0), NEWLY_CREATED(2);
 
-    private static final Map<Integer, Status> lookup
-        = new HashMap<>();
+    private static final Map<Integer, Status> lookup = new HashMap<>();
 
     static {
-      for (Status c : EnumSet.allOf(Status.class)) {
+      for(Status c : EnumSet.allOf(Status.class)) {
         lookup.put(c.getValue(), c);
       }
     }

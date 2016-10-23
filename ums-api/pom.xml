@@ -9,4 +9,14 @@
   <artifactId>ums-api</artifactId>
   <version>trunk-SNAPSHOT</version>
   <packaging>jar</packaging>
+  <properties>
+    <main.basedir>${project.parent.basedir}</main.basedir>
+  </properties>
+  <dependencies>
+    <dependency>
+      <groupId>org.ums</groupId>
+      <artifactId>build-tools</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
 </project>

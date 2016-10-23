@@ -20,11 +20,12 @@ public class PersistentSubGroupCCI implements MutableSubGroupCCI {
   private static CourseManager sCourseManager;
   private static SubGroupCCIManager sSubGroupCCIManager;
 
-  static{
+  static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sSemesterManager = applicationContext.getBean("semesterManager",SemesterManager.class);
-    sCourseManager = applicationContext.getBean("courseManager",CourseManager.class);
-    sSubGroupCCIManager = applicationContext.getBean("subGroupCCIManager", SubGroupCCIManager.class);
+    sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
+    sCourseManager = applicationContext.getBean("courseManager", CourseManager.class);
+    sSubGroupCCIManager =
+        applicationContext.getBean("subGroupCCIManager", SubGroupCCIManager.class);
   }
 
   private int mId;
@@ -40,14 +41,14 @@ public class PersistentSubGroupCCI implements MutableSubGroupCCI {
   private String mExamDate;
   private String mLastModified;
 
-  public PersistentSubGroupCCI(){
+  public PersistentSubGroupCCI() {
 
   }
 
-  public PersistentSubGroupCCI(final PersistentSubGroupCCI pPersistentSubGroupCCI)throws Exception{
+  public PersistentSubGroupCCI(final PersistentSubGroupCCI pPersistentSubGroupCCI) throws Exception {
     mId = pPersistentSubGroupCCI.getId();
     mSemester = pPersistentSubGroupCCI.getSemester();
-    mSemesterId  = pPersistentSubGroupCCI.getSemesterId();
+    mSemesterId = pPersistentSubGroupCCI.getSemesterId();
     mSubGroupNo = pPersistentSubGroupCCI.getSubGroupNo();
     mTotalStudent = pPersistentSubGroupCCI.getTotalStudent();
     mCourse = pPersistentSubGroupCCI.getCourse();
@@ -111,10 +112,10 @@ public class PersistentSubGroupCCI implements MutableSubGroupCCI {
 
   @Override
   public void commit(boolean update) throws Exception {
-    if(update){
+    if(update) {
       sSubGroupCCIManager.update(this);
     }
-    else{
+    else {
       sSubGroupCCIManager.create(this);
     }
   }
@@ -126,7 +127,7 @@ public class PersistentSubGroupCCI implements MutableSubGroupCCI {
 
   @Override
   public void setId(Integer pId) {
-    mId=pId;
+    mId = pId;
   }
 
   @Override
@@ -136,7 +137,8 @@ public class PersistentSubGroupCCI implements MutableSubGroupCCI {
 
   @Override
   public Semester getSemester() throws Exception {
-    return mSemester==null?sSemesterManager.get(mSemesterId):sSemesterManager.validate(mSemester);
+    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
+        .validate(mSemester);
   }
 
   @Override
@@ -156,7 +158,7 @@ public class PersistentSubGroupCCI implements MutableSubGroupCCI {
 
   @Override
   public Course getCourse() throws Exception {
-    return mCourse==null?sCourseManager.get(mCourseId):sCourseManager.validate(mCourse);
+    return mCourse == null ? sCourseManager.get(mCourseId) : sCourseManager.validate(mCourse);
   }
 
   @Override

@@ -6,8 +6,9 @@ import org.ums.manager.CacheManager;
 import org.ums.manager.CourseGroupManager;
 import org.ums.util.CacheUtil;
 
-public class CourseGroupCache extends ContentCache<CourseGroup, MutableCourseGroup, Integer, CourseGroupManager>
-    implements CourseGroupManager {
+public class CourseGroupCache extends
+    ContentCache<CourseGroup, MutableCourseGroup, Integer, CourseGroupManager> implements
+    CourseGroupManager {
   private CacheManager<CourseGroup, Integer> mCacheManager;
 
   public CourseGroupCache(final CacheManager<CourseGroup, Integer> pCacheManager) {

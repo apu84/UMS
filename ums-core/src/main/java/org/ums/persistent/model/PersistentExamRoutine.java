@@ -14,9 +14,9 @@ public class PersistentExamRoutine implements MutableExamRoutine {
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sExamRoutineManager = applicationContext.getBean("examRoutineManager", ExamRoutineManager.class);
+    sExamRoutineManager =
+        applicationContext.getBean("examRoutineManager", ExamRoutineManager.class);
   }
-
 
   private List<ExamRoutineDto> mExamRoutine;
   private String mInsertType;
@@ -34,8 +34,7 @@ public class PersistentExamRoutine implements MutableExamRoutine {
   private Integer mCourseSemester;
   private Integer mExamGroup;
 
-  public PersistentExamRoutine() {
-  }
+  public PersistentExamRoutine() {}
 
   @Override
   public void setCourseYear(Integer pCourseYear) {
@@ -100,9 +99,10 @@ public class PersistentExamRoutine implements MutableExamRoutine {
     mExamRoutine = pOriginal.getRoutine();
   }
 
-  public void setExamDateOriginal(String pExamDateOriginal){
+  public void setExamDateOriginal(String pExamDateOriginal) {
     mExamDateOriginal = pExamDateOriginal;
   }
+
   @Override
   public String getExamDateOriginal() {
     return mExamDateOriginal;
@@ -130,16 +130,13 @@ public class PersistentExamRoutine implements MutableExamRoutine {
 
   }
 
-
   @Override
-  public void commit(boolean update) throws Exception {
-  }
+  public void commit(boolean update) throws Exception {}
 
   @Override
   public MutableExamRoutine edit() throws Exception {
     return null;
   }
-
 
   @Override
   public void setTotalStudent(Integer pTotalStudent) {
@@ -162,7 +159,6 @@ public class PersistentExamRoutine implements MutableExamRoutine {
   }
 
   @Override
-
   public Integer getSemesterId() {
     return mSemesterId;
   }
@@ -187,8 +183,6 @@ public class PersistentExamRoutine implements MutableExamRoutine {
     return mExamTypeId;
   }
 
-
-
   @Override
   public void setExamTypeId(Integer mExamTypeId) {
     this.mExamTypeId = mExamTypeId;
@@ -203,7 +197,6 @@ public class PersistentExamRoutine implements MutableExamRoutine {
   public void setExamTypeName(String mExamTypeName) {
     this.mExamTypeName = mExamTypeName;
   }
-
 
   @Override
   public Integer getExamGroup() {

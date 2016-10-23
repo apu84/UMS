@@ -1,6 +1,5 @@
 package org.ums.dummy.shared.dao;
 
-
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.dummy.shared.model.User;
@@ -22,7 +21,7 @@ public class UserRoleDaoImpl {
   public List<UserRole> getRoles(String email) {
     String query = SELECT_ALL + "where email = ?";
     JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-    return jdbcTemplate.query(query, new Object[]{email}, new UserRoleMapper());
+    return jdbcTemplate.query(query, new Object[] {email}, new UserRoleMapper());
   }
 
   public void insertRole(UserRole role) {

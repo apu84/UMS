@@ -9,10 +9,13 @@ import java.util.List;
 /**
  * Created by My Pc on 7/11/2016.
  */
-public class ApplicationCCIDaoDecorator extends ContentDaoDecorator<ApplicationCCI,MutableApplicationCCI,Integer,ApplicationCCIManager> implements ApplicationCCIManager {
+public class ApplicationCCIDaoDecorator extends
+    ContentDaoDecorator<ApplicationCCI, MutableApplicationCCI, Integer, ApplicationCCIManager>
+    implements ApplicationCCIManager {
   @Override
-  public List<ApplicationCCI> getByStudentIdAndSemesterAndType(String pStudentId, int pSemesterId, int pExamType) {
-    return getManager().getByStudentIdAndSemesterAndType(pStudentId,pSemesterId,pExamType);
+  public List<ApplicationCCI> getByStudentIdAndSemesterAndType(String pStudentId, int pSemesterId,
+      int pExamType) {
+    return getManager().getByStudentIdAndSemesterAndType(pStudentId, pSemesterId, pExamType);
   }
 
   @Override
@@ -22,26 +25,29 @@ public class ApplicationCCIDaoDecorator extends ContentDaoDecorator<ApplicationC
 
   @Override
   public List<ApplicationCCI> getBySemesterAndType(int pSemesterId, int pExamType) {
-    return getManager().getBySemesterAndType(pSemesterId,pExamType);
+    return getManager().getBySemesterAndType(pSemesterId, pExamType);
   }
 
   @Override
-  public List<ApplicationCCI> getByProgramAndSemesterAndType(int pProgramId, int pSemesterId, int pExamType) {
-    return getManager().getByProgramAndSemesterAndType(pProgramId,pSemesterId,pExamType);
+  public List<ApplicationCCI> getByProgramAndSemesterAndType(int pProgramId, int pSemesterId,
+      int pExamType) {
+    return getManager().getByProgramAndSemesterAndType(pProgramId, pSemesterId, pExamType);
   }
 
   @Override
   public List<ApplicationCCI> getByStudentIdAndSemester(String pStudentId, int pSemesterId) {
-    return getManager().getByStudentIdAndSemester(pStudentId,pSemesterId);
+    return getManager().getByStudentIdAndSemester(pStudentId, pSemesterId);
   }
 
   @Override
-  public List<ApplicationCCI> getBySemesterAndExamDate(Integer pSemesterId, String pExamDate) throws Exception{
-    return getManager().getBySemesterAndExamDate(pSemesterId,pExamDate);
+  public List<ApplicationCCI> getBySemesterAndExamDate(Integer pSemesterId, String pExamDate)
+      throws Exception {
+    return getManager().getBySemesterAndExamDate(pSemesterId, pExamDate);
   }
 
   @Override
-  public List<ApplicationCCI> getByStudentIdAndSemesterForSeatPlanView(String pStudentId, Integer pSemesterId) {
-    return getManager().getByStudentIdAndSemesterForSeatPlanView(pStudentId,pSemesterId);
+  public List<ApplicationCCI> getByStudentIdAndSemesterForSeatPlanView(String pStudentId,
+      Integer pSemesterId) {
+    return getManager().getByStudentIdAndSemesterForSeatPlanView(pStudentId, pSemesterId);
   }
 }

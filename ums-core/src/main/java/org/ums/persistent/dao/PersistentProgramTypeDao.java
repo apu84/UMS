@@ -1,6 +1,5 @@
 package org.ums.persistent.dao;
 
-
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.persistent.model.PersistentProgramType;
@@ -27,7 +26,7 @@ public class PersistentProgramTypeDao extends ProgramTypeDaoDecorator {
 
   public ProgramType get(final Integer pId) throws Exception {
     String query = SELECT_ALL + "WHERE TYPE_ID = ?";
-    return mJdbcTemplate.queryForObject(query, new Object[]{pId}, new ProgramTypeRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new ProgramTypeRowMapper());
   }
 
   public List<ProgramType> getAll() throws Exception {

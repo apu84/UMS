@@ -1,6 +1,5 @@
 package org.ums.cache;
 
-
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.mutable.MutableSemester;
 import org.ums.enums.ProgramType;
@@ -11,7 +10,8 @@ import org.ums.util.CacheUtil;
 
 import java.util.List;
 
-public class SemesterCache extends ContentCache<Semester, MutableSemester, Integer, SemesterManager> implements SemesterManager {
+public class SemesterCache extends
+    ContentCache<Semester, MutableSemester, Integer, SemesterManager> implements SemesterManager {
   private CacheManager<Semester, Integer> mCacheManager;
 
   public SemesterCache(final CacheManager<Semester, Integer> pCacheManager) {
@@ -39,7 +39,8 @@ public class SemesterCache extends ContentCache<Semester, MutableSemester, Integ
   }
 
   @Override
-  public Semester getSemesterByStatus(ProgramType pProgramType, SemesterStatus status) throws Exception {
+  public Semester getSemesterByStatus(ProgramType pProgramType, SemesterStatus status)
+      throws Exception {
     return getManager().getSemesterByStatus(pProgramType, status);
   }
 

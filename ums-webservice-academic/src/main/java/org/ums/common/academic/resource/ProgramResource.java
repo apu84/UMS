@@ -33,7 +33,8 @@ public class ProgramResource extends Resource {
 
   @GET
   @Path(PATH_PARAM_OBJECT_ID)
-  public Response get(final @Context Request pRequest, final @PathParam("object-id") int pObjectId) throws Exception {
+  public Response get(final @Context Request pRequest, final @PathParam("object-id") int pObjectId)
+      throws Exception {
     return mResourceHelper.get(pObjectId, pRequest, mUriInfo);
   }
 }

@@ -19,8 +19,7 @@ public class FlushCache extends Resource {
   CacheFactory mCacheFactory;
 
   @POST
-  public Response flushCache(final @Context Request pRequest)
-      throws Exception {
+  public Response flushCache(final @Context Request pRequest) throws Exception {
     mCacheFactory.getCacheManager().flushAll();
     return Response.ok().build();
   }

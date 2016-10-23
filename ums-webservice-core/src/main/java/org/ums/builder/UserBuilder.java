@@ -13,18 +13,20 @@ import javax.ws.rs.core.UriInfo;
 @Component
 public class UserBuilder implements Builder<User, MutableUser> {
   @Override
-  public void build(JsonObjectBuilder pBuilder, User pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) throws Exception {
+  public void build(JsonObjectBuilder pBuilder, User pReadOnly, UriInfo pUriInfo,
+      LocalCache pLocalCache) throws Exception {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("name", pReadOnly.getName());
     pBuilder.add("departmentName", pReadOnly.getDepartment().getShortName());
     pBuilder.add("departmentId", pReadOnly.getDepartment().getId());
-    if (!StringUtils.isEmpty(pReadOnly.getEmployeeId())) {
+    if(!StringUtils.isEmpty(pReadOnly.getEmployeeId())) {
       pBuilder.add("employeeId", pReadOnly.getEmployeeId());
     }
   }
 
   @Override
-  public void build(MutableUser pMutable, JsonObject pJsonObject, LocalCache pLocalCache) throws Exception {
+  public void build(MutableUser pMutable, JsonObject pJsonObject, LocalCache pLocalCache)
+      throws Exception {
     // Do Nothing
   }
 }

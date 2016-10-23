@@ -10,8 +10,10 @@ import java.util.List;
 /**
  * Created by Ifti on 08-Jan-16.
  */
-public interface SemesterSyllabusMapManager extends ContentManager<SemesterSyllabusMap, MutableSemesterSyllabusMap, Integer> {
-  public List<SemesterSyllabusMap> getMapsByProgramSemester(final Integer pProgramId, final Integer pSemesterId) throws Exception;
+public interface SemesterSyllabusMapManager extends
+    ContentManager<SemesterSyllabusMap, MutableSemesterSyllabusMap, Integer> {
+  public List<SemesterSyllabusMap> getMapsByProgramSemester(final Integer pProgramId,
+      final Integer pSemesterId) throws Exception;
 
   public SemesterSyllabusMap get(final Integer pMapId) throws Exception;
 
@@ -19,5 +21,6 @@ public interface SemesterSyllabusMapManager extends ContentManager<SemesterSylla
 
   List<Syllabus> getSyllabusForSemester(final Integer pProgramId, final Integer pSemesterId);
 
-  Syllabus getSyllabusForSemester(final Integer pProgramId, final Integer pSemesterId, final Integer pYear, final Integer pSemester);
+  Syllabus getSyllabusForSemester(final Integer pProgramId, final Integer pSemesterId,
+      final Integer pYear, final Integer pSemester);
 }

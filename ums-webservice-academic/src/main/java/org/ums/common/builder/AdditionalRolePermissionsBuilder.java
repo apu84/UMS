@@ -19,22 +19,25 @@ import java.util.List;
 import java.util.Set;
 
 @Component
-public class AdditionalRolePermissionsBuilder implements Builder<AdditionalRolePermissions, MutableAdditionalRolePermissions> {
+public class AdditionalRolePermissionsBuilder implements
+    Builder<AdditionalRolePermissions, MutableAdditionalRolePermissions> {
   @Autowired
   NavigationManager mNavigationManager;
   @Autowired
   DateFormat mDateFormat;
 
   @Override
-  public void build(JsonObjectBuilder pBuilder, AdditionalRolePermissions pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) throws Exception {
+  public void build(JsonObjectBuilder pBuilder, AdditionalRolePermissions pReadOnly,
+      UriInfo pUriInfo, LocalCache pLocalCache) throws Exception {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("userId", pReadOnly.getUserId());
 
     JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
     JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
 
-    List<Navigation> navigationList = mNavigationManager.getByPermissions(pReadOnly.getPermission());
-    for (Navigation navigation : navigationList) {
+    List<Navigation> navigationList =
+        mNavigationManager.getByPermissions(pReadOnly.getPermission());
+    for(Navigation navigation : navigationList) {
       jsonArrayBuilder.add(navigation.getId());
     }
     jsonObjectBuilder.add("entries", jsonArrayBuilder);
@@ -44,24 +47,25 @@ public class AdditionalRolePermissionsBuilder implements Builder<AdditionalRoleP
   }
 
   @Override
-  public void build(MutableAdditionalRolePermissions pMutable, JsonObject pJsonObject, LocalCache pLocalCache) throws Exception {
+  public void build(MutableAdditionalRolePermissions pMutable, JsonObject pJsonObject,
+      LocalCache pLocalCache) throws Exception {
     pMutable.setUserId(pJsonObject.getString("user"));
     pMutable.setAssignedByUserId(SecurityUtils.getSubject().getPrincipal().toString());
-    if (pJsonObject.containsKey("start") && !StringUtils.isEmpty(pJsonObject.getString("start"))) {
+    if(pJsonObject.containsKey("start") && !StringUtils.isEmpty(pJsonObject.getString("start"))) {
       pMutable.setValidFrom(mDateFormat.parse(pJsonObject.getString("start")));
     }
-    if (pJsonObject.containsKey("end") && !StringUtils.isEmpty(pJsonObject.getString("end"))) {
+    if(pJsonObject.containsKey("end") && !StringUtils.isEmpty(pJsonObject.getString("end"))) {
       pMutable.setValidTo(mDateFormat.parse(pJsonObject.getString("end")));
     }
     JsonArray permissions = pJsonObject.getJsonArray("permissions");
     Set<Integer> permissionSet = new HashSet<>();
-    for (int i = 0; i < permissions.size(); i++) {
+    for(int i = 0; i < permissions.size(); i++) {
       permissionSet.add(Integer.parseInt(permissions.getString(i)));
     }
 
     List<Navigation> navigationList = mNavigationManager.getByPermissionsId(permissionSet);
     Set<String> permissionStringSet = new HashSet<>();
-    for (Navigation navigation : navigationList) {
+    for(Navigation navigation : navigationList) {
       permissionStringSet.add(navigation.getPermission());
     }
     pMutable.setPermission(permissionStringSet);

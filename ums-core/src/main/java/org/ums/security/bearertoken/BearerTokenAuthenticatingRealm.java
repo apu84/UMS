@@ -30,7 +30,8 @@ import org.ums.manager.PermissionManager;
 import java.util.*;
 
 public class BearerTokenAuthenticatingRealm extends AuthorizingRealm {
-  private static final Logger mLogger = LoggerFactory.getLogger(BearerTokenAuthenticatingRealm.class);
+  private static final Logger mLogger = LoggerFactory
+      .getLogger(BearerTokenAuthenticatingRealm.class);
 
   @Autowired
   private BearerAccessTokenManager mBearerAccessTokenManager;
@@ -66,16 +67,16 @@ public class BearerTokenAuthenticatingRealm extends AuthorizingRealm {
       RealmSecurityManager manager = (RealmSecurityManager) SecurityUtils.getSecurityManager();
       SimplePrincipalCollection ret = new SimplePrincipalCollection();
       try {
-        for (Realm realm : manager.getRealms()) {
-          if (realm instanceof ProfileRealm) {
+        for(Realm realm : manager.getRealms()) {
+          if(realm instanceof ProfileRealm) {
             String userId = token.getUserId();
-            if (((ProfileRealm) realm).accountExists(userId)) {
+            if(((ProfileRealm) realm).accountExists(userId)) {
               ret.add(userId, realm.getName());
             }
           }
         }
         ret.add(token.getId(), getName());
-      } catch (Exception e) {
+      } catch(Exception e) {
         e.printStackTrace();
       }
 
@@ -94,7 +95,8 @@ public class BearerTokenAuthenticatingRealm extends AuthorizingRealm {
   }
 
   @Override
-  protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken pAuthenticationToken) throws AuthenticationException {
+  protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken pAuthenticationToken)
+      throws AuthenticationException {
     BearerToken token = (BearerToken) pAuthenticationToken;
     String userId = (String) token.getPrincipal();
     String credentials = (String) token.getCredentials();
@@ -105,37 +107,39 @@ public class BearerTokenAuthenticatingRealm extends AuthorizingRealm {
 
     try {
       dbToken = mBearerAccessTokenManager.get(credentials);
-    } catch (Exception e) {
+    } catch(Exception e) {
       mLogger.error("User: " + userId + " Credential: " + credentials + " is invalid");
       throw new AuthenticationException("Not able to find provided bearer access token", e);
     }
 
-    if (tokenIsInvalid(token, dbToken)) {
-      mLogger.error("User: " + token.getPrincipal() + ", Invalid access token: " + token.getCredentials());
+    if(tokenIsInvalid(token, dbToken)) {
+      mLogger.error("User: " + token.getPrincipal() + ", Invalid access token: "
+          + token.getCredentials());
       throw new AuthenticationException("Access denied. Invalid access token");
     }
 
     /**
-     * If difference between current time and last accessed time is less than 15 minutes
-     * or less than some pre-configured time that update last access time. Otherwise throw
-     * an SessionTimeout Exception.
+     * If difference between current time and last accessed time is less than 15 minutes or less
+     * than some pre-configured time that update last access time. Otherwise throw an SessionTimeout
+     * Exception.
      */
-    //Bypassing logout uri.
-    if (!token.getPath().contains(mLogoutUri)) {
+    // Bypassing logout uri.
+    if(!token.getPath().contains(mLogoutUri)) {
       Date currentDate = new Date();
       long diff = currentDate.getTime() - dbToken.getLastAccessTime().getTime();
       long diffMinutes = diff / (60 * 1000);
 
-      if (diffMinutes >= sessionTimeoutInterval && diffMinutes <= sessionTimeout) {
+      if(diffMinutes >= sessionTimeoutInterval && diffMinutes <= sessionTimeout) {
         try {
           MutableBearerAccessToken mutableBearerAccessToken = dbToken.edit();
           mutableBearerAccessToken.commit(true);
-        } catch (Exception e) {
+        } catch(Exception e) {
           throw new AuthenticationException("Failed to update token", e);
         }
 
-      } else if (diffMinutes > sessionTimeout) {
-        if (mLogger.isDebugEnabled()) {
+      }
+      else if(diffMinutes > sessionTimeout) {
+        if(mLogger.isDebugEnabled()) {
           mLogger.debug("Expired access token: " + dbToken.getId());
         }
         throw new AuthenticationException("Expired token");
@@ -145,11 +149,12 @@ public class BearerTokenAuthenticatingRealm extends AuthorizingRealm {
     return new BearerAuthenticationInfo(dbToken);
   }
 
-  //TODO: Move this method to a common place so both the realm can use same authorization base
+  // TODO: Move this method to a common place so both the realm can use same authorization base
   @Override
-  protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) throws AuthorizationException {
-    //null usernames are invalid
-    if (principals == null) {
+  protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals)
+      throws AuthorizationException {
+    // null usernames are invalid
+    if(principals == null) {
       throw new AuthorizationException("PrincipalCollection method argument cannot be null.");
     }
     SimpleAuthorizationInfo info = null;
@@ -158,16 +163,17 @@ public class BearerTokenAuthenticatingRealm extends AuthorizingRealm {
       BearerAccessToken bearerAccessToken = mBearerAccessTokenManager.get(token);
       User user = mUserManager.get(bearerAccessToken.getUserId());
       info = new SimpleAuthorizationInfo(Sets.newHashSet(user.getPrimaryRole().getName()));
-      List<Permission> rolePermissions = mPermissionManager.getPermissionByRole(user.getPrimaryRole());
+      List<Permission> rolePermissions =
+          mPermissionManager.getPermissionByRole(user.getPrimaryRole());
 
       Set<String> permissions = new HashSet<>();
 
-      for (Permission permission : rolePermissions) {
+      for(Permission permission : rolePermissions) {
         permissions.addAll(permission.getPermissions());
       }
 
       info.setStringPermissions(permissions);
-    } catch (Exception e) {
+    } catch(Exception e) {
       throw new AuthorizationException("Invalid access token", e);
     }
     return info;
@@ -182,11 +188,11 @@ public class BearerTokenAuthenticatingRealm extends AuthorizingRealm {
   @SuppressWarnings("unchecked")
   private void deleteTokens(PrincipalCollection principals) {
     Collection<String> tokens = principals.fromRealm(getName());
-    if (tokens != null) {
-      for (String token : tokens) {
+    if(tokens != null) {
+      for(String token : tokens) {
         try {
           mBearerAccessTokenManager.delete(mBearerAccessTokenManager.get(token).edit());
-        } catch (Exception e) {
+        } catch(Exception e) {
           mLogger.error("Failed to delete token: " + token, e);
         }
 

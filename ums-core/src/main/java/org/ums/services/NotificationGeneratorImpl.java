@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-public class NotificationGeneratorImpl implements NotificationGenerator{
+public class NotificationGeneratorImpl implements NotificationGenerator {
   private NotificationManager mNotificationManager;
   private DateFormat dateFormat;
 
@@ -30,7 +30,7 @@ public class NotificationGeneratorImpl implements NotificationGenerator{
 
     List<MutableNotification> notificationList = new ArrayList<>();
 
-    for (String consumer: consumers) {
+    for(String consumer : consumers) {
       MutableNotification notification = new PersistentNotification();
       notification.setId(UUID.randomUUID().toString());
       notification.setProducerId(producer);

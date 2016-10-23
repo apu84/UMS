@@ -1,6 +1,5 @@
 package org.ums.common.academic.resource.helper;
 
-
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.common.EditType;
 import org.ums.domain.model.common.Mutable;
@@ -29,72 +28,75 @@ public abstract class AbstractAssignedTeacherResourceHelper<R extends EditType<M
   }
 
   public JsonObject getAssignedTeachers(final Integer pProgramId, final Integer pSemesterId,
-                                        final String pOfferedBy, final UriInfo pUriInfo) throws Exception {
+      final String pOfferedBy, final UriInfo pUriInfo) throws Exception {
 
-    List<R> assignedTeachers = getContentManager().getAssignedTeachers(pProgramId, pSemesterId, pOfferedBy);
+    List<R> assignedTeachers =
+        getContentManager().getAssignedTeachers(pProgramId, pSemesterId, pOfferedBy);
     return buildJsonResponse(assignedTeachers, pUriInfo);
   }
 
   public JsonObject getAssignedTeachers(final Integer pProgramId, final Integer pSemesterId,
-                                        final Integer pYear,
-                                        final String pOfferedBy,
-                                        final UriInfo pUriInfo) throws Exception {
-    List<R> assignedTeachers = getContentManager().getAssignedTeachers(pProgramId, pSemesterId, pYear, pOfferedBy);
+      final Integer pYear, final String pOfferedBy, final UriInfo pUriInfo) throws Exception {
+    List<R> assignedTeachers =
+        getContentManager().getAssignedTeachers(pProgramId, pSemesterId, pYear, pOfferedBy);
     return buildJsonResponse(assignedTeachers, pUriInfo);
   }
 
   public JsonObject getAssignedTeachers(final Integer pProgramId, final Integer pSemesterId,
-                                        final Integer pYear, final Integer pSemester,
-                                        final String pOfferedBy, final UriInfo pUriInfo) throws Exception {
-    List<R> assignedTeachers = getContentManager().getAssignedTeachers(pProgramId, pSemesterId, pYear, pSemester, pOfferedBy);
+      final Integer pYear, final Integer pSemester, final String pOfferedBy, final UriInfo pUriInfo)
+      throws Exception {
+    List<R> assignedTeachers =
+        getContentManager().getAssignedTeachers(pProgramId, pSemesterId, pYear, pSemester,
+            pOfferedBy);
     return buildJsonResponse(assignedTeachers, pUriInfo);
   }
 
   public JsonObject getAssignedTeachers(final Integer pProgramId, final Integer pSemesterId,
-                                        final CourseCategory pCourseCategory,
-                                        final String pOfferedBy,
-                                        final UriInfo pUriInfo) throws Exception {
-    List<R> assignedTeachers = getContentManager().getAssignedTeachers(pProgramId, pSemesterId, pCourseCategory, pOfferedBy);
+      final CourseCategory pCourseCategory, final String pOfferedBy, final UriInfo pUriInfo)
+      throws Exception {
+    List<R> assignedTeachers =
+        getContentManager().getAssignedTeachers(pProgramId, pSemesterId, pCourseCategory,
+            pOfferedBy);
     return buildJsonResponse(assignedTeachers, pUriInfo);
   }
 
   public JsonObject getAssignedTeachers(final Integer pProgramId, final Integer pSemesterId,
-                                        final String pCourseId,
-                                        final String pOfferedBy,
-                                        final UriInfo pUriInfo) throws Exception {
-    List<R> assignedTeachers = getContentManager().getAssignedTeachers(pProgramId, pSemesterId, pCourseId, pOfferedBy);
+      final String pCourseId, final String pOfferedBy, final UriInfo pUriInfo) throws Exception {
+    List<R> assignedTeachers =
+        getContentManager().getAssignedTeachers(pProgramId, pSemesterId, pCourseId, pOfferedBy);
     return buildJsonResponse(assignedTeachers, pUriInfo);
   }
 
-  public JsonObject getAssignedTeachers(final Integer pProgramId, final Integer pSemesterId, final Integer pYear,
-                                        final CourseCategory pCourseCategory,
-                                        final String pOfferedBy,
-                                        final UriInfo pUriInfo) throws Exception {
-    List<R> assignedTeachers = getContentManager().getAssignedTeachers(pProgramId, pSemesterId, pYear, pCourseCategory, pOfferedBy);
+  public JsonObject getAssignedTeachers(final Integer pProgramId, final Integer pSemesterId,
+      final Integer pYear, final CourseCategory pCourseCategory, final String pOfferedBy,
+      final UriInfo pUriInfo) throws Exception {
+    List<R> assignedTeachers =
+        getContentManager().getAssignedTeachers(pProgramId, pSemesterId, pYear, pCourseCategory,
+            pOfferedBy);
     return buildJsonResponse(assignedTeachers, pUriInfo);
   }
 
-  public JsonObject getAssignedTeachers(final Integer pProgramId, final Integer pSemesterId, final Integer pYear,
-                                        final Integer pSemester,
-                                        final CourseCategory pCourseCategory,
-                                        final String pOfferedBy,
-                                        final UriInfo pUriInfo) throws Exception {
-    List<R> assignedTeachers
-        = getContentManager().getAssignedTeachers(pProgramId, pSemesterId, pYear, pSemester, pCourseCategory, pOfferedBy);
+  public JsonObject getAssignedTeachers(final Integer pProgramId, final Integer pSemesterId,
+      final Integer pYear, final Integer pSemester, final CourseCategory pCourseCategory,
+      final String pOfferedBy, final UriInfo pUriInfo) throws Exception {
+    List<R> assignedTeachers =
+        getContentManager().getAssignedTeachers(pProgramId, pSemesterId, pYear, pSemester,
+            pCourseCategory, pOfferedBy);
     return buildJsonResponse(assignedTeachers, pUriInfo);
   }
 
   public JsonObject getAssignedCourses(final Integer pSemesterId, final String pTeacherId,
-                                       final UriInfo pUriInfo) throws Exception {
+      final UriInfo pUriInfo) throws Exception {
     List<R> assignedTeachers = getContentManager().getAssignedCourses(pSemesterId, pTeacherId);
     return buildJsonResponse(assignedTeachers, pUriInfo);
   }
 
-  protected JsonObject buildJsonResponse(final List<R> pAssignedTeachers, final UriInfo pUriInfo) throws Exception {
+  protected JsonObject buildJsonResponse(final List<R> pAssignedTeachers, final UriInfo pUriInfo)
+      throws Exception {
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-    for (R assignedTeacher : pAssignedTeachers) {
+    for(R assignedTeacher : pAssignedTeachers) {
       children.add(toJson(assignedTeacher, pUriInfo, localCache));
     }
     object.add("entries", children);
