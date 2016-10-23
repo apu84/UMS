@@ -56,7 +56,7 @@ public class CourseMaterialNotifier extends AbstractSectionPermission {
               mUGRegistrationResultManager.getByCourseSemester(Integer.parseInt(semesterId),
                   courseId, CourseRegType.REGULAR);
 
-          for (UGRegistrationResult registrationResult : studentList) {
+          for(UGRegistrationResult registrationResult : studentList) {
             users.add(registrationResult.getStudentId());
           }
         }
