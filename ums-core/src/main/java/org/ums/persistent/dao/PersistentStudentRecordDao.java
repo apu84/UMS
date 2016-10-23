@@ -7,7 +7,6 @@ import org.ums.persistent.model.PersistentStudentRecord;
 import org.ums.decorator.StudentRecordDaoDecorator;
 import org.ums.domain.model.mutable.MutableStudentRecord;
 import org.ums.domain.model.immutable.StudentRecord;
-import sun.misc.resources.Messages_ja;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -150,8 +149,8 @@ public class PersistentStudentRecordDao extends StudentRecordDaoDecorator {
       studentRecord.setSemesterId(rs.getInt("SEMESTER_ID"));
       studentRecord.setYear(rs.getInt("YEAR"));
       studentRecord.setAcademicSemester(rs.getInt("SEMESTER"));
-      studentRecord.setCGPA(rs.getFloat("CGPA"));
-      studentRecord.setGPA(rs.getFloat("GPA"));
+      studentRecord.setCGPA(rs.getDouble("CGPA"));
+      studentRecord.setGPA(rs.getDouble("GPA"));
       studentRecord.setType(StudentRecord.Type.get(rs.getString("TYPE")));
       studentRecord.setStatus(StudentRecord.Status.get(rs.getString("STATUS")));
       studentRecord.setLastModified(rs.getString("LAST_MODIFIED"));
