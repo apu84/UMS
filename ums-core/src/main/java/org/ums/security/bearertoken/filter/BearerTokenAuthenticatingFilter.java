@@ -21,7 +21,7 @@ public final class BearerTokenAuthenticatingFilter extends UMSHttpAuthentication
   private static final String AUTHORIZATION_PARAM = "ums_auth";
   private static final String AUTHORIZATION_SCHEME = "UMSTOKEN";
   private static final String AUTHORIZATION_SCHEME_ALT = "Basic";
-
+  private static final String LOGIN_AS_SEPARATOR = ">";
   private String usernameParam;
   private String passwordParam;
 
@@ -146,7 +146,11 @@ public final class BearerTokenAuthenticatingFilter extends UMSHttpAuthentication
 
   String[] getPrincipalsAndCredentials(String encoded) {
     String decoded = Base64.decodeToString(encoded);
-    return decoded.split(":", 2);
+    String[] decodedArray = decoded.split(":", 2);
+    if (decodedArray[0].contains(LOGIN_AS_SEPARATOR)) {
+      decodedArray[0] = decodedArray[0].split(LOGIN_AS_SEPARATOR)[1];
+    }
+    return decodedArray;
   }
 
   String getUsername(ServletRequest request) {

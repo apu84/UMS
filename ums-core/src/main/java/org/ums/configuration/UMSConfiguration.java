@@ -20,6 +20,9 @@ public class UMSConfiguration {
   @Value("${pollingInterval}")
   private int mPollingInterval;
 
+  @Value("${admin.user}")
+  private String mAdminUser;
+
   public boolean isOwnerOnlyModification() {
     return mOwnerOnlyModification;
   }
@@ -42,5 +45,9 @@ public class UMSConfiguration {
 
   public int getPollingInterval() {
     return mPollingInterval;
+  }
+
+  public String getAdminUser() {
+    return mAdminUser;
   }
 }
