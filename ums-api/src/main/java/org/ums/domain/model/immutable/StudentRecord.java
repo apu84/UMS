@@ -37,10 +37,7 @@ public interface StudentRecord extends Serializable, Identifier<Integer>, LastMo
   Status getStatus();
 
   enum Type {
-    REGULAR("R"),
-    READMISSION_REQUIRED("RR"),
-    READMITTED("RA"),
-    TEMPORARY("T");
+    REGULAR("R"), READMISSION_REQUIRED("RR"), READMITTED("RA"), TEMPORARY("T");
 
     private static final Map<String, Type> lookup = new HashMap<>();
 
@@ -66,10 +63,7 @@ public interface StudentRecord extends Serializable, Identifier<Integer>, LastMo
   }
 
   enum Status {
-    FAILED("F"),
-    PASSED("P"),
-    UNKNOWN("U"),
-    WITHHELD("W");
+    FAILED("F"), PASSED("P"), UNKNOWN("U"), WITHHELD("W");
 
     private static final Map<String, Status> lookup = new HashMap<>();
 

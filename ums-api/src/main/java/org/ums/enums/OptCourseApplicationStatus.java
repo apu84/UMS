@@ -1,8 +1,7 @@
 package org.ums.enums;
 
 public enum OptCourseApplicationStatus {
-  APPLIED(0, "Saved"),
-  APPROVED(1, "Submitted");
+  APPLIED(0, "Saved"), APPROVED(1, "Submitted");
 
   private String label;
   private int id;

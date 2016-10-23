@@ -5,9 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum ClassRoomType {
-  THEORY(1),
-  SESSIONAL(2),
-  NONE(0);
+  THEORY(1), SESSIONAL(2), NONE(0);
 
   private static final Map<Integer, ClassRoomType> lookup = new HashMap<>();
 

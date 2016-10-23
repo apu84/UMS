@@ -8,9 +8,7 @@ import java.util.Map;
  * Created by Ifti on 08-Jan-16.
  */
 public enum CourseCategory {
-  MANDATORY(1),
-  OPTIONAL(2),
-  NONE(0);
+  MANDATORY(1), OPTIONAL(2), NONE(0);
 
   private static final Map<Integer, CourseCategory> lookup = new HashMap<>();
 

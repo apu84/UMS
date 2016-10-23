@@ -10,9 +10,8 @@ import java.util.Map;
 
 public enum ExamType {
 
-  SEMESTER_FINAL(1, "Semester Final"),
-  CLEARANCE_CARRY_IMPROVEMENT(2, "Carry/Clearance/Improvement"),
-  SEMESTER_FINAL_CIVIL_SPECIAL(3, "Civil Final");
+  SEMESTER_FINAL(1, "Semester Final"), CLEARANCE_CARRY_IMPROVEMENT(2, "Carry/Clearance/Improvement"), SEMESTER_FINAL_CIVIL_SPECIAL(
+      3, "Civil Final");
 
   private String label;
   private int id;
@@ -22,16 +21,13 @@ public enum ExamType {
     this.label = label;
   }
 
-
-  private static final Map<Integer, ExamType> lookup
-      = new HashMap<>();
+  private static final Map<Integer, ExamType> lookup = new HashMap<>();
 
   static {
-    for (ExamType c : EnumSet.allOf(ExamType.class)) {
+    for(ExamType c : EnumSet.allOf(ExamType.class)) {
       lookup.put(c.getId(), c);
     }
   }
-
 
   public static ExamType get(final int pId) {
     return lookup.get(pId);
@@ -44,6 +40,5 @@ public enum ExamType {
   public int getId() {
     return this.id;
   }
-
 
 }

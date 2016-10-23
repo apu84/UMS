@@ -7,10 +7,7 @@ public final class Messages {
   private Messages() {}
 
   public enum Status {
-    OK("ok"),
-    FAILED("nope"),
-    UNAUTHORIZED("nopeNopeNope"),
-    EXPIRED_TOKEN("expired_token");
+    OK("ok"), FAILED("nope"), UNAUTHORIZED("nopeNopeNope"), EXPIRED_TOKEN("expired_token");
 
     private final String text;
 
@@ -26,12 +23,8 @@ public final class Messages {
   }
 
   public enum Login {
-    NO_SUCH_USER("noSuchUser"),
-    BAD_PASSWORD("badPassword"),
-    ACCOUNT_LOCKED("accountLocked"),
-    ACCT_DISABLE("accountDisabled"),
-    MANY_ATTEMPT("tooManyAttempts"),
-    INVALID_DATA("invalidData");
+    NO_SUCH_USER("noSuchUser"), BAD_PASSWORD("badPassword"), ACCOUNT_LOCKED("accountLocked"), ACCT_DISABLE(
+        "accountDisabled"), MANY_ATTEMPT("tooManyAttempts"), INVALID_DATA("invalidData");
 
     private final String text;
 
@@ -69,13 +62,9 @@ public final class Messages {
   }
 
   public enum Register {
-    ALREADY_USER("alreadyUser"),
-    BAD_EMAIL_ADDRESS("badEmailAdd"),
-    BAD_PASSWORD("badPassword"),
-    PASSWORDS_MATCH("passwordMatch"),
-    INVALID_PHONE("badPhoneNum"),
-    INVALID_DATA("invalidData"),
-    NO_SUCH_MEMBER("superForgot");
+    ALREADY_USER("alreadyUser"), BAD_EMAIL_ADDRESS("badEmailAdd"), BAD_PASSWORD("badPassword"), PASSWORDS_MATCH(
+        "passwordMatch"), INVALID_PHONE("badPhoneNum"), INVALID_DATA("invalidData"), NO_SUCH_MEMBER(
+        "superForgot");
 
     private final String text;
 
@@ -90,11 +79,8 @@ public final class Messages {
   }
 
   public enum Activate {
-    CODE_EXPIRED("expiredCode"),
-    NO_SUCH_USER("noSuchUser"),
-    BAD_PASSWORD("badPassword"),
-    PASSWORDS_MATCH("passwordMatch"),
-    INVALID_DATA("invalidData");
+    CODE_EXPIRED("expiredCode"), NO_SUCH_USER("noSuchUser"), BAD_PASSWORD("badPassword"), PASSWORDS_MATCH(
+        "passwordMatch"), INVALID_DATA("invalidData");
 
     private final String text;
 

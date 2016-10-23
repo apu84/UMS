@@ -9,9 +9,7 @@ import java.util.Map;
  */
 public enum UserRole {
 
-  HEAD(1, "Head"),
-  COE(2, "CoE"),
-  VC(3, "VC");
+  HEAD(1, "Head"), COE(2, "CoE"), VC(3, "VC");
 
   private String label;
   private int id;
