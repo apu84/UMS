@@ -706,6 +706,7 @@ module ums {
     private resetClassRoutine():void{
       this.$scope.routineArr=angular.copy(this.$scope.tmpRoutineArr);
       this.$scope.showSaveButton=false;
+      this.$scope.showResetButton=false;
     }
 
     private resetDivs() {

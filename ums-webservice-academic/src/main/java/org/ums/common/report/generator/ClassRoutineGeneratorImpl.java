@@ -136,7 +136,7 @@ public class ClassRoutineGeneratorImpl implements ClassRoutineGenerator {
     paragraph.setAlignment(Element.ALIGN_CENTER);
     document.add(paragraph);
 
-    paragraph = new Paragraph("Load Schedule ("+semester.getName()+")",headingFont);
+    paragraph = new Paragraph("Class Schedule ("+semester.getName()+")",headingFont);
     paragraph.setAlignment(Element.ALIGN_CENTER);
 
     document.add(paragraph);
@@ -185,7 +185,7 @@ public class ClassRoutineGeneratorImpl implements ClassRoutineGenerator {
         timeInitializer =  new Time(timeFormat.parse(appSettingMap.get("class start time")).getTime());
 
         while(true){
-          if(timeInitializer.equals(endTime)){
+          if(timeInitializer.getTime()>=endTime.getTime()){
             break;
           }else{
             if(routines.size()!=0){
