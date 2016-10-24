@@ -4,12 +4,15 @@ package org.ums.enums;
  * Created by ikh on 4/29/2016.
  */
 public enum CourseMarksSubmissionStatus {
-  NOT_SUBMITTED(0, "Not Submitted"), WAITING_FOR_SCRUTINY(1, "Waiting for Scrutiny"), REQUESTED_FOR_RECHECK_BY_SCRUTINIZER(
-      2, "Requested for recheck by Scrutinizer"), WAITING_FOR_HEAD_APPROVAL(3,
-      "Waiting for Head's Approval"), REQUESTED_FOR_RECHECK_BY_HEAD(4,
-      "Requested for recheck by Head"), WAITING_FOR_COE_APPROVAL(5, "Waiting for CoE's Approval"), REQUESTED_FOR_RECHECK_BY_COE(
-      6, "Requested for recheck by CoE"), ACCEPTED_BY_COE(7, "Accepted by CoE"), WAITING_FOR_RECHECK_REQUEST_APPROVAL(
-      8, "Waiting for recheck request approval");
+  NOT_SUBMITTED(0, "Not Submitted"),
+  WAITING_FOR_SCRUTINY(1, "Waiting for Scrutiny"),
+  REQUESTED_FOR_RECHECK_BY_SCRUTINIZER(2, "Requested for recheck by Scrutinizer"),
+  WAITING_FOR_HEAD_APPROVAL(3, "Waiting for Head's Approval"),
+  REQUESTED_FOR_RECHECK_BY_HEAD(4, "Requested for recheck by Head"),
+  WAITING_FOR_COE_APPROVAL(5, "Waiting for CoE's Approval"),
+  REQUESTED_FOR_RECHECK_BY_COE(6, "Requested for recheck by CoE"),
+  ACCEPTED_BY_COE(7, "Accepted by CoE"),
+  WAITING_FOR_RECHECK_REQUEST_APPROVAL(8, "Waiting for recheck request approval");
 
   private String label;
   private int id;

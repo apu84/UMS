@@ -14,8 +14,12 @@ public final class HTTP {
   private HTTP() {}
 
   public static enum Status {
-    OK(200), BAD_REQUEST(400), UNAUTHORIZED(401), NOT_FOUND(404), FORBIDDEN(403), INTERNAL_ERROR(
-        500);
+    OK(200),
+    BAD_REQUEST(400),
+    UNAUTHORIZED(401),
+    NOT_FOUND(404),
+    FORBIDDEN(403),
+    INTERNAL_ERROR(500);
 
     private final int code;
 

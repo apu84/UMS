@@ -10,8 +10,9 @@ import java.util.Map;
 
 public enum ExamType {
 
-  SEMESTER_FINAL(1, "Semester Final"), CLEARANCE_CARRY_IMPROVEMENT(2, "Carry/Clearance/Improvement"), SEMESTER_FINAL_CIVIL_SPECIAL(
-      3, "Civil Final");
+  SEMESTER_FINAL(1, "Semester Final"),
+  CLEARANCE_CARRY_IMPROVEMENT(2, "Carry/Clearance/Improvement"),
+  SEMESTER_FINAL_CIVIL_SPECIAL(3, "Civil Final");
 
   private String label;
   private int id;

@@ -81,7 +81,8 @@ public interface Student extends Serializable, EditType<MutableStudent>, Identif
   StudentStatus getStatus();
 
   enum EnrollmentType {
-    ACTUAL(1), TEMPORARY(0);
+    ACTUAL(1),
+    TEMPORARY(0);
 
     private static final Map<Integer, EnrollmentType> lookup = new HashMap<>();
 

@@ -14,7 +14,8 @@ public interface BinaryContentManager<T> {
   String create(T pData, String pIdentifier, Domain pDomain) throws Exception;
 
   enum Domain {
-    PICTURE(1), COURSE_MATERIAL(2);
+    PICTURE(1),
+    COURSE_MATERIAL(2);
 
     private static final Map<Integer, Domain> lookup = new HashMap<>();
 

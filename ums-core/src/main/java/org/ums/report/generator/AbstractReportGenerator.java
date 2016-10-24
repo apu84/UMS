@@ -209,6 +209,8 @@ public abstract class AbstractReportGenerator {
    * The supported output types for this sample
    */
   public static enum OutputType {
-    PDF, EXCEL, HTML
+    PDF,
+    EXCEL,
+    HTML
   }
 }
