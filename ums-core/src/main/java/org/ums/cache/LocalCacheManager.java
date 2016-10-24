@@ -48,8 +48,8 @@ public class LocalCacheManager<R extends LastModifier, I> implements CacheManage
     mCache.remove(pCacheId);
     mLastModified.remove(pCacheId);
     List<String> referrer = mInverseReferredKeyMap.get(pCacheId);
-    if (referrer != null) {
-      for (String key : referrer) {
+    if(referrer != null) {
+      for(String key : referrer) {
         mReferredKeyMap.remove(key);
       }
     }
@@ -97,11 +97,12 @@ public class LocalCacheManager<R extends LastModifier, I> implements CacheManage
     mReferredKeyMap.put(pReferrer, pReferred);
     List<String> keyList = mInverseReferredKeyMap.get(pReferred);
 
-    if (keyList == null) {
+    if(keyList == null) {
       keyList = new ArrayList<>();
       keyList.add(pReferrer);
-    } else {
-      if (!keyList.contains(pReferrer)) {
+    }
+    else {
+      if(!keyList.contains(pReferrer)) {
         keyList.add(pReferrer);
       }
     }

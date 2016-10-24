@@ -8,7 +8,8 @@ import org.ums.manager.MarksSubmissionStatusManager;
 import org.ums.util.CacheUtil;
 
 public class MarksSubmissionStatusCache
-    extends ContentCache<MarksSubmissionStatus, MutableMarksSubmissionStatus, Integer, MarksSubmissionStatusManager>
+    extends
+    ContentCache<MarksSubmissionStatus, MutableMarksSubmissionStatus, Integer, MarksSubmissionStatusManager>
     implements MarksSubmissionStatusManager {
 
   private CacheManager<MarksSubmissionStatus, Integer> mCacheManager;

@@ -1,6 +1,5 @@
 package org.ums.cache;
 
-
 import net.spy.memcached.MemcachedClient;
 import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
@@ -18,8 +17,8 @@ public class MemcacheClientManager<R extends LastModifier, I> implements CacheMa
 
   private MemcachedClient mObjectCache;
 
-
-  public MemcacheClientManager(final String pObjectCacheUrl, final Integer pObjectCachePort) throws Exception {
+  public MemcacheClientManager(final String pObjectCacheUrl, final Integer pObjectCachePort)
+      throws Exception {
     Validate.notNull(pObjectCacheUrl);
     Validate.notNull(pObjectCachePort);
 
@@ -29,7 +28,8 @@ public class MemcacheClientManager<R extends LastModifier, I> implements CacheMa
   @Override
   public void put(String pCacheId, R pReadonly) {
     mObjectCache.set(pCacheId, 0, pReadonly);
-    mObjectCache.set(getLastModifiedKey(pCacheId), 0, StringUtils.isEmpty(pReadonly.getLastModified()) ? "": pReadonly.getLastModified());
+    mObjectCache.set(getLastModifiedKey(pCacheId), 0,
+        StringUtils.isEmpty(pReadonly.getLastModified()) ? "" : pReadonly.getLastModified());
   }
 
   @Override
@@ -84,11 +84,12 @@ public class MemcacheClientManager<R extends LastModifier, I> implements CacheMa
 
     List<String> keyList = (List<String>) mObjectCache.get(getReferenceKey(pReferred));
 
-    if (keyList == null) {
+    if(keyList == null) {
       keyList = new ArrayList<>();
       keyList.add(pReferrer);
-    } else {
-      if (!keyList.contains(pReferrer)) {
+    }
+    else {
+      if(!keyList.contains(pReferrer)) {
         keyList.add(pReferrer);
       }
     }

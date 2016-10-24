@@ -11,7 +11,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecorator {
-  private static final Logger mLogger = LoggerFactory.getLogger(UGRegistrationResultAggregator.class);
+  private static final Logger mLogger = LoggerFactory
+      .getLogger(UGRegistrationResultAggregator.class);
   private EquivalentCourseManager mEquivalentCourseManager;
 
   public UGRegistrationResultAggregator(final EquivalentCourseManager pEquivalentCourseManager) {
@@ -19,16 +20,18 @@ public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecor
   }
 
   @Override
-  public List<UGRegistrationResult> getRegisteredCoursesWithResult(String pStudentId) throws Exception {
+  public List<UGRegistrationResult> getRegisteredCoursesWithResult(String pStudentId)
+      throws Exception {
     List<UGRegistrationResult> resultList = super.getRegisteredCoursesWithResult(pStudentId);
     Collections.sort(resultList, new ResultComparator());
     return aggregateResults(resultList);
   }
 
-  private List<UGRegistrationResult> aggregateResults(List<UGRegistrationResult> pResults) throws Exception {
+  private List<UGRegistrationResult> aggregateResults(List<UGRegistrationResult> pResults)
+      throws Exception {
     Map<String, UGRegistrationResult> resultMap = new HashMap<>();
-    for (UGRegistrationResult result : pResults) {
-      if (!resultMap.containsKey(result.getCourseId())) {
+    for(UGRegistrationResult result : pResults) {
+      if(!resultMap.containsKey(result.getCourseId())) {
         resultMap.put(result.getCourseId(), result);
       }
     }
@@ -55,17 +58,20 @@ public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecor
     @Override
     public int compare(final UGRegistrationResult pResult1, final UGRegistrationResult pResult2) {
       try {
-        int dateDiff = pResult1.getSemester().getStartDate().compareTo(pResult2.getSemester().getStartDate());
-        if (dateDiff != 0) {
+        int dateDiff =
+            pResult1.getSemester().getStartDate().compareTo(pResult2.getSemester().getStartDate());
+        if(dateDiff != 0) {
           return dateDiff;
-        } else {
-          if (pResult1.getCourseId().equalsIgnoreCase(pResult2.getCourseId())) {
+        }
+        else {
+          if(pResult1.getCourseId().equalsIgnoreCase(pResult2.getCourseId())) {
             return pResult1.getType().compareTo(pResult2.getType());
-          } else {
+          }
+          else {
             return pResult1.getCourseId().compareTo(pResult2.getCourseId());
           }
         }
-      } catch (Exception e) {
+      } catch(Exception e) {
         mLogger.error(e.getMessage(), e);
       }
       throw new NullPointerException("Can not sort result");

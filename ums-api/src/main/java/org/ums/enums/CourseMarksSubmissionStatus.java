@@ -21,7 +21,7 @@ public enum CourseMarksSubmissionStatus {
   private static final Map<Integer, CourseMarksSubmissionStatus> lookup = new HashMap<>();
 
   static {
-    for (CourseMarksSubmissionStatus c : EnumSet.allOf(CourseMarksSubmissionStatus.class)) {
+    for(CourseMarksSubmissionStatus c : EnumSet.allOf(CourseMarksSubmissionStatus.class)) {
       lookup.put(c.getId(), c);
     }
   }

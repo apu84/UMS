@@ -8,7 +8,8 @@ import java.util.Map;
  * Created by My Pc on 02-Oct-16.
  */
 public enum StudentStatus {
-  PASSED(0, "Passed"), ACTIVE(1, "Active");
+  PASSED(0, "Passed"),
+  ACTIVE(1, "Active");
 
   private String label;
   private int id;

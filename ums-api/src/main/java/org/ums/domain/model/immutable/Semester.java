@@ -27,7 +27,9 @@ public interface Semester extends Serializable, EditType<MutableSemester>, LastM
   Status getStatus() throws Exception;
 
   enum Status {
-    ACTIVE(1), INACTIVE(0), NEWLY_CREATED(2);
+    ACTIVE(1),
+    INACTIVE(0),
+    NEWLY_CREATED(2);
 
     private static final Map<Integer, Status> lookup = new HashMap<>();
 

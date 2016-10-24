@@ -385,8 +385,10 @@ public class UMSContext {
 
   @Bean
   UGRegistrationResultManager registrationResultManager() {
-    UGRegistrationResultAggregator resultAggregator = new UGRegistrationResultAggregator(equivalentCourseManager());
-    resultAggregator.setManager(new PersistentUGRegistrationResultDao(mTemplateFactory.getJdbcTemplate()));
+    UGRegistrationResultAggregator resultAggregator =
+        new UGRegistrationResultAggregator(equivalentCourseManager());
+    resultAggregator.setManager(new PersistentUGRegistrationResultDao(mTemplateFactory
+        .getJdbcTemplate()));
     return resultAggregator;
   }
 
@@ -452,15 +454,18 @@ public class UMSContext {
 
   @Bean
   EquivalentCourseManager equivalentCourseManager() {
-    EquivalentCourseCache equivalentCourseCache = new EquivalentCourseCache(mCacheFactory.getCacheManager());
+    EquivalentCourseCache equivalentCourseCache =
+        new EquivalentCourseCache(mCacheFactory.getCacheManager());
     equivalentCourseCache.setManager(new EquivalentCourseDao(mTemplateFactory.getJdbcTemplate()));
     return equivalentCourseCache;
   }
 
   @Bean
   MarksSubmissionStatusManager marksSubmissionStatusManager() {
-    MarksSubmissionStatusCache cache = new MarksSubmissionStatusCache(mCacheFactory.getCacheManager());
-    cache.setManager(new PersistentMarkSubmissionStatusDao(mTemplateFactory.getJdbcTemplate(), getGenericDateFormat()));
+    MarksSubmissionStatusCache cache =
+        new MarksSubmissionStatusCache(mCacheFactory.getCacheManager());
+    cache.setManager(new PersistentMarkSubmissionStatusDao(mTemplateFactory.getJdbcTemplate(),
+        getGenericDateFormat()));
     return cache;
   }
 

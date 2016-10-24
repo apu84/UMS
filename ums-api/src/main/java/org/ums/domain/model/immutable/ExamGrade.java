@@ -15,18 +15,31 @@ import java.util.List;
  * Created by ikh on 4/29/2016.
  */
 public interface ExamGrade extends Serializable, EditType<MutableExamGrade>, Identifier<Integer> {
-    List<StudentGradeDto> getGradeList();
-    int getSemesterId();
-    String getSemesterName();
-    int getExamTypeId();
-    ExamType getExamType();
-    String getExamTypeName();
-    String getCourseId();
-    String getCourseTitle();
-    String getCourseNo();
-    Integer getCourseCreditHour();
-    Date getLastSubmissionDate();
-    String getExamDate();
-    String getProgramShortName();
-    Integer getTotalStudents();
+  List<StudentGradeDto> getGradeList();
+
+  int getSemesterId();
+
+  String getSemesterName();
+
+  int getExamTypeId();
+
+  ExamType getExamType();
+
+  String getExamTypeName();
+
+  String getCourseId();
+
+  String getCourseTitle();
+
+  String getCourseNo();
+
+  Integer getCourseCreditHour();
+
+  Date getLastSubmissionDate();
+
+  String getExamDate();
+
+  String getProgramShortName();
+
+  Integer getTotalStudents();
 }

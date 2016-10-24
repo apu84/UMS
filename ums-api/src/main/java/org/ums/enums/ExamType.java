@@ -22,16 +22,13 @@ public enum ExamType {
     this.label = label;
   }
 
-
-  private static final Map<Integer, ExamType> lookup
-      = new HashMap<>();
+  private static final Map<Integer, ExamType> lookup = new HashMap<>();
 
   static {
-    for (ExamType c : EnumSet.allOf(ExamType.class)) {
+    for(ExamType c : EnumSet.allOf(ExamType.class)) {
       lookup.put(c.getId(), c);
     }
   }
-
 
   public static ExamType get(final int pId) {
     return lookup.get(pId);
@@ -44,6 +41,5 @@ public enum ExamType {
   public int getId() {
     return this.id;
   }
-
 
 }

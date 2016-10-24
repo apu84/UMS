@@ -38,7 +38,6 @@ public class PersistentExamGrade implements MutableExamGrade {
   private Date mLastSubmissionDate;
   private Integer mTotalStudents;
 
-
   public PersistentExamGrade() {
 
   }
@@ -46,7 +45,6 @@ public class PersistentExamGrade implements MutableExamGrade {
   public PersistentExamGrade(final MutableExamGrade pOriginal) throws Exception {
     mGradeList = pOriginal.getGradeList();
   }
-
 
   @Override
   public Integer getId() {
@@ -80,10 +78,8 @@ public class PersistentExamGrade implements MutableExamGrade {
 
   }
 
-
   @Override
-  public void commit(boolean update) throws Exception {
-  }
+  public void commit(boolean update) throws Exception {}
 
   @Override
   public MutableExamGrade edit() throws Exception {

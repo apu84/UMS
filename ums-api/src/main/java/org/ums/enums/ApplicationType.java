@@ -8,7 +8,11 @@ import java.util.Map;
  * Created by My Pc on 7/11/2016.
  */
 public enum ApplicationType {
-  REGULAR(1), CLEARANCE(2), CARRY(3), SPECIAL_CARRY(4), IMPROVEMENT(5);
+  REGULAR(1),
+  CLEARANCE(2),
+  CARRY(3),
+  SPECIAL_CARRY(4),
+  IMPROVEMENT(5);
 
   private static final Map<Integer, ApplicationType> Lookup = new HashMap<>();
 

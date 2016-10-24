@@ -41,9 +41,9 @@ public class GradeSubmissionService {
   @Autowired
   private NotificationGenerator mNotificationGenerator;
 
-
-  public void prepareGradeGroups(JsonObjectBuilder objectBuilder, List<StudentGradeDto> examGradeList,
-                                 CourseMarksSubmissionStatus courseStatus, String currentActor) {
+  public void prepareGradeGroups(JsonObjectBuilder objectBuilder,
+      List<StudentGradeDto> examGradeList, CourseMarksSubmissionStatus courseStatus,
+      String currentActor) {
 
     JsonArrayBuilder noneAndSubmitArrayBuilder = Json.createArrayBuilder();
     JsonArrayBuilder scrutinizeCandidatesArrayBuilder = Json.createArrayBuilder();
@@ -60,46 +60,49 @@ public class GradeSubmissionService {
     JsonReader jsonReader;
     JsonObject jsonObject;
 
-    for (StudentGradeDto gradeDto : examGradeList) {
+    for(StudentGradeDto gradeDto : examGradeList) {
       jsonReader = Json.createReader(new StringReader(gradeDto.toString()));
       jsonObject = jsonReader.readObject();
       jsonReader.close();
       gradeStatus = gradeDto.getStatus();
 
-      if (gradeStatus == StudentMarksSubmissionStatus.NONE
+      if(gradeStatus == StudentMarksSubmissionStatus.NONE
           || gradeStatus == StudentMarksSubmissionStatus.SUBMIT
-          && gradeDto.getRecheckStatusId() == 0
-          && currentActor.equalsIgnoreCase("preparer")) {
+          && gradeDto.getRecheckStatusId() == 0 && currentActor.equalsIgnoreCase("preparer")) {
         noneAndSubmitArrayBuilder.add(jsonObject);
       }
-      else if ((gradeStatus == StudentMarksSubmissionStatus.SUBMITTED || gradeStatus == StudentMarksSubmissionStatus.SCRUTINIZE)
+      else if((gradeStatus == StudentMarksSubmissionStatus.SUBMITTED || gradeStatus == StudentMarksSubmissionStatus.SCRUTINIZE)
           && currentActor.equalsIgnoreCase("scrutinizer")) {
         scrutinizeCandidatesArrayBuilder.add(jsonObject);
       }
-      else if ((gradeStatus == StudentMarksSubmissionStatus.SCRUTINIZED || gradeStatus == StudentMarksSubmissionStatus.APPROVE)
+      else if((gradeStatus == StudentMarksSubmissionStatus.SCRUTINIZED || gradeStatus == StudentMarksSubmissionStatus.APPROVE)
           && currentActor.equalsIgnoreCase("head")) {
         approveCandidatesArrayBuilder.add(jsonObject);
       }
-      else if ((gradeStatus == StudentMarksSubmissionStatus.APPROVED || gradeStatus == StudentMarksSubmissionStatus.ACCEPT)
+      else if((gradeStatus == StudentMarksSubmissionStatus.APPROVED || gradeStatus == StudentMarksSubmissionStatus.ACCEPT)
           && currentActor.equalsIgnoreCase("coe")) {
         acceptCandidatesArrayBuilder.add(jsonObject);
       }
 
-      if ((gradeStatus == StudentMarksSubmissionStatus.SUBMITTED || gradeStatus == StudentMarksSubmissionStatus.SCRUTINIZE))//&& !currentActor.equalsIgnoreCase("scrutinizer")
+      if((gradeStatus == StudentMarksSubmissionStatus.SUBMITTED || gradeStatus == StudentMarksSubmissionStatus.SCRUTINIZE))// &&
+                                                                                                                           // !currentActor.equalsIgnoreCase("scrutinizer")
         submittedArrayBuilder.add(jsonObject);
-      else if ((gradeStatus == StudentMarksSubmissionStatus.SCRUTINIZED || gradeStatus == StudentMarksSubmissionStatus.APPROVE)) // && !currentActor.equalsIgnoreCase("head")
+      else if((gradeStatus == StudentMarksSubmissionStatus.SCRUTINIZED || gradeStatus == StudentMarksSubmissionStatus.APPROVE)) // &&
+                                                                                                                                // !currentActor.equalsIgnoreCase("head")
         scrutinizedArrayBuilder.add(jsonObject);
-      else if ((gradeStatus == StudentMarksSubmissionStatus.APPROVED || gradeStatus == StudentMarksSubmissionStatus.ACCEPT)) //&& !currentActor.equalsIgnoreCase("coe")
+      else if((gradeStatus == StudentMarksSubmissionStatus.APPROVED || gradeStatus == StudentMarksSubmissionStatus.ACCEPT)) // &&
+                                                                                                                            // !currentActor.equalsIgnoreCase("coe")
         approvedArrayBuilder.add(jsonObject);
-      else if (gradeStatus == StudentMarksSubmissionStatus.ACCEPTED) {
-        //acceptedArrayBuilder.add(object1);
-        if (gradeDto.getRecheckStatus() == RecheckStatus.RECHECK_TRUE)
+      else if(gradeStatus == StudentMarksSubmissionStatus.ACCEPTED) {
+        // acceptedArrayBuilder.add(object1);
+        if(gradeDto.getRecheckStatus() == RecheckStatus.RECHECK_TRUE)
           recheckAcceptedArrayBuilder.add(jsonObject);
         else
           acceptedArrayBuilder.add(jsonObject);
       }
-      if ((courseStatus == CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_SCRUTINIZER || courseStatus == CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_HEAD
-          || courseStatus == CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_COE) && gradeDto.getRecheckStatus() == RecheckStatus.RECHECK_TRUE) {
+      if((courseStatus == CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_SCRUTINIZER
+          || courseStatus == CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_HEAD || courseStatus == CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_COE)
+          && gradeDto.getRecheckStatus() == RecheckStatus.RECHECK_TRUE) {
         recheckCandidatesArrayBuilder.add(jsonObject);
       }
     }
@@ -118,7 +121,7 @@ public class GradeSubmissionService {
 
   public String getActingRoleForCourse(CourseMarksSubmissionStatus currentStatus) {
     String actingRole = "";
-    switch (currentStatus) {
+    switch(currentStatus) {
       case NOT_SUBMITTED:
       case REQUESTED_FOR_RECHECK_BY_SCRUTINIZER:
       case REQUESTED_FOR_RECHECK_BY_HEAD:
@@ -142,130 +145,142 @@ public class GradeSubmissionService {
     return actingRole;
   }
 
-  public String getActorForCurrentUser(String userId, String requestedRole, int semesterId, String courseId) throws Exception {
+  public String getActorForCurrentUser(String userId, String requestedRole, int semesterId,
+      String courseId) throws Exception {
     String role = "Invalid";
     List<String> roleList;
-    switch (requestedRole) {
+    switch(requestedRole) {
       case "T":
         User user = mUserManager.get(userId);
         roleList = mManager.getRoleForTeacher(user.getEmployeeId(), semesterId, courseId);
-        if (roleList.size() != 0)
+        if(roleList.size() != 0)
           role = roleList.get(0);
         break;
       case "H":
         roleList = mManager.getRoleForHead(userId);
-        if (roleList.size() != 0)
+        if(roleList.size() != 0)
           role = roleList.get(0);
         break;
       case "C":
         roleList = mManager.getRoleForCoE(userId);
-        if (roleList.size() != 0)
+        if(roleList.size() != 0)
           role = roleList.get(0);
         break;
       case "V":
         roleList = mManager.getRoleForVC(userId);
-        if (roleList.size() != 0)
+        if(roleList.size() != 0)
           role = roleList.get(0);
         break;
       default:
         throw new ValidationException("Unauthorized Access Detected.");
     }
-    if (!Arrays.asList(Constants.validRolesForGradeAccess).contains(role))
+    if(!Arrays.asList(Constants.validRolesForGradeAccess).contains(role))
       throw new ValidationException("Unauthorized Access Detected.");
     else
       return role;
   }
 
-  public void validatePartInfo(final Integer pTotalPart, final Integer pPartATotal, final Integer pPartBTotal) throws Exception {
-    if (pTotalPart != 1 && pTotalPart != 2)
+  public void validatePartInfo(final Integer pTotalPart, final Integer pPartATotal,
+      final Integer pPartBTotal) throws Exception {
+    if(pTotalPart != 1 && pTotalPart != 2)
       throw new Exception("Part Information is wrong.");
 
-    if (pTotalPart == 1 && (pPartATotal == 0 || pPartATotal > 70)) {
+    if(pTotalPart == 1 && (pPartATotal == 0 || pPartATotal > 70)) {
       throw new Exception("Part Information is wrong.");
-    } else if (pTotalPart == 2) {
-      if (pPartATotal == 0 || pPartBTotal == 0 || pPartATotal + pPartBTotal != 70) {
+    }
+    else if(pTotalPart == 2) {
+      if(pPartATotal == 0 || pPartBTotal == 0 || pPartATotal + pPartBTotal != 70) {
         throw new Exception("Part Information is wrong.");
       }
     }
   }
 
-  private void validateGradeSubmissionDeadline(Date lastDateOfSubmission) throws ValidationException {
-    if (lastDateOfSubmission == null) {
+  private void validateGradeSubmissionDeadline(Date lastDateOfSubmission)
+      throws ValidationException {
+    if(lastDateOfSubmission == null) {
       return;
     }
     Date currentDate = new Date();
-    if (currentDate.after(lastDateOfSubmission)) {
+    if(currentDate.after(lastDateOfSubmission)) {
       throw new ValidationException("Grade Submission Deadline is Over.");
     }
   }
 
   public void validateGradeSubmission(String actingRoleForCurrentUser,
-                                       MarksSubmissionStatusDto requestedStatusDTO,
-                                       MarksSubmissionStatus actualStatus,
-                                       List<StudentGradeDto> gradeList, String operation) throws Exception {
-    //operation can be either submit OR save
-    //Checking the role, requested from client side is valid for the user who is trying to do some operation on grades
-    //Role Validation
+      MarksSubmissionStatusDto requestedStatusDTO, MarksSubmissionStatus actualStatus,
+      List<StudentGradeDto> gradeList, String operation) throws Exception {
+    // operation can be either submit OR save
+    // Checking the role, requested from client side is valid for the user who is trying to do some
+    // operation on grades
+    // Role Validation
     String actualActingRole = getActingRoleForCourse(actualStatus.getStatus());
-    if (!actingRoleForCurrentUser.equalsIgnoreCase(actualActingRole)) {
+    if(!actingRoleForCurrentUser.equalsIgnoreCase(actualActingRole)) {
       throw new ValidationException("Sorry, you are not allowed for this operation.");
     }
-    //Deadline && Part Info Validation
-    if (actualStatus.getStatus() == CourseMarksSubmissionStatus.NOT_SUBMITTED && operation.equals("submit")) {
+    // Deadline && Part Info Validation
+    if(actualStatus.getStatus() == CourseMarksSubmissionStatus.NOT_SUBMITTED
+        && operation.equals("submit")) {
       validateGradeSubmissionDeadline(actualStatus.getLastSubmissionDate());
-      if (actualStatus.getCourse().getCourseType() == CourseType.THEORY)
-        validatePartInfo(requestedStatusDTO.getTotal_part(),
-            requestedStatusDTO.getPart_a_total(),
+      if(actualStatus.getCourse().getCourseType() == CourseType.THEORY)
+        validatePartInfo(requestedStatusDTO.getTotal_part(), requestedStatusDTO.getPart_a_total(),
             requestedStatusDTO.getPart_b_total());
     }
-    //Submitted Grade Validation
+    // Submitted Grade Validation
     validateSubmittedGrades(actualStatus, gradeList);
   }
 
   private void validateSubmittedGrades(MarksSubmissionStatus actualStatus,
-                                       List<StudentGradeDto> gradeList) throws Exception {
+      List<StudentGradeDto> gradeList) throws Exception {
 
-    //Validate all the grades been submitted or not
+    // Validate all the grades been submitted or not
     int totalStudents = mManager.getTotalStudentCount(actualStatus);
-    if (actualStatus.getStatus() == CourseMarksSubmissionStatus.NOT_SUBMITTED && gradeList.size() != totalStudents) {
+    if(actualStatus.getStatus() == CourseMarksSubmissionStatus.NOT_SUBMITTED
+        && gradeList.size() != totalStudents) {
       throw new ValidationException("Wrong number of grades been submitted.");
     }
 
-    //|| partInfo.getStatus()==CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_SCRUTINIZER
-    //|| partInfo.getStatus()==CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_HEAD  || partInfo.getStatus()==CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_COE
-    if (actualStatus.getStatus() == CourseMarksSubmissionStatus.NOT_SUBMITTED) {
+    // || partInfo.getStatus()==CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_SCRUTINIZER
+    // || partInfo.getStatus()==CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_HEAD ||
+    // partInfo.getStatus()==CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_COE
+    if(actualStatus.getStatus() == CourseMarksSubmissionStatus.NOT_SUBMITTED) {
       boolean hasError = false;
-      for (StudentGradeDto gradeDTO : gradeList) {
+      for(StudentGradeDto gradeDTO : gradeList) {
         try {
           hasError = validateMarks(hasError, gradeDTO, actualStatus);
-        } catch (Exception ex) {
+        } catch(Exception ex) {
           throw new RuntimeException(ex);
         }
       }
-//      gradeList.forEach((gradeDTO) -> {
-//            try {
-//              validateMarks(hasError, gradeDTO, actualStatusDTO);
-//            } catch (Exception ex) {
-//              throw new RuntimeException(ex);
-//            }
-//          }
-//      );
+      // gradeList.forEach((gradeDTO) -> {
+      // try {
+      // validateMarks(hasError, gradeDTO, actualStatusDTO);
+      // } catch (Exception ex) {
+      // throw new RuntimeException(ex);
+      // }
+      // }
+      // );
 
-      if (hasError == true) {
+      if(hasError == true) {
         throw new ValidationException("Grade validation failed.");
       }
     }
   }
 
-  private Boolean validateMarks(Boolean hasError, StudentGradeDto gradeDTO, MarksSubmissionStatus partInfo) throws Exception {
-    if (partInfo.getCourse().getCourseType() == CourseType.THEORY) {
+  private Boolean validateMarks(Boolean hasError, StudentGradeDto gradeDTO,
+      MarksSubmissionStatus partInfo) throws Exception {
+    if(partInfo.getCourse().getCourseType() == CourseType.THEORY) {
       hasError = validateQuiz(hasError, gradeDTO.getQuiz(), gradeDTO.getRegType());
-      hasError = validateClassPerformance(hasError, gradeDTO.getClassPerformance(), gradeDTO.getRegType());
-      hasError = validatePartA(hasError, gradeDTO.getPartA(), partInfo.getPartATotal(), gradeDTO.getRegType());
-      hasError = validatePartB(hasError, gradeDTO.getPartB(), partInfo.getTotalPart(), partInfo.getPartBTotal(),
-          gradeDTO.getRegType());
+      hasError =
+          validateClassPerformance(hasError, gradeDTO.getClassPerformance(), gradeDTO.getRegType());
+      hasError =
+          validatePartA(hasError, gradeDTO.getPartA(), partInfo.getPartATotal(),
+              gradeDTO.getRegType());
+      hasError =
+          validatePartB(hasError, gradeDTO.getPartB(), partInfo.getTotalPart(),
+              partInfo.getPartBTotal(), gradeDTO.getRegType());
       hasError = validateTheoryTotal(hasError, gradeDTO);
-    } else if (partInfo.getCourse().getCourseType() == CourseType.SESSIONAL) {
+    }
+    else if(partInfo.getCourse().getCourseType() == CourseType.SESSIONAL) {
       hasError = validateSessionalTotal(hasError, gradeDTO);
     }
 
@@ -273,90 +288,108 @@ public class GradeSubmissionService {
   }
 
   private Boolean validateQuiz(Boolean error, Double quiz, CourseRegType regType) {
-    if (quiz > 20 && regType == CourseRegType.REGULAR) {
+    if(quiz > 20 && regType == CourseRegType.REGULAR) {
       error = Boolean.TRUE;
     }
     return error;
   }
 
   private Boolean validateClassPerformance(Boolean error, Double classPerf, CourseRegType regType) {
-    if (classPerf > 10 && regType == CourseRegType.REGULAR) {
+    if(classPerf > 10 && regType == CourseRegType.REGULAR) {
       error = Boolean.TRUE;
     }
     return error;
   }
 
   private Boolean validatePartA(Boolean error, Double partA, Integer partAMax, CourseRegType regType) {
-    if (partA > partAMax) {
+    if(partA > partAMax) {
       error = Boolean.TRUE;
     }
     return error;
   }
 
-  private Boolean validatePartB(Boolean error, Double partB, Integer totalPartCount, Integer partBMax, CourseRegType regType) {
-    if (totalPartCount == 2 && (partB > partBMax)) {
+  private Boolean validatePartB(Boolean error, Double partB, Integer totalPartCount,
+      Integer partBMax, CourseRegType regType) {
+    if(totalPartCount == 2 && (partB > partBMax)) {
       error = Boolean.TRUE;
     }
-    if (totalPartCount == 1 && (partB > 0)) {
+    if(totalPartCount == 1 && (partB > 0)) {
       error = Boolean.TRUE;
     }
     return error;
   }
 
   private Boolean validateTheoryTotal(Boolean error, StudentGradeDto gradeDTO) {
-    if (gradeDTO.getTotal() > 100 || gradeDTO.getTotal() != Math.round(gradeDTO.getQuiz() + gradeDTO.getClassPerformance() + gradeDTO.getPartA() + gradeDTO.getPartB())) {
+    if(gradeDTO.getTotal() > 100
+        || gradeDTO.getTotal() != Math.round(gradeDTO.getQuiz() + gradeDTO.getClassPerformance()
+            + gradeDTO.getPartA() + gradeDTO.getPartB())) {
       error = Boolean.TRUE;
     }
     return error;
   }
 
   private Boolean validateSessionalTotal(Boolean error, StudentGradeDto gradeDTO) {
-    if (gradeDTO.getTotal() > 100) {
+    if(gradeDTO.getTotal() > 100) {
       error = Boolean.TRUE;
     }
     return error;
   }
 
   private Boolean validateGradeLetter(Boolean error, StudentGradeDto gradeDTO) throws Exception {
-    if (!mUtilsService.getGradeLetter(UmsUtils.round(gradeDTO.getTotal()), gradeDTO.getRegType()).equalsIgnoreCase(gradeDTO.getGradeLetter())) {
+    if(!mUtilsService.getGradeLetter(UmsUtils.round(gradeDTO.getTotal()), gradeDTO.getRegType())
+        .equalsIgnoreCase(gradeDTO.getGradeLetter())) {
       error = Boolean.TRUE;
     }
     return error;
   }
 
-  public CourseMarksSubmissionStatus getCourseMarksSubmissionNextStatus(String actor, String action, CourseMarksSubmissionStatus currentStatus) {
+  public CourseMarksSubmissionStatus getCourseMarksSubmissionNextStatus(String actor,
+      String action, CourseMarksSubmissionStatus currentStatus) {
     CourseMarksSubmissionStatus nextStatus = null;
-    if (actor.equalsIgnoreCase("scrutinizer")) {
-      if (action.equalsIgnoreCase("recheck") && currentStatus == CourseMarksSubmissionStatus.WAITING_FOR_SCRUTINY)
+    if(actor.equalsIgnoreCase("scrutinizer")) {
+      if(action.equalsIgnoreCase("recheck")
+          && currentStatus == CourseMarksSubmissionStatus.WAITING_FOR_SCRUTINY)
         nextStatus = CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_SCRUTINIZER;
-      else if (action.equalsIgnoreCase("approve") && currentStatus == CourseMarksSubmissionStatus.WAITING_FOR_SCRUTINY)
+      else if(action.equalsIgnoreCase("approve")
+          && currentStatus == CourseMarksSubmissionStatus.WAITING_FOR_SCRUTINY)
         nextStatus = CourseMarksSubmissionStatus.WAITING_FOR_HEAD_APPROVAL;
-    } else if (actor.equalsIgnoreCase("head")) {
-      if (action.equalsIgnoreCase("recheck") && currentStatus == CourseMarksSubmissionStatus.WAITING_FOR_HEAD_APPROVAL)
+    }
+    else if(actor.equalsIgnoreCase("head")) {
+      if(action.equalsIgnoreCase("recheck")
+          && currentStatus == CourseMarksSubmissionStatus.WAITING_FOR_HEAD_APPROVAL)
         nextStatus = CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_HEAD;
-      else if (action.equalsIgnoreCase("approve") && currentStatus == CourseMarksSubmissionStatus.WAITING_FOR_HEAD_APPROVAL)
+      else if(action.equalsIgnoreCase("approve")
+          && currentStatus == CourseMarksSubmissionStatus.WAITING_FOR_HEAD_APPROVAL)
         nextStatus = CourseMarksSubmissionStatus.WAITING_FOR_COE_APPROVAL;
-    } else if (actor.equalsIgnoreCase("coe")) {
-      if (action.equalsIgnoreCase("recheck") && currentStatus == CourseMarksSubmissionStatus.WAITING_FOR_COE_APPROVAL)
+    }
+    else if(actor.equalsIgnoreCase("coe")) {
+      if(action.equalsIgnoreCase("recheck")
+          && currentStatus == CourseMarksSubmissionStatus.WAITING_FOR_COE_APPROVAL)
         nextStatus = CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_COE;
-      else if (action.equalsIgnoreCase("approve") && currentStatus == CourseMarksSubmissionStatus.WAITING_FOR_COE_APPROVAL)
+      else if(action.equalsIgnoreCase("approve")
+          && currentStatus == CourseMarksSubmissionStatus.WAITING_FOR_COE_APPROVAL)
         nextStatus = CourseMarksSubmissionStatus.ACCEPTED_BY_COE;
-      else if (action.equalsIgnoreCase("recheck_request_submit") && currentStatus == CourseMarksSubmissionStatus.ACCEPTED_BY_COE)
+      else if(action.equalsIgnoreCase("recheck_request_submit")
+          && currentStatus == CourseMarksSubmissionStatus.ACCEPTED_BY_COE)
         nextStatus = CourseMarksSubmissionStatus.WAITING_FOR_RECHECK_REQUEST_APPROVAL;
-    } else if (actor.equalsIgnoreCase("vc")) {
-      if (action.equalsIgnoreCase("recheck_request_rejected") && currentStatus == CourseMarksSubmissionStatus.WAITING_FOR_RECHECK_REQUEST_APPROVAL)
+    }
+    else if(actor.equalsIgnoreCase("vc")) {
+      if(action.equalsIgnoreCase("recheck_request_rejected")
+          && currentStatus == CourseMarksSubmissionStatus.WAITING_FOR_RECHECK_REQUEST_APPROVAL)
         nextStatus = CourseMarksSubmissionStatus.ACCEPTED_BY_COE;
-      else if (action.equalsIgnoreCase("recheck_request_approved") && currentStatus == CourseMarksSubmissionStatus.WAITING_FOR_RECHECK_REQUEST_APPROVAL)
+      else if(action.equalsIgnoreCase("recheck_request_approved")
+          && currentStatus == CourseMarksSubmissionStatus.WAITING_FOR_RECHECK_REQUEST_APPROVAL)
         nextStatus = CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_COE;
     }
 
     return nextStatus;
   }
 
-  public String getUserIdForNotification(Integer pSemesterId, String pCourseId, CourseMarksSubmissionStatus pNextStatus) throws Exception {
+  public String getUserIdForNotification(Integer pSemesterId, String pCourseId,
+      CourseMarksSubmissionStatus pNextStatus) throws Exception {
     String userId = "";
     Map RoleMap = mManager.getUserRoleList(pSemesterId, pCourseId);
-    switch (pNextStatus) {
+    switch(pNextStatus) {
       case WAITING_FOR_SCRUTINY:
         userId = RoleMap.get("Scrutinizer").toString();
         break;
@@ -378,7 +411,6 @@ public class GradeSubmissionService {
 
     return userId;
   }
-
 
   public void sendNotification(String userId, String courseNumber) {
     Notifier notifier = new Notifier() {
@@ -403,7 +435,7 @@ public class GradeSubmissionService {
       public String payload() {
         try {
           return "Grades for Course Number : " + courseNumber + " is waiting for your approval.";
-        } catch (Exception e) {
+        } catch(Exception e) {
           mLogger.error("Exception while looking for user: ", e);
         }
         return null;
@@ -411,10 +443,9 @@ public class GradeSubmissionService {
     };
     try {
       mNotificationGenerator.notify(notifier);
-    } catch (Exception e) {
+    } catch(Exception e) {
       mLogger.error("Failed to generate notification", e);
     }
   }
-
 
 }

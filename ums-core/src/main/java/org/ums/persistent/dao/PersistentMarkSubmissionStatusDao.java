@@ -20,15 +20,22 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentMarkSubmissionStatusDao extends MarksSubmissionStatusDaoDecorator {
-  String SELECT_ALL = "SELECT ID, SEMESTER_ID, COURSE_ID, STATUS, EXAM_TYPE, LAST_SUBMISSION_DATE, TOTAL_PART, PART_A_TOTAL, " +
-      "PART_B_TOTAL, YEAR, SEMESTER, LAST_MODIFIED FROM MARKS_SUBMISSION_STATUS ";
-  String UPDATE_ALL = "UPDATE MARKS_SUBMISSION_STATUS SET SEMESTER_ID = ?, COURSE_ID = ?, STATUS = ?, EXAM_TYPE = ?, " +
-      "LAST_SUBMISSION_DATE = TO_DATE(?, '" + Constants.DATE_FORMAT + "'), TOTAL_PART, PART_A_TOTAL = ?, PART_B_TOTAL = ?, " +
-      "YEAR = ?, SEMESTER = ?, LAST_MODIFIED = " + getLastModifiedSql() + " ";
+  String SELECT_ALL =
+      "SELECT ID, SEMESTER_ID, COURSE_ID, STATUS, EXAM_TYPE, LAST_SUBMISSION_DATE, TOTAL_PART, PART_A_TOTAL, "
+          + "PART_B_TOTAL, YEAR, SEMESTER, LAST_MODIFIED FROM MARKS_SUBMISSION_STATUS ";
+  String UPDATE_ALL =
+      "UPDATE MARKS_SUBMISSION_STATUS SET SEMESTER_ID = ?, COURSE_ID = ?, STATUS = ?, EXAM_TYPE = ?, "
+          + "LAST_SUBMISSION_DATE = TO_DATE(?, '" + Constants.DATE_FORMAT
+          + "'), TOTAL_PART, PART_A_TOTAL = ?, PART_B_TOTAL = ?, "
+          + "YEAR = ?, SEMESTER = ?, LAST_MODIFIED = " + getLastModifiedSql() + " ";
   String DELETE_ALL = "DELETE FROM MARKS_SUBMISSION_STATUS ";
-  String INSERT_ALL = "INSERT INTO MST_SEMESTER(SEMESTER_ID, COURSE_ID, STATUS, EXAM_TYPE, LAST_SUBMISSION_DATE, TOTAL_PART, " +
-      "PART_A_TOTAL, PART_B_TOTAL, YEAR, SEMESTER, LAST_MODIFIED) " +
-      "VALUES(?, ?, ?, ?  TO_DATE(?, '" + Constants.DATE_FORMAT + "'), ?, ?, ?, ?, " + getLastModifiedSql() + ")";
+  String INSERT_ALL =
+      "INSERT INTO MST_SEMESTER(SEMESTER_ID, COURSE_ID, STATUS, EXAM_TYPE, LAST_SUBMISSION_DATE, TOTAL_PART, "
+          + "PART_A_TOTAL, PART_B_TOTAL, YEAR, SEMESTER, LAST_MODIFIED) "
+          + "VALUES(?, ?, ?, ?  TO_DATE(?, '"
+          + Constants.DATE_FORMAT
+          + "'), ?, ?, ?, ?, "
+          + getLastModifiedSql() + ")";
 
   private JdbcTemplate mJdbcTemplate;
   private DateFormat mDateFormat;
@@ -41,24 +48,18 @@ public class PersistentMarkSubmissionStatusDao extends MarksSubmissionStatusDaoD
   @Override
   public MarksSubmissionStatus get(Integer pId) throws Exception {
     String query = SELECT_ALL + "WHERE ID = ?";
-    return mJdbcTemplate.queryForObject(query, new Object[]{pId}, new MarksSubmissionStatusRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId},
+        new MarksSubmissionStatusRowMapper());
   }
 
   @Override
   public int update(MutableMarksSubmissionStatus pMutable) throws Exception {
     String query = UPDATE_ALL + "WHERE ID = ?";
-    return mJdbcTemplate.update(query,
-        pMutable.getSemesterId(),
-        pMutable.getCourseId(),
-        pMutable.getStatus(),
-        pMutable.getExamType(),
-        mDateFormat.format(pMutable.getLastSubmissionDate()),
-        pMutable.getTotalPart(),
-        pMutable.getPartATotal(),
-        pMutable.getPartBTotal(),
-        pMutable.getYear(),
-        pMutable.getAcademicSemester(),
-        pMutable.getId());
+    return mJdbcTemplate.update(query, pMutable.getSemesterId(), pMutable.getCourseId(),
+        pMutable.getStatus(), pMutable.getExamType(),
+        mDateFormat.format(pMutable.getLastSubmissionDate()), pMutable.getTotalPart(),
+        pMutable.getPartATotal(), pMutable.getPartBTotal(), pMutable.getYear(),
+        pMutable.getAcademicSemester(), pMutable.getId());
   }
 
   @Override
@@ -75,42 +76,30 @@ public class PersistentMarkSubmissionStatusDao extends MarksSubmissionStatusDaoD
 
   @Override
   public int create(MutableMarksSubmissionStatus pMutable) throws Exception {
-    return mJdbcTemplate.update(INSERT_ALL,
-        pMutable.getSemesterId(),
-        pMutable.getCourseId(),
-        pMutable.getStatus(),
-        pMutable.getExamType(),
-        mDateFormat.format(pMutable.getLastSubmissionDate()),
-        pMutable.getTotalPart(),
-        pMutable.getPartATotal(),
-        pMutable.getPartBTotal(),
-        pMutable.getYear(),
+    return mJdbcTemplate.update(INSERT_ALL, pMutable.getSemesterId(), pMutable.getCourseId(),
+        pMutable.getStatus(), pMutable.getExamType(),
+        mDateFormat.format(pMutable.getLastSubmissionDate()), pMutable.getTotalPart(),
+        pMutable.getPartATotal(), pMutable.getPartBTotal(), pMutable.getYear(),
         pMutable.getAcademicSemester());
   }
 
   @Override
   public MarksSubmissionStatus get(Integer pSemesterId, String pCourseId, ExamType pExamType) {
     String query = SELECT_ALL + "WHERE SEMESTER_ID = ? AND COURSE_ID = ? AND EXAM_TYPE = ?";
-    return mJdbcTemplate.queryForObject(query, new Object[]{pSemesterId, pCourseId, pExamType.getId()},
+    return mJdbcTemplate.queryForObject(query,
+        new Object[] {pSemesterId, pCourseId, pExamType.getId()},
         new MarksSubmissionStatusRowMapper());
   }
 
-  private List<Object[]> getUpdateParamArray(List<MutableMarksSubmissionStatus> pMarksSubmissionStatusList) {
+  private List<Object[]> getUpdateParamArray(
+      List<MutableMarksSubmissionStatus> pMarksSubmissionStatusList) {
     List<Object[]> params = new ArrayList<>();
-    for (MarksSubmissionStatus pMutable : pMarksSubmissionStatusList) {
-      params.add(new Object[]{
-          pMutable.getSemesterId(),
-          pMutable.getCourseId(),
-          pMutable.getStatus(),
-          pMutable.getExamType(),
-          mDateFormat.format(pMutable.getLastSubmissionDate()),
-          pMutable.getTotalPart(),
-          pMutable.getPartATotal(),
-          pMutable.getPartBTotal(),
-          pMutable.getYear(),
-          pMutable.getAcademicSemester(),
-          pMutable.getId()
-      });
+    for(MarksSubmissionStatus pMutable : pMarksSubmissionStatusList) {
+      params.add(new Object[] {pMutable.getSemesterId(), pMutable.getCourseId(),
+          pMutable.getStatus(), pMutable.getExamType(),
+          mDateFormat.format(pMutable.getLastSubmissionDate()), pMutable.getTotalPart(),
+          pMutable.getPartATotal(), pMutable.getPartBTotal(), pMutable.getYear(),
+          pMutable.getAcademicSemester(), pMutable.getId()});
     }
 
     return params;
@@ -132,7 +121,8 @@ public class PersistentMarkSubmissionStatusDao extends MarksSubmissionStatusDaoD
       marksSubmissionStatus.setYear(rs.getInt("YEAR"));
       marksSubmissionStatus.setAcademicSemester(rs.getInt("SEMESTER"));
       marksSubmissionStatus.setLastModified(rs.getString("LAST_MODIFIED"));
-      AtomicReference<MarksSubmissionStatus> atomicReference = new AtomicReference<>(marksSubmissionStatus);
+      AtomicReference<MarksSubmissionStatus> atomicReference =
+          new AtomicReference<>(marksSubmissionStatus);
       return atomicReference.get();
     }
   }

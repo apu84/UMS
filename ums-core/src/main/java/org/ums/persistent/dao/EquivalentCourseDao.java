@@ -12,9 +12,14 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class EquivalentCourseDao extends EquivalentCourseDaoDecorator {
-  String SELECT_ALL = "SELECT ID, PRE_COURSE_ID, NEW_COURSE_ID, LAST_MODIFIED FROM EQUIVALENT_COURSE ";
-  String INSERT_ALL = "INSERT INTO EQUIVALENT_COURSE(PRE_COURSE_ID, NEW_COURSE_ID, LAST_MODIFIED) VALUES (?, ? , " + getLastModifiedSql() + ") ";
-  String UPDATE_ALL = "UPDATE EQUIVALENT_COURSE SET PRE_COURSE_ID = ?, NEW_COURSE_ID = ?, LAST_MODIFIED = " + getLastModifiedSql() + " ";
+  String SELECT_ALL =
+      "SELECT ID, PRE_COURSE_ID, NEW_COURSE_ID, LAST_MODIFIED FROM EQUIVALENT_COURSE ";
+  String INSERT_ALL =
+      "INSERT INTO EQUIVALENT_COURSE(PRE_COURSE_ID, NEW_COURSE_ID, LAST_MODIFIED) VALUES (?, ? , "
+          + getLastModifiedSql() + ") ";
+  String UPDATE_ALL =
+      "UPDATE EQUIVALENT_COURSE SET PRE_COURSE_ID = ?, NEW_COURSE_ID = ?, LAST_MODIFIED = "
+          + getLastModifiedSql() + " ";
   String DELETE_ALL = "DELETE FROM EQUIVALENT_COURSE ";
   String EXISTS = "SELECT COUNT(ID) EXIST FROM EQUIVALENT_COURSE ";
 
@@ -32,13 +37,14 @@ public class EquivalentCourseDao extends EquivalentCourseDaoDecorator {
   @Override
   public EquivalentCourse get(Integer pId) throws Exception {
     String query = SELECT_ALL + "WHERE ID = ? ";
-    return mJdbcTemplate.queryForObject(query, new Object[]{pId}, new EquivalentCourseMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new EquivalentCourseMapper());
   }
 
   @Override
   public int update(MutableEquivalentCourse pMutable) throws Exception {
     String query = UPDATE_ALL + " WHERE ID = ? ";
-    return mJdbcTemplate.update(query, pMutable.getOldCourseId(), pMutable.getNewCourseId(), pMutable.getId());
+    return mJdbcTemplate.update(query, pMutable.getOldCourseId(), pMutable.getNewCourseId(),
+        pMutable.getId());
   }
 
   @Override

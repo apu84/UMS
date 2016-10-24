@@ -20,8 +20,9 @@ public class PersistentMarksSubmissionStatus implements MutableMarksSubmissionSt
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sMarksSubmissionStatusManager = applicationContext.getBean("markSubmissionStatusManager",
-        MarksSubmissionStatusManager.class);
+    sMarksSubmissionStatusManager =
+        applicationContext.getBean("markSubmissionStatusManager",
+            MarksSubmissionStatusManager.class);
     sCourseManager = applicationContext.getBean("courseManager", CourseManager.class);
     sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
   }
@@ -41,10 +42,10 @@ public class PersistentMarksSubmissionStatus implements MutableMarksSubmissionSt
   private String mLastModified;
   private Integer mTotalPart;
 
-  public PersistentMarksSubmissionStatus() {
-  }
+  public PersistentMarksSubmissionStatus() {}
 
-  public PersistentMarksSubmissionStatus(MutableMarksSubmissionStatus pMarksSubmissionStatus) throws Exception {
+  public PersistentMarksSubmissionStatus(MutableMarksSubmissionStatus pMarksSubmissionStatus)
+      throws Exception {
     setId(pMarksSubmissionStatus.getId());
     setSemesterId(pMarksSubmissionStatus.getSemesterId());
     setCourseId(pMarksSubmissionStatus.getCourseId());
@@ -61,9 +62,10 @@ public class PersistentMarksSubmissionStatus implements MutableMarksSubmissionSt
 
   @Override
   public void commit(boolean update) throws Exception {
-    if (update) {
+    if(update) {
       sMarksSubmissionStatusManager.update(this);
-    } else {
+    }
+    else {
       sMarksSubmissionStatusManager.create(this);
     }
   }
@@ -110,7 +112,8 @@ public class PersistentMarksSubmissionStatus implements MutableMarksSubmissionSt
 
   @Override
   public Semester getSemester() throws Exception {
-    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager.validate(mSemester);
+    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
+        .validate(mSemester);
   }
 
   @Override

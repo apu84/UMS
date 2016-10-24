@@ -10,8 +10,8 @@ import org.ums.enums.ExamType;
 
 import java.util.Date;
 
-public interface MutableMarksSubmissionStatus extends MarksSubmissionStatus, Mutable, MutableIdentifier<Integer>,
-    MutableLastModifier {
+public interface MutableMarksSubmissionStatus extends MarksSubmissionStatus, Mutable,
+    MutableIdentifier<Integer>, MutableLastModifier {
 
   void setSemesterId(Integer pSemesterId);
 

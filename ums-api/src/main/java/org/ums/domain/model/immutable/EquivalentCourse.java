@@ -7,7 +7,8 @@ import org.ums.domain.model.mutable.MutableEquivalentCourse;
 
 import java.io.Serializable;
 
-public interface EquivalentCourse extends Serializable, Identifier<Integer>, EditType<MutableEquivalentCourse>, LastModifier {
+public interface EquivalentCourse extends Serializable, Identifier<Integer>,
+    EditType<MutableEquivalentCourse>, LastModifier {
   String getOldCourseId();
 
   Course getOldCourse() throws Exception;

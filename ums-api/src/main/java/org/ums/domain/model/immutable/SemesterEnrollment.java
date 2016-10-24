@@ -30,7 +30,8 @@ public interface SemesterEnrollment extends Serializable, LastModifier, Identifi
   Type getType();
 
   enum Type {
-    TEMPORARY(0), PERMANENT(1);
+    TEMPORARY(0),
+    PERMANENT(1);
 
     private static final Map<Integer, Type> lookup = new HashMap<>();
 

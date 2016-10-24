@@ -8,7 +8,10 @@ import java.util.Map;
  * Created by Ifti on 08-Jan-16.
  */
 public enum CourseType {
-  THEORY(1, "Theory"), SESSIONAL(2, "Sessional"), THESIS_PROJECT(3, "Thesis-Project"), NONE(0, "");
+  THEORY(1, "Theory"),
+  SESSIONAL(2, "Sessional"),
+  THESIS_PROJECT(3, "Thesis-Project"),
+  NONE(0, "");
 
   private String label;
   private int id;
