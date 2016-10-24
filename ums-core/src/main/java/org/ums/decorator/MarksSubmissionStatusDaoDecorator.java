@@ -1,5 +1,7 @@
 package org.ums.decorator;
 
+import java.util.List;
+
 import org.ums.domain.model.immutable.MarksSubmissionStatus;
 import org.ums.domain.model.mutable.MutableMarksSubmissionStatus;
 import org.ums.enums.ExamType;
@@ -13,5 +15,16 @@ public class MarksSubmissionStatusDaoDecorator
   public MarksSubmissionStatus get(Integer pSemesterId, String pCourseId, ExamType pExamType)
       throws Exception {
     return getManager().get(pSemesterId, pCourseId, pExamType);
+  }
+
+  @Override
+  public List<MarksSubmissionStatus> get(Integer pProgramId, Integer pSemesterId) throws Exception {
+    return getManager().get(pProgramId, pSemesterId);
+  }
+
+  @Override
+  public boolean isValidForResultProcessing(Integer pProgramId, Integer pSemesterId)
+      throws Exception {
+    return getManager().isValidForResultProcessing(pProgramId, pSemesterId);
   }
 }

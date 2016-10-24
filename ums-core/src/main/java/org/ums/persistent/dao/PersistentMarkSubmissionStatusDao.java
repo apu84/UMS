@@ -1,23 +1,21 @@
 package org.ums.persistent.dao;
 
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.ums.decorator.MarksSubmissionStatusDaoDecorator;
-import org.ums.domain.model.immutable.MarksSubmissionStatus;
-import org.ums.domain.model.immutable.Student;
-import org.ums.domain.model.mutable.MutableMarksSubmissionStatus;
-import org.ums.domain.model.mutable.MutableStudent;
-import org.ums.enums.CourseMarksSubmissionStatus;
-import org.ums.enums.ExamType;
-import org.ums.persistent.model.PersistentMarksSubmissionStatus;
-import org.ums.util.Constants;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.ums.decorator.MarksSubmissionStatusDaoDecorator;
+import org.ums.domain.model.immutable.MarksSubmissionStatus;
+import org.ums.domain.model.mutable.MutableMarksSubmissionStatus;
+import org.ums.enums.CourseMarksSubmissionStatus;
+import org.ums.enums.ExamType;
+import org.ums.persistent.model.PersistentMarksSubmissionStatus;
+import org.ums.util.Constants;
 
 public class PersistentMarkSubmissionStatusDao extends MarksSubmissionStatusDaoDecorator {
   String SELECT_ALL =
@@ -88,6 +86,13 @@ public class PersistentMarkSubmissionStatusDao extends MarksSubmissionStatusDaoD
     String query = SELECT_ALL + "WHERE SEMESTER_ID = ? AND COURSE_ID = ? AND EXAM_TYPE = ?";
     return mJdbcTemplate.queryForObject(query,
         new Object[] {pSemesterId, pCourseId, pExamType.getId()},
+        new MarksSubmissionStatusRowMapper());
+  }
+
+  @Override
+  public List<MarksSubmissionStatus> get(Integer pProgramId, Integer pSemesterId) throws Exception {
+    String query = SELECT_ALL + "WHERE SEMESTER_ID = ? ORDER BY COURSE_ID, EXAM_TYPE ";
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId},
         new MarksSubmissionStatusRowMapper());
   }
 
