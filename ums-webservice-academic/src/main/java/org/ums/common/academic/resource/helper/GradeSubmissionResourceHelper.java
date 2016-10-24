@@ -36,8 +36,8 @@ import org.ums.resource.ResourceHelper;
 import org.ums.services.academic.GradeSubmissionService;
 
 @Component
-public class GradeSubmissionResourceHelper
-    extends ResourceHelper<ExamGrade, MutableExamGrade, Object> {
+public class GradeSubmissionResourceHelper extends
+    ResourceHelper<ExamGrade, MutableExamGrade, Object> {
 
   @Autowired
   private ExamGradeManager mManager;
@@ -80,9 +80,9 @@ public class GradeSubmissionResourceHelper
 
     MarksSubmissionStatusDto marksSubmissionStatusDto =
         getContentManager().getMarksSubmissionStatus(pSemesterId, pCourseId, pExamType);
-    String currentActor = gradeSubmissionService.getActorForCurrentUser(
-        SecurityUtils.getSubject().getPrincipal().toString(), pRequestedRoleId, pSemesterId,
-        pCourseId);
+    String currentActor =
+        gradeSubmissionService.getActorForCurrentUser(SecurityUtils.getSubject().getPrincipal()
+            .toString(), pRequestedRoleId, pSemesterId, pCourseId);
 
     JsonReader jsonReader =
         Json.createReader(new StringReader(marksSubmissionStatusDto.toString()));
@@ -93,7 +93,8 @@ public class GradeSubmissionResourceHelper
     objectBuilder.add("current_actor", currentActor);
     objectBuilder.add("current_course_status", marksSubmissionStatusDto.getStatusId());
 
-    gradeSubmissionService.prepareGradeGroups(objectBuilder,
+    gradeSubmissionService.prepareGradeGroups(
+        objectBuilder,
         getContentManager().getAllGrades(pSemesterId, pCourseId, pExamType,
             marksSubmissionStatusDto.getCourseType()),
         CourseMarksSubmissionStatus.values()[marksSubmissionStatusDto.getStatusId()], currentActor);
@@ -144,8 +145,9 @@ public class GradeSubmissionResourceHelper
     MarksSubmissionStatusDto actualStatusDTO =
         getContentManager().getMarksSubmissionStatus(requestedStatusDTO.getSemesterId(),
             requestedStatusDTO.getCourseId(), requestedStatusDTO.getExamType());
-    String actingRoleForCurrentUser = gradeSubmissionService.getActorForCurrentUser(userId,
-        userRole, actualStatusDTO.getSemesterId(), actualStatusDTO.getCourseId());
+    String actingRoleForCurrentUser =
+        gradeSubmissionService.getActorForCurrentUser(userId, userRole,
+            actualStatusDTO.getSemesterId(), actualStatusDTO.getCourseId());
 
     if((actualStatusDTO.getCourseType() == CourseType.THEORY)
         && (actualStatusDTO.getStatus() == CourseMarksSubmissionStatus.NOT_SUBMITTED)) {
@@ -272,8 +274,9 @@ public class GradeSubmissionResourceHelper
     MarksSubmissionStatusDto actualStatusDTO =
         getContentManager().getMarksSubmissionStatus(requestedStatusDTO.getSemesterId(),
             requestedStatusDTO.getCourseId(), requestedStatusDTO.getExamType());
-    String actingRoleForCurrentUser = gradeSubmissionService.getActorForCurrentUser(userId,
-        userRole, actualStatusDTO.getSemesterId(), actualStatusDTO.getCourseId());
+    String actingRoleForCurrentUser =
+        gradeSubmissionService.getActorForCurrentUser(userId, userRole,
+            actualStatusDTO.getSemesterId(), actualStatusDTO.getCourseId());
     CourseMarksSubmissionStatus nextStatus =
         gradeSubmissionService.getCourseMarksSubmissionNextStatus(actingRoleForCurrentUser, action,
             actualStatusDTO.getStatus());
@@ -291,8 +294,9 @@ public class GradeSubmissionResourceHelper
     getContentManager().updateCourseMarksSubmissionStatus(actualStatusDTO, nextStatus);
 
     // Need to put log here....
-    String notificationConsumer = gradeSubmissionService.getUserIdForNotification(
-        actualStatusDTO.getSemesterId(), actualStatusDTO.getCourseId(), nextStatus);
+    String notificationConsumer =
+        gradeSubmissionService.getUserIdForNotification(actualStatusDTO.getSemesterId(),
+            actualStatusDTO.getCourseId(), nextStatus);
     if(!userId.equals(""))
       gradeSubmissionService.sendNotification(notificationConsumer, actualStatusDTO.getCourseNo());
 
@@ -306,8 +310,9 @@ public class GradeSubmissionResourceHelper
       final Integer pExamType, final Integer courseType) throws Exception {
 
     User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
-    List<GradeChartDataDto> examGradeStatusList = getContentManager().getChartData(pSemesterId,
-        pCourseId, ExamType.get(pExamType), CourseType.get(courseType));
+    List<GradeChartDataDto> examGradeStatusList =
+        getContentManager().getChartData(pSemesterId, pCourseId, ExamType.get(pExamType),
+            CourseType.get(courseType));
 
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
@@ -445,8 +450,9 @@ public class GradeSubmissionResourceHelper
     MarksSubmissionStatusDto marksSubmissionStatusDto =
         getContentManager().getMarksSubmissionStatus(pSemesterId, pCourseId, pExamType);
 
-    List<MarksLogDto> logList = getContentManager().getMarksLogs(pSemesterId, pCourseId, pExamType,
-        pStudentId, marksSubmissionStatusDto.getCourseType());
+    List<MarksLogDto> logList =
+        getContentManager().getMarksLogs(pSemesterId, pCourseId, pExamType, pStudentId,
+            marksSubmissionStatusDto.getCourseType());
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     JsonReader jsonReader;
