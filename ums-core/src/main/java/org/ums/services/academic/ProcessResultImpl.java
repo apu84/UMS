@@ -40,7 +40,8 @@ public class ProcessResultImpl implements ProcessResult {
   private final static String PROCESS_GRADES = "_process_grades";
   private final static String PROCESS_GRADES_TASK_NAME = "Processing student grades";
   private final static String PROCESS_GPA_CGPA_PROMOTION = "_process_gpa_cgpa_promotion";
-  private final static String PROCESS_GPA_CGPA_PROMOTION_TASK_NAME = "Processing student GPA, CGPA and PASS/FAIL status";
+  private final static String PROCESS_GPA_CGPA_PROMOTION_TASK_NAME =
+      "Processing student GPA, CGPA and PASS/FAIL status";
 
   private static final Integer UPDATE_NOTIFICATION_AFTER = 20;
   private static final Integer MAX_NO_FAILED_COURSE = 4;
@@ -157,23 +158,21 @@ public class ProcessResultImpl implements ProcessResult {
   private Double calculateGPA(List<UGRegistrationResult> pResults) throws Exception {
     int totalCrHr = 0;
     Double totalGPA = 0D;
-    for (UGRegistrationResult result : pResults) {
-      if (!EXCLUDE_GRADES.contains(result.getGradeLetter())) {
+    for(UGRegistrationResult result : pResults) {
+      if(!EXCLUDE_GRADES.contains(result.getGradeLetter())) {
         totalCrHr += result.getCourse().getCrHr();
         totalGPA += GPA_MAP.get(result.getGradeLetter()) * result.getCourse().getCrHr();
       }
     }
     Double toBeTruncated = totalGPA / totalCrHr;
-    return BigDecimal.valueOf(toBeTruncated)
-        .setScale(2, RoundingMode.HALF_UP)
-        .doubleValue();
+    return BigDecimal.valueOf(toBeTruncated).setScale(2, RoundingMode.HALF_UP).doubleValue();
   }
 
   private Boolean isPassed(List<UGRegistrationResult> pResults) throws Exception {
     int failedCourse = 0;
-    for (UGRegistrationResult result : pResults) {
-      if (result.getGradeLetter().equalsIgnoreCase("F")) {
-        if (result.getCourse().getCourseType() == CourseType.SESSIONAL) {
+    for(UGRegistrationResult result : pResults) {
+      if(result.getGradeLetter().equalsIgnoreCase("F")) {
+        if(result.getCourse().getCourseType() == CourseType.SESSIONAL) {
           return false;
         }
         failedCourse++;
@@ -185,10 +184,12 @@ public class ProcessResultImpl implements ProcessResult {
   @Override
   public TaskStatusResponse status(int pProgramId, int pSemesterId) throws Exception {
     TaskStatus status = mTaskStatusManager.get(pProgramId + "_" + pSemesterId + PROCESS_GRADES);
-    if (status.getStatus() == TaskStatus.Status.INPROGRESS) {
+    if(status.getStatus() == TaskStatus.Status.INPROGRESS) {
       return new TaskStatusResponse(status);
-    } else {
-      return new TaskStatusResponse(mTaskStatusManager.get(pProgramId + "_" + pSemesterId + PROCESS_GPA_CGPA_PROMOTION));
+    }
+    else {
+      return new TaskStatusResponse(mTaskStatusManager.get(pProgramId + "_" + pSemesterId
+          + PROCESS_GPA_CGPA_PROMOTION));
     }
   }
 }

@@ -16,8 +16,11 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentUGRegistrationResultDao extends UGRegistrationResultDaoDecorator {
-  String SELECT_ALL =
-      "SELECT STUDENT_ID, SEMESTER_ID, COURSE_ID, GRADE_LETTER, EXAM_TYPE, REG_TYPE, LAST_MODIFIED FROM UG_REGISTRATION_RESULT ";
+  String SELECT_ALL = "SELECT UG_REGISTRATION_RESULT.STUDENT_ID, "
+      + "UG_REGISTRATION_RESULT.SEMESTER_ID, " + "UG_REGISTRATION_RESULT.COURSE_ID, "
+      + "UG_REGISTRATION_RESULT.GRADE_LETTER, " + "UG_REGISTRATION_RESULT.EXAM_TYPE, "
+      + "UG_REGISTRATION_RESULT.REG_TYPE, " + "UG_REGISTRATION_RESULT.LAST_MODIFIED "
+      + "FROM UG_REGISTRATION_RESULT ";
 
   String INSERT_ALL =
       "INSERT INTO UG_REGISTRATION_RESULT(STUDENT_ID, SEMESTER_ID, COURSE_ID, GRADE_LETTER, EXAM_TYPE, TYPE, LAST_MODIFIED)"
@@ -89,6 +92,20 @@ public class PersistentUGRegistrationResultDao extends UGRegistrationResultDaoDe
     return mJdbcTemplate.query(query,
         new Object[] {pCourseId, pSemesterId, pCourseRegType.getId()},
         new UGRegistrationResultRowMapperWithoutResult());
+  }
+
+  @Override
+  public List<UGRegistrationResult> getResults(Integer pProgramId, Integer pSemesterId)
+      throws Exception {
+    String query =
+        SELECT_ALL
+            + ", STUDENT_RECORD, STUDENT WHERE STUDENT_RECORD.STUDENT_ID = UG_REGISTRATION_RESULT.STUDENT_ID "
+            + "AND STUDENT_RECORD.STUDENT_ID = STUDENT.STUDENT_ID, "
+            + "AND STUDENT_RECORD.REGISTRATION_TYPE != 'D' AND STUDENT_RECORD.REGISTRATION_TYPE != 'W' "
+            + "AND STUDENT_RECORD_SEMESTER_ID = ? " + "AND STUDENT.PROGRAM_ID = ? "
+            + "ORDER BY STUDENT_RECORD.STUDENT_ID, UG_REGISTRATION_RESULT.SEMESTER_ID";
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pProgramId},
+        new UGRegistrationResultRowMapperWithResult());
   }
 
   @Override

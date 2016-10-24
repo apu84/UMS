@@ -10,7 +10,8 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
-public interface TaskStatus extends Serializable, EditType<MutableTaskStatus>, Identifier<String>, LastModifier {
+public interface TaskStatus extends Serializable, EditType<MutableTaskStatus>, Identifier<String>,
+    LastModifier {
   String getTaskName() throws Exception;
 
   Status getStatus() throws Exception;
@@ -22,7 +23,6 @@ public interface TaskStatus extends Serializable, EditType<MutableTaskStatus>, I
     COMPLETED(2, "Completed"),
     NONE(0, "");
 
-
     private String label;
     private int id;
 
@@ -31,16 +31,13 @@ public interface TaskStatus extends Serializable, EditType<MutableTaskStatus>, I
       this.label = label;
     }
 
-
-    private static final Map<Integer, Status> lookup
-        = new HashMap<>();
+    private static final Map<Integer, Status> lookup = new HashMap<>();
 
     static {
-      for (Status c : EnumSet.allOf(Status.class)) {
+      for(Status c : EnumSet.allOf(Status.class)) {
         lookup.put(c.getId(), c);
       }
     }
-
 
     public static Status get(final int pId) {
       return lookup.get(pId);

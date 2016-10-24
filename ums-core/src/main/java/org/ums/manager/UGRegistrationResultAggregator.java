@@ -39,6 +39,23 @@ public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecor
     return equivalent(resultMap);
   }
 
+  @Override
+  public List<UGRegistrationResult> getResults(Integer pProgramId, Integer pSemesterId) throws Exception {
+    List<UGRegistrationResult> resultList = super.getResults(pProgramId, pSemesterId);
+
+    Map<String, List<UGRegistrationResult>> studentCourseGradeMap
+        = resultList.stream().collect(Collectors.groupingBy(UGRegistrationResult::getStudentId));
+
+    for (String studentId : studentCourseGradeMap.keySet()) {
+      Collections.sort(studentCourseGradeMap.get(studentId), new ResultComparator());
+      aggregateResults(studentCourseGradeMap.get(studentId));
+    }
+
+    return studentCourseGradeMap.values().stream()
+        .flatMap(List::stream)
+        .collect(Collectors.toList());
+  }
+
   private List<UGRegistrationResult> equivalent(Map<String, UGRegistrationResult> pResults) throws Exception {
     List<EquivalentCourse> equivalentCourses = mEquivalentCourseManager.getAll();
     Map<String, EquivalentCourse> equivalentCourseMap = equivalentCourses.stream().collect(

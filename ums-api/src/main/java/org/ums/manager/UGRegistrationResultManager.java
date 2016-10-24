@@ -29,4 +29,6 @@ public interface UGRegistrationResultManager extends
       CourseRegType pCourseRegType);
 
   List<UGRegistrationResult> getRegisteredCoursesWithResult(String pStudentId) throws Exception;
+
+  List<UGRegistrationResult> getResults(Integer pProgramId, Integer pSemesterId) throws Exception;
 }

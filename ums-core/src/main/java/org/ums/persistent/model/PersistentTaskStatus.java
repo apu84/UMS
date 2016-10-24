@@ -20,8 +20,7 @@ public class PersistentTaskStatus implements MutableTaskStatus {
   private String mLastModified;
   private String mProgressDescription;
 
-  public PersistentTaskStatus() {
-  }
+  public PersistentTaskStatus() {}
 
   private PersistentTaskStatus(final PersistentTaskStatus pPersistentTaskStatus) throws Exception {
     setId(pPersistentTaskStatus.getId());
@@ -32,9 +31,10 @@ public class PersistentTaskStatus implements MutableTaskStatus {
 
   @Override
   public void commit(boolean update) throws Exception {
-    if (update) {
+    if(update) {
       sTaskStatusManager.update(this);
-    } else {
+    }
+    else {
       sTaskStatusManager.create(this);
     }
   }

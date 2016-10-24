@@ -13,11 +13,15 @@ import java.sql.SQLException;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentTaskStatusDao extends TaskStatusDaoDecorator {
-  String SELECT_ALL = "SELECT TASK_ID, TASK_NAME, STATUS, PROGRESS_DESC, LAST_MODIFIED FROM TASK_STATUS ";
-  String UPDATE_ALL = "UPDATE TASK_STATUS TASK_NAME = ?, STATUS = ?, PROGRESS_DESC = ?, LAST_MODIFIED = " + getLastModifiedSql() + " ";
+  String SELECT_ALL =
+      "SELECT TASK_ID, TASK_NAME, STATUS, PROGRESS_DESC, LAST_MODIFIED FROM TASK_STATUS ";
+  String UPDATE_ALL =
+      "UPDATE TASK_STATUS TASK_NAME = ?, STATUS = ?, PROGRESS_DESC = ?, LAST_MODIFIED = "
+          + getLastModifiedSql() + " ";
   String DELETE_ALL = "DELETE FROM TASK_STATUS ";
-  String INSERT_ALL = "INSERT INTO TASK_STATUS(TASK_ID, TASK_NAME, STATUS, PROGRESS_DESC, LAST_MODIFIED) " +
-      "VALUES(?, ?, ?, ?, " + getLastModifiedSql() + ")";
+  String INSERT_ALL =
+      "INSERT INTO TASK_STATUS(TASK_ID, TASK_NAME, STATUS, PROGRESS_DESC, LAST_MODIFIED) "
+          + "VALUES(?, ?, ?, ?, " + getLastModifiedSql() + ")";
 
   private UMSJdbcTemplate mJdbcTemplate;
 
@@ -28,17 +32,18 @@ public class PersistentTaskStatusDao extends TaskStatusDaoDecorator {
   @Override
   public TaskStatus get(String pId) throws Exception {
     String query = SELECT_ALL + "WHERE TASK_ID = ?";
-    return mJdbcTemplate.queryForObject(query, new Object[]{pId}, new TaskStatusRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new TaskStatusRowMapper());
   }
 
   @Override
   public int update(MutableTaskStatus pMutable) throws Exception {
     String query = UPDATE_ALL + "WHERE TASK_ID = ?";
-    return mJdbcTemplate.update(query,
+    return mJdbcTemplate.update(
+        query,
         pMutable.getTaskName(),
         pMutable.getStatus().getId(),
-        StringUtils.isEmpty(pMutable.getProgressDescription()) ? "" : pMutable.getProgressDescription(),
-        pMutable.getId());
+        StringUtils.isEmpty(pMutable.getProgressDescription()) ? "" : pMutable
+            .getProgressDescription(), pMutable.getId());
   }
 
   @Override
@@ -49,11 +54,9 @@ public class PersistentTaskStatusDao extends TaskStatusDaoDecorator {
 
   @Override
   public int create(MutableTaskStatus pMutable) throws Exception {
-    return mJdbcTemplate.update(INSERT_ALL,
-        pMutable.getId(),
-        pMutable.getTaskName(),
-        pMutable.getStatus().getId(),
-        StringUtils.isEmpty(pMutable.getProgressDescription()) ? "" : pMutable.getProgressDescription());
+    return mJdbcTemplate.update(INSERT_ALL, pMutable.getId(), pMutable.getTaskName(), pMutable
+        .getStatus().getId(), StringUtils.isEmpty(pMutable.getProgressDescription()) ? ""
+        : pMutable.getProgressDescription());
   }
 
   private class TaskStatusRowMapper implements RowMapper<TaskStatus> {
@@ -63,8 +66,8 @@ public class PersistentTaskStatusDao extends TaskStatusDaoDecorator {
       taskStatus.setId(rs.getString("TASK_ID"));
       taskStatus.setTaskName(rs.getString("TASK_NAME"));
       taskStatus.setStatus(TaskStatus.Status.get(rs.getInt("STATUS")));
-      taskStatus.setProgressDescription(
-          StringUtils.isEmpty(rs.getString("PROGRESS_DESC")) ? "" : rs.getString("PROGRESS_DESC"));
+      taskStatus.setProgressDescription(StringUtils.isEmpty(rs.getString("PROGRESS_DESC")) ? ""
+          : rs.getString("PROGRESS_DESC"));
       taskStatus.setLastModified(rs.getString("LAST_MODIFIED"));
       AtomicReference<TaskStatus> atomicReference = new AtomicReference<>(taskStatus);
       return atomicReference.get();
