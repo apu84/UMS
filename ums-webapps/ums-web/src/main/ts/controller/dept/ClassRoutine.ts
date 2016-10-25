@@ -363,6 +363,7 @@ module ums {
                   });
 
                 }else{
+                  this.initializeColor();
                   this.notify.error("Time overlapping is not allowed");
                 }
               });
@@ -396,8 +397,10 @@ module ums {
         if(this.$scope.tmpRoutineArr[i].day==routine.day){
           if(Number(this.$scope.timeWithTimeIdMap[routine.startTime])>= Number(this.$scope.timeWithTimeIdMap[this.$scope.tmpRoutineArr[i].startTime]) &&
               Number(this.$scope.timeWithTimeIdMap[routine.endTime])<= Number(this.$scope.timeWithTimeIdMap[this.$scope.tmpRoutineArr[i].endTime]) &&
+                  this.$scope.tmpRoutineArr[i].section == routine.section ||
               this.$scope.tmpRoutineArr[i].roomNo== routine.roomNo){
             foundOccurrence=true;
+            this.colorOverlappedRoutine(this.$scope.tmpRoutineArr[i]);
             break;
           }
         }
@@ -461,8 +464,7 @@ module ums {
 
     private courseSelected(courseNo:string,routine:IClassRoutine):void{
 
-      this.checkIfTheCourseIsAlreadySelectedInTheSameDate(courseNo,routine).then((found:boolean)=>{
-        if(found==false){
+
           routine.section="";
           routine.courseId=this.$scope.courseNoMapCourseId[courseNo];
           routine.courseNo = courseNo;
@@ -493,11 +495,7 @@ module ums {
           }else{
             routine.section = this.$scope.section;
           }
-        }
-        else{
-          this.notify.error("The course is already assigned in the current date");
-        }
-      });
+
 
 
 
