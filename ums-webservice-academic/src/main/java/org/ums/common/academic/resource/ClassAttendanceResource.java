@@ -86,8 +86,8 @@ public class ClassAttendanceResource {
     String header =
         " [" + "      {" + "        data: 'sId'," + "        title: 'Student Id',"
             + "        readOnly:true" + "      }," + "      {" + "        data: 'sName',"
-            + "        title: 'Student Name'," + "        readOnly:true" + "      },"
-            + "      {" + "        data: 'date11012016'," + "        title: '11 Jan, 16',"
+            + "        title: 'Student Name'," + "        readOnly:true" + "      }," + "      {"
+            + "        data: 'date11012016'," + "        title: '11 Jan, 16',"
             + "        renderer: this.imageRenderer," + "        readOnly:true" + "      },"
             + "      {" + "        data: 'date21022016'," + "        title: '21 Feb, 16',"
             + "        renderer: this.imageRenderer," + "        readOnly:true" + "      },"
@@ -122,8 +122,6 @@ public class ClassAttendanceResource {
             + "      {" + "        data: 'date13072016'," + "        title: '13 Jul, 16',"
             + "        renderer: this.imageRenderer," + "        readOnly:true" + "      }"
             + "    ]";
-
-
 
     return null;
 

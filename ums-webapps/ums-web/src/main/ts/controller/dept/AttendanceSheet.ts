@@ -22,120 +22,44 @@ module ums {
       {
         data: 'sId',
         title: 'Student Id',
-        readOnly:true
+        readOnly:true,
+        date: '',
+        serial:0
       },
       {
         data: 'sName',
         title: 'Student Name',
-        readOnly:true
+        date: '',
+        readOnly:true,
+        serial:0
       },
       {
         data: 'date11012016',
-        title: '11 Jan, 16',
+        title:'11 Jan, 16 <span class="badge badge-info">3</span>',
+        date: '11 Jan, 16',
+        serial:3,
         renderer: this.imageRenderer,
-        readOnly:true,
-        serial:1,
-        teacherName:"Nurul Amin",
-        teacherShort:"nam"
+        readOnly:true
 
       },
       {
         data: 'date21022016',
-        title: '21 Feb, 16',
+        title:'21 Feb, 16 <span class="badge badge-info">2</span>',
+        date: '21 Jan, 16',
+        serial:2,
         renderer: this.imageRenderer,
         readOnly:true
       },
       {
         data: 'date01032016',
-        title: '01 Mar, 16',
-        renderer: this.imageRenderer,
-        readOnly:true
-      },
-      {
-        data: 'date10042016',
-        title: '10 Apr, 16',
-        renderer: this.imageRenderer
-      },
-      {
-        data: 'date15052016',
-        title: '15 Mar, 16',
-        renderer: this.imageRenderer,
-        readOnly:true
-      },
-      {
-        data: 'date22052016',
-        title: '22 May, 16',
-        renderer: this.imageRenderer,
-        readOnly:true
-      },
-      {
-        data: 'date01062016',
-        title: '01 Jun, 16',
-        renderer: this.imageRenderer,
-        readOnly:true
-      },
-      {
-        data: 'date07062016',
-        title: '07 Jun, 16',
-        renderer: this.imageRenderer,
-        readOnly:true
-      },
-      {
-        data: 'date12062016',
-        title: '12 Jun, 16',
-        renderer: this.imageRenderer,
-        readOnly:true
-      },
-      {
-        data: 'date25062016',
-        title: '25 Jun, 16',
-        renderer: this.imageRenderer,
-        readOnly:true
-      },
-      {
-        data: 'date01072016',
-        title: '01 Jul, 16',
-        renderer: this.imageRenderer,
-        readOnly:true
-      },
-      {
-        data: 'date03072016',
-        title: '03 Jul, 16',
-        renderer: this.imageRenderer,
-        readOnly:true
-      },
-      {
-        data: 'date05072016',
-        title: '05 Jul, 16',
-        renderer: this.imageRenderer,
-        readOnly:true
-      },
-      {
-        data: 'date07072016',
-        title: '07 Jul, 16',
-        renderer: this.imageRenderer,
-        readOnly:true
-      },
-      {
-        data: 'date09072016',
-        title: '09 Jul, 16',
-        renderer: this.imageRenderer,
-        readOnly:true
-      },
-      {
-        data: 'date11072016',
-        title: '11 Jul, 16',
-        renderer: this.imageRenderer,
-        readOnly:true
-      },
-      {
-        data: 'date13072016',
-        title: '13 Jul, 16',
+        title:'24 Feb, 16 <span class="badge badge-info">1</span>',
+        date: '24 Feb, 16',
+        serial:1,
         renderer: this.imageRenderer,
         readOnly:true
       }
     ];
-private serial;
+    private serial;
     private attendanceSearchParamModel: CourseTeacherSearchParamModel;
 
     constructor(private $scope: IAttr, private $stateParams: any,
@@ -151,7 +75,7 @@ private serial;
       var that=this;
       $scope.data = {
         settings:{
-          colWidths: [80, 230, 100, 100, 100, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90],
+          colWidths: [80, 230, 100, 100, 100],
           colHeaders: true,
           rowHeaders: true,
           fixedColumnsLeft: 2,
@@ -180,9 +104,11 @@ private serial;
           }
         },
         // items:[["160105001","Sadia Sultana","Y","N","Y","Y","N","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y"]]
-        items:[{'sId':'','sName':'','date11012016':'I','date21022016':'I','date01032016':'I','date10042016':'O-BBC-Md. Abul Malek','date15052016':'I','date22052016':'I','date01062016':'I','date07062016':'I','date12062016':'I','date25062016':'I','date01072016':'v','date03072016':'I','date05072016':'I','date07072016':'I','date09072016':'I','date11072016':'I','date13072016':'I'},
-               {'sId':'160105001','sName':'Sadia Sultana','date11012016':'Y','date21022016':'Y','date01032016':'Y','date10042016':'Y','date15052016':'Y','date22052016':'Y','date01062016':'Y','date07062016':'Y','date12062016':'Y','date25062016':'Y','date01072016':'Y','date03072016':'Y','date05072016':'Y','date07072016':'Y','date09072016':'Y','date11072016':'Y','date13072016':'Y'}],
-      columns:this.columnHeader
+        items:[{'sId':'','sName':'','date11012016':'I','date21022016':'I','date01032016':'I'},
+          {'sId':'160105001','sName':'Sadia Sultana','date11012016':'Y','date21022016':'Y','date01032016':'Y'},
+          {'sId':'160105002','sName':'Md. Ferdous Wahed','date11012016':'Y','date21022016':'Y','date01032016':'N'},
+          {'sId':'160105003','sName':'Tahsin Sarwar','date11012016':'Y','date21022016':'Y','date01032016':'Y'}],
+        columns:this.columnHeader
       };
 
 
@@ -233,17 +159,17 @@ private serial;
       var output="";
       var nonEditModeString = '<i class="fa fa-pencil-square-o" aria-hidden="true" style="cursor:pointer;margin-left:2px;" onClick="operation(\'E\','+row+','+col+',\''+value+'\')"></i>';
       var editModeString = '<i class="fa fa-check-square-o" aria-hidden="true" style="color:green;cursor:pointer;" onClick="operation(\'EY\','+row+','+col+',\''+value+'\')";></i> ' +
-                                       '<i class="fa fa-times" aria-hidden="true" style="color:red;cursor:pointer;margin-left:2px;" onClick="operation(\'EN\','+row+','+col+',\''+value+'\')";></i>'+
-                                       '<i class="fa fa-undo" aria-hidden="true" style="cursor:pointer;margin-left:2px;" onClick="operation(\'R\','+row+','+col+',\''+value+'\')";></i>'+
-                                       '<i class="fa fa-floppy-o" aria-hidden="true" style="cursor:pointer;margin-left:2px;"></i>'+
-                                       '<i class="fa fa-trash-o" aria-hidden="true"  style="color:red;cursor:pointer;margin-left:2px;" ></i>';
+          '<i class="fa fa-times" aria-hidden="true" style="color:red;cursor:pointer;margin-left:2px;" onClick="operation(\'EN\','+row+','+col+',\''+value+'\')";></i>'+
+          '<i class="fa fa-undo" aria-hidden="true" style="cursor:pointer;margin-left:2px;" onClick="operation(\'R\','+row+','+col+',\''+value+'\')";></i>'+
+          '<i class="fa fa-floppy-o" aria-hidden="true" style="cursor:pointer;margin-left:2px;"></i>'+
+          '<i class="fa fa-trash-o" aria-hidden="true"  style="color:red;cursor:pointer;margin-left:2px;" ></i>';
       if (value == "Y")
         output = "<img src='images/attendancePresent.png' />";
       else if (value == "N")
         output="<img src='images/attendanceAbsent.png' />";
       else if (value.indexOf("E-")==0){
         if((value.split("-"))[1]=="Y")
-            output="<input type='checkbox' checked/>";
+          output="<input type='checkbox' checked/>";
         else
           output="<input type='checkbox'/>";
       }
@@ -305,8 +231,8 @@ private serial;
         hot.setDataAtCell(update1);
         hot.render();
 
-        var dateValue=$("#date_"+serial).val();
-        classDate.title=dateValue;
+        //var dateValue=$("#date_"+serial).val();
+        classDate.title=classDate.date+" "+"<span class='badge badge-info'>"+classDate.serial+"</span>";
         this.columnHeader[column]=classDate;
         hot.updateSettings({
           columns:this.columnHeader
@@ -316,32 +242,46 @@ private serial;
 
 
       var rows = hot.countRows();
-     // console.log(rows);
+      var newData=hot.getSourceData();
+      // console.log(rows);
       for(var i = 0; i < rows; i++){
         if(i==0 && operationType=="E"){
           //console.log("-------->>");
           update.push([i,column,'IE']);
+          newData[i][this.columnHeader[column].data]='IE';
         }
         else if(i!=0 && (operationType =='Y' || operationType =='N' || operationType =='E'  || operationType=='EY' || operationType == 'EN')){
 
-          if(operationType=='E')
-              update.push([i, column,  'E'+"-"+hot.getDataAtCell(i,column)]);
-          else if(operationType=='EY' )
-            update.push([i, column,  "E-Y"]);
-          else if(operationType=='EN' )
-            update.push([i, column,  "E-N"]);
+          if(operationType=='E') {
+            update.push([i, column, 'E' + "-" + hot.getDataAtCell(i, column)]);
+            newData[i][this.columnHeader[column].data]='E' + "-" + hot.getDataAtCell(i, column);
+
+
+          }
+          else if(operationType=='EY' ) {
+            update.push([i, column, "E-Y"]);
+            newData[i][this.columnHeader[column].data]='E-Y';
+          }
+          else if(operationType=='EN' ) {
+            update.push([i, column, "E-N"]);
+            newData[i][this.columnHeader[column].data]='E-N';
+          }
         }
       }
 
-      hot.setDataAtCell(update);
-    //  hot.render();
 
+      console.log(newData);
+      //  hot.setDataAtCell(update);
+      hot.loadData(newData);
+      //  hot.render();
+      //
       if(operationType=="E"){
         localStorage["class_attendance_" + row+"_"+column] = JSON.stringify(update);
         //classDate.title="<a onclick=\"showCalendar('"+serial+"')\">c</a><input id='date_"+serial+"' type='text' style='width:80px;height:20px;border:1px solid grey;text-align:center;' value=\""+classDate.title+"\"  />";
         this.columnHeader[column]=classDate;
         classDate.title="<i class='fa fa-calendar' aria-hidden='true' onclick=\"showCalendar('"+serial+"')\" style='cursor:pointer'></i>&nbsp;"+
-        "<input id='date_"+serial+"' class='date_"+serial+"'  type='text' style='width:55px;height:14px;border:1px solid grey;text-align:center;font-size:10px;' value=\""+classDate.title+"\"  />";
+        "<input id='date_"+serial+"' class='date_"+serial+"'  type='text' style='width:55px;height:14px;border:1px solid grey;text-align:center;font-size:10px;' value=\""+classDate.date+"\"  readonly/>&nbsp;"+
+        "<input id='serial_"+serial+"' class='serial_"+serial+"'  type='text' style='width:15px;height:14px;border:1px solid grey;text-align:center;font-size:10px;' value=\""+classDate.serial+"\"  readonly/>";
 
         hot.updateSettings({
           columns:this.columnHeader
@@ -349,10 +289,12 @@ private serial;
       }
 
 
+
     }
 
     private showCalendar(serial){
-      $("#date_"+serial).datepicker("show");
+      $('#class_date').val($('#date_'+serial).val());
+      $('#class_serial').val($('#serial_'+serial).val());
       $('#myModal').modal('show');
       this.serial=serial;
     }
@@ -362,7 +304,10 @@ private serial;
       this.columnHeader.splice(2, 0, {
         data: 'new',
         title: 'new',
-        renderer: this.imageRenderer
+        renderer: this.imageRenderer,
+        date:'',
+        serial:0 ,
+        readOnly:true
       });
       hot.updateSettings({
         columns:this.columnHeader
@@ -384,27 +329,28 @@ private serial;
     }
 
     private setDate(){
-    console.log($("#class_date").val());
+      console.log($("#class_date").val());
       console.log(this.serial);
       console.log($("#date_"+this.serial));
 
-     // document.getElementById("date_"+this.serial).value="1111";
-    //$("#date_"+this.serial).val($("#class_date").val());
+      // document.getElementById("date_"+this.serial).value="1111";
+      //$("#date_"+this.serial).val($("#class_date").val());
 
       var elements = document.getElementsByClassName("date_"+this.serial);
       var names = '';
       for(var i=0; i<elements.length; i++) {
-         $(elements[i]).val($("#class_date").val());
+        $(elements[i]).val($("#class_date").val());
         $(elements[i]).attr('value',$("#class_date").val());
       }
       //alert(Number((this.serial).charAt(1)));
       var classDate=this.columnHeader[Number((this.serial).charAt(1))];
       //classDate.title=$("#class_date").val();
       classDate.title="<i class='fa fa-calendar' aria-hidden='true' onclick=\"showCalendar('"+this.serial+"')\" style='cursor:pointer'></i>&nbsp;"+
-      "<input id='date_"+this.serial+"' class='date_"+this.serial+"'  type='text' style='width:55px;height:14px;border:1px solid grey;text-align:center;font-size:10px;' value=\""+$("#class_date").val()+"\"  />";
+      "<input id='date_"+this.serial+"' class='date_"+this.serial+"'  type='text' style='width:55px;height:14px;border:1px solid grey;text-align:center;font-size:10px;' value=\""+$("#class_date").val()+"\"  />&nbsp;"+
+      "<input id='serial_"+this.serial+"' class='serial_"+this.serial+"'  type='text' style='width:15px;height:14px;border:1px solid grey;text-align:center;font-size:10px;' value=\""+$("#class_serial").val()+"\"  />";
 
       this.columnHeader[Number((this.serial).charAt(1))]=classDate;
-     $('#myModal').modal('hide');
+      $('#myModal').modal('hide');
     }
     private fetchCourseInfo(): void {
 
