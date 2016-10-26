@@ -22,6 +22,7 @@ public class PersistentTaskStatusDao extends TaskStatusDaoDecorator {
   String INSERT_ALL =
       "INSERT INTO TASK_STATUS(TASK_ID, TASK_NAME, STATUS, PROGRESS_DESC, LAST_MODIFIED) "
           + "VALUES(?, ?, ?, ?, " + getLastModifiedSql() + ")";
+  String MAX_SERIAL = "SELECT MAX(SERIAL) FROM TASK_STATUS WHERE TASK_ID = ?";
 
   private UMSJdbcTemplate mJdbcTemplate;
 
@@ -31,25 +32,25 @@ public class PersistentTaskStatusDao extends TaskStatusDaoDecorator {
 
   @Override
   public TaskStatus get(String pId) throws Exception {
-    String query = SELECT_ALL + "WHERE TASK_ID = ?";
-    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new TaskStatusRowMapper());
+    String query = SELECT_ALL + "WHERE TASK_ID = ? AND SERIAL = (" + MAX_SERIAL + ")";
+    return mJdbcTemplate.queryForObject(query, new Object[]{pId, pId}, new TaskStatusRowMapper());
   }
 
   @Override
   public int update(MutableTaskStatus pMutable) throws Exception {
-    String query = UPDATE_ALL + "WHERE TASK_ID = ?";
+    String query = UPDATE_ALL + "WHERE TASK_ID = ? AND SERIAL = (" + MAX_SERIAL + ")";
     return mJdbcTemplate.update(
         query,
         pMutable.getTaskName(),
         pMutable.getStatus().getId(),
         StringUtils.isEmpty(pMutable.getProgressDescription()) ? "" : pMutable
-            .getProgressDescription(), pMutable.getId());
+            .getProgressDescription(), pMutable.getId(), pMutable.getId());
   }
 
   @Override
   public int delete(MutableTaskStatus pMutable) throws Exception {
-    String query = DELETE_ALL + "WHERE TASK_ID = ?";
-    return mJdbcTemplate.update(query, pMutable.getId());
+    String query = DELETE_ALL + "WHERE TASK_ID = ? AND SERIAL = (" + MAX_SERIAL + ")";
+    return mJdbcTemplate.update(query, pMutable.getId(), pMutable.getId());
   }
 
   @Override
