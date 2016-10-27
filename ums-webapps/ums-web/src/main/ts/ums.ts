@@ -701,19 +701,17 @@ module ums {
         .state('attendanceSheet', {
           url: "/attendanceSheet",
           controller: 'AttendanceSheet',
-          templateUrl: 'views/dept/attendance-sheet.html'
-          /*
+          templateUrl: 'views/dept/attendance-sheet.html',
           resolve: {
             loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
               return $ocLazyLoad.load({
-                files: ['http://handsontable.github.io/ngHandsontable/bower_components/handsontable/dist/handsontable.full.css',
-                  'http://handsontable.github.io/ngHandsontable/bower_components/angular/angular.js',
-                  'http://handsontable.github.io/ngHandsontable/bower_components/handsontable/dist/handsontable.full.js',
-                  'http://handsontable.github.io/ngHandsontable/dist/ngHandsontable.js'
+                files: ['https://www.jqueryscript.net/demo/Path-like-Circle-Menu-with-jQuery-CSS3-Transforms-WCircleMenu/jQuery.WCircleMenu.js',
+                  'vendors/bootstrap-datepicker/css/datepicker.css',
+                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js'
                 ]
               });
             }]
-          }*/
+          }
         })
       //In database use /dummyController/H or /dummyController/T in the location column
       //https://localhost/ums-web/iums/#/dummyConroller/T

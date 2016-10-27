@@ -6,6 +6,20 @@
     .handsontableInput {
         box-shadow: 0 0 0 2px #5292F7 inset !important;
     }
+    .currentRow {
+        background-color: #E0FFFF !important;
+    }
+    .currentCol {
+        background-color: #E7E8EF !important;
+    }
+    .handsontable .htDimmed {
+        color: #000000 !important;
+    }
+    input[type=checkbox], input[type=radio]{
+        margin: 0px !important;
+    }
+
+
 </style>
 <div class="row" id="topArrowDiv">
     <div class="col-md-2 col-md-offset-5">
@@ -24,7 +38,7 @@
             <h3 class="panel-title">Select </h3>
         </div>
         <div class="panel-body pan">
-            <form action="" class="form-horizontal" data-validate=""  data-onvalidate="fetchCourseInfo" >
+            <form action="" class="form-horizontal" data-validate=""  data-onvalidate="fetchCourseInfo" id="form11">
                 <div class="form-body pal">
                     <div data-program-selector="" data-model="attendanceSearchParamModel.programSelector"></div>
                     <div class="form-group">
@@ -111,7 +125,7 @@
     }
 </script>
 <div class="row">
-    <div class="col-md-12" >
+    <div class="col-md-12"  style="padding-top: 20px;  ">
     <hot-table hot-id="foo"
                settings="data.settings"
                datarows="data.items"
@@ -121,6 +135,45 @@
 </div>
     <button data-ng-click="test123()" >Click Me1133333</button>
     <button data-ng-click="insertColo()" >Add new</button>
+
 </div>
 
+<!-- Modal -->
+<div id="myModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                <h4 class="modal-title">Select a Date</h4></div>
+            <div class="modal-body"><p>
+                Serial: <input type="text" id="class_serial" />   Date : <input type="text" id="class_date" />
+            </p></div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
+                <button type="button" class="btn btn-primary"  data-ng-click="setDate()">Set Selected Date</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+        <script type="text/javascript">
+            function operation(operationType,row,column,value) {
+                var scope = angular.element(document.getElementById("form11")).scope();
+                scope.$apply(function () {
+                    scope.operation(operationType,row,column,value);
+                });
+            }
+
+            function showCalendar(serial) {
+                var scope = angular.element(document.getElementById("form11")).scope();
+                scope.$apply(function () {
+                    scope.showCalendar(serial);
+                });
+            }
+            $("#class_date").datepicker({
+                format: 'dd M, yy'
+            });
+
+        </script>
 
