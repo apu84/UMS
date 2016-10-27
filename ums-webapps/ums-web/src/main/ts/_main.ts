@@ -112,6 +112,7 @@
 /// <reference path='controller/dept/CourseTeacher.ts'/>
 /// <reference path='controller/dept/Examiner.ts'/>
 /// <reference path='controller/dept/TeachersRoutine.ts'/>
+/// <reference path='controller/dept/RoomBasedRoutine.ts'/>
 /// <reference path='controller/dept/StudentsRoutine.ts'/>
 
 /// <reference path='controller/common/academic/ClassRoomInfo.ts'/>

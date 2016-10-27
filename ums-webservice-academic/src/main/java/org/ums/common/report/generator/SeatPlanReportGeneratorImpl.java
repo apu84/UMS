@@ -797,7 +797,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                        * 
                        * 
                        * ClassRoom room = mRoomManager.get(seatPlan.getClassRoomId()); Paragraph
-                       * roomNoParagraph= new Paragraph(roomNo+ room.getRoomNo());
+                       * roomNoParagraph= new Paragraph(roomNo+ room.getRoomId());
                        * roomNoParagraph.setAlignment(Element.ALIGN_CENTER);
                        * roomNoParagraph.setFont(FontFactory.getFont(FontFactory.TIMES_BOLD));
                        * PdfPCell roomCell = new PdfPCell(roomNoParagraph);

@@ -31,7 +31,7 @@ public interface MutableRoutine extends Routine, Mutable, MutableLastModifier,
 
   void setEndTime(final String pEndTime);
 
-  void setRoomNo(final String pRoomNo);
+  void setRoomId(final Integer pRoomId);
 
   void setDuration(final int mDuration);
 

@@ -4,10 +4,8 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.itextpdf.text.pdf.qrcode.ByteArray;
 import org.apache.commons.lang.UnhandledException;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authz.UnauthenticatedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.ums.domain.model.immutable.*;
@@ -17,12 +15,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.sql.Time;
-import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -33,6 +29,9 @@ public class ClassRoutineGeneratorImpl implements ClassRoutineGenerator {
 
   @Autowired
   TeacherManager mTeacherManager;
+
+  @Autowired
+  ClassRoomManager mClassRoomManager;
 
   @Autowired
   SemesterManager mSemesterManager;
@@ -144,6 +143,11 @@ public class ClassRoutineGeneratorImpl implements ClassRoutineGenerator {
 
     Font tableDataFont = new Font(Font.FontFamily.TIMES_ROMAN,7);
     Font tableDataFontTime = new Font(Font.FontFamily.TIMES_ROMAN,11);
+
+    Map<Integer,List<ClassRoom>> roomsMap = mClassRoomManager.getAll()
+        .stream()
+        .collect(Collectors.groupingBy(ClassRoom::getId,Collectors.toList()));
+
     List<Semester> semesterList = mSemesterManager.getAll().stream()
         .filter(pSemester -> {
           try{
@@ -223,7 +227,7 @@ public class ClassRoutineGeneratorImpl implements ClassRoutineGenerator {
               String courseId= routines.get(0).getCourseId();
               sectionList.add(routines.get(0).getSection());
               String sections= routines.get(0).getSection();
-              String roomNo = routines.get(0).getRoomNo();
+              String roomNo = roomsMap.get(routines.get(0).getRoomId()).get(0).getRoomNo() ;
               int duration  = routines.get(0).getDuration();
 
               int routineIterator=1;

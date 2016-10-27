@@ -14,4 +14,6 @@ public interface ClassRoomManager extends ContentManager<ClassRoom, MutableClass
   public ClassRoom getByRoomNo(String pRoomNo) throws Exception;
 
   public List<ClassRoom> getSeatPlanRooms(Integer pSemesterid, Integer pExamType) throws Exception;
+
+  public List<ClassRoom> getRoomsBasedOnRoutine(int pSemesterId, int pProgramId) throws Exception;
 }

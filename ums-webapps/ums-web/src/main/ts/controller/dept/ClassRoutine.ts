@@ -33,6 +33,8 @@ module ums {
 
     //map
     courseIdMapCourseNo:any;
+    roomIdMapRoomNo:any;
+    roomNoMapRoomId:any;
     dateMap:any;
     dateMapFromDateToNumber:any;
     courseNoMapCourseId:any;
@@ -108,6 +110,7 @@ module ums {
     endTime:string;
     duration:string;
     roomNo:string;
+    roomId:number;
     updated:boolean;
     editRoutine:boolean;
     showEditButton:boolean;
@@ -396,8 +399,7 @@ module ums {
       for(var i=0;i<this.$scope.tmpRoutineArr.length;i++){
         if(this.$scope.tmpRoutineArr[i].day==routine.day){
           if(Number(this.$scope.timeWithTimeIdMap[routine.startTime])>= Number(this.$scope.timeWithTimeIdMap[this.$scope.tmpRoutineArr[i].startTime]) &&
-              Number(this.$scope.timeWithTimeIdMap[routine.endTime])<= Number(this.$scope.timeWithTimeIdMap[this.$scope.tmpRoutineArr[i].endTime]) &&
-                  this.$scope.tmpRoutineArr[i].section == routine.section ||
+              Number(this.$scope.timeWithTimeIdMap[routine.endTime])<=Number(this.$scope.timeWithTimeIdMap[this.$scope.tmpRoutineArr[i].endTime]) &&
               this.$scope.tmpRoutineArr[i].roomNo== routine.roomNo){
             foundOccurrence=true;
             this.colorOverlappedRoutine(this.$scope.tmpRoutineArr[i]);
@@ -577,6 +579,21 @@ module ums {
     }
 
 
+    private createRoomMaps(rooms:Array<IClassRoom>):ng.IPromise<any>{
+
+      var defer = this.$q.defer();
+      this.$scope.roomIdMapRoomNo={};
+      this.$scope.roomNoMapRoomId={};
+      for(var i=0;i<rooms.length;i++){
+        this.$scope.roomIdMapRoomNo[rooms[i].id]=rooms[i].roomNo;
+        this.$scope.roomNoMapRoomId[rooms[i].roomNo] = rooms[i].id;
+      }
+
+      defer.resolve("done");
+      return defer.promise;
+    }
+
+
     private searchForRoutineData():void{
 
       this.setSemesterNameAndProgramNameAndProgramType();
@@ -612,31 +629,35 @@ module ums {
         this.classRoomService.getClassRooms().then((rooms:Array<IClassRoom>)=>{
           this.$scope.roomArr=[];
           this.$scope.roomArr = rooms;
+          this.createRoomMaps(rooms).then((done:string)=>{
+            this.$scope.routineArr=[];
+            this.$scope.tmpRoutineArr=[];
+            this.classRoutineService.getClassRoutineForEmployee(this.$scope.semesterId,this.$scope.studentsYear,this.$scope.studentsSemester,this.$scope.section)
+                .then((routineArr:Array<IClassRoutine>)=>{
+                  console.log('class routines--->";')
+                  console.log(routineArr);
+                  for(var k=0;k<routineArr.length;k++){
+                    routineArr[k].backgroundColor="white";
+                    routineArr[k].day = this.$scope.dateMap[String(routineArr[k].day)];
+                    routineArr[k].courseNo = this.$scope.courseIdMapCourseNo[routineArr[k].courseId];
+                    routineArr[k].courseType = this.$scope.courseNoMapCourse[this.$scope.courseIdMapCourseNo[routineArr[k].courseId]].type;
+                    routineArr[k].roomNo = this.$scope.roomIdMapRoomNo[routineArr[k].roomId];
+                    this.$scope.routineArr.push(angular.copy(routineArr[k]));
+                    this.$scope.tmpRoutineArr.push(angular.copy(routineArr[k]));
+                  }
+
+                  console.log(this.$scope.routineArr);
+
+                  this.$scope.showLoader=false;
+
+                  if(routineArr.length>0){
+                    this.$scope.showRoutineTable=true;
+                  }
+
+                });
+          });
 
 
-          this.$scope.routineArr=[];
-          this.$scope.tmpRoutineArr=[];
-          this.classRoutineService.getClassRoutineForEmployee(this.$scope.semesterId,this.$scope.studentsYear,this.$scope.studentsSemester,this.$scope.section)
-              .then((routineArr:Array<IClassRoutine>)=>{
-                console.log(this.$scope.courseNoMapCourse);
-                for(var k=0;k<routineArr.length;k++){
-                  routineArr[k].backgroundColor="white";
-                  routineArr[k].day = this.$scope.dateMap[String(routineArr[k].day)];
-                  routineArr[k].courseNo = this.$scope.courseIdMapCourseNo[routineArr[k].courseId];
-                  routineArr[k].courseType = this.$scope.courseNoMapCourse[this.$scope.courseIdMapCourseNo[routineArr[k].courseId]].type;
-                  this.$scope.routineArr.push(angular.copy(routineArr[k]));
-                  this.$scope.tmpRoutineArr.push(angular.copy(routineArr[k]));
-                }
-
-                console.log(this.$scope.routineArr);
-
-                this.$scope.showLoader=false;
-
-                if(routineArr.length>0){
-                  this.$scope.showRoutineTable=true;
-                }
-
-              });
         });
 
       });
@@ -738,7 +759,7 @@ module ums {
           item['academicSemester']=this.$scope.studentsSemester;
           item['startTime'] = r.startTime;
           item['endTime'] = r.endTime;
-          item['roomNo']=r.roomNo;
+          item['roomNo']=this.$scope.roomNoMapRoomId[r.roomNo];
           item['status'] = r.status;
           jsonObject.push(item);
         }

@@ -34,7 +34,7 @@ public interface Routine extends Serializable, LastModifier, EditType<MutableRou
 
   int getDuration() throws Exception;
 
-  String getRoomNo();
+  Integer getRoomId();
 
   String getStatus();
 }

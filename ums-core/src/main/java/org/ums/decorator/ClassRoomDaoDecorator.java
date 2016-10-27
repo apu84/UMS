@@ -26,4 +26,9 @@ public class ClassRoomDaoDecorator extends
   public List<ClassRoom> getSeatPlanRooms(Integer pSemesterId, Integer pExamType) throws Exception {
     return getManager().getSeatPlanRooms(pSemesterId, pExamType);
   }
+
+  @Override
+  public List<ClassRoom> getRoomsBasedOnRoutine(int pSemesterId, int pProgramId) throws Exception {
+    return getManager().getRoomsBasedOnRoutine(pSemesterId, pProgramId);
+  }
 }
