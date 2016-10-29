@@ -1,7 +1,7 @@
 module ums {
   interface IAttr extends ng.IScope {
-    test123:Function;
-    insertColo:Function;
+    downloadSectionWiseXls:Function;
+    insertNewAttendanceColumn:Function;
     loadingVisibility:any;
     contentVisibility:any;
     data:any;
@@ -13,52 +13,13 @@ module ums {
     fetchCourseInfo:any;
     selectedCourseNo:any;
     entries:any;
+    addNewColumnDisable:any;
   }
   export class AttendanceSheet {
 
     public static $inject = ['$scope', '$stateParams', 'appConstants', 'HttpClient','hotRegisterer'];
     private currentUser: LoggedInUser;
-    private columnHeader= [
-      {
-        data: 'sId',
-        title: 'Student Id',
-        readOnly:true,
-        date: '',
-        serial:0
-      },
-      {
-        data: 'sName',
-        title: 'Student Name',
-        date: '',
-        readOnly:true,
-        serial:0
-      },
-      {
-        data: 'date11012016',
-        title:'11 Jan, 16 <span class="badge badge-info">3</span>',
-        date: '11 Jan, 16',
-        serial:3,
-        renderer: this.imageRenderer,
-        readOnly:true
-
-      },
-      {
-        data: 'date21022016',
-        title:'21 Feb, 16 <span class="badge badge-info">2</span>',
-        date: '21 Jan, 16',
-        serial:2,
-        renderer: this.imageRenderer,
-        readOnly:true
-      },
-      {
-        data: 'date01032016',
-        title:'24 Feb, 16 <span class="badge badge-info">1</span>',
-        date: '24 Feb, 16',
-        serial:1,
-        renderer: this.imageRenderer,
-        readOnly:true
-      }
-    ];
+    private columnHeader;
     private serial;
     private attendanceSearchParamModel: CourseTeacherSearchParamModel;
 
@@ -67,11 +28,59 @@ module ums {
 
       $scope.loadingVisibility = false;
       $scope.contentVisibility = false;
-      $scope.test123=this.test123.bind(this);
-      $scope.insertColo=this.insertColo.bind(this);
+      $scope.addNewColumnDisable=false;
+      $scope.downloadSectionWiseXls=this.downloadSectionWiseXls.bind(this);
+      $scope.insertNewAttendanceColumn=this.insertNewAttendanceColumn.bind(this);
 
 
       $scope.showAttendanceSheet=this.showAttendanceSheet.bind(this);
+      this.columnHeader=[
+        {
+          data: 'sId',
+          title: 'Student Id',
+          readOnly:true,
+          date: '',
+          serial:0,
+          teacherId:"0"
+        },
+        {
+          data: 'sName',
+          title: 'Student Name',
+          date: '',
+          readOnly:true,
+          serial:0,
+          teacherId:"0"
+        },
+        {
+          data: 'date11012016',
+          title:'11 Jan, 16 <span class="badge badge-info">3</span>',
+          date: '11 Jan, 16',
+          serial:3,
+          renderer: this.imageRenderer,
+          readOnly:true,
+          teacherId:"11"
+
+        },
+        {
+          data: 'date21022016',
+          title:'21 Feb, 16 <span class="badge badge-info">2</span>',
+          date: '21 Jan, 16',
+          serial:2,
+          renderer: this.imageRenderer,
+          readOnly:true,
+          teacherId:"22"
+        },
+        {
+          data: 'date01032016',
+          title:'24 Feb, 16 <span class="badge badge-info">1</span>',
+          date: '24 Feb, 16',
+          serial:1,
+          renderer: this.imageRenderer,
+          readOnly:true,
+          teacherId:"33"
+        }
+      ];
+
       var that=this;
       $scope.data = {
         settings:{
@@ -84,7 +93,7 @@ module ums {
           height:$( window ).height()-200,
           currentRowClassName: 'currentRow',
           currentColClassName: 'currentCol',
-          fillHandle: false,
+          fillHandle: false
           //cells: function(r,c, prop) {
           //  var cellProperties :any={};
           //  if (c==0 || c==1 || r===0) {
@@ -93,18 +102,18 @@ module ums {
           //
           //  return cellProperties;
           //},
-          afterOnCellMouseDown: function(event, coords){
-            console.log(coords.row+"==="+coords.col);
-            var hot = that.hotRegisterer.getInstance("foo");
-            var update = [];
-            update.push([coords.row,coords.col,'I']);
-
-            var tab = hot.getData();
-            //hot.setDataAtCell(update);
-          }
+          //afterOnCellMouseDown: function(event, coords){
+          //  console.log(coords.row+"==="+coords.col);
+          //  var table = this.getTableInstance();
+          //  var update = [];
+          //  update.push([coords.row,coords.col,'I']);
+          //
+          //  var tab = table.getData();
+          //  //hot.setDataAtCell(update);
+          //}
         },
         // items:[["160105001","Sadia Sultana","Y","N","Y","Y","N","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y"]]
-        items:[{'sId':'','sName':'','date11012016':'I','date21022016':'I','date01032016':'I'},
+        items:[{'sId':'','sName':'','date11012016':'I','date21022016':'T-ARM','date01032016':'I'},
           {'sId':'160105001','sName':'Sadia Sultana','date11012016':'Y','date21022016':'Y','date01032016':'Y'},
           {'sId':'160105002','sName':'Md. Ferdous Wahed','date11012016':'Y','date21022016':'Y','date01032016':'N'},
           {'sId':'160105003','sName':'Tahsin Sarwar','date11012016':'Y','date21022016':'Y','date01032016':'Y'}],
@@ -157,6 +166,7 @@ module ums {
       var value = Handsontable.helper.stringify(value);
       var serial=row+''+col;
       var output="";
+
       var nonEditModeString = '<i class="fa fa-pencil-square-o" aria-hidden="true" style="cursor:pointer;margin-left:2px;" onClick="operation(\'E\','+row+','+col+',\''+value+'\')"></i>';
       var editModeString = '<i class="fa fa-check-square-o" aria-hidden="true" style="color:green;cursor:pointer;" onClick="operation(\'EY\','+row+','+col+',\''+value+'\')";></i> ' +
           '<i class="fa fa-times" aria-hidden="true" style="color:red;cursor:pointer;margin-left:2px;" onClick="operation(\'EN\','+row+','+col+',\''+value+'\')";></i>'+
@@ -180,12 +190,14 @@ module ums {
         output="<input type='checkbox' />";
       }
       else if(value=="I") {
-        output=nonEditModeString;
+          output=nonEditModeString;
       }
       else if(value=="IE") {
         output=editModeString;
       }
-
+      else if (value.indexOf("T-")==0){
+        output=value;
+      }
 //      Handsontable.Dom.addEvent(img, 'mousedown', function (e){
 //        e.preventDefault(); // prevent selection quirk
 //      });
@@ -200,16 +212,16 @@ module ums {
       return td;
     }
 
-    private test123(){
-      var hot_instance = this.hotRegisterer.getInstance("foo");
-      var data = hot_instance.getData();
-      var exportPlugin = hot_instance.getPlugin('exportFile');
+    private downloadSectionWiseXls(){
+      var table = this.getTableInstance();
+      var data = table.getData();
+      var exportPlugin = table.getPlugin('exportFile');
       console.log(data);
       exportPlugin.downloadFile('csv', {filename: 'MyFile'});
     }
 
     private operation(operationType,row,column,value){
-      var hot = this.hotRegisterer.getInstance("foo");
+      var table = this.getTableInstance();
       var serial=row+""+column;
 
       var classDate=this.columnHeader[column];
@@ -228,21 +240,21 @@ module ums {
           update1.push(innerArray)
         }
         update1[0]=[0,column,"I"];
-        hot.setDataAtCell(update1);
-        hot.render();
+        table.setDataAtCell(update1);
+        table.render();
 
         //var dateValue=$("#date_"+serial).val();
         classDate.title=classDate.date+" "+"<span class='badge badge-info'>"+classDate.serial+"</span>";
         this.columnHeader[column]=classDate;
-        hot.updateSettings({
+        table.updateSettings({
           columns:this.columnHeader
         });
         return;
       }
 
 
-      var rows = hot.countRows();
-      var newData=hot.getSourceData();
+      var rows = table.countRows();
+      var newData=table.getSourceData();
       // console.log(rows);
       for(var i = 0; i < rows; i++){
         if(i==0 && operationType=="E"){
@@ -253,8 +265,8 @@ module ums {
         else if(i!=0 && (operationType =='Y' || operationType =='N' || operationType =='E'  || operationType=='EY' || operationType == 'EN')){
 
           if(operationType=='E') {
-            update.push([i, column, 'E' + "-" + hot.getDataAtCell(i, column)]);
-            newData[i][this.columnHeader[column].data]='E' + "-" + hot.getDataAtCell(i, column);
+            update.push([i, column, 'E' + "-" + table.getDataAtCell(i, column)]);
+            newData[i][this.columnHeader[column].data]='E' + "-" + table.getDataAtCell(i, column);
 
 
           }
@@ -272,7 +284,7 @@ module ums {
 
       console.log(newData);
       //  hot.setDataAtCell(update);
-      hot.loadData(newData);
+      table.loadData(newData);
       //  hot.render();
       //
       if(operationType=="E"){
@@ -283,7 +295,7 @@ module ums {
         "<input id='date_"+serial+"' class='date_"+serial+"'  type='text' style='width:55px;height:14px;border:1px solid grey;text-align:center;font-size:10px;' value=\""+classDate.date+"\"  readonly/>&nbsp;"+
         "<input id='serial_"+serial+"' class='serial_"+serial+"'  type='text' style='width:15px;height:14px;border:1px solid grey;text-align:center;font-size:10px;' value=\""+classDate.serial+"\"  readonly/>";
 
-        hot.updateSettings({
+        table.updateSettings({
           columns:this.columnHeader
         });
       }
@@ -299,22 +311,38 @@ module ums {
       this.serial=serial;
     }
 
-    private insertColo(){
-      var hot = this.hotRegisterer.getInstance("foo");
+    private getTableInstance():any{
+    return this.hotRegisterer.getInstance("attendanceHandsOnTable");
+  }
+    private insertNewAttendanceColumn(){
+
+      var maxSerial = Math.max.apply(null, this.columnHeader.map(function(a:any){return a.serial;})) ; //Get maximum serial  from json object array columnHeader
+      var nextSerial=maxSerial+1;
+      var today=new Date();
+      var year:string=today.getFullYear()+'';
+      var dateFormat1 = today.getDate()+''+(today.getMonth()+1)+''+ today.getFullYear()+''+nextSerial;
+      var dateFormat2 = today.getDate()+' '+Utils.SHORT_MONTH_ARR[today.getMonth()] +', '+year.substring(2,4);
+      this.$scope.addNewColumnDisable = true;
+
+
+
+      var table = this.getTableInstance();
       this.columnHeader.splice(2, 0, {
-        data: 'new',
-        title: 'new',
+        data: 'date'+dateFormat1,
+        title: dateFormat2+ "&nbsp;<span class='badge badge-info'>"+nextSerial+"</span>",
+        date:dateFormat2,
+        serial:nextSerial, //new to find out
         renderer: this.imageRenderer,
-        date:'',
-        serial:0 ,
-        readOnly:true
+        readOnly:true,
+        teacherId:"22"
       });
-      hot.updateSettings({
+
+      table.updateSettings({
         columns:this.columnHeader
       });
 
       var update = [];
-      var rows = hot.countRows();
+      var rows = table.countRows();
       for(var i = 0; i < rows; i++){
         if(i==0){
           update.push([i,2,'I']);
@@ -323,8 +351,8 @@ module ums {
           update.push([i, 2, 'Y']);
         }
       }
-      hot.setDataAtCell(update);
-      hot.render();
+      table.setDataAtCell(update);
+      table.render();
 
     }
 
