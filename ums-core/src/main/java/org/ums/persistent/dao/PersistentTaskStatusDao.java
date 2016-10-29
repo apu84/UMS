@@ -33,7 +33,7 @@ public class PersistentTaskStatusDao extends TaskStatusDaoDecorator {
   @Override
   public TaskStatus get(String pId) throws Exception {
     String query = SELECT_ALL + "WHERE TASK_ID = ? AND SERIAL = (" + MAX_SERIAL + ")";
-    return mJdbcTemplate.queryForObject(query, new Object[]{pId, pId}, new TaskStatusRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId, pId}, new TaskStatusRowMapper());
   }
 
   @Override

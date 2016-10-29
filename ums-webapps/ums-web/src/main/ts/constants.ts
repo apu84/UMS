@@ -498,7 +498,18 @@ module ums {
           {id: "32", name: "3-2"},
           {id: "41", name: "4-1"},
           {id: "42", name: "4-2"}
-        ]
+        ],
+        MARKS_SUBMISSION_STATUS: {
+          NOT_SUBMITTED: 0,
+          WAITING_FOR_SCRUTINY: 1,
+          REQUESTED_FOR_RECHECK_BY_SCRUTINIZER: 2,
+          WAITING_FOR_HEAD_APPROVAL: 3,
+          REQUESTED_FOR_RECHECK_BY_HEAD: 4,
+          WAITING_FOR_COE_APPROVAL: 5,
+          REQUESTED_FOR_RECHECK_BY_COE: 6,
+          ACCEPTED_BY_COE: 7,
+          WAITING_FOR_RECHECK_REQUEST_APPROVAL: 8
+        }
 
       }
     }

@@ -91,7 +91,7 @@ public class PersistentMarkSubmissionStatusDao extends MarksSubmissionStatusDaoD
 
   @Override
   public List<MarksSubmissionStatus> get(Integer pProgramId, Integer pSemesterId) throws Exception {
-    String query = SELECT_ALL + "WHERE SEMESTER_ID = ? ORDER BY COURSE_ID, EXAM_TYPE ";
+    String query = SELECT_ALL + "WHERE SEMESTER_ID = ? ORDER BY COURSE_ID, EXAM_TYPE DESC";
     return mJdbcTemplate.query(query, new Object[] {pSemesterId},
         new MarksSubmissionStatusRowMapper());
   }

@@ -23,6 +23,12 @@ public class MarksSubmissionStatusDaoDecorator
   }
 
   @Override
+  public List<MarksSubmissionStatus> getByProgramType(Integer pProgramTypeId, Integer pSemesterId)
+      throws Exception {
+    return getManager().getByProgramType(pProgramTypeId, pSemesterId);
+  }
+
+  @Override
   public boolean isValidForResultProcessing(Integer pProgramId, Integer pSemesterId)
       throws Exception {
     return getManager().isValidForResultProcessing(pProgramId, pSemesterId);

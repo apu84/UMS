@@ -4,6 +4,7 @@ import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.common.EditType;
 import org.ums.domain.model.common.Mutable;
+import org.ums.domain.model.immutable.MarksSubmissionStatus;
 import org.ums.manager.ContentManager;
 
 import javax.json.Json;
@@ -66,6 +67,20 @@ public abstract class ResourceHelper<R extends EditType<M>, M extends Mutable, I
     JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
     getBuilder().build(jsonObjectBuilder, pObject, pUriInfo, pLocalCache);
     return jsonObjectBuilder.build();
+  }
+
+  protected JsonObject buildJsonResponse(final List<R> pObjectList, final UriInfo pUriInfo)
+      throws Exception {
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+    for(R readOnly : pObjectList) {
+      children.add(toJson(readOnly, pUriInfo, localCache));
+    }
+    object.add("entries", children);
+    localCache.invalidate();
+
+    return object.build();
   }
 
   public Response delete(final I pObjectId) throws Exception {

@@ -1,5 +1,7 @@
 package org.ums.cache;
 
+import java.util.List;
+
 import org.ums.domain.model.immutable.MarksSubmissionStatus;
 import org.ums.domain.model.mutable.MutableMarksSubmissionStatus;
 import org.ums.enums.ExamType;
@@ -32,5 +34,22 @@ public class MarksSubmissionStatusCache
   public MarksSubmissionStatus get(Integer pSemesterId, String pCourseId, ExamType pExamType) throws Exception {
     String cacheKey = getCacheKey(MarksSubmissionStatus.class.toString(), pSemesterId, pCourseId, pExamType);
     return cachedEntity(cacheKey, () -> getManager().get(pSemesterId, pCourseId, pExamType));
+  }
+
+  @Override
+  public List<MarksSubmissionStatus> get(Integer pProgramId, Integer pSemesterId) throws Exception {
+    return getManager().get(pProgramId, pSemesterId);
+  }
+
+  @Override
+  public List<MarksSubmissionStatus> getByProgramType(Integer pProgramTypeId, Integer pSemesterId)
+      throws Exception {
+    return getManager().getByProgramType(pProgramTypeId, pSemesterId);
+  }
+
+  @Override
+  public boolean isValidForResultProcessing(Integer pProgramId, Integer pSemesterId)
+      throws Exception {
+    return getManager().isValidForResultProcessing(pProgramId, pSemesterId);
   }
 }

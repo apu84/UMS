@@ -1,5 +1,10 @@
 package org.ums.configuration;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
+import javax.sql.DataSource;
+
 import org.apache.shiro.authc.credential.PasswordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -27,10 +32,6 @@ import org.ums.statistics.JdbcTemplateFactory;
 import org.ums.statistics.QueryLogger;
 import org.ums.statistics.TextLogger;
 import org.ums.util.Constants;
-
-import javax.sql.DataSource;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 
 @Configuration
 @EnableAsync
@@ -464,7 +465,9 @@ public class UMSContext {
   MarksSubmissionStatusManager marksSubmissionStatusManager() {
     MarksSubmissionStatusCache cache =
         new MarksSubmissionStatusCache(mCacheFactory.getCacheManager());
-    cache.setManager(new PersistentMarkSubmissionStatusDao(mTemplateFactory.getJdbcTemplate(),
+    MarksSubmissionStatusAggregator aggregator = new MarksSubmissionStatusAggregator();
+    cache.setManager(aggregator);
+    aggregator.setManager(new PersistentMarkSubmissionStatusDao(mTemplateFactory.getJdbcTemplate(),
         getGenericDateFormat()));
     return cache;
   }

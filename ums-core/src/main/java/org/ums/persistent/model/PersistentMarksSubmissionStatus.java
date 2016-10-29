@@ -21,7 +21,7 @@ public class PersistentMarksSubmissionStatus implements MutableMarksSubmissionSt
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sMarksSubmissionStatusManager =
-        applicationContext.getBean("markSubmissionStatusManager",
+        applicationContext.getBean("marksSubmissionStatusManager",
             MarksSubmissionStatusManager.class);
     sCourseManager = applicationContext.getBean("courseManager", CourseManager.class);
     sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);

@@ -91,20 +91,6 @@ public abstract class AbstractAssignedTeacherResourceHelper<R extends EditType<M
     return buildJsonResponse(assignedTeachers, pUriInfo);
   }
 
-  protected JsonObject buildJsonResponse(final List<R> pAssignedTeachers, final UriInfo pUriInfo)
-      throws Exception {
-    JsonObjectBuilder object = Json.createObjectBuilder();
-    JsonArrayBuilder children = Json.createArrayBuilder();
-    LocalCache localCache = new LocalCache();
-    for(R assignedTeacher : pAssignedTeachers) {
-      children.add(toJson(assignedTeacher, pUriInfo, localCache));
-    }
-    object.add("entries", children);
-    localCache.invalidate();
-
-    return object.build();
-  }
-
   @Override
   protected abstract C getContentManager();
 }
