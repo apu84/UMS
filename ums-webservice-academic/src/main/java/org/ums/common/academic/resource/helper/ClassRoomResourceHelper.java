@@ -78,7 +78,7 @@ public class ClassRoomResourceHelper extends ResourceHelper<ClassRoom, MutableCl
 
     List<ClassRoom> roomList = getRoomsByDepartment();
 
-    return buildClassRooms(roomList,pUriInfo);
+    return buildClassRooms(roomList, pUriInfo);
   }
 
   private List<ClassRoom> getRoomsByDepartment() throws Exception{
@@ -146,9 +146,10 @@ public class ClassRoomResourceHelper extends ResourceHelper<ClassRoom, MutableCl
     return object.build();
   }
 
-  public JsonObject getRoomsBasedOnRoutine(int pSemesterId, int pProgramid,UriInfo pUriInfo) throws  Exception{
+  public JsonObject getRoomsBasedOnRoutine(int pSemesterId, int pProgramid, UriInfo pUriInfo)
+      throws Exception {
 
-    List<ClassRoom> roomList = getContentManager().getRoomsBasedOnRoutine(pSemesterId,pProgramid);
+    List<ClassRoom> roomList = getContentManager().getRoomsBasedOnRoutine(pSemesterId, pProgramid);
     return buildClassRooms(roomList, pUriInfo);
   }
 

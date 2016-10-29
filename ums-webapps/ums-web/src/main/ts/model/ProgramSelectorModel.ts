@@ -110,8 +110,8 @@ module ums {
 
       this.programId = '';
       this.departmentId = '';
-      this.programTypeId = String(Utils.UG);
-      this.loadSemester();
+      this.programTypeId = Utils.UG+'';
+      this.loadDepartments();
     }
 
     public setDepartment(departmentId: string): void {
@@ -133,6 +133,7 @@ module ums {
     public loadDepartments(): void {
       this.setPrograms(this.getAppConstants().initProgram);
       this.programId = '';
+
 
       if (this.programTypeId == Utils.UG+'') {
         this.setDepartments(this.getAppConstants().ugDept);

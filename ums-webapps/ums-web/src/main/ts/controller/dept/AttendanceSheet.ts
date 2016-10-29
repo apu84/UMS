@@ -32,59 +32,13 @@ module ums {
       $scope.downloadSectionWiseXls=this.downloadSectionWiseXls.bind(this);
       $scope.insertNewAttendanceColumn=this.insertNewAttendanceColumn.bind(this);
 
-
       $scope.showAttendanceSheet=this.showAttendanceSheet.bind(this);
-      this.columnHeader=[
-        {
-          data: 'sId',
-          title: 'Student Id',
-          readOnly:true,
-          date: '',
-          serial:0,
-          teacherId:"0"
-        },
-        {
-          data: 'sName',
-          title: 'Student Name',
-          date: '',
-          readOnly:true,
-          serial:0,
-          teacherId:"0"
-        },
-        {
-          data: 'date11012016',
-          title:'11 Jan, 16 <span class="badge badge-info">3</span>',
-          date: '11 Jan, 16',
-          serial:3,
-          renderer: this.imageRenderer,
-          readOnly:true,
-          teacherId:"11"
-
-        },
-        {
-          data: 'date21022016',
-          title:'21 Feb, 16 <span class="badge badge-info">2</span>',
-          date: '21 Jan, 16',
-          serial:2,
-          renderer: this.imageRenderer,
-          readOnly:true,
-          teacherId:"22"
-        },
-        {
-          data: 'date01032016',
-          title:'24 Feb, 16 <span class="badge badge-info">1</span>',
-          date: '24 Feb, 16',
-          serial:1,
-          renderer: this.imageRenderer,
-          readOnly:true,
-          teacherId:"33"
-        }
-      ];
+      this.columnHeader=[];
 
       var that=this;
       $scope.data = {
         settings:{
-          colWidths: [80, 230, 100, 100, 100],
+          colWidths: [80, 230, 100, 100],
           colHeaders: true,
           rowHeaders: true,
           fixedColumnsLeft: 2,
@@ -94,30 +48,16 @@ module ums {
           currentRowClassName: 'currentRow',
           currentColClassName: 'currentCol',
           fillHandle: false
-          //cells: function(r,c, prop) {
-          //  var cellProperties :any={};
-          //  if (c==0 || c==1 || r===0) {
-          //    cellProperties.readOnly = true;
-          //  }
-          //
-          //  return cellProperties;
-          //},
-          //afterOnCellMouseDown: function(event, coords){
-          //  console.log(coords.row+"==="+coords.col);
-          //  var table = this.getTableInstance();
-          //  var update = [];
-          //  update.push([coords.row,coords.col,'I']);
-          //
-          //  var tab = table.getData();
-          //  //hot.setDataAtCell(update);
-          //}
         },
-        // items:[["160105001","Sadia Sultana","Y","N","Y","Y","N","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y"]]
+        items:[],
+        columns:[]
+        /*
         items:[{'sId':'','sName':'','date11012016':'I','date21022016':'T-ARM','date01032016':'I'},
           {'sId':'160105001','sName':'Sadia Sultana','date11012016':'Y','date21022016':'Y','date01032016':'Y'},
           {'sId':'160105002','sName':'Md. Ferdous Wahed','date11012016':'Y','date21022016':'Y','date01032016':'N'},
           {'sId':'160105003','sName':'Tahsin Sarwar','date11012016':'Y','date21022016':'Y','date01032016':'Y'}],
         columns:this.columnHeader
+        */
       };
 
 
@@ -137,28 +77,30 @@ module ums {
             setTimeout(function(){
               that.$scope.attendanceSearchParamModel.semesterId=that.$scope.attendanceSearchParamModel.programSelector.getSemesters()[1].id;
             },1000);
-
-
-
-
-
           });
 
-      //this.httpClient.get("academic/classattendance/ifti", this.appConstants.mimeTypeJson,
-      //    (json:any, etag:string) => {
-      //      var response:any = json.entries;
-      //      console.log(response);
-      //    },
-      //    (response:ng.IHttpPromiseCallbackArg<any>) => {
-      //      console.error(response);
-      //    });
+      this.httpClient.get("academic/classattendance/ifti", this.appConstants.mimeTypeJson,
+          (json:any, etag:string) => {
+                var response:any = json;
+            console.log(response);
+                var table = this.getTableInstance();
+                this.columnHeader=response.columns;
+            for(var i=2;i<this.columnHeader.length;i++){
+
+              var a=this.columnHeader[i];
+              a.renderer= this.imageRenderer;
+            }
+                this.$scope.data.columns=this.columnHeader;
+                this.$scope.data. items=response.attendance;
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>) => {
+            console.error(response);
+          });
 
       this.$scope.fetchCourseInfo = this.fetchCourseInfo.bind(this);
       this.$scope.operation=this.operation.bind(this);
       this.$scope.showCalendar=this.showCalendar.bind(this);
       this.$scope.setDate=this.setDate.bind(this);
-
-
 
     }
     private imageRenderer (instance, td, row, col, prop, value, cellProperties) {

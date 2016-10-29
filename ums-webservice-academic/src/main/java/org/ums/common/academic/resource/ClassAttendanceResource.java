@@ -2,6 +2,9 @@ package org.ums.common.academic.resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ums.common.academic.resource.helper.ClassAttendanceResourceHelper;
+import org.ums.common.academic.resource.helper.GradeSubmissionResourceHelper;
+import org.ums.enums.ExamType;
 import org.ums.manager.ClassRoomManager;
 import org.ums.resource.Resource;
 
@@ -26,12 +29,14 @@ public class ClassAttendanceResource {
   @Autowired
   ClassRoomManager mManager;
 
+  @Autowired
+  ClassAttendanceResourceHelper mResourceHelper;
+
   @GET
   @Path("/ifti")
   public JsonObject getAll() throws Exception {
-    
 
-    return null;
+    return mResourceHelper.getClassAttendance(11012016, "CSE1101");
 
   }
 
