@@ -160,6 +160,18 @@
                     scope.operation(operationType,row,column,value);
                 });
             }
+            function saveAttendance(row,column){
+                var scope = getAngularScope();
+                scope.$apply(function () {
+                    scope.saveAttendance(row,column);
+                });
+            }
+            function deleteAttendance(operationType,row,column){
+                var scope = getAngularScope();
+                scope.$apply(function () {
+                    scope.deleteAttendance(operationType,row,column);
+                });
+            }
 
             function showCalendar(serial) {
                 var scope = getAngularScope();

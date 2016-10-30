@@ -7,12 +7,14 @@ import com.google.gson.Gson;
  */
 public class ClassAttendanceDto {
 
+  private String id;
   private String classDate;
   private String classDateFormat1;
   private Integer serial;
   private String teacherId;
   private String studentId;
   private String studentName;
+  private Integer attendance;
 
   public String getClassDate() {
     return classDate;
@@ -58,8 +60,24 @@ public class ClassAttendanceDto {
     return studentName;
   }
 
+  public Integer getAttendance() {
+    return attendance;
+  }
+
+  public void setAttendance(Integer attendance) {
+    this.attendance = attendance;
+  }
+
   public void setStudentName(String studentName) {
     this.studentName = studentName;
+  }
+
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
   }
 
   public String toString() {

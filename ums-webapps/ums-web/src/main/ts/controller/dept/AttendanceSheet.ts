@@ -10,21 +10,28 @@ module ums {
     showCalendar:Function;
     setDate:Function;
     operation:Function;
+    saveAttendance:Function;
+    deleteAttendance:Function;
     fetchCourseInfo:any;
     selectedCourseNo:any;
     entries:any;
     addNewColumnDisable:any;
   }
-  export class AttendanceSheet {
+  interface IClassAttendance {
+    studentId:string;
+    studentName:string;
+    attendance:number;
+  }
 
-    public static $inject = ['$scope', '$stateParams', 'appConstants', 'HttpClient','hotRegisterer'];
+  export class AttendanceSheet {
+    public static $inject = ['$scope', '$stateParams', 'appConstants', 'HttpClient','hotRegisterer','notify'];
     private currentUser: LoggedInUser;
     private columnHeader;
     private serial;
     private attendanceSearchParamModel: CourseTeacherSearchParamModel;
 
     constructor(private $scope: IAttr, private $stateParams: any,
-                private appConstants: any, private httpClient: HttpClient,private hotRegisterer:any) {
+                private appConstants: any, private httpClient: HttpClient,private hotRegisterer:any,private notify: Notify) {
 
       $scope.loadingVisibility = false;
       $scope.contentVisibility = false;
@@ -79,7 +86,7 @@ module ums {
             },1000);
           });
 
-      this.httpClient.get("academic/classattendance/ifti", this.appConstants.mimeTypeJson,
+      this.httpClient.get("academic/classAttendance/ifti", this.appConstants.mimeTypeJson,
           (json:any, etag:string) => {
                 var response:any = json;
             console.log(response);
@@ -101,6 +108,9 @@ module ums {
       this.$scope.operation=this.operation.bind(this);
       this.$scope.showCalendar=this.showCalendar.bind(this);
       this.$scope.setDate=this.setDate.bind(this);
+      this.$scope.saveAttendance=this.saveAttendance.bind(this);
+      this.$scope.deleteAttendance=this.deleteAttendance.bind(this);
+
 
     }
     private imageRenderer (instance, td, row, col, prop, value, cellProperties) {
@@ -113,8 +123,13 @@ module ums {
       var editModeString = '<i class="fa fa-check-square-o" aria-hidden="true" style="color:green;cursor:pointer;" onClick="operation(\'EY\','+row+','+col+',\''+value+'\')";></i> ' +
           '<i class="fa fa-times" aria-hidden="true" style="color:red;cursor:pointer;margin-left:2px;" onClick="operation(\'EN\','+row+','+col+',\''+value+'\')";></i>'+
           '<i class="fa fa-undo" aria-hidden="true" style="cursor:pointer;margin-left:2px;" onClick="operation(\'R\','+row+','+col+',\''+value+'\')";></i>'+
-          '<i class="fa fa-floppy-o" aria-hidden="true" style="cursor:pointer;margin-left:2px;"></i>'+
-          '<i class="fa fa-trash-o" aria-hidden="true"  style="color:red;cursor:pointer;margin-left:2px;" ></i>';
+          '<i class="fa fa-floppy-o" aria-hidden="true" style="cursor:pointer;margin-left:2px;" onClick="saveAttendance('+row+','+col+')";></i>';
+
+      if(value=="I-N")
+        editModeString+='<i class="fa fa-trash-o" aria-hidden="true"  style="color:red;cursor:pointer;margin-left:2px;" onClick="deleteAttendance(\'New\','+row+','+col+')";></i>';
+      else
+        editModeString+='<i class="fa fa-trash-o" aria-hidden="true"  style="color:red;cursor:pointer;margin-left:2px;" onClick="deleteAttendance(\'Old\','+row+','+col+')";></i>';
+
       if (value == "Y")
         output = "<img src='images/attendancePresent.png' />";
       else if (value == "N")
@@ -131,7 +146,7 @@ module ums {
       else if (value == "EN"){
         output="<input type='checkbox' />";
       }
-      else if(value=="I") {
+      else if(value=="I" || value=="I-N") {
           output=nonEditModeString;
       }
       else if(value=="IE") {
@@ -246,11 +261,60 @@ module ums {
 
     }
 
+    private saveAttendance(row,column){
+      var complete_json=this.createCompleteJson(row,column)
+      var url = "academic/classAttendance";
+      this.httpClient.post(url, complete_json, 'application/json')
+          .success(() => {
+            this.notify.success("Successfully Saved New Attendance.");
+          }).error((data) => {
+          });
+    }
+
+    private deleteAttendance(operationType,row,column){
+
+      if(operationType=="Old") {
+        this.$scope.data.columns.splice(column, 1);
+        this.$scope.addNewColumnDisable=false;
+      }
+      else{
+        //this.$scope.data.columns.splice(column, 1);
+        alert("Need to do more work here....");
+      }
+
+
+      //var complete_json=this.createCompleteJson(row,column)
+      //var url = "academic/classAttendance";
+      //this.httpClient.post(url, complete_json, 'application/json')
+      //    .success(() => {
+      //      this.notify.success("Successfully Saved New Attendance.");
+      //    }).error((data) => {
+      //    });
+    }
+
+    private createCompleteJson(row:number,column:number):any{
+      var table = this.getTableInstance();
+      var attendances=table.getData();
+      var attendanceList:Array<IClassAttendance> = new Array<IClassAttendance>();
+      for(var i=1;i<attendances.length;i++){
+        var attendance:IClassAttendance = <IClassAttendance>{};
+        var cell=attendances[i];
+        attendance.studentId=cell[0];
+        attendance.attendance=cell[2]=="E-Y"?1:0;
+        attendanceList.push(attendance);
+      }
+      var complete_json = {};
+      complete_json["attendanceList"] = attendanceList;
+      complete_json["date"] = $("#date_"+row+column).val();
+      complete_json["serial"] = $("#serial_"+row+column).val();
+      return complete_json;
+    }
     private showCalendar(serial){
       $('#class_date').val($('#date_'+serial).val());
       $('#class_serial').val($('#serial_'+serial).val());
       $('#myModal').modal('show');
       this.serial=serial;
+
     }
 
     private getTableInstance():any{
@@ -275,8 +339,8 @@ module ums {
         date:dateFormat2,
         serial:nextSerial, //new to find out
         renderer: this.imageRenderer,
-        readOnly:true,
-        teacherId:"22"
+        readOnly:true
+        //teacherId:"22"
       });
 
       table.updateSettings({
@@ -285,13 +349,9 @@ module ums {
 
       var update = [];
       var rows = table.countRows();
-      for(var i = 0; i < rows; i++){
-        if(i==0){
-          update.push([i,2,'I']);
-        }
-        else {
+      update.push([0,2,'I-N']);  //I New Column
+      for(var i = 1; i < rows; i++){
           update.push([i, 2, 'Y']);
-        }
       }
       table.setDataAtCell(update);
       table.render();

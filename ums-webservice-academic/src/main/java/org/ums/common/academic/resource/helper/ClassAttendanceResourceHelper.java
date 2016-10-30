@@ -52,76 +52,73 @@ public class ClassAttendanceResourceHelper {
     Map<String, String> attendanceList = getContentManager().getAttendance(pSemesterId, pCourseId);
     JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
 
-
     JsonBuilderFactory factory = Json.createBuilderFactory(null);
-    JsonArray jsonArray ;
-    JsonArrayBuilder jsonArrayBuilder=factory.createArrayBuilder();
+    JsonArray jsonArray;
+    JsonArrayBuilder jsonArrayBuilder = factory.createArrayBuilder();
     JsonObjectBuilder jsonObjectBuilder;
-    int index=0;
+    int index = 0;
 
-    jsonObjectBuilder=factory.createObjectBuilder();
-    for(ClassAttendanceDto date:dateList) {
-      if(index==0){
-        jsonObjectBuilder.add("sId","")
-            .add("sName", "");
+    jsonObjectBuilder = factory.createObjectBuilder();
+    for(ClassAttendanceDto date : dateList) {
+      if(index == 0) {
+        jsonObjectBuilder.add("sId", "").add("sName", "");
       }
-      index=index + 1;
+      index = index + 1;
       jsonObjectBuilder.add("date" + date.getClassDateFormat1(), "I");
     }
-    //asfasdfasdfasdf a dsf asdf
+    // asfasdfasdfasdf a dsf asdf
     jsonArrayBuilder.add(jsonObjectBuilder);
-    for(ClassAttendanceDto student:studentList){
-      jsonObjectBuilder=factory.createObjectBuilder();
-      index=0;
-        for(ClassAttendanceDto date:dateList) {
-            if(index==0){
-              jsonObjectBuilder.add("sId",student.getStudentId())
-                                        .add("sName", student.getStudentName());
-            }
-          index=index + 1;
+    for(ClassAttendanceDto student : studentList) {
+      jsonObjectBuilder = factory.createObjectBuilder();
+      index = 0;
+      jsonObjectBuilder.add("sId", student.getStudentId()).add("sName", student.getStudentName());
+      for(ClassAttendanceDto date : dateList) {
+        // if(index == 0) {
+        // jsonObjectBuilder.add("sId", student.getStudentId()).add("sName",
+        // student.getStudentName());
+        // }
+        index = index + 1;
 
-          String key=date.getClassDateFormat1() + "" + date.getSerial() + "" + student.getStudentId();
-          if(attendanceList.containsKey(key))
-            jsonObjectBuilder.add("date" + date.getClassDateFormat1(), attendanceList.get(key).equals("1")?"Y":"N");
-          else
-            jsonObjectBuilder.add("date" + date.getClassDateFormat1(), "N");
+        String key =
+            date.getClassDateFormat1() + "" + date.getSerial() + "" + student.getStudentId();
+        if(attendanceList.containsKey(key))
+          jsonObjectBuilder.add("date" + date.getClassDateFormat1(), attendanceList.get(key)
+              .equals("1") ? "Y" : "N");
+        else
+          jsonObjectBuilder.add("date" + date.getClassDateFormat1(), "N");
 
       }
-        jsonArrayBuilder.add(jsonObjectBuilder);
+      jsonArrayBuilder.add(jsonObjectBuilder);
     }
-    jsonArray=jsonArrayBuilder.build();
+    jsonArray = jsonArrayBuilder.build();
     System.out.println(jsonArray.toString());
     objectBuilder.add("attendance", jsonArray);
 
-    jsonObjectBuilder=factory.createObjectBuilder();
-    jsonObjectBuilder.add("data", "sId")
-                              .add("title", "Student Id")
-                              .add("readOnly", true)
-                              .add("date", "")
-                              .add("serial", 0);
+    jsonObjectBuilder = factory.createObjectBuilder();
+    jsonObjectBuilder.add("data", "sId").add("title", "Student Id").add("readOnly", true)
+        .add("date", "").add("serial", 0);
     jsonArrayBuilder.add(jsonObjectBuilder);
-    jsonObjectBuilder.add("data", "sName")
-                              .add("title", "Student Name")
-                              .add("readOnly", true)
-                              .add("date", "")
-                              .add("serial", 0);
+    jsonObjectBuilder.add("data", "sName").add("title", "Student Name").add("readOnly", true)
+        .add("date", "").add("serial", 0);
     jsonArrayBuilder.add(jsonObjectBuilder);
 
-    for(ClassAttendanceDto date:dateList){
-      jsonObjectBuilder.add("data", "date" + date.getClassDateFormat1())
-          .add("title", date.getClassDate() + "&nbsp;<span class=\"badge badge-info\">" + date.getSerial() + "</span>")
-          .add("readOnly", true)
-          .add("date", date.getClassDate())
+    for(ClassAttendanceDto date : dateList) {
+      jsonObjectBuilder
+          .add("data", "date" + date.getClassDateFormat1())
+          .add(
+              "title",
+              date.getClassDate() + "&nbsp;<span class=\"badge badge-info\">" + date.getSerial()
+                  + "</span>").add("readOnly", true).add("date", date.getClassDate())
           .add("serial", date.getSerial());
       jsonArrayBuilder.add(jsonObjectBuilder);
     }
-    jsonArray=jsonArrayBuilder.build();
+    jsonArray = jsonArrayBuilder.build();
     System.out.println(jsonArray.toString());
     objectBuilder.add("columns", jsonArray);
 
-//    jsonArrayBuilder=factory.createArrayBuilder();
+    // jsonArrayBuilder=factory.createArrayBuilder();
 
-//    JsonObject jsonObject = jsonObject.put("aoColumnDefs",(Object)jsonArray);
+    // JsonObject jsonObject = jsonObject.put("aoColumnDefs",(Object)jsonArray);
 
     return objectBuilder.build();
   }
