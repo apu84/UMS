@@ -41,7 +41,7 @@
                                          width="12"
                                          height="12"
                                          data-ng-if="!isReadyForResultProcess(status.yearSemester[yearSemester].status)"
-                                         data-ng-click="showCourseList(status.yearSemester[yearSemester].entries)"/>
+                                         data-ng-click="showCourseList(status.yearSemester[yearSemester].entries, status.departmentName, yearSemester)"/>
                                 </li>
                             </ul>
                         </div>
@@ -61,13 +61,12 @@
                                          width="12"
                                          height="12"
                                          data-ng-if="!isReadyForResultProcess(status.yearSemester[yearSemester].status)"
-                                         data-target="#modal-course_wise_status"
-                                         data-toggle="modal"/>
+                                         data-ng-click="showCourseList(status.yearSemester[yearSemester].entries, status.departmentName, yearSemester)"/>
                                 </li>
                             </ul>
                         </div>
                     </div>
-                    <img src="images/back.png" data-ng-click="showDefault('01')"
+                    <img src="images/back.png" data-ng-click="showDefault(programId)"
                          style="clear: both;cursor: pointer;"/>
                 </div>
             </div>

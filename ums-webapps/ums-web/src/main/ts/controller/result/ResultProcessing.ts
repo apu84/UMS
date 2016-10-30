@@ -11,6 +11,7 @@ module ums {
     academicSemester: number;
     status: string;
     statusId: number;
+    lastSubmissionDate: string;
   }
 
   interface MarksSubmissionStatusResponse {
@@ -65,38 +66,38 @@ module ums {
     }
 
     private showYearSemesterWise(programId: String): void {
-      $("#" + programId + "_view1").hide('slide', {direction: 'right', easing: 'easeOutBounce'}, 400);
+      $(`#${programId}_view1`).hide('slide', {direction: 'right', easing: 'easeOutBounce'}, 400);
 
-      if ($("#" + programId + "_download")) {
-        $("#" + programId + "_download").hide('slide', {
+      if ($(`#${programId}_download`)) {
+        $(`#${programId}_download`).hide('slide', {
           direction: 'right',
           easing: 'easeOutBounce'
         }, 200);
       }
 
-      if ($("#" + programId + "_publish")) {
-        $("#" + programId + "_publish").hide('slide', {
+      if ($(`#${programId}_publish`)) {
+        $(`#${programId}_publish`).hide('slide', {
           direction: 'right',
           easing: 'easeOutBounce'
         }, 200);
       }
       setTimeout(function () {
-        $("#" + programId + "_view2").fadeIn(200);
+        $(`#${programId}_view2`).fadeIn(200);
       }, 400);
 
     }
 
-    private showDefault(deptId: String): void {
-      $("#" + deptId + "_view2").hide('slide', {direction: 'right', easing: 'easeOutBounce'}, 200);
+    private showDefault(programId: String): void {
+      $(`#${programId}_view2`).hide('slide', {direction: 'right', easing: 'easeOutBounce'}, 200);
 
       setTimeout(function () {
-        $("#" + deptId + "_view1").fadeIn(200);
-        if ($("#" + deptId + "_download")) {
-          $("#" + deptId + "_download").fadeIn(100);
+        $(`#${programId}_view1`).fadeIn(200);
+        if ($(`#${programId}_download`)) {
+          $(`#${programId}_download`).fadeIn(100);
         }
-        $("#" + deptId + "").fadeIn(100);
-        if ($("#" + deptId + "_publish")) {
-          $("#" + deptId + "_publish").fadeIn(100);
+        $(`#${programId}`).fadeIn(100);
+        if ($(`#${programId}_publish`)) {
+          $(`#${programId}_publish`).fadeIn(100);
         }
       }, 200);
 
@@ -146,13 +147,21 @@ module ums {
       console.log(statusMap);
     }
 
-    private showCourseList(status: Array<MarksSubmissionStatus>): void {
+    private showCourseList(marksSubmissionStatusList: Array<MarksSubmissionStatus>,
+                           departmentName: string,
+                           yearSemester: string): void {
       this.$modal.open({
         templateUrl: 'views/result/modal-content.html',
         controller: CourseStatusList,
         resolve: {
-          items: function () {
-            return status;
+          marksSubmissionStatusList: () => {
+            return marksSubmissionStatusList;
+          },
+          departmentName: () => {
+            return departmentName;
+          },
+          yearSemester: () => {
+            return yearSemester;
           }
         }
       });
