@@ -448,4 +448,9 @@ public class UMSContext {
     return new NotificationGeneratorImpl(notificationManager());
   }
 
+  @Bean
+  ClassAttendanceManager classAttendanceManager() {
+    return new PersistentClassAttendanceDao(mTemplateFactory.getJdbcTemplate());
+  }
+
 }
