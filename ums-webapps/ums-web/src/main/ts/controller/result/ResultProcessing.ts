@@ -144,7 +144,6 @@ module ums {
         }
       }
       this.$scope.statusMap = statusMap;
-      console.log(statusMap);
     }
 
     private showCourseList(marksSubmissionStatusList: Array<MarksSubmissionStatus>,
@@ -172,7 +171,7 @@ module ums {
     }
 
     private isReadyForResultProcess(status): boolean {
-      return status === this.appConstants.MARKS_SUBMISSION_STATUS.ACCEPTED_BY_COE;
+      return parseInt(status) === this.appConstants.MARKS_SUBMISSION_STATUS.ACCEPTED_BY_COE;
     }
 
     private getAllStatusUri(pProgramType: number, semesterId: number): string {
