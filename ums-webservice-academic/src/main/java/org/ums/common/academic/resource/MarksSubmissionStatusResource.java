@@ -20,9 +20,17 @@ public class MarksSubmissionStatusResource extends Resource {
 
   @GET
   @Path("/programType/{programType-id}/semester/{semester-id}/")
-  public JsonObject getBySemesterProgram(final @Context Request pRequest,
+  public JsonObject getBySemesterProgramType(final @Context Request pRequest,
       final @PathParam("programType-id") Integer pProgramTypeId,
       final @PathParam("semester-id") Integer pSemesterId) throws Exception {
     return mResourceHelper.getMarksSubmissionStatus(pProgramTypeId, pSemesterId, mUriInfo);
+  }
+
+  @GET
+  @Path("/program/{program-id}/semester/{semester-id}/")
+  public JsonObject getBySemesterProgram(final @Context Request pRequest,
+      final @PathParam("program-id") Integer pProgramId,
+      final @PathParam("semester-id") Integer pSemesterId) throws Exception {
+    return mResourceHelper.getMarksSubmissionStatusByProgram(pProgramId, pSemesterId, mUriInfo);
   }
 }

@@ -23,9 +23,19 @@ module ums {
     private setProgramTypePreset: Function;
     private isProgramTypePreset: Function;
 
-    programId:string;
-    departmentId:string;
-    programTypeId:string;
+    private enableAllDepartment: Function;
+    private isAllDepartmentEnabled: Function;
+
+    private enableAllProgram: Function;
+    private isAllProgramEnabled: Function;
+
+    private isSemesterEnabled: Function;
+    private enableSemester: Function;
+
+    programId: string;
+    departmentId: string;
+    programTypeId: string;
+    semesterId: string;
 
     constructor(pAppConstants: any, pHtpClient: HttpClient) {
 
@@ -39,8 +49,9 @@ module ums {
       var programPreset: boolean = false;
       var departmentPreset: boolean = false;
       var programTypePreset: boolean = false;
-
-
+      var enableAllDepartments: boolean = false;
+      var enableAllPrograms: boolean = false;
+      var semesterEnabled: boolean = false;
 
       this.getProgramTypes = () => {
         return programTypes;
@@ -64,7 +75,6 @@ module ums {
 
       this.setDepartments = (pDepartments: any) => {
         departments = pDepartments;
-        setTimeout(function(){$("#dept_id").val("");},200);
       };
 
       this.setPrograms = (pPrograms: any) => {
@@ -73,7 +83,7 @@ module ums {
 
       this.setSemesters = (pSemesters: any) => {
         semesters = pSemesters;
-        semesters.splice(0, 0, appConstants.initSemester[0]);
+        // semesters.splice(0, 0, appConstants.initSemester[0]);
       };
 
       this.getAppConstants = (): Constants => {
@@ -108,26 +118,67 @@ module ums {
         return programTypePreset;
       };
 
+      this.isAllDepartmentEnabled = () => {
+        return enableAllDepartments;
+      };
+
+      this.enableAllDepartment = (pEnable: boolean) => {
+        enableAllDepartments = pEnable;
+      };
+
+      this.isAllProgramEnabled = () => {
+        return enableAllPrograms;
+      };
+
+      this.enableAllProgram = (pEnable: boolean) => {
+        enableAllPrograms = pEnable;
+      };
+
+      this.isSemesterEnabled = () => {
+        return semesterEnabled;
+      };
+
+      this.enableSemester = (pEnable: boolean) => {
+        semesterEnabled = pEnable;
+      };
+
       this.programId = '';
       this.departmentId = '';
-      this.programTypeId = String(Utils.UG);
-      this.loadSemester();
     }
 
-    public setDepartment(departmentId: string): void {
+    public setDepartment(departmentId: string, preSelected?: boolean): void {
       this.departmentId = departmentId;
-      this.setDepartmentPreset(true);
+      if (!preSelected) {
+        this.setDepartmentPreset(true);
+      }
     }
 
-    public setProgramId(programId: string): void {
+    public setProgramId(programId: string, preSelected?: boolean): void {
       this.programId = programId;
-      this.setProgramPreset(true);
+      if (!preSelected) {
+        this.setProgramPreset(true);
+      }
     }
 
-    public setProgramTypeId(programTypeId: string): void {
+    public setProgramTypeId(programTypeId: string, preSelected?: boolean): void {
       this.programTypeId = programTypeId;
-      this.setProgramTypePreset(true);
+      if (!preSelected) {
+        this.setProgramTypePreset(true);
+      }
+      this.loadDepartments();
       this.loadSemester();
+    }
+
+    public enableAllDepartmentOption(enable: boolean) {
+      this.enableAllDepartment(enable);
+    }
+
+    public enableAllProgramOption(enable: boolean) {
+      this.enableAllProgram(enable);
+    }
+
+    public enableSemesterOption(enable: boolean): void {
+      this.enableSemester(enable);
     }
 
     public loadDepartments(): void {
@@ -144,22 +195,26 @@ module ums {
         this.setDepartments([{id: '', name: 'Select Dept./School'}]);
       }
 
+      if (this.isAllDepartmentEnabled()) {
+        if (this.getDepartments()[this.getDepartments().length - 1].id != '') {
+          this.getDepartments().push({id: '', name: 'All'})
+        }
+      }
+
       if (!this.isDepartmentPreset) {
         this.departmentId = '';
       } else {
         this.loadPrograms();
       }
-
-      this.loadSemester();
     }
 
     public loadPrograms(): void {
       if (this.departmentId != "" && this.programTypeId == "11") {
-        var ugProgramsArr:any = this.getAppConstants().ugPrograms;
+        var ugProgramsArr: any = this.getAppConstants().ugPrograms;
         var ugProgramsJson = $.map(ugProgramsArr, (el) => {
           return el
         });
-        var resultPrograms:any = $.grep(ugProgramsJson, (e:any) => {
+        var resultPrograms: any = $.grep(ugProgramsJson, (e: any) => {
           return e.deptId == this.departmentId;
         });
 
@@ -170,13 +225,21 @@ module ums {
         this.setPrograms([{id: '', longName: 'Select a Program'}]);
         this.programId = "";
       }
+
+      if (this.isAllProgramEnabled()) {
+        this.getPrograms().push({id: '', longName: 'All'});
+      }
     }
 
     public loadSemester(): void {
-      if (this.programTypeId != this.getAppConstants().Empty) {
-        this.getHttpClient().get('academic/semester/program-type/' + this.programTypeId + "/limit/10", 'application/json',
+      if (this.programTypeId && this.programTypeId != this.getAppConstants().Empty) {
+        this.getHttpClient().get('academic/semester/program-type/' + this.programTypeId + "/limit/10",
+            HttpClient.MIME_TYPE_JSON,
             (json: any, etag: string) => {
               this.setSemesters(json.entries);
+              if (this.isSemesterEnabled()) {
+                this.semesterId = (this.getSemesters()[0]).id +'';
+              }
             },
             (response: ng.IHttpPromiseCallbackArg<any>) => {
               console.error(response);

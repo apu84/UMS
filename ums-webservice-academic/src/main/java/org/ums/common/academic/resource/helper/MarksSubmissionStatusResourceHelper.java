@@ -52,4 +52,11 @@ public class MarksSubmissionStatusResourceHelper extends
         mMarksSubmissionStatusManager.getByProgramType(pProgramTypeId, pSemesterId);
     return buildJsonResponse(statuses, pUriInfo);
   }
+
+  public JsonObject getMarksSubmissionStatusByProgram(int pProgramId, int pSemesterId,
+      final UriInfo pUriInfo) throws Exception {
+    List<MarksSubmissionStatus> statuses =
+        mMarksSubmissionStatusManager.get(pProgramId, pSemesterId);
+    return buildJsonResponse(statuses, pUriInfo);
+  }
 }

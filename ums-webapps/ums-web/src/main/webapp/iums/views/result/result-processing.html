@@ -18,39 +18,7 @@
         <div class="panel-body pan">
             <form action="" class="form-horizontal">
                 <div class="form-body pal">
-                    <div class="form-group">
-                        <label class="col-md-4 control-label">Program Type</label>
-                        <div class="col-md-8">
-                            <select class="form-control required"
-                                    data-ng-model="inputParams.program_type" data-convert-to-number>
-                                <option value="11">Undergraduate</option>
-                                <option value="22">Postgraduate</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-4 control-label">Semester</label>
-                        <div class="col-md-8">
-                            <select class="form-control required"
-                                    data-ng-model="inputParams.program_type" data-convert-to-number>
-                                <option value="11012016">Spring, 2016</option>
-                                <option value="11022015">Fall, 2015</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="col-md-4 control-label">Dept./School</label>
-                        <div class="col-md-8">
-                            <select class="form-control required"
-                                    data-ng-model="inputParams.program_type" data-convert-to-number>
-                                <option value="11012016">All</option>
-                                <option value="11012016">CSE</option>
-                                <option value="11022015">EEE</option>
-                            </select>
-                        </div>
-                    </div>
-
+                    <div data-program-selector="" data-model="resultProcessingSearchParamModel.programSelector"></div>
                 </div>
                 <div class="form-actions text-right pal">
                     <button type="button" class="btn btn-success" data-ng-click="fetchStatusInfo()">
@@ -389,60 +357,6 @@
             </div>
 
         </div>
-
-        <!--Modal for Marks Submission Status Log-->
-        <div id="modal-course_wise_status" tabindex="-1" role="dialog"
-             aria-labelledby="modal-prompt-label"
-             aria-hidden="true" class="modal fade">
-            <div class="modal-dialog modal-wide-width">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" data-dismiss="modal" aria-hidden="true"
-                                class="close">&times;</button>
-                        <h4 id="modal-marks_submission_status_log-label" class="modal-title">Marks
-                            Submission Status - CSE 1-1</h4></div>
-                    <div class="modal-body">
-                        <table class="table table-hover table-condensed">
-                            <thead>
-                            <tr>
-                                <th>Course No</th>
-                                <th>Course Title</th>
-                                <th>Status</th>
-                                <th>Deadline</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>CSE 1101</td>
-                                <td>Elementary Structured Programming</td>
-                                <td><img src="images/error.png"/>Waiting for Head's Approval</td>
-                                <td>10 Oct, 2016</td>
-                            </tr>
-                            <tr>
-                                <td>CSE 1102</td>
-                                <td>Elementary Structured Programming Lab</td>
-                                <td><img src="images/check.png"/> Accepted by CoE</td>
-                                <td>10 Oct, 2016</td>
-                            </tr>
-                            <tr>
-                                <td>CSE 1108</td>
-                                <td>Introduction to Computer Systems</td>
-                                <td><img src="images/error.png"/> Not Submitted</td>
-                                <td>10 Oct, 2016</td>
-                            </tr>
-                            </tbody>
-                        </table>
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" data-dismiss="modal" class="btn btn-default">Close
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
     </div>
 </div>
 

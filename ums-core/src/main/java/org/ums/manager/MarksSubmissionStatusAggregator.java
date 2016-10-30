@@ -15,7 +15,7 @@ public class MarksSubmissionStatusAggregator extends MarksSubmissionStatusDaoDec
   @Override
   public List<MarksSubmissionStatus> get(Integer pProgramId, Integer pSemesterId) throws Exception {
     List<MarksSubmissionStatus> marksSubmissionStatuses = super.get(pProgramId, pSemesterId);
-    marksSubmissionStatuses.stream().filter(pResult -> {
+    List<MarksSubmissionStatus> filteredList = marksSubmissionStatuses.stream().filter(pResult -> {
       try {
         return pResult.getCourse().getSyllabus().getProgramId() == pProgramId;
       } catch(Exception e) {
@@ -23,7 +23,7 @@ public class MarksSubmissionStatusAggregator extends MarksSubmissionStatusDaoDec
       }
     }).collect(Collectors.toList());
 
-    return removeDuplicates(marksSubmissionStatuses);
+    return removeDuplicates(filteredList);
   }
 
   @Override
@@ -31,7 +31,7 @@ public class MarksSubmissionStatusAggregator extends MarksSubmissionStatusDaoDec
       throws Exception {
     // Don't need to pass programTypeId, as it is not processed by persistent layer anyway
     List<MarksSubmissionStatus> marksSubmissionStatuses = super.get(-1, pSemesterId);
-    marksSubmissionStatuses.stream().filter(pResult -> {
+    List<MarksSubmissionStatus> filteredList = marksSubmissionStatuses.stream().filter(pResult -> {
       try {
         return pResult.getCourse().getSyllabus().getProgram().getProgramTypeId() == pProgramTypeId;
       } catch(Exception e) {
@@ -39,7 +39,7 @@ public class MarksSubmissionStatusAggregator extends MarksSubmissionStatusDaoDec
       }
     }).collect(Collectors.toList());
 
-    return removeDuplicates(marksSubmissionStatuses);
+    return removeDuplicates(filteredList);
   }
 
   private List<MarksSubmissionStatus> removeDuplicates(List<MarksSubmissionStatus> pList) {
