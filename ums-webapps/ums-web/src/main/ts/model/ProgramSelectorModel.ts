@@ -111,7 +111,7 @@ module ums {
       this.programId = '';
       this.departmentId = '';
       this.programTypeId = String(Utils.UG);
-      this.loadSemester();
+      this.loadDepartments();
     }
 
     public setDepartment(departmentId: string): void {
@@ -134,10 +134,10 @@ module ums {
       this.setPrograms(this.getAppConstants().initProgram);
       this.programId = '';
 
-      if (this.programTypeId == "11") {
+      if (this.programTypeId == Utils.UG) {
         this.setDepartments(this.getAppConstants().ugDept);
       }
-      else if (this.programTypeId == "22") {
+      else if (this.programTypeId == Utils.PG) {
         this.setDepartments(this.getAppConstants().pgDept);
       }
       else {
@@ -154,7 +154,7 @@ module ums {
     }
 
     public loadPrograms(): void {
-      if (this.departmentId != "" && this.programTypeId == "11") {
+      if (this.departmentId != "" && this.programTypeId == Utils.UG) {
         var ugProgramsArr:any = this.getAppConstants().ugPrograms;
         var ugProgramsJson = $.map(ugProgramsArr, (el) => {
           return el
