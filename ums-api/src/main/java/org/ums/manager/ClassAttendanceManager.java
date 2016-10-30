@@ -23,9 +23,11 @@ public interface ClassAttendanceManager {
   public int deleteAttendanceMaster(Integer attendanceId) throws Exception;
 
   public int updateAttendanceMaster(ClassAttendanceDto classAttendanceDto) throws Exception;
-  public int insertAttendanceMaster(Integer pId,Integer pSemesterId, String pCourseId, String pSection, String pClassDate,Integer pSerial,String pTeacherId) throws Exception;
-  public boolean upsertAttendanceDtl(Integer id, List<ClassAttendanceDto> attendanceList) throws Exception;
 
+  public int insertAttendanceMaster(Integer pId, Integer pSemesterId, String pCourseId,
+      String pSection, String pClassDate, Integer pSerial, String pTeacherId) throws Exception;
 
+  public boolean upsertAttendanceDtl(Integer id, List<ClassAttendanceDto> attendanceList)
+      throws Exception;
 
 }

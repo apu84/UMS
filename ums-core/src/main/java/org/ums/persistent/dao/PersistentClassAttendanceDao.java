@@ -95,34 +95,42 @@ public class PersistentClassAttendanceDao implements ClassAttendanceManager {
 
   @Override
   public int updateAttendanceMaster(ClassAttendanceDto classAttendanceDto) throws Exception {
-    String query = "Update MST_CLASS_ATTENDANCE Set Class_Date=To_Date(?, 'DD Mon, YY'),Serial=?  Where Id=?";
-    return mJdbcTemplate.update(query, classAttendanceDto.getClassDate(),classAttendanceDto.getSerial(),classAttendanceDto.getId());
-  }
-  @Override
-  public int insertAttendanceMaster(Integer pId,Integer pSemesterId, String pCourseId, String pSection, String pClassDate,Integer pSerial,String pTeacherId) {
-    String query ="Insert InTo MST_CLASS_ATTENDANCE(ID,SEMESTER_ID,COURSE_ID,SECTION,CLASS_DATE,SERIAL,TEACHER_ID) " +
-        "Values(?,?,?,?,To_Date(?, 'DD Mon, YY'),?,?) ";
-    return mJdbcTemplate.update(query, pId,pSemesterId,pCourseId,pSection,pClassDate,pSerial,pTeacherId);
+    String query =
+        "Update MST_CLASS_ATTENDANCE Set Class_Date=To_Date(?, 'DD Mon, YY'),Serial=?  Where Id=?";
+    return mJdbcTemplate.update(query, classAttendanceDto.getClassDate(),
+        classAttendanceDto.getSerial(), classAttendanceDto.getId());
   }
 
   @Override
-  public boolean upsertAttendanceDtl(Integer id, List<ClassAttendanceDto> attendanceList) throws Exception {
+  public int insertAttendanceMaster(Integer pId, Integer pSemesterId, String pCourseId,
+      String pSection, String pClassDate, Integer pSerial, String pTeacherId) {
+    String query =
+        "Insert InTo MST_CLASS_ATTENDANCE(ID,SEMESTER_ID,COURSE_ID,SECTION,CLASS_DATE,SERIAL,TEACHER_ID) "
+            + "Values(?,?,?,?,To_Date(?, 'DD Mon, YY'),?,?) ";
+    return mJdbcTemplate.update(query, pId, pSemesterId, pCourseId, pSection, pClassDate, pSerial,
+        pTeacherId);
+  }
+
+  @Override
+  public boolean upsertAttendanceDtl(Integer id, List<ClassAttendanceDto> attendanceList)
+      throws Exception {
     batchInsertAttendanceDtl(id, attendanceList);
     return true;
   }
 
   public void batchInsertAttendanceDtl(Integer id, List<ClassAttendanceDto> attendanceList) {
-    String sql = "merge into DTL_CLASS_ATTENDANCE " +
-        "using (  " +
-        "  select ? as Attendance_Id, " +
-        "         ? as Student_Id, " +
-        "         ? as Attendance " +
-        "   from dual " +
-        ")dt2 on (DTL_CLASS_ATTENDANCE.Attendance_Id = dt2.Attendance_Id And DTL_CLASS_ATTENDANCE.Student_Id = dt2.Student_Id) " +
-        "when matched then  " +
-        "update set DTL_CLASS_ATTENDANCE.Attendance =  dt2.Attendance " +
-        "when not matched then " +
-        "Insert values (dt2.Attendance_Id,dt2.Student_Id, dt2.Attendance)";
+    String sql =
+        "merge into DTL_CLASS_ATTENDANCE "
+            + "using (  "
+            + "  select ? as Attendance_Id, "
+            + "         ? as Student_Id, "
+            + "         ? as Attendance "
+            + "   from dual "
+            + ")dt2 on (DTL_CLASS_ATTENDANCE.Attendance_Id = dt2.Attendance_Id And DTL_CLASS_ATTENDANCE.Student_Id = dt2.Student_Id) "
+            + "when matched then  "
+            + "update set DTL_CLASS_ATTENDANCE.Attendance =  dt2.Attendance "
+            + "when not matched then "
+            + "Insert values (dt2.Attendance_Id,dt2.Student_Id, dt2.Attendance)";
 
     mJdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
       @Override
@@ -131,7 +139,7 @@ public class PersistentClassAttendanceDao implements ClassAttendanceManager {
         ps.setInt(1, id);
         ps.setString(2, classAttendanceDto.getStudentId());
         ps.setInt(3, classAttendanceDto.getAttendance());
-        }
+      }
 
       @Override
       public int getBatchSize() {
@@ -141,7 +149,7 @@ public class PersistentClassAttendanceDao implements ClassAttendanceManager {
   }
 
   @Override
-     public int deleteAttendanceDtl(Integer attendanceId) throws Exception {
+  public int deleteAttendanceDtl(Integer attendanceId) throws Exception {
     String query = "Delete DTL_CLASS_ATTENDANCE Where Id=? ";
     return mJdbcTemplate.update(query, attendanceId);
   }
