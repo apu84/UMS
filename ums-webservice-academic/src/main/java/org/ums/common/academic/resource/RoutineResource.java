@@ -60,8 +60,9 @@ public class RoutineResource extends MutableRoutineResource {
   @GET
   @Path("/roomBasedRoutine/semester/{semester-id}/room/{room-id}")
   @Produces("application/pdf")
-  public StreamingOutput createRoomBasedRoutineReport(final @PathParam("semester-id") int pSemesterId,
-      final @PathParam("room-id") int pRoomId, final @Context Request pRequest) throws Exception {
+  public StreamingOutput createRoomBasedRoutineReport(
+      final @PathParam("semester-id") int pSemesterId, final @PathParam("room-id") int pRoomId,
+      final @Context Request pRequest) throws Exception {
     return new StreamingOutput() {
       @Override
       public void write(OutputStream pOutputStream) throws IOException, WebApplicationException {
