@@ -163,7 +163,7 @@ module ums {
           statusMap[statuses[i].programId].yearSemester[yearSemester].status = statuses[i].statusId;
         }
       }
-      this.$scope.statusMap = statusMap;
+      this.$scope.statusMap = statusMap; console.log(statusMap);
     }
 
     private showCourseList(marksSubmissionStatusList: Array<MarksSubmissionStatus>,

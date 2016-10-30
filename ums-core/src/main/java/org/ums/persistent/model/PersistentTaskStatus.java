@@ -6,6 +6,8 @@ import org.ums.domain.model.immutable.TaskStatus;
 import org.ums.domain.model.mutable.MutableTaskStatus;
 import org.ums.manager.TaskStatusManager;
 
+import java.util.Date;
+
 public class PersistentTaskStatus implements MutableTaskStatus {
   private static TaskStatusManager sTaskStatusManager;
 
@@ -19,6 +21,7 @@ public class PersistentTaskStatus implements MutableTaskStatus {
   private TaskStatus.Status mStatus;
   private String mLastModified;
   private String mProgressDescription;
+  private Date mTaskCompletionDate;
 
   public PersistentTaskStatus() {}
 
@@ -97,5 +100,15 @@ public class PersistentTaskStatus implements MutableTaskStatus {
   @Override
   public String getProgressDescription() throws Exception {
     return mProgressDescription;
+  }
+
+  @Override
+  public void setTaskCompletionDate(Date pDate) {
+    mTaskCompletionDate = pDate;
+  }
+
+  @Override
+  public Date getTaskCompletionDate() {
+    return mTaskCompletionDate;
   }
 }

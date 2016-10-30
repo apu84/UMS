@@ -2,6 +2,7 @@ package org.ums.services.academic;
 
 import org.jvnet.hk2.annotations.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.ums.domain.model.immutable.StudentRecord;
 import org.ums.domain.model.immutable.TaskStatus;
 import org.ums.domain.model.immutable.UGRegistrationResult;
@@ -26,7 +27,7 @@ import java.util.concurrent.Future;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-@Service
+@Component
 public class ProcessResultImpl implements ProcessResult {
   @Autowired
   UGRegistrationResultManager mResultManager;
@@ -77,48 +78,46 @@ public class ProcessResultImpl implements ProcessResult {
     getResults(pProgramId, pSemesterId);
   }
 
-  private Future<List<UGRegistrationResult>> getResults(int pProgramId,
-                                                        int pSemesterId) throws Exception {
+  private Future<List<UGRegistrationResult>> getResults(int pProgramId, int pSemesterId)
+      throws Exception {
     return pool.submit(() -> {
-          List<UGRegistrationResult> resultList = mResultManager.getResults(pProgramId, pSemesterId);
+      List<UGRegistrationResult> resultList = mResultManager.getResults(pProgramId, pSemesterId);
 
-          TaskStatus taskStatus = mTaskStatusManager.get(pProgramId + "_" + pSemesterId + PROCESS_GRADES);
-          MutableTaskStatus mutableTaskStatus = taskStatus.edit();
-          mutableTaskStatus.setStatus(TaskStatus.Status.COMPLETED);
-          mutableTaskStatus.commit(true);
+      TaskStatus taskStatus =
+          mTaskStatusManager.get(pProgramId + "_" + pSemesterId + PROCESS_GRADES);
+      MutableTaskStatus mutableTaskStatus = taskStatus.edit();
+      mutableTaskStatus.setStatus(TaskStatus.Status.COMPLETED);
+      mutableTaskStatus.commit(true);
 
-          MutableTaskStatus processResultStatus = new PersistentTaskStatus();
-          processResultStatus.setId(pProgramId + "_" + pSemesterId + PROCESS_GPA_CGPA_PROMOTION);
-          processResultStatus.setTaskName(PROCESS_GPA_CGPA_PROMOTION_TASK_NAME);
-          processResultStatus.setStatus(TaskStatus.Status.INPROGRESS);
-          processResultStatus.commit(false);
+      MutableTaskStatus processResultStatus = new PersistentTaskStatus();
+      processResultStatus.setId(pProgramId + "_" + pSemesterId + PROCESS_GPA_CGPA_PROMOTION);
+      processResultStatus.setTaskName(PROCESS_GPA_CGPA_PROMOTION_TASK_NAME);
+      processResultStatus.setStatus(TaskStatus.Status.INPROGRESS);
+      processResultStatus.commit(false);
 
-          processResult(pProgramId,
-              pSemesterId,
-              resultList.stream().collect(Collectors.groupingBy(UGRegistrationResult::getStudentId)));
+      processResult(pProgramId, pSemesterId,
+          resultList.stream().collect(Collectors.groupingBy(UGRegistrationResult::getStudentId)));
 
-          return resultList;
-        }
-    );
+      return resultList;
+    });
   }
 
-  private void processResult(int pProgramId,
-                             int pSemesterId,
-                             Map<String, List<UGRegistrationResult>> studentCourseGradeMap) throws Exception {
+  private void processResult(int pProgramId, int pSemesterId,
+      Map<String, List<UGRegistrationResult>> studentCourseGradeMap) throws Exception {
 
     int totalStudents = studentCourseGradeMap.keySet().size();
     int percentageCompleted, i = 0;
 
-    List<StudentRecord> studentRecords = mStudentRecordManager.getStudentRecords(pProgramId, pSemesterId);
-    Map<String, StudentRecord> studentRecordMap
-        = studentRecords.stream().collect(Collectors.toMap(StudentRecord::getStudentId, Function.identity()));
+    List<StudentRecord> studentRecords =
+        mStudentRecordManager.getStudentRecords(pProgramId, pSemesterId);
+    Map<String, StudentRecord> studentRecordMap = studentRecords.stream()
+        .collect(Collectors.toMap(StudentRecord::getStudentId, Function.identity()));
 
     List<MutableStudentRecord> updatedStudentRecords = new ArrayList<>();
 
-    for (String studentId : studentCourseGradeMap.keySet()) {
+    for(String studentId : studentCourseGradeMap.keySet()) {
       Double gpa = calculateGPA(studentCourseGradeMap.get(studentId).stream()
-          .filter(pResult -> pResult.getSemesterId() == pSemesterId)
-          .collect(Collectors.toList()));
+          .filter(pResult -> pResult.getSemesterId() == pSemesterId).collect(Collectors.toList()));
 
       Double cgpa = calculateCGPA(studentCourseGradeMap.get(studentId));
       boolean isPassed = isPassed(studentCourseGradeMap.get(studentId));
@@ -131,20 +130,22 @@ public class ProcessResultImpl implements ProcessResult {
 
       i++;
 
-      if ((i % UPDATE_NOTIFICATION_AFTER) == 0 || (i == studentCourseGradeMap.keySet().size())) {
+      if((i % UPDATE_NOTIFICATION_AFTER) == 0 || (i == studentCourseGradeMap.keySet().size())) {
         mStudentRecordManager.update(updatedStudentRecords);
         updatedStudentRecords.clear();
 
         percentageCompleted = (i / totalStudents) * 100;
 
-        TaskStatus taskStatus = mTaskStatusManager.get(pProgramId + "_" + pSemesterId + PROCESS_GPA_CGPA_PROMOTION);
+        TaskStatus taskStatus =
+            mTaskStatusManager.get(pProgramId + "_" + pSemesterId + PROCESS_GPA_CGPA_PROMOTION);
         MutableTaskStatus mutableTaskStatus = taskStatus.edit();
         mutableTaskStatus.setProgressDescription(percentageCompleted + "");
         mutableTaskStatus.commit(true);
       }
     }
 
-    TaskStatus taskStatus = mTaskStatusManager.get(pProgramId + "_" + pSemesterId + PROCESS_GPA_CGPA_PROMOTION);
+    TaskStatus taskStatus =
+        mTaskStatusManager.get(pProgramId + "_" + pSemesterId + PROCESS_GPA_CGPA_PROMOTION);
     MutableTaskStatus mutableTaskStatus = taskStatus.edit();
     mutableTaskStatus.setProgressDescription("100");
     mutableTaskStatus.setStatus(TaskStatus.Status.COMPLETED);
@@ -183,13 +184,27 @@ public class ProcessResultImpl implements ProcessResult {
 
   @Override
   public TaskStatusResponse status(int pProgramId, int pSemesterId) throws Exception {
-    TaskStatus status = mTaskStatusManager.get(pProgramId + "_" + pSemesterId + PROCESS_GRADES);
-    if(status.getStatus() == TaskStatus.Status.INPROGRESS) {
-      return new TaskStatusResponse(status);
+    if(mTaskStatusManager.exists(pProgramId + "_" + pSemesterId + PROCESS_GRADES)) {
+      TaskStatus status = mTaskStatusManager.get(pProgramId + "_" + pSemesterId + PROCESS_GRADES);
+      if(status.getStatus() == TaskStatus.Status.INPROGRESS) {
+        return new TaskStatusResponse(status);
+      }
+      else {
+        if(mTaskStatusManager.exists(pProgramId + "_" + pSemesterId + PROCESS_GPA_CGPA_PROMOTION)) {
+          return new TaskStatusResponse(mTaskStatusManager.get(pProgramId + "_" + pSemesterId
+              + PROCESS_GPA_CGPA_PROMOTION));
+        }
+        else {
+          return new TaskStatusResponse(status);
+        }
+      }
     }
-    else {
-      return new TaskStatusResponse(mTaskStatusManager.get(pProgramId + "_" + pSemesterId
-          + PROCESS_GPA_CGPA_PROMOTION));
-    }
+
+    MutableTaskStatus taskStatus = new PersistentTaskStatus();
+    taskStatus.setId(pProgramId + "_" + pSemesterId + PROCESS_GPA_CGPA_PROMOTION);
+    taskStatus.setTaskName(PROCESS_GPA_CGPA_PROMOTION);
+    taskStatus.setStatus(TaskStatus.Status.NONE);
+
+    return new TaskStatusResponse(taskStatus);
   }
 }

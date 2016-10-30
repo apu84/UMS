@@ -6,6 +6,7 @@ import org.ums.domain.model.common.LastModifier;
 import org.ums.domain.model.mutable.MutableTaskStatus;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,6 +19,8 @@ public interface TaskStatus extends Serializable, EditType<MutableTaskStatus>, I
 
   String getProgressDescription() throws Exception;
 
+  Date getTaskCompletionDate();
+
   enum Status {
     INPROGRESS(1, "Inprogress"),
     COMPLETED(2, "Completed"),
@@ -26,7 +29,7 @@ public interface TaskStatus extends Serializable, EditType<MutableTaskStatus>, I
     private String label;
     private int id;
 
-    private Status(int id, String label) {
+    Status(int id, String label) {
       this.id = id;
       this.label = label;
     }

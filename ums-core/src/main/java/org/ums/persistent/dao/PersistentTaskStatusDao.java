@@ -1,5 +1,6 @@
 package org.ums.persistent.dao;
 
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.util.StringUtils;
 import org.ums.decorator.TaskStatusDaoDecorator;
@@ -10,23 +11,25 @@ import org.ums.statistics.UMSJdbcTemplate;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentTaskStatusDao extends TaskStatusDaoDecorator {
   String SELECT_ALL =
-      "SELECT TASK_ID, TASK_NAME, STATUS, PROGRESS_DESC, LAST_MODIFIED FROM TASK_STATUS ";
+      "SELECT TASK_ID, TASK_NAME, STATUS, PROGRESS_DESC, TASK_COMPLETION_DATE, LAST_MODIFIED FROM TASK_STATUS ";
   String UPDATE_ALL =
-      "UPDATE TASK_STATUS TASK_NAME = ?, STATUS = ?, PROGRESS_DESC = ?, LAST_MODIFIED = "
+      "UPDATE TASK_STATUS TASK_NAME = ?, STATUS = ?, PROGRESS_DESC = ?, TASK_COMPLETION_DATE = SYSDATE, LAST_MODIFIED = "
           + getLastModifiedSql() + " ";
   String DELETE_ALL = "DELETE FROM TASK_STATUS ";
   String INSERT_ALL =
-      "INSERT INTO TASK_STATUS(TASK_ID, TASK_NAME, STATUS, PROGRESS_DESC, LAST_MODIFIED) "
-          + "VALUES(?, ?, ?, ?, " + getLastModifiedSql() + ")";
+      "INSERT INTO TASK_STATUS(TASK_ID, TASK_NAME, STATUS, PROGRESS_DESC, TASK_COMPLETION_DATE, LAST_MODIFIED) "
+          + "VALUES(?, ?, ?, ?, SYSDATE, " + getLastModifiedSql() + ")";
   String MAX_SERIAL = "SELECT MAX(SERIAL) FROM TASK_STATUS WHERE TASK_ID = ?";
+  String EXISTS = "SELECT COUNT(TASK_ID) EXIST FROM TASK_STATUS ";
 
-  private UMSJdbcTemplate mJdbcTemplate;
+  private JdbcTemplate mJdbcTemplate;
 
-  public PersistentTaskStatusDao(UMSJdbcTemplate pJdbcTemplate) {
+  public PersistentTaskStatusDao(JdbcTemplate pJdbcTemplate) {
     mJdbcTemplate = pJdbcTemplate;
   }
 
@@ -60,6 +63,12 @@ public class PersistentTaskStatusDao extends TaskStatusDaoDecorator {
         : pMutable.getProgressDescription());
   }
 
+  @Override
+  public boolean exists(String pId) throws Exception {
+    String query = EXISTS + "WHERE TASK_ID = ? ";
+    return mJdbcTemplate.queryForObject(query, Boolean.class, pId);
+  }
+
   private class TaskStatusRowMapper implements RowMapper<TaskStatus> {
     @Override
     public TaskStatus mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -69,6 +78,8 @@ public class PersistentTaskStatusDao extends TaskStatusDaoDecorator {
       taskStatus.setStatus(TaskStatus.Status.get(rs.getInt("STATUS")));
       taskStatus.setProgressDescription(StringUtils.isEmpty(rs.getString("PROGRESS_DESC")) ? ""
           : rs.getString("PROGRESS_DESC"));
+      taskStatus.setTaskCompletionDate(rs.getObject("TASK_COMPLETION_DATE") == null ? null : rs
+          .getDate("TASK_COMPLETION_DATE"));
       taskStatus.setLastModified(rs.getString("LAST_MODIFIED"));
       AtomicReference<TaskStatus> atomicReference = new AtomicReference<>(taskStatus);
       return atomicReference.get();

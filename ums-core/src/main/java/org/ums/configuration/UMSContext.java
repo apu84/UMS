@@ -472,4 +472,9 @@ public class UMSContext {
     return cache;
   }
 
+  @Bean
+  TaskStatusManager taskStatusManager() {
+    return new PersistentTaskStatusDao(mTemplateFactory.getJdbcTemplate());
+  }
+
 }
