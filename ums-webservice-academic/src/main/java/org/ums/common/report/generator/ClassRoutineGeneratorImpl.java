@@ -31,6 +31,9 @@ public class ClassRoutineGeneratorImpl implements ClassRoutineGenerator {
   TeacherManager mTeacherManager;
 
   @Autowired
+  CourseManager mCourseManager;
+
+  @Autowired
   ClassRoomManager mClassRoomManager;
 
   @Autowired
@@ -51,10 +54,103 @@ public class ClassRoutineGeneratorImpl implements ClassRoutineGenerator {
   @Autowired
   UserManager mUserManager;
 
+  @Autowired
+  EmployeeManager mEmployeeManager;
+
+  enum ClassRoutineType {
+    teacherAndStudentRoutine,
+    roomBasedRoutine
+  }
+
   @Override
   public void createClassRoutineStudentReport(OutputStream pOutputStream) throws Exception,
       IOException, DocumentException {
 
+  }
+
+  @Override
+  public void createRoomBasedClassRoutineReport(OutputStream pOutputStream, int pSemesterId, int pRoomId) throws Exception, IOException, DocumentException {
+    String userId = SecurityUtils.getSubject().getPrincipal().toString();
+    User user = mUserManager.get(userId);
+    Employee employee = mEmployeeManager.getByEmployeeId(user.getEmployeeId());
+    String deptId = employee.getDepartment().getId();
+    Department department = mDepartmentManager.get(deptId);
+
+    Semester semester = mSemesterManager.get(pSemesterId);
+
+    List<Program> programs  = mProgramManager.getAll().stream().filter(p->p.getDepartmentId().equals(deptId)).collect(Collectors.toList());
+
+    Map<Integer,List<Routine>> roomidWithRoutineMap = new HashMap<>();
+
+    if(pRoomId==9999){
+      roomidWithRoutineMap = mRoutineManager.getRoutine(pSemesterId,programs.get(0).getId())
+          .stream()
+          .collect(Collectors.groupingBy(Routine::getRoomId));
+    }else{
+      roomidWithRoutineMap = mRoutineManager.getRoutine(pSemesterId,programs.get(0).getId())
+          .stream()
+          .filter(r->r.getRoomId().equals(pRoomId))
+          .collect(Collectors.groupingBy(Routine::getRoomId));
+    }
+
+    Map<Integer,String> roomIdWithRoomNoMap = mClassRoomManager.getRoomsBasedOnRoutine(pSemesterId,programs.get(0).getId())
+        .stream()
+        .collect(Collectors.toMap(r->r.getId(),r->r.getRoomNo()));
+
+
+
+    Document document = new Document();
+    document.addTitle("Teacher's Routine");
+
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    PdfWriter writer = PdfWriter.getInstance(document,baos);
+
+    Font tableDataFont = new Font(Font.FontFamily.TIMES_ROMAN,7);
+    Font tableDataFontTime = new Font(Font.FontFamily.TIMES_ROMAN,11);
+
+    Font universityNameFont = new Font(FontFactory.getFont(FontFactory.TIMES_BOLD,20));
+    Font headingFont = new Font(Font.FontFamily.TIMES_ROMAN,13);
+    document.open();
+    document.setPageSize(PageSize.A4.rotate());
+
+
+    for(Map.Entry<Integer,List<Routine>>  entry : roomidWithRoutineMap.entrySet()){
+      document.newPage();
+
+      Paragraph paragraph = new Paragraph("Ahsanullah University of Science and Technology",universityNameFont);
+      paragraph.setAlignment(Element.ALIGN_CENTER);
+
+      document.add(paragraph);
+
+      paragraph = new Paragraph(department.getLongName().toUpperCase(),headingFont);
+      paragraph.setAlignment(Element.ALIGN_CENTER);
+      document.add(paragraph);
+
+      paragraph = new Paragraph("Class Schedule ("+semester.getName()+")",headingFont);
+      paragraph.setAlignment(Element.ALIGN_CENTER);
+
+      document.add(paragraph);
+
+      paragraph = new Paragraph("ROOM NUMBER: "+ roomIdWithRoomNoMap.get(entry.getKey()).toUpperCase(),headingFont);
+      paragraph.setAlignment(Element.ALIGN_CENTER);
+
+      document.add(paragraph);
+      document.add(new Paragraph(" "));
+
+      if(entry.getValue().size()!=0){
+        document = routineGenerator(document,entry.getValue(),ClassRoutineType.roomBasedRoutine);
+      }
+      else{
+        Paragraph noRoutineParagraph= new Paragraph("No Routine Published Yet!");
+        noRoutineParagraph.setAlignment(Element.ALIGN_CENTER);
+        document.add(noRoutineParagraph);
+      }
+    }
+
+
+
+    document.close();
+    baos.writeTo(pOutputStream);
   }
 
   @Override
@@ -124,7 +220,7 @@ public class ClassRoutineGeneratorImpl implements ClassRoutineGenerator {
     document.add(new Paragraph(" "));
 
     if(routines.size()!=0){
-      document = routineGenerator(document,routines);
+      document = routineGenerator(document,routines,ClassRoutineType.teacherAndStudentRoutine);
     }
     else{
       Paragraph noRoutineParagraph= new Paragraph("No Routine Published Yet!");
@@ -138,7 +234,7 @@ public class ClassRoutineGeneratorImpl implements ClassRoutineGenerator {
 
   }
 
-  Document routineGenerator( Document document, List<Routine> routines) throws Exception,
+  Document routineGenerator( Document document, List<Routine> routines,ClassRoutineType type) throws Exception,
       IOException, DocumentException {
 
     Font tableDataFont = new Font(Font.FontFamily.TIMES_ROMAN,7);
@@ -156,6 +252,18 @@ public class ClassRoutineGeneratorImpl implements ClassRoutineGenerator {
             throw new UnhandledException(e);
           }
         }).collect(Collectors.toList());
+    Map<String,Course> courseMapWithCourseId = new HashMap<>();
+    if(type == ClassRoutineType.roomBasedRoutine){
+      String userId = SecurityUtils.getSubject().getPrincipal().toString();
+      User user = mUserManager.get(userId);
+      Employee employee = mEmployeeManager.getByEmployeeId(user.getEmployeeId());
+      String deptId = employee.getDepartment().getId();
+
+      List<Program> programs  = mProgramManager.getAll().stream().filter(p->p.getDepartmentId().equals(deptId)).collect(Collectors.toList());
+
+      courseMapWithCourseId = mCourseManager.getBySemesterProgram(semesterList.get(0).getId().toString(), programs.get(0).getId().toString()).stream()
+          .collect(Collectors.toMap(c->c.getId(),c->c));
+    }
 
     Semester semester = semesterList.get(0);
 
@@ -249,8 +357,19 @@ public class ClassRoutineGeneratorImpl implements ClassRoutineGenerator {
 
               }
 
-              Paragraph upperParagraph = new Paragraph(courseNo+"("+sections+")",tableDataFont);
-              Paragraph lowerParagraph = new Paragraph(roomNo,tableDataFont);
+              Paragraph upperParagraph = new Paragraph();
+              Paragraph lowerParagraph = new Paragraph();
+
+              if(type == ClassRoutineType.teacherAndStudentRoutine){
+                upperParagraph = new Paragraph(courseNo+"("+sections+")",tableDataFont);
+                lowerParagraph = new Paragraph(roomNo,tableDataFont);
+              }
+              else{
+                Course course = courseMapWithCourseId.get(courseId);
+                upperParagraph = new Paragraph(course.getYear()+"-"+course.getSemester()+"("+sections+")",tableDataFont);
+                lowerParagraph= new Paragraph(" ");
+              }
+
 
               upperParagraph.setAlignment(Element.ALIGN_CENTER);
               lowerParagraph.setAlignment(Element.ALIGN_CENTER);

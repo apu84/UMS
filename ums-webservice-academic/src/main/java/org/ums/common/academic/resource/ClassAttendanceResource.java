@@ -29,7 +29,6 @@ public class ClassAttendanceResource {
   @GET
   @Path("/ifti")
   public JsonObject getAll() throws Exception {
-    
 
     return null;
 

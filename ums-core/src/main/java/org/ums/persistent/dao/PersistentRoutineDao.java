@@ -94,6 +94,30 @@ public class PersistentRoutineDao extends RoutineDaoDecorator {
   }
 
   @Override
+  public List<Routine> getRoutine(int pSemesterId, int pProgramId) {
+    String query =
+        " SELECT    " + "                CLASS_ROUTINE.ROUTINE_ID,    "
+            + "                CLASS_ROUTINE.SEMESTER_ID,    "
+            + "                CLASS_ROUTINE.COURSE_ID,    "
+            + "                CLASS_ROUTINE.SECTION,    "
+            + "                CLASS_ROUTINE.YEAR,    "
+            + "                CLASS_ROUTINE.SEMESTER,    "
+            + "                CLASS_ROUTINE.START_TIME,    "
+            + "                CLASS_ROUTINE.END_TIME,    "
+            + "                CLASS_ROUTINE.DURATION,    "
+            + "                CLASS_ROUTINE.ROOM_ID,    "
+            + "                CLASS_ROUTINE.DAY,    "
+            + "                CLASS_ROUTINE.PROGRAM_ID,    "
+            + "                MST_COURSE.COURSE_NO    " + "              FROM    "
+            + "                CLASS_ROUTINE,MST_COURSE "
+            + " WHERE CLASS_ROUTINE.COURSE_ID=MST_COURSE.COURSE_ID  "
+            + " and CLASS_ROUTINE.SEMESTER_ID=?  "
+            + " and program_id=?  ORDER BY CLASS_ROUTINE.DAY, class_routine.START_TIME";
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pProgramId},
+        new RoutineRowMapperWithCourseNo());
+  }
+
+  @Override
   public List<Routine> getStudentRoutine(Student pStudent) {
     String query = SELECT_ALL_FOR_STUDENT;
     return mJdbcTemplate.query(query,
