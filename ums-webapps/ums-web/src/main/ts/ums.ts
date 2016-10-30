@@ -707,8 +707,7 @@ module ums {
               return $ocLazyLoad.load({
                 files: ['https://www.jqueryscript.net/demo/Path-like-Circle-Menu-with-jQuery-CSS3-Transforms-WCircleMenu/jQuery.WCircleMenu.js',
                   'vendors/bootstrap-datepicker/css/datepicker.css',
-                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
-                  'https://cdn.rawgit.com/JDMcKinstry/JavaScriptDateFormat/master/Date.format.min.js'
+                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js'
                 ]
               });
             }]

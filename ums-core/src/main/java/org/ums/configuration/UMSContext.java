@@ -452,4 +452,5 @@ public class UMSContext {
   ClassAttendanceManager classAttendanceManager() {
     return new PersistentClassAttendanceDao(mTemplateFactory.getJdbcTemplate());
   }
+
 }
