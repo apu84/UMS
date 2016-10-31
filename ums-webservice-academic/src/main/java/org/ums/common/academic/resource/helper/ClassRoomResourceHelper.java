@@ -77,7 +77,7 @@ public class ClassRoomResourceHelper extends ResourceHelper<ClassRoom, MutableCl
 
   public JsonObject getRooms(UriInfo pUriInfo) throws Exception {
 
-    List<ClassRoom> roomList = getRoomsByDepartment();
+    List<ClassRoom> roomList = getContentManager().getAll();
 
     return buildClassRooms(roomList, pUriInfo);
   }

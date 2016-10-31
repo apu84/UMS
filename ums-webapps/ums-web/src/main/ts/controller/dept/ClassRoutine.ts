@@ -283,6 +283,8 @@ module ums {
       if(this.$scope.showResetButton==false){
         this.$scope.showResetButton=true;
       }
+      this.activateSection(routine);
+      console.log(routine);
 
     }
 
@@ -503,6 +505,36 @@ module ums {
 
     }
 
+
+    private activateSection(routine:IClassRoutine){
+      console.log("in the active section");
+      console.log(routine);
+      console.log(routine.courseType);
+      if(routine.courseType=='SESSIONAL'){
+        this.$scope.sessionalSections=[];
+
+        if(this.$scope.section=='A'){
+          this.$scope.sessionalSections=this.appConstants.sessionalSectionsA;
+          console.log("In sessional section A");
+          console.log(this.$scope.sessionalSections);
+
+        }
+        else if(this.$scope.section=='B'){
+          this.$scope.sessionalSections= this.appConstants.sessionalSectionsB;
+
+        }
+        else if(this.$scope.section=='C'){
+          this.$scope.sessionalSections= this.appConstants.sessionalSectionsC ;
+        }
+        else{
+          this.$scope.sessionalSections= this.appConstants.sessionalSectionsD;
+        }
+      }else{
+        routine.section = this.$scope.section;
+      }
+
+    }
+
     private checkIfTheSameCourseWithSectionIsAlreadyAssignedAtTheSameTime(courseNo:string,routine:IClassRoutine):ng.IPromise<any>{
       var defer = this.$q.defer();
       var occuranceFound:boolean=false;
@@ -629,6 +661,8 @@ module ums {
         this.classRoomService.getClassRooms().then((rooms:Array<IClassRoom>)=>{
           this.$scope.roomArr=[];
           this.$scope.roomArr = rooms;
+          console.log("Rooms----");
+          console.log(rooms);
           this.createRoomMaps(rooms).then((done:string)=>{
             this.$scope.routineArr=[];
             this.$scope.tmpRoutineArr=[];
