@@ -14,18 +14,18 @@ module ums {
     lastSubmissionDate: string;
   }
 
-  interface MarksSubmissionStatusResponse {
+  export interface MarksSubmissionStatusResponse {
     entries: Array<MarksSubmissionStatus>;
   }
 
-  interface AggregatedStatus {
+  export interface AggregatedStatus {
     entries: Array<MarksSubmissionStatus>;
     status?: number;
     year?: number;
     academicSemester?: number;
   }
 
-  interface StatusByYearSemester {
+  export interface StatusByYearSemester {
     yearSemester?: {
       [key: string]: AggregatedStatus
     };
@@ -83,6 +83,7 @@ module ums {
             parseInt(this.resultProcessingSearchParamModel.programSelector.semesterId)));
       }
 
+      this.$scope.semesterId = this.resultProcessingSearchParamModel.programSelector.semesterId;
     }
 
     private showYearSemesterWise(programId: String): void {

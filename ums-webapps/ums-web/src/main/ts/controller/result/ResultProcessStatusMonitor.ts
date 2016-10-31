@@ -1,4 +1,5 @@
 module ums {
+
   interface TaskStatus {
     id: string,
     lastModified: string,
@@ -14,10 +15,12 @@ module ums {
     responseType: string;
   }
 
-  interface IResultProcessStatusMonitorScope {
+  interface IResultProcessStatusMonitorScope extends ng.IScope {
     programId: string;
     semesterId: string;
     taskStatus: TaskStatus;
+    statusByYearSemester: StatusByYearSemester;
+    resultProcessesStatus: Function;
   }
 
   export class ResultProcessStatusMonitor implements ng.IDirective {
@@ -36,12 +39,14 @@ module ums {
     public restrict: string = 'AE';
 
     public scope: any = {
-      programId: '@',
-      semesterId: '@'
+      programId: '=',
+      semesterId: '=',
+      statusByYearSemester: '='
     };
 
     public link = (scope: IResultProcessStatusMonitorScope, element: JQuery, attributes: any) => {
-      this.updateStatus();
+      this.updateStatus(scope.programId, scope.semesterId, scope);
+      scope.resultProcessesStatus = this.resultProcessesStatus.bind(this);
     };
 
     public templateUrl = "./views/result/result-process-status.html";
@@ -58,20 +63,46 @@ module ums {
           });
     }
 
-    private updateStatus(): void {
-      this.httpClient.get(`processResult/status/program/${this.scope.programId}/semester/${this.scope.semesterId}`,
+    private updateStatus(programId: string, semesterId: string, scope: any): void {
+      this.httpClient.get(`academic/processResult/status/program/${programId}/semester/${semesterId}`,
           HttpClient.MIME_TYPE_JSON,
           (response: TaskStatusResponse) => {
-            this.scope.taskStatus = response;
+            scope.taskStatus = response;
           });
     }
 
-    private isResultProcessed(status: TaskStatus): boolean {
-      return status.taskName == this.getResultProcessTaskName() && status.status == this.appConstants.TASK_STATUS.COMPLETED;
+    private resultProcessesStatus(programId: string,
+                                  semesterId: string,
+                                  status: TaskStatusResponse,
+                                  statusByYearSemester: StatusByYearSemester): string {
+      if (status) {
+        if (status.response.id == this.getResultProcessTaskName(programId, semesterId)) {
+          if (status.response.status == this.appConstants.TASK_STATUS.COMPLETED) {
+            return `Processed on ${status.response.taskCompletionDate}`;
+          }
+          else if (status.response.id  == this.appConstants.TASK_STATUS.INPROGRESS) {
+            return `Processes in progress`;
+          }
+          else {
+            for (var yearSemester in statusByYearSemester.yearSemester) {
+              if (statusByYearSemester.yearSemester.hasOwnProperty(yearSemester)) {
+                if (statusByYearSemester.yearSemester[yearSemester].status
+                    < this.appConstants.MARKS_SUBMISSION_STATUS.ACCEPTED_BY_COE
+                    || statusByYearSemester.yearSemester[yearSemester].status
+                    == this.appConstants.MARKS_SUBMISSION_STATUS.REQUESTED_FOR_RECHECK_BY_COE) {
+                  return "Unprocessed";
+                }
+              }
+            }
+            return "Ready to be processed";
+          }
+        }
+        return "Status undefined";
+      }
     }
 
-    private getResultProcessTaskName(): string {
-      return `${this.scope.programId}_${this.scope.semesterId}_${this.PROCESS_GPA_CGPA_PROMOTION}`;
+    private getResultProcessTaskName(programId: string, semesterId: string): string {
+      return `${programId}_${semesterId}${this.PROCESS_GPA_CGPA_PROMOTION}`;
     }
   }
 
