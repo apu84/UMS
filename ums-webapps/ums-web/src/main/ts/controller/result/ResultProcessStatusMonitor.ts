@@ -10,15 +10,19 @@ module ums {
   }
 
   interface TaskStatusResponse {
-    message: string;
-    response: TaskStatus;
-    responseType: string;
+    message?: string;
+    response?: TaskStatus;
+    responseType?: string;
+  }
+
+  interface TaskStatusResponseWrapper {
+    taskStatus: TaskStatusResponse;
   }
 
   interface IResultProcessStatusMonitorScope extends ng.IScope {
     programId: string;
     semesterId: string;
-    taskStatus: TaskStatus;
+    taskStatus: TaskStatusResponseWrapper;
     statusByYearSemester: StatusByYearSemester;
     resultProcessesStatus: Function;
   }
@@ -41,20 +45,24 @@ module ums {
     public scope: any = {
       programId: '=',
       semesterId: '=',
-      statusByYearSemester: '='
+      statusByYearSemester: '=',
+      taskStatus: '='
     };
 
+    private currentScope: IResultProcessStatusMonitorScope;
+
     public link = (scope: IResultProcessStatusMonitorScope, element: JQuery, attributes: any) => {
-      this.updateStatus(scope.programId, scope.semesterId, scope);
+      this.updateStatus(scope.programId, scope.semesterId, scope.taskStatus);
       scope.resultProcessesStatus = this.resultProcessesStatus.bind(this);
     };
 
     public templateUrl = "./views/result/result-process-status.html";
 
-    private getNotification() {
-      this.httpClient.poll("notification/10/", HttpClient.MIME_TYPE_JSON,
-          (response: NotificationEntries)=> {
-
+    private getNotification(programId: string, semesterId: string, statusWrapper: TaskStatusResponseWrapper) {
+      this.httpClient.poll(this.getUpdateStatusUri(programId, semesterId),
+          HttpClient.MIME_TYPE_JSON,
+          (response: TaskStatusResponse)=> {
+            statusWrapper.taskStatus = response;
           },
           (response: ng.IHttpPromiseCallbackArg<any>) => {
             if (response.status === 401) {
@@ -63,24 +71,34 @@ module ums {
           });
     }
 
-    private updateStatus(programId: string, semesterId: string, scope: any): void {
-      this.httpClient.get(`academic/processResult/status/program/${programId}/semester/${semesterId}`,
+    private updateStatus(programId: string, semesterId: string, taskStatusWrapper: TaskStatusResponseWrapper): void {
+      this.httpClient.get(this.getUpdateStatusUri(programId, semesterId),
           HttpClient.MIME_TYPE_JSON,
           (response: TaskStatusResponse) => {
-            scope.taskStatus = response;
+            taskStatusWrapper.taskStatus = response;
           });
     }
 
     private resultProcessesStatus(programId: string,
                                   semesterId: string,
-                                  status: TaskStatusResponse,
+                                  statusWrapper: TaskStatusResponseWrapper,
                                   statusByYearSemester: StatusByYearSemester): string {
-      if (status) {
-        if (status.response.id == this.getResultProcessTaskName(programId, semesterId)) {
-          if (status.response.status == this.appConstants.TASK_STATUS.COMPLETED) {
-            return `Processed on ${status.response.taskCompletionDate}`;
+      console.log(statusWrapper);
+      if (statusWrapper.taskStatus) {
+        if (statusWrapper.taskStatus.response.id == this.getResultProcessTaskName(programId, semesterId)) {
+          if (statusWrapper.taskStatus.response.status == this.appConstants.TASK_STATUS.COMPLETED) {
+            if (this.intervalPromise) {
+              this.$interval.cancel(this.intervalPromise);
+              this.intervalPromise = null;
+            }
+            return `Processed on ${statusWrapper.taskStatus.response.taskCompletionDate}`;
           }
-          else if (status.response.id  == this.appConstants.TASK_STATUS.INPROGRESS) {
+          else if (statusWrapper.taskStatus.response.status == this.appConstants.TASK_STATUS.INPROGRESS) {
+            if (!this.intervalPromise) {
+              this.intervalPromise = this.$interval(()=> {
+                this.getNotification(programId, semesterId, statusWrapper)
+              }, 2000, 0, true);
+            }
             return `Processes in progress`;
           }
           else {
@@ -103,6 +121,14 @@ module ums {
 
     private getResultProcessTaskName(programId: string, semesterId: string): string {
       return `${programId}_${semesterId}${this.PROCESS_GPA_CGPA_PROMOTION}`;
+    }
+
+    private getGradeProcessTaskName(programId: string, semesterId: string): string {
+      return `${programId}_${semesterId}${this.PROCESS_GRADES}`;
+    }
+
+    private getUpdateStatusUri(programId: string, semesterId: string): string {
+      return `academic/processResult/status/program/${programId}/semester/${semesterId}`;
     }
   }
 
