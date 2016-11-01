@@ -83,15 +83,22 @@ module ums {
                                   semesterId: string,
                                   statusWrapper: TaskStatusResponseWrapper,
                                   statusByYearSemester: StatusByYearSemester): string {
-      console.log(statusWrapper);
-      if (statusWrapper.taskStatus) {
-        if (statusWrapper.taskStatus.response.id == this.getResultProcessTaskName(programId, semesterId)) {
+      if (statusWrapper && statusWrapper.taskStatus && statusWrapper.taskStatus.response) {
+        var resultProcessTask: boolean
+            = statusWrapper.taskStatus.response.id == this.getResultProcessTaskName(programId, semesterId);
+        var gradeProcessTask: boolean
+            = statusWrapper.taskStatus.response.id == this.getGradeProcessTaskName(programId, semesterId);
+
+        if (resultProcessTask || gradeProcessTask) {
           if (statusWrapper.taskStatus.response.status == this.appConstants.TASK_STATUS.COMPLETED) {
-            if (this.intervalPromise) {
+            if (this.intervalPromise && resultProcessTask) {
               this.$interval.cancel(this.intervalPromise);
               this.intervalPromise = null;
             }
-            return `Processed on ${statusWrapper.taskStatus.response.taskCompletionDate}`;
+
+            return gradeProcessTask
+                ? `Process in progress`
+                : `Processed on ${statusWrapper.taskStatus.response.taskCompletionDate}`;
           }
           else if (statusWrapper.taskStatus.response.status == this.appConstants.TASK_STATUS.INPROGRESS) {
             if (!this.intervalPromise) {
