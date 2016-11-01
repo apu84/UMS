@@ -74,7 +74,7 @@ public class ClassAttendanceResourceHelper {
         jsonObjectBuilder.add("sId", "").add("sName", "");
       }
       index = index + 1;
-      jsonObjectBuilder.add("date" + date.getClassDateFormat1(), "I");
+      jsonObjectBuilder.add("date" + date.getClassDateFormat1()+date.getSerial(), "I");
     }
     // asfasdfasdfasdf a dsf asdf
     jsonArrayBuilder.add(jsonObjectBuilder);
@@ -92,10 +92,10 @@ public class ClassAttendanceResourceHelper {
         String key =
             date.getClassDateFormat1() + "" + date.getSerial() + "" + student.getStudentId();
         if(attendanceList.containsKey(key))
-          jsonObjectBuilder.add("date" + date.getClassDateFormat1(), attendanceList.get(key)
+          jsonObjectBuilder.add("date" + date.getClassDateFormat1()+date.getSerial(), attendanceList.get(key)
               .equals("1") ? "Y" : "N");
         else
-          jsonObjectBuilder.add("date" + date.getClassDateFormat1(), "N");
+          jsonObjectBuilder.add("date" + date.getClassDateFormat1()+date.getSerial(), "N");
 
       }
       jsonArrayBuilder.add(jsonObjectBuilder);
@@ -114,7 +114,8 @@ public class ClassAttendanceResourceHelper {
 
     for(ClassAttendanceDto date : dateList) {
       jsonObjectBuilder
-          .add("data", "date" + date.getClassDateFormat1())
+          .add("data", "date" + date.getClassDateFormat1()+date.getSerial())
+          .add("id", date.getId())
           .add(
               "title",
               date.getClassDate() + "&nbsp;<span class=\"badge badge-info\">" + date.getSerial()
@@ -126,26 +127,53 @@ public class ClassAttendanceResourceHelper {
     System.out.println(jsonArray.toString());
     objectBuilder.add("columns", jsonArray);
 
-    // jsonArrayBuilder=factory.createArrayBuilder();
-
-    // JsonObject jsonObject = jsonObject.put("aoColumnDefs",(Object)jsonArray);
-
     return objectBuilder.build();
   }
 
   @Transactional(rollbackFor = Exception.class)
   public Response saveNewAttendance(final JsonObject pJsonObject) throws Exception {
     List<ClassAttendanceDto> attendanceList = getBuilder().getAttendanceList(pJsonObject);
-    // String action = pJsonObject.getString("action");
-    // String userRole = pJsonObject.getString("role");
-    // String userId = SecurityUtils.getSubject().getPrincipal().toString();
-    // Integer pId, Integer pSemesterId, String pCourseId,
-    getContentManager().insertAttendanceMaster(1234, 11012016, "EEE1101_110500_00408", "A",
-        "12 Jun, 16", 1, "41");
-    getContentManager().upsertAttendanceDtl(1234, attendanceList);
+
+    Integer semester = pJsonObject.getInt("semester");
+    String course = pJsonObject.getString("course");
+    String section = pJsonObject.getString("section");
+    String classDate = pJsonObject.getString("classDate");
+    Integer serial = pJsonObject.getInt("serial");
+
+    String attendanceId = getContentManager().getAttendanceId();
+    getContentManager().insertAttendanceMaster(attendanceId, semester, course, section, classDate,
+        serial, "41");
+    getContentManager().upsertAttendanceDtl(attendanceId, attendanceList);
 
     Response.ResponseBuilder builder = Response.created(null);
     builder.status(Response.Status.CREATED);
+    builder.entity(attendanceId);
     return builder.build();
+  }
+
+  @Transactional(rollbackFor = Exception.class)
+  public Response updateClassAttendance(final JsonObject pJsonObject) throws Exception {
+    List<ClassAttendanceDto> attendanceList = getBuilder().getAttendanceList(pJsonObject);
+
+    Integer semester = pJsonObject.getInt("semester");
+    String course = pJsonObject.getString("course");
+    String section = pJsonObject.getString("section");
+    String classDate = pJsonObject.getString("classDate");
+    Integer serial = pJsonObject.getInt("serial");
+    String attendanceId = pJsonObject.getString("id");
+
+    getContentManager().updateAttendanceMaster(classDate, serial, attendanceId);
+    getContentManager().upsertAttendanceDtl(attendanceId, attendanceList);
+
+    return Response.noContent().build();
+  }
+
+  @Transactional(rollbackFor = Exception.class)
+  public Response deleteClassAttendance(final String attendanceId) throws Exception {
+
+    getContentManager().deleteAttendanceMaster(attendanceId);
+    getContentManager().deleteAttendanceDtl(attendanceId);
+
+    return Response.noContent().build();
   }
 }

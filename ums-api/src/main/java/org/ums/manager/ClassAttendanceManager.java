@@ -18,16 +18,19 @@ public interface ClassAttendanceManager {
 
   public Map<String, String> getAttendance(int semesterId, String courseId) throws Exception;
 
-  public int deleteAttendanceDtl(Integer attendanceId) throws Exception;
+  public int deleteAttendanceDtl(String attendanceId) throws Exception;
 
-  public int deleteAttendanceMaster(Integer attendanceId) throws Exception;
+  public int deleteAttendanceMaster(String attendanceId) throws Exception;
 
-  public int updateAttendanceMaster(ClassAttendanceDto classAttendanceDto) throws Exception;
+  public int updateAttendanceMaster(String pClassDate, Integer pSerial, String pAttendanceId)
+      throws Exception;
 
-  public int insertAttendanceMaster(Integer pId, Integer pSemesterId, String pCourseId,
+  public String getAttendanceId() throws Exception;
+
+  public int insertAttendanceMaster(String pId, Integer pSemesterId, String pCourseId,
       String pSection, String pClassDate, Integer pSerial, String pTeacherId) throws Exception;
 
-  public boolean upsertAttendanceDtl(Integer id, List<ClassAttendanceDto> attendanceList)
+  public boolean upsertAttendanceDtl(String id, List<ClassAttendanceDto> attendanceList)
       throws Exception;
 
 }

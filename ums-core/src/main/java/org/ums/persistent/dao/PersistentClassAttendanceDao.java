@@ -39,7 +39,7 @@ public class PersistentClassAttendanceDao implements ClassAttendanceManager {
       + "And test1.course_id=reg.course_id " + "Order by StudentId";
 
   String ATTENDANCE_DATE_QUERY =
-      "Select TO_Char(Class_Date,'DD MON, YY') Class_Date,To_Char(Class_Date,'DDMMYYYY') CLASS_DATE_F1,Serial,Teacher_Id  "
+      "Select TO_Char(Class_Date,'DD MON, YY') Class_Date,To_Char(Class_Date,'DDMMYYYY') CLASS_DATE_F1,Serial,Teacher_Id ,ID  "
           + "From MST_CLASS_ATTENDANCE Where Semester_Id= ? And Course_id=? "
           + "Order by Class_Date,Serial ";
 
@@ -94,15 +94,15 @@ public class PersistentClassAttendanceDao implements ClassAttendanceManager {
   }
 
   @Override
-  public int updateAttendanceMaster(ClassAttendanceDto classAttendanceDto) throws Exception {
+  public int updateAttendanceMaster(String pClassDate, Integer pSerial, String pAttendanceId)
+      throws Exception {
     String query =
         "Update MST_CLASS_ATTENDANCE Set Class_Date=To_Date(?, 'DD Mon, YY'),Serial=?  Where Id=?";
-    return mJdbcTemplate.update(query, classAttendanceDto.getClassDate(),
-        classAttendanceDto.getSerial(), classAttendanceDto.getId());
+    return mJdbcTemplate.update(query, pClassDate, pSerial, pAttendanceId);
   }
 
   @Override
-  public int insertAttendanceMaster(Integer pId, Integer pSemesterId, String pCourseId,
+  public int insertAttendanceMaster(String pId, Integer pSemesterId, String pCourseId,
       String pSection, String pClassDate, Integer pSerial, String pTeacherId) {
     String query =
         "Insert InTo MST_CLASS_ATTENDANCE(ID,SEMESTER_ID,COURSE_ID,SECTION,CLASS_DATE,SERIAL,TEACHER_ID) "
@@ -112,13 +112,13 @@ public class PersistentClassAttendanceDao implements ClassAttendanceManager {
   }
 
   @Override
-  public boolean upsertAttendanceDtl(Integer id, List<ClassAttendanceDto> attendanceList)
+  public boolean upsertAttendanceDtl(String id, List<ClassAttendanceDto> attendanceList)
       throws Exception {
     batchInsertAttendanceDtl(id, attendanceList);
     return true;
   }
 
-  public void batchInsertAttendanceDtl(Integer id, List<ClassAttendanceDto> attendanceList) {
+  public void batchInsertAttendanceDtl(String id, List<ClassAttendanceDto> attendanceList) {
     String sql =
         "merge into DTL_CLASS_ATTENDANCE "
             + "using (  "
@@ -136,7 +136,7 @@ public class PersistentClassAttendanceDao implements ClassAttendanceManager {
       @Override
       public void setValues(PreparedStatement ps, int i) throws SQLException {
         ClassAttendanceDto classAttendanceDto = attendanceList.get(i);
-        ps.setInt(1, id);
+        ps.setString(1, id);
         ps.setString(2, classAttendanceDto.getStudentId());
         ps.setInt(3, classAttendanceDto.getAttendance());
       }
@@ -149,15 +149,23 @@ public class PersistentClassAttendanceDao implements ClassAttendanceManager {
   }
 
   @Override
-  public int deleteAttendanceDtl(Integer attendanceId) throws Exception {
-    String query = "Delete DTL_CLASS_ATTENDANCE Where Id=? ";
+  public int deleteAttendanceDtl(String attendanceId) throws Exception {
+    String query = "Delete DTL_CLASS_ATTENDANCE Where Attendance_Id=? ";
     return mJdbcTemplate.update(query, attendanceId);
   }
 
   @Override
-  public int deleteAttendanceMaster(Integer attendanceId) throws Exception {
-    String query = "Delete MST_CLASS_ATTENDANCE Where Attendance_Id=? ";
+  public int deleteAttendanceMaster(String attendanceId) throws Exception {
+    String query = "Delete MST_CLASS_ATTENDANCE Where Id=? ";
     return mJdbcTemplate.update(query, attendanceId);
+  }
+
+  @Override
+  public String getAttendanceId() throws Exception {
+    String query = "Select SQN_CLASS_ATTENDANCE.NextVal From Dual";
+    String attendanceId =
+        (String) mJdbcTemplate.queryForObject(query, new Object[] {}, String.class);
+    return attendanceId;
   }
 
   class AttendanceStudentRowMapper implements RowMapper<ClassAttendanceDto> {
@@ -179,6 +187,7 @@ public class PersistentClassAttendanceDao implements ClassAttendanceManager {
       attendanceDto.setClassDateFormat1(resultSet.getString("CLASS_DATE_F1"));
       attendanceDto.setSerial(resultSet.getInt("SERIAL"));
       attendanceDto.setTeacherId(resultSet.getString("TEACHER_ID"));
+      attendanceDto.setId(resultSet.getString("ID"));
       AtomicReference<ClassAttendanceDto> atomicReference = new AtomicReference<>(attendanceDto);
       return atomicReference.get();
     }
