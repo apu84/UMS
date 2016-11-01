@@ -24,13 +24,10 @@ import java.io.StringReader;
 @Path("/academic/classAttendance")
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
-public class ClassAttendanceResource {
+public class ClassAttendanceResource extends MutableClassAttendanceResource {
 
   @Autowired
   ClassRoomManager mManager;
-
-  @Autowired
-  ClassAttendanceResourceHelper mResourceHelper;
 
   @GET
   @Path("/ifti")

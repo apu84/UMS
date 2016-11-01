@@ -12,6 +12,7 @@ module ums {
     operation:Function;
     saveAttendance:Function;
     deleteAttendance:Function;
+    changeCheckboxValue:Function;
     fetchCourseInfo:any;
     selectedCourseNo:any;
     entries:any;
@@ -110,6 +111,7 @@ module ums {
       this.$scope.setDate=this.setDate.bind(this);
       this.$scope.saveAttendance=this.saveAttendance.bind(this);
       this.$scope.deleteAttendance=this.deleteAttendance.bind(this);
+      this.$scope.changeCheckboxValue=this.changeCheckboxValue.bind(this);
 
 
     }
@@ -130,21 +132,22 @@ module ums {
       else
         editModeString+='<i class="fa fa-trash-o" aria-hidden="true"  style="color:red;cursor:pointer;margin-left:2px;" onClick="deleteAttendance(\'Old\','+row+','+col+')";></i>';
 
+
       if (value == "Y")
         output = "<img src='images/attendancePresent.png' />";
       else if (value == "N")
         output="<img src='images/attendanceAbsent.png' />";
       else if (value.indexOf("E-")==0){
         if((value.split("-"))[1]=="Y")
-          output="<input type='checkbox' checked/>";
+          output="<input type='checkbox' checked id='att_"+serial+"' onclick=\"changeCheckboxValue("+row+","+col+",this.value)\"/>";
         else
-          output="<input type='checkbox'/>";
+          output="<input type='checkbox' id='att_"+serial+"'/>";
       }
       else if (value == "EY"){
-        output="<input type='checkbox' checked/>";
+        output="<input type='checkbox' checked id='att_"+row+col+"'/>";
       }
       else if (value == "EN"){
-        output="<input type='checkbox' />";
+        output="<input type='checkbox'  id='att_"+row+col+"'/>";
       }
       else if(value=="I" || value=="I-N") {
           output=nonEditModeString;
@@ -182,10 +185,6 @@ module ums {
       var serial=row+""+column;
 
       var classDate=this.columnHeader[column];
-
-
-
-
       var update = [];
       var update1=[];
       if(operationType=="R"){
@@ -195,6 +194,26 @@ module ums {
           var val=innerArray[2];
           innerArray[2]=val.replace("E-","");
           update1.push(innerArray)
+        }
+        update1[0]=[0,column,"I"];
+        table.setDataAtCell(update1);
+        table.render();
+
+        //var dateValue=$("#date_"+serial).val();
+        classDate.title=classDate.date+" "+"<span class='badge badge-info'>"+classDate.serial+"</span>";
+        this.columnHeader[column]=classDate;
+        table.updateSettings({
+          columns:this.columnHeader
+        });
+        return;
+      }
+      else if(operationType=="SR"){
+        var data=table.getData();
+        update=JSON.parse(localStorage.getItem("class_attendance_" + row+"_"+column));
+        for(var  i=0;i<update.length;i++){
+          var innerArray = update[i];
+          innerArray[2]=(data[i][column]=="E-Y")?"Y":"N";  
+          update1.push(innerArray);
         }
         update1[0]=[0,column,"I"];
         table.setDataAtCell(update1);
@@ -262,13 +281,28 @@ module ums {
     }
 
     private saveAttendance(row,column){
+      var table = this.getTableInstance();
       var complete_json=this.createCompleteJson(row,column)
       var url = "academic/classAttendance";
       this.httpClient.post(url, complete_json, 'application/json')
           .success(() => {
             this.notify.success("Successfully Saved New Attendance.");
+            //localStorage["class_attendance_" + row+"_"+column] = JSON.stringify(table);
+            this.operation('SR',0,2,'IE')
+
           }).error((data) => {
           });
+    }
+
+    private changeCheckboxValue(row,col,value){
+      var checked=$('#att_'+row+col).is(':checked');
+      var table = this.getTableInstance();
+
+      var update1=[];
+      update1[0]=[row,col,(checked==true)?"E-Y":"E-N"];
+      table.setDataAtCell(update1);
+
+      console.log(checked);
     }
 
     private deleteAttendance(operationType,row,column){
@@ -293,20 +327,28 @@ module ums {
     }
 
     private createCompleteJson(row:number,column:number):any{
+      console.log("------"+column);
       var table = this.getTableInstance();
       var attendances=table.getData();
+      console.log(attendances);
       var attendanceList:Array<IClassAttendance> = new Array<IClassAttendance>();
       for(var i=1;i<attendances.length;i++){
         var attendance:IClassAttendance = <IClassAttendance>{};
         var cell=attendances[i];
         attendance.studentId=cell[0];
-        attendance.attendance=cell[2]=="E-Y"?1:0;
+        //console.log('att_'+i+''+column);
+        //var att=$('#att_'+i+''+column).is(':checked');//document.getElementById('att_'+i+''+column).checked;
+        //console.log(att);
+        attendance.attendance=(cell[2]=="E-Y")?1:0;
         attendanceList.push(attendance);
       }
       var complete_json = {};
       complete_json["attendanceList"] = attendanceList;
       complete_json["date"] = $("#date_"+row+column).val();
       complete_json["serial"] = $("#serial_"+row+column).val();
+      complete_json["courseId"] = "EEE1101_110500_00408";
+      complete_json["section"] = "A";
+
       return complete_json;
     }
     private showCalendar(serial){

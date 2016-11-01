@@ -180,6 +180,13 @@
         });
     }
 
+    function changeCheckboxValue(row,col,value) {
+        var scope = getAngularScope();
+        scope.$apply(function () {
+            scope.changeCheckboxValue(row,col,value);
+        });
+    }
+
     function getAngularScope(){
         return angular.element(document.getElementById("searchForm")).scope();
     }

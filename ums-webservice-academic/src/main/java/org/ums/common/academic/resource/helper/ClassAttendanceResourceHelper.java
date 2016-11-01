@@ -3,20 +3,30 @@ package org.ums.common.academic.resource.helper;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import org.ums.cache.LocalCache;
+import org.ums.common.academic.resource.SemesterResource;
 import org.ums.common.builder.ClassAttendanceBuilder;
 import org.ums.common.builder.ExamGradeBuilder;
 import org.ums.domain.model.dto.ClassAttendanceDto;
 import org.ums.domain.model.dto.MarksSubmissionStatusDto;
+import org.ums.domain.model.dto.StudentGradeDto;
+import org.ums.domain.model.mutable.MutableClassRoom;
 import org.ums.enums.CourseMarksSubmissionStatus;
+import org.ums.enums.CourseType;
 import org.ums.enums.ExamType;
 import org.ums.manager.ClassAttendanceManager;
 import org.ums.manager.ExamGradeManager;
 import org.ums.manager.SemesterManager;
 import org.ums.manager.UserManager;
+import org.ums.persistent.model.PersistentClassRoom;
 import org.ums.services.academic.GradeSubmissionService;
 
 import javax.json.*;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 import java.io.StringReader;
+import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
@@ -121,5 +131,21 @@ public class ClassAttendanceResourceHelper {
     // JsonObject jsonObject = jsonObject.put("aoColumnDefs",(Object)jsonArray);
 
     return objectBuilder.build();
+  }
+
+  @Transactional(rollbackFor = Exception.class)
+  public Response saveNewAttendance(final JsonObject pJsonObject) throws Exception {
+    List<ClassAttendanceDto> attendanceList = getBuilder().getAttendanceList(pJsonObject);
+    // String action = pJsonObject.getString("action");
+    // String userRole = pJsonObject.getString("role");
+    // String userId = SecurityUtils.getSubject().getPrincipal().toString();
+    // Integer pId, Integer pSemesterId, String pCourseId,
+    getContentManager().insertAttendanceMaster(1234, 11012016, "EEE1101_110500_00408", "A",
+        "12 Jun, 16", 1, "41");
+    getContentManager().upsertAttendanceDtl(1234, attendanceList);
+
+    Response.ResponseBuilder builder = Response.created(null);
+    builder.status(Response.Status.CREATED);
+    return builder.build();
   }
 }
