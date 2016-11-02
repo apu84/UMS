@@ -244,7 +244,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
 
               if(seatPlanOfTheRowAndCol != null) {
                 SeatPlan seatPlan = seatPlanOfTheRowAndCol; // roomRowColWithSeatPlanMap.get(room.getId()+""+i+""+j)
-                                                            // ;
+                // ;
                 Student student = studentIdWIthStuddentInfoMap.get(seatPlan.getStudent().getId());
                 Program program;
                 String dept;
