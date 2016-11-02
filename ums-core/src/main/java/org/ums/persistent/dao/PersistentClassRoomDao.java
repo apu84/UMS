@@ -79,7 +79,7 @@ public class PersistentClassRoomDao extends ClassRoomDaoDecorator {
   public List<ClassRoom> getRoomsBasedOnRoutine(int pSemesterId, int pProgramId) throws Exception {
     String query =
         SELECT_ALL
-            + " where ROOM_ID  in (select distinct(room_id) from class_routine where semester_id=? and program_id=?)";
+            + " where ROOM_ID not in (select distinct(roomId) from class_routine where semester_id=? and program_id=?)";
     return mJdbcTemplate.query(query, new Object[] {pSemesterId, pProgramId},
         new ClassRoomRowMapper());
   }

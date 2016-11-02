@@ -3,21 +3,26 @@ package org.ums.common.academic.resource.helper;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ums.domain.model.immutable.*;
-import org.ums.manager.*;
+import org.ums.domain.model.immutable.Employee;
+import org.ums.domain.model.immutable.Program;
+import org.ums.domain.model.immutable.User;
+import org.ums.manager.EmployeeManager;
+import org.ums.manager.ProgramManager;
+import org.ums.manager.UserManager;
 import org.ums.persistent.model.PersistentClassRoom;
 import org.ums.cache.LocalCache;
 import org.ums.resource.ResourceHelper;
 import org.ums.common.academic.resource.SemesterResource;
 import org.ums.common.builder.ClassRoomBuilder;
 import org.ums.domain.model.mutable.MutableClassRoom;
+import org.ums.domain.model.immutable.ClassRoom;
+import org.ums.manager.ClassRoomManager;
 
 import javax.json.*;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.io.StringReader;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,12 +41,6 @@ public class ClassRoomResourceHelper extends ResourceHelper<ClassRoom, MutableCl
 
   @Autowired
   private EmployeeManager mEmployeeManager;
-
-  @Autowired
-  private SemesterManager mSemesterManager;
-
-  @Autowired
-  private StudentManager mStudentManager;
 
   @Autowired
   private ProgramManager mProgramManager;
@@ -147,25 +146,10 @@ public class ClassRoomResourceHelper extends ResourceHelper<ClassRoom, MutableCl
     return object.build();
   }
 
-  public JsonObject getRoomsBasedOnRoutine(int pSemesterId ,UriInfo pUriInfo)
+  public JsonObject getRoomsBasedOnRoutine(int pSemesterId, int pProgramid, UriInfo pUriInfo)
       throws Exception {
 
-    List<ClassRoom> roomList = new ArrayList<>();
-    String userId = SecurityUtils.getSubject().getPrincipal().toString();
-
-    User user = mUserManager.get(userId);
-
-    if(user.getEmployeeId().equals("")){
-      Student student = mStudentManager.get(user.getId());
-      roomList = getContentManager().getRoomsBasedOnRoutine(pSemesterId,student.getProgram().getId());
-    }
-    else{
-      Employee employee = mEmployeeManager.getByEmployeeId(user.getEmployeeId());
-      String deptId = employee.getDepartment().getId();
-      List<Program> programs = mProgramManager.getAll().stream().filter(p-> p.getDepartmentId().equals(deptId)).collect(Collectors.toList());
-      roomList = getContentManager().getRoomsBasedOnRoutine(pSemesterId,programs.get(0).getId());
-    }
-
+    List<ClassRoom> roomList = getContentManager().getRoomsBasedOnRoutine(pSemesterId, pProgramid);
     return buildClassRooms(roomList, pUriInfo);
   }
 

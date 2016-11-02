@@ -12,6 +12,5 @@ module ums{
     endTime:string;
     duration:number;
     roomNo:string;
-    roomId:number;
   }
 }

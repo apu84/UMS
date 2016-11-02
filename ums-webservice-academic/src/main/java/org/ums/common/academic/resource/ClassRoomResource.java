@@ -44,11 +44,4 @@ public class ClassRoomResource extends MutableClassRoomResource {
     return mResourceHelper.getRooms(mUriInfo);
   }
 
-  @GET
-  @Path("/forRoutine/semester/{semester-id}")
-  public JsonObject getRoomsForRoutine(final @Context Request pRequest,
-      final @PathParam("semester-id") int pSemesterId) throws Exception {
-    return mResourceHelper.getRoomsBasedOnRoutine(pSemesterId, mUriInfo);
-  }
-
 }

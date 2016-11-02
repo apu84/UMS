@@ -6,7 +6,12 @@ module ums {
     static APPROVED_APPLICATION : string = "#E0FFFF";
     static NONE : string = "none";
     static UG : number =11;
+    static PG : number =22;
     static DEFAULT_SEMESTER_COUNT: number = 10;
+
+    static SHORT_MONTH_ARR = new Array("Jan", "Feb", "Mar",
+        "Apr", "May", "Jun", "Jul", "Aug", "Sep",
+        "Oct", "Nov", "Dec");
 
     /*
       *Status code for Optional Course Status Fields

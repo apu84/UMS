@@ -13,7 +13,6 @@ module  ums{
     programId: string;
     academicYear: string;
     academicSemester: string;
-    roomIdRoomNoMap:any;
     departmentName:string;
     semesterName:string;
     semester:ISemester;
@@ -36,7 +35,6 @@ module  ums{
     colspan:string;
     courseId:string;
     roomNo:string;
-    roomId:number;
   }
 
   interface ISemester{
@@ -55,8 +53,8 @@ module  ums{
 
   export class StudentsRoutine{
 
-    public static $inject = ['appConstants','HttpClient','$scope','$q','classRoomService'];
-    constructor(private appConstants: any, private httpClient: HttpClient, private $scope: IStudentsRoutineScope,private $q:ng.IQService, private classRoomService: ClassRoomService ){
+    public static $inject = ['appConstants','HttpClient','$scope','$q'];
+    constructor(private appConstants: any, private httpClient: HttpClient, private $scope: IStudentsRoutineScope,private $q:ng.IQService ){
       //$scope.studentId="150105001";
       $scope.days = appConstants.weekDays;
       $scope.checker = appConstants.timeChecker;
@@ -86,6 +84,7 @@ module  ums{
 
       var routineStoreArr: IRoutineStore[] = [];
 
+
       for(var d=0;d<this.$scope.days.length;d++){
 
         for(var i=0;i<12;i++){
@@ -99,8 +98,7 @@ module  ums{
 
               routineStore.courseId = this.$scope.courseIdMapCourse[routine[routines].courseId].no;
 
-              routineStore.roomNo = this.$scope.roomIdRoomNoMap[routine[routines].roomId] ;
-
+              routineStore.roomNo = routine[routines].roomNo;
               routineStoreArr.push(routineStore);
               i=i+(routine[routines].duration-1);
               found = true;
@@ -126,36 +124,15 @@ module  ums{
     private getStudentRoutineBySemesterAndProgram(){
       this.httpClient.get('academic/routine/routineForStudent','application/json',(json:any,etag:string)=>{
             this.$scope.routines = json.entries;
-            this.$scope.roomIdRoomNoMap={};
-            this.getRooms().then((rooms:Array<any>)=>{
 
-
-             this.getCourses().then((courseArr:Array<ICourse>)=>{
-
-                this.createStudentsRoutine(this.$scope.routines);
-
-              });
+            this.getCourses().then((courseArr:Array<ICourse>)=>{
+              this.createStudentsRoutine(this.$scope.routines);
             });
 
           },
           (response:ng.IHttpPromiseCallbackArg<any>)=>{
             console.error(response);
           });
-    }
-
-
-    private getRooms():ng.IPromise<any>{
-      var defer=this.$q.defer();
-      this.classRoomService.getClassRoomsBasedOnRoutine(this.$scope.student[0].semesterId).then((rooms:Array<any>)=> {
-
-        for (var i = 0; i < rooms.length; i++) {
-          this.$scope.roomIdRoomNoMap[rooms[i].id] = rooms[i].roomNo;
-        }
-      });
-
-      defer.resolve(this.$scope.roomIdRoomNoMap);
-      return defer.promise;
-
     }
 
 
@@ -180,6 +157,7 @@ module  ums{
             this.$scope.student = json.entries;
 
             this.getStudentRoutineBySemesterAndProgram();
+            console.log(this.$scope.student);
             defer.resolve(this.$scope.student);
 
           },

@@ -25,22 +25,6 @@ module ums{
 
       return defer.promise;
     }
-
-    public getLoggedEmployeeInfo():ng.IPromise<any>{
-      var defer = this.$q.defer();
-      var employees:any={};
-      this.httpClient.get("/ums-webservice-academic/academic/employee/employeeById",'application/json',
-          (json:any,etag:string)=>{
-            employees = json.entries;
-            defer.resolve(employees);
-          },
-          (response:ng.IHttpPromiseCallbackArg<any>)=>{
-            console.error(response);
-            this.notify.error("Error in fetching employee data");
-          });
-
-      return defer.promise;
-    }
   }
 
   UMS.service("employeeService",EmployeeService);

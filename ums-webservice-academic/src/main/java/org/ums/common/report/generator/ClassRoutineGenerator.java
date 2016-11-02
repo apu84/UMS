@@ -1,5 +1,6 @@
 package org.ums.common.report.generator;
 
+import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 
 import java.io.IOException;
@@ -14,7 +15,4 @@ public interface ClassRoutineGenerator {
 
   void createClassRoutineTeacherReport(OutputStream pOutputStream) throws Exception, IOException,
       DocumentException;
-
-  void createRoomBasedClassRoutineReport(OutputStream pOutputStream, int pSemesterId, int pRoomId)
-      throws Exception, IOException, DocumentException;
 }

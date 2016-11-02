@@ -26,9 +26,4 @@ public class RoutineDaoDecorator extends
   public List<Routine> getEmployeeRoutine(int semesterId, int programId, int year, int semester) {
     return getManager().getEmployeeRoutine(semesterId, programId, year, semester);
   }
-
-  @Override
-  public List<Routine> getRoutine(int pSemesterId, int pProgramId) {
-    return getManager().getRoutine(pSemesterId, pProgramId);
-  }
 }
