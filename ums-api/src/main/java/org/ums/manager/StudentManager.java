@@ -15,6 +15,10 @@ public interface StudentManager extends ContentManager<Student, MutableStudent, 
 
   public List<Student> getActiveStudents();
 
+  public List<Student> getRegisteredStudents(int pSemesterId, int pExamType);
+
+  public List<Student> getRegisteredStudents(int pGroupNo, int pSemesterId, int pExamType);
+
   public int updateStudentsAdviser(List<MutableStudent> pStudents) throws Exception;
 
   public List<Student> getActiveStudentsByAdviser(String pTeacherId);

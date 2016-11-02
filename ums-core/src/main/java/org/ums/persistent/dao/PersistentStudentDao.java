@@ -123,6 +123,68 @@ public class PersistentStudentDao extends StudentDaoDecorator {
   }
 
   @Override
+  public List<Student> getRegisteredStudents(int pSemesterId, int pExamType) {
+    String query =
+        "SELECT " + "  STUDENTS.STUDENT_ID, " + "  FULL_NAME, " + "  DEPT_ID, "
+            + "  STUDENTS.SEMESTER_ID, " + "  FATHER_NAME, " + "  MOTHER_NAME, " + "  BIRTH_DATE, "
+            + "  GENDER, " + "  PRESENT_ADDRESS, " + "  PERMANENT_ADDRESS, " + "  MOBILE_NUMBER, "
+            + "  PHONE_NUMBER, " + "  BLOOD_GROUP, " + "  EMAIL_ADDRESS, " + "  GUARDIAN_NAME, "
+            + "  GUARDIAN_MOBILE, " + "  GUARDIAN_PHONE, " + "  GUARDIAN_EMAIL, "
+            + "  STUDENTS.PROGRAM_ID, " + "  STUDENTS.LAST_MODIFIED, " + "  ENROLLMENT_TYPE, "
+            + "  CURR_YEAR, " + "  CURR_SEMESTER, " + "  CURR_ENROLLED_SEMESTER, "
+            + "  THEORY_SECTION, " + "  SESSIONAL_SECTION, " + "  ADVISER, " + "  STATUS "
+            + "FROM STUDENTS " + "WHERE STUDENT_ID IN (SELECT DISTINCT STUDENT_ID "
+            + "                     FROM UG_REGISTRATION_RESULT "
+            + "                     WHERE STUDENTS.SEMESTER_ID = ? AND EXAM_TYPE = ?) "
+            + "ORDER BY PROGRAM_ID, STUDENT_ID, CURR_YEAR, CURR_SEMESTER";
+    return mJdbcTemplate
+        .query(query, new Object[] {pSemesterId, pExamType}, new StudentRowMapper());
+  }
+
+  @Override
+  public List<Student> getRegisteredStudents(int pGroupNo, int pSemesterId, int pExamType) {
+    String query =
+        "SELECT "
+            + "  STUDENTS.STUDENT_ID, "
+            + "  FULL_NAME, "
+            + "  DEPT_ID, "
+            + "  STUDENTS.SEMESTER_ID, "
+            + "  FATHER_NAME, "
+            + "  MOTHER_NAME, "
+            + "  BIRTH_DATE, "
+            + "  GENDER, "
+            + "  PRESENT_ADDRESS, "
+            + "  PERMANENT_ADDRESS, "
+            + "  MOBILE_NUMBER, "
+            + "  PHONE_NUMBER, "
+            + "  BLOOD_GROUP, "
+            + "  EMAIL_ADDRESS, "
+            + "  GUARDIAN_NAME, "
+            + "  GUARDIAN_MOBILE, "
+            + "  GUARDIAN_PHONE, "
+            + "  GUARDIAN_EMAIL, "
+            + "  STUDENTS.PROGRAM_ID, "
+            + "  STUDENTS.LAST_MODIFIED, "
+            + "  ENROLLMENT_TYPE, "
+            + "  CURR_YEAR, "
+            + "  CURR_SEMESTER, "
+            + "  CURR_ENROLLED_SEMESTER, "
+            + "  THEORY_SECTION, "
+            + "  SESSIONAL_SECTION, "
+            + "  ADVISER, "
+            + "  STATUS "
+            + "FROM STUDENTS "
+            + "WHERE STUDENT_ID IN (SELECT DISTINCT (r.STUDENT_ID) "
+            + "                     FROM UG_REGISTRATION_RESULT r, STUDENTS s, SP_GROUP g "
+            + "                     WHERE g.GROUP_NO = ? AND r.SEMESTER_ID = ? AND r.EXAM_TYPE = ? AND g.TYPE = r.EXAM_TYPE AND "
+            + "                           r.STUDENT_ID = s.STUDENT_ID AND g.PROGRAM_ID = s.PROGRAM_ID AND g.YEAR = s.CURR_YEAR "
+            + "                           AND g.SEMESTER = s.CURR_SEMESTER) "
+            + "ORDER BY PROGRAM_ID, STUDENT_ID, CURR_YEAR, CURR_SEMESTER";
+    return mJdbcTemplate.query(query, new Object[] {pGroupNo, pSemesterId, pExamType},
+        new StudentRowMapper());
+  }
+
+  @Override
   public int update(List<MutableStudent> pStudentList) throws Exception {
     String query = UPDATE_ALL + " WHERE STUDENT_ID = ?";
     return mJdbcTemplate.batchUpdate(query, getUpdateParamArray(pStudentList)).length;

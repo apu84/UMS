@@ -38,4 +38,14 @@ public class StudentDaoDecorator extends
   public List<Student> getActiveStudentsByAdviser(String pTeacherId) {
     return getManager().getActiveStudentsByAdviser(pTeacherId);
   }
+
+  @Override
+  public List<Student> getRegisteredStudents(int pSemesterId, int pExamType) {
+    return getManager().getRegisteredStudents(pSemesterId, pExamType);
+  }
+
+  @Override
+  public List<Student> getRegisteredStudents(int pGroupNo, int pSemesterId, int pExamType) {
+    return getManager().getRegisteredStudents(pGroupNo, pSemesterId, pExamType);
+  }
 }

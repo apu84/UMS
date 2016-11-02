@@ -258,9 +258,9 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                 else {
                   program = programIdWithProgramInfoMap.get(student.getProgram().getId());
                   dept =
-                      program.getShortName() + " " + student.getCurrentYear() + "/"
-                          + student.getCurrentAcademicSemester();
-                  deptName = program.getShortName();
+                      program.getShortName().replace("BSc in ", "") + " "
+                          + student.getCurrentYear() + "/" + student.getCurrentAcademicSemester();
+                  deptName = program.getShortName().replace("BSc in ", "");
 
                 }
                 String yearSemester =
@@ -523,8 +523,8 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                 PdfPCell lowerCell = new PdfPCell();
 
                 String upperPart =
-                    program.getShortName() + " " + student.getCurrentYear() + "/"
-                        + student.getCurrentAcademicSemester();
+                    program.getShortName().replace("BSc in ", "") + " " + student.getCurrentYear()
+                        + "/" + student.getCurrentAcademicSemester();
                 Paragraph upperParagraph =
                     new Paragraph(upperPart, FontFactory.getFont(FontFactory.TIMES_ROMAN, fontSize));
                 upperParagraph.setSpacingBefore(-1f);
@@ -562,8 +562,8 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                 PdfPCell lowerCell = new PdfPCell();
                 lowerCell.setColspan(10);
                 String upperPart =
-                    program2.getShortName() + " " + student2.getCurrentYear() + "/"
-                        + student2.getCurrentAcademicSemester();
+                    program2.getShortName().replace("BSc in ", "") + " "
+                        + student2.getCurrentYear() + "/" + student2.getCurrentAcademicSemester();
                 Paragraph upperParagraph =
                     new Paragraph(upperPart, FontFactory.getFont(FontFactory.TIMES_ROMAN, fontSize));
                 upperParagraph.setSpacingBefore(-1f);
