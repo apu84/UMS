@@ -68,7 +68,7 @@ public class StudentRecordResourceHelper extends
       Integer pSemester, final Request pRequest, final UriInfo pUriInfo) throws Exception {
     String studentId = SecurityUtils.getSubject().getPrincipal().toString();
     Student student = mStudentManager.get(studentId);
-    Semester studentsSemester = mSemesterManager.get(student.getCurrentEnrolledSemesterId());
+    Semester studentsSemester = mSemesterManager.get(student.getSemesterId());
     Semester activeSemester =
         mSemesterManager.getActiveSemester(studentsSemester.getProgramTypeId());
 
