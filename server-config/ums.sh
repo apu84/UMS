@@ -35,7 +35,7 @@ build_src() {
   
 	export PATH
 	
-	mvn clean install
+	mvn clean install -Ptest-server
 	
 	cd $UMS_SRC/ums-webapps
 	
