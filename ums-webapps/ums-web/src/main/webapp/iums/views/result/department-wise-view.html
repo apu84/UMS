@@ -3,9 +3,15 @@
          data-ng-repeat="(programId, status) in statusMap track by $index">
         <div class="panel panel-default">
             <div class="panel-body" style="min-height: 240px;">
-                <img id="{{::programId}}_download" src="images/pdf_square.png"
-                     class="download_tooltip"
-                     style="position: absolute;top: 0px;right: 0px;cursor: pointer;"/>
+                <div
+                     data-result-process-status-monitor=""
+                     data-status-by-year-semester="status"
+                     data-semester-id="semesterId"
+                     data-program-id="programId"
+                     data-task-status="{taskStatus: {}}"
+                     data-render="'icon'">
+                </div>
+
                 <div id="{{::programId}}_view1">
                     <strong class="text-uppercase">{{::status.departmentName}}</strong><br/>
                     <span>{{::status.programName}}</span><br/>
@@ -18,7 +24,8 @@
                              data-status-by-year-semester="status"
                              data-semester-id="semesterId"
                              data-program-id="programId"
-                             data-task-status="{taskStatus: {}}">
+                             data-task-status="{taskStatus: {}}"
+                             data-render="'text'">
                         </div>
                     </div>
                 </div>

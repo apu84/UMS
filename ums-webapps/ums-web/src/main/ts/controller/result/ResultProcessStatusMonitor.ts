@@ -19,6 +19,10 @@ module ums {
     taskStatus: TaskStatusResponse;
   }
 
+  interface ResultProcessStatus extends StatusByYearSemester {
+    status: number;
+  }
+
   interface IResultProcessStatusMonitorScope extends ng.IScope {
     programId: string;
     semesterId: string;
@@ -46,7 +50,8 @@ module ums {
       programId: '=',
       semesterId: '=',
       statusByYearSemester: '=',
-      taskStatus: '='
+      taskStatus: '=',
+      render: '='
     };
 
     private currentScope: IResultProcessStatusMonitorScope;
@@ -82,7 +87,7 @@ module ums {
     private resultProcessesStatus(programId: string,
                                   semesterId: string,
                                   statusWrapper: TaskStatusResponseWrapper,
-                                  statusByYearSemester: StatusByYearSemester): string {
+                                  statusByYearSemester: ResultProcessStatus): string {
       if (statusWrapper && statusWrapper.taskStatus && statusWrapper.taskStatus.response) {
         var resultProcessTask: boolean
             = statusWrapper.taskStatus.response.id == this.getResultProcessTaskName(programId, semesterId);
@@ -95,10 +100,13 @@ module ums {
               this.$interval.cancel(this.intervalPromise);
               this.intervalPromise = null;
             }
-
+            statusByYearSemester.status
+                = gradeProcessTask
+                ? this.appConstants.RESULT_PROCESS_STATUS.IN_PROGRESS.id
+                : this.appConstants.RESULT_PROCESS_STATUS.PROCESSED_ON.id;
             return gradeProcessTask
-                ? `Process in progress`
-                : `Processed on ${statusWrapper.taskStatus.response.taskCompletionDate}`;
+                ? this.appConstants.RESULT_PROCESS_STATUS.IN_PROGRESS.label
+                : `${this.appConstants.RESULT_PROCESS_STATUS.IN_PROGRESS.label} ${statusWrapper.taskStatus.response.taskCompletionDate}`;
           }
           else if (statusWrapper.taskStatus.response.status == this.appConstants.TASK_STATUS.INPROGRESS) {
             if (!this.intervalPromise) {
@@ -106,7 +114,8 @@ module ums {
                 this.getNotification(programId, semesterId, statusWrapper)
               }, 2000, 0, true);
             }
-            return `Processes in progress`;
+            statusByYearSemester.status = this.appConstants.RESULT_PROCESS_STATUS.IN_PROGRESS.id;
+            return this.appConstants.RESULT_PROCESS_STATUS.IN_PROGRESS.label;
           }
           else {
             for (var yearSemester in statusByYearSemester.yearSemester) {
@@ -115,14 +124,17 @@ module ums {
                     < this.appConstants.MARKS_SUBMISSION_STATUS.ACCEPTED_BY_COE
                     || statusByYearSemester.yearSemester[yearSemester].status
                     == this.appConstants.MARKS_SUBMISSION_STATUS.REQUESTED_FOR_RECHECK_BY_COE) {
-                  return "Unprocessed";
+                  statusByYearSemester.status = this.appConstants.RESULT_PROCESS_STATUS.UNPROCESSED.id;
+                  return this.appConstants.RESULT_PROCESS_STATUS.UNPROCESSED.label;
                 }
               }
             }
-            return "Ready to be processed";
+            statusByYearSemester.status = this.appConstants.RESULT_PROCESS_STATUS.READY_TO_BE_PROCESSED.id;
+            return this.appConstants.RESULT_PROCESS_STATUS.READY_TO_BE_PROCESSED.label;
           }
         }
-        return "Status undefined";
+        statusByYearSemester.status = this.appConstants.RESULT_PROCESS_STATUS.STATUS_UNDEFINED.id;
+        return this.appConstants.RESULT_PROCESS_STATUS.STATUS_UNDEFINED.label;
       }
     }
 

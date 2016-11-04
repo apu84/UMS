@@ -515,6 +515,28 @@ module ums {
           INPROGRESS: "INPROGRESS",
           COMPLETED: "COMPLETED",
           NONE: "NONE"
+        },
+        RESULT_PROCESS_STATUS: {
+          IN_PROGRESS: {
+            id : 1,
+            label: "Process in progress"
+          },
+          PROCESSED_ON: {
+            id: 2,
+            label: "Processed on"
+          },
+          UNPROCESSED: {
+            id: 3,
+            label: "Unprocessed"
+          },
+          READY_TO_BE_PROCESSED: {
+            id: 4,
+            label: "Ready to be processed"
+          },
+          STATUS_UNDEFINED: {
+            id: 5,
+            label: "Status undefined"
+          }
         }
 
       }
