@@ -1,4 +1,5 @@
-<style>
+<style type="text/css">
+    /* Page Specific Design for HandsOnTable */
     .table>tbody>tr>td{
         padding-bottom: 5px !important;
         padding-top: 5px !important;
@@ -18,8 +19,9 @@
     input[type=checkbox], input[type=radio]{
         margin: 0px !important;
     }
-
-
+    .label-info, .badge-info{
+        margin-top: -3px !important;
+    }
 </style>
 <div class="row" id="topArrowDiv">
     <div class="col-md-2 col-md-offset-5">
@@ -38,7 +40,7 @@
             <h3 class="panel-title">Select </h3>
         </div>
         <div class="panel-body pan">
-            <form action="" class="form-horizontal" data-validate=""  data-onvalidate="fetchCourseInfo" id="form11">
+            <form action="" class="form-horizontal" data-validate=""  data-onvalidate="fetchCourseInfo" id="searchForm">
                 <div class="form-body pal">
                     <div data-program-selector="" data-model="attendanceSearchParamModel.programSelector"></div>
                     <div class="form-group">
@@ -92,21 +94,18 @@
                             <td  style="text-align: center;">{{::courseTeacher.section}}
                             </td>
                             <td>
-                                    <select name="yourinput" style="height: 25px;">
-                                        <option ng-repeat="section in courseTeacher.section | $split">{{section}}</option>
-                                    </select>
+                                <select style="height: 25px;" id="section_{{::courseTeacher.courseId}}">
+                                    <option ng-repeat="section in courseTeacher.section | $split">{{section}}</option>
+                                </select>
 
-                                    <a data-ng-if="r.showEditButton!=false" href="javascript:;" class="btn btn-xs btn-default"
-                                       data-ng-click="showBulkAssignmentUI()" style="background-color: #ffffff;border: 1px solid red;margin-top: -5px;" id="bulkAnchor">
-                                        <i class="fa fa-file-pdf-o" style="color: red;" aria-hidden="true" id="bulkIcon"></i>
-                                    </a>
-                                    <a data-ng-if="r.showEditButton!=false" href="javascript:;" class="btn btn-xs btn-default"
-                                       data-ng-click="showAttendanceSheet()" style="background-color: #ffffff;border: 1px solid blue;margin-top: -5px;" id="bulkAnchor">
-                                        <i class="fa fa-edit" style="color: blue;" aria-hidden="true" id="bulkIcon"></i>
-
-
-                                    </a>
-
+                                <a data-ng-if="r.showEditButton!=false" href="javascript:;" class="btn btn-xs btn-default"
+                                   data-ng-click="showBulkAssignmentUI()" style="background-color: #ffffff;border: 1px solid red;margin-top: -5px;">
+                                    <i class="fa fa-file-pdf-o" style="color: red;" aria-hidden="true"></i>
+                                </a>
+                                <a data-ng-if="r.showEditButton!=false" href="javascript:;" class="btn btn-xs btn-default"
+                                   data-ng-click="showAttendanceSheet(courseTeacher.courseId)" style="background-color: #ffffff;border: 1px solid blue;margin-top: -5px;">
+                                    <i class="fa fa-edit" style="color: blue;" aria-hidden="true"></i>
+                                </a>
                             </td>
                         </tr>
                         </tbody>
@@ -125,16 +124,14 @@
     }
 </script>
 <div class="row">
-    <div class="col-md-12"  style="padding-top: 20px;  ">
-    <hot-table hot-id="foo"
-               settings="data.settings"
-               datarows="data.items"
-               columns="data.columns">
-    </hot-table>
+    <div class="col-md-12"  style="padding-top: 5px;display: none;" id="attSheetDiv">
+        <hot-table hot-id="attendanceHandsOnTable"
+                   settings="data.settings"
+                   datarows="data.items"
+                   columns="data.columns">
+        </hot-table>
+    </div>
 
-</div>
-    <button data-ng-click="test123()" >Click Me1133333</button>
-    <button data-ng-click="insertColo()" >Add new</button>
 
 </div>
 
@@ -157,23 +154,59 @@
 </div>
 
 
-        <script type="text/javascript">
-            function operation(operationType,row,column,value) {
-                var scope = angular.element(document.getElementById("form11")).scope();
-                scope.$apply(function () {
-                    scope.operation(operationType,row,column,value);
-                });
-            }
+<script type="text/javascript">
+    function operation(operationType,row,column,value) {
+        var scope = getAngularScope();
+        scope.$apply(function () {
+            scope.operation(operationType,row,column,value);
+        });
+    }
+    function saveAttendance(row,column){
+        var scope = getAngularScope();
+        scope.$apply(function () {
+            scope.saveAttendance(row,column);
+        });
+    }
+    function deleteAttendance(row,column){
+        var scope = getAngularScope();
+        scope.$apply(function () {
+            scope.deleteAttendance(row,column);
+        });
+    }
 
-            function showCalendar(serial) {
-                var scope = angular.element(document.getElementById("form11")).scope();
-                scope.$apply(function () {
-                    scope.showCalendar(serial);
-                });
-            }
-            $("#class_date").datepicker({
-                format: 'dd M, yy'
-            });
+    function showCalendar(serial) {
+        var scope = getAngularScope();
+        scope.$apply(function () {
+            scope.showCalendar(serial);
+        });
+    }
 
-        </script>
+    function changeCheckboxValue(row,col,value) {
+        var scope = getAngularScope();
+        scope.$apply(function () {
+            scope.changeCheckboxValue(row,col,value);
+        });
+    }
+
+    function insertNewAttendanceColumn() {
+        var scope = getAngularScope();
+        scope.$apply(function () {
+            scope.insertNewAttendanceColumn();
+        });
+    }
+    function downloadSectionWiseXls() {
+        var scope = getAngularScope();
+        scope.$apply(function () {
+            scope.downloadSectionWiseXls();
+        });
+    }
+
+    function getAngularScope(){
+        return angular.element(document.getElementById("searchForm")).scope();
+    }
+    $("#class_date").datepicker({
+        format: 'dd M, yy'
+    });
+
+</script>
 

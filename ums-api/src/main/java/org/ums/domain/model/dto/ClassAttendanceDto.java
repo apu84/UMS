@@ -2,6 +2,8 @@ package org.ums.domain.model.dto;
 
 import com.google.gson.Gson;
 
+import java.util.List;
+
 /**
  * Created by Ifti on 29-Oct-16.
  */
@@ -15,6 +17,7 @@ public class ClassAttendanceDto {
   private String studentId;
   private String studentName;
   private Integer attendance;
+  private List<String> attendances;
 
   public String getClassDate() {
     return classDate;
@@ -60,14 +63,6 @@ public class ClassAttendanceDto {
     return studentName;
   }
 
-  public Integer getAttendance() {
-    return attendance;
-  }
-
-  public void setAttendance(Integer attendance) {
-    this.attendance = attendance;
-  }
-
   public void setStudentName(String studentName) {
     this.studentName = studentName;
   }
@@ -78,6 +73,22 @@ public class ClassAttendanceDto {
 
   public void setId(String id) {
     this.id = id;
+  }
+
+  public Integer getAttendance() {
+    return attendance;
+  }
+
+  public void setAttendance(Integer attendance) {
+    this.attendance = attendance;
+  }
+
+  public List<String> getAttendances() {
+    return attendances;
+  }
+
+  public void setAttendances(List<String> attendances) {
+    this.attendances = attendances;
   }
 
   public String toString() {

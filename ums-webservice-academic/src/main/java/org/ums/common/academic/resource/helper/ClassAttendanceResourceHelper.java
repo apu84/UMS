@@ -53,13 +53,28 @@ public class ClassAttendanceResourceHelper {
     return mBuilder;
   }
 
-  public JsonObject getClassAttendance(final Integer pSemesterId, final String pCourseId)
-      throws Exception {
+  public List<ClassAttendanceDto> getDateList(final Integer pSemesterId, final String pCourseId,
+      final String pSection) throws Exception {
+    return getContentManager().getDateList(pSemesterId, pCourseId);
+  }
 
-    List<ClassAttendanceDto> dateList = getContentManager().getDateList(pSemesterId, pCourseId);
-    List<ClassAttendanceDto> studentList =
-        getContentManager().getStudentList(pSemesterId, pCourseId);
-    Map<String, String> attendanceList = getContentManager().getAttendance(pSemesterId, pCourseId);
+  public List<ClassAttendanceDto> getStudentList(final Integer pSemesterId, final String pCourseId,
+      final String pSection) throws Exception {
+    return getContentManager().getStudentList(pSemesterId, pCourseId);
+  }
+
+  public Map<String, String> getAttendanceMap(final Integer pSemesterId, final String pCourseId,
+      final String pSection) throws Exception {
+    return getContentManager().getAttendance(pSemesterId, pCourseId);
+  }
+
+  public JsonObject getClassAttendance(final Integer pSemesterId, final String pCourseId,
+      final String pSection) throws Exception {
+
+    List<ClassAttendanceDto> dateList = getDateList(pSemesterId, pCourseId, pSection);
+    List<ClassAttendanceDto> studentList = getStudentList(pSemesterId, pCourseId, pSection);
+    Map<String, String> attendanceList = getAttendanceMap(pSemesterId, pCourseId, pSection);
+
     JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
 
     JsonBuilderFactory factory = Json.createBuilderFactory(null);
@@ -69,11 +84,18 @@ public class ClassAttendanceResourceHelper {
     int index = 0;
 
     jsonObjectBuilder = factory.createObjectBuilder();
+    // String operation=
+    // "<i class=\"fa fa-plus-circle\" aria-hidden=\"true\" style=\"color:green;cursor:pointer;\" onClick=\"operation()\";></i> "
+    // +
+    // "<i class=\"fa fa-download\" aria-hidden=\"true\" style=\"color:red;cursor:pointer;margin-left:2px;\" onClick=\"operation()\";></i>"+
+    // "<i class=\"fa fa-registered\" aria-hidden=\"true\" style=\"color:red;cursor:pointer;margin-left:2px;\" onClick=\"operation()\";></i>"+
+    // "<i class=\"fa fa-users\" aria-hidden=\"true\" style=\"color:red;cursor:pointer;margin-left:2px;\" onClick=\"operation()\";></i>";
+    jsonObjectBuilder.add("sId", "").add("sName", "OR");
     for(ClassAttendanceDto date : dateList) {
-      if(index == 0) {
-        jsonObjectBuilder.add("sId", "").add("sName", "");
-      }
-      index = index + 1;
+      // if(index == 0) {
+      // jsonObjectBuilder.add("sId", "").add("sName", "OR");
+      // }
+      // index = index + 1;
       jsonObjectBuilder.add("date" + date.getClassDateFormat1() + date.getSerial(), "I");
     }
     // asfasdfasdfasdf a dsf asdf
