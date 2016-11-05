@@ -36,8 +36,8 @@
             <div class="panel-body shadowPanel" style="min-height: 490px;text-align: center;">
                 <img src="images/matrix_white.gif" data-ng-show="showGif"/>
                 <div id="allDept" data-ng-show="showAllDept">
-                    <div class="row">
-                        <!-- Arch Start -->
+<!--                    <div class="row">
+                        &lt;!&ndash; Arch Start &ndash;&gt;
                         <div class="col-lg-3">
                             <div class="panel panel-default">
                                 <div class="panel-body" style="min-height: 240px;">
@@ -116,9 +116,9 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Arch End -->
+                        &lt;!&ndash; Arch End &ndash;&gt;
 
-                        <!-- BBA Start -->
+                        &lt;!&ndash; BBA Start &ndash;&gt;
                         <div class="col-lg-3">
                             <div class="panel panel-default">
                                 <div class="panel-body" style="min-height: 240px;">
@@ -193,9 +193,9 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- BBA End  -->
+                        &lt;!&ndash; BBA End  &ndash;&gt;
 
-                        <!-- CE Start -->
+                        &lt;!&ndash; CE Start &ndash;&gt;
                         <div class="col-lg-3">
                             <div class="panel panel-default">
                                 <div class="panel-body" style="min-height: 240px;">
@@ -266,7 +266,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- CE End  -->
+                        &lt;!&ndash; CE End  &ndash;&gt;
 
                         <div class="col-lg-3">
                             <div class="panel panel-default">
@@ -348,10 +348,9 @@
                             </div>
                         </div>
 
-                    </div>
-
-                    <div data-ng-include="'views/result/department-wise-view.html'" data-ng-if="true" onload="start=0;end=3;"></div>
-                    <div data-ng-include="'views/result/department-wise-view.html'" data-ng-if="true" onload="start=4;end=7;"></div>
+                    </div>-->
+                    <div data-ng-include="'views/result/department-wise-view.html'" data-ng-if="numberOfRows >= 1" onload="start=row1start;end=row1end;"></div>
+                    <div data-ng-include="'views/result/department-wise-view.html'" data-ng-if="numberOfRows > 1" onload="start=row2start;end=row2end;"></div>
                 </div>
 
             </div>

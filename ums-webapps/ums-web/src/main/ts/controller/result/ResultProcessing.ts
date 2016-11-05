@@ -54,6 +54,7 @@ module ums {
       $scope.isReadyForResultProcess = this.isReadyForResultProcess.bind(this);
       $scope.sortedKeys = this.sortedKeys.bind(this);
       $scope.showCourseList = this.showCourseList.bind(this);
+      $scope.length = UmsUtil.length;
 
       this.resultProcessingSearchParamModel = new CourseTeacherSearchParamModel(this.appConstants, this.httpClient);
       this.resultProcessingSearchParamModel.programSelector.enableAllDepartmentOption(true);
@@ -165,6 +166,18 @@ module ums {
         }
       }
       this.$scope.statusMap = statusMap; console.log(statusMap);
+      if (Object.keys(statusMap).length > 2) {
+        this.$scope.numberOfRows = 2;
+        this.$scope.row1start = 0;
+        this.$scope.row1end = 3;
+        this.$scope.row2start = 4;
+        this.$scope.row2end = 7;
+      }
+      else {
+        this.$scope.numberOfRows = 1;
+        this.$scope.row1start = 0;
+        this.$scope.row1end = Object.keys(statusMap).length - 1;
+      }
     }
 
     private showCourseList(marksSubmissionStatusList: Array<MarksSubmissionStatus>,

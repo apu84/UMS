@@ -28,7 +28,8 @@ module ums {
     semesterId: string;
     taskStatus: TaskStatusResponseWrapper;
     statusByYearSemester: StatusByYearSemester;
-    resultProcessesStatus: Function;
+    resultProcessStatus: Function;
+    resultProcessStatusConst: {};
   }
 
   export class ResultProcessStatusMonitor implements ng.IDirective {
@@ -58,7 +59,8 @@ module ums {
 
     public link = (scope: IResultProcessStatusMonitorScope, element: JQuery, attributes: any) => {
       this.updateStatus(scope.programId, scope.semesterId, scope.taskStatus);
-      scope.resultProcessesStatus = this.resultProcessesStatus.bind(this);
+      scope.resultProcessStatus = this.resultProcessStatus.bind(this);
+      scope.resultProcessStatusConst = this.appConstants.RESULT_PROCESS_STATUS;
     };
 
     public templateUrl = "./views/result/result-process-status.html";
@@ -84,7 +86,7 @@ module ums {
           });
     }
 
-    private resultProcessesStatus(programId: string,
+    private resultProcessStatus(programId: string,
                                   semesterId: string,
                                   statusWrapper: TaskStatusResponseWrapper,
                                   statusByYearSemester: ResultProcessStatus): string {
@@ -106,7 +108,7 @@ module ums {
                 : this.appConstants.RESULT_PROCESS_STATUS.PROCESSED_ON.id;
             return gradeProcessTask
                 ? this.appConstants.RESULT_PROCESS_STATUS.IN_PROGRESS.label
-                : `${this.appConstants.RESULT_PROCESS_STATUS.IN_PROGRESS.label} ${statusWrapper.taskStatus.response.taskCompletionDate}`;
+                : `${this.appConstants.RESULT_PROCESS_STATUS.PROCESSED_ON.label} ${statusWrapper.taskStatus.response.taskCompletionDate}`;
           }
           else if (statusWrapper.taskStatus.response.status == this.appConstants.TASK_STATUS.INPROGRESS) {
             if (!this.intervalPromise) {
