@@ -349,8 +349,8 @@
                         </div>
 
                     </div>-->
-                    <div data-ng-include="'views/result/department-wise-view.html'" data-ng-if="numberOfRows >= 1" onload="start=row1start;end=row1end;"></div>
-                    <div data-ng-include="'views/result/department-wise-view.html'" data-ng-if="numberOfRows > 1" onload="start=row2start;end=row2end;"></div>
+                    <div data-ng-include="'views/result/department-wise-view.html?updateTime='+updateTime" data-ng-if="numberOfRows >= 1" onload="start=row1start;end=row1end;"></div>
+                    <div data-ng-include="'views/result/department-wise-view.html?updateTime='+updateTime" data-ng-if="numberOfRows > 1" onload="start=row2start;end=row2end;"></div>
                 </div>
 
             </div>

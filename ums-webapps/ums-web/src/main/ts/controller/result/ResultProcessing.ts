@@ -178,6 +178,7 @@ module ums {
         this.$scope.row1start = 0;
         this.$scope.row1end = Object.keys(statusMap).length - 1;
       }
+      this.$scope.updateTime = Date.now();
     }
 
     private showCourseList(marksSubmissionStatusList: Array<MarksSubmissionStatus>,
