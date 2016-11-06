@@ -1415,7 +1415,7 @@ module ums {
     }
 
     private saveXls(url, fileName) {
-      var a = document.createElement("a");
+      var a: any = document.createElement("a");
       document.body.appendChild(a);
       a.style = "display: none";
       a.href = url;
