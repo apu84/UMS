@@ -84,13 +84,9 @@ public class ClassAttendanceResourceHelper {
     int index = 0;
 
     jsonObjectBuilder = factory.createObjectBuilder();
-    // String operation=
-    // "<i class=\"fa fa-plus-circle\" aria-hidden=\"true\" style=\"color:green;cursor:pointer;\" onClick=\"operation()\";></i> "
-    // +
-    // "<i class=\"fa fa-download\" aria-hidden=\"true\" style=\"color:red;cursor:pointer;margin-left:2px;\" onClick=\"operation()\";></i>"+
-    // "<i class=\"fa fa-registered\" aria-hidden=\"true\" style=\"color:red;cursor:pointer;margin-left:2px;\" onClick=\"operation()\";></i>"+
-    // "<i class=\"fa fa-users\" aria-hidden=\"true\" style=\"color:red;cursor:pointer;margin-left:2px;\" onClick=\"operation()\";></i>";
-    jsonObjectBuilder.add("sId", "").add("sName", "OR");
+
+    // GOI = Global Operation Icon
+    jsonObjectBuilder.add("sId", "").add("sName", "GOI");
     for(ClassAttendanceDto date : dateList) {
       // if(index == 0) {
       // jsonObjectBuilder.add("sId", "").add("sName", "OR");

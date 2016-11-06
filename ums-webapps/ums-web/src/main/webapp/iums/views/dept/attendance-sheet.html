@@ -136,7 +136,7 @@
 </div>
 
 <!-- Modal -->
-<div id="myModal" class="modal fade">
+<div id="dateSerialModal" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -155,10 +155,10 @@
 
 
 <script type="text/javascript">
-    function operation(operationType,row,column,value) {
+    function attendanceColumnOperation(operationType,row,column,value) {
         var scope = getAngularScope();
         scope.$apply(function () {
-            scope.operation(operationType,row,column,value);
+            scope.attendanceColumnOperation(operationType,row,column,value);
         });
     }
     function saveAttendance(row,column){
@@ -214,7 +214,5 @@
     $("#class_date").datepicker({
         format: 'dd M, yy'
     });
-    console.log($("#download1"));
-    setTimeout(function () {$("#download1").tooltip({placement : 'top', trigger : 'hover', title : "Download Promotion List"});}, 100);
 </script>
 

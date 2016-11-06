@@ -1406,7 +1406,7 @@ module ums {
             var reader = new FileReader();
             reader.readAsDataURL(file);
             reader.onloadend = (e) => {
-              this.saveXls(reader.result, this.$scope.data.course_no);
+              Utils.saveXls(reader.result, this.$scope.data.course_no);
             };
           },
           (response: ng.IHttpPromiseCallbackArg<any>) => {
@@ -1414,16 +1414,6 @@ module ums {
           }, 'arraybuffer');
     }
 
-    private saveXls(url, fileName) {
-      var a: any = document.createElement("a");
-      document.body.appendChild(a);
-      a.style = "display: none";
-      a.href = url;
-      a.download = fileName;
-      a.click();
-      window.URL.revokeObjectURL(url);
-      $(a).remove();
-    }
     //Styling for different type registrations
     private calculateStyle(regType:number):any{
       var style={backgroundColor:''};
