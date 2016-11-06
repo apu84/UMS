@@ -1405,13 +1405,24 @@ module ums {
             var file = new Blob([data], {type: 'application/vnd.ms-excel'});
             var reader = new FileReader();
             reader.readAsDataURL(file);
-            reader.onloadend = function (e) {
-              window.open(reader.result, 'Excel', 'width=20,height=10,toolbar=0,menubar=0,scrollbars=no', false);
+            reader.onloadend = (e) => {
+              this.saveXls(reader.result, this.$scope.data.course_no);
             };
           },
           (response: ng.IHttpPromiseCallbackArg<any>) => {
             console.error(response);
           }, 'arraybuffer');
+    }
+
+    private saveXls(url, fileName) {
+      var a = document.createElement("a");
+      document.body.appendChild(a);
+      a.style = "display: none";
+      a.href = url;
+      a.download = fileName;
+      a.click();
+      window.URL.revokeObjectURL(url);
+      $(a).remove();
     }
     //Styling for different type registrations
     private calculateStyle(regType:number):any{
