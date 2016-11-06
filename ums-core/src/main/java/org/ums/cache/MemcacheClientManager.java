@@ -23,8 +23,8 @@ public class MemcacheClientManager<R extends LastModifier, I> implements CacheMa
     Validate.notNull(pObjectCachePort);
     Validate.notNull(pLastModifiedCacheUrl);
     Validate.notNull(pLastModifiedCachePort);
-    mLogger.debug("Memcached - " + pObjectCacheUrl + " : " + pObjectCachePort);
-    mLogger.debug("Memcached - " + pLastModifiedCacheUrl + " : " + pLastModifiedCachePort);
+    mLogger.error("Memcached - " + pObjectCacheUrl + " : " + pObjectCachePort);
+    mLogger.error("Memcached - " + pLastModifiedCacheUrl + " : " + pLastModifiedCachePort);
     mObjectCache = new MemcachedClient(new InetSocketAddress(pObjectCacheUrl, pObjectCachePort));
     mLastModified =
         new MemcachedClient(new InetSocketAddress(pLastModifiedCacheUrl, pLastModifiedCachePort));
