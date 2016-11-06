@@ -200,6 +200,13 @@
             scope.downloadSectionWiseXls();
         });
     }
+    function refreshAttendanceSheet() {
+        var scope = getAngularScope();
+        scope.$apply(function () {
+            scope.refreshAttendanceSheet();
+        });
+    }
+
 
     function getAngularScope(){
         return angular.element(document.getElementById("searchForm")).scope();
@@ -207,6 +214,7 @@
     $("#class_date").datepicker({
         format: 'dd M, yy'
     });
-
+    console.log($("#download1"));
+    setTimeout(function () {$("#download1").tooltip({placement : 'top', trigger : 'hover', title : "Download Promotion List"});}, 100);
 </script>
 

@@ -95,7 +95,7 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
           + "getPreparerScrutinizer(Ms_Status.Semester_Id,Mst_Course.Course_Id,'S') SCRUTINIZER_NAME,STATUS  "
           + "From MARKS_SUBMISSION_STATUS Ms_Status,Mst_Course,COURSE_SYLLABUS_MAP,MST_SYLLABUS,MST_PROGRAM "
           + "Where Ms_Status.Semester_Id=? And Exam_Type=? "
-          + "And MST_PROGRAM.PROGRAM_ID =? "
+//          + "And MST_PROGRAM.PROGRAM_ID =? "  // No need. We will show all the courses either offered by or offered to the current department
           + "And Ms_Status.Course_Id=Mst_Course.Course_Id "
           + "And Mst_Course.Course_Id=COURSE_SYLLABUS_MAP.Course_Id "
           + "AND MST_SYLLABUS.SYLLABUS_ID = COURSE_SYLLABUS_MAP.SYLLABUS_ID "
@@ -377,7 +377,8 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
         query += "  And Ms_Status.Year=" + year + " And Ms_Status.Semester=" + semester;
       }
       return mJdbcTemplate.query(query,
-          new Object[] {pSemesterId, pExamType, pProgramId, teacherId},
+          //new Object[] {pSemesterId, pExamType, pProgramId, teacherId},
+          new Object[] {pSemesterId, pExamType, teacherId},
           new MarksSubmissionStatusTableRowMapper());
     }
     else if(userRole.equals("C")) { // CoE

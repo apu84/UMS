@@ -14,6 +14,7 @@ module ums {
     deleteAttendance:Function;
     changeCheckboxValue:Function;
     fetchAttendanceSheet:Function;
+    refreshAttendanceSheet:Function;
     fetchCourseInfo:any;
     selectedCourseNo:any;
     entries:any;
@@ -96,9 +97,14 @@ module ums {
       this.$scope.deleteAttendance=this.deleteAttendance.bind(this);
       this.$scope.changeCheckboxValue=this.changeCheckboxValue.bind(this);
       this.$scope.fetchAttendanceSheet=this.fetchAttendanceSheet.bind(this);
+      this.$scope.refreshAttendanceSheet=this.refreshAttendanceSheet.bind(this);
 
     }
 
+    private refreshAttendanceSheet(){
+      this.fetchAttendanceSheet(this.$scope.selectedCourse);
+    }
+    //sfasdfljdsakfl asldfjlsakdfjldsajflasdkfj
     private fetchAttendanceSheet(courseId:string){
 
       this.$scope.selectedSection=$("#section_"+courseId).val();
@@ -147,9 +153,9 @@ module ums {
           '<i class="fa fa-bolt" aria-hidden="true" style="color:blue;cursor:pointer;margin-left:2px;" onClick="downloadSectionWiseXls()";></i>&nbsp;&nbsp;&nbsp;'+
           '<i class="fa fa-user" aria-hidden="true" style="color:red;cursor:pointer;margin-left:2px;" onClick="operation()";></i>&nbsp;&nbsp;&nbsp;'+
           '<i class="fa fa-users" aria-hidden="true" style="color:grey;cursor:pointer;margin-left:2px;" onClick="operation()";></i>&nbsp;&nbsp;&nbsp;'+
-          '<i class="fa fa-refresh" aria-hidden="true" style="cursor:pointer;margin-left:2px;" onClick="operation()";></i>';
-      var value = Handsontable.helper.stringify(value);
+          '<i id="download1" class="fa fa-refresh" aria-hidden="true" style="cursor:pointer;margin-left:2px;" onClick="refreshAttendanceSheet()";></i>';
 
+      var value = Handsontable.helper.stringify(value);
       var output="";
       if (value == "OR")   //Operation
         output =operationString;
