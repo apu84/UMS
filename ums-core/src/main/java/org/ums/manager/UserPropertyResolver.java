@@ -27,6 +27,7 @@ public class UserPropertyResolver extends UserDaoDecorator {
       mutableUser.setDepartment(null);
       mutableUser.setName("Admin User");
       mutableUser.setEmployeeId("-1");
+      return mutableUser;
     }
     if(user.getPrimaryRole().getName().equalsIgnoreCase("student")) {
       Student student = mStudentManager.get(pId);
