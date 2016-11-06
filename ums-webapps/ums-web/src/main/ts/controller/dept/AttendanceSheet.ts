@@ -87,6 +87,12 @@ module ums {
       this.$scope.changeCheckboxValue=this.changeCheckboxValue.bind(this);
       this.$scope.fetchAttendanceSheet=this.fetchAttendanceSheet.bind(this);
       this.$scope.refreshAttendanceSheet=this.refreshAttendanceSheet.bind(this);
+
+      $scope.$on('LastRepeaterElement', function(){
+        $(".btn.btn-xs.btn-default.downloadPDF").tooltip({placement: 'top', trigger: 'hover', title: "Download PDF for All Students"});
+        $(".btn.btn-xs.btn-default.downloadXLS").tooltip({placement: 'top', trigger: 'hover', title: "Download Excel for All Students"});
+        $(".btn.btn-xs.btn-default.showAttendanceSheet").tooltip({placement: 'top', trigger: 'hover', title: "Show Attendance Sheet"});
+      });
     }
 
     private refreshAttendanceSheet(){
@@ -129,11 +135,11 @@ module ums {
     private nameColumnRenderer(instance, td, row, col, prop, value, cellProperties){
       var operationString = '&nbsp;&nbsp;&nbsp;&nbsp;'+
           '<i class="fa fa-plus-circle" aria-hidden="true" title="Add New Attendance Column" style="color:blue;cursor:pointer;" onClick="insertNewAttendanceColumn()";></i>&nbsp;&nbsp;&nbsp;' +
-          '<i class="fa fa-download" aria-hidden="true" title="Download Excel" style="color:blue;cursor:pointer;margin-left:2px;" onClick="downloadSectionWiseXls()";></i>&nbsp;&nbsp;&nbsp;'+
-          '<i class="fa fa-bolt" aria-hidden="true" title="Download PDF" style="color:blue;cursor:pointer;margin-left:2px;" onClick="downloadSectionWiseXls()";></i>&nbsp;&nbsp;&nbsp;'+
-          '<i class="fa fa-user" aria-hidden="true" title="Registered Students" style="color:red;cursor:pointer;margin-left:2px;" onClick="operation()";></i>&nbsp;&nbsp;&nbsp;'+
+          '<i class="fa fa-file-excel-o" aria-hidden="true" title="Download Excel" style="color:blue;cursor:pointer;margin-left:2px;" onClick="downloadSectionWiseXls()";></i>&nbsp;&nbsp;&nbsp;'+
+          '<i class="fa fa-file-pdf-o" aria-hidden="true" title="Download PDF" style="color:blue;cursor:pointer;margin-left:2px;" onClick="downloadSectionWiseXls()";></i>&nbsp;&nbsp;&nbsp;'+
+          '<i class="fa fa-user" aria-hidden="true" title="Registered Students" style="color:maroon;cursor:pointer;margin-left:2px;" onClick="operation()";></i>&nbsp;&nbsp;&nbsp;'+
           '<i class="fa fa-users" aria-hidden="true" title="All Students" style="color:grey;cursor:pointer;margin-left:2px;" onClick="operation()";></i>&nbsp;&nbsp;&nbsp;'+
-          '<i id="download1" class="fa fa-refresh" aria-hidden="true" title="Refresh" style="cursor:pointer;margin-left:2px;" onClick="refreshAttendanceSheet()";></i>';
+          '<i id="download1" class="fa fa-refresh" aria-hidden="true" title="Refresh" style="color:black;cursor:pointer;margin-left:2px;" onClick="refreshAttendanceSheet()";></i>';
 
       var value = Handsontable.helper.stringify(value);
       var output=value;
