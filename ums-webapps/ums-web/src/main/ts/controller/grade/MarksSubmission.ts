@@ -1405,14 +1405,15 @@ module ums {
             var file = new Blob([data], {type: 'application/vnd.ms-excel'});
             var reader = new FileReader();
             reader.readAsDataURL(file);
-            reader.onloadend = function (e) {
-              window.open(reader.result, 'Excel', 'width=20,height=10,toolbar=0,menubar=0,scrollbars=no', false);
+            reader.onloadend = (e) => {
+              Utils.saveXls(reader.result, this.$scope.data.course_no);
             };
           },
           (response: ng.IHttpPromiseCallbackArg<any>) => {
             console.error(response);
           }, 'arraybuffer');
     }
+
     //Styling for different type registrations
     private calculateStyle(regType:number):any{
       var style={backgroundColor:''};

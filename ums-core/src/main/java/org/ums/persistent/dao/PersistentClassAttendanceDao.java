@@ -41,7 +41,7 @@ public class PersistentClassAttendanceDao implements ClassAttendanceManager {
   String ATTENDANCE_DATE_QUERY =
       "Select TO_Char(Class_Date,'DD MON, YY') Class_Date,To_Char(Class_Date,'DDMMYYYY') CLASS_DATE_F1,Serial,Teacher_Id ,ID  "
           + "From MST_CLASS_ATTENDANCE Where Semester_Id= ? And Course_id=? "
-          + "Order by Class_Date,Serial ";
+          + "Order by Serial desc";
 
   String ATTENDANCE_STUDENTS_ALL =
       "Select * From ( "
