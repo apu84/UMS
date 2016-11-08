@@ -15,6 +15,7 @@ module ums {
     changeCheckboxValue:Function;
     fetchAttendanceSheet:Function;
     refreshAttendanceSheet:Function;
+    fetchAttendanceSheetReport:Function;
     fetchCourseInfo:any;
     selectedCourseNo:any;
     entries:any;
@@ -31,24 +32,23 @@ module ums {
     attendance:number;
   }
 
-
   export class AttendanceSheet {
-    public static $inject = ['$scope', '$stateParams', 'appConstants', 'HttpClient','hotRegisterer','notify'];
+    public static $inject = ['$scope', '$stateParams', 'appConstants', 'HttpClient','hotRegisterer','notify','$window','$sce'];
     private currentUser: LoggedInUser;
     private columnHeader;
     private serial;
     private attendanceSearchParamModel: CourseTeacherSearchParamModel;
 
     constructor(private $scope: IAttr, private $stateParams: any,
-                private appConstants: any, private httpClient: HttpClient,private hotRegisterer:any,private notify: Notify) {
+                private appConstants: any, private httpClient: HttpClient,private hotRegisterer:any,private notify: Notify, private $window: ng.IWindowService, private $sce:ng.ISCEService) {
 
       $scope.loadingVisibility = false;
       $scope.contentVisibility = false;
       $scope.addNewColumnDisable=false;
       $scope.downloadSectionWiseXls=this.downloadSectionWiseXls.bind(this);
       $scope.insertNewAttendanceColumn=this.insertNewAttendanceColumn.bind(this);
-
       $scope.showAttendanceSheet=this.showAttendanceSheet.bind(this);
+
       this.columnHeader=[];
       this.$scope.colWidthArray=[80, 230]; // Student Id and Student Name column width
       var that=this;
@@ -87,12 +87,8 @@ module ums {
       this.$scope.changeCheckboxValue=this.changeCheckboxValue.bind(this);
       this.$scope.fetchAttendanceSheet=this.fetchAttendanceSheet.bind(this);
       this.$scope.refreshAttendanceSheet=this.refreshAttendanceSheet.bind(this);
+      $scope.fetchAttendanceSheetReport = this.fetchAttendanceSheetReport.bind(this);
 
-      $scope.$on('LastRepeaterElement', function(){
-        $(".btn.btn-xs.btn-default.downloadPDF").tooltip({placement: 'top', trigger: 'hover', title: "Download PDF for All Students"});
-        $(".btn.btn-xs.btn-default.downloadXLS").tooltip({placement: 'top', trigger: 'hover', title: "Download Excel for All Students"});
-        $(".btn.btn-xs.btn-default.showAttendanceSheet").tooltip({placement: 'top', trigger: 'hover', title: "Show Attendance Sheet"});
-      });
     }
 
     private refreshAttendanceSheet(){
@@ -216,6 +212,28 @@ module ums {
           (response: ng.IHttpPromiseCallbackArg<any>) => {
             console.error(response);
           }, 'arraybuffer');
+    }
+    private fetchAttendanceSheetReport(courseId:string,courseNumber:string):any{
+      var fileName= courseNumber;
+      console.log(this.$scope.attendanceSearchParamModel.semesterId);
+      var selectedSection=$("#section_"+courseId).val();
+      console.log(selectedSection);
+      console.log(courseId);
+      this.httpClient.get("academic/classAttendance/classAttendanceReport/semester/"+this.$scope.attendanceSearchParamModel.semesterId+
+          "/course/"+courseId+"/section/"+selectedSection,'application/pdf',
+          (data:any, etag:string) => {
+            var file = new Blob([data], {type: 'application/pdf'});
+            //var fileURL = this.$sce.trustAsResourceUrl(URL.createObjectURL(file));
+            //this.$window.open(fileURL);
+            var reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onloadend = function (e) {
+              Utils.saveXls(reader.result, fileName);
+            }
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>) => {
+            console.error(response);
+          },'arraybuffer');
     }
 
     private attendanceColumnOperation(operationType,row,column,value){

@@ -1,6 +1,7 @@
 package org.ums.common.academic.resource.helper;
 
 import org.apache.shiro.SecurityUtils;
+import org.omg.CORBA.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,6 +9,7 @@ import org.ums.cache.LocalCache;
 import org.ums.common.academic.resource.SemesterResource;
 import org.ums.common.builder.ClassAttendanceBuilder;
 import org.ums.common.builder.ExamGradeBuilder;
+import org.ums.common.report.generator.AttendanceSheetGenerator;
 import org.ums.domain.model.dto.ClassAttendanceDto;
 import org.ums.domain.model.dto.MarksSubmissionStatusDto;
 import org.ums.domain.model.dto.StudentGradeDto;
@@ -25,6 +27,7 @@ import org.ums.services.academic.GradeSubmissionService;
 import javax.json.*;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.io.OutputStream;
 import java.io.StringReader;
 import java.net.URI;
 import java.util.List;
@@ -41,6 +44,9 @@ public class ClassAttendanceResourceHelper {
 
   @Autowired
   private ClassAttendanceBuilder mBuilder;
+
+  @Autowired
+  private AttendanceSheetGenerator mSheetGenerator;
 
   @Autowired
   private UserManager mUserManager;
@@ -193,5 +199,10 @@ public class ClassAttendanceResourceHelper {
     getContentManager().deleteAttendanceDtl(attendanceId);
 
     return Response.noContent().build();
+  }
+
+  public void getAttendanceSheetReport(final OutputStream pOutputStream, final int pSemesterId,
+      final String pCourseId, final String pSection) throws Exception {
+    mSheetGenerator.createAttendanceSheetReport(pOutputStream, pSemesterId, pCourseId, pSection);
   }
 }

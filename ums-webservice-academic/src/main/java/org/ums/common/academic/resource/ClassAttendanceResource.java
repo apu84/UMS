@@ -1,5 +1,7 @@
 package org.ums.common.academic.resource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.common.academic.resource.helper.ClassAttendanceResourceHelper;
@@ -14,6 +16,9 @@ import javax.json.JsonReader;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
+import javax.ws.rs.core.StreamingOutput;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.io.StringReader;
 
 /**
@@ -24,6 +29,8 @@ import java.io.StringReader;
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
 public class ClassAttendanceResource extends MutableClassAttendanceResource {
+
+  private static Logger mLogger = LoggerFactory.getLogger(ClassAttendanceResource.class);
 
   @Autowired
   ClassRoomManager mManager;
@@ -38,4 +45,23 @@ public class ClassAttendanceResource extends MutableClassAttendanceResource {
 
   }
 
+  @GET
+  @Path("classAttendanceReport/semester/{semester-id}/course/{course-id}/section/{section-id}")
+  @Produces("application/pdf")
+  public StreamingOutput createAttendanceSheetReport(
+      final @PathParam("semester-id") int pSemesterId,
+      final @PathParam("course-id") String pCourseId, final @PathParam("section") String pSection)
+      throws Exception {
+    return new StreamingOutput() {
+      @Override
+      public void write(OutputStream pOutputStream) throws IOException, WebApplicationException {
+        try {
+          mResourceHelper.getAttendanceSheetReport(pOutputStream, pSemesterId, pCourseId, pSection);
+        } catch(Exception e) {
+          mLogger.error(e.getMessage());
+          throw new WebApplicationException(e);
+        }
+      }
+    };
+  }
 }

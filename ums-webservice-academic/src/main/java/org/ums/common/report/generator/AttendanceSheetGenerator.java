@@ -29,29 +29,17 @@ public class AttendanceSheetGenerator {
 
   @Autowired
   private UserManager mUserManager;
-
   @Autowired
   private EmployeeManager mEmployeeManager;
-
   @Autowired
   private DepartmentManager mDepartmentManager;
-
   @Autowired
   private ProgramManager mProgramManager;
-
   @Autowired
   private CourseManager mCourseManager;
-
   @Autowired
   private ClassAttendanceManager mClassAttendanceManager;
 
-  /*
-   * Program program;
-   * 
-   * Course course;
-   * 
-   * Employee employee;
-   */
 
   public void createAttendanceSheetReport(OutputStream pOutputStream,
                                           final Integer pSemesterId,
@@ -234,7 +222,7 @@ public class AttendanceSheetGenerator {
         for(int i=1;i<=45;i++){
           if(dateTmp.size()!=0){
             ClassAttendanceDto tmpDate = dateTmp.get(0);
-            String key = tmpDate.getClassDateFormat1()+1+attendanceDto.getStudentId();
+            String key = tmpDate.getClassDateFormat1()+ tmpDate.getSerial()+attendanceDto.getStudentId();
             headerCell = new PdfPCell();
             if(attendance.get(key)!=null){
               paragraph = new Paragraph(attendance.get(key),tableFont);
