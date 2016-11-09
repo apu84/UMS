@@ -13,14 +13,12 @@ import org.ums.common.report.generator.AttendanceSheetGenerator;
 import org.ums.domain.model.dto.ClassAttendanceDto;
 import org.ums.domain.model.dto.MarksSubmissionStatusDto;
 import org.ums.domain.model.dto.StudentGradeDto;
+import org.ums.domain.model.immutable.Course;
 import org.ums.domain.model.mutable.MutableClassRoom;
 import org.ums.enums.CourseMarksSubmissionStatus;
 import org.ums.enums.CourseType;
 import org.ums.enums.ExamType;
-import org.ums.manager.ClassAttendanceManager;
-import org.ums.manager.ExamGradeManager;
-import org.ums.manager.SemesterManager;
-import org.ums.manager.UserManager;
+import org.ums.manager.*;
 import org.ums.persistent.model.PersistentClassRoom;
 import org.ums.services.academic.GradeSubmissionService;
 
@@ -49,7 +47,7 @@ public class ClassAttendanceResourceHelper {
   private AttendanceSheetGenerator mSheetGenerator;
 
   @Autowired
-  private UserManager mUserManager;
+  private CourseManager mCourseManager;
 
   public ClassAttendanceManager getContentManager() {
     return mManager;
@@ -65,8 +63,10 @@ public class ClassAttendanceResourceHelper {
   }
 
   public List<ClassAttendanceDto> getStudentList(final Integer pSemesterId, final String pCourseId,
-      final String pSection) throws Exception {
-    return getContentManager().getStudentList(pSemesterId, pCourseId);
+      final String pSection, String pStudentCategory) throws Exception {
+    Course course = mCourseManager.get(pCourseId);
+    return getContentManager().getStudentList(pSemesterId, pCourseId, course.getCourseType(),
+        pSection, pStudentCategory);
   }
 
   public Map<String, String> getAttendanceMap(final Integer pSemesterId, final String pCourseId,
@@ -75,10 +75,11 @@ public class ClassAttendanceResourceHelper {
   }
 
   public JsonObject getClassAttendance(final Integer pSemesterId, final String pCourseId,
-      final String pSection) throws Exception {
+      final String pSection, final String pStudentCategory) throws Exception {
 
     List<ClassAttendanceDto> dateList = getDateList(pSemesterId, pCourseId, pSection);
-    List<ClassAttendanceDto> studentList = getStudentList(pSemesterId, pCourseId, pSection);
+    List<ClassAttendanceDto> studentList =
+        getStudentList(pSemesterId, pCourseId, pSection, pStudentCategory);
     Map<String, String> attendanceList = getAttendanceMap(pSemesterId, pCourseId, pSection);
 
     JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
@@ -202,7 +203,9 @@ public class ClassAttendanceResourceHelper {
   }
 
   public void getAttendanceSheetReport(final OutputStream pOutputStream, final int pSemesterId,
-      final String pCourseId, final String pSection) throws Exception {
-    mSheetGenerator.createAttendanceSheetReport(pOutputStream, pSemesterId, pCourseId, pSection);
+      final String pCourseId, final String pSection, final String pStudentCategory)
+      throws Exception {
+    mSheetGenerator.createAttendanceSheetReport(pOutputStream, pSemesterId, pCourseId, pSection,
+        pStudentCategory);
   }
 }

@@ -37,6 +37,29 @@ module ums {
     static SEMESTER_STATUS_ACTIVE: number=1;
     static SEMESTER_STATUS_NEWLY_CREATED: number=2;
 
+    /**
+     * File Content Types
+     */
+    static PDF: string="application/pdf";
+    static XLS: string="application/vnd.ms-excel";
+
+
+    public static getFileContentType(fileType:string):string {
+      var contentType:string="";
+      switch (fileType)
+      {
+        case'pdf':
+          contentType=this.PDF;
+          break;
+        case'xls':
+          contentType=this.XLS;
+          break;
+        default:
+          alert("Wrong file type.........");
+      }
+      return contentType;
+    }
+
     public static findIndex(source_arr:Array<any>, element_value:string):number {
       var targetIndex = -1;
       for (var i = 0; i < source_arr.length; i++) {
@@ -92,7 +115,15 @@ module ums {
       });
     }
 
-    public static saveXls(url, fileName) {
+    public static writeFileContent(data:any,contentType:string,fileName:string){
+      var file = new Blob([data], {type: contentType});
+      var reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = function (e) {
+        Utils.saveAsFile(reader.result, fileName);
+      }
+    }
+    public static  saveAsFile(url, fileName) {
       var a: any = document.createElement("a");
       document.body.appendChild(a);
       a.style = "display: none";

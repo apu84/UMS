@@ -39,13 +39,12 @@ public class ClassAttendanceXls extends Resource {
   XlsGenerator xlsGenerator;
 
   @GET
-  @Path("/semester/{semester-id}/course/{course-id}")
+  @Path("/semester/{semester-id}/course/{course-id}/section/{section-id}/studentCategory/{student-category}")
   public StreamingOutput get(final @Context Request pRequest,
       final @PathParam("semester-id") Integer pSemesterId,
-      final @PathParam("course-id") String pCourseId) throws Exception {
-    // List<StudentGradeDto> gradeList =
-    // mExamGradeManager.getAllGrades(pSemesterId, pCourseId, ExamType.get(pExamTypeId),
-    // CourseType.get(pCourseType));
+      final @PathParam("course-id") String pCourseId,
+      final @PathParam("section-id") String pSection,
+      final @PathParam("student-category") String pStudentCategory) throws Exception {
     return new StreamingOutput() {
       public void write(OutputStream output) throws IOException, WebApplicationException {
         try {
@@ -58,7 +57,7 @@ public class ClassAttendanceXls extends Resource {
           List<ClassAttendanceDto> dateList =
               mResourceHelper.getDateList(pSemesterId, pCourseId, "");
           List<ClassAttendanceDto> studentList =
-              mResourceHelper.getStudentList(pSemesterId, pCourseId, "");
+              mResourceHelper.getStudentList(pSemesterId, pCourseId, pSection, pStudentCategory);
           Map<String, String> attendanceMap =
               mResourceHelper.getAttendanceMap(pSemesterId, pCourseId, "");
 
@@ -97,19 +96,10 @@ public class ClassAttendanceXls extends Resource {
 
           List<List<Object>> data = createGridData(dataList);
 
-          // Map map = new HashMap();
-          // // map.put("headers", Arrays.asList("Date 1", "Date 2", "Date 3", "Date 4"));
-          // map.put("headers", dateList);
-          // map.put("data", dates);
-
           org.jxls.common.Context context = new org.jxls.common.Context();
           context.putVar("headers", headerList);
           context.putVar("data", data);
           JxlsHelper.getInstance().processTemplate(a, output, context);
-          // xlsGenerator.build(map, output, a);
-          // JxlsHelper.getInstance().processGridTemplateAtCell(is, os, context,
-          // "name,birthDate,payment", "Sheet2!A1");
-
         } catch(Exception e) {
           throw new WebApplicationException(e);
         }
@@ -136,33 +126,4 @@ public class ClassAttendanceXls extends Resource {
     return list;
   }
 
-  // public class Student {
-  // private String studentId;
-  // private String studentName;
-  // private List<String> attendances;
-  //
-  // public String getStudentId() {
-  // return studentId;
-  // }
-  //
-  // public void setStudentId(String studentId) {
-  // this.studentId = studentId;
-  // }
-  //
-  // public String getStudentName() {
-  // return studentName;
-  // }
-  //
-  // public void setStudentName(String studentName) {
-  // this.studentName = studentName;
-  // }
-  //
-  // public List<String> getAttendances() {
-  // return attendances;
-  // }
-  //
-  // public void setAttendances(List<String> attendances) {
-  // this.attendances = attendances;
-  // }
-  // }
 }

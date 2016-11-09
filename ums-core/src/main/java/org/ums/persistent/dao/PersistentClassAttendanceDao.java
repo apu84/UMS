@@ -32,11 +32,11 @@ public class PersistentClassAttendanceDao implements ClassAttendanceManager {
       + "Left Outer Join DTL_CLASS_ATTENDANCE "
       + "on tmp1.Id = DTL_CLASS_ATTENDANCE.Attendance_Id ";
 
-  String ATTENDANCE_ALL = ATTENDANCE_QUERY + " Order by StudentId";
-
-  String ATTENDANCE_ONLY_REGISTERED = "Select * From ( " + ATTENDANCE_QUERY
-      + ")test1,UG_Registration_Result reg " + "Where test1.student_id=reg.student_id "
-      + "And test1.course_id=reg.course_id " + "Order by StudentId";
+  // String ATTENDANCE_ALL = ATTENDANCE_QUERY + " Order by StudentId";
+  //
+  // String ATTENDANCE_ONLY_REGISTERED = "Select * From ( " + ATTENDANCE_QUERY
+  // + ")test1,UG_Registration_Result reg " + "Where test1.student_id=reg.student_id "
+  // + "And test1.course_id=reg.course_id " + "Order by StudentId";
 
   String ATTENDANCE_DATE_QUERY =
       "Select TO_Char(Class_Date,'DD MON, YY') Class_Date,To_Char(Class_Date,'DDMMYYYY') CLASS_DATE_F1,Serial,Teacher_Id ,ID  "
@@ -47,23 +47,23 @@ public class PersistentClassAttendanceDao implements ClassAttendanceManager {
       "Select * From ( "
           + "Select Students.Student_Id,Full_Name From ( "
           + "Select distinct Students.Student_Id from UG_Registration_Result,Students Where  "
-          + "UG_Registration_Result.Semester_Id=? and Course_Id=? and exam_type=1 "
-          + "And Students.student_id=UG_Registration_Result.student_id and Theory_Section='A' "
+          + "UG_Registration_Result.Semester_Id=? and Course_Id=? and exam_type= "
+          + ExamType.SEMESTER_FINAL.getId()
+          + " And Students.student_id=UG_Registration_Result.student_id %s "
           + "union "
-          + "Select Student_Id From DTL_CLASS_ATTENDANCE,MST_CLASS_ATTENDANCE Where  MST_CLASS_ATTENDANCE.id=DTL_CLASS_ATTENDANCE.ATTENDANCE_ID "
-          + "And Semester_Id=? and Course_id=? and Section='A' "
+          + "Select Students.Student_Id From DTL_CLASS_ATTENDANCE,MST_CLASS_ATTENDANCE,Students Where  MST_CLASS_ATTENDANCE.id=DTL_CLASS_ATTENDANCE.ATTENDANCE_ID "
+          + "And Students.Student_Id=DTL_CLASS_ATTENDANCE.Student_Id "
+          + "And MST_CLASS_ATTENDANCE.Semester_Id=? and Course_id=? %s"
           + ")tmp1,Students Where tmp1.Student_Id=Students.Student_id "
-          + ")tmp2  "
-          + "Where Student_Id in (Select Student_Id From UG_Registration_Result Where Semester_Id=? and Course_Id=? and exam_type=1) "
-          + "Order by Student_Id ";
+          + ")tmp2 Order by Student_Id  ";
 
   String ATTENDANCE_STUDENTS_ENROLLED = "Select * From ( "
       + "Select Students.Student_Id,Full_Name From ( "
       + "Select distinct Students.Student_Id from UG_Registration_Result,Students Where  "
-      + "UG_Registration_Result.Semester_Id=? and Course_Id=? and exam_type=1 "
-      + "And Students.student_id=UG_Registration_Result.student_id and Theory_Section='A' "
-      + ")tmp1,Students Where tmp1.Student_Id=Students.Student_id " + ")tmp2 "
-      + "Order by Student_Id ";
+      + "UG_Registration_Result.Semester_Id=? and Course_Id=? and exam_type= "
+      + ExamType.SEMESTER_FINAL.getId()
+      + "And Students.student_id=UG_Registration_Result.student_id %s "
+      + ")tmp1,Students Where tmp1.Student_Id=Students.Student_id )tmp2 " + "Order by Student_Id ";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -79,11 +79,47 @@ public class PersistentClassAttendanceDao implements ClassAttendanceManager {
   }
 
   @Override
-  public List<ClassAttendanceDto> getStudentList(int pSemesterId, String pCourseId)
-      throws Exception {
-    String query = ATTENDANCE_STUDENTS_ENROLLED;
-    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pCourseId},
-        new AttendanceStudentRowMapper());
+  public List<ClassAttendanceDto> getStudentList(int pSemesterId, String pCourseId,
+      CourseType courseType, String pSection, String pStudentCategory) throws Exception {
+    String query = "";
+    if(pStudentCategory.equals("Enrolled"))
+      query = ATTENDANCE_STUDENTS_ENROLLED;
+    else if(pStudentCategory.equals("All"))
+      query = ATTENDANCE_STUDENTS_ALL;
+
+    if(pSection.equals("Z")) {
+      if(pStudentCategory.equals("Enrolled"))
+        query = String.format(query, "");
+      else if(pStudentCategory.equals("All"))
+        query = String.format(query, "", "");
+    }
+    else {
+      if(pStudentCategory.equals("Enrolled")) {
+        if(courseType == CourseType.THEORY)
+          query = String.format(query, " And Theory_Section='" + pSection + "' ");
+        else if(courseType == CourseType.SESSIONAL)
+          query = String.format(query, " And Sessional_Section=" + pSection + "' ");
+      }
+      else if(pStudentCategory.equals("All")) {
+        if(courseType == CourseType.THEORY)
+          query =
+              String.format(query, " And Theory_Section='" + pSection + "' ",
+                  " And Theory_Section='" + pSection + "' ");
+        else if(courseType == CourseType.SESSIONAL)
+          query =
+              String.format(query, " And Sessional_Section=" + pSection + "' ",
+                  " And Sessional_Section=" + pSection + "' ");
+      }
+    }
+
+    if(pStudentCategory.equals("Enrolled"))
+      return mJdbcTemplate.query(query, new Object[] {pSemesterId, pCourseId},
+          new AttendanceStudentRowMapper());
+    else if(pStudentCategory.equals("All"))
+      return mJdbcTemplate.query(query, new Object[] {pSemesterId, pCourseId, pSemesterId,
+          pCourseId}, new AttendanceStudentRowMapper());
+    else
+      return null;
   }
 
   @Override

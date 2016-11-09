@@ -15,7 +15,7 @@ module ums {
     changeCheckboxValue:Function;
     fetchAttendanceSheet:Function;
     refreshAttendanceSheet:Function;
-    fetchAttendanceSheetReport:Function;
+    downloadAttendanceSheet:Function;
     fetchCourseInfo:any;
     selectedCourseNo:any;
     entries:any;
@@ -45,7 +45,7 @@ module ums {
       $scope.loadingVisibility = false;
       $scope.contentVisibility = false;
       $scope.addNewColumnDisable=false;
-      $scope.downloadSectionWiseXls=this.downloadSectionWiseXls.bind(this);
+      //$scope.downloadSectionWiseXls=this.downloadSectionWiseXls.bind(this);
       $scope.insertNewAttendanceColumn=this.insertNewAttendanceColumn.bind(this);
       $scope.showAttendanceSheet=this.showAttendanceSheet.bind(this);
 
@@ -87,7 +87,7 @@ module ums {
       this.$scope.changeCheckboxValue=this.changeCheckboxValue.bind(this);
       this.$scope.fetchAttendanceSheet=this.fetchAttendanceSheet.bind(this);
       this.$scope.refreshAttendanceSheet=this.refreshAttendanceSheet.bind(this);
-      $scope.fetchAttendanceSheetReport = this.fetchAttendanceSheetReport.bind(this);
+      $scope.downloadAttendanceSheet = this.downloadAttendanceSheet.bind(this);
 
     }
 
@@ -102,7 +102,8 @@ module ums {
       this.$scope.selectedCourse=courseId;
 
       var table = this.getTableInstance();
-      this.httpClient.get("academic/classAttendance/semester/"+this.$scope.selectedSemester+"/course/"+this.$scope.selectedCourse+"/section/"+this.$scope.selectedSection, this.appConstants.mimeTypeJson,
+      this.httpClient.get("classAttendance/semester/"+this.$scope.selectedSemester+"/course/"+this.$scope.selectedCourse+"/section/"+this.$scope.selectedSection+
+          "/studentCategory/All", this.appConstants.mimeTypeJson,
           (response:any, etag:string) => {
             this.columnHeader=response.columns;
             var columnHeader=this.columnHeader[1]; //name column is in 1 index
@@ -198,43 +199,38 @@ module ums {
       return td;
     }
 
-    private downloadSectionWiseXls(){
-      var fileName= this.$scope.selectedCourse+"_ "+this.$scope.selectedSection;
-      this.httpClient.get("classAttendanceReport/xls/semester/"+this.$scope.selectedSemester+"/course/"+ this.$scope.selectedCourse, 'application/vnd.ms-excel',
-          (data: any, etag: string) => {
-            var file = new Blob([data], {type: 'application/vnd.ms-excel'});
-            var reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onloadend = function (e) {
-              Utils.saveXls(reader.result, fileName);
-            };
-          },
-          (response: ng.IHttpPromiseCallbackArg<any>) => {
-            console.error(response);
-          }, 'arraybuffer');
-    }
-    private fetchAttendanceSheetReport(courseId:string,courseNumber:string):any{
+    //private downloadSectionWiseXls(){
+    //  var fileName= this.$scope.selectedCourse+"_ "+this.$scope.selectedSection;
+    //  this.httpClient.get("classAttendanceReport/xls/semester/"+this.$scope.selectedSemester+"/course/"+ this.$scope.selectedCourse, 'application/vnd.ms-excel',
+    //      (data: any, etag: string) => {
+    //        var file = new Blob([data], {type: 'application/vnd.ms-excel'});
+    //        var reader = new FileReader();
+    //        reader.readAsDataURL(file);
+    //        reader.onloadend = function (e) {
+    //          Utils.saveAsFile(reader.result, fileName);
+    //        };
+    //      },
+    //      (response: ng.IHttpPromiseCallbackArg<any>) => {
+    //        console.error(response);
+    //      }, 'arraybuffer');
+    //}
+    private downloadAttendanceSheet(courseId:string,courseNumber:string,classSection:string,fileType:string):any{
+      var studentCategory="";
+      if(classSection=="Z"){
+        studentCategory=$("#studentCategory_"+courseId).val();
+      }
       var fileName= courseNumber;
-      console.log(this.$scope.attendanceSearchParamModel.semesterId);
-      var selectedSection=$("#section_"+courseId).val();
-      console.log(selectedSection);
-      console.log(courseId);
-      this.httpClient.get("academic/classAttendance/classAttendanceReport/semester/"+this.$scope.attendanceSearchParamModel.semesterId+
-          "/course/"+courseId+"/section/"+selectedSection,'application/pdf',
+      var contentType:string=Utils.getFileContentType(fileType);
+      this.httpClient.get("classAttendanceReport/"+fileType+"/semester/"+this.$scope.attendanceSearchParamModel.semesterId+
+          "/course/"+courseId+"/section/"+classSection+"/studentCategory/"+studentCategory,contentType,
           (data:any, etag:string) => {
-            var file = new Blob([data], {type: 'application/pdf'});
-            //var fileURL = this.$sce.trustAsResourceUrl(URL.createObjectURL(file));
-            //this.$window.open(fileURL);
-            var reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onloadend = function (e) {
-              Utils.saveXls(reader.result, fileName);
-            }
+            Utils.writeFileContent(data,contentType,fileName);
           },
           (response:ng.IHttpPromiseCallbackArg<any>) => {
             console.error(response);
           },'arraybuffer');
     }
+
 
     private attendanceColumnOperation(operationType,row,column,value){
       var table = this.getTableInstance();
@@ -341,7 +337,7 @@ module ums {
     private saveAttendance(row,column){
       var table = this.getTableInstance();
       var complete_json=this.createCompleteJson(row,column)
-      var url = "academic/classAttendance";
+      var url = "classAttendance";
       var dateObject=this.columnHeader[column];
       //This block is for Newly added Attendance Column
       if(dateObject.id==0) {
@@ -361,7 +357,7 @@ module ums {
       }
       //This block is for existing attendance column
       else{
-        var url = "academic/classAttendance";
+        var url = "classAttendance";
         this.httpClient.put(url, complete_json, 'application/json')
             .success((data) => {
               this.notify.success("Successfully Updated Attendance Information.");
@@ -400,7 +396,7 @@ module ums {
       }
       //If the selected attendance column is an existing  column
       else{
-        this.httpClient.delete('academic/classAttendance/'+dateObject.id)
+        this.httpClient.delete('classAttendance/'+dateObject.id)
             .success(()=>{
               this.notify.success("Successfully Deleted Attendance Information.");
               this.$scope.data.columns.splice(column, 1);

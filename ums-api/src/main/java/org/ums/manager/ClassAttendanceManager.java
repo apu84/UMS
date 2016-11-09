@@ -12,7 +12,17 @@ import java.util.Map;
  * Created by Ifti on 29-Oct-16.
  */
 public interface ClassAttendanceManager {
-  public List<ClassAttendanceDto> getStudentList(int semesterId, String courseId) throws Exception;
+  /**
+   * 
+   * @param semesterId
+   * @param courseId
+   * @param pSection "Z" mans all section
+   * @param pStudentCategory can be either "Enrolled" or "All"
+   * @return
+   * @throws Exception
+   */
+  public List<ClassAttendanceDto> getStudentList(int semesterId, String courseId,
+      CourseType pCourseType, String pSection, String pStudentCategory) throws Exception;
 
   public List<ClassAttendanceDto> getDateList(int semesterId, String courseId) throws Exception;
 

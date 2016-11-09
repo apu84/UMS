@@ -40,11 +40,11 @@ public class AttendanceSheetGenerator {
   @Autowired
   private ClassAttendanceManager mClassAttendanceManager;
 
-
   public void createAttendanceSheetReport(OutputStream pOutputStream,
                                           final Integer pSemesterId,
                                           final String pCourseId,
-                                          final String pSection) throws Exception, IOException, DocumentException {
+                                          final String pSection,
+                                          final String pStudentCategory) throws Exception, IOException, DocumentException {
     Employee employee = getEmployeeInfo();
     String deptId = employee.getDepartment().getId();
     Program program = mProgramManager
@@ -62,8 +62,8 @@ public class AttendanceSheetGenerator {
     Course course = mCourseManager.get(pCourseId);
 
     java.util.List<ClassAttendanceDto> dates = mClassAttendanceManager.getDateList(pSemesterId,pCourseId);
-    List<ClassAttendanceDto> studentList = mClassAttendanceManager.getStudentList(pSemesterId,pCourseId);
-    Map<String,String> attendance = mClassAttendanceManager.getAttendance(pSemesterId,pCourseId);
+    List<ClassAttendanceDto> studentList = mClassAttendanceManager.getStudentList(pSemesterId, pCourseId, course.getCourseType(), pSection, pStudentCategory);
+    Map<String,String> attendance = mClassAttendanceManager.getAttendance(pSemesterId, pCourseId);
 
 
     Font universityNameFont = new Font(Font.FontFamily.TIMES_ROMAN,13, Font.BOLD);

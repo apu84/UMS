@@ -77,13 +77,13 @@
                     <table class="table table-bordered table-advanced">
                         <thead>
                         <tr role="row" class="heading">
-                            <th width="15%">Program</th>
-                            <th width="10%">CourseNo</th>
-                            <th width="30%">Course Title</th>
-                            <th width="10%" style="text-align: center;">CrHr</th>
+                            <th width="10%">Program</th>
+                            <th width="8%">CourseNo</th>
+                            <th width="25%">Course Title</th>
+                            <th width="8%" style="text-align: center;">CrHr</th>
                             <th width="15%" style="text-align: center;">Sections</th>
-                            <th style="width: 120px;">Attn. Sheet</th>
-                            <th style="width: 180px;">Downloads</th>
+                            <th width="10%">Attn. Sheet</th>
+                            <th width="15%">Downloads(Complete)</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -95,29 +95,42 @@
                             <td  style="text-align: center;">{{::courseTeacher.section}}
                             </td>
                             <td>
-                                <select style="height: 25px;" id="section_{{::courseTeacher.courseId}}">
-                                    <option ng-repeat="section in courseTeacher.section | $split">{{section}}</option>
-                                </select>
-                                <a href="javascript:;" class="btn btn-xs btn-default"
-                                   data-ng-click="showAttendanceSheet(courseTeacher.courseId)" style="background-color: #ffffff;border: 1px solid blue;margin-top: -5px;">
-                                    <i class="fa fa-edit" style="color: blue;" aria-hidden="true"></i>
-                                </a>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <select style="height: 25px;" id="section_{{::courseTeacher.courseId}}">
+                                            <option ng-repeat="section in courseTeacher.section | $split">{{section}}</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6" style="margin-top: 4px;">
+                                            <a href="javascript:;" class="btn btn-xs btn-default"
+                                               data-ng-click="showAttendanceSheet(courseTeacher.courseId)" style="background-color: #ffffff;border: 1px solid blue;margin-top: -5px;">
+                                                <i class="fa fa-edit" style="color: blue;" aria-hidden="true"></i>
+                                            </a>
+                                    </div>
+                                    </div>
 
                             </td>
                             <td>
-                                <select style="height: 25px;">
-                                    <option value="">Reg.</option>
-                                    <option value="">All</option>
-                                </select>
 
-                                <a href="javascript:;" class="btn btn-xs btn-default"
-                                   data-ng-click="fetchAttendanceSheetReport(courseTeacher.courseId,courseTeacher.courseNo)" style="background-color: #ffffff;border: 1px solid red;margin-top: -5px;">
-                                    <i class="fa fa-file-pdf-o" style="color: red;" aria-hidden="true"></i>
-                                </a>
-                                <a href="javascript:;" class="btn btn-xs btn-default"
-                                   data-ng-click="showAttendanceSheet(courseTeacher.courseId)" style="background-color: #ffffff;border: 1px solid blue;margin-top: -5px;">
-                                    <i class="fa fa-file-excel-o" aria-hidden="true"></i>
-                                </a>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <select style="height: 25px;" id="studentCategory_{{::courseTeacher.courseId}}">
+                                            <option value="Enrolled">Enrolled</option>
+                                            <option value="All">All</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6" style="margin-top: 4px;">
+                                        <!-- Section 'Z' means All Sections  -->
+                                        <a href="javascript:;" class="btn btn-xs btn-default"
+                                           data-ng-click="downloadAttendanceSheet(courseTeacher.courseId,courseTeacher.courseNo,'Z','pdf')" style="background-color: #ffffff;border: 1px solid red;margin-top: -5px;">
+                                            <i class="fa fa-file-pdf-o" style="color: red;" aria-hidden="true"></i>
+                                        </a>
+                                        <a href="javascript:;" class="btn btn-xs btn-default"
+                                           data-ng-click="downloadAttendanceSheet(courseTeacher.courseId,courseTeacher.courseNo,'Z','xls')" style="background-color: #ffffff;border: 1px solid blue;margin-top: -5px;">
+                                            <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                                        </a>
+                                    </div>
+                                </div>
 
                             </td>
                         </tr>
