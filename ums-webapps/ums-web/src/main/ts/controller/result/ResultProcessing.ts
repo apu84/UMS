@@ -31,6 +31,7 @@ module ums {
     };
     departmentName?: string;
     programName?: string;
+    taskStatus?: {};
   }
 
   interface StatusMapByProgram {
@@ -145,6 +146,7 @@ module ums {
 
         if (!statusMap[statuses[i].programId].yearSemester) {
           statusMap[statuses[i].programId].yearSemester = {};
+          statusMap[statuses[i].programId].taskStatus = {};
         }
 
         if (!statusMap[statuses[i].programId].yearSemester[yearSemester]) {

@@ -46,6 +46,7 @@ public class ProcessResultImpl implements ProcessResult {
 
   private static final Integer UPDATE_NOTIFICATION_AFTER = 20;
   private static final Integer MAX_NO_FAILED_COURSE = 4;
+  private static final Integer MAX_NO_FAILED_COURSE_CURRENT_SEMESTER = 2;
 
   private final Map<String, Double> GPA_MAP = new HashMap<>();
   private final List<String> EXCLUDE_GRADES = new ArrayList<>();
@@ -120,7 +121,7 @@ public class ProcessResultImpl implements ProcessResult {
           .filter(pResult -> pResult.getSemesterId() == pSemesterId).collect(Collectors.toList()));
 
       Double cgpa = calculateCGPA(studentCourseGradeMap.get(studentId));
-      boolean isPassed = isPassed(studentCourseGradeMap.get(studentId));
+      boolean isPassed = isPassed(pSemesterId, studentCourseGradeMap.get(studentId));
 
       MutableStudentRecord studentRecord = studentRecordMap.get(studentId).edit();
       studentRecord.setGPA(gpa);
@@ -149,7 +150,7 @@ public class ProcessResultImpl implements ProcessResult {
     MutableTaskStatus mutableTaskStatus = taskStatus.edit();
     mutableTaskStatus.setProgressDescription("100");
     mutableTaskStatus.setStatus(TaskStatus.Status.COMPLETED);
-    mutableTaskStatus.commit(false);
+    mutableTaskStatus.commit(true);
   }
 
   private Double calculateCGPA(List<UGRegistrationResult> pResults) throws Exception {
@@ -169,17 +170,22 @@ public class ProcessResultImpl implements ProcessResult {
     return BigDecimal.valueOf(toBeTruncated).setScale(2, RoundingMode.HALF_UP).doubleValue();
   }
 
-  private Boolean isPassed(List<UGRegistrationResult> pResults) throws Exception {
-    int failedCourse = 0;
+  private Boolean isPassed(final int pSemesterId, List<UGRegistrationResult> pResults)
+      throws Exception {
+    int totalFailedCourse = 0, failedInCurrentSemester = 0;
     for(UGRegistrationResult result : pResults) {
       if(result.getGradeLetter().equalsIgnoreCase("F")) {
         if(result.getCourse().getCourseType() == CourseType.SESSIONAL) {
           return false;
         }
-        failedCourse++;
+        totalFailedCourse++;
+        if(result.getSemesterId() == pSemesterId) {
+          failedInCurrentSemester++;
+        }
       }
     }
-    return failedCourse > MAX_NO_FAILED_COURSE;
+    return (totalFailedCourse <= MAX_NO_FAILED_COURSE)
+        && (failedInCurrentSemester <= MAX_NO_FAILED_COURSE_CURRENT_SEMESTER);
   }
 
   @Override

@@ -1,15 +1,16 @@
 package org.ums.common.academic.resource;
 
+import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Request;
+import javax.ws.rs.core.Response;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.domain.model.immutable.TaskStatus;
 import org.ums.resource.Resource;
 import org.ums.response.type.GenericResponse;
 import org.ums.services.academic.ProcessResult;
-
-import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Request;
 
 @Component
 @Path("/academic/processResult")
@@ -26,5 +27,13 @@ public class ProcessResultResource extends Resource {
       final @PathParam("program-id") Integer pProgramId,
       final @PathParam("semester-id") Integer pSemesterId) throws Exception {
     return mProcessResult.status(pProgramId, pSemesterId);
+  }
+
+  @POST
+  @Path("/program/{program-id}/semester/{semester-id}/")
+  public Response processResult(final @PathParam("program-id") int pProgramId,
+      final @PathParam("semester-id") int pSemesterId) throws Exception {
+    mProcessResult.process(pProgramId, pSemesterId);
+    return Response.ok().build();
   }
 }

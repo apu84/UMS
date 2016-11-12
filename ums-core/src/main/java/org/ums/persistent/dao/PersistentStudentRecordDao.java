@@ -16,13 +16,13 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentStudentRecordDao extends StudentRecordDaoDecorator {
   String SELECT_ALL =
-      "SELECT STUDENT_ID, SEMESTER_ID, PROGRAM_ID, YEAR, SEMESTER, CGPA, GPA, TYPE, STATUS, LAST_MODIFIED, ID FROM STUDENT_RECORD ";
+      "SELECT STUDENT_ID, SEMESTER_ID, PROGRAM_ID, YEAR, SEMESTER, CGPA, GPA, REGISTRATION_TYPE, RESULT, LAST_MODIFIED, ID FROM STUDENT_RECORD ";
   String INSERT_ALL =
-      "INSERT INTO STUDENT_RECORD(STUDENT_ID, SEMESTER_ID, PROGRAM_ID, YEAR, SEMESTER, TYPE, STATUS, LAST_MODIFIED) VALUES("
+      "INSERT INTO STUDENT_RECORD(STUDENT_ID, SEMESTER_ID, PROGRAM_ID, YEAR, SEMESTER, REGISTRATION_TYPE, RESULT, LAST_MODIFIED) VALUES("
           + "?, ?, ?, ?, ?, ?, ?, " + getLastModifiedSql() + ") ";
   String UPDATE_ALL = "UPDATE STUDENT_RECORD SET STUDENT_ID = ?, " + "SEMESTER_ID = ?, "
-      + "YEAR = ?," + "SEMESTER = ?," + "CGPA = ?," + "GPA = ?," + "TYPE = ?," + "STATUS = ?,"
-      + "LAST_MODIFIED = " + getLastModifiedSql() + " ";
+      + "YEAR = ?," + "SEMESTER = ?," + "CGPA = ?," + "GPA = ?," + "REGISTRATION_TYPE = ?,"
+      + "RESULT = ?," + "LAST_MODIFIED = " + getLastModifiedSql() + " ";
   String DELETE_ALL = "DELETE FROM STUDENT_RECORD ";
 
   private JdbcTemplate mJdbcTemplate;
@@ -79,7 +79,8 @@ public class PersistentStudentRecordDao extends StudentRecordDaoDecorator {
   @Override
   public List<StudentRecord> getStudentRecords(Integer pProgramId, Integer pSemesterId,
       StudentRecord.Type pType) {
-    String query = SELECT_ALL + " WHERE PROGRAM_ID = ? AND SEMESTER_ID = ? AND TYPE = ?";
+    String query =
+        SELECT_ALL + " WHERE PROGRAM_ID = ? AND SEMESTER_ID = ? AND REGISTRATION_TYPE = ?";
     return mJdbcTemplate.query(query, new Object[] {pProgramId, pSemesterId, pType.getValue()},
         new StudentRecordRowMapper());
   }
@@ -89,7 +90,7 @@ public class PersistentStudentRecordDao extends StudentRecordDaoDecorator {
       Integer pYear, Integer pAcademicSemester, StudentRecord.Type pType) {
     String query =
         SELECT_ALL
-            + " WHERE PROGRAM_ID = ? AND SEMESTER_ID = ? AND YEAR = ? AND SEMESTER = ? AND TYPE = ?";
+            + " WHERE PROGRAM_ID = ? AND SEMESTER_ID = ? AND YEAR = ? AND SEMESTER = ? AND REGISTRATION_TYPE = ?";
     return mJdbcTemplate.query(query, new Object[] {pProgramId, pSemesterId, pYear,
         pAcademicSemester, pType.getValue()}, new StudentRecordRowMapper());
   }
@@ -117,11 +118,10 @@ public class PersistentStudentRecordDao extends StudentRecordDaoDecorator {
       throws Exception {
     List<Object[]> params = new ArrayList<>();
     for(StudentRecord studentRecord : pStudentRecords) {
-      params.add(new Object[] {studentRecord.getStudent().getId(),
-          studentRecord.getSemester().getId(), studentRecord.getYear(),
-          studentRecord.getAcademicSemester(), studentRecord.getCGPA(), studentRecord.getGPA(),
-          studentRecord.getType().getValue(), studentRecord.getStatus().getValue(),
-          studentRecord.getId()});
+      params.add(new Object[] {studentRecord.getStudentId(), studentRecord.getSemester().getId(),
+          studentRecord.getYear(), studentRecord.getAcademicSemester(), studentRecord.getCGPA(),
+          studentRecord.getGPA(), studentRecord.getType().getValue(),
+          studentRecord.getStatus().getValue(), studentRecord.getId()});
     }
 
     return params;
@@ -151,8 +151,8 @@ public class PersistentStudentRecordDao extends StudentRecordDaoDecorator {
       studentRecord.setAcademicSemester(rs.getInt("SEMESTER"));
       studentRecord.setCGPA(rs.getDouble("CGPA"));
       studentRecord.setGPA(rs.getDouble("GPA"));
-      studentRecord.setType(StudentRecord.Type.get(rs.getString("TYPE")));
-      studentRecord.setStatus(StudentRecord.Status.get(rs.getString("STATUS")));
+      studentRecord.setType(StudentRecord.Type.get(rs.getString("REGISTRATION_TYPE")));
+      studentRecord.setStatus(StudentRecord.Status.get(rs.getString("RESULT")));
       studentRecord.setLastModified(rs.getString("LAST_MODIFIED"));
       studentRecord.setProgramId(rs.getInt("PROGRAM_ID"));
       AtomicReference<StudentRecord> atomicReference = new AtomicReference<>(studentRecord);

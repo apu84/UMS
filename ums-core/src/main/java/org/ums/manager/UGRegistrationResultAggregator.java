@@ -23,6 +23,9 @@ public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecor
   public List<UGRegistrationResult> getRegisteredCoursesWithResult(String pStudentId)
       throws Exception {
     List<UGRegistrationResult> resultList = super.getRegisteredCoursesWithResult(pStudentId);
+    if(mLogger.isDebugEnabled()) {
+      mLogger.debug("Course found: " + resultList.size());
+    }
     Collections.sort(resultList, new ResultComparator());
     return aggregateResults(resultList);
   }
@@ -31,11 +34,13 @@ public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecor
       throws Exception {
     Map<String, UGRegistrationResult> resultMap = new HashMap<>();
     for(UGRegistrationResult result : pResults) {
-      if(!resultMap.containsKey(result.getCourseId())) {
-        resultMap.put(result.getCourseId(), result);
-      }
+      // if(!resultMap.containsKey(result.getCourseId())) {
+      resultMap.put(result.getCourseId(), result);
+      // }
     }
-
+    if(mLogger.isDebugEnabled()) {
+      mLogger.debug("Aggregated result: " + resultMap.size());
+    }
     return equivalent(resultMap);
   }
 
@@ -47,8 +52,12 @@ public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecor
         = resultList.stream().collect(Collectors.groupingBy(UGRegistrationResult::getStudentId));
 
     for (String studentId : studentCourseGradeMap.keySet()) {
+      if(mLogger.isDebugEnabled()) {
+        mLogger.debug("Processing grades for student: " + studentId);
+      }
       Collections.sort(studentCourseGradeMap.get(studentId), new ResultComparator());
-      aggregateResults(studentCourseGradeMap.get(studentId));
+      List<UGRegistrationResult> results = aggregateResults(studentCourseGradeMap.get(studentId));
+      studentCourseGradeMap.put(studentId, results);
     }
 
     return studentCourseGradeMap.values().stream()
@@ -67,7 +76,9 @@ public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecor
         pResults.remove(course.getOldCourseId());
       }
     }
-
+    if(mLogger.isDebugEnabled()) {
+      mLogger.debug("Equivalence result: " + pResults.values().size());
+    }
     return new ArrayList<>(pResults.values());
   }
 
@@ -82,7 +93,7 @@ public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecor
         }
         else {
           if(pResult1.getCourseId().equalsIgnoreCase(pResult2.getCourseId())) {
-            return pResult1.getType().compareTo(pResult2.getType());
+            return pResult1.getExamType().compareTo(pResult2.getExamType());
           }
           else {
             return pResult1.getCourseId().compareTo(pResult2.getCourseId());

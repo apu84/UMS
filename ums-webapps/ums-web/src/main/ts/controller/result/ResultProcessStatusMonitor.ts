@@ -30,10 +30,11 @@ module ums {
     statusByYearSemester: StatusByYearSemester;
     resultProcessStatus: Function;
     resultProcessStatusConst: {};
+    processResult: Function;
   }
 
   export class ResultProcessStatusMonitor implements ng.IDirective {
-    private intervalPromise: ng.IPromise<any>;
+    private intervalPromiseMap: {[key:string]: ng.IPromise<any>} = {};
     private PROCESS_GRADES: string = "_process_grades";
     private PROCESS_GPA_CGPA_PROMOTION: string = "_process_gpa_cgpa_promotion";
 
@@ -55,12 +56,11 @@ module ums {
       render: '='
     };
 
-    private currentScope: IResultProcessStatusMonitorScope;
-
     public link = (scope: IResultProcessStatusMonitorScope, element: JQuery, attributes: any) => {
       this.updateStatus(scope.programId, scope.semesterId, scope.taskStatus);
       scope.resultProcessStatus = this.resultProcessStatus.bind(this);
       scope.resultProcessStatusConst = this.appConstants.RESULT_PROCESS_STATUS;
+      scope.processResult = this.processResult.bind(this);
     };
 
     public templateUrl = "./views/result/result-process-status.html";
@@ -72,8 +72,8 @@ module ums {
             statusWrapper.taskStatus = response;
           },
           (response: ng.IHttpPromiseCallbackArg<any>) => {
-            if (response.status === 401) {
-              this.$interval.cancel(this.intervalPromise);
+            if (response.status !== 200) {
+              this.$interval.cancel(this.intervalPromiseMap[`${programId}_${semesterId}`]);
             }
           });
     }
@@ -87,9 +87,9 @@ module ums {
     }
 
     private resultProcessStatus(programId: string,
-                                  semesterId: string,
-                                  statusWrapper: TaskStatusResponseWrapper,
-                                  statusByYearSemester: ResultProcessStatus): string {
+                                semesterId: string,
+                                statusWrapper: TaskStatusResponseWrapper,
+                                statusByYearSemester: ResultProcessStatus): string {
       if (statusWrapper && statusWrapper.taskStatus && statusWrapper.taskStatus.response) {
         var resultProcessTask: boolean
             = statusWrapper.taskStatus.response.id == this.getResultProcessTaskName(programId, semesterId);
@@ -98,9 +98,9 @@ module ums {
 
         if (resultProcessTask || gradeProcessTask) {
           if (statusWrapper.taskStatus.response.status == this.appConstants.TASK_STATUS.COMPLETED) {
-            if (this.intervalPromise && resultProcessTask) {
-              this.$interval.cancel(this.intervalPromise);
-              this.intervalPromise = null;
+            if (this.intervalPromiseMap[`${programId}_${semesterId}`] && resultProcessTask) {
+              this.$interval.cancel(this.intervalPromiseMap[`${programId}_${semesterId}`]);
+              delete this.intervalPromiseMap[`${programId}_${semesterId}`];
             }
             statusByYearSemester.status
                 = gradeProcessTask
@@ -111,11 +111,7 @@ module ums {
                 : `${this.appConstants.RESULT_PROCESS_STATUS.PROCESSED_ON.label} ${statusWrapper.taskStatus.response.taskCompletionDate}`;
           }
           else if (statusWrapper.taskStatus.response.status == this.appConstants.TASK_STATUS.INPROGRESS) {
-            if (!this.intervalPromise) {
-              this.intervalPromise = this.$interval(()=> {
-                this.getNotification(programId, semesterId, statusWrapper)
-              }, 2000, 0, true);
-            }
+            this.startPolling(programId, semesterId, statusWrapper);
             statusByYearSemester.status = this.appConstants.RESULT_PROCESS_STATUS.IN_PROGRESS.id;
             return this.appConstants.RESULT_PROCESS_STATUS.IN_PROGRESS.label;
           }
@@ -150,6 +146,25 @@ module ums {
 
     private getUpdateStatusUri(programId: string, semesterId: string): string {
       return `academic/processResult/status/program/${programId}/semester/${semesterId}`;
+    }
+
+    private getProcessResultUri(programId: string, semesterId: string): string {
+      return `academic/processResult/program/${programId}/semester/${semesterId}`;
+    }
+
+    private processResult(programId: string, semesterId: string,  statusWrapper: TaskStatusResponseWrapper): void {
+      this.httpClient.post(this.getProcessResultUri(programId, semesterId),
+          {},
+          HttpClient.MIME_TYPE_JSON);
+      this.startPolling(programId, semesterId, statusWrapper);
+    }
+
+    private startPolling(programId: string, semesterId: string, statusWrapper: TaskStatusResponseWrapper): void {
+      if (!this.intervalPromiseMap[`${programId}_${semesterId}`]) {
+        this.intervalPromiseMap[`${programId}_${semesterId}`] = this.$interval(()=> {
+          this.getNotification(programId, semesterId, statusWrapper);
+        }, 2000, 0, true);
+      }
     }
   }
 
