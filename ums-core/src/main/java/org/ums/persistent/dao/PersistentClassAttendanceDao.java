@@ -87,30 +87,30 @@ public class PersistentClassAttendanceDao implements ClassAttendanceManager {
     else if(pStudentCategory.equals("All"))
       query = ATTENDANCE_STUDENTS_ALL;
 
-    if(pSection.equals("Z")) {
-      if(pStudentCategory.equals("Enrolled"))
-        query = String.format(query, "");
-      else if(pStudentCategory.equals("All"))
-        query = String.format(query, "", "");
+    // if(pSection.equals("Z")) {
+    // if(pStudentCategory.equals("Enrolled"))
+    // query = String.format(query, "");
+    // else if(pStudentCategory.equals("All"))
+    // query = String.format(query, "", "");
+    // }
+    // else {
+    if(pStudentCategory.equals("Enrolled")) {
+      if(courseType == CourseType.THEORY)
+        query = String.format(query, " And Theory_Section='" + pSection + "' ");
+      else if(courseType == CourseType.SESSIONAL)
+        query = String.format(query, " And Sessional_Section=" + pSection + "' ");
     }
-    else {
-      if(pStudentCategory.equals("Enrolled")) {
-        if(courseType == CourseType.THEORY)
-          query = String.format(query, " And Theory_Section='" + pSection + "' ");
-        else if(courseType == CourseType.SESSIONAL)
-          query = String.format(query, " And Sessional_Section=" + pSection + "' ");
-      }
-      else if(pStudentCategory.equals("All")) {
-        if(courseType == CourseType.THEORY)
-          query =
-              String.format(query, " And Theory_Section='" + pSection + "' ",
-                  " And Theory_Section='" + pSection + "' ");
-        else if(courseType == CourseType.SESSIONAL)
-          query =
-              String.format(query, " And Sessional_Section=" + pSection + "' ",
-                  " And Sessional_Section=" + pSection + "' ");
-      }
+    else if(pStudentCategory.equals("All")) {
+      if(courseType == CourseType.THEORY)
+        query =
+            String.format(query, " And Theory_Section='" + pSection + "' ", " And Theory_Section='"
+                + pSection + "' ");
+      else if(courseType == CourseType.SESSIONAL)
+        query =
+            String.format(query, " And Sessional_Section=" + pSection + "' ",
+                " And Sessional_Section=" + pSection + "' ");
     }
+    // }
 
     if(pStudentCategory.equals("Enrolled"))
       return mJdbcTemplate.query(query, new Object[] {pSemesterId, pCourseId},

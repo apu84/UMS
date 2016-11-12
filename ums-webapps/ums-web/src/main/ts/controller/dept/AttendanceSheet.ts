@@ -16,6 +16,7 @@ module ums {
     fetchAttendanceSheet:Function;
     refreshAttendanceSheet:Function;
     downloadAttendanceSheet:Function;
+    showAttendanceSheetByStudentCategory:Function;
     fetchCourseInfo:any;
     selectedCourseNo:any;
     entries:any;
@@ -25,6 +26,7 @@ module ums {
     selectedSection:string;
     selectedSemester:string;
     selectedCourse:string;
+    selectedStudentCategory:string;
   }
   interface IClassAttendance {
     studentId:string;
@@ -37,6 +39,7 @@ module ums {
     private currentUser: LoggedInUser;
     private columnHeader;
     private serial;
+    private abc;
     private attendanceSearchParamModel: CourseTeacherSearchParamModel;
 
     constructor(private $scope: IAttr, private $stateParams: any,
@@ -88,22 +91,27 @@ module ums {
       this.$scope.fetchAttendanceSheet=this.fetchAttendanceSheet.bind(this);
       this.$scope.refreshAttendanceSheet=this.refreshAttendanceSheet.bind(this);
       $scope.downloadAttendanceSheet = this.downloadAttendanceSheet.bind(this);
+      $scope.showAttendanceSheetByStudentCategory=this.showAttendanceSheetByStudentCategory.bind(this);
 
     }
 
     private refreshAttendanceSheet(){
-      this.fetchAttendanceSheet(this.$scope.selectedCourse);
+      this.fetchAttendanceSheet(this.$scope.selectedCourse,this.$scope.selectedCourseNo,this.$scope.selectedStudentCategory);
     }
 
-    private fetchAttendanceSheet(courseId:string){
+    private fetchAttendanceSheet(courseId:string,courseNo:string,studentCategory:string){
       //Selected values
       this.$scope.selectedSection=$("#section_"+courseId).val();
       this.$scope.selectedSemester=this.$scope.attendanceSearchParamModel.semesterId
       this.$scope.selectedCourse=courseId;
+      this.$scope.selectedCourseNo=courseNo;
+      this.$scope.selectedStudentCategory=studentCategory;
+
+      console.log(this.$scope.selectedCourse);
 
       var table = this.getTableInstance();
       this.httpClient.get("classAttendance/semester/"+this.$scope.selectedSemester+"/course/"+this.$scope.selectedCourse+"/section/"+this.$scope.selectedSection+
-          "/studentCategory/All", this.appConstants.mimeTypeJson,
+          "/studentCategory/"+studentCategory, this.appConstants.mimeTypeJson,
           (response:any, etag:string) => {
             this.columnHeader=response.columns;
             var columnHeader=this.columnHeader[1]; //name column is in 1 index
@@ -122,6 +130,8 @@ module ums {
             table.updateSettings({
               colWidths:this.$scope.colWidthArray
             });
+
+
           },
           (response:ng.IHttpPromiseCallbackArg<any>) => {
             console.error(response);
@@ -131,11 +141,11 @@ module ums {
     //Student Name Column Renderer
     private nameColumnRenderer(instance, td, row, col, prop, value, cellProperties){
       var operationString = '&nbsp;&nbsp;&nbsp;&nbsp;'+
-          '<i class="fa fa-plus-circle" aria-hidden="true" title="Add New Attendance Column" style="color:blue;cursor:pointer;" onClick="insertNewAttendanceColumn()";></i>&nbsp;&nbsp;&nbsp;' +
-          '<i class="fa fa-file-excel-o" aria-hidden="true" title="Download Excel" style="color:blue;cursor:pointer;margin-left:2px;" onClick="downloadSectionWiseXls()";></i>&nbsp;&nbsp;&nbsp;'+
-          '<i class="fa fa-file-pdf-o" aria-hidden="true" title="Download PDF" style="color:blue;cursor:pointer;margin-left:2px;" onClick="downloadSectionWiseXls()";></i>&nbsp;&nbsp;&nbsp;'+
-          '<i class="fa fa-user" aria-hidden="true" title="Registered Students" style="color:maroon;cursor:pointer;margin-left:2px;" onClick="operation()";></i>&nbsp;&nbsp;&nbsp;'+
-          '<i class="fa fa-users" aria-hidden="true" title="All Students" style="color:grey;cursor:pointer;margin-left:2px;" onClick="operation()";></i>&nbsp;&nbsp;&nbsp;'+
+          '<i class="fa fa-plus-circle" aria-hidden="true" title="Add New Attendance Column" style="color:#E74C3C;cursor:pointer;" onClick="insertNewAttendanceColumn()";></i>&nbsp;&nbsp;&nbsp;' +
+          '<i class="fa fa-file-excel-o" aria-hidden="true" title="Download Excel" style="color:#273746;cursor:pointer;margin-left:2px;" onClick="downloadAttendanceSheet(\'xls\')";></i>&nbsp;&nbsp;&nbsp;'+
+          '<i class="fa fa-file-pdf-o" aria-hidden="true" title="Download PDF" style="color:#273746;cursor:pointer;margin-left:2px;" onClick="downloadAttendanceSheet(\'pdf\')";></i>&nbsp;&nbsp;&nbsp;'+
+          '<i class="fa fa-user" id="icon_enrolled" aria-hidden="true" title="Enrolled Students" style="color:#52BE80;cursor:pointer;margin-left:2px;" onClick="showAttendanceSheetByStudentCategory(\'Enrolled\')"></i>&nbsp;&nbsp;&nbsp;'+
+          '<i class="fa fa-users" id="icon_all" aria-hidden="true" title="All Students" style="color:#52BE80;cursor:pointer;margin-left:2px;"  onClick="showAttendanceSheetByStudentCategory(\'All\')"></i>&nbsp;&nbsp;&nbsp;'+
           '<i id="download1" class="fa fa-refresh" aria-hidden="true" title="Refresh" style="color:black;cursor:pointer;margin-left:2px;" onClick="refreshAttendanceSheet()";></i>';
 
       var value = Handsontable.helper.stringify(value);
@@ -147,6 +157,10 @@ module ums {
       return td;
     }
 
+    private showAttendanceSheetByStudentCategory(studentCategory:string){
+      if(studentCategory!=this.$scope.selectedStudentCategory)
+          this.showAttendanceSheet(this.$scope.selectedCourse,this.$scope.selectedCourseNo,studentCategory);
+    }
 
     private attendanceColumnRenderer (instance, td, row, col, prop, value, cellProperties) {
       var value = Handsontable.helper.stringify(value);
@@ -214,15 +228,12 @@ module ums {
     //        console.error(response);
     //      }, 'arraybuffer');
     //}
-    private downloadAttendanceSheet(courseId:string,courseNumber:string,classSection:string,fileType:string):any{
-      var studentCategory="";
-      if(classSection=="Z"){
-        studentCategory=$("#studentCategory_"+courseId).val();
-      }
-      var fileName= courseNumber;
+    private downloadAttendanceSheet(fileType:string):any{
+      var fileName= this.$scope.selectedCourseNo;
+
       var contentType:string=Utils.getFileContentType(fileType);
       this.httpClient.get("classAttendanceReport/"+fileType+"/semester/"+this.$scope.attendanceSearchParamModel.semesterId+
-          "/course/"+courseId+"/section/"+classSection+"/studentCategory/"+studentCategory,contentType,
+          "/course/"+this.$scope.selectedCourse+"/section/"+this.$scope.selectedSection+"/studentCategory/"+this.$scope.selectedStudentCategory,contentType,
           (data:any, etag:string) => {
             Utils.writeFileContent(data,contentType,fileName);
           },
@@ -541,11 +552,11 @@ module ums {
       return courseList;
     }
 
-    private showAttendanceSheet(courseId){
+    private showAttendanceSheet(courseId:string,courseNo:string, studentCategory:string){
       $("#courseSelectionDiv").hide(80);
       $("#topArrowDiv").show(50);
       $("#attSheetDiv").show(100);
-      this.fetchAttendanceSheet(courseId);
+      this.fetchAttendanceSheet(courseId,courseNo, studentCategory);
     }
   }
 

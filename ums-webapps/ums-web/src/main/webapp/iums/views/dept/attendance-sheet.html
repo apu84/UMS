@@ -79,11 +79,11 @@
                         <tr role="row" class="heading">
                             <th width="10%">Program</th>
                             <th width="8%">CourseNo</th>
-                            <th width="25%">Course Title</th>
+                            <th width="30%">Course Title</th>
                             <th width="8%" style="text-align: center;">CrHr</th>
                             <th width="15%" style="text-align: center;">Sections</th>
                             <th width="10%">Attn. Sheet</th>
-                            <th width="15%">Downloads(Complete)</th>
+                            <!-- <th width="15%">Downloads(Complete)</th>  -->
                         </tr>
                         </thead>
                         <tbody>
@@ -102,16 +102,15 @@
                                         </select>
                                     </div>
                                     <div class="col-md-6" style="margin-top: 4px;">
-                                            <a href="javascript:;" class="btn btn-xs btn-default"
-                                               data-ng-click="showAttendanceSheet(courseTeacher.courseId)" style="background-color: #ffffff;border: 1px solid blue;margin-top: -5px;">
-                                                <i class="fa fa-edit" style="color: blue;" aria-hidden="true"></i>
-                                            </a>
+                                        <a href="javascript:;" class="btn btn-xs btn-default"
+                                           data-ng-click="showAttendanceSheet(courseTeacher.courseId,courseTeacher.courseNo,'All')" style="background-color: #ffffff;border: 1px solid blue;margin-top: -5px;">
+                                            <i class="fa fa-edit" style="color: blue;" aria-hidden="true"></i>
+                                        </a>
                                     </div>
-                                    </div>
-
+                                </div>
                             </td>
+                            <!--
                             <td>
-
                                 <div class="row">
                                     <div class="col-md-6">
                                         <select style="height: 25px;" id="studentCategory_{{::courseTeacher.courseId}}">
@@ -120,7 +119,6 @@
                                         </select>
                                     </div>
                                     <div class="col-md-6" style="margin-top: 4px;">
-                                        <!-- Section 'Z' means All Sections  -->
                                         <a href="javascript:;" class="btn btn-xs btn-default"
                                            data-ng-click="downloadAttendanceSheet(courseTeacher.courseId,courseTeacher.courseNo,'Z','pdf')" style="background-color: #ffffff;border: 1px solid red;margin-top: -5px;">
                                             <i class="fa fa-file-pdf-o" style="color: red;" aria-hidden="true"></i>
@@ -131,8 +129,9 @@
                                         </a>
                                     </div>
                                 </div>
-
                             </td>
+                            -->
+                            <!-- Section 'Z' means All Sections  -->
                         </tr>
                         </tbody>
                     </table>
@@ -149,6 +148,7 @@
         $("#courseSelectionDiv").show(200);
     }
 </script>
+        Course No: {{selectedCourseNo}} Course Title: {{selectedCourseNo}} Section: {{selectedSection}} Student Category: {{selectedStudentCategory}}
 <div class="row">
     <div class="col-md-12"  style="padding-top: 5px;display: none;" id="attSheetDiv">
         <hot-table hot-id="attendanceHandsOnTable"
@@ -233,6 +233,18 @@
         });
     }
 
+    function showAttendanceSheetByStudentCategory(studentCategory) {
+        var scope = getAngularScope();
+        scope.$apply(function () {
+            scope.showAttendanceSheetByStudentCategory(studentCategory);
+        });
+    }
+    function downloadAttendanceSheet(fileType) {
+        var scope = getAngularScope();
+        scope.$apply(function () {
+            scope.downloadAttendanceSheet(fileType);
+        });
+    }
 
     function getAngularScope(){
         return angular.element(document.getElementById("searchForm")).scope();
@@ -240,7 +252,6 @@
     $("#class_date").datepicker({
         format: 'dd M, yy'
     });
-
 
 </script>
 
