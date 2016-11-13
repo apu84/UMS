@@ -18,14 +18,11 @@ module ums {
     downloadAttendanceSheet:Function;
     showAttendanceSheetByStudentCategory:Function;
     fetchCourseInfo:any;
-    selectedCourseNo:any;
     entries:any;
     addNewColumnDisable:any;
     colWidthArray:any;
 
-    selectedSection:string;
-    selectedSemester:string;
-    selectedCourse:string;
+    selectedCourse:CourseTeacherModel;
     selectedStudentCategory:string;
   }
   interface IClassAttendance {
@@ -71,6 +68,7 @@ module ums {
         items:[],
         columns:[]
       };
+      this.$scope.selectedCourse=new CourseTeacherModel();
 
       this.httpClient.get("users/current", HttpClient.MIME_TYPE_JSON,
           (response: LoggedInUser) => {
@@ -96,21 +94,24 @@ module ums {
     }
 
     private refreshAttendanceSheet(){
-      this.fetchAttendanceSheet(this.$scope.selectedCourse,this.$scope.selectedCourseNo,this.$scope.selectedStudentCategory);
+      this.fetchAttendanceSheet(this.$scope.selectedCourse,this.$scope.selectedStudentCategory);
     }
 
-    private fetchAttendanceSheet(courseId:string,courseNo:string,studentCategory:string){
+    private fetchAttendanceSheet(course:CourseTeacherModel,studentCategory:string){
+      console.log(course);
+      console.log(studentCategory);
       //Selected values
-      this.$scope.selectedSection=$("#section_"+courseId).val();
-      this.$scope.selectedSemester=this.$scope.attendanceSearchParamModel.semesterId
-      this.$scope.selectedCourse=courseId;
-      this.$scope.selectedCourseNo=courseNo;
+      this.$scope.selectedCourse.section=$("#section_"+course.courseId).val();
+      this.$scope.selectedCourse.semester=this.$scope.attendanceSearchParamModel.semesterId
+      this.$scope.selectedCourse.courseId=course.courseId;
+      this.$scope.selectedCourse.courseNo=course.courseNo;
+      this.$scope.selectedCourse.courseTitle=course.courseTitle;
       this.$scope.selectedStudentCategory=studentCategory;
 
       console.log(this.$scope.selectedCourse);
 
       var table = this.getTableInstance();
-      this.httpClient.get("classAttendance/semester/"+this.$scope.selectedSemester+"/course/"+this.$scope.selectedCourse+"/section/"+this.$scope.selectedSection+
+      this.httpClient.get("classAttendance/semester/"+this.$scope.selectedCourse.semester+"/course/"+this.$scope.selectedCourse.courseId+"/section/"+this.$scope.selectedCourse.section+
           "/studentCategory/"+studentCategory, this.appConstants.mimeTypeJson,
           (response:any, etag:string) => {
             this.columnHeader=response.columns;
@@ -159,7 +160,7 @@ module ums {
 
     private showAttendanceSheetByStudentCategory(studentCategory:string){
       if(studentCategory!=this.$scope.selectedStudentCategory)
-          this.showAttendanceSheet(this.$scope.selectedCourse,this.$scope.selectedCourseNo,studentCategory);
+          this.showAttendanceSheet(this.$scope.selectedCourse,studentCategory);
     }
 
     private attendanceColumnRenderer (instance, td, row, col, prop, value, cellProperties) {
@@ -213,27 +214,12 @@ module ums {
       return td;
     }
 
-    //private downloadSectionWiseXls(){
-    //  var fileName= this.$scope.selectedCourse+"_ "+this.$scope.selectedSection;
-    //  this.httpClient.get("classAttendanceReport/xls/semester/"+this.$scope.selectedSemester+"/course/"+ this.$scope.selectedCourse, 'application/vnd.ms-excel',
-    //      (data: any, etag: string) => {
-    //        var file = new Blob([data], {type: 'application/vnd.ms-excel'});
-    //        var reader = new FileReader();
-    //        reader.readAsDataURL(file);
-    //        reader.onloadend = function (e) {
-    //          Utils.saveAsFile(reader.result, fileName);
-    //        };
-    //      },
-    //      (response: ng.IHttpPromiseCallbackArg<any>) => {
-    //        console.error(response);
-    //      }, 'arraybuffer');
-    //}
     private downloadAttendanceSheet(fileType:string):any{
-      var fileName= this.$scope.selectedCourseNo;
+      var fileName= this.$scope.selectedCourse.semester+"_"+this.$scope.selectedCourse.courseNo;
 
       var contentType:string=Utils.getFileContentType(fileType);
       this.httpClient.get("classAttendanceReport/"+fileType+"/semester/"+this.$scope.attendanceSearchParamModel.semesterId+
-          "/course/"+this.$scope.selectedCourse+"/section/"+this.$scope.selectedSection+"/studentCategory/"+this.$scope.selectedStudentCategory,contentType,
+          "/course/"+this.$scope.selectedCourse.courseId+"/section/"+this.$scope.selectedCourse.section+"/studentCategory/"+this.$scope.selectedStudentCategory,contentType,
           (data:any, etag:string) => {
             Utils.writeFileContent(data,contentType,fileName);
           },
@@ -441,9 +427,9 @@ module ums {
       complete_json["attendanceList"] = attendanceList;
       complete_json["classDate"] = $("#date_0"+column).val();
       complete_json["serial"] = Number($("#serial_0"+column).val());
-      complete_json["course"] =this.$scope.selectedCourse;
-      complete_json["section"] = this.$scope.selectedSection;
-      complete_json["semester"] =  this.$scope.selectedSemester;
+      complete_json["course"] =this.$scope.selectedCourse.courseId;
+      complete_json["section"] = this.$scope.selectedCourse.section;
+      complete_json["semester"] =  this.$scope.selectedCourse.semester;
       complete_json["id"] = dateObject.id+'';
       return complete_json;
     }
@@ -523,7 +509,7 @@ module ums {
 
       this.$scope.loadingVisibility = true;
       this.$scope.contentVisibility = false;
-      this.$scope.selectedCourseNo = '';
+      this.$scope.selectedCourse.courseNo = '';
 
       this.httpClient.get("academic/courseTeacher/" + this.attendanceSearchParamModel.semesterId + "/"
           + this.currentUser.employeeId + "/course", HttpClient.MIME_TYPE_JSON,
@@ -533,6 +519,8 @@ module ums {
             this.$scope.contentVisibility = true;
           }
       )
+      $("#attendanceSheetBlock").hide();
+
     }
 
 
@@ -552,11 +540,11 @@ module ums {
       return courseList;
     }
 
-    private showAttendanceSheet(courseId:string,courseNo:string, studentCategory:string){
+    private showAttendanceSheet(course:CourseTeacherModel, studentCategory:string){
       $("#courseSelectionDiv").hide(80);
       $("#topArrowDiv").show(50);
-      $("#attSheetDiv").show(100);
-      this.fetchAttendanceSheet(courseId,courseNo, studentCategory);
+      $("#attendanceSheetBlock").show(100);
+      this.fetchAttendanceSheet(course, studentCategory);
     }
   }
 

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.ums.domain.model.dto.ClassAttendanceDto;
 import org.ums.domain.model.immutable.*;
 import org.ums.manager.*;
+import sun.font.FileFont;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -60,6 +61,8 @@ public class AttendanceSheetGenerator {
         .findAny()
         .orElse(null);
     Course course = mCourseManager.get(pCourseId);
+String check="E:\\check11.png";
+    String cross="E:\\cross11.png";
 
     java.util.List<ClassAttendanceDto> dates = mClassAttendanceManager.getDateList(pSemesterId,pCourseId);
     List<ClassAttendanceDto> studentList = mClassAttendanceManager.getStudentList(pSemesterId, pCourseId, course.getCourseType(), pSection, pStudentCategory);
@@ -75,12 +78,13 @@ public class AttendanceSheetGenerator {
 
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     PdfWriter writer = PdfWriter.getInstance(document,baos);
-
+    MyFooter event = new MyFooter();
+//    writer.setPageEvent(event);
     document.open();
     /*MyHeader event = new MyHeader();
     writer.setPageEvent(event);*/
     document.setPageSize(PageSize.LEGAL.rotate());
-
+    document.setMargins(10, 20, 10, 10);
     document.newPage();
     Paragraph paragraph = new Paragraph();
 
@@ -113,43 +117,31 @@ public class AttendanceSheetGenerator {
       paragraph = new Paragraph("Name of the Course Teacher :" +
             employee.getEmployeeName(), infoFont); paragraph.setAlignment(Element.ALIGN_LEFT);
       document.add(paragraph);
-      String programShortName = "";
-      try { programShortName = program.getShortName(); }
-      catch(Exception e) { throw new UnhandledException(e); }
-      paragraph = new Paragraph("PROGRAMME: "
-            + programShortName.toUpperCase() + " , STUDENT'S YEAR: " + course.getYear() + " , SEMESTER: " +
+//      String programShortName = "";
+//      try { programShortName = program.getShortName(); }
+//      catch(Exception e) { throw new UnhandledException(e); }
+      paragraph = new Paragraph("PROGRAMME:  , STUDENT'S YEAR: " + course.getYear() + " , SEMESTER: " +
             course.getSemester() + " ,COURSE NO: " + course.getNo() + " , COURSE TITLE: " +
             course.getTitle(), infoFont);
       header.add(paragraph);
       document.add(paragraph);
       document.add(new Paragraph(" "));
-
-      PdfPTable outerTable = new PdfPTable(1);
-      outerTable.setWidthPercentage(105);
-
       PdfPTable table = new PdfPTable(53);
-      //table.setWidths(tableWidth);
-
-      // table.setTotalWidth(tableWidth);
-
-      table.setWidthPercentage(105);
+      table.setWidthPercentage(100);
 
       //top header of the table
       PdfPCell headerCell = new PdfPCell();
-
-      paragraph.setAlignment(Element.ALIGN_CENTER);
-      paragraph = new Paragraph("Student", tableFont);
+      paragraph = new Paragraph("Student No", tableFont);
       headerCell.addElement(paragraph);
-      paragraph = new Paragraph("No", tableFont);
-      headerCell.addElement(paragraph);
-      headerCell.setPadding(5.0f);
       headerCell.setColspan(2);
+      headerCell.setVerticalAlignment(Element.ALIGN_TOP);
       table.addCell(headerCell);
 
       headerCell = new PdfPCell();
       paragraph = new Paragraph("Name of the Students", tableFont);
       headerCell.addElement(paragraph);
       headerCell.setColspan(6);
+      headerCell.setVerticalAlignment(Element.ALIGN_TOP);
       table.addCell(headerCell);
 
 
@@ -196,9 +188,9 @@ public class AttendanceSheetGenerator {
       table.addCell(headerCell);
 
       for(int i=1;i<=45;i++){
-        headerCell = new PdfPCell();
-        paragraph = new Paragraph(""+i, tableFont);
-        headerCell.addElement(paragraph);
+        headerCell = new PdfPCell(new Paragraph(""+i, tableFont));
+        headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        headerCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
         table.addCell(headerCell);
       }
 
@@ -224,16 +216,22 @@ public class AttendanceSheetGenerator {
             ClassAttendanceDto tmpDate = dateTmp.get(0);
             String key = tmpDate.getClassDateFormat1()+ tmpDate.getSerial()+attendanceDto.getStudentId();
             headerCell = new PdfPCell();
-            if(attendance.get(key)!=null){
-              paragraph = new Paragraph(attendance.get(key),tableFont);
-            }else{
-              paragraph = new Paragraph("");
-            }
 
             dateTmp.remove(0);
-            headerCell.addElement(paragraph);
-            table.addCell(headerCell);
+            String aaa="";
+            if(attendance.get(key)!=null){
+              aaa=attendance.get(key);
+              if(aaa.equals("1"))
+              aaa=check;
+              else
+                aaa=cross;
+            }
+            headerCell = new PdfPCell(new Paragraph(aaa, tableFont));
+            headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            headerCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 
+//            table.addCell(headerCell);
+            table.addCell(createImageCell(aaa));
           }else{
             headerCell = new PdfPCell();
             paragraph = new Paragraph("");
@@ -266,11 +264,47 @@ public class AttendanceSheetGenerator {
 
   }
 
+  public static PdfPCell createImageCell(String path) throws DocumentException, IOException {
+    Image img = Image.getInstance(path);
+    img.scaleAbsolute(12f, 12f);
+    PdfPCell cell = new PdfPCell(img, false);
+    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+    cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+    return cell;
+  }
+
   private Employee getEmployeeInfo() throws Exception {
     String userId = SecurityUtils.getSubject().getPrincipal().toString();
     User user = mUserManager.get(userId);
     Employee employee = mEmployeeManager.getByEmployeeId(user.getEmployeeId());
     return employee;
+  }
+
+  class MyFooter extends PdfPageEventHelper {
+    Font ffont = new Font(Font.FontFamily.UNDEFINED, 5, Font.ITALIC);
+
+    @Override
+    public void onStartPage(PdfWriter writer, Document document) {
+      PdfContentByte cb = writer.getDirectContent();
+      Phrase header = new Phrase("this is a header", ffont);
+      ColumnText
+          .showTextAligned(cb, Element.ALIGN_CENTER, header, (document.right() - document.left())
+              / 2 + document.leftMargin(), document.top() + 100, 0);
+    }
+    /*
+     * @Override public void onEndPage(PdfWriter writer, Document document) { PdfPTable table = new
+     * PdfPTable(1); try { table.setWidths(new int[] {1});
+     * table.getDefaultCell().setFixedHeight(20);
+     * table.getDefaultCell().setBorder(Rectangle.BOTTOM);
+     * table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_RIGHT); table.addCell(new
+     * Phrase(String.format("Page %d of", writer.getPageNumber()), ffont)); table.completeRow();
+     * PdfContentByte canvas = writer.getDirectContent();
+     * canvas.beginMarkedContentSequence(PdfName.ARTIFACT); table.writeSelectedRows(0, -1, 36, 30,
+     * canvas); canvas.endMarkedContentSequence(); } catch(DocumentException de) { throw new
+     * ExceptionConverter(de); } // Phrase footer = new Phrase("this is a footer", ffont); // //
+     * ColumnText.showTextAligned(cb, Element.ALIGN_CENTER, footer, // (document.right() -
+     * document.left()) / 2 + document.leftMargin(), document.bottom() - 10, // 0); }
+     */
   }
 
 }

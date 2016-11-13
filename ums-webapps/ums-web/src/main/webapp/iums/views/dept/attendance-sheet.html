@@ -83,7 +83,6 @@
                             <th width="8%" style="text-align: center;">CrHr</th>
                             <th width="15%" style="text-align: center;">Sections</th>
                             <th width="10%">Attn. Sheet</th>
-                            <!-- <th width="15%">Downloads(Complete)</th>  -->
                         </tr>
                         </thead>
                         <tbody>
@@ -103,35 +102,12 @@
                                     </div>
                                     <div class="col-md-6" style="margin-top: 4px;">
                                         <a href="javascript:;" class="btn btn-xs btn-default"
-                                           data-ng-click="showAttendanceSheet(courseTeacher.courseId,courseTeacher.courseNo,'All')" style="background-color: #ffffff;border: 1px solid blue;margin-top: -5px;">
+                                           data-ng-click="showAttendanceSheet(courseTeacher,'All')" style="background-color: #ffffff;border: 1px solid blue;margin-top: -5px;">
                                             <i class="fa fa-edit" style="color: blue;" aria-hidden="true"></i>
                                         </a>
                                     </div>
                                 </div>
                             </td>
-                            <!--
-                            <td>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <select style="height: 25px;" id="studentCategory_{{::courseTeacher.courseId}}">
-                                            <option value="Enrolled">Enrolled</option>
-                                            <option value="All">All</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-6" style="margin-top: 4px;">
-                                        <a href="javascript:;" class="btn btn-xs btn-default"
-                                           data-ng-click="downloadAttendanceSheet(courseTeacher.courseId,courseTeacher.courseNo,'Z','pdf')" style="background-color: #ffffff;border: 1px solid red;margin-top: -5px;">
-                                            <i class="fa fa-file-pdf-o" style="color: red;" aria-hidden="true"></i>
-                                        </a>
-                                        <a href="javascript:;" class="btn btn-xs btn-default"
-                                           data-ng-click="downloadAttendanceSheet(courseTeacher.courseId,courseTeacher.courseNo,'Z','xls')" style="background-color: #ffffff;border: 1px solid blue;margin-top: -5px;">
-                                            <i class="fa fa-file-excel-o" aria-hidden="true"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </td>
-                            -->
-                            <!-- Section 'Z' means All Sections  -->
                         </tr>
                         </tbody>
                     </table>
@@ -141,24 +117,24 @@
         </div>
     </div>
 </div>
-
-<script type="text/javascript">
-    function resetTopBottomDivs(){
-        $("#topArrowDiv").hide(10);
-        $("#courseSelectionDiv").show(200);
-    }
-</script>
-        Course No: {{selectedCourseNo}} Course Title: {{selectedCourseNo}} Section: {{selectedSection}} Student Category: {{selectedStudentCategory}}
-<div class="row">
-    <div class="col-md-12"  style="padding-top: 5px;display: none;" id="attSheetDiv">
-        <hot-table hot-id="attendanceHandsOnTable"
-                   settings="data.settings"
-                   datarows="data.items"
-                   columns="data.columns">
-        </hot-table>
+<div id="attendanceSheetBlock" style="display: none;">
+    <div class="row">
+        <div class="col-md-12"  style="padding-top: 5px;">
+            <span class="label label-default">Course No</span> : {{selectedCourse.courseNo}}
+            <span class="label label-default" style="margin-left: 10px;">Course Title</span> : {{selectedCourse.courseTitle}}
+            <span class="label label-default" style="margin-left: 10px;">Section</span> : {{selectedCourse.section}}
+             <span class="label label-default" style="margin-left: 10px;">Student Category</span> : {{selectedStudentCategory}}
+        </div>
     </div>
-
-
+    <div class="row">
+        <div class="col-md-12"  style="padding-top: 5px;">
+            <hot-table hot-id="attendanceHandsOnTable"
+                       settings="data.settings"
+                       datarows="data.items"
+                       columns="data.columns">
+            </hot-table>
+        </div>
+    </div>
 </div>
 
 <!-- Modal -->
@@ -181,6 +157,11 @@
 
 
 <script type="text/javascript">
+    function resetTopBottomDivs(){
+        $("#topArrowDiv").hide(10);
+        $("#courseSelectionDiv").show(200);
+    }
+
     function attendanceColumnOperation(operationType,row,column,value) {
         var scope = getAngularScope();
         scope.$apply(function () {
