@@ -489,32 +489,32 @@
                                 <td id="td_sname_{{response.studentId}}">{{ response.studentName }}</td>
                                 <td id="td_quiz_{{response.studentId}}" data-ng-show="courseType=='THEORY'">
                                     <input type="text"  style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="quiz_{{response.studentId}}"
-                                           value="{{response.quiz}}" data-ng-change="calculateTotalAndGradeLetter('{{response.studentId}}')"  maxlength="5"/>
+                                           value="{{response.quiz}}" onchange="calculateTotalAndGradeLetter(this.id)"  maxlength="5"/>
                                     <img  class='img_tooltip'  id="tooltip_quiz_{{response.studentId}}"/>
                                 </td>
                                 <td id="td_cperf_{{response.studentId}}" data-ng-show="courseType=='THEORY'">
                                     <input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="class_perf_{{response.studentId}}"
-                                           value="{{response.classPerformance}}"  data-ng-change="calculateTotalAndGradeLetter('{{response.studentId}}')"  maxlength="5"/>
+                                           value="{{response.classPerformance}}"  onchange="calculateTotalAndGradeLetter(this.id)"  maxlength="5"/>
                                     <img  class='img_tooltip'  id="tooltip_class_perf_{{response.studentId}}"/>
                                 </td>
                                 <td id="td_parta_{{response.studentId}}" data-ng-show="courseType=='THEORY'">
                                     <input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="part_a_{{response.studentId}}"
-                                           value="{{response.partA}}" data-ng-change="calculateTotalAndGradeLetter('{{response.studentId}}')"  maxlength="5"/>
+                                           value="{{response.partA}}" onchange="calculateTotalAndGradeLetter(this.id)"  maxlength="5"/>
                                     <img  class='img_tooltip'  id="tooltip_part_a_{{response.studentId}}"/>
                                 </td>
                                 <td id="td_partb_{{response.studentId}}" ng-show="toggleColumn && courseType=='THEORY'">
                                     <input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="part_b_{{response.studentId}}"
-                                           value="{{response.partB}}" data-ng-change="calculateTotalAndGradeLetter('{{response.studentId}}')"  maxlength="5"/>
+                                           value="{{response.partB}}" onchange="calculateTotalAndGradeLetter(this.id)"  maxlength="5"/>
                                     <img  class='img_tooltip'  id="tooltip_part_b_{{response.studentId}}"/>
                                 </td>
                                 <td id="td_total_{{response.studentId}}" data-ng-if="courseType=='THEORY'">
                                     <input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;"  disabled="disabled"
-                                           onchange="calculateTotalAndGradeLetter('{{response.studentId}}')" id="total_{{response.studentId}}" value="{{response.total}}"/>
+                                            id="total_{{response.studentId}}" value="{{response.total}}"/>
                                     <img  class='img_tooltip'  id="tooltip_total_{{response.studentId}}"/>
                                 </td>
                                 <td id="td_total_{{response.studentId}}" data-ng-if="courseType!='THEORY'">
-                                    <input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" 
-                                           onchange="calculateTotalAndGradeLetter('{{response.studentId}}')" id="total_{{response.studentId}}" value="{{response.total}}"/>
+                                    <input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;"
+                                           onchange="calculateTotalAndGradeLetter(this.id)" id="total_{{response.studentId}}" value="{{response.total}}"/>
                                     <img  class='img_tooltip'  id="tooltip_total_{{response.studentId}}"/>
                                 </td>
                                 <td id="td_grade_letter_{{response.studentId}}">
