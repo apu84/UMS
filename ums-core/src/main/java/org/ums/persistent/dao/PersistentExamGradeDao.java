@@ -44,25 +44,18 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
 
   String UPDATE_THEORY_MARKS =
       "Update  UG_THEORY_MARKS Set Quiz=?,Class_Performance=?,Part_A=?,Part_B=?,Total=?,Grade_Letter=?,Status=? "
-          + " Where Semester_Id=? And Course_Id=? and Exam_Type=? and Student_Id=? and status in (0,1)"; // None
-                                                                                                         // and
-                                                                                                         // Submit
-                                                                                                         // grades
-                                                                                                         // marks
-                                                                                                         // are
-                                                                                                         // allowed
-                                                                                                         // to
-                                                                                                         // update
+          + " Where Semester_Id=? And Course_Id=? and Exam_Type=? and Student_Id=? and status in (0,1)";
+  // None, Submit grades are allowed to update
+  String UPDATE_THEORY_MARKS_RECHECK =
+      "Update  UG_THEORY_MARKS Set Quiz=?,Class_Performance=?,Part_A=?,Part_B=?,Total=?,Grade_Letter=?,Status=? "
+          + " Where Semester_Id=? And Course_Id=? and Exam_Type=? and Student_Id=? and recheck_status=1";
+
   String UPDATE_SESSIONAL_MARKS = "Update  UG_SESSIONAL_MARKS Set Total=?,Grade_Letter=?,Status=? "
-      + " Where Semester_Id=? And Course_Id=? and Exam_Type=? and Student_Id=? and status in (0,1)"; // None
-                                                                                                     // and
-                                                                                                     // Submit
-                                                                                                     // grades
-                                                                                                     // marks
-                                                                                                     // are
-                                                                                                     // allowed
-                                                                                                     // to
-                                                                                                     // update
+      + " Where Semester_Id=? And Course_Id=? and Exam_Type=? and Student_Id=? and status in (0,1)";
+  // None, Submit grades are allowed to update
+  String UPDATE_SESSIONAL_MARKS_RECHECK =
+      "Update  UG_SESSIONAL_MARKS Set Total=?,Grade_Letter=?,Status=? "
+          + " Where Semester_Id=? And Course_Id=? and Exam_Type=? and Student_Id=? and recheck_status=1";
 
   String SELECT_GRADE_SUBMISSION_TABLE_TEACHER =
       "Select tmp5.*,Status,Exam_Type,to_char(last_submission_date,'dd Mon, YY') last_submission_date From ( "
@@ -511,18 +504,28 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
   @Override
   public boolean saveGradeSheet(MarksSubmissionStatusDto actualStatusDTO,
       List<StudentGradeDto> pGradeList) throws Exception {
-    batchUpdateGrade(actualStatusDTO.getSemesterId(), actualStatusDTO.getCourseId(),
-        actualStatusDTO.getExamType(), actualStatusDTO.getCourseType(), pGradeList);
+    batchUpdateGrade(actualStatusDTO.getStatus(), actualStatusDTO.getSemesterId(),
+        actualStatusDTO.getCourseId(), actualStatusDTO.getExamType(),
+        actualStatusDTO.getCourseType(), pGradeList);
     return true;
   }
 
-  public void batchUpdateGrade(int pSemesterId, String pCourseId, ExamType pExamType,
-      CourseType courseType, List<StudentGradeDto> pGradeList) {
+  public void batchUpdateGrade(CourseMarksSubmissionStatus courseMarksSubmissionStatus,
+      int pSemesterId, String pCourseId, ExamType pExamType, CourseType courseType,
+      List<StudentGradeDto> pGradeList) {
     String sql = "";
-    if(courseType == CourseType.THEORY)
-      sql = UPDATE_THEORY_MARKS;
-    else if(courseType == CourseType.SESSIONAL)
-      sql = UPDATE_SESSIONAL_MARKS;
+    if(courseType == CourseType.THEORY) {
+      if(courseMarksSubmissionStatus == CourseMarksSubmissionStatus.NOT_SUBMITTED)
+        sql = UPDATE_THEORY_MARKS;
+      else
+        sql = UPDATE_THEORY_MARKS_RECHECK;
+    }
+    else if(courseType == CourseType.SESSIONAL) {
+      if(courseMarksSubmissionStatus == CourseMarksSubmissionStatus.NOT_SUBMITTED)
+        sql = UPDATE_SESSIONAL_MARKS;
+      else
+        sql = UPDATE_SESSIONAL_MARKS_RECHECK;
+    }
 
     mJdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
       @Override
