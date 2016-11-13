@@ -1,14 +1,17 @@
 package org.ums.services.academic;
 
+import org.apache.commons.lang.mutable.Mutable;
 import org.jvnet.hk2.annotations.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.ums.domain.model.immutable.StudentRecord;
 import org.ums.domain.model.immutable.TaskStatus;
 import org.ums.domain.model.immutable.UGRegistrationResult;
 import org.ums.domain.model.mutable.MutableStudentRecord;
 import org.ums.domain.model.mutable.MutableTaskStatus;
 import org.ums.enums.CourseType;
+import org.ums.manager.ResultPublishManager;
 import org.ums.manager.StudentRecordManager;
 import org.ums.manager.TaskStatusManager;
 import org.ums.manager.UGRegistrationResultManager;
@@ -35,6 +38,8 @@ public class ProcessResultImpl implements ProcessResult {
   TaskStatusManager mTaskStatusManager;
   @Autowired
   StudentRecordManager mStudentRecordManager;
+  @Autowired
+  ResultPublishManager mResultPublishManager;
 
   private final ExecutorService pool = Executors.newFixedThreadPool(10);
 
@@ -43,6 +48,8 @@ public class ProcessResultImpl implements ProcessResult {
   private final static String PROCESS_GPA_CGPA_PROMOTION = "_process_gpa_cgpa_promotion";
   private final static String PROCESS_GPA_CGPA_PROMOTION_TASK_NAME =
       "Processing student GPA, CGPA and PASS/FAIL status";
+  private final static String PUBLISH_RESULT = "_publish_result";
+  private final static String PUBLISH_RESULT_TASK_NAME = "Publish result";
 
   private static final Integer UPDATE_NOTIFICATION_AFTER = 20;
   private static final Integer MAX_NO_FAILED_COURSE = 4;
@@ -190,6 +197,13 @@ public class ProcessResultImpl implements ProcessResult {
 
   @Override
   public TaskStatusResponse status(int pProgramId, int pSemesterId) throws Exception {
+    String publishResult = pProgramId + "_" + pSemesterId + PUBLISH_RESULT;
+
+    if(mTaskStatusManager.exists(publishResult)) {
+      TaskStatus status = mTaskStatusManager.get(publishResult);
+      return new TaskStatusResponse(status);
+    }
+
     if(mTaskStatusManager.exists(pProgramId + "_" + pSemesterId + PROCESS_GRADES)) {
       TaskStatus status = mTaskStatusManager.get(pProgramId + "_" + pSemesterId + PROCESS_GRADES);
       if(status.getStatus() == TaskStatus.Status.INPROGRESS) {
@@ -212,5 +226,24 @@ public class ProcessResultImpl implements ProcessResult {
     taskStatus.setStatus(TaskStatus.Status.NONE);
 
     return new TaskStatusResponse(taskStatus);
+  }
+
+  @Transactional(rollbackFor = IllegalArgumentException.class)
+  @Override
+  public void publishResult(int pProgramId, int pSemesterId) throws Exception {
+    String publishResult = pProgramId + "_" + pSemesterId + PUBLISH_RESULT;
+
+    MutableTaskStatus taskStatus = new PersistentTaskStatus();
+    taskStatus.setId(publishResult);
+    taskStatus.setTaskName(PUBLISH_RESULT_TASK_NAME);
+    taskStatus.setStatus(TaskStatus.Status.INPROGRESS);
+    taskStatus.commit(false);
+
+    mResultPublishManager.publishResult(pProgramId, pSemesterId);
+
+    TaskStatus status = mTaskStatusManager.get(publishResult);
+    MutableTaskStatus mutableTaskStatus = status.edit();
+    mutableTaskStatus.setStatus(TaskStatus.Status.COMPLETED);
+    mutableTaskStatus.commit(true);
   }
 }

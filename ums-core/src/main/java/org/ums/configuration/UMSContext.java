@@ -477,4 +477,13 @@ public class UMSContext {
     return new PersistentTaskStatusDao(mTemplateFactory.getJdbcTemplate());
   }
 
+  @Bean
+  ResultPublishManager resultPublishManager() {
+    ResultPublishValidator validator = new ResultPublishValidator(marksSubmissionStatusManager());
+    ResultPublishImpl resultPublish = new ResultPublishImpl();
+    validator.setManager(resultPublish);
+    resultPublish.setManager(new ResultPublishDao(mTemplateFactory.getJdbcTemplate()));
+    return validator;
+  }
+
 }

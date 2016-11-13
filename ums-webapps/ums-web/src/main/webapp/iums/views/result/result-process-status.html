@@ -1,15 +1,18 @@
+<span data-ng-if="render=='text' && statusByYearSemester">{{statusByYearSemester.statusText}}</span>
 
-<span data-ng-if="render=='text' && taskStatus">{{resultProcessStatus(programId, semesterId, taskStatus, statusByYearSemester)}}</span>
-
-<img data-ng-if="render=='icon' && statusByYearSemester.status==resultProcessStatusConst.PROCESSED_ON.id" src="images/pdf_square.png"
+<img data-ng-if="render=='icon' && statusByYearSemester.status==resultProcessStatusConst.PROCESSED_ON.id"
+     src="images/pdf_square.png"
      class="download_tooltip"
      style="position: absolute;top: 40px;right: 0px;cursor: pointer;"/>
 
-<img data-ng-if="render=='icon' && statusByYearSemester.status==resultProcessStatusConst.PROCESSED_ON.id" src="images/publish.png"
+<img data-ng-if="render=='icon' && statusByYearSemester.status==resultProcessStatusConst.PROCESSED_ON.id"
+     src="images/publish.png"
      class="publish_tooltip"
-     style="position: absolute;top: 80px;right: 0px;cursor: pointer;"/>
+     style="position: absolute;top: 80px;right: 0px;cursor: pointer;"
+     data-ng-click="publishResult(programId, semesterId, statusByYearSemester)"/>
 
-<img data-ng-if="render=='icon' && (statusByYearSemester.status==resultProcessStatusConst.READY_TO_BE_PROCESSED.id || statusByYearSemester.status==resultProcessStatusConst.PROCESSED_ON.id)" src="images/process2.png"
+<img data-ng-if="render=='icon' && (statusByYearSemester.status==resultProcessStatusConst.READY_TO_BE_PROCESSED.id || statusByYearSemester.status==resultProcessStatusConst.PROCESSED_ON.id)"
+     src="images/process2.png"
      class="process_tooltip"
-     data-ng-click="processResult(programId, semesterId, taskStatus)"
+     data-ng-click="processResult(programId, semesterId, statusByYearSemester)"
      style="position: absolute;top: 0px;right: 0px;cursor: pointer;"/>

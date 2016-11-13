@@ -31,7 +31,7 @@ module ums {
     };
     departmentName?: string;
     programName?: string;
-    taskStatus?: {};
+    taskStatus?: any;
   }
 
   interface StatusMapByProgram {

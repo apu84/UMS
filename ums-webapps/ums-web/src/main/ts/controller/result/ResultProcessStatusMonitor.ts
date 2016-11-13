@@ -21,28 +21,32 @@ module ums {
 
   interface ResultProcessStatus extends StatusByYearSemester {
     status: number;
+    statusText: string;
   }
 
   interface IResultProcessStatusMonitorScope extends ng.IScope {
     programId: string;
     semesterId: string;
     taskStatus: TaskStatusResponseWrapper;
-    statusByYearSemester: StatusByYearSemester;
+    statusByYearSemester: ResultProcessStatus;
     resultProcessStatus: Function;
     resultProcessStatusConst: {};
     processResult: Function;
+    publishResult: Function;
   }
 
   export class ResultProcessStatusMonitor implements ng.IDirective {
-    private intervalPromiseMap: {[key:string]: ng.IPromise<any>} = {};
+    private intervalPromiseMap: {[key: string]: ng.IPromise<any>};
     private PROCESS_GRADES: string = "_process_grades";
     private PROCESS_GPA_CGPA_PROMOTION: string = "_process_gpa_cgpa_promotion";
+    private PUBLISH_RESULT: string = "_publish_result";
 
     constructor(private httpClient: HttpClient,
                 private $q: ng.IQService,
                 private $interval: ng.IIntervalService,
                 private settings: Settings,
-                private appConstants: any) {
+                private appConstants: any,
+                private $timeout: ng.ITimeoutService) {
 
     }
 
@@ -52,24 +56,36 @@ module ums {
       programId: '=',
       semesterId: '=',
       statusByYearSemester: '=',
-      taskStatus: '=',
       render: '='
     };
 
     public link = (scope: IResultProcessStatusMonitorScope, element: JQuery, attributes: any) => {
-      this.updateStatus(scope.programId, scope.semesterId, scope.taskStatus);
+      this.intervalPromiseMap = {};
+      this.updateStatus(scope.programId, scope.semesterId, scope.statusByYearSemester);
       scope.resultProcessStatus = this.resultProcessStatus.bind(this);
       scope.resultProcessStatusConst = this.appConstants.RESULT_PROCESS_STATUS;
       scope.processResult = this.processResult.bind(this);
+      scope.publishResult = this.publishResult.bind(this);
+
     };
 
     public templateUrl = "./views/result/result-process-status.html";
 
-    private getNotification(programId: string, semesterId: string, statusWrapper: TaskStatusResponseWrapper) {
+    private getNotification(programId: string, semesterId: string, statusByYearSemester: ResultProcessStatus) {
       this.httpClient.poll(this.getUpdateStatusUri(programId, semesterId),
           HttpClient.MIME_TYPE_JSON,
           (response: TaskStatusResponse)=> {
-            statusWrapper.taskStatus = response;
+            statusByYearSemester.taskStatus = response;
+            this.$timeout(()=>{
+              this.resultProcessStatus(programId, semesterId, statusByYearSemester);
+            });
+
+            if (statusByYearSemester.taskStatus.response.status == this.appConstants.TASK_STATUS.COMPLETED) {
+              if (this.intervalPromiseMap[`${programId}_${semesterId}`]) {
+                this.$interval.cancel(this.intervalPromiseMap[`${programId}_${semesterId}`]);
+                delete this.intervalPromiseMap[`${programId}_${semesterId}`];
+              }
+            }
           },
           (response: ng.IHttpPromiseCallbackArg<any>) => {
             if (response.status !== 200) {
@@ -78,42 +94,56 @@ module ums {
           });
     }
 
-    private updateStatus(programId: string, semesterId: string, taskStatusWrapper: TaskStatusResponseWrapper): void {
+    private updateStatus(programId: string, semesterId: string, statusByYearSemester: ResultProcessStatus): void {
       this.httpClient.get(this.getUpdateStatusUri(programId, semesterId),
           HttpClient.MIME_TYPE_JSON,
           (response: TaskStatusResponse) => {
-            taskStatusWrapper.taskStatus = response;
+            statusByYearSemester.taskStatus = response;
+            this.resultProcessStatus(programId, semesterId, statusByYearSemester);
           });
     }
 
     private resultProcessStatus(programId: string,
                                 semesterId: string,
-                                statusWrapper: TaskStatusResponseWrapper,
-                                statusByYearSemester: ResultProcessStatus): string {
-      if (statusWrapper && statusWrapper.taskStatus && statusWrapper.taskStatus.response) {
+                                statusByYearSemester: ResultProcessStatus): void {
+      if (statusByYearSemester.taskStatus && statusByYearSemester.taskStatus.response) {
         var resultProcessTask: boolean
-            = statusWrapper.taskStatus.response.id == this.getResultProcessTaskName(programId, semesterId);
+            = statusByYearSemester.taskStatus.response.id == this.getResultProcessTaskName(programId, semesterId);
         var gradeProcessTask: boolean
-            = statusWrapper.taskStatus.response.id == this.getGradeProcessTaskName(programId, semesterId);
-
-        if (resultProcessTask || gradeProcessTask) {
-          if (statusWrapper.taskStatus.response.status == this.appConstants.TASK_STATUS.COMPLETED) {
-            if (this.intervalPromiseMap[`${programId}_${semesterId}`] && resultProcessTask) {
-              this.$interval.cancel(this.intervalPromiseMap[`${programId}_${semesterId}`]);
-              delete this.intervalPromiseMap[`${programId}_${semesterId}`];
+            = statusByYearSemester.taskStatus.response.id == this.getGradeProcessTaskName(programId, semesterId);
+        var resultPublishTask: boolean
+            = statusByYearSemester.taskStatus.response.id == this.getResultPublishTaskName(programId, semesterId);
+        if (resultProcessTask || gradeProcessTask || resultPublishTask) {
+          if (statusByYearSemester.taskStatus.response.status == this.appConstants.TASK_STATUS.COMPLETED) {
+            if (resultPublishTask) {
+              statusByYearSemester.status = this.appConstants.RESULT_PROCESS_STATUS.RESULT_PUBLISHED.id;
+              statusByYearSemester.statusText
+                  = `${this.appConstants.RESULT_PROCESS_STATUS.RESULT_PUBLISHED.label} ${statusByYearSemester.taskStatus.response.taskCompletionDate}`;
+              return;
             }
-            statusByYearSemester.status
-                = gradeProcessTask
-                ? this.appConstants.RESULT_PROCESS_STATUS.IN_PROGRESS.id
-                : this.appConstants.RESULT_PROCESS_STATUS.PROCESSED_ON.id;
-            return gradeProcessTask
-                ? this.appConstants.RESULT_PROCESS_STATUS.IN_PROGRESS.label
-                : `${this.appConstants.RESULT_PROCESS_STATUS.PROCESSED_ON.label} ${statusWrapper.taskStatus.response.taskCompletionDate}`;
+            else {
+              statusByYearSemester.status
+                  = gradeProcessTask
+                  ? this.appConstants.RESULT_PROCESS_STATUS.IN_PROGRESS.id
+                  : this.appConstants.RESULT_PROCESS_STATUS.PROCESSED_ON.id;
+              statusByYearSemester.statusText = gradeProcessTask
+                  ? this.appConstants.RESULT_PROCESS_STATUS.IN_PROGRESS.label
+                  : `${this.appConstants.RESULT_PROCESS_STATUS.PROCESSED_ON.label} ${statusByYearSemester.taskStatus.response.taskCompletionDate}`;
+              return;
+            }
           }
-          else if (statusWrapper.taskStatus.response.status == this.appConstants.TASK_STATUS.INPROGRESS) {
-            this.startPolling(programId, semesterId, statusWrapper);
-            statusByYearSemester.status = this.appConstants.RESULT_PROCESS_STATUS.IN_PROGRESS.id;
-            return this.appConstants.RESULT_PROCESS_STATUS.IN_PROGRESS.label;
+          else if (statusByYearSemester.taskStatus.response.status == this.appConstants.TASK_STATUS.INPROGRESS) {
+            this.startPolling(programId, semesterId, statusByYearSemester);
+            if (resultPublishTask) {
+              statusByYearSemester.status = this.appConstants.RESULT_PROCESS_STATUS.RESULT_PUBLISHED_INPROGRESS.id;
+              statusByYearSemester.statusText = this.appConstants.RESULT_PROCESS_STATUS.RESULT_PUBLISHED_INPROGRESS.label;
+              return;
+            }
+            else {
+              statusByYearSemester.status = this.appConstants.RESULT_PROCESS_STATUS.IN_PROGRESS.id;
+              statusByYearSemester.statusText = this.appConstants.RESULT_PROCESS_STATUS.IN_PROGRESS.label;
+              return;
+            }
           }
           else {
             for (var yearSemester in statusByYearSemester.yearSemester) {
@@ -123,16 +153,19 @@ module ums {
                     || statusByYearSemester.yearSemester[yearSemester].status
                     == this.appConstants.MARKS_SUBMISSION_STATUS.REQUESTED_FOR_RECHECK_BY_COE) {
                   statusByYearSemester.status = this.appConstants.RESULT_PROCESS_STATUS.UNPROCESSED.id;
-                  return this.appConstants.RESULT_PROCESS_STATUS.UNPROCESSED.label;
+                  statusByYearSemester.statusText = this.appConstants.RESULT_PROCESS_STATUS.UNPROCESSED.label;
+                  return;
                 }
               }
             }
             statusByYearSemester.status = this.appConstants.RESULT_PROCESS_STATUS.READY_TO_BE_PROCESSED.id;
-            return this.appConstants.RESULT_PROCESS_STATUS.READY_TO_BE_PROCESSED.label;
+            statusByYearSemester.statusText = this.appConstants.RESULT_PROCESS_STATUS.READY_TO_BE_PROCESSED.label;
+            return;
           }
         }
         statusByYearSemester.status = this.appConstants.RESULT_PROCESS_STATUS.STATUS_UNDEFINED.id;
-        return this.appConstants.RESULT_PROCESS_STATUS.STATUS_UNDEFINED.label;
+        statusByYearSemester.statusText = this.appConstants.RESULT_PROCESS_STATUS.STATUS_UNDEFINED.label;
+        return;
       }
     }
 
@@ -144,6 +177,11 @@ module ums {
       return `${programId}_${semesterId}${this.PROCESS_GRADES}`;
     }
 
+    private getResultPublishTaskName(programId: string, semesterId: string): string {
+      return `${programId}_${semesterId}${this.PUBLISH_RESULT}`;
+    }
+
+
     private getUpdateStatusUri(programId: string, semesterId: string): string {
       return `academic/processResult/status/program/${programId}/semester/${semesterId}`;
     }
@@ -152,19 +190,31 @@ module ums {
       return `academic/processResult/program/${programId}/semester/${semesterId}`;
     }
 
-    private processResult(programId: string, semesterId: string,  statusWrapper: TaskStatusResponseWrapper): void {
+    private getPublishResultUri(programId: string, semesterId: string): string {
+      return `academic/publishResult/program/${programId}/semester/${semesterId}`;
+    }
+
+    private processResult(programId: string, semesterId: string, statusByYearSemester: ResultProcessStatus): void {
       this.httpClient.post(this.getProcessResultUri(programId, semesterId),
           {},
           HttpClient.MIME_TYPE_JSON);
-      this.startPolling(programId, semesterId, statusWrapper);
+      this.startPolling(programId, semesterId, statusByYearSemester);
     }
 
-    private startPolling(programId: string, semesterId: string, statusWrapper: TaskStatusResponseWrapper): void {
-      if (!this.intervalPromiseMap[`${programId}_${semesterId}`]) {
-        this.intervalPromiseMap[`${programId}_${semesterId}`] = this.$interval(()=> {
-          this.getNotification(programId, semesterId, statusWrapper);
-        }, 2000, 0, true);
+    private startPolling(programId: string, semesterId: string, statusByYearSemester: ResultProcessStatus): void {
+      var key: string = `${programId}_${semesterId}`;
+      if (!this.intervalPromiseMap[key]) {
+        this.intervalPromiseMap[key] = this.$interval(()=> {
+          this.getNotification(programId, semesterId, statusByYearSemester);
+        }, 10000, 0, true);
       }
+    }
+
+    private publishResult(programId: string, semesterId: string, statusByYearSemester: ResultProcessStatus): void {
+      this.httpClient.post(this.getPublishResultUri(programId, semesterId),
+          {},
+          HttpClient.MIME_TYPE_JSON);
+      this.startPolling(programId, semesterId, statusByYearSemester);
     }
   }
 
@@ -174,7 +224,8 @@ module ums {
         '$interval',
         'Settings',
         'appConstants',
-        (httpClient, $q, $interval, settings: Settings, appConstants: any)=> {
-          return new ResultProcessStatusMonitor(httpClient, $q, $interval, settings, appConstants);
+        '$timeout',
+        (httpClient, $q, $interval, settings: Settings, appConstants: any, $timeout)=> {
+          return new ResultProcessStatusMonitor(httpClient, $q, $interval, settings, appConstants, $timeout);
         }]);
 }

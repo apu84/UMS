@@ -536,6 +536,14 @@ module ums {
           STATUS_UNDEFINED: {
             id: 5,
             label: "Status undefined"
+          },
+          RESULT_PUBLISHED_INPROGRESS: {
+            id: 6,
+            label: "Result publish in progress"
+          },
+          RESULT_PUBLISHED: {
+            id: 7,
+            label: "Result published on"
           }
         }
 
