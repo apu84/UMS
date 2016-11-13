@@ -9,6 +9,7 @@ import org.ums.common.report.generator.UgGradeSheetGenerator;
 import org.ums.enums.ExamType;
 import org.ums.resource.Resource;
 
+import javax.servlet.ServletContext;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
@@ -26,6 +27,8 @@ import java.io.OutputStream;
 public class ClassAttendancePdf extends Resource {
   @Autowired
   ClassAttendanceResourceHelper mResourceHelper;
+  @Context
+  ServletContext servletContext;
 
   private static Logger mLogger = LoggerFactory.getLogger(ClassAttendancePdf.class);
 
@@ -40,6 +43,7 @@ public class ClassAttendancePdf extends Resource {
     return new StreamingOutput() {
       @Override
       public void write(OutputStream pOutputStream) throws IOException, WebApplicationException {
+        String a = servletContext.getRealPath("");
         try {
           mResourceHelper.getAttendanceSheetReport(pOutputStream, pSemesterId, pCourseId, pSection,
               pStudentCategory);

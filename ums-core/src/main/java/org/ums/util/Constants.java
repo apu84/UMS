@@ -24,4 +24,8 @@ public interface Constants {
   public static final String COE = "coe";
   public static final String VC = "vc";
 
+  // Application Labels
+  public static final String University_AllCap = "AHSANULLAH UNIVERSITY OF SCIENCE AND TECHNOLOGY";
+  public static final String University_InitCap = "Ahsanullah University of Science and Technology";
+
 }
