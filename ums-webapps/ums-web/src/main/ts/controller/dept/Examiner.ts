@@ -143,7 +143,7 @@ module ums {
           savedExaminer.entries.push({
             id: saved.id,
             courseId: courseId,
-            programId: this.$scope.teacherSearchParamModel.programSelector.programId,
+            programId: this.$scope.teacherSearchParamModel.programSelector.programId+'',
             semesterId: this.$scope.teacherSearchParamModel.semesterId,
             preparerId: modified.preparerId,
             scrutinizerId: modified.scrutinizerId,
@@ -152,7 +152,7 @@ module ums {
         } else {
           savedExaminer.entries.push({
             courseId: courseId,
-            programId: this.$scope.teacherSearchParamModel.programSelector.programId,
+            programId: this.$scope.teacherSearchParamModel.programSelector.programId+'',
             semesterId: this.$scope.teacherSearchParamModel.semesterId,
             preparerId: modified.preparerId,
             scrutinizerId: modified.scrutinizerId,
