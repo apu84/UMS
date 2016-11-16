@@ -1,19 +1,19 @@
 module ums{
   interface IStudentAdviser extends ng.IScope{
 
+    selectedOptionTitle:string;
     showSaveButton:boolean;
     showAdviser:boolean;
     enableSaveButton:Function;
     save:Function;
     showLoader:boolean;
-    showOneInputArea:boolean;
 
 
     shiftOptionSelected:boolean;
     showShiftUI:Function;
 
     changeOptionSelected:boolean;
-    showChangeUI:Function;
+    showSingleStudentUI:Function;
 
     bulkAssignmentOptionSelected:boolean;
     showBulkAssignmentUI:Function;
@@ -107,11 +107,10 @@ module ums{
       $scope.showAdviserName=false;
       $scope.showSaveButton=false;
       $scope.shiftOptionSelected=false;
-      $scope.showOneInputArea=false;
       $scope.changeOptionSelected=false;
       $scope.bulkAssignmentOptionSelected=false;
       $scope.showShiftUI=this.showShiftUI.bind(this);
-      $scope.showChangeUI = this.showChangeUI.bind(this);
+      $scope.showSingleStudentUI = this.showSingleStudentUI.bind(this);
       $scope.showBulkAssignmentUI = this.showBulkAssignmentUI.bind(this);
       $scope.getActiveTeachers = this.getActiveTeachers.bind(this);
       $scope.getActiveStudentsOfDept = this.getActiveStudentsOfDept.bind(this);
@@ -137,19 +136,85 @@ module ums{
       $scope.viewStudentWithoutYearSemester = this.viewStudentWithoutYearSemester.bind(this);
       $scope.getExistingStudentsOfAdviser = this.getExistingStudentsOfAdviser.bind(this);
       $scope.viewStudentByIdAndAdviser = this.viewStudentByIdAndAdviser.bind(this);
-      //this.enableSelectPicker();
 
       $('.selectpicker').selectpicker({
         iconBase: 'fa',
         tickIcon: 'fa-check'
       });
 
-
       $("#shift").hide();
       $("#change").hide();
       $("#bulk").hide();
+
+      setTimeout(this.$scope.showSingleStudentUI(),2000);
     }
 
+    private showSingleStudentUI(){
+      this.activateUI(1);
+      this.resetMainSelections();
+      this.setSelection("singleAnchor","singleIcon");
+      this.$scope.selectedOptionTitle="View/Change Student's Advisor Information";
+
+    }
+    private showBulkAssignmentUI(){
+      this.activateUI(2);
+      this.resetMainSelections();
+      this.setSelection("bulkAnchor","bulkIcon");
+      this.$scope.selectedOptionTitle="Bulk Advisor Assignment";
+    }
+    private showShiftUI(){
+      this.activateUI(3);
+      this.resetMainSelections();
+      this.initializeFromAndToStudents(3);
+      this.setSelection("shiftingAnchor","shiftingIcon");
+      this.$scope.selectedOptionTitle="Shift Students' Advisor Information";
+      this.$scope.showStudentsByYearSemester=false;
+    }
+    private setSelection(icon1,icon2){
+      $("#"+icon1).css({"background-color":"black"});
+      $("#"+icon2).css({"color":"white"});
+    }
+    private resetMainSelections(){
+      $("#singleAnchor").css({"background-color":"white"});
+      $("#bulkAnchor").css({"background-color":"white"});
+      $("#shiftingAnchor").css({"background-color":"white"});
+      $("#singleIcon").css({"color":"black"});
+      $("#bulkIcon").css({"color":"black"});
+      $("#shiftingIcon").css({"color":"black"});
+    }
+    private activateUI(activateNumber:number){
+      this.disableAllUI().then((message:string)=>{
+        if(activateNumber==1){
+          this.$scope.changeOptionSelected=true;
+          $("#shift").hide();
+          $("#change").show();
+          $("#bulk").hide();
+        }else if(activateNumber==2){
+          this.$scope.bulkAssignmentOptionSelected=true;
+          $("#shift").hide();
+          $("#change").hide();
+          $("#bulk").show();
+        }else{
+          this.$scope.shiftOptionSelected=true;
+          $("#shift").show();
+          $("#change").hide();
+          $("#bulk").hide();
+        }
+      });
+      this.initialize();
+    }
+    private initialize(){
+      this.$scope.existingStudetsOfAdivser=[];
+      this.$scope.addedStudents=[];
+      this.$scope.addedStudentIdMap={};
+      this.$scope.selectedTeacher="";
+      this.$scope.fromStudents=[];
+      this.$scope.toStudents=[];
+      this.$scope.fromTeacherId="";
+      this.$scope.toTeacherId="";
+      this.$scope.teacherId="";
+      this.initializeFromAndToStudents(3);
+    }
 
     private addAndSave(){
 
@@ -233,30 +298,7 @@ module ums{
     }
 
 
-    private activateUI(activateNumber:number){
-      this.disableAllUI().then((message:string)=>{
-        if(activateNumber===1){
-          this.$scope.shiftOptionSelected=true;
-          $("#shift").show(300);
-          $("#change").hide(300);
-          $("#bulk").hide(300);
-        }else if(activateNumber===2){
-          this.$scope.changeOptionSelected=true;
-          $("#shift").hide(300);
-          $("#change").show(300);
-          $("#bulk").hide(300);
 
-        }else{
-          this.$scope.bulkAssignmentOptionSelected=true;
-          $("#shift").hide(300);
-          $("#change").hide(300);
-          $("#bulk").show(300);
-        }
-      });
-
-      this.initialize();
-
-    }
 
     private removeFromAddedList(student:Student){
       for(var i=0;i<this.$scope.addedStudents.length;i++){
@@ -351,7 +393,7 @@ module ums{
 
         }
         if(foundKey==false){
-           this.$scope.categorizedToStudents.push(this.pushNewValueIntoCategorizedStudents(student,header,key)) ;
+          this.$scope.categorizedToStudents.push(this.pushNewValueIntoCategorizedStudents(student,header,key)) ;
         }
       }
 
@@ -424,45 +466,9 @@ module ums{
       return defer.promise;
     }
 
-    private showShiftUI(){
-      this.resetMainSelections();
-      this.$scope.showStudentsByYearSemester=false;
-      this.initializeFromAndToStudents(3);
-      this.activateUI(1);
-      this.setSelection("shiftingAnchor","shiftingIcon");
-    }
-
-    private showChangeUI(){
-      this.resetMainSelections();
-      this.$scope.showOneInputArea=true;
-      this.activateUI(2);
-      this.setSelection("singleAnchor","singleIcon");
-    }
-
-    private showBulkAssignmentUI(){
-      this.resetMainSelections();
-      //this.enableSelectPicker();
-      this.$scope.showOneInputArea=false;
-      this.initialize();
-      this.activateUI(3);
-      this.setSelection("bulkAnchor","bulkIcon");
-    }
 
 
-    private resetMainSelections(){
-      $("#singleAnchor").css({"background-color":"white"});
-      $("#bulkAnchor").css({"background-color":"white"});
-      $("#shiftingAnchor").css({"background-color":"white"});
 
-      $("#singleIcon").css({"color":"black"});
-      $("#bulkIcon").css({"color":"black"});
-      $("#shiftingIcon").css({"color":"black"});
-    }
-
-    private setSelection(icon1,icon2){
-      $("#"+icon1).css({"background-color":"black"});
-      $("#"+icon2).css({"color":"white"});
-    }
 
     private getActiveTeachers(){
       this.employeeService.getActiveTeacherByDept().then((teachers:Array<IEmployee>)=>{
@@ -588,8 +594,8 @@ module ums{
       if(this.$scope.teacherId!=null && this.$scope.teacherId!="" && this.$scope.addedStudents.length>0){
         this.convertToJson().then((jsonData)=>{
           this.studentService.updateStudentsAdviser(jsonData).then((data)=>{
-              this.initialize();
-              this.initializeFromAndToStudents(3);
+            this.initialize();
+            this.initializeFromAndToStudents(3);
           })
         });
       }else{
@@ -597,25 +603,6 @@ module ums{
       }
     }
 
-    private initialize(){
-      this.$scope.existingStudetsOfAdivser=[];
-      this.$scope.addedStudents=[];
-      this.$scope.addedStudentIdMap={};
-      /*this.$scope.fromStudentId=null;
-      this.$scope.toStudentId=null;*/
-      this.$scope.selectedTeacher="";
-      this.$scope.fromStudents=[];
-      this.$scope.toStudents=[];
-      this.$scope.fromTeacherId="";
-      this.$scope.toTeacherId="";
-      this.$scope.teacherId="";
-     /* this.$scope.toStudentId="";
-      this.$scope.fromStudentId="";*/
-
-      this.initializeFromAndToStudents(3);
-
-     // this.initializeTeachersStudentForBulkAssignment();
-    }
 
     private initializeExistingStudentsOfAdviser():ng.IPromise<any>{
       var defer = this.$q.defer();

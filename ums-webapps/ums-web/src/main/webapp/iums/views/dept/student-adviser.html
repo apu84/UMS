@@ -2,50 +2,38 @@
     .panel-height {
         min-height: 400px;
     }
-
     .labels {
         padding: 1%;
     }
-
     ul {
         list-style-type: none;
         margin: 0;
         padding: 0;
     }
-
     .rounded {
         display: inline-block;
         padding: 0.5%;
         border-radius: 10%;
-        /*//background: #DEF;*/
         color: black;
-        /*border-style: groove;
-        border-color: #7B68EE;*/
         border-collapse: separate;
         margin: 2px;
-        /*max-width: 80px;*/
-
     }
-
     .alignLeft {
         float: left;
     }
-
     .alignRight {
         float: right;
     }
-
-
 </style>
 <div class="row">
     <div class="col-md-12">
         <div class="panel">
             <div class="panel-heading" data-ng-init="getActiveTeachers();getActiveStudentsOfDept()">
-                <p class="alignLeft">Assign/Shift/View Advisor Information</p>
+                <p class="alignLeft" id="pageTitle">{{selectedOptionTitle}}</p>
                 <p class="alignRight">
                     <a data-ng-if="r.showEditButton!=false" href="javascript:;" class="btn btn-xs btn-default"
-                       data-ng-click="showChangeUI()" style="background-color: #ffffff;" id="singleAnchor">
-                        <i class="fa fa-user " style="color: black;" aria-hidden="true" id="singleIcon"></i>
+                       data-ng-click="showSingleStudentUI()" style="background-color: black;" id="singleAnchor">
+                        <i class="fa fa-user " style="color: white;" aria-hidden="true" id="singleIcon"></i>
                     </a>
                     <a data-ng-if="r.showEditButton!=false" href="javascript:;" class="btn btn-xs btn-default"
                        data-ng-click="showBulkAssignmentUI()" style="background-color: #ffffff;" id="bulkAnchor">
@@ -60,7 +48,7 @@
             </div>
             <div class="panel-body">
                 <!-- Single Student -->
-                <div data-ng-if="changeOptionSelected" id="change">
+                <div data-ng-if="changeOptionSelected"  id="change">
                     <div class="row">
                         <div class="col-md-4">
                             <div data-ng-repeat="s in addedStudents" style="border: 1px solid #5e5e5e;">
@@ -110,17 +98,12 @@
                                  add-first="setFirstAutoCompleteValue(id)"
                                  add-one="addAStudent()"
                                  x="addedStudents"
-                                 show-one-input-area="showOneInputArea">
+                                 show-one-input-area="true">
                             </div>
                             <div data-ng-repeat="s in addedStudents">
-                                <p><label class="labels" style="background-color: darkslategray;color: whitesmoke;">Current
-                                    Adviser</label></p>
-
+                                <p><label class="labels" style="background-color: darkslategray;color: whitesmoke;">Current Adviser</label></p>
                                 <p>{{teacherIdWithTeacherMap[s.adviser].employeeName}}</p>
-
-                                <p><label class="labels" style="background-color: darkslategray;color: whitesmoke;">New
-                                    Adviser</label></p>
-
+                                <p><label class="labels" style="background-color: darkslategray;color: whitesmoke;">New Adviser</label></p>
                                 <p>
                                     <label>Select an adviser</label>
                                     <select data-ng-model="teacherId" data-ng-change="assignTeacherId(teacherId)">
@@ -144,23 +127,27 @@
 
                 <!-- Shifting Students from One Advisor to another Advisor -->
                 <div data-ng-if="shiftOptionSelected" id="shift">
-                    <h5 style="background-color: darkgrey; color: ghostwhite"><p class="labels">Shift Student's
-                        Adviser</p></h5>
-                    <div class="row" align="right" style="padding:2%;">
-                        <button type="button" class="btn btn-primary btn-outlined btn-xs" title="View by student's id"
-                                data-ng-click="viewStudentById()"><i class="fa fa-user" aria-hidden="true"></i></button>
-                        <button type="button" class="btn btn-primary btn-outlined btn-xs"
-                                title="View by student's id and name" data-ng-click="viewStudentByIdAndName()">
-                            <i class="fa fa-user" aria-hidden="true"></i>
-                            <i class="fa fa-plus-circle" aria-hidden="true"></i>
-                        </button>
-                        <button type="button" class="btn btn-primary btn-outlined btn-xs"
-                                title="View By Year and Semester" data-ng-click="viewStudentByYearSemester()"><i
-                                class="fa fa-bars" aria-hidden="true"></i></i></button>
-                        <button type="button" class="btn btn-primary btn-outlined btn-xs"
-                                title="View Without Year and Semester" data-ng-click="viewStudentWithoutYearSemester()">
-                            <i class="fa fa-bars" aria-hidden="true"></i></i><i class="fa fa-times"
-                                                                                aria-hidden="true"></i></button>
+                    <div class="row" align="left" style="padding:2%;">
+
+                        <a  href="javascript:;" class="btn btn-xs btn-default"
+                           data-ng-click="viewStudentById()" style="background-color: black;" id="11">
+                            <i class="fa fa-user " style="color: white;" aria-hidden="true" id="11"></i>
+                        </a>
+
+                        <a  href="javascript:;" class="btn btn-xs btn-default"
+                            data-ng-click="viewStudentByIdAndName()" style="background-color: white;" id="43">
+                            <i class="fa fa-indent " style="color: black;" aria-hidden="true" id="43"></i>
+                        </a>
+
+                        <a  href="javascript:;" class="btn btn-xs btn-default"
+                           data-ng-click="viewStudentByYearSemester()" style="background-color: white;" id="43">
+                            <i class="fa fa-th " style="color: black;" aria-hidden="true" id="43"></i>
+                        </a>
+
+                        <a  href="javascript:;" class="btn btn-xs btn-default"
+                            data-ng-click="viewStudentWithoutYearSemester()" style="background-color: black;">
+                            <i class="fa fa-align-justify " style="color: white;" aria-hidden="true" id="55"></i>
+                        </a>
 
                     </div>
                     <table class="table table-bordered">
@@ -310,7 +297,7 @@
                                  add-one="addAStudent()"
                                  add-range="addStudents()"
                                  x="addedStudents"
-                                 show-one-input-area="showOneInputArea"
+                                 show-one-input-area="false"
                                  class="col-md-12" align="right">
                             </div>
                         </div>
