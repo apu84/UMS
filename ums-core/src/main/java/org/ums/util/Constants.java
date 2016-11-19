@@ -23,5 +23,5 @@ public interface Constants {
   public static final String HEAD = "head";
   public static final String COE = "coe";
   public static final String VC = "vc";
-
+  public static final String University_AllCap = "AHSANULLAH UNIVERSITY OF SCIENCE AND TECHNOLOGY";
 }
