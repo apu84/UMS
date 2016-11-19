@@ -13,8 +13,6 @@ import java.util.Map;
 
 public interface TaskStatus extends Serializable, EditType<MutableTaskStatus>, Identifier<String>,
     LastModifier {
-  String getTaskName() throws Exception;
-
   Status getStatus() throws Exception;
 
   String getProgressDescription() throws Exception;

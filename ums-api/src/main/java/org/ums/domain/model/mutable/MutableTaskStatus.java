@@ -8,8 +8,6 @@ import java.util.Date;
 
 public interface MutableTaskStatus extends TaskStatus, Mutable, MutableIdentifier<String>,
     MutableLastModifier {
-  void setTaskName(String pTaskName);
-
   void setStatus(Status pStatus);
 
   void setProgressDescription(String pProgressDescription);

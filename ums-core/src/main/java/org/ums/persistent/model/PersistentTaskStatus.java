@@ -17,7 +17,6 @@ public class PersistentTaskStatus implements MutableTaskStatus {
   }
 
   private String mId;
-  private String mTaskName;
   private TaskStatus.Status mStatus;
   private String mLastModified;
   private String mProgressDescription;
@@ -28,7 +27,6 @@ public class PersistentTaskStatus implements MutableTaskStatus {
   private PersistentTaskStatus(final PersistentTaskStatus pPersistentTaskStatus) throws Exception {
     setId(pPersistentTaskStatus.getId());
     setStatus(pPersistentTaskStatus.getStatus());
-    setTaskName(pPersistentTaskStatus.getTaskName());
     setLastModified(pPersistentTaskStatus.getLastModified());
   }
 
@@ -73,18 +71,8 @@ public class PersistentTaskStatus implements MutableTaskStatus {
   }
 
   @Override
-  public void setTaskName(String pTaskName) {
-    mTaskName = pTaskName;
-  }
-
-  @Override
   public void setStatus(Status pStatus) {
     mStatus = pStatus;
-  }
-
-  @Override
-  public String getTaskName() throws Exception {
-    return mTaskName;
   }
 
   @Override

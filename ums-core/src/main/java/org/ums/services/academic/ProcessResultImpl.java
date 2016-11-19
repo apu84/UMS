@@ -1,8 +1,18 @@
 package org.ums.services.academic;
 
-import org.apache.commons.lang.mutable.Mutable;
-import org.jvnet.hk2.annotations.Service;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.ums.domain.model.immutable.StudentRecord;
@@ -17,18 +27,7 @@ import org.ums.manager.TaskStatusManager;
 import org.ums.manager.UGRegistrationResultManager;
 import org.ums.persistent.model.PersistentTaskStatus;
 import org.ums.response.type.TaskStatusResponse;
-
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import org.ums.util.UmsUtils;
 
 @Component
 public class ProcessResultImpl implements ProcessResult {
@@ -41,19 +40,12 @@ public class ProcessResultImpl implements ProcessResult {
   @Autowired
   ResultPublishManager mResultPublishManager;
 
-  private final ExecutorService pool = Executors.newFixedThreadPool(10);
-
-  private final static String PROCESS_GRADES = "_process_grades";
-  private final static String PROCESS_GRADES_TASK_NAME = "Processing student grades";
-  private final static String PROCESS_GPA_CGPA_PROMOTION = "_process_gpa_cgpa_promotion";
-  private final static String PROCESS_GPA_CGPA_PROMOTION_TASK_NAME =
-      "Processing student GPA, CGPA and PASS/FAIL status";
-  private final static String PUBLISH_RESULT = "_publish_result";
-  private final static String PUBLISH_RESULT_TASK_NAME = "Publish result";
-
-  private static final Integer UPDATE_NOTIFICATION_AFTER = 20;
-  private static final Integer MAX_NO_FAILED_COURSE = 4;
-  private static final Integer MAX_NO_FAILED_COURSE_CURRENT_SEMESTER = 2;
+  private final static String PROCESS_GRADES = "process_grades";
+  private final static String PROCESS_GPA_CGPA_PROMOTION = "process_gpa_cgpa_promotion";
+  private final static String PUBLISH_RESULT = "publish_result";
+  private final static Integer UPDATE_NOTIFICATION_AFTER = 20;
+  private final static Integer MAX_NO_FAILED_COURSE = 4;
+  private final static Integer MAX_NO_FAILED_COURSE_CURRENT_SEMESTER = 2;
 
   private final Map<String, Double> GPA_MAP = new HashMap<>();
   private final List<String> EXCLUDE_GRADES = new ArrayList<>();
@@ -77,44 +69,27 @@ public class ProcessResultImpl implements ProcessResult {
 
   @Override
   public void process(int pProgramId, int pSemesterId) throws Exception {
-    MutableTaskStatus taskStatus = new PersistentTaskStatus();
-    taskStatus.setId(pProgramId + "_" + pSemesterId + PROCESS_GRADES);
-    taskStatus.setTaskName(PROCESS_GRADES_TASK_NAME);
-    taskStatus.setStatus(TaskStatus.Status.INPROGRESS);
-    taskStatus.commit(false);
-
-    getResults(pProgramId, pSemesterId);
+    processResult(pProgramId, pSemesterId);
   }
 
-  private Future<List<UGRegistrationResult>> getResults(int pProgramId, int pSemesterId)
-      throws Exception {
-    return pool.submit(() -> {
-      List<UGRegistrationResult> resultList = mResultManager.getResults(pProgramId, pSemesterId);
+  @Async
+  private void processResult(int pProgramId, int pSemesterId) throws Exception {
+    List<UGRegistrationResult> resultList = mResultManager.getResults(pProgramId, pSemesterId);
 
-      TaskStatus taskStatus =
-          mTaskStatusManager.get(pProgramId + "_" + pSemesterId + PROCESS_GRADES);
-      MutableTaskStatus mutableTaskStatus = taskStatus.edit();
-      mutableTaskStatus.setStatus(TaskStatus.Status.COMPLETED);
-      mutableTaskStatus.commit(true);
+    MutableTaskStatus processResultStatus = new PersistentTaskStatus();
+    processResultStatus.setId(mTaskStatusManager.buildTaskId(pProgramId, pSemesterId, PROCESS_GPA_CGPA_PROMOTION));
+    processResultStatus.setStatus(TaskStatus.Status.INPROGRESS);
+    processResultStatus.commit(false);
 
-      MutableTaskStatus processResultStatus = new PersistentTaskStatus();
-      processResultStatus.setId(pProgramId + "_" + pSemesterId + PROCESS_GPA_CGPA_PROMOTION);
-      processResultStatus.setTaskName(PROCESS_GPA_CGPA_PROMOTION_TASK_NAME);
-      processResultStatus.setStatus(TaskStatus.Status.INPROGRESS);
-      processResultStatus.commit(false);
-
-      processResult(pProgramId, pSemesterId,
-          resultList.stream().collect(Collectors.groupingBy(UGRegistrationResult::getStudentId)));
-
-      return resultList;
-    });
+    processResult(pProgramId, pSemesterId,
+        resultList.stream().collect(Collectors.groupingBy(UGRegistrationResult::getStudentId)));
   }
 
   private void processResult(int pProgramId, int pSemesterId,
       Map<String, List<UGRegistrationResult>> studentCourseGradeMap) throws Exception {
-
+    String processCGPA = mTaskStatusManager.buildTaskId(pProgramId, pSemesterId, PROCESS_GPA_CGPA_PROMOTION);
     int totalStudents = studentCourseGradeMap.keySet().size();
-    int percentageCompleted, i = 0;
+    int i = 0;
 
     List<StudentRecord> studentRecords =
         mStudentRecordManager.getStudentRecords(pProgramId, pSemesterId);
@@ -138,22 +113,16 @@ public class ProcessResultImpl implements ProcessResult {
 
       i++;
 
-      if((i % UPDATE_NOTIFICATION_AFTER) == 0 || (i == studentCourseGradeMap.keySet().size())) {
+      if((i % UPDATE_NOTIFICATION_AFTER) == 0 || (i == totalStudents)) {
         mStudentRecordManager.update(updatedStudentRecords);
         updatedStudentRecords.clear();
-
-        percentageCompleted = (i / totalStudents) * 100;
-
-        TaskStatus taskStatus =
-            mTaskStatusManager.get(pProgramId + "_" + pSemesterId + PROCESS_GPA_CGPA_PROMOTION);
+        TaskStatus taskStatus = mTaskStatusManager.get(processCGPA);
         MutableTaskStatus mutableTaskStatus = taskStatus.edit();
-        mutableTaskStatus.setProgressDescription(percentageCompleted + "");
+        mutableTaskStatus.setProgressDescription(UmsUtils.getPercentageString(i, totalStudents));
         mutableTaskStatus.commit(true);
       }
     }
-
-    TaskStatus taskStatus =
-        mTaskStatusManager.get(pProgramId + "_" + pSemesterId + PROCESS_GPA_CGPA_PROMOTION);
+    TaskStatus taskStatus = mTaskStatusManager.get(processCGPA);
     MutableTaskStatus mutableTaskStatus = taskStatus.edit();
     mutableTaskStatus.setProgressDescription("100");
     mutableTaskStatus.setStatus(TaskStatus.Status.COMPLETED);
@@ -197,22 +166,24 @@ public class ProcessResultImpl implements ProcessResult {
 
   @Override
   public TaskStatusResponse status(int pProgramId, int pSemesterId) throws Exception {
-    String publishResult = pProgramId + "_" + pSemesterId + PUBLISH_RESULT;
+    String publishResult = mTaskStatusManager.buildTaskId(pProgramId, pSemesterId, PUBLISH_RESULT);
+    String processCGPA =
+        mTaskStatusManager.buildTaskId(pProgramId, pSemesterId, PROCESS_GPA_CGPA_PROMOTION);
+    String processGrades = mTaskStatusManager.buildTaskId(pProgramId, pSemesterId, PROCESS_GRADES);
 
     if(mTaskStatusManager.exists(publishResult)) {
       TaskStatus status = mTaskStatusManager.get(publishResult);
       return new TaskStatusResponse(status);
     }
 
-    if(mTaskStatusManager.exists(pProgramId + "_" + pSemesterId + PROCESS_GRADES)) {
-      TaskStatus status = mTaskStatusManager.get(pProgramId + "_" + pSemesterId + PROCESS_GRADES);
+    if(mTaskStatusManager.exists(processGrades)) {
+      TaskStatus status = mTaskStatusManager.get(processGrades);
       if(status.getStatus() == TaskStatus.Status.INPROGRESS) {
         return new TaskStatusResponse(status);
       }
       else {
-        if(mTaskStatusManager.exists(pProgramId + "_" + pSemesterId + PROCESS_GPA_CGPA_PROMOTION)) {
-          return new TaskStatusResponse(mTaskStatusManager.get(pProgramId + "_" + pSemesterId
-              + PROCESS_GPA_CGPA_PROMOTION));
+        if(mTaskStatusManager.exists(processCGPA)) {
+          return new TaskStatusResponse(mTaskStatusManager.get(processCGPA));
         }
         else {
           return new TaskStatusResponse(status);
@@ -221,8 +192,7 @@ public class ProcessResultImpl implements ProcessResult {
     }
 
     MutableTaskStatus taskStatus = new PersistentTaskStatus();
-    taskStatus.setId(pProgramId + "_" + pSemesterId + PROCESS_GPA_CGPA_PROMOTION);
-    taskStatus.setTaskName(PROCESS_GPA_CGPA_PROMOTION);
+    taskStatus.setId(processCGPA);
     taskStatus.setStatus(TaskStatus.Status.NONE);
 
     return new TaskStatusResponse(taskStatus);
@@ -231,11 +201,10 @@ public class ProcessResultImpl implements ProcessResult {
   @Transactional(rollbackFor = IllegalArgumentException.class)
   @Override
   public void publishResult(int pProgramId, int pSemesterId) throws Exception {
-    String publishResult = pProgramId + "_" + pSemesterId + PUBLISH_RESULT;
+    String publishResult = mTaskStatusManager.buildTaskId(pProgramId, pSemesterId, PUBLISH_RESULT);
 
     MutableTaskStatus taskStatus = new PersistentTaskStatus();
     taskStatus.setId(publishResult);
-    taskStatus.setTaskName(PUBLISH_RESULT_TASK_NAME);
     taskStatus.setStatus(TaskStatus.Status.INPROGRESS);
     taskStatus.commit(false);
 

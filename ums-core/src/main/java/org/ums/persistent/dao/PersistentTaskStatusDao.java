@@ -16,14 +16,14 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentTaskStatusDao extends TaskStatusDaoDecorator {
   String SELECT_ALL =
-      "SELECT TASK_ID, TASK_NAME, STATUS, PROGRESS_DESC, TASK_COMPLETION_DATE, LAST_MODIFIED FROM TASK_STATUS ";
+      "SELECT TASK_ID, STATUS, PROGRESS_DESC, TASK_COMPLETION_DATE, LAST_MODIFIED FROM TASK_STATUS ";
   String UPDATE_ALL =
-      "UPDATE TASK_STATUS SET TASK_NAME = ?, STATUS = ?, PROGRESS_DESC = ?, TASK_COMPLETION_DATE = SYSDATE, LAST_MODIFIED = "
+      "UPDATE TASK_STATUS SET STATUS = ?, PROGRESS_DESC = ?, TASK_COMPLETION_DATE = SYSDATE, LAST_MODIFIED = "
           + getLastModifiedSql() + " ";
   String DELETE_ALL = "DELETE FROM TASK_STATUS ";
   String INSERT_ALL =
-      "INSERT INTO TASK_STATUS(TASK_ID, TASK_NAME, STATUS, PROGRESS_DESC, TASK_COMPLETION_DATE, LAST_MODIFIED) "
-          + "VALUES(?, ?, ?, ?, SYSDATE, " + getLastModifiedSql() + ")";
+      "INSERT INTO TASK_STATUS(TASK_ID, STATUS, PROGRESS_DESC, TASK_COMPLETION_DATE, LAST_MODIFIED) "
+          + "VALUES(?, ?, ?, SYSDATE, " + getLastModifiedSql() + ")";
   String MAX_SERIAL = "SELECT MAX(SERIAL) FROM TASK_STATUS WHERE TASK_ID = ?";
   String EXISTS = "SELECT COUNT(TASK_ID) EXIST FROM TASK_STATUS ";
 
@@ -42,12 +42,9 @@ public class PersistentTaskStatusDao extends TaskStatusDaoDecorator {
   @Override
   public int update(MutableTaskStatus pMutable) throws Exception {
     String query = UPDATE_ALL + "WHERE TASK_ID = ? AND SERIAL = (" + MAX_SERIAL + ")";
-    return mJdbcTemplate.update(
-        query,
-        pMutable.getTaskName(),
-        pMutable.getStatus().getId(),
-        StringUtils.isEmpty(pMutable.getProgressDescription()) ? "" : pMutable
-            .getProgressDescription(), pMutable.getId(), pMutable.getId());
+    return mJdbcTemplate.update(query, pMutable.getStatus().getId(), StringUtils.isEmpty(pMutable
+        .getProgressDescription()) ? "" : pMutable.getProgressDescription(), pMutable.getId(),
+        pMutable.getId());
   }
 
   @Override
@@ -58,9 +55,12 @@ public class PersistentTaskStatusDao extends TaskStatusDaoDecorator {
 
   @Override
   public int create(MutableTaskStatus pMutable) throws Exception {
-    return mJdbcTemplate.update(INSERT_ALL, pMutable.getId(), pMutable.getTaskName(), pMutable
-        .getStatus().getId(), StringUtils.isEmpty(pMutable.getProgressDescription()) ? ""
-        : pMutable.getProgressDescription());
+    return mJdbcTemplate.update(
+        INSERT_ALL,
+        pMutable.getId(),
+        pMutable.getStatus().getId(),
+        StringUtils.isEmpty(pMutable.getProgressDescription()) ? "" : pMutable
+            .getProgressDescription());
   }
 
   @Override
@@ -74,7 +74,6 @@ public class PersistentTaskStatusDao extends TaskStatusDaoDecorator {
     public TaskStatus mapRow(ResultSet rs, int rowNum) throws SQLException {
       MutableTaskStatus taskStatus = new PersistentTaskStatus();
       taskStatus.setId(rs.getString("TASK_ID"));
-      taskStatus.setTaskName(rs.getString("TASK_NAME"));
       taskStatus.setStatus(TaskStatus.Status.get(rs.getInt("STATUS")));
       taskStatus.setProgressDescription(StringUtils.isEmpty(rs.getString("PROGRESS_DESC")) ? ""
           : rs.getString("PROGRESS_DESC"));

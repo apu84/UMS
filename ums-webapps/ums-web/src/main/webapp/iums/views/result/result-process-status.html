@@ -1,6 +1,6 @@
 <span data-ng-if="render=='text' && statusByYearSemester">{{statusByYearSemester.statusText}}</span>
 
-<img data-ng-if="render=='icon' && statusByYearSemester.status==resultProcessStatusConst.PROCESSED_ON.id"
+<img data-ng-if="render=='icon' && (statusByYearSemester.status==resultProcessStatusConst.PROCESSED_ON.id || statusByYearSemester.status==resultProcessStatusConst.RESULT_PUBLISHED.id || statusByYearSemester.status==resultProcessStatusConst.RESULT_PUBLISH_INPROGRESS.id)"
      src="images/pdf_square.png"
      class="download_tooltip"
      style="position: absolute;top: 40px;right: 0px;cursor: pointer;"/>

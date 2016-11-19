@@ -135,8 +135,8 @@ module ums {
           else if (statusByYearSemester.taskStatus.response.status == this.appConstants.TASK_STATUS.INPROGRESS) {
             this.startPolling(programId, semesterId, statusByYearSemester);
             if (resultPublishTask) {
-              statusByYearSemester.status = this.appConstants.RESULT_PROCESS_STATUS.RESULT_PUBLISHED_INPROGRESS.id;
-              statusByYearSemester.statusText = this.appConstants.RESULT_PROCESS_STATUS.RESULT_PUBLISHED_INPROGRESS.label;
+              statusByYearSemester.status = this.appConstants.RESULT_PROCESS_STATUS.RESULT_PUBLISH_INPROGRESS.id;
+              statusByYearSemester.statusText = this.appConstants.RESULT_PROCESS_STATUS.RESULT_PUBLISH_INPROGRESS.label;
               return;
             }
             else {
@@ -206,7 +206,7 @@ module ums {
       if (!this.intervalPromiseMap[key]) {
         this.intervalPromiseMap[key] = this.$interval(()=> {
           this.getNotification(programId, semesterId, statusByYearSemester);
-        }, 10000, 0, true);
+        }, 2000, 0, true);
       }
     }
 

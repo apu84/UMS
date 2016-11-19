@@ -10,7 +10,7 @@ public class TaskStatusResponse implements GenericResponse<TaskStatus> {
   public TaskStatusResponse(TaskStatus pTaskStatus) throws Exception {
     mTaskStatus = pTaskStatus;
     mResponseType = ResponseType.INFO;
-    mMessage = pTaskStatus.getTaskName();
+    mMessage = pTaskStatus.getId();
   }
 
   @Override
