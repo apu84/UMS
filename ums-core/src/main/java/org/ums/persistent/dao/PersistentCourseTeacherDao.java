@@ -34,7 +34,7 @@ public class PersistentCourseTeacherDao extends
       + "                    AND t1.semester_id = ?\n"
       + "                    AND t1.syllabus_id = t3.syllabus_id\n"
       + "                    AND t1.year = t2.year\n"
-      + "                    AND(T1.SEMESTER = t2.SEMESTER or t2.SEMESER IS NULL)\n"
+      + "                    AND(T1.SEMESTER = t2.SEMESTER or t2.SEMESTER IS NULL)\n"
       + "                    AND T2.COURSE_ID=T3.COURSE_ID\n" + "%s" + "%s"
       + "                    AND t1.syllabus_id = t3.syllabus_id\n"
       + "                    AND t2.OFFER_BY = ? " + "           ORDER BY t3.syllabus_id,\n"
