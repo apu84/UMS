@@ -230,9 +230,14 @@ module ums {
       $scope.chartData =[];
       this.initChart();
       $scope.$on('LastRepeaterElement', function(){
-        $("#panel_top").show();
-        $("#loading_panel").hide();
-        $(".img_tooltip").hide();
+        setTimeout(function()
+        {
+          $(".img_tooltip").hide();
+          $("#panel_top").show();
+          $("#loading_panel").hide();
+        }
+            ,400);
+
       });
 
       Utils.setValidationOptions("form-horizontal");
