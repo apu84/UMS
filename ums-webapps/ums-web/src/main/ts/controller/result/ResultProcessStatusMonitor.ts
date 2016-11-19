@@ -33,6 +33,7 @@ module ums {
     resultProcessStatusConst: {};
     processResult: Function;
     publishResult: Function;
+    resultPdf: Function;
   }
 
   export class ResultProcessStatusMonitor implements ng.IDirective {
@@ -66,6 +67,7 @@ module ums {
       scope.resultProcessStatusConst = this.appConstants.RESULT_PROCESS_STATUS;
       scope.processResult = this.processResult.bind(this);
       scope.publishResult = this.publishResult.bind(this);
+      scope.resultPdf = this.resultPdf.bind(this);
 
     };
 
@@ -76,7 +78,7 @@ module ums {
           HttpClient.MIME_TYPE_JSON,
           (response: TaskStatusResponse)=> {
             statusByYearSemester.taskStatus = response;
-            this.$timeout(()=>{
+            this.$timeout(()=> {
               this.resultProcessStatus(programId, semesterId, statusByYearSemester);
             });
 
@@ -215,6 +217,32 @@ module ums {
           {},
           HttpClient.MIME_TYPE_JSON);
       this.startPolling(programId, semesterId, statusByYearSemester);
+    }
+
+    private resultPdf(programId: string, semesterId: string): void {
+      this.httpClient.get(`result/pdf/program/${programId}/semester/${semesterId}`, 'application/pdf',
+          (data: any, etag: string) => {
+            var file = new Blob([data], {type: 'application/pdf'});
+            var reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onloadend = (e) => {
+              this.saveAsFile(reader.result, `result_list_${programId}_${semesterId}`);
+            };
+          },
+          (response: ng.IHttpPromiseCallbackArg<any>) => {
+            console.error(response);
+          }, 'arraybuffer');
+    }
+
+    private saveAsFile(url, fileName) {
+      var a: any = document.createElement("a");
+      document.body.appendChild(a);
+      a.style = "display: none";
+      a.href = url;
+      a.download = fileName;
+      a.click();
+      window.URL.revokeObjectURL(url);
+      $(a).remove();
     }
   }
 

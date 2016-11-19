@@ -1,7 +1,6 @@
 package org.ums.common.report.generator;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,20 +13,18 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 
 @Component
-public class PromotionListGenerator extends AbstractResultGenerator {
+public class SemesterResultGenerator extends AbstractResultGenerator {
   @Autowired
   StudentRecordManager mStudentRecordManager;
 
   @Override
   protected List<StudentRecord> getStudentList(int pProgramId, int pSemesterId) throws Exception {
-    return mStudentRecordManager.getStudentRecords(pProgramId, pSemesterId).stream()
-        .filter(pResult -> pResult.getStatus() == StudentRecord.Status.PASSED)
-        .collect(Collectors.toList());
+    return mStudentRecordManager.getStudentRecords(pProgramId, pSemesterId);
   }
 
   @Override
   protected PdfPTable contentTableHeader() {
-    PdfPTable contentTable = new PdfPTable(4);
+    PdfPTable contentTable = new PdfPTable(5);
 
     PdfPCell cell = new PdfPCell();
     cell.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -61,7 +58,13 @@ public class PromotionListGenerator extends AbstractResultGenerator {
     cell.addElement(paragraph);
     contentTable.addCell(cell);
 
-    contentTable.setHeaderRows(1);
+    cell = new PdfPCell();
+    cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+    cell.setVerticalAlignment(Element.ALIGN_CENTER);
+    paragraph = new Paragraph("PASS/FAIL", infoFont);
+    paragraph.setAlignment(Element.ALIGN_CENTER);
+    cell.addElement(paragraph);
+    contentTable.addCell(cell);
 
     return contentTable;
   }
@@ -99,10 +102,18 @@ public class PromotionListGenerator extends AbstractResultGenerator {
     paragraph.setAlignment(Element.ALIGN_CENTER);
     cell.addElement(paragraph);
     pContentTable.addCell(cell);
+
+    cell = new PdfPCell();
+    cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+    cell.setVerticalAlignment(Element.ALIGN_CENTER);
+    paragraph = new Paragraph(pStudentRecord.getStatus().getValue(), tableFont);
+    paragraph.setAlignment(Element.ALIGN_CENTER);
+    cell.addElement(paragraph);
+    pContentTable.addCell(cell);
   }
 
   @Override
   protected String getReportTitle() {
-    return "PROMOTION LIST";
+    return "SEMESTER FINAL RESULT";
   }
 }
