@@ -57,12 +57,14 @@ module ums {
     public addTeacher(courseId: string): void {
       this.populateTeachers(courseId);
       this.formattedMap[courseId].editMode = true;
+      this.$scope.showSaveButton = this.saveButtonVisibility();
     }
 
     public editTeacher(courseId: string): void {
       this.populateTeachers(courseId);
       this.formattedMap[courseId].editMode = true;
       this.formattedMap[courseId].modified = true;
+      this.$scope.showSaveButton = this.saveButtonVisibility();
     }
 
     public removeTeacher(courseId: string): void {
@@ -71,6 +73,7 @@ module ums {
       this.formattedMap[courseId]['scrutinizerId'] = '-1';
       delete this.formattedMap[courseId]['scrutinizerName'];
       this.formattedMap[courseId].deleted = true;
+      this.$scope.showSaveButton = this.saveButtonVisibility();
     }
 
     public saveTeachers(): void {
@@ -144,7 +147,7 @@ module ums {
             id: saved.id,
             courseId: courseId,
             programId: this.$scope.teacherSearchParamModel.programSelector.programId,
-            semesterId: this.$scope.teacherSearchParamModel.semesterId,
+            semesterId: this.$scope.teacherSearchParamModel.programSelector.semesterId,
             preparerId: modified.preparerId,
             scrutinizerId: modified.scrutinizerId,
             updateType: updateType
@@ -153,7 +156,7 @@ module ums {
           savedExaminer.entries.push({
             courseId: courseId,
             programId: this.$scope.teacherSearchParamModel.programSelector.programId,
-            semesterId: this.$scope.teacherSearchParamModel.semesterId,
+            semesterId: this.$scope.teacherSearchParamModel.programSelector.semesterId,
             preparerId: modified.preparerId,
             scrutinizerId: modified.scrutinizerId,
             updateType: 'insert'

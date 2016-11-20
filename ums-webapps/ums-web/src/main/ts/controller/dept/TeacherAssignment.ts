@@ -19,6 +19,8 @@ module ums {
     academicSemester: string;
     courseCategory: string;
     isEmpty: Function;
+    showRightSide: boolean;
+    showSaveButton: boolean;
   }
 
   export interface IAssignedTeacher {
@@ -77,6 +79,9 @@ module ums {
                 public notify: Notify,
                 public teacherService: TeacherService) {
       $scope.teacherSearchParamModel = new TeacherAssignmentSearchParamModel(this.appConstants, this.httpClient);
+      $scope.teacherSearchParamModel.programSelector.setProgramTypeId(Utils.UG + "", true);
+      $scope.teacherSearchParamModel.programSelector.enableSemesterOption(true);
+
       $scope.data = {
         courseCategoryOptions: appConstants.courseCategory,
         academicYearOptions: appConstants.academicYear,
@@ -96,6 +101,8 @@ module ums {
       this.teachersList = {};
       this.formattedMap = {};
 
+      $scope.showRightSide = false;
+      $scope.showSaveButton = false;
       // this.fetchTeacherInfo();
     }
 
@@ -125,10 +132,12 @@ module ums {
             } else {
               this.formatTeacher(data.entries);
             }
-
+            this.$scope.showSaveButton = this.saveButtonVisibility();
             this.$scope.loadingVisibility = false;
             this.$scope.contentVisibility = true;
           });
+
+      this.$scope.showRightSide = true;
     }
 
     //override
@@ -227,7 +236,7 @@ module ums {
       }
 
       for (var i = 0; i < this.$scope.teacherSearchParamModel.programSelector.getSemesters().length; i++) {
-        if (this.$scope.teacherSearchParamModel.programSelector.getSemesters()[i].id == this.$scope.teacherSearchParamModel.semesterId) {
+        if (this.$scope.teacherSearchParamModel.programSelector.getSemesters()[i].id == this.$scope.teacherSearchParamModel.programSelector.semesterId) {
           this.$scope.semesterName = this.$scope.teacherSearchParamModel.programSelector.getSemesters()[i].name;
         }
       }
@@ -263,7 +272,7 @@ module ums {
 
     private uriBuilder(param: CourseTeacherSearchParamModel): string {
       // var fetchUri: string = this.getBaseUri() + "/programId/" + '110500' + "/semesterId/" + '11012016' + '/year/1';
-      var fetchUri = this.getBaseUri() + "/programId/" + param.programSelector.programId + "/semesterId/" + param.semesterId;
+      var fetchUri = this.getBaseUri() + "/programId/" + param.programSelector.programId + "/semesterId/" + param.programSelector.semesterId;
 
       if (!UmsUtil.isEmptyString(param.courseId)) {
         fetchUri = fetchUri + "/courseId/" + param.courseId;
@@ -289,6 +298,15 @@ module ums {
 
     public getPostUri(): string {
       return "";
+    }
+
+    public saveButtonVisibility(): boolean {
+      for (var courseId: string in this.$scope.entries) {
+        if (this.$scope.entries.hasOwnProperty(courseId) && this.$scope.entries[courseId].editMode) {
+          return true
+        }
+      }
+      return false;
     }
   }
 }

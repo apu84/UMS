@@ -11,7 +11,7 @@
         </div>
     </div>
 
-    <div  id="rightDiv">
+    <div  id="rightDiv"  data-ng-if="showRightSide">
         <div class="panel" style="min-height: 490px;">
             <div class="panel-heading" style="font-size: 14px;">
                 <b>Program:</b>  {{programName}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -127,7 +127,7 @@
 
             </div>
             <div class="form-actions text-right pal" style="margin-top:25px;">
-                <button type="button" class="btn btn-success" data-ng-click="saveTeachers()">Save</button>
+                <button type="button" class="btn btn-success" data-ng-click="saveTeachers()" data-ng-if="showSaveButton">Save</button>
             </div>
         </div>
     </div>

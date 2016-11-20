@@ -12,7 +12,9 @@ module ums {
       this.httpClient.get("users/current", HttpClient.MIME_TYPE_JSON,
           (response: LoggedInUser) => {
             this.courseMaterialSearchParamModel = new CourseTeacherSearchParamModel(this.appConstants, this.httpClient);
+            this.courseMaterialSearchParamModel.programSelector.setProgramTypeId(Utils.UG + "", true);
             this.courseMaterialSearchParamModel.programSelector.setDepartment(response.departmentId);
+            this.courseMaterialSearchParamModel.programSelector.enableSemesterOption(true);
             // Program selector is not required. Setting it to null doesn't make sense,
             // probably adding some show/hide mechanism makes it more clear to understand
             this.courseMaterialSearchParamModel.programSelector.setProgramId(null);
@@ -35,7 +37,7 @@ module ums {
       this.$scope.contentVisibility = false;
       this.$scope.selectedCourseNo = '';
 
-      this.httpClient.get("academic/courseTeacher/" + this.courseMaterialSearchParamModel.semesterId + "/"
+      this.httpClient.get("academic/courseTeacher/" + this.courseMaterialSearchParamModel.programSelector.semesterId + "/"
           + this.currentUser.employeeId + "/course", HttpClient.MIME_TYPE_JSON,
           (response: {entries: CourseTeacherModel[]}) => {
             this.$scope.entries = this.aggregateResult(response.entries);
