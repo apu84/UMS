@@ -167,7 +167,7 @@ module ums {
           statusMap[statuses[i].programId].yearSemester[yearSemester].status = statuses[i].statusId;
         }
       }
-      this.$scope.statusMap = statusMap; console.log(statusMap);
+      this.$scope.statusMap = statusMap; //console.log(statusMap);
       if (Object.keys(statusMap).length > 2) {
         this.$scope.numberOfRows = 2;
         this.$scope.row1start = 0;
