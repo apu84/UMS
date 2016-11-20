@@ -46,9 +46,6 @@ public abstract class AbstractResultGenerator {
   public void createPdf(Integer pProgramId, Integer pSemesterId, OutputStream pOutputStream)
       throws Exception {
     java.util.List<StudentRecord> studentRecordList = getStudentList(pProgramId, pSemesterId);
-    if(pProgramId == 110500) {
-      throw new IllegalArgumentException("No. of students is zero");
-    }
     if(studentRecordList.size() > 0) {
       initialize(studentRecordList.get(0));
     }
