@@ -177,9 +177,7 @@ public abstract class AbstractResultGenerator {
     public void onEndPage(PdfWriter writer, Document document) {
 
       PdfContentByte cb = writer.getDirectContent();
-      Phrase footer =
-          new Phrase(String.format("page %d of %d", writer.getPageNumber(),
-              document.getPageNumber()), pageNoFont);
+      Phrase footer = new Phrase(String.format("page %d", writer.getPageNumber()), pageNoFont);
 
       ColumnText.showTextAligned(cb, Element.ALIGN_RIGHT, footer, document.right(),
           document.bottom() - 2, 0);
