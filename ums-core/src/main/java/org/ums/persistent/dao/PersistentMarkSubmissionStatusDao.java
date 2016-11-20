@@ -24,7 +24,7 @@ public class PersistentMarkSubmissionStatusDao extends MarksSubmissionStatusDaoD
   String UPDATE_ALL =
       "UPDATE MARKS_SUBMISSION_STATUS SET SEMESTER_ID = ?, COURSE_ID = ?, STATUS = ?, EXAM_TYPE = ?, "
           + "LAST_SUBMISSION_DATE = TO_DATE(?, '" + Constants.DATE_FORMAT
-          + "'), TOTAL_PART, PART_A_TOTAL = ?, PART_B_TOTAL = ?, "
+          + "'), TOTAL_PART = ?, PART_A_TOTAL = ?, PART_B_TOTAL = ?, "
           + "YEAR = ?, SEMESTER = ?, LAST_MODIFIED = " + getLastModifiedSql() + " ";
   String DELETE_ALL = "DELETE FROM MARKS_SUBMISSION_STATUS ";
   String INSERT_ALL =
@@ -53,11 +53,10 @@ public class PersistentMarkSubmissionStatusDao extends MarksSubmissionStatusDaoD
   @Override
   public int update(MutableMarksSubmissionStatus pMutable) throws Exception {
     String query = UPDATE_ALL + "WHERE ID = ?";
-    return mJdbcTemplate.update(query, pMutable.getSemesterId(), pMutable.getCourseId(),
-        pMutable.getStatus(), pMutable.getExamType(),
-        mDateFormat.format(pMutable.getLastSubmissionDate()), pMutable.getTotalPart(),
-        pMutable.getPartATotal(), pMutable.getPartBTotal(), pMutable.getYear(),
-        pMutable.getAcademicSemester(), pMutable.getId());
+    return mJdbcTemplate.update(query, pMutable.getSemesterId(), pMutable.getCourseId(), pMutable
+        .getStatus().getId(), pMutable.getExamType().getId(), mDateFormat.format(pMutable
+        .getLastSubmissionDate()), pMutable.getTotalPart(), pMutable.getPartATotal(), pMutable
+        .getPartBTotal(), pMutable.getYear(), pMutable.getAcademicSemester(), pMutable.getId());
   }
 
   @Override

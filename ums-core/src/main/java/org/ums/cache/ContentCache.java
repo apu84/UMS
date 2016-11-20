@@ -1,5 +1,9 @@
 package org.ums.cache;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
@@ -8,10 +12,6 @@ import org.ums.domain.model.common.Identifier;
 import org.ums.domain.model.common.LastModifier;
 import org.ums.manager.CacheManager;
 import org.ums.manager.ContentManager;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Callable;
 
 public abstract class ContentCache<R extends Identifier<I> & LastModifier, M extends R, I, C extends ContentManager<R, M, I>>
     extends ContentDaoDecorator<R, M, I, C> {
@@ -184,14 +184,22 @@ public abstract class ContentCache<R extends Identifier<I> & LastModifier, M ext
   protected R cachedEntity(final String pCacheKey, Callable<R> pCallable) throws Exception {
     String referredKey = getCacheManager().getReferred(pCacheKey);
     if(StringUtils.isEmpty(referredKey)) {
-      R readonly = pCallable.call();
-      String idCacheKey = getCacheKey(readonly.getId());
-      getCacheManager().put(idCacheKey, readonly);
-      getCacheManager().putReferrerKey(pCacheKey, idCacheKey);
-      return readonly;
+      return cache(pCacheKey, pCallable);
     }
     else {
-      return getCacheManager().get(referredKey);
+      R cachedEntity = getCacheManager().get(referredKey);
+      if(cachedEntity != null) {
+        return cachedEntity;
+      }
+      return cache(pCacheKey, pCallable);
     }
+  }
+
+  private R cache(final String pCacheKey, Callable<R> pCallable) throws Exception {
+    R readonly = pCallable.call();
+    String idCacheKey = getCacheKey(readonly.getId());
+    getCacheManager().put(idCacheKey, readonly);
+    getCacheManager().putReferrerKey(pCacheKey, idCacheKey);
+    return readonly;
   }
 }
