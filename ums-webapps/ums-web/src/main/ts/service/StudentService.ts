@@ -65,10 +65,11 @@ module ums{
 
     public updateStudentsAdviser(json:any):ng.IPromise<any>{
       var defer = this.$q.defer();
+      var that=this;
       this.httpClient.put("/ums-webservice-academic/academic/student/adviser",json,'application/json')
           .success(()=>{
             this.notify.success("Successfully Saved");
-            defer.resolve('success');
+            defer.resolve('success')
           })
           .error((data)=>{
             console.log(data);

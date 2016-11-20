@@ -24,7 +24,8 @@ public interface ClassAttendanceManager {
   public List<ClassAttendanceDto> getStudentList(int semesterId, String courseId,
       CourseType pCourseType, String pSection, String pStudentCategory) throws Exception;
 
-  public List<ClassAttendanceDto> getDateList(int semesterId, String courseId) throws Exception;
+  public List<ClassAttendanceDto> getDateList(int semesterId, String courseId, String section)
+      throws Exception;
 
   public Map<String, String> getAttendance(int semesterId, String courseId) throws Exception;
 

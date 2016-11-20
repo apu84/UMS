@@ -31,7 +31,7 @@ module ums {
     attendance:number;
   }
 
-  export class AttendanceSheet {
+  export class ClassAttendance {
     public static $inject = ['$scope', '$stateParams', 'appConstants', 'HttpClient','hotRegisterer','notify','$window','$sce'];
     private currentUser: LoggedInUser;
     private columnHeader;
@@ -548,5 +548,5 @@ module ums {
     }
   }
 
-  UMS.controller("AttendanceSheet", AttendanceSheet);
+  UMS.controller("ClassAttendance", ClassAttendance);
 }

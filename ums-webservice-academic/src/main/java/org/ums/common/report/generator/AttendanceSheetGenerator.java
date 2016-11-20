@@ -52,7 +52,8 @@ public class AttendanceSheetGenerator {
     String check = "E://check11.png";
     String cross = "E://cross11.png";
 
-    List<ClassAttendanceDto> dates = mClassAttendanceManager.getDateList(pSemesterId, pCourseId);
+    List<ClassAttendanceDto> dates =
+        mClassAttendanceManager.getDateList(pSemesterId, pCourseId, pSection);
     List<ClassAttendanceDto> studentList =
         mClassAttendanceManager.getStudentList(pSemesterId, pCourseId, course.getCourseType(),
             pSection, pStudentCategory);

@@ -698,17 +698,15 @@ module ums {
           controller: 'ResultProcessing',
           templateUrl: 'views/result/result-processing.html'
         })
-        .state('attendanceSheet', {
-          url: "/attendanceSheet",
-          controller: 'AttendanceSheet',
-          templateUrl: 'views/dept/attendance-sheet.html',
+        .state('classAttendance', {
+          url: "/classAttendance",
+          controller: 'ClassAttendance',
+          templateUrl: 'views/dept/class-attendance.html',
           resolve: {
             loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
               return $ocLazyLoad.load({
-                files: ['https://www.jqueryscript.net/demo/Path-like-Circle-Menu-with-jQuery-CSS3-Transforms-WCircleMenu/jQuery.WCircleMenu.js',
-                  'vendors/bootstrap-datepicker/css/datepicker.css',
-                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js'
-                ]
+                files: ['vendors/bootstrap-datepicker/css/datepicker.css',
+                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js']
               });
             }]
           }

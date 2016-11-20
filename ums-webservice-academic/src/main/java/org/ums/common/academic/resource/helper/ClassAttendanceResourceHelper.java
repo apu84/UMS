@@ -59,7 +59,7 @@ public class ClassAttendanceResourceHelper {
 
   public List<ClassAttendanceDto> getDateList(final Integer pSemesterId, final String pCourseId,
       final String pSection) throws Exception {
-    return getContentManager().getDateList(pSemesterId, pCourseId);
+    return getContentManager().getDateList(pSemesterId, pCourseId, pSection);
   }
 
   public List<ClassAttendanceDto> getStudentList(final Integer pSemesterId, final String pCourseId,

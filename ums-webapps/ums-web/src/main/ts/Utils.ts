@@ -43,6 +43,11 @@ module ums {
     static PDF: string="application/pdf";
     static XLS: string="application/vnd.ms-excel";
 
+    /**
+     * Student Id block colors
+     */
+    static DEFAULT_COLOR: string="#DEF";
+    static SELECTED_COLOR: string="#FADBD8";
 
     public static getFileContentType(fileType:string):string {
       var contentType:string="";

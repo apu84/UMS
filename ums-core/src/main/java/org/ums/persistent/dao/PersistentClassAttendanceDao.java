@@ -32,15 +32,9 @@ public class PersistentClassAttendanceDao implements ClassAttendanceManager {
       + "Left Outer Join DTL_CLASS_ATTENDANCE "
       + "on tmp1.Id = DTL_CLASS_ATTENDANCE.Attendance_Id ";
 
-  // String ATTENDANCE_ALL = ATTENDANCE_QUERY + " Order by StudentId";
-  //
-  // String ATTENDANCE_ONLY_REGISTERED = "Select * From ( " + ATTENDANCE_QUERY
-  // + ")test1,UG_Registration_Result reg " + "Where test1.student_id=reg.student_id "
-  // + "And test1.course_id=reg.course_id " + "Order by StudentId";
-
   String ATTENDANCE_DATE_QUERY =
       "Select TO_Char(Class_Date,'DD MON, YY') Class_Date,To_Char(Class_Date,'DDMMYYYY') CLASS_DATE_F1,Serial,Teacher_Id ,ID  "
-          + "From MST_CLASS_ATTENDANCE Where Semester_Id= ? And Course_id=? "
+          + "From MST_CLASS_ATTENDANCE Where Semester_Id= ? And Course_id=? And Section=?"
           + "Order by Serial desc";
 
   String ATTENDANCE_STUDENTS_ALL =
@@ -72,9 +66,10 @@ public class PersistentClassAttendanceDao implements ClassAttendanceManager {
   }
 
   @Override
-  public List<ClassAttendanceDto> getDateList(int pSemesterId, String pCourseId) throws Exception {
+  public List<ClassAttendanceDto> getDateList(int pSemesterId, String pCourseId, String pSection)
+      throws Exception {
     String query = ATTENDANCE_DATE_QUERY;
-    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pCourseId},
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pCourseId, pSection},
         new AttendanceDateRowMapper());
   }
 
@@ -87,13 +82,6 @@ public class PersistentClassAttendanceDao implements ClassAttendanceManager {
     else if(pStudentCategory.equals("All"))
       query = ATTENDANCE_STUDENTS_ALL;
 
-    // if(pSection.equals("Z")) {
-    // if(pStudentCategory.equals("Enrolled"))
-    // query = String.format(query, "");
-    // else if(pStudentCategory.equals("All"))
-    // query = String.format(query, "", "");
-    // }
-    // else {
     if(pStudentCategory.equals("Enrolled")) {
       if(courseType == CourseType.THEORY)
         query = String.format(query, " And Theory_Section='" + pSection + "' ");
@@ -110,7 +98,6 @@ public class PersistentClassAttendanceDao implements ClassAttendanceManager {
             String.format(query, " And Sessional_Section=" + pSection + "' ",
                 " And Sessional_Section=" + pSection + "' ");
     }
-    // }
 
     if(pStudentCategory.equals("Enrolled"))
       return mJdbcTemplate.query(query, new Object[] {pSemesterId, pCourseId},
@@ -240,6 +227,5 @@ public class PersistentClassAttendanceDao implements ClassAttendanceManager {
       }
       return mapRet;
     }
-
   }
 }
