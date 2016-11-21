@@ -54,9 +54,9 @@ module ums{
 
 
     private getCurrentLoggedEmployeeInfo(){
-      this.employeeService.getLoggedEmployeeInfo().then((employees:Array<any>)=>{
+      this.employeeService.getLoggedEmployeeInfo().then((employee:Employee)=>{
         this.$scope.loggedEmployee=<Employee>{};
-        this.$scope.loggedEmployee = employees[0];
+        this.$scope.loggedEmployee = employee;
       });
     }
 

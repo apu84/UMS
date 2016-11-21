@@ -32,7 +32,7 @@ module ums{
       this.httpClient.get("/ums-webservice-academic/academic/employee/employeeById",'application/json',
           (json:any,etag:string)=>{
             employees = json.entries;
-            defer.resolve(employees);
+            defer.resolve(employees[0]);
           },
           (response:ng.IHttpPromiseCallbackArg<any>)=>{
             console.error(response);

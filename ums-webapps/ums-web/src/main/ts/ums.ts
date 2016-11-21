@@ -698,6 +698,11 @@ module ums {
           controller: 'ResultProcessing',
           templateUrl: 'views/result/result-processing.html'
         })
+        .state('advisersStudents', {
+          url: "/advisersStudents",
+          controller: 'AdvisersStudents',
+          templateUrl: 'views/dept/advisers-students.html'
+        })
         .state('classAttendance', {
           url: "/classAttendance",
           controller: 'ClassAttendance',
