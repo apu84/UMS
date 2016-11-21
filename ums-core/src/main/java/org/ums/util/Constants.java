@@ -4,8 +4,7 @@ import java.text.SimpleDateFormat;
 
 public interface Constants {
   public static final String DATE_FORMAT = "dd/MM/yyyy";
-  public static final SimpleDateFormat DATE_TIME_FORMAT = new SimpleDateFormat(
-      "dd-MM-yyyy HH:mm:ss");
+  public static final String DATE_TIME_FORMAT = "dd/MM/yyyy HH:mm:ss";
   public static final SimpleDateFormat DF_dd_Mon_YY_Time = new SimpleDateFormat(
       "dd MMM, yy HH:mm:ss");
   public static final String SERVICE_CONTEXT = "services-context.xml";

@@ -177,9 +177,9 @@ public class GradeSubmissionResourceHelper extends
       mutable.setStatus(CourseMarksSubmissionStatus.WAITING_FOR_SCRUTINY);
       mutable.commit(true);
 
-      marksSubmissionStatus =
+/*      marksSubmissionStatus =
           mMarksSubmissionStatusManager.get(requestedStatusDTO.getSemesterId(),
-              requestedStatusDTO.getCourseId(), requestedStatusDTO.getExamType());
+              requestedStatusDTO.getCourseId(), requestedStatusDTO.getExamType());*/
 
       getContentManager().insertGradeLog(userId, actingRoleForCurrentUser, marksSubmissionStatus,
           CourseMarksSubmissionStatus.WAITING_FOR_SCRUTINY, gradeList);
@@ -253,11 +253,6 @@ public class GradeSubmissionResourceHelper extends
       mutable.setStatus(nextStatus);
       mutable.commit(true);
 
-      marksSubmissionStatus
-          = mMarksSubmissionStatusManager.get(requestedStatusDTO.getSemesterId(),
-          requestedStatusDTO.getCourseId(),
-          requestedStatusDTO.getExamType());
-
       if (recheckList != null) recheckList.stream().forEach(g -> {
         g.setRecheckStatusId(1);
       });
@@ -268,6 +263,11 @@ public class GradeSubmissionResourceHelper extends
           Stream.concat(recheckList == null ? Stream.empty() : recheckList.stream(), approveList == null ? Stream.empty() : approveList.stream()).collect(Collectors.toList());
 
       gradeSubmissionService.validateGradeSubmission(actingRoleForCurrentUser, requestedStatusDTO, marksSubmissionStatus, allGradeList, action);
+
+/*      marksSubmissionStatus
+          = mMarksSubmissionStatusManager.get(requestedStatusDTO.getSemesterId(),
+          requestedStatusDTO.getCourseId(),
+          requestedStatusDTO.getExamType());*/
 
       String notificationConsumer = gradeSubmissionService.getUserIdForNotification(marksSubmissionStatus.getSemesterId(), marksSubmissionStatus.getCourseId(), nextStatus);
 
@@ -323,9 +323,9 @@ public class GradeSubmissionResourceHelper extends
     mutable.setStatus(nextStatus);
     mutable.commit(true);
 
-    marksSubmissionStatus =
-        mMarksSubmissionStatusManager.get(requestedStatusDTO.getSemesterId(),
-            requestedStatusDTO.getCourseId(), requestedStatusDTO.getExamType());
+    // marksSubmissionStatus =
+    // mMarksSubmissionStatusManager.get(requestedStatusDTO.getSemesterId(),
+    // requestedStatusDTO.getCourseId(), requestedStatusDTO.getExamType());
 
     // Need to put log here....
     String notificationConsumer =

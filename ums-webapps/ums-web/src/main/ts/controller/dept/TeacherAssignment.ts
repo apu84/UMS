@@ -301,7 +301,7 @@ module ums {
     }
 
     public saveButtonVisibility(): boolean {
-      for (var courseId: string in this.$scope.entries) {
+      for (var courseId in this.$scope.entries) {
         if (this.$scope.entries.hasOwnProperty(courseId) && this.$scope.entries[courseId].editMode) {
           return true
         }
