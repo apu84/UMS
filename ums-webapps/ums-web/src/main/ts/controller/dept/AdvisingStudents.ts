@@ -30,7 +30,7 @@ module ums{
     students:Array<Student>;
   }
 
-  class AdvisersStudents{
+  class AdvisingStudents{
     public static $inject = ['appConstants','HttpClient','$scope','$q','notify','semesterService','employeeService','studentService'];
     constructor(private appConstants: any, private httpClient: HttpClient, private $scope: IAdvisersStudents,
                 private $q:ng.IQService, private notify: Notify, private semesterService:SemesterService,
@@ -119,6 +119,6 @@ module ums{
     }
   }
 
-  UMS.controller("AdvisersStudents", AdvisersStudents)
+  UMS.controller("AdvisingStudents", AdvisingStudents)
 
 }

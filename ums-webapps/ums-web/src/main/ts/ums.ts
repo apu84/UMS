@@ -40,6 +40,13 @@ module ums {
       return input.split(',');
     }
   });
+  /* Filter used in course-teacher.html, it returns the total size of the keys in a json object */
+  UMS.filter('numKeys', function() {
+    return function(json) {
+      var keys = Object.keys(json)
+      return keys.length;
+    }
+  });
 
   UMS.config(($stateProvider, $urlRouterProvider, $locationProvider) => {
     //
@@ -698,10 +705,10 @@ module ums {
           controller: 'ResultProcessing',
           templateUrl: 'views/result/result-processing.html'
         })
-        .state('advisersStudents', {
-          url: "/advisersStudents",
-          controller: 'AdvisersStudents',
-          templateUrl: 'views/dept/advisers-students.html'
+        .state('advisingStudents', {
+          url: "/AdvisingStudents",
+          controller: 'AdvisingStudents',
+          templateUrl: 'views/dept/advising-students.html'
         })
         .state('classAttendance', {
           url: "/classAttendance",

@@ -120,9 +120,9 @@
           </table>
         </div>
 
-      </div>
-      <div class="form-actions text-right pal" style="margin-top:25px;">
-        <button type="button" class="btn btn-success" data-ng-click="saveTeachers()">Save Course-Teacher Info
+      </div>{{entries.length}}
+      <div class="form-actions text-right pal" style="margin-top:25px;" data-ng-if="(entries|numKeys)>0">
+        <button type="button" class="btn btn-success" data-ng-click="saveTeachers()">Save Changes
         </button>
       </div>
     </div>
