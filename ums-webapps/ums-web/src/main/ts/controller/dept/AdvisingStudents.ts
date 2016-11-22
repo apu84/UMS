@@ -1,7 +1,3 @@
-/**
- * Created by My Pc on 21-Nov-16.
- */
-
 module ums{
   interface  IAdvisersStudents extends ng.IScope{
 
@@ -9,7 +5,6 @@ module ums{
     students:Array<Student>;
     studentsByYearSemester:Array<IStudentsByYearSemester>;
     backgroundColor:string;
-
     yearSemesterMapWithIStudentsByYearSemester:any;
 
 
@@ -18,7 +13,7 @@ module ums{
     showStudentsByYearSemester:boolean;
 
     getTeacherInfo:Function;
-    studentsOfAdviser:Function;
+    fetchAdvisingStudents:Function;
     viewStudentById:Function;
     viewStudentByIdAndName:Function;
   }
@@ -32,10 +27,17 @@ module ums{
 
   class AdvisingStudents{
     public static $inject = ['appConstants','HttpClient','$scope','$q','notify','semesterService','employeeService','studentService'];
-    constructor(private appConstants: any, private httpClient: HttpClient, private $scope: IAdvisersStudents,
+    private advisingStudentSearchParamModel: CourseTeacherSearchParamModel;
+
+    constructor(private appConstants: any, private httpClient: HttpClient, private $scope: any,
                 private $q:ng.IQService, private notify: Notify, private semesterService:SemesterService,
                 private employeeService:EmployeeService,
                 private studentService:StudentService) {
+
+      this.advisingStudentSearchParamModel = new CourseTeacherSearchParamModel(this.appConstants, this.httpClient);
+      this.advisingStudentSearchParamModel.programSelector.setDepartment("01");
+      this.advisingStudentSearchParamModel.programSelector.setProgramId(null);
+      this.$scope.advisingStudentSearchParamModel = this.advisingStudentSearchParamModel;
 
       $scope.students=[];
       $scope.backgroundColor=Utils.DEFAULT_COLOR;
@@ -44,7 +46,7 @@ module ums{
       $scope.studentsByYearSemester=[];
       $scope.showStudentId=true;
       $scope.showStudentName=false;
-      $scope.studentsOfAdviser = this.studentsOfAdviser.bind(this);
+      $scope.fetchAdvisingStudents = this.fetchAdvisingStudents.bind(this);
       $scope.viewStudentById=this.viewStudentById.bind(this);
       $scope.viewStudentByIdAndName = this.viewStudentByName.bind(this);
 
@@ -64,7 +66,12 @@ module ums{
       this.$scope.showStudentName=true;
     }
 
-    private studentsOfAdviser(){
+    private fetchAdvisingStudents(){
+
+      $("#leftDiv").hide();
+      $("#arrowDiv").show();
+
+
       this.employeeService.getLoggedEmployeeInfo().then((employee:Employee)=>{
 
         this.studentService.getActiveStudentsOfTheTeacher(employee.id).then((students:Array<Student>)=>{

@@ -48,6 +48,19 @@ module ums {
     }
   });
 
+  UMS.filter('nth', function() {
+    return function(serial:number) {
+      switch(serial){
+        case 1: return serial+"st";
+        case 2: return serial+"st";
+        case 3: return serial+"rd";
+        case 4: return serial+"th";
+        case 5: return serial+"th";
+      }
+      return serial;
+    }
+  });
+
   UMS.config(($stateProvider, $urlRouterProvider, $locationProvider) => {
     //
     // For any unmatched url, redirect to /state1
@@ -706,7 +719,7 @@ module ums {
           templateUrl: 'views/result/result-processing.html'
         })
         .state('advisingStudents', {
-          url: "/AdvisingStudents",
+          url: "/advisingStudents",
           controller: 'AdvisingStudents',
           templateUrl: 'views/dept/advising-students.html'
         })

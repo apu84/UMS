@@ -12,7 +12,7 @@
     }
     .rounded {
         display: inline-block;
-        padding: 0.5% 3%;
+        padding: 2px 8px;
         border-radius: 10%;
         color: black;
         border-collapse: separate;
@@ -25,7 +25,9 @@
         float: right;
     }
     fieldset { border:1px dashed grey;
-        padding-right: 5px;}
+        padding-right: 5px;
+    padding-left: 5px;
+    }
 
     legend {
         padding: 0.2em 0.5em;
@@ -55,15 +57,42 @@
         padding: 5px !important;
     }
 </style>
-<div class="row" data-ng-init="studentsOfAdviser()">
-    <div class="panel panel-blue">
-        <div class="panel-heading">Adviser's Students</div>
-        <div class="panel-body">
-            <div class="row">
-                <div class="col-md-10">
 
+<div class="row" id="courseSelectionDiv">
+    <div  onclick="resetCommonCollapsibleDivs()" id="arrowDiv">
+        <i class="fa fa-angle-double-right fa-cx"></i></i>
+    </div>
+    <div class="panel panel-green"  id="leftDiv">
+        <div class="panel-heading">
+            <h3 class="panel-title">Select </h3>
+        </div>
+        <div class="panel-body pan">
+            <form action="" class="form-horizontal" data-validate=""  data-onvalidate="fetchAdvisingStudents" >
+                <div class="form-body pal">
+                    <div class="form-group"></div>
+                    <div class="form-group">
+                    <label class="col-md-4 control-label">Program Type</label>
+                    <div class="col-md-8">
+                            <select class="form-control" name="programType" id="programTypeId" data-ng-model="model.programTypeId"
+                                    data-ng-change="model.loadDepartments()" data-convert-to-number>
+                                <option data-ng-repeat="programType in model.getProgramTypes()" value="{{programType.id}}">{{programType.name}}
+                                </option>
+                            </select>
+                    </div>
+                        </div>
                 </div>
-                <div class="col-md-2" align="right">
+                <div class="form-actions text-right pal">
+                    <button type="button" class="btn btn-success">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="rightDiv" >
+        <div class="panel">
+            <div class="panel-heading">
+                <p class="alignLeft" id="pageTitle">Advising Student List - <b>Undergraduate</b></p>
+                <p class="alignRight">
                     <a  href="javascript:;" class="btn btn-xs btn-default bulkStudentIdAnchor"
                         data-ng-click="viewStudentById()" style="background-color: black;">
                         <i class="fa fa-user bulkStudentIdIcon" style="color: white;" aria-hidden="true"></i>
@@ -73,44 +102,52 @@
                         data-ng-click="viewStudentByIdAndName()" style="background-color: white;">
                         <span class="fa fa-indent bulkStudentNameIcon" style="color: black;" ></span>
                     </a>
+                </p>
+                <span class="subtitle"></span>
                 </div>
-            </div>
-            <br>
-            <div class="row">
-                <div class="col-md-12">
-                    <ul data-ng-if="showStudentsByYearSemester==false">
-                        <li class="rounded" ng-style="{background:'#DEF'}"
-                            data-ng-repeat="a in students track by a.id" style="position: relative;padding-left: 1.5%;padding-right: 1.5%;">
-                            <div data-ng-show="showStudentId" >{{a.id}}</div>
-                            <div data-ng-show="showStudentName">{{a.id}}<br/>
-                                <img src="https://cdn2.iconfinder.com/data/icons/pretty-office-10/16/Graduate-male-16.png" /> {{a.fullName}}</div>
-                        </li>
-                    </ul>
+            <div class="panel-body" style="min-height: 350px;">
+                <div class="spinner" ng-show="loadingVisibility">
+                    <div class="bounce1"></div>
+                    <div class="bounce2"></div>
+                    <div class="bounce3"></div>
+                </div>
+                <div data-ng-if="true">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <ul data-ng-if="showStudentsByYearSemester==false">
+                                <li class="rounded" ng-style="{background:'#DEF'}"
+                                    data-ng-repeat="a in students track by a.id" style="position: relative;padding-left: 1.5%;padding-right: 1.5%;">
+                                    <div data-ng-show="showStudentId" >{{a.id}}</div>
+                                    <div data-ng-show="showStudentName">{{a.id}}<br/>
+                                        {{a.fullName}}</div>
+                                </li>
+                            </ul>
 
-                        <div data-ng-if=" showStudentsByYearSemester==true">
-                            <div data-ng-repeat="s in studentsByYearSemester">
+                            <div data-ng-if=" showStudentsByYearSemester==true">
+                                <div data-ng-repeat="s in studentsByYearSemester">
 
-                                <fieldset style="padding-bottom: 5px;">
-                                    <legend>{{s.year}} year {{s.semester}}</legend>
-                                    <li class="rounded" ng-style="{background:'#DEF'}" style="cursor: pointer;"
-                                        data-ng-repeat="a in s.students track by a.id"
-                                        ng-click="changeColor(a)">
-                                        <div style="padding: 2%" data-ng-if="showStudentId">{{a.id}}
-                                        </div>
-                                        <div data-ng-if="showStudentName">
-                                            {{a.id}}<br><img src="https://cdn2.iconfinder.com/data/icons/pretty-office-10/16/Graduate-male-16.png" />{{a.fullName}}
-                                        </div>
-                                    </li>
-                                </fieldset>
-                                <br/>
+                                    <fieldset style="padding-bottom: 5px;">
+                                        <legend>{{s.year|nth}} Year {{s.semester|nth}}, Semester</legend>
+                                        <li class="rounded" ng-style="{background:'#DEF'}" style="cursor: pointer;"
+                                            data-ng-repeat="a in s.students track by a.id"
+                                            ng-click="changeColor(a)">
+                                            <div style="padding: 2%" data-ng-if="showStudentId">{{a.id}}
+                                            </div>
+                                            <div data-ng-if="showStudentName">
+                                                {{a.id}}<br>{{a.fullName}}
+                                            </div>
+                                        </li>
+                                    </fieldset>
+                                    <br/>
+                                </div>
+
                             </div>
+                        </div>
 
                     </div>
                 </div>
 
             </div>
-
         </div>
     </div>
-
 </div>
