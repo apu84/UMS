@@ -49,7 +49,7 @@ module ums {
   });
 
   UMS.filter('nth', function() {
-    return function(serial:number) {
+    return function(serial) {
       switch(serial){
         case 1: return serial+"st";
         case 2: return serial+"st";
