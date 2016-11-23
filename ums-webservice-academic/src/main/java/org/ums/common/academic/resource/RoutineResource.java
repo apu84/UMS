@@ -33,10 +33,10 @@ public class RoutineResource extends MutableRoutineResource {
   }
 
   @GET
-  @Path("/routineForTeacher/{teacherId}")
-  public JsonObject getRoutineForTeachers(final @Context Request pRequest,
-      final @PathParam("teacherId") String teacherId) throws Exception {
-    return mRoutineResourceHelper.getRoutineForTeacher(teacherId, pRequest, mUriInfo);
+  @Path("/routineForTeacher")
+  public JsonObject getRoutineForTeachers(final @Context Request pRequest) throws Exception {
+
+    return mRoutineResourceHelper.getRoutineForTeacher(pRequest, mUriInfo);
   }
 
   @GET

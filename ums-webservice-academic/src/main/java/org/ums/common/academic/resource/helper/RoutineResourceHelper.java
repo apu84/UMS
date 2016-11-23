@@ -156,9 +156,13 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
     return object.build();
   }
 
-  public JsonObject getRoutineForTeacher(final String teacherId, final Request pRequest,
-      final UriInfo pUriInfo) throws Exception {
-    List<Routine> routines = getContentManager().getTeacherRoutine(teacherId);
+  public JsonObject getRoutineForTeacher(final Request pRequest, final UriInfo pUriInfo)
+      throws Exception {
+    String userId = SecurityUtils.getSubject().getPrincipal().toString();
+    User user = mUserManager.get(userId);
+    String employeeId = user.getEmployeeId();
+    // Employee employee = mEmployeeManager.getByEmployeeId(employeeId);
+    List<Routine> routines = getContentManager().getTeacherRoutine(employeeId);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();

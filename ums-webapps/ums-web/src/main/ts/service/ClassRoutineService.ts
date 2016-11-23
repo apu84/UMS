@@ -29,6 +29,22 @@ module ums{
       return defer.promise;
     }
 
+    public getRoutineForTeacher():ng.IPromise<any>{
+      var defer = this.$q.defer();
+      var routines:any={};
+      this.httpClient.get("/ums-webservice-academic/academic/routine/routineForTeacher",'application/json',
+          (data:any,etag:string)=>{
+            routines = data.entries;
+            defer.resolve(routines);
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>)=>{
+            console.error(response);
+            this.notify.error("Error in fetching routine data");
+          });
+
+      return defer.promise;
+    }
+
 
     public getRoomBasedClassRoutine(semesterId:number, roomId?:number):ng.IPromise<any>{
       var defer= this.$q.defer();
