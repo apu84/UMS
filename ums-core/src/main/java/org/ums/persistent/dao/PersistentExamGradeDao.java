@@ -72,8 +72,7 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
           + "Where tmp2.Course_id=Mst_Course.Course_id "
           + "And Mst_Course.Course_Id=Course_Syllabus_Map.Course_id "
           + "And Course_Syllabus_Map.Syllabus_Id=Mst_Syllabus.SYLLABUS_ID "
-          + "And MST_PROGRAM.PROGRAM_ID=MST_SYLLABUS.PROGRAM_ID "
-          + ")tmp3,MVIEW_TEACHERS "
+          + "And MST_PROGRAM.PROGRAM_ID=MST_SYLLABUS.PROGRAM_ID " + ")tmp3,MVIEW_TEACHERS "
           + "Where tmp3.preparer_id=MVIEW_TEACHERS.teacher_id (+))tmp4,MVIEW_TEACHERS "
           + "Where tmp4.scrutinizer_id=MVIEW_TEACHERS.teacher_id (+) "
           + ")tmp5, Marks_Submission_Status "
@@ -487,8 +486,9 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
   @Override
   public boolean saveGradeSheet(MarksSubmissionStatus actualStatus, List<StudentGradeDto> pGradeList)
       throws Exception {
-    batchUpdateGrade(actualStatus.getStatus(),actualStatus.getSemesterId(), actualStatus.getCourseId(),
-        actualStatus.getExamType(), actualStatus.getCourse().getCourseType(), pGradeList);
+    batchUpdateGrade(actualStatus.getStatus(), actualStatus.getSemesterId(),
+        actualStatus.getCourseId(), actualStatus.getExamType(), actualStatus.getCourse()
+            .getCourseType(), pGradeList);
     return true;
   }
 
@@ -514,9 +514,10 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
       public void setValues(PreparedStatement ps, int i) throws SQLException {
         StudentGradeDto gradeDto = pGradeList.get(i);
         if(courseType == CourseType.THEORY) {
-          if(gradeDto.getQuiz() == -1)
+          if(gradeDto.getQuiz() == -1) {
             ps.setNull(1, Types.NULL);
-          else
+          }
+          else {
             ps.setDouble(1, gradeDto.getQuiz());
           }
 
@@ -1085,5 +1086,4 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
     }
 
   }
-
 }

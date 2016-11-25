@@ -177,9 +177,11 @@ public class GradeSubmissionResourceHelper extends
       mutable.setStatus(CourseMarksSubmissionStatus.WAITING_FOR_SCRUTINY);
       mutable.commit(true);
 
-/*      marksSubmissionStatus =
-          mMarksSubmissionStatusManager.get(requestedStatusDTO.getSemesterId(),
-              requestedStatusDTO.getCourseId(), requestedStatusDTO.getExamType());*/
+      /*
+       * marksSubmissionStatus =
+       * mMarksSubmissionStatusManager.get(requestedStatusDTO.getSemesterId(),
+       * requestedStatusDTO.getCourseId(), requestedStatusDTO.getExamType());
+       */
 
       getContentManager().insertGradeLog(userId, actingRoleForCurrentUser, marksSubmissionStatus,
           CourseMarksSubmissionStatus.WAITING_FOR_SCRUTINY, gradeList);
