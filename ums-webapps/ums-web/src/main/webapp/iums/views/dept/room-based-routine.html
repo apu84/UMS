@@ -1,0 +1,64 @@
+<div onclick="resetCommonCollapsibleDivs()" id="arrowDiv">
+    <i class="fa fa-angle-double-right fa-cx"></i></i>
+</div>
+<div class="panel panel-green" id="leftDiv">
+    <div class="panel-heading">
+        <h3 class="panel-title">Select</h3>
+    </div>
+    <div class="panel-body pan">
+        <br>
+        <form action="" class="form-horizontal" data-validate=""  data-onvalidate="getRooms">
+            <div class="form-group">
+                <label class="col-md-4 control-label">Program Type</label>
+                <div class="col-md-7">
+                    <select name="programType" class="form-control required" data-ng-model="programTypeId"  data-ng-change="getActiveSemester(programTypeId)">
+                        <option data-ng-repeat="p in programTypes" value="{{p.id}}">{{p.name}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group" >
+                <label class="col-md-4 control-label">Semester</label>
+                <label class="col-md-4 control-label" >{{semester.name}}</label>
+            </div>
+            <div class="form-actions text-right pal">
+                <button type="button" class="btn btn-success">Search</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="rightDiv">
+    <div class="panel" style="min-height: 490px;">
+        <div class="panel-heading">
+            Room Based Routine
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <select name="roomNo" class="form-control required" data-ng-model="roomId"  data-ng-change="getActiveSemester(programTypeId)">
+                        <option value="">Select a room</option>
+                        <option data-ng-repeat="r in rooms" value="{{r.id}}">{{r.roomNo}}</option>
+                    </select>
+
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-success" data-ng-click="fetchOne()">Fetch</button>
+                </div>
+                <div class="col-md-4" align="right">
+                    <button class="btn btn-info" data-ng-click="fetchAll()">Fetch All</button>
+                </div>
+            </div>
+            <br>
+            <div class="row" data-ng-if="showById">
+                <div class="col-md-12">
+                    <embed data-ng-src="{{pdfFileByRoomId}}" width="100%" height="500px" />
+                </div>
+            </div>
+            <div class="row" data-ng-if="showAll">
+                <div class="col-md-12">
+                    <embed data-ng-src="{{pdfFile}}" width="100%" height="500px" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -230,9 +230,14 @@ module ums {
       $scope.chartData =[];
       this.initChart();
       $scope.$on('LastRepeaterElement', function(){
-        $("#panel_top").show();
-        $("#loading_panel").hide();
-        $(".img_tooltip").hide();
+        setTimeout(function()
+        {
+          $(".img_tooltip").hide();
+          $("#panel_top").show();
+          $("#loading_panel").hide();
+        }
+            ,400);
+
       });
 
       Utils.setValidationOptions("form-horizontal");
@@ -1400,19 +1405,21 @@ module ums {
 
     //Download GradeSheet in Excel Format
     private generateXls(): void {
-      this.httpClient.get("gradeReport/xls/semester/"+this.$scope.current_semesterId+"/courseid/"+this.$scope.current_courseId+"/examtype/"+this.$scope.current_examTypeId+"/coursetype/"+(this.$scope.courseType=="THEORY"?"1":"2")+"/role/"+this.$scope.currentActor, 'application/vnd.ms-excel',
+      var contentType=Utils.getFileContentType("xls");
+      this.httpClient.get("gradeReport/xls/semester/"+this.$scope.current_semesterId+"/courseid/"+this.$scope.current_courseId+"/examtype/"+this.$scope.current_examTypeId+"/coursetype/"+(this.$scope.courseType=="THEORY"?"1":"2")+"/role/"+this.$scope.currentActor, contentType,
           (data: any, etag: string) => {
-            var file = new Blob([data], {type: 'application/vnd.ms-excel'});
+            var file = new Blob([data], {type: contentType});
             var reader = new FileReader();
             reader.readAsDataURL(file);
-            reader.onloadend = function (e) {
-              window.open(reader.result, 'Excel', 'width=20,height=10,toolbar=0,menubar=0,scrollbars=no', false);
+            reader.onloadend = (e) => {
+              Utils.saveAsFile(reader.result, this.$scope.data.course_no);
             };
           },
           (response: ng.IHttpPromiseCallbackArg<any>) => {
             console.error(response);
           }, 'arraybuffer');
     }
+
     //Styling for different type registrations
     private calculateStyle(regType:number):any{
       var style={backgroundColor:''};

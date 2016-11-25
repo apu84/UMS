@@ -24,6 +24,39 @@ module ums{
     }
 
 
+    public getAllClassRooms():ng.IPromise<any>{
+      var defer = this.$q.defer();
+      var rooms:any={};
+      this.httpClient.get("/ums-webservice-academic/academic/classroom/all",'application/json',
+          (json:any,etag:string)=>{
+            rooms = json.entries;
+            defer.resolve(rooms);
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>)=>{
+            console.error(response);
+            this.notify.error("Error in fetching room data");
+          });
+
+      return defer.promise;
+    }
+
+    public getClassRoomsBasedOnRoutine(semesterId:number):ng.IPromise<any>{
+      var defer = this.$q.defer();
+      var rooms:any={};
+      this.httpClient.get("/ums-webservice-academic/academic/classroom/forRoutine/semester/"+semesterId,'application/json',
+          (json:any,etag:string)=>{
+            rooms = json.entries;
+            defer.resolve(rooms);
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>)=>{
+            console.error(response);
+            this.notify.error("Error in fetching room data");
+          });
+
+      return defer.promise;
+    }
+
+
   }
 
   UMS.service("classRoomService",ClassRoomService);

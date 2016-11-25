@@ -33,6 +33,8 @@ module ums {
 
     //map
     courseIdMapCourseNo:any;
+    roomIdMapRoomNo:any;
+    roomNoMapRoomId:any;
     dateMap:any;
     dateMapFromDateToNumber:any;
     courseNoMapCourseId:any;
@@ -108,6 +110,7 @@ module ums {
     endTime:string;
     duration:string;
     roomNo:string;
+    roomId:number;
     updated:boolean;
     editRoutine:boolean;
     showEditButton:boolean;
@@ -187,7 +190,7 @@ module ums {
       this.$scope.showSaveButton=true;
       for(var i=0;i<this.$scope.routineArr.length;i++){
         if(this.$scope.routineArr[i]===routine){
-         // this.$scope.routineArr.splice(i,1);
+          // this.$scope.routineArr.splice(i,1);
           this.$scope.routineArr[i].status="deleted";
           break;
         }
@@ -262,15 +265,15 @@ module ums {
     }
     private editRoutineData(routine:IClassRoutine){
       /*//this.$scope.courseType
-      this.$scope.showSaveButton=true;
-      this.initializeAddVariables();
-      this.$scope.addedDate=routine.day.toString();
-      this.$scope.addedCourse=routine.courseId;
-      this.$scope.addedStartTime = routine.startTime;
-      this.$scope.addedEndTime = routine.endTime;
-      this.$scope.addedRoomNo = routine.roomNo;
-      this.$scope.courseType=this.fetchCourseType(routine.courseId);
-      this.$scope.addedSection=routine.section;*/
+       this.$scope.showSaveButton=true;
+       this.initializeAddVariables();
+       this.$scope.addedDate=routine.day.toString();
+       this.$scope.addedCourse=routine.courseId;
+       this.$scope.addedStartTime = routine.startTime;
+       this.$scope.addedEndTime = routine.endTime;
+       this.$scope.addedRoomNo = routine.roomNo;
+       this.$scope.courseType=this.fetchCourseType(routine.courseId);
+       this.$scope.addedSection=routine.section;*/
 
 
       routine.editRoutine=true;
@@ -280,6 +283,8 @@ module ums {
       if(this.$scope.showResetButton==false){
         this.$scope.showResetButton=true;
       }
+      this.activateSection(routine);
+      console.log(routine);
 
     }
 
@@ -287,7 +292,7 @@ module ums {
       var courseType:string="";
       for(var i=0;i<this.$scope.courseArr.length;i++){
         if(this.$scope.courseArr[i].id==courseId){
-         courseType = this.$scope.courseArr[i].type;
+          courseType = this.$scope.courseArr[i].type;
           break;
         }
       }
@@ -363,6 +368,7 @@ module ums {
                   });
 
                 }else{
+                  this.initializeColor();
                   this.notify.error("Time overlapping is not allowed");
                 }
               });
@@ -395,9 +401,10 @@ module ums {
       for(var i=0;i<this.$scope.tmpRoutineArr.length;i++){
         if(this.$scope.tmpRoutineArr[i].day==routine.day){
           if(Number(this.$scope.timeWithTimeIdMap[routine.startTime])>= Number(this.$scope.timeWithTimeIdMap[this.$scope.tmpRoutineArr[i].startTime]) &&
-              Number(this.$scope.timeWithTimeIdMap[routine.endTime])<= Number(this.$scope.timeWithTimeIdMap[this.$scope.tmpRoutineArr[i].endTime]) &&
+              Number(this.$scope.timeWithTimeIdMap[routine.endTime])<=Number(this.$scope.timeWithTimeIdMap[this.$scope.tmpRoutineArr[i].endTime]) &&
               this.$scope.tmpRoutineArr[i].roomNo== routine.roomNo){
             foundOccurrence=true;
+            this.colorOverlappedRoutine(this.$scope.tmpRoutineArr[i]);
             break;
           }
         }
@@ -411,15 +418,15 @@ module ums {
     private assignValueToRoutine():ng.IPromise<any>{
       var defer = this.$q.defer();
       var routine:any={};
-     /* routine.day=+this.$scope.addedDate;
-      routine.courseId = this.$scope.addedCourse;
-      routine.section= this.$scope.addedSection;
-      routine.startTime = this.$scope.addedStartTime;
-      routine.endTime=this.$scope.addedEndTime;
-      routine.roomNo = this.$scope.addedRoomNo;
-      routine.updated=true;
-      routine.courseType=this.$scope.courseType;*/
-     routine= angular.copy(this.$scope.addedRoutine);
+      /* routine.day=+this.$scope.addedDate;
+       routine.courseId = this.$scope.addedCourse;
+       routine.section= this.$scope.addedSection;
+       routine.startTime = this.$scope.addedStartTime;
+       routine.endTime=this.$scope.addedEndTime;
+       routine.roomNo = this.$scope.addedRoomNo;
+       routine.updated=true;
+       routine.courseType=this.$scope.courseType;*/
+      routine= angular.copy(this.$scope.addedRoutine);
 
       routine.status='created';
       this.$scope.routineArr.push(routine);
@@ -436,11 +443,11 @@ module ums {
       var defer = this.$q.defer();
       var routine=this.$scope.addedRoutine;
       if( routine.roomNo=="" ||
-        routine.section=="" ||
-        routine.courseId=="" ||
-        routine.day==null ||
-        routine.startTime=="" ||
-        routine.endTime==""){
+          routine.section=="" ||
+          routine.courseId=="" ||
+          routine.day==null ||
+          routine.startTime=="" ||
+          routine.endTime==""){
         defer.resolve("false");
       }else{
         defer.resolve("true");
@@ -461,45 +468,70 @@ module ums {
 
     private courseSelected(courseNo:string,routine:IClassRoutine):void{
 
-      this.checkIfTheCourseIsAlreadySelectedInTheSameDate(courseNo,routine).then((found:boolean)=>{
-        if(found==false){
-          routine.section="";
-          routine.courseId=this.$scope.courseNoMapCourseId[courseNo];
-          routine.courseNo = courseNo;
-          routine.courseType=this.$scope.courseNoMapCourse[this.$scope.courseIdMapCourseNo[routine.courseId]].type;
-          //this.$scope.courseType="";
-          for(var i=0;i<this.$scope.courseArr.length;i++){
-            if(this.$scope.courseArr[i].id==this.$scope.courseNoMapCourseId[courseNo]){
-              this.$scope.courseType = angular.copy(this.$scope.courseArr[i].type);
-              break;
-            }
-          }
+
+      routine.section="";
+      routine.courseId=this.$scope.courseNoMapCourseId[courseNo];
+      routine.courseNo = courseNo;
+      routine.courseType=this.$scope.courseNoMapCourse[this.$scope.courseIdMapCourseNo[routine.courseId]].type;
+      //this.$scope.courseType="";
+      for(var i=0;i<this.$scope.courseArr.length;i++){
+        if(this.$scope.courseArr[i].id==this.$scope.courseNoMapCourseId[courseNo]){
+          this.$scope.courseType = angular.copy(this.$scope.courseArr[i].type);
+          break;
+        }
+      }
 
 
-          if(this.$scope.courseType=="SESSIONAL"){
-            this.$scope.sessionalSections=[];
-            if(this.$scope.section=='A'){
-              this.$scope.sessionalSections=this.appConstants.sessionalSectionsA;
-            }
-            else if(this.$scope.section=='B'){
-              this.$scope.sessionalSections= this.appConstants.sessionalSectionsB;
-            }
-            else if(this.$scope.section=='C'){
-              this.$scope.sessionalSections= this.appConstants.sessionalSectionsC ;
-            }
-            else{
-              this.$scope.sessionalSections= this.appConstants.sessionalSectionsD;
-            }
-          }else{
-            routine.section = this.$scope.section;
-          }
+      if(this.$scope.courseType=="SESSIONAL"){
+        this.$scope.sessionalSections=[];
+        if(this.$scope.section=='A'){
+          this.$scope.sessionalSections=this.appConstants.sessionalSectionsA;
+        }
+        else if(this.$scope.section=='B'){
+          this.$scope.sessionalSections= this.appConstants.sessionalSectionsB;
+        }
+        else if(this.$scope.section=='C'){
+          this.$scope.sessionalSections= this.appConstants.sessionalSectionsC ;
         }
         else{
-          this.notify.error("The course is already assigned in the current date");
+          this.$scope.sessionalSections= this.appConstants.sessionalSectionsD;
         }
-      });
+      }else{
+        routine.section = this.$scope.section;
+      }
 
 
+
+
+    }
+
+
+    private activateSection(routine:IClassRoutine){
+      console.log("in the active section");
+      console.log(routine);
+      console.log(routine.courseType);
+      if(routine.courseType=='SESSIONAL'){
+        this.$scope.sessionalSections=[];
+
+        if(this.$scope.section=='A'){
+          this.$scope.sessionalSections=this.appConstants.sessionalSectionsA;
+          console.log("In sessional section A");
+          console.log(this.$scope.sessionalSections);
+
+        }
+        else if(this.$scope.section=='B'){
+          this.$scope.sessionalSections= this.appConstants.sessionalSectionsB;
+
+        }
+        else if(this.$scope.section=='C'){
+          this.$scope.sessionalSections= this.appConstants.sessionalSectionsC ;
+        }
+        else{
+          this.$scope.sessionalSections= this.appConstants.sessionalSectionsD;
+        }
+      }else{
+        routine.section = this.$scope.section;
+      }
 
     }
 
@@ -532,10 +564,10 @@ module ums {
 
       this.$timeout(()=>{
         for(var i=0;i<this.$scope.routineArr.length;i++){
-            if(this.$scope.routineArr[i].backgroundColor=='yellow'){
-              console.log("making white");
-              this.$scope.routineArr[i].backgroundColor="white";
-            }
+          if(this.$scope.routineArr[i].backgroundColor=='yellow'){
+            console.log("making white");
+            this.$scope.routineArr[i].backgroundColor="white";
+          }
         }
       },4000);
     }
@@ -579,6 +611,21 @@ module ums {
     }
 
 
+    private createRoomMaps(rooms:Array<IClassRoom>):ng.IPromise<any>{
+
+      var defer = this.$q.defer();
+      this.$scope.roomIdMapRoomNo={};
+      this.$scope.roomNoMapRoomId={};
+      for(var i=0;i<rooms.length;i++){
+        this.$scope.roomIdMapRoomNo[rooms[i].id]=rooms[i].roomNo;
+        this.$scope.roomNoMapRoomId[rooms[i].roomNo] = rooms[i].id;
+      }
+
+      defer.resolve("done");
+      return defer.promise;
+    }
+
+
     private searchForRoutineData():void{
 
       this.setSemesterNameAndProgramNameAndProgramType();
@@ -614,31 +661,37 @@ module ums {
         this.classRoomService.getClassRooms().then((rooms:Array<IClassRoom>)=>{
           this.$scope.roomArr=[];
           this.$scope.roomArr = rooms;
+          console.log("Rooms----");
+          console.log(rooms);
+          this.createRoomMaps(rooms).then((done:string)=>{
+            this.$scope.routineArr=[];
+            this.$scope.tmpRoutineArr=[];
+            this.classRoutineService.getClassRoutineForEmployee(this.$scope.semesterId,this.$scope.studentsYear,this.$scope.studentsSemester,this.$scope.section)
+                .then((routineArr:Array<IClassRoutine>)=>{
+                  console.log('class routines--->";')
+                  console.log(routineArr);
+                  for(var k=0;k<routineArr.length;k++){
+                    routineArr[k].backgroundColor="white";
+                    routineArr[k].day = this.$scope.dateMap[String(routineArr[k].day)];
+                    routineArr[k].courseNo = this.$scope.courseIdMapCourseNo[routineArr[k].courseId];
+                    routineArr[k].courseType = this.$scope.courseNoMapCourse[this.$scope.courseIdMapCourseNo[routineArr[k].courseId]].type;
+                    routineArr[k].roomNo = this.$scope.roomIdMapRoomNo[routineArr[k].roomId];
+                    this.$scope.routineArr.push(angular.copy(routineArr[k]));
+                    this.$scope.tmpRoutineArr.push(angular.copy(routineArr[k]));
+                  }
+
+                  console.log(this.$scope.routineArr);
+
+                  this.$scope.showLoader=false;
+
+                  if(routineArr.length>0){
+                    this.$scope.showRoutineTable=true;
+                  }
+
+                });
+          });
 
 
-          this.$scope.routineArr=[];
-          this.$scope.tmpRoutineArr=[];
-          this.classRoutineService.getClassRoutineForEmployee(this.$scope.semesterId,this.$scope.studentsYear,this.$scope.studentsSemester,this.$scope.section)
-              .then((routineArr:Array<IClassRoutine>)=>{
-                console.log(this.$scope.courseNoMapCourse);
-                for(var k=0;k<routineArr.length;k++){
-                  routineArr[k].backgroundColor="white";
-                  routineArr[k].day = this.$scope.dateMap[String(routineArr[k].day)];
-                  routineArr[k].courseNo = this.$scope.courseIdMapCourseNo[routineArr[k].courseId];
-                  routineArr[k].courseType = this.$scope.courseNoMapCourse[this.$scope.courseIdMapCourseNo[routineArr[k].courseId]].type;
-                  this.$scope.routineArr.push(angular.copy(routineArr[k]));
-                  this.$scope.tmpRoutineArr.push(angular.copy(routineArr[k]));
-                }
-
-                console.log(this.$scope.routineArr);
-
-                this.$scope.showLoader=false;
-
-                if(routineArr.length>0){
-                  this.$scope.showRoutineTable=true;
-                }
-
-              });
         });
 
       });
@@ -650,7 +703,7 @@ module ums {
       //this.$scope.dates = this.appConstants.weekday;
       this.createDayMaps();
       this.createTimeMaps();
-      }
+    }
 
     private createDayMaps():void{
       this.$scope.dates = this.appConstants.weekday;
@@ -740,7 +793,7 @@ module ums {
           item['academicSemester']=this.$scope.studentsSemester;
           item['startTime'] = r.startTime;
           item['endTime'] = r.endTime;
-          item['roomNo']=r.roomNo;
+          item['roomNo']=this.$scope.roomNoMapRoomId[r.roomNo];
           item['status'] = r.status;
           jsonObject.push(item);
         }

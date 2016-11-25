@@ -108,31 +108,30 @@ public class SeatPlanGroupResourceHelper extends
        * children.add(toJson(seatPlanGroup,pUriInfo,localCache)); } } else{
        * genericResponse.setMessage(genericResponse.getMessage() + "\n" +
        * previousResponse.getMessage()); }
-       */
+       *//*
+          * 
+          * List<SeatPlanGroup> seatplanGroups =
+          * mSeatPlanGroupManager.getGroupBySemester(pSemesterId, type);
+          * 
+          * List<MutableSeatPlanGroup> mutableSeatPlanGroups = new ArrayList<>();
+          * 
+          * for(SeatPlanGroup group : seatplanGroups) { MutableSeatPlanGroup mSeatPlanGroup = new
+          * PersistentSeatPlanGroup(); PersistentSemester semester = new PersistentSemester();
+          * semester.setId(group.getSemester().getId()); mSeatPlanGroup.setSemester(semester);
+          * PersistentProgram program = new PersistentProgram();
+          * program.setId(group.getProgram().getId()); mSeatPlanGroup.setProgram(program);
+          * mSeatPlanGroup.setAcademicYear(group.getAcademicYear());
+          * mSeatPlanGroup.setAcademicSemester(group.getAcademicSemester());
+          * mSeatPlanGroup.setGroupNo(group.getGroupNo());
+          * mSeatPlanGroup.setExamType(group.getExamType());
+          * mSeatPlanGroup.setProgramShortName(group.getProgramName());
+          * mSeatPlanGroup.setTotalStudentNumber(group.getTotalStudentNumber());
+          * mutableSeatPlanGroups.add(mSeatPlanGroup); }
+          * 
+          * mSeatPlanGroupManager.create(mutableSeatPlanGroups);
+          */
 
-      List<SeatPlanGroup> seatplanGroups =
-          mSeatPlanGroupManager.getGroupBySemester(pSemesterId, type);
-
-      List<MutableSeatPlanGroup> mutableSeatPlanGroups = new ArrayList<>();
-
-      for(SeatPlanGroup group : seatplanGroups) {
-        MutableSeatPlanGroup mSeatPlanGroup = new PersistentSeatPlanGroup();
-        PersistentSemester semester = new PersistentSemester();
-        semester.setId(group.getSemester().getId());
-        mSeatPlanGroup.setSemester(semester);
-        PersistentProgram program = new PersistentProgram();
-        program.setId(group.getProgram().getId());
-        mSeatPlanGroup.setProgram(program);
-        mSeatPlanGroup.setAcademicYear(group.getAcademicYear());
-        mSeatPlanGroup.setAcademicSemester(group.getAcademicSemester());
-        mSeatPlanGroup.setGroupNo(group.getGroupNo());
-        mSeatPlanGroup.setExamType(group.getExamType());
-        mSeatPlanGroup.setProgramShortName(group.getProgramName());
-        mSeatPlanGroup.setTotalStudentNumber(group.getTotalStudentNumber());
-        mutableSeatPlanGroups.add(mSeatPlanGroup);
-      }
-
-      mSeatPlanGroupManager.create(mutableSeatPlanGroups);
+      mSeatPlanGroupManager.createSeatPlanGroup(pSemesterId, type);
 
       seatPlanGroupForSemester =
           mSeatPlanGroupManager.getGroupBySemesterTypeFromDb(pSemesterId, type);

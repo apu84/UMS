@@ -37,9 +37,9 @@
     '/studentCourseMaterial': {title: 'Course Materials', 'breadcrumb': ['Course Materials']},
     '/gradeSubmissionDeadLine': {title: 'Grade Submission Deadline', 'breadcrumb': ['Grade Submission Deadline']},
     '/studentAdviser': {title: 'Students Adviser', 'breadcrumb': ['Students Adviser']},
+    '/advisingStudents': {title: 'Advising Students', 'breadcrumb': ['Advising Students']},
     '/resultProcessing': {title: 'Result Processing', 'breadcrumb': ['Result Processing']},
-    '/attendanceSheet': {title: 'Attendance Sheet', 'breadcrumb': ['Attendance Sheet']}
-
+    '/classAttendance': {title: 'Attendance Sheet', 'breadcrumb': ['Attendance Sheet']}
 
   };
 

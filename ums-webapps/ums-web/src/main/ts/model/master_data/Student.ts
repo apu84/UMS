@@ -35,5 +35,6 @@ module ums {
     theorySection:string;
     sessionalSection:string;
     backgroundColor:string;
+    text:string;
   }
 }

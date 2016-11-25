@@ -4,7 +4,8 @@ import java.text.SimpleDateFormat;
 
 public interface Constants {
   public static final String DATE_FORMAT = "dd/MM/yyyy";
-  public static final String DATE_TIME_FORMAT = "dd/MM/yyyy HH:mm:ss";
+  public static final SimpleDateFormat DATE_TIME_FORMAT = new SimpleDateFormat(
+      "dd-MM-yyyy HH:mm:ss");
   public static final SimpleDateFormat DF_dd_Mon_YY_Time = new SimpleDateFormat(
       "dd MMM, yy HH:mm:ss");
   public static final String SERVICE_CONTEXT = "services-context.xml";
@@ -22,5 +23,9 @@ public interface Constants {
   public static final String HEAD = "head";
   public static final String COE = "coe";
   public static final String VC = "vc";
+
+  // Application Labels
   public static final String University_AllCap = "AHSANULLAH UNIVERSITY OF SCIENCE AND TECHNOLOGY";
+  public static final String University_InitCap = "Ahsanullah University of Science and Technology";
+
 }

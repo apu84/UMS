@@ -1,14 +1,9 @@
 package org.ums.common.academic.resource.helper;
 
-import com.itextpdf.text.DocumentException;
-import org.apache.commons.jexl2.UnifiedJEXL;
-import org.apache.commons.jexl2.parser.ParseException;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.NullValueInNestedPathException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
@@ -32,12 +27,8 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.io.OutputStream;
 import java.net.URI;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.sql.Time;
-import java.util.stream.Stream;
 
 @Component
 public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutine, String> {
@@ -165,9 +156,13 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
     return object.build();
   }
 
-  public JsonObject getRoutineForTeacher(final String teacherId, final Request pRequest,
-      final UriInfo pUriInfo) throws Exception {
-    List<Routine> routines = getContentManager().getTeacherRoutine(teacherId);
+  public JsonObject getRoutineForTeacher(final Request pRequest, final UriInfo pUriInfo)
+      throws Exception {
+    String userId = SecurityUtils.getSubject().getPrincipal().toString();
+    User user = mUserManager.get(userId);
+    String employeeId = user.getEmployeeId();
+    // Employee employee = mEmployeeManager.getByEmployeeId(employeeId);
+    List<Routine> routines = getContentManager().getTeacherRoutine(employeeId);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
@@ -178,6 +173,11 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
     object.add("entries", children);
     localCache.invalidate();
     return object.build();
+  }
+
+  public void getRoomBasedRoutineReport(final OutputStream pOutputStream, final int pSemesterId,
+      final int pRoomid, final Request pRequest, final UriInfo pUriInfo) throws Exception {
+    mRoutineGenerator.createRoomBasedClassRoutineReport(pOutputStream, pSemesterId, pRoomid);
   }
 
   public void getRoutineReportForTeacher(final OutputStream pOutputStream, final Request pRequest,

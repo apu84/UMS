@@ -40,6 +40,26 @@ module ums {
       return input.split(',');
     }
   });
+  /* Filter used in course-teacher.html, it returns the total size of the keys in a json object */
+  UMS.filter('numKeys', function() {
+    return function(json) {
+      var keys = Object.keys(json)
+      return keys.length;
+    }
+  });
+
+  UMS.filter('nth', function() {
+    return function(serial) {
+      switch(serial){
+        case 1: return serial+"st";
+        case 2: return serial+"st";
+        case 3: return serial+"rd";
+        case 4: return serial+"th";
+        case 5: return serial+"th";
+      }
+      return serial;
+    }
+  });
 
   UMS.config(($stateProvider, $urlRouterProvider, $locationProvider) => {
     //
@@ -172,6 +192,24 @@ module ums {
           url: "/teachersRoutine",
           controller: 'TeachersRoutine',
           templateUrl: 'views/dept/teachers-routine.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: [
+                  'vendors/bootstrap-switch/css/bootstrap-switch.css',
+                  'vendors/bootstrap-datepicker/css/datepicker.css',
+                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                  'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
+                  'vendors/bootstrap-daterangepicker/daterangepicker.js'
+                ]
+              });
+            }]
+          }
+        })
+        .state('roomBasedRoutine', {
+          url: "/roomBasedRoutine",
+          controller: 'RoomBasedRoutine',
+          templateUrl: 'views/dept/room-based-routine.html',
           resolve: {
             loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
               return $ocLazyLoad.load({
@@ -680,22 +718,23 @@ module ums {
           controller: 'ResultProcessing',
           templateUrl: 'views/result/result-processing.html'
         })
-        .state('attendanceSheet', {
-          url: "/attendanceSheet",
-          controller: 'AttendanceSheet',
-          templateUrl: 'views/dept/attendance-sheet.html'
-          /*
+        .state('advisingStudents', {
+          url: "/advisingStudents",
+          controller: 'AdvisingStudents',
+          templateUrl: 'views/dept/advising-students.html'
+        })
+        .state('classAttendance', {
+          url: "/classAttendance",
+          controller: 'ClassAttendance',
+          templateUrl: 'views/dept/class-attendance.html',
           resolve: {
             loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
               return $ocLazyLoad.load({
-                files: ['http://handsontable.github.io/ngHandsontable/bower_components/handsontable/dist/handsontable.full.css',
-                  'http://handsontable.github.io/ngHandsontable/bower_components/angular/angular.js',
-                  'http://handsontable.github.io/ngHandsontable/bower_components/handsontable/dist/handsontable.full.js',
-                  'http://handsontable.github.io/ngHandsontable/dist/ngHandsontable.js'
-                ]
+                files: ['vendors/bootstrap-datepicker/css/datepicker.css',
+                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js']
               });
             }]
-          }*/
+          }
         })
       //In database use /dummyController/H or /dummyController/T in the location column
       //https://localhost/ums-web/iums/#/dummyConroller/T

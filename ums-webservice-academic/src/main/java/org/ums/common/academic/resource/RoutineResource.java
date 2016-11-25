@@ -2,6 +2,7 @@ package org.ums.common.academic.resource;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Component;
 import org.ums.manager.RoutineManager;
 import org.ums.resource.Resource;
@@ -32,10 +33,10 @@ public class RoutineResource extends MutableRoutineResource {
   }
 
   @GET
-  @Path("/routineForTeacher/{teacherId}")
-  public JsonObject getRoutineForTeachers(final @Context Request pRequest,
-      final @PathParam("teacherId") String teacherId) throws Exception {
-    return mRoutineResourceHelper.getRoutineForTeacher(teacherId, pRequest, mUriInfo);
+  @Path("/routineForTeacher")
+  public JsonObject getRoutineForTeachers(final @Context Request pRequest) throws Exception {
+
+    return mRoutineResourceHelper.getRoutineForTeacher(pRequest, mUriInfo);
   }
 
   @GET
@@ -48,6 +49,26 @@ public class RoutineResource extends MutableRoutineResource {
       public void write(OutputStream pOutputStream) throws IOException, WebApplicationException {
         try {
           mRoutineResourceHelper.getRoutineReportForTeacher(pOutputStream, pRequest, mUriInfo);
+        } catch(Exception e) {
+          mLogger.error(e.getMessage());
+          throw new WebApplicationException(e);
+        }
+      }
+    };
+  }
+
+  @GET
+  @Path("/roomBasedRoutine/semester/{semester-id}/room/{room-id}")
+  @Produces("application/pdf")
+  public StreamingOutput createRoomBasedRoutineReport(
+      final @PathParam("semester-id") int pSemesterId, final @PathParam("room-id") int pRoomId,
+      final @Context Request pRequest) throws Exception {
+    return new StreamingOutput() {
+      @Override
+      public void write(OutputStream pOutputStream) throws IOException, WebApplicationException {
+        try {
+          mRoutineResourceHelper.getRoomBasedRoutineReport(pOutputStream, pSemesterId, pRoomId,
+              pRequest, mUriInfo);
         } catch(Exception e) {
           mLogger.error(e.getMessage());
           throw new WebApplicationException(e);

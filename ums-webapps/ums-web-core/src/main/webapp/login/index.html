@@ -22,10 +22,10 @@
       authenticationHelper.authenticate();
       console.debug(authenticationHelper);
     }
-/*    $('#loginForm').submit(function (event) { console.debug("submit");
-      alert( "Handler for .submit() called." );
-      event.preventDefault();
-    });*/
+    /*    $('#loginForm').submit(function (event) { console.debug("submit");
+     alert( "Handler for .submit() called." );
+     event.preventDefault();
+     });*/
     $('#forgotPasswordForm').submit(function (event) {
       event.preventDefault();
     });
@@ -91,7 +91,13 @@
       <br/><br/>
 
       <div class="contact-wrap">
-        <div class="error-msm" id="errorDiv" style="clear: both;display:none"></div>
+        <div class="error-msm" id="errorDiv" style="clear: both;display:block;background-color: #D4EFDF;text-align: left;padding-left: 10px;color: #000000;">
+          <b>Contact Information - </b><br/><br/>
+
+          <b>Email:</b> contact.iums@gmail.com <br/>
+          <b>Ext:</b> 338
+
+        </div>
       </div>
 
       <div class="successdDiv" style="display:none">

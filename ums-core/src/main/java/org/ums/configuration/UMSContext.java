@@ -486,4 +486,9 @@ public class UMSContext {
     return validator;
   }
 
+  @Bean
+  ClassAttendanceManager classAttendanceManager() {
+    return new PersistentClassAttendanceDao(mTemplateFactory.getJdbcTemplate());
+  }
+
 }

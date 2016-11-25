@@ -42,6 +42,7 @@ public class StudentBuilder implements Builder<Student, MutableStudent> {
     pBuilder.add("department", pUriInfo.getBaseUriBuilder().path("academic").path("department")
         .path(String.valueOf(department.getId())).build().toString());
     pBuilder.add("departmentName", department.getLongName());
+    pBuilder.add("departmentShortName", department.getShortName());
 
     Semester semester = (Semester) pLocalCache.cache(() -> pStudent.getSemester(), pStudent.getSemesterId(), Semester.class);
     pBuilder.add("semesterId", semester.getId());
@@ -54,6 +55,7 @@ public class StudentBuilder implements Builder<Student, MutableStudent> {
     pBuilder.add("program", pUriInfo.getBaseUriBuilder().path("academic").path("program")
         .path(String.valueOf(program.getId())).build().toString());
     pBuilder.add("programName", program.getLongName());
+    pBuilder.add("programShortName", program.getShortName());
     pBuilder.add("programTypeId", program.getProgramTypeId());
     pBuilder.add("year", pStudent.getCurrentYear());
     pBuilder.add("academicSemester", pStudent.getCurrentAcademicSemester());
@@ -121,6 +123,16 @@ public class StudentBuilder implements Builder<Student, MutableStudent> {
     pMutableStudent.setGuardianMobileNo(pJsonObject.getString("guardianMobileNo"));
     pMutableStudent.setGuardianPhoneNo(pJsonObject.getString("guardianPhoneNo"));
     pMutableStudent.setGuardianEmail(pJsonObject.getString("guardianEmail"));
+    if(pJsonObject.getString("adviser") != null) {
+      PersistentTeacher teacher = new PersistentTeacher();
+      teacher.setId(pJsonObject.getString("adviser"));
+      pMutableStudent.setAdviser(teacher);
+    }
+  }
+
+  public void buildAdvisor(final MutableStudent pMutableStudent, final JsonObject pJsonObject,
+      final LocalCache pLocalCache) throws Exception {
+    pMutableStudent.setId(pJsonObject.getString("id"));
     if(pJsonObject.getString("adviser") != null) {
       PersistentTeacher teacher = new PersistentTeacher();
       teacher.setId(pJsonObject.getString("adviser"));

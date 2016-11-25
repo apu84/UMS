@@ -1,0 +1,238 @@
+<style type="text/css">
+    /* Page Specific Design for HandsOnTable */
+    .table>tbody>tr>td{
+        padding-bottom: 5px !important;
+        padding-top: 5px !important;
+    }
+    .handsontableInput {
+        box-shadow: 0 0 0 2px #5292F7 inset !important;
+    }
+    .currentRow {
+        background-color: #E0FFFF !important;
+    }
+    .currentCol {
+        background-color: #E7E8EF !important;
+    }
+    .handsontable .htDimmed {
+        color: #000000 !important;
+    }
+    input[type=checkbox], input[type=radio]{
+        margin: 0px !important;
+    }
+    .label-info, .badge-info{
+        margin-top: -3px !important;
+    }
+</style>
+<div class="row" id="topArrowDiv">
+    <div class="col-md-2 col-md-offset-5">
+        <center>
+            <i class="fa fa-chevron-down" aria-hidden="true" onclick="resetTopBottomDivs()"  style="cursor: pointer;"></i>
+        </center>
+    </div>
+</div>
+
+<div class="row" id="courseSelectionDiv">
+    <div  onclick="resetCommonCollapsibleDivs()" id="arrowDiv">
+        <i class="fa fa-angle-double-right fa-cx"></i></i>
+    </div>
+    <div class="panel panel-green"  id="leftDiv">
+        <div class="panel-heading">
+            <h3 class="panel-title">Select </h3>
+        </div>
+        <div class="panel-body pan">
+            <form action="" class="form-horizontal" data-validate=""  data-onvalidate="fetchCourseInfo" id="searchForm">
+                <div class="form-body pal">
+                    <div data-program-selector="" data-model="attendanceSearchParamModel.programSelector"></div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Semester</label>
+                        <div class="col-md-8">
+                            <select class="form-control required"
+                                    data-ng-model="attendanceSearchParamModel.semesterId"
+                                    ng-init="attendanceSearchParamModel.academicSemesterId=''"  id="semester_id"  data-convert-to-number>
+                                <option data-ng-repeat="semester in attendanceSearchParamModel.programSelector.getSemesters()"
+                                        value="{{semester.id}}">
+                                    {{semester.name}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-actions text-right pal">
+                    <button type="button" class="btn btn-success">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="rightDiv" >
+        <div class="panel">
+            <div class="panel-heading">Available Course List</div>
+            <div class="panel-body">
+                <div class="spinner" ng-show="loadingVisibility">
+                    <div class="bounce1"></div>
+                    <div class="bounce2"></div>
+                    <div class="bounce3"></div>
+                </div>
+                <div data-ng-if="contentVisibility">
+                    <table class="table table-bordered table-advanced">
+                        <thead>
+                        <tr role="row" class="heading">
+                            <th width="10%">Program</th>
+                            <th width="8%">CourseNo</th>
+                            <th width="30%">Course Title</th>
+                            <th width="8%" style="text-align: center;">CrHr</th>
+                            <th width="15%" style="text-align: center;">Sections</th>
+                            <th width="10%">Attn. Sheet</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr data-ng-repeat="(courseId, courseTeacher) in entries" data-emit-last-repeater-element>
+                            <td>{{::courseTeacher.programName}}</td>
+                            <td>{{::courseTeacher.courseNo}}</td>
+                            <td>{{::courseTeacher.courseTitle}}</td>
+                            <td  style="text-align: center;">{{::courseTeacher.courseCrHr}}</td>
+                            <td  style="text-align: center;">{{::courseTeacher.section}}
+                            </td>
+                            <td>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <select style="height: 25px;" id="section_{{::courseTeacher.courseId}}">
+                                            <option ng-repeat="section in courseTeacher.section | $split">{{section}}</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6" style="margin-top: 4px;">
+                                        <a href="javascript:;" class="btn btn-xs btn-default"
+                                           data-ng-click="showAttendanceSheet(courseTeacher,'All')" style="background-color: #ffffff;border: 1px solid blue;margin-top: -5px;">
+                                            <i class="fa fa-edit" style="color: blue;" aria-hidden="true"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div id="attendanceSheetBlock" style="display: none;">
+    <div class="row">
+        <div class="col-md-12"  style="padding-top: 5px;">
+            <span class="label label-default">Course No</span> : {{selectedCourse.courseNo}}
+            <span class="label label-default" style="margin-left: 10px;">Course Title</span> : {{selectedCourse.courseTitle}}
+            <span class="label label-default" style="margin-left: 10px;">Section</span> : {{selectedCourse.section}}
+             <span class="label label-default" style="margin-left: 10px;">Student Category</span> : {{selectedStudentCategory}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12"  style="padding-top: 5px;">
+            <hot-table hot-id="attendanceHandsOnTable"
+                       settings="data.settings"
+                       datarows="data.items"
+                       columns="data.columns">
+            </hot-table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="dateSerialModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                <h4 class="modal-title">Select a Date</h4></div>
+            <div class="modal-body"><p>
+                Serial: <input type="text" id="class_serial" />   Date : <input type="text" id="class_date" />
+            </p></div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
+                <button type="button" class="btn btn-primary"  data-ng-click="setDate()">Set Selected Date</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    function resetTopBottomDivs(){
+        $("#topArrowDiv").hide(10);
+        $("#courseSelectionDiv").show(200);
+    }
+
+    function attendanceColumnOperation(operationType,row,column,value) {
+        var scope = getAngularScope();
+        scope.$apply(function () {
+            scope.attendanceColumnOperation(operationType,row,column,value);
+        });
+    }
+    function saveAttendance(row,column){
+        var scope = getAngularScope();
+        scope.$apply(function () {
+            scope.saveAttendance(row,column);
+        });
+    }
+    function deleteAttendance(row,column){
+        var scope = getAngularScope();
+        scope.$apply(function () {
+            scope.deleteAttendance(row,column);
+        });
+    }
+
+    function showCalendar(serial) {
+        var scope = getAngularScope();
+        scope.$apply(function () {
+            scope.showCalendar(serial);
+        });
+    }
+
+    function changeCheckboxValue(row,col,value) {
+        var scope = getAngularScope();
+        scope.$apply(function () {
+            scope.changeCheckboxValue(row,col,value);
+        });
+    }
+
+    function insertNewAttendanceColumn() {
+        var scope = getAngularScope();
+        scope.$apply(function () {
+            scope.insertNewAttendanceColumn();
+        });
+    }
+    function downloadSectionWiseXls() {
+        var scope = getAngularScope();
+        scope.$apply(function () {
+            scope.downloadSectionWiseXls();
+        });
+    }
+    function refreshAttendanceSheet() {
+        var scope = getAngularScope();
+        scope.$apply(function () {
+            scope.refreshAttendanceSheet();
+        });
+    }
+
+    function showAttendanceSheetByStudentCategory(studentCategory) {
+        var scope = getAngularScope();
+        scope.$apply(function () {
+            scope.showAttendanceSheetByStudentCategory(studentCategory);
+        });
+    }
+    function downloadAttendanceSheet(fileType) {
+        var scope = getAngularScope();
+        scope.$apply(function () {
+            scope.downloadAttendanceSheet(fileType);
+        });
+    }
+
+    function getAngularScope(){
+        return angular.element(document.getElementById("searchForm")).scope();
+    }
+    $("#class_date").datepicker({
+        format: 'dd M, yy'
+    });
+
+</script>
+

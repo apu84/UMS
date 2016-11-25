@@ -6,7 +6,12 @@ module ums {
     static APPROVED_APPLICATION : string = "#E0FFFF";
     static NONE : string = "none";
     static UG : number =11;
+    static PG : number =22;
     static DEFAULT_SEMESTER_COUNT: number = 10;
+
+    static SHORT_MONTH_ARR = new Array("Jan", "Feb", "Mar",
+        "Apr", "May", "Jun", "Jul", "Aug", "Sep",
+        "Oct", "Nov", "Dec");
 
     /*
       *Status code for Optional Course Status Fields
@@ -31,6 +36,34 @@ module ums {
     static SEMESTER_STATUS_INACTIVE: number=0;
     static SEMESTER_STATUS_ACTIVE: number=1;
     static SEMESTER_STATUS_NEWLY_CREATED: number=2;
+
+    /**
+     * File Content Types
+     */
+    static PDF: string="application/pdf";
+    static XLS: string="application/vnd.ms-excel";
+
+    /**
+     * Student Id block colors
+     */
+    static DEFAULT_COLOR: string="#DEF";
+    static SELECTED_COLOR: string="#FADBD8";
+
+    public static getFileContentType(fileType:string):string {
+      var contentType:string="";
+      switch (fileType)
+      {
+        case'pdf':
+          contentType=this.PDF;
+          break;
+        case'xls':
+          contentType=this.XLS;
+          break;
+        default:
+          alert("Wrong file type.........");
+      }
+      return contentType;
+    }
 
     public static findIndex(source_arr:Array<any>, element_value:string):number {
       var targetIndex = -1;
@@ -85,6 +118,25 @@ module ums {
           label.remove();
         }
       });
+    }
+
+    public static writeFileContent(data:any,contentType:string,fileName:string){
+      var file = new Blob([data], {type: contentType});
+      var reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = function (e) {
+        Utils.saveAsFile(reader.result, fileName);
+      }
+    }
+    public static  saveAsFile(url, fileName) {
+      var a: any = document.createElement("a");
+      document.body.appendChild(a);
+      a.style = "display: none";
+      a.href = url;
+      a.download = fileName;
+      a.click();
+      window.URL.revokeObjectURL(url);
+      $(a).remove();
     }
 
   }

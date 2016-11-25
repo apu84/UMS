@@ -121,6 +121,65 @@ public class PersistentSeatPlanGroupDao extends SeatPlanGroupDaoDecorator {
   }
 
   @Override
+  public int createSeatPlanGroup(int pSemesterid, int pExamType) {
+    String query =
+        "INSERT INTO sp_group (semester_id, program_id, year, semester, group_no, type, total_student, program_short_name) "
+            + "SELECT "
+            + "  r.semester_id, "
+            + "  r.program_id, "
+            + "  r.year, "
+            + "  r.semester, "
+            + "  e.group_no, "
+            + "  e.EXAM_TYPE AS type, "
+            + "  r.TOTAL_STUDENT, "
+            + "  e.program_short_name "
+            + "FROM ( "
+            + " "
+            + "       SELECT "
+            + "         s.semester_id, "
+            + "         s.PROGRAM_ID, "
+            + "         s.year, "
+            + "         s.semester, "
+            + "         count(STUDENT_ID) AS total_student "
+            + "       FROM ( "
+            + "              SELECT DISTINCT "
+            + "                s.student_id, "
+            + "                s.PROGRAM_ID, "
+            + "                r.semester_id, "
+            + "                s.CURR_YEAR     AS year, "
+            + "                s.CURR_SEMESTER AS semester "
+            + "              FROM STUDENTS s, UG_REGISTRATION_RESULT r "
+            + "              WHERE s.STUDENT_ID = r.STUDENT_ID AND "
+            + "                    r.SEMESTER_ID = ? AND r.EXAM_TYPE = ?) s "
+            + "       GROUP BY s.SEMESTER_ID, s.PROGRAM_ID, s.year, s.semester "
+            + "       ORDER BY PROGRAM_ID, year, semester) r, "
+            + " "
+            + "  ( "
+            + "    SELECT "
+            + "      DISTINCT "
+            + "      EXAM_ROUTINE.PROGRAM_ID, "
+            + "      year, "
+            + "      MST_COURSE.SEMESTER, "
+            + "      program_short_name, "
+            + "      exam_group            AS group_no, "
+            + "      EXAM_ROUTINE.semester AS semester_id, "
+            + "      exam_type "
+            + "    FROM EXAM_ROUTINE, MST_PROGRAM, MST_COURSE "
+            + "    WHERE Exam_routine.SEMESTER = ? AND EXAM_TYPE = ? AND EXAM_ROUTINE.PROGRAM_ID = MST_PROGRAM.PROGRAM_ID AND "
+            + "          EXAM_ROUTINE.COURSE_ID = MST_COURSE.COURSE_ID AND Mst_course.SEMESTER > 0 AND "
+            + "          exam_date IN (SELECT DISTINCT exam_date "
+            + "                        FROM EXAM_ROUTINE "
+            + "                        WHERE SEMESTER = ? AND EXAM_TYPE = ? "
+            + "                        GROUP BY EXAM_DATE "
+            + "                        HAVING count(EXAM_DATE) > 2) "
+            + "    ORDER BY exam_routine.exam_group, EXAM_ROUTINE.PROGRAM_ID, MST_COURSE.YEAR, MST_COURSE.SEMESTER) e "
+            + "WHERE r.SEMESTER_ID = e.semester_id AND r.PROGRAM_ID = e.PROGRAM_ID AND r.year = e.YEAR AND r.semester = e.semester "
+            + "ORDER BY e.group_no, e.PROGRAM_ID, e.YEAR, e.SEMESTER";
+    return mJdbcTemplate.update(query, new Object[] {pSemesterid, pExamType, pSemesterid,
+        pExamType, pSemesterid, pExamType});
+  }
+
+  @Override
   public int delete(List<MutableSeatPlanGroup> pMutableList) throws Exception {
     return super.delete(pMutableList);
   }

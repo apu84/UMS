@@ -123,8 +123,10 @@ public class SeatPlanServiceImpl implements SeatPlanService {
               numberOfSubGroups, studentsByProgramYearSemesterStatusList2);
     }
     else {
-      studentsByProgramYearSemesterStatusList = initiateStudentsBasedOnProgramYearSemesterStatus();
-      studentsByProgramYearSemesterStatusList2 = initiateStudentsBasedOnProgramYearSemesterStatus();
+      studentsByProgramYearSemesterStatusList =
+          initiateStudentsBasedOnProgramYearSemesterStatus(pGroupNo, pSemesterId, pExamType);
+      studentsByProgramYearSemesterStatusList2 =
+          initiateStudentsBasedOnProgramYearSemesterStatus(pGroupNo, pSemesterId, pExamType);
 
       subGroupWithStudents =
           getStudentsOfTheSubGroups(pSemesterId, pGroupNo, pExamType, pExamDate, numberOfSubGroups,
@@ -525,7 +527,7 @@ public class SeatPlanServiceImpl implements SeatPlanService {
           SeatPlanGroup group = mSeatPlanGroupManager.get(member.getGroupId());
           String key =
               group.getProgram().getId() + "" + group.getAcademicYear() + ""
-                  + group.getAcademicSemester() + "" + 1;
+                  + group.getAcademicSemester();
           List<Student> studentsOfTheGroup = new ArrayList<>();
           List<Student> existingStudents = studentsByProgramYearSemesterStatusList.get(key);
 
@@ -662,11 +664,13 @@ public class SeatPlanServiceImpl implements SeatPlanService {
     return studentMap;
   }
 
-  Map<String, List<Student>> initiateStudentsBasedOnProgramYearSemesterStatus() throws Exception {
+  Map<String, List<Student>> initiateStudentsBasedOnProgramYearSemesterStatus(int pGroupNo,
+      int pSemesterId, int pExamType) throws Exception {
 
     Map<String, List<Student>> studentInfoMap = new HashMap<>();
 
-    List<Student> allStudents = mStudentManager.getAll();
+    List<Student> allStudents =
+        mStudentManager.getRegisteredStudents(pGroupNo, pSemesterId, pExamType);
 
     for(Student student : allStudents) {
       String keyWithProgramYearSemesterStatus =

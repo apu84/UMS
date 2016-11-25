@@ -26,7 +26,7 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
       "Select UG_SESSIONAL_MARKS.*,FULL_NAME From UG_SESSIONAL_MARKS,STUDENTS  Where UG_SESSIONAL_MARKS.STUDENT_ID=STUDENTS.STUDENT_ID AND UG_SESSIONAL_MARKS.Semester_Id=? and Course_Id=? and Exam_Type=? ";
 
   String SELECT_PART_INFO =
-      "Select MARKS_SUBMISSION_STATUS.*, LAST_SUBMISSION_DATE,COURSE_TYPE,COURSE_TITLE,COURSE_NO,CRHR,LONG_NAME,SEMESTER_NAME "
+      "Select MARKS_SUBMISSION_STATUS.*,LAST_SUBMISSION_DATE,COURSE_TYPE,COURSE_TITLE,COURSE_NO,CRHR,LONG_NAME,SEMESTER_NAME "
           + "From MARKS_SUBMISSION_STATUS,MST_COURSE,COURSE_SYLLABUS_MAP,MST_SYLLABUS,MST_PROGRAM,MST_DEPT_OFFICE,MST_SEMESTER "
           + " Where MST_COURSE.Course_Id=MARKS_SUBMISSION_STATUS.Course_Id  "
           + "AND MST_COURSE.Course_Id = COURSE_SYLLABUS_MAP.Course_Id "
@@ -36,27 +36,25 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
           + " And MST_SEMESTER.SEMESTER_ID=MARKS_SUBMISSION_STATUS.SEMESTER_ID "
           + " And MARKS_SUBMISSION_STATUS.Semester_Id=? and MARKS_SUBMISSION_STATUS.Course_Id=? and Exam_Type=?  ";
 
+  String UPDATE_PART_INFO =
+      "Update MARKS_SUBMISSION_STATUS Set TOTAL_PART=?,PART_A_TOTAL=?,PART_B_TOTAL=? Where SEMESTER_ID=? and COURSE_ID=? and EXAM_TYPE=? and Status=0";
+  String UPDATE_MARKS_SUBMISSION_STATUS =
+      "Update MARKS_SUBMISSION_STATUS Set STATUS=? Where SEMESTER_ID=? and COURSE_ID=? and EXAM_TYPE=? ";
+
   String UPDATE_THEORY_MARKS =
       "Update  UG_THEORY_MARKS Set Quiz=?,Class_Performance=?,Part_A=?,Part_B=?,Total=?,Grade_Letter=?,Status=? "
-          + " Where Semester_Id=? And Course_Id=? and Exam_Type=? and Student_Id=? and status in (0,1)"; // None
-                                                                                                         // and
-                                                                                                         // Submit
-                                                                                                         // grades
-                                                                                                         // marks
-                                                                                                         // are
-                                                                                                         // allowed
-                                                                                                         // to
-                                                                                                         // update
+          + " Where Semester_Id=? And Course_Id=? and Exam_Type=? and Student_Id=? and status in (0,1)";
+  // None, Submit grades are allowed to update
+  String UPDATE_THEORY_MARKS_RECHECK =
+      "Update  UG_THEORY_MARKS Set Quiz=?,Class_Performance=?,Part_A=?,Part_B=?,Total=?,Grade_Letter=?,Status=? "
+          + " Where Semester_Id=? And Course_Id=? and Exam_Type=? and Student_Id=? and recheck_status=1";
+
   String UPDATE_SESSIONAL_MARKS = "Update  UG_SESSIONAL_MARKS Set Total=?,Grade_Letter=?,Status=? "
-      + " Where Semester_Id=? And Course_Id=? and Exam_Type=? and Student_Id=? and status in (0,1)"; // None
-                                                                                                     // and
-                                                                                                     // Submit
-                                                                                                     // grades
-                                                                                                     // marks
-                                                                                                     // are
-                                                                                                     // allowed
-                                                                                                     // to
-                                                                                                     // update
+      + " Where Semester_Id=? And Course_Id=? and Exam_Type=? and Student_Id=? and status in (0,1)";
+  // None, Submit grades are allowed to update
+  String UPDATE_SESSIONAL_MARKS_RECHECK =
+      "Update  UG_SESSIONAL_MARKS Set Total=?,Grade_Letter=?,Status=? "
+          + " Where Semester_Id=? And Course_Id=? and Exam_Type=? and Student_Id=? and recheck_status=1";
 
   String SELECT_GRADE_SUBMISSION_TABLE_TEACHER =
       "Select tmp5.*,Status,Exam_Type, last_submission_date From ( "
@@ -74,7 +72,8 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
           + "Where tmp2.Course_id=Mst_Course.Course_id "
           + "And Mst_Course.Course_Id=Course_Syllabus_Map.Course_id "
           + "And Course_Syllabus_Map.Syllabus_Id=Mst_Syllabus.SYLLABUS_ID "
-          + "And MST_PROGRAM.PROGRAM_ID=MST_SYLLABUS.PROGRAM_ID " + ")tmp3,MVIEW_TEACHERS "
+          + "And MST_PROGRAM.PROGRAM_ID=MST_SYLLABUS.PROGRAM_ID "
+          + ")tmp3,MVIEW_TEACHERS "
           + "Where tmp3.preparer_id=MVIEW_TEACHERS.teacher_id (+))tmp4,MVIEW_TEACHERS "
           + "Where tmp4.scrutinizer_id=MVIEW_TEACHERS.teacher_id (+) "
           + ")tmp5, Marks_Submission_Status "
@@ -88,7 +87,8 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
           + "getPreparerScrutinizer(Ms_Status.Semester_Id,Mst_Course.Course_Id,'S') SCRUTINIZER_NAME,STATUS  "
           + "From MARKS_SUBMISSION_STATUS Ms_Status,Mst_Course,COURSE_SYLLABUS_MAP,MST_SYLLABUS,MST_PROGRAM "
           + "Where Ms_Status.Semester_Id=? And Exam_Type=? "
-          + "And MST_PROGRAM.PROGRAM_ID =? "
+          // + "And MST_PROGRAM.PROGRAM_ID =? " // No need. We will show all the courses either
+          // offered by or offered to the current department
           + "And Ms_Status.Course_Id=Mst_Course.Course_Id "
           + "And Mst_Course.Course_Id=COURSE_SYLLABUS_MAP.Course_Id "
           + "AND MST_SYLLABUS.SYLLABUS_ID = COURSE_SYLLABUS_MAP.SYLLABUS_ID "
@@ -372,7 +372,8 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
         query += "  And Ms_Status.Year=" + year + " And Ms_Status.Semester=" + semester;
       }
       return mJdbcTemplate.query(query,
-          new Object[] {pSemesterId, pExamType, pProgramId, teacherId},
+          // new Object[] {pSemesterId, pExamType, pProgramId, teacherId},
+          new Object[] {pSemesterId, pExamType, teacherId},
           new MarksSubmissionStatusTableRowMapper());
     }
     else if(userRole.equals("C")) { // CoE
@@ -486,19 +487,26 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
   @Override
   public boolean saveGradeSheet(MarksSubmissionStatus actualStatus, List<StudentGradeDto> pGradeList)
       throws Exception {
-    batchUpdateGrade(actualStatus.getSemesterId(), actualStatus.getCourseId(),
+    batchUpdateGrade(actualStatus.getStatus(),actualStatus.getSemesterId(), actualStatus.getCourseId(),
         actualStatus.getExamType(), actualStatus.getCourse().getCourseType(), pGradeList);
     return true;
   }
 
-  public void batchUpdateGrade(int pSemesterId, String pCourseId, ExamType pExamType,
-      CourseType courseType, List<StudentGradeDto> pGradeList) {
+  public void batchUpdateGrade(CourseMarksSubmissionStatus courseMarksSubmissionStatus,
+      int pSemesterId, String pCourseId, ExamType pExamType, CourseType courseType,
+      List<StudentGradeDto> pGradeList) {
     String sql = "";
     if(courseType == CourseType.THEORY) {
-      sql = UPDATE_THEORY_MARKS;
+      if(courseMarksSubmissionStatus == CourseMarksSubmissionStatus.NOT_SUBMITTED)
+        sql = UPDATE_THEORY_MARKS;
+      else
+        sql = UPDATE_THEORY_MARKS_RECHECK;
     }
     else if(courseType == CourseType.SESSIONAL) {
-      sql = UPDATE_SESSIONAL_MARKS;
+      if(courseMarksSubmissionStatus == CourseMarksSubmissionStatus.NOT_SUBMITTED)
+        sql = UPDATE_SESSIONAL_MARKS;
+      else
+        sql = UPDATE_SESSIONAL_MARKS_RECHECK;
     }
 
     mJdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
@@ -506,10 +514,9 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
       public void setValues(PreparedStatement ps, int i) throws SQLException {
         StudentGradeDto gradeDto = pGradeList.get(i);
         if(courseType == CourseType.THEORY) {
-          if(gradeDto.getQuiz() == -1) {
+          if(gradeDto.getQuiz() == -1)
             ps.setNull(1, Types.NULL);
-          }
-          else {
+          else
             ps.setDouble(1, gradeDto.getQuiz());
           }
 

@@ -46,6 +46,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/BindHtml.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/DatePicker.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/AutoComplete.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/directive/ClassRoutineDir.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/Spinner.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/ProfilePicture.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/Grid.ts'/>
@@ -112,16 +113,18 @@
 /// <reference path='controller/dept/CourseTeacher.ts'/>
 /// <reference path='controller/dept/Examiner.ts'/>
 /// <reference path='controller/dept/TeachersRoutine.ts'/>
+/// <reference path='controller/dept/RoomBasedRoutine.ts'/>
 /// <reference path='controller/dept/StudentsRoutine.ts'/>
 
 /// <reference path='controller/common/academic/ClassRoomInfo.ts'/>
 /// <reference path='controller/common/academic/ExamRoutine.ts'/>
 /// <reference path='controller/dept/StudentsRoutine.ts'/>
 /// <reference path='controller/dept/StudentAdviser.ts'/>
+/// <reference path='controller/dept/AdvisingStudents.ts'/>
 /// <reference path='controller/dept/OptionalCoursesOffer.ts'/>
 /// <reference path='controller/semester/SemesterSettingParameter.ts'/>
 /// <reference path='controller/dept/ClassRoutine.ts'/>
-/// <reference path='controller/dept/AttendanceSheet.ts'/>
+/// <reference path='controller/dept/ClassAttendance.ts'/>
 /// <reference path='controller/logger/LoggerGrid.ts'/>
 /// <reference path='controller/course-material/CourseMaterial.ts'/>
 /// <reference path='controller/course-material/StudentCourseMaterial.ts'/>

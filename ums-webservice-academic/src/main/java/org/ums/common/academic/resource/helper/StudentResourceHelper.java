@@ -150,7 +150,7 @@ public class StudentResourceHelper extends ResourceHelper<Student, MutableStuden
     for(int i = 0; i < entries.size(); i++) {
       JsonObject jsonObject = entries.getJsonObject(i);
       PersistentStudent student = new PersistentStudent();
-      mBuilder.build(student, jsonObject, localCache);
+      mBuilder.buildAdvisor(student, jsonObject, localCache);
       students.add(student);
     }
 

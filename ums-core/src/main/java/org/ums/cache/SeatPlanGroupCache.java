@@ -56,4 +56,8 @@ public class SeatPlanGroupCache extends
     return getManager().checkSeatPlanGroupDataSize(pSemesterId, pExamType);
   }
 
+  @Override
+  public int createSeatPlanGroup(int pSemesterid, int pExamType) {
+    return getManager().createSeatPlanGroup(pSemesterid, pExamType);
+  }
 }

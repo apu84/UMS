@@ -53,7 +53,7 @@ public class RoutineBuilder implements Builder<Routine, MutableRoutine> {
     pBuilder.add("startTime", pReadOnly.getStartTime());
     pBuilder.add("endTime", pReadOnly.getEndTime());
     pBuilder.add("duration", pReadOnly.getDuration());
-    pBuilder.add("roomNo", pReadOnly.getRoomNo());
+    pBuilder.add("roomId", pReadOnly.getRoomId());
     if(pReadOnly.getCourseNo() != null) {
       pBuilder.add("courseNo", pReadOnly.getCourseNo());
     }
@@ -89,7 +89,7 @@ public class RoutineBuilder implements Builder<Routine, MutableRoutine> {
     pMutable.setAcademicSemester(Integer.parseInt(pJsonObject.getString("academicSemester")));
     pMutable.setStartTime(pJsonObject.getString("startTime"));
     pMutable.setEndTime(pJsonObject.getString("endTime"));
-    pMutable.setRoomNo(pJsonObject.getString("roomNo"));
+    pMutable.setRoomId(pJsonObject.getInt("roomNo"));
     pMutable.setStatus(pJsonObject.getString("status"));
   }
 }

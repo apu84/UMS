@@ -18,5 +18,7 @@ public interface SeatPlanGroupManager extends
 
   int deleteBySemesterAndExamType(final int pSemesterId, final int pExamType);
 
+  int createSeatPlanGroup(final int pSemesterid, final int pExamType);
+
   int checkSeatPlanGroupDataSize(int pSemesterId, int pExamType);
 }

@@ -36,4 +36,9 @@ public class SeatPlanGroupDaoDecorator extends
   public int checkSeatPlanGroupDataSize(int pSemesterId, int pExamType) {
     return getManager().checkSeatPlanGroupDataSize(pSemesterId, pExamType);
   }
+
+  @Override
+  public int createSeatPlanGroup(int pSemesterid, int pExamType) {
+    return getManager().createSeatPlanGroup(pSemesterid, pExamType);
+  }
 }

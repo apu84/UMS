@@ -2,68 +2,86 @@
     .panel-height {
         min-height: 400px;
     }
-
     .labels {
         padding: 1%;
     }
-
     ul {
         list-style-type: none;
         margin: 0;
         padding: 0;
     }
-
     .rounded {
         display: inline-block;
-        padding: 0.5%;
+        padding: 0.5% 3%;
         border-radius: 10%;
-        /*//background: #DEF;*/
         color: black;
-        /*border-style: groove;
-        border-color: #7B68EE;*/
         border-collapse: separate;
         margin: 2px;
-        /*max-width: 80px;*/
-
     }
-
     .alignLeft {
         float: left;
     }
-
     .alignRight {
         float: right;
     }
+    fieldset { border:1px dashed grey;
+    padding-right: 5px;}
 
-
+    legend {
+        padding: 0.2em 0.5em;
+        border:1px solid grey;
+        color:#4d4b4b;
+        font-size:90%;
+        text-align:right;
+        width: 150px;
+        padding-right: 11px;
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
+    .btn-default{
+        right: 0px;
+    }
+    .fa-sa:before {
+        font-family: Arial; /* your font family here! */
+        font-weight: bold;
+        content: 'SA';
+    }
+    .fa-ha:before {
+        font-family: Arial; /* your font family here! */
+        font-weight: bold;
+        content: 'HA';
+    }
+    .pll, .phl, .pal {
+        padding: 5px !important;
+    }
 </style>
 <div class="row">
     <div class="col-md-12">
         <div class="panel">
             <div class="panel-heading" data-ng-init="getActiveTeachers();getActiveStudentsOfDept()">
-                <p class="alignLeft">Assign/Shift/View Advisor Information</p>
+                <p class="alignLeft" id="pageTitle">{{selectedOptionTitle}}</p>
                 <p class="alignRight">
-                    <a data-ng-if="r.showEditButton!=false" href="javascript:;" class="btn btn-xs btn-default"
-                       data-ng-click="showChangeUI()" style="background-color: #ffffff;" id="singleAnchor">
-                        <i class="fa fa-user " style="color: black;" aria-hidden="true" id="singleIcon"></i>
+                    <a data-ng-if="r.showEditButton!=false" href="javascript:;" class="btn btn-xs btn-default singleAnchor"
+                       data-ng-click="showSingleStudentUI()" style="background-color: black;">
+                        <i class="fa fa-user singleIcon" style="color: white;" aria-hidden="true"></i>
                     </a>
-                    <a data-ng-if="r.showEditButton!=false" href="javascript:;" class="btn btn-xs btn-default"
-                       data-ng-click="showBulkAssignmentUI()" style="background-color: #ffffff;" id="bulkAnchor">
-                        <i class="fa fa-users " style="color: black;" aria-hidden="true" id="bulkIcon"></i>
+                    <a data-ng-if="r.showEditButton!=false" href="javascript:;" class="btn btn-xs btn-default bulkAnchor"
+                       data-ng-click="showBulkAssignmentUI()" style="background-color: #ffffff;">
+                        <i class="fa fa-users bulkIcon" style="color: black;" aria-hidden="true"></i>
                     </a>
-                    <a data-ng-if="r.showEditButton!=false" href="javascript:;" class="btn btn-xs btn-default"
-                       data-ng-click="showShiftUI()" style="background-color: #ffffff;" id="shiftingAnchor">
-                        <i class="fa fa-random " style="color: black;" aria-hidden="true" id="shiftingIcon"></i>
+                    <a data-ng-if="r.showEditButton!=false" href="javascript:;" class="btn btn-xs btn-default shiftingAnchor"
+                       data-ng-click="showShiftUI()" style="background-color: #ffffff;">
+                        <i class="fa fa-random shiftingIcon" style="color: black;" aria-hidden="true"></i>
                     </a>
                 </p>
                 <span class="subtitle"></span>
             </div>
             <div class="panel-body">
                 <!-- Single Student -->
-                <div data-ng-if="changeOptionSelected" id="change">
+                <div data-ng-show="changeOptionSelected"  id="change">
                     <div class="row">
                         <div class="col-md-4">
-                            <div data-ng-repeat="s in addedStudents" style="border: 1px solid #5e5e5e;">
+                            <div data-ng-if="singleStudent!=null" style="border: 1px solid #5e5e5e;">
                                 <div class="form-group">
                                     <div class="text-center mbl">
                                         <img
@@ -75,7 +93,7 @@
                                     <tbody>
                                     <tr>
                                         <td width="40%">Student's Name</td>
-                                        <td>{{s.fullName}}</td>
+                                        <td>{{singleStudent.fullName}}</td>
                                     </tr>
                                     <tr>
                                         <td>Student Id</td>
@@ -83,19 +101,15 @@
                                     </tr>
                                     <tr>
                                         <td>Year, Semester</td>
-                                        <td>Year:{{s.year}}, Semester: {{s.academicSemester}}</td>
+                                        <td>Year:{{singleStudent.year}}, Semester: {{singleStudent.academicSemester}}</td>
                                     </tr>
                                     <tr>
                                         <td>Dept.</td>
-                                        <td><span class="label label-success">Active</span></td>
+                                        <td>{{singleStudent.departmentShortName}}</td>
                                     </tr>
                                     <tr>
                                         <td>Program</td>
-                                        <td><span class="label label-success">Active</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Current Advisor</td>
-                                        <td><span class="label label-success">Active</span></td>
+                                        <td>{{singleStudent.programShortName}}</td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -104,99 +118,231 @@
 
 
                         <div class="col-md-8">
-                            <div auto-complete
-                                 suggestion-list="studentIds"
-                                 first-selected="fromStudentId"
-                                 add-first="setFirstAutoCompleteValue(id)"
-                                 add-one="addAStudent()"
-                                 x="addedStudents"
-                                 show-one-input-area="showOneInputArea">
-                            </div>
-                            <div data-ng-repeat="s in addedStudents">
-                                <p><label class="labels" style="background-color: darkslategray;color: whitesmoke;">Current
-                                    Adviser</label></p>
+                            <input type="text" id="singleStudentList" style="width: 300px;" data-ng-model="singleStudentId" data-ng-change="searchSingleStudent()">
+                            <div data-ng-if="singleStudent!=null">
+                                <fieldset style="padding-left: 8px;margin-top: 20px;">
+                                    <legend style="text-align: left;">Current Advisor</legend>
+                                    <div class="row" style="min-height: 70px;">
+                                        <div class="col-md-12">
+                                            <b>{{teacherIdWithTeacherMap[singleStudent.adviser].employeeName}}</b>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                                <fieldset style="padding-left: 8px;margin-top: 20px;">
+                                    <legend style="text-align: left;">New Advisor</legend>
+                                    <div class="row" style="min-height: 70px;">
+                                        <div class="col-md-12">{{singleTeacherId}}
+                                            <select class="form-control" style="width: 300px;"
+                                                    data-select="select2"
+                                                    data-ng-model="singleTeacher.id"
+                                                    data-ng-placeholder="Select a Teacher"
+                                                    data-ng-options="teacher.id as teacher.employeeName for teacher in teachers">
+                                            </select>
 
-                                <p>{{teacherIdWithTeacherMap[s.adviser].employeeName}}</p>
-
-                                <p><label class="labels" style="background-color: darkslategray;color: whitesmoke;">New
-                                    Adviser</label></p>
-
-                                <p>
-                                    <label>Select an adviser</label>
-                                    <select data-ng-model="teacherId" data-ng-change="assignTeacherId(teacherId)">
-                                        <option value="">Select an adviser</option>
-                                        <option data-ng-repeat="t in teachers track by t.id" value="{{t.id}}" data-ng-if="t.id!=fromTeacherId">{{t.employeeName}}</option>
-                                    </select>
-                                </p>
+                                        </div>
+                                    </div>
+                                </fieldset>
                             </div>
                         </div>
                     </div>
                     <div align="right" clas="row">
                         <div class="col-md-12">
                             <hr>
-                            <button type="button" class="btn btn-success" data-ng-click="save()">Change
-                                Adviser
-                            </button>
+                            <button type="button" data-ng-disabled="singleStudent==null" class="btn btn-success" data-ng-click="saveSingleStudentAdvisor()">Change Advisor</button>
                         </div>
                     </div>
                 </div>
                 <!-- End Single Student -->
 
+                <!-- Start of Bulk Students Advisor Assignment -->
+                <div data-ng-show="bulkAssignmentOptionSelected" id="bulk">
+
+                    <div class="row ">
+                        <div class="col-md-12">
+                            <div class="form-body pal">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="form-group">
+                                        <label for="fromStudentList" class="control-label">From Student</label>
+                                        <div class="input-icon left">
+                                            <input type="text" id="fromStudentList" style="width: 70%;" class="form-control" data-ng-model="fromStudentId" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="form-group">
+                                        <label for="toStudentList" class="control-label">To Student</label>
+                                        <div class="input-icon left">
+                                            <input type="text" id="toStudentList" style="width: 70%;" class="form-control"  data-ng-model="toStudentId"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <button type="button" class="btn btn-default btn-outlined" data-ng-click="addAStudent()">Add Single Student</button><br/>
+                                        <button type="button" class="btn btn-dark btn-outlined btn-square" style="margin-top: 5px;" data-ng-click="addStudents()">Add Student Range</button>
+                                        </div>
+                                    </div>
+                            </div>
+                                </div>
+                        </div>
+                    </div>
+
+                    <div class="row ">
+                        <div class="col-md-12">
+                            <div class="form-body pal">
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <div class="form-group">
+                                            <label for="fromStudentList" class="control-label">Assign To</label>
+                                            <div class="input-icon left">
+                                                <select class="form-control" style="width: 70%"
+                                                        data-ng-change="getExistingStudentsOfAdviser(bulkTeacher.id);enableSaveButton();"
+                                                        data-select="select2"
+                                                        data-ng-model="bulkTeacher.id"
+                                                        data-ng-placeholder="Select a Teacher"
+                                                        data-ng-options="teacher.id as teacher.employeeName for teacher in teachers">
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="form-group">
+                                            <label for="toStudentList" class="control-label">Currently Assigned Students</label>
+                                            <div class="input-icon left" style="font-weight: bold;font-size:20px;">
+                                                {{assignedStudentsOfTheAdviser}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <a  href="javascript:;" class="btn btn-xs btn-default bulkStudentIdAnchor"
+                                            data-ng-click="viewStudentById('bulk')" style="background-color: black;">
+                                            <i class="fa fa-user bulkStudentIdIcon" style="color: white;" aria-hidden="true"></i>
+                                        </a>
+
+                                        <a  href="javascript:;" class="btn btn-xs btn-default bulkStudentNameAnchor"
+                                            data-ng-click="viewStudentByIdAndName('bulk')" style="background-color: white;">
+                                            <span class="fa fa-indent bulkStudentNameIcon" style="color: black;" ></span>
+                                        </a>
+                                        <a  href="javascript:;" class="btn btn-xs btn-default showAdvisorAnchor"
+                                            data-ng-click="toggleAdvisorInfo('show')" style="background-color: white;">
+                                            <span class="fa fa-sa showAdvisorIcon" style="color: black;"></span>
+                                        </a>
+
+                                        <a  href="javascript:;" class="btn btn-xs btn-default hideAdvisorAnchor"
+                                            data-ng-click="toggleAdvisorInfo('hide')" style="background-color: black;">
+                                            <span class="fa fa-ha hideAdvisorIcon" style="color: white;" ></span>
+                                        </a>
+                                        <a  href="javascript:;" class="btn btn-xs btn-default bulkClearAnchor"
+                                            data-ng-click="clearBulkStudents()" style="background-color: white;">
+                                            <span class="fa fa-eraser bulkClearIcon"></span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <fieldset style="padding-left: 8px;padding-bottom: 5px;">
+                        <legend style="text-align: left;">Selected Student List</legend>
+                        <div class="row" style="min-height: 200px;">
+                            <div class="col-md-12">
+                                <div data-ng-show="showLoader==true" align="center">
+                                    <p>Loader...</p>
+                                    <i class="fa fa-spinner fa-spin fa-4x fa-fw"></i>
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                                <div data-ng-show="showLoader==false">
+                                    <ul data-ng-show="showLoader==false">
+                                        <li class="rounded" ng-style="{background:a.backgroundColor}"
+                                            data-ng-repeat="a in bulkSelectedStudents track by a.id" style="position: relative;padding-left: 1.5%;padding-right: 1.5%;">
+                                            <img src="https://cdn0.iconfinder.com/data/icons/round-ui-icons/128/close_red.png"  data-ng-click="removeFromBulkStudents(a)"
+                                                 style="position: absolute;top: -8px;right: -5px; height: 20px; width: 20px;cursor: pointer;" />
+
+                                            <div data-ng-show="bulkShowStudentId" >{{a.id}}</div>
+                                            <div data-ng-show="bulkShowStudentName">{{a.id}}<br/>
+                                                <img src="https://cdn2.iconfinder.com/data/icons/pretty-office-10/16/Graduate-male-16.png" /> {{a.fullName}}</div>
+                                            <div data-ng-show="showAdviserName">
+                                                <img src="https://cdn2.iconfinder.com/data/icons/school-and-education-4-free-1/32/student_learning_learn_teacher-16.png" />
+                                                {{teacherIdWithTeacherMap[a.adviser].employeeName}}
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <div class="row">
+                        <div align="right"  style="padding: 1% 1%;">
+                            <hr/>
+                            <button data-ng-disabled="bulkSelectedStudents.length==0" type="button" class="btn btn-success" data-ng-click="saveAdvisorForBulkStudents()">Assign Advisor to Selected Student(s)</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- End of Bulk Students Advisor Assignment -->
+
                 <!-- Shifting Students from One Advisor to another Advisor -->
                 <div data-ng-if="shiftOptionSelected" id="shift">
-                    <h5 style="background-color: darkgrey; color: ghostwhite"><p class="labels">Shift Student's
-                        Adviser</p></h5>
                     <div class="row" align="right" style="padding:2%;">
-                        <button type="button" class="btn btn-primary btn-outlined btn-xs" title="View by student's id"
-                                data-ng-click="viewStudentById()"><i class="fa fa-user" aria-hidden="true"></i></button>
-                        <button type="button" class="btn btn-primary btn-outlined btn-xs"
-                                title="View by student's id and name" data-ng-click="viewStudentByIdAndName()">
-                            <i class="fa fa-user" aria-hidden="true"></i>
-                            <i class="fa fa-plus-circle" aria-hidden="true"></i>
-                        </button>
-                        <button type="button" class="btn btn-primary btn-outlined btn-xs"
-                                title="View By Year and Semester" data-ng-click="viewStudentByYearSemester()"><i
-                                class="fa fa-bars" aria-hidden="true"></i></i></button>
-                        <button type="button" class="btn btn-primary btn-outlined btn-xs"
-                                title="View Without Year and Semester" data-ng-click="viewStudentWithoutYearSemester()">
-                            <i class="fa fa-bars" aria-hidden="true"></i></i><i class="fa fa-times"
-                                                                                aria-hidden="true"></i></button>
+
+                        <a  href="javascript:;" class="btn btn-xs btn-default shiftStudentIdAnchor"
+                           data-ng-click="viewStudentById('shift')" style="background-color: black;">
+                            <i class="fa fa-user shiftStudentIdIcon" style="color: white;" aria-hidden="true"></i>
+                        </a>
+
+                        <a  href="javascript:;" class="btn btn-xs btn-default shiftStudentNameAnchor"
+                            data-ng-click="viewStudentByIdAndName('shift')" style="background-color: white;">
+                            <i class="fa fa-indent shiftStudentNameIcon" style="color: black;" aria-hidden="true"></i>
+                        </a>
+
+                        <a  href="javascript:;" class="btn btn-xs btn-default yearSemesterAnchor"
+                           data-ng-click="viewStudentByYearSemester()" style="background-color: white;">
+                            <i class="fa fa-th yearSemesterIcon" style="color: black;" aria-hidden="true"></i>
+                        </a>
+
+                        <a  href="javascript:;" class="btn btn-xs btn-default yearSemesterClearAnchor"
+                            data-ng-click="viewStudentWithoutYearSemester()" style="background-color: black;">
+                            <i class="fa fa-align-justify yearSemesterClearIcon" style="color: white;" aria-hidden="true"></i>
+                        </a>
 
                     </div>
                     <table class="table table-bordered">
                         <thead>
-                        <tr align="center">
-                            <th><p align="center">From</p></th>
-                            <th><p align="center">To</p></th>
+                        <tr>
+                            <th>From</th>
+                            <th>To</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
                             <td style="width:50%">
                                 <div class="col-md-12">
-                                    <div class="row" align="center">
-
-                                        <select data-ng-model="fromTeacherId"
-                                                data-ng-change="getStudentsOfTheFirstTeacher(fromTeacherId)">
-                                            <option value="">Select an adviser</option>
-                                            <option data-ng-repeat="t in teachers track by t.id" value="{{t.id}}">
-                                                {{t.employeeName}}
-                                            </option>
-                                        </select>
+                                    <div class="row">
+                                        <div class="input-group">
+                                            <div class="input-group-addon"><i class="fa fa-user"></i></div>
+                                            <select class="form-control" style="width: 80%"
+                                                    data-ng-change="getStudentsOfTheFirstTeacher(fromTeacherId)"
+                                                    data-select="select2"
+                                                    data-ng-model="fromTeacherId"
+                                                    data-ng-options="teacher.id as teacher.employeeName for teacher in teachers">
+                                            </select>
+                                        </div>
                                     </div>
                                     <br>
 
-                                    <div class="row"  data-ng-if="showLoader==false && showStudentsByYearSemester==false">
+                                    <div class="row"  data-ng-show="showLoader==false && showStudentsByYearSemester==false">
                                             <ul>
-                                                <li class="rounded" ng-style="{background:a.backgroundColor}"
+                                                <li class="rounded" ng-style="{background:a.backgroundColor}" style="cursor: pointer;"
                                                     data-ng-repeat="a in fromStudents track by a.id"
                                                     ng-click="changeColor(a)">
-                                                    <div style="padding: 2%" data-ng-if="showStudentId">{{a.id}}</div>
-                                                    <div data-ng-if="showStudentName">
+                                                    <div style="padding: 2%" data-ng-if="shiftShowStudentId">{{a.id}}</div>
+                                                    <div data-ng-if="shiftShowStudentName" >
                                                         {{a.id}}<br>{{a.fullName}}
-                                                        <div data-ng-if="showAdviserName">
-
-                                                        </div>
                                                     </div>
                                                 </li>
                                             </ul>
@@ -206,20 +352,20 @@
                                     <div class="row" data-ng-if="showLoader==false && showStudentsByYearSemester==true">
                                         <div data-ng-if="showLoader==false && showStudentsByYearSemester==true">
                                             <div data-ng-repeat="s in categorizedFormStudents">
-                                                <hr>
-                                                <b>{{s.header}}</b><br>
-                                                <li class="rounded" ng-style="{background:a.backgroundColor}"
-                                                    data-ng-repeat="a in s.students track by a.id"
-                                                    ng-click="changeColor(a)">
-                                                    <div style="padding: 2%" data-ng-if="showStudentId">{{a.id}}
-                                                    </div>
-                                                    <div data-ng-if="showStudentName">
-                                                        {{a.id}}<br>{{a.fullName}}
-                                                        <div data-ng-if="showAdviserName">
 
+                                                <fieldset style="padding-bottom: 5px;">
+                                                    <legend>{{s.header}}</legend>
+                                                    <li class="rounded" ng-style="{background:a.backgroundColor}" style="cursor: pointer;"
+                                                        data-ng-repeat="a in s.students track by a.id"
+                                                        ng-click="changeColor(a)">
+                                                        <div style="padding: 2%" data-ng-if="shiftShowStudentId">{{a.id}}
                                                         </div>
-                                                    </div>
-                                                </li>
+                                                        <div data-ng-if="shiftShowStudentName">
+                                                            {{a.id}}<br>{{a.fullName}}
+                                                        </div>
+                                                    </li>
+                                                </fieldset>
+                                                <br/>
                                             </div>
                                         </div>
 
@@ -229,28 +375,28 @@
                             </td>
                             <td style="width:50%">
                                 <div class="col-md-12">
-                                    <div class="row" align="center">
-                                        <select data-ng-model="toTeacherId"
-                                                data-ng-change="getStudentsOfTheSecondTeacher(toTeacherId)">
-                                            <option value="">Select an adviser</option>
-                                            <option data-ng-repeat="t in teachers track by t.id" value="{{t.id}}" data-ng-if="t.id!=fromTeacherId">
-                                                {{t.employeeName}}
-                                            </option>
-                                        </select>
+                                    <div class="row">
+                                        <div class="input-group">
+                                            <div class="input-group-addon"><i class="fa fa-user"></i></div>
+                                            <select class="form-control" style="width: 80%"
+                                                    data-ng-change="getStudentsOfTheSecondTeacher(toTeacherId)"
+                                                    data-select="select2"
+                                                    data-ng-model="toTeacherId"
+                                                    data-ng-options="teacher.id as teacher.employeeName for teacher in teachers">
+                                            </select>
+                                        </div>
+                                        <br/>
                                     </div>
-                                    <br>
+
 
                                     <div class="row"
                                          data-ng-if="showLoader==false && showStudentsByYearSemester==false">
                                         <ul>
                                             <li class="rounded" ng-style="{background:a.backgroundColor}"
                                                 data-ng-repeat="a in toStudents track by a.id">
-                                                <div data-ng-if="showStudentId">{{a.id}}</div>
-                                                <div data-ng-if="showStudentName">
+                                                <div data-ng-if="shiftShowStudentId">{{a.id}}</div>
+                                                <div data-ng-if="shiftShowStudentName">
                                                     {{a.id}}<br>{{a.fullName}}
-                                                    <div data-ng-if="showAdviserName">
-
-                                                    </div>
                                                 </div>
                                             </li>
                                         </ul>
@@ -259,19 +405,19 @@
                                     <div class="row" data-ng-if="showLoader==false && showStudentsByYearSemester==true">
                                         <div data-ng-if="showLoader==false && showStudentsByYearSemester==true">
                                             <div data-ng-repeat="s in categorizedToStudents">
-                                                <hr>
-                                                <b>{{s.header}}</b><br>
-                                                <li class="rounded" ng-style="{background:a.backgroundColor}"
-                                                    data-ng-repeat="a in s.students track by a.id">
-                                                    <div style="padding: 2%" data-ng-if="showStudentId">{{a.id}}
-                                                    </div>
-                                                    <div data-ng-if="showStudentName">
-                                                        {{a.id}}<br>{{a.fullName}}
-                                                        <div data-ng-if="showAdviserName">
 
+                                                <fieldset style="padding-bottom: 5px;">
+                                                    <legend>{{s.header}}</legend>
+                                                    <li class="rounded" ng-style="{background:a.backgroundColor}" style="cursor: pointer;"
+                                                        data-ng-repeat="a in s.students track by a.id">
+                                                        <div style="padding: 2%" data-ng-if="shiftShowStudentId">{{a.id}}
                                                         </div>
-                                                    </div>
-                                                </li>
+                                                        <div data-ng-if="shiftShowStudentName">
+                                                            {{a.id}}<br>{{a.fullName}}
+                                                        </div>
+                                                    </li>
+                                                </fieldset>
+                                                <br/>
                                             </div>
                                         </div>
 
@@ -285,150 +431,13 @@
                     <div class="row" align="right">
                         <br>
                         <hr>
-                        <button type="button" class="btn btn-success" ng-click="addAndSave()"> Add & Save</button>
-                        <button type="button" class="btn btn-danger" ng-click="cancelAddAndSave()"> Cancel</button>
+                        <button type="button" class="btn btn-success" ng-click="saveAdvisorShifting()"> Shift Advisor for the Selected Students</button>
+                        <button type="button" class="btn btn-danger" ng-click="resetShiftStudentSelection()"> Reset Selection</button>
                     </div>
 
                 </div>
                 <!-- End of Shifting Students -->
 
-                <!-- Start of Bulk Students Advisor Assignment -->
-                <div data-ng-if="bulkAssignmentOptionSelected" id="bulk">
-
-                    <div class="row ">
-                        <div class="col-md-12">
-                            <h5 style="background-color: darkgrey; color: ghostwhite"><p class="labels">Bulk Student
-                                Assignment</p></h5>
-                            <br>
-
-                            <div auto-complete
-                                 suggestion-list="studentIds"
-                                 first-selected="fromStudentId"
-                                 second-selected="toStudentId"
-                                 add-first="setFirstAutoCompleteValue(id)"
-                                 add-second="setSecondAutoCompleteValue(id)"
-                                 add-one="addAStudent()"
-                                 add-range="addStudents()"
-                                 x="addedStudents"
-                                 show-one-input-area="showOneInputArea"
-                                 class="col-md-12" align="right">
-                            </div>
-                        </div>
-
-
-                    </div>
-                    <div class="row">
-                        <div class="col-md-8">
-                        </div>
-                        <div class="col-md-4" align="right">
-                            <button type="button" class="btn btn-primary btn-outlined btn-xs"
-                                    title="View by student's id" data-ng-click="viewStudentById()"><i class="fa fa-user"
-                                                                                                      aria-hidden="true"></i>
-                            </button>
-                            <button type="button" class="btn btn-primary btn-outlined btn-xs"
-                                    title="View by student's id and name" data-ng-click="viewStudentByIdAndName()">
-                                <i class="fa fa-user" aria-hidden="true"></i>
-                                <i class="fa fa-plus-circle" aria-hidden="true"></i>
-                            </button>
-                            <button type="button" class="btn btn-primary btn-outlined btn-xs"
-                                    title="View by student's id and adviser"
-                                    data-ng-click="viewStudentByIdAndAdviser()">
-                                <i class="fa fa-user" aria-hidden="true"></i>
-                                <i class="fa fa-user" aria-hidden="true"></i>
-                            </button>
-                            <button type="button" class="btn btn-primary btn-outlined btn-xs"
-                                    title="Clear added students" data-ng-click="clearAddedStudents()">
-                                <i class="fa fa-eraser" aria-hidden="true"></i>
-                            </button>
-                        </div>
-                    </div>
-
-
-                    <div class="row" style="min-height: 200px;">
-                        <div class="col-md-12">
-                            <h5 style="background-color: darkgrey; color: ghostwhite"><p class="labels">Added
-                                Students</p></h5>
-                            <br>
-
-                            <div data-ng-if="showLoader==true" align="center">
-                                <p>Loader...</p>
-                                <i class="fa fa-spinner fa-spin fa-4x fa-fw"></i>
-                                <span class="sr-only">Loading...</span>
-
-                            </div>
-                            <div data-ng-if="showLoader==false">
-                                <ul data-ng-if="showLoader==false">
-                                    <li class="rounded" ng-style="{background:a.backgroundColor}"
-                                        data-ng-repeat="a in addedStudents track by a.id">
-                                        <div data-ng-if="showStudentId">{{a.id}}
-                                            <button type="btn" class="btn btn-default btn-xs"
-                                                    data-ng-click="removeFromAddedList(a)">X
-                                            </button>
-                                        </div>
-                                        <div data-ng-if="showStudentName">
-                                            {{a.id}}
-                                            <button type="btn" class="btn btn-default btn-xs"
-                                                    data-ng-click="removeFromAddedList(a)">X
-                                            </button>
-                                            <br>{{a.fullName}}
-
-                                        </div>
-                                        <div data-ng-if="showAdviserName">
-                                            {{a.id}}
-                                            <button type="btn" class="btn btn-default btn-xs"
-                                                    data-ng-click="removeFromAddedList(a)">X
-                                            </button>
-                                            <br>{{teacherIdWithTeacherMap[a.adviser].employeeName}}
-
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-
-
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h5 style="background-color: darkgrey; color: ghostwhite"><p class="labels">Adviser</p></h5>
-                            <br>
-
-                            <div class="col-md-2" align="right">
-                                <p>Select an adviser</p>
-                            </div>
-                            <div class="col-md-4">
-                                <select data-ng-model="teacherId"
-                                        data-ng-change="getExistingStudentsOfAdviser(teacherId);enableSaveButton();assignTeacherId(teacherId)">
-                                    <option value="">Select an adviser</option>
-                                    <option data-ng-repeat="t in teachers track by t.id" value="{{t.id}}">
-                                        {{t.employeeName}}
-                                    </option>
-                                </select>
-                                <!--<select data-ng-model="teacherId" class="form-control required" name="teacher" data-ng-change="enableSaveButton();assignTeacherId(teacherId)">
-                                    <option value="">Select an adviser</option>
-                                    <option data-ng-repeat="t in teachers track by t.id" value="{{t.id}}">{{t.employeeName}}</option>
-                                </select>-->
-                                <!--  <select data-ng-model="selectedTeacher" class="form-control" data-ng-options=" t as t.employeeName for t in teachers" data-ng-change="enableSaveButton();assignTeacherId(t);">
-                                      <option value="">Select a teacher</option>
-                                  </select>-->
-                            </div>
-                            <div class="col-md-4">
-                                <p><b>Currently Assigned Students: </b>{{assignedStudentsOfTheAdviser}}</p>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div align="right" style="padding: 5%">
-                            <hr>
-                            <button type="button" class="btn btn-success" data-ng-click="save()">Save</button>
-                        </div>
-
-                    </div>
-
-                </div>
-                <!-- Dne of Bulk STudents Advisor Assignment -->
             </div>
         </div>
     </div>
