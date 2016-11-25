@@ -185,7 +185,7 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
       + "        COURSE_ID,count(COURSE_ID) total_students  "
       + "        from UG_REGISTRATION_RESULT  "
       + "        WHERE SEMESTER_ID=? GROUP BY  COURSE_ID  " + "    ) ugRegistrationResult,  "
-      + "  (  " + "    select ID " + "      SEMESTER_ID,  " + "      COURSE_ID,  "
+      + "  (  " + "    select ID, SEMESTER_ID,  " + "      COURSE_ID,  "
       + "      last_submission_date  " + "    from MARKS_SUBMISSION_STATUS  "
       + "    ) marksSubmissionStatus  " + "where  "
       + "  EXAM_ROUTINE.EXAM_DATE=to_date(?,'dd-mm-yyyy') AND  "
