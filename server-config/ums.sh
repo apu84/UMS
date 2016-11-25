@@ -67,6 +67,11 @@ restart_web_server() {
 	service nginx restart	
 }
 
+restart_cache_server() {
+	service memcached restart
+	service memcached2 restart
+}
+
 restart_app_servers() {
 	stop_all
 	start_all
@@ -146,6 +151,7 @@ usage() {
 	echo "      --applog Show applicaiton logs of a particular tomcat instance"
 	echo "      --restart-app-servers Restarts all tomcat instances"
 	echo "      --restart-web-server Restarts web server (apache/nginx)"
+	echo "      --restart-cache-server Restarts cache server (memcached)"
 }
 
 #restart_service_if_not_running nginx	
@@ -163,6 +169,7 @@ TOMCAT_INSTANCE=""
 APP_LOG=""
 RESTART_APP_SERVERS=""
 RESTART_WEB_SERVER=""
+RESTART_CACHE_SERVER=""
 
 while [[ $# -gt 0 ]]
 do
@@ -218,7 +225,11 @@ case $key in
 		--restart-web-server)
     RESTART_WEB_SERVER="restart-web-server"
     ;;
-		
+
+    --restart-cache-server)
+		RESTART_CACHE_SERVER="restart-cache-server"
+		;;
+
     *)
 		
     ;;
@@ -309,6 +320,10 @@ then
 	restart_web_server		
 fi
 
+if [ ! -z "$RESTART_CACHE_SERVER" ]
+then
+	restart_cache_server
+fi
 
 
 if [[ $ARGUMENTS -eq 1 ]]

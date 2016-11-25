@@ -1,0 +1,84 @@
+<div class="row">
+    <div class="col-lg-3" data-ng-if="$index >= start && $index <= end"
+         data-ng-repeat="(programId, status) in statusMap track by $index">
+        <div class="panel panel-default">
+            <div class="panel-body" style="min-height: 240px;">
+                <div
+                     data-result-process-status-monitor=""
+                     data-status-by-year-semester="status"
+                     data-semester-id="semesterId"
+                     data-program-id="programId"
+                     data-render="'icon'">
+                </div>
+
+                <div id="{{::programId}}_view1">
+                    <strong class="text-uppercase">{{::status.departmentName}}</strong><br/>
+                    <span>{{::status.programName}}</span><br/>
+                    <img src="images/processed.jpg" height="64" width="64"
+                         data-ng-click="showYearSemesterWise(programId)"
+                         style="margin: 20px 0px;clear: both;cursor: pointer;"/>
+                    <div class="col-lg-12">
+                        <div class="well well-sm"
+                             data-result-process-status-monitor=""
+                             data-status-by-year-semester="status"
+                             data-semester-id="semesterId"
+                             data-program-id="programId"
+                             data-render="'text'">
+                        </div>
+                    </div>
+                </div>
+                <div id="{{::programId}}_view2" style="display: none;">
+                    <img src="images/processed.jpg" height="36" width="36"
+                         style="position: absolute;top: 0px;left: 10px;cursor: pointer;z-index: 999;"/>
+                    <div class="row">
+                        <strong class="text-uppercase">
+                            {{::status.departmentName}}
+                        </strong> (Promotion List)<br/><br/>
+                        <div class="col-md-6">
+                            <ul class="list-group">
+                                <li class="list-group-item"
+                                    data-ng-if="::status.yearSemester[yearSemester].academicSemester == 1"
+                                    data-ng-repeat="yearSemester in sortedKeys(status.yearSemester)">
+                                    {{::yearSemester}}
+                                    <img src="images/check.png"
+                                         style="margin-left: 20px;"
+                                         width="12"
+                                         height="12"
+                                         data-ng-if="isReadyForResultProcess(status.yearSemester[yearSemester].status)"/>
+                                    <img src="images/error.png"
+                                         style="margin-left: 20px;"
+                                         width="12"
+                                         height="12"
+                                         data-ng-if="!isReadyForResultProcess(status.yearSemester[yearSemester].status)"
+                                         data-ng-click="showCourseList(status.yearSemester[yearSemester].entries, status.departmentName, yearSemester)"/>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="list-group">
+                                <li class="list-group-item"
+                                    data-ng-if="::status.yearSemester[yearSemester].academicSemester == 2"
+                                    data-ng-repeat="yearSemester in sortedKeys(status.yearSemester)">
+                                    {{::yearSemester}}
+                                    <img src="images/check.png"
+                                         style="margin-left: 20px;"
+                                         width="12"
+                                         height="12"
+                                         data-ng-if="isReadyForResultProcess(status.yearSemester[yearSemester].status)"/>
+                                    <img src="images/error.png"
+                                         style="margin-left: 20px;"
+                                         width="12"
+                                         height="12"
+                                         data-ng-if="!isReadyForResultProcess(status.yearSemester[yearSemester].status)"
+                                         data-ng-click="showCourseList(status.yearSemester[yearSemester].entries, status.departmentName, yearSemester)"/>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <img src="images/back.png" data-ng-click="showDefault(programId)"
+                         style="clear: both;cursor: pointer;"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -9,32 +9,27 @@ import org.ums.domain.model.common.LastModifier;
 import org.ums.manager.CacheManager;
 
 import java.net.InetSocketAddress;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MemcacheClientManager<R extends LastModifier, I> implements CacheManager<R, I> {
   private static final Logger mLogger = LoggerFactory.getLogger(MemcacheClientManager.class);
 
   private MemcachedClient mObjectCache;
-  private MemcachedClient mLastModified;
 
-  public MemcacheClientManager(final String pObjectCacheUrl, final Integer pObjectCachePort,
-      final String pLastModifiedCacheUrl, final Integer pLastModifiedCachePort) throws Exception {
+  public MemcacheClientManager(final String pObjectCacheUrl, final Integer pObjectCachePort)
+      throws Exception {
     Validate.notNull(pObjectCacheUrl);
     Validate.notNull(pObjectCachePort);
-    Validate.notNull(pLastModifiedCacheUrl);
-    Validate.notNull(pLastModifiedCachePort);
-    mLogger.info("Memcached - " + pObjectCacheUrl + " : " + pObjectCachePort);
-    mLogger.info("Memcached - " + pLastModifiedCacheUrl + " : " + pLastModifiedCachePort);
+
     mObjectCache = new MemcachedClient(new InetSocketAddress(pObjectCacheUrl, pObjectCachePort));
-    mLastModified =
-        new MemcachedClient(new InetSocketAddress(pLastModifiedCacheUrl, pLastModifiedCachePort));
   }
 
   @Override
   public void put(String pCacheId, R pReadonly) {
     mObjectCache.set(pCacheId, 0, pReadonly);
-    mLastModified.set(pCacheId, 0, StringUtils.isEmpty(pReadonly.getLastModified()) ? ""
-        : pReadonly.getLastModified());
+    mObjectCache.set(getLastModifiedKey(pCacheId), 0,
+        StringUtils.isEmpty(pReadonly.getLastModified()) ? "" : pReadonly.getLastModified());
   }
 
   @Override
@@ -44,19 +39,18 @@ public class MemcacheClientManager<R extends LastModifier, I> implements CacheMa
 
   @Override
   public String getLastModified(final String pCacheId) throws Exception {
-    return (String) mLastModified.get(pCacheId);
+    return (String) mObjectCache.get(getLastModifiedKey(pCacheId));
   }
 
   @Override
   public void invalidate(String pCacheId) {
     mObjectCache.delete(pCacheId);
-    mLastModified.delete(pCacheId);
+    mObjectCache.delete(getLastModifiedKey(pCacheId));
   }
 
   @Override
   public void flushAll() throws Exception {
     mObjectCache.flush();
-    mLastModified.flush();
   }
 
   @Override
@@ -82,5 +76,42 @@ public class MemcacheClientManager<R extends LastModifier, I> implements CacheMa
   @Override
   public void invalidateList(String pCacheId) throws Exception {
     mObjectCache.delete(pCacheId);
+  }
+
+  @Override
+  public void putReferrerKey(String pReferrer, String pReferred) {
+    mObjectCache.set(pReferrer, 0, pReferred);
+
+    List<String> keyList = (List<String>) mObjectCache.get(getReferenceKey(pReferred));
+
+    if(keyList == null) {
+      keyList = new ArrayList<>();
+      keyList.add(pReferrer);
+    }
+    else {
+      if(!keyList.contains(pReferrer)) {
+        keyList.add(pReferrer);
+      }
+    }
+
+    mObjectCache.set(getReferenceKey(pReferred), 0, keyList);
+  }
+
+  @Override
+  public String getReferred(String pReferrer) {
+    return (String) mObjectCache.get(pReferrer);
+  }
+
+  @Override
+  public List<String> getReferrer(String pReferred) {
+    return (List<String>) mObjectCache.get(pReferred);
+  }
+
+  private String getReferenceKey(String pId) {
+    return pId + "-reference";
+  }
+
+  private String getLastModifiedKey(String pId) {
+    return pId + "-lastModified";
   }
 }

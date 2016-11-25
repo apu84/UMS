@@ -2,19 +2,6 @@
     <div class="form-body pal">
         <div data-program-selector="" data-model="teacherSearchParamModel.programSelector"></div>
         <div class="form-group">
-            <label class="col-md-4 control-label">Semester</label>
-            <div class="col-md-8">
-                <select name="semester" id="semester_id" class="form-control required" data-ng-model="teacherSearchParamModel.semesterId"
-                        ng-init="teacherSearchParamModel.academicSemesterId=''">
-                    <option data-ng-repeat="semester in teacherSearchParamModel.programSelector.getSemesters()"
-                            value="{{semester.id}}">
-                        {{semester.name}}
-                    </option>
-                </select>
-            </div>
-        </div>
-
-        <div class="form-group">
             <label class="col-md-4 control-label">Year</label>
 
             <div class="col-md-8">

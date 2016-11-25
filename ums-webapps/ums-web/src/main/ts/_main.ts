@@ -131,6 +131,9 @@
 /// <reference path='controller/grade/MarksSubmission.ts'/>
 /// <reference path='controller/grade/GradeSubmissionDeadLine.ts'/>
 /// <reference path='controller/result/ResultProcessing.ts'/>
+/// <reference path='controller/result/CourseStatusList.ts'/>
+/// <reference path='controller/result/ResultProcessStatusMonitor.ts'/>
+
 
 /// <reference path='Utils.ts'/>
 

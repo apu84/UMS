@@ -8,8 +8,6 @@
   <bean class="org.ums.cache.MemcacheClientManager" id="memCachedClientManager" lazy-init="true">
     <constructor-arg index="0" type="java.lang.String" value="${object.cache.url}"/>
     <constructor-arg index="1" type="java.lang.Integer" value="${object.cache.port}"/>
-    <constructor-arg index="2" type="java.lang.String" value="${lastmodified.cache.url}"/>
-    <constructor-arg index="3" type="java.lang.Integer" value="${lastmodified.cache.port}"/>
   </bean>
 
   <bean class="org.ums.cache.CacheFactoryImpl" id="cacheFactory">

@@ -1,5 +1,6 @@
 package org.ums.common.builder;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
@@ -16,6 +17,7 @@ import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,9 +27,14 @@ import java.util.List;
 @Component
 public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
 
+  @Autowired
+  DateFormat mDateFormat;
+
   @Override
   public void build(JsonObjectBuilder pBuilder, ExamGrade pReadOnly, UriInfo pUriInfo,
       final LocalCache pLocalCache) throws Exception {
+
+    pBuilder.add("id", pReadOnly.getId());
 
     if(pReadOnly.getExamDate() != null) {
       pBuilder.add("examDate", pReadOnly.getExamDate());
@@ -58,7 +65,7 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
     }
 
     if(pReadOnly.getLastSubmissionDate() != null) {
-      pBuilder.add("lastSubmissionDate", pReadOnly.getLastSubmissionDate());
+      pBuilder.add("lastSubmissionDate", mDateFormat.format(pReadOnly.getLastSubmissionDate()));
     }
 
   }
@@ -66,8 +73,12 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
   @Override
   public void build(MutableExamGrade pMutable, JsonObject pJsonObject, final LocalCache pLocalCache)
       throws Exception {
+    if(pJsonObject.getString("id") != null) {
+      pMutable.setId(Integer.parseInt(pJsonObject.getString("id")));
+    }
     if(pJsonObject.getString("lastSubmissionDate") != null) {
-      pMutable.setExamDate(pJsonObject.getString("lastSubmissionDate"));
+      pMutable
+          .setLastSubmissionDate(mDateFormat.parse(pJsonObject.getString("lastSubmissionDate")));
     }
     pMutable.setSemesterId(pJsonObject.getInt("semesterId"));
     // pMutable.setExamTypeId(pJsonObject.getInt("examType"));

@@ -28,9 +28,9 @@ public interface StudentRecord extends Serializable, Identifier<Integer>, LastMo
 
   Integer getAcademicSemester();
 
-  Float getCGPA();
+  Double getCGPA();
 
-  Float getGPA();
+  Double getGPA();
 
   Type getType();
 
