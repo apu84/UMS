@@ -96,9 +96,10 @@ public class PersistentMarkSubmissionStatusDao extends MarksSubmissionStatusDaoD
     List<Object[]> params = new ArrayList<>();
     for(MarksSubmissionStatus pMutable : pMarksSubmissionStatusList) {
       params.add(new Object[] {pMutable.getSemesterId(), pMutable.getCourseId(),
-          pMutable.getStatus().getId(), pMutable.getExamType().getId(), pMutable.getLastSubmissionDate(),
-          pMutable.getTotalPart(), pMutable.getPartATotal(), pMutable.getPartBTotal(),
-          pMutable.getYear(), pMutable.getAcademicSemester(), pMutable.getId()});
+          pMutable.getStatus().getId(), pMutable.getExamType().getId(),
+          pMutable.getLastSubmissionDate(), pMutable.getTotalPart(), pMutable.getPartATotal(),
+          pMutable.getPartBTotal(), pMutable.getYear(), pMutable.getAcademicSemester(),
+          pMutable.getId()});
     }
 
     return params;

@@ -83,7 +83,7 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
     }
     if(pJsonObject.getString("lastSubmissionDate") != null) {
       Date date = dateFormat.parse(pJsonObject.getString("lastSubmissionDate"));
-      // Set date to last hour and last minute of the day
+      // Set date to last hour and last minute of the dayatch
       Calendar calendar = Calendar.getInstance();
       calendar.setTime(date);
       calendar.set(Calendar.MINUTE, 59);
