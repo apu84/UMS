@@ -1,9 +1,9 @@
 var Authentication = (function () {
-  function Authentication() {
+  var endpointUrl;
+  function Authentication(pEndpoint) {
+    endpointUrl = pEndpoint;
   }
-
-  var endpointUrl = window.location.origin + '/ums-webservice-academic/login';
-
+  
   Authentication.prototype.authenticate = function (pUserName,pPassword) {
     var userName = pUserName?pUserName:document.getElementById('userName').value;
     var password = pPassword?pPassword:document.getElementById('password').value;

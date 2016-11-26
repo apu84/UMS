@@ -28,7 +28,7 @@
     </dependency>
     <dependency>
       <groupId>org.ums</groupId>
-      <artifactId>ums-web</artifactId>
+      <artifactId>ums-webservice-bank</artifactId>
       <type>war</type>
       <version>${project.version}</version>
     </dependency>

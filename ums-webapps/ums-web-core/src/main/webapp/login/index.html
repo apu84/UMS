@@ -15,10 +15,11 @@
   <link type="text/css" rel="stylesheet" href="../resources/css/layout.css"/>
   <script type="text/javascript" src="../resources/js/jquery-1.11.3.min.js"></script>
   <script type="text/javascript" src="../resources/js/bootstrap.js"></script>
+  <script type="text/javascript" src="../resources/js/endpoint.js"></script>
   <script type="text/javascript" src="../resources/js/login.js"></script>
   <script type="text/javascript">
     function authenticate() {
-      var authenticationHelper = new Authentication();
+      var authenticationHelper = new Authentication(endpointUrl);
       authenticationHelper.authenticate();
       console.debug(authenticationHelper);
     }
