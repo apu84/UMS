@@ -16,8 +16,11 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentUGRegistrationResultDao extends UGRegistrationResultDaoDecorator {
-  String SELECT_ALL =
-      "SELECT STUDENT_ID, SEMESTER_ID, COURSE_ID, GRADE_LETTER, EXAM_TYPE, REG_TYPE, LAST_MODIFIED FROM UG_REGISTRATION_RESULT ";
+  String SELECT_ALL = "SELECT UG_REGISTRATION_RESULT.STUDENT_ID, "
+      + "UG_REGISTRATION_RESULT.SEMESTER_ID, " + "UG_REGISTRATION_RESULT.COURSE_ID, "
+      + "UG_REGISTRATION_RESULT.GRADE_LETTER, " + "UG_REGISTRATION_RESULT.EXAM_TYPE, "
+      + "UG_REGISTRATION_RESULT.REG_TYPE, " + "UG_REGISTRATION_RESULT.LAST_MODIFIED "
+      + "FROM UG_REGISTRATION_RESULT ";
 
   String INSERT_ALL =
       "INSERT INTO UG_REGISTRATION_RESULT(STUDENT_ID, SEMESTER_ID, COURSE_ID, GRADE_LETTER, EXAM_TYPE, TYPE, LAST_MODIFIED)"
@@ -92,6 +95,20 @@ public class PersistentUGRegistrationResultDao extends UGRegistrationResultDaoDe
   }
 
   @Override
+  public List<UGRegistrationResult> getResults(Integer pProgramId, Integer pSemesterId)
+      throws Exception {
+    String query =
+        SELECT_ALL
+            + ", STUDENT_RECORD, STUDENTS WHERE STUDENT_RECORD.STUDENT_ID = UG_REGISTRATION_RESULT.STUDENT_ID "
+            + "AND STUDENT_RECORD.STUDENT_ID = STUDENTS.STUDENT_ID "
+            + "AND STUDENT_RECORD.REGISTRATION_TYPE != 'D' AND STUDENT_RECORD.REGISTRATION_TYPE != 'W' "
+            + "AND STUDENT_RECORD.SEMESTER_ID = ? " + "AND STUDENTS.PROGRAM_ID = ? "
+            + "ORDER BY STUDENT_RECORD.STUDENT_ID, UG_REGISTRATION_RESULT.SEMESTER_ID";
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pProgramId},
+        new UGRegistrationResultRowMapperWithResult());
+  }
+
+  @Override
   public int create(List<MutableUGRegistrationResult> pMutableList) throws Exception {
     return mJdbcTemplate.batchUpdate(INSERT_ALL, getInsertParamList(pMutableList)).length;
   }
@@ -135,6 +152,13 @@ public class PersistentUGRegistrationResultDao extends UGRegistrationResultDaoDe
         new UGRegistrationResultRowMapperWithoutResult());
   }
 
+  @Override
+  public List<UGRegistrationResult> getRegisteredCoursesWithResult(String pStudentId) {
+    String query = SELECT_ALL + " WHERE STUDENT_ID = ?";
+    return mJdbcTemplate.query(query, new Object[] {pStudentId},
+        new UGRegistrationResultRowMapperWithResult());
+  }
+
   // this will only work with Carry, Clearance and Improvement applications.
   class UGRegistrationResultCCIRowMapper implements RowMapper<UGRegistrationResult> {
     @Override
@@ -153,17 +177,32 @@ public class PersistentUGRegistrationResultDao extends UGRegistrationResultDaoDe
   }
 
   class UGRegistrationResultRowMapperWithoutResult implements RowMapper<UGRegistrationResult> {
-    @Override
-    public UGRegistrationResult mapRow(ResultSet pResultSet, int pI) throws SQLException {
-      PersistentUGRegistrationResult result = new PersistentUGRegistrationResult();
+    protected MutableUGRegistrationResult build(ResultSet pResultSet) throws SQLException {
+      MutableUGRegistrationResult result = new PersistentUGRegistrationResult();
       result.setStudentId(pResultSet.getString("STUDENT_ID"));
       result.setCourseId(pResultSet.getString("COURSE_ID"));
       result.setExamType(ExamType.get(pResultSet.getInt("EXAM_TYPE")));
       result.setType(CourseRegType.get(pResultSet.getInt("REG_TYPE")));
       result.setSemesterId(pResultSet.getInt("SEMESTER_ID"));
       result.setLastModified(pResultSet.getString("LAST_MODIFIED"));
-      AtomicReference<UGRegistrationResult> registrationResult = new AtomicReference<>(result);
+      return result;
+    }
+
+    @Override
+    public UGRegistrationResult mapRow(ResultSet pResultSet, int pI) throws SQLException {
+      AtomicReference<UGRegistrationResult> registrationResult =
+          new AtomicReference<>(build(pResultSet));
       return registrationResult.get();
+    }
+  }
+
+  class UGRegistrationResultRowMapperWithResult extends UGRegistrationResultRowMapperWithoutResult {
+    @Override
+    public UGRegistrationResult mapRow(ResultSet pResultSet, int pI) throws SQLException {
+      MutableUGRegistrationResult registrationResult = build(pResultSet);
+      registrationResult.setGradeLetter(pResultSet.getString("GRADE_LETTER"));
+      AtomicReference<UGRegistrationResult> result = new AtomicReference<>(registrationResult);
+      return result.get();
     }
   }
 

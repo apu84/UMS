@@ -25,9 +25,9 @@ public interface MutableStudentRecord extends StudentRecord, Mutable, MutableIde
 
   void setStatus(final Status pStatus);
 
-  void setCGPA(final Float pCGPA);
+  void setCGPA(final Double pCGPA);
 
-  void setGPA(final Float pGPA);
+  void setGPA(final Double pGPA);
 
   void setProgramId(final Integer pProgramId);
 

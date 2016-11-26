@@ -33,4 +33,8 @@ public class UmsUtils {
       return d < 0 ? -(i + 1) : i + 1;
     }
   }
+
+  public static String getPercentageString(int portion, int total) {
+    return ((portion / total) * 100) + "%";
+  }
 }

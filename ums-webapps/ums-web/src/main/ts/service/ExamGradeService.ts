@@ -12,7 +12,8 @@ module ums{
       var defer = this.$q.defer();
       var gradeSubmissionStatisticsArr:any={};
 
-      this.httpClient.get('/ums-webservice-academic/academic/gradeSubmission/deadline/semester/'+semesterId+'/examType/'+examType+'/examDate/'+examDate,'application/json',
+      this.httpClient.get(`academic/gradeSubmission/deadline/semester/${semesterId}/examType/${examType}/examDate/${examDate}`,
+          HttpClient.MIME_TYPE_JSON,
           (json:any,etag:string)=>{
             gradeSubmissionStatisticsArr = json.entries;
             defer.resolve(gradeSubmissionStatisticsArr);
@@ -26,7 +27,7 @@ module ums{
 
     public updateGradeSubmissionDeadLine(json:any):ng.IPromise<any>{
       var defer = this.$q.defer();
-      this.httpClient.put('/ums-webservice-academic/academic/gradeSubmission/gradeSubmissionDeadLine',json,'application/json')
+      this.httpClient.put('academic/gradeSubmission/gradeSubmissionDeadLine',json, HttpClient.MIME_TYPE_JSON)
         .success(()=>{
             defer.resolve("Successfully saved");
         }).error((data)=>{

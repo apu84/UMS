@@ -34,8 +34,8 @@ public class PersistentStudentRecord implements MutableStudentRecord {
   private Semester mSemester;
   private Integer mYear;
   private Integer mAcademicSemester;
-  private Float mCGPA;
-  private Float mGPA;
+  private Double mCGPA;
+  private Double mGPA;
   private StudentRecord.Status mStatus;
   private StudentRecord.Type mType;
   private String mLastModified;
@@ -89,12 +89,12 @@ public class PersistentStudentRecord implements MutableStudentRecord {
   }
 
   @Override
-  public void setCGPA(Float pCGPA) {
+  public void setCGPA(Double pCGPA) {
     mCGPA = pCGPA;
   }
 
   @Override
-  public void setGPA(Float pGPA) {
+  public void setGPA(Double pGPA) {
     mGPA = pGPA;
   }
 
@@ -170,12 +170,12 @@ public class PersistentStudentRecord implements MutableStudentRecord {
   }
 
   @Override
-  public Float getCGPA() {
+  public Double getCGPA() {
     return mCGPA;
   }
 
   @Override
-  public Float getGPA() {
+  public Double getGPA() {
     return mGPA;
   }
 

@@ -1,6 +1,6 @@
 module ums {
   export class Constants {
-    static  Default():any {
+    static  Default(): any {
       return {
         Empty: "",
         initDept: [{id: '', name: 'Select Dept./School'}],
@@ -74,12 +74,12 @@ module ums {
         dept4JqGridSelectBox: ':None;01:ARC;02:BBA;03:CE;04:CSE;05:EEE;06:TE;07:MPE',
         days: ':None;1:Saturday;2:Sunday;3:Monday;4:Tuesday;5:Wednesday;6:Thursday;7:Friday',
         weekday: [
-          {id:"1",name: 'Saturday'},
-          {id:"2",name: 'Sunday'},
-          {id:"3",name: 'Monday'},
-          {id:"4",name: 'Tuesday'},
-          {id:"5",name: 'Wednesday'},
-          {id:"6",name: 'Thursday'}
+          {id: "1", name: 'Saturday'},
+          {id: "2", name: 'Sunday'},
+          {id: "3", name: 'Monday'},
+          {id: "4", name: 'Tuesday'},
+          {id: "5", name: 'Wednesday'},
+          {id: "6", name: 'Thursday'}
         ],
         officeShort: {
           '80': 'RO',
@@ -133,8 +133,8 @@ module ums {
         ],
         timeChecker: [
           {
-            id:'',
-            val:'Select time'
+            id: '',
+            val: 'Select time'
           },
           {
             id: '08:00 AM',
@@ -350,14 +350,15 @@ module ums {
           }
         ],
         pgPrograms: [],
-        ugProgramMap : {'110100':['BSC in ARC'],
-                                      '110200':['BBA'],
-                                      '110300':['BSc in CE'],
-                                      '110400':['BSc in CSE'],
-                                      '110500':['BSc in EEE'],
-                                      '110600':['BSc in TE'],
-                                      '110707':['BSc in IPE'],
-                                      '110708':['BSc in ME']
+        ugProgramMap: {
+          '110100': ['BSC in ARC'],
+          '110200': ['BBA'],
+          '110300': ['BSc in CE'],
+          '110400': ['BSc in CSE'],
+          '110500': ['BSc in EEE'],
+          '110600': ['BSc in TE'],
+          '110707': ['BSc in IPE'],
+          '110708': ['BSc in ME']
         },
         theorySectionsGrid: ":None;A:A;B:B;C:C;D:D",
         theorySections: [
@@ -378,19 +379,19 @@ module ums {
           {id: "C2", name: "C2"},
           {id: "D2", name: "D2"}
         ],
-        sessionalSectionsA:[
-          {id:'A1',name:'A1'},
-          {id:'A2',name:'A2'}
+        sessionalSectionsA: [
+          {id: 'A1', name: 'A1'},
+          {id: 'A2', name: 'A2'}
         ],
-        sessionalSectionsB:[
-          {id:'B1',name:'B1'},
-          {id:'B2',name:'B2'}
-        ],sessionalSectionsC:[
-          {id:'C1',name:'C1'},
-          {id:'C2',name:'C2'}
-        ],sessionalSectionsD:[
-          {id:'D1',name:'D1'},
-          {id:'D2',name:'D2'}
+        sessionalSectionsB: [
+          {id: 'B1', name: 'B1'},
+          {id: 'B2', name: 'B2'}
+        ], sessionalSectionsC: [
+          {id: 'C1', name: 'C1'},
+          {id: 'C2', name: 'C2'}
+        ], sessionalSectionsD: [
+          {id: 'D1', name: 'D1'},
+          {id: 'D2', name: 'D2'}
         ],
         mimeTypeJson: 'application/json',
         mimeTypePdf: 'application/pdf',
@@ -471,22 +472,22 @@ module ums {
           ACCEPT: 7,
           ACCEPTED: 8
         },
-        courseRegType:{
-          REGULAR:1,
-          CLEARANCE:2,
-          CARRY:3,
-          SPECIAL_CARRY:4,
-          IMPROVEMENT:5
+        courseRegType: {
+          REGULAR: 1,
+          CLEARANCE: 2,
+          CARRY: 3,
+          SPECIAL_CARRY: 4,
+          IMPROVEMENT: 5
         },
-        regColorCode:{
-          CLEARANCE:"#BBFFFF",
-          CARRY:"#CCCCFF",
-          SPECIAL_CARRY:"#00FF00",
-          IMPROVEMENT:"#FFF68F"
+        regColorCode: {
+          CLEARANCE: "#BBFFFF",
+          CARRY: "#CCCCFF",
+          SPECIAL_CARRY: "#00FF00",
+          IMPROVEMENT: "#FFF68F"
         },
-        programTypeEnum:{
-          UG:11,
-          PG:22
+        programTypeEnum: {
+          UG: 11,
+          PG: 22
         },
         yearSemester: [
           {id: "0", name: "Select Year-Semester"},
@@ -498,7 +499,53 @@ module ums {
           {id: "32", name: "3-2"},
           {id: "41", name: "4-1"},
           {id: "42", name: "4-2"}
-        ]
+        ],
+        MARKS_SUBMISSION_STATUS: {
+          NOT_SUBMITTED: 0,
+          WAITING_FOR_SCRUTINY: 1,
+          REQUESTED_FOR_RECHECK_BY_SCRUTINIZER: 2,
+          WAITING_FOR_HEAD_APPROVAL: 3,
+          REQUESTED_FOR_RECHECK_BY_HEAD: 4,
+          WAITING_FOR_COE_APPROVAL: 5,
+          REQUESTED_FOR_RECHECK_BY_COE: 6,
+          ACCEPTED_BY_COE: 7,
+          WAITING_FOR_RECHECK_REQUEST_APPROVAL: 8
+        },
+        TASK_STATUS: {
+          INPROGRESS: "INPROGRESS",
+          COMPLETED: "COMPLETED",
+          NONE: "NONE"
+        },
+        RESULT_PROCESS_STATUS: {
+          IN_PROGRESS: {
+            id : 1,
+            label: "Process in progress"
+          },
+          PROCESSED_ON: {
+            id: 2,
+            label: "Processed on"
+          },
+          UNPROCESSED: {
+            id: 3,
+            label: "Unprocessed"
+          },
+          READY_TO_BE_PROCESSED: {
+            id: 4,
+            label: "Ready to be processed"
+          },
+          STATUS_UNDEFINED: {
+            id: 5,
+            label: "Status undefined"
+          },
+          RESULT_PUBLISH_INPROGRESS: {
+            id: 6,
+            label: "Result publish in progress"
+          },
+          RESULT_PUBLISHED: {
+            id: 7,
+            label: "Result published on"
+          }
+        }
 
       }
     }

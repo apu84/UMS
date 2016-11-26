@@ -4,11 +4,10 @@ import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.dto.StudentGradeDto;
 import org.ums.domain.model.mutable.MutableExamGrade;
-import org.ums.domain.model.mutable.MutableExamRoutine;
 import org.ums.enums.ExamType;
 import org.ums.manager.ExamGradeManager;
-import org.ums.manager.ExamRoutineManager;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,6 +22,7 @@ public class PersistentExamGrade implements MutableExamGrade {
     sExamGradeManager = applicationContext.getBean("examGradeManager", ExamGradeManager.class);
   }
 
+  private Integer mId;
   private List<StudentGradeDto> mGradeList;
   private String mExamTypeName;
   private int mExamTypeId;
@@ -35,7 +35,7 @@ public class PersistentExamGrade implements MutableExamGrade {
   private String mExamDate;
   private String mProgramShortname;
   private Integer mCourseCreditHour;
-  private String mLastSubmissionDate;
+  private Date mLastSubmissionDate;
   private Integer mTotalStudents;
 
   public PersistentExamGrade() {
@@ -44,6 +44,16 @@ public class PersistentExamGrade implements MutableExamGrade {
 
   public PersistentExamGrade(final MutableExamGrade pOriginal) throws Exception {
     mGradeList = pOriginal.getGradeList();
+  }
+
+  @Override
+  public Integer getId() {
+    return mId;
+  }
+
+  @Override
+  public void setId(Integer pId) {
+    mId = pId;
   }
 
   public void save() throws Exception {
@@ -97,7 +107,7 @@ public class PersistentExamGrade implements MutableExamGrade {
   }
 
   @Override
-  public void setLastSubmissionDate(String pLastSubmissionDate) {
+  public void setLastSubmissionDate(Date pLastSubmissionDate) {
     mLastSubmissionDate = pLastSubmissionDate;
   }
 
@@ -122,7 +132,7 @@ public class PersistentExamGrade implements MutableExamGrade {
   }
 
   @Override
-  public String getLastSubmissionDate() {
+  public Date getLastSubmissionDate() {
     return mLastSubmissionDate;
   }
 

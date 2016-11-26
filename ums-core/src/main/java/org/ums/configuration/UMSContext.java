@@ -1,5 +1,10 @@
 package org.ums.configuration;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
+import javax.sql.DataSource;
+
 import org.apache.shiro.authc.credential.PasswordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -27,10 +32,6 @@ import org.ums.statistics.JdbcTemplateFactory;
 import org.ums.statistics.QueryLogger;
 import org.ums.statistics.TextLogger;
 import org.ums.util.Constants;
-
-import javax.sql.DataSource;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 
 @Configuration
 @EnableAsync
@@ -385,7 +386,11 @@ public class UMSContext {
 
   @Bean
   UGRegistrationResultManager registrationResultManager() {
-    return new PersistentUGRegistrationResultDao(mTemplateFactory.getJdbcTemplate());
+    UGRegistrationResultAggregator resultAggregator =
+        new UGRegistrationResultAggregator(equivalentCourseManager(), taskStatusManager());
+    resultAggregator.setManager(new PersistentUGRegistrationResultDao(mTemplateFactory
+        .getJdbcTemplate()));
+    return resultAggregator;
   }
 
   @Bean
@@ -446,6 +451,39 @@ public class UMSContext {
   @Lazy
   NotificationGenerator notificationGenerator() {
     return new NotificationGeneratorImpl(notificationManager());
+  }
+
+  @Bean
+  EquivalentCourseManager equivalentCourseManager() {
+    EquivalentCourseCache equivalentCourseCache =
+        new EquivalentCourseCache(mCacheFactory.getCacheManager());
+    equivalentCourseCache.setManager(new EquivalentCourseDao(mTemplateFactory.getJdbcTemplate()));
+    return equivalentCourseCache;
+  }
+
+  @Bean
+  MarksSubmissionStatusManager marksSubmissionStatusManager() {
+    MarksSubmissionStatusCache cache =
+        new MarksSubmissionStatusCache(mCacheFactory.getCacheManager());
+    MarksSubmissionStatusAggregator aggregator = new MarksSubmissionStatusAggregator();
+    cache.setManager(aggregator);
+    aggregator.setManager(new PersistentMarkSubmissionStatusDao(mTemplateFactory.getJdbcTemplate(),
+        getGenericDateFormat()));
+    return cache;
+  }
+
+  @Bean
+  TaskStatusManager taskStatusManager() {
+    return new PersistentTaskStatusDao(mTemplateFactory.getJdbcTemplate());
+  }
+
+  @Bean
+  ResultPublishManager resultPublishManager() {
+    ResultPublishValidator validator = new ResultPublishValidator(marksSubmissionStatusManager());
+    ResultPublishImpl resultPublish = new ResultPublishImpl();
+    validator.setManager(resultPublish);
+    resultPublish.setManager(new ResultPublishDao(mTemplateFactory.getJdbcTemplate()));
+    return validator;
   }
 
   @Bean

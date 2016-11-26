@@ -2,13 +2,13 @@ package org.ums.decorator;
 
 import org.ums.domain.model.dto.*;
 import org.ums.domain.model.immutable.ExamGrade;
+import org.ums.domain.model.immutable.MarksSubmissionStatus;
 import org.ums.domain.model.mutable.MutableExamGrade;
 import org.ums.enums.CourseMarksSubmissionStatus;
 import org.ums.enums.CourseType;
 import org.ums.enums.ExamType;
 import org.ums.manager.ExamGradeManager;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -43,62 +43,49 @@ public class ExamGradeDaoDecorator extends
   }
 
   @Override
-  public boolean saveGradeSheet(MarksSubmissionStatusDto actualStatusDTO,
-      List<StudentGradeDto> gradeList) throws Exception {
-    return getManager().saveGradeSheet(actualStatusDTO, gradeList);
+  public boolean saveGradeSheet(MarksSubmissionStatus actualStatus, List<StudentGradeDto> gradeList)
+      throws Exception {
+    return getManager().saveGradeSheet(actualStatus, gradeList);
   }
 
   @Override
-  public boolean insertGradeLog(String userId, String userRole,
-      MarksSubmissionStatusDto actualStatusDTO, CourseMarksSubmissionStatus nextStatus,
-      List<StudentGradeDto> gradeList) throws Exception {
-    return getManager().insertGradeLog(userId, userRole, actualStatusDTO, nextStatus, gradeList);
+  public boolean insertGradeLog(String userId, String userRole, MarksSubmissionStatus actualStatus,
+      CourseMarksSubmissionStatus nextStatus, List<StudentGradeDto> gradeList) throws Exception {
+    return getManager().insertGradeLog(userId, userRole, actualStatus, nextStatus, gradeList);
   }
 
   @Override
   public int insertMarksSubmissionStatusLog(String userId, String userRole,
-      MarksSubmissionStatusDto actualStatusDTO, CourseMarksSubmissionStatus status)
-      throws Exception {
-    return getManager().insertMarksSubmissionStatusLog(userId, userRole, actualStatusDTO, status);
+      MarksSubmissionStatus actualStatus, CourseMarksSubmissionStatus status) throws Exception {
+    return getManager().insertMarksSubmissionStatusLog(userId, userRole, actualStatus, status);
   }
 
   @Override
-  public boolean updateGradeStatus_Save(MarksSubmissionStatusDto actualStatusDTO,
+  public boolean updateGradeStatus_Save(MarksSubmissionStatus actualStatus,
       List<StudentGradeDto> recheckList, List<StudentGradeDto> approveList) throws Exception {
-    return getManager().updateGradeStatus_Save(actualStatusDTO, recheckList, approveList);
+    return getManager().updateGradeStatus_Save(actualStatus, recheckList, approveList);
   }
 
   @Override
-  public boolean updateGradeStatus_Recheck(MarksSubmissionStatusDto actualStatusDTO,
+  public boolean updateGradeStatus_Recheck(MarksSubmissionStatus actualStatus,
       List<StudentGradeDto> recheckList, List<StudentGradeDto> approveList) throws Exception {
-    return getManager().updateGradeStatus_Recheck(actualStatusDTO, recheckList, approveList);
+    return getManager().updateGradeStatus_Recheck(actualStatus, recheckList, approveList);
   }
 
   @Override
-  public boolean updateGradeStatus_Approve(MarksSubmissionStatusDto actualStatusDTO,
+  public boolean updateGradeStatus_Approve(MarksSubmissionStatus actualStatus,
       List<StudentGradeDto> recheckList, List<StudentGradeDto> approveList) throws Exception {
-    return getManager().updateGradeStatus_Approve(actualStatusDTO, recheckList, approveList);
+    return getManager().updateGradeStatus_Approve(actualStatus, recheckList, approveList);
   }
 
   @Override
-  public int updateCourseMarksSubmissionStatus(MarksSubmissionStatusDto actualStatusDTO,
-      CourseMarksSubmissionStatus status) throws Exception {
-    return getManager().updateCourseMarksSubmissionStatus(actualStatusDTO, status);
+  public int rejectRecheckRequest(MarksSubmissionStatus pMarksSubmissionStatus) throws Exception {
+    return getManager().rejectRecheckRequest(pMarksSubmissionStatus);
   }
 
   @Override
-  public int updatePartInfo(MarksSubmissionStatusDto requestedStatusDTO) throws Exception {
-    return getManager().updatePartInfo(requestedStatusDTO);
-  }
-
-  @Override
-  public int rejectRecheckRequest(MarksSubmissionStatusDto actualStatusDTO) throws Exception {
-    return getManager().rejectRecheckRequest(actualStatusDTO);
-  }
-
-  @Override
-  public int approveRecheckRequest(MarksSubmissionStatusDto actualStatusDTO) throws Exception {
-    return getManager().approveRecheckRequest(actualStatusDTO);
+  public int approveRecheckRequest(MarksSubmissionStatus pMarksSubmissionStatus) throws Exception {
+    return getManager().approveRecheckRequest(pMarksSubmissionStatus);
   }
 
   @Override
@@ -139,14 +126,8 @@ public class ExamGradeDaoDecorator extends
     return getManager().getGradeSubmissionDeadLine(pSemesterId, pExamType, pExamDate);
   }
 
-  @Override
-  public int updateForGradeSubmissionDeadLine(
-      List<MarksSubmissionStatusDto> pMarksSubmissionStatusDtos) throws Exception {
-    return getManager().updateForGradeSubmissionDeadLine(pMarksSubmissionStatusDtos);
-  }
-
-  public int getTotalStudentCount(MarksSubmissionStatusDto actualStatusDTO) throws Exception {
-    return getManager().getTotalStudentCount(actualStatusDTO);
+  public int getTotalStudentCount(MarksSubmissionStatus actualStatus) throws Exception {
+    return getManager().getTotalStudentCount(actualStatus);
   }
 
   public List<MarksSubmissionStatusLogDto> getMarksSubmissionLogs(Integer pSemesterId,

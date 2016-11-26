@@ -22,4 +22,10 @@ public interface CacheManager<R, I> {
   void invalidateList(String pCacheId) throws Exception;
 
   void flushAll() throws Exception;
+
+  void putReferrerKey(String pReferrer, String pReferred);
+
+  String getReferred(String pReferrer);
+
+  List<String> getReferrer(String pReferred);
 }

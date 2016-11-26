@@ -1,5 +1,7 @@
 package org.ums.common.builder;
 
+import org.apache.commons.lang.time.DateUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
@@ -16,7 +18,11 @@ import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -25,9 +31,14 @@ import java.util.List;
 @Component
 public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
 
+  @Autowired
+  DateFormat mDateFormat;
+
   @Override
   public void build(JsonObjectBuilder pBuilder, ExamGrade pReadOnly, UriInfo pUriInfo,
       final LocalCache pLocalCache) throws Exception {
+
+    pBuilder.add("id", pReadOnly.getId());
 
     if(pReadOnly.getExamDate() != null) {
       pBuilder.add("examDate", pReadOnly.getExamDate());
@@ -58,7 +69,7 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
     }
 
     if(pReadOnly.getLastSubmissionDate() != null) {
-      pBuilder.add("lastSubmissionDate", pReadOnly.getLastSubmissionDate());
+      pBuilder.add("lastSubmissionDate", mDateFormat.format(pReadOnly.getLastSubmissionDate()));
     }
 
   }
@@ -66,8 +77,18 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
   @Override
   public void build(MutableExamGrade pMutable, JsonObject pJsonObject, final LocalCache pLocalCache)
       throws Exception {
+    DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+    if(pJsonObject.containsKey("id")) {
+      pMutable.setId(Integer.parseInt(pJsonObject.get("id").toString()));
+    }
     if(pJsonObject.getString("lastSubmissionDate") != null) {
-      pMutable.setExamDate(pJsonObject.getString("lastSubmissionDate"));
+      Date date = dateFormat.parse(pJsonObject.getString("lastSubmissionDate"));
+      // Set date to last hour and last minute of the day
+      Calendar calendar = Calendar.getInstance();
+      calendar.setTime(date);
+      calendar.set(Calendar.MINUTE, 59);
+      calendar.set(Calendar.HOUR, 23);
+      pMutable.setLastSubmissionDate(calendar.getTime());
     }
     pMutable.setSemesterId(pJsonObject.getInt("semesterId"));
     // pMutable.setExamTypeId(pJsonObject.getInt("examType"));

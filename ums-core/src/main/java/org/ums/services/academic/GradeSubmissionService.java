@@ -1,13 +1,13 @@
 package org.ums.services.academic;
 
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authz.UnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.domain.model.dto.MarksSubmissionStatusDto;
 import org.ums.domain.model.dto.StudentGradeDto;
+import org.ums.domain.model.immutable.MarksSubmissionStatus;
 import org.ums.domain.model.immutable.Notification;
 import org.ums.domain.model.immutable.User;
 import org.ums.enums.*;
@@ -23,9 +23,6 @@ import org.ums.util.UmsUtils;
 
 import javax.json.*;
 import java.io.StringReader;
-import java.nio.file.Path;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Component("gradeSubmissionService")
@@ -71,17 +68,21 @@ public class GradeSubmissionService {
 
       if(gradeStatus == StudentMarksSubmissionStatus.NONE
           || gradeStatus == StudentMarksSubmissionStatus.SUBMIT
-          && gradeDto.getRecheckStatusId() == 0 && currentActor.equalsIgnoreCase("preparer"))
+          && gradeDto.getRecheckStatusId() == 0 && currentActor.equalsIgnoreCase("preparer")) {
         noneAndSubmitArrayBuilder.add(jsonObject);
+      }
       else if((gradeStatus == StudentMarksSubmissionStatus.SUBMITTED || gradeStatus == StudentMarksSubmissionStatus.SCRUTINIZE)
-          && currentActor.equalsIgnoreCase("scrutinizer"))
+          && currentActor.equalsIgnoreCase("scrutinizer")) {
         scrutinizeCandidatesArrayBuilder.add(jsonObject);
+      }
       else if((gradeStatus == StudentMarksSubmissionStatus.SCRUTINIZED || gradeStatus == StudentMarksSubmissionStatus.APPROVE)
-          && currentActor.equalsIgnoreCase("head"))
+          && currentActor.equalsIgnoreCase("head")) {
         approveCandidatesArrayBuilder.add(jsonObject);
+      }
       else if((gradeStatus == StudentMarksSubmissionStatus.APPROVED || gradeStatus == StudentMarksSubmissionStatus.ACCEPT)
-          && currentActor.equalsIgnoreCase("coe"))
+          && currentActor.equalsIgnoreCase("coe")) {
         acceptCandidatesArrayBuilder.add(jsonObject);
+      }
 
       if((gradeStatus == StudentMarksSubmissionStatus.SUBMITTED || gradeStatus == StudentMarksSubmissionStatus.SCRUTINIZE))// &&
                                                                                                                            // !currentActor.equalsIgnoreCase("scrutinizer")
@@ -194,55 +195,46 @@ public class GradeSubmissionService {
     }
   }
 
-  public void validateGradeSubmissionDeadline(String lastDateOfSubmission) throws Exception {
-
-    if(lastDateOfSubmission == null || lastDateOfSubmission.equalsIgnoreCase(""))
+  private void validateGradeSubmissionDeadline(Date lastDateOfSubmission)
+      throws ValidationException {
+    if(lastDateOfSubmission == null) {
       return;
-    try {
-      SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-      Date currentDate = new Date();
-      Date deadLine = sdf.parse(lastDateOfSubmission + " 23:59:59");
-      if(currentDate.compareTo(deadLine) > 0) {
-        throw new ValidationException("Grade Submission Deadline is Over.");
-      }
-    } catch(ParseException ex) {
-      ex.printStackTrace();
     }
-
+    Date currentDate = new Date();
+    if(currentDate.after(lastDateOfSubmission)) {
+      throw new ValidationException("Grade Submission Deadline is Over.");
+    }
   }
 
   public void validateGradeSubmission(String actingRoleForCurrentUser,
-      MarksSubmissionStatusDto requestedStatusDTO, MarksSubmissionStatusDto actualStatusDTO,
+      MarksSubmissionStatusDto requestedStatusDTO, MarksSubmissionStatus actualStatus,
       List<StudentGradeDto> gradeList, String operation) throws Exception {
-
     // operation can be either submit OR save
     // Checking the role, requested from client side is valid for the user who is trying to do some
     // operation on grades
     // Role Validation
-    String actualActingRole = getActingRoleForCourse(actualStatusDTO.getStatus());
+    String actualActingRole = getActingRoleForCourse(actualStatus.getStatus());
     if(!actingRoleForCurrentUser.equalsIgnoreCase(actualActingRole)) {
       throw new ValidationException("Sorry, you are not allowed for this operation.");
     }
-
     // Deadline && Part Info Validation
-    if(actualStatusDTO.getStatus() == CourseMarksSubmissionStatus.NOT_SUBMITTED
+    if(actualStatus.getStatus() == CourseMarksSubmissionStatus.NOT_SUBMITTED
         && operation.equals("submit")) {
-      validateGradeSubmissionDeadline(actualStatusDTO.getLastSubmissionDate());
-      if(actualStatusDTO.getCourseType() == CourseType.THEORY)
+      validateGradeSubmissionDeadline(actualStatus.getLastSubmissionDate());
+      if(actualStatus.getCourse().getCourseType() == CourseType.THEORY)
         validatePartInfo(requestedStatusDTO.getTotal_part(), requestedStatusDTO.getPart_a_total(),
             requestedStatusDTO.getPart_b_total());
     }
-
     // Submitted Grade Validation
-    validateSubmittedGrades(actualStatusDTO, gradeList);
+    validateSubmittedGrades(actualStatus, gradeList);
   }
 
-  public void validateSubmittedGrades(MarksSubmissionStatusDto actualStatusDTO,
+  private void validateSubmittedGrades(MarksSubmissionStatus actualStatus,
       List<StudentGradeDto> gradeList) throws Exception {
 
     // Validate all the grades been submitted or not
-    int totalStudents = mManager.getTotalStudentCount(actualStatusDTO);
-    if(actualStatusDTO.getStatus() == CourseMarksSubmissionStatus.NOT_SUBMITTED
+    int totalStudents = mManager.getTotalStudentCount(actualStatus);
+    if(actualStatus.getStatus() == CourseMarksSubmissionStatus.NOT_SUBMITTED
         && gradeList.size() != totalStudents) {
       throw new ValidationException("Wrong number of grades been submitted.");
     }
@@ -250,11 +242,11 @@ public class GradeSubmissionService {
     // || partInfo.getStatus()==CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_SCRUTINIZER
     // || partInfo.getStatus()==CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_HEAD ||
     // partInfo.getStatus()==CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_COE
-    if(actualStatusDTO.getStatus() == CourseMarksSubmissionStatus.NOT_SUBMITTED) {
+    if(actualStatus.getStatus() == CourseMarksSubmissionStatus.NOT_SUBMITTED) {
       boolean hasError = false;
       for(StudentGradeDto gradeDTO : gradeList) {
         try {
-          hasError = validateMarks(hasError, gradeDTO, actualStatusDTO);
+          hasError = validateMarks(hasError, gradeDTO, actualStatus);
         } catch(Exception ex) {
           throw new RuntimeException(ex);
         }
@@ -275,25 +267,24 @@ public class GradeSubmissionService {
   }
 
   private Boolean validateMarks(Boolean hasError, StudentGradeDto gradeDTO,
-      MarksSubmissionStatusDto partInfo) throws Exception {
-    if(partInfo.getCourseType() == CourseType.THEORY) {
+      MarksSubmissionStatus partInfo) throws Exception {
+    if(partInfo.getCourse().getCourseType() == CourseType.THEORY) {
       hasError = validateQuiz(hasError, gradeDTO.getQuiz(), gradeDTO.getRegType());
       hasError =
           validateClassPerformance(hasError, gradeDTO.getClassPerformance(), gradeDTO.getRegType());
       hasError =
-          validatePartA(hasError, gradeDTO.getPartA(), partInfo.getPart_a_total(),
+          validatePartA(hasError, gradeDTO.getPartA(), partInfo.getPartATotal(),
               gradeDTO.getRegType());
-      if(partInfo.getTotal_part() == 2 && partInfo.getCourseType() == CourseType.THEORY)
-        hasError =
-            validatePartB(hasError, gradeDTO.getPartB(), partInfo.getTotal_part(),
-                partInfo.getPart_b_total(), gradeDTO.getRegType());
+      hasError =
+          validatePartB(hasError, gradeDTO.getPartB(), partInfo.getTotalPart(),
+              partInfo.getPartBTotal(), gradeDTO.getRegType());
       hasError = validateTheoryTotal(hasError, gradeDTO);
     }
-    else if(partInfo.getCourseType() == CourseType.SESSIONAL) {
+    else if(partInfo.getCourse().getCourseType() == CourseType.SESSIONAL) {
       hasError = validateSessionalTotal(hasError, gradeDTO);
     }
-    hasError = validateGradeLetter(hasError, gradeDTO);
-    return hasError;
+
+    return validateGradeLetter(hasError, gradeDTO);
   }
 
   private Boolean validateQuiz(Boolean error, Double quiz, CourseRegType regType) {
@@ -331,7 +322,7 @@ public class GradeSubmissionService {
   private Boolean validateTheoryTotal(Boolean error, StudentGradeDto gradeDTO) {
     if(gradeDTO.getTotal() > 100
         || gradeDTO.getTotal() != Math.round(gradeDTO.getQuiz() + gradeDTO.getClassPerformance()
-            + gradeDTO.getPartA() + (gradeDTO.getPartB() == null ? 0 : gradeDTO.getPartB()))) {
+            + gradeDTO.getPartA() + gradeDTO.getPartB())) {
       error = Boolean.TRUE;
     }
     return error;

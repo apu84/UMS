@@ -26,7 +26,6 @@ module ums {
           className: 'error',
           autoHide: autoHide
         });
-        console.debug('here.....')
       }else {
         $.notify(pMessage, 'error');
       }
