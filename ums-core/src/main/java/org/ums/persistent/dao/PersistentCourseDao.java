@@ -206,6 +206,34 @@ public class PersistentCourseDao extends CourseDaoDecorator {
         new CourseRowMapper());
   }
 
+  @Override
+  public List<Course> getByTeacher(String pTeacherId) {
+
+    String query =
+        "SELECT "
+            + "  MST_COURSE.COURSE_ID, "
+            + "  COURSE_NO, "
+            + "  COURSE_TITLE, "
+            + "  CRHR, "
+            + "  SYLLABUS_ID, "
+            + "  OPT_GROUP_ID, "
+            + "  OFFER_BY, "
+            + "  VIEW_ORDER, "
+            + "  YEAR, "
+            + "  SEMESTER, "
+            + "  COURSE_TYPE, "
+            + "  COURSE_CATEGORY, "
+            + "  PAIR_COURSE_ID, "
+            + "  LAST_MODIFIED, "
+            + "  NULL AS TOTAL_APPLIED "
+            + "FROM MST_COURSE, COURSE_SYLLABUS_MAP "
+            + "WHERE MST_COURSE.COURSE_ID IN (SELECT DISTINCT (c.COURSE_ID) "
+            + "                               FROM COURSE_TEACHER C, MST_SEMESTER S "
+            + "                               WHERE s.STATUS = 1 AND s.SEMESTER_ID = c.SEMESTER_ID AND TEACHER_ID = ?) "
+            + "and MST_COURSE.COURSE_ID=COURSE_SYLLABUS_MAP.COURSE_ID";
+    return mJdbcTemplate.query(query, new Object[] {pTeacherId}, new CourseRowMapper());
+  }
+
   class CourseRowMapper implements RowMapper<Course> {
     @Override
     public Course mapRow(ResultSet resultSet, int i) throws SQLException {
@@ -237,4 +265,5 @@ public class PersistentCourseDao extends CourseDaoDecorator {
       return atomicReference.get();
     }
   }
+
 }

@@ -39,4 +39,6 @@ public interface CourseManager extends ContentManager<Course, MutableCourse, Str
 
   Course getByCourseNo(final String pCourseName, final String pSyllabusId);
 
+  public List<Course> getByTeacher(final String pTeacherId);
+
 }

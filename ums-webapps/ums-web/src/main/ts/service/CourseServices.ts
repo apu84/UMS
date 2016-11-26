@@ -27,6 +27,23 @@ module ums{
 
     }
 
+    public getCourseOfTeacher():ng.IPromise<any>{
+      var defer = this.$q.defer();
+      var courses:any={};
+      this.httpClient.get("/ums-webservice-academic/academic/course/coursedOfATeacher",
+          'application/json',
+          (json:any,etag:string)=>{
+            courses = json.entries;
+            defer.resolve(courses);
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>)=> {
+            this.notify.error("Error in fetching teacher's courses");
+            console.log(response);
+          })
+
+      return defer.promise;
+    }
+
 
     public getCourseBySemesterAndProgramType(semesterId:number, programType:number):ng.IPromise<any>{
       console.log(semesterId);

@@ -73,6 +73,12 @@ public class CourseResource extends MutableCourseResource {
   }
 
   @GET
+  @Path("/coursedOfATeacher")
+  public JsonObject getCoursesOfATeacher(final @Context Request pRequest) throws Exception {
+    return mResourceHelper.getCoursesForTeacher(pRequest, mUriInfo);
+  }
+
+  @GET
   @Path(PATH_PARAM_OBJECT_ID)
   public Response get(final @Context Request pRequest,
       final @PathParam("object-id") String pObjectId) throws Exception {
@@ -116,6 +122,13 @@ public class CourseResource extends MutableCourseResource {
       final @PathParam("semester") Integer pSemester) throws Exception {
     return mResourceHelper.getApprovedCourses(pSemesterId, pProgramId, pYear, pSemester, mUriInfo);
   }
+
+  /*
+   * @GET
+   * 
+   * @Path("/forTeacher") public JsonObject getCoursesOfATeacher(final @Context Request pRequest)
+   * throws Exception{ return mResourceHelper.getCoursesForTeacher(pRequest,mUriInfo); }
+   */
 
   @GET
   @Path("/approved-call-for-application/semester-id/{semester-id}/program/{program-id}/year/{year}/semester/{semester}")

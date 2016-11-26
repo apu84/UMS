@@ -6,31 +6,54 @@ module ums{
   interface IClassRoutineDir extends ng.IScope{
     routines:Array<IRoutine>;
     classRoomMapWithRoomId:any;
-    createClassRoomMapWithRoomId:Function;
-    createCourseMapWithCourseId:Function;
+    weekday:any;
+    courseMap:any;
+    roomMap:any;
+    currentDate:string;
+
+    updateDate:Function;
   }
 
   class ClassRoutineDirController{
-    public static $inject=['$scope','classRoomService','courseService'];
+    public static $inject=['$scope','classRoomService','courseService','appConstants'];
     constructor(private $scope:IClassRoutineDir,
                 private classRoomService:ClassRoomService,
-                private courseService:CourseService){
+                private courseService:CourseService,
+                private  appConstants:any){
       $scope.routines=[];
-      $scope.classRoomMapWithRoomId={};
-      $scope.createClassRoomMapWithRoomId = this.createClassRoomMapWithRoomId.bind(this);
-    }
+      $scope.courseMap={};
+      $scope.roomMap={};
+      $scope.weekday=appConstants.weekday;
+      $scope.updateDate=this.updateDate.bind(this);
 
-    private createClassRoomMapWithRoomId(){
-      this.classRoomService.getClassRooms().then((rooms:Array<ClassRoom>)=>{
-        for(var i=0;i<rooms.length;i++){
-          this.$scope.classRoomMapWithRoomId[rooms[i].roomId]=rooms[i];
-        }
-      });
-    }
-
-    private createCourseIdMapWithCourseId(){
+      this.getCurrentDate();
 
     }
+
+    private getCurrentDate():void{
+      var d= new Date();
+      var date = d.getDay();
+      if((date+2)==8){
+        date=1;
+      }else if((date+2)==9){
+        date=2;
+      }else{
+        date=date+2;
+      }
+
+
+      console.log("date");
+      console.log(date);
+      this.$scope.currentDate=String(date);
+    }
+
+
+    private updateDate(day:number):void{
+      console.log("In the update date");
+      this.$scope.currentDate=String(day);
+      console.log(this.$scope.currentDate);
+    }
+
   }
 
   class ClassRoutineDir implements ng.IDirective{
@@ -40,7 +63,9 @@ module ums{
 
     public restrict:string="A";
     public scope={
-      routines:'=routines'
+      routines:'=routines',
+      courseMap:'=courseMap',
+      roomMap:'=roomMap'
     };
 
     public controller=ClassRoutineDirController;
@@ -48,9 +73,9 @@ module ums{
 
 
     public link = (scope:any, element:any, attributes:any)=>{
-
-      attributes.routines=scope.routines;
-      console.log(attributes.routines);
+      for(var i=0;i<scope.routines.length;i++){
+        scope.routines[i].day=String(scope.routines[i].day);
+      }
     };
 
 

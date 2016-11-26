@@ -149,6 +149,16 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
     return buildCourse(courses,pUriInfo);
   }
 
+  public JsonObject getCoursesForTeacher(final Request pRequest, final UriInfo pUriInfo)
+      throws Exception {
+    String userId = SecurityUtils.getSubject().getPrincipal().toString();
+    User user = mUserManager.get(userId);
+    String employeeId = user.getEmployeeId();
+    List<Course> courses = getContentManager().getByTeacher(employeeId);
+
+    return buildCourse(courses, pUriInfo);
+  }
+
   public JsonObject getByYearSemester(final String pSemesterId, final String pProgramId,
       final int year, final int semester, final Request pRequest, final UriInfo pUriInfo)
       throws Exception {

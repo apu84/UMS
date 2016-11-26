@@ -76,4 +76,9 @@ public class CourseDaoDecorator extends
   public Course getByCourseNo(String pCourseName, String pSyllabusId) {
     return getManager().getByCourseNo(pCourseName, pSyllabusId);
   }
+
+  @Override
+  public List<Course> getByTeacher(String pTeacherId) {
+    return getManager().getByTeacher(pTeacherId);
+  }
 }
