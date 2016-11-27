@@ -14,6 +14,8 @@ public class ClassAttendanceDto {
   private String classDateFormat1;
   private Integer serial;
   private String teacherId;
+  private String teacherName;
+  private String teacherShortName;
   private String studentId;
   private String studentName;
   private Integer attendance;
@@ -89,6 +91,22 @@ public class ClassAttendanceDto {
 
   public void setAttendances(List<String> attendances) {
     this.attendances = attendances;
+  }
+
+  public String getTeacherName() {
+    return teacherName;
+  }
+
+  public void setTeacherName(String teacherName) {
+    this.teacherName = teacherName;
+  }
+
+  public String getTeacherShortName() {
+    return teacherShortName;
+  }
+
+  public void setTeacherShortName(String teacherShortName) {
+    this.teacherShortName = teacherShortName;
   }
 
   public String toString() {
