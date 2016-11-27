@@ -70,6 +70,30 @@ module ums{
 
 
 
+    public getRoomBasedClassRoutineInnerHtmlFormat(semesterId:number, roomId?:number):ng.IPromise<any>{
+      var defer= this.$q.defer();
+
+      if(!roomId){
+        roomId=9999;
+      }
+
+      this.httpClient.get("academic/routine/roomBasedRoutine/semester/"+semesterId+"/room/"+roomId,  'application/pdf',
+          (data:any, etag:string) => {
+            var file = new Blob([data], {type: 'application/pdf'});
+            var fileURL = this.$sce.trustAsResourceUrl(URL.createObjectURL(file));
+            //this.$window.open(fileURL);
+            defer.resolve(fileURL);
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>) => {
+            console.error(response);
+            defer.resolve("failure");
+          },'arraybuffer');
+
+      return defer.promise;
+    }
+
+
+
     public getClassRoutineForStudents():ng.IPromise<any>{
       var defer = this.$q.defer();
 
