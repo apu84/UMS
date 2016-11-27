@@ -79,11 +79,6 @@ public class CourseCache extends ContentCache<Course, MutableCourse, String, Cou
   }
 
   @Override
-  public List<Course> getAll() throws Exception {
-    return super.getAll();
-  }
-
-  @Override
   public List<Course> getMandatorySesssionalCourses(String pSyllabusId, final Integer pYear,
       final Integer pSemester) {
     return getManager().getMandatorySesssionalCourses(pSyllabusId, pYear, pSemester);

@@ -12,5 +12,5 @@
 
   <aop:aspectj-autoproxy/>
   <context:component-scan
-      base-package="org.ums.dummy.webservice,org.ums.common.academic.resource,org.ums.common.academic.resource.helper,org.ums.login,org.ums.common.report,org.ums.navigation,org.ums.common.resource,org.ums.common.builder,org.ums.services,org.ums.common.validator"/>
+      base-package="org.ums.dummy.webservice,org.ums.common.academic.resource,org.ums.common.academic.resource.helper,org.ums.login,org.ums.listener,org.ums.cachewarmer,org.ums.common.report,org.ums.navigation,org.ums.common.resource,org.ums.common.builder,org.ums.services,org.ums.common.validator"/>
 </beans>

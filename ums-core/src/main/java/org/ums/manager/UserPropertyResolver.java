@@ -1,5 +1,8 @@
 package org.ums.manager;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.ums.decorator.UserDaoDecorator;
@@ -20,8 +23,22 @@ public class UserPropertyResolver extends UserDaoDecorator {
   }
 
   @Override
+  public List<User> getAll() throws Exception {
+    List<User> users = getManager().getAll();
+    List<User> transformedList = new ArrayList<>();
+    for(User user : users) {
+      transformedList.add(transform(user));
+    }
+    return transformedList;
+  }
+
+  @Override
   public User get(String pId) throws Exception {
     User user = getManager().get(pId);
+    return transform(user);
+  }
+
+  private User transform(User user) throws Exception {
     MutableUser mutableUser = user.edit();
     if(user.getPrimaryRole().getName().equalsIgnoreCase("sadmin")) {
       mutableUser.setDepartment(null);
@@ -30,7 +47,7 @@ public class UserPropertyResolver extends UserDaoDecorator {
       return mutableUser;
     }
     if(user.getPrimaryRole().getName().equalsIgnoreCase("student")) {
-      Student student = mStudentManager.get(pId);
+      Student student = mStudentManager.get(user.getId());
       mutableUser.setDepartment(student.getDepartment());
       mutableUser.setName(student.getFullName());
     }
