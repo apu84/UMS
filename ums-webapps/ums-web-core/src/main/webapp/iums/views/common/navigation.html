@@ -39,6 +39,7 @@
                 <li data-ng-repeat="children in entry.children">
                     <a href='javascript:void(0);'
                        ui-sref="{{children.location}}" ui-sref-opts="{reload: true, notify: true}"
+                       ui-sref-opts="{reload: true, notify: true}"
                        ui-sref-active="active"
                        data-ng-click="_menu.collapse(children.viewOrder)"
                        index="{{children.viewOrder}}"
@@ -72,7 +73,7 @@
                     data-ng-class="_menu.hover[index]"
                     index="{{index}}">
                     <a href='javascript:void(0);' data-ng-if="entry.location!=''"
-                       data-ui-sref="{{entry.location}}"
+                       data-ui-sref="{{entry.location}}" ui-sref-opts="{reload: true, notify: true}"
                        data-ng-click="_menu.collapse(index)"
                        index="{{index}}"
                        data-ng-init="_menu.status[index]=true">
