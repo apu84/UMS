@@ -30,6 +30,7 @@ module ums{
     colspan:string;
     courseId:string;
     roomNo:string;
+    section:string;
   }
 
   class ClassRoutineDirController{
@@ -90,6 +91,7 @@ module ums{
 
         for(var i=0;i<12;i++){
           var found:boolean = false;
+          var tmpRoutineStore:IRoutineStore=new IRoutineStore();
           for(var routines=0;routines<routine.length; routines++){
 
             if(routine[routines].startTime == this.$scope.times[i] && routine[routines].day== Number(this.$scope.days[d].id)){
@@ -100,6 +102,18 @@ module ums{
               routineStore.courseId = this.$scope.courseMap[routine[routines].courseId].no;
 
               routineStore.roomNo = this.$scope.roomMap[routine[routines].roomId].roomNo;
+              routineStore.section="("+this.$scope.routines[routines].section+")";
+              /*if(tmpRoutineStore!=null){
+                if(tmpRoutineStore.courseId==routineStore.courseId && tmpRoutineStore.section!=routineStore.section){
+                  routineStore.section=tmpRoutineStore.section+"+"+routineStore.section;
+                }else{
+                  routineStore.section="("+this.$scope.routines[routines].section+")";
+
+                }
+              }else{
+                routineStore.section="("+this.$scope.routines[routines].section+")";
+
+              }*/
               //routineStore.roomNo=this.$scope.roomMap[routine[routines].id].roomNo;
               routineStoreArr.push(routineStore);
               i=i+(routine[routines].duration-1);

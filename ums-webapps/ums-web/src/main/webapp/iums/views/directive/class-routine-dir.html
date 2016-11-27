@@ -19,7 +19,7 @@
     <div class="col-md-12">
         <div class="tabbable tabs-left">
             <ul  class="nav nav-tabs">
-                <li data-ng-repeat="d in weekday" data-ng-class="d.id==currentDate?'active':''">
+                <li data-ng-repeat="d in weekday" data-ng-class="d.id==currentDate?'active':''" style="cursor: pointer;">
                     <a  data-toggle="tab" data-ng-click="updateDate(d.id)">{{d.name}}</a>
                 </li>
             </ul>
@@ -86,7 +86,7 @@
                     <tr data-ng-repeat="day in days">
                         <td><b><i>{{day.day}}</i></b></td>
                         <td colspan={{stores.colspan}} data-ng-repeat="stores in routineStore | filter:{day:day.id}">
-                            <p align="center"><b>{{stores.courseId}}<br>{{stores.roomNo}}</b></p>
+                            <p align="center"><b>{{stores.courseId}} {{stores.section}}<br>{{stores.roomNo}}</b></p>
                         </td>
 
                     </tr>

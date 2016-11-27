@@ -96,7 +96,7 @@ module ums{
       console.log('Room Id');
       console.log(this.$scope.roomId);
       this.$scope.pdfFileByRoomId;
-      this.classRoutineService.getRoomBasedClassRoutine(this.$scope.semester.id,this.$scope.roomId).then((file:any)=>{
+      this.classRoutineService.getRoomBasedClassRoutineInnerHtmlFormat(this.$scope.semester.id,this.$scope.roomId).then((file:any)=>{
         if(file!="failure"){
           this.$scope.showAll=false;
           this.$scope.showById=true;
@@ -121,7 +121,7 @@ module ums{
       }
       this.$scope.pdfFile;
 
-      this.classRoutineService.getRoomBasedClassRoutine(this.$scope.semester.id).then((file:any)=>{
+      this.classRoutineService.getRoomBasedClassRoutineInnerHtmlFormat(this.$scope.semester.id).then((file:any)=>{
         if(file!="failure"){
           this.$scope.showById=false;
           this.$scope.showAll=true;
