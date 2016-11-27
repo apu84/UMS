@@ -1,12 +1,19 @@
-<div class="panel panel-blue" data-ng-init="getTeachersRoutine()">
-    <div class="panel-heading">Class Routine</div>
-    <div class="panel-body">
-        <div class="row">
-            <div class-routine-dir routines="routines" course-map="courseMap"  room-map="roomMap"></div>
+<div>
+    <div class="panel panel-blue" data-ng-init="getTeachersRoutine()">
+        <div class="panel-heading">Class Routine</div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class-routine-dir routines="routines" course-map="courseMap"  room-map="roomMap"></div>
+                </div>
+            </div>
+            <div class="row" align="right">
+                <!--<embed data-ng-src="{{pdfFile}}" width="100%" height="500px" />-->
+                <div class="col-md-12">
+                    <button class="btn btn-success" data-ng-click="showRoutineReport()">Print</button>
+                </div>
+            </div>
+            <!--<button class="btn btn-success" ng-click="getTeachersRoutine()">Get Routine</button>-->
         </div>
-        <div class="row">
-            <embed data-ng-src="{{pdfFile}}" width="100%" height="500px" />
-        </div>
-        <!--<button class="btn btn-success" ng-click="getTeachersRoutine()">Get Routine</button>-->
     </div>
 </div>

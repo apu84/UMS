@@ -7,6 +7,7 @@ module ums{
     pdfFile:any;
     courseMap:any;
     roomMap:any;
+    showRoutineReport:Function;
   }
 
   class TeachersRoutine{
@@ -20,6 +21,7 @@ module ums{
       $scope.routines=[];
       $scope.courseMap={};
       $scope.getTeachersRoutine = this.getTeachersRoutine.bind(this);
+      $scope.showRoutineReport = this.showRoutineReport.bind(this);
 
     }
 
@@ -27,6 +29,8 @@ module ums{
     private getTeachersRoutine(){
       this.classRoutineService.getRoutineForTeacher().then((routines:Array<IRoutine>)=>{
         this.$scope.routines = routines;
+        console.log("Routines--->");
+        console.log(this.$scope.routines);
       });
       this.createCourseMap();
       this.createRoomMap();
@@ -57,6 +61,7 @@ module ums{
 
 
     private showRoutineReport(){
+      console.log("IN the show routine");
       this.$scope.pdfFile;
       this.classRoutineService.getClassRoutineReportForTeacher().then((file:any)=>{
         if(file!="failure"){
