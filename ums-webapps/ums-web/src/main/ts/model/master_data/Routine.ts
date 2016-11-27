@@ -1,5 +1,6 @@
 module ums{
   export interface IRoutine{
+    roomId:number;
     id:string;
     semesterId:number;
     programId:number;
