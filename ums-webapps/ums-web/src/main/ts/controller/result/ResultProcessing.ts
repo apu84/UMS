@@ -55,6 +55,7 @@ module ums {
       $scope.isReadyForResultProcess = this.isReadyForResultProcess.bind(this);
       $scope.sortedKeys = this.sortedKeys.bind(this);
       $scope.showCourseList = this.showCourseList.bind(this);
+      $scope.isReadyForProcess=this.isReadyForProcess.bind(this);
       $scope.length = UmsUtil.length;
 
       this.resultProcessingSearchParamModel = new CourseTeacherSearchParamModel(this.appConstants, this.httpClient);
@@ -181,6 +182,21 @@ module ums {
         this.$scope.row1end = Object.keys(statusMap).length - 1;
       }
       this.$scope.updateTime = Date.now();
+    }
+
+    private isReadyForProcess(statusId:number,programId:number): boolean {
+      if(statusId!=3) return false;
+
+      var yearSemester=this.$scope.statusMap [programId].yearSemester;
+      for (var key in yearSemester) {
+        var entries = yearSemester[key].entries;
+        for (var index in entries) {
+          var status:number=entries[index].status;
+          if(status!=this.appConstants.MARKS_SUBMISSION_STATUS.ACCEPTED_BY_COE)
+            return false;
+        }
+      }
+      return true;
     }
 
     private showCourseList(marksSubmissionStatusList: Array<MarksSubmissionStatus>,
