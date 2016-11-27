@@ -23,7 +23,7 @@ public class PersistentRoutineDao extends RoutineDaoDecorator {
   static String INSERT_ONE =
       "INSERT INTO CLASS_ROUTINE(SEMESTER_ID,PROGRAM_ID,COURSE_ID,DAY,SECTION,YEAR,SEMESTER,START_TIME,END_TIME,DURATION,ROOM_ID,LAST_MODIFIED) "
           + "VALUES(?,?,?,?,?,?,?,?,?,?,?," + getLastModifiedSql() + ")";
-  static String ORDER_BY = "ORDER BY SEMESTER_ID";
+  static String ORDER_BY = "ORDER BY SEMESTER_ID ";
   static String SELECT_ALL_FOR_TEACHER = "SELECT " + "  CLASS_ROUTINE.ROUTINE_ID, "
       + "  CLASS_ROUTINE.SEMESTER_ID, " + "  CLASS_ROUTINE.COURSE_ID, "
       + "  CLASS_ROUTINE.SECTION, " + "  CLASS_ROUTINE.YEAR, " + "  CLASS_ROUTINE.SEMESTER, "
