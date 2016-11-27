@@ -39,6 +39,7 @@ module ums{
       this.advisingStudentSearchParamModel.programSelector.setProgramId(null);
       this.$scope.advisingStudentSearchParamModel = this.advisingStudentSearchParamModel;
 
+
       $scope.students=[];
       $scope.backgroundColor=Utils.DEFAULT_COLOR;
       $scope.showStudentsByYearSemester=true;
@@ -49,9 +50,8 @@ module ums{
       $scope.fetchAdvisingStudents = this.fetchAdvisingStudents.bind(this);
       $scope.viewStudentById=this.viewStudentById.bind(this);
       $scope.viewStudentByIdAndName = this.viewStudentByName.bind(this);
-
     }
-
+//asdfasdfas fa fasfa sdf asdf asdf
     private getTeacherInfo():void{
 
     }
@@ -59,18 +59,32 @@ module ums{
     private viewStudentById(){
       this.$scope.showStudentId=true;
       this.$scope.showStudentName=false;
+
+      $(".btn.btn-xs.btn-default.studentIdAnchor").css({"background-color":"white"});
+      $(".fa.fa-user.studentIdIcon").css({"color":"black"});
+      $(".btn.btn-xs.btn-default.studentNameAnchor").css({"background-color":"white"});
+      $(".fa.fa-indent.studentNameIcon").css({"color":"black"});
+
+      $(".btn.btn-xs.btn-default.studentIdAnchor").css({"background-color":"black"});
+      $(".fa.fa-user.studentIdIcon").css({"color":"white"});
     }
 
     private viewStudentByName(){
       this.$scope.showStudentId=false;
       this.$scope.showStudentName=true;
+
+      $(".btn.btn-xs.btn-default.studentIdAnchor").css({"background-color":"white"});
+      $(".fa.fa-user.studentIdIcon").css({"color":"black"});
+      $(".btn.btn-xs.btn-default.studentNameAnchor").css({"background-color":"white"});
+      $(".fa.fa-indent.studentNameIcon").css({"color":"black"});
+
+      $(".btn.btn-xs.btn-default.studentNameAnchor").css({"background-color":"black"});
+      $(".fa.fa-indent.studentNameIcon").css({"color":"white"})
     }
 
     private fetchAdvisingStudents(){
-
       $("#leftDiv").hide();
       $("#arrowDiv").show();
-
 
       this.employeeService.getLoggedEmployeeInfo().then((employee:Employee)=>{
 
