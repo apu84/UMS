@@ -69,7 +69,8 @@
     <module>ums-dist</module>
     <module>ums-webservice-academic</module>
     <module>ums-webservice-bank</module>
-    <!-- <module>ums-web-templates</module>-->
+    <module>ums-webservice-library</module>
+      <!-- <module>ums-web-templates</module>-->
   </modules>
 
   <dependencies>
