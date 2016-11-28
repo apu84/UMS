@@ -57,9 +57,9 @@ module ums{
       $scope.colspan=1;
 
       this.getCurrentDate();
-      $timeout(()=>{
+      /*$timeout(()=>{
         this.viewByCompleteTable();
-      });
+      });*/
 
 
     }
@@ -179,12 +179,12 @@ module ums{
 
       console.log("scope");
       console.log(scope);
-
-      scope.$watchCollection(['routines','courseMap','roomMap'],(newVal,oldVal)=>{
-        console.log("new val");
-        console.log(newVal);
+      scope.$watch('routines',(newVal,oldVal)=>{
+        if(newVal){
+          scope.viewByCompleteTable();
+        }
       });
-    };
+    };  
 
 
     public templateUrl:string="./views/directive/class-routine-dir.html";
