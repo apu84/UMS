@@ -191,7 +191,11 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
     List<Routine> routines = new ArrayList<>();
 
     try {
-      routines = getContentManager().getStudentRoutine(student);
+      routines = getContentManager()
+          .getStudentRoutine(student)
+          .stream()
+          .filter((r)->r.getSection().equals(student.getTheorySection() )|| r.getSection().equals(student.getSessionalSection()))
+          .collect(Collectors.toList());
     } catch(Exception e) {
 
     }
