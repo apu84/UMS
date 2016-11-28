@@ -17,5 +17,6 @@
     <module>ums-web-core</module>
     <module>ums-web</module>
     <module>ums-bank-web</module>
+    <module>ums-library-web</module>
   </modules>
 </project>
