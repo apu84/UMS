@@ -514,21 +514,21 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
       public void setValues(PreparedStatement ps, int i) throws SQLException {
         StudentGradeDto gradeDto = pGradeList.get(i);
         if(courseType == CourseType.THEORY) {
-          if(gradeDto.getQuiz() == -1) {
+          if(gradeDto.getQuiz() == null || gradeDto.getQuiz() == -1) {
             ps.setNull(1, Types.NULL);
           }
           else {
             ps.setDouble(1, gradeDto.getQuiz());
           }
 
-          if(gradeDto.getClassPerformance() == -1) {
+          if(gradeDto.getClassPerformance() == null || gradeDto.getClassPerformance() == -1) {
             ps.setNull(2, Types.NULL);
           }
           else {
             ps.setDouble(2, gradeDto.getClassPerformance());
           }
 
-          if(gradeDto.getPartA() == -1) {
+          if(gradeDto.getPartA() == null || gradeDto.getPartA() == -1) {
             ps.setNull(3, Types.NULL);
           }
           else {
@@ -542,7 +542,7 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
             ps.setDouble(4, gradeDto.getPartB());
           }
 
-          if(gradeDto.getTotal() == -1) {
+          if(gradeDto.getTotal()==null || gradeDto.getTotal() == -1) {
             ps.setNull(5, Types.NULL);
           }
           else {
