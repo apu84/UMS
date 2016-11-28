@@ -57,7 +57,8 @@ public class AttendanceSheetGenerator {
     List<ClassAttendanceDto> studentList =
         mClassAttendanceManager.getStudentList(pSemesterId, pCourseId, course.getCourseType(),
             pSection, pStudentCategory);
-    Map<String, String> attendance = mClassAttendanceManager.getAttendance(pSemesterId, pCourseId);
+    Map<String, String> attendance =
+        mClassAttendanceManager.getAttendance(pSemesterId, pCourseId, pSection);
 
     Font universityNameFont = new Font(Font.FontFamily.TIMES_ROMAN, 13, Font.BOLD);
     Font infoFont = new Font(Font.FontFamily.TIMES_ROMAN, 10);

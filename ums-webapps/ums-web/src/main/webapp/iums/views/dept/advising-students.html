@@ -53,9 +53,7 @@
         font-weight: bold;
         content: 'HA';
     }
-    .pll, .phl, .pal {
-        padding: 5px !important;
-    }
+
 </style>
 
 <div class="row" id="courseSelectionDiv">
@@ -69,23 +67,22 @@
         <div class="panel-body pan">
             <form action="" class="form-horizontal" data-validate=""  data-onvalidate="fetchAdvisingStudents" >
                 <div class="form-body pal">
-                    <div class="form-group"></div>
                     <div class="form-group">
-                    <label class="col-md-4 control-label">Program Type</label>
-                    <div class="col-md-8">
-                            <select class="form-control" name="programType" id="programTypeId" data-ng-model="model.programTypeId"
-                                    data-ng-change="model.loadDepartments()" data-convert-to-number>
-                                <option data-ng-repeat="programType in model.getProgramTypes()" value="{{programType.id}}">{{programType.name}}
-                                </option>
+                        <label class="col-md-4 control-label">Program Type</label>
+                        <div class="col-md-8">
+                            <select class="form-control required" data-ng-model="inputParams.program_type"  data-convert-to-number >
+                                <option  value="11">Undergraduate</option>
+                                <option  value="22">Postgraduate</option>
                             </select>
-                    </div>
                         </div>
+                    </div>
                 </div>
                 <div class="form-actions text-right pal">
                     <button type="button" class="btn btn-success">Submit</button>
                 </div>
             </form>
         </div>
+
     </div>
 
     <div id="rightDiv" >
@@ -93,14 +90,14 @@
             <div class="panel-heading">
                 <p class="alignLeft" id="pageTitle">Advising Student List - <b>Undergraduate</b></p>
                 <p class="alignRight">
-                    <a  href="javascript:;" class="btn btn-xs btn-default bulkStudentIdAnchor"
+                    <a  href="javascript:;" class="btn btn-xs btn-default studentIdAnchor"
                         data-ng-click="viewStudentById()" style="background-color: black;">
-                        <i class="fa fa-user bulkStudentIdIcon" style="color: white;" aria-hidden="true"></i>
+                        <i class="fa fa-user studentIdIcon" style="color: white;" aria-hidden="true"></i>
                     </a>
 
-                    <a  href="javascript:;" class="btn btn-xs btn-default bulkStudentNameAnchor"
+                    <a  href="javascript:;" class="btn btn-xs btn-default studentNameAnchor"
                         data-ng-click="viewStudentByIdAndName()" style="background-color: white;">
-                        <span class="fa fa-indent bulkStudentNameIcon" style="color: black;" ></span>
+                        <span class="fa fa-indent studentNameIcon" style="color: black;" ></span>
                     </a>
                 </p>
                 <span class="subtitle"></span>

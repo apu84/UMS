@@ -1,5 +1,10 @@
 package org.ums.persistent.dao;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.CourseDaoDecorator;
@@ -8,11 +13,6 @@ import org.ums.domain.model.mutable.MutableCourse;
 import org.ums.enums.CourseCategory;
 import org.ums.enums.CourseType;
 import org.ums.persistent.model.PersistentCourse;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentCourseDao extends CourseDaoDecorator {
   static String SELECT_ALL =
@@ -68,7 +68,8 @@ public class PersistentCourseDao extends CourseDaoDecorator {
   }
 
   public List<Course> getAll() throws Exception {
-    String query = SELECT_ALL + ORDER_BY;
+    String query =
+        SELECT_ALL + " WHERE MST_COURSE.COURSE_ID=COURSE_SYLLABUS_MAP.COURSE_ID " + ORDER_BY;
     return mJdbcTemplate.query(query, new CourseRowMapper());
   }
 

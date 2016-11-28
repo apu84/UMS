@@ -343,6 +343,7 @@ module ums{
             for(var i=0;i<this.$scope.bulkSelectedStudents.length;i++)
               this.$scope.bulkSelectedStudents[i].adviser=this.$scope.bulkTeacher.id;
           }
+          this.clearBulkStudents();
           this.getExistingStudentsOfAdviser(this.$scope.bulkTeacher.id);
         })
       });
@@ -604,6 +605,12 @@ module ums{
 
             this.studentService.updateStudentsAdviser(jsonData).then((data)=>{
               if(data=="success") {
+                for(var i=0;i<shiftSelectedStudents.length;i++) {
+                  this.$scope.shiftSelectedStudents[i].adviser = this.$scope.toTeacherId;
+                  this.$scope.studentIdWithStudentMap[this.$scope.shiftSelectedStudents[i].id] = this.$scope.shiftSelectedStudents[i];
+                  this.searchSingleStudent();
+                }
+
                 this.initializeShiftingStudents("from").then((data)=> {
                   this.getStudentsOfTheFirstTeacher(this.$scope.fromTeacherId);
                 });

@@ -61,6 +61,17 @@
     </property>
   </bean>
 
+  <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager"/>
+
+  <bean id="backendSecurityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+    <property name="realms">
+      <list>
+        <ref bean="jdbcRealm"/>
+      </list>
+    </property>
+    <property name="sessionManager" ref="sessionManager"/>
+  </bean>
+
   <bean id="passThrough" class="java.util.ArrayList">
     <constructor-arg>
       <list>

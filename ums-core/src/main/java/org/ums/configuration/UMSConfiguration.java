@@ -23,6 +23,15 @@ public class UMSConfiguration {
   @Value("${admin.user}")
   private String mAdminUser;
 
+  @Value("${backend.user}")
+  private String mBackendUser;
+
+  @Value("${backend.user.password}")
+  private String mBackendUserPassword;
+
+  @Value("${enable.cache.warmer}")
+  private boolean mEnableCacheWarmer;
+
   public boolean isOwnerOnlyModification() {
     return mOwnerOnlyModification;
   }
@@ -49,5 +58,17 @@ public class UMSConfiguration {
 
   public String getAdminUser() {
     return mAdminUser;
+  }
+
+  public String getBackendUser() {
+    return mBackendUser;
+  }
+
+  public String getBackendUserPassword() {
+    return mBackendUserPassword;
+  }
+
+  public boolean isEnableCacheWarmer() {
+    return mEnableCacheWarmer;
   }
 }

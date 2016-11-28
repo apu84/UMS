@@ -14,12 +14,14 @@ import org.ums.domain.model.dto.ClassAttendanceDto;
 import org.ums.domain.model.dto.MarksSubmissionStatusDto;
 import org.ums.domain.model.dto.StudentGradeDto;
 import org.ums.domain.model.immutable.Course;
+import org.ums.domain.model.immutable.User;
 import org.ums.domain.model.mutable.MutableClassRoom;
 import org.ums.enums.CourseMarksSubmissionStatus;
 import org.ums.enums.CourseType;
 import org.ums.enums.ExamType;
 import org.ums.manager.*;
 import org.ums.persistent.model.PersistentClassRoom;
+import org.ums.services.UserService;
 import org.ums.services.academic.GradeSubmissionService;
 
 import javax.json.*;
@@ -49,6 +51,12 @@ public class ClassAttendanceResourceHelper {
   @Autowired
   private CourseManager mCourseManager;
 
+  @Autowired
+  private UserService mUserService;
+
+  @Autowired
+  private UserManager mUserManager;
+
   public ClassAttendanceManager getContentManager() {
     return mManager;
   }
@@ -71,7 +79,7 @@ public class ClassAttendanceResourceHelper {
 
   public Map<String, String> getAttendanceMap(final Integer pSemesterId, final String pCourseId,
       final String pSection) throws Exception {
-    return getContentManager().getAttendance(pSemesterId, pCourseId);
+    return getContentManager().getAttendance(pSemesterId, pCourseId, pSection);
   }
 
   public JsonObject getClassAttendance(final Integer pSemesterId, final String pCourseId,
@@ -99,7 +107,17 @@ public class ClassAttendanceResourceHelper {
       // jsonObjectBuilder.add("sId", "").add("sName", "OR");
       // }
       // index = index + 1;
-      jsonObjectBuilder.add("date" + date.getClassDateFormat1() + date.getSerial(), "I");
+      // date.getTeacherId();
+
+      String userId = mUserService.getUser();
+      User user = mUserManager.get(userId);
+      String employeeId = user.getEmployeeId();
+
+      if(employeeId.equals(date.getTeacherId()))
+        jsonObjectBuilder.add("date" + date.getClassDateFormat1() + date.getSerial(), "I");
+      else
+        jsonObjectBuilder.add("date" + date.getClassDateFormat1() + date.getSerial(),
+            "T-" + date.getTeacherShortName());
     }
     // asfasdfasdfasdf a dsf asdf
     jsonArrayBuilder.add(jsonObjectBuilder);

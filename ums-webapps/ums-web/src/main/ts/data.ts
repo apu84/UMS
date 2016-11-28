@@ -39,7 +39,8 @@
     '/studentAdviser': {title: 'Students Adviser', 'breadcrumb': ['Students Adviser']},
     '/advisingStudents': {title: 'Advising Students', 'breadcrumb': ['Advising Students']},
     '/resultProcessing': {title: 'Result Processing', 'breadcrumb': ['Result Processing']},
-    '/classAttendance': {title: 'Attendance Sheet', 'breadcrumb': ['Attendance Sheet']}
+    '/classAttendance': {title: 'Attendance Sheet', 'breadcrumb': ['Attendance Sheet']},
+    '/roomBasedRoutine': {title: 'Room-wise Routine', 'breadcrumb': ['Routine','Room-wise']}
 
   };
 

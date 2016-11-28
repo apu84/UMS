@@ -23,6 +23,11 @@ public class PersistentTeacherDao extends TeacherDaoDecorator {
   }
 
   @Override
+  public List<Teacher> getAll() throws Exception {
+    return mJdbcTemplate.query(SELECT_ALL, new TeacherRowMapper());
+  }
+
+  @Override
   public Teacher get(String pId) throws Exception {
     String query = SELECT_ALL + "WHERE TEACHER_ID = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new TeacherRowMapper());

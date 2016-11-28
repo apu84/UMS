@@ -209,20 +209,7 @@ module ums {
         .state('roomBasedRoutine', {
           url: "/roomBasedRoutine",
           controller: 'RoomBasedRoutine',
-          templateUrl: 'views/dept/room-based-routine.html',
-          resolve: {
-            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-              return $ocLazyLoad.load({
-                files: [
-                  'vendors/bootstrap-switch/css/bootstrap-switch.css',
-                  'vendors/bootstrap-datepicker/css/datepicker.css',
-                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js',
-                  'vendors/bootstrap-switch/js/bootstrap-switch.min.js',
-                  'vendors/bootstrap-daterangepicker/daterangepicker.js'
-                ]
-              });
-            }]
-          }
+          templateUrl: 'views/dept/room-based-routine.html'
         })
         .state('studentAdviser', {
           url: "/studentAdviser",

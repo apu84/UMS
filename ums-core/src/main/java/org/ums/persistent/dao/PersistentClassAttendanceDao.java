@@ -28,13 +28,13 @@ public class PersistentClassAttendanceDao implements ClassAttendanceManager {
 
   String ATTENDANCE_QUERY = "Select Course_Id,Class_Date,Serial,Student_Id,Attendance From  "
       + "(Select Course_id,Id,to_char(Class_Date,'DDMMYYYY') class_date,serial,Teacher_Id  "
-      + "From MST_CLASS_ATTENDANCE Where Semester_Id=? And Course_id=? )tmp1  "
+      + "From MST_CLASS_ATTENDANCE Where Semester_Id=? And Course_id=? And Section=? )tmp1  "
       + "Left Outer Join DTL_CLASS_ATTENDANCE "
       + "on tmp1.Id = DTL_CLASS_ATTENDANCE.Attendance_Id ";
 
   String ATTENDANCE_DATE_QUERY =
-      "Select TO_Char(Class_Date,'DD MON, YY') Class_Date,To_Char(Class_Date,'DDMMYYYY') CLASS_DATE_F1,Serial,Teacher_Id ,ID  "
-          + "From MST_CLASS_ATTENDANCE Where Semester_Id= ? And Course_id=? And Section=?"
+      "Select TO_Char(Class_Date,'DD MON, YY') Class_Date,To_Char(Class_Date,'DDMMYYYY') CLASS_DATE_F1,Serial,Teacher_Id ,ID,EMPLOYEE_NAME,SHORT_NAME  "
+          + "From MST_CLASS_ATTENDANCE,EMPLOYEES Where Semester_Id= ? And Course_id=? And Section=? And EMPLOYEE_ID=Teacher_Id "
           + "Order by Serial desc";
 
   String ATTENDANCE_STUDENTS_ALL =
@@ -110,9 +110,9 @@ public class PersistentClassAttendanceDao implements ClassAttendanceManager {
   }
 
   @Override
-  public Map getAttendance(int pSemesterId, String pCourseId) throws Exception {
+  public Map getAttendance(int pSemesterId, String pCourseId, String pSection) throws Exception {
     String query = ATTENDANCE_QUERY;
-    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pCourseId},
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pCourseId, pSection},
         new AttendanceRowMapper());
   }
 
@@ -210,6 +210,8 @@ public class PersistentClassAttendanceDao implements ClassAttendanceManager {
       attendanceDto.setClassDateFormat1(resultSet.getString("CLASS_DATE_F1"));
       attendanceDto.setSerial(resultSet.getInt("SERIAL"));
       attendanceDto.setTeacherId(resultSet.getString("TEACHER_ID"));
+      attendanceDto.setTeacherName(resultSet.getString("EMPLOYEE_NAME"));
+      attendanceDto.setTeacherShortName(resultSet.getString("SHORT_NAME"));
       attendanceDto.setId(resultSet.getString("ID"));
       AtomicReference<ClassAttendanceDto> atomicReference = new AtomicReference<>(attendanceDto);
       return atomicReference.get();
