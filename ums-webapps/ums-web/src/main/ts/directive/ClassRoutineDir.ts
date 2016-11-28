@@ -98,6 +98,7 @@ module ums{
 
               routineStore.roomNo = this.$scope.roomMap[routine[routines].roomId].roomNo;
               routineStore.section="("+this.$scope.routines[routines].section+")";
+              //todo remove comments if there is a case, where a teacher takes more than section for a course on the same day and at the same time
               /*if(tmpRoutineStore!=null){
                 if(tmpRoutineStore.courseId==routineStore.courseId && tmpRoutineStore.section!=routineStore.section){
                   routineStore.section=tmpRoutineStore.section+"+"+routineStore.section;
@@ -184,7 +185,7 @@ module ums{
           scope.viewByCompleteTable();
         }
       });
-    };  
+    };
 
 
     public templateUrl:string="./views/directive/class-routine-dir.html";
