@@ -7,7 +7,11 @@ module ums{
     pdfFile:any;
     courseMap:any;
     roomMap:any;
+    showRoutine:boolean;
+    showRoutineDirective:boolean;
     showRoutineReport:Function;
+    getRoutines:Function;
+
   }
 
   class TeachersRoutine{
@@ -20,48 +24,62 @@ module ums{
 
       $scope.routines=[];
       $scope.courseMap={};
+      $scope.showRoutineDirective=false;
       $scope.getTeachersRoutine = this.getTeachersRoutine.bind(this);
       $scope.showRoutineReport = this.showRoutineReport.bind(this);
+      $scope.getRoutines = this.getRoutines.bind(this);
 
     }
 
 
-    private getTeachersRoutine(){
+    private getRoutines(){
+      this.createCourseMap();
+    }
+
+
+    private getTeachersRoutine():ng.IPromise<any>{
+      var defer = this.$q.defer();
       this.classRoutineService.getRoutineForTeacher().then((routines:Array<IRoutine>)=>{
         this.$scope.routines = routines;
-        console.log("Routines--->");
-        console.log(this.$scope.routines);
+
+
+
       });
-      this.createCourseMap();
-      this.createRoomMap();
+      defer.resolve("success");
+      return defer.promise;
     }
 
 
     private createCourseMap(){
       this.courseService.getCourseOfTeacher().then((courses:Array<Course>)=>{
-        console.log(courses);
         for(var i=0;i<courses.length;i++){
           this.$scope.courseMap[courses[i].id]=courses[i];
         }
 
-        console.log("***course map****");
-        console.log(this.$scope.courseMap);
+
+
+        this.createRoomMap();
       });
     }
 
     private createRoomMap(){
+      this.$scope.roomMap={};
       this.classRoomService.getClassRooms().then((rooms:any)=>{
-        console.log(rooms);
         for(var i=0;i<rooms.length;i++){
           this.$scope.roomMap[rooms[i].id]=rooms[i];
         }
+
+        this.getTeachersRoutine().then((success:string)=>{
+          if(success=='success'){
+            this.$scope.showRoutineDirective=true;
+          }
+        });
       });
     }
 
 
 
     private showRoutineReport(){
-      console.log("IN the show routine");
       this.$scope.pdfFile;
       this.classRoutineService.getClassRoutineReportForTeacher().then((file:any)=>{
         if(file!="failure"){

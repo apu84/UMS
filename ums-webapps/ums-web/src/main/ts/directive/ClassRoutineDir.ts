@@ -44,9 +44,6 @@ module ums{
       $scope.checker = appConstants.timeChecker;
       var times:string[]=['08:00 am'];
       $scope.routineTime = appConstants.routineTime;
-      $scope.routines=[];
-      $scope.courseMap={};
-      $scope.roomMap={};
       $scope.routineStore=[];
       $scope.weekday=appConstants.weekday;
       $scope.showByDay=false;
@@ -62,7 +59,7 @@ module ums{
       this.getCurrentDate();
       $timeout(()=>{
         this.viewByCompleteTable();
-      },500);
+      });
 
 
     }
@@ -80,10 +77,8 @@ module ums{
 
 
     private createStudentsRoutine(){
-      console.log("routines*******");
-      console.log(this.$scope.routines);
+
       var routine:Array<IRoutine>=this.$scope.routines;
-      console.log(this.$scope.roomMap);
       var routineStoreArr: IRoutineStore[] = [];
 
 
@@ -136,8 +131,6 @@ module ums{
       this.$scope.routineStore = routineStoreArr;
 
 
-      console.log("Routine store---->");
-      console.log(this.$scope.routineStore);
 
     }
 
@@ -183,6 +176,14 @@ module ums{
       for(var i=0;i<scope.routines.length;i++){
         scope.routines[i].day=String(scope.routines[i].day);
       }
+
+      console.log("scope");
+      console.log(scope);
+
+      scope.$watchCollection(['routines','courseMap','roomMap'],(newVal,oldVal)=>{
+        console.log("new val");
+        console.log(newVal);
+      });
     };
 
 
