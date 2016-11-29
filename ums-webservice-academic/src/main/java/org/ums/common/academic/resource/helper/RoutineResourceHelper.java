@@ -197,7 +197,7 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
           .filter((r)->r.getSection().equals(student.getTheorySection() )|| r.getSection().equals(student.getSessionalSection()))
           .collect(Collectors.toList());
     } catch(Exception e) {
-
+      mLogger.error(e.getMessage());
     }
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
