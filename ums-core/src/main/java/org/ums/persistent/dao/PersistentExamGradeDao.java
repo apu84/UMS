@@ -542,7 +542,7 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
             ps.setDouble(4, gradeDto.getPartB());
           }
 
-          if(gradeDto.getTotal()==null || gradeDto.getTotal() == -1) {
+          if(gradeDto.getTotal() == null || gradeDto.getTotal() == -1) {
             ps.setNull(5, Types.NULL);
           }
           else {
@@ -912,7 +912,7 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
               ps.setDouble(7, gradeDto.getQuiz());
               ps.setDouble(8, gradeDto.getClassPerformance());
               ps.setDouble(9, gradeDto.getPartA());
-              if(gradeDto.getPartB() == -1)
+              if(gradeDto.getPartB() == null || gradeDto.getPartB() == -1)
                 ps.setNull(10, Types.NULL);
               else
                 ps.setDouble(10, gradeDto.getPartB());

@@ -313,7 +313,7 @@ public class GradeSubmissionService {
     if(totalPartCount == 2 && (partB > partBMax)) {
       error = Boolean.TRUE;
     }
-    if(totalPartCount == 1 && (partB > 0)) {
+    if(totalPartCount == 1 && (partB !=null && partB > 0)) {
       error = Boolean.TRUE;
     }
     return error;
@@ -322,7 +322,7 @@ public class GradeSubmissionService {
   private Boolean validateTheoryTotal(Boolean error, StudentGradeDto gradeDTO) {
     if(gradeDTO.getTotal() > 100
         || gradeDTO.getTotal() != Math.round(gradeDTO.getQuiz() + gradeDTO.getClassPerformance()
-            + gradeDTO.getPartA() + gradeDTO.getPartB())) {
+            + gradeDTO.getPartA() + (gradeDTO.getPartB()==null?0:gradeDTO.getPartB()))) {
       error = Boolean.TRUE;
     }
     return error;
