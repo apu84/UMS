@@ -11,6 +11,7 @@ module  ums{
     student:Student;
     semesterId:string;
     programId: string;
+    roomMap:any;
     academicYear: string;
     academicSemester: string;
     departmentName:string;
@@ -53,12 +54,13 @@ module  ums{
 
   export class StudentsRoutine{
 
-    public static $inject = ['appConstants','HttpClient','$scope','$q'];
-    constructor(private appConstants: any, private httpClient: HttpClient, private $scope: IStudentsRoutineScope,private $q:ng.IQService ){
+    public static $inject = ['appConstants','HttpClient','$scope','$q','classRoomService'];
+    constructor(private appConstants: any, private httpClient: HttpClient, private $scope: IStudentsRoutineScope,private $q:ng.IQService, private classRoomService:ClassRoomService ){
       //$scope.studentId="150105001";
       $scope.days = appConstants.weekDays;
       $scope.checker = appConstants.timeChecker;
       var times:string[]=['08:00 am'];
+      $scope.roomMap={};
       $scope.routineTime = appConstants.routineTime;
       $scope.courseIdMapCourse={};
       $scope.department=appConstants.deptLong;
@@ -79,11 +81,28 @@ module  ums{
       });
 
     }
+    private getClassRooms():ng.IPromise<any>{
+      var defer=this.$q.defer();
+      var rooms:any={};
+      console.log(this.$scope.student);
+      this.classRoomService.getClassRooms().then((rooms:Array<ClassRoom>)=>{
 
+        for(var i=0;i<rooms.length;i++){
+          this.$scope.roomMap[rooms[i].id]=rooms[i];
+        }
+
+        console.log("room map");
+        console.log(this.$scope.roomMap);
+      });
+
+      defer.resolve('success');
+      return defer.promise;
+    }
     private createStudentsRoutine(routine:Array<IRoutine>){
 
       var routineStoreArr: IRoutineStore[] = [];
-
+      console.log("Routines");
+      console.log(routine);
 
       for(var d=0;d<this.$scope.days.length;d++){
 
@@ -98,7 +117,9 @@ module  ums{
 
               routineStore.courseId = this.$scope.courseIdMapCourse[routine[routines].courseId].no;
 
-              routineStore.roomNo = routine[routines].roomNo;
+              routineStore.roomNo =  this.$scope.roomMap[routine[routines].roomId].roomNo ;
+              console.log("room no");
+              console.log(routineStore.roomNo);
               routineStoreArr.push(routineStore);
               i=i+(routine[routines].duration-1);
               found = true;
@@ -126,7 +147,9 @@ module  ums{
             this.$scope.routines = json.entries;
 
             this.getCourses().then((courseArr:Array<ICourse>)=>{
+
               this.createStudentsRoutine(this.$scope.routines);
+
             });
 
           },
@@ -137,19 +160,19 @@ module  ums{
 
 
     /*
-    private getSemesterInfo(semesterId:string){
-      this.httpClient.get('academic/semester/'+semesterId,'application/json',(json:any,etag:string)=>{
-            console.log("semesters");
-            console.log(json);
-            this.$scope.semester = json;
-            this.$scope.semesterName = this.$scope.semester.name;
-            console.log(this.$scope.semesterName);
-          },
-          (response:ng.IHttpPromiseCallbackArg<any>)=>{
-            console.error(response);
-          });
-    }
-*/
+     private getSemesterInfo(semesterId:string){
+     this.httpClient.get('academic/semester/'+semesterId,'application/json',(json:any,etag:string)=>{
+     console.log("semesters");
+     console.log(json);
+     this.$scope.semester = json;
+     this.$scope.semesterName = this.$scope.semester.name;
+     console.log(this.$scope.semesterName);
+     },
+     (response:ng.IHttpPromiseCallbackArg<any>)=>{
+     console.error(response);
+     });
+     }
+     */
     private getStudentInfo():ng.IPromise<any>{
       var defer = this.$q.defer();
       var studentArr: Array<any>;
@@ -159,6 +182,8 @@ module  ums{
             this.getStudentRoutineBySemesterAndProgram();
             console.log(this.$scope.student);
             defer.resolve(this.$scope.student);
+
+            this.getClassRooms();
 
           },
           (response:ng.IHttpPromiseCallbackArg<any>)=>{
@@ -184,6 +209,7 @@ module  ums{
           (response:ng.IHttpPromiseCallbackArg<any>) => {
             console.error(response);
           });
+
       return defer.promise;
     }
 
