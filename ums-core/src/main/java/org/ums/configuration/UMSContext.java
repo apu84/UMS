@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import javax.sql.DataSource;
 
 import org.apache.shiro.authc.credential.PasswordService;
+import org.apache.shiro.mgt.SecurityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -16,6 +17,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.ums.cache.*;
+import org.ums.cachewarmer.AutoCacheWarmer;
+import org.ums.cachewarmer.CacheWarmerManagerImpl;
 import org.ums.domain.model.immutable.Examiner;
 import org.ums.domain.model.mutable.MutableExaminer;
 import org.ums.generator.JxlsGenerator;
@@ -66,6 +69,10 @@ public class UMSContext {
   @Qualifier("mongoTemplate")
   @Lazy
   MongoTemplate mMongoOperations;
+
+  @Autowired
+  @Qualifier("backendSecurityManager")
+  SecurityManager mSecurityManager;
 
   @Bean
   SemesterManager semesterManager() {
@@ -489,6 +496,22 @@ public class UMSContext {
   @Bean
   ClassAttendanceManager classAttendanceManager() {
     return new PersistentClassAttendanceDao(mTemplateFactory.getJdbcTemplate());
+  }
+
+  @Bean
+  CacheWarmerManager cacheWarmerManager() {
+    return new CacheWarmerManagerImpl(mSecurityManager, mCacheFactory, mUMSConfiguration,
+        departmentManager(), roleManager(), permissionManager(), bearerAccessTokenManager(),
+        additionalRolePermissionsManager(), navigationManager(), employeeManager(),
+        programTypeManager(), programManager(), semesterManager(), syllabusManager(),
+        courseGroupManager(), equivalentCourseManager(), teacherManager(), courseTeacherManager(),
+        examinerManager(), studentManager(), studentRecordManager(), classRoomManager(),
+        courseManager(), marksSubmissionStatusManager(), userManager());
+  }
+
+  @Bean
+  AutoCacheWarmer autoCacheWarmer() {
+    return new AutoCacheWarmer(cacheWarmerManager());
   }
 
 }

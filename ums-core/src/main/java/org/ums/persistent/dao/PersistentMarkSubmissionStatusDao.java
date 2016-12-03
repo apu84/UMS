@@ -41,6 +41,11 @@ public class PersistentMarkSubmissionStatusDao extends MarksSubmissionStatusDaoD
   }
 
   @Override
+  public List<MarksSubmissionStatus> getAll() {
+    return mJdbcTemplate.query(SELECT_ALL, new MarksSubmissionStatusRowMapper());
+  }
+
+  @Override
   public MarksSubmissionStatus get(Integer pId) {
     String query = SELECT_ALL + "WHERE ID = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId},

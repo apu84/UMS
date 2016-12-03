@@ -202,8 +202,9 @@ public abstract class ContentCache<R extends Identifier<I> & LastModifier, M ext
   private R cache(final String pCacheKey, Callable<R> pCallable) {
     R readonly = null;
     try {
-      pCallable.call();
+      readonly = pCallable.call();
     } catch(Exception e) {
+      mLogger.error("Exception while caching entity", e);
       throw new RuntimeException(e);
     }
     String idCacheKey = getCacheKey(readonly.getId());

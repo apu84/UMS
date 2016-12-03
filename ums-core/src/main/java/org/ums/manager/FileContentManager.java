@@ -30,7 +30,7 @@ public class FileContentManager extends BinaryContentDecorator {
   public byte[] get(String pIdentifier, Domain pDomain) throws IOException {
     Path path = getQualifiedPath(pDomain, pIdentifier);
     if(!Files.exists(path)) {
-      throw new RuntimeException(new FileNotFoundException());
+      throw new FileNotFoundException();
     }
     byte[] fileData = null;
 
