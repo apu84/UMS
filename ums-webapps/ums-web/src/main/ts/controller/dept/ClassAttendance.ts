@@ -145,8 +145,8 @@ module ums {
           '<i class="fa fa-plus-circle" aria-hidden="true" title="Add New Attendance Column" style="color:#E74C3C;cursor:pointer;" onClick="insertNewAttendanceColumn()";></i>&nbsp;&nbsp;&nbsp;' +
           '<i class="fa fa-file-excel-o" aria-hidden="true" title="Download Excel" style="color:#273746;cursor:pointer;margin-left:2px;" onClick="downloadAttendanceSheet(\'xls\')";></i>&nbsp;&nbsp;&nbsp;'+
           '<i class="fa fa-file-pdf-o" aria-hidden="true" title="Download PDF" style="color:#273746;cursor:pointer;margin-left:2px;" onClick="downloadAttendanceSheet(\'pdf\')";></i>&nbsp;&nbsp;&nbsp;'+
-          '<i class="fa fa-user" id="icon_enrolled" aria-hidden="true" title="Enrolled Students" style="color:#52BE80;cursor:pointer;margin-left:2px;" onClick="showAttendanceSheetByStudentCategory(\'Enrolled\')"></i>&nbsp;&nbsp;&nbsp;'+
-          '<i class="fa fa-users" id="icon_all" aria-hidden="true" title="All Students" style="color:#52BE80;cursor:pointer;margin-left:2px;"  onClick="showAttendanceSheetByStudentCategory(\'All\')"></i>&nbsp;&nbsp;&nbsp;'+
+          '<i class="fa fa-es" id="icon_enrolled" aria-hidden="true" title="Enrolled Students" style="color:#716b7a;cursor:pointer;margin-left:2px;" onClick="showAttendanceSheetByStudentCategory(\'Enrolled\')"></i>&nbsp;&nbsp;&nbsp;'+
+          '<i class="fa fa-as" id="icon_all" aria-hidden="true" title="All Students" style="color:#52BE80;cursor:pointer;margin-left:2px;"  onClick="showAttendanceSheetByStudentCategory(\'All\')"></i>&nbsp;&nbsp;&nbsp;'+
           '<i id="download1" class="fa fa-refresh" aria-hidden="true" title="Refresh" style="color:black;cursor:pointer;margin-left:2px;" onClick="refreshAttendanceSheet()";></i>';
 
       var value = Handsontable.helper.stringify(value);
