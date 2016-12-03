@@ -27,20 +27,19 @@ public class StudentResource extends MutableStudentResource {
 
   @GET
   @Path("/getStudentInfoById")
-  public JsonObject getStudentInfoById() throws Exception {
+  public JsonObject getStudentInfoById() {
     return mResourceHelper.getStudentInfoById(mUriInfo);
   }
 
   @GET
   @Path("/getStudentsByDept")
-  public JsonObject getActiveStudentsByDepartment() throws Exception {
+  public JsonObject getActiveStudentsByDepartment() {
     return mResourceHelper.getActiveStudentsByDepartment(mUriInfo);
   }
 
   @GET
   @Path("/getStudents/adviser/{teacher-id}")
-  public JsonObject getActiveStudentsByTeacher(final @PathParam("teacher-id") String pTeacherId)
-      throws Exception {
+  public JsonObject getActiveStudentsByTeacher(final @PathParam("teacher-id") String pTeacherId) {
     return mResourceHelper.getActiveStudentsByAdviser(pTeacherId, mUriInfo);
   }
 

@@ -35,7 +35,7 @@ public class ProgramTypeResourceHelper extends
     return mBuilder;
   }
 
-  public Response post(final JsonObject pJsonObject, final UriInfo pUriInfo) throws Exception {
+  public Response post(final JsonObject pJsonObject, final UriInfo pUriInfo) {
     MutableProgramType mutableProgramType = new PersistentProgramType();
     LocalCache localCache = new LocalCache();
     getBuilder().build(mutableProgramType, pJsonObject, localCache);

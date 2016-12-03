@@ -17,7 +17,7 @@ import javax.ws.rs.core.UriInfo;
 public class StudentRecordBuilder implements Builder<StudentRecord, MutableStudentRecord> {
   @Override
   public void build(JsonObjectBuilder pBuilder, StudentRecord pReadOnly, UriInfo pUriInfo,
-      LocalCache pLocalCache) throws Exception {
+      LocalCache pLocalCache) {
     if(pReadOnly.getId() != null) {
       pBuilder.add("id", pReadOnly.getId());
     }
@@ -61,8 +61,7 @@ public class StudentRecordBuilder implements Builder<StudentRecord, MutableStude
   }
 
   @Override
-  public void build(MutableStudentRecord pMutable, JsonObject pJsonObject, LocalCache pLocalCache)
-      throws Exception {
+  public void build(MutableStudentRecord pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
 
   }
 }

@@ -12,7 +12,7 @@ public interface CourseGroup extends Serializable, EditType<MutableCourseGroup>,
     Identifier<Integer> {
   String getName();
 
-  Syllabus getSyllabus() throws Exception;
+  Syllabus getSyllabus();
 
   String getSyllabusId();
 }

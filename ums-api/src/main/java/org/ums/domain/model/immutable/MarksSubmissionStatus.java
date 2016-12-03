@@ -15,11 +15,11 @@ public interface MarksSubmissionStatus extends Serializable,
 
   Integer getSemesterId();
 
-  Semester getSemester() throws Exception;
+  Semester getSemester();
 
   String getCourseId();
 
-  Course getCourse() throws Exception;
+  Course getCourse();
 
   CourseMarksSubmissionStatus getStatus();
 

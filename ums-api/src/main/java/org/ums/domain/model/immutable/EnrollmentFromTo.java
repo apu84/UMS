@@ -11,7 +11,7 @@ public interface EnrollmentFromTo extends Serializable, LastModifier, Identifier
     EditType<MutableEnrollmentFromTo> {
   Integer getProgramId();
 
-  Program getProgram() throws Exception;
+  Program getProgram();
 
   Integer getFromYear();
 

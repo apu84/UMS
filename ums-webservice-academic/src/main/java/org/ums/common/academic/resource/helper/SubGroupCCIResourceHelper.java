@@ -37,13 +37,13 @@ public class SubGroupCCIResourceHelper extends
   SeatPlanManager mSeatPlanManager;
 
   @Override
-  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) {
     // int checkIfThereisAnyRecord = getContentManager().checkOccuranceBySemesterAndExamDate()
     return null;
   }
 
   public Response saveData(Integer pSemesterId, String pExamDate, JsonObject pJsonObject,
-      UriInfo pUriInfo) throws Exception {
+      UriInfo pUriInfo) {
     int checkIfThereIsAnyRecord =
         getContentManager().checkOccuranceBySemesterAndExamDate(pSemesterId, pExamDate);
     if(checkIfThereIsAnyRecord > 0) {
@@ -70,15 +70,14 @@ public class SubGroupCCIResourceHelper extends
     return builder.build();
   }
 
-  public Response deleteBySemesterAndExamDate(Integer pSemesterId, String pExamDate)
-      throws Exception {
+  public Response deleteBySemesterAndExamDate(Integer pSemesterId, String pExamDate) {
     int i = getContentManager().deleteBySemesterAndExamDate(pSemesterId, pExamDate);
     mSeatPlanManager.deleteBySemesterGroupExamTypeAndExamDate(pSemesterId, 0, 2, pExamDate);
     return Response.noContent().build();
   }
 
   public JsonObject getBySemesterAndExamDate(Integer pSemesterId, String pExamDate,
-      final Request pRequest, final UriInfo pUriInfo) throws Exception {
+      final Request pRequest, final UriInfo pUriInfo) {
     List<SubGroupCCI> subGroupCCIs =
         getContentManager().getBySemesterAndExamDate(pSemesterId, pExamDate);
     JsonObjectBuilder object = Json.createObjectBuilder();

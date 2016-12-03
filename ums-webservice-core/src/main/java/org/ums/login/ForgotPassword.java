@@ -25,14 +25,14 @@ public class ForgotPassword extends Resource {
 
   @PUT
   public GenericResponse<Map> passwordResetEmailRequest(final @Context Request pRequest,
-      final JsonObject pJsonObject) throws Exception {
+      final JsonObject pJsonObject) {
     return mLoginService.checkAndSendPasswordResetEmailToUser(pJsonObject.getString("userId"));
   }
 
   @PUT
   @Path("/resetPassword")
   public GenericResponse<Map> resetPassword(final @Context Request pRequest,
-      final JsonObject pJsonObject) throws Exception {
+      final JsonObject pJsonObject) {
     return mLoginService.resetPassword(pJsonObject.getString("userId"),
         pJsonObject.getString("passwordResetToken"), pJsonObject.getString("newPassword"),
         pJsonObject.getString("confirmNewPassword"));

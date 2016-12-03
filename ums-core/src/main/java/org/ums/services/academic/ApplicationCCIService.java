@@ -12,5 +12,5 @@ import java.util.List;
 public interface ApplicationCCIService {
   List<PersistentApplicationCCI> validateForAnomalies(
       List<PersistentApplicationCCI> pApplicationCCIs, List<UGRegistrationResult> results,
-      Student pStudent) throws Exception;
+      Student pStudent);
 }

@@ -23,13 +23,13 @@ public class AdditionalRolePermissionsResource extends Resource {
   @GET
   @Path(PATH_PARAM_OBJECT_ID)
   public JsonObject getAdditionalRolePermissions(final @Context Request pRequest,
-      final @PathParam("object-id") String pUserId) throws Exception {
+      final @PathParam("object-id") String pUserId) {
     return mAdditionalRolePermissionsHelper.getUserAdditionalRolePermissionsByAssignedBy(pUserId,
         SecurityUtils.getSubject().getPrincipal().toString(), mUriInfo);
   }
 
   @POST
-  public Response createAdditionalRolePermissions(final JsonObject pJsonObject) throws Exception {
+  public Response createAdditionalRolePermissions(final JsonObject pJsonObject) {
     return mAdditionalRolePermissionsHelper.post(pJsonObject, mUriInfo);
   }
 

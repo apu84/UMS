@@ -256,7 +256,7 @@ public class UgGradeSheetGenerator {
   }
 
   public PdfPTable getSubTableHeader(Course course, int totalStudents, String semesterName)
-      throws Exception {
+      throws DocumentException {
     // a table with three columns
     Font fontAUST = new Font(Font.FontFamily.HELVETICA, 7, Font.NORMAL);
     Font gradeSheetHeader = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD);

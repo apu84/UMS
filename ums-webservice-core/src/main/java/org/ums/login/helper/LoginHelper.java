@@ -33,7 +33,7 @@ public class LoginHelper {
   @Autowired
   private BearerAccessTokenManager mBearerAccessTokenManager;
 
-  public Response changePassword(final JsonObject pJsonObject) throws Exception {
+  public Response changePassword(final JsonObject pJsonObject) {
 
     Subject loggedInUser = SecurityUtils.getSubject();
     String userName = loggedInUser.getPrincipal().toString();
@@ -68,7 +68,7 @@ public class LoginHelper {
   }
 
   @Transactional
-  protected String changePassword(User pCurrentUser, final String pNewPassword) throws Exception {
+  protected String changePassword(User pCurrentUser, final String pNewPassword) {
     MutableUser mutableUser = pCurrentUser.edit();
     mutableUser.setPassword(mPasswordService.encryptPassword(pNewPassword).toCharArray());
     mutableUser.setTemporaryPassword(null);

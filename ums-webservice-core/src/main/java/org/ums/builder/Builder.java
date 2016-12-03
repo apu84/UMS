@@ -8,8 +8,7 @@ import javax.ws.rs.core.UriInfo;
 
 public interface Builder<R, M> {
   void build(final JsonObjectBuilder pBuilder, final R pReadOnly, final UriInfo pUriInfo,
-      final LocalCache pLocalCache) throws Exception;
+      final LocalCache pLocalCache);
 
-  void build(final M pMutable, JsonObject pJsonObject, final LocalCache pLocalCache)
-      throws Exception;
+  void build(final M pMutable, JsonObject pJsonObject, final LocalCache pLocalCache);
 }

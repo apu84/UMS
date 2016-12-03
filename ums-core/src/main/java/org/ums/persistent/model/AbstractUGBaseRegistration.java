@@ -127,7 +127,7 @@ public abstract class AbstractUGBaseRegistration implements MutableUGBaseRegistr
   }
 
   @Override
-  public Course getCourse() throws Exception {
+  public Course getCourse() {
     return mCourse == null ? sCourseManager.get(mCourseId) : sCourseManager.validate(mCourse);
   }
 
@@ -147,7 +147,7 @@ public abstract class AbstractUGBaseRegistration implements MutableUGBaseRegistr
   }
 
   @Override
-  public Semester getSemester() throws Exception {
+  public Semester getSemester() {
     return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
         .validate(mSemester);
   }
@@ -168,7 +168,7 @@ public abstract class AbstractUGBaseRegistration implements MutableUGBaseRegistr
   }
 
   @Override
-  public Student getStudent() throws Exception {
+  public Student getStudent() {
     return mStudent == null ? sStudentManager.get(mStudentId) : sStudentManager.validate(mStudent);
   }
 

@@ -15,7 +15,7 @@ import javax.ws.rs.core.UriInfo;
 public class EmployeeBuilder implements Builder<Employee, MutableEmployee> {
   @Override
   public void build(JsonObjectBuilder pBuilder, Employee pReadOnly, UriInfo pUriInfo,
-      LocalCache pLocalCache) throws Exception {
+      LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("employeeName", pReadOnly.getEmployeeName());
     pBuilder.add("designation", pReadOnly.getDesignation());
@@ -41,8 +41,7 @@ public class EmployeeBuilder implements Builder<Employee, MutableEmployee> {
   }
 
   @Override
-  public void build(MutableEmployee pMutable, JsonObject pJsonObject, LocalCache pLocalCache)
-      throws Exception {
+  public void build(MutableEmployee pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
     pMutable.setId(pJsonObject.getString("id"));
     pMutable.setEmployeeName(pJsonObject.getString("employeeName"));
     pMutable.setDesignation(Integer.parseInt(pJsonObject.getString("designation")));

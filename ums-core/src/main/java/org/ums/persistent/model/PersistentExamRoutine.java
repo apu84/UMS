@@ -95,7 +95,7 @@ public class PersistentExamRoutine implements MutableExamRoutine {
     mExamDate = pExamDate;
   }
 
-  public PersistentExamRoutine(final MutableExamRoutine pOriginal) throws Exception {
+  public PersistentExamRoutine(final MutableExamRoutine pOriginal) {
     mExamRoutine = pOriginal.getRoutine();
   }
 
@@ -118,23 +118,23 @@ public class PersistentExamRoutine implements MutableExamRoutine {
     return mExamRoutine;
   }
 
-  public void save() throws Exception {
+  public void save() {
 
     sExamRoutineManager.create(this);
 
   }
 
   @Override
-  public void delete() throws Exception {
+  public void delete() {
     sExamRoutineManager.delete(this);
 
   }
 
   @Override
-  public void commit(boolean update) throws Exception {}
+  public void commit(boolean update) {}
 
   @Override
-  public MutableExamRoutine edit() throws Exception {
+  public MutableExamRoutine edit() {
     return null;
   }
 

@@ -6,7 +6,7 @@ import org.ums.persistent.model.PersistentResultPublish;
 
 public class ResultPublishImpl extends ResultPublishDaoDecorator {
   @Override
-  public void publishResult(Integer programId, Integer semesterId) throws Exception {
+  public void publishResult(Integer programId, Integer semesterId) {
     MutableResultPublish resultPublish = new PersistentResultPublish();
     resultPublish.setProgramId(programId);
     resultPublish.setSemesterId(semesterId);

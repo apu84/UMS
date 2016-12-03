@@ -30,6 +30,6 @@ public class ApplicationStartupListener {
       } catch(Exception e) {
         mLogger.error("Failed to warm cache ", e);
       }
-    }, 30, TimeUnit.SECONDS);
+    }, 120, TimeUnit.SECONDS);
   }
 }

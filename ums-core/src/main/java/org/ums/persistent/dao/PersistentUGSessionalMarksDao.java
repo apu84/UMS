@@ -22,12 +22,11 @@ public class PersistentUGSessionalMarksDao extends UGSessionalMarksDaoDecorator 
   }
 
   @Override
-  public int create(List<MutableUGSessionalMarks> pMutableList) throws Exception {
+  public int create(List<MutableUGSessionalMarks> pMutableList) {
     return mJdbcTemplate.batchUpdate(INSERT_ALL, getInsertParamList(pMutableList)).length;
   }
 
-  private List<Object[]> getInsertParamList(List<MutableUGSessionalMarks> pSessionalMarks)
-      throws Exception {
+  private List<Object[]> getInsertParamList(List<MutableUGSessionalMarks> pSessionalMarks) {
     List<Object[]> params = new ArrayList<>();
     for(UGSessionalMarks sessionalMarks : pSessionalMarks) {
       params.add(new Object[] {sessionalMarks.getStudent().getId(),
@@ -40,12 +39,11 @@ public class PersistentUGSessionalMarksDao extends UGSessionalMarksDaoDecorator 
   }
 
   @Override
-  public int delete(List<MutableUGSessionalMarks> pMutableList) throws Exception {
+  public int delete(List<MutableUGSessionalMarks> pMutableList) {
     return mJdbcTemplate.batchUpdate(DELETE_BY_STUDENT_SEMESTER, getDeleteParamList(pMutableList)).length;
   }
 
-  private List<Object[]> getDeleteParamList(List<MutableUGSessionalMarks> pSessionalMarkses)
-      throws Exception {
+  private List<Object[]> getDeleteParamList(List<MutableUGSessionalMarks> pSessionalMarkses) {
     List<Object[]> params = new ArrayList<>();
     for(UGSessionalMarks sessionalMarks : pSessionalMarkses) {
       params.add(new Object[] {sessionalMarks.getStudent().getId(),

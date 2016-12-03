@@ -52,26 +52,26 @@ public class PersistentSemesterSyllabusMapDao extends SemesterSyllabusMapDaoDeco
 
   @Override
   public List<SemesterSyllabusMap> getMapsByProgramSemester(final Integer pSemesterId,
-      final Integer pProgramId) throws Exception {
+      final Integer pProgramId) {
     String query = SELECT_BY_SEMESTER_PROGRAM;
     return mJdbcTemplate.query(query, new Object[] {pProgramId, pSemesterId},
         new SemesterSyllabusRowMapper());
   }
 
   @Override
-  public SemesterSyllabusMap get(final Integer pMapId) throws Exception {
+  public SemesterSyllabusMap get(final Integer pMapId) {
     String query = SELECT_SINGLE;
     return mJdbcTemplate.queryForObject(query, new Object[] {pMapId},
         new SemesterSyllabusRowMapper());
   }
 
   @Override
-  public int update(final MutableSemesterSyllabusMap pSSMap) throws Exception {
+  public int update(final MutableSemesterSyllabusMap pSSMap) {
     String query = UPDATE_ONE + " Where Mapping_Id=?";
     return mJdbcTemplate.update(query, pSSMap.getSyllabus().getId(), pSSMap.getId());
   }
 
-  public void copySyllabus(final SemesterSyllabusMapDto pSemesterSyllabusMapDto) throws Exception {
+  public void copySyllabus(final SemesterSyllabusMapDto pSemesterSyllabusMapDto) {
 
     String query =
         "insert into SEMESTER_SYLLABUS_MAP(mapping_id, program_id, year, semester, semester_id, syllabus_id)"

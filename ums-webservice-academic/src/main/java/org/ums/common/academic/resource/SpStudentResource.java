@@ -34,8 +34,7 @@ public class SpStudentResource extends MutableSpStudentResource {
   @Path("/program/{programId}/year/{year}/semester/{semester}/status/{status}")
   public JsonObject getByProgramYearSemesterStatus(final @Context Request pRequest,
       final @PathParam("programId") int programId, final @PathParam("year") int year,
-      final @PathParam("semester") int semester, final @PathParam("status") int status)
-      throws Exception {
+      final @PathParam("semester") int semester, final @PathParam("status") int status) {
     return mHelper.getStudentByProgramYearSemesterStatus(programId, year, semester, status,
         pRequest, mUriInfo);
   }

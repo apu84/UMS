@@ -21,7 +21,7 @@ public abstract class AbstractSectionPermission extends BaseFileContentPermissio
   }
 
   protected boolean hasPermission(final Path pTargetPath, final List<String> pSections,
-      final Student pStudent) throws Exception {
+      final Student pStudent) {
     String type = getUserDefinedProperty(FOLDER_TYPE, pTargetPath);
 
     if(!StringUtils.isEmpty(type)) {
@@ -47,7 +47,7 @@ public abstract class AbstractSectionPermission extends BaseFileContentPermissio
   }
 
   protected List<String> permittedSections(final String pOwner, final Integer pSemesterId,
-      final String pCourseId) throws Exception {
+      final String pCourseId) {
     User creator = mUserManager.get(pOwner);
     List<CourseTeacher> courseTeacherSections =
         mCourseTeacherManager.getAssignedSections(pSemesterId, pCourseId, creator.getEmployeeId());

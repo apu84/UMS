@@ -28,7 +28,7 @@ public class PersistentCourseGroup implements MutableCourseGroup {
 
   }
 
-  public PersistentCourseGroup(final PersistentCourseGroup pPersistentCourseGroup) throws Exception {
+  public PersistentCourseGroup(final PersistentCourseGroup pPersistentCourseGroup) {
     this.mId = pPersistentCourseGroup.getId();
     this.mName = pPersistentCourseGroup.getName();
     this.mSyllabus = pPersistentCourseGroup.getSyllabus();
@@ -55,7 +55,7 @@ public class PersistentCourseGroup implements MutableCourseGroup {
   }
 
   @Override
-  public Syllabus getSyllabus() throws Exception {
+  public Syllabus getSyllabus() {
     return mSyllabus == null ? sSyllabusManager.get(mSyllabusId) : sSyllabusManager
         .validate(mSyllabus);
   }
@@ -75,12 +75,12 @@ public class PersistentCourseGroup implements MutableCourseGroup {
   }
 
   @Override
-  public MutableCourseGroup edit() throws Exception {
+  public MutableCourseGroup edit() {
     return new PersistentCourseGroup(this);
   }
 
   @Override
-  public void commit(boolean update) throws Exception {
+  public void commit(boolean update) {
     if(update) {
       sCourseGroupManager.update(this);
     }
@@ -90,7 +90,7 @@ public class PersistentCourseGroup implements MutableCourseGroup {
   }
 
   @Override
-  public void delete() throws Exception {
+  public void delete() {
     sCourseGroupManager.delete(this);
   }
 

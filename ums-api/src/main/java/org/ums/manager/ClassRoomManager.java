@@ -9,11 +9,11 @@ import java.util.List;
  * Created by Ifti on 13-Feb-16.
  */
 public interface ClassRoomManager extends ContentManager<ClassRoom, MutableClassRoom, Integer> {
-  public List<ClassRoom> getRoomList() throws Exception;
+  public List<ClassRoom> getRoomList();
 
-  public ClassRoom getByRoomNo(String pRoomNo) throws Exception;
+  public ClassRoom getByRoomNo(String pRoomNo);
 
-  public List<ClassRoom> getSeatPlanRooms(Integer pSemesterid, Integer pExamType) throws Exception;
+  public List<ClassRoom> getSeatPlanRooms(Integer pSemesterid, Integer pExamType);
 
-  public List<ClassRoom> getRoomsBasedOnRoutine(int pSemesterId, int pProgramId) throws Exception;
+  public List<ClassRoom> getRoomsBasedOnRoutine(int pSemesterId, int pProgramId);
 }

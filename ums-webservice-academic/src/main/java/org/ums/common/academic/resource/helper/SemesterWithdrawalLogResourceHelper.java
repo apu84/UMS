@@ -32,7 +32,7 @@ public class SemesterWithdrawalLogResourceHelper extends
   public SemesterWithdrawalLogBuilder mBuilder;
 
   @Override
-  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) {
     MutableSemesterWithdrawalLog mutableLog = new PersistentSemesterWithdrawalLog();
     LocalCache localCache = new LocalCache();
     getBuilder().build(mutableLog, pJsonObject, localCache);
@@ -46,7 +46,7 @@ public class SemesterWithdrawalLogResourceHelper extends
   }
 
   public JsonObject getBySemesterWithdrawalId(final int semesterWithdrawalid,
-      final Request pRequest, final UriInfo pUriInfo) throws Exception {
+      final Request pRequest, final UriInfo pUriInfo) {
     SemesterWithdrawalLog mLog =
         getContentManager().getBySemesterWithdrawalId(semesterWithdrawalid);
 

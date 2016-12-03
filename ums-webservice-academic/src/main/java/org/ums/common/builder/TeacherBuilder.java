@@ -14,7 +14,7 @@ import javax.ws.rs.core.UriInfo;
 @Component
 public class TeacherBuilder implements Builder<Teacher, MutableTeacher> {
   @Override
-  public void build(JsonObjectBuilder pBuilder, Teacher pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) throws Exception {
+  public void build(JsonObjectBuilder pBuilder, Teacher pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("name", pReadOnly.getName());
 
@@ -32,8 +32,7 @@ public class TeacherBuilder implements Builder<Teacher, MutableTeacher> {
   }
 
   @Override
-  public void build(MutableTeacher pMutable, JsonObject pJsonObject, LocalCache pLocalCache)
-      throws Exception {
+  public void build(MutableTeacher pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
 
   }
 }

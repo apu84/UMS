@@ -24,21 +24,20 @@ public class ApplicationCCIResource extends MutableApplicationCCIResource {
 
   @GET
   @Path("/student")
-  public JsonObject getApplicationCCIForStudent(@Context Request pRequest) throws Exception {
+  public JsonObject getApplicationCCIForStudent(@Context Request pRequest) {
     return mHelper.getApplicationCCIInfoForStudent(pRequest, mUriInfo);
   }
 
   @GET
   @Path("/semester/{semester-id}/examDate/{exam-date}")
   public JsonObject getApplicationCCIForSeatPlan(@Context Request pRequest,
-      @PathParam("semester-id") Integer pSemesterId, @PathParam("exam-date") String pExamDate)
-      throws Exception {
+      @PathParam("semester-id") Integer pSemesterId, @PathParam("exam-date") String pExamDate) {
     return mHelper.getApplicationCCIForSeatPlan(pSemesterId, pExamDate, pRequest, mUriInfo);
   }
 
   @GET
   @Path("/seatPlanView")
-  public JsonObject getApplicationCCIForSeatPlanView(@Context Request pRequest) throws Exception {
+  public JsonObject getApplicationCCIForSeatPlanView(@Context Request pRequest) {
     return mHelper.getApplicationCCIForSeatPlanViewingOfStudent(mUriInfo);
   }
 }

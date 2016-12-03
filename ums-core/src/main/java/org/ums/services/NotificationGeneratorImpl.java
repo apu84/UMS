@@ -22,7 +22,7 @@ public class NotificationGeneratorImpl implements NotificationGenerator {
   }
 
   @Async
-  public void notify(Notifier pNotifier) throws Exception {
+  public void notify(Notifier pNotifier) {
     List<String> consumers = pNotifier.consumers();
     String producer = pNotifier.producer();
     String notificationType = pNotifier.notificationType();

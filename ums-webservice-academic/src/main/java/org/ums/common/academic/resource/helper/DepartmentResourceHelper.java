@@ -30,7 +30,7 @@ public class DepartmentResourceHelper extends ResourceHelper<Department, Mutable
     return mBuilder;
   }
 
-  public Response post(final JsonObject pJsonObject, final UriInfo pUriInfo) throws Exception {
+  public Response post(final JsonObject pJsonObject, final UriInfo pUriInfo) {
     return null;
   }
 

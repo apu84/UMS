@@ -40,13 +40,13 @@ public class PersistentEmployeeDao extends EmployeeDaoDecorator {
   }
 
   @Override
-  public List<Employee> getAll() throws Exception {
+  public List<Employee> getAll() {
     String query = SELECT_ALL;
     return mJdbcTemplate.query(query, new EmployeeRowmapper());
   }
 
   @Override
-  public int update(MutableEmployee pMutable) throws Exception {
+  public int update(MutableEmployee pMutable) {
     String query = UPDATE_ONE + " WHERE EMPLOYEE_ID=? ";
     return mJdbcTemplate.update(query, pMutable.getEmployeeName(), pMutable.getDesignation(),
         pMutable.getEmploymentType(), pMutable.getDepartment().getId(), pMutable.getFatherName(),
@@ -58,7 +58,7 @@ public class PersistentEmployeeDao extends EmployeeDaoDecorator {
   }
 
   @Override
-  public int delete(MutableEmployee pMutable) throws Exception {
+  public int delete(MutableEmployee pMutable) {
     String query = DELETE_ONE + " WHERE EMPLOYEE_ID=? ";
     return mJdbcTemplate.update(query, pMutable.getId());
   }

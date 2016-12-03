@@ -37,8 +37,7 @@ public class LoginService {
   @Autowired
   private String dummyEmail;
 
-  public GenericResponse<Map> checkAndSendPasswordResetEmailToUser(final String pUserId)
-      throws Exception {
+  public GenericResponse<Map> checkAndSendPasswordResetEmailToUser(final String pUserId) {
     String token = UUID.randomUUID().toString();
     Date now = new Date();
     Date tokenInvalidDate = null;
@@ -84,7 +83,7 @@ public class LoginService {
   }
 
   public GenericResponse<Map> resetPassword(final String pUserId, final String pResetToken,
-      final String pNewPassword, final String pConfirmNewPassword) throws Exception {
+      final String pNewPassword, final String pConfirmNewPassword) {
     Date tokenInvalidDate = null;
     Date now = new Date();
 

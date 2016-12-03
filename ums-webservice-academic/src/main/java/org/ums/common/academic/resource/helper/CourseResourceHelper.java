@@ -57,7 +57,7 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
   }
 
   @Override
-  public Response post(final JsonObject pJsonObject, final UriInfo pUriInfo) throws Exception {
+  public Response post(final JsonObject pJsonObject, final UriInfo pUriInfo) {
     MutableCourse mutableCourse = new PersistentCourse();
     LocalCache localCache = new LocalCache();
     getBuilder().build(mutableCourse, pJsonObject, localCache);
@@ -86,7 +86,7 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
    */
 
   public JsonObject getBySyllabus(final String pSyllabusId, final Request pRequest,
-      final UriInfo pUriInfo) throws Exception {
+      final UriInfo pUriInfo) {
     List<Course> courses = getContentManager().getBySyllabus(pSyllabusId);
 
     JsonObjectBuilder object = Json.createObjectBuilder();
@@ -102,13 +102,13 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
   }
 
   public JsonObject getBySemesterProgram(final String pSemesterId, final String pProgramId,
-      final Request pRequest, final UriInfo pUriInfo) throws Exception {
+      final Request pRequest, final UriInfo pUriInfo) {
     List<Course> courses = getContentManager().getBySemesterProgram(pSemesterId, pProgramId);
 
     return buildCourse(courses, pUriInfo);
   }
 
-  public JsonObject getCourses(final Integer pSemesterId, final int pProgramType, final Request pRequest, final UriInfo pUriInfo) throws Exception{
+  public JsonObject getCourses(final Integer pSemesterId, final int pProgramType, final Request pRequest, final UriInfo pUriInfo){
     String userId = SecurityUtils.getSubject().getPrincipal().toString();
     User user = mUserManager.get(userId);
     String employeeId = user.getEmployeeId();
@@ -128,7 +128,7 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
     return buildCourse(courses,pUriInfo);
   }
 
-  public JsonObject getCourses(final Integer pSemesterId, final int pProgramType,final int pYear,final int pSemester, final Request pRequest, final UriInfo pUriInfo) throws Exception{
+  public JsonObject getCourses(final Integer pSemesterId, final int pProgramType,final int pYear,final int pSemester, final Request pRequest, final UriInfo pUriInfo){
     String userId = SecurityUtils.getSubject().getPrincipal().toString();
     User user = mUserManager.get(userId);
     String employeeId = user.getEmployeeId();
@@ -149,8 +149,7 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
     return buildCourse(courses,pUriInfo);
   }
 
-  public JsonObject getCoursesForTeacher(final Request pRequest, final UriInfo pUriInfo)
-      throws Exception {
+  public JsonObject getCoursesForTeacher(final Request pRequest, final UriInfo pUriInfo) {
     String userId = SecurityUtils.getSubject().getPrincipal().toString();
     User user = mUserManager.get(userId);
     String employeeId = user.getEmployeeId();
@@ -160,8 +159,7 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
   }
 
   public JsonObject getByYearSemester(final String pSemesterId, final String pProgramId,
-      final int year, final int semester, final Request pRequest, final UriInfo pUriInfo)
-      throws Exception {
+      final int year, final int semester, final Request pRequest, final UriInfo pUriInfo) {
     List<Course> courses =
         getContentManager().getByYearSemester(pSemesterId, pProgramId, year, semester);
 
@@ -169,8 +167,7 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
   }
 
   public JsonObject getOptionalCourses(final Integer pSemesterId, final Integer pProgramId,
-      final Integer pYear, final Integer pSemester, final Request pRequest, final UriInfo pUriInfo)
-      throws Exception {
+      final Integer pYear, final Integer pSemester, final Request pRequest, final UriInfo pUriInfo) {
     Syllabus syllabus =
         mSemesterSyllabusMapManager.getSyllabusForSemester(pSemesterId, pProgramId, pYear,
             pSemester);
@@ -181,7 +178,7 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
   }
 
   public JsonObject getOfferedCourses(final Integer pSemesterId, final Integer pProgramId,
-      final Integer pYear, final Integer pSemester, final UriInfo pUriInfo) throws Exception {
+      final Integer pYear, final Integer pSemester, final UriInfo pUriInfo) {
 
     List<Course> courses =
         getContentManager().getOfferedCourseList(pSemesterId, pProgramId, pYear, pSemester);
@@ -190,8 +187,7 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
   }
 
   public JsonObject getCallForApplicationCourses(final Integer pSemesterId,
-      final Integer pProgramId, final Integer pYear, final Integer pSemester, final UriInfo pUriInfo)
-      throws Exception {
+      final Integer pProgramId, final Integer pYear, final Integer pSemester, final UriInfo pUriInfo) {
 
     List<Course> courses =
         getContentManager().getCallForApplicationCourseList(pSemesterId, pProgramId, pYear,
@@ -201,7 +197,7 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
   }
 
   public JsonObject getApprovedCourses(final Integer pSemesterId, final Integer pProgramId,
-      final Integer pYear, final Integer pSemester, final UriInfo pUriInfo) throws Exception {
+      final Integer pYear, final Integer pSemester, final UriInfo pUriInfo) {
 
     List<Course> courses =
         getContentManager().getApprovedCourseList(pSemesterId, pProgramId, pYear, pSemester);
@@ -210,8 +206,7 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
   }
 
   public JsonObject getApprovedCallForApplicationCourseList(final Integer pSemesterId,
-      final Integer pProgramId, final Integer pYear, final Integer pSemester, final UriInfo pUriInfo)
-      throws Exception {
+      final Integer pProgramId, final Integer pYear, final Integer pSemester, final UriInfo pUriInfo) {
 
     List<Course> courses =
         getContentManager().getApprovedCallForApplicationCourseList(pSemesterId, pProgramId, pYear,
@@ -220,7 +215,7 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
     return buildCourse(courses, pUriInfo);
   }
 
-  private JsonObject buildCourse(List<Course> courses, final UriInfo pUriInfo) throws Exception {
+  private JsonObject buildCourse(List<Course> courses, final UriInfo pUriInfo) {
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();

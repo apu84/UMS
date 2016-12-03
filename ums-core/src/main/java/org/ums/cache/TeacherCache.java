@@ -34,7 +34,7 @@ public class TeacherCache extends ContentCache<Teacher, MutableTeacher, String, 
   }
 
   @Override
-  public List<Teacher> getByDepartment(Department pDepartment) throws Exception {
+  public List<Teacher> getByDepartment(Department pDepartment) {
     String cacheKey = getCacheKey(Teacher.class.toString(), pDepartment.getId());
     return cachedList(cacheKey, () -> getManager().getByDepartment(pDepartment));
   }

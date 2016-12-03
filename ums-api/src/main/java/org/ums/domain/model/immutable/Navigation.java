@@ -13,7 +13,7 @@ public interface Navigation extends Serializable, Identifier<Integer>, LastModif
 
   String getPermission();
 
-  Navigation getParent() throws Exception;
+  Navigation getParent();
 
   Integer getParentId();
 

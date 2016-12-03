@@ -36,20 +36,19 @@ public class PersistentNotificationDao extends NotificationDaoDecorator {
   }
 
   @Override
-  public int update(MutableNotification pNotification) throws Exception {
+  public int update(MutableNotification pNotification) {
     List<MutableNotification> notifications = new ArrayList<>();
     notifications.add(pNotification);
     return update(notifications);
   }
 
   @Override
-  public int update(List<MutableNotification> pMutableList) throws Exception {
+  public int update(List<MutableNotification> pMutableList) {
     String query = UPDATE_ALL + " WHERE ID = ?";
     return mJdbcTemplate.batchUpdate(query, getUpdateParamArray(pMutableList)).length;
   }
 
-  private List<Object[]> getUpdateParamArray(List<MutableNotification> pMutableList)
-      throws Exception {
+  private List<Object[]> getUpdateParamArray(List<MutableNotification> pMutableList) {
     List<Object[]> params = new ArrayList<>();
     for(Notification notification : pMutableList) {
       params.add(new Object[] {notification.getProducerId(), notification.getConsumerId(),
@@ -59,19 +58,19 @@ public class PersistentNotificationDao extends NotificationDaoDecorator {
   }
 
   @Override
-  public int delete(MutableNotification pMutable) throws Exception {
+  public int delete(MutableNotification pMutable) {
     String query = DELETE_ALL + " WHERE ID = ?";
     return mJdbcTemplate.update(query, pMutable.getId());
   }
 
   @Override
-  public int delete(List<MutableNotification> pMutableList) throws Exception {
+  public int delete(List<MutableNotification> pMutableList) {
     String query = DELETE_ALL + " WHERE ID = ?";
     return mJdbcTemplate.update(query, getDeleteParamArray(pMutableList));
   }
 
   @Override
-  public int create(MutableNotification pNotification) throws Exception {
+  public int create(MutableNotification pNotification) {
     return mJdbcTemplate.update(INSERT_ALL, pNotification.getProducerId(),
         pNotification.getConsumerId(), pNotification.getNotificationType(),
         pNotification.getPayload(), mDateFormat.format(pNotification.getProducedOn()),
@@ -80,12 +79,12 @@ public class PersistentNotificationDao extends NotificationDaoDecorator {
   }
 
   @Override
-  public int create(List<MutableNotification> pMutableList) throws Exception {
+  public int create(List<MutableNotification> pMutableList) {
     return mJdbcTemplate.batchUpdate(INSERT_ALL, getInsertParamArray(pMutableList)).length;
   }
 
   @Override
-  public Notification get(String pId) throws Exception {
+  public Notification get(String pId) {
     String query = SELECT_ALL + " WHERE ID = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new NotificationRowMapper());
   }
@@ -107,8 +106,7 @@ public class PersistentNotificationDao extends NotificationDaoDecorator {
         new NotificationRowMapper());
   }
 
-  private List<Object[]> getInsertParamArray(List<MutableNotification> pMutableList)
-      throws Exception {
+  private List<Object[]> getInsertParamArray(List<MutableNotification> pMutableList) {
     List<Object[]> params = new ArrayList<>();
     for(Notification notification : pMutableList) {
       params.add(new Object[] {notification.getProducerId(), notification.getConsumerId(),
@@ -117,8 +115,7 @@ public class PersistentNotificationDao extends NotificationDaoDecorator {
     return params;
   }
 
-  private List<Object[]> getDeleteParamArray(List<MutableNotification> pMutableList)
-      throws Exception {
+  private List<Object[]> getDeleteParamArray(List<MutableNotification> pMutableList) {
     List<Object[]> params = new ArrayList<>();
     for(Notification notification : pMutableList) {
       params.add(new Object[] {notification.getId(),});

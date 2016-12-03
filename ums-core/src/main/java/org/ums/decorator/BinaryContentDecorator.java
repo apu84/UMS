@@ -1,9 +1,6 @@
 package org.ums.decorator;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.ums.manager.BinaryContentManager;
-
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
@@ -18,6 +15,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.ums.manager.BinaryContentManager;
 
 public abstract class BinaryContentDecorator implements BinaryContentManager<byte[]> {
   private static Logger mLogger = LoggerFactory.getLogger(BinaryContentDecorator.class);
@@ -46,22 +47,22 @@ public abstract class BinaryContentDecorator implements BinaryContentManager<byt
   }
 
   @Override
-  public byte[] get(String pId, Domain pDomain) throws Exception {
+  public byte[] get(String pId, Domain pDomain) throws IOException {
     return getManager().get(pId, pDomain);
   }
 
   @Override
-  public void put(byte[] pData, String pId, Domain pDomain) throws Exception {
+  public void put(byte[] pData, String pId, Domain pDomain) throws IOException {
     getManager().put(pData, pId, pDomain);
   }
 
   @Override
-  public void delete(String pId, Domain pDomain) throws Exception {
+  public void delete(String pId, Domain pDomain) throws IOException {
     getManager().delete(pId, pDomain);
   }
 
   @Override
-  public String create(byte[] pData, String pIdentifier, Domain pDomain) throws Exception {
+  public String create(byte[] pData, String pIdentifier, Domain pDomain) throws IOException {
     return getManager().create(pData, pIdentifier, pDomain);
   }
 
@@ -157,10 +158,11 @@ public abstract class BinaryContentDecorator implements BinaryContentManager<byt
   }
 
   protected void addUserDefinedProperty(final String pPropertyName, final String pPropertyValue,
-      final Path pTargetPath) throws Exception {
+      final Path pTargetPath) throws IOException {
     if(isUserDefinedAttributeSupported(pTargetPath)) {
       UserDefinedFileAttributeView view =
           Files.getFileAttributeView(pTargetPath, UserDefinedFileAttributeView.class);
+
       view.write(pPropertyName, Charset.defaultCharset().encode(pPropertyValue));
     }
   }

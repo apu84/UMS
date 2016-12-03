@@ -62,7 +62,7 @@ public class PersistentSubGroupCCIDao extends SubGroupCCIDaoDecorator {
   }
 
   @Override
-  public int create(List<MutableSubGroupCCI> pMutableList) throws Exception {
+  public int create(List<MutableSubGroupCCI> pMutableList) {
     String query =
         "INSERT INTO SP_SUB_GROUP_CCI (SEMESTER_ID,SUB_GROUP_NO,TOTAL_STUDENT,COURSE_ID,EXAM_DATE,LAST_MODIFIED)"
             + " VALUES (?,?,?,?,to_date(?,'MM-DD-YYYY')," + getLastModifiedSql() + ")";
@@ -70,7 +70,7 @@ public class PersistentSubGroupCCIDao extends SubGroupCCIDaoDecorator {
   }
 
   @Override
-  public int delete(MutableSubGroupCCI pMutable) throws Exception {
+  public int delete(MutableSubGroupCCI pMutable) {
     String query = DELETE_ONE + " where semester_id=? and exam_date=to_date(?,'MM-DD-YYYY')";
     return mJdbcTemplate.update(query, pMutable.getSemesterId(), pMutable.getExamDate());
   }
@@ -82,8 +82,7 @@ public class PersistentSubGroupCCIDao extends SubGroupCCIDaoDecorator {
     return mJdbcTemplate.update(query, pExamDate, pSemesterId);
   }
 
-  private List<Object[]> getInsertParamList(List<MutableSubGroupCCI> pMutableSubGroupCCIs)
-      throws Exception {
+  private List<Object[]> getInsertParamList(List<MutableSubGroupCCI> pMutableSubGroupCCIs) {
     List<Object[]> params = new ArrayList<>();
     for(SubGroupCCI subGroup : pMutableSubGroupCCIs) {
       params.add(new Object[] {subGroup.getSemesterId(), subGroup.getSubGroupNo(),

@@ -48,7 +48,7 @@ public class PersistentSeatPlan implements MutableSeatPlan {
 
   }
 
-  public PersistentSeatPlan(final PersistentSeatPlan pPersistentSeatPlan) throws Exception {
+  public PersistentSeatPlan(final PersistentSeatPlan pPersistentSeatPlan) {
     mId = pPersistentSeatPlan.getId();
     mClassRoom = pPersistentSeatPlan.getClassRoom();
     mClassRoomId = pPersistentSeatPlan.getClassRoomId();
@@ -145,7 +145,7 @@ public class PersistentSeatPlan implements MutableSeatPlan {
   }
 
   @Override
-  public void commit(boolean update) throws Exception {
+  public void commit(boolean update) {
     if(update) {
       sSeatPlanManager.update(this);
     }
@@ -155,7 +155,7 @@ public class PersistentSeatPlan implements MutableSeatPlan {
   }
 
   @Override
-  public void delete() throws Exception {
+  public void delete() {
     sSeatPlanManager.delete(this);
   }
 
@@ -170,18 +170,18 @@ public class PersistentSeatPlan implements MutableSeatPlan {
   }
 
   @Override
-  public ClassRoom getClassRoom() throws Exception {
+  public ClassRoom getClassRoom() {
     return mClassRoom == null ? sClassRoomManager.get(mClassRoomId) : sClassRoomManager
         .validate(mClassRoom);
   }
 
   @Override
-  public Student getStudent() throws Exception {
+  public Student getStudent() {
     return mStudent == null ? sStudentManager.get(mStudentId) : sStudentManager.validate(mStudent);
   }
 
   @Override
-  public Semester getSemester() throws Exception {
+  public Semester getSemester() {
     return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
         .validate(mSemester);
   }
@@ -207,7 +207,7 @@ public class PersistentSeatPlan implements MutableSeatPlan {
   }
 
   @Override
-  public MutableSeatPlan edit() throws Exception {
+  public MutableSeatPlan edit() {
     return new PersistentSeatPlan(this);
   }
 

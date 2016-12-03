@@ -13,7 +13,7 @@ import javax.ws.rs.core.UriInfo;
 @Component
 public class ProgramTypeBuilder implements Builder<ProgramType, MutableProgramType> {
   public void build(final JsonObjectBuilder pBuilder, final ProgramType pProgramType,
-      final UriInfo pUriInfo, final LocalCache pLocalCache) throws Exception {
+      final UriInfo pUriInfo, final LocalCache pLocalCache) {
     pBuilder.add("id", pProgramType.getId());
     pBuilder.add("name", pProgramType.getName());
     pBuilder.add(
@@ -23,7 +23,7 @@ public class ProgramTypeBuilder implements Builder<ProgramType, MutableProgramTy
   }
 
   public void build(final MutableProgramType pMutableProgramType, JsonObject pJsonObject,
-      final LocalCache pLocalCache) throws Exception {
+      final LocalCache pLocalCache) {
     pMutableProgramType.setId(pJsonObject.getInt("id"));
     pMutableProgramType.setName(pJsonObject.getString("name"));
   }

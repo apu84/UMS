@@ -44,7 +44,7 @@ public class PersistentEmployee implements MutableEmployee {
 
   }
 
-  public PersistentEmployee(final PersistentEmployee pPersistentEmployee) throws Exception {
+  public PersistentEmployee(final PersistentEmployee pPersistentEmployee) {
     mId = pPersistentEmployee.getId();
     mEmployeeName = pPersistentEmployee.getEmployeeName();
     mDesignation = pPersistentEmployee.getDesignation();
@@ -175,7 +175,7 @@ public class PersistentEmployee implements MutableEmployee {
   }
 
   @Override
-  public Department getDepartment() throws Exception {
+  public Department getDepartment() {
     return mDepartment == null ? sDepartmentManager.get(mDepartmentId) : sDepartmentManager
         .validate(mDepartment);
   }
@@ -246,7 +246,7 @@ public class PersistentEmployee implements MutableEmployee {
   }
 
   @Override
-  public MutableEmployee edit() throws Exception {
+  public MutableEmployee edit() {
     return new PersistentEmployee(this);
   }
 
@@ -261,7 +261,7 @@ public class PersistentEmployee implements MutableEmployee {
   }
 
   @Override
-  public void commit(boolean update) throws Exception {
+  public void commit(boolean update) {
 
     if(update) {
       sEmployeeManager.update(this);
@@ -272,7 +272,7 @@ public class PersistentEmployee implements MutableEmployee {
   }
 
   @Override
-  public void delete() throws Exception {
+  public void delete() {
     sEmployeeManager.delete(this);
   }
 

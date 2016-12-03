@@ -22,22 +22,20 @@ import java.util.Map;
 
 public interface SeatPlanReportGenerator {
   void createPdf(String dest, boolean noSeatPlanInfo, int pSemesterId, int groupNo, int type,
-      String examDate, OutputStream pOutputStream) throws Exception, IOException, DocumentException;
+      String examDate, OutputStream pOutputStream) throws IOException, DocumentException;
 
   void createSeatPlanAttendenceReport(Integer pProgramType, Integer pSemesterId, Integer pExamType,
-      String pExamDate, OutputStream pOutputStream) throws Exception, IOException,
-      DocumentException;
+      String pExamDate, OutputStream pOutputStream) throws IOException, DocumentException;
 
   void createSeatPlanAttendencePdfReport(Integer pProgramType, Integer pSemesterId,
-      Integer pExamType, String pExamDate, OutputStream pOutputStream) throws Exception,
-      IOException, DocumentException;
+      Integer pExamType, String pExamDate, OutputStream pOutputStream) throws IOException,
+      DocumentException;
 
   void createSeatPlanTopSheetPdfReport(Integer pProgramType, Integer pSemesterId,
-      Integer pExamType, String pExamDate, OutputStream pOutputStream) throws Exception,
-      IOException, DocumentException;
+      Integer pExamType, String pExamDate, OutputStream pOutputStream) throws IOException,
+      DocumentException;
 
   void createSeatPlanStickerReport(Integer pProgramType, Integer pSemesterId, Integer pExamType,
-      String pExamDate, OutputStream pOutputStream) throws Exception, IOException,
-      DocumentException;
+      String pExamDate, OutputStream pOutputStream) throws IOException, DocumentException;
 
 }

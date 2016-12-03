@@ -25,7 +25,7 @@ public class CourseTeacherBuilder implements Builder<CourseTeacher, MutableCours
   private SemesterManager mSemesterManager;
 
   @Override
-  public void build(JsonObjectBuilder pBuilder, CourseTeacher pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) throws Exception {
+  public void build(JsonObjectBuilder pBuilder, CourseTeacher pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
     if (pReadOnly.getId() != null) {
       pBuilder.add("id", pReadOnly.getId());
     }
@@ -75,8 +75,7 @@ public class CourseTeacherBuilder implements Builder<CourseTeacher, MutableCours
   }
 
   @Override
-  public void build(MutableCourseTeacher pMutable, JsonObject pJsonObject, LocalCache pLocalCache)
-      throws Exception {
+  public void build(MutableCourseTeacher pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
     if(pJsonObject.containsKey("id")) {
       pMutable.setId(pJsonObject.getInt("id"));
     }

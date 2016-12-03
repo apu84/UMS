@@ -34,7 +34,7 @@ public class AdditionalRolePermissionsHelper extends
 
   @Override
   @Transactional
-  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) {
     MutableAdditionalRolePermissions mutableAdditionalRolePermissions =
         new PersistentAdditionalRolePermissions();
     LocalCache localCache = new LocalCache();
@@ -64,7 +64,7 @@ public class AdditionalRolePermissionsHelper extends
   }
 
   public JsonObject getUserAdditionalRolePermissionsByAssignedBy(final String pUserId,
-      final String pAssignedBy, final UriInfo pUriInfo) throws Exception {
+      final String pAssignedBy, final UriInfo pUriInfo) {
     List<AdditionalRolePermissions> additionalRolePermissions =
         mAdditionalRolePermissionsManager.getUserPermissionsByAssignedUser(pUserId, pAssignedBy);
 

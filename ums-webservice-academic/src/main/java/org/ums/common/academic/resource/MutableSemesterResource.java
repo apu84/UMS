@@ -15,7 +15,7 @@ public class MutableSemesterResource extends Resource {
   SemesterResourceHelper mResourceHelper;
 
   @POST
-  public Response createSemester(final JsonObject pJsonObject) throws Exception {
+  public Response createSemester(final JsonObject pJsonObject) {
     return mResourceHelper.post(pJsonObject, mUriInfo);
   }
 

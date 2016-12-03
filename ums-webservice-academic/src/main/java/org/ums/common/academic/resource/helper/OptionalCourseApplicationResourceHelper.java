@@ -1,10 +1,21 @@
 package org.ums.common.academic.resource.helper;
 
+import java.io.StringReader;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import javax.json.*;
+import javax.ws.rs.core.Request;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
+
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.ums.cache.LocalCache;
 import org.ums.common.builder.OptionalCourseApplicationBuilder;
 import org.ums.domain.model.dto.OptCourseStudentDto;
 import org.ums.domain.model.dto.OptSectionDto;
@@ -12,7 +23,6 @@ import org.ums.domain.model.dto.OptionalCourseApplicationStatDto;
 import org.ums.domain.model.dto.SemesterWiseCrHrDto;
 import org.ums.domain.model.immutable.Course;
 import org.ums.domain.model.immutable.Semester;
-import org.ums.domain.model.immutable.Student;
 import org.ums.domain.model.immutable.Syllabus;
 import org.ums.enums.OptCourseApplicationStatus;
 import org.ums.enums.OptCourseCourseStatus;
@@ -26,16 +36,6 @@ import org.ums.persistent.dao.PersistentOptionalCourseApplicationDao;
 import org.ums.persistent.dao.PersistentSemesterWiseCrHrDao;
 import org.ums.response.type.GenericMessageResponse;
 import org.ums.response.type.GenericResponse;
-
-import javax.json.*;
-import javax.ws.rs.core.Request;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
-import java.io.StringReader;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 @Component
 public class OptionalCourseApplicationResourceHelper {
@@ -68,7 +68,7 @@ public class OptionalCourseApplicationResourceHelper {
   }
 
   public JsonObject getSemesterWiseCrHrInfo(Integer pSemesterId, Integer pProgramId, Integer pYear,
-      Integer pSemester) throws Exception {
+      Integer pSemester) {
 
     Syllabus syllabus =
         mSemesterSyllabusManager.getSyllabusForSemester(pSemesterId, pProgramId, pYear, pSemester);
@@ -91,8 +91,7 @@ public class OptionalCourseApplicationResourceHelper {
 
   }
 
-  public JsonObject getApplicationStatistics(final Integer pSemesterId, final Integer pProgramId)
-      throws Exception {
+  public JsonObject getApplicationStatistics(final Integer pSemesterId, final Integer pProgramId) {
     List<OptionalCourseApplicationStatDto> statList =
         mManager.getApplicationStatistics(pSemesterId, pProgramId, 1, 1);
 
@@ -114,8 +113,7 @@ public class OptionalCourseApplicationResourceHelper {
   }
 
   public Response saveApprovedAndApplicationCourses(final Integer pSemesterId,
-      final Integer pProgramId, int pYear, int pSemester, final JsonObject pJsonObject)
-      throws Exception {
+      final Integer pProgramId, int pYear, int pSemester, final JsonObject pJsonObject) {
     OptionalCourseApplicationBuilder builder = getBuilder();
     List<Course> approvedCourseList = new ArrayList<>();
     builder.build(approvedCourseList, pJsonObject, "approved");
@@ -131,8 +129,7 @@ public class OptionalCourseApplicationResourceHelper {
     return Response.noContent().build();
   }
 
-  public JsonObject getStudentList(int pSemesterId, String pCourseId, String pStatus)
-      throws Exception {
+  public JsonObject getStudentList(int pSemesterId, String pCourseId, String pStatus) {
     List<OptCourseStudentDto> studentList =
         getContentManager().getStudentList(pSemesterId, pCourseId, pStatus);
     JsonObjectBuilder object = Json.createObjectBuilder();
@@ -152,7 +149,7 @@ public class OptionalCourseApplicationResourceHelper {
   }
 
   public JsonObject getNonAssignedSectionStudentList(int pSemesterId, int pProgramId,
-      String pCourseId) throws Exception {
+      String pCourseId) {
     List<OptCourseStudentDto> studentList =
         getContentManager().getNonAssignedSectionStudentList(pSemesterId, pProgramId, pCourseId);
     JsonObjectBuilder object = Json.createObjectBuilder();
@@ -172,7 +169,7 @@ public class OptionalCourseApplicationResourceHelper {
   }
 
   public JsonObject getOptionalSectionListWithStudents(int pSemesterId, int pProgramId,
-      String pCourseId) throws Exception {
+      String pCourseId) {
     List<OptSectionDto> studentList =
         getContentManager().getOptionalSectionListWithStudents(pSemesterId, pProgramId, pCourseId);
     JsonObjectBuilder object = Json.createObjectBuilder();
@@ -194,27 +191,32 @@ public class OptionalCourseApplicationResourceHelper {
   }
 
   public Response deleteSection(int pSemesterId, int pProgramId, String pCourseId,
-      String pSectionName) throws Exception {
+      String pSectionName) {
     mManager.deleteSection(pSemesterId, pProgramId, pCourseId, pSectionName);
     return Response.noContent().build();
   }
 
   public Response mergeSelection(int pSemesterId, int pProgramId, String pCourseId,
-      String pSectionName, JsonObject pStudents) throws Exception {
+      String pSectionName, JsonObject pStudents) {
 
     mManager.mergeSection(pSemesterId, pProgramId, pCourseId, pSectionName,
         pStudents.getString("students"));
     // URI contextURI =
     // pUriInfo.getBaseUriBuilder().path(StudentResource.class).path(StudentResource.class,
     // "get").build(mutableStudent.getId());
-    URI contextURI = new URI("");
+    URI contextURI = null;
+    try {
+      contextURI = new URI("");
+    } catch(URISyntaxException ue) {
+      throw new RuntimeException(ue);
+    }
     Response.ResponseBuilder builder = Response.created(contextURI);
     builder.status(Response.Status.CREATED);
 
     return builder.build();
   }
 
-  public JsonObject getApplicationStatus(String pStudentId, int pSemesterId) throws Exception {
+  public JsonObject getApplicationStatus(String pStudentId, int pSemesterId) {
     OptCourseApplicationStatus status =
         getContentManager().getApplicationStatus(pStudentId, pSemesterId);
     JsonObject object =
@@ -224,8 +226,7 @@ public class OptionalCourseApplicationResourceHelper {
     return object;
   }
 
-  public JsonObject getAppliedCoursesByStudent(String pStudentId, int pSemesterId, int pProgramId)
-      throws Exception {
+  public JsonObject getAppliedCoursesByStudent(String pStudentId, int pSemesterId, int pProgramId) {
     // Todo: Need to verify that the user requested for the resource is in the same department under
     // the requested program Id.
     List<OptCourseStudentDto> courseList =
@@ -248,7 +249,7 @@ public class OptionalCourseApplicationResourceHelper {
 
   @Transactional
   public GenericResponse<Map> updateApplicationStatusByCourse(int pSemesterId, String pCourseId,
-      final JsonObject pJsonObject) throws Exception {
+      final JsonObject pJsonObject) {
 
     OptionalCourseApplicationBuilder builder = getBuilder();
     List<String> approveStudentList = new ArrayList<>();
@@ -288,7 +289,7 @@ public class OptionalCourseApplicationResourceHelper {
 
   @Transactional
   public Response updateApplicationStatusByStudent(int pSemesterId, String pStudentId,
-      final JsonObject pJsonObject) throws Exception {
+      final JsonObject pJsonObject) {
 
     OptionalCourseApplicationBuilder builder = getBuilder();
     StringBuilder approveCourse = new StringBuilder("");
@@ -340,7 +341,7 @@ public class OptionalCourseApplicationResourceHelper {
 
   @Transactional
   public Response shiftStudents(int pSemesterId, String pSourceCourseId, String pTargetCourseId,
-      final JsonObject pJsonObject) throws Exception {
+      final JsonObject pJsonObject) {
     // Todo: need to make sure if the source code has a pair course id then the target course must
     // have a pair course id.
 
@@ -367,7 +368,7 @@ public class OptionalCourseApplicationResourceHelper {
     return Response.noContent().build();
   }
 
-  public JsonObject getDataForStudent(Request pRequest, UriInfo mUriInfo) throws Exception {
+  public JsonObject getDataForStudent(Request pRequest, UriInfo mUriInfo) {
 
     String mStudentId = SecurityUtils.getSubject().getPrincipal().toString();
     Semester mSemester =
@@ -388,8 +389,7 @@ public class OptionalCourseApplicationResourceHelper {
   }
 
   @Transactional
-  public Response saveStudentApplication(Integer status, final JsonObject pJsonObject)
-      throws Exception {
+  public Response saveStudentApplication(Integer status, final JsonObject pJsonObject) {
 
     String mStudentId = SecurityUtils.getSubject().getPrincipal().toString();
     Semester mSemester =

@@ -73,7 +73,7 @@ public class PersistentLoggerEntry implements MutableLoggerEntry {
   }
 
   @Override
-  public MutableLoggerEntry edit() throws Exception {
+  public MutableLoggerEntry edit() {
     return new PersistentLoggerEntry(this);
   }
 
@@ -83,7 +83,7 @@ public class PersistentLoggerEntry implements MutableLoggerEntry {
   }
 
   @Override
-  public void commit(boolean update) throws Exception {
+  public void commit(boolean update) {
     if(update) {
       sLoggerEntryManager.update(this);
     }
@@ -93,7 +93,7 @@ public class PersistentLoggerEntry implements MutableLoggerEntry {
   }
 
   @Override
-  public void delete() throws Exception {
+  public void delete() {
     sLoggerEntryManager.delete(this);
   }
 

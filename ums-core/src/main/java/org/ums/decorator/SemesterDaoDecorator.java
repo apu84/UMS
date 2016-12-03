@@ -15,23 +15,22 @@ public class SemesterDaoDecorator extends
     ContentDaoDecorator<Semester, MutableSemester, Integer, SemesterManager> implements
     SemesterManager {
   @Override
-  public List<Semester> getSemesters(Integer pProgramType, Integer pLimit) throws Exception {
+  public List<Semester> getSemesters(Integer pProgramType, Integer pLimit) {
     return getManager().getSemesters(pProgramType, pLimit);
   }
 
   @Override
-  public Semester getPreviousSemester(Integer pSemesterId, Integer pProgramTypeId) throws Exception {
+  public Semester getPreviousSemester(Integer pSemesterId, Integer pProgramTypeId) {
     return getManager().getPreviousSemester(pSemesterId, pProgramTypeId);
   }
 
   @Override
-  public Semester getSemesterByStatus(ProgramType programType, SemesterStatus status)
-      throws Exception {
+  public Semester getSemesterByStatus(ProgramType programType, SemesterStatus status) {
     return getManager().getSemesterByStatus(programType, status);
   }
 
   @Override
-  public Semester getBySemesterName(String pSemesterName, Integer pProgramTypeId) throws Exception {
+  public Semester getBySemesterName(String pSemesterName, Integer pProgramTypeId) {
     return getManager().getBySemesterName(pSemesterName, pProgramTypeId);
   }
 

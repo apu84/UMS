@@ -32,7 +32,7 @@ public class TeacherResourceHelper extends ResourceHelper<Teacher, MutableTeache
   private TeacherBuilder mBuilder;
 
   @Override
-  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) {
     throw new NotImplementedException("Post method not implemented for TeacherResourceHelper");
   }
 
@@ -51,8 +51,7 @@ public class TeacherResourceHelper extends ResourceHelper<Teacher, MutableTeache
     return pReadonly.getLastModified();
   }
 
-  public JsonObject getByDepartment(final String pDepartmentId, final UriInfo pUriInfo)
-      throws Exception {
+  public JsonObject getByDepartment(final String pDepartmentId, final UriInfo pUriInfo) {
     Department department = mDepartmentManager.get(pDepartmentId);
     List<Teacher> teachers = getContentManager().getByDepartment(department);
 

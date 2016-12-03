@@ -1,6 +1,7 @@
 package org.ums.common.report.generator;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 
@@ -26,17 +27,15 @@ public abstract class AbstractResultGenerator {
   private Integer mCurrentAcademicSemester;
   private Semester mCurrentSemester;
 
-  protected abstract List<StudentRecord> getStudentList(int pProgramId, int pSemesterId)
-      throws Exception;
+  protected abstract List<StudentRecord> getStudentList(int pProgramId, int pSemesterId);
 
   protected abstract PdfPTable contentTableHeader();
 
-  protected abstract void contentRow(StudentRecord pStudentRecord, PdfPTable pContentTable)
-      throws Exception;
+  protected abstract void contentRow(StudentRecord pStudentRecord, PdfPTable pContentTable);
 
   protected abstract String getReportTitle();
 
-  private void initialize(StudentRecord pStudentRecord) throws Exception {
+  private void initialize(StudentRecord pStudentRecord) {
     mCurrentYear = pStudentRecord.getYear();
     mCurrentAcademicSemester = pStudentRecord.getAcademicSemester();
     mCurrentSemester = pStudentRecord.getSemester();
@@ -44,7 +43,7 @@ public abstract class AbstractResultGenerator {
   }
 
   public void createPdf(Integer pProgramId, Integer pSemesterId, OutputStream pOutputStream)
-      throws Exception {
+      throws IOException, DocumentException {
     java.util.List<StudentRecord> studentRecordList = getStudentList(pProgramId, pSemesterId);
     if(studentRecordList.size() > 0) {
       initialize(studentRecordList.get(0));

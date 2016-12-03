@@ -44,8 +44,7 @@ public class PersistentAdditionalRolePermissions implements MutableAdditionalRol
 
   public PersistentAdditionalRolePermissions() {}
 
-  public PersistentAdditionalRolePermissions(final PersistentAdditionalRolePermissions pAdditional)
-      throws Exception {
+  public PersistentAdditionalRolePermissions(final PersistentAdditionalRolePermissions pAdditional) {
     setId(pAdditional.getId());
     setUser(pAdditional.getUser());
     setUserId(pAdditional.getUserId());
@@ -94,12 +93,12 @@ public class PersistentAdditionalRolePermissions implements MutableAdditionalRol
   }
 
   @Override
-  public User getUser() throws Exception {
+  public User getUser() {
     return mUser == null ? sUserManager.get(mUserId) : sUserManager.validate(mUser);
   }
 
   @Override
-  public Role getRole() throws Exception {
+  public Role getRole() {
     return mRole == null ? (StringUtils.isEmpty(mRoleId) ? null : sRoleManager.get(mRoleId))
         : sRoleManager.validate(mRole);
   }
@@ -110,7 +109,7 @@ public class PersistentAdditionalRolePermissions implements MutableAdditionalRol
   }
 
   @Override
-  public Set<String> getPermission() throws Exception {
+  public Set<String> getPermission() {
     Role role = getRole();
     if(role != null && role.getPermissions() != null) {
       if(mPermission == null) {
@@ -167,7 +166,7 @@ public class PersistentAdditionalRolePermissions implements MutableAdditionalRol
   }
 
   @Override
-  public User getAssignedBy() throws Exception {
+  public User getAssignedBy() {
     return mAssignedBy == null ? sUserManager.get(mAssignedByUserId) : sUserManager
         .validate(mAssignedBy);
   }
@@ -187,7 +186,7 @@ public class PersistentAdditionalRolePermissions implements MutableAdditionalRol
   }
 
   @Override
-  public void commit(boolean update) throws Exception {
+  public void commit(boolean update) {
     if(update) {
       sAdditionalRolePermissionsManager.update(this);
     }
@@ -197,12 +196,12 @@ public class PersistentAdditionalRolePermissions implements MutableAdditionalRol
   }
 
   @Override
-  public void delete() throws Exception {
+  public void delete() {
     sAdditionalRolePermissionsManager.delete(this);
   }
 
   @Override
-  public MutableAdditionalRolePermissions edit() throws Exception {
+  public MutableAdditionalRolePermissions edit() {
     return new PersistentAdditionalRolePermissions(this);
   }
 

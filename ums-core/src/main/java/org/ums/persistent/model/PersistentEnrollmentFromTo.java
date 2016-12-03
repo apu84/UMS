@@ -75,7 +75,7 @@ public class PersistentEnrollmentFromTo implements MutableEnrollmentFromTo {
   }
 
   @Override
-  public Program getProgram() throws Exception {
+  public Program getProgram() {
     return mProgram == null ? sProgramManager.get(mProgramId) : sProgramManager.validate(mProgram);
   }
 
@@ -100,7 +100,7 @@ public class PersistentEnrollmentFromTo implements MutableEnrollmentFromTo {
   }
 
   @Override
-  public MutableEnrollmentFromTo edit() throws Exception {
+  public MutableEnrollmentFromTo edit() {
     return new PersistentEnrollmentFromTo(this);
   }
 
@@ -125,7 +125,7 @@ public class PersistentEnrollmentFromTo implements MutableEnrollmentFromTo {
   }
 
   @Override
-  public void commit(boolean update) throws Exception {
+  public void commit(boolean update) {
     if(update) {
       sEnrollmentFromToManager.update(this);
     }
@@ -135,7 +135,7 @@ public class PersistentEnrollmentFromTo implements MutableEnrollmentFromTo {
   }
 
   @Override
-  public void delete() throws Exception {
+  public void delete() {
     sEnrollmentFromToManager.delete(this);
   }
 }

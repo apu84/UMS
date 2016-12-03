@@ -11,7 +11,7 @@ public class PermissionDaoDecorator extends
     ContentDaoDecorator<Permission, MutablePermission, Integer, PermissionManager> implements
     PermissionManager {
   @Override
-  public List<Permission> getPermissionByRole(Role pRole) throws Exception {
+  public List<Permission> getPermissionByRole(Role pRole) {
     return getManager().getPermissionByRole(pRole);
   }
 }

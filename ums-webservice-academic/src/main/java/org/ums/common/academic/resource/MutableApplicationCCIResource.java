@@ -21,12 +21,12 @@ public class MutableApplicationCCIResource extends Resource {
 
   @POST
   @Produces({MediaType.APPLICATION_JSON})
-  public JsonObject createApplicationCCI(final JsonObject pJsonObject) throws Exception {
+  public JsonObject createApplicationCCI(final JsonObject pJsonObject) {
     return mHelper.saveAndReturn(pJsonObject, mUriInfo);
   }
 
   @DELETE
-  public Response delete() throws Exception {
+  public Response delete() {
     return mHelper.deleteByStudentId(mUriInfo);
   }
 }

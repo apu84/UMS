@@ -32,7 +32,7 @@ public class PersistentSyllabus implements MutableSyllabus {
 
   }
 
-  public PersistentSyllabus(final PersistentSyllabus pPersistentSyllabus) throws Exception {
+  public PersistentSyllabus(final PersistentSyllabus pPersistentSyllabus) {
     mId = pPersistentSyllabus.getId();
     mSemester = pPersistentSyllabus.getSemester();
     mProgram = pPersistentSyllabus.getProgram();
@@ -40,7 +40,7 @@ public class PersistentSyllabus implements MutableSyllabus {
   }
 
   @Override
-  public void commit(boolean update) throws Exception {
+  public void commit(boolean update) {
     if(update) {
       sSyllabusManager.update(this);
     }
@@ -50,7 +50,7 @@ public class PersistentSyllabus implements MutableSyllabus {
   }
 
   @Override
-  public void delete() throws Exception {
+  public void delete() {
     sSyllabusManager.delete(this);
   }
 
@@ -65,7 +65,7 @@ public class PersistentSyllabus implements MutableSyllabus {
   }
 
   @Override
-  public Semester getSemester() throws Exception {
+  public Semester getSemester() {
     return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
         .validate(mSemester);
   }
@@ -76,7 +76,7 @@ public class PersistentSyllabus implements MutableSyllabus {
   }
 
   @Override
-  public Program getProgram() throws Exception {
+  public Program getProgram() {
     return mProgram == null ? sProgramManager.get(mProgramId) : sProgramManager.validate(mProgram);
   }
 
@@ -86,7 +86,7 @@ public class PersistentSyllabus implements MutableSyllabus {
   }
 
   @Override
-  public MutableSyllabus edit() throws Exception {
+  public MutableSyllabus edit() {
     return new PersistentSyllabus(this);
   }
 

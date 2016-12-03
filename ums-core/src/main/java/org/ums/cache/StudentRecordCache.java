@@ -28,8 +28,7 @@ public class StudentRecordCache extends
   }
 
   @Override
-  public List<StudentRecord> getStudentRecords(Integer pProgramId, Integer pSemesterId)
-      throws Exception {
+  public List<StudentRecord> getStudentRecords(Integer pProgramId, Integer pSemesterId) {
     List<StudentRecord> readOnlys = getManager().getStudentRecords(pProgramId, pSemesterId);
     for(StudentRecord readOnly : readOnlys) {
       getCacheManager().put(getCacheKey(readOnly.getId()), readOnly);
@@ -39,7 +38,7 @@ public class StudentRecordCache extends
 
   @Override
   public List<StudentRecord> getStudentRecords(Integer pProgramId, Integer pSemesterId,
-      StudentRecord.Type pType) throws Exception {
+      StudentRecord.Type pType) {
     List<StudentRecord> readOnlys = getManager().getStudentRecords(pProgramId, pSemesterId, pType);
     for(StudentRecord readOnly : readOnlys) {
       getCacheManager().put(getCacheKey(readOnly.getId()), readOnly);
@@ -49,7 +48,7 @@ public class StudentRecordCache extends
 
   @Override
   public List<StudentRecord> getStudentRecords(Integer pProgramId, Integer pSemesterId,
-      Integer pYear, Integer pAcademicSemester) throws Exception {
+      Integer pYear, Integer pAcademicSemester) {
     List<StudentRecord> readOnlys =
         getManager().getStudentRecords(pProgramId, pSemesterId, pYear, pAcademicSemester);
     for(StudentRecord readOnly : readOnlys) {
@@ -60,7 +59,7 @@ public class StudentRecordCache extends
 
   @Override
   public List<StudentRecord> getStudentRecords(Integer pProgramId, Integer pSemesterId,
-      Integer pYear, Integer pAcademicSemester, StudentRecord.Type pType) throws Exception {
+      Integer pYear, Integer pAcademicSemester, StudentRecord.Type pType) {
     List<StudentRecord> readOnlys =
         getManager().getStudentRecords(pProgramId, pSemesterId, pYear, pAcademicSemester, pType);
     for(StudentRecord readOnly : readOnlys) {
@@ -71,7 +70,7 @@ public class StudentRecordCache extends
 
   @Override
   public List<StudentRecord> getStudentRecords(String pStudentId, Integer pSemesterId,
-      Integer pYear, Integer pAcademicSemester) throws Exception {
+      Integer pYear, Integer pAcademicSemester) {
     List<StudentRecord> readOnlys =
         getManager().getStudentRecords(pStudentId, pSemesterId, pYear, pAcademicSemester);
     for(StudentRecord readOnly : readOnlys) {

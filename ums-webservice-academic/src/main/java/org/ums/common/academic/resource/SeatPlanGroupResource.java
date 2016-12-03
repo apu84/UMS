@@ -22,7 +22,7 @@ public class SeatPlanGroupResource extends MutableSeatPlanGroupResource {
   @Path("/semester/{semester-id}/type/{type}/update/{update}")
   public JsonObject getSemesterList(final @Context Request pRequest,
       final @PathParam("semester-id") int pSemesterId, final @PathParam("type") int type,
-      final @PathParam("update") int update) throws Exception {
+      final @PathParam("update") int update) {
 
     return mResourceHelper
         .getSeatPlanGroupBySemester(pSemesterId, type, update, pRequest, mUriInfo);

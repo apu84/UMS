@@ -38,7 +38,7 @@ public class MainNavigationHelper extends ResourceHelper<Navigation, MutableNavi
   NavigationProcessor mNavigationProcessor;
 
   @Override
-  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) {
     // Do nothing
     return null;
   }
@@ -58,7 +58,7 @@ public class MainNavigationHelper extends ResourceHelper<Navigation, MutableNavi
     return pReadonly.getLastModified();
   }
 
-  public JsonObject getNavigationItems(final UriInfo pUriInfo) throws Exception {
+  public JsonObject getNavigationItems(final UriInfo pUriInfo) {
     JsonObjectBuilder root = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
 
@@ -94,8 +94,7 @@ public class MainNavigationHelper extends ResourceHelper<Navigation, MutableNavi
     return root.build();
   }
 
-  private List<Map<String, Object>> insertChildMenu(final List<Navigation> pNavigationList)
-      throws Exception {
+  private List<Map<String, Object>> insertChildMenu(final List<Navigation> pNavigationList) {
     List<Map<String, Object>> navigationList = new ArrayList<>();
 
     for(Navigation navigation : pNavigationList) {
@@ -127,7 +126,7 @@ public class MainNavigationHelper extends ResourceHelper<Navigation, MutableNavi
   }
 
   private Map<String, Object> findParentNavigation(final List<Map<String, Object>> pNavigationList,
-      final Navigation pTargetNavigation) throws Exception {
+      final Navigation pTargetNavigation) {
 
     for(Map<String, Object> navigationMap : pNavigationList) {
       Navigation navigation = (Navigation) navigationMap.get("navigation");
@@ -138,7 +137,7 @@ public class MainNavigationHelper extends ResourceHelper<Navigation, MutableNavi
     return null;
   }
 
-  private JsonArray buildNavigation(final Set<String> permissions, final UriInfo pUriInfo) throws Exception {
+  private JsonArray buildNavigation(final Set<String> permissions, final UriInfo pUriInfo) {
     LocalCache localCache = new LocalCache();
     JsonArrayBuilder items = Json.createArrayBuilder();
 
@@ -180,7 +179,7 @@ public class MainNavigationHelper extends ResourceHelper<Navigation, MutableNavi
   }
 
   private JsonObjectBuilder getRoleWisePermission(final Role pRole, final UriInfo pUriInfo,
-      final String pRoleType) throws Exception {
+      final String pRoleType) {
     JsonObjectBuilder typedItems = Json.createObjectBuilder();
     List<Permission> rolePermissions = mPermissionManager.getPermissionByRole(pRole);
     Set<String> permissions = new HashSet<>();

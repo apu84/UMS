@@ -40,8 +40,7 @@ public class ApplicationCCIDaoDecorator extends
   }
 
   @Override
-  public List<ApplicationCCI> getBySemesterAndExamDate(Integer pSemesterId, String pExamDate)
-      throws Exception {
+  public List<ApplicationCCI> getBySemesterAndExamDate(Integer pSemesterId, String pExamDate) {
     return getManager().getBySemesterAndExamDate(pSemesterId, pExamDate);
   }
 

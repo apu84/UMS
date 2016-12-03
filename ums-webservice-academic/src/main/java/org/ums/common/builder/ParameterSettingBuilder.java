@@ -16,7 +16,7 @@ import javax.ws.rs.core.UriInfo;
 public class ParameterSettingBuilder implements Builder<ParameterSetting, MutableParameterSetting> {
   @Override
   public void build(JsonObjectBuilder pBuilder, ParameterSetting pReadOnly, UriInfo pUriInfo,
-      LocalCache pLocalCache) throws Exception {
+      LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("semesterId", pReadOnly.getSemester().getId());
     pBuilder.add("parameterId", pReadOnly.getParameter().getId());
@@ -27,8 +27,7 @@ public class ParameterSettingBuilder implements Builder<ParameterSetting, Mutabl
   }
 
   @Override
-  public void build(MutableParameterSetting pMutable, JsonObject pJsonObject, LocalCache pLocalCache)
-      throws Exception {
+  public void build(MutableParameterSetting pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
 
     if(pJsonObject.getString("id") != null) {
       pMutable.setId(pJsonObject.getString("id"));

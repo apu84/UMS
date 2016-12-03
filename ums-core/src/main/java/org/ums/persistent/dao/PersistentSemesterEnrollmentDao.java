@@ -36,19 +36,19 @@ public class PersistentSemesterEnrollmentDao extends SemesterEnrollmentDaoDecora
   }
 
   @Override
-  public SemesterEnrollment get(Integer pId) throws Exception {
+  public SemesterEnrollment get(Integer pId) {
     String query = SELECT_ALL + "WHERE ID = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId},
         new SemesterEnrollmentRowMapper());
   }
 
   @Override
-  public List<SemesterEnrollment> getAll() throws Exception {
+  public List<SemesterEnrollment> getAll() {
     return mJdbcTemplate.query(SELECT_ALL, new SemesterEnrollmentRowMapper());
   }
 
   @Override
-  public int update(MutableSemesterEnrollment pMutable) throws Exception {
+  public int update(MutableSemesterEnrollment pMutable) {
     String query = UPDATE_ALL + "WHERE ID = ?";
     return mJdbcTemplate.update(query, pMutable.getSemester().getId(), pMutable.getProgram()
         .getId(), pMutable.getYear(), pMutable.getAcademicSemester(), mDateFormat.format(pMutable
@@ -56,13 +56,13 @@ public class PersistentSemesterEnrollmentDao extends SemesterEnrollmentDaoDecora
   }
 
   @Override
-  public int delete(MutableSemesterEnrollment pMutable) throws Exception {
+  public int delete(MutableSemesterEnrollment pMutable) {
     String query = DELETE_ALL + "WHERE ID = ?";
     return mJdbcTemplate.update(query, pMutable.getId());
   }
 
   @Override
-  public int create(MutableSemesterEnrollment pMutable) throws Exception {
+  public int create(MutableSemesterEnrollment pMutable) {
     return mJdbcTemplate
         .update(INSERT_ALL, pMutable.getSemester().getId(), pMutable.getProgram().getId(),
             pMutable.getYear(), pMutable.getAcademicSemester(), pMutable.getType().getValue());

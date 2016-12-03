@@ -20,21 +20,19 @@ public class MutableClassAttendanceResource extends Resource {
   ClassAttendanceResourceHelper mResourceHelper;
 
   @POST
-  public Response createNewClassAttendance(final JsonObject pJsonObject) throws Exception {
+  public Response createNewClassAttendance(final JsonObject pJsonObject) {
     return mResourceHelper.saveNewAttendance(pJsonObject);
   }
 
   @PUT
   public Response updateClassAttendance(final @Context Request pRequest,
-      final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader, final JsonObject pJsonObject)
-      throws Exception {
+      final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader, final JsonObject pJsonObject) {
     return mResourceHelper.updateClassAttendance(pJsonObject);
   }
 
   @DELETE
   @Path(PATH_PARAM_OBJECT_ID)
-  public Response deleteClassAttendance(final @PathParam("object-id") String objectId)
-      throws Exception {
+  public Response deleteClassAttendance(final @PathParam("object-id") String objectId) {
     return mResourceHelper.deleteClassAttendance(objectId);
   }
 

@@ -36,7 +36,7 @@ public class PersistentEquivalentCourse implements MutableEquivalentCourse {
   }
 
   @Override
-  public void commit(boolean update) throws Exception {
+  public void commit(boolean update) {
     if(update) {
       sEquivalentCourseManager.update(this);
     }
@@ -46,7 +46,7 @@ public class PersistentEquivalentCourse implements MutableEquivalentCourse {
   }
 
   @Override
-  public MutableEquivalentCourse edit() throws Exception {
+  public MutableEquivalentCourse edit() {
     return new PersistentEquivalentCourse(this);
   }
 
@@ -71,7 +71,7 @@ public class PersistentEquivalentCourse implements MutableEquivalentCourse {
   }
 
   @Override
-  public void delete() throws Exception {
+  public void delete() {
     sEquivalentCourseManager.delete(this);
   }
 
@@ -91,7 +91,7 @@ public class PersistentEquivalentCourse implements MutableEquivalentCourse {
   }
 
   @Override
-  public Course getOldCourse() throws Exception {
+  public Course getOldCourse() {
     return mOldCourse == null ? sCourseManager.get(mOldCourseId) : sCourseManager
         .validate(mOldCourse);
   }
@@ -107,7 +107,7 @@ public class PersistentEquivalentCourse implements MutableEquivalentCourse {
   }
 
   @Override
-  public Course getNewCourse() throws Exception {
+  public Course getNewCourse() {
     return mNewCourse == null ? sCourseManager.get(mNewCourseId) : sCourseManager
         .validate(mNewCourse);
   }

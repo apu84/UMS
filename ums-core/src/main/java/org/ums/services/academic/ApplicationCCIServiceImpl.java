@@ -17,6 +17,7 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import java.sql.Timestamp;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -38,7 +39,7 @@ public class ApplicationCCIServiceImpl implements ApplicationCCIService {
   @Override
   public List<PersistentApplicationCCI> validateForAnomalies(
       List<PersistentApplicationCCI> pApplicationCCIs, List<UGRegistrationResult> results,
-      Student pStudent) throws Exception {
+      Student pStudent) {
     Date date = new Date();
     ParameterSetting parameterSetting =
         mParameterSettingManager.getByParameterAndSemesterId("application_cci",
@@ -48,8 +49,14 @@ public class ApplicationCCIServiceImpl implements ApplicationCCIService {
     startDateFormatter = new SimpleDateFormat("dd/MM/yyyy");
     DateFormat endDateFormatter;
     endDateFormatter = new SimpleDateFormat("dd/MM/yyyy");
-    Date startDate = startDateFormatter.parse(parameterSetting.getStartDate());
-    Date endDate = endDateFormatter.parse(parameterSetting.getEndDate());
+    Date startDate = null;
+    Date endDate = null;
+    try {
+      startDate = startDateFormatter.parse(parameterSetting.getStartDate());
+      endDate = endDateFormatter.parse(parameterSetting.getEndDate());
+    } catch(ParseException pe) {
+      throw new RuntimeException(pe);
+    }
     Timestamp startDateTimeStamp = new Timestamp(startDate.getTime());
     Timestamp endDateTimeStamp = new Timestamp(endDate.getTime());
 

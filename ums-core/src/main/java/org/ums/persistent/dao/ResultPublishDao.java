@@ -32,31 +32,31 @@ public class ResultPublishDao extends ResultPublishDaoDecorator {
   }
 
   @Override
-  public List<ResultPublish> getAll() throws Exception {
+  public List<ResultPublish> getAll() {
     return mJdbcTemplate.query(SELECT_ALL, new ResultPublishRowMapper());
   }
 
   @Override
-  public ResultPublish get(Integer pId) throws Exception {
+  public ResultPublish get(Integer pId) {
     String query = SELECT_ALL + "WHERE ID = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new ResultPublishRowMapper());
   }
 
   @Override
-  public int update(MutableResultPublish pMutable) throws Exception {
+  public int update(MutableResultPublish pMutable) {
     String query = UPDATE_ALL + "WHERE ID = ?";
     return mJdbcTemplate.update(query, pMutable.getProgramId(), pMutable.getSemesterId(),
         pMutable.getId());
   }
 
   @Override
-  public int delete(MutableResultPublish pMutable) throws Exception {
+  public int delete(MutableResultPublish pMutable) {
     String query = DELETE_ALL + "WHERE ID = ?";
     return mJdbcTemplate.update(query, pMutable.getId());
   }
 
   @Override
-  public int create(MutableResultPublish pMutable) throws Exception {
+  public int create(MutableResultPublish pMutable) {
     return mJdbcTemplate.update(INSERT_ALL, pMutable.getProgramId(), pMutable.getSemesterId());
   }
 

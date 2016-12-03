@@ -57,7 +57,7 @@ public class ApplicationCCIResourceHelper extends
   UGRegistrationResultResourceHelper mResultHelper;
 
   @Override
-  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) {
     /*
      * Validator validate = new ApplicationCCIValidator(); validate.validate(pJsonObject);
      */
@@ -88,7 +88,7 @@ public class ApplicationCCIResourceHelper extends
     return builder.build();
   }
 
-  public JsonObject saveAndReturn(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+  public JsonObject saveAndReturn(JsonObject pJsonObject, UriInfo pUriInfo) {
 
     String studentId = SecurityUtils.getSubject().getPrincipal().toString();
     Student student = mStudentManager.get(studentId);
@@ -162,7 +162,7 @@ public class ApplicationCCIResourceHelper extends
         resultForWorkingAsResponse, pUriInfo);
   }
 
-  public Response deleteByStudentId(UriInfo pUriInfo) throws Exception {
+  public Response deleteByStudentId(UriInfo pUriInfo) {
     String studentId = SecurityUtils.getSubject().getPrincipal().toString();
     getContentManager().deleteByStudentId(studentId);
     URI contextURI =
@@ -173,8 +173,7 @@ public class ApplicationCCIResourceHelper extends
     return builder.build();
   }
 
-  public JsonObject getApplicationCCIInfoForStudent(final Request pRequest, final UriInfo pUriInfo)
-      throws Exception {
+  public JsonObject getApplicationCCIInfoForStudent(final Request pRequest, final UriInfo pUriInfo) {
     String studentId = SecurityUtils.getSubject().getPrincipal().toString();
     Student student = mStudentManager.get(studentId);
     List<ApplicationCCI> applictionAll = getContentManager().getAll();
@@ -201,8 +200,7 @@ public class ApplicationCCIResourceHelper extends
     return object.build();
   }
 
-  public JsonObject getApplicationCCIForSeatPlanViewingOfStudent(final UriInfo pUriInfo)
-      throws Exception {
+  public JsonObject getApplicationCCIForSeatPlanViewingOfStudent(final UriInfo pUriInfo) {
     String studentId = SecurityUtils.getSubject().getPrincipal().toString();
     Student student = mStudentManager.get(studentId);
     List<ApplicationCCI> applications =
@@ -221,7 +219,7 @@ public class ApplicationCCIResourceHelper extends
   }
 
   public JsonObject getApplicationCCIForSeatPlan(final Integer pSemesterId, final String pExamDate,
-      final Request pRequest, final UriInfo pUriInfo) throws Exception {
+      final Request pRequest, final UriInfo pUriInfo) {
 
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();

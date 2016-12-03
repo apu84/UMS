@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class OfficialsHomeProcessor extends AbstractUserHomeProcessor {
   @Override
-  public List<Map<String, String>> process(Subject pCurrentSubject) throws Exception {
+  public List<Map<String, String>> process(Subject pCurrentSubject) {
     String userId = pCurrentSubject.getPrincipal().toString();
     User user = mUserManager.get(userId);
 

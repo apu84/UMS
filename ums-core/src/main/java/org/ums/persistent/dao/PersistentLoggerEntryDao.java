@@ -39,43 +39,42 @@ public class PersistentLoggerEntryDao extends
   }
 
   @Override
-  public int create(List<MutableLoggerEntry> pMutableList) throws Exception {
+  public int create(List<MutableLoggerEntry> pMutableList) {
     return mJdbcTemplate.batchUpdate(INSERT_ONE, getInsertParamList(pMutableList)).length;
   }
 
   @Override
-  public int create(MutableLoggerEntry pMutable) throws Exception {
+  public int create(MutableLoggerEntry pMutable) {
     return mJdbcTemplate
         .update(INSERT_ONE, getInsertParamList(Lists.newArrayList(pMutable)).get(0));
   }
 
   @Override
-  public int delete(MutableLoggerEntry pMutable) throws Exception {
+  public int delete(MutableLoggerEntry pMutable) {
     String query = DELETE_ONE + "WHERE ID = ?";
     return mJdbcTemplate.update(query, pMutable.getId());
   }
 
   @Override
-  public int update(MutableLoggerEntry pMutable) throws Exception {
+  public int update(MutableLoggerEntry pMutable) {
     String query = UPDATE_ONE + "WHERE ID = ?";
     return mJdbcTemplate.update(query, pMutable.getSql(), pMutable.getUserName(),
         pMutable.getExecutionTime(), mDateFormat.format(pMutable.getTimestamp()), pMutable.getId());
   }
 
   @Override
-  public LoggerEntry get(Integer pId) throws Exception {
+  public LoggerEntry get(Integer pId) {
     String query = SELECT_ALL + "WHERE ID = ? ";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new LoggerEntryRowMapper());
   }
 
   @Override
-  public List<LoggerEntry> getAll() throws Exception {
+  public List<LoggerEntry> getAll() {
     String query = SELECT_ALL;
     return mJdbcTemplate.query(query, new LoggerEntryRowMapper());
   }
 
-  private List<Object[]> getInsertParamList(List<MutableLoggerEntry> pMutableLoggerEntries)
-      throws Exception {
+  private List<Object[]> getInsertParamList(List<MutableLoggerEntry> pMutableLoggerEntries) {
     List<Object[]> params = new ArrayList<>();
     for(LoggerEntry entry : pMutableLoggerEntries) {
       params.add(new Object[] {entry.getSql(), entry.getUserName(), entry.getExecutionTime(),

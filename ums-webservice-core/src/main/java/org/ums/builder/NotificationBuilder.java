@@ -18,7 +18,7 @@ public class NotificationBuilder implements Builder<Notification, MutableNotific
 
   @Override
   public void build(JsonObjectBuilder pBuilder, Notification pReadOnly, UriInfo pUriInfo,
-      LocalCache pLocalCache) throws Exception {
+      LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("payload", pReadOnly.getPayload());
     if(pReadOnly.getProducedOn() != null) {
@@ -30,8 +30,7 @@ public class NotificationBuilder implements Builder<Notification, MutableNotific
   }
 
   @Override
-  public void build(MutableNotification pMutable, JsonObject pJsonObject, LocalCache pLocalCache)
-      throws Exception {
+  public void build(MutableNotification pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
 
   }
 }

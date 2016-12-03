@@ -6,5 +6,5 @@ import java.util.List;
 import java.util.Map;
 
 public interface UserHomeService {
-  List<Map<String, String>> process(final Subject pCurrentSubject) throws Exception;
+  List<Map<String, String>> process(final Subject pCurrentSubject);
 }

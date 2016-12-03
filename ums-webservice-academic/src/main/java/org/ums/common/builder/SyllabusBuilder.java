@@ -26,7 +26,7 @@ public class SyllabusBuilder implements Builder<Syllabus, MutableSyllabus> {
   ProgramManager mProgramManager;
 
   @Override
-  public void build(JsonObjectBuilder pBuilder, Syllabus pReadOnly, UriInfo pUriInfo, final LocalCache pLocalCache) throws Exception {
+  public void build(JsonObjectBuilder pBuilder, Syllabus pReadOnly, UriInfo pUriInfo, final LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId());
     Semester semester = (Semester) pLocalCache.cache(() -> pReadOnly.getSemester(),
         pReadOnly.getSemesterId(), Semester.class);
@@ -47,8 +47,7 @@ public class SyllabusBuilder implements Builder<Syllabus, MutableSyllabus> {
   }
 
   @Override
-  public void build(MutableSyllabus pMutable, JsonObject pJsonObject, final LocalCache pLocalCache)
-      throws Exception {
+  public void build(MutableSyllabus pMutable, JsonObject pJsonObject, final LocalCache pLocalCache) {
     String id = pJsonObject.getString("syllabusId");
     int semesterId = Integer.parseInt(pJsonObject.getString("semesterId"));
     int programId =

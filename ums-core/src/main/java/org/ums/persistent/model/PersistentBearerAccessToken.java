@@ -50,7 +50,7 @@ public class PersistentBearerAccessToken implements MutableBearerAccessToken {
   }
 
   @Override
-  public MutableBearerAccessToken edit() throws Exception {
+  public MutableBearerAccessToken edit() {
     return new PersistentBearerAccessToken(this);
   }
 
@@ -65,7 +65,7 @@ public class PersistentBearerAccessToken implements MutableBearerAccessToken {
   }
 
   @Override
-  public void commit(boolean update) throws Exception {
+  public void commit(boolean update) {
     if(update) {
       sBearerAccessTokenManager.update(this);
     }
@@ -75,7 +75,7 @@ public class PersistentBearerAccessToken implements MutableBearerAccessToken {
   }
 
   @Override
-  public void delete() throws Exception {
+  public void delete() {
     sBearerAccessTokenManager.delete(this);
   }
 

@@ -41,7 +41,7 @@ public abstract class AbstractAssignedTeacher implements MutableAssignedTeacher 
   }
 
   @Override
-  public Semester getSemester() throws Exception {
+  public Semester getSemester() {
     return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
         .validate(mSemester);
   }
@@ -52,7 +52,7 @@ public abstract class AbstractAssignedTeacher implements MutableAssignedTeacher 
   }
 
   @Override
-  public Course getCourse() throws Exception {
+  public Course getCourse() {
     return mCourse == null ? sCourseManager.get(mCourseId) : sCourseManager.validate(mCourse);
   }
 

@@ -27,7 +27,7 @@ public class UserResourceHelper extends ResourceHelper<User, MutableUser, String
   UserBuilder mBuilder;
 
   @Override
-  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) {
     // Do nothing
     throw new NotImplementedException("Post method not implemented for UserResourceHelper");
   }
@@ -47,7 +47,7 @@ public class UserResourceHelper extends ResourceHelper<User, MutableUser, String
     return "";
   }
 
-  public JsonObject getUsers(final UriInfo pUriInfo) throws Exception {
+  public JsonObject getUsers(final UriInfo pUriInfo) {
     List<User> users = mUserManager.getUsers();
 
     JsonObjectBuilder object = Json.createObjectBuilder();

@@ -20,7 +20,7 @@ import javax.ws.rs.core.UriInfo;
 public class SpStudentBuilder implements Builder<SpStudent, MutableSpStudent> {
   @Override
   public void build(JsonObjectBuilder pBuilder, SpStudent pReadOnly, UriInfo pUriInfo,
-      LocalCache pLocalCache) throws Exception {
+      LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("programId", pReadOnly.getProgram().getId());
     pBuilder.add("semesterId", pReadOnly.getSemester().getId());
@@ -30,8 +30,7 @@ public class SpStudentBuilder implements Builder<SpStudent, MutableSpStudent> {
   }
 
   @Override
-  public void build(MutableSpStudent pMutable, JsonObject pJsonObject, LocalCache pLocalCache)
-      throws Exception {
+  public void build(MutableSpStudent pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
     pMutable.setId(pJsonObject.getString("id"));
     PersistentProgram program = new PersistentProgram();
     program.setId(pJsonObject.getInt("programId"));

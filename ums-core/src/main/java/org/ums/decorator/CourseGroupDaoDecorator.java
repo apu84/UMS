@@ -8,7 +8,7 @@ public class CourseGroupDaoDecorator extends
     ContentDaoDecorator<CourseGroup, MutableCourseGroup, Integer, CourseGroupManager> implements
     CourseGroupManager {
   @Override
-  public CourseGroup getBySyllabus(Integer pCourseGroupId, String pSyllabusId) throws Exception {
+  public CourseGroup getBySyllabus(Integer pCourseGroupId, String pSyllabusId) {
     return getManager().getBySyllabus(pCourseGroupId, pSyllabusId);
   }
 }

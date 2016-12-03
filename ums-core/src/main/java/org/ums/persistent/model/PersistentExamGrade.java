@@ -42,7 +42,7 @@ public class PersistentExamGrade implements MutableExamGrade {
 
   }
 
-  public PersistentExamGrade(final MutableExamGrade pOriginal) throws Exception {
+  public PersistentExamGrade(final MutableExamGrade pOriginal) {
     mGradeList = pOriginal.getGradeList();
   }
 
@@ -56,7 +56,7 @@ public class PersistentExamGrade implements MutableExamGrade {
     mId = pId;
   }
 
-  public void save() throws Exception {
+  public void save() {
 
     // sExamRoutineManager.create(this);
 
@@ -73,16 +73,16 @@ public class PersistentExamGrade implements MutableExamGrade {
   }
 
   @Override
-  public void delete() throws Exception {
+  public void delete() {
     // sExamRoutineManager.delete(this);
 
   }
 
   @Override
-  public void commit(boolean update) throws Exception {}
+  public void commit(boolean update) {}
 
   @Override
-  public MutableExamGrade edit() throws Exception {
+  public MutableExamGrade edit() {
     return null;
   }
 

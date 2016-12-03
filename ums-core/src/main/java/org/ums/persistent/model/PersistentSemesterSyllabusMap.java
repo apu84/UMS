@@ -32,8 +32,7 @@ public class PersistentSemesterSyllabusMap implements MutableSemesterSyllabusMap
 
   }
 
-  public PersistentSemesterSyllabusMap(final PersistentSemesterSyllabusMap pOriginal)
-      throws Exception {
+  public PersistentSemesterSyllabusMap(final PersistentSemesterSyllabusMap pOriginal) {
     mId = pOriginal.getId();
     mAcademicSemester = pOriginal.getAcademicSemester();
     mProgram = pOriginal.getProgram();
@@ -90,11 +89,11 @@ public class PersistentSemesterSyllabusMap implements MutableSemesterSyllabusMap
     this.mSemester = mSemester;
   }
 
-  public void delete() throws Exception {
+  public void delete() {
     sSemesterSyllabusMapManager.delete(this);
   }
 
-  public void commit(final boolean update) throws Exception {
+  public void commit(final boolean update) {
     if(update) {
       sSemesterSyllabusMapManager.update(this);
     }
@@ -103,7 +102,7 @@ public class PersistentSemesterSyllabusMap implements MutableSemesterSyllabusMap
     }
   }
 
-  public MutableSemesterSyllabusMap edit() throws Exception {
+  public MutableSemesterSyllabusMap edit() {
     return new PersistentSemesterSyllabusMap(this);
   }
 

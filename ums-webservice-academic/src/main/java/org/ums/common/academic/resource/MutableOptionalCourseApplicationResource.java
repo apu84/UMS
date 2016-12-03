@@ -28,8 +28,7 @@ public class MutableOptionalCourseApplicationResource extends Resource {
   public Response saveApprovedAndCallForApplicationCourses(final @Context Request pRequest,
       final @PathParam("semester-id") Integer pSemesterId,
       final @PathParam("program-id") Integer pProgramId, final @PathParam("year") Integer pYear,
-      final @PathParam("semester") Integer pSemester, final JsonObject pJsonObject)
-      throws Exception {
+      final @PathParam("semester") Integer pSemester, final JsonObject pJsonObject) {
     return mResourceHelper.saveApprovedAndApplicationCourses(pSemesterId, pProgramId, pYear,
         pSemester, pJsonObject);
   }
@@ -40,8 +39,7 @@ public class MutableOptionalCourseApplicationResource extends Resource {
       final @PathParam("semester-id") Integer pSemesterId,
       final @PathParam("program-id") Integer pProgramId,
       final @PathParam("course-id") String pCourseId,
-      final @PathParam("section-name") String pSectionName, final JsonObject pJsonObject)
-      throws Exception {
+      final @PathParam("section-name") String pSectionName, final JsonObject pJsonObject) {
     return mResourceHelper.deleteSection(pSemesterId, pProgramId, pCourseId, pSectionName);
   }
 
@@ -51,8 +49,7 @@ public class MutableOptionalCourseApplicationResource extends Resource {
       final @PathParam("semester-id") Integer pSemesterId,
       final @PathParam("program-id") Integer pProgramId,
       final @PathParam("course-id") String pCourseId,
-      final @PathParam("section-name") String pSectionName, final JsonObject pJsonObject)
-      throws Exception {
+      final @PathParam("section-name") String pSectionName, final JsonObject pJsonObject) {
     return mResourceHelper.mergeSelection(pSemesterId, pProgramId, pCourseId, pSectionName,
         pJsonObject);
   }
@@ -61,8 +58,7 @@ public class MutableOptionalCourseApplicationResource extends Resource {
   @Path("/status/semester-id/{semester-id}/course/{course-id}")
   public GenericResponse<Map> updateApplicationStatusByCourse(final @Context Request pRequest,
       final @PathParam("semester-id") Integer pSemesterId,
-      final @PathParam("course-id") String pCourseId, final JsonObject pJsonObject)
-      throws Exception {
+      final @PathParam("course-id") String pCourseId, final JsonObject pJsonObject) {
     return mResourceHelper.updateApplicationStatusByCourse(pSemesterId, pCourseId, pJsonObject);
   }
 
@@ -70,8 +66,7 @@ public class MutableOptionalCourseApplicationResource extends Resource {
   @Path("status/semester-id/{semester-id}/student/{student-id}")
   public Response updateApplicationStatusByStudent(final @Context Request pRequest,
       final @PathParam("semester-id") Integer pSemesterId,
-      final @PathParam("student-id") String pStudentId, final JsonObject pJsonObject)
-      throws Exception {
+      final @PathParam("student-id") String pStudentId, final JsonObject pJsonObject) {
     return mResourceHelper.updateApplicationStatusByStudent(pSemesterId, pStudentId, pJsonObject);
   }
 
@@ -80,8 +75,7 @@ public class MutableOptionalCourseApplicationResource extends Resource {
   public Response shiftStudents(final @Context Request pRequest,
       final @PathParam("semester-id") Integer pSemesterId,
       final @PathParam("source-course-id") String pSourceCourseId,
-      final @PathParam("target-course-id") String pTargetCourseId, final JsonObject pJsonObject)
-      throws Exception {
+      final @PathParam("target-course-id") String pTargetCourseId, final JsonObject pJsonObject) {
     return mResourceHelper
         .shiftStudents(pSemesterId, pSourceCourseId, pTargetCourseId, pJsonObject);
   }
@@ -90,7 +84,7 @@ public class MutableOptionalCourseApplicationResource extends Resource {
   @PUT
   @Path("student/{STATUS-ID}")
   public Response saveStudentApplication(final @Context Request pRequest,
-      final @PathParam("STATUS-ID") Integer status, final JsonObject pJsonObject) throws Exception {
+      final @PathParam("STATUS-ID") Integer status, final JsonObject pJsonObject) {
     return mResourceHelper.saveStudentApplication(status, pJsonObject);
   }
 

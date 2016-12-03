@@ -56,7 +56,7 @@ public class ClassRoomResourceHelper extends ResourceHelper<ClassRoom, MutableCl
     return mBuilder;
   }
 
-  public JsonObject getAll(final UriInfo pUriInfo) throws Exception {
+  public JsonObject getAll(final UriInfo pUriInfo) {
     List<ClassRoom> roomList = getContentManager().getAll();
 
     JsonObjectBuilder object = Json.createObjectBuilder();
@@ -75,14 +75,14 @@ public class ClassRoomResourceHelper extends ResourceHelper<ClassRoom, MutableCl
 
   }
 
-  public JsonObject getRooms(UriInfo pUriInfo) throws Exception {
+  public JsonObject getRooms(UriInfo pUriInfo) {
 
     List<ClassRoom> roomList = getContentManager().getAll();
 
     return buildClassRooms(roomList, pUriInfo);
   }
 
-  private List<ClassRoom> getRoomsByDepartment() throws Exception{
+  private List<ClassRoom> getRoomsByDepartment(){
     String userId = SecurityUtils.getSubject().getPrincipal().toString();
 
     User user = mUserManager.get(userId);
@@ -114,7 +114,7 @@ public class ClassRoomResourceHelper extends ResourceHelper<ClassRoom, MutableCl
   }
 
   @Override
-  public Response post(final JsonObject pJsonObject, final UriInfo pUriInfo) throws Exception {
+  public Response post(final JsonObject pJsonObject, final UriInfo pUriInfo) {
     MutableClassRoom mutableClassRoom = new PersistentClassRoom();
     LocalCache localCache = new LocalCache();
     getBuilder().build(mutableClassRoom, pJsonObject, localCache);
@@ -134,8 +134,7 @@ public class ClassRoomResourceHelper extends ResourceHelper<ClassRoom, MutableCl
     return "";
   }
 
-  public JsonObject buildClassRooms(final List<ClassRoom> pClassRooms, final UriInfo pUriInfo)
-      throws Exception {
+  public JsonObject buildClassRooms(final List<ClassRoom> pClassRooms, final UriInfo pUriInfo) {
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
@@ -148,7 +147,7 @@ public class ClassRoomResourceHelper extends ResourceHelper<ClassRoom, MutableCl
   }
 
   public JsonObject getRoomsBasedOnRoutine(int pSemesterId ,UriInfo pUriInfo)
-      throws Exception {
+      {
 
     List<ClassRoom> roomList = new ArrayList<>();
     String userId = SecurityUtils.getSubject().getPrincipal().toString();
@@ -169,7 +168,7 @@ public class ClassRoomResourceHelper extends ResourceHelper<ClassRoom, MutableCl
     return buildClassRooms(roomList, pUriInfo);
   }
 
-  public JsonObject getByRoomNo(final String pRoomNo, final UriInfo pUriInfo) throws Exception {
+  public JsonObject getByRoomNo(final String pRoomNo, final UriInfo pUriInfo) {
     ClassRoom room = getContentManager().getByRoomNo(pRoomNo);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
@@ -181,7 +180,7 @@ public class ClassRoomResourceHelper extends ResourceHelper<ClassRoom, MutableCl
     return object.build();
   }
 
-  public JsonObject getByRoomId(final Integer pRoomId, final UriInfo pUriInfo) throws Exception {
+  public JsonObject getByRoomId(final Integer pRoomId, final UriInfo pUriInfo) {
     ClassRoom room = getContentManager().get(pRoomId);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();

@@ -33,7 +33,7 @@ public class SeatPlanPublishResourceHelper extends
   private SeatPlanPublishBuilder mBuilder;
 
   @Override
-  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) {
     return null;
   }
 
@@ -47,8 +47,7 @@ public class SeatPlanPublishResourceHelper extends
    * @return
    * @throws Exception
    */
-  public Response createBySemester(Integer pSemesterId, JsonObject pJsonObject, UriInfo pUriInfo)
-      throws Exception {
+  public Response createBySemester(Integer pSemesterId, JsonObject pJsonObject, UriInfo pUriInfo) {
 
     Integer record = getContentManager().checkBySemester(pSemesterId);
 
@@ -74,8 +73,7 @@ public class SeatPlanPublishResourceHelper extends
     return builder.build();
   }
 
-  public Response updateBySemester(Integer pSemesterId, JsonObject pJsonObject, UriInfo pUriInfo)
-      throws Exception {
+  public Response updateBySemester(Integer pSemesterId, JsonObject pJsonObject, UriInfo pUriInfo) {
     Integer record = getContentManager().checkBySemester(pSemesterId);
 
     List<MutableSeatPlanPublish> seatPlanPublishs = new ArrayList<>();
@@ -104,7 +102,7 @@ public class SeatPlanPublishResourceHelper extends
   }
 
   public JsonObject getBySemester(Integer pSemesterId, final Request pRequest,
-      final UriInfo pUriInfo) throws Exception {
+      final UriInfo pUriInfo) {
     Integer record = getContentManager().checkBySemester(pSemesterId);
     List<SeatPlanPublish> publishs = new ArrayList<>();
     if(record > 0) {

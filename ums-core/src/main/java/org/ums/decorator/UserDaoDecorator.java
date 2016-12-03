@@ -9,7 +9,7 @@ import java.util.List;
 public class UserDaoDecorator extends ContentDaoDecorator<User, MutableUser, String, UserManager>
     implements UserManager {
   @Override
-  public int setPasswordResetToken(String pToken, String pUserId) throws Exception {
+  public int setPasswordResetToken(String pToken, String pUserId) {
     int modified = getManager().setPasswordResetToken(pToken, pUserId);
     if(modified <= 0) {
       throw new IllegalArgumentException("No entry updated");
@@ -18,7 +18,7 @@ public class UserDaoDecorator extends ContentDaoDecorator<User, MutableUser, Str
   }
 
   @Override
-  public int updatePassword(String pUserId, String pPassword) throws Exception {
+  public int updatePassword(String pUserId, String pPassword) {
     int modified = getManager().updatePassword(pUserId, pPassword);
     if(modified <= 0) {
       throw new IllegalArgumentException("No entry updated");
@@ -27,7 +27,7 @@ public class UserDaoDecorator extends ContentDaoDecorator<User, MutableUser, Str
   }
 
   @Override
-  public int clearPasswordResetToken(final String pUserId) throws Exception {
+  public int clearPasswordResetToken(final String pUserId) {
     int modified = getManager().clearPasswordResetToken(pUserId);
     if(modified <= 0) {
       throw new IllegalArgumentException("No entry updated");
@@ -36,7 +36,7 @@ public class UserDaoDecorator extends ContentDaoDecorator<User, MutableUser, Str
   }
 
   @Override
-  public List<User> getUsers() throws Exception {
+  public List<User> getUsers() {
     return getManager().getUsers();
   }
 }

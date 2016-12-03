@@ -23,7 +23,7 @@ public class PasswordReport extends Resource {
   @GET
   @Path("/single" + PATH_PARAM_OBJECT_ID)
   public StreamingOutput get(final @Context Request pRequest,
-      final @PathParam("object-id") String pObjectId) throws Exception {
+      final @PathParam("object-id") String pObjectId) {
     return new StreamingOutput() {
       public void write(OutputStream output) throws IOException, WebApplicationException {
         try {
@@ -47,7 +47,7 @@ public class PasswordReport extends Resource {
   @GET
   @Path("/bulk" + PATH_PARAM_OBJECT_ID)
   public StreamingOutput getBulk(final @Context Request pRequest,
-      final @PathParam("object-id") String pObjectId) throws Exception {
+      final @PathParam("object-id") String pObjectId) {
     return new StreamingOutput() {
       public void write(OutputStream output) throws IOException, WebApplicationException {
         try {

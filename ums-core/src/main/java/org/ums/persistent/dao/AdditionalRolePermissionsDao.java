@@ -65,7 +65,7 @@ public class AdditionalRolePermissionsDao extends AdditionalRolePermissionsDaoDe
   }
 
   @Override
-  public int create(MutableAdditionalRolePermissions pMutable) throws Exception {
+  public int create(MutableAdditionalRolePermissions pMutable) {
     return mJdbcTemplate.update(INSERT_ALL, pMutable.getUser().getId(),
         pMutable.getRole() == null ? 0 : pMutable.getRole().getId(),
         Joiner.on(PersistentPermissionDao.PERMISSION_SEPARATOR).join(pMutable.getPermission()),
@@ -74,13 +74,13 @@ public class AdditionalRolePermissionsDao extends AdditionalRolePermissionsDaoDe
   }
 
   @Override
-  public int delete(MutableAdditionalRolePermissions pMutable) throws Exception {
+  public int delete(MutableAdditionalRolePermissions pMutable) {
     String query = DELETE_ALL + "WHERE ID = ?";
     return mJdbcTemplate.update(query);
   }
 
   @Override
-  public int update(MutableAdditionalRolePermissions pMutable) throws Exception {
+  public int update(MutableAdditionalRolePermissions pMutable) {
     String query = UPDATE_ALL + "WHERE ID = ?";
     return mJdbcTemplate.update(query, pMutable.getUser().getId(), pMutable.getRole().getId(),
         Joiner.on(PersistentPermissionDao.PERMISSION_SEPARATOR).join(pMutable.getPermission()),
@@ -89,13 +89,13 @@ public class AdditionalRolePermissionsDao extends AdditionalRolePermissionsDaoDe
   }
 
   @Override
-  public AdditionalRolePermissions get(Integer pId) throws Exception {
+  public AdditionalRolePermissions get(Integer pId) {
     String query = SELECT_ALL + "WHERE ID = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new RolePermissionsMapper());
   }
 
   @Override
-  public List<AdditionalRolePermissions> getAll() throws Exception {
+  public List<AdditionalRolePermissions> getAll() {
     return mJdbcTemplate.query(SELECT_ALL, new RolePermissionsMapper());
   }
 

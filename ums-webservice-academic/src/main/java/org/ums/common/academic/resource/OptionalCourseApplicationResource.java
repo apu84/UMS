@@ -18,7 +18,7 @@ public class OptionalCourseApplicationResource extends MutableOptionalCourseAppl
   @Path("/stat/semester-id/{semester-id}/program/{program-id}")
   public JsonObject getStatistics(final @Context Request pRequest,
       final @PathParam("semester-id") Integer pSemesterId,
-      final @PathParam("program-id") Integer pProgramId) throws Exception {
+      final @PathParam("program-id") Integer pProgramId) {
     return mResourceHelper.getApplicationStatistics(pSemesterId, pProgramId);
   }
 
@@ -27,8 +27,7 @@ public class OptionalCourseApplicationResource extends MutableOptionalCourseAppl
   public JsonObject getCrHrInfo(final @Context Request pRequest,
       final @PathParam("semester-id") Integer pSemesterId,
       final @PathParam("program-id") Integer pProgramId,
-      final @PathParam("semester") Integer pSemester, final @PathParam("year") Integer pYear)
-      throws Exception {
+      final @PathParam("semester") Integer pSemester, final @PathParam("year") Integer pYear) {
     return mResourceHelper.getSemesterWiseCrHrInfo(pSemesterId, pProgramId, pYear, pSemester);
   }
 
@@ -36,8 +35,7 @@ public class OptionalCourseApplicationResource extends MutableOptionalCourseAppl
   @Path("/students/semester-id/{semester-id}/course/{course-id}/status/{status}")
   public JsonObject getStudentList(final @Context Request pRequest,
       final @PathParam("semester-id") Integer pSemesterId,
-      final @PathParam("course-id") String pCourseId, final @PathParam("status") String pStatus)
-      throws Exception {
+      final @PathParam("course-id") String pCourseId, final @PathParam("status") String pStatus) {
     return mResourceHelper.getStudentList(pSemesterId, pCourseId, pStatus);
   }
 
@@ -46,7 +44,7 @@ public class OptionalCourseApplicationResource extends MutableOptionalCourseAppl
   public JsonObject getNonAssignedSectionStudentList(final @Context Request pRequest,
       final @PathParam("semester-id") Integer pSemesterId,
       final @PathParam("program-id") Integer pProgramId,
-      final @PathParam("course-id") String pCourseId) throws Exception {
+      final @PathParam("course-id") String pCourseId) {
     return mResourceHelper.getNonAssignedSectionStudentList(pSemesterId, pProgramId, pCourseId);
   }
 
@@ -55,7 +53,7 @@ public class OptionalCourseApplicationResource extends MutableOptionalCourseAppl
   public JsonObject getOptionalSectionListWithStudents(final @Context Request pRequest,
       final @PathParam("semester-id") Integer pSemesterId,
       final @PathParam("program-id") Integer pProgramId,
-      final @PathParam("course-id") String pCourseId) throws Exception {
+      final @PathParam("course-id") String pCourseId) {
     return mResourceHelper.getOptionalSectionListWithStudents(pSemesterId, pProgramId, pCourseId);
   }
 
@@ -63,7 +61,7 @@ public class OptionalCourseApplicationResource extends MutableOptionalCourseAppl
   @Path("/status/student-id/{student-id}/semester-id/{semester-id}/program/{program-id}")
   public JsonObject getApplicationStatus(final @Context Request pRequest,
       final @PathParam("student-id") String pStudentId,
-      final @PathParam("semester-id") Integer pSemesterId) throws Exception {
+      final @PathParam("semester-id") Integer pSemesterId) {
     return mResourceHelper.getApplicationStatus(pStudentId, pSemesterId);
   }
 
@@ -72,7 +70,7 @@ public class OptionalCourseApplicationResource extends MutableOptionalCourseAppl
   public JsonObject getAppliedCoursesByStudent(final @Context Request pRequest,
       final @PathParam("student-id") String pStudentId,
       final @PathParam("semester-id") Integer pSemesterId,
-      final @PathParam("program-id") Integer pProgramId) throws Exception {
+      final @PathParam("program-id") Integer pProgramId) {
     return mResourceHelper.getAppliedCoursesByStudent(pStudentId, pSemesterId, pProgramId);
   }
 
@@ -80,7 +78,7 @@ public class OptionalCourseApplicationResource extends MutableOptionalCourseAppl
 
   @GET
   @Path("/student")
-  public JsonObject getDataForStudent(final @Context Request pRequest) throws Exception {
+  public JsonObject getDataForStudent(final @Context Request pRequest) {
     return mResourceHelper.getDataForStudent(pRequest, mUriInfo);
   }
 

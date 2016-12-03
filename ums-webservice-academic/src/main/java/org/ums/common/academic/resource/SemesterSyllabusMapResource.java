@@ -26,8 +26,7 @@ public class SemesterSyllabusMapResource extends MutableSemesterSyllabusMapResou
   @GET
   @Path("/program/{program-id}/semester/{semester-id}")
   public JsonObject getMapsByProgramSemester(final @Context Request pRequest,
-      final @PathParam("program-id") int pProgramId, final @PathParam("semester-id") int pSemesterId)
-      throws Exception {
+      final @PathParam("program-id") int pProgramId, final @PathParam("semester-id") int pSemesterId) {
     return mResourceHelper.buildMaps(mManager.getMapsByProgramSemester(pProgramId, pSemesterId),
         mUriInfo);
   }

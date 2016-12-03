@@ -11,7 +11,7 @@ public class NavigationDaoDecorator extends
     ContentDaoDecorator<Navigation, MutableNavigation, Integer, NavigationManager> implements
     NavigationManager {
   @Override
-  public List<Navigation> getByPermissions(Set<String> pPermissions) throws Exception {
+  public List<Navigation> getByPermissions(Set<String> pPermissions) {
     return getManager().getByPermissions(pPermissions);
   }
 

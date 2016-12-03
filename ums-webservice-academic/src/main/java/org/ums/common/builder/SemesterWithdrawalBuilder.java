@@ -25,7 +25,7 @@ public class SemesterWithdrawalBuilder implements
 
   @Override
   public void build(JsonObjectBuilder pBuilder, SemesterWithdrawal pReadOnly, UriInfo pUriInfo,
-      LocalCache pLocalCache) throws Exception {
+      LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("semesterId", pReadOnly.getSemester().getId());
     pBuilder.add("programId", pReadOnly.getProgram().getId());
@@ -45,7 +45,7 @@ public class SemesterWithdrawalBuilder implements
 
   @Override
   public void build(MutableSemesterWithdrawal pMutable, JsonObject pJsonObject,
-      LocalCache pLocalCache) throws Exception {
+      LocalCache pLocalCache) {
     int id = pJsonObject.getInt("id");
     if(id != 0) {
       pMutable.setId(id);

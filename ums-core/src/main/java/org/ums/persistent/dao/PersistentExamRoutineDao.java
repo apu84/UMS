@@ -43,7 +43,7 @@ public class PersistentExamRoutineDao extends ExamRoutineDaoDecorator {
   }
 
   @Override
-  public List<ExamRoutineDto> getExamRoutine(int semesterId, int examTypeId) throws Exception {
+  public List<ExamRoutineDto> getExamRoutine(int semesterId, int examTypeId) {
     String query = SELECT_ALL;
     return mJdbcTemplate.query(query, new Object[] {semesterId, examTypeId},
         new ExamRoutineRowMapper());
@@ -105,7 +105,7 @@ public class PersistentExamRoutineDao extends ExamRoutineDaoDecorator {
         new ExamRoutineForSeatPlanPublishRowMapper());
   }
 
-  public int delete(final MutableExamRoutine pExamRoutine) throws Exception {
+  public int delete(final MutableExamRoutine pExamRoutine) {
     if(pExamRoutine.getInsertType().equalsIgnoreCase("byProgram")) {
       String query =
           DELETE + " And  Exam_Date= to_date(?,'dd/MM/YYYY') And Exam_Time =?  and  Program_Id =?";
@@ -131,7 +131,7 @@ public class PersistentExamRoutineDao extends ExamRoutineDaoDecorator {
     return 0;
   }
 
-  public int create(final MutableExamRoutine pExamRoutine) throws Exception {
+  public int create(final MutableExamRoutine pExamRoutine) {
     insertBatch(pExamRoutine);
     return 1;
   }

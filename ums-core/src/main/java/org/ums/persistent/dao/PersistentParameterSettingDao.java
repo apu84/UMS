@@ -36,14 +36,14 @@ public class PersistentParameterSettingDao extends ParameterSettingDaoDecorator 
   }
 
   @Override
-  public List<ParameterSetting> getAll() throws Exception {
+  public List<ParameterSetting> getAll() {
     String query = SELECT_ALL + ORDER_BY;
     List<ParameterSetting> test = mJdbcTemplate.query(query, new ParameterSettingRowMapper());
     return mJdbcTemplate.query(query, new ParameterSettingRowMapper());
   }
 
   @Override
-  public ParameterSetting get(String pId) throws Exception {
+  public ParameterSetting get(String pId) {
     String query = SELECT_ALL + " WHERE PS_ID=? ";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new ParameterSettingRowMapper());
   }
@@ -66,20 +66,20 @@ public class PersistentParameterSettingDao extends ParameterSettingDaoDecorator 
   }
 
   @Override
-  public int update(MutableParameterSetting pMutable) throws Exception {
+  public int update(MutableParameterSetting pMutable) {
     String query = UPDATE_ONE + " WHERE PS_ID=? ";
     return mJdbcTemplate.update(query, pMutable.getSemester().getId(), pMutable.getParameter()
         .getId(), pMutable.getStartDate(), pMutable.getEndDate(), pMutable.getId());
   }
 
   @Override
-  public int delete(MutableParameterSetting pMutable) throws Exception {
+  public int delete(MutableParameterSetting pMutable) {
     String query = DELETE_ONE + " WHERE PS_ID=?";
     return mJdbcTemplate.update(query, pMutable.getId());
   }
 
   @Override
-  public int create(MutableParameterSetting pMutable) throws Exception {
+  public int create(MutableParameterSetting pMutable) {
 
     String query = INSERT_ONE;
     return mJdbcTemplate.update(query, pMutable.getSemester().getId(), pMutable.getParameter()

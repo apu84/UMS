@@ -34,7 +34,7 @@ public class RoutineResource extends MutableRoutineResource {
 
   @GET
   @Path("/routineForTeacher")
-  public JsonObject getRoutineForTeachers(final @Context Request pRequest) throws Exception {
+  public JsonObject getRoutineForTeachers(final @Context Request pRequest) {
 
     return mRoutineResourceHelper.getRoutineForTeacher(pRequest, mUriInfo);
   }
@@ -42,8 +42,7 @@ public class RoutineResource extends MutableRoutineResource {
   @GET
   @Path("/routineReportTeacher")
   @Produces("application/pdf")
-  public StreamingOutput createTeacherRoutineReport(final @Context Request pRequest)
-      throws Exception {
+  public StreamingOutput createTeacherRoutineReport(final @Context Request pRequest) {
     return new StreamingOutput() {
       @Override
       public void write(OutputStream pOutputStream) throws IOException, WebApplicationException {
@@ -62,7 +61,7 @@ public class RoutineResource extends MutableRoutineResource {
   @Produces("application/pdf")
   public StreamingOutput createRoomBasedRoutineReport(
       final @PathParam("semester-id") int pSemesterId, final @PathParam("room-id") int pRoomId,
-      final @Context Request pRequest) throws Exception {
+      final @Context Request pRequest) {
     return new StreamingOutput() {
       @Override
       public void write(OutputStream pOutputStream) throws IOException, WebApplicationException {
@@ -81,7 +80,7 @@ public class RoutineResource extends MutableRoutineResource {
   @Path("/routineForStudent")
   public JsonObject getRoutineForStudents(final @Context Request pRequest,
       final @PathParam("semesterId") String semesterId,
-      final @PathParam("programId") String programId) throws Exception {
+      final @PathParam("programId") String programId) {
     return mRoutineResourceHelper.getRoutineForStudent();
   }
 
@@ -89,8 +88,7 @@ public class RoutineResource extends MutableRoutineResource {
   @Path("/routineForEmployee/semester/{semesterId}/year/{year}/semester/{semester}/section/{section}")
   public JsonObject getRoutineForEmployee(final @Context Request pRequest,
       final @PathParam("semesterId") String semesterId, final @PathParam("year") String year,
-      final @PathParam("semester") String semester, final @PathParam("section") String section)
-      throws Exception {
+      final @PathParam("semester") String semester, final @PathParam("section") String section) {
     return mRoutineResourceHelper.getRoutineForEmployee(Integer.parseInt(semesterId),
         Integer.parseInt(year), Integer.parseInt(semester), section, pRequest, mUriInfo);
   }

@@ -20,34 +20,34 @@ public class ClassRoomResource extends MutableClassRoomResource {
 
   @GET
   @Path("/all")
-  public JsonObject getAll() throws Exception {
+  public JsonObject getAll() {
     return mResourceHelper.getAll(mUriInfo);
   }
 
   @GET
   @Path("/roomNo/{room-no}")
   public JsonObject getByRoomNo(final @Context Request pRequest,
-      final @PathParam("room-no") String roomNo) throws Exception {
+      final @PathParam("room-no") String roomNo) {
     return mResourceHelper.getByRoomNo(roomNo, mUriInfo);
   }
 
   @GET
   @Path("/roomId/{room-id}")
   public JsonObject getByRoomId(final @Context Request pRequest,
-      final @PathParam("room-id") Integer roomId) throws Exception {
+      final @PathParam("room-id") Integer roomId) {
     return mResourceHelper.getByRoomId(roomId, mUriInfo);
   }
 
   @GET
   @Path("/program")
-  public JsonObject getByProgram(final @Context Request pRequest) throws Exception {
+  public JsonObject getByProgram(final @Context Request pRequest) {
     return mResourceHelper.getRooms(mUriInfo);
   }
 
   @GET
   @Path("/forRoutine/semester/{semester-id}")
   public JsonObject getRoomsForRoutine(final @Context Request pRequest,
-      final @PathParam("semester-id") int pSemesterId) throws Exception {
+      final @PathParam("semester-id") int pSemesterId) {
     return mResourceHelper.getRoomsBasedOnRoutine(pSemesterId, mUriInfo);
   }
 

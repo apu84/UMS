@@ -32,8 +32,7 @@ public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecor
   }
 
   @Override
-  public List<UGRegistrationResult> getRegisteredCoursesWithResult(String pStudentId)
-      throws Exception {
+  public List<UGRegistrationResult> getRegisteredCoursesWithResult(String pStudentId) {
     List<UGRegistrationResult> resultList = super.getRegisteredCoursesWithResult(pStudentId);
     if(mLogger.isDebugEnabled()) {
       mLogger.debug("Course found: " + resultList.size());
@@ -42,8 +41,7 @@ public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecor
     return aggregateResults(resultList);
   }
 
-  private List<UGRegistrationResult> aggregateResults(List<UGRegistrationResult> pResults)
-      throws Exception {
+  private List<UGRegistrationResult> aggregateResults(List<UGRegistrationResult> pResults) {
     Map<String, UGRegistrationResult> resultMap = new HashMap<>();
     for(UGRegistrationResult result : pResults) {
       // if(!resultMap.containsKey(result.getCourseId())) {
@@ -58,7 +56,7 @@ public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecor
 
   @Override
   public List<UGRegistrationResult> getResults(Integer pProgramId, Integer pSemesterId)
-      throws Exception {
+      {
     String taskId = String.format("%s_%s%s", pProgramId, pSemesterId, ProcessResult.PROCESS_GRADES);
     createTaskStatus(taskId);
 
@@ -93,7 +91,7 @@ public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecor
   }
 
   private List<UGRegistrationResult> equivalent(Map<String, UGRegistrationResult> pResults)
-      throws Exception {
+      {
     List<EquivalentCourse> equivalentCourses = mEquivalentCourseManager.getAll();
     Map<String, EquivalentCourse> equivalentCourseMap = equivalentCourses.stream()
         .collect(Collectors.toMap(EquivalentCourse::getOldCourseId, Function.identity()));
@@ -135,20 +133,19 @@ public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecor
   }
 
   @Async
-  private void createTaskStatus(String taskId) throws Exception {
+  private void createTaskStatus(String taskId) {
     MutableTaskStatus taskStatus = new PersistentTaskStatus();
     taskStatus.setId(taskId);
     taskStatus.setStatus(TaskStatus.Status.INPROGRESS);
     taskStatus.commit(false);
   }
 
-  private void updateTaskStatus(String taskId, TaskStatus.Status pStatus) throws Exception {
+  private void updateTaskStatus(String taskId, TaskStatus.Status pStatus) {
     updateTaskStatus(taskId, pStatus, null);
   }
 
   @Async
-  private void updateTaskStatus(String taskId, TaskStatus.Status pStatus, String pProgress)
-      throws Exception {
+  private void updateTaskStatus(String taskId, TaskStatus.Status pStatus, String pProgress) {
     TaskStatus taskStatus = mTaskStatusManager.get(taskId);
     MutableTaskStatus mutableTaskStatus = taskStatus.edit();
     mutableTaskStatus.setStatus(pStatus);

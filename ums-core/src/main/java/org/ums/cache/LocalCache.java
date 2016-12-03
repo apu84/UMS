@@ -11,12 +11,16 @@ public class LocalCache {
     mLocalCopy = new HashMap<String, Object>();
   }
 
-  public Object cache(Callable<Object> func, Object pCacheId, Class pObjectClass) throws Exception {
+  public Object cache(Callable<Object> func, Object pCacheId, Class pObjectClass) {
 
     String cacheKey = getCacheKey(pCacheId, pObjectClass);
 
     if(mLocalCopy.get(cacheKey) == null) {
-      mLocalCopy.put(cacheKey, func.call());
+      try {
+        mLocalCopy.put(cacheKey, func.call());
+      } catch(Exception e) {
+        throw new RuntimeException(e);
+      }
     }
 
     return mLocalCopy.get(cacheKey);

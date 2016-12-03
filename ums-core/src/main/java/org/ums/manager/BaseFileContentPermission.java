@@ -39,11 +39,11 @@ public abstract class BaseFileContentPermission extends BinaryContentDecorator {
     return mUserManager;
   }
 
-  protected String encrypt(String plainText) throws Exception {
+  protected String encrypt(String plainText) {
     return Base64.getEncoder().encodeToString(plainText.getBytes());
   }
 
-  protected static String decrypt(String plainText) throws Exception {
+  protected static String decrypt(String plainText) {
     return new String(Base64.getDecoder().decode(plainText));
   }
 

@@ -65,8 +65,8 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
 
   @Override
   public void createPdf(String dest, boolean noSeatPlanInfo, int pSemesterId, int groupNo,
-      int type, String examDate, OutputStream pOutputStream) throws Exception, IOException,
-      DocumentException, WebApplicationException {
+      int type, String examDate, OutputStream pOutputStream) throws IOException, DocumentException,
+      WebApplicationException {
 
     Document document = new Document();
     document.addTitle("Seat Plan");
@@ -709,8 +709,8 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
 
   @Override
   public void createSeatPlanAttendenceReport(Integer pProgramType, Integer pSemesterId,
-      Integer pExamType, String pExamDate, OutputStream pOutputStream) throws Exception,
-      IOException, DocumentException {
+      Integer pExamType, String pExamDate, OutputStream pOutputStream) throws IOException,
+      DocumentException {
     /*
      * java.util.List<ExamRoutineDto> examRoutines = new ArrayList<>(); List<SeatPlan> seatPlans =
      * new ArrayList<>(); String universityName = new
@@ -1076,8 +1076,8 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
 
   @Override
   public void createSeatPlanAttendencePdfReport(Integer pProgramType, Integer pSemesterId,
-      Integer pExamType, String pExamDate, OutputStream pOutputStream) throws Exception,
-      IOException, DocumentException {
+      Integer pExamType, String pExamDate, OutputStream pOutputStream) throws IOException,
+      DocumentException {
 
     java.util.List<SeatPlanReportDto> seatPlanReports = new ArrayList<>();
     String universityName = new String("Ahsanullah University of Science and Technology");
@@ -1420,8 +1420,8 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
 
   @Override
   public void createSeatPlanTopSheetPdfReport(Integer pProgramType, Integer pSemesterId,
-      Integer pExamType, String pExamDate, OutputStream pOutputStream) throws Exception,
-      IOException, DocumentException {
+      Integer pExamType, String pExamDate, OutputStream pOutputStream) throws IOException,
+      DocumentException {
     List<SeatPlanReportDto> seatPlans =
         mSeatPlanReportManager.getSeatPlanDataForTopSheet(pSemesterId, pExamType, pExamDate);
 
@@ -1761,8 +1761,8 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
 
   @Override
   public void createSeatPlanStickerReport(Integer pProgramType, Integer pSemesterId,
-      Integer pExamType, String pExamDate, OutputStream pOutputStream) throws Exception,
-      IOException, DocumentException {
+      Integer pExamType, String pExamDate, OutputStream pOutputStream) throws IOException,
+      DocumentException {
 
     List<SeatPlanReportDto> seatPlans =
         mSeatPlanReportManager.getSeatPlanDataForSticker(pSemesterId, pExamType, pExamDate);

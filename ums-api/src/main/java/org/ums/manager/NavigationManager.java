@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 public interface NavigationManager extends ContentManager<Navigation, MutableNavigation, Integer> {
-  List<Navigation> getByPermissions(final Set<String> pPermissions) throws Exception;
+  List<Navigation> getByPermissions(final Set<String> pPermissions);
 
   List<Navigation> getByPermissionsId(final Set<Integer> pPermissionIds);
 }

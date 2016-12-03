@@ -14,7 +14,7 @@ public abstract class AbstractUserHomeProcessor implements UserHomeProcessor {
   protected UserManager mUserManager;
 
   @Override
-  public boolean supports(Subject pCurrentSubject) throws Exception {
+  public boolean supports(Subject pCurrentSubject) {
     String userId = pCurrentSubject.getPrincipal().toString();
     User user = mUserManager.get(userId);
 

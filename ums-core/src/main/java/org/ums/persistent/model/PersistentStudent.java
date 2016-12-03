@@ -66,7 +66,7 @@ public class PersistentStudent implements MutableStudent {
 
   }
 
-  public PersistentStudent(final MutableStudent pMutableStudent) throws Exception {
+  public PersistentStudent(final MutableStudent pMutableStudent) {
     setId(pMutableStudent.getId());
     setUser(pMutableStudent.getUser());
     setFullName(pMutableStudent.getFullName());
@@ -139,7 +139,7 @@ public class PersistentStudent implements MutableStudent {
   }
 
   @Override
-  public void commit(boolean update) throws Exception {
+  public void commit(boolean update) {
     if(update) {
       sStudentManager.update(this);
     }
@@ -149,7 +149,7 @@ public class PersistentStudent implements MutableStudent {
   }
 
   @Override
-  public void delete() throws Exception {
+  public void delete() {
     sStudentManager.delete(this);
   }
 
@@ -184,13 +184,13 @@ public class PersistentStudent implements MutableStudent {
   }
 
   @Override
-  public Department getDepartment() throws Exception {
+  public Department getDepartment() {
     return mDepartment == null ? sDepartmentManager.get(mDepartmentId) : sDepartmentManager
         .validate(mDepartment);
   }
 
   @Override
-  public void setDepartment(Department pDepartment) throws Exception {
+  public void setDepartment(Department pDepartment) {
     mDepartment = pDepartment;
   }
 
@@ -205,13 +205,13 @@ public class PersistentStudent implements MutableStudent {
   }
 
   @Override
-  public Semester getSemester() throws Exception {
+  public Semester getSemester() {
     return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
         .validate(mSemester);
   }
 
   @Override
-  public void setSemester(Semester pSemester) throws Exception {
+  public void setSemester(Semester pSemester) {
     mSemester = pSemester;
   }
 
@@ -226,12 +226,12 @@ public class PersistentStudent implements MutableStudent {
   }
 
   @Override
-  public Program getProgram() throws Exception {
+  public Program getProgram() {
     return mProgram == null ? sProgramManager.get(mProgramId) : sProgramManager.validate(mProgram);
   }
 
   @Override
-  public void setProgram(Program pProgram) throws Exception {
+  public void setProgram(Program pProgram) {
     mProgram = pProgram;
   }
 
@@ -376,7 +376,7 @@ public class PersistentStudent implements MutableStudent {
   }
 
   @Override
-  public MutableStudent edit() throws Exception {
+  public MutableStudent edit() {
     return new PersistentStudent(this);
   }
 

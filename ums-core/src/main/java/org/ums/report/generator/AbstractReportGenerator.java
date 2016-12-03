@@ -75,7 +75,7 @@ public abstract class AbstractReportGenerator {
    * 
    * @return the data factory used by this report generator
    */
-  public abstract DataFactory getDataFactory(String reportQuery) throws Exception;
+  public abstract DataFactory getDataFactory(String reportQuery);
 
   /**
    * Returns the set of parameters that will be passed to the report generation process. If there
@@ -85,7 +85,7 @@ public abstract class AbstractReportGenerator {
    * @return the set of report parameters to be used by the report generation process, or
    *         <code>null</code> if no parameters are required.
    */
-  public abstract Map<String, Object> getReportParameters(Object... pParameters) throws Exception;
+  public abstract Map<String, Object> getReportParameters(Object... pParameters);
 
   /**
    * Generates the report in the specified <code>outputType</code> and writes it into the specified

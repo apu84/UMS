@@ -22,7 +22,7 @@ public class UserResource extends Resource {
   UserResourceHelper mUserResourceHelper;
 
   @GET
-  public JsonObject getUsers(final @Context Request pRequest) throws Exception {
+  public JsonObject getUsers(final @Context Request pRequest) {
     return mUserResourceHelper.getUsers(mUriInfo);
   }
 

@@ -41,7 +41,7 @@ public class ParameterSettingResourceHelper extends
   private ParameterSettingBuilder mBuilder;
 
   @Override
-  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) {
     MutableParameterSetting mutableParameterSetting = new PersistentParameterSetting();
     LocalCache localCache = new LocalCache();
     getBuilder().build(mutableParameterSetting, pJsonObject, localCache);
@@ -56,7 +56,7 @@ public class ParameterSettingResourceHelper extends
   }
 
   public JsonObject getBySemester(final int pSemesterId, final Request pRequest,
-      final UriInfo pUriInfo) throws Exception {
+      final UriInfo pUriInfo) {
     List<ParameterSetting> parameterSettings = getContentManager().getBySemester(pSemesterId);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
@@ -72,7 +72,7 @@ public class ParameterSettingResourceHelper extends
   }
 
   public JsonObject getByParameterIdAndSemesterId(final int pParameterId, final int pSemesterId,
-      final Request pRequest, final UriInfo pUriInfo) throws Exception {
+      final Request pRequest, final UriInfo pUriInfo) {
     ParameterSetting parameterSettings =
         getContentManager().getBySemesterAndParameterId(pParameterId, pSemesterId);
     JsonObjectBuilder object = Json.createObjectBuilder();
@@ -88,7 +88,7 @@ public class ParameterSettingResourceHelper extends
   }
 
   public JsonObject getByParameterAndSemesterId(final String parameter, final Request pRequest,
-      final UriInfo pUriInfo) throws Exception {
+      final UriInfo pUriInfo) {
     String mStudentId = SecurityUtils.getSubject().getPrincipal().toString();
     Student student = mStudentManager.get(mStudentId);
     ParameterSetting parameterSettings =
@@ -105,7 +105,7 @@ public class ParameterSettingResourceHelper extends
     return object.build();
   }
 
-  public JsonObject getAllInfo(final UriInfo pUriInfo) throws Exception {
+  public JsonObject getAllInfo(final UriInfo pUriInfo) {
     List<ParameterSetting> parameterSettings = getContentManager().getAll();
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();

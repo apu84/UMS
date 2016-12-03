@@ -10,15 +10,15 @@ import java.io.Serializable;
 public interface Program extends Serializable, EditType<MutableProgram>, LastModifier,
     Identifier<Integer> {
 
-  ProgramType getProgramType() throws Exception;
+  ProgramType getProgramType();
 
   int getProgramTypeId();
 
-  String getShortName() throws Exception;
+  String getShortName();
 
-  String getLongName() throws Exception;
+  String getLongName();
 
-  Department getDepartment() throws Exception;
+  Department getDepartment();
 
   String getDepartmentId();
 }

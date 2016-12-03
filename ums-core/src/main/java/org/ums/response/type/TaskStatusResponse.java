@@ -7,7 +7,7 @@ public class TaskStatusResponse implements GenericResponse<TaskStatus> {
   private ResponseType mResponseType;
   private String mMessage;
 
-  public TaskStatusResponse(TaskStatus pTaskStatus) throws Exception {
+  public TaskStatusResponse(TaskStatus pTaskStatus) {
     mTaskStatus = pTaskStatus;
     mResponseType = ResponseType.INFO;
     mMessage = pTaskStatus.getId();

@@ -1,15 +1,14 @@
 package org.ums.common.academic.resource;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.io.IOUtils;
-import org.springframework.stereotype.Component;
-import org.springframework.util.StreamUtils;
-import org.springframework.util.StringUtils;
-import org.ums.manager.BinaryContentManager;
-import org.ums.resource.Resource;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.json.JsonArray;
 import javax.json.JsonObject;
@@ -20,13 +19,19 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
-import java.io.InputStream;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.IOUtils;
+import org.springframework.stereotype.Component;
+import org.springframework.util.StreamUtils;
+import org.springframework.util.StringUtils;
+import org.ums.manager.BinaryContentManager;
+import org.ums.resource.Resource;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component
 public abstract class AbstractCourseMaterialResource extends Resource {
@@ -79,12 +84,17 @@ public abstract class AbstractCourseMaterialResource extends Resource {
 
         case "createAssignmentFolder":
           Map<String, String> additionalAssignmentParams = buildAdditionalParams(pJsonObject);
-          result.put(
-              "result",
-              getBinaryContentManager().createAssignmentFolder(pJsonObject.getString("newPath"),
-                  mDateFormat.parse(pJsonObject.getString("startDate")),
-                  mDateFormat.parse(pJsonObject.getString("endDate")), additionalAssignmentParams,
-                  BinaryContentManager.Domain.COURSE_MATERIAL, pSemesterName, pCourseNo));
+          try {
+            result.put(
+                "result",
+                getBinaryContentManager().createAssignmentFolder(pJsonObject.getString("newPath"),
+                    mDateFormat.parse(pJsonObject.getString("startDate")),
+                    mDateFormat.parse(pJsonObject.getString("endDate")),
+                    additionalAssignmentParams, BinaryContentManager.Domain.COURSE_MATERIAL,
+                    pSemesterName, pCourseNo));
+          } catch(ParseException pe) {
+            throw new RuntimeException(pe);
+          }
           break;
 
         case "remove":
@@ -129,7 +139,7 @@ public abstract class AbstractCourseMaterialResource extends Resource {
   @Path("/semester/{semester-name}/course/{course-no}/upload")
   public Object uploadBySemesterCourse(final @Context HttpServletRequest httpRequest,
       final @PathParam("semester-name") String pSemesterName,
-      final @PathParam("course-no") String pCourseNo) throws Exception {
+      final @PathParam("course-no") String pCourseNo) {
     Map<String, Object> result = new HashMap<>();
     if(ServletFileUpload.isMultipartContent(httpRequest)) {
       result.put("result", uploadFile(httpRequest, pSemesterName, pCourseNo));
@@ -193,35 +203,37 @@ public abstract class AbstractCourseMaterialResource extends Resource {
   }
 
   protected void writeToResponse(final Map<String, Object> pResponse,
-      final HttpServletResponse pHttpServletResponse) throws Exception {
+      final HttpServletResponse pHttpServletResponse) throws IOException {
     InputStream fileStream = (InputStream) pResponse.get("Content");
     for(String key : pResponse.keySet()) {
       if(!key.equalsIgnoreCase("Content")) {
         pHttpServletResponse.setHeader(key, pResponse.get(key).toString());
       }
     }
-
     StreamUtils.copy(fileStream, pHttpServletResponse.getOutputStream());
     pHttpServletResponse.getOutputStream().flush();
     IOUtils.closeQuietly(fileStream);
   }
 
-  private Object uploadFile(HttpServletRequest request, String... pRootPath) throws Exception {
+  private Object uploadFile(HttpServletRequest request, String... pRootPath) {
     String destination = null;
     Map<String, InputStream> files = new HashMap<>();
-
-    List<FileItem> items = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
-    for(FileItem item : items) {
-      if(item.isFormField()) {
-        // Process regular form field (input type="text|radio|checkbox|etc", select, etc).
-        if(DESTINATION.equals(item.getFieldName())) {
-          destination = item.getString();
+    try {
+      List<FileItem> items = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
+      for(FileItem item : items) {
+        if(item.isFormField()) {
+          // Process regular form field (input type="text|radio|checkbox|etc", select, etc).
+          if(DESTINATION.equals(item.getFieldName())) {
+            destination = item.getString();
+          }
+        }
+        else {
+          // Process form file field (input type="file").
+          files.put(item.getName(), item.getInputStream());
         }
       }
-      else {
-        // Process form file field (input type="file").
-        files.put(item.getName(), item.getInputStream());
-      }
+    } catch(FileUploadException | IOException ie) {
+      throw new RuntimeException(ie);
     }
 
     return getBinaryContentManager().upload(files, destination,
@@ -247,7 +259,7 @@ public abstract class AbstractCourseMaterialResource extends Resource {
     return actionItems;
   }
 
-  private Map<String, String> buildAdditionalParams(JsonObject pJsonObject) throws Exception {
+  private Map<String, String> buildAdditionalParams(JsonObject pJsonObject) throws IOException {
     if(pJsonObject.containsKey("additionalParams")) {
       pJsonObject.getJsonObject("additionalParams");
       return new ObjectMapper().readValue(pJsonObject.getJsonObject("additionalParams").toString(),

@@ -27,7 +27,7 @@ public class PersistentOptionalCourseApplicationDao {
   }
 
   public List<OptionalCourseApplicationStatDto> getApplicationStatistics(int pSemesterId,
-      int pProgramId, int pYear, int pSemester) throws Exception {
+      int pProgramId, int pYear, int pSemester) {
     String query =
         "Select COURSE_NO,COURSE_TITLE,TOTAL_APPLIED From OPT_COURSE_OFFER,MST_COURSE "
             + "Where OPT_COURSE_OFFER.course_id=MST_COURSE.COURSE_ID ";
@@ -35,15 +35,14 @@ public class PersistentOptionalCourseApplicationDao {
     return mJdbcTemplate.query(query, new Object[] {}, new CourseRowMapper());
   }
 
-  public int deleteApplicationCourses(int pSemesterId, int pProgramId, int pYear, int pSemester)
-      throws Exception {
+  public int deleteApplicationCourses(int pSemesterId, int pProgramId, int pYear, int pSemester) {
     String query =
         "Delete OPT_COURSE_OFFER Where Semester_Id=? And Program_Id=? And Year=? And Semester=? And Call_For_Application='Y' ";
     return mJdbcTemplate.update(query, pSemesterId, pProgramId, pYear, pSemester);
   }
 
   public int insertApplicationCourses(int pSemesterId, int pProgramId, int pYear, int pSemester,
-      final List<Course> pCourseList) throws Exception {
+      final List<Course> pCourseList) {
     batchInsertApplicationCourse(pSemesterId, pProgramId, pYear, pSemester, pCourseList);
     return 1;
   }
@@ -75,7 +74,7 @@ public class PersistentOptionalCourseApplicationDao {
   }
 
   public int insertApprovedCourses(int pSemesterId, int pProgramId, int pYear, int pSemester,
-      final List<Course> pCourseList) throws Exception {
+      final List<Course> pCourseList) {
     batchMergeApprovedCourse(pSemesterId, pProgramId, pYear, pSemester, pCourseList);
     return 1;
   }
@@ -118,8 +117,7 @@ public class PersistentOptionalCourseApplicationDao {
     });
   }
 
-  public List<OptCourseStudentDto> getStudentList(int pSemesterId, String pCourseId, String pStatus)
-      throws Exception {
+  public List<OptCourseStudentDto> getStudentList(int pSemesterId, String pCourseId, String pStatus) {
     Object[] objectArray = new Object[] {pSemesterId, pCourseId};
     String query =
         "Select opt.*,std.full_name From OPT_COURSE_APPLICATION opt,STUDENTS std Where std.Student_Id in  "
@@ -138,7 +136,7 @@ public class PersistentOptionalCourseApplicationDao {
   }
 
   public List<OptCourseStudentDto> getNonAssignedSectionStudentList(int pSemesterId,
-      int pProgramId, String pCourseId) throws Exception {
+      int pProgramId, String pCourseId) {
     String query =
         "Select * From ( "
             + "Select app_status.student_id,students.full_name From OPT_COURSE_APPLICATION_STATUS app_status,STUDENTS,OPT_COURSE_APPLICATION opt_course "
@@ -160,7 +158,7 @@ public class PersistentOptionalCourseApplicationDao {
   }
 
   public List<OptSectionDto> getOptionalSectionListWithStudents(int pSemesterId, int pProgramId,
-      String pCourseId) throws Exception {
+      String pCourseId) {
     String query =
         "Select * from OPT_COURSE_SECTION_INFO " + "Where Semester_Id=11012017 "
             + "And Program_id=110500 " + "And Course_Id='" + pCourseId + "' "
@@ -169,15 +167,14 @@ public class PersistentOptionalCourseApplicationDao {
     return mJdbcTemplate.query(query, new Object[] {}, new OptSectionMapper());
   }
 
-  public int deleteSection(int pSemesterId, int pProgramId, String pCourseId, String pSectionName)
-      throws Exception {
+  public int deleteSection(int pSemesterId, int pProgramId, String pCourseId, String pSectionName) {
     String query =
         "Delete OPT_COURSE_SECTION_INFO Where SEMESTER_ID=? and PROGRAM_ID=? and COURSE_ID=? and SECTION_NAME=?";
     return mJdbcTemplate.update(query, pSemesterId, pProgramId, pCourseId, pSectionName);
   }
 
   public int mergeSection(int pSemesterId, int pProgramId, String pCourseId, String pSectionName,
-      String pStudentList) throws Exception {
+      String pStudentList) {
     String query =
         " merge into OPT_COURSE_SECTION_INFO tbl1 "
             + "    using "
@@ -193,8 +190,7 @@ public class PersistentOptionalCourseApplicationDao {
         pStudentList, pSemesterId, pProgramId, pCourseId, pSectionName, pStudentList);
   }
 
-  public OptCourseApplicationStatus getApplicationStatus(String pStudentId, int pSemesterId)
-      throws Exception {
+  public OptCourseApplicationStatus getApplicationStatus(String pStudentId, int pSemesterId) {
     String query =
         "Select status From OPT_COURSE_APPLICATION_STATUS Where Student_Id=? and Semester_Id=?";
     Integer statusId =
@@ -204,8 +200,7 @@ public class PersistentOptionalCourseApplicationDao {
     return OptCourseApplicationStatus.values()[statusId];
   }
 
-  public List<OptCourseStudentDto> getAppliedCoursesByStudent(String pStudentId, int pSemesterId)
-      throws Exception {
+  public List<OptCourseStudentDto> getAppliedCoursesByStudent(String pStudentId, int pSemesterId) {
 
     String query =
         "Select course.course_id,course.course_no,course.course_title,applied_on,status From OPT_COURSE_APPLICATION,MST_COURSE course "
@@ -217,7 +212,7 @@ public class PersistentOptionalCourseApplicationDao {
   }
 
   public int updateCourseStatus(int pSemesterId, String pCourseId, final List<String> pStudentList,
-      int pNewStatus) throws Exception {
+      int pNewStatus) {
     batchStatusUpdateForOptionalCourse(pSemesterId, pCourseId, pStudentList, pNewStatus);
     return 1;
   }
@@ -246,7 +241,7 @@ public class PersistentOptionalCourseApplicationDao {
   }
 
   public int updateCourseStatusForDependentCourse(int pSemesterId, String pCourseId,
-      final List<String> pStudentList, int pNewStatus) throws Exception {
+      final List<String> pStudentList, int pNewStatus) {
     batchStatusUpdateForOptionalCourseForDependentCourse(pSemesterId, pCourseId, pStudentList,
         pNewStatus);
     return 1;
@@ -279,7 +274,7 @@ public class PersistentOptionalCourseApplicationDao {
   }
 
   public int deleteCourseAppliedByTeacher(int pSemesterId, String pCourseId,
-      final List<String> pStudentList) throws Exception {
+      final List<String> pStudentList) {
     batchDeleteCourseAppliedByTeacher(pSemesterId, pCourseId, pStudentList);
     return 1;
   }
@@ -307,7 +302,7 @@ public class PersistentOptionalCourseApplicationDao {
   }
 
   public int insertShiftApplication(int pSemesterId, String pCourseId, String pDependentCourseId,
-      final List<String> pStudentList) throws Exception {
+      final List<String> pStudentList) {
     batchInsertShiftApplication(pSemesterId, pCourseId, pDependentCourseId, pStudentList);
     return 1;
   }
@@ -337,13 +332,12 @@ public class PersistentOptionalCourseApplicationDao {
     });
   }
 
-  public int deleteCoursesAppliedByStudent(String pStudentId, int pSemesterId) throws Exception {
+  public int deleteCoursesAppliedByStudent(String pStudentId, int pSemesterId) {
     String query = "Delete OPT_COURSE_APPLICATION Where Student_Id=? and Semester_Id=? ";
     return mJdbcTemplate.update(query, pStudentId, pSemesterId);
   }
 
-  public int saveStudentApplication(String pStudentId, int pSemester, final List<String> pCourseList)
-      throws Exception {
+  public int saveStudentApplication(String pStudentId, int pSemester, final List<String> pCourseList) {
     batchMergeStudentApplication(pStudentId, pSemester, pCourseList);
     return 1;
   }
@@ -383,7 +377,7 @@ public class PersistentOptionalCourseApplicationDao {
   }
 
   public int updateStatus(String pStudentId, Integer pSemesterId,
-      final OptCourseApplicationStatus status) throws Exception {
+      final OptCourseApplicationStatus status) {
     String query =
         "Update OPT_COURSE_APPLICATION_STATUS Set Status=? Where Student_id=? and Semester_Id=?";
     return mJdbcTemplate.update(query, status.getId(), pStudentId, pSemesterId);

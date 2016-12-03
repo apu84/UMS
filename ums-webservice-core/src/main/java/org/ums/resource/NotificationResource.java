@@ -22,14 +22,14 @@ public class NotificationResource extends Resource {
   @GET
   @Path("/{num-of-latest-notification}")
   public JsonObject getAdditionalRolePermissions(final @Context Request pRequest,
-      final @PathParam("num-of-latest-notification") Integer pNum) throws Exception {
+      final @PathParam("num-of-latest-notification") Integer pNum) {
     return mNotificationResourceHelper.getNotifications(SecurityUtils.getSubject().getPrincipal()
         .toString(), pNum, mUriInfo);
   }
 
   @POST
   @Path("/read")
-  public Response addLogger(final JsonArray pJsonArray) throws Exception {
+  public Response addLogger(final JsonArray pJsonArray) {
     mNotificationResourceHelper.updateReadStatus(pJsonArray);
     return Response.noContent().build();
   }

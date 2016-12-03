@@ -18,8 +18,7 @@ public class UGRegistratonResultResource extends MutableUGRegistrationResource {
 
   @GET
   @Path("/CarryClearanceImprovement")
-  public JsonObject getResultByCarryClearanceAndImprovement(final @Context Request pRequest)
-      throws Exception {
+  public JsonObject getResultByCarryClearanceAndImprovement(final @Context Request pRequest) {
     return mHelper.getResultForCarryClearanceAndImprovement(pRequest, mUriInfo);
   }
 }

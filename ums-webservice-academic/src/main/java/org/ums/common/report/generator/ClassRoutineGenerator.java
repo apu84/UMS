@@ -9,12 +9,12 @@ import java.io.OutputStream;
  * Created by My Pc on 30-Aug-16.
  */
 public interface ClassRoutineGenerator {
-  void createClassRoutineStudentReport(OutputStream pOutputStream) throws Exception, IOException,
+  void createClassRoutineStudentReport(OutputStream pOutputStream) throws IOException,
       DocumentException;
 
-  void createClassRoutineTeacherReport(OutputStream pOutputStream) throws Exception, IOException,
+  void createClassRoutineTeacherReport(OutputStream pOutputStream) throws IOException,
       DocumentException;
 
   void createRoomBasedClassRoutineReport(OutputStream pOutputStream, int pSemesterId, int pRoomId)
-      throws Exception, IOException, DocumentException;
+      throws IOException, DocumentException;
 }

@@ -29,31 +29,31 @@ public class BearerAccessTokenDao extends BearerAccessTokenDaoDecorator {
   }
 
   @Override
-  public int create(MutableBearerAccessToken pMutable) throws Exception {
+  public int create(MutableBearerAccessToken pMutable) {
     return mJdbcTemplate.update(INSERT_ALL, pMutable.getId(), pMutable.getUserId());
   }
 
   @Override
-  public int delete(MutableBearerAccessToken pMutable) throws Exception {
+  public int delete(MutableBearerAccessToken pMutable) {
     String query = DELETE_ALL + "WHERE TOKEN = ?";
     return mJdbcTemplate.update(query, pMutable.getId());
   }
 
   @Override
-  public int update(MutableBearerAccessToken pMutable) throws Exception {
+  public int update(MutableBearerAccessToken pMutable) {
     String query = UPDATE_ALL + "WHERE TOKEN = ?";
     return mJdbcTemplate.update(query, pMutable.getId());
   }
 
   @Override
-  public BearerAccessToken get(String pId) throws Exception {
+  public BearerAccessToken get(String pId) {
     String query = SELECT_ALL + "WHERE TOKEN = ?";
     return mJdbcTemplate
         .queryForObject(query, new Object[] {pId}, new BearerAccessTokenRowMapper());
   }
 
   @Override
-  public List<BearerAccessToken> getAll() throws Exception {
+  public List<BearerAccessToken> getAll() {
     return mJdbcTemplate.query(SELECT_ALL, new BearerAccessTokenRowMapper());
   }
 

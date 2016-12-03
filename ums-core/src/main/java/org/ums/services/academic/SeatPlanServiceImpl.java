@@ -62,7 +62,7 @@ public class SeatPlanServiceImpl implements SeatPlanService {
   @Override
   @Transactional
   public GenericResponse<Map> generateSeatPlan(int pSemesterId, int pGroupNo, int pExamType,
-      String pExamDate) throws Exception {
+      String pExamDate) {
     int numberOfSubGroups;
     if(pGroupNo == 0) {
       numberOfSubGroups = mSubGroupCCIManager.checkSubGroupNumber(pSemesterId, pExamDate);
@@ -359,7 +359,7 @@ public class SeatPlanServiceImpl implements SeatPlanService {
 
   @Override
   @Transactional
-  public GenericResponse<Map> generateGroup(int pSemesterId, int pExamType) throws Exception {
+  public GenericResponse<Map> generateGroup(int pSemesterId, int pExamType) {
     List<ExamRoutineDto> mExamRoutineList =
         mExamRoutineManager.getExamRoutine(pSemesterId, pExamType);
 
@@ -465,7 +465,7 @@ public class SeatPlanServiceImpl implements SeatPlanService {
   }
 
   MutableSeatPlanGroup storeCourseInfo(ExamRoutineDto examRoutineDto, int pSemesterId,
-      int pExamType, int group) throws Exception {
+      int pExamType, int group) {
 
     Course course = mCourseManager.get(examRoutineDto.getCourseId());
 
@@ -511,7 +511,7 @@ public class SeatPlanServiceImpl implements SeatPlanService {
 
   Map<Integer, List<Student>> getStudentsOfTheSubGroups(int pSemesterId, int pGroupNo,
       int pExamType, String examDate, int numberOfSubGroups,
-      Map<String, List<Student>> studentsByProgramYearSemesterStatusList) throws Exception {
+      Map<String, List<Student>> studentsByProgramYearSemesterStatusList) {
 
     Map<Integer, List<Student>> subGroupMap = new HashMap<>();
 
@@ -600,7 +600,7 @@ public class SeatPlanServiceImpl implements SeatPlanService {
 
   Map<Integer, List<Student>> getStudentsOfTheSubGroupsCCI(int pSemesterId, int pGroupNo,
       int pExamType, String examDate, int numberOfSubGroups,
-      Map<String, List<Student>> studentsByProgramYearSemesterStatusList) throws Exception {
+      Map<String, List<Student>> studentsByProgramYearSemesterStatusList) {
     List<SubGroupCCI> subGroupMembers =
         mSubGroupCCIManager.getBySemesterAndExamDate(pSemesterId, examDate);
     Map<Integer, List<Student>> subGroupNumberWithStudentsMap = new HashMap<>();
@@ -649,8 +649,7 @@ public class SeatPlanServiceImpl implements SeatPlanService {
     return subGroupNumberWithStudentsMap;
   }
 
-  Map<String, List<Student>> initiateStudentsForCCIBasedOnExamDate(int pSemester, String pExamDate)
-      throws Exception {
+  Map<String, List<Student>> initiateStudentsForCCIBasedOnExamDate(int pSemester, String pExamDate) {
     Map<String, List<Student>> studentMap = new HashMap<>();
     List<ApplicationCCI> applicationCCIs =
         mApplicationCCIManager.getBySemesterAndExamDate(pSemester, pExamDate);
@@ -665,7 +664,7 @@ public class SeatPlanServiceImpl implements SeatPlanService {
   }
 
   Map<String, List<Student>> initiateStudentsBasedOnProgramYearSemesterStatus(int pGroupNo,
-      int pSemesterId, int pExamType) throws Exception {
+      int pSemesterId, int pExamType) {
 
     Map<String, List<Student>> studentInfoMap = new HashMap<>();
 

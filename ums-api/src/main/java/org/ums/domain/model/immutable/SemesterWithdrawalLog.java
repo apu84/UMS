@@ -10,9 +10,9 @@ import java.sql.Timestamp;
 
 public interface SemesterWithdrawalLog extends Serializable, LastModifier,
     EditType<MutableSemesterWithdrawalLog>, Identifier<Integer> {
-  public SemesterWithdrawal getSemesterWithdrawal() throws Exception;
+  public SemesterWithdrawal getSemesterWithdrawal();
 
-  public String getEmployeeId() throws Exception;
+  public String getEmployeeId();
 
   public String getEventDateTime();
 

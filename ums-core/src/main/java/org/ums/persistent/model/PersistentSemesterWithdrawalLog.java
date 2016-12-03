@@ -47,7 +47,7 @@ public class PersistentSemesterWithdrawalLog implements MutableSemesterWithdrawa
   }
 
   public PersistentSemesterWithdrawalLog(
-      final PersistentSemesterWithdrawalLog pPersistentSemesterWithdrawalLog) throws Exception {
+      final PersistentSemesterWithdrawalLog pPersistentSemesterWithdrawalLog) {
     mId = pPersistentSemesterWithdrawalLog.getId();
 
     mSemesterWithdrawal = pPersistentSemesterWithdrawalLog.getSemesterWithdrawal();
@@ -93,7 +93,7 @@ public class PersistentSemesterWithdrawalLog implements MutableSemesterWithdrawa
   }
 
   @Override
-  public SemesterWithdrawal getSemesterWithdrawal() throws Exception {
+  public SemesterWithdrawal getSemesterWithdrawal() {
     return mSemesterWithdrawal == null ? sSemesterWithdrawalManager.get(mSemesterWithdrawalId)
         : sSemesterWithdrawalManager.validate(mSemesterWithdrawal);
   }
@@ -104,7 +104,7 @@ public class PersistentSemesterWithdrawalLog implements MutableSemesterWithdrawa
   }
 
   @Override
-  public void commit(boolean update) throws Exception {
+  public void commit(boolean update) {
     if(update) {
       sSemesterWithdrawalLogManager.update(this);
     }
@@ -114,7 +114,7 @@ public class PersistentSemesterWithdrawalLog implements MutableSemesterWithdrawa
   }
 
   @Override
-  public void delete() throws Exception {
+  public void delete() {
     sSemesterWithdrawalLogManager.delete(this);
   }
 
@@ -144,7 +144,7 @@ public class PersistentSemesterWithdrawalLog implements MutableSemesterWithdrawa
   }
 
   @Override
-  public MutableSemesterWithdrawalLog edit() throws Exception {
+  public MutableSemesterWithdrawalLog edit() {
     return new PersistentSemesterWithdrawalLog(this);
   }
 

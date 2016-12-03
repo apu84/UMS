@@ -19,7 +19,7 @@ public class MutableSeatPlanResource extends Resource {
   SeatPlanResourceHelper mSeatPlanResourceHelper;
 
   @POST
-  public Response createOrViewSeatPlan(final JsonObject pJsonObject) throws Exception {
+  public Response createOrViewSeatPlan(final JsonObject pJsonObject) {
     return mSeatPlanResourceHelper.post(pJsonObject, mUriInfo);
   }
 

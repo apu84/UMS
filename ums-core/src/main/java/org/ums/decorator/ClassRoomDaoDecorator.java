@@ -13,22 +13,22 @@ public class ClassRoomDaoDecorator extends
     ContentDaoDecorator<ClassRoom, MutableClassRoom, Integer, ClassRoomManager> implements
     ClassRoomManager {
   @Override
-  public List<ClassRoom> getRoomList() throws Exception {
+  public List<ClassRoom> getRoomList() {
     return getManager().getRoomList();
   }
 
   @Override
-  public ClassRoom getByRoomNo(String pRoomNo) throws Exception {
+  public ClassRoom getByRoomNo(String pRoomNo) {
     return getManager().getByRoomNo(pRoomNo);
   }
 
   @Override
-  public List<ClassRoom> getSeatPlanRooms(Integer pSemesterId, Integer pExamType) throws Exception {
+  public List<ClassRoom> getSeatPlanRooms(Integer pSemesterId, Integer pExamType) {
     return getManager().getSeatPlanRooms(pSemesterId, pExamType);
   }
 
   @Override
-  public List<ClassRoom> getRoomsBasedOnRoutine(int pSemesterId, int pProgramId) throws Exception {
+  public List<ClassRoom> getRoomsBasedOnRoutine(int pSemesterId, int pProgramId) {
     return getManager().getRoomsBasedOnRoutine(pSemesterId, pProgramId);
   }
 }

@@ -27,7 +27,7 @@ public class StudentCache extends ContentCache<Student, MutableStudent, String, 
   }
 
   @Override
-  public List<Student> getStudentListFromStudentsString(String pStudents) throws Exception {
+  public List<Student> getStudentListFromStudentsString(String pStudents) {
     return getManager().getStudentListFromStudentsString(pStudents);
   }
 
@@ -48,7 +48,7 @@ public class StudentCache extends ContentCache<Student, MutableStudent, String, 
   }
 
   @Override
-  public int updateStudentsAdviser(List<MutableStudent> pStudents) throws Exception {
+  public int updateStudentsAdviser(List<MutableStudent> pStudents) {
     return getManager().updateStudentsAdviser(pStudents);
   }
 

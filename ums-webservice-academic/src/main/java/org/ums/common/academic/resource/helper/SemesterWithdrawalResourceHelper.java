@@ -34,7 +34,7 @@ public class SemesterWithdrawalResourceHelper extends
   SemesterWithdrawalBuilder mBuilder;
 
   @Override
-  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) {
     MutableSemesterWithdrawal mutableSemesterWithdrawal = new PersistentSemesterWithdrawal();
     LocalCache localCache = new LocalCache();
     getBuilder().build(mutableSemesterWithdrawal, pJsonObject, localCache);
@@ -48,7 +48,7 @@ public class SemesterWithdrawalResourceHelper extends
   }
 
   public JsonObject getStudentRecord(final int semesterId, final int year,
-      final int academicSemester, Request pRequest, final UriInfo pUriInfo) throws Exception {
+      final int academicSemester, Request pRequest, final UriInfo pUriInfo) {
     String mStudentId = SecurityUtils.getSubject().getPrincipal().toString();
     SemesterWithdrawal semesterWithdrawal =
         getContentManager().getStudentsRecord(mStudentId, semesterId, year, academicSemester);
@@ -63,7 +63,7 @@ public class SemesterWithdrawalResourceHelper extends
   }
 
   public JsonObject getRoutineByDeptForEmployee(final String deptId, final Request pRequest,
-      final UriInfo pUriInfo) throws Exception {
+      final UriInfo pUriInfo) {
     List<SemesterWithdrawal> semesterWithdrawals = getContentManager().getByDeptForEmployee(deptId);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();

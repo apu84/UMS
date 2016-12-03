@@ -14,7 +14,7 @@ import javax.ws.rs.core.UriInfo;
 public class DepartmentBuilder implements Builder<Department, MutableDepartment> {
   @Override
   public void build(JsonObjectBuilder pBuilder, Department pReadOnly, UriInfo pUriInfo,
-      final LocalCache pLocalCache) throws Exception {
+      final LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("shortName", pReadOnly.getShortName());
     pBuilder.add("longName", pReadOnly.getLongName());
@@ -26,8 +26,7 @@ public class DepartmentBuilder implements Builder<Department, MutableDepartment>
   }
 
   @Override
-  public void build(MutableDepartment pMutable, JsonObject pJsonObject, final LocalCache pLocalCache)
-      throws Exception {
+  public void build(MutableDepartment pMutable, JsonObject pJsonObject, final LocalCache pLocalCache) {
     // Do nothing
   }
 }

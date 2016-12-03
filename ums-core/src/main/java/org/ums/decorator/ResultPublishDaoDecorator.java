@@ -8,7 +8,7 @@ public class ResultPublishDaoDecorator extends
     ContentDaoDecorator<ResultPublish, MutableResultPublish, Integer, ResultPublishManager>
     implements ResultPublishManager {
   @Override
-  public void publishResult(Integer programId, Integer semesterId) throws Exception {
+  public void publishResult(Integer programId, Integer semesterId) {
     getManager().publishResult(programId, semesterId);
   }
 

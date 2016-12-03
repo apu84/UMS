@@ -60,8 +60,8 @@ public class PasswordReportGenerator extends AbstractReportGenerator {
   }
 
   /*
-   * public Map<String, Object> getReportParameters(Object... pParameter) throws Exception { final
-   * Map<String, Object> parameters = new HashMap<>(); if (pParameter.length > 0) { User user =
+   * public Map<String, Object> getReportParameters(Object... pParameter) { final Map<String,
+   * Object> parameters = new HashMap<>(); if (pParameter.length > 0) { User user =
    * mUserManager.get(pParameter[0].toString()); parameters.put("user id", user.getId());
    * parameters.put("credential", String.valueOf(user.getTemporaryPassword()));
    * 

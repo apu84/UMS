@@ -1,16 +1,16 @@
 package org.ums.persistent.dao;
 
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.ums.persistent.model.PersistentProgramType;
-import org.ums.decorator.ProgramTypeDaoDecorator;
-import org.ums.domain.model.mutable.MutableProgramType;
-import org.ums.domain.model.immutable.ProgramType;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.ums.decorator.ProgramTypeDaoDecorator;
+import org.ums.domain.model.immutable.ProgramType;
+import org.ums.domain.model.mutable.MutableProgramType;
+import org.ums.persistent.model.PersistentProgramType;
 
 public class PersistentProgramTypeDao extends ProgramTypeDaoDecorator {
   static String SELECT_ALL = "SELECT TYPE_ID, TYPE_NAME FROM MST_PROGRAM_TYPE ";
@@ -24,38 +24,42 @@ public class PersistentProgramTypeDao extends ProgramTypeDaoDecorator {
     mJdbcTemplate = pJdbcTemplate;
   }
 
-  public ProgramType get(final Integer pId) throws Exception {
+  public ProgramType get(final Integer pId) {
     String query = SELECT_ALL + "WHERE TYPE_ID = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new ProgramTypeRowMapper());
   }
 
-  public List<ProgramType> getAll() throws Exception {
+  public List<ProgramType> getAll() {
     String query = SELECT_ALL;
     return mJdbcTemplate.query(query, new ProgramTypeRowMapper());
   }
 
-  public int update(final MutableProgramType pProgramType) throws Exception {
+  public int update(final MutableProgramType pProgramType) {
     String query = UPDATE_ONE + "WHERE TYPE_ID = ?";
     return mJdbcTemplate.update(query, pProgramType.getName(), pProgramType.getId());
   }
 
-  public int delete(final MutableProgramType pProgramType) throws Exception {
+  public int delete(final MutableProgramType pProgramType) {
     String query = DELETE_ONE + "WHERE TYPE_ID = ?";
     return mJdbcTemplate.update(query, pProgramType.getId());
   }
 
-  public int create(final MutableProgramType pProgramType) throws Exception {
+  public int create(final MutableProgramType pProgramType) {
     return mJdbcTemplate.update(INSERT_ONE, pProgramType.getId(), pProgramType.getName());
   }
 
   class ProgramTypeRowMapper implements RowMapper<ProgramType> {
     @Override
-    public ProgramType mapRow(ResultSet resultSet, int i) throws SQLException {
-      PersistentProgramType programType = new PersistentProgramType();
-      programType.setId(resultSet.getInt("TYPE_ID"));
-      programType.setName(resultSet.getString("TYPE_NAME"));
-      AtomicReference<ProgramType> atomicReference = new AtomicReference<>(programType);
-      return atomicReference.get();
+    public ProgramType mapRow(ResultSet resultSet, int i) {
+      try {
+        PersistentProgramType programType = new PersistentProgramType();
+        programType.setId(resultSet.getInt("TYPE_ID"));
+        programType.setName(resultSet.getString("TYPE_NAME"));
+        AtomicReference<ProgramType> atomicReference = new AtomicReference<>(programType);
+        return atomicReference.get();
+      } catch(SQLException sqlE) {
+        throw new RuntimeException(sqlE);
+      }
     }
   }
 }

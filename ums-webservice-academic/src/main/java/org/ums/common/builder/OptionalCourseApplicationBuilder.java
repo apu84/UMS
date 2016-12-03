@@ -15,8 +15,7 @@ import java.util.List;
 @Component
 public class OptionalCourseApplicationBuilder {
 
-  public void build(List<Course> pCourseList, JsonObject pJsonObject, String courseType)
-      throws Exception {
+  public void build(List<Course> pCourseList, JsonObject pJsonObject, String courseType) {
 
     JsonArray entries = pJsonObject.getJsonArray(courseType);
     MutableCourse course;
@@ -29,8 +28,7 @@ public class OptionalCourseApplicationBuilder {
     }
   }
 
-  public void buildStudent(List<String> pStudentId, JsonObject pJsonObject, String operationType)
-      throws Exception {
+  public void buildStudent(List<String> pStudentId, JsonObject pJsonObject, String operationType) {
     JsonArray entries = pJsonObject.getJsonArray(operationType);
     String studentId = "";
     for(int i = 0; i < entries.size(); i++) {
@@ -44,8 +42,7 @@ public class OptionalCourseApplicationBuilder {
     }
   }
 
-  public void buildCourseId(StringBuilder pCourseId, JsonObject pJsonObject, String operationType)
-      throws Exception {
+  public void buildCourseId(StringBuilder pCourseId, JsonObject pJsonObject, String operationType) {
     JsonArray entries = pJsonObject.getJsonArray(operationType);
     for(int i = 0; i < entries.size(); i++) {
       JsonObject jsonObject = entries.getJsonObject(i);
@@ -53,7 +50,7 @@ public class OptionalCourseApplicationBuilder {
     }
   }
 
-  public void buildCourseId(List<String> pCourseList, JsonObject pJsonObject) throws Exception {
+  public void buildCourseId(List<String> pCourseList, JsonObject pJsonObject) {
     JsonArray entries = pJsonObject.getJsonArray("courseList");
     for(int i = 0; i < entries.size(); i++) {
       JsonObject jsonObject = entries.getJsonObject(i);

@@ -45,7 +45,7 @@ public class PersistentResultPublish implements MutableResultPublish {
   }
 
   @Override
-  public void commit(boolean update) throws Exception {
+  public void commit(boolean update) {
     if(update) {
       sResultPublishManager.update(this);
     }
@@ -55,7 +55,7 @@ public class PersistentResultPublish implements MutableResultPublish {
   }
 
   @Override
-  public MutableResultPublish edit() throws Exception {
+  public MutableResultPublish edit() {
     return new PersistentResultPublish(this);
   }
 
@@ -80,7 +80,7 @@ public class PersistentResultPublish implements MutableResultPublish {
   }
 
   @Override
-  public void delete() throws Exception {
+  public void delete() {
     sResultPublishManager.delete(this);
   }
 
@@ -95,7 +95,7 @@ public class PersistentResultPublish implements MutableResultPublish {
   }
 
   @Override
-  public Semester getSemester() throws Exception {
+  public Semester getSemester() {
     return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
         .validate(mSemester);
   }
@@ -116,7 +116,7 @@ public class PersistentResultPublish implements MutableResultPublish {
   }
 
   @Override
-  public Program getProgram() throws Exception {
+  public Program getProgram() {
     return mProgram == null ? sProgramManager.get(mProgramId) : sProgramManager.validate(mProgram);
   }
 

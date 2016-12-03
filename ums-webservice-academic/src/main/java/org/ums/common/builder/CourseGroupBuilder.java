@@ -21,7 +21,7 @@ public class CourseGroupBuilder implements Builder<CourseGroup, MutableCourseGro
 
   @Override
   public void build(JsonObjectBuilder pBuilder, CourseGroup pReadOnly,
-                    UriInfo pUriInfo, final LocalCache pLocalCache) throws Exception {
+                    UriInfo pUriInfo, final LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("name", pReadOnly.getName());
     Syllabus syllabus = (Syllabus) pLocalCache.cache(() -> pReadOnly.getSyllabus(),
@@ -34,7 +34,7 @@ public class CourseGroupBuilder implements Builder<CourseGroup, MutableCourseGro
 
   @Override
   public void build(MutableCourseGroup pMutable, JsonObject pJsonObject,
-      final LocalCache pLocalCache) throws Exception {
+      final LocalCache pLocalCache) {
     pMutable.setId(pJsonObject.getInt("id"));
     pMutable.setName(pJsonObject.getString("name"));
     pMutable.setSyllabus(mSemesterManager.get(pJsonObject.getString("syllabus")));

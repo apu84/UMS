@@ -61,7 +61,7 @@ public class GradeSubmissionResourceHelper extends
   private MarksSubmissionStatusManager mMarksSubmissionStatusManager;
 
   @Override
-  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) {
     throw new NotImplementedException(
         "Post method is not implemented for GradeSubmissionResourceHelper");
   }
@@ -82,7 +82,7 @@ public class GradeSubmissionResourceHelper extends
   }
 
   public JsonObject getGradeList(final String pRequestedRoleId, final Integer pSemesterId,
-      final String pCourseId, final ExamType pExamType) throws Exception {
+      final String pCourseId, final ExamType pExamType) {
 
     MarksSubmissionStatusDto marksSubmissionStatusDto =
         getContentManager().getMarksSubmissionStatus(pSemesterId, pCourseId, pExamType);
@@ -110,7 +110,7 @@ public class GradeSubmissionResourceHelper extends
 
   public JsonObject getGradeSubmissionStatus(final Integer pSemesterId, final Integer pExamType,
       final Integer pProgramId, final Integer pYearSemester, final String deptId,
-      final String pUserRole, final int pStatus) throws Exception {
+      final String pUserRole, final int pStatus) {
     User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
     Integer year = 0;
     Integer semester = 0;
@@ -139,7 +139,7 @@ public class GradeSubmissionResourceHelper extends
 
   // This method will only be used by Grade Sheet Preparer during saving or submitting grades.
   @Transactional(rollbackFor = Exception.class)
-  public Response saveGradeSheet(final JsonObject pJsonObject) throws Exception {
+  public Response saveGradeSheet(final JsonObject pJsonObject) {
     List<StudentGradeDto> gradeList = getBuilder().build(pJsonObject);
     MarksSubmissionStatusDto requestedStatusDTO = new MarksSubmissionStatusDto();
     getBuilder().build(requestedStatusDTO, pJsonObject);
@@ -206,7 +206,7 @@ public class GradeSubmissionResourceHelper extends
   }
 
   @Transactional(rollbackFor = Exception.class)
-  public Response updateGradeStatus(final JsonObject pJsonObject) throws Exception {
+  public Response updateGradeStatus(final JsonObject pJsonObject) {
 
     String action = pJsonObject.getString("action");
     String userRole = pJsonObject.getString("role");
@@ -289,7 +289,7 @@ public class GradeSubmissionResourceHelper extends
   }
 
   @Transactional(rollbackFor = Exception.class)
-  public Response recheckRequestApprove(final JsonObject pJsonObject) throws Exception {
+  public Response recheckRequestApprove(final JsonObject pJsonObject) {
 
     String action = pJsonObject.getString("action");
     String userRole = pJsonObject.getString("role");
@@ -346,7 +346,7 @@ public class GradeSubmissionResourceHelper extends
   }
 
   public JsonObject getChartData(final Integer pSemesterId, final String pCourseId,
-      final Integer pExamType, final Integer courseType) throws Exception {
+      final Integer pExamType, final Integer courseType) {
 
     User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
     List<GradeChartDataDto> examGradeStatusList =
@@ -371,7 +371,7 @@ public class GradeSubmissionResourceHelper extends
   }
 
   public JsonObject getGradeSubmissionDeadline(final Integer pSemesterId, final ExamType pExamType,
-      final String pExamDate, final UriInfo pUriInfo) throws Exception {
+      final String pExamDate, final UriInfo pUriInfo) {
 
     List<MarksSubmissionStatusDto> marksSubmissionStatusDtoList = new ArrayList<>();
     int size = getContentManager().checkSize(pSemesterId, pExamType, pExamDate);
@@ -423,8 +423,7 @@ public class GradeSubmissionResourceHelper extends
     return object.build();
   }
 
-  public Response updateGradeSubmissionDeadLine(JsonObject pJsonObject, UriInfo pUriInfo)
-      throws Exception {
+  public Response updateGradeSubmissionDeadLine(JsonObject pJsonObject, UriInfo pUriInfo) {
 
     JsonArray entries = pJsonObject.getJsonArray("entries");
     List<MutableMarksSubmissionStatus> deadlineList = new ArrayList<>();
@@ -463,7 +462,7 @@ public class GradeSubmissionResourceHelper extends
 
   // Get Course-wise marks submission status log
   public JsonObject getMarksSubmissionLogs(final Integer pSemesterId, final String pCourseId,
-      final Integer pExamType) throws Exception {
+      final Integer pExamType) {
 
     List<MarksSubmissionStatusLogDto> logList =
         getContentManager().getMarksSubmissionLogs(pSemesterId, pCourseId, pExamType);
@@ -484,7 +483,7 @@ public class GradeSubmissionResourceHelper extends
 
   // Get Student-wise log for Grade Submission
   public JsonObject getMarksLogs(final Integer pSemesterId, final String pCourseId,
-      final ExamType pExamType, final String pStudentId) throws Exception {
+      final ExamType pExamType, final String pStudentId) {
     MarksSubmissionStatus marksSubmissionStatus =
         mMarksSubmissionStatusManager.get(pSemesterId, pCourseId, pExamType);
 

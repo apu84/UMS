@@ -1,17 +1,18 @@
 package org.ums.manager;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
 public interface BinaryContentManager<T> {
 
-  T get(final String pId, Domain pDomain) throws Exception;
+  T get(final String pId, Domain pDomain) throws IOException;
 
-  void put(T pData, String pId, Domain pDomain) throws Exception;
+  void put(T pData, String pId, Domain pDomain) throws IOException;
 
-  void delete(String pId, Domain pDomain) throws Exception;
+  void delete(String pId, Domain pDomain) throws IOException;
 
-  String create(T pData, String pIdentifier, Domain pDomain) throws Exception;
+  String create(T pData, String pIdentifier, Domain pDomain) throws IOException;
 
   enum Domain {
     PICTURE(1),

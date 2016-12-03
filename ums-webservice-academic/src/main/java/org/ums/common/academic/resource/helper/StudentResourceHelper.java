@@ -1,10 +1,20 @@
 package org.ums.common.academic.resource.helper;
 
-import org.apache.commons.jexl2.UnifiedJEXL;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.json.*;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
+
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.apache.shiro.web.filter.AccessControlFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -25,16 +35,6 @@ import org.ums.persistent.model.PersistentStudentRecord;
 import org.ums.persistent.model.PersistentUser;
 import org.ums.resource.ResourceHelper;
 import org.ums.util.UmsUtils;
-
-import javax.json.*;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 @Qualifier("StudentResourceHelper")
@@ -96,9 +96,12 @@ public class StudentResourceHelper extends ResourceHelper<Student, MutableStuden
     String encodingPrefix = "base64,", data = pJsonObject.getString("imageData");
     int contentStartIndex = data.indexOf(encodingPrefix) + encodingPrefix.length();
     byte[] imageData = Base64.getDecoder().decode(data.substring(contentStartIndex));
-
-    mBinaryContentManager.create(imageData, pJsonObject.getString("id"),
-        BinaryContentManager.Domain.PICTURE);
+    try {
+      mBinaryContentManager.create(imageData, pJsonObject.getString("id"),
+          BinaryContentManager.Domain.PICTURE);
+    } catch(IOException ie) {
+      throw new UncheckedIOException(ie);
+    }
     URI contextURI =
         pUriInfo.getBaseUriBuilder().path(StudentResource.class).path(StudentResource.class, "get")
             .build(mutableStudent.getId());
@@ -108,7 +111,7 @@ public class StudentResourceHelper extends ResourceHelper<Student, MutableStuden
     return builder.build();
   }
 
-  public JsonObject getStudentInfoById(final UriInfo pUriInfo) throws Exception {
+  public JsonObject getStudentInfoById(final UriInfo pUriInfo) {
     String mStudentId = SecurityUtils.getSubject().getPrincipal().toString();
     Student student = getContentManager().get(mStudentId);
     JsonObjectBuilder object = Json.createObjectBuilder();
@@ -120,21 +123,17 @@ public class StudentResourceHelper extends ResourceHelper<Student, MutableStuden
     return object.build();
   }
 
-  public JsonObject getActiveStudentsByDepartment(final UriInfo pUriInfo) throws Exception{
+  public JsonObject getActiveStudentsByDepartment(final UriInfo pUriInfo) {
     Employee employee = getLoggedEmployee();
     String deptId = employee.getDepartment().getId();
-    List<Student> students = getContentManager()
-        .getActiveStudents()
-        .stream()
+    List<Student> students = getContentManager().getActiveStudents().stream()
         .sorted(Comparator.comparing(Student::getId))
-        .filter(s-> s.getDepartmentId().equals(deptId))
-        .collect(Collectors.toList());
+        .filter(s -> s.getDepartmentId().equals(deptId)).collect(Collectors.toList());
 
-    return studentJsonCreator(students,pUriInfo);
+    return studentJsonCreator(students, pUriInfo);
   }
 
-  public JsonObject getActiveStudentsByAdviser(final String pTeacherId, final UriInfo pUriInfo)
-      throws Exception {
+  public JsonObject getActiveStudentsByAdviser(final String pTeacherId, final UriInfo pUriInfo) {
     List<Student> students = getContentManager().getActiveStudentsByAdviser(pTeacherId);
 
     return studentJsonCreator(students, pUriInfo);
@@ -142,7 +141,7 @@ public class StudentResourceHelper extends ResourceHelper<Student, MutableStuden
 
   // // TODO: 09-Oct-16 Grant access via accessControl.
   // @RequiresPermissions("assign:adviser")
-  public Response modifyStudentAdviser(JsonObject pJsonObject) throws Exception {
+  public Response modifyStudentAdviser(JsonObject pJsonObject) {
     User user = getLoggedUser();
     LocalCache localCache = new LocalCache();
     JsonArray entries = pJsonObject.getJsonArray("entries");
@@ -160,7 +159,7 @@ public class StudentResourceHelper extends ResourceHelper<Student, MutableStuden
     return Response.noContent().build();
   }
 
-  private JsonObject studentJsonCreator(List<Student> students, UriInfo pUriInfo) throws Exception {
+  private JsonObject studentJsonCreator(List<Student> students, UriInfo pUriInfo) {
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
@@ -173,13 +172,13 @@ public class StudentResourceHelper extends ResourceHelper<Student, MutableStuden
     return object.build();
   }
 
-  private Employee getLoggedEmployee() throws Exception {
+  private Employee getLoggedEmployee() {
     User user = getLoggedUser();
     Employee employee = mEmployeeManager.getByEmployeeId(user.getEmployeeId());
     return employee;
   }
 
-  private User getLoggedUser() throws Exception {
+  private User getLoggedUser() {
     String userId = SecurityUtils.getSubject().getPrincipal().toString();
     User user = mUserManager.get(userId);
     return user;

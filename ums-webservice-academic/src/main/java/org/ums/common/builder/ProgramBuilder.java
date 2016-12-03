@@ -15,7 +15,7 @@ import javax.ws.rs.core.UriInfo;
 @Component
 public class ProgramBuilder implements Builder<Program, MutableProgram> {
   @Override
-  public void build(JsonObjectBuilder pBuilder, Program pReadOnly, UriInfo pUriInfo, final LocalCache pLocalCache) throws Exception {
+  public void build(JsonObjectBuilder pBuilder, Program pReadOnly, UriInfo pUriInfo, final LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("shortName", pReadOnly.getShortName());
     pBuilder.add("longName", pReadOnly.getLongName());
@@ -35,8 +35,7 @@ public class ProgramBuilder implements Builder<Program, MutableProgram> {
   }
 
   @Override
-  public void build(MutableProgram pMutable, JsonObject pJsonObject, final LocalCache pLocalCache)
-      throws Exception {
+  public void build(MutableProgram pMutable, JsonObject pJsonObject, final LocalCache pLocalCache) {
     // Do nothing
   }
 }

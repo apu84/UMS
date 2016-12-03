@@ -53,7 +53,7 @@ public class PersistentCourse implements MutableCourse {
 
   }
 
-  public PersistentCourse(final PersistentCourse pPersistentCourse) throws Exception {
+  public PersistentCourse(final PersistentCourse pPersistentCourse) {
     mId = pPersistentCourse.getId();
     mNo = pPersistentCourse.getNo();
     mTitle = pPersistentCourse.getTitle();
@@ -109,13 +109,13 @@ public class PersistentCourse implements MutableCourse {
   }
 
   @Override
-  public Department getOfferedBy() throws Exception {
+  public Department getOfferedBy() {
     return mOfferedBy == null && !StringUtils.isEmpty(mDepartmentId) ? sDepartmentManager
         .get(mDepartmentId) : mOfferedBy;
   }
 
   @Override
-  public Department getOfferedTo() throws Exception {
+  public Department getOfferedTo() {
     return mOfferedTo == null && !StringUtils.isEmpty(mSyllabusId) ? sSyllabusManager
         .get(mSyllabusId).getProgram().getDepartment() : mOfferedTo;
   }
@@ -161,7 +161,7 @@ public class PersistentCourse implements MutableCourse {
   }
 
   @Override
-  public CourseGroup getCourseGroup(final String pSyllabusId) throws Exception {
+  public CourseGroup getCourseGroup(final String pSyllabusId) {
     return mCourseGroup == null && mCourseGroupId > 0 ? sCourseGroupManager.getBySyllabus(
         mCourseGroupId, pSyllabusId) : sCourseGroupManager.validate(mCourseGroup);
   }
@@ -172,7 +172,7 @@ public class PersistentCourse implements MutableCourse {
   }
 
   @Override
-  public Syllabus getSyllabus() throws Exception {
+  public Syllabus getSyllabus() {
     return mSyllabus == null ? sSyllabusManager.get(mSyllabusId) : sSyllabusManager
         .validate(mSyllabus);
   }
@@ -203,7 +203,7 @@ public class PersistentCourse implements MutableCourse {
   }
 
   @Override
-  public MutableCourse edit() throws Exception {
+  public MutableCourse edit() {
     return new PersistentCourse(this);
   }
 
@@ -263,7 +263,7 @@ public class PersistentCourse implements MutableCourse {
   }
 
   @Override
-  public void commit(boolean update) throws Exception {
+  public void commit(boolean update) {
     if(update) {
       sCourseManager.update(this);
     }
@@ -273,7 +273,7 @@ public class PersistentCourse implements MutableCourse {
   }
 
   @Override
-  public void delete() throws Exception {
+  public void delete() {
     sCourseManager.delete(this);
   }
 }

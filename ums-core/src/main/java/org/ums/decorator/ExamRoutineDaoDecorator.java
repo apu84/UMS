@@ -11,7 +11,7 @@ public class ExamRoutineDaoDecorator extends
     ContentDaoDecorator<ExamRoutine, MutableExamRoutine, Object, ExamRoutineManager> implements
     ExamRoutineManager {
   @Override
-  public List<ExamRoutineDto> getExamRoutine(int semesterId, int examTypeId) throws Exception {
+  public List<ExamRoutineDto> getExamRoutine(int semesterId, int examTypeId) {
     return getManager().getExamRoutine(semesterId, examTypeId);
   }
 

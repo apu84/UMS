@@ -33,7 +33,7 @@ public class PersistentClassRoom implements MutableClassRoom {
 
   public PersistentClassRoom() {}
 
-  public PersistentClassRoom(final PersistentClassRoom pOriginal) throws Exception {
+  public PersistentClassRoom(final PersistentClassRoom pOriginal) {
     mId = pOriginal.getId();
     mRoomNo = pOriginal.getRoomNo();
     mDescription = pOriginal.getDescription();
@@ -137,7 +137,7 @@ public class PersistentClassRoom implements MutableClassRoom {
   }
 
   @Override
-  public Department getDept() throws Exception {
+  public Department getDept() {
     return mDept == null && !StringUtils.isEmpty(mDeptId) ? sDepartmentManager.get(mDeptId) : mDept;
   }
 
@@ -156,11 +156,11 @@ public class PersistentClassRoom implements MutableClassRoom {
     mLastModified = pLastModified;
   }
 
-  public void delete() throws Exception {
+  public void delete() {
     sClassRoomManager.delete(this);
   }
 
-  public void commit(final boolean update) throws Exception {
+  public void commit(final boolean update) {
     if(update) {
       sClassRoomManager.update(this);
     }
@@ -169,7 +169,7 @@ public class PersistentClassRoom implements MutableClassRoom {
     }
   }
 
-  public MutableClassRoom edit() throws Exception {
+  public MutableClassRoom edit() {
     return new PersistentClassRoom(this);
   }
 }

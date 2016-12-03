@@ -15,7 +15,7 @@ import javax.ws.rs.core.UriInfo;
 public class ApplicationCCIBuilder implements Builder<ApplicationCCI, MutableApplicationCCI> {
   @Override
   public void build(JsonObjectBuilder pBuilder, ApplicationCCI pReadOnly, UriInfo pUriInfo,
-      LocalCache pLocalCache) throws Exception {
+      LocalCache pLocalCache) {
     if(pReadOnly.getId() != null)
       pBuilder.add("id", pReadOnly.getId());
     if(pReadOnly.getSemesterId() != null)
@@ -58,8 +58,7 @@ public class ApplicationCCIBuilder implements Builder<ApplicationCCI, MutableApp
   }
 
   @Override
-  public void build(MutableApplicationCCI pMutable, JsonObject pJsonObject, LocalCache pLocalCache)
-      throws Exception {
+  public void build(MutableApplicationCCI pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
     pMutable.setSemesterId(pJsonObject.getInt("semesterId"));
     pMutable.setStudentId(pJsonObject.getString("studentId"));
     pMutable.setCourseId(pJsonObject.getString("courseId"));

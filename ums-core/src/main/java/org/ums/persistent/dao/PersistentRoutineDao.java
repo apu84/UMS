@@ -54,17 +54,17 @@ public class PersistentRoutineDao extends RoutineDaoDecorator {
     mJdbcTemplate = pJdbcTemplate;
   }
 
-  public Routine get(final String pId) throws Exception {
+  public Routine get(final String pId) {
     String query = SELECT_ALL + " WHERE ROUTINE_ID = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new RoutineRowMapper());
   }
 
-  public List<Routine> getAll() throws Exception {
+  public List<Routine> getAll() {
     String query = SELECT_ALL + ORDER_BY;
     return mJdbcTemplate.query(query, new RoutineRowMapper());
   }
 
-  public int update(final MutableRoutine pMutableRoutine) throws Exception {
+  public int update(final MutableRoutine pMutableRoutine) {
     String query = UPDATE_ONE + " WHERE ROUTINE_ID=?";
     return mJdbcTemplate.update(query, pMutableRoutine.getSemester().getId(), pMutableRoutine
         .getProgram().getId(), pMutableRoutine.getCourseId(), pMutableRoutine.getDay(),
@@ -74,7 +74,7 @@ public class PersistentRoutineDao extends RoutineDaoDecorator {
   }
 
   @Override
-  public int create(final MutableRoutine pMutable) throws Exception {
+  public int create(final MutableRoutine pMutable) {
     return mJdbcTemplate.update(INSERT_ONE, pMutable.getSemester().getId(), pMutable.getProgram()
         .getId(), pMutable.getCourseId(), pMutable.getDay(), pMutable.getSection(), pMutable
         .getAcademicYear(), pMutable.getAcademicSemester(), pMutable.getStartTime(), pMutable
@@ -127,30 +127,30 @@ public class PersistentRoutineDao extends RoutineDaoDecorator {
   }
 
   @Override
-  public int delete(final MutableRoutine pMutable) throws Exception {
+  public int delete(final MutableRoutine pMutable) {
     String query = DELETE_ONE + " WHERE ROUTINE_ID=?";
     return mJdbcTemplate.update(query, pMutable.getId());
   }
 
   @Override
-  public int update(List<MutableRoutine> pMutableList) throws Exception {
+  public int update(List<MutableRoutine> pMutableList) {
     String update = UPDATE_ONE + " where routine_id=?";
     return mJdbcTemplate.batchUpdate(update, getUpdateParamList(pMutableList)).length;
   }
 
   @Override
-  public int delete(List<MutableRoutine> pMutableList) throws Exception {
+  public int delete(List<MutableRoutine> pMutableList) {
     String query = DELETE_ONE + " where routine_id=?";
     return mJdbcTemplate.batchUpdate(query, getDeleteParamList(pMutableList)).length;
   }
 
   @Override
-  public int create(List<MutableRoutine> pMutableList) throws Exception {
+  public int create(List<MutableRoutine> pMutableList) {
     String query = INSERT_ONE;
     return mJdbcTemplate.batchUpdate(query, getInsertParamList(pMutableList)).length;
   }
 
-  private List<Object[]> getInsertParamList(List<MutableRoutine> pRoutines) throws Exception {
+  private List<Object[]> getInsertParamList(List<MutableRoutine> pRoutines) {
     List<Object[]> params = new ArrayList<>();
 
     for(Routine routine : pRoutines) {
@@ -163,7 +163,7 @@ public class PersistentRoutineDao extends RoutineDaoDecorator {
     return params;
   }
 
-  private List<Object[]> getUpdateParamList(List<MutableRoutine> pRoutines) throws Exception {
+  private List<Object[]> getUpdateParamList(List<MutableRoutine> pRoutines) {
     List<Object[]> params = new ArrayList<>();
 
     for(Routine routine : pRoutines) {
@@ -176,7 +176,7 @@ public class PersistentRoutineDao extends RoutineDaoDecorator {
     return params;
   }
 
-  private List<Object[]> getDeleteParamList(List<MutableRoutine> pRoutines) throws Exception {
+  private List<Object[]> getDeleteParamList(List<MutableRoutine> pRoutines) {
     List<Object[]> params = new ArrayList<>();
 
     for(Routine routine : pRoutines) {

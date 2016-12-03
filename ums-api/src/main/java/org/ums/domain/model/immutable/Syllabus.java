@@ -10,9 +10,9 @@ import java.io.Serializable;
 public interface Syllabus extends Serializable, EditType<MutableSyllabus>, LastModifier,
     Identifier<String> {
 
-  Semester getSemester() throws Exception;
+  Semester getSemester();
 
-  Program getProgram() throws Exception;
+  Program getProgram();
 
   int getSemesterId();
 

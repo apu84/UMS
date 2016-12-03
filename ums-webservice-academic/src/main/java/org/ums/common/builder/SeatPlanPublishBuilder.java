@@ -19,7 +19,7 @@ import javax.ws.rs.core.UriInfo;
 public class SeatPlanPublishBuilder implements Builder<SeatPlanPublish, MutableSeatPlanPublish> {
   @Override
   public void build(JsonObjectBuilder pBuilder, SeatPlanPublish pReadOnly, UriInfo pUriInfo,
-      LocalCache pLocalCache) throws Exception {
+      LocalCache pLocalCache) {
     if(pReadOnly.getId() != null)
       pBuilder.add("id", pReadOnly.getId());
     if(pReadOnly.getSemesterId() != null)
@@ -42,8 +42,7 @@ public class SeatPlanPublishBuilder implements Builder<SeatPlanPublish, MutableS
   }
 
   @Override
-  public void build(MutableSeatPlanPublish pMutable, JsonObject pJsonObject, LocalCache pLocalCache)
-      throws Exception {
+  public void build(MutableSeatPlanPublish pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
     /**
      * In database, id is auto generated type. So, firstly, when there is no data of the element or
      * item, then, there is no need to have any id, as that will be auto generated. But, for update

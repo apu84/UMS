@@ -43,8 +43,7 @@ public class StudentEnrollmentResource extends Resource {
   @GET
   @Path("/program/{program-id}/semester/{semester-id}")
   public JsonObject getSemesterList(final @Context Request pRequest,
-      final @PathParam("program-id") int pProgramId, final @PathParam("semester-id") int pSemesterId)
-      throws Exception {
+      final @PathParam("program-id") int pProgramId, final @PathParam("semester-id") int pSemesterId) {
 
     List<EnrollmentFromTo> enrollmentFromToList =
         mEnrollmentFromToManager.getEnrollmentFromTo(pProgramId);
@@ -83,8 +82,7 @@ public class StudentEnrollmentResource extends Resource {
   public GenericResponse<Map> enrollSemester(final @Context Request pRequest,
       final @PathParam("enrollment-type") int pEnrollmentType,
       final @PathParam("program-id") int pProgramId,
-      final @PathParam("semester-id") int pSemesterId, final JsonObject pJsonObject)
-      throws Exception {
+      final @PathParam("semester-id") int pSemesterId, final JsonObject pJsonObject) {
 
     GenericResponse<Map> genericResponse = null, previousResponse = null;
 
@@ -125,7 +123,7 @@ public class StudentEnrollmentResource extends Resource {
   }
 
   protected JsonObjectBuilder toJson(final EnrollmentFromTo pObject, final UriInfo pUriInfo,
-      final LocalCache pLocalCache) throws Exception {
+      final LocalCache pLocalCache) {
     JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
     mBuilder.build(jsonObjectBuilder, pObject, pUriInfo, pLocalCache);
     return jsonObjectBuilder;

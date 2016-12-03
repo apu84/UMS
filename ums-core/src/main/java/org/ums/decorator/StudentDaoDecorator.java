@@ -9,7 +9,7 @@ import java.util.List;
 public class StudentDaoDecorator extends
     ContentDaoDecorator<Student, MutableStudent, String, StudentManager> implements StudentManager {
   @Override
-  public List<Student> getStudentListFromStudentsString(String pStudents) throws Exception {
+  public List<Student> getStudentListFromStudentsString(String pStudents) {
     return getManager().getStudentListFromStudentsString(pStudents);
   }
 
@@ -30,7 +30,7 @@ public class StudentDaoDecorator extends
   }
 
   @Override
-  public int updateStudentsAdviser(List<MutableStudent> pStudents) throws Exception {
+  public int updateStudentsAdviser(List<MutableStudent> pStudents) {
     return getManager().updateStudentsAdviser(pStudents);
   }
 

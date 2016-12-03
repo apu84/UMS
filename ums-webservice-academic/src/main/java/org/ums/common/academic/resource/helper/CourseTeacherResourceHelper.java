@@ -27,7 +27,7 @@ public class CourseTeacherResourceHelper
   private CourseTeacherBuilder mBuilder;
 
   @Override
-  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) {
     modifyContent(pJsonObject);
     Response.ResponseBuilder builder = Response.ok();
     return builder.build();
@@ -48,7 +48,7 @@ public class CourseTeacherResourceHelper
     return pReadonly.getLastModified();
   }
 
-  protected void modifyContent(JsonObject pJsonObject) throws Exception {
+  protected void modifyContent(JsonObject pJsonObject) {
     LocalCache localCache = new LocalCache();
     JsonArray entries = pJsonObject.getJsonArray("entries");
 

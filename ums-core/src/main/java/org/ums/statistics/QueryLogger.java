@@ -11,5 +11,5 @@ public interface QueryLogger {
 
   void log(final String pQuery, final String pUserName, final long pExecutionTime);
 
-  void doLog() throws Exception;
+  void doLog();
 }

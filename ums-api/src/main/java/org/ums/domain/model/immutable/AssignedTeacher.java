@@ -6,11 +6,11 @@ import org.ums.domain.model.common.LastModifier;
 import java.io.Serializable;
 
 public interface AssignedTeacher extends Serializable, LastModifier, Identifier<Integer> {
-  Semester getSemester() throws Exception;
+  Semester getSemester();
 
   Integer getSemesterId();
 
-  Course getCourse() throws Exception;
+  Course getCourse();
 
   String getCourseId();
 }

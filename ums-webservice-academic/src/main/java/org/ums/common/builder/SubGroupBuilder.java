@@ -20,7 +20,7 @@ import javax.ws.rs.core.UriInfo;
 public class SubGroupBuilder implements Builder<SubGroup, MutableSubGroup> {
   @Override
   public void build(JsonObjectBuilder pBuilder, SubGroup pReadOnly, UriInfo pUriInfo,
-      LocalCache pLocalCache) throws Exception {
+      LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("semesterId", pReadOnly.getSemester().getId());
     pBuilder.add("groupNo", pReadOnly.getGroup().getGroupNo());
@@ -41,8 +41,7 @@ public class SubGroupBuilder implements Builder<SubGroup, MutableSubGroup> {
   }
 
   @Override
-  public void build(MutableSubGroup pMutable, JsonObject pJsonObject, LocalCache pLocalCache)
-      throws Exception {
+  public void build(MutableSubGroup pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
 
     PersistentSemester semester = new PersistentSemester();
     semester.setId(Integer.parseInt(pJsonObject.getString("semesterId")));

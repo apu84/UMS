@@ -29,7 +29,7 @@ public class PersistentPermission implements MutablePermission {
 
   public PersistentPermission() {}
 
-  public PersistentPermission(final PersistentPermission pPersistentPermission) throws Exception {
+  public PersistentPermission(final PersistentPermission pPersistentPermission) {
     setId(pPersistentPermission.getId());
     setRoleId(pPersistentPermission.getRoleId());
     setRole(pPersistentPermission.getRole());
@@ -60,7 +60,7 @@ public class PersistentPermission implements MutablePermission {
   }
 
   @Override
-  public void commit(boolean update) throws Exception {
+  public void commit(boolean update) {
     if(update) {
       sPermissionManager.update(this);
     }
@@ -70,7 +70,7 @@ public class PersistentPermission implements MutablePermission {
   }
 
   @Override
-  public void delete() throws Exception {
+  public void delete() {
     sPermissionManager.delete(this);
   }
 
@@ -80,7 +80,7 @@ public class PersistentPermission implements MutablePermission {
   }
 
   @Override
-  public Role getRole() throws Exception {
+  public Role getRole() {
     return mRole == null ? sRoleManager.get(mRoleId) : sRoleManager.validate(mRole);
   }
 
@@ -95,7 +95,7 @@ public class PersistentPermission implements MutablePermission {
   }
 
   @Override
-  public MutablePermission edit() throws Exception {
+  public MutablePermission edit() {
     return new PersistentPermission(this);
   }
 

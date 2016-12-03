@@ -12,11 +12,11 @@ public interface ResultPublish extends Serializable, LastModifier, Identifier<In
     EditType<MutableResultPublish> {
   Integer getSemesterId();
 
-  Semester getSemester() throws Exception;
+  Semester getSemester();
 
   Integer getProgramId();
 
-  Program getProgram() throws Exception;
+  Program getProgram();
 
   Date getPublishedDate();
 }

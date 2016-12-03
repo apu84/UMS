@@ -77,7 +77,7 @@ public class PersistentSeatPlanDao extends SeatPlanDaoDecorator {
 
   @Override
   public List<SeatPlan> getSeatPlanOrderByExamDateAndCourseAndYearAndSemesterAndStudentId(
-      Integer pSemesterId, Integer pExamType) throws Exception {
+      Integer pSemesterId, Integer pExamType) {
     String query =
         "" + "SELECT  " + "  SEAT_PLAN.ID,  " + "  SEAT_PLAN.ROOM_ID,  " + "  SEAT_PLAN.ROW_NO,  "
             + "  SEAT_PLAN.COL_NO,  " + "  SEAT_PLAN.STUDENT_ID,  " + "  SEAT_PLAN.EXAM_TYPE,  "
@@ -100,25 +100,25 @@ public class PersistentSeatPlanDao extends SeatPlanDaoDecorator {
   }
 
   @Override
-  public List<SeatPlan> getAll() throws Exception {
+  public List<SeatPlan> getAll() {
     String query = SELECT_ALL;
     return mJdbcTemplate.query(query, new SeatPlanRowMapper());
   }
 
   @Override
-  public SeatPlan get(Integer pId) throws Exception {
+  public SeatPlan get(Integer pId) {
     String query = SELECT_ALL + " WHERE ID=?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new SeatPlanRowMapper());
   }
 
   // will check if it is needed
   @Override
-  public int update(MutableSeatPlan pMutable) throws Exception {
+  public int update(MutableSeatPlan pMutable) {
     return super.update(pMutable);
   }
 
   @Override
-  public int delete(MutableSeatPlan pMutableList) throws Exception {
+  public int delete(MutableSeatPlan pMutableList) {
     String query = DELETE_ALL + " WHERE ID=?";
     return mJdbcTemplate.update(query, pMutableList.getId());
   }
@@ -139,12 +139,12 @@ public class PersistentSeatPlanDao extends SeatPlanDaoDecorator {
   }
 
   @Override
-  public int create(List<MutableSeatPlan> pMutableList) throws Exception {
+  public int create(List<MutableSeatPlan> pMutableList) {
     return mJdbcTemplate.batchUpdate(INSERT_ALL, getInsertParamList(pMutableList)).length;
   }
 
   @Override
-  public int createSeatPlanForCCI(List<MutableSeatPlan> pSeatPlans) throws Exception {
+  public int createSeatPlanForCCI(List<MutableSeatPlan> pSeatPlans) {
     return mJdbcTemplate.batchUpdate(INSERT_ALL_CCI, getInsertParamListCCI(pSeatPlans)).length;
   }
 
@@ -207,13 +207,13 @@ public class PersistentSeatPlanDao extends SeatPlanDaoDecorator {
   }
 
   @Override
-  public int create(MutableSeatPlan pMutable) throws Exception {
+  public int create(MutableSeatPlan pMutable) {
     return mJdbcTemplate.update(INSERT_ALL, pMutable.getClassRoom().getId(), pMutable.getSemester()
         .getId(), pMutable.getGroupNo(), pMutable.getStudent().getId(), pMutable.getRowNo(),
         pMutable.getColumnNo(), pMutable.getExamType());
   }
 
-  private List<Object[]> getInsertParamList(List<MutableSeatPlan> pSeatPlans) throws Exception {
+  private List<Object[]> getInsertParamList(List<MutableSeatPlan> pSeatPlans) {
     List<Object[]> params = new ArrayList<>();
 
     for(SeatPlan seatPlan : pSeatPlans) {
@@ -224,7 +224,7 @@ public class PersistentSeatPlanDao extends SeatPlanDaoDecorator {
     return params;
   }
 
-  private List<Object[]> getInsertParamListCCI(List<MutableSeatPlan> pSeatPlans) throws Exception {
+  private List<Object[]> getInsertParamListCCI(List<MutableSeatPlan> pSeatPlans) {
     List<Object[]> params = new ArrayList<>();
     for(SeatPlan seatPlan : pSeatPlans) {
       params.add(new Object[] {seatPlan.getClassRoom().getId(), seatPlan.getSemester().getId(),

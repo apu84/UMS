@@ -32,13 +32,13 @@ public class PersistentAppSettingDao extends AppSettingDaoDecorator {
   }
 
   @Override
-  public List<AppSetting> getAll() throws Exception {
+  public List<AppSetting> getAll() {
     String query = SELECT_ALL;
     return mJdbcTemplate.query(query, new AppSettingRowMapper());
   }
 
   @Override
-  public AppSetting get(Integer pId) throws Exception {
+  public AppSetting get(Integer pId) {
     String query = SELECT_ALL + " where id=?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new AppSettingRowMapper());
   }

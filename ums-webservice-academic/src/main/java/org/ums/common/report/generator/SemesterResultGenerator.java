@@ -18,7 +18,7 @@ public class SemesterResultGenerator extends AbstractResultGenerator {
   StudentRecordManager mStudentRecordManager;
 
   @Override
-  protected List<StudentRecord> getStudentList(int pProgramId, int pSemesterId) throws Exception {
+  protected List<StudentRecord> getStudentList(int pProgramId, int pSemesterId) {
     return mStudentRecordManager.getStudentRecords(pProgramId, pSemesterId);
   }
 
@@ -70,7 +70,7 @@ public class SemesterResultGenerator extends AbstractResultGenerator {
   }
 
   @Override
-  protected void contentRow(StudentRecord pStudentRecord, PdfPTable pContentTable) throws Exception {
+  protected void contentRow(StudentRecord pStudentRecord, PdfPTable pContentTable) {
     PdfPCell cell = new PdfPCell();
     cell.setHorizontalAlignment(Element.ALIGN_LEFT);
     cell.setVerticalAlignment(Element.ALIGN_CENTER);

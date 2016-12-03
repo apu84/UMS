@@ -13,7 +13,7 @@ import java.io.Serializable;
  */
 public interface SeatPlanPublish extends Serializable, LastModifier,
     EditType<MutableSeatPlanPublish>, Identifier<Integer> {
-  Semester getSemester() throws Exception;
+  Semester getSemester();
 
   Integer getSemesterId();
 

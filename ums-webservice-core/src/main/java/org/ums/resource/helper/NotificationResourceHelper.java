@@ -29,7 +29,7 @@ public class NotificationResourceHelper extends
   NotificationBuilder mNotificationBuilder;
 
   @Override
-  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) {
     throw new NotImplementedException("Post method not implemented for UserResourceHelper");
   }
 
@@ -48,8 +48,7 @@ public class NotificationResourceHelper extends
     return pReadonly.getLastModified();
   }
 
-  public JsonObject getNotifications(String pConsumerId, String pNotificationType, UriInfo pUriInfo)
-      throws Exception {
+  public JsonObject getNotifications(String pConsumerId, String pNotificationType, UriInfo pUriInfo) {
     List<Notification> notifications =
         mNotificationManager.getNotifications(pConsumerId, pNotificationType);
 
@@ -65,7 +64,7 @@ public class NotificationResourceHelper extends
   }
 
   public JsonObject getNotifications(String pConsumerId, Integer pNumOfLatestNotification,
-      UriInfo pUriInfo) throws Exception {
+      UriInfo pUriInfo) {
     List<Notification> notifications =
         mNotificationManager.getNotifications(pConsumerId, pNumOfLatestNotification);
 
@@ -80,7 +79,7 @@ public class NotificationResourceHelper extends
     return object.build();
   }
 
-  public void updateReadStatus(JsonArray pJsonArray) throws Exception {
+  public void updateReadStatus(JsonArray pJsonArray) {
     List<MutableNotification> notifications = new ArrayList<>();
     for(int i = 0; i < pJsonArray.size(); i++) {
       JsonObject notificationObject = pJsonArray.getJsonObject(i);

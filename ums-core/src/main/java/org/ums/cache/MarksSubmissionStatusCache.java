@@ -31,25 +31,23 @@ public class MarksSubmissionStatusCache
   }
 
   @Override
-  public MarksSubmissionStatus get(Integer pSemesterId, String pCourseId, ExamType pExamType) throws Exception {
+  public MarksSubmissionStatus get(Integer pSemesterId, String pCourseId, ExamType pExamType) {
     String cacheKey = getCacheKey(MarksSubmissionStatus.class.toString(), pSemesterId, pCourseId, pExamType);
     return cachedEntity(cacheKey, () -> getManager().get(pSemesterId, pCourseId, pExamType));
   }
 
   @Override
-  public List<MarksSubmissionStatus> get(Integer pProgramId, Integer pSemesterId) throws Exception {
+  public List<MarksSubmissionStatus> get(Integer pProgramId, Integer pSemesterId) {
     return getManager().get(pProgramId, pSemesterId);
   }
 
   @Override
-  public List<MarksSubmissionStatus> getByProgramType(Integer pProgramTypeId, Integer pSemesterId)
-      throws Exception {
+  public List<MarksSubmissionStatus> getByProgramType(Integer pProgramTypeId, Integer pSemesterId) {
     return getManager().getByProgramType(pProgramTypeId, pSemesterId);
   }
 
   @Override
-  public boolean isValidForResultProcessing(Integer pProgramId, Integer pSemesterId)
-      throws Exception {
+  public boolean isValidForResultProcessing(Integer pProgramId, Integer pSemesterId) {
     return getManager().isValidForResultProcessing(pProgramId, pSemesterId);
   }
 }

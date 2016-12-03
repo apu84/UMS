@@ -2,11 +2,12 @@ package org.ums.services;
 
 import org.springframework.stereotype.Component;
 import org.ums.enums.CourseRegType;
+import org.ums.exceptions.ValidationException;
 
 @Component("utilsService")
 public class UtilsService {
 
-  public String getGradeLetter(final Integer pTotalMarks, CourseRegType regType) throws Exception {
+  public String getGradeLetter(final Integer pTotalMarks, CourseRegType regType) {
     if(pTotalMarks >= 80 && regType == CourseRegType.REGULAR)
       return "A+";
     else if(pTotalMarks >= 75 && pTotalMarks < 80 && regType == CourseRegType.REGULAR)
@@ -35,7 +36,7 @@ public class UtilsService {
     else if(pTotalMarks < 40)
       return "F";
     else
-      throw new Exception("Invalid Marks");
+      throw new ValidationException("Invalid Marks");
   }
 
 }

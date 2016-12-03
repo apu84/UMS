@@ -20,9 +20,9 @@ public interface Course extends Serializable, LastModifier, EditType<MutableCour
 
   String getOfferedDepartmentId();
 
-  Department getOfferedBy() throws Exception;
+  Department getOfferedBy();
 
-  Department getOfferedTo() throws Exception;
+  Department getOfferedTo();
 
   int getYear();
 
@@ -32,11 +32,11 @@ public interface Course extends Serializable, LastModifier, EditType<MutableCour
 
   int getCourseGroupId();
 
-  CourseGroup getCourseGroup(final String pSyllabusId) throws Exception;
+  CourseGroup getCourseGroup(final String pSyllabusId);
 
   String getSyllabusId();
 
-  Syllabus getSyllabus() throws Exception;
+  Syllabus getSyllabus();
 
   CourseType getCourseType();
 

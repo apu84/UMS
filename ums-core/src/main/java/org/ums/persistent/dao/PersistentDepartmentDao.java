@@ -22,13 +22,13 @@ public class PersistentDepartmentDao extends DepartmentDaoDecorator {
   }
 
   @Override
-  public Department get(final String pId) throws Exception {
+  public Department get(final String pId) {
     String query = SELECT_ALL + " WHERE DEPT_ID = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new DepartmentRowMapper());
   }
 
   @Override
-  public List<Department> getAll() throws Exception {
+  public List<Department> getAll() {
     String query = SELECT_ALL;
     return mJdbcTemplate.query(query, new DepartmentRowMapper());
   }

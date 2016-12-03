@@ -29,36 +29,36 @@ public class PersistentSyllabusDao extends SyllabusDaoDecorator {
     mJdbcTemplate = pJdbcTemplate;
   }
 
-  public Syllabus get(final String pSyllabusId) throws Exception {
+  public Syllabus get(final String pSyllabusId) {
     String query = SELECT_ALL + "WHERE SYLLABUS_ID = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pSyllabusId}, new SyllabusRowMapper());
   }
 
   @Override
-  public List<Syllabus> getSyllabusList(final Integer pProgramId) throws Exception {
+  public List<Syllabus> getSyllabusList(final Integer pProgramId) {
     String query = SELECT_ALL + "WHERE PROGRAM_ID = ?";
     return mJdbcTemplate.query(query, new Object[] {pProgramId}, new SyllabusRowMapper());
   }
 
   @Override
-  public List<Syllabus> getAll() throws Exception {
+  public List<Syllabus> getAll() {
     String query = SELECT_ALL;
     return mJdbcTemplate.query(query, new SyllabusRowMapper());
   }
 
   @Override
-  public int update(final MutableSyllabus pSyllabus) throws Exception {
+  public int update(final MutableSyllabus pSyllabus) {
     String query = UPDATE_ONE + "WHERE SYLLABUS_ID = ?";
     return mJdbcTemplate.update(query, pSyllabus.getSemester().getId(), pSyllabus.getProgram()
         .getId(), pSyllabus.getId());
   }
 
-  public int delete(final MutableSyllabus pSyllabus) throws Exception {
+  public int delete(final MutableSyllabus pSyllabus) {
     String query = DELETE_ONE + "WHERE SYLLABUS_ID = ?";
     return mJdbcTemplate.update(query, pSyllabus.getId());
   }
 
-  public int create(final MutableSyllabus pSyllabus) throws Exception {
+  public int create(final MutableSyllabus pSyllabus) {
     return mJdbcTemplate.update(INSERT_ONE, pSyllabus.getId(), pSyllabus.getSemester().getId(),
         pSyllabus.getProgram().getId());
   }

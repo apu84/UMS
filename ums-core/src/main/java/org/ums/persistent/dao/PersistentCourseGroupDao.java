@@ -31,38 +31,38 @@ public class PersistentCourseGroupDao extends CourseGroupDaoDecorator {
   }
 
   @Override
-  public CourseGroup get(final Integer pId) throws Exception {
+  public CourseGroup get(final Integer pId) {
     String query = SELECT_ALL + "WHERE GROUP_ID = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new CourseGroupRowMapper());
   }
 
   @Override
-  public CourseGroup getBySyllabus(final Integer pId, final String pSyllabusId) throws Exception {
+  public CourseGroup getBySyllabus(final Integer pId, final String pSyllabusId) {
     String query = SELECT_ALL + "WHERE GROUP_ID = ? AND SYLLABUS_ID = ? ";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId, pSyllabusId},
         new CourseGroupRowMapper());
   }
 
   @Override
-  public List<CourseGroup> getAll() throws Exception {
+  public List<CourseGroup> getAll() {
     String query = SELECT_ALL;
     return mJdbcTemplate.query(query, new CourseGroupRowMapper());
   }
 
   @Override
-  public int update(final MutableCourseGroup pCourseGroup) throws Exception {
+  public int update(final MutableCourseGroup pCourseGroup) {
     String query = UPDATE_ONE + "WHERE GORUP_ID = ?";
     return mJdbcTemplate.update(query, pCourseGroup.getSyllabus().getId(), pCourseGroup.getName(),
         pCourseGroup.getId());
   }
 
-  public int delete(final MutableCourseGroup pCourseGroup) throws Exception {
+  public int delete(final MutableCourseGroup pCourseGroup) {
     String query = DELETE_ONE + "WHERE GROUP_ID = ?";
     return mJdbcTemplate.update(query, pCourseGroup.getId());
   }
 
   @Override
-  public int create(final MutableCourseGroup pCourseGroup) throws Exception {
+  public int create(final MutableCourseGroup pCourseGroup) {
     return mJdbcTemplate.update(INSERT_ONE, pCourseGroup.getSyllabus().getId(),
         pCourseGroup.getId(), pCourseGroup.getName());
   }

@@ -45,7 +45,7 @@ public class CourseMaterialNotifier extends AbstractSectionPermission {
         super.createFolder(pNewPath, pAdditionalParams, pDomain, pRootPath);
     Notifier notifier = new Notifier() {
       @Override
-      public List<String> consumers() throws Exception {
+      public List<String> consumers() {
         List<String> users = new ArrayList<>();
 
         if(pNewPath.lastIndexOf("/") == 0) {
@@ -65,7 +65,7 @@ public class CourseMaterialNotifier extends AbstractSectionPermission {
       }
 
       @Override
-      public String producer() throws Exception {
+      public String producer() {
         return SecurityUtils.getSubject().getPrincipal().toString();
       }
 
@@ -109,11 +109,12 @@ public class CourseMaterialNotifier extends AbstractSectionPermission {
 
     Notifier notifier = new Notifier() {
       @Override
-      public List<String> consumers() throws Exception {
+      public List<String> consumers() {
         List<String> users = new ArrayList<>();
         if(StringUtils.isEmpty(semesterIdString) || StringUtils.isEmpty(courseId)
             || StringUtils.isEmpty(owner)) {
-          throw new Exception("Can not find required semesterId or courseId or owner of the file");
+          throw new RuntimeException(
+              "Can not find required semesterId or courseId or owner of the file");
         }
 
         Integer semesterId = Integer.parseInt(semesterIdString);
@@ -132,7 +133,7 @@ public class CourseMaterialNotifier extends AbstractSectionPermission {
       }
 
       @Override
-      public String producer() throws Exception {
+      public String producer() {
         return SecurityUtils.getSubject().getPrincipal().toString();
       }
 

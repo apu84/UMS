@@ -1,5 +1,9 @@
 package org.ums.persistent.dao;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.concurrent.atomic.AtomicReference;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.util.StringUtils;
@@ -7,12 +11,6 @@ import org.ums.decorator.TaskStatusDaoDecorator;
 import org.ums.domain.model.immutable.TaskStatus;
 import org.ums.domain.model.mutable.MutableTaskStatus;
 import org.ums.persistent.model.PersistentTaskStatus;
-import org.ums.statistics.UMSJdbcTemplate;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.DateFormat;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentTaskStatusDao extends TaskStatusDaoDecorator {
   String SELECT_ALL =
@@ -34,13 +32,13 @@ public class PersistentTaskStatusDao extends TaskStatusDaoDecorator {
   }
 
   @Override
-  public TaskStatus get(String pId) throws Exception {
+  public TaskStatus get(String pId) {
     String query = SELECT_ALL + "WHERE TASK_ID = ? AND SERIAL = (" + MAX_SERIAL + ")";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId, pId}, new TaskStatusRowMapper());
   }
 
   @Override
-  public int update(MutableTaskStatus pMutable) throws Exception {
+  public int update(MutableTaskStatus pMutable) {
     String query = UPDATE_ALL + "WHERE TASK_ID = ? AND SERIAL = (" + MAX_SERIAL + ")";
     return mJdbcTemplate.update(query, pMutable.getStatus().getId(), StringUtils.isEmpty(pMutable
         .getProgressDescription()) ? "" : pMutable.getProgressDescription(), pMutable.getId(),
@@ -48,13 +46,13 @@ public class PersistentTaskStatusDao extends TaskStatusDaoDecorator {
   }
 
   @Override
-  public int delete(MutableTaskStatus pMutable) throws Exception {
+  public int delete(MutableTaskStatus pMutable) {
     String query = DELETE_ALL + "WHERE TASK_ID = ? AND SERIAL = (" + MAX_SERIAL + ")";
     return mJdbcTemplate.update(query, pMutable.getId(), pMutable.getId());
   }
 
   @Override
-  public int create(MutableTaskStatus pMutable) throws Exception {
+  public int create(MutableTaskStatus pMutable) {
     return mJdbcTemplate.update(
         INSERT_ALL,
         pMutable.getId(),
@@ -64,24 +62,28 @@ public class PersistentTaskStatusDao extends TaskStatusDaoDecorator {
   }
 
   @Override
-  public boolean exists(String pId) throws Exception {
+  public boolean exists(String pId) {
     String query = EXISTS + "WHERE TASK_ID = ? ";
     return mJdbcTemplate.queryForObject(query, Boolean.class, pId);
   }
 
   private class TaskStatusRowMapper implements RowMapper<TaskStatus> {
     @Override
-    public TaskStatus mapRow(ResultSet rs, int rowNum) throws SQLException {
-      MutableTaskStatus taskStatus = new PersistentTaskStatus();
-      taskStatus.setId(rs.getString("TASK_ID"));
-      taskStatus.setStatus(TaskStatus.Status.get(rs.getInt("STATUS")));
-      taskStatus.setProgressDescription(StringUtils.isEmpty(rs.getString("PROGRESS_DESC")) ? ""
-          : rs.getString("PROGRESS_DESC"));
-      taskStatus.setTaskCompletionDate(rs.getObject("TASK_COMPLETION_DATE") == null ? null : rs
-          .getDate("TASK_COMPLETION_DATE"));
-      taskStatus.setLastModified(rs.getString("LAST_MODIFIED"));
-      AtomicReference<TaskStatus> atomicReference = new AtomicReference<>(taskStatus);
-      return atomicReference.get();
+    public TaskStatus mapRow(ResultSet rs, int rowNum) {
+      try {
+        MutableTaskStatus taskStatus = new PersistentTaskStatus();
+        taskStatus.setId(rs.getString("TASK_ID"));
+        taskStatus.setStatus(TaskStatus.Status.get(rs.getInt("STATUS")));
+        taskStatus.setProgressDescription(StringUtils.isEmpty(rs.getString("PROGRESS_DESC")) ? ""
+            : rs.getString("PROGRESS_DESC"));
+        taskStatus.setTaskCompletionDate(rs.getObject("TASK_COMPLETION_DATE") == null ? null : rs
+            .getDate("TASK_COMPLETION_DATE"));
+        taskStatus.setLastModified(rs.getString("LAST_MODIFIED"));
+        AtomicReference<TaskStatus> atomicReference = new AtomicReference<>(taskStatus);
+        return atomicReference.get();
+      } catch(SQLException sqlE) {
+        throw new RuntimeException(sqlE);
+      }
     }
   }
 }

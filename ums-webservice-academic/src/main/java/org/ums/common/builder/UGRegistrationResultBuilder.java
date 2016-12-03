@@ -16,7 +16,7 @@ public class UGRegistrationResultBuilder implements
 
   @Override
   public void build(JsonObjectBuilder pBuilder, UGRegistrationResult pReadOnly, UriInfo pUriInfo,
-      LocalCache pLocalCache) throws Exception {
+      LocalCache pLocalCache) {
     pBuilder.add("studentId", pReadOnly.getStudentId());
     pBuilder.add("courseId", pReadOnly.getCourseId());
     pBuilder.add("gradeLetter", pReadOnly.getGradeLetter());
@@ -37,7 +37,7 @@ public class UGRegistrationResultBuilder implements
 
   @Override
   public void build(MutableUGRegistrationResult pMutable, JsonObject pJsonObject,
-      LocalCache pLocalCache) throws Exception {
+      LocalCache pLocalCache) {
 
   }
 }

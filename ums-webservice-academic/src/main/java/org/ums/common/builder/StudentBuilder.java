@@ -19,6 +19,7 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.text.DateFormat;
+import java.text.ParseException;
 
 @Component
 @Qualifier("StudentBuilder")
@@ -32,7 +33,7 @@ public class StudentBuilder implements Builder<Student, MutableStudent> {
   public void build(final JsonObjectBuilder pBuilder,
                     final Student pStudent,
                     final UriInfo pUriInfo,
-                    final LocalCache pLocalCache) throws Exception {
+                    final LocalCache pLocalCache) {
 
     pBuilder.add("id", pStudent.getId());
     pBuilder.add("fullName", pStudent.getFullName());
@@ -89,7 +90,7 @@ public class StudentBuilder implements Builder<Student, MutableStudent> {
   }
 
   public void build(final MutableStudent pMutableStudent, final JsonObject pJsonObject,
-      final LocalCache pLocalCache) throws Exception {
+      final LocalCache pLocalCache) {
 
     /*
      * Validator validator = new StudentValidator(); validator.validate(pJsonObject);
@@ -111,7 +112,11 @@ public class StudentBuilder implements Builder<Student, MutableStudent> {
     pMutableStudent.setSemesterId(Integer.parseInt(pJsonObject.getString("semesterId")));
     pMutableStudent.setFatherName(pJsonObject.getString("fatherName"));
     pMutableStudent.setMotherName(pJsonObject.getString("motherName"));
-    pMutableStudent.setDateOfBirth(mDateFormat.parse(pJsonObject.getString("dateOfBirth")));
+    try {
+      pMutableStudent.setDateOfBirth(mDateFormat.parse(pJsonObject.getString("dateOfBirth")));
+    } catch(ParseException pe) {
+      throw new RuntimeException(pe);
+    }
     pMutableStudent.setGender(pJsonObject.getString("gender"));
     pMutableStudent.setPresentAddress(pJsonObject.getString("presentAddress"));
     pMutableStudent.setPermanentAddress(pJsonObject.getString("permanentAddress"));
@@ -131,7 +136,7 @@ public class StudentBuilder implements Builder<Student, MutableStudent> {
   }
 
   public void buildAdvisor(final MutableStudent pMutableStudent, final JsonObject pJsonObject,
-      final LocalCache pLocalCache) throws Exception {
+      final LocalCache pLocalCache) {
     pMutableStudent.setId(pJsonObject.getString("id"));
     if(pJsonObject.getString("adviser") != null) {
       PersistentTeacher teacher = new PersistentTeacher();

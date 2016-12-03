@@ -13,16 +13,16 @@ import java.util.Map;
 public interface UGBaseRegistration extends Serializable, Identifier<Integer>, LastModifier {
   String getCourseId();
 
-  Course getCourse() throws Exception; // will provide course_id,course_no and course_title for
-                                       // UG_Registration_Result.
+  Course getCourse(); // will provide course_id,course_no and course_title for
+                      // UG_Registration_Result.
 
   Integer getSemesterId();
 
-  Semester getSemester() throws Exception;
+  Semester getSemester();
 
   String getStudentId();
 
-  Student getStudent() throws Exception;
+  Student getStudent();
 
   String getGradeLetter();
 

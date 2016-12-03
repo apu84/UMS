@@ -8,8 +8,8 @@ import java.util.Map;
 public interface EnrollmentService {
   GenericResponse<Map> saveEnrollment(final SemesterEnrollment.Type pType,
       final Integer pNewSemesterId, final Integer pProgramId, final Integer pToYear,
-      final Integer pToAcademicSemester) throws Exception;
+      final Integer pToAcademicSemester);
 
   GenericResponse<Map> saveEnrollment(final SemesterEnrollment.Type pType,
-      final Integer pNewSemesterId, final Integer pProgramId) throws Exception;
+      final Integer pNewSemesterId, final Integer pProgramId);
 }

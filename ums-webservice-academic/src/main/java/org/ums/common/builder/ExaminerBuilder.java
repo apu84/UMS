@@ -25,7 +25,7 @@ public class ExaminerBuilder implements Builder<Examiner, MutableExaminer> {
   private SemesterManager mSemesterManager;
 
   @Override
-  public void build(JsonObjectBuilder pBuilder, Examiner pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) throws Exception {
+  public void build(JsonObjectBuilder pBuilder, Examiner pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
     if (pReadOnly.getId() != null) {
       pBuilder.add("id", pReadOnly.getId());
     }
@@ -77,8 +77,7 @@ public class ExaminerBuilder implements Builder<Examiner, MutableExaminer> {
   }
 
   @Override
-  public void build(MutableExaminer pMutable, JsonObject pJsonObject, LocalCache pLocalCache)
-      throws Exception {
+  public void build(MutableExaminer pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
     if(pJsonObject.containsKey("id")) {
       pMutable.setId(pJsonObject.getInt("id"));
     }

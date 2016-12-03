@@ -24,31 +24,31 @@ public class PersistentRoleDao extends RoleDaoDecorator {
   }
 
   @Override
-  public List<Role> getAll() throws Exception {
+  public List<Role> getAll() {
     String query = SELECT_ALL;
     return mJdbcTemplate.query(query, new RoleRowMapper());
   }
 
   @Override
-  public Role get(Integer pId) throws Exception {
+  public Role get(Integer pId) {
     String query = SELECT_ALL + "WHERE ROLE_ID = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new RoleRowMapper());
   }
 
   @Override
-  public int update(MutableRole pMutable) throws Exception {
+  public int update(MutableRole pMutable) {
     String query = UPDATE_ALL + "WHERE ROLE_ID = ?";
     return mJdbcTemplate.update(query, pMutable.getId());
   }
 
   @Override
-  public int delete(MutableRole pMutable) throws Exception {
+  public int delete(MutableRole pMutable) {
     String query = DELETE_ALL + "WHERE ROLE_ID = ?";
     return mJdbcTemplate.update(query, pMutable.getId());
   }
 
   @Override
-  public int create(MutableRole pMutable) throws Exception {
+  public int create(MutableRole pMutable) {
     return mJdbcTemplate.update(INSERT_ALL, pMutable.getId(), pMutable.getName());
   }
 

@@ -18,7 +18,7 @@ public class MutableParameterResource extends Resource {
   ParameterResourceHelper mParameterResourceHelper;
 
   @POST
-  public Response createAcademicCalenderParameter(final JsonObject pJsonObject) throws Exception {
+  public Response createAcademicCalenderParameter(final JsonObject pJsonObject) {
     return mParameterResourceHelper.post(pJsonObject, mUriInfo);
   }
 

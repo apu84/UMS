@@ -9,15 +9,15 @@ import org.ums.domain.model.common.MutableIdentifier;
 public interface MutableProgram extends Program, Mutable, MutableLastModifier,
     MutableIdentifier<Integer> {
 
-  void setShortName(final String pShortName) throws Exception;
+  void setShortName(final String pShortName);
 
-  void setLongName(final String pLongName) throws Exception;
+  void setLongName(final String pLongName);
 
-  void setDepartment(final Department pDepartment) throws Exception;
+  void setDepartment(final Department pDepartment);
 
   void setDepartmentId(final String pDepartmentId);
 
-  void setProgramType(final ProgramType pProgramType) throws Exception;
+  void setProgramType(final ProgramType pProgramType);
 
   void setProgramTypeId(final int pProgramTypeId);
 }

@@ -22,7 +22,7 @@ public class CourseGroupResourceHelper extends
   private CourseGroupBuilder mBuilder;
 
   @Override
-  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) {
     return null;
   }
 

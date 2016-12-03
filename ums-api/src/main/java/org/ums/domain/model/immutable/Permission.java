@@ -10,7 +10,7 @@ import java.util.Set;
 
 public interface Permission extends Serializable, EditType<MutablePermission>, LastModifier,
     Identifier<Integer> {
-  Role getRole() throws Exception;
+  Role getRole();
 
   Integer getRoleId();
 

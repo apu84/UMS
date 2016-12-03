@@ -17,16 +17,16 @@ public class SemesterSyllabusMapDaoDecorator
     implements SemesterSyllabusMapManager {
   @Override
   public List<SemesterSyllabusMap> getMapsByProgramSemester(final Integer pProgramId,
-      final Integer pSemesterId) throws Exception {
+      final Integer pSemesterId) {
     return getManager().getMapsByProgramSemester(pProgramId, pSemesterId);
   }
 
-  public SemesterSyllabusMap get(final Integer pMapId) throws Exception {
+  public SemesterSyllabusMap get(final Integer pMapId) {
     return getManager().get(pMapId);
   }
 
   @Override
-  public void copySyllabus(SemesterSyllabusMapDto pSemesterSyllabusMapDto) throws Exception {
+  public void copySyllabus(SemesterSyllabusMapDto pSemesterSyllabusMapDto) {
     getManager().copySyllabus(pSemesterSyllabusMapDto);
   }
 

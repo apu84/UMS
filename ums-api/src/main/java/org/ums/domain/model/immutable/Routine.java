@@ -12,9 +12,9 @@ import java.io.Serializable;
  */
 public interface Routine extends Serializable, LastModifier, EditType<MutableRoutine>,
     Identifier<String> {
-  Semester getSemester() throws Exception;
+  Semester getSemester();
 
-  Program getProgram() throws Exception;
+  Program getProgram();
 
   String getCourseId();
 
@@ -32,7 +32,7 @@ public interface Routine extends Serializable, LastModifier, EditType<MutableRou
 
   String getEndTime();
 
-  int getDuration() throws Exception;
+  int getDuration();
 
   Integer getRoomId();
 

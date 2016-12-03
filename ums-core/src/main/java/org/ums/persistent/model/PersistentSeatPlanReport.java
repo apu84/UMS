@@ -71,12 +71,12 @@ public class PersistentSeatPlanReport implements MutableSeatPlanReport {
   }
 
   @Override
-  public void commit(boolean update) throws Exception {
+  public void commit(boolean update) {
 
   }
 
   @Override
-  public void delete() throws Exception {
+  public void delete() {
 
   }
 
@@ -121,7 +121,7 @@ public class PersistentSeatPlanReport implements MutableSeatPlanReport {
   }
 
   @Override
-  public MutableSeatPlanReport edit() throws Exception {
+  public MutableSeatPlanReport edit() {
     return null;
   }
 }

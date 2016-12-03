@@ -27,7 +27,7 @@ public class SyllabusCache extends ContentCache<Syllabus, MutableSyllabus, Strin
   }
 
   @Override
-  public List<Syllabus> getSyllabusList(Integer pProgramId) throws Exception {
+  public List<Syllabus> getSyllabusList(Integer pProgramId) {
     return getManager().getSyllabusList(pProgramId);
   }
 }

@@ -13,7 +13,7 @@ import org.ums.enums.ExamType;
 
 public class MarksSubmissionStatusAggregator extends MarksSubmissionStatusDaoDecorator {
   @Override
-  public List<MarksSubmissionStatus> get(Integer pProgramId, Integer pSemesterId) throws Exception {
+  public List<MarksSubmissionStatus> get(Integer pProgramId, Integer pSemesterId) {
     List<MarksSubmissionStatus> marksSubmissionStatuses = super.get(pProgramId, pSemesterId);
     List<MarksSubmissionStatus> filteredList = marksSubmissionStatuses.stream().filter(pResult -> {
       try {
@@ -28,7 +28,7 @@ public class MarksSubmissionStatusAggregator extends MarksSubmissionStatusDaoDec
 
   @Override
   public List<MarksSubmissionStatus> getByProgramType(Integer pProgramTypeId, Integer pSemesterId)
-      throws Exception {
+      {
     // Don't need to pass programTypeId, as it is not processed by persistent layer anyway
     List<MarksSubmissionStatus> marksSubmissionStatuses = super.get(-1, pSemesterId);
     List<MarksSubmissionStatus> filteredList = marksSubmissionStatuses.stream().filter(pResult -> {
@@ -55,7 +55,7 @@ public class MarksSubmissionStatusAggregator extends MarksSubmissionStatusDaoDec
 
   @Override
   public boolean isValidForResultProcessing(Integer pProgramId, Integer pSemesterId)
-      throws Exception {
+      {
     List<MarksSubmissionStatus> marksSubmissionStatuses = get(pProgramId, pSemesterId);
     return marksSubmissionStatuses.stream()
         .filter(p -> p.getStatus() != CourseMarksSubmissionStatus.ACCEPTED_BY_COE)

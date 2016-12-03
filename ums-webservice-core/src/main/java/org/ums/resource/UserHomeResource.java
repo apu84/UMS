@@ -21,7 +21,7 @@ public class UserHomeResource extends Resource {
   private UserHomeService mUserHomeService;
 
   @GET
-  public List<Map<String, String>> get(final @Context Request pRequest) throws Exception {
+  public List<Map<String, String>> get(final @Context Request pRequest) {
     return mUserHomeService.process(SecurityUtils.getSubject());
   }
 }

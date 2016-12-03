@@ -18,7 +18,7 @@ public class NavigationByPermissionResolver extends NavigationDaoDecorator {
   }
 
   @Override
-  public List<Navigation> getByPermissions(Set<String> pPermissions) throws Exception {
+  public List<Navigation> getByPermissions(Set<String> pPermissions) {
     List<Navigation> navigationList = getManager().getAll();
     List<Navigation> permittedNavigation = null;
 

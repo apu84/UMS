@@ -31,25 +31,25 @@ public class PersistentClassRoomDao extends ClassRoomDaoDecorator {
   }
 
   @Override
-  public ClassRoom get(final Integer pId) throws Exception {
+  public ClassRoom get(final Integer pId) {
     String query = SELECT_ALL + " WHERE ROOM_ID = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new ClassRoomRowMapper());
   }
 
   @Override
-  public ClassRoom getByRoomNo(String pRoomNo) throws Exception {
+  public ClassRoom getByRoomNo(String pRoomNo) {
     String query = SELECT_ALL + " WHERE ROOM_NO=? ";
     return mJdbcTemplate.queryForObject(query, new Object[] {pRoomNo}, new ClassRoomRowMapper());
   }
 
   @Override
-  public List<ClassRoom> getAll() throws Exception {
+  public List<ClassRoom> getAll() {
     String query = SELECT_ALL + " Order by ROOM_ID";
     return mJdbcTemplate.query(query, new ClassRoomRowMapper());
   }
 
   @Override
-  public List<ClassRoom> getSeatPlanRooms(Integer pSemesterId, Integer pExamType) throws Exception {
+  public List<ClassRoom> getSeatPlanRooms(Integer pSemesterId, Integer pExamType) {
     String query =
         "select " + "  ROOM_INFO.ROOM_ID, " + "  ROOM_INFO.ROOM_NO, " + "  ROOM_INFO.DESCRIPTION, "
             + "  ROOM_INFO.TOTAL_ROW, " + "  ROOM_INFO.TOTAL_COLUMN, " + "  ROOM_INFO.CAPACITY, "
@@ -63,20 +63,20 @@ public class PersistentClassRoomDao extends ClassRoomDaoDecorator {
   }
 
   @Override
-  public int update(final MutableClassRoom pRoom) throws Exception {
+  public int update(final MutableClassRoom pRoom) {
     String query = UPDATE_ONE + "WHERE ROOM_ID = ?";
     return mJdbcTemplate.update(query, pRoom.getRoomNo(), pRoom.getDescription(), pRoom
         .getTotalRow(), pRoom.getTotalColumn(), pRoom.getCapacity(),
         pRoom.getRoomType().getValue(), pRoom.getDeptId(), pRoom.isExamSeatPlan(), pRoom.getId());
   }
 
-  public int delete(final MutableClassRoom pClassRoom) throws Exception {
+  public int delete(final MutableClassRoom pClassRoom) {
     String query = DELETE_ONE + "WHERE ROOM_ID = ?";
     return mJdbcTemplate.update(query, pClassRoom.getId());
   }
 
   @Override
-  public List<ClassRoom> getRoomsBasedOnRoutine(int pSemesterId, int pProgramId) throws Exception {
+  public List<ClassRoom> getRoomsBasedOnRoutine(int pSemesterId, int pProgramId) {
     String query =
         SELECT_ALL
             + " where ROOM_ID  in (select distinct(room_id) from class_routine where semester_id=? and program_id=?)";
@@ -84,19 +84,19 @@ public class PersistentClassRoomDao extends ClassRoomDaoDecorator {
         new ClassRoomRowMapper());
   }
 
-  public int create(final MutableClassRoom pClassRoom) throws Exception {
+  public int create(final MutableClassRoom pClassRoom) {
     return mJdbcTemplate.update(INSERT_ONE, pClassRoom.getRoomNo(), pClassRoom.getDescription(),
         pClassRoom.getTotalRow(), pClassRoom.getTotalColumn(), pClassRoom.getCapacity(), pClassRoom
             .getRoomType().getValue(), pClassRoom.getDeptId(), pClassRoom.isExamSeatPlan());
   }
 
   /*
-   * @Override public int update(final MutableSyllabus pSyllabus) throws Exception { String query =
-   * UPDATE_ONE + "WHERE SYLLABUS_ID = ?"; return mJdbcTemplate.update(query,
-   * pSyllabus.getSemester().getId(), pSyllabus.getProgram().getId(), pSyllabus.getId()); }
+   * @Override public int update(final MutableSyllabus pSyllabus) { String query = UPDATE_ONE +
+   * "WHERE SYLLABUS_ID = ?"; return mJdbcTemplate.update(query, pSyllabus.getSemester().getId(),
+   * pSyllabus.getProgram().getId(), pSyllabus.getId()); }
    * 
-   * public int delete(final MutableSyllabus pSyllabus) throws Exception { String query = DELETE_ONE
-   * + "WHERE SYLLABUS_ID = ?"; return mJdbcTemplate.update(query, pSyllabus.getId()); }
+   * public int delete(final MutableSyllabus pSyllabus) { String query = DELETE_ONE +
+   * "WHERE SYLLABUS_ID = ?"; return mJdbcTemplate.update(query, pSyllabus.getId()); }
    */
   class ClassRoomRowMapper implements RowMapper<ClassRoom> {
     @Override

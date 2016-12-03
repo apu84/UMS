@@ -35,8 +35,7 @@ public class PersistentParameterSetting implements MutableParameterSetting {
 
   }
 
-  public PersistentParameterSetting(final PersistentParameterSetting pPersistentParameterSetting)
-      throws Exception {
+  public PersistentParameterSetting(final PersistentParameterSetting pPersistentParameterSetting) {
     mId = pPersistentParameterSetting.getId();
     mSemester = pPersistentParameterSetting.getSemester();
     mSemesterId = pPersistentParameterSetting.getSemesterId();
@@ -69,7 +68,7 @@ public class PersistentParameterSetting implements MutableParameterSetting {
   }
 
   @Override
-  public void setParameter(Parameter pParameter) throws Exception {
+  public void setParameter(Parameter pParameter) {
     mParameter = pParameter;
   }
 
@@ -84,12 +83,12 @@ public class PersistentParameterSetting implements MutableParameterSetting {
   }
 
   @Override
-  public MutableParameterSetting edit() throws Exception {
+  public MutableParameterSetting edit() {
     return new PersistentParameterSetting(this);
   }
 
   @Override
-  public void commit(boolean update) throws Exception {
+  public void commit(boolean update) {
     if(update) {
       sParameterSettingManager.update(this);
     }
@@ -99,7 +98,7 @@ public class PersistentParameterSetting implements MutableParameterSetting {
   }
 
   @Override
-  public void delete() throws Exception {
+  public void delete() {
     sParameterSettingManager.delete(this);
   }
 
@@ -114,13 +113,13 @@ public class PersistentParameterSetting implements MutableParameterSetting {
   }
 
   @Override
-  public Semester getSemester() throws Exception {
+  public Semester getSemester() {
     return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
         .validate(mSemester);
   }
 
   @Override
-  public Parameter getParameter() throws Exception {
+  public Parameter getParameter() {
     return mParameter == null ? sParameterManager.get(mParameterId) : sParameterManager
         .validate(mParameter);
   }

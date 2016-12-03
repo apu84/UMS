@@ -27,20 +27,20 @@ public class EmployeeResource extends MutableEmployeeResource {
 
   @GET
   @Path("/getActiveTeachersByDept")
-  public JsonObject getActiveTeachersByDepartment() throws Exception {
+  public JsonObject getActiveTeachersByDepartment() {
     return mEmployeeResourceHelper.getActiveTeachersByDept(mUriInfo);
   }
 
   @GET
   @Path("/employeeById")
-  public JsonObject getEmployeeById() throws Exception {
+  public JsonObject getEmployeeById() {
     return mEmployeeResourceHelper.getByEmployeeId(mUriInfo);
   }
 
   @GET
   @Path("/designation/{designationId}")
   public JsonObject getByDesignation(final @Context Request pRequest,
-      final @PathParam("designationId") String designationId) throws Exception {
+      final @PathParam("designationId") String designationId) {
     return mEmployeeResourceHelper.getByDesignation(designationId, pRequest, mUriInfo);
   }
 

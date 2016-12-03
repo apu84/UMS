@@ -90,7 +90,7 @@ public class PersistentSemesterEnrollment implements MutableSemesterEnrollment {
   }
 
   @Override
-  public void commit(boolean update) throws Exception {
+  public void commit(boolean update) {
     if(update) {
       sSemesterEnrollmentManager.update(this);
     }
@@ -100,7 +100,7 @@ public class PersistentSemesterEnrollment implements MutableSemesterEnrollment {
   }
 
   @Override
-  public void delete() throws Exception {
+  public void delete() {
     sSemesterEnrollmentManager.delete(this);
   }
 
@@ -120,7 +120,7 @@ public class PersistentSemesterEnrollment implements MutableSemesterEnrollment {
   }
 
   @Override
-  public Semester getSemester() throws Exception {
+  public Semester getSemester() {
     return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
         .validate(mSemester);
   }
@@ -131,7 +131,7 @@ public class PersistentSemesterEnrollment implements MutableSemesterEnrollment {
   }
 
   @Override
-  public Program getProgram() throws Exception {
+  public Program getProgram() {
     return mProgram == null ? sProgramManager.get(mProgramId) : sProgramManager.validate(mProgram);
   }
 
@@ -156,7 +156,7 @@ public class PersistentSemesterEnrollment implements MutableSemesterEnrollment {
   }
 
   @Override
-  public MutableSemesterEnrollment edit() throws Exception {
+  public MutableSemesterEnrollment edit() {
     return new PersistentSemesterEnrollment(this);
   }
 

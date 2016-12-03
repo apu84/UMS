@@ -15,7 +15,7 @@ public interface Employee extends Serializable, LastModifier, EditType<MutableEm
 
   String getEmploymentType();
 
-  Department getDepartment() throws Exception;
+  Department getDepartment();
 
   String getFatherName();
 

@@ -11,11 +11,11 @@ import java.util.Set;
 
 public interface SemesterWithdrawal extends Serializable, LastModifier,
     EditType<MutableSemesterWithdrawal>, Identifier<Integer> {
-  Semester getSemester() throws Exception;
+  Semester getSemester();
 
-  Student getStudent() throws Exception;
+  Student getStudent();
 
-  Program getProgram() throws Exception;
+  Program getProgram();
 
   String getCause();
 

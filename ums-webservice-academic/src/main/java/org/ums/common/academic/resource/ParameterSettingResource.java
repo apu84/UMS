@@ -28,7 +28,7 @@ public class ParameterSettingResource extends MutableParameterSettingResource {
 
   @GET
   @Path("/all")
-  public JsonObject getAll() throws Exception {
+  public JsonObject getAll() {
     return mResourceHelper.getAllInfo(mUriInfo);
   }
 
@@ -42,7 +42,7 @@ public class ParameterSettingResource extends MutableParameterSettingResource {
   @GET
   @Path(("/semester/{semesterId}"))
   public JsonObject getBySemester(final @Context Request pRequest,
-      final @PathParam("semesterId") Integer pSemesterId) throws Exception {
+      final @PathParam("semesterId") Integer pSemesterId) {
     return mResourceHelper.getBySemester(pSemesterId, pRequest, mUriInfo);
   }
 
@@ -50,7 +50,7 @@ public class ParameterSettingResource extends MutableParameterSettingResource {
   @Path(("/parameter/{parameterId}/semester/{semesterId}"))
   public JsonObject getByParameterIdAndSemester(final @Context Request pRequest,
       final @PathParam("parameterId") Integer pParameterId,
-      final @PathParam("semesterId") Integer pSemesterId) throws Exception {
+      final @PathParam("semesterId") Integer pSemesterId) {
     return mResourceHelper.getByParameterIdAndSemesterId(pParameterId, pSemesterId, pRequest,
         mUriInfo);
   }
@@ -58,7 +58,7 @@ public class ParameterSettingResource extends MutableParameterSettingResource {
   @GET
   @Path(("/parameter/{parameter}"))
   public JsonObject getByParameterAndSemester(final @Context Request pRequest,
-      final @PathParam("parameter") String parameter) throws Exception {
+      final @PathParam("parameter") String parameter) {
     return mResourceHelper.getByParameterAndSemesterId(parameter, pRequest, mUriInfo);
   }
 }

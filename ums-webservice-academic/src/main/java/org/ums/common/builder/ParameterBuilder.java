@@ -14,7 +14,7 @@ import javax.ws.rs.core.UriInfo;
 public class ParameterBuilder implements Builder<Parameter, MutableParameter> {
   @Override
   public void build(JsonObjectBuilder pBuilder, Parameter pReadOnly, UriInfo pUriInfo,
-      LocalCache pLocalCache) throws Exception {
+      LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("parameter", pReadOnly.getParameter());
     pBuilder.add("shortDescription", pReadOnly.getShortDescription());
@@ -27,8 +27,7 @@ public class ParameterBuilder implements Builder<Parameter, MutableParameter> {
   }
 
   @Override
-  public void build(MutableParameter pMutable, JsonObject pJsonObject, LocalCache pLocalCache)
-      throws Exception {
+  public void build(MutableParameter pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
     pMutable.setId(pJsonObject.getString("id"));
     pMutable.setParameter(pJsonObject.getString("parameter"));
     pMutable.setShortDescription(pJsonObject.getString("shortDescription"));

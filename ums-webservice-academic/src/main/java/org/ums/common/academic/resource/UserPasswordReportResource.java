@@ -23,7 +23,7 @@ public class UserPasswordReportResource {
   @POST
   @Consumes("application/json")
   @Produces("application/pdf")
-  public StreamingOutput getUserPasswordReport() throws Exception {
+  public StreamingOutput getUserPasswordReport() {
     File file = new File(FILE_PATH);
     return new StreamingOutput() {
       public void write(OutputStream output) throws IOException, WebApplicationException {

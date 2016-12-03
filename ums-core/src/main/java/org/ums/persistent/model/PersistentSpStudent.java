@@ -41,7 +41,7 @@ public class PersistentSpStudent implements MutableSpStudent {
 
   }
 
-  public PersistentSpStudent(final PersistentSpStudent pPersistentSpStudent) throws Exception {
+  public PersistentSpStudent(final PersistentSpStudent pPersistentSpStudent) {
     mStudentId = pPersistentSpStudent.getId();
     mProgram = pPersistentSpStudent.getProgram();
     mProgramId = pPersistentSpStudent.getProgramId();
@@ -123,7 +123,7 @@ public class PersistentSpStudent implements MutableSpStudent {
   }
 
   @Override
-  public void commit(boolean update) throws Exception {
+  public void commit(boolean update) {
     if(update) {
       sSpStudentManager.update(this);
     }
@@ -133,7 +133,7 @@ public class PersistentSpStudent implements MutableSpStudent {
   }
 
   @Override
-  public void delete() throws Exception {
+  public void delete() {
     sSpStudentManager.delete(this);
   }
 
@@ -148,12 +148,12 @@ public class PersistentSpStudent implements MutableSpStudent {
   }
 
   @Override
-  public Program getProgram() throws Exception {
+  public Program getProgram() {
     return mProgram == null ? sProgramManager.get(mProgramId) : sProgramManager.validate(mProgram);
   }
 
   @Override
-  public Semester getSemester() throws Exception {
+  public Semester getSemester() {
     return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
         .validate(mSemester);
   }
@@ -174,7 +174,7 @@ public class PersistentSpStudent implements MutableSpStudent {
   }
 
   @Override
-  public MutableSpStudent edit() throws Exception {
+  public MutableSpStudent edit() {
     return new PersistentSpStudent(this);
   }
 

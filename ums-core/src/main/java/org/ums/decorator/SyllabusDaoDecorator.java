@@ -13,7 +13,7 @@ public class SyllabusDaoDecorator extends
     ContentDaoDecorator<Syllabus, MutableSyllabus, String, SyllabusManager> implements
     SyllabusManager {
   @Override
-  public List<Syllabus> getSyllabusList(Integer pProgramId) throws Exception {
+  public List<Syllabus> getSyllabusList(Integer pProgramId) {
     return getManager().getSyllabusList(pProgramId);
   }
 }

@@ -12,9 +12,9 @@ import java.io.Serializable;
  */
 public interface SubGroup extends Serializable, LastModifier, EditType<MutableSubGroup>,
     Identifier<Integer> {
-  Semester getSemester() throws Exception;
+  Semester getSemester();
 
-  SeatPlanGroup getGroup() throws Exception;
+  SeatPlanGroup getGroup();
 
   int subGroupNo();
 

@@ -59,12 +59,12 @@ public class PersistentTeacher implements MutableTeacher {
   }
 
   @Override
-  public void commit(boolean update) throws Exception {
+  public void commit(boolean update) {
 
   }
 
   @Override
-  public void delete() throws Exception {
+  public void delete() {
 
   }
 
@@ -99,7 +99,7 @@ public class PersistentTeacher implements MutableTeacher {
   }
 
   @Override
-  public Department getDepartment() throws Exception {
+  public Department getDepartment() {
     return mDepartment == null ? sDepartmentManager.get(mDepartmentId) : sDepartmentManager
         .validate(mDepartment);
   }
@@ -115,7 +115,7 @@ public class PersistentTeacher implements MutableTeacher {
   }
 
   @Override
-  public MutableTeacher edit() throws Exception {
+  public MutableTeacher edit() {
     return null;
   }
 

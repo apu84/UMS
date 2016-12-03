@@ -16,7 +16,7 @@ public class MutableClassRoomResource extends Resource {
   ClassRoomResourceHelper mResourceHelper;
 
   @POST
-  public Response createClassRoom(final JsonObject pJsonObject) throws Exception {
+  public Response createClassRoom(final JsonObject pJsonObject) {
     return mResourceHelper.post(pJsonObject, mUriInfo);
   }
 

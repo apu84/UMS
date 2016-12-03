@@ -56,8 +56,7 @@ public class PersistentApplicationCCI implements MutableApplicationCCI {
 
   }
 
-  public PersistentApplicationCCI(final PersistentApplicationCCI pPersistentApplicationCCI)
-      throws Exception {
+  public PersistentApplicationCCI(final PersistentApplicationCCI pPersistentApplicationCCI) {
     mId = pPersistentApplicationCCI.getId();
     mSemester = pPersistentApplicationCCI.getSemester();
     mSemesterId = pPersistentApplicationCCI.getSemesterId();
@@ -229,18 +228,18 @@ public class PersistentApplicationCCI implements MutableApplicationCCI {
   }
 
   @Override
-  public Semester getSemester() throws Exception {
+  public Semester getSemester() {
     return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
         .validate(mSemester);
   }
 
   @Override
-  public Student getStudent() throws Exception {
+  public Student getStudent() {
     return mStudent == null ? sStudentManager.get(mStudentId) : sStudentManager.validate(mStudent);
   }
 
   @Override
-  public Course getCourse() throws Exception {
+  public Course getCourse() {
     return mCourse == null ? sCourseManager.get(mCourseId) : sCourseManager.validate(mCourse);
   }
 
@@ -265,7 +264,7 @@ public class PersistentApplicationCCI implements MutableApplicationCCI {
   }
 
   @Override
-  public MutableApplicationCCI edit() throws Exception {
+  public MutableApplicationCCI edit() {
     return new PersistentApplicationCCI(this);
   }
 
@@ -280,7 +279,7 @@ public class PersistentApplicationCCI implements MutableApplicationCCI {
   }
 
   @Override
-  public void commit(boolean update) throws Exception {
+  public void commit(boolean update) {
     if(update) {
       sApplicationCCIManager.update(this);
     }
@@ -290,7 +289,7 @@ public class PersistentApplicationCCI implements MutableApplicationCCI {
   }
 
   @Override
-  public void delete() throws Exception {
+  public void delete() {
     sApplicationCCIManager.delete(this);
   }
 

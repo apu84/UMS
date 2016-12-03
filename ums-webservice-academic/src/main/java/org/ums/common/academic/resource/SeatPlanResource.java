@@ -38,7 +38,7 @@ public class SeatPlanResource extends MutableSeatPlanResource {
   public StreamingOutput createOrViewSeatPlan(final @Context Request pRequest,
       final @PathParam("semesterId") String pSemesterId,
       final @PathParam("groupNo") String pGroupNo, final @PathParam("type") String pType,
-      final @PathParam("exam-date") String pExamDate) throws Exception {
+      final @PathParam("exam-date") String pExamDate) {
 
     return new StreamingOutput() {
       @Override
@@ -62,7 +62,7 @@ public class SeatPlanResource extends MutableSeatPlanResource {
       final @PathParam("program-type") Integer pProgramType,
       final @PathParam("semester-id") Integer pSemesterId,
       final @PathParam("exam-type") Integer pExamType,
-      final @PathParam("exam-date") String pExamDate) throws Exception {
+      final @PathParam("exam-date") String pExamDate) {
     return new StreamingOutput() {
       @Override
       public void write(OutputStream pOutputStream) throws IOException, WebApplicationException {
@@ -84,7 +84,7 @@ public class SeatPlanResource extends MutableSeatPlanResource {
       final @PathParam("program-type") Integer pProgramType,
       final @PathParam("semester-id") Integer pSemesterId,
       final @PathParam("exam-type") Integer pExamType,
-      final @PathParam("exam-date") String pExamDate) throws Exception {
+      final @PathParam("exam-date") String pExamDate) {
     return new StreamingOutput() {
       @Override
       public void write(OutputStream pOutputStream) throws IOException, WebApplicationException {
@@ -106,7 +106,7 @@ public class SeatPlanResource extends MutableSeatPlanResource {
       final @PathParam("program-type") Integer pProgramType,
       final @PathParam("semester-id") Integer pSemesterId,
       final @PathParam("exam-type") Integer pExamType,
-      final @PathParam("exam-date") String pExamDate) throws Exception {
+      final @PathParam("exam-date") String pExamDate) {
     return new StreamingOutput() {
       @Override
       public void write(OutputStream pOutputStream) throws IOException, WebApplicationException {
@@ -125,7 +125,7 @@ public class SeatPlanResource extends MutableSeatPlanResource {
   @Path("/studentId/{student-id}/semesterId/{semester-id}")
   public JsonObject getSeatPlanInfoForSeatPlanViewing(final @Context Request pRequest,
       final @PathParam("student-id") String pStudentId,
-      final @PathParam("semester-id") Integer pSemesterId) throws Exception {
+      final @PathParam("semester-id") Integer pSemesterId) {
     return mSeatPlanResourceHelper.getSeatPlanForStudentsSeatPlanView(pStudentId, pSemesterId,
         mUriInfo);
   }
@@ -135,7 +135,7 @@ public class SeatPlanResource extends MutableSeatPlanResource {
   public JsonObject getSeatPlanForStudentAndCCIExam(final @Context Request pRequest,
       final @PathParam("student-id") String pStudentId,
       final @PathParam("semester-id") Integer pSemesterId,
-      final @PathParam("exam-date") String pExamDate) throws Exception {
+      final @PathParam("exam-date") String pExamDate) {
     return mSeatPlanResourceHelper.getSeatPlanForStudentAndCCIExam(pStudentId, pSemesterId,
         pExamDate, mUriInfo);
   }

@@ -34,7 +34,7 @@ public class SubGroupCCIResource extends MutableSubGroupCCIResource {
   @Path("/semester/{semester-id}/examDate/{exam-date}")
   public JsonObject getBySemesterAndExamDate(final @Context Request pRequest,
       final @PathParam("semester-id") Integer pSemesterId,
-      final @PathParam("exam-date") String pExamDate) throws Exception {
+      final @PathParam("exam-date") String pExamDate) {
     return mHelper.getBySemesterAndExamDate(pSemesterId, pExamDate, pRequest, mUriInfo);
   }
 

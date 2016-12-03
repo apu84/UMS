@@ -39,31 +39,31 @@ public class PersistentPermissionDao extends PermissionDaoDecorator {
   }
 
   @Override
-  public List<Permission> getAll() throws Exception {
+  public List<Permission> getAll() {
     return mJdbcTemplate.query(SELECT_ALL, new PermissionRowMapper());
   }
 
   @Override
-  public Permission get(Integer pId) throws Exception {
+  public Permission get(Integer pId) {
     String query = SELECT_ALL + "WHERE PERMISSION_ID = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new PermissionRowMapper());
   }
 
   @Override
-  public int update(MutablePermission pMutable) throws Exception {
+  public int update(MutablePermission pMutable) {
     String query = UPDATE_ALL + "WHERE PERMISSION_ID = ?";
     return mJdbcTemplate.update(query, pMutable.getRole().getId(), Joiner.on(PERMISSION_SEPARATOR)
         .join(pMutable.getPermissions()));
   }
 
   @Override
-  public int delete(MutablePermission pMutable) throws Exception {
+  public int delete(MutablePermission pMutable) {
     String query = DELETE_ALL + "WHERE PERMISSION_ID = ?";
     return mJdbcTemplate.update(query, pMutable.getId());
   }
 
   @Override
-  public int create(MutablePermission pMutable) throws Exception {
+  public int create(MutablePermission pMutable) {
     return mJdbcTemplate.update(INSERT_ALL, pMutable.getRole().getId(),
         Joiner.on(PERMISSION_SEPARATOR).join(pMutable.getPermissions()));
   }

@@ -9,6 +9,7 @@ import org.ums.manager.ProgramManager;
 import org.ums.manager.RoutineManager;
 import org.ums.manager.SemesterManager;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -46,7 +47,7 @@ public class PersistentRoutine implements MutableRoutine {
 
   }
 
-  public PersistentRoutine(final PersistentRoutine pPersistentRoutine) throws Exception {
+  public PersistentRoutine(final PersistentRoutine pPersistentRoutine) {
     mId = pPersistentRoutine.getId();
     mSemester = pPersistentRoutine.getSemester();
     mProgram = pPersistentRoutine.getProgram();
@@ -67,7 +68,7 @@ public class PersistentRoutine implements MutableRoutine {
   }
 
   @Override
-  public int getDuration() throws Exception {
+  public int getDuration() {
     char[] startTimeArray = mStartTime.toCharArray();
     startTimeArray[2] = ':';
     String startTimeString = String.valueOf(startTimeArray);
@@ -75,8 +76,14 @@ public class PersistentRoutine implements MutableRoutine {
     endTimeArray[2] = ':';
     String endTimeString = String.valueOf(endTimeArray);
     SimpleDateFormat format = new SimpleDateFormat("h:mm a");
-    Date date1 = format.parse(startTimeString);
-    Date date2 = format.parse(endTimeString);
+    Date date1 = null;
+    Date date2 = null;
+    try {
+      date1 = format.parse(startTimeString);
+      date2 = format.parse(endTimeString);
+    } catch(ParseException pe) {
+      throw new RuntimeException(pe);
+    }
     long difference = date2.getTime() - date1.getTime();
     long diffMinutes = (difference / 60000) / 50;
     String duration = String.valueOf(diffMinutes);
@@ -135,7 +142,7 @@ public class PersistentRoutine implements MutableRoutine {
   }
 
   @Override
-  public Program getProgram() throws Exception {
+  public Program getProgram() {
     return mProgram == null ? sProgramManager.get(mProgramId) : sProgramManager.validate(mProgram);
 
   }
@@ -197,7 +204,7 @@ public class PersistentRoutine implements MutableRoutine {
   }
 
   @Override
-  public void commit(boolean update) throws Exception {
+  public void commit(boolean update) {
     if(update) {
       sRoutineManager.update(this);
     }
@@ -207,7 +214,7 @@ public class PersistentRoutine implements MutableRoutine {
   }
 
   @Override
-  public void delete() throws Exception {
+  public void delete() {
     sRoutineManager.delete(this);
   }
 
@@ -222,7 +229,7 @@ public class PersistentRoutine implements MutableRoutine {
   }
 
   @Override
-  public Semester getSemester() throws Exception {
+  public Semester getSemester() {
     return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
         .validate(mSemester);
   }
@@ -253,7 +260,7 @@ public class PersistentRoutine implements MutableRoutine {
   }
 
   @Override
-  public MutableRoutine edit() throws Exception {
+  public MutableRoutine edit() {
     return new PersistentRoutine(this);
   }
 

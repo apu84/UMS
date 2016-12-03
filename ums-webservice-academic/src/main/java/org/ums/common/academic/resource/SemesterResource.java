@@ -31,7 +31,7 @@ public class SemesterResource extends MutableSemesterResource {
   @Path("/program-type/{program-type}/limit/{list-limit}")
   public JsonObject getSemesterList(final @Context Request pRequest,
       final @PathParam("program-type") int pProgramType,
-      final @PathParam("list-limit") int pListLimit) throws Exception {
+      final @PathParam("list-limit") int pListLimit) {
     List<Semester> semesters = mManager.getSemesters(pProgramType, pListLimit);
     return mResourceHelper
         .buildSemesters(mManager.getSemesters(pProgramType, pListLimit), mUriInfo);

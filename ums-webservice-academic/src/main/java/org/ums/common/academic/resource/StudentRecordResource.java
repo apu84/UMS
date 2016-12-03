@@ -27,7 +27,7 @@ public class StudentRecordResource extends MutableStudentRecordResource {
   public JsonObject getStudentRecord(final @Context Request pRequest,
       final @PathParam("student-id") String pStudentId,
       final @PathParam("semester-id") Integer pSemesterId, final @PathParam("year") Integer pYear,
-      final @PathParam("semester") Integer pSemester) throws Exception {
+      final @PathParam("semester") Integer pSemester) {
     return mHelper.getStudentRecord(pStudentId, pSemesterId, pYear, pSemester, pRequest, mUriInfo);
   }
 }

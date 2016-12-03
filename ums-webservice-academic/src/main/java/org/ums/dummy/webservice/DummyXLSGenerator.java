@@ -31,7 +31,7 @@ public class DummyXLSGenerator {
   DepartmentManager mDepartmentManager;
 
   @GET
-  public StreamingOutput get() throws Exception {
+  public StreamingOutput get() {
     List<Teacher> teacherList = mTeacherManager.getByDepartment(mDepartmentManager.get("05"));
     return new StreamingOutput() {
       public void write(OutputStream output) throws IOException, WebApplicationException {

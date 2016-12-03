@@ -73,19 +73,19 @@ public class PersistentStudentDao extends StudentDaoDecorator {
   }
 
   @Override
-  public int update(MutableStudent pMutable) throws Exception {
+  public int update(MutableStudent pMutable) {
     String query = UPDATE_ALL + " WHERE STUDENT_ID = ?";
     return mJdbcTemplate.update(query, getUpdateParamArray(Lists.newArrayList(pMutable)).get(0));
   }
 
   @Override
-  public int delete(MutableStudent pMutable) throws Exception {
+  public int delete(MutableStudent pMutable) {
     String query = DELETE_ALL + " WHERE STUDENT_ID = ?";
     return mJdbcTemplate.update(query, pMutable.getId());
   }
 
   @Override
-  public int create(MutableStudent pMutable) throws Exception {
+  public int create(MutableStudent pMutable) {
     return mJdbcTemplate.update(CREATE_ALL, pMutable.getId(), pMutable.getFullName(),
         pMutable.getDepartmentId(), pMutable.getSemesterId(), pMutable.getFatherName(),
         pMutable.getMotherName(), mDateFormat.format(pMutable.getDateOfBirth()),
@@ -105,13 +105,13 @@ public class PersistentStudentDao extends StudentDaoDecorator {
    */
 
   @Override
-  public Student get(String pId) throws Exception {
+  public Student get(String pId) {
     String query = SELECT_ALL + " WHERE STUDENT_ID = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new StudentRowMapper());
   }
 
   @Override
-  public List<Student> getAll() throws Exception {
+  public List<Student> getAll() {
     String query = SELECT_ALL;
     return mJdbcTemplate.query(query, new StudentRowMapper());
   }
@@ -185,13 +185,13 @@ public class PersistentStudentDao extends StudentDaoDecorator {
   }
 
   @Override
-  public int update(List<MutableStudent> pStudentList) throws Exception {
+  public int update(List<MutableStudent> pStudentList) {
     String query = UPDATE_ALL + " WHERE STUDENT_ID = ?";
     return mJdbcTemplate.batchUpdate(query, getUpdateParamArray(pStudentList)).length;
   }
 
   @Override
-  public int updateStudentsAdviser(List<MutableStudent> pStudents) throws Exception {
+  public int updateStudentsAdviser(List<MutableStudent> pStudents) {
     String query = "UPDATE STUDENTS SET ADVISER=? WHERE STUDENT_ID=?";
     return mJdbcTemplate.batchUpdate(query, getUpdateParamArrayForAdviser(pStudents)).length;
   }
@@ -226,7 +226,7 @@ public class PersistentStudentDao extends StudentDaoDecorator {
   }
 
   @Override
-  public List<Student> getStudentListFromStudentsString(String pStudents) throws Exception {
+  public List<Student> getStudentListFromStudentsString(String pStudents) {
     String query =
         "Select * From Students where Student_Id in ( "
             + "select regexp_substr(?,'[^,]+', 1, level)  " + "from dual  " + "connect by  "

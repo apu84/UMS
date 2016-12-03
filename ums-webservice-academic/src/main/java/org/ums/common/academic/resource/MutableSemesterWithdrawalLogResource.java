@@ -16,7 +16,7 @@ public class MutableSemesterWithdrawalLogResource extends Resource {
   SemesterWithdrawalLogResourceHelper mHelper;
 
   @POST
-  public Response createSemesterWithdrawalLog(final JsonObject pJsonObject) throws Exception {
+  public Response createSemesterWithdrawalLog(final JsonObject pJsonObject) {
     return mHelper.post(pJsonObject, mUriInfo);
   }
 

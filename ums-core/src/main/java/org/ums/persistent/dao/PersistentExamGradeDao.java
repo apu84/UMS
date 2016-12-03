@@ -306,7 +306,7 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
 
   @Override
   public List<StudentGradeDto> getAllGrades(int pSemesterId, String pCourseId, ExamType pExamType,
-      CourseType courseType) throws Exception {
+      CourseType courseType) {
 
     String query = "";
     if(courseType == CourseType.THEORY) {
@@ -326,7 +326,7 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
 
   @Override
   public List<GradeChartDataDto> getChartData(int pSemesterId, String pCourseId,
-      ExamType pExamType, CourseType courseType) throws Exception {
+      ExamType pExamType, CourseType courseType) {
     String query = getQuery(CHART_DATA, courseType);
     return mJdbcTemplate.query(query, new Object[] {pSemesterId, pCourseId, pExamType.getId()},
         new ChartDataRowMapper());
@@ -345,7 +345,7 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
 
   @Override
   public MarksSubmissionStatusDto getMarksSubmissionStatus(int pSemesterId, String pCourseId,
-      ExamType pExamType) throws Exception {
+      ExamType pExamType) {
     String query = SELECT_PART_INFO;
     return mJdbcTemplate.queryForObject(query,
         new Object[] {pSemesterId, pCourseId, pExamType.getId()},
@@ -355,7 +355,7 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
   @Override
   public List<MarksSubmissionStatusDto> getMarksSubmissionStatus(Integer pSemesterId,
       Integer pExamType, Integer pProgramId, Integer year, Integer semester, String teacherId,
-      String deptId, String userRole, Integer status) throws Exception {
+      String deptId, String userRole, Integer status) {
     String query = "";
     if(userRole.equals("T")) { // Teacher
       query = SELECT_GRADE_SUBMISSION_TABLE_TEACHER;
@@ -401,27 +401,26 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
   }
 
   @Override
-  public List<String> getRoleForTeacher(String pTeacherId, int pSemesterId, String pCourseId)
-      throws Exception {
+  public List<String> getRoleForTeacher(String pTeacherId, int pSemesterId, String pCourseId) {
     String query = CHECK_TEACHER_ROLE;
     return mJdbcTemplate.query(query, new Object[] {pTeacherId, pSemesterId, pCourseId, pTeacherId,
         pSemesterId, pCourseId, pTeacherId, pSemesterId, pCourseId}, new RoleRowMapper());
   }
 
   @Override
-  public List<String> getRoleForHead(String pUserId) throws Exception {
+  public List<String> getRoleForHead(String pUserId) {
     String query = CHECK_HEAD_ROLE;
     return mJdbcTemplate.query(query, new Object[] {pUserId}, new RoleRowMapper());
   }
 
   @Override
-  public List<String> getRoleForCoE(String pUserId) throws Exception {
+  public List<String> getRoleForCoE(String pUserId) {
     String query = CHECK_COE_ROLE;
     return mJdbcTemplate.query(query, new Object[] {pUserId, pUserId}, new RoleRowMapper());
   }
 
   @Override
-  public List<String> getRoleForVC(String pUserId) throws Exception {
+  public List<String> getRoleForVC(String pUserId) {
     String query = CHECK_VC_ROLE;
     return mJdbcTemplate.query(query, new Object[] {pUserId, pUserId}, new RoleRowMapper());
   }
@@ -484,8 +483,7 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
   }
 
   @Override
-  public boolean saveGradeSheet(MarksSubmissionStatus actualStatus, List<StudentGradeDto> pGradeList)
-      throws Exception {
+  public boolean saveGradeSheet(MarksSubmissionStatus actualStatus, List<StudentGradeDto> pGradeList) {
     batchUpdateGrade(actualStatus.getStatus(), actualStatus.getSemesterId(),
         actualStatus.getCourseId(), actualStatus.getExamType(), actualStatus.getCourse()
             .getCourseType(), pGradeList);
@@ -585,13 +583,13 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
 
   @Override
   public boolean updateGradeStatus_Save(MarksSubmissionStatus actualStatus,
-      List<StudentGradeDto> recheckList, List<StudentGradeDto> approveList) throws Exception {
+      List<StudentGradeDto> recheckList, List<StudentGradeDto> approveList) {
     batchUpdateGradeStatus_Save(actualStatus, recheckList, approveList);
     return true;
   }
 
   private void batchUpdateGradeStatus_Save(MarksSubmissionStatus actualStatus,
-      List<StudentGradeDto> recheckList, List<StudentGradeDto> approveList) throws Exception {
+      List<StudentGradeDto> recheckList, List<StudentGradeDto> approveList) {
 
     String query = getQuery(UPDATE_STATUS_SAVE_RECHECK, actualStatus.getCourse().getCourseType());
     mJdbcTemplate.batchUpdate(query, new BatchPreparedStatementSetter() {
@@ -644,13 +642,13 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
 
   @Override
   public boolean updateGradeStatus_Recheck(MarksSubmissionStatus actualStatus,
-      List<StudentGradeDto> recheckList, List<StudentGradeDto> approveList) throws Exception {
+      List<StudentGradeDto> recheckList, List<StudentGradeDto> approveList) {
     batchUpdateGradeStatus_Recheck(actualStatus, recheckList, approveList);
     return true;
   }
 
   @Override
-  public int rejectRecheckRequest(MarksSubmissionStatus pMarksSubmissionStatus) throws Exception {
+  public int rejectRecheckRequest(MarksSubmissionStatus pMarksSubmissionStatus) {
     String query =
         "UPDATE %s SET RECHECK_STATUS= ? WHERE SEMESTER_ID = ? AND COURSE_ID = ? AND EXAM_TYPE = ? ";
     query = String.format(query, getTableName(pMarksSubmissionStatus.getCourse().getCourseType()));
@@ -661,7 +659,7 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
   }
 
   @Override
-  public int approveRecheckRequest(MarksSubmissionStatus pMarksSubmissionStatus) throws Exception {
+  public int approveRecheckRequest(MarksSubmissionStatus pMarksSubmissionStatus) {
     String query =
         "UPDATE %s SET STATUS = ? WHERE SEMESTER_ID = ? AND COURSE_ID = ? AND EXAM_TYPE = ? AND STATUS = ? "
             + "AND RECHECK_STATUS= ?";
@@ -680,7 +678,7 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
   }
 
   private int batchUpdateGradeStatus_Recheck(MarksSubmissionStatus actualStatus,
-      List<StudentGradeDto> recheckList, List<StudentGradeDto> approveList) throws Exception {
+      List<StudentGradeDto> recheckList, List<StudentGradeDto> approveList) {
 
     int total;
     int[] recheckTotal;
@@ -721,13 +719,13 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
 
   @Override
   public boolean updateGradeStatus_Approve(MarksSubmissionStatus actualStatus,
-      List<StudentGradeDto> recheckList, List<StudentGradeDto> approveList) throws Exception {
+      List<StudentGradeDto> recheckList, List<StudentGradeDto> approveList) {
     batchUpdateGradeStatus_Approve(actualStatus, recheckList, approveList);
     return true;
   }
 
   private void batchUpdateGradeStatus_Approve(MarksSubmissionStatus actualStatus,
-      List<StudentGradeDto> recheckList, List<StudentGradeDto> approveList) throws Exception {
+      List<StudentGradeDto> recheckList, List<StudentGradeDto> approveList) {
     String query = getQuery(UPDATE_STATUS_APPROVE, actualStatus.getCourse().getCourseType());
     mJdbcTemplate.batchUpdate(query, new BatchPreparedStatementSetter() {
       @Override
@@ -752,7 +750,7 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
   }
 
   private List<Object[]> getUpdateParamListForGradeSubmissionDeadLine(
-      List<MarksSubmissionStatusDto> pMarksSubmissionStatusDtos) throws Exception {
+      List<MarksSubmissionStatusDto> pMarksSubmissionStatusDtos) {
     List<Object[]> params = new ArrayList<>();
     for(MarksSubmissionStatusDto app : pMarksSubmissionStatusDtos) {
       params.add(new Object[] {app.getExamDate(), app.getSemesterId(), app.getExamType().getId(),
@@ -877,13 +875,13 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
 
   @Override
   public boolean insertGradeLog(String userId, String pRole, MarksSubmissionStatus actualStatus,
-      CourseMarksSubmissionStatus nextStatus, List<StudentGradeDto> pGradeList) throws Exception {
+      CourseMarksSubmissionStatus nextStatus, List<StudentGradeDto> pGradeList) {
     batchInsertGradeLog(userId, pRole, actualStatus, nextStatus, pGradeList);
     return true;
   }
 
   private void batchInsertGradeLog(String userId, String pRole, MarksSubmissionStatus actualStatus,
-      CourseMarksSubmissionStatus nextStatus, List<StudentGradeDto> pGradeList) throws Exception {
+      CourseMarksSubmissionStatus nextStatus, List<StudentGradeDto> pGradeList) {
     String sql = "";
     if(actualStatus.getCourse().getCourseType() == CourseType.THEORY) {
       sql = INSERT_THEORY_LOG;
@@ -963,14 +961,14 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
 
   @Override
   public int insertMarksSubmissionStatusLog(String userId, String userRole,
-      MarksSubmissionStatus actualStatus, CourseMarksSubmissionStatus status) throws Exception {
+      MarksSubmissionStatus actualStatus, CourseMarksSubmissionStatus status) {
     return mJdbcTemplate.update(INSERT_MARKS_SUBMISSION_STATUS_LOG, userId, userRole, actualStatus
         .getSemesterId(), actualStatus.getCourseId(), actualStatus.getExamType().getId(), status
         .getId());
   }
 
   @Override
-  public int getTotalStudentCount(MarksSubmissionStatus actualStatus) throws Exception {
+  public int getTotalStudentCount(MarksSubmissionStatus actualStatus) {
     String sql = "";
     if(actualStatus.getStatus() == CourseMarksSubmissionStatus.NOT_SUBMITTED) {
       if(actualStatus.getCourse().getCourseType() == CourseType.THEORY) {
@@ -995,7 +993,7 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
 
   @Override
   public List<MarksSubmissionStatusLogDto> getMarksSubmissionLogs(Integer pSemesterId,
-      String pCourseId, Integer pExamType) throws Exception {
+      String pCourseId, Integer pExamType) {
     return mJdbcTemplate.query(SELECT_MARKS_SUBMISSION_STATUS_LOG, new Object[] {pSemesterId,
         pCourseId, pExamType}, new MarksSubmissionStatusLogRowMapper());
   }
@@ -1018,8 +1016,7 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
 
   @Override
   public List<MarksLogDto> getMarksLogs(final Integer pSemesterId, final String pCourseId,
-      final ExamType pExamType, final String pStudentId, final CourseType pCourseType)
-      throws Exception {
+      final ExamType pExamType, final String pStudentId, final CourseType pCourseType) {
     String sql = "";
     if(pCourseType == CourseType.THEORY)
       sql = SELECT_THEORY_LOG;
@@ -1069,7 +1066,7 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
   }
 
   @Override
-  public Map getUserRoleList(Integer pSemesterId, String pCourseId) throws Exception {
+  public Map getUserRoleList(Integer pSemesterId, String pCourseId) {
     return mJdbcTemplate.query(USER_ROLE_QUERY, new Object[] {pSemesterId, pCourseId, pSemesterId,
         pCourseId}, new UserRoleRowExtractor());
   }

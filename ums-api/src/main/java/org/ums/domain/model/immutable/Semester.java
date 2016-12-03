@@ -14,17 +14,17 @@ import java.util.Map;
 public interface Semester extends Serializable, EditType<MutableSemester>, LastModifier,
     Identifier<Integer> {
 
-  String getName() throws Exception;
+  String getName();
 
-  Date getStartDate() throws Exception;
+  Date getStartDate();
 
-  Date getEndDate() throws Exception;
+  Date getEndDate();
 
-  ProgramType getProgramType() throws Exception;
+  ProgramType getProgramType();
 
   int getProgramTypeId();
 
-  Status getStatus() throws Exception;
+  Status getStatus();
 
   enum Status {
     ACTIVE(1),

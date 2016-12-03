@@ -30,7 +30,7 @@ public class PermissionCache extends
   }
 
   @Override
-  public List<Permission> getPermissionByRole(Role pRole) throws Exception{
+  public List<Permission> getPermissionByRole(Role pRole){
     String cacheKey = getCacheKey(Permission.class.toString(), pRole.getId());
     return cachedList(cacheKey, () -> getManager().getPermissionByRole(pRole));
   }

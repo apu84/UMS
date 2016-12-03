@@ -58,19 +58,19 @@ public class PersistentExaminerDao extends
   }
 
   @Override
-  public int delete(MutableExaminer pMutable) throws Exception {
+  public int delete(MutableExaminer pMutable) {
     String query = DELETE_ALL + "WHERE ID = ?";
     return mJdbcTemplate.update(query, pMutable.getId());
   }
 
   @Override
-  public int create(MutableExaminer pMutable) throws Exception {
+  public int create(MutableExaminer pMutable) {
     return mJdbcTemplate.update(INSERT_ONE, pMutable.getSemester().getId(), pMutable.getPreparer()
         .getId(), pMutable.getScrutinizer().getId(), pMutable.getCourse().getId());
   }
 
   @Override
-  public int update(MutableExaminer pMutable) throws Exception {
+  public int update(MutableExaminer pMutable) {
     String query = UPDATE_ALL + "WHERE ID = ?";
     return mJdbcTemplate
         .update(query, pMutable.getSemester().getId(), pMutable.getPreparer().getId(), pMutable

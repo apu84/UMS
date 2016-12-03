@@ -28,7 +28,7 @@ public class PersistentParameter implements MutableParameter {
 
   }
 
-  public PersistentParameter(final PersistentParameter pOriginal) throws Exception {
+  public PersistentParameter(final PersistentParameter pOriginal) {
     mId = pOriginal.getId();
     mParameter = pOriginal.getParameter();
     mShortDescription = pOriginal.getShortDescription();
@@ -82,7 +82,7 @@ public class PersistentParameter implements MutableParameter {
   }
 
   @Override
-  public MutableParameter edit() throws Exception {
+  public MutableParameter edit() {
     return new PersistentParameter(this);
   }
 
@@ -92,7 +92,7 @@ public class PersistentParameter implements MutableParameter {
   }
 
   @Override
-  public void commit(boolean update) throws Exception {
+  public void commit(boolean update) {
     if(update) {
       sParameterManager.update(this);
     }
@@ -102,7 +102,7 @@ public class PersistentParameter implements MutableParameter {
   }
 
   @Override
-  public void delete() throws Exception {
+  public void delete() {
     sParameterManager.delete(this);
   }
 

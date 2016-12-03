@@ -13,9 +13,9 @@ import java.util.Map;
 
 public interface TaskStatus extends Serializable, EditType<MutableTaskStatus>, Identifier<String>,
     LastModifier {
-  Status getStatus() throws Exception;
+  Status getStatus();
 
-  String getProgressDescription() throws Exception;
+  String getProgressDescription();
 
   Date getTaskCompletionDate();
 

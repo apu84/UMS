@@ -23,7 +23,7 @@ public class FlushCache extends Resource {
   CacheWarmerManager mCacheWarmerManager;
 
   @POST
-  public Response flushCache(final @Context Request pRequest) throws Exception {
+  public Response flushCache(final @Context Request pRequest) {
     mCacheFactory.getCacheManager().flushAll();
     mCacheWarmerManager.warm(true);
     return Response.ok().build();

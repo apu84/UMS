@@ -196,7 +196,7 @@ public class StudentFileContentPermission extends AbstractSectionPermission {
     return error(mMessageResource.getMessage("compress.not.allowed"));
   }
 
-  protected Student getStudent() throws Exception {
+  protected Student getStudent() {
     String studentId = SecurityUtils.getSubject().getPrincipal().toString();
     return mStudentManager.get(studentId);
   }

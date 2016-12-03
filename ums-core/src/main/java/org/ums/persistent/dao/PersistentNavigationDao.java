@@ -36,30 +36,30 @@ public class PersistentNavigationDao extends NavigationDaoDecorator {
   }
 
   @Override
-  public int update(MutableNavigation pMutable) throws Exception {
+  public int update(MutableNavigation pMutable) {
     String query = UPDATE_ALL + "WHERE NAVIGATION_ID = ?";
     return mJdbcTemplate.update(query, pMutable.getId());
   }
 
   @Override
-  public int delete(MutableNavigation pMutable) throws Exception {
+  public int delete(MutableNavigation pMutable) {
     String query = DELETE_ALL + "WHERE NAVIGATION_ID = ?";
     return mJdbcTemplate.update(query, pMutable.getId());
   }
 
   @Override
-  public int create(MutableNavigation pMutable) throws Exception {
+  public int create(MutableNavigation pMutable) {
     return mJdbcTemplate.update(INSERT_ALL);
   }
 
   @Override
-  public Navigation get(Integer pId) throws Exception {
+  public Navigation get(Integer pId) {
     String query = SELECT_ALL + "WHERE NAVIGATION_ID = ? ORDER BY VIEW_ORDER";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new NavigationMapper());
   }
 
   @Override
-  public List<Navigation> getAll() throws Exception {
+  public List<Navigation> getAll() {
     String query = SELECT_ALL + "ORDER BY PARENT_MENU ASC";
     return mJdbcTemplate.query(query, new NavigationMapper());
   }

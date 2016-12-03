@@ -12,7 +12,7 @@ import javax.json.JsonObject;
 public class StudentProfileBuilder extends StudentBuilder {
   @Override
   public void build(final MutableStudent pMutableStudent, final JsonObject pJsonObject,
-      final LocalCache pLocalCache) throws Exception {
+      final LocalCache pLocalCache) {
     pMutableStudent.setId(pJsonObject.getString("id"));
     pMutableStudent.setPresentAddress(pJsonObject.getString("presentAddress"));
     pMutableStudent.setPermanentAddress(pJsonObject.getString("permanentAddress"));

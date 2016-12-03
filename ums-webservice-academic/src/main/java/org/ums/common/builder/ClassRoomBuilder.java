@@ -15,7 +15,7 @@ import javax.ws.rs.core.UriInfo;
 public class ClassRoomBuilder implements Builder<ClassRoom, MutableClassRoom> {
   @Override
   public void build(JsonObjectBuilder pBuilder, ClassRoom pReadOnly, UriInfo pUriInfo,
-      final LocalCache pLocalCache) throws Exception {
+      final LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("roomNo", pReadOnly.getRoomNo());
     pBuilder.add("description",
@@ -33,8 +33,7 @@ public class ClassRoomBuilder implements Builder<ClassRoom, MutableClassRoom> {
   }
 
   @Override
-  public void build(MutableClassRoom pMutable, JsonObject pJsonObject, final LocalCache pLocalCache)
-      throws Exception {
+  public void build(MutableClassRoom pMutable, JsonObject pJsonObject, final LocalCache pLocalCache) {
     pMutable.setRoomNo(pJsonObject.getString("roomNo"));
     pMutable.setDescription(pJsonObject.getString("description"));
     pMutable.setTotalRow((Integer.parseInt(pJsonObject.getString("totalRow"))));

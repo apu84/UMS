@@ -18,7 +18,7 @@ public interface User extends Serializable, EditType<MutableUser>, Identifier<St
 
   List<Integer> getRoleIds();
 
-  List<Role> getRoles() throws Exception;
+  List<Role> getRoles();
 
   boolean isActive();
 
@@ -28,11 +28,11 @@ public interface User extends Serializable, EditType<MutableUser>, Identifier<St
 
   Integer getPrimaryRoleId();
 
-  Role getPrimaryRole() throws Exception;
+  Role getPrimaryRole();
 
   List<String> getAdditionalPermissions();
 
-  Department getDepartment() throws Exception;
+  Department getDepartment();
 
   String getDepartmentId();
 

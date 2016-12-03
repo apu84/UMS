@@ -23,12 +23,12 @@ public class PersistentUGTheoryMarks extends AbstractUGBaseRegistration implemen
   }
 
   @Override
-  public MutableUGTheoryMarks edit() throws Exception {
+  public MutableUGTheoryMarks edit() {
     return new PersistentUGTheoryMarks(this);
   }
 
   @Override
-  public void commit(boolean update) throws Exception {
+  public void commit(boolean update) {
     if(update) {
       sTheoryMarksManager.update(this);
     }
@@ -38,7 +38,7 @@ public class PersistentUGTheoryMarks extends AbstractUGBaseRegistration implemen
   }
 
   @Override
-  public void delete() throws Exception {
+  public void delete() {
     sTheoryMarksManager.delete(this);
   }
 }

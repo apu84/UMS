@@ -15,7 +15,7 @@ public class MutableSyllabusResource extends Resource {
   SyllabusResourceHelper mResourceHelper;
 
   @POST
-  public Response createSyllabus(final JsonObject pJsonObject) throws Exception {
+  public Response createSyllabus(final JsonObject pJsonObject) {
     return mResourceHelper.post(pJsonObject, mUriInfo);
   }
 

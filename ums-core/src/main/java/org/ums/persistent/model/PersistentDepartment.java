@@ -31,7 +31,7 @@ public class PersistentDepartment implements MutableDepartment {
   }
 
   @Override
-  public void commit(boolean update) throws Exception {
+  public void commit(boolean update) {
     if(update) {
       sDepartmentManager.update(this);
     }
@@ -41,7 +41,7 @@ public class PersistentDepartment implements MutableDepartment {
   }
 
   @Override
-  public void delete() throws Exception {
+  public void delete() {
     sDepartmentManager.delete(this);
   }
 
@@ -82,7 +82,7 @@ public class PersistentDepartment implements MutableDepartment {
   }
 
   @Override
-  public MutableDepartment edit() throws Exception {
+  public MutableDepartment edit() {
     return new PersistentDepartment(this);
   }
 

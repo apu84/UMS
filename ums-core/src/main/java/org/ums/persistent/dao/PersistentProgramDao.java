@@ -21,12 +21,12 @@ public class PersistentProgramDao extends ProgramDaoDecorator {
     mJdbcTemplate = pJdbcTemplate;
   }
 
-  public Program get(final Integer pId) throws Exception {
+  public Program get(final Integer pId) {
     String query = SELECT_ALL + "WHERE PROGRAM_ID = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new ProgramRowMapper());
   }
 
-  public List<Program> getAll() throws Exception {
+  public List<Program> getAll() {
     String query = SELECT_ALL;
     return mJdbcTemplate.query(query, new ProgramRowMapper());
   }

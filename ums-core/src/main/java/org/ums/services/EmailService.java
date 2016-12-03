@@ -1,10 +1,12 @@
 package org.ums.services;
 
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
@@ -50,38 +52,43 @@ public class EmailService {
   private void sendEmail(final String toEmailAddresses, final String fromEmailAddress,
       final String subject, final String attachmentPath, final String attachmentName) {
     MimeMessagePreparator preparator = new MimeMessagePreparator() {
-      public void prepare(MimeMessage mimeMessage) throws Exception {
-        MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true);
-        message.setTo(toEmailAddresses);
-        message.setFrom(new InternetAddress(fromEmailAddress, "IUMS"));
-        message.setSubject(subject);
+      public void prepare(MimeMessage mimeMessage) {
+        MimeMessageHelper message = null;
+        try {
+          message = new MimeMessageHelper(mimeMessage, true);
+          message.setTo(toEmailAddresses);
+          message.setFrom(new InternetAddress(fromEmailAddress, "IUMS"));
+          message.setSubject(subject);
 
-        SimpleDateFormat sdfDate = new SimpleDateFormat("dd-MM-yyyy  HH:mm");// dd/MM/yyyy
-        Date now = new Date();
-        String strDate = sdfDate.format(now);
+          SimpleDateFormat sdfDate = new SimpleDateFormat("dd-MM-yyyy  HH:mm");// dd/MM/yyyy
+          Date now = new Date();
+          String strDate = sdfDate.format(now);
 
-        ResetPasswordEmailDto others = new ResetPasswordEmailDto();
-        others.setUmsRootUrl("https://localhost/ums-web/login");
-        others.setUmsForgotPasswordUrl("https://localhost/ums-web/login/?fogot-password.ums");
-        String abc =
-            "https://localhost/ums-web/login/reset-password.html?pr_token=$$TOKEN$$&uid=$$USER_ID$$";
-        abc = abc.replace("$$TOKEN$$", user.getPasswordResetToken());
-        abc = abc.replace("$$USER_ID$$", user.getId());
+          ResetPasswordEmailDto others = new ResetPasswordEmailDto();
+          others.setUmsRootUrl("https://localhost/ums-web/login");
+          others.setUmsForgotPasswordUrl("https://localhost/ums-web/login/?fogot-password.ums");
+          String abc =
+              "https://localhost/ums-web/login/reset-password.html?pr_token=$$TOKEN$$&uid=$$USER_ID$$";
+          abc = abc.replace("$$TOKEN$$", user.getPasswordResetToken());
+          abc = abc.replace("$$USER_ID$$", user.getId());
 
-        others.setUmsResetPasswordUrl(abc);
-        others.setForgotPasswordRequestDateTime(strDate);
+          others.setUmsResetPasswordUrl(abc);
+          others.setForgotPasswordRequestDateTime(strDate);
 
-        Map model = new HashMap();
-        model.put("user", user);
-        model.put("others", others);
+          Map model = new HashMap();
+          model.put("user", user);
+          model.put("others", others);
 
-        String body =
-            VelocityEngineUtils.mergeTemplateIntoString(velocityEngine,
-                "html-templates/password-reset-email.vm", "UTF-8", model);
-        message.setText(body, true);
-        if(!StringUtils.isBlank(attachmentPath)) {
-          FileSystemResource file = new FileSystemResource(attachmentPath);
-          message.addAttachment(attachmentName, file);
+          String body =
+              VelocityEngineUtils.mergeTemplateIntoString(velocityEngine,
+                  "html-templates/password-reset-email.vm", "UTF-8", model);
+          message.setText(body, true);
+          if(!StringUtils.isBlank(attachmentPath)) {
+            FileSystemResource file = new FileSystemResource(attachmentPath);
+            message.addAttachment(attachmentName, file);
+          }
+        } catch(MessagingException | UnsupportedEncodingException e) {
+          throw new RuntimeException(e);
         }
       }
     };

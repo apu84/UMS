@@ -14,15 +14,15 @@ public interface MutableStudent extends Student, Mutable, MutableIdentifier<Stri
 
   void setDepartmentId(final String pDepartmentId);
 
-  void setDepartment(final Department pDepartment) throws Exception;
+  void setDepartment(final Department pDepartment);
 
   void setSemesterId(final Integer pSemesterId);
 
-  void setSemester(final Semester pSemester) throws Exception;
+  void setSemester(final Semester pSemester);
 
   void setProgramId(final Integer pProgramId);
 
-  void setProgram(final Program pProgram) throws Exception;
+  void setProgram(final Program pProgram);
 
   void setFatherName(final String pFatherName);
 

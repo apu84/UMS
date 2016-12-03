@@ -79,7 +79,7 @@ public class PersistentSemesterWithdrawalDao extends SemesterWithdrawalDaoDecora
   }
 
   @Override
-  public int update(MutableSemesterWithdrawal pMutable) throws Exception {
+  public int update(MutableSemesterWithdrawal pMutable) {
     if(pMutable.getStatus() < 2) {
       String query = UPDATE_ONE + " WHERE SW_ID=?";
       return mJdbcTemplate.update(query, pMutable.getSemester().getId(), pMutable.getProgram()
@@ -99,26 +99,26 @@ public class PersistentSemesterWithdrawalDao extends SemesterWithdrawalDaoDecora
   }
 
   @Override
-  public int delete(MutableSemesterWithdrawal pMutable) throws Exception {
+  public int delete(MutableSemesterWithdrawal pMutable) {
     String query = DELETE_ONE + " WHERE SW_ID=?";
     return mJdbcTemplate.update(query, pMutable.getId());
   }
 
   @Override
-  public SemesterWithdrawal get(Integer pId) throws Exception {
+  public SemesterWithdrawal get(Integer pId) {
     String query = SELECT_ALL + " WHERE SW_ID=?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId},
         new SemesterWithdrawalRowMapper());
   }
 
   @Override
-  public List<SemesterWithdrawal> getAll() throws Exception {
+  public List<SemesterWithdrawal> getAll() {
     String query = SELECT_ALL;
     return mJdbcTemplate.query(query, new SemesterWithdrawalRowMapper());
   }
 
   @Override
-  public int create(MutableSemesterWithdrawal pMutable) throws Exception {
+  public int create(MutableSemesterWithdrawal pMutable) {
     String query = INSERT_ONE;
     return mJdbcTemplate.update(query, pMutable.getSemester().getId(), pMutable.getProgram()
         .getId(), pMutable.getStudent().getId(), pMutable.getStudent().getCurrentYear(), pMutable

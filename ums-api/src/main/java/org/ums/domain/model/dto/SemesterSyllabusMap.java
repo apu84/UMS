@@ -25,7 +25,7 @@ public class SemesterSyllabusMap implements MutableSemesterSyllabusMapDto, Semes
   }
 
   @Override
-  public void setCopySemester(Semester pSemester) throws Exception {
+  public void setCopySemester(Semester pSemester) {
     mCopySemester = pSemester;
   }
 

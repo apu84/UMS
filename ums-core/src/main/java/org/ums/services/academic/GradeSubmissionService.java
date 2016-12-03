@@ -146,7 +146,7 @@ public class GradeSubmissionService {
   }
 
   public String getActorForCurrentUser(String userId, String requestedRole, int semesterId,
-      String courseId) throws Exception {
+      String courseId) {
     String role = "Invalid";
     List<String> roleList;
     switch(requestedRole) {
@@ -181,16 +181,16 @@ public class GradeSubmissionService {
   }
 
   public void validatePartInfo(final Integer pTotalPart, final Integer pPartATotal,
-      final Integer pPartBTotal) throws Exception {
+      final Integer pPartBTotal) {
     if(pTotalPart != 1 && pTotalPart != 2)
-      throw new Exception("Part Information is wrong.");
+      throw new ValidationException("Part Information is wrong.");
 
     if(pTotalPart == 1 && (pPartATotal == 0 || pPartATotal > 70)) {
-      throw new Exception("Part Information is wrong.");
+      throw new ValidationException("Part Information is wrong.");
     }
     else if(pTotalPart == 2) {
       if(pPartATotal == 0 || pPartBTotal == 0 || pPartATotal + pPartBTotal != 70) {
-        throw new Exception("Part Information is wrong.");
+        throw new ValidationException("Part Information is wrong.");
       }
     }
   }
@@ -208,7 +208,7 @@ public class GradeSubmissionService {
 
   public void validateGradeSubmission(String actingRoleForCurrentUser,
       MarksSubmissionStatusDto requestedStatusDTO, MarksSubmissionStatus actualStatus,
-      List<StudentGradeDto> gradeList, String operation) throws Exception {
+      List<StudentGradeDto> gradeList, String operation) {
     // operation can be either submit OR save
     // Checking the role, requested from client side is valid for the user who is trying to do some
     // operation on grades
@@ -230,7 +230,7 @@ public class GradeSubmissionService {
   }
 
   private void validateSubmittedGrades(MarksSubmissionStatus actualStatus,
-      List<StudentGradeDto> gradeList) throws Exception {
+      List<StudentGradeDto> gradeList) {
 
     // Validate all the grades been submitted or not
     int totalStudents = mManager.getTotalStudentCount(actualStatus);
@@ -267,7 +267,7 @@ public class GradeSubmissionService {
   }
 
   private Boolean validateMarks(Boolean hasError, StudentGradeDto gradeDTO,
-      MarksSubmissionStatus partInfo) throws Exception {
+      MarksSubmissionStatus partInfo) {
     if(partInfo.getCourse().getCourseType() == CourseType.THEORY) {
       hasError = validateQuiz(hasError, gradeDTO.getQuiz(), gradeDTO.getRegType());
       hasError =
@@ -313,7 +313,7 @@ public class GradeSubmissionService {
     if(totalPartCount == 2 && (partB > partBMax)) {
       error = Boolean.TRUE;
     }
-    if(totalPartCount == 1 && (partB !=null && partB > 0)) {
+    if(totalPartCount == 1 && (partB != null && partB > 0)) {
       error = Boolean.TRUE;
     }
     return error;
@@ -322,7 +322,7 @@ public class GradeSubmissionService {
   private Boolean validateTheoryTotal(Boolean error, StudentGradeDto gradeDTO) {
     if(gradeDTO.getTotal() > 100
         || gradeDTO.getTotal() != Math.round(gradeDTO.getQuiz() + gradeDTO.getClassPerformance()
-            + gradeDTO.getPartA() + (gradeDTO.getPartB()==null?0:gradeDTO.getPartB()))) {
+            + gradeDTO.getPartA() + (gradeDTO.getPartB() == null ? 0 : gradeDTO.getPartB()))) {
       error = Boolean.TRUE;
     }
     return error;
@@ -335,7 +335,7 @@ public class GradeSubmissionService {
     return error;
   }
 
-  private Boolean validateGradeLetter(Boolean error, StudentGradeDto gradeDTO) throws Exception {
+  private Boolean validateGradeLetter(Boolean error, StudentGradeDto gradeDTO) {
     if(!mUtilsService.getGradeLetter(UmsUtils.round(gradeDTO.getTotal()), gradeDTO.getRegType())
         .equalsIgnoreCase(gradeDTO.getGradeLetter())) {
       error = Boolean.TRUE;
@@ -386,7 +386,7 @@ public class GradeSubmissionService {
   }
 
   public String getUserIdForNotification(Integer pSemesterId, String pCourseId,
-      CourseMarksSubmissionStatus pNextStatus) throws Exception {
+      CourseMarksSubmissionStatus pNextStatus) {
     String userId = "";
     Map RoleMap = mManager.getUserRoleList(pSemesterId, pCourseId);
     switch(pNextStatus) {
@@ -415,14 +415,14 @@ public class GradeSubmissionService {
   public void sendNotification(String userId, String courseNumber) {
     Notifier notifier = new Notifier() {
       @Override
-      public List<String> consumers() throws Exception {
+      public List<String> consumers() {
         List<String> users = new ArrayList<>();
         users.add(userId);
         return users;
       }
 
       @Override
-      public String producer() throws Exception {
+      public String producer() {
         return SecurityUtils.getSubject().getPrincipal().toString();
       }
 

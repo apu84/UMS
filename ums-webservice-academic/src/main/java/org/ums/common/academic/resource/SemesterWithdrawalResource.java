@@ -30,7 +30,7 @@ public class SemesterWithdrawalResource extends MutableSemesterWithdrawalResourc
   @Path("/studentInfo/semester/{semesterId}/year/{year}/academicSemester/{semester}")
   public JsonObject getStudentRecord(final @Context Request pRequest,
       final @PathParam("semesterId") String semesterId, final @PathParam("year") String year,
-      final @PathParam("semester") String semester) throws Exception {
+      final @PathParam("semester") String semester) {
     return mHelper.getStudentRecord(Integer.parseInt(semesterId), Integer.parseInt(year),
         Integer.parseInt(semester), pRequest, mUriInfo);
   }
@@ -38,7 +38,7 @@ public class SemesterWithdrawalResource extends MutableSemesterWithdrawalResourc
   @GET
   @Path("/deptId/{deptId}")
   public JsonObject getByDeptForEmployee(final @Context Request pRequest,
-      final @PathParam("deptId") String deptId) throws Exception {
+      final @PathParam("deptId") String deptId) {
 
     String dId = "05";
     return mHelper.getRoutineByDeptForEmployee(dId, pRequest, mUriInfo);

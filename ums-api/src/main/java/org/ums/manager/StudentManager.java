@@ -6,7 +6,7 @@ import org.ums.domain.model.immutable.Student;
 import java.util.List;
 
 public interface StudentManager extends ContentManager<Student, MutableStudent, String> {
-  public List<Student> getStudentListFromStudentsString(final String pStudents) throws Exception;
+  public List<Student> getStudentListFromStudentsString(final String pStudents);
 
   public List<Student> getStudentByCourseIdAndSemesterIdForSeatPlanForCCI(String pCourseId,
       int pSemesterId);
@@ -19,7 +19,7 @@ public interface StudentManager extends ContentManager<Student, MutableStudent, 
 
   public List<Student> getRegisteredStudents(int pGroupNo, int pSemesterId, int pExamType);
 
-  public int updateStudentsAdviser(List<MutableStudent> pStudents) throws Exception;
+  public int updateStudentsAdviser(List<MutableStudent> pStudents);
 
   public List<Student> getActiveStudentsByAdviser(String pTeacherId);
 }

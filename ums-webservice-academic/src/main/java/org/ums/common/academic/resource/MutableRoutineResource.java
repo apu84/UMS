@@ -16,7 +16,7 @@ public class MutableRoutineResource extends Resource {
   RoutineResourceHelper mRoutineResourceHelper;
 
   @POST
-  public Response createRoutine(final JsonObject pJsonObject) throws Exception {
+  public Response createRoutine(final JsonObject pJsonObject) {
     return mRoutineResourceHelper.post(pJsonObject, mUriInfo);
   }
 

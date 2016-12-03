@@ -18,25 +18,25 @@ public class MutableGradeSubmissionResource extends Resource {
   GradeSubmissionResourceHelper mResourceHelper;
 
   @PUT
-  public Response saveGradeSheet(final JsonObject pJsonObject) throws Exception {
+  public Response saveGradeSheet(final JsonObject pJsonObject) {
     return mResourceHelper.saveGradeSheet(pJsonObject);
   }
 
   @PUT
   @Path("/recheckApprove")
-  public Response recheckApprove(final JsonObject pJsonObject) throws Exception {
+  public Response recheckApprove(final JsonObject pJsonObject) {
     return mResourceHelper.updateGradeStatus(pJsonObject);
   }
 
   @PUT
   @Path("/vc/recheckApprove")
-  public Response recheckRequestApprove(final JsonObject pJsonObject) throws Exception {
+  public Response recheckRequestApprove(final JsonObject pJsonObject) {
     return mResourceHelper.recheckRequestApprove(pJsonObject);
   }
 
   @PUT
   @Path("/gradeSubmissionDeadLine")
-  public Response updateGradeSubmissionDeadLine(final JsonObject pJsonObject) throws Exception {
+  public Response updateGradeSubmissionDeadLine(final JsonObject pJsonObject) {
     return mResourceHelper.updateGradeSubmissionDeadLine(pJsonObject, mUriInfo);
   }
 

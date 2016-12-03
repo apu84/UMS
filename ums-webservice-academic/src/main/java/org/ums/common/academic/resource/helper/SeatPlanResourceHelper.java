@@ -1,6 +1,7 @@
 package org.ums.common.academic.resource.helper;
 
 import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +24,7 @@ import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
+import javax.print.Doc;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
@@ -80,7 +82,7 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan, MutableSeat
   public static final String DEST = "I:/pdf/seat_plan_report.pdf";
 
   public JsonObject getSeatPlanForStudentsSeatPlanView(final String pStudentId,
-      final Integer pSemesterId, final UriInfo mUriInfo) throws Exception {
+      final Integer pSemesterId, final UriInfo mUriInfo) {
     List<SeatPlan> seatPlans = getContentManager().getForStudent(pStudentId, pSemesterId);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
@@ -94,7 +96,7 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan, MutableSeat
   }
 
   public JsonObject getSeatPlanForStudentAndCCIExam(final String pStudentId,
-      final Integer pSemesterId, final String pExamDate, final UriInfo mUriInfo) throws Exception {
+      final Integer pSemesterId, final String pExamDate, final UriInfo mUriInfo) {
     List<SeatPlan> seatPlans =
         getContentManager().getForStudentAndCCIExam(pStudentId, pSemesterId, pExamDate);
     JsonObjectBuilder object = Json.createObjectBuilder();
@@ -109,7 +111,7 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan, MutableSeat
   }
 
   @Override
-  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) {
     int groupNo = pJsonObject.getInt("groupNo");
     int semesterId = pJsonObject.getInt("semesterId");
     int type = pJsonObject.getInt("type");
@@ -148,7 +150,7 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan, MutableSeat
 
   public void createOrCheckSeatPlanAndReturnRoomList(final int pSemesterId, final int groupNo,
       final int type, final String examDate, OutputStream pOutputStream, final Request pRequest,
-      final UriInfo pUriInfo) throws Exception, IOException {
+      final UriInfo pUriInfo) throws IOException, DocumentException {
     GenericResponse<Map> genericResponse = null, previousResponse = null;
 
     List<SeatPlan> allSeatPlans = mManager.getAll();
@@ -216,7 +218,7 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan, MutableSeat
 
   public void getSeatPlanAttendenceSheetReport(Integer pProgramType, Integer pSemesterId,
       Integer pExamType, String pExamDate, OutputStream pOutputStream, final Request pRequest,
-      final UriInfo mUriInfo) throws Exception, IOException {
+      final UriInfo mUriInfo) throws IOException, DocumentException {
 
     mSeatPlanReportGenerator.createSeatPlanAttendencePdfReport(pProgramType, pSemesterId,
         pExamType, pExamDate, pOutputStream);
@@ -225,7 +227,7 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan, MutableSeat
 
   public void getSeatPlanTopSheetReport(Integer pProgramType, Integer pSemesterId,
       Integer pExamType, String pExamDate, OutputStream pOutputStream, final Request pRequest,
-      final UriInfo mUriInfo) throws Exception, IOException {
+      final UriInfo mUriInfo) throws IOException, DocumentException {
 
     mSeatPlanReportGenerator.createSeatPlanTopSheetPdfReport(pProgramType, pSemesterId, pExamType,
         pExamDate, pOutputStream);
@@ -234,7 +236,7 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan, MutableSeat
 
   public void getSeatPlanStudentStickerReport(Integer pProgramType, Integer pSemesterId,
       Integer pExamType, String pExamDate, OutputStream pOutputStream, final Request pRequest,
-      final UriInfo mUriInfo) throws Exception, IOException {
+      final UriInfo mUriInfo) throws IOException, DocumentException {
 
     mSeatPlanReportGenerator.createSeatPlanStickerReport(pProgramType, pSemesterId, pExamType,
         pExamDate, pOutputStream);

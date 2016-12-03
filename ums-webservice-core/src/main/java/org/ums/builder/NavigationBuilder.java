@@ -21,7 +21,7 @@ public class NavigationBuilder implements Builder<Navigation, MutableNavigation>
 
   @Override
   public void build(JsonObjectBuilder pBuilder, Navigation pReadOnly, UriInfo pUriInfo,
-      LocalCache pLocalCache) throws Exception {
+      LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("title", pReadOnly.getTitle());
     pBuilder.add("parentMenu",
@@ -77,8 +77,7 @@ public class NavigationBuilder implements Builder<Navigation, MutableNavigation>
   }
 
   @Override
-  public void build(MutableNavigation pMutable, JsonObject pJsonObject, LocalCache pLocalCache)
-      throws Exception {
+  public void build(MutableNavigation pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
     // Do nothing for now
   }
 }

@@ -18,7 +18,7 @@ public abstract class ContentCache<R extends Identifier<I> & LastModifier, M ext
   private static final Logger mLogger = LoggerFactory.getLogger(TeacherCache.class);
 
   @Override
-  public List<R> getAll() throws Exception {
+  public List<R> getAll() {
     List<R> readOnlys = super.getAll();
     for(R readOnly : readOnlys) {
       getCacheManager().put(getCacheKey(readOnly.getId()), readOnly);
@@ -27,21 +27,21 @@ public abstract class ContentCache<R extends Identifier<I> & LastModifier, M ext
   }
 
   @Override
-  public int create(M pMutable) throws Exception {
+  public int create(M pMutable) {
     int created = super.create(pMutable);
     getCacheManager().invalidateList(getCachedListKey());
     return created;
   }
 
   @Override
-  public int create(List<M> pMutableList) throws Exception {
+  public int create(List<M> pMutableList) {
     int created = super.create(pMutableList);
     getCacheManager().invalidateList(getCachedListKey());
     return created;
   }
 
   @Override
-  public int delete(M pMutable) throws Exception {
+  public int delete(M pMutable) {
     int modified = super.delete(pMutable);
     invalidate(pMutable);
     getCacheManager().invalidateList(getCachedListKey());
@@ -49,7 +49,7 @@ public abstract class ContentCache<R extends Identifier<I> & LastModifier, M ext
   }
 
   @Override
-  public int delete(List<M> pMutableList) throws Exception {
+  public int delete(List<M> pMutableList) {
     int modified = super.delete(pMutableList);
     for(M mutable : pMutableList) {
       invalidate(mutable);
@@ -59,14 +59,14 @@ public abstract class ContentCache<R extends Identifier<I> & LastModifier, M ext
   }
 
   @Override
-  public int update(M pMutable) throws Exception {
+  public int update(M pMutable) {
     int modified = super.update(pMutable);
     invalidate(pMutable);
     return modified;
   }
 
   @Override
-  public int update(List<M> pMutableList) throws Exception {
+  public int update(List<M> pMutableList) {
     int modified = super.update(pMutableList);
     for(M mutable : pMutableList) {
       invalidate(mutable);
@@ -75,7 +75,7 @@ public abstract class ContentCache<R extends Identifier<I> & LastModifier, M ext
   }
 
   @Override
-  public R get(I pId) throws Exception {
+  public R get(I pId) {
     String cacheKey = getCacheKey(pId);
     R pReadonly = getCacheManager().get(cacheKey);
     if(pReadonly == null) {
@@ -86,7 +86,7 @@ public abstract class ContentCache<R extends Identifier<I> & LastModifier, M ext
   }
 
   @Override
-  public R validate(R pReadonly) throws Exception {
+  public R validate(R pReadonly) {
     String cacheKey = getCacheKey(pReadonly.getId());
     String lastModified = getCacheManager().getLastModified(cacheKey);
 
@@ -104,13 +104,13 @@ public abstract class ContentCache<R extends Identifier<I> & LastModifier, M ext
   }
 
   @Override
-  public boolean exists(I pId) throws Exception {
+  public boolean exists(I pId) {
     String cacheKey = getCacheKey(pId);
     R pReadonly = getCacheManager().get(cacheKey);
     return pReadonly != null || super.exists(pId);
   }
 
-  protected void invalidate(final R pReadonly) throws Exception {
+  protected void invalidate(final R pReadonly) {
     getCacheManager().invalidate(getCacheKey(pReadonly.getId()));
   }
 
@@ -131,8 +131,7 @@ public abstract class ContentCache<R extends Identifier<I> & LastModifier, M ext
     return "all_cached_list";
   }
 
-  protected List<R> cachedList(final String pCacheKey, Callable<List<R>> pCallable)
-      throws Exception {
+  protected List<R> cachedList(final String pCacheKey, Callable<List<R>> pCallable) {
     String methodName = Thread.currentThread().getStackTrace()[2].getMethodName();
     String cacheKey = pCacheKey + methodName;
 
@@ -140,7 +139,12 @@ public abstract class ContentCache<R extends Identifier<I> & LastModifier, M ext
 
     if(cachedList == null || cachedList.size() == 0) {
       // if list is not present in cache
-      List<R> entityList = pCallable.call();
+      List<R> entityList = null;
+      try {
+        entityList = pCallable.call();
+      } catch(Exception e) {
+        throw new RuntimeException(e);
+      }
       if(entityList.size() > 0) {
         List<I> entityCacheIds = new ArrayList<>();
 
@@ -181,7 +185,7 @@ public abstract class ContentCache<R extends Identifier<I> & LastModifier, M ext
     }
   }
 
-  protected R cachedEntity(final String pCacheKey, Callable<R> pCallable) throws Exception {
+  protected R cachedEntity(final String pCacheKey, Callable<R> pCallable) {
     String referredKey = getCacheManager().getReferred(pCacheKey);
     if(StringUtils.isEmpty(referredKey)) {
       return cache(pCacheKey, pCallable);
@@ -195,8 +199,13 @@ public abstract class ContentCache<R extends Identifier<I> & LastModifier, M ext
     }
   }
 
-  private R cache(final String pCacheKey, Callable<R> pCallable) throws Exception {
-    R readonly = pCallable.call();
+  private R cache(final String pCacheKey, Callable<R> pCallable) {
+    R readonly = null;
+    try {
+      pCallable.call();
+    } catch(Exception e) {
+      throw new RuntimeException(e);
+    }
     String idCacheKey = getCacheKey(readonly.getId());
     getCacheManager().put(idCacheKey, readonly);
     getCacheManager().putReferrerKey(pCacheKey, idCacheKey);

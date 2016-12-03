@@ -24,14 +24,14 @@ public class PersistentTaskStatus implements MutableTaskStatus {
 
   public PersistentTaskStatus() {}
 
-  private PersistentTaskStatus(final PersistentTaskStatus pPersistentTaskStatus) throws Exception {
+  private PersistentTaskStatus(final PersistentTaskStatus pPersistentTaskStatus) {
     setId(pPersistentTaskStatus.getId());
     setStatus(pPersistentTaskStatus.getStatus());
     setLastModified(pPersistentTaskStatus.getLastModified());
   }
 
   @Override
-  public void commit(boolean update) throws Exception {
+  public void commit(boolean update) {
     if(update) {
       sTaskStatusManager.update(this);
     }
@@ -41,7 +41,7 @@ public class PersistentTaskStatus implements MutableTaskStatus {
   }
 
   @Override
-  public MutableTaskStatus edit() throws Exception {
+  public MutableTaskStatus edit() {
     return new PersistentTaskStatus(this);
   }
 
@@ -66,7 +66,7 @@ public class PersistentTaskStatus implements MutableTaskStatus {
   }
 
   @Override
-  public void delete() throws Exception {
+  public void delete() {
     sTaskStatusManager.delete(this);
   }
 
@@ -76,7 +76,7 @@ public class PersistentTaskStatus implements MutableTaskStatus {
   }
 
   @Override
-  public Status getStatus() throws Exception {
+  public Status getStatus() {
     return mStatus;
   }
 
@@ -86,7 +86,7 @@ public class PersistentTaskStatus implements MutableTaskStatus {
   }
 
   @Override
-  public String getProgressDescription() throws Exception {
+  public String getProgressDescription() {
     return mProgressDescription;
   }
 

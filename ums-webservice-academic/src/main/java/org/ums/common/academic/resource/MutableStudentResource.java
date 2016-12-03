@@ -39,7 +39,7 @@ public class MutableStudentResource extends Resource {
 
   @PUT
   @Path("/adviser")
-  public Response updateStudentsAdviser(final JsonObject pJsonObject) throws Exception {
+  public Response updateStudentsAdviser(final JsonObject pJsonObject) {
     return mResourceHelper.modifyStudentAdviser(pJsonObject);
   }
 }

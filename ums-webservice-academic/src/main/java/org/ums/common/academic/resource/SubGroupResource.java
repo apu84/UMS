@@ -34,7 +34,7 @@ public class SubGroupResource extends MutableSubGroupResource {
   @Path("/get/semesterId/{semesterId}/groupNo/{groupNo}/type/{type}")
   public JsonObject getBySemesterAndGroupNo(final @Context Request pRequest,
       final @PathParam("semesterId") int pSemesterId, final @PathParam("groupNo") int pGroupNo,
-      final @PathParam("type") String type) throws Exception {
+      final @PathParam("type") String type) {
     return mSubGroupResourceHelper.getBySemesterAndGroupNO(pSemesterId, pGroupNo,
         Integer.parseInt(type), pRequest, mUriInfo);
   }

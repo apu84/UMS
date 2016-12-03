@@ -23,8 +23,7 @@ public class PersistentCourseTeacher extends AbstractAssignedTeacher implements
 
   public PersistentCourseTeacher() {}
 
-  public PersistentCourseTeacher(final PersistentCourseTeacher pPersistentCourseTeacher)
-      throws Exception {
+  public PersistentCourseTeacher(final PersistentCourseTeacher pPersistentCourseTeacher) {
     this.mId = pPersistentCourseTeacher.getId();
     this.mSemester = pPersistentCourseTeacher.getSemester();
     this.mTeacher = pPersistentCourseTeacher.getTeacher();
@@ -34,7 +33,7 @@ public class PersistentCourseTeacher extends AbstractAssignedTeacher implements
   }
 
   @Override
-  public Teacher getTeacher() throws Exception {
+  public Teacher getTeacher() {
     return mTeacher == null ? sTeacherManager.get(mTeacherId) : sTeacherManager.validate(mTeacher);
   }
 
@@ -64,17 +63,17 @@ public class PersistentCourseTeacher extends AbstractAssignedTeacher implements
   }
 
   @Override
-  public MutableCourseTeacher edit() throws Exception {
+  public MutableCourseTeacher edit() {
     return new PersistentCourseTeacher(this);
   }
 
   @Override
-  public void delete() throws Exception {
+  public void delete() {
     sCourseTeacherManager.delete(this);
   }
 
   @Override
-  public void commit(boolean update) throws Exception {
+  public void commit(boolean update) {
     if(update) {
       sCourseTeacherManager.update(this);
     }

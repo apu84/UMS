@@ -98,12 +98,12 @@ public class CacheWarmerManagerImpl implements CacheWarmerManager {
   private CacheWarmer mCacheWarmer;
 
   @Override
-  public void warm() throws Exception {
+  public void warm() {
     warm(false);
   }
 
   @Override
-  public void warm(boolean force) throws Exception {
+  public void warm(boolean force) {
     if(mUMSConfiguration.isEnableCacheWarmer() && login()) {
       CacheManager cacheManager = mCacheFactory.getCacheManager();
       if(force || cacheManager.get(WARMER_KEY) == null

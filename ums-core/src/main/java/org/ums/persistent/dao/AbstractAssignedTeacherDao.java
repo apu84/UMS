@@ -85,13 +85,13 @@ public abstract class AbstractAssignedTeacherDao<R extends Identifier<I>, M exte
   }
 
   @Override
-  public List<R> getAll() throws Exception {
+  public List<R> getAll() {
     String query = getSelectSql();
     return mJdbcTemplate.query(query, getRowMapper());
   }
 
   @Override
-  public R get(I pId) throws Exception {
+  public R get(I pId) {
     String query = getSelectSql() + "WHERE ID = ? ";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, getRowMapper());
   }

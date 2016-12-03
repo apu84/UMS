@@ -14,7 +14,7 @@ public class ResultPublishValidator extends ResultPublishDaoDecorator {
   }
 
   @Override
-  public void publishResult(Integer programId, Integer semesterId) throws Exception {
+  public void publishResult(Integer programId, Integer semesterId) {
     if(!super.isResultPublished(programId, semesterId)) {
       List<MarksSubmissionStatus> marksSubmissionStatuses =
           mMarksSubmissionStatusManager.get(programId, semesterId);

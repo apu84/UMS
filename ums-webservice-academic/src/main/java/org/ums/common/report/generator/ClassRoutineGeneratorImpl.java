@@ -63,13 +63,14 @@ public class ClassRoutineGeneratorImpl implements ClassRoutineGenerator {
   }
 
   @Override
-  public void createClassRoutineStudentReport(OutputStream pOutputStream) throws Exception,
-      IOException, DocumentException {
+  public void createClassRoutineStudentReport(OutputStream pOutputStream) throws IOException,
+      DocumentException {
 
   }
 
   @Override
-  public void createRoomBasedClassRoutineReport(OutputStream pOutputStream, int pSemesterId, int pRoomId) throws Exception, IOException, DocumentException {
+  public void createRoomBasedClassRoutineReport(OutputStream pOutputStream, int pSemesterId, int pRoomId) throws
+      IOException, DocumentException {
     String userId = SecurityUtils.getSubject().getPrincipal().toString();
     User user = mUserManager.get(userId);
     Employee employee = mEmployeeManager.getByEmployeeId(user.getEmployeeId());
@@ -138,7 +139,11 @@ public class ClassRoutineGeneratorImpl implements ClassRoutineGenerator {
       document.add(new Paragraph(" "));
 
       if(entry.getValue().size()!=0){
-        document = routineGenerator(document,entry.getValue(),ClassRoutineType.roomBasedRoutine);
+        try {
+          document = routineGenerator(document, entry.getValue(), ClassRoutineType.roomBasedRoutine);
+        }catch (Exception e) {
+          throw new RuntimeException(e);
+        }
       }
       else{
         Paragraph noRoutineParagraph= new Paragraph("No Routine Published Yet!");
@@ -154,7 +159,7 @@ public class ClassRoutineGeneratorImpl implements ClassRoutineGenerator {
   }
 
   @Override
-  public void createClassRoutineTeacherReport(OutputStream pOutputStream) throws Exception, IOException, DocumentException {
+  public void createClassRoutineTeacherReport(OutputStream pOutputStream) throws IOException, DocumentException {
     String teacherId= SecurityUtils.getSubject().getPrincipal().toString();
     User user = mUserManager.get(teacherId);
     Teacher teacher = mTeacherManager.get(user.getEmployeeId());
@@ -220,7 +225,11 @@ public class ClassRoutineGeneratorImpl implements ClassRoutineGenerator {
     document.add(new Paragraph(" "));
 
     if(routines.size()!=0){
-      document = routineGenerator(document,routines,ClassRoutineType.teacherAndStudentRoutine);
+      try {
+        document = routineGenerator(document, routines, ClassRoutineType.teacherAndStudentRoutine);
+      }catch (Exception e) {
+        throw new RuntimeException(e);
+      }
     }
     else{
       Paragraph noRoutineParagraph= new Paragraph("No Routine Published Yet!");
@@ -234,8 +243,8 @@ public class ClassRoutineGeneratorImpl implements ClassRoutineGenerator {
 
   }
 
-  Document routineGenerator( Document document, List<Routine> routines,ClassRoutineType type) throws Exception,
-      IOException, DocumentException {
+  Document routineGenerator( Document document, List<Routine> routines,ClassRoutineType type) throws
+      IOException, DocumentException, Exception {
 
     Font tableDataFont = new Font(Font.FontFamily.TIMES_ROMAN,7);
     Font tableDataFontTime = new Font(Font.FontFamily.TIMES_ROMAN,11);

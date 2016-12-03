@@ -22,12 +22,11 @@ public class PersistentUGTheoryMarksDao extends UGTheoryMarksDaoDecorator {
   }
 
   @Override
-  public int create(List<MutableUGTheoryMarks> pMutableList) throws Exception {
+  public int create(List<MutableUGTheoryMarks> pMutableList) {
     return mJdbcTemplate.batchUpdate(INSERT_ALL, getInsertParamList(pMutableList)).length;
   }
 
-  private List<Object[]> getInsertParamList(List<MutableUGTheoryMarks> pTheoryMarkses)
-      throws Exception {
+  private List<Object[]> getInsertParamList(List<MutableUGTheoryMarks> pTheoryMarkses) {
     List<Object[]> params = new ArrayList<>();
     for(UGTheoryMarks theoryMarks : pTheoryMarkses) {
       params.add(new Object[] {theoryMarks.getStudent().getId(), theoryMarks.getSemester().getId(),
@@ -39,12 +38,11 @@ public class PersistentUGTheoryMarksDao extends UGTheoryMarksDaoDecorator {
   }
 
   @Override
-  public int delete(List<MutableUGTheoryMarks> pMutableList) throws Exception {
+  public int delete(List<MutableUGTheoryMarks> pMutableList) {
     return mJdbcTemplate.batchUpdate(DELETE_BY_STUDENT_SEMESTER, getDeleteParamList(pMutableList)).length;
   }
 
-  private List<Object[]> getDeleteParamList(List<MutableUGTheoryMarks> pTheoryMarkses)
-      throws Exception {
+  private List<Object[]> getDeleteParamList(List<MutableUGTheoryMarks> pTheoryMarkses) {
     List<Object[]> params = new ArrayList<>();
     for(UGTheoryMarks theoryMarks : pTheoryMarkses) {
       params.add(new Object[] {theoryMarks.getStudent().getId(), theoryMarks.getSemester().getId(),

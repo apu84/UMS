@@ -35,7 +35,7 @@ public class CourseBuilder implements Builder<Course, MutableCourse> {
 
   @Override
   public void build(final JsonObjectBuilder pBuilder, final Course pReadOnly, UriInfo pUriInfo,
-                    final LocalCache pLocalCache) throws Exception {
+                    final LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("no", pReadOnly.getNo());
     pBuilder.add("title", pReadOnly.getTitle());
@@ -82,7 +82,7 @@ public class CourseBuilder implements Builder<Course, MutableCourse> {
 
   @Override
   public void build(final MutableCourse pMutable, final JsonObject pJsonObject,
-      final LocalCache pLocalCache) throws Exception {
+      final LocalCache pLocalCache) {
 
     // pMutable.setId(pJsonObject.getString("courseId"));
     String couseIdMiddle =

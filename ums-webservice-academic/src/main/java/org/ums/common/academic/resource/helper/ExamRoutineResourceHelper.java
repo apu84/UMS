@@ -46,7 +46,7 @@ public class ExamRoutineResourceHelper extends
   private SubGroupManager mSubGroupManager;
 
   @Override
-  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) {
     throw new NotImplementedException("Post method not implemented for ExamRoutineResourceHelper");
   }
 
@@ -65,14 +65,13 @@ public class ExamRoutineResourceHelper extends
     return null;
   }
 
-  public JsonObject getExamRoutine(final Integer pSemesterId, final Integer pExamType)
-      throws Exception {
+  public JsonObject getExamRoutine(final Integer pSemesterId, final Integer pExamType) {
     List<ExamRoutineDto> examRoutine = getContentManager().getExamRoutine(pSemesterId, pExamType);
     return buildJsonResponse(pSemesterId, pExamType, examRoutine);
   }
 
   public JsonObject getExamRoutineForCCI(Integer pSemesterId, Integer pExamType,
-      final Request pRequest, final UriInfo pUriInfo) throws Exception {
+      final Request pRequest, final UriInfo pUriInfo) {
     List<ExamRoutineDto> examRoutine =
         getContentManager().getExamRoutineForApplicationCCI(pSemesterId, pExamType);
     JsonObjectBuilder object = Json.createObjectBuilder();
@@ -94,7 +93,7 @@ public class ExamRoutineResourceHelper extends
   }
 
   public JsonObject getExamRoutineInfoForCivil(Integer pSemesterId, final Request pRequest,
-      final UriInfo pUriInfo) throws Exception {
+      final UriInfo pUriInfo) {
     ExamRoutineDto examRoutineDto =
         getContentManager().getExamRoutineForCivilExamBySemester(pSemesterId);
     JsonObjectBuilder object = Json.createObjectBuilder();
@@ -113,7 +112,7 @@ public class ExamRoutineResourceHelper extends
   }
 
   public JsonObject getExamRoutineForCCIForSeatPlanPublish(Integer pSemesterId,
-      final Request pRequest, final UriInfo pUriInfo) throws Exception {
+      final Request pRequest, final UriInfo pUriInfo) {
     List<ExamRoutineDto> examRoutine = getContentManager().getCCIExamRoutinesBySemeste(pSemesterId);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
@@ -134,7 +133,7 @@ public class ExamRoutineResourceHelper extends
   }
 
   public JsonObject getExamRoutineWithSemesterAndExamType(Integer pSemesterId, Integer pExamType,
-      final Request pRequest, final UriInfo pUriInfo) throws Exception {
+      final Request pRequest, final UriInfo pUriInfo) {
     List<ExamRoutineDto> examRoutine = getContentManager().getExamRoutine(pSemesterId, pExamType);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
@@ -155,7 +154,7 @@ public class ExamRoutineResourceHelper extends
   }
 
   public JsonObject getExamDateBySemesterAndExamType(Integer pSemesterId, Integer pExamType,
-      final Request pRequest, final UriInfo pUriInfo) throws Exception {
+      final Request pRequest, final UriInfo pUriInfo) {
     List<ExamRoutineDto> examRoutine =
         getContentManager().getExamDatesBySemesterAndType(pSemesterId, pExamType);
     JsonObjectBuilder object = Json.createObjectBuilder();
@@ -177,7 +176,7 @@ public class ExamRoutineResourceHelper extends
   }
 
   protected JsonObject buildJsonResponse(final Integer pSemesterId, final Integer pExamType,
-      final List<ExamRoutineDto> routineList) throws Exception {
+      final List<ExamRoutineDto> routineList) {
     JsonObjectBuilder object = Json.createObjectBuilder();
     String prevDateTime = "", currDateTime = "";
     int prevProgram = 0, currProgram = 0;
@@ -284,8 +283,7 @@ public class ExamRoutineResourceHelper extends
   }
 
   @Transactional
-  public Response save(final JsonObject pJsonObject, int pSemesterId, int pExamType)
-      throws Exception {
+  public Response save(final JsonObject pJsonObject, int pSemesterId, int pExamType) {
     // check if the group for the exam is already created, if created, the group will be deleted
     List<SeatPlanGroup> groups = mSeatPlanGroupManager.getGroupBySemester(pSemesterId, pExamType);
     if(groups.size() > 0) {

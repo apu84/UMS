@@ -21,7 +21,7 @@ public class CourseGroupCache extends
   }
 
   @Override
-  public CourseGroup getBySyllabus(Integer pCourseGroupId, String pSyllabusId) throws Exception {
+  public CourseGroup getBySyllabus(Integer pCourseGroupId, String pSyllabusId) {
     return getManager().getBySyllabus(pCourseGroupId, pSyllabusId);
   }
 

@@ -38,7 +38,7 @@ public class SyllabusResourceHelper extends ResourceHelper<Syllabus, MutableSyll
     return mBuilder;
   }
 
-  public Response post(final JsonObject pJsonObject, final UriInfo pUriInfo) throws Exception {
+  public Response post(final JsonObject pJsonObject, final UriInfo pUriInfo) {
     MutableSyllabus mutableSyllabus = new PersistentSyllabus();
     LocalCache localCache = new LocalCache();
     getBuilder().build(mutableSyllabus, pJsonObject, localCache);
@@ -53,8 +53,7 @@ public class SyllabusResourceHelper extends ResourceHelper<Syllabus, MutableSyll
     return builder.build();
   }
 
-  public JsonObject buildSyllabuses(final List<Syllabus> pSyllabuses, final UriInfo pUriInfo)
-      throws Exception {
+  public JsonObject buildSyllabuses(final List<Syllabus> pSyllabuses, final UriInfo pUriInfo) {
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();

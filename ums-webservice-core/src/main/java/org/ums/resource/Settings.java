@@ -20,7 +20,7 @@ public class Settings extends Resource {
   private UMSConfiguration mConfiguration;
 
   @GET
-  public Map<String, Object> get(final @Context Request pRequest) throws Exception {
+  public Map<String, Object> get(final @Context Request pRequest) {
     Map<String, Object> settings = new HashMap<>();
     settings.put("notification.enabled", mConfiguration.isNotificationServiceEnabled());
     settings.put("polling.interval", mConfiguration.getPollingInterval());

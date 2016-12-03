@@ -78,7 +78,7 @@ public class PersistentAppSetting implements MutableAppSetting {
   }
 
   @Override
-  public MutableAppSetting edit() throws Exception {
+  public MutableAppSetting edit() {
     return new PersistentAppSetting(this);
   }
 
@@ -93,7 +93,7 @@ public class PersistentAppSetting implements MutableAppSetting {
   }
 
   @Override
-  public void commit(boolean update) throws Exception {
+  public void commit(boolean update) {
     if(update) {
       sAppSettingManager.update(this);
     }
@@ -103,7 +103,7 @@ public class PersistentAppSetting implements MutableAppSetting {
   }
 
   @Override
-  public void delete() throws Exception {
+  public void delete() {
     sAppSettingManager.delete(this);
   }
 

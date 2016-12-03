@@ -11,5 +11,5 @@ public interface MutableSemesterSyllabusMapDto extends SemesterSyllabusMapDto {
 
   void setProgram(Program program);
 
-  void setCopySemester(final Semester pSemester) throws Exception;
+  void setCopySemester(final Semester pSemester);
 }

@@ -13,7 +13,7 @@ public interface MutableParameterSetting extends ParameterSetting, Mutable, Muta
     MutableIdentifier<String> {
   void setSemester(Semester pSemester);
 
-  void setParameter(Parameter pParameter) throws Exception;
+  void setParameter(Parameter pParameter);
 
   void setStartDate(String pStartDate);
 

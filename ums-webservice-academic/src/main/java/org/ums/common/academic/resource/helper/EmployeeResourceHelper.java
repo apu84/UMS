@@ -38,7 +38,7 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
   private UserManager mUserManager;
 
   @Override
-  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) {
     MutableEmployee mutableEmployee = new PersistentEmployee();
     LocalCache localCache = new LocalCache();
     getBuilder().build(mutableEmployee, pJsonObject, localCache);
@@ -51,7 +51,7 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
     return builder.build();
   }
 
-  public JsonObject getByEmployeeId(final UriInfo pUriInfo) throws Exception {
+  public JsonObject getByEmployeeId(final UriInfo pUriInfo) {
     // String employeeId = SecurityUtils.getSubject().getPrincipal().toString();
     Employee employee = getSignedEmployeeInfo();
 
@@ -64,7 +64,7 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
     return object.build();
   }
 
-  public JsonObject getActiveTeachersByDept(final UriInfo pUriInfo) throws Exception {
+  public JsonObject getActiveTeachersByDept(final UriInfo pUriInfo) {
     Employee employee = getSignedEmployeeInfo();
     List<Employee> employees =
         getContentManager().getActiveTeachersOfDept(employee.getDepartment().getId());
@@ -73,12 +73,12 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
   }
 
   public JsonObject getByDesignation(final String designationId, final Request pRequest,
-      final UriInfo pUriInfo) throws Exception {
+      final UriInfo pUriInfo) {
     List<Employee> employees = getContentManager().getByDesignation(designationId);
     return convertToJson(employees, pUriInfo);
   }
 
-  private Employee getSignedEmployeeInfo() throws Exception {
+  private Employee getSignedEmployeeInfo() {
     String userId = SecurityUtils.getSubject().getPrincipal().toString();
     User user = mUserManager.get(userId);
     String employeeId = user.getEmployeeId();
@@ -86,7 +86,7 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
     return employee;
   }
 
-  private JsonObject convertToJson(List<Employee> employees, UriInfo pUriInfo) throws Exception {
+  private JsonObject convertToJson(List<Employee> employees, UriInfo pUriInfo) {
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();

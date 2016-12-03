@@ -16,7 +16,7 @@ public class MutableEmployeeResource extends Resource {
   EmployeeResourceHelper mEmployeeResourceHelper;
 
   @POST
-  public Response createEmployee(final JsonObject pJsonObject) throws Exception {
+  public Response createEmployee(final JsonObject pJsonObject) {
     return mEmployeeResourceHelper.post(pJsonObject, mUriInfo);
   }
 

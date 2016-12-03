@@ -29,19 +29,19 @@ public class PersistentEnrollmentFromToDao extends EnrollmentFromToDaoDecorator 
   }
 
   @Override
-  public int create(MutableEnrollmentFromTo pMutable) throws Exception {
+  public int create(MutableEnrollmentFromTo pMutable) {
     return mJdbcTemplate.update(INSERT_ALL, pMutable.getProgram().getId(), pMutable.getFromYear(),
         pMutable.getFromSemester(), pMutable.getToYear(), pMutable.getToSemester());
   }
 
   @Override
-  public int delete(MutableEnrollmentFromTo pMutable) throws Exception {
+  public int delete(MutableEnrollmentFromTo pMutable) {
     String query = DELETE_ALL + "WHERE ID = ?";
     return mJdbcTemplate.update(query, pMutable.getId());
   }
 
   @Override
-  public int update(MutableEnrollmentFromTo pMutable) throws Exception {
+  public int update(MutableEnrollmentFromTo pMutable) {
     String query = UPDATE_ALL + "WHERE ID = ?";
     return mJdbcTemplate.update(query, pMutable.getProgram().getId(), pMutable.getFromYear(),
         pMutable.getFromSemester(), pMutable.getToYear(), pMutable.getToSemester(),
@@ -49,13 +49,13 @@ public class PersistentEnrollmentFromToDao extends EnrollmentFromToDaoDecorator 
   }
 
   @Override
-  public EnrollmentFromTo get(Integer pId) throws Exception {
+  public EnrollmentFromTo get(Integer pId) {
     String query = SELECT_ALL + "WHERE ID = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new EnrollmentFromToRowMapper());
   }
 
   @Override
-  public List<EnrollmentFromTo> getAll() throws Exception {
+  public List<EnrollmentFromTo> getAll() {
     return mJdbcTemplate.query(SELECT_ALL, new EnrollmentFromToRowMapper());
   }
 

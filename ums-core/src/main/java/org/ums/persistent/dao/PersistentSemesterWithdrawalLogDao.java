@@ -33,33 +33,33 @@ public class PersistentSemesterWithdrawalLogDao extends SemesterWithdrawalLogDao
   }
 
   @Override
-  public List<SemesterWithdrawalLog> getAll() throws Exception {
+  public List<SemesterWithdrawalLog> getAll() {
     String query = SELECT_ALL;
     return mJdbcTemplate.query(query, new SemesterWithdrawalLogRowMapper());
   }
 
   @Override
-  public SemesterWithdrawalLog get(Integer pId) throws Exception {
+  public SemesterWithdrawalLog get(Integer pId) {
     String query = SELECT_ALL + " WHERE SWL_ID=?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId},
         new SemesterWithdrawalLogRowMapper());
   }
 
   @Override
-  public int update(MutableSemesterWithdrawalLog pMutable) throws Exception {
+  public int update(MutableSemesterWithdrawalLog pMutable) {
     String query = UPDATE_ONE + " WHERE SWL_ID=?";
     return mJdbcTemplate.update(query, pMutable.getSemesterWithdrawal().getId(),
         pMutable.getEmployeeId(), pMutable.getAction(), pMutable.getId());
   }
 
   @Override
-  public int delete(MutableSemesterWithdrawalLog pMutable) throws Exception {
+  public int delete(MutableSemesterWithdrawalLog pMutable) {
     String query = DELETE_ONE + " WHERE SWL_ID=?";
     return mJdbcTemplate.update(query, pMutable.getId());
   }
 
   @Override
-  public int create(MutableSemesterWithdrawalLog pMutable) throws Exception {
+  public int create(MutableSemesterWithdrawalLog pMutable) {
     String query = INSERT_ONE;
     return mJdbcTemplate.update(query, pMutable.getSemesterWithdrawal().getId(),
         pMutable.getEmployeeId(), pMutable.getAction());

@@ -39,7 +39,7 @@ public class SemesterSyllabusMapResourceHelper extends
   private SemesterSyllabusMapsBuilder mMapBuilder;
 
   @Override
-  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) {
     MutableSemesterSyllabusMapDto mutableSemesterSyllabusMap =
         new org.ums.domain.model.dto.SemesterSyllabusMap();
     LocalCache localCache = new LocalCache();
@@ -62,7 +62,7 @@ public class SemesterSyllabusMapResourceHelper extends
     return mManager;
   }
 
-  public Response put(final JsonObject pJsonObject) throws Exception {
+  public Response put(final JsonObject pJsonObject) {
     MutableSemesterSyllabusMap mutable = new PersistentSemesterSyllabusMap();
     getBuilder().build(mutable, pJsonObject, null);
     SemesterSyllabusMap readOnly = load(mutable.getId());
@@ -77,8 +77,7 @@ public class SemesterSyllabusMapResourceHelper extends
     return mBuilder;
   }
 
-  public JsonObject buildMaps(final List<SemesterSyllabusMap> pSyllabuses, final UriInfo pUriInfo)
-      throws Exception {
+  public JsonObject buildMaps(final List<SemesterSyllabusMap> pSyllabuses, final UriInfo pUriInfo) {
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();

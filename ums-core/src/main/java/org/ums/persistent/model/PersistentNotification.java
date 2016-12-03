@@ -30,8 +30,7 @@ public class PersistentNotification implements MutableNotification {
 
   public PersistentNotification() {}
 
-  public PersistentNotification(final PersistentNotification pPersistentNotification)
-      throws Exception {
+  public PersistentNotification(final PersistentNotification pPersistentNotification) {
     setProducerId(pPersistentNotification.getProducerId());
     setConsumerId(pPersistentNotification.getConsumerId());
     setNotificationType(pPersistentNotification.getNotificationType());
@@ -73,7 +72,7 @@ public class PersistentNotification implements MutableNotification {
   }
 
   @Override
-  public void commit(boolean update) throws Exception {
+  public void commit(boolean update) {
     if(update) {
       sNotificationManager.update(this);
     }
@@ -118,7 +117,7 @@ public class PersistentNotification implements MutableNotification {
   }
 
   @Override
-  public MutableNotification edit() throws Exception {
+  public MutableNotification edit() {
     return new PersistentNotification(this);
   }
 
@@ -133,7 +132,7 @@ public class PersistentNotification implements MutableNotification {
   }
 
   @Override
-  public void delete() throws Exception {
+  public void delete() {
     sNotificationManager.delete(this);
   }
 

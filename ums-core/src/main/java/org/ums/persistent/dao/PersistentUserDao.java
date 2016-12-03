@@ -36,19 +36,19 @@ public class PersistentUserDao extends UserDaoDecorator {
   }
 
   @Override
-  public List<User> getAll() throws Exception {
+  public List<User> getAll() {
     String query = SELECT_ALL;
     return mJdbcTemplate.query(query, new UserRowMapper());
   }
 
   @Override
-  public User get(String pId) throws Exception {
+  public User get(String pId) {
     String query = SELECT_ALL + "WHERE USER_ID = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new UserRowMapper());
   }
 
   @Override
-  public int update(MutableUser pMutable) throws Exception {
+  public int update(MutableUser pMutable) {
     String query = UPDATE_ALL + "WHERE USER_ID = ?";
     return mJdbcTemplate.update(query,
         pMutable.getPassword() == null ? "" : String.valueOf(pMutable.getPassword()), pMutable
@@ -58,30 +58,30 @@ public class PersistentUserDao extends UserDaoDecorator {
   }
 
   @Override
-  public int updatePassword(final String pUserId, final String pPassword) throws Exception {
+  public int updatePassword(final String pUserId, final String pPassword) {
     String query = UPDATE_PASSWORD + "WHERE USER_ID = ?";
     return mJdbcTemplate.update(query, pPassword, pUserId);
   }
 
   @Override
-  public int clearPasswordResetToken(final String pUserId) throws Exception {
+  public int clearPasswordResetToken(final String pUserId) {
     String query = CLEAR_PASSWORD_RESET_TOKEN + "WHERE USER_ID = ?";
     return mJdbcTemplate.update(query, pUserId);
   }
 
   @Override
-  public int delete(MutableUser pMutable) throws Exception {
+  public int delete(MutableUser pMutable) {
     String query = DELETE_ALL + "WHERE USER_ID = ?";
     return mJdbcTemplate.update(query, pMutable.getId());
   }
 
   @Override
-  public int setPasswordResetToken(String pToken, String pUserId) throws Exception {
+  public int setPasswordResetToken(String pToken, String pUserId) {
     return mJdbcTemplate.update(UPDATE_PASSWORD_RESET_TOKEN, pToken, pUserId);
   }
 
   @Override
-  public int create(MutableUser pMutable) throws Exception {
+  public int create(MutableUser pMutable) {
     return mJdbcTemplate.update(
         INSERT_ALL,
         pMutable.getId(),
@@ -93,13 +93,13 @@ public class PersistentUserDao extends UserDaoDecorator {
   }
 
   @Override
-  public List<User> getUsers() throws Exception {
+  public List<User> getUsers() {
     String query = SELECT_ALL + "WHERE ROLE_ID != 11";
     return mJdbcTemplate.query(query, new UserRowMapper());
   }
 
   @Override
-  public boolean exists(String pId) throws Exception {
+  public boolean exists(String pId) {
     String query = EXISTS + "WHERE USER_ID = ?";
     return mJdbcTemplate.queryForObject(query, Boolean.class, pId);
   }

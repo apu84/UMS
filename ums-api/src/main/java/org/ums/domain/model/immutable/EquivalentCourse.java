@@ -11,9 +11,9 @@ public interface EquivalentCourse extends Serializable, Identifier<Integer>,
     EditType<MutableEquivalentCourse>, LastModifier {
   String getOldCourseId();
 
-  Course getOldCourse() throws Exception;
+  Course getOldCourse();
 
   String getNewCourseId();
 
-  Course getNewCourse() throws Exception;
+  Course getNewCourse();
 }

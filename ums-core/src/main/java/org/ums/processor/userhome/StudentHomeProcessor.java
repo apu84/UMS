@@ -15,7 +15,7 @@ public class StudentHomeProcessor extends AbstractUserHomeProcessor {
   private StudentManager mStudentManager;
 
   @Override
-  public List<Map<String, String>> process(Subject pCurrentSubject) throws Exception {
+  public List<Map<String, String>> process(Subject pCurrentSubject) {
     String studentId = pCurrentSubject.getPrincipal().toString();
     Student student = mStudentManager.get(studentId);
 

@@ -22,13 +22,13 @@ import java.util.List;
 public class LoggerResource extends Resource {
   @GET
   @Path("/levels")
-  public List<Level> getUsers(final @Context Request pRequest) throws Exception {
+  public List<Level> getUsers(final @Context Request pRequest) {
     return UMSLogger.getLogLevels();
   }
 
   @GET
   @Path("/list")
-  public JsonArray getLoggers() throws Exception {
+  public JsonArray getLoggers() {
     JsonArrayBuilder loggerArray = Json.createArrayBuilder();
     List<Logger> loggers = UMSLogger.getLoggers();
 
@@ -46,7 +46,7 @@ public class LoggerResource extends Resource {
   }
 
   @POST
-  public Response addLogger(final JsonObject pJsonObject) throws Exception {
+  public Response addLogger(final JsonObject pJsonObject) {
     String name = pJsonObject.getString("name");
     int level = Integer.parseInt(pJsonObject.getString("level"));
     UMSLogger.setLogger(name, Level.toLevel(level));

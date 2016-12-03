@@ -12,7 +12,7 @@ import java.io.Serializable;
  */
 public interface SubGroupCCI extends Serializable, LastModifier, EditType<MutableSubGroupCCI>,
     Identifier<Integer> {
-  Semester getSemester() throws Exception;
+  Semester getSemester();
 
   Integer getSemesterId();
 
@@ -20,7 +20,7 @@ public interface SubGroupCCI extends Serializable, LastModifier, EditType<Mutabl
 
   Integer getTotalStudent();
 
-  Course getCourse() throws Exception;
+  Course getCourse();
 
   String getCourseId();
 

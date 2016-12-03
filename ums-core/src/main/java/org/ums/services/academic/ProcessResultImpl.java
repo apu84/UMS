@@ -68,12 +68,12 @@ public class ProcessResultImpl implements ProcessResult {
   }
 
   @Override
-  public void process(int pProgramId, int pSemesterId) throws Exception {
+  public void process(int pProgramId, int pSemesterId) {
     processResult(pProgramId, pSemesterId);
   }
 
   @Async
-  private void processResult(int pProgramId, int pSemesterId) throws Exception {
+  private void processResult(int pProgramId, int pSemesterId) {
     List<UGRegistrationResult> resultList = mResultManager.getResults(pProgramId, pSemesterId);
 
     MutableTaskStatus processResultStatus = new PersistentTaskStatus();
@@ -86,7 +86,7 @@ public class ProcessResultImpl implements ProcessResult {
   }
 
   private void processResult(int pProgramId, int pSemesterId,
-      Map<String, List<UGRegistrationResult>> studentCourseGradeMap) throws Exception {
+      Map<String, List<UGRegistrationResult>> studentCourseGradeMap) {
     String processCGPA = mTaskStatusManager.buildTaskId(pProgramId, pSemesterId, PROCESS_GPA_CGPA_PROMOTION);
     int totalStudents = studentCourseGradeMap.keySet().size();
     int i = 0;
@@ -129,11 +129,11 @@ public class ProcessResultImpl implements ProcessResult {
     mutableTaskStatus.commit(true);
   }
 
-  private Double calculateCGPA(List<UGRegistrationResult> pResults) throws Exception {
+  private Double calculateCGPA(List<UGRegistrationResult> pResults) {
     return calculateGPA(pResults);
   }
 
-  private Double calculateGPA(List<UGRegistrationResult> pResults) throws Exception {
+  private Double calculateGPA(List<UGRegistrationResult> pResults) {
     int totalCrHr = 0;
     Double totalGPA = 0D;
     for(UGRegistrationResult result : pResults) {
@@ -146,8 +146,7 @@ public class ProcessResultImpl implements ProcessResult {
     return BigDecimal.valueOf(toBeTruncated).setScale(2, RoundingMode.HALF_UP).doubleValue();
   }
 
-  private Boolean isPassed(final int pSemesterId, List<UGRegistrationResult> pResults)
-      throws Exception {
+  private Boolean isPassed(final int pSemesterId, List<UGRegistrationResult> pResults) {
     int totalFailedCourse = 0, failedInCurrentSemester = 0;
     for(UGRegistrationResult result : pResults) {
       if(result.getGradeLetter().equalsIgnoreCase("F")) {
@@ -165,7 +164,7 @@ public class ProcessResultImpl implements ProcessResult {
   }
 
   @Override
-  public TaskStatusResponse status(int pProgramId, int pSemesterId) throws Exception {
+  public TaskStatusResponse status(int pProgramId, int pSemesterId) {
     String publishResult = mTaskStatusManager.buildTaskId(pProgramId, pSemesterId, PUBLISH_RESULT);
     String processCGPA =
         mTaskStatusManager.buildTaskId(pProgramId, pSemesterId, PROCESS_GPA_CGPA_PROMOTION);
@@ -200,7 +199,7 @@ public class ProcessResultImpl implements ProcessResult {
 
   @Transactional(rollbackFor = IllegalArgumentException.class)
   @Override
-  public void publishResult(int pProgramId, int pSemesterId) throws Exception {
+  public void publishResult(int pProgramId, int pSemesterId) {
     String publishResult = mTaskStatusManager.buildTaskId(pProgramId, pSemesterId, PUBLISH_RESULT);
 
     MutableTaskStatus taskStatus = new PersistentTaskStatus();

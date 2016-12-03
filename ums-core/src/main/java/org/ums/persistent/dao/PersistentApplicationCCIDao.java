@@ -36,25 +36,25 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
   }
 
   @Override
-  public List<ApplicationCCI> getAll() throws Exception {
+  public List<ApplicationCCI> getAll() {
     String query = SELECT_ALL;
     return mJdbcTemplate.query(query, new ApplicationCCIRowMapper());
   }
 
   @Override
-  public int create(List<MutableApplicationCCI> pMutableList) throws Exception {
+  public int create(List<MutableApplicationCCI> pMutableList) {
     return mJdbcTemplate.batchUpdate(INSERT_ONE, getInsertParamList(pMutableList)).length;
   }
 
   @Override
-  public int create(MutableApplicationCCI pMutable) throws Exception {
+  public int create(MutableApplicationCCI pMutable) {
     String query = INSERT_ONE;
     return mJdbcTemplate.update(query, pMutable.getSemesterId(), pMutable.getStudentId(),
         pMutable.getCourseId(), pMutable.getApplicationType().getValue());
   }
 
   @Override
-  public int delete(MutableApplicationCCI pMutable) throws Exception {
+  public int delete(MutableApplicationCCI pMutable) {
     return super.delete(pMutable);
   }
 
@@ -65,13 +65,13 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
   }
 
   @Override
-  public int update(MutableApplicationCCI pMutable) throws Exception {
+  public int update(MutableApplicationCCI pMutable) {
     String query = DELETE_ONE + " WHERE STUDENT_ID=? ";
     return mJdbcTemplate.update(query, pMutable.getStudentId());
   }
 
   @Override
-  public int update(List<MutableApplicationCCI> pMutableList) throws Exception {
+  public int update(List<MutableApplicationCCI> pMutableList) {
     return super.update(pMutableList);
   }
 
@@ -95,8 +95,7 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
   }
 
   @Override
-  public List<ApplicationCCI> getBySemesterAndExamDate(Integer pSemesterId, String pExamDate)
-      throws Exception {
+  public List<ApplicationCCI> getBySemesterAndExamDate(Integer pSemesterId, String pExamDate) {
     SimpleDateFormat formatter = new SimpleDateFormat("MM-DD-YYYY");
     // Date date = (Date) formatter.parse(pExamDate);
     // Date date = (Date) formatter.parse(pExamDate);
@@ -140,8 +139,7 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
         new ApplicationCCIRowMapper());
   }
 
-  private List<Object[]> getInsertParamList(List<MutableApplicationCCI> pMutableApplicationCCIs)
-      throws Exception {
+  private List<Object[]> getInsertParamList(List<MutableApplicationCCI> pMutableApplicationCCIs) {
     List<Object[]> params = new ArrayList<>();
     for(ApplicationCCI app : pMutableApplicationCCIs) {
       params.add(new Object[] {app.getSemesterId(), app.getStudentId(), app.getCourseId(),

@@ -44,8 +44,7 @@ public class PersistentStudentRecord implements MutableStudentRecord {
 
   public PersistentStudentRecord() {}
 
-  public PersistentStudentRecord(final PersistentStudentRecord pPersistentStudentRecord)
-      throws Exception {
+  public PersistentStudentRecord(final PersistentStudentRecord pPersistentStudentRecord) {
     setId(pPersistentStudentRecord.getId());
     setStudentId(pPersistentStudentRecord.getStudentId());
     setSemesterId(pPersistentStudentRecord.getSemesterId());
@@ -114,7 +113,7 @@ public class PersistentStudentRecord implements MutableStudentRecord {
   }
 
   @Override
-  public void commit(boolean update) throws Exception {
+  public void commit(boolean update) {
     if(update) {
       sStudentRecordManager.update(this);
     }
@@ -124,7 +123,7 @@ public class PersistentStudentRecord implements MutableStudentRecord {
   }
 
   @Override
-  public void delete() throws Exception {
+  public void delete() {
     sStudentRecordManager.delete(this);
   }
 
@@ -144,7 +143,7 @@ public class PersistentStudentRecord implements MutableStudentRecord {
   }
 
   @Override
-  public Student getStudent() throws Exception {
+  public Student getStudent() {
     return mStudent == null ? sStudentManager.get(mStudentId) : sStudentManager.validate(mStudent);
   }
 
@@ -154,7 +153,7 @@ public class PersistentStudentRecord implements MutableStudentRecord {
   }
 
   @Override
-  public Semester getSemester() throws Exception {
+  public Semester getSemester() {
     return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
         .validate(mSemester);
   }
@@ -190,7 +189,7 @@ public class PersistentStudentRecord implements MutableStudentRecord {
   }
 
   @Override
-  public MutableStudentRecord edit() throws Exception {
+  public MutableStudentRecord edit() {
     return new PersistentStudentRecord(this);
   }
 
@@ -215,7 +214,7 @@ public class PersistentStudentRecord implements MutableStudentRecord {
   }
 
   @Override
-  public Program getProgram() throws Exception {
+  public Program getProgram() {
     return mProgram == null ? sProgramManager.get(mProgramId) : sProgramManager.validate(mProgram);
   }
 }

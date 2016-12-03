@@ -1,13 +1,15 @@
 package org.ums.security.bearertoken.util;
 
-import com.google.common.base.Preconditions;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
-import org.apache.shiro.web.util.WebUtils;
+import java.io.IOException;
 
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+
+import org.apache.shiro.web.util.WebUtils;
+
+import com.google.common.base.Preconditions;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 
 public final class HTTP {
 
@@ -57,47 +59,39 @@ public final class HTTP {
   }
 
   public static void write(ServletResponse response, String mimeType, Status returnCode,
-      String output) {
+      String output) throws IOException {
     write(WebUtils.toHttp(response), mimeType, returnCode, output);
   }
 
   public static void write(HttpServletResponse response, String mimeType, Status returnCode,
-      String output) {
-    try {
-      response.setContentType(mimeType);
-      response.setStatus(returnCode.toInt());
-      response.getWriter().println(output);
-      response.getWriter().flush();
-    } catch(IOException e) {
-      throw new RuntimeException(e);
-    }
+      String output) throws IOException {
+    response.setContentType(mimeType);
+    response.setStatus(returnCode.toInt());
+    response.getWriter().println(output);
+    response.getWriter().flush();
   }
 
-  public static void writeError(ServletResponse response, Status error) {
+  public static void writeError(ServletResponse response, Status error) throws IOException {
     writeError(WebUtils.toHttp(response), error);
   }
 
-  public static void writeError(HttpServletResponse response, Status error) {
-    try {
-      response.sendError(error.toInt());
-    } catch(IOException e) {
-      throw new RuntimeException(e);
-    }
+  public static void writeError(HttpServletResponse response, Status error) throws IOException {
+    response.sendError(error.toInt());
   }
 
-  public static void writeJSON(HttpServletResponse response, JsonObject obj) {
+  public static void writeJSON(HttpServletResponse response, JsonObject obj) throws IOException {
     write(response, MimeTypes.JSON, Status.OK, obj.toString());
   }
 
-  public static void writeJSON(ServletResponse response, JsonObject obj) {
+  public static void writeJSON(ServletResponse response, JsonObject obj) throws IOException {
     write(response, MimeTypes.JSON, Status.OK, obj.toString());
   }
 
-  public static void writeAsJSON(HttpServletResponse response, Object... args) {
+  public static void writeAsJSON(HttpServletResponse response, Object... args) throws IOException {
     writeJSON(response, JSON.fromArgs(args));
   }
 
-  public static void writeAsJSON(ServletResponse response, Object... args) {
+  public static void writeAsJSON(ServletResponse response, Object... args) throws IOException {
     writeJSON(response, JSON.fromArgs(args));
   }
 

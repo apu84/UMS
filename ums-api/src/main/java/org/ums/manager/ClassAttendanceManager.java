@@ -22,27 +22,23 @@ public interface ClassAttendanceManager {
    * @throws Exception
    */
   public List<ClassAttendanceDto> getStudentList(int semesterId, String courseId,
-      CourseType pCourseType, String pSection, String pStudentCategory) throws Exception;
+      CourseType pCourseType, String pSection, String pStudentCategory);
 
-  public List<ClassAttendanceDto> getDateList(int semesterId, String courseId, String section)
-      throws Exception;
+  public List<ClassAttendanceDto> getDateList(int semesterId, String courseId, String section);
 
-  public Map<String, String> getAttendance(int semesterId, String courseId, String section)
-      throws Exception;
+  public Map<String, String> getAttendance(int semesterId, String courseId, String section);
 
-  public int deleteAttendanceDtl(String attendanceId) throws Exception;
+  public int deleteAttendanceDtl(String attendanceId);
 
-  public int deleteAttendanceMaster(String attendanceId) throws Exception;
+  public int deleteAttendanceMaster(String attendanceId);
 
-  public int updateAttendanceMaster(String pClassDate, Integer pSerial, String pAttendanceId)
-      throws Exception;
+  public int updateAttendanceMaster(String pClassDate, Integer pSerial, String pAttendanceId);
 
-  public String getAttendanceId() throws Exception;
+  public String getAttendanceId();
 
   public int insertAttendanceMaster(String pId, Integer pSemesterId, String pCourseId,
-      String pSection, String pClassDate, Integer pSerial, String pTeacherId) throws Exception;
+      String pSection, String pClassDate, Integer pSerial, String pTeacherId);
 
-  public boolean upsertAttendanceDtl(String id, List<ClassAttendanceDto> attendanceList)
-      throws Exception;
+  public boolean upsertAttendanceDtl(String id, List<ClassAttendanceDto> attendanceList);
 
 }

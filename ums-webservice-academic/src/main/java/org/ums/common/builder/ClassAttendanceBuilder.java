@@ -19,8 +19,7 @@ import java.util.List;
 @Component
 public class ClassAttendanceBuilder {
 
-  public void buildForUIclient(MarksSubmissionStatusDto partInfoDto, JsonObject pJsonObject)
-      throws Exception {
+  public void buildForUIclient(MarksSubmissionStatusDto partInfoDto, JsonObject pJsonObject) {
     JsonObject course = pJsonObject.getJsonObject("courseInfo");
     partInfoDto.setCourseId(course.getString("course_id"));
     partInfoDto.setSemesterId(course.getInt("semester_id"));
@@ -31,7 +30,7 @@ public class ClassAttendanceBuilder {
     partInfoDto.setCourseType(CourseType.get(course.getInt("course_typeId")));
   }
 
-  public List<ClassAttendanceDto> getAttendanceList(JsonObject pJsonObject) throws Exception {
+  public List<ClassAttendanceDto> getAttendanceList(JsonObject pJsonObject) {
 
     JsonArray entries = pJsonObject.getJsonArray("attendanceList");
     List<ClassAttendanceDto> attendanceList = new ArrayList<>(entries.size());

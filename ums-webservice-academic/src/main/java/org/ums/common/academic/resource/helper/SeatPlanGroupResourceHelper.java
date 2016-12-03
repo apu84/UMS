@@ -56,7 +56,7 @@ public class SeatPlanGroupResourceHelper extends
   SeatPlanService mSeatPlanService;
 
   public JsonObject getSeatPlanGroupBySemester(final int pSemesterId, int type, final int update,
-      final Request pRequest, final UriInfo pUriInfo) throws Exception {
+      final Request pRequest, final UriInfo pUriInfo) {
 
     GenericResponse<Map> genericResponse = null, previousResponse = null;
 
@@ -147,7 +147,7 @@ public class SeatPlanGroupResourceHelper extends
   }
 
   @Override
-  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) {
     throw new NotImplementedException("Post method not implemented for SeatPlanGroupResourceHelper");
   }
 

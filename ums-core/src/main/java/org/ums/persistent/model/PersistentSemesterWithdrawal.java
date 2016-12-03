@@ -52,7 +52,7 @@ public class PersistentSemesterWithdrawal implements MutableSemesterWithdrawal {
   }
 
   public PersistentSemesterWithdrawal(
-      final PersistentSemesterWithdrawal pPersistentSemesterWithdrawal) throws Exception {
+      final PersistentSemesterWithdrawal pPersistentSemesterWithdrawal) {
     mId = pPersistentSemesterWithdrawal.getId();
 
     mSemester = pPersistentSemesterWithdrawal.getSemester();
@@ -130,7 +130,7 @@ public class PersistentSemesterWithdrawal implements MutableSemesterWithdrawal {
   }
 
   @Override
-  public Student getStudent() throws Exception {
+  public Student getStudent() {
     return mStudent == null ? sStudentManager.get(mStudentId) : sStudentManager.validate(mStudent);
   }
 
@@ -148,7 +148,7 @@ public class PersistentSemesterWithdrawal implements MutableSemesterWithdrawal {
   }
 
   @Override
-  public Program getProgram() throws Exception {
+  public Program getProgram() {
     return mProgram == null ? sProgramManager.get(mProgramId) : sProgramManager.validate(mProgram);
   }
 
@@ -175,7 +175,7 @@ public class PersistentSemesterWithdrawal implements MutableSemesterWithdrawal {
   }
 
   @Override
-  public Semester getSemester() throws Exception {
+  public Semester getSemester() {
     return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
         .validate(mSemester);
   }
@@ -186,7 +186,7 @@ public class PersistentSemesterWithdrawal implements MutableSemesterWithdrawal {
   }
 
   @Override
-  public MutableSemesterWithdrawal edit() throws Exception {
+  public MutableSemesterWithdrawal edit() {
     return new PersistentSemesterWithdrawal(this);
   }
 
@@ -201,7 +201,7 @@ public class PersistentSemesterWithdrawal implements MutableSemesterWithdrawal {
   }
 
   @Override
-  public void commit(boolean update) throws Exception {
+  public void commit(boolean update) {
     if(update) {
       sSemesterWithDrawalManager.update(this);
     }
@@ -211,7 +211,7 @@ public class PersistentSemesterWithdrawal implements MutableSemesterWithdrawal {
   }
 
   @Override
-  public void delete() throws Exception {
+  public void delete() {
     sSemesterWithDrawalManager.delete(this);
   }
 

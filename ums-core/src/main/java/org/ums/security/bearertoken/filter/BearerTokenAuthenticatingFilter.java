@@ -13,6 +13,8 @@ import org.ums.security.filter.UMSHttpAuthenticationFilter;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.Locale;
 
 public final class BearerTokenAuthenticatingFilter extends UMSHttpAuthenticationFilter {
@@ -90,14 +92,17 @@ public final class BearerTokenAuthenticatingFilter extends UMSHttpAuthentication
   protected boolean onLoginFailure(AuthenticationToken token, AuthenticationException e,
       ServletRequest request, ServletResponse response) {
     boolean isLogin = isLoginRequest(request, response);
-    if(isLogin) {
-      HTTP.writeError(response, HTTP.Status.UNAUTHORIZED);
+    try {
+      if(isLogin) {
+        HTTP.writeError(response, HTTP.Status.UNAUTHORIZED);
+      }
+      else {
+        HTTP.write(response, MimeTypes.PLAINTEXT, HTTP.Status.UNAUTHORIZED,
+            Messages.Status.EXPIRED_TOKEN.toString());
+      }
+    } catch(IOException ie) {
+      throw new UncheckedIOException(ie);
     }
-    else {
-      HTTP.write(response, MimeTypes.PLAINTEXT, HTTP.Status.UNAUTHORIZED,
-          Messages.Status.EXPIRED_TOKEN.toString());
-    }
-
     return false;
   }
 

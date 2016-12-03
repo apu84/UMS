@@ -12,9 +12,9 @@ import java.io.Serializable;
  */
 public interface SeatPlanGroup extends Serializable, LastModifier, EditType<MutableSeatPlanGroup>,
     Identifier<Integer> {
-  Semester getSemester() throws Exception;
+  Semester getSemester();
 
-  Program getProgram() throws Exception;
+  Program getProgram();
 
   int getProgramId();
 

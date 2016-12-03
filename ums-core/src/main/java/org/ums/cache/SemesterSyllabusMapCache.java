@@ -31,13 +31,12 @@ public class SemesterSyllabusMapCache
   }
 
   @Override
-  public List<SemesterSyllabusMap> getMapsByProgramSemester(Integer pProgramId, Integer pSemesterId)
-      throws Exception {
+  public List<SemesterSyllabusMap> getMapsByProgramSemester(Integer pProgramId, Integer pSemesterId) {
     return getManager().getMapsByProgramSemester(pProgramId, pSemesterId);
   }
 
   @Override
-  public void copySyllabus(SemesterSyllabusMapDto pSemesterSyllabusMapDto) throws Exception {
+  public void copySyllabus(SemesterSyllabusMapDto pSemesterSyllabusMapDto) {
     getManager().copySyllabus(pSemesterSyllabusMapDto);
   }
 

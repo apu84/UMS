@@ -41,7 +41,7 @@ public class UgGradeSheetXls extends Resource {
       final @PathParam("course-id") String pCourseId,
       final @PathParam("exam-type") Integer pExamTypeId,
       final @PathParam("course-type") Integer pCourseType,
-      final @PathParam("role") String pRequestedRole) throws Exception {
+      final @PathParam("role") String pRequestedRole) {
     List<StudentGradeDto> gradeList =
         mExamGradeManager.getAllGrades(pSemesterId, pCourseId, ExamType.get(pExamTypeId),
             CourseType.get(pCourseType));

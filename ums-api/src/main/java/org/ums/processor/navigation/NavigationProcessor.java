@@ -4,5 +4,5 @@ import org.apache.shiro.subject.Subject;
 import org.ums.domain.model.immutable.Navigation;
 
 public interface NavigationProcessor {
-  Navigation process(final Navigation pNavigation, final Subject pCurrentSubject) throws Exception;
+  Navigation process(final Navigation pNavigation, final Subject pCurrentSubject);
 }

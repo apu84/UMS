@@ -40,12 +40,12 @@ public class UGRegistrationResultResourceHelper extends
   UGRegistrationResultBuilder mBuilder;
 
   @Override
-  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) {
     return null;
   }
 
   public JsonObject getResultForCarryClearanceAndImprovement(final Request pRequest,
-      final UriInfo pUriInfo) throws Exception {
+      final UriInfo pUriInfo) {
 
     String mStudentId = SecurityUtils.getSubject().getPrincipal().toString();
     Student student = mStudentManager.get(mStudentId);
@@ -68,7 +68,7 @@ public class UGRegistrationResultResourceHelper extends
   }
 
   public JsonObject getResultForApplicationCCIOfCarryClearanceAndImprovement(
-      List<UGRegistrationResult> results, final UriInfo pUriInfo) throws Exception {
+      List<UGRegistrationResult> results, final UriInfo pUriInfo) {
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();

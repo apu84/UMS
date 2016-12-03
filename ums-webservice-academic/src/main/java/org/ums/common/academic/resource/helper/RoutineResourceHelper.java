@@ -1,5 +1,6 @@
 package org.ums.common.academic.resource.helper;
 
+import com.itextpdf.text.DocumentException;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,9 +23,11 @@ import org.ums.persistent.model.PersistentSemester;
 import org.ums.resource.ResourceHelper;
 
 import javax.json.*;
+import javax.print.Doc;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
 import java.util.*;
@@ -59,7 +62,7 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
   private ClassRoutineGenerator mRoutineGenerator;
 
   @Override
-  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) {
     /*MutableRoutine mutableRoutine = new PersistentRoutine();
     LocalCache localCache = new LocalCache();
     getBuilder().build(mutableRoutine, pJsonObject, localCache);
@@ -121,7 +124,7 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
   }
 
   public Response post(final int semesterId, final int programId, final int academicYear,
-      final int academicSemester, JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+      final int academicSemester, JsonObject pJsonObject, UriInfo pUriInfo) {
     MutableRoutine mutableRoutine = new PersistentRoutine();
     MutableSemester semester = new PersistentSemester();
     semester.setId(semesterId);
@@ -143,8 +146,7 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
     return builder.build();
   }
 
-  public JsonObject buildRoutines(final List<Routine> pRoutines, final UriInfo pUriInfo)
-      throws Exception {
+  public JsonObject buildRoutines(final List<Routine> pRoutines, final UriInfo pUriInfo) {
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
@@ -156,8 +158,7 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
     return object.build();
   }
 
-  public JsonObject getRoutineForTeacher(final Request pRequest, final UriInfo pUriInfo)
-      throws Exception {
+  public JsonObject getRoutineForTeacher(final Request pRequest, final UriInfo pUriInfo) {
     String userId = SecurityUtils.getSubject().getPrincipal().toString();
     User user = mUserManager.get(userId);
     String employeeId = user.getEmployeeId();
@@ -176,16 +177,17 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
   }
 
   public void getRoomBasedRoutineReport(final OutputStream pOutputStream, final int pSemesterId,
-      final int pRoomid, final Request pRequest, final UriInfo pUriInfo) throws Exception {
+      final int pRoomid, final Request pRequest, final UriInfo pUriInfo) throws DocumentException,
+      IOException {
     mRoutineGenerator.createRoomBasedClassRoutineReport(pOutputStream, pSemesterId, pRoomid);
   }
 
   public void getRoutineReportForTeacher(final OutputStream pOutputStream, final Request pRequest,
-      final UriInfo pUriInfo) throws Exception {
+      final UriInfo pUriInfo) throws DocumentException, IOException {
     mRoutineGenerator.createClassRoutineTeacherReport(pOutputStream);
   }
 
-  public JsonObject getRoutineForStudent() throws Exception {
+  public JsonObject getRoutineForStudent() {
     String mStudentId = SecurityUtils.getSubject().getPrincipal().toString();
     Student student = mStudentManager.get(mStudentId);
     List<Routine> routines = new ArrayList<>();
@@ -215,7 +217,7 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
                                           final int academicSemester,
                                           final String section,
                                           final Request pRequest,
-                                          final UriInfo pUriInfo) throws Exception {
+                                          final UriInfo pUriInfo) {
     List<Routine> routines = new ArrayList<>();
     String userId = SecurityUtils.getSubject().getPrincipal().toString();
     User user = mUserManager.get(userId);

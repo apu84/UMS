@@ -27,7 +27,7 @@ public class MarksSubmissionStatusResourceHelper extends
   MarksSubmissionStatusManager mMarksSubmissionStatusManager;
 
   @Override
-  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) {
     return null;
   }
 
@@ -47,14 +47,14 @@ public class MarksSubmissionStatusResourceHelper extends
   }
 
   public JsonObject getMarksSubmissionStatus(int pProgramTypeId, int pSemesterId,
-      final UriInfo pUriInfo) throws Exception {
+      final UriInfo pUriInfo) {
     List<MarksSubmissionStatus> statuses =
         mMarksSubmissionStatusManager.getByProgramType(pProgramTypeId, pSemesterId);
     return buildJsonResponse(statuses, pUriInfo);
   }
 
   public JsonObject getMarksSubmissionStatusByProgram(int pProgramId, int pSemesterId,
-      final UriInfo pUriInfo) throws Exception {
+      final UriInfo pUriInfo) {
     List<MarksSubmissionStatus> statuses =
         mMarksSubmissionStatusManager.get(pProgramId, pSemesterId);
     return buildJsonResponse(statuses, pUriInfo);

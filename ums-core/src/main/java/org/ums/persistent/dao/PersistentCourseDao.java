@@ -60,20 +60,20 @@ public class PersistentCourseDao extends CourseDaoDecorator {
     mJdbcTemplate = pJdbcTemplate;
   }
 
-  public Course get(final String pId) throws Exception {
+  public Course get(final String pId) {
     String query =
         SELECT_ALL
             + "WHERE MST_COURSE.COURSE_ID = ? And MST_COURSE.COURSE_ID=COURSE_SYLLABUS_MAP.COURSE_ID";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new CourseRowMapper());
   }
 
-  public List<Course> getAll() throws Exception {
+  public List<Course> getAll() {
     String query =
         SELECT_ALL + " WHERE MST_COURSE.COURSE_ID=COURSE_SYLLABUS_MAP.COURSE_ID " + ORDER_BY;
     return mJdbcTemplate.query(query, new CourseRowMapper());
   }
 
-  public int update(final MutableCourse pCourse) throws Exception {
+  public int update(final MutableCourse pCourse) {
     String query = UPDATE_ONE + "WHERE GORUP_ID = ?";
     return mJdbcTemplate.update(query, pCourse.getNo(), pCourse.getTitle(), pCourse.getCrHr(),
         pCourse.getSyllabus().getId(), pCourse.getCourseGroup(pCourse.getSyllabus().getId())
@@ -83,12 +83,12 @@ public class PersistentCourseDao extends CourseDaoDecorator {
             .ordinal());
   }
 
-  public int delete(final MutableCourse pCourse) throws Exception {
+  public int delete(final MutableCourse pCourse) {
     String query = DELETE_ONE + "WHERE COURSE_ID = ?";
     return mJdbcTemplate.update(query, pCourse.getId());
   }
 
-  public int create(final MutableCourse pCourse) throws Exception {
+  public int create(final MutableCourse pCourse) {
     return mJdbcTemplate.update(INSERT_ONE, pCourse.getId(), pCourse.getNo(), pCourse.getTitle(),
         pCourse.getCrHr(), pCourse.getSyllabusId(), pCourse.getCourseGroupId() > 0 ? pCourse
             .getCourseGroup(pCourse.getSyllabus().getId()).getId() : null, pCourse.getOfferedBy()

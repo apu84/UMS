@@ -43,11 +43,11 @@ public class PersistentProgramType implements MutableProgramType {
     mName = pName;
   }
 
-  public void delete() throws Exception {
+  public void delete() {
     sManager.delete(this);
   }
 
-  public void commit(final boolean pUpdate) throws Exception {
+  public void commit(final boolean pUpdate) {
     if(pUpdate) {
       sManager.update(this);
     }
@@ -56,7 +56,7 @@ public class PersistentProgramType implements MutableProgramType {
     }
   }
 
-  public MutableProgramType edit() throws Exception {
+  public MutableProgramType edit() {
     return new PersistentProgramType(this);
   }
 

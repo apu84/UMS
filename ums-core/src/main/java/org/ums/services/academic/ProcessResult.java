@@ -11,9 +11,9 @@ public interface ProcessResult {
   String PUBLISH_RESULT = "_publish_result";
   String PUBLISH_RESULT_TASK_NAME = "Publish result";
 
-  void process(final int pProgramId, final int pSemesterId) throws Exception;
+  void process(final int pProgramId, final int pSemesterId);
 
-  GenericResponse<TaskStatus> status(int pProgramId, final int pSemesterId) throws Exception;
+  GenericResponse<TaskStatus> status(int pProgramId, final int pSemesterId);
 
-  void publishResult(final int pProgramId, final int pSemesterId) throws Exception;
+  void publishResult(final int pProgramId, final int pSemesterId);
 }

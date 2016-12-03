@@ -23,7 +23,7 @@ public class PersistentUGRegistrationResult extends AbstractUGBaseRegistration i
   }
 
   @Override
-  public void commit(boolean update) throws Exception {
+  public void commit(boolean update) {
     if(update) {
       sRegistrationResultManager.update(this);
     }
@@ -33,12 +33,12 @@ public class PersistentUGRegistrationResult extends AbstractUGBaseRegistration i
   }
 
   @Override
-  public void delete() throws Exception {
+  public void delete() {
     sRegistrationResultManager.delete(this);
   }
 
   @Override
-  public MutableUGRegistrationResult edit() throws Exception {
+  public MutableUGRegistrationResult edit() {
     return new PersistentUGRegistrationResult(this);
   }
 }

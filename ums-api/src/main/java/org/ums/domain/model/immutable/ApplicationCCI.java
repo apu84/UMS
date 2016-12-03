@@ -13,15 +13,15 @@ import java.io.Serializable;
  */
 public interface ApplicationCCI extends Serializable, LastModifier,
     EditType<MutableApplicationCCI>, Identifier<Integer> {
-  Semester getSemester() throws Exception;
+  Semester getSemester();
 
   Integer getSemesterId();
 
-  Student getStudent() throws Exception;
+  Student getStudent();
 
   String getStudentId();
 
-  Course getCourse() throws Exception;
+  Course getCourse();
 
   String getCourseId();
 

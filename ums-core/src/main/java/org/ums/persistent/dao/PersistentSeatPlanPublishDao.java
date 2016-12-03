@@ -38,13 +38,13 @@ public class PersistentSeatPlanPublishDao extends SeatPlanPublishDaoDecorator {
   }
 
   @Override
-  public int update(List<MutableSeatPlanPublish> pMutableList) throws Exception {
+  public int update(List<MutableSeatPlanPublish> pMutableList) {
     String query = " update sp_publish set  published=? where id=?";
     return mJdbcTemplate.batchUpdate(query, getUpdateParamList(pMutableList)).length;
   }
 
   @Override
-  public int create(List<MutableSeatPlanPublish> pMutableList) throws Exception {
+  public int create(List<MutableSeatPlanPublish> pMutableList) {
     String query =
         " insert into sp_publish(semester_id,exam_type,exam_date,published) values(?,?,to_date(?,'dd/MM/YYYY'),?)";
     return mJdbcTemplate.batchUpdate(query, getInsertParamList(pMutableList)).length;
@@ -56,8 +56,7 @@ public class PersistentSeatPlanPublishDao extends SeatPlanPublishDaoDecorator {
     return mJdbcTemplate.update(query, pSemesterId);
   }
 
-  public List<Object[]> getUpdateParamList(List<MutableSeatPlanPublish> pMutableSeatPlanPublishs)
-      throws Exception {
+  public List<Object[]> getUpdateParamList(List<MutableSeatPlanPublish> pMutableSeatPlanPublishs) {
     List<Object[]> params = new ArrayList<>();
     for(SeatPlanPublish publish : pMutableSeatPlanPublishs) {
       params.add(new Object[] {publish.getPublishStatus(), publish.getId()});
@@ -65,8 +64,7 @@ public class PersistentSeatPlanPublishDao extends SeatPlanPublishDaoDecorator {
     return params;
   }
 
-  public List<Object[]> getInsertParamList(List<MutableSeatPlanPublish> pMutableSeatPlanPublishs)
-      throws Exception {
+  public List<Object[]> getInsertParamList(List<MutableSeatPlanPublish> pMutableSeatPlanPublishs) {
     List<Object[]> params = new ArrayList<>();
     for(SeatPlanPublish publish : pMutableSeatPlanPublishs) {
       params.add(new Object[] {publish.getSemesterId(), publish.getExamType().getId(),

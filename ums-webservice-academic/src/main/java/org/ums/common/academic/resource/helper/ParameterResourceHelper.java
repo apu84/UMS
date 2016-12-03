@@ -31,7 +31,7 @@ public class ParameterResourceHelper extends ResourceHelper<Parameter, MutablePa
   private ParameterBuilder mBuilder;
 
   @Override
-  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) {
     MutableParameter mutableParameter = new PersistentParameter();
     LocalCache localCache = new LocalCache();
     getBuilder().build(mutableParameter, pJsonObject, localCache);

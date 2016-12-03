@@ -34,12 +34,12 @@ public class LocalCacheManager<R extends LastModifier, I> implements CacheManage
   }
 
   @Override
-  public R get(String pCacheId) throws Exception {
+  public R get(String pCacheId) {
     return mCache.get(pCacheId);
   }
 
   @Override
-  public String getLastModified(final String pCacheId) throws Exception {
+  public String getLastModified(final String pCacheId) {
     return mLastModified.get(pCacheId);
   }
 
@@ -58,7 +58,7 @@ public class LocalCacheManager<R extends LastModifier, I> implements CacheManage
   }
 
   @Override
-  public void flushAll() throws Exception {
+  public void flushAll() {
     mCache.clear();
     mCacheList.clear();
     mCachedKeyList.clear();
@@ -68,27 +68,27 @@ public class LocalCacheManager<R extends LastModifier, I> implements CacheManage
   }
 
   @Override
-  public void put(String pCacheId, List<I> pReadOnlyIds) throws Exception {
+  public void put(String pCacheId, List<I> pReadOnlyIds) {
     mCacheList.put(pCacheId, pReadOnlyIds);
   }
 
   @Override
-  public void putKeys(String pCacheId, List<String> pKeys) throws Exception {
+  public void putKeys(String pCacheId, List<String> pKeys) {
     mCachedKeyList.put(pCacheId, pKeys);
   }
 
   @Override
-  public List<I> getList(String pCacheId) throws Exception {
+  public List<I> getList(String pCacheId) {
     return mCacheList.get(pCacheId);
   }
 
   @Override
-  public List<String> getCachedKeyList(String pCacheId) throws Exception {
+  public List<String> getCachedKeyList(String pCacheId) {
     return mCachedKeyList.get(pCacheId);
   }
 
   @Override
-  public void invalidateList(String pCacheId) throws Exception {
+  public void invalidateList(String pCacheId) {
     mCacheList.remove(pCacheId);
   }
 

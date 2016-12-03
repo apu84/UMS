@@ -32,13 +32,13 @@ public class PersistentSpStudentDao extends SpStudentDaoDecorator {
   }
 
   @Override
-  public List<SpStudent> getAll() throws Exception {
+  public List<SpStudent> getAll() {
     String query = SELECT_ALL + " WHERE ACTIVE=1  ORDER BY STUDENT_ID";
     return mJdbcTemplate.query(query, new SpStudentRowMapper());
   }
 
   @Override
-  public SpStudent get(String pId) throws Exception {
+  public SpStudent get(String pId) {
     String query = SELECT_ALL + " WHERE STUDENT_ID=? AND ROWNUM = 1";
 
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new SpStudentRowMapper());
@@ -53,7 +53,7 @@ public class PersistentSpStudentDao extends SpStudentDaoDecorator {
   }
 
   @Override
-  public int create(MutableSpStudent pMutable) throws Exception {
+  public int create(MutableSpStudent pMutable) {
     String query = INSERT_ONE;
     return mJdbcTemplate.update(query, pMutable.getId(), pMutable.getProgram().getId(), pMutable
         .getSemester().getId(), pMutable.getAcademicYear(), pMutable.getAcademicSemester(),
@@ -61,13 +61,13 @@ public class PersistentSpStudentDao extends SpStudentDaoDecorator {
   }
 
   @Override
-  public int delete(MutableSpStudent pMutable) throws Exception {
+  public int delete(MutableSpStudent pMutable) {
     String query = DELETE_ONE + " WHERE STUDENT_ID=?";
     return mJdbcTemplate.update(query, pMutable.getId());
   }
 
   @Override
-  public int update(MutableSpStudent pMutable) throws Exception {
+  public int update(MutableSpStudent pMutable) {
     String query = UPDATE_ONE + " WHERE STUDENT_ID=?";
     return mJdbcTemplate.update(query, pMutable.getId());
   }

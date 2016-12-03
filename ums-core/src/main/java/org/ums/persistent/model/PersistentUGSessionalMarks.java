@@ -23,12 +23,12 @@ public class PersistentUGSessionalMarks extends AbstractUGBaseRegistration imple
   }
 
   @Override
-  public MutableUGSessionalMarks edit() throws Exception {
+  public MutableUGSessionalMarks edit() {
     return new PersistentUGSessionalMarks(this);
   }
 
   @Override
-  public void commit(boolean update) throws Exception {
+  public void commit(boolean update) {
     if(update) {
       sSessionalMarksManager.update(this);
     }
@@ -38,7 +38,7 @@ public class PersistentUGSessionalMarks extends AbstractUGBaseRegistration imple
   }
 
   @Override
-  public void delete() throws Exception {
+  public void delete() {
     sSessionalMarksManager.delete(this);
   }
 }

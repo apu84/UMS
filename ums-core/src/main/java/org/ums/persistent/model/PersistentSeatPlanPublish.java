@@ -35,8 +35,7 @@ public class PersistentSeatPlanPublish implements MutableSeatPlanPublish {
 
   }
 
-  public PersistentSeatPlanPublish(final MutableSeatPlanPublish pMutableSeatPlanPublish)
-      throws Exception {
+  public PersistentSeatPlanPublish(final MutableSeatPlanPublish pMutableSeatPlanPublish) {
     mId = pMutableSeatPlanPublish.getId();
     mSemester = pMutableSeatPlanPublish.getSemester();
     mSemesterId = pMutableSeatPlanPublish.getSemesterId();
@@ -82,7 +81,7 @@ public class PersistentSeatPlanPublish implements MutableSeatPlanPublish {
   }
 
   @Override
-  public void commit(boolean update) throws Exception {
+  public void commit(boolean update) {
     if(update) {
       sSeatPlanPublishManager.update(this);
     }
@@ -92,7 +91,7 @@ public class PersistentSeatPlanPublish implements MutableSeatPlanPublish {
   }
 
   @Override
-  public void delete() throws Exception {
+  public void delete() {
     sSeatPlanPublishManager.delete(this);
   }
 
@@ -107,7 +106,7 @@ public class PersistentSeatPlanPublish implements MutableSeatPlanPublish {
   }
 
   @Override
-  public Semester getSemester() throws Exception {
+  public Semester getSemester() {
     return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
         .validate(mSemester);
   }
@@ -133,7 +132,7 @@ public class PersistentSeatPlanPublish implements MutableSeatPlanPublish {
   }
 
   @Override
-  public MutableSeatPlanPublish edit() throws Exception {
+  public MutableSeatPlanPublish edit() {
     return new PersistentSeatPlanPublish(this);
   }
 }

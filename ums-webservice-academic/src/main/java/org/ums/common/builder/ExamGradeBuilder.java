@@ -19,6 +19,7 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -36,7 +37,7 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
 
   @Override
   public void build(JsonObjectBuilder pBuilder, ExamGrade pReadOnly, UriInfo pUriInfo,
-      final LocalCache pLocalCache) throws Exception {
+      final LocalCache pLocalCache) {
 
     pBuilder.add("id", pReadOnly.getId());
 
@@ -75,20 +76,23 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
   }
 
   @Override
-  public void build(MutableExamGrade pMutable, JsonObject pJsonObject, final LocalCache pLocalCache)
-      throws Exception {
+  public void build(MutableExamGrade pMutable, JsonObject pJsonObject, final LocalCache pLocalCache) {
     DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
     if(pJsonObject.containsKey("id")) {
       pMutable.setId(Integer.parseInt(pJsonObject.get("id").toString()));
     }
-    if(pJsonObject.getString("lastSubmissionDate") != null) {
-      Date date = dateFormat.parse(pJsonObject.getString("lastSubmissionDate"));
-      // Set date to last hour and last minute of the dayatch
-      Calendar calendar = Calendar.getInstance();
-      calendar.setTime(date);
-      calendar.set(Calendar.MINUTE, 59);
-      calendar.set(Calendar.HOUR, 23);
-      pMutable.setLastSubmissionDate(calendar.getTime());
+    try {
+      if(pJsonObject.getString("lastSubmissionDate") != null) {
+        Date date = dateFormat.parse(pJsonObject.getString("lastSubmissionDate"));
+        // Set date to last hour and last minute of the dayatch
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.HOUR, 23);
+        pMutable.setLastSubmissionDate(calendar.getTime());
+      }
+    } catch(ParseException pe) {
+      throw new RuntimeException(pe);
     }
     pMutable.setSemesterId(pJsonObject.getInt("semesterId"));
     // pMutable.setExamTypeId(pJsonObject.getInt("examType"));
@@ -98,7 +102,7 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
     }
   }
 
-  public void build(MarksSubmissionStatusDto partInfoDto, JsonObject pJsonObject) throws Exception {
+  public void build(MarksSubmissionStatusDto partInfoDto, JsonObject pJsonObject) {
     JsonObject course = pJsonObject.getJsonObject("courseInfo");
     partInfoDto.setCourseId(course.getString("course_id"));
     partInfoDto.setSemesterId(course.getInt("semester_id"));
@@ -109,7 +113,7 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
     partInfoDto.setCourseType(CourseType.get(course.getInt("course_typeId")));
   }
 
-  public List<StudentGradeDto> build(JsonObject pJsonObject) throws Exception {
+  public List<StudentGradeDto> build(JsonObject pJsonObject) {
 
     JsonArray entries = pJsonObject.getJsonArray("gradeList");
     JsonObject courseInfo = pJsonObject.getJsonObject("courseInfo");
@@ -148,7 +152,7 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
   }
 
   public ArrayList<List<StudentGradeDto>> buildForRecheckApproveGrade(String action, String actor,
-      JsonObject pJsonObject) throws Exception {
+      JsonObject pJsonObject) {
 
     ArrayList<List<StudentGradeDto>> recheckApproveList = new ArrayList<>();
     JsonArray recheckEntries = pJsonObject.getJsonArray("recheckList");

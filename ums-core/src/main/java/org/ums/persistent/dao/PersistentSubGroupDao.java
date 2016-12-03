@@ -80,7 +80,7 @@ public class PersistentSubGroupDao extends SubGroupDaoDecorator {
   }
 
   @Override
-  public int create(List<MutableSubGroup> pMutableList) throws Exception {
+  public int create(List<MutableSubGroup> pMutableList) {
     return mJdbcTemplate.batchUpdate(INSERT_ALL, getInsertParamList(pMutableList)).length;
   }
 
@@ -102,37 +102,37 @@ public class PersistentSubGroupDao extends SubGroupDaoDecorator {
   }
 
   @Override
-  public int create(MutableSubGroup pMutable) throws Exception {
+  public int create(MutableSubGroup pMutable) {
     return mJdbcTemplate.update(INSERT_ALL, pMutable.getSemester().getId(), pMutable.getGroup()
         .getGroupNo(), pMutable.subGroupNo(), pMutable.getGroup().getId(), pMutable.getPosition(),
         pMutable.getStudentNumber(), pMutable.getExamType());
   }
 
   @Override
-  public int delete(MutableSubGroup pMutable) throws Exception {
+  public int delete(MutableSubGroup pMutable) {
     String query = DELETE_ONE + " WHERE ID=?";
     return mJdbcTemplate.update(query, pMutable.getId());
   }
 
   @Override
-  public int update(MutableSubGroup pMutable) throws Exception {
+  public int update(MutableSubGroup pMutable) {
     String query = UPDATE_ALL + " WHERE ID=?";
     return mJdbcTemplate.update(query, pMutable.getId());
   }
 
   @Override
-  public SubGroup get(Integer pId) throws Exception {
+  public SubGroup get(Integer pId) {
     String query = SELECT_ALL + " WHERE ID=?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new SubGroupRowMapper());
   }
 
   @Override
-  public List<SubGroup> getAll() throws Exception {
+  public List<SubGroup> getAll() {
     String query = SELECT_ALL;
     return mJdbcTemplate.query(query, new SubGroupRowMapper());
   }
 
-  private List<Object[]> getInsertParamList(List<MutableSubGroup> pSubGroups) throws Exception {
+  private List<Object[]> getInsertParamList(List<MutableSubGroup> pSubGroups) {
     List<Object[]> params = new ArrayList<>();
 
     for(SubGroup subGroup : pSubGroups) {

@@ -21,7 +21,7 @@ public class MarksSubmissionStatusBuilder implements
 
   @Override
   public void build(JsonObjectBuilder pBuilder, MarksSubmissionStatus pReadOnly, UriInfo pUriInfo,
-      LocalCache pLocalCache) throws Exception {
+      LocalCache pLocalCache) {
     Course course = (Course) pLocalCache.cache(() -> pReadOnly.getCourse(), pReadOnly.getCourseId(),
         Course.class);
     Syllabus syllabus = (Syllabus) pLocalCache.cache(() -> course.getSyllabus(), course.getSyllabusId(),
@@ -48,7 +48,7 @@ public class MarksSubmissionStatusBuilder implements
 
   @Override
   public void build(MutableMarksSubmissionStatus pMutable, JsonObject pJsonObject,
-      LocalCache pLocalCache) throws Exception {
+      LocalCache pLocalCache) {
 
   }
 }

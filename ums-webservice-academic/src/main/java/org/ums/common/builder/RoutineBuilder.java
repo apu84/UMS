@@ -36,7 +36,7 @@ public class RoutineBuilder implements Builder<Routine, MutableRoutine> {
 
   @Override
   public void build(JsonObjectBuilder pBuilder, Routine pReadOnly, UriInfo pUriInfo,
-      LocalCache pLocalCache) throws Exception {
+      LocalCache pLocalCache) {
     if(pReadOnly.getId() != null)
       pBuilder.add("id", pReadOnly.getId());
     if(pReadOnly.getSemester().getId() != null)
@@ -62,7 +62,7 @@ public class RoutineBuilder implements Builder<Routine, MutableRoutine> {
   }
 
   @Override
-  public void build(MutableRoutine pMutable, JsonObject pJsonObject, LocalCache pLocalCache) throws Exception {
+  public void build(MutableRoutine pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
 
     String userId = SecurityUtils.getSubject().getPrincipal().toString();
     User user = mUserManager.get(userId);

@@ -44,8 +44,7 @@ public class PersistentMarksSubmissionStatus implements MutableMarksSubmissionSt
 
   public PersistentMarksSubmissionStatus() {}
 
-  public PersistentMarksSubmissionStatus(MutableMarksSubmissionStatus pMarksSubmissionStatus)
-      throws Exception {
+  public PersistentMarksSubmissionStatus(MutableMarksSubmissionStatus pMarksSubmissionStatus) {
     setId(pMarksSubmissionStatus.getId());
     setSemesterId(pMarksSubmissionStatus.getSemesterId());
     setCourseId(pMarksSubmissionStatus.getCourseId());
@@ -61,7 +60,7 @@ public class PersistentMarksSubmissionStatus implements MutableMarksSubmissionSt
   }
 
   @Override
-  public void commit(boolean update) throws Exception {
+  public void commit(boolean update) {
     if(update) {
       sMarksSubmissionStatusManager.update(this);
     }
@@ -71,7 +70,7 @@ public class PersistentMarksSubmissionStatus implements MutableMarksSubmissionSt
   }
 
   @Override
-  public MutableMarksSubmissionStatus edit() throws Exception {
+  public MutableMarksSubmissionStatus edit() {
     return new PersistentMarksSubmissionStatus(this);
   }
 
@@ -96,7 +95,7 @@ public class PersistentMarksSubmissionStatus implements MutableMarksSubmissionSt
   }
 
   @Override
-  public void delete() throws Exception {
+  public void delete() {
     sMarksSubmissionStatusManager.delete(this);
   }
 
@@ -111,7 +110,7 @@ public class PersistentMarksSubmissionStatus implements MutableMarksSubmissionSt
   }
 
   @Override
-  public Semester getSemester() throws Exception {
+  public Semester getSemester() {
     return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
         .validate(mSemester);
   }
@@ -132,7 +131,7 @@ public class PersistentMarksSubmissionStatus implements MutableMarksSubmissionSt
   }
 
   @Override
-  public Course getCourse() throws Exception {
+  public Course getCourse() {
     return mCourse == null ? sCourseManager.get(mCourseId) : sCourseManager.validate(mCourse);
   }
 

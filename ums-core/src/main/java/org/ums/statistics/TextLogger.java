@@ -44,7 +44,7 @@ public class TextLogger implements QueryLogger {
 
   @Override
   @Scheduled(fixedDelay = 15000, initialDelay = 60000)
-  public void doLog() throws Exception {
+  public void doLog() {
     List<String> loggerEntries = new ArrayList<>();
     synchronized(mLoggerEntries) {
       String ml;

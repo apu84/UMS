@@ -44,7 +44,7 @@ public class SpStudentResourceHelper extends ResourceHelper<SpStudent, MutableSp
   private SpStudentBuilder mBuilder;
 
   @Override
-  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) {
     MutableSpStudent spStudent = new PersistentSpStudent();
     LocalCache localCache = new LocalCache();
     getBuilder().build(spStudent, pJsonObject, localCache);
@@ -59,7 +59,7 @@ public class SpStudentResourceHelper extends ResourceHelper<SpStudent, MutableSp
 
   public JsonObject getStudentByProgramYearSemesterStatus(final int programId,
       final int academicYear, final int academicSemester, final int status, final Request pRequest,
-      final UriInfo pUriInfo) throws Exception {
+      final UriInfo pUriInfo) {
     List<SpStudent> spStudents =
         getContentManager().getStudentByProgramYearSemesterStatus(programId, academicYear,
             academicSemester, status);

@@ -117,7 +117,7 @@ public class PersistentNavigation implements MutableNavigation {
   }
 
   @Override
-  public Navigation getParent() throws Exception {
+  public Navigation getParent() {
     return mNavigation == null ? mParentId > 0 ? sNavigationManager.get(mParentId) : null
         : sNavigationManager.validate(mNavigation);
   }
@@ -148,7 +148,7 @@ public class PersistentNavigation implements MutableNavigation {
   }
 
   @Override
-  public void commit(boolean update) throws Exception {
+  public void commit(boolean update) {
     if(update) {
       sNavigationManager.update(this);
     }
@@ -158,12 +158,12 @@ public class PersistentNavigation implements MutableNavigation {
   }
 
   @Override
-  public void delete() throws Exception {
+  public void delete() {
     sNavigationManager.delete(this);
   }
 
   @Override
-  public MutableNavigation edit() throws Exception {
+  public MutableNavigation edit() {
     return new PersistentNavigation(this);
   }
 

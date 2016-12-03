@@ -40,7 +40,7 @@ public class PersistentRole implements MutableRole {
   }
 
   @Override
-  public MutableRole edit() throws Exception {
+  public MutableRole edit() {
     return new PersistentRole(this);
   }
 
@@ -65,7 +65,7 @@ public class PersistentRole implements MutableRole {
   }
 
   @Override
-  public void commit(boolean update) throws Exception {
+  public void commit(boolean update) {
     if(update) {
       sRoleManager.update(this);
     }
@@ -75,7 +75,7 @@ public class PersistentRole implements MutableRole {
   }
 
   @Override
-  public void delete() throws Exception {
+  public void delete() {
     sRoleManager.delete(this);
   }
 

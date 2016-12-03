@@ -32,32 +32,32 @@ public class PersistentParameterDao extends ParameterDaoDecorator {
   }
 
   @Override
-  public List<Parameter> getAll() throws Exception {
+  public List<Parameter> getAll() {
     String query = SELECT_ALL;
     return mJdbcTemplate.query(query, new ParameterRowMapper());
   }
 
   @Override
-  public Parameter get(String pId) throws Exception {
+  public Parameter get(String pId) {
     String query = SELECT_ALL + " WHERE PARAMETER_ID = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new ParameterRowMapper());
   }
 
   @Override
-  public int update(MutableParameter pMutable) throws Exception {
+  public int update(MutableParameter pMutable) {
     String query = UPDATE_ONE + " WHERE PARAMETER_ID=?";
     return mJdbcTemplate.update(query, pMutable.getParameter(), pMutable.getShortDescription(),
         pMutable.getLongDescription(), pMutable.getType(), pMutable.getId());
   }
 
   @Override
-  public int delete(MutableParameter pMutable) throws Exception {
+  public int delete(MutableParameter pMutable) {
     String query = DELETE_ONE + " WHERE PARAMETER_ID = ?";
     return mJdbcTemplate.update(query, pMutable.getId());
   }
 
   @Override
-  public int create(MutableParameter pMutable) throws Exception {
+  public int create(MutableParameter pMutable) {
     return mJdbcTemplate.update(INSERT_ONE, pMutable.getParameter(),
         pMutable.getShortDescription(), pMutable.getLongDescription(), pMutable.getType());
   }

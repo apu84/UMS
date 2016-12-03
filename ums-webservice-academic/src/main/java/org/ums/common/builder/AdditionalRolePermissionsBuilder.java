@@ -14,6 +14,7 @@ import org.ums.manager.NavigationManager;
 import javax.json.*;
 import javax.ws.rs.core.UriInfo;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -28,7 +29,7 @@ public class AdditionalRolePermissionsBuilder implements
 
   @Override
   public void build(JsonObjectBuilder pBuilder, AdditionalRolePermissions pReadOnly,
-      UriInfo pUriInfo, LocalCache pLocalCache) throws Exception {
+      UriInfo pUriInfo, LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("userId", pReadOnly.getUserId());
 
@@ -48,14 +49,18 @@ public class AdditionalRolePermissionsBuilder implements
 
   @Override
   public void build(MutableAdditionalRolePermissions pMutable, JsonObject pJsonObject,
-      LocalCache pLocalCache) throws Exception {
+      LocalCache pLocalCache) {
     pMutable.setUserId(pJsonObject.getString("user"));
     pMutable.setAssignedByUserId(SecurityUtils.getSubject().getPrincipal().toString());
-    if(pJsonObject.containsKey("start") && !StringUtils.isEmpty(pJsonObject.getString("start"))) {
-      pMutable.setValidFrom(mDateFormat.parse(pJsonObject.getString("start")));
-    }
-    if(pJsonObject.containsKey("end") && !StringUtils.isEmpty(pJsonObject.getString("end"))) {
-      pMutable.setValidTo(mDateFormat.parse(pJsonObject.getString("end")));
+    try {
+      if(pJsonObject.containsKey("start") && !StringUtils.isEmpty(pJsonObject.getString("start"))) {
+        pMutable.setValidFrom(mDateFormat.parse(pJsonObject.getString("start")));
+      }
+      if(pJsonObject.containsKey("end") && !StringUtils.isEmpty(pJsonObject.getString("end"))) {
+        pMutable.setValidTo(mDateFormat.parse(pJsonObject.getString("end")));
+      }
+    } catch(ParseException pe) {
+      throw new RuntimeException(pe);
     }
     JsonArray permissions = pJsonObject.getJsonArray("permissions");
     Set<Integer> permissionSet = new HashSet<>();

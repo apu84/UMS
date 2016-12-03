@@ -30,36 +30,36 @@ public class EquivalentCourseDao extends EquivalentCourseDaoDecorator {
   }
 
   @Override
-  public List<EquivalentCourse> getAll() throws Exception {
+  public List<EquivalentCourse> getAll() {
     return mJdbcTemplate.query(SELECT_ALL, new EquivalentCourseMapper());
   }
 
   @Override
-  public EquivalentCourse get(Integer pId) throws Exception {
+  public EquivalentCourse get(Integer pId) {
     String query = SELECT_ALL + "WHERE ID = ? ";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new EquivalentCourseMapper());
   }
 
   @Override
-  public int update(MutableEquivalentCourse pMutable) throws Exception {
+  public int update(MutableEquivalentCourse pMutable) {
     String query = UPDATE_ALL + " WHERE ID = ? ";
     return mJdbcTemplate.update(query, pMutable.getOldCourseId(), pMutable.getNewCourseId(),
         pMutable.getId());
   }
 
   @Override
-  public int delete(MutableEquivalentCourse pMutable) throws Exception {
+  public int delete(MutableEquivalentCourse pMutable) {
     String query = DELETE_ALL + " WHERE ID = ? ";
     return mJdbcTemplate.update(query, pMutable.getId());
   }
 
   @Override
-  public int create(MutableEquivalentCourse pMutable) throws Exception {
+  public int create(MutableEquivalentCourse pMutable) {
     return mJdbcTemplate.update(INSERT_ALL, pMutable.getOldCourseId(), pMutable.getNewCourseId());
   }
 
   @Override
-  public boolean exists(Integer pId) throws Exception {
+  public boolean exists(Integer pId) {
     String query = EXISTS + "WHERE ID = ?";
     return mJdbcTemplate.queryForObject(query, Boolean.class, pId);
   }

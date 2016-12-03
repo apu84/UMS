@@ -24,7 +24,7 @@ public class PersistentSemesterWiseCrHrDao {
   }
 
   public SemesterWiseCrHrDto getCrHrInfoByYearSemester(String pSyllabusId, Integer pYear,
-      Integer pSemester) throws Exception {
+      Integer pSemester) {
     String query =
         "Select * From SEMESTER_WISE_CRHR Where Syllabus_Id=? and Year=? and Semester=? ";
 

@@ -20,7 +20,7 @@ public class MainNavigation extends Resource {
   MainNavigationHelper mNavigationHelper;
 
   @GET
-  public JsonObject navigationItems() throws Exception {
+  public JsonObject navigationItems() {
     return mNavigationHelper.getNavigationItems(mUriInfo);
   }
 }

@@ -34,7 +34,7 @@ public class UMSLogin {
 
   @GET
   @Transactional
-  public JsonObject login() throws Exception {
+  public JsonObject login() {
     Subject currentUser = SecurityUtils.getSubject();
     String userName = currentUser.getPrincipal().toString();
     final JsonObjectBuilder builder = Json.createObjectBuilder();

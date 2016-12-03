@@ -41,7 +41,7 @@ public class ClassAttendanceResource extends MutableClassAttendanceResource {
       final @PathParam("semester-id") Integer pSemesterId,
       final @PathParam("course-id") String pCourseId,
       final @PathParam("section-id") String pSection,
-      final @PathParam("student-category") String pStudentCategory) throws Exception {
+      final @PathParam("student-category") String pStudentCategory) {
     return mResourceHelper.getClassAttendance(pSemesterId, pCourseId, pSection, pStudentCategory);
 
   }

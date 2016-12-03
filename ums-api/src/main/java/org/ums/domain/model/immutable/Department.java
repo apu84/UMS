@@ -9,9 +9,9 @@ import java.io.Serializable;
 
 public interface Department extends Serializable, EditType<MutableDepartment>, LastModifier,
     Identifier<String> {
-  String getShortName() throws Exception;
+  String getShortName();
 
-  String getLongName() throws Exception;
+  String getLongName();
 
-  int getType() throws Exception;
+  int getType();
 }

@@ -34,7 +34,7 @@ public class SeatPlanGroupBuilder implements Builder<SeatPlanGroup, MutableSeatP
 
   @Override
   public void build(JsonObjectBuilder pBuilder, SeatPlanGroup pReadOnly, UriInfo pUriInfo,
-      LocalCache pLocalCache) throws Exception {
+      LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("groupId", pReadOnly.getId());
     pBuilder.add("semesterId", pReadOnly.getSemester().getId());
@@ -52,8 +52,7 @@ public class SeatPlanGroupBuilder implements Builder<SeatPlanGroup, MutableSeatP
   }
 
   @Override
-  public void build(MutableSeatPlanGroup pMutable, JsonObject pJsonObject, LocalCache pLocalCache)
-      throws Exception {
+  public void build(MutableSeatPlanGroup pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
     PersistentSemester persistentSemester = new PersistentSemester();
     persistentSemester.setId(pJsonObject.getInt("semesterId"));
     pMutable.setSemester(persistentSemester);

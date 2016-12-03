@@ -21,12 +21,12 @@ public class PersistentObjectNotificationDao extends NotificationDaoDecorator {
   }
 
   @Override
-  public Notification get(String pId) throws Exception {
+  public Notification get(String pId) {
     return mMongoOperations.findOne(Query.query(Criteria.where("mId").is(pId)), Notification.class);
   }
 
   @Override
-  public int update(MutableNotification pMutable) throws Exception {
+  public int update(MutableNotification pMutable) {
     Query query = Query.query(Criteria.where("mId").is(pMutable.getId()));
     DBObject dbDoc = new BasicDBObject();
     mMongoOperations.getConverter().write(pMutable, dbDoc);
@@ -36,19 +36,19 @@ public class PersistentObjectNotificationDao extends NotificationDaoDecorator {
   }
 
   @Override
-  public int delete(MutableNotification pMutable) throws Exception {
+  public int delete(MutableNotification pMutable) {
     mMongoOperations.remove(pMutable);
     return 1;
   }
 
   @Override
-  public int create(MutableNotification pMutable) throws Exception {
+  public int create(MutableNotification pMutable) {
     mMongoOperations.insert(pMutable);
     return 1;
   }
 
   @Override
-  public int create(List<MutableNotification> pMutableList) throws Exception {
+  public int create(List<MutableNotification> pMutableList) {
     mMongoOperations.insert(pMutableList, Notification.class);
     return pMutableList.size();
   }

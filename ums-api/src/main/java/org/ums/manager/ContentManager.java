@@ -3,23 +3,23 @@ package org.ums.manager;
 import java.util.List;
 
 public interface ContentManager<R, M, I> {
-  List<R> getAll() throws Exception;
+  List<R> getAll();
 
-  R get(final I pId) throws Exception;
+  R get(final I pId);
 
-  R validate(final R pReadonly) throws Exception;
+  R validate(final R pReadonly);
 
-  int update(final M pMutable) throws Exception;
+  int update(final M pMutable);
 
-  int update(final List<M> pMutableList) throws Exception;
+  int update(final List<M> pMutableList);
 
-  int delete(final M pMutable) throws Exception;
+  int delete(final M pMutable);
 
-  int delete(final List<M> pMutableList) throws Exception;
+  int delete(final List<M> pMutableList);
 
-  int create(final M pMutable) throws Exception;
+  int create(final M pMutable);
 
-  int create(final List<M> pMutableList) throws Exception;
+  int create(final List<M> pMutableList);
 
-  boolean exists(final I pId) throws Exception;
+  boolean exists(final I pId);
 }

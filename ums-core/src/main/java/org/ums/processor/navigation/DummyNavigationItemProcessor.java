@@ -14,7 +14,7 @@ public class DummyNavigationItemProcessor implements NavigationProcessor {
   ContentManager<User, MutableUser, String> mUserManager;
 
   @Override
-  public Navigation process(Navigation pNavigation, Subject pCurrentSubject) throws Exception {
+  public Navigation process(Navigation pNavigation, Subject pCurrentSubject) {
     User currentUser = mUserManager.get(pCurrentSubject.getPrincipal().toString());
     if(pNavigation.getLocation().contains("studentProfile")
         && currentUser.getPrimaryRole().getName().equalsIgnoreCase("sadmin")) {

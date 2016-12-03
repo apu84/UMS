@@ -31,7 +31,7 @@ public class NavigationCache extends
   }
 
   @Override
-  public List<Navigation> getByPermissions(Set<String> pPermissions) throws Exception {
+  public List<Navigation> getByPermissions(Set<String> pPermissions) {
     return getManager().getByPermissions(pPermissions);
   }
 
@@ -41,7 +41,7 @@ public class NavigationCache extends
   }
 
   @Override
-  public List<Navigation> getAll() throws Exception {
+  public List<Navigation> getAll() {
     String cacheKey = getCacheKey(Navigation.class.toString());
     return cachedList(cacheKey, () -> getManager().getAll());
   }

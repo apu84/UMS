@@ -25,14 +25,14 @@ public class ProcessResultResource extends Resource {
   @Path("/processResult/status/program/{program-id}/semester/{semester-id}/")
   public GenericResponse<TaskStatus> getResultProcessStatus(final @Context Request pRequest,
       final @PathParam("program-id") Integer pProgramId,
-      final @PathParam("semester-id") Integer pSemesterId) throws Exception {
+      final @PathParam("semester-id") Integer pSemesterId) {
     return mProcessResult.status(pProgramId, pSemesterId);
   }
 
   @POST
   @Path("/processResult/program/{program-id}/semester/{semester-id}/")
   public Response processResult(final @PathParam("program-id") int pProgramId,
-      final @PathParam("semester-id") int pSemesterId) throws Exception {
+      final @PathParam("semester-id") int pSemesterId) {
     mProcessResult.process(pProgramId, pSemesterId);
     return Response.ok().build();
   }
@@ -40,7 +40,7 @@ public class ProcessResultResource extends Resource {
   @POST
   @Path("/publishResult/program/{program-id}/semester/{semester-id}/")
   public Response publishResult(final @PathParam("program-id") int pProgramId,
-      final @PathParam("semester-id") int pSemesterId) throws Exception {
+      final @PathParam("semester-id") int pSemesterId) {
     mProcessResult.publishResult(pProgramId, pSemesterId);
     return Response.ok().build();
   }

@@ -37,7 +37,7 @@ public class PersistentProgram implements MutableProgram {
 
   }
 
-  public PersistentProgram(final PersistentProgram pPersistentProgram) throws Exception {
+  public PersistentProgram(final PersistentProgram pPersistentProgram) {
     mId = pPersistentProgram.getId();
     mShortName = pPersistentProgram.getShortName();
     mLongName = pPersistentProgram.getLongName();
@@ -54,7 +54,7 @@ public class PersistentProgram implements MutableProgram {
     mId = pId;
   }
 
-  public Department getDepartment() throws Exception {
+  public Department getDepartment() {
     return mDepartment == null ? sDepartmentManger.get(mDepartmentId) : sDepartmentManger
         .validate(mDepartment);
   }
@@ -83,7 +83,7 @@ public class PersistentProgram implements MutableProgram {
   }
 
   @Override
-  public ProgramType getProgramType() throws Exception {
+  public ProgramType getProgramType() {
     return mProgramType == null ? sProgramTypeManager.get(mProgramTypeId) : sProgramTypeManager
         .validate(mProgramType);
   }
@@ -111,11 +111,11 @@ public class PersistentProgram implements MutableProgram {
     mDepartmentId = pDepartmentId;
   }
 
-  public void delete() throws Exception {
+  public void delete() {
     sProgramManager.delete(this);
   }
 
-  public void commit(final boolean update) throws Exception {
+  public void commit(final boolean update) {
     if(update) {
       sProgramManager.update(this);
     }
@@ -124,7 +124,7 @@ public class PersistentProgram implements MutableProgram {
     }
   }
 
-  public MutableProgram edit() throws Exception {
+  public MutableProgram edit() {
     return new PersistentProgram(this);
   }
 

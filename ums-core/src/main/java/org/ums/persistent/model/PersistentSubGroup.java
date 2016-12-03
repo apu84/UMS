@@ -45,7 +45,7 @@ public class PersistentSubGroup implements MutableSubGroup {
 
   }
 
-  public PersistentSubGroup(final PersistentSubGroup pPersistentSubGroup) throws Exception {
+  public PersistentSubGroup(final PersistentSubGroup pPersistentSubGroup) {
     mId = pPersistentSubGroup.getId();
     mSemester = pPersistentSubGroup.getSemester();
     mSemesterId = pPersistentSubGroup.getSemesterId();
@@ -130,13 +130,13 @@ public class PersistentSubGroup implements MutableSubGroup {
   }
 
   @Override
-  public Semester getSemester() throws Exception {
+  public Semester getSemester() {
     return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
         .validate(mSemester);
   }
 
   @Override
-  public MutableSubGroup edit() throws Exception {
+  public MutableSubGroup edit() {
     return new PersistentSubGroup(this);
   }
 
@@ -151,7 +151,7 @@ public class PersistentSubGroup implements MutableSubGroup {
   }
 
   @Override
-  public void commit(boolean update) throws Exception {
+  public void commit(boolean update) {
     if(update) {
       sSubGroupManager.update(this);
     }
@@ -161,7 +161,7 @@ public class PersistentSubGroup implements MutableSubGroup {
   }
 
   @Override
-  public void delete() throws Exception {
+  public void delete() {
     sSubGroupManager.delete(this);
   }
 
@@ -176,7 +176,7 @@ public class PersistentSubGroup implements MutableSubGroup {
   }
 
   @Override
-  public SeatPlanGroup getGroup() throws Exception {
+  public SeatPlanGroup getGroup() {
     return mSeatPlanGroup == null ? sSeatPlanGroupManager.get(mGroupId) : sSeatPlanGroupManager
         .validate(mSeatPlanGroup);
   }

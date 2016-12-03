@@ -18,7 +18,7 @@ import javax.ws.rs.core.UriInfo;
 public class SubGroupCCIBuilder implements Builder<SubGroupCCI, MutableSubGroupCCI> {
   @Override
   public void build(JsonObjectBuilder pBuilder, SubGroupCCI pReadOnly, UriInfo pUriInfo,
-      LocalCache pLocalCache) throws Exception {
+      LocalCache pLocalCache) {
     if(pReadOnly.getId() != null)
       pBuilder.add("id", pReadOnly.getId());
     if(pReadOnly.getSemesterId() != null)
@@ -45,8 +45,7 @@ public class SubGroupCCIBuilder implements Builder<SubGroupCCI, MutableSubGroupC
   }
 
   @Override
-  public void build(MutableSubGroupCCI pMutable, JsonObject pJsonObject, LocalCache pLocalCache)
-      throws Exception {
+  public void build(MutableSubGroupCCI pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
     PersistentSemester semester = new PersistentSemester();
     semester.setId(Integer.parseInt(pJsonObject.getString("semesterId")));
     pMutable.setSemester(semester);

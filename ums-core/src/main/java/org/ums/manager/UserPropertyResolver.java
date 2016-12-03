@@ -23,7 +23,7 @@ public class UserPropertyResolver extends UserDaoDecorator {
   }
 
   @Override
-  public List<User> getAll() throws Exception {
+  public List<User> getAll() {
     List<User> users = getManager().getAll();
     List<User> transformedList = new ArrayList<>();
     for(User user : users) {
@@ -33,12 +33,12 @@ public class UserPropertyResolver extends UserDaoDecorator {
   }
 
   @Override
-  public User get(String pId) throws Exception {
+  public User get(String pId) {
     User user = getManager().get(pId);
     return transform(user);
   }
 
-  private User transform(User user) throws Exception {
+  private User transform(User user) {
     MutableUser mutableUser = user.edit();
     if(user.getPrimaryRole().getName().equalsIgnoreCase("sadmin")) {
       mutableUser.setDepartment(null);

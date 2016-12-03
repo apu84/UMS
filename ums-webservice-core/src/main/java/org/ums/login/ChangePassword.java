@@ -21,8 +21,7 @@ public class ChangePassword extends Resource {
 
   @PUT
   public Response changePassword(final @Context Request pRequest,
-      final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader, final JsonObject pJsonObject)
-      throws Exception {
+      final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader, final JsonObject pJsonObject) {
     return mLoginHelper.changePassword(pJsonObject);
   }
 }

@@ -19,7 +19,7 @@ import java.util.List;
 
 public abstract class ResourceHelper<R extends EditType<M>, M extends Mutable, I> {
 
-  public R load(final I pObjectId) throws Exception {
+  public R load(final I pObjectId) {
     return getContentManager().get(pObjectId);
   }
 
@@ -62,15 +62,13 @@ public abstract class ResourceHelper<R extends EditType<M>, M extends Mutable, I
     return object.build();
   }
 
-  protected JsonObject toJson(final R pObject, final UriInfo pUriInfo, final LocalCache pLocalCache)
-      throws Exception {
+  protected JsonObject toJson(final R pObject, final UriInfo pUriInfo, final LocalCache pLocalCache) {
     JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
     getBuilder().build(jsonObjectBuilder, pObject, pUriInfo, pLocalCache);
     return jsonObjectBuilder.build();
   }
 
-  protected JsonObject buildJsonResponse(final List<R> pObjectList, final UriInfo pUriInfo)
-      throws Exception {
+  protected JsonObject buildJsonResponse(final List<R> pObjectList, final UriInfo pUriInfo) {
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();

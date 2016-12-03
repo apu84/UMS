@@ -15,11 +15,11 @@ public interface SemesterEnrollment extends Serializable, LastModifier, Identifi
     EditType<MutableSemesterEnrollment> {
   Integer getSemesterId();
 
-  Semester getSemester() throws Exception;
+  Semester getSemester();
 
   Integer getProgramId();
 
-  Program getProgram() throws Exception;
+  Program getProgram();
 
   Integer getYear();
 

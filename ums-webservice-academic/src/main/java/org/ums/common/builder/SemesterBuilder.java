@@ -13,6 +13,7 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.text.DateFormat;
+import java.text.ParseException;
 
 @Component
 public class SemesterBuilder implements Builder<Semester, MutableSemester> {
@@ -21,7 +22,7 @@ public class SemesterBuilder implements Builder<Semester, MutableSemester> {
   @Autowired
   ProgramTypeManager mProgramTypeManager;
 
-  public void build(final JsonObjectBuilder pBuilder, final Semester pSemester, final UriInfo pUriInfo, final LocalCache pLocalCache) throws Exception {
+  public void build(final JsonObjectBuilder pBuilder, final Semester pSemester, final UriInfo pUriInfo, final LocalCache pLocalCache) {
     pBuilder.add("id", pSemester.getId());
     pBuilder.add("name", pSemester.getName());
     pBuilder.add("startDate", mDateFormat.format(pSemester.getStartDate()));
@@ -40,7 +41,7 @@ public class SemesterBuilder implements Builder<Semester, MutableSemester> {
   }
 
   public void build(final MutableSemester pMutableSemester, JsonObject pJsonObject,
-      final LocalCache pLocalCache) throws Exception {
+      final LocalCache pLocalCache) {
     int id = Integer.parseInt(pJsonObject.getString("id"));
     String name = pJsonObject.getString("name");
     String startDate = pJsonObject.getString("startDate");
@@ -49,10 +50,14 @@ public class SemesterBuilder implements Builder<Semester, MutableSemester> {
     Semester.Status status = Semester.Status.get(Integer.parseInt(pJsonObject.getString("status")));
     pMutableSemester.setId(id);
     pMutableSemester.setName(name);
-    pMutableSemester.setStartDate(mDateFormat.parse(startDate));
-    if(pJsonObject.containsKey("endDate")) {
-      String endDate = pJsonObject.getString("endDate");
-      pMutableSemester.setEndDate(mDateFormat.parse(endDate));
+    try {
+      pMutableSemester.setStartDate(mDateFormat.parse(startDate));
+      if(pJsonObject.containsKey("endDate")) {
+        String endDate = pJsonObject.getString("endDate");
+        pMutableSemester.setEndDate(mDateFormat.parse(endDate));
+      }
+    } catch(ParseException pe) {
+      throw new RuntimeException(pe);
     }
     pMutableSemester.setProgramType(mProgramTypeManager.get(program));
     pMutableSemester.setStatus(status);

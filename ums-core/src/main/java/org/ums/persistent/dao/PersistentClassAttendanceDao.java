@@ -66,8 +66,7 @@ public class PersistentClassAttendanceDao implements ClassAttendanceManager {
   }
 
   @Override
-  public List<ClassAttendanceDto> getDateList(int pSemesterId, String pCourseId, String pSection)
-      throws Exception {
+  public List<ClassAttendanceDto> getDateList(int pSemesterId, String pCourseId, String pSection) {
     String query = ATTENDANCE_DATE_QUERY;
     return mJdbcTemplate.query(query, new Object[] {pSemesterId, pCourseId, pSection},
         new AttendanceDateRowMapper());
@@ -75,7 +74,7 @@ public class PersistentClassAttendanceDao implements ClassAttendanceManager {
 
   @Override
   public List<ClassAttendanceDto> getStudentList(int pSemesterId, String pCourseId,
-      CourseType courseType, String pSection, String pStudentCategory) throws Exception {
+      CourseType courseType, String pSection, String pStudentCategory) {
     String query = "";
     if(pStudentCategory.equals("Enrolled"))
       query = ATTENDANCE_STUDENTS_ENROLLED;
@@ -110,15 +109,14 @@ public class PersistentClassAttendanceDao implements ClassAttendanceManager {
   }
 
   @Override
-  public Map getAttendance(int pSemesterId, String pCourseId, String pSection) throws Exception {
+  public Map getAttendance(int pSemesterId, String pCourseId, String pSection) {
     String query = ATTENDANCE_QUERY;
     return mJdbcTemplate.query(query, new Object[] {pSemesterId, pCourseId, pSection},
         new AttendanceRowMapper());
   }
 
   @Override
-  public int updateAttendanceMaster(String pClassDate, Integer pSerial, String pAttendanceId)
-      throws Exception {
+  public int updateAttendanceMaster(String pClassDate, Integer pSerial, String pAttendanceId) {
     String query =
         "Update MST_CLASS_ATTENDANCE Set Class_Date=To_Date(?, 'DD Mon, YY'),Serial=?  Where Id=?";
     return mJdbcTemplate.update(query, pClassDate, pSerial, pAttendanceId);
@@ -135,8 +133,7 @@ public class PersistentClassAttendanceDao implements ClassAttendanceManager {
   }
 
   @Override
-  public boolean upsertAttendanceDtl(String id, List<ClassAttendanceDto> attendanceList)
-      throws Exception {
+  public boolean upsertAttendanceDtl(String id, List<ClassAttendanceDto> attendanceList) {
     batchInsertAttendanceDtl(id, attendanceList);
     return true;
   }
@@ -172,19 +169,19 @@ public class PersistentClassAttendanceDao implements ClassAttendanceManager {
   }
 
   @Override
-  public int deleteAttendanceDtl(String attendanceId) throws Exception {
+  public int deleteAttendanceDtl(String attendanceId) {
     String query = "Delete DTL_CLASS_ATTENDANCE Where Attendance_Id=? ";
     return mJdbcTemplate.update(query, attendanceId);
   }
 
   @Override
-  public int deleteAttendanceMaster(String attendanceId) throws Exception {
+  public int deleteAttendanceMaster(String attendanceId) {
     String query = "Delete MST_CLASS_ATTENDANCE Where Id=? ";
     return mJdbcTemplate.update(query, attendanceId);
   }
 
   @Override
-  public String getAttendanceId() throws Exception {
+  public String getAttendanceId() {
     String query = "Select SQN_CLASS_ATTENDANCE.NextVal From Dual";
     String attendanceId =
         (String) mJdbcTemplate.queryForObject(query, new Object[] {}, String.class);

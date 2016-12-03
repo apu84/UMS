@@ -39,7 +39,7 @@ public class ClassAttendancePdf extends Resource {
       final @PathParam("semester-id") int pSemesterId,
       final @PathParam("course-id") String pCourseId,
       final @PathParam("section-id") String pSection,
-      final @PathParam("student-category") String pStudentCategory) throws Exception {
+      final @PathParam("student-category") String pStudentCategory) {
     return new StreamingOutput() {
       @Override
       public void write(OutputStream pOutputStream) throws IOException, WebApplicationException {

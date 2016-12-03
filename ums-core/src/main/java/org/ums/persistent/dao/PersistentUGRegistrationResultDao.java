@@ -95,8 +95,7 @@ public class PersistentUGRegistrationResultDao extends UGRegistrationResultDaoDe
   }
 
   @Override
-  public List<UGRegistrationResult> getResults(Integer pProgramId, Integer pSemesterId)
-      throws Exception {
+  public List<UGRegistrationResult> getResults(Integer pProgramId, Integer pSemesterId) {
     String query =
         SELECT_ALL
             + ", STUDENT_RECORD, STUDENTS WHERE STUDENT_RECORD.STUDENT_ID = UG_REGISTRATION_RESULT.STUDENT_ID "
@@ -109,12 +108,11 @@ public class PersistentUGRegistrationResultDao extends UGRegistrationResultDaoDe
   }
 
   @Override
-  public int create(List<MutableUGRegistrationResult> pMutableList) throws Exception {
+  public int create(List<MutableUGRegistrationResult> pMutableList) {
     return mJdbcTemplate.batchUpdate(INSERT_ALL, getInsertParamList(pMutableList)).length;
   }
 
-  private List<Object[]> getInsertParamList(List<MutableUGRegistrationResult> pRegistrationResults)
-      throws Exception {
+  private List<Object[]> getInsertParamList(List<MutableUGRegistrationResult> pRegistrationResults) {
     List<Object[]> params = new ArrayList<>();
     for(UGRegistrationResult registrationResult : pRegistrationResults) {
       params.add(new Object[] {registrationResult.getStudent().getId(),
@@ -127,12 +125,11 @@ public class PersistentUGRegistrationResultDao extends UGRegistrationResultDaoDe
   }
 
   @Override
-  public int delete(List<MutableUGRegistrationResult> pMutableList) throws Exception {
+  public int delete(List<MutableUGRegistrationResult> pMutableList) {
     return mJdbcTemplate.batchUpdate(DELETE_BY_STUDENT_SEMESTER, getDeleteParamList(pMutableList)).length;
   }
 
-  private List<Object[]> getDeleteParamList(List<MutableUGRegistrationResult> pRegistrationResults)
-      throws Exception {
+  private List<Object[]> getDeleteParamList(List<MutableUGRegistrationResult> pRegistrationResults) {
     List<Object[]> params = new ArrayList<>();
     for(UGRegistrationResult registrationResult : pRegistrationResults) {
       params.add(new Object[] {registrationResult.getStudent().getId(),

@@ -24,7 +24,7 @@ public class GradeSubmissionResource extends MutableGradeSubmissionResource {
       final @PathParam("semester-id") Integer pSemesterId,
       final @PathParam("course-id") String pCourseId,
       final @PathParam("exam-type") Integer pExamTypeId,
-      final @PathParam("role") String pRequestedRole) throws Exception {
+      final @PathParam("role") String pRequestedRole) {
     return mResourceHelper.getGradeList(pRequestedRole, pSemesterId, pCourseId,
         ExamType.get(pExamTypeId));
 
@@ -38,7 +38,7 @@ public class GradeSubmissionResource extends MutableGradeSubmissionResource {
       final @PathParam("program-id") Integer pProgramId,
       final @PathParam("year-semester") Integer pYearSemester,
       final @PathParam("dept-id") String pDeptId, final @PathParam("role") String pUserRole,
-      final @PathParam("status") int pStatus) throws Exception {
+      final @PathParam("status") int pStatus) {
     return mResourceHelper.getGradeSubmissionStatus(pSemesterId, pExamTypeId, pProgramId,
         pYearSemester, pDeptId, pUserRole, pStatus);
 
@@ -50,7 +50,7 @@ public class GradeSubmissionResource extends MutableGradeSubmissionResource {
       final @PathParam("semester-id") Integer pSemesterId,
       final @PathParam("course-id") String pCourseId,
       final @PathParam("exam-type") Integer pExamTypeId,
-      final @PathParam("course-type") Integer pCourseTypeId) throws Exception {
+      final @PathParam("course-type") Integer pCourseTypeId) {
     return mResourceHelper.getChartData(pSemesterId, pCourseId, pExamTypeId, pCourseTypeId);
   }
 
@@ -59,7 +59,7 @@ public class GradeSubmissionResource extends MutableGradeSubmissionResource {
   public JsonObject getGradeSubmissionDeadLine(final @Context Request pRequest,
       final @PathParam("semester-id") Integer pSemesterId,
       final @PathParam("exam-type") Integer pExamType,
-      final @PathParam("exam-date") String pExamDate) throws Exception {
+      final @PathParam("exam-date") String pExamDate) {
     return mResourceHelper.getGradeSubmissionDeadline(pSemesterId, ExamType.get(pExamType),
         pExamDate, mUriInfo);
   }
@@ -69,7 +69,7 @@ public class GradeSubmissionResource extends MutableGradeSubmissionResource {
   public JsonObject getMarksSubmissionLogs(final @Context Request pRequest,
       final @PathParam("semester-id") Integer pSemesterId,
       final @PathParam("course-id") String pCourseId,
-      final @PathParam("exam-type") Integer pExamType) throws Exception {
+      final @PathParam("exam-type") Integer pExamType) {
     return mResourceHelper.getMarksSubmissionLogs(pSemesterId, pCourseId, pExamType);
   }
 
@@ -79,7 +79,7 @@ public class GradeSubmissionResource extends MutableGradeSubmissionResource {
       final @PathParam("semester-id") Integer pSemesterId,
       final @PathParam("course-id") String pCourseId,
       final @PathParam("exam-type") Integer pExamType,
-      final @PathParam("student-id") String pStudentId) throws Exception {
+      final @PathParam("student-id") String pStudentId) {
     return mResourceHelper
         .getMarksLogs(pSemesterId, pCourseId, ExamType.get(pExamType), pStudentId);
   }

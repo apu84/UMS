@@ -46,7 +46,7 @@ public class StudentRecordResourceHelper extends
   private SemesterManager mSemesterManager;
 
   @Override
-  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) {
     return null;
   }
 
@@ -65,7 +65,7 @@ public class StudentRecordResourceHelper extends
    */
 
   public JsonObject getStudentRecord(String pStudentId, Integer pSemesterId, Integer pYear,
-      Integer pSemester, final Request pRequest, final UriInfo pUriInfo) throws Exception {
+      Integer pSemester, final Request pRequest, final UriInfo pUriInfo) {
     String studentId = SecurityUtils.getSubject().getPrincipal().toString();
     Student student = mStudentManager.get(studentId);
     Semester studentsSemester = mSemesterManager.get(student.getSemesterId());

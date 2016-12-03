@@ -156,12 +156,12 @@ public class UMSAuthenticationRealm extends JdbcRealm implements ProfileRealm {
   }
 
   @Override
-  public boolean accountExists(String pUserId) throws Exception {
+  public boolean accountExists(String pUserId) {
     return !StringUtils.isEmpty(pUserId) && mUserManager.get(pUserId) != null;
   }
 
   @Override
-  public User getAccount(String pUserId) throws Exception {
+  public User getAccount(String pUserId) {
     return mUserManager.get(pUserId);
   }
 

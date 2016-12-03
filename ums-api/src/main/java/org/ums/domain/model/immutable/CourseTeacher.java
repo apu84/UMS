@@ -6,7 +6,7 @@ import org.ums.domain.model.mutable.MutableCourseTeacher;
 public interface CourseTeacher extends AssignedTeacher, EditType<MutableCourseTeacher> {
   String getTeacherId();
 
-  Teacher getTeacher() throws Exception;
+  Teacher getTeacher();
 
   String getSection();
 }

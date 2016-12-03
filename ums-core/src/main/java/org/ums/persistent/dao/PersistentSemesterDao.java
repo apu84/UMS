@@ -1,5 +1,11 @@
 package org.ums.persistent.dao;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.DateFormat;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
+
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -10,13 +16,6 @@ import org.ums.enums.ProgramType;
 import org.ums.enums.SemesterStatus;
 import org.ums.persistent.model.PersistentSemester;
 import org.ums.util.Constants;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
-import java.text.DateFormat;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentSemesterDao extends SemesterDaoDecorator {
 
@@ -46,26 +45,25 @@ public class PersistentSemesterDao extends SemesterDaoDecorator {
     mDateFormat = pDateFormat;
   }
 
-  public Semester get(final Integer pSemesterId) throws Exception {
+  public Semester get(final Integer pSemesterId) {
     String query = SELECT_ALL + "WHERE SEMESTER_ID = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pSemesterId}, new SemesterRowMapper());
   }
 
-  public Semester getSemesterByStatus(final ProgramType pProgramType, SemesterStatus status)
-      throws Exception {
+  public Semester getSemesterByStatus(final ProgramType pProgramType, SemesterStatus status) {
     String sql = SELECT_SEMESTER_BY_STATUS + " WHERE  Program_Type=? AND STATUS=?";
     return mJdbcTemplate.queryForObject(sql,
         new Object[] {pProgramType.getValue(), status.getId()}, new SemesterRowMapper());
   }
 
   @Override
-  public List<Semester> getAll() throws Exception {
+  public List<Semester> getAll() {
     String query = SELECT_ALL + " order by START_DATE DESC ";
     return mJdbcTemplate.query(query, new SemesterRowMapper());
   }
 
   @Override
-  public int update(final MutableSemester pSemester) throws Exception {
+  public int update(final MutableSemester pSemester) {
     String query = UPDATE_ONE + " Where Semester_Id=? and Status In (1,2)";
     return mJdbcTemplate.update(query, mDateFormat.format(pSemester.getStartDate()), pSemester
         .getEndDate() == null ? "" : mDateFormat.format(pSemester.getEndDate()), pSemester
@@ -73,13 +71,13 @@ public class PersistentSemesterDao extends SemesterDaoDecorator {
   }
 
   @Override
-  public int delete(final MutableSemester pSemester) throws Exception {
+  public int delete(final MutableSemester pSemester) {
     String query = DELETE_ONE + "WHERE SEMESTER_ID = ?";
     return mJdbcTemplate.update(query, pSemester.getId());
   }
 
   @Override
-  public int create(final MutableSemester pSemester) throws Exception {
+  public int create(final MutableSemester pSemester) {
 
     try {
       return mJdbcTemplate.update(INSERT_ONE, pSemester.getId(), pSemester.getName(), mDateFormat
@@ -87,14 +85,15 @@ public class PersistentSemesterDao extends SemesterDaoDecorator {
           pSemester.getEndDate() == null ? "" : mDateFormat.format(pSemester.getEndDate()),
           pSemester.getProgramType().getId(), pSemester.getStatus().getValue());
     } catch(DuplicateKeyException exception) {
-      throw new SQLIntegrityConstraintViolationException("Semester already exists.");
+      throw exception;
+      // throw new SQLIntegrityConstraintViolationException("Semester already exists.");
     } catch(Exception ex) {
       throw ex;
     }
   }
 
   @Override
-  public List<Semester> getSemesters(Integer pProgramType, Integer pLimit) throws Exception {
+  public List<Semester> getSemesters(Integer pProgramType, Integer pLimit) {
     String query =
         "Select * from ( " + SELECT_ALL
             + "WHERE PROGRAM_TYPE = ? Order By START_DATE desc) Where RowNum<=?";
@@ -102,7 +101,7 @@ public class PersistentSemesterDao extends SemesterDaoDecorator {
   }
 
   @Override
-  public Semester getPreviousSemester(Integer pSemesterId, Integer pProgramTypeId) throws Exception {
+  public Semester getPreviousSemester(Integer pSemesterId, Integer pProgramTypeId) {
     String query =
         SELECT_ALL + "WHERE START_DATE =\n" + "              (SELECT MAX (START_DATE)\n"
             + "                 FROM MST_SEMESTER\n" + "                WHERE START_DATE <\n"
@@ -115,7 +114,7 @@ public class PersistentSemesterDao extends SemesterDaoDecorator {
   }
 
   @Override
-  public Semester getBySemesterName(String pSemesterName, Integer pProgramTypeId) throws Exception {
+  public Semester getBySemesterName(String pSemesterName, Integer pProgramTypeId) {
     String query = SELECT_ALL + "WHERE SEMESTER_NAME = ? AND PROGRAM_TYPE = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pSemesterName, pProgramTypeId},
         new SemesterRowMapper());

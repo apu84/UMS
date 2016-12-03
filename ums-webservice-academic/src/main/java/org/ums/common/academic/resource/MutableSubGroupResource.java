@@ -19,7 +19,7 @@ public class MutableSubGroupResource extends Resource {
   SubGroupResourceHelper mSubGroupResourceHelper;
 
   @POST
-  public Response createSubGroup(final JsonObject pJsonObject) throws Exception {
+  public Response createSubGroup(final JsonObject pJsonObject) {
     return mSubGroupResourceHelper.post(pJsonObject, mUriInfo);
   }
 
@@ -41,7 +41,7 @@ public class MutableSubGroupResource extends Resource {
   @Path("/save/semester/{semesterId}/groupNo/{groupNo}/type/{type}")
   public Response saveAllSubGroupInfo(final @PathParam("semesterId") String pSemesterId,
       final @PathParam("groupNo") String pGroupNo, final @PathParam("type") String pType,
-      final JsonObject pJsonObject) throws Exception {
+      final JsonObject pJsonObject) {
     return mSubGroupResourceHelper.save(Integer.parseInt(pSemesterId), Integer.parseInt(pGroupNo),
         Integer.parseInt(pType), pJsonObject);
   }
@@ -49,7 +49,7 @@ public class MutableSubGroupResource extends Resource {
   @DELETE
   @Path("/semesterId/{semesterId}/groupNo/{groupNo}/type/{type}")
   public Response deleteBySemesterAndGroup(final @PathParam("semesterId") int semesterId,
-      final @PathParam("groupNo") int groupNo, final @PathParam("type") int pType) throws Exception {
+      final @PathParam("groupNo") int groupNo, final @PathParam("type") int pType) {
     return mSubGroupResourceHelper.deleteBySemesterAndGroup(semesterId, groupNo, pType);
   }
 }

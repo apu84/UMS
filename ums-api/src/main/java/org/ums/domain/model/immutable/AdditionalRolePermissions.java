@@ -11,15 +11,15 @@ import java.util.Set;
 
 public interface AdditionalRolePermissions extends Serializable, Identifier<Integer>, LastModifier,
     EditType<MutableAdditionalRolePermissions> {
-  User getUser() throws Exception;
+  User getUser();
 
   String getUserId();
 
-  Role getRole() throws Exception;
+  Role getRole();
 
   Integer getRoleId();
 
-  Set<String> getPermission() throws Exception;
+  Set<String> getPermission();
 
   Date getValidFrom();
 
@@ -27,7 +27,7 @@ public interface AdditionalRolePermissions extends Serializable, Identifier<Inte
 
   boolean isActive();
 
-  User getAssignedBy() throws Exception;
+  User getAssignedBy();
 
   String getAssignedByUserId();
 }

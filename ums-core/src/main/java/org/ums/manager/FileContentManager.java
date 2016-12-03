@@ -1,5 +1,12 @@
 package org.ums.manager;
 
+import java.io.*;
+import java.net.URI;
+import java.nio.file.*;
+import java.nio.file.FileSystem;
+import java.nio.file.attribute.*;
+import java.util.*;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
@@ -7,13 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.ums.decorator.BinaryContentDecorator;
 import org.ums.message.MessageResource;
-
-import java.io.*;
-import java.net.URI;
-import java.nio.file.*;
-import java.nio.file.FileSystem;
-import java.nio.file.attribute.*;
-import java.util.*;
 
 public class FileContentManager extends BinaryContentDecorator {
   private static final Logger mLogger = LoggerFactory.getLogger(FileContentManager.class);
@@ -27,29 +27,33 @@ public class FileContentManager extends BinaryContentDecorator {
   MessageResource mMessageResource;
 
   @Override
-  public byte[] get(String pIdentifier, Domain pDomain) throws Exception {
+  public byte[] get(String pIdentifier, Domain pDomain) throws IOException {
     Path path = getQualifiedPath(pDomain, pIdentifier);
     if(!Files.exists(path)) {
-      throw new FileNotFoundException();
+      throw new RuntimeException(new FileNotFoundException());
     }
-    return Files.readAllBytes(path);
+    byte[] fileData = null;
+
+    fileData = Files.readAllBytes(path);
+    return fileData;
   }
 
   @Override
-  public void put(byte[] pData, String pIdentifier, Domain pDomain) throws Exception {
+  public void put(byte[] pData, String pIdentifier, Domain pDomain) throws IOException {
     Path filePath = getQualifiedPath(pDomain, pIdentifier);
+
     Files.createFile(filePath);
     Files.copy(new ByteArrayInputStream(pData), filePath, StandardCopyOption.REPLACE_EXISTING);
   }
 
   @Override
-  public void delete(String pIdentifier, Domain pDomain) throws Exception {
+  public void delete(String pIdentifier, Domain pDomain) throws IOException {
     Path filePath = getQualifiedPath(pDomain, pIdentifier);
     Files.delete(filePath);
   }
 
   @Override
-  public String create(byte[] pData, String pIdentifier, Domain pDomain) throws Exception {
+  public String create(byte[] pData, String pIdentifier, Domain pDomain) throws IOException {
     createIfNotExist(pDomain);
     Path newFilePath = getQualifiedPath(pDomain, pIdentifier);
     Files.createFile(newFilePath);
@@ -57,14 +61,14 @@ public class FileContentManager extends BinaryContentDecorator {
     return newFilePath.toString();
   }
 
-  protected void createIfNotExist(final Domain pDomain) throws Exception {
+  protected void createIfNotExist(final Domain pDomain) throws IOException {
     Path path = getQualifiedPath(pDomain);
     if(!Files.exists(path)) {
       Files.createDirectories(path);
     }
   }
 
-  protected void createIfNotExist(final Domain pDomain, final String pPath) throws Exception {
+  protected void createIfNotExist(final Domain pDomain, final String pPath) throws IOException {
     Path path = getQualifiedPath(pDomain, pPath);
     if(!Files.exists(path)) {
       Files.createDirectories(path);
@@ -113,7 +117,7 @@ public class FileContentManager extends BinaryContentDecorator {
     return list;
   }
 
-  protected Map<String, Object> getPathDetails(Path pTargetPath) throws Exception {
+  protected Map<String, Object> getPathDetails(Path pTargetPath) throws IOException {
     BasicFileAttributes attrs = Files.readAttributes(pTargetPath, BasicFileAttributes.class);
     Map<String, Object> details = new HashMap<>();
     details.put(NAME, pTargetPath.getFileName().toString());
@@ -415,7 +419,7 @@ public class FileContentManager extends BinaryContentDecorator {
   }
 
   private void addAdditionalParams(final Path pTargetDirectory,
-      final Map<String, String> pAdditionalParams) throws Exception {
+      final Map<String, String> pAdditionalParams) throws IOException {
     if(pAdditionalParams != null) {
       for(String key : pAdditionalParams.keySet()) {
         addUserDefinedProperty(key, pAdditionalParams.get(key), pTargetDirectory);

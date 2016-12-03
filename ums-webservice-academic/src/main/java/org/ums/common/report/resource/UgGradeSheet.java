@@ -30,7 +30,7 @@ public class UgGradeSheet extends Resource {
       final @PathParam("semester-id") Integer pSemesterId,
       final @PathParam("course-id") String pCourseId,
       final @PathParam("exam-type") Integer pExamTypeId,
-      final @PathParam("role") String pRequestedRole) throws Exception {
+      final @PathParam("role") String pRequestedRole) {
     return new StreamingOutput() {
       public void write(OutputStream output) throws IOException, WebApplicationException {
         try {

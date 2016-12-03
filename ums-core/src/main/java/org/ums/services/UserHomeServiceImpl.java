@@ -18,7 +18,7 @@ public class UserHomeServiceImpl implements UserHomeService {
   }
 
   @Override
-  public List<Map<String, String>> process(Subject pCurrentSubject) throws Exception {
+  public List<Map<String, String>> process(Subject pCurrentSubject) {
     for(UserHomeProcessor homeProcessor : mUserHomeProcessors) {
       if(homeProcessor.supports(pCurrentSubject)) {
         return homeProcessor.process(pCurrentSubject);

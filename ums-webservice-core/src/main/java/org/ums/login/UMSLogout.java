@@ -25,7 +25,7 @@ public class UMSLogout {
   BearerAccessTokenManager mBearerAccessTokenManager;
 
   @GET
-  public Response logout() throws Exception {
+  public Response logout() {
     SecurityUtils.getSubject().logout();
     return Response.ok().build();
   }

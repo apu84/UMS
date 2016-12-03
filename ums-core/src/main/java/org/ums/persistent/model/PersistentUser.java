@@ -47,7 +47,7 @@ public class PersistentUser implements MutableUser {
 
   }
 
-  public PersistentUser(final PersistentUser pPersistentUser) throws Exception {
+  public PersistentUser(final PersistentUser pPersistentUser) {
     mId = pPersistentUser.getId();
     mPassword = pPersistentUser.getPassword();
     mRoleIds = pPersistentUser.getRoleIds();
@@ -66,7 +66,7 @@ public class PersistentUser implements MutableUser {
   }
 
   @Override
-  public void commit(boolean update) throws Exception {
+  public void commit(boolean update) {
     if(update) {
       sUserManager.update(this);
     }
@@ -76,7 +76,7 @@ public class PersistentUser implements MutableUser {
   }
 
   @Override
-  public void delete() throws Exception {
+  public void delete() {
     sUserManager.delete(this);
   }
 
@@ -101,7 +101,7 @@ public class PersistentUser implements MutableUser {
   }
 
   @Override
-  public List<Role> getRoles() throws Exception {
+  public List<Role> getRoles() {
     mRoles = new ArrayList<>();
     if(mRoleIds != null) {
       for(Integer roleId : mRoleIds) {
@@ -127,7 +127,7 @@ public class PersistentUser implements MutableUser {
   }
 
   @Override
-  public MutableUser edit() throws Exception {
+  public MutableUser edit() {
     return new PersistentUser(this);
   }
 
@@ -187,7 +187,7 @@ public class PersistentUser implements MutableUser {
   }
 
   @Override
-  public Role getPrimaryRole() throws Exception {
+  public Role getPrimaryRole() {
     return mPrimaryRole == null ? sRoleManager.get(mPrimaryRoleId) : sRoleManager
         .validate(mPrimaryRole);
   }
@@ -233,7 +233,7 @@ public class PersistentUser implements MutableUser {
   }
 
   @Override
-  public Department getDepartment() throws Exception {
+  public Department getDepartment() {
     return mDepartment == null ? (StringUtils.isEmpty(mDepartmentId) ? null : sDepartmentManager
         .get(mDepartmentId)) : sDepartmentManager.validate(mDepartment);
   }

@@ -24,22 +24,22 @@ public class ContentDaoDecorator<R, M, I, C extends ContentManager<R, M, I>> imp
   }
 
   @Override
-  public List<R> getAll() throws Exception {
+  public List<R> getAll() {
     return getManager().getAll();
   }
 
   @Override
-  public R get(final I pId) throws Exception {
+  public R get(final I pId) {
     return getManager().get(pId);
   }
 
   @Override
-  public R validate(R pReadonly) throws Exception {
+  public R validate(R pReadonly) {
     return getManager() == null ? pReadonly : getManager().validate(pReadonly);
   }
 
   @Override
-  public int update(final M pMutable) throws Exception {
+  public int update(final M pMutable) {
     int updated = getManager().update(pMutable);
     if(updated <= 0) {
       throw new IllegalArgumentException("No entry has been updated");
@@ -48,7 +48,7 @@ public class ContentDaoDecorator<R, M, I, C extends ContentManager<R, M, I>> imp
   }
 
   @Override
-  public int update(final List<M> pMutableList) throws Exception {
+  public int update(final List<M> pMutableList) {
     int updated = getManager().update(pMutableList);
     if(updated <= 0) {
       throw new IllegalArgumentException("No entry has been updated");
@@ -57,7 +57,7 @@ public class ContentDaoDecorator<R, M, I, C extends ContentManager<R, M, I>> imp
   }
 
   @Override
-  public int delete(final M pMutable) throws Exception {
+  public int delete(final M pMutable) {
     int deleted = getManager().delete(pMutable);
     if(deleted <= 0) {
       throw new IllegalArgumentException("No entry has been deleted");
@@ -66,7 +66,7 @@ public class ContentDaoDecorator<R, M, I, C extends ContentManager<R, M, I>> imp
   }
 
   @Override
-  public int delete(final List<M> pMutableList) throws Exception {
+  public int delete(final List<M> pMutableList) {
     int deleted = getManager().delete(pMutableList);
     if(deleted <= 0) {
       throw new IllegalArgumentException("No entry has been deleted");
@@ -75,7 +75,7 @@ public class ContentDaoDecorator<R, M, I, C extends ContentManager<R, M, I>> imp
   }
 
   @Override
-  public int create(final M pMutable) throws Exception {
+  public int create(final M pMutable) {
     int created = getManager().create(pMutable);
     if(created <= 0) {
       throw new IllegalArgumentException("No entry has been created");
@@ -84,7 +84,7 @@ public class ContentDaoDecorator<R, M, I, C extends ContentManager<R, M, I>> imp
   }
 
   @Override
-  public int create(final List<M> pMutableList) throws Exception {
+  public int create(final List<M> pMutableList) {
     int created = 0;
     try {
       created = getManager().create(pMutableList);
@@ -98,7 +98,7 @@ public class ContentDaoDecorator<R, M, I, C extends ContentManager<R, M, I>> imp
   }
 
   @Override
-  public boolean exists(I pId) throws Exception {
+  public boolean exists(I pId) {
     return getManager().exists(pId);
   }
 }

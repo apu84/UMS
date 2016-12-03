@@ -1,6 +1,10 @@
 package org.ums.cache;
 
-import net.spy.memcached.MemcachedClient;
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,9 +12,7 @@ import org.springframework.util.StringUtils;
 import org.ums.domain.model.common.LastModifier;
 import org.ums.manager.CacheManager;
 
-import java.net.InetSocketAddress;
-import java.util.ArrayList;
-import java.util.List;
+import net.spy.memcached.MemcachedClient;
 
 public class MemcacheClientManager<R extends LastModifier, I> implements CacheManager<R, I> {
   private static final Logger mLogger = LoggerFactory.getLogger(MemcacheClientManager.class);
@@ -18,10 +20,9 @@ public class MemcacheClientManager<R extends LastModifier, I> implements CacheMa
   private MemcachedClient mObjectCache;
 
   public MemcacheClientManager(final String pObjectCacheUrl, final Integer pObjectCachePort)
-      throws Exception {
+      throws IOException {
     Validate.notNull(pObjectCacheUrl);
     Validate.notNull(pObjectCachePort);
-
     mObjectCache = new MemcachedClient(new InetSocketAddress(pObjectCacheUrl, pObjectCachePort));
   }
 
@@ -33,12 +34,12 @@ public class MemcacheClientManager<R extends LastModifier, I> implements CacheMa
   }
 
   @Override
-  public R get(String pCacheId) throws Exception {
+  public R get(String pCacheId) {
     return (R) mObjectCache.get(pCacheId);
   }
 
   @Override
-  public String getLastModified(final String pCacheId) throws Exception {
+  public String getLastModified(final String pCacheId) {
     return (String) mObjectCache.get(getLastModifiedKey(pCacheId));
   }
 
@@ -49,32 +50,32 @@ public class MemcacheClientManager<R extends LastModifier, I> implements CacheMa
   }
 
   @Override
-  public void flushAll() throws Exception {
+  public void flushAll() {
     mObjectCache.flush();
   }
 
   @Override
-  public void put(String pCacheId, List<I> pReadOnlyIds) throws Exception {
+  public void put(String pCacheId, List<I> pReadOnlyIds) {
     mObjectCache.set(pCacheId, 0, pReadOnlyIds);
   }
 
   @Override
-  public void putKeys(String pCacheId, List<String> pKeys) throws Exception {
+  public void putKeys(String pCacheId, List<String> pKeys) {
     mObjectCache.set(pCacheId, 0, pKeys);
   }
 
   @Override
-  public List<I> getList(String pCacheId) throws Exception {
+  public List<I> getList(String pCacheId) {
     return (List<I>) mObjectCache.get(pCacheId);
   }
 
   @Override
-  public List<String> getCachedKeyList(String pCacheId) throws Exception {
+  public List<String> getCachedKeyList(String pCacheId) {
     return (List<String>) mObjectCache.get(pCacheId);
   }
 
   @Override
-  public void invalidateList(String pCacheId) throws Exception {
+  public void invalidateList(String pCacheId) {
     mObjectCache.delete(pCacheId);
   }
 

@@ -45,8 +45,7 @@ public class PersistentSeatPlanGroup implements MutableSeatPlanGroup {
 
   }
 
-  public PersistentSeatPlanGroup(final PersistentSeatPlanGroup pPersistentSeatPlanGroup)
-      throws Exception {
+  public PersistentSeatPlanGroup(final PersistentSeatPlanGroup pPersistentSeatPlanGroup) {
     mId = pPersistentSeatPlanGroup.getId();
     mSemester = pPersistentSeatPlanGroup.getSemester();
     mSemesterId = pPersistentSeatPlanGroup.getSemesterId();
@@ -152,7 +151,7 @@ public class PersistentSeatPlanGroup implements MutableSeatPlanGroup {
   }
 
   @Override
-  public void commit(boolean update) throws Exception {
+  public void commit(boolean update) {
     if(update) {
       sSeatPlanGroupManager.update(this);
     }
@@ -162,7 +161,7 @@ public class PersistentSeatPlanGroup implements MutableSeatPlanGroup {
   }
 
   @Override
-  public void delete() throws Exception {
+  public void delete() {
     sSeatPlanGroupManager.delete(this);
   }
 
@@ -177,14 +176,14 @@ public class PersistentSeatPlanGroup implements MutableSeatPlanGroup {
   }
 
   @Override
-  public Semester getSemester() throws Exception {
+  public Semester getSemester() {
     return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
         .validate(mSemester);
 
   }
 
   @Override
-  public Program getProgram() throws Exception {
+  public Program getProgram() {
     return mProgram == null ? sProgramManager.get(mProgramId) : sProgramManager.validate(mProgram);
 
   }
@@ -200,7 +199,7 @@ public class PersistentSeatPlanGroup implements MutableSeatPlanGroup {
   }
 
   @Override
-  public MutableSeatPlanGroup edit() throws Exception {
+  public MutableSeatPlanGroup edit() {
     return new PersistentSeatPlanGroup(this);
   }
 

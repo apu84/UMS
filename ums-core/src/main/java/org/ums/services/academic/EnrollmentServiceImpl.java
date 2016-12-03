@@ -71,7 +71,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
   @Transactional
   public GenericResponse<Map> saveEnrollment(final SemesterEnrollment.Type pType,
       final Integer pNewSemesterId, final Integer pProgramId, final Integer pToYear,
-      final Integer pToAcademicSemester) throws Exception {
+      final Integer pToAcademicSemester) {
 
     GenericResponse<Map> enrollmentStatus =
         enrollmentStatus(pType, pNewSemesterId, pProgramId, pToYear, pToAcademicSemester);
@@ -291,7 +291,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
   @Override
   @Transactional
   public GenericResponse<Map> saveEnrollment(SemesterEnrollment.Type pType, Integer pNewSemesterId,
-      Integer pProgramId) throws Exception {
+      Integer pProgramId) {
     List<EnrollmentFromTo> enrollmentFromToList =
         mEnrollmentFromToManager.getEnrollmentFromTo(pProgramId);
     for(EnrollmentFromTo enrollment : enrollmentFromToList) {
@@ -316,7 +316,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
   private GenericResponse<Map> enrollmentStatus(final SemesterEnrollment.Type pType,
       final Integer pNewSemesterId, final Integer pProgramId, final Integer pToYear,
-      final Integer pToAcademicSemester) throws Exception {
+      final Integer pToAcademicSemester) {
     // if temporary enrollment, then check whether enrollment is already done. if permanent
     // enrollment then check whether
     // temporary is done first.
@@ -363,8 +363,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     return new GenericMessageResponse(GenericResponse.ResponseType.SUCCESS);
   }
 
-  private void permanentEnrollmentNewStudents(final List<StudentRecord> pStudentRecordList)
-      throws Exception {
+  private void permanentEnrollmentNewStudents(final List<StudentRecord> pStudentRecordList) {
 
     List<MutableStudentRecord> mutableStudentRecords = new ArrayList<>();
     List<MutableStudent> mutableStudents = new ArrayList<>();

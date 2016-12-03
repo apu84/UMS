@@ -41,14 +41,14 @@ public class PersistentMarkSubmissionStatusDao extends MarksSubmissionStatusDaoD
   }
 
   @Override
-  public MarksSubmissionStatus get(Integer pId) throws Exception {
+  public MarksSubmissionStatus get(Integer pId) {
     String query = SELECT_ALL + "WHERE ID = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId},
         new MarksSubmissionStatusRowMapper());
   }
 
   @Override
-  public int update(MutableMarksSubmissionStatus pMutable) throws Exception {
+  public int update(MutableMarksSubmissionStatus pMutable) {
     String query = UPDATE_ALL + "WHERE ID = ?";
     return mJdbcTemplate.update(query, pMutable.getSemesterId(), pMutable.getCourseId(), pMutable
         .getStatus().getId(), pMutable.getExamType().getId(), pMutable.getLastSubmissionDate(),
@@ -57,19 +57,19 @@ public class PersistentMarkSubmissionStatusDao extends MarksSubmissionStatusDaoD
   }
 
   @Override
-  public int update(List<MutableMarksSubmissionStatus> pMutableList) throws Exception {
+  public int update(List<MutableMarksSubmissionStatus> pMutableList) {
     String query = UPDATE_ALL + "WHERE ID = ?";
     return mJdbcTemplate.batchUpdate(query, getUpdateParamArray(pMutableList)).length;
   }
 
   @Override
-  public int delete(MutableMarksSubmissionStatus pMutable) throws Exception {
+  public int delete(MutableMarksSubmissionStatus pMutable) {
     String query = DELETE_ALL + "WHERE ID = ?";
     return mJdbcTemplate.update(query, pMutable.getId());
   }
 
   @Override
-  public int create(MutableMarksSubmissionStatus pMutable) throws Exception {
+  public int create(MutableMarksSubmissionStatus pMutable) {
     return mJdbcTemplate.update(INSERT_ALL, pMutable.getSemesterId(), pMutable.getCourseId(),
         pMutable.getStatus(), pMutable.getExamType(), pMutable.getLastSubmissionDate(),
         pMutable.getTotalPart(), pMutable.getPartATotal(), pMutable.getPartBTotal(),
@@ -85,7 +85,7 @@ public class PersistentMarkSubmissionStatusDao extends MarksSubmissionStatusDaoD
   }
 
   @Override
-  public List<MarksSubmissionStatus> get(Integer pProgramId, Integer pSemesterId) throws Exception {
+  public List<MarksSubmissionStatus> get(Integer pProgramId, Integer pSemesterId) {
     String query = SELECT_ALL + "WHERE SEMESTER_ID = ? ORDER BY COURSE_ID, EXAM_TYPE DESC";
     return mJdbcTemplate.query(query, new Object[] {pSemesterId},
         new MarksSubmissionStatusRowMapper());

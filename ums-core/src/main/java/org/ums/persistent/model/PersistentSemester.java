@@ -34,7 +34,7 @@ public class PersistentSemester implements MutableSemester {
 
   }
 
-  public PersistentSemester(final PersistentSemester pOriginal) throws Exception {
+  public PersistentSemester(final PersistentSemester pOriginal) {
     mId = pOriginal.getId();
     mName = pOriginal.getName();
     mStartDate = pOriginal.getStartDate();
@@ -82,7 +82,7 @@ public class PersistentSemester implements MutableSemester {
     mStatus = pStatus;
   }
 
-  public ProgramType getProgramType() throws Exception {
+  public ProgramType getProgramType() {
     return mProgramType != null ? sProgramTypeManager.validate(mProgramType) : sProgramTypeManager
         .get(mProgramTypeId);
   }
@@ -110,11 +110,11 @@ public class PersistentSemester implements MutableSemester {
     mLastModified = pLastModified;
   }
 
-  public void delete() throws Exception {
+  public void delete() {
     sSemesterManager.delete(this);
   }
 
-  public void commit(final boolean update) throws Exception {
+  public void commit(final boolean update) {
     if(update) {
       sSemesterManager.update(this);
     }
@@ -123,7 +123,7 @@ public class PersistentSemester implements MutableSemester {
     }
   }
 
-  public MutableSemester edit() throws Exception {
+  public MutableSemester edit() {
     return new PersistentSemester(this);
   }
 }

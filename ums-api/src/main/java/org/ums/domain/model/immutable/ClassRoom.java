@@ -27,7 +27,7 @@ public interface ClassRoom extends Serializable, LastModifier, EditType<MutableC
 
   String getDeptId();
 
-  Department getDept() throws Exception;
+  Department getDept();
 
   boolean isExamSeatPlan();
 

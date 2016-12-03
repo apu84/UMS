@@ -17,7 +17,7 @@ public interface Teacher extends Serializable, EditType<MutableTeacher>, LastMod
 
   String getDepartmentId();
 
-  Department getDepartment() throws Exception;
+  Department getDepartment();
 
   String getDepartmentName();
 

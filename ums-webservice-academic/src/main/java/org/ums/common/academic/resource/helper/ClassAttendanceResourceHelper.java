@@ -1,37 +1,27 @@
 package org.ums.common.academic.resource.helper;
 
-import org.apache.shiro.SecurityUtils;
-import org.omg.CORBA.Request;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-import org.ums.cache.LocalCache;
-import org.ums.common.academic.resource.SemesterResource;
-import org.ums.common.builder.ClassAttendanceBuilder;
-import org.ums.common.builder.ExamGradeBuilder;
-import org.ums.common.report.generator.AttendanceSheetGenerator;
-import org.ums.domain.model.dto.ClassAttendanceDto;
-import org.ums.domain.model.dto.MarksSubmissionStatusDto;
-import org.ums.domain.model.dto.StudentGradeDto;
-import org.ums.domain.model.immutable.Course;
-import org.ums.domain.model.immutable.User;
-import org.ums.domain.model.mutable.MutableClassRoom;
-import org.ums.enums.CourseMarksSubmissionStatus;
-import org.ums.enums.CourseType;
-import org.ums.enums.ExamType;
-import org.ums.manager.*;
-import org.ums.persistent.model.PersistentClassRoom;
-import org.ums.services.UserService;
-import org.ums.services.academic.GradeSubmissionService;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.List;
+import java.util.Map;
 
 import javax.json.*;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
-import java.io.OutputStream;
-import java.io.StringReader;
-import java.net.URI;
-import java.util.List;
-import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import org.ums.common.builder.ClassAttendanceBuilder;
+import org.ums.common.report.generator.AttendanceSheetGenerator;
+import org.ums.domain.model.dto.ClassAttendanceDto;
+import org.ums.domain.model.immutable.Course;
+import org.ums.domain.model.immutable.User;
+import org.ums.manager.ClassAttendanceManager;
+import org.ums.manager.CourseManager;
+import org.ums.manager.UserManager;
+import org.ums.services.UserService;
+
+import com.itextpdf.text.DocumentException;
 
 /**
  * Created by Ifti on 29-Oct-16.
@@ -66,24 +56,24 @@ public class ClassAttendanceResourceHelper {
   }
 
   public List<ClassAttendanceDto> getDateList(final Integer pSemesterId, final String pCourseId,
-      final String pSection) throws Exception {
+      final String pSection) {
     return getContentManager().getDateList(pSemesterId, pCourseId, pSection);
   }
 
   public List<ClassAttendanceDto> getStudentList(final Integer pSemesterId, final String pCourseId,
-      final String pSection, String pStudentCategory) throws Exception {
+      final String pSection, String pStudentCategory) {
     Course course = mCourseManager.get(pCourseId);
     return getContentManager().getStudentList(pSemesterId, pCourseId, course.getCourseType(),
         pSection, pStudentCategory);
   }
 
   public Map<String, String> getAttendanceMap(final Integer pSemesterId, final String pCourseId,
-      final String pSection) throws Exception {
+      final String pSection) {
     return getContentManager().getAttendance(pSemesterId, pCourseId, pSection);
   }
 
   public JsonObject getClassAttendance(final Integer pSemesterId, final String pCourseId,
-      final String pSection, final String pStudentCategory) throws Exception {
+      final String pSection, final String pStudentCategory) {
 
     List<ClassAttendanceDto> dateList = getDateList(pSemesterId, pCourseId, pSection);
     List<ClassAttendanceDto> studentList =
@@ -174,7 +164,7 @@ public class ClassAttendanceResourceHelper {
   }
 
   @Transactional(rollbackFor = Exception.class)
-  public Response saveNewAttendance(final JsonObject pJsonObject) throws Exception {
+  public Response saveNewAttendance(final JsonObject pJsonObject) {
     List<ClassAttendanceDto> attendanceList = getBuilder().getAttendanceList(pJsonObject);
 
     Integer semester = pJsonObject.getInt("semester");
@@ -195,7 +185,7 @@ public class ClassAttendanceResourceHelper {
   }
 
   @Transactional(rollbackFor = Exception.class)
-  public Response updateClassAttendance(final JsonObject pJsonObject) throws Exception {
+  public Response updateClassAttendance(final JsonObject pJsonObject) {
     List<ClassAttendanceDto> attendanceList = getBuilder().getAttendanceList(pJsonObject);
 
     Integer semester = pJsonObject.getInt("semester");
@@ -212,7 +202,7 @@ public class ClassAttendanceResourceHelper {
   }
 
   @Transactional(rollbackFor = Exception.class)
-  public Response deleteClassAttendance(final String attendanceId) throws Exception {
+  public Response deleteClassAttendance(final String attendanceId) {
 
     getContentManager().deleteAttendanceMaster(attendanceId);
     getContentManager().deleteAttendanceDtl(attendanceId);
@@ -222,7 +212,7 @@ public class ClassAttendanceResourceHelper {
 
   public void getAttendanceSheetReport(final OutputStream pOutputStream, final int pSemesterId,
       final String pCourseId, final String pSection, final String pStudentCategory)
-      throws Exception {
+      throws DocumentException, IOException {
     mSheetGenerator.createAttendanceSheetReport(pOutputStream, pSemesterId, pCourseId, pSection,
         pStudentCategory);
   }

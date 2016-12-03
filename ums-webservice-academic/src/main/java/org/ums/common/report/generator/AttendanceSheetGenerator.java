@@ -46,7 +46,7 @@ public class AttendanceSheetGenerator {
 
   public void createAttendanceSheetReport(OutputStream pOutputStream, final Integer pSemesterId,
       final String pCourseId, final String pSection, final String pStudentCategory)
-      throws Exception, IOException, DocumentException {
+      throws IOException, DocumentException {
     Employee employee = getEmployeeInfo();
     Course course = mCourseManager.get(pCourseId);
     String check = "E://check11.png";
@@ -285,7 +285,7 @@ public class AttendanceSheetGenerator {
     return cell;
   }
 
-  private Employee getEmployeeInfo() throws Exception {
+  private Employee getEmployeeInfo() {
     String userId = SecurityUtils.getSubject().getPrincipal().toString();
     User user = mUserManager.get(userId);
     Employee employee = mEmployeeManager.getByEmployeeId(user.getEmployeeId());

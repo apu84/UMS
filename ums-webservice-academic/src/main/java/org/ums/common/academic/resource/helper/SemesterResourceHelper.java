@@ -39,7 +39,7 @@ public class SemesterResourceHelper extends ResourceHelper<Semester, MutableSeme
   }
 
   @Override
-  public Response post(final JsonObject pJsonObject, final UriInfo pUriInfo) throws Exception {
+  public Response post(final JsonObject pJsonObject, final UriInfo pUriInfo) {
     MutableSemester mutableSemester = new PersistentSemester();
     LocalCache localCache = new LocalCache();
     getBuilder().build(mutableSemester, pJsonObject, localCache);
@@ -61,8 +61,7 @@ public class SemesterResourceHelper extends ResourceHelper<Semester, MutableSeme
 
   // TODO: Remove this @RequiresPermissions, as it is added to test permission workflow
   // @RequiresPermissions(value = "lookup:semester")
-  public JsonObject buildSemesters(final List<Semester> pSemesters, final UriInfo pUriInfo)
-      throws Exception {
+  public JsonObject buildSemesters(final List<Semester> pSemesters, final UriInfo pUriInfo) {
 
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();

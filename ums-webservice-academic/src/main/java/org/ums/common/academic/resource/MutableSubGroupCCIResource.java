@@ -19,7 +19,7 @@ public class MutableSubGroupCCIResource extends Resource {
   SubGroupCCIResourceHelper mHelper;
 
   @POST
-  public Response createSubGroup(final JsonObject pJsonObject) throws Exception {
+  public Response createSubGroup(final JsonObject pJsonObject) {
     return mHelper.post(pJsonObject, mUriInfo);
   }
 
@@ -34,7 +34,7 @@ public class MutableSubGroupCCIResource extends Resource {
   @Path("/put/semester/{semester-id}/examDate/{exam-date}")
   public Response save(final @PathParam("semester-id") String pSemesterId,
       final @PathParam("exam-date") String pExamDate, final @Context Request pRequest,
-      final JsonObject pJsonObject) throws Exception {
+      final JsonObject pJsonObject) {
 
     return mHelper.saveData(Integer.parseInt(pSemesterId), pExamDate, pJsonObject, mUriInfo);
   }
@@ -44,14 +44,14 @@ public class MutableSubGroupCCIResource extends Resource {
   public Response saveAllSubGroupInfo(
 
   final @PathParam("semesterId") Integer pSemesterId,
-      final @PathParam("examdate") String pExamDate, final JsonObject pJsonObject) throws Exception {
+      final @PathParam("examdate") String pExamDate, final JsonObject pJsonObject) {
     return mHelper.saveData(pSemesterId, pExamDate, pJsonObject, mUriInfo);
   }
 
   @DELETE
   @Path("/semesterId/{semesterId}/examDate/{examDate}")
   public Response deleteBySemesterAndExamDate(final @PathParam("semesterId") String pSemesterId,
-      final @PathParam("examDate") String pExamDate) throws Exception {
+      final @PathParam("examDate") String pExamDate) {
     return mHelper.deleteBySemesterAndExamDate(Integer.parseInt(pSemesterId), pExamDate);
   }
 }

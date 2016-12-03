@@ -12,9 +12,9 @@ import java.io.Serializable;
  */
 public interface ParameterSetting extends Serializable, LastModifier,
     EditType<MutableParameterSetting>, Identifier<String> {
-  Semester getSemester() throws Exception;
+  Semester getSemester();
 
-  Parameter getParameter() throws Exception;
+  Parameter getParameter();
 
   String getStartDate();
 
