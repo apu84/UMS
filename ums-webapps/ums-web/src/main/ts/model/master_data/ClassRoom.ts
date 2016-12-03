@@ -1,5 +1,6 @@
 module ums {
   export interface ClassRoom {
+    id:number;
     roomId:number;
     roomNumber:string;
     description: string;

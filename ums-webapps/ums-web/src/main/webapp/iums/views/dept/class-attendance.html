@@ -22,6 +22,16 @@
     .label-info, .badge-info{
         margin-top: -3px !important;
     }
+    .fa-es:before {
+        font-family: Arial; /* your font family here! */
+        font-weight: bold;
+        content: 'ES';
+    }
+    .fa-as:before {
+        font-family: Arial; /* your font family here! */
+        font-weight: bold;
+        content: 'AS';
+    }
 </style>
 <div class="row" id="topArrowDiv">
     <div class="col-md-2 col-md-offset-5">
@@ -123,7 +133,7 @@
             <span class="label label-default">Course No</span> : {{selectedCourse.courseNo}}
             <span class="label label-default" style="margin-left: 10px;">Course Title</span> : {{selectedCourse.courseTitle}}
             <span class="label label-default" style="margin-left: 10px;">Section</span> : {{selectedCourse.section}}
-             <span class="label label-default" style="margin-left: 10px;">Student Category</span> : {{selectedStudentCategory}}
+            <span class="label label-default" style="margin-left: 10px;">Student Category</span> : {{selectedStudentCategory}}
         </div>
     </div>
     <div class="row">
