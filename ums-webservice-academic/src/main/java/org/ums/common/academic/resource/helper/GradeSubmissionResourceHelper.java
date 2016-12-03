@@ -138,7 +138,7 @@ public class GradeSubmissionResourceHelper extends
   }
 
   // This method will only be used by Grade Sheet Preparer during saving or submitting grades.
-  @Transactional(rollbackFor = Exception.class)
+  @Transactional
   public Response saveGradeSheet(final JsonObject pJsonObject) {
     List<StudentGradeDto> gradeList = getBuilder().build(pJsonObject);
     MarksSubmissionStatusDto requestedStatusDTO = new MarksSubmissionStatusDto();
@@ -205,7 +205,7 @@ public class GradeSubmissionResourceHelper extends
     return builder.build();
   }
 
-  @Transactional(rollbackFor = Exception.class)
+  @Transactional
   public Response updateGradeStatus(final JsonObject pJsonObject) {
 
     String action = pJsonObject.getString("action");
@@ -288,7 +288,7 @@ public class GradeSubmissionResourceHelper extends
     return builder.build();
   }
 
-  @Transactional(rollbackFor = Exception.class)
+  @Transactional
   public Response recheckRequestApprove(final JsonObject pJsonObject) {
 
     String action = pJsonObject.getString("action");

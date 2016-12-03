@@ -163,7 +163,7 @@ public class ClassAttendanceResourceHelper {
     return objectBuilder.build();
   }
 
-  @Transactional(rollbackFor = Exception.class)
+  @Transactional
   public Response saveNewAttendance(final JsonObject pJsonObject) {
     List<ClassAttendanceDto> attendanceList = getBuilder().getAttendanceList(pJsonObject);
 
@@ -184,7 +184,7 @@ public class ClassAttendanceResourceHelper {
     return builder.build();
   }
 
-  @Transactional(rollbackFor = Exception.class)
+  @Transactional
   public Response updateClassAttendance(final JsonObject pJsonObject) {
     List<ClassAttendanceDto> attendanceList = getBuilder().getAttendanceList(pJsonObject);
 

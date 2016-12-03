@@ -197,7 +197,7 @@ public class ProcessResultImpl implements ProcessResult {
     return new TaskStatusResponse(taskStatus);
   }
 
-  @Transactional(rollbackFor = IllegalArgumentException.class)
+  @Transactional
   @Override
   public void publishResult(int pProgramId, int pSemesterId) {
     String publishResult = mTaskStatusManager.buildTaskId(pProgramId, pSemesterId, PUBLISH_RESULT);
