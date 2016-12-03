@@ -175,7 +175,7 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
           + "Select 'F' Grade_Letter, 0 Total, '#2A0CD0' Color From Dual  "
           + ")Tmp Group by Grade_Letter Order by Decode(Grade_Letter,'A+',1,'A',2,'A-',3,'B+',4,'B',5,'B-',6,'C+',7,'C',8,'D',9,'F',10)  ";
 
-  String SELECT_EXAM_GRADE_DEAD_LINE = "" + "select  "
+  String SELECT_EXAM_GRADE_DEAD_LINE = " Select  "
       + "  to_char(EXAM_ROUTINE.EXAM_DATE,'dd-mm-yyyy') Exam_date,  "
       + "  MST_PROGRAM.PROGRAM_SHORT_NAME,  " + "  MST_COURSE.COURSE_ID,"
       + "  MST_COURSE.COURSE_NO,  " + "  MST_COURSE.COURSE_TITLE,  " + "  MST_COURSE.CRHR,  "
@@ -252,6 +252,18 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
           + "Where USERS.EMPLOYEE_ID=EMPLOYEES.EMPLOYEE_ID "
           + "And EMPLOYEES.STATUS=1 And USERS.STATUS=1 " + "And Designation = 202 " + "Union "
           + "Select user_id,'VC' Role From Users Where Role_Id=99 and Status=1 ";
+
+  String MARKS_SUBMISSION_STAT =
+      "Select tmp1.dept_id,short_name,program_id,PROGRAM_SHORT_NAME,  "
+          + "marksSubmissionStat(?, nvl(program_id,0),tmp1.dept_id,?,?,'Self','Total') Total_Offered_To_Self, "
+          + "marksSubmissionStat(?, nvl(program_id,0),tmp1.dept_id,?,?,'Self','Accepted') Accepted_Offered_To_Self, "
+          + "marksSubmissionStat(?, nvl(program_id,0),tmp1.dept_id,?,?,'Others','Total') Total_Offered_to_Other, "
+          + "marksSubmissionStat(?, nvl(program_id,0),tmp1.dept_id,?,?,'Others','Accepted') Accepted_Offered_to_Other, "
+          + "marksSubmissionStat(?, nvl(program_id,0),tmp1.dept_id,?,?,'All','Total') Total_Offered, "
+          + "marksSubmissionStat(?, nvl(program_id,0),tmp1.dept_id,?,?,'All','Accepted') Total_Accepted "
+          + "From (select dept_id,short_name from mst_dept_office where type=1 )tmp1, "
+          + "mst_program  " + "Where tmp1.dept_id =  MST_PROGRAM.DEPT_ID(+)   "
+          + "Order by Dept_Id ";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -1081,6 +1093,37 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
       }
       return mapRet;
     }
+  }
 
+  @Override
+  public List<MarksSubmissionStatDto> getMarksSubmissionStat(Integer pProgramType,
+      Integer pSemesterId, String pDeptId, Integer pExamType, String pStatus) throws Exception {
+    String query = MARKS_SUBMISSION_STAT;
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pExamType, pStatus, pSemesterId,
+        pExamType, pStatus, pSemesterId, pExamType, pStatus, pSemesterId, pExamType, pStatus,
+        pSemesterId, pExamType, pStatus, pSemesterId, pExamType, pStatus},
+        new MarksSubmissionStatRow());
+  }
+
+  class MarksSubmissionStatRow implements RowMapper<MarksSubmissionStatDto> {
+    @Override
+    public MarksSubmissionStatDto mapRow(ResultSet resultSet, int i) throws SQLException {
+      MarksSubmissionStatDto data = new MarksSubmissionStatDto();
+
+      data.setDeptId(resultSet.getString("DEPT_ID"));
+      data.setDeptName(resultSet.getString("SHORT_NAME"));
+      data.setProgramId(resultSet.getInt("PROGRAM_ID"));
+      data.setProgramName(resultSet.getString("PROGRAM_SHORT_NAME"));
+      data.setTotalOfferedSelf(resultSet.getInt("TOTAL_OFFERED_TO_SELF"));
+      data.setTotalAcceptedSelf(resultSet.getInt("ACCEPTED_OFFERED_TO_SELF"));
+      data.setTotalOfferedOthers(resultSet.getInt("TOTAL_OFFERED_TO_OTHER"));
+      data.setTotalAcceptedOthers(resultSet.getInt("ACCEPTED_OFFERED_TO_OTHER"));
+      data.setTotalOffered(resultSet.getInt("TOTAL_OFFERED"));
+      data.setTotalAccepted(resultSet.getInt("TOTAL_ACCEPTED"));
+
+      AtomicReference<MarksSubmissionStatDto> atomicReference = new AtomicReference<>(data);
+      return atomicReference.get();
+
+    }
   }
 }

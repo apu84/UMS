@@ -504,4 +504,28 @@ public class GradeSubmissionResourceHelper extends
     object.add("entries", children);
     return object.build();
   }
+
+  // Marks Submission Statistics
+  public JsonObject getMarksSubmissionStat(Integer pProgramType, Integer pSemesterId,
+      String pDeptId, Integer pExamType, String pStatus) throws Exception {
+    List<MarksSubmissionStatDto> examGradeStatusList =
+        getContentManager().getMarksSubmissionStat(pProgramType, pSemesterId, pDeptId, pExamType,
+            pStatus);
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+
+    JsonReader jsonReader;
+    JsonObject object1;
+
+    for(MarksSubmissionStatDto statDto : examGradeStatusList) {
+      jsonReader = Json.createReader(new StringReader(statDto.toString()));
+      object1 = jsonReader.readObject();
+      jsonReader.close();
+      children.add(object1);
+    }
+    object.add("entries", children);
+
+    return object.build();
+  }
+
 }

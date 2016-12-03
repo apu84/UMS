@@ -40,8 +40,8 @@
     '/advisingStudents': {title: 'Advising Students', 'breadcrumb': ['Advising Students']},
     '/resultProcessing': {title: 'Result Processing', 'breadcrumb': ['Result Processing']},
     '/classAttendance': {title: 'Attendance Sheet', 'breadcrumb': ['Attendance Sheet']},
-    '/roomBasedRoutine': {title: 'Room-wise Routine', 'breadcrumb': ['Routine','Room-wise']}
-
+    '/roomBasedRoutine': {title: 'Room-wise Routine', 'breadcrumb': ['Routine','Room-wise']},
+    '/marksSubmissionStat': {title: 'Marks Submission Statistics', 'breadcrumb': ['Marks Submission Stat.']}
   };
 
   $.fn.Data.get = function (id) {

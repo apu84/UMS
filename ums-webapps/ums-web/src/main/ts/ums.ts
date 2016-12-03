@@ -723,6 +723,19 @@ module ums {
             }]
           }
         })
+        .state('marksSubmissionStat', {
+          url: "/marksSubmissionStat",
+          controller: 'MarksSubmissionStat',
+          templateUrl: 'views/grade/marks-submission-stat.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: ['vendors/jquery-tablesorter/themes/blue/style-custom.css',
+                  'vendors/jquery-tablesorter/jquery.tablesorter.js']
+              });
+            }]
+          }
+        })
       //In database use /dummyController/H or /dummyController/T in the location column
       //https://localhost/ums-web/iums/#/dummyConroller/T
       //https://localhost/ums-web/iums/#/dummyConroller/H
@@ -734,3 +747,4 @@ module ums {
 
   });
 }
+//asdfasdfasd f/adsfa/sd f/asd fasd/f

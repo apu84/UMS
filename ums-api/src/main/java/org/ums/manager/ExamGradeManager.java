@@ -75,4 +75,7 @@ public interface ExamGradeManager extends ContentManager<ExamGrade, MutableExamG
 
   public Map getUserRoleList(Integer pSemesterId, String pCourseId);
 
+  public List<MarksSubmissionStatDto> getMarksSubmissionStat(Integer getMarksSubmissionStat,
+      Integer pSemesterId, String pDeptId, Integer pExamType, String pStatus) throws Exception;
+
 }

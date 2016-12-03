@@ -129,6 +129,7 @@
 /// <reference path='controller/course-material/CourseMaterial.ts'/>
 /// <reference path='controller/course-material/StudentCourseMaterial.ts'/>
 /// <reference path='controller/grade/MarksSubmission.ts'/>
+/// <reference path='controller/grade/MarksSubmissionStat.ts'/>
 /// <reference path='controller/grade/GradeSubmissionDeadLine.ts'/>
 /// <reference path='controller/result/ResultProcessing.ts'/>
 /// <reference path='controller/result/CourseStatusList.ts'/>

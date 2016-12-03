@@ -1,0 +1,90 @@
+<div class="row">
+    <div id="arrowDiv" onclick="resetCommonCollapsibleDivs()">
+        <i class="fa fa-angle-double-right fa-cx"></i>
+    </div>
+    <div id="leftDiv" class="panel panel-green">
+        <div class="panel-heading">
+            <h3 class="panel-title">Select Parameters</h3>
+        </div>
+        <div class="panel-body pan">
+            <form action="" class="form-horizontal" data-validate=""  data-onvalidate="getStatData" >
+                <div class="form-body pal">
+                    <div data-program-selector="" data-model="statParamModel"></div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Exam Type</label>
+                        <div class="col-md-8">
+                            <select class="form-control required" name="examType" data-ng-model="statParamModel.examType" data-convert-to-number>
+                                <option value="1">Semester Final</option>
+                                <option value="2">Carry/Clearance/Improvement</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Status</label>
+                        <div class="col-md-8">
+                            <select class="form-control required" name="examType" data-ng-model="statParamModel.status">
+                                <option value="S">Submitted</option>
+                                <option value="H">Approved by Head</option>
+                                <option value="C">Accepted by CoE</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-actions text-right pal">
+                    <button type="button" class="btn btn-success">Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="rightDiv">
+        <div class="panel">
+            <div class="panel-heading" style="height: 43px;">
+                <div>Statistics<span class="subtitle"></span></div>
+            </div>
+            <div class="panel-body shadowPanel" style="min-height: 490px;text-align: center;">
+                <table class="table table-hover table-bordered table-advanced tablesorter" data-ng-show="statRecords.length>0">
+                    <thead>
+                    <tr>
+                        <th rowspan="2" style="text-align: center;vertical-align: middle;">Dept.</th>
+                        <th rowspan="2" style="text-align: left;vertical-align: middle;">Program</th>
+                        <th colspan="2" style="text-align: center;">Offered to Self</th>
+                        <th colspan="2" style="text-align: center;">Offered to Others</th>
+                        <th colspan="2" style="text-align: center;">Total Offered</th>
+                    </tr>
+                    <tr>
+
+                        <th style="text-align: center;min-width: 100px;">Total</th>
+                        <th style="text-align: center;width: 100px;">Accepted</th>
+                        <th style="text-align: center;width: 100px;">Total</th>
+                        <th style="text-align: center;width: 100px;">Accepted</th>
+                        <th style="text-align: center;width: 100px;">Total</th>
+                        <th style="text-align: center;width: 100px;">Accepted</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr data-ng-repeat="record in statRecords" >
+                        <td class="active">{{record.deptName}}</td>
+                        <td class="active" style="text-align: left;">{{record.programName}}</td>
+                        <td class="success" style="text-align: center;">{{record.totalOfferedSelf}}</td>
+                        <td class="success" style="text-align: center;">{{record.totalAcceptedSelf}}</td>
+                        <td class="warning" style="text-align: center;">{{record.totalOfferedOthers}}</td>
+                        <td class="warning" style="text-align: center;">{{record.totalAcceptedOthers}}</td>
+                        <td class="danger" style="text-align: center;">{{record.totalOffered}}</td>
+                        <td class="danger" style="text-align: center;">{{record.totalAccepted}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+        <script type="text/javascript">
+            setTimeout(function(){
+                $(".tablesorter").tablesorter({
+                    headers: {
+                    }
+                });
+            }, 500);
+        </script>
