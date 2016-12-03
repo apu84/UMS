@@ -292,9 +292,9 @@ module ums {
           },
           (response:ng.IHttpPromiseCallbackArg<any>) => {
             console.error(response);
-          });
-      return defer.promise;
-    }
+  });
+  return defer.promise;
+}
     private copyGradeRow():void{
       var studentId:any=this.$scope.data.recheck_accepted_studentId;
       var newRowId:any="recheck_accepted_"+studentId;

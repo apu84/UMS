@@ -144,4 +144,11 @@ public class ExamGradeDaoDecorator extends
     return getManager().getUserRoleList(pSemesterId, pCourseId);
   }
 
+  @Override
+  public List<MarksSubmissionStatDto> getMarksSubmissionStat(Integer pProgramType,
+      Integer pSemesterId, String pDeptId, Integer pExamType, String pStatus) throws Exception {
+    return getManager().getMarksSubmissionStat(pProgramType, pSemesterId, pDeptId, pExamType,
+        pStatus);
+  }
+
 }

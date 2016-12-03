@@ -83,4 +83,15 @@ public class GradeSubmissionResource extends MutableGradeSubmissionResource {
     return mResourceHelper
         .getMarksLogs(pSemesterId, pCourseId, ExamType.get(pExamType), pStudentId);
   }
+
+  @GET
+  @Path("/submissionstat/programtype/{program-type}/semester/{semester-id}/dept/{dept-id}/examtype/{exam-type}/status/{status}")
+  public JsonObject getMarksSubmissionStat(final @Context Request pRequest,
+      final @PathParam("program-type") Integer programType,
+      final @PathParam("semester-id") Integer pSemesterId,
+      final @PathParam("dept-id") String pDeptId, final @PathParam("exam-type") Integer pExamType,
+      final @PathParam("status") String pStatus) throws Exception {
+    return mResourceHelper.getMarksSubmissionStat(programType, pSemesterId, pDeptId, pExamType,
+        pStatus);
+  }
 }
