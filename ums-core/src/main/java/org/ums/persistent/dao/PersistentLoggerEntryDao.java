@@ -20,8 +20,6 @@ import java.util.concurrent.atomic.AtomicReference;
 public class PersistentLoggerEntryDao extends
     ContentDaoDecorator<LoggerEntry, MutableLoggerEntry, Integer, LoggerEntryManager> implements
     LoggerEntryManager {
-  static final String TIME_STAMP_FORMAT = "yyyy-MM-dd HH:mm:ss";
-  static final String DB_TIME_STAMP_FORMAT = "yyyy-MM-dd hh24:mi:ss";
   static String SELECT_ALL =
       "SELECT ID, SQL, USER_NAME, EXECUTION_TIME, EXECUTION_TIME_STAMP FROM DB_LOGGER ";
   static String UPDATE_ONE =
@@ -29,10 +27,9 @@ public class PersistentLoggerEntryDao extends
   static String DELETE_ONE = "DELETE FROM DB_LOGGER ";
   static String INSERT_ONE =
       "INSERT INTO DB_LOGGER(SQL, USER_NAME, EXECUTION_TIME, EXECUTION_TIME_STAMP) "
-          + "VALUES(?, ?, ?, TO_DATE(?, '" + DB_TIME_STAMP_FORMAT + "'))";
+          + "VALUES(?, ?, ?, ?)";
 
   private JdbcTemplate mJdbcTemplate;
-  private DateFormat mDateFormat = new SimpleDateFormat(TIME_STAMP_FORMAT);
 
   public PersistentLoggerEntryDao(JdbcTemplate pJdbcTemplate) {
     mJdbcTemplate = pJdbcTemplate;
@@ -59,7 +56,7 @@ public class PersistentLoggerEntryDao extends
   public int update(MutableLoggerEntry pMutable) {
     String query = UPDATE_ONE + "WHERE ID = ?";
     return mJdbcTemplate.update(query, pMutable.getSql(), pMutable.getUserName(),
-        pMutable.getExecutionTime(), mDateFormat.format(pMutable.getTimestamp()), pMutable.getId());
+        pMutable.getExecutionTime(), pMutable.getTimestamp(), pMutable.getId());
   }
 
   @Override
@@ -78,7 +75,7 @@ public class PersistentLoggerEntryDao extends
     List<Object[]> params = new ArrayList<>();
     for(LoggerEntry entry : pMutableLoggerEntries) {
       params.add(new Object[] {entry.getSql(), entry.getUserName(), entry.getExecutionTime(),
-          mDateFormat.format(entry.getTimestamp())});
+          entry.getTimestamp()});
     }
 
     return params;
