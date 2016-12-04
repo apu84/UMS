@@ -55,7 +55,7 @@ public class ClassAttendanceXls extends Resource {
           List<String> headerList = new ArrayList<>();
 
           List<ClassAttendanceDto> dateList =
-              mResourceHelper.getDateList(pSemesterId, pCourseId,pSection);
+              mResourceHelper.getDateList(pSemesterId, pCourseId, pSection);
           List<ClassAttendanceDto> studentList =
               mResourceHelper.getStudentList(pSemesterId, pCourseId, pSection, pStudentCategory);
           Map<String, String> attendanceMap =

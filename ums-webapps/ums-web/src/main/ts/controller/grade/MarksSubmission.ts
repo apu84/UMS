@@ -1,4 +1,3 @@
-
 module ums {
   export interface IMarksSubmissionScope extends ng.IScope {
     data:any;
@@ -49,6 +48,7 @@ module ums {
 
     recheckAll:Function;
     approveAll:Function;
+    recheckedAll:Function;
     onRecheckClick:Function;
     onApproveClick:Function;
     totalRecheck:number;
@@ -193,6 +193,7 @@ module ums {
 
       $scope.recheckAll=this.recheckAll.bind(this);
       $scope.approveAll=this.approveAll.bind(this);
+      $scope.recheckedAll=this.recheckedAll.bind(this);
 
       $scope.downloadPdf=this.downloadPdf.bind(this);
 
@@ -1008,8 +1009,11 @@ module ums {
     }
 
     private recheckAll(actor:string):void {
+      console.log(actor);
       var studentMark:IStudentMarks ;
+      alert("1");
       var gradeList:Array<IStudentMarks>=this.getGradeList(actor);
+      alert("2");
       for (var ind in gradeList) {
         studentMark = gradeList[ind];
         if($('#recheckAllCheckBox').prop('checked'))
@@ -1018,6 +1022,19 @@ module ums {
           $("#recheck_" + studentMark.studentId).prop('checked', false);
       }
       this.enableDisableRecheckApproveButton(actor);
+    }
+
+    private recheckedAll(actor:string):void {
+      var studentMark:IStudentMarks ;
+      var gradeList:Array<IStudentMarks>=this.getGradeList(actor);
+      for (var ind in gradeList) {
+        studentMark = gradeList[ind];
+        if($('#recheckedAllCheckBox').prop('checked'))
+          $("#rechecked_" + studentMark.studentId).prop('checked', true);
+        else
+          $("#rechecked_" + studentMark.studentId).prop('checked', false);
+      }
+      this.enableDisableRecheckedButton(actor);
     }
 
     private approveAll(actor:string):void {
@@ -1215,6 +1232,14 @@ module ums {
         $("#recheckBtn").removeClass("disabled");
       }
     }
+    private enableDisableRecheckedButton(actor:String){
+      $("#recheckedButton").removeClass("disabled");
+      $("#recheckedButton").addClass("disabled");
+      if(this.getTotalRecheckedGrade(actor)==this.$scope.recheckCandidatesGrades.length) {
+        $("#recheckedButton").removeClass("disabled");
+      }
+    }
+
     private showErrorTooltip(field:String,student_id:String,message:String)
     {
       $("#tooltip_"+field+"_"+ student_id).show();

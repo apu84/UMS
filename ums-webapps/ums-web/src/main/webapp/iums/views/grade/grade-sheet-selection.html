@@ -357,8 +357,8 @@
                                 <th sortable-header col="partB" width="8%" style="text-align: center;" ng-show="toggleColumn && courseType=='THEORY'">Part-B ({{data.part_b_total}})</th>
                                 <th sortable-header col="total" width="8%" style="text-align: center;">Total</th>
                                 <th sortable-header class="col2" col="gradeLetter" width="8%" style="text-align: center;">Grade Letter</th>
-                                <th sortable-header col="recheckAll" width="8%" style="text-align: center;">Recheck&nbsp;&nbsp;<input type="checkbox" data-ng-click="recheckAll(currentActor)" id="recheckAllCheckBox"/></th>
-                                <th col="scrutinyAll" col="approveAll"  width="8%" style="text-align: center;">{{approveAction}}&nbsp;&nbsp;<input type="checkbox"  data-ng-click="approveAll(currentActor)" id="approveAllCheckBox"/></a>
+                                <th col="recheckAll" width="8%" style="text-align: center;">Recheck&nbsp;&nbsp;<input type="checkbox" data-ng-click="recheckAll(currentActor)" id="recheckAllCheckBox"/></th>
+                                <th col="approveAll"  width="8%" style="text-align: center;">{{approveAction}}&nbsp;&nbsp;<input type="checkbox"  data-ng-click="approveAll(currentActor)" id="approveAllCheckBox"/></a>
                                 </th>
                             </tr>
                             </thead>
@@ -478,8 +478,7 @@
                                 <th sortable-header col="partB" width="8%" style="text-align: center;" ng-show="toggleColumn && courseType=='THEORY'">Part-B ({{data.part_b_total}})</th>
                                 <th sortable-header col="total" width="8%" style="text-align: center;">Total</th>
                                 <th sortable-header col="gradeLetter" width="8%" style="text-align: center;">Grade Letter</th>
-                                <th sortable-header col="recheckAll" width="5%" style="text-align: center;">R&nbsp;&nbsp;
-                                    <input type="checkbox" data-ng-click="recheckAll(currentActor)" id="recheckAllCheckBox"/>
+                                <th col="recheckedAll" width="5%" style="text-align: center;">R&nbsp;&nbsp;<input type="checkbox" data-ng-click="recheckedAll(currentActor)" id="recheckedAllCheckBox"/>
                                 </th>
                             </tr>
                             </thead>
@@ -541,7 +540,7 @@
                         <div class="col-md-6" style="text-align: right;">
                             <button type="button" class="btn btn-grey btn-square" data-ng-click="saveGradeSheet()">Save Data</button>
                             <modal data-handler="modalSettings.submitHandler" data-body="modalSettings.submitBody"  data-header="modalSettings.header" data-ng-click-right-button="modalSettings.submitRightButton()"></modal>
-                            <a data-target="#{{modalSettings.submitHandler}}" role="button" class="btn btn-green btn-square" data-toggle="modal">Save & Send to Scrutinizer</a>
+                            <a data-target="#{{modalSettings.submitHandler}}" role="button" class="btn btn-green btn-square" data-toggle="modal" id="recheckedButton">Save & Send to Scrutinizer</a>
                             <!--
                             <button type="button" class="btn btn-green btn-square" data-ng-click="saveAndSendToScrutinizer()">Save & Send to Scrutinizer</button>
                             -->
