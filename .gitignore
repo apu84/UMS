@@ -47,3 +47,5 @@ Temporary Items
 #Project specefic
 *.iml
 target/
+ums-webapps/ums-web/.tscache/
+ums-webapps/ums-web/node_modules/
