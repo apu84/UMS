@@ -1,6 +1,11 @@
 package org.ums.persistent.dao;
 
-import com.google.common.collect.Lists;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.ContentDaoDecorator;
@@ -9,13 +14,7 @@ import org.ums.domain.model.mutable.MutableLoggerEntry;
 import org.ums.manager.LoggerEntryManager;
 import org.ums.persistent.model.PersistentLoggerEntry;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
+import com.google.common.collect.Lists;
 
 public class PersistentLoggerEntryDao extends
     ContentDaoDecorator<LoggerEntry, MutableLoggerEntry, Integer, LoggerEntryManager> implements
