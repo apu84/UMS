@@ -131,7 +131,7 @@ public abstract class ContentCache<R extends Identifier<I> & LastModifier, M ext
     return "all_cached_list";
   }
 
-  protected List<R> cachedList(final String pCacheKey, Callable<List<R>> pCallable) {
+  List<R> cachedList(final String pCacheKey, Callable<List<R>> pCallable) {
     String methodName = Thread.currentThread().getStackTrace()[2].getMethodName();
     String cacheKey = pCacheKey + methodName;
 
@@ -143,6 +143,7 @@ public abstract class ContentCache<R extends Identifier<I> & LastModifier, M ext
       try {
         entityList = pCallable.call();
       } catch(Exception e) {
+        mLogger.error("Exception while caching entity list", e);
         throw new RuntimeException(e);
       }
       if(entityList.size() > 0) {
@@ -185,7 +186,7 @@ public abstract class ContentCache<R extends Identifier<I> & LastModifier, M ext
     }
   }
 
-  protected R cachedEntity(final String pCacheKey, Callable<R> pCallable) {
+  R cachedEntity(final String pCacheKey, Callable<R> pCallable) {
     String referredKey = getCacheManager().getReferred(pCacheKey);
     if(StringUtils.isEmpty(referredKey)) {
       return cache(pCacheKey, pCallable);

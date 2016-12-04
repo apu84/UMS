@@ -77,8 +77,7 @@ public class UMSContext {
   @Bean
   SemesterManager semesterManager() {
     SemesterCache semesterCache = new SemesterCache(mCacheFactory.getCacheManager());
-    semesterCache.setManager(new PersistentSemesterDao(mTemplateFactory.getJdbcTemplate(),
-        getGenericDateFormat()));
+    semesterCache.setManager(new PersistentSemesterDao(mTemplateFactory.getJdbcTemplate()));
     return semesterCache;
   }
 
@@ -212,8 +211,7 @@ public class UMSContext {
   @Bean
   StudentManager studentManager() {
     StudentCache studentCache = new StudentCache(mCacheFactory.getCacheManager());
-    studentCache.setManager(new PersistentStudentDao(mTemplateFactory.getJdbcTemplate(),
-        getGenericDateFormat()));
+    studentCache.setManager(new PersistentStudentDao(mTemplateFactory.getJdbcTemplate()));
     return studentCache;
   }
 
@@ -293,7 +291,7 @@ public class UMSContext {
     AdditionalRolePermissionsCache additionalRolePermissionsCache =
         new AdditionalRolePermissionsCache(mCacheFactory.getCacheManager());
     additionalRolePermissionsCache.setManager(new AdditionalRolePermissionsDao(mTemplateFactory
-        .getJdbcTemplate(), getGenericDateFormat()));
+        .getJdbcTemplate()));
     return additionalRolePermissionsCache;
   }
 
@@ -310,7 +308,7 @@ public class UMSContext {
     SemesterEnrollmentCache semesterEnrollmentCache =
         new SemesterEnrollmentCache(mCacheFactory.getCacheManager());
     semesterEnrollmentCache.setManager(new PersistentSemesterEnrollmentDao(mTemplateFactory
-        .getJdbcTemplate(), getGenericDateFormat()));
+        .getJdbcTemplate()));
     return semesterEnrollmentCache;
   }
 
@@ -450,8 +448,7 @@ public class UMSContext {
   @Lazy
   NotificationManager notificationManager() {
     return mUMSConfiguration.isEnableObjectDb() ? new PersistentObjectNotificationDao(
-        mMongoOperations) : new PersistentNotificationDao(mTemplateFactory.getJdbcTemplate(),
-        getGenericDateFormat());
+        mMongoOperations) : new PersistentNotificationDao(mTemplateFactory.getJdbcTemplate());
   }
 
   @Bean
@@ -474,8 +471,8 @@ public class UMSContext {
         new MarksSubmissionStatusCache(mCacheFactory.getCacheManager());
     MarksSubmissionStatusAggregator aggregator = new MarksSubmissionStatusAggregator();
     cache.setManager(aggregator);
-    aggregator.setManager(new PersistentMarkSubmissionStatusDao(mTemplateFactory.getJdbcTemplate(),
-        getGenericDateFormat()));
+    aggregator
+        .setManager(new PersistentMarkSubmissionStatusDao(mTemplateFactory.getJdbcTemplate()));
     return cache;
   }
 

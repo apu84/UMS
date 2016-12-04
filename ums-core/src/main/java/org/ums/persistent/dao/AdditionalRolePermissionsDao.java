@@ -1,51 +1,42 @@
 package org.ums.persistent.dao;
 
-import com.google.common.base.Joiner;
-import com.google.common.collect.Sets;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.util.StringUtils;
-import org.ums.persistent.model.PersistentAdditionalRolePermissions;
-import org.ums.decorator.AdditionalRolePermissionsDaoDecorator;
-import org.ums.domain.model.mutable.MutableAdditionalRolePermissions;
-import org.ums.domain.model.immutable.AdditionalRolePermissions;
-import org.ums.domain.model.immutable.Role;
-import org.ums.domain.model.immutable.User;
-import org.ums.util.Constants;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
+
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.util.StringUtils;
+import org.ums.decorator.AdditionalRolePermissionsDaoDecorator;
+import org.ums.domain.model.immutable.AdditionalRolePermissions;
+import org.ums.domain.model.immutable.Role;
+import org.ums.domain.model.immutable.User;
+import org.ums.domain.model.mutable.MutableAdditionalRolePermissions;
+import org.ums.persistent.model.PersistentAdditionalRolePermissions;
+
+import com.google.common.base.Joiner;
+import com.google.common.collect.Sets;
 
 public class AdditionalRolePermissionsDao extends AdditionalRolePermissionsDaoDecorator {
 
   String SELECT_ALL =
       "SELECT ID, USER_ID, ROLE_ID, PERMISSIONS, VALID_FROM, VALID_TO, STATUS, LAST_MODIFIED, ASSIGNED_BY FROM ADDITIONAL_ROLE_PERMISSIONS ";
   String UPDATE_ALL =
-      "UPDATE ADDITIONAL_ROLE_PERMISSIONS SET USER_ID = ?, ROLE_ID = ?, PERMISSIONS = ?, VALID_FROM = TO_DATE(?, '"
-          + Constants.DATE_FORMAT
-          + "'),"
-          + "VALID_TO = TO_DATE(?, '"
-          + Constants.DATE_FORMAT
-          + "'), STATUS = ?, LAST_MODIFIED = " + getLastModifiedSql() + ", ASSIGNED_BY = ? ";
+      "UPDATE ADDITIONAL_ROLE_PERMISSIONS SET USER_ID = ?, ROLE_ID = ?, PERMISSIONS = ?, VALID_FROM = ?,"
+          + "VALID_TO = ?, STATUS = ?, LAST_MODIFIED = " + getLastModifiedSql()
+          + ", ASSIGNED_BY = ? ";
   String INSERT_ALL =
       "INSERT INTO ADDITIONAL_ROLE_PERMISSIONS (USER_ID, ROLE_ID, PERMISSIONS, VALID_FROM, VALID_TO, STATUS, LAST_MODIFIED, ASSIGNED_BY) VALUES ("
-          + "?, ?, ?, TO_DATE(?, '"
-          + Constants.DATE_FORMAT
-          + "'), TO_DATE(?, '"
-          + Constants.DATE_FORMAT + "'), ?, " + getLastModifiedSql() + ", ?) ";
+          + "?, ?, ?, ?, ?, ?, " + getLastModifiedSql() + ", ?) ";
   String DELETE_ALL = "DELETE FROM ADDITIONAL_ROLE_PERMISSIONS ";
 
   private JdbcTemplate mJdbcTemplate;
-  private DateFormat mDateFormat;
 
-  public AdditionalRolePermissionsDao(final JdbcTemplate pJdbcTemplate, final DateFormat pDateFormat) {
+  public AdditionalRolePermissionsDao(final JdbcTemplate pJdbcTemplate) {
     mJdbcTemplate = pJdbcTemplate;
-    mDateFormat = pDateFormat;
   }
 
   @Override
@@ -69,8 +60,8 @@ public class AdditionalRolePermissionsDao extends AdditionalRolePermissionsDaoDe
     return mJdbcTemplate.update(INSERT_ALL, pMutable.getUser().getId(),
         pMutable.getRole() == null ? 0 : pMutable.getRole().getId(),
         Joiner.on(PersistentPermissionDao.PERMISSION_SEPARATOR).join(pMutable.getPermission()),
-        mDateFormat.format(pMutable.getValidFrom()), mDateFormat.format(pMutable.getValidTo()),
-        pMutable.isActive() ? 1 : 0, pMutable.getAssignedBy().getId());
+        pMutable.getValidFrom(), pMutable.getValidTo(), pMutable.isActive() ? 1 : 0, pMutable
+            .getAssignedBy().getId());
   }
 
   @Override
@@ -84,8 +75,8 @@ public class AdditionalRolePermissionsDao extends AdditionalRolePermissionsDaoDe
     String query = UPDATE_ALL + "WHERE ID = ?";
     return mJdbcTemplate.update(query, pMutable.getUser().getId(), pMutable.getRole().getId(),
         Joiner.on(PersistentPermissionDao.PERMISSION_SEPARATOR).join(pMutable.getPermission()),
-        mDateFormat.format(pMutable.getValidFrom()), mDateFormat.format(pMutable.getValidTo()),
-        pMutable.isActive() ? 1 : 0, pMutable.getId());
+        pMutable.getValidFrom(), pMutable.getValidTo(), pMutable.isActive() ? 1 : 0,
+        pMutable.getId());
   }
 
   @Override
@@ -112,14 +103,14 @@ public class AdditionalRolePermissionsDao extends AdditionalRolePermissionsDaoDe
     mJdbcTemplate.update(query, pAssignedBy.getId(), pUserId);
 
     return mJdbcTemplate.update(INSERT_ALL, pUserId, 0,
-        Joiner.on(PersistentPermissionDao.PERMISSION_SEPARATOR).join(pPermissions),
-        mDateFormat.format(pFromDate), mDateFormat.format(pToDate), 1, pAssignedBy.getId());
+        Joiner.on(PersistentPermissionDao.PERMISSION_SEPARATOR).join(pPermissions), pFromDate,
+        pToDate, 1, pAssignedBy.getId());
   }
 
   @Override
   public int addRole(String pUserId, Role pRole, User pAssignedBy, Date pFromDate, Date pToDate) {
-    return mJdbcTemplate.update(INSERT_ALL, pUserId, pRole.getId(), "",
-        mDateFormat.format(pFromDate), mDateFormat.format(pToDate), 1, pAssignedBy.getId());
+    return mJdbcTemplate.update(INSERT_ALL, pUserId, pRole.getId(), "", pFromDate, pToDate, 1,
+        pAssignedBy.getId());
   }
 
   class RolePermissionsMapper implements RowMapper<AdditionalRolePermissions> {

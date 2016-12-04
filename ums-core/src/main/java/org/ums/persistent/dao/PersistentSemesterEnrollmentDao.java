@@ -1,5 +1,10 @@
 package org.ums.persistent.dao;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
+
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -7,13 +12,6 @@ import org.ums.decorator.SemesterEnrollmentDaoDecorator;
 import org.ums.domain.model.immutable.SemesterEnrollment;
 import org.ums.domain.model.mutable.MutableSemesterEnrollment;
 import org.ums.persistent.model.PersistentSemesterEnrollment;
-import org.ums.util.Constants;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.DateFormat;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentSemesterEnrollmentDao extends SemesterEnrollmentDaoDecorator {
   private String SELECT_ALL =
@@ -22,17 +20,14 @@ public class PersistentSemesterEnrollmentDao extends SemesterEnrollmentDaoDecora
       "INSERT INTO SEMESTER_ENROLLMENT(SEMESTER_ID, PROGRAM_ID, STUDENT_YEAR, STUDENT_SEMESTER, ENROLL_DATE, ENROLL_TYPE, LAST_MODIFIED) VALUES"
           + "(?, ?, ?, ?, SYSDATE, ?, " + getLastModifiedSql() + ") ";
   private String UPDATE_ALL = "UPDATE SEMESTER_ENROLLMENT SET " + "SEMESTER_ID = ?,"
-      + "PROGRAM_ID = ?," + "STUDENT_YEAR = ?," + "STUDENT_SEMESTER = ?,"
-      + "ENROLL_DATE = TO_DATE(?, '" + Constants.DATE_FORMAT + "')," + "ENROLL_TYPE = ?,"
-      + "LAST_MODIFIED = " + getLastModifiedSql() + " ";
+      + "PROGRAM_ID = ?," + "STUDENT_YEAR = ?," + "STUDENT_SEMESTER = ?," + "ENROLL_DATE = ?,"
+      + "ENROLL_TYPE = ?," + "LAST_MODIFIED = " + getLastModifiedSql() + " ";
   private String DELETE_ALL = "DELETE FROM SEMESTER_ENROLLMENT ";
 
   private JdbcTemplate mJdbcTemplate;
-  private DateFormat mDateFormat;
 
-  public PersistentSemesterEnrollmentDao(JdbcTemplate pJdbcTemplate, DateFormat pDateFormat) {
+  public PersistentSemesterEnrollmentDao(JdbcTemplate pJdbcTemplate) {
     mJdbcTemplate = pJdbcTemplate;
-    mDateFormat = pDateFormat;
   }
 
   @Override
@@ -51,8 +46,8 @@ public class PersistentSemesterEnrollmentDao extends SemesterEnrollmentDaoDecora
   public int update(MutableSemesterEnrollment pMutable) {
     String query = UPDATE_ALL + "WHERE ID = ?";
     return mJdbcTemplate.update(query, pMutable.getSemester().getId(), pMutable.getProgram()
-        .getId(), pMutable.getYear(), pMutable.getAcademicSemester(), mDateFormat.format(pMutable
-        .getEnrollmentDate()), pMutable.getType().getValue(), pMutable.getId());
+        .getId(), pMutable.getYear(), pMutable.getAcademicSemester(), pMutable.getEnrollmentDate(),
+        pMutable.getType().getValue(), pMutable.getId());
   }
 
   @Override

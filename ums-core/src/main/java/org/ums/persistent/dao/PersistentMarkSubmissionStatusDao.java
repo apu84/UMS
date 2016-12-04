@@ -2,7 +2,6 @@ package org.ums.persistent.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,7 +15,6 @@ import org.ums.domain.model.mutable.MutableMarksSubmissionStatus;
 import org.ums.enums.CourseMarksSubmissionStatus;
 import org.ums.enums.ExamType;
 import org.ums.persistent.model.PersistentMarksSubmissionStatus;
-import org.ums.util.Constants;
 
 public class PersistentMarkSubmissionStatusDao extends MarksSubmissionStatusDaoDecorator {
   String SELECT_ALL =
@@ -33,11 +31,9 @@ public class PersistentMarkSubmissionStatusDao extends MarksSubmissionStatusDaoD
           + "VALUES(?, ?, ?, ?  ?, ?, ?, ?, ?, " + getLastModifiedSql() + ")";
 
   private JdbcTemplate mJdbcTemplate;
-  private DateFormat mDateFormat;
 
-  public PersistentMarkSubmissionStatusDao(JdbcTemplate pJdbcTemplate, DateFormat pDateFormat) {
+  public PersistentMarkSubmissionStatusDao(JdbcTemplate pJdbcTemplate) {
     mJdbcTemplate = pJdbcTemplate;
-    mDateFormat = pDateFormat;
   }
 
   @Override
@@ -110,7 +106,7 @@ public class PersistentMarkSubmissionStatusDao extends MarksSubmissionStatusDaoD
     return params;
   }
 
-  class MarksSubmissionStatusRowMapper implements RowMapper<MarksSubmissionStatus> {
+  private class MarksSubmissionStatusRowMapper implements RowMapper<MarksSubmissionStatus> {
     @Override
     public MarksSubmissionStatus mapRow(ResultSet rs, int rowNum) throws SQLException {
       MutableMarksSubmissionStatus marksSubmissionStatus = new PersistentMarksSubmissionStatus();

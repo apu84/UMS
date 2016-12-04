@@ -56,7 +56,7 @@ public class SemesterResourceHelper extends ResourceHelper<Semester, MutableSeme
 
   @Override
   protected String getEtag(Semester pReadonly) {
-    return "";
+    return pReadonly.getLastModified();
   }
 
   // TODO: Remove this @RequiresPermissions, as it is added to test permission workflow

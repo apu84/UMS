@@ -2,7 +2,6 @@ package org.ums.persistent.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormat;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -15,34 +14,27 @@ import org.ums.domain.model.mutable.MutableSemester;
 import org.ums.enums.ProgramType;
 import org.ums.enums.SemesterStatus;
 import org.ums.persistent.model.PersistentSemester;
-import org.ums.util.Constants;
 
 public class PersistentSemesterDao extends SemesterDaoDecorator {
 
   static String SELECT_ALL =
       "SELECT SEMESTER_ID, SEMESTER_NAME, START_DATE, END_DATE, PROGRAM_TYPE, STATUS, LAST_MODIFIED FROM MST_SEMESTER  ";
 
-  static String UPDATE_ONE = "UPDATE MST_SEMESTER SET START_DATE = TO_DATE(?, '"
-      + Constants.DATE_FORMAT + "'), " + "END_DATE= TO_DATE(?, '" + Constants.DATE_FORMAT
-      + "'), LAST_MODIFIED = " + getLastModifiedSql() + ", Status= ? ";
+  static String UPDATE_ONE = "UPDATE MST_SEMESTER SET START_DATE = ?, "
+      + "END_DATE = ?, LAST_MODIFIED = " + getLastModifiedSql() + ", Status= ? ";
 
   static String DELETE_ONE = "DELETE FROM MST_SEMESTER ";
   static String INSERT_ONE =
       "INSERT INTO MST_SEMESTER(SEMESTER_ID, SEMESTER_NAME, START_DATE, END_DATE, PROGRAM_TYPE, STATUS, LAST_MODIFIED) "
-          + "VALUES(?, ?, TO_DATE(?, '"
-          + Constants.DATE_FORMAT
-          + "'), TO_DATE(?, '"
-          + Constants.DATE_FORMAT + "'), ?, ?, " + getLastModifiedSql() + ")";
+          + "VALUES(?, ?, ?, ?, ?, ?, " + getLastModifiedSql() + ")";
 
   static String SELECT_SEMESTER_BY_STATUS =
       "SELECT SEMESTER_ID, SEMESTER_NAME, START_DATE, END_DATE, PROGRAM_TYPE, STATUS, LAST_MODIFIED FROM MST_SEMESTER ";
 
   private JdbcTemplate mJdbcTemplate;
-  private DateFormat mDateFormat;
 
-  public PersistentSemesterDao(final JdbcTemplate pJdbcTemplate, final DateFormat pDateFormat) {
+  public PersistentSemesterDao(final JdbcTemplate pJdbcTemplate) {
     mJdbcTemplate = pJdbcTemplate;
-    mDateFormat = pDateFormat;
   }
 
   public Semester get(final Integer pSemesterId) {
@@ -65,8 +57,7 @@ public class PersistentSemesterDao extends SemesterDaoDecorator {
   @Override
   public int update(final MutableSemester pSemester) {
     String query = UPDATE_ONE + " Where Semester_Id=? and Status In (1,2)";
-    return mJdbcTemplate.update(query, mDateFormat.format(pSemester.getStartDate()), pSemester
-        .getEndDate() == null ? "" : mDateFormat.format(pSemester.getEndDate()), pSemester
+    return mJdbcTemplate.update(query, pSemester.getStartDate(), pSemester.getEndDate(), pSemester
         .getStatus().getValue(), pSemester.getId());
   }
 
@@ -80,10 +71,9 @@ public class PersistentSemesterDao extends SemesterDaoDecorator {
   public int create(final MutableSemester pSemester) {
 
     try {
-      return mJdbcTemplate.update(INSERT_ONE, pSemester.getId(), pSemester.getName(), mDateFormat
-          .format(pSemester.getStartDate()),
-          pSemester.getEndDate() == null ? "" : mDateFormat.format(pSemester.getEndDate()),
-          pSemester.getProgramType().getId(), pSemester.getStatus().getValue());
+      return mJdbcTemplate.update(INSERT_ONE, pSemester.getId(), pSemester.getName(),
+          pSemester.getStartDate(), pSemester.getEndDate(), pSemester.getProgramType().getId(),
+          pSemester.getStatus().getValue());
     } catch(DuplicateKeyException exception) {
       throw exception;
       // throw new SQLIntegrityConstraintViolationException("Semester already exists.");

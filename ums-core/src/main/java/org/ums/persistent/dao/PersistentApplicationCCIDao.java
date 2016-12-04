@@ -1,5 +1,10 @@
 package org.ums.persistent.dao;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.ApplicationCCIDaoDecorator;
@@ -7,13 +12,6 @@ import org.ums.domain.model.immutable.ApplicationCCI;
 import org.ums.domain.model.mutable.MutableApplicationCCI;
 import org.ums.enums.ApplicationType;
 import org.ums.persistent.model.PersistentApplicationCCI;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * Created by My Pc on 7/14/2016.
@@ -96,7 +94,6 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
 
   @Override
   public List<ApplicationCCI> getBySemesterAndExamDate(Integer pSemesterId, String pExamDate) {
-    SimpleDateFormat formatter = new SimpleDateFormat("MM-DD-YYYY");
     // Date date = (Date) formatter.parse(pExamDate);
     // Date date = (Date) formatter.parse(pExamDate);
     // Timestamp timestamp = new Timestamp(date.getTime());

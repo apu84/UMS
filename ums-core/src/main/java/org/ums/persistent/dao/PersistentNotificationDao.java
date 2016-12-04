@@ -1,19 +1,17 @@
 package org.ums.persistent.dao;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.NotificationDaoDecorator;
 import org.ums.domain.model.immutable.Notification;
 import org.ums.domain.model.mutable.MutableNotification;
 import org.ums.persistent.model.PersistentNotification;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.DateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentNotificationDao extends NotificationDaoDecorator {
   String SELECT_ALL =
@@ -28,11 +26,9 @@ public class PersistentNotificationDao extends NotificationDaoDecorator {
   String DELETE_ALL = "DELETE FROM NOTIFICATION ";
 
   private JdbcTemplate mJdbcTemplate;
-  private DateFormat mDateFormat;
 
-  public PersistentNotificationDao(JdbcTemplate pJdbcTemplate, DateFormat pDateFormat) {
+  public PersistentNotificationDao(JdbcTemplate pJdbcTemplate) {
     mJdbcTemplate = pJdbcTemplate;
-    mDateFormat = pDateFormat;
   }
 
   @Override
@@ -73,8 +69,7 @@ public class PersistentNotificationDao extends NotificationDaoDecorator {
   public int create(MutableNotification pNotification) {
     return mJdbcTemplate.update(INSERT_ALL, pNotification.getProducerId(),
         pNotification.getConsumerId(), pNotification.getNotificationType(),
-        pNotification.getPayload(), mDateFormat.format(pNotification.getProducedOn()),
-        mDateFormat.format(pNotification.getConsumedOn()));
+        pNotification.getPayload());
 
   }
 

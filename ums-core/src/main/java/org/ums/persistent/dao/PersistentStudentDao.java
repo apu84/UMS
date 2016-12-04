@@ -12,7 +12,6 @@ import org.ums.util.Constants;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
@@ -65,11 +64,8 @@ public class PersistentStudentDao extends StudentDaoDecorator {
 
   private JdbcTemplate mJdbcTemplate;
 
-  private DateFormat mDateFormat;
-
-  public PersistentStudentDao(final JdbcTemplate pJdbcTemplate, final DateFormat pDateFormat) {
+  public PersistentStudentDao(final JdbcTemplate pJdbcTemplate) {
     mJdbcTemplate = pJdbcTemplate;
-    mDateFormat = pDateFormat;
   }
 
   @Override
@@ -86,16 +82,16 @@ public class PersistentStudentDao extends StudentDaoDecorator {
 
   @Override
   public int create(MutableStudent pMutable) {
-    return mJdbcTemplate.update(CREATE_ALL, pMutable.getId(), pMutable.getFullName(),
-        pMutable.getDepartmentId(), pMutable.getSemesterId(), pMutable.getFatherName(),
-        pMutable.getMotherName(), mDateFormat.format(pMutable.getDateOfBirth()),
-        pMutable.getGender(), pMutable.getPresentAddress(), pMutable.getPermanentAddress(),
-        pMutable.getMobileNo(), pMutable.getPhoneNo(), pMutable.getBloodGroup(),
-        pMutable.getEmail(), pMutable.getGuardianName(), pMutable.getGuardianMobileNo(),
-        pMutable.getGuardianPhoneNo(), pMutable.getGuardianEmail(), pMutable.getProgramId(),
-        pMutable.getEnrollmentType().getValue(), pMutable.getCurrentYear(),
-        pMutable.getCurrentAcademicSemester(), pMutable.getCurrentEnrolledSemester().getId(),
-        pMutable.getTheorySection(), pMutable.getSessionalSection());
+    return mJdbcTemplate.update(CREATE_ALL, pMutable.getId(), pMutable.getFullName(), pMutable
+        .getDepartmentId(), pMutable.getSemesterId(), pMutable.getFatherName(), pMutable
+        .getMotherName(), pMutable.getDateOfBirth(), pMutable.getGender(), pMutable
+        .getPresentAddress(), pMutable.getPermanentAddress(), pMutable.getMobileNo(), pMutable
+        .getPhoneNo(), pMutable.getBloodGroup(), pMutable.getEmail(), pMutable.getGuardianName(),
+        pMutable.getGuardianMobileNo(), pMutable.getGuardianPhoneNo(), pMutable.getGuardianEmail(),
+        pMutable.getProgramId(), pMutable.getEnrollmentType().getValue(),
+        pMutable.getCurrentYear(), pMutable.getCurrentAcademicSemester(), pMutable
+            .getCurrentEnrolledSemester().getId(), pMutable.getTheorySection(), pMutable
+            .getSessionalSection());
   }
 
   /*
@@ -212,14 +208,13 @@ public class PersistentStudentDao extends StudentDaoDecorator {
     for(Student student : pStudents) {
       params.add(new Object[] {student.getFullName(), student.getDepartmentId(),
           student.getSemesterId(), student.getFatherName(), student.getMotherName(),
-          mDateFormat.format(student.getDateOfBirth()), student.getGender(),
-          student.getPresentAddress(), student.getPermanentAddress(), student.getMobileNo(),
-          student.getPhoneNo(), student.getBloodGroup(), student.getEmail(),
-          student.getGuardianName(), student.getGuardianMobileNo(), student.getGuardianPhoneNo(),
-          student.getGuardianEmail(), student.getEnrollmentType().getValue(),
-          student.getCurrentYear(), student.getCurrentAcademicSemester(),
-          student.getCurrentEnrolledSemester().getId(), student.getTheorySection(),
-          student.getSessionalSection(), student.getId()});
+          student.getDateOfBirth(), student.getGender(), student.getPresentAddress(),
+          student.getPermanentAddress(), student.getMobileNo(), student.getPhoneNo(),
+          student.getBloodGroup(), student.getEmail(), student.getGuardianName(),
+          student.getGuardianMobileNo(), student.getGuardianPhoneNo(), student.getGuardianEmail(),
+          student.getEnrollmentType().getValue(), student.getCurrentYear(),
+          student.getCurrentAcademicSemester(), student.getCurrentEnrolledSemester().getId(),
+          student.getTheorySection(), student.getSessionalSection(), student.getId()});
     }
 
     return params;
