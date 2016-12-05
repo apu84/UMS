@@ -1,7 +1,7 @@
 package org.ums.enums;
 
 /**
- * Created by My Pc on 3/22/2016.
+ * Created by Morshed on 3/22/2016.
  */
 public enum ApplicationStatus {
   WRITTEN(0, "Saved"),
