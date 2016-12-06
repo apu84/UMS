@@ -68,12 +68,12 @@ public class ExaminerResourceHelper
     for(int i = 0; i < entries.size(); i++) {
       JsonObject jsonObject = entries.getJsonObject(i);
       String updateType = jsonObject.getString("updateType");
-      Object obj =  jsonObject.get("programId");
+      Object obj = jsonObject.get("programId");
       Integer programId;
-      if(obj instanceof String){
+      if(obj.toString() instanceof String) {
         programId = Integer.parseInt(jsonObject.getString("programId"));
       }
-      else{
+      else {
         programId = jsonObject.getInt("programId");
       }
       MutableExaminer mutableExaminer = new PersistentExaminer();
