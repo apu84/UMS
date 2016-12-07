@@ -32,6 +32,19 @@ module ums {
             }]
           }
         })
+        .state('libraryBooksEntry', {
+            url: "/libraryBooksEntry",
+            templateUrl: 'views/intro/library-intro.html',
+            controller: 'LibraryIntro',
+            resolve: {
+                loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        files: ['vendors/bootstrap-datepicker/css/datepicker.css',
+                            'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js']
+                    });
+                }]
+            }
+        })
         .state('logout', {
           url: "/logout",
           controller: 'Logout'
