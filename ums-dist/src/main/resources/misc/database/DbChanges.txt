@@ -104,3 +104,121 @@ BEGIN
   FROM   dual;
 END;
 /
+
+//****************************************************************
+table: mst_faculty
+//***************************************************************
+ALTER TABLE DB_IUMS.MST_FACULTY
+ DROP PRIMARY KEY CASCADE;
+
+DROP TABLE DB_IUMS.MST_FACULTY CASCADE CONSTRAINTS;
+
+CREATE TABLE DB_IUMS.MST_FACULTY
+(
+  ID             NUMBER,
+  LONG_NAME      VARCHAR2(100 BYTE),
+  SHORT_NAME     VARCHAR2(20 BYTE),
+  LAST_MODIFIED  VARCHAR2(18 BYTE)
+)
+TABLESPACE SYSTEM
+RESULT_CACHE (MODE DEFAULT)
+PCTUSED    40
+PCTFREE    10
+INITRANS   1
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+LOGGING
+NOCOMPRESS
+NOCACHE
+NOPARALLEL
+MONITORING;
+
+
+--  There is no statement for index DB_IUMS.SYS_C0011826.
+--  The object is created when the parent object is created.
+
+CREATE OR REPLACE TRIGGER DB_IUMS.trg_faculty_id
+  before insert ON DB_IUMS.MST_FACULTY
+  for EACH ROW
+BEGIN
+    select faculty_id_seq.nextval
+      INTO :new.id
+      from dual;
+  END;
+/
+
+
+ALTER TABLE DB_IUMS.MST_FACULTY ADD (
+  PRIMARY KEY
+  (ID)
+  USING INDEX
+    TABLESPACE SYSTEM
+    PCTFREE    10
+    INITRANS   2
+    MAXTRANS   255
+    STORAGE    (
+                INITIAL          64K
+                NEXT             1M
+                MINEXTENTS       1
+                MAXEXTENTS       UNLIMITED
+                PCTINCREASE      0
+                FREELISTS        1
+                FREELIST GROUPS  1
+                BUFFER_POOL      DEFAULT
+                FLASH_CACHE      DEFAULT
+                CELL_FLASH_CACHE DEFAULT
+               )
+  ENABLE VALIDATE);
+
+Insert into DB_IUMS.MST_FACULTY
+   (ID, LONG_NAME, SHORT_NAME, LAST_MODIFIED)
+ Values
+   (1, 'Engineering/Architecture Faculty', 'Engg. Faculty', '12345');
+Insert into DB_IUMS.MST_FACULTY
+   (ID, LONG_NAME, SHORT_NAME, LAST_MODIFIED)
+ Values
+   (2, 'Business Faculty', 'Business Faculty', '12345');
+COMMIT;
+
+
+
+
+//************************************************************
+sequence form parameter_setting
+//************************************************************
+create SEQUENCE  param_setting_id_seq;
+
+create trigger trg_param_setting_id
+  before insert on MST_PARAMETER_SETTING
+  for EACH ROW
+  BEGIN
+    SELECT  param_setting_id_seq.nextval
+      into :new.PS_ID
+      from dual;
+  END;
+  /
+
+
+
+  //**************************************************************
+  adding faculty column in mst_program
+  //**************************************************************
+
+  alter table MST_PROGRAM
+  add  faculty_id NUMBER;
+
+
+  update mst_program set FACULTY_ID=1 where PROGRAM_SHORT_NAME!='BBA';
+
+  update mst_program set FACULTY_ID=2 where PROGRAM_SHORT_NAME='BBA';

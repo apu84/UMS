@@ -523,6 +523,21 @@ module ums {
             }]
           }
         })
+        .state('uploadMeritList', {
+          url: "/uploadMeritList",
+          templateUrl: 'views/admission/merit-list-upload.html',
+          controller: 'AdmissionMeritList',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: [
+                  'vendors/amcharts/amcharts.js',
+                  'vendors/amcharts/serial.js'
+                ]
+              });
+            }]
+          }
+        })
         .state('studentsRoutine', {
           url: "/studentsRoutine",
           controller:'StudentsRoutine',

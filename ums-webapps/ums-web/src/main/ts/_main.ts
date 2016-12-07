@@ -136,6 +136,10 @@
 /// <reference path='controller/result/ResultProcessStatusMonitor.ts'/>
 
 
+
+/// <reference path='controller/admission/AdmissionMeritList.ts'/>
+
+
 /// <reference path='Utils.ts'/>
 
 /// <reference path='controller/syllabus/FullSyllabus.ts'/>
