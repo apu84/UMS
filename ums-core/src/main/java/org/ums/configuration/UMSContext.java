@@ -87,6 +87,13 @@ public class UMSContext {
   }
 
   @Bean
+  FacultyManager facultyManager() {
+    FacultyCache facultyCache = new FacultyCache(mCacheFactory.getCacheManager());
+    facultyCache.setManager(new PersistentFacultyDao(mTemplateFactory.getJdbcTemplate()));
+    return facultyCache;
+  }
+
+  @Bean
   EmployeeManager employeeManager() {
     EmployeeCache employeeCache = new EmployeeCache(mCacheFactory.getCacheManager());
     employeeCache.setManager(new PersistentEmployeeDao(mTemplateFactory.getJdbcTemplate()));
