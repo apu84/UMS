@@ -85,6 +85,7 @@
 /// <reference path='service/SeatPlanService.ts'/>
 /// <reference path='service/SemesterService.ts'/>
 /// <reference path='service/CommonService.ts'/>
+/// <reference path='service/FacultyService.ts'/>
 /// <reference path='service/ClassRoutineService.ts'/>
 /// <reference path='service/ExamGradeService.ts'/>
 /// <reference path='service/ClassRoomService.ts'/>

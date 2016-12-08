@@ -1,5 +1,5 @@
 
-<div class="row" data-ng-init="getSemesters()">
+<div class="row" >
     <div onclick="resetCommonCollapsibleDivs()" id="arrowDiv">
         <i class="fa fa-angle-double-right fa-cx"></i></i>
     </div>
@@ -21,27 +21,27 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label">Semester</label>
                         <div class="col-md-8">
-                            <select class="form-control required" name="semester" data-ng-model="semester" data-ng-change="getExamDates()" data-convert-to-number>
-                                <option value="">Select a Semester</option>
+                            <select class="form-control required" name="semester" data-ng-model="semester">
+                                <option   value="">Select a semester</option>
                                 <option data-ng-repeat="semester in semesters" value="{{semester}}">{{semester.name}}</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-md-4 control-label">Exam Type</label>
+                        <label class="col-md-4 control-label">Faculty</label>
                         <div class="col-md-8">
-                            <select class="form-control required" name="examType" data-ng-model="examType" data-ng-change="getExamDates()"  data-convert-to-number>
-                                <option value="1">Semester Final</option>
-                                <option value="2">Carry/Clearance/Improvement</option>
+                            <select class="form-control required" name="faculty" data-ng-model="faculty" >
+                                <option value="">Select a faculty</option>
+                                <option data-ng-repeat="faculty in faculties" value="{{faculty}}">{{faculty.shortName}}</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-md-4 control-label">Exam Date</label>
+                        <label class="col-md-4 control-label">Merit Type</label>
                         <div class="col-md-8">
-                            <select class="form-control required" name="examDate" data-ng-model="examDate">
-                                <option value="">Select an Exam Date</option>
-                                <option data-ng-repeat="examRoutine in examRoutineArr">{{examRoutine.examDate}}</option>
+                            <select class="form-control required" name="meritType" data-ng-model="meritType">
+                                <option value="">Select merit list type</option>
+                                <option data-ng-repeat="meritType in meritTypes" value="{{meritType}}">{{meritType.name}}</option>
                             </select>
                         </div>
                     </div>

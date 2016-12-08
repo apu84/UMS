@@ -3,6 +3,7 @@ package org.ums.common.builder;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
+import org.ums.domain.model.immutable.Faculty;
 import org.ums.domain.model.mutable.MutableProgram;
 import org.ums.domain.model.immutable.Department;
 import org.ums.domain.model.immutable.Program;
@@ -29,6 +30,11 @@ public class ProgramBuilder implements Builder<Program, MutableProgram> {
         pReadOnly.getDepartmentId(), Department.class);
     pBuilder.add("department", pUriInfo.getBaseUriBuilder().path("academic").path("department")
         .path(String.valueOf(department.getId())).build().toString());
+
+    Faculty faculty = (Faculty) pLocalCache.cache(()-> pReadOnly.getFaculty(),
+        pReadOnly.getFacultyId(),Faculty.class);
+
+    pBuilder.add("faculty", pUriInfo.getBaseUriBuilder().path("academic").path("faculty").path(String.valueOf(faculty.getId())).build().toString());
 
     pBuilder.add("self", pUriInfo.getBaseUriBuilder().path("academic").path("program")
         .path(String.valueOf(pReadOnly.getId())).build().toString());

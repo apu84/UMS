@@ -1,6 +1,7 @@
 package org.ums.persistent.model;
 
 import org.springframework.context.ApplicationContext;
+import org.ums.domain.model.immutable.Faculty;
 import org.ums.domain.model.mutable.MutableProgram;
 import org.ums.domain.model.immutable.Department;
 import org.ums.domain.model.immutable.ProgramType;
@@ -27,10 +28,12 @@ public class PersistentProgram implements MutableProgram {
   private String mShortName;
   private String mLongName;
   private Department mDepartment;
+  private Faculty mFaculty;
   private ProgramType mProgramType;
   private String mLastModified;
 
   private String mDepartmentId;
+  private int mFacultyId;
   private int mProgramTypeId;
 
   public PersistentProgram() {
@@ -43,6 +46,26 @@ public class PersistentProgram implements MutableProgram {
     mLongName = pPersistentProgram.getLongName();
     mDepartment = pPersistentProgram.getDepartment();
     mProgramType = pPersistentProgram.getProgramType();
+  }
+
+  @Override
+  public Faculty getFaculty() {
+    return mFaculty;
+  }
+
+  @Override
+  public int getFacultyId() {
+    return mFacultyId;
+  }
+
+  @Override
+  public void setFaculty(Faculty pFaculty) {
+    mFaculty = pFaculty;
+  }
+
+  @Override
+  public void setFacultyId(int pFacultyId) {
+    mFacultyId = pFacultyId;
   }
 
   public Integer getId() {

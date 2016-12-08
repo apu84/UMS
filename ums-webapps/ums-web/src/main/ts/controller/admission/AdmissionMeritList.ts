@@ -10,6 +10,10 @@ module ums{
     semester:Semester;
     programTypes:Array<IProgramType>;
     programType:IProgramType;
+    faculty:Faculty;
+    faculties:Array<Faculty>;
+    meritTypes:Array<IMeritListType>;
+    meritType:IMeritListType;
 
     getSemesters:Function;
   }
@@ -19,8 +23,13 @@ module ums{
     name:string;
   }
 
+  interface IMeritListType{
+    id:string;
+    name:string;
+  }
+
   class AdmissionMeritList{
-    public static $inject = ['appConstants','HttpClient','$scope','$q','notify','$sce','$window','semesterService'];
+    public static $inject = ['appConstants','HttpClient','$scope','$q','notify','$sce','$window','semesterService','facultyService'];
     constructor(private appConstants: any,
                 private httpClient: HttpClient,
                 private $scope: IAdmissionMerit,
@@ -28,16 +37,36 @@ module ums{
                 private notify: Notify,
                 private $sce:ng.ISCEService,
                 private $window:ng.IWindowService,
-                private semesterService: SemesterService) {
+                private semesterService: SemesterService,
+                private facultyService: FacultyService) {
 
       $scope.programTypes=appConstants.programType;
+
+      $scope.getSemesters= this.getSemesters.bind(this);
+
+      this.getFaculties();
+      this.getMeritListTypes();
     }
 
-    private getSemesters(programType:IProgramType):void{
-      this.semesterService.fetchSemesters(+programType.id).then((semesters:Array<Semester>)=>{
-        this.$scope.semesters=[];
+    private getMeritListTypes():void{
+      this.$scope.meritTypes = [];
+      this.$scope.meritTypes = this.appConstants.meritListTypes;
+      this.$scope.meritTypes.splice(0,1);
+    }
+
+    private getSemesters(programType:number):void{
+      console.log("program type");
+      console.log(programType);
+      this.semesterService.fetchSemesters(+programType,5).then((semesters:Array<Semester>)=>{
         this.$scope.semesters=semesters;
         console.log(this.$scope.semesters);
+      });
+    }
+
+    private getFaculties(){
+      this.facultyService.getAllFaculties().then((faculties:Array<Faculty>)=>{
+        this.$scope.faculties=[];
+        this.$scope.faculties=faculties;
       });
     }
 

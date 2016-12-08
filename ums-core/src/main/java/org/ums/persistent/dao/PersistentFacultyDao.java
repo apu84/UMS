@@ -40,12 +40,11 @@ public class PersistentFacultyDao extends FacultyDaoDecorator {
     @Override
     public Faculty mapRow(ResultSet pResultSet, int pI) throws SQLException {
       PersistentFaculty faculty = new PersistentFaculty();
-      faculty.setId(pResultSet.getInt("id"));
+      faculty.setId(pResultSet.getInt("ID"));
       faculty.setLongName(pResultSet.getString("LONG_NAME"));
       faculty.setShortName(pResultSet.getString("SHORT_NAME"));
       faculty.setLastModified(pResultSet.getString("LAST_MODIFIED"));
-      AtomicReference<Faculty> atomicReference = new AtomicReference<>();
-      return atomicReference.get();
+      return faculty;
     }
   }
 }
