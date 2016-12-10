@@ -1009,11 +1009,8 @@ module ums {
     }
 
     private recheckAll(actor:string):void {
-      console.log(actor);
       var studentMark:IStudentMarks ;
-      alert("1");
       var gradeList:Array<IStudentMarks>=this.getGradeList(actor);
-      alert("2");
       for (var ind in gradeList) {
         studentMark = gradeList[ind];
         if($('#recheckAllCheckBox').prop('checked'))
