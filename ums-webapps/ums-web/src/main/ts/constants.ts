@@ -402,10 +402,11 @@ module ums {
         ],
         meritListTypes:[
           {id:"", name:"Select Merit Type"},
-          {id:"0", name:"General Merit List"},
-          {id:"1", name:"Freedom Fighter Merit List"},
-          {id:"2", name:"Rural Area Merit List"},
-          {id:"3", name:"English Medium Merit List"}
+          {id:"0", name:"Combined (GA+RA+FF) Merit List"},
+          {id:"1", name:"General Merit List"},
+          {id:"2", name:"Freedom Fighter Merit List"},
+          {id:"3", name:"Rural Area Merit List"},
+          {id:"4", name:"English Medium Merit List"}
         ],
         applicationTypes: [
           {id: "", name: "Select Application Type"},
