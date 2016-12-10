@@ -75,7 +75,7 @@ public class UMSContext {
   SecurityManager mSecurityManager;
 
   @Bean
-  LibraryManager liraryManager() {
+  LibraryManager libraryManager() {
     LibraryCache libraryCache = new LibraryCache(mCacheFactory.getCacheManager());
     libraryCache.setManager(new PersistentLibraryDao(mTemplateFactory.getJdbcTemplate()));
     return libraryCache;

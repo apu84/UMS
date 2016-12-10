@@ -10,7 +10,7 @@
     </div>
     <div class="panel panel-green" id=0"leftDiv">
         <div class="panel-heading">
-            <h3 class="panel-title">Enter Book Information</h3>
+            <h3 class="panel-title">Search Book</h3>
         </div>
         <div class="panel-body pan">
             <form action="" class="form-horizontal" data-validate="">
@@ -18,18 +18,12 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label">Book Name</label>
                         <div class="col-md-8">
-                           <input  type="text" name="book" id="mBook" data-ng-model="book"/>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-4 control-label">Author</label>
-                        <div class="col-md-8">
-                            <input type="text" name="author" id="mAuthor" data-ng-model="author"/>
+                            <input  type="text" name="book" id="mBook" data-ng-model="searchBook"/>
                         </div>
                     </div>
                 </div>
                 <div class="form-actions text-right pal">
-                    <button type="button" class="btn btn-success" data-ng-click="save()">-Submit-</button>
+                    <button type="button" class="btn btn-success" data-ng-click="search()">Submit</button>
                 </div>
             </form>
         </div>
@@ -40,7 +34,19 @@
                     class="subtitle"></span></div>
             <div class="panel-body shadowPanel"   style="min-height: 490px;">
                 <div class="row" data-ng-if="showTable==true" style="padding-left: 2%; padding-right: 2%;">
-                    <h1>Data Has Been Saved In The DataBase</h1>
+                    <table class="table table-bordered table-advanced table-striped">
+                        <thead id="thead" role="row"  class="heading">
+                        <th style="text-align:center;">Book Title</th>
+                        <th align="center">Author Title</th>
+                        </thead>
+                        <tbody>
+                        <tr data-ng-repeat="b in foundbooks" align="center">
+                            <td>{{b.bookName}}</td>
+                            <td>{{b.authorName}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <br/>
                     <br/>
                 </div>
             </div>

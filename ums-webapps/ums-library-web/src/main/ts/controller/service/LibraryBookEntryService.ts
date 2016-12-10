@@ -1,6 +1,6 @@
 module ums{
 
-    export class LibraryService{
+    export class LibraryBookEntryService{
 
         private Url:string='/ums-webservice-library/library';
         public static $inject = ['HttpClient','$q','notify'];
@@ -23,7 +23,6 @@ module ums{
             console.log("I am in LibraryService");
             return defer.promise;
         }
-
     }
-    UMS.service("LibraryService",LibraryService);
+    UMS.service("LibraryBookEntryService",LibraryBookEntryService);
 }
