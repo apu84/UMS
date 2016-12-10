@@ -147,7 +147,7 @@
 
                         //A quick hack by ifti to make checkbox workable in side th
                         $element.find("table th .th-inner:visible div.title").each(function (index, el) {
-                            console.log(el.childNodes[0].innerHTML);
+                            //console.log(el.childNodes[0].innerHTML);
                             for(var i = 0;i < el.childNodes.length;i++){
                                 if(el.childNodes[i].attributes && el.childNodes[i].attributes[0].nodeValue == "checkbox"){
                                     var checkBox=el.childNodes[i].outerHTML;
