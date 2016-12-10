@@ -161,6 +161,7 @@
 /// <reference path='model/NewSyllabusModel.ts'/>
 /// <reference path='model/ParameterSetting.ts'/>
 /// <reference path='model/master_data/ClassRoom.ts'/>
+/// <reference path='model/master_data/Faculty.ts'/>
 /// <reference path='model/master_data/Course.ts'/>
 /// <reference path='model/master_data/Employee.ts'/>
 /// <reference path='model/master_data/Parameter.ts'/>
