@@ -65,10 +65,10 @@ public class EmailService {
           String strDate = sdfDate.format(now);
 
           ResetPasswordEmailDto others = new ResetPasswordEmailDto();
-          others.setUmsRootUrl("https://localhost/ums-web/login");
-          others.setUmsForgotPasswordUrl("https://localhost/ums-web/login/?fogot-password.ums");
+          others.setUmsRootUrl("https://172.16.25.254/ums-web/login");
+          others.setUmsForgotPasswordUrl("https://172.16.25.254/ums-web/login/?forgot-password.ums");
           String abc =
-              "https://localhost/ums-web/login/reset-password.html?pr_token=$$TOKEN$$&uid=$$USER_ID$$";
+              "https://172.16.25.254/ums-web/login/reset-password.html?pr_token=$$TOKEN$$&uid=$$USER_ID$$";
           abc = abc.replace("$$TOKEN$$", user.getPasswordResetToken());
           abc = abc.replace("$$USER_ID$$", user.getId());
 
