@@ -80,6 +80,8 @@ module ums {
     destroyErrorTooltip:Function;
 
     alertMessage:string;
+    searchStudent:Function;
+    clearSearch:Function;
   }
   interface IStudentMarks {
     studentId:string;
@@ -167,7 +169,9 @@ module ums {
         pgPrograms: appConstants.pgPrograms,
         programs:Array<IOption>(),
         markSubmissionStatus:appConstants.marksSubmissionStatus,
-        yearSemester:appConstants.yearSemester
+        yearSemester:appConstants.yearSemester,
+        searchBox:String,
+        searchStudentId:String
       };
 
       $scope.modalSettings = {};
@@ -214,6 +218,8 @@ module ums {
       $scope.showErrorTooltip=this.showErrorTooltip.bind(this);
       $scope.destroyErrorTooltip=this.destroyErrorTooltip.bind(this);
 
+      $scope.searchStudent=this.searchStudent.bind(this);
+      $scope.clearSearch=this.clearSearch.bind(this);
 
       $scope.inputParams={
         program_type:this.appConstants.programTypeEnum.UG,
@@ -262,7 +268,7 @@ module ums {
         },
         valueAxes: [{
           dashLength : 5,
-          title: "Visitors"
+          title: "Students"
         }],
         graphs: [{
           type: "column",
@@ -300,7 +306,7 @@ module ums {
       var studentId:any=this.$scope.data.recheck_accepted_studentId;
       var newRowId:any="recheck_accepted_"+studentId;
       if ($("#"+newRowId).length) return;
-      var $clone = $("#"+studentId).clone();
+      var $clone = $("#row_"+studentId).clone();
       $clone.attr("id", newRowId);
       $clone.append('<td style="text-align: center;cursor:pointer;" onclick="removeTableRow(\''+newRowId+'\')"><img src="https://cdn4.iconfinder.com/data/icons/6x16-free-application-icons/16/Delete.png" /></td>');
       $clone.appendTo($('#tbl_recheck_accepted > tbody'));
@@ -442,6 +448,7 @@ module ums {
             this.$scope.gradeSubmissionStatus=part_info.statusId;
             this.$scope.courseType=part_info.courseType;
             this.$scope.currentActor = data.current_actor;
+            this.$scope.data.searchBox = "";
 
             if(this.$scope.data.total_part==1)
               this.$scope.toggleColumn = false;
@@ -806,23 +813,11 @@ module ums {
         }
       }
 
-      var parentRow = document.getElementById("row_" + student_id);
-      var tdArray = parentRow.getElementsByTagName('td');
-
       if (row_error == true) {
-        for (var i = 0; i < tdArray.length; i++) {
-          if($("#reg_type_"+student_id).val()==1  || (i!=0 && $("#reg_type_"+student_id).val()!=1))
-            tdArray[i].style.backgroundColor = "#FCDC3B";//"#FFFF7E";
-        }
+        this.colorRow(Utils.ERROR_ROW,student_id);
       }
       else {
-        for (var i = 0; i < tdArray.length; i++) {
-          if($('#'+tdArray[i].id).is("[style]") && ($("#reg_type_"+student_id).val()==1  || (i!=0 && $("#reg_type_"+student_id).val()!=1))) {
-            $('#' + tdArray[i].id).attr('style', function (i, style) {
-              return style.replace(/background-color[^;]+;?/g, '');
-            });
-          }
-        }
+        this.resetRowColor(this.getTdArray(student_id),student_id);
       }
       return row_error;
     }
@@ -920,9 +915,14 @@ module ums {
       var gradeList:Array<IStudentMarks> = this.getTargetGradeList(this.appConstants.marksStatusEnum.SUBMITTED);
       var validate:boolean = true;
       if(this.$scope.courseType=="THEORY") {
-
-        if(this.validatePartAPartB(true)==true) return;
-
+        if(this.validatePartAPartB(true)==true){
+          $("#alertMessage").html("Please provide Part Information Correctly.<br/></br>Check <font color='red'>'Total Part'</font> Section of the Gradesheet Header.");
+          setTimeout(function(){
+            $("#modal-alert").modal('show');
+          }, 200);
+          $("html, body").animate({ scrollTop: 0 }, "slow");
+          return;
+        }
         for (var ind in gradeList) {
           var studentMark:IStudentMarks = gradeList[ind];
           if (this.validateGrade(true, studentMark.studentId, studentMark.quiz.toString(), studentMark.classPerformance.toString(), studentMark.partA.toString(), studentMark.partB.toString(), studentMark.total.toString(), studentMark.gradeLetter,studentMark.regType) == true)
@@ -1442,6 +1442,53 @@ module ums {
       else if (regType == this.appConstants.regColorCode.SPECIAL_CARRY) style.backgroundColor=this.appConstants.regColorCode.SPECIAL_CARRY;
       else if (regType == this.appConstants.regColorCode.IMPROVEMENT) style.backgroundColor=this.appConstants.regColorCode.IMPROVEMENT;
       return style;
+    }
+
+
+    private colorRow(colorCode:string,studentId:string):void{
+    var tdArray=this.getTdArray(studentId);
+    for (var i = 0; i < tdArray.length; i++) {
+      if($("#reg_type_"+studentId).val()==1  || (i!=0 && $("#reg_type_"+studentId).val()!=1))
+        tdArray[i].style.backgroundColor = colorCode;
+    }
+  }
+
+    private getTdArray(studentId:string){
+    var parentRow = document.getElementById("row_" + studentId);
+      if(parentRow) {
+        var tdArray = parentRow.getElementsByTagName('td');
+        return tdArray;
+      }
+      return null;
+  }
+
+    private resetRowColor(tdArray:any,studentId:string):void{
+      if(tdArray==null) return;
+      for (var i = 0; i < tdArray.length; i++) {
+        if($('#'+tdArray[i].id).is("[style]") && ($("#reg_type_"+studentId).val()==1  || (i!=0 && $("#reg_type_"+studentId).val()!=1))) {
+          $('#' + tdArray[i].id).attr('style', function (i, style) {
+            return style.replace(/background-color[^;]+;?/g, '');
+          });
+        }
+      }
+    }
+
+    private searchStudent():void{
+      var searchValue=this.$scope.data.searchBox;
+
+      var tdArray=this.getTdArray(this.$scope.data.searchStudentId);
+      this.resetRowColor(tdArray,this.$scope.data.searchStudentId);
+
+      if(document.getElementById("row_"+searchValue)) {
+        this.$scope.$broadcast("rowSelected", searchValue);
+        this.colorRow(Utils.SEARCH_ROW, searchValue);
+        this.$scope.data.searchStudentId=searchValue;
+      }
+    }
+    private clearSearch(){
+      this.$scope.data.searchBox="";
+      var tdArray=this.getTdArray(this.$scope.data.searchStudentId);
+      this.resetRowColor(tdArray,this.$scope.data.searchStudentId);
     }
   }
   UMS.controller('MarksSubmission', MarksSubmission);
