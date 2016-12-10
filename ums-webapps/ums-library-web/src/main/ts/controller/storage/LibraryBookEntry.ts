@@ -4,19 +4,19 @@
  */
 
 module ums {
-    interface ILibraryIntro extends ng.IScope {
+    interface ILibraryBookEntry extends ng.IScope {
         showTable: boolean;
         author:string;
         book:string;
         save:Function;
     }
 
-    export class LibraryIntro {
-        public static $inject = ['$scope', '$q', 'notify',  'LibraryService'];
+    export class LibraryBookEntry {
+        public static $inject = ['$scope', '$q', 'notify',  'LibraryBookEntryService'];
 
-        constructor(private $scope: ILibraryIntro,
+        constructor(private $scope: ILibraryBookEntry,
                     private $q: ng.IQService, private notify: Notify,
-                     private libraryService: LibraryService) {
+                     private libraryBookEntryService: LibraryBookEntryService) {
 
             $scope.showTable = false;
             $scope.save = this.save.bind(this);
@@ -25,9 +25,8 @@ module ums {
         }
 
         private save() : void {
-            console.log("In the save method");
             this.convertToJson().then((json: any)=> {
-                this.libraryService.saveBook(json).then((message: any)=> {
+                this.libraryBookEntryService.saveBook(json).then((message: any)=> {
                     this.notify.success(message);
 
                 });
@@ -53,10 +52,9 @@ module ums {
             completeJson["entries"] = jsonObject;
 
             defer.resolve(completeJson);
-            console.log("In the converTOJSON method");
             return defer.promise;
         }
     }
 
-    UMS.controller('LibraryIntro', LibraryIntro);
+    UMS.controller('LibraryBookEntry', LibraryBookEntry);
 }

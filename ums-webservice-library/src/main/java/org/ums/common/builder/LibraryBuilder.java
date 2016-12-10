@@ -3,10 +3,10 @@ package org.ums.common.builder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.Library;
 import org.ums.domain.model.mutable.MutableLibrary;
-import org.ums.builder.Builder;
 import org.ums.manager.BinaryContentManager;
 
 import javax.json.JsonObject;
@@ -38,8 +38,10 @@ public class LibraryBuilder implements Builder<Library, MutableLibrary> {
   @Override
   public void build(final MutableLibrary pMutableLibrary, final JsonObject pJsonObject,
       final LocalCache pLocalCache) {
-    pMutableLibrary.setBookName(pJsonObject.getString("bookName"));
-    pMutableLibrary.setAuthorName(pJsonObject.getString("authorName"));
+    String book = pJsonObject.getString("book");
+    String author = pJsonObject.getString("author");
+    pMutableLibrary.setBookName(pJsonObject.getString("book"));
+    pMutableLibrary.setAuthorName(pJsonObject.getString("author"));
 
   }
 }

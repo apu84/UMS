@@ -21,6 +21,7 @@ import org.ums.persistent.model.PersistentUser;
 import org.ums.resource.ResourceHelper;
 import org.ums.util.UmsUtils;
 
+import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
@@ -48,13 +49,18 @@ public class LibraryResourceHelper extends ResourceHelper<Library, MutableLibrar
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) {
     MutableLibrary mutableLibrary = new PersistentLibrary();
+
+    JsonArray entries = pJsonObject.getJsonArray("entries");
+
     LocalCache localCache = new LocalCache();
-    getBuilder().build(mutableLibrary, pJsonObject, localCache);
+    getBuilder().build(mutableLibrary, entries.getJsonObject(0), localCache);
     mutableLibrary.commit(false);
-    URI contextURI =
-        pUriInfo.getBaseUriBuilder().path(LibraryResource.class).path(LibraryResource.class, "get")
-            .build(mutableLibrary.getId());
-    Response.ResponseBuilder builder = Response.created(contextURI);
+    /*
+     * URI contextURI =
+     * pUriInfo.getBaseUriBuilder().path(LibraryResource.class).path(LibraryResource.class, "get")
+     * .build(mutableLibrary.getId());
+     */
+    Response.ResponseBuilder builder = Response.created(null);
     builder.status(Response.Status.CREATED);
     return builder.build();
   }

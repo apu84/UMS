@@ -32,10 +32,23 @@ module ums {
             }]
           }
         })
-        .state('libraryBooksEntry', {
-            url: "/libraryBooksEntry",
-            templateUrl: 'views/intro/library-intro.html',
-            controller: 'LibraryIntro',
+        .state('storeBook', {
+            url: "/storeBook",
+            templateUrl: 'views/Search/library-book-store.html',
+            controller: 'LibraryBookEntry',
+            resolve: {
+                loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        files: ['vendors/bootstrap-datepicker/css/datepicker.css',
+                            'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js']
+                    });
+                }]
+            }
+        })
+        .state('searchLibrary', {
+            url: "/searchLibrary",
+            templateUrl: 'views/searchLibrary/library-search.html',
+            controller: 'LibrarySearch',
             resolve: {
                 loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
                     return $ocLazyLoad.load({
