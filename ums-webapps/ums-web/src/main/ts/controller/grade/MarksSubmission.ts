@@ -371,7 +371,6 @@ module ums {
           "/status/"+status,
           this.appConstants.mimeTypeJson,
           (data:any, etag:string)=> {
-            console.log(data.entries);
             this.$scope.allMarksSubmissionStatus = data.entries;
           });
 
@@ -880,7 +879,6 @@ module ums {
           || this.$scope.gradeSubmissionStatus == this.appConstants.marksSubmissionStatusEnum.REQUESTED_FOR_RECHECK_BY_HEAD
           || this.$scope.gradeSubmissionStatus == this.appConstants.marksSubmissionStatusEnum.REQUESTED_FOR_RECHECK_BY_COE) {
         allStudents = this.$scope.recheckCandidatesGrades;
-        console.log(this.$scope.recheckCandidatesGrades);
       }
       for (var ind in allStudents) {
         var currentStudent:IStudentMarks = allStudents[ind];
@@ -920,7 +918,6 @@ module ums {
 
     private saveAndSendToScrutinizer():void {
       var gradeList:Array<IStudentMarks> = this.getTargetGradeList(this.appConstants.marksStatusEnum.SUBMITTED);
-      console.log(gradeList);
       var validate:boolean = true;
       if(this.$scope.courseType=="THEORY") {
 
@@ -933,11 +930,7 @@ module ums {
         }
       }
       else if(this.$scope.courseType=="SESSIONAL") {
-        console.log(gradeList.length);
-        console.log(gradeList);///asdfa sdfaf asd/f /ads /s/adf/ asdf/ a/sdf asdf asd sad fasdf asdf
         for (var ind in gradeList) {
-          console.log("-------ssss ---asf-a- sf-a-f asdf sd fsdafs asdfas--");//asdf asdjsaldkjflasdfkjlasdjflaskdj flasfjfdsla jk
-          console.log( gradeList[ind]);
           var studentMark:IStudentMarks = gradeList[ind];
           if (this.validateGrade(true, studentMark.studentId,"", "", "", "", studentMark.total.toString(), studentMark.gradeLetter,studentMark.regType) == true)
             validate = false;
@@ -1347,7 +1340,6 @@ module ums {
           "/examType/"+this.$scope.current_examTypeId,
           this.appConstants.mimeTypeJson,
           (data:any, etag:string)=> {
-            console.log(data.entries);
             this.$scope.marksSubmissionStatusLogs = data.entries;
           });
 
