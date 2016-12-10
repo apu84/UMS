@@ -71,7 +71,7 @@ public class ExaminerResourceHelper
       Object obj = jsonObject.get("programId");
       Integer programId;
       if(obj.toString() instanceof String) {
-        programId = Integer.parseInt(jsonObject.getString("programId"));
+        programId = Integer.parseInt(obj.toString());
       }
       else {
         programId = jsonObject.getInt("programId");

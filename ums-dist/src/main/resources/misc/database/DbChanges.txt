@@ -222,3 +222,38 @@ create trigger trg_param_setting_id
   update mst_program set FACULTY_ID=1 where PROGRAM_SHORT_NAME!='BBA';
 
   update mst_program set FACULTY_ID=2 where PROGRAM_SHORT_NAME='BBA';
+
+
+
+  //***************************** admision_merit_list ***************************************
+  create table admission_merit_list(
+    id NUMBER,
+    semester_id number,
+    merit_sl_no number not null,
+    receipt_id number not null,
+    admission_roll number not null,
+    candidate_name varchar2(100) not null,
+    admission_group number not null,
+    faculty_id number not null,
+    last_modified varchar2(18),
+    CONSTRAINT admission_merit_list_uniq UNIQUE (merit_sl_no,receipt_id,admission_roll,admission_group),
+    PRIMARY KEY (id)
+  );
+
+
+  create sequence admission_merit_seq START WITH 1;
+
+  create or REPLACE TRIGGER admission_merit_trig
+    BEFORE INSERT on admission_merit_list
+    for EACH ROW
+    BEGIN
+      select admission_merit_seq.nextval
+        into :new.id
+        from dual;
+    END;
+  /
+
+
+  comment on COLUMN admission_merit_list.admission_group is '1=GENERAL, 2= Freedom Fighter, 3= Remote Area, 4= English Medium';
+
+  //*************************************** end admission merit list *******************************************************
