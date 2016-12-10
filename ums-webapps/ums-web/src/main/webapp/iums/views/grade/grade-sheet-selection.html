@@ -1,5 +1,4 @@
 <style>
-    <style>
     .table thead tr th, .table thead tr td {
         border-bottom: 1px solid grey;
     }
@@ -19,6 +18,16 @@
     .redColor{
         color: #ff0000;
         font-weight: bold;
+    }
+    .gradeSelectBox{
+        width: 80px;
+        border: 1px solid grey;
+        padding: 0px;
+        height: 23px !important;
+        background-color: rgb(235, 235, 228);
+    }
+    .badge-total{
+        background-color: white;color: black;font-weight: bold;
     }
 </style>
 <div class="row" id="selection1">
@@ -217,11 +226,12 @@
                         <td width="40%">{{data.course_title}}</td>
                         <td width="20%"><b>Course Number :</b></td>
                         <td width="25%">{{data.course_no}}</td>
-
                     </tr>
                     <tr>
                         <td  style="height: 30px;"><b>Credit Hour :</b></td>
-                        <td>{{data.crhr}} <a href="Javascript:void(0)" data-ng-click="refreshGradeSheet()">Reload</a></td>
+                        <td>
+                            {{data.crhr}}<!--<a href="Javascript:void(0)" data-ng-click="refreshGradeSheet()">Reload</a>-->
+                        </td>
                         <td data-ng-if="courseType=='THEORY'"><b>Total Part <span data-ng-if="(gradeSubmissionStatus !='0')">({{data.total_part}})</span> :</b></td>
                         <td data-ng-if="courseType=='THEORY'">
                             <select id="total_part" data-ng-model="data.total_part" data-ng-change="onTotalPartChange()"
@@ -244,10 +254,25 @@
                                     <span data-ng-if="(gradeSubmissionStatus !='0' || currentActor!='preparer')">{{data.part_b_total}}</span>
                             </span>
                             </div>
-                            <script>
+                        </td>
+                    </tr>
 
-
-                            </script>
+                    <tr>
+                        <td><b>Total Students :</b></td>
+                        <td style="font-size: 18px;font-weight: bold;">
+                            {{chartData[0].total+chartData[1].total+chartData[2].total+chartData[3].total+chartData[4].total+chartData[5].total+chartData[6].total+chartData[7].total+chartData[8].total+chartData[9].total}}
+                        </td>
+                        <td><b>Search :</b></td>
+                        <td>
+                            <input type="text" data-ng-model="data.searchBox" style="width:100px;border: 1px solid grey;padding-left: 5px;">
+                            <a href="javascript:;" class="btn btn-xs btn-default btn-round"
+                               data-ng-click="searchStudent()" style="border-radius: 15px;" >
+                                <i class="fa fa-search" style="color: blue;" aria-hidden="true"></i>
+                            </a>
+                            <a href="javascript:;" class="btn btn-xs btn-default btn-round"
+                               data-ng-click="clearSearch()" style="border-radius: 15px;" >
+                                <i class="fa fa-eraser" style="color: blue;" aria-hidden="true"></i>
+                            </a>
                         </td>
                     </tr>
                 </table>
@@ -259,7 +284,6 @@
                         <span style="padding-right: 100px;">{{gradeTitle}}</span>
                     </div>
                     <data-course-reg-type-legend examtype="{{current_examTypeId}}"></data-course-reg-type-legend>
-
                     <div class="clearfix"></div>
                     <scrollable-table watch="noneSubmittedGrades" ng-style="{height: noneSubmittedGrades.length > 10 ? 450 : (38 + (noneSubmittedGrades.length * 35.5))}">
                         <table class="table table-striped table-bordered">
@@ -305,7 +329,7 @@
                                     <img  class='img_tooltip'  id="tooltip_total_{{response.studentId}}"/>
                                 </td>
                                 <td id="td_grade_letter_{{response.studentId}}" style="text-align: center;">
-                                    <select  style="width: 100px;border: 1px solid grey;padding: 0px;height: 23px;" id="grade_letter_{{response.studentId}}" disabled="disabled">
+                                    <select  class="gradeSelectBox" id="grade_letter_{{response.studentId}}" disabled="disabled">
                                         <option value="">Select Grade</option>
                                         <option ng-selected="{{gradeLetter.id == response.gradeLetter}}" data-ng-repeat="gradeLetter in data.gradeLetterOptions" value="{{gradeLetter.id}}">{{gradeLetter.name}}</option>
                                     </select>
@@ -363,17 +387,17 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="response in candidatesGrades" data-emit-last-repeater-element>
-                                <td ng-style="calculateStyle(response.regType)">{{response.studentId}}</td>
-                                <td>{{ response.studentName }}</td>
-                                <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.quiz}}</td>
-                                <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.classPerformance}}</td>
-                                <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.partA}}</td>
-                                <td style="padding-right: 30px;text-align: right;" ng-show="toggleColumn && courseType=='THEORY'">{{response.partB}}</td>
-                                <td style="padding-right: 30px;text-align: right;">{{response.total}}</td>
-                                <td style="text-align: center;">{{response.gradeLetter}}</td>
-                                <td style="text-align: center;"><input type="checkbox" id="recheck_{{response.studentId}}" data-ng-click="onRecheckClick(currentActor,response)" ng-checked="response.recheckStatusId"/> </td>
-                                <td style="text-align: center;"><input type="checkbox" id="approve_{{response.studentId}}" data-ng-click="onApproveClick(currentActor,response)"
+                            <tr ng-repeat="response in candidatesGrades" row-id="{{response.studentId}}" id="row_{{response.studentId}}" data-emit-last-repeater-element>
+                                <td id="sid_{{response.studentId}}" ng-style="calculateStyle(response.regType)">{{response.studentId}}</td>
+                                <td id="td_sname_{{response.studentId}}">{{ response.studentName }}</td>
+                                <td id="td_quiz_{{response.studentId}}"  style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.quiz}}</td>
+                                <td id="td_cperf_{{response.studentId}}"  style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.classPerformance}}</td>
+                                <td id="td_parta_{{response.studentId}}" style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.partA}}</td>
+                                <td id="td_partb_{{response.studentId}}" style="padding-right: 30px;text-align: right;" ng-show="toggleColumn && courseType=='THEORY'">{{response.partB}}</td>
+                                <td id="td_total_{{response.studentId}}" style="padding-right: 30px;text-align: right;">{{response.total}}</td>
+                                <td id="td_grade_letter_{{response.studentId}}" style="text-align: center;">{{response.gradeLetter}}</td>
+                                <td id="td_recheck_{{response.studentId}}" style="text-align: center;"><input type="checkbox" id="recheck_{{response.studentId}}" data-ng-click="onRecheckClick(currentActor,response)" ng-checked="response.recheckStatusId"/> </td>
+                                <td id="td_approved_{{response.studentId}}" style="text-align: center;"><input type="checkbox" id="approve_{{response.studentId}}" data-ng-click="onApproveClick(currentActor,response)"
                                                                        ng-checked="((gradeSubmissionStatus =='1' && response.statusId==3) || (gradeSubmissionStatus =='3' && response.statusId==5) || (gradeSubmissionStatus =='5' && response.statusId==7))
                                                                        && response.recheckStatusId==0"/> </td>
                             </tr>
@@ -439,15 +463,15 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="response in recheckCandidatesGrades" data-emit-last-repeater-element>
-                                <td ng-style="calculateStyle(response.regType)">{{response.studentId}}</td>
-                                <td>{{ response.studentName }}</td>
-                                <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.quiz}}</td>
-                                <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.classPerformance}}</td>
-                                <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.partA}}</td>
-                                <td style="padding-right: 30px;text-align: right;" ng-show="toggleColumn && courseType=='THEORY'">{{response.partB}}</td>
-                                <td style="padding-right: 30px;text-align: right;">{{response.total}}</td>
-                                <td style="text-align: center;">{{response.gradeLetter}}</td>
+                            <tr ng-repeat="response in recheckCandidatesGrades" row-id="{{response.studentId}}" id="row_{{response.studentId}}" data-emit-last-repeater-element>
+                                <td id="sid_{{response.studentId}}" ng-style="calculateStyle(response.regType)">{{response.studentId}}</td>
+                                <td id="td_sname_{{response.studentId}}">{{ response.studentName }}</td>
+                                <td id="td_quiz_{{response.studentId}}" style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.quiz}}</td>
+                                <td id="td_cperf_{{response.studentId}}" style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.classPerformance}}</td>
+                                <td id="td_parta_{{response.studentId}}"  style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.partA}}</td>
+                                <td id="td_partb_{{response.studentId}}" style="padding-right: 30px;text-align: right;" ng-show="toggleColumn && courseType=='THEORY'">{{response.partB}}</td>
+                                <td id="td_total_{{response.studentId}}" style="padding-right: 30px;text-align: right;">{{response.total}}</td>
+                                <td id="td_grade_letter_{{response.studentId}}" style="text-align: center;">{{response.gradeLetter}}</td>
                             </tr>
                             </tbody>
                         </table>
@@ -462,7 +486,7 @@
                 <div ng-if="recheckCandidatesGrades.length >0 &&  ((gradeSubmissionStatus =='2' || gradeSubmissionStatus =='4' || gradeSubmissionStatus =='6') && currentActor=='preparer')" id="top_div" >
                     <div class="btn btn-blue" style="margin-top: 20px;" >
                         <i class="fa fa-check-square-o"></i>
-                        <span style="padding-right: 100px;">Requested for Recheck Grades</span>
+                        <span style="padding-right: 100px;">Requested for Recheck Grades <span class="badge badge-total pull-right">{{recheckCandidatesGrades.length}}</span></span>
                     </div>
                     <data-course-reg-type-legend examtype="{{current_examTypeId}}"></data-course-reg-type-legend>
                     <div class="clearfix"></div>
@@ -517,14 +541,14 @@
                                     <img  class='img_tooltip'  id="tooltip_total_{{response.studentId}}"/>
                                 </td>
                                 <td id="td_grade_letter_{{response.studentId}}">
-                                    <select  style="width: 100px;border: 1px solid grey;padding: 0px;height: 23px;" id="grade_letter_{{response.studentId}}" disabled="disabled">
+                                    <select  class="gradeSelectBox" id="grade_letter_{{response.studentId}}" disabled="disabled">
                                         <option value="">Select Grade</option>
                                         <option ng-selected="{{gradeLetter.id == response.gradeLetter}}" data-ng-repeat="gradeLetter in data.gradeLetterOptions" value="{{gradeLetter.id}}">{{gradeLetter.name}}</option>
                                     </select>
                                     <img  class='img_tooltip'  id="tooltip_grade_letter_{{response.studentId}}"/>
                                     <input type="hidden" id="reg_type_{{response.studentId}}" value="{{response.regType}}"/>
                                 </td>
-                                <td style="text-align: center;">
+                                <td id="td_rechecked_{{response.studentId}}" style="text-align: center;">
                                     <input type="checkbox" id="rechecked_{{response.studentId}}"  ng-checked="response.statusId==1"/>
                                 </td>
                             </tr>
@@ -554,7 +578,7 @@
                 <div ng-if="submittedGrades.length>0  &&  ((currentActor=='scrutinizer' && gradeSubmissionStatus !='1') || (currentActor!='scrutinizer')) ">
                     <div class="btn btn-blue" style="margin-top: 20px;">
                         <i class="fa fa-check-circle-o"></i>
-                        <span style="padding-right: 100px;">Submitted Grades</span>
+                        <span style="padding-right: 100px;">Submitted Grades<span class="badge badge-total pull-right">{{submittedGrades.length}}</span></span>
                     </div>
                     <data-course-reg-type-legend examtype="{{current_examTypeId}}"></data-course-reg-type-legend>
                     <div class="clearfix"></div>
@@ -574,15 +598,17 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="response in submittedGrades" data-emit-last-repeater-element>
-                                <td ng-style="calculateStyle(response.regType)" style="text-align: center;">{{response.studentId}}</td>
-                                <td>{{ response.studentName }}</td>
-                                <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.quiz}}</td>
-                                <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.classPerformance}}</td>
-                                <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.partA}}</td>
-                                <td style="padding-right: 30px;text-align: right;" ng-show="toggleColumn && courseType=='THEORY'">{{response.partB}}</td>
-                                <td style="padding-right: 30px;text-align: right;">{{response.total}}</td>
-                                <td style="text-align: center;">{{response.gradeLetter}}</td>
+                            <tr ng-repeat="response in submittedGrades" row-id="{{response.studentId}}" id="row_{{response.studentId}}" data-emit-last-repeater-element>
+                                <td id="sid_{{response.studentId}}" ng-style="calculateStyle(response.regType)" style="text-align: center;">{{response.studentId}}</td>
+                                <td id="td_sname_{{response.studentId}}">{{ response.studentName }}</td>
+                                <td id="td_quiz_{{response.studentId}}" style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.quiz}}</td>
+                                <td id="td_cperf_{{response.studentId}}"  style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.classPerformance}}</td>
+                                <td id="td_parta_{{response.studentId}}" style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.partA}}</td>
+                                <td id="td_partb_{{response.studentId}}" style="padding-right: 30px;text-align: right;" ng-show="toggleColumn && courseType=='THEORY'">{{response.partB}}</td>
+                                <td id="td_total_{{response.studentId}}" style="padding-right: 30px;text-align: right;">{{response.total}}</td>
+                                <td id="td_grade_letter_{{response.studentId}}" style="text-align: center;">{{response.gradeLetter}}
+                                    <input type="hidden" id="reg_type_{{response.studentId}}" value="{{response.regType}}"/>
+                                </td>
                             </tr>
                             </tbody>
                         </table>
@@ -620,15 +646,15 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="response in scrutinizedGrades" data-emit-last-repeater-element>
-                                <td ng-style="calculateStyle(response.regType)">{{response.studentId}}</td>
-                                <td>{{ response.studentName }}</td>
-                                <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.quiz}}</td>
-                                <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.classPerformance}}</td>
-                                <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.partA}}</td>
-                                <td style="padding-right: 30px;text-align: right;" ng-show="toggleColumn && courseType=='THEORY'">{{response.partB}}</td>
-                                <td style="padding-right: 30px;text-align: right;">{{response.total}}</td>
-                                <td style="text-align: center;">{{response.gradeLetter}}</td>
+                            <tr ng-repeat="response in scrutinizedGrades" row-id="{{response.studentId}}" id="row_{{response.studentId}}" data-emit-last-repeater-element>
+                                <td id="sid_{{response.studentId}}" ng-style="calculateStyle(response.regType)">{{response.studentId}}</td>
+                                <td id="td_sname_{{response.studentId}}">{{ response.studentName }}</td>
+                                <td id="td_quiz_{{response.studentId}}"  style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.quiz}}</td>
+                                <td id="td_cperf_{{response.studentId}}"  style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.classPerformance}}</td>
+                                <td id="td_parta_{{response.studentId}}" style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.partA}}</td>
+                                <td id="td_partb_{{response.studentId}}" style="padding-right: 30px;text-align: right;" ng-show="toggleColumn && courseType=='THEORY'">{{response.partB}}</td>
+                                <td id="td_total_{{response.studentId}}" style="padding-right: 30px;text-align: right;">{{response.total}}</td>
+                                <td id="td_grade_letter_{{response.studentId}}" style="text-align: center;">{{response.gradeLetter}}</td>
                             </tr>
                             </tbody>
                         </table>
@@ -666,15 +692,15 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="response in approvedGrades" data-emit-last-repeater-element>
-                                <td ng-style="calculateStyle(response.regType)">{{response.studentId}}</td>
-                                <td>{{ response.studentName }}</td>
-                                <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.quiz}}</td>
-                                <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.classPerformance}}</td>
-                                <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.partA}}</td>
-                                <td style="padding-right: 30px;text-align: right;" ng-show="toggleColumn && courseType=='THEORY'">{{response.partB}}</td>
-                                <td style="padding-right: 30px;text-align: right;">{{response.total}}</td>
-                                <td style="text-align: center;">{{response.gradeLetter}}</td>
+                            <tr ng-repeat="response in approvedGrades" row-id="{{response.studentId}}" id="row_{{response.studentId}}" data-emit-last-repeater-element>
+                                <td id="sid_{{response.studentId}}" ng-style="calculateStyle(response.regType)">{{response.studentId}}</td>
+                                <td id="td_sname_{{response.studentId}}">{{ response.studentName }}</td>
+                                <td id="td_quiz_{{response.studentId}}"  style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.quiz}}</td>
+                                <td id="td_cperf_{{response.studentId}}" style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.classPerformance}}</td>
+                                <td id="td_parta_{{response.studentId}}" style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.partA}}</td>
+                                <td id="td_partb_{{response.studentId}}" style="padding-right: 30px;text-align: right;" ng-show="toggleColumn && courseType=='THEORY'">{{response.partB}}</td>
+                                <td id="td_total_{{response.studentId}}" style="padding-right: 30px;text-align: right;">{{response.total}}</td>
+                                <td id="td_grade_letter_{{response.studentId}}" style="text-align: center;">{{response.gradeLetter}}</td>
                             </tr>
                             </tbody>
                         </table>
@@ -711,15 +737,15 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="response in acceptedGrades" id="{{response.studentId}}" data-emit-last-repeater-element>
-                                <td ng-style="calculateStyle(response.regType)">{{response.studentId}}</td>
-                                <td>{{ response.studentName }}</td>
-                                <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.quiz}}</td>
-                                <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.classPerformance}}</td>
-                                <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.partA}}</td>
-                                <td style="padding-right: 30px;text-align: right;" ng-show="toggleColumn && courseType=='THEORY'">{{response.partB}}</td>
-                                <td style="padding-right: 30px;text-align: right;">{{response.total}}</td>
-                                <td style="text-align: center;">{{response.gradeLetter}}</td>
+                            <tr ng-repeat="response in acceptedGrades" row-id="{{response.studentId}}" id="row_{{response.studentId}}" data-emit-last-repeater-element>
+                                <td  id="sid_{{response.studentId}}" ng-style="calculateStyle(response.regType)">{{response.studentId}}</td>
+                                <td id="td_sname_{{response.studentId}}">{{ response.studentName }}</td>
+                                <td id="td_quiz_{{response.studentId}}"  style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.quiz}}</td>
+                                <td id="td_cperf_{{response.studentId}}"  style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.classPerformance}}</td>
+                                <td id="td_parta_{{response.studentId}}" style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.partA}}</td>
+                                <td id="td_partb_{{response.studentId}}" style="padding-right: 30px;text-align: right;" ng-show="toggleColumn && courseType=='THEORY'">{{response.partB}}</td>
+                                <td id="td_total_{{response.studentId}}" style="padding-right: 30px;text-align: right;">{{response.total}}</td>
+                                <td id="td_grade_letter_{{response.studentId}}" style="text-align: center;">{{response.gradeLetter}}</td>
                             </tr>
                             </tbody>
                         </table>
@@ -754,14 +780,14 @@
                                 </thead>
                                 <tbody>
                                 <tr ng-repeat="response in recheckAcceptedGrades" id="recheck_accepted_{{response.studentId}}">
-                                    <td>{{response.studentId}}</td>
-                                    <td>{{ response.studentName }}</td>
-                                    <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.quiz}}</td>
-                                    <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.classPerformance}}</td>
-                                    <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.partA}}</td>
-                                    <td style="padding-right: 30px;text-align: right;" ng-show="toggleColumn && courseType=='THEORY'">{{response.partB}}</td>
-                                    <td style="padding-right: 30px;text-align: right;">{{response.total}}</td>
-                                    <td style="text-align: center;">{{response.gradeLetter}}</td>
+                                    <td id="sid_{{response.studentId}}">{{response.studentId}}</td>
+                                    <td id="td_sname_{{response.studentId}}">{{ response.studentName }}</td>
+                                    <td id="td_quiz_{{response.studentId}}"  style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.quiz}}</td>
+                                    <td id="td_cperf_{{response.studentId}}"  style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.classPerformance}}</td>
+                                    <td id="td_parta_{{response.studentId}}" style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.partA}}</td>
+                                    <td id="td_partb_{{response.studentId}}" style="padding-right: 30px;text-align: right;" ng-show="toggleColumn && courseType=='THEORY'">{{response.partB}}</td>
+                                    <td id="td_total_{{response.studentId}}" style="padding-right: 30px;text-align: right;">{{response.total}}</td>
+                                    <td id="td_grade_letter_{{response.studentId}}"  style="text-align: center;">{{response.gradeLetter}}</td>
                                     <td style="text-align: center;" ></td>
                                 </tr>
                                 </tbody>
@@ -803,15 +829,15 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr ng-repeat="response in recheckAcceptedGrades">
-                                    <td>{{response.studentId}}</td>
-                                    <td>{{ response.studentName }}</td>
-                                    <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.quiz}}</td>
-                                    <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.classPerformance}}</td>
-                                    <td style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.partA}}</td>
-                                    <td style="padding-right: 30px;text-align: right;" ng-show="toggleColumn && courseType=='THEORY'">{{response.partB}}</td>
-                                    <td style="padding-right: 30px;text-align: right;">{{response.total}}</td>
-                                    <td style="text-align: center;">{{response.gradeLetter}}</td>
+                                <tr ng-repeat="response in recheckAcceptedGrades" row-id="{{response.studentId}}" id="row_{{response.studentId}}">
+                                    <td id="sid_{{response.studentId}}">{{response.studentId}}</td>
+                                    <td id="td_sname_{{response.studentId}}">{{ response.studentName }}</td>
+                                    <td id="td_quiz_{{response.studentId}}"  style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.quiz}}</td>
+                                    <td id="td_cperf_{{response.studentId}}"  style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.classPerformance}}</td>
+                                    <td id="td_parta_{{response.studentId}}" style="padding-right: 30px;text-align: right;" data-ng-show="courseType=='THEORY'">{{response.partA}}</td>
+                                    <td id="td_partb_{{response.studentId}}" style="padding-right: 30px;text-align: right;" ng-show="toggleColumn && courseType=='THEORY'">{{response.partB}}</td>
+                                    <td id="td_total_{{response.studentId}}" style="padding-right: 30px;text-align: right;">{{response.total}}</td>
+                                    <td id="td_grade_letter_{{response.studentId}}" style="text-align: center;">{{response.gradeLetter}}</td>
                                 </tr>
                                 </tbody>
                             </table>

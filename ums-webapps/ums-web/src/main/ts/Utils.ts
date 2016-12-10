@@ -44,10 +44,19 @@ module ums {
     static XLS: string="application/vnd.ms-excel";
 
     /**
-     * Student Id block colors
+     * Student Id block colors (Advisor Assignment from Admin Officer Account)
      */
     static DEFAULT_COLOR: string="#DEF";
     static SELECTED_COLOR: string="#FADBD8";
+
+    /**
+     * Grade Submission Yellow Error Row Color
+     */
+    static ERROR_ROW: string="#FCDC3B";
+    static SEARCH_ROW: string="#A2D9CE";
+
+
+
 
     public static getFileContentType(fileType:string):string {
       var contentType:string="";
