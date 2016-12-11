@@ -6,7 +6,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.immutable.User;
+import org.ums.domain.model.mutable.MutableEmployee;
+import org.ums.manager.EmployeeManager;
 import org.ums.manager.UserManager;
 import org.ums.message.MessageResource;
 import org.ums.response.type.GenericMessageResponse;
@@ -24,6 +27,9 @@ public class LoginService {
 
   @Autowired
   private UserManager mUserManager;
+
+  @Autowired
+  private EmployeeManager mEmployeeManager;
 
   @Autowired
   private PasswordService mPasswordService;
@@ -75,9 +81,10 @@ public class LoginService {
       mLogger.info("Send an password token email again.");
     }
     // ToDo: Need to check whether the user has an email address in the database
+    // Here for the time being we only considered employee email address, But later on we will consider student's email address as well....
+    Employee employee=mEmployeeManager.getByEmployeeId(user.getEmployeeId());
     emailService.setUser(user);
-    emailService.sendEmail(dummyEmail, dummyEmail, "Reset Your IUMS Password");
-
+    emailService.sendEmail(employee.getEmailAddress(), dummyEmail, "Reset Your IUMS Password");
     return new GenericMessageResponse(GenericResponse.ResponseType.SUCCESS);
 
   }
