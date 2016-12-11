@@ -13,6 +13,8 @@ import java.util.List;
  */
 public interface AdmissionMeritListManager extends
     ContentManager<AdmissionMeritList, MutableAdmissionMeritList, Integer> {
-  List<AdmissionMeritList> getMeritList(final Semester pSemester, final Faculty pFaculty,
+  List<AdmissionMeritList> getMeritList(
+      final Semester pSemester,
+      final Faculty pFaculty,
       final AdmissionGroupType pAdmissionGroup);
 }
