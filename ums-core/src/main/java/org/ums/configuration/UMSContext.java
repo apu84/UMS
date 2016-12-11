@@ -89,6 +89,13 @@ public class UMSContext {
   }
 
   @Bean
+  AdmissionMeritListManager admissionMeritListManager(){
+    AdmissionMeritListCache admissionMeritListCache = new AdmissionMeritListCache(mCacheFactory.getCacheManager());
+    admissionMeritListCache.setManager(new PersistentAdmissionMeritListDao(mTemplateFactory.getJdbcTemplate()));
+    return admissionMeritListCache;
+  }
+
+  @Bean
   FacultyManager facultyManager() {
     FacultyCache facultyCache = new FacultyCache(mCacheFactory.getCacheManager());
     facultyCache.setManager(new PersistentFacultyDao(mTemplateFactory.getJdbcTemplate()));
