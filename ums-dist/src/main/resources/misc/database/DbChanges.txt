@@ -257,3 +257,37 @@ create trigger trg_param_setting_id
   comment on COLUMN admission_merit_list.admission_group is '1=GENERAL, 2= Freedom Fighter, 3= Remote Area, 4= English Medium';
 
   //*************************************** end admission merit list *******************************************************
+
+
+
+  //************************************** admissionStudents **************************************************************
+create table admission_students
+(
+  semester_id number,
+  receipt_id varchar2(25),
+  pin varchar2(25),
+  hsc_board VARCHAR2(25),
+  hsc_roll VARCHAR2(25),
+  hsc_regno VARCHAR2(25),
+  hsc_year number,
+  hsc_group varchar(18),
+  ssc_board varchar2(25),
+  ssc_roll VARCHAR2(25),
+  ssc_regno VARCHAR2(25),
+  ssc_year number,
+  ssc_group varchar2(25),
+  gender varchar2(1),
+  date_of_birth DATE,
+  student_name varchar2(50),
+  father_name varchar2(50),
+  mother_name varchar2(50),
+  ssc_gpa number(1,2),
+  hsc_gpa number(1,2),
+  quota varchar2(2),
+  admission_roll varchar2(25),
+  merit_sl_no number,
+  student_id varchar2(9),
+  allocated_program_id number,
+  migration_status number,
+  CONSTRAINT admission_students_uniq UNIQUE (semester_id,receipt_id,pin,ssc_roll,hsc_roll,quota,student_id, allocated_program_id)
+);
