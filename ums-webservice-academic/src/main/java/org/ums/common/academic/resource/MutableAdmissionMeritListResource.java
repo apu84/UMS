@@ -11,12 +11,12 @@ import javax.ws.rs.core.Response;
 /**
  * Created by Monjur-E-Morshed on 11-Dec-16.
  */
-public class MutableAdmissionMeritListResource extends Resource{
+public class MutableAdmissionMeritListResource extends Resource {
   @Autowired
   protected AdmissionMeritListResourceHelper mHelper;
 
   @POST
-  public Response saveNewMeritList(final JsonObject pJsonObject) throws Exception{
+  public Response saveNewMeritList(final JsonObject pJsonObject) throws Exception {
     return mHelper.post(pJsonObject, mUriInfo);
   }
 }

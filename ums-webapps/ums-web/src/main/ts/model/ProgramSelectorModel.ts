@@ -83,7 +83,8 @@ module ums {
 
       this.setSemesters = (pSemesters: any) => {
         semesters = pSemesters;
-        // semesters.splice(0, 0, appConstants.initSemester[0]);
+        //semesters.splice(0, 0, appConstants.initSemester[0]);
+        //setTimeout(function(){$("#semester_id").val((pSemesters[1]).id);},200);
       };
 
       this.getAppConstants = (): Constants => {
@@ -144,6 +145,8 @@ module ums {
 
       this.programId = '';
       this.departmentId = '';
+      this.programTypeId = String(Utils.UG);
+      this.loadSemester();
     }
 
     public setDepartment(departmentId: string, preSelected?: boolean): void {
@@ -238,6 +241,7 @@ module ums {
             (json: any, etag: string) => {
               this.setSemesters(json.entries);
               if (this.isSemesterEnabled()) {
+                console.log(this.getSemesters());
                 this.semesterId = (this.getSemesters()[0]).id +'';
               }
             },

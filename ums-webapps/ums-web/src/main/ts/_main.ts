@@ -33,6 +33,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/MainController.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/ChangePassword.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/Logout.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/controller/UserGuide.ts'/>
 
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/FlushCache.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/LeftMenu.ts'/>

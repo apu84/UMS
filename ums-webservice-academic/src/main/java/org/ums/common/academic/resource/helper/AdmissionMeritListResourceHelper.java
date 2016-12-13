@@ -26,7 +26,8 @@ import java.util.List;
  * Created by Monjur-E-Morshed on 11-Dec-16.
  */
 @Component
-public class AdmissionMeritListResourceHelper extends ResourceHelper<AdmissionMeritList, MutableAdmissionMeritList, Integer>{
+public class AdmissionMeritListResourceHelper extends
+    ResourceHelper<AdmissionMeritList, MutableAdmissionMeritList, Integer> {
 
   @Autowired
   private AdmissionMeritListManager mManager;
@@ -40,14 +41,12 @@ public class AdmissionMeritListResourceHelper extends ResourceHelper<AdmissionMe
   @Autowired
   private FacultyManager mFacultyManager;
 
-
-
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
     List<MutableAdmissionMeritList> admissionMeritLists = new ArrayList<>();
     JsonArray entries = pJsonObject.getJsonArray("entries");
 
-    for(int i=0;i<entries.size();i++){
+    for(int i = 0; i < entries.size(); i++) {
       LocalCache localCache = new LocalCache();
       JsonObject jsonObject = entries.getJsonObject(i);
       PersistentAdmissionMeritList admissionMeritList = new PersistentAdmissionMeritList();
@@ -62,24 +61,17 @@ public class AdmissionMeritListResourceHelper extends ResourceHelper<AdmissionMe
     return builder.build();
   }
 
+  public JsonObject getMeritList(final int pSemesterId, final int pFacultyId,
+      int pAdmissionGroupId, final UriInfo pUriInfo) {
+    List<AdmissionMeritList> admissionMeritLists =
+        getContentManager().getMeritList(mSemesterManager.get(pSemesterId),
+            mFacultyManager.get(pFacultyId), AdmissionGroupType.get(pAdmissionGroupId));
 
-  public JsonObject getMeritList(final int pSemesterId,
-                                 final int pFacultyId,
-                                 int pAdmissionGroupId,
-                                 final UriInfo pUriInfo){
-    List<AdmissionMeritList> admissionMeritLists = getContentManager()
-        .getMeritList(
-            mSemesterManager.get(pSemesterId),
-            mFacultyManager.get(pFacultyId),
-            AdmissionGroupType.get(pAdmissionGroupId)
-        );
-
-    return buildAdmissionMeritList(admissionMeritLists,pUriInfo);
+    return buildAdmissionMeritList(admissionMeritLists, pUriInfo);
   }
 
-
-
-  private JsonObject buildAdmissionMeritList(final List<AdmissionMeritList> pMeritLists, final UriInfo pUriInfo){
+  private JsonObject buildAdmissionMeritList(final List<AdmissionMeritList> pMeritLists,
+      final UriInfo pUriInfo) {
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();

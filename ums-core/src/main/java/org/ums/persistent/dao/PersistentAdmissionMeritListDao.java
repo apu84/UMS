@@ -36,40 +36,31 @@ public class PersistentAdmissionMeritListDao extends AdmissionMeritListDaoDecora
     mJdbcTemplate = pJdbcTemplate;
   }
 
-
   @Override
   public List<AdmissionMeritList> getAll() {
-    String query=SELECT_ONE;
+    String query = SELECT_ONE;
     return mJdbcTemplate.query(query, new AdmissionRowMapper());
   }
 
   @Override
-  public List<AdmissionMeritList> getMeritList(Semester pSemester, Faculty pFaculty, AdmissionGroupType pAdmissionGroup) {
+  public List<AdmissionMeritList> getMeritList(Semester pSemester, Faculty pFaculty,
+      AdmissionGroupType pAdmissionGroup) {
     return super.getMeritList(pSemester, pFaculty, pAdmissionGroup);
   }
 
-
-
   @Override
   public int create(List<MutableAdmissionMeritList> pMutableList) {
-    String query=INSERT_ONE;
+    String query = INSERT_ONE;
     return mJdbcTemplate.batchUpdate(query, getInsertParamList(pMutableList)).length;
   }
 
-
-  private List<Object[]> getInsertParamList(List<MutableAdmissionMeritList> pMeritLists){
+  private List<Object[]> getInsertParamList(List<MutableAdmissionMeritList> pMeritLists) {
     List<Object[]> params = new ArrayList<>();
 
-    for(AdmissionMeritList meritList: pMeritLists){
-      params.add(new Object[]{
-          meritList.getSemester().getId(),
-          meritList.getMeritListSerialNo(),
-          meritList.getReceiptId(),
-          meritList.getAdmissionRoll(),
-          meritList.getCandidateName(),
-          meritList.getAdmissionGroup().getId(),
-          meritList.getFaculty().getId()
-      });
+    for(AdmissionMeritList meritList : pMeritLists) {
+      params.add(new Object[] {meritList.getSemester().getId(), meritList.getMeritListSerialNo(),
+          meritList.getReceiptId(), meritList.getAdmissionRoll(), meritList.getCandidateName(),
+          meritList.getAdmissionGroup().getId(), meritList.getFaculty().getId()});
     }
     return params;
   }

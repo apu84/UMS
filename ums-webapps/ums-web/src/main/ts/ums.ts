@@ -751,6 +751,12 @@ module ums {
             }]
           }
         })
+        .state('userGuide', {
+          url: "/userGuide",
+          controller: 'UserGuide',
+          templateUrl: 'views/common/user-guide.html'
+        })
+
       //In database use /dummyController/H or /dummyController/T in the location column
       //https://localhost/ums-web/iums/#/dummyConroller/T
       //https://localhost/ums-web/iums/#/dummyConroller/H
