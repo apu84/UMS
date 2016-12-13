@@ -81,8 +81,9 @@ public class LoginService {
       mLogger.info("Send an password token email again.");
     }
     // ToDo: Need to check whether the user has an email address in the database
-    // Here for the time being we only considered employee email address, But later on we will consider student's email address as well....
-    Employee employee=mEmployeeManager.getByEmployeeId(user.getEmployeeId());
+    // Here for the time being we only considered employee email address, But later on we will
+    // consider student's email address as well....
+    Employee employee = mEmployeeManager.getByEmployeeId(user.getEmployeeId());
     emailService.setUser(user);
     emailService.sendEmail(employee.getEmailAddress(), dummyEmail, "Reset Your IUMS Password");
     return new GenericMessageResponse(GenericResponse.ResponseType.SUCCESS);
