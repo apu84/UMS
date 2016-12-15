@@ -9,7 +9,9 @@ import org.ums.util.CacheUtil;
 /**
  * Created by Monjur-E-Morshed on 12-Dec-16.
  */
-public class AdmissionStudentCache extends ContentCache<AdmissionStudent, MutableAdmissionStudent, String, AdmissionStudentManager> implements AdmissionStudentManager{
+public class AdmissionStudentCache extends
+    ContentCache<AdmissionStudent, MutableAdmissionStudent, String, AdmissionStudentManager>
+    implements AdmissionStudentManager {
 
   private CacheManager<AdmissionStudent, String> mCacheManager;
 

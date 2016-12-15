@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * Created by Monjur-E-Morshed on 12-Dec-16.
  */
-public enum  MigrationStatus {
+public enum MigrationStatus {
   NOT_MIGRATED(0, "Not Migrated"),
   MIGRATED(1, "Migrated");
 
@@ -15,11 +15,11 @@ public enum  MigrationStatus {
 
   private static final Map<Integer, MigrationStatus> lookup = new HashMap<>();
 
-
   private MigrationStatus(int id, String label) {
     this.id = id;
     this.label = label;
   }
+
   public static MigrationStatus get(final int pId) {
     return lookup.get(pId);
   }

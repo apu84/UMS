@@ -19,7 +19,7 @@ import javax.ws.rs.core.UriInfo;
  * Created by Monjur-E-Morshed on 14-Dec-16.
  */
 @Component
-public class AdmissionStudentBuilder implements Builder<AdmissionStudent, MutableAdmissionStudent>{
+public class AdmissionStudentBuilder implements Builder<AdmissionStudent, MutableAdmissionStudent> {
 
   @Autowired
   SemesterManager mSemesterManager;
@@ -28,7 +28,8 @@ public class AdmissionStudentBuilder implements Builder<AdmissionStudent, Mutabl
   ProgramManager mProgramManager;
 
   @Override
-  public void build(JsonObjectBuilder pBuilder, AdmissionStudent pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
+  public void build(JsonObjectBuilder pBuilder, AdmissionStudent pReadOnly, UriInfo pUriInfo,
+      LocalCache pLocalCache) {
     pBuilder.add("semesterId", pReadOnly.getSemester().getId());
     pBuilder.add("semesterName", pReadOnly.getSemester().getName());
     pBuilder.add("receiptId", pReadOnly.getId());
@@ -51,18 +52,18 @@ public class AdmissionStudentBuilder implements Builder<AdmissionStudent, Mutabl
     pBuilder.add("sscGpa", pReadOnly.getSSCGpa());
     pBuilder.add("hscGpa", pReadOnly.getHSCGpa());
     pBuilder.add("quota", pReadOnly.getQuota());
-    if(pReadOnly.getAdmissionRoll()!=null)
+    if(pReadOnly.getAdmissionRoll() != null)
       pBuilder.add("admissionRoll", pReadOnly.getAdmissionRoll());
-    if(pReadOnly.getMeritSerialNo()!=null)
+    if(pReadOnly.getMeritSerialNo() != null)
       pBuilder.add("meritSlNo", pReadOnly.getMeritSerialNo());
-    if(pReadOnly.getStudentId()!=null)
+    if(pReadOnly.getStudentId() != null)
       pBuilder.add("studentId", pReadOnly.getStudentId());
-    if(pReadOnly.getAllocatedProgram()!=null){
+    if(pReadOnly.getAllocatedProgram() != null) {
       pBuilder.add("allocatedProgramId", pReadOnly.getAllocatedProgram().getId());
       pBuilder.add("programShortName", pReadOnly.getAllocatedProgram().getShortName());
       pBuilder.add("programLongName", pReadOnly.getAllocatedProgram().getLongName());
     }
-    if(pReadOnly.getMigrationStatus()!=null)
+    if(pReadOnly.getMigrationStatus() != null)
       pBuilder.add("migrationStatus", pReadOnly.getMigrationStatus().getId());
   }
 
@@ -89,15 +90,15 @@ public class AdmissionStudentBuilder implements Builder<AdmissionStudent, Mutabl
     pMutable.setSSCGpa(Double.parseDouble(pJsonObject.getString("sscGpa")));
     pMutable.setHSCGpa(Double.parseDouble(pJsonObject.getString("hscGpa")));
     pMutable.setQuota(pJsonObject.getString("quota"));
-    if(pJsonObject.getString("admissionRoll")!=null)
+    if(pJsonObject.getString("admissionRoll") != null)
       pMutable.setAdmissionRoll(pJsonObject.getString("admissionRoll"));
-    if(((Integer)pJsonObject.getInt("meritSlNo"))!=null){
+    if(((Integer) pJsonObject.getInt("meritSlNo")) != null) {
       pMutable.setMeritSerialNo(pJsonObject.getInt("meritSlNo"));
     }
-    if((Integer) pJsonObject.getInt("programId")!=null){
+    if((Integer) pJsonObject.getInt("programId") != null) {
       pMutable.setAllocatedProgram(mProgramManager.get(pJsonObject.getInt("programId")));
     }
-    if(((Integer) pJsonObject.getInt("migrationStatus"))!=null){
+    if(((Integer) pJsonObject.getInt("migrationStatus")) != null) {
       pMutable.setMigrationStatus(MigrationStatus.get(pJsonObject.getInt("migrationStatus")));
     }
   }

@@ -13,17 +13,18 @@ import org.ums.manager.SemesterManager;
 /**
  * Created by Monjur-E-Morshed on 12-Dec-16.
  */
-public class PersistentAdmissionStudent implements MutableAdmissionStudent{
+public class PersistentAdmissionStudent implements MutableAdmissionStudent {
 
   private static SemesterManager sSemesterManager;
   private static ProgramManager sProgramManager;
   private static AdmissionStudentManager sAdmissionStudentManager;
 
-  static{
+  static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
     sProgramManager = applicationContext.getBean("programManager", ProgramManager.class);
-    sAdmissionStudentManager = applicationContext.getBean("admissionStudentManager", AdmissionStudentManager.class);
+    sAdmissionStudentManager =
+        applicationContext.getBean("admissionStudentManager", AdmissionStudentManager.class);
   }
 
   private String mId;
@@ -57,11 +58,9 @@ public class PersistentAdmissionStudent implements MutableAdmissionStudent{
   private MigrationStatus mMigrationStatus;
   private String mLastModified;
 
+  public PersistentAdmissionStudent() {}
 
-  public PersistentAdmissionStudent() {
-  }
-
-  public PersistentAdmissionStudent(final PersistentAdmissionStudent pAdmissionStudent){
+  public PersistentAdmissionStudent(final PersistentAdmissionStudent pAdmissionStudent) {
     mId = pAdmissionStudent.getId();
     mReceiptId = pAdmissionStudent.getReceiptId();
     mSemester = pAdmissionStudent.getSemester();
@@ -112,9 +111,10 @@ public class PersistentAdmissionStudent implements MutableAdmissionStudent{
 
   @Override
   public void commit(boolean update) {
-    if(update){
+    if(update) {
       sAdmissionStudentManager.update(this);
-    }else{
+    }
+    else {
       sAdmissionStudentManager.create(this);
     }
   }
@@ -156,7 +156,8 @@ public class PersistentAdmissionStudent implements MutableAdmissionStudent{
 
   @Override
   public Semester getSemester() {
-    return mSemester==null? sSemesterManager.get(mSemesterId):sSemesterManager.validate(mSemester);
+    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
+        .validate(mSemester);
   }
 
   @Override
@@ -346,7 +347,8 @@ public class PersistentAdmissionStudent implements MutableAdmissionStudent{
 
   @Override
   public Program getAllocatedProgram() {
-    return mAllocatedProgram==null?sProgramManager.get(mAllocatedProgramId):sProgramManager.validate(mAllocatedProgram);
+    return mAllocatedProgram == null ? sProgramManager.get(mAllocatedProgramId) : sProgramManager
+        .validate(mAllocatedProgram);
   }
 
   @Override
