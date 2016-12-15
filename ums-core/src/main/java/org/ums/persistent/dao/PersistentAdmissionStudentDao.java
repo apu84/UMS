@@ -28,53 +28,23 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
   @Autowired
   private ProgramManager mProgramManager;
 
+  String SELECT_ONE = "SELECT " + "  SEMESTER_ID, " + "  RECEIPT_ID, " + "  PIN, "
+      + "  HSC_BOARD, " + "  HSC_ROLL, " + "  HSC_REGNO, " + "  HSC_YEAR, " + "  HSC_GROUP, "
+      + "  SSC_BOARD, " + "  SSC_ROLL, " + "  SSC_REGNO, " + "  SSC_YEAR, " + "  SSC_GROUP, "
+      + "  GENDER, " + "  DATE_OF_BIRTH, " + "  STUDENT_NAME, " + "  FATHER_NAME, "
+      + "  MOTHER_NAME, " + "  SSC_GPA, " + "  HSC_GPA, " + "  QUOTA, " + "  ADMISSION_ROLL, "
+      + "  MERIT_SL_NO, " + "  STUDENT_ID, " + "  ALLOCATED_PROGRAM_ID, " + "  MIGRATION_STATUS, "
+      + "  LAST_MODIFIED " + "FROM admission_students";
 
-  String SELECT_ONE="SELECT " +
-      "  SEMESTER_ID, " +
-      "  RECEIPT_ID, " +
-      "  PIN, " +
-      "  HSC_BOARD, " +
-      "  HSC_ROLL, " +
-      "  HSC_REGNO, " +
-      "  HSC_YEAR, " +
-      "  HSC_GROUP, " +
-      "  SSC_BOARD, " +
-      "  SSC_ROLL, " +
-      "  SSC_REGNO, " +
-      "  SSC_YEAR, " +
-      "  SSC_GROUP, " +
-      "  GENDER, " +
-      "  DATE_OF_BIRTH, " +
-      "  STUDENT_NAME, " +
-      "  FATHER_NAME, " +
-      "  MOTHER_NAME, " +
-      "  SSC_GPA, " +
-      "  HSC_GPA, " +
-      "  QUOTA, " +
-      "  ADMISSION_ROLL, " +
-      "  MERIT_SL_NO, " +
-      "  STUDENT_ID, " +
-      "  ALLOCATED_PROGRAM_ID, " +
-      "  MIGRATION_STATUS, " +
-      "  LAST_MODIFIED " +
-      "FROM admission_students";
-
-
-  String INSERT_ONE="INSERT INTO DB_IUMS.ADMISSION_STUDENTS  " +
-      "(SEMESTER_ID, RECEIPT_ID, PIN, HSC_BOARD, HSC_ROLL,  " +
-      " HSC_REGNO, HSC_YEAR, HSC_GROUP, SSC_BOARD, SSC_ROLL,  " +
-      " SSC_REGNO, SSC_YEAR, SSC_GROUP, GENDER, DATE_OF_BIRTH,  " +
-      " STUDENT_NAME, FATHER_NAME, MOTHER_NAME, SSC_GPA, HSC_GPA,  " +
-      " QUOTA, ADMISSION_ROLL, MERIT_SL_NO, STUDENT_ID, ALLOCATED_PROGRAM_ID,  " +
-      " MIGRATION_STATUS, LAST_MODIFIED)  " +
-      "VALUES  " +
-      "  (?, ?, ?, ?, ?,  " +
-      "      ?, ?, ?, ?, ?,  " +
-      "      ?, ?, ?, ?, ?, ?,  " +
-      "         ?, ?, ?, ?, ?,  " +
-      "   ?, ?, ?, ?, ?,  " +
-      "   ?, "+ getLastModifiedSql()+");";
-
+  String INSERT_ONE = "INSERT INTO DB_IUMS.ADMISSION_STUDENTS  "
+      + "(SEMESTER_ID, RECEIPT_ID, PIN, HSC_BOARD, HSC_ROLL,  "
+      + " HSC_REGNO, HSC_YEAR, HSC_GROUP, SSC_BOARD, SSC_ROLL,  "
+      + " SSC_REGNO, SSC_YEAR, SSC_GROUP, GENDER, DATE_OF_BIRTH,  "
+      + " STUDENT_NAME, FATHER_NAME, MOTHER_NAME, SSC_GPA, HSC_GPA,  "
+      + " QUOTA, ADMISSION_ROLL, MERIT_SL_NO, STUDENT_ID, ALLOCATED_PROGRAM_ID,  "
+      + " MIGRATION_STATUS, LAST_MODIFIED)  " + "VALUES  " + "  (?, ?, ?, ?, ?,  "
+      + "      ?, ?, ?, ?, ?,  " + "      ?, ?, ?, ?, ?, ?,  " + "         ?, ?, ?, ?, ?,  "
+      + "   ?, ?, ?, ?, ?,  " + "   ?, " + getLastModifiedSql() + ");";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -82,47 +52,24 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
     mJdbcTemplate = pJdbcTemplate;
   }
 
-
-
   @Override
   public int create(List<MutableAdmissionStudent> pMutableList) {
     String query = INSERT_ONE;
     return mJdbcTemplate.batchUpdate(query, getAdmissionStudentParams(pMutableList)).length;
   }
 
-
-  private List<Object[]> getAdmissionStudentParams(List<MutableAdmissionStudent> pStudents){
+  private List<Object[]> getAdmissionStudentParams(List<MutableAdmissionStudent> pStudents) {
     List<Object[]> params = new ArrayList<>();
 
-    for(AdmissionStudent student: pStudents){
-      params.add(new Object[]{
-          student.getSemester().getId(),
-          student.getReceiptId(),
-          student.getPin(),
-          student.getHSCBoard(),
-          student.getHSCRoll(),
-          student.getHSCRegNo(),
-          student.getHSCYear(),
-          student.getHSCGroup(),
-          student.getSSCBoard(),
-          student.getSSCRoll(),
-          student.getSSCRegNo(),
-          student.getSSCYear(),
-          student.getSSCGroup(),
-          student.getGender(),
-          student.getBirthDate(),
-          student.getStudentName(),
-          student.getFatherName(),
-          student.getMotherName(),
-          student.getSSCGpa(),
-          student.getHSCGpa(),
-          student.getQuota(),
-          student.getAdmissionRoll(),
-          student.getMeritSerialNo(),
-          student.getStudentId(),
-          student.getAllocatedProgram().getId(),
-          student.getMigrationStatus().getId()
-      });
+    for(AdmissionStudent student : pStudents) {
+      params.add(new Object[] {student.getSemester().getId(), student.getReceiptId(),
+          student.getPin(), student.getHSCBoard(), student.getHSCRoll(), student.getHSCRegNo(),
+          student.getHSCYear(), student.getHSCGroup(), student.getSSCBoard(), student.getSSCRoll(),
+          student.getSSCRegNo(), student.getSSCYear(), student.getSSCGroup(), student.getGender(),
+          student.getBirthDate(), student.getStudentName(), student.getFatherName(),
+          student.getMotherName(), student.getSSCGpa(), student.getHSCGpa(), student.getQuota(),
+          student.getAdmissionRoll(), student.getMeritSerialNo(), student.getStudentId(),
+          student.getAllocatedProgram().getId(), student.getMigrationStatus().getId()});
     }
     return params;
   }
