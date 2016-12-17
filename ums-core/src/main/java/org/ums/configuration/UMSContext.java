@@ -526,6 +526,13 @@ public class UMSContext {
   }
 
   @Bean
+  UserGuideManager userGuideManager() {
+    UserGuideCache userGuideCache = new UserGuideCache(mCacheFactory.getCacheManager());
+    userGuideCache.setManager(new PersistentUserGuideDao(mTemplateFactory.getJdbcTemplate()));
+    return userGuideCache;
+  }
+
+  @Bean
   CacheWarmerManager cacheWarmerManager() {
     return new CacheWarmerManagerImpl(mSecurityManager, mCacheFactory, mUMSConfiguration,
         departmentManager(), roleManager(), permissionManager(), bearerAccessTokenManager(),

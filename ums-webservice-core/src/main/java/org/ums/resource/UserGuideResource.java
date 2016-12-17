@@ -3,10 +3,14 @@ package org.ums.resource;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ums.resource.helper.NotificationResourceHelper;
+import org.ums.resource.helper.UserGuideResourceHelper;
 import org.ums.services.UserHomeService;
 
+import javax.json.JsonObject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
@@ -19,12 +23,14 @@ import java.util.Map;
 @Component
 @Path("/userGuide")
 @Produces(Resource.MIME_TYPE_JSON)
-public class UserGuide extends Resource {
+public class UserGuideResource extends Resource {
+
   @Autowired
-  private UserHomeService mUserHomeService;
+  UserGuideResourceHelper mUserGuideResourceHelper;
 
   @GET
-  public List<Map<String, String>> get(final @Context Request pRequest) {
-    return mUserHomeService.process(SecurityUtils.getSubject());
+  public JsonObject getAdditionalRolePermissions(final @Context Request pRequest) {
+    return mUserGuideResourceHelper.getUserGuides(SecurityUtils.getSubject().getPrincipal()
+        .toString(), mUriInfo);
   }
 }
