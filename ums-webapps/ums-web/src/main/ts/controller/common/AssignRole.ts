@@ -69,8 +69,6 @@ module ums {
       save['start'] = this.$scope.startDate;
       save['end'] = this.$scope.endDate;
 
-      console.debug("%o", save);
-
       this.httpClient.post('additionalRolePermissions/', save, 'application/json')
           .success((data) => {
             console.debug(data);

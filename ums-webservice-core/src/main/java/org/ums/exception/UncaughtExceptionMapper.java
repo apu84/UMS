@@ -12,6 +12,6 @@ public class UncaughtExceptionMapper extends Throwable implements
     return Response
         .status(
             new CustomReasonPhraseExceptionStatusType(Response.Status.INTERNAL_SERVER_ERROR, e
-                .getCause().getMessage())).type(MediaType.APPLICATION_JSON_TYPE).build();
+                .getMessage())).type(MediaType.APPLICATION_JSON_TYPE).build();
   }
 }

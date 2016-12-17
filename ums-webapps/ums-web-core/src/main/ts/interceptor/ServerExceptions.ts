@@ -12,10 +12,12 @@ module ums {
           if (response.config.responseType == 'arraybuffer') {
             notify.error("Failed to generate pdf/xls.");
           } else {
-            var responseJson: ExceptionMessageModel = response.data;
-            $log.debug("Internal Server Exception Occured.");
-            if (responseJson.message) {
-              notify.error(responseJson.message);
+            if (response.data) {
+              var parser = new DOMParser();
+              var doc = parser.parseFromString(response.data, 'text/html');
+              if(doc.body.querySelector('u').innerHTML) {
+                notify.error(doc.body.querySelector("u").innerHTML);
+              }
             }
           }
         }

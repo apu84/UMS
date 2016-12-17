@@ -20,7 +20,7 @@ public class DateFormat extends SimpleDateFormat {
       return super.parse(source);
     } catch(ParseException pe) {
       mLogger.error("Exception while parsing date, " + source, pe);
-      throw new RuntimeException(pe);
+      throw new RuntimeException("Unparseable date", pe);
     }
   }
 }
