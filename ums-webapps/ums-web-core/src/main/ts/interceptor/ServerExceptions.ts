@@ -15,8 +15,9 @@ module ums {
             if (response.data) {
               var parser = new DOMParser();
               var doc = parser.parseFromString(response.data, 'text/html');
-              if(doc.body.querySelector('u').innerHTML) {
-                notify.error(doc.body.querySelector("u").innerHTML);
+              var statusHtml = <HTMLElement> doc.body.querySelector('u');
+              if(statusHtml && statusHtml.innerHTML) {
+                notify.error(statusHtml.innerHTML);
               }
             }
           }
