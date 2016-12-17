@@ -90,12 +90,14 @@
 /// <reference path='service/ClassRoutineService.ts'/>
 /// <reference path='service/ExamGradeService.ts'/>
 /// <reference path='service/ClassRoomService.ts'/>
-/// <reference path='service/CourseServices.ts'/>
+/// <reference path='service/ClassRoomService.ts'/>
+/// <reference path='service/AdmissionStudentService.ts'/>
 /// <reference path='service/StudentService.ts'/>
 /// <reference path='service/TimeTracker.ts'/>
 /// <reference path='service/TimeTracker.ts'/>
 /// <reference path='service/EmployeeService.ts'/>
 /// <reference path='service/StudentService.ts'/>
+/// <reference path='service/TeacherService.ts'/>
 /// <reference path='service/TeacherService.ts'/>
 
 
@@ -140,6 +142,8 @@
 
 
 /// <reference path='controller/admission/AdmissionMeritList.ts'/>
+/// <reference path='controller/admission/AdmissionTaletalkData.ts'/>
+
 
 
 /// <reference path='Utils.ts'/>
@@ -162,6 +166,7 @@
 /// <reference path='model/NewSyllabusModel.ts'/>
 /// <reference path='model/ParameterSetting.ts'/>
 /// <reference path='model/master_data/ClassRoom.ts'/>
+/// <reference path='model/master_data/AdmissionStudent.ts'/>
 /// <reference path='model/master_data/Faculty.ts'/>
 /// <reference path='model/master_data/Course.ts'/>
 /// <reference path='model/master_data/Employee.ts'/>

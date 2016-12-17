@@ -538,6 +538,21 @@ module ums {
             }]
           }
         })
+        .state('uploadTaletalkData', {
+          url: "/uploadTaletalkData",
+          templateUrl: 'views/admission/taletalk-data-upload.html',
+          controller: 'AdmissionTaletalkData',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: [
+                  'vendors/amcharts/amcharts.js',
+                  'vendors/amcharts/serial.js'
+                ]
+              });
+            }]
+          }
+        })
         .state('studentsRoutine', {
           url: "/studentsRoutine",
           controller:'StudentsRoutine',
