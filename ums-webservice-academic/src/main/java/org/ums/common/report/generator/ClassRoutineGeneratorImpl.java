@@ -73,7 +73,7 @@ public class ClassRoutineGeneratorImpl implements ClassRoutineGenerator {
       IOException, DocumentException {
     String userId = SecurityUtils.getSubject().getPrincipal().toString();
     User user = mUserManager.get(userId);
-    Employee employee = mEmployeeManager.getByEmployeeId(user.getEmployeeId());
+    Employee employee = mEmployeeManager.get(user.getEmployeeId());
     String deptId = employee.getDepartment().getId();
     Department department = mDepartmentManager.get(deptId);
 
@@ -265,7 +265,7 @@ public class ClassRoutineGeneratorImpl implements ClassRoutineGenerator {
     if(type == ClassRoutineType.roomBasedRoutine){
       String userId = SecurityUtils.getSubject().getPrincipal().toString();
       User user = mUserManager.get(userId);
-      Employee employee = mEmployeeManager.getByEmployeeId(user.getEmployeeId());
+      Employee employee = mEmployeeManager.get(user.getEmployeeId());
       String deptId = employee.getDepartment().getId();
 
       List<Program> programs  = mProgramManager.getAll().stream().filter(p->p.getDepartmentId().equals(deptId)).collect(Collectors.toList());

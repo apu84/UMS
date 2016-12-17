@@ -11,11 +11,6 @@ public class EmployeeDaoDecorator extends
     EmployeeManager {
 
   @Override
-  public Employee getByEmployeeId(String pEmployeeId) {
-    return getManager().getByEmployeeId(pEmployeeId);
-  }
-
-  @Override
   public List<Employee> getByDesignation(String pDesignationId) {
     return getManager().getByDesignation(pDesignationId);
   }

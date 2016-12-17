@@ -1,5 +1,12 @@
 package org.ums.common.builder;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.json.*;
+import javax.ws.rs.core.UriInfo;
+
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -9,15 +16,8 @@ import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.AdditionalRolePermissions;
 import org.ums.domain.model.immutable.Navigation;
 import org.ums.domain.model.mutable.MutableAdditionalRolePermissions;
+import org.ums.formatter.DateFormat;
 import org.ums.manager.NavigationManager;
-
-import javax.json.*;
-import javax.ws.rs.core.UriInfo;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Component
 public class AdditionalRolePermissionsBuilder implements
@@ -52,15 +52,11 @@ public class AdditionalRolePermissionsBuilder implements
       LocalCache pLocalCache) {
     pMutable.setUserId(pJsonObject.getString("user"));
     pMutable.setAssignedByUserId(SecurityUtils.getSubject().getPrincipal().toString());
-    try {
-      if(pJsonObject.containsKey("start") && !StringUtils.isEmpty(pJsonObject.getString("start"))) {
-        pMutable.setValidFrom(mDateFormat.parse(pJsonObject.getString("start")));
-      }
-      if(pJsonObject.containsKey("end") && !StringUtils.isEmpty(pJsonObject.getString("end"))) {
-        pMutable.setValidTo(mDateFormat.parse(pJsonObject.getString("end")));
-      }
-    } catch(ParseException pe) {
-      throw new RuntimeException(pe);
+    if(pJsonObject.containsKey("start") && !StringUtils.isEmpty(pJsonObject.getString("start"))) {
+      pMutable.setValidFrom(mDateFormat.parse(pJsonObject.getString("start")));
+    }
+    if(pJsonObject.containsKey("end") && !StringUtils.isEmpty(pJsonObject.getString("end"))) {
+      pMutable.setValidTo(mDateFormat.parse(pJsonObject.getString("end")));
     }
     JsonArray permissions = pJsonObject.getJsonArray("permissions");
     Set<Integer> permissionSet = new HashSet<>();

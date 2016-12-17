@@ -1,25 +1,24 @@
 package org.ums.common.builder;
 
+import java.text.ParseException;
+
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+import javax.ws.rs.core.UriInfo;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
-import org.ums.common.validator.StudentValidator;
 import org.ums.domain.model.immutable.Department;
 import org.ums.domain.model.immutable.Program;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.Student;
 import org.ums.domain.model.mutable.MutableStudent;
+import org.ums.formatter.DateFormat;
 import org.ums.manager.BinaryContentManager;
 import org.ums.persistent.model.PersistentTeacher;
-import org.ums.validator.Validator;
-
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
-import javax.ws.rs.core.UriInfo;
-import java.text.DateFormat;
-import java.text.ParseException;
 
 @Component
 @Qualifier("StudentBuilder")
@@ -30,28 +29,29 @@ public class StudentBuilder implements Builder<Student, MutableStudent> {
   @Qualifier("fileContentManager")
   private BinaryContentManager<byte[]> mBinaryContentManager;
 
-  public void build(final JsonObjectBuilder pBuilder,
-                    final Student pStudent,
-                    final UriInfo pUriInfo,
-                    final LocalCache pLocalCache) {
+  public void build(final JsonObjectBuilder pBuilder, final Student pStudent,
+      final UriInfo pUriInfo, final LocalCache pLocalCache) {
 
     pBuilder.add("id", pStudent.getId());
     pBuilder.add("fullName", pStudent.getFullName());
 
-    Department department = (Department) pLocalCache.cache(() -> pStudent.getDepartment(), pStudent.getDepartmentId(), Department.class);
+    Department department = (Department) pLocalCache.cache(() -> pStudent.getDepartment(),
+        pStudent.getDepartmentId(), Department.class);
     pBuilder.add("departmentId", department.getId());
     pBuilder.add("department", pUriInfo.getBaseUriBuilder().path("academic").path("department")
         .path(String.valueOf(department.getId())).build().toString());
     pBuilder.add("departmentName", department.getLongName());
     pBuilder.add("departmentShortName", department.getShortName());
 
-    Semester semester = (Semester) pLocalCache.cache(() -> pStudent.getSemester(), pStudent.getSemesterId(), Semester.class);
+    Semester semester = (Semester) pLocalCache.cache(() -> pStudent.getSemester(),
+        pStudent.getSemesterId(), Semester.class);
     pBuilder.add("semesterId", semester.getId());
     pBuilder.add("semesterName", semester.getName());
     pBuilder.add("semester", pUriInfo.getBaseUriBuilder().path("academic").path("semester")
         .path(String.valueOf(semester.getId())).build().toString());
 
-    Program program = (Program) pLocalCache.cache(() -> pStudent.getProgram(), pStudent.getProgramId(), Program.class);
+    Program program = (Program) pLocalCache.cache(() -> pStudent.getProgram(),
+        pStudent.getProgramId(), Program.class);
     pBuilder.add("programId", program.getId());
     pBuilder.add("program", pUriInfo.getBaseUriBuilder().path("academic").path("program")
         .path(String.valueOf(program.getId())).build().toString());
@@ -71,21 +71,21 @@ public class StudentBuilder implements Builder<Student, MutableStudent> {
     pBuilder.add("phoneNo", pStudent.getPhoneNo());
     pBuilder.add("bloodGroup", pStudent.getBloodGroup());
     pBuilder.add("email", pStudent.getEmail());
-    pBuilder.add("year",pStudent.getCurrentYear());
-    pBuilder.add("academicSemester",pStudent.getCurrentAcademicSemester());
+    pBuilder.add("year", pStudent.getCurrentYear());
+    pBuilder.add("academicSemester", pStudent.getCurrentAcademicSemester());
     pBuilder.add("guardianName", pStudent.getGuardianName());
     pBuilder.add("guardianMobileNo", pStudent.getGuardianMobileNo());
     pBuilder.add("guardianPhoneNo", pStudent.getGuardianPhoneNo());
     pBuilder.add("guardianEmail", pStudent.getGuardianEmail());
 
-    if(pStudent.getAdviser().getId()!=null){
-      pBuilder.add("adviser",pStudent.getAdviser().getId());
+    if(pStudent.getAdviser().getId() != null) {
+      pBuilder.add("adviser", pStudent.getAdviser().getId());
     }
-    if(pStudent.getTheorySection()!=null){
-      pBuilder.add("section",pStudent.getTheorySection());
+    if(pStudent.getTheorySection() != null) {
+      pBuilder.add("section", pStudent.getTheorySection());
     }
 
-    pBuilder.add("status",pStudent.getStatus().getId());
+    pBuilder.add("status", pStudent.getStatus().getId());
 
   }
 
@@ -112,11 +112,7 @@ public class StudentBuilder implements Builder<Student, MutableStudent> {
     pMutableStudent.setSemesterId(Integer.parseInt(pJsonObject.getString("semesterId")));
     pMutableStudent.setFatherName(pJsonObject.getString("fatherName"));
     pMutableStudent.setMotherName(pJsonObject.getString("motherName"));
-    try {
-      pMutableStudent.setDateOfBirth(mDateFormat.parse(pJsonObject.getString("dateOfBirth")));
-    } catch(ParseException pe) {
-      throw new RuntimeException(pe);
-    }
+    pMutableStudent.setDateOfBirth(mDateFormat.parse(pJsonObject.getString("dateOfBirth")));
     pMutableStudent.setGender(pJsonObject.getString("gender"));
     pMutableStudent.setPresentAddress(pJsonObject.getString("presentAddress"));
     pMutableStudent.setPermanentAddress(pJsonObject.getString("permanentAddress"));

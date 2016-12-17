@@ -2,6 +2,7 @@ package org.ums.manager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,18 +25,18 @@ public class UserPropertyResolver extends UserDaoDecorator {
 
   @Override
   public List<User> getAll() {
-    List<User> users = getManager().getAll();
-    List<User> transformedList = new ArrayList<>();
-    for(User user : users) {
-      transformedList.add(transform(user));
-    }
-    return transformedList;
+    return super.getUsers().stream().map(user -> transform(user)).collect(Collectors.toList());
   }
 
   @Override
   public User get(String pId) {
     User user = getManager().get(pId);
     return transform(user);
+  }
+
+  @Override
+  public List<User> getUsers() {
+    return super.getUsers().stream().map(user -> transform(user)).collect(Collectors.toList());
   }
 
   private User transform(User user) {
@@ -54,7 +55,7 @@ public class UserPropertyResolver extends UserDaoDecorator {
     else {
       Employee employee = null;
       try {
-        employee = mEmployeeManager.getByEmployeeId(user.getEmployeeId());
+        employee = mEmployeeManager.get(user.getEmployeeId());
       } catch(Exception e) {
         mLogger.error("User not found as Employee, " + user.getId(), e);
       }

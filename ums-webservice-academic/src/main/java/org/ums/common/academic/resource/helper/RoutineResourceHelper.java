@@ -222,7 +222,7 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
     String userId = SecurityUtils.getSubject().getPrincipal().toString();
     User user = mUserManager.get(userId);
     String employeeId = user.getEmployeeId();
-    Employee employee = mEmployeeManager.getByEmployeeId(employeeId);
+    Employee employee = mEmployeeManager.get(employeeId);
     String deptId = employee.getDepartment().getId();
     List<Program> programLIst = mProgramManager
         .getAll()

@@ -1,7 +1,5 @@
 package org.ums.common.builder;
 
-import java.text.DateFormat;
-
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
@@ -12,6 +10,7 @@ import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.*;
 import org.ums.domain.model.mutable.MutableMarksSubmissionStatus;
+import org.ums.formatter.DateFormat;
 
 @Component
 public class MarksSubmissionStatusBuilder implements

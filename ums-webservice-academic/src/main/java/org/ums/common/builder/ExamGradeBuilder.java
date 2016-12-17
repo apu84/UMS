@@ -1,6 +1,15 @@
 package org.ums.common.builder;
 
-import org.apache.commons.lang.time.DateUtils;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
+import javax.json.JsonArray;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+import javax.ws.rs.core.UriInfo;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
@@ -13,18 +22,7 @@ import org.ums.enums.CourseType;
 import org.ums.enums.ExamType;
 import org.ums.enums.RecheckStatus;
 import org.ums.enums.StudentMarksSubmissionStatus;
-
-import javax.json.JsonArray;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
-import javax.ws.rs.core.UriInfo;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import org.ums.formatter.DateFormat;
 
 /**
  * Created by ikh on 4/30/2016.
@@ -77,23 +75,19 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
 
   @Override
   public void build(MutableExamGrade pMutable, JsonObject pJsonObject, final LocalCache pLocalCache) {
-    DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
     if(pJsonObject.containsKey("id")) {
       pMutable.setId(Integer.parseInt(pJsonObject.get("id").toString()));
     }
-    try {
-      if(pJsonObject.getString("lastSubmissionDate") != null) {
-        Date date = dateFormat.parse(pJsonObject.getString("lastSubmissionDate"));
-        // Set date to last hour and last minute of the dayatch
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.set(Calendar.MINUTE, 59);
-        calendar.set(Calendar.HOUR, 23);
-        pMutable.setLastSubmissionDate(calendar.getTime());
-      }
-    } catch(ParseException pe) {
-      throw new RuntimeException(pe);
+    if(pJsonObject.getString("lastSubmissionDate") != null) {
+      Date date = mDateFormat.parse(pJsonObject.getString("lastSubmissionDate"));
+      // Set date to last hour and last minute of the dayatch
+      Calendar calendar = Calendar.getInstance();
+      calendar.setTime(date);
+      calendar.set(Calendar.MINUTE, 59);
+      calendar.set(Calendar.HOUR, 23);
+      pMutable.setLastSubmissionDate(calendar.getTime());
     }
+
     pMutable.setSemesterId(pJsonObject.getInt("semesterId"));
     // pMutable.setExamTypeId(pJsonObject.getInt("examType"));
     pMutable.setExamType(ExamType.get(pJsonObject.getInt("examType")));

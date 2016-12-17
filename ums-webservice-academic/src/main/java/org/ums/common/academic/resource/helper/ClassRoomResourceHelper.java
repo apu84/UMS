@@ -87,7 +87,7 @@ public class ClassRoomResourceHelper extends ResourceHelper<ClassRoom, MutableCl
 
     User user = mUserManager.get(userId);
     String employeeId = user.getEmployeeId();
-    Employee employee = mEmployeeManager.getByEmployeeId(employeeId);
+    Employee employee = mEmployeeManager.get(employeeId);
     String deptId = employee.getDepartment().getId();
     List<Program> programs = mProgramManager
         .getAll()
@@ -159,7 +159,7 @@ public class ClassRoomResourceHelper extends ResourceHelper<ClassRoom, MutableCl
       roomList = getContentManager().getRoomsBasedOnRoutine(pSemesterId,student.getProgram().getId());
     }
     else{
-      Employee employee = mEmployeeManager.getByEmployeeId(user.getEmployeeId());
+      Employee employee = mEmployeeManager.get(user.getEmployeeId());
       String deptId = employee.getDepartment().getId();
       List<Program> programs = mProgramManager.getAll().stream().filter(p-> p.getDepartmentId().equals(deptId)).collect(Collectors.toList());
       roomList = getContentManager().getRoomsBasedOnRoutine(pSemesterId,programs.get(0).getId());

@@ -288,7 +288,7 @@ public class AttendanceSheetGenerator {
   private Employee getEmployeeInfo() {
     String userId = SecurityUtils.getSubject().getPrincipal().toString();
     User user = mUserManager.get(userId);
-    Employee employee = mEmployeeManager.getByEmployeeId(user.getEmployeeId());
+    Employee employee = mEmployeeManager.get(user.getEmployeeId());
     return employee;
   }
 

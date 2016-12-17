@@ -94,7 +94,7 @@ public class PersistentUserDao extends UserDaoDecorator {
 
   @Override
   public List<User> getUsers() {
-    String query = SELECT_ALL + "WHERE ROLE_ID != 11";
+    String query = SELECT_ALL + "WHERE ROLE_ID != 11 AND ROLE_ID != 999";
     return mJdbcTemplate.query(query, new UserRowMapper());
   }
 

@@ -82,7 +82,7 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
     String userId = SecurityUtils.getSubject().getPrincipal().toString();
     User user = mUserManager.get(userId);
     String employeeId = user.getEmployeeId();
-    Employee employee = getContentManager().getByEmployeeId(employeeId);
+    Employee employee = getContentManager().get(employeeId);
     return employee;
   }
 

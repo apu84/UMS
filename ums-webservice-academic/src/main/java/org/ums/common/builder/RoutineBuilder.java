@@ -67,7 +67,7 @@ public class RoutineBuilder implements Builder<Routine, MutableRoutine> {
     String userId = SecurityUtils.getSubject().getPrincipal().toString();
     User user = mUserManager.get(userId);
     String employeeId = user.getEmployeeId();
-    Employee employee = mEmployeeManager.getByEmployeeId(employeeId);
+    Employee employee = mEmployeeManager.get(employeeId);
     String deptId = employee.getDepartment().getId();
     List<Program> programList = mProgramManager
         .getAll()

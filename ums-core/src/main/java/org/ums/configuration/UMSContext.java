@@ -1,8 +1,5 @@
 package org.ums.configuration;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-
 import javax.sql.DataSource;
 
 import org.apache.shiro.authc.credential.PasswordService;
@@ -21,6 +18,7 @@ import org.ums.cachewarmer.AutoCacheWarmer;
 import org.ums.cachewarmer.CacheWarmerManagerImpl;
 import org.ums.domain.model.immutable.Examiner;
 import org.ums.domain.model.mutable.MutableExaminer;
+import org.ums.formatter.DateFormat;
 import org.ums.generator.JxlsGenerator;
 import org.ums.generator.XlsGenerator;
 import org.ums.manager.*;
@@ -156,7 +154,7 @@ public class UMSContext {
 
   @Bean
   DateFormat getGenericDateFormat() {
-    return new SimpleDateFormat(Constants.DATE_FORMAT);
+    return new DateFormat(Constants.DATE_FORMAT);
   }
 
   @Bean
@@ -218,11 +216,11 @@ public class UMSContext {
   @Bean
   UserManager userManager() {
     UserCache userCache = new UserCache(mCacheFactory.getCacheManager());
+    userCache.setManager(new PersistentUserDao(mTemplateFactory.getJdbcTemplate()));
     UserPropertyResolver userPropertyResolver =
         new UserPropertyResolver(employeeManager(), studentManager());
-    userPropertyResolver.setManager(new PersistentUserDao(mTemplateFactory.getJdbcTemplate()));
-    userCache.setManager(userPropertyResolver);
-    return userCache;
+    userPropertyResolver.setManager(userCache);
+    return userPropertyResolver;
   }
 
   @Bean

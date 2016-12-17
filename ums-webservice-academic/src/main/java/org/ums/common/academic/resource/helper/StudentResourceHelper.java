@@ -174,7 +174,7 @@ public class StudentResourceHelper extends ResourceHelper<Student, MutableStuden
 
   private Employee getLoggedEmployee() {
     User user = getLoggedUser();
-    Employee employee = mEmployeeManager.getByEmployeeId(user.getEmployeeId());
+    Employee employee = mEmployeeManager.get(user.getEmployeeId());
     return employee;
   }
 
