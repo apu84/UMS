@@ -92,6 +92,7 @@
 /// <reference path='service/ClassRoomService.ts'/>
 /// <reference path='service/ClassRoomService.ts'/>
 /// <reference path='service/AdmissionStudentService.ts'/>
+/// <reference path='service/CourseServices.ts'/>
 /// <reference path='service/StudentService.ts'/>
 /// <reference path='service/TimeTracker.ts'/>
 /// <reference path='service/TimeTracker.ts'/>
