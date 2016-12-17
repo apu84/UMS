@@ -37,8 +37,5 @@ public class AdmissionStudentCache extends
   }
 
 
-  @Override
-  public List<AdmissionStudent> getTaletalkData(int pSemesterId) {
-    return getManager().getTaletalkData(pSemesterId);
-  }
+  
 }
