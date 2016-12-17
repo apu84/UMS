@@ -34,7 +34,7 @@ module ums {
         })
         .state('storeBook', {
             url: "/storeBook",
-            templateUrl: 'views/Search/library-book-store.html',
+            templateUrl: 'views/storage/library-book-store.html',
             controller: 'LibraryBookEntry',
             resolve: {
                 loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {

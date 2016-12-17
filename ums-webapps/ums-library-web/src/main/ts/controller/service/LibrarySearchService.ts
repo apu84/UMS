@@ -13,15 +13,17 @@ module ums{
 
         }
 
-        public getDesiredBook(book: string): ng.IPromise<any> {
+        public getDesiredBook(pbook: string): ng.IPromise<any> {
             var defer = this.$q.defer();
-            var books: any = {};
+            var books: any;
 
-            this.httpClient.get(`library/${book}`,
+            console.log("book---->");
+            console.log(pbook);
+            this.httpClient.get("library/libraryBook/"+pbook,
                 HttpClient.MIME_TYPE_JSON,
                 (json: any)=> {
-                    book = json.entries;
-                    defer.resolve(books);
+                    defer.resolve(json.entries);
+                    console.log(json.entries);
                 },
                 (response: ng.IHttpPromiseCallbackArg<any>)=> {
                     console.error(response);

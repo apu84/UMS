@@ -5,9 +5,9 @@
 module ums {
     interface ILibrarySearch extends ng.IScope {
         showTable: boolean;
-        book:string;
-        search:Function;
-        foundbooks:ILibraryBook;
+        book : any;
+        search : Function;
+        foundbooks : Array<ILibraryBook>;
     }
 
     interface ILibraryBook{
@@ -17,7 +17,6 @@ module ums {
 
     export class LibrarySearch {
         public static $inject = ['$scope', '$q', 'notify', 'LibrarySearchService'];
-        private search;
 
         constructor(private $scope: ILibrarySearch,
                     private $q: ng.IQService, private notify: Notify,
@@ -30,11 +29,11 @@ module ums {
         }
 
         private search(): void {
-            Utils.expandRightDiv();
-            this.$scope.showTable = true;
 
+            this.$scope.showTable = true;
+            console.log(this.$scope.book);
             this.librarySearchService.getDesiredBook(this.$scope.book)
-                .then((outputs: ILibraryBook) => {
+                .then((outputs: Array<ILibraryBook>) => {
                     if (outputs == null) {
                         this.$scope.showTable = false;
                         this.notify.error("No Data Found");

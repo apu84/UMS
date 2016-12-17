@@ -36,9 +36,9 @@ public class LibraryResource extends MutableLibraryResource {
   }
 
   @GET
-  @Path("/{getBook}")
-  public JsonObject getBook() throws Exception {
-    return mLibraryResourceHelper.getAll(mUriInfo);
+  @Path("/libraryBook/{bookName}")
+  public JsonObject getLibraryBooks(final @Context Request pRequest,
+      final @PathParam("bookName") String pBook) throws Exception {
+    return mLibraryResourceHelper.getTheLibraryBooks(pBook, mUriInfo);
   }
-
 }

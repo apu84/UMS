@@ -9,6 +9,7 @@ import org.ums.persistent.model.PersistentLibrary;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -16,6 +17,7 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public class PersistentLibraryDao extends LibraryDaoDecorator {
   static String INSERT_ALL = "INSERT INTO LIBRARY(BOOK_NAME, AUTHOR_NAME) VALUES(? , ?) ";
+  static String SELECT_ALL = "SELECT BOOK_NAME,AUTHOR_NAME FROM LIBRARY";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -26,6 +28,12 @@ public class PersistentLibraryDao extends LibraryDaoDecorator {
   @Override
   public int create(MutableLibrary pMutable) {
     return mJdbcTemplate.update(INSERT_ALL, pMutable.getBookName(), pMutable.getAuthorName());
+  }
+
+  public List<Library> getLibraryBooks(String pBook) {
+    String query = SELECT_ALL + " WHERE BOOK_NAME=?";
+    return mJdbcTemplate.query(query, new Object[] {pBook},
+        new PersistentLibraryDao.RoleRowMapper());
   }
 
   class RoleRowMapper implements RowMapper<Library> {

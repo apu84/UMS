@@ -21,10 +21,10 @@ import org.ums.persistent.model.PersistentUser;
 import org.ums.resource.ResourceHelper;
 import org.ums.util.UmsUtils;
 
-import javax.json.JsonArray;
-import javax.json.JsonObject;
+import javax.json.*;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.util.List;
 import javax.ws.rs.core.Response;
 
 /**
@@ -55,14 +55,27 @@ public class LibraryResourceHelper extends ResourceHelper<Library, MutableLibrar
     LocalCache localCache = new LocalCache();
     getBuilder().build(mutableLibrary, entries.getJsonObject(0), localCache);
     mutableLibrary.commit(false);
-    /*
-     * URI contextURI =
-     * pUriInfo.getBaseUriBuilder().path(LibraryResource.class).path(LibraryResource.class, "get")
-     * .build(mutableLibrary.getId());
-     */
     Response.ResponseBuilder builder = Response.created(null);
     builder.status(Response.Status.CREATED);
     return builder.build();
+  }
+
+  public JsonObject getTheLibraryBooks(final String pBook, final UriInfo pUriInfo) throws Exception {
+    List<Library> libs = getContentManager().getLibraryBooks(pBook);
+    return ConvertToJSon(libs, pUriInfo);
+  }
+
+  private JsonObject ConvertToJSon(List<Library> plibraryBook, final UriInfo pUriInfo) {
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+    for(Library l : plibraryBook) {
+      children.add(toJson(l, pUriInfo, localCache));
+    }
+    object.add("entries", children);
+    localCache.invalidate();
+
+    return object.build();
   }
 
   @Override
