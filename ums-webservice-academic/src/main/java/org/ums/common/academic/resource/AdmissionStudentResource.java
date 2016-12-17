@@ -16,12 +16,12 @@ import javax.ws.rs.core.Request;
 @Path("/academic/admission")
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
-public class AdmissionStudentResource extends MutableAdmissionStudentResource {
+public class AdmissionStudentResource  extends MutableAdmissionStudentResource{
 
   @GET
   @Path("/taletalkData/semester/{semester-id}")
   public JsonObject getTaletalkData(final @Context Request pRequest,
-      final @PathParam("semester-id") int pSemesterId) {
+                                    final @PathParam("semester-id") int pSemesterId){
     return mHelper.getTaletalkData(pSemesterId, mUriInfo);
   }
 }

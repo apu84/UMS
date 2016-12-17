@@ -3,7 +3,6 @@ package org.ums.common.academic.resource.helper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.common.builder.AdmissionStudentBuilder;
@@ -25,12 +24,10 @@ import java.util.List;
 /**
  * Created by Monjur-E-Morshed on 17-Dec-16.
  */
-@Component
-public class AdmissionStudentResourceHelper extends
-    ResourceHelper<AdmissionStudent, MutableAdmissionStudent, String> {
+public class AdmissionStudentResourceHelper extends ResourceHelper<AdmissionStudent, MutableAdmissionStudent, String> {
 
-  private static final Logger mLogger = LoggerFactory
-      .getLogger(AdmissionStudentResourceHelper.class);
+  private static final Logger mLogger = LoggerFactory.getLogger(AdmissionStudentResourceHelper.class);
+
 
   @Autowired
   AdmissionStudentManager mManager;
@@ -38,28 +35,29 @@ public class AdmissionStudentResourceHelper extends
   @Autowired
   AdmissionStudentBuilder mBuilder;
 
+
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
     return null;
   }
 
-  public Response postTaletalkData(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+  public Response postTaletalkData(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception{
 
     return null;
   }
 
-  public JsonObject getTaletalkData(final int pSemesterId, final UriInfo pUriInfo) {
+  public JsonObject getTaletalkData(final int pSemesterId,final UriInfo pUriInfo){
     List<AdmissionStudent> students;
-    try {
+    try{
       students = getContentManager().getTaletalkData(pSemesterId);
-    } catch(Exception e) {
-      students = new ArrayList<>(); // just for skipping while we have no data in the db.
+    }catch(Exception e){
+      students = new ArrayList<>(); //just for skipping while we have no data in the db.
     }
 
     return jsonCreator(students, pUriInfo);
   }
 
-  private JsonObject jsonCreator(List<AdmissionStudent> pStudentLIst, UriInfo pUriInfo) {
+  private JsonObject jsonCreator(List<AdmissionStudent> pStudentLIst, UriInfo pUriInfo){
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
