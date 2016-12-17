@@ -8,7 +8,7 @@
             <h3 class="panel-title">Select </h3>
         </div>
         <div class="panel-body pan">
-            <form action="" class="form-horizontal" data-validate=""  data-onvalidate="fetchDeadlineInformation" >
+            <form action="" class="form-horizontal" data-validate=""  data-onvalidate="fetchTaletalkData" >
                 <div class="form-body pal">
                     <div class="form-group">
                         <label class="col-md-4 control-label">Program Type</label>
@@ -57,37 +57,11 @@
             <div class="panel-heading">Admission Merit List<span
                     class="subtitle"></span></div>
             <div class="panel-body shadowPanel"   style="min-height: 490px;">
-                <div class="row" data-ng-if="showTable==true" style="padding-left: 2%; padding-right: 2%;">
-                    <table class="table table-bordered table-advanced table-striped">
-                        <thead id="thead" role="row"  class="heading">
-                        <th style="text-align:center;">Exam Date</th>
-                        <th align="center">Program</th>
-                        <th style="text-align:center;">Course No</th>
-                        <th align="left">Course Title</th>
-                        <th style="text-align:center;">CrHr</th>
-                        <th style="width:120px;text-align:center;">Total Students</th>
-                        <th style="width:172px;text-align:center;">Last Date of Submission</th>
-                        </thead>
-                        <tbody>
-                        <tr data-ng-repeat="e in examGradeStatisticsArr" align="center">
-                            <td>{{e.examDate}}</td>
-                            <td style="text-align:left;">{{e.programShortName}}</td>
-                            <td>{{e.courseNo}}</td>
-                            <td align="left">{{e.courseTitle}}</td>
-                            <td>{{e.courseCreditHour}}</td>
-                            <td>{{e.totalStudents}}</td>
-                            <td align="center" >
-                                <input align="center" contenteditable="editable" style="width:70%;text-align: center;" type="text"
-                                       data-date-format="dd-mm-yyyy" placeholder="DD-MM-YYYY" class="datepicker-default form-control" data-ng-model="e.lastSubmissionDate" data-ng-change="dateChanged(e)">
-                            </td>
-                        </tr>
-                        </tbody>
+                <div data-ng-if="showUploadPortion==true">
 
-                    </table>
-                    <br/>
-                    <div align="right" style="padding-right: 3%;" data-ng-if="showButton">
-                        <button class="btn btn-primary" data-ng-click="saveChanges()">Save Changes</button> <button class="btn btn-danger" data-ng-click="cancel()">Cancel</button>
-                    </div>
+                </div>
+                <div data-ng-if="showUploadPortion==false">
+
                 </div>
             </div>
         </div>

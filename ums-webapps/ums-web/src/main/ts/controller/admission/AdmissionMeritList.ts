@@ -15,6 +15,11 @@ module ums{
     meritTypes:Array<IMeritListType>;
     meritType:IMeritListType;
 
+    admissionStudents:Array<AdmissionStudent>;
+
+
+    showUploadPortion:boolean;
+
     getSemesters:Function;
   }
 
@@ -29,7 +34,7 @@ module ums{
   }
 
   class AdmissionMeritList{
-    public static $inject = ['appConstants','HttpClient','$scope','$q','notify','$sce','$window','semesterService','facultyService'];
+    public static $inject = ['appConstants','HttpClient','$scope','$q','notify','$sce','$window','semesterService','facultyService', 'admissionStudentService'];
     constructor(private appConstants: any,
                 private httpClient: HttpClient,
                 private $scope: IAdmissionMerit,
@@ -38,7 +43,8 @@ module ums{
                 private $sce:ng.ISCEService,
                 private $window:ng.IWindowService,
                 private semesterService: SemesterService,
-                private facultyService: FacultyService) {
+                private facultyService: FacultyService,
+                private admissionStudentService:AdmissionStudentService) {
 
       $scope.programTypes=appConstants.programType;
 
@@ -54,6 +60,14 @@ module ums{
       this.$scope.meritTypes.splice(0,1);
     }
 
+    private fetchTaletalkData():void{
+      this.admissionStudentService.fetchTaletalkData(this.$scope.semester.semesterId).then((students:Array<AdmissionStudent>)=>{
+        if(students.length==0){
+          this.$scope.showUploadPortion=false;
+        }
+      });
+    }
+
     private getSemesters(programType:number):void{
       console.log("program type");
       console.log(programType);
@@ -62,6 +76,8 @@ module ums{
         console.log(this.$scope.semesters);
       });
     }
+
+
 
     private getFaculties(){
       this.facultyService.getAllFaculties().then((faculties:Array<Faculty>)=>{
