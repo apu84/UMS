@@ -21,6 +21,7 @@ module ums{
     showUploadPortion:boolean;
 
     getSemesters:Function;
+    fetchTaletalkData:Function;
   }
 
   interface  IProgramType{
@@ -49,6 +50,7 @@ module ums{
       $scope.programTypes=appConstants.programType;
 
       $scope.getSemesters= this.getSemesters.bind(this);
+      $scope.fetchTaletalkData = this.fetchTaletalkData.bind(this);
 
       this.getFaculties();
       this.getMeritListTypes();
@@ -61,9 +63,14 @@ module ums{
     }
 
     private fetchTaletalkData():void{
+      console.log(this.$scope.semester);
       this.admissionStudentService.fetchTaletalkData(this.$scope.semester.semesterId).then((students:Array<AdmissionStudent>)=>{
         if(students.length==0){
           this.$scope.showUploadPortion=false;
+        }else{
+          this.$scope.showUploadPortion=false;
+          this.$scope.admissionStudents=[];
+          this.$scope.admissionStudents=students;
         }
       });
     }
