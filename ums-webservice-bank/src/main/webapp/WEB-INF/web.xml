@@ -73,7 +73,6 @@
       <param-value>
         org.ums.resource,
         org.ums.login,
-        org.ums.listener,
         org.ums.cachewarmer,
         org.ums.navigation,
         org.ums.filter.cors,
