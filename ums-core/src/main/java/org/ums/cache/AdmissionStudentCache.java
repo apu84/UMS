@@ -6,6 +6,8 @@ import org.ums.manager.AdmissionStudentManager;
 import org.ums.manager.CacheManager;
 import org.ums.util.CacheUtil;
 
+import java.util.List;
+
 /**
  * Created by Monjur-E-Morshed on 12-Dec-16.
  */
@@ -27,5 +29,16 @@ public class AdmissionStudentCache extends
   @Override
   protected String getCacheKey(String pId) {
     return CacheUtil.getCacheKey(AdmissionStudent.class, pId);
+  }
+
+  @Override
+  public List<AdmissionStudent> getTaletalkData(int pSemesterId) {
+    return getManager().getTaletalkData(pSemesterId);
+  }
+
+
+  @Override
+  public List<AdmissionStudent> getTaletalkData(int pSemesterId) {
+    return getManager().getTaletalkData(pSemesterId);
   }
 }

@@ -36,6 +36,13 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
       + "  MERIT_SL_NO, " + "  STUDENT_ID, " + "  ALLOCATED_PROGRAM_ID, " + "  MIGRATION_STATUS, "
       + "  LAST_MODIFIED " + "FROM admission_students";
 
+  String SELECT_ONE_TALETALK_DATA = "SELECT " + "  SEMESTER_ID, " + "  RECEIPT_ID, " + "  PIN, "
+      + "  HSC_BOARD, " + "  HSC_ROLL, " + "  HSC_REGNO, " + "  HSC_YEAR, " + "  HSC_GROUP, "
+      + "  SSC_BOARD, " + "  SSC_ROLL, " + "  SSC_REGNO, " + "  SSC_YEAR, " + "  SSC_GROUP, "
+      + "  GENDER, " + "  DATE_OF_BIRTH, " + "  STUDENT_NAME, " + "  FATHER_NAME, "
+      + "  MOTHER_NAME, " + "  SSC_GPA, " + "  HSC_GPA, " + "  QUOTA, " + "  LAST_MODIFIED "
+      + "FROM admission_students";
+
   String INSERT_ONE = "INSERT INTO DB_IUMS.ADMISSION_STUDENTS  "
       + "(SEMESTER_ID, RECEIPT_ID, PIN, HSC_BOARD, HSC_ROLL,  "
       + " HSC_REGNO, HSC_YEAR, HSC_GROUP, SSC_BOARD, SSC_ROLL,  "
@@ -74,6 +81,13 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
     return params;
   }
 
+  @Override
+  public List<AdmissionStudent> getTaletalkData(int pSemesterId) {
+    String query = SELECT_ONE_TALETALK_DATA + " where semester_id=?";
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId},
+        new AdmissionStudentRowMapperTaletalk());
+  }
+
   class AdmissionStudentRowMapper implements RowMapper<AdmissionStudent> {
     @Override
     public AdmissionStudent mapRow(ResultSet pResultSet, int pI) throws SQLException {
@@ -108,4 +122,35 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
       return student;
     }
   }
+
+  class AdmissionStudentRowMapperTaletalk implements RowMapper<AdmissionStudent> {
+    @Override
+    public AdmissionStudent mapRow(ResultSet pResultSet, int pI) throws SQLException {
+      MutableAdmissionStudent student = new PersistentAdmissionStudent();
+      student.setId(pResultSet.getString("receipt_id"));
+      student.setSemester(mSemesterManager.get(pResultSet.getInt("semester_id")));
+      student.setPin(pResultSet.getString("pin"));
+      student.setHSCBoard(pResultSet.getString("hsc_boeard"));
+      student.setHSCRoll(pResultSet.getString("hsc_roll"));
+      student.setHSCRegNo(pResultSet.getString("hsc_regno"));
+      student.setHSCYear(pResultSet.getInt("hsc_Year"));
+      student.setHSCGroup(pResultSet.getString("hsc_group"));
+      student.setSSCBoard(pResultSet.getString("ssc_board"));
+      student.setSSCRoll(pResultSet.getString("ssc_roll"));
+      student.setSSCRegNo(pResultSet.getString("ssc_regno"));
+      student.setSSCYear(pResultSet.getInt("ssc_year"));
+      student.setSSCGroup(pResultSet.getString("ssc_group"));
+      student.setGender(pResultSet.getString("gender"));
+      student.setDateOfBirth(pResultSet.getString("date_of_birth"));
+      student.setStudentName(pResultSet.getString("student_name"));
+      student.setFatherName(pResultSet.getString("father_name"));
+      student.setMotherName(pResultSet.getString("mother_name"));
+      student.setSSCGpa(pResultSet.getDouble("ssc_gpa"));
+      student.setHSCGpa(pResultSet.getDouble("hsc_gpa"));
+      student.setQuota(pResultSet.getString("quota"));
+      student.setLastModified(pResultSet.getString("last_modified"));
+      return student;
+    }
+  }
+
 }
