@@ -36,6 +36,4 @@ public class AdmissionStudentCache extends
     return getManager().getTaletalkData(pSemesterId);
   }
 
-
-
 }

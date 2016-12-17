@@ -142,6 +142,8 @@
 
 
 /// <reference path='controller/admission/AdmissionMeritList.ts'/>
+/// <reference path='controller/admission/AdmissionTaletalkData.ts'/>
+
 
 
 /// <reference path='Utils.ts'/>
