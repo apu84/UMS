@@ -104,7 +104,7 @@ module ums{
         }
       });
     }
-   //check the status
+    //check the status
     private details(semesterWith:SemesterWithdraw):void{
       this.$scope.comments={};
       this.$scope.tempSemesterWithdraw = semesterWith;
@@ -114,12 +114,12 @@ module ums{
       //console.log(this.$scope.employee[0].designation);
       this.$scope.approveButton=false;
       this.$scope.rejectButton = false;
-      if(this.$scope.employee[0].designation == 101 && this.$scope.tempSemesterWithdraw.status!=4 && this.$scope.tempSemesterWithdraw.status!=5 && this.$scope.tempSemesterWithdraw.status!=3 && this.$scope.tempSemesterWithdraw.status!=2 ){
+      if(this.$scope.employee[0].designation == 101 && this.$scope.tempSemesterWithdraw.status!=4 && this.$scope.tempSemesterWithdraw.status!=Number(5) && this.$scope.tempSemesterWithdraw.status!=3 && this.$scope.tempSemesterWithdraw.status!=Number(2) ){
         this.$scope.approveButton=true;
         this.$scope.rejectButton = true;
         console.log("I am in");
       }
-      if(this.$scope.employee[0].designation!=101 && this.$scope.tempSemesterWithdraw.status==2 && this.$scope.tempSemesterWithdraw.status!=4 && this.$scope.tempSemesterWithdraw.status!=5){
+      if(this.$scope.employee[0].designation!=101 && this.$scope.tempSemesterWithdraw.status==2 && this.$scope.tempSemesterWithdraw.status!=Number(4) && this.$scope.tempSemesterWithdraw.status!=Number(5)){
 
         this.$scope.approveButton = true;
         this.$scope.rejectButton= true;
@@ -128,17 +128,17 @@ module ums{
       this.$scope.comments=semesterWith.comments;
       this.getStudentInfo().then((studentInfoArr:Array<Student>)=>{
         this.getSemesterInfo().then((semesterInfoArr:Array<Student>)=>{
-            /*if(this.$scope.tempSemesterWithdraw.status==1){
-              this.$scope.data.status = "Application Submitted";
-            }else if(this.$scope.tempSemesterWithdraw.status=2){
-              this.$scope.data.status="Application Approved By Head";
-            }else if(this.$scope.tempSemesterWithdraw.status=3){
-              this.$scope.data.status="Application Rejected By Head";
-            }else if(this.$scope.tempSemesterWithdraw.status=4){
-              this.$scope.data.status="Application Approved By Registrar";
-            }else{
-              this.$scope.data.status="Application Rejected By Registrar";
-            }*/
+          /*if(this.$scope.tempSemesterWithdraw.status==1){
+           this.$scope.data.status = "Application Submitted";
+           }else if(this.$scope.tempSemesterWithdraw.status=2){
+           this.$scope.data.status="Application Approved By Head";
+           }else if(this.$scope.tempSemesterWithdraw.status=3){
+           this.$scope.data.status="Application Rejected By Head";
+           }else if(this.$scope.tempSemesterWithdraw.status=4){
+           this.$scope.data.status="Application Approved By Registrar";
+           }else{
+           this.$scope.data.status="Application Rejected By Registrar";
+           }*/
         });
       });
     }
