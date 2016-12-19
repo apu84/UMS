@@ -1,12 +1,15 @@
 module ums {
   export class AppController {
-    public static $inject = ['$scope', '$rootScope', '$window', '$http', '$templateCache'];
+    public static $inject = ['$scope', '$rootScope', '$window', '$http', '$templateCache','HttpClient'];
 
     constructor(private $scope:any,
                 private $rootScope:any,
                 private $window: ng.IWindowService,
                 private $http: ng.IHttpService,
-                private $templateCache: ng.ITemplateCacheService) {
+                private $templateCache: ng.ITemplateCacheService,
+                private httpClient: HttpClient) {
+      $scope.downloadUserGuide = this.downloadUserGuide.bind(this);
+
       this.$rootScope.style = 'style1';
       this.$rootScope.theme = 'orange-blue';
       this.$scope.data = {};
@@ -73,9 +76,13 @@ module ums {
           this.$scope.header.animation = '';
         }, 100);
         */
+        var abc="";
+        if(toState.url =="/gradeSheetSelectionTeacher/:1")
+          abc="/gradeSheetSelectionTeacher/T";
+        else
+          abc =toState.url;
+        this.$scope.data = $.fn.Data.get(abc);
         $('.sidebar-collapse').removeClass('in').addClass('collapse');
-
-        this.$scope.data = $.fn.Data.get(toState.url);
         if (-1 == $.inArray(toState.url, ['/extra-500', '/extra-404', '/extra-lock-screen', '/extra-signup', '/extra-signin'])) {
           $('body').removeClass('bounceInLeft');
           $("body>.default-page").show();
@@ -87,53 +94,8 @@ module ums {
 
         this.$scope.header.boxed = '';
         this.$scope.header.footer = true;
-
         this.$rootScope.style = 'style1';
         this.$rootScope.theme = 'orange-blue';
-
-        if ('/layout-left-sidebar' === toState.url) {
-          this.$scope.header.layout_menu = '';
-          this.$scope.header.header_topbar = '';
-          this.$scope.header.layout_horizontal_menu = '';
-        }
-        else if ('/layout-left-sidebar-collapsed' === toState.url) {
-          this.$scope.header.layout_menu = '';
-          this.$scope.header.header_topbar = 'sidebar-collapsed';
-          this.$scope.header.layout_horizontal_menu = '';
-        }
-        else if ('/layout-right-sidebar' === toState.url) {
-          this.$scope.header.layout_menu = 'right-sidebar';
-          this.$scope.header.header_topbar = '';
-          this.$scope.header.layout_horizontal_menu = '';
-        }
-        else if ('/layout-right-sidebar-collapsed' === toState.url) {
-          this.$scope.header.layout_menu = 'right-sidebar';
-          this.$scope.header.header_topbar = 'right-side-collapsed';
-          this.$scope.header.layout_horizontal_menu = '';
-        }
-        else if ('/layout-horizontal-menu' === toState.url) {
-          this.$scope.header.layout_menu = '';
-          this.$scope.header.header_topbar = 'horizontal-menu-page';
-          this.$scope.header.layout_horizontal_menu = 'horizontal-menu hidden-sm hidden-xs';
-        }
-        else if ('/layout-horizontal-menu-sidebar' === toState.url) {
-          this.$scope.header.layout_horizontal_menu = 'horizontal-menu hidden-sm hidden-xs';
-        }
-        else if ('/layout-fixed-topbar' === toState.url) {
-          this.$scope.header.layout_menu = '';
-          this.$scope.header.header_topbar = 'fixed-topbar';
-          this.$scope.header.layout_horizontal_menu = '';
-        }
-        else if ('/layout-boxed' === toState.url) {
-          this.$scope.header.boxed = 'container';
-        }
-        else if ('/layout-hidden-footer' == toState.url) {
-          this.$scope.header.footer = false;
-        }
-        else if ($.inArray(toState.url, ['/extra-500', '/extra-404']) >= 0) {
-          this.$rootScope.style = 'style1';
-          this.$rootScope.theme = 'pink-violet';
-        }
       });
 
       this.$scope.style_change = () => {
@@ -162,6 +124,30 @@ module ums {
 
       $scope.user = JSON.parse($window.sessionStorage.getItem(HttpClient.USER_KEY));
     }
+
+    private downloadUserGuide(navigationId:string,manualTitle:string,manualType:string):any{
+
+      if(manualType=="html") {
+        this.httpClient.get("userGuide/html/" + navigationId, HttpClient.MIME_TYPE_JSON,
+            (response: any) => {
+             console.log(response);
+              this.$scope.data.htmlUserGuide=response.htmlContent;
+            });
+      }
+      else if(manualType=="pdf") {
+        var fileName = manualTitle + ".pdf";
+        var contentType:string = UmsUtil.getFileContentType("pdf");
+        this.httpClient.get("userGuide/pdf/" + navigationId, contentType,
+            (data:any, etag:string) => {
+              UmsUtil.writeFileContent(data, contentType, fileName);
+            },
+            (response:ng.IHttpPromiseCallbackArg<any>) => {
+              console.error(response);
+            }, 'arraybuffer');
+      }
+    }
+
+
   }
   UMS.controller('AppController', AppController);
 }

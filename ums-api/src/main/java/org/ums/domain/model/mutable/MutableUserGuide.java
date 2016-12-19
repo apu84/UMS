@@ -22,7 +22,9 @@ public interface MutableUserGuide extends UserGuide, Mutable, MutableIdentifier<
 
   void setManualTitle(String pManualTitle);
 
-  void setFilePath(String pFilePath);
+  void setPdfFilePath(String pPdfFilePath);
+
+  void setHtmlContent(String pHtmlContent);
 
   void setViewOrder(Integer pViewOrder);
 

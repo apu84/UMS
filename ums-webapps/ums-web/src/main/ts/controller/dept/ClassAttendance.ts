@@ -219,11 +219,11 @@ module ums {
     private downloadAttendanceSheet(fileType:string):any{
       var fileName= this.$scope.selectedCourse.semester+"_"+this.$scope.selectedCourse.courseNo;
 
-      var contentType:string=Utils.getFileContentType(fileType);
+      var contentType:string=UmsUtil.getFileContentType(fileType);
       this.httpClient.get("classAttendanceReport/"+fileType+"/semester/"+this.$scope.attendanceSearchParamModel.semesterId+
           "/course/"+this.$scope.selectedCourse.courseId+"/section/"+this.$scope.selectedCourse.section+"/studentCategory/"+this.$scope.selectedStudentCategory,contentType,
           (data:any, etag:string) => {
-            Utils.writeFileContent(data,contentType,fileName);
+            UmsUtil.writeFileContent(data,contentType,fileName);
           },
           (response:ng.IHttpPromiseCallbackArg<any>) => {
             console.error(response);

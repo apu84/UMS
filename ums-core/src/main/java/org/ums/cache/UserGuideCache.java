@@ -33,4 +33,9 @@ public class UserGuideCache extends
     String cacheKey = getCacheKey(UserGuide.class.toString(), pUserId);
     return cachedList(cacheKey, () -> getManager().getUserGuideList(pRoleId,pUserId));
   }
+
+  public UserGuide getUserGuide(Integer pNavigationId) {
+    String cacheKey = getCacheKey(UserGuide.class.toString(), pNavigationId);
+    return cachedEntity(cacheKey, () -> getManager().getUserGuide(pNavigationId));
+  }
 }

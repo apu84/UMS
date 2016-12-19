@@ -5,13 +5,14 @@ module ums {
     constructor(private $scope: any, private $stateParams: any,
                 private appConstants: any, private httpClient: HttpClient,private $q:ng.IQService) {
 
-
       this.httpClient.get("userGuide", HttpClient.MIME_TYPE_JSON,
           (response: any) => {
             console.log( response.entries);
             $scope.guideList = response.entries;
           });
     }
+
+    // For downloadUserGuide check in AppController.ts File
 
 
   }

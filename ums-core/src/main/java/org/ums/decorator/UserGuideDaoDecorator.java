@@ -20,4 +20,9 @@ public class UserGuideDaoDecorator extends
   public List<UserGuide> getUserGuideList(Integer pRoleId, String pUserId) {
     return getManager().getUserGuideList(pRoleId, pUserId);
   }
+
+  @Override
+  public UserGuide getUserGuide(Integer pNavigationId) {
+    return getManager().getUserGuide(pNavigationId);
+  }
 }

@@ -1,6 +1,6 @@
 <style>
     .table thead tr th, .table thead tr td {
-        border-bottom: 1px solid grey;
+        border-bottom: 1px solid #ddd;
     }
     .scrollArea table .recheckAll .th-inner .ng-scope {
         display: inline;
@@ -445,7 +445,7 @@
                 <div ng-if="recheckCandidatesGrades.length >0 &&  ((gradeSubmissionStatus =='2' || gradeSubmissionStatus =='4' || gradeSubmissionStatus =='6') && currentActor!='preparer')">
                     <div class="btn btn-blue" style="margin-top: 20px;">
                         <i class="fa fa-check-square-o"></i>
-                        <span style="padding-right: 100px;">Requested for Recheck Grades</span>
+                        <span style="padding-right: 100px;">Requested for Recheck Grades<span class="badge badge-total pull-right">{{recheckCandidatesGrades.length}}</span></span>
                     </div>
                     <data-course-reg-type-legend examtype="{{current_examTypeId}}"></data-course-reg-type-legend>
                     <div class="clearfix"></div>
@@ -627,7 +627,7 @@
                 <div ng-if="scrutinizedGrades.length>0  &&  ((currentActor=='head' && gradeSubmissionStatus !='3') || (currentActor!='head')) ">
                     <div class="btn btn-blue" style="margin-top: 20px;">
                         <i class="fa fa-check-circle-o"></i>
-                        <span style="padding-right: 100px;">Scrutinized Grades</span>
+                        <span style="padding-right: 100px;">Scrutinized Grades<span class="badge badge-total pull-right">{{scrutinizedGrades.length}}</span></span>
                     </div>
                     <data-course-reg-type-legend examtype="{{current_examTypeId}}"></data-course-reg-type-legend>
                     <div class="clearfix"></div>
@@ -673,7 +673,7 @@
                 <div ng-if="approvedGrades.length>0 &&  ((currentActor=='coe' && gradeSubmissionStatus !='5') || (currentActor!='coe')) ">
                     <div class="btn btn-blue" style="margin-top: 20px;">
                         <i class="fa fa-check-circle-o"></i>
-                        <span style="padding-right: 100px;">Approved(by Head) Grades</span>
+                        <span style="padding-right: 100px;">Approved(by Head) Grades<span class="badge badge-total pull-right">{{approvedGrades.length}}</span></span>
                     </div>
                     <data-course-reg-type-legend examtype="{{current_examTypeId}}"></data-course-reg-type-legend>
                     <div class="clearfix"></div>
@@ -719,7 +719,7 @@
                 <div ng-if="acceptedGrades.length>0">
                     <div class="btn btn-blue" style="margin-top: 20px;">
                         <i class="fa fa-check-circle"></i>
-                        <span style="padding-right: 100px;">Accepted(by CoE) Grades</span>
+                        <span style="padding-right: 100px;">Accepted(by CoE) Grades<span class="badge badge-total pull-right">{{acceptedGrades.length}}</span></span>
                     </div>
                     <data-course-reg-type-legend examtype="{{current_examTypeId}}"></data-course-reg-type-legend>
                     <div class="clearfix"></div>

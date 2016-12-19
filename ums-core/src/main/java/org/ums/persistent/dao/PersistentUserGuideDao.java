@@ -3,18 +3,12 @@ package org.ums.persistent.dao;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.UserGuideDaoDecorator;
-import org.ums.domain.model.immutable.MarksSubmissionStatus;
 import org.ums.domain.model.immutable.UserGuide;
-import org.ums.domain.model.mutable.MutableMarksSubmissionStatus;
 import org.ums.domain.model.mutable.MutableUserGuide;
-import org.ums.enums.CourseMarksSubmissionStatus;
-import org.ums.enums.ExamType;
-import org.ums.persistent.model.PersistentMarksSubmissionStatus;
 import org.ums.persistent.model.PersistentUserGuide;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -76,6 +70,13 @@ public class PersistentUserGuideDao extends UserGuideDaoDecorator {
         new UserGuideRowMapper());
   }
 
+  @Override
+  public UserGuide getUserGuide(Integer pNavigationId) {
+    String query = "Select * From User_Guide Where Navigation_Id=?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pNavigationId},
+        new UserGuideRowMapper());
+  }
+
   private class UserGuideRowMapper implements RowMapper<UserGuide> {
     @Override
     public UserGuide mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -84,7 +85,8 @@ public class PersistentUserGuideDao extends UserGuideDaoDecorator {
       userGuide.setGuideId(rs.getInt("ID"));
       userGuide.setNavigationId(rs.getInt("NAVIGATION_ID"));
       userGuide.setManualTitle(rs.getString("MANUAL_TITLE"));
-      userGuide.setFilePath(rs.getString("FILE_PATH"));
+      userGuide.setPdfFilePath(rs.getString("PDF_FILE_PATH"));
+      userGuide.setHtmlContent(rs.getString("HTML_CONTENT"));
       userGuide.setViewOrder(rs.getInt("VIEW_ORDER"));
       userGuide.setVisibility(rs.getInt("VISIBILITY"));
       AtomicReference<UserGuide> atomicReference = new AtomicReference<>(userGuide);

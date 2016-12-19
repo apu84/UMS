@@ -23,7 +23,9 @@ public interface UserGuide extends Serializable, EditType<MutableUserGuide>, Ide
 
   String getManualTitle();
 
-  String getFilePath();
+  String getPdfFilePath();
+
+  String getHtmlContent();
 
   Integer getViewOrder();
 

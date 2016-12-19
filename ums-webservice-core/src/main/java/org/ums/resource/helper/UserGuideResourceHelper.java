@@ -58,4 +58,10 @@ public class UserGuideResourceHelper extends ResourceHelper<UserGuide, MutableUs
     return buildJsonResponse(userGuideList, pUriInfo);
   }
 
+  public JsonObject getUserGuide(Integer pNavigationId) {
+    UserGuide userGuide = mUserGuideManager.getUserGuide(pNavigationId);
+
+    return toJson(userGuide, null, null);
+  }
+
 }

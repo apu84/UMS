@@ -12,4 +12,6 @@ public interface UserGuideManager extends ContentManager<UserGuide, MutableUserG
 
   List<UserGuide> getUserGuideList(Integer pRoleId, String pUserId);
 
+  UserGuide getUserGuide(Integer pNavigationId);
+
 }

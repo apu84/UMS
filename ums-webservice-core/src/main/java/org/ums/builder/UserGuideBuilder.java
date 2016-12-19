@@ -21,7 +21,8 @@ public class UserGuideBuilder implements Builder<UserGuide, MutableUserGuide> {
     pBuilder.add("guideId", pReadOnly.getGuideId());
     pBuilder.add("navigationId", pReadOnly.getNavigationId());
     pBuilder.add("manualTitle", pReadOnly.getManualTitle());
-    pBuilder.add("filePath", pReadOnly.getFilePath());
+    pBuilder.add("pdfFilePath", pReadOnly.getPdfFilePath());
+    pBuilder.add("htmlContent", pReadOnly.getHtmlContent());
     pBuilder.add("viewOrder", pReadOnly.getViewOrder());
     pBuilder.add("visibility", pReadOnly.getVisibility());
   }

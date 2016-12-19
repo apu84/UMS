@@ -3,19 +3,18 @@ package org.ums.resource;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ums.resource.helper.NotificationResourceHelper;
 import org.ums.resource.helper.UserGuideResourceHelper;
-import org.ums.services.UserHomeService;
 
 import javax.json.JsonObject;
-import javax.ws.rs.GET;
+import javax.ws.rs.*;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
-import java.util.List;
-import java.util.Map;
+import javax.ws.rs.core.StreamingOutput;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.*;
 
 /**
  * Created by Ifti on 13-Dec-16.
@@ -29,8 +28,35 @@ public class UserGuideResource extends Resource {
   UserGuideResourceHelper mUserGuideResourceHelper;
 
   @GET
-  public JsonObject getAdditionalRolePermissions(final @Context Request pRequest) {
+  public JsonObject getUserGuides(final @Context Request pRequest) {
     return mUserGuideResourceHelper.getUserGuides(SecurityUtils.getSubject().getPrincipal()
         .toString(), mUriInfo);
+  }
+
+  @GET
+  @Path("/html/{navigationId}")
+  public JsonObject getUserGuide(final @Context Request pRequest,
+      final @PathParam("navigationId") Integer pNavigationId) {
+    return mUserGuideResourceHelper.getUserGuide(pNavigationId);
+  }
+
+  @GET
+  @Produces({"application/pdf"})
+  @Path("/pdf/{navigationId}")
+  public StreamingOutput getUserGuidePdf(final @Context Request pRequest,
+      final @PathParam("navigationId") String pNavigationId) {
+    // To Do: User wise manual access validation need to be done
+    return new StreamingOutput() {
+      public void write(OutputStream output) throws IOException, WebApplicationException {
+        File toBeCopied = new File("F:\\IUMS-Manual\\" + pNavigationId + ".pdf");
+        try {
+          java.nio.file.Path path = toBeCopied.toPath();
+          Files.copy(path, output);
+          output.flush();
+        } catch(Exception e) {
+          throw new WebApplicationException(e);
+        }
+      }
+    };
   }
 }

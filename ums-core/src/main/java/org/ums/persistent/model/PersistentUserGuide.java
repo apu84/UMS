@@ -20,7 +20,8 @@ public class PersistentUserGuide implements MutableUserGuide {
   private Integer mUserGuideId;
   private Integer mNavigationId;
   private String mManualTitle;
-  private String mFilePath;
+  private String mPdfFilePath;
+  private String mHtmlContent;
   private Integer mViewOrder;
   private Integer mVisibility;
 
@@ -30,7 +31,8 @@ public class PersistentUserGuide implements MutableUserGuide {
     setId(pMutableUserGuide.getId());
     setNavigationId(pMutableUserGuide.getNavigationId());
     setManualTitle(pMutableUserGuide.getManualTitle());
-    setFilePath(pMutableUserGuide.getFilePath());
+    setPdfFilePath(pMutableUserGuide.getPdfFilePath());
+    setHtmlContent(pMutableUserGuide.getHtmlContent());
     setViewOrder(pMutableUserGuide.getViewOrder());
     setVisibility(pMutableUserGuide.getVisibility());
   }
@@ -64,8 +66,13 @@ public class PersistentUserGuide implements MutableUserGuide {
   }
 
   @Override
-  public void setFilePath(String pFilePath) {
-    this.mFilePath = pFilePath;
+  public void setPdfFilePath(String pPdfFilePath) {
+    mPdfFilePath = pPdfFilePath;
+  }
+
+  @Override
+  public void setHtmlContent(String pHtmlContent) {
+    mHtmlContent = pHtmlContent;
   }
 
   @Override
@@ -94,8 +101,13 @@ public class PersistentUserGuide implements MutableUserGuide {
   }
 
   @Override
-  public String getFilePath() {
-    return mFilePath;
+  public String getPdfFilePath() {
+    return mPdfFilePath;
+  }
+
+  @Override
+  public String getHtmlContent() {
+    return mHtmlContent;
   }
 
   @Override

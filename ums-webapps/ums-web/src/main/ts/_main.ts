@@ -21,7 +21,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/handsontable.d.ts'/>
 
 /// <reference path='../../../../ums-web-core/src/main/ts/root.ts'/>
-
+/// <reference path='Utils.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/BaseUri.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/Notify.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/HttpClient.ts'/>
@@ -147,7 +147,7 @@
 
 
 
-/// <reference path='Utils.ts'/>
+
 
 /// <reference path='controller/syllabus/FullSyllabus.ts'/>
 /// <reference path='controller/syllabus/NewSyllabus.ts'/>
