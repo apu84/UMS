@@ -430,12 +430,6 @@ angular-filemanager .navbar .navbar-form
 angular-filemanager .btn.btn-flat>i{
     font-size:15px !important;
 }
-/** Course Material */
-.angular-filemanager .navbar .navbar-form
-{
-    margin:0px !important;
-    margin-right: 10px !important;
-}
 angular-filemanager .breadcrumb{
     font-size:15.5px !important; ;
 }
