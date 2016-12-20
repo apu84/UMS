@@ -3,14 +3,15 @@ package org.ums.common.academic.resource.helper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
-import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.common.builder.AdmissionStudentBuilder;
+import org.ums.common.report.generator.AdmissionStudentGenerator;
 import org.ums.domain.model.immutable.AdmissionStudent;
 import org.ums.domain.model.mutable.MutableAdmissionStudent;
 import org.ums.manager.AdmissionStudentManager;
-import org.ums.manager.ContentManager;
 import org.ums.resource.ResourceHelper;
 
 import javax.json.Json;
@@ -19,6 +20,7 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +40,9 @@ public class AdmissionStudentResourceHelper extends
   @Autowired
   AdmissionStudentBuilder mBuilder;
 
+  @Autowired
+  AdmissionStudentGenerator mGenerator;
+
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
     return null;
@@ -50,13 +55,33 @@ public class AdmissionStudentResourceHelper extends
 
   public JsonObject getTaletalkData(final int pSemesterId, final UriInfo pUriInfo) {
     List<AdmissionStudent> students;
+    students = getContentManager().getTaletalkData(pSemesterId);
     try {
       students = getContentManager().getTaletalkData(pSemesterId);
-    } catch(Exception e) {
+    } catch(EmptyResultDataAccessException e) {
+      mLogger.error(e.getMessage());
       students = new ArrayList<>(); // just for skipping while we have no data in the db.
     }
 
     return jsonCreator(students, pUriInfo);
+  }
+
+  public List<AdmissionStudent> getTaletalkData(final int pSemesterId) {
+    List<AdmissionStudent> students;
+    students = getContentManager().getTaletalkData(pSemesterId);
+    try {
+      students = getContentManager().getTaletalkData(pSemesterId);
+    } catch(EmptyResultDataAccessException e) {
+      mLogger.error(e.getMessage());
+      students = new ArrayList<>(); // just for skipping while we have no data in the db.
+    }
+
+    return students;
+  }
+
+  public void getTaletalkDataXlesFormat(final OutputStream pOutputStream, int pSemesterId)
+      throws Exception {
+    mGenerator.createABlankTaletalkDataFormatFile(pOutputStream, pSemesterId);
   }
 
   private JsonObject jsonCreator(List<AdmissionStudent> pStudentLIst, UriInfo pUriInfo) {

@@ -14,8 +14,9 @@ module ums{
 
     }
 
+
     public fetchTaletalkData(semesterId:number):ng.IPromise<any>{
-      var url="academic/admission/taletalkData/semester"+semesterId;
+      var url="academic/admission/taletalkData/semester/"+semesterId;
       var defer = this.$q.defer();
 
       this.httpClient.get(url, this.appConstants.mimeTypeJson,
@@ -28,6 +29,24 @@ module ums{
           });
 
       return defer.promise;
+    }
+
+    public downloadExcelFile(semesterId:number):any{
+
+      var fileName = "Taletalk_data_"+semesterId;
+      var contentType:string = Utils.getFileContentType('xls');
+      var url="admission/xlx/taletalkData/semester/"+semesterId;
+
+      this.httpClient.get(url, contentType,
+          (data:any, etag:string)=>{
+        console.log(data);
+        console.log(contentType);
+            Utils.writeFileContent(data, contentType, fileName);
+            console.log("got the file");
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>)=>{
+            console.error(response);
+          },'arraybuffer');
     }
   }
 

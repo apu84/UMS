@@ -13,21 +13,33 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label">Program Type</label>
                         <div class="col-md-8">
-                            <select class="form-control required" name="programTypeObj" data-ng-model="programType" data-ng-change="getSemesters(programTypeObj)">
-                                <option data-ng-repeat="programType in programTypes" value="{{programType}}">{{programType.name}}</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-4 control-label">Semester</label>
-                        <div class="col-md-8">
-                            <select class="form-control required" name="semester" data-ng-model="semester">
-                                <option   value="">Select a semester</option>
-                                <option data-ng-repeat="semester in semesters" value="{{semester}}">{{semester.name}}</option>
+                            <select
+                                    class="form-control required"
+                                    name="programType"
+                                    id="programType"
+                                    data-ng-options="programType.name for programType in programTypes track by programType.id"
+                                    data-ng-model="programType" data-ng-change="getSemesters()">
                             </select>
                         </div>
                     </div>
 
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Semester</label>
+                        <div class="col-md-8">
+                            <!--<select class="form-control required" name="semester" data-ng-model="semester">
+                                <option   value="">Select a semester</option>
+                                <option data-ng-repeat="semester in semesters" value="{{semester}}">{{semester.name}}</option>
+                            </select>-->
+                            <select
+                                class="form-control required"
+                                name="semester"
+                                id="semester"
+                                data-ng-options="semester.name for semester in semesters track by semester.id"
+                                data-ng-model="semester">
+
+                            </select>
+                        </div>
+                    </div>
 
                 </div>
                 <div class="form-actions text-right pal">
@@ -42,7 +54,19 @@
                     class="subtitle"></span></div>
             <div class="panel-body shadowPanel"   style="min-height: 490px;">
                 <div data-ng-if="showUploadPortion==true" align="center">
-                    <h1>This is upload portion</h1>
+                   <div class="row" align="center">
+                       <h1>Please upload taletalk data</h1>
+                       <br>
+                       <br>
+                   </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button class="btn btn-default" data-ng-click="fetchExcelFormat()">Download xls file</button>
+                        </div>
+                        <div class="col-md-6">
+                            <button class="btn btn-success">Upload xls file</button>
+                        </div>
+                    </div>
                 </div>
                 <div data-ng-if="showUploadPortion==false" align="center">
                     <h1>This is saved portion</h1>
