@@ -37,17 +37,17 @@ public class AdmissionStudentGeneratorImpl implements AdmissionStudentGenerator 
     row.createCell(6).setCellValue("hsc_group");
     row.createCell(7).setCellValue("ssc_board");
     row.createCell(8).setCellValue("ssc_roll");
-    row.createCell(9).setCellValue("ssc_regno");
-    row.createCell(10).setCellValue("ssc_year");
-    row.createCell(11).setCellValue("ssc_group");
-    row.createCell(12).setCellValue("gender");
-    row.createCell(13).setCellValue("date_of_birth");
-    row.createCell(14).setCellValue("student_name");
-    row.createCell(15).setCellValue("father_name");
-    row.createCell(16).setCellValue("mother_name");
-    row.createCell(17).setCellValue("ssc_gpa");
-    row.createCell(18).setCellValue("hsc_gpa");
-    row.createCell(19).setCellValue("quota");
+    row.createCell(9).setCellValue("ssc_year");
+    row.createCell(10).setCellValue("ssc_group");
+    row.createCell(11).setCellValue("gender");
+    row.createCell(12).setCellValue("date_of_birth");
+    row.createCell(13).setCellValue("student_name");
+    row.createCell(14).setCellValue("father_name");
+    row.createCell(15).setCellValue("mother_name");
+    row.createCell(16).setCellValue("ssc_gpa");
+    row.createCell(17).setCellValue("hsc_gpa");
+    row.createCell(18).setCellValue("quota");
+    row.createCell(19).setCellValue("unit");
 
     wb.write(pOutputStream);
 

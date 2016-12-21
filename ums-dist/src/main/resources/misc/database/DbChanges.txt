@@ -291,3 +291,9 @@ create table admission_students
   migration_status number,
   CONSTRAINT admission_students_uniq UNIQUE (semester_id,receipt_id,pin,ssc_roll,hsc_roll,quota,student_id, allocated_program_id)
 );
+
+
+
+alter table admission_students
+ADD unit VARCHAR2(15);
+

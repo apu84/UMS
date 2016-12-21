@@ -64,13 +64,80 @@
                             <button class="btn btn-default" data-ng-click="fetchExcelFormat()">Download xls file</button>
                         </div>
                         <div class="col-md-6">
-                            <button class="btn btn-success">Upload xls file</button>
+                            <button class="btn btn-success" data-toggle="modal" data-target="#entryModal">Upload xls file</button>
+                            <!--<div class="table_overlay"></div>
+                            <div class="modal-dialog" id="msg_div"  style="position: absolute;">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button class="close" aria-hidden="true" data-dismiss="modal" type="button" data-ng-click="closePopupModal()">×</button>
+                                        <h4 id="modal-stackable-label" class="modal-title">Message</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p id="msg_content"></p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-primary" type="button" data-ng-click="closePopupModal()">Close</button>
+                                    </div>
+                                </div>
+                            </div>-->
+
                         </div>
                     </div>
                 </div>
-                <div data-ng-if="showUploadPortion==false" align="center">
-                    <h1>This is saved portion</h1>
+                <div class="modal fade" id="entryModal" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">Paste Data Here</h4>
+                            </div>
+                            <div class="modal-body" align="left">
+                                            <textarea editable="true" rows="10" style="width: 100%;" data-ng-model="modalData">
+
+                                            </textarea>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-ng-click="processData(modalData)" data-dismiss="modal">Process & Close</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+                <div data-ng-if="showUploadPortion==false" align="center" style="color:black;">
+                    <div class="row" align="left">
+                        <hot-table settings="data.settings"
+                                   hot-id="taletalkData"
+                                   datarows="admissionStudents"
+                                   stretchH="all",
+                                   autoWrapRow="true"
+                                   height="600"
+                                   >
+                            <hot-column data="receiptId" title="'Receipt Id'" ></hot-column>
+                            <hot-column data="pin" title="'Pin No'"></hot-column>
+                            <hot-column data="hscBoard" title="'HSC Board'"></hot-column>
+                            <hot-column data="hscRoll" title="'HSC Roll'"></hot-column>
+                            <hot-column data="hscRegNo" title="'HSC Regno'"></hot-column>
+                            <hot-column data="hscYear" title="'HSC Year'"></hot-column>
+                            <hot-column data="hscGroup" title="'HSC Group'"></hot-column>
+                            <hot-column data="sscBoard" title="'SSC Board'"></hot-column>
+                            <hot-column data="sscRoll" title="'SSC Roll'"></hot-column>
+                            <hot-column data="sscYear" title="'SSC Year'"></hot-column>
+                            <hot-column data="sscGroup" title="'SSC Group'"></hot-column>
+                            <hot-column data="gender" title="'Gender'"></hot-column>
+                            <hot-column data="dateOfBirth" title="'Date Of Birth'"></hot-column>
+                            <hot-column data="studentName" title="'Name'"></hot-column>
+                            <hot-column data="fatherName" title="'Father Name'"></hot-column>
+                            <hot-column data="motherName" title="'Mother Name'"></hot-column>
+                            <hot-column data="sscGpa" title="'SSC GPA'"></hot-column>
+                            <hot-column data="hscGpa" title="'HSC GPA'"></hot-column>
+                            <hot-column data="quota" title="'Quota'"></hot-column>
+                            <hot-column data="unit" title="'Unit'"></hot-column>
+                        </hot-table>
+                    </div>
+
+
+                </div>
+
+
             </div>
         </div>
     </div>

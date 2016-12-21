@@ -34,14 +34,14 @@ module ums{
     public downloadExcelFile(semesterId:number):any{
 
       var fileName = "Taletalk_data_"+semesterId;
-      var contentType:string = Utils.getFileContentType('xls');
+      var contentType:string=UmsUtil.getFileContentType('xls');
       var url="admission/xlx/taletalkData/semester/"+semesterId;
 
       this.httpClient.get(url, contentType,
           (data:any, etag:string)=>{
         console.log(data);
         console.log(contentType);
-            Utils.writeFileContent(data, contentType, fileName);
+            UmsUtil.writeFileContent(data, contentType, fileName);
             console.log("got the file");
           },
           (response:ng.IHttpPromiseCallbackArg<any>)=>{

@@ -40,7 +40,6 @@ public class PersistentAdmissionStudent implements MutableAdmissionStudent {
   private double mHSCGPA;
   private String mSSCBoard;
   private String mSSCRoll;
-  private String mSSCRegNo;
   private int mSSCYear;
   private String mSSCGroup;
   private double mSSCGPA;
@@ -50,6 +49,7 @@ public class PersistentAdmissionStudent implements MutableAdmissionStudent {
   private String mFatherName;
   private String mMotherName;
   private String mQuota;
+  private String mUnit;
   private String mAdmissionRoll;
   private int mMeritSerialNo;
   private String mStudentId;
@@ -74,7 +74,6 @@ public class PersistentAdmissionStudent implements MutableAdmissionStudent {
     mHSCGPA = pAdmissionStudent.getHSCGpa();
     mSSCBoard = pAdmissionStudent.getSSCBoard();
     mSSCRoll = pAdmissionStudent.getSSCRoll();
-    mSSCRegNo = pAdmissionStudent.getSSCRegNo();
     mSSCYear = pAdmissionStudent.getSSCYear();
     mSSCGroup = pAdmissionStudent.getSSCGroup();
     mSSCGPA = pAdmissionStudent.getSSCGpa();
@@ -84,6 +83,7 @@ public class PersistentAdmissionStudent implements MutableAdmissionStudent {
     mFatherName = pAdmissionStudent.getFatherName();
     mMotherName = pAdmissionStudent.getMotherName();
     mQuota = pAdmissionStudent.getQuota();
+    mUnit = pAdmissionStudent.getUnit();
     mAdmissionRoll = pAdmissionStudent.getAdmissionRoll();
     mMeritSerialNo = pAdmissionStudent.getMeritSerialNo();
     mStudentId = pAdmissionStudent.getStudentId();
@@ -91,6 +91,16 @@ public class PersistentAdmissionStudent implements MutableAdmissionStudent {
     mAllocatedProgramId = pAdmissionStudent.getAllocatedProgramId();
     mMigrationStatus = pAdmissionStudent.getMigrationStatus();
     mLastModified = pAdmissionStudent.getLastModified();
+  }
+
+  @Override
+  public void setUnit(String pUnit) {
+    mUnit = pUnit;
+  }
+
+  @Override
+  public String getUnit() {
+    return mUnit;
   }
 
   public int getAllocatedProgramId() {
@@ -241,11 +251,6 @@ public class PersistentAdmissionStudent implements MutableAdmissionStudent {
   }
 
   @Override
-  public String getSSCRegNo() {
-    return mSSCRegNo;
-  }
-
-  @Override
   public int getSSCYear() {
     return mSSCYear;
   }
@@ -288,11 +293,6 @@ public class PersistentAdmissionStudent implements MutableAdmissionStudent {
   @Override
   public String getStudentName() {
     return mStudentName;
-  }
-
-  @Override
-  public void setSSCRegNo(String pSSCRegNo) {
-    mSSCRegNo = pSSCRegNo;
   }
 
   @Override
