@@ -44,7 +44,7 @@
     '/marksSubmissionStat': {title: 'Marks Submission Statistics', 'breadcrumb': ['Marks Submission Stat.']},
     '/uploadMeritList': {title: 'Upload Admission Merit List', 'breadcrumb': ['Admission Merit List']},
     '/userGuide': {title: 'User Guide', 'breadcrumb': ['User Guide']},
-    '/uploadTaletalkData': {title: 'Upload Taletalk Data', 'breadcrumb': ['Admission Taletalk Student List']},
+    '/uploadTaletalkData': {title: 'Upload Taletalk Data', 'breadcrumb': ['Admission Taletalk Student List']}
   };
 
   $.fn.Data.get = function (id) {

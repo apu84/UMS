@@ -57,7 +57,7 @@ module ums{
           columnSorting:true,
           sortIndicator:true,
           readOnly:true,
-          width:$(".page-content").width(),
+          width:$(".page-content").width()
         }
       };
       $scope.programTypes = appConstants.programType;
