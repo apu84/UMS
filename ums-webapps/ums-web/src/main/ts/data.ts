@@ -44,6 +44,9 @@
     '/marksSubmissionStat': {title: 'Marks Submission Statistics', 'breadcrumb': ['Marks Submission Stat.']},
     '/uploadMeritList': {title: 'Upload Admission Merit List', 'breadcrumb': ['Admission Merit List']},
     '/userGuide': {title: 'User Guide', 'breadcrumb': ['User Guide']},
+    '/inbox': {title: 'MailBox - Inbox', 'breadcrumb': ['MailBox','Inbox']},
+    '/composeMail': {title: 'MailBox - Compose Mail', 'breadcrumb': ['MailBox','Compose']},
+    '/viewMail': {title: 'MailBox - View Mail', 'breadcrumb': ['MailBox','View']},
     '/uploadTaletalkData': {title: 'Upload Taletalk Data', 'breadcrumb': ['Admission Taletalk Student List']}
   };
 

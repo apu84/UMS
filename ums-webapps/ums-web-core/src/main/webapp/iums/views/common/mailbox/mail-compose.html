@@ -1,0 +1,60 @@
+<style>
+    .form-control {
+        border: 1px solid #ccc !important;
+    }
+</style>
+<div class="compose-mail">
+    <div class="portlet box portlet-white">
+        <div class="portlet-header">
+            <div class="caption">Compose Mail</div>
+            <div class="tools"><a
+                    onclick="$(this).hide(); $('#cc').parent().parent().removeClass('hidden'); $('#cc').focus();"
+                    href="javascript:;" class="mrm">Cc</a><a
+                    onclick="$(this).hide(); $('#bcc').parent().parent().removeClass('hidden'); $('#bcc').focus();"
+                    href="javascript:;">Bcc</a></div>
+        </div>
+        <div class="portlet-body">
+            <form role="form-horizontal" method="post">
+                <div class="form-group">
+                    <div class="input-group"><span class="input-group-addon">To:</span><input
+                            id="to" type="text" placeholder="" class="form-control"/></div>
+                </div>
+                <div class="form-group hidden">
+                    <div class="input-group"><span class="input-group-addon">Cc:</span><input
+                            id="cc" type="text" placeholder="" class="form-control"/></div>
+                </div>
+                <div class="form-group hidden">
+                    <div class="input-group"><span class="input-group-addon">Bcc:</span><input
+                            id="bcc" type="text" placeholder="" class="form-control"/></div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group"><span
+                            class="input-group-addon">Subject:</span><input id="subject"
+                                                                            type="text"
+                                                                            placeholder=""
+                                                                            class="form-control"/>
+                    </div>
+                </div>
+                <div class="compose-editor mbl"><textarea rows="6"
+                                                          class="wysihtml5 form-control"></textarea>
+                </div>
+                <div class="form-group"><input type="file"/>
+
+                    <p class="help-block"><i class="fa fa-paperclip"></i>&nbsp;
+                        Attachments</p></div>
+                <hr/>
+                <div class="compose-btn">
+                    <button class="btn btn-sm btn-primary"><i class="fa fa-check"></i>&nbsp;
+                        Send
+                    </button>
+                    &nbsp;
+                    <button class="btn btn-default btn-sm"><i class="fa fa-times"></i>&nbsp;
+                        Discard
+                    </button>
+                    &nbsp;
+                    <button class="btn btn-sm btn-default">Draft</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
