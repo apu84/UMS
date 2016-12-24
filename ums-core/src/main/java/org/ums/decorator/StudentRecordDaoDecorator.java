@@ -37,4 +37,9 @@ public class StudentRecordDaoDecorator extends
       Integer pYear, Integer pAcademicSemester) {
     return getManager().getStudentRecords(pStudentId, pSemesterId, pYear, pAcademicSemester);
   }
+
+  @Override
+  public StudentRecord getStudentRecord(String pStudentId, Integer pSemesterId) {
+    return getManager().getStudentRecord(pStudentId, pSemesterId);
+  }
 }

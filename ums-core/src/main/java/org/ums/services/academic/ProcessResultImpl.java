@@ -47,20 +47,11 @@ public class ProcessResultImpl implements ProcessResult {
   private final static Integer MAX_NO_FAILED_COURSE = 4;
   private final static Integer MAX_NO_FAILED_COURSE_CURRENT_SEMESTER = 2;
 
-  private final Map<String, Double> GPA_MAP = new HashMap<>();
+  private Map<String, Double> GPA_MAP = null;
   private final List<String> EXCLUDE_GRADES = new ArrayList<>();
 
   public ProcessResultImpl() {
-    GPA_MAP.put("A+", 4.00);
-    GPA_MAP.put("A", 3.75);
-    GPA_MAP.put("A-", 3.50);
-    GPA_MAP.put("B+", 3.25);
-    GPA_MAP.put("B", 3.00);
-    GPA_MAP.put("B-", 2.75);
-    GPA_MAP.put("C+", 2.50);
-    GPA_MAP.put("C", 2.25);
-    GPA_MAP.put("D", 2.00);
-    GPA_MAP.put("F", 0.00);
+    GPA_MAP = UmsUtils.getGPAMap();
 
     EXCLUDE_GRADES.add("E");
     EXCLUDE_GRADES.add("W");

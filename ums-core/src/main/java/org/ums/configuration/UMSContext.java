@@ -422,7 +422,8 @@ public class UMSContext {
   @Bean
   UGRegistrationResultManager registrationResultManager() {
     UGRegistrationResultAggregator resultAggregator =
-        new UGRegistrationResultAggregator(equivalentCourseManager(), taskStatusManager());
+        new UGRegistrationResultAggregator(equivalentCourseManager(), taskStatusManager(),
+            semesterManager());
     resultAggregator.setManager(new PersistentUGRegistrationResultDao(mTemplateFactory
         .getJdbcTemplate()));
     return resultAggregator;

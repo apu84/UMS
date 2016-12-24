@@ -10,6 +10,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.util.StringUtils;
 import org.ums.decorator.UGRegistrationResultDaoDecorator;
 import org.ums.domain.model.immutable.EquivalentCourse;
+import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.TaskStatus;
 import org.ums.domain.model.immutable.UGRegistrationResult;
 import org.ums.domain.model.mutable.MutableTaskStatus;
@@ -24,21 +25,23 @@ public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecor
 
   private EquivalentCourseManager mEquivalentCourseManager;
   private TaskStatusManager mTaskStatusManager;
+  private SemesterManager mSemesterManager;
 
   public UGRegistrationResultAggregator(final EquivalentCourseManager pEquivalentCourseManager,
-      final TaskStatusManager pTaskStatusManager) {
+      final TaskStatusManager pTaskStatusManager, final SemesterManager pSemesterManager) {
     mEquivalentCourseManager = pEquivalentCourseManager;
     mTaskStatusManager = pTaskStatusManager;
+    mSemesterManager = pSemesterManager;
   }
 
   @Override
-  public List<UGRegistrationResult> getRegisteredCoursesWithResult(String pStudentId) {
-    List<UGRegistrationResult> resultList = super.getRegisteredCoursesWithResult(pStudentId);
+  public List<UGRegistrationResult> getResults(String pStudentId, Integer pSemesterId) {
+    List<UGRegistrationResult> resultList = super.getResults(pStudentId, pSemesterId);
     if(mLogger.isDebugEnabled()) {
       mLogger.debug("Course found: " + resultList.size());
     }
     Collections.sort(resultList, new ResultComparator());
-    return aggregateResults(resultList);
+    return resultsWithCarryCourses(resultList, pSemesterId);
   }
 
   private List<UGRegistrationResult> aggregateResults(List<UGRegistrationResult> pResults) {
@@ -55,8 +58,7 @@ public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecor
   }
 
   @Override
-  public List<UGRegistrationResult> getResults(Integer pProgramId, Integer pSemesterId)
-      {
+  public List<UGRegistrationResult> getResults(Integer pProgramId, Integer pSemesterId) {
     String taskId = String.format("%s_%s%s", pProgramId, pSemesterId, ProcessResult.PROCESS_GRADES);
     createTaskStatus(taskId);
 
@@ -66,8 +68,8 @@ public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecor
         resultList.stream().collect(Collectors.groupingBy(UGRegistrationResult::getStudentId));
 
     int totalStudentFound = studentCourseGradeMap.keySet().size();
-    int i= 0;
-    if (mLogger.isDebugEnabled()) {
+    int i = 0;
+    if(mLogger.isDebugEnabled()) {
       mLogger.debug("Total student found for result process is: " + totalStudentFound);
     }
 
@@ -81,7 +83,8 @@ public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecor
 
       i++;
       if((i % UPDATE_NOTIFICATION_AFTER) == 0 || (i == totalStudentFound)) {
-        updateTaskStatus(taskId, TaskStatus.Status.INPROGRESS, UmsUtils.getPercentageString(i, totalStudentFound));
+        updateTaskStatus(taskId, TaskStatus.Status.INPROGRESS,
+            UmsUtils.getPercentageString(i, totalStudentFound));
       }
     }
     List<UGRegistrationResult> returnList =
@@ -90,8 +93,7 @@ public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecor
     return returnList;
   }
 
-  private List<UGRegistrationResult> equivalent(Map<String, UGRegistrationResult> pResults)
-      {
+  private List<UGRegistrationResult> equivalent(Map<String, UGRegistrationResult> pResults) {
     List<EquivalentCourse> equivalentCourses = mEquivalentCourseManager.getAll();
     Map<String, EquivalentCourse> equivalentCourseMap = equivalentCourses.stream()
         .collect(Collectors.toMap(EquivalentCourse::getOldCourseId, Function.identity()));
@@ -153,5 +155,59 @@ public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecor
       mutableTaskStatus.setProgressDescription(pProgress);
     }
     mutableTaskStatus.commit(true);
+  }
+
+  private List<UGRegistrationResult> resultsWithCarryCourses(List<UGRegistrationResult> pResults,
+      Integer pForSemesterId) {
+    ListIterator<UGRegistrationResult> resultIterator = pResults.listIterator();
+    while(resultIterator.hasNext()) {
+      UGRegistrationResult result = resultIterator.next();
+      Semester pForSemester = mSemesterManager.get(pForSemesterId);
+      if(result.getSemester().getStartDate().before(pForSemester.getStartDate())
+          && result.getGradeLetter() != null) {
+        if(result.getGradeLetter().equalsIgnoreCase("F")) {
+          if(hasTakenInFollowingSemesters(result, pResults)) {
+            resultIterator.remove();
+          }
+        }
+        else {
+          resultIterator.remove();
+        }
+      }
+    }
+    List<UGRegistrationResult> list = new ArrayList<>();
+    while(resultIterator.hasPrevious()) {
+      resultIterator.previous();
+    }
+    resultIterator.forEachRemaining(list::add);
+    return list;
+  }
+
+  private boolean hasTakenInFollowingSemesters(UGRegistrationResult pResult,
+      List<UGRegistrationResult> pResults) {
+    for(UGRegistrationResult result : pResults) {
+      if(result.getCourseId().equalsIgnoreCase(pResult.getCourseId())
+          && pResult.getSemester().getStartDate().before(result.getSemester().getStartDate())) {
+        return true;
+      }
+    }
+    return hasTakenEquivalentInFollowingSemesters(pResult, pResults);
+  }
+
+  private boolean hasTakenEquivalentInFollowingSemesters(UGRegistrationResult pResult,
+                                                         List<UGRegistrationResult> pResults) {
+    List<EquivalentCourse> equivalentCourses = mEquivalentCourseManager.getAll();
+    Map<String, EquivalentCourse> equivalentCourseMap = equivalentCourses.stream()
+        .collect(Collectors.toMap(EquivalentCourse::getOldCourseId, Function.identity()));
+    EquivalentCourse equivalentCourse = equivalentCourseMap.get(pResult.getCourseId());
+    if(equivalentCourse != null) {
+      for(UGRegistrationResult result : pResults) {
+        if(result.getCourseId().equalsIgnoreCase(equivalentCourse.getNewCourseId())
+            && pResult.getSemester().getStartDate().before(result.getSemester().getStartDate())) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 }

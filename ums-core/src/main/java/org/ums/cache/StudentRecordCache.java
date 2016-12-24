@@ -1,12 +1,12 @@
 package org.ums.cache;
 
+import java.util.List;
+
 import org.ums.domain.model.immutable.StudentRecord;
 import org.ums.domain.model.mutable.MutableStudentRecord;
 import org.ums.manager.CacheManager;
 import org.ums.manager.StudentRecordManager;
 import org.ums.util.CacheUtil;
-
-import java.util.List;
 
 public class StudentRecordCache extends
     ContentCache<StudentRecord, MutableStudentRecord, Integer, StudentRecordManager> implements
@@ -77,5 +77,11 @@ public class StudentRecordCache extends
       getCacheManager().put(getCacheKey(readOnly.getId()), readOnly);
     }
     return readOnlys;
+  }
+
+  @Override
+  public StudentRecord getStudentRecord(final String pStudentId, final Integer pSemesterId) {
+    String cacheKey = getCacheKey(StudentRecord.class.toString(), pStudentId, pSemesterId);
+    return cachedEntity(cacheKey, () -> getManager().getStudentRecord(pStudentId, pSemesterId));
   }
 }
