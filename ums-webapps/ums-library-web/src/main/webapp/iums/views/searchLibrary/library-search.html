@@ -18,11 +18,13 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label">Book Name</label>
                         <div class="col-md-8">
-                            <input  type="text" name="book" id="mBook" data-ng-model="searchBook"/>
+                            <input type="text" name="myBook" id="mBook" data-ng-model="book"/>
+                            <label data-ng-model="msg_book"></label>
                         </div>
                     </div>
                 </div>
                 <div class="form-actions text-right pal">
+                    <button type="button" class="btn btn-success" data-ng-click="getAll()">Get All Books</button>
                     <button type="button" class="btn btn-success" data-ng-click="search()">Submit</button>
                 </div>
             </form>
@@ -38,11 +40,13 @@
                         <thead id="thead" role="row"  class="heading">
                         <th style="text-align:center;">Book Title</th>
                         <th align="center">Author Title</th>
+                        <th align="center">Operation</th>
                         </thead>
                         <tbody>
                         <tr data-ng-repeat="b in foundbooks" align="center">
                             <td>{{b.bookName}}</td>
                             <td>{{b.authorName}}</td>
+                            <td><input type="button" value="Delete" data-ng-click="remove(b.bookName, b.authorName)"/></td>
                         </tr>
                         </tbody>
                     </table>

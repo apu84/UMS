@@ -12,12 +12,11 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-/**
- * Created by kawsu on 12/4/2016.
- */
 public class PersistentLibraryDao extends LibraryDaoDecorator {
   static String INSERT_ALL = "INSERT INTO LIBRARY(BOOK_NAME, AUTHOR_NAME) VALUES(? , ?) ";
   static String SELECT_ALL = "SELECT BOOK_NAME,AUTHOR_NAME FROM LIBRARY";
+  static String DELETE_ALL = "DELETE FROM LIBRARY";
+  static String SELECT_ALL_BOOKS = "SELECT BOOK_NAME,AUTHOR_NAME FROM LIBRARY";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -30,10 +29,20 @@ public class PersistentLibraryDao extends LibraryDaoDecorator {
     return mJdbcTemplate.update(INSERT_ALL, pMutable.getBookName(), pMutable.getAuthorName());
   }
 
-  public List<Library> getLibraryBooks(String pBook) {
+  public List<Library> getAllTheLibraryBooks(String pBook) {
     String query = SELECT_ALL + " WHERE BOOK_NAME=?";
     return mJdbcTemplate.query(query, new Object[] {pBook},
         new PersistentLibraryDao.RoleRowMapper());
+  }
+
+  public int deleteByBookNameAndAuthorName(String pBookName, String pAuthorName) {
+    String query = DELETE_ALL + " WHERE BOOK_NAME=? AND AUTHOR_NAME=?";
+    return mJdbcTemplate.update(query, pBookName, pAuthorName);
+  }
+
+  public List<Library> getAllLibraryBooks() {
+    String query = SELECT_ALL_BOOKS;
+    return mJdbcTemplate.query(query, new RoleRowMapper());
   }
 
   class RoleRowMapper implements RowMapper<Library> {

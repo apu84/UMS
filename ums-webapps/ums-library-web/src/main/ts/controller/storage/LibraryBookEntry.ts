@@ -19,8 +19,6 @@ module ums {
 
       $scope.showTable = false;
       $scope.save = this.save.bind(this);
-
-      console.log("This is constructor");
     }
 
     private save(): void {

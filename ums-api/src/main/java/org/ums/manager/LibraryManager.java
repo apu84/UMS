@@ -10,4 +10,8 @@ import java.util.List;
 public interface LibraryManager extends ContentManager<Library, MutableLibrary, Integer> {
 
   public List<Library> getLibraryBooks(final String pbook) throws Exception;
+
+  public List<Library> getAllTheLibraryBooks() throws Exception;
+
+  int deleteByBookNameAndAuthorName(final String pBookName, final String pAuthorName);
 }

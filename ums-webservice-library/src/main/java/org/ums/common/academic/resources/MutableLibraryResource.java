@@ -8,9 +8,6 @@ import javax.json.JsonObject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
-/**
- * Created by kawsu on 12/5/2016.
- */
 public class MutableLibraryResource extends Resource {
   @Autowired
   LibraryResourceHelper mLibraryResourceHelper;
@@ -18,5 +15,13 @@ public class MutableLibraryResource extends Resource {
   @POST
   public Response createBook(final JsonObject pJsonObject) {
     return mLibraryResourceHelper.post(pJsonObject, mUriInfo);
+  }
+
+  @DELETE
+  @Path("/delete/book/{bookName}/author/{authorName}")
+  public Response deleteByBookAndAuthor(final @PathParam("bookName") String pbookName,
+      final @PathParam("authorName") String pAuthorName) {
+    return mLibraryResourceHelper.deleteByBookAndAuthor(pbookName.toString(),
+        pAuthorName.toString());
   }
 }
