@@ -48,7 +48,6 @@ module ums {
           {id: 'F', name: 'Female'}
         ],
         programType: [
-          {id: '', name: 'Select Program Type'},
           {id: '11', name: 'Undergraduate'},
           {id: '22', name: 'Postgraduate'}
         ],

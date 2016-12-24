@@ -34,8 +34,6 @@ public interface MutableAdmissionStudent extends AdmissionStudent, Mutable,
 
   void setSSCRoll(final String pSSCRoll);
 
-  void setSSCRegNo(final String pSSCRegNo);
-
   void setSSCYear(final int pSSCYear);
 
   void setSSCGroup(final String pSSCGroup);
@@ -53,6 +51,8 @@ public interface MutableAdmissionStudent extends AdmissionStudent, Mutable,
   void setMotherName(final String pMotherName);
 
   void setQuota(final String pQuota);
+
+  void setUnit(final String pUnit);
 
   void setAdmissionRoll(final String pAdmissionRoll);
 

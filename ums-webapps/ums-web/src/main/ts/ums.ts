@@ -66,6 +66,7 @@ module ums {
     // For any unmatched url, redirect to /state1
     //$locationProvider.html5Mode(true);
     $urlRouterProvider.when('/passwordReport','/passwordReport/singleUserPassword');
+    $urlRouterProvider.when('/mailBox','/mailBox/inbox');
     $urlRouterProvider.otherwise("/userHome");
 
     //
@@ -771,7 +772,32 @@ module ums {
           controller: 'UserGuide',
           templateUrl: 'views/common/user-guide.html'
         })
-
+        .state('mailBox', {
+          url: "/mailBox",
+          templateUrl: 'views/common/mailbox/mailbox.html'
+        })
+        .state('mailBox.inbox', {
+          url: "/inbox",
+          controller: 'MailInbox',
+          templateUrl: 'views/common/mailbox/mail-inbox.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: ['vendors/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css',
+                  'vendors/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js']
+              });
+            }]
+          }
+        })
+        .state('mailBox.composeMail', {
+          url: "/composeMail",
+          controller: 'MailCompose',
+          templateUrl: 'views/common/mailbox/mail-compose.html'
+        })
+        .state('mailBox.viewMail', {
+          url: "/viewMail",
+          templateUrl: 'views/common/mailbox/mail-view.html'
+        })
       //In database use /dummyController/H or /dummyController/T in the location column
       //https://localhost/ums-web/iums/#/dummyConroller/T
       //https://localhost/ums-web/iums/#/dummyConroller/H
@@ -783,4 +809,3 @@ module ums {
 
   });
 }
-//asdfasdfasd f/adsfa/sd f/asd fasd/f

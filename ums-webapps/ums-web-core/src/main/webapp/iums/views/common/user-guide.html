@@ -1,1 +1,41 @@
-Hello Iftiuser
+<style>
+    #list-group {
+        max-width: 979px;
+        min-width: 280px;
+    }
+</style>
+<div class="row">
+    <div class="col-md-12" style="padding-right:0px;padding-left: 12px;">
+        <div class="panel">
+            <div class="panel-heading">Available User Guide List</div>
+            <div class="panel-body">
+                <ul class="list-group" id="list-group">
+                    <li class="list-group-item" data-ng-repeat="guide in guideList">
+                        {{$index + 1}}. {{guide.manualTitle}}
+
+                        <div class="mbn pull-right">
+                            <button type="button" data-toggle="modal"
+                                    class="btn btn-default btn-xs" data-target="#modal-full-width" data-ng-click="downloadUserGuide(guide.navigationId,guide.manualTitle,'html')">
+                                <i class="fa fa-globe"
+                                   aria-hidden="true"
+                                   style="color: blue;"></i>
+                                HTML
+                            </button>
+                            <button type="button"
+                                    class="btn btn-default btn-xs"
+                                    style="margin-left: 15px;" data-ng-click="downloadUserGuide(guide.navigationId,guide.manualTitle,'pdf')">
+                                <i class="fa fa-file-pdf-o"
+                                   aria-hidden="true"
+                                   style="color: red;"></i>
+                                PDF
+                            </button>
+                        </div>
+
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</div>
+

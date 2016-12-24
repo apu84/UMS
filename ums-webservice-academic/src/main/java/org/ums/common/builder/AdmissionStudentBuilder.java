@@ -41,7 +41,6 @@ public class AdmissionStudentBuilder implements Builder<AdmissionStudent, Mutabl
     pBuilder.add("hscGroup", pReadOnly.getHSCGroup());
     pBuilder.add("sscBoard", pReadOnly.getSSCBoard());
     pBuilder.add("sscRoll", pReadOnly.getSSCRoll());
-    pBuilder.add("sscRegNo", pReadOnly.getSSCRegNo());
     pBuilder.add("sscYear", pReadOnly.getSSCYear());
     pBuilder.add("sscGroup", pReadOnly.getSSCGroup());
     pBuilder.add("gender", pReadOnly.getGender());
@@ -52,6 +51,7 @@ public class AdmissionStudentBuilder implements Builder<AdmissionStudent, Mutabl
     pBuilder.add("sscGpa", pReadOnly.getSSCGpa());
     pBuilder.add("hscGpa", pReadOnly.getHSCGpa());
     pBuilder.add("quota", pReadOnly.getQuota());
+    pBuilder.add("unit", pReadOnly.getUnit());
     if(pReadOnly.getAdmissionRoll() != null)
       pBuilder.add("admissionRoll", pReadOnly.getAdmissionRoll());
     if(pReadOnly.getMeritSerialNo() != null)
@@ -77,7 +77,7 @@ public class AdmissionStudentBuilder implements Builder<AdmissionStudent, Mutabl
     pMutable.setHSCRoll(pJsonObject.getString("hscRoll"));
     pMutable.setSSCRoll(pJsonObject.getString("sscRoll"));
     pMutable.setHSCRegNo(pJsonObject.getString("hscRegNo"));
-    pMutable.setSSCRegNo(pJsonObject.getString("sscRegNo"));
+    pMutable.setUnit(pJsonObject.getString("unit"));
     pMutable.setHSCYear(pJsonObject.getInt("hscYear"));
     pMutable.setSSCYear(pJsonObject.getInt("sscYear"));
     pMutable.setHSCGroup(pJsonObject.getString("hscGroup"));

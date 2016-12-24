@@ -410,3 +410,26 @@ div.ui-jqgrid-view table.ui-jqgrid-btable th {
     font-weight: bold;
     font-size: 2.2em;
 }
+
+
+/** Course Material */
+.angular-filemanager .navbar .navbar-form
+{
+    margin:0px !important;
+    margin-right: 10px !important;
+}
+.angular-filemanager .btn.btn-flat>i{
+    font-size:15px !important; ;
+}
+
+/** Angular File Manager Course Material */
+angular-filemanager .navbar .navbar-form
+{
+    margin:9px 0px !important;
+}
+angular-filemanager .btn.btn-flat>i{
+    font-size:15px !important;
+}
+angular-filemanager .breadcrumb{
+    font-size:15.5px !important; ;
+}

@@ -37,11 +37,6 @@ module ums {
     static SEMESTER_STATUS_ACTIVE: number=1;
     static SEMESTER_STATUS_NEWLY_CREATED: number=2;
 
-    /**
-     * File Content Types
-     */
-    static PDF: string="application/pdf";
-    static XLS: string="application/vnd.ms-excel";
 
     /**
      * Student Id block colors (Advisor Assignment from Admin Officer Account)
@@ -58,21 +53,7 @@ module ums {
 
 
 
-    public static getFileContentType(fileType:string):string {
-      var contentType:string="";
-      switch (fileType)
-      {
-        case'pdf':
-          contentType=this.PDF;
-          break;
-        case'xls':
-          contentType=this.XLS;
-          break;
-        default:
-          alert("Wrong file type.........");
-      }
-      return contentType;
-    }
+
 
     public static findIndex(source_arr:Array<any>, element_value:string):number {
       var targetIndex = -1;
@@ -129,24 +110,7 @@ module ums {
       });
     }
 
-    public static writeFileContent(data:any,contentType:string,fileName:string){
-      var file = new Blob([data], {type: contentType});
-      var reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onloadend = function (e) {
-        Utils.saveAsFile(reader.result, fileName);
-      }
-    }
-    public static  saveAsFile(url, fileName) {
-      var a: any = document.createElement("a");
-      document.body.appendChild(a);
-      a.style = "display: none";
-      a.href = url;
-      a.download = fileName;
-      a.click();
-      window.URL.revokeObjectURL(url);
-      $(a).remove();
-    }
+
 
   }
 }

@@ -37,8 +37,6 @@ public interface AdmissionStudent extends Serializable, EditType<MutableAdmissio
 
   String getSSCRoll();
 
-  String getSSCRegNo();
-
   int getSSCYear();
 
   String getSSCGroup();
@@ -56,6 +54,8 @@ public interface AdmissionStudent extends Serializable, EditType<MutableAdmissio
   String getMotherName();
 
   String getQuota();
+
+  String getUnit();
 
   String getAdmissionRoll();
 

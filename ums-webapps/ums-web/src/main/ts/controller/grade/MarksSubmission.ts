@@ -1419,14 +1419,14 @@ module ums {
 
     //Download GradeSheet in Excel Format
     private generateXls(): void {
-      var contentType=Utils.getFileContentType("xls");
+      var contentType=UmsUtil.getFileContentType("xls");
       this.httpClient.get("gradeReport/xls/semester/"+this.$scope.current_semesterId+"/courseid/"+this.$scope.current_courseId+"/examtype/"+this.$scope.current_examTypeId+"/coursetype/"+(this.$scope.courseType=="THEORY"?"1":"2")+"/role/"+this.$scope.currentActor, contentType,
           (data: any, etag: string) => {
             var file = new Blob([data], {type: contentType});
             var reader = new FileReader();
             reader.readAsDataURL(file);
             reader.onloadend = (e) => {
-              Utils.saveAsFile(reader.result, this.$scope.data.course_no);
+              UmsUtil.saveAsFile(reader.result, this.$scope.data.course_no);
             };
           },
           (response: ng.IHttpPromiseCallbackArg<any>) => {

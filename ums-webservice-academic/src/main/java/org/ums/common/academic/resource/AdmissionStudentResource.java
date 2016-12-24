@@ -7,6 +7,9 @@ import javax.json.JsonObject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
+import javax.ws.rs.core.StreamingOutput;
+import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * Created by Monjur-E-Morshed on 17-Dec-16.
@@ -24,4 +27,5 @@ public class AdmissionStudentResource extends MutableAdmissionStudentResource {
       final @PathParam("semester-id") int pSemesterId) {
     return mHelper.getTaletalkData(pSemesterId, mUriInfo);
   }
+
 }

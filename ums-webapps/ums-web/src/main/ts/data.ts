@@ -26,7 +26,7 @@
     '/examRoutine': {title: 'Exam Routine ', 'breadcrumb': ['Exam Routine']},
     '/optionalCoursesApplication': {title: 'Optional Courses ', 'breadcrumb': ['Optional Course Application']},
     '/optionalCoursesOffer': {title: 'Optional Courses ', 'breadcrumb': ['Optional Course Settings']},
-      '/gradeSheetSelectionTeacher': {title: 'Grade Sheet View/Selection', 'breadcrumb': ['Grade Sheet View/Selection']},
+      '/gradeSheetSelectionTeacher/T': {title: 'Grade Sheet View/Selection', 'breadcrumb': ['Grade Sheet View/Selection'],'navId':'2029'},
     '/applicationCCI':{title:'Appliction for Clearance/Improvement/Carry','breadcrumb':['Application for Clearance/Improvement/Carry']},
     '/examSeatPlan': {title: 'Exam Seat Plan ', 'breadcrumb': ['Seat Plan ']},
     '/seatPlanRegular': {title: 'Exam Seat Plan - Regular ', 'breadcrumb': ['Seat Plan','Regular']},
@@ -39,11 +39,15 @@
     '/studentAdviser': {title: 'Students Adviser', 'breadcrumb': ['Students Adviser']},
     '/advisingStudents': {title: 'Advising Students', 'breadcrumb': ['Advising Students']},
     '/resultProcessing': {title: 'Result Processing', 'breadcrumb': ['Result Processing']},
-    '/classAttendance': {title: 'Attendance Sheet', 'breadcrumb': ['Attendance Sheet']},
+    '/classAttendance': {title: 'Attendance Sheet', 'breadcrumb': ['Attendance Sheet'],'navId':'1111'},
     '/roomBasedRoutine': {title: 'Room-wise Routine', 'breadcrumb': ['Routine','Room-wise']},
     '/marksSubmissionStat': {title: 'Marks Submission Statistics', 'breadcrumb': ['Marks Submission Stat.']},
     '/uploadMeritList': {title: 'Upload Admission Merit List', 'breadcrumb': ['Admission Merit List']},
-    '/userGuide': {title: 'User Guide', 'breadcrumb': ['User Guide']}
+    '/userGuide': {title: 'User Guide', 'breadcrumb': ['User Guide']},
+    '/inbox': {title: 'MailBox - Inbox', 'breadcrumb': ['MailBox','Inbox']},
+    '/composeMail': {title: 'MailBox - Compose Mail', 'breadcrumb': ['MailBox','Compose']},
+    '/viewMail': {title: 'MailBox - View Mail', 'breadcrumb': ['MailBox','View']},
+    '/uploadTaletalkData': {title: 'Upload Taletalk Data', 'breadcrumb': ['Admission Taletalk Student List']}
   };
 
   $.fn.Data.get = function (id) {

@@ -1,0 +1,72 @@
+
+<div class="row">
+    <div class="col-sm-3 col-md-2">
+
+    </div>
+    <div class="col-sm-9 col-md-10">
+        <div class="btn-group">
+            <button type="button" class="btn btn-default"><input type="checkbox"
+                                                                 style="margin: 0; vertical-align: middle;"
+                                                                 class="checkall"/></button>
+            <button type="button" data-toggle="dropdown" class="btn btn-default dropdown-toggle"><span
+                    class="caret"></span><span class="sr-only">Toggle Dropdown</span></button>
+            <ul role="menu" class="dropdown-menu">
+                <li><a href="#">All</a></li>
+                <li><a href="#">None</a></li>
+                <li><a href="#">Read</a></li>
+                <li><a href="#">Unread</a></li>
+                <li><a href="#">Starred</a></li>
+                <li><a href="#">Unstarred</a></li>
+            </ul>
+        </div>
+        <button type="button" data-toggle="tooltip" title="Refresh" class="btn btn-default mls mrs">
+            <span class="glyphicon glyphicon-refresh"></span></button>
+        <div class="btn-group">
+            <button type="button" data-toggle="dropdown" class="btn btn-default dropdown-toggle">More
+                &nbsp;<span class="caret"></span></button>
+            <ul role="menu" class="dropdown-menu">
+                <li><a href="#">Mark all as read</a></li>
+                <li class="divider"></li>
+                <li class="text-center pbm">
+                    <small class="text-muted">Select messages to see more actions</small>
+                </li>
+            </ul>
+        </div>
+        <div class="pull-right"><span class="text-muted"><b>1</b>&nbsp; – &nbsp;<b>50</b>&nbsp; of &nbsp;<b>277</b></span>
+
+            <div class="btn-group mlm">
+                <button type="button" class="btn btn-default"><span
+                        class="glyphicon glyphicon-chevron-left"></span></button>
+                <button type="button" class="btn btn-default"><span
+                        class="glyphicon glyphicon-chevron-right"></span></button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="mtl mbl"></div>
+<div class="row">
+    <div class="col-sm-3 col-md-2">
+        <a ui-sref=".composeMail" role="button" class="btn btn-danger btn-sm btn-block" style="background-color:#795548;border:2px solid #795548;">COMPOSE</a>
+
+        <div class="mtm mbm"></div>
+        <div class="panel">
+            <div class="panel-body pan">
+                <ul style="background: #fff" class="nav nav-pills nav-stacked">
+                    <li class="active"><a ui-sref=".inbox"><span class="badge pull-right">42</span><i
+                            class="fa fa-inbox fa-fw mrs"></i>Inbox</a></li>
+                    <li><a href="#"><i class="fa fa-star-o fa-fw mrs"></i>Starred</a></li>
+                    <li><a href="#"><i class="fa fa-info-circle fa-fw mrs"></i>Important</a></li>
+                    <li><a href="#"><i class="fa fa-plane fa-fw mrs"></i>Sent Mail</a></li>
+                    <li><a href="#"><span class="badge badge-orange pull-right">3</span><i
+                            class="fa fa-edit fa-fw mrs"></i>Drafts</a></li>
+                    <li><a href="#"><i class="fa fa-trash-o fa-fw mrs"></i>Trash</a></li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-sm-9 col-md-10" ui-view>
+    </div>
+</div>
+</div>
+

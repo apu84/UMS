@@ -15,7 +15,6 @@ module ums{
     hscGroup:string;
     sscBoard:string;
     sscRoll:string;
-    sscRegNo:string;
     sscYear:number;
     sscGroup:string;
     gender:string;
@@ -26,6 +25,7 @@ module ums{
     sscGpa:any;
     hscGpa:any;
     quota:string;
+    unit:string;
     admissionRoll:string;
     meritSlNo:number;
     studentId:string;

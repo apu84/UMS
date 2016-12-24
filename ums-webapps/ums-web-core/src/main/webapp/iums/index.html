@@ -141,5 +141,22 @@
     </div>
 </div>
 
+<!--Modal Full Width for User Guide Html View-->
+<div id="modal-full-width" tabindex="-1" role="dialog" aria-labelledby="modal-full-width-label"
+     aria-hidden="true" class="modal fade">
+    <div class="modal-dialog modal-full-width" style="padding-left: 9px;height: 84%;">
+        <div class="modal-content" style="height: 99%;">
+            <div class="modal-header" style="padding: 7px 15px;">
+                <button type="button" data-dismiss="modal" aria-hidden="true"
+                        class="close" style="opacity: 1;margin-top: 0px;">&times;</button>
+                <h4 id="modal-full-width-label" class="modal-title" style="font-size: 16px;">User Guide-Html View</h4></div>
+            <div class="modal-body" data-ng-bind-html="data.htmlUserGuide" style="height: calc(100% - 90px);"></div>
+            <div class="modal-footer" style="padding: 7px 15px;">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>

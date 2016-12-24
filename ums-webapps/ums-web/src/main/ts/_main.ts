@@ -19,9 +19,10 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/jquery.tab.d.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/bootstrap.modal.d.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/handsontable.d.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/lib/wysihtml5.d.ts'/>
 
 /// <reference path='../../../../ums-web-core/src/main/ts/root.ts'/>
-
+/// <reference path='Utils.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/BaseUri.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/Notify.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/HttpClient.ts'/>
@@ -34,6 +35,9 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/ChangePassword.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/Logout.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/UserGuide.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/controller/mailbox/MailInbox.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/controller/mailbox/MailCompose.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/controller/mailbox/MailView.ts'/>
 
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/FlushCache.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/LeftMenu.ts'/>
@@ -147,7 +151,7 @@
 
 
 
-/// <reference path='Utils.ts'/>
+
 
 /// <reference path='controller/syllabus/FullSyllabus.ts'/>
 /// <reference path='controller/syllabus/NewSyllabus.ts'/>
