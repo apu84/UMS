@@ -17,6 +17,7 @@ module ums {
   }]);
 
   UMS.config(($stateProvider, $urlRouterProvider, $locationProvider) => {
+    $urlRouterProvider.when('/cataloging','/cataloging/search');
     $urlRouterProvider.otherwise("/userHome");
     $stateProvider
         .state('userHome', {
@@ -34,7 +35,17 @@ module ums {
         })
         .state('cataloging', {
           url: "/cataloging",
-          templateUrl: 'views/admin/cataloging/cataloging-home.html'
+          templateUrl: 'views/admin/cataloging/catalog-home.html'
+        })
+        .state('cataloging.search', {
+          url: "/search",
+          templateUrl: 'views/admin/cataloging/catalog-search.html'
+
+        })
+        .state('cataloging.newBook', {
+          url: "/search",
+
+          templateUrl: 'views/admin/cataloging/catalog-new-book.html'
         })
         .state('storeBook', {
           url: "/storeBook",
