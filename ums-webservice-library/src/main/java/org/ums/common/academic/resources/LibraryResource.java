@@ -19,7 +19,7 @@ import javax.ws.rs.core.Response;
  */
 
 @Component
-@Path("/library")
+@Path("library")
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
 public class LibraryResource extends MutableLibraryResource {
@@ -32,7 +32,7 @@ public class LibraryResource extends MutableLibraryResource {
   @GET
   @Path("/all")
   public JsonObject getAll() throws Exception {
-    return mLibraryResourceHelper.getAll(mUriInfo);
+    return mLibraryResourceHelper.getAllLibraryBooks(mUriInfo);
   }
 
   @GET

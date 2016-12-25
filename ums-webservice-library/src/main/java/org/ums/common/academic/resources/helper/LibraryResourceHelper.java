@@ -39,7 +39,7 @@ public class LibraryResourceHelper extends ResourceHelper<Library, MutableLibrar
   BinaryContentManager<byte[]> mBinaryContentManager;
 
   @Autowired
-  private LibraryManager mManager;
+  private LibraryManager mLibraryManager;
 
   @Autowired
   @Qualifier("LibraryBuilder")
@@ -65,6 +65,11 @@ public class LibraryResourceHelper extends ResourceHelper<Library, MutableLibrar
     return ConvertToJSon(libs, pUriInfo);
   }
 
+  public JsonObject getAllLibraryBooks(final UriInfo pUriInfo) throws Exception {
+    List<Library> libs = getContentManager().getAllTheLibraryBooks();
+    return ConvertToJSon(libs, pUriInfo);
+  }
+
   private JsonObject ConvertToJSon(List<Library> plibraryBook, final UriInfo pUriInfo) {
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
@@ -78,9 +83,14 @@ public class LibraryResourceHelper extends ResourceHelper<Library, MutableLibrar
     return object.build();
   }
 
+  public Response deleteByBookAndAuthor(String pBookName, String pAuthorname) {
+    mLibraryManager.deleteByBookNameAndAuthorName(pBookName, pAuthorname);
+    return Response.noContent().build();
+  }
+
   @Override
   protected LibraryManager getContentManager() {
-    return mManager;
+    return mLibraryManager;
   }
 
   @Override

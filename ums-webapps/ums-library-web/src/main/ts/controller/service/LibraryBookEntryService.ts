@@ -21,7 +21,6 @@ module ums {
         defer.resolve("error");
       });
 
-      console.log("I am in LibraryService");
       return defer.promise;
     }
   }

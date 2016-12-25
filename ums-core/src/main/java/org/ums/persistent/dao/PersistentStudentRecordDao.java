@@ -1,18 +1,19 @@
 package org.ums.persistent.dao;
 
-import com.google.common.collect.Lists;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.ums.persistent.model.PersistentStudentRecord;
-import org.ums.decorator.StudentRecordDaoDecorator;
-import org.ums.domain.model.mutable.MutableStudentRecord;
-import org.ums.domain.model.immutable.StudentRecord;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.ums.decorator.StudentRecordDaoDecorator;
+import org.ums.domain.model.immutable.StudentRecord;
+import org.ums.domain.model.mutable.MutableStudentRecord;
+import org.ums.persistent.model.PersistentStudentRecord;
+
+import com.google.common.collect.Lists;
 
 public class PersistentStudentRecordDao extends StudentRecordDaoDecorator {
   String SELECT_ALL =
@@ -101,6 +102,13 @@ public class PersistentStudentRecordDao extends StudentRecordDaoDecorator {
     String query = SELECT_ALL + " where  STUDENT_ID=? AND SEMESTER_ID=? AND YEAR=? AND SEMESTER=?";
     return mJdbcTemplate.query(query, new Object[] {pStudentId, pSemesterId, pYear,
         pAcademicSemester}, new StudentRecordRowMapper());
+  }
+
+  @Override
+  public StudentRecord getStudentRecord(final String pStudentId, final Integer pSemesterId) {
+    String query = SELECT_ALL + " where  STUDENT_ID=? AND SEMESTER_ID=?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pStudentId, pSemesterId},
+        new StudentRecordRowMapper());
   }
 
   @Override

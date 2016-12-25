@@ -150,7 +150,7 @@ public class PersistentUGRegistrationResultDao extends UGRegistrationResultDaoDe
   }
 
   @Override
-  public List<UGRegistrationResult> getRegisteredCoursesWithResult(String pStudentId) {
+  public List<UGRegistrationResult> getResults(String pStudentId, Integer pSemesterId) {
     String query = SELECT_ALL + " WHERE STUDENT_ID = ?";
     return mJdbcTemplate.query(query, new Object[] {pStudentId},
         new UGRegistrationResultRowMapperWithResult());

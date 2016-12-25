@@ -16,4 +16,14 @@ public class LibraryDaoDecorator extends
   public List<Library> getLibraryBooks(final String pbook) throws Exception {
     return getManager().getLibraryBooks(pbook);
   }
+
+  @Override
+  public List<Library> getAllTheLibraryBooks() throws Exception {
+    return getManager().getAllTheLibraryBooks();
+  }
+
+  @Override
+  public int deleteByBookNameAndAuthorName(String pBookName, String pAuthorName) {
+    return getManager().deleteByBookNameAndAuthorName(pBookName, pAuthorName);
+  }
 }

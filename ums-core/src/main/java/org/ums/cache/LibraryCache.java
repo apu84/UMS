@@ -8,9 +8,6 @@ import org.ums.util.CacheUtil;
 
 import java.util.List;
 
-/**
- * Created by kawsu on 12/3/2016.
- */
 public class LibraryCache extends ContentCache<Library, MutableLibrary, Integer, LibraryManager>
     implements LibraryManager {
   private CacheManager<Library, Integer> mCacheManager;
@@ -32,6 +29,16 @@ public class LibraryCache extends ContentCache<Library, MutableLibrary, Integer,
   @Override
   public List<Library> getLibraryBooks(final String pbook) throws Exception {
     return getManager().getLibraryBooks(pbook);
+  }
+
+  @Override
+  public List<Library> getAllTheLibraryBooks() throws Exception {
+    return getManager().getAllTheLibraryBooks();
+  }
+
+  @Override
+  public int deleteByBookNameAndAuthorName(String pBookName, String pAuthorName) {
+    return getManager().deleteByBookNameAndAuthorName(pBookName, pAuthorName);
   }
 
 }

@@ -20,4 +20,6 @@ public interface StudentRecordManager extends
 
   List<StudentRecord> getStudentRecords(final String pStudentId, final Integer pSemesterId,
       final Integer pYear, final Integer pAcademicSemester);
+
+  StudentRecord getStudentRecord(final String pStudentId, final Integer pSemesterId);
 }
