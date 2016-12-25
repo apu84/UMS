@@ -32,6 +32,10 @@ module ums {
             }]
           }
         })
+        .state('cataloging', {
+          url: "/cataloging",
+          templateUrl: 'views/admin/cataloging/cataloging-home.html'
+        })
         .state('storeBook', {
           url: "/storeBook",
           templateUrl: 'views/storage/library-book-store.html',
