@@ -13,15 +13,11 @@
       </a>
   </span>
   </li>
-  <!--
-  Temporary commented by ifti. Because we don't have any functionality for breadcrumb here. This seems to be a redundant information.
-  If we feel that this is necessary, we will open it in future.
-  <li><i class="fa fa-home"></i>&nbsp;<a href="/#/">Home</a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i></li>
-  <li ng-repeat="(k,v) in data.breadcrumb" ng-class="{active:$last}">
+  <li data-ng-if="data.navId == null"><i class="fa fa-home"></i>&nbsp;<a href="/#/">Home</a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i></li>
+  <li data-ng-if="data.navId == null" ng-repeat="(k,v) in data.breadcrumb" ng-class="{active:$last}">
     &nbsp;&nbsp;
     {{v}}
     &nbsp;&nbsp;<i ng-if="!$last" class="fa fa-angle-right"></i>
   </li>
-  -->
 </ol>
 <div class="clearfix"></div>
