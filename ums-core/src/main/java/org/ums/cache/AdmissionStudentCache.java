@@ -36,4 +36,13 @@ public class AdmissionStudentCache extends
     return getManager().getTaletalkData(pSemesterId);
   }
 
+  @Override
+  public int saveTaletalkData(List<MutableAdmissionStudent> students) {
+    return getManager().saveTaletalkData(students);
+  }
+
+  @Override
+  public int getDataSize(int pSemesterId) {
+    return getManager().getDataSize(pSemesterId);
+  }
 }

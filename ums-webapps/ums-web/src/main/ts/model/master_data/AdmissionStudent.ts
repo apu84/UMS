@@ -22,8 +22,8 @@ module ums{
     studentName:string;
     fatherName:string;
     motherName:string;
-    sscGpa:any;
-    hscGpa:any;
+    sscGpa:number;
+    hscGpa:number;
     quota:string;
     unit:string;
     admissionRoll:string;

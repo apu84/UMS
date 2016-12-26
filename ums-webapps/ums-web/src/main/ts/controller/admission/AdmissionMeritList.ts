@@ -47,13 +47,13 @@ module ums{
                 private facultyService: FacultyService,
                 private admissionStudentService:AdmissionStudentService) {
 
-      $scope.programTypes=appConstants.programType;
+      /*$scope.programTypes=appConstants.programType;
 
       $scope.getSemesters= this.getSemesters.bind(this);
-      $scope.fetchTaletalkData = this.fetchTaletalkData.bind(this);
+      $scope.fetchTaletalkData = this.fetchTaletalkData.bind(this);*/
 
-      this.getFaculties();
-      this.getMeritListTypes();
+      /*this.getFaculties();
+      this.getMeritListTypes();*/
     }
 
     private getMeritListTypes():void{

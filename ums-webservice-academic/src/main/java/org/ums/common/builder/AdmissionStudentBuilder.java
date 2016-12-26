@@ -1,9 +1,12 @@
 package org.ums.common.builder;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
+import org.ums.common.academic.resource.helper.AdmissionStudentResourceHelper;
 import org.ums.domain.model.immutable.AdmissionStudent;
 import org.ums.domain.model.mutable.MutableAdmissionStudent;
 import org.ums.enums.MigrationStatus;
@@ -30,41 +33,50 @@ public class AdmissionStudentBuilder implements Builder<AdmissionStudent, Mutabl
   @Override
   public void build(JsonObjectBuilder pBuilder, AdmissionStudent pReadOnly, UriInfo pUriInfo,
       LocalCache pLocalCache) {
-    pBuilder.add("semesterId", pReadOnly.getSemester().getId());
-    pBuilder.add("semesterName", pReadOnly.getSemester().getName());
-    pBuilder.add("receiptId", pReadOnly.getId());
-    pBuilder.add("pin", pReadOnly.getPin());
-    pBuilder.add("hscBoard", pReadOnly.getHSCBoard());
-    pBuilder.add("hscRoll", pReadOnly.getHSCRoll());
-    pBuilder.add("hscRegNo", pReadOnly.getHSCRegNo());
-    pBuilder.add("hscYear", pReadOnly.getHSCYear());
-    pBuilder.add("hscGroup", pReadOnly.getHSCGroup());
-    pBuilder.add("sscBoard", pReadOnly.getSSCBoard());
-    pBuilder.add("sscRoll", pReadOnly.getSSCRoll());
-    pBuilder.add("sscYear", pReadOnly.getSSCYear());
-    pBuilder.add("sscGroup", pReadOnly.getSSCGroup());
-    pBuilder.add("gender", pReadOnly.getGender());
-    pBuilder.add("dateOfBirth", pReadOnly.getBirthDate());
-    pBuilder.add("studentName", pReadOnly.getStudentName());
-    pBuilder.add("fatherName", pReadOnly.getFatherName());
-    pBuilder.add("motherName", pReadOnly.getMotherName());
-    pBuilder.add("sscGpa", pReadOnly.getSSCGpa());
-    pBuilder.add("hscGpa", pReadOnly.getHSCGpa());
-    pBuilder.add("quota", pReadOnly.getQuota());
-    pBuilder.add("unit", pReadOnly.getUnit());
-    if(pReadOnly.getAdmissionRoll() != null)
+
+  }
+
+  public void admissionStudentBuilder(JsonObjectBuilder pBuilder, AdmissionStudent pReadOnly,
+      UriInfo pUriInfo, LocalCache pLocalCache, String type) {
+
+    if(type.equals("taletalkDataUpload")) {
+      pBuilder.add("semesterId", pReadOnly.getSemester().getId());
+      pBuilder.add("semesterName", pReadOnly.getSemester().getName());
+      pBuilder.add("receiptId", pReadOnly.getId());
+      pBuilder.add("pin", pReadOnly.getPin());
+      pBuilder.add("hscBoard", pReadOnly.getHSCBoard());
+      pBuilder.add("hscRoll", pReadOnly.getHSCRoll());
+      pBuilder.add("hscRegNo", pReadOnly.getHSCRegNo());
+      pBuilder.add("hscYear", pReadOnly.getHSCYear());
+      pBuilder.add("hscGroup", pReadOnly.getHSCGroup());
+      pBuilder.add("sscBoard", pReadOnly.getSSCBoard());
+      pBuilder.add("sscRoll", pReadOnly.getSSCRoll());
+      pBuilder.add("sscYear", pReadOnly.getSSCYear());
+      pBuilder.add("sscGroup", pReadOnly.getSSCGroup());
+      pBuilder.add("gender", pReadOnly.getGender());
+      pBuilder.add("dateOfBirth", pReadOnly.getBirthDate());
+      pBuilder.add("studentName", pReadOnly.getStudentName());
+      pBuilder.add("fatherName", pReadOnly.getFatherName());
+      pBuilder.add("motherName", pReadOnly.getMotherName());
+      pBuilder.add("sscGpa", pReadOnly.getSSCGpa());
+      pBuilder.add("hscGpa", pReadOnly.getHSCGpa());
+      pBuilder.add("quota", pReadOnly.getQuota());
+      pBuilder.add("unit", pReadOnly.getUnit());
+    }
+
+    if(type.equals("meritListUpload")) {
       pBuilder.add("admissionRoll", pReadOnly.getAdmissionRoll());
-    if(pReadOnly.getMeritSerialNo() != null)
       pBuilder.add("meritSlNo", pReadOnly.getMeritSerialNo());
-    if(pReadOnly.getStudentId() != null)
+    }
+
+    if(type.equals("departmentSelection")) {
       pBuilder.add("studentId", pReadOnly.getStudentId());
-    if(pReadOnly.getAllocatedProgram() != null) {
       pBuilder.add("allocatedProgramId", pReadOnly.getAllocatedProgram().getId());
       pBuilder.add("programShortName", pReadOnly.getAllocatedProgram().getShortName());
       pBuilder.add("programLongName", pReadOnly.getAllocatedProgram().getLongName());
-    }
-    if(pReadOnly.getMigrationStatus() != null)
       pBuilder.add("migrationStatus", pReadOnly.getMigrationStatus().getId());
+    }
+
   }
 
   @Override
@@ -90,15 +102,16 @@ public class AdmissionStudentBuilder implements Builder<AdmissionStudent, Mutabl
     pMutable.setSSCGpa(Double.parseDouble(pJsonObject.getString("sscGpa")));
     pMutable.setHSCGpa(Double.parseDouble(pJsonObject.getString("hscGpa")));
     pMutable.setQuota(pJsonObject.getString("quota"));
-    if(pJsonObject.getString("admissionRoll") != null)
+    pMutable.setUnit(pJsonObject.getString("unit"));
+    if(!pJsonObject.getString("admissionRoll").equals("null"))
       pMutable.setAdmissionRoll(pJsonObject.getString("admissionRoll"));
-    if(((Integer) pJsonObject.getInt("meritSlNo")) != null) {
+    if(!(pJsonObject.getString("meritSlNo")).contains("null")) {
       pMutable.setMeritSerialNo(pJsonObject.getInt("meritSlNo"));
     }
-    if((Integer) pJsonObject.getInt("programId") != null) {
+    if(!pJsonObject.getString("programId").contains("null")) {
       pMutable.setAllocatedProgram(mProgramManager.get(pJsonObject.getInt("programId")));
     }
-    if(((Integer) pJsonObject.getInt("migrationStatus")) != null) {
+    if(!(pJsonObject.getString("migrationStatus")).contains("null")) {
       pMutable.setMigrationStatus(MigrationStatus.get(pJsonObject.getInt("migrationStatus")));
     }
   }

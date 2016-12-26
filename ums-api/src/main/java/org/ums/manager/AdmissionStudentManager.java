@@ -12,4 +12,8 @@ public interface AdmissionStudentManager extends
     ContentManager<AdmissionStudent, MutableAdmissionStudent, String> {
 
   List<AdmissionStudent> getTaletalkData(final int pSemesterId);
+
+  int saveTaletalkData(final List<MutableAdmissionStudent> students);
+
+  int getDataSize(final int pSemesterId);
 }

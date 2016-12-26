@@ -527,32 +527,12 @@ module ums {
         .state('uploadMeritList', {
           url: "/uploadMeritList",
           templateUrl: 'views/admission/merit-list-upload.html',
-          controller: 'AdmissionMeritList',
-          resolve: {
-            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-              return $ocLazyLoad.load({
-                files: [
-                  'vendors/amcharts/amcharts.js',
-                  'vendors/amcharts/serial.js'
-                ]
-              });
-            }]
-          }
+          controller: 'AdmissionMeritList'
         })
         .state('uploadTaletalkData', {
           url: "/uploadTaletalkData",
           templateUrl: 'views/admission/taletalk-data-upload.html',
-          controller: 'AdmissionTaletalkData',
-          resolve: {
-            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-              return $ocLazyLoad.load({
-                files: [
-                  'vendors/amcharts/amcharts.js',
-                  'vendors/amcharts/serial.js'
-                ]
-              });
-            }]
-          }
+          controller: 'AdmissionTaletalkData'
         })
         .state('studentsRoutine', {
           url: "/studentsRoutine",

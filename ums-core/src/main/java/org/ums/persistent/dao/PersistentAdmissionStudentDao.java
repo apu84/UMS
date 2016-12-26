@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.AdmissionStudentDaoDecorator;
 import org.ums.domain.model.immutable.AdmissionStudent;
+import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.mutable.MutableAdmissionStudent;
 import org.ums.enums.MigrationStatus;
 import org.ums.manager.ProgramManager;
@@ -15,7 +16,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Created by Monjur-E-Morshed on 14-Dec-16.
@@ -36,21 +36,36 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
       + "  STUDENT_ID, " + "  ALLOCATED_PROGRAM_ID, " + "  MIGRATION_STATUS, " + "  LAST_MODIFIED "
       + "FROM admission_students";
 
-  String SELECT_ONE_TALETALK_DATA = "SELECT " + "  SEMESTER_ID, " + "  RECEIPT_ID, " + "  PIN, "
-      + "  HSC_BOARD, " + "  HSC_ROLL, " + "  HSC_REGNO, " + "  HSC_YEAR, " + "  HSC_GROUP, "
-      + "  SSC_BOARD, " + "  SSC_ROLL, " + "  " + "  SSC_YEAR, " + "  SSC_GROUP, " + "  GENDER, "
-      + "  DATE_OF_BIRTH, " + "  STUDENT_NAME, " + "  FATHER_NAME, " + "  MOTHER_NAME, "
-      + "  SSC_GPA, " + "  HSC_GPA, " + "  QUOTA, UNIT, " + "  LAST_MODIFIED "
-      + "FROM admission_students";
+  String SELECT_ONE_TALETALK_DATA =
+      "select SEMESTER_ID, RECEIPT_ID, PIN, HSC_BOARD, HSC_ROLL,       "
+          + "                 HSC_REGNO, HSC_YEAR, HSC_GROUP, SSC_BOARD, SSC_ROLL,       "
+          + "                 SSC_YEAR, SSC_GROUP, GENDER,to_char(DATE_OF_BIRTH,'dd/mm/yy') date_of_birth , STUDENT_NAME,       "
+          + "                 FATHER_NAME, MOTHER_NAME, SSC_GPA, HSC_GPA, QUOTA , unit,      "
+          + "                 LAST_MODIFIED from admission_students where SEMESTER_ID=? order by to_number(RECEIPT_ID)";
 
-  String INSERT_ONE_TALETALK_DATA = "INSERT INTO DB_IUMS.ADMISSION_STUDENTS  "
-      + "(SEMESTER_ID, RECEIPT_ID, PIN, HSC_BOARD, HSC_ROLL,  "
-      + " HSC_REGNO, HSC_YEAR, HSC_GROUP, SSC_BOARD, SSC_ROLL,  "
-      + "  SSC_YEAR, SSC_GROUP, GENDER, DATE_OF_BIRTH,  "
-      + " STUDENT_NAME, FATHER_NAME, MOTHER_NAME, SSC_GPA, HSC_GPA,  "
-      + " QUOTA,UNIT, LAST_MODIFIED)  " + "VALUES  " + "  (?, ?, ?, ?, ?,?,  "
-      + "      ?, ?, ?, ?, ?,  " + "      ?,  ?, ?, ?, ?,  " + "         ?, ?, ?, ?, ?,  "
-      + "     " + "   ?, " + getLastModifiedSql() + ");";
+  String INSERT_ONE_TALETALK_DATA =
+      "INSERT INTO admission_students (semester_id, "
+          + "                                receipt_id, "
+          + "                                pin, "
+          + "                                hsc_board,hsc_roll, "
+          + "                                hsc_regno, "
+          + "                                hsc_year, "
+          + "                                hsc_group, "
+          + "                                ssc_board, "
+          + "                                ssc_roll, "
+          + "                                ssc_year, "
+          + "                                ssc_group, "
+          + "                                gender, "
+          + "                                date_of_birth, "
+          + "                                student_name, "
+          + "                                father_name, "
+          + "                                mother_name, "
+          + "                                ssc_gpa, "
+          + "                                hsc_gpa, "
+          + "                                quota, "
+          + "                                unit,last_Modified) "
+          + "                                values(?,?,?,?,?,?,?,?,?,?,?,?,?,to_date(?,'dd/MM/YY'),?,?,?,?,?,?,?,"
+          + getLastModifiedSql() + ")";
 
   String INSERT_ONE = "INSERT INTO DB_IUMS.ADMISSION_STUDENTS  "
       + "(SEMESTER_ID, RECEIPT_ID, PIN, HSC_BOARD, HSC_ROLL,  "
@@ -60,7 +75,7 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
       + " QUOTA,UNIT, ADMISSION_ROLL, MERIT_SL_NO, STUDENT_ID, ALLOCATED_PROGRAM_ID,  "
       + " MIGRATION_STATUS, LAST_MODIFIED)  " + "VALUES  " + "  (?, ?, ?, ?, ?,?,  "
       + "      ?, ?, ?, ?, ?,  " + "      ?, ?, ?, ?, ?,  " + "         ?, ?, ?, ?, ?,  "
-      + "   ?, ?, ?, ?, ?,  " + "   ?, " + getLastModifiedSql() + ");";
+      + "   ?, ?, ?, ?, ?,  " + "   ?, " + getLastModifiedSql() + ")";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -72,6 +87,12 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
   public int create(List<MutableAdmissionStudent> pMutableList) {
     String query = INSERT_ONE;
     return mJdbcTemplate.batchUpdate(query, getAdmissionStudentParams(pMutableList)).length;
+  }
+
+  @Override
+  public int saveTaletalkData(List<MutableAdmissionStudent> students) {
+    String query = INSERT_ONE_TALETALK_DATA;
+    return mJdbcTemplate.batchUpdate(query, getTaletalkDataParams(students)).length;
   }
 
   private List<Object[]> getAdmissionStudentParams(List<MutableAdmissionStudent> pStudents) {
@@ -90,11 +111,31 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
     return params;
   }
 
+  private List<Object[]> getTaletalkDataParams(List<MutableAdmissionStudent> pStudents) {
+    List<Object[]> params = new ArrayList<>();
+
+    for(AdmissionStudent student : pStudents) {
+      params.add(new Object[] {student.getSemester().getId(), student.getReceiptId(),
+          student.getPin(), student.getHSCBoard(), student.getHSCRoll(), student.getHSCRegNo(),
+          student.getHSCYear(), student.getHSCGroup(), student.getSSCBoard(), student.getSSCRoll(),
+          student.getSSCYear(), student.getSSCGroup(), student.getGender(), student.getBirthDate(),
+          student.getStudentName(), student.getFatherName(), student.getMotherName(),
+          student.getSSCGpa(), student.getHSCGpa(), student.getQuota(), student.getUnit()});
+    }
+    return params;
+  }
+
   @Override
   public List<AdmissionStudent> getTaletalkData(int pSemesterId) {
-    String query = SELECT_ONE_TALETALK_DATA + " where semester_id=?";
+    String query = SELECT_ONE_TALETALK_DATA;
     return mJdbcTemplate.query(query, new Object[] {pSemesterId},
         new AdmissionStudentRowMapperTaletalk());
+  }
+
+  @Override
+  public int getDataSize(int pSemesterId) {
+    String query = "select count(*) from admission_students where semester_id=?";
+    return mJdbcTemplate.queryForObject(query, Integer.class, pSemesterId);
   }
 
   class AdmissionStudentRowMapper implements RowMapper<AdmissionStudent> {
@@ -104,7 +145,7 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
       student.setId(pResultSet.getString("receipt_id"));
       student.setSemester(mSemesterManager.get(pResultSet.getInt("semester_id")));
       student.setPin(pResultSet.getString("pin"));
-      student.setHSCBoard(pResultSet.getString("hsc_boeard"));
+      student.setHSCBoard(pResultSet.getString("hsc_board"));
       student.setHSCRoll(pResultSet.getString("hsc_roll"));
       student.setHSCRegNo(pResultSet.getString("hsc_regno"));
       student.setHSCYear(pResultSet.getInt("hsc_Year"));
@@ -136,10 +177,10 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
     @Override
     public AdmissionStudent mapRow(ResultSet pResultSet, int pI) throws SQLException {
       MutableAdmissionStudent student = new PersistentAdmissionStudent();
+      student.setSemesterId(pResultSet.getInt("semester_id"));
       student.setId(pResultSet.getString("receipt_id"));
-      student.setSemester(mSemesterManager.get(pResultSet.getInt("semester_id")));
       student.setPin(pResultSet.getString("pin"));
-      student.setHSCBoard(pResultSet.getString("hsc_boeard"));
+      student.setHSCBoard(pResultSet.getString("hsc_board"));
       student.setHSCRoll(pResultSet.getString("hsc_roll"));
       student.setHSCRegNo(pResultSet.getString("hsc_regno"));
       student.setHSCYear(pResultSet.getInt("hsc_Year"));

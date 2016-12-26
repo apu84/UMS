@@ -48,6 +48,19 @@ module ums{
             console.error(response);
           },'arraybuffer');
     }
+
+    public saveTaletalkData(json:any, semesterId:number):ng.IPromise<any>{
+      var defer=this.$q.defer();
+      var url="academic/admission/taletalkData/semester/"+semesterId;
+      this.httpClient.post(url,json,'application/json')
+          .success(()=>{
+            defer.resolve("success");
+          }).error((data)=>{
+        defer.resolve("error");
+      });
+
+      return defer.promise;
+    }
   }
 
   UMS.service("admissionStudentService", AdmissionStudentService);
