@@ -22,8 +22,6 @@ module ums{
     getSemesters:Function;
     fetchTaletalkData:Function;
     fetchExcelFormat:Function;
-    showPopupModal:Function;
-    closePopupModal:Function;
     processData:Function;
     saveData:Function;
   }
@@ -76,15 +74,15 @@ module ums{
           columns:[{"title":"Receipt Id","data":"receiptId"},
             {"title":"Pin","data":"pin"},
             {"title":"HSC Board","data":"hscBoard"},
-            {"title":"HSC RegNo","data":"hscRoll"},
-            {"title":"HSC Year","data":"hscRegNo"},
-            {"title":"HSC Group","data":"hscYear"},
-            {"title":"SSC Board","data":"hscGroup"},
-            {"title":"SSC Roll","data":"sscBoard"},
-            {"title":"SSC Year","data":"sscRoll"},
-            {"title":"SSC Group","data":"sscYear"},
-            {"title":"Gender","data":"sscGroup"},
-            {"title":"Date of Birth","data":"gender"},
+            {"title":"HSC Roll","data":"hscRoll"},
+            {"title":"HSC RegNo","data":"hscRegNo"},
+            {"title":"HSC Year","data":"hscYear"},
+            {"title":"HSC Group","data":"hscGroup"},
+            {"title":"SSC Board","data":"sscBoard"},
+            {"title":"SSC Roll","data":"sscRoll"},
+            {"title":"SSC Year","data":"sscYear"},
+            {"title":"SSC Group","data":"sscGroup"},
+            {"title":"Gender","data":"gender"},
             {"title":"Student Name","data":"studentName"},
             {"title":"Father Name","data":"fatherName"},
             {"title":"Mother Name","data":"motherName"},
@@ -104,8 +102,6 @@ module ums{
       $scope.getSemesters = this.getSemesters.bind(this);
       $scope.fetchTaletalkData = this.fetchTaletalkData.bind(this);
       $scope.fetchExcelFormat = this.fetchExcelFormat.bind(this);
-      $scope.showPopupModal = this.showPopupModal.bind(this);
-      $scope.closePopupModal = this.closePopupModal.bind(this);
       $scope.processData = this.processData.bind(this);
       $scope.saveData = this.saveData.bind(this);
 
@@ -116,12 +112,7 @@ module ums{
     }
 
 
-    private configureHandsOnTable(){
-      var hotTable = document.getElementById('taletalkData');
-      var hot = new Handsontable(hotTable,{
-        search:true
-      });
-    }
+
 
 
     private getSemesters(){
@@ -140,9 +131,9 @@ module ums{
 
     private fetchTaletalkData(){
       Utils.expandRightDiv();
+
       this.$scope.searchSpinner=true;
       this.$scope.admissionStudents=[];
-      console.log("In the fetch taletalk data");
       this.admissionStudentService.fetchTaletalkData(this.$scope.semester.id).then((admissionStudents:Array<AdmissionStudent>)=>{
         console.log("upload portion");
         console.log(admissionStudents);
@@ -151,8 +142,7 @@ module ums{
           this.$scope.searchSpinner=false;
           this.$scope.disableSaveButton=false;
         }else{
-          // this.configureHandsOnTable();
-          console.log("----");
+
           this.$scope.searchSpinner=false;
           this.$scope.admissionStudents=admissionStudents;
 
@@ -178,38 +168,13 @@ module ums{
     }
 
 
-    private closePopupModal():void{
-      $("#msg_div").css({
-        display:"none"
-      });
-      $(".table_overlay").fadeOut();
-    }
-    private showPopupModal():void{
-      var topDiv=$("#top_div");
 
-      $(".table_overlay").css({
-        background:'url("images/overlay1.png")',
-        opacity : 0.5,
-        top     : topDiv.position().top-150,
-        width   : topDiv.outerWidth()+20,
-        height  : 450,
-        zIndex:100
-      });
-      $(".table_overlay").fadeIn();
-      $("#msg_div").css({
-        display:"block",
-        top     : $(".table_overlay").position().top,
-        left: $(".table_overlay").position().left+(topDiv.outerWidth()+20)/2-$("#msg_div").width()/2,
-        zIndex:105
-      });
-    }
 
 
     private processData(modalData:any):void{
       this.$scope.admissionStudents=[];
 
       this.fillUpAdmissionStudents(modalData).then((students:Array<AdmissionStudent>)=>{
-        this.configureHandsOnTable();
         this.$scope.showUploadPortion=false;
       });
 
@@ -255,8 +220,7 @@ module ums{
       student.sscYear=+cellData[9];
       student.sscGroup=cellData[10];
       student.gender=cellData[11];
-      var formatedBirthDate=this.formateDate(cellData[12]);
-      student.dateOfBirth=formatedBirthDate;
+      student.dateOfBirth=this.formateDate(cellData[12]);;
       student.studentName=cellData[13];
       student.fatherName=cellData[14];
       student.motherName=cellData[15];
