@@ -31,7 +31,24 @@ module ums{
       return defer.promise;
     }
 
-    public downloadExcelFile(semesterId:number):any{
+
+    public fetchMeritList(semesterId:number, meritTypeId:number):ng.IPromise<any>{
+      var url="academic/admission/meritList/semester/"+semesterId+"/meritType/"+meritTypeId;
+      var defer = this.$q.defer();
+
+      this.httpClient.get(url, this.appConstants.mimeTypeJson,
+          (json:any, etag:string)=>{
+            var admissionStudents:any = json.entries;
+            defer.resolve(admissionStudents);
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>)=>{
+            console.error(response);
+          });
+
+      return defer.promise;
+    }
+
+    public downloadTaletalkDataExcelFile(semesterId: number):any{
 
       var fileName = "Taletalk_data_"+semesterId;
       var contentType:string=UmsUtil.getFileContentType('xls');
@@ -41,6 +58,25 @@ module ums{
           (data:any, etag:string)=>{
         console.log(data);
         console.log(contentType);
+            UmsUtil.writeFileContent(data, contentType, fileName);
+            console.log("got the file");
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>)=>{
+            console.error(response);
+          },'arraybuffer');
+    }
+
+
+    public downloadMeritListExcelFile(semesterId: number):any{
+
+      var fileName = "merit_list_data";
+      var contentType:string=UmsUtil.getFileContentType('xls');
+      var url="admission/xlx/meritList/semester/"+semesterId;
+
+      this.httpClient.get(url, contentType,
+          (data:any, etag:string)=>{
+            console.log(data);
+            console.log(contentType);
             UmsUtil.writeFileContent(data, contentType, fileName);
             console.log("got the file");
           },

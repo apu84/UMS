@@ -5,7 +5,7 @@ import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.Faculty;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.mutable.MutableAdmissionMeritList;
-import org.ums.enums.AdmissionGroupType;
+import org.ums.enums.QuotaType;
 import org.ums.manager.AdmissionMeritListManager;
 import org.ums.manager.FacultyManager;
 import org.ums.manager.SemesterManager;
@@ -34,7 +34,7 @@ public class PersistentAdmissionMeritList implements MutableAdmissionMeritList {
   private int mReceiptId;
   private int mAdmissionRoll;
   private String mCandidateName;
-  private AdmissionGroupType mAdmissionGroupType;
+  private QuotaType mQuotaType;
   private Faculty mFaculty;
   private int mFacultyId;
   private String mLastModified;
@@ -50,7 +50,7 @@ public class PersistentAdmissionMeritList implements MutableAdmissionMeritList {
     mReceiptId = pPersistentAdmissionMeritList.getReceiptId();
     mAdmissionRoll = pPersistentAdmissionMeritList.getAdmissionRoll();
     mCandidateName = pPersistentAdmissionMeritList.getCandidateName();
-    mAdmissionGroupType = pPersistentAdmissionMeritList.getAdmissionGroup();
+    mQuotaType = pPersistentAdmissionMeritList.getAdmissionGroup();
     mFaculty = pPersistentAdmissionMeritList.getFaculty();
     mFacultyId = pPersistentAdmissionMeritList.getFacultyId();
     mLastModified = pPersistentAdmissionMeritList.getLastModified();
@@ -154,8 +154,8 @@ public class PersistentAdmissionMeritList implements MutableAdmissionMeritList {
   }
 
   @Override
-  public AdmissionGroupType getAdmissionGroup() {
-    return mAdmissionGroupType;
+  public QuotaType getAdmissionGroup() {
+    return mQuotaType;
   }
 
   @Override
@@ -174,8 +174,8 @@ public class PersistentAdmissionMeritList implements MutableAdmissionMeritList {
   }
 
   @Override
-  public void setAdmissionGroup(AdmissionGroupType pAdmissionGroup) {
-    mAdmissionGroupType = pAdmissionGroup;
+  public void setAdmissionGroup(QuotaType pAdmissionGroup) {
+    mQuotaType = pAdmissionGroup;
   }
 
   @Override

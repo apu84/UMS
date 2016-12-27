@@ -4,7 +4,7 @@ import org.ums.domain.model.immutable.AdmissionMeritList;
 import org.ums.domain.model.immutable.Faculty;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.mutable.MutableAdmissionMeritList;
-import org.ums.enums.AdmissionGroupType;
+import org.ums.enums.QuotaType;
 
 import java.util.List;
 
@@ -14,5 +14,5 @@ import java.util.List;
 public interface AdmissionMeritListManager extends
     ContentManager<AdmissionMeritList, MutableAdmissionMeritList, Integer> {
   List<AdmissionMeritList> getMeritList(final Semester pSemester, final Faculty pFaculty,
-      final AdmissionGroupType pAdmissionGroup);
+      final QuotaType pAdmissionGroup);
 }

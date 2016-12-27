@@ -54,4 +54,21 @@ public class AdmissionStudentGeneratorImpl implements AdmissionStudentGenerator 
     baos.writeTo(pOutputStream);
 
   }
+
+  @Override
+  public void createABlankMeritListUploadFormatFile(OutputStream pOutputStream, int pSemesterId)
+      throws Exception {
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    Workbook wb = new HSSFWorkbook();
+
+    Sheet sheet = wb.createSheet("Merit list data sample format");
+    Row row = sheet.createRow((short) 0);
+    row.createCell(0).setCellValue("merit sl no.");
+    row.createCell(1).setCellValue("receipt id");
+    row.createCell(2).setCellValue("admission roll");
+
+    wb.write(pOutputStream);
+    baos.writeTo(pOutputStream);
+  }
+
 }

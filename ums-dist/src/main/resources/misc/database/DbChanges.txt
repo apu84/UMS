@@ -273,7 +273,6 @@ create table admission_students
   hsc_group varchar(18),
   ssc_board varchar2(25),
   ssc_roll VARCHAR2(25),
-  ssc_regno VARCHAR2(25),
   ssc_year number,
   ssc_group varchar2(25),
   gender varchar2(1),
@@ -291,6 +290,7 @@ create table admission_students
   migration_status number,
   CONSTRAINT admission_students_uniq UNIQUE (semester_id,receipt_id,pin,ssc_roll,hsc_roll,quota,student_id, allocated_program_id)
 );
+
 
 
 

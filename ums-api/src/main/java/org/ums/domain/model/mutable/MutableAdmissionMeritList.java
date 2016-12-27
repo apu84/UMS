@@ -5,7 +5,7 @@ import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.immutable.AdmissionMeritList;
 import org.ums.domain.model.immutable.Faculty;
 import org.ums.domain.model.immutable.Semester;
-import org.ums.enums.AdmissionGroupType;
+import org.ums.enums.QuotaType;
 
 /**
  * Created by Monjur-E-Morshed on 10-Dec-16.
@@ -22,7 +22,7 @@ public interface MutableAdmissionMeritList extends AdmissionMeritList, Mutable,
 
   void setCandidateName(final String pCandidateName);
 
-  void setAdmissionGroup(final AdmissionGroupType pAdmissionGroup);
+  void setAdmissionGroup(final QuotaType pAdmissionGroup);
 
   void setFaculty(final Faculty pFaculty);
 }

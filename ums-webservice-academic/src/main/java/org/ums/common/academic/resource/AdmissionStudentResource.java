@@ -1,6 +1,7 @@
 package org.ums.common.academic.resource;
 
 import org.springframework.stereotype.Component;
+import org.ums.enums.QuotaType;
 import org.ums.resource.Resource;
 
 import javax.json.JsonObject;
@@ -26,6 +27,13 @@ public class AdmissionStudentResource extends MutableAdmissionStudentResource {
   public JsonObject getTaletalkData(final @Context Request pRequest,
       final @PathParam("semester-id") int pSemesterId) {
     return mHelper.getTaletalkData(pSemesterId, mUriInfo);
+  }
+
+  @GET
+  @Path("/meritList/semester/{semester-id}/meritType/{merit-type}")
+  public JsonObject getAdmissionMeritList(final @Context Request pRequest,
+      final @PathParam("semester-id") int pSemesterId, final @PathParam("merit-type") int pMeritType) {
+    return mHelper.getAdmissionMeritList(pSemesterId, QuotaType.get(pMeritType), mUriInfo);
   }
 
 }

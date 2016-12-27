@@ -15,6 +15,7 @@ import org.ums.common.report.generator.AdmissionStudentGenerator;
 import org.ums.domain.model.immutable.AdmissionStudent;
 import org.ums.domain.model.mutable.MutableAdmissionStudent;
 import org.ums.domain.model.mutable.MutableStudent;
+import org.ums.enums.QuotaType;
 import org.ums.manager.AdmissionStudentManager;
 import org.ums.persistent.model.PersistentAdmissionStudent;
 import org.ums.resource.ResourceHelper;
@@ -87,7 +88,13 @@ public class AdmissionStudentResourceHelper extends
       students = new ArrayList<>(); // just for skipping while we have no data in the db.
     }
 
-    return jsonCreator(students, pUriInfo);
+    return jsonCreator(students, "taletalkData", pUriInfo);
+  }
+
+  public JsonObject getAdmissionMeritList(final int pSemesterId, final QuotaType pQuotaType,
+      final UriInfo pUriInfo) {
+    List<AdmissionStudent> students = getContentManager().getTaletalkData(pSemesterId, pQuotaType);
+    return jsonCreator(students, "meritList", pUriInfo);
   }
 
   public List<AdmissionStudent> getTaletalkData(final int pSemesterId) {
@@ -108,15 +115,19 @@ public class AdmissionStudentResourceHelper extends
     mGenerator.createABlankTaletalkDataFormatFile(pOutputStream, pSemesterId);
   }
 
-  private JsonObject jsonCreator(List<AdmissionStudent> pStudentLIst, UriInfo pUriInfo) {
+  public void getMeritLisXlesFormat(final OutputStream pOutputStream, int pSemesterId)
+      throws Exception {
+    mGenerator.createABlankMeritListUploadFormatFile(pOutputStream, pSemesterId);
+  }
+
+  private JsonObject jsonCreator(List<AdmissionStudent> pStudentLIst, String pType, UriInfo pUriInfo) {
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
 
     for(AdmissionStudent student : pStudentLIst) {
       JsonObjectBuilder jsonObject = Json.createObjectBuilder();
-      getBuilder().admissionStudentBuilder(jsonObject, student, pUriInfo, localCache,
-          "taletalkDataUpload");
+      getBuilder().admissionStudentBuilder(jsonObject, student, pUriInfo, localCache, pType);
       children.add(jsonObject);
     }
     object.add("entries", children);

@@ -10,4 +10,7 @@ import java.io.OutputStream;
 public interface AdmissionStudentGenerator {
   void createABlankTaletalkDataFormatFile(OutputStream pOutputStream, final int pSemesterId)
       throws Exception;
+
+  void createABlankMeritListUploadFormatFile(OutputStream pOutputStream, final int pSemesterId)
+      throws Exception;
 }

@@ -2,6 +2,7 @@ package org.ums.decorator;
 
 import org.ums.domain.model.immutable.AdmissionStudent;
 import org.ums.domain.model.mutable.MutableAdmissionStudent;
+import org.ums.enums.QuotaType;
 import org.ums.manager.AdmissionStudentManager;
 
 import java.util.List;
@@ -26,5 +27,10 @@ public class AdmissionStudentDaoDecorator extends
   @Override
   public int getDataSize(int pSemesterId) {
     return getManager().getDataSize(pSemesterId);
+  }
+
+  @Override
+  public List<AdmissionStudent> getTaletalkData(int pSemesterId, QuotaType pQuotaType) {
+    return getManager().getTaletalkData(pSemesterId, pQuotaType);
   }
 }

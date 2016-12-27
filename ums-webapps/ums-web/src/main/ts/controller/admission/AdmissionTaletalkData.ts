@@ -116,8 +116,6 @@ module ums{
 
 
     private getSemesters(){
-
-
       this.semesterService.fetchSemesters(+this.$scope.programType.id).then((semesters:Array<Semester>)=>{
         this.$scope.semesters=[];
         for(var i=0;i<semesters.length;i++){
@@ -164,7 +162,7 @@ module ums{
     }
 
     private fetchExcelFormat(){
-      this.admissionStudentService.downloadExcelFile(this.$scope.semester.id);
+      this.admissionStudentService.downloadTaletalkDataExcelFile(this.$scope.semester.id);
     }
 
 

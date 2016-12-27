@@ -4,7 +4,7 @@ import org.ums.domain.model.immutable.AdmissionMeritList;
 import org.ums.domain.model.immutable.Faculty;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.mutable.MutableAdmissionMeritList;
-import org.ums.enums.AdmissionGroupType;
+import org.ums.enums.QuotaType;
 import org.ums.manager.AdmissionMeritListManager;
 
 import java.util.List;
@@ -18,7 +18,7 @@ public class AdmissionMeritListDaoDecorator
     implements AdmissionMeritListManager {
   @Override
   public List<AdmissionMeritList> getMeritList(Semester pSemester, Faculty pFaculty,
-      AdmissionGroupType pAdmissionGroup) {
+      QuotaType pAdmissionGroup) {
     return getManager().getMeritList(pSemester, pFaculty, pAdmissionGroup);
   }
 }

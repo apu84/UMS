@@ -2,6 +2,7 @@ package org.ums.manager;
 
 import org.ums.domain.model.immutable.AdmissionStudent;
 import org.ums.domain.model.mutable.MutableAdmissionStudent;
+import org.ums.enums.QuotaType;
 
 import java.util.List;
 
@@ -16,4 +17,6 @@ public interface AdmissionStudentManager extends
   int saveTaletalkData(final List<MutableAdmissionStudent> students);
 
   int getDataSize(final int pSemesterId);
+
+  List<AdmissionStudent> getTaletalkData(final int pSemesterId, final QuotaType pQuotaType);
 }

@@ -7,7 +7,7 @@ import org.ums.domain.model.immutable.AdmissionMeritList;
 import org.ums.domain.model.immutable.Faculty;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.mutable.MutableAdmissionMeritList;
-import org.ums.enums.AdmissionGroupType;
+import org.ums.enums.QuotaType;
 import org.ums.persistent.model.PersistentAdmissionMeritList;
 
 import java.sql.ResultSet;
@@ -44,7 +44,7 @@ public class PersistentAdmissionMeritListDao extends AdmissionMeritListDaoDecora
 
   @Override
   public List<AdmissionMeritList> getMeritList(Semester pSemester, Faculty pFaculty,
-      AdmissionGroupType pAdmissionGroup) {
+      QuotaType pAdmissionGroup) {
     return super.getMeritList(pSemester, pFaculty, pAdmissionGroup);
   }
 
@@ -75,7 +75,7 @@ public class PersistentAdmissionMeritListDao extends AdmissionMeritListDaoDecora
       admission.setReceiptId(pResultSet.getInt("receipt_id"));
       admission.setAdmissionRoll(pResultSet.getInt("admission_roll"));
       admission.setCandidateName(pResultSet.getString("candidate_name"));
-      admission.setAdmissionGroup(AdmissionGroupType.get(pResultSet.getInt("admission_group")));
+      admission.setAdmissionGroup(QuotaType.get(pResultSet.getInt("admission_group")));
       admission.setFacultyId(pResultSet.getInt("faculty_id"));
       admission.setLastModified(pResultSet.getString("last_modified"));
       return admission;

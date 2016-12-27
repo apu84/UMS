@@ -51,4 +51,23 @@ public class AdmissionXls {
     };
   }
 
+  @GET
+  @Path("/meritList/semester/{semester-id}")
+  @Produces("application/vnd.ms-excel")
+  public StreamingOutput getMeritListXlsFileFormat(final @Context Request pRequest,
+      @PathParam("semester-id") int pSemesterId) {
+    return new StreamingOutput() {
+      @Override
+      public void write(OutputStream pOutputStream) throws IOException, WebApplicationException {
+        try {
+          mHelper.getMeritLisXlesFormat(pOutputStream, pSemesterId);
+
+        } catch(Exception e) {
+          throw new WebApplicationException(e);
+        }
+
+      }
+    };
+  }
+
 }

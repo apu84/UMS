@@ -400,7 +400,6 @@ module ums {
           {id: "1", name: "Permanent"}
         ],
         meritListTypes:[
-          {id:"", name:"Select Merit Type"},
           {id:"0", name:"Combined (GA+RA+FF) Merit List"},
           {id:"1", name:"General Merit List"},
           {id:"2", name:"Freedom Fighter Merit List"},

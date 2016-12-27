@@ -2,6 +2,7 @@ package org.ums.cache;
 
 import org.ums.domain.model.immutable.AdmissionStudent;
 import org.ums.domain.model.mutable.MutableAdmissionStudent;
+import org.ums.enums.QuotaType;
 import org.ums.manager.AdmissionStudentManager;
 import org.ums.manager.CacheManager;
 import org.ums.util.CacheUtil;
@@ -44,5 +45,10 @@ public class AdmissionStudentCache extends
   @Override
   public int getDataSize(int pSemesterId) {
     return getManager().getDataSize(pSemesterId);
+  }
+
+  @Override
+  public List<AdmissionStudent> getTaletalkData(int pSemesterId, QuotaType pQuotaType) {
+    return getManager().getTaletalkData(pSemesterId, pQuotaType);
   }
 }

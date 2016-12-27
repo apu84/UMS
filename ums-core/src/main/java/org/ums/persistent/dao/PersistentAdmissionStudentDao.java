@@ -8,6 +8,7 @@ import org.ums.domain.model.immutable.AdmissionStudent;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.mutable.MutableAdmissionStudent;
 import org.ums.enums.MigrationStatus;
+import org.ums.enums.QuotaType;
 import org.ums.manager.ProgramManager;
 import org.ums.manager.SemesterManager;
 import org.ums.persistent.model.PersistentAdmissionStudent;
@@ -138,6 +139,31 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
     return mJdbcTemplate.queryForObject(query, Integer.class, pSemesterId);
   }
 
+  @Override
+  public List<AdmissionStudent> getTaletalkData(int pSemesterId, QuotaType pQuotaType) {
+    String query =
+        "select semester_id,receipt_id, merit_sl_no, admission_roll,student_name,quota,  "
+            + "last_modified from admission_students where semester_id=? and merit_sl_no!=null and admission_roll!=null  "
+            + " and receipt_id in (select receipt_id from admission_students where ";
+    if(pQuotaType.getId() == 0) {
+      query = query + "  quota='FF' or quota='GA' or quota='RA')";
+    }
+    else if(pQuotaType.getId() == 1) {
+      query = query + " quota='GA')";
+    }
+    else if(pQuotaType.getId() == 2) {
+      query = query + " quota='FF')";
+    }
+    else if(pQuotaType.getId() == 3) {
+      query = query + " quota='RA')";
+    }
+    else {
+      query = query + " quota='EM')";
+    }
+    return mJdbcTemplate
+        .query(query, new Object[] {pSemesterId}, new AdmissionMeritListRowMapper());
+  }
+
   class AdmissionStudentRowMapper implements RowMapper<AdmissionStudent> {
     @Override
     public AdmissionStudent mapRow(ResultSet pResultSet, int pI) throws SQLException {
@@ -168,6 +194,21 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
       student.setStudentId(pResultSet.getString("student_id"));
       student.setAllocatedProgram(mProgramManager.get(pResultSet.getInt("allocated_program_id")));
       student.setMigrationStatus(MigrationStatus.get(pResultSet.getInt("migration_status")));
+      student.setLastModified(pResultSet.getString("last_modified"));
+      return student;
+    }
+  }
+
+  class AdmissionMeritListRowMapper implements RowMapper<AdmissionStudent> {
+    @Override
+    public AdmissionStudent mapRow(ResultSet pResultSet, int pI) throws SQLException {
+      MutableAdmissionStudent student = new PersistentAdmissionStudent();
+      student.setSemesterId(pResultSet.getInt("semester_id"));
+      student.setId(pResultSet.getString("receipt_id"));
+      student.setMeritSerialNo(pResultSet.getInt("merit_sl_no"));
+      student.setAdmissionRoll(pResultSet.getString("admission_roll"));
+      student.setStudentName(pResultSet.getString("student_name"));
+      student.setQuota(pResultSet.getString("quota"));
       student.setLastModified(pResultSet.getString("last_modified"));
       return student;
     }

@@ -8,7 +8,7 @@ import org.ums.domain.model.immutable.AdmissionMeritList;
 import org.ums.domain.model.immutable.Faculty;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.mutable.MutableAdmissionMeritList;
-import org.ums.enums.AdmissionGroupType;
+import org.ums.enums.QuotaType;
 import org.ums.manager.FacultyManager;
 import org.ums.manager.SemesterManager;
 
@@ -56,7 +56,7 @@ public class AdmissionMeritListBuilder implements
     pMutable.setReceiptId(pJsonObject.getInt("receiptId"));
     pMutable.setAdmissionRoll(pJsonObject.getInt("admissionRoll"));
     pMutable.setCandidateName(pJsonObject.getString("candidateName"));
-    pMutable.setAdmissionGroup(AdmissionGroupType.get(pJsonObject.getInt("admissionGroup")));
+    pMutable.setAdmissionGroup(QuotaType.get(pJsonObject.getInt("admissionGroup")));
 
     Faculty faculty = mFacultyManager.get(pJsonObject.getInt("facultyId"));
     pMutable.setFaculty(faculty);

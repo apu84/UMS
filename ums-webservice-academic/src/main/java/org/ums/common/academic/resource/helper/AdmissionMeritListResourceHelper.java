@@ -2,14 +2,12 @@ package org.ums.common.academic.resource.helper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.common.builder.AdmissionMeritListBuilder;
 import org.ums.domain.model.immutable.AdmissionMeritList;
 import org.ums.domain.model.mutable.MutableAdmissionMeritList;
-import org.ums.enums.AdmissionGroupType;
+import org.ums.enums.QuotaType;
 import org.ums.manager.AdmissionMeritListManager;
-import org.ums.manager.ContentManager;
 import org.ums.manager.FacultyManager;
 import org.ums.manager.SemesterManager;
 import org.ums.persistent.model.PersistentAdmissionMeritList;
@@ -18,7 +16,6 @@ import org.ums.resource.ResourceHelper;
 import javax.json.*;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,7 +62,7 @@ public class AdmissionMeritListResourceHelper extends
       int pAdmissionGroupId, final UriInfo pUriInfo) {
     List<AdmissionMeritList> admissionMeritLists =
         getContentManager().getMeritList(mSemesterManager.get(pSemesterId),
-            mFacultyManager.get(pFacultyId), AdmissionGroupType.get(pAdmissionGroupId));
+            mFacultyManager.get(pFacultyId), QuotaType.get(pAdmissionGroupId));
 
     return buildAdmissionMeritList(admissionMeritLists, pUriInfo);
   }

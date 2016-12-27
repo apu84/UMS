@@ -39,10 +39,13 @@ public class AdmissionStudentBuilder implements Builder<AdmissionStudent, Mutabl
   public void admissionStudentBuilder(JsonObjectBuilder pBuilder, AdmissionStudent pReadOnly,
       UriInfo pUriInfo, LocalCache pLocalCache, String type) {
 
-    if(type.equals("taletalkDataUpload")) {
-      pBuilder.add("semesterId", pReadOnly.getSemester().getId());
-      pBuilder.add("semesterName", pReadOnly.getSemester().getName());
-      pBuilder.add("receiptId", pReadOnly.getId());
+    pBuilder.add("semesterId", pReadOnly.getSemester().getId());
+    pBuilder.add("semesterName", pReadOnly.getSemester().getName());
+    pBuilder.add("receiptId", pReadOnly.getId());
+    pBuilder.add("studentName", pReadOnly.getStudentName());
+    pBuilder.add("quota", pReadOnly.getQuota());
+
+    if(type.equals("taletalkData")) {
       pBuilder.add("pin", pReadOnly.getPin());
       pBuilder.add("hscBoard", pReadOnly.getHSCBoard());
       pBuilder.add("hscRoll", pReadOnly.getHSCRoll());
@@ -55,16 +58,14 @@ public class AdmissionStudentBuilder implements Builder<AdmissionStudent, Mutabl
       pBuilder.add("sscGroup", pReadOnly.getSSCGroup());
       pBuilder.add("gender", pReadOnly.getGender());
       pBuilder.add("dateOfBirth", pReadOnly.getBirthDate());
-      pBuilder.add("studentName", pReadOnly.getStudentName());
       pBuilder.add("fatherName", pReadOnly.getFatherName());
       pBuilder.add("motherName", pReadOnly.getMotherName());
       pBuilder.add("sscGpa", pReadOnly.getSSCGpa());
       pBuilder.add("hscGpa", pReadOnly.getHSCGpa());
-      pBuilder.add("quota", pReadOnly.getQuota());
       pBuilder.add("unit", pReadOnly.getUnit());
     }
 
-    if(type.equals("meritListUpload")) {
+    if(type.equals("meritList")) {
       pBuilder.add("admissionRoll", pReadOnly.getAdmissionRoll());
       pBuilder.add("meritSlNo", pReadOnly.getMeritSerialNo());
     }

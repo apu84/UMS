@@ -8,40 +8,59 @@
             <h3 class="panel-title">Select </h3>
         </div>
         <div class="panel-body pan">
-            <form action="" class="form-horizontal" data-validate=""  data-onvalidate="fetchTaletalkData" >
+            <form action="" class="form-horizontal" data-validate=""  data-onvalidate="fetchMeritList" >
                 <div class="form-body pal">
                     <div class="form-group">
                         <label class="col-md-4 control-label">Program Type</label>
                         <div class="col-md-8">
-                            <select class="form-control required" name="programType" data-ng-model="programType" data-ng-change="getSemesters(programType)">
-                                <option data-ng-repeat="programType in programTypes" value="{{programType.id}}">{{programType.name}}</option>
-                            </select>
+                            <select
+                                    class="form-control required"
+                                    name="programType"
+                                    id="programType"
+                                    data-ng-options="programType.name for programType in programTypes track by programType.id"
+                                    data-ng-model="programType"
+                                    data-ng-change="getSemesters()"
+                            ></select>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-4 control-label">Semester</label>
                         <div class="col-md-8">
-                            <select class="form-control required" name="semester" data-ng-model="semester">
-                                <option   value="">Select a semester</option>
-                                <option data-ng-repeat="semester in semesters" value="{{semester}}">{{semester.name}}</option>
+                            <select
+                                    class="form-control required"
+                                    name="semester"
+                                    id="semester"
+                                    data-ng-options="semester.name for semester in semesters track by semester.id"
+                                    data-ng-model="semester"
+                            >
+
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-4 control-label">Faculty</label>
                         <div class="col-md-8">
-                            <select class="form-control required" name="faculty" data-ng-model="faculty" >
-                                <option value="">Select a faculty</option>
-                                <option data-ng-repeat="faculty in faculties" value="{{faculty}}">{{faculty.shortName}}</option>
+                            <select
+                                    class="form-control required"
+                                    name="faculty"
+                                    id="faculty"
+                                    data-ng-options="faculty.shortName for faculty in faculties track by faculty.id"
+                                    data-ng-model="faculty"
+                            >
+
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-4 control-label">Merit Type</label>
                         <div class="col-md-8">
-                            <select class="form-control required" name="meritType" data-ng-model="meritType">
-                                <option value="">Select merit list type</option>
-                                <option data-ng-repeat="meritType in meritTypes" value="{{meritType}}">{{meritType.name}}</option>
+                            <select
+                                    class="form-control required"
+                                    name="meritType"
+                                    id="meritType"
+                                    data-ng-options="meritType.name for meritType in meritTypes track by meritType.id"
+                                    data-ng-model="meritType"
+                            >
                             </select>
                         </div>
                     </div>
@@ -57,10 +76,44 @@
             <div class="panel-heading">Admission Merit List<span
                     class="subtitle"></span></div>
             <div class="panel-body shadowPanel"   style="min-height: 490px;">
-                <div data-ng-if="showUploadPortion==true" align="center">
-                    <h1>This is upload portion</h1>
+                <div data-ng-if="searchSpinner" align="center">
+                    <br>
+                    <i class="fa fa-spinner fa-spin fa-6x fa-fw"></i>
                 </div>
-                <div data-ng-if="showUploadPortion==false" align="center">
+                <div data-ng-if="showUploadPortion==true && searchSpinner==false" align="center">
+                    <h1>Please upload merit list xls file</h1>
+                    <br>
+                    <br>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-6" align="center">
+                            <button class="btn btn-default" ng-click="downloadTemplate()">Download Template</button>
+                        </div>
+                        <div class="col-md-6" align="center">
+                            <button class="btn btn-success" data-toggle="modal" data-target="#entryModal">Upload Data</button>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal fade" id="entryModal" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">Paste Data Here</h4>
+                            </div>
+                            <div class="modal-body" align="left">
+                                            <textarea editable="true" rows="10" style="width: 100%;" data-ng-model="modalData">
+
+                                            </textarea>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-ng-click="processData(modalData)" data-dismiss="modal">Process & Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div data-ng-if="showUploadPortion==false && searchSpinner==false" align="center">
                     <h1>This is saved portion</h1>
                 </div>
             </div>
