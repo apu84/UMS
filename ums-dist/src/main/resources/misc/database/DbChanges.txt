@@ -261,41 +261,91 @@ create trigger trg_param_setting_id
 
 
   //************************************** admissionStudents **************************************************************
-create table admission_students
+DROP TABLE DB_IUMS.ADMISSION_STUDENTS CASCADE CONSTRAINTS;
+
+CREATE TABLE DB_IUMS.ADMISSION_STUDENTS
 (
-  semester_id number,
-  receipt_id varchar2(25),
-  pin varchar2(25),
-  hsc_board VARCHAR2(25),
-  hsc_roll VARCHAR2(25),
-  hsc_regno VARCHAR2(25),
-  hsc_year number,
-  hsc_group varchar(18),
-  ssc_board varchar2(25),
-  ssc_roll VARCHAR2(25),
-  ssc_year number,
-  ssc_group varchar2(25),
-  gender varchar2(1),
-  date_of_birth DATE,
-  student_name varchar2(50),
-  father_name varchar2(50),
-  mother_name varchar2(50),
-  ssc_gpa number(1,2),
-  hsc_gpa number(1,2),
-  quota varchar2(2),
-  admission_roll varchar2(25),
-  merit_sl_no number,
-  student_id varchar2(9),
-  allocated_program_id number,
-  migration_status number,
-  CONSTRAINT admission_students_uniq UNIQUE (semester_id,receipt_id,pin,ssc_roll,hsc_roll,quota,student_id, allocated_program_id)
-);
+  SEMESTER_ID           NUMBER,
+  RECEIPT_ID            VARCHAR2(25 BYTE),
+  PIN                   VARCHAR2(25 BYTE),
+  HSC_BOARD             VARCHAR2(25 BYTE),
+  HSC_ROLL              VARCHAR2(25 BYTE),
+  HSC_REGNO             VARCHAR2(25 BYTE),
+  HSC_YEAR              NUMBER,
+  HSC_GROUP             VARCHAR2(25 BYTE),
+  SSC_BOARD             VARCHAR2(25 BYTE),
+  SSC_ROLL              VARCHAR2(25 BYTE),
+  SSC_YEAR              NUMBER,
+  SSC_GROUP             VARCHAR2(25 BYTE),
+  GENDER                VARCHAR2(6 BYTE),
+  DATE_OF_BIRTH         DATE,
+  STUDENT_NAME          VARCHAR2(50 BYTE),
+  FATHER_NAME           VARCHAR2(50 BYTE),
+  MOTHER_NAME           VARCHAR2(50 BYTE),
+  SSC_GPA               FLOAT(126),
+  HSC_GPA               FLOAT(126),
+  QUOTA                 VARCHAR2(2 BYTE),
+  ADMISSION_ROLL        VARCHAR2(25 BYTE),
+  MERIT_SL_NO           NUMBER,
+  STUDENT_ID            VARCHAR2(9 BYTE),
+  ALLOCATED_PROGRAM_ID  NUMBER,
+  MIGRATION_STATUS      NUMBER,
+  LAST_MODIFIED         VARCHAR2(18 BYTE),
+  UNIT                  VARCHAR2(15 BYTE)
+)
+TABLESPACE SYSTEM
+RESULT_CACHE (MODE DEFAULT)
+PCTUSED    40
+PCTFREE    10
+INITRANS   1
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+LOGGING
+NOCOMPRESS
+NOCACHE
+NOPARALLEL
+MONITORING;
 
 
+CREATE UNIQUE INDEX DB_IUMS.ADMISSION_STUDENTS_UNIQ ON DB_IUMS.ADMISSION_STUDENTS
+(SEMESTER_ID, RECEIPT_ID, PIN, SSC_ROLL, HSC_ROLL,
+QUOTA, STUDENT_ID, ALLOCATED_PROGRAM_ID)
+LOGGING
+TABLESPACE SYSTEM
+PCTFREE    10
+INITRANS   2
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+NOPARALLEL;
 
 
-alter table admission_students
-ADD unit VARCHAR2(15);
+ALTER TABLE DB_IUMS.ADMISSION_STUDENTS ADD (
+  CONSTRAINT ADMISSION_STUDENTS_UNIQ
+  UNIQUE (SEMESTER_ID, RECEIPT_ID, PIN, SSC_ROLL, HSC_ROLL, QUOTA, STUDENT_ID, ALLOCATED_PROGRAM_ID)
+  USING INDEX DB_IUMS.ADMISSION_STUDENTS_UNIQ
+  ENABLE VALIDATE);
 
 
 
