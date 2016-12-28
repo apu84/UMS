@@ -48,7 +48,17 @@ public class AdmissionStudentCache extends
   }
 
   @Override
-  public List<AdmissionStudent> getTaletalkData(int pSemesterId, QuotaType pQuotaType) {
-    return getManager().getTaletalkData(pSemesterId, pQuotaType);
+  public List<AdmissionStudent> getMeritList(int pSemesterId, QuotaType pQuotaType, String pUnit) {
+    return getManager().getMeritList(pSemesterId, pQuotaType, pUnit);
+  }
+
+  @Override
+  public List<AdmissionStudent> getTaletalkData(int pSemesterId, QuotaType pQuotaType, String unit) {
+    return getManager().getTaletalkData(pSemesterId, pQuotaType, unit);
+  }
+
+  @Override
+  public int saveMeritList(List<MutableAdmissionStudent> pStudents) {
+    return getManager().saveMeritList(pStudents);
   }
 }

@@ -5,7 +5,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.AdmissionStudentDaoDecorator;
 import org.ums.domain.model.immutable.AdmissionStudent;
-import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.mutable.MutableAdmissionStudent;
 import org.ums.enums.MigrationStatus;
 import org.ums.enums.QuotaType;
@@ -29,13 +28,12 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
   @Autowired
   private ProgramManager mProgramManager;
 
-  String SELECT_ONE = "SELECT " + "  SEMESTER_ID, " + "  RECEIPT_ID, " + "  PIN, "
-      + "  HSC_BOARD, " + "  HSC_ROLL, " + "  HSC_REGNO, " + "  HSC_YEAR, " + "  HSC_GROUP, "
-      + "  SSC_BOARD, " + "  SSC_ROLL, " + "   " + "  SSC_YEAR, " + "  SSC_GROUP, " + "  GENDER, "
-      + "  DATE_OF_BIRTH, " + "  STUDENT_NAME, " + "  FATHER_NAME, " + "  MOTHER_NAME, "
-      + "  SSC_GPA, " + "  HSC_GPA, " + "  QUOTA, " + "  ADMISSION_ROLL, " + "  MERIT_SL_NO, "
-      + "  STUDENT_ID, " + "  ALLOCATED_PROGRAM_ID, " + "  MIGRATION_STATUS, " + "  LAST_MODIFIED "
-      + "FROM admission_students";
+  String SELECT_ONE = " SELECT SEMESTER_ID, RECEIPT_ID, PIN, HSC_BOARD, HSC_ROLL,  "
+      + "    HSC_REGNO, HSC_YEAR, HSC_GROUP, SSC_BOARD, SSC_ROLL,  "
+      + "    SSC_YEAR, SSC_GROUP, GENDER, DATE_OF_BIRTH, STUDENT_NAME,  "
+      + "    FATHER_NAME, MOTHER_NAME, SSC_GPA, HSC_GPA, QUOTA,  "
+      + "    ADMISSION_ROLL, MERIT_SL_NO, STUDENT_ID, ALLOCATED_PROGRAM_ID, MIGRATION_STATUS,  "
+      + "    LAST_MODIFIED, UNIT from admission_students ";
 
   String SELECT_ONE_TALETALK_DATA =
       "select SEMESTER_ID, RECEIPT_ID, PIN, HSC_BOARD, HSC_ROLL,       "
@@ -96,6 +94,13 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
     return mJdbcTemplate.batchUpdate(query, getTaletalkDataParams(students)).length;
   }
 
+  @Override
+  public int saveMeritList(List<MutableAdmissionStudent> pStudents) {
+    String query =
+        "update admission_students set merit_sl_no=? , admission_roll=? where semester_id=? and receipt_id=?";
+    return mJdbcTemplate.batchUpdate(query, getMeritListParams(pStudents)).length;
+  }
+
   private List<Object[]> getAdmissionStudentParams(List<MutableAdmissionStudent> pStudents) {
     List<Object[]> params = new ArrayList<>();
 
@@ -108,6 +113,16 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
           student.getSSCGpa(), student.getHSCGpa(), student.getQuota(), student.getUnit(),
           student.getAdmissionRoll(), student.getMeritSerialNo(), student.getStudentId(),
           student.getAllocatedProgram().getId(), student.getMigrationStatus().getId()});
+    }
+    return params;
+  }
+
+  private List<Object[]> getMeritListParams(List<MutableAdmissionStudent> pStudents) {
+    List<Object[]> params = new ArrayList<>();
+
+    for(AdmissionStudent student : pStudents) {
+      params.add(new Object[] {student.getMeritSerialNo(), student.getAdmissionRoll(),
+          student.getSemester().getId(), student.getReceiptId()});
     }
     return params;
   }
@@ -140,36 +155,51 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
   }
 
   @Override
-  public List<AdmissionStudent> getTaletalkData(int pSemesterId, QuotaType pQuotaType) {
+  public List<AdmissionStudent> getMeritList(int pSemesterId, QuotaType pQuotaType, String pUnit) {
     String query =
-        "select semester_id,receipt_id, merit_sl_no, admission_roll,student_name,quota,  "
-            + "last_modified from admission_students where semester_id=? and merit_sl_no!=null and admission_roll!=null  "
+        SELECT_ONE
+            + " where semester_id=? and unit=? and merit_sl_no is not null and admission_roll is not null  "
             + " and receipt_id in (select receipt_id from admission_students where ";
+    query = getQuotaSql(pQuotaType, query);
+    query = query + ") order by merit_sl_no";
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pUnit},
+        new AdmissionStudentRowMapper());
+  }
+
+  @Override
+  public List<AdmissionStudent> getTaletalkData(int pSemesterId, QuotaType pQuotaType, String unit) {
+    String query = SELECT_ONE + " where semester_id=? and unit=? and ";
+    query = getQuotaSql(pQuotaType, query);
+    query = query + " order by to_number(receipt_id)";
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, unit},
+        new AdmissionStudentRowMapper());
+  }
+
+  private String getQuotaSql(QuotaType pQuotaType, String pQuery) {
     if(pQuotaType.getId() == 0) {
-      query = query + "  quota='FF' or quota='GA' or quota='RA')";
+      pQuery = pQuery + "  quota='FF' or quota='GL' or quota='RA'";
     }
     else if(pQuotaType.getId() == 1) {
-      query = query + " quota='GA')";
+      pQuery = pQuery + " quota='GL'";
     }
     else if(pQuotaType.getId() == 2) {
-      query = query + " quota='FF')";
+      pQuery = pQuery + " quota='FF'";
     }
     else if(pQuotaType.getId() == 3) {
-      query = query + " quota='RA')";
+      pQuery = pQuery + " quota='RA'";
     }
     else {
-      query = query + " quota='EM')";
+      pQuery = pQuery + " quota='EM'";
     }
-    return mJdbcTemplate
-        .query(query, new Object[] {pSemesterId}, new AdmissionMeritListRowMapper());
+    return pQuery;
   }
 
   class AdmissionStudentRowMapper implements RowMapper<AdmissionStudent> {
     @Override
     public AdmissionStudent mapRow(ResultSet pResultSet, int pI) throws SQLException {
       MutableAdmissionStudent student = new PersistentAdmissionStudent();
+      student.setSemesterId(pResultSet.getInt("semester_id"));
       student.setId(pResultSet.getString("receipt_id"));
-      student.setSemester(mSemesterManager.get(pResultSet.getInt("semester_id")));
       student.setPin(pResultSet.getString("pin"));
       student.setHSCBoard(pResultSet.getString("hsc_board"));
       student.setHSCRoll(pResultSet.getString("hsc_roll"));
@@ -192,9 +222,10 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
       student.setAdmissionRoll(pResultSet.getString("admission_roll"));
       student.setMeritSerialNo(pResultSet.getInt("merit_sl_no"));
       student.setStudentId(pResultSet.getString("student_id"));
-      student.setAllocatedProgram(mProgramManager.get(pResultSet.getInt("allocated_program_id")));
+      student.setAllocatedProgramId(pResultSet.getInt("allocated_program_id"));
       student.setMigrationStatus(MigrationStatus.get(pResultSet.getInt("migration_status")));
       student.setLastModified(pResultSet.getString("last_modified"));
+      student.setUnit(pResultSet.getString("unit"));
       return student;
     }
   }

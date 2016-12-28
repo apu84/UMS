@@ -31,9 +31,25 @@ module ums{
       return defer.promise;
     }
 
+    public fetchTaletalkDataWithMeritType(semesterId:number, meritTypeId:number, unit:string):ng.IPromise<any>{
+      var url="academic/admission/taletalkData/semester/"+semesterId+"/unit/"+unit+"/meritType/"+meritTypeId;
+      var defer = this.$q.defer();
 
-    public fetchMeritList(semesterId:number, meritTypeId:number):ng.IPromise<any>{
-      var url="academic/admission/meritList/semester/"+semesterId+"/meritType/"+meritTypeId;
+      this.httpClient.get(url, this.appConstants.mimeTypeJson,
+          (json:any, etag:string)=>{
+            var admissionStudents:any = json.entries;
+            defer.resolve(admissionStudents);
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>)=>{
+            console.error(response);
+          });
+
+      return defer.promise;
+    }
+
+
+    public fetchMeritList(semesterId:number, meritTypeId:number, unit:string):ng.IPromise<any>{
+      var url="academic/admission/meritList/semester/"+semesterId+"/unit/"+unit+"/meritType/"+meritTypeId;
       var defer = this.$q.defer();
 
       this.httpClient.get(url, this.appConstants.mimeTypeJson,
@@ -89,6 +105,19 @@ module ums{
       var defer=this.$q.defer();
       var url="academic/admission/taletalkData/semester/"+semesterId;
       this.httpClient.post(url,json,'application/json')
+          .success(()=>{
+            defer.resolve("success");
+          }).error((data)=>{
+        defer.resolve("error");
+      });
+
+      return defer.promise;
+    }
+
+    public saveMeritList(json:any):ng.IPromise<any>{
+      var defer=this.$q.defer();
+      var url="academic/admission/meritListUpload";
+      this.httpClient.put(url,json,'application/json')
           .success(()=>{
             defer.resolve("success");
           }).error((data)=>{

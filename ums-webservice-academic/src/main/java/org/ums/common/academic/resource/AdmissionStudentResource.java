@@ -30,10 +30,19 @@ public class AdmissionStudentResource extends MutableAdmissionStudentResource {
   }
 
   @GET
-  @Path("/meritList/semester/{semester-id}/meritType/{merit-type}")
+  @Path("/taletalkData/semester/{semester-id}/unit/{unit}/meritType/{merit-type}")
+  public JsonObject getTaletalkData(final @Context Request pRequest,
+      final @PathParam("semester-id") int pSemesterId, final @PathParam("unit") String pUnit,
+      final @PathParam("merit-type") int pMeritType) {
+    return mHelper.getTaletalkData(pSemesterId, QuotaType.get(pMeritType), pUnit, mUriInfo);
+  }
+
+  @GET
+  @Path("/meritList/semester/{semester-id}/unit/{unit}/meritType/{merit-type}")
   public JsonObject getAdmissionMeritList(final @Context Request pRequest,
-      final @PathParam("semester-id") int pSemesterId, final @PathParam("merit-type") int pMeritType) {
-    return mHelper.getAdmissionMeritList(pSemesterId, QuotaType.get(pMeritType), mUriInfo);
+      final @PathParam("semester-id") int pSemesterId, final @PathParam("unit") String pUnit,
+      final @PathParam("merit-type") int pMeritType) {
+    return mHelper.getAdmissionMeritList(pSemesterId, QuotaType.get(pMeritType), pUnit, mUriInfo);
   }
 
 }

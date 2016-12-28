@@ -6,6 +6,7 @@ import org.ums.resource.Resource;
 
 import javax.json.JsonObject;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
@@ -23,6 +24,12 @@ public class MutableAdmissionStudentResource extends Resource {
   public Response saveTaletalkData(@PathParam("semester-id") int pSemesterId,
       final JsonObject pJsonObject) throws Exception {
     return mHelper.postTaletalkData(pJsonObject, pSemesterId, mUriInfo);
+  }
+
+  @PUT
+  @Path("/meritListUpload")
+  public Response saveMeritList(final JsonObject pJsonObject) throws Exception {
+    return mHelper.saveMeritListData(pJsonObject, mUriInfo);
   }
 
 }

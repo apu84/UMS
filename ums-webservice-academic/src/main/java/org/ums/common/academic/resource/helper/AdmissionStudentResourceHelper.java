@@ -1,35 +1,29 @@
 package org.ums.common.academic.resource.helper;
 
-import com.fasterxml.jackson.databind.util.JSONPObject;
-import jdk.nashorn.internal.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.ums.cache.LocalCache;
 import org.ums.common.builder.AdmissionStudentBuilder;
 import org.ums.common.report.generator.AdmissionStudentGenerator;
+import org.ums.domain.model.common.Mutable;
 import org.ums.domain.model.immutable.AdmissionStudent;
 import org.ums.domain.model.mutable.MutableAdmissionStudent;
-import org.ums.domain.model.mutable.MutableStudent;
 import org.ums.enums.QuotaType;
 import org.ums.manager.AdmissionStudentManager;
 import org.ums.persistent.model.PersistentAdmissionStudent;
 import org.ums.resource.ResourceHelper;
 
 import javax.json.*;
-import javax.json.stream.JsonParser;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.io.OutputStream;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created by Monjur-E-Morshed on 17-Dec-16.
@@ -79,6 +73,26 @@ public class AdmissionStudentResourceHelper extends
     return builder.build();
   }
 
+  @Transactional
+  public Response saveMeritListData(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+    List<MutableAdmissionStudent> students = new ArrayList<>();
+    JsonArray entries = pJsonObject.getJsonArray("entries");
+
+    for(int i = 0; i < entries.size(); i++) {
+      LocalCache localCache = new LocalCache();
+      JsonObject jsonObject = entries.getJsonObject(i);
+      PersistentAdmissionStudent student = new PersistentAdmissionStudent();
+      getBuilder().build(student, jsonObject, "meritList", localCache);
+      students.add(student);
+    }
+    getContentManager().saveMeritList(students);
+    URI contextURI = null;
+    Response.ResponseBuilder builder = Response.created(contextURI);
+    builder.status(Response.Status.CREATED);
+    return builder.build();
+
+  }
+
   public JsonObject getTaletalkData(final int pSemesterId, final UriInfo pUriInfo) {
     List<AdmissionStudent> students;
     try {
@@ -92,9 +106,17 @@ public class AdmissionStudentResourceHelper extends
   }
 
   public JsonObject getAdmissionMeritList(final int pSemesterId, final QuotaType pQuotaType,
-      final UriInfo pUriInfo) {
-    List<AdmissionStudent> students = getContentManager().getTaletalkData(pSemesterId, pQuotaType);
+      String pUnit, final UriInfo pUriInfo) {
+    List<AdmissionStudent> students =
+        getContentManager().getMeritList(pSemesterId, pQuotaType, pUnit);
     return jsonCreator(students, "meritList", pUriInfo);
+  }
+
+  public JsonObject getTaletalkData(final int pSemesterId, final QuotaType pQuotaType,
+      final String pUnit, final UriInfo pUriInfo) {
+    List<AdmissionStudent> students =
+        getContentManager().getTaletalkData(pSemesterId, pQuotaType, pUnit);
+    return jsonCreator(students, "taletalkData", pUriInfo);
   }
 
   public List<AdmissionStudent> getTaletalkData(final int pSemesterId) {

@@ -116,4 +116,15 @@ public class AdmissionStudentBuilder implements Builder<AdmissionStudent, Mutabl
       pMutable.setMigrationStatus(MigrationStatus.get(pJsonObject.getInt("migrationStatus")));
     }
   }
+
+  public void build(MutableAdmissionStudent pMutable, JsonObject pJsonObject, String pType,
+      LocalCache pLocalCache) {
+    pMutable.setId(pJsonObject.getString("receiptId"));
+    pMutable.setSemester(mSemesterManager.get(pJsonObject.getInt("semesterId")));
+
+    if(pType.equals("meritList")) {
+      pMutable.setMeritSerialNo(pJsonObject.getInt("meritSlNo"));
+      pMutable.setAdmissionRoll(pJsonObject.getString("admissionRoll"));
+    }
+  }
 }

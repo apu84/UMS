@@ -1,4 +1,13 @@
 
+<style>
+    .handsontable .htDimmed {
+        color: black;
+    }
+
+    .handsontable thead th {
+        text-align: left;
+    }
+</style>
 <div class="row" >
     <div onclick="resetCommonCollapsibleDivs()" id="arrowDiv">
         <i class="fa fa-angle-double-right fa-cx"></i></i>
@@ -75,17 +84,18 @@
         <div class="panel">
             <div class="panel-heading">Admission Merit List<span
                     class="subtitle"></span></div>
-            <div class="panel-body shadowPanel"   style="min-height: 490px;">
+            <div class="panel-body shadowPanel"   style="min-height: 300px;">
                 <div data-ng-if="searchSpinner" align="center">
                     <br>
-                    <i class="fa fa-spinner fa-spin fa-6x fa-fw"></i>
+                    <i class="fa fa-spinner fa-spin fa-5x fa-fw"></i>
                 </div>
-                <div data-ng-if="showUploadPortion==true && searchSpinner==false" align="center">
+                <div data-ng-if="showUploadPortion==true && searchSpinner==false" align="center" class="well well-lg">
                     <h1>Please upload merit list xls file</h1>
                     <br>
                     <br>
                     <br>
-                    <div class="row">
+                    <div class="row" >
+
                         <div class="col-md-6" align="center">
                             <button class="btn btn-default" ng-click="downloadTemplate()">Download Template</button>
                         </div>
@@ -113,8 +123,28 @@
                         </div>
                     </div>
                 </div>
-                <div data-ng-if="showUploadPortion==false && searchSpinner==false" align="center">
-                    <h1>This is saved portion</h1>
+                <div data-ng-if="showUploadPortion==false && searchSpinner==false" align="left" >
+                    <div class="row ">
+                        <div class="col-md-12 ">
+                            <hot-table settings="data.settings"
+                                       hot-id="meritListData"
+                                       datarows="admissionStudents"
+                                       autoWrapRow="true"
+                                       columns="data.columns"
+                                       width="data.width"
+                                       height="data.height"
+                                       id="meritListData">
+                            </hot-table>
+                        </div>
+
+                    </div>
+
+                    <br>
+                    <div class="row" data-ng-if="dataFound==false">
+                        <div class="col-md-12" align="right">
+                            <button class="btn btn-success" data-ng-click="saveMeritList()">Save</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

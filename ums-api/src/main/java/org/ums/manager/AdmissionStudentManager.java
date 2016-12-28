@@ -14,9 +14,15 @@ public interface AdmissionStudentManager extends
 
   List<AdmissionStudent> getTaletalkData(final int pSemesterId);
 
+  List<AdmissionStudent> getTaletalkData(final int pSemesterId, final QuotaType pQuotaType,
+      String unit);
+
   int saveTaletalkData(final List<MutableAdmissionStudent> students);
 
   int getDataSize(final int pSemesterId);
 
-  List<AdmissionStudent> getTaletalkData(final int pSemesterId, final QuotaType pQuotaType);
+  List<AdmissionStudent> getMeritList(final int pSemesterId, final QuotaType pQuotaType,
+      String pUnit);
+
+  int saveMeritList(final List<MutableAdmissionStudent> pStudents);
 }
