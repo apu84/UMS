@@ -6,6 +6,7 @@ import org.ums.domain.model.immutable.AdmissionStudent;
 import org.ums.domain.model.immutable.Program;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.enums.MigrationStatus;
+import org.ums.enums.ProgramType;
 
 /**
  * Created by Monjur-E-Morshed on 12-Dec-16.
@@ -15,6 +16,8 @@ public interface MutableAdmissionStudent extends AdmissionStudent, Mutable,
   void setSemester(final Semester pSemester);
 
   void setSemesterId(final int pSemesterId);
+
+  void setProgramType(final ProgramType pProgramType);
 
   void setPin(final String pPin);
 

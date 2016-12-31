@@ -6,6 +6,7 @@ module ums{
   export interface AdmissionStudent{
     semesterId:number;
     semesterName:string;
+    programType:number;
     receiptId:string;
     pin:string;
     hscBoard:string;

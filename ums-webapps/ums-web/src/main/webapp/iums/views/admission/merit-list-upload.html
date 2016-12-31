@@ -2,11 +2,14 @@
 <style>
     .handsontable .htDimmed {
         color: black;
+        /*width:100%;*/
     }
 
     .handsontable thead th {
         text-align: left;
     }
+
+
 </style>
 <div class="row" >
     <div onclick="resetCommonCollapsibleDivs()" id="arrowDiv">
@@ -84,7 +87,7 @@
         <div class="panel">
             <div class="panel-heading">Admission Merit List<span
                     class="subtitle"></span></div>
-            <div class="panel-body shadowPanel"   style="min-height: 300px;">
+            <div class="panel-body shadowPanel"   style="min-height: 490px;">
                 <div data-ng-if="searchSpinner" align="center">
                     <br>
                     <i class="fa fa-spinner fa-spin fa-5x fa-fw"></i>
@@ -131,8 +134,6 @@
                                        datarows="admissionStudents"
                                        autoWrapRow="true"
                                        columns="data.columns"
-                                       width="data.width"
-                                       height="data.height"
                                        id="meritListData">
                             </hot-table>
                         </div>

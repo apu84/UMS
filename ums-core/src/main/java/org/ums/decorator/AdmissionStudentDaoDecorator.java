@@ -2,6 +2,7 @@ package org.ums.decorator;
 
 import org.ums.domain.model.immutable.AdmissionStudent;
 import org.ums.domain.model.mutable.MutableAdmissionStudent;
+import org.ums.enums.ProgramType;
 import org.ums.enums.QuotaType;
 import org.ums.manager.AdmissionStudentManager;
 
@@ -15,8 +16,8 @@ public class AdmissionStudentDaoDecorator extends
     implements AdmissionStudentManager {
 
   @Override
-  public List<AdmissionStudent> getTaletalkData(int pSemesterId) {
-    return getManager().getTaletalkData(pSemesterId);
+  public List<AdmissionStudent> getTaletalkData(int pSemesterId, ProgramType pProgramType) {
+    return getManager().getTaletalkData(pSemesterId, pProgramType);
   }
 
   @Override
@@ -25,18 +26,20 @@ public class AdmissionStudentDaoDecorator extends
   }
 
   @Override
-  public int getDataSize(int pSemesterId) {
-    return getManager().getDataSize(pSemesterId);
+  public int getDataSize(int pSemesterId, ProgramType pProgramType) {
+    return getManager().getDataSize(pSemesterId, pProgramType);
   }
 
   @Override
-  public List<AdmissionStudent> getMeritList(int pSemesterId, QuotaType pQuotaType, String pUnit) {
-    return getManager().getMeritList(pSemesterId, pQuotaType, pUnit);
+  public List<AdmissionStudent> getMeritList(int pSemesterId, QuotaType pQuotaType, String pUnit,
+      ProgramType pProgramType) {
+    return getManager().getMeritList(pSemesterId, pQuotaType, pUnit, pProgramType);
   }
 
   @Override
-  public List<AdmissionStudent> getTaletalkData(int pSemesterId, QuotaType pQuotaType, String unit) {
-    return getManager().getTaletalkData(pSemesterId, pQuotaType, unit);
+  public List<AdmissionStudent> getTaletalkData(int pSemesterId, QuotaType pQuotaType, String unit,
+      ProgramType pProgramType) {
+    return getManager().getTaletalkData(pSemesterId, pQuotaType, unit, pProgramType);
   }
 
   @Override

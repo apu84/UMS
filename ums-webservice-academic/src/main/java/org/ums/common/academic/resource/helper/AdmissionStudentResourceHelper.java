@@ -9,9 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.ums.cache.LocalCache;
 import org.ums.common.builder.AdmissionStudentBuilder;
 import org.ums.common.report.generator.AdmissionStudentGenerator;
-import org.ums.domain.model.common.Mutable;
 import org.ums.domain.model.immutable.AdmissionStudent;
 import org.ums.domain.model.mutable.MutableAdmissionStudent;
+import org.ums.enums.ProgramType;
 import org.ums.enums.QuotaType;
 import org.ums.manager.AdmissionStudentManager;
 import org.ums.persistent.model.PersistentAdmissionStudent;
@@ -50,9 +50,10 @@ public class AdmissionStudentResourceHelper extends
   }
 
   @Transactional
-  public Response postTaletalkData(JsonObject pJsonObject, final int pSemesterId, UriInfo pUriInfo)
-      throws Exception {
-    int dataSize = getContentManager().getDataSize(pSemesterId);
+  public Response postTaletalkData(JsonObject pJsonObject, final int pSemesterId,
+      final ProgramType pProgramType, UriInfo pUriInfo) throws Exception {
+
+    int dataSize = getContentManager().getDataSize(pSemesterId, pProgramType);
     if(dataSize == 0) {
       List<MutableAdmissionStudent> students = new ArrayList<>();
       JsonArray entries = pJsonObject.getJsonArray("entries");
@@ -93,10 +94,11 @@ public class AdmissionStudentResourceHelper extends
 
   }
 
-  public JsonObject getTaletalkData(final int pSemesterId, final UriInfo pUriInfo) {
+  public JsonObject getTaletalkData(final int pSemesterId, final ProgramType pProgramType,
+      final UriInfo pUriInfo) {
     List<AdmissionStudent> students;
     try {
-      students = getContentManager().getTaletalkData(pSemesterId);
+      students = getContentManager().getTaletalkData(pSemesterId, pProgramType);
     } catch(EmptyResultDataAccessException e) {
       mLogger.error(e.getMessage());
       students = new ArrayList<>(); // just for skipping while we have no data in the db.
@@ -105,25 +107,26 @@ public class AdmissionStudentResourceHelper extends
     return jsonCreator(students, "taletalkData", pUriInfo);
   }
 
-  public JsonObject getAdmissionMeritList(final int pSemesterId, final QuotaType pQuotaType,
-      String pUnit, final UriInfo pUriInfo) {
+  public JsonObject getAdmissionMeritList(final int pSemesterId, final ProgramType pProgramType,
+      final QuotaType pQuotaType, String pUnit, final UriInfo pUriInfo) {
     List<AdmissionStudent> students =
-        getContentManager().getMeritList(pSemesterId, pQuotaType, pUnit);
+        getContentManager().getMeritList(pSemesterId, pQuotaType, pUnit, pProgramType);
     return jsonCreator(students, "meritList", pUriInfo);
   }
 
-  public JsonObject getTaletalkData(final int pSemesterId, final QuotaType pQuotaType,
-      final String pUnit, final UriInfo pUriInfo) {
+  public JsonObject getTaletalkData(final int pSemesterId, final ProgramType pProgramType,
+      final QuotaType pQuotaType, final String pUnit, final UriInfo pUriInfo) {
     List<AdmissionStudent> students =
-        getContentManager().getTaletalkData(pSemesterId, pQuotaType, pUnit);
+        getContentManager().getTaletalkData(pSemesterId, pQuotaType, pUnit, pProgramType);
     return jsonCreator(students, "taletalkData", pUriInfo);
   }
 
-  public List<AdmissionStudent> getTaletalkData(final int pSemesterId) {
-    List<AdmissionStudent> students;
-    students = getContentManager().getTaletalkData(pSemesterId);
+  public List<AdmissionStudent> getTaletalkData(final int pSemesterId,
+      final ProgramType pProgramType) {
+    List<AdmissionStudent> students = new ArrayList<>();
+    // students = getContentManager().getTaletalkData(pSemesterId, pProgramType);
     try {
-      students = getContentManager().getTaletalkData(pSemesterId);
+      students = getContentManager().getTaletalkData(pSemesterId, pProgramType);
     } catch(EmptyResultDataAccessException e) {
       mLogger.error(e.getMessage());
       students = new ArrayList<>(); // just for skipping while we have no data in the db.

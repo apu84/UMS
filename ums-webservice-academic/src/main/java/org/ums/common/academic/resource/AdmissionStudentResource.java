@@ -1,6 +1,7 @@
 package org.ums.common.academic.resource;
 
 import org.springframework.stereotype.Component;
+import org.ums.enums.ProgramType;
 import org.ums.enums.QuotaType;
 import org.ums.resource.Resource;
 
@@ -23,26 +24,31 @@ import java.io.OutputStream;
 public class AdmissionStudentResource extends MutableAdmissionStudentResource {
 
   @GET
-  @Path("/taletalkData/semester/{semester-id}")
+  @Path("/taletalkData/semester/{semester-id}/programType/{program-type}")
   public JsonObject getTaletalkData(final @Context Request pRequest,
-      final @PathParam("semester-id") int pSemesterId) {
-    return mHelper.getTaletalkData(pSemesterId, mUriInfo);
+      final @PathParam("semester-id") int pSemesterId,
+      final @PathParam("program-type") int pProgramType) {
+    return mHelper.getTaletalkData(pSemesterId, ProgramType.get(pProgramType), mUriInfo);
   }
 
   @GET
-  @Path("/taletalkData/semester/{semester-id}/unit/{unit}/meritType/{merit-type}")
+  @Path("/taletalkData/semester/{semester-id}/programType/{program-type}/unit/{unit}/meritType/{merit-type}")
   public JsonObject getTaletalkData(final @Context Request pRequest,
-      final @PathParam("semester-id") int pSemesterId, final @PathParam("unit") String pUnit,
+      final @PathParam("semester-id") int pSemesterId,
+      final @PathParam("program-type") int pProgramType, final @PathParam("unit") String pUnit,
       final @PathParam("merit-type") int pMeritType) {
-    return mHelper.getTaletalkData(pSemesterId, QuotaType.get(pMeritType), pUnit, mUriInfo);
+    return mHelper.getTaletalkData(pSemesterId, ProgramType.get(pProgramType),
+        QuotaType.get(pMeritType), pUnit, mUriInfo);
   }
 
   @GET
-  @Path("/meritList/semester/{semester-id}/unit/{unit}/meritType/{merit-type}")
+  @Path("/meritList/semester/{semester-id}/programType/{program-type}/unit/{unit}/meritType/{merit-type}")
   public JsonObject getAdmissionMeritList(final @Context Request pRequest,
-      final @PathParam("semester-id") int pSemesterId, final @PathParam("unit") String pUnit,
+      final @PathParam("semester-id") int pSemesterId,
+      final @PathParam("program-type") int pProgramType, final @PathParam("unit") String pUnit,
       final @PathParam("merit-type") int pMeritType) {
-    return mHelper.getAdmissionMeritList(pSemesterId, QuotaType.get(pMeritType), pUnit, mUriInfo);
+    return mHelper.getAdmissionMeritList(pSemesterId, ProgramType.get(pProgramType),
+        QuotaType.get(pMeritType), pUnit, mUriInfo);
   }
 
 }

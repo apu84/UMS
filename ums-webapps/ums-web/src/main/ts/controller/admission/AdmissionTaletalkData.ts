@@ -132,7 +132,9 @@ module ums{
 
       this.$scope.searchSpinner=true;
       this.$scope.admissionStudents=[];
-      this.admissionStudentService.fetchTaletalkData(this.$scope.semester.id).then((admissionStudents:Array<AdmissionStudent>)=>{
+      console.log("-----programType---");
+      console.log(this.$scope.programType.id);
+      this.admissionStudentService.fetchTaletalkData(this.$scope.semester.id, +this.$scope.programType.id).then((admissionStudents:Array<AdmissionStudent>)=>{
         console.log("upload portion");
         console.log(admissionStudents);
         if(admissionStudents.length==0){
@@ -252,7 +254,7 @@ module ums{
       this.$scope.showSpinner=true;
 
       this.convertToJson().then((completeJson:any)=>{
-        this.admissionStudentService.saveTaletalkData(completeJson, this.$scope.semester.id).then((message:string)=>{
+        this.admissionStudentService.saveTaletalkData(completeJson, this.$scope.semester.id, +this.$scope.programType.id).then((message:string)=>{
           if(message == "success"){
             this.notify.success("Data successfully saved");
             this.$scope.disableSaveButton=true;
@@ -296,6 +298,7 @@ module ums{
         item['hscGpa'] = students[i].hscGpa;
         item['quota'] = students[i].quota;
         item['unit'] = students[i].unit;
+        item['programType']= +this.$scope.programType.id;
         item['admissionRoll'] = 'null';
         item['meritSlNo'] = 'null';
         item['programId'] = 'null';

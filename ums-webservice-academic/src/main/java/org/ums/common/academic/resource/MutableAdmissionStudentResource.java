@@ -2,6 +2,7 @@ package org.ums.common.academic.resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.ums.common.academic.resource.helper.AdmissionStudentResourceHelper;
+import org.ums.enums.ProgramType;
 import org.ums.resource.Resource;
 
 import javax.json.JsonObject;
@@ -20,10 +21,11 @@ public class MutableAdmissionStudentResource extends Resource {
   AdmissionStudentResourceHelper mHelper;
 
   @POST
-  @Path("/taletalkData/semester/{semester-id}")
+  @Path("/taletalkData/semester/{semester-id}/programType/{program-type}")
   public Response saveTaletalkData(@PathParam("semester-id") int pSemesterId,
-      final JsonObject pJsonObject) throws Exception {
-    return mHelper.postTaletalkData(pJsonObject, pSemesterId, mUriInfo);
+      @PathParam("program-type") int pProgramType, final JsonObject pJsonObject) throws Exception {
+    return mHelper.postTaletalkData(pJsonObject, pSemesterId, ProgramType.get(pProgramType),
+        mUriInfo);
   }
 
   @PUT
