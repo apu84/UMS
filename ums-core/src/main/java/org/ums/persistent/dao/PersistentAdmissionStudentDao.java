@@ -7,6 +7,7 @@ import org.ums.decorator.AdmissionStudentDaoDecorator;
 import org.ums.domain.model.immutable.AdmissionStudent;
 import org.ums.domain.model.mutable.MutableAdmissionStudent;
 import org.ums.enums.MigrationStatus;
+import org.ums.enums.ProgramType;
 import org.ums.enums.QuotaType;
 import org.ums.manager.ProgramManager;
 import org.ums.manager.SemesterManager;
@@ -40,7 +41,7 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
           + "                 HSC_REGNO, HSC_YEAR, HSC_GROUP, SSC_BOARD, SSC_ROLL,       "
           + "                 SSC_YEAR, SSC_GROUP, GENDER,to_char(DATE_OF_BIRTH,'dd/mm/yy') date_of_birth , STUDENT_NAME,       "
           + "                 FATHER_NAME, MOTHER_NAME, SSC_GPA, HSC_GPA, QUOTA , unit,      "
-          + "                 LAST_MODIFIED from admission_students where SEMESTER_ID=? order by to_number(RECEIPT_ID)";
+          + "                 LAST_MODIFIED from admission_students where SEMESTER_ID=? and program_type=? order by to_number(RECEIPT_ID)";
 
   String INSERT_ONE_TALETALK_DATA =
       "INSERT INTO admission_students (semester_id, "
@@ -62,8 +63,8 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
           + "                                ssc_gpa, "
           + "                                hsc_gpa, "
           + "                                quota, "
-          + "                                unit,last_Modified) "
-          + "                                values(?,?,?,?,?,?,?,?,?,?,?,?,?,to_date(?,'dd/MM/YY'),?,?,?,?,?,?,?,"
+          + "                                unit, program_type,last_Modified) "
+          + "                                values(?,?,?,?,?,?,?,?,?,?,?,?,?,to_date(?,'dd/MM/YY'),?,?,?,?,?,?,?,?,"
           + getLastModifiedSql() + ")";
 
   String INSERT_ONE = "INSERT INTO DB_IUMS.ADMISSION_STUDENTS  "
@@ -136,42 +137,48 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
           student.getHSCYear(), student.getHSCGroup(), student.getSSCBoard(), student.getSSCRoll(),
           student.getSSCYear(), student.getSSCGroup(), student.getGender(), student.getBirthDate(),
           student.getStudentName(), student.getFatherName(), student.getMotherName(),
-          student.getSSCGpa(), student.getHSCGpa(), student.getQuota(), student.getUnit()});
+          student.getSSCGpa(), student.getHSCGpa(), student.getQuota(), student.getUnit(),
+          student.getProgramType().getValue()});
     }
     return params;
   }
 
   @Override
-  public List<AdmissionStudent> getTaletalkData(int pSemesterId) {
+  public List<AdmissionStudent> getTaletalkData(int pSemesterId, ProgramType pProgramType) {
+    int pType = pProgramType.getValue();
     String query = SELECT_ONE_TALETALK_DATA;
-    return mJdbcTemplate.query(query, new Object[] {pSemesterId},
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pProgramType.getValue()},
         new AdmissionStudentRowMapperTaletalk());
   }
 
   @Override
-  public int getDataSize(int pSemesterId) {
-    String query = "select count(*) from admission_students where semester_id=?";
-    return mJdbcTemplate.queryForObject(query, Integer.class, pSemesterId);
+  public int getDataSize(int pSemesterId, ProgramType pProgramType) {
+    String query = "select count(*) from admission_students where semester_id=? and program_type=?";
+    return mJdbcTemplate.queryForObject(query, Integer.class, pSemesterId, pProgramType.getValue());
   }
 
   @Override
-  public List<AdmissionStudent> getMeritList(int pSemesterId, QuotaType pQuotaType, String pUnit) {
+  public List<AdmissionStudent> getMeritList(int pSemesterId, QuotaType pQuotaType, String pUnit,
+      ProgramType pProgramType) {
+
+    int pTYpe = pProgramType.getValue();
     String query =
         SELECT_ONE
-            + " where semester_id=? and unit=? and merit_sl_no is not null and admission_roll is not null  "
+            + " where semester_id=? and program_type=? and unit=? and merit_sl_no is not null and admission_roll is not null  "
             + " and receipt_id in (select receipt_id from admission_students where ";
     query = getQuotaSql(pQuotaType, query);
     query = query + ") order by merit_sl_no";
-    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pUnit},
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pProgramType.getValue(), pUnit},
         new AdmissionStudentRowMapper());
   }
 
   @Override
-  public List<AdmissionStudent> getTaletalkData(int pSemesterId, QuotaType pQuotaType, String unit) {
-    String query = SELECT_ONE + " where semester_id=? and unit=? and ";
+  public List<AdmissionStudent> getTaletalkData(int pSemesterId, QuotaType pQuotaType, String unit,
+      ProgramType pProgramType) {
+    String query = SELECT_ONE + " where semester_id=? and program_type=? and unit=? and ";
     query = getQuotaSql(pQuotaType, query);
     query = query + " order by to_number(receipt_id)";
-    return mJdbcTemplate.query(query, new Object[] {pSemesterId, unit},
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pProgramType.getValue(), unit},
         new AdmissionStudentRowMapper());
   }
 

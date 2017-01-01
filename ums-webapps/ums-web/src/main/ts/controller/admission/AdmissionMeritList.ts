@@ -75,7 +75,7 @@ module ums{
           columnSorting:true,
           sortIndicator:true,
           readOnly:true,
-          width:$(".page-content").width()-5,
+          stretchH:'all',
           height:$(".page-content").height()-5,
           observeChanges:true,
           search:true,
@@ -123,7 +123,7 @@ module ums{
       Utils.expandRightDiv();
 
       this.$scope.searchSpinner=true;
-      this.admissionStudentService.fetchMeritList(this.$scope.semester.id, +this.$scope.meritType.id, this.$scope.faculty.shortName).then((students:Array<AdmissionStudent>)=>{
+      this.admissionStudentService.fetchMeritList(this.$scope.semester.id, +this.$scope.programType.id, +this.$scope.meritType.id, this.$scope.faculty.shortName).then((students:Array<AdmissionStudent>)=>{
         console.log("Admission merit list");
         console.log(students);
         if(students.length==0){
@@ -142,7 +142,7 @@ module ums{
 
     private fetchAllAdmissionStudents():void{
       this.$scope.admissionStudentMap={};
-      this.admissionStudentService.fetchTaletalkDataWithMeritType(this.$scope.semester.id,
+      this.admissionStudentService.fetchTaletalkDataWithMeritType(this.$scope.semester.id, +this.$scope.programType.id,
           +this.$scope.meritType.id, this.$scope.faculty.shortName )
           .then((students:Array<AdmissionStudent>)=>{
 

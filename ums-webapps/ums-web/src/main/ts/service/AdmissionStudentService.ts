@@ -15,8 +15,10 @@ module ums{
     }
 
 
-    public fetchTaletalkData(semesterId:number):ng.IPromise<any>{
-      var url="academic/admission/taletalkData/semester/"+semesterId;
+    public fetchTaletalkData(semesterId:number, programType:number):ng.IPromise<any>{
+      console.log("in the service");
+      console.log(programType);
+      var url="academic/admission/taletalkData/semester/"+semesterId+"/programType/"+programType;
       var defer = this.$q.defer();
 
       this.httpClient.get(url, this.appConstants.mimeTypeJson,
@@ -31,8 +33,8 @@ module ums{
       return defer.promise;
     }
 
-    public fetchTaletalkDataWithMeritType(semesterId:number, meritTypeId:number, unit:string):ng.IPromise<any>{
-      var url="academic/admission/taletalkData/semester/"+semesterId+"/unit/"+unit+"/meritType/"+meritTypeId;
+    public fetchTaletalkDataWithMeritType(semesterId:number, programType:number, meritTypeId:number, unit:string):ng.IPromise<any>{
+      var url="academic/admission/taletalkData/semester/"+semesterId+"/programType/"+programType+"/unit/"+unit+"/meritType/"+meritTypeId;
       var defer = this.$q.defer();
 
       this.httpClient.get(url, this.appConstants.mimeTypeJson,
@@ -48,8 +50,8 @@ module ums{
     }
 
 
-    public fetchMeritList(semesterId:number, meritTypeId:number, unit:string):ng.IPromise<any>{
-      var url="academic/admission/meritList/semester/"+semesterId+"/unit/"+unit+"/meritType/"+meritTypeId;
+    public fetchMeritList(semesterId:number, programType:number, meritTypeId:number, unit:string):ng.IPromise<any>{
+      var url="academic/admission/meritList/semester/"+semesterId+"/programType/"+programType+"/unit/"+unit+"/meritType/"+meritTypeId;
       var defer = this.$q.defer();
 
       this.httpClient.get(url, this.appConstants.mimeTypeJson,
@@ -101,9 +103,9 @@ module ums{
           },'arraybuffer');
     }
 
-    public saveTaletalkData(json:any, semesterId:number):ng.IPromise<any>{
+    public saveTaletalkData(json:any, semesterId:number, programType:number):ng.IPromise<any>{
       var defer=this.$q.defer();
-      var url="academic/admission/taletalkData/semester/"+semesterId;
+      var url="academic/admission/taletalkData/semester/"+semesterId+"/programType/"+programType;
       this.httpClient.post(url,json,'application/json')
           .success(()=>{
             defer.resolve("success");

@@ -4,7 +4,8 @@ import org.ums.domain.model.common.EditType;
 import org.ums.domain.model.common.Identifier;
 import org.ums.domain.model.common.LastModifier;
 import org.ums.domain.model.mutable.MutableAdmissionStudent;
-import org.ums.enums.MigrationStatus;
+import org.ums.enums.*;
+import org.ums.enums.ProgramType;
 
 import java.io.Serializable;
 
@@ -16,6 +17,8 @@ public interface AdmissionStudent extends Serializable, EditType<MutableAdmissio
   Semester getSemester();
 
   int getSemesterId();
+
+  ProgramType getProgramType();
 
   String getReceiptId();
 

@@ -10,6 +10,7 @@ import org.ums.common.academic.resource.helper.AdmissionStudentResourceHelper;
 import org.ums.domain.model.immutable.AdmissionStudent;
 import org.ums.domain.model.mutable.MutableAdmissionStudent;
 import org.ums.enums.MigrationStatus;
+import org.ums.enums.ProgramType;
 import org.ums.manager.ProgramManager;
 import org.ums.manager.SemesterManager;
 import sun.dc.pr.PRError;
@@ -115,6 +116,7 @@ public class AdmissionStudentBuilder implements Builder<AdmissionStudent, Mutabl
     if(!(pJsonObject.getString("migrationStatus")).contains("null")) {
       pMutable.setMigrationStatus(MigrationStatus.get(pJsonObject.getInt("migrationStatus")));
     }
+    pMutable.setProgramType(ProgramType.get(pJsonObject.getInt("programType")));
   }
 
   public void build(MutableAdmissionStudent pMutable, JsonObject pJsonObject, String pType,

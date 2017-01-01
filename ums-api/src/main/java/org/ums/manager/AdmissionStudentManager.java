@@ -2,6 +2,7 @@ package org.ums.manager;
 
 import org.ums.domain.model.immutable.AdmissionStudent;
 import org.ums.domain.model.mutable.MutableAdmissionStudent;
+import org.ums.enums.ProgramType;
 import org.ums.enums.QuotaType;
 
 import java.util.List;
@@ -12,17 +13,17 @@ import java.util.List;
 public interface AdmissionStudentManager extends
     ContentManager<AdmissionStudent, MutableAdmissionStudent, String> {
 
-  List<AdmissionStudent> getTaletalkData(final int pSemesterId);
+  List<AdmissionStudent> getTaletalkData(final int pSemesterId, ProgramType pProgramType);
 
   List<AdmissionStudent> getTaletalkData(final int pSemesterId, final QuotaType pQuotaType,
-      String unit);
+      String unit, ProgramType pProgramType);
 
   int saveTaletalkData(final List<MutableAdmissionStudent> students);
 
-  int getDataSize(final int pSemesterId);
+  int getDataSize(final int pSemesterId, ProgramType pProgramType);
 
   List<AdmissionStudent> getMeritList(final int pSemesterId, final QuotaType pQuotaType,
-      String pUnit);
+      String pUnit, ProgramType pProgramType);
 
   int saveMeritList(final List<MutableAdmissionStudent> pStudents);
 }
