@@ -27,12 +27,13 @@ public class GradeSheetBuilder implements
         Course.class);
     pBuilder.add("courseNo", course.getNo());
     pBuilder.add("courseTitle", course.getTitle());
+    pBuilder.add("courseId", course.getId());
     pBuilder.add("crhr", course.getCrHr());
     pBuilder.add("grade", pReadOnly.getGradeLetter());
     double totalGPA = GPA_MAP.get(pReadOnly.getGradeLetter()) * course.getCrHr();
     pBuilder.add("gradePoint", totalGPA);
     pBuilder.add("regType", pReadOnly.getType().getId());
-    pBuilder.add("semesterId", pReadOnly.getSemesterId());
+    pBuilder.add("semesterId", String.valueOf(pReadOnly.getSemesterId()));
   }
 
   @Override

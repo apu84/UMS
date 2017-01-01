@@ -433,3 +433,7 @@ angular-filemanager .btn.btn-flat>i{
 angular-filemanager .breadcrumb{
     font-size:15.5px !important; ;
 }
+
+.table tbody tr td.center-aligned {
+    text-align: center;
+}

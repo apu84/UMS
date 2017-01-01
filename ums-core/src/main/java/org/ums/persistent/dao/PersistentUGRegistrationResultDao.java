@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentUGRegistrationResultDao extends UGRegistrationResultDaoDecorator {
-  String SELECT_ALL = "SELECT UG_REGISTRATION_RESULT.STUDENT_ID, "
+  String SELECT_ALL = "SELECT UG_REGISTRATION_RESULT.ID, UG_REGISTRATION_RESULT.STUDENT_ID, "
       + "UG_REGISTRATION_RESULT.SEMESTER_ID, " + "UG_REGISTRATION_RESULT.COURSE_ID, "
       + "UG_REGISTRATION_RESULT.GRADE_LETTER, " + "UG_REGISTRATION_RESULT.EXAM_TYPE, "
       + "UG_REGISTRATION_RESULT.REG_TYPE, " + "UG_REGISTRATION_RESULT.LAST_MODIFIED "
@@ -176,6 +176,7 @@ public class PersistentUGRegistrationResultDao extends UGRegistrationResultDaoDe
   class UGRegistrationResultRowMapperWithoutResult implements RowMapper<UGRegistrationResult> {
     protected MutableUGRegistrationResult build(ResultSet pResultSet) throws SQLException {
       MutableUGRegistrationResult result = new PersistentUGRegistrationResult();
+      result.setId(pResultSet.getInt("ID"));
       result.setStudentId(pResultSet.getString("STUDENT_ID"));
       result.setCourseId(pResultSet.getString("COURSE_ID"));
       result.setExamType(ExamType.get(pResultSet.getInt("EXAM_TYPE")));

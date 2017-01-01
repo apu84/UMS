@@ -1,5 +1,7 @@
 package org.ums.cache;
 
+import java.util.List;
+
 import org.ums.domain.model.immutable.UGRegistrationResult;
 import org.ums.domain.model.mutable.MutableUGRegistrationResult;
 import org.ums.enums.CourseRegType;
@@ -7,11 +9,6 @@ import org.ums.manager.CacheManager;
 import org.ums.manager.UGRegistrationResultManager;
 import org.ums.util.CacheUtil;
 
-import java.util.List;
-
-/**
- * Created by My Pc on 7/12/2016.
- */
 public class UGRegistrationResultCache
     extends
     ContentCache<UGRegistrationResult, MutableUGRegistrationResult, Integer, UGRegistrationResultManager>
@@ -78,7 +75,8 @@ public class UGRegistrationResultCache
 
   @Override
   public List<UGRegistrationResult> getResults(String pStudentId, Integer pSemesterId) {
-    return getManager().getResults(pStudentId, pSemesterId);
+    String cacheKey = getCacheKey(UGRegistrationResult.class.toString(), pStudentId, pSemesterId);
+    return cachedList(cacheKey, () -> getManager().getResults(pStudentId, pSemesterId));
   }
 
   @Override

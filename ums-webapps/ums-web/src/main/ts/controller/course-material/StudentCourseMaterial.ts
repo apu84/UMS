@@ -33,7 +33,7 @@ module ums {
       this.$scope.contentVisibility = false;
       this.$scope.selectedCourseNo = '';
 
-      this.httpClient.get("academic/course/semester/" + this.courseMaterialSearchParamModel.semesterId + "/program/"
+      this.httpClient.get("course/semester/" + this.courseMaterialSearchParamModel.semesterId + "/program/"
           + this.courseMaterialSearchParamModel.programSelector.programId + "/year/"
           + this.currentUser.year + "/academicSemester/" + this.currentUser.academicSemester, HttpClient.MIME_TYPE_JSON,
           (response: {entries: Course[]}) => {

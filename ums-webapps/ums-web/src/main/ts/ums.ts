@@ -43,7 +43,7 @@ module ums {
   /* Filter used in course-teacher.html, it returns the total size of the keys in a json object */
   UMS.filter('numKeys', function() {
     return function(json) {
-      var keys = Object.keys(json)
+      var keys = Object.keys(json);
       return keys.length;
     }
   });
@@ -777,6 +777,11 @@ module ums {
         .state('mailBox.viewMail', {
           url: "/viewMail",
           templateUrl: 'views/common/mailbox/mail-view.html'
+        })
+        .state('studentGradeSheet', {
+          url: "/studentGradeSheet",
+          controller: "StudentGradeSheet",
+          templateUrl: 'views/student/grade-sheet.html'
         })
       //In database use /dummyController/H or /dummyController/T in the location column
       //https://localhost/ums-web/iums/#/dummyConroller/T

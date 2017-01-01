@@ -163,6 +163,11 @@ public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecor
     while(resultIterator.hasNext()) {
       UGRegistrationResult result = resultIterator.next();
       Semester pForSemester = mSemesterManager.get(pForSemesterId);
+
+      if(result.getSemester().getStartDate().after(pForSemester.getStartDate())) {
+        resultIterator.remove();
+      }
+
       if(result.getSemester().getStartDate().before(pForSemester.getStartDate())
           && result.getGradeLetter() != null) {
         if(result.getGradeLetter().equalsIgnoreCase("F")) {
@@ -195,7 +200,7 @@ public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecor
   }
 
   private boolean hasTakenEquivalentInFollowingSemesters(UGRegistrationResult pResult,
-                                                         List<UGRegistrationResult> pResults) {
+      List<UGRegistrationResult> pResults) {
     List<EquivalentCourse> equivalentCourses = mEquivalentCourseManager.getAll();
     Map<String, EquivalentCourse> equivalentCourseMap = equivalentCourses.stream()
         .collect(Collectors.toMap(EquivalentCourse::getOldCourseId, Function.identity()));

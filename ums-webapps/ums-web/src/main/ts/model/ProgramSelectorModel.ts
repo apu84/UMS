@@ -212,7 +212,7 @@ module ums {
     }
 
     public loadPrograms(): void {
-      if (this.departmentId != "" && this.programTypeId == Utils.UG+'') {
+      if (this.departmentId && this.departmentId != '' && this.programTypeId == Utils.UG+'') {
         var ugProgramsArr:any = this.getAppConstants().ugPrograms;
         var ugProgramsJson = $.map(ugProgramsArr, (el) => {
           return el
@@ -220,7 +220,6 @@ module ums {
         var resultPrograms: any = $.grep(ugProgramsJson, (e: any) => {
           return e.deptId == this.departmentId;
         });
-
         this.setPrograms(resultPrograms[0].programs);
         this.programId = this.getPrograms()[0].id;
       }
@@ -241,7 +240,6 @@ module ums {
             (json: any, etag: string) => {
               this.setSemesters(json.entries);
               if (this.isSemesterEnabled()) {
-                console.log(this.getSemesters());
                 this.semesterId = (this.getSemesters()[0]).id +'';
               }
             },

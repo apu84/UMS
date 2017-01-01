@@ -103,11 +103,9 @@
 /// <reference path='service/EmployeeService.ts'/>
 /// <reference path='service/StudentService.ts'/>
 /// <reference path='service/TeacherService.ts'/>
-/// <reference path='service/TeacherService.ts'/>
-
-
 
 /// <reference path='controller/student/NewStudent.ts'/>
+/// <reference path='controller/student/GradeSheetService.ts'/>
 /// <reference path='controller/semester/NewSemester.ts'/>
 /// <reference path='controller/semester/SemesterInfo.ts'/>
 /// <reference path='controller/semester/SemesterSyllabusMap.ts'/>
@@ -144,21 +142,16 @@
 /// <reference path='controller/result/CourseStatusList.ts'/>
 /// <reference path='controller/result/ResultProcessStatusMonitor.ts'/>
 
-
-
 /// <reference path='controller/admission/AdmissionMeritList.ts'/>
 /// <reference path='controller/admission/AdmissionTaletalkData.ts'/>
 /// <reference path='controller/admission/AdmissionDeadline.ts'/>
-
-
-
-
 
 /// <reference path='controller/syllabus/FullSyllabus.ts'/>
 /// <reference path='controller/syllabus/NewSyllabus.ts'/>
 /// <reference path='controller/syllabus/GridSyllabus.ts'/>
 /// <reference path='controller/semester/SemesterEnrollment.ts'/>
 /// <reference path='controller/student/StudentProfile.ts'/>
+/// <reference path='controller/student/GradeSheet.ts'/>
 
 /// <reference path='dummy/DummyController.ts'/>
 

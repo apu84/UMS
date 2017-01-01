@@ -424,8 +424,11 @@ public class UMSContext {
     UGRegistrationResultAggregator resultAggregator =
         new UGRegistrationResultAggregator(equivalentCourseManager(), taskStatusManager(),
             semesterManager());
-    resultAggregator.setManager(new PersistentUGRegistrationResultDao(mTemplateFactory
+    UGRegistrationResultCache registrationResultCache =
+        new UGRegistrationResultCache(mCacheFactory.getCacheManager());
+    registrationResultCache.setManager(new PersistentUGRegistrationResultDao(mTemplateFactory
         .getJdbcTemplate()));
+    resultAggregator.setManager(registrationResultCache);
     return resultAggregator;
   }
 
