@@ -9,7 +9,9 @@ import org.ums.util.CacheUtil;
 /**
  * Created by Monjur-E-Morshed on 01-Jan-17.
  */
-public class UgAdmissionLogCache extends ContentCache<UgAdmissionLog, MutableUgAdmissionLog, Integer, UgAdmissionLogManager> implements UgAdmissionLogManager{
+public class UgAdmissionLogCache extends
+    ContentCache<UgAdmissionLog, MutableUgAdmissionLog, Integer, UgAdmissionLogManager> implements
+    UgAdmissionLogManager {
 
   private CacheManager<UgAdmissionLog, Integer> mCacheManager;
 

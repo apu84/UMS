@@ -10,7 +10,8 @@ import java.io.Serializable;
 /**
  * Created by Monjur-E-Morshed on 01-Jan-17.
  */
-public interface UgAdmissionLog extends Serializable, EditType<MutableUgAdmissionLog>, LastModifier, Identifier<Integer> {
+public interface UgAdmissionLog extends Serializable, EditType<MutableUgAdmissionLog>,
+    LastModifier, Identifier<Integer> {
   String getReceiptId();
 
   int getSemesterId();

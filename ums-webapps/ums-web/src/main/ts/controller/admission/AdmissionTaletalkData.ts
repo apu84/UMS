@@ -46,6 +46,7 @@ module ums{
                 private facultyService: FacultyService,
                 private admissionStudentService:AdmissionStudentService) {
 
+      console.log("This is constructor");
       $scope.modalData="";
       $scope.disableSaveButton=true;
       $scope.showSpinner=false;
