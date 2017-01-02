@@ -15,9 +15,9 @@ import java.sql.SQLException;
  */
 public class PersistentUgAdmissionLogDao extends UgAdmissionLogDaoDecorator {
 
-
-  private final String INSERT_ONE="INSERT INTO UG_ADMISSION_LOG (RECEIPT_ID, SEMESTER_ID, LOG_TEXT, ACTOR, INSERTED_ON) " +
-      "VALUES (?, ?, ?, ?, sysdate)";
+  private final String INSERT_ONE =
+      "INSERT INTO UG_ADMISSION_LOG (RECEIPT_ID, SEMESTER_ID, LOG_TEXT, ACTOR, INSERTED_ON) "
+          + "VALUES (?, ?, ?, ?, sysdate)";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -28,10 +28,11 @@ public class PersistentUgAdmissionLogDao extends UgAdmissionLogDaoDecorator {
   @Override
   public int create(MutableUgAdmissionLog pMutable) {
     String query = INSERT_ONE;
-    return mJdbcTemplate.update(query, pMutable.getReceiptId(), pMutable.getSemesterId(), pMutable.getLogText());
+    return mJdbcTemplate.update(query, pMutable.getReceiptId(), pMutable.getSemesterId(),
+        pMutable.getLogText());
   }
 
-  class UgAdmissionRowMapper implements RowMapper<UgAdmissionLog>{
+  class UgAdmissionRowMapper implements RowMapper<UgAdmissionLog> {
     @Override
     public UgAdmissionLog mapRow(ResultSet pResultSet, int pI) throws SQLException {
       PersistentUgAdmissionLog log = new PersistentUgAdmissionLog();

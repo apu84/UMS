@@ -22,7 +22,8 @@ public class PersistentUgAdmissionLog implements MutableUgAdmissionLog {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
     sEmployeeManager = applicationContext.getBean("employeeManager", EmployeeManager.class);
-    sUgAdmissionLogManager = applicationContext.getBean("ugAdmissionLogManager", UgAdmissionLogManager.class);
+    sUgAdmissionLogManager =
+        applicationContext.getBean("ugAdmissionLogManager", UgAdmissionLogManager.class);
   }
 
   private int mId;
@@ -34,13 +35,11 @@ public class PersistentUgAdmissionLog implements MutableUgAdmissionLog {
   private Employee mActor;
   private String mInsertedOn;
 
-
   public PersistentUgAdmissionLog() {
 
   }
 
-
-  public PersistentUgAdmissionLog(final PersistentUgAdmissionLog pPersistentUgAdmissionLog){
+  public PersistentUgAdmissionLog(final PersistentUgAdmissionLog pPersistentUgAdmissionLog) {
     mId = pPersistentUgAdmissionLog.getId();
     mReceiptId = pPersistentUgAdmissionLog.getReceiptId();
     mSemesterId = pPersistentUgAdmissionLog.getSemesterId();
@@ -51,14 +50,12 @@ public class PersistentUgAdmissionLog implements MutableUgAdmissionLog {
     mInsertedOn = pPersistentUgAdmissionLog.getInsertionDate();
   }
 
-
-
   @Override
   public void commit(boolean update) {
-    if(update){
+    if(update) {
       sUgAdmissionLogManager.update(this);
     }
-    else{
+    else {
       sUgAdmissionLogManager.create(this);
     }
   }
@@ -125,7 +122,8 @@ public class PersistentUgAdmissionLog implements MutableUgAdmissionLog {
 
   @Override
   public Semester getSemester() {
-    return mSemester==null? sSemesterManager.get(mSemesterId): sSemesterManager.validate(mSemester);
+    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
+        .validate(mSemester);
   }
 
   @Override
@@ -150,7 +148,7 @@ public class PersistentUgAdmissionLog implements MutableUgAdmissionLog {
 
   @Override
   public Employee getActor() {
-    return mActor==null? sEmployeeManager.get(mActorId): sEmployeeManager.validate(mActor);
+    return mActor == null ? sEmployeeManager.get(mActorId) : sEmployeeManager.validate(mActor);
   }
 
   @Override
