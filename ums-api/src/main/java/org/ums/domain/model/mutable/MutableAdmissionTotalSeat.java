@@ -5,6 +5,7 @@ import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.immutable.AdmissionTotalSeat;
 import org.ums.domain.model.immutable.Program;
 import org.ums.domain.model.immutable.Semester;
+import org.ums.enums.ProgramType;
 
 /**
  * Created by Monjur-E-Morshed on 02-Jan-17.
@@ -20,4 +21,6 @@ public interface MutableAdmissionTotalSeat extends AdmissionTotalSeat, Mutable,
   void setProgram(final Program pProgram);
 
   void setTotalSeat(final int pTotalSeat);
+
+  void setProgramType(final ProgramType pProgramType);
 }

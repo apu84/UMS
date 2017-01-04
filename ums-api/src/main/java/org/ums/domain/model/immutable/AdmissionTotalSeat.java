@@ -4,6 +4,8 @@ import org.ums.domain.model.common.EditType;
 import org.ums.domain.model.common.Identifier;
 import org.ums.domain.model.common.LastModifier;
 import org.ums.domain.model.mutable.MutableAdmissionTotalSeat;
+import org.ums.enums.*;
+import org.ums.enums.ProgramType;
 
 import java.io.Serializable;
 
@@ -22,4 +24,5 @@ public interface AdmissionTotalSeat extends Serializable, EditType<MutableAdmiss
 
   int getTotalSeat();
 
+  ProgramType getProgramType();
 }

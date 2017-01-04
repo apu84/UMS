@@ -80,9 +80,11 @@ public class UMSContext {
   }
 
   @Bean
-  AdmissionTotalSeatManager admissionTotalSeatManager(){
-    AdmissionTotalSeatCache admissionTotalSeatCache = new AdmissionTotalSeatCache(mCacheFactory.getCacheManager());
-    admissionTotalSeatCache.setManager(new PersistentAdmissionTotalSeatDao(mTemplateFactory.getJdbcTemplate()));
+  AdmissionTotalSeatManager admissionTotalSeatManager() {
+    AdmissionTotalSeatCache admissionTotalSeatCache =
+        new AdmissionTotalSeatCache(mCacheFactory.getCacheManager());
+    admissionTotalSeatCache.setManager(new PersistentAdmissionTotalSeatDao(mTemplateFactory
+        .getJdbcTemplate()));
     return admissionTotalSeatCache;
   }
 

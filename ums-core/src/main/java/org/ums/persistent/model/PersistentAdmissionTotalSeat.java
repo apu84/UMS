@@ -5,6 +5,7 @@ import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.Program;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.mutable.MutableAdmissionTotalSeat;
+import org.ums.enums.ProgramType;
 import org.ums.manager.AdmissionTotalSeatManager;
 import org.ums.manager.ProgramManager;
 import org.ums.manager.SemesterManager;
@@ -14,7 +15,6 @@ import org.ums.manager.SemesterManager;
  */
 public class PersistentAdmissionTotalSeat implements MutableAdmissionTotalSeat {
 
-
   private static SemesterManager sSemesterManager;
   private static ProgramManager sProgramManager;
   private static AdmissionTotalSeatManager sAdmissionTotalSeatManager;
@@ -23,7 +23,8 @@ public class PersistentAdmissionTotalSeat implements MutableAdmissionTotalSeat {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
     sProgramManager = applicationContext.getBean("programManager", ProgramManager.class);
-    sAdmissionTotalSeatManager = applicationContext.getBean("admissionTotalSeatManager", AdmissionTotalSeatManager.class);
+    sAdmissionTotalSeatManager =
+        applicationContext.getBean("admissionTotalSeatManager", AdmissionTotalSeatManager.class);
   }
 
   private int mId;
@@ -32,13 +33,13 @@ public class PersistentAdmissionTotalSeat implements MutableAdmissionTotalSeat {
   private Program mProgram;
   private int mProgramId;
   private int mTotalSeat;
+  private ProgramType mProgramType;
   private String mLastModified;
 
+  public PersistentAdmissionTotalSeat() {}
 
-  public PersistentAdmissionTotalSeat() {
-  }
-
-  public PersistentAdmissionTotalSeat(final PersistentAdmissionTotalSeat pPersistentAdmissionTotalSeat){
+  public PersistentAdmissionTotalSeat(
+      final PersistentAdmissionTotalSeat pPersistentAdmissionTotalSeat) {
     mId = pPersistentAdmissionTotalSeat.getId();
     mSemester = pPersistentAdmissionTotalSeat.getSemester();
     mSemesterId = pPersistentAdmissionTotalSeat.getSemesterId();
@@ -46,14 +47,25 @@ public class PersistentAdmissionTotalSeat implements MutableAdmissionTotalSeat {
     mProgramId = pPersistentAdmissionTotalSeat.getProgramId();
     mTotalSeat = pPersistentAdmissionTotalSeat.getTotalSeat();
     mLastModified = pPersistentAdmissionTotalSeat.getLastModified();
+    mProgramType = pPersistentAdmissionTotalSeat.getProgramType();
+  }
+
+  @Override
+  public ProgramType getProgramType() {
+    return mProgramType;
+  }
+
+  @Override
+  public void setProgramType(ProgramType pProgramType) {
+    mProgramType = pProgramType;
   }
 
   @Override
   public void commit(boolean update) {
-    if(update){
+    if(update) {
       sAdmissionTotalSeatManager.update(this);
     }
-    else{
+    else {
       sAdmissionTotalSeatManager.create(this);
     }
   }
@@ -100,7 +112,8 @@ public class PersistentAdmissionTotalSeat implements MutableAdmissionTotalSeat {
 
   @Override
   public Semester getSemester() {
-    return mSemester==null? sSemesterManager.get(mSemesterId):sSemesterManager.validate(mSemester);
+    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
+        .validate(mSemester);
   }
 
   @Override
@@ -120,7 +133,7 @@ public class PersistentAdmissionTotalSeat implements MutableAdmissionTotalSeat {
 
   @Override
   public Program getProgram() {
-    return mProgram==null? sProgramManager.get(mProgramId):sProgramManager.validate(mProgram);
+    return mProgram == null ? sProgramManager.get(mProgramId) : sProgramManager.validate(mProgram);
   }
 
   @Override

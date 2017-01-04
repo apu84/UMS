@@ -1,9 +1,15 @@
 package org.ums.common.academic.resource.helper;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
+import org.ums.common.builder.AdmissionTotalSeatBuilder;
 import org.ums.domain.model.immutable.AdmissionTotalSeat;
 import org.ums.domain.model.mutable.MutableAdmissionStudent;
 import org.ums.domain.model.mutable.MutableAdmissionTotalSeat;
+import org.ums.manager.AdmissionTotalSeatManager;
 import org.ums.manager.ContentManager;
 import org.ums.resource.ResourceHelper;
 
@@ -14,25 +20,36 @@ import javax.ws.rs.core.UriInfo;
 /**
  * Created by Monjur-E-Morshed on 03-Jan-17.
  */
-public class AdmissionTotalSeatResourceHelper
-    extends ResourceHelper<AdmissionTotalSeat, MutableAdmissionTotalSeat, Integer> {
+@Component
+public class AdmissionTotalSeatResourceHelper extends
+    ResourceHelper<AdmissionTotalSeat, MutableAdmissionTotalSeat, Integer> {
+
+  private static final Logger mLogger = LoggerFactory
+      .getLogger(AdmissionTotalSeatResourceHelper.class);
+
+  @Autowired
+  AdmissionTotalSeatManager mAdmissionTotalSeatManager;
+
+  @Autowired
+  AdmissionTotalSeatBuilder mBuilder;
+
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
     return null;
   }
 
   @Override
-  protected ContentManager<AdmissionTotalSeat, MutableAdmissionTotalSeat, Integer> getContentManager() {
-    return null;
+  protected AdmissionTotalSeatManager getContentManager() {
+    return mAdmissionTotalSeatManager;
   }
 
   @Override
-  protected Builder<AdmissionTotalSeat, MutableAdmissionTotalSeat> getBuilder() {
-    return null;
+  protected AdmissionTotalSeatBuilder getBuilder() {
+    return mBuilder;
   }
 
   @Override
   protected String getEtag(AdmissionTotalSeat pReadonly) {
-    return null;
+    return pReadonly.getLastModified();
   }
 }

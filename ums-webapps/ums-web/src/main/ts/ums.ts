@@ -529,6 +529,11 @@ module ums {
           templateUrl: 'views/admission/merit-list-upload.html',
           controller: 'AdmissionMeritList'
         })
+        .state('uploadAdmissionTotalSeat', {
+          url: "/admissionTotalSeat",
+          templateUrl: 'views/admission/admission-total-seat-assignment.html',
+          controller: 'AdmissionTotalSeatAssignment'
+        })
         .state('uploadTaletalkData', {
           url: "/uploadTaletalkData",
           templateUrl: 'views/admission/taletalk-data-upload.html',
