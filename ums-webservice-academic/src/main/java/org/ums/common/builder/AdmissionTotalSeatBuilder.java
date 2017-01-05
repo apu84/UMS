@@ -7,6 +7,7 @@ import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.AdmissionTotalSeat;
 import org.ums.domain.model.mutable.MutableAdmissionTotalSeat;
 import org.ums.enums.ProgramType;
+import org.ums.enums.QuotaType;
 import org.ums.manager.ProgramManager;
 
 import javax.json.JsonObject;
@@ -48,6 +49,7 @@ public class AdmissionTotalSeatBuilder implements
       pMutable.setId(pJsonObject.getInt("id"));
     }
     pMutable.setProgramType(ProgramType.get(pJsonObject.getInt("programType")));
+    pMutable.setQuotaType(QuotaType.get(pJsonObject.getInt("quota")));
     pMutable.setSemesterId(pJsonObject.getInt("semesterId"));
     pMutable.setProgramId(pJsonObject.getInt("programId"));
     pMutable.setTotalSeat(pJsonObject.getInt("totalSeat"));

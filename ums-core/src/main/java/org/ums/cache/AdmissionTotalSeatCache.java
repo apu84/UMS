@@ -3,6 +3,7 @@ package org.ums.cache;
 import org.ums.domain.model.immutable.AdmissionTotalSeat;
 import org.ums.domain.model.mutable.MutableAdmissionTotalSeat;
 import org.ums.enums.ProgramType;
+import org.ums.enums.QuotaType;
 import org.ums.manager.AdmissionTotalSeatManager;
 import org.ums.manager.CacheManager;
 import org.ums.util.CacheUtil;
@@ -33,7 +34,8 @@ public class AdmissionTotalSeatCache extends
   }
 
   @Override
-  public List<AdmissionTotalSeat> getAdmissionTotalSeat(int pSemesterId, ProgramType pProgramType) {
-    return getManager().getAdmissionTotalSeat(pSemesterId, pProgramType);
+  public List<AdmissionTotalSeat> getAdmissionTotalSeat(int pSemesterId, ProgramType pProgramType,
+      QuotaType pQuotaType) {
+    return getManager().getAdmissionTotalSeat(pSemesterId, pProgramType, pQuotaType);
   }
 }

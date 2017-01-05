@@ -2,6 +2,7 @@ package org.ums.common.academic.resource;
 
 import org.springframework.stereotype.Component;
 import org.ums.enums.ProgramType;
+import org.ums.enums.QuotaType;
 import org.ums.resource.Resource;
 
 import javax.json.JsonObject;
@@ -19,10 +20,12 @@ import javax.ws.rs.core.Request;
 public class AdmissionTotalSeatResource extends MutableAdmissionTotalSeatResource {
 
   @GET
-  @Path("/semester/{semester-id}/programType/{program-type}")
+  @Path("/semester/{semester-id}/programType/{program-type}/quota/{quota-type}")
   public JsonObject getTotalSeatInfo(final @Context Request pRequest,
       final @PathParam("semester-id") int pSemesterId,
-      final @PathParam("program-type") int pProgramTyoe) {
-    return mHelper.getAdmissionTotalSeat(pSemesterId, ProgramType.get(pProgramTyoe), mUriInfo);
+      final @PathParam("program-type") int pProgramTyoe,
+      final @PathParam("quota-type") int pQuotaType) {
+    return mHelper.getAdmissionTotalSeat(pSemesterId, ProgramType.get(pProgramTyoe),
+        QuotaType.get(pQuotaType), mUriInfo);
   }
 }

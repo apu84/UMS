@@ -25,4 +25,6 @@ public interface AdmissionTotalSeat extends Serializable, EditType<MutableAdmiss
   int getTotalSeat();
 
   ProgramType getProgramType();
+
+  QuotaType getQuotaType();
 }

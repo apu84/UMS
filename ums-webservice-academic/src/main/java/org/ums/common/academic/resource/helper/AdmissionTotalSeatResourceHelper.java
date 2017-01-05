@@ -3,17 +3,14 @@ package org.ums.common.academic.resource.helper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
-import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.common.builder.AdmissionTotalSeatBuilder;
 import org.ums.domain.model.immutable.AdmissionTotalSeat;
-import org.ums.domain.model.mutable.MutableAdmissionStudent;
 import org.ums.domain.model.mutable.MutableAdmissionTotalSeat;
 import org.ums.enums.ProgramType;
+import org.ums.enums.QuotaType;
 import org.ums.manager.AdmissionTotalSeatManager;
-import org.ums.manager.ContentManager;
 import org.ums.persistent.model.PersistentAdmissionTotalSeat;
 import org.ums.resource.ResourceHelper;
 
@@ -76,12 +73,12 @@ public class AdmissionTotalSeatResourceHelper extends
   }
 
   public JsonObject getAdmissionTotalSeat(final int pSemesterId, final ProgramType pProgramType,
-      final UriInfo pUriInfo) {
+      QuotaType pQuotaType, final UriInfo pUriInfo) {
 
     List<AdmissionTotalSeat> seats;
 
     try {
-      seats = getContentManager().getAdmissionTotalSeat(pSemesterId, pProgramType);
+      seats = getContentManager().getAdmissionTotalSeat(pSemesterId, pProgramType, pQuotaType);
     } catch(Exception e) {
       seats = new ArrayList<>();
       mLogger.warn("No data found in AdmissionTotalSeat");

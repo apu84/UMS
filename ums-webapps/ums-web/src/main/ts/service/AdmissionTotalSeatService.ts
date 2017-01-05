@@ -13,8 +13,8 @@ module ums{
 
     }
 
-    public fetchAdmissionTotalSeat(semesterId:number, programType:number):ng.IPromise<any>{
-      var url="academic/admissionTotalSeat/semester/"+semesterId+"/programType/"+programType;
+    public fetchAdmissionTotalSeat(semesterId:number, programType:number, quota:number):ng.IPromise<any>{
+      var url="academic/admissionTotalSeat/semester/"+semesterId+"/programType/"+programType+"/quota/"+quota;
       var defer = this.$q.defer();
 
       this.httpClient.get(url, this.appConstants.mimeTypeJson,
@@ -40,6 +40,7 @@ module ums{
       var url="academic/admissionTotalSeat/save";
       this.httpClient.post(url,json,'application/json')
           .success(()=>{
+            this.notify.success("Data Saved Successfully");
             defer.resolve("success");
           }).error((data)=>{
         defer.resolve("error");
@@ -54,6 +55,7 @@ module ums{
       var url="academic/admissionTotalSeat/update";
       this.httpClient.put(url,json,'application/json')
           .success(()=>{
+            this.notify.success("Total Seat Updated Successfully")
             defer.resolve("success");
           }).error((data)=>{
         defer.resolve("error");

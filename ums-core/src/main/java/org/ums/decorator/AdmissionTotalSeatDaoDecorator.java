@@ -3,6 +3,7 @@ package org.ums.decorator;
 import org.ums.domain.model.immutable.AdmissionTotalSeat;
 import org.ums.domain.model.mutable.MutableAdmissionTotalSeat;
 import org.ums.enums.ProgramType;
+import org.ums.enums.QuotaType;
 import org.ums.manager.AdmissionTotalSeatManager;
 
 import java.util.List;
@@ -16,7 +17,8 @@ public class AdmissionTotalSeatDaoDecorator
     implements AdmissionTotalSeatManager {
 
   @Override
-  public List<AdmissionTotalSeat> getAdmissionTotalSeat(int pSemesterId, ProgramType pProgramType) {
-    return getManager().getAdmissionTotalSeat(pSemesterId, pProgramType);
+  public List<AdmissionTotalSeat> getAdmissionTotalSeat(int pSemesterId, ProgramType pProgramType,
+      QuotaType pQuotaType) {
+    return getManager().getAdmissionTotalSeat(pSemesterId, pProgramType, pQuotaType);
   }
 }

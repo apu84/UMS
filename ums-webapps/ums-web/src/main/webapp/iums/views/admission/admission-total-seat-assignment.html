@@ -49,6 +49,20 @@
                             </select>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Quota</label>
+                        <div class="col-md-8">
+                            <select
+                                    class="form-control required"
+                                    name="semester"
+                                    id="quota"
+                                    data-ng-options="quotaType.name for quotaType in quotaTypes track by quotaType.id"
+                                    data-ng-model="quotaType"
+                            >
+
+                            </select>
+                        </div>
+                    </div>
 
                 </div>
                 <div class="form-actions text-right pal">
@@ -59,7 +73,7 @@
     </div>
     <div id="rightDiv">
         <div class="panel">
-            <div class="panel-heading">Semester <b>{{semester.name}}</b>, Program Type <b>{{programType.name}}</b><span
+            <div class="panel-heading">Semester <b>{{semester.name}}</b>, Program Type <b>{{programType.name}}</b>, Quota Type <b>{{quotaType.name}}</b><span
                     class="subtitle"></span></div>
             <div class="panel-body shadowPanel"   style="min-height: 490px;">
                 <div data-ng-if="showContent">
