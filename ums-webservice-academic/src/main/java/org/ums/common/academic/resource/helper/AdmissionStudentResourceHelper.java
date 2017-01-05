@@ -145,6 +145,11 @@ public class AdmissionStudentResourceHelper extends
     mGenerator.createABlankMeritListUploadFormatFile(pOutputStream, pSemesterId);
   }
 
+  public JsonObject getAdmissionStudentByReceiptId(final String pReceiptId, final UriInfo pUriInfo) {
+    List<AdmissionStudent> student = getContentManager().getNewStudentByReceiptId(pReceiptId);
+    return jsonCreator(student, "meritList", pUriInfo);
+  }
+
   private JsonObject jsonCreator(List<AdmissionStudent> pStudentLIst, String pType, UriInfo pUriInfo) {
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();

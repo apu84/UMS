@@ -534,6 +534,11 @@ module ums {
           templateUrl: 'views/admission/taletalk-data-upload.html',
           controller: 'AdmissionTaletalkData'
         })
+        .state('certificateVerification', {
+          url: "/certificateVerification",
+          templateUrl: 'views/admission/certificate-verification.html',
+          controller: 'AdmissionCertificateVerification'
+        })
         .state('studentsRoutine', {
           url: "/studentsRoutine",
           controller:'StudentsRoutine',

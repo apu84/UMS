@@ -8,9 +8,6 @@ import org.ums.manager.AdmissionStudentManager;
 
 import java.util.List;
 
-/**
- * Created by Monjur-E-Morshed on 12-Dec-16.
- */
 public class AdmissionStudentDaoDecorator extends
     ContentDaoDecorator<AdmissionStudent, MutableAdmissionStudent, String, AdmissionStudentManager>
     implements AdmissionStudentManager {
@@ -45,5 +42,10 @@ public class AdmissionStudentDaoDecorator extends
   @Override
   public int saveMeritList(List<MutableAdmissionStudent> pStudents) {
     return getManager().saveMeritList(pStudents);
+  }
+
+  @Override
+  public List<AdmissionStudent> getNewStudentByReceiptId(String pReceiptId) {
+    return getManager().getNewStudentByReceiptId(pReceiptId);
   }
 }

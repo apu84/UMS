@@ -103,6 +103,7 @@
 /// <reference path='service/EmployeeService.ts'/>
 /// <reference path='service/StudentService.ts'/>
 /// <reference path='service/TeacherService.ts'/>
+/// <reference path='service/AdmissionCertificateVerificationService.ts'/>
 
 /// <reference path='controller/student/NewStudent.ts'/>
 
@@ -145,6 +146,7 @@
 /// <reference path='controller/admission/AdmissionMeritList.ts'/>
 /// <reference path='controller/admission/AdmissionTaletalkData.ts'/>
 /// <reference path='controller/admission/AdmissionDeadline.ts'/>
+/// <reference path='controller/admission/AdmissionCertificateVerification.ts'/>
 
 /// <reference path='controller/syllabus/FullSyllabus.ts'/>
 /// <reference path='controller/syllabus/NewSyllabus.ts'/>

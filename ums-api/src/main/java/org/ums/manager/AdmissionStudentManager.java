@@ -26,4 +26,6 @@ public interface AdmissionStudentManager extends
       String pUnit, ProgramType pProgramType);
 
   int saveMeritList(final List<MutableAdmissionStudent> pStudents);
+
+  List<AdmissionStudent> getNewStudentByReceiptId(final String receiptId);
 }

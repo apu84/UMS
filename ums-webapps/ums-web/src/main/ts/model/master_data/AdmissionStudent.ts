@@ -1,7 +1,3 @@
-/**
- * Created by My Pc on 17-Dec-16.
- */
-
 module ums{
   export interface AdmissionStudent{
     semesterId:number;

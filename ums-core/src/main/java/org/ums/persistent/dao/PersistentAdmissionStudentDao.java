@@ -77,6 +77,13 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
       + "      ?, ?, ?, ?, ?,  " + "      ?, ?, ?, ?, ?,  " + "         ?, ?, ?, ?, ?,  "
       + "   ?, ?, ?, ?, ?,  " + "   ?, " + getLastModifiedSql() + ")";
 
+  String GET_ONE = "SELECT SEMESTER_ID, RECEIPT_ID, PIN, HSC_BOARD, HSC_ROLL,  "
+          + "    HSC_REGNO, HSC_YEAR, HSC_GROUP, SSC_BOARD, SSC_ROLL,  "
+          + "    SSC_YEAR, SSC_GROUP, GENDER, DATE_OF_BIRTH, STUDENT_NAME,  "
+          + "    FATHER_NAME, MOTHER_NAME, SSC_GPA, HSC_GPA, QUOTA,  "
+          + "    ADMISSION_ROLL, MERIT_SL_NO, STUDENT_ID, ALLOCATED_PROGRAM_ID, MIGRATION_STATUS,  "
+          + "    LAST_MODIFIED, UNIT from admission_students ";
+
   private JdbcTemplate mJdbcTemplate;
 
   public PersistentAdmissionStudentDao(final JdbcTemplate pJdbcTemplate) {
@@ -199,6 +206,11 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
       pQuery = pQuery + " quota='EM'";
     }
     return pQuery;
+  }
+
+  public List<AdmissionStudent> getNewStudentByReceiptId(String pReceiptId) {
+    String query = GET_ONE + "WHERE RECEIPT_ID=?";
+    return mJdbcTemplate.query(query, new Object[] {pReceiptId}, new AdmissionStudentRowMapper());
   }
 
   class AdmissionStudentRowMapper implements RowMapper<AdmissionStudent> {

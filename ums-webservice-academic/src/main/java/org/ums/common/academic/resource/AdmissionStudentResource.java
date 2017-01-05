@@ -9,9 +9,6 @@ import javax.json.JsonObject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
-import javax.ws.rs.core.StreamingOutput;
-import java.io.IOException;
-import java.io.OutputStream;
 
 /**
  * Created by Monjur-E-Morshed on 17-Dec-16.
@@ -49,6 +46,13 @@ public class AdmissionStudentResource extends MutableAdmissionStudentResource {
       final @PathParam("merit-type") int pMeritType) {
     return mHelper.getAdmissionMeritList(pSemesterId, ProgramType.get(pProgramType),
         QuotaType.get(pMeritType), pUnit, mUriInfo);
+  }
+
+  @GET
+  @Path("/receiptId/{receipt-id}")
+  public JsonObject getNewStudentByReceiptId(@PathParam("receipt-id") String pReceiptId,
+      final @Context Request pRequest) {
+    return mHelper.getAdmissionStudentByReceiptId(pReceiptId, mUriInfo);
   }
 
 }
