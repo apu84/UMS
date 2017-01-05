@@ -6,6 +6,7 @@ import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.AdmissionTotalSeat;
 import org.ums.domain.model.mutable.MutableAdmissionTotalSeat;
+import org.ums.enums.ProgramType;
 import org.ums.manager.ProgramManager;
 
 import javax.json.JsonObject;
@@ -29,7 +30,7 @@ public class AdmissionTotalSeatBuilder implements
     pBuilder.add("semesterId", pReadOnly.getSemesterId());
     pBuilder.add("programId", pReadOnly.getProgramId());
     pBuilder.add("programShortName", pReadOnly.getProgram().getShortName());
-    pBuilder.add("programShortName", pReadOnly.getProgram().getShortName());
+    pBuilder.add("programLongName", pReadOnly.getProgram().getLongName());
     pBuilder.add("totalSeat", pReadOnly.getTotalSeat());
   }
 
@@ -37,6 +38,17 @@ public class AdmissionTotalSeatBuilder implements
   public void build(MutableAdmissionTotalSeat pMutable, JsonObject pJsonObject,
       LocalCache pLocalCache) {
     pMutable.setSemesterId(pJsonObject.getInt("semesterID"));
+    pMutable.setProgramId(pJsonObject.getInt("programId"));
+    pMutable.setTotalSeat(pJsonObject.getInt("totalSeat"));
+  }
+
+  public void build(MutableAdmissionTotalSeat pMutable, JsonObject pJsonObject,
+      LocalCache pLocalCache, String pType) {
+    if(pType.equals("update")) {
+      pMutable.setId(pJsonObject.getInt("id"));
+    }
+    pMutable.setProgramType(ProgramType.get(pJsonObject.getInt("programType")));
+    pMutable.setSemesterId(pJsonObject.getInt("semesterId"));
     pMutable.setProgramId(pJsonObject.getInt("programId"));
     pMutable.setTotalSeat(pJsonObject.getInt("totalSeat"));
   }

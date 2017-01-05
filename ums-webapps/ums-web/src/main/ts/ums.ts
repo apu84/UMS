@@ -529,7 +529,7 @@ module ums {
           templateUrl: 'views/admission/merit-list-upload.html',
           controller: 'AdmissionMeritList'
         })
-        .state('uploadAdmissionTotalSeat', {
+        .state('admissionTotalSeat', {
           url: "/admissionTotalSeat",
           templateUrl: 'views/admission/admission-total-seat-assignment.html',
           controller: 'AdmissionTotalSeatAssignment'

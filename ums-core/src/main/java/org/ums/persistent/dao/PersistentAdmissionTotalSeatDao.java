@@ -34,7 +34,7 @@ public class PersistentAdmissionTotalSeatDao extends AdmissionTotalSeatDaoDecora
 
   @Override
   public List<AdmissionTotalSeat> getAdmissionTotalSeat(int pSemesterId, ProgramType pProgramType) {
-    String query = SELECT_ALL + " WHERE SEMESTER_ID=? AND PROGRAM_TYPE=?";
+    String query = SELECT_ALL + " WHERE SEMESTER_ID=? AND PROGRAM_TYPE=? order by program_id";
     return mJdbcTemplate.query(query, new Object[] {pSemesterId, pProgramType.getValue()},
         new AdmissionTotalSeatRowMapper());
   }
@@ -45,6 +45,18 @@ public class PersistentAdmissionTotalSeatDao extends AdmissionTotalSeatDaoDecora
     return mJdbcTemplate.batchUpdate(query, getAdmissionTotalSeatParams(pMutableList)).length;
   }
 
+  @Override
+  public int update(List<MutableAdmissionTotalSeat> pMutableList) {
+    String query =
+        "UPDATE ADMISSION_TOTAL_SEAT "
+            + "SET TOTAL_SEAT = ?, last_modified ="
+            + getLastModifiedSql()
+            + " WHERE PROGRAM_TYPE = ? AND PROGRAM_ID = ? AND SEMESTER_ID IN (SELECT SEMESTER_ID "
+            + "                                                              FROM MST_SEMESTER "
+            + "                                                              WHERE SEMESTER_ID = ? AND STATUS = 2)";
+    return mJdbcTemplate.batchUpdate(query, getAdmissionTotalSeatUpdateParams(pMutableList)).length;
+  }
+
   private List<Object[]> getAdmissionTotalSeatParams(List<MutableAdmissionTotalSeat> pSeats) {
 
     List<Object[]> params = new ArrayList<>();
@@ -52,6 +64,17 @@ public class PersistentAdmissionTotalSeatDao extends AdmissionTotalSeatDaoDecora
     for(AdmissionTotalSeat seat : pSeats) {
       params.add(new Object[] {seat.getSemester().getId(), seat.getProgram().getId(),
           seat.getProgramType().getValue(), seat.getTotalSeat()});
+    }
+    return params;
+  }
+
+  private List<Object[]> getAdmissionTotalSeatUpdateParams(List<MutableAdmissionTotalSeat> pSeats) {
+
+    List<Object[]> params = new ArrayList<>();
+
+    for(AdmissionTotalSeat seat : pSeats) {
+      params.add(new Object[] {seat.getTotalSeat(), seat.getProgramType().getValue(),
+          seat.getProgram().getId(), seat.getSemester().getId()});
     }
     return params;
   }
