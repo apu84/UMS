@@ -2,8 +2,10 @@ package org.ums.common.academic.resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ums.common.academic.resource.helper.ProgramResourceHelper;
 import org.ums.domain.model.immutable.Program;
 import org.ums.domain.model.mutable.MutableProgram;
+import org.ums.enums.ProgramType;
 import org.ums.manager.ProgramManager;
 import org.ums.resource.Resource;
 import org.ums.resource.ResourceHelper;
@@ -20,7 +22,7 @@ import javax.ws.rs.core.Response;
 @Consumes(Resource.MIME_TYPE_JSON)
 public class ProgramResource extends Resource {
   @Autowired
-  ResourceHelper<Program, MutableProgram, Integer> mResourceHelper;
+  ProgramResourceHelper mResourceHelper;
 
   @Autowired
   ProgramManager mManager;
@@ -29,6 +31,12 @@ public class ProgramResource extends Resource {
   @Path("/all")
   public JsonObject getAll() throws Exception {
     return mResourceHelper.getAll(mUriInfo);
+  }
+
+  @GET
+  @Path("/programType/{program-type}")
+  public JsonObject getByProgramType(@PathParam("program-type") int pProgramType) throws Exception {
+    return mResourceHelper.getPrograms(ProgramType.get(pProgramType), mUriInfo);
   }
 
   @GET

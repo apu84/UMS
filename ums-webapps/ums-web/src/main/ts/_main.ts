@@ -96,6 +96,8 @@
 /// <reference path='service/ClassRoomService.ts'/>
 /// <reference path='service/ClassRoomService.ts'/>
 /// <reference path='service/AdmissionStudentService.ts'/>
+/// <reference path='service/ProgramService.ts'/>
+/// <reference path='service/AdmissionTotalSeatService.ts'/>
 /// <reference path='service/CourseServices.ts'/>
 /// <reference path='service/StudentService.ts'/>
 /// <reference path='service/TimeTracker.ts'/>
@@ -147,6 +149,7 @@
 /// <reference path='controller/admission/AdmissionTaletalkData.ts'/>
 /// <reference path='controller/admission/AdmissionDeadline.ts'/>
 /// <reference path='controller/admission/AdmissionCertificateVerification.ts'/>
+/// <reference path='controller/admission/AdmissionTotalSeatAssignment.ts'/>
 
 /// <reference path='controller/syllabus/FullSyllabus.ts'/>
 /// <reference path='controller/syllabus/NewSyllabus.ts'/>
@@ -168,8 +171,10 @@
 /// <reference path='model/ParameterSetting.ts'/>
 /// <reference path='model/master_data/ClassRoom.ts'/>
 /// <reference path='model/master_data/AdmissionStudent.ts'/>
+/// <reference path='model/master_data/Program.ts'/>
 /// <reference path='model/master_data/Faculty.ts'/>
 /// <reference path='model/master_data/Course.ts'/>
+/// <reference path='model/master_data/AdmissionTotalSeat.ts'/>
 /// <reference path='model/master_data/Employee.ts'/>
 /// <reference path='model/master_data/Parameter.ts'/>
 /// <reference path='model/master_data/Routine.ts'/>

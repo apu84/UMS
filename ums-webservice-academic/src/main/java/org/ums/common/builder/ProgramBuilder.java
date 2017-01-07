@@ -34,7 +34,7 @@ public class ProgramBuilder implements Builder<Program, MutableProgram> {
     Faculty faculty = (Faculty) pLocalCache.cache(()-> pReadOnly.getFaculty(),
         pReadOnly.getFacultyId(),Faculty.class);
 
-    pBuilder.add("faculty", pUriInfo.getBaseUriBuilder().path("academic").path("faculty").path(String.valueOf(faculty.getId())).build().toString());
+   // pBuilder.add("faculty", pUriInfo.getBaseUriBuilder().path("academic").path("faculty").path(String.valueOf(faculty.getId())).build().toString());
 
     pBuilder.add("self", pUriInfo.getBaseUriBuilder().path("academic").path("program")
         .path(String.valueOf(pReadOnly.getId())).build().toString());
