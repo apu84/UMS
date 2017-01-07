@@ -7,6 +7,7 @@ import org.ums.decorator.ContentDaoDecorator;
 import org.ums.domain.model.immutable.AdmissionTotalSeat;
 import org.ums.domain.model.mutable.MutableAdmissionTotalSeat;
 import org.ums.enums.ProgramType;
+import org.ums.enums.QuotaType;
 import org.ums.manager.AdmissionTotalSeatManager;
 import org.ums.persistent.model.PersistentAdmissionTotalSeat;
 
@@ -23,8 +24,8 @@ public class PersistentAdmissionTotalSeatDao extends AdmissionTotalSeatDaoDecora
   String SELECT_ALL = "select * from admission_total_seat ";
 
   String INSERT_ONE =
-      "insert into admission_total_seat (semester_id, program_id, program_type, total_seat, last_modified) "
-          + "values (?,?,?,?," + getLastModifiedSql() + ")";
+      "insert into admission_total_seat (semester_id, program_id, program_type, quota, total_seat, last_modified) "
+          + "values (?,?,?,?,?," + getLastModifiedSql() + ")";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -33,10 +34,12 @@ public class PersistentAdmissionTotalSeatDao extends AdmissionTotalSeatDaoDecora
   }
 
   @Override
-  public List<AdmissionTotalSeat> getAdmissionTotalSeat(int pSemesterId, ProgramType pProgramType) {
-    String query = SELECT_ALL + " WHERE SEMESTER_ID=? AND PROGRAM_TYPE=? order by program_id";
-    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pProgramType.getValue()},
-        new AdmissionTotalSeatRowMapper());
+  public List<AdmissionTotalSeat> getAdmissionTotalSeat(int pSemesterId, ProgramType pProgramType,
+      QuotaType pQuotaType) {
+    String query =
+        SELECT_ALL + " WHERE SEMESTER_ID=? AND PROGRAM_TYPE=? and quota=? order by program_id";
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pProgramType.getValue(),
+        pQuotaType.getId()}, new AdmissionTotalSeatRowMapper());
   }
 
   @Override
@@ -51,7 +54,7 @@ public class PersistentAdmissionTotalSeatDao extends AdmissionTotalSeatDaoDecora
         "UPDATE ADMISSION_TOTAL_SEAT "
             + "SET TOTAL_SEAT = ?, last_modified ="
             + getLastModifiedSql()
-            + " WHERE PROGRAM_TYPE = ? AND PROGRAM_ID = ? AND SEMESTER_ID IN (SELECT SEMESTER_ID "
+            + " WHERE PROGRAM_TYPE = ? AND PROGRAM_ID = ? and quota=? AND SEMESTER_ID IN (SELECT SEMESTER_ID "
             + "                                                              FROM MST_SEMESTER "
             + "                                                              WHERE SEMESTER_ID = ? AND STATUS = 2)";
     return mJdbcTemplate.batchUpdate(query, getAdmissionTotalSeatUpdateParams(pMutableList)).length;
@@ -63,7 +66,7 @@ public class PersistentAdmissionTotalSeatDao extends AdmissionTotalSeatDaoDecora
 
     for(AdmissionTotalSeat seat : pSeats) {
       params.add(new Object[] {seat.getSemester().getId(), seat.getProgram().getId(),
-          seat.getProgramType().getValue(), seat.getTotalSeat()});
+          seat.getProgramType().getValue(), seat.getQuotaType().getId(), seat.getTotalSeat()});
     }
     return params;
   }
@@ -74,7 +77,7 @@ public class PersistentAdmissionTotalSeatDao extends AdmissionTotalSeatDaoDecora
 
     for(AdmissionTotalSeat seat : pSeats) {
       params.add(new Object[] {seat.getTotalSeat(), seat.getProgramType().getValue(),
-          seat.getProgram().getId(), seat.getSemester().getId()});
+          seat.getProgram().getId(), seat.getQuotaType().getId(), seat.getSemester().getId()});
     }
     return params;
   }
@@ -90,6 +93,7 @@ public class PersistentAdmissionTotalSeatDao extends AdmissionTotalSeatDaoDecora
       seat.setTotalSeat(pResultSet.getInt("total_seat"));
       seat.setLastModified(pResultSet.getString("last_modified"));
       seat.setProgramType(ProgramType.get(pResultSet.getInt("program_type")));
+      seat.setQuotaType(QuotaType.get(pResultSet.getInt("quota")));
       return seat;
     }
   }

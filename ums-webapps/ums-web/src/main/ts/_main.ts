@@ -147,6 +147,7 @@
 
 /// <reference path='controller/admission/AdmissionMeritList.ts'/>
 /// <reference path='controller/admission/AdmissionTaletalkData.ts'/>
+/// <reference path='controller/admission/AdmissionDepartmentSelection.ts'/>
 /// <reference path='controller/admission/AdmissionDeadline.ts'/>
 /// <reference path='controller/admission/AdmissionCertificateVerification.ts'/>
 /// <reference path='controller/admission/AdmissionTotalSeatAssignment.ts'/>

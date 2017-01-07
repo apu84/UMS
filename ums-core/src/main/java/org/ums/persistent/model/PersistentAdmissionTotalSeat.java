@@ -6,6 +6,7 @@ import org.ums.domain.model.immutable.Program;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.mutable.MutableAdmissionTotalSeat;
 import org.ums.enums.ProgramType;
+import org.ums.enums.QuotaType;
 import org.ums.manager.AdmissionTotalSeatManager;
 import org.ums.manager.ProgramManager;
 import org.ums.manager.SemesterManager;
@@ -34,6 +35,7 @@ public class PersistentAdmissionTotalSeat implements MutableAdmissionTotalSeat {
   private int mProgramId;
   private int mTotalSeat;
   private ProgramType mProgramType;
+  private QuotaType mQuotaType;
   private String mLastModified;
 
   public PersistentAdmissionTotalSeat() {}
@@ -48,6 +50,17 @@ public class PersistentAdmissionTotalSeat implements MutableAdmissionTotalSeat {
     mTotalSeat = pPersistentAdmissionTotalSeat.getTotalSeat();
     mLastModified = pPersistentAdmissionTotalSeat.getLastModified();
     mProgramType = pPersistentAdmissionTotalSeat.getProgramType();
+    mQuotaType = pPersistentAdmissionTotalSeat.getQuotaType();
+  }
+
+  @Override
+  public QuotaType getQuotaType() {
+    return mQuotaType;
+  }
+
+  @Override
+  public void setQuotaType(QuotaType pQuotaType) {
+    mQuotaType = pQuotaType;
   }
 
   @Override

@@ -9,6 +9,8 @@ module ums{
     programTypes:Array<IProgramType>;
     programType:IProgramType;
     admissionTotalSeats:Array<AdmissionTotalSeat>;
+    quotaTypes:Array<IQuotaType>;
+    quotaType:IQuotaType;
 
     searchSpinner:boolean;
     updatble:boolean;
@@ -26,6 +28,10 @@ module ums{
     name:string;
   }
 
+  interface  IQuotaType{
+    id:string;
+    name:string;
+  }
 
   class AdmissionTotalSeatAssignment{
     public static $inject = ['appConstants','HttpClient','$scope','$q','notify','$sce','$window','semesterService','admissionTotalSeatService','programService'];
@@ -42,6 +48,8 @@ module ums{
 
       $scope.programTypes=appConstants.programType;
       $scope.programType = $scope.programTypes[0];
+      $scope.quotaTypes = appConstants.quotaTypes;
+      $scope.quotaType = $scope.quotaTypes[0];
       $scope.searchSpinner = false;
       $scope.showContent=false;
       $scope.edit=false;
@@ -58,6 +66,8 @@ module ums{
 
 
     }
+
+
 
 
     private getSemesters():void{
@@ -79,7 +89,7 @@ module ums{
       this.$scope.searchSpinner=true;
 
       this.admissionTotalSeatService
-          .fetchAdmissionTotalSeat(this.$scope.semester.id, +this.$scope.programType.id)
+          .fetchAdmissionTotalSeat(this.$scope.semester.id, +this.$scope.programType.id, +this.$scope.quotaType.id)
           .then((seats:Array<AdmissionTotalSeat>)=>{
         this.$scope.showContent = true;
         this.$scope.searchSpinner=false;
@@ -151,6 +161,7 @@ module ums{
         item['semesterId'] = this.$scope.semester.id;
         item['programId'] = seats[i].programId;
         item['programType'] = +this.$scope.programType.id;
+        item['quota'] = +this.$scope.quotaType.id;
         if(seats[i].totalSeat!=""){
           item['totalSeat'] = +seats[i].totalSeat;
         }else{
