@@ -42,7 +42,7 @@ public class AdmissionStudentBuilder implements Builder<AdmissionStudent, Mutabl
       UriInfo pUriInfo, LocalCache pLocalCache, String type) {
 
     pBuilder.add("id", pReadOnly.getReceiptId());
-    pBuilder.add("text",pReadOnly.getReceiptId());
+    pBuilder.add("text", pReadOnly.getReceiptId());
     pBuilder.add("semesterId", pReadOnly.getSemester().getId());
     pBuilder.add("semesterName", pReadOnly.getSemester().getName());
     pBuilder.add("receiptId", pReadOnly.getId());
