@@ -1,1 +1,121 @@
-<h1>Department selection works!</h1>
+
+<style>
+    .handsontable .htDimmed {
+        color: black;
+        /*width:100%;*/
+    }
+
+    .handsontable thead th {
+        text-align: left;
+    }
+
+
+</style>
+<div class="row" >
+    <div onclick="resetCommonCollapsibleDivs()" id="arrowDiv">
+        <i class="fa fa-angle-double-right fa-cx"></i></i>
+    </div>
+    <div class="panel panel-green" id="leftDiv">
+        <div class="panel-heading">
+            <h3 class="panel-title">Select </h3>
+        </div>
+        <div class="panel-body pan">
+            <form action="" class="form-horizontal" data-validate=""  data-onvalidate="getAllStudents" >
+                <div class="form-body pal">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Program Type</label>
+                        <div class="col-md-8">
+                            <select
+                                    class="form-control required"
+                                    name="programType"
+                                    id="programType"
+                                    data-ng-options="programType.name for programType in programTypes track by programType.id"
+                                    data-ng-model="programType"
+                                    data-ng-change="getSemesters()"
+                            ></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Semester</label>
+                        <div class="col-md-8">
+                            <select
+                                    class="form-control required"
+                                    name="semester"
+                                    id="semester"
+                                    data-ng-options="semester.name for semester in semesters track by semester.id"
+                                    data-ng-model="semester"
+                            >
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Faculty</label>
+                        <div class="col-md-8">
+                            <select
+                                    class="form-control required"
+                                    name="faculty"
+                                    id="faculty"
+                                    data-ng-options="faculty.shortName for faculty in faculties track by faculty.id"
+                                    data-ng-model="faculty"
+                            >
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Merit Type</label>
+                        <div class="col-md-8">
+                            <select
+                                    class="form-control required"
+                                    name="meritType"
+                                    id="meritType"
+                                    data-ng-options="meritType.name for meritType in meritTypes track by meritType.id"
+                                    data-ng-model="meritType"
+                            >
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-actions text-right pal">
+                    <button type="button" class="btn btn-success">Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="rightDiv">
+        <div class="panel">
+            <div class="panel-heading">Program Type <b>{{programType.name}}</b>, Semester <b>{{semester.name}}</b>, Faculty <b>{{faculty.shortName}}</b>, Merit Type <b>{{meritType.name}}</b><span
+                    class="subtitle"></span></div>
+            <div class="panel-body shadowPanel"   style="min-height: 490px;">
+                <div class="row">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4">
+                        <input type="text" id="searchByReceiptId" style="width: 300px;" data-ng-model="admissionStudent" data-ng-change="searchByReceiptId(admissionStudent)">
+                    </div>
+                    <div class="col-md-4"></div>
+                </div>
+                <br/>
+                <div class="row">
+                    <div class="col-md-3" align="right">
+                        Student's name<br>
+                        Admission Roll<br>
+                        Merit Position<br>
+                        Father's Name<br>
+                        Mother's Name<br>
+                    </div>
+                    <div class="col-md-3" align="left">
+                        :{{selectedStudent.studentName}}
+                        :{{selectedStudent.admissionRoll}}
+                        :{{selectedStudent.meritSlNo}}
+                        :{{selectedStudent.fatherName}}
+                        :{{selectedStudent.motherName}}
+                    </div>
+                    <div class="col-md-6">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

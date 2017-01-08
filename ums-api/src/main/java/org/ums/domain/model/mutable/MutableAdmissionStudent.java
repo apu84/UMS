@@ -6,6 +6,7 @@ import org.ums.domain.model.immutable.AdmissionStudent;
 import org.ums.domain.model.immutable.Program;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.enums.MigrationStatus;
+import org.ums.enums.PresentStatus;
 import org.ums.enums.ProgramType;
 
 /**
@@ -68,4 +69,6 @@ public interface MutableAdmissionStudent extends AdmissionStudent, Mutable,
   void setAllocatedProgramId(final int pAllocatedProgramId);
 
   void setMigrationStatus(final MigrationStatus pMigrationStatus);
+
+  void setPresentStatus(final PresentStatus pPresentStatus);
 }
