@@ -1,6 +1,7 @@
 package org.ums.decorator;
 
 import org.ums.domain.model.immutable.AdmissionStudent;
+import org.ums.domain.model.immutable.AdmissionStudentCertificate;
 import org.ums.domain.model.mutable.MutableAdmissionStudent;
 import org.ums.enums.ProgramType;
 import org.ums.enums.QuotaType;
@@ -45,7 +46,12 @@ public class AdmissionStudentDaoDecorator extends
   }
 
   @Override
-  public List<AdmissionStudent> getNewStudentByReceiptId(String pReceiptId) {
-    return getManager().getNewStudentByReceiptId(pReceiptId);
+  public List<AdmissionStudent> getNewStudentByReceiptId(int pSemsterId, String pReceiptId) {
+    return getManager().getNewStudentByReceiptId(pSemsterId, pReceiptId);
+  }
+
+  @Override
+  public List<AdmissionStudentCertificate> getAdmissionStudentCertificateLists() {
+    return getManager().getAdmissionStudentCertificateLists();
   }
 }

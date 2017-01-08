@@ -1,7 +1,3 @@
-/**
- * Created by Monjur-E-Morshed on 01-Dec-16.
- */
-
 module ums{
 
   interface IAdmissionMerit extends ng.IScope{
