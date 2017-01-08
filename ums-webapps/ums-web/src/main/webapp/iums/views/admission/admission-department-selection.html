@@ -1,14 +1,9 @@
 
 <style>
-    .handsontable .htDimmed {
-        color: black;
-        /*width:100%;*/
-    }
 
-    .handsontable thead th {
-        text-align: left;
+    thead{
+        background-color: #efefef;
     }
-
 
 </style>
 <div class="row" >
@@ -89,30 +84,107 @@
                     class="subtitle"></span></div>
             <div class="panel-body shadowPanel"   style="min-height: 490px;">
                 <div class="row">
-                    <div class="col-md-4"></div>
-                    <div class="col-md-4">
-                        <input type="text" id="searchByReceiptId" style="width: 300px;" data-ng-model="admissionStudent" data-ng-change="searchByReceiptId(admissionStudent)">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-4" align="right" class="form-control">Admission Deadline</div>
+                    <div class="col-md-3" align="left">
+                        <div class="input-icon right" >
+                            <i class="fa fa-calendar"></i>
+                            <input  type="text"  data-ng-model="parameter.startDateTmp" data-date-format="dd/mm/yyyy" placeholder="DD/MM/YYYY" class="datepicker-default form-control required" autocomplete="off"/>
+                        </div>
                     </div>
-                    <div class="col-md-4"></div>
+                    <div class="col-md-3"></div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-4" align="right">Receipt Id</div>
+                    <div class="col-md-3">
+                        <input type="text" id="searchByReceiptId" style="width: 300px;" data-ng-model="receiptId" data-ng-change="searchByReceiptId(receiptId)">
+                    </div>
+                    <div class="col-md-3"></div>
                 </div>
                 <br/>
                 <div class="row">
-                    <div class="col-md-3" align="right">
-                        Student's name<br>
-                        Admission Roll<br>
-                        Merit Position<br>
-                        Father's Name<br>
-                        Mother's Name<br>
-                    </div>
-                    <div class="col-md-3" align="left">
-                        :{{selectedStudent.studentName}}
-                        :{{selectedStudent.admissionRoll}}
-                        :{{selectedStudent.meritSlNo}}
-                        :{{selectedStudent.fatherName}}
-                        :{{selectedStudent.motherName}}
-                    </div>
                     <div class="col-md-6">
+                        <table class="table table-striped">
+                            <tbody>
+                                <tr>
+                                    <th align="right">Student's Name</th>
+                                    <th align="left">: {{selectedStudent.studentName}}</th>
+                                </tr>
+                                <tr>
+                                    <th align="right">Admission Roll</th>
+                                    <th align="left">: {{selectedStudent.admissionRoll}}</th>
+                                </tr>
+                                <tr>
+                                    <th align="right">Merit Position</th>
+                                    <th align="left">: {{selectedStudent.meritSlNo}}</th>
+                                </tr>
+                                <tr>
+                                    <th align="right">Father's Name</th>
+                                    <th align="left">: {{selectedStudent.fatherName}}</th>
+                                </tr>
+                                <tr>
+                                    <th align="right">Mother's Name</th>
+                                    <th align="left">: {{selectedStudent.motherName}}</th>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <br>
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Selected Program</label>
+                            <div class="col-md-8">
+                                <select
+                                        class="form-control"
+                                        name="selectedProgram"
+                                        id="selectedProgram"
+                                        data-ng-options="program.shortName for program in programs track by program.id"
+                                        data-ng-model="selectedProgram"
+                                >
 
+                                </select>
+                            </div>
+                        </div>
+                        <br>
+                        <br>
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Waiting Program</label>
+                            <div class="col-md-8">
+                                <select
+                                        class="form-control waitingProgram"
+                                        name="waitingProgram"
+                                        id="waitingProgram"
+                                        data-ng-options="program.shortName for program in programs track by program.id"
+                                        data-ng-model="waitingProgram"
+                                >
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-6">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <td>Program</td>
+                                    <td>Allocated Seat</td>
+                                    <td>Selected</td>
+                                    <td>Remaining<br>Vacancy</td>
+                                    <td>Waiting</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr data-ng-repeat="s in statistics">
+                                    <td>{{s.programName}}</td>
+                                    <td align="center">{{s.allocatedSeat}}</td>
+                                    <td align="center">{{s.selected}}</td>
+                                    <td align="center">{{s.remaining}}</td>
+                                    <td align="center">{{s.waiting}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

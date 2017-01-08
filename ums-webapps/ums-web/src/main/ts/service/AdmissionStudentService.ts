@@ -66,6 +66,22 @@ module ums{
       return defer.promise;
     }
 
+    public fetchStatistics(semesterId:number, programType:number, meritTypeId:number, unit:string):ng.IPromise<any>{
+      var url="academic/admission/statistics/semester/"+semesterId+"/programType/"+programType+"/unit/"+unit+"/meritType/"+meritTypeId;
+      var defer = this.$q.defer();
+
+      this.httpClient.get(url, this.appConstants.mimeTypeJson,
+          (json:any, etag:string)=>{
+            var admissionStudents:any = json.entries;
+            defer.resolve(admissionStudents);
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>)=>{
+            console.error(response);
+          });
+
+      return defer.promise;
+    }
+
     public downloadTaletalkDataExcelFile(semesterId: number):any{
 
       var fileName = "Taletalk_data_"+semesterId;

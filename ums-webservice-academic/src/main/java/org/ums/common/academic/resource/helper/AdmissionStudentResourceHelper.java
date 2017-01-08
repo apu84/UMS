@@ -11,12 +11,14 @@ import org.ums.common.builder.AdmissionStudentBuilder;
 import org.ums.common.report.generator.AdmissionStudentGenerator;
 import org.ums.domain.model.immutable.AdmissionStudent;
 import org.ums.domain.model.immutable.AdmissionStudentCertificate;
+import org.ums.domain.model.immutable.AdmissionTotalSeat;
 import org.ums.domain.model.immutable.Faculty;
 import org.ums.domain.model.mutable.MutableAdmissionStudent;
 import org.ums.enums.FacultyType;
 import org.ums.enums.ProgramType;
 import org.ums.enums.QuotaType;
 import org.ums.manager.AdmissionStudentManager;
+import org.ums.manager.AdmissionTotalSeatManager;
 import org.ums.manager.FacultyManager;
 import org.ums.persistent.model.PersistentAdmissionStudent;
 import org.ums.resource.ResourceHelper;
@@ -28,6 +30,8 @@ import java.io.OutputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Created by Monjur-E-Morshed on 17-Dec-16.
@@ -47,6 +51,9 @@ public class AdmissionStudentResourceHelper extends
 
   @Autowired
   FacultyManager mFacultyManager;
+
+  @Autowired
+  AdmissionTotalSeatManager mAdmissionTotalSeatManager;
 
   @Autowired
   AdmissionStudentGenerator mGenerator;
@@ -112,6 +119,56 @@ public class AdmissionStudentResourceHelper extends
     }
 
     return jsonCreator(students, "taletalkData", pUriInfo);
+  }
+
+  public JsonObject getCurrentDepartmentAllocationStatistics(final int pSemesterId,
+                                                             final ProgramType pProgramType,
+                                                             final QuotaType pQuotaType,
+                                                             String pUnit,
+                                                             final UriInfo pUriInfo){
+
+    List<AdmissionTotalSeat> totalSeats = mAdmissionTotalSeatManager.getAdmissionTotalSeat(pSemesterId, pProgramType, pQuotaType);
+    List<AdmissionStudent> students = getContentManager().getMeritList(pSemesterId,pQuotaType, pUnit,pProgramType);
+    Map<Integer, List<AdmissionStudent>> allocatedProgramMapStudents = students
+        .parallelStream()
+        .collect(Collectors.groupingBy(AdmissionStudent::getProgramIdByMerit));
+    Map<Integer, List<AdmissionStudent>> waitingProgramMapStudents = students
+        .parallelStream()
+        .collect(Collectors.groupingBy(AdmissionStudent::getProgramIdByTransfer));
+
+    return getStatisticsJsonObject(totalSeats, allocatedProgramMapStudents, waitingProgramMapStudents);
+  }
+
+  private JsonObject getStatisticsJsonObject(List<AdmissionTotalSeat> pTotalSeats,
+      Map<Integer, List<AdmissionStudent>> pAllocatedProgramMapStudents,
+      Map<Integer, List<AdmissionStudent>> pWaitingProgramMapStudents) {
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+
+    for(AdmissionTotalSeat seat : pTotalSeats) {
+      JsonObjectBuilder jsonObject = Json.createObjectBuilder();
+      jsonObject.add("programId", seat.getProgram().getId());
+      jsonObject.add("programName", seat.getProgram().getShortName().replaceAll("BSc in ",""));
+      jsonObject.add("allocatedSeat", seat.getTotalSeat());
+      int selected = 0;
+      int waiting = 0;
+
+      if(pAllocatedProgramMapStudents.get(seat.getProgram().getId()) != null) {
+        selected = pAllocatedProgramMapStudents.get(seat.getProgram().getId()).size();
+      }
+      if(pWaitingProgramMapStudents.get(seat.getProgram().getId()) != null) {
+        waiting = pAllocatedProgramMapStudents.get(seat.getProgram().getId()).size();
+      }
+      jsonObject.add("selected", selected);
+      jsonObject.add("remaining", (seat.getTotalSeat() - selected));
+      jsonObject.add("waiting", waiting);
+      children.add(jsonObject);
+    }
+
+    object.add("entries", children);
+    localCache.invalidate();
+    return object.build();
   }
 
   public JsonObject getAdmissionMeritList(final int pSemesterId, final ProgramType pProgramType,

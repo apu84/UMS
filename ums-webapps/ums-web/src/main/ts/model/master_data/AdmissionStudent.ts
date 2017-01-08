@@ -32,5 +32,11 @@ module ums{
     programLongName:string;
     presentStatus:number;
     text:string;
+    programId:number;
+    programName:string;
+    allocatedSeat:number;
+    selected:number;
+    remaining:number;
+    waiting:number;
   }
 }

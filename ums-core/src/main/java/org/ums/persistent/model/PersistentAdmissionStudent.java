@@ -61,6 +61,10 @@ public class PersistentAdmissionStudent implements MutableAdmissionStudent {
   private String mLastModified;
   private ProgramType mProgramType;
   private PresentStatus mPresentStatus;
+  private Program mProgramByMerit;
+  private int mProgramIdByMerit;
+  private Program mProgramByTransfer;
+  private int mProgramIdByTransfer;
 
   public PersistentAdmissionStudent() {}
 
@@ -97,6 +101,52 @@ public class PersistentAdmissionStudent implements MutableAdmissionStudent {
     mLastModified = pAdmissionStudent.getLastModified();
     mProgramType = pAdmissionStudent.getProgramType();
     mPresentStatus = pAdmissionStudent.getPresentStatus();
+    mProgramByMerit = pAdmissionStudent.getProgramByMerit();
+    mProgramIdByMerit = pAdmissionStudent.getProgramIdByMerit();
+    mProgramByTransfer = pAdmissionStudent.getProgramByTransfer();
+    mProgramIdByTransfer = pAdmissionStudent.getProgramIdByTransfer();
+  }
+
+  @Override
+  public Program getProgramByMerit() {
+    return mProgramByMerit == null ? sProgramManager.get(mProgramIdByMerit) : sProgramManager
+        .validate(mProgramByMerit);
+  }
+
+  @Override
+  public int getProgramIdByMerit() {
+    return mProgramIdByMerit;
+  }
+
+  @Override
+  public Program getProgramByTransfer() {
+    return mProgramByTransfer == null ? sProgramManager.get(mProgramIdByTransfer) : sProgramManager
+        .validate(mProgramByTransfer);
+  }
+
+  @Override
+  public int getProgramIdByTransfer() {
+    return mProgramIdByTransfer;
+  }
+
+  @Override
+  public void setProgramByMerit(Program pProgramByMerit) {
+    mProgramByMerit = pProgramByMerit;
+  }
+
+  @Override
+  public void setProgramIdByMerit(int pProgramIdByMerit) {
+    mProgramIdByMerit = pProgramIdByMerit;
+  }
+
+  @Override
+  public void setProgramByTransfer(Program pProgramByTransfer) {
+    mProgramByTransfer = pProgramByTransfer;
+  }
+
+  @Override
+  public void setProgramIdByTransfer(int pProgramIdByTransfer) {
+    mProgramIdByTransfer = pProgramIdByTransfer;
   }
 
   @Override

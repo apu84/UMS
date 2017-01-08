@@ -49,6 +49,16 @@ public class AdmissionStudentResource extends MutableAdmissionStudentResource {
   }
 
   @GET
+  @Path("/statistics/semester/{semester-id}/programType/{program-type}/unit/{unit}/meritType/{merit-type}")
+  public JsonObject getCurrentStatistics(final @Context Request pRequest,
+      final @PathParam("semester-id") int pSemesterId,
+      final @PathParam("program-type") int pProgramType, final @PathParam("unit") String pUnit,
+      final @PathParam("merit-type") int pMeritType) {
+    return mHelper.getCurrentDepartmentAllocationStatistics(pSemesterId,
+        ProgramType.get(pProgramType), QuotaType.get(pMeritType), pUnit, mUriInfo);
+  }
+
+  @GET
   @Path("/semesterId/{semester-id}/receiptId/{receipt-id}")
   public JsonObject getNewStudentByReceiptId(@PathParam("semester-id") int pSemesterId,
       @PathParam("receipt-id") String pReceiptId, final @Context Request pRequest) {
