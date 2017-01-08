@@ -20,7 +20,7 @@
             <h3 class="panel-title">Select </h3>
         </div>
         <div class="panel-body pan">
-            <form action="" class="form-horizontal" data-validate=""  data-onvalidate="fetchMeritList" >
+            <form action="" class="form-horizontal" data-validate=""  data-onvalidate="getAllStudents" >
                 <div class="form-body pal">
                     <div class="form-group">
                         <label class="col-md-4 control-label">Program Type</label>
@@ -88,7 +88,33 @@
             <div class="panel-heading">Program Type <b>{{programType.name}}</b>, Semester <b>{{semester.name}}</b>, Faculty <b>{{faculty.shortName}}</b>, Merit Type <b>{{meritType.name}}</b><span
                     class="subtitle"></span></div>
             <div class="panel-body shadowPanel"   style="min-height: 490px;">
+                <div class="row">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4">
+                        <input type="text" id="searchByReceiptId" style="width: 300px;" data-ng-model="admissionStudent" data-ng-change="searchByReceiptId(admissionStudent)">
+                    </div>
+                    <div class="col-md-4"></div>
+                </div>
+                <br/>
+                <div class="row">
+                    <div class="col-md-3" align="right">
+                        Student's name<br>
+                        Admission Roll<br>
+                        Merit Position<br>
+                        Father's Name<br>
+                        Mother's Name<br>
+                    </div>
+                    <div class="col-md-3" align="left">
+                        :{{selectedStudent.studentName}}
+                        :{{selectedStudent.admissionRoll}}
+                        :{{selectedStudent.meritSlNo}}
+                        :{{selectedStudent.fatherName}}
+                        :{{selectedStudent.motherName}}
+                    </div>
+                    <div class="col-md-6">
 
+                    </div>
+                </div>
             </div>
         </div>
     </div>

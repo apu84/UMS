@@ -80,13 +80,12 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
       + "      ?, ?, ?, ?, ?,  " + "      ?, ?, ?, ?, ?,  " + "         ?, ?, ?, ?, ?,  "
       + "   ?, ?, ?, ?, ?,  " + "   ?, " + getLastModifiedSql() + ")";
 
-  String GET_ONE =
-      "SELECT SEMESTER_ID, RECEIPT_ID, PIN, HSC_BOARD, HSC_ROLL,  "
-          + "    HSC_REGNO, HSC_YEAR, HSC_GROUP, SSC_BOARD, SSC_ROLL,  "
-          + "    SSC_YEAR, SSC_GROUP, GENDER, to_char(DATE_OF_BIRTH,'dd/mm/yy') date_of_birth , STUDENT_NAME,  "
-          + "    FATHER_NAME, MOTHER_NAME, SSC_GPA, HSC_GPA, QUOTA,  "
-          + "    ADMISSION_ROLL, MERIT_SL_NO, STUDENT_ID, ALLOCATED_PROGRAM_ID, MIGRATION_STATUS,  "
-          + "    LAST_MODIFIED, UNIT from admission_students ";
+  String GET_ONE = "SELECT SEMESTER_ID, RECEIPT_ID, PIN, HSC_BOARD, HSC_ROLL,  "
+      + "    HSC_REGNO, HSC_YEAR, HSC_GROUP, SSC_BOARD, SSC_ROLL,  "
+      + "    SSC_YEAR, SSC_GROUP, GENDER, DATE_OF_BIRTH, STUDENT_NAME,  "
+      + "    FATHER_NAME, MOTHER_NAME, SSC_GPA, HSC_GPA, QUOTA,  "
+      + "    ADMISSION_ROLL, MERIT_SL_NO, STUDENT_ID, ALLOCATED_PROGRAM_ID, MIGRATION_STATUS,  "
+      + "    LAST_MODIFIED, UNIT from admission_students ";
 
   String GET_ALL =
       "SELECT CERTIFICATE_ID, CERTIFICATE_TITLE, CERTIFICATE_TYPE FROM ADMISSION_CERTIFICATES ";

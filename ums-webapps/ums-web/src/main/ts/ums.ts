@@ -537,7 +537,21 @@ module ums {
         .state('admissionDepartmentSelection', {
           url: "/admissionDepartmentSelection",
           templateUrl: 'views/admission/admission-department-selection.html',
-          controller: 'AdmissionDepartmentSelection'
+          controller: 'AdmissionDepartmentSelection',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: [
+                  'vendors/select2/select2-madmin.css',
+                  'vendors/bootstrap-select/bootstrap-select.min.css',
+                  'vendors/multi-select/css/multi-select-madmin.css',
+                  'vendors/select2/select2.min.js',
+                  'vendors/bootstrap-select/bootstrap-select.min.js',
+                  'vendors/multi-select/js/jquery.multi-select.js'
+                ]
+              });
+            }]
+          }
         })
         .state('uploadTaletalkData', {
           url: "/uploadTaletalkData",

@@ -37,6 +37,12 @@ module ums {
     static SEMESTER_STATUS_ACTIVE: number=1;
     static SEMESTER_STATUS_NEWLY_CREATED: number=2;
 
+    /*
+    * Present status during department selection
+    * */
+    static ABSENT:number=0;
+    static PRESENT:number=1;
+
 
     /**
      * Student Id block colors (Advisor Assignment from Admin Officer Account)
@@ -49,6 +55,7 @@ module ums {
      */
     static ERROR_ROW: string="#FCDC3B";
     static SEARCH_ROW: string="#A2D9CE";
+
 
 
 

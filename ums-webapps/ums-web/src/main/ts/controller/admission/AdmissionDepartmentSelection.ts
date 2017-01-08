@@ -12,8 +12,14 @@ module ums{
     faculties:Array<Faculty>;
     meritTypes:Array<IMeritListType>;
     meritType:IMeritListType;
+    admissionStudents:Array<AdmissionStudent>;
+    admissionStudent:AdmissionStudent;
+    receiptId:string;
+    receiptIdMap:any;
+
 
     getSemesters:Function;
+    getAllStudents:Function;
   }
 
   interface  IProgramType{
@@ -44,6 +50,8 @@ module ums{
       $scope.programType = $scope.programTypes[0];
 
       $scope.getSemesters= this.getSemesters.bind(this);
+      $scope.getAllStudents = this.getAllStudents.bind(this);
+      $scope.receiptId="";
 
       this.getFaculties();
       this.getSemesters();
@@ -51,6 +59,73 @@ module ums{
 
 
     }
+
+
+    private getAllStudents(){
+      Utils.expandRightDiv();
+
+      var unit=this.getUnit();
+
+      this.$scope.receiptIdMap={};
+      this.admissionStudentService.fetchTaletalkDataWithMeritType(this.$scope.semester.id,
+          +this.$scope.programType.id,
+          +this.$scope.meritType.id,
+          unit)
+          .then((students:Array<AdmissionStudent>)=>{
+
+        this.$scope.admissionStudents=[];
+        for(var i=0;i<students.length;i++){
+          this.$scope.admissionStudents.push(students[i]);
+          this.$scope.receiptIdMap[students[i].receiptId] = students[i];
+        }
+
+        console.log(students[1]);
+        this.initializeSelect2("searchByReceiptId", this.$scope.admissionStudents);
+
+      });
+    }
+
+    private getUnit():string{
+      var unit:string="";
+      if(this.$scope.faculty.shortName=='BUSINESS'){
+        unit="BBA"
+      }else{
+        unit="ENGINEERING";
+      }
+      return unit;
+    }
+
+
+
+    private  initializeSelect2(selectBoxId,studentIds){
+      var data = studentIds;
+      $("#"+selectBoxId).select2({
+        minimumInputLength: 1,
+        query: function (options) {
+          var pageSize = 100;
+          var startIndex = (options.page - 1) * pageSize;
+          var filteredData = data;
+          if (options.term && options.term.length > 0) {
+            if (!options.context) {
+              var term = options.term.toLowerCase();
+              options.context = data.filter(function (metric:any) {
+                return ( metric.id.indexOf(term) !== -1 );
+              });
+            }
+            filteredData = options.context;
+          }
+          options.callback({
+            context: filteredData,
+            results: filteredData.slice(startIndex, startIndex + pageSize),
+            more: (startIndex + pageSize) < filteredData.length
+          });
+        },
+        placeholder: "Select a Receipt Id"
+      });
+      // Her is the exmaple code for select2 with pagination.....
+      //http://jsfiddle.net/Z7bDG/1/
+    }
+
 
     private getMeritListTypes():void{
       this.$scope.meritTypes = [];
