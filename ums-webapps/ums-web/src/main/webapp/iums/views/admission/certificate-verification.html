@@ -1,0 +1,271 @@
+
+<style>
+    fieldset {
+        border:1px dashed grey;
+        /*width: 705px;*/
+        padding-right: 5px;
+        padding-left: 5px;
+    }
+
+    legend {
+        padding: 0.2em 0.5em;
+        border:1px solid grey;
+        color:#4d4b4b;
+        font-size:90%;
+        text-align:left;
+        width: 200px;
+        padding-right: 11px;
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
+
+</style>
+<div class="row" >
+    <div onclick="resetCommonCollapsibleDivs()" id="arrowDiv">
+        <i class="fa fa-angle-double-right fa-cx"></i></i>
+    </div>
+    <div class="panel panel-green" id="leftDiv">
+        <div class="panel-heading">
+            <h3 class="panel-title">Select</h3>
+        </div>
+        <div class="panel-body pan">
+            <form action="" class="form-horizontal">
+                <div class="form-body pal">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Program Type</label>
+                        <div class="col-md-8">
+                            <select
+                                    class="form-control required"
+                                    name="programType"
+                                    id="programType"
+                                    data-ng-options="programType.name for programType in programTypes track by programType.id"
+                                    data-ng-model="programType"
+                                    data-ng-change="getSemesters()"
+                            ></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Semester</label>
+                        <div class="col-md-8">
+                            <select
+                                    class="form-control required"
+                                    name="semester"
+                                    id="semester"
+                                    data-ng-options="semester.name for semester in semesters track by semester.id"
+                                    data-ng-model="semester"
+                            >
+
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-actions text-right pal">
+                    <button type="button" class="btn btn-success" data-ng-click="showRightDiv()">Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="rightDiv" data-ng-if="rightDiv==true">
+        <div class="panel">
+            <div class="panel-heading">Search Candidate By Receipt ID<span
+                    class="subtitle"></span></div>
+            <div class="panel-body shadowPanel"   style="min-height: 490px;">
+                <div align="center">
+                    <form class="form-inline">
+                        <div class="form-group">
+                            <label class="control-label" style="font-weight: bold;">Receipt Id:</label>
+                            <input type="text" class="form-control" data-ng-model="receiptId" placeholder="Enter Receipt Id">
+                        </div>
+                        <button type="submit" class="btn btn-success" data-ng-click="searchByReceiptId(semester.id,receiptId)">Search</button>
+                    </form>
+                </div>
+                <br /><br /><br />
+                <div data-ng-show="mainDiv==true">
+                    <div class="row">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-5">
+                            <form>
+                                <fieldset style="padding-bottom: 5px;">
+                                    <legend>Candidate's General Information:</legend>
+                                    <table class="table">
+                                        <tr>
+                                            <th><label class="control-label" style="font-weight: bold;">Receipt Id:</label></th>
+                                            <td><label class="control-label" style="font-weight: bold;">{{admissionStudent.receiptId}}</label></td>
+                                        </tr>
+                                        <tr>
+                                            <th><label class="control-label" style="font-weight: bold;">Semester:</label></th>
+                                            <td><label class="control-label" style="font-weight: bold;">{{admissionStudent.semesterName}}</label></td>
+                                        </tr>
+                                        <div data-ng-if="forEngineering">
+                                            <tr>
+                                                <th><label class="control-label" style="font-weight: bold;">Admission Roll:</label></th>
+                                                <td><label class="control-label" style="font-weight: bold;">{{admissionStudent.admissionRoll}}</label></td>
+                                            </tr>
+                                            <tr>
+                                                <th><label class="control-label" style="font-weight: bold;">Merit SL No:</label></th>
+                                                <td><label class="control-label" style="font-weight: bold;">{{admissionStudent.meritSlNo}}</label></td>
+                                            </tr>
+                                        </div>
+                                        <tr>
+                                            <th><label class="control-label" style="font-weight: bold;">Quota:</label></th>
+                                            <td><label class="control-label" style="font-weight: bold;">{{admissionStudent.quota}}</label></td>
+                                        </tr>
+                                    </table>
+                                </fieldset>
+                            </form>
+                        </div>
+                        <div class="col-md-5">
+                            <form>
+                                <fieldset style="padding-bottom: 5px;">
+                                    <legend>Candidate's Personal Information:</legend>
+                                    <table class="table">
+                                        <tr>
+                                            <th><label class="control-label" style="font-weight: bold;">Name:</label></th>
+                                            <td><label class="control-label" style="font-weight: bold;">{{admissionStudent.studentName}}</label></td>
+                                        </tr>
+                                        <tr>
+                                            <th><label class="control-label" style="font-weight: bold;">Gender:</label></th>
+                                            <td><label class="control-label" style="font-weight: bold;">{{admissionStudent.gender}}</label></td>
+                                        </tr>
+                                        <tr>
+                                            <th><label class="control-label" style="font-weight: bold;">Date of Birth:</label></th>
+                                            <td><label class="control-label" style="font-weight: bold;">{{admissionStudent.dateOfBirth}}</label></td>
+                                        </tr>
+                                        <tr>
+                                            <th><label class="control-label" style="font-weight: bold;">Father's Name:</label></th>
+                                            <td><label class="control-label" style="font-weight: bold;">{{admissionStudent.fatherName}}</label></td>
+                                        </tr>
+                                        <tr>
+                                            <th><label class="control-label" style="font-weight: bold;">Mother's Name:</label></th>
+                                            <td><label class="control-label" style="font-weight: bold;">{{admissionStudent.motherName}}</label></td>
+                                        </tr>
+                                    </table>
+                                </fieldset>
+                            </form>
+                        </div>
+                        <div class="col-md-1"></div>
+                    </div>
+                    <br />
+
+                    <div class="row">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-5">
+                            <form>
+                                <fieldset style="padding-bottom: 5px;">
+                                    <legend>Candidate's HSC Information:</legend>
+                                    <table class="table">
+                                        <tr>
+                                            <th><label class="control-label" style="font-weight: bold;">HSC Board:</label></th>
+                                            <td><label class="control-label" style="font-weight: bold;">{{admissionStudent.hscBoard}}</label></td>
+                                        </tr>
+                                        <tr>
+                                            <th><label class="control-label" style="font-weight: bold;">HSC Group:</label></th>
+                                            <td><label class="control-label" style="font-weight: bold;">{{admissionStudent.hscGroup}}</label></td>
+                                        </tr>
+                                        <tr>
+                                            <th><label class="control-label" style="font-weight: bold;">HSC Roll:</label></th>
+                                            <td><label class="control-label" style="font-weight: bold;">{{admissionStudent.hscRoll}}</label></td>
+                                        </tr>
+                                        <tr>
+                                            <th><label class="control-label" style="font-weight: bold;">HSC Registration No.:</label></th>
+                                            <td><label class="control-label" style="font-weight: bold;">{{admissionStudent.hscRegNo}}</label></td>
+                                        </tr>
+                                        <tr>
+                                            <th><label class="control-label" style="font-weight: bold;">HSC GPA:</label></th>
+                                            <td><label class="control-label" style="font-weight: bold;">{{admissionStudent.hscGpa}}</label></td>
+                                        </tr>
+                                        <tr>
+                                            <th><label class="control-label" style="font-weight: bold;">HSC Passing Year:</label></th>
+                                            <td><label class="control-label" style="font-weight: bold;">{{admissionStudent.hscYear}}</label></td>
+                                        </tr>
+                                    </table>
+                                </fieldset>
+                            </form>
+                        </div>
+                        <div class="col-md-5">
+                            <form>
+                                <fieldset style="padding-bottom: 5px;">
+                                    <legend>Candidate's SSC Information:</legend>
+                                    <table class="table">
+                                        <tr>
+                                            <th><label class="control-label" style="font-weight: bold;">SSC Board:</label></th>
+                                            <td><label class="control-label" style="font-weight: bold;">{{admissionStudent.sscBoard}}</label></td>
+                                        </tr>
+                                        <tr>
+                                            <th><label class="control-label" style="font-weight: bold;">SSC Group:</label></th>
+                                            <td><label class="control-label" style="font-weight: bold;">{{admissionStudent.sscGroup}}</label></td>
+                                        </tr>
+                                        <tr>
+                                            <th><label class="control-label" style="font-weight: bold;">SSC Roll:</label></th>
+                                            <td><label class="control-label" style="font-weight: bold;">{{admissionStudent.sscRoll}}</label></td>
+                                        </tr>
+                                        <tr>
+                                            <th><label class="control-label" style="font-weight: bold;">SSC GPA:</label></th>
+                                            <td><label class="control-label" style="font-weight: bold;">{{admissionStudent.sscGpa}}</label></td>
+                                        </tr>
+                                        <tr>
+                                            <th><label class="control-label" style="font-weight: bold;">SSC Passing Year:</label></th>
+                                            <td><label class="control-label" style="font-weight: bold;">{{admissionStudent.sscYear}}</label></td>
+                                        </tr>
+                                    </table>
+                                </fieldset>
+                            </form>
+                        </div>
+                        <div class="col-md-1"></div>
+                    </div>
+                    <br /><br />
+                    <div class="row">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-5">
+                            <form>
+                                <fieldset style="padding-bottom: 5px;">
+                                    <legend>Student Verification</legend>
+                                        <div>
+                                            <label ng-repeat="aCName in academicCertificates"><br />
+                                            <input
+                                                    type="checkbox"
+                                                    name="selectedCertificates[]"
+                                                    value="{{aCName}}"
+                                                    ng-checked="exists(aCName)"
+                                                    ng-click="toggleSelection(aCName)"
+                                            >&nbsp; {{aCName.certificateTitle}} &nbsp;
+                                            </label>
+                                        </div>
+                                </fieldset>
+                            </form>
+                        </div>
+                        <div class="col-md-5">
+                            <form>
+                                <fieldset style="padding-bottom: 5px;">
+                                    <legend>Person Verification</legend>
+                                    <div>
+                                        <label ng-repeat="pCName in personalCertificates"><br />
+                                            <input
+                                                    type="checkbox"
+                                                    name="selectedCertificates[]"
+                                                    value="{{pCName}}"
+                                                    ng-checked="exists(pCName)"
+                                                    ng-click="toggleSelection(pCName)"
+                                            >&nbsp; {{pCName.certificateTitle}} &nbsp;
+                                        </label>
+                                    </div>
+                                </fieldset>
+                            </form>
+                        </div>
+                        <div class="col-md-1"></div>
+                    </div>
+                    <br /> <br /><br /><br />
+                    <div class="row" align="right">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-10">
+                            <button type="submit" class="btn btn-danger" data-ng-click="rejected()">Rejected</button>
+                            <button type="submit" class="btn btn-warning" data-ng-click="underTaken()">Undertaken Form</button>
+                            <button type="submit" class="btn btn-success" data-ng-click="verified()">Verified</button>
+                        </div>
+                        <div class="col-md-1"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
