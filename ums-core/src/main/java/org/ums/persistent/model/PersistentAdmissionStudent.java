@@ -6,6 +6,7 @@ import org.ums.domain.model.immutable.Program;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.mutable.MutableAdmissionStudent;
 import org.ums.enums.MigrationStatus;
+import org.ums.enums.PresentStatus;
 import org.ums.enums.ProgramType;
 import org.ums.manager.AdmissionStudentManager;
 import org.ums.manager.ProgramManager;
@@ -59,6 +60,7 @@ public class PersistentAdmissionStudent implements MutableAdmissionStudent {
   private MigrationStatus mMigrationStatus;
   private String mLastModified;
   private ProgramType mProgramType;
+  private PresentStatus mPresentStatus;
 
   public PersistentAdmissionStudent() {}
 
@@ -94,6 +96,17 @@ public class PersistentAdmissionStudent implements MutableAdmissionStudent {
     mMigrationStatus = pAdmissionStudent.getMigrationStatus();
     mLastModified = pAdmissionStudent.getLastModified();
     mProgramType = pAdmissionStudent.getProgramType();
+    mPresentStatus = pAdmissionStudent.getPresentStatus();
+  }
+
+  @Override
+  public PresentStatus getPresentStatus() {
+    return mPresentStatus;
+  }
+
+  @Override
+  public void setPresentStatus(PresentStatus pPresentStatus) {
+    mPresentStatus = pPresentStatus;
   }
 
   @Override

@@ -39,6 +39,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/mailbox/MailCompose.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/mailbox/MailView.ts'/>
 
+
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/FlushCache.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/LeftMenu.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/directive/DisableOperation.ts'/>
@@ -96,6 +97,8 @@
 /// <reference path='service/ClassRoomService.ts'/>
 /// <reference path='service/ClassRoomService.ts'/>
 /// <reference path='service/AdmissionStudentService.ts'/>
+/// <reference path='service/ProgramService.ts'/>
+/// <reference path='service/AdmissionTotalSeatService.ts'/>
 /// <reference path='service/CourseServices.ts'/>
 /// <reference path='service/StudentService.ts'/>
 /// <reference path='service/TimeTracker.ts'/>
@@ -103,9 +106,10 @@
 /// <reference path='service/EmployeeService.ts'/>
 /// <reference path='service/StudentService.ts'/>
 /// <reference path='service/TeacherService.ts'/>
+/// <reference path='service/AdmissionCertificateVerificationService.ts'/>
 
 /// <reference path='controller/student/NewStudent.ts'/>
-/// <reference path='controller/student/GradeSheetService.ts'/>
+
 /// <reference path='controller/semester/NewSemester.ts'/>
 /// <reference path='controller/semester/SemesterInfo.ts'/>
 /// <reference path='controller/semester/SemesterSyllabusMap.ts'/>
@@ -144,14 +148,17 @@
 
 /// <reference path='controller/admission/AdmissionMeritList.ts'/>
 /// <reference path='controller/admission/AdmissionTaletalkData.ts'/>
+/// <reference path='controller/admission/AdmissionDepartmentSelection.ts'/>
 /// <reference path='controller/admission/AdmissionDeadline.ts'/>
+/// <reference path='controller/admission/AdmissionCertificateVerification.ts'/>
+/// <reference path='controller/admission/AdmissionTotalSeatAssignment.ts'/>
 
 /// <reference path='controller/syllabus/FullSyllabus.ts'/>
 /// <reference path='controller/syllabus/NewSyllabus.ts'/>
 /// <reference path='controller/syllabus/GridSyllabus.ts'/>
 /// <reference path='controller/semester/SemesterEnrollment.ts'/>
 /// <reference path='controller/student/StudentProfile.ts'/>
-/// <reference path='controller/student/GradeSheet.ts'/>
+
 
 /// <reference path='dummy/DummyController.ts'/>
 
@@ -166,8 +173,10 @@
 /// <reference path='model/ParameterSetting.ts'/>
 /// <reference path='model/master_data/ClassRoom.ts'/>
 /// <reference path='model/master_data/AdmissionStudent.ts'/>
+/// <reference path='model/master_data/Program.ts'/>
 /// <reference path='model/master_data/Faculty.ts'/>
 /// <reference path='model/master_data/Course.ts'/>
+/// <reference path='model/master_data/AdmissionTotalSeat.ts'/>
 /// <reference path='model/master_data/Employee.ts'/>
 /// <reference path='model/master_data/Parameter.ts'/>
 /// <reference path='model/master_data/Routine.ts'/>

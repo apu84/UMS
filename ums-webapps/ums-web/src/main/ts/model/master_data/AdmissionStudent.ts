@@ -1,9 +1,6 @@
-/**
- * Created by My Pc on 17-Dec-16.
- */
-
 module ums{
   export interface AdmissionStudent{
+    id:number;
     semesterId:number;
     semesterName:string;
     programType:number;
@@ -33,5 +30,7 @@ module ums{
     allocatedProgramId:number;
     programShortName:string;
     programLongName:string;
+    presentStatus:number;
+    text:string;
   }
 }

@@ -10,10 +10,14 @@ import org.ums.cache.LocalCache;
 import org.ums.common.builder.AdmissionStudentBuilder;
 import org.ums.common.report.generator.AdmissionStudentGenerator;
 import org.ums.domain.model.immutable.AdmissionStudent;
+import org.ums.domain.model.immutable.AdmissionStudentCertificate;
+import org.ums.domain.model.immutable.Faculty;
 import org.ums.domain.model.mutable.MutableAdmissionStudent;
+import org.ums.enums.FacultyType;
 import org.ums.enums.ProgramType;
 import org.ums.enums.QuotaType;
 import org.ums.manager.AdmissionStudentManager;
+import org.ums.manager.FacultyManager;
 import org.ums.persistent.model.PersistentAdmissionStudent;
 import org.ums.resource.ResourceHelper;
 
@@ -40,6 +44,9 @@ public class AdmissionStudentResourceHelper extends
 
   @Autowired
   AdmissionStudentBuilder mBuilder;
+
+  @Autowired
+  FacultyManager mFacultyManager;
 
   @Autowired
   AdmissionStudentGenerator mGenerator;
@@ -145,6 +152,32 @@ public class AdmissionStudentResourceHelper extends
     mGenerator.createABlankMeritListUploadFormatFile(pOutputStream, pSemesterId);
   }
 
+  public JsonObject getAdmissionStudentByReceiptId(final int pSemesterId, final String pReceiptId,
+      final UriInfo pUriInfo) {
+
+    List<AdmissionStudent> student =
+        getContentManager().getNewStudentByReceiptId(pSemesterId, pReceiptId);
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+
+    for(AdmissionStudent admissionStudent : student) {
+      JsonObjectBuilder jsonObject = Json.createObjectBuilder();
+      getBuilder().getAdmissionStudentByReceiptIdBuilder(jsonObject, admissionStudent, pUriInfo,
+          localCache);
+      children.add(jsonObject);
+    }
+    object.add("entries", children);
+    localCache.invalidate();
+    return object.build();
+  }
+
+  public JsonObject getCertificates(final UriInfo pUriInfo) {
+    List<AdmissionStudentCertificate> pAdmissionStudentCertificate =
+        getContentManager().getAdmissionStudentCertificateLists();
+    return jsonCreator(pAdmissionStudentCertificate, pUriInfo);
+  }
+
   private JsonObject jsonCreator(List<AdmissionStudent> pStudentLIst, String pType, UriInfo pUriInfo) {
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
@@ -153,6 +186,23 @@ public class AdmissionStudentResourceHelper extends
     for(AdmissionStudent student : pStudentLIst) {
       JsonObjectBuilder jsonObject = Json.createObjectBuilder();
       getBuilder().admissionStudentBuilder(jsonObject, student, pUriInfo, localCache, pType);
+      children.add(jsonObject);
+    }
+    object.add("entries", children);
+    localCache.invalidate();
+    return object.build();
+  }
+
+  private JsonObject jsonCreator(List<AdmissionStudentCertificate> pAdmissionStudentCertificate,
+      UriInfo pUriInfo) {
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+
+    for(AdmissionStudentCertificate studentCertificate : pAdmissionStudentCertificate) {
+      JsonObjectBuilder jsonObject = Json.createObjectBuilder();
+      getBuilder().admissionStudentCertificateBuilder(jsonObject, studentCertificate, pUriInfo,
+          localCache);
       children.add(jsonObject);
     }
     object.add("entries", children);

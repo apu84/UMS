@@ -529,10 +529,39 @@ module ums {
           templateUrl: 'views/admission/merit-list-upload.html',
           controller: 'AdmissionMeritList'
         })
+        .state('admissionTotalSeat', {
+          url: "/admissionTotalSeat",
+          templateUrl: 'views/admission/admission-total-seat-assignment.html',
+          controller: 'AdmissionTotalSeatAssignment'
+        })
+        .state('admissionDepartmentSelection', {
+          url: "/admissionDepartmentSelection",
+          templateUrl: 'views/admission/admission-department-selection.html',
+          controller: 'AdmissionDepartmentSelection',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: [
+                  'vendors/select2/select2-madmin.css',
+                  'vendors/bootstrap-select/bootstrap-select.min.css',
+                  'vendors/multi-select/css/multi-select-madmin.css',
+                  'vendors/select2/select2.min.js',
+                  'vendors/bootstrap-select/bootstrap-select.min.js',
+                  'vendors/multi-select/js/jquery.multi-select.js'
+                ]
+              });
+            }]
+          }
+        })
         .state('uploadTaletalkData', {
           url: "/uploadTaletalkData",
           templateUrl: 'views/admission/taletalk-data-upload.html',
           controller: 'AdmissionTaletalkData'
+        })
+        .state('certificateVerification', {
+          url: "/certificateVerification",
+          templateUrl: 'views/admission/certificate-verification.html',
+          controller: 'AdmissionCertificateVerification'
         })
         .state('studentsRoutine', {
           url: "/studentsRoutine",
@@ -778,11 +807,11 @@ module ums {
           url: "/viewMail",
           templateUrl: 'views/common/mailbox/mail-view.html'
         })
-        .state('studentGradeSheet', {
-          url: "/studentGradeSheet",
-          controller: "StudentGradeSheet",
-          templateUrl: 'views/student/grade-sheet.html'
-        })
+        // .state('studentGradeSheet', {
+        //   url: "/studentGradeSheet",
+        //   controller: "StudentGradeSheet",
+        //   templateUrl: 'views/student/grade-sheet.html'
+        // })
       //In database use /dummyController/H or /dummyController/T in the location column
       //https://localhost/ums-web/iums/#/dummyConroller/T
       //https://localhost/ums-web/iums/#/dummyConroller/H

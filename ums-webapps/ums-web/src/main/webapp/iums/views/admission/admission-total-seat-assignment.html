@@ -1,0 +1,120 @@
+
+<style>
+    .handsontable .htDimmed {
+        color: black;
+        /*width:100%;*/
+    }
+
+    .handsontable thead th {
+        text-align: left;
+    }
+
+
+</style>
+<div class="row" >
+    <div onclick="resetCommonCollapsibleDivs()" id="arrowDiv">
+        <i class="fa fa-angle-double-right fa-cx"></i></i>
+    </div>
+    <div class="panel panel-green" id="leftDiv">
+        <div class="panel-heading">
+            <h3 class="panel-title">Select </h3>
+        </div>
+        <div class="panel-body pan">
+            <form action="" class="form-horizontal" data-validate=""  data-onvalidate="getAdmissionTotalSeat" >
+                <div class="form-body pal">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Program Type</label>
+                        <div class="col-md-8">
+                            <select
+                                    class="form-control required"
+                                    name="programType"
+                                    id="programType"
+                                    data-ng-options="programType.name for programType in programTypes track by programType.id"
+                                    data-ng-model="programType"
+                                    data-ng-change="getSemesters()"
+                            ></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Semester</label>
+                        <div class="col-md-8">
+                            <select
+                                    class="form-control required"
+                                    name="semester"
+                                    id="semester"
+                                    data-ng-options="semester.name for semester in semesters track by semester.id"
+                                    data-ng-model="semester"
+                            >
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Quota</label>
+                        <div class="col-md-8">
+                            <select
+                                    class="form-control required"
+                                    name="semester"
+                                    id="quota"
+                                    data-ng-options="quotaType.name for quotaType in quotaTypes track by quotaType.id"
+                                    data-ng-model="quotaType"
+                            >
+
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="form-actions text-right pal">
+                    <button type="button" class="btn btn-success">Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="rightDiv">
+        <div class="panel">
+            <div class="panel-heading">Semester <b>{{semester.name}}</b>, Program Type <b>{{programType.name}}</b>, Quota Type <b>{{quotaType.name}}</b><span
+                    class="subtitle"></span></div>
+            <div class="panel-body shadowPanel"   style="min-height: 490px;">
+                <div data-ng-if="showContent">
+                    <div class="row">
+                        <div class="col-md-2"></div>
+                        <div class="col-md-8">
+                            <table class="table table-bordered table-striped">
+                                <thead style="background-color: #9fceb8">
+                                <tr>
+                                    <th style="width: 85%">Program</th>
+                                    <th style="width: 15%">Total Seat</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr data-ng-repeat="seat in admissionTotalSeats">
+                                    <td style="width: 85%"><p>{{seat.programShortName}}</p></td>
+                                    <td style="width: 15%"><input data-ng-disabled="!edit" class="form-control" type="text" data-ng-model="seat.totalSeat" /></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-md-2"></div>
+
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-12" align="right">
+                            <button  class="btn btn-default" data-ng-disabled="edit" data-ng-click="editData()">Edit</button>
+                            <button class="btn btn-success" data-ng-disabled="!edit" data-ng-click="save()">Save</button>
+                        </div>
+                    </div>
+                </div>
+                <div data-ng-if="showSpinner" align="center">
+                    <br>
+                    <br>
+                    <i class="fa fa-spinner fa-spin fa-5x fa-fw"></i>
+                    <span class="sr-only">Loading...</span>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>

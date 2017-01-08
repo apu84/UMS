@@ -1,6 +1,7 @@
 package org.ums.cache;
 
 import org.ums.domain.model.immutable.AdmissionStudent;
+import org.ums.domain.model.immutable.AdmissionStudentCertificate;
 import org.ums.domain.model.mutable.MutableAdmissionStudent;
 import org.ums.enums.ProgramType;
 import org.ums.enums.QuotaType;
@@ -10,9 +11,6 @@ import org.ums.util.CacheUtil;
 
 import java.util.List;
 
-/**
- * Created by Monjur-E-Morshed on 12-Dec-16.
- */
 public class AdmissionStudentCache extends
     ContentCache<AdmissionStudent, MutableAdmissionStudent, String, AdmissionStudentManager>
     implements AdmissionStudentManager {
@@ -63,5 +61,15 @@ public class AdmissionStudentCache extends
   @Override
   public int saveMeritList(List<MutableAdmissionStudent> pStudents) {
     return getManager().saveMeritList(pStudents);
+  }
+
+  @Override
+  public List<AdmissionStudent> getNewStudentByReceiptId(int pSemsterId, String pReceiptId) {
+    return getManager().getNewStudentByReceiptId(pSemsterId, pReceiptId);
+  }
+
+  @Override
+  public List<AdmissionStudentCertificate> getAdmissionStudentCertificateLists() {
+    return getManager().getAdmissionStudentCertificateLists();
   }
 }

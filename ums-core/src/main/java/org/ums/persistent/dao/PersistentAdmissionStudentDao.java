@@ -5,13 +5,16 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.AdmissionStudentDaoDecorator;
 import org.ums.domain.model.immutable.AdmissionStudent;
+import org.ums.domain.model.immutable.AdmissionStudentCertificate;
 import org.ums.domain.model.mutable.MutableAdmissionStudent;
+import org.ums.domain.model.mutable.MutableAdmissionStudentCertificate;
 import org.ums.enums.MigrationStatus;
 import org.ums.enums.ProgramType;
 import org.ums.enums.QuotaType;
 import org.ums.manager.ProgramManager;
 import org.ums.manager.SemesterManager;
 import org.ums.persistent.model.PersistentAdmissionStudent;
+import org.ums.persistent.model.PersistentAdmissionStudentCertificate;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -76,6 +79,16 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
       + " MIGRATION_STATUS, LAST_MODIFIED)  " + "VALUES  " + "  (?, ?, ?, ?, ?,?,  "
       + "      ?, ?, ?, ?, ?,  " + "      ?, ?, ?, ?, ?,  " + "         ?, ?, ?, ?, ?,  "
       + "   ?, ?, ?, ?, ?,  " + "   ?, " + getLastModifiedSql() + ")";
+
+  String GET_ONE = "SELECT SEMESTER_ID, RECEIPT_ID, PIN, HSC_BOARD, HSC_ROLL,  "
+      + "    HSC_REGNO, HSC_YEAR, HSC_GROUP, SSC_BOARD, SSC_ROLL,  "
+      + "    SSC_YEAR, SSC_GROUP, GENDER, DATE_OF_BIRTH, STUDENT_NAME,  "
+      + "    FATHER_NAME, MOTHER_NAME, SSC_GPA, HSC_GPA, QUOTA,  "
+      + "    ADMISSION_ROLL, MERIT_SL_NO, STUDENT_ID, ALLOCATED_PROGRAM_ID, MIGRATION_STATUS,  "
+      + "    LAST_MODIFIED, UNIT from admission_students ";
+
+  String GET_ALL =
+      "SELECT CERTIFICATE_ID, CERTIFICATE_TITLE, CERTIFICATE_TYPE FROM ADMISSION_CERTIFICATES ";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -201,6 +214,17 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
     return pQuery;
   }
 
+  public List<AdmissionStudent> getNewStudentByReceiptId(int pSemesterId, String pReceiptId) {
+    String query = GET_ONE + "WHERE SEMESTER_ID=? AND RECEIPT_ID=? ";
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pReceiptId},
+        new AdmissionStudentRowMapper());
+  }
+
+  public List<AdmissionStudentCertificate> getAdmissionStudentCertificateLists() {
+    String query = GET_ALL;
+    return mJdbcTemplate.query(query, new Object[] {}, new AdmissionCertificateRowMapper());
+  }
+
   class AdmissionStudentRowMapper implements RowMapper<AdmissionStudent> {
     @Override
     public AdmissionStudent mapRow(ResultSet pResultSet, int pI) throws SQLException {
@@ -249,6 +273,17 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
       student.setQuota(pResultSet.getString("quota"));
       student.setLastModified(pResultSet.getString("last_modified"));
       return student;
+    }
+  }
+
+  class AdmissionCertificateRowMapper implements RowMapper<AdmissionStudentCertificate> {
+    @Override
+    public AdmissionStudentCertificate mapRow(ResultSet pResultSet, int pI) throws SQLException {
+      MutableAdmissionStudentCertificate certificate = new PersistentAdmissionStudentCertificate();
+      certificate.setCertificateId(pResultSet.getInt("certificate_id"));
+      certificate.setCertificateTitle(pResultSet.getNString("certificate_title"));
+      certificate.setCetificateType(pResultSet.getString("certificate_type"));
+      return certificate;
     }
   }
 

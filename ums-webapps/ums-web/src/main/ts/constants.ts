@@ -400,11 +400,17 @@ module ums {
           {id: "1", name: "Permanent"}
         ],
         meritListTypes:[
-          {id:"0", name:"Combined (GA+RA+FF) Merit List"},
-          {id:"1", name:"General Merit List"},
-          {id:"2", name:"Freedom Fighter Merit List"},
-          {id:"3", name:"Rural Area Merit List"},
-          {id:"4", name:"English Medium Merit List"}
+          {id:"0", name:"Combined (GA+RA+FF) "},
+          {id:"1", name:"General "},
+          {id:"2", name:"Freedom Fighter "},
+          {id:"3", name:"Rural Area "},
+          {id:"4", name:"English Medium "}
+        ],
+        quotaTypes:[
+          {id:"1", name:"General "},
+          {id:"2", name:"Freedom Fighter "},
+          {id:"3", name:"Rural Area "},
+          {id:"4", name:"English Medium "}
         ],
         applicationTypes: [
           {id: "", name: "Select Application Type"},

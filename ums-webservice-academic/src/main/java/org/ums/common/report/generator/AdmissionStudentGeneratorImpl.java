@@ -1,10 +1,10 @@
 package org.ums.common.report.generator;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayOutputStream;
@@ -50,7 +50,6 @@ public class AdmissionStudentGeneratorImpl implements AdmissionStudentGenerator 
     row.createCell(19).setCellValue("unit");
 
     wb.write(pOutputStream);
-
     baos.writeTo(pOutputStream);
 
   }
@@ -68,6 +67,7 @@ public class AdmissionStudentGeneratorImpl implements AdmissionStudentGenerator 
     row.createCell(2).setCellValue("admission roll");
 
     wb.write(pOutputStream);
+
     baos.writeTo(pOutputStream);
   }
 
