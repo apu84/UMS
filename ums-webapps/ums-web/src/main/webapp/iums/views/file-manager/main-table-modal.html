@@ -3,7 +3,7 @@
         <tr>
             <th>
                 <a href="" ng-click="order('model.name')">
-                    {{"name" | translate}}
+                    {{"name" }}
                     <span class="sortorder" ng-show="predicate[1] === 'model.name'" ng-class="{reverse:reverse}"></span>
                 </a>
             </th>
@@ -18,10 +18,10 @@
         </tr>
         <tr ng-show="!fileNavigator.requesting && !fileNavigator.listHasFolders() && !fileNavigator.error">
             <td>
-                {{"no_folders_in_folder" | translate}}...
+                {{"no_folders_in_folder" }}...
             </td>
             <td class="text-right">
-                <button class="btn btn-sm btn-default" ng-click="fileNavigator.upDir()">{{"go_back" | translate}}</button>
+                <button class="btn btn-sm btn-default" ng-click="fileNavigator.upDir()">{{"go_back" }}</button>
             </td>
         </tr>
         <tr ng-show="!fileNavigator.requesting && fileNavigator.error">
@@ -38,7 +38,7 @@
             </td>
             <td class="text-right">
                 <button class="btn btn-sm btn-default" ng-click="select(item)">
-                    <i class="glyphicon glyphicon-hand-up"></i> {{"select_this" | translate}}
+                    <i class="glyphicon glyphicon-hand-up"></i> {{"select_this" }}
                 </button>
             </td>
         </tr>

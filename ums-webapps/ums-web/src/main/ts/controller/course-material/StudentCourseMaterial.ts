@@ -1,11 +1,12 @@
 module ums {
   export class StudentCourseMaterial {
-    public static $inject = ['$scope', '$stateParams', 'appConstants', 'HttpClient'];
+    public static $inject = ['$scope', '$stateParams', 'appConstants', 'HttpClient', 'fileManagerConfig'];
     private currentUser: Student;
     private courseMaterialSearchParamModel: ProgramSelectorModel;
 
     constructor(private $scope: any, private $stateParams: any,
-                private appConstants: any, private httpClient: HttpClient) {
+                private appConstants: any, private httpClient: HttpClient,
+                private fileManagerConfig: any) {
 
       $scope.loadingVisibility = false;
       $scope.contentVisibility = false;
@@ -54,39 +55,47 @@ module ums {
       $("#courseSelectionDiv").hide(80);
       $("#topArrowDiv").show(50);
 
-      FILEMANAGER_CONFIG.set({
-        appName: semesterName + ' > ' + courseNo,
-        listUrl: baseUri,
-        uploadUrl: baseUri + "/upload",
-        downloadFileUrl: downloadBaseUri,
-        downloadMultipleUrl: downloadBaseUri,
-        hidePermissions: true,
-        hideOwner: false,
-        multipleDownloadFileName: 'CourseMaterial-' + semesterName + "-" + courseNo + '.zip',
-        searchForm: true,
-        languageSelection: false,
-        additionalParams: {
-          semesterId: semesterId,
-          courseId: courseId
-        },
-        allowedActions: angular.extend(FILEMANAGER_CONFIG.$get().allowedActions, {
-          createAssignmentFolder: false,
-          upload: true,
-          rename: false,
-          move: false,
-          copy: false,
-          edit: false,
-          changePermissions: false,
-          compress: false,
-          compressChooseName: false,
-          extract: false,
-          download: true,
-          downloadMultiple: true,
-          preview: false,
-          remove: false,
-          createFolder: false
-        })
+      this.fileManagerConfig.appName = semesterName + ' > ' + courseNo;
+      this.fileManagerConfig.tplPath = 'views/file-manager';
+      this.fileManagerConfig.listUrl = baseUri;
+      this.fileManagerConfig.uploadUrl = baseUri + "/upload";
+      this.fileManagerConfig.downloadFileUrl = downloadBaseUri;
+      this.fileManagerConfig.downloadMultipleUrl = downloadBaseUri;
+      this.fileManagerConfig.hidePermissions = true;
+      this.fileManagerConfig.hideOwner = false;
+      this.fileManagerConfig.multipleDownloadFileName = 'CourseMaterial-' + semesterName + "-" + courseNo + '.zip';
+      this.fileManagerConfig.searchForm = true;
+      this.fileManagerConfig.languageSelection = false;
+
+      this.fileManagerConfig.additionalParams = {
+        semesterId: semesterId,
+        courseId: courseId
+      };
+
+      this.fileManagerConfig.allowedActions = angular.extend(this.fileManagerConfig.allowedActions, {
+        createAssignmentFolder: false,
+        upload: true,
+        rename: false,
+        move: false,
+        copy: false,
+        edit: false,
+        changePermissions: false,
+        compress: false,
+        compressChooseName: false,
+        extract: false,
+        download: true,
+        downloadMultiple: true,
+        preview: false,
+        remove: false,
+        createFolder: false
       });
+
+      this.fileManagerConfig.pickCallback = (item) => {
+        var msg = 'Picked %s "%s" for external use'
+            .replace('%s', item.type)
+            .replace('%s', item.fullPath());
+        window.alert(msg);
+      };
 
       this.$scope.reloadOn = courseNo;
     }
