@@ -8,7 +8,7 @@ module ums {
       this._settings = {};
     }
 
-    public get settings(): ng.IPromise<{[key: string]: any}> {
+    public getSettings(): ng.IPromise<{[key: string]: any}> {
       if (UmsUtil.isEmpty(this._settings)) {
         var defer = this.$q.defer();
         this.httpClient.get("settings", HttpClient.MIME_TYPE_JSON,

@@ -37,10 +37,11 @@ module ums {
     private columnHeader;
     private serial;
     private abc;
-    private attendanceSearchParamModel: CourseTeacherSearchParamModel;
+    private attendanceSearchParamModel: ProgramSelectorModel;
 
     constructor(private $scope: IAttr, private $stateParams: any,
-                private appConstants: any, private httpClient: HttpClient,private hotRegisterer:any,private notify: Notify, private $window: ng.IWindowService, private $sce:ng.ISCEService) {
+                private appConstants: any, private httpClient: HttpClient,private hotRegisterer:any,
+                private notify: Notify, private $window: ng.IWindowService, private $sce:ng.ISCEService) {
 
       $scope.loadingVisibility = false;
       $scope.contentVisibility = false;
@@ -72,10 +73,10 @@ module ums {
 
       this.httpClient.get("users/current", HttpClient.MIME_TYPE_JSON,
           (response: LoggedInUser) => {
-            this.attendanceSearchParamModel = new CourseTeacherSearchParamModel(this.appConstants, this.httpClient);
-            this.attendanceSearchParamModel.programSelector.setDepartment(response.departmentId);
-            this.attendanceSearchParamModel.programSelector.setProgramId(null);
-            this.attendanceSearchParamModel.programSelector.enableSemesterOption(true);
+            this.attendanceSearchParamModel = new ProgramSelectorModel(this.appConstants, this.httpClient, true);
+            this.attendanceSearchParamModel.setProgramType(this.appConstants.programTypeEnum.UG, FieldViewTypes.selected);
+            this.attendanceSearchParamModel.setDepartment(response.departmentId, FieldViewTypes.hidden);
+            this.attendanceSearchParamModel.setProgram(null, FieldViewTypes.hidden);
             this.currentUser = response;
             this.$scope.attendanceSearchParamModel = this.attendanceSearchParamModel;
 
@@ -104,7 +105,7 @@ module ums {
       console.log(studentCategory);
       //Selected values
       this.$scope.selectedCourse.section=$("#section_"+course.courseId).val();
-      this.$scope.selectedCourse.semester=this.$scope.attendanceSearchParamModel.programSelector.semesterId;
+      this.$scope.selectedCourse.semester=this.$scope.attendanceSearchParamModel.semesterId;
       this.$scope.selectedCourse.courseId=course.courseId;
       this.$scope.selectedCourse.courseNo=course.courseNo;
       this.$scope.selectedCourse.courseTitle=course.courseTitle;
@@ -513,7 +514,7 @@ module ums {
       this.$scope.contentVisibility = false;
       this.$scope.selectedCourse.courseNo = '';
 
-      this.httpClient.get("academic/courseTeacher/" + this.attendanceSearchParamModel.programSelector.semesterId + "/"
+      this.httpClient.get("academic/courseTeacher/" + this.attendanceSearchParamModel.semesterId + "/"
           + this.currentUser.employeeId + "/course", HttpClient.MIME_TYPE_JSON,
           (response: {entries: CourseTeacherModel[]}) => {
             this.$scope.entries = this.aggregateResult(response.entries);

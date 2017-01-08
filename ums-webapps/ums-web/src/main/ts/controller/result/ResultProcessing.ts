@@ -40,7 +40,7 @@ module ums {
 
   export class ResultProcessing {
     public static $inject = ['$scope', '$stateParams', 'appConstants', 'HttpClient', '$modal'];
-    private resultProcessingSearchParamModel: CourseTeacherSearchParamModel;
+    private resultProcessingSearchParamModel: ProgramSelectorModel;
 
     constructor(private $scope: any, private $stateParams: any,
                 private appConstants: any, private httpClient: HttpClient,
@@ -58,14 +58,14 @@ module ums {
       $scope.isReadyForProcess=this.isReadyForProcess.bind(this);
       $scope.length = UmsUtil.length;
 
-      this.resultProcessingSearchParamModel = new CourseTeacherSearchParamModel(this.appConstants, this.httpClient);
-      this.resultProcessingSearchParamModel.programSelector.enableAllDepartmentOption(true);
-      this.resultProcessingSearchParamModel.programSelector.enableAllProgramOption(true);
-      this.resultProcessingSearchParamModel.programSelector.setProgramTypeId(Utils.UG + "", true);
-      this.resultProcessingSearchParamModel.programSelector.setDepartment("", true);
-      this.resultProcessingSearchParamModel.programSelector.setProgramId("", true);
-      this.resultProcessingSearchParamModel.programSelector.enableSemesterOption(true);
-
+      this.resultProcessingSearchParamModel
+          = new ProgramSelectorModel(this.appConstants, this.httpClient, true, true, true);
+      this.resultProcessingSearchParamModel.setProgramType(this.appConstants.programTypeEnum.UG,
+          FieldViewTypes.selected);
+      this.resultProcessingSearchParamModel.setDepartment(this.appConstants.deptAll.id,
+          FieldViewTypes.selected);
+      this.resultProcessingSearchParamModel.setProgram(this.appConstants.programAll.id,
+          FieldViewTypes.selected);
       $scope.resultProcessingSearchParamModel = this.resultProcessingSearchParamModel;
     }
 
@@ -76,17 +76,17 @@ module ums {
       this.$scope.showGif = false;
       this.$scope.showAllDept = true;
 
-      if (this.resultProcessingSearchParamModel.programSelector.programId == '') {
+      if (this.resultProcessingSearchParamModel.programId === this.appConstants.programAll.id) {
         this.getStatus(this.getAllStatusUri(
-            parseInt(this.resultProcessingSearchParamModel.programSelector.programTypeId),
-            parseInt(this.resultProcessingSearchParamModel.programSelector.semesterId)));
+            parseInt(this.resultProcessingSearchParamModel.programTypeId),
+            parseInt(this.resultProcessingSearchParamModel.semesterId)));
       } else {
         this.getStatus(this.getProgramWiseStatusUri(
-            parseInt(this.resultProcessingSearchParamModel.programSelector.programId),
-            parseInt(this.resultProcessingSearchParamModel.programSelector.semesterId)));
+            parseInt(this.resultProcessingSearchParamModel.programId),
+            parseInt(this.resultProcessingSearchParamModel.semesterId)));
       }
 
-      this.$scope.semesterId = this.resultProcessingSearchParamModel.programSelector.semesterId;
+      this.$scope.semesterId = this.resultProcessingSearchParamModel.semesterId;
     }
 
     private showYearSemesterWise(programId: String): void {

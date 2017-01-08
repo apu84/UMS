@@ -78,9 +78,9 @@ module ums {
                 public $q: ng.IQService,
                 public notify: Notify,
                 public teacherService: TeacherService) {
-      $scope.teacherSearchParamModel = new TeacherAssignmentSearchParamModel(this.appConstants, this.httpClient);
-      $scope.teacherSearchParamModel.programSelector.setProgramTypeId(Utils.UG + "", true);
-      $scope.teacherSearchParamModel.programSelector.enableSemesterOption(true);
+      $scope.teacherSearchParamModel = new TeacherAssignmentSearchParamModel(this.appConstants, this.httpClient, true);
+      $scope.teacherSearchParamModel.programSelector.setProgramType(this.appConstants.programTypeEnum.UG,
+          FieldViewTypes.selected);
 
       $scope.data = {
         courseCategoryOptions: appConstants.courseCategory,

@@ -52,22 +52,7 @@
         <div class="panel-body pan">
             <form action="" class="form-horizontal" data-validate=""  data-onvalidate="fetchCourseInfo" id="searchForm">
                 <div class="form-body pal">
-                    <div data-program-selector="" data-model="attendanceSearchParamModel.programSelector"></div>
-                    <!--
-                    <div class="form-group">
-                        <label class="col-md-4 control-label">Semester</label>
-                        <div class="col-md-8">
-                            <select class="form-control required"
-                                    data-ng-model="attendanceSearchParamModel.semesterId"
-                                    ng-init="attendanceSearchParamModel.academicSemesterId=''"  id="semester_id"  data-convert-to-number>
-                                <option data-ng-repeat="semester in attendanceSearchParamModel.programSelector.getSemesters()"
-                                        value="{{semester.id}}">
-                                    {{semester.name}}
-                                </option>
-                            </select>
-                        </div>
-                    </div>
-                    -->
+                    <div data-program-selector="" data-model="attendanceSearchParamModel"></div>
                 </div>
                 <div class="form-actions text-right pal">
                     <button type="button" class="btn btn-success">Submit</button>
