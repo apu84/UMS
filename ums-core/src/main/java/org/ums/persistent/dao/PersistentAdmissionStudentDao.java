@@ -145,16 +145,17 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
 
   @Override
   public AdmissionStudent getNextStudentForDepartmentSelection(int pSemesterId,
-      ProgramType pProgramType, String pUnit) {
+      ProgramType pProgramType, String pUnit, String pQuota) {
     String query =
         "SELECT * "
             + "FROM "
             + "  (SELECT * "
             + "   FROM ADMISSION_STUDENTS "
-            + "   WHERE SEMESTER_ID = ? AND PROGRAM_TYPE = ? AND unit = ? AND PRESENT_STATUS IS NULL "
+            + "   WHERE SEMESTER_ID = ? AND QUOTA=? AND  PROGRAM_TYPE = ? AND unit = ? AND PRESENT_STATUS IS NULL "
             + "   ORDER BY MERIT_SL_NO) s " + "WHERE rownum <= 1";
-    return mJdbcTemplate.queryForObject(query, new Object[] {pSemesterId, pProgramType.getValue(),
-        pUnit}, new AdmissionStudentRowMapper());
+    return mJdbcTemplate.queryForObject(query,
+        new Object[] {pSemesterId, pQuota, pProgramType.getValue(), pUnit},
+        new AdmissionStudentRowMapper());
   }
 
   @Override
@@ -277,8 +278,7 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
   @Override
   public AdmissionStudent getAdmissionStudent(int pSemesterId, ProgramType pProgramType,
       String pReceiptId) {
-    String query =
-        SELECT_ONE+"  where semester_id=? and program_type=? and receipt_id=?";
+    String query = SELECT_ONE + "  where semester_id=? and program_type=? and receipt_id=?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pSemesterId, pProgramType.getValue(),
         pReceiptId}, new AdmissionStudentRowMapper());
   }

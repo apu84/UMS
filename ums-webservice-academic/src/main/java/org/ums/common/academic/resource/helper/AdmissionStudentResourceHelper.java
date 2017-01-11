@@ -12,10 +12,8 @@ import org.ums.common.report.generator.AdmissionStudentGenerator;
 import org.ums.domain.model.immutable.AdmissionStudent;
 import org.ums.domain.model.immutable.AdmissionStudentCertificate;
 import org.ums.domain.model.immutable.AdmissionTotalSeat;
-import org.ums.domain.model.immutable.Faculty;
 import org.ums.domain.model.mutable.MutableAdmissionStudent;
 import org.ums.enums.DepartmentSelectionType;
-import org.ums.enums.FacultyType;
 import org.ums.enums.ProgramType;
 import org.ums.enums.QuotaType;
 import org.ums.manager.AdmissionStudentManager;
@@ -120,7 +118,7 @@ public class AdmissionStudentResourceHelper extends
     getContentManager().updateDepartmentSelection(student, pDepartmentSelectionType);
     AdmissionStudent nextStudent =
         getContentManager().getNextStudentForDepartmentSelection(student.getSemester().getId(),
-            student.getProgramType(), student.getUnit());
+            student.getProgramType(), student.getUnit(), student.getQuota());
 
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();

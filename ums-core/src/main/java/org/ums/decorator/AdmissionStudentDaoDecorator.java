@@ -70,7 +70,7 @@ public class AdmissionStudentDaoDecorator extends
 
   @Override
   public AdmissionStudent getNextStudentForDepartmentSelection(int pSemesterId,
-      ProgramType pProgramType, String pUnit) {
-    return getNextStudentForDepartmentSelection(pSemesterId, pProgramType, pUnit);
+      ProgramType pProgramType, String pUnit, String pQuota) {
+    return getNextStudentForDepartmentSelection(pSemesterId, pProgramType, pUnit, pQuota);
   }
 }

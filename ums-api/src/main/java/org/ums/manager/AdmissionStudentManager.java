@@ -40,5 +40,5 @@ public interface AdmissionStudentManager extends
   List<AdmissionStudentCertificate> getAdmissionStudentCertificateLists();
 
   AdmissionStudent getNextStudentForDepartmentSelection(final int pSemesterId,
-      final ProgramType pProgramType, final String pUnit);
+      final ProgramType pProgramType, final String pUnit, final String pQuota);
 }

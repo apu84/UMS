@@ -21,6 +21,7 @@ module ums{
     statistics:Array<AdmissionStudent>;
     statisticsMap:any;
     programs:Array<Program>;
+    selectionPrograms:Array<Program>;
     selectedProgram:Program;
     waitingProgram:Program;
     programMap:any;
@@ -132,6 +133,7 @@ module ums{
     private getPrograms():void{
       this.programService.fetchProgram(+this.$scope.programType.id).then((programs:Array<Program>)=>{
         this.$scope.programs=[];
+        this.$scope.selectionPrograms=[];
         var program:Program=<Program>{};
         program.id=0;
         program.shortName="Select A Program";
@@ -142,6 +144,7 @@ module ums{
         for(var i=0;i<programs.length;i++){
           if(programs[i].id!=110200){
             this.$scope.programs.push(programs[i]);
+            this.$scope.selectionPrograms.push(programs[i]);
             this.$scope.programMap[programs[i].id]=programs[i];
           }
         }
@@ -151,8 +154,7 @@ module ums{
     }
 
     private getSelectedProgram(){
-      console.log("This is statistics");
-      console.log(this.$scope.statistics);
+
       for(var i=0;i<this.$scope.statistics.length;i++){
         if(this.$scope.statistics[i].remaining>0){
           this.$scope.selectedProgram=this.$scope.programMap[this.$scope.statistics[i].programId];
@@ -172,12 +174,25 @@ module ums{
         for(var i=0;i<students.length;i++){
           this.$scope.statistics.push(students[i]);
           this.$scope.statisticsMap[students[i].programId]=students[i];
+          if(this.$scope.statistics[i].remaining==0 || this.$scope.statistics[i].remaining<0){
+            /*this.removeProgramsFromSelectionList(this.$scope.statistics[i].programIdByMerit);*/
+          }
         }
         defer.resolve(this.$scope.statistics);
       });
       return defer.promise;
     }
 
+    private removeProgramsFromSelectionList(programId:number){
+      console.log("selection programs");
+      console.log(this.$scope.selectionPrograms);
+      for(var i=0;i<this.$scope.selectionPrograms.length;i++){
+        if(this.$scope.selectionPrograms[i].id==programId){
+          this.$scope.selectionPrograms.splice(i,1);
+          break;
+        }
+      }
+    }
 
     private searchByReceiptId(receiptId:any){
       console.log("Deadline");
@@ -189,7 +204,15 @@ module ums{
         this.$scope.selectedStudent=<AdmissionStudent>{};
         this.$scope.selectedStudent=student;
         this.$scope.showStudentPortion=true;
-        this.$scope.deadLine = student.deadline;
+        if(student.programIdByMerit!=null || student.programIdByTransfer!=null){
+          if(student.deadline==null){
+            this.$scope.deadLine="";
+          }else{
+
+            this.$scope.deadLine = student.deadline;
+          }
+        }
+
 
         this.assignSelectedAndWaitingProgram();
         //this.getSelectedProgram();
@@ -303,6 +326,17 @@ module ums{
       }else{
         this.$scope.disableSaveButton=false;
       }
+      this.checkIfEmptyProgramIsSelected();
+    }
+
+    private checkIfEmptyProgramIsSelected(){
+      if(this.$scope.statisticsMap[this.$scope.selectedProgram.id].remaining==0){
+        this.$scope.disableSaveButton=true;
+        this.notify.error("No seat remaining for the selected program");
+      }
+      else{
+        this.$scope.disableSaveButton=false;
+      }
     }
 
     private saveAndRetrieveNext(){
@@ -357,6 +391,7 @@ module ums{
         item['admissionRoll'] = students.admissionRoll;
         item['programType'] = +this.$scope.programType.id;
         item['unit'] = students.unit;
+        item['quota']=students.quota;
         item['deadline'] = this.$scope.deadLine;
         if(this.$scope.selectedProgram.id!=0){
           item['programIdByMerit'] = this.$scope.selectedProgram.id;

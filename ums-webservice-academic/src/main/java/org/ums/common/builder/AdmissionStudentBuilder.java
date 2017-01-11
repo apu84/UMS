@@ -198,6 +198,7 @@ public class AdmissionStudentBuilder implements Builder<AdmissionStudent, Mutabl
     pMutable.setSemester(mSemesterManager.get(pJsonObject.getInt("semesterId")));
     pMutable.setProgramType(ProgramType.get(pJsonObject.getInt("programType")));
     pMutable.setUnit(pJsonObject.getString("unit"));
+    pMutable.setQuota(pJsonObject.getString("quota"));
 
     if(DepartmentSelectionType.MERIT_WAITING_PROGRAMS_SELECTED == pType) {
       pMutable.setProgramIdByMerit(pJsonObject.getInt("programIdByMerit"));
