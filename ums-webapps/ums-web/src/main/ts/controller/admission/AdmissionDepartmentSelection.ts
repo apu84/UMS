@@ -28,14 +28,16 @@ module ums{
 
     showStudentPortion:boolean;
     showSearch:boolean;
-
+    disableSaveButton:boolean;
 
     showSearchBar:Function;
     saveAndRetrieveNext:Function;
+    saveOnly:Function;
     getSemesters:Function;
     getAllStudents:Function;
     searchByReceiptId:Function;
     assignDeadline:Function;
+    checkForSameSelectedPrograms:Function;
   }
 
   interface  IProgramType{
@@ -68,6 +70,7 @@ module ums{
       $scope.programType = $scope.programTypes[0];
       $scope.showStudentPortion=false;
       $scope.showSearch = true;
+      $scope.disableSaveButton=false;
 
       $scope.getSemesters= this.getSemesters.bind(this);
       $scope.getAllStudents = this.getAllStudents.bind(this);
@@ -75,6 +78,8 @@ module ums{
       $scope.saveAndRetrieveNext = this.saveAndRetrieveNext.bind(this);
       $scope.showSearchBar = this.showSearchBar.bind(this);
       $scope.assignDeadline = this.assignDeadline.bind(this);
+      $scope.checkForSameSelectedPrograms = this.checkForSameSelectedPrograms.bind(this);
+      $scope.saveOnly = this.saveOnly.bind(this);
       $scope.receiptId="";
 
       this.getFaculties();
@@ -184,6 +189,7 @@ module ums{
         this.$scope.selectedStudent=<AdmissionStudent>{};
         this.$scope.selectedStudent=student;
         this.$scope.showStudentPortion=true;
+        this.$scope.deadLine = student.deadline;
 
         this.assignSelectedAndWaitingProgram();
         //this.getSelectedProgram();
@@ -261,6 +267,7 @@ module ums{
       this.$scope.meritType = this.$scope.meritTypes[1];
     }
 
+
     private getSemesters():void{
       this.semesterService.fetchSemesters(+this.$scope.programType.id,5).then((semesters:Array<Semester>)=>{
         this.$scope.semesters=semesters;
@@ -280,8 +287,22 @@ module ums{
             this.$scope.faculties.push(faculties[i]);
         }
         this.$scope.faculty=faculties[0];
-
       });
+    }
+
+
+    private checkForSameSelectedPrograms(){
+      if(this.$scope.selectedProgram.id!=0 &&
+          this.$scope.waitingProgram.id!=0 ){
+        if(this.$scope.selectedProgram.id==this.$scope.waitingProgram.id){
+          this.$scope.disableSaveButton=true;
+          this.notify.error("Both Selected program and Waiting program can't be same");
+        }else{
+          this.$scope.disableSaveButton=false;
+        }
+      }else{
+        this.$scope.disableSaveButton=false;
+      }
     }
 
     private saveAndRetrieveNext(){
@@ -303,6 +324,23 @@ module ums{
         });
       }
 
+    }
+
+    private saveOnly(){
+      if(this.$scope.selectedProgram.id!=0 && this.$scope.deadLine==""){
+        this.notify.error("Deadline is not selected");
+      }
+      else{
+        this.convertToJson().then((json)=>{
+
+          this.admissionStudentService.saveAndFetchNextStudentForDepartmentSelection(this.$scope.departmentSelectionStatus, json).then((data)=>{
+            this.searchByReceiptId(this.$scope.receiptId);
+            this.getStatistics();
+            this.$scope.showSearch=false;
+            this.initializeSelect2("searchByReceiptId",this.$scope.admissionStudents,"");
+          });
+        });
+      }
     }
 
 

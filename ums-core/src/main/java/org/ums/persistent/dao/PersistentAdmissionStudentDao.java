@@ -42,7 +42,7 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
   String SELECT_ONE_TALETALK_DATA =
       "select SEMESTER_ID, RECEIPT_ID, PIN, HSC_BOARD, HSC_ROLL,       "
           + "                 HSC_REGNO, HSC_YEAR, HSC_GROUP, SSC_BOARD, SSC_ROLL,       "
-          + "                 SSC_YEAR, SSC_GROUP, GENDER,to_char(DATE_OF_BIRTH,'dd/mm/yy') date_of_birth , STUDENT_NAME,       "
+          + "                 SSC_YEAR, SSC_GROUP, GENDER,to_char(DATE_OF_BIRTH,'dd/mm/yyyy') date_of_birth , STUDENT_NAME,       "
           + "                 FATHER_NAME, MOTHER_NAME, SSC_GPA, HSC_GPA, QUOTA , unit,      "
           + "                 LAST_MODIFIED from admission_students where SEMESTER_ID=? and program_type=? order by to_number(RECEIPT_ID)";
 
@@ -278,7 +278,7 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
   public AdmissionStudent getAdmissionStudent(int pSemesterId, ProgramType pProgramType,
       String pReceiptId) {
     String query =
-        "select * from admission_students where semester_id=? and program_type=? and receipt_id=?";
+        SELECT_ONE+"  where semester_id=? and program_type=? and receipt_id=?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pSemesterId, pProgramType.getValue(),
         pReceiptId}, new AdmissionStudentRowMapper());
   }

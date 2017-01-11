@@ -149,6 +149,7 @@
                                         id="selectedProgram"
                                         data-ng-options="program.shortName for program in programs track by program.id"
                                         data-ng-model="selectedProgram"
+                                        data-ng-change="checkForSameSelectedPrograms()"
                                 >
 
                                 </select>
@@ -165,6 +166,7 @@
                                         id="waitingProgram"
                                         data-ng-options="program.shortName for program in programs track by program.id"
                                         data-ng-model="waitingProgram"
+                                        data-ng-change="checkForSameSelectedPrograms()"
                                 >
 
                                 </select>
@@ -200,7 +202,7 @@
                     <div class="col-md-12">
                         <div class="well" align="right">
                             <!--<button class="btn btn-info">Edit</button>-->
-                            <button class="btn btn-success" data-toggle="modal" data-target="#summaryModal" >Save</button>
+                            <button data-ng-disabled="disableSaveButton==true" class="btn btn-success" data-toggle="modal" data-target="#summaryModal" >Save</button>
                         </div>
                     </div>
                 </div>
@@ -248,8 +250,9 @@
                                         </table>
                                     </div>
                                     <div class="modal-footer">
+                                        <button class="btn btn-info" ng-click="saveOnly()" data-dismiss="modal">Save</button>
                                         <button class="btn btn-success" data-ng-click="saveAndRetrieveNext()" data-dismiss="modal">Save and Next</button>
-                                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel & Close</button>
                                     </div>
                                 </div>
 
