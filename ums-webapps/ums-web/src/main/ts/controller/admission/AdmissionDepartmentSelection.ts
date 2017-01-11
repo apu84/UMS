@@ -327,7 +327,7 @@ module ums{
     }
 
     private saveOnly(){
-      if(this.$scope.selectedProgram.id!=0 && this.$scope.deadLine==""){
+      if(this.$scope.selectedProgram.id!=0 && this.$scope.deadLine=="" || this.$scope.deadLine==null){
         this.notify.error("Deadline is not selected");
       }
       else{
