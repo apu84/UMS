@@ -1,6 +1,7 @@
 package org.ums.common.academic.resource;
 
 import org.springframework.stereotype.Component;
+import org.ums.enums.DepartmentSelectionType;
 import org.ums.enums.ProgramType;
 import org.ums.enums.QuotaType;
 import org.ums.resource.Resource;
@@ -63,6 +64,15 @@ public class AdmissionStudentResource extends MutableAdmissionStudentResource {
   public JsonObject getNewStudentByReceiptId(@PathParam("semester-id") int pSemesterId,
       @PathParam("receipt-id") String pReceiptId, final @Context Request pRequest) {
     return mHelper.getAdmissionStudentByReceiptId(pSemesterId, pReceiptId, mUriInfo);
+  }
+
+  @GET
+  @Path("/semester/{semester-id}/programType/{program-type}/receiptId/{receipt-id}")
+  public JsonObject getStudentByReceiptId(@PathParam("semester-id") int pSemesterId,
+      @PathParam("program-type") int pProgramType, @PathParam("receipt-id") String pReceiptId,
+      final @Context Request pRequest) {
+    return mHelper.getAdmissionStudentByReceiptId(pSemesterId, ProgramType.get(pProgramType),
+        pReceiptId, mUriInfo);
   }
 
   @GET

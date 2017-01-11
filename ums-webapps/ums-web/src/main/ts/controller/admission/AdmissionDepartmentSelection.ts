@@ -4,6 +4,7 @@
 
 module ums{
   interface IAdmissionDepartmentSelection extends ng.IScope{
+    deadLine:string;
     semesters:Array<Semester>;
     semester:Semester;
     programTypes:Array<IProgramType>;
@@ -23,11 +24,18 @@ module ums{
     selectedProgram:Program;
     waitingProgram:Program;
     programMap:any;
+    departmentSelectionStatus:number;
+
+    showStudentPortion:boolean;
+    showSearch:boolean;
 
 
+    showSearchBar:Function;
+    saveAndRetrieveNext:Function;
     getSemesters:Function;
     getAllStudents:Function;
     searchByReceiptId:Function;
+    assignDeadline:Function;
   }
 
   interface  IProgramType{
@@ -55,12 +63,18 @@ module ums{
                 private admissionStudentService:AdmissionStudentService,
                 private programService:ProgramService) {
 
+      $scope.deadLine="";
       $scope.programTypes=appConstants.programType;
       $scope.programType = $scope.programTypes[0];
+      $scope.showStudentPortion=false;
+      $scope.showSearch = true;
 
       $scope.getSemesters= this.getSemesters.bind(this);
       $scope.getAllStudents = this.getAllStudents.bind(this);
       $scope.searchByReceiptId  = this.searchByReceiptId.bind(this);
+      $scope.saveAndRetrieveNext = this.saveAndRetrieveNext.bind(this);
+      $scope.showSearchBar = this.showSearchBar.bind(this);
+      $scope.assignDeadline = this.assignDeadline.bind(this);
       $scope.receiptId="";
 
       this.getFaculties();
@@ -70,6 +84,16 @@ module ums{
 
     }
 
+    private assignDeadline(deadLine:string){
+      this.$scope.deadLine=deadLine;
+      console.log("Deadline");
+      console.log(deadLine);
+      console.log(this.$scope.deadLine);
+    }
+
+    private showSearchBar(){
+      this.$scope.showSearch=true;
+    }
 
     private getAllStudents(){
       Utils.expandRightDiv();
@@ -90,7 +114,7 @@ module ums{
         }
 
         console.log(students[1]);
-        this.initializeSelect2("searchByReceiptId", this.$scope.admissionStudents);
+        this.initializeSelect2("searchByReceiptId", this.$scope.admissionStudents,"Insert a Receipt ID");
         this.addDate();
 
       });
@@ -103,16 +127,21 @@ module ums{
     private getPrograms():void{
       this.programService.fetchProgram(+this.$scope.programType.id).then((programs:Array<Program>)=>{
         this.$scope.programs=[];
+        var program:Program=<Program>{};
+        program.id=0;
+        program.shortName="Select A Program";
+        this.$scope.programs.push(program);
         this.$scope.programMap={};
         console.log("---programs---");
         console.log(programs);
         for(var i=0;i<programs.length;i++){
-          this.$scope.programs.push(programs[i]);
-          this.$scope.programMap[programs[i].id]=programs[i];
+          if(programs[i].id!=110200){
+            this.$scope.programs.push(programs[i]);
+            this.$scope.programMap[programs[i].id]=programs[i];
+          }
         }
-        this.$scope.waitingProgram=programs[0];
-        this.getSelectedProgram();
-
+        /*this.$scope.waitingProgram=programs[0];
+        this.getSelectedProgram();*/
       });
     }
 
@@ -146,11 +175,34 @@ module ums{
 
 
     private searchByReceiptId(receiptId:any){
-      console.log("Receipt id:");
-      console.log(receiptId);
-      this.$scope.selectedStudent=<AdmissionStudent>{};
-      this.$scope.selectedStudent = this.$scope.receiptIdMap[receiptId];
-      console.log()
+      console.log("Deadline");
+      console.log(this.$scope.deadLine);
+
+      this.admissionStudentService.fetchAdmissionStudentByReceiptId(this.$scope.semester.id,+this.$scope.programType.id, receiptId).then((student:AdmissionStudent)=>{
+        console.log("Receipt id student");
+        console.log(student);
+        this.$scope.selectedStudent=<AdmissionStudent>{};
+        this.$scope.selectedStudent=student;
+        this.$scope.showStudentPortion=true;
+
+        this.assignSelectedAndWaitingProgram();
+        //this.getSelectedProgram();
+      });
+    }
+
+    private assignSelectedAndWaitingProgram() {
+
+      if (this.$scope.selectedStudent.programIdByMerit != null) {
+        this.$scope.selectedProgram = this.$scope.programMap[this.$scope.selectedStudent.programIdByMerit];
+      } else {
+        this.$scope.selectedProgram = this.$scope.programs[0];
+      }
+
+      if (this.$scope.selectedStudent.programIdByTransfer != null) {
+        this.$scope.waitingProgram = this.$scope.programMap[this.$scope.selectedStudent.programIdByTransfer];
+      } else {
+        this.$scope.waitingProgram = this.$scope.programs[0];
+      }
     }
 
     private getUnit():string{
@@ -173,7 +225,7 @@ module ums{
 
     }
 
-    private  initializeSelect2(selectBoxId,studentIds){
+    private  initializeSelect2(selectBoxId,studentIds,placeHolderText){
       var data = studentIds;
       $("#"+selectBoxId).select2({
         minimumInputLength: 0,
@@ -196,7 +248,7 @@ module ums{
             more: (startIndex + pageSize) < filteredData.length
           });
         },
-        placeholder: "Select a Receipt Id"
+        placeholder: placeHolderText
       });
       // Her is the exmaple code for select2 with pagination.....
       //http://jsfiddle.net/Z7bDG/1/
@@ -230,6 +282,75 @@ module ums{
         this.$scope.faculty=faculties[0];
 
       });
+    }
+
+    private saveAndRetrieveNext(){
+      if(this.$scope.selectedProgram.id!=0 && this.$scope.deadLine==""){
+        this.notify.error("Deadline is not selected");
+      }
+      else{
+        this.convertToJson().then((json)=>{
+
+          this.admissionStudentService.saveAndFetchNextStudentForDepartmentSelection(this.$scope.departmentSelectionStatus, json).then((data)=>{
+            this.$scope.selectedStudent = data[0];
+            this.$scope.receiptId="";
+            this.$scope.receiptId = this.$scope.selectedStudent.receiptId;
+            $("#searchByReceiptId").val(this.$scope.receiptId).trigger("change");
+            this.getStatistics();
+            this.$scope.showSearch=false;
+            this.initializeSelect2("searchByReceiptId",this.$scope.admissionStudents,"");
+          });
+        });
+      }
+
+    }
+
+
+    private convertToJson():ng.IPromise<any>{
+      var defer = this.$q.defer();
+      var completeJson={};
+      var jsonObject = [];
+      var students:AdmissionStudent = this.$scope.selectedStudent;
+
+        var item:any = {};
+        item['semesterId']=students.semesterId;
+        item['meritSlNo']=students.meritSlNo;
+        item['receiptId'] = students.receiptId;
+        item['admissionRoll'] = students.admissionRoll;
+        item['programType'] = +this.$scope.programType.id;
+        item['unit'] = students.unit;
+        item['deadline'] = this.$scope.deadLine;
+        if(this.$scope.selectedProgram.id!=0){
+          item['programIdByMerit'] = this.$scope.selectedProgram.id;
+        }
+        if(this.$scope.waitingProgram.id!=0){
+          item['programIdByTransfer'] = this.$scope.waitingProgram.id;
+        }
+        if(this.$scope.selectedProgram.id!=0 || this.$scope.waitingProgram.id!=0){
+          item['presentStatus']=Utils.PRESENT;
+
+          if(this.$scope.selectedProgram.id!=0 && this.$scope.waitingProgram.id==0){
+            item['departmentSelectionType']=Utils.MERIT_PROGRAM_SELECTED;
+            this.$scope.departmentSelectionStatus = Utils.MERIT_PROGRAM_SELECTED;
+          }
+          else if(this.$scope.selectedProgram.id!=0 && this.$scope.waitingProgram.id!=0){
+            item['departmentSelectionType'] = Utils.MERIT_WAITING_PROGRAMS_SELECTED;
+            this.$scope.departmentSelectionStatus = Utils.MERIT_WAITING_PROGRAMS_SELECTED
+          }else{
+            item['departmentSelectionType'] = Utils.WAITING_PROGRAM_SELECTED;
+            this.$scope.departmentSelectionStatus = Utils.WAITING_PROGRAM_SELECTED;
+          }
+        }else{
+          item['presentStatus']=Utils.ABSENT;
+          this.$scope.departmentSelectionStatus=Utils.ABSENT;
+        }
+
+
+        jsonObject.push(item);
+
+      completeJson["entries"] = jsonObject;
+      defer.resolve(completeJson);
+      return defer.promise;
     }
 
   }

@@ -65,6 +65,10 @@ public class PersistentAdmissionStudent implements MutableAdmissionStudent {
   private int mProgramIdByMerit;
   private Program mProgramByTransfer;
   private int mProgramIdByTransfer;
+  private String mNID;
+  private String mBirthRegNo;
+  private String mPassport;
+  private String mDeadline;
 
   public PersistentAdmissionStudent() {}
 
@@ -105,6 +109,50 @@ public class PersistentAdmissionStudent implements MutableAdmissionStudent {
     mProgramIdByMerit = pAdmissionStudent.getProgramIdByMerit();
     mProgramByTransfer = pAdmissionStudent.getProgramByTransfer();
     mProgramIdByTransfer = pAdmissionStudent.getProgramIdByTransfer();
+    mNID = pAdmissionStudent.getNID();
+    mBirthRegNo = pAdmissionStudent.getBirthRegNo();
+    mPassport = pAdmissionStudent.getPassportNo();
+    mDeadline = pAdmissionStudent.getDeadline();
+  }
+
+  @Override
+  public String getDeadline() {
+    return mDeadline;
+  }
+
+  @Override
+  public void setDeadline(String pDeadline) {
+    mDeadline = pDeadline;
+  }
+
+  @Override
+  public String getNID() {
+    return mNID;
+  }
+
+  @Override
+  public String getBirthRegNo() {
+    return mBirthRegNo;
+  }
+
+  @Override
+  public String getPassportNo() {
+    return mPassport;
+  }
+
+  @Override
+  public void setNID(String pNID) {
+
+  }
+
+  @Override
+  public void setBirthReg(String pBirthReg) {
+
+  }
+
+  @Override
+  public void setPassportNo(String pPassportNo) {
+
   }
 
   @Override
@@ -114,7 +162,7 @@ public class PersistentAdmissionStudent implements MutableAdmissionStudent {
   }
 
   @Override
-  public int getProgramIdByMerit() {
+  public Integer getProgramIdByMerit() {
     return mProgramIdByMerit;
   }
 
@@ -125,7 +173,7 @@ public class PersistentAdmissionStudent implements MutableAdmissionStudent {
   }
 
   @Override
-  public int getProgramIdByTransfer() {
+  public Integer getProgramIdByTransfer() {
     return mProgramIdByTransfer;
   }
 

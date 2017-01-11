@@ -10,6 +10,7 @@ import org.ums.common.academic.resource.helper.AdmissionStudentResourceHelper;
 import org.ums.domain.model.immutable.AdmissionStudent;
 import org.ums.domain.model.immutable.AdmissionStudentCertificate;
 import org.ums.domain.model.mutable.MutableAdmissionStudent;
+import org.ums.enums.DepartmentSelectionType;
 import org.ums.enums.MigrationStatus;
 import org.ums.enums.ProgramType;
 import org.ums.manager.ProgramManager;
@@ -70,6 +71,14 @@ public class AdmissionStudentBuilder implements Builder<AdmissionStudent, Mutabl
     if(type.equals("meritList")) {
       pBuilder.add("admissionRoll", pReadOnly.getAdmissionRoll());
       pBuilder.add("meritSlNo", pReadOnly.getMeritSerialNo());
+      if(pReadOnly.getProgramIdByMerit() != 0) {
+        pBuilder.add("programIdByMerit", pReadOnly.getProgramByMerit().getId());
+        pBuilder.add("programNameByMerit", pReadOnly.getProgramByMerit().getShortName());
+      }
+      if(pReadOnly.getProgramIdByTransfer() != 0) {
+        pBuilder.add("programIdByTransfer", pReadOnly.getProgramByTransfer().getId());
+        pBuilder.add("programNameByTransfer", pReadOnly.getProgramByTransfer().getShortName());
+      }
     }
 
     if(type.equals("departmentSelection")) {
@@ -78,6 +87,10 @@ public class AdmissionStudentBuilder implements Builder<AdmissionStudent, Mutabl
       pBuilder.add("programShortName", pReadOnly.getAllocatedProgram().getShortName());
       pBuilder.add("programLongName", pReadOnly.getAllocatedProgram().getLongName());
       pBuilder.add("migrationStatus", pReadOnly.getMigrationStatus().getId());
+    }
+
+    if(pReadOnly.getDeadline() != null) {
+      pBuilder.add("deadline", pReadOnly.getDeadline());
     }
 
   }
@@ -172,5 +185,35 @@ public class AdmissionStudentBuilder implements Builder<AdmissionStudent, Mutabl
       pMutable.setMeritSerialNo(pJsonObject.getInt("meritSlNo"));
       pMutable.setAdmissionRoll(pJsonObject.getString("admissionRoll"));
     }
+    if(pType.equals("departmentSelection")) {
+      pMutable.setProgramIdByMerit(pJsonObject.getInt("programIdByMerit"));
+      pMutable.setProgramIdByTransfer(pJsonObject.getInt("programIdByTransfer"));
+    }
+
+  }
+
+  public void build(MutableAdmissionStudent pMutable, JsonObject pJsonObject,
+      DepartmentSelectionType pType, LocalCache pLocalCache) {
+    pMutable.setId(pJsonObject.getString("receiptId"));
+    pMutable.setSemester(mSemesterManager.get(pJsonObject.getInt("semesterId")));
+    pMutable.setProgramType(ProgramType.get(pJsonObject.getInt("programType")));
+    pMutable.setUnit(pJsonObject.getString("unit"));
+
+    if(DepartmentSelectionType.MERIT_WAITING_PROGRAMS_SELECTED == pType) {
+      pMutable.setProgramIdByMerit(pJsonObject.getInt("programIdByMerit"));
+      pMutable.setProgramIdByTransfer(pJsonObject.getInt("programIdByTransfer"));
+      pMutable.setDeadline(pJsonObject.getString("deadline"));
+    }
+    else if(DepartmentSelectionType.MERIT_PROGRAM_SELECTED == pType) {
+      pMutable.setProgramIdByMerit(pJsonObject.getInt("programIdByMerit"));
+      pMutable.setDeadline(pJsonObject.getString("deadline"));
+    }
+    else if(DepartmentSelectionType.WAITING_PROGRAM_SELECTED == pType) {
+      pMutable.setProgramIdByTransfer(pJsonObject.getInt("programIdByTransfer"));
+    }
+    else {
+      // do nothing
+    }
+
   }
 }

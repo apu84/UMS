@@ -2,14 +2,14 @@ package org.ums.common.academic.resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.ums.common.academic.resource.helper.AdmissionStudentResourceHelper;
+import org.ums.enums.DepartmentSelectionType;
 import org.ums.enums.ProgramType;
 import org.ums.resource.Resource;
 
 import javax.json.JsonObject;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 
 /**
@@ -32,6 +32,15 @@ public class MutableAdmissionStudentResource extends Resource {
   @Path("/meritListUpload")
   public Response saveMeritList(final JsonObject pJsonObject) throws Exception {
     return mHelper.saveMeritListData(pJsonObject, mUriInfo);
+  }
+
+  @PUT
+  @Path("/departmentSelectionStatus/{department-selection-status}")
+  public JsonObject saveAndGetNextStudent(
+      @PathParam("department-selection-status") int pDepartmentSelectionStatus,
+      final JsonObject pJsonObject, final @Context Request pRequest) throws Exception {
+    return mHelper.saveDepartmentSelectionInfoAndRetrieveNextStudent(pJsonObject,
+        DepartmentSelectionType.get(pDepartmentSelectionStatus), mUriInfo);
   }
 
 }

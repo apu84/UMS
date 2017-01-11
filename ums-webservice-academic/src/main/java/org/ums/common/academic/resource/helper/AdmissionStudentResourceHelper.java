@@ -14,6 +14,7 @@ import org.ums.domain.model.immutable.AdmissionStudentCertificate;
 import org.ums.domain.model.immutable.AdmissionTotalSeat;
 import org.ums.domain.model.immutable.Faculty;
 import org.ums.domain.model.mutable.MutableAdmissionStudent;
+import org.ums.enums.DepartmentSelectionType;
 import org.ums.enums.FacultyType;
 import org.ums.enums.ProgramType;
 import org.ums.enums.QuotaType;
@@ -108,6 +109,30 @@ public class AdmissionStudentResourceHelper extends
 
   }
 
+  @Transactional
+  public JsonObject saveDepartmentSelectionInfoAndRetrieveNextStudent(JsonObject pJsonObject,
+      final DepartmentSelectionType pDepartmentSelectionType, UriInfo pUriInfo) throws Exception {
+    JsonArray entries = pJsonObject.getJsonArray("entries");
+    LocalCache localCache = new LocalCache();
+    JsonObject jsonObject = entries.getJsonObject(0);
+    PersistentAdmissionStudent student = new PersistentAdmissionStudent();
+    getBuilder().build(student, jsonObject, pDepartmentSelectionType, localCache);
+    getContentManager().updateDepartmentSelection(student, pDepartmentSelectionType);
+    AdmissionStudent nextStudent =
+        getContentManager().getNextStudentForDepartmentSelection(student.getSemester().getId(),
+            student.getProgramType(), student.getUnit());
+
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    JsonObjectBuilder jsonObjectForNext = Json.createObjectBuilder();
+    getBuilder().admissionStudentBuilder(jsonObjectForNext, nextStudent, pUriInfo, localCache,
+        "meritList");
+    children.add(jsonObjectForNext);
+    object.add("entries", children);
+    localCache.invalidate();
+    return object.build();
+  }
+
   public JsonObject getTaletalkData(final int pSemesterId, final ProgramType pProgramType,
       final UriInfo pUriInfo) {
     List<AdmissionStudent> students;
@@ -149,7 +174,7 @@ public class AdmissionStudentResourceHelper extends
     for(AdmissionTotalSeat seat : pTotalSeats) {
       JsonObjectBuilder jsonObject = Json.createObjectBuilder();
       jsonObject.add("programId", seat.getProgram().getId());
-      jsonObject.add("programName", seat.getProgram().getShortName().replaceAll("BSc in ",""));
+      jsonObject.add("programName", seat.getProgram().getShortName().replaceAll("BSc in ", ""));
       jsonObject.add("allocatedSeat", seat.getTotalSeat());
       int selected = 0;
       int waiting = 0;
@@ -158,7 +183,7 @@ public class AdmissionStudentResourceHelper extends
         selected = pAllocatedProgramMapStudents.get(seat.getProgram().getId()).size();
       }
       if(pWaitingProgramMapStudents.get(seat.getProgram().getId()) != null) {
-        waiting = pAllocatedProgramMapStudents.get(seat.getProgram().getId()).size();
+        waiting = pWaitingProgramMapStudents.get(seat.getProgram().getId()).size();
       }
       jsonObject.add("selected", selected);
       jsonObject.add("remaining", (seat.getTotalSeat() - selected));
@@ -166,6 +191,22 @@ public class AdmissionStudentResourceHelper extends
       children.add(jsonObject);
     }
 
+    object.add("entries", children);
+    localCache.invalidate();
+    return object.build();
+  }
+
+  public JsonObject getAdmissionStudentByReceiptId(final int pSemesterId,
+      final ProgramType pProgramType, final String pReceiptId, final UriInfo pUriInfo) {
+
+    AdmissionStudent student =
+        getContentManager().getAdmissionStudent(pSemesterId, pProgramType, pReceiptId);
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+    JsonObjectBuilder jsonObject = Json.createObjectBuilder();
+    getBuilder().admissionStudentBuilder(jsonObject, student, pUriInfo, localCache, "meritList");
+    children.add(jsonObject);
     object.add("entries", children);
     localCache.invalidate();
     return object.build();

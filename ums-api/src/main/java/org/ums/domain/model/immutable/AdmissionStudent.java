@@ -70,15 +70,24 @@ public interface AdmissionStudent extends Serializable, EditType<MutableAdmissio
 
   int getAllocatedProgramId();
 
+  String getNID();
+
+  String getBirthRegNo();
+
+  String getPassportNo();
+
   MigrationStatus getMigrationStatus();
 
   PresentStatus getPresentStatus();
 
   Program getProgramByMerit();
 
-  int getProgramIdByMerit();
+  Integer getProgramIdByMerit();
 
   Program getProgramByTransfer();
 
-  int getProgramIdByTransfer();
+  Integer getProgramIdByTransfer();
+
+  String getDeadline();
+
 }

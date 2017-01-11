@@ -38,5 +38,10 @@ module ums{
     selected:number;
     remaining:number;
     waiting:number;
+    programIdByMerit:number;
+    programNameByMerit:string;
+    programIdByTransfer:number;
+    programNameByTransfer:string;
+    deadline:string;
   }
 }

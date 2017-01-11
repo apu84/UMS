@@ -8,9 +8,7 @@ import org.ums.domain.model.immutable.AdmissionStudent;
 import org.ums.domain.model.immutable.AdmissionStudentCertificate;
 import org.ums.domain.model.mutable.MutableAdmissionStudent;
 import org.ums.domain.model.mutable.MutableAdmissionStudentCertificate;
-import org.ums.enums.MigrationStatus;
-import org.ums.enums.ProgramType;
-import org.ums.enums.QuotaType;
+import org.ums.enums.*;
 import org.ums.manager.ProgramManager;
 import org.ums.manager.SemesterManager;
 import org.ums.persistent.model.PersistentAdmissionStudent;
@@ -32,12 +30,14 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
   @Autowired
   private ProgramManager mProgramManager;
 
-  String SELECT_ONE = " SELECT SEMESTER_ID, RECEIPT_ID, PIN, HSC_BOARD, HSC_ROLL,  "
-      + "    HSC_REGNO, HSC_YEAR, HSC_GROUP, SSC_BOARD, SSC_ROLL,  "
-      + "    SSC_YEAR, SSC_GROUP, GENDER, DATE_OF_BIRTH, STUDENT_NAME,  "
-      + "    FATHER_NAME, MOTHER_NAME, SSC_GPA, HSC_GPA, QUOTA,  "
-      + "    ADMISSION_ROLL, MERIT_SL_NO, STUDENT_ID, ALLOCATED_PROGRAM_ID, MIGRATION_STATUS,  "
-      + "    LAST_MODIFIED, UNIT from admission_students ";
+  String SELECT_ONE =
+      " select SEMESTER_ID, RECEIPT_ID, PIN, HSC_BOARD, HSC_ROLL,  "
+          + "    HSC_REGNO, HSC_YEAR, HSC_GROUP, SSC_BOARD, SSC_ROLL,  "
+          + "    SSC_YEAR, SSC_GROUP, GENDER, DATE_OF_BIRTH, STUDENT_NAME,  "
+          + "    FATHER_NAME, MOTHER_NAME, SSC_GPA, HSC_GPA, QUOTA,  "
+          + "    ADMISSION_ROLL, MERIT_SL_NO, STUDENT_ID, ALLOCATED_PROGRAM_ID, MIGRATION_STATUS,  "
+          + "    LAST_MODIFIED, UNIT, PROGRAM_TYPE, NID, BIRTH_REG,  "
+          + "    PASSPORT, PROGRAM_ID_BY_MERIT, PROGRAM_ID_BY_TRANSFER, PRESENT_STATUS, to_char(DEADLINE,'dd/mm/yyyy') deadline from admission_students ";
 
   String SELECT_ONE_TALETALK_DATA =
       "select SEMESTER_ID, RECEIPT_ID, PIN, HSC_BOARD, HSC_ROLL,       "
@@ -106,6 +106,55 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
   public int saveTaletalkData(List<MutableAdmissionStudent> students) {
     String query = INSERT_ONE_TALETALK_DATA;
     return mJdbcTemplate.batchUpdate(query, getTaletalkDataParams(students)).length;
+  }
+
+  @Override
+  public int updateDepartmentSelection(MutableAdmissionStudent pStudent,
+      DepartmentSelectionType pDepartmentSelectionType) {
+    String query = "";
+    if(pDepartmentSelectionType.ABSENT.equals(pDepartmentSelectionType)) {
+      query =
+          "update admission_students set present_status=0,last_modified=" + getLastModifiedSql()
+              + " where semester_id=? and receipt_id=?";
+      return mJdbcTemplate.update(query, pStudent.getSemester().getId(), pStudent.getReceiptId());
+    }
+    else if(pDepartmentSelectionType.MERIT_PROGRAM_SELECTED.equals(pDepartmentSelectionType)) {
+      query =
+          "update admission_students set program_id_by_merit=?,present_status=1,deadline=to_date(?,'dd/mm/yyyy'),last_modified="
+              + getLastModifiedSql() + " where semester_id=? and receipt_id=?";
+      return mJdbcTemplate.update(query, pStudent.getProgramByMerit().getId(),
+          pStudent.getDeadline(), pStudent.getSemester().getId(), pStudent.getReceiptId());
+    }
+    else if(pDepartmentSelectionType.MERIT_WAITING_PROGRAMS_SELECTED
+        .equals(pDepartmentSelectionType)) {
+      query =
+          "update admission_students set program_id_by_merit=?, program_id_by_transfer=?, deadline=to_date(?,'dd/mm/yyyy'),present_status=1,last_modified="
+              + getLastModifiedSql() + " where semester_id=? and receipt_id=?";
+      return mJdbcTemplate.update(query, pStudent.getProgramByMerit().getId(), pStudent
+          .getProgramByTransfer().getId(), pStudent.getDeadline(), pStudent.getSemester().getId(),
+          pStudent.getReceiptId());
+    }
+    else {
+      query =
+          "update admission_students set program_id_by_transfer=?,present_status=1,last_modified="
+              + getLastModifiedSql() + " where semester_id=? and receipt_id=?";
+      return mJdbcTemplate.update(query, pStudent.getProgramByTransfer().getId(), pStudent
+          .getSemester().getId(), pStudent.getReceiptId());
+    }
+  }
+
+  @Override
+  public AdmissionStudent getNextStudentForDepartmentSelection(int pSemesterId,
+      ProgramType pProgramType, String pUnit) {
+    String query =
+        "SELECT * "
+            + "FROM "
+            + "  (SELECT * "
+            + "   FROM ADMISSION_STUDENTS "
+            + "   WHERE SEMESTER_ID = ? AND PROGRAM_TYPE = ? AND unit = ? AND PRESENT_STATUS IS NULL "
+            + "   ORDER BY MERIT_SL_NO) s " + "WHERE rownum <= 1";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pSemesterId, pProgramType.getValue(),
+        pUnit}, new AdmissionStudentRowMapper());
   }
 
   @Override
@@ -225,6 +274,15 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
     return mJdbcTemplate.query(query, new Object[] {}, new AdmissionCertificateRowMapper());
   }
 
+  @Override
+  public AdmissionStudent getAdmissionStudent(int pSemesterId, ProgramType pProgramType,
+      String pReceiptId) {
+    String query =
+        "select * from admission_students where semester_id=? and program_type=? and receipt_id=?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pSemesterId, pProgramType.getValue(),
+        pReceiptId}, new AdmissionStudentRowMapper());
+  }
+
   class AdmissionStudentRowMapper implements RowMapper<AdmissionStudent> {
     @Override
     public AdmissionStudent mapRow(ResultSet pResultSet, int pI) throws SQLException {
@@ -257,6 +315,13 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
       student.setMigrationStatus(MigrationStatus.get(pResultSet.getInt("migration_status")));
       student.setLastModified(pResultSet.getString("last_modified"));
       student.setUnit(pResultSet.getString("unit"));
+      student.setNID(pResultSet.getString("nid"));
+      student.setBirthReg(pResultSet.getString("birth_reg"));
+      student.setPassportNo(pResultSet.getString("passport"));
+      student.setProgramIdByMerit(pResultSet.getInt("program_id_by_merit"));
+      student.setProgramIdByTransfer(pResultSet.getInt("program_id_by_transfer"));
+      student.setPresentStatus(PresentStatus.get(pResultSet.getInt("present_status")));
+      student.setDeadline(pResultSet.getString("deadline"));
       return student;
     }
   }
