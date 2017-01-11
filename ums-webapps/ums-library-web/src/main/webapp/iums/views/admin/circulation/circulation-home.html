@@ -1,0 +1,100 @@
+<style>
+    .center-block {
+        width:250px;
+        padding:10px;
+    }
+    #rcorners1 {
+        border-radius: 15px;
+        background: #eee;
+        padding:  16px 12px;
+        height: 64px;
+    }
+    .btn-round{
+        border-radius: 0.5em !important;
+    }
+    .btn-group > .btn {
+        -webkit-border-radius:14px !important;
+    }
+    .btn-group{
+        width: 80% !important;
+    }
+    .tab-content{
+        padding:2px 1px;
+    }
+    .tabbable.tabs-below .tab-content{
+        border-top: 0px !important;
+        border-left: 0px !important;
+        border-right: 0px !important;
+    }
+    .tabbable.tabs-below .nav-tabs{
+        margin-left: 30px !important;
+    }
+    .tabbable.tabs-below .nav-tabs > li.active > a{
+    border-color: #ABB2B9 !important;
+    }
+    .tabbable.tabs-below .nav-tabs > li.active > a{
+        border-bottom-left-radius: 8px !important;
+        border-bottom-right-radius: 8px !important;
+    }
+    .tabbable.tabs-below .nav-tabs > li.active > a{
+        font-weight:700;
+    }
+    .searchLabel{
+        color: #909497;padding-bottom: 3px;padding-left: 34px;
+    }
+</style>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-body" style="padding-top: 5px;" id="panelBody1">
+                <div>
+                <div class="tabbable tabs-below center-block" style="width: 600px;">
+                    <div id="myTabContent1" class="tab-content" style="background-color: transparent;">
+                        <div id="checkout" class="tab-pane fade in active">
+                            <div class="searchLabel">Enter patron card number or partial name:</div>
+                            <data-circulation-search-box circulationType="checkOut"></data-circulation-search-box>
+                        </div>
+                        <div id="checkin" class="tab-pane fade">
+                            <div class="searchLabel">Scan a barcode to check in:</div>
+                            <data-circulation-search-box circulationtype="checkIn"></data-circulation-search-box>
+                        </div>
+                        <div id="renew" class="tab-pane fade">
+                            <div class="searchLabel">Scan a barcode to renew:</div>
+                            <data-circulation-search-box></data-circulation-search-box>
+                        </div>
+                        <div id="searchPatrons" class="tab-pane fade">
+                            <div class="searchLabel">Enter patron card number or partial name:</div>
+                            <data-circulation-search-box></data-circulation-search-box>
+                        </div>
+                    </div>
+                    <ul id="myTab1" class="nav nav-tabs">
+                        <li class="active"><a href="/#checkout" data-toggle="tab">Check Out</a></li>
+                        <li><a href="/#checkin" data-toggle="tab">Check in</a></li>
+                        <li><a href="/#renew" data-toggle="tab">Renew</a></li>
+                        <li><a href="/#searchPatrons" data-toggle="tab">Search patrons</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div style="margin-top: -27px;">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div id="circulationDetailArea" ui-view>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    var div = $('.page-content');
+    var div1 = $('#panelBody1');
+    var height = div.height();
+    div1.css('height', height);
+</script>

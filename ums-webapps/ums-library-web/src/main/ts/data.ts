@@ -7,7 +7,11 @@
   $.fn.Data.pages = {
     '/index': {title: 'Dashboard', 'breadcrumb': ['Dashboard']},
     '/userHome': {title: 'User Home', 'breadcrumb': ['User Home']},
-    '/cataloging': {title: 'Cataloging', 'breadcrumb': ['Cataloging']}
+    '/search': {title: 'Cataloging', 'breadcrumb': ['Cataloging','Search']},
+    '/newBook': {title: 'Cataloging', 'breadcrumb': ['Cataloging','Books']},
+    '/thesis': {title: 'Cataloging', 'breadcrumb': ['Cataloging','Thesis']},
+    '/circulation': {title: 'Circulation', 'breadcrumb': ['Circulation']},
+    '/patrons': {title: 'Patrons', 'breadcrumb': ['Patrons']}
   };
 
   $.fn.Data.get = function (id) {
