@@ -14,6 +14,8 @@
     '/patrons': {title: 'Patrons', 'breadcrumb': ['Patrons']}
   };
 
+
+
   $.fn.Data.get = function (id) {
     if (id && $this.pages[id]) {
       return $this.pages[id];
