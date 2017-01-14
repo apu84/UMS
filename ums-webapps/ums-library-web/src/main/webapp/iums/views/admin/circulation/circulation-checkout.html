@@ -1,0 +1,79 @@
+checkout history......
+<style>
+    .tabbable.tabs-left .tab-content{
+        border-right: 0px;
+        border-bottom: 0px;
+        border-top: 0px;
+    }
+    .tabbable.tabs-left > ul {
+        margin-top: 40px;
+    }
+    .tabbable.tabs-left .tab-content {
+        border-color: #B9D8D9 !important;
+    }
+    div#menu li a {
+        text-decoration: none;
+        display: block;
+        cursor: pointer;
+        background: #e8f0f6;
+        background: -moz-linear-gradient(left, #e8f0f6 0%, #e8f0f6 96%, #c1c1c1 100%);
+        background: -webkit-gradient(linear, left top, right top, color-stop(0%,#e8f0f6), color-stop(96%,#e8f0f6), color-stop(100%,#c1c1c1));
+        background: -webkit-linear-gradient(left, #e8f0f6 0%,#e8f0f6 96%,#c1c1c1 100%);
+        background: -o-linear-gradient(left, #e8f0f6 0%,#e8f0f6 96%,#c1c1c1 100%);
+        background: -ms-linear-gradient(left, #e8f0f6 0%,#e8f0f6 96%,#c1c1c1 100%);
+        background: linear-gradient(left, #e8f0f6 0%,#e8f0f6 96%,#c1c1c1 100%);
+        -moz-border-top-left-radius: 5px !important;
+        border-top-left-radius: 5px !important;
+        -moz-border-bottom-left-radius: 5px !important;
+        border-bottom-left-radius: 5px !important;
+        border: 1px solid #b9d8d9;
+        margin: .5em 0;
+        padding: .4em .3em;
+        margin-right: -1px;
+        color: #004d99;
+        padding-left: 15px;
+    }
+    div#menu li a:hover {
+        background: #fff;
+        background: -moz-linear-gradient(left, #FAFAFA 0%, #FAFAFA 96%, #e6e6e6 97%, #cccccc 99%, #c1c1c1 100%);
+        background: -webkit-gradient(linear, left top, right top, color-stop(0%,#FAFAFA), color-stop(96%,#FAFAFA), color-stop(97%,#e6e6e6), color-stop(99%,#cccccc), color-stop(100%,#c1c1c1));
+        background: -webkit-linear-gradient(left, #FAFAFA 0%,#FAFAFA 96%,#e6e6e6 97%,#cccccc 99%,#c1c1c1 100%);
+        background: -o-linear-gradient(left, #FAFAFA 0%,#FAFAFA 96%,#e6e6e6 97%,#cccccc 99%,#c1c1c1 100%);
+        background: -ms-linear-gradient(left, #FAFAFA 0%,#FAFAFA 96%,#e6e6e6 97%,#cccccc 99%,#c1c1c1 100%);
+        background: linear-gradient(left, #FAFAFA 0%,#fff 96%,#e6e6e6 97%,#cccccc 99%,#c1c1c1 100%);
+        border-left: 1px solid #85CA11 !important;
+        border-top: 1px solid #85CA11 !important;
+        border-bottom: 1px solid #85CA11 !important;
+    }
+    .tabbable.tabs-left .nav-tabs > li{
+        width: 175px;
+        margin-top: 12px;
+    }
+    div#menu li.active a:hover {
+        background-color: #fff;
+        color: #538200;
+    }
+    #menu ul li.active a {
+        background-color: #FFF;
+        background-image: none;
+        font-weight: bold;
+        color: #000000;
+        border-left: 1px solid #85CA11 !important;
+        border-top: 1px solid #85CA11 !important;
+        border-bottom: 1px solid #85CA11 !important;
+        border-right: 0;
+    }
+</style>
+
+<div class="tabbable tabs-left" id="menu">
+    <ul class="nav nav-tabs">
+        <li  id="o1" class="active"><a ui-sref=".patronCheckOut">Check Out</a></li>
+        <li onclick="changeSelection(this.id)" id="o2"><a ui-sref=".patronDetail">Details </a></li>
+        <li onclick="changeSelection(this.id)" id="o3"><a ui-sref=".thesis">Fines</a></li>
+        <li onclick="changeSelection(this.id)" id="o4"><a ui-sref=".journal">Circulation History </a></li>
+        <li onclick="changeSelection(this.id)" id="o5"><a ui-sref=".map">Purchase Suggestions </a></li>
+    </ul>
+    <div id="myTabContent2" class="tab-content" ui-view style="min-height: 400px;padding-left: 20px;">
+
+    </div>
+</div>

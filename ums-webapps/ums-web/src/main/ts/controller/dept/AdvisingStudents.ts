@@ -27,18 +27,18 @@ module ums{
 
   class AdvisingStudents{
     public static $inject = ['appConstants','HttpClient','$scope','$q','notify','semesterService','employeeService','studentService'];
-    private advisingStudentSearchParamModel: CourseTeacherSearchParamModel;
+    private advisingStudentSearchParamModel: ProgramSelectorModel;
 
     constructor(private appConstants: any, private httpClient: HttpClient, private $scope: any,
                 private $q:ng.IQService, private notify: Notify, private semesterService:SemesterService,
                 private employeeService:EmployeeService,
                 private studentService:StudentService) {
 
-      this.advisingStudentSearchParamModel = new CourseTeacherSearchParamModel(this.appConstants, this.httpClient);
-      this.advisingStudentSearchParamModel.programSelector.setDepartment("01");
-      this.advisingStudentSearchParamModel.programSelector.setProgramId(null);
+      this.advisingStudentSearchParamModel = new ProgramSelectorModel(this.appConstants, this.httpClient);
+      this.advisingStudentSearchParamModel.setProgramType(this.appConstants.programTypeEnum.UG, FieldViewTypes.selected);
+      this.advisingStudentSearchParamModel.setDepartment(null, FieldViewTypes.hidden);
+      this.advisingStudentSearchParamModel.setProgram(null,  FieldViewTypes.hidden);
       this.$scope.advisingStudentSearchParamModel = this.advisingStudentSearchParamModel;
-
 
       $scope.students=[];
       $scope.backgroundColor=Utils.DEFAULT_COLOR;

@@ -16,21 +16,7 @@
         <div class="panel-body pan">
             <form action="" class="form-horizontal">
                 <div class="form-body pal">
-                    <div data-program-selector="" data-model="courseMaterialSearchParamModel.programSelector"></div>
-                    <div class="form-group">
-                        <label class="col-md-4 control-label">Semester</label>
-
-                        <div class="col-md-8">
-                            <select class="form-control required"
-                                    data-ng-model="courseMaterialSearchParamModel.semesterId"
-                                    ng-init="courseMaterialSearchParamModel.academicSemesterId=''">
-                                <option data-ng-repeat="semester in courseMaterialSearchParamModel.programSelector.getSemesters()"
-                                        value="{{semester.id}}">
-                                    {{semester.name}}
-                                </option>
-                            </select>
-                        </div>
-                    </div>
+                    <div data-program-selector="" data-model="courseMaterialSearchParamModel"></div>
                 </div>
                 <div class="form-actions text-right pal">
                     <button type="button" class="btn btn-success" data-ng-click="fetchCourseInfo()">Submit</button>

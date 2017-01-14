@@ -70,7 +70,23 @@ public interface MutableAdmissionStudent extends AdmissionStudent, Mutable,
 
   void setMigrationStatus(final MigrationStatus pMigrationStatus);
 
+  void setNID(final String pNID);
+
+  void setBirthReg(final String pBirthReg);
+
+  void setPassportNo(final String pPassportNo);
+
   void setPresentStatus(final PresentStatus pPresentStatus);
 
   void setVerificationStatus(final int pVerificationStatus);
+
+  void setProgramByMerit(final Program pProgramByMerit);
+
+  void setProgramIdByMerit(final int pProgramIdByMerit);
+
+  void setProgramByTransfer(final Program pProgramByTransfer);
+
+  void setProgramIdByTransfer(final int pProgramIdByTransfer);
+
+  void setDeadline(final String pDeadline);
 }

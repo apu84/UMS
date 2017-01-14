@@ -9,8 +9,11 @@ module ums {
     programSelector: ProgramSelectorModel;
     courseId: string;
 
-    constructor(appConstants:any, httpClient:HttpClient) {
-      this.programSelector = new ProgramSelectorModel(appConstants, httpClient);
+    constructor(appConstants:any, httpClient:HttpClient,
+                enableSemester: boolean, pEnableAllDepartment?: boolean,
+                pEnableAllProgram?: boolean) {
+      this.programSelector = new ProgramSelectorModel(appConstants, httpClient, enableSemester, pEnableAllDepartment,
+          pEnableAllProgram);
       this.semesterId = '';
       this.academicYearId = '';
       this.academicSemesterId = '';

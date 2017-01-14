@@ -76,3 +76,6 @@
 
 /// <reference path='data.ts'/>
 
+/// <reference path='controller/BookInfo.ts'/>
+/// <reference path='controller/PatronHome.ts'/>
+/// <reference path='directive/CirculationSearchBox.ts'/>

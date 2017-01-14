@@ -2,7 +2,7 @@ module ums {
   export class StudentCourseMaterial {
     public static $inject = ['$scope', '$stateParams', 'appConstants', 'HttpClient'];
     private currentUser: Student;
-    private courseMaterialSearchParamModel: CourseTeacherSearchParamModel;
+    private courseMaterialSearchParamModel: ProgramSelectorModel;
 
     constructor(private $scope: any, private $stateParams: any,
                 private appConstants: any, private httpClient: HttpClient) {
@@ -11,10 +11,11 @@ module ums {
       $scope.contentVisibility = false;
       this.httpClient.get("academic/student", HttpClient.MIME_TYPE_JSON,
           (response: Student) => {
-            this.courseMaterialSearchParamModel = new CourseTeacherSearchParamModel(this.appConstants, this.httpClient);
-            this.courseMaterialSearchParamModel.programSelector.setDepartment(response.deptId);
-            this.courseMaterialSearchParamModel.programSelector.setProgramId(response.programId);
-            this.courseMaterialSearchParamModel.programSelector.setProgramTypeId(response.programTypeId);
+            this.courseMaterialSearchParamModel = new ProgramSelectorModel(this.appConstants, this.httpClient,
+                true);
+            this.courseMaterialSearchParamModel.setProgramType(response.programTypeId, FieldViewTypes.hidden);
+            this.courseMaterialSearchParamModel.setDepartment(response.departmentId, FieldViewTypes.hidden);
+            this.courseMaterialSearchParamModel.setProgram(response.programId, FieldViewTypes.hidden);
             this.currentUser = response;
             this.$scope.courseMaterialSearchParamModel = this.courseMaterialSearchParamModel;
           });
@@ -32,16 +33,15 @@ module ums {
       this.$scope.loadingVisibility = true;
       this.$scope.contentVisibility = false;
       this.$scope.selectedCourseNo = '';
-
-      this.httpClient.get("course/semester/" + this.courseMaterialSearchParamModel.semesterId + "/program/"
-          + this.courseMaterialSearchParamModel.programSelector.programId + "/year/"
+      this.httpClient.get("academic/course/semester/" + this.courseMaterialSearchParamModel.semesterId + "/program/"
+          + this.courseMaterialSearchParamModel.programId + "/year/"
           + this.currentUser.year + "/academicSemester/" + this.currentUser.academicSemester, HttpClient.MIME_TYPE_JSON,
           (response: {entries: Course[]}) => {
             this.$scope.entries = response.entries;
             this.$scope.loadingVisibility = false;
             this.$scope.contentVisibility = true;
           }
-      )
+      );
     }
 
     private initFileManager(courseNo: string,
@@ -92,7 +92,7 @@ module ums {
     }
 
     private getSelectedSemester(): string {
-      var semesters = this.courseMaterialSearchParamModel.programSelector.getSemesters();
+      var semesters = this.courseMaterialSearchParamModel.getSemesters();
       var semesterName = "";
       for (var i = 0; i < semesters.length; i++) {
         if (semesters[i].id == this.courseMaterialSearchParamModel.semesterId) {

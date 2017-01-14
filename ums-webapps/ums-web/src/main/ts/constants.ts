@@ -557,8 +557,15 @@ module ums {
             id: 7,
             label: "Result published on"
           }
+        },
+        deptAll: {
+          id: '-1',
+          label: 'All'
+        },
+        programAll: {
+          id: -1,
+          label: 'All'
         }
-
       }
     }
   }

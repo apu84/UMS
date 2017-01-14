@@ -1,4 +1,4 @@
-<div class="form-group" data-ng-if="!model.isProgramTypePreset()">
+<div class="form-group" data-ng-if="model.fieldView().programType !== model.fieldViewTypes()['hidden']">
   <label class="col-md-4 control-label">Program Type</label>
   <div class="col-md-8">
     <select class="form-control required" name="programType" id="programTypeId" data-ng-model="model.programTypeId"
@@ -8,7 +8,7 @@
     </select>
   </div>
 </div>
-<div class="form-group" data-ng-if="!model.isDepartmentPreset()">
+<div class="form-group" data-ng-if="model.fieldView().department !== model.fieldViewTypes()['hidden']">
   <label class="col-md-4 control-label">Dept./School</label>
   <div class="col-md-8">
     <select name="dept" id="dept_id" class="form-control required" data-ng-model="model.departmentId" data-ng-change="model.loadPrograms()" >
@@ -16,7 +16,7 @@
     </select>
   </div>
 </div>
-<div class="form-group" data-ng-if="!model.isProgramPreset()">
+<div class="form-group" data-ng-if="model.fieldView().program !== model.fieldViewTypes()['hidden']">
   <label class="col-md-4 control-label">Program Name</label>
   <div class="col-md-8">
     <select class="form-control required" data-ng-model="model.programId" id="dirProgram" data-convert-to-number>
@@ -24,7 +24,7 @@
     </select>
   </div>
 </div>
-<div class="form-group" data-ng-if="model.isSemesterEnabled()">
+<div class="form-group" data-ng-if="model.isSemesterEnabled() && model.fieldView().semester !== model.fieldViewTypes()['hidden']">
   <label class="col-md-4 control-label">Semester</label>
   <div class="col-md-8">
     <select name="semester" id="semester_id" class="form-control required" data-ng-model="model.semesterId">

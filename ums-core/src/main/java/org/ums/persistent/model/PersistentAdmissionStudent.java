@@ -62,6 +62,14 @@ public class PersistentAdmissionStudent implements MutableAdmissionStudent {
   private ProgramType mProgramType;
   private PresentStatus mPresentStatus;
   private int mVerificationStatus;
+  private Program mProgramByMerit;
+  private int mProgramIdByMerit;
+  private Program mProgramByTransfer;
+  private int mProgramIdByTransfer;
+  private String mNID;
+  private String mBirthRegNo;
+  private String mPassport;
+  private String mDeadline;
 
   public PersistentAdmissionStudent() {}
 
@@ -99,6 +107,96 @@ public class PersistentAdmissionStudent implements MutableAdmissionStudent {
     mProgramType = pAdmissionStudent.getProgramType();
     mPresentStatus = pAdmissionStudent.getPresentStatus();
     mVerificationStatus = pAdmissionStudent.getVerificationStatus();
+    mProgramByMerit = pAdmissionStudent.getProgramByMerit();
+    mProgramIdByMerit = pAdmissionStudent.getProgramIdByMerit();
+    mProgramByTransfer = pAdmissionStudent.getProgramByTransfer();
+    mProgramIdByTransfer = pAdmissionStudent.getProgramIdByTransfer();
+    mNID = pAdmissionStudent.getNID();
+    mBirthRegNo = pAdmissionStudent.getBirthRegNo();
+    mPassport = pAdmissionStudent.getPassportNo();
+    mDeadline = pAdmissionStudent.getDeadline();
+  }
+
+  @Override
+  public String getDeadline() {
+    return mDeadline;
+  }
+
+  @Override
+  public void setDeadline(String pDeadline) {
+    mDeadline = pDeadline;
+  }
+
+  @Override
+  public String getNID() {
+    return mNID;
+  }
+
+  @Override
+  public String getBirthRegNo() {
+    return mBirthRegNo;
+  }
+
+  @Override
+  public String getPassportNo() {
+    return mPassport;
+  }
+
+  @Override
+  public void setNID(String pNID) {
+
+  }
+
+  @Override
+  public void setBirthReg(String pBirthReg) {
+
+  }
+
+  @Override
+  public void setPassportNo(String pPassportNo) {
+
+  }
+
+  @Override
+  public Program getProgramByMerit() {
+    return mProgramByMerit == null ? sProgramManager.get(mProgramIdByMerit) : sProgramManager
+        .validate(mProgramByMerit);
+  }
+
+  @Override
+  public Integer getProgramIdByMerit() {
+    return mProgramIdByMerit;
+  }
+
+  @Override
+  public Program getProgramByTransfer() {
+    return mProgramByTransfer == null ? sProgramManager.get(mProgramIdByTransfer) : sProgramManager
+        .validate(mProgramByTransfer);
+  }
+
+  @Override
+  public Integer getProgramIdByTransfer() {
+    return mProgramIdByTransfer;
+  }
+
+  @Override
+  public void setProgramByMerit(Program pProgramByMerit) {
+    mProgramByMerit = pProgramByMerit;
+  }
+
+  @Override
+  public void setProgramIdByMerit(int pProgramIdByMerit) {
+    mProgramIdByMerit = pProgramIdByMerit;
+  }
+
+  @Override
+  public void setProgramByTransfer(Program pProgramByTransfer) {
+    mProgramByTransfer = pProgramByTransfer;
+  }
+
+  @Override
+  public void setProgramIdByTransfer(int pProgramIdByTransfer) {
+    mProgramIdByTransfer = pProgramIdByTransfer;
   }
 
   @Override

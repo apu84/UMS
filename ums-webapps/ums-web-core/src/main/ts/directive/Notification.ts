@@ -30,7 +30,7 @@ module ums {
       this.scope = $scope;
       this.scope.numOfUnreadNotification = 0;
       
-      this.settings.settings.then((appSettings: {[key: string]: any}) => {
+      this.settings.getSettings().then((appSettings: {[key: string]: any}) => {
         if (appSettings['notification.enabled']) {
           this.getNotification();
           this.intervalPromise = this.$interval(()=> {

@@ -2,7 +2,7 @@ module ums {
   export class CourseMaterial {
     public static $inject = ['$scope', '$stateParams', 'appConstants', 'HttpClient'];
     private currentUser: LoggedInUser;
-    private courseMaterialSearchParamModel: CourseTeacherSearchParamModel;
+    private courseMaterialSearchParamModel: ProgramSelectorModel;
 
     constructor(private $scope: any, private $stateParams: any,
                 private appConstants: any, private httpClient: HttpClient) {
@@ -11,13 +11,12 @@ module ums {
       $scope.contentVisibility = false;
       this.httpClient.get("users/current", HttpClient.MIME_TYPE_JSON,
           (response: LoggedInUser) => {
-            this.courseMaterialSearchParamModel = new CourseTeacherSearchParamModel(this.appConstants, this.httpClient);
-            this.courseMaterialSearchParamModel.programSelector.setProgramTypeId(Utils.UG + "", true);
-            this.courseMaterialSearchParamModel.programSelector.setDepartment(response.departmentId);
-            this.courseMaterialSearchParamModel.programSelector.enableSemesterOption(true);
-            // Program selector is not required. Setting it to null doesn't make sense,
-            // probably adding some show/hide mechanism makes it more clear to understand
-            this.courseMaterialSearchParamModel.programSelector.setProgramId(null);
+            this.courseMaterialSearchParamModel = new ProgramSelectorModel(this.appConstants, this.httpClient, true);
+            this.courseMaterialSearchParamModel.setProgramType(this.appConstants.programTypeEnum.UG,
+                FieldViewTypes.selected);
+            this.courseMaterialSearchParamModel.setDepartment(response.departmentId,
+                FieldViewTypes.hidden);
+            this.courseMaterialSearchParamModel.setProgram(null, FieldViewTypes.hidden);
             this.currentUser = response;
             this.$scope.courseMaterialSearchParamModel = this.courseMaterialSearchParamModel;
           });
@@ -37,7 +36,7 @@ module ums {
       this.$scope.contentVisibility = false;
       this.$scope.selectedCourseNo = '';
 
-      this.httpClient.get("academic/courseTeacher/" + this.courseMaterialSearchParamModel.programSelector.semesterId + "/"
+      this.httpClient.get("academic/courseTeacher/" + this.courseMaterialSearchParamModel.semesterId + "/"
           + this.currentUser.employeeId + "/course", HttpClient.MIME_TYPE_JSON,
           (response: {entries: CourseTeacherModel[]}) => {
             this.$scope.entries = this.aggregateResult(response.entries);
@@ -49,7 +48,7 @@ module ums {
 
     private aggregateResult(courses: CourseTeacherModel[]): CourseTeacherModel[] {
       var courseList: CourseTeacherModel[] = [];
-      var courseMap: {[courseId:string]: CourseTeacherModel} = {};
+      var courseMap: {[courseId: string]: CourseTeacherModel} = {};
       courses.forEach((courseTeacher: CourseTeacherModel) => {
 
         if (courseTeacher.courseId in courseMap) {
@@ -70,7 +69,7 @@ module ums {
       var downloadBaseUri: string = '/ums-webservice-academic/academic/courseMaterial/download/semester/' + semesterName + "/course/" + courseNo;
 
       $("#courseSelectionDiv").hide(80);
-      $("#topArrowDiv").show(50); 
+      $("#topArrowDiv").show(50);
 
       FILEMANAGER_CONFIG.set({
         appName: semesterName + ' > ' + courseNo,
@@ -99,8 +98,6 @@ module ums {
         }
       });
       this.$scope.reloadOn = courseNo;
-
-
 
 
     }

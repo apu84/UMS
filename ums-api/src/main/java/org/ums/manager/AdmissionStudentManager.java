@@ -1,7 +1,9 @@
 package org.ums.manager;
 
 import org.ums.domain.model.immutable.AdmissionStudent;
+import org.ums.domain.model.immutable.AdmissionStudentCertificate;
 import org.ums.domain.model.mutable.MutableAdmissionStudent;
+import org.ums.enums.DepartmentSelectionType;
 import org.ums.enums.ProgramType;
 import org.ums.enums.QuotaType;
 
@@ -25,12 +27,23 @@ public interface AdmissionStudentManager extends
   List<AdmissionStudent> getMeritList(final int pSemesterId, final QuotaType pQuotaType,
       String pUnit, ProgramType pProgramType);
 
+  AdmissionStudent getAdmissionStudent(final int pSemesterId, ProgramType pProgramType,
+      String pReceiptId);
+
   int saveMeritList(final List<MutableAdmissionStudent> pStudents);
 
   List<AdmissionStudent> getNewStudentByReceiptId(final String pProgramType, final int pSemesterId,
       final String receiptId);
+  int updateDepartmentSelection(final MutableAdmissionStudent pStudent,
+      DepartmentSelectionType pDepartmentSelectionType);
+
+  List<AdmissionStudent> getNewStudentByReceiptId(final int pSemesterId, final String receiptId);
 
   int saveVerificationStatus(final MutableAdmissionStudent pStudent);
 
   AdmissionStudent getByStudentId(final String pStudentId);
+  List<AdmissionStudentCertificate> getAdmissionStudentCertificateLists();
+
+  AdmissionStudent getNextStudentForDepartmentSelection(final int pSemesterId,
+      final ProgramType pProgramType, final String pUnit, final String pQuota);
 }

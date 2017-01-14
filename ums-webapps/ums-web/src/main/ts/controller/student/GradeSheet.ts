@@ -16,8 +16,8 @@ module ums {
           (response: Student) => {
             this.gradeSheetSelector = new CourseTeacherSearchParamModel(this.appConstants, this.httpClient);
             this.gradeSheetSelector.programSelector.setDepartment(response.deptId);
-            this.gradeSheetSelector.programSelector.setProgramId(response.programId);
-            this.gradeSheetSelector.programSelector.setProgramTypeId(response.programTypeId);
+            this.gradeSheetSelector.programSelector.setProgram(response.programId);
+            this.gradeSheetSelector.programSelector.setProgramType(response.programTypeId);
             this.gradeSheetSelector.programSelector.enableSemesterOption(true);
             this.$scope.gradeSheetSelector = this.gradeSheetSelector;
           });
