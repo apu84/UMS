@@ -1,61 +1,75 @@
 module ums {
   export var FILEMANAGER_CONFIG: any = {};
 
-  UMS.config(['BaseUriProvider', (baseUriProvider: BaseUriProvider)  => {
+  UMS.config(['BaseUriProvider', (baseUriProvider: BaseUriProvider) => {
     baseUriProvider.setServicePath('/ums-webservice-academic/');
   }]);
 
-  angular.module('FileManagerApp').config(
-      ['fileManagerConfigProvider', (config) => {
-        var defaults = config.$get();
-        FILEMANAGER_CONFIG = config;
-        config.set(
-            {
-              appName: 'Course Materials',
-              tplPath: 'views/file-manager',
-              pickCallback: function (item) {
-                var msg = 'Picked %s "%s" for external use'
-                    .replace('%s', item.type)
-                    .replace('%s', item.fullPath());
-                window.alert(msg);
-              },
-
-              allowedActions: angular.extend(
-                  defaults.allowedActions, {
-                    createFolder: true,
-                    pickFiles: true,
-                    pickFolders: true
-                  })
-            });
-      }]);
-
+  UMS.config(['$ocLazyLoadProvider', ($ocLazyLoadProvider) => {
+    $ocLazyLoadProvider.config({
+      modules: [
+        {
+          name: 'FileManagerApp',
+          files: [
+            'js/lib/angular-filemanager/app.js',
+            'js/lib/angular-filemanager/directives/directives.js',
+            'js/lib/angular-filemanager/filters/filters.js',
+            'js/lib/angular-filemanager/providers/config.js',
+            'js/lib/angular-filemanager/entities/chmod.js',
+            'js/lib/angular-filemanager/entities/item.js',
+            'js/lib/angular-filemanager/services/apihandler.js',
+            'js/lib/angular-filemanager/services/apimiddleware.js',
+            'js/lib/angular-filemanager/services/filenavigator.js',
+            'js/lib/angular-filemanager/providers/translations.js',
+            'js/lib/angular-filemanager/controllers/main.js',
+            'js/lib/angular-filemanager/controllers/selector-controller.js',
+            'js/lib/angular-translate.min.js',
+            'css/angular-filemanager.min.css',
+            'vendors/bootstrap-datepicker/css/datepicker.css',
+            'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js'
+          ]
+        },
+        {
+          name: 'amChartsDirective',
+          files: [
+            'vendors/amcharts/serial.js',
+            'vendors/amcharts/amcharts.js',
+            'js/lib/amChartsDirective.js'
+          ]
+        }]
+    });
+  }]);
 
   angular.module('ngHandsontableApp', ['ngHandsontable']);
 
   UMS.constant("appConstants", Constants.Default());
 
-
-  UMS.filter('$split', function() {
-    return function(input) {
+  UMS.filter('$split', function () {
+    return function (input) {
       return input.split(',');
     }
   });
   /* Filter used in course-teacher.html, it returns the total size of the keys in a json object */
-  UMS.filter('numKeys', function() {
-    return function(json) {
+  UMS.filter('numKeys', function () {
+    return function (json) {
       var keys = Object.keys(json);
       return keys.length;
     }
   });
 
-  UMS.filter('nth', function() {
-    return function(serial) {
-      switch(serial){
-        case 1: return serial+"st";
-        case 2: return serial+"st";
-        case 3: return serial+"rd";
-        case 4: return serial+"th";
-        case 5: return serial+"th";
+  UMS.filter('nth', function () {
+    return function (serial) {
+      switch (serial) {
+        case 1:
+          return serial + "st";
+        case 2:
+          return serial + "st";
+        case 3:
+          return serial + "rd";
+        case 4:
+          return serial + "th";
+        case 5:
+          return serial + "th";
       }
       return serial;
     }
@@ -65,8 +79,8 @@ module ums {
     //
     // For any unmatched url, redirect to /state1
     //$locationProvider.html5Mode(true);
-    $urlRouterProvider.when('/passwordReport','/passwordReport/singleUserPassword');
-    $urlRouterProvider.when('/mailBox','/mailBox/inbox');
+    $urlRouterProvider.when('/passwordReport', '/passwordReport/singleUserPassword');
+    $urlRouterProvider.when('/mailBox', '/mailBox/inbox');
     $urlRouterProvider.otherwise("/userHome");
 
     //
@@ -130,7 +144,7 @@ module ums {
         })
         .state('showSemesterList', {
           url: "/showSemesterList",
-          controller:"SemesterInfo",
+          controller: "SemesterInfo",
           templateUrl: "views/semester/list-semester.html"
         })
         .state('createSyllabus', {
@@ -301,7 +315,7 @@ module ums {
         })
         .state('showSyllabusList', {
           url: "/showSyllabusList",
-          controller:"GridSyllabus",
+          controller: "GridSyllabus",
           templateUrl: "views/syllabus/list-syllabus.html",
           resolve: {
             loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
@@ -363,10 +377,10 @@ module ums {
           controller: 'NewCoursePg',
           templateUrl: 'views/course/new-course-pg.html'
         })
-        .state('semesterSettingParameter',{
-          url:"/semesterSettingParameter",
-          controller:'SemesterSettingParameter',
-          templateUrl:'views/semester/semester-setting-parameter.html',
+        .state('semesterSettingParameter', {
+          url: "/semesterSettingParameter",
+          controller: 'SemesterSettingParameter',
+          templateUrl: 'views/semester/semester-setting-parameter.html',
           resolve: {
             loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
               return $ocLazyLoad.load({
@@ -481,7 +495,7 @@ module ums {
           controller: 'CourseTeacher',
           templateUrl: 'views/dept/course-teacher.html',
           resolve: {
-            loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
               return $ocLazyLoad.load({
                 files: ['vendors/select2/select2-madmin.css',
                   'vendors/bootstrap-select/bootstrap-select.min.css',
@@ -498,7 +512,7 @@ module ums {
           controller: 'Examiner',
           templateUrl: 'views/dept/examiner.html',
           resolve: {
-            loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
               return $ocLazyLoad.load({
                 files: ['vendors/select2/select2-madmin.css',
                   'vendors/bootstrap-select/bootstrap-select.min.css',
@@ -512,10 +526,10 @@ module ums {
         })
         .state('classRoutine', {
           url: "/classRoutine",
-          controller:'ClassRoutine',
+          controller: 'ClassRoutine',
           templateUrl: 'views/dept/class-routine.html',
           resolve: {
-            loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
               return $ocLazyLoad.load({
                 files: ['vendors/jquery-file-upload/css/jquery.fileupload.css',
                   'vendors/jquery-file-upload/css/jquery.fileupload-ui.css',
@@ -569,10 +583,10 @@ module ums {
         })
         .state('studentsRoutine', {
           url: "/studentsRoutine",
-          controller:'StudentsRoutine',
+          controller: 'StudentsRoutine',
           templateUrl: 'views/routine/students-routine.html',
           resolve: {
-            loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
               return $ocLazyLoad.load({
                 files: ['vendors/jquery-file-upload/css/jquery.fileupload.css',
                   'vendors/jquery-file-upload/css/jquery.fileupload-ui.css',
@@ -657,12 +671,7 @@ module ums {
           controller: 'MarksSubmission',
           resolve: {
             loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-              return $ocLazyLoad.load({
-                files: [
-                  'vendors/amcharts/amcharts.js',
-                  'vendors/amcharts/serial.js'
-                ]
-              });
+              return $ocLazyLoad.load(['amChartsDirective']);
             }]
           }
         })
@@ -672,12 +681,7 @@ module ums {
           controller: 'MarksSubmission',
           resolve: {
             loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-              return $ocLazyLoad.load({
-                files: [
-                  'vendors/amcharts/amcharts.js',
-                  'vendors/amcharts/serial.js'
-                ]
-              });
+              return $ocLazyLoad.load(['amChartsDirective']);
             }]
           }
         })
@@ -688,12 +692,7 @@ module ums {
           controller: 'MarksSubmission',
           resolve: {
             loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-              return $ocLazyLoad.load({
-                files: [
-                  'vendors/amcharts/amcharts.js',
-                  'vendors/amcharts/serial.js'
-                ]
-              });
+              return $ocLazyLoad.load(['amChartsDirective']);
             }]
           }
         })
@@ -703,12 +702,7 @@ module ums {
           controller: 'MarksSubmission',
           resolve: {
             loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-              return $ocLazyLoad.load({
-                files: [
-                  'vendors/amcharts/amcharts.js',
-                  'vendors/amcharts/serial.js'
-                ]
-              });
+              return $ocLazyLoad.load(['amChartsDirective']);
             }]
           }
         })
@@ -724,10 +718,7 @@ module ums {
           templateUrl: 'views/course-material/course-material.html',
           resolve: {
             loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-              return $ocLazyLoad.load({
-                files: ['vendors/bootstrap-datepicker/css/datepicker.css',
-                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js']
-              });
+              return $ocLazyLoad.load(['FileManagerApp'])
             }]
           }
         })
@@ -737,10 +728,7 @@ module ums {
           templateUrl: 'views/course-material/student-course-material.html',
           resolve: {
             loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-              return $ocLazyLoad.load({
-                files: ['vendors/bootstrap-datepicker/css/datepicker.css',
-                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js']
-              });
+              return $ocLazyLoad.load(['FileManagerApp'])
             }]
           }
         })
@@ -794,7 +782,7 @@ module ums {
           controller: 'MailInbox',
           templateUrl: 'views/common/mailbox/mail-inbox.html',
           resolve: {
-            loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
               return $ocLazyLoad.load({
                 files: ['vendors/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css',
                   'vendors/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js']
@@ -816,9 +804,9 @@ module ums {
         //   controller: "StudentGradeSheet",
         //   templateUrl: 'views/student/grade-sheet.html'
         // })
-      //In database use /dummyController/H or /dummyController/T in the location column
-      //https://localhost/ums-web/iums/#/dummyConroller/T
-      //https://localhost/ums-web/iums/#/dummyConroller/H
+        //In database use /dummyController/H or /dummyController/T in the location column
+        //https://localhost/ums-web/iums/#/dummyConroller/T
+        //https://localhost/ums-web/iums/#/dummyConroller/H
         .state('dummyController', {
           url: "/dummyConroller/:1",
           controller: 'DummyController',

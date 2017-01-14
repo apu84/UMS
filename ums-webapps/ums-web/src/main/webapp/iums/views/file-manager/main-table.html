@@ -3,31 +3,31 @@
         <tr>
             <th>
                 <a href="" ng-click="order('model.name')">
-                    {{"name" | translate}}
+                    {{"name" }}
                     <span class="sortorder" ng-show="predicate[1] === 'model.name'" ng-class="{reverse:reverse}"></span>
                 </a>
             </th>
             <th class="hidden-xs" ng-hide="config.hideSize">
                 <a href="" ng-click="order('model.size')">
-                    {{"size" | translate}}
+                    {{"size" }}
                     <span class="sortorder" ng-show="predicate[1] === 'model.size'" ng-class="{reverse:reverse}"></span>
                 </a>
             </th>
             <th class="hidden-sm hidden-xs" ng-hide="config.hideDate">
                 <a href="" ng-click="order('model.date')">
-                    {{"date" | translate}}
+                    {{"date" }}
                     <span class="sortorder" ng-show="predicate[1] === 'model.date'" ng-class="{reverse:reverse}"></span>
                 </a>
             </th>
             <th class="hidden-sm hidden-xs" ng-hide="config.hidePermissions">
                 <a href="" ng-click="order('model.permissions')">
-                    {{"permissions" | translate}}
+                    {{"permissions" }}
                     <span class="sortorder" ng-show="predicate[1] === 'model.permissions'" ng-class="{reverse:reverse}"></span>
                 </a>
             </th>
             <th class="hidden-sm hidden-xs" ng-hide="config.hideOwner">
                 <a href="" ng-click="order('model.owner')">
-                    {{"owner" | translate}}
+                    {{"owner" }}
                     <span class="sortorder" ng-show="predicate[1] === 'model.owner'" ng-class="{reverse:reverse}"></span>
                 </a>
             </th>
@@ -41,7 +41,7 @@
         </tr>
         <tr ng-show="!fileNavigator.requesting &amp;&amp; fileNavigator.fileList.length < 1 &amp;&amp; !fileNavigator.error">
             <td colspan="5">
-                {{"no_files_in_folder" | translate}}...
+                {{"no_files_in_folder" }}...
             </td>
         </tr>
         <tr ng-show="!fileNavigator.requesting &amp;&amp; fileNavigator.error">

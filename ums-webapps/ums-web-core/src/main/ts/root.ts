@@ -8,8 +8,6 @@ module ums {
     'ngCookies',
     'ngSanitize',
     'scrollable-table',
-    'amChartsDirective',
-    'FileManagerApp',
     'ui.sortable',
     'ngHandsontableApp'
   ]);
