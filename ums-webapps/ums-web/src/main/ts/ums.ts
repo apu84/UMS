@@ -28,6 +28,14 @@ module ums {
             'vendors/bootstrap-datepicker/css/datepicker.css',
             'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js'
           ]
+        },
+        {
+          name: 'amChartsDirective',
+          files: [
+            'vendors/amcharts/serial.js',
+            'vendors/amcharts/amcharts.js',
+            'js/lib/amChartsDirective.js'
+          ]
         }]
     });
   }]);
@@ -659,13 +667,7 @@ module ums {
           controller: 'MarksSubmission',
           resolve: {
             loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-              return $ocLazyLoad.load({
-                files: [
-                  'vendors/amcharts/amcharts.js',
-                  'vendors/amcharts/serial.js',
-                  'js/lib/amChartsDirective.js'
-                ]
-              });
+              return $ocLazyLoad.load(['amChartsDirective']);
             }]
           }
         })
@@ -675,13 +677,7 @@ module ums {
           controller: 'MarksSubmission',
           resolve: {
             loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-              return $ocLazyLoad.load({
-                files: [
-                  'vendors/amcharts/amcharts.js',
-                  'vendors/amcharts/serial.js',
-                  'js/lib/amChartsDirective.js'
-                ]
-              });
+              return $ocLazyLoad.load(['amChartsDirective']);
             }]
           }
         })
@@ -692,13 +688,7 @@ module ums {
           controller: 'MarksSubmission',
           resolve: {
             loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-              return $ocLazyLoad.load({
-                files: [
-                  'vendors/amcharts/amcharts.js',
-                  'vendors/amcharts/serial.js',
-                  'js/lib/amChartsDirective.js'
-                ]
-              });
+              return $ocLazyLoad.load(['amChartsDirective']);
             }]
           }
         })
@@ -708,13 +698,7 @@ module ums {
           controller: 'MarksSubmission',
           resolve: {
             loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-              return $ocLazyLoad.load({
-                files: [
-                  'vendors/amcharts/amcharts.js',
-                  'vendors/amcharts/serial.js',
-                  'js/lib/amChartsDirective.js'
-                ]
-              });
+              return $ocLazyLoad.load(['amChartsDirective']);
             }]
           }
         })
