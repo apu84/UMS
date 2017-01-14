@@ -155,6 +155,7 @@ module ums{
       this.httpClient.put(url,json,'application/json')
           .success(()=>{
             defer.resolve("success");
+            this.notify.success("Successfully Saved!");
           }).error((data)=>{
         defer.resolve("error");
       });
