@@ -142,6 +142,8 @@ module ums{
           +this.$scope.meritType.id, this.$scope.faculty.shortName )
           .then((students:Array<AdmissionStudent>)=>{
 
+        console.log("students length");
+        console.log(students.length);
         for(var i=0;i<students.length;i++){
           this.$scope.admissionStudentMap[students[i].receiptId] = students[i];
         }
