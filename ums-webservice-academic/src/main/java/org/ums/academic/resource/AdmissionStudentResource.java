@@ -64,25 +64,23 @@ public class AdmissionStudentResource extends MutableAdmissionStudentResource {
       @PathParam("semester-id") int pSemesterId, @PathParam("receipt-id") String pReceiptId,
       final @Context Request pRequest) {
     return mHelper.getAdmissionStudentByReceiptId(pProgramType, pSemesterId, pReceiptId, mUriInfo);
+  }
+
+  @GET
   @Path("/semesterId/{semester-id}/receiptId/{receipt-id}")
   public JsonObject getNewStudentByReceiptId(@PathParam("semester-id") int pSemesterId,
-      @PathParam("receipt-id") String pReceiptId, final @Context Request pRequest) {
+                                             @PathParam("receipt-id") String pReceiptId, final @Context Request pRequest) {
     return mHelper.getAdmissionStudentByReceiptId(pSemesterId, pReceiptId, mUriInfo);
   }
 
   @GET
   @Path("/semester/{semester-id}/programType/{program-type}/receiptId/{receipt-id}")
   public JsonObject getStudentByReceiptId(@PathParam("semester-id") int pSemesterId,
-      @PathParam("program-type") int pProgramType, @PathParam("receipt-id") String pReceiptId,
-      final @Context Request pRequest) {
+                                          @PathParam("program-type") int pProgramType, @PathParam("receipt-id") String pReceiptId,
+                                          final @Context Request pRequest) {
     return mHelper.getAdmissionStudentByReceiptId(pSemesterId, ProgramType.get(pProgramType),
-        pReceiptId, mUriInfo);
+            pReceiptId, mUriInfo);
   }
 
-  @GET
-  @Path("/certificateLists")
-  public JsonObject getAllCertificates(final @Context Request pRequest) {
-    return mHelper.getCertificates(mUriInfo);
-  }
 
 }

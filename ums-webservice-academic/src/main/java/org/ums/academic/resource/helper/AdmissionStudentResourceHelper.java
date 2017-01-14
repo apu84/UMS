@@ -8,12 +8,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.ums.cache.LocalCache;
 import org.ums.builder.AdmissionStudentBuilder;
+import org.ums.domain.model.immutable.AdmissionTotalSeat;
+import org.ums.enums.DepartmentSelectionType;
 import org.ums.report.generator.AdmissionStudentGenerator;
 import org.ums.domain.model.immutable.AdmissionStudent;
 import org.ums.domain.model.immutable.AdmissionStudentCertificate;
-import org.ums.domain.model.immutable.AdmissionTotalSeat;
+import org.ums.domain.model.immutable.Faculty;
 import org.ums.domain.model.mutable.MutableAdmissionStudent;
-import org.ums.enums.DepartmentSelectionType;
+import org.ums.enums.FacultyType;
 import org.ums.enums.ProgramType;
 import org.ums.enums.QuotaType;
 import org.ums.manager.AdmissionStudentManager;
@@ -125,7 +127,7 @@ public class AdmissionStudentResourceHelper extends
 
   @Transactional
   public JsonObject saveDepartmentSelectionInfoAndRetrieveNextStudent(JsonObject pJsonObject,
-      final DepartmentSelectionType pDepartmentSelectionType, UriInfo pUriInfo) throws Exception {
+                                                                      final DepartmentSelectionType pDepartmentSelectionType, UriInfo pUriInfo) throws Exception {
     JsonArray entries = pJsonObject.getJsonArray("entries");
     LocalCache localCache = new LocalCache();
     JsonObject jsonObject = entries.getJsonObject(0);
@@ -210,11 +212,12 @@ public class AdmissionStudentResourceHelper extends
     return object.build();
   }
 
+
   public JsonObject getAdmissionStudentByReceiptId(final int pSemesterId,
-      final ProgramType pProgramType, final String pReceiptId, final UriInfo pUriInfo) {
+                                                   final ProgramType pProgramType, final String pReceiptId, final UriInfo pUriInfo) {
 
     AdmissionStudent student =
-        getContentManager().getAdmissionStudent(pSemesterId, pProgramType, pReceiptId);
+            getContentManager().getAdmissionStudent(pSemesterId, pProgramType, pReceiptId);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
@@ -225,6 +228,28 @@ public class AdmissionStudentResourceHelper extends
     localCache.invalidate();
     return object.build();
   }
+
+  public JsonObject getAdmissionStudentByReceiptId(final String pProgramType,
+                                                   final int pSemesterId, final String pReceiptId, final UriInfo pUriInfo) {
+
+    List<AdmissionStudent> student =
+            getContentManager().getNewStudentByReceiptId(pProgramType, pSemesterId, pReceiptId);
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+
+    for(AdmissionStudent admissionStudent : student) {
+      JsonObjectBuilder jsonObject = Json.createObjectBuilder();
+      getBuilder().getAdmissionStudentByReceiptIdBuilder(jsonObject, admissionStudent, pUriInfo,
+              localCache);
+      children.add(jsonObject);
+    }
+    object.add("entries", children);
+    localCache.invalidate();
+    return object.build();
+  }
+
+
 
   public JsonObject getAdmissionMeritList(final int pSemesterId, final ProgramType pProgramType,
       final QuotaType pQuotaType, String pUnit, final UriInfo pUriInfo) {
@@ -264,11 +289,11 @@ public class AdmissionStudentResourceHelper extends
     mGenerator.createABlankMeritListUploadFormatFile(pOutputStream, pSemesterId);
   }
 
-  public JsonObject getAdmissionStudentByReceiptId(final String pProgramType,
-      final int pSemesterId, final String pReceiptId, final UriInfo pUriInfo) {
+  public JsonObject getAdmissionStudentByReceiptId(final int pSemesterId, final String pReceiptId,
+      final UriInfo pUriInfo) {
 
     List<AdmissionStudent> student =
-        getContentManager().getNewStudentByReceiptId(pProgramType, pSemesterId, pReceiptId);
+        getContentManager().getNewStudentByReceiptId(pSemesterId, pReceiptId);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();

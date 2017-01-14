@@ -99,4 +99,14 @@ public class AdmissionStudentCache extends
     return getManager().getNextStudentForDepartmentSelection(pSemesterId, pProgramType, pUnit,
         pQuota);
   }
+
+  @Override
+  public List<AdmissionStudent> getNewStudentByReceiptId(int pSemesterId, String receiptId) {
+    return getNewStudentByReceiptId(pSemesterId,receiptId);
+  }
+
+  @Override
+  public List<AdmissionStudentCertificate> getAdmissionStudentCertificateLists() {
+    return getManager().getAdmissionStudentCertificateLists();
+  }
 }

@@ -76,6 +76,16 @@ public class AdmissionStudentDaoDecorator extends
   }
 
   @Override
+  public List<AdmissionStudent> getNewStudentByReceiptId(int pSemesterId, String receiptId) {
+    return getManager().getNewStudentByReceiptId(pSemesterId,receiptId);
+  }
+
+  @Override
+  public List<AdmissionStudentCertificate> getAdmissionStudentCertificateLists() {
+    return getManager().getAdmissionStudentCertificateLists();
+  }
+
+  @Override
   public AdmissionStudent getNextStudentForDepartmentSelection(int pSemesterId,
       ProgramType pProgramType, String pUnit, String pQuota) {
     return getNextStudentForDepartmentSelection(pSemesterId, pProgramType, pUnit, pQuota);
