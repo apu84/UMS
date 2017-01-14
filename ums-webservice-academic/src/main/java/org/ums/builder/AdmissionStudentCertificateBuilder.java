@@ -1,4 +1,4 @@
-package org.ums.common.builder;
+package org.ums.builder;
 
 import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
@@ -29,7 +29,7 @@ public class AdmissionStudentCertificateBuilder implements
     pMutable.setCertificateId(pJsonObject.getInt("certificate_id"));
     pMutable.setCertificateTitle(pJsonObject.getString("certificate_title"));
     pMutable.setCertificateType(pJsonObject.getString("certificate_type"));
-    pMutable.setCertificateCategory((pJsonObject.getString("certificate_catagory")));
+    pMutable.setCertificateCategory((pJsonObject.getString("certificate_category")));
   }
 
 }

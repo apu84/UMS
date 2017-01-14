@@ -1,16 +1,14 @@
-package org.ums.common.academic.resource.helper;
+package org.ums.academic.resource.helper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
-import org.ums.common.builder.AdmissionStudentsCertificateCommentBuilder;
+import org.ums.builder.AdmissionStudentsCertificateCommentBuilder;
 import org.ums.domain.model.immutable.AdmissionStudentsCertificateComment;
 import org.ums.domain.model.mutable.MutableAdmissionStudentsCertificateComment;
 import org.ums.manager.AdmissionStudentsCertificateCommentManager;
-import org.ums.manager.ContentManager;
 import org.ums.persistent.model.PersistentAdmissionStudentsCertificateComment;
 import org.ums.resource.ResourceHelper;
 

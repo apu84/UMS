@@ -1,7 +1,6 @@
-package org.ums.common.academic.resource;
+package org.ums.academic.resource;
 
 import org.springframework.stereotype.Component;
-import org.ums.domain.model.mutable.MutableAdmissionStudentsCertificateHistory;
 import org.ums.resource.Resource;
 
 import javax.json.JsonObject;

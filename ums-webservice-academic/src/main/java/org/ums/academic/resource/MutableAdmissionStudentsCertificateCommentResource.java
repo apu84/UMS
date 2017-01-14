@@ -1,7 +1,7 @@
-package org.ums.common.academic.resource;
+package org.ums.academic.resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.ums.common.academic.resource.helper.AdmissionStudentsCertificateCommentResourceHelper;
+import org.ums.academic.resource.helper.AdmissionStudentsCertificateCommentResourceHelper;
 import org.ums.resource.Resource;
 
 import javax.json.JsonObject;

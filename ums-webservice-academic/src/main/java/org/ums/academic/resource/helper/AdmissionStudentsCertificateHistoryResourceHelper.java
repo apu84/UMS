@@ -1,18 +1,14 @@
-package org.ums.common.academic.resource.helper;
+package org.ums.academic.resource.helper;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
-import org.ums.common.academic.resource.AdmissionStudentsCertificateHistoryResource;
-import org.ums.common.builder.AdmissionStudentsCertificateHistoryBuilder;
-import org.ums.domain.model.immutable.AdmissionStudentCertificate;
+import org.ums.builder.AdmissionStudentsCertificateHistoryBuilder;
 import org.ums.domain.model.immutable.AdmissionStudentsCertificateHistory;
 import org.ums.domain.model.mutable.MutableAdmissionStudentsCertificateHistory;
 import org.ums.manager.AdmissionStudentsCertificateHistoryManager;
-import org.ums.manager.ContentManager;
 import org.ums.persistent.model.PersistentAdmissionStudentsCertificateHistory;
 import org.ums.resource.ResourceHelper;
 import org.slf4j.LoggerFactory;

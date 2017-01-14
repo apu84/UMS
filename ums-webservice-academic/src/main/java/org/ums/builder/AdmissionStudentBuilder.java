@@ -131,13 +131,18 @@ public class AdmissionStudentBuilder implements Builder<AdmissionStudent, Mutabl
     pBuilder.add("hscGpa", pReadOnly.getHSCGpa());
     pBuilder.add("unit", pReadOnly.getUnit());
 
-    if(pReadOnly.getUnit().equals("ENGINEERING") || pReadOnly.getAdmissionRoll().equals(null)) {
-      pBuilder.add("admissionRoll", pReadOnly.getAdmissionRoll());
-      pBuilder.add("meritSlNo", pReadOnly.getMeritSerialNo());
+    if(pReadOnly.getAdmissionRoll() == null) {
+      pBuilder.add("admissionRoll", "Unavailable");
     }
     else {
-      pBuilder.add("admissionRoll", "Not Available");
-      pBuilder.add("meritSlNo", "Not Available");
+      pBuilder.add("admissionRoll", pReadOnly.getAdmissionRoll());
+    }
+
+    if(pReadOnly.getMeritSerialNo() == 0) {
+      pBuilder.add("meritSlNo", "Unavailable");
+    }
+    else {
+      pBuilder.add("meritSlNo", pReadOnly.getMeritSerialNo());
     }
   }
 
