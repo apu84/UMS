@@ -3,24 +3,27 @@ package org.ums.persistent.model;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.AdmissionStudentCertificate;
-import org.ums.domain.model.mutable.MutableAdmissionStudent;
 import org.ums.domain.model.mutable.MutableAdmissionStudentCertificate;
-import org.ums.manager.AdmissionStudentManager;
+import org.ums.manager.AdmissionStudentCertificateManager;
 
 import java.util.List;
 
 public class PersistentAdmissionStudentCertificate implements MutableAdmissionStudentCertificate {
 
-  private static AdmissionStudentManager sAdmissionStudentManager;
+  private static AdmissionStudentCertificateManager sAdmissionStudentCertificateManager;
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    applicationContext.getBean("admissionStudentManager", AdmissionStudentManager.class);
+    sAdmissionStudentCertificateManager =
+        applicationContext.getBean("admissionStudentCertificateManager",
+            AdmissionStudentCertificateManager.class);
   }
 
-  private Integer mCertificateId;
+  private int mCertificateId;
   private String mCertificateTitle;
   private String mCertificateType;
+  private String mCertificateCategory;
+  private String mLastModified;
 
   public PersistentAdmissionStudentCertificate() {}
 
@@ -29,16 +32,23 @@ public class PersistentAdmissionStudentCertificate implements MutableAdmissionSt
     mCertificateId = pAdmissionStudentCertificate.getCertificateId();
     mCertificateTitle = pAdmissionStudentCertificate.getCertificateTitle();
     mCertificateType = pAdmissionStudentCertificate.getCertificateType();
+    mCertificateCategory = pAdmissionStudentCertificate.getCertificateCategory();
+    mLastModified = pAdmissionStudentCertificate.getLastModified();
   }
 
   @Override
   public void commit(boolean update) {
-
+    if(update) {
+      sAdmissionStudentCertificateManager.update(this);
+    }
+    else {
+      sAdmissionStudentCertificateManager.create(this);
+    }
   }
 
   @Override
   public void delete() {
-
+    sAdmissionStudentCertificateManager.delete(this);
   }
 
   @Override
@@ -48,26 +58,26 @@ public class PersistentAdmissionStudentCertificate implements MutableAdmissionSt
 
   @Override
   public String getLastModified() {
-    return null;
+    return mLastModified;
   }
 
   @Override
-  public String getId() {
-    return null;
+  public Integer getId() {
+    return mCertificateId;
   }
 
   @Override
-  public void setId(String pId) {
-
+  public void setId(Integer pId) {
+    mCertificateId = pId;
   }
 
   @Override
   public void setLastModified(String pLastModified) {
-
+    mLastModified = pLastModified;
   }
 
   @Override
-  public void setCertificateId(Integer pCertificateId) {
+  public void setCertificateId(int pCertificateId) {
     mCertificateId = pCertificateId;
   }
 
@@ -77,8 +87,13 @@ public class PersistentAdmissionStudentCertificate implements MutableAdmissionSt
   }
 
   @Override
-  public void setCetificateType(String pCertificateType) {
+  public void setCertificateType(String pCertificateType) {
     mCertificateType = pCertificateType;
+  }
+
+  @Override
+  public void setCertificateCategory(String pCertificateCategory) {
+    mCertificateCategory = pCertificateCategory;
   }
 
   @Override
@@ -94,5 +109,10 @@ public class PersistentAdmissionStudentCertificate implements MutableAdmissionSt
   @Override
   public String getCertificateType() {
     return mCertificateType;
+  }
+
+  @Override
+  public String getCertificateCategory() {
+    return mCertificateCategory;
   }
 }

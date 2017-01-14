@@ -12,7 +12,6 @@ module ums{
       if(!limit){
         limit=Utils.DEFAULT_SEMESTER_COUNT;
       }
-
       var url="academic/semester/program-type/"+programType+"/limit/"+limit;
       var defer = this.$q.defer();
       this.httpClient.get(url, this.appConstants.mimeTypeJson,

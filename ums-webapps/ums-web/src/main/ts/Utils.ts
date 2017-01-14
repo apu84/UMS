@@ -39,9 +39,17 @@ module ums {
 
     /*
     * Present status during department selection
+    *
     * */
     static ABSENT:number=0;
     static PRESENT:number=1;
+
+    /*
+    * Department selection type
+    * */
+    static MERIT_PROGRAM_SELECTED=1;
+    static MERIT_WAITING_PROGRAMS_SELECTED=2;
+    static WAITING_PROGRAM_SELECTED=3;
 
 
     /**

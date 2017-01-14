@@ -1,1 +1,528 @@
-cataloging book
+<style>
+    input[type=text]{
+        border:none;
+        border-bottom:thin dashed black;
+        padding-bottom:0;
+        outline:none;
+    }
+    .control-label{
+        padding-top: 7px;
+        color: #17202A;
+    }
+    .form-group{
+        clear: both;
+    }
+    .form-control{
+        height: 26px;
+        padding: 0px;
+        padding-top: 5px;
+        padding-left: 5px;
+    }
+    fieldset { border:1px solid #BFC9CA;
+        padding-right: 5px;
+        padding-left: 5px;
+        padding-bottom: 10px;
+    }
+
+    legend {
+        padding: 0.2em 0.5em;
+        border:1px solid grey;
+        color:#4d4b4b;
+        font-size:90%;
+        text-align:left;
+        width: 150px;
+        padding-right: 11px;
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
+    @media (min-width: 992px) {
+        .col-md-1 {
+            width: 10.333333% !important;
+        }
+    }
+    @media (min-width: 992px) {
+        .col-md-3 {
+            width: 23% !important;
+        }
+    }
+    .col-md-1{
+        padding-right: 5px !important;
+    }
+    @media (min-width: 992px){
+        .col-md-11 {
+            width: 89.666667% !important;
+        }
+    }
+    .alignLeft {
+        float: left;
+    }
+    .alignRight {
+        float: right;
+    }
+</style>
+<div>
+    <p class="alignLeft" id="pageTitle" style="padding-left: 3%;font-size: 18px;font-weight: bold;"><span>{{data.headerTitle}}</span></p>
+    <p class="alignRight">
+        <a href="javascript:;" class="btn btn-xs btn-default bookAnchor"
+           data-ng-click="showBookUI()" style="background-color: black;">
+            <i class="fa fa-book bookIcon" style="color: white;" aria-hidden="true"></i>
+        </a>
+        <a href="javascript:;" class="btn btn-xs btn-default recordAnchor"
+           data-ng-click="showAccessionUI()" style="background-color: #ffffff;">
+            <i class="fa fa-files-o recordIcon" style="color: black;" aria-hidden="true"></i>
+        </a>
+    </p>
+</div>
+
+<hr style="clear: both;"/>
+<div class="form-body pal" style="margin-top: -25px;" data-ng-show="bookInfo">
+    <div class="form-group">
+        <label class="col-md-1 control-label">MFN No</label>
+        <div class="col-md-3">
+            <input
+                    type="text" class="form-control"/>
+
+        </div>
+
+        <label class="col-md-1 control-label">Language</label>
+
+        <div class="col-md-3">
+            <input
+                    id="inputName" type="text" placeholder="" class="form-control"/>
+
+        </div>
+
+        <label for="inputName" class="col-md-1 control-label">Call No</label>
+
+        <div class="col-md-3">
+            <input
+                    type="text" placeholder="" class="form-control"/>
+
+        </div>
+
+    </div>
+
+    <div class="form-group">
+        <label for="inputName" class="col-md-1 control-label">Book Title</label>
+
+        <div class="col-md-3">
+            <input
+                    type="text" placeholder="" class="form-control"/>
+
+        </div>
+
+        <label for="inputName" class="col-md-1 control-label">Edition</label>
+
+        <div class="col-md-3">
+            <input
+                    type="text" placeholder="" class="form-control"/>
+
+        </div>
+
+        <label for="inputName" class="col-md-1 control-label">Sub Title</label>
+
+        <div class="col-md-3">
+            <input
+                    type="text" placeholder="" class="form-control"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="inputName" class="col-md-1 control-label">ISBN</label>
+
+        <div class="col-md-3">
+            <input
+                    type="text" placeholder="" class="form-control"/>
+
+        </div>
+
+        <label for="inputName" class="col-md-1 control-label">Imprint</label>
+
+        <div class="col-md-3">
+            <input
+                    type="text" placeholder="" class="form-control"/>
+
+        </div>
+
+        <label for="inputName" class="col-md-1 control-label">Phy. Desc.
+            <img src="https://cdn2.iconfinder.com/data/icons/officeicons/PNG/24/Help.png" height="16" width="16"
+                 style="float: right;cursor: pointer;" data-toggle="tooltip" data-placement="top" title="Physical Description" />
+        </label>
+
+        <div class="col-md-3">
+            <input
+                    type="text" placeholder="" class="form-control" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="inputName" class="col-md-1 control-label">Language</label>
+
+        <div class="col-md-3">
+            <input
+                    type="text" placeholder="" class="form-control"/>
+
+        </div>
+
+        <label for="inputName" class="col-md-1 control-label" >Acqui. Type
+            <img src="https://cdn2.iconfinder.com/data/icons/officeicons/PNG/24/Help.png" height="16" width="16"
+                 style="float: right;cursor: pointer;" data-toggle="tooltip" data-placement="top" title="Acquisition Type" />
+        </label>
+
+        <div class="col-md-3">
+            <input
+                    type="text" placeholder="" class="form-control"/>
+
+        </div>
+
+        <label for="inputName" class="col-md-1 control-label">T. T.  Edition
+            <img src="https://cdn2.iconfinder.com/data/icons/officeicons/PNG/24/Help.png" height="16" width="16"
+                 style="float: right;cursor: pointer;" data-toggle="tooltip" data-placement="top" title="Translation Title Edition" />
+        </label>
+
+        <div class="col-md-3">
+            <input
+                    type="text" placeholder="" class="form-control" />
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label for="inputName" class="col-md-1 control-label">Serial Title</label>
+
+        <div class="col-md-3">
+            <input
+                    type="text" placeholder="" class="form-control"/>
+
+        </div>
+
+        <label for="inputName" class="col-md-1 control-label">Volume No.</label>
+
+        <div class="col-md-3">
+            <input
+                    type="text" placeholder="" class="form-control"/>
+
+        </div>
+
+        <label for="inputName" class="col-md-1 control-label">Volume Title</label>
+
+        <div class="col-md-3">
+            <input
+                    type="text" placeholder="" class="form-control" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="inputName" class="col-md-1 control-label">Library Lacks</label>
+
+        <div class="col-md-3">
+            <input
+                    type="text" placeholder="" class="form-control"/>
+
+        </div>
+
+        <label for="inputName" class="col-md-1 control-label">Changed Titles</label>
+
+        <div class="col-md-3">
+            <input
+                    type="text" placeholder="" class="form-control"/>
+
+        </div>
+
+        <label for="inputName" class="col-md-1 control-label">Copy</label>
+
+        <div class="col-md-3">
+            <input
+                    type="text" placeholder="" class="form-control" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="inputName" class="col-md-1 control-label">Cor. A. Main
+            <img src="https://cdn2.iconfinder.com/data/icons/officeicons/PNG/24/Help.png" height="16" width="16"
+                 style="float: right;cursor: pointer;" data-toggle="tooltip" data-placement="top" title="Corporate Author Main" />
+        </label>
+
+        <div class="col-md-3">
+            <input
+                    type="text" placeholder="" class="form-control"/>
+
+        </div>
+
+        <label for="inputName" class="col-md-1 control-label">Sub Body</label>
+
+        <div class="col-md-3">
+            <input
+                    type="text" placeholder="" class="form-control"/>
+
+        </div>
+
+        <label for="inputName" class="col-md-1 control-label">City, Country</label>
+
+        <div class="col-md-3">
+            <input
+                    type="text" placeholder="" class="form-control" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="inputName" class="col-md-1 control-label">Binding Type
+
+        </label>
+
+        <div class="col-md-3">
+            <input
+                    type="text" placeholder="" class="form-control"/>
+
+        </div>
+
+
+    </div>
+
+    <fieldset style="padding-bottom: 5px;width: 100%;margin-top: 40px;">
+        <legend>Contributors
+            <span style="float: right;">[<i class="fa fa-plus-circle" aria-hidden="true" style="cursor: pointer;"></i>]</span>
+        </legend>
+        <div class="form-group">
+            <label for="inputName" class="col-md-1 control-label">View Order</label>
+
+            <div class="col-md-3">
+                <input
+                        type="text" placeholder="" class="form-control"/>
+
+            </div>
+
+            <label for="inputName" class="col-md-1 control-label">Role</label>
+
+            <div class="col-md-3">
+                <input
+                        type="text" placeholder="" class="form-control"/>
+
+            </div>
+
+            <label for="inputName" class="col-md-1 control-label">Name</label>
+
+            <div class="col-md-3">
+                <input
+                        type="text" placeholder="" class="form-control"/>
+
+            </div>
+
+        </div>
+        <div class="form-group">
+            <label for="inputName" class="col-md-1 control-label">View Order</label>
+
+            <div class="col-md-3">
+                <input
+                        type="text" placeholder="" class="form-control"/>
+
+            </div>
+
+            <label for="inputName" class="col-md-1 control-label">Role</label>
+
+            <div class="col-md-3">
+                <input
+                        type="text" placeholder="" class="form-control"/>
+
+            </div>
+
+            <label for="inputName" class="col-md-1 control-label">Name</label>
+
+            <div class="col-md-3">
+                <input
+                        type="text" placeholder="" class="form-control"/>
+
+            </div>
+
+        </div>
+    </fieldset>
+
+    <fieldset style="padding-bottom: 5px;width: 100%;margin-top: 20px;">
+        <legend>Subjects</legend>
+        <div class="form-group">
+            <label for="inputName" class="col-md-1 control-label">Primary Descriptors</label>
+
+            <div class="col-md-3">
+                <input
+                        type="text" placeholder="" class="form-control"/>
+
+            </div>
+
+            <label for="inputName" class="col-md-1 control-label">Secondary Descriptors</label>
+
+            <div class="col-md-3">
+                <input
+                        type="text" placeholder="" class="form-control"/>
+
+            </div>
+
+            <label for="inputName" class="col-md-1 control-label">Br. Subj. Heading
+                <img src="https://cdn2.iconfinder.com/data/icons/officeicons/PNG/24/Help.png" height="16" width="16"
+                     style="float: right;cursor: pointer;" data-toggle="tooltip" data-placement="top" title="Broad Subject Heading" />
+            </label>
+
+            <div class="col-md-3">
+                <input
+                        type="text" placeholder="" class="form-control"/>
+
+            </div>
+
+        </div>
+        <div class="form-group">
+            <label for="inputName" class="col-md-1 control-label">Keywords</label>
+
+            <div class="col-md-11">
+                <input
+                        type="text" placeholder="" class="form-control"/>
+
+            </div>
+
+
+
+        </div>
+    </fieldset>
+
+    <fieldset style="padding-bottom: 5px;width: 100%;margin-top: 20px;">
+        <legend>Notes
+            <span style="float: right;">[<i class="fa fa-plus-circle" aria-hidden="true" style="cursor: pointer;"></i>]</span>
+        </legend>
+        <div class="form-group">
+            <label for="inputName" class="col-md-1 control-label">View Order</label>
+
+            <div class="col-md-3">
+                <input
+                        type="text" placeholder="" class="form-control"/>
+
+            </div>
+
+            <label for="inputName" class="col-md-1 control-label">Note</label>
+
+            <div class="col-md-3">
+                <input
+                        type="text" placeholder="" class="form-control"/>
+
+            </div>
+
+
+        </div>
+        <div class="form-group">
+            <label for="inputName" class="col-md-1 control-label">View Order</label>
+
+            <div class="col-md-3">
+                <input
+                        type="text" placeholder="" class="form-control"/>
+
+            </div>
+
+            <label for="inputName" class="col-md-1 control-label">Note</label>
+
+            <div class="col-md-3">
+                <input
+                        type="text" placeholder="" class="form-control"/>
+
+            </div>
+
+
+        </div>
+
+    </fieldset>
+
+    <div class="row">
+        <div class="col-md-12"  style="padding-top: 45px;padding-left: 2%;">
+            <button type="button" class="btn btn-default">Save</button>&nbsp;&nbsp;&nbsp;
+            <button type="button" class="btn btn-default">Save & Continue Editing</button>&nbsp;&nbsp;&nbsp;
+            <button type="button" class="btn btn-default">Save & Edit Items</button>&nbsp;&nbsp;&nbsp;
+            <button type="button" class="btn btn-dark">Save & View Record</button>
+        </div>
+    </div>
+
+</div>
+
+
+<div style="margin-top: -25px;" data-ng-show="accessionInfo">
+
+    <div class="row">
+        <div class="col-md-12"  style="padding-top: 10px;">
+            <hot-table hot-id="bookCopyHandsOnTable"
+                       settings="data.settings"
+                       datarows="data.items"
+                       columns="data.columns">
+            </hot-table>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <p class="alignLeft" id="newItemTitle" style="padding-left: 2%;font-size: 18px;font-weight: bold;"><span>Add Item</span></p>
+            <!--Edit Item # 3 / Barcode 3 -->
+            <hr style="clear: both;"/>
+        </div>
+    </div>
+
+    <div class="form-body pal" style="margin-top: -25px;">
+        <div class="form-group">
+            <label class="col-md-1 control-label">Copy Number</label>
+            <div class="col-md-3">
+                <input
+                        type="text" class="form-control"/>
+
+            </div>
+
+            <label class="col-md-1 control-label">Accession #</label>
+
+            <div class="col-md-3">
+                <input
+                        id="inputName" type="text" placeholder="" class="form-control"/>
+
+            </div>
+
+            <label for="inputName" class="col-md-1 control-label">Price</label>
+
+            <div class="col-md-3">
+                <input
+                        type="text" placeholder="" class="form-control"/>
+
+            </div>
+
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-1 control-label">Barcode</label>
+            <div class="col-md-3">
+                <input
+                        type="text" class="form-control"/>
+
+            </div>
+
+            <label class="col-md-1 control-label">Supplier</label>
+
+            <div class="col-md-3">
+                <input
+                        id="inputName" type="text" placeholder="" class="form-control"/>
+
+            </div>
+
+            <label for="inputName" class="col-md-1 control-label">Internal Note</label>
+
+            <div class="col-md-3">
+                <input
+                        type="text" placeholder="" class="form-control"/>
+
+            </div>
+
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-md-12"  style="padding-top: 45px;padding-left: 4%;padding-bottom: 10px;">
+            <button type="button" class="btn btn-default">Add Item</button>&nbsp;&nbsp;&nbsp;
+            <button type="button" class="btn btn-default">Add & Duplicate</button>&nbsp;&nbsp;&nbsp;
+            <button type="button" class="btn btn-dark">Add Multiple copies of this item</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    setTimeout(function(){
+        $('[data-toggle="tooltip"]').tooltip(
+            {
+                container: 'body'
+            });
+    }, 1000);
+</script>

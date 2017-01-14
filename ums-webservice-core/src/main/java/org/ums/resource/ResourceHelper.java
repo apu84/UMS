@@ -119,4 +119,5 @@ public abstract class ResourceHelper<R extends EditType<M>, M extends Mutable, I
   protected abstract Builder<R, M> getBuilder();
 
   protected abstract String getEtag(R pReadonly);
+
 }

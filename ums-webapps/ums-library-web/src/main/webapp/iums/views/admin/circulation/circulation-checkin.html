@@ -1,0 +1,141 @@
+<style>
+    fieldset {
+        margin: 1em 1em 1em 0;
+        padding: 1em;
+        background-color: #f4f8f9;
+        border: 2px solid #b9d8d9;
+        border-radius: 5px;
+    }
+    legend {
+        font-weight: bold;
+        border: 2px solid #b9d8d9;
+        background-color: #ffffff;
+        border-radius: 3px;
+        width: auto;
+        padding: 0.2em 30px 0.2em 0.5em;
+        margin-bottom: 5px !important;
+        font-size: 14px;
+    }
+    .table-striped>tbody>tr:nth-of-type(odd) {
+        /*background-color: white !important;*/
+    }
+</style>
+<div class="row">
+    <div class="col-md-4">
+        <fieldset>
+            <legend>Check in</legend>
+            <label for="barcode">Enter item barcode: </label>
+
+            <input name="barcode" id="barcode" size="14" class="focus">
+
+            <input type="submit" class="submit" value="Submit">
+
+
+            <div class="date-select" id="return_date_override_fields">
+                <div class="hint">Specify return date (DD/MM/YYYY)
+                    : </div>
+
+                <input type="text" size="13" id="return_date_override" name="return_date_override" value="" class="hasDatepicker"><img class="ui-datepicker-trigger" src="/intranet-tmpl/prog/img/famfamfam/silk/calendar.png" alt="..." title="...">
+
+                <label for="return_date_override_remember"> Remember for next check in:</label>
+
+                <input type="checkbox" id="return_date_override_remember" onclick="this.form.barcode.focus();" name="return_date_override_remember">
+
+
+                <input type="button" class="action" id="cleardate" value="Clear" name="cleardate" onclick="this.checked = false; this.form.return_date_override.value = ''; this.form.return_date_override_remember.checked = false; this.form.barcode.focus(); return false;">
+            </div>
+
+
+
+
+        </fieldset>
+    </div>
+    <div class="col-md-4">
+        <fieldset id="checkin_options">
+            <legend>Options</legend>
+
+            <p>
+
+                <input type="checkbox" id="exemptcheck" name="exemptfine" value="exemptfine">
+
+                <label for="exemptcheck">Forgive overdue charges</label>
+            </p>
+            <!-- overduecharges -->
+            <p>
+
+                <input type="checkbox" id="dropboxcheck" name="dropboxmode" value="dropboxmode">
+                <label for="dropboxcheck">Book drop mode</label>
+            </p>
+            <!-- overduecharges -->
+        </fieldset>
+    </div>
+
+    <div class="col-md-4">
+        <fieldset id="checkin_options">
+            <legend>Patrons</legend>
+
+            <table class="table table-bordered table-striped table-condensed cf">
+                <thead class="cf">
+                <tr>
+                    <th width="80%">Name</th>
+                    <th width="20%" style="text-align: center;">Hold</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Ifta Khirul</td>
+                    <td style="text-align: center;"><span class="badge badge-danger pull-center">3</span></td>
+
+                </tr>
+                <tr>
+                    <td>Imrul Kayes</td>
+                    <td style="text-align: center;"><span class="badge badge-danger pull-center">3</span></td>
+                </tr>
+                </tbody>
+            </table>
+            <!-- overduecharges -->
+        </fieldset>
+    </div>
+</div>
+
+<!-- S - Checked-in Items Table Start -->
+
+<div class="row">
+    <div class="col-md-10 col-md-offset-1">
+        <p style="font-weight: bold;font-size: 16px;margin-top:10px;">Checked-in Items</p>
+        <table class="table table-bordered table-striped table-condensed cf">
+            <thead class="cf">
+            <tr>
+                <th>Due date</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Barcode</th>
+                <th>Call  Number</th>
+                <th>Type</th>
+                <th>Patron</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>AAC</td>
+                <td>AUSTRALIAN AGRICULTURAL</td>
+                <td>1.38</td>
+                <td>1.38</td>
+                <td>1.38</td>
+                <td>1.38</td>
+                <td>AUSTRALIAN AGRICULTURAL</td>
+            </tr>
+            <tr>
+                <td>AAC</td>
+                <td>AUSTRALIAN AGRICULTURAL</td>
+                <td>1.38</td>
+                <td>1.38</td>
+                <td>1.38</td>
+                <td>1.38</td>
+                <td>AUSTRALIAN AGRICULTURAL</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<!-- - X-  Checked-in Items Table End -->

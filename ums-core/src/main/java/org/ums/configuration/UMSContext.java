@@ -16,6 +16,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.ums.cache.*;
 import org.ums.cachewarmer.AutoCacheWarmer;
 import org.ums.cachewarmer.CacheWarmerManagerImpl;
+import org.ums.domain.model.immutable.AdmissionStudentsCertificateComment;
+import org.ums.domain.model.immutable.AdmissionStudentsCertificateHistory;
 import org.ums.domain.model.immutable.Examiner;
 import org.ums.domain.model.mutable.MutableExaminer;
 import org.ums.formatter.DateFormat;
@@ -111,6 +113,35 @@ public class UMSContext {
     admissionMeritListCache.setManager(new PersistentAdmissionMeritListDao(mTemplateFactory
         .getJdbcTemplate()));
     return admissionMeritListCache;
+  }
+
+  @Bean
+  AdmissionStudentCertificateManager admissionStudentCertificateManager() {
+    AdmissionStudentCertificateCache admissionStudentCertificateCache =
+        new AdmissionStudentCertificateCache(mCacheFactory.getCacheManager());
+    admissionStudentCertificateCache.setManager(new PersistentAdmissionStudentCertificateDao(
+        mTemplateFactory.getJdbcTemplate()));
+    return admissionStudentCertificateCache;
+  }
+
+  @Bean
+  AdmissionStudentsCertificateHistoryManager admissionStudentsCertificateHistoryManager() {
+    AdmissionStudentsCertificateHistoryCache admissionStudentsCertificateHistoryCache =
+        new AdmissionStudentsCertificateHistoryCache(mCacheFactory.getCacheManager());
+    admissionStudentsCertificateHistoryCache
+        .setManager(new PersistentAdmissionStudentsCertificateHistoryDao(mTemplateFactory
+            .getJdbcTemplate()));
+    return admissionStudentsCertificateHistoryCache;
+  }
+
+  @Bean
+  AdmissionStudentsCertificateCommentManager admissionStudentsCertificateCommentManager() {
+    AdmissionStudentsCertificateCommentCache admissionStudentsCertificateCommentCache =
+        new AdmissionStudentsCertificateCommentCache(mCacheFactory.getCacheManager());
+    admissionStudentsCertificateCommentCache
+        .setManager(new PersistentAdmissionStudentsCertificateCommentDao(mTemplateFactory
+            .getJdbcTemplate()));
+    return admissionStudentsCertificateCommentCache;
   }
 
   @Bean

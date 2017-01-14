@@ -42,10 +42,12 @@
                                     data-ng-model="programType"
                                     data-ng-change="getSemesters()"
                             ></select>
+
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-4 control-label">Semester</label>
+
                         <div class="col-md-8">
                             <select
                                     class="form-control required"
@@ -67,7 +69,7 @@
     </div>
     <div id="rightDiv" data-ng-if="rightDiv==true">
         <div class="panel">
-            <div class="panel-heading">Search Candidate By Receipt ID<span
+            <div class="panel-heading">Search Candidate By <b>ProgramType:</b> {{programType.name}} <b>Semester:</b> {{semester.name}} <b>ReceiptID:</b> {{receiptId}}<span
                     class="subtitle"></span></div>
             <div class="panel-body shadowPanel"   style="min-height: 490px;">
                 <div align="center">
@@ -76,7 +78,7 @@
                             <label class="control-label" style="font-weight: bold;">Receipt Id:</label>
                             <input type="text" class="form-control" data-ng-model="receiptId" placeholder="Enter Receipt Id">
                         </div>
-                        <button type="submit" class="btn btn-success" data-ng-click="searchByReceiptId(semester.id,receiptId)">Search</button>
+                        <button type="submit" class="btn btn-success" data-ng-click="searchByReceiptId(receiptId)">Search</button>
                     </form>
                 </div>
                 <br /><br /><br />
@@ -86,8 +88,8 @@
                         <div class="col-md-5">
                             <form>
                                 <fieldset style="padding-bottom: 5px;">
-                                    <legend>Candidate's General Information:</legend>
-                                    <table class="table">
+                                    <legend>General Information:</legend>
+                                    <table class="table table-striped">
                                         <tr>
                                             <th><label class="control-label" style="font-weight: bold;">Receipt Id:</label></th>
                                             <td><label class="control-label" style="font-weight: bold;">{{admissionStudent.receiptId}}</label></td>
@@ -110,6 +112,10 @@
                                             <th><label class="control-label" style="font-weight: bold;">Quota:</label></th>
                                             <td><label class="control-label" style="font-weight: bold;">{{admissionStudent.quota}}</label></td>
                                         </tr>
+                                        <tr>
+                                            <th><label class="control-label" style="font-weight: bold;">Unit:</label></th>
+                                            <td><label class="control-label" style="font-weight: bold;">{{admissionStudent.unit}}</label></td>
+                                        </tr>
                                     </table>
                                 </fieldset>
                             </form>
@@ -117,8 +123,8 @@
                         <div class="col-md-5">
                             <form>
                                 <fieldset style="padding-bottom: 5px;">
-                                    <legend>Candidate's Personal Information:</legend>
-                                    <table class="table">
+                                    <legend>Personal Information:</legend>
+                                    <table class="table table-striped">
                                         <tr>
                                             <th><label class="control-label" style="font-weight: bold;">Name:</label></th>
                                             <td><label class="control-label" style="font-weight: bold;">{{admissionStudent.studentName}}</label></td>
@@ -152,8 +158,8 @@
                         <div class="col-md-5">
                             <form>
                                 <fieldset style="padding-bottom: 5px;">
-                                    <legend>Candidate's HSC Information:</legend>
-                                    <table class="table">
+                                    <legend>HSC Information:</legend>
+                                    <table class="table table-striped">
                                         <tr>
                                             <th><label class="control-label" style="font-weight: bold;">HSC Board:</label></th>
                                             <td><label class="control-label" style="font-weight: bold;">{{admissionStudent.hscBoard}}</label></td>
@@ -185,8 +191,8 @@
                         <div class="col-md-5">
                             <form>
                                 <fieldset style="padding-bottom: 5px;">
-                                    <legend>Candidate's SSC Information:</legend>
-                                    <table class="table">
+                                    <legend>SSC Information:</legend>
+                                    <table class="table table-striped">
                                         <tr>
                                             <th><label class="control-label" style="font-weight: bold;">SSC Board:</label></th>
                                             <td><label class="control-label" style="font-weight: bold;">{{admissionStudent.sscBoard}}</label></td>
@@ -219,34 +225,34 @@
                         <div class="col-md-5">
                             <form>
                                 <fieldset style="padding-bottom: 5px;">
-                                    <legend>Student Verification</legend>
-                                        <div>
-                                            <label ng-repeat="aCName in academicCertificates"><br />
+                                    <legend>Student Certificates(Bengali)</legend>
+                                    <div>
+                                        <label ng-repeat="bmacName in banglaMediumAcademicCertificates"><br />
                                             <input
                                                     type="checkbox"
-                                                    name="selectedCertificates[]"
-                                                    value="{{aCName}}"
-                                                    ng-checked="exists(aCName)"
-                                                    ng-click="toggleSelection(aCName)"
-                                            >&nbsp; {{aCName.certificateTitle}} &nbsp;
-                                            </label>
-                                        </div>
+                                                    value="{{bmacName}}"
+                                                    ng-checked="{{bmacName.disableChecked}}"
+                                                    ng-click="toggleSelection(bmacName)"
+                                                    ng-disabled="{{bmacName.disableChecked}}"
+                                            >&nbsp; {{bmacName.certificateTitle}} &nbsp;
+                                        </label>
+                                    </div>
                                 </fieldset>
                             </form>
                         </div>
                         <div class="col-md-5">
                             <form>
                                 <fieldset style="padding-bottom: 5px;">
-                                    <legend>Person Verification</legend>
+                                    <legend>Student Certificates(English)</legend>
                                     <div>
-                                        <label ng-repeat="pCName in personalCertificates"><br />
+                                        <label ng-repeat="emacName in englishMediumAcademicCertificates"><br />
                                             <input
                                                     type="checkbox"
-                                                    name="selectedCertificates[]"
-                                                    value="{{pCName}}"
-                                                    ng-checked="exists(pCName)"
-                                                    ng-click="toggleSelection(pCName)"
-                                            >&nbsp; {{pCName.certificateTitle}} &nbsp;
+                                                    value="{{emacName}}"
+                                                    ng-checked="{{emacName.disableChecked}}"
+                                                    ng-click="toggleSelection(emacName)"
+                                                    ng-disabled="{{emacName.disableChecked}}"
+                                            >&nbsp; {{emacName.certificateTitle}} &nbsp;
                                         </label>
                                     </div>
                                 </fieldset>
@@ -254,13 +260,63 @@
                         </div>
                         <div class="col-md-1"></div>
                     </div>
-                    <br /> <br /><br /><br />
+                    <br /><br />
+                    <div class="row">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-5">
+                            <form>
+                                <fieldset style="padding-bottom: 5px;">
+                                    <legend>Person Certificates</legend>
+                                    <div>
+                                        <label ng-repeat="pcName in personalCertificates"><br />
+                                            <input
+                                                    type="checkbox"
+                                                    value="{{pcName}}"
+                                                    ng-checked="{{pcName.disableChecked}}"
+                                                    ng-click="toggleSelection(pcName)"
+                                                    ng-disabled="{{pcName.disableChecked}}"
+                                            >&nbsp; {{pcName.certificateTitle}} &nbsp;
+                                        </label>
+                                    </div>
+                                </fieldset>
+                            </form>
+                        </div>
+                        <div class="col-md-5">
+                            <form>
+                                <fieldset style="padding-bottom: 5px;">
+                                    <legend>Quota Certificates</legend>
+                                    <div>
+                                        <label ng-repeat="qcName in quotaCertificates"><br />
+                                            <input
+                                                    type="checkbox"
+                                                    value="{{qcName}}"
+                                                    ng-checked="{{qcName.disableChecked}}"
+                                                    ng-click="toggleSelection(qcName)"
+                                                    ng-disabled="{{qcName.disableChecked}}"
+                                            >&nbsp; {{qcName.certificateTitle}} &nbsp;
+                                        </label>
+                                    </div>
+                                </fieldset>
+                            </form>
+                        </div>
+                        <div class="col-md-1"></div>
+                    </div>
+                    <br /><br />
+                    <div class="row">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-10">
+                            <label for="comment">Comment:</label><br />
+                            <textarea class="form-control" id="comment" rows="5" data-ng-model="comment"></textarea>
+                        </div>
+                        <div class="col-md-1"></div>
+                    </div>
+                    <br /> <br />
                     <div class="row" align="right">
                         <div class="col-md-1"></div>
                         <div class="col-md-10">
-                            <button type="submit" class="btn btn-danger" data-ng-click="rejected()">Rejected</button>
-                            <button type="submit" class="btn btn-warning" data-ng-click="underTaken()">Undertaken Form</button>
-                            <button type="submit" class="btn btn-success" data-ng-click="verified()">Verified</button>
+                            <button type="submit" class="btn btn-danger" data-ng-click="rejected(comment)">Rejected</button>
+                            <button type="submit" class="btn btn-warning" data-ng-click="underTaken(comment)">Undertaken Form</button>
+                            <button type="submit" class="btn btn-success" data-ng-click="verified(comment)">Verified</button>
                         </div>
                         <div class="col-md-1"></div>
                     </div>

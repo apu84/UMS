@@ -57,6 +57,10 @@
     <script src="js/lib/hands-on-table/handsontable.full.min.js"></script>
     <script src="js/lib/hands-on-table/ngHandsontable.js"></script>
 
+    <script src="js/lib/angular-data-grid/pagination.min.js"></script>
+    <script src="js/lib/angular-data-grid/dataGrid.min.js"></script>
+    <script src="js/lib/angular-data-grid/loading-bar.min.js"></script>
+
     <script src="js/lib/angular-translate.min.js"></script>
 
     <script src="vendors/jquery-migrate-1.2.1.min.js"></script>
@@ -121,6 +125,40 @@
             <div class="modal-body" id="alertMessage" style="font-size: 17px;"></div>
             <div class="modal-footer">
                 <button type="button" data-dismiss="modal" class="btn btn-primary">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal Full Width for User Guide Html View-->
+<div id="modal-full-width" tabindex="-1" role="dialog" aria-labelledby="modal-full-width-label"
+     aria-hidden="true" class="modal fade">
+    <div class="modal-dialog modal-full-width" style="padding-left: 9px;height: 84%;">
+        <div class="modal-content" style="height: 99%;">
+            <div class="modal-header" style="padding: 7px 15px;">
+                <button type="button" data-dismiss="modal" aria-hidden="true"
+                        class="close" style="opacity: 1;margin-top: 0px;">&times;</button>
+                <h4 id="modal-full-width-label" class="modal-title" style="font-size: 16px;">User Guide-Html View</h4></div>
+            <div class="modal-body" data-ng-bind-html="data.htmlUserGuide" style="height: calc(100% - 90px);"></div>
+            <div class="modal-footer" style="padding: 7px 15px;">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal Default-->
+<div id="modal-default" tabindex="-1" role="dialog" aria-labelledby="modal-default-label"
+     aria-hidden="true" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" data-dismiss="modal" aria-hidden="true"
+                        class="close" style="opacity: 1;margin-top: 0px;">&times;</button>
+                <h4 id="modal-default-label" class="modal-title">Modal Default</h4></div>
+            <div class="modal-body">Modal body goes here</div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
             </div>
         </div>
     </div>

@@ -33,6 +33,23 @@ module ums{
       return defer.promise;
     }
 
+    public fetchAdmissionStudentByReceiptId(semesterId:number, programType:number, receiptId:string):ng.IPromise<any>{
+      var url="academic/admission/semester/"+semesterId+"/programType/"+programType+"/receiptId/"+receiptId;
+      var defer = this.$q.defer();
+
+      this.httpClient.get(url, this.appConstants.mimeTypeJson,
+          (json:any, etag:string)=>{
+            var admissionStudent:any = json.entries;
+            console.log(admissionStudent);
+            defer.resolve(admissionStudent[0]);
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>)=>{
+            console.error(response);
+          });
+
+      return defer.promise;
+    }
+
     public fetchTaletalkDataWithMeritType(semesterId:number, programType:number, meritTypeId:number, unit:string):ng.IPromise<any>{
       var url="academic/admission/taletalkData/semester/"+semesterId+"/programType/"+programType+"/unit/"+unit+"/meritType/"+meritTypeId;
       var defer = this.$q.defer();
@@ -52,6 +69,22 @@ module ums{
 
     public fetchMeritList(semesterId:number, programType:number, meritTypeId:number, unit:string):ng.IPromise<any>{
       var url="academic/admission/meritList/semester/"+semesterId+"/programType/"+programType+"/unit/"+unit+"/meritType/"+meritTypeId;
+      var defer = this.$q.defer();
+
+      this.httpClient.get(url, this.appConstants.mimeTypeJson,
+          (json:any, etag:string)=>{
+            var admissionStudents:any = json.entries;
+            defer.resolve(admissionStudents);
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>)=>{
+            console.error(response);
+          });
+
+      return defer.promise;
+    }
+
+    public fetchStatistics(semesterId:number, programType:number, meritTypeId:number, unit:string):ng.IPromise<any>{
+      var url="academic/admission/statistics/semester/"+semesterId+"/programType/"+programType+"/unit/"+unit+"/meritType/"+meritTypeId;
       var defer = this.$q.defer();
 
       this.httpClient.get(url, this.appConstants.mimeTypeJson,
@@ -126,6 +159,21 @@ module ums{
         defer.resolve("error");
       });
 
+      return defer.promise;
+    }
+
+    public saveAndFetchNextStudentForDepartmentSelection(departmentSelectionStatus:number, json:any):ng.IPromise<any>{
+      var defer = this.$q.defer();
+      var url = "academic/admission/departmentSelectionStatus/"+departmentSelectionStatus;
+
+      this.httpClient.put(url, json, 'application/json')
+          .success((data)=>{
+              this.notify.success("Successfully Saved");
+              console.log(data);
+              defer.resolve(data.entries);
+          }).error((data)=>{
+
+          });
       return defer.promise;
     }
   }

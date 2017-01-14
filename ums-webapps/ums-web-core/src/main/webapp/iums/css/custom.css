@@ -1,3 +1,6 @@
+.page-content{
+    padding-bottom: 0px !important;
+}
 @font-face {
     font-family: 'open_sanslight';
     src: url('fonts/opensans-light-webfont.eot');
@@ -273,11 +276,6 @@ hr.style-eight:after {
     background: white;
 }
 /* End of horizontal bar style */
-
-/* Modal Style Override */
-.modal-dialog {
-    margin: 100px auto !important;
-}
 .course-teacher-inner-header {
     border: 0;
     width: 100%;
@@ -322,6 +320,9 @@ div.ui-jqgrid-view table.ui-jqgrid-btable th {
 .ui-jqgrid .ui-jqgrid-btable { cursor : pointer; }
 
 /* Change the Modal Dialog Style as it was overridden by Jquery File Upload Manager */
+.modal-dialog {
+    margin: 100px auto !important;
+}
 .modal .modal-header{
     background:#4b5d67 !important;
     border-radius:0px !important;
@@ -332,6 +333,28 @@ div.ui-jqgrid-view table.ui-jqgrid-btable th {
 .modal .modal-header .close{
     color:white !important;
 }
+
+/*----------*/
+.modal-open {
+        padding-right: 0 !important;
+        overflow-y: scroll;
+    }
+    .modal-header {
+        padding: 10px 15px !important;
+    }
+    .modal-footer {
+        padding: 8px 15px !important;
+    }
+    .modal-backdrop{
+        background-position: center center;
+        background-repeat: no-repeat;
+        background: -webkit-gradient(radial, center center, 0, center center, 460, from(#ffffff), to(#E5E7E9));
+        background: -webkit-radial-gradient(circle, #ffffff, #E5E7E9);
+        background: -moz-radial-gradient(circle, #ffffff, #E5E7E9);
+        background: -ms-radial-gradient(circle, #ffffff, #E5E7E9);
+        background-color: rgb(0, 0, 0);
+        zoom: 1;
+    }
 /*== End ==*/
 
 .page-title-breadcrumb{

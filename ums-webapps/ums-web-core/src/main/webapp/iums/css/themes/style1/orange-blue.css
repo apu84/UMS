@@ -49,7 +49,7 @@ body {
   line-height: 1.42857143;
   color: #777;
   background-color: #f0f2f5;
-  height: 100%;
+  /*height: 100%; commented by ifti */
 }
 input,
 button,
@@ -1306,7 +1306,8 @@ hr {
 /* End Left Sidebar Collapsed */
 .page-content {
   padding: 20px 20px 50px 20px;
-  min-height: 700px;
+ /* min-height: 700px; commented by ifti */
+  min-height: calc(100vh - 160px);
   clear: both;
 }
 #footer {
