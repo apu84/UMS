@@ -80,7 +80,6 @@ public class AdmissionStudentCache extends
     return getManager().getByStudentId(pStudentId);
   }
 
-
   @Override
   public AdmissionStudent getAdmissionStudent(int pSemesterId, ProgramType pProgramType,
       String pReceiptId) {
@@ -102,7 +101,7 @@ public class AdmissionStudentCache extends
 
   @Override
   public List<AdmissionStudent> getNewStudentByReceiptId(int pSemesterId, String receiptId) {
-    return getNewStudentByReceiptId(pSemesterId,receiptId);
+    return getNewStudentByReceiptId(pSemesterId, receiptId);
   }
 
   @Override

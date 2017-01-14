@@ -31,14 +31,14 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
   private ProgramManager mProgramManager;
 
   String SELECT_ONE =
-      " select SEMESTER_ID, RECEIPT_ID, PIN, HSC_BOARD, HSC_ROLL,  " +
-          "    HSC_REGNO, HSC_YEAR, HSC_GROUP, SSC_BOARD, SSC_ROLL,  " +
-          "    SSC_YEAR, SSC_GROUP, GENDER, DATE_OF_BIRTH, STUDENT_NAME,  " +
-          "    FATHER_NAME, MOTHER_NAME, SSC_GPA, HSC_GPA, QUOTA,  " +
-          "    ADMISSION_ROLL, MERIT_SL_NO, STUDENT_ID, ALLOCATED_PROGRAM_ID, MIGRATION_STATUS,  " +
-          "    LAST_MODIFIED, UNIT, PROGRAM_TYPE, NID, BIRTH_REG,  " +
-          "    PASSPORT, PROGRAM_ID_BY_MERIT, PROGRAM_ID_BY_TRANSFER, PRESENT_STATUS, to_char(DEADLINE,'dd/mm/yyyy') deadline,  " +
-          "    VERIFICATION_STATUS from admission_students ";
+      " select SEMESTER_ID, RECEIPT_ID, PIN, HSC_BOARD, HSC_ROLL,  "
+          + "    HSC_REGNO, HSC_YEAR, HSC_GROUP, SSC_BOARD, SSC_ROLL,  "
+          + "    SSC_YEAR, SSC_GROUP, GENDER, DATE_OF_BIRTH, STUDENT_NAME,  "
+          + "    FATHER_NAME, MOTHER_NAME, SSC_GPA, HSC_GPA, QUOTA,  "
+          + "    ADMISSION_ROLL, MERIT_SL_NO, STUDENT_ID, ALLOCATED_PROGRAM_ID, MIGRATION_STATUS,  "
+          + "    LAST_MODIFIED, UNIT, PROGRAM_TYPE, NID, BIRTH_REG,  "
+          + "    PASSPORT, PROGRAM_ID_BY_MERIT, PROGRAM_ID_BY_TRANSFER, PRESENT_STATUS, to_char(DEADLINE,'dd/mm/yyyy') deadline,  "
+          + "    VERIFICATION_STATUS from admission_students ";
 
   String SELECT_ONE_TALETALK_DATA =
       "select SEMESTER_ID, RECEIPT_ID, PIN, HSC_BOARD, HSC_ROLL,       "
@@ -275,7 +275,7 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
 
   public List<AdmissionStudent> getNewStudentByReceiptId(String pProgramType, int pSemesterId,
       String pReceiptId) {
-    String query = GET_ONE + "WHERE PROGRAM_TYPE=? AND SEMESTER_ID=? AND RECEIPT_ID=? ";
+    String query = SELECT_ONE + " WHERE PROGRAM_TYPE=? AND SEMESTER_ID=? AND RECEIPT_ID=? ";
     return mJdbcTemplate.query(query, new Object[] {pProgramType, pSemesterId, pReceiptId},
         new AdmissionStudentRowMapper());
   }
@@ -317,7 +317,6 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
       student.setSSCGpa(pResultSet.getDouble("ssc_gpa"));
       student.setHSCGpa(pResultSet.getDouble("hsc_gpa"));
       student.setQuota(pResultSet.getString("quota"));
-      student.setUnit(pResultSet.getString("unit"));
       student.setAdmissionRoll(pResultSet.getString("admission_roll"));
       student.setMeritSerialNo(pResultSet.getInt("merit_sl_no"));
       student.setStudentId(pResultSet.getString("student_id"));
@@ -325,6 +324,7 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
       student.setMigrationStatus(MigrationStatus.get(pResultSet.getInt("migration_status")));
       student.setLastModified(pResultSet.getString("last_modified"));
       student.setUnit(pResultSet.getString("unit"));
+      student.setProgramType(ProgramType.get(pResultSet.getInt("PROGRAM_TYPE")));
       student.setNID(pResultSet.getString("nid"));
       student.setBirthReg(pResultSet.getString("birth_reg"));
       student.setPassportNo(pResultSet.getString("passport"));

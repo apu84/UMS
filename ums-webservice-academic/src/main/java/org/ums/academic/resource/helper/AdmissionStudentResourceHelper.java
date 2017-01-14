@@ -127,7 +127,7 @@ public class AdmissionStudentResourceHelper extends
 
   @Transactional
   public JsonObject saveDepartmentSelectionInfoAndRetrieveNextStudent(JsonObject pJsonObject,
-                                                                      final DepartmentSelectionType pDepartmentSelectionType, UriInfo pUriInfo) throws Exception {
+      final DepartmentSelectionType pDepartmentSelectionType, UriInfo pUriInfo) throws Exception {
     JsonArray entries = pJsonObject.getJsonArray("entries");
     LocalCache localCache = new LocalCache();
     JsonObject jsonObject = entries.getJsonObject(0);
@@ -212,12 +212,11 @@ public class AdmissionStudentResourceHelper extends
     return object.build();
   }
 
-
   public JsonObject getAdmissionStudentByReceiptId(final int pSemesterId,
-                                                   final ProgramType pProgramType, final String pReceiptId, final UriInfo pUriInfo) {
+      final ProgramType pProgramType, final String pReceiptId, final UriInfo pUriInfo) {
 
     AdmissionStudent student =
-            getContentManager().getAdmissionStudent(pSemesterId, pProgramType, pReceiptId);
+        getContentManager().getAdmissionStudent(pSemesterId, pProgramType, pReceiptId);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
@@ -230,10 +229,10 @@ public class AdmissionStudentResourceHelper extends
   }
 
   public JsonObject getAdmissionStudentByReceiptId(final String pProgramType,
-                                                   final int pSemesterId, final String pReceiptId, final UriInfo pUriInfo) {
+      final int pSemesterId, final String pReceiptId, final UriInfo pUriInfo) {
 
     List<AdmissionStudent> student =
-            getContentManager().getNewStudentByReceiptId(pProgramType, pSemesterId, pReceiptId);
+        getContentManager().getNewStudentByReceiptId(pProgramType, pSemesterId, pReceiptId);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
@@ -241,15 +240,13 @@ public class AdmissionStudentResourceHelper extends
     for(AdmissionStudent admissionStudent : student) {
       JsonObjectBuilder jsonObject = Json.createObjectBuilder();
       getBuilder().getAdmissionStudentByReceiptIdBuilder(jsonObject, admissionStudent, pUriInfo,
-              localCache);
+          localCache);
       children.add(jsonObject);
     }
     object.add("entries", children);
     localCache.invalidate();
     return object.build();
   }
-
-
 
   public JsonObject getAdmissionMeritList(final int pSemesterId, final ProgramType pProgramType,
       final QuotaType pQuotaType, String pUnit, final UriInfo pUriInfo) {

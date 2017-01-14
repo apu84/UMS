@@ -62,7 +62,6 @@ public class AdmissionStudentDaoDecorator extends
     return getManager().getByStudentId(pStudentId);
   }
 
-
   @Override
   public AdmissionStudent getAdmissionStudent(int pSemesterId, ProgramType pProgramType,
       String pReceiptId) {
@@ -77,7 +76,7 @@ public class AdmissionStudentDaoDecorator extends
 
   @Override
   public List<AdmissionStudent> getNewStudentByReceiptId(int pSemesterId, String receiptId) {
-    return getManager().getNewStudentByReceiptId(pSemesterId,receiptId);
+    return getManager().getNewStudentByReceiptId(pSemesterId, receiptId);
   }
 
   @Override
