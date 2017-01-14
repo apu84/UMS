@@ -71,4 +71,6 @@ public interface MutableAdmissionStudent extends AdmissionStudent, Mutable,
   void setMigrationStatus(final MigrationStatus pMigrationStatus);
 
   void setPresentStatus(final PresentStatus pPresentStatus);
+
+  void setVerificationStatus(final int pVerificationStatus);
 }

@@ -151,6 +151,7 @@ module ums{
 
 
     private downloadTemplate():void{
+
       this.admissionStudentService.downloadMeritListExcelFile(this.$scope.semester.id);
     }
 

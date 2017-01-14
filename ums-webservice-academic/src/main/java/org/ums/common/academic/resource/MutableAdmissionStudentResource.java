@@ -34,4 +34,10 @@ public class MutableAdmissionStudentResource extends Resource {
     return mHelper.saveMeritListData(pJsonObject, mUriInfo);
   }
 
+  @PUT
+  @Path("/verificationStatus")
+  public Response verificationStatus(final JsonObject pJsonObject) {
+    return mHelper.putVerificationStatus(pJsonObject, mUriInfo);
+  }
+
 }

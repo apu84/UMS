@@ -80,15 +80,15 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
       + "      ?, ?, ?, ?, ?,  " + "      ?, ?, ?, ?, ?,  " + "         ?, ?, ?, ?, ?,  "
       + "   ?, ?, ?, ?, ?,  " + "   ?, " + getLastModifiedSql() + ")";
 
-  String GET_ONE = "SELECT SEMESTER_ID, RECEIPT_ID, PIN, HSC_BOARD, HSC_ROLL,  "
-      + "    HSC_REGNO, HSC_YEAR, HSC_GROUP, SSC_BOARD, SSC_ROLL,  "
-      + "    SSC_YEAR, SSC_GROUP, GENDER, DATE_OF_BIRTH, STUDENT_NAME,  "
-      + "    FATHER_NAME, MOTHER_NAME, SSC_GPA, HSC_GPA, QUOTA,  "
-      + "    ADMISSION_ROLL, MERIT_SL_NO, STUDENT_ID, ALLOCATED_PROGRAM_ID, MIGRATION_STATUS,  "
-      + "    LAST_MODIFIED, UNIT from admission_students ";
+  String GET_ONE =
+      "SELECT SEMESTER_ID, RECEIPT_ID, PIN, HSC_BOARD, HSC_ROLL,  "
+          + "    HSC_REGNO, HSC_YEAR, HSC_GROUP, SSC_BOARD, SSC_ROLL,  "
+          + "    SSC_YEAR, SSC_GROUP, GENDER, to_char(DATE_OF_BIRTH,'dd/mm/yy') date_of_birth, STUDENT_NAME,  "
+          + "    FATHER_NAME, MOTHER_NAME, SSC_GPA, HSC_GPA, QUOTA,  "
+          + "    ADMISSION_ROLL, MERIT_SL_NO, STUDENT_ID, ALLOCATED_PROGRAM_ID, MIGRATION_STATUS,  "
+          + "    LAST_MODIFIED, UNIT from admission_students ";
 
-  String GET_ALL =
-      "SELECT CERTIFICATE_ID, CERTIFICATE_TITLE, CERTIFICATE_TYPE FROM ADMISSION_CERTIFICATES ";
+  String GET_BY_STUDENTID = "SELECT RECEIPT_ID FROM ADMISSION_STUDENTS ";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -113,6 +113,14 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
     String query =
         "update admission_students set merit_sl_no=? , admission_roll=? where semester_id=? and receipt_id=?";
     return mJdbcTemplate.batchUpdate(query, getMeritListParams(pStudents)).length;
+  }
+
+  public int saveVerificationStatus(MutableAdmissionStudent pStudent) {
+    MutableAdmissionStudent student = pStudent;
+    String query =
+        "update admission_students set verification_status=? where program_type=? and semester_id=? and receipt_id=?";
+    return mJdbcTemplate.update(query, student.getVerificationStatus(), student.getProgramType()
+        .getValue(), student.getSemester().getId(), student.getReceiptId());
   }
 
   private List<Object[]> getAdmissionStudentParams(List<MutableAdmissionStudent> pStudents) {
@@ -214,16 +222,17 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
     return pQuery;
   }
 
-  public List<AdmissionStudent> getNewStudentByReceiptId(int pSemesterId, String pReceiptId) {
-    String query = GET_ONE + "WHERE SEMESTER_ID=? AND RECEIPT_ID=? ";
-    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pReceiptId},
+  public List<AdmissionStudent> getNewStudentByReceiptId(String pProgramType, int pSemesterId,
+      String pReceiptId) {
+    String query = GET_ONE + "WHERE PROGRAM_TYPE=? AND SEMESTER_ID=? AND RECEIPT_ID=? ";
+    return mJdbcTemplate.query(query, new Object[] {pProgramType, pSemesterId, pReceiptId},
         new AdmissionStudentRowMapper());
   }
 
-  public List<AdmissionStudentCertificate> getAdmissionStudentCertificateLists() {
-    String query = GET_ALL;
-    return mJdbcTemplate.query(query, new Object[] {}, new AdmissionCertificateRowMapper());
-  }
+  // public AdmissionStudent getByStudentId(String pStudentId){
+  // String query = GET_BY_STUDENTID + "WHERE STUDENT_ID=?";
+  // return mJdbcTemplate.query(query, new Object[] {pStudentId}, new AdmissionStudentRowMapper());
+  // }
 
   class AdmissionStudentRowMapper implements RowMapper<AdmissionStudent> {
     @Override
@@ -273,17 +282,6 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
       student.setQuota(pResultSet.getString("quota"));
       student.setLastModified(pResultSet.getString("last_modified"));
       return student;
-    }
-  }
-
-  class AdmissionCertificateRowMapper implements RowMapper<AdmissionStudentCertificate> {
-    @Override
-    public AdmissionStudentCertificate mapRow(ResultSet pResultSet, int pI) throws SQLException {
-      MutableAdmissionStudentCertificate certificate = new PersistentAdmissionStudentCertificate();
-      certificate.setCertificateId(pResultSet.getInt("certificate_id"));
-      certificate.setCertificateTitle(pResultSet.getNString("certificate_title"));
-      certificate.setCetificateType(pResultSet.getString("certificate_type"));
-      return certificate;
     }
   }
 

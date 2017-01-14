@@ -61,6 +61,7 @@ public class PersistentAdmissionStudent implements MutableAdmissionStudent {
   private String mLastModified;
   private ProgramType mProgramType;
   private PresentStatus mPresentStatus;
+  private int mVerificationStatus;
 
   public PersistentAdmissionStudent() {}
 
@@ -97,6 +98,7 @@ public class PersistentAdmissionStudent implements MutableAdmissionStudent {
     mLastModified = pAdmissionStudent.getLastModified();
     mProgramType = pAdmissionStudent.getProgramType();
     mPresentStatus = pAdmissionStudent.getPresentStatus();
+    mVerificationStatus = pAdmissionStudent.getVerificationStatus();
   }
 
   @Override
@@ -105,8 +107,18 @@ public class PersistentAdmissionStudent implements MutableAdmissionStudent {
   }
 
   @Override
+  public int getVerificationStatus() {
+    return mVerificationStatus;
+  }
+
+  @Override
   public void setPresentStatus(PresentStatus pPresentStatus) {
     mPresentStatus = pPresentStatus;
+  }
+
+  @Override
+  public void setVerificationStatus(int pVerificationStatus) {
+    mVerificationStatus = pVerificationStatus;
   }
 
   @Override

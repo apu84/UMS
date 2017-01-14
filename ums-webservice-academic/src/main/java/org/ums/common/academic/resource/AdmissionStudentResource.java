@@ -49,16 +49,11 @@ public class AdmissionStudentResource extends MutableAdmissionStudentResource {
   }
 
   @GET
-  @Path("/semesterId/{semester-id}/receiptId/{receipt-id}")
-  public JsonObject getNewStudentByReceiptId(@PathParam("semester-id") int pSemesterId,
-      @PathParam("receipt-id") String pReceiptId, final @Context Request pRequest) {
-    return mHelper.getAdmissionStudentByReceiptId(pSemesterId, pReceiptId, mUriInfo);
-  }
-
-  @GET
-  @Path("/certificateLists")
-  public JsonObject getAllCertificates(final @Context Request pRequest) {
-    return mHelper.getCertificates(mUriInfo);
+  @Path("/programType/{program-type}/semesterId/{semester-id}/receiptId/{receipt-id}")
+  public JsonObject getNewStudentByReceiptId(@PathParam("program-type") String pProgramType,
+      @PathParam("semester-id") int pSemesterId, @PathParam("receipt-id") String pReceiptId,
+      final @Context Request pRequest) {
+    return mHelper.getAdmissionStudentByReceiptId(pProgramType, pSemesterId, pReceiptId, mUriInfo);
   }
 
 }

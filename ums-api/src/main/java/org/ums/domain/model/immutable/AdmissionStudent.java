@@ -73,4 +73,6 @@ public interface AdmissionStudent extends Serializable, EditType<MutableAdmissio
   MigrationStatus getMigrationStatus();
 
   PresentStatus getPresentStatus();
+
+  int getVerificationStatus();
 }

@@ -14,6 +14,7 @@ import org.ums.enums.MigrationStatus;
 import org.ums.enums.ProgramType;
 import org.ums.manager.ProgramManager;
 import org.ums.manager.SemesterManager;
+import org.ums.persistent.model.PersistentAdmissionStudent;
 import sun.dc.pr.PRError;
 
 import javax.json.JsonObject;
@@ -41,8 +42,6 @@ public class AdmissionStudentBuilder implements Builder<AdmissionStudent, Mutabl
   public void admissionStudentBuilder(JsonObjectBuilder pBuilder, AdmissionStudent pReadOnly,
       UriInfo pUriInfo, LocalCache pLocalCache, String type) {
 
-    pBuilder.add("id", pReadOnly.getReceiptId());
-    pBuilder.add("text", pReadOnly.getReceiptId());
     pBuilder.add("semesterId", pReadOnly.getSemester().getId());
     pBuilder.add("semesterName", pReadOnly.getSemester().getName());
     pBuilder.add("receiptId", pReadOnly.getId());
@@ -109,20 +108,18 @@ public class AdmissionStudentBuilder implements Builder<AdmissionStudent, Mutabl
     pBuilder.add("unit", pReadOnly.getUnit());
 
     if(pReadOnly.getAdmissionRoll() == null) {
-      pBuilder.add("admissionRoll", "Not Available");
-      pBuilder.add("meritSlNo", "Not Available");
+      pBuilder.add("admissionRoll", "Unavailable");
     }
     else {
       pBuilder.add("admissionRoll", pReadOnly.getAdmissionRoll());
+    }
+
+    if(pReadOnly.getMeritSerialNo() == 0) {
+      pBuilder.add("meritSlNo", "Unavailable");
+    }
+    else {
       pBuilder.add("meritSlNo", pReadOnly.getMeritSerialNo());
     }
-  }
-
-  public void admissionStudentCertificateBuilder(JsonObjectBuilder pBuilder,
-      AdmissionStudentCertificate pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
-    pBuilder.add("certificateId", pReadOnly.getCertificateId());
-    pBuilder.add("certificateTitle", pReadOnly.getCertificateTitle());
-    pBuilder.add("certificateType", pReadOnly.getCertificateType());
   }
 
   @Override
@@ -172,5 +169,13 @@ public class AdmissionStudentBuilder implements Builder<AdmissionStudent, Mutabl
       pMutable.setMeritSerialNo(pJsonObject.getInt("meritSlNo"));
       pMutable.setAdmissionRoll(pJsonObject.getString("admissionRoll"));
     }
+  }
+
+  public void setVerificationStatus(MutableAdmissionStudent pMutable, JsonObject pJsonObject,
+      LocalCache pLocalCache) {
+    pMutable.setId(pJsonObject.getString("receiptId"));
+    pMutable.setSemester(mSemesterManager.get(pJsonObject.getInt("semesterId")));
+    pMutable.setProgramType(ProgramType.get(pJsonObject.getInt("programType")));
+    pMutable.setVerificationStatus(pJsonObject.getInt("status"));
   }
 }
