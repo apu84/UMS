@@ -89,6 +89,20 @@ public class AdmissionStudentBuilder implements Builder<AdmissionStudent, Mutabl
       pBuilder.add("deadline", pReadOnly.getDeadline());
     }
 
+    if(pReadOnly.getAdmissionRoll() == null) {
+      pBuilder.add("admissionRoll", "Unavailable");
+    }
+    else {
+      pBuilder.add("admissionRoll", pReadOnly.getAdmissionRoll());
+    }
+
+    if(pReadOnly.getMeritSerialNo() == 0) {
+      pBuilder.add("meritSlNo", "Unavailable");
+    }
+    else {
+      pBuilder.add("meritSlNo", pReadOnly.getMeritSerialNo());
+    }
+
   }
 
   public void getAdmissionStudentByReceiptIdBuilder(JsonObjectBuilder pBuilder,

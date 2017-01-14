@@ -31,13 +31,14 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
   private ProgramManager mProgramManager;
 
   String SELECT_ONE =
-      " select SEMESTER_ID, RECEIPT_ID, PIN, HSC_BOARD, HSC_ROLL,  "
-          + "    HSC_REGNO, HSC_YEAR, HSC_GROUP, SSC_BOARD, SSC_ROLL,  "
-          + "    SSC_YEAR, SSC_GROUP, GENDER, DATE_OF_BIRTH, STUDENT_NAME,  "
-          + "    FATHER_NAME, MOTHER_NAME, SSC_GPA, HSC_GPA, QUOTA,  "
-          + "    ADMISSION_ROLL, MERIT_SL_NO, STUDENT_ID, ALLOCATED_PROGRAM_ID, MIGRATION_STATUS,  "
-          + "    LAST_MODIFIED, UNIT, PROGRAM_TYPE, NID, BIRTH_REG,  "
-          + "    PASSPORT, PROGRAM_ID_BY_MERIT, PROGRAM_ID_BY_TRANSFER, PRESENT_STATUS, to_char(DEADLINE,'dd/mm/yyyy') deadline from admission_students ";
+      " select SEMESTER_ID, RECEIPT_ID, PIN, HSC_BOARD, HSC_ROLL,  " +
+          "    HSC_REGNO, HSC_YEAR, HSC_GROUP, SSC_BOARD, SSC_ROLL,  " +
+          "    SSC_YEAR, SSC_GROUP, GENDER, DATE_OF_BIRTH, STUDENT_NAME,  " +
+          "    FATHER_NAME, MOTHER_NAME, SSC_GPA, HSC_GPA, QUOTA,  " +
+          "    ADMISSION_ROLL, MERIT_SL_NO, STUDENT_ID, ALLOCATED_PROGRAM_ID, MIGRATION_STATUS,  " +
+          "    LAST_MODIFIED, UNIT, PROGRAM_TYPE, NID, BIRTH_REG,  " +
+          "    PASSPORT, PROGRAM_ID_BY_MERIT, PROGRAM_ID_BY_TRANSFER, PRESENT_STATUS, to_char(DEADLINE,'dd/mm/yyyy') deadline,  " +
+          "    VERIFICATION_STATUS from admission_students ";
 
   String SELECT_ONE_TALETALK_DATA =
       "select SEMESTER_ID, RECEIPT_ID, PIN, HSC_BOARD, HSC_ROLL,       "
@@ -331,6 +332,7 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
       student.setProgramIdByTransfer(pResultSet.getInt("program_id_by_transfer"));
       student.setPresentStatus(PresentStatus.get(pResultSet.getInt("present_status")));
       student.setDeadline(pResultSet.getString("deadline"));
+      student.setVerificationStatus(pResultSet.getInt("verification_status"));
       return student;
     }
   }
