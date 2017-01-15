@@ -24,7 +24,7 @@
     /* Position the content inside the overlay */
     .overlay-content {
         position: relative;
-        top: 2%; /* 25% from the top */
+        top: 5%; /* 25% from the top */
         width: 100%; /* 100% width */
         text-align: center; /* Centered text/links */
         margin-top: 30px; /* 30px top margin to avoid conflict with the close button on smaller screens */
@@ -35,7 +35,7 @@
     .overlay a {
         padding: 8px;
         text-decoration: none;
-        font-size: 36px;
+        font-size: 36vw;
         color: #818181;
         display: block; /* Display block instead of inline */
         transition: 0.3s; /* Transition effects on hover (color) */
@@ -212,13 +212,26 @@
 
                     </div>
                     <div id="myModal" class="overlay">
-                        <a href="javascript:void(0)" class="closebtn" data-ng-click="closeNav()">&times;</a>
+                        <div class="closebtn">
+
+                            <div class="btn-group btn-group-xs" role="group" aria-label="...">
+                                <button class="btn btn-default" data-ng-click="showOrHideTable('ga')">GA</button>
+                                <button class="btn btn-default" data-ng-click="showOrHideTable('ff')">FF</button>
+                                <button class="btn btn-default" data-ng-click="showOrHideTable('ra')">RA</button>
+                                <button class="btn btn-default" data-ng-click="showOrHideTable('gce')">GCE</button>
+                                <button type="button" class="btn  btn-primary" data-ng-click="increaseFontSize()"><i class="fa fa-chevron-up" aria-hidden="true"></i></button>
+                                <button type="button" class="btn  btn-primary" data-ng-click="decreaseFontSize()"><i class="fa fa-chevron-down" aria-hidden="true"></i></button>
+                                <button type="button" class="btn btn-danger"  onclick="closeNav()">&times;</button>
+                            </div>
+
+                        </div>
+                       <!-- <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>-->
 
                         <div class="overlay-content">
 
                                 <div class="row">
-                                    <div class="col-md-6">
-                                        <h3>General Quota</h3>
+                                    <div data-ng-class="columnSize" data-ng-if="showGA">
+                                        General Quota
                                         <table class="table table-bordered table-striped">
                                             <thead>
                                             <tr>
@@ -240,8 +253,8 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    <div class="col-md-6">
-                                        <h3>Freedom Fighter Quota</h3>
+                                    <div data-ng-class="columnSize" data-ng-if="showFF">
+                                        Freedom Fighter Quota
                                         <table class="table table-bordered table-striped">
                                             <thead>
                                             <tr>
@@ -263,8 +276,31 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    <div class="col-md-6">
-                                        <h3>Rural Area Quota</h3>
+                                    <div data-ng-class="columnSize" data-ng-if="showRA">
+                                        Rural Area Quota
+                                        <table class="table table-bordered table-striped">
+                                            <thead>
+                                            <tr>
+                                                <td>Program</td>
+                                                <td>Allocated Seat</td>
+                                                <td>Selected</td>
+                                                <td>Remaining<br>Vacancy</td>
+                                                <td>Waiting</td>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr data-ng-repeat="s in raStatistics">
+                                                <td>{{s.programName}}</td>
+                                                <td align="center">{{s.allocatedSeat}}</td>
+                                                <td align="center">{{s.selected}}</td>
+                                                <td align="center">{{s.remaining}}</td>
+                                                <td align="center">{{s.waiting}}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div data-ng-class="columnSize" data-ng-if="showGCE">
+                                        English Medium Quota
                                         <table class="table table-bordered table-striped">
                                             <thead>
                                             <tr>
@@ -288,6 +324,21 @@
                                     </div>
                                 </div>
 
+
+                        </div>
+                        <br>
+                        <br>
+                        <br>
+                        <div style="padding-right: 5%;" align="right">
+
+                            <div class="btn-group btn-group-xs" role="group" aria-label="...">
+                                <button class="btn btn-default">GA</button>
+                                <button class="btn btn-default">FF</button>
+                                <button class="btn btn-default">RA</button>
+                                <button class="btn btn-default">GCE</button>
+                                <button type="button" class="btn  btn-primary" data-ng-click="increaseFontSize()"><i class="fa fa-chevron-up" aria-hidden="true"></i></button>
+                                <button type="button" class="btn  btn-primary" data-ng-click="decreaseFontSize()"><i class="fa fa-chevron-down" aria-hidden="true"></i></button>
+                            </div>
 
                         </div>
                     </div>

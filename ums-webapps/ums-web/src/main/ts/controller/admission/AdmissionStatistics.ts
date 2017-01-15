@@ -11,13 +11,22 @@ module ums{
     programType:IProgramType;
     faculty:Faculty;
     faculties:Array<Faculty>;
-
+    fontSize:number;
     glStatistics:Array<IStatistics>;
     raStatistics:Array<IStatistics>;
     ffStatistics:Array<IStatistics>;
+    columnSize:string;
+
+    showGA:boolean;
+    showFF:boolean;
+    showRA:boolean;
+    showGCE:boolean;
 
     searchStatistics:Function;
+    increaseFontSize:Function;
+    decreaseFontSize:Function;
     closeNav:Function;
+    showOrHideTable:Function;
   }
 
   interface  IProgramType{
@@ -51,21 +60,86 @@ module ums{
 
       $scope.programTypes = appConstants.programType;
       $scope.programType = $scope.programTypes[0];
-
+      $scope.fontSize=10;
+      $scope.showGA = true;
+      $scope.showFF = true;
+      $scope.showRA = true;
+      $scope.showGCE = true;
+      $scope.columnSize="col-md-6";
 
       $scope.searchStatistics = this.searchStatistics.bind(this);
       $scope.closeNav = this.closeNav.bind(this);
-
+      $scope.increaseFontSize = this.increaseFontSize.bind(this);
+      $scope.decreaseFontSize = this.decreaseFontSize.bind(this);
+      $scope.showOrHideTable = this.showOrHideTable.bind(this);
       this.getSemesters();
       this.getFaculties();
       this.initializeQuota();
     }
+
 
     private closeNav(){
       //angular.element(document.documentElement("#myModal").style.width=0);
       //angular.element("#myModal").style.width=0;
       angular.element("#moModal").css('width',0);
     }
+
+    private showOrHideTable(type:string){
+      this.switchOnOffContent(type).then((data)=>{
+        this.configureColumnSize();
+      });
+    }
+
+    private configureColumnSize(){
+      var counter:number=0;
+      if(this.$scope.showGA==true){
+        counter+=1;
+      }
+      if(this.$scope.showFF==true){
+        counter+=1;
+      }
+      if(this.$scope.showRA==true){
+        counter+=1;
+      }
+      if(this.$scope.showGCE==true){
+        counter+=1;
+      }
+
+      if(counter<=2){
+       this.$scope.columnSize="col-md-12";
+      }else{
+        this.$scope.columnSize="col-md-6";
+      }
+    }
+
+
+    private switchOnOffContent(type:string):ng.IPromise<any>{
+      var defer = this.$q.defer();
+      if(type=='ga'){
+        this.$scope.showGA=!this.$scope.showGA;
+      }
+      else if(type=='ff'){
+        this.$scope.showFF = !this.$scope.showFF;
+      }
+      else if(type=='ra'){
+        this.$scope.showRA = !this.$scope.showRA;
+      }else{
+        this.$scope.showGCE = !this.$scope.showGCE;
+      }
+      defer.resolve("done");
+      return defer.promise;
+    }
+
+    private increaseFontSize(){
+      this.$scope.fontSize=this.$scope.fontSize+1;
+      angular.element(".overlay-content").css('font-size',this.$scope.fontSize+"px");
+    }
+
+    private decreaseFontSize(){
+      this.$scope.fontSize=this.$scope.fontSize-1;
+      angular.element(".overlay-content").css('font-size',this.$scope.fontSize+"px");
+    }
+
 
     private getFaculties(){
       this.facultyService.getAllFaculties().then((faculties:Array<Faculty>)=>{
