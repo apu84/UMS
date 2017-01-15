@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "module": "amd",
+    "target": "ES5",
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "sourceMap": false,
+    "outFile": "target/ums-web-trunk-SNAPSHOT/iums/js/main.js"
+  },
+  "exclude": [
+    "node_modules/*",
+    "**/*-d.ts"
+  ],
+  "files": [
+    "src/main/ts/_main.ts"
+  ]
+}
