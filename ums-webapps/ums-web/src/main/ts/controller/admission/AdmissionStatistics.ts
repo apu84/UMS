@@ -17,6 +17,7 @@ module ums{
     ffStatistics:Array<IStatistics>;
 
     searchStatistics:Function;
+    closeNav:Function;
   }
 
   interface  IProgramType{
@@ -53,12 +54,18 @@ module ums{
 
 
       $scope.searchStatistics = this.searchStatistics.bind(this);
+      $scope.closeNav = this.closeNav.bind(this);
 
       this.getSemesters();
       this.getFaculties();
       this.initializeQuota();
     }
 
+    private closeNav(){
+      //angular.element(document.documentElement("#myModal").style.width=0);
+      //angular.element("#myModal").style.width=0;
+      angular.element("#moModal").css('width',0);
+    }
 
     private getFaculties(){
       this.facultyService.getAllFaculties().then((faculties:Array<Faculty>)=>{
