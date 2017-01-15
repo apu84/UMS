@@ -37,18 +37,8 @@ module ums {
   }
 
   export class ResultProcessStatusMonitor implements ng.IDirective {
-    private intervalPromiseMap: {[key: string]: ng.IPromise<any>};
-    private PROCESS_GRADES: string = "_process_grades";
-    private PROCESS_GPA_CGPA_PROMOTION: string = "_process_gpa_cgpa_promotion";
-    private PUBLISH_RESULT: string = "_publish_result";
 
-    constructor(private httpClient: HttpClient,
-                private $q: ng.IQService,
-                private $interval: ng.IIntervalService,
-                private settings: Settings,
-                private appConstants: any,
-                private $timeout: ng.ITimeoutService) {
-
+    constructor() {
     }
 
     public restrict: string = 'AE';
@@ -60,18 +50,40 @@ module ums {
       render: '='
     };
 
-    public link = (scope: IResultProcessStatusMonitorScope, element: JQuery, attributes: any) => {
-      this.intervalPromiseMap = {};
-      this.updateStatus(scope.programId, scope.semesterId, scope.statusByYearSemester);
-      scope.resultProcessStatus = this.resultProcessStatus.bind(this);
-      scope.resultProcessStatusConst = this.appConstants.RESULT_PROCESS_STATUS;
-      scope.processResult = this.processResult.bind(this);
-      scope.publishResult = this.publishResult.bind(this);
-      scope.resultPdf = this.resultPdf.bind(this);
-
-    };
-
     public templateUrl = "./views/result/result-process-status.html";
+    public bindToController: boolean = true;
+    public controller: any = ResultProcessStatusMonitorController;
+    public controllerAs: string = 'vm';
+  }
+
+  class ResultProcessStatusMonitorController {
+    public static $inject = ['HttpClient',
+      '$q',
+      '$interval',
+      'Settings',
+      'appConstants',
+      '$timeout'];
+    private intervalPromiseMap: {[key: string]: ng.IPromise<any>};
+    private PROCESS_GRADES: string = "_process_grades";
+    private PROCESS_GPA_CGPA_PROMOTION: string = "_process_gpa_cgpa_promotion";
+    private PUBLISH_RESULT: string = "_publish_result";
+
+    private programId: string;
+    private semesterId: string;
+    private statusByYearSemester: ResultProcessStatus;
+    private render: string;
+    private resultProcessStatusConst: any;
+
+    constructor(private httpClient: HttpClient,
+                private $q: ng.IQService,
+                private $interval: ng.IIntervalService,
+                private settings: Settings,
+                private appConstants: any,
+                private $timeout: ng.ITimeoutService) {
+      this.intervalPromiseMap = {};
+      this.resultProcessStatusConst = this.appConstants.RESULT_PROCESS_STATUS;
+      this.updateStatus(this.programId, this.semesterId, this.statusByYearSemester);
+    }
 
     private getNotification(programId: string, semesterId: string, statusByYearSemester: ResultProcessStatus) {
       this.httpClient.poll(this.getUpdateStatusUri(programId, semesterId),
@@ -247,13 +259,7 @@ module ums {
   }
 
   UMS.directive("resultProcessStatusMonitor",
-      ['HttpClient',
-        '$q',
-        '$interval',
-        'Settings',
-        'appConstants',
-        '$timeout',
-        (httpClient, $q, $interval, settings: Settings, appConstants: any, $timeout)=> {
-          return new ResultProcessStatusMonitor(httpClient, $q, $interval, settings, appConstants, $timeout);
-        }]);
+      ()=> {
+        return new ResultProcessStatusMonitor();
+      });
 }

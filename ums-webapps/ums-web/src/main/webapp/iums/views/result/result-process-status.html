@@ -1,22 +1,22 @@
-<span data-ng-if="render=='text' && statusByYearSemester">{{statusByYearSemester.statusText}}</span>
+<span data-ng-if="vm.render=='text' && vm.statusByYearSemester">{{vm.statusByYearSemester.statusText}}</span>
 <div style="width: 42px;position: absolute;top: 0px;right: 0px;">
-     <img data-ng-if="render=='icon' && (statusByYearSemester.status==resultProcessStatusConst.READY_TO_BE_PROCESSED.id || statusByYearSemester.status==resultProcessStatusConst.PROCESSED_ON.id)"
+     <img data-ng-if="vm.render=='icon' && (vm.statusByYearSemester.status==vm.resultProcessStatusConst.READY_TO_BE_PROCESSED.id || vm.statusByYearSemester.status==vm.resultProcessStatusConst.PROCESSED_ON.id)"
           src="images/process2.png"
           class="process_tooltip"
-          data-ng-click="processResult(programId, semesterId, statusByYearSemester)"
+          data-ng-click="vm.processResult(vm.programId, vm.semesterId, vm.statusByYearSemester)"
           style="position: relative;cursor: pointer;margin-bottom: 10px;"/>
 
-          <img data-ng-if="render=='icon' && (statusByYearSemester.status==resultProcessStatusConst.PROCESSED_ON.id || statusByYearSemester.status==resultProcessStatusConst.RESULT_PUBLISHED.id || statusByYearSemester.status==resultProcessStatusConst.RESULT_PUBLISH_INPROGRESS.id)"
+          <img data-ng-if="vm.render=='icon' && (vm.statusByYearSemester.status==vm.resultProcessStatusConst.PROCESSED_ON.id || vm.statusByYearSemester.status==vm.resultProcessStatusConst.RESULT_PUBLISHED.id || vm.statusByYearSemester.status==vm.resultProcessStatusConst.RESULT_PUBLISH_INPROGRESS.id)"
           src="images/pdf_square.png"
           class="download_tooltip"
           style="position: relative;cursor: pointer;margin-bottom: 10px;"
-          data-ng-click="resultPdf(programId, semesterId)"/>
+          data-ng-click="vm.resultPdf(vm.programId, vm.semesterId)"/>
 
-     <img data-ng-if="render=='icon' && statusByYearSemester.status==resultProcessStatusConst.PROCESSED_ON.id"
+     <img data-ng-if="vm.render=='icon' && vm.statusByYearSemester.status==vm.resultProcessStatusConst.PROCESSED_ON.id"
           src="images/publish.png"
           class="publish_tooltip"
           style="position: relative;cursor: pointer;margin-bottom: 10px;"
-          data-ng-click="publishResult(programId, semesterId, statusByYearSemester)"/>
+          data-ng-click="vm.publishResult(vm.programId, vm.semesterId, vm.statusByYearSemester)"/>
 
 
 </div>
