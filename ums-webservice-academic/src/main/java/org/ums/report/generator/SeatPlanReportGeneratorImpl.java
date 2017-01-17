@@ -110,13 +110,13 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
     if(groupNo != 0) {
       //students = mSpStudentManager.getRegisteredStudents(groupNo, pSemesterId, type);
       studentIdWIthStuddentInfoMap = mSpStudentManager.getRegisteredStudents(groupNo, pSemesterId, type)
-          .stream()
+          .parallelStream()
           .collect(Collectors.toMap(Student::getId, Function.identity()));
     }
     else {
       //students = mSpStudentManager.getStudentBySemesterIdAndExamDateForCCI(pSemesterId, examDate);
       studentIdWIthStuddentInfoMap = mSpStudentManager.getStudentBySemesterIdAndExamDateForCCI(pSemesterId, examDate)
-          .stream()
+          .parallelStream()
           .collect(Collectors.toMap(Student::getId, Function.identity()));
     }
     programIdWithProgramInfoMap = mProgramManager.getAll().stream()
