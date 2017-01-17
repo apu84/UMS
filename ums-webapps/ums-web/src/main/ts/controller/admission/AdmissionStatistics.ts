@@ -60,6 +60,10 @@ module ums{
 
       $scope.programTypes = appConstants.programType;
       $scope.programType = $scope.programTypes[0];
+      $scope.glStatistics=[];
+      $scope.raStatistics=[];
+      //$scope.gceStatistics=[];
+      $scope.ffStatistics=[];
       $scope.fontSize=10;
       $scope.showGA = true;
       $scope.showFF = true;
@@ -172,7 +176,7 @@ module ums{
       console.log(this.$interval);
       this.$interval(()=>{
         this.getStatistics();
-      },10000);
+      },1000);
     }
 
     private getStatistics(){
@@ -189,9 +193,16 @@ module ums{
     }
 
     private getFFStatistics(){
-      this.$scope.ffStatistics=[];
-
+      //this.$scope.ffStatistics=[];
+      var ffStatistics=this.$scope.ffStatistics;
       this.admissionStudentService.fetchStatistics(this.$scope.semester.id, +this.$scope.programType.id,Utils.FREEDOM_FIGHTER, this.$scope.faculty.shortName).then((data)=>{
+        for(var i=0;i<data.length;i++){
+          if(!ffStatistics[i]){
+            ffStatistics.push(data[i]);
+          }else{
+            ffStatistics[i] = data[i];
+          }
+        }
         this.$scope.ffStatistics=data;
       });
 
@@ -199,19 +210,32 @@ module ums{
     }
 
     private getRAStatistics(){
-      this.$scope.raStatistics=[];
+      var raStatistics=this.$scope.raStatistics;
 
       this.admissionStudentService.fetchStatistics(this.$scope.semester.id, +this.$scope.programType.id,Utils.REMOTE_AREA, this.$scope.faculty.shortName).then((data)=>{
-        this.$scope.raStatistics=data;
+
+        for(var i=0;i<data.length;i++){
+          if(!raStatistics[i]){
+            raStatistics.push(data[i]);
+          }else{
+            raStatistics[i]= data[i];
+          }
+        }
       });
 
     }
 
     private getGLStatistics(){
-      this.$scope.glStatistics=[];
+      var glStatistics = this.$scope.glStatistics;
 
       this.admissionStudentService.fetchStatistics(this.$scope.semester.id, +this.$scope.programType.id,Utils.GENERAL, this.$scope.faculty.shortName).then((data)=>{
-        this.$scope.glStatistics=data;
+        for(var i=0;i<data.length;i++){
+          if(!glStatistics[i]){
+            glStatistics.push(data[i]);
+          }else{
+            glStatistics[i]=data[i];
+          }
+        }
       });
 
     }
