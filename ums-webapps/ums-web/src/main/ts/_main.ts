@@ -22,11 +22,14 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/wysihtml5.d.ts'/>
 
 /// <reference path='../../../../ums-web-core/src/main/ts/root.ts'/>
-/// <reference path='Utils.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/constants.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/Utils.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/BaseUri.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/Notify.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/HttpClient.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/FileUpload.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/AdmissionStudentService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/SemesterService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/CookieService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/Settings.ts'/>
 
@@ -70,6 +73,9 @@
 
 /// <reference path='../../../../ums-web-core/src/main/ts/model/ChangePasswordModel.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/model/User.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/model/AdmissionStudent.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/model/Semester.ts'/>
+
 
 /// <reference path='../../../../ums-web-core/src/main/ts/grid/GridConfig.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/grid/GridDecorator.ts'/>
@@ -82,21 +88,18 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/util/UmsUtil.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/util/UriUtil.ts'/>
 
-/// <reference path='constants.ts'/>
 /// <reference path='ums.ts'/>
 /// <reference path='data.ts'/>
 
 
 /// <reference path='service/ExamRoutineService.ts'/>
 /// <reference path='service/SeatPlanService.ts'/>
-/// <reference path='service/SemesterService.ts'/>
 /// <reference path='service/CommonService.ts'/>
 /// <reference path='service/FacultyService.ts'/>
 /// <reference path='service/ClassRoutineService.ts'/>
 /// <reference path='service/ExamGradeService.ts'/>
 /// <reference path='service/ClassRoomService.ts'/>
 /// <reference path='service/ClassRoomService.ts'/>
-/// <reference path='service/AdmissionStudentService.ts'/>
 /// <reference path='service/ProgramService.ts'/>
 /// <reference path='service/AdmissionTotalSeatService.ts'/>
 /// <reference path='service/CourseServices.ts'/>
@@ -173,7 +176,6 @@
 /// <reference path='model/NewSyllabusModel.ts'/>
 /// <reference path='model/ParameterSetting.ts'/>
 /// <reference path='model/master_data/ClassRoom.ts'/>
-/// <reference path='model/master_data/AdmissionStudent.ts'/>
 /// <reference path='model/master_data/Program.ts'/>
 /// <reference path='model/master_data/Faculty.ts'/>
 /// <reference path='model/master_data/Course.ts'/>
@@ -181,7 +183,6 @@
 /// <reference path='model/master_data/Employee.ts'/>
 /// <reference path='model/master_data/Parameter.ts'/>
 /// <reference path='model/master_data/Routine.ts'/>
-/// <reference path='model/master_data/Semester.ts'/>
 /// <reference path='model/master_data/Student.ts'/>
 /// <reference path='model/master_data/Syllabus.ts'/>
 

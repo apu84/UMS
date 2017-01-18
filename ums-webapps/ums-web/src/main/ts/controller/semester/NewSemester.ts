@@ -1,6 +1,4 @@
-///<reference path="../../model/master_data/Semester.ts"/>
-///<reference path="../../../../../../ums-web-core/src/main/ts/service/HttpClient.ts"/>
-///<reference path="../../../../../../ums-web-core/src/main/ts/lib/jquery.notify.d.ts"/>
+
 module ums {
 
   interface INewSemesterScope extends ng.IScope {

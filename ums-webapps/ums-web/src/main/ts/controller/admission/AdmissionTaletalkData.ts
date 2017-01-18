@@ -26,7 +26,6 @@ module ums{
     saveData:Function;
   }
 
-
   interface  IProgramType{
     id:string;
     name:string;
