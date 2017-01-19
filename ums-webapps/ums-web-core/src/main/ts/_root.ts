@@ -27,12 +27,17 @@
 /// <reference path='lib/bootstrap.modal.d.ts'/>
 
 /// <reference path='root.ts'/>
+/// <reference path='constants.ts'/>
+/// <reference path='Utils.ts'/>
+
 
 /// <reference path='service/BaseUri.ts'/>
 /// <reference path='service/Notify.ts'/>
 /// <reference path='service/HttpClient.ts'/>
 /// <reference path='service/FileUpload.ts'/>
 /// <reference path='service/CookieService.ts'/>
+/// <reference path='service/AdmissionStudentService.ts'/>
+/// <reference path='service/SemesterService.ts'/>
 /// <reference path='service/Settings.ts'/>
 
 /// <reference path='controller/AppController.ts'/>
@@ -68,6 +73,9 @@
 
 /// <reference path='model/ChangePasswordModel.ts'/>
 /// <reference path='model/User.ts'/>
+/// <reference path='model/AdmissionStudent.ts'/>
+/// <reference path='model/Semester.ts'/>
+
 
 /// <reference path='grid/GridConfig.ts'/>
 /// <reference path='grid/GridDecorator.ts'/>

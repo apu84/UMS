@@ -84,13 +84,13 @@
                                 <thead style="background-color: #9fceb8">
                                 <tr>
                                     <th style="width: 85%">Program</th>
-                                    <th style="width: 15%">Total Seat</th>
+                                    <th style="width: 15%" align="center">Total Seat</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr data-ng-repeat="seat in admissionTotalSeats">
+                                <tr data-ng-repeat="seat in admissionTotalSeats" >
                                     <td style="width: 85%"><p>{{seat.programShortName}}</p></td>
-                                    <td style="width: 15%"><input data-ng-disabled="!edit" class="form-control" type="text" data-ng-model="seat.totalSeat" /></td>
+                                    <td style="width: 10%;" ><input style="text-align: right; padding-right: 10px;width: 80%;height: 80%;"  data-ng-disabled="!edit" class="form-control" type="text" data-ng-model="seat.totalSeat" /></td>
                                 </tr>
                                 </tbody>
                             </table>

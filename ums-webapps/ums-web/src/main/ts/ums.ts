@@ -576,6 +576,11 @@ module ums {
           templateUrl: 'views/admission/taletalk-data-upload.html',
           controller: 'AdmissionTaletalkData'
         })
+        .state('admissionStatistics', {
+          url: "/admissionStatistics",
+          templateUrl: 'views/admission/admission-statistics.html',
+          controller: 'AdmissionStatistics'
+        })
         .state('certificateVerification', {
           url: "/certificateVerification",
           templateUrl: 'views/admission/certificate-verification.html',
@@ -715,6 +720,7 @@ module ums {
           url: "/courseMaterial",
           //url: "/courseMaterial/:1/:2",
           controller: 'CourseMaterial',
+          controllerAs: 'vm',
           templateUrl: 'views/course-material/course-material.html',
           resolve: {
             loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
@@ -735,6 +741,7 @@ module ums {
         .state('resultProcessing', {
           url: "/resultProcessing",
           controller: 'ResultProcessing',
+          controllerAs: 'vm',
           templateUrl: 'views/result/result-processing.html'
         })
         .state('advisingStudents', {

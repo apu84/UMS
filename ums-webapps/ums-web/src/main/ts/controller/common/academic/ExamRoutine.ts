@@ -67,6 +67,7 @@ module ums {
         addButtonDisable: true,
         saveButtonDisable: true
       };
+
       $scope.loadingVisibility = false;
       $scope.addNewDateTime = this.addNewDateTime.bind(this);
       $scope.removeDateTime = this.removeDateTime.bind(this);

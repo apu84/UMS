@@ -21,11 +21,19 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/handsontable.d.ts'/>
 
 /// <reference path='ums-bank.ts'/>
+/// <reference path='controller/admission/AdmissionFee.ts'/>
+
+/// <reference path='../../../../ums-web-core/src/main/ts/root.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/constants.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/Utils.ts'/>
+
 /// <reference path='../../../../ums-web-core/src/main/ts/service/BaseUri.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/Notify.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/HttpClient.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/FileUpload.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/CookieService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/AdmissionStudentService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/SemesterService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/Settings.ts'/>
 
 /// <reference path='../../../../ums-web-core/src/main/ts/controller/AppController.ts'/>
@@ -61,6 +69,8 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/filter/TrustAsHtml.ts'/>
 
 /// <reference path='../../../../ums-web-core/src/main/ts/model/ChangePasswordModel.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/model/AdmissionStudent.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/model/Semester.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/model/User.ts'/>
 
 /// <reference path='../../../../ums-web-core/src/main/ts/grid/GridConfig.ts'/>
@@ -75,4 +85,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/util/UriUtil.ts'/>
 
 /// <reference path='data.ts'/>
+
+
+
 

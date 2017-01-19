@@ -1,0 +1,357 @@
+
+<style>
+
+    thead{
+        background-color: #efefef;
+    }
+
+
+    /* The Overlay (background) */
+    .overlay {
+        /* Height & width depends on how you want to reveal the overlay (see JS below) */
+        height: 100%;
+        width: 0;
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        left: 0;
+        top: 0;
+        background-color: white; /* Black fallback color */
+        background-color: white; /* Black w/opacity */
+        overflow-x: hidden; /* Disable horizontal scroll */
+        transition: 0.5s; /* 0.5 second transition effect to slide in or slide down the overlay (height or width, depending on reveal) */
+    }
+
+    /* Position the content inside the overlay */
+    .overlay-content {
+        position: relative;
+        top: 5%; /* 25% from the top */
+        width: 100%; /* 100% width */
+        text-align: center; /* Centered text/links */
+        margin-top: 30px; /* 30px top margin to avoid conflict with the close button on smaller screens */
+
+    }
+
+    /* The navigation links inside the overlay */
+    .overlay a {
+        padding: 8px;
+        text-decoration: none;
+        font-size: 36vw;
+        color: #818181;
+        display: block; /* Display block instead of inline */
+        transition: 0.3s; /* Transition effects on hover (color) */
+    }
+
+    /* When you mouse over the navigation links, change their color */
+    .overlay a:hover, .overlay a:focus {
+        color: #f1f1f1;
+    }
+
+    /* Position the close button (top right corner) */
+    .overlay .closebtn {
+        position: absolute;
+        top: 20px;
+        right: 45px;
+        font-size: 60px;
+    }
+
+    /* When the height of the screen is less than 450 pixels, change the font-size of the links and position the close button again, so they don't overlap */
+    @media screen and (max-height: 450px) {
+        .overlay a {font-size: 20px}
+        .overlay .closebtn {
+            font-size: 40px;
+            top: 15px;
+            right: 35px;
+        }
+    }
+
+</style>
+
+
+<div class="row" >
+    <div onclick="resetCommonCollapsibleDivs()" id="arrowDiv">
+        <i class="fa fa-angle-double-right fa-cx"></i></i>
+    </div>
+    <div class="panel panel-green" id="leftDiv">
+        <div class="panel-heading">
+            <h3 class="panel-title">Select </h3>
+        </div>
+        <div class="panel-body pan">
+            <form action="" class="form-horizontal" data-validate=""  data-onvalidate="searchStatistics" >
+                <div class="form-body pal">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Program Type</label>
+                        <div class="col-md-8">
+                            <select
+                                    class="form-control required"
+                                    name="programType"
+                                    id="programType"
+                                    data-ng-options="programType.name for programType in programTypes track by programType.id"
+                                    data-ng-model="programType" data-ng-change="getSemesters()">
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Semester</label>
+                        <div class="col-md-8">
+                            <!--<select class="form-control required" name="semester" data-ng-model="semester">
+                                <option   value="">Select a semester</option>
+                                <option data-ng-repeat="semester in semesters" value="{{semester}}">{{semester.name}}</option>
+                            </select>-->
+                            <select
+                                    class="form-control required"
+                                    name="semester"
+                                    id="semester"
+                                    data-ng-options="semester.name for semester in semesters track by semester.id"
+                                    data-ng-model="semester">
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Faculty</label>
+                        <div class="col-md-8">
+                            <select
+                                    class="form-control required"
+                                    name="faculty"
+                                    id="faculty"
+                                    data-ng-options="faculty.shortName for faculty in faculties track by faculty.id"
+                                    data-ng-model="faculty"
+                            >
+
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="form-actions text-right pal">
+                    <button type="button" class="btn btn-success">Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="rightDiv">
+        <div class="panel">
+            <div class="panel-heading">Admission Statistics<span
+                    class="subtitle"></span></div>
+            <div class="panel-body shadowPanel"   style="min-height: 490px;">
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                                <td>Program</td>
+                                <td>Allocated Seat</td>
+                                <td>Selected</td>
+                                <td>Remaining<br>Vacancy</td>
+                                <td>Waiting</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr data-ng-repeat="s in glStatistics">
+                                <td>{{s.programName}}</td>
+                                <td align="center">{{s.allocatedSeat}}</td>
+                                <td align="center">{{s.selected}}</td>
+                                <td align="center">{{s.remaining}}</td>
+                                <td align="center">{{s.waiting}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                                <td>Program</td>
+                                <td>Allocated Seat</td>
+                                <td>Selected</td>
+                                <td>Remaining<br>Vacancy</td>
+                                <td>Waiting</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr data-ng-repeat="s in ffStatistics">
+                                <td>{{s.programName}}</td>
+                                <td align="center">{{s.allocatedSeat}}</td>
+                                <td align="center">{{s.selected}}</td>
+                                <td align="center">{{s.remaining}}</td>
+                                <td align="center">{{s.waiting}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                                <td>Program</td>
+                                <td>Allocated Seat</td>
+                                <td>Selected</td>
+                                <td>Remaining<br>Vacancy</td>
+                                <td>Waiting</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr data-ng-repeat="s in raStatistics">
+                                <td>{{s.programName}}</td>
+                                <td align="center">{{s.allocatedSeat}}</td>
+                                <td align="center">{{s.selected}}</td>
+                                <td align="center">{{s.remaining}}</td>
+                                <td align="center">{{s.waiting}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="cell" align="right">
+                        <button type="button" class="btn btn-info btn-lg" onclick="openNav()">Open Modal</button>
+
+                        <!-- Modal -->
+
+                    </div>
+                    <div id="myModal" class="overlay">
+                        <div class="closebtn">
+
+                            <div class="btn-group btn-group-xs" role="group" aria-label="...">
+                                <button class="btn btn-default" data-ng-click="showOrHideTable('ga')">GA</button>
+                                <button class="btn btn-default" data-ng-click="showOrHideTable('ff')">FF</button>
+                                <button class="btn btn-default" data-ng-click="showOrHideTable('ra')">RA</button>
+                                <button class="btn btn-default" data-ng-click="showOrHideTable('gce')">GCE</button>
+                                <button type="button" class="btn  btn-primary" data-ng-click="increaseFontSize()"><i class="fa fa-chevron-up" aria-hidden="true"></i></button>
+                                <button type="button" class="btn  btn-primary" data-ng-click="decreaseFontSize()"><i class="fa fa-chevron-down" aria-hidden="true"></i></button>
+                                <button type="button" class="btn btn-danger"  onclick="closeNav()">&times;</button>
+                            </div>
+
+                        </div>
+                       <!-- <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>-->
+
+                        <div class="overlay-content">
+
+                                <div class="row">
+                                    <div data-ng-class="columnSize" data-ng-if="showGA">
+                                        General Quota
+                                        <table class="table table-bordered table-striped">
+                                            <thead>
+                                            <tr>
+                                                <td>Program</td>
+                                                <td>Allocated Seat</td>
+                                                <td>Selected</td>
+                                                <td>Remaining<br>Vacancy</td>
+                                                <td>Waiting</td>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr data-ng-repeat="s in glStatistics">
+                                                <td>{{s.programName}}</td>
+                                                <td align="center">{{s.allocatedSeat}}</td>
+                                                <td align="center">{{s.selected}}</td>
+                                                <td align="center">{{s.remaining}}</td>
+                                                <td align="center">{{s.waiting}}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div data-ng-class="columnSize" data-ng-if="showFF">
+                                        Freedom Fighter Quota
+                                        <table class="table table-bordered table-striped">
+                                            <thead>
+                                            <tr>
+                                                <td>Program</td>
+                                                <td>Allocated Seat</td>
+                                                <td>Selected</td>
+                                                <td>Remaining<br>Vacancy</td>
+                                                <td>Waiting</td>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr data-ng-repeat="s in ffStatistics">
+                                                <td>{{s.programName}}</td>
+                                                <td align="center">{{s.allocatedSeat}}</td>
+                                                <td align="center">{{s.selected}}</td>
+                                                <td align="center">{{s.remaining}}</td>
+                                                <td align="center">{{s.waiting}}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div data-ng-class="columnSize" data-ng-if="showRA">
+                                        Rural Area Quota
+                                        <table class="table table-bordered table-striped">
+                                            <thead>
+                                            <tr>
+                                                <td>Program</td>
+                                                <td>Allocated Seat</td>
+                                                <td>Selected</td>
+                                                <td>Remaining<br>Vacancy</td>
+                                                <td>Waiting</td>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr data-ng-repeat="s in raStatistics">
+                                                <td>{{s.programName}}</td>
+                                                <td align="center">{{s.allocatedSeat}}</td>
+                                                <td align="center">{{s.selected}}</td>
+                                                <td align="center">{{s.remaining}}</td>
+                                                <td align="center">{{s.waiting}}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div data-ng-class="columnSize" data-ng-if="showGCE">
+                                        English Medium Quota
+                                        <table class="table table-bordered table-striped">
+                                            <thead>
+                                            <tr>
+                                                <td>Program</td>
+                                                <td>Allocated Seat</td>
+                                                <td>Selected</td>
+                                                <td>Remaining<br>Vacancy</td>
+                                                <td>Waiting</td>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr data-ng-repeat="s in raStatistics">
+                                                <td>{{s.programName}}</td>
+                                                <td align="center">{{s.allocatedSeat}}</td>
+                                                <td align="center">{{s.selected}}</td>
+                                                <td align="center">{{s.remaining}}</td>
+                                                <td align="center">{{s.waiting}}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    /* Open when someone clicks on the span element */
+    function openNav() {
+        document.getElementById("myModal").style.width = "100%";
+    }
+
+    /* Close when someone clicks on the "x" symbol inside the overlay */
+    function closeNav() {
+        document.getElementById("myModal").style.width = "0%";
+    }
+    /*function showMyBigScreen(){
+        $("#myModal").show();
+        $("#myModal").height($( window ).height());
+        $("#myModal").width($( window ).width());
+
+        $("#myModal").top(0);
+        $("#myModal").left(0);
+    }*/
+</script>

@@ -36,5 +36,10 @@ module ums {
           url: "/logout",
           controller: 'Logout'
         })
+        .state('admissionFee', {
+          url: "/admissionFee",
+          templateUrl: 'views/admission/admission-fee.html',
+          controller: 'AdmissionFee'
+        })
   });
 }

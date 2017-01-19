@@ -13,8 +13,11 @@ import org.ums.services.academic.SeatPlanService;
 
 import javax.ws.rs.WebApplicationException;
 import java.io.*;
+import java.sql.Time;
 import java.util.*;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * Created by My Pc on 5/25/2016.
@@ -100,18 +103,26 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
 
     }
     java.util.List<Student> students;
-    if(groupNo != 0) {
-      students = mSpStudentManager.getAll();
-    }
-    else {
-      students = mSpStudentManager.getStudentBySemesterIdAndExamDateForCCI(pSemesterId, examDate);
-    }
-    java.util.List<Program> programs = mProgramManager.getAll();
-
     java.util.List<Integer> roomsOfTheSeatPlan = new ArrayList<>();
     Map<String, Student> studentIdWIthStuddentInfoMap = new HashMap<>();
     Map<String, SeatPlan> roomRowColWithSeatPlanMap = new HashMap<>();
     Map<Integer, Program> programIdWithProgramInfoMap = new HashMap<>();
+    if(groupNo != 0) {
+      //students = mSpStudentManager.getRegisteredStudents(groupNo, pSemesterId, type);
+      studentIdWIthStuddentInfoMap = mSpStudentManager.getRegisteredStudents(groupNo, pSemesterId, type)
+          .parallelStream()
+          .collect(Collectors.toMap(Student::getId, Function.identity()));
+    }
+    else {
+      //students = mSpStudentManager.getStudentBySemesterIdAndExamDateForCCI(pSemesterId, examDate);
+      studentIdWIthStuddentInfoMap = mSpStudentManager.getStudentBySemesterIdAndExamDateForCCI(pSemesterId, examDate)
+          .parallelStream()
+          .collect(Collectors.toMap(Student::getId, Function.identity()));
+    }
+    programIdWithProgramInfoMap = mProgramManager.getAll().stream()
+    .collect(Collectors.toMap(Program::getId, Function.identity()));
+
+
     long startTime = System.currentTimeMillis();
     for(SeatPlan seatPlan : seatPlans) {
       roomsOfTheSeatPlan.add(seatPlan.getClassRoomId());
@@ -126,12 +137,12 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
     }
     long endTime = System.currentTimeMillis();
     long totalTime = endTime - startTime;
-    for(Student student : students) {
+    /*for(Student student : students) {
       studentIdWIthStuddentInfoMap.put(student.getId(), student);
-    }
-    for(Program program : programs) {
+    }*/
+    /*for(Program program : programs) {
       programIdWithProgramInfoMap.put(program.getId(), program);
-    }
+    }*/
 
     int routineCounter = 0;
     if(examDate.equals("null")) {
@@ -228,7 +239,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
               SeatPlan seatPlanOfTheRowAndCol =
                   roomRowColWithSeatPlanMap.get(room.getId() + "" + i + "" + j);
               int ifSeatPlanExist;
-              if(groupNo == 0) {
+              /*if(groupNo == 0) {
                 ifSeatPlanExist =
                     mSeatPlanManager.checkIfExistsBySemesterGroupTypeExamDateRoomRowAndCol(
                         pSemesterId, groupNo, type, examDate, room.getId(), i, j);
@@ -238,8 +249,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                     mSeatPlanManager.checkIfExistsBySemesterGroupTypeRoomRowAndCol(pSemesterId,
                         groupNo, type, room.getId(), i, j);
 
-              }
-
+              }*/
               if(seatPlanOfTheRowAndCol != null) {
                 SeatPlan seatPlan = seatPlanOfTheRowAndCol; // roomRowColWithSeatPlanMap.get(room.getId()+""+i+""+j)
                 // ;
@@ -654,6 +664,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
     long endTimeOfTheMainAlgorithm = System.currentTimeMillis();
     long totalTimeOfTHeMainAlgorithm = endTimeOfTheMainAlgorithm - startTimeOfTheMainAlgorithm;
 
+    double totalTimeTaken = totalTimeOfTHeMainAlgorithm/60000;
     long exp = totalTimeOfTHeMainAlgorithm;
     document.close();
     baos.writeTo(pOutputStream);

@@ -138,10 +138,10 @@ module ums{
 
     private fetchAllAdmissionStudents():void{
       this.$scope.admissionStudentMap={};
-      this.admissionStudentService.fetchTaletalkDataWithMeritType(this.$scope.semester.id, +this.$scope.programType.id,
-          +this.$scope.meritType.id, this.$scope.faculty.shortName )
-          .then((students:Array<AdmissionStudent>)=>{
+      this.admissionStudentService.fetchTaletalkData(this.$scope.semester.id, +this.$scope.programType.id).then((students:Array<AdmissionStudent>)=>{
 
+        console.log("students length");
+        console.log(students.length);
         for(var i=0;i<students.length;i++){
           this.$scope.admissionStudentMap[students[i].receiptId] = students[i];
         }

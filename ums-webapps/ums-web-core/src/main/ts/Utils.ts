@@ -51,6 +51,13 @@ module ums {
     static MERIT_WAITING_PROGRAMS_SELECTED=2;
     static WAITING_PROGRAM_SELECTED=3;
 
+    /*
+    * Quota type for admission*/
+    static GENERAL=1;
+    static FREEDOM_FIGHTER=2;
+    static REMOTE_AREA=3;
+    static ENGLISH_MEDIUM=4;
+
 
     /**
      * Student Id block colors (Advisor Assignment from Admin Officer Account)
