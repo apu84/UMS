@@ -12,10 +12,7 @@ import org.ums.domain.model.immutable.AdmissionTotalSeat;
 import org.ums.enums.DepartmentSelectionType;
 import org.ums.report.generator.AdmissionStudentGenerator;
 import org.ums.domain.model.immutable.AdmissionStudent;
-import org.ums.domain.model.immutable.AdmissionStudentCertificate;
-import org.ums.domain.model.immutable.Faculty;
 import org.ums.domain.model.mutable.MutableAdmissionStudent;
-import org.ums.enums.FacultyType;
 import org.ums.enums.ProgramType;
 import org.ums.enums.QuotaType;
 import org.ums.manager.AdmissionStudentManager;
@@ -109,6 +106,8 @@ public class AdmissionStudentResourceHelper extends
 
   }
 
+  // kawsurilu
+
   @Transactional
   public Response putVerificationStatus(JsonObject pJsonObject, UriInfo pUriInfo) {
     MutableAdmissionStudent student = new PersistentAdmissionStudent();
@@ -118,12 +117,14 @@ public class AdmissionStudentResourceHelper extends
     JsonObject jsonObject = entries.getJsonObject(0);
     getBuilder().setVerificationStatus(student, jsonObject, localCache);
 
-    getContentManager().saveVerificationStatus(student);
+    getContentManager().setVerificationStatus(student);
     URI contextURI = null;
     Response.ResponseBuilder builder = Response.created(contextURI);
     builder.status(Response.Status.CREATED);
     return builder.build();
   }
+
+  //
 
   @Transactional
   public JsonObject saveDepartmentSelectionInfoAndRetrieveNextStudent(JsonObject pJsonObject,
@@ -228,25 +229,26 @@ public class AdmissionStudentResourceHelper extends
     return object.build();
   }
 
+  // kawsurilu
+  // don't need meritType
+
   public JsonObject getAdmissionStudentByReceiptId(final String pProgramType,
       final int pSemesterId, final String pReceiptId, final UriInfo pUriInfo) {
 
-    List<AdmissionStudent> student =
+    AdmissionStudent student =
         getContentManager().getNewStudentByReceiptId(pProgramType, pSemesterId, pReceiptId);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-
-    for(AdmissionStudent admissionStudent : student) {
-      JsonObjectBuilder jsonObject = Json.createObjectBuilder();
-      getBuilder().getAdmissionStudentByReceiptIdBuilder(jsonObject, admissionStudent, pUriInfo,
-          localCache);
-      children.add(jsonObject);
-    }
+    JsonObjectBuilder jsonObject = Json.createObjectBuilder();
+    getBuilder().getAdmissionStudentByReceiptIdBuilder(jsonObject, student, pUriInfo, localCache);
+    children.add(jsonObject);
     object.add("entries", children);
     localCache.invalidate();
     return object.build();
   }
+
+  //
 
   public JsonObject getAdmissionMeritList(final int pSemesterId, final ProgramType pProgramType,
       final QuotaType pQuotaType, String pUnit, final UriInfo pUriInfo) {
@@ -284,26 +286,6 @@ public class AdmissionStudentResourceHelper extends
   public void getMeritLisXlesFormat(final OutputStream pOutputStream, int pSemesterId)
       throws Exception {
     mGenerator.createABlankMeritListUploadFormatFile(pOutputStream, pSemesterId);
-  }
-
-  public JsonObject getAdmissionStudentByReceiptId(final int pSemesterId, final String pReceiptId,
-      final UriInfo pUriInfo) {
-
-    List<AdmissionStudent> student =
-        getContentManager().getNewStudentByReceiptId(pSemesterId, pReceiptId);
-    JsonObjectBuilder object = Json.createObjectBuilder();
-    JsonArrayBuilder children = Json.createArrayBuilder();
-    LocalCache localCache = new LocalCache();
-
-    for(AdmissionStudent admissionStudent : student) {
-      JsonObjectBuilder jsonObject = Json.createObjectBuilder();
-      getBuilder().getAdmissionStudentByReceiptIdBuilder(jsonObject, admissionStudent, pUriInfo,
-          localCache);
-      children.add(jsonObject);
-    }
-    object.add("entries", children);
-    localCache.invalidate();
-    return object.build();
   }
 
   private JsonObject jsonCreator(List<AdmissionStudent> pStudentLIst, String pType, UriInfo pUriInfo) {

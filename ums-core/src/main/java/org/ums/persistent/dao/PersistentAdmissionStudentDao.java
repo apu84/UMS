@@ -5,14 +5,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.AdmissionStudentDaoDecorator;
 import org.ums.domain.model.immutable.AdmissionStudent;
-import org.ums.domain.model.immutable.AdmissionStudentCertificate;
 import org.ums.domain.model.mutable.MutableAdmissionStudent;
-import org.ums.domain.model.mutable.MutableAdmissionStudentCertificate;
 import org.ums.enums.*;
 import org.ums.manager.ProgramManager;
 import org.ums.manager.SemesterManager;
 import org.ums.persistent.model.PersistentAdmissionStudent;
-import org.ums.persistent.model.PersistentAdmissionStudentCertificate;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -166,14 +163,6 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
     return mJdbcTemplate.batchUpdate(query, getMeritListParams(pStudents)).length;
   }
 
-  public int saveVerificationStatus(MutableAdmissionStudent pStudent) {
-    MutableAdmissionStudent student = pStudent;
-    String query =
-        "update admission_students set verification_status=? where program_type=? and semester_id=? and receipt_id=?";
-    return mJdbcTemplate.update(query, student.getVerificationStatus(), student.getProgramType()
-        .getValue(), student.getSemester().getId(), student.getReceiptId());
-  }
-
   private List<Object[]> getAdmissionStudentParams(List<MutableAdmissionStudent> pStudents) {
     List<Object[]> params = new ArrayList<>();
 
@@ -273,17 +262,24 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
     return pQuery;
   }
 
-  public List<AdmissionStudent> getNewStudentByReceiptId(String pProgramType, int pSemesterId,
+  // kawsurilu
+
+  public AdmissionStudent getNewStudentByReceiptId(String pProgramType, int pSemesterId,
       String pReceiptId) {
     String query = SELECT_ONE + " WHERE PROGRAM_TYPE=? AND SEMESTER_ID=? AND RECEIPT_ID=? ";
-    return mJdbcTemplate.query(query, new Object[] {pProgramType, pSemesterId, pReceiptId},
-        new AdmissionStudentRowMapper());
+    return mJdbcTemplate.queryForObject(query,
+        new Object[] {pProgramType, pSemesterId, pReceiptId}, new AdmissionStudentRowMapper());
   }
 
-  // public AdmissionStudent getByStudentId(String pStudentId){
-  // String query = GET_BY_STUDENTID + "WHERE STUDENT_ID=?";
-  // return mJdbcTemplate.query(query, new Object[] {pStudentId}, new AdmissionStudentRowMapper());
-  // }
+  public int setVerificationStatus(MutableAdmissionStudent pStudent) {
+    MutableAdmissionStudent student = pStudent;
+    String query =
+        "update admission_students set verification_status=? where program_type=? and semester_id=? and receipt_id=?";
+    return mJdbcTemplate.update(query, student.getVerificationStatus(), student.getProgramType()
+        .getValue(), student.getSemester().getId(), student.getReceiptId());
+  }
+
+  //
 
   @Override
   public AdmissionStudent getAdmissionStudent(int pSemesterId, ProgramType pProgramType,

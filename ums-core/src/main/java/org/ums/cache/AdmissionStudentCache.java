@@ -1,7 +1,6 @@
 package org.ums.cache;
 
 import org.ums.domain.model.immutable.AdmissionStudent;
-import org.ums.domain.model.immutable.AdmissionStudentCertificate;
 import org.ums.domain.model.mutable.MutableAdmissionStudent;
 import org.ums.enums.DepartmentSelectionType;
 import org.ums.enums.ProgramType;
@@ -64,21 +63,25 @@ public class AdmissionStudentCache extends
     return getManager().saveMeritList(pStudents);
   }
 
+  // kawsurilu
+
   @Override
-  public List<AdmissionStudent> getNewStudentByReceiptId(String pProgramType, int pSemsterId,
+  public AdmissionStudent getNewStudentByReceiptId(String pProgramType, int pSemsterId,
       String pReceiptId) {
     return getManager().getNewStudentByReceiptId(pProgramType, pSemsterId, pReceiptId);
   }
 
   @Override
-  public int saveVerificationStatus(MutableAdmissionStudent pStudent) {
-    return getManager().saveVerificationStatus(pStudent);
+  public int setVerificationStatus(MutableAdmissionStudent pStudent) {
+    return getManager().setVerificationStatus(pStudent);
   }
 
   @Override
   public AdmissionStudent getByStudentId(String pStudentId) {
     return getManager().getByStudentId(pStudentId);
   }
+
+  //
 
   @Override
   public AdmissionStudent getAdmissionStudent(int pSemesterId, ProgramType pProgramType,
@@ -104,8 +107,4 @@ public class AdmissionStudentCache extends
     return getNewStudentByReceiptId(pSemesterId, receiptId);
   }
 
-  @Override
-  public List<AdmissionStudentCertificate> getAdmissionStudentCertificateLists() {
-    return getManager().getAdmissionStudentCertificateLists();
-  }
 }

@@ -2,62 +2,62 @@ module ums{
 
   interface IAdmissionCertificateVerification extends ng.IScope{
 
-    admissionStudent: AdmissionStudent;
-    semester:Semester;
     programType:IProgramType;
+    semester:Semester;
+    admissionStudent: AdmissionStudent;
 
-    semesters:Array<Semester>;
     programTypes:Array<IProgramType>;
-    certificates: Array<ICertificate>;
-    savedCertificates: Array<ISavedCertificates>
-    banglaMediumAcademicCertificates: Array<ICertificate>;
-    englishMediumAcademicCertificates: Array<ICertificate>;
-    personalCertificates: Array<ICertificate>;
-    quotaCertificates: Array<ICertificate>;
-    savedComments : Array<IComment>;
+    semesters:Array<Semester>;
+    allTypesOfCertificates: Array<ITypesOfCertificate>;
+    gLCertificates: Array<ITypesOfCertificate>;
+    gCECertificates: Array<ITypesOfCertificate>;
+    nationalCertificates: Array<ITypesOfCertificate>;
+    quotaCertificates: Array<ITypesOfCertificate>;
+    previousCertificates: Array<IPreviousCertificates>;
+    previousComments : Array<IPreviousComment>;
 
-    receiptId:string;
     mainDiv: boolean;
     rightDiv: boolean;
     forEngineering:boolean;
+    GLShow:boolean;
+    GCEShow: boolean;
+    quotaShow: boolean;
+    studentQuota: string;
+    receiptId:string;
     selected: any;
     lengthOfSavedCertificates : number;
-    comment: string;
+    lengthOfTotalCertificates: number;
 
     showRightDiv: Function;
-    searchByReceiptId: Function;
+    search: Function;
     getSemesters:Function;
-    getCertificates: Function;
+    getAllCertificates: Function;
     toggleSelection : Function;
     rejected: Function;
     underTaken: Function;
     verified : Function;
-    getComments : Function;
+    getPreviousComments : Function;
   }
 
-  interface ICertificate{
-    certificateId:number;
-    certificateTitle: string;
-    certificateType: string;
-    certificateCategory: string;
-    disableChecked?:string;
-  }
-
-  interface IComment{
-    semesterId: number;
-    receiptId: string;
+  interface IPreviousComment{
     comment: string;
-  }
-
-  interface ISavedCertificates {
-    semesterId: number;
-    receiptId: string;
-    certificateId: number;
+    commentedOn:string;
   }
 
   interface IProgramType{
     id:string;
     name:string;
+  }
+
+  interface IPreviousCertificates{
+    id : number;
+  }
+
+  interface ITypesOfCertificate{
+    id: number;
+    name: string;
+    type: string;
+    disableChecked: string;
   }
 
   class AdmissionCertificateVerification {
@@ -76,8 +76,9 @@ module ums{
 
 
       $scope.receiptId = "";
-      $scope.comment = "";
+      $scope.studentQuota = "";
       $scope.lengthOfSavedCertificates = 0;
+      $scope.lengthOfTotalCertificates = 0;
 
       $scope.programTypes=appConstants.programType;
       $scope.programType = $scope.programTypes[0];
@@ -85,22 +86,26 @@ module ums{
       $scope.rightDiv = false;
       $scope.mainDiv = false;
       $scope.forEngineering = false;
+      $scope.GLShow = false;
+      $scope.GCEShow = false;
+      $scope.quotaShow = false;
       $scope.selected = [];
 
       $scope.getSemesters = this.getSemesters.bind(this);
       $scope.showRightDiv = this.showRightDiv.bind(this);
-      $scope.searchByReceiptId = this.searchByReceiptId.bind(this);
-      $scope.getCertificates = this.getCertificates.bind(this);
+      $scope.search = this.search.bind(this);
+      $scope.getAllCertificates = this.getAllCertificates.bind(this);
       $scope.rejected = this.rejected.bind(this);
       $scope.underTaken = this.underTaken.bind(this);
       $scope.verified = this.verified.bind(this);
       $scope.toggleSelection = this.toggleSelection.bind(this);
-      $scope.getComments = this.getComments.bind(this);
+      $scope.getPreviousComments = this.getPreviousComments.bind(this);
 
       this.getSemesters();
 
       Utils.setValidationOptions("form-horizontal");
     }
+
     private getSemesters():void {
       this.semesterService.fetchSemesters(Number(this.$scope.programType.id), 5).then((semesters: any) => {
         this.$scope.semesters = semesters;
@@ -113,106 +118,124 @@ module ums{
       });
     }
 
-    private searchByReceiptId(receiptId: string): void {
+    private search(receiptId: string): void {
 
       Utils.expandRightDiv();
-      this.$scope.receiptId = receiptId;
-      this.admissionCertificateVerificationService.getNewStudentInfo(this.$scope.programType.id, this.$scope.semester.id, receiptId)
-          .then((admissionStudentsInfo: Array<AdmissionStudent>) => {
 
-            if (admissionStudentsInfo == null) {
+      this.$scope.receiptId = receiptId;
+
+      this.admissionCertificateVerificationService.getCandidateInformation(this.$scope.programType.id, this.$scope.semester.id, this.$scope.receiptId)
+          .then((admissionStudentsInformation: Array<AdmissionStudent>) => {
+
+            if (admissionStudentsInformation == null) {
               this.notify.error("No Data Found");
             }
             else {
-              this.$scope.getCertificates();
-              this.$scope.getComments();
               this.$scope.mainDiv = true;
-              this.$scope.admissionStudent = <AdmissionStudent>{};
-              this.$scope.admissionStudent = admissionStudentsInfo[0];
+              this.$scope.admissionStudent = admissionStudentsInformation[0];
+              this.$scope.studentQuota = this.$scope.admissionStudent.quota;
+              this.$scope.getAllCertificates();
+              this.$scope.getPreviousComments();
             }
           });
     }
 
-    private getCertificates(): void {
-      this.getSavedCertificatesOfStudent();
+    private getAllCertificates(): void {
+      this.getPreviousCertificates();
       this.getAllTypesOfCertificates();
     }
 
-    private getComments() : void{
-      var s = "";
-      this.admissionCertificateVerificationService.getSavedComments(+this.$scope.semester.id, this.$scope.receiptId)
-          .then((savedComments : Array<IComment>) => {
-            this.$scope.savedComments = savedComments;
-            for(var i=0; i<savedComments.length; i++){
-              s += "Comment " + (i+1) + ": " + savedComments[i].comment + "\n";
-            }
-            this.$scope.comment = s;
-          });
-    }
+    private getPreviousCertificates() {
 
-    private getSavedCertificatesOfStudent() {
-      this.admissionCertificateVerificationService.getSavedCertificateLists(+this.$scope.semester.id, this.$scope.receiptId)
-          .then((savedCertificates: Array<ISavedCertificates>) => {
-            this.$scope.savedCertificates = savedCertificates;
-            this.$scope.lengthOfSavedCertificates = savedCertificates.length;
+      this.admissionCertificateVerificationService.getSavedCertificates(+this.$scope.semester.id, this.$scope.receiptId)
+          .then((previousCertificates: Array<IPreviousCertificates>) => {
+            this.$scope.previousCertificates = previousCertificates;
+            this.$scope.lengthOfSavedCertificates = previousCertificates.length;
           });
     }
 
     private getAllTypesOfCertificates() {
-      this.admissionCertificateVerificationService.getCertificateLists()
-          .then((certificates: Array<ICertificate>) => {
-            this.$scope.certificates = certificates;
+      this.admissionCertificateVerificationService.getAllTypesOfCertificates()
+          .then((allTypesOfCertificates: Array<ITypesOfCertificate>) => {
+            this.$scope.allTypesOfCertificates = allTypesOfCertificates;
+            this.$scope.lengthOfTotalCertificates = allTypesOfCertificates.length;
 
-            this.$scope.banglaMediumAcademicCertificates = [];
-            this.$scope.englishMediumAcademicCertificates = [];
-            this.$scope.personalCertificates = [];
-            this.$scope.quotaCertificates = [];
-            this.categorizeCertificates(certificates);
+            this.disablePreviouslySelectedCertificates();
+            this.categorizeAllTypesOfCertificates();
           });
     }
 
-    private categorizeCertificates(certificates: Array<ICertificate>) {
+    private disablePreviouslySelectedCertificates() {
 
-      for (var i = 0; i < certificates.length; i++) {
-        if (certificates[i].certificateCategory == "ACADEMIC" && certificates[i].certificateType == "Bengali") {
-          this.$scope.banglaMediumAcademicCertificates.push(certificates[i]);
+      if (this.$scope.lengthOfSavedCertificates > 0) {
+
+        for (var p = 0; p < this.$scope.lengthOfSavedCertificates; p++) {
+          for (var q = 0; q < this.$scope.lengthOfTotalCertificates; q++) {
+            if (this.$scope.previousCertificates[p].id == this.$scope.allTypesOfCertificates[q].id) {
+              this.$scope.allTypesOfCertificates[q].disableChecked = "true";
+              break;
+            }
+          }
         }
-        else if (certificates[i].certificateCategory == "ACADEMIC" && certificates[i].certificateType == "English") {
-          this.$scope.englishMediumAcademicCertificates.push(certificates[i]);
-        }
-        else if (certificates[i].certificateCategory == "PERSONAL" && certificates[i].certificateType == "All") {
-          this.$scope.personalCertificates.push(certificates[i]);
-        }
-        else if (certificates[i].certificateCategory == "PERSONAL" && certificates[i].certificateType == "Quota") {
-          this.$scope.quotaCertificates.push(certificates[i]);
-        }
-      }
-      //disableSavedCertifiates()
-      for (var i = 0; i < +this.$scope.lengthOfSavedCertificates; i++) {
-        certificates[(this.$scope.savedCertificates[i].certificateId) - 1].disableChecked = "true";
       }
     }
+
+    private categorizeAllTypesOfCertificates() {
+
+      this.$scope.gLCertificates = [];
+      this.$scope.gCECertificates = [];
+      this.$scope.nationalCertificates = [];
+      this.$scope.quotaCertificates = [];
+
+      if(this.$scope.studentQuota == "GCE"){
+
+        this.$scope.GLShow = false;
+        this.$scope.quotaShow = false;
+        this.$scope.GCEShow = true;
+
+        for (var i = 0; i < this.$scope.lengthOfTotalCertificates; i++) {
+          if (this.$scope.allTypesOfCertificates[i].type == "GCE") {
+            this.$scope.gCECertificates.push(this.$scope.allTypesOfCertificates[i]);
+          }
+          else if (this.$scope.allTypesOfCertificates[i].type == "ALL") {
+            this.$scope.nationalCertificates.push(this.$scope.allTypesOfCertificates[i]);
+          }
+        }
+      }
+      else{
+        this.$scope.GCEShow = false;
+        this.$scope.quotaShow = false;
+        this.$scope.GLShow = true;
+        for (var i = 0; i < this.$scope.lengthOfTotalCertificates; i++) {
+          if (this.$scope.allTypesOfCertificates[i].type == "GL") {
+            this.$scope.gLCertificates.push(this.$scope.allTypesOfCertificates[i]);
+          }
+          else if (this.$scope.allTypesOfCertificates[i].type == "ALL") {
+            this.$scope.nationalCertificates.push(this.$scope.allTypesOfCertificates[i]);
+          }
+          else if(this.$scope.admissionStudent.quota == "FF" && this.$scope.allTypesOfCertificates[i].type == "FF"){
+            this.$scope.quotaShow = true;
+            this.$scope.quotaCertificates.push(this.$scope.allTypesOfCertificates[i]);
+          }
+          else if(this.$scope.admissionStudent.quota == "RA" && this.$scope.allTypesOfCertificates[i].type == "RA"){
+            this.$scope.quotaShow = true;
+            this.$scope.quotaCertificates.push(this.$scope.allTypesOfCertificates[i]);
+          }
+        }
+      }
+    }
+
+    private getPreviousComments() : void {
+      var s = "";
+      this.admissionCertificateVerificationService.getAllPreviousComments(this.$scope.semester.id, this.$scope.receiptId)
+          .then((previousComments: Array<IPreviousComment>) => {
+            this.$scope.previousComments = previousComments;
+          });
+    }
+
 
     private rejected(comments: string): void {
-      this.$scope.comment = comments;
-      this.convertStatusToJson(3).then((json:any)=> {
-        this.admissionCertificateVerificationService.setVerificationStatus(json)
-            .then((message:any)=>{
-              this.notify.success(message);
-            });
-      });
-
-      this.convertCommentsToJson(this.$scope.comment).then((json:any)=> {
-        this.admissionCertificateVerificationService.saveComments(json)
-            .then((message:any)=>{
-              this.notify.success(message);
-            });
-      });
-    }
-
-    private underTaken(comments:string): void {
-      this.$scope.comment = comments;
-      this.convertStatusToJson(2).then((json:any)=> {
+      this.convertStatusToJson(0).then((json:any)=> {
         this.admissionCertificateVerificationService.setVerificationStatus(json)
             .then((message:any)=>{
               this.notify.success(message);
@@ -237,8 +260,12 @@ module ums{
       this.$scope.selected = [];
     }
 
+    private underTaken(comments:string): void {
+
+
+    }
+
     private verified(comments:string): void {
-      this.$scope.comment = comments;
       this.convertStatusToJson(1).then((json:any)=> {
         this.admissionCertificateVerificationService.setVerificationStatus(json)
             .then((message:any)=>{
@@ -261,8 +288,8 @@ module ums{
               });
         });
       }
-      this.$scope.selected = [];
 
+      this.$scope.selected = [];
     }
 
     private convertStatusToJson(status: number): ng.IPromise<any> {
@@ -286,6 +313,9 @@ module ums{
       var defer = this.$q.defer();
       var completeJson = {};
       var jsonObject = [];
+
+      console.log("selected Certificates ");
+      console.log(this.$scope.selected);
 
       for(var i=0; i < this.$scope.selected.length; i++) {
           var item: any = {};
@@ -323,15 +353,15 @@ module ums{
 
     }
 
-    private toggleSelection(studentAcademicCertificate: any, list: any): void {
+    private toggleSelection(allCertificates: ITypesOfCertificate): void {
 
-      var idx = this.$scope.selected.indexOf(studentAcademicCertificate.certificateId);
+      var idx = this.$scope.selected.indexOf(allCertificates.id);
 
       if (idx > -1) {
         this.$scope.selected.splice(idx, 1);
       }
       else {
-        this.$scope.selected.push(studentAcademicCertificate.certificateId);
+        this.$scope.selected.push(allCertificates.id);
       }
     }
 

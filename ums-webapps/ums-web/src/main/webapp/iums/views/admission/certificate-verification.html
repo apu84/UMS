@@ -1,21 +1,18 @@
 
 <style>
     fieldset {
-        border:1px dashed grey;
-        /*width: 705px;*/
-        padding-right: 5px;
-        padding-left: 5px;
+        border:1px solid grey;
+        width: auto;
+        padding-left: 5%;
+        padding-right: 5%;
     }
 
     legend {
-        padding: 0.2em 0.5em;
         border:1px solid grey;
         color:#4d4b4b;
         font-size:90%;
-        text-align:left;
-        width: 200px;
-        padding-right: 11px;
-        margin-bottom: 10px;
+        text-align:center;
+        width: 60%;
         font-weight: bold;
     }
 
@@ -69,7 +66,7 @@
     </div>
     <div id="rightDiv" data-ng-if="rightDiv==true">
         <div class="panel">
-            <div class="panel-heading">Search Candidate By <b>ProgramType:</b> {{programType.name}} <b>Semester:</b> {{semester.name}} <b>ReceiptID:</b> {{receiptId}}<span
+            <div class="panel-heading">Search Candidate By <b>ProgramType:</b> {{programType.name}} <b>Semester:</b> {{semester.name}} <b>ReceiptId:</b> {{receiptId}}<span
                     class="subtitle"></span></div>
             <div class="panel-body shadowPanel"   style="min-height: 490px;">
                 <div align="center">
@@ -78,247 +75,169 @@
                             <label class="control-label" style="font-weight: bold;">Receipt Id:</label>
                             <input type="text" class="form-control" data-ng-model="receiptId" placeholder="Enter Receipt Id">
                         </div>
-                        <button type="submit" class="btn btn-success" data-ng-click="searchByReceiptId(receiptId)">Search</button>
+                        <button type="submit" class="btn btn-success" data-ng-click="search(receiptId)">Search</button>
                     </form>
                 </div>
-                <br /><br /><br />
+                <br />
                 <div data-ng-show="mainDiv==true">
                     <div class="row">
-                        <div class="col-md-1"></div>
-                        <div class="col-md-5">
-                            <form>
-                                <fieldset style="padding-bottom: 5px;">
-                                    <legend>General Information:</legend>
-                                    <table class="table table-striped">
-                                        <tr>
-                                            <th><label class="control-label" style="font-weight: bold;">Receipt Id:</label></th>
-                                            <td><label class="control-label" style="font-weight: bold;">{{admissionStudent.receiptId}}</label></td>
-                                        </tr>
-                                        <tr>
-                                            <th><label class="control-label" style="font-weight: bold;">Semester:</label></th>
-                                            <td><label class="control-label" style="font-weight: bold;">{{admissionStudent.semesterName}}</label></td>
-                                        </tr>
-                                        <div data-ng-if="forEngineering">
-                                            <tr>
-                                                <th><label class="control-label" style="font-weight: bold;">Admission Roll:</label></th>
-                                                <td><label class="control-label" style="font-weight: bold;">{{admissionStudent.admissionRoll}}</label></td>
-                                            </tr>
-                                            <tr>
-                                                <th><label class="control-label" style="font-weight: bold;">Merit SL No:</label></th>
-                                                <td><label class="control-label" style="font-weight: bold;">{{admissionStudent.meritSlNo}}</label></td>
-                                            </tr>
-                                        </div>
-                                        <tr>
-                                            <th><label class="control-label" style="font-weight: bold;">Quota:</label></th>
-                                            <td><label class="control-label" style="font-weight: bold;">{{admissionStudent.quota}}</label></td>
-                                        </tr>
-                                        <tr>
-                                            <th><label class="control-label" style="font-weight: bold;">Unit:</label></th>
-                                            <td><label class="control-label" style="font-weight: bold;">{{admissionStudent.unit}}</label></td>
-                                        </tr>
-                                    </table>
-                                </fieldset>
-                            </form>
-                        </div>
-                        <div class="col-md-5">
-                            <form>
-                                <fieldset style="padding-bottom: 5px;">
-                                    <legend>Personal Information:</legend>
-                                    <table class="table table-striped">
-                                        <tr>
-                                            <th><label class="control-label" style="font-weight: bold;">Name:</label></th>
-                                            <td><label class="control-label" style="font-weight: bold;">{{admissionStudent.studentName}}</label></td>
-                                        </tr>
-                                        <tr>
-                                            <th><label class="control-label" style="font-weight: bold;">Gender:</label></th>
-                                            <td><label class="control-label" style="font-weight: bold;">{{admissionStudent.gender}}</label></td>
-                                        </tr>
-                                        <tr>
-                                            <th><label class="control-label" style="font-weight: bold;">Date of Birth:</label></th>
-                                            <td><label class="control-label" style="font-weight: bold;">{{admissionStudent.dateOfBirth}}</label></td>
-                                        </tr>
-                                        <tr>
-                                            <th><label class="control-label" style="font-weight: bold;">Father's Name:</label></th>
-                                            <td><label class="control-label" style="font-weight: bold;">{{admissionStudent.fatherName}}</label></td>
-                                        </tr>
-                                        <tr>
-                                            <th><label class="control-label" style="font-weight: bold;">Mother's Name:</label></th>
-                                            <td><label class="control-label" style="font-weight: bold;">{{admissionStudent.motherName}}</label></td>
-                                        </tr>
-                                    </table>
-                                </fieldset>
-                            </form>
-                        </div>
-                        <div class="col-md-1"></div>
-                    </div>
-                    <br />
+                        <div class="col-md-4">
+                            <div style="border: 1px solid #5e5e5e;">
+                                <div class="form-group">
+                                    <div class="text-center mbl">
+                                        <img
+                                                src="https://s3.amazonaws.com/uifaces/faces/twitter/oliveirasimoes/128.jpg"
+                                                style="border: 5px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0.25);"
+                                                class="img-circle"/></div>
+                                </div>
+                                <table class="table table-striped">
+                                    <tr>
+                                        <th><label class="control-label" style="font-weight: bold;">Name:</label></th>
+                                        <td><label class="control-label">{{admissionStudent.studentName}}</label></td>
+                                    </tr>
+                                    <tr>
+                                        <th><label class="control-label" style="font-weight: bold;">Gender:</label></th>
+                                        <td><label class="control-label">{{admissionStudent.gender}}</label></td>
+                                    </tr>
+                                    <tr>
+                                        <th><label class="control-label" style="font-weight: bold;">Date of Birth:</label></th>
+                                        <td><label class="control-label">{{admissionStudent.dateOfBirth}}</label></td>
+                                    </tr>
+                                    <tr>
+                                        <th><label class="control-label" style="font-weight: bold;">Father's Name:</label></th>
+                                        <td><label class="control-label">{{admissionStudent.fatherName}}</label></td>
+                                    </tr>
+                                    <tr>
+                                        <th><label class="control-label" style="font-weight: bold;">Mother's Name:</label></th>
+                                        <td><label class="control-label">{{admissionStudent.motherName}}</label></td>
+                                    </tr>
+                                    <tr>
+                                        <th><label class="control-label" style="font-weight: bold;">HSC Board:</label></th>
+                                        <td><label class="control-label">{{admissionStudent.hscBoard}}</label></td>
+                                    </tr>
+                                    <tr>
+                                        <th><label class="control-label" style="font-weight: bold;">SSC Board:</label></th>
+                                        <td><label class="control-label">{{admissionStudent.sscBoard}}</label></td>
+                                    </tr>
+                                    <tr>
+                                        <th><label class="control-label" style="font-weight: bold;">HSC Passing Year:</label></th>
+                                        <td><label class="control-label">{{admissionStudent.hscYear}}</label></td>
+                                    </tr>
 
-                    <div class="row">
-                        <div class="col-md-1"></div>
-                        <div class="col-md-5">
-                            <form>
-                                <fieldset style="padding-bottom: 5px;">
-                                    <legend>HSC Information:</legend>
-                                    <table class="table table-striped">
-                                        <tr>
-                                            <th><label class="control-label" style="font-weight: bold;">HSC Board:</label></th>
-                                            <td><label class="control-label" style="font-weight: bold;">{{admissionStudent.hscBoard}}</label></td>
-                                        </tr>
-                                        <tr>
-                                            <th><label class="control-label" style="font-weight: bold;">HSC Group:</label></th>
-                                            <td><label class="control-label" style="font-weight: bold;">{{admissionStudent.hscGroup}}</label></td>
-                                        </tr>
-                                        <tr>
-                                            <th><label class="control-label" style="font-weight: bold;">HSC Roll:</label></th>
-                                            <td><label class="control-label" style="font-weight: bold;">{{admissionStudent.hscRoll}}</label></td>
-                                        </tr>
-                                        <tr>
-                                            <th><label class="control-label" style="font-weight: bold;">HSC Registration No.:</label></th>
-                                            <td><label class="control-label" style="font-weight: bold;">{{admissionStudent.hscRegNo}}</label></td>
-                                        </tr>
-                                        <tr>
-                                            <th><label class="control-label" style="font-weight: bold;">HSC GPA:</label></th>
-                                            <td><label class="control-label" style="font-weight: bold;">{{admissionStudent.hscGpa}}</label></td>
-                                        </tr>
-                                        <tr>
-                                            <th><label class="control-label" style="font-weight: bold;">HSC Passing Year:</label></th>
-                                            <td><label class="control-label" style="font-weight: bold;">{{admissionStudent.hscYear}}</label></td>
-                                        </tr>
-                                    </table>
-                                </fieldset>
-                            </form>
+                                    <tr>
+                                        <th><label class="control-label" style="font-weight: bold;">SSC Passing Year:</label></th>
+                                        <td><label class="control-label">{{admissionStudent.sscYear}}</label></td>
+                                    </tr>
+                                </table>
+                            </div>
                         </div>
-                        <div class="col-md-5">
-                            <form>
-                                <fieldset style="padding-bottom: 5px;">
-                                    <legend>SSC Information:</legend>
-                                    <table class="table table-striped">
-                                        <tr>
-                                            <th><label class="control-label" style="font-weight: bold;">SSC Board:</label></th>
-                                            <td><label class="control-label" style="font-weight: bold;">{{admissionStudent.sscBoard}}</label></td>
-                                        </tr>
-                                        <tr>
-                                            <th><label class="control-label" style="font-weight: bold;">SSC Group:</label></th>
-                                            <td><label class="control-label" style="font-weight: bold;">{{admissionStudent.sscGroup}}</label></td>
-                                        </tr>
-                                        <tr>
-                                            <th><label class="control-label" style="font-weight: bold;">SSC Roll:</label></th>
-                                            <td><label class="control-label" style="font-weight: bold;">{{admissionStudent.sscRoll}}</label></td>
-                                        </tr>
-                                        <tr>
-                                            <th><label class="control-label" style="font-weight: bold;">SSC GPA:</label></th>
-                                            <td><label class="control-label" style="font-weight: bold;">{{admissionStudent.sscGpa}}</label></td>
-                                        </tr>
-                                        <tr>
-                                            <th><label class="control-label" style="font-weight: bold;">SSC Passing Year:</label></th>
-                                            <td><label class="control-label" style="font-weight: bold;">{{admissionStudent.sscYear}}</label></td>
-                                        </tr>
-                                    </table>
-                                </fieldset>
-                            </form>
+                        <div class="col-md-8" style="border: 1px dashed #5e5e5e;">
+                            <br />
+                            <div class="col-md-4" data-ng-show="GLShow==true">
+                                <form>
+                                    <fieldset style="padding-bottom: 5px;">
+                                        <legend>Academic</legend>
+                                        <div>
+                                            <span data-ng-repeat="gl in gLCertificates">
+
+                                                <input
+                                                        type="checkbox"
+                                                        value="{{gl}}"
+                                                        ng-checked="{{gl.disableChecked}}"
+                                                        ng-click="toggleSelection(gl)"
+                                                        ng-disabled="{{gl.disableChecked}}"
+                                                >&nbsp; {{gl.name}} &nbsp;
+                                                <br />
+                                            </span>
+                                        </div>
+                                    </fieldset>
+                                </form>
+                                <br />
+                            </div>
+                            <div class="col-md-4" data-ng-show="GCEShow==true">
+                                <form>
+                                    <fieldset style="padding-bottom: 5px;">
+                                        <legend>Academic</legend>
+                                        <div>
+                                            <span ng-repeat="gce in gCECertificates">
+
+                                                <input
+                                                        type="checkbox"
+                                                        value="{{gce}}"
+                                                        ng-checked="{{gce.disableChecked}}"
+                                                        ng-click="toggleSelection(gce)"
+                                                        ng-disabled="{{gce.disableChecked}}"
+                                                >&nbsp; {{gce.name}} &nbsp;
+                                                <br />
+                                            </span>
+                                        </div>
+                                    </fieldset>
+                                </form>
+                                <br />
+                            </div>
+                            <div class="col-md-4">
+                                <form>
+                                    <fieldset style="padding-bottom: 5px;">
+                                        <legend>National</legend>
+                                        <div>
+                                            <span ng-repeat="n in nationalCertificates">
+
+                                                <input
+                                                        type="checkbox"
+                                                        value="{{n}}"
+                                                        ng-checked="{{n.disableChecked}}"
+                                                        ng-click="toggleSelection(n)"
+                                                        ng-disabled="{{n.disableChecked}}"
+                                                >&nbsp; {{n.name}} &nbsp;
+                                                <br />
+                                            </span>
+                                        </div>
+                                    </fieldset>
+                                </form>
+                                <br />
+                            </div>
+                            <div class="col-md-4" data-ng-show="quotaShow==true">
+                                <form>
+                                    <fieldset style="padding-bottom: 5px;">
+                                        <legend>Quota</legend>
+                                        <div>
+                                            <span ng-repeat="q in quotaCertificates">
+
+                                                <input
+                                                        type="checkbox"
+                                                        value="{{q}}"
+                                                        ng-checked="{{q.disableChecked}}"
+                                                        ng-click="toggleSelection(q)"
+                                                        ng-disabled="{{q.disableChecked}}"
+                                                >&nbsp; {{q.name}} &nbsp;
+                                                <br />
+                                            </span>
+                                        </div>
+                                    </fieldset>
+                                </form>
+                                <br />
+                            </div>
+
+                        <div class="col-md-12">
+                            <label>Comment:</label><br />
+                            <textarea class="form-control" rows="2" data-ng-model="userComment"></textarea>
+                            <span data-ng-repeat="comments in previousComments">
+
+                                <textarea class="form-control" rows="1" disabled>{{comments.comment}} {{comments.commentedOn}}</textarea>
+
+                            </span>
+                            <br />
                         </div>
-                        <div class="col-md-1"></div>
-                    </div>
-                    <br /><br />
-                    <div class="row">
-                        <div class="col-md-1"></div>
-                        <div class="col-md-5">
-                            <form>
-                                <fieldset style="padding-bottom: 5px;">
-                                    <legend>Student Certificates(Bengali)</legend>
-                                    <div>
-                                        <label ng-repeat="bmacName in banglaMediumAcademicCertificates"><br />
-                                            <input
-                                                    type="checkbox"
-                                                    value="{{bmacName}}"
-                                                    ng-checked="{{bmacName.disableChecked}}"
-                                                    ng-click="toggleSelection(bmacName)"
-                                                    ng-disabled="{{bmacName.disableChecked}}"
-                                            >&nbsp; {{bmacName.certificateTitle}} &nbsp;
-                                        </label>
-                                    </div>
-                                </fieldset>
-                            </form>
                         </div>
-                        <div class="col-md-5">
-                            <form>
-                                <fieldset style="padding-bottom: 5px;">
-                                    <legend>Student Certificates(English)</legend>
-                                    <div>
-                                        <label ng-repeat="emacName in englishMediumAcademicCertificates"><br />
-                                            <input
-                                                    type="checkbox"
-                                                    value="{{emacName}}"
-                                                    ng-checked="{{emacName.disableChecked}}"
-                                                    ng-click="toggleSelection(emacName)"
-                                                    ng-disabled="{{emacName.disableChecked}}"
-                                            >&nbsp; {{emacName.certificateTitle}} &nbsp;
-                                        </label>
-                                    </div>
-                                </fieldset>
-                            </form>
+                        <div class="col-md-4" align="left">
+                            <br />
+                            <button type="submit" class="btn btn-warning" data-ng-click="underTaken(userComment)" disabled>Print Undertaken Form</button>
                         </div>
-                        <div class="col-md-1"></div>
-                    </div>
-                    <br /><br />
-                    <div class="row">
-                        <div class="col-md-1"></div>
-                        <div class="col-md-5">
-                            <form>
-                                <fieldset style="padding-bottom: 5px;">
-                                    <legend>Person Certificates</legend>
-                                    <div>
-                                        <label ng-repeat="pcName in personalCertificates"><br />
-                                            <input
-                                                    type="checkbox"
-                                                    value="{{pcName}}"
-                                                    ng-checked="{{pcName.disableChecked}}"
-                                                    ng-click="toggleSelection(pcName)"
-                                                    ng-disabled="{{pcName.disableChecked}}"
-                                            >&nbsp; {{pcName.certificateTitle}} &nbsp;
-                                        </label>
-                                    </div>
-                                </fieldset>
-                            </form>
+                        <div class="col-md-4" align="right">
+                            <br />
+                            <button type="submit" class="btn btn-danger" data-ng-click="rejected(userComment)">Rejected</button>
+                            <button type="submit" class="btn btn-success" data-ng-click="verified(userComment)">Approved</button>
                         </div>
-                        <div class="col-md-5">
-                            <form>
-                                <fieldset style="padding-bottom: 5px;">
-                                    <legend>Quota Certificates</legend>
-                                    <div>
-                                        <label ng-repeat="qcName in quotaCertificates"><br />
-                                            <input
-                                                    type="checkbox"
-                                                    value="{{qcName}}"
-                                                    ng-checked="{{qcName.disableChecked}}"
-                                                    ng-click="toggleSelection(qcName)"
-                                                    ng-disabled="{{qcName.disableChecked}}"
-                                            >&nbsp; {{qcName.certificateTitle}} &nbsp;
-                                        </label>
-                                    </div>
-                                </fieldset>
-                            </form>
-                        </div>
-                        <div class="col-md-1"></div>
-                    </div>
-                    <br /><br />
-                    <div class="row">
-                        <div class="col-md-1"></div>
-                        <div class="col-md-10">
-                            <label for="comment">Comment:</label><br />
-                            <textarea class="form-control" id="comment" rows="5" data-ng-model="comment"></textarea>
-                        </div>
-                        <div class="col-md-1"></div>
-                    </div>
-                    <br /> <br />
-                    <div class="row" align="right">
-                        <div class="col-md-1"></div>
-                        <div class="col-md-10">
-                            <button type="submit" class="btn btn-danger" data-ng-click="rejected(comment)">Rejected</button>
-                            <button type="submit" class="btn btn-warning" data-ng-click="underTaken(comment)">Undertaken Form</button>
-                            <button type="submit" class="btn btn-success" data-ng-click="verified(comment)">Verified</button>
-                        </div>
-                        <div class="col-md-1"></div>
                     </div>
                 </div>
             </div>

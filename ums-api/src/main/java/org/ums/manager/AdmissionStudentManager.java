@@ -1,7 +1,6 @@
 package org.ums.manager;
 
 import org.ums.domain.model.immutable.AdmissionStudent;
-import org.ums.domain.model.immutable.AdmissionStudentCertificate;
 import org.ums.domain.model.mutable.MutableAdmissionStudent;
 import org.ums.enums.DepartmentSelectionType;
 import org.ums.enums.ProgramType;
@@ -32,20 +31,22 @@ public interface AdmissionStudentManager extends
 
   int saveMeritList(final List<MutableAdmissionStudent> pStudents);
 
-  List<AdmissionStudent> getNewStudentByReceiptId(final String pProgramType, final int pSemesterId,
-      final String receiptId);
-
   int updateDepartmentSelection(final MutableAdmissionStudent pStudent,
       DepartmentSelectionType pDepartmentSelectionType);
 
   List<AdmissionStudent> getNewStudentByReceiptId(final int pSemesterId, final String receiptId);
 
-  int saveVerificationStatus(final MutableAdmissionStudent pStudent);
+  AdmissionStudent getNextStudentForDepartmentSelection(final int pSemesterId,
+      final ProgramType pProgramType, final String pUnit, final String pQuota);
+
+  // kawsurilu
+
+  AdmissionStudent getNewStudentByReceiptId(final String pProgramType, final int pSemesterId,
+      final String receiptId);
 
   AdmissionStudent getByStudentId(final String pStudentId);
 
-  List<AdmissionStudentCertificate> getAdmissionStudentCertificateLists();
+  int setVerificationStatus(final MutableAdmissionStudent pStudent);
 
-  AdmissionStudent getNextStudentForDepartmentSelection(final int pSemesterId,
-      final ProgramType pProgramType, final String pUnit, final String pQuota);
+  //
 }

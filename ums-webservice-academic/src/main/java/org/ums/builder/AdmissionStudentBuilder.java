@@ -4,14 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.AdmissionStudent;
-import org.ums.domain.model.immutable.AdmissionStudentCertificate;
 import org.ums.domain.model.mutable.MutableAdmissionStudent;
 import org.ums.enums.DepartmentSelectionType;
 import org.ums.enums.MigrationStatus;
 import org.ums.enums.ProgramType;
 import org.ums.manager.ProgramManager;
 import org.ums.manager.SemesterManager;
-import sun.dc.pr.PRError;
 
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
@@ -105,6 +103,8 @@ public class AdmissionStudentBuilder implements Builder<AdmissionStudent, Mutabl
 
   }
 
+  // kawsurilu
+
   public void getAdmissionStudentByReceiptIdBuilder(JsonObjectBuilder pBuilder,
       AdmissionStudent pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
     pBuilder.add("semesterId", pReadOnly.getSemester().getId());
@@ -145,6 +145,16 @@ public class AdmissionStudentBuilder implements Builder<AdmissionStudent, Mutabl
       pBuilder.add("meritSlNo", pReadOnly.getMeritSerialNo());
     }
   }
+
+  public void setVerificationStatus(MutableAdmissionStudent pMutable, JsonObject pJsonObject,
+      LocalCache pLocalCache) {
+    pMutable.setId(pJsonObject.getString("receiptId"));
+    pMutable.setSemester(mSemesterManager.get(pJsonObject.getInt("semesterId")));
+    pMutable.setProgramType(ProgramType.get(pJsonObject.getInt("programType")));
+    pMutable.setVerificationStatus(pJsonObject.getInt("status"));
+  }
+
+  //
 
   @Override
   public void build(MutableAdmissionStudent pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
@@ -224,13 +234,5 @@ public class AdmissionStudentBuilder implements Builder<AdmissionStudent, Mutabl
       // do nothing
     }
 
-  }
-
-  public void setVerificationStatus(MutableAdmissionStudent pMutable, JsonObject pJsonObject,
-      LocalCache pLocalCache) {
-    pMutable.setId(pJsonObject.getString("receiptId"));
-    pMutable.setSemester(mSemesterManager.get(pJsonObject.getInt("semesterId")));
-    pMutable.setProgramType(ProgramType.get(pJsonObject.getInt("programType")));
-    pMutable.setVerificationStatus(pJsonObject.getInt("status"));
   }
 }

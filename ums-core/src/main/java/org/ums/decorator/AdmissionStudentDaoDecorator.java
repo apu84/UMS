@@ -1,7 +1,6 @@
 package org.ums.decorator;
 
 import org.ums.domain.model.immutable.AdmissionStudent;
-import org.ums.domain.model.immutable.AdmissionStudentCertificate;
 import org.ums.domain.model.mutable.MutableAdmissionStudent;
 import org.ums.enums.DepartmentSelectionType;
 import org.ums.enums.ProgramType;
@@ -47,22 +46,6 @@ public class AdmissionStudentDaoDecorator extends
   }
 
   @Override
-  public List<AdmissionStudent> getNewStudentByReceiptId(String pProgramType, int pSemsterId,
-      String pReceiptId) {
-    return getManager().getNewStudentByReceiptId(pProgramType, pSemsterId, pReceiptId);
-  }
-
-  @Override
-  public int saveVerificationStatus(final MutableAdmissionStudent pStudent) {
-    return getManager().saveVerificationStatus(pStudent);
-  }
-
-  @Override
-  public AdmissionStudent getByStudentId(String pStudentId) {
-    return getManager().getByStudentId(pStudentId);
-  }
-
-  @Override
   public AdmissionStudent getAdmissionStudent(int pSemesterId, ProgramType pProgramType,
       String pReceiptId) {
     return getManager().getAdmissionStudent(pSemesterId, pProgramType, pReceiptId);
@@ -80,13 +63,28 @@ public class AdmissionStudentDaoDecorator extends
   }
 
   @Override
-  public List<AdmissionStudentCertificate> getAdmissionStudentCertificateLists() {
-    return getManager().getAdmissionStudentCertificateLists();
-  }
-
-  @Override
   public AdmissionStudent getNextStudentForDepartmentSelection(int pSemesterId,
       ProgramType pProgramType, String pUnit, String pQuota) {
     return getNextStudentForDepartmentSelection(pSemesterId, pProgramType, pUnit, pQuota);
   }
+
+  // kawsurilu
+
+  @Override
+  public AdmissionStudent getNewStudentByReceiptId(String pProgramType, int pSemesterId,
+      String pReceiptId) {
+    return getManager().getNewStudentByReceiptId(pProgramType, pSemesterId, pReceiptId);
+  }
+
+  @Override
+  public int setVerificationStatus(final MutableAdmissionStudent pStudent) {
+    return getManager().setVerificationStatus(pStudent);
+  }
+
+  @Override
+  public AdmissionStudent getByStudentId(String pStudentId) {
+    return getManager().getByStudentId(pStudentId);
+  }
+
+  //
 }
