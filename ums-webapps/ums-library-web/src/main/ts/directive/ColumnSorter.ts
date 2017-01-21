@@ -5,7 +5,7 @@ module ums {
     public controllerAs: string = 'vm';
     public restrict: string = "A";
     public scope = {
-      onChange: '@'
+      columnSorter: '@'
     };
   }
 
@@ -13,12 +13,12 @@ module ums {
     public static $inject = ['$element'];
     private sort: string = 'asc';
 
-    public onChange: Function;
+    public columnSorter: Function;
 
     constructor($element: ng.IAugmentedJQuery) {
       $element.on('click', () => {
         this.sort = (this.sort === 'asc' ? 'desc' : 'asc');
-        this.onChange(this.sort);
+        this.columnSorter(this.sort);
       });
     }
   }
