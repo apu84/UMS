@@ -3,7 +3,7 @@ package org.ums.academic.resource.helper;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ums.academic.resource.SemesterResource;
+import org.ums.resource.SemesterResource;
 import org.ums.builder.CourseBuilder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.*;
