@@ -82,6 +82,11 @@ public class AdmissionStudentDaoDecorator extends
   }
 
   @Override
+  public List<AdmissionStudent> getAllNewCandidates(String pProgramType, int pSemesterId) {
+    return getManager().getAllNewCandidates(pProgramType, pSemesterId);
+  }
+
+  @Override
   public AdmissionStudent getByStudentId(String pStudentId) {
     return getManager().getByStudentId(pStudentId);
   }

@@ -7,6 +7,9 @@ import javax.json.JsonObject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
+import javax.ws.rs.core.StreamingOutput;
+import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * Created by kawsu on 1/11/2017.
@@ -25,5 +28,4 @@ public class AdmissionCertificatesOfStudentResource extends
       final @PathParam("receipt-Id") String pReceiptId) {
     return mHelper.getStudentsSavedCertificates(pSemesterId, pReceiptId, mUriInfo);
   }
-
 }

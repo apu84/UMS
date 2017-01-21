@@ -20,9 +20,6 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by kawsu on 1/11/2017.
- */
 @Component
 public class AdmissionCertificatesOfStudentResourceHelper extends
     ResourceHelper<AdmissionCertificatesOfStudent, MutableAdmissionCertificatesOfStudent, Integer> {
@@ -35,26 +32,6 @@ public class AdmissionCertificatesOfStudentResourceHelper extends
 
   @Autowired
   AdmissionCertificatesOfStudentBuilder mBuilder;
-
-  @Transactional
-  public Response postCertificateList(JsonObject pJsonObject, UriInfo pUriInfo) {
-    List<MutableAdmissionCertificatesOfStudent> studentsCertificates = new ArrayList<>();
-    JsonArray entries = pJsonObject.getJsonArray("entries");
-
-    for(int i = 0; i < entries.size(); i++) {
-      LocalCache localCache = new LocalCache();
-      JsonObject jsonObject = entries.getJsonObject(i);
-      MutableAdmissionCertificatesOfStudent studentsCertificate =
-          new PersistentAdmissionCertificatesOfStudent();
-      getBuilder().build(studentsCertificate, jsonObject, localCache);
-      studentsCertificates.add(studentsCertificate);
-    }
-    getContentManager().saveAdmissionStudentsCertificates(studentsCertificates);
-    URI contextURI = null;
-    Response.ResponseBuilder builder = Response.created(contextURI);
-    builder.status(Response.Status.CREATED);
-    return builder.build();
-  }
 
   public JsonObject getStudentsSavedCertificates(final int pSemesterId, final String pReceiptId,
       final UriInfo pUriInfo) {

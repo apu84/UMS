@@ -248,6 +248,25 @@ public class AdmissionStudentResourceHelper extends
     return object.build();
   }
 
+  public JsonObject getCandidateLists(final String pProgramType, final int pSemesterId,
+      final UriInfo pUriInfo) {
+    List<AdmissionStudent> student =
+        getContentManager().getAllNewCandidates(pProgramType, pSemesterId);
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+
+    for(AdmissionStudent admissionStudent : student) {
+      JsonObjectBuilder jsonObject = Json.createObjectBuilder();
+      getBuilder().getAdmissionStudentByReceiptIdBuilder(jsonObject, admissionStudent, pUriInfo,
+          localCache);
+      children.add(jsonObject);
+    }
+    object.add("entries", children);
+    localCache.invalidate();
+    return object.build();
+  }
+
   //
 
   public JsonObject getAdmissionMeritList(final int pSemesterId, final ProgramType pProgramType,

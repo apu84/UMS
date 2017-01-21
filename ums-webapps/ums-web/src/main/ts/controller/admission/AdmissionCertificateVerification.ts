@@ -6,6 +6,7 @@ module ums{
     semester:Semester;
     admissionStudent: AdmissionStudent;
 
+    admissionStudents: Array<AdmissionStudent>;
     programTypes:Array<IProgramType>;
     semesters:Array<Semester>;
     allTypesOfCertificates: Array<ITypesOfCertificate>;
@@ -22,11 +23,22 @@ module ums{
     GLShow:boolean;
     GCEShow: boolean;
     quotaShow: boolean;
+    undertake:boolean;
     studentQuota: string;
     receiptId:string;
+    thisComment: string;
+    verify:boolean;
+    reject:boolean;
+    deadLine: string;
     selected: any;
+    receiptIdMap: any;
     lengthOfSavedCertificates : number;
     lengthOfTotalCertificates: number;
+    countGL: number;
+    countGCE:number;
+    countFF: number;
+    countRA: number;
+    countAll:number;
 
     showRightDiv: Function;
     search: Function;
@@ -37,11 +49,8 @@ module ums{
     underTaken: Function;
     verified : Function;
     getPreviousComments : Function;
-  }
-
-  interface IPreviousComment{
-    comment: string;
-    commentedOn:string;
+    getAllCandidates: Function;
+    getCurrentComment: Function;
   }
 
   interface IProgramType{
@@ -51,6 +60,11 @@ module ums{
 
   interface IPreviousCertificates{
     id : number;
+  }
+
+  interface IPreviousComment{
+    comment: string;
+    commentedOn:string;
   }
 
   interface ITypesOfCertificate{
@@ -77,10 +91,17 @@ module ums{
 
       $scope.receiptId = "";
       $scope.studentQuota = "";
+      $scope.thisComment = "";
+      $scope.deadLine = "";
+      $scope.countGL = 0;
+      $scope.countGCE = 0;
+      $scope.countFF = 0;
+      $scope.countRA = 0;
+      $scope.countAll = 0;
       $scope.lengthOfSavedCertificates = 0;
       $scope.lengthOfTotalCertificates = 0;
 
-      $scope.programTypes=appConstants.programType;
+      $scope.programTypes = appConstants.programType;
       $scope.programType = $scope.programTypes[0];
 
       $scope.rightDiv = false;
@@ -89,6 +110,9 @@ module ums{
       $scope.GLShow = false;
       $scope.GCEShow = false;
       $scope.quotaShow = false;
+      $scope.verify = true;
+      $scope.reject = true;
+      $scope.undertake = true;
       $scope.selected = [];
 
       $scope.getSemesters = this.getSemesters.bind(this);
@@ -100,13 +124,14 @@ module ums{
       $scope.verified = this.verified.bind(this);
       $scope.toggleSelection = this.toggleSelection.bind(this);
       $scope.getPreviousComments = this.getPreviousComments.bind(this);
+      $scope.getAllCandidates = this.getAllCandidates.bind(this);
+      $scope.getCurrentComment = this.getCurrentComment.bind(this);
 
       this.getSemesters();
-
       Utils.setValidationOptions("form-horizontal");
     }
 
-    private getSemesters():void {
+    private getSemesters(): void {
       this.semesterService.fetchSemesters(Number(this.$scope.programType.id), 5).then((semesters: any) => {
         this.$scope.semesters = semesters;
         for (var i = 0; i < semesters.length; i++) {
@@ -118,26 +143,87 @@ module ums{
       });
     }
 
+    private getAllCandidates() {
+      this.$scope.receiptIdMap = {};
+      this.admissionCertificateVerificationService.getCandidateList(this.$scope.programType.id, this.$scope.semester.id)
+          .then((students: Array<AdmissionStudent>) => {
+
+            this.$scope.admissionStudents = [];
+            for (var i = 0; i < students.length; i++) {
+              this.$scope.admissionStudents.push(students[i]);
+              this.$scope.receiptIdMap[students[i].receiptId] = students[i];
+            }
+            this.initializeSelect2("searchByReceiptId", this.$scope.admissionStudents, "Enter Receipt ID");
+          });
+    }
+
+    private initializeSelect2(selectBoxId, studentIds, placeHolderText) {
+      var data = studentIds;
+      $("#" + selectBoxId).select2({
+        minimumInputLength: 0,
+        query: function (options) {
+          var pageSize = 100;
+          var startIndex = (options.page - 1) * pageSize;
+          var filteredData = data;
+          if (options.term && options.term.length > 0) {
+            if (!options.context) {
+              var term = options.term.toLowerCase();
+              options.context = data.filter(function (metric: any) {
+                return ( metric.id.indexOf(term) !== -1 );
+              });
+            }
+            filteredData = options.context;
+          }
+          options.callback({
+            context: filteredData,
+            results: filteredData.slice(startIndex, startIndex + pageSize),
+            more: (startIndex + pageSize) < filteredData.length
+          });
+        },
+        placeholder: placeHolderText
+      });
+    }
+
     private search(receiptId: string): void {
 
-      Utils.expandRightDiv();
+      this.$scope.countGL = 0;
+      this.$scope.countGCE = 0;
+      this.$scope.countFF = 0;
+      this.$scope.countRA = 0;
+      this.$scope.countAll = 0;
 
-      this.$scope.receiptId = receiptId;
+      this.$scope.verify = true;
+      this.$scope.reject = true;
+      this.$scope.undertake = false;
 
-      this.admissionCertificateVerificationService.getCandidateInformation(this.$scope.programType.id, this.$scope.semester.id, this.$scope.receiptId)
-          .then((admissionStudentsInformation: Array<AdmissionStudent>) => {
 
-            if (admissionStudentsInformation == null) {
-              this.notify.error("No Data Found");
-            }
-            else {
-              this.$scope.mainDiv = true;
-              this.$scope.admissionStudent = admissionStudentsInformation[0];
-              this.$scope.studentQuota = this.$scope.admissionStudent.quota;
-              this.$scope.getAllCertificates();
-              this.$scope.getPreviousComments();
-            }
-          });
+      if (receiptId == null || receiptId == "") {
+      }
+      else {
+        Utils.expandRightDiv();
+
+        this.$scope.thisComment = "";
+        this.$scope.selected = [];
+        this.$scope.receiptId = receiptId;
+
+
+        this.admissionCertificateVerificationService.getCandidateInformation(this.$scope.programType.id, this.$scope.semester.id, this.$scope.receiptId)
+            .then((admissionStudentsInformation: Array<AdmissionStudent>) => {
+
+              if (admissionStudentsInformation == null) {
+                this.notify.error("No Data Found");
+              }
+              else {
+                this.$scope.mainDiv = true;
+                this.$scope.admissionStudent = admissionStudentsInformation[0];
+                this.$scope.studentQuota = this.$scope.admissionStudent.quota;
+                this.$scope.getAllCertificates();
+                this.$scope.getPreviousComments();
+                this.addDate();
+
+              }
+            });
+      }
     }
 
     private getAllCertificates(): void {
@@ -187,7 +273,7 @@ module ums{
       this.$scope.nationalCertificates = [];
       this.$scope.quotaCertificates = [];
 
-      if(this.$scope.studentQuota == "GCE"){
+      if (this.$scope.studentQuota == "GCE") {
 
         this.$scope.GLShow = false;
         this.$scope.quotaShow = false;
@@ -202,7 +288,7 @@ module ums{
           }
         }
       }
-      else{
+      else {
         this.$scope.GCEShow = false;
         this.$scope.quotaShow = false;
         this.$scope.GLShow = true;
@@ -213,11 +299,11 @@ module ums{
           else if (this.$scope.allTypesOfCertificates[i].type == "ALL") {
             this.$scope.nationalCertificates.push(this.$scope.allTypesOfCertificates[i]);
           }
-          else if(this.$scope.admissionStudent.quota == "FF" && this.$scope.allTypesOfCertificates[i].type == "FF"){
+          else if (this.$scope.admissionStudent.quota == "FF" && this.$scope.allTypesOfCertificates[i].type == "FF") {
             this.$scope.quotaShow = true;
             this.$scope.quotaCertificates.push(this.$scope.allTypesOfCertificates[i]);
           }
-          else if(this.$scope.admissionStudent.quota == "RA" && this.$scope.allTypesOfCertificates[i].type == "RA"){
+          else if (this.$scope.admissionStudent.quota == "RA" && this.$scope.allTypesOfCertificates[i].type == "RA") {
             this.$scope.quotaShow = true;
             this.$scope.quotaCertificates.push(this.$scope.allTypesOfCertificates[i]);
           }
@@ -225,7 +311,7 @@ module ums{
       }
     }
 
-    private getPreviousComments() : void {
+    private getPreviousComments(): void {
       var s = "";
       this.admissionCertificateVerificationService.getAllPreviousComments(this.$scope.semester.id, this.$scope.receiptId)
           .then((previousComments: Array<IPreviousComment>) => {
@@ -233,113 +319,85 @@ module ums{
           });
     }
 
+    private getCurrentComment(comments: string): void {
 
-    private rejected(comments: string): void {
-      this.convertStatusToJson(0).then((json:any)=> {
-        this.admissionCertificateVerificationService.setVerificationStatus(json)
-            .then((message:any)=>{
-              this.notify.success(message);
-            });
-      });
-
-      this.convertCommentsToJson(comments).then((json:any)=> {
-        this.admissionCertificateVerificationService.saveComments(json)
-            .then((message:any)=>{
-              this.notify.success(message);
-            });
-      });
-
-      if(this.$scope.selected.length > 0) {
-        this.convertSelectedCertificatesToJson().then((json: any) => {
-          this.admissionCertificateVerificationService.saveCertificates(json)
-              .then((message: any) => {
-                this.notify.success(message);
-              });
-        });
-      }
-      this.$scope.selected = [];
+      this.$scope.thisComment = comments;
     }
 
-    private underTaken(comments:string): void {
+    private verified(): void {
 
-
-    }
-
-    private verified(comments:string): void {
-      this.convertStatusToJson(1).then((json:any)=> {
-        this.admissionCertificateVerificationService.setVerificationStatus(json)
-            .then((message:any)=>{
-          this.notify.success(message);
-        });
-      });
-
-      this.convertCommentsToJson(comments).then((json:any)=> {
-        this.admissionCertificateVerificationService.saveComments(json)
-            .then((message:any)=>{
-              this.notify.success(message);
-            });
-      });
-
-      if(this.$scope.selected.length > 0) {
-        this.convertSelectedCertificatesToJson().then((json: any) => {
-          this.admissionCertificateVerificationService.saveCertificates(json)
-              .then((message: any) => {
-                this.notify.success(message);
-              });
-        });
+      if (this.$scope.thisComment == null || this.$scope.thisComment == "") {
+        this.$scope.thisComment = "";
       }
 
-      this.$scope.selected = [];
+      this.convertToJson(1, this.$scope.thisComment).then((json: any) => {
+        this.admissionCertificateVerificationService.saveAll(json)
+            .then((message: any) => {
+              this.notify.success(message);
+              this.search(this.$scope.receiptId);
+            });
+      });
     }
 
-    private convertStatusToJson(status: number): ng.IPromise<any> {
+    private underTaken(): void {
+      if (this.$scope.thisComment == null || this.$scope.thisComment == "") {
+        this.$scope.thisComment = "";
+      }
+
+      this.convertToJson(2, this.$scope.thisComment).then((json: any) => {
+        this.admissionCertificateVerificationService.saveAll(json)
+            .then((message: any) => {
+              this.notify.success(message);
+              this.search(this.$scope.receiptId);
+            });
+      });
+    }
+
+    private rejected(): void {
+
+      if (this.$scope.thisComment == null || this.$scope.thisComment == "") {
+        this.$scope.thisComment = "";
+      }
+
+      this.convertToJson(3, this.$scope.thisComment).then((json: any) => {
+        this.admissionCertificateVerificationService.saveAll(json)
+            .then((message: any) => {
+              this.notify.success(message);
+              this.search(this.$scope.receiptId);
+            });
+      });
+    }
+
+
+    private convertToJson(status: number, comments: string): ng.IPromise<any> {
       var defer = this.$q.defer();
       var completeJson = {};
       var jsonObject = [];
 
-      var item: any = {};
-      item['programType'] = +this.$scope.programType.id;
-      item['semesterId'] = this.$scope.semester.id;
-      item['receiptId'] = this.$scope.receiptId;
-      item['status'] = status;
-      jsonObject.push(item);
+      if (this.$scope.selected.length > 0) {
 
-      completeJson["entries"] = jsonObject;
-      defer.resolve(completeJson);
-      return defer.promise;
-    }
-
-    private convertSelectedCertificatesToJson(): ng.IPromise<any> {
-      var defer = this.$q.defer();
-      var completeJson = {};
-      var jsonObject = [];
-
-      console.log("selected Certificates ");
-      console.log(this.$scope.selected);
-
-      for(var i=0; i < this.$scope.selected.length; i++) {
+        for (var i = 0; i < this.$scope.selected.length; i++) {
           var item: any = {};
+          item['programType'] = +this.$scope.programType.id;
           item['semesterId'] = this.$scope.semester.id;
           item['receiptId'] = this.$scope.receiptId;
           item['certificateId'] = this.$scope.selected[i];
+          item['status'] = status;
+          item['comment'] = comments;
           jsonObject.push(item);
         }
+      }
+      else {
+        var item: any = {};
+        item['programType'] = +this.$scope.programType.id;
+        item['semesterId'] = this.$scope.semester.id;
+        item['receiptId'] = this.$scope.receiptId;
+        item['certificateId'] = 0;
+        item['status'] = status;
+        item['comment'] = comments;
+        jsonObject.push(item);
 
-      completeJson["entries"] = jsonObject;
-      defer.resolve(completeJson);
-      return defer.promise;
-    }
-
-    private convertCommentsToJson(comments:string): ng.IPromise<any> {
-      var defer = this.$q.defer();
-      var completeJson = {};
-      var jsonObject = [];
-
-      var item: any = {};
-      item['semesterId'] = this.$scope.semester.id;
-      item['receiptId'] = this.$scope.receiptId;
-      item['comment'] = comments;
-      jsonObject.push(item);
+      }
 
       completeJson["entries"] = jsonObject;
       defer.resolve(completeJson);
@@ -359,10 +417,117 @@ module ums{
 
       if (idx > -1) {
         this.$scope.selected.splice(idx, 1);
+
+
+        this.$scope.countGL = 0;
+        this.$scope.countGCE = 0;
+        this.$scope.countAll = 0;
+        this.$scope.countFF = 0;
+        this.$scope.countRA = 0;
+        this.$scope.verify = true;
+        this.$scope.reject = true;
+        this.$scope.undertake = false;
       }
       else {
         this.$scope.selected.push(allCertificates.id);
+
+        this.trackAndIncreaseCountForPreviousCertificates();
+        this.increaseCountForCurrentlySelectedCertificates();
+        this.enableOrDisableButtons();
       }
+    }
+
+    private trackAndIncreaseCountForPreviousCertificates() {
+      for (var i = 0; i < this.$scope.previousCertificates.length; i++) {
+        if (this.$scope.previousCertificates[i].id >= 1 && this.$scope.previousCertificates[i].id <= 4) {
+          this.$scope.countGL++;
+        }
+        else if (this.$scope.previousCertificates[i].id >= 5 && this.$scope.previousCertificates[i].id <= 8) {
+          this.$scope.countGCE++;
+        }
+        else if (this.$scope.previousCertificates[i].id >= 9 && this.$scope.previousCertificates[i].id <= 11) {
+          this.$scope.countAll++;
+        }
+        else if (this.$scope.previousCertificates[i].id >= 12 && this.$scope.previousCertificates[i].id <= 14) {
+          this.$scope.countFF++;
+        }
+        else if (this.$scope.previousCertificates[i].id >= 15 && this.$scope.previousCertificates[i].id <= 16) {
+          this.$scope.countRA++;
+        }
+      }
+    }
+
+    private increaseCountForCurrentlySelectedCertificates() {
+      for (var i = 0; i < this.$scope.selected.length; i++) {
+        if (this.$scope.selected[i] >= 1 && this.$scope.selected[i] <= 4) {
+          this.$scope.countGL++;
+        }
+        else if (this.$scope.selected[i] >= 5 && this.$scope.selected[i] <= 8) {
+          this.$scope.countGCE++;
+        }
+        else if (this.$scope.selected[i] >= 9 && this.$scope.selected[i] <= 11) {
+          this.$scope.countAll++;
+        }
+        else if (this.$scope.selected[i] >= 12 && this.$scope.selected[i] <= 14) {
+          this.$scope.countFF++;
+        }
+        else if (this.$scope.selected[i] >= 15 && this.$scope.selected[i] <= 16) {
+          this.$scope.countRA++;
+        }
+      }
+    }
+
+    private enableOrDisableButtons() {
+      if (this.$scope.studentQuota == "GCE") {
+        if (this.$scope.countGCE == 4 && this.$scope.countAll >= 1) {
+          this.$scope.verify = false;
+          this.$scope.reject = false;
+          this.$scope.undertake = true;
+        }
+      }
+      if (this.$scope.studentQuota == "GL") {
+        if (this.$scope.countGL == 4 && this.$scope.countAll >= 1) {
+          this.$scope.verify = false;
+          this.$scope.reject = false;
+          this.$scope.undertake = true;
+        }
+      }
+      if (this.$scope.studentQuota == "FF") {
+        if (this.$scope.countGL == 4 && this.$scope.countAll >= 1 && this.$scope.countFF == 3) {
+          this.$scope.verify = false;
+          this.$scope.reject = false;
+          this.$scope.undertake = true;
+        }
+      }
+      if (this.$scope.studentQuota == "RA") {
+        if (this.$scope.countGL == 4 && this.$scope.countAll >= 1 && this.$scope.countRA == 2) {
+          this.$scope.verify = false;
+          this.$scope.reject = false;
+          this.$scope.undertake = true;
+        }
+      }
+
+      this.$scope.countGL = 0;
+      this.$scope.countGCE = 0;
+      this.$scope.countAll = 0;
+      this.$scope.countFF = 0;
+      this.$scope.countRA = 0;
+    }
+
+    private UnderTakenDeadline(deadLine : string){
+      this.$scope.deadLine = deadLine;
+      console.log("Deadline");
+      console.log(this.$scope.deadLine);
+    }
+
+    private addDate(): void{
+      setTimeout(function () {
+        $('.datepicker-default').datepicker();
+        $('.datepicker-default').on('change', function () {
+          $('.datepicker').hide();
+        });
+      }, 100);
+
     }
 
   }

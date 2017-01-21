@@ -55,18 +55,9 @@ public class AdmissionCommentForStudentResourceHelper extends
     return object.build();
   }
 
-  @Transactional
-  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) {
-    MutableAdmissionCommentForStudent mutableAdmissionStudentsCertificateComment =
-        new PersistentAdmissionCommentForStudent();
-    JsonArray entries = pJsonObject.getJsonArray("entries");
-    LocalCache localCache = new LocalCache();
-    getBuilder().build(mutableAdmissionStudentsCertificateComment, entries.getJsonObject(0),
-        localCache);
-    getContentManager().create(mutableAdmissionStudentsCertificateComment);
-    Response.ResponseBuilder builder = Response.created(null);
-    builder.status(Response.Status.CREATED);
-    return builder.build();
+  @Override
+  public Response post(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+    return null;
   }
 
   @Override

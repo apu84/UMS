@@ -8,9 +8,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 
-/**
- * Created by kawsu on 1/12/2017.
- */
 @Component
 @Path("/academic/students/comment")
 @Produces(Resource.MIME_TYPE_JSON)

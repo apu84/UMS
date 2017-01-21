@@ -26,7 +26,7 @@
             <h3 class="panel-title">Select</h3>
         </div>
         <div class="panel-body pan">
-            <form action="" class="form-horizontal">
+            <form action="" class="form-horizontal" data-validate=""  data-onvalidate="getAllCandidates">
                 <div class="form-body pal">
                     <div class="form-group">
                         <label class="col-md-4 control-label">Program Type</label>
@@ -66,17 +66,15 @@
     </div>
     <div id="rightDiv" data-ng-if="rightDiv==true">
         <div class="panel">
-            <div class="panel-heading">Search Candidate By <b>ProgramType:</b> {{programType.name}} <b>Semester:</b> {{semester.name}} <b>ReceiptId:</b> {{receiptId}}<span
+            <div class="panel-heading">Search Candidate By ProgramType: <b>{{programType.name}}</b> Semester: <b>{{semester.name}}</b><span
                     class="subtitle"></span></div>
             <div class="panel-body shadowPanel"   style="min-height: 490px;">
-                <div align="center">
-                    <form class="form-inline">
-                        <div class="form-group">
-                            <label class="control-label" style="font-weight: bold;">Receipt Id:</label>
-                            <input type="text" class="form-control" data-ng-model="receiptId" placeholder="Enter Receipt Id">
-                        </div>
-                        <button type="submit" class="btn btn-success" data-ng-click="search(receiptId)">Search</button>
-                    </form>
+                <div class="row">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-6" align="center" >Receipt Id
+                        <input type="text" id="searchByReceiptId" class="form-control" data-ng-model="receiptId" data-ng-change="search(receiptId)">
+                    </div>
+                    <div class="col-md-3"></div>
                 </div>
                 <br />
                 <div data-ng-show="mainDiv==true">
@@ -127,6 +125,10 @@
                                     <tr>
                                         <th><label class="control-label" style="font-weight: bold;">SSC Passing Year:</label></th>
                                         <td><label class="control-label">{{admissionStudent.sscYear}}</label></td>
+                                    </tr>
+                                    <tr>
+                                        <th><label class="control-label" style="font-weight: bold;">Status:</label></th>
+                                        <td><label class="control-label">{{admissionStudent.verificationStatus}}</label></td>
                                     </tr>
                                 </table>
                             </div>
@@ -220,7 +222,7 @@
 
                         <div class="col-md-12">
                             <label>Comment:</label><br />
-                            <textarea class="form-control" rows="2" data-ng-model="userComment"></textarea>
+                            <textarea class="form-control" rows="2" data-ng-model="userComment" data-ng-change="getCurrentComment(userComment)"></textarea>
                             <span data-ng-repeat="comments in previousComments">
 
                                 <textarea class="form-control" rows="1" disabled>{{comments.comment}} {{comments.commentedOn}}</textarea>
@@ -231,12 +233,17 @@
                         </div>
                         <div class="col-md-4" align="left">
                             <br />
-                            <button type="submit" class="btn btn-warning" data-ng-click="underTaken(userComment)" disabled>Print Undertaken Form</button>
+                            <div class="input-icon right" >
+                                <i class="fa fa-calendar"></i>
+                                <input  type="text" data-ng-model="deadLine" data-ng-change="UnderTakenDeadline(deadLine)" data-date-format="dd/mm/yyyy" placeholder="DD/MM/YYYY" class="datepicker-default form-control" autocomplete="off"/>
+                            </div>
+                            <br />
+                            <button type="submit" class="btn btn-warning" data-ng-click="underTaken()" data-ng-disabled="undertake">Print Undertaken Form</button>
                         </div>
                         <div class="col-md-4" align="right">
                             <br />
-                            <button type="submit" class="btn btn-danger" data-ng-click="rejected(userComment)">Rejected</button>
-                            <button type="submit" class="btn btn-success" data-ng-click="verified(userComment)">Approved</button>
+                            <button type="submit" class="btn btn-danger" data-ng-click="rejected()" ng-disabled="reject">Rejected</button>
+                            <button type="submit" class="btn btn-success" data-ng-click="verified()" ng-disabled="verify">Approved</button>
                         </div>
                     </div>
                 </div>

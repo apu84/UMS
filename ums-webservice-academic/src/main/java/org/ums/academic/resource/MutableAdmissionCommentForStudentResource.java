@@ -13,11 +13,4 @@ public class MutableAdmissionCommentForStudentResource extends Resource {
 
   @Autowired
   AdmissionCommentForStudentResourceHelper mHelper;
-
-  @POST
-  @Path("/comments")
-  public Response setComments(final JsonObject pJsonObject) {
-    return mHelper.post(pJsonObject, mUriInfo);
-  }
-
 }

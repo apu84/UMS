@@ -62,39 +62,31 @@ module ums{
       return defer.promise;
     }
 
-    public setVerificationStatus(json:any):ng.IPromise<any>{
-      var url = "academic/admission/verificationStatus"
+    public saveAll(json:any):ng.IPromise<any>{
+      var url = "academic/admission/student/saveAll";
       var defer = this.$q.defer();
       this.httpClient.put(url, json, 'application/json')
-          .success(()=> {
-            defer.resolve("Verification Status Set");
+          .success(() => {
+            defer.resolve("Saved");
           }).error((data)=>{
-        defer.resolve("Error In Verification Status");
+        defer.resolve("Error in saving");
       });
       return defer.promise;
     }
 
-    public saveCertificates(json:any):ng.IPromise<any>{
-      var url = "academic/students/certificateHistory/saveCertificates";
+    public getCandidateList(programType:string,semesterId:number):ng.IPromise<any>{
+      var url="academic/admission/allCandidates/programType/"+programType + "/semester/" +semesterId;
       var defer = this.$q.defer();
-      this.httpClient.post(url, json, 'application/json')
-          .success(()=> {
-            defer.resolve("Saved Certificates");
-          }).error((data)=>{
-        defer.resolve("Error in Saving Certificates");
-      });
-      return defer.promise;
-    }
 
-    public saveComments(json:any):ng.IPromise<any>{
-      var url = "academic/students/comment/comments";
-      var defer = this.$q.defer();
-      this.httpClient.post(url, json, 'application/json')
-          .success(()=> {
-            defer.resolve("Successfully Saved the comments");
-          }).error((data)=>{
-        defer.resolve("Error in saving Comments");
-      });
+      this.httpClient.get(url, this.appConstants.mimeTypeJson,
+          (json:any, etag:string)=>{
+            var admissionStudents:any = json.entries;
+            defer.resolve(admissionStudents);
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>)=>{
+            console.error(response);
+          });
+
       return defer.promise;
     }
   }
