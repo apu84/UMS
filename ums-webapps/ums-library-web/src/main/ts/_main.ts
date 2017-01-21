@@ -79,3 +79,5 @@
 /// <reference path='controller/BookInfo.ts'/>
 /// <reference path='controller/PatronHome.ts'/>
 /// <reference path='directive/CirculationSearchBox.ts'/>
+/// <reference path='directive/ColumnSorter.ts'/>
+
