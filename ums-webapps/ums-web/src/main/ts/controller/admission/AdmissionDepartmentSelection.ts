@@ -279,8 +279,6 @@ module ums{
         },
         placeholder: placeHolderText
       });
-      // Her is the exmaple code for select2 with pagination.....
-      //http://jsfiddle.net/Z7bDG/1/
     }
 
 

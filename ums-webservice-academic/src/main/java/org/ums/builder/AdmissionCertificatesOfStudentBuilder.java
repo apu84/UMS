@@ -5,7 +5,7 @@ import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.AdmissionCertificatesOfStudent;
 import org.ums.domain.model.mutable.MutableAdmissionCertificatesOfStudent;
 
-import javax.json.JsonObject;
+import javax.json.*;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
 
@@ -27,11 +27,5 @@ public class AdmissionCertificatesOfStudentBuilder implements
     pMutable.setSemesterId(pJsonObject.getInt("semesterId"));
     pMutable.setReceiptId(pJsonObject.getString("receiptId"));
     pMutable.setCertificateId(pJsonObject.getInt("certificateId"));
-  }
-
-  public void savedStudentsCertificates(JsonObjectBuilder pBuilder,
-      AdmissionCertificatesOfStudent pReadOnly, UriInfo pUriInfo, LocalCache localCache) {
-
-    pBuilder.add("certificateId", pReadOnly.getCertificateId());
   }
 }

@@ -279,12 +279,19 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
         .getValue(), student.getSemester().getId(), student.getReceiptId());
   }
 
+  public List<AdmissionStudent> getAllNewCandidates(String pProgramType, int pSemesterId) {
+    String query =
+        SELECT_ONE + " WHERE PROGRAM_TYPE=? AND SEMESTER_ID=? ORDER BY to_number(RECEIPT_ID)";
+    return mJdbcTemplate.query(query, new Object[] {pProgramType, pSemesterId},
+        new AdmissionStudentRowMapper());
+  }
+
   //
 
   @Override
   public AdmissionStudent getAdmissionStudent(int pSemesterId, ProgramType pProgramType,
       String pReceiptId) {
-    String query = SELECT_ONE + "  where semester_id=? and program_type=? and receipt_id=?";
+    String query = SELECT_ONE + "  where semester_id=? and program_type=? and receipt_id=? ";
     return mJdbcTemplate.queryForObject(query, new Object[] {pSemesterId, pProgramType.getValue(),
         pReceiptId}, new AdmissionStudentRowMapper());
   }

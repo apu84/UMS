@@ -58,6 +58,8 @@ public class AdmissionStudentResource extends MutableAdmissionStudentResource {
         ProgramType.get(pProgramType), QuotaType.get(pMeritType), pUnit, mUriInfo);
   }
 
+  // kawsurilu
+
   @GET
   @Path("/programType/{program-type}/semesterId/{semester-id}/receiptId/{receipt-id}")
   public JsonObject getNewStudentByReceiptId(@PathParam("program-type") String pProgramType,
@@ -65,6 +67,15 @@ public class AdmissionStudentResource extends MutableAdmissionStudentResource {
       final @Context Request pRequest) {
     return mHelper.getAdmissionStudentByReceiptId(pProgramType, pSemesterId, pReceiptId, mUriInfo);
   }
+
+  @GET
+  @Path("/allCandidates/programType/{program-Type}/semester/{semester-Id}")
+  public JsonObject getAllCandidates(@PathParam("program-Type") String pProgramType,
+      @PathParam("semester-Id") int pSemesterId, final @Context Request pRequest) {
+    return mHelper.getCandidateLists(pProgramType, pSemesterId, mUriInfo);
+  }
+
+  //
 
   @GET
   @Path("/semester/{semester-id}/programType/{program-type}/receiptId/{receipt-id}")

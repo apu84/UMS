@@ -48,5 +48,7 @@ public interface AdmissionStudentManager extends
 
   int setVerificationStatus(final MutableAdmissionStudent pStudent);
 
+  List<AdmissionStudent> getAllNewCandidates(final String pProgramType, final int pSemesterId);
+
   //
 }

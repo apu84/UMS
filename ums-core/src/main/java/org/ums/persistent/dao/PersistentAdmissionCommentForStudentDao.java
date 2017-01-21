@@ -26,17 +26,19 @@ public class PersistentAdmissionCommentForStudentDao extends AdmissionCommentFor
   String GET_COMMENTS =
       "SELECT SEMESTER_ID, RECEIPT_ID, COMMENTS, COMMENTED_ON FROM COMMENTS_FOR_STUDENTS ";
 
-  public int create(MutableAdmissionCommentForStudent pMutableAdmissionStudentsCertificateComment) {
-    String query = INSERT_ONE;
-    return mJdbcTemplate.update(query, pMutableAdmissionStudentsCertificateComment.getSemesterId(),
-        pMutableAdmissionStudentsCertificateComment.getReceiptId(),
-        pMutableAdmissionStudentsCertificateComment.getComment());
-  }
-
   public List<AdmissionCommentForStudent> getComments(final int pSemesterId, final String pReceiptId) {
 
     String query = GET_COMMENTS + "WHERE SEMESTER_ID=? AND RECEIPT_ID=?";
     return mJdbcTemplate.query(query, new Object[] {pSemesterId, pReceiptId}, new RoleRowMapper());
+  }
+
+  @Override
+  public int saveComment(
+      MutableAdmissionCommentForStudent pMutableAdmissionStudentsCertificateComment) {
+    String query = INSERT_ONE;
+    return mJdbcTemplate.update(query, pMutableAdmissionStudentsCertificateComment.getSemesterId(),
+        pMutableAdmissionStudentsCertificateComment.getReceiptId(),
+        pMutableAdmissionStudentsCertificateComment.getComment());
   }
 
   class RoleRowMapper implements RowMapper<AdmissionCommentForStudent> {

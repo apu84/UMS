@@ -26,6 +26,7 @@ module ums{
     unit:string;
     admissionRoll:string;
     meritSlNo:number;
+    verificationStatus:string;
     studentId:string;
     allocatedProgramId:number;
     programShortName:string;

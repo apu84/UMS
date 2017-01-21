@@ -107,12 +107,12 @@ public class AdmissionStudentBuilder implements Builder<AdmissionStudent, Mutabl
 
   public void getAdmissionStudentByReceiptIdBuilder(JsonObjectBuilder pBuilder,
       AdmissionStudent pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
+    pBuilder.add("id", pReadOnly.getReceiptId());
+    pBuilder.add("text", pReadOnly.getReceiptId());
     pBuilder.add("semesterId", pReadOnly.getSemester().getId());
-    pBuilder.add("semesterName", pReadOnly.getSemester().getName());
-    pBuilder.add("receiptId", pReadOnly.getId());
+    pBuilder.add("receiptId", pReadOnly.getReceiptId());
     pBuilder.add("studentName", pReadOnly.getStudentName());
     pBuilder.add("quota", pReadOnly.getQuota());
-
     pBuilder.add("pin", pReadOnly.getPin());
     pBuilder.add("hscBoard", pReadOnly.getHSCBoard());
     pBuilder.add("hscRoll", pReadOnly.getHSCRoll());
@@ -143,6 +143,19 @@ public class AdmissionStudentBuilder implements Builder<AdmissionStudent, Mutabl
     }
     else {
       pBuilder.add("meritSlNo", pReadOnly.getMeritSerialNo());
+    }
+
+    if(pReadOnly.getVerificationStatus() == 0) {
+      pBuilder.add("verificationStatus", "Not Specified");
+    }
+    else if(pReadOnly.getVerificationStatus() == 1) {
+      pBuilder.add("verificationStatus", "Verified");
+    }
+    else if(pReadOnly.getVerificationStatus() == 2) {
+      pBuilder.add("verificationStatus", "UnderTaken");
+    }
+    else if(pReadOnly.getVerificationStatus() == 3) {
+      pBuilder.add("verificationStatus", "Rejected");
     }
   }
 

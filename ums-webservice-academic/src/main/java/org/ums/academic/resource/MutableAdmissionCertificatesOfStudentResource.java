@@ -9,18 +9,9 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 
-/**
- * Created by kawsu on 1/11/2017.
- */
 public class MutableAdmissionCertificatesOfStudentResource extends Resource {
 
   @Autowired
   AdmissionCertificatesOfStudentResourceHelper mHelper;
-
-  @POST
-  @Path("/saveCertificates")
-  public Response setComments(final JsonObject pJsonObject) {
-    return mHelper.postCertificateList(pJsonObject, mUriInfo);
-  }
 
 }
