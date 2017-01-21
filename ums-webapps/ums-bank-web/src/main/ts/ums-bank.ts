@@ -16,6 +16,8 @@ module ums {
     baseUriProvider.setServicePath('/ums-webservice-bank/');
   }]);
 
+  UMS.constant("appConstants", Constants.Default());
+
   UMS.config(($stateProvider, $urlRouterProvider, $locationProvider) => {
     $urlRouterProvider.otherwise("/userHome");
     $stateProvider

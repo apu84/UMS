@@ -19,14 +19,12 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/jquery.tab.d.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/bootstrap.modal.d.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/handsontable.d.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/constants.ts'/>
 
 /// <reference path='ums-bank.ts'/>
-/// <reference path='controller/admission/AdmissionFee.ts'/>
-
-/// <reference path='../../../../ums-web-core/src/main/ts/root.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/constants.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/util/UmsUtil.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/util/UriUtil.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/Utils.ts'/>
-
 /// <reference path='../../../../ums-web-core/src/main/ts/service/BaseUri.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/Notify.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/HttpClient.ts'/>
@@ -81,10 +79,8 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/grid/JqGridApi.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/grid/JqGridApiImpl.ts'/>
 
-/// <reference path='../../../../ums-web-core/src/main/ts/util/UmsUtil.ts'/>
-/// <reference path='../../../../ums-web-core/src/main/ts/util/UriUtil.ts'/>
-
 /// <reference path='data.ts'/>
+/// <reference path='controller/admission/AdmissionFee.ts'/>
 
 
 
