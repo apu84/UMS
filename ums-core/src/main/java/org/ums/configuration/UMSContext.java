@@ -18,6 +18,7 @@ import org.ums.cachewarmer.AutoCacheWarmer;
 import org.ums.cachewarmer.CacheWarmerManagerImpl;
 import org.ums.domain.model.immutable.Examiner;
 import org.ums.domain.model.mutable.MutableExaminer;
+import org.ums.fee.*;
 import org.ums.formatter.DateFormat;
 import org.ums.generator.JxlsGenerator;
 import org.ums.generator.XlsGenerator;
@@ -573,6 +574,18 @@ public class UMSContext {
     return userGuideCache;
   }
 
+  FeeCategoryManager feeCategoryManager() {
+    FeeCategoryCache feeCategoryCache = new FeeCategoryCache(mCacheFactory.getCacheManager());
+    feeCategoryCache.setManager(new PersistentFeeCategoryDao(mTemplateFactory.getJdbcTemplate()));
+    return feeCategoryCache;
+  }
+
+  FeeManager feeManager() {
+    FeeCache feeCache = new FeeCache(mCacheFactory.getCacheManager());
+    feeCache.setManager(new PersistentFeeDao(mTemplateFactory.getJdbcTemplate()));
+    return feeCache;
+  }
+
   @Bean
   CacheWarmerManager cacheWarmerManager() {
     return new CacheWarmerManagerImpl(mSecurityManager, mCacheFactory, mUMSConfiguration,
@@ -581,7 +594,8 @@ public class UMSContext {
         programTypeManager(), programManager(), semesterManager(), syllabusManager(),
         courseGroupManager(), equivalentCourseManager(), teacherManager(), courseTeacherManager(),
         examinerManager(), studentManager(), studentRecordManager(), classRoomManager(),
-        courseManager(), marksSubmissionStatusManager(), userManager());
+        courseManager(), marksSubmissionStatusManager(), userManager(), feeCategoryManager(),
+        feeManager());
   }
 
   @Bean
