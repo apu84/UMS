@@ -85,6 +85,22 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
    * children); localCache.invalidate(); return object.build(); }
    */
 
+  public JsonObject getAllForPagination(final Integer pItemPerPage, final Integer pPage,
+      final String pOrder, final UriInfo pUriInfo) {
+    List<Course> courses = getContentManager().getAllForPagination(pItemPerPage, pPage, pOrder);
+
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+    for(Course course : courses) {
+      children.add(toJson(course, pUriInfo, localCache));
+    }
+    object.add("entries", children);
+    localCache.invalidate();
+
+    return object.build();
+  }
+
   public JsonObject getBySyllabus(final String pSyllabusId, final Request pRequest,
       final UriInfo pUriInfo) {
     List<Course> courses = getContentManager().getBySyllabus(pSyllabusId);

@@ -30,6 +30,14 @@ public class CourseResource extends MutableCourseResource {
   }
 
   @GET
+  @Path("/all/ipp/{item-per-page}/page/{page}/order/{order}")
+  public JsonObject getAllForPagination(final @Context Request pRequest,
+      final @PathParam("item-per-page") int pItemPerPage, final @PathParam("page") int pPage,
+      final @PathParam("order") String pOrder) throws Exception {
+    return mResourceHelper.getAllForPagination(pItemPerPage, pPage, pOrder, mUriInfo);
+  }
+
+  @GET
   @Path("/syllabus" + PATH_PARAM_OBJECT_ID)
   public JsonObject getBySyllabus(final @Context Request pRequest,
       final @PathParam("object-id") String pObjectId) {

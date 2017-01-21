@@ -11,30 +11,10 @@ module ums {
     'amChartsDirective',
     'ui.sortable',
     'ngHandsontable',
-    "dataGrid",
-    "pagination",
-     'angular-loading-bar'
+    "angularUtils.directives.dirPagination"
   ]);
+//https://localhost//ums-webservice-academic/academic/course/all/ipp/5/page/1
 
-   UMS.factory('myAppFactory', ["$http",function($http) {
-    var herokuDomain = 'https://server-pagination.herokuapp.com';
-    return {
-      getOrdersData: getOrdersData,
-      getStatuses: getStatuses
-    };
-
-
-    function getOrdersData(params, callback) {
-      $http.defaults.headers.common={};
-      $http.get(herokuDomain + '/orders' + params).success(function (response) {
-        callback(response.orders, response.ordersCount);
-      });
-    }
-
-    function getStatuses() {
-      return $http.get(herokuDomain + '/orders/statuses');
-    }
-  }]);
 
   UMS.config(['BaseUriProvider', (baseUriProvider: BaseUriProvider) => {
     baseUriProvider.setServicePath('/ums-webservice-library/');
@@ -42,7 +22,7 @@ module ums {
 
   UMS.config(($stateProvider, $urlRouterProvider, $locationProvider) => {
     $urlRouterProvider.when('/cataloging','/cataloging/search');
-    $urlRouterProvider.otherwise("/userHome");
+    //$urlRouterProvider.otherwise("/userHome");
     $stateProvider
         .state('userHome', {
           url: "/userHome",
