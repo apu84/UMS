@@ -25,6 +25,7 @@ module ums {
 
   export interface IAssignedTeacher {
     id: string;
+    courseType:number;
     courseId: string;
     courseNo: string;
     courseTitle: string;

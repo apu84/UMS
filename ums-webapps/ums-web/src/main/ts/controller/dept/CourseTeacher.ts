@@ -91,11 +91,10 @@ module ums {
 
     public decorateTeacher(assignedTeacher: ICourseTeacher): void {
       var sectionArray = [];
-      sectionArray.push.apply(sectionArray, this.appConstants.theorySections);
-      sectionArray.push.apply(sectionArray, this.appConstants.sessionalSections);
+      // CourseType = 1 for Theory Course.
+      sectionArray.push.apply(sectionArray, (assignedTeacher.courseType == 1) ?  this.appConstants.theorySections : this.appConstants.sessionalSections);
       assignedTeacher.sections = sectionArray;
     }
-
     public addTeacher(courseId: string): void {
       this.populateTeachers(courseId);
       this.$scope.entries[courseId].editMode = true;
