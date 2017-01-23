@@ -16,7 +16,7 @@ public interface AdmissionStudent extends Serializable, EditType<MutableAdmissio
     Identifier<String>, LastModifier {
   Semester getSemester();
 
-  int getSemesterId();
+  Integer getSemesterId();
 
   ProgramType getProgramType();
 
@@ -30,7 +30,7 @@ public interface AdmissionStudent extends Serializable, EditType<MutableAdmissio
 
   String getHSCRegNo();
 
-  int getHSCYear();
+  Integer getHSCYear();
 
   String getHSCGroup();
 
@@ -40,7 +40,7 @@ public interface AdmissionStudent extends Serializable, EditType<MutableAdmissio
 
   String getSSCRoll();
 
-  int getSSCYear();
+  Integer getSSCYear();
 
   String getSSCGroup();
 
@@ -68,7 +68,7 @@ public interface AdmissionStudent extends Serializable, EditType<MutableAdmissio
 
   Program getAllocatedProgram();
 
-  int getAllocatedProgramId();
+  Integer getAllocatedProgramId();
 
   String getNID();
 
@@ -80,7 +80,7 @@ public interface AdmissionStudent extends Serializable, EditType<MutableAdmissio
 
   PresentStatus getPresentStatus();
 
-  int getVerificationStatus();
+  Integer getVerificationStatus();
 
   Program getProgramByMerit();
 

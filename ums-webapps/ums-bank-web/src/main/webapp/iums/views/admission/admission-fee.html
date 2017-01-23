@@ -1,11 +1,19 @@
 
 <style>
-    .handsontable .htDimmed {
-        color: black;
+    fieldset {
+        border:1px solid grey;
+        width: auto;
+        padding-left: 5%;
+        padding-right: 5%;
     }
 
-    .handsontable thead th {
-        text-align: left;
+    legend {
+        border:1px solid grey;
+        color:#4d4b4b;
+        font-size:90%;
+        text-align:center;
+        width: 60%;
+        font-weight: bold;
     }
 </style>
 
@@ -19,7 +27,7 @@
             <h3 class="panel-title">Select </h3>
         </div>
         <div class="panel-body pan">
-            <form action="" class="form-horizontal" data-validate=""  data-onvalidate="fetchTaletalkData" >
+            <form action="" class="form-horizontal" data-validate=""  data-onvalidate="expandDiv" >
                 <div class="form-body pal">
                     <div class="form-group">
                         <label class="col-md-4 control-label">Program Type</label>
@@ -65,6 +73,113 @@
                     class="subtitle"></span></div>
             <div class="panel-body shadowPanel"   style="min-height: 490px;">
 
+                <div class="row">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <span class="input-group-addon">Receipt Id</span>
+                            <input id="receiptId" type="text" class="form-control" name="receiptId" data-ng-model="receiptId" placeholder="Insert Receipt Id Here">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" data-ng-click="searchByReceiptId(receiptId)"><i class="fa fa-search" aria-hidden="true"></i></button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-4"></div>
+                </div>
+                <br>
+
+                <div class="row" data-ng-if="showDescriptionSection">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4">
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td >Name</td>
+                                    <td >: <b>{{admissionStudent.studentName}}</b></td>
+                                </tr>
+                                <tr>
+                                    <td >Receipt Id</td>
+                                    <td>: <b>{{admissionStudent.receiptId}}</b></td>
+                                </tr>
+                                <tr>
+                                    <td >Merit Serial No</td>
+                                    <td>: <b>{{admissionStudent.meritSlNo}}</b></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-4"></div>
+                </div>
+                <br>
+                <div class="row" data-ng-if="showDescriptionSection">
+                    <div class="col-md-12">
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        Admission fee<br>
+                                        Registration fee<br>
+                                        Tuition fee<br>
+                                        Establishment fee<br>
+                                        Laboratory fe
+                                    </td>
+                                    <td align="center">
+                                        <p style="font-size: 300%">}</p>
+                                    </td>
+                                    <td align="center">
+                                        <br>
+                                        <div data-ng-if="admissionStudent.unit==='BBA'">
+                                            <b>Tk.</b><br>
+                                            <b>80,360/-</b>
+                                        </div>
+                                        <div data-ng-if="admissionStudent.unit==='ENGINEERING'">
+                                            <b>Tk.</b><br>
+                                            <b>1,04,800/-</b>
+                                        </div>
+                                    </td>
+                                    <td align="center">
+                                        <br>
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox"> Paid
+                                            </label>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center"><b>Total</b></td>
+                                    <td></td>
+                                    <td align="center" colspan="2">
+                                        <div data-ng-if="admissionStudent.unit==='BBA'">
+                                            <b>Tk. 80,360/-</b>
+                                        </div>
+                                        <div data-ng-if="admissionStudent.unit==='ENGINEERING'">
+                                            <b>Tk. 1,04,800/-</b>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-12" align="center">
+                        <div data-ng-if="admissionStudent.unit==='BBA'">
+                            <b>In words: Taka eighty thousand three hundred sixty only</b>
+                        </div>
+                        <div data-ng-if="admissionStudent.unit==='ENGINEERING'">
+                            In words: <b>Taka one lac four thousand eight hundred only</b>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <br>
+                <div class="row" data-ng-if="showDescriptionSection">
+                    <div class="col-md-12">
+                        <div class="well" align="right">
+                            <button class="btn btn-danger">Submit</button>
+                        </div>
+                    </div>
+
+                </div>
 
             </div>
         </div>

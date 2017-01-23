@@ -8,6 +8,13 @@ module ums{
    semester:Semester;
    programTypes:Array<IProgramType>;
    programType:IProgramType;
+   receiptId:string;
+   admissionStudent:AdmissionStudent;
+
+   showDescriptionSection:boolean;
+
+   searchByReceiptId:Function;
+   expandDiv:Function;
  }
 
 
@@ -32,8 +39,13 @@ module ums{
 
      $scope.programTypes = appConstants.programType;
      $scope.programType = $scope.programTypes[0];
+     $scope.showDescriptionSection=false;
+
+     $scope.searchByReceiptId = this.searchByReceiptId.bind(this);
+     $scope.expandDiv = this.expandDiv.bind(this);
 
      this.getSemesters();
+
 
    }
 
@@ -48,6 +60,21 @@ module ums{
           this.$scope.semesters.push(semesters[i]);
         }
       });
+    }
+
+    private expandDiv(){
+      Utils.expandRightDiv();
+      this.$scope.showDescriptionSection=false;
+    }
+
+    private searchByReceiptId(receiptId:string){
+      this.$scope.showDescriptionSection=false;
+      this.admissionStudentService.fetchAdmissionStudentByReceiptId(this.$scope.semester.id, +this.$scope.programType.id, receiptId).then((data)=>{
+        this.$scope.admissionStudent = <AdmissionStudent>{};
+        this.$scope.admissionStudent = data;
+        console.log(this.$scope.admissionStudent);
+        this.$scope.showDescriptionSection=true;
+      })
     }
  }
 
