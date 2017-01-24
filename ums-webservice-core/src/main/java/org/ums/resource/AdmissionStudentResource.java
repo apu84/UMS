@@ -58,7 +58,6 @@ public class AdmissionStudentResource extends MutableAdmissionStudentResource {
   }
 
   // kawsurilu
-
   @GET
   @Path("/programType/{program-type}/semesterId/{semester-id}/receiptId/{receipt-id}")
   public JsonObject getNewStudentByReceiptId(@PathParam("program-type") String pProgramType,

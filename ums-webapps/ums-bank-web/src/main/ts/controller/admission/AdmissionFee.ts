@@ -59,8 +59,10 @@ module ums{
           }
           this.$scope.semesters.push(semesters[i]);
         }
+
       });
     }
+
 
     private expandDiv(){
       Utils.expandRightDiv();
