@@ -10,6 +10,7 @@ module ums{
    programType:IProgramType;
    receiptId:string;
    admissionStudent:AdmissionStudent;
+   paymentInfo:Array<PaymentInfo>;
 
    showDescriptionSection:boolean;
 
@@ -25,7 +26,7 @@ module ums{
 
 
   class AdmissionFee{
-   public static $inject = ['appConstants','HttpClient','$scope','$q','notify','$sce','$window','semesterService', 'admissionStudentService'];
+   public static $inject = ['appConstants','HttpClient','$scope','$q','notify','$sce','$window','semesterService', 'admissionStudentService','paymentInfoService'];
    constructor(private appConstants: any,
                private httpClient: HttpClient,
                private $scope: IAdmissionFee,
@@ -34,7 +35,8 @@ module ums{
                private $sce:ng.ISCEService,
                private $window:ng.IWindowService,
                private semesterService: SemesterService,
-               private admissionStudentService:AdmissionStudentService) {
+               private admissionStudentService:AdmissionStudentService,
+               private paymentInfoService: PaymentInfoService) {
 
 
      $scope.programTypes = appConstants.programType;
@@ -76,7 +78,16 @@ module ums{
         this.$scope.admissionStudent = data;
         console.log(this.$scope.admissionStudent);
         this.$scope.showDescriptionSection=true;
-      })
+      });
+
+      this.fetchPaymentInfo(receiptId);
+    }
+
+    private fetchPaymentInfo(receiptId:string){
+      this.paymentInfoService.fetchAdmissionPaymentInfo(receiptId, this.$scope.semester.id).then((data)=>{
+        this.$scope.paymentInfo=[];
+        this.$scope.paymentInfo = data;
+      });
     }
  }
 

@@ -90,6 +90,13 @@ public class UMSContext {
   }
 
   @Bean
+  PaymentInfoManager paymentInfoManager() {
+    PaymentInfoCache paymentInfoCache = new PaymentInfoCache(mCacheFactory.getCacheManager());
+    paymentInfoCache.setManager(new PersistentPaymentInfoDao(mTemplateFactory.getJdbcTemplate()));
+    return paymentInfoCache;
+  }
+
+  @Bean
   SemesterManager semesterManager() {
     SemesterCache semesterCache = new SemesterCache(mCacheFactory.getCacheManager());
     semesterCache.setManager(new PersistentSemesterDao(mTemplateFactory.getJdbcTemplate()));

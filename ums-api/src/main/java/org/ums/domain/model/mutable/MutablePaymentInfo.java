@@ -17,6 +17,7 @@ public interface MutablePaymentInfo extends PaymentInfo, Mutable, MutableLastMod
   void setSemesterId(final int pSemesterId);
 
   void setPaymentType(final PaymentType pPaymentType);
+
   // todo integrate with payment system
   void setAmount(final int pAmount);
 

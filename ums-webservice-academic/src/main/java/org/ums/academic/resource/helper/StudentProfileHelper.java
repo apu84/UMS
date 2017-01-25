@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.ums.builder.StudentProfileBuilder;
 import org.ums.builder.StudentBuilder;
+import org.ums.resource.helper.StudentResourceHelper;
 
 @Component
 @Qualifier("StudentProfileHelper")

@@ -31,6 +31,7 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/service/FileUpload.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/CookieService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/AdmissionStudentService.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/service/PaymentInfoService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/SemesterService.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/Settings.ts'/>
 
@@ -68,6 +69,7 @@
 
 /// <reference path='../../../../ums-web-core/src/main/ts/model/ChangePasswordModel.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/model/AdmissionStudent.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/model/PaymentInfo.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/model/Semester.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/model/User.ts'/>
 
