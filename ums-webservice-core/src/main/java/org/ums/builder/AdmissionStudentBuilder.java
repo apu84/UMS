@@ -67,11 +67,11 @@ public class AdmissionStudentBuilder implements Builder<AdmissionStudent, Mutabl
         pBuilder.add("admissionRoll", pReadOnly.getAdmissionRoll());
       if(pReadOnly.getMeritSerialNo() != null)
         pBuilder.add("meritSlNo", pReadOnly.getMeritSerialNo());
-      if(pReadOnly.getProgramIdByMerit() != null) {
+      if(pReadOnly.getProgramIdByMerit() != 0) {
         pBuilder.add("programIdByMerit", pReadOnly.getProgramByMerit().getId());
         pBuilder.add("programNameByMerit", pReadOnly.getProgramByMerit().getShortName());
       }
-      if(pReadOnly.getProgramIdByTransfer() != null) {
+      if(pReadOnly.getProgramIdByTransfer() != 0) {
         pBuilder.add("programIdByTransfer", pReadOnly.getProgramByTransfer().getId());
         pBuilder.add("programNameByTransfer", pReadOnly.getProgramByTransfer().getShortName());
       }

@@ -30,7 +30,7 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
   String SELECT_ONE =
       " select SEMESTER_ID, RECEIPT_ID, PIN, HSC_BOARD, HSC_ROLL,  "
           + "    HSC_REGNO, HSC_YEAR, HSC_GROUP, SSC_BOARD, SSC_ROLL,  "
-          + "    SSC_YEAR, SSC_GROUP, GENDER, DATE_OF_BIRTH, STUDENT_NAME,  "
+          + "    SSC_YEAR, SSC_GROUP, GENDER, to_char(DATE_OF_BIRTH,'dd/mm/yy'), STUDENT_NAME,  "
           + "    FATHER_NAME, MOTHER_NAME, SSC_GPA, HSC_GPA, QUOTA,  "
           + "    ADMISSION_ROLL, MERIT_SL_NO, STUDENT_ID, ALLOCATED_PROGRAM_ID, MIGRATION_STATUS,  "
           + "    LAST_MODIFIED, UNIT, PROGRAM_TYPE, NID, BIRTH_REG,  "

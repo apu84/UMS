@@ -1,4 +1,4 @@
-package org.ums.academic.resource.helper;
+package org.ums.resource.helper;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -19,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.ums.academic.resource.StudentResource;
 import org.ums.builder.StudentBuilder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.Employee;
@@ -34,6 +33,7 @@ import org.ums.persistent.model.PersistentStudent;
 import org.ums.persistent.model.PersistentStudentRecord;
 import org.ums.persistent.model.PersistentUser;
 import org.ums.resource.ResourceHelper;
+import org.ums.resource.StudentResource;
 import org.ums.util.UmsUtils;
 
 @Component
