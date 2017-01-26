@@ -34,8 +34,6 @@ public interface AdmissionStudentManager extends
   int updateDepartmentSelection(final MutableAdmissionStudent pStudent,
       DepartmentSelectionType pDepartmentSelectionType);
 
-  List<AdmissionStudent> getNewStudentByReceiptId(final int pSemesterId, final String receiptId);
-
   AdmissionStudent getNextStudentForDepartmentSelection(final int pSemesterId,
       final ProgramType pProgramType, final String pUnit, final String pQuota);
 
@@ -49,6 +47,8 @@ public interface AdmissionStudentManager extends
   int setVerificationStatus(final MutableAdmissionStudent pStudent);
 
   List<AdmissionStudent> getAllNewCandidates(final String pProgramType, final int pSemesterId);
+
+  List<AdmissionStudent> getNewStudentByReceiptId(final int pSemesterId, final String receiptId);
 
   //
 }

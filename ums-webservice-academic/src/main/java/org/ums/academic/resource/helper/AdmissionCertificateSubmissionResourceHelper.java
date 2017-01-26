@@ -1,5 +1,6 @@
 package org.ums.academic.resource.helper;
 
+import com.itextpdf.text.DocumentException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +20,15 @@ import org.ums.manager.AdmissionStudentManager;
 import org.ums.persistent.model.PersistentAdmissionCertificatesOfStudent;
 import org.ums.persistent.model.PersistentAdmissionCommentForStudent;
 import org.ums.persistent.model.PersistentAdmissionStudent;
+import org.ums.report.generator.UndertakenFormGenerator;
 import org.ums.resource.ResourceHelper;
 
 import javax.json.*;
+import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 

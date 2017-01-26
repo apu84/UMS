@@ -70,11 +70,11 @@
                     class="subtitle"></span></div>
             <div class="panel-body shadowPanel"   style="min-height: 490px;">
                 <div class="row">
-                    <div class="col-md-3"></div>
-                    <div class="col-md-6" align="center" >Receipt Id
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4" align="center" >
                         <input type="text" id="searchByReceiptId" class="form-control" data-ng-model="receiptId" data-ng-change="search(receiptId)">
                     </div>
-                    <div class="col-md-3"></div>
+                    <div class="col-md-4"></div>
                 </div>
                 <br />
                 <div data-ng-show="mainDiv==true">
@@ -220,9 +220,10 @@
                                 <br />
                             </div>
 
-                        <div class="col-md-12">
+                        <div class="col-md-10">
+                            <br />
                             <label>Comment:</label><br />
-                            <textarea class="form-control" rows="2" data-ng-model="userComment" data-ng-change="getCurrentComment(userComment)"></textarea>
+                            <textarea class="form-control" rows="3" data-ng-model="userComment" data-ng-change="getCurrentComment(userComment)"></textarea>
                             <span data-ng-repeat="comments in previousComments">
 
                                 <textarea class="form-control" rows="1" disabled>{{comments.comment}} {{comments.commentedOn}}</textarea>

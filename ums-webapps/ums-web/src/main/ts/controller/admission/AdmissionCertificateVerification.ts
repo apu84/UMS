@@ -51,6 +51,7 @@ module ums{
     getPreviousComments : Function;
     getAllCandidates: Function;
     getCurrentComment: Function;
+    UnderTakenDeadline: Function;
   }
 
   interface IProgramType{
@@ -126,6 +127,7 @@ module ums{
       $scope.getPreviousComments = this.getPreviousComments.bind(this);
       $scope.getAllCandidates = this.getAllCandidates.bind(this);
       $scope.getCurrentComment = this.getCurrentComment.bind(this);
+      $scope.UnderTakenDeadline = this.UnderTakenDeadline.bind(this);
 
       this.getSemesters();
       Utils.setValidationOptions("form-horizontal");
@@ -340,17 +342,20 @@ module ums{
     }
 
     private underTaken(): void {
-      if (this.$scope.thisComment == null || this.$scope.thisComment == "") {
-        this.$scope.thisComment = "";
-      }
+      // if (this.$scope.thisComment == null || this.$scope.thisComment == "") {
+      //   this.$scope.thisComment = "";
+      // }
+      //
+      // this.convertToJson(2, this.$scope.thisComment).then((json: any) => {
+      //   this.admissionCertificateVerificationService.saveAll(json)
+      //       .then((message: any) => {
+      //         this.notify.success(message);
+      //         this.search(this.$scope.receiptId);
+      //       });
+      // });
 
-      this.convertToJson(2, this.$scope.thisComment).then((json: any) => {
-        this.admissionCertificateVerificationService.saveAll(json)
-            .then((message: any) => {
-              this.notify.success(message);
-              this.search(this.$scope.receiptId);
-            });
-      });
+      this.admissionCertificateVerificationService.getUndertakenReport(this.$scope.programType.id, this.$scope.semester.id, this.$scope.receiptId);
+
     }
 
     private rejected(): void {
