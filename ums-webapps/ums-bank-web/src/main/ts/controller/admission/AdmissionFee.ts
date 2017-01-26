@@ -24,6 +24,7 @@ module ums{
    searchByReceiptId:Function;
    expandDiv:Function;
    save:Function;
+   changeCheckBoxValue:Function;
  }
 
  interface IConstants{
@@ -65,6 +66,7 @@ module ums{
      $scope.searchByReceiptId = this.searchByReceiptId.bind(this);
      $scope.expandDiv = this.expandDiv.bind(this);
      $scope.save = this.save.bind(this);
+     $scope.changeCheckBoxValue = this.changeCheckBoxValue.bind(this);
 
      this.getSemesters();
 
@@ -154,6 +156,17 @@ module ums{
         this.notify.error("Paid checkbox is not selected");
       }
 
+    }
+
+    private changeCheckBoxValue(){
+      if(this.$scope.paid==false){
+        this.$scope.paid = true;
+      }else{
+        this.$scope.paid = false;
+      }
+
+      console.log("Check box value");
+      console.log(this.$scope.paid);
     }
 
     private convertToJson():ng.IPromise<any>{

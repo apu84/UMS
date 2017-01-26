@@ -167,7 +167,7 @@
                                         <br>
                                         <div class="checkbox">
                                             <label>
-                                                <input type="checkbox" ng-true-value="true" ng-false-value="false" data-ng-model="paid"> Paid
+                                                <input type="checkbox" data-ng-click="changeCheckBoxValue()" data-ng-model="paid"> Paid
                                             </label>
                                         </div>
                                     </td>
@@ -201,7 +201,7 @@
                 <div class="row" data-ng-if="showDescriptionSection">
                     <div class="col-md-12">
                         <div class="well" align="right">
-                            <button class="btn btn-danger" data-ng-click="save()">Submit</button>
+                            <button class="btn btn-danger" data-ng-click="save()">Submit Payment</button>
                         </div>
                     </div>
 
