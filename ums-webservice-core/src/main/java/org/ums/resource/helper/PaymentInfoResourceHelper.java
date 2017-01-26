@@ -51,13 +51,13 @@ public class PaymentInfoResourceHelper extends
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-    try{
+    try {
       List<PaymentInfo> paymentInfos = getContentManager().getPaymentInfo(pReceiptId, pSemesterId);
-      for(PaymentInfo paymentInfo: paymentInfos){
+      for(PaymentInfo paymentInfo : paymentInfos) {
         children.add(toJson(paymentInfo, mUriInfo, localCache));
       }
-    }catch (EmptyResultDataAccessException e){
-      //do nothing
+    } catch(EmptyResultDataAccessException e) {
+      // do nothing
     }
 
     object.add("entries", children);

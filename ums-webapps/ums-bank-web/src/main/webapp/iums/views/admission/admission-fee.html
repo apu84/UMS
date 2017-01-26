@@ -22,6 +22,7 @@
     <div onclick="resetCommonCollapsibleDivs()" id="arrowDiv">
         <i class="fa fa-angle-double-right fa-cx"></i></i>
     </div>
+
     <div class="panel panel-green" id="leftDiv">
         <div class="panel-heading">
             <h3 class="panel-title">Select </h3>
@@ -112,16 +113,41 @@
                 </div>
                 <br>
                 <div class="row" data-ng-if="showDescriptionSection">
+                    <div class="col-md-6"></div>
+                    <div class="col-md-6" align="right">
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" >Payment Mode</label>
+                            <div class="col-md-8">
+                                <select
+                                        class="form-control required"
+                                        name="paymentMode"
+                                        id="paymentMode"
+                                        data-ng-options="paymentMode.name for paymentMode in paymentModes track by paymentMode.id"
+                                        data-ng-model="paymentMode" data-ng-change="getSemesters()">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row" data-ng-if="showDescriptionSection">
                     <div class="col-md-12">
                         <table class="table">
                             <tbody>
                                 <tr>
-                                    <td>
+                                    <td data-ng-if="showAdmissionFeeSection==true">
                                         Admission fee<br>
                                         Registration fee<br>
                                         Tuition fee<br>
                                         Establishment fee<br>
                                         Laboratory fe
+                                    </td>
+                                    <td data-ng-if="showMigrationFeeSection==true">
+                                        <br>
+                                        <br>
+                                        Migration fee
+                                        <br>
+                                        <br>
                                     </td>
                                     <td align="center">
                                         <p style="font-size: 300%">}</p>
@@ -141,7 +167,7 @@
                                         <br>
                                         <div class="checkbox">
                                             <label>
-                                                <input type="checkbox"> Paid
+                                                <input type="checkbox" ng-true-value="true" ng-false-value="false" data-ng-model="paid"> Paid
                                             </label>
                                         </div>
                                     </td>
@@ -175,7 +201,7 @@
                 <div class="row" data-ng-if="showDescriptionSection">
                     <div class="col-md-12">
                         <div class="well" align="right">
-                            <button class="btn btn-danger">Submit</button>
+                            <button class="btn btn-danger" data-ng-click="save()">Submit</button>
                         </div>
                     </div>
 

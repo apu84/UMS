@@ -58,6 +58,17 @@ module ums {
     static REMOTE_AREA=3;
     static ENGLISH_MEDIUM=4;
 
+    /*
+    *Payment Types
+    * */
+    static ADMISSION_FEE=1;
+    static MIGRATION_FEE=2;
+
+    /*
+    * Payment Modes*/
+    static CASH=1;
+    static DEMAND_NOTE=2;
+    static PAY_ORDER=3;
 
     /**
      * Student Id block colors (Advisor Assignment from Admin Officer Account)
