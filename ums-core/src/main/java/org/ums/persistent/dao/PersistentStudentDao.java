@@ -6,12 +6,16 @@ import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.StudentDaoDecorator;
 import org.ums.domain.model.immutable.Student;
 import org.ums.domain.model.mutable.MutableStudent;
+import org.ums.enums.StudentStatus;
 import org.ums.persistent.model.PersistentStudent;
 import org.ums.persistent.model.PersistentTeacher;
 import org.ums.util.Constants;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
@@ -81,17 +85,26 @@ public class PersistentStudentDao extends StudentDaoDecorator {
   }
 
   @Override
+  public int getSize(int pSemesterId, int pProgramId) {
+    String query = "select count(*) from students where semester_id=? and program_id=?";
+    return mJdbcTemplate.queryForObject(query, Integer.class, pSemesterId, pProgramId);
+  }
+
+  @Override
   public int create(MutableStudent pMutable) {
-    return mJdbcTemplate.update(CREATE_ALL, pMutable.getId(), pMutable.getFullName(), pMutable
-        .getDepartmentId(), pMutable.getSemesterId(), pMutable.getFatherName(), pMutable
-        .getMotherName(), pMutable.getDateOfBirth(), pMutable.getGender(), pMutable
-        .getPresentAddress(), pMutable.getPermanentAddress(), pMutable.getMobileNo(), pMutable
-        .getPhoneNo(), pMutable.getBloodGroup(), pMutable.getEmail(), pMutable.getGuardianName(),
-        pMutable.getGuardianMobileNo(), pMutable.getGuardianPhoneNo(), pMutable.getGuardianEmail(),
-        pMutable.getProgramId(), pMutable.getEnrollmentType().getValue(),
-        pMutable.getCurrentYear(), pMutable.getCurrentAcademicSemester(), pMutable
-            .getCurrentEnrolledSemester().getId(), pMutable.getTheorySection(), pMutable
-            .getSessionalSection());
+    String query =
+        "INSERT INTO STUDENTS (STUDENT_ID, FULL_NAME, DEPT_ID, SEMESTER_ID, FATHER_NAME, MOTHER_NAME, BIRTH_DATE, curr_year,curr_semester, curr_enrolled_semester,enrollment_type, program_id,status,gender, last_modified) "
+            + " VALUES (?, ?, ?, ?, ?, ?, to_date(?,'dd/mm/yy'),?,?,?,?,?,1,?,"
+            + getLastModifiedSql() + ")";
+
+    DateFormat df = new SimpleDateFormat("dd/mm/yy");
+
+    String birthDate = df.format(pMutable.getDateOfBirth());
+    return mJdbcTemplate.update(query, pMutable.getId(), pMutable.getFullName(), pMutable
+        .getDepartment().getId(), pMutable.getSemester().getId(), pMutable.getFatherName(),
+        pMutable.getMotherName(), birthDate, pMutable.getCurrentYear(), pMutable
+            .getCurrentAcademicSemester(), pMutable.getCurrentEnrolledSemesterId(), 1, pMutable
+            .getProgram().getId(), pMutable.getGender());
   }
 
   /*
@@ -265,6 +278,12 @@ public class PersistentStudentDao extends StudentDaoDecorator {
     return mJdbcTemplate.query(query2, new Object[] {pSemesterId, pExamDate},
         new SpStudentRowMapperForCCI2());
 
+  }
+
+  @Override
+  public int updateStudentsStatus(StudentStatus pStudentStatus, String pStudentId) {
+    String query = "update students set status=? where student_id=?";
+    return mJdbcTemplate.update(query, pStudentStatus.getId(), pStudentId);
   }
 
   class StudentRowMapper implements RowMapper<Student> {

@@ -19,7 +19,7 @@ import java.util.List;
 public class PersistentPaymentInfoDao extends PaymentInfoDaoDecorator {
 
   String SELECT_ALL =
-      "SELECT id, reference_id, semester_id, payment_type, amount, payment_date, last_modified, PAYMENT_MODE from PAYMENT_INFO ";
+      "SELECT id, reference_id, semester_id, payment_type, amount, to_char(payment_date,'dd/mm/yyyy') payment_date, last_modified, PAYMENT_MODE from PAYMENT_INFO ";
   String INSERT_ONE =
       "INSERT INTO  PAYMENT_INFO (REFERENCE_ID, SEMESTER_ID, PAYMENT_TYPE, AMOUNT, PAYMENT_DATE, LAST_MODIFIED, PAYMENT_MODE)"
           + "    VALUES (?,?,?,?,sysdate," + getLastModifiedSql() + ",?)";

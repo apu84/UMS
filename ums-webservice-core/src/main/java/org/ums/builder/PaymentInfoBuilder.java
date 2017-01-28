@@ -10,6 +10,7 @@ import org.ums.domain.model.immutable.Student;
 import org.ums.domain.model.mutable.MutablePaymentInfo;
 import org.ums.enums.PaymentMode;
 import org.ums.enums.PaymentType;
+import org.ums.enums.ProgramType;
 import org.ums.manager.AdmissionStudentManager;
 import org.ums.manager.SemesterManager;
 import org.ums.manager.StudentManager;
@@ -46,7 +47,10 @@ public class PaymentInfoBuilder implements Builder<PaymentInfo, MutablePaymentIn
 
     JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
     if(pPaymentType == PaymentType.ADMISSION_FEE || pPaymentType == PaymentType.MIGRATION_FEE) {
-      AdmissionStudent admissionStudent = mAdmissionStudentManager.get(pReadOnly.getReferenceId());
+      AdmissionStudent admissionStudent =
+          mAdmissionStudentManager.getAdmissionStudent(pReadOnly.getSemesterId(),
+              ProgramType.get(pReadOnly.getSemester().getProgramTypeId()),
+              pReadOnly.getReferenceId());
       pBuilder.add("receiptId", admissionStudent.getReceiptId());
       pBuilder.add("studentName", admissionStudent.getStudentName());
       pBuilder.add("unit", admissionStudent.getUnit());

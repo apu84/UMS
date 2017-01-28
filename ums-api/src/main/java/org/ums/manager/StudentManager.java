@@ -2,6 +2,7 @@ package org.ums.manager;
 
 import org.ums.domain.model.mutable.MutableStudent;
 import org.ums.domain.model.immutable.Student;
+import org.ums.enums.StudentStatus;
 
 import java.util.List;
 
@@ -21,5 +22,9 @@ public interface StudentManager extends ContentManager<Student, MutableStudent, 
 
   public int updateStudentsAdviser(List<MutableStudent> pStudents);
 
+  public int updateStudentsStatus(StudentStatus pStudentStatus, String pStudentId);
+
   public List<Student> getActiveStudentsByAdviser(String pTeacherId);
+
+  public int getSize(final int pSemesterId, final int pProgramId);
 }

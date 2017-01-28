@@ -3,6 +3,7 @@ package org.ums.cache;
 import org.ums.domain.model.immutable.AdmissionStudent;
 import org.ums.domain.model.mutable.MutableAdmissionStudent;
 import org.ums.enums.DepartmentSelectionType;
+import org.ums.enums.MigrationStatus;
 import org.ums.enums.ProgramType;
 import org.ums.enums.QuotaType;
 import org.ums.manager.AdmissionStudentManager;
@@ -112,4 +113,9 @@ public class AdmissionStudentCache extends
     return getNewStudentByReceiptId(pSemesterId, receiptId);
   }
 
+  @Override
+  public int updateStudentsAllocatedProgram(AdmissionStudent pAdmissionStudent,
+      MigrationStatus pMigrationStatus) {
+    return getManager().updateStudentsAllocatedProgram(pAdmissionStudent, pMigrationStatus);
+  }
 }

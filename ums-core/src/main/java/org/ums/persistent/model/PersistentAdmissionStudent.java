@@ -70,6 +70,7 @@ public class PersistentAdmissionStudent implements MutableAdmissionStudent {
   private String mBirthRegNo;
   private String mPassport;
   private String mDeadline;
+  private String mMigratedFrom;
 
   public PersistentAdmissionStudent() {}
 
@@ -115,6 +116,17 @@ public class PersistentAdmissionStudent implements MutableAdmissionStudent {
     mBirthRegNo = pAdmissionStudent.getBirthRegNo();
     mPassport = pAdmissionStudent.getPassportNo();
     mDeadline = pAdmissionStudent.getDeadline();
+    mMigratedFrom = pAdmissionStudent.getMigratedFrom();
+  }
+
+  @Override
+  public String getMigratedFrom() {
+    return mMigratedFrom;
+  }
+
+  @Override
+  public void setMigratedFrom(String pMigratedFrom) {
+    mMigratedFrom = pMigratedFrom;
   }
 
   @Override

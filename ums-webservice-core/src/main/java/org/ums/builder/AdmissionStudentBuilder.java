@@ -77,13 +77,16 @@ public class AdmissionStudentBuilder implements Builder<AdmissionStudent, Mutabl
       }
     }
 
-    if(type.equals("departmentSelection")) {
+    if(pReadOnly.getStudentId() != null)
       pBuilder.add("studentId", pReadOnly.getStudentId());
+    if(pReadOnly.getAllocatedProgramId() != 0) {
       pBuilder.add("allocatedProgramId", pReadOnly.getAllocatedProgram().getId());
       pBuilder.add("programShortName", pReadOnly.getAllocatedProgram().getShortName());
       pBuilder.add("programLongName", pReadOnly.getAllocatedProgram().getLongName());
-      pBuilder.add("migrationStatus", pReadOnly.getMigrationStatus().getId());
     }
+
+    if(pReadOnly.getMigrationStatus() != null)
+      pBuilder.add("migrationStatus", pReadOnly.getMigrationStatus().getId());
 
     if(pReadOnly.getDeadline() != null) {
       pBuilder.add("deadline", pReadOnly.getDeadline());

@@ -3,6 +3,7 @@ package org.ums.decorator;
 import org.ums.domain.model.immutable.AdmissionStudent;
 import org.ums.domain.model.mutable.MutableAdmissionStudent;
 import org.ums.enums.DepartmentSelectionType;
+import org.ums.enums.MigrationStatus;
 import org.ums.enums.ProgramType;
 import org.ums.enums.QuotaType;
 import org.ums.manager.AdmissionStudentManager;
@@ -79,6 +80,12 @@ public class AdmissionStudentDaoDecorator extends
   @Override
   public int setVerificationStatus(final MutableAdmissionStudent pStudent) {
     return getManager().setVerificationStatus(pStudent);
+  }
+
+  @Override
+  public int updateStudentsAllocatedProgram(AdmissionStudent pAdmissionStudent,
+      MigrationStatus pMigrationStatus) {
+    return getManager().updateStudentsAllocatedProgram(pAdmissionStudent, pMigrationStatus);
   }
 
   @Override

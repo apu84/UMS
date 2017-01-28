@@ -44,5 +44,6 @@ module ums{
     programIdByTransfer:number;
     programNameByTransfer:string;
     deadline:string;
+    migrationStatus:number;
   }
 }

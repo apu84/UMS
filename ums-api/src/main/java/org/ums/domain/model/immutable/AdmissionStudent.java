@@ -92,4 +92,6 @@ public interface AdmissionStudent extends Serializable, EditType<MutableAdmissio
 
   String getDeadline();
 
+  String getMigratedFrom();
+
 }
