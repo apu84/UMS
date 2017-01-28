@@ -5,7 +5,7 @@ module ums {
     public controllerAs: string = 'vm';
     public restrict: string = "A";
     public scope = {
-      columnSorter: '@'
+      columnSorter: '&'
     };
   }
 
@@ -15,10 +15,19 @@ module ums {
 
     public columnSorter: Function;
 
-    constructor($element: ng.IAugmentedJQuery) {
+    constructor($element: ng.IAugmentedJQuery,attrs:any) {
+      console.log(this.columnSorter);
       $element.on('click', () => {
-        this.sort = (this.sort === 'asc' ? 'desc' : 'asc');
-        this.columnSorter(this.sort);
+        if (this.sort === 'asc') {
+          this.sort = 'desc';
+          $element.removeClass('headerSortDown');
+          $element.addClass('headerSortUp');
+        } else {
+          this.sort = 'asc';
+          $element.removeClass('headerSortUp');
+          $element.addClass('headerSortDown');
+        }
+        this.columnSorter()(this.sort);
       });
     }
   }

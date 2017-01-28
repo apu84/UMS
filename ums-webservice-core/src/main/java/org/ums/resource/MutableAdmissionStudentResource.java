@@ -1,7 +1,7 @@
-package org.ums.academic.resource;
+package org.ums.resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.ums.academic.resource.helper.AdmissionStudentResourceHelper;
+import org.ums.resource.helper.AdmissionStudentResourceHelper;
 import org.ums.enums.DepartmentSelectionType;
 import org.ums.enums.ProgramType;
 import org.ums.resource.Resource;

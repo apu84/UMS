@@ -205,7 +205,7 @@ public class PersistentAdmissionStudent implements MutableAdmissionStudent {
   }
 
   @Override
-  public int getVerificationStatus() {
+  public Integer getVerificationStatus() {
     return mVerificationStatus;
   }
 
@@ -239,7 +239,7 @@ public class PersistentAdmissionStudent implements MutableAdmissionStudent {
     return mUnit;
   }
 
-  public int getAllocatedProgramId() {
+  public Integer getAllocatedProgramId() {
     return mAllocatedProgramId;
   }
 
@@ -247,7 +247,7 @@ public class PersistentAdmissionStudent implements MutableAdmissionStudent {
     mAllocatedProgramId = pAllocatedProgramId;
   }
 
-  public int getSemesterId() {
+  public Integer getSemesterId() {
     return mSemesterId;
   }
 
@@ -347,7 +347,7 @@ public class PersistentAdmissionStudent implements MutableAdmissionStudent {
   }
 
   @Override
-  public int getHSCYear() {
+  public Integer getHSCYear() {
     return mHSCYear;
   }
 
@@ -387,7 +387,7 @@ public class PersistentAdmissionStudent implements MutableAdmissionStudent {
   }
 
   @Override
-  public int getSSCYear() {
+  public Integer getSSCYear() {
     return mSSCYear;
   }
 

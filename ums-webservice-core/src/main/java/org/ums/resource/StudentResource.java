@@ -1,4 +1,4 @@
-package org.ums.academic.resource;
+package org.ums.resource;
 
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,8 +1,8 @@
-package org.ums.academic.resource;
+package org.ums.resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.ums.academic.resource.helper.StudentResourceHelper;
+import org.ums.resource.helper.StudentResourceHelper;
 import org.ums.resource.Resource;
 
 import javax.json.JsonObject;

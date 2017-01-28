@@ -97,6 +97,20 @@ public class PersistentCourseDao extends CourseDaoDecorator {
   }
 
   @Override
+  public List<Course> getAllForPagination(final Integer pItemPerPage, final Integer pPage,
+      final String pOrder) {
+
+    // int totalRecord= getAll().size();
+    int startIndex = pItemPerPage * pPage;
+    int endIndex = startIndex + pItemPerPage;
+    String query =
+        "Select tmp2.*,ind  From (Select ROWNUM ind, tmp1.* From (" + SELECT_ALL
+            + " Where MST_COURSE.COURSE_ID=COURSE_SYLLABUS_MAP.COURSE_ID " + pOrder
+            + ")tmp1 ) tmp2" + " WHERE ind >=? and ind<=?  ";
+    return mJdbcTemplate.query(query, new Object[] {startIndex, endIndex}, new CourseRowMapper());
+  }
+
+  @Override
   public List<Course> getBySyllabus(String pSyllabusId) {
     String query =
         SELECT_ALL

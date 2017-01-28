@@ -1,9 +1,8 @@
-package org.ums.academic.resource;
+package org.ums.resource;
 
 import org.springframework.stereotype.Component;
 import org.ums.enums.ProgramType;
 import org.ums.enums.QuotaType;
-import org.ums.resource.Resource;
 
 import javax.json.JsonObject;
 import javax.ws.rs.*;
@@ -59,7 +58,6 @@ public class AdmissionStudentResource extends MutableAdmissionStudentResource {
   }
 
   // kawsurilu
-
   @GET
   @Path("/programType/{program-type}/semesterId/{semester-id}/receiptId/{receipt-id}")
   public JsonObject getNewStudentByReceiptId(@PathParam("program-type") String pProgramType,

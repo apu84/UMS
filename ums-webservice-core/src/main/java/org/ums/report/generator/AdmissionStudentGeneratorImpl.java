@@ -16,6 +16,7 @@ import java.io.OutputStream;
 
 @Component
 public class AdmissionStudentGeneratorImpl implements AdmissionStudentGenerator {
+
   @Override
   public void createABlankTaletalkDataFormatFile(OutputStream pOutputStream, int pSemesterId)
       throws Exception {

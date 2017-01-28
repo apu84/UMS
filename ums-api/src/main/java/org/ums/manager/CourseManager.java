@@ -8,6 +8,9 @@ import java.util.List;
 public interface CourseManager extends ContentManager<Course, MutableCourse, String> {
   public List<Course> getBySyllabus(final String pSyllabusId);
 
+  public List<Course> getAllForPagination(final Integer pItemPerPage, final Integer pPage,
+      final String pOrder);
+
   public List<Course> getBySemesterProgram(final String pSemesterId, final String pProgramId);
 
   public List<Course> getByYearSemester(final String pSemesterId, final String pProgramId,

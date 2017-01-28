@@ -33,6 +33,7 @@ public class CourseTeacherBuilder implements Builder<CourseTeacher, MutableCours
     Course course = (Course) pLocalCache.cache(() -> pReadOnly.getCourse(),
         pReadOnly.getCourseId(), Course.class);
 
+    pBuilder.add("courseType", course.getCourseType().getId());
     pBuilder.add("courseId", course.getId());
     pBuilder.add("courseNo", course.getNo());
     pBuilder.add("courseTitle", course.getTitle());

@@ -37,6 +37,7 @@
 /// <reference path='service/FileUpload.ts'/>
 /// <reference path='service/CookieService.ts'/>
 /// <reference path='service/AdmissionStudentService.ts'/>
+/// <reference path='service/PaymentInfoService.ts'/>
 /// <reference path='service/SemesterService.ts'/>
 /// <reference path='service/Settings.ts'/>
 
@@ -74,6 +75,7 @@
 /// <reference path='model/ChangePasswordModel.ts'/>
 /// <reference path='model/User.ts'/>
 /// <reference path='model/AdmissionStudent.ts'/>
+/// <reference path='model/PaymentInfo.ts'/>
 /// <reference path='model/Semester.ts'/>
 
 

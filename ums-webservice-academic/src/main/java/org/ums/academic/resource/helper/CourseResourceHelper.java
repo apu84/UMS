@@ -3,7 +3,7 @@ package org.ums.academic.resource.helper;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ums.academic.resource.SemesterResource;
+import org.ums.resource.SemesterResource;
 import org.ums.builder.CourseBuilder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.*;
@@ -84,6 +84,22 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
    * pCourses) { children.add(toJson(readOnly, pUriInfo, localCache)); } object.add("entries",
    * children); localCache.invalidate(); return object.build(); }
    */
+
+  public JsonObject getAllForPagination(final Integer pItemPerPage, final Integer pPage,
+      final String pOrder, final UriInfo pUriInfo) {
+    List<Course> courses = getContentManager().getAllForPagination(pItemPerPage, pPage, pOrder);
+
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+    for(Course course : courses) {
+      children.add(toJson(course, pUriInfo, localCache));
+    }
+    object.add("entries", children);
+    localCache.invalidate();
+
+    return object.build();
+  }
 
   public JsonObject getBySyllabus(final String pSyllabusId, final Request pRequest,
       final UriInfo pUriInfo) {

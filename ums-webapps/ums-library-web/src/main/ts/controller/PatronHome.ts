@@ -1,102 +1,70 @@
 module ums{
   export class PatronHome{
-    public static $inject = ['HttpClient','$scope','$q','notify','$http','myAppFactory'];
+    public static $inject = ['HttpClient','$scope','$q','notify'];
     constructor(private httpClient: HttpClient, private $scope: any,
-                private $q:ng.IQService, private notify: Notify,private $http:ng.IHttpService,private myAppFactory:any) {
+                private $q:ng.IQService, private notify: Notify) {
+      $scope.courses = [];
+      $scope.totalCourses = 0;
+      $scope.orderBy = " Order by course_no asc";
+      $scope.data={
+        coursePerPage : 5
+      }; // this should match however many results your API puts on one page
+      this.getResultsPage(1);
+      $scope.pageChanged = this.pageChanged.bind(this);
+      $scope.sort = this.sort.bind(this);
 
-      // $scope.getOrdersData1 = this.getOrdersData1.bind(this);
-      $scope.gridOptions = {
-        data: [],
-        getData: myAppFactory.getOrdersData,
-        sort: {
-          predicate: 'orderNo',
-          direction: 'asc'
-        }
+      $scope.pagination = {
+        current: 1
       };
-      $scope.gridActions = {};
 
-      console.log("llllllssssslll");
-   console.log($scope);
-      console.log("llllllddddddlll");
+      // var that=this;
+      // $scope.$watch('orderBy', function() {
+      //   console.log("orderBy value changed.....");
+      //   this.pageChanged(1);
+      // });
 
     }
-    /*
-    public getOrdersData1(params:any, callback:any) {
-      console.log(params);
-      console.log(callback);
-console.log(this.$scope);
-      this.$http.defaults.headers.common={};
-    var herokuDomain = 'https://server-pagination.herokuapp.com';
 
-      this.$http.get(herokuDomain + '/orders').success(function (response:any) {
+    private sort(field: string):any {
+      // var that=this;
+      return (order:string) => {
+        console.log(field, order);
 
-      callback(response.orders, response.ordersCount);
-       console.log(response.orders);
-      // that.gridOptions.getData=response.orders;
-      // that.gridOptions.data=response.orders;
+        this.$scope.orderBy=" Order by "+field+" " +order;
+        console.log(this);
+        this.$scope.pageChanged(1);
+
+      }
+    }
 
 
-    });
+    private pageChanged (pageNumber) {
+      this.getResultsPage(pageNumber);
+    }
+
+
+    private getResultsPage(pageNumber) {
+      this.getCourseData(pageNumber).then((courseData:any)=> {
+console.log(courseData.entries);
+        this.$scope.courses = courseData.entries;
+        this.$scope.totalCourses = 100;
+      });
   }
 
-
-    public getOrdersData(params, callback):ng.IPromise<any>{
-      var herokuDomain = 'https://server-pagination.herokuapp.com';
-      var navList:Array<any>=[];
+    private getCourseData(pageNumber:string):ng.IPromise<any> {
+      var url="https://localhost//ums-webservice-academic/academic/course/all/ipp/"+this.$scope.data.coursePerPage+"/page/"+pageNumber+"/order/"+this.$scope.orderBy;
       var defer = this.$q.defer();
-      alert("bbc")
-
-      this.httpClient.get(herokuDomain + '/orders',"application/json",
-
-          //https://localhost/ums-webservice-library/mainNavigation
-          (json:any,etag:string)=>{
-           // navList=json.entries//;[0].items;
-            var bbc= {
-              getOrdersData: json.orders,
-              getStatuses: null
-            };
-            console.log(bbc);
-            defer.resolve(bbc);
+      this.httpClient.get(url, "application/json",
+          (json:any, etag:string) => {
+            var courseData:any = json;
+            defer.resolve(courseData);
           },
-          (response:ng.IHttpPromiseCallbackArg<any>)=>{
+          (response:ng.IHttpPromiseCallbackArg<any>) => {
             console.error(response);
           });
       return defer.promise;
     }
 
-    public getOrdersData(params, callback) {
-    this.httpClient.get("https://server-pagination.herokuapp.com" + '/orders' + params,"application/json",
-
-        //https://localhost/ums-webservice-library/mainNavigation
-        (json:any,etag:string)=>{
-      callback(json.orders, json.ordersCount);
-    },
-        (response:ng.IHttpPromiseCallbackArg<any>)=>{
-          console.error(response);
-        });
-  }
-
-
-    public getData():ng.IPromise<any>{
-      var navList:Array<any>=[];
-      var defer = this.$q.defer();
-      this.httpClient.get("https://localhost/ums-webservice-academic/academic/course/semester/11012016/program/110500","application/json",
-
-          //https://localhost/ums-webservice-library/mainNavigation
-          (json:any,etag:string)=>{
-            navList=json.entries//;[0].items;
-
-            console.log(navList);
-            defer.resolve(navList);
-
-
-          },
-          (response:ng.IHttpPromiseCallbackArg<any>)=>{
-            console.error(response);
-          });
-      return defer.promise;
-    }
-    */
   }
   UMS.controller("PatronHome",PatronHome);
 }

@@ -2,7 +2,7 @@ package org.ums.report.resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ums.academic.resource.helper.AdmissionStudentResourceHelper;
+import org.ums.resource.helper.AdmissionStudentResourceHelper;
 import org.ums.generator.XlsGenerator;
 import org.ums.resource.Resource;
 

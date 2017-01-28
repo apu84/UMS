@@ -10,6 +10,12 @@ public class CourseDaoDecorator extends
     ContentDaoDecorator<Course, MutableCourse, String, CourseManager> implements CourseManager {
 
   @Override
+  public List<Course> getAllForPagination(final Integer pItemPerPage, final Integer pPage,
+      final String pOrder) {
+    return getManager().getAllForPagination(pItemPerPage, pPage, pOrder);
+  }
+
+  @Override
   public List<Course> getByYearSemester(String pSemesterId, String pProgramId, int year,
       int semester) {
     return getManager().getByYearSemester(pSemesterId, pProgramId, year, semester);

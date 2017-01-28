@@ -6,6 +6,7 @@ import org.ums.manager.CacheManager;
 import org.ums.manager.CourseManager;
 import org.ums.util.CacheUtil;
 
+import javax.ws.rs.core.UriInfo;
 import java.util.List;
 
 public class CourseCache extends ContentCache<Course, MutableCourse, String, CourseManager>
@@ -24,6 +25,12 @@ public class CourseCache extends ContentCache<Course, MutableCourse, String, Cou
   @Override
   protected String getCacheKey(String pId) {
     return CacheUtil.getCacheKey(Course.class, pId);
+  }
+
+  @Override
+  public List<Course> getAllForPagination(final Integer pItemPerPage, final Integer pPage,
+      final String pOrder) {
+    return getManager().getAllForPagination(pItemPerPage, pPage, pOrder);
   }
 
   @Override

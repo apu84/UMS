@@ -19,6 +19,11 @@ module ums {
           {id: '2', name: 'Sessional'},
           {id: '3', name: 'Thesis/Project'}
         ],
+        paymentMode:[
+          {id:1, name:'Cash'},
+          {id:2, name:'Demand note'},
+          {id:3, name:'Pay order'}
+        ],
         courseCategory: [
           {id: '', name: 'Select Course Category'},
           {id: '1', name: 'Mandatory'},

@@ -63,8 +63,10 @@ public class AdmissionStudentBuilder implements Builder<AdmissionStudent, Mutabl
     pBuilder.add("unit", pReadOnly.getUnit());
 
     if(type.equals("meritList")) {
-      pBuilder.add("admissionRoll", pReadOnly.getAdmissionRoll());
-      pBuilder.add("meritSlNo", pReadOnly.getMeritSerialNo());
+      if(pReadOnly.getAdmissionRoll() != null)
+        pBuilder.add("admissionRoll", pReadOnly.getAdmissionRoll());
+      if(pReadOnly.getMeritSerialNo() != null)
+        pBuilder.add("meritSlNo", pReadOnly.getMeritSerialNo());
       if(pReadOnly.getProgramIdByMerit() != 0) {
         pBuilder.add("programIdByMerit", pReadOnly.getProgramByMerit().getId());
         pBuilder.add("programNameByMerit", pReadOnly.getProgramByMerit().getShortName());
@@ -138,14 +140,14 @@ public class AdmissionStudentBuilder implements Builder<AdmissionStudent, Mutabl
       pBuilder.add("admissionRoll", pReadOnly.getAdmissionRoll());
     }
 
-    if(pReadOnly.getMeritSerialNo() == 0) {
+    if(pReadOnly.getMeritSerialNo() == null) {
       pBuilder.add("meritSlNo", "Unavailable");
     }
     else {
       pBuilder.add("meritSlNo", pReadOnly.getMeritSerialNo());
     }
 
-    if(pReadOnly.getVerificationStatus() == 0) {
+    if(pReadOnly.getVerificationStatus() == null) {
       pBuilder.add("verificationStatus", "Not Specified");
     }
     else if(pReadOnly.getVerificationStatus() == 1) {
