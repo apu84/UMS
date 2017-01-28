@@ -166,10 +166,6 @@ module ums {
       }
       else {
         assignedTeacher.teachers = this.teachersList[assignedTeacher.courseOfferedByDepartmentId].entries;
-        if (assignedTeacher.courseOfferedByDepartmentId != assignedTeacher.courseOfferedToDepartmentId) {
-          assignedTeacher.teachers.push.apply(assignedTeacher.teachers,
-              this.teachersList[assignedTeacher.courseOfferedToDepartmentId].entries);
-        }
       }
 
       if (assignedTeacher.courseOfferedByDepartmentId != assignedTeacher.courseOfferedToDepartmentId) {
