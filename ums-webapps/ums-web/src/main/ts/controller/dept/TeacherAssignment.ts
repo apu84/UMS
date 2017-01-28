@@ -161,19 +161,6 @@ module ums {
             .then((teachers: ITeachers) => {
               assignedTeacher.teachers = teachers.entries;
               this.teachersList[assignedTeacher.courseOfferedByDepartmentId] = teachers;
-
-              if (assignedTeacher.courseOfferedByDepartmentId != assignedTeacher.courseOfferedToDepartmentId) {
-                if (!this.teachersList[assignedTeacher.courseOfferedToDepartmentId]) {
-                  this.listTeachers(assignedTeacher.courseOfferedToDepartmentId)
-                      .then((teachers: ITeachers) => {
-                        assignedTeacher.teachers.push.apply(assignedTeacher.teachers, teachers.entries);
-                        this.teachersList[assignedTeacher.courseOfferedToDepartmentId] = teachers;
-                      });
-                }
-                else {
-                  assignedTeacher.teachers = this.teachersList[assignedTeacher.courseOfferedToDepartmentId].entries;
-                }
-              }
             });
       }
       else {
@@ -181,6 +168,19 @@ module ums {
         if (assignedTeacher.courseOfferedByDepartmentId != assignedTeacher.courseOfferedToDepartmentId) {
           assignedTeacher.teachers.push.apply(assignedTeacher.teachers,
               this.teachersList[assignedTeacher.courseOfferedToDepartmentId].entries);
+        }
+      }
+
+      if (assignedTeacher.courseOfferedByDepartmentId != assignedTeacher.courseOfferedToDepartmentId) {
+        if (!this.teachersList[assignedTeacher.courseOfferedToDepartmentId]) {
+          this.listTeachers(assignedTeacher.courseOfferedToDepartmentId)
+              .then((teachers: ITeachers) => {
+                assignedTeacher.teachers.push.apply(assignedTeacher.teachers, teachers.entries);
+                this.teachersList[assignedTeacher.courseOfferedToDepartmentId] = teachers;
+              });
+        }
+        else {
+          assignedTeacher.teachers = this.teachersList[assignedTeacher.courseOfferedToDepartmentId].entries;
         }
       }
     }
