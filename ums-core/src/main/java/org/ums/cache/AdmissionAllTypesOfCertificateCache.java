@@ -25,11 +25,6 @@ public class AdmissionAllTypesOfCertificateCache
   }
 
   @Override
-  protected String getCacheKey(Integer pId) {
-    return CacheUtil.getCacheKey(AdmissionAllTypesOfCertificate.class, pId);
-  }
-
-  @Override
   public List<AdmissionAllTypesOfCertificate> getAdmissionStudentCertificateLists() {
     return getManager().getAdmissionStudentCertificateLists();
   }

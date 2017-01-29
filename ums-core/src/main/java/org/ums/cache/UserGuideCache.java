@@ -24,11 +24,6 @@ public class UserGuideCache extends
     return mCacheManager;
   }
 
-  @Override
-  protected String getCacheKey(Integer pId) {
-    return CacheUtil.getCacheKey(UserGuide.class, pId);
-  }
-
   public List<UserGuide> getUserGuideList(Integer pRoleId,String pUserId) {
     String cacheKey = getCacheKey(UserGuide.class.toString(), pUserId);
     return cachedList(cacheKey, () -> getManager().getUserGuideList(pRoleId,pUserId));

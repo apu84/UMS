@@ -24,8 +24,4 @@ public class UgAdmissionLogCache extends
     return mCacheManager;
   }
 
-  @Override
-  protected String getCacheKey(Integer pId) {
-    return CacheUtil.getCacheKey(UgAdmissionLog.class, pId);
-  }
 }

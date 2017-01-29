@@ -29,11 +29,6 @@ public class AdmissionTotalSeatCache extends
   }
 
   @Override
-  protected String getCacheKey(Integer pId) {
-    return CacheUtil.getCacheKey(AdmissionTotalSeat.class, pId);
-  }
-
-  @Override
   public List<AdmissionTotalSeat> getAdmissionTotalSeat(int pSemesterId, ProgramType pProgramType,
       QuotaType pQuotaType) {
     return getManager().getAdmissionTotalSeat(pSemesterId, pProgramType, pQuotaType);

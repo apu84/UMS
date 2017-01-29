@@ -20,9 +20,4 @@ public class EquivalentCourseCache extends
   protected CacheManager<EquivalentCourse, Integer> getCacheManager() {
     return mCacheManager;
   }
-
-  @Override
-  protected String getCacheKey(Integer pId) {
-    return CacheUtil.getCacheKey(EquivalentCourse.class, pId);
-  }
 }

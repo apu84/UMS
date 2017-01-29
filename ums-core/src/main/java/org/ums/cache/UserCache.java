@@ -22,11 +22,6 @@ public class UserCache extends ContentCache<User, MutableUser, String, UserManag
   }
 
   @Override
-  protected String getCacheKey(String pId) {
-    return CacheUtil.getCacheKey(User.class, pId);
-  }
-
-  @Override
   public int setPasswordResetToken(String pToken, String pUserId) {
     int modified = getManager().setPasswordResetToken(pToken, pUserId);
     if(modified > 0) {

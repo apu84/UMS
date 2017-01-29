@@ -61,11 +61,6 @@ public class ApplicationCCICache extends
   }
 
   @Override
-  protected String getCacheKey(Integer pId) {
-    return CacheUtil.getCacheKey(ApplicationCCI.class, pId);
-  }
-
-  @Override
   public List<ApplicationCCI> getByStudentIdAndSemesterForSeatPlanView(String pStudentId,
       Integer pSemesterId) {
     return getManager().getByStudentIdAndSemesterForSeatPlanView(pStudentId, pSemesterId);

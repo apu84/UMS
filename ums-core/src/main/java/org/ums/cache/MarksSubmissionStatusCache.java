@@ -26,11 +26,6 @@ public class MarksSubmissionStatusCache
   }
 
   @Override
-  protected String getCacheKey(Integer pId) {
-    return CacheUtil.getCacheKey(MarksSubmissionStatus.class, pId);
-  }
-
-  @Override
   public MarksSubmissionStatus get(Integer pSemesterId, String pCourseId, ExamType pExamType) {
     String cacheKey = getCacheKey(MarksSubmissionStatus.class.toString(), pSemesterId, pCourseId, pExamType);
     return cachedEntity(cacheKey, () -> getManager().get(pSemesterId, pCourseId, pExamType));

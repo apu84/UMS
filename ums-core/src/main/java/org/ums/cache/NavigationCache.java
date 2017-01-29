@@ -26,11 +26,6 @@ public class NavigationCache extends
   }
 
   @Override
-  protected String getCacheKey(Integer pId) {
-    return CacheUtil.getCacheKey(Navigation.class, pId);
-  }
-
-  @Override
   public List<Navigation> getByPermissions(Set<String> pPermissions) {
     return getManager().getByPermissions(pPermissions);
   }

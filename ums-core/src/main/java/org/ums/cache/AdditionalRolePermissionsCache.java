@@ -29,11 +29,6 @@ public class AdditionalRolePermissionsCache
   }
 
   @Override
-  protected String getCacheKey(Integer pId) {
-    return CacheUtil.getCacheKey(AdditionalRolePermissions.class, pId);
-  }
-
-  @Override
   public List<AdditionalRolePermissions> getPermissionsByUser(String pUserId) {
     return getManager().getPermissionsByUser(pUserId);
   }

@@ -23,11 +23,6 @@ public class StudentCache extends ContentCache<Student, MutableStudent, String, 
   }
 
   @Override
-  protected String getCacheKey(String pId) {
-    return CacheUtil.getCacheKey(Student.class, pId);
-  }
-
-  @Override
   public List<Student> getStudentListFromStudentsString(String pStudents) {
     return getManager().getStudentListFromStudentsString(pStudents);
   }

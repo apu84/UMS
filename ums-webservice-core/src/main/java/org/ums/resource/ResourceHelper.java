@@ -18,7 +18,6 @@ import java.util.List;
 
 public abstract class ResourceHelper<R extends EditType<M>, M extends Mutable, I> {
 
-
   public R load(final I pObjectId) {
     return getContentManager().get(pObjectId);
   }
@@ -31,7 +30,7 @@ public abstract class ResourceHelper<R extends EditType<M>, M extends Mutable, I
     EntityTag eTag = new EntityTag(getETag(readOnly));
 
     // Verify if it matched with eTag available in http request
-//    builder = pRequest.evaluatePreconditions(eTag);
+    // builder = pRequest.evaluatePreconditions(eTag);
     if(builder == null) {
       LocalCache localCache = new LocalCache();
       builder = Response.ok(toJson(readOnly, pUriInfo, localCache));

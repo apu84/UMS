@@ -23,11 +23,6 @@ public class EnrollmentFromToCache extends
   }
 
   @Override
-  protected String getCacheKey(Integer pId) {
-    return CacheUtil.getCacheKey(EnrollmentFromTo.class, pId);
-  }
-
-  @Override
   public List<EnrollmentFromTo> getEnrollmentFromTo(Integer pProgramId) {
     return getManager().getEnrollmentFromTo(pProgramId);
   }

@@ -20,8 +20,4 @@ public class DepartmentCache extends
     return mCacheManager;
   }
 
-  @Override
-  protected String getCacheKey(String pId) {
-    return CacheUtil.getCacheKey(Department.class, pId);
-  }
 }

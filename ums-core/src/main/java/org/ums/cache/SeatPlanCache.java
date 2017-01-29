@@ -27,11 +27,6 @@ public class SeatPlanCache extends
   }
 
   @Override
-  protected String getCacheKey(Integer pId) {
-    return CacheUtil.getCacheKey(SeatPlan.class, pId);
-  }
-
-  @Override
   public int createSeatPlanForCCI(List<MutableSeatPlan> pSeatPlans) {
     return getManager().createSeatPlanForCCI(pSeatPlans);
   }

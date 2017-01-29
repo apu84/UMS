@@ -23,11 +23,6 @@ public class SubGroupCache extends
   }
 
   @Override
-  protected String getCacheKey(Integer pId) {
-    return CacheUtil.getCacheKey(SubGroup.class, pId);
-  }
-
-  @Override
   public List<SubGroup> getByGroupNo(int pGroupNo) {
     return getManager().getByGroupNo(pGroupNo);
   }

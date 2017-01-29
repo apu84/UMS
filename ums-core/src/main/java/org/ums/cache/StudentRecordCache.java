@@ -23,11 +23,6 @@ public class StudentRecordCache extends
   }
 
   @Override
-  protected String getCacheKey(Integer pId) {
-    return CacheUtil.getCacheKey(StudentRecord.class, pId);
-  }
-
-  @Override
   public List<StudentRecord> getStudentRecords(Integer pProgramId, Integer pSemesterId) {
     List<StudentRecord> readOnlys = getManager().getStudentRecords(pProgramId, pSemesterId);
     for(StudentRecord readOnly : readOnlys) {

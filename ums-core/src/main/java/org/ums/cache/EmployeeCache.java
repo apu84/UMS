@@ -23,11 +23,6 @@ public class EmployeeCache extends ContentCache<Employee, MutableEmployee, Strin
   }
 
   @Override
-  protected String getCacheKey(String pId) {
-    return CacheUtil.getCacheKey(Employee.class, pId);
-  }
-
-  @Override
   public List<Employee> getByDesignation(String pDesignationId) {
     return getManager().getByDesignation(pDesignationId);
   }

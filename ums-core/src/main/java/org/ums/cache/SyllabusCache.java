@@ -22,11 +22,6 @@ public class SyllabusCache extends ContentCache<Syllabus, MutableSyllabus, Strin
   }
 
   @Override
-  protected String getCacheKey(String pId) {
-    return CacheUtil.getCacheKey(Syllabus.class, pId);
-  }
-
-  @Override
   public List<Syllabus> getSyllabusList(Integer pProgramId) {
     return getManager().getSyllabusList(pProgramId);
   }

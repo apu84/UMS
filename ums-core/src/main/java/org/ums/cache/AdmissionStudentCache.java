@@ -28,11 +28,6 @@ public class AdmissionStudentCache extends
   }
 
   @Override
-  protected String getCacheKey(String pId) {
-    return CacheUtil.getCacheKey(AdmissionStudent.class, pId);
-  }
-
-  @Override
   public List<AdmissionStudent> getTaletalkData(int pSemesterId, ProgramType pProgramType) {
     return getManager().getTaletalkData(pSemesterId, pProgramType);
   }
