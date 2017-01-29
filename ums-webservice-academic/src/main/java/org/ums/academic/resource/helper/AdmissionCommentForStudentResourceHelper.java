@@ -71,7 +71,7 @@ public class AdmissionCommentForStudentResourceHelper extends
   }
 
   @Override
-  protected String getEtag(AdmissionCommentForStudent pReadonly) {
+  protected String getETag(AdmissionCommentForStudent pReadonly) {
     return pReadonly.getLastModified();
   }
 }

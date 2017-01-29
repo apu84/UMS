@@ -77,7 +77,7 @@ public class GradeSubmissionResourceHelper extends
   }
 
   @Override
-  protected String getEtag(ExamGrade pReadonly) {
+  protected String getETag(ExamGrade pReadonly) {
     return null;
   }
 

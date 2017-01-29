@@ -253,7 +253,7 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan, MutableSeat
   }
 
   @Override
-  protected String getEtag(SeatPlan pReadonly) {
+  protected String getETag(SeatPlan pReadonly) {
     return pReadonly.getLastModified();
   }
 

@@ -158,7 +158,7 @@ public class SeatPlanGroupResourceHelper extends
   }
 
   @Override
-  protected String getEtag(SeatPlanGroup pReadonly) {
+  protected String getETag(SeatPlanGroup pReadonly) {
     return pReadonly.getLastUpdateDate();
   }
 }

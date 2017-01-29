@@ -91,7 +91,7 @@ public class AdmissionMeritListResourceHelper extends
   }
 
   @Override
-  protected String getEtag(AdmissionMeritList pReadonly) {
+  protected String getETag(AdmissionMeritList pReadonly) {
     return pReadonly.getLastModified();
   }
 }

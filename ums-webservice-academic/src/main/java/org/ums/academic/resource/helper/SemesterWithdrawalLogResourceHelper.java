@@ -71,7 +71,7 @@ public class SemesterWithdrawalLogResourceHelper extends
   }
 
   @Override
-  public String getEtag(SemesterWithdrawalLog pReadonly) {
+  public String getETag(SemesterWithdrawalLog pReadonly) {
     return pReadonly.getLastModified();
   }
 }

@@ -4,7 +4,6 @@ import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.common.EditType;
 import org.ums.domain.model.common.Mutable;
-import org.ums.domain.model.immutable.MarksSubmissionStatus;
 import org.ums.manager.ContentManager;
 
 import javax.json.Json;
@@ -19,6 +18,7 @@ import java.util.List;
 
 public abstract class ResourceHelper<R extends EditType<M>, M extends Mutable, I> {
 
+
   public R load(final I pObjectId) {
     return getContentManager().get(pObjectId);
   }
@@ -26,16 +26,16 @@ public abstract class ResourceHelper<R extends EditType<M>, M extends Mutable, I
   public Response get(final I pObjectId, final Request pRequest, final UriInfo pUriInfo)
       throws Exception {
     R readOnly = load(pObjectId);
-    Response.ResponseBuilder builder;
+    Response.ResponseBuilder builder = null;
     // Calculate the ETag on last modified date of user resource
-    EntityTag etag = new EntityTag(getEtag(readOnly));
-    // Verify if it matched with etag available in http request
-    builder = pRequest.evaluatePreconditions(etag);
-    builder = null;
+    EntityTag eTag = new EntityTag(getETag(readOnly));
+
+    // Verify if it matched with eTag available in http request
+//    builder = pRequest.evaluatePreconditions(eTag);
     if(builder == null) {
       LocalCache localCache = new LocalCache();
       builder = Response.ok(toJson(readOnly, pUriInfo, localCache));
-      builder.tag(etag);
+      builder.tag(eTag);
       localCache.invalidate();
     }
 
@@ -52,10 +52,8 @@ public abstract class ResourceHelper<R extends EditType<M>, M extends Mutable, I
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-    int count = 0;
     for(R readOnly : readOnlys) {
       children.add(toJson(readOnly, pUriInfo, localCache));
-      count++;
     }
     object.add("entries", children);
     localCache.invalidate();
@@ -94,9 +92,9 @@ public abstract class ResourceHelper<R extends EditType<M>, M extends Mutable, I
           .build();
     }
     R readOnly = load(pObjectId);
-    EntityTag etag = new EntityTag(getEtag(readOnly));
+    EntityTag eTag = new EntityTag(getETag(readOnly));
 
-    Response.ResponseBuilder preconditionResponse = pRequest.evaluatePreconditions(etag);
+    Response.ResponseBuilder preconditionResponse = pRequest.evaluatePreconditions(eTag);
     // client is not up to date (send back 412)
     if(preconditionResponse != null) {
       return preconditionResponse.build();
@@ -118,6 +116,6 @@ public abstract class ResourceHelper<R extends EditType<M>, M extends Mutable, I
 
   protected abstract Builder<R, M> getBuilder();
 
-  protected abstract String getEtag(R pReadonly);
+  protected abstract String getETag(R pReadonly);
 
 }

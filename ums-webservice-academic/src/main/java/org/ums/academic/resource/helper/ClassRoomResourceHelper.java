@@ -130,7 +130,7 @@ public class ClassRoomResourceHelper extends ResourceHelper<ClassRoom, MutableCl
   }
 
   @Override
-  protected String getEtag(ClassRoom pReadonly) {
+  protected String getETag(ClassRoom pReadonly) {
     return "";
   }
 

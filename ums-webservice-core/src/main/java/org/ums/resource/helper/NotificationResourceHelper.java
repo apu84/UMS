@@ -44,7 +44,7 @@ public class NotificationResourceHelper extends
   }
 
   @Override
-  protected String getEtag(Notification pReadonly) {
+  protected String getETag(Notification pReadonly) {
     return pReadonly.getLastModified();
   }
 

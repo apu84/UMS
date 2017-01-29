@@ -47,7 +47,7 @@ public class TeacherResourceHelper extends ResourceHelper<Teacher, MutableTeache
   }
 
   @Override
-  protected String getEtag(Teacher pReadonly) {
+  protected String getETag(Teacher pReadonly) {
     return pReadonly.getLastModified();
   }
 

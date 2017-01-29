@@ -73,8 +73,8 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
   }
 
   @Override
-  protected String getEtag(Course pReadonly) {
-    return "";
+  protected String getETag(Course pReadonly) {
+    return pReadonly.getLastModified();
   }
 
   /*

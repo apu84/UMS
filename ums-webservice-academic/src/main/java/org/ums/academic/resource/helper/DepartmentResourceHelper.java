@@ -35,7 +35,7 @@ public class DepartmentResourceHelper extends ResourceHelper<Department, Mutable
   }
 
   @Override
-  protected String getEtag(Department pReadonly) {
+  protected String getETag(Department pReadonly) {
     return "";
   }
 }

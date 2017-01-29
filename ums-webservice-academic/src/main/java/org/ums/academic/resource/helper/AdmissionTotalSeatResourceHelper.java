@@ -114,7 +114,7 @@ public class AdmissionTotalSeatResourceHelper extends
   }
 
   @Override
-  protected String getEtag(AdmissionTotalSeat pReadonly) {
+  protected String getETag(AdmissionTotalSeat pReadonly) {
     return pReadonly.getLastModified();
   }
 }

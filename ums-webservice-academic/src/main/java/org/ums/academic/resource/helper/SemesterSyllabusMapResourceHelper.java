@@ -90,7 +90,7 @@ public class SemesterSyllabusMapResourceHelper extends
   }
 
   @Override
-  protected String getEtag(SemesterSyllabusMap pReadonly) {
+  protected String getETag(SemesterSyllabusMap pReadonly) {
     return "";
   }
 }

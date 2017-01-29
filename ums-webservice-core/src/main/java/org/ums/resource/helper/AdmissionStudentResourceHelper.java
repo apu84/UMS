@@ -333,7 +333,7 @@ public class AdmissionStudentResourceHelper extends
   }
 
   @Override
-  protected String getEtag(AdmissionStudent pReadonly) {
+  protected String getETag(AdmissionStudent pReadonly) {
     return pReadonly.getLastModified();
   }
 }

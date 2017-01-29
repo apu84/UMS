@@ -40,7 +40,7 @@ public class FacultyResourceHelper extends ResourceHelper<Faculty, MutableFacult
   }
 
   @Override
-  protected String getEtag(Faculty pReadonly) {
+  protected String getETag(Faculty pReadonly) {
     return pReadonly.getLastModified();
   }
 }

@@ -107,7 +107,7 @@ public class StudentRecordResourceHelper extends
   }
 
   @Override
-  protected String getEtag(StudentRecord pReadonly) {
+  protected String getETag(StudentRecord pReadonly) {
     return pReadonly.getLastModified();
   }
 }

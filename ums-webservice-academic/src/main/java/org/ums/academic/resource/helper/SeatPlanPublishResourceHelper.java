@@ -131,7 +131,7 @@ public class SeatPlanPublishResourceHelper extends
   }
 
   @Override
-  protected String getEtag(SeatPlanPublish pReadonly) {
+  protected String getETag(SeatPlanPublish pReadonly) {
     return pReadonly.getExamDate();
   }
 }

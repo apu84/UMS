@@ -110,7 +110,7 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
   }
 
   @Override
-  public String getEtag(Employee pReadonly) {
+  public String getETag(Employee pReadonly) {
     return pReadonly.getLastModified();
   }
 }

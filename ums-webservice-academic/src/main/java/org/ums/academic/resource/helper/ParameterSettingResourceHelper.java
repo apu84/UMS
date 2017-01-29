@@ -131,7 +131,7 @@ public class ParameterSettingResourceHelper extends
   }
 
   @Override
-  public String getEtag(ParameterSetting pReadonly) {
+  public String getETag(ParameterSetting pReadonly) {
     return pReadonly.getLastModified();
   }
 }

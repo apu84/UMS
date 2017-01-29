@@ -37,7 +37,7 @@ public class CourseGroupResourceHelper extends
   }
 
   @Override
-  protected String getEtag(CourseGroup pReadonly) {
+  protected String getETag(CourseGroup pReadonly) {
     return pReadonly.getLastModified();
   }
 }

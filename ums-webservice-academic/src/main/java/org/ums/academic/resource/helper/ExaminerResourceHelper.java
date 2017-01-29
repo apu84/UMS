@@ -57,7 +57,7 @@ public class ExaminerResourceHelper
   }
 
   @Override
-  protected String getEtag(Examiner pReadonly) {
+  protected String getETag(Examiner pReadonly) {
     return pReadonly.getLastModified();
   }
 

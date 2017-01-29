@@ -51,7 +51,7 @@ public class ProgramTypeResourceHelper extends
   }
 
   @Override
-  protected String getEtag(ProgramType pReadonly) {
+  protected String getETag(ProgramType pReadonly) {
     return "";
   }
 }

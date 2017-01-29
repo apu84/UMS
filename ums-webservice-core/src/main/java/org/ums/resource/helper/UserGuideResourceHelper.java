@@ -47,7 +47,7 @@ public class UserGuideResourceHelper extends ResourceHelper<UserGuide, MutableUs
   }
 
   @Override
-  protected String getEtag(UserGuide pReadonly) {
+  protected String getETag(UserGuide pReadonly) {
     return pReadonly.getLastModified();
   }
 

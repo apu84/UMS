@@ -44,7 +44,7 @@ public class CourseTeacherResourceHelper
   }
 
   @Override
-  protected String getEtag(CourseTeacher pReadonly) {
+  protected String getETag(CourseTeacher pReadonly) {
     return pReadonly.getLastModified();
   }
 
