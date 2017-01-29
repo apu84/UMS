@@ -200,7 +200,7 @@ public class PaymentInfoResourceHelper extends
   }
 
   @Override
-  protected String getEtag(PaymentInfo pReadonly) {
+  protected String getETag(PaymentInfo pReadonly) {
     return pReadonly.getLastModified();
   }
 }
