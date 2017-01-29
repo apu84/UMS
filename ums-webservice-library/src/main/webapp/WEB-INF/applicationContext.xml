@@ -11,5 +11,5 @@
     http://www.springframework.org/schema/aop/spring-aop.xsd">
 
   <aop:aspectj-autoproxy/>
-  <context:component-scan base-package="org.ums.login,org.ums.cachewarmer,org.ums.common"/>
+  <context:component-scan base-package="org.ums.login,org.ums.cachewarmer,org.ums.report,org.ums.builder,org.ums.exception, org.ums.resource, org.ums.validator"/>
 </beans>
