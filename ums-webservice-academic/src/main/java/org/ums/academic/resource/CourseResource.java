@@ -20,9 +20,6 @@ public class CourseResource extends MutableCourseResource {
   @Autowired
   CourseResourceHelper mResourceHelper;
 
-  @Autowired
-  CourseManager mManager;
-
   @GET
   @Path("/all")
   public JsonObject getAll() throws Exception {
