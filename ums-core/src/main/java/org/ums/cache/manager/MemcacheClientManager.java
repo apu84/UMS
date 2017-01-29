@@ -1,4 +1,4 @@
-package org.ums.cache;
+package org.ums.cache.manager;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -13,6 +13,7 @@ import org.ums.domain.model.common.LastModifier;
 import org.ums.manager.CacheManager;
 
 import net.spy.memcached.MemcachedClient;
+import org.ums.util.CacheUtil;
 
 public class MemcacheClientManager<R extends LastModifier, I> implements CacheManager<R, I> {
   private static final Logger mLogger = LoggerFactory.getLogger(MemcacheClientManager.class);
@@ -82,19 +83,8 @@ public class MemcacheClientManager<R extends LastModifier, I> implements CacheMa
   @Override
   public void putReferrerKey(String pReferrer, String pReferred) {
     mObjectCache.set(pReferrer, 0, pReferred);
-
     List<String> keyList = (List<String>) mObjectCache.get(getReferenceKey(pReferred));
-
-    if(keyList == null) {
-      keyList = new ArrayList<>();
-      keyList.add(pReferrer);
-    }
-    else {
-      if(!keyList.contains(pReferrer)) {
-        keyList.add(pReferrer);
-      }
-    }
-
+    CacheUtil.addReferrer(keyList,pReferrer);
     mObjectCache.set(getReferenceKey(pReferred), 0, keyList);
   }
 
