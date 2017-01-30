@@ -12,6 +12,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.ums.cache.*;
+import org.ums.cache.common.CountryCache;
 import org.ums.cache.library.AuthorCache;
 import org.ums.cachewarmer.AutoCacheWarmer;
 import org.ums.cachewarmer.CacheWarmerManagerImpl;
@@ -22,9 +23,11 @@ import org.ums.formatter.DateFormat;
 import org.ums.generator.JxlsGenerator;
 import org.ums.generator.XlsGenerator;
 import org.ums.manager.*;
+import org.ums.manager.common.CountryManager;
 import org.ums.manager.library.AuthorManager;
 import org.ums.message.MessageResource;
 import org.ums.persistent.dao.*;
+import org.ums.persistent.dao.common.PersistentCountryDao;
 import org.ums.persistent.dao.library.PersistentAuthorDao;
 import org.ums.security.authentication.UMSAuthenticationRealm;
 import org.ums.services.LoginService;
@@ -601,6 +604,13 @@ public class UMSContext {
     AuthorCache authorCache = new AuthorCache(mCacheFactory.getCacheManager());
     authorCache.setManager(new PersistentAuthorDao(mTemplateFactory.getLmsJdbcTemplate()));
     return authorCache;
+  }
+
+  @Bean
+  CountryManager countryManager() {
+    CountryCache countryCache = new CountryCache(mCacheFactory.getCacheManager());
+    countryCache.setManager(new PersistentCountryDao(mTemplateFactory.getJdbcTemplate()));
+    return countryCache;
   }
 
   @Bean

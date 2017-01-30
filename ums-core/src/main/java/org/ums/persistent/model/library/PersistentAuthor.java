@@ -38,6 +38,13 @@ public class PersistentAuthor implements MutableAuthor {
 
   public PersistentAuthor(final PersistentAuthor pPersistentAuthor) {
     mId = pPersistentAuthor.getId();
+    mFirstName = pPersistentAuthor.getFirstName();
+    mMiddleName = pPersistentAuthor.getMiddleName();
+    mLastName = pPersistentAuthor.getLastName();
+    mShortName = pPersistentAuthor.getShortName();
+    mGender = pPersistentAuthor.getGender();
+    mAddress = pPersistentAuthor.getAddress();
+    mCountryId = pPersistentAuthor.getCountryId();
   }
 
   @Override
