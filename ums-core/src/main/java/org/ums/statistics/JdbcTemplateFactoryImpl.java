@@ -15,9 +15,18 @@ public class JdbcTemplateFactoryImpl implements JdbcTemplateFactory {
   @Qualifier("umsJdbcTemplate")
   UMSJdbcTemplate mUMSJdbcTemplate;
 
+  @Autowired
+  @Qualifier("lmsJdbcTemplate")
+  JdbcTemplate mLMSJdbcTemplate;
+
   @Override
   public JdbcTemplate getJdbcTemplate() {
     return mLoggingEnabled ? mUMSJdbcTemplate : mJdbcTemplate;
+  }
+
+  @Override
+  public JdbcTemplate getLmsJdbcTemplate() {
+    return mLMSJdbcTemplate;
   }
 
   public void setLoggingEnabled(boolean pLoggingEnabled) {

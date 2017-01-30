@@ -18,13 +18,22 @@
   <context:annotation-config/>
   <context:spring-configured/>
 
-  <bean id="dataSource"
-        class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+  <bean id="dataSource" name="dataSource" primary="true"
+        class="org.springframework.jdbc.datasource.DriverManagerDataSource" >
     <property name="driverClassName" value="${jdbc.driverClass}"/>
     <property name="url" value="${jdbc.url}"/>
     <property name="username" value="${jdbc.username}"/>
     <property name="password" value="${jdbc.password}"/>
   </bean>
+
+  <bean id="libraryDataSource" name="libraryDataSource"
+        class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+    <property name="driverClassName" value="${jdbc.driverClass}"/>
+    <property name="url" value="${lms.jdbc.url}"/>
+    <property name="username" value="${lms.jdbc.username}"/>
+    <property name="password" value="${lms.jdbc.password}"/>
+  </bean>
+
 
   <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
     <property name="dataSource" ref="dataSource"/>
@@ -40,6 +49,10 @@
 
   <bean id="umsJdbcTemplate" class="org.ums.statistics.UMSJdbcTemplate">
     <property name="dataSource" ref="dataSource"/>
+  </bean>
+
+  <bean id="lmsJdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+    <property name="dataSource" ref="libraryDataSource"/>
   </bean>
 
   <bean id="jdbcTemplateFactory" class="org.ums.statistics.JdbcTemplateFactoryImpl">

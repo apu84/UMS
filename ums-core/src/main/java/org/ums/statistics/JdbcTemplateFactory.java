@@ -4,4 +4,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 public interface JdbcTemplateFactory {
   JdbcTemplate getJdbcTemplate();
+
+  JdbcTemplate getLmsJdbcTemplate();
 }
