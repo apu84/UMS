@@ -144,20 +144,31 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
   @Override
   public int updateStudentsAllocatedProgram(AdmissionStudent pAdmissionStudent,
       MigrationStatus pMigrationStatus) {
-    if(pMigrationStatus == MigrationStatus.NOT_MIGRATED) {
+    int migrationStatus = MigrationStatus.NOT_MIGRATED.getId();
+    if(pAdmissionStudent.getUnit().equals("BBA")) {
+      // todo assign deadline information for bba students
       String query =
-          "update ADMISSION_STUDENTS set ALLOCATED_PROGRAM_ID=?, STUDENT_ID=?, MIGRATION_STATUS=? where RECEIPT_ID=? and SEMESTER_ID=? and deadline>=sysdate";
+          "update admission_students set allocated_program_id=?, student_id=?, MIGRATION_STATUS=? where receipt_id=? and semester_id=?";
       return mJdbcTemplate.update(query, pAdmissionStudent.getAllocatedProgram().getId(),
-          pAdmissionStudent.getStudentId(), pMigrationStatus.getId(),
+          pAdmissionStudent.getStudentId(), MigrationStatus.NOT_MIGRATED.getId(),
           pAdmissionStudent.getReceiptId(), pAdmissionStudent.getSemester().getId());
     }
     else {
-      String query =
-          "update ADMISSION_STUDENTS set ALLOCATED_PROGRAM_ID=?, STUDENT_ID=?, MIGRATION_STATUS=?,MIGRATED_FROM where RECEIPT_ID=? and SEMESTER_ID=? and deadline>=sysdate";
-      return mJdbcTemplate.update(query, pAdmissionStudent.getAllocatedProgram().getId(),
-          pAdmissionStudent.getStudentId(), pMigrationStatus.getId(), pAdmissionStudent
-              .getMigratedFrom(), pAdmissionStudent.getReceiptId(), pAdmissionStudent.getSemester()
-              .getId());
+      if(pMigrationStatus == MigrationStatus.NOT_MIGRATED) {
+        String query =
+            "update ADMISSION_STUDENTS set ALLOCATED_PROGRAM_ID=?, STUDENT_ID=?, MIGRATION_STATUS=? where RECEIPT_ID=? and SEMESTER_ID=? and deadline>=sysdate";
+        return mJdbcTemplate.update(query, pAdmissionStudent.getAllocatedProgram().getId(),
+            pAdmissionStudent.getStudentId(), pMigrationStatus.getId(),
+            pAdmissionStudent.getReceiptId(), pAdmissionStudent.getSemester().getId());
+      }
+      else {
+        String query =
+            "update ADMISSION_STUDENTS set ALLOCATED_PROGRAM_ID=?, STUDENT_ID=?, MIGRATION_STATUS=?,MIGRATED_FROM where RECEIPT_ID=? and SEMESTER_ID=? and deadline>=sysdate";
+        return mJdbcTemplate.update(query, pAdmissionStudent.getAllocatedProgram().getId(),
+            pAdmissionStudent.getStudentId(), pMigrationStatus.getId(),
+            pAdmissionStudent.getMigratedFrom(), pAdmissionStudent.getReceiptId(),
+            pAdmissionStudent.getSemester().getId());
+      }
     }
 
   }

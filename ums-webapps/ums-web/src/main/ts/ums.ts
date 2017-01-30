@@ -581,6 +581,12 @@ module ums {
           templateUrl: 'views/admission/admission-statistics.html',
           controller: 'AdmissionStatistics'
         })
+        .state('admissionStudentId', {
+          url: "/admissionStudentId",
+          templateUrl: 'views/admission/admission-student-id.html',
+          controller: 'AdmissionStudentId'
+        })
+
         .state('certificateVerification', {
           url: "/certificateVerification",
           templateUrl: 'views/admission/certificate-verification.html',

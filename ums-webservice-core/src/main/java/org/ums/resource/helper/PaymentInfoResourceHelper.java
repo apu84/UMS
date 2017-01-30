@@ -24,6 +24,7 @@ import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Monjur-E-Morshed on 25-Jan-17.
@@ -37,6 +38,9 @@ public class PaymentInfoResourceHelper extends
 
   @Autowired
   private SemesterManager mSemesterManager;
+
+  @Autowired
+  private ProgramManager mProgramManager;
 
   @Autowired
   private StudentManager mStudentManager;
@@ -80,19 +84,30 @@ public class PaymentInfoResourceHelper extends
     PersistentAdmissionStudent mAdmissionStudent = new PersistentAdmissionStudent();
     mAdmissionStudent.setId(pAdmissionStudent.getReceiptId());
     mAdmissionStudent.setSemesterId(pAdmissionStudent.getSemester().getId());
-    if(pPaymentType == PaymentType.ADMISSION_FEE) {
-      mAdmissionStudent.setAllocatedProgramId(pAdmissionStudent.getProgramByMerit().getId());
+    if(pAdmissionStudent.getUnit().equals("BBA")) {
+      mAdmissionStudent.setUnit("BBA");
+      List<Program> program = mProgramManager.getAll().stream().filter(p-> p.getShortName().equals("BBA")).collect(Collectors.toList());
+      mAdmissionStudent.setAllocatedProgramId(program.get(0).getId());
       mAdmissionStudent.setStudentId(pStudentId);
       mAdmissionStudentManager.updateStudentsAllocatedProgram(mAdmissionStudent,
           MigrationStatus.NOT_MIGRATED);
     }
     else {
-      mAdmissionStudent.setAllocatedProgramId(pAdmissionStudent.getProgramByTransfer().getId());
-      mAdmissionStudent.setStudentId(pStudentId);
-      mAdmissionStudent.setMigratedFrom(pAdmissionStudent.getStudentId());
-      mAdmissionStudentManager.updateStudentsAllocatedProgram(mAdmissionStudent,
-          MigrationStatus.MIGRATED);
+      if(pPaymentType == PaymentType.ADMISSION_FEE) {
+        mAdmissionStudent.setAllocatedProgramId(pAdmissionStudent.getProgramByMerit().getId());
+        mAdmissionStudent.setStudentId(pStudentId);
+        mAdmissionStudentManager.updateStudentsAllocatedProgram(mAdmissionStudent,
+            MigrationStatus.NOT_MIGRATED);
+      }
+      else {
+        mAdmissionStudent.setAllocatedProgramId(pAdmissionStudent.getProgramByTransfer().getId());
+        mAdmissionStudent.setStudentId(pStudentId);
+        mAdmissionStudent.setMigratedFrom(pAdmissionStudent.getStudentId());
+        mAdmissionStudentManager.updateStudentsAllocatedProgram(mAdmissionStudent,
+            MigrationStatus.MIGRATED);
+      }
     }
+
   }
 
   private void saveIntoStudent(final AdmissionStudent pAdmissionStudent, String pStudentId,
@@ -102,16 +117,23 @@ public class PaymentInfoResourceHelper extends
     student.setId(pStudentId);
     student.setSemesterId(pAdmissionStudent.getSemester().getId());
     student.setFullName(pAdmissionStudent.getStudentName());
-    if(pPaymentType == PaymentType.ADMISSION_FEE) {
-      student.setProgramId(pAdmissionStudent.getProgramByMerit().getId());
-      student.setDepartmentId(pAdmissionStudent.getProgramByMerit().getDepartment().getId());
+    if(pAdmissionStudent.getUnit().equals("BBA")){
+      List<Program> program = mProgramManager.getAll().stream().filter(p-> p.getShortName().equals("BBA")).collect(Collectors.toList());
+      student.setProgramId(program.get(0).getId());
+      student.setDepartmentId(program.get(0).getDepartment().getId());
+    }else{
+      if(pPaymentType == PaymentType.ADMISSION_FEE) {
+        student.setProgramId(pAdmissionStudent.getProgramByMerit().getId());
+        student.setDepartmentId(pAdmissionStudent.getProgramByMerit().getDepartment().getId());
+      }
+      else {
+        student.setProgramId(pAdmissionStudent.getProgramByTransfer().getId());
+        student.setDepartmentId(pAdmissionStudent.getProgramByTransfer().getDepartment().getId());
+        mStudentManager
+            .updateStudentsStatus(StudentStatus.MIGRATED, pAdmissionStudent.getStudentId());
+      }
     }
-    else {
-      student.setProgramId(pAdmissionStudent.getProgramByTransfer().getId());
-      student.setDepartmentId(pAdmissionStudent.getProgramByTransfer().getDepartment().getId());
-      mStudentManager
-          .updateStudentsStatus(StudentStatus.MIGRATED, pAdmissionStudent.getStudentId());
-    }
+
 
     student.setCurrentYear(1);
     student.setCurrentAcademicSemester(1);
@@ -155,11 +177,16 @@ public class PaymentInfoResourceHelper extends
     studentId = studentId + semesterId.substring(2, 4);
     Program program = new PersistentProgram();
     String deptId = "";
-    if(pPaymentType == PaymentType.ADMISSION_FEE) {
-      program = pAdmissionStudent.getProgramByMerit();
+    if(pAdmissionStudent.getUnit().equals("BBA")) {
+      program = mProgramManager.get(110200);
     }
     else {
-      program = pAdmissionStudent.getProgramByTransfer();
+      if(pPaymentType == PaymentType.ADMISSION_FEE) {
+        program = pAdmissionStudent.getProgramByMerit();
+      }
+      else {
+        program = pAdmissionStudent.getProgramByTransfer();
+      }
     }
 
     if(program.getDepartment().getId().equals("07")) {

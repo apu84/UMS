@@ -81,8 +81,8 @@ public class AdmissionStudentBuilder implements Builder<AdmissionStudent, Mutabl
       pBuilder.add("studentId", pReadOnly.getStudentId());
     if(pReadOnly.getAllocatedProgramId() != 0) {
       pBuilder.add("allocatedProgramId", pReadOnly.getAllocatedProgram().getId());
-      pBuilder.add("programShortName", pReadOnly.getAllocatedProgram().getShortName());
-      pBuilder.add("programLongName", pReadOnly.getAllocatedProgram().getLongName());
+      pBuilder.add("allocatedProgramShortName", pReadOnly.getAllocatedProgram().getShortName());
+      pBuilder.add("allocatedProgramLongName", pReadOnly.getAllocatedProgram().getLongName());
     }
 
     if(pReadOnly.getMigrationStatus() != null)

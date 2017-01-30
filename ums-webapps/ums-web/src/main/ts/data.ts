@@ -48,7 +48,8 @@
     '/composeMail': {title: 'MailBox - Compose Mail', 'breadcrumb': ['MailBox','Compose']},
     '/viewMail': {title: 'MailBox - View Mail', 'breadcrumb': ['MailBox','View']},
     '/uploadTaletalkData': {title: 'Upload Taletalk Data', 'breadcrumb': ['Admission Taletalk Student List']},
-    '/admissionTotalSeat': {title: 'Assign program-wise total seat', 'breadcrumb': ['Admission Total Seat Assignment']}
+    '/admissionTotalSeat': {title: 'Assign program-wise total seat', 'breadcrumb': ['Admission Total Seat Assignment']},
+    '/admissionStudentId': {title: 'Admitted Student Id', 'breadcrumb': ['Admitted Student Information']}
   };
 
   $.fn.Data.get = function (id) {

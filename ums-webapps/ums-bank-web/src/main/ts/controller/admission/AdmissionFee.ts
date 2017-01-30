@@ -24,6 +24,8 @@ module ums {
     showException: boolean;
     disableButton: boolean;
     disableContent: boolean;
+    showNotificationMessage: boolean;
+    localNotificationMessage:string;
 
     searchByReceiptId: Function;
     expandDiv: Function;
@@ -43,7 +45,7 @@ module ums {
 
 
   class AdmissionFee {
-    public static $inject = ['appConstants', 'HttpClient', '$scope', '$q', 'notify', '$sce', '$window', 'semesterService', 'admissionStudentService', 'paymentInfoService'];
+    public static $inject = ['appConstants', 'HttpClient', '$scope', '$q', 'notify', '$sce', '$window', 'semesterService', 'admissionStudentService', 'paymentInfoService','$timeout'];
 
     constructor(private appConstants: any,
                 private httpClient: HttpClient,
@@ -54,7 +56,8 @@ module ums {
                 private $window: ng.IWindowService,
                 private semesterService: SemesterService,
                 private admissionStudentService: AdmissionStudentService,
-                private paymentInfoService: PaymentInfoService) {
+                private paymentInfoService: PaymentInfoService,
+                private $timeout : ng.ITimeoutService) {
 
 
       $scope.programTypes = appConstants.programType;
@@ -68,6 +71,8 @@ module ums {
       $scope.showMigrationFeeSection = false;
       $scope.disableButton = true;
       $scope.paid = false;
+      $scope.showNotificationMessage = false;
+      $scope.localNotificationMessage="";
 
       $scope.searchByReceiptId = this.searchByReceiptId.bind(this);
       $scope.expandDiv = this.expandDiv.bind(this);
@@ -109,14 +114,15 @@ module ums {
         this.$scope.showDescriptionSection = true;
         if (this.$scope.admissionStudent.migrationStatus == Utils.NOT_MIGRATED || this.$scope.admissionStudent.migrationStatus==Utils.MIGRATED) {
           this.$scope.disableButton = true;
+          this.showLocalNotification("No payment activity left");
         } else {
           this.$scope.disableButton = false;
         }
-
+        this.fetchPaymentInfo(receiptId);
+        this.configureAmount();
         this.checkDeadline(this.$scope.admissionStudent.deadline);
       });
 
-      this.fetchPaymentInfo(receiptId);
     }
 
     private checkDeadline(deadline:string){
@@ -124,6 +130,7 @@ module ums {
       var today = new Date();
       if(date<today){
        this.notify.error("Deadline over");
+       this.showLocalNotification("Deadline over");
        this.$scope.showDescriptionSection=false;
        this.$scope.disableButton=true;
       }else{
@@ -145,31 +152,42 @@ module ums {
 
     private configurePaymentViewSection() {
       console.log("In the payment configuration section");
-      if (this.$scope.paymentInfo.length === 0) {
+      if (this.$scope.paymentInfo.length <= 1  && (this.$scope.admissionStudent.migrationStatus== Utils.NOT_MIGRATED || this.$scope.admissionStudent.migrationStatus==null)) {
         this.$scope.showAdmissionFeeSection = true;
         this.$scope.showMigrationFeeSection = false;
         this.$scope.paymentType = Utils.ADMISSION_FEE;
-        this.configureAmount();
 
-      } else {
+
+      }
+      else {
         this.$scope.showMigrationFeeSection = true;
         this.$scope.showAdmissionFeeSection = false;
         this.$scope.paymentType = Utils.MIGRATION_FEE;
-        this.configureAmount();
       }
+      //this.configureAmount();
+
     }
 
     private configureAmount() {
-      console.log(this.$scope.admissionStudent.unit);
-      if (this.$scope.showAdmissionFeeSection) {
+
+      if(this.$scope.admissionStudent.migrationStatus == Utils.MIGRATION_ABLE){
+        this.$scope.amount = 4000;
+      }else{
         if (this.$scope.admissionStudent.unit == 'ENGINEERING') {
           this.$scope.amount = 104800;
         } else {
           this.$scope.amount = 80360;
         }
-      } else {
-        this.$scope.amount = 4000;
       }
+    }
+
+
+    private showLocalNotification(message:string){
+      this.$scope.showNotificationMessage=true;
+      this.$scope.localNotificationMessage = message;
+      this.$timeout(()=>{
+        this.$scope.showNotificationMessage=false;
+      },5000);
     }
 
     /*
@@ -196,10 +214,10 @@ module ums {
     private save() {
       this.convertToJson().then((data) => {
         this.paymentInfoService.saveAdmissionPaymentInfo(data).then((message) => {
-
+          this.showLocalNotification("Payment Successfully Saved");
+          this.$scope.disableButton=true;
         })
       });
-
 
     }
 

@@ -29,8 +29,8 @@ module ums{
     verificationStatus:string;
     studentId:string;
     allocatedProgramId:number;
-    programShortName:string;
-    programLongName:string;
+    allocatedProgramShortName:string;
+    allocatedProgramLongName:string;
     presentStatus:number;
     text:string;
     programId:number;
