@@ -35,7 +35,7 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
           + "    ADMISSION_ROLL, MERIT_SL_NO, STUDENT_ID, ALLOCATED_PROGRAM_ID, MIGRATION_STATUS,  "
           + "    LAST_MODIFIED, UNIT, PROGRAM_TYPE, NID, BIRTH_REG,  "
           + "    PASSPORT, PROGRAM_ID_BY_MERIT, PROGRAM_ID_BY_TRANSFER, PRESENT_STATUS, to_char(DEADLINE,'dd/mm/yyyy') deadline,  "
-          + "    VERIFICATION_STATUS, MIGRATED_FROM from admission_students ";
+          + "    VERIFICATION_STATUS, MIGRATED_FROM, to_char(UNDERTAKEN_DEADLINE,'dd/mm/yyyy') undertaken_deadline from admission_students ";
 
   String SELECT_ONE_TALETALK_DATA =
       "select SEMESTER_ID, RECEIPT_ID, PIN, HSC_BOARD, HSC_ROLL,       "
