@@ -1,7 +1,5 @@
 package org.ums.configuration;
 
-import javax.sql.DataSource;
-
 import org.apache.shiro.authc.credential.PasswordService;
 import org.apache.shiro.mgt.SecurityManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +12,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.ums.cache.*;
+import org.ums.cache.library.AuthorCache;
 import org.ums.cachewarmer.AutoCacheWarmer;
 import org.ums.cachewarmer.CacheWarmerManagerImpl;
 import org.ums.domain.model.immutable.Examiner;
@@ -23,8 +22,10 @@ import org.ums.formatter.DateFormat;
 import org.ums.generator.JxlsGenerator;
 import org.ums.generator.XlsGenerator;
 import org.ums.manager.*;
+import org.ums.manager.library.AuthorManager;
 import org.ums.message.MessageResource;
 import org.ums.persistent.dao.*;
+import org.ums.persistent.dao.library.PersistentAuthorDao;
 import org.ums.security.authentication.UMSAuthenticationRealm;
 import org.ums.services.LoginService;
 import org.ums.services.NotificationGenerator;
@@ -34,6 +35,8 @@ import org.ums.statistics.JdbcTemplateFactory;
 import org.ums.statistics.QueryLogger;
 import org.ums.statistics.TextLogger;
 import org.ums.util.Constants;
+
+import javax.sql.DataSource;
 
 @Configuration
 @EnableAsync
@@ -591,6 +594,13 @@ public class UMSContext {
     FeeCache feeCache = new FeeCache(mCacheFactory.getCacheManager());
     feeCache.setManager(new PersistentFeeDao(mTemplateFactory.getJdbcTemplate()));
     return feeCache;
+  }
+
+  @Bean
+  AuthorManager authorManager() {
+    AuthorCache authorCache = new AuthorCache(mCacheFactory.getCacheManager());
+    authorCache.setManager(new PersistentAuthorDao(mTemplateFactory.getLmsJdbcTemplate()));
+    return authorCache;
   }
 
   @Bean
