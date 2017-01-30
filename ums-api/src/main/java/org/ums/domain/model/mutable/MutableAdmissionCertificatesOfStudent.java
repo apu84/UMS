@@ -13,4 +13,8 @@ public interface MutableAdmissionCertificatesOfStudent extends AdmissionCertific
   void setReceiptId(final String pReceiptId);
 
   void setCertificateId(final int pCertificateId);
+
+  void setCertificateName(final String pCertificateName);
+
+  void setCertificateType(final String pCertificateType);
 }

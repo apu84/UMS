@@ -34,4 +34,9 @@ public class AdmissionAllTypesOfCertificateCache
     return getManager().getAdmissionStudentCertificateLists();
   }
 
+  @Override
+  public List<AdmissionAllTypesOfCertificate> getCertificates(String pCertificateType) {
+    return getManager().getCertificates(pCertificateType);
+  }
+
 }

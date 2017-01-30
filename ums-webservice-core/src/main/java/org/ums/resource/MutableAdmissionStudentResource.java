@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.ums.resource.helper.AdmissionStudentResourceHelper;
 import org.ums.enums.DepartmentSelectionType;
 import org.ums.enums.ProgramType;
-import org.ums.resource.Resource;
 
 import javax.json.JsonObject;
 import javax.ws.rs.*;
@@ -32,12 +31,6 @@ public class MutableAdmissionStudentResource extends Resource {
   @Path("/meritListUpload")
   public Response saveMeritList(final JsonObject pJsonObject) throws Exception {
     return mHelper.saveMeritListData(pJsonObject, mUriInfo);
-  }
-
-  @PUT
-  @Path("/verificationStatus")
-  public Response verificationStatus(final JsonObject pJsonObject) {
-    return mHelper.putVerificationStatus(pJsonObject, mUriInfo);
   }
 
   @PUT

@@ -82,6 +82,8 @@ public interface AdmissionStudent extends Serializable, EditType<MutableAdmissio
 
   Integer getVerificationStatus();
 
+  String getUndertakenDeadline();
+
   Program getProgramByMerit();
 
   Integer getProgramIdByMerit();

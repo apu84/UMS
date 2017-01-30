@@ -8,6 +8,7 @@ import org.ums.cache.LocalCache;
 import org.ums.builder.AdmissionCertificatesOfStudentBuilder;
 import org.ums.domain.model.immutable.AdmissionCertificatesOfStudent;
 import org.ums.domain.model.mutable.MutableAdmissionCertificatesOfStudent;
+import org.ums.enums.ProgramType;
 import org.ums.manager.AdmissionCertificatesOfStudentManager;
 import org.ums.report.generator.UndertakenFormGenerator;
 import org.ums.resource.ResourceHelper;
@@ -62,7 +63,7 @@ public class AdmissionCertificatesOfStudentResourceHelper extends
   }
 
   // TODO remove ir
-  public void getUndertakenForm(final String pProgramType, final int pSemesterId,
+  public void getUndertakenForm(final ProgramType pProgramType, final int pSemesterId,
       final String pReceiptId, final OutputStream pOutputStream, final Request pRequest,
       final UriInfo pUriInfo) throws IOException, DocumentException {
     mUndertakenFormGenerator.createUndertakenForm(pProgramType, pSemesterId, pReceiptId,

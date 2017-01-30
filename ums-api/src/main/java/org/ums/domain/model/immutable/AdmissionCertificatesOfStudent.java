@@ -17,4 +17,8 @@ public interface AdmissionCertificatesOfStudent extends Serializable,
   String getReceiptId();
 
   int getCertificateId();
+
+  String getCertificateName();
+
+  String getCertificateType();
 }

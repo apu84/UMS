@@ -39,14 +39,15 @@ public interface AdmissionStudentManager extends
 
   // kawsurilu
 
-  AdmissionStudent getNewStudentByReceiptId(final String pProgramType, final int pSemesterId,
-      final String receiptId);
-
   AdmissionStudent getByStudentId(final String pStudentId);
 
-  int setVerificationStatus(final MutableAdmissionStudent pStudent);
+  int setVerificationStatusAndUndertakenDate(final MutableAdmissionStudent pStudent);
 
-  List<AdmissionStudent> getAllNewCandidates(final String pProgramType, final int pSemesterId);
+  // int setVerificationStatus(final MutableAdmissionStudent pStudent);
+
+  // int setUndertakenDate(final MutableAdmissionStudent pStudent);
+
+  List<AdmissionStudent> getAllCandidates(final ProgramType pProgramType, final int pSemesterId);
 
   List<AdmissionStudent> getNewStudentByReceiptId(final int pSemesterId, final String receiptId);
 

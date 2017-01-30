@@ -17,7 +17,9 @@ public class AdmissionCertificatesOfStudentBuilder implements
   public void build(JsonObjectBuilder pBuilder, AdmissionCertificatesOfStudent pReadOnly,
       UriInfo pUriInfo, LocalCache pLocalCache) {
 
+    pBuilder.add("name", pReadOnly.getCertificateName());
     pBuilder.add("id", pReadOnly.getCertificateId());
+    pBuilder.add("type", pReadOnly.getCertificateType());
   }
 
   @Override

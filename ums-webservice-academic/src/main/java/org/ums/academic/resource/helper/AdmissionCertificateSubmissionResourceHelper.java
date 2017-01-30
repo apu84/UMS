@@ -64,8 +64,15 @@ public class AdmissionCertificateSubmissionResourceHelper extends
     LocalCache localCache = new LocalCache();
     JsonArray entries = pJsonObject.getJsonArray("entries");
     JsonObject jsonObject = entries.getJsonObject(0);
-    getBuilder().setVerificationStatus(student, jsonObject, localCache);
-    getContentManager().setVerificationStatus(student);
+    getBuilder().setVerificationStatusAndUndertakenDateBuilder(student, jsonObject, localCache);
+    getContentManager().setVerificationStatusAndUndertakenDate(student);
+
+    // MutableAdmissionStudent student = new PersistentAdmissionStudent();
+    // LocalCache localCache = new LocalCache();
+    // JsonArray entries = pJsonObject.getJsonArray("entries");
+    // JsonObject jsonObject = entries.getJsonObject(0);
+    // getBuilder().setVerificationStatusBuilder(student, jsonObject, localCache);
+    // getContentManager().setVerificationStatus(student);
 
     if(entries.getJsonObject(0).getString("comment").equals("")) {
     }

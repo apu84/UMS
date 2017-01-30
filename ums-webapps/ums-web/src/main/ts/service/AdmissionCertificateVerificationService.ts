@@ -1,5 +1,7 @@
 module ums{
+
   import IPromise = ng.IPromise;
+
   export class AdmissionCertificateVerificationService {
     public static $inject = ['appConstants', 'HttpClient', '$q', 'notify', '$sce', '$window'];
 
@@ -8,8 +10,24 @@ module ums{
                 private $sce: ng.ISCEService, private $window: ng.IWindowService) {
     }
 
-    public getCandidateInformation(programType: string, semesterId: number, receiptId: string): ng.IPromise<any> {
-      var url = "academic/admission/programType/" + programType + "/semesterId/" + semesterId + "/receiptId/" + receiptId;
+    public getCandidatesList(programType: number, semesterId: number): ng.IPromise<any> {
+      var url = "academic/admission/candidatesList/programType/" + programType + "/semester/" + semesterId;
+      var defer = this.$q.defer();
+
+      this.httpClient.get(url, this.appConstants.mimeTypeJson,
+          (json: any, etag: string) => {
+            var admissionStudents: any = json.entries;
+            defer.resolve(admissionStudents);
+          },
+          (response: ng.IHttpPromiseCallbackArg<any>) => {
+            console.error(response);
+          });
+
+      return defer.promise;
+    }
+
+    public getCandidateInformation(programType: number, semesterId: number, receiptId: string): ng.IPromise<any> {
+      var url = "academic/admission/semester/"+semesterId+"/programType/"+programType+"/receiptId/"+receiptId;
       var defer = this.$q.defer();
 
       this.httpClient.get(url, this.appConstants.mimeTypeJson,
@@ -68,30 +86,16 @@ module ums{
       var defer = this.$q.defer();
       this.httpClient.put(url, json, 'application/json')
           .success(() => {
+            this.notify.success("Successfully Saved");
             defer.resolve("Saved");
           }).error((data) => {
+        this.notify.success("Error in saving");
         defer.resolve("Error in saving");
       });
       return defer.promise;
     }
 
-    public getCandidateList(programType: string, semesterId: number): ng.IPromise<any> {
-      var url = "academic/admission/allCandidates/programType/" + programType + "/semester/" + semesterId;
-      var defer = this.$q.defer();
-
-      this.httpClient.get(url, this.appConstants.mimeTypeJson,
-          (json: any, etag: string) => {
-            var admissionStudents: any = json.entries;
-            defer.resolve(admissionStudents);
-          },
-          (response: ng.IHttpPromiseCallbackArg<any>) => {
-            console.error(response);
-          });
-
-      return defer.promise;
-    }
-
-    public getUndertakenReport(programType: string, semesterId: number, receiptId: string): void {
+    public getUndertakenReport(programType: number, semesterId: number, receiptId: string): void {
       this.httpClient.get("academic/students/certificateHistory/underTaken/programType/"+ programType +"/semesterId/"+semesterId+"/receiptId/"+receiptId, 'application/pdf', (data: any, etag: string) => {
             var file = new Blob([data], {type: 'application/pdf'});
             var fileURL = this.$sce.trustAsResourceUrl(URL.createObjectURL(file));

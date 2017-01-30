@@ -103,12 +103,32 @@ public class AdmissionStudentBuilder implements Builder<AdmissionStudent, Mutabl
       pBuilder.add("meritSlNo", pReadOnly.getMeritSerialNo());
     }
 
+    if(pReadOnly.getUndertakenDeadline() == null || pReadOnly.getUndertakenDeadline().equals("")) {
+      pBuilder.add("undertakeDeadLine", "Unavailable");
+    }
+    else {
+      pBuilder.add("undertakeDeadLine", pReadOnly.getUndertakenDeadline());
+    }
+
+    if(pReadOnly.getVerificationStatus() == null || pReadOnly.getVerificationStatus() == 0) {
+      pBuilder.add("verificationStatus", "Unspecified");
+    }
+    else if(pReadOnly.getVerificationStatus() == 1) {
+      pBuilder.add("verificationStatus", "Verified");
+    }
+    else if(pReadOnly.getVerificationStatus() == 2) {
+      pBuilder.add("verificationStatus", "UnderTaken");
+    }
+    else if(pReadOnly.getVerificationStatus() == 3) {
+      pBuilder.add("verificationStatus", "Rejected");
+    }
+
   }
 
   // kawsurilu
 
-  public void getAdmissionStudentByReceiptIdBuilder(JsonObjectBuilder pBuilder,
-      AdmissionStudent pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
+  public void getAdmissionStudentBuilder(JsonObjectBuilder pBuilder, AdmissionStudent pReadOnly,
+      UriInfo pUriInfo, LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getReceiptId());
     pBuilder.add("text", pReadOnly.getReceiptId());
     pBuilder.add("semesterId", pReadOnly.getSemester().getId());
@@ -147,7 +167,7 @@ public class AdmissionStudentBuilder implements Builder<AdmissionStudent, Mutabl
       pBuilder.add("meritSlNo", pReadOnly.getMeritSerialNo());
     }
 
-    if(pReadOnly.getVerificationStatus() == null) {
+    if(pReadOnly.getVerificationStatus() == null || pReadOnly.getVerificationStatus() == 0) {
       pBuilder.add("verificationStatus", "Not Specified");
     }
     else if(pReadOnly.getVerificationStatus() == 1) {
@@ -161,13 +181,43 @@ public class AdmissionStudentBuilder implements Builder<AdmissionStudent, Mutabl
     }
   }
 
-  public void setVerificationStatus(MutableAdmissionStudent pMutable, JsonObject pJsonObject,
-      LocalCache pLocalCache) {
+  public void setVerificationStatusAndUndertakenDateBuilder(MutableAdmissionStudent pMutable,
+      JsonObject pJsonObject, LocalCache pLocalCache) {
     pMutable.setId(pJsonObject.getString("receiptId"));
     pMutable.setSemester(mSemesterManager.get(pJsonObject.getInt("semesterId")));
     pMutable.setProgramType(ProgramType.get(pJsonObject.getInt("programType")));
     pMutable.setVerificationStatus(pJsonObject.getInt("status"));
+    if(pJsonObject.getString("undertakeDeadLine").equals(null)
+        || pJsonObject.getString("undertakeDeadLine").equals("")
+        || pJsonObject.getInt("status") == 1 || pJsonObject.getInt("status") == 3) {
+    }
+    else {
+      pMutable.setUndertakenDeadline(pJsonObject.getString("undertakeDeadLine"));
+    }
   }
+
+  // public void setVerificationStatusBuilder(MutableAdmissionStudent pMutable,
+  // JsonObject pJsonObject, LocalCache pLocalCache) {
+  // pMutable.setId(pJsonObject.getString("receiptId"));
+  // pMutable.setSemester(mSemesterManager.get(pJsonObject.getInt("semesterId")));
+  // pMutable.setProgramType(ProgramType.get(pJsonObject.getInt("programType")));
+  // pMutable.setVerificationStatus(pJsonObject.getInt("status"));
+  //
+  // }
+  //
+  // public void setUndertakenDateBuilder(MutableAdmissionStudent pMutable, JsonObject pJsonObject,
+  // LocalCache pLocalCache) {
+  // pMutable.setId(pJsonObject.getString("receiptId"));
+  // pMutable.setSemester(mSemesterManager.get(pJsonObject.getInt("semesterId")));
+  // pMutable.setProgramType(ProgramType.get(pJsonObject.getInt("programType")));
+  // if(pJsonObject.getString("undertakeDeadLine").equals(null)
+  // || pJsonObject.getString("undertakeDeadLine").equals("")
+  // || pJsonObject.getInt("status") == 1 || pJsonObject.getInt("status") == 3) {
+  // }
+  // else {
+  // pMutable.setUndertakenDate(pJsonObject.getString("undertakeDeadLine"));
+  // }
+  // }
 
   //
 

@@ -15,4 +15,9 @@ public class AdmissionAllTypesOfCertificateDaoDecorator
   public List<AdmissionAllTypesOfCertificate> getAdmissionStudentCertificateLists() {
     return getManager().getAdmissionStudentCertificateLists();
   }
+
+  @Override
+  public List<AdmissionAllTypesOfCertificate> getCertificates(String pCertificateType) {
+    return getManager().getCertificates(pCertificateType);
+  }
 }

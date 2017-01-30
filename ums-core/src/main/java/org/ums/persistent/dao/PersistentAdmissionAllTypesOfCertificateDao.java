@@ -19,7 +19,7 @@ public class PersistentAdmissionAllTypesOfCertificateDao extends
     AdmissionAllTypesOfCertificateDaoDecorator {
 
   static String GET_ALL =
-      "SELECT CERTIFICATE_ID, CERTIFICATE_NAME, CERTIFICATE_TYPE FROM ALL_TYPES_OF_CERTIFICATES";
+      "SELECT CERTIFICATE_ID, CERTIFICATE_NAME, CERTIFICATE_TYPE FROM ALL_TYPES_OF_CERTIFICATES ";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -31,6 +31,13 @@ public class PersistentAdmissionAllTypesOfCertificateDao extends
     String query = GET_ALL;
     return mJdbcTemplate.query(query, new Object[] {},
         new PersistentAdmissionAllTypesOfCertificateDao.AdmissionAllTypesOfCertificateRowMapper());
+  }
+
+  public List<AdmissionAllTypesOfCertificate> getCertificates(String pCertificateType) {
+    String query = GET_ALL + "Where certificate_type=?";
+    return mJdbcTemplate.query(query, new Object[] {pCertificateType},
+        new AdmissionAllTypesOfCertificateRowMapper());
+
   }
 
   class AdmissionAllTypesOfCertificateRowMapper implements

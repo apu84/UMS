@@ -3,6 +3,7 @@ package org.ums.academic.resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.ums.enums.ProgramType;
 import org.ums.resource.Resource;
 
 import javax.json.JsonObject;
@@ -39,15 +40,15 @@ public class AdmissionCertificatesOfStudentResource extends
   @GET
   @Path("/underTaken/programType/{program-type}/semesterId/{semester-Id}/receiptId/{receipt-Id}")
   @Produces("application/pdf")
-  public StreamingOutput getUndertakenReport(final @PathParam("program-type") String pProgramType,
+  public StreamingOutput getUndertakenReport(final @PathParam("program-type") int pProgramType,
       final @PathParam("semester-Id") int pSemesterId,
       final @PathParam("receipt-Id") String pReceiptId, final @Context Request pRequest) {
     return new StreamingOutput() {
       @Override
       public void write(OutputStream pOutputStream) throws IOException, WebApplicationException {
         try {
-          mHelper.getUndertakenForm(pProgramType, pSemesterId, pReceiptId, pOutputStream, pRequest,
-              mUriInfo);
+          mHelper.getUndertakenForm(ProgramType.get(pProgramType), pSemesterId, pReceiptId,
+              pOutputStream, pRequest, mUriInfo);
         } catch(Exception e) {
           mLogger.error(e.getMessage());
           throw new WebApplicationException(e);

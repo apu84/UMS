@@ -9,4 +9,6 @@ public interface AdmissionAllTypesOfCertificateManager extends
     ContentManager<AdmissionAllTypesOfCertificate, MutableAdmissionAllTypesOfCertificate, Integer> {
 
   List<AdmissionAllTypesOfCertificate> getAdmissionStudentCertificateLists();
+
+  List<AdmissionAllTypesOfCertificate> getCertificates(final String pCertificateType);
 }

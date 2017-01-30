@@ -66,19 +66,23 @@ public class AdmissionStudentCache extends
   // kawsurilu
 
   @Override
-  public AdmissionStudent getNewStudentByReceiptId(String pProgramType, int pSemsterId,
-      String pReceiptId) {
-    return getManager().getNewStudentByReceiptId(pProgramType, pSemsterId, pReceiptId);
+  public int setVerificationStatusAndUndertakenDate(MutableAdmissionStudent pStudent) {
+    return getManager().setVerificationStatusAndUndertakenDate(pStudent);
   }
 
-  @Override
-  public int setVerificationStatus(MutableAdmissionStudent pStudent) {
-    return getManager().setVerificationStatus(pStudent);
-  }
+  // @Override
+  // public int setVerificationStatus(final MutableAdmissionStudent pStudent) {
+  // return getManager().setVerificationStatus(pStudent);
+  // }
+  //
+  // @Override
+  // public int setUndertakenDate(final MutableAdmissionStudent pStudent) {
+  // return getManager().setUndertakenDate(pStudent);
+  // }
 
   @Override
-  public List<AdmissionStudent> getAllNewCandidates(String pProgramType, int pSemesterId) {
-    return getManager().getAllNewCandidates(pProgramType, pSemesterId);
+  public List<AdmissionStudent> getAllCandidates(ProgramType pProgramType, int pSemesterId) {
+    return getManager().getAllCandidates(pProgramType, pSemesterId);
   }
 
   @Override

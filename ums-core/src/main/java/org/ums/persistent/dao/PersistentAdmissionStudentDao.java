@@ -35,7 +35,7 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
           + "    ADMISSION_ROLL, MERIT_SL_NO, STUDENT_ID, ALLOCATED_PROGRAM_ID, MIGRATION_STATUS,  "
           + "    LAST_MODIFIED, UNIT, PROGRAM_TYPE, NID, BIRTH_REG,  "
           + "    PASSPORT, PROGRAM_ID_BY_MERIT, PROGRAM_ID_BY_TRANSFER, PRESENT_STATUS, to_char(DEADLINE,'dd/mm/yyyy') deadline,  "
-          + "    VERIFICATION_STATUS from admission_students ";
+          + "    VERIFICATION_STATUS, to_char(UNDERTAKEN_DEADLINE,'dd/mm/yyyy') undertaken_deadline from admission_students ";
 
   String SELECT_ONE_TALETALK_DATA =
       "select SEMESTER_ID, RECEIPT_ID, PIN, HSC_BOARD, HSC_ROLL,       "
@@ -271,18 +271,35 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
         new Object[] {pProgramType, pSemesterId, pReceiptId}, new AdmissionStudentRowMapper());
   }
 
-  public int setVerificationStatus(MutableAdmissionStudent pStudent) {
+  public int setVerificationStatusAndUndertakenDate(MutableAdmissionStudent pStudent) {
     MutableAdmissionStudent student = pStudent;
     String query =
-        "update admission_students set verification_status=? where program_type=? and semester_id=? and receipt_id=?";
-    return mJdbcTemplate.update(query, student.getVerificationStatus(), student.getProgramType()
-        .getValue(), student.getSemester().getId(), student.getReceiptId());
+        "update admission_students set verification_status=? , undertaken_deadline = to_date(?,'dd/mm/yyyy') where program_type=? and semester_id=? and receipt_id=?";
+    return mJdbcTemplate.update(query, student.getVerificationStatus(), student
+        .getUndertakenDeadline(), student.getProgramType().getValue(), student.getSemester()
+        .getId(), student.getReceiptId());
   }
 
-  public List<AdmissionStudent> getAllNewCandidates(String pProgramType, int pSemesterId) {
+  // public int setVerificationStatus(MutableAdmissionStudent pStudent) {
+  // MutableAdmissionStudent student = pStudent;
+  // String query =
+  // "update admission_students set verification_status=? where program_type=? and semester_id=? and receipt_id=?";
+  // return mJdbcTemplate.update(query, student.getVerificationStatus(), student.getProgramType()
+  // .getValue(), student.getSemester().getId(), student.getReceiptId());
+  // }
+
+  // public int setUndertakenDate(MutableAdmissionStudent pStudent) {
+  // MutableAdmissionStudent student = pStudent;
+  // String query =
+  // "update admission_students set undertaken_deadline=to_date(?,'dd/mm/yyyy') where program_type=? and semester_id=? and receipt_id=?";
+  // return mJdbcTemplate.update(query, student.getUndertakenDate(), student.getProgramType()
+  // .getValue(), student.getSemester().getId(), student.getReceiptId());
+  // }
+
+  public List<AdmissionStudent> getAllCandidates(ProgramType pProgramType, int pSemesterId) {
     String query =
         SELECT_ONE + " WHERE PROGRAM_TYPE=? AND SEMESTER_ID=? ORDER BY to_number(RECEIPT_ID)";
-    return mJdbcTemplate.query(query, new Object[] {pProgramType, pSemesterId},
+    return mJdbcTemplate.query(query, new Object[] {pProgramType.getValue(), pSemesterId},
         new AdmissionStudentRowMapper());
   }
 
@@ -336,6 +353,7 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
       student.setPresentStatus(PresentStatus.get(pResultSet.getInt("present_status")));
       student.setDeadline(pResultSet.getString("deadline"));
       student.setVerificationStatus(pResultSet.getInt("verification_status"));
+      student.setUndertakenDeadline(pResultSet.getString("undertaken_deadline"));
       return student;
     }
   }

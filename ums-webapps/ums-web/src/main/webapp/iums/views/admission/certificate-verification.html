@@ -26,7 +26,7 @@
             <h3 class="panel-title">Select</h3>
         </div>
         <div class="panel-body pan">
-            <form action="" class="form-horizontal" data-validate=""  data-onvalidate="getAllCandidates">
+            <form action="" class="form-horizontal" data-validate="getAllCandidates"  data-onvalidate="getAllCandidates">
                 <div class="form-body pal">
                     <div class="form-group">
                         <label class="col-md-4 control-label">Program Type</label>
@@ -94,10 +94,6 @@
                                         <td><label class="control-label">{{admissionStudent.studentName}}</label></td>
                                     </tr>
                                     <tr>
-                                        <th><label class="control-label" style="font-weight: bold;">Gender:</label></th>
-                                        <td><label class="control-label">{{admissionStudent.gender}}</label></td>
-                                    </tr>
-                                    <tr>
                                         <th><label class="control-label" style="font-weight: bold;">Date of Birth:</label></th>
                                         <td><label class="control-label">{{admissionStudent.dateOfBirth}}</label></td>
                                     </tr>
@@ -138,14 +134,23 @@
                             <div class="col-md-4" data-ng-show="GLShow==true">
                                 <form>
                                     <fieldset style="padding-bottom: 5px;">
-                                        <legend>Academic</legend>
+                                        <legend>Academic
+                                            <span>
+                                                <input
+                                                        type="checkbox"
+                                                        ng-checked="isChecked(gLCertificates)"
+                                                        ng-click="toggleAll(gLCertificates)"
+                                                        data-ng-show="allCheck==true"
+                                                >
+                                            </span>
+                                        </legend>
                                         <div>
                                             <span data-ng-repeat="gl in gLCertificates">
 
                                                 <input
                                                         type="checkbox"
                                                         value="{{gl}}"
-                                                        ng-checked="{{gl.disableChecked}}"
+                                                        ng-checked="exists(gl)"
                                                         ng-click="toggleSelection(gl)"
                                                         ng-disabled="{{gl.disableChecked}}"
                                                 >&nbsp; {{gl.name}} &nbsp;
@@ -159,14 +164,23 @@
                             <div class="col-md-4" data-ng-show="GCEShow==true">
                                 <form>
                                     <fieldset style="padding-bottom: 5px;">
-                                        <legend>Academic</legend>
+                                        <legend>Academic
+                                            <span>
+                                                <input
+                                                        type="checkbox"
+                                                        ng-checked="isChecked(gCECertificates)"
+                                                        ng-click="toggleAll(gCECertificates)"
+                                                        data-ng-show="allCheck==true"
+                                                >
+                                            </span>
+                                        </legend>
                                         <div>
                                             <span ng-repeat="gce in gCECertificates">
 
                                                 <input
                                                         type="checkbox"
                                                         value="{{gce}}"
-                                                        ng-checked="{{gce.disableChecked}}"
+                                                        ng-checked="exists(gce, 1)"
                                                         ng-click="toggleSelection(gce)"
                                                         ng-disabled="{{gce.disableChecked}}"
                                                 >&nbsp; {{gce.name}} &nbsp;
@@ -180,14 +194,23 @@
                             <div class="col-md-4">
                                 <form>
                                     <fieldset style="padding-bottom: 5px;">
-                                        <legend>National</legend>
+                                        <legend>National
+                                            <span>
+                                                <input
+                                                        type="checkbox"
+                                                        ng-checked="isChecked(nationalCertificates)"
+                                                        ng-click="toggleAll(nationalCertificates)"
+                                                        data-ng-show="allCheck==true"
+                                                >
+                                            </span>
+                                        </legend>
                                         <div>
                                             <span ng-repeat="n in nationalCertificates">
 
                                                 <input
                                                         type="checkbox"
                                                         value="{{n}}"
-                                                        ng-checked="{{n.disableChecked}}"
+                                                        ng-checked="exists(n, 1)"
                                                         ng-click="toggleSelection(n)"
                                                         ng-disabled="{{n.disableChecked}}"
                                                 >&nbsp; {{n.name}} &nbsp;
@@ -201,14 +224,23 @@
                             <div class="col-md-4" data-ng-show="quotaShow==true">
                                 <form>
                                     <fieldset style="padding-bottom: 5px;">
-                                        <legend>Quota</legend>
+                                        <legend>Quota
+                                            <span>
+                                                <input
+                                                        type="checkbox"
+                                                        ng-checked="isChecked(quotaCertificates)"
+                                                        ng-click="toggleAll(quotaCertificates)"
+                                                        data-ng-show="allCheck==true"
+                                                >
+                                            </span>
+                                        </legend>
                                         <div>
                                             <span ng-repeat="q in quotaCertificates">
 
                                                 <input
                                                         type="checkbox"
                                                         value="{{q}}"
-                                                        ng-checked="{{q.disableChecked}}"
+                                                        ng-checked="exists(q, 1)"
                                                         ng-click="toggleSelection(q)"
                                                         ng-disabled="{{q.disableChecked}}"
                                                 >&nbsp; {{q.name}} &nbsp;
@@ -220,31 +252,31 @@
                                 <br />
                             </div>
 
-                        <div class="col-md-10">
-                            <br />
-                            <label>Comment:</label><br />
-                            <textarea class="form-control" rows="3" data-ng-model="userComment" data-ng-change="getCurrentComment(userComment)"></textarea>
-                            <span data-ng-repeat="comments in previousComments">
-
-                                <textarea class="form-control" rows="1" disabled>{{comments.comment}} {{comments.commentedOn}}</textarea>
-
-                            </span>
-                            <br />
-                        </div>
-                        </div>
-                        <div class="col-md-4" align="left">
-                            <br />
-                            <div class="input-icon right" >
-                                <i class="fa fa-calendar"></i>
-                                <input  type="text" data-ng-model="deadLine" data-ng-change="UnderTakenDeadline(deadLine)" data-date-format="dd/mm/yyyy" placeholder="DD/MM/YYYY" class="datepicker-default form-control" autocomplete="off"/>
+                            <div class="col-md-10">
+                                <br />
+                                <label>Comment:</label><br />
+                                <textarea class="form-control" rows="3" data-ng-model="data.userComment" data-ng-change="getCurrentComment(userComment)" ng-disabled="commentBox"></textarea>
+                                <span data-ng-repeat="comments in previousComments">
+                                    <textarea class="form-control" rows="1" disabled>{{comments.comment}} {{comments.commentedOn}}</textarea>
+                                </span>
+                                <br />
                             </div>
-                            <br />
-                            <button type="submit" class="btn btn-warning" data-ng-click="underTaken()" data-ng-disabled="undertake">Print Undertaken Form</button>
                         </div>
-                        <div class="col-md-4" align="right">
+                        <div class="col-md-8">
                             <br />
-                            <button type="submit" class="btn btn-danger" data-ng-click="rejected()" ng-disabled="reject">Rejected</button>
-                            <button type="submit" class="btn btn-success" data-ng-click="verified()" ng-disabled="verify">Approved</button>
+                            <div class="col-md-3">
+                                <div class="input-icon right" >
+                                    <i class="fa fa-calendar"></i>
+                                    <input  type="text" data-ng-model="deadLine" data-ng-change="UnderTakenDeadline(deadLine)" data-date-format="dd/mm/yyyy" placeholder="DD/MM/YYYY" class="datepicker-default form-control" autocomplete="off"/>
+                                </div>
+                            </div>
+                            <div class="col-md-3" align="left">
+                                <button type="submit" class="btn btn-warning" data-ng-click="underTaken()" data-ng-disabled="undertake">Print Undertaken Form</button>
+                            </div>
+                            <div class="col-md-6" align="right">
+                                <button type="submit" class="btn btn-danger" data-ng-click="rejected()" ng-disabled="reject">Rejected</button>
+                                <button type="submit" class="btn btn-success" data-ng-click="verified()" ng-disabled="verify">Approved</button>
+                            </div>
                         </div>
                     </div>
                 </div>

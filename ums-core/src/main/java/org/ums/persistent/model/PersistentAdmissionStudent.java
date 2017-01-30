@@ -70,6 +70,7 @@ public class PersistentAdmissionStudent implements MutableAdmissionStudent {
   private String mBirthRegNo;
   private String mPassport;
   private String mDeadline;
+  private String mUndertakenDeadline;
 
   public PersistentAdmissionStudent() {}
 
@@ -115,6 +116,7 @@ public class PersistentAdmissionStudent implements MutableAdmissionStudent {
     mBirthRegNo = pAdmissionStudent.getBirthRegNo();
     mPassport = pAdmissionStudent.getPassportNo();
     mDeadline = pAdmissionStudent.getDeadline();
+    mUndertakenDeadline = pAdmissionStudent.getUndertakenDeadline();
   }
 
   @Override
@@ -210,6 +212,11 @@ public class PersistentAdmissionStudent implements MutableAdmissionStudent {
   }
 
   @Override
+  public String getUndertakenDeadline() {
+    return mUndertakenDeadline;
+  }
+
+  @Override
   public void setPresentStatus(PresentStatus pPresentStatus) {
     mPresentStatus = pPresentStatus;
   }
@@ -217,6 +224,11 @@ public class PersistentAdmissionStudent implements MutableAdmissionStudent {
   @Override
   public void setVerificationStatus(int pVerificationStatus) {
     mVerificationStatus = pVerificationStatus;
+  }
+
+  @Override
+  public void setUndertakenDeadline(String pDeadline) {
+    mUndertakenDeadline = pDeadline;
   }
 
   @Override

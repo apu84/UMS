@@ -108,21 +108,21 @@ public class AdmissionStudentResourceHelper extends
 
   // kawsurilu
 
-  @Transactional
-  public Response putVerificationStatus(JsonObject pJsonObject, UriInfo pUriInfo) {
-    MutableAdmissionStudent student = new PersistentAdmissionStudent();
-    JsonArray entries = pJsonObject.getJsonArray("entries");
-
-    LocalCache localCache = new LocalCache();
-    JsonObject jsonObject = entries.getJsonObject(0);
-    getBuilder().setVerificationStatus(student, jsonObject, localCache);
-
-    getContentManager().setVerificationStatus(student);
-    URI contextURI = null;
-    Response.ResponseBuilder builder = Response.created(contextURI);
-    builder.status(Response.Status.CREATED);
-    return builder.build();
-  }
+  // @Transactional
+  // public Response putVerificationStatus(JsonObject pJsonObject, UriInfo pUriInfo) {
+  // MutableAdmissionStudent student = new PersistentAdmissionStudent();
+  // JsonArray entries = pJsonObject.getJsonArray("entries");
+  //
+  // LocalCache localCache = new LocalCache();
+  // JsonObject jsonObject = entries.getJsonObject(0);
+  // getBuilder().setVerificationStatus(student, jsonObject, localCache);
+  //
+  // getContentManager().setVerificationStatus(student);
+  // URI contextURI = null;
+  // Response.ResponseBuilder builder = Response.created(contextURI);
+  // builder.status(Response.Status.CREATED);
+  // return builder.build();
+  // }
 
   //
 
@@ -232,34 +232,18 @@ public class AdmissionStudentResourceHelper extends
   // kawsurilu
   // don't need meritType
 
-  public JsonObject getAdmissionStudentByReceiptId(final String pProgramType,
-      final int pSemesterId, final String pReceiptId, final UriInfo pUriInfo) {
-
-    AdmissionStudent student =
-        getContentManager().getNewStudentByReceiptId(pProgramType, pSemesterId, pReceiptId);
-    JsonObjectBuilder object = Json.createObjectBuilder();
-    JsonArrayBuilder children = Json.createArrayBuilder();
-    LocalCache localCache = new LocalCache();
-    JsonObjectBuilder jsonObject = Json.createObjectBuilder();
-    getBuilder().getAdmissionStudentByReceiptIdBuilder(jsonObject, student, pUriInfo, localCache);
-    children.add(jsonObject);
-    object.add("entries", children);
-    localCache.invalidate();
-    return object.build();
-  }
-
-  public JsonObject getCandidateLists(final String pProgramType, final int pSemesterId,
+  public JsonObject getCandidatesList(final ProgramType pProgramType, final int pSemesterId,
       final UriInfo pUriInfo) {
+    System.out.println();
     List<AdmissionStudent> student =
-        getContentManager().getAllNewCandidates(pProgramType, pSemesterId);
+        getContentManager().getAllCandidates(pProgramType, pSemesterId);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
 
     for(AdmissionStudent admissionStudent : student) {
       JsonObjectBuilder jsonObject = Json.createObjectBuilder();
-      getBuilder().getAdmissionStudentByReceiptIdBuilder(jsonObject, admissionStudent, pUriInfo,
-          localCache);
+      getBuilder().getAdmissionStudentBuilder(jsonObject, admissionStudent, pUriInfo, localCache);
       children.add(jsonObject);
     }
     object.add("entries", children);

@@ -48,8 +48,9 @@ public class PersistentAdmissionCertificatesOfStudentDao extends
   public List<AdmissionCertificatesOfStudent> getStudentsSavedCertificateLists(int pSemesterId,
       String pReceiptId) {
     String query =
-        "select * from ALL_CERTIFICATES_OF_STUDENTS WHERE SEMESTER_ID=? AND RECEIPT_ID=?";
-    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pReceiptId}, new RoleRowMapper());
+        "select c.semester_id, c.receipt_id, c.certificate_id, a.certificate_name, a.certificate_type from all_types_of_certificates a, all_certificates_of_students c where a.certificate_id = c.certificate_id and SEMESTER_ID=? and RECEIPT_ID=?";
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pReceiptId},
+        new CustomRoleRowMapper());
   }
 
   class RoleRowMapper implements RowMapper<AdmissionCertificatesOfStudent> {
@@ -61,6 +62,21 @@ public class PersistentAdmissionCertificatesOfStudentDao extends
       studentsCertificate.setSemesterId(resultSet.getInt("semester_id"));
       studentsCertificate.setReceiptId(resultSet.getString("receipt_id"));
       studentsCertificate.setCertificateId(resultSet.getInt("certificate_id"));
+      return studentsCertificate;
+    }
+  }
+
+  class CustomRoleRowMapper implements RowMapper<AdmissionCertificatesOfStudent> {
+
+    @Override
+    public AdmissionCertificatesOfStudent mapRow(ResultSet resultSet, int i) throws SQLException {
+      MutableAdmissionCertificatesOfStudent studentsCertificate =
+          new PersistentAdmissionCertificatesOfStudent();
+      studentsCertificate.setSemesterId(resultSet.getInt("semester_id"));
+      studentsCertificate.setReceiptId(resultSet.getString("receipt_id"));
+      studentsCertificate.setCertificateId(resultSet.getInt("certificate_id"));
+      studentsCertificate.setCertificateName(resultSet.getString("certificate_name"));
+      studentsCertificate.setCertificateType(resultSet.getString("certificate_type"));
       return studentsCertificate;
     }
   }

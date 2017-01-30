@@ -80,6 +80,8 @@ public interface MutableAdmissionStudent extends AdmissionStudent, Mutable,
 
   void setVerificationStatus(final int pVerificationStatus);
 
+  void setUndertakenDeadline(final String pDeadline);
+
   void setProgramByMerit(final Program pProgramByMerit);
 
   void setProgramIdByMerit(final int pProgramIdByMerit);

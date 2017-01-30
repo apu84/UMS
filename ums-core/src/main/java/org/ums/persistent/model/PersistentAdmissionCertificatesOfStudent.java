@@ -22,6 +22,8 @@ public class PersistentAdmissionCertificatesOfStudent implements
   private String mReceiptId;
   private int mCertificateId;
   private String mLastModified;
+  private String mCertificateName;
+  private String mCertificateType;
 
   public PersistentAdmissionCertificatesOfStudent() {
 
@@ -33,6 +35,8 @@ public class PersistentAdmissionCertificatesOfStudent implements
     mSemesterId = pAdmissionStudentesCertificateHistory.getSemesterId();
     mReceiptId = pAdmissionStudentesCertificateHistory.getReceiptId();
     mCertificateId = pAdmissionStudentesCertificateHistory.getCertificateId();
+    mCertificateName = pAdmissionStudentesCertificateHistory.getCertificateName();
+    mCertificateType = pAdmissionStudentesCertificateHistory.getCertificateType();
   }
 
   @Override
@@ -96,6 +100,16 @@ public class PersistentAdmissionCertificatesOfStudent implements
   }
 
   @Override
+  public String getCertificateName() {
+    return mCertificateName;
+  }
+
+  @Override
+  public String getCertificateType() {
+    return mCertificateType;
+  }
+
+  @Override
   public void setRowId(int pRowId) {
     mRowId = pRowId;
   }
@@ -113,6 +127,16 @@ public class PersistentAdmissionCertificatesOfStudent implements
   @Override
   public void setCertificateId(int pCertificateId) {
     mCertificateId = pCertificateId;
+  }
+
+  @Override
+  public void setCertificateName(String pCertificateName) {
+    mCertificateName = pCertificateName;
+  }
+
+  @Override
+  public void setCertificateType(String pCertificateType) {
+    mCertificateType = pCertificateType;
   }
 
 }
