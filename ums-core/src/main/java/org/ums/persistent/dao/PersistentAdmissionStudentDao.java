@@ -301,7 +301,7 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
         .getId(), student.getReceiptId());
   }
 
-  public List<AdmissionStudent> getAllNewCandidates(String pProgramType, int pSemesterId) {
+  public List<AdmissionStudent> getAllCandidates(ProgramType pProgramType, int pSemesterId) {
     String query =
         SELECT_ONE + " WHERE PROGRAM_TYPE=? AND SEMESTER_ID=? ORDER BY to_number(RECEIPT_ID)";
     return mJdbcTemplate.query(query, new Object[] {pProgramType.getValue(), pSemesterId},
@@ -361,6 +361,7 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
       student.setDeadline(pResultSet.getString("deadline"));
       student.setVerificationStatus(pResultSet.getInt("verification_status"));
       student.setMigratedFrom(pResultSet.getString("migrated_from"));
+      student.setUndertakenDeadline(pResultSet.getString("undertaken_deadline"));
       return student;
     }
   }

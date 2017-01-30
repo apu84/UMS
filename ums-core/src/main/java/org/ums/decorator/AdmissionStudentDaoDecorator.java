@@ -79,19 +79,12 @@ public class AdmissionStudentDaoDecorator extends
   @Override
   public List<AdmissionStudent> getAllCandidates(ProgramType pProgramType, int pSemesterId) {
     return getManager().getAllCandidates(pProgramType, pSemesterId);
-  public int setVerificationStatus(final MutableAdmissionStudent pStudent) {
-    return getManager().setVerificationStatus(pStudent);
   }
 
   @Override
   public int updateStudentsAllocatedProgram(AdmissionStudent pAdmissionStudent,
       MigrationStatus pMigrationStatus) {
     return getManager().updateStudentsAllocatedProgram(pAdmissionStudent, pMigrationStatus);
-  }
-
-  @Override
-  public List<AdmissionStudent> getAllNewCandidates(String pProgramType, int pSemesterId) {
-    return getManager().getAllNewCandidates(pProgramType, pSemesterId);
   }
 
   @Override

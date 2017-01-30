@@ -47,10 +47,6 @@ public interface AdmissionStudentManager extends
 
   int setVerificationStatusAndUndertakenDate(final MutableAdmissionStudent pStudent);
 
-  // int setVerificationStatus(final MutableAdmissionStudent pStudent);
-
-  // int setUndertakenDate(final MutableAdmissionStudent pStudent);
-
   List<AdmissionStudent> getAllCandidates(final ProgramType pProgramType, final int pSemesterId);
 
   List<AdmissionStudent> getNewStudentByReceiptId(final int pSemesterId, final String receiptId);
