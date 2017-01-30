@@ -8,7 +8,7 @@ public class CacheUtil {
     return pClass.getName() + "-" + pId;
   }
 
-  public static <T>void addReferrer(List<T> keyList,T pReferrer){
+  public static <T> void addReferrer(List<T> keyList, T pReferrer) {
     if(keyList == null) {
       keyList = new ArrayList<>();
       keyList.add(pReferrer);

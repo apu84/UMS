@@ -97,7 +97,7 @@ public class LocalCacheManager<R extends LastModifier, I> implements CacheManage
   public void putReferrerKey(String pReferrer, String pReferred) {
     mReferredKeyMap.put(pReferrer, pReferred);
     List<String> keyList = mInverseReferredKeyMap.get(pReferred);
-    CacheUtil.addReferrer(keyList,pReferrer);
+    CacheUtil.addReferrer(keyList, pReferrer);
     mInverseReferredKeyMap.put(pReferred, keyList);
   }
 

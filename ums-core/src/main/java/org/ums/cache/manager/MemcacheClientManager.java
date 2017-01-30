@@ -84,7 +84,7 @@ public class MemcacheClientManager<R extends LastModifier, I> implements CacheMa
   public void putReferrerKey(String pReferrer, String pReferred) {
     mObjectCache.set(pReferrer, 0, pReferred);
     List<String> keyList = (List<String>) mObjectCache.get(getReferenceKey(pReferred));
-    CacheUtil.addReferrer(keyList,pReferrer);
+    CacheUtil.addReferrer(keyList, pReferrer);
     mObjectCache.set(getReferenceKey(pReferred), 0, keyList);
   }
 

@@ -11,6 +11,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 @Component
 @Path("/academic/course")
@@ -55,8 +56,11 @@ public class CourseResource extends MutableCourseResource {
       final @PathParam("semester-id") int pSemesterId,
       final @PathParam("program-type") int pProgramType, final @PathParam("year") int pYear,
       final @PathParam("semester") int pSemester) {
-    return mResourceHelper.getCourses(pSemesterId, pProgramType, pYear, pSemester, pRequest,
-        mUriInfo);
+    /*
+     * return mResourceHelper.getCourses(pSemesterId, pProgramType, pYear, pSemester, pRequest,
+     * mUriInfo);
+     */
+    return mResourceHelper.getCourses(pSemesterId, pYear, pSemester, pRequest, mUriInfo);
   }
 
   @GET
