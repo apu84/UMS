@@ -40,8 +40,4 @@ public class AdmissionCertificatesOfStudentCache
     return mCacheManager;
   }
 
-  @Override
-  protected String getCacheKey(Integer pId) {
-    return CacheUtil.getCacheKey(AdmissionCertificatesOfStudent.class, pId);
-  }
 }

@@ -45,5 +45,6 @@ module ums{
     programNameByTransfer:string;
     deadline:string;
     undertakeDeadLine: string;
+    migrationStatus:number;
   }
 }

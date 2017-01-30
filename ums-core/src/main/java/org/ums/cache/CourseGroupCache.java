@@ -25,8 +25,4 @@ public class CourseGroupCache extends
     return getManager().getBySyllabus(pCourseGroupId, pSyllabusId);
   }
 
-  @Override
-  protected String getCacheKey(Integer pId) {
-    return CacheUtil.getCacheKey(CourseGroup.class, pId);
-  }
 }

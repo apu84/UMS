@@ -43,7 +43,7 @@ public class UserResourceHelper extends ResourceHelper<User, MutableUser, String
   }
 
   @Override
-  protected String getEtag(User pReadonly) {
+  protected String getETag(User pReadonly) {
     return "";
   }
 

@@ -25,11 +25,6 @@ public class PermissionCache extends
   }
 
   @Override
-  protected String getCacheKey(Integer pId) {
-    return CacheUtil.getCacheKey(Permission.class, pId);
-  }
-
-  @Override
   public List<Permission> getPermissionByRole(Role pRole){
     String cacheKey = getCacheKey(Permission.class.toString(), pRole.getId());
     return cachedList(cacheKey, () -> getManager().getPermissionByRole(pRole));

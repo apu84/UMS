@@ -26,11 +26,6 @@ public class SemesterSyllabusMapCache
   }
 
   @Override
-  protected String getCacheKey(Integer pId) {
-    return CacheUtil.getCacheKey(SemesterSyllabusMap.class, pId);
-  }
-
-  @Override
   public List<SemesterSyllabusMap> getMapsByProgramSemester(Integer pProgramId, Integer pSemesterId) {
     return getManager().getMapsByProgramSemester(pProgramId, pSemesterId);
   }

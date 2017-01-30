@@ -19,8 +19,4 @@ public class ProgramCache extends ContentCache<Program, MutableProgram, Integer,
     return mCacheManager;
   }
 
-  @Override
-  protected String getCacheKey(Integer pId) {
-    return CacheUtil.getCacheKey(Program.class, pId);
-  }
 }

@@ -55,7 +55,7 @@ public class ParameterResourceHelper extends ResourceHelper<Parameter, MutablePa
   }
 
   @Override
-  public String getEtag(Parameter pReadonly) {
+  public String getETag(Parameter pReadonly) {
     return null;
   }
 }

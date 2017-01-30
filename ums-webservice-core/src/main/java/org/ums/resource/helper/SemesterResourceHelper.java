@@ -55,7 +55,7 @@ public class SemesterResourceHelper extends ResourceHelper<Semester, MutableSeme
   }
 
   @Override
-  protected String getEtag(Semester pReadonly) {
+  protected String getETag(Semester pReadonly) {
     return pReadonly.getLastModified();
   }
 

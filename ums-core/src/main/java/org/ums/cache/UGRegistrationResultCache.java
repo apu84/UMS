@@ -26,11 +26,6 @@ public class UGRegistrationResultCache
   }
 
   @Override
-  protected String getCacheKey(Integer pId) {
-    return CacheUtil.getCacheKey(UGRegistrationResult.class, pId);
-  }
-
-  @Override
   public List<UGRegistrationResult> getBySemesterAndExamTYpeAndGrade(int pSemesterId,
       int pExamType, String pGrade) {
     return getManager().getBySemesterAndExamTYpeAndGrade(pSemesterId, pExamType, pGrade);

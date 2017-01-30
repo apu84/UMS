@@ -21,7 +21,7 @@ public class PersistentFee implements MutableFee {
     sFeeManager = applicationContext.getBean("feeManager", FeeManager.class);
     sFeeCategoryManager =
         applicationContext.getBean("feeCategoryManager", FeeCategoryManager.class);
-    sSemesterManager = applicationContext.getBean("semesterManab=ger", SemesterManager.class);
+    sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
     sProgramTypeManager =
         applicationContext.getBean("programTypeManager", ProgramTypeManager.class);
     sFacultyManager = applicationContext.getBean("facultyManager", FacultyManager.class);

@@ -27,11 +27,6 @@ public class PaymentInfoCache extends
   }
 
   @Override
-  protected String getCacheKey(Integer pId) {
-    return CacheUtil.getCacheKey(PaymentInfo.class, pId);
-  }
-
-  @Override
   public List<PaymentInfo> getPaymentInfo(String pReferenceId, int pSemesterId) {
     return getManager().getPaymentInfo(pReferenceId, pSemesterId);
   }

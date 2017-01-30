@@ -24,11 +24,6 @@ public class SemesterCache extends
   }
 
   @Override
-  protected String getCacheKey(Integer pId) {
-    return CacheUtil.getCacheKey(Semester.class, pId);
-  }
-
-  @Override
   public List<Semester> getSemesters(Integer pProgramType, Integer pLimit) {
     return getManager().getSemesters(pProgramType, pLimit);
   }

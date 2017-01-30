@@ -26,7 +26,7 @@ public class PersistentPaymentInfo implements MutablePaymentInfo {
         applicationContext.getBean("admissionStudentManager", AdmissionStudentManager.class);
     sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
     sPaymentInfoManager =
-        applicationContext.getBean("admissionPaymentManager", PaymentInfoManager.class);
+        applicationContext.getBean("paymentInfoManager", PaymentInfoManager.class);
   }
 
   private int mId;

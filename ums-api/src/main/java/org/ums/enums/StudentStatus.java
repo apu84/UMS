@@ -9,7 +9,8 @@ import java.util.Map;
  */
 public enum StudentStatus {
   PASSED(0, "Passed"),
-  ACTIVE(1, "Active");
+  ACTIVE(1, "Active"),
+  MIGRATED(2, "Migrated");
 
   private String label;
   private int id;

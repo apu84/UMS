@@ -35,8 +35,4 @@ public class AdmissionMeritListCache extends
     return mCacheManager;
   }
 
-  @Override
-  protected String getCacheKey(Integer pId) {
-    return CacheUtil.getCacheKey(AdmissionMeritList.class, pId);
-  }
 }

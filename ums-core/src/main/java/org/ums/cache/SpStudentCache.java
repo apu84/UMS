@@ -25,11 +25,6 @@ public class SpStudentCache extends
   }
 
   @Override
-  protected String getCacheKey(String pId) {
-    return CacheUtil.getCacheKey(SpStudent.class, pId);
-  }
-
-  @Override
   public List<SpStudent> getStudentByProgramYearSemesterStatus(int pProgramId, int pYear,
       int pSemester, int pStatus) {
     return getManager()

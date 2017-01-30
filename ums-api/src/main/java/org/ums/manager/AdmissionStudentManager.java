@@ -3,6 +3,7 @@ package org.ums.manager;
 import org.ums.domain.model.immutable.AdmissionStudent;
 import org.ums.domain.model.mutable.MutableAdmissionStudent;
 import org.ums.enums.DepartmentSelectionType;
+import org.ums.enums.MigrationStatus;
 import org.ums.enums.ProgramType;
 import org.ums.enums.QuotaType;
 
@@ -25,6 +26,9 @@ public interface AdmissionStudentManager extends
 
   List<AdmissionStudent> getMeritList(final int pSemesterId, final QuotaType pQuotaType,
       String pUnit, ProgramType pProgramType);
+
+  int updateStudentsAllocatedProgram(final AdmissionStudent pAdmissionStudent,
+      final MigrationStatus pMigrationStatus);
 
   AdmissionStudent getAdmissionStudent(final int pSemesterId, ProgramType pProgramType,
       String pReceiptId);

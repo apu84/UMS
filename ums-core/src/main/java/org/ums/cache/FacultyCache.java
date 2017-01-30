@@ -23,8 +23,4 @@ public class FacultyCache extends ContentCache<Faculty, MutableFaculty, Integer,
     return mCacheManager;
   }
 
-  @Override
-  protected String getCacheKey(Integer pId) {
-    return CacheUtil.getCacheKey(Faculty.class, pId);
-  }
 }

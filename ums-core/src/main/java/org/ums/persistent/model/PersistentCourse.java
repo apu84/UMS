@@ -203,11 +203,6 @@ public class PersistentCourse implements MutableCourse {
   }
 
   @Override
-  public MutableCourse edit() {
-    return new PersistentCourse(this);
-  }
-
-  @Override
   public String getLastModified() {
     return mLastModified;
   }
@@ -270,6 +265,11 @@ public class PersistentCourse implements MutableCourse {
     else {
       sCourseManager.create(this);
     }
+  }
+
+  @Override
+  public MutableCourse edit() {
+    return new PersistentCourse(this);
   }
 
   @Override

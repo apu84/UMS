@@ -27,11 +27,6 @@ public class SubGroupCCICache extends
   }
 
   @Override
-  protected String getCacheKey(Integer pId) {
-    return CacheUtil.getCacheKey(SubGroupCCI.class, pId);
-  }
-
-  @Override
   public List<SubGroupCCI> getBySemesterAndExamDate(Integer pSemesterId, String pExamDate) {
     return getManager().getBySemesterAndExamDate(pSemesterId, pExamDate);
   }

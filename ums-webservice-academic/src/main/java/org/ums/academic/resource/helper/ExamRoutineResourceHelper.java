@@ -59,7 +59,7 @@ public class ExamRoutineResourceHelper extends
   }
 
   @Override
-  protected String getEtag(ExamRoutine pReadonly) {
+  protected String getETag(ExamRoutine pReadonly) {
     return null;
   }
 

@@ -86,7 +86,7 @@ public class SpStudentResourceHelper extends ResourceHelper<SpStudent, MutableSp
   }
 
   @Override
-  public String getEtag(SpStudent pReadonly) {
+  public String getETag(SpStudent pReadonly) {
     return pReadonly.getLastModified();
   }
 }

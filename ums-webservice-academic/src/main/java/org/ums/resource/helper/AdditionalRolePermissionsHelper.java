@@ -59,7 +59,7 @@ public class AdditionalRolePermissionsHelper extends
   }
 
   @Override
-  protected String getEtag(AdditionalRolePermissions pReadonly) {
+  protected String getETag(AdditionalRolePermissions pReadonly) {
     return pReadonly.getLastModified();
   }
 

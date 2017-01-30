@@ -1,5 +1,6 @@
 package org.ums.cache;
 
+import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -10,8 +11,10 @@ import org.springframework.util.StringUtils;
 import org.ums.decorator.ContentDaoDecorator;
 import org.ums.domain.model.common.Identifier;
 import org.ums.domain.model.common.LastModifier;
+import org.ums.domain.model.immutable.Course;
 import org.ums.manager.CacheManager;
 import org.ums.manager.ContentManager;
+import org.ums.util.CacheUtil;
 
 public abstract class ContentCache<R extends Identifier<I> & LastModifier, M extends R, I, C extends ContentManager<R, M, I>>
     extends ContentDaoDecorator<R, M, I, C> {
@@ -116,7 +119,14 @@ public abstract class ContentCache<R extends Identifier<I> & LastModifier, M ext
 
   protected abstract CacheManager<R, I> getCacheManager();
 
-  protected abstract String getCacheKey(I pId);
+  protected String getCacheKey(I pId) {
+    return CacheUtil.getCacheKey(getClassOfR(), pId);
+  }
+
+  private Class<R> getClassOfR() {
+    ParameterizedType superclass = (ParameterizedType) getClass().getGenericSuperclass();
+    return (Class<R>) superclass.getActualTypeArguments()[0];
+  }
 
   protected String getCacheKey(final String pEntityName, final Object... args) {
     StringBuilder cacheKeyBuilder = new StringBuilder();

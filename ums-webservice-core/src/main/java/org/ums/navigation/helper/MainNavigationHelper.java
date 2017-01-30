@@ -54,7 +54,7 @@ public class MainNavigationHelper extends ResourceHelper<Navigation, MutableNavi
   }
 
   @Override
-  protected String getEtag(Navigation pReadonly) {
+  protected String getETag(Navigation pReadonly) {
     return pReadonly.getLastModified();
   }
 

@@ -246,7 +246,7 @@ public class ApplicationCCIResourceHelper extends
   }
 
   @Override
-  protected String getEtag(ApplicationCCI pReadonly) {
+  protected String getETag(ApplicationCCI pReadonly) {
     return pReadonly.getApplicationDate();
   }
 }

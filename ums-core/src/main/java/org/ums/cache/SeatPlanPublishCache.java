@@ -26,11 +26,6 @@ public class SeatPlanPublishCache extends
   }
 
   @Override
-  protected String getCacheKey(Integer pId) {
-    return CacheUtil.getCacheKey(SeatPlanPublish.class, pId);
-  }
-
-  @Override
   public List<SeatPlanPublish> getBySemester(Integer pSemesterId) {
     return getManager().getBySemester(pSemesterId);
   }

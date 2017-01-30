@@ -27,11 +27,6 @@ public class SeatPlanGroupCache extends
   }
 
   @Override
-  protected String getCacheKey(Integer pId) {
-    return CacheUtil.getCacheKey(SeatPlanGroup.class, pId);
-  }
-
-  @Override
   public List<SeatPlanGroup> getGroupBySemester(int pSemesterId, int pExamType) {
     return getManager().getGroupBySemester(pSemesterId, pExamType);
   }

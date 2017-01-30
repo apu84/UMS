@@ -48,7 +48,7 @@ public class GradeSheetResourceHelper extends
   }
 
   @Override
-  protected String getEtag(UGRegistrationResult pReadonly) {
+  protected String getETag(UGRegistrationResult pReadonly) {
     return pReadonly.getLastModified();
   }
 

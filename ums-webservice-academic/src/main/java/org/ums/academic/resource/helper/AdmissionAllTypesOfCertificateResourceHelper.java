@@ -73,7 +73,7 @@ public class AdmissionAllTypesOfCertificateResourceHelper extends
   }
 
   @Override
-  protected String getEtag(AdmissionAllTypesOfCertificate pReadonly) {
+  protected String getETag(AdmissionAllTypesOfCertificate pReadonly) {
     return pReadonly.getLastModified();
   }
 }

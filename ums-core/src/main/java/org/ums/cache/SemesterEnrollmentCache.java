@@ -23,11 +23,6 @@ public class SemesterEnrollmentCache extends
   }
 
   @Override
-  protected String getCacheKey(Integer pId) {
-    return CacheUtil.getCacheKey(SemesterEnrollment.class, pId);
-  }
-
-  @Override
   public List<SemesterEnrollment> getEnrollmentStatus(SemesterEnrollment.Type pType,
       Integer pProgramId, Integer pSemesterId) {
     return getManager().getEnrollmentStatus(pType, pProgramId, pSemesterId);

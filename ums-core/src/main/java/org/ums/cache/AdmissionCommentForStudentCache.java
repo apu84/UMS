@@ -36,8 +36,4 @@ public class AdmissionCommentForStudentCache
     return mCacheManager;
   }
 
-  @Override
-  protected String getCacheKey(Integer pId) {
-    return CacheUtil.getCacheKey(AdmissionCommentForStudent.class, pId);
-  }
 }

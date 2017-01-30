@@ -42,7 +42,7 @@ public class MarksSubmissionStatusResourceHelper extends
   }
 
   @Override
-  protected String getEtag(MarksSubmissionStatus pReadonly) {
+  protected String getETag(MarksSubmissionStatus pReadonly) {
     return pReadonly.getLastModified();
   }
 

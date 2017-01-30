@@ -27,11 +27,6 @@ public class SemesterWithdrawalCache extends
   }
 
   @Override
-  protected String getCacheKey(Integer pId) {
-    return CacheUtil.getCacheKey(SemesterWithdrawal.class, pId);
-  }
-
-  @Override
   public List<SemesterWithdrawal> getByDeptForEmployee(String deptId) {
     return getManager().getByDeptForEmployee(deptId);
   }

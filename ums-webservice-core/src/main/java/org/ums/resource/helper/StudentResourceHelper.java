@@ -195,7 +195,7 @@ public class StudentResourceHelper extends ResourceHelper<Student, MutableStuden
   }
 
   @Override
-  protected String getEtag(Student pReadonly) {
+  protected String getETag(Student pReadonly) {
     return pReadonly.getLastModified();
   }
 }

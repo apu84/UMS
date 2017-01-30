@@ -103,7 +103,7 @@ public class SubGroupCCIResourceHelper extends
   }
 
   @Override
-  protected String getEtag(SubGroupCCI pReadonly) {
+  protected String getETag(SubGroupCCI pReadonly) {
     return pReadonly.getLastModified();
   }
 }

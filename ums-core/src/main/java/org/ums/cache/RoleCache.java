@@ -19,8 +19,4 @@ public class RoleCache extends ContentCache<Role, MutableRole, Integer, RoleMana
     return mCacheManager;
   }
 
-  @Override
-  protected String getCacheKey(Integer pId) {
-    return CacheUtil.getCacheKey(Role.class, pId);
-  }
 }

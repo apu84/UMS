@@ -95,7 +95,7 @@ public class UGRegistrationResultResourceHelper extends
   }
 
   @Override
-  protected String getEtag(UGRegistrationResult pReadonly) {
+  protected String getETag(UGRegistrationResult pReadonly) {
     return "1";
   }
 }

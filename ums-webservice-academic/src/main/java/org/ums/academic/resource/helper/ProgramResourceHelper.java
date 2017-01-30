@@ -63,7 +63,7 @@ public class ProgramResourceHelper extends ResourceHelper<Program, MutableProgra
   }
 
   @Override
-  protected String getEtag(Program pReadonly) {
+  protected String getETag(Program pReadonly) {
     return "";
   }
 }

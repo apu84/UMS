@@ -41,9 +41,6 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
   private ProgramManager mProgramManager;
 
   @Autowired
-  private DepartmentManager mDepartmentManager;
-
-  @Autowired
   private CourseBuilder mBuilder;
 
   @Override
@@ -73,8 +70,8 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
   }
 
   @Override
-  protected String getEtag(Course pReadonly) {
-    return "";
+  protected String getETag(Course pReadonly) {
+    return pReadonly.getLastModified();
   }
 
   /*
@@ -144,7 +141,7 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
     return buildCourse(courses,pUriInfo);
   }
 
-  public JsonObject getCourses(final Integer pSemesterId, final int pProgramType,final int pYear,final int pSemester, final Request pRequest, final UriInfo pUriInfo){
+  public JsonObject getCourses(final Integer pSemesterId, final int pYear, final int pSemester, final Request pRequest, final UriInfo pUriInfo){
     String userId = SecurityUtils.getSubject().getPrincipal().toString();
     User user = mUserManager.get(userId);
     String employeeId = user.getEmployeeId();

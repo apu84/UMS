@@ -432,7 +432,7 @@ module ums {
       complete_json["serial"] = Number($("#serial_0"+column).val());
       complete_json["course"] =this.$scope.selectedCourse.courseId;
       complete_json["section"] = this.$scope.selectedCourse.section;
-      complete_json["semester"] =  this.$scope.selectedCourse.semester;
+      complete_json["semester"] =  Number(this.$scope.selectedCourse.semester);
       complete_json["id"] = dateObject.id+'';
       return complete_json;
     }

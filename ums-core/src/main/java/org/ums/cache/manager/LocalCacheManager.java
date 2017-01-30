@@ -1,8 +1,9 @@
-package org.ums.cache;
+package org.ums.cache.manager;
 
 import org.springframework.stereotype.Component;
 import org.ums.domain.model.common.LastModifier;
 import org.ums.manager.CacheManager;
+import org.ums.util.CacheUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -96,17 +97,7 @@ public class LocalCacheManager<R extends LastModifier, I> implements CacheManage
   public void putReferrerKey(String pReferrer, String pReferred) {
     mReferredKeyMap.put(pReferrer, pReferred);
     List<String> keyList = mInverseReferredKeyMap.get(pReferred);
-
-    if(keyList == null) {
-      keyList = new ArrayList<>();
-      keyList.add(pReferrer);
-    }
-    else {
-      if(!keyList.contains(pReferrer)) {
-        keyList.add(pReferrer);
-      }
-    }
-
+    CacheUtil.addReferrer(keyList, pReferrer);
     mInverseReferredKeyMap.put(pReferred, keyList);
   }
 

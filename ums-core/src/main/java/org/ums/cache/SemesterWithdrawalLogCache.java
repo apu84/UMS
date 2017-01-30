@@ -26,9 +26,4 @@ public class SemesterWithdrawalLogCache
   protected CacheManager<SemesterWithdrawalLog, Integer> getCacheManager() {
     return mCacheManager;
   }
-
-  @Override
-  protected String getCacheKey(Integer pId) {
-    return CacheUtil.getCacheKey(SemesterWithdrawalLog.class, pId);
-  }
 }

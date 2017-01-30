@@ -91,4 +91,6 @@ public interface MutableAdmissionStudent extends AdmissionStudent, Mutable,
   void setProgramIdByTransfer(final int pProgramIdByTransfer);
 
   void setDeadline(final String pDeadline);
+
+  void setMigratedFrom(final String pMigratedFrom);
 }

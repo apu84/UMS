@@ -35,7 +35,7 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
           + "    ADMISSION_ROLL, MERIT_SL_NO, STUDENT_ID, ALLOCATED_PROGRAM_ID, MIGRATION_STATUS,  "
           + "    LAST_MODIFIED, UNIT, PROGRAM_TYPE, NID, BIRTH_REG,  "
           + "    PASSPORT, PROGRAM_ID_BY_MERIT, PROGRAM_ID_BY_TRANSFER, PRESENT_STATUS, to_char(DEADLINE,'dd/mm/yyyy') deadline,  "
-          + "    VERIFICATION_STATUS, to_char(UNDERTAKEN_DEADLINE,'dd/mm/yyyy') undertaken_deadline from admission_students ";
+          + "    VERIFICATION_STATUS, MIGRATED_FROM, to_char(UNDERTAKEN_DEADLINE,'dd/mm/yyyy') undertaken_deadline from admission_students ";
 
   String SELECT_ONE_TALETALK_DATA =
       "select SEMESTER_ID, RECEIPT_ID, PIN, HSC_BOARD, HSC_ROLL,       "
@@ -139,6 +139,27 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
       return mJdbcTemplate.update(query, pStudent.getProgramByTransfer().getId(), pStudent
           .getSemester().getId(), pStudent.getReceiptId());
     }
+  }
+
+  @Override
+  public int updateStudentsAllocatedProgram(AdmissionStudent pAdmissionStudent,
+      MigrationStatus pMigrationStatus) {
+    if(pMigrationStatus == MigrationStatus.NOT_MIGRATED) {
+      String query =
+          "update ADMISSION_STUDENTS set ALLOCATED_PROGRAM_ID=?, STUDENT_ID=?, MIGRATION_STATUS=? where RECEIPT_ID=? and SEMESTER_ID=? and deadline>=sysdate";
+      return mJdbcTemplate.update(query, pAdmissionStudent.getAllocatedProgram().getId(),
+          pAdmissionStudent.getStudentId(), pMigrationStatus.getId(),
+          pAdmissionStudent.getReceiptId(), pAdmissionStudent.getSemester().getId());
+    }
+    else {
+      String query =
+          "update ADMISSION_STUDENTS set ALLOCATED_PROGRAM_ID=?, STUDENT_ID=?, MIGRATION_STATUS=?,MIGRATED_FROM where RECEIPT_ID=? and SEMESTER_ID=? and deadline>=sysdate";
+      return mJdbcTemplate.update(query, pAdmissionStudent.getAllocatedProgram().getId(),
+          pAdmissionStudent.getStudentId(), pMigrationStatus.getId(), pAdmissionStudent
+              .getMigratedFrom(), pAdmissionStudent.getReceiptId(), pAdmissionStudent.getSemester()
+              .getId());
+    }
+
   }
 
   @Override
@@ -280,23 +301,7 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
         .getId(), student.getReceiptId());
   }
 
-  // public int setVerificationStatus(MutableAdmissionStudent pStudent) {
-  // MutableAdmissionStudent student = pStudent;
-  // String query =
-  // "update admission_students set verification_status=? where program_type=? and semester_id=? and receipt_id=?";
-  // return mJdbcTemplate.update(query, student.getVerificationStatus(), student.getProgramType()
-  // .getValue(), student.getSemester().getId(), student.getReceiptId());
-  // }
-
-  // public int setUndertakenDate(MutableAdmissionStudent pStudent) {
-  // MutableAdmissionStudent student = pStudent;
-  // String query =
-  // "update admission_students set undertaken_deadline=to_date(?,'dd/mm/yyyy') where program_type=? and semester_id=? and receipt_id=?";
-  // return mJdbcTemplate.update(query, student.getUndertakenDate(), student.getProgramType()
-  // .getValue(), student.getSemester().getId(), student.getReceiptId());
-  // }
-
-  public List<AdmissionStudent> getAllCandidates(ProgramType pProgramType, int pSemesterId) {
+  public List<AdmissionStudent> getAllNewCandidates(String pProgramType, int pSemesterId) {
     String query =
         SELECT_ONE + " WHERE PROGRAM_TYPE=? AND SEMESTER_ID=? ORDER BY to_number(RECEIPT_ID)";
     return mJdbcTemplate.query(query, new Object[] {pProgramType.getValue(), pSemesterId},
@@ -341,6 +346,8 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
       student.setMeritSerialNo(pResultSet.getInt("merit_sl_no"));
       student.setStudentId(pResultSet.getString("student_id"));
       student.setAllocatedProgramId(pResultSet.getInt("allocated_program_id"));
+      int migrationStatusS = pResultSet.getInt("migration_status");
+      MigrationStatus mStatus = MigrationStatus.get(migrationStatusS);
       student.setMigrationStatus(MigrationStatus.get(pResultSet.getInt("migration_status")));
       student.setLastModified(pResultSet.getString("last_modified"));
       student.setUnit(pResultSet.getString("unit"));
@@ -353,7 +360,7 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
       student.setPresentStatus(PresentStatus.get(pResultSet.getInt("present_status")));
       student.setDeadline(pResultSet.getString("deadline"));
       student.setVerificationStatus(pResultSet.getInt("verification_status"));
-      student.setUndertakenDeadline(pResultSet.getString("undertaken_deadline"));
+      student.setMigratedFrom(pResultSet.getString("migrated_from"));
       return student;
     }
   }

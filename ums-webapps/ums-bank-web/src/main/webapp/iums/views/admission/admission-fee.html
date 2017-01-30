@@ -11,7 +11,7 @@
         border:1px solid grey;
         color:#4d4b4b;
         font-size:90%;
-        text-align:center;
+        text-align:left;
         width: 60%;
         font-weight: bold;
     }
@@ -73,8 +73,113 @@
             <div class="panel-heading">Taletalk-admission Data<span
                     class="subtitle"></span></div>
             <div class="panel-body shadowPanel"   style="min-height: 490px;">
-
                 <div class="row">
+                    <div class="col-md-4">
+                        <fieldset>
+                            <legend>Student Info</legend>
+
+                            <div class="input-group">
+                                <span class="input-group-addon">Receipt Id</span>
+                                <input id="receiptId" type="text" class="form-control" name="receiptId" data-ng-model="receiptId" placeholder="Insert Receipt Id Here">
+                                <span class="input-group-btn">
+                                <button class="btn btn-default" data-ng-click="searchByReceiptId(receiptId)"><i class="fa fa-search" aria-hidden="true"></i></button>
+                            </span>
+                            </div>
+                            <br>
+                            <table class="table" >
+                                <tbody>
+                                <tr>
+                                    <td >Name</td>
+                                    <td >: <b>{{admissionStudent.studentName}}</b></td>
+                                </tr>
+                                <tr>
+                                    <td >Receipt Id</td>
+                                    <td>: <b>{{admissionStudent.receiptId}}</b></td>
+                                </tr>
+                                <tr>
+                                    <td >Unit</td>
+                                    <td>: <b>{{admissionStudent.unit}}</b></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </fieldset>
+
+                    </div>
+                    <div class="col-md-8">
+                        <fieldset>
+                            <legend>Payment Info</legend>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" >Payment Mode</label>
+                                <div class="col-md-8">
+                                    <select
+                                            class="form-control required"
+                                            name="paymentMode"
+                                            id="paymentMode"
+                                            data-ng-options="paymentMode.name for paymentMode in paymentModes track by paymentMode.id"
+                                            data-ng-model="paymentMode" data-ng-change="getSemesters()">
+                                    </select>
+                                </div>
+                            </div>
+                            <br>
+                            <br>
+                            <table class="table" style="padding-top: 3%;">
+                                <tbody>
+                                <tr>
+                                    <td data-ng-if="showAdmissionFeeSection==true">
+                                        Admission fee<br>
+                                        Registration fee<br>
+                                        Tuition fee<br>
+                                        Establishment fee<br>
+                                        Laboratory fe
+                                    </td>
+                                    <td data-ng-if="showMigrationFeeSection==true">
+                                        <br>
+                                        <br>
+                                        Migration fee
+                                        <br>
+                                        <br>
+                                    </td>
+                                    <td align="center">
+                                        <p style="font-size: 300%">}</p>
+                                    </td>
+                                    <td align="center">
+                                        <br>
+                                        <div data-ng-if="admissionStudent.unit==='BBA'">
+                                            <b>Tk.</b><br>
+                                            <b>80,360/-</b>
+                                        </div>
+                                        <div data-ng-if="admissionStudent.unit==='ENGINEERING'">
+                                            <b>Tk.</b><br>
+                                            <b>1,04,800/-</b>
+                                        </div>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td align="center"><b>Total</b></td>
+                                    <td></td>
+                                    <td align="center" colspan="1">
+                                        <div data-ng-if="admissionStudent.unit==='BBA'">
+                                            <b>Tk. 80,360/-</b>
+                                        </div>
+                                        <div data-ng-if="admissionStudent.unit==='ENGINEERING'">
+                                            <b>Tk. 1,04,800/-</b>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <br>
+                            <div class="col-md-12">
+                                <div class="well" align="right">
+                                    <button class="btn btn-danger" data-ng-disabled="disableButton" data-ng-click="save()">Submit Payment</button>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+
+                <!--<div class="row">
                     <div class="col-md-4"></div>
                     <div class="col-md-4">
                         <div class="input-group">
@@ -205,7 +310,7 @@
                         </div>
                     </div>
 
-                </div>
+                </div>-->
 
             </div>
         </div>

@@ -22,11 +22,6 @@ public class BearerAccessTokenCache extends
   }
 
   @Override
-  protected String getCacheKey(String pId) {
-    return CacheUtil.getCacheKey(BearerAccessToken.class, pId);
-  }
-
-  @Override
   public BearerAccessToken getByUser(String userId) {
     return getManager().getByUser(userId);
   }

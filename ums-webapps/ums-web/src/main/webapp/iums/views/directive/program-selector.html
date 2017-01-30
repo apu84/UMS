@@ -27,7 +27,7 @@
 <div class="form-group" data-ng-if="model.isSemesterEnabled() && model.fieldView().semester !== model.fieldViewTypes()['hidden']">
   <label class="col-md-4 control-label">Semester</label>
   <div class="col-md-8">
-    <select name="semester" id="semester_id" class="form-control required" data-ng-model="model.semesterId">
+    <select name="semester" id="semester_id" class="form-control required" data-ng-model="model.semesterId" data-convert-to-number>
       <option data-ng-repeat="semester in model.getSemesters()" value="{{semester.id}}">
         {{semester.name}}
       </option>

@@ -20,8 +20,4 @@ public class ProgramTypeCache extends
     return mCacheManager;
   }
 
-  @Override
-  protected String getCacheKey(Integer pId) {
-    return CacheUtil.getCacheKey(ProgramType.class, pId);
-  }
 }

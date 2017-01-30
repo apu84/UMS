@@ -138,7 +138,7 @@ public class SubGroupResourceHelper extends ResourceHelper<SubGroup, MutableSubG
   }
 
   @Override
-  protected String getEtag(SubGroup pReadonly) {
+  protected String getETag(SubGroup pReadonly) {
     return pReadonly.getLastModified();
   }
 }

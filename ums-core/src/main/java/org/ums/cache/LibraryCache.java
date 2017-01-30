@@ -22,11 +22,6 @@ public class LibraryCache extends ContentCache<Library, MutableLibrary, Integer,
   }
 
   @Override
-  protected String getCacheKey(Integer pId) {
-    return CacheUtil.getCacheKey(Library.class, pId);
-  }
-
-  @Override
   public List<Library> getLibraryBooks(final String pbook) throws Exception {
     return getManager().getLibraryBooks(pbook);
   }

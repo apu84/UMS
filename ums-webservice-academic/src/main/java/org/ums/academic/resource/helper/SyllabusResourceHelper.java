@@ -66,7 +66,7 @@ public class SyllabusResourceHelper extends ResourceHelper<Syllabus, MutableSyll
   }
 
   @Override
-  protected String getEtag(Syllabus pReadonly) {
+  protected String getETag(Syllabus pReadonly) {
     return pReadonly.getLastModified();
   }
 }
