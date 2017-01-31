@@ -21,10 +21,10 @@ public class PersistentAdmissionCommentForStudentDao extends AdmissionCommentFor
   }
 
   String INSERT_ONE =
-      "INSERT INTO COMMENTS_FOR_STUDENTS (SEMESTER_ID, RECEIPT_ID, COMMENTS, COMMENTED_ON) VALUES (? ,? ,?, sysdate)";
+      "INSERT INTO ug_adm_ver_comments (SEMESTER_ID, RECEIPT_ID, COMMENTS, COMMENTED_ON) VALUES (? ,? ,?, sysdate)";
 
   String GET_COMMENTS =
-      "SELECT SEMESTER_ID, RECEIPT_ID, COMMENTS, COMMENTED_ON FROM COMMENTS_FOR_STUDENTS ";
+      "SELECT SEMESTER_ID, RECEIPT_ID, COMMENTS, COMMENTED_ON FROM ug_adm_ver_comments ";
 
   public List<AdmissionCommentForStudent> getComments(final int pSemesterId, final String pReceiptId) {
 

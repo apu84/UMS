@@ -22,7 +22,7 @@ public class PersistentAdmissionCertificatesOfStudentDao extends
   }
 
   String INSERT_ONE =
-      "INSERT INTO DB_IUMS.ALL_CERTIFICATES_OF_STUDENTS (SEMESTER_ID, RECEIPT_ID, CERTIFICATE_ID) VALUES (? ,? ,?)";
+      "INSERT INTO DB_IUMS.ug_adm_ver_certificates (SEMESTER_ID, RECEIPT_ID, CERTIFICATE_ID) VALUES (? ,? ,?)";
 
   public int saveAdmissionStudentsCertificates(
       List<MutableAdmissionCertificatesOfStudent> pMutableAdmissionStudentsCertificateHistory) {
@@ -48,7 +48,7 @@ public class PersistentAdmissionCertificatesOfStudentDao extends
   public List<AdmissionCertificatesOfStudent> getStudentsSavedCertificateLists(int pSemesterId,
       String pReceiptId) {
     String query =
-        "select c.semester_id, c.receipt_id, c.certificate_id, a.certificate_name, a.certificate_type from all_types_of_certificates a, all_certificates_of_students c where a.certificate_id = c.certificate_id and SEMESTER_ID=? and RECEIPT_ID=?";
+        "select c.semester_id, c.receipt_id, c.certificate_id, a.certificate_name, a.certificate_type from all_types_of_certificates a, ug_adm_ver_certificates c where a.certificate_id = c.certificate_id and SEMESTER_ID=? and RECEIPT_ID=?";
     return mJdbcTemplate.query(query, new Object[] {pSemesterId, pReceiptId},
         new CustomRoleRowMapper());
   }

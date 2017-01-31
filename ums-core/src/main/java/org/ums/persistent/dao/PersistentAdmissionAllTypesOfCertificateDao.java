@@ -19,7 +19,7 @@ public class PersistentAdmissionAllTypesOfCertificateDao extends
     AdmissionAllTypesOfCertificateDaoDecorator {
 
   static String GET_ALL =
-      "SELECT CERTIFICATE_ID, CERTIFICATE_NAME, CERTIFICATE_TYPE FROM ALL_TYPES_OF_CERTIFICATES ";
+      "SELECT CERTIFICATE_ID, CERTIFICATE_NAME, CERTIFICATE_TYPE FROM ug_adm_certificates ";
 
   private JdbcTemplate mJdbcTemplate;
 
