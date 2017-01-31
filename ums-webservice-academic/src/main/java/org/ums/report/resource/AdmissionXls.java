@@ -65,4 +65,22 @@ public class AdmissionXls {
     };
   }
 
+  @GET
+  @Path("/migrationList")
+  @Produces("application/vnd.ms-excel")
+  public StreamingOutput getMigrationListXlsFormat(final @Context Request pRequest) {
+    return new StreamingOutput() {
+      @Override
+      public void write(OutputStream pOutputStream) throws IOException, WebApplicationException {
+        try {
+          mHelper.getMigrationListXlsFormat(pOutputStream);
+
+        } catch(Exception e) {
+          throw new WebApplicationException(e);
+        }
+
+      }
+    };
+  }
+
 }

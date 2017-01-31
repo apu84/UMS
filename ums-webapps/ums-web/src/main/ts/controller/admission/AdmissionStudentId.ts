@@ -7,6 +7,8 @@ module ums{
     programType:IProgramType;
     admissionStudent: AdmissionStudent;
 
+    showStudentSection: boolean;
+
     getSemesters:Function;
     showMainPanel:Function;
     searchByReceiptId: Function;
@@ -33,6 +35,7 @@ module ums{
 
       $scope.programTypes = appConstants.programType;
       $scope.programType = $scope.programTypes[0];
+      $scope.showStudentSection=false;
 
       $scope.showMainPanel = this.showManePanel.bind(this);
       $scope.searchByReceiptId  = this.searchByReceiptId.bind(this);
@@ -55,10 +58,16 @@ module ums{
     }
 
     private searchByReceiptId(receiptId: string) {
-
+      this.$scope.showStudentSection=false;
       this.admissionStudentService.fetchAdmissionStudentByReceiptId(this.$scope.semester.id, +this.$scope.programType.id, receiptId).then((data) => {
         this.$scope.admissionStudent = <AdmissionStudent>{};
         this.$scope.admissionStudent = data;
+
+        if(this.$scope.admissionStudent.studentId!=null){
+          this.$scope.showStudentSection=true;
+        }else{
+          this.notify.error("The student is not yet admitted");
+        }
 
       });
 

@@ -14,6 +14,8 @@ import org.ums.manager.SemesterManager;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by Monjur-E-Morshed on 14-Dec-16.
@@ -34,7 +36,7 @@ public class AdmissionStudentBuilder implements Builder<AdmissionStudent, Mutabl
   }
 
   public void admissionStudentBuilder(JsonObjectBuilder pBuilder, AdmissionStudent pReadOnly,
-      UriInfo pUriInfo, LocalCache pLocalCache, String type) {
+      UriInfo pUriInfo, LocalCache pLocalCache, String type) throws Exception {
 
     pBuilder.add("id", pReadOnly.getReceiptId());
     pBuilder.add("text", pReadOnly.getReceiptId());
@@ -85,8 +87,28 @@ public class AdmissionStudentBuilder implements Builder<AdmissionStudent, Mutabl
       pBuilder.add("allocatedProgramLongName", pReadOnly.getAllocatedProgram().getLongName());
     }
 
-    if(pReadOnly.getMigrationStatus() != null)
+    if(pReadOnly.getMigrationStatus() != null) {
       pBuilder.add("migrationStatus", pReadOnly.getMigrationStatus().getId());
+
+      SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+      if(pReadOnly.getDeadline() != null) {
+        String dateInString = pReadOnly.getDeadline();
+        Date date = formatter.parse(dateInString);
+        Date current = new Date();
+
+        if(date.equals(current) || date.after(current)) {
+          if(pReadOnly.getMigrationStatus().getId() == MigrationStatus.MIGRATION_ABLE.getId()) {
+            pBuilder.add("migrationDes", "migration-able");
+          }
+          else {
+            pBuilder.add("migrationDes", "migrated");
+          }
+        }
+        else {
+          pBuilder.add("migrationDes", "migration deadline over");
+        }
+      }
+    }
 
     if(pReadOnly.getDeadline() != null) {
       pBuilder.add("deadline", pReadOnly.getDeadline());

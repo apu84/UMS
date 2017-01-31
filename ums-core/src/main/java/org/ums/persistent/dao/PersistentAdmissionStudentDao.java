@@ -195,6 +195,14 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
     return mJdbcTemplate.batchUpdate(query, getMeritListParams(pStudents)).length;
   }
 
+  @Override
+  public int updateAdmissionMigrationStatus(List<MutableAdmissionStudent> pStudents) {
+    String query =
+        "update admission_students set migration_status=? where semester_id=? and receipt_id=?";
+    return mJdbcTemplate.batchUpdate(query,
+        getAdmissionStudentsWithMigrationStatusParams(pStudents)).length;
+  }
+
   private List<Object[]> getAdmissionStudentParams(List<MutableAdmissionStudent> pStudents) {
     List<Object[]> params = new ArrayList<>();
 
@@ -207,6 +215,16 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
           student.getSSCGpa(), student.getHSCGpa(), student.getQuota(), student.getUnit(),
           student.getAdmissionRoll(), student.getMeritSerialNo(), student.getStudentId(),
           student.getAllocatedProgram().getId(), student.getMigrationStatus().getId()});
+    }
+    return params;
+  }
+
+  private List<Object[]> getAdmissionStudentsWithMigrationStatusParams(
+      List<MutableAdmissionStudent> pStudents) {
+    List<Object[]> params = new ArrayList<>();
+    for(AdmissionStudent student : pStudents) {
+      params.add(new Object[] {student.getMigrationStatus().getId(), student.getSemester().getId(),
+          student.getReceiptId()});
     }
     return params;
   }
@@ -242,6 +260,14 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
     String query = SELECT_ONE_TALETALK_DATA;
     return mJdbcTemplate.query(query, new Object[] {pSemesterId, pProgramType.getValue()},
         new AdmissionStudentRowMapperTaletalk());
+  }
+
+  @Override
+  public List<AdmissionStudent> getAdmissionStudent(int pSemesterId,
+      MigrationStatus pMigrationStatus) {
+    String query = SELECT_ONE + " WHERE SEMESTER_ID=? AND MIGRATION_STATUS>=?";
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pMigrationStatus.getId()},
+        new AdmissionStudentRowMapper());
   }
 
   @Override

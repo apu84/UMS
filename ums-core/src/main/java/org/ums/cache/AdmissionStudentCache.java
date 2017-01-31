@@ -8,7 +8,6 @@ import org.ums.enums.ProgramType;
 import org.ums.enums.QuotaType;
 import org.ums.manager.AdmissionStudentManager;
 import org.ums.manager.CacheManager;
-import org.ums.util.CacheUtil;
 
 import java.util.List;
 
@@ -116,5 +115,16 @@ public class AdmissionStudentCache extends
   public int updateStudentsAllocatedProgram(AdmissionStudent pAdmissionStudent,
       MigrationStatus pMigrationStatus) {
     return getManager().updateStudentsAllocatedProgram(pAdmissionStudent, pMigrationStatus);
+  }
+
+  @Override
+  public List<AdmissionStudent> getAdmissionStudent(int pSemesterId,
+      MigrationStatus pMigrationStatus) {
+    return getManager().getAdmissionStudent(pSemesterId, pMigrationStatus);
+  }
+
+  @Override
+  public int updateAdmissionMigrationStatus(List<MutableAdmissionStudent> pStudents) {
+    return getManager().updateAdmissionMigrationStatus(pStudents);
   }
 }

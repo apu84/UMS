@@ -33,6 +33,23 @@ module ums{
       return defer.promise;
     }
 
+    public fetchMigrationData(semesterId:number):ng.IPromise<any>{
+      console.log("in the service");
+      var url="academic/admission/migrationList/semester/"+semesterId;
+      var defer = this.$q.defer();
+
+      this.httpClient.get(url, this.appConstants.mimeTypeJson,
+          (json:any, etag:string)=>{
+            var admissionStudents:any = json.entries;
+            defer.resolve(admissionStudents);
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>)=>{
+            console.error(response);
+          });
+
+      return defer.promise;
+    }
+
     public fetchAdmissionStudentByReceiptId(semesterId:number, programType:number, receiptId:string):ng.IPromise<any>{
       var url="academic/admission/semester/"+semesterId+"/programType/"+programType+"/receiptId/"+receiptId;
       var defer = this.$q.defer();
@@ -131,6 +148,24 @@ module ums{
             console.log(contentType);
             UmsUtil.writeFileContent(data, contentType, fileName);
             console.log("got the file");
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>)=>{
+            console.error(response);
+          },'arraybuffer');
+    }
+
+
+    public downloadMigrationListXlsFile():any{
+
+      var fileName = "migration_list";
+      var contentType:string=UmsUtil.getFileContentType('xls');
+      var url="admission/xlx/migrationList";
+
+      this.httpClient.get(url, contentType,
+          (data:any, etag:string)=>{
+            console.log(data);
+            console.log(contentType);
+            UmsUtil.writeFileContent(data, contentType, fileName);
           },
           (response:ng.IHttpPromiseCallbackArg<any>)=>{
             console.error(response);

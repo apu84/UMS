@@ -69,4 +69,17 @@ public class AdmissionStudentGeneratorImpl implements AdmissionStudentGenerator 
     baos.writeTo(pOutputStream);
   }
 
+  @Override
+  public void createBlankMigrationListUploadFormatFile(OutputStream pOutputStream) throws Exception {
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    Workbook wb = new HSSFWorkbook();
+
+    Sheet sheet = wb.createSheet("Migration List Upload");
+    Row row = sheet.createRow((short) 0);
+    row.createCell(0).setCellValue("receipt_id");
+
+    wb.write(pOutputStream);
+
+    baos.writeTo(pOutputStream);
+  }
 }

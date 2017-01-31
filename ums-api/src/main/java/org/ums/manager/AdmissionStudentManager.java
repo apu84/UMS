@@ -27,6 +27,8 @@ public interface AdmissionStudentManager extends
   List<AdmissionStudent> getMeritList(final int pSemesterId, final QuotaType pQuotaType,
       String pUnit, ProgramType pProgramType);
 
+  List<AdmissionStudent> getAdmissionStudent(int pSemesterId, MigrationStatus pMigrationStatus);
+
   int updateStudentsAllocatedProgram(final AdmissionStudent pAdmissionStudent,
       final MigrationStatus pMigrationStatus);
 
@@ -37,6 +39,8 @@ public interface AdmissionStudentManager extends
 
   int updateDepartmentSelection(final MutableAdmissionStudent pStudent,
       DepartmentSelectionType pDepartmentSelectionType);
+
+  int updateAdmissionMigrationStatus(List<MutableAdmissionStudent> pStudents);
 
   AdmissionStudent getNextStudentForDepartmentSelection(final int pSemesterId,
       final ProgramType pProgramType, final String pUnit, final String pQuota);
