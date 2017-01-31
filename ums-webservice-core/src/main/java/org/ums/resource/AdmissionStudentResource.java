@@ -77,4 +77,11 @@ public class AdmissionStudentResource extends MutableAdmissionStudentResource {
         pReceiptId, mUriInfo);
   }
 
+  @GET
+  @Path("/migrationList/semester/{semester-id}")
+  public JsonObject getMigrationList(@PathParam("semester-id") int pSemesterId,
+      final @Context Request pRequest) {
+    return mHelper.getMigrationList(pSemesterId, mUriInfo);
+  }
+
 }

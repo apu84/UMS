@@ -1,0 +1,132 @@
+
+<style>
+    .handsontable .htDimmed {
+        color: black;
+    }
+
+    .handsontable thead th {
+        text-align: left;
+    }
+</style>
+
+
+<div class="row" >
+    <div onclick="resetCommonCollapsibleDivs()" id="arrowDiv">
+        <i class="fa fa-angle-double-right fa-cx"></i></i>
+    </div>
+    <div class="panel panel-green" id="leftDiv">
+        <div class="panel-heading">
+            <h3 class="panel-title">Select </h3>
+        </div>
+        <div class="panel-body pan">
+            <form action="" class="form-horizontal" data-validate=""  data-onvalidate="fetchTaletalkData" >
+                <div class="form-body pal">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Program Type</label>
+                        <div class="col-md-8">
+                            <select
+                                    class="form-control required"
+                                    name="programType"
+                                    id="programType"
+                                    data-ng-options="programType.name for programType in programTypes track by programType.id"
+                                    data-ng-model="programType" data-ng-change="getSemesters()">
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Semester</label>
+                        <div class="col-md-8">
+                            <!--<select class="form-control required" name="semester" data-ng-model="semester">
+                                <option   value="">Select a semester</option>
+                                <option data-ng-repeat="semester in semesters" value="{{semester}}">{{semester.name}}</option>
+                            </select>-->
+                            <select
+                                    class="form-control required"
+                                    name="semester"
+                                    id="semester"
+                                    data-ng-options="semester.name for semester in semesters track by semester.id"
+                                    data-ng-model="semester">
+
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="form-actions text-right pal">
+                    <button type="button" class="btn btn-success">Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="rightDiv">
+        <div class="panel">
+            <div class="panel-heading">Migration List<span
+                    class="subtitle"></span></div>
+            <div class="panel-body shadowPanel"   style="min-height: 490px;">
+                <div data-ng-show="showFileUploadSection==true && searchSpinner==false" align="center">
+                    <div class="row" align="center">
+                        <h1>Please upload migration data</h1>
+                        <br>
+                        <br>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button class="btn btn-default" data-ng-click="fetchExcelFormat()">Download Template (xls)</button>
+                        </div>
+                        <div class="col-md-6">
+                            <button class="btn btn-success" data-toggle="modal" data-target="#entryModal">Upload xls file</button>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="entryModal" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">Paste Data Here</h4>
+                            </div>
+                            <div class="modal-body" align="left">
+                                            <textarea editable="true" rows="10" style="width: 100%;" data-ng-model="modalData">
+
+                                            </textarea>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-ng-click="processData(modalData)" data-dismiss="modal">Process & Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div data-ng-if="showFileUploadSection==false && searchSpinner==false " align="left" style="color:black;">
+                    <div class="row" align="center" data-ng-show="showSpinner==true">
+                        <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+                    </div>
+                    <div class="row" align="left" data-ng-show="showSpinner==false">
+                        <hot-table settings="data.settings"
+                                   hot-id="taletalkData"
+                                   datarows="migrationStudents"
+                                   autoWrapRow="true"
+                                   columns="data.columns"
+                                   id ="taletalkData">
+
+                        </hot-table>
+                    </div>
+                    <div class="row" data-ng-show="showSpinner==false">
+                        <div class="col-md-12" align="right" data-ng-if="disableSaveButton==false">
+                            <br>
+                            <button class="btn btn-success" data-ng-click="saveData()">Save Data</button>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div data-ng-show="searchSpinner" align="center">
+                    <i class="fa fa-spinner fa-spin fa-5x fa-fw"></i>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>

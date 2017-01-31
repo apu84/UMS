@@ -13,4 +13,6 @@ public interface AdmissionStudentGenerator {
 
   void createABlankMeritListUploadFormatFile(OutputStream pOutputStream, final int pSemesterId)
       throws Exception;
+
+  void createBlankMigrationListUploadFormatFile(OutputStream pOutputStream) throws Exception;
 }

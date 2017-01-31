@@ -92,5 +92,16 @@ public class AdmissionStudentDaoDecorator extends
     return getManager().getByStudentId(pStudentId);
   }
 
+  @Override
+  public List<AdmissionStudent> getAdmissionStudent(int pSemesterId,
+      MigrationStatus pMigrationStatus) {
+    return getManager().getAdmissionStudent(pSemesterId, pMigrationStatus);
+  }
+
+  @Override
+  public int updateAdmissionMigrationStatus(List<MutableAdmissionStudent> pStudents) {
+    return getManager().updateAdmissionMigrationStatus(pStudents);
+  }
+
   //
 }

@@ -10,6 +10,7 @@ import org.ums.cache.LocalCache;
 import org.ums.builder.AdmissionStudentBuilder;
 import org.ums.domain.model.immutable.AdmissionTotalSeat;
 import org.ums.enums.DepartmentSelectionType;
+import org.ums.enums.MigrationStatus;
 import org.ums.report.generator.AdmissionStudentGenerator;
 import org.ums.domain.model.immutable.AdmissionStudent;
 import org.ums.domain.model.mutable.MutableAdmissionStudent;
@@ -222,8 +223,30 @@ public class AdmissionStudentResourceHelper extends
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
     JsonObjectBuilder jsonObject = Json.createObjectBuilder();
-    getBuilder().admissionStudentBuilder(jsonObject, student, pUriInfo, localCache, "meritList");
+    try {
+      getBuilder().admissionStudentBuilder(jsonObject, student, pUriInfo, localCache, "meritList");
+    } catch(Exception pE) {
+      pE.printStackTrace();
+    }
     children.add(jsonObject);
+    object.add("entries", children);
+    localCache.invalidate();
+    return object.build();
+  }
+
+  public JsonObject getMigrationList(final int pSemesterId, final UriInfo pUriInfo) {
+    List<AdmissionStudent> students =
+        getContentManager().getAdmissionStudent(pSemesterId,
+            MigrationStatus.get(MigrationStatus.MIGRATION_ABLE.getId()));
+    JsonObjectBuilder object = Json.createObjectBuilder();
+    JsonArrayBuilder children = Json.createArrayBuilder();
+    LocalCache localCache = new LocalCache();
+
+    for(AdmissionStudent admissionStudent : students) {
+      JsonObjectBuilder jsonObject = Json.createObjectBuilder();
+      getBuilder().getAdmissionStudentBuilder(jsonObject, admissionStudent, pUriInfo, localCache);
+      children.add(jsonObject);
+    }
     object.add("entries", children);
     localCache.invalidate();
     return object.build();
@@ -291,6 +314,10 @@ public class AdmissionStudentResourceHelper extends
     mGenerator.createABlankMeritListUploadFormatFile(pOutputStream, pSemesterId);
   }
 
+  public void getMigrationListXlsFormat(final OutputStream pOutputStream) throws Exception {
+    mGenerator.createBlankMigrationListUploadFormatFile(pOutputStream);
+  }
+
   private JsonObject jsonCreator(List<AdmissionStudent> pStudentLIst, String pType, UriInfo pUriInfo) {
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
@@ -298,7 +325,11 @@ public class AdmissionStudentResourceHelper extends
 
     for(AdmissionStudent student : pStudentLIst) {
       JsonObjectBuilder jsonObject = Json.createObjectBuilder();
-      getBuilder().admissionStudentBuilder(jsonObject, student, pUriInfo, localCache, pType);
+      try {
+        getBuilder().admissionStudentBuilder(jsonObject, student, pUriInfo, localCache, pType);
+      } catch(Exception pE) {
+        pE.printStackTrace();
+      }
       children.add(jsonObject);
     }
     object.add("entries", children);
