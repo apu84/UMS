@@ -225,185 +225,6 @@ create trigger trg_param_setting_id
 
 
 
-  //***************************** admision_merit_list ***************************************
-  create table admission_merit_list(
-    id NUMBER,
-    semester_id number,
-    merit_sl_no number not null,
-    receipt_id number not null,
-    admission_roll number not null,
-    candidate_name varchar2(100) not null,
-    admission_group number not null,
-    faculty_id number not null,
-    last_modified varchar2(18),
-    CONSTRAINT admission_merit_list_uniq UNIQUE (merit_sl_no,receipt_id,admission_roll,admission_group),
-    PRIMARY KEY (id)
-  );
-
-
-  create sequence admission_merit_seq START WITH 1;
-
-  create or REPLACE TRIGGER admission_merit_trig
-    BEFORE INSERT on admission_merit_list
-    for EACH ROW
-    BEGIN
-      select admission_merit_seq.nextval
-        into :new.id
-        from dual;
-    END;
-  /
-
-
-  comment on COLUMN admission_merit_list.admission_group is '1=GENERAL, 2= Freedom Fighter, 3= Remote Area, 4= English Medium';
-
-  //*************************************** end admission merit list *******************************************************
-
-
-
-  //************************************** admissionStudents **************************************************************
-DROP TABLE DB_IUMS.ADMISSION_STUDENTS CASCADE CONSTRAINTS;
-
-CREATE TABLE DB_IUMS.ADMISSION_STUDENTS
-(
-  SEMESTER_ID           NUMBER,
-  RECEIPT_ID            VARCHAR2(25 BYTE),
-  PIN                   VARCHAR2(25 BYTE),
-  HSC_BOARD             VARCHAR2(25 BYTE),
-  HSC_ROLL              VARCHAR2(25 BYTE),
-  HSC_REGNO             VARCHAR2(25 BYTE),
-  HSC_YEAR              NUMBER,
-  HSC_GROUP             VARCHAR2(25 BYTE),
-  SSC_BOARD             VARCHAR2(25 BYTE),
-  SSC_ROLL              VARCHAR2(25 BYTE),
-  SSC_YEAR              NUMBER,
-  SSC_GROUP             VARCHAR2(25 BYTE),
-  GENDER                VARCHAR2(6 BYTE),
-  DATE_OF_BIRTH         DATE,
-  STUDENT_NAME          VARCHAR2(50 BYTE),
-  FATHER_NAME           VARCHAR2(50 BYTE),
-  MOTHER_NAME           VARCHAR2(50 BYTE),
-  SSC_GPA               FLOAT(126),
-  HSC_GPA               FLOAT(126),
-  QUOTA                 VARCHAR2(2 BYTE),
-  ADMISSION_ROLL        VARCHAR2(25 BYTE),
-  MERIT_SL_NO           NUMBER,
-  STUDENT_ID            VARCHAR2(9 BYTE),
-  ALLOCATED_PROGRAM_ID  NUMBER,
-  MIGRATION_STATUS      NUMBER,
-  LAST_MODIFIED         VARCHAR2(18 BYTE),
-  UNIT                  VARCHAR2(15 BYTE)
-)
-TABLESPACE SYSTEM
-RESULT_CACHE (MODE DEFAULT)
-PCTUSED    40
-PCTFREE    10
-INITRANS   1
-MAXTRANS   255
-STORAGE    (
-            INITIAL          64K
-            NEXT             1M
-            MINEXTENTS       1
-            MAXEXTENTS       UNLIMITED
-            PCTINCREASE      0
-            FREELISTS        1
-            FREELIST GROUPS  1
-            BUFFER_POOL      DEFAULT
-            FLASH_CACHE      DEFAULT
-            CELL_FLASH_CACHE DEFAULT
-           )
-LOGGING
-NOCOMPRESS
-NOCACHE
-NOPARALLEL
-MONITORING;
-
-
-CREATE UNIQUE INDEX DB_IUMS.ADMISSION_STUDENTS_UNIQ ON DB_IUMS.ADMISSION_STUDENTS
-(SEMESTER_ID, RECEIPT_ID, PIN, SSC_ROLL, HSC_ROLL,
-QUOTA, STUDENT_ID, ALLOCATED_PROGRAM_ID)
-LOGGING
-TABLESPACE SYSTEM
-PCTFREE    10
-INITRANS   2
-MAXTRANS   255
-STORAGE    (
-            INITIAL          64K
-            NEXT             1M
-            MINEXTENTS       1
-            MAXEXTENTS       UNLIMITED
-            PCTINCREASE      0
-            FREELISTS        1
-            FREELIST GROUPS  1
-            BUFFER_POOL      DEFAULT
-            FLASH_CACHE      DEFAULT
-            CELL_FLASH_CACHE DEFAULT
-           )
-NOPARALLEL;
-
-
-ALTER TABLE DB_IUMS.ADMISSION_STUDENTS ADD (
-  CONSTRAINT ADMISSION_STUDENTS_UNIQ
-  UNIQUE (SEMESTER_ID, RECEIPT_ID, PIN, SSC_ROLL, HSC_ROLL, QUOTA, STUDENT_ID, ALLOCATED_PROGRAM_ID)
-  USING INDEX DB_IUMS.ADMISSION_STUDENTS_UNIQ
-  ENABLE VALIDATE);
-
-
-
-/************************************* admission_roles********************************************************
-Insert into DB_IUMS.MST_ROLE
-   (ROLE_ID, ROLE_NAME)
- Values
-   (83, 'ug_admission_chairman');
-Insert into DB_IUMS.MST_ROLE
-   (ROLE_ID, ROLE_NAME)
- Values
-   (84, 'ug_admission_verifier');
-
-
- /*******************************admission_navigation**********************************************************
-
-Insert into DB_IUMS.MAIN_NAVIGATION
-   (NAVIGATION_ID, MENU_TITLE, PERMISSION, LOCATION, PARENT_MENU,
-    ICON_IMG_CLASS, ICON_COLOR_CLASS, VIEW_ORDER, STATUS, LAST_MODIFIED)
- Values
-   (2054, 'Taletalk Data Upload', 'admission:taletalkDataUpload', '/uploadTaletalkData', 0,
-    'fa fa-th', 'bg-blue', 104, 1, '12345');
-Insert into DB_IUMS.MAIN_NAVIGATION
-   (NAVIGATION_ID, MENU_TITLE, PERMISSION, LOCATION, PARENT_MENU,
-    ICON_IMG_CLASS, ICON_COLOR_CLASS, VIEW_ORDER, STATUS, LAST_MODIFIED)
- Values
-   (2055, 'Merit List Upload', 'admission:meritListUpload', '/uploadMeritList', 0,
-    'fa fa-th', 'bg-blue', 105, 1, '12345');
-
- /************************admission_permissions***********************************************************
-
-Insert into DB_IUMS.PERMISSIONS
-   (ROLE_ID, PERMISSIONS, PERMISSION_ID, LAST_MODIFIED)
- Values
-   (83, 'admission:meritListUpload,admission:taletalkDataUpload', 1016, NULL);
-Insert into DB_IUMS.PERMISSIONS
-   (ROLE_ID, PERMISSIONS, PERMISSION_ID, LAST_MODIFIED)
- Values
-   (84, 'admission:meritListUpload,admission:taletalkDataUpload', 1017, NULL);
-
-   /***********************admission_users*****************************************************************
-   Insert into DB_IUMS.USERS
-      (USER_ID, PASSWORD, ROLE_ID, CREATED_ON, CREATED_BY,
-       LAST_LOGIN_ON, STATUS, EMPLOYEE_ID, TEMP_PASSWORD, PR_TOKEN,
-       TOKEN_GENERATED_ON)
-    Values
-      ('admission_chairman', '$shiro1$SHA-512$1024$Wz/uXRcO5PXoXCf72PI/vw==$lY+jz00kyWRYrn6DZdgOs7VGIcvmXW0L6I8IXWPTIIikvx1nWA4VlBPY7PgPUpePASb5FThxO0dZJ4a9W2LIAw==', 83, TO_DATE('11/29/2015 00:00:00', 'MM/DD/YYYY HH24:MI:SS'), 'sadmin',
-       TO_DATE('11/29/2015 00:00:00', 'MM/DD/YYYY HH24:MI:SS'), 1, '33333', NULL, NULL,
-       NULL);
-   Insert into DB_IUMS.USERS
-      (USER_ID, PASSWORD, ROLE_ID, CREATED_ON, CREATED_BY,
-       LAST_LOGIN_ON, STATUS, EMPLOYEE_ID, TEMP_PASSWORD, PR_TOKEN,
-       TOKEN_GENERATED_ON)
-    Values
-      ('admission_validator', '$shiro1$SHA-512$1024$Wz/uXRcO5PXoXCf72PI/vw==$lY+jz00kyWRYrn6DZdgOs7VGIcvmXW0L6I8IXWPTIIikvx1nWA4VlBPY7PgPUpePASb5FThxO0dZJ4a9W2LIAw==', 84, TO_DATE('11/29/2015 00:00:00', 'MM/DD/YYYY HH24:MI:SS'), 'sadmin',
-       TO_DATE('11/29/2015 00:00:00', 'MM/DD/YYYY HH24:MI:SS'), 1, '22222', NULL, NULL,
-       NULL);
-
 /***************************************************FEE STRUCTURE**********************************/
 CREATE TABLE DB_IUMS.FEE_CATEGORY
 (
@@ -447,3 +268,293 @@ BEGIN
   FROM   dual;
 END;
 
+
+****************************** admission ******************************************************
+DROP TABLE DB_IUMS.ADMISSION_STUDENTS CASCADE CONSTRAINTS;
+
+CREATE TABLE DB_IUMS.ADMISSION_STUDENTS
+(
+  SEMESTER_ID             NUMBER,
+  RECEIPT_ID              VARCHAR2(25 BYTE),
+  PIN                     VARCHAR2(25 BYTE),
+  HSC_BOARD               VARCHAR2(25 BYTE),
+  HSC_ROLL                VARCHAR2(25 BYTE),
+  HSC_REGNO               VARCHAR2(25 BYTE),
+  HSC_YEAR                NUMBER,
+  HSC_GROUP               VARCHAR2(25 BYTE),
+  SSC_BOARD               VARCHAR2(25 BYTE),
+  SSC_ROLL                VARCHAR2(25 BYTE),
+  SSC_YEAR                NUMBER,
+  SSC_GROUP               VARCHAR2(25 BYTE),
+  GENDER                  VARCHAR2(6 BYTE),
+  DATE_OF_BIRTH           DATE,
+  STUDENT_NAME            VARCHAR2(50 BYTE),
+  FATHER_NAME             VARCHAR2(50 BYTE),
+  MOTHER_NAME             VARCHAR2(50 BYTE),
+  SSC_GPA                 FLOAT(126),
+  HSC_GPA                 FLOAT(126),
+  QUOTA                   VARCHAR2(2 BYTE),
+  ADMISSION_ROLL          VARCHAR2(25 BYTE),
+  MERIT_SL_NO             NUMBER,
+  STUDENT_ID              VARCHAR2(9 BYTE),
+  ALLOCATED_PROGRAM_ID    NUMBER,
+  MIGRATION_STATUS        NUMBER,
+  LAST_MODIFIED           VARCHAR2(18 BYTE),
+  UNIT                    VARCHAR2(15 BYTE),
+  PROGRAM_TYPE            NUMBER,
+  NID                     VARCHAR2(100 BYTE),
+  BIRTH_REG               VARCHAR2(100 BYTE),
+  PASSPORT                VARCHAR2(100 BYTE),
+  PROGRAM_ID_BY_MERIT     NUMBER,
+  PROGRAM_ID_BY_TRANSFER  NUMBER,
+  PRESENT_STATUS          NUMBER,
+  DEADLINE                DATE,
+  VERIFICATION_STATUS     NUMBER,
+  MIGRATED_FROM           VARCHAR2(25 BYTE),
+  UNDERTAKEN_DEADLINE     DATE
+)
+TABLESPACE SYSTEM
+RESULT_CACHE (MODE DEFAULT)
+PCTUSED    40
+PCTFREE    10
+INITRANS   1
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+LOGGING
+NOCOMPRESS
+NOCACHE
+NOPARALLEL
+MONITORING;
+
+COMMENT ON COLUMN DB_IUMS.ADMISSION_STUDENTS.PRESENT_STATUS IS '0 = absent, 1= present';
+
+
+
+CREATE UNIQUE INDEX DB_IUMS.ADMISSION_STUDENTS_UNIQ ON DB_IUMS.ADMISSION_STUDENTS
+(SEMESTER_ID, RECEIPT_ID, PIN, SSC_ROLL, HSC_ROLL,
+QUOTA, STUDENT_ID, ALLOCATED_PROGRAM_ID)
+LOGGING
+TABLESPACE SYSTEM
+PCTFREE    10
+INITRANS   2
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+NOPARALLEL;
+
+//**************admission payment info*************************
+ALTER TABLE DB_IUMS.PAYMENT_INFO
+ DROP PRIMARY KEY CASCADE;
+
+DROP TABLE DB_IUMS.PAYMENT_INFO CASCADE CONSTRAINTS;
+
+CREATE TABLE DB_IUMS.PAYMENT_INFO
+(
+  ID             NUMBER,
+  REFERENCE_ID   VARCHAR2(25 BYTE),
+  SEMESTER_ID    NUMBER,
+  PAYMENT_TYPE   NUMBER,
+  AMOUNT         NUMBER,
+  PAYMENT_DATE   TIMESTAMP(6),
+  LAST_MODIFIED  VARCHAR2(18 BYTE),
+  PAYMENT_MODE   NUMBER
+)
+TABLESPACE SYSTEM
+RESULT_CACHE (MODE DEFAULT)
+PCTUSED    40
+PCTFREE    10
+INITRANS   1
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+LOGGING
+NOCOMPRESS
+NOCACHE
+NOPARALLEL
+MONITORING;
+
+
+--  There is no statement for index DB_IUMS.SYS_C0012023.
+--  The object is created when the parent object is created.
+
+CREATE OR REPLACE TRIGGER DB_IUMS.admission_payment_trig
+  BEFORE INSERT ON DB_IUMS.PAYMENT_INFO
+  for EACH ROW
+BEGIN
+    SELECT  admission_payment_seq.nextval
+      INTO :new.id
+      FROM dual;
+  END;
+/
+
+
+ALTER TABLE DB_IUMS.PAYMENT_INFO ADD (
+  PRIMARY KEY
+  (ID)
+  USING INDEX
+    TABLESPACE SYSTEM
+    PCTFREE    10
+    INITRANS   2
+    MAXTRANS   255
+    STORAGE    (
+                INITIAL          64K
+                NEXT             1M
+                MINEXTENTS       1
+                MAXEXTENTS       UNLIMITED
+                PCTINCREASE      0
+                FREELISTS        1
+                FREELIST GROUPS  1
+                BUFFER_POOL      DEFAULT
+                FLASH_CACHE      DEFAULT
+                CELL_FLASH_CACHE DEFAULT
+               )
+  ENABLE VALIDATE);
+
+
+
+//***********************roles**********************
+Insert into DB_IUMS.MST_ROLE
+   (ROLE_ID, ROLE_NAME)
+ Values
+   (10101, 'ug_admission_chairman');
+Insert into DB_IUMS.MST_ROLE
+   (ROLE_ID, ROLE_NAME)
+ Values
+   (10102, 'ug_admission_verifier');
+Insert into DB_IUMS.MST_ROLE
+   (ROLE_ID, ROLE_NAME)
+ Values
+   (20101, 'bank_user');
+
+//*****************navigation************************
+Insert into DB_IUMS.MAIN_NAVIGATION
+   (NAVIGATION_ID, MENU_TITLE, PERMISSION, LOCATION, PARENT_MENU,
+    ICON_IMG_CLASS, ICON_COLOR_CLASS, VIEW_ORDER, STATUS, LAST_MODIFIED)
+ Values
+   (2054, 'Taletalk Data Upload', 'admission:taletalkDataUpload', '/uploadTaletalkData', 0,
+    'fa fa-th', 'bg-blue', 104, 1, '12345');
+Insert into DB_IUMS.MAIN_NAVIGATION
+   (NAVIGATION_ID, MENU_TITLE, PERMISSION, LOCATION, PARENT_MENU,
+    ICON_IMG_CLASS, ICON_COLOR_CLASS, VIEW_ORDER, STATUS, LAST_MODIFIED)
+ Values
+   (2055, 'Merit List Upload', 'admission:meritListUpload', '/uploadMeritList', 0,
+    'fa fa-th', 'bg-blue', 105, 1, '12345');
+Insert into DB_IUMS.MAIN_NAVIGATION
+   (NAVIGATION_ID, MENU_TITLE, PERMISSION, LOCATION, PARENT_MENU,
+    ICON_IMG_CLASS, ICON_COLOR_CLASS, VIEW_ORDER, STATUS, LAST_MODIFIED)
+ Values
+   (2056, 'Admission Deadline', 'admission:deadline', '/admissionDeadLine', 0,
+    'fa fa-th', 'bg-blue', 106, 1, '12345');
+Insert into DB_IUMS.MAIN_NAVIGATION
+   (NAVIGATION_ID, MENU_TITLE, PERMISSION, LOCATION, PARENT_MENU,
+    ICON_IMG_CLASS, ICON_COLOR_CLASS, VIEW_ORDER, STATUS, LAST_MODIFIED)
+ Values
+   (2057, 'Admission Total Seat', 'admission:totalSeat', '/admissionTotalSeat', 0,
+    'fa fa-th', 'bg-blue', 107, 1, '12345
+');
+Insert into DB_IUMS.MAIN_NAVIGATION
+   (NAVIGATION_ID, MENU_TITLE, PERMISSION, LOCATION, PARENT_MENU,
+    ICON_IMG_CLASS, ICON_COLOR_CLASS, VIEW_ORDER, STATUS, LAST_MODIFIED)
+ Values
+   (2058, 'Department Selection', 'admission:departmentSelection', '/admissionDepartmentSelection', 0,
+    'fa fa-th', 'bg-blue', 108, 1, '12345');
+Insert into DB_IUMS.MAIN_NAVIGATION
+   (NAVIGATION_ID, MENU_TITLE, PERMISSION, LOCATION, PARENT_MENU,
+    ICON_IMG_CLASS, ICON_COLOR_CLASS, VIEW_ORDER, STATUS, LAST_MODIFIED)
+ Values
+   (2059, 'Certificate Verification', 'admission:certificateVerification', '/certificateVerification', 0,
+    'fa fa-th', 'bg-blue', 106, 1, '12345');
+Insert into DB_IUMS.MAIN_NAVIGATION
+   (NAVIGATION_ID, MENU_TITLE, PERMISSION, LOCATION, PARENT_MENU,
+    ICON_IMG_CLASS, ICON_COLOR_CLASS, VIEW_ORDER, STATUS, LAST_MODIFIED)
+ Values
+   (2060, 'Admission Statistics', 'admission:statistics', '/admissionStatistics', 0,
+    'fa fa-th', 'bg-blue', 109, 1, '2131346546');
+Insert into DB_IUMS.MAIN_NAVIGATION
+   (NAVIGATION_ID, MENU_TITLE, PERMISSION, LOCATION, PARENT_MENU,
+    ICON_IMG_CLASS, ICON_COLOR_CLASS, VIEW_ORDER, STATUS, LAST_MODIFIED)
+ Values
+   (2061, 'Admission Fees', 'admission:fee', '/admissionFee', 0,
+    'fa fa-file-word-0', 'bg-blue', 110, 1, '12265465');
+Insert into DB_IUMS.MAIN_NAVIGATION
+   (NAVIGATION_ID, MENU_TITLE, PERMISSION, LOCATION, PARENT_MENU,
+    ICON_IMG_CLASS, ICON_COLOR_CLASS, VIEW_ORDER, STATUS, LAST_MODIFIED)
+ Values
+   (2062, 'Student Id', 'admission:studentId', '/admissionStudentId', 0,
+    'fa fa-th', 'bg-blue', 111, 1, '565465465465');
+Insert into DB_IUMS.MAIN_NAVIGATION
+   (NAVIGATION_ID, MENU_TITLE, PERMISSION, LOCATION, PARENT_MENU,
+    ICON_IMG_CLASS, ICON_COLOR_CLASS, VIEW_ORDER, STATUS, LAST_MODIFIED)
+ Values
+   (2063, 'Migration List ', 'admission:migration', '/admissionMigrationList', 0,
+    'fa fa-th', 'bg-blue', 112, 1, '132132132132');
+
+
+
+//******************************permissions*************************************
+Insert into DB_IUMS.PERMISSIONS
+   (ROLE_ID, PERMISSIONS, PERMISSION_ID, LAST_MODIFIED)
+ Values
+   (10101, 'admission:meritListUpload,admission:taletalkDataUpload,admission:deadline,admission:totalSeat,admission:departmentSelection,admission:certificateVerification,admission:statistics,admission:studentId, admission:migration', 1016, NULL);
+Insert into DB_IUMS.PERMISSIONS
+   (ROLE_ID, PERMISSIONS, PERMISSION_ID, LAST_MODIFIED)
+ Values
+   (10102, 'admission:meritListUpload,admission:taletalkDataUpload,admission:deadline, admission:totalSeat, admission:departmentSelection,admission:certificateVerification,admission:statistics, admission:studentId, admission:migration', 1017, NULL);
+Insert into DB_IUMS.PERMISSIONS
+   (ROLE_ID, PERMISSIONS, PERMISSION_ID, LAST_MODIFIED)
+ Values
+   (20101, 'admission:fee', 1018, NULL);
+
+
+
+   //****************************users**************************
+   Insert into DB_IUMS.USERS
+      (USER_ID, PASSWORD, ROLE_ID, CREATED_ON, CREATED_BY,
+       LAST_LOGIN_ON, STATUS, EMPLOYEE_ID, TEMP_PASSWORD, PR_TOKEN,
+       TOKEN_GENERATED_ON)
+    Values
+      ('admission_bank', '$shiro1$SHA-512$1024$Wz/uXRcO5PXoXCf72PI/vw==$lY+jz00kyWRYrn6DZdgOs7VGIcvmXW0L6I8IXWPTIIikvx1nWA4VlBPY7PgPUpePASb5FThxO0dZJ4a9W2LIAw==', 20101, TO_DATE('11/29/2015 00:00:00', 'MM/DD/YYYY HH24:MI:SS'), 'sadmin',
+       TO_DATE('11/29/2015 00:00:00', 'MM/DD/YYYY HH24:MI:SS'), 1, '33333', NULL, NULL,
+       NULL);
+
+
+
+       Insert into DB_IUMS.USERS
+          (USER_ID, PASSWORD, ROLE_ID, CREATED_ON, CREATED_BY,
+           LAST_LOGIN_ON, STATUS, EMPLOYEE_ID, TEMP_PASSWORD, PR_TOKEN,
+           TOKEN_GENERATED_ON)
+        Values
+          ('admission_chairman', '$shiro1$SHA-512$1024$Wz/uXRcO5PXoXCf72PI/vw==$lY+jz00kyWRYrn6DZdgOs7VGIcvmXW0L6I8IXWPTIIikvx1nWA4VlBPY7PgPUpePASb5FThxO0dZJ4a9W2LIAw==', 10101, TO_DATE('11/29/2015 00:00:00', 'MM/DD/YYYY HH24:MI:SS'), 'sadmin',
+           TO_DATE('11/29/2015 00:00:00', 'MM/DD/YYYY HH24:MI:SS'), 1, '33333', NULL, NULL,
+           NULL);

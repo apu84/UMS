@@ -15,6 +15,7 @@ module ums{
     modalData:any;
 
     searchSpinner:boolean;
+    showSpinner:boolean;
     showFileUploadSection:boolean;
 
 
@@ -51,6 +52,8 @@ module ums{
       $scope.programType = $scope.programTypes[0];
       $scope.searchSpinner = false;
       $scope.showFileUploadSection = false;
+      $scope.showSpinner = false;
+      $scope.migrationStudents=[];
 
       $scope.data = {
         settings:{
@@ -105,6 +108,7 @@ module ums{
     private fetchTaletalkData(){
       Utils.expandRightDiv();
       this.$scope.modalData={};
+      this.$scope.modalData="";
       this.$scope.searchSpinner=true;
       this.$scope.admissionStudents=[];
       this.$scope.admissionStudentMap={};
@@ -172,7 +176,7 @@ module ums{
 
       }
 
-
+      this.$scope.showSpinner=false;
       defer.resolve(this.$scope.admissionStudents);
       return defer.promise;
     }
@@ -183,7 +187,9 @@ module ums{
       var receiptId=cellData[0];
       var student:AdmissionStudent = this.$scope.admissionStudentMap[receiptId];
       student.migrationStatus=Utils.MIGRATION_ABLE;
+      student.migrationDes="Migration-able";
       this.$scope.migrationStudents.push(student);
+      console.log(this.$scope.migrationStudents);
     }
 
   }
