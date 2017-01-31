@@ -296,13 +296,6 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
 
   // kawsurilu
 
-  public AdmissionStudent getNewStudentByReceiptId(String pProgramType, int pSemesterId,
-      String pReceiptId) {
-    String query = SELECT_ONE + " WHERE PROGRAM_TYPE=? AND SEMESTER_ID=? AND RECEIPT_ID=? ";
-    return mJdbcTemplate.queryForObject(query,
-        new Object[] {pProgramType, pSemesterId, pReceiptId}, new AdmissionStudentRowMapper());
-  }
-
   public int setVerificationStatusAndUndertakenDate(MutableAdmissionStudent pStudent) {
     MutableAdmissionStudent student = pStudent;
     String query =

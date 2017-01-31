@@ -199,29 +199,6 @@ public class AdmissionStudentBuilder implements Builder<AdmissionStudent, Mutabl
     }
   }
 
-  // public void setVerificationStatusBuilder(MutableAdmissionStudent pMutable,
-  // JsonObject pJsonObject, LocalCache pLocalCache) {
-  // pMutable.setId(pJsonObject.getString("receiptId"));
-  // pMutable.setSemester(mSemesterManager.get(pJsonObject.getInt("semesterId")));
-  // pMutable.setProgramType(ProgramType.get(pJsonObject.getInt("programType")));
-  // pMutable.setVerificationStatus(pJsonObject.getInt("status"));
-  //
-  // }
-  //
-  // public void setUndertakenDateBuilder(MutableAdmissionStudent pMutable, JsonObject pJsonObject,
-  // LocalCache pLocalCache) {
-  // pMutable.setId(pJsonObject.getString("receiptId"));
-  // pMutable.setSemester(mSemesterManager.get(pJsonObject.getInt("semesterId")));
-  // pMutable.setProgramType(ProgramType.get(pJsonObject.getInt("programType")));
-  // if(pJsonObject.getString("undertakeDeadLine").equals(null)
-  // || pJsonObject.getString("undertakeDeadLine").equals("")
-  // || pJsonObject.getInt("status") == 1 || pJsonObject.getInt("status") == 3) {
-  // }
-  // else {
-  // pMutable.setUndertakenDate(pJsonObject.getString("undertakeDeadLine"));
-  // }
-  // }
-
   //
 
   @Override

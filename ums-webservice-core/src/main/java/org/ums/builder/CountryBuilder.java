@@ -21,7 +21,8 @@ public class CountryBuilder implements Builder<Country, MutableCountry> {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("code", pReadOnly.getCode());
     pBuilder.add("name", pReadOnly.getName());
-    pBuilder.add("lastModified", pReadOnly.getLastModified()==null?"":pReadOnly.getLastModified());
+    pBuilder.add("lastModified",
+        pReadOnly.getLastModified() == null ? "" : pReadOnly.getLastModified());
   }
 
   @Override

@@ -28,6 +28,15 @@ public class AdmissionCertificatesOfStudentBuilder implements
 
     pMutable.setSemesterId(pJsonObject.getInt("semesterId"));
     pMutable.setReceiptId(pJsonObject.getString("receiptId"));
-    pMutable.setCertificateId(pJsonObject.getInt("certificateId"));
+    pMutable.setCertificateId(pJsonObject.getInt("id"));
+  }
+
+  public void customCertificateBuilder(MutableAdmissionCertificatesOfStudent pMutable,
+      JsonObject pJsonObject, int j, LocalCache pLocalCache) {
+
+    pMutable.setSemesterId(pJsonObject.getInt("semesterId"));
+    pMutable.setReceiptId(pJsonObject.getString("receiptId"));
+    pMutable.setCertificateId(pJsonObject.getJsonArray("certificateIds").getJsonObject(j)
+        .getInt("id"));
   }
 }

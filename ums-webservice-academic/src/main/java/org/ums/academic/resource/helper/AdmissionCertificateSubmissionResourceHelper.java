@@ -67,13 +67,6 @@ public class AdmissionCertificateSubmissionResourceHelper extends
     getBuilder().setVerificationStatusAndUndertakenDateBuilder(student, jsonObject, localCache);
     getContentManager().setVerificationStatusAndUndertakenDate(student);
 
-    // MutableAdmissionStudent student = new PersistentAdmissionStudent();
-    // LocalCache localCache = new LocalCache();
-    // JsonArray entries = pJsonObject.getJsonArray("entries");
-    // JsonObject jsonObject = entries.getJsonObject(0);
-    // getBuilder().setVerificationStatusBuilder(student, jsonObject, localCache);
-    // getContentManager().setVerificationStatus(student);
-
     if(entries.getJsonObject(0).getString("comment").equals("")) {
     }
     else {
@@ -84,13 +77,13 @@ public class AdmissionCertificateSubmissionResourceHelper extends
       mAdmissionCommentForStudentManager.saveComment(mutableAdmissionCommentForStudent);
     }
 
-    if(entries.getJsonObject(0).getInt("certificateId") != 0) {
+    if(entries.getJsonObject(0).getJsonArray("certificateIds") != null) {
       List<MutableAdmissionCertificatesOfStudent> studentsCertificates = new ArrayList<>();
-      for(int i = 0; i < entries.size(); i++) {
+      for(int i = 0; i < entries.getJsonObject(0).getJsonArray("certificateIds").size(); i++) {
         MutableAdmissionCertificatesOfStudent studentsCertificate =
             new PersistentAdmissionCertificatesOfStudent();
-        mAdmissionCertificatesOfStudentBuilder.build(studentsCertificate, entries.getJsonObject(i),
-            localCache);
+        mAdmissionCertificatesOfStudentBuilder.customCertificateBuilder(studentsCertificate,
+            jsonObject, i, localCache);
         studentsCertificates.add(studentsCertificate);
       }
       mAdmissionCertificatesOfStudentManager

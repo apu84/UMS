@@ -8,9 +8,6 @@ import org.ums.util.CacheUtil;
 
 import java.util.List;
 
-/**
- * Created by kawsu on 1/11/2017.
- */
 public class AdmissionCertificatesOfStudentCache
     extends
     ContentCache<AdmissionCertificatesOfStudent, MutableAdmissionCertificatesOfStudent, Integer, AdmissionCertificatesOfStudentManager>

@@ -26,7 +26,7 @@ module ums{
       return defer.promise;
     }
 
-    public getCandidateInformation(programType: number, semesterId: number, receiptId: string): ng.IPromise<any> {
+    public getCandidate(programType: number, semesterId: number, receiptId: string): ng.IPromise<any> {
       var url = "academic/admission/semester/"+semesterId+"/programType/"+programType+"/receiptId/"+receiptId;
       var defer = this.$q.defer();
 
@@ -55,7 +55,7 @@ module ums{
       return defer.promise;
     }
 
-    public getSavedCertificates(semesterId: number, receiptId: string): ng.IPromise<any> {
+    public getSubmittedCertificates(semesterId: number, receiptId: string): ng.IPromise<any> {
       var defer = this.$q.defer();
       this.httpClient.get("academic/students/certificateHistory/savedCertificates/semesterId/" + semesterId + "/receiptId/" + receiptId,
           HttpClient.MIME_TYPE_JSON,
@@ -95,7 +95,7 @@ module ums{
       return defer.promise;
     }
 
-    public getUndertakenReport(programType: number, semesterId: number, receiptId: string): void {
+    public getUndertakenForm(programType: number, semesterId: number, receiptId: string): void {
       this.httpClient.get("academic/students/certificateHistory/underTaken/programType/"+ programType +"/semesterId/"+semesterId+"/receiptId/"+receiptId, 'application/pdf', (data: any, etag: string) => {
             var file = new Blob([data], {type: 'application/pdf'});
             var fileURL = this.$sce.trustAsResourceUrl(URL.createObjectURL(file));

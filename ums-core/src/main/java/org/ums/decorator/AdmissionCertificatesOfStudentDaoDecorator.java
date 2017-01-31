@@ -6,9 +6,6 @@ import org.ums.manager.AdmissionCertificatesOfStudentManager;
 
 import java.util.List;
 
-/**
- * Created by kawsu on 1/11/2017.
- */
 public class AdmissionCertificatesOfStudentDaoDecorator
     extends
     ContentDaoDecorator<AdmissionCertificatesOfStudent, MutableAdmissionCertificatesOfStudent, Integer, AdmissionCertificatesOfStudentManager>
