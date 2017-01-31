@@ -558,3 +558,335 @@ Insert into DB_IUMS.PERMISSIONS
           ('admission_chairman', '$shiro1$SHA-512$1024$Wz/uXRcO5PXoXCf72PI/vw==$lY+jz00kyWRYrn6DZdgOs7VGIcvmXW0L6I8IXWPTIIikvx1nWA4VlBPY7PgPUpePASb5FThxO0dZJ4a9W2LIAw==', 10101, TO_DATE('11/29/2015 00:00:00', 'MM/DD/YYYY HH24:MI:SS'), 'sadmin',
            TO_DATE('11/29/2015 00:00:00', 'MM/DD/YYYY HH24:MI:SS'), 1, '33333', NULL, NULL,
            NULL);
+
+
+
+
+    //******************************ug_adm_certificates***************
+    ALTER TABLE DB_IUMS.UG_ADM_CERTIFICATES
+     DROP PRIMARY KEY CASCADE;
+
+    DROP TABLE DB_IUMS.UG_ADM_CERTIFICATES CASCADE CONSTRAINTS;
+
+    CREATE TABLE DB_IUMS.UG_ADM_CERTIFICATES
+    (
+      CERTIFICATE_ID    NUMBER,
+      CERTIFICATE_NAME  VARCHAR2(50 BYTE),
+      CERTIFICATE_TYPE  VARCHAR2(30 BYTE),
+      VIEW_ORDER        NUMBER
+    )
+    TABLESPACE SYSTEM
+    RESULT_CACHE (MODE DEFAULT)
+    PCTUSED    40
+    PCTFREE    10
+    INITRANS   1
+    MAXTRANS   255
+    STORAGE    (
+                INITIAL          64K
+                NEXT             1M
+                MINEXTENTS       1
+                MAXEXTENTS       UNLIMITED
+                PCTINCREASE      0
+                FREELISTS        1
+                FREELIST GROUPS  1
+                BUFFER_POOL      DEFAULT
+                FLASH_CACHE      DEFAULT
+                CELL_FLASH_CACHE DEFAULT
+               )
+    LOGGING
+    NOCOMPRESS
+    NOCACHE
+    NOPARALLEL
+    MONITORING;
+
+
+    --  There is no statement for index DB_IUMS.SYS_C008209.
+    --  The object is created when the parent object is created.
+
+    ALTER TABLE DB_IUMS.UG_ADM_CERTIFICATES ADD (
+      PRIMARY KEY
+      (CERTIFICATE_ID)
+      USING INDEX
+        TABLESPACE SYSTEM
+        PCTFREE    10
+        INITRANS   2
+        MAXTRANS   255
+        STORAGE    (
+                    INITIAL          64K
+                    NEXT             1M
+                    MINEXTENTS       1
+                    MAXEXTENTS       UNLIMITED
+                    PCTINCREASE      0
+                    FREELISTS        1
+                    FREELIST GROUPS  1
+                    BUFFER_POOL      DEFAULT
+                    FLASH_CACHE      DEFAULT
+                    CELL_FLASH_CACHE DEFAULT
+                   )
+      ENABLE VALIDATE);
+
+    Insert into DB_IUMS.UG_ADM_CERTIFICATES
+       (CERTIFICATE_ID, CERTIFICATE_NAME, CERTIFICATE_TYPE, VIEW_ORDER)
+     Values
+       (1, 'SSC Transcript', 'GL', 5);
+    Insert into DB_IUMS.UG_ADM_CERTIFICATES
+       (CERTIFICATE_ID, CERTIFICATE_NAME, CERTIFICATE_TYPE, VIEW_ORDER)
+     Values
+       (2, 'HSC Transcript', 'GL', 2);
+    Insert into DB_IUMS.UG_ADM_CERTIFICATES
+       (CERTIFICATE_ID, CERTIFICATE_NAME, CERTIFICATE_TYPE, VIEW_ORDER)
+     Values
+       (3, 'SSC Certificate', 'GL', 4);
+    Insert into DB_IUMS.UG_ADM_CERTIFICATES
+       (CERTIFICATE_ID, CERTIFICATE_NAME, CERTIFICATE_TYPE, VIEW_ORDER)
+     Values
+       (4, 'HSC Certificate', 'GL', 1);
+    Insert into DB_IUMS.UG_ADM_CERTIFICATES
+       (CERTIFICATE_ID, CERTIFICATE_NAME, CERTIFICATE_TYPE, VIEW_ORDER)
+     Values
+       (5, 'SSC Testimonial', 'GL', 6);
+    Insert into DB_IUMS.UG_ADM_CERTIFICATES
+       (CERTIFICATE_ID, CERTIFICATE_NAME, CERTIFICATE_TYPE, VIEW_ORDER)
+     Values
+       (6, 'HSC Testimonial', 'GL', 3);
+    Insert into DB_IUMS.UG_ADM_CERTIFICATES
+       (CERTIFICATE_ID, CERTIFICATE_NAME, CERTIFICATE_TYPE, VIEW_ORDER)
+     Values
+       (7, 'O-Level Transcript', 'GCE', NULL);
+    Insert into DB_IUMS.UG_ADM_CERTIFICATES
+       (CERTIFICATE_ID, CERTIFICATE_NAME, CERTIFICATE_TYPE, VIEW_ORDER)
+     Values
+       (8, 'A-Level Transcript', 'GCE', NULL);
+    Insert into DB_IUMS.UG_ADM_CERTIFICATES
+       (CERTIFICATE_ID, CERTIFICATE_NAME, CERTIFICATE_TYPE, VIEW_ORDER)
+     Values
+       (9, 'O-Level Certificate', 'GCE', NULL);
+    Insert into DB_IUMS.UG_ADM_CERTIFICATES
+       (CERTIFICATE_ID, CERTIFICATE_NAME, CERTIFICATE_TYPE, VIEW_ORDER)
+     Values
+       (10, 'A-Level Certificate', 'GCE', NULL);
+    Insert into DB_IUMS.UG_ADM_CERTIFICATES
+       (CERTIFICATE_ID, CERTIFICATE_NAME, CERTIFICATE_TYPE, VIEW_ORDER)
+     Values
+       (11, 'O-Level Testimonial', 'GCE', NULL);
+    Insert into DB_IUMS.UG_ADM_CERTIFICATES
+       (CERTIFICATE_ID, CERTIFICATE_NAME, CERTIFICATE_TYPE, VIEW_ORDER)
+     Values
+       (12, 'A-Level Testimonial', 'GCE', NULL);
+    Insert into DB_IUMS.UG_ADM_CERTIFICATES
+       (CERTIFICATE_ID, CERTIFICATE_NAME, CERTIFICATE_TYPE, VIEW_ORDER)
+     Values
+       (13, 'NID', 'ALL', NULL);
+    Insert into DB_IUMS.UG_ADM_CERTIFICATES
+       (CERTIFICATE_ID, CERTIFICATE_NAME, CERTIFICATE_TYPE, VIEW_ORDER)
+     Values
+       (14, 'Birth Certificate', 'ALL', NULL);
+    Insert into DB_IUMS.UG_ADM_CERTIFICATES
+       (CERTIFICATE_ID, CERTIFICATE_NAME, CERTIFICATE_TYPE, VIEW_ORDER)
+     Values
+       (15, 'Passport', 'ALL', NULL);
+    Insert into DB_IUMS.UG_ADM_CERTIFICATES
+       (CERTIFICATE_ID, CERTIFICATE_NAME, CERTIFICATE_TYPE, VIEW_ORDER)
+     Values
+       (16, 'FF Certificate 1', 'FF', NULL);
+    Insert into DB_IUMS.UG_ADM_CERTIFICATES
+       (CERTIFICATE_ID, CERTIFICATE_NAME, CERTIFICATE_TYPE, VIEW_ORDER)
+     Values
+       (17, 'FF Certificate 2', 'FF', NULL);
+    Insert into DB_IUMS.UG_ADM_CERTIFICATES
+       (CERTIFICATE_ID, CERTIFICATE_NAME, CERTIFICATE_TYPE, VIEW_ORDER)
+     Values
+       (18, 'FF Certificate 3', 'FF', NULL);
+    Insert into DB_IUMS.UG_ADM_CERTIFICATES
+       (CERTIFICATE_ID, CERTIFICATE_NAME, CERTIFICATE_TYPE, VIEW_ORDER)
+     Values
+       (19, 'RA Certificate 1', 'RA', NULL);
+    Insert into DB_IUMS.UG_ADM_CERTIFICATES
+       (CERTIFICATE_ID, CERTIFICATE_NAME, CERTIFICATE_TYPE, VIEW_ORDER)
+     Values
+       (20, 'RA Certificate 2', 'RA', NULL);
+    COMMIT;
+
+
+
+    //*********************ug_adm_ver_certificates****************************
+    ALTER TABLE DB_IUMS.UG_ADM_VER_CERTIFICATES
+     DROP PRIMARY KEY CASCADE;
+
+    DROP TABLE DB_IUMS.UG_ADM_VER_CERTIFICATES CASCADE CONSTRAINTS;
+
+    CREATE TABLE DB_IUMS.UG_ADM_VER_CERTIFICATES
+    (
+      ROW_ID          NUMBER,
+      SEMESTER_ID     NUMBER,
+      RECEIPT_ID      VARCHAR2(25 BYTE),
+      CERTIFICATE_ID  NUMBER,
+      LAST_MODIFIED   VARCHAR2(18 BYTE)
+    )
+    TABLESPACE SYSTEM
+    RESULT_CACHE (MODE DEFAULT)
+    PCTUSED    40
+    PCTFREE    10
+    INITRANS   1
+    MAXTRANS   255
+    STORAGE    (
+                INITIAL          64K
+                NEXT             1M
+                MINEXTENTS       1
+                MAXEXTENTS       UNLIMITED
+                PCTINCREASE      0
+                FREELISTS        1
+                FREELIST GROUPS  1
+                BUFFER_POOL      DEFAULT
+                FLASH_CACHE      DEFAULT
+                CELL_FLASH_CACHE DEFAULT
+               )
+    LOGGING
+    NOCOMPRESS
+    NOCACHE
+    NOPARALLEL
+    MONITORING;
+
+
+    CREATE UNIQUE INDEX DB_IUMS.ALL_CERTIFICATES_OF_STUDEN_U01 ON DB_IUMS.UG_ADM_VER_CERTIFICATES
+    (CERTIFICATE_ID, RECEIPT_ID, SEMESTER_ID, ROW_ID)
+    LOGGING
+    TABLESPACE SYSTEM
+    PCTFREE    10
+    INITRANS   2
+    MAXTRANS   255
+    STORAGE    (
+                INITIAL          64K
+                NEXT             1M
+                MINEXTENTS       1
+                MAXEXTENTS       UNLIMITED
+                PCTINCREASE      0
+                FREELISTS        1
+                FREELIST GROUPS  1
+                BUFFER_POOL      DEFAULT
+                FLASH_CACHE      DEFAULT
+                CELL_FLASH_CACHE DEFAULT
+               )
+    NOPARALLEL;
+
+
+    --  There is no statement for index DB_IUMS.SYS_C008226.
+    --  The object is created when the parent object is created.
+
+    CREATE OR REPLACE TRIGGER DB_IUMS.ROW_ID_TRG
+    before insert ON DB_IUMS.UG_ADM_VER_CERTIFICATES
+    for each row
+    begin
+       select validate_id_sequence.nextval
+       into :new.row_id
+       from dual;
+    end;
+    /
+
+
+    ALTER TABLE DB_IUMS.UG_ADM_VER_CERTIFICATES ADD (
+      PRIMARY KEY
+      (ROW_ID)
+      USING INDEX
+        TABLESPACE SYSTEM
+        PCTFREE    10
+        INITRANS   2
+        MAXTRANS   255
+        STORAGE    (
+                    INITIAL          64K
+                    NEXT             1M
+                    MINEXTENTS       1
+                    MAXEXTENTS       UNLIMITED
+                    PCTINCREASE      0
+                    FREELISTS        1
+                    FREELIST GROUPS  1
+                    BUFFER_POOL      DEFAULT
+                    FLASH_CACHE      DEFAULT
+                    CELL_FLASH_CACHE DEFAULT
+                   )
+      ENABLE VALIDATE,
+      CONSTRAINT ALL_CERTIFICATES_OF_STUDEN_U01
+      UNIQUE (CERTIFICATE_ID, RECEIPT_ID, SEMESTER_ID, ROW_ID)
+      USING INDEX DB_IUMS.ALL_CERTIFICATES_OF_STUDEN_U01
+      ENABLE VALIDATE);
+
+
+
+   //***********************ug_adm_ver_comments******************
+
+   ALTER TABLE DB_IUMS.UG_ADM_VER_COMMENTS
+    DROP PRIMARY KEY CASCADE;
+
+   DROP TABLE DB_IUMS.UG_ADM_VER_COMMENTS CASCADE CONSTRAINTS;
+
+   CREATE TABLE DB_IUMS.UG_ADM_VER_COMMENTS
+   (
+     ROW_ID         NUMBER,
+     SEMESTER_ID    NUMBER,
+     RECEIPT_ID     VARCHAR2(25 BYTE),
+     COMMENTS       VARCHAR2(255 BYTE),
+     LAST_MODIFIED  VARCHAR2(18 BYTE),
+     COMMENTED_ON   DATE
+   )
+   TABLESPACE SYSTEM
+   RESULT_CACHE (MODE DEFAULT)
+   PCTUSED    40
+   PCTFREE    10
+   INITRANS   1
+   MAXTRANS   255
+   STORAGE    (
+               INITIAL          64K
+               NEXT             1M
+               MINEXTENTS       1
+               MAXEXTENTS       UNLIMITED
+               PCTINCREASE      0
+               FREELISTS        1
+               FREELIST GROUPS  1
+               BUFFER_POOL      DEFAULT
+               FLASH_CACHE      DEFAULT
+               CELL_FLASH_CACHE DEFAULT
+              )
+   LOGGING
+   NOCOMPRESS
+   NOCACHE
+   NOPARALLEL
+   MONITORING;
+
+
+   --  There is no statement for index DB_IUMS.SYS_C008211.
+   --  The object is created when the parent object is created.
+
+   CREATE OR REPLACE TRIGGER DB_IUMS.ROW_ID_COMMENTS_TABLE_TRG
+   before insert ON DB_IUMS.UG_ADM_VER_COMMENTS
+   for each row
+   begin
+      select validate_id_seq.nextval
+      into :new.row_id
+      from dual;
+   end;
+   /
+
+
+   ALTER TABLE DB_IUMS.UG_ADM_VER_COMMENTS ADD (
+     PRIMARY KEY
+     (ROW_ID)
+     USING INDEX
+       TABLESPACE SYSTEM
+       PCTFREE    10
+       INITRANS   2
+       MAXTRANS   255
+       STORAGE    (
+                   INITIAL          64K
+                   NEXT             1M
+                   MINEXTENTS       1
+                   MAXEXTENTS       UNLIMITED
+                   PCTINCREASE      0
+                   FREELISTS        1
+                   FREELIST GROUPS  1
+                   BUFFER_POOL      DEFAULT
+                   FLASH_CACHE      DEFAULT
+                   CELL_FLASH_CACHE DEFAULT
+                  )
+     ENABLE VALIDATE);
+
+
