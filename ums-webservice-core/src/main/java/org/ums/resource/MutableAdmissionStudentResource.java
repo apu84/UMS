@@ -34,6 +34,12 @@ public class MutableAdmissionStudentResource extends Resource {
   }
 
   @PUT
+  @Path("/migrationList")
+  public Response saveMigrationList(final JsonObject pJsonObject) throws Exception {
+    return mHelper.saveMigrationData(pJsonObject, mUriInfo);
+  }
+
+  @PUT
   @Path("/departmentSelectionStatus/{department-selection-status}")
   public JsonObject saveAndGetNextStudent(
       @PathParam("department-selection-status") int pDepartmentSelectionStatus,

@@ -107,6 +107,27 @@ public class AdmissionStudentResourceHelper extends
 
   }
 
+  public Response saveMigrationData(JsonObject pJsonObject, UriInfo pUriInfo) throws Exception {
+    List<MutableAdmissionStudent> students = new ArrayList<>();
+    JsonArray entries = pJsonObject.getJsonArray("entries");
+
+    for(int i = 0; i < entries.size(); i++) {
+      LocalCache localCache = new LocalCache();
+      JsonObject jsonObject = entries.getJsonObject(i);
+      PersistentAdmissionStudent student = new PersistentAdmissionStudent();
+      student.setId(jsonObject.getString("receiptId"));
+      student.setSemesterId(jsonObject.getInt("semesterId"));
+      student.setDeadline(jsonObject.getString("deadline"));
+      student.setMigrationStatus(MigrationStatus.MIGRATION_ABLE);
+      students.add(student);
+    }
+    getContentManager().updateAdmissionMigrationStatus(students);
+    URI contextURI = null;
+    Response.ResponseBuilder builder = Response.created(contextURI);
+    builder.status(Response.Status.CREATED);
+    return builder.build();
+  }
+
   // kawsurilu
 
   // @Transactional
@@ -244,7 +265,11 @@ public class AdmissionStudentResourceHelper extends
 
     for(AdmissionStudent admissionStudent : students) {
       JsonObjectBuilder jsonObject = Json.createObjectBuilder();
-      getBuilder().getAdmissionStudentBuilder(jsonObject, admissionStudent, pUriInfo, localCache);
+      try {
+        getBuilder().getAdmissionStudentBuilder(jsonObject, admissionStudent, pUriInfo, localCache);
+      } catch(Exception pE) {
+        pE.printStackTrace();
+      }
       children.add(jsonObject);
     }
     object.add("entries", children);
@@ -266,7 +291,11 @@ public class AdmissionStudentResourceHelper extends
 
     for(AdmissionStudent admissionStudent : student) {
       JsonObjectBuilder jsonObject = Json.createObjectBuilder();
-      getBuilder().getAdmissionStudentBuilder(jsonObject, admissionStudent, pUriInfo, localCache);
+      try {
+        getBuilder().getAdmissionStudentBuilder(jsonObject, admissionStudent, pUriInfo, localCache);
+      } catch(Exception pE) {
+        pE.printStackTrace();
+      }
       children.add(jsonObject);
     }
     object.add("entries", children);

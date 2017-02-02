@@ -198,7 +198,7 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
   @Override
   public int updateAdmissionMigrationStatus(List<MutableAdmissionStudent> pStudents) {
     String query =
-        "update admission_students set migration_status=? where semester_id=? and receipt_id=?";
+        "update admission_students set migration_status=?, deadline=to_date(?,'dd/mm/yyyy') where semester_id=? and receipt_id=?";
     return mJdbcTemplate.batchUpdate(query,
         getAdmissionStudentsWithMigrationStatusParams(pStudents)).length;
   }
@@ -223,7 +223,9 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
       List<MutableAdmissionStudent> pStudents) {
     List<Object[]> params = new ArrayList<>();
     for(AdmissionStudent student : pStudents) {
-      params.add(new Object[] {student.getMigrationStatus().getId(), student.getSemester().getId(),
+      params.add(new Object[] {student.getMigrationStatus().getId(),
+          student.getDeadline(),
+          student.getSemester().getId(),
           student.getReceiptId()});
     }
     return params;
@@ -257,9 +259,8 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
   @Override
   public List<AdmissionStudent> getTaletalkData(int pSemesterId, ProgramType pProgramType) {
     int pType = pProgramType.getValue();
-    String query = SELECT_ONE_TALETALK_DATA;
-    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pProgramType.getValue()},
-        new AdmissionStudentRowMapperTaletalk());
+    String query = SELECT_ONE + " where semester_id=? ";
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId}, new AdmissionStudentRowMapper());
   }
 
   @Override

@@ -13,16 +13,23 @@ module ums{
     migrationStudents:Array<AdmissionStudent>;
     admissionStudentMap:any;
     modalData:any;
+    deadline:string;
 
+    showMainSection:boolean;
     searchSpinner:boolean;
     showSpinner:boolean;
+    disableSaveButton:boolean;
     showFileUploadSection:boolean;
+    showAddButton:boolean;
 
 
     fetchTaletalkData:Function;
     fetchMigrationData:Function;
     fetchExcelFormat:Function;
     processData:Function;
+    saveData:Function;
+    assignDeadline:Function;
+    addData:Function;
 
   }
 
@@ -51,8 +58,11 @@ module ums{
       $scope.programTypes = appConstants.programType;
       $scope.programType = $scope.programTypes[0];
       $scope.searchSpinner = false;
+      $scope.disableSaveButton=true;
       $scope.showFileUploadSection = false;
       $scope.showSpinner = false;
+      $scope.showMainSection=false;
+      $scope.showAddButton=false;
       $scope.migrationStudents=[];
 
       $scope.data = {
@@ -66,17 +76,19 @@ module ums{
           manualColumnResize:true,
           columnSorting:true,
           sortIndicator:true,
+          stretchH:'all',
           readOnly:true,
-          width:$(".page-content").width()-5,
           height:$(".page-content").height()-5,
           observeChanges:true,
           search:true,
           columns:[
             {"title":"Receipt Id","data":"receiptId"},
             {"title":"Student Name","data":"studentName"},
+            {"title":"Merit Sl No.","data":"meritSlNo"},
             {"title":"Quota","data":"quota"},
             {"title":"Unit","data":"unit"},
-            {"title":"Migration Status", "data":"migrationDes"}]
+            {"title":"Migration Status", "data":"migrationDes"},
+            {"title":"Admission Deadline", "data":"deadline"}]
         }
 
       };
@@ -85,6 +97,9 @@ module ums{
       $scope.fetchMigrationData = this.fetchMigrationData.bind(this);
       $scope.fetchExcelFormat = this.fetchExcelFormat.bind(this);
       $scope.processData = this.processData.bind(this);
+      $scope.saveData = this.saveData.bind(this);
+      $scope.assignDeadline=this.assignDeadline.bind(this);
+      $scope.addData = this.addData.bind(this);
 
       this.getSemesters();
 
@@ -103,10 +118,11 @@ module ums{
       });
     }
 
-
-
     private fetchTaletalkData(){
       Utils.expandRightDiv();
+      this.$scope.showMainSection=true;
+      console.log("Show main section");
+      console.log(this.$scope.showMainSection);
       this.$scope.modalData={};
       this.$scope.modalData="";
       this.$scope.searchSpinner=true;
@@ -126,10 +142,34 @@ module ums{
       });
     }
 
+    private addDate():void{
+      setTimeout(function () {
+        $('.datepicker-default').datepicker();
+        $('.datepicker-default').on('change', function () {
+          $('.datepicker').hide();
+        });
+      }, 100);
+
+    }
+
+    private addData(){
+      this.$scope.showFileUploadSection = true;
+      this.$scope.showAddButton=false;
+    }
+
+
+    private assignDeadline(deadLine:string){
+      this.$scope.deadline=deadLine;
+      console.log("###########");
+      console.log(deadLine);
+
+
+    }
 
     private fetchMigrationData(){
       this.admissionStudentService.fetchMigrationData(this.$scope.semester.id).then((data)=>{
         this.$scope.migrationStudents = data;
+
         this.configureViewSection();
         this.$scope.searchSpinner = false;
       });
@@ -137,7 +177,10 @@ module ums{
 
     private configureViewSection(){
       if(this.$scope.migrationStudents.length>0){
+        this.$scope.showAddButton=true;
         this.$scope.showFileUploadSection=false;
+        this.$scope.showSpinner=false;
+
       }else{
         this.$scope.showFileUploadSection = true;
       }
@@ -149,8 +192,10 @@ module ums{
     }
 
     private processData(modalData:any){
+      this.$scope.disableSaveButton=false;
       this.$scope.migrationStudents=[];
       this.$scope.searchSpinner=false;
+      this.addDate();
       this.fillUpAdmissionStudents(modalData).then((students:Array<AdmissionStudent>)=>{
         this.$scope.showFileUploadSection=false;
       });
@@ -190,6 +235,40 @@ module ums{
       student.migrationDes="Migration-able";
       this.$scope.migrationStudents.push(student);
       console.log(this.$scope.migrationStudents);
+    }
+
+    private saveData(){
+      if(this.$scope.deadline=="" || this.$scope.deadline==null){
+        this.notify.error("Deadline is not selected");
+      }else{
+        this.convertToJson().then((json)=>{
+          this.admissionStudentService.saveMigrationData(json).then((message)=>{
+            this.fetchMigrationData();
+          });
+        });
+      }
+
+    }
+
+    private convertToJson():ng.IPromise<any>{
+      var defer  = this.$q.defer();
+      var completeJson = {};
+      var jsonObject=[];
+      console.log("deadline");
+      console.log(this.$scope.deadline);
+      var students:Array<AdmissionStudent> = this.$scope.migrationStudents;
+
+      for(var i=0;i<students.length;i++){
+        var item:any={};
+        item['receiptId'] = students[i].receiptId;
+        item['semesterId'] = this.$scope.semester.id;
+        item['deadline'] = this.$scope.deadline;
+        jsonObject.push(item);
+      }
+
+      completeJson['entries'] = jsonObject;
+      defer.resolve(completeJson);
+      return defer.promise;
     }
 
   }

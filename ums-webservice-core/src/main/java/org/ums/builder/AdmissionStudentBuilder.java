@@ -87,29 +87,6 @@ public class AdmissionStudentBuilder implements Builder<AdmissionStudent, Mutabl
       pBuilder.add("allocatedProgramLongName", pReadOnly.getAllocatedProgram().getLongName());
     }
 
-    if(pReadOnly.getMigrationStatus() != null) {
-      pBuilder.add("migrationStatus", pReadOnly.getMigrationStatus().getId());
-
-      SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-      if(pReadOnly.getDeadline() != null) {
-        String dateInString = pReadOnly.getDeadline();
-        Date date = formatter.parse(dateInString);
-        Date current = new Date();
-
-        if(date.equals(current) || date.after(current)) {
-          if(pReadOnly.getMigrationStatus().getId() == MigrationStatus.MIGRATION_ABLE.getId()) {
-            pBuilder.add("migrationDes", "migration-able");
-          }
-          else {
-            pBuilder.add("migrationDes", "migrated");
-          }
-        }
-        else {
-          pBuilder.add("migrationDes", "migration deadline over");
-        }
-      }
-    }
-
     if(pReadOnly.getDeadline() != null) {
       pBuilder.add("deadline", pReadOnly.getDeadline());
     }
@@ -153,7 +130,7 @@ public class AdmissionStudentBuilder implements Builder<AdmissionStudent, Mutabl
   // kawsurilu
 
   public void getAdmissionStudentBuilder(JsonObjectBuilder pBuilder, AdmissionStudent pReadOnly,
-      UriInfo pUriInfo, LocalCache pLocalCache) {
+      UriInfo pUriInfo, LocalCache pLocalCache) throws Exception {
     pBuilder.add("id", pReadOnly.getReceiptId());
     pBuilder.add("text", pReadOnly.getReceiptId());
     pBuilder.add("semesterId", pReadOnly.getSemester().getId());
@@ -203,6 +180,32 @@ public class AdmissionStudentBuilder implements Builder<AdmissionStudent, Mutabl
     }
     else if(pReadOnly.getVerificationStatus() == 3) {
       pBuilder.add("verificationStatus", "Rejected");
+    }
+
+    if(pReadOnly.getMigrationStatus() != null) {
+      pBuilder.add("migrationStatus", pReadOnly.getMigrationStatus().getId());
+
+      SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+      if(pReadOnly.getDeadline() != null) {
+        String dateInString = pReadOnly.getDeadline();
+        Date date = formatter.parse(dateInString);
+        Date current = new Date();
+
+        if(date.equals(current) || date.after(current)) {
+          if(pReadOnly.getMigrationStatus().getId() == MigrationStatus.MIGRATION_ABLE.getId()) {
+            pBuilder.add("migrationDes", "migration-able");
+          }
+          else {
+            pBuilder.add("migrationDes", "migrated");
+          }
+        }
+        else {
+          pBuilder.add("migrationDes", "migration deadline over");
+        }
+      }
+    }
+    if(pReadOnly.getDeadline()!=null){
+      pBuilder.add("deadline", pReadOnly.getDeadline());
     }
   }
 

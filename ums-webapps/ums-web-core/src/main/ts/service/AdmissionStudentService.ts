@@ -185,6 +185,22 @@ module ums{
       return defer.promise;
     }
 
+    public saveMigrationData(json:any):ng.IPromise<any>{
+      var defer=this.$q.defer();
+      var url="academic/admission/migrationList";
+      console.log("Found json");
+      console.log(json);
+      this.httpClient.put(url,json,'application/json')
+          .success(()=>{
+            defer.resolve("success");
+            this.notify.success("Data Successfully Saved");
+          }).error((data)=>{
+        defer.resolve("error");
+      });
+
+      return defer.promise;
+    }
+
     public saveMeritList(json:any):ng.IPromise<any>{
       var defer=this.$q.defer();
       var url="academic/admission/meritListUpload";

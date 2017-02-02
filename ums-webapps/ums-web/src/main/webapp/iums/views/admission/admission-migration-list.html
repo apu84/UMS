@@ -64,6 +64,7 @@
             <div class="panel-heading">Migration List<span
                     class="subtitle"></span></div>
             <div class="panel-body shadowPanel"   style="min-height: 490px;">
+
                 <div data-ng-show="showFileUploadSection==true && searchSpinner==false" align="center">
                     <div class="row" align="center">
                         <h1>Please upload migration data</h1>
@@ -98,7 +99,18 @@
                         </div>
                     </div>
                 </div>
-                <div data-ng-if="showFileUploadSection==false && searchSpinner==false " align="left" style="color:black;">
+                <div data-ng-if="showFileUploadSection==false && searchSpinner==false && showMainSection==true " align="left" style="color:black;">
+                    <div class="row"  data-ng-show="showAddButton==false">
+                        <div class="col-md-4" align="right">Deadline</div>
+                        <div class="col-md-3" align="left">
+                            <div class="input-icon right" >
+                                <i class="fa fa-calendar"></i>
+                                <input  type="text"  data-ng-model="deadline" data-ng-change="assignDeadline(deadline)" data-date-format="dd/mm/yyyy" placeholder="DD/MM/YYYY" class="datepicker-default form-control required" autocomplete="off"/>
+                            </div>
+                        </div>
+                        <div class="col-md-5"></div>
+                    </div>
+                    <br>
 
                     <div class="row" align="left" >
                         <hot-table settings="data.settings"
@@ -111,9 +123,11 @@
                         </hot-table>
                     </div>
                     <div class="row" data-ng-show="showSpinner==false">
-                        <div class="col-md-12" align="right" data-ng-if="disableSaveButton==false">
+                        <div class="col-md-12" align="right" >
                             <br>
-                            <button class="btn btn-success" data-ng-click="saveData()">Save Data</button>
+                            <button class="btn btn-success" data-ng-click="saveData()" data-ng-disabled="showAddButton">Save Data</button>
+                            <button class="btn btn-success" data-ng-click="addData()" data-ng-disabled="showAddButton==false">Add Data</button>
+
                         </div>
                     </div>
 
