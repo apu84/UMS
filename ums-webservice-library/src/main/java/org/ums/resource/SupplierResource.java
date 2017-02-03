@@ -19,7 +19,7 @@ import javax.ws.rs.core.Response;
 @Path("supplier")
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
-public class SupplierResource extends MutableAuthorResource {
+public class SupplierResource extends MutableSupplierResource {
   @Autowired
   SupplierResourceHelper mResourceHelper;
 
