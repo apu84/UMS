@@ -2,12 +2,12 @@ package org.ums.resource.helper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ums.builder.SupplierBuilder;
+import org.ums.builder.PublisherBuilder;
 import org.ums.cache.LocalCache;
-import org.ums.domain.model.immutable.library.Supplier;
-import org.ums.domain.model.mutable.library.MutableSupplier;
-import org.ums.manager.library.SupplierManager;
-import org.ums.persistent.model.library.PersistentSupplier;
+import org.ums.domain.model.immutable.library.Publisher;
+import org.ums.domain.model.mutable.library.MutablePublisher;
+import org.ums.manager.library.PublisherManager;
+import org.ums.persistent.model.library.PersistentPublisher;
 import org.ums.resource.ResourceHelper;
 import org.ums.resource.SemesterResource;
 import org.ums.util.UmsUtils;
@@ -20,45 +20,44 @@ import java.net.URI;
 /**
  * Created by Ifti on 04-Feb-17.
  */
-
 @Component
-public class SupplierResourceHelper extends ResourceHelper<Supplier, MutableSupplier, Integer>
+public class PublisherResourceHelper extends ResourceHelper<Publisher, MutablePublisher, Integer>
 
 {
 
   @Autowired
-  private SupplierManager mManager;
+  private PublisherManager mManager;
 
   @Autowired
-  private SupplierBuilder mBuilder;
+  private PublisherBuilder mBuilder;
 
   @Override
-  public SupplierManager getContentManager() {
+  public PublisherManager getContentManager() {
     return mManager;
   }
 
   @Override
-  public SupplierBuilder getBuilder() {
+  public PublisherBuilder getBuilder() {
     return mBuilder;
   }
 
   @Override
   public Response post(final JsonObject pJsonObject, final UriInfo pUriInfo) {
-    MutableSupplier mutableSupplier = new PersistentSupplier();
+    MutablePublisher mutablePublisher = new PersistentPublisher();
     LocalCache localCache = new LocalCache();
-    getBuilder().build(mutableSupplier, pJsonObject, localCache);
-    mutableSupplier.commit(false);
+    getBuilder().build(mutablePublisher, pJsonObject, localCache);
+    mutablePublisher.commit(false);
 
     URI contextURI =
         pUriInfo.getBaseUriBuilder().path(SemesterResource.class)
-            .path(SemesterResource.class, "get").build(mutableSupplier.getId());
+            .path(SemesterResource.class, "get").build(mutablePublisher.getId());
     Response.ResponseBuilder builder = Response.created(contextURI);
     builder.status(Response.Status.CREATED);
     return builder.build();
   }
 
   @Override
-  protected String getETag(Supplier pReadonly) {
+  protected String getETag(Publisher pReadonly) {
     return UmsUtils.nullConversion(pReadonly.getLastModified());
   }
 

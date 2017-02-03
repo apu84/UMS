@@ -60,4 +60,5 @@ public class UmsUtils {
   public static String nullConversion(String value) {
     return value == null ? "" : value;
   }
+
 }

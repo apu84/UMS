@@ -2,7 +2,7 @@ package org.ums.resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ums.resource.helper.SupplierResourceHelper;
+import org.ums.resource.helper.PublisherResourceHelper;
 
 import javax.json.JsonObject;
 import javax.ws.rs.*;
@@ -15,12 +15,12 @@ import javax.ws.rs.core.Response;
  */
 
 @Component
-@Path("supplier")
+@Path("publisher")
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
-public class SupplierResource extends MutableSupplierResource {
+public class PublisherResource extends MutableSupplierResource {
   @Autowired
-  SupplierResourceHelper mResourceHelper;
+  PublisherResourceHelper mResourceHelper;
 
   @GET
   @Path("/all")

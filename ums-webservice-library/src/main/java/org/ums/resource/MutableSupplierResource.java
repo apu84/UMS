@@ -1,9 +1,7 @@
 package org.ums.resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.ums.domain.model.immutable.library.Author;
 import org.ums.domain.model.immutable.library.Supplier;
-import org.ums.domain.model.mutable.library.MutableAuthor;
 import org.ums.domain.model.mutable.library.MutableSupplier;
 
 /**
