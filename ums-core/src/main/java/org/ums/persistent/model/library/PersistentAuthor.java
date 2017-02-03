@@ -4,10 +4,7 @@ import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.common.Country;
 import org.ums.domain.model.mutable.library.MutableAuthor;
-import org.ums.manager.CourseGroupManager;
-import org.ums.manager.CourseManager;
-import org.ums.manager.DepartmentManager;
-import org.ums.manager.SyllabusManager;
+import org.ums.domain.model.mutable.library.MutableSupplier;
 import org.ums.manager.library.AuthorManager;
 
 /**

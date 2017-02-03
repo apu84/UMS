@@ -204,7 +204,7 @@ public class AdmissionStudentBuilder implements Builder<AdmissionStudent, Mutabl
         }
       }
     }
-    if(pReadOnly.getDeadline()!=null){
+    if(pReadOnly.getDeadline() != null) {
       pBuilder.add("deadline", pReadOnly.getDeadline());
     }
   }

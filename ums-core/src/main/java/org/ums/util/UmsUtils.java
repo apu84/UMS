@@ -56,4 +56,8 @@ public class UmsUtils {
     GPA_MAP.put("F", 0.00);
     return Collections.unmodifiableMap(GPA_MAP);
   }
+
+  public static String nullConversion(String value) {
+    return value == null ? "" : value;
+  }
 }

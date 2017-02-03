@@ -223,10 +223,8 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
       List<MutableAdmissionStudent> pStudents) {
     List<Object[]> params = new ArrayList<>();
     for(AdmissionStudent student : pStudents) {
-      params.add(new Object[] {student.getMigrationStatus().getId(),
-          student.getDeadline(),
-          student.getSemester().getId(),
-          student.getReceiptId()});
+      params.add(new Object[] {student.getMigrationStatus().getId(), student.getDeadline(),
+          student.getSemester().getId(), student.getReceiptId()});
     }
     return params;
   }

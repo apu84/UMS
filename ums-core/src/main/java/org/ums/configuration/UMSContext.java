@@ -14,6 +14,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.ums.cache.*;
 import org.ums.cache.common.CountryCache;
 import org.ums.cache.library.AuthorCache;
+import org.ums.cache.library.SupplierCache;
 import org.ums.cachewarmer.AutoCacheWarmer;
 import org.ums.cachewarmer.CacheWarmerManagerImpl;
 import org.ums.domain.model.immutable.Examiner;
@@ -25,10 +26,12 @@ import org.ums.generator.XlsGenerator;
 import org.ums.manager.*;
 import org.ums.manager.common.CountryManager;
 import org.ums.manager.library.AuthorManager;
+import org.ums.manager.library.SupplierManager;
 import org.ums.message.MessageResource;
 import org.ums.persistent.dao.*;
 import org.ums.persistent.dao.common.PersistentCountryDao;
 import org.ums.persistent.dao.library.PersistentAuthorDao;
+import org.ums.persistent.dao.library.PersistentSupplierDao;
 import org.ums.security.authentication.UMSAuthenticationRealm;
 import org.ums.services.LoginService;
 import org.ums.services.NotificationGenerator;
@@ -611,6 +614,13 @@ public class UMSContext {
     CountryCache countryCache = new CountryCache(mCacheFactory.getCacheManager());
     countryCache.setManager(new PersistentCountryDao(mTemplateFactory.getJdbcTemplate()));
     return countryCache;
+  }
+
+  @Bean
+  SupplierManager supplierManager() {
+    SupplierCache supplierCache = new SupplierCache(mCacheFactory.getCacheManager());
+    supplierCache.setManager(new PersistentSupplierDao(mTemplateFactory.getLmsJdbcTemplate()));
+    return supplierCache;
   }
 
   @Bean
