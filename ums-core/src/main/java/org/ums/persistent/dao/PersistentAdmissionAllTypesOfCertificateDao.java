@@ -18,8 +18,7 @@ import java.util.List;
 public class PersistentAdmissionAllTypesOfCertificateDao extends
     AdmissionAllTypesOfCertificateDaoDecorator {
 
-  static String GET_ALL =
-      "SELECT CERTIFICATE_ID, CERTIFICATE_NAME, CERTIFICATE_TYPE FROM ug_adm_certificates ";
+  static String GET_ALL = "SELECT ID, CERTIFICATE_NAME, CERTIFICATE_TYPE FROM ug_adm_certificates ";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -46,7 +45,7 @@ public class PersistentAdmissionAllTypesOfCertificateDao extends
     public AdmissionAllTypesOfCertificate mapRow(ResultSet pResultSet, int pI) throws SQLException {
       MutableAdmissionAllTypesOfCertificate certificate =
           new PersistentAdmissionAllTypesOfCertificate();
-      certificate.setCertificateId(pResultSet.getInt("CERTIFICATE_ID"));
+      certificate.setCertificateId(pResultSet.getInt("ID"));
       certificate.setCertificateTitle(pResultSet.getString("CERTIFICATE_NAME"));
       certificate.setCertificateType(pResultSet.getString("CERTIFICATE_TYPE"));
       return certificate;

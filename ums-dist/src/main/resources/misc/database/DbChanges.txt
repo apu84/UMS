@@ -570,7 +570,7 @@ Insert into DB_IUMS.PERMISSIONS
 
     CREATE TABLE DB_IUMS.UG_ADM_CERTIFICATES
     (
-      CERTIFICATE_ID    NUMBER,
+      ID    NUMBER,
       CERTIFICATE_NAME  VARCHAR2(50 BYTE),
       CERTIFICATE_TYPE  VARCHAR2(30 BYTE),
       VIEW_ORDER        NUMBER
@@ -717,7 +717,7 @@ Insert into DB_IUMS.PERMISSIONS
 
     CREATE TABLE DB_IUMS.UG_ADM_VER_CERTIFICATES
     (
-      ROW_ID          NUMBER,
+      ID          NUMBER,
       SEMESTER_ID     NUMBER,
       RECEIPT_ID      VARCHAR2(25 BYTE),
       CERTIFICATE_ID  NUMBER,
@@ -778,7 +778,7 @@ Insert into DB_IUMS.PERMISSIONS
     for each row
     begin
        select validate_id_sequence.nextval
-       into :new.row_id
+       into :new.id
        from dual;
     end;
     /
@@ -821,7 +821,7 @@ Insert into DB_IUMS.PERMISSIONS
 
    CREATE TABLE DB_IUMS.UG_ADM_VER_COMMENTS
    (
-     ROW_ID         NUMBER,
+     ID         NUMBER,
      SEMESTER_ID    NUMBER,
      RECEIPT_ID     VARCHAR2(25 BYTE),
      COMMENTS       VARCHAR2(255 BYTE),
@@ -861,7 +861,7 @@ Insert into DB_IUMS.PERMISSIONS
    for each row
    begin
       select validate_id_seq.nextval
-      into :new.row_id
+      into :new.id
       from dual;
    end;
    /
