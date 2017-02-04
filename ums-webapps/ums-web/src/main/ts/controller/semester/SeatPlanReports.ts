@@ -161,7 +161,7 @@
         this.$scope.showLoader=false;
       });*/
 
-      this.httpClient.get("/ums-webservice-academic/academic/seatplan/programType/"+programType+"/semesterId/"+semesterId+"/examType/"+examType+"/examDate/"+examDate,  'application/pdf',
+      this.httpClient.get("academic/seatplan/programType/"+programType+"/semesterId/"+semesterId+"/examType/"+examType+"/examDate/"+examDate,  'application/pdf',
           (data:any, etag:string) => {
             var file = new Blob([data], {type: 'application/pdf'});
             var fileURL = this.$sce.trustAsResourceUrl(URL.createObjectURL(file));
@@ -193,7 +193,7 @@
        this.$scope.showLoader=false;
        });*/
 
-      this.httpClient.get("/ums-webservice-academic/academic/seatplan/topsheet/programType/"+programType+"/semesterId/"+semesterId+"/examType/"+examType+"/examDate/"+examDate,  'application/pdf',
+      this.httpClient.get("academic/seatplan/topsheet/programType/"+programType+"/semesterId/"+semesterId+"/examType/"+examType+"/examDate/"+examDate,  'application/pdf',
           (data:any, etag:string) => {
             var file = new Blob([data], {type: 'application/pdf'});
             var fileURL = this.$sce.trustAsResourceUrl(URL.createObjectURL(file));
@@ -225,7 +225,7 @@
        this.$scope.showLoader=false;
        });*/
 
-      this.httpClient.get("/ums-webservice-academic/academic/seatplan/sticker/programType/"+programType+"/semesterId/"+semesterId+"/examType/"+examType+"/examDate/"+examDate,  'application/pdf',
+      this.httpClient.get("academic/seatplan/sticker/programType/"+programType+"/semesterId/"+semesterId+"/examType/"+examType+"/examDate/"+examDate,  'application/pdf',
           (data:any, etag:string) => {
             var file = new Blob([data], {type: 'application/pdf'});
             var fileURL = this.$sce.trustAsResourceUrl(URL.createObjectURL(file));
@@ -239,7 +239,7 @@
 
     private getProgramInfo():ng.IPromise<any>{
       var defer = this.$q.defer();
-      this.httpClient.get('/ums-webservice-academic/academic/program/all', 'application/json',
+      this.httpClient.get('academic/program/all', 'application/json',
           (json:any, etag:string) => {
             this.$scope.programsArr = json.entries;
 
@@ -247,6 +247,7 @@
           },
           (response:ng.IHttpPromiseCallbackArg<any>) => {
             console.error(response);
+
           });
       return defer.promise;
     }
@@ -267,7 +268,6 @@
 
       return defer.promise;
     }
-
 
   }
 
