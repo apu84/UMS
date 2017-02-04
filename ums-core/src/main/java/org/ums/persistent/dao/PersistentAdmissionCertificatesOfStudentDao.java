@@ -48,7 +48,7 @@ public class PersistentAdmissionCertificatesOfStudentDao extends
   public List<AdmissionCertificatesOfStudent> getStudentsSavedCertificateLists(int pSemesterId,
       String pReceiptId) {
     String query =
-        "select c.semester_id, c.receipt_id, c.certificate_id, a.certificate_name, a.certificate_type from all_types_of_certificates a, ug_adm_ver_certificates c where a.certificate_id = c.certificate_id and SEMESTER_ID=? and RECEIPT_ID=?";
+        "select c.semester_id, c.receipt_id, c.certificate_id, a.certificate_name, a.certificate_type from ug_adm_certificates a, ug_adm_ver_certificates c where a.certificate_id = c.certificate_id and SEMESTER_ID=? and RECEIPT_ID=?";
     return mJdbcTemplate.query(query, new Object[] {pSemesterId, pReceiptId},
         new CustomRoleRowMapper());
   }
