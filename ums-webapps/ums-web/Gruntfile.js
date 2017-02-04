@@ -22,11 +22,17 @@ module.exports = function (grunt) {
         },
         esteWatch: {
             options: {
-                dirs: ['../ums-web-core/src/main/ts/**/',
-                    'src/main/ts/**/',
-                    'src/main/webapp/**/',
-                    '!src/main/webapp/templates/**/',
-                    '!src/main/webapp/vendors/**/']
+                dirs: (function () {
+                    var dirs = ['src/main/webapp/**/',
+                        '!src/main/webapp/templates/**/',
+                        '!src/main/webapp/vendors/**/'];
+                    var ts = grunt.option('ts') || false;
+                    if (ts) {
+                        dirs.push('../ums-web-core/src/main/ts/**/',
+                            'src/main/ts/**/');
+                    }
+                    return dirs;
+                })()
             },
             ts: function (filepath) {
                 return ['ts'];
@@ -53,11 +59,11 @@ module.exports = function (grunt) {
             }
         }
     });
+
     grunt.loadNpmTasks("grunt-ts");
     grunt.loadNpmTasks("grunt-concurrent");
     grunt.loadNpmTasks('grunt-este-watch');
     grunt.loadNpmTasks('grunt-sync');
-
 
     grunt.registerTask("default", ["sync", "ts", "concurrent"]);
 };
