@@ -573,5 +573,36 @@ module ums {
         }
       }
     }
+    static  LibConstant(): any {
+      return {
+        languages: [
+          {id: '1', name: 'English'},
+          {id: '2', name: 'Bangla'}
+        ],
+        bindingTypes: [
+          {id: '1', name: 'Saddle Stitched'},
+          {id: '2', name: 'Loop Stitched'},
+          {id: '3', name: 'Stab Stitched or Side Stitched'},
+          {id: '4', name: 'Sewn Bound'},
+          {id: '5', name: 'Perfect Bound'},
+          {id: '6', name: 'Tape Bound'},
+          {id: '7', name: 'Screw Bound'},
+          {id: '8', name: 'Hardcover or Case Bound'},
+          {id: '9', name: 'Plastic Grip'},
+          {id: '10', name: 'Comb Bound or Plastic Bound'},
+          {id: '11', name: 'Spiral Bound or Coil Bound'},
+          {id: '12', name: 'Wire-O Bound or Wire Bound'}
+        ],
+        acquisitionTypes: [
+          {id: '1', name: 'Purchase'},
+          {id: '2', name: 'Donation'}
+        ],
+        libContributorRoles: [
+          {id: '1', name: 'Author'},
+          {id: '2', name: 'Co-Author'},
+          {id: '3', name: 'Editor'}
+        ],
+      }
+    }
   }
 }
