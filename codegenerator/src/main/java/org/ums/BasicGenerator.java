@@ -1,0 +1,454 @@
+package org.ums;
+
+import java.io.File;
+import java.io.FileReader;
+import java.io.Serializable;
+
+import com.sun.javafx.binding.StringFormatter;
+import org.apache.commons.lang.WordUtils;
+import org.jboss.forge.roaster.Roaster;
+import org.jboss.forge.roaster.model.source.JavaClassSource;
+import org.jboss.forge.roaster.model.source.JavaInterfaceSource;
+import org.jboss.forge.roaster.model.source.MethodSource;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
+public class BasicGenerator {
+
+  public static void main(String[] args) {
+    new BasicGenerator();
+  }
+
+  public BasicGenerator() {
+    generateModel();
+  }
+
+  private void generateModel() {
+    JSONObject template = getTemplateJson();
+    JSONObject model = (JSONObject) template.get("model");
+    if(model != null) {
+      String immutableModelName = model.get("name").toString();
+      String mutableModelName = String.format("%s%s", "Mutable", immutableModelName);
+      generateImmutable(immutableModelName, mutableModelName, (JSONArray) model.get("fields"));
+      generateMutable(immutableModelName, mutableModelName, (JSONArray) model.get("fields"));
+      generateContentManager(immutableModelName, mutableModelName);
+      generatePersistentModel(immutableModelName, mutableModelName,
+          (JSONArray) model.get("fields"));
+      generateDaoDecorator(immutableModelName, mutableModelName);
+    }
+
+  }
+
+  private void generateImmutable(String pImmutable, String pMutable, JSONArray pFields) {
+    JavaInterfaceSource immutable = Roaster.create(JavaInterfaceSource.class);
+    immutable.setPackage("org.ums.domain.model.immutable").setName(pImmutable);
+    immutable.addInterface(Serializable.class);
+    immutable.addImport("org.ums.domain.model.common.Identifier");
+    immutable.addImport("org.ums.domain.model.common.EditType");
+    immutable.addImport(String.format("org.ums.domain.model.mutable.%s", pMutable));
+
+    immutable.addInterface(String.format("EditType<%s>", pMutable))
+        .addInterface(org.ums.domain.model.common.LastModifier.class)
+        .addInterface("Identifier<String>");
+
+    for(int i = 0; i < pFields.size(); i++) {
+      JSONObject field = (JSONObject) pFields.get(i);
+
+      for(Object fieldNameObject : field.keySet()) {
+        String fieldName = (String) fieldNameObject;
+
+        if(field.get(fieldName) instanceof String) {
+          immutable.addMethod().setName(String.format("get%s", WordUtils.capitalize(fieldName)))
+              .setReturnType(field.get(fieldName).toString());
+        }
+        else {
+          JSONObject fieldValue = (JSONObject) field.get(fieldName);
+          JSONObject referenceObject = (JSONObject) fieldValue.get("reference");
+          String referenceName = WordUtils.capitalize(referenceObject.get("name").toString());
+
+          if(referenceObject.containsKey("package")) {
+            immutable.addImport(
+                String.format("%s.%s", referenceObject.get("package").toString(), referenceName));
+          }
+
+          immutable.addMethod().setName(String.format("get%s", referenceName))
+              .setReturnType(referenceName);
+
+          if(fieldValue.containsKey("type")
+              && fieldValue.get("type").toString().equalsIgnoreCase("Ref")) {
+            immutable.addMethod().setName(String.format("get%sId", referenceName))
+                .setReturnType(String.class);
+          }
+
+        }
+      }
+    }
+
+    print(immutable.toString());
+  }
+
+  private void generateMutable(String pImmutable, String pMutable, JSONArray pFields) {
+    JavaInterfaceSource mutable = Roaster.create(JavaInterfaceSource.class);
+    mutable.setPackage("org.ums.domain.model.mutable")
+        .setName(String.format("Mutable%s", pImmutable));
+    mutable.addImport("org.ums.domain.model.common.Mutable");
+    mutable.addImport("org.ums.domain.model.common.MutableIdentifier");
+    mutable.addImport("org.ums.domain.model.mutable.MutableLastModifier");
+    mutable.addImport(String.format("org.ums.domain.model.immutable.%s", pImmutable));
+
+    mutable.addInterface(pImmutable).addInterface("Mutable")
+        .addInterface("MutableIdentifier<String>").addInterface("MutableLastModifier");
+
+    for(int i = 0; i < pFields.size(); i++) {
+      JSONObject field = (JSONObject) pFields.get(i);
+
+      for(Object fieldNameObject : field.keySet()) {
+        String fieldName = (String) fieldNameObject;
+
+        if(field.get(fieldName) instanceof String) {
+          mutable.addMethod().setName(String.format("set%s", WordUtils.capitalize(fieldName)))
+              .setReturnTypeVoid().addParameter(field.get(fieldName).toString(),
+                  String.format("p%s", WordUtils.capitalize(fieldName)));
+        }
+        else {
+          JSONObject fieldValue = (JSONObject) field.get(fieldName);
+          JSONObject referenceObject = (JSONObject) fieldValue.get("reference");
+          String referenceName = WordUtils.capitalize(referenceObject.get("name").toString());
+
+          if(referenceObject.containsKey("package")) {
+            mutable.addImport(
+                String.format("%s.%s", referenceObject.get("package").toString(), referenceName));
+          }
+
+          mutable.addMethod().setName(String.format("set%s", referenceName)).setReturnTypeVoid()
+              .addParameter(referenceName, String.format("p%s", referenceName));
+
+          if(fieldValue.containsKey("type")
+              && fieldValue.get("type").toString().equalsIgnoreCase("Ref")) {
+            mutable.addMethod().setName(String.format("set%sId", referenceName)).setReturnTypeVoid()
+                .addParameter(String.class, String.format("p%sId", referenceName));;
+          }
+
+        }
+      }
+    }
+
+    print(mutable.toString());
+  }
+
+  private void generateContentManager(String pImmutable, String pMutable) {
+    JavaInterfaceSource manager = Roaster.create(JavaInterfaceSource.class);
+    manager.setPackage("org.ums.manager").setName(String.format("%sManager", pImmutable));
+    manager.addImport("org.ums.manager.ContentManager");
+    manager.addImport(String.format("org.ums.domain.model.immutable.%s", pImmutable));
+    manager.addImport(String.format("org.ums.domain.model.mutable.%s", pMutable));
+
+    manager.addInterface(String.format("ContentManager<%s, %s, String>", pImmutable, pMutable));
+
+    print(manager.toString());
+  }
+
+  private void generatePersistentModel(String pImmutable, String pMutable, JSONArray pFields) {
+    JavaClassSource model = Roaster.create(JavaClassSource.class);
+    String modelName = String.format("Persistent%s", pImmutable);
+    model.setPackage("org.ums.persistent.model").setName(modelName);
+    model.addImport("org.springframework.context.ApplicationContext");
+    model.addImport("org.ums.context.AppContext");
+    model.addImport(String.format("org.ums.domain.model.immutable.%s", pImmutable));
+    model.addImport(String.format("org.ums.domain.model.mutable.%s", pMutable));
+
+    String managerName = String.format("%sManager", WordUtils.capitalize(pImmutable));
+    model.addImport(String.format("org.ums.manager.%s", managerName));
+    model.addInterface(pMutable);
+
+    for(int i = 0; i < pFields.size(); i++) {
+      JSONObject field = (JSONObject) pFields.get(i);
+
+      for(Object fieldNameObject : field.keySet()) {
+        String fieldName = (String) fieldNameObject;
+
+        if(!(field.get(fieldName) instanceof String)) {
+          JSONObject fieldValue = (JSONObject) field.get(fieldName);
+          JSONObject referenceObject = (JSONObject) fieldValue.get("reference");
+          String referenceName = WordUtils.capitalize(referenceObject.get("name").toString());
+
+          if(referenceObject.containsKey("package")) {
+            model.addImport(
+                String.format("%s.%s", referenceObject.get("package").toString(), referenceName));
+          }
+
+          if(referenceObject.containsKey("manager")) {
+            JSONObject managerObject = (JSONObject) referenceObject.get("manager");
+            String referenceManagerName = "";
+            if(managerObject.containsKey("name")) {
+              referenceManagerName = managerObject.get("name").toString();
+            }
+            else {
+              referenceManagerName = String.format("%sManager", referenceName);
+            }
+
+            if(managerObject.containsKey("package")) {
+              model.addImport(String.format("%s.%s", managerObject.get("package").toString(),
+                  referenceManagerName));
+            }
+
+            model.addField().setName(String.format("s%s", managerName))
+                .setType(referenceManagerName).setPrivate().setStatic(true);
+
+          }
+        }
+      }
+    }
+
+    model.addField().setName(String.format("s%s", managerName)).setType(managerName).setPrivate()
+        .setStatic(true);
+
+    for(int i = 0; i < pFields.size(); i++) {
+      JSONObject field = (JSONObject) pFields.get(i);
+
+      for(Object fieldNameObject : field.keySet()) {
+        String fieldName = (String) fieldNameObject;
+
+        if(field.get(fieldName) instanceof String) {
+          model.addField().setName(String.format("m%s", WordUtils.capitalize(fieldName)))
+              .setType(field.get(fieldName).toString()).setPrivate();
+
+          MethodSource getMethodSource = model.addMethod()
+              .setBody(String.format("return m%s;", WordUtils.capitalize(fieldName)))
+              .setName(String.format("get%s", WordUtils.capitalize(fieldName)))
+              .setReturnType(field.get(fieldName).toString()).setPublic();
+          getMethodSource.addAnnotation().setName("Override");
+
+          MethodSource setMethodSource = model.addMethod()
+              .setName(String.format("set%s", WordUtils.capitalize(fieldName))).setPublic();
+          setMethodSource.addParameter(fieldName,
+              String.format("p%s", WordUtils.capitalize(fieldName)));
+          setMethodSource.setBody(String.format("this.m%s = p%s;", WordUtils.capitalize(fieldName),
+              WordUtils.capitalize(fieldName)));
+          setMethodSource.addAnnotation().setName("Override");
+
+        }
+        else {
+          JSONObject fieldValue = (JSONObject) field.get(fieldName);
+          JSONObject referenceObject = (JSONObject) fieldValue.get("reference");
+          String referenceName = WordUtils.capitalize(referenceObject.get("name").toString());
+          String referenceManager = String.format("s%sManager", referenceName);
+          model.addField().setName(String.format("m%s", referenceName)).setType(referenceName)
+              .setPrivate();
+
+          MethodSource getMethodSource =
+              model.addMethod().setName(String.format("get%s", referenceName))
+                  .setReturnType(referenceName).setPublic();
+          getMethodSource.addAnnotation().setName("Override");
+
+          if(fieldValue.containsKey("type")
+              && fieldValue.get("type").toString().equalsIgnoreCase("Ref")) {
+            getMethodSource.setBody(
+                String.format("return m%s == null? %s.get(m%sId): %s.validate(m%s);", referenceName,
+                    referenceManager, referenceName, referenceManager, referenceName));
+          }
+          else {
+            getMethodSource.setBody(String.format("return m%s;", referenceName));
+          }
+
+          MethodSource setMethodSource =
+              model.addMethod().setName(String.format("set%s", referenceName)).setPublic();
+          setMethodSource.addParameter(referenceName, String.format("p%s", referenceName));
+          setMethodSource.setBody(String.format("this.m%s = p%s;", referenceName, referenceName));
+          setMethodSource.addAnnotation().setName("Override");
+
+          if(fieldValue.containsKey("type")
+              && fieldValue.get("type").toString().equalsIgnoreCase("Ref")) {
+            model.addField().setName(String.format("m%sId", WordUtils.capitalize(fieldName)))
+                .setType("String").setPrivate();
+
+            getMethodSource = model.addMethod()
+                .setBody(String.format("return m%sId;", WordUtils.capitalize(fieldName)))
+                .setName(String.format("get%sId", WordUtils.capitalize(fieldName)))
+                .setReturnType("String").setPublic();
+            getMethodSource.addAnnotation().setName("Override");
+
+            setMethodSource = model.addMethod()
+                .setName(String.format("set%sId", WordUtils.capitalize(fieldName))).setPublic();
+            setMethodSource.addParameter("String",
+                String.format("p%sId", WordUtils.capitalize(fieldName)));
+            setMethodSource.setBody(String.format("this.m%sId = p%s;",
+                WordUtils.capitalize(fieldName), WordUtils.capitalize(fieldName)));
+            setMethodSource.addAnnotation().setName("Override");
+          }
+
+        }
+      }
+    }
+    String modelManagerInstance = String.format("s%s", managerName);
+    String lastModified = "lastModified";
+    model.addField().setName(String.format("m%s", WordUtils.capitalize(lastModified)))
+        .setType("String").setPrivate();
+
+    MethodSource getMethodSource =
+        model.addMethod().setBody(String.format("return m%s;", WordUtils.capitalize(lastModified)))
+            .setName(String.format("get%s", WordUtils.capitalize(lastModified)))
+            .setReturnType("String").setPublic();
+    getMethodSource.addAnnotation().setName("Override");
+
+    MethodSource setMethodSource = model.addMethod()
+        .setName(String.format("set%s", WordUtils.capitalize(lastModified))).setPublic();
+    setMethodSource.addParameter("String",
+        String.format("p%s", WordUtils.capitalize(lastModified)));
+    setMethodSource.setBody(String.format("this.m%s = p%s;", WordUtils.capitalize(lastModified),
+        WordUtils.capitalize(lastModified)));
+    setMethodSource.addAnnotation().setName("Override");
+
+    MethodSource methodSource = model.addMethod().setName("commit");
+    methodSource.setReturnTypeVoid();
+    methodSource.setPublic();
+    methodSource.addParameter("boolean", "update");
+    methodSource
+        .setBody(String.format(
+            "if(update) {\n" + "      %s.update(this);\n" + "    }\n" + "    else {\n"
+                + "      %s.create(this);\n" + "    }",
+            modelManagerInstance, modelManagerInstance));
+    methodSource.addAnnotation().setName("Override");
+
+    methodSource = model.addMethod().setName("edit");
+    methodSource.setReturnType(pMutable);
+    methodSource.setPublic();
+    methodSource.setBody(String.format("return new Persistent%s(this);", pImmutable));
+    methodSource.addAnnotation().setName("Override");
+
+    methodSource = model.addMethod().setName("delete");
+    methodSource.setReturnTypeVoid();
+    methodSource.setPublic();
+    methodSource.setBody(String.format("%s.delete(this);", modelManagerInstance));
+    methodSource.addAnnotation().setName("Override");
+
+    methodSource = model.addMethod().setName(modelName);
+    methodSource.setConstructor(true).setBody("");
+    methodSource.setPublic();
+
+    methodSource = model.addMethod().setName(modelName);
+    methodSource.setConstructor(true);
+    methodSource.addParameter(pMutable, String.format("p%s", pImmutable));
+    methodSource.setBody(getConstructorBody(pFields));
+    methodSource.setPublic();
+
+    model.addMethod().setStatic(true).setName("staticBlock")
+        .setBody(generateStaticBlock(model, pFields, managerName));
+    print(model.toString().replace("void staticBlock()", ""));
+  }
+
+  private void generateDaoDecorator(String pImmutable, String pMutable) {
+    JavaClassSource decorator = Roaster.create(JavaClassSource.class);
+    decorator.setPackage("org.ums.decorator").setName(String.format("%sDaoDecorator", pImmutable));
+    decorator.addImport(String.format("org.ums.manager.%sManager", pImmutable));
+    decorator.addImport("org.ums.decorator.ContentDaoDecorator");
+    decorator.addImport(String.format("org.ums.domain.model.immutable.%s", pImmutable));
+    decorator.addImport(String.format("org.ums.domain.model.mutable.%s", pMutable));
+    decorator.setSuperType(String.format("ContentDaoDecorator<%s, %s, String>", pImmutable, pMutable));
+    decorator.addInterface(String.format("%sManager", pImmutable));
+
+    print(decorator.toString());
+  }
+
+  private String getConstructorBody(JSONArray pFields) {
+    StringBuilder builder = new StringBuilder();
+    for(int i = 0; i < pFields.size(); i++) {
+      JSONObject field = (JSONObject) pFields.get(i);
+
+      for(Object fieldNameObject : field.keySet()) {
+        String fieldName = (String) fieldNameObject;
+
+        if(field.get(fieldName) instanceof String) {
+          builder.append(String.format("set%s(m%s);\r\n", WordUtils.capitalize(fieldName),
+              WordUtils.capitalize(fieldName)));
+        }
+        else {
+          JSONObject fieldValue = (JSONObject) field.get(fieldName);
+          JSONObject referenceObject = (JSONObject) fieldValue.get("reference");
+          String referenceName = WordUtils.capitalize(referenceObject.get("name").toString());
+          builder.append(String.format("set%s(m%s);\r\n", referenceName, referenceName));
+
+          if(fieldValue.containsKey("type")
+              && fieldValue.get("type").toString().equalsIgnoreCase("Ref")) {
+            builder.append(String.format("set%sId(m%sId);\r\n", referenceName, referenceName));
+          }
+        }
+      }
+    }
+    builder.append("setLastModified(mLastModified);");
+    return builder.toString();
+  }
+
+  private String generateStaticBlock(JavaClassSource model, JSONArray pFields,
+      String modelManager) {
+    StringBuilder builder = new StringBuilder();
+    builder.append("ApplicationContext applicationContext = AppContext.getApplicationContext();");
+    builder.append("\r\n");
+
+    for(int i = 0; i < pFields.size(); i++) {
+      JSONObject field = (JSONObject) pFields.get(i);
+
+      for(Object fieldNameObject : field.keySet()) {
+        String fieldName = (String) fieldNameObject;
+
+        if(!(field.get(fieldName) instanceof String)) {
+          JSONObject fieldValue = (JSONObject) field.get(fieldName);
+
+          if(fieldValue.containsKey("type")
+              && fieldValue.get("type").toString().equalsIgnoreCase("Ref")) {
+            JSONObject referenceObject = (JSONObject) fieldValue.get("reference");
+            String referenceName = WordUtils.capitalize(referenceObject.get("name").toString());
+
+            if(referenceObject.containsKey("package")) {
+              model.addImport(
+                  String.format("%s.%s", referenceObject.get("package").toString(), referenceName));
+            }
+
+            if(referenceObject.containsKey("manager")) {
+              JSONObject managerObject = (JSONObject) referenceObject.get("manager");
+              String managerName = "";
+              if(managerObject.containsKey("name")) {
+                managerName = managerObject.get("name").toString();
+              }
+              else {
+                managerName = String.format("%sManager", referenceName);
+              }
+              builder
+                  .append(String.format("s%s = applicationContext.getBean(\"%s\", %s.class);\r\n",
+                      managerName, WordUtils.uncapitalize(managerName), managerName));
+
+            }
+          }
+
+        }
+      }
+    }
+    builder.append(String.format("s%s = applicationContext.getBean(\"%s\", %s.class);",
+        modelManager, WordUtils.uncapitalize(modelManager), modelManager));
+    return builder.toString();
+  }
+
+  private File getTemplate() {
+    ClassLoader classLoader = getClass().getClassLoader();
+    return new File(classLoader.getResource("template.json").getFile());
+  }
+
+  private JSONObject getTemplateJson() {
+    JSONParser parser = new JSONParser();
+
+    try {
+      return (JSONObject) parser.parse(new FileReader(getTemplate()));
+    } catch(Exception e) {
+      e.printStackTrace();
+    }
+
+    return null;
+  }
+
+  private void print(String pContent) {
+    System.out.println("-------------------------------------------------------------------------");
+    System.out.println(Roaster.format(pContent));
+    System.out.println("-------------------------------------------------------------------------");
+  }
+}
