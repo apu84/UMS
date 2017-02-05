@@ -156,11 +156,12 @@ module ums {
     private getTeachers(assignedTeacher: IAssignedTeacher): void {
 
       this.decorateTeacher(assignedTeacher);
+      assignedTeacher.teachers = [];
 
       if (!this.teachersList[assignedTeacher.courseOfferedByDepartmentId]) {
         this.listTeachers(assignedTeacher.courseOfferedByDepartmentId)
             .then((teachers: ITeachers) => {
-              assignedTeacher.teachers = teachers.entries;
+              assignedTeacher.teachers.push.apply(assignedTeacher.teachers, teachers.entries);
               this.teachersList[assignedTeacher.courseOfferedByDepartmentId] = teachers;
             });
       }
