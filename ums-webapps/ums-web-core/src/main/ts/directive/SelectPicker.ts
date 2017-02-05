@@ -7,6 +7,9 @@ module ums {
     }
 
     public restrict: string = 'A';
+    public scope={
+      dataSet: '=datas'
+    };
 
     public require: string = 'ngModel';
 
@@ -15,13 +18,53 @@ module ums {
     public link = ($scope: any, element: JQuery, attributes: any, ngModelCtrl: ng.INgModelController) => {
 
       if (attributes['select'] == 'select2') {
-        this.$timeout(()=> {
-          element.select2({
-            placeholder: "Select an option",
-            allowClear: true
+console.log(attributes['page']);
+        var placeHolder = attributes['placeholder'];
+        if(placeHolder=="") placeHolder =  "Select an option";
+        if(attributes['page']=="true")
+        {
+          var dataSet= $scope.dataSet;
+          this.$timeout(() => {
+            element.select2({
+              placeholder: placeHolder,
+              minimumInputLength: 2,
+              query: function (options) {
+                var pageSize = 50;
+                var startIndex = (options.page - 1) * pageSize;
+                var endIndex = startIndex + pageSize;
+                var filteredData =dataSet;
+                var obj="";
+                if (options.term && options.term.length > 0) {
+                  console.log(options.context);
+                  if (!options.context) {
+                    var term = options.term.toLowerCase();
+                    options.context = dataSet.filter(function (metric:any) {
+                      obj=metric.text.toLowerCase();
+                      return ( obj.indexOf(term) !== -1 );
+                    });
+                  }
+                  filteredData = options.context;
+                }
+                options.callback({
+                  context: filteredData,
+                  results: filteredData.slice(startIndex, endIndex),
+                  more: (startIndex + pageSize) < filteredData.length
+                });
+
+              }
+            });
+            this.elementInitialized = true;
           });
-          this.elementInitialized = true;
-        });
+        }
+        else {
+          this.$timeout(() => {
+            element.select2({
+              placeholder: "Select an option",
+              allowClear: true
+            });
+            this.elementInitialized = true;
+          });
+        }
 
         var refreshSelect = () => {
           if (!this.elementInitialized) {
