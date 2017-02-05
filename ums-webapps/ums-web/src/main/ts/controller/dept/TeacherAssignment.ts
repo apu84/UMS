@@ -158,28 +158,29 @@ module ums {
       this.decorateTeacher(assignedTeacher);
       assignedTeacher.teachers = [];
 
-      if (!this.teachersList[assignedTeacher.courseOfferedByDepartmentId]) {
-        this.listTeachers(assignedTeacher.courseOfferedByDepartmentId)
+      this.getTeacherByDepartment(assignedTeacher.courseOfferedByDepartmentId)
+          .then((teachers: Array<ITeacher>) => {
+            assignedTeacher.teachers.push.apply(assignedTeacher.teachers, teachers);
+
+            if (assignedTeacher.courseOfferedByDepartmentId != assignedTeacher.courseOfferedToDepartmentId) {
+              this.getTeacherByDepartment(assignedTeacher.courseOfferedToDepartmentId)
+                  .then((teachers: Array<ITeacher>) => {
+                    assignedTeacher.teachers.push.apply(assignedTeacher.teachers, teachers);
+                  });
+            }
+          });
+    }
+
+    private getTeacherByDepartment(departmentId: string): ng.IPromise<Array<ITeacher>> {
+      if (!this.teachersList[departmentId]) {
+        return this.listTeachers(departmentId)
             .then((teachers: ITeachers) => {
-              assignedTeacher.teachers.push.apply(assignedTeacher.teachers, teachers.entries);
-              this.teachersList[assignedTeacher.courseOfferedByDepartmentId] = teachers;
+              this.teachersList[departmentId] = teachers;
+              return teachers.entries;
             });
       }
       else {
-        assignedTeacher.teachers = this.teachersList[assignedTeacher.courseOfferedByDepartmentId].entries;
-      }
-
-      if (assignedTeacher.courseOfferedByDepartmentId != assignedTeacher.courseOfferedToDepartmentId) {
-        if (!this.teachersList[assignedTeacher.courseOfferedToDepartmentId]) {
-          this.listTeachers(assignedTeacher.courseOfferedToDepartmentId)
-              .then((teachers: ITeachers) => {
-                assignedTeacher.teachers.push.apply(assignedTeacher.teachers, teachers.entries);
-                this.teachersList[assignedTeacher.courseOfferedToDepartmentId] = teachers;
-              });
-        }
-        else {
-          assignedTeacher.teachers = this.teachersList[assignedTeacher.courseOfferedToDepartmentId].entries;
-        }
+        return this.$q.when(this.teachersList[departmentId].entries);
       }
     }
 
