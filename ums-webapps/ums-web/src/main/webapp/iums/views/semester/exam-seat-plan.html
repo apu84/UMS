@@ -128,6 +128,11 @@
         color: #c60008; }
     .dialogdemoBasicUsage .dialog-demo-prerendered md-checkbox {
         margin-bottom: 0; }
+
+    .badge-black {
+        background-color: #2C3E50;
+        background-image: none !important;
+    }
 </style>
 
 <div class="panel panel-blue" data-ng-show="showGroupSelectionPanel">
@@ -229,7 +234,7 @@
                         <div class=" panel panel-info">
                             <div class="panel-heading"> Group {{groupNo.groupNumber}}</div>
                             <ul data-role="listview" class="list-group" data-ng-repeat="group in groupNo.groupMembers">
-                                <li class="list-group-item">{{group.programName}}, {{group.year}} year {{group.semester}} semester <span class="badge">{{group.studentNumber}}</span> </li>
+                                <li class="list-group-item">{{group.programName}}, {{group.year}} year {{group.semester}} semester <span class="badge badge-black">{{group.studentNumber}}</span> </li>
                             </ul>
                             <div style="text-align: center;padding: 10px;">
                                 <font style="font-weight: bold;font-size: 22px;"> Total Student : {{groupNo.totalStudentNumber}}</font>
