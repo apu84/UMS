@@ -126,6 +126,8 @@ module ums{
       $scope.Approved = this.Approved.bind(this);
 
       this.getSemesters();
+      this.getAllTypesOfCertificates();
+      this.categorizeAllTypesOfCertificates();
       Utils.setValidationOptions("form-horizontal");
     }
 
@@ -207,7 +209,8 @@ module ums{
                 this.$scope.studentStatus = this.$scope.admissionStudent.verificationStatus;
                 
                 this.initializeVariables();
-                this.getAllCertificates();
+                this.resetCertificatesProperties();
+                this.getPreviousCertificates();
                 this.getPreviousComments();
                 this.addDate();
                 this.$scope.mainDiv = true;
@@ -246,7 +249,7 @@ module ums{
       this.$scope.totalSelected = [];
       this.$scope.lengthOfTotalCandidate = 0;
       this.$scope.lengthOfPreviousCertificates = 0;
-      this.$scope.lengthOfTotalCertificates = 0;
+      // this.$scope.lengthOfTotalCertificates = 0;
       this.$scope.countGL = 0;
       this.$scope.countGCE = 0;
       this.$scope.countFF = 0;
@@ -258,18 +261,19 @@ module ums{
     }
 
 
-    private getAllCertificates(): void {
-      this.getAllTypesOfCertificates();
-      this.getPreviousCertificates();
-    }
-
-
     private getAllTypesOfCertificates() {
       this.admissionCertificateVerificationService.getAllTypesOfCertificates()
           .then((allTypesOfCertificates: Array<ITypesOfCertificate>) => {
             this.$scope.allTypesOfCertificates = allTypesOfCertificates;
             this.$scope.lengthOfTotalCertificates = allTypesOfCertificates.length;
           });
+    }
+
+
+    private resetCertificatesProperties(){
+      for(var i = 0; i < this.$scope.lengthOfTotalCertificates; i++){
+        this.$scope.allTypesOfCertificates[i].disableChecked = "false";
+      }
     }
 
 
