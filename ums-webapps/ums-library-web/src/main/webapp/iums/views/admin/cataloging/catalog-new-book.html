@@ -1,5 +1,6 @@
+
 <style>
-    input[type=text]{
+    input[type=text].dottedInput{
         border:none;
         border-bottom:thin dashed black;
         padding-bottom:0;
@@ -12,7 +13,7 @@
     .form-group{
         clear: both;
     }
-    .form-control{
+    .form-control.dottedInput{
         height: 26px;
         padding: 0px;
         padding-top: 5px;
@@ -59,10 +60,50 @@
     .alignRight {
         float: right;
     }
+    select {
+        width: 100%;
+        height: 26px;
+    }
+    .tokenfield.form-control{
+    border:none;
+    border-bottom:1px dashed black;
+    }
+    .select2-container .select2-choice{
+    height:28px !important;
+    line-height:27px !important;
+    }
+
+    .fa.fa-wpforms.fa-lg{
+    margin-top:6px;
+    }
+    .fa.fa-times.fa-lg{
+    margin-top:7px;
+    }
 </style>
 <div>
     <p class="alignLeft" id="pageTitle" style="padding-left: 3%;font-size: 18px;font-weight: bold;"><span>{{data.headerTitle}}</span></p>
     <p class="alignRight">
+
+<!--
+    <div class="btn-group" style="padding-right: 20px;">
+        <button type="button" class="btn btn-default"><i class="fa fa-plus" aria-hidden="true"></i>  New Material</button>
+
+        <button type="button" data-toggle="dropdown"
+                class="btn btn-default dropdown-toggle"><span class="caret"></span><span
+                class="sr-only">Toggle Dropdown</span></button>
+        <ul role="menu" class="dropdown-menu">
+            <li><a href="#"><i class="fa fa-book" aria-hidden="true"></i> Book</a></li>
+            <li><a href="#"><i class="fa fa-newspaper-o" aria-hidden="true"></i> Journal</a></li>
+            <li><a href="#"><i class="fa fa-gitlab" aria-hidden="true"></i> Thesis/Project</a></li>
+            <li class="divider"></li>
+            <li><a href="#"><i class="fa fa-list-alt" aria-hidden="true"></i> Manuscripts</a></li>
+            <li><a href="#"><i class="fa fa-floppy-o" aria-hidden="true"></i> CD/DVD/Audio/Video</a></li>
+            <li><a href="#"><i class="fa fa-tencent-weibo" aria-hidden="true"></i> Cartographic Materials</a></li>
+            <li><a href="#"><i class="fa fa-map" aria-hidden="true"></i> Graphic Materials</a></li>
+        </ul>
+    </div>
+    -->
+
         <a href="javascript:;" class="btn btn-xs btn-default bookAnchor"
            data-ng-click="showBookUI()" style="background-color: black;">
             <i class="fa fa-book bookIcon" style="color: white;" aria-hidden="true"></i>
@@ -71,107 +112,84 @@
            data-ng-click="showAccessionUI()" style="background-color: #ffffff;">
             <i class="fa fa-files-o recordIcon" style="color: black;" aria-hidden="true"></i>
         </a>
+
+
     </p>
 </div>
 
 <hr style="clear: both;"/>
 <div class="form-body pal" style="margin-top: -25px;" data-ng-show="bookInfo">
     <div class="form-group">
+
         <label class="col-md-1 control-label">MFN No</label>
         <div class="col-md-3">
-            <input
-                    type="text" class="form-control"/>
-
+            <input type="text" class="form-control dottedInput" disabled="disabled"/>
         </div>
-
         <label class="col-md-1 control-label">Language</label>
-
         <div class="col-md-3">
-            <input
-                    id="inputName" type="text" placeholder="" class="form-control"/>
-
+            <select style="width: 98%">
+               <option value="">Select Language</option>
+                <option data-ng-repeat="lang in data.languageOptions" value="{{lang.id}}">{{lang.name}}</option>
+            </select>
         </div>
+        <label for="inputName" class="col-md-1 control-label">T. T.  Edition
+                    <img src="https://cdn2.iconfinder.com/data/icons/officeicons/PNG/24/Help.png" height="16" width="16"
+                         style="float: right;cursor: pointer;" data-toggle="tooltip" data-placement="top" title="Translation Title Edition" />
+                </label>
 
-        <label for="inputName" class="col-md-1 control-label"></label>
-
-        <div class="col-md-3">
-
-
-        </div>
-
+                <div class="col-md-3">
+                    <input
+                            type="text" placeholder="" class="form-control dottedInput" />
+                </div>
     </div>
 
     <div class="form-group">
         <label for="inputName" class="col-md-1 control-label">Book Title</label>
 
-        <div class="col-md-3">
+        <div class="col-md-11">
             <input
-                    type="text" placeholder="" class="form-control"/>
+                    type="text" placeholder="" class="form-control dottedInput"/>
 
         </div>
-
-
+</div>
+<div class="form-group">
         <label for="inputName" class="col-md-1 control-label">Sub Title</label>
 
-        <div class="col-md-3">
+        <div class="col-md-11">
             <input
-                    type="text" placeholder="" class="form-control"/>
+                    type="text" placeholder="" class="form-control dottedInput"/>
         </div>
-
+    </div>
+    <div class="form-group">
 
         <label for="inputName" class="col-md-1 control-label">Edition</label>
 
         <div class="col-md-3">
             <input
-                    type="text" placeholder="" class="form-control"/>
+                    type="text" placeholder="" class="form-control dottedInput"/>
 
         </div>
-    </div>
-    <div class="form-group">
-        <label for="inputName" class="col-md-1 control-label">ISBN</label>
 
-        <div class="col-md-3">
-            <input
-                    type="text" placeholder="" class="form-control"/>
-
-        </div>
         <label for="inputName" class="col-md-1 control-label">Binding Type</label>
 
         <div class="col-md-3">
-            <input
-                    type="text" placeholder="" class="form-control"/>
-
+                <select style="width: 98%">
+                       <option value="">Select Binding Type</option>
+                        <option data-ng-repeat="binding in data.bindingTypeOptions" value="{{binding.id}}">{{binding.name}}</option>
+                 </select>
         </div>
-    </div>
-    <div class="form-group">
-        <label for="inputName" class="col-md-1 control-label">Language</label>
+                <label for="inputName" class="col-md-1 control-label" >Acqui. Type
+                    <img src="https://cdn2.iconfinder.com/data/icons/officeicons/PNG/24/Help.png" height="16" width="16"
+                         style="float: right;cursor: pointer;" data-toggle="tooltip" data-placement="top" title="Acquisition Type" />
+                </label>
 
-        <div class="col-md-3">
-            <input
-                    type="text" placeholder="" class="form-control"/>
+                <div class="col-md-3">
+                   <select style="width: 98%">
+                          <option value="">Select Acquisition Type</option>
+                           <option data-ng-repeat="acqType in data.acquisitionTypeOptions" value="{{acqType.id}}">{{acqType.name}}</option>
+                    </select>
 
-        </div>
-
-        <label for="inputName" class="col-md-1 control-label" >Acqui. Type
-            <img src="https://cdn2.iconfinder.com/data/icons/officeicons/PNG/24/Help.png" height="16" width="16"
-                 style="float: right;cursor: pointer;" data-toggle="tooltip" data-placement="top" title="Acquisition Type" />
-        </label>
-
-        <div class="col-md-3">
-            <input
-                    type="text" placeholder="" class="form-control"/>
-
-        </div>
-
-        <label for="inputName" class="col-md-1 control-label">T. T.  Edition
-            <img src="https://cdn2.iconfinder.com/data/icons/officeicons/PNG/24/Help.png" height="16" width="16"
-                 style="float: right;cursor: pointer;" data-toggle="tooltip" data-placement="top" title="Translation Title Edition" />
-        </label>
-
-        <div class="col-md-3">
-            <input
-                    type="text" placeholder="" class="form-control" />
-        </div>
+                </div>
     </div>
 
 
@@ -180,7 +198,7 @@
 
         <div class="col-md-3">
             <input
-                    type="text" placeholder="" class="form-control"/>
+                    type="text" placeholder="" class="form-control dottedInput"/>
 
         </div>
 
@@ -188,7 +206,7 @@
 
         <div class="col-md-3">
             <input
-                    type="text" placeholder="" class="form-control"/>
+                    type="text" placeholder="" class="form-control dottedInput"/>
 
         </div>
 
@@ -196,7 +214,7 @@
 
         <div class="col-md-3">
             <input
-                    type="text" placeholder="" class="form-control" />
+                    type="text" placeholder="" class="form-control dottedInput" />
         </div>
     </div>
     <div class="form-group">
@@ -204,7 +222,7 @@
 
         <div class="col-md-3">
             <input
-                    type="text" placeholder="" class="form-control"/>
+                    type="text" placeholder="" class="form-control dottedInput"/>
 
         </div>
 
@@ -212,7 +230,7 @@
 
         <div class="col-md-3">
             <input
-                    type="text" placeholder="" class="form-control"/>
+                    type="text" placeholder="" class="form-control dottedInput"/>
 
         </div>
 
@@ -220,7 +238,7 @@
 
         <div class="col-md-3">
             <input
-                    type="text" placeholder="" class="form-control" />
+                    type="text" placeholder="" class="form-control dottedInput" />
         </div>
     </div>
 
@@ -229,7 +247,7 @@
 
         <div class="col-md-3">
             <input
-                    type="text" placeholder="" class="form-control"/>
+                    type="text" placeholder="" class="form-control dottedInput"/>
 
         </div>
 
@@ -237,15 +255,17 @@
 
         <div class="col-md-3">
             <input
-                    type="text" placeholder="" class="form-control"/>
+                    type="text" placeholder="" class="form-control dottedInput"/>
 
         </div>
 
-        <label for="inputName" class="col-md-1 control-label">Copy</label>
+
+        <label for="inputName" class="col-md-1 control-label">ISBN</label>
 
         <div class="col-md-3">
             <input
-                    type="text" placeholder="" class="form-control" />
+                    type="text" placeholder="" class="form-control dottedInput"/>
+
         </div>
     </div>
     <div class="form-group">
@@ -256,7 +276,7 @@
 
         <div class="col-md-3">
             <input
-                    type="text" placeholder="" class="form-control"/>
+                    type="text" placeholder="" class="form-control dottedInput"/>
 
         </div>
 
@@ -264,7 +284,7 @@
 
         <div class="col-md-3">
             <input
-                    type="text" placeholder="" class="form-control"/>
+                    type="text" placeholder="" class="form-control dottedInput"/>
 
         </div>
 
@@ -272,8 +292,22 @@
 
         <div class="col-md-3">
             <input
-                    type="text" placeholder="" class="form-control" />
+                    type="text" placeholder="" class="form-control dottedInput" />
         </div>
+    </div>
+
+    <div class="form-group">
+        <label for="inputName" class="col-md-1 control-label">GMD
+            <img src="https://cdn2.iconfinder.com/data/icons/officeicons/PNG/24/Help.png" height="16" width="16"
+                 style="float: right;cursor: pointer;" data-toggle="tooltip" data-placement="top" title="General Material Description" />
+        </label>
+
+        <div class="col-md-11">
+            <input
+                    type="text" placeholder="" class="form-control dottedInput"/>
+
+        </div>
+
     </div>
 
     <fieldset style="padding-bottom: 5px;width: 100%;margin-top: 40px;">
@@ -284,7 +318,7 @@
 
             <div class="col-md-3">
                 <input
-                        type="text" placeholder="" class="form-control"/>
+                        type="text" placeholder="" class="form-control dottedInput"/>
 
             </div>
 
@@ -292,7 +326,7 @@
 
             <div class="col-md-3">
                 <input
-                        type="text" placeholder="" class="form-control"/>
+                        type="text" placeholder="" class="form-control dottedInput"/>
 
             </div>
 
@@ -300,7 +334,7 @@
 
             <div class="col-md-3">
                 <input
-                        type="text" placeholder="" class="form-control"/>
+                        type="text" placeholder="" class="form-control dottedInput"/>
             </div>
 
         </div>
@@ -309,7 +343,7 @@
 
             <div class="col-md-3">
                 <input
-                        type="text" placeholder="" class="form-control"/>
+                        type="text" placeholder="" class="form-control dottedInput"/>
 
             </div>
 
@@ -317,7 +351,7 @@
 
             <div class="col-md-3">
                 <input
-                        type="text" placeholder="" class="form-control"/>
+                        type="text" placeholder="" class="form-control dottedInput"/>
 
             </div>
 
@@ -325,7 +359,7 @@
 
             <div class="col-md-3">
                 <input
-                        type="text" placeholder="" class="form-control"/>
+                        type="text" placeholder="" class="form-control dottedInput"/>
 
             </div>
 
@@ -334,59 +368,31 @@
 
     <fieldset style="padding-bottom: 5px;width: 100%;margin-top: 40px;">
         <legend>Contributors
-            <span style="float: right;">[<i class="fa fa-plus-circle" aria-hidden="true" style="cursor: pointer;"></i>]</span>
+            <span style="float: right;">[<a ng-click="addNewRow('contributor')"><i class="fa fa-plus-circle" aria-hidden="true" style="cursor: pointer;"></i></a>]</span>
         </legend>
-        <div class="form-group">
-            <label for="inputName" class="col-md-1 control-label">View Order</label>
+        <div class="form-group" ng-repeat="contributor in contributorList">
+                            <label for="inputName" class="col-md-1 control-label">View Order</label>
+                            <div class="col-md-1">
+                                <input type="text" placeholder="" class="form-control dottedInput" value="{{contributor.viewOrder}}" style="text-align:center;"/>
+                            </div>
+                            <label for="inputName" class="col-md-1 control-label">Role</label>
+                            <div class="col-md-2">
+                                <select style="width: 98%">
+                                      <option value="">Select Role</option>
+                                      <option data-ng-repeat="role in data.contributorRoleOptions" value="{{role.id}}">{{role.name}}</option>
+                                 </select>
+                            </div>
+                            <label for="inputName" class="col-md-1 control-label">Name</label>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control" style="width: 98%"  data-select="select2"  page="true"
+                                              data-ng-model="abc"   datas="contributors"  placeholder="Select a Name"/>
 
-            <div class="col-md-3">
-                <input
-                        type="text" placeholder="" class="form-control"/>
 
-            </div>
+                            </div>
+                            <i class="fa fa-wpforms  fa-lg" aria-hidden="true"></i>&nbsp;&nbsp;
+                            <i ng-click="deleteRow('contributor',$index)" class="fa fa-times fa-lg" aria-hidden="true" style="color:red;cursor:pointer;"></i>
+                        </div>
 
-            <label for="inputName" class="col-md-1 control-label">Role</label>
-
-            <div class="col-md-3">
-                <input
-                        type="text" placeholder="" class="form-control"/>
-
-            </div>
-
-            <label for="inputName" class="col-md-1 control-label">Name</label>
-
-            <div class="col-md-3">
-                <input
-                        type="text" placeholder="" class="form-control"/>
-            </div>
-
-        </div>
-        <div class="form-group">
-            <label for="inputName" class="col-md-1 control-label">View Order</label>
-
-            <div class="col-md-3">
-                <input
-                        type="text" placeholder="" class="form-control"/>
-
-            </div>
-
-            <label for="inputName" class="col-md-1 control-label">Role</label>
-
-            <div class="col-md-3">
-                <input
-                        type="text" placeholder="" class="form-control"/>
-
-            </div>
-
-            <label for="inputName" class="col-md-1 control-label">Name</label>
-
-            <div class="col-md-3">
-                <input
-                        type="text" placeholder="" class="form-control"/>
-
-            </div>
-
-        </div>
     </fieldset>
 
     <fieldset style="padding-bottom: 5px;width: 100%;margin-top: 40px;">
@@ -394,27 +400,29 @@
         <div class="form-group">
             <label for="inputName" class="col-md-1 control-label">Publisher</label>
 
-            <div class="col-md-3">
-                <input
-                        type="text" placeholder="" class="form-control"/>
+            <div class="col-md-4">
+                <input type="text" placeholder="" class="form-control dottedInput"  style="float:left;width:90%"/>
+                  <i class="fa fa-external-link  fa-2x" aria-hidden="true"></i>
             </div>
 
             <label for="inputName" class="col-md-1 control-label">PoP</label>
-
-            <div class="col-md-3">
-                <input
-                        type="text" placeholder="" class="form-control"/>
-
+            <div class="col-md-2">
+                <input type="text" placeholder="" class="form-control dottedInput"/>
             </div>
-
             <label for="inputName" class="col-md-1 control-label">YoP</label>
-
-            <div class="col-md-3">
-                <input
-                        type="text" placeholder="" class="form-control"/>
+            <div class="col-md-2">
+                <input type="text" placeholder="" class="form-control dottedInput"/>
             </div>
-
         </div>
+        <div class="form-group">
+                    <label for="inputName" class="col-md-1 control-label">Copyright Date</label>
+
+                    <div class="col-md-3">
+                        <input
+                                type="text" placeholder="" class="form-control dottedInput"/>
+                    </div>
+
+                </div>
 
     </fieldset>
 
@@ -425,13 +433,13 @@
 
             <div class="col-md-3">
                 <input
-                        type="text" placeholder="" class="form-control"/>
+                        type="text" placeholder="" class="form-control dottedInput"/>
             </div>
             <label for="inputName" class="col-md-1 control-label">Illustrations</label>
 
             <div class="col-md-3">
                 <input
-                        type="text" placeholder="" class="form-control"/>
+                        type="text" placeholder="" class="form-control dottedInput"/>
 
             </div>
 
@@ -440,7 +448,7 @@
 
             <div class="col-md-3">
                 <input
-                        type="text" placeholder="" class="form-control"/>
+                        type="text" placeholder="" class="form-control dottedInput"/>
             </div>
 
         </div>
@@ -449,7 +457,7 @@
 
             <div class="col-md-3">
                 <input
-                        type="text" placeholder="" class="form-control"/>
+                        type="text" placeholder="" class="form-control dottedInput"/>
 
             </div>
 
@@ -457,7 +465,7 @@
 
             <div class="col-md-3">
                 <input
-                        type="text" placeholder="" class="form-control"/>
+                        type="text" placeholder="" class="form-control dottedInput"/>
 
             </div>
 
@@ -467,52 +475,29 @@
 
 
     <fieldset style="padding-bottom: 5px;width: 100%;margin-top: 20px;">
-        <legend>Subjects
-            <span style="float: right;">[<i class="fa fa-plus-circle" aria-hidden="true" style="cursor: pointer;"></i>]</span></legend>
-        <div class="form-group">
+        <legend>
+            Subjects <span style="float: right;">
+            [<a ng-click="addNewRow('subject')"><i class="fa fa-plus-circle" aria-hidden="true" style="cursor: pointer;"></i></a>]
+            </span>
+         </legend>
+        <div class="form-group" ng-repeat="subject in subjectList">
             <label for="inputName" class="col-md-1 control-label">View Order</label>
-
             <div class="col-md-3">
-                <input
-                        type="text" placeholder="" class="form-control"/>
-
+                <input type="text" placeholder="" class="form-control dottedInput"  value="{{subject.viewOrder}}" style="text-align:center;"/>
             </div>
-
             <label for="inputName" class="col-md-1 control-label">Subject</label>
-
-            <div class="col-md-3">
-                <input
-                        type="text" placeholder="" class="form-control"/>
-
+            <div class="col-md-5">
+                <input type="text" placeholder="" class="form-control dottedInput" value="{{subject.subject}}"/>
             </div>
-
-
+            <i ng-click="deleteRow('subject',$index)" class="fa fa-times fa-lg" aria-hidden="true" style="color:red;cursor:pointer;"></i>
         </div>
-        <div class="form-group">
-            <label for="inputName" class="col-md-1 control-label">View Order</label>
-
-            <div class="col-md-3">
-                <input
-                        type="text" placeholder="" class="form-control"/>
-
-            </div>
-
-            <label for="inputName" class="col-md-1 control-label">Subject</label>
-
-            <div class="col-md-3">
-                <input
-                        type="text" placeholder="" class="form-control"/>
-
-            </div>
 
 
-        </div>
         <div class="form-group">
             <label for="inputName" class="col-md-1 control-label">Keywords</label>
 
             <div class="col-md-11">
-                <input
-                        type="text" placeholder="" class="form-control"/>
+                <input type="text" placeholder="" class="form-control dottedInput"  id="abcd"/>
 
             </div>
 
@@ -522,47 +507,22 @@
     </fieldset>
 
     <fieldset style="padding-bottom: 5px;width: 100%;margin-top: 20px;">
-        <legend>Notes
-            <span style="float: right;">[<i class="fa fa-plus-circle" aria-hidden="true" style="cursor: pointer;"></i>]</span>
+        <legend>
+            Notes <span style="float: right;">
+            [<a ng-click="addNewRow('note')"><i class="fa fa-plus-circle" aria-hidden="true" style="cursor: pointer;"></i></a>]
+            </span>
         </legend>
-        <div class="form-group">
-            <label for="inputName" class="col-md-1 control-label">View Order</label>
-
-            <div class="col-md-3">
-                <input
-                        type="text" placeholder="" class="form-control"/>
-
+          <div class='form-group' ng-repeat="note in noteList">
+            <label for='inputName' class='col-md-1 control-label'>View Order</label>
+            <div class='col-md-3'>
+            <input type='text' placeholder='' class='form-control dottedInput' value="{{note.viewOrder}}" style="text-align:center;"/>
+             </div>
+              <label for='inputName' class='col-md-1 control-label'>Note</label>
+            <div class='col-md-5'>
+            <input type='text' placeholder='' class='form-control dottedInput' value="{{note.note}}"/>
             </div>
-
-            <label for="inputName" class="col-md-1 control-label">Note</label>
-
-            <div class="col-md-3">
-                <input
-                        type="text" placeholder="" class="form-control"/>
-
+            <i ng-click="deleteRow('note',$index)" class="fa fa-times fa-lg" aria-hidden="true" style="color:red;cursor:pointer;"></i>
             </div>
-
-
-        </div>
-        <div class="form-group">
-            <label for="inputName" class="col-md-1 control-label">View Order</label>
-
-            <div class="col-md-3">
-                <input
-                        type="text" placeholder="" class="form-control"/>
-
-            </div>
-
-            <label for="inputName" class="col-md-1 control-label">Note</label>
-
-            <div class="col-md-3">
-                <input
-                        type="text" placeholder="" class="form-control"/>
-
-            </div>
-
-
-        </div>
 
     </fieldset>
 
@@ -603,7 +563,7 @@
             <label class="col-md-1 control-label">Copy Number</label>
             <div class="col-md-3">
                 <input
-                        type="text" class="form-control"/>
+                        type="text" class="form-control dottedInput"/>
 
             </div>
 
@@ -611,7 +571,7 @@
 
             <div class="col-md-3">
                 <input
-                        id="inputName" type="text" placeholder="" class="form-control"/>
+                        id="inputName" type="text" placeholder="" class="form-control dottedInput"/>
 
             </div>
 
@@ -619,7 +579,7 @@
 
             <div class="col-md-3">
                 <input
-                        type="text" placeholder="" class="form-control"/>
+                        type="text" placeholder="" class="form-control dottedInput"/>
 
             </div>
 
@@ -629,7 +589,7 @@
             <label class="col-md-1 control-label">Barcode</label>
             <div class="col-md-3">
                 <input
-                        type="text" class="form-control"/>
+                        type="text" class="form-control dottedInput"/>
 
             </div>
 
@@ -637,7 +597,7 @@
 
             <div class="col-md-3">
                 <input
-                        id="inputName" type="text" placeholder="" class="form-control"/>
+                        id="inputName" type="text" placeholder="" class="form-control dottedInput"/>
 
             </div>
 
@@ -645,7 +605,7 @@
 
             <div class="col-md-3">
                 <input
-                        type="text" placeholder="" class="form-control"/>
+                        type="text" placeholder="" class="form-control dottedInput"/>
 
             </div>
 
@@ -662,6 +622,13 @@
 
 </div>
 
+<a   style="cursor: pointer" data-toggle="modal" data-target="#modal-contributor" >
+    <img height="22" width="22" src="images/manual_html.png" />&nbsp; ss
+</a>
+
+
+<div data-ng-include="'views/admin/cataloging/supporting-panels/contributor-panel.html'"></div>
+
 <script>
     setTimeout(function(){
         $('[data-toggle="tooltip"]').tooltip(
@@ -669,4 +636,22 @@
                 container: 'body'
             });
     }, 1000);
+
+    function showList(){
+
+        $("#body2").hide('slide', {direction: 'left'}, 400);
+        $("#body1").show('slide', {direction: 'right'}, 400);
+
+
+    }
+    function showNew(){
+        $("#body2").show('slide', {direction: 'left'}, 400);
+        $("#body1").hide('slide', {direction: 'right'}, 400);
+    }
+
+/*
+    function deleteRow(event) {
+      $(event).parent().remove();
+    }*/
+$("#abcd").tokenfield();
 </script>
