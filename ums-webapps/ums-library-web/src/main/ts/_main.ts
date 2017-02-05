@@ -19,6 +19,8 @@
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/jquery.tab.d.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/bootstrap.modal.d.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/lib/handsontable.d.ts'/>
+/// <reference path='../../../../ums-web-core/src/main/ts/constants.ts'/>
+
 
 /// <reference path='ums-library.ts'/>
 /// <reference path='../../../../ums-web-core/src/main/ts/service/BaseUri.ts'/>
@@ -80,4 +82,7 @@
 /// <reference path='controller/PatronHome.ts'/>
 /// <reference path='directive/CirculationSearchBox.ts'/>
 /// <reference path='directive/ColumnSorter.ts'/>
+
+
+
 

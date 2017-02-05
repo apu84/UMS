@@ -15,10 +15,11 @@ module ums {
   ]);
 //https://localhost//ums-webservice-academic/academic/course/all/ipp/5/page/1
 
-
   UMS.config(['BaseUriProvider', (baseUriProvider: BaseUriProvider) => {
     baseUriProvider.setServicePath('/ums-webservice-library/');
   }]);
+
+  UMS.constant("libConstants", Constants.LibConstant());
 
   UMS.config(($stateProvider, $urlRouterProvider, $locationProvider) => {
     $urlRouterProvider.when('/cataloging','/cataloging/search');
@@ -60,7 +61,19 @@ module ums {
         .state('cataloging.newBook', {
           url: "/newBook",
           controller: 'BookInfo',
-          templateUrl: 'views/admin/cataloging/catalog-new-book.html'
+          templateUrl: 'views/admin/cataloging/catalog-new-book.html',
+          resolve: {
+            loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load({
+                files: [
+                  'https://sliptree.github.io/bootstrap-tokenfield/dist/css/bootstrap-tokenfield.css',
+                  'https://sliptree.github.io/bootstrap-tokenfield/dist/bootstrap-tokenfield.js',
+                  'vendors/select2/select2-madmin.css',
+                  'vendors/select2/select2.min.js'
+                ]
+              });
+            }]
+          }
         })
         .state('cataloging.thesis', {
           url: "/thesis",
