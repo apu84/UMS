@@ -166,19 +166,18 @@ public class PersistentSeatPlanReportDao extends SeatPlanReportDaoDecorator {
       + "  seatPlan.PROGRAM_ID,examRoutine.COURSE_NO, seatPlan.STUDENT_ID";
 
   String SELECT_ALL_STICKER =
-      ""
-          + "select  "
-          + "  seatPlans.ROOM_NO,  "
-          + "  MST_PROGRAM.PROGRAM_SHORT_NAME,  "
-          + "  STUDENTS.CURR_YEAR,  "
-          + "  STUDENTS.CURR_SEMESTER,  "
-          + "  STUDENTS.STUDENT_ID  "
-          + "from STUDENTS,MST_PROGRAM,(  "
-          + "  select room_no,student_id from SEAT_PLAN,ROOM_INFO where SEMESTER_ID=? and EXAM_TYPE=? and SEAT_PLAN.ROOM_ID=ROOM_INFO.ROOM_ID ORDER BY STUDENT_ID  "
-          + "  " + "  ) seatPlans  " + "WHERE  "
-          + "  seatPlans.STUDENT_ID=STUDENTS.STUDENT_ID AND  "
-          + "  MST_PROGRAM.PROGRAM_ID=STUDENTS.PROGRAM_ID  " + "ORDER BY  "
-          + "  MST_PROGRAM.PROGRAM_ID,students.STUDENT_ID,curr_year,CURR_SEMESTER";
+      "select   "
+          + "             seatPlans.ROOM_NO,   "
+          + "             MST_PROGRAM.PROGRAM_SHORT_NAME,   "
+          + "             STUDENTS.CURR_YEAR,   "
+          + "             STUDENTS.CURR_SEMESTER,   "
+          + "             STUDENTS.STUDENT_ID   "
+          + "           from STUDENTS,MST_PROGRAM,(   "
+          + "             select room_no,student_id from SEAT_PLAN,ROOM_INFO where SEMESTER_ID=? and EXAM_TYPE=? and SEAT_PLAN.ROOM_ID=ROOM_INFO.ROOM_ID ORDER BY ROOM_INFO.ROOM_ID "
+          + "                 ) seatPlans    WHERE   "
+          + "             seatPlans.STUDENT_ID=STUDENTS.STUDENT_ID AND   "
+          + "             MST_PROGRAM.PROGRAM_ID=STUDENTS.PROGRAM_ID    ORDER BY seatPlans.ROOM_NO, "
+          + "             MST_PROGRAM.PROGRAM_ID,curr_year,CURR_SEMESTER";
 
   public JdbcTemplate mJdbcTemplate;
 
