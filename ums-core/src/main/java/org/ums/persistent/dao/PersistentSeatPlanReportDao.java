@@ -23,7 +23,8 @@ public class PersistentSeatPlanReportDao extends SeatPlanReportDaoDecorator {
           + "  to_char(examRoutine.EXAM_DATE, 'dd-mm-YYYY') EXAM_DATE, "
           + "  seatPlan.CURR_YEAR, "
           + "  seatPlan.CURR_SEMESTER, "
-          + "  seatPlan.STUDENT_ID "
+          + "  seatPlan.STUDENT_ID, "
+          + "  STUDENT_RECORD.REGISTRATION_TYPE "
           + "FROM "
           + "  ( "
           + " "
@@ -68,13 +69,15 @@ public class PersistentSeatPlanReportDao extends SeatPlanReportDaoDecorator {
           + "      EXAM_ROUTINE.EXAM_DATE, "
           + "      MST_PROGRAM.PROGRAM_ID, "
           + "      MST_COURSE.COURSE_NO "
-          + "  ) examRoutine, UG_REGISTRATION_RESULT "
+          + "  ) examRoutine, UG_REGISTRATION_RESULT, STUDENT_RECORD "
           + "WHERE "
           + "  seatPlan.PROGRAM_ID = examRoutine.PROGRAM_ID AND "
           + "  seatPlan.CURR_YEAR = examRoutine.YEAR AND "
           + "  seatPlan.CURR_SEMESTER = examRoutine.SEMESTER AND "
           + "  UG_REGISTRATION_RESULT.COURSE_ID = examRoutine.COURSE_ID AND "
-          + "  UG_REGISTRATION_RESULT.STUDENT_ID = seatPlan.STUDENT_ID "
+          + "  UG_REGISTRATION_RESULT.STUDENT_ID = seatPlan.STUDENT_ID AND  "
+          + "    STUDENT_RECORD.SEMESTER_ID = seatPlan.SEMESTER_ID AND  "
+          + "    STUDENT_RECORD.STUDENT_ID = seatPlan.STUDENT_ID "
           + "ORDER BY "
           + "  seatPlan.ROOM_NO, seatPlan.PROGRAM_ID, examRoutine.EXAM_DATE, examRoutine.COURSE_NO, seatPlan.STUDENT_ID";
 
@@ -140,7 +143,8 @@ public class PersistentSeatPlanReportDao extends SeatPlanReportDaoDecorator {
           + "  to_char(examRoutine.EXAM_DATE, 'dd-mm-YYYY') EXAM_DATE, "
           + "  seatPlan.CURR_YEAR, "
           + "  seatPlan.CURR_SEMESTER, "
-          + "  seatPlan.STUDENT_ID "
+          + "  seatPlan.STUDENT_ID, "
+          + "  STUDENT_RECORD.REGISTRATION_TYPE "
           + "FROM (SELECT "
           + "        ROOM_INFO.ROOM_NO, "
           + "        SEAT_PLAN.STUDENT_ID, "
@@ -173,12 +177,14 @@ public class PersistentSeatPlanReportDao extends SeatPlanReportDaoDecorator {
           + "                                                                  AND MST_PROGRAM.PROGRAM_ID = EXAM_ROUTINE.PROGRAM_ID "
           + "                                                            ORDER BY "
           + "                                                              EXAM_ROUTINE.EXAM_DATE, MST_PROGRAM.PROGRAM_ID, "
-          + "                                                              MST_COURSE.COURSE_NO) examRoutine, UG_REGISTRATION_RESULT "
-          + "WHERE " + "  seatPlan.PROGRAM_ID = examRoutine.PROGRAM_ID AND "
-          + "  seatPlan.CURR_YEAR = examRoutine.YEAR AND "
-          + "  seatPlan.CURR_SEMESTER = examRoutine.SEMESTER AND "
-          + "  UG_REGISTRATION_RESULT.COURSE_ID = examRoutine.COURSE_ID AND "
-          + "  UG_REGISTRATION_RESULT.STUDENT_ID = seatPlan.STUDENT_ID " + "ORDER BY "
+          + "                                                              MST_COURSE.COURSE_NO) examRoutine, UG_REGISTRATION_RESULT, "
+          + "  STUDENT_RECORD " + "WHERE seatPlan.PROGRAM_ID = examRoutine.PROGRAM_ID AND "
+          + "      seatPlan.CURR_YEAR = examRoutine.YEAR AND "
+          + "      seatPlan.CURR_SEMESTER = examRoutine.SEMESTER AND "
+          + "      UG_REGISTRATION_RESULT.COURSE_ID = examRoutine.COURSE_ID AND "
+          + "      UG_REGISTRATION_RESULT.STUDENT_ID = seatPlan.STUDENT_ID AND "
+          + "      STUDENT_RECORD.SEMESTER_ID = seatPlan.SEMESTER_ID AND "
+          + "      STUDENT_RECORD.STUDENT_ID = seatPlan.STUDENT_ID " + "ORDER BY "
           + "  seatPlan.ROOM_NO, seatPlan.PROGRAM_ID, examRoutine.COURSE_NO, seatPlan.STUDENT_ID";
 
   String SELECT_ALL_TOP_SHEET_EXAM_DATE =
@@ -309,6 +315,7 @@ public class PersistentSeatPlanReportDao extends SeatPlanReportDaoDecorator {
       seatPlan.setCurrentYear(pResultSet.getInt("curr_year"));
       seatPlan.setCurrentSemester(pResultSet.getInt("curr_semester"));
       seatPlan.setStudentId(pResultSet.getString("student_id"));
+      seatPlan.setStudentType(pResultSet.getString("registration_type"));
       return seatPlan;
     }
   }

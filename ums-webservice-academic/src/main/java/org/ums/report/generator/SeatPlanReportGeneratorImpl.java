@@ -1324,7 +1324,16 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
           if(seatPlanInner.getRoomNo().equals(classRoomNo)
               && seatPlanInner.getCourseNo().equals(courseNoOfStudent) && counter != 20
               && seatPlanReports.size() != 0) {
-            PdfPCell innerCellOne = new PdfPCell(new Paragraph(seatPlanInner.getStudentId()));
+            PdfPCell innerCellOne = new PdfPCell();
+            if(seatPlanInner.getStudentType().equals("RA")) {
+              innerCellOne.addElement(new Paragraph(seatPlanInner.getStudentId(), FontFactory
+                  .getFont(FontFactory.TIMES_BOLD)));
+            }
+            else {
+              innerCellOne.addElement(new Paragraph(seatPlanInner.getStudentId(), FontFactory
+                  .getFont(FontFactory.TIMES)));
+            }
+            innerCellOne.setPaddingTop(-4);
             PdfPCell innerCellTwo = new PdfPCell(new Paragraph("  "));
             attendanceSheetTable.addCell(innerCellOne);
             attendanceSheetTable.addCell(innerCellTwo);
