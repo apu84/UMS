@@ -36,6 +36,9 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
   private SeatPlanService mSeatPlanService;
 
   @Autowired
+  private StudentRecordManager mStudentRecordManager;
+
+  @Autowired
   private ClassRoomManager mRoomManager;
 
   @Autowired
@@ -58,6 +61,12 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
 
   @Autowired
   private CourseManager mCourseManager;
+
+  @Autowired
+  private CourseTeacherManager mCourseTeacherManager;
+
+  @Autowired
+  private EmployeeManager mEmployeeManager;
 
   @Autowired
   private SeatPlanReportManager mSeatPlanReportManager;
@@ -1602,27 +1611,72 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
           SeatPlanReportDto seatPlanReportDto = seatPlans.get(0);
           if(seatPlanReportDto.getCourseNo().equals(seatPlan.getCourseNo())
               && seatPlans.size() != 0) {
-            String studentId = "";
+            Chunk studentId = new Chunk("");
+            Paragraph studentIdParagraph = new Paragraph();
+
             for(int i = 0; i < 6; i++) {
               if(seatPlans.size() != 0) {
                 SeatPlanReportDto seatPlanInnerReport = seatPlans.get(0);
                 if(seatPlanInnerReport.getCourseNo().equals(seatPlan.getCourseNo())
                     && seatPlans.size() != 0) {
-                  String stdIdTmp = "";
-                  stdIdTmp = studentId;
-                  studentId = "";
+                  /*
+                   * String stdIdTmp = ""; stdIdTmp = studentId; studentId = "";
+                   */
                   if(seatPlans.size() != 1) {
                     if(seatPlanReportDto.getCourseNo().equals(seatPlans.get(1).getCourseNo())) {
-                      studentId = stdIdTmp + "" + seatPlanInnerReport.getStudentId() + ", ";
+                      if(seatPlanInnerReport.getStudentType().equals("RA")) {
+                        studentId =
+                            new Chunk(seatPlanInnerReport.getStudentId(),
+                                FontFactory.getFont(FontFactory.TIMES_BOLD));
+
+                      }
+                      else {
+                        studentId =
+                            new Chunk(seatPlanInnerReport.getStudentId(),
+                                FontFactory.getFont(FontFactory.TIMES));
+                      }
+
+                      studentIdParagraph.add(studentId);
+                      studentId = new Chunk(", ");
+                      studentIdParagraph.add(studentId);
+                      // studentId = stdIdTmp + "" + seatPlanInnerReport.getStudentId() + ", ";
 
                     }
                     else {
-                      studentId = stdIdTmp + "" + seatPlanInnerReport.getStudentId() + " ";
+                      if(seatPlanInnerReport.getStudentType().equals("RA")) {
+                        studentId =
+                            new Chunk(seatPlanInnerReport.getStudentId(),
+                                FontFactory.getFont(FontFactory.TIMES_BOLD));
+
+                      }
+                      else {
+                        studentId =
+                            new Chunk(seatPlanInnerReport.getStudentId(),
+                                FontFactory.getFont(FontFactory.TIMES));
+                      }
+
+                      studentIdParagraph.add(studentId);
+                      studentId = new Chunk(" ");
+                      studentIdParagraph.add(studentId);
 
                     }
                   }
                   else {
-                    studentId = stdIdTmp + "" + seatPlanInnerReport.getStudentId() + " ";
+                    if(seatPlanInnerReport.getStudentType().equals("RA")) {
+                      studentId =
+                          new Chunk(seatPlanInnerReport.getStudentId(),
+                              FontFactory.getFont(FontFactory.TIMES_BOLD));
+
+                    }
+                    else {
+                      studentId =
+                          new Chunk(seatPlanInnerReport.getStudentId(),
+                              FontFactory.getFont(FontFactory.TIMES));
+                    }
+
+                    studentIdParagraph.add(studentId);
+                    studentId = new Chunk(" ");
+                    studentIdParagraph.add(studentId);
 
                   }
 
@@ -1640,7 +1694,6 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
 
             }
 
-            Paragraph studentIdParagraph = new Paragraph(studentId);
             studentIdParagraph.setFont(FontFactory.getFont(FontFactory.TIMES, 11));
             Paragraph emptyParagraph = new Paragraph("  ");
             PdfPCell firstCell = new PdfPCell();
@@ -1739,7 +1792,23 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
       bottomTable.addCell(preparedCell);
 
       PdfPCell examineer = new PdfPCell();
-      examineer.addElement(new Paragraph("Name of the Examiner: ", lightFont));
+      List<CourseTeacher> examiners =
+          mCourseTeacherManager.getCourseTeacher(pSemesterId, seatPlan.getCourseId());
+      String teachersName = "";
+      int teacherCounter = 0;
+      Set<String> teacherNameSet = new HashSet<>();
+      for(CourseTeacher teacher : examiners) {
+        Employee employee = mEmployeeManager.get(teacher.getTeacherId());
+        teacherCounter += 1;
+        if(teacherCounter < examiners.size()) {
+          teacherNameSet.add(employee.getEmployeeName());
+        }
+        else {
+          teacherNameSet.add(employee.getEmployeeName());
+        }
+      }
+      teachersName = String.join(",", teacherNameSet.toString());
+      examineer.addElement(new Paragraph("Name of the Examiner(s): " + teachersName, lightFont));
       examineer.addElement(new Paragraph("Address & telephone no: AUST,Mobile-", lightFont));
       examineer.setBorder(Rectangle.NO_BORDER);
       bottomTable.addCell(examineer);

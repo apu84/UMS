@@ -10,13 +10,31 @@ public class SeatPlanReportDto implements Serializable {
   private String mProgramName;
   private String mCourseTitle;
   private String mCourseNo;
+  private String mCourseId;
   private String mExamDate;
   private Integer mCurrentYear;
   private Integer mCurrentSemester;
   private String mStudentId;
+  private String mStudentType;
 
   public SeatPlanReportDto() {
 
+  }
+
+  public String getStudentType() {
+    return mStudentType;
+  }
+
+  public void setStudentType(String pStudentType) {
+    mStudentType = pStudentType;
+  }
+
+  public String getCourseId() {
+    return mCourseId;
+  }
+
+  public void setCourseId(String pCourseId) {
+    mCourseId = pCourseId;
   }
 
   public String getRoomNo() {

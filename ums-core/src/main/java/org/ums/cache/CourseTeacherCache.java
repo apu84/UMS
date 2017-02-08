@@ -20,4 +20,9 @@ public class CourseTeacherCache extends
       String pTeacherId) {
     return getManager().getAssignedSections(pSemesterId, pCourseId, pTeacherId);
   }
+
+  @Override
+  public List<CourseTeacher> getCourseTeacher(int pSemesterId, String pCourseId) {
+    return getManager().getCourseTeacher(pSemesterId, pCourseId);
+  }
 }
