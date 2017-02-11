@@ -1,6 +1,8 @@
 package org.ums.util;
 
+import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -59,6 +61,19 @@ public class UmsUtils {
 
   public static String nullConversion(String value) {
     return value == null ? "" : value;
+  }
+
+  public static String formatDate(String date, String inputFormat, String outputFormat) {
+    String fDate = "";
+    try {
+      SimpleDateFormat newDateFormat = new SimpleDateFormat(inputFormat);
+      Date MyDate = newDateFormat.parse(date);
+      newDateFormat.applyPattern(outputFormat);
+      fDate = newDateFormat.format(MyDate);
+    } catch(Exception ex) {
+
+    }
+    return fDate;
   }
 
 }

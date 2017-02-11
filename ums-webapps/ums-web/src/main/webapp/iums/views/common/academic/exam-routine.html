@@ -51,8 +51,12 @@
                             <div class="form-group">
                                 <label class="control-label" style="font-weight: bold;">Operations</label>
                                 <div class="form-control"  style="border: none;padding: 0px;">
-                                    <button type="button"   class="btn btn-success" data-ng-click="addNewDateTime()"   data-ng-disabled="routine.addButtonDisable"> Add New Date</button>
-                                    <button type="button" class="btn btn-grey btn-square" data-ng-click="saveAll()" data-ng-disabled="routine.saveButtonDisable">Save All</button>
+                                    <button type="button" class="btn btn-grey btn-square"    data-ng-click="addNewDateTime()"   data-ng-disabled="routine.addButtonDisable"> Add New Date</button>
+                                    <button type="button" class="btn btn-success" data-ng-click="saveAll()" data-ng-disabled="routine.saveButtonDisable">Save All</button>
+                                    <a href="javascript:void()"  data-ng-click="downloadExamRoutine()"  class="btn btn-blue" ng-show="routine.date_times .length > 0">
+                                        <i class="fa fa-download" aria-hidden="true"></i>&nbsp;Download Routine
+                                    </a>
+
                                 </div>
                             </div>
                         </span>
@@ -74,7 +78,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="date_time in routine.date_times "  id="row{{date_time.index}}">
+                    <tr ng-repeat="date_time in routine.date_times"  id="row{{date_time.index}}">
                         <td align="center" style="border-right: none;">
 
 

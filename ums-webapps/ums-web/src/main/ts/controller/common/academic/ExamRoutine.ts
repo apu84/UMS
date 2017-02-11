@@ -14,6 +14,7 @@ module ums {
     saveAll:Function;
     editDateTime:Function;
     fetchSavedRoutine:Function;
+    downloadExamRoutine:Function;
     loadingVisibility:boolean;
     routine: any;
     data: any;
@@ -82,6 +83,7 @@ module ums {
       $scope.saveAll = this.saveAll.bind(this);
       $scope.editDateTime = this.editDateTime.bind(this);
       $scope.fetchSavedRoutine = this.fetchSavedRoutine.bind(this);
+      $scope.downloadExamRoutine = this.downloadExamRoutine.bind(this);
       this.loadSemesters();
 
     }
@@ -641,6 +643,22 @@ module ums {
         localStorage.removeItem("program_courses_" + this.appConstants.ugPrograms[indx].programs[0].programId);
       }
     }
+
+    private downloadExamRoutine(fileType:string):any{
+      console.log(this.$scope.routine.semester);
+      console.log(this.$scope.routine.examType);
+      var fileName= "Exam_Routine";
+      var contentType:string=UmsUtil.getFileContentType("pdf");
+      this.httpClient.get("ugExamRoutineReport/pdf/semester/"+this.$scope.routine.semester+"/examType/"+this.$scope.routine.examType,contentType,
+          (data:any, etag:string) => {
+            UmsUtil.writeFileContent(data,contentType,fileName);
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>) => {
+            console.error(response);
+          },'arraybuffer');
+
+    }
+
   }
   UMS.controller('ExamRoutine', ExamRoutine);
 }

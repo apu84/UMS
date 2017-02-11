@@ -1,5 +1,6 @@
 package org.ums.academic.resource.helper;
 
+import com.itextpdf.text.DocumentException;
 import org.apache.commons.lang.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -16,6 +17,8 @@ import org.ums.manager.ExamRoutineManager;
 import org.ums.manager.SeatPlanGroupManager;
 import org.ums.manager.SubGroupManager;
 import org.ums.persistent.model.PersistentExamRoutine;
+import org.ums.report.generator.AttendanceSheetGenerator;
+import org.ums.report.generator.UGExamRoutineGenerator;
 import org.ums.resource.ResourceHelper;
 
 import javax.json.Json;
@@ -25,6 +28,8 @@ import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 
 @Component
@@ -42,6 +47,9 @@ public class ExamRoutineResourceHelper extends
 
   @Autowired
   private SubGroupManager mSubGroupManager;
+
+  @Autowired
+  private UGExamRoutineGenerator mExamRoutineGenerator;
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) {
@@ -299,6 +307,11 @@ public class ExamRoutineResourceHelper extends
       throw new ValidationException("Duplicate entry found.");
     }
     return Response.noContent().build();
+  }
+
+  public void getExamRoutineReport(final OutputStream pOutputStream, final int pSemesterId,
+      final Integer pExamType) throws DocumentException, IOException {
+    mExamRoutineGenerator.createExamRoutineReport(pOutputStream, pSemesterId, pExamType);
   }
 
 }
