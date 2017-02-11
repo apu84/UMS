@@ -247,7 +247,7 @@ module ums {
       }
       program_obj_row.courseArr = null;
 
-      console.log(program_obj_row.programId);
+
       this.getCourseArr(program_obj_row.programId, program_obj_row).then((courseResponse:any)=> {
 
         localStorage["program_courses_" + courseResponse.program.programId] = JSON.stringify(courseResponse.courseArr);
@@ -346,7 +346,6 @@ module ums {
 
       var courseArr:Array<any> = JSON.parse(localStorage.getItem("program_courses_" + program_row.programId));
       var course:ICourse = this.arrayLookup(courseArr, 'id', selected_course_id);
-      console.log(course);
       course_row.year = course.year;
       course_row.semester = course.semester;
       course_row.title = course.title;
@@ -393,7 +392,7 @@ module ums {
         this.notify.error(this.validationErrorMessage);
         return;
       }
-      var json:any = this.convertToJson([date_time], "byProgram");
+      var json:any = this.convertToJson([dateTimeRow], "byProgram");
       this.saveRoutine(json).then((message:string)=> {
         this.notify.success(message);
         this.readOnlyRow([date_time]);
@@ -446,8 +445,6 @@ module ums {
             item ["group"] = dateTimeArr[indx_date_time].examGroup;
             item ["program"] = Number(program.programId);
             item ["course"] = course.id;
-            console.log("---------------");
-            console.log(item);
             jsonObj.push(item);
           }
         }
@@ -606,7 +603,6 @@ module ums {
     private setSelect2Courses(date_time_row_obj:IDateTime):void {
       for (var ind1 in date_time_row_obj.programs) {
         var program:IProgram = date_time_row_obj.programs[ind1];
-        console.log(program);
         $("#program_" + date_time_row_obj.index + program.index).val(program.programId + '');
         for (var ind2 in program.courses) {
           var course:ICourse = program.courses[ind2];
