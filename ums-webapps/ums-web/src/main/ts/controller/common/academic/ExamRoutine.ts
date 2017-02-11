@@ -645,9 +645,7 @@ module ums {
     }
 
     private downloadExamRoutine(fileType:string):any{
-      console.log(this.$scope.routine.semester);
-      console.log(this.$scope.routine.examType);
-      var fileName= "Exam_Routine";
+      var fileName= "Exam_Routine_"+this.$scope.routine.semester+"_"+this.$scope.routine.examType;
       var contentType:string=UmsUtil.getFileContentType("pdf");
       this.httpClient.get("ugExamRoutineReport/pdf/semester/"+this.$scope.routine.semester+"/examType/"+this.$scope.routine.examType,contentType,
           (data:any, etag:string) => {
