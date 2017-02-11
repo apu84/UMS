@@ -1798,14 +1798,15 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
       String teachersName = "";
       int teacherCounter = 0;
       Set<String> teacherNameSet = new HashSet<>();
-      for(CourseTeacher teacher : examiners) {
-        Employee employee = mEmployeeManager.get(teacher.getTeacherId());
-        teacherCounter += 1;
-        if(teacherCounter < examiners.size()) {
-          teacherNameSet.add(employee.getEmployeeName());
-        }
-        else {
-          teacherNameSet.add(employee.getEmployeeName());
+      if(examiners!=null) {
+        for (CourseTeacher teacher : examiners) {
+          Employee employee = mEmployeeManager.get(teacher.getTeacherId());
+          teacherCounter += 1;
+          if (teacherCounter < examiners.size()) {
+            teacherNameSet.add(employee.getEmployeeName());
+          } else {
+            teacherNameSet.add(employee.getEmployeeName());
+          }
         }
       }
       teachersName = String.join(",", teacherNameSet.toString());
