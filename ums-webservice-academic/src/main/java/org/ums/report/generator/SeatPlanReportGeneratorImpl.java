@@ -1441,6 +1441,10 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
     List<SeatPlanReportDto> seatPlans =
         mSeatPlanReportManager.getSeatPlanDataForTopSheet(pSemesterId, pExamType, pExamDate);
 
+    Map<String, List<CourseTeacher>> courseWithCourseTeacherMap= mCourseTeacherManager.getCourseTeacher(pSemesterId)
+        .stream()
+        .collect(Collectors.groupingBy(CourseTeacher::getCourseId));
+
     Document document = new Document();
     document.addTitle("Seat Plan Attendence Sheet");
 
@@ -1790,8 +1794,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
       bottomTable.addCell(preparedCell);
 
       PdfPCell examineer = new PdfPCell();
-      List<CourseTeacher> examiners =
-          mCourseTeacherManager.getCourseTeacher(pSemesterId, seatPlan.getCourseId());
+      List<CourseTeacher> examiners = courseWithCourseTeacherMap.get(seatPlan.getCourseId());
       String teachersName = "";
       int teacherCounter = 0;
       Set<String> teacherNameSet = new HashSet<>();
