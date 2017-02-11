@@ -528,7 +528,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                 emptyParagraph2.setPaddingTop(-10f);
                 emptyCell.addElement(emptyParagraph);
                 emptyCell.addElement(emptyParagraph2);
-                if(i==1)
+                if(i==1 && j<=room.getTotalColumn()-2)
                   emptyCell.setBorder(Rectangle.NO_BORDER);
 
                 table.addCell(emptyCell);
@@ -539,7 +539,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                  * java.util.List<SeatPlan> seatPlanLists =
                  * mSeatPlanManager.getBySemesterGroupTypeRoomRowAndCol
                  * (pSemesterId,groupNo,type,room.getId(),i,j);
-                 * 
+                 *
                  * SeatPlan seatPlan = seatPlanLists.get(0);
                  */
 
@@ -579,7 +579,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                 emptyParagraph2.setPaddingTop(-10f);
                 emptyCell.addElement(emptyParagraph);
                 emptyCell.addElement(emptyParagraph2);
-                if(i==1)
+                if(i==1 && j<=room.getTotalColumn()-2)
                   emptyCell.setBorder(Rectangle.NO_BORDER);
                 table.addCell(emptyCell);
 
@@ -770,21 +770,21 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
            * (pSemesterId,pExamType); seatPlans =
            * mSeatPlanManager.getSeatPlanOrderByExamDateAndCourseAndYearAndSemesterAndStudentId
            * (pSemesterId,pExamType); }else{
-           * 
+           *
            * } Document document = new Document(); document.addTitle("Seat Plan Attendence Sheet");
-           * 
+           *
            * ByteArrayOutputStream baos = new ByteArrayOutputStream(); PdfWriter writer =
            * PdfWriter.getInstance(document,baos);
            *//*
               * MyFooter event = new MyFooter(); writer.setPageEvent(event);
               *//*
                  * document.open(); document.setPageSize(PageSize.A4);
-                 * 
-                 * 
+                 *
+                 *
                  * int routineCounter=0; for(ExamRoutineDto routine: examRoutines){
                  * routineCounter+=1; if(routineCounter==200){ break; } Course course =
                  * mCourseManager.get(routine.getCourseId());
-                 * 
+                 *
                  * while(true){ boolean courseMismatchfound=false; SeatPlan seatPlan =
                  * seatPlans.get(0); int studentYear = seatPlan.getStudent().getAcademicYear(); int
                  * studentSemester = seatPlan.getStudent().getAcademicSemester(); int courseYear =
@@ -792,7 +792,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                  * = seatPlan.getStudent().getProgram().getId(); int routineProgramId =
                  * routine.getProgramId(); if(studentYear==courseYear &&
                  * studentSemester==courseSemester && studentProgramId==routineProgramId){
-                 * 
+                 *
                  * PdfPTable table = new PdfPTable(2); table.setWidthPercentage(110); PdfPTable
                  * tableOne = new PdfPTable(1); PdfPTable tableTwo = new PdfPTable(1); Paragraph
                  * universityParagraph = new Paragraph(universityName);
@@ -802,23 +802,23 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                  * cellUniversityName.addElement(universityParagraph);
                  * cellUniversityName.setPaddingBottom(5); tableOne.addCell(cellUniversityName);
                  * tableTwo.addCell(cellUniversityName);
-                 * 
+                 *
                  * Paragraph originalParagraph = new Paragraph(original);
                  * originalParagraph.setAlignment(Element.ALIGN_CENTER);
                  * originalParagraph.setFont(FontFactory.getFont(FontFactory.TIMES_BOLD,14));
                  * PdfPCell originalCell = new PdfPCell();
                  * originalCell.addElement(originalParagraph); originalCell.setPaddingTop(-3);
                  * tableOne.addCell(originalCell);
-                 * 
+                 *
                  * Paragraph duplicateParagraph= new Paragraph(duplicate);
                  * duplicateParagraph.setAlignment(Element.ALIGN_CENTER);
                  * duplicateParagraph.setFont(FontFactory.getFont(FontFactory.TIMES_BOLD,14));
                  * PdfPCell duplicateCell = new PdfPCell();
                  * duplicateCell.addElement(duplicateParagraph); duplicateCell.setPaddingTop(-3);
                  * tableTwo.addCell(duplicateCell);
-                 * 
+                 *
                  * PdfPCell upperCell=new PdfPCell();
-                 * 
+                 *
                  * Paragraph attendanceParagraph=new Paragraph(attendenceSheet);
                  * attendanceParagraph.setAlignment(Element.ALIGN_CENTER);
                  * attendanceParagraph.setFont(FontFactory.getFont(FontFactory.TIMES,14)); PdfPCell
@@ -828,8 +828,8 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                  *//*
                     * tableOne.addCell(attendanceCell); tableTwo.addCell(attendanceCell);
                     *//*
-                       * 
-                       * 
+                       *
+                       *
                        * ClassRoom room = mRoomManager.get(seatPlan.getClassRoomId()); Paragraph
                        * roomNoParagraph= new Paragraph(roomNo+ room.getRoomId());
                        * roomNoParagraph.setAlignment(Element.ALIGN_CENTER);
@@ -840,8 +840,8 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                           * tableOne.addCell(roomCell); tableTwo.addCell(roomCell);
                           *//*
                              * upperCell.addElement(roomNoParagraph);
-                             * 
-                             * 
+                             *
+                             *
                              * Paragraph date = new Paragraph("Date: "+routine.getExamDate());
                              * date.setAlignment(Element.ALIGN_CENTER);
                              * date.setFont(FontFactory.getFont(FontFactory.TIMES_BOLD)); PdfPCell
@@ -851,8 +851,8 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                                 * tableOne.addCell(dateCell); tableTwo.addCell(dateCell);
                                 *//*
                                    * upperCell.addElement(date);
-                                   * 
-                                   * 
+                                   *
+                                   *
                                    * Paragraph examParagraph = new Paragraph(examName);
                                    * examParagraph.setAlignment(Element.ALIGN_CENTER);
                                    * examParagraph.
@@ -862,7 +862,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                                       * tableOne.addCell(examCell); tableTwo.addCell(examCell);
                                       *//*
                                          * upperCell.addElement(examParagraph);
-                                         * 
+                                         *
                                          * Paragraph yearSemesterParagraph = new
                                          * Paragraph(year+seatPlan.getStudent().getAcademicYear()+
                                          * "                             "
@@ -878,7 +878,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                                             * tableTwo.addCell(yearSemesterCell);
                                             *//*
                                                * upperCell.addElement(yearSemesterParagraph);
-                                               * 
+                                               *
                                                * Paragraph departmentParagraph = new
                                                * Paragraph("Department: "
                                                * +seatPlan.getStudent().getProgram
@@ -893,8 +893,8 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                                                   * tableTwo.addCell(departmentCell);
                                                   *//*
                                                      * upperCell.addElement(departmentParagraph);
-                                                     * 
-                                                     * 
+                                                     *
+                                                     *
                                                      * Paragraph courseNoParagraph = new
                                                      * Paragraph(courseNo+ course.getNo());
                                                      * courseNoParagraph
@@ -909,7 +909,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                                                         * tableTwo.addCell(courseNoCell);
                                                         *//*
                                                            * upperCell.addElement(courseNoParagraph);
-                                                           * 
+                                                           *
                                                            * Paragraph courseTitleParagrah = new
                                                            * Paragraph
                                                            * (courseTitle+course.getTitle());
@@ -927,10 +927,10 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                                                                  * upperCell.addElement(
                                                                  * courseTitleParagrah);
                                                                  * upperCell.setPaddingBottom(10);
-                                                                 * 
+                                                                 *
                                                                  * tableOne.addCell(upperCell);
                                                                  * tableTwo.addCell(upperCell);
-                                                                 * 
+                                                                 *
                                                                  * float[] attendenceSheetColSpan =
                                                                  * {4,7}; PdfPTable
                                                                  * attendanceSheetTable = new
@@ -991,7 +991,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                                                                  * attendanceSheetTable
                                                                  * .addCell(innerCellTwo);
                                                                  * counter+=1; } } }
-                                                                 * 
+                                                                 *
                                                                  * PdfPCell attendenceCellTable =
                                                                  * new
                                                                  * PdfPCell(attendanceSheetTable);
@@ -999,8 +999,8 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                                                                  * .addCell(attendenceCellTable);
                                                                  * tableTwo
                                                                  * .addCell(attendenceCellTable);
-                                                                 * 
-                                                                 * 
+                                                                 *
+                                                                 *
                                                                  * Paragraph
                                                                  * numberOfExamineeParagraph = new
                                                                  * Paragraph
@@ -1020,7 +1020,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                                                                  * );
                                                                  * tableTwo.addCell(studentInfoCell
                                                                  * );
-                                                                 * 
+                                                                 *
                                                                  * Paragraph numberOfPresent = new
                                                                  * Paragraph
                                                                  * (numberofTheExamineesPresent);
@@ -1030,7 +1030,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                                                                  * (numberOfPresent);
                                                                  * tableOne.addCell(presentCell);
                                                                  * tableTwo.addCell(presentCell);
-                                                                 * 
+                                                                 *
                                                                  * Paragraph underLine = new
                                                                  * Paragraph
                                                                  * ("___________________________");
@@ -1043,7 +1043,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                                                                  * ); signatureInvigilatorParagraph.
                                                                  * setAlignment
                                                                  * (Element.ALIGN_RIGHT);
-                                                                 * 
+                                                                 *
                                                                  * PdfPCell invigilatorSignatureCell
                                                                  * = new PdfPCell();
                                                                  * invigilatorSignatureCell
@@ -1060,7 +1060,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                                                                  * tableTwo
                                                                  * .addCell(invigilatorSignatureCell
                                                                  * );
-                                                                 * 
+                                                                 *
                                                                  * Paragraph
                                                                  * invigilatorNameParagraph = new
                                                                  * Paragraph(nameOfTheInvigilator);
@@ -1076,7 +1076,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                                                                  * nameCell.setPaddingTop(8);
                                                                  * tableOne.addCell(nameCell);
                                                                  * tableTwo.addCell(nameCell);
-                                                                 * 
+                                                                 *
                                                                  * PdfPCell cellOne = new
                                                                  * PdfPCell(tableOne);
                                                                  * cellOne.setBorder
@@ -1088,21 +1088,21 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                                                                  * cellTwo.setPaddingLeft(5);
                                                                  * table.addCell(cellOne);
                                                                  * table.addCell(cellTwo);
-                                                                 * 
+                                                                 *
                                                                  * document.add(table);
                                                                  * document.newPage(); //break;
-                                                                 * 
+                                                                 *
                                                                  * } else{ break; }
-                                                                 * 
-                                                                 * 
+                                                                 *
+                                                                 *
                                                                  * }
-                                                                 * 
-                                                                 * 
-                                                                 * 
-                                                                 * 
-                                                                 * 
+                                                                 *
+                                                                 *
+                                                                 *
+                                                                 *
+                                                                 *
                                                                  * }
-                                                                 * 
+                                                                 *
                                                                  * document.close();
                                                                  * baos.writeTo(pOutputStream);
                                                                  */
