@@ -147,13 +147,9 @@ public class SeatPlanServiceImpl implements SeatPlanService {
       if(room.isExamSeatPlan()) {
         boolean subGroupEmpty = true;
         int capacity = room.getCapacity();
-
-        String[][] roomStructure = new String[room.getTotalRow() + 1][room.getTotalColumn()];
+        String[][] roomStructure = new String[room.getTotalRow()][room.getTotalColumn()];
 
         // **********new Algorithm *************************
-        if(room.getId() == 388) {
-          boolean found = true;
-        }
 
         int divider = numberOfSubGroups / 2;
 
@@ -165,46 +161,23 @@ public class SeatPlanServiceImpl implements SeatPlanService {
         List<Integer> secondGroupWithZeroSize = new ArrayList<>();
         for(int j = 0; j < room.getTotalColumn(); j++) {
 
-          for(int i = 0; i <= room.getTotalRow(); i++) {
-            if(j < room.getTotalColumn() - 2) {
-              if(i == 0) {
-                i = 1;
-              }
-            }
+          for(int i = 0; i < room.getTotalRow(); i++) {
 
             if(j % 2 == 0) {
               if(tempSubGroupWithStudents.get(evenRow).size() > 0) {
-                if(j >= room.getTotalColumn() - 2) {
-                  if(i > 0) {
-                    if(roomStructure[i - 1][j].equals(Integer.toString(evenRow))) {
-                      if(i + 1 < room.getTotalRow()) {
-                        roomStructure[i][j] = "";
-                        i += 1;
-                      }
-                      if(i + 1 == room.getTotalRow()) {
-                        roomStructure[i][j] = "";
-                        break;
-                      }
-
+                if(i > 0) {
+                  if(roomStructure[i - 1][j].equals(Integer.toString(evenRow))) {
+                    if(i + 1 < room.getTotalRow()) {
+                      roomStructure[i][j] = "";
+                      i += 1;
                     }
+                    if(i + 1 == room.getTotalRow()) {
+                      roomStructure[i][j] = "";
+                      break;
+                    }
+
                   }
                 }
-                else {
-                  if(i > 1) {
-                    if(roomStructure[i - 1][j].equals(Integer.toString(evenRow))) {
-                      if(i + 1 < room.getTotalRow() + 1) {
-                        roomStructure[i][j] = "";
-                        i += 1;
-                      }
-                      if(i + 1 == room.getTotalRow()) {
-                        roomStructure[i][j] = "";
-                        break;
-                      }
-
-                    }
-                  }
-                }
-
                 roomStructure[i][j] = Integer.toString(evenRow);
                 List<Student> tempStudentOfTheSubgroup = tempSubGroupWithStudents.get(evenRow);
                 tempStudentOfTheSubgroup.remove(0);
@@ -250,35 +223,18 @@ public class SeatPlanServiceImpl implements SeatPlanService {
             else {
 
               if(tempSubGroupWithStudents.get(oddRow).size() > 0) {
-                if(j >= room.getTotalColumn() - 2) {
-                  if(i > 0) {
-                    if(roomStructure[i - 1][j].equals(Integer.toString(oddRow))) {
-                      if(i + 1 < room.getTotalRow() + 1) {
-                        roomStructure[i][j] = "";
 
-                        i += 1;
+                if(i > 0) {
+                  if(roomStructure[i - 1][j].equals(Integer.toString(oddRow))) {
+                    if(i + 1 < room.getTotalRow()) {
+                      roomStructure[i][j] = "";
 
-                      }
-                      if(i + 1 == room.getTotalRow()) {
-                        roomStructure[i][j] = "";
-                        break;
-                      }
+                      i += 1;
+
                     }
-                  }
-                }
-                else {
-                  if(i > 1) {
-                    if(roomStructure[i - 1][j].equals(Integer.toString(oddRow))) {
-                      if(i + 1 < room.getTotalRow()) {
-                        roomStructure[i][j] = "";
-
-                        i += 1;
-
-                      }
-                      if(i + 1 == room.getTotalRow()) {
-                        roomStructure[i][j] = "";
-                        break;
-                      }
+                    if(i + 1 == room.getTotalRow()) {
+                      roomStructure[i][j] = "";
+                      break;
                     }
                   }
                 }
@@ -331,12 +287,9 @@ public class SeatPlanServiceImpl implements SeatPlanService {
         // *********end of new Algorithm ******************
 
         for(int roomColumn = 0; roomColumn < room.getTotalColumn(); roomColumn++) {
-          for(int roomRow = 0; roomRow <= room.getTotalRow(); roomRow++) {
+          for(int roomRow = 0; roomRow < room.getTotalRow(); roomRow++) {
             boolean columnBreak = false;
-            if(roomColumn < room.getTotalColumn() - 2) {
-              if(roomRow == 0)
-                roomRow = 1;
-            }
+
             for(int subGroup = 1; subGroup <= numberOfSubGroups; subGroup++) {
               if(roomStructure[roomRow][roomColumn] != null) {
                 if(roomStructure[roomRow][roomColumn].equals(Integer.toString(subGroup))) {
@@ -348,7 +301,7 @@ public class SeatPlanServiceImpl implements SeatPlanService {
                     PersistentClassRoom classRoom = new PersistentClassRoom();
                     classRoom.setId(room.getId());
                     seatPlan.setClassRoom(classRoom);
-                    seatPlan.setRowNo(roomRow + 1);
+                    seatPlan.setRowNo(roomRow + 2);
                     seatPlan.setColumnNo(roomColumn + 1);
                     PersistentStudent spStudent = new PersistentStudent();
                     spStudent.setId(student.getId());

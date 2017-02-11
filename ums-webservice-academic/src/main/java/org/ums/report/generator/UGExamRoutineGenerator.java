@@ -209,7 +209,8 @@ public class UGExamRoutineGenerator {
             footerInfoFontBold, ReportUtils.LR1S);
     paragraph.add(chunk);
     chunk =
-        ReportUtils.getChunk("everyday. Concerned examinees are asked to take their respective seats",
+        ReportUtils.getChunk(
+            "everyday. Concerned examinees are asked to take their respective seats",
             footerInfoFont, ReportUtils.LR1S);
     paragraph.add(chunk);
     chunk =
@@ -217,22 +218,23 @@ public class UGExamRoutineGenerator {
             footerInfoFontBold, ReportUtils.LR1S);
     paragraph.add(chunk);
     chunk =
-        ReportUtils.getChunk("Room-wise sitting arrangement will be notified in due course for the examinees. The examinees are also asked to bring their",
-            footerInfoFont, ReportUtils.LR1S);
+        ReportUtils
+            .getChunk(
+                "Room-wise sitting arrangement will be notified in due course for the examinees. The examinees are also asked to bring their",
+                footerInfoFont, ReportUtils.LR1S);
     paragraph.add(chunk);
     chunk =
-        ReportUtils.getChunk("identity cards with valid sticker, non-programmable calculators and other accessories officially allowed",
-            footerInfoFontBold, ReportUtils.LR1S);
+        ReportUtils
+            .getChunk(
+                "identity cards with valid sticker, non-programmable calculators and other accessories officially allowed",
+                footerInfoFontBold, ReportUtils.LR1S);
     paragraph.add(chunk);
-    chunk =
-        ReportUtils.getChunk("in the examination halls.\n",
-            footerInfoFont, ReportUtils.LR1S);
+    chunk = ReportUtils.getChunk("in the examination halls.\n", footerInfoFont, ReportUtils.LR1S);
     paragraph.add(chunk);
 
     paragraph.setAlignment(Element.ALIGN_JUSTIFIED);
     cell.addElement(paragraph);
     footerTable.addCell(cell);
-
 
     PdfPCell pdfPCell = new PdfPCell(new Paragraph("By Order of the Vice-Chancellor", tableFont));
     pdfPCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
@@ -243,15 +245,17 @@ public class UGExamRoutineGenerator {
     pdfPCell.setBorder(0);
     footerTable.addCell(pdfPCell);
 
-
-    pdfPCell = new PdfPCell(new Paragraph("______________________________\nProf. Md. Amirul Alam Khan\nController of Examinations", tableFont));
+    pdfPCell =
+        new PdfPCell(
+            new Paragraph(
+                "______________________________\nProf. Md. Amirul Alam Khan\nController of Examinations",
+                tableFont));
     pdfPCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
     pdfPCell.setVerticalAlignment(Element.ALIGN_TOP);
     pdfPCell.setPaddingRight(20);
     pdfPCell.setPaddingTop(10);
     pdfPCell.setBorder(0);
     footerTable.addCell(pdfPCell);
-
 
     footerTable.setSpacingBefore(20);
     document.add(footerTable);
