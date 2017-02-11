@@ -217,13 +217,13 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
           String semesterInfo = "";
           if(type == 1) {
             semesterInfo =
-                "Semester Final Examination " + semesterName + ". Capacity: " + room.getCapacity()
+                "Semester Final Examination " + semesterName + ". Capacity: " + (room.getCapacity()+2)
                     + ".";
           }
           if(type == 2) {
             semesterInfo =
                 "Clearance/Improvement/Carryover Examination " + semesterName + ". Capacity: "
-                    + room.getCapacity() + ".";
+                    + (room.getCapacity()+2) + ".";
           }
           Paragraph pSemesterInfo =
               new Paragraph(semesterInfo, FontFactory.getFont(FontFactory.TIMES_BOLD, 12));
@@ -243,8 +243,14 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
           Map<String, String> deptWithDeptNameMap = new HashMap<>();
           Map<String, String> deptWithYearSemesterMap = new HashMap<>();
 
-          for(int i = 1; i <= room.getTotalRow(); i++) {
+          for(int i = 1; i <= (room.getTotalRow()+1); i++) {
             for(int j = 1; j <= room.getTotalColumn(); j++) {
+
+              /*if(j<room.getTotalColumn()-2){
+                if(i==1)
+                  i=2;
+              }*/
+
               SeatPlan seatPlanOfTheRowAndCol =
                   roomRowColWithSeatPlanMap.get(room.getId() + "" + i + "" + j);
               int ifSeatPlanExist;
@@ -501,7 +507,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
           document.add(summaryTable);
           // end of getting the summary
 
-          for(int i = 1; i <= room.getTotalRow(); i++) {
+          for(int i = 1; i <= room.getTotalRow()+1; i++) {
             Paragraph tableRow = new Paragraph();
             PdfPTable mainTable = new PdfPTable(room.getTotalColumn() / 2);
             mainTable.setWidthPercentage(100);
@@ -518,8 +524,13 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                 String emptyString = "  ";
                 Paragraph emptyParagraph = new Paragraph(emptyString);
                 Paragraph emptyParagraph2 = new Paragraph("  ");
+                emptyParagraph.setPaddingTop(-5f);
+                emptyParagraph2.setPaddingTop(-10f);
                 emptyCell.addElement(emptyParagraph);
                 emptyCell.addElement(emptyParagraph2);
+                if(i==1)
+                  emptyCell.setBorder(Rectangle.NO_BORDER);
+
                 table.addCell(emptyCell);
                 // cellsForMainTable[cellCounter].addElement(emptyCell);
               }
@@ -544,14 +555,14 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                         + "/" + student.getCurrentAcademicSemester();
                 Paragraph upperParagraph =
                     new Paragraph(upperPart, FontFactory.getFont(FontFactory.TIMES_ROMAN, fontSize));
-                upperParagraph.setSpacingBefore(-1f);
+                upperParagraph.setPaddingTop(-5f);
                 String lowerPart = student.getId();
                 Paragraph lowerParagraph =
                     new Paragraph(lowerPart, FontFactory.getFont(FontFactory.TIMES_ROMAN, fontSize));
-                lowerParagraph.setSpacingBefore(-1f);
+                lowerParagraph.setPaddingTop(-10f);
                 upperCell.addElement(upperParagraph);
                 upperCell.addElement(lowerParagraph);
-                upperCell.setPaddingTop(-2f);
+                upperCell.setPaddingTop(-5f);
 
                 table.addCell(upperCell);
               }
@@ -564,8 +575,12 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                 String emptyString = "  ";
                 Paragraph emptyParagraph = new Paragraph(emptyString);
                 Paragraph emptyParagraph2 = new Paragraph("  ");
+                emptyParagraph.setPaddingTop(-5f);
+                emptyParagraph2.setPaddingTop(-10f);
                 emptyCell.addElement(emptyParagraph);
                 emptyCell.addElement(emptyParagraph2);
+                if(i==1)
+                  emptyCell.setBorder(Rectangle.NO_BORDER);
                 table.addCell(emptyCell);
 
               }
@@ -583,17 +598,17 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                         + student2.getCurrentYear() + "/" + student2.getCurrentAcademicSemester();
                 Paragraph upperParagraph =
                     new Paragraph(upperPart, FontFactory.getFont(FontFactory.TIMES_ROMAN, fontSize));
-                upperParagraph.setSpacingBefore(-1f);
+                upperParagraph.setPaddingTop(-5f);
                 String lowerPart = student2.getId();
                 Paragraph lowerParagraph =
                     new Paragraph(lowerPart, FontFactory.getFont(FontFactory.TIMES_ROMAN, fontSize));
-                lowerParagraph.setSpacingBefore(-1f);
+                lowerParagraph.setPaddingTop(-10f);
                 upperCell.addElement(upperParagraph);
                 upperCell.addElement(lowerParagraph);
-                upperCell.setPaddingTop(-2f);
+                upperCell.setPaddingTop(-5f);
                 table.addCell(upperCell);
               }
-
+              table.setPaddingTop(-2f);
               cellsForMainTable[cellCounter].addElement(table);
               cellsForMainTable[cellCounter].setBorder(PdfPCell.NO_BORDER);
               mainTable.addCell(cellsForMainTable[cellCounter]);
@@ -601,8 +616,9 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
               cellCounter += 1;
             }
 
+
             tableRow.add(mainTable);
-            tableRow.setSpacingAfter(8f);
+            tableRow.setSpacingAfter(3f);
 
             document.add(tableRow);
           }
