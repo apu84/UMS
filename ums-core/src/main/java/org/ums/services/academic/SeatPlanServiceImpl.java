@@ -62,7 +62,7 @@ public class SeatPlanServiceImpl implements SeatPlanService {
   @Override
   @Transactional
   public GenericResponse<Map> generateSeatPlan(int pSemesterId, int pGroupNo, int pExamType,
-                                               String pExamDate) {
+      String pExamDate) {
     int numberOfSubGroups;
     if(pGroupNo == 0) {
       numberOfSubGroups = mSubGroupCCIManager.checkSubGroupNumber(pSemesterId, pExamDate);
@@ -301,7 +301,7 @@ public class SeatPlanServiceImpl implements SeatPlanService {
                     PersistentClassRoom classRoom = new PersistentClassRoom();
                     classRoom.setId(room.getId());
                     seatPlan.setClassRoom(classRoom);
-                    seatPlan.setRowNo(roomRow + 1);
+                    seatPlan.setRowNo(roomRow + 2);
                     seatPlan.setColumnNo(roomColumn + 1);
                     PersistentStudent spStudent = new PersistentStudent();
                     spStudent.setId(student.getId());
@@ -429,7 +429,7 @@ public class SeatPlanServiceImpl implements SeatPlanService {
                   .getProgramId()
                   && seatPlanGroupForIterationForFinding.getAcademicYear() == course.getYear()
                   && seatPlanGroupForIterationForFinding.getAcademicSemester() == course
-                  .getSemester()) {
+                      .getSemester()) {
 
                 foundMatch = true;
                 group = seatPlanGroupForIterationForFinding.getGroupNo();
@@ -465,7 +465,7 @@ public class SeatPlanServiceImpl implements SeatPlanService {
   }
 
   MutableSeatPlanGroup storeCourseInfo(ExamRoutineDto examRoutineDto, int pSemesterId,
-                                       int pExamType, int group) {
+      int pExamType, int group) {
 
     Course course = mCourseManager.get(examRoutineDto.getCourseId());
 
@@ -491,7 +491,7 @@ public class SeatPlanServiceImpl implements SeatPlanService {
   }
 
   Map<Integer, List<SeatPlanGroup>> setGroupAndProgramMap(SeatPlanGroup seatPlanGroup, int group,
-                                                          Map<Integer, List<SeatPlanGroup>> groupWithProgramAndCourseMap) {
+      Map<Integer, List<SeatPlanGroup>> groupWithProgramAndCourseMap) {
 
     Map<Integer, List<SeatPlanGroup>> groupWithProgramAndCourse = groupWithProgramAndCourseMap;
     if(groupWithProgramAndCourse.get(group) == null) {
@@ -510,8 +510,8 @@ public class SeatPlanServiceImpl implements SeatPlanService {
   }
 
   Map<Integer, List<Student>> getStudentsOfTheSubGroups(int pSemesterId, int pGroupNo,
-                                                        int pExamType, String examDate, int numberOfSubGroups,
-                                                        Map<String, List<Student>> studentsByProgramYearSemesterStatusList) {
+      int pExamType, String examDate, int numberOfSubGroups,
+      Map<String, List<Student>> studentsByProgramYearSemesterStatusList) {
 
     Map<Integer, List<Student>> subGroupMap = new HashMap<>();
 
@@ -599,8 +599,8 @@ public class SeatPlanServiceImpl implements SeatPlanService {
   }
 
   Map<Integer, List<Student>> getStudentsOfTheSubGroupsCCI(int pSemesterId, int pGroupNo,
-                                                           int pExamType, String examDate, int numberOfSubGroups,
-                                                           Map<String, List<Student>> studentsByProgramYearSemesterStatusList) {
+      int pExamType, String examDate, int numberOfSubGroups,
+      Map<String, List<Student>> studentsByProgramYearSemesterStatusList) {
     List<SubGroupCCI> subGroupMembers =
         mSubGroupCCIManager.getBySemesterAndExamDate(pSemesterId, examDate);
     Map<Integer, List<Student>> subGroupNumberWithStudentsMap = new HashMap<>();
@@ -664,7 +664,7 @@ public class SeatPlanServiceImpl implements SeatPlanService {
   }
 
   Map<String, List<Student>> initiateStudentsBasedOnProgramYearSemesterStatus(int pGroupNo,
-                                                                              int pSemesterId, int pExamType) {
+      int pSemesterId, int pExamType) {
 
     Map<String, List<Student>> studentInfoMap = new HashMap<>();
 
