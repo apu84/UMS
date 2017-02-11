@@ -439,13 +439,15 @@ module ums {
         for (var indx_program in dateTimeArr[indx_date_time].programs) {
           var program:IProgram = dateTimeArr[indx_date_time].programs[indx_program];
           for (var indx_course in program.courses) {
-            var course:ICourse = program.courses[indx_course];
+              var course:ICourse = program.courses[indx_course];
             var item = {}
             item ["date"] = dateTimeArr[indx_date_time].examDate;
             item ["time"] = dateTimeArr[indx_date_time].examTime;
             item ["group"] = dateTimeArr[indx_date_time].examGroup;
             item ["program"] = Number(program.programId);
             item ["course"] = course.id;
+            console.log("---------------");
+            console.log(item);
             jsonObj.push(item);
           }
         }
