@@ -506,7 +506,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                 emptyCell.addElement(emptyParagraph2);
                 if (i == 1 && j <= room.getTotalColumn() - 2)
                   emptyCell.setBorder(Rectangle.NO_BORDER);
-
+                emptyCell.setPaddingTop(-5f);
                 table.addCell(emptyCell);
                 // cellsForMainTable[cellCounter].addElement(emptyCell);
               } else {
@@ -556,6 +556,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                 emptyCell.addElement(emptyParagraph2);
                 if (i == 1 && j <= room.getTotalColumn() - 2)
                   emptyCell.setBorder(Rectangle.NO_BORDER);
+                emptyCell.setPaddingTop(-5f);
                 table.addCell(emptyCell);
 
               } else {
