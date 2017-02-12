@@ -8,6 +8,7 @@ import org.ums.builder.CourseTeacherBuilder;
 import org.ums.domain.model.immutable.CourseTeacher;
 import org.ums.domain.model.mutable.MutableCourseTeacher;
 import org.ums.manager.AssignedTeacherManager;
+import org.ums.manager.CourseTeacherManager;
 import org.ums.persistent.model.PersistentCourseTeacher;
 
 import javax.json.JsonArray;
@@ -18,10 +19,10 @@ import javax.ws.rs.core.UriInfo;
 @Component
 public class CourseTeacherResourceHelper
     extends
-    AbstractAssignedTeacherResourceHelper<CourseTeacher, MutableCourseTeacher, Integer, AssignedTeacherManager<CourseTeacher, MutableCourseTeacher, Integer>> {
+    AbstractAssignedTeacherResourceHelper<CourseTeacher, MutableCourseTeacher, Long, CourseTeacherManager> {
   @Autowired
   @Qualifier("courseTeacherManager")
-  AssignedTeacherManager<CourseTeacher, MutableCourseTeacher, Integer> mCourseTeacherManager;
+  CourseTeacherManager mCourseTeacherManager;
 
   @Autowired
   private CourseTeacherBuilder mBuilder;
@@ -34,7 +35,7 @@ public class CourseTeacherResourceHelper
   }
 
   @Override
-  protected AssignedTeacherManager<CourseTeacher, MutableCourseTeacher, Integer> getContentManager() {
+  protected CourseTeacherManager getContentManager() {
     return mCourseTeacherManager;
   }
 

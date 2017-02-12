@@ -6,7 +6,7 @@ import org.ums.domain.model.mutable.MutableCourseTeacher;
 import java.util.List;
 
 public interface CourseTeacherManager extends
-    AssignedTeacherManager<CourseTeacher, MutableCourseTeacher, Integer> {
+    AssignedTeacherManager<CourseTeacher, MutableCourseTeacher, Long> {
   List<CourseTeacher> getAssignedSections(final Integer pSemesterId, final String pCourseId,
       final String pTeacherId);
 

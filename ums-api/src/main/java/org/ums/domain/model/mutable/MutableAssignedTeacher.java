@@ -8,7 +8,7 @@ import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.Teacher;
 
 public interface MutableAssignedTeacher extends AssignedTeacher, Mutable, MutableLastModifier,
-    MutableIdentifier<Integer> {
+    MutableIdentifier<Long> {
 
   void setSemester(final Semester pSemester);
 

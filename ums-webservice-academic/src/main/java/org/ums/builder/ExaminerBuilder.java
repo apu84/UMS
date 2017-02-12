@@ -26,8 +26,8 @@ public class ExaminerBuilder implements Builder<Examiner, MutableExaminer> {
 
   @Override
   public void build(JsonObjectBuilder pBuilder, Examiner pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
-    if (pReadOnly.getId() != null) {
-      pBuilder.add("id", pReadOnly.getId());
+    if (pReadOnly.getId() != null && pReadOnly.getId() > 0) {
+      pBuilder.add("id", pReadOnly.getId().toString());
     }
 
     Course course = (Course) pLocalCache.cache(() -> pReadOnly.getCourse(),
@@ -79,7 +79,7 @@ public class ExaminerBuilder implements Builder<Examiner, MutableExaminer> {
   @Override
   public void build(MutableExaminer pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
     if(pJsonObject.containsKey("id")) {
-      pMutable.setId(pJsonObject.getInt("id"));
+      pMutable.setId(Long.parseLong(pJsonObject.getString("id")));
     }
     pMutable.setCourse(mCourseManager.get(pJsonObject.getString("courseId")));
     pMutable.setCourseId(pJsonObject.getString("courseId"));

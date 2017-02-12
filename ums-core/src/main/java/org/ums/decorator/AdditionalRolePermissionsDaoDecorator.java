@@ -12,7 +12,7 @@ import java.util.Set;
 
 public class AdditionalRolePermissionsDaoDecorator
     extends
-    ContentDaoDecorator<AdditionalRolePermissions, MutableAdditionalRolePermissions, Integer, AdditionalRolePermissionsManager>
+    ContentDaoDecorator<AdditionalRolePermissions, MutableAdditionalRolePermissions, Long, AdditionalRolePermissionsManager>
     implements AdditionalRolePermissionsManager {
   @Override
   public List<AdditionalRolePermissions> getPermissionsByUser(String pUserId) {

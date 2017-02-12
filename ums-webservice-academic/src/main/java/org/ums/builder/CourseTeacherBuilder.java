@@ -26,8 +26,8 @@ public class CourseTeacherBuilder implements Builder<CourseTeacher, MutableCours
 
   @Override
   public void build(JsonObjectBuilder pBuilder, CourseTeacher pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
-    if (pReadOnly.getId() != null) {
-      pBuilder.add("id", pReadOnly.getId());
+    if (pReadOnly.getId() != null && pReadOnly.getId() > 0) {
+      pBuilder.add("id", pReadOnly.getId().toString());
     }
 
     Course course = (Course) pLocalCache.cache(() -> pReadOnly.getCourse(),
@@ -78,7 +78,7 @@ public class CourseTeacherBuilder implements Builder<CourseTeacher, MutableCours
   @Override
   public void build(MutableCourseTeacher pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
     if(pJsonObject.containsKey("id")) {
-      pMutable.setId(pJsonObject.getInt("id"));
+      pMutable.setId(Long.parseLong(pJsonObject.getString("id")));
     }
     pMutable.setCourse(mCourseManager.get(pJsonObject.getString("courseId")));
     pMutable.setTeacher(mTeacherManager.get(pJsonObject.getString("teacherId")));

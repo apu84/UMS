@@ -15,6 +15,7 @@ import org.ums.domain.model.immutable.AdditionalRolePermissions;
 import org.ums.domain.model.immutable.Role;
 import org.ums.domain.model.immutable.User;
 import org.ums.domain.model.mutable.MutableAdditionalRolePermissions;
+import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.PersistentAdditionalRolePermissions;
 
 import com.google.common.base.Joiner;
@@ -29,14 +30,17 @@ public class AdditionalRolePermissionsDao extends AdditionalRolePermissionsDaoDe
           + "VALID_TO = ?, STATUS = ?, LAST_MODIFIED = " + getLastModifiedSql()
           + ", ASSIGNED_BY = ? ";
   String INSERT_ALL =
-      "INSERT INTO ADDITIONAL_ROLE_PERMISSIONS (USER_ID, ROLE_ID, PERMISSIONS, VALID_FROM, VALID_TO, STATUS, LAST_MODIFIED, ASSIGNED_BY) VALUES ("
-          + "?, ?, ?, ?, ?, ?, " + getLastModifiedSql() + ", ?) ";
+      "INSERT INTO ADDITIONAL_ROLE_PERMISSIONS (ID, USER_ID, ROLE_ID, PERMISSIONS, VALID_FROM, VALID_TO, STATUS, LAST_MODIFIED, ASSIGNED_BY) VALUES ("
+          + "?, ?, ?, ?, ?, ?, ?, " + getLastModifiedSql() + ", ?) ";
   String DELETE_ALL = "DELETE FROM ADDITIONAL_ROLE_PERMISSIONS ";
 
   private JdbcTemplate mJdbcTemplate;
+  private IdGenerator mIdGenerator;
 
-  public AdditionalRolePermissionsDao(final JdbcTemplate pJdbcTemplate) {
+  public AdditionalRolePermissionsDao(final JdbcTemplate pJdbcTemplate,
+      final IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
+    mIdGenerator = pIdGenerator;
   }
 
   @Override
@@ -57,8 +61,8 @@ public class AdditionalRolePermissionsDao extends AdditionalRolePermissionsDaoDe
 
   @Override
   public int create(MutableAdditionalRolePermissions pMutable) {
-    return mJdbcTemplate.update(INSERT_ALL, pMutable.getUser().getId(),
-        pMutable.getRole() == null ? 0 : pMutable.getRole().getId(),
+    return mJdbcTemplate.update(INSERT_ALL, mIdGenerator.getNumericId(),
+        pMutable.getUser().getId(), pMutable.getRole() == null ? 0 : pMutable.getRole().getId(),
         Joiner.on(PersistentPermissionDao.PERMISSION_SEPARATOR).join(pMutable.getPermission()),
         pMutable.getValidFrom(), pMutable.getValidTo(), pMutable.isActive() ? 1 : 0, pMutable
             .getAssignedBy().getId());
@@ -80,7 +84,7 @@ public class AdditionalRolePermissionsDao extends AdditionalRolePermissionsDaoDe
   }
 
   @Override
-  public AdditionalRolePermissions get(Integer pId) {
+  public AdditionalRolePermissions get(Long pId) {
     String query = SELECT_ALL + "WHERE ID = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new RolePermissionsMapper());
   }
@@ -117,7 +121,7 @@ public class AdditionalRolePermissionsDao extends AdditionalRolePermissionsDaoDe
     @Override
     public AdditionalRolePermissions mapRow(ResultSet rs, int rowNum) throws SQLException {
       MutableAdditionalRolePermissions rolePermissions = new PersistentAdditionalRolePermissions();
-      rolePermissions.setId(rs.getInt("ID"));
+      rolePermissions.setId(rs.getLong("ID"));
       rolePermissions.setUserId(rs.getString("USER_ID"));
       if(rs.getInt("ROLE_ID") > 0) {
         rolePermissions.setRoleId(rs.getInt("ROLE_ID"));

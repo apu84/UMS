@@ -7,8 +7,8 @@ import org.ums.manager.CacheManager;
 
 public class ExaminerCache
     extends
-    AssignedTeacherCache<Examiner, MutableExaminer, Integer, AssignedTeacherManager<Examiner, MutableExaminer, Integer>> {
-  public ExaminerCache(final CacheManager<Examiner, Integer> pCacheManager) {
+    AssignedTeacherCache<Examiner, MutableExaminer, Long, AssignedTeacherManager<Examiner, MutableExaminer, Long>> {
+  public ExaminerCache(final CacheManager<Examiner, Long> pCacheManager) {
     super(pCacheManager);
   }
 }

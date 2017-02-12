@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.AssignedTeacherDaoDecorator;
 import org.ums.domain.model.common.Identifier;
 import org.ums.enums.CourseCategory;
+import org.ums.generator.IdGenerator;
 import org.ums.manager.AssignedTeacherManager;
 
 import java.util.List;
@@ -13,6 +14,8 @@ public abstract class AbstractAssignedTeacherDao<R extends Identifier<I>, M exte
     extends AssignedTeacherDaoDecorator<R, M, I, AssignedTeacherManager<R, M, I>> {
 
   protected JdbcTemplate mJdbcTemplate;
+
+  protected IdGenerator mIdGenerator;
 
   protected abstract String getSelectSql();
 
@@ -93,6 +96,6 @@ public abstract class AbstractAssignedTeacherDao<R extends Identifier<I>, M exte
   @Override
   public R get(I pId) {
     String query = getSelectSql() + "WHERE ID = ? ";
-    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, getRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId.toString()}, getRowMapper());
   }
 }
