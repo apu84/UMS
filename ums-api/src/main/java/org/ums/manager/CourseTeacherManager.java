@@ -11,4 +11,6 @@ public interface CourseTeacherManager extends
       final String pTeacherId);
 
   List<CourseTeacher> getCourseTeacher(final int pSemesterId, final String pCourseId);
+
+  List<CourseTeacher> getCourseTeacher(final int pSemesterId);
 }

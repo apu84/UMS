@@ -82,6 +82,12 @@ public class PersistentCourseTeacherDao extends
   }
 
   @Override
+  public List<CourseTeacher> getCourseTeacher(int pSemesterId) {
+    String query = SELECT_ALL + " where semester_id=?";
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId}, new CourseTeacherRowMapper());
+  }
+
+  @Override
   public int update(MutableCourseTeacher pMutable) {
     String query = UPDATE_ALL + " WHERE ID = ?";
     return mJdbcTemplate.update(query, pMutable.getSemester().getId(), pMutable.getTeacher()
