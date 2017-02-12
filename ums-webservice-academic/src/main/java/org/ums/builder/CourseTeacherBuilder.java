@@ -26,7 +26,7 @@ public class CourseTeacherBuilder implements Builder<CourseTeacher, MutableCours
 
   @Override
   public void build(JsonObjectBuilder pBuilder, CourseTeacher pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
-    if (pReadOnly.getId() != null && pReadOnly.getId() > 0) {
+    if (pReadOnly.getId() != null && pReadOnly.getId() != 0) {
       pBuilder.add("id", pReadOnly.getId().toString());
     }
 

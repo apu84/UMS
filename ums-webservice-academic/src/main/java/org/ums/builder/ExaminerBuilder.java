@@ -26,7 +26,7 @@ public class ExaminerBuilder implements Builder<Examiner, MutableExaminer> {
 
   @Override
   public void build(JsonObjectBuilder pBuilder, Examiner pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
-    if (pReadOnly.getId() != null && pReadOnly.getId() > 0) {
+    if (pReadOnly.getId() != null && pReadOnly.getId() != 0) {
       pBuilder.add("id", pReadOnly.getId().toString());
     }
 
