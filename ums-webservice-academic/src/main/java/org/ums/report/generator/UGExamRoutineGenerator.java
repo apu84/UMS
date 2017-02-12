@@ -35,14 +35,16 @@ public class UGExamRoutineGenerator {
   @Autowired
   private SemesterManager mSemesterManager;
 
-  Font universityNameFont = new Font(Font.FontFamily.TIMES_ROMAN, 13, Font.BOLD);
+  Font universityNameFont = new Font(Font.FontFamily.TIMES_ROMAN, 11, Font.BOLD);
   Font infoFont = new Font(Font.FontFamily.TIMES_ROMAN, 10);
   Font infoFontUnderline = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.UNDERLINE);
-  Font tableFont = new Font(Font.FontFamily.TIMES_ROMAN, 12f);
-  Font tableCaptionFont = new Font(Font.FontFamily.TIMES_ROMAN, 11.5f, Font.BOLD);
+  Font tableFont = new Font(Font.FontFamily.TIMES_ROMAN, 10f);
+  Font tableCaptionFont = new Font(Font.FontFamily.TIMES_ROMAN, 10f, Font.BOLD);
 
-  Font footerInfoFont = new Font(Font.FontFamily.TIMES_ROMAN, 13);
-  Font footerInfoFontBold = new Font(Font.FontFamily.TIMES_ROMAN, 13, Font.BOLD);
+  Font footerInfoFont = new Font(Font.FontFamily.TIMES_ROMAN, 10);
+  Font footerInfoFontBold = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
+  Font footerInfoFontBoldUnderline = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD
+      | Font.UNDERLINE);
 
   public void createExamRoutineReport(OutputStream pOutputStream, final Integer pSemesterId,
       final Integer pExamType) throws IOException, DocumentException {
@@ -58,27 +60,52 @@ public class UGExamRoutineGenerator {
     PdfWriter writer = PdfWriter.getInstance(document, baos);
     document.setPageSize(PageSize.A4);
     Paragraph paragraph = new Paragraph();
-    document.setMargins(20, 20, 20, 20);
+    document.setMargins(20, 20, 40, 70);
     // Left, Right, Top, Bottom
 
-    UGExamRoutineGenerator.UGExamRoutineFooter event =
-        new UGExamRoutineGenerator.UGExamRoutineFooter();
-    writer.setPageEvent(event);
+    PdfPTable rHeader = new PdfPTable(2);
+    rHeader.setWidthPercentage(100);
+    rHeader.setTotalWidth(document.getPageSize().getWidth() - 40);
+    rHeader.setWidths(new float[] {new Float(1), new Float(1)});
+    Chunk chunk = null;
+    rHeader.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
 
+    PdfPCell cell = new PdfPCell(new Paragraph("No. : AUST/ Exam/ Fall 2016(15)", tableFont));
+    cell.setBorder(Rectangle.NO_BORDER);
+    cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+    cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+    rHeader.addCell(cell);
+
+    cell = new PdfPCell(new Paragraph("Date: 13 February 2017", tableFont));
+    cell.setBorder(Rectangle.NO_BORDER);
+    cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+    cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+    rHeader.addCell(cell);
+
+    UGExamRoutineGenerator.UGExamRoutineFooter event =
+        new UGExamRoutineGenerator.UGExamRoutineFooter(rHeader);
+    writer.setPageEvent(event);
     document.open();
 
     PdfPTable headerTable = new PdfPTable(1);
-    Chunk chunk = null;
     headerTable.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
     headerTable.setWidthPercentage(100);
     headerTable.setTotalWidth(document.getPageSize().getWidth() - 30);
     universityNameFont = new Font(Font.FontFamily.TIMES_ROMAN, 13, Font.BOLD);
     infoFont = new Font(Font.FontFamily.TIMES_ROMAN, 10);
 
-    PdfPCell cell = new PdfPCell();
-    cell.setBorder(Rectangle.NO_BORDER);
-    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-    cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+    PdfPCell dummyCell = new PdfPCell(new Paragraph(""));
+    dummyCell.setFixedHeight(60);
+    dummyCell.setBorder(0);
+    dummyCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+    dummyCell.setVerticalAlignment(Element.ALIGN_BOTTOM);
+    headerTable.addCell(dummyCell);
+
+    dummyCell = ReportUtils.getCell(ReportUtils.B0_P0);
+    paragraph = new Paragraph("");
+    paragraph.setAlignment(Element.ALIGN_CENTER);
+    dummyCell.addElement(paragraph);
+    headerTable.addCell(dummyCell);
 
     cell = ReportUtils.getCell(ReportUtils.B0_P0);
     paragraph = new Paragraph("NOTIFICATION", universityNameFont);
@@ -86,14 +113,19 @@ public class UGExamRoutineGenerator {
     cell.addElement(paragraph);
     headerTable.addCell(cell);
 
+    cell = new PdfPCell();
+    cell.setBorder(Rectangle.NO_BORDER);
+    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+    cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
     cell = ReportUtils.getCell(ReportUtils.B0_P0);
     paragraph =
         new Paragraph("(Schedule of Semester Final Examinations of "
             + mSemesterManager.get(pSemesterId).getName() + ")", FontFactory.getFont(
-            FontFactory.TIMES_BOLD, 12));
+            FontFactory.TIMES_BOLD, 11));
     paragraph.setAlignment(Element.ALIGN_CENTER);
     cell.addElement(paragraph);
     headerTable.addCell(cell);
+
 
     cell = ReportUtils.getCell(ReportUtils.B0_P0);
     paragraph =
@@ -107,17 +139,18 @@ public class UGExamRoutineGenerator {
                 + UmsUtils.formatDate(examList.get(examList.size() - 1).getExamDate(),
                     "dd/MM/yyyy", "EEEE d MMMM yyyy")
                 + " in accordance with the following schedule.", FontFactory.getFont(
-                FontFactory.TIMES, 11));
+                FontFactory.TIMES, 10));
     paragraph.setAlignment(Element.ALIGN_JUSTIFIED);
     cell.addElement(paragraph);
     headerTable.addCell(cell);
+    headerTable.setSpacingBefore(260);
     document.add(headerTable);
 
     // Create Table object, Here 6 specify the no. of columns
     PdfPTable pdfPTable = new PdfPTable(6);
     pdfPTable.setWidthPercentage(100);
-    pdfPTable.setWidths(new float[] {new Float(1.6), new Float(1.8), new Float(1.2),
-        new Float(1.2), new Float(1.5), new Float(3.8)});
+    pdfPTable.setWidths(new float[] {new Float(1.6), new Float(1.1), new Float(1.1), new Float(1),
+        new Float(1.5), new Float(4)});
 
     // Create cells
     PdfPCell pdfPCell1 = new PdfPCell(new Paragraph("Date & Time", tableCaptionFont));
@@ -194,14 +227,16 @@ public class UGExamRoutineGenerator {
     pdfPTable.setHeaderRows(1);
     document.add(pdfPTable);
 
-    PdfPTable footerTable = new PdfPTable(1);
+    PdfPTable footerTable = new PdfPTable(2);
     cell = new PdfPCell();
     cell.setBorder(0);
-    footerTable.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
     footerTable.setWidthPercentage(100);
+    rHeader.setWidths(new float[] {new Float(3.5), new Float(1)});
+    footerTable.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
     footerTable.setTotalWidth(document.getPageSize().getWidth() - 30);
 
     cell = ReportUtils.getCell(ReportUtils.B0_P0);
+    cell.setColspan(2);
     paragraph = new Paragraph("The examinations will ", footerInfoFont);
     chunk =
         ReportUtils.getChunk("will start from 9:30 a.m and continue up to 12:30 p.m. ",
@@ -235,34 +270,87 @@ public class UGExamRoutineGenerator {
     cell.addElement(paragraph);
     footerTable.addCell(cell);
 
-    PdfPCell pdfPCell = new PdfPCell(new Paragraph("By Order of the Vice-Chancellor", tableFont));
-    pdfPCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+    cell = new PdfPCell();
+    cell.setBorder(0);
+    footerTable.addCell(cell);
+
+    PdfPCell pdfPCell = new PdfPCell(new Paragraph("By Order of the Vice-Chancellor, ", tableFont));
+    pdfPCell.setHorizontalAlignment(Element.ALIGN_CENTER);
     pdfPCell.setVerticalAlignment(Element.ALIGN_TOP);
-    pdfPCell.setPaddingRight(20);
     pdfPCell.setPaddingTop(10);
-    pdfPCell.setFixedHeight(100);
+    pdfPCell.setFixedHeight(40);
     pdfPCell.setBorder(0);
     footerTable.addCell(pdfPCell);
 
-    pdfPCell =
-        new PdfPCell(
-            new Paragraph(
-                "______________________________\nProf. Md. Amirul Alam Khan\nController of Examinations",
-                tableFont));
-    pdfPCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+    cell = new PdfPCell();
+    cell.setBorder(0);
+    footerTable.addCell(cell);
+
+    pdfPCell = new PdfPCell(new Paragraph("___________________________________", tableFont));
+    pdfPCell.setHorizontalAlignment(Element.ALIGN_CENTER);
     pdfPCell.setVerticalAlignment(Element.ALIGN_TOP);
-    pdfPCell.setPaddingRight(20);
-    pdfPCell.setPaddingTop(10);
+    pdfPCell.setBorder(0);
+    footerTable.addCell(pdfPCell);
+
+    cell = new PdfPCell();
+    cell.setBorder(0);
+    footerTable.addCell(cell);
+    pdfPCell =
+        new PdfPCell(new Paragraph(
+            "Dr. Md. Ismail Chowdhury\nController of Examinations(In-charge)", tableFont));
+    pdfPCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+    pdfPCell.setVerticalAlignment(Element.ALIGN_TOP);
     pdfPCell.setBorder(0);
     footerTable.addCell(pdfPCell);
 
     footerTable.setSpacingBefore(20);
     document.add(footerTable);
 
+    /** Copy to Section **/
+    PdfPTable copyToTable = new PdfPTable(1);
+    cell = new PdfPCell();
+    copyToTable.setWidthPercentage(100);
+    copyToTable.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
+
+    pdfPCell = new PdfPCell(new Paragraph("Copy to:", footerInfoFontBoldUnderline));
+    pdfPCell.setFixedHeight(30);
+    pdfPCell.setBorder(0);
+    copyToTable.addCell(pdfPCell);
+
+    pdfPCell =
+        new PdfPCell(new Paragraph("1. Heads of the Department/ School/ Offices, AUST", tableFont));
+    pdfPCell.setFixedHeight(25);
+    pdfPCell.setBorder(0);
+    copyToTable.addCell(pdfPCell);
+
+    pdfPCell = new PdfPCell(new Paragraph("2. APS to Vice-Chancellor, AUST ", tableFont));
+    pdfPCell.setFixedHeight(25);
+    pdfPCell.setBorder(0);
+    copyToTable.addCell(pdfPCell);
+
+    pdfPCell = new PdfPCell(new Paragraph("3. APS to Treasurer, AUST ", tableFont));
+    pdfPCell.setFixedHeight(25);
+    pdfPCell.setBorder(0);
+    copyToTable.addCell(pdfPCell);
+
+    pdfPCell = new PdfPCell(new Paragraph("4. Notice Boards, AUST ", tableFont));
+    pdfPCell.setFixedHeight(25);
+    pdfPCell.setBorder(0);
+    copyToTable.addCell(pdfPCell);
+
+    pdfPCell = new PdfPCell(new Paragraph("5. University Website, AUST ", tableFont));
+    pdfPCell.setFixedHeight(25);
+    pdfPCell.setBorder(0);
+    copyToTable.addCell(pdfPCell);
+    /** End of Copy To **/
+
+    rHeader.setSpacingBefore(40);
+    document.add(rHeader);
+    copyToTable.setSpacingBefore(15);
+    document.add(copyToTable);
+
     document.close();
-
     baos.writeTo(pOutputStream);
-
   }
 
   private void drawRow(ExamRoutineDto dateInfo, Map<String, List<ExamRoutineDto>> mapList,
@@ -274,8 +362,12 @@ public class UGExamRoutineGenerator {
     pdfPCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
     pdfPCell.setHorizontalAlignment(Element.ALIGN_CENTER);
     pdfPCell.setRowspan(getTotalRowCount(mapList));
+    // pdfPCell.setBorderWidthBottom(new Float(1));
+    pdfPCell.setPaddingTop(3);
+    pdfPCell.setPaddingBottom(3);
     pdfPTable.addCell(pdfPCell);
 
+    int programCount = 1;
     Iterator it = mapList.entrySet().iterator();
     while(it.hasNext()) {
       Map.Entry pair = (Map.Entry) it.next();
@@ -285,28 +377,42 @@ public class UGExamRoutineGenerator {
       pdfPCell.setRowspan(courseList.size());
       pdfPCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
       pdfPCell.setPaddingLeft(5);
+      // if(programCount == mapList.size())
+      // pdfPCell.setBorderWidthBottom(new Float(1));
       pdfPTable.addCell(pdfPCell);
 
+      int courseCount = 1;
       for(ExamRoutineDto course : courseList) {
         pdfPCell = new PdfPCell(new Paragraph(course.getCourseYear() + "", tableFont));
         pdfPCell.setHorizontalAlignment(Element.ALIGN_CENTER);
         pdfPCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+        // if(programCount == mapList.size() && courseCount == courseList.size())
+        // pdfPCell.setBorderWidthBottom(new Float(1));
         pdfPTable.addCell(pdfPCell);
         pdfPCell = new PdfPCell(new Paragraph(course.getCourseSemester() + "", tableFont));
         pdfPCell.setHorizontalAlignment(Element.ALIGN_CENTER);
         pdfPCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+        // if(programCount == mapList.size() && courseCount == courseList.size())
+        // pdfPCell.setBorderWidthBottom(new Float(1));
         pdfPTable.addCell(pdfPCell);
         pdfPCell = new PdfPCell(new Paragraph(course.getCourseNumber(), tableFont));
-        pdfPCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        pdfPCell.setPaddingLeft(5);
+        pdfPCell.setHorizontalAlignment(Element.ALIGN_LEFT);
         pdfPCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+        // if(programCount == mapList.size() && courseCount == courseList.size())
+        // pdfPCell.setBorderWidthBottom(new Float(1));
         pdfPTable.addCell(pdfPCell);
         pdfPCell = new PdfPCell(new Paragraph(course.getCourseTitle(), tableFont));
         pdfPCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        pdfPCell.setMinimumHeight(20);
+        // if(programCount == mapList.size() && courseCount == courseList.size())
+        // pdfPCell.setBorderWidthBottom(new Float(1));
+        pdfPCell.setMinimumHeight(18);
         pdfPCell.setPaddingLeft(5);
         pdfPTable.addCell(pdfPCell);
-      }
 
+        courseCount++;
+      }
+      programCount++;
     }
 
   }
@@ -323,13 +429,20 @@ public class UGExamRoutineGenerator {
 
   class UGExamRoutineFooter extends PdfPageEventHelper {
 
-    public UGExamRoutineFooter() {}
+    protected PdfPTable header;
+
+    public UGExamRoutineFooter(PdfPTable header) {
+      this.header = header;
+    }
 
     Font ffont = new Font(Font.FontFamily.TIMES_ROMAN, 8, Font.ITALIC);
 
     @Override
     public void onStartPage(PdfWriter writer, Document document) {
-
+      if(writer.getPageNumber() == 1)
+        header.writeSelectedRows(0, -1, 20, document.top() - 40, writer.getDirectContent());
+      else
+        header.writeSelectedRows(0, -1, 20, document.top() + 22, writer.getDirectContent());
     }
 
     @Override
@@ -338,7 +451,7 @@ public class UGExamRoutineGenerator {
       Phrase footer = new Phrase(String.format("page %d", writer.getPageNumber()), ffont);
 
       ColumnText.showTextAligned(cb, Element.ALIGN_RIGHT, footer, document.right(),
-          document.bottom() - 2, 0);
+          document.bottom() - 30, 0);
     }
 
   }
