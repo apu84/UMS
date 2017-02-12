@@ -102,10 +102,10 @@ public class UGExamRoutineGenerator {
                 + semesterName
                 + " for the Undergraduate students of Ahasanullah University of Science and Technology (AUST) will be held from   "
                 + UmsUtils.formatDate(examList.get(0).getExamDate(), "dd/MM/yyyy",
-                    "EEEE d MMM yyyy")
+                    "EEEE d MMMM yyyy")
                 + " to "
                 + UmsUtils.formatDate(examList.get(examList.size() - 1).getExamDate(),
-                    "dd/MM/yyyy", "EEEE d MMM yyyy")
+                    "dd/MM/yyyy", "EEEE d MMMM yyyy")
                 + " in accordance with the following schedule.", FontFactory.getFont(
                 FontFactory.TIMES, 11));
     paragraph.setAlignment(Element.ALIGN_JUSTIFIED);
@@ -116,8 +116,8 @@ public class UGExamRoutineGenerator {
     // Create Table object, Here 6 specify the no. of columns
     PdfPTable pdfPTable = new PdfPTable(6);
     pdfPTable.setWidthPercentage(100);
-    pdfPTable.setWidths(new float[] {new Float(1.4), new Float(1.8), new Float(1.2),
-        new Float(1.2), new Float(1.5), 4});
+    pdfPTable.setWidths(new float[] {new Float(1.6), new Float(1.8), new Float(1.2),
+        new Float(1.2), new Float(1.5), new Float(3.8)});
 
     // Create cells
     PdfPCell pdfPCell1 = new PdfPCell(new Paragraph("Date & Time", tableCaptionFont));
@@ -205,11 +205,12 @@ public class UGExamRoutineGenerator {
     cell = ReportUtils.getCell(ReportUtils.B0_P0);
     paragraph = new Paragraph("The examinations will ", footerInfoFont);
     chunk =
-        ReportUtils.getChunk("will start from9:30 a.m and continue up to 12:30 p.m. ",
+        ReportUtils.getChunk("will start from 9:30 a.m and continue up to 12:30 p.m. ",
             footerInfoFontBold, ReportUtils.LR1S);
     paragraph.add(chunk);
     chunk =
-        ReportUtils.getChunk("everyday. Concerned examinees are asked to take their respective seats",
+        ReportUtils.getChunk(
+            "everyday. Concerned examinees are asked to take their respective seats",
             footerInfoFont, ReportUtils.LR1S);
     paragraph.add(chunk);
     chunk =
@@ -217,22 +218,23 @@ public class UGExamRoutineGenerator {
             footerInfoFontBold, ReportUtils.LR1S);
     paragraph.add(chunk);
     chunk =
-        ReportUtils.getChunk("Room-wise sitting arrangement will be notified in due course for the examinees. The examinees are also asked to bring their",
-            footerInfoFont, ReportUtils.LR1S);
+        ReportUtils
+            .getChunk(
+                "Room-wise sitting arrangement will be notified in due course for the examinees. The examinees are also asked to bring their",
+                footerInfoFont, ReportUtils.LR1S);
     paragraph.add(chunk);
     chunk =
-        ReportUtils.getChunk("identity cards with valid sticker, non-programmable calculators and other accessories officially allowed",
-            footerInfoFontBold, ReportUtils.LR1S);
+        ReportUtils
+            .getChunk(
+                "identity cards with valid sticker, non-programmable calculators and other accessories officially allowed",
+                footerInfoFontBold, ReportUtils.LR1S);
     paragraph.add(chunk);
-    chunk =
-        ReportUtils.getChunk("in the examination halls.\n",
-            footerInfoFont, ReportUtils.LR1S);
+    chunk = ReportUtils.getChunk("in the examination halls.\n", footerInfoFont, ReportUtils.LR1S);
     paragraph.add(chunk);
 
     paragraph.setAlignment(Element.ALIGN_JUSTIFIED);
     cell.addElement(paragraph);
     footerTable.addCell(cell);
-
 
     PdfPCell pdfPCell = new PdfPCell(new Paragraph("By Order of the Vice-Chancellor", tableFont));
     pdfPCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
@@ -243,15 +245,17 @@ public class UGExamRoutineGenerator {
     pdfPCell.setBorder(0);
     footerTable.addCell(pdfPCell);
 
-
-    pdfPCell = new PdfPCell(new Paragraph("______________________________\nProf. Md. Amirul Alam Khan\nController of Examinations", tableFont));
+    pdfPCell =
+        new PdfPCell(
+            new Paragraph(
+                "______________________________\nProf. Md. Amirul Alam Khan\nController of Examinations",
+                tableFont));
     pdfPCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
     pdfPCell.setVerticalAlignment(Element.ALIGN_TOP);
     pdfPCell.setPaddingRight(20);
     pdfPCell.setPaddingTop(10);
     pdfPCell.setBorder(0);
     footerTable.addCell(pdfPCell);
-
 
     footerTable.setSpacingBefore(20);
     document.add(footerTable);
@@ -267,7 +271,7 @@ public class UGExamRoutineGenerator {
     String dateTime = dateInfo.getExamTime().replaceAll("to", "\nto\n");
     PdfPCell pdfPCell =
         new PdfPCell(new Paragraph(UmsUtils.formatDate(dateInfo.getExamDate(), "dd/MM/yyyy",
-            "d MMM yyyy (EEEE)") + "\n\nFrom\n " + dateTime, tableFont));
+            "d MMMM yyyy (EEEE)") + "\n\nFrom\n " + dateTime, tableFont));
     pdfPCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
     pdfPCell.setHorizontalAlignment(Element.ALIGN_CENTER);
     pdfPCell.setRowspan(getTotalRowCount(mapList));
