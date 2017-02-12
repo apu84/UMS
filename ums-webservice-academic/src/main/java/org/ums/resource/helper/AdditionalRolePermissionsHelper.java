@@ -22,7 +22,7 @@ import java.util.List;
 
 @Component
 public class AdditionalRolePermissionsHelper extends
-    ResourceHelper<AdditionalRolePermissions, MutableAdditionalRolePermissions, Integer> {
+    ResourceHelper<AdditionalRolePermissions, MutableAdditionalRolePermissions, Long> {
   @Autowired
   AdditionalRolePermissionsManager mAdditionalRolePermissionsManager;
 

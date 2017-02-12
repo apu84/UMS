@@ -8,10 +8,10 @@ import org.ums.manager.CourseTeacherManager;
 import java.util.List;
 
 public class CourseTeacherCache extends
-    AssignedTeacherCache<CourseTeacher, MutableCourseTeacher, Integer, CourseTeacherManager>
-    implements CourseTeacherManager {
+    AssignedTeacherCache<CourseTeacher, MutableCourseTeacher, Long, CourseTeacherManager> implements
+    CourseTeacherManager {
 
-  public CourseTeacherCache(final CacheManager<CourseTeacher, Integer> pCacheManager) {
+  public CourseTeacherCache(final CacheManager<CourseTeacher, Long> pCacheManager) {
     super(pCacheManager);
   }
 

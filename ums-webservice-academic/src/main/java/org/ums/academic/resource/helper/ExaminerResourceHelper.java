@@ -25,10 +25,10 @@ import java.util.List;
 @Component
 public class ExaminerResourceHelper
     extends
-    AbstractAssignedTeacherResourceHelper<Examiner, MutableExaminer, Integer, AssignedTeacherManager<Examiner, MutableExaminer, Integer>> {
+    AbstractAssignedTeacherResourceHelper<Examiner, MutableExaminer, Long, AssignedTeacherManager<Examiner, MutableExaminer, Long>> {
   @Autowired
   @Qualifier("examinerManager")
-  AssignedTeacherManager<Examiner, MutableExaminer, Integer> mExaminerManager;
+  AssignedTeacherManager<Examiner, MutableExaminer, Long> mExaminerManager;
 
   @Autowired
   private ExaminerBuilder mBuilder;
@@ -47,7 +47,7 @@ public class ExaminerResourceHelper
   }
 
   @Override
-  protected AssignedTeacherManager<Examiner, MutableExaminer, Integer> getContentManager() {
+  protected AssignedTeacherManager<Examiner, MutableExaminer, Long> getContentManager() {
     return mExaminerManager;
   }
 

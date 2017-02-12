@@ -1,19 +1,20 @@
 package org.ums.persistent.dao;
 
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.ums.domain.model.immutable.CourseTeacher;
-import org.ums.domain.model.mutable.MutableCourseTeacher;
-import org.ums.manager.CourseTeacherManager;
-import org.ums.persistent.model.PersistentCourseTeacher;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.ums.domain.model.immutable.CourseTeacher;
+import org.ums.domain.model.mutable.MutableCourseTeacher;
+import org.ums.generator.IdGenerator;
+import org.ums.manager.CourseTeacherManager;
+import org.ums.persistent.model.PersistentCourseTeacher;
+
 public class PersistentCourseTeacherDao extends
-    AbstractAssignedTeacherDao<CourseTeacher, MutableCourseTeacher, Integer> implements
+    AbstractAssignedTeacherDao<CourseTeacher, MutableCourseTeacher, Long> implements
     CourseTeacherManager {
 
   String SELECT_ALL =
@@ -23,8 +24,8 @@ public class PersistentCourseTeacherDao extends
           + getLastModifiedSql() + " ";
   String DELETE_ALL = "DELETE FROM COURSE_TEACHER ";
   String INSERT_ONE =
-      "INSERT INTO COURSE_TEACHER(SEMESTER_ID, TEACHER_ID, COURSE_ID, SECTION, LAST_MODIFIED) VALUES"
-          + "(?, ?, ?, ?," + getLastModifiedSql() + ")";
+      "INSERT INTO COURSE_TEACHER(ID, SEMESTER_ID, TEACHER_ID, COURSE_ID, SECTION, LAST_MODIFIED) VALUES"
+          + "(?, ?, ?, ?, ?," + getLastModifiedSql() + ")";
 
   private String SELECT_BY_SEMESTER_PROGRAM = "SELECT t3.*,\n" + "       t4.teacher_id,\n"
       + "       t4.section,\n" + "       t4.last_modified,\n" + "       t4.id\n"
@@ -43,8 +44,9 @@ public class PersistentCourseTeacherDao extends
       + "       ON t3.course_id = t4.course_id  and t3.semester_id = t4.semester_id " + "%s"
       + "ORDER BY t3.COURSE_ID, t4.TEACHER_ID, t4.SECTION";
 
-  public PersistentCourseTeacherDao(JdbcTemplate pJdbcTemplate) {
+  public PersistentCourseTeacherDao(JdbcTemplate pJdbcTemplate, IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
+    mIdGenerator = pIdGenerator;
   }
 
   @Override
@@ -70,8 +72,9 @@ public class PersistentCourseTeacherDao extends
 
   @Override
   public int create(MutableCourseTeacher pMutable) {
-    return mJdbcTemplate.update(INSERT_ONE, pMutable.getSemester().getId(), pMutable.getTeacher()
-        .getId(), pMutable.getCourse().getId(), pMutable.getSection());
+    return mJdbcTemplate.update(INSERT_ONE, mIdGenerator.getNumericId().toString(), pMutable
+        .getSemester().getId(), pMutable.getTeacher().getId(), pMutable.getCourse().getId(),
+        pMutable.getSection());
   }
 
   @Override
@@ -112,7 +115,7 @@ public class PersistentCourseTeacherDao extends
     @Override
     public CourseTeacher mapRow(ResultSet rs, int rowNum) throws SQLException {
       MutableCourseTeacher courseTeacher = new PersistentCourseTeacher();
-      courseTeacher.setId(rs.getInt("ID"));
+      courseTeacher.setId(rs.getLong("ID"));
       courseTeacher.setCourseId(rs.getString("COURSE_ID"));
       courseTeacher.setSemesterId(rs.getInt("SEMESTER_ID"));
       courseTeacher.setTeacherId(rs.getString("TEACHER_ID"));

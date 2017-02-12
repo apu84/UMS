@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.Set;
 
 public interface MutableAdditionalRolePermissions extends AdditionalRolePermissions, Mutable,
-    MutableLastModifier, MutableIdentifier<Integer> {
+    MutableLastModifier, MutableIdentifier<Long> {
   void setUser(final User pUser);
 
   void setUserId(final String pUserId);

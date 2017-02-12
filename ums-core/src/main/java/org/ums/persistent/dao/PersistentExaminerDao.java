@@ -1,17 +1,18 @@
 package org.ums.persistent.dao;
 
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.ums.domain.model.immutable.Examiner;
-import org.ums.domain.model.mutable.MutableExaminer;
-import org.ums.persistent.model.PersistentExaminer;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.ums.domain.model.immutable.Examiner;
+import org.ums.domain.model.mutable.MutableExaminer;
+import org.ums.generator.IdGenerator;
+import org.ums.persistent.model.PersistentExaminer;
+
 public class PersistentExaminerDao extends
-    AbstractAssignedTeacherDao<Examiner, MutableExaminer, Integer> {
+    AbstractAssignedTeacherDao<Examiner, MutableExaminer, Long> {
   static String SELECT_ALL =
       "SELECT SEMESTER_ID, PREPARER, SCRUTINIZER, COURSE_ID, LAST_MODIFIED, ID FROM PREPARER_SCRUTINIZER ";
   static String UPDATE_ALL =
@@ -19,8 +20,8 @@ public class PersistentExaminerDao extends
           + getLastModifiedSql() + " ";
   static String DELETE_ALL = "DELETE FROM PREPARER_SCRUTINIZER ";
   static String INSERT_ONE =
-      "INSERT INTO PREPARER_SCRUTINIZER(SEMESTER_ID, PREPARER, SCRUTINIZER, COURSE_ID, LAST_MODIFIED) VALUES"
-          + "(?, ?, ?, ?," + getLastModifiedSql() + ")";
+      "INSERT INTO PREPARER_SCRUTINIZER(ID, SEMESTER_ID, PREPARER, SCRUTINIZER, COURSE_ID, LAST_MODIFIED) VALUES"
+          + "(?, ?, ?, ?, ?," + getLastModifiedSql() + ")";
 
   private String SELECT_BY_SEMESTER_PROGRAM = "SELECT t3.*,\n" + "       t4.preparer,\n"
       + "       t4.scrutinizer,\n" + "       t4.last_modified,\n" + "       t4.id\n"
@@ -38,8 +39,9 @@ public class PersistentExaminerDao extends
       + "       ON t3.course_id = t4.course_id " + "%s"
       + "ORDER BY t3.COURSE_ID, t4.PREPARER, t4.SCRUTINIZER";
 
-  public PersistentExaminerDao(JdbcTemplate pJdbcTemplate) {
+  public PersistentExaminerDao(JdbcTemplate pJdbcTemplate, IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
+    mIdGenerator = pIdGenerator;
   }
 
   @Override
@@ -65,8 +67,9 @@ public class PersistentExaminerDao extends
 
   @Override
   public int create(MutableExaminer pMutable) {
-    return mJdbcTemplate.update(INSERT_ONE, pMutable.getSemester().getId(), pMutable.getPreparer()
-        .getId(), pMutable.getScrutinizer().getId(), pMutable.getCourse().getId());
+    return mJdbcTemplate.update(INSERT_ONE, mIdGenerator.getNumericId(), pMutable.getSemester()
+        .getId(), pMutable.getPreparer().getId(), pMutable.getScrutinizer().getId(), pMutable
+        .getCourse().getId());
   }
 
   @Override
@@ -81,7 +84,7 @@ public class PersistentExaminerDao extends
     @Override
     public Examiner mapRow(ResultSet rs, int rowNum) throws SQLException {
       MutableExaminer examiner = new PersistentExaminer();
-      examiner.setId(rs.getInt("ID"));
+      examiner.setId(rs.getLong("ID"));
       examiner.setCourseId(rs.getString("COURSE_ID"));
       examiner.setSemesterId(rs.getInt("SEMESTER_ID"));
       examiner.setPreparerId(rs.getString("PREPARER"));
