@@ -179,9 +179,10 @@ public class UGExamRoutineGenerator {
       }
       else {
         // New Date Found
+        System.out.println(previousProgram);
         routineMap.put(previousProgram, courseList);
         drawRow(dateInfo, routineMap, pdfPTable);
-        routineMap = new HashMap<>();
+        routineMap = new LinkedHashMap<>();
         courseList = new ArrayList<>();
         courseList.add(routineDto);
       }
