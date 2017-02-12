@@ -171,7 +171,6 @@ public class UGExamRoutineGenerator {
         else {
           // New Program Found
           // -- Add previous courses to the Map
-          System.out.println(previousProgram);
           routineMap.put(previousProgram, courseList);
           courseList = new ArrayList<>();
           courseList.add(routineDto);
@@ -179,7 +178,6 @@ public class UGExamRoutineGenerator {
       }
       else {
         // New Date Found
-        System.out.println(previousProgram);
         routineMap.put(previousProgram, courseList);
         drawRow(dateInfo, routineMap, pdfPTable);
         routineMap = new LinkedHashMap<>();
