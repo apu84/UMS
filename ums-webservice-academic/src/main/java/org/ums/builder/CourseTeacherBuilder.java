@@ -1,19 +1,19 @@
 package org.ums.builder;
 
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+import javax.json.JsonValue;
+import javax.ws.rs.core.UriInfo;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.*;
 import org.ums.domain.model.mutable.MutableCourseTeacher;
 import org.ums.manager.CourseManager;
 import org.ums.manager.SemesterManager;
 import org.ums.manager.TeacherManager;
-
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
-import javax.ws.rs.core.UriInfo;
 
 @Component
 public class CourseTeacherBuilder implements Builder<CourseTeacher, MutableCourseTeacher> {
@@ -82,8 +82,14 @@ public class CourseTeacherBuilder implements Builder<CourseTeacher, MutableCours
     }
     pMutable.setCourse(mCourseManager.get(pJsonObject.getString("courseId")));
     pMutable.setTeacher(mTeacherManager.get(pJsonObject.getString("teacherId")));
-    pMutable
-        .setSemester(mSemesterManager.get(Integer.parseInt(pJsonObject.getString("semesterId"))));
+    JsonValue semesterIdObject = pJsonObject.get("semesterId");
+    if(semesterIdObject.getValueType().toString().equalsIgnoreCase("integer")) {
+      pMutable.setSemester(mSemesterManager.get(pJsonObject.getInt("semesterId")));
+    }
+    else if(semesterIdObject.getValueType().toString().equalsIgnoreCase("string")) {
+      pMutable.setSemester(mSemesterManager.get(Integer.parseInt(pJsonObject
+          .getString("semesterId"))));
+    }
     if(pJsonObject.containsKey("section") && !StringUtils.isEmpty(pJsonObject.getString("section"))) {
       pMutable.setSection(pJsonObject.getString("section"));
     }
