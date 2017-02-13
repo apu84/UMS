@@ -1,6 +1,5 @@
 package org.ums.domain.model.mutable;
 
-import org.ums.domain.model.common.Identifier;
 import org.ums.domain.model.common.Mutable;
 import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.dto.StudentGradeDto;
@@ -35,7 +34,11 @@ public interface MutableExamGrade extends ExamGrade, Mutable, MutableIdentifier<
 
   void setCourseCreditHour(Integer pCourseCreditHour);
 
-  void setLastSubmissionDate(Date pLastSubmissionDate);
+  void setLastSubmissionDatePrep(Date pLastSubmissionDate);
+
+  void setLastSubmissionDateScr(Date pLastSubmissionDateScr);
+
+  void setLastSubmissionDateHead(Date pLastSubmissionDateHead);
 
   void setExamDate(String pExamDate);
 

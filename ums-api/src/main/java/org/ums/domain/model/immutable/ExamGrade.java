@@ -4,7 +4,6 @@ import org.ums.domain.model.common.EditType;
 import org.ums.domain.model.common.Identifier;
 import org.ums.domain.model.dto.StudentGradeDto;
 import org.ums.domain.model.mutable.MutableExamGrade;
-import org.ums.domain.model.mutable.MutableExamRoutine;
 import org.ums.enums.ExamType;
 
 import java.io.Serializable;
@@ -35,7 +34,11 @@ public interface ExamGrade extends Serializable, EditType<MutableExamGrade>, Ide
 
   Integer getCourseCreditHour();
 
-  Date getLastSubmissionDate();
+  Date getLastSubmissionDatePrep();
+
+  Date getLastSubmissionDateScr();
+
+  Date getLastSubmissionDateHead();
 
   String getExamDate();
 

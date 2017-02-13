@@ -63,7 +63,9 @@
                     <th align="left">Course Title</th>
                     <th style="text-align:center;">CrHr</th>
                     <th style="width:120px;text-align:center;">Total Students</th>
-                    <th style="width:172px;text-align:center;">Last Date of Submission</th>
+                    <th style="width:172px;text-align:center;">Last Date of Submission(prep)</th>
+                    <th style="width:172px;text-align:center;">Last Date of Submission(scr)</th>
+                    <th style="width:172px;text-align:center;">Last Date of Submission(head)</th>
                     </thead>
                     <tbody>
                     <tr data-ng-repeat="e in examGradeStatisticsArr" align="center">
@@ -75,7 +77,15 @@
                         <td>{{e.totalStudents}}</td>
                         <td align="center" >
                             <input align="center" contenteditable="editable" style="width:70%;text-align: center;" type="text"
-                                   data-date-format="dd-mm-yyyy" placeholder="DD-MM-YYYY" class="datepicker-default form-control" data-ng-model="e.lastSubmissionDate" data-ng-change="dateChanged(e)">
+                                   data-date-format="dd-mm-yyyy" placeholder="DD-MM-YYYY" class="datepicker-default form-control" data-ng-model="e.lastSubmissionDatePrep" data-ng-change="dateChanged(e)">
+                        </td>
+                        <td align="center" >
+                            <input align="center" contenteditable="editable" style="width:70%;text-align: center;" type="text"
+                                   data-date-format="dd-mm-yyyy" placeholder="DD-MM-YYYY" class="datepicker-default form-control" data-ng-model="e.lastSubmissionDateScr" data-ng-change="dateChanged(e)">
+                        </td>
+                        <td align="center" >
+                            <input align="center" contenteditable="editable" style="width:70%;text-align: center;" type="text"
+                                   data-date-format="dd-mm-yyyy" placeholder="DD-MM-YYYY" class="datepicker-default form-control" data-ng-model="e.lastSubmissionDateHead" data-ng-change="dateChanged(e)">
                         </td>
                     </tr>
                     </tbody>

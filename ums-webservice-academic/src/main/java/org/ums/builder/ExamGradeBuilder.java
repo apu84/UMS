@@ -12,7 +12,6 @@ import javax.ws.rs.core.UriInfo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.dto.MarksSubmissionStatusDto;
 import org.ums.domain.model.dto.StudentGradeDto;
@@ -67,9 +66,18 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
       pBuilder.add("totalStudents", pReadOnly.getTotalStudents());
     }
 
-    if(pReadOnly.getLastSubmissionDate() != null) {
-      pBuilder.add("lastSubmissionDate", mDateFormat.format(pReadOnly.getLastSubmissionDate()));
+    if(pReadOnly.getLastSubmissionDatePrep() != null) {
+      pBuilder.add("lastSubmissionDatePrep",
+          mDateFormat.format(pReadOnly.getLastSubmissionDatePrep()));
     }
+
+    if(pReadOnly.getLastSubmissionDateScr() != null)
+      pBuilder.add("lastSubmissionDateScr",
+          mDateFormat.format(pReadOnly.getLastSubmissionDateScr()));
+
+    if(pReadOnly.getLastSubmissionDateHead() != null)
+      pBuilder.add("lastSubmissionDateHead",
+          mDateFormat.format(pReadOnly.getLastSubmissionDateHead()));
 
   }
 
@@ -78,14 +86,27 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
     if(pJsonObject.containsKey("id")) {
       pMutable.setId(Integer.parseInt(pJsonObject.get("id").toString()));
     }
-    if(pJsonObject.getString("lastSubmissionDate") != null) {
-      Date date = mDateFormat.parse(pJsonObject.getString("lastSubmissionDate"));
+
+    if(pJsonObject.getString("lastSubmissionDatePrep") != null) {
+      Date date =
+          mDateFormat.parse(pJsonObject.getString("lastSubmissionDatePrep").replace("-", "/"));
       // Set date to last hour and last minute of the dayatch
-      Calendar calendar = Calendar.getInstance();
-      calendar.setTime(date);
-      calendar.set(Calendar.MINUTE, 59);
-      calendar.set(Calendar.HOUR, 23);
-      pMutable.setLastSubmissionDate(calendar.getTime());
+      Calendar calendar = getCalendar(date);
+      pMutable.setLastSubmissionDatePrep(calendar.getTime());
+    }
+
+    if(pJsonObject.getString("lastSubmissionDateScr") != null) {
+      Date date =
+          mDateFormat.parse(pJsonObject.getString("lastSubmissionDateScr").replace("-", "/"));
+      Calendar calendar = getCalendar(date);
+      pMutable.setLastSubmissionDateScr(calendar.getTime());
+    }
+
+    if(pJsonObject.getString("lastSubmissionDateHead") != null) {
+      Date date =
+          mDateFormat.parse(pJsonObject.getString("lastSubmissionDateHead").replace("-", "/"));
+      Calendar calendar = getCalendar(date);
+      pMutable.setLastSubmissionDateHead(calendar.getTime());
     }
 
     pMutable.setSemesterId(pJsonObject.getInt("semesterId"));
@@ -94,6 +115,14 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
     if(pJsonObject.getString("courseId") != null) {
       pMutable.setCourseId(pJsonObject.getString("courseId"));
     }
+  }
+
+  private Calendar getCalendar(Date pDate) {
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTime(pDate);
+    calendar.set(Calendar.MINUTE, 59);
+    calendar.set(Calendar.HOUR, 23);
+    return calendar;
   }
 
   public void build(MarksSubmissionStatusDto partInfoDto, JsonObject pJsonObject) {

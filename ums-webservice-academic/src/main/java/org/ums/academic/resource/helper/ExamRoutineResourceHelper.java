@@ -2,6 +2,7 @@ package org.ums.academic.resource.helper;
 
 import com.itextpdf.text.DocumentException;
 import org.apache.commons.lang.NotImplementedException;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Component;
@@ -9,13 +10,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.ums.cache.LocalCache;
 import org.ums.builder.ExamRoutineBuilder;
 import org.ums.domain.model.dto.ExamRoutineDto;
+import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.immutable.ExamRoutine;
 import org.ums.domain.model.immutable.SeatPlanGroup;
+import org.ums.domain.model.immutable.User;
 import org.ums.domain.model.mutable.MutableExamRoutine;
 import org.ums.exceptions.ValidationException;
-import org.ums.manager.ExamRoutineManager;
-import org.ums.manager.SeatPlanGroupManager;
-import org.ums.manager.SubGroupManager;
+import org.ums.manager.*;
 import org.ums.persistent.model.PersistentExamRoutine;
 import org.ums.report.generator.AttendanceSheetGenerator;
 import org.ums.report.generator.UGExamRoutineGenerator;
@@ -49,6 +50,12 @@ public class ExamRoutineResourceHelper extends
   private SubGroupManager mSubGroupManager;
 
   @Autowired
+  private EmployeeManager mEmployeeManager;
+
+  @Autowired
+  private UserManager mUserManager;
+
+  @Autowired
   private UGExamRoutineGenerator mExamRoutineGenerator;
 
   @Override
@@ -76,14 +83,29 @@ public class ExamRoutineResourceHelper extends
     return buildJsonResponse(pSemesterId, pExamType, examRoutine);
   }
 
+  public JsonObject getExamRoutineByDept(final Integer pSemesterId, final Integer pExamType,
+      UriInfo pUriInfo) {
+    String userId = SecurityUtils.getSubject().getPrincipal().toString();
+    User user = mUserManager.get(userId);
+    Employee employee = mEmployeeManager.get(user.getEmployeeId());
+    List<ExamRoutineDto> examRoutine =
+        getContentManager()
+            .getExamRoutine(pSemesterId, pExamType, employee.getDepartment().getId());
+    return getJsonObject(pUriInfo, examRoutine);
+  }
+
   public JsonObject getExamRoutineForCCI(Integer pSemesterId, Integer pExamType,
       final Request pRequest, final UriInfo pUriInfo) {
     List<ExamRoutineDto> examRoutine =
         getContentManager().getExamRoutineForApplicationCCI(pSemesterId, pExamType);
+    return getJsonObject(pUriInfo, examRoutine);
+  }
+
+  private JsonObject getJsonObject(UriInfo pUriInfo, List<ExamRoutineDto> pExamRoutine) {
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-    for(ExamRoutineDto exam : examRoutine) {
+    for(ExamRoutineDto exam : pExamRoutine) {
       PersistentExamRoutine ex = new PersistentExamRoutine();
       ex.setExamDate(exam.getExamDate());
       ex.setTotalStudent(exam.getTotalStudent());

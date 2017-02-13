@@ -175,25 +175,26 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
           + "Select 'F' Grade_Letter, 0 Total, '#2A0CD0' Color From Dual  "
           + ")Tmp Group by Grade_Letter Order by Decode(Grade_Letter,'A+',1,'A',2,'A-',3,'B+',4,'B',5,'B-',6,'C+',7,'C',8,'D',9,'F',10)  ";
 
-  String SELECT_EXAM_GRADE_DEAD_LINE = " Select  "
-      + "  to_char(EXAM_ROUTINE.EXAM_DATE,'dd-mm-yyyy') Exam_date,  "
-      + "  MST_PROGRAM.PROGRAM_SHORT_NAME,  " + "  MST_COURSE.COURSE_ID,"
-      + "  MST_COURSE.COURSE_NO,  " + "  MST_COURSE.COURSE_TITLE,  " + "  MST_COURSE.CRHR,  "
-      + "  ugRegistrationResult.total_students,  " + "  marksSubmissionStatus.ID, "
-      + "  last_submission_date " + "  " + "from  " + "  EXAM_ROUTINE,  " + "  MST_PROGRAM,  "
-      + "  MST_COURSE,  " + "    (  " + "        select  "
-      + "        COURSE_ID,count(COURSE_ID) total_students  "
-      + "        from UG_REGISTRATION_RESULT  "
-      + "        WHERE SEMESTER_ID=? GROUP BY  COURSE_ID  " + "    ) ugRegistrationResult,  "
-      + "  (  " + "    select ID, SEMESTER_ID,  " + "      COURSE_ID,  "
-      + "      last_submission_date  " + "    from MARKS_SUBMISSION_STATUS  "
-      + "    ) marksSubmissionStatus  " + "where  "
-      + "  EXAM_ROUTINE.EXAM_DATE=to_date(?,'dd-mm-yyyy') AND  "
-      + "  MST_PROGRAM.PROGRAM_ID = EXAM_ROUTINE.PROGRAM_ID AND  "
-      + "  MST_COURSE.COURSE_ID=EXAM_ROUTINE.COURSE_ID AND  "
-      + "  EXAM_ROUTINE.COURSE_ID=ugRegistrationResult.COURSE_ID AND  "
-      + "  exam_routine.SEMESTER=? AND  " + "  exam_routine.exam_type=? and "
-      + "  marksSubmissionStatus.SEMESTER_ID=EXAM_ROUTINE.SEMESTER AND  "
+  String SELECT_EXAM_GRADE_DEAD_LINE = " SELECT "
+      + "  to_char(EXAM_ROUTINE.EXAM_DATE, 'dd-mm-yyyy') Exam_date, "
+      + "  MST_PROGRAM.PROGRAM_SHORT_NAME, " + "  MST_COURSE.COURSE_ID, "
+      + "  MST_COURSE.COURSE_NO, " + "  MST_COURSE.COURSE_TITLE, " + "  MST_COURSE.CRHR, "
+      + "  ugRegistrationResult.total_students, " + "  marksSubmissionStatus.ID, "
+      + "  last_submission_date_prep, " + "  LAST_SUBMISSION_DATE_SCR, "
+      + "  LAST_SUBMISSION_DATE_HEAD " + "FROM EXAM_ROUTINE, MST_PROGRAM, "
+      + "  MST_COURSE, (SELECT " + "                 COURSE_ID, "
+      + "                 count(COURSE_ID) total_students "
+      + "               FROM UG_REGISTRATION_RESULT " + "               WHERE SEMESTER_ID = ? "
+      + "               GROUP BY COURSE_ID) ugRegistrationResult, " + "  (SELECT " + "     ID, "
+      + "     SEMESTER_ID, " + "     COURSE_ID, " + "     last_submission_date_prep, "
+      + "     LAST_SUBMISSION_DATE_SCR, " + "     LAST_SUBMISSION_DATE_HEAD "
+      + "   FROM MARKS_SUBMISSION_STATUS " + "  ) marksSubmissionStatus " + "WHERE "
+      + "  EXAM_ROUTINE.EXAM_DATE = to_date(?, 'dd-mm-yyyy') AND "
+      + "  MST_PROGRAM.PROGRAM_ID = EXAM_ROUTINE.PROGRAM_ID AND "
+      + "  MST_COURSE.COURSE_ID = EXAM_ROUTINE.COURSE_ID AND " + "  MST_COURSE.OFFER_BY=? AND "
+      + "  EXAM_ROUTINE.COURSE_ID = ugRegistrationResult.COURSE_ID AND "
+      + "  exam_routine.SEMESTER = ? AND exam_routine.exam_type = ? AND "
+      + "  marksSubmissionStatus.SEMESTER_ID = EXAM_ROUTINE.SEMESTER AND "
       + "  marksSubmissionStatus.COURSE_ID = EXAM_ROUTINE.COURSE_ID";
 
   String INSERT_THEORY_LOG =
@@ -297,8 +298,7 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
    *         is returned to the client.
    */
   @Override
-  public int insertGradeSubmissionDeadLineInfo(Integer pSemesterId, ExamType pExamType,
-      String pExamDate) {
+  public int createGradeSubmissionStatus(Integer pSemesterId, ExamType pExamType, String pExamDate) {
     String query =
         "" + "insert into MARKS_SUBMISSION_STATUS (SEMESTER_ID,COURSE_ID,EXAM_TYPE,STATUS)  "
             + "    select  " + "      SEMESTER,  " + "      COURSE_ID,  " + "      EXAM_TYPE,  "
@@ -309,11 +309,18 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
 
   @Override
   public List<MarksSubmissionStatusDto> getGradeSubmissionDeadLine(Integer pSemesterId,
-      ExamType pExamType, String pExamDate) {
+      ExamType pExamType, String pExamDate, String pOfferedDeptId) {
     String query = SELECT_EXAM_GRADE_DEAD_LINE;
-    return mJdbcTemplate.query(query,
-        new Object[] {pSemesterId, pExamDate, pSemesterId, pExamType.getId()},
-        new GradeSubmissionDeadlineRowMapper());
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pExamDate, pOfferedDeptId,
+        pSemesterId, pExamType.getId()}, new GradeSubmissionDeadlineRowMapper());
+  }
+
+  @Override
+  public int updateDeadline(List<MarksSubmissionStatusDto> pMarksSubmissionStatuses) {
+    String query =
+        "update MARKS_SUBMISSION_STATUS set last_submission_date_prep=?, LAST_SUBMISSION_DATE_SCR=?, LAST_SUBMISSION_DATE_HEAD=? where SEMESTER_ID=? and  COURSE_ID=? and EXAM_TYPE=?";
+    return mJdbcTemplate
+        .batchUpdate(query, getParamListForDeadlineUpdate(pMarksSubmissionStatuses)).length;
   }
 
   @Override
@@ -761,12 +768,23 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
     });
   }
 
-  private List<Object[]> getUpdateParamListForGradeSubmissionDeadLine(
+  private List<Object[]> getParamListForGradeSubmissionStatusCreator(
       List<MarksSubmissionStatusDto> pMarksSubmissionStatusDtos) {
     List<Object[]> params = new ArrayList<>();
     for(MarksSubmissionStatusDto app : pMarksSubmissionStatusDtos) {
       params.add(new Object[] {app.getExamDate(), app.getSemesterId(), app.getExamType().getId(),
           app.getCourseId()});
+    }
+    return params;
+  }
+
+  private List<Object[]> getParamListForDeadlineUpdate(
+      List<MarksSubmissionStatusDto> pMarksSubmissionStatusDtos) {
+    List<Object[]> params = new ArrayList<>();
+    for(MarksSubmissionStatusDto app : pMarksSubmissionStatusDtos) {
+      params.add(new Object[] {app.getLastSubmissionDatePrep(), app.getLastSubmissionDateScr(),
+          app.getLastSubmissionDateHead(), app.getSemesterId(), app.getCourseId(),
+          app.getExamType().getId()});
     }
     return params;
   }
@@ -783,7 +801,11 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
       submissionStatusDto.setCourseTitle(pResultSet.getString("course_title"));
       submissionStatusDto.setCourseCreditHour(pResultSet.getInt("crhr"));
       submissionStatusDto.setTotalStudents(pResultSet.getInt("total_students"));
-      submissionStatusDto.setLastSubmissionDate(pResultSet.getDate("last_submission_date"));
+      submissionStatusDto
+          .setLastSubmissionDatePrep(pResultSet.getDate("last_submission_date_prep"));
+      submissionStatusDto.setLastSubmissionDateScr(pResultSet.getDate("last_submission_date_scr"));
+      submissionStatusDto
+          .setLastSubmissionDateHead(pResultSet.getDate("last_submission_date_head"));
       submissionStatusDto.setId(pResultSet.getInt("ID"));
       return submissionStatusDto;
     }
@@ -816,7 +838,7 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
       statusDto.setDeptSchoolName(resultSet.getString("LONG_NAME"));
       statusDto.setSemesterName(resultSet.getString("SEMESTER_NAME"));
       statusDto.setcRhR(resultSet.getFloat("CRHR"));
-      statusDto.setLastSubmissionDate(resultSet.getDate("LAST_SUBMISSION_DATE"));
+      statusDto.setLastSubmissionDatePrep(resultSet.getDate("LAST_SUBMISSION_DATE"));
       AtomicReference<MarksSubmissionStatusDto> atomicReference = new AtomicReference<>(statusDto);
       return atomicReference.get();
     }
@@ -847,10 +869,10 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
           .getLabel());
 
       if(resultSet.getObject("LAST_SUBMISSION_DATE") != null) {
-        statusDto.setLastSubmissionDate(resultSet.getDate("LAST_SUBMISSION_DATE"));
+        statusDto.setLastSubmissionDatePrep(resultSet.getDate("LAST_SUBMISSION_DATE"));
         Date currentDate = new Date();
 
-        if(currentDate.after(statusDto.getLastSubmissionDate())) {
+        if(currentDate.after(statusDto.getLastSubmissionDatePrep())) {
           statusDto.setSubmissionDateOver(true);
         }
         else {

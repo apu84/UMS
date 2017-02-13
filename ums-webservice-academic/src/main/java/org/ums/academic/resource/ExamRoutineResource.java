@@ -26,6 +26,14 @@ public class ExamRoutineResource extends MutableExamRoutineResource {
   }
 
   @GET
+  @Path("deptWise/semester/{semester-id}/examtype/{exam-type}")
+  public JsonObject getExamRoutineForEmployee(final @Context Request pRequest,
+      final @PathParam("semester-id") Integer pSemesterId,
+      final @PathParam("exam-type") Integer pExamTypeId) {
+    return mResourceHelper.getExamRoutineByDept(pSemesterId, pExamTypeId, mUriInfo);
+  }
+
+  @GET
   @Path("/simplified/semester/{semester-id}/examtype/{exam-type}")
   public JsonObject getExamRoutineSimplified(final @Context Request pRequest,
       final @PathParam("semester-id") Integer pSemesterId,

@@ -9,19 +9,13 @@ import org.springframework.util.StringUtils;
 import org.ums.cache.LocalCache;
 import org.ums.builder.ExamGradeBuilder;
 import org.ums.domain.model.dto.*;
-import org.ums.domain.model.immutable.ExamGrade;
-import org.ums.domain.model.immutable.MarksSubmissionStatus;
-import org.ums.domain.model.immutable.Semester;
-import org.ums.domain.model.immutable.User;
+import org.ums.domain.model.immutable.*;
 import org.ums.domain.model.mutable.MutableExamGrade;
 import org.ums.domain.model.mutable.MutableMarksSubmissionStatus;
 import org.ums.enums.CourseMarksSubmissionStatus;
 import org.ums.enums.CourseType;
 import org.ums.enums.ExamType;
-import org.ums.manager.ExamGradeManager;
-import org.ums.manager.MarksSubmissionStatusManager;
-import org.ums.manager.SemesterManager;
-import org.ums.manager.UserManager;
+import org.ums.manager.*;
 import org.ums.persistent.model.PersistentExamGrade;
 import org.ums.resource.ResourceHelper;
 import org.ums.services.academic.GradeSubmissionService;
@@ -58,7 +52,13 @@ public class GradeSubmissionResourceHelper extends
   private GradeSubmissionService gradeSubmissionService;
 
   @Autowired
+  private EmployeeManager mEmployeeManager;
+
+  @Autowired
   private MarksSubmissionStatusManager mMarksSubmissionStatusManager;
+
+  @Autowired
+  private ExamGradeManager mExamGradeManager;
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) {
@@ -372,18 +372,22 @@ public class GradeSubmissionResourceHelper extends
 
   public JsonObject getGradeSubmissionDeadline(final Integer pSemesterId, final ExamType pExamType,
       final String pExamDate, final UriInfo pUriInfo) {
-
+    String userId = SecurityUtils.getSubject().getPrincipal().toString();
+    User user = mUserManager.get(userId);
+    Employee employee = mEmployeeManager.get(user.getEmployeeId());
     List<MarksSubmissionStatusDto> marksSubmissionStatusDtoList = new ArrayList<>();
     int size = getContentManager().checkSize(pSemesterId, pExamType, pExamDate);
 
     if(size == 0) {
-      getContentManager().insertGradeSubmissionDeadLineInfo(pSemesterId, pExamType, pExamDate);
+      getContentManager().createGradeSubmissionStatus(pSemesterId, pExamType, pExamDate);
       marksSubmissionStatusDtoList =
-          getContentManager().getGradeSubmissionDeadLine(pSemesterId, pExamType, pExamDate);
+          getContentManager().getGradeSubmissionDeadLine(pSemesterId, pExamType, pExamDate,
+              employee.getDepartment().getId());
     }
     else {
       marksSubmissionStatusDtoList =
-          mManager.getGradeSubmissionDeadLine(pSemesterId, pExamType, pExamDate);
+          mManager.getGradeSubmissionDeadLine(pSemesterId, pExamType, pExamDate, employee
+              .getDepartment().getId());
     }
 
     Collections.sort(marksSubmissionStatusDtoList, new Comparator<MarksSubmissionStatusDto>() {
@@ -412,8 +416,14 @@ public class GradeSubmissionResourceHelper extends
       examGrade.setCourseTitle(marksSubmissionStatusDto.getCourseTitle());
       examGrade.setCourseCreditHour(marksSubmissionStatusDto.getCourseCreditHour());
       examGrade.setTotalStudents(marksSubmissionStatusDto.getTotalStudents());
-      if(marksSubmissionStatusDto.getLastSubmissionDate() != null) {
-        examGrade.setLastSubmissionDate(marksSubmissionStatusDto.getLastSubmissionDate());
+      if(marksSubmissionStatusDto.getLastSubmissionDatePrep() != null) {
+        examGrade.setLastSubmissionDatePrep(marksSubmissionStatusDto.getLastSubmissionDatePrep());
+      }
+      if(marksSubmissionStatusDto.getLastSubmissionDateScr() != null) {
+        examGrade.setLastSubmissionDateScr(marksSubmissionStatusDto.getLastSubmissionDateScr());
+      }
+      if(marksSubmissionStatusDto.getLastSubmissionDateHead() != null) {
+        examGrade.setLastSubmissionDateHead(marksSubmissionStatusDto.getLastSubmissionDateHead());
       }
       examGrade.setId(marksSubmissionStatusDto.getId());
       children.add(toJson(examGrade, pUriInfo, null));
@@ -426,8 +436,8 @@ public class GradeSubmissionResourceHelper extends
   public Response updateGradeSubmissionDeadLine(JsonObject pJsonObject, UriInfo pUriInfo) {
 
     JsonArray entries = pJsonObject.getJsonArray("entries");
-    List<MutableMarksSubmissionStatus> deadlineList = new ArrayList<>();
-
+    // List<MutableMarksSubmissionStatus> deadlineList = new ArrayList<>();
+    List<MarksSubmissionStatusDto> deadlineListDto = new ArrayList<>();
     boolean isSemesterValid = true;
     for(int i = 0; i < entries.size(); i++) {
       JsonObject jsonObject = entries.getJsonObject(i);
@@ -443,15 +453,18 @@ public class GradeSubmissionResourceHelper extends
         }
       }
 
-      MarksSubmissionStatus marksSubmissionStatus =
-          mMarksSubmissionStatusManager.get(examGrade.getId());
-      MutableMarksSubmissionStatus mutable = marksSubmissionStatus.edit();
-      mutable.setLastSubmissionDate(examGrade.getLastSubmissionDate());
-      deadlineList.add(mutable);
+      MarksSubmissionStatusDto deadline = new MarksSubmissionStatusDto();
+      deadline.setSemesterId(examGrade.getSemesterId());
+      deadline.setCourseId(examGrade.getCourseId());
+      deadline.setExamType(examGrade.getExamType());
+      deadline.setLastSubmissionDatePrep(examGrade.getLastSubmissionDatePrep());
+      deadline.setLastSubmissionDateHead(examGrade.getLastSubmissionDateHead());
+      deadline.setLastSubmissionDateScr(examGrade.getLastSubmissionDateScr());
+      deadlineListDto.add(deadline);
     }
 
     if(isSemesterValid) {
-      mMarksSubmissionStatusManager.update(deadlineList);
+      mExamGradeManager.updateDeadline(deadlineListDto);
     }
 
     URI contextURI = null;

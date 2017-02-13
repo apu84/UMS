@@ -18,6 +18,8 @@ public interface ExamRoutineManager extends ContentManager<ExamRoutine, MutableE
   public List<ExamRoutineDto> getExamRoutineBySemesterAndExamType(Integer pSemesterId,
       Integer pExamType);
 
+  public List<ExamRoutineDto> getExamRoutine(int pSemesterId, int pExamType, String pOfferedBy);
+
   public List<ExamRoutineDto> getExamDatesBySemesterAndType(Integer pSemesterId, Integer pExamType);
 
   public List<ExamRoutineDto> getExamRoutineBySemesterAndExamTypeOrderByExamDateAndProgramIdAndCourseId(

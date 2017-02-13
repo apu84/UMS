@@ -890,3 +890,13 @@ Insert into DB_IUMS.PERMISSIONS
      ENABLE VALIDATE);
 
 
+//*******************************************************************grade submission deadline*************************************************************
+alter table MARKS_SUBMISSION_STATUS
+rename column last_submission_date to
+last_submission_date_prep;
+
+alter table MARKS_SUBMISSION_STATUS
+add last_submission_date_scr DATE;
+
+alter table MARKS_SUBMISSION_STATUS
+add last_submission_date_head DATE;

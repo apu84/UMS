@@ -59,11 +59,12 @@ public interface ExamGradeManager extends ContentManager<ExamGrade, MutableExamG
 
   public int checkSize(Integer pSemesterId, ExamType pExamType, String pExamDate);
 
-  public int insertGradeSubmissionDeadLineInfo(Integer pSemesterId, ExamType pExamType,
-      String pExamDate);
+  public int createGradeSubmissionStatus(Integer pSemesterId, ExamType pExamType, String pExamDate);
 
   public List<MarksSubmissionStatusDto> getGradeSubmissionDeadLine(Integer pSemesterId,
-      ExamType pExamType, String pExamDate);
+      ExamType pExamType, String pExamDate, String pOfferedDeptId);
+
+  public int updateDeadline(List<MarksSubmissionStatusDto> pMarksSubmissionStatuses);
 
   public int getTotalStudentCount(MarksSubmissionStatus actualStatus);
 

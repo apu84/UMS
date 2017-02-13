@@ -47,4 +47,9 @@ public class ExamRoutineDaoDecorator extends
     return getManager().getExamRoutineBySemesterAndExamTypeOrderByExamDateAndProgramIdAndCourseId(
         pSemesterId, pExamType);
   }
+
+  @Override
+  public List<ExamRoutineDto> getExamRoutine(int pSemesterId, int pExamType, String pOfferedBy) {
+    return getManager().getExamRoutine(pSemesterId, pExamType, pOfferedBy);
+  }
 }

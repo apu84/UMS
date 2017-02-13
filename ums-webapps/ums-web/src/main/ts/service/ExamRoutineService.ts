@@ -24,6 +24,19 @@ module ums{
       return defer.promise;
     }
 
+    public getExamRoutineByDept(semesterId:number,examType:number):ng.IPromise<any>{
+      var examRoutineList:Array<ExamRoutineModel>=[];
+      var defer = this.$q.defer();
+      this.httpClient.get("/ums-webservice-academic/academic/examroutine/deptWise/semester/"+semesterId+"/examtype/"+examType,"application/json",
+          (json:any,etag:string)=>{
+            examRoutineList=json.entries;
+            defer.resolve(examRoutineList);
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>)=>{
+            console.error(response);
+          });
+      return defer.promise;
+    }
 
 
     public getExamRoutineDates(semesterId:number,examType:number):ng.IPromise<any>{
