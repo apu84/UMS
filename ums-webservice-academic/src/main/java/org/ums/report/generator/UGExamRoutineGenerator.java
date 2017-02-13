@@ -126,7 +126,6 @@ public class UGExamRoutineGenerator {
     cell.addElement(paragraph);
     headerTable.addCell(cell);
 
-
     cell = ReportUtils.getCell(ReportUtils.B0_P0);
     paragraph =
         new Paragraph(

@@ -30,7 +30,7 @@ public class SubGroupBuilder implements Builder<SubGroup, MutableSubGroup> {
     pBuilder.add("studentNumber", pReadOnly.getStudentNumber());
     pBuilder.add("examType", pReadOnly.getExamType());
     if(pReadOnly.getProgramShortName() != null) {
-      pBuilder.add("programName", pReadOnly.getProgramShortName().replaceAll("BSc in ", ""));
+      pBuilder.add("programName", pReadOnly.getProgramShortName().replaceAll("B.Sc in ", ""));
     }
     if(pReadOnly.getStudentYear() != null) {
       pBuilder.add("year", pReadOnly.getStudentYear());
