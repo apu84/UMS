@@ -220,6 +220,7 @@ public class UGExamRoutineGenerator {
       previousProgram = routineDto.getProgramName();
 
     }
+    routineMap.put(previousProgram, courseList);
     drawRow(dateInfo, routineMap, pdfPTable);
 
     pdfPTable.setSpacingBefore(20);
@@ -370,7 +371,7 @@ public class UGExamRoutineGenerator {
     Iterator it = mapList.entrySet().iterator();
     while(it.hasNext()) {
       Map.Entry pair = (Map.Entry) it.next();
-      ArrayList<ExamRoutineDto> courseList = (ArrayList<ExamRoutineDto>) pair.getValue();
+      List<ExamRoutineDto> courseList = (ArrayList<ExamRoutineDto>) pair.getValue();
 
       pdfPCell = new PdfPCell(new Paragraph(pair.getKey().toString(), tableFont));
       pdfPCell.setRowspan(courseList.size());
