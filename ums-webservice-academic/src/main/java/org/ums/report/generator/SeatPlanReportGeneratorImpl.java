@@ -112,10 +112,10 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
     }
     java.util.List<Student> students;
     java.util.List<Integer> roomsOfTheSeatPlan = new ArrayList<>();
-    Map<String, Student> studentIdWIthStuddentInfoMap = new HashMap<>();
+//    Map<String, Student> studentIdWIthStuddentInfoMap = new HashMap<>();
     Map<String, SeatPlan> roomRowColWithSeatPlanMap = new HashMap<>();
-    Map<Integer, Program> programIdWithProgramInfoMap = new HashMap<>();
-    if (groupNo != 0) {
+//    Map<Integer, Program> programIdWithProgramInfoMap = new HashMap<>();
+   /* if (groupNo != 0) {
       //students = mSpStudentManager.getRegisteredStudents(groupNo, pSemesterId, type);
       studentIdWIthStuddentInfoMap = mSpStudentManager.getRegisteredStudents(groupNo, pSemesterId, type)
           .parallelStream()
@@ -127,7 +127,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
           .collect(Collectors.toMap(Student::getId, Function.identity()));
     }
     programIdWithProgramInfoMap = mProgramManager.getAll().stream()
-        .collect(Collectors.toMap(Program::getId, Function.identity()));
+        .collect(Collectors.toMap(Program::getId, Function.identity()));*/
 
 
     long startTime = System.currentTimeMillis();
@@ -262,7 +262,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
               if (seatPlanOfTheRowAndCol != null) {
                 SeatPlan seatPlan = seatPlanOfTheRowAndCol; // roomRowColWithSeatPlanMap.get(room.getId()+""+i+""+j)
                 // ;
-                Student student = studentIdWIthStuddentInfoMap.get(seatPlan.getStudent().getId());
+                Student student = seatPlan.getStudent();
                 Program program;
                 String dept;
                 String deptName;
@@ -272,11 +272,11 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                           + student.getCurrentAcademicSemester();
                   deptName = student.getProgramShortName();
                 } else {
-                  program = programIdWithProgramInfoMap.get(student.getProgram().getId());
+                  program = student.getProgram();
                   dept =
-                      program.getShortName().replace("BSc in ", "") + " "
+                      program.getShortName().replace("B.Sc in ", "") + " "
                           + student.getCurrentYear() + "/" + student.getCurrentAcademicSemester();
-                  deptName = program.getShortName().replace("BSc in ", "");
+                  deptName = program.getShortName().replace("B.Sc in ", "");
 
                 }
                 String yearSemester =
@@ -518,15 +518,15 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                  * SeatPlan seatPlan = seatPlanLists.get(0);
                  */
 
-                Student student = studentIdWIthStuddentInfoMap.get(seatPlan.getStudent().getId());
-                Program program = programIdWithProgramInfoMap.get(student.getProgram().getId());
+                Student student = seatPlan.getStudent();
+                Program program =student.getProgram();
 
                 PdfPCell upperCell = new PdfPCell();
 
                 PdfPCell lowerCell = new PdfPCell();
 
                 String upperPart =
-                    program.getShortName().replace("BSc in ", "") + " " + student.getCurrentYear()
+                    program.getShortName().replace("B.Sc in ", "") + " " + student.getCurrentYear()
                         + "/" + student.getCurrentAcademicSemester();
                 Paragraph upperParagraph =
                     new Paragraph(upperPart, FontFactory.getFont(FontFactory.TIMES_ROMAN, fontSize));
@@ -561,15 +561,15 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
 
               } else {
 
-                Student student2 = studentIdWIthStuddentInfoMap.get(seatPlan2.getStudent().getId());
-                Program program2 = programIdWithProgramInfoMap.get(student2.getProgram().getId());
+                Student student2 = seatPlan2.getStudent();
+                Program program2 =student2.getProgram();
 
                 PdfPCell upperCell = new PdfPCell();
                 upperCell.setColspan(10);
                 PdfPCell lowerCell = new PdfPCell();
                 lowerCell.setColspan(10);
                 String upperPart =
-                    program2.getShortName().replace("BSc in ", "") + " "
+                    program2.getShortName().replace("B.Sc in ", "") + " "
                         + student2.getCurrentYear() + "/" + student2.getCurrentAcademicSemester();
                 Paragraph upperParagraph =
                     new Paragraph(upperPart, FontFactory.getFont(FontFactory.TIMES_ROMAN, fontSize));
