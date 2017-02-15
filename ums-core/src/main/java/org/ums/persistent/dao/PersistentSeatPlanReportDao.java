@@ -129,7 +129,7 @@ public class PersistentSeatPlanReportDao extends SeatPlanReportDaoDecorator {
           + "      seatPlan.CURR_YEAR = examRoutine.YEAR AND "
           + "      seatPlan.CURR_SEMESTER = examRoutine.SEMESTER AND "
           + "      UG_REGISTRATION_RESULT.COURSE_ID = examRoutine.COURSE_ID AND "
-          + "      UG_REGISTRATION_RESULT.STUDENT_ID = seatPlan.STUDENT_ID AND "
+          + "      UG_REGISTRATION_RESULT.STUDENT_ID = seatPlan.STUDENT_ID AND   UG_REGISTRATION_RESULT.SEMESTER_ID = seatPlan.SEMESTER_ID AND"
           + "      STUDENT_RECORD.SEMESTER_ID = seatPlan.SEMESTER_ID AND "
           + "  STUDENT_RECORD.STUDENT_ID = seatPlan.STUDENT_ID " + "ORDER BY "
           + "  seatPlan.PROGRAM_ID, examRoutine.COURSE_NO, seatPlan.STUDENT_ID";
@@ -237,6 +237,7 @@ public class PersistentSeatPlanReportDao extends SeatPlanReportDaoDecorator {
           + "      seatPlan.CURR_SEMESTER = examRoutine.SEMESTER AND "
           + "      UG_REGISTRATION_RESULT.COURSE_ID = examRoutine.COURSE_ID AND "
           + "      UG_REGISTRATION_RESULT.STUDENT_ID = seatPlan.STUDENT_ID AND "
+          + "      UG_REGISTRATION_RESULT.SEMESTER_ID = seatPlan.SEMESTER_ID AND "
           + "      STUDENT_RECORD.SEMESTER_ID = seatPlan.SEMESTER_ID AND "
           + "      STUDENT_RECORD.STUDENT_ID = seatPlan.STUDENT_ID " + "ORDER BY "
           + "  seatPlan.PROGRAM_ID, examRoutine.COURSE_NO, seatPlan.STUDENT_ID";

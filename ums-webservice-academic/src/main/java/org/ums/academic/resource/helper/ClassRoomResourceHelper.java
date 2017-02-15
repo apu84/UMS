@@ -3,6 +3,7 @@ package org.ums.academic.resource.helper;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ums.enums.ExamType;
 import org.ums.resource.SemesterResource;
 import org.ums.builder.ClassRoomBuilder;
 import org.ums.domain.model.immutable.*;
@@ -166,6 +167,11 @@ public class ClassRoomResourceHelper extends ResourceHelper<ClassRoom, MutableCl
     }
 
     return buildClassRooms(roomList, pUriInfo);
+  }
+
+  public JsonObject getRoomsBasedOnSeatPlan(int pSemesterId, ExamType pExamType, UriInfo pUriInfo) {
+    List<ClassRoom> rooms = getContentManager().getSeatPlanRooms(pSemesterId, pExamType.getId());
+    return buildClassRooms(rooms, pUriInfo);
   }
 
   public JsonObject getByRoomNo(final String pRoomNo, final UriInfo pUriInfo) {

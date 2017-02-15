@@ -57,6 +57,23 @@ module ums{
     }
 
 
+    public getClassRoomsBasedOnSeatPlan(semesterId:number, programType:number):ng.IPromise<any>{
+      var defer = this.$q.defer();
+      var rooms:any={};
+      this.httpClient.get("/academic/classroom/seatplan/semester/"+semesterId+"/programType/"+programType,'application/json',
+          (json:any,etag:string)=>{
+            rooms = json.entries;
+            defer.resolve(rooms);
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>)=>{
+            console.error(response);
+            this.notify.error("Error in fetching room data");
+          });
+
+      return defer.promise;
+    }
+
+
   }
 
   UMS.service("classRoomService",ClassRoomService);

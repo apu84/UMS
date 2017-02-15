@@ -9,6 +9,8 @@
     examRoutineArr:Array<ExamRoutineModel>;
     programType:string;
     examDate:string;
+    classRooms:Array<ClassRoom>;
+    classRoom:ClassRoom;
 
 
     isShowReportButtonClicked:boolean;
@@ -64,13 +66,14 @@
   }
 
   class SeatPlanReports{
-    public static $inject = ['appConstants','HttpClient','$scope','$q','notify','$sce','$window','semesterService','examRoutineService','seatPlanService'];
+    public static $inject = ['appConstants','HttpClient','$scope','$q','notify','$sce','$window','semesterService','examRoutineService','seatPlanService','classRoomService'];
     constructor(private appConstants: any, private httpClient: HttpClient, private $scope: ISeatPlanReports,
                 private $q:ng.IQService, private notify: Notify,
                 private $sce:ng.ISCEService,private $window:ng.IWindowService,
                 private semesterService:SemesterService,
                 private examRoutineService:ExamRoutineService,
-                private seatPlanService:SeatPlanService
+                private seatPlanService:SeatPlanService,
+                private classRoomService:ClassRoomService
                 ) {
 
       $scope.examDate="";
@@ -91,8 +94,18 @@
       $scope.getTopSheetReport = this.getTopSheetReport.bind(this);
       $scope.getStickerReport = this.getStickerReport.bind(this);
 
+      this.getClassRooms();
+
     }
 
+    private getClassRooms():void{
+      if(this.$scope.semesterId!=null || this.$scope.programType!=null){
+       this.classRoomService.getClassRoomsBasedOnSeatPlan(+this.$scope.semesterId, +this.$scope.programType).then((rooms)=>{
+         this.$scope.classRooms = [];
+         this.$scope.classRooms = rooms;
+       });
+      }
+    }
 
     private closeAlertDialog():void{
       this.$scope.isShowAlertFired=false;
