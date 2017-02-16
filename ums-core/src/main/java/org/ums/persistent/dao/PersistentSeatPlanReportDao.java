@@ -267,7 +267,7 @@ public class PersistentSeatPlanReportDao extends SeatPlanReportDaoDecorator {
           + "             STUDENTS.CURR_SEMESTER,   "
           + "             STUDENTS.STUDENT_ID   "
           + "           from STUDENTS,MST_PROGRAM,(   "
-          + "             select room_no,student_id from SEAT_PLAN,ROOM_INFO where SEMESTER_ID=? and EXAM_TYPE=? and SEAT_PLAN.ROOM_ID=ROOM_INFO.ROOM_ID ORDER BY ROOM_INFO.ROOM_ID "
+          + "             select room_no,student_id from SEAT_PLAN,ROOM_INFO where SEMESTER_ID=? and EXAM_TYPE=? and seat_plan.room_id=? and SEAT_PLAN.ROOM_ID=ROOM_INFO.ROOM_ID ORDER BY ROOM_INFO.ROOM_ID "
           + "                 ) seatPlans    WHERE   "
           + "             seatPlans.STUDENT_ID=STUDENTS.STUDENT_ID AND   "
           + "             MST_PROGRAM.PROGRAM_ID=STUDENTS.PROGRAM_ID    ORDER BY seatPlans.ROOM_NO, "
@@ -315,9 +315,9 @@ public class PersistentSeatPlanReportDao extends SeatPlanReportDaoDecorator {
 
   @Override
   public List<SeatPlanReportDto> getSeatPlanDataForSticker(Integer pSemesterId, Integer pExamType,
-      String pExamDate) {
+      String pExamDate, int pRoomId) {
     String query = SELECT_ALL_STICKER;
-    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pExamType},
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pExamType, pRoomId},
         new SeatPlanRowMapperSticker());
   }
 

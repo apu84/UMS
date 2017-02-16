@@ -9,8 +9,8 @@
     examRoutineArr:Array<ExamRoutineModel>;
     programType:string;
     examDate:string;
-    classRooms:Array<ClassRoom>;
-    classRoom:ClassRoom;
+    classRooms:Array<IRoom>;
+    classRoom:IRoom;
     roomIdRoomMap:any;
     selectedRoomNo:string;
 
@@ -33,6 +33,7 @@
     getAttendenceSheetReport:Function;
     getTopSheetReport:Function;
     getStickerReport:Function;
+    roomChanged():Function;
 
   }
 
@@ -95,24 +96,32 @@
       $scope.getAttendenceSheetReport = this.getAttendenceSheetReport.bind(this);
       $scope.getTopSheetReport = this.getTopSheetReport.bind(this);
       $scope.getStickerReport = this.getStickerReport.bind(this);
+      $scope.roomChanged = this.roomChanged.bind(this);
 
-      this.getClassRooms();
+
 
     }
 
+    private roomChanged(rooNo):void{
+      this.$scope.classRoom=this.$scope.roomIdRoomMap[rooNo];
+      console.log(this.$scope.classRoom);
+    }
+
     private getClassRooms():void{
-      if(this.$scope.semesterId!=null || this.$scope.programType!=null){
-       this.classRoomService.getClassRoomsBasedOnSeatPlan(+this.$scope.semesterId, +this.$scope.programType).then((rooms:Array<ClassRoom>)=>{
+      console.log("In get class rooms");
+      console.log(this.$scope.examType);
+      console.log(this.$scope.semesterId);
+       this.classRoomService.getClassRoomsBasedOnSeatPlan(+this.$scope.semesterId, +this.$scope.examType).then((rooms:Array<IRoom>)=>{
          console.log("ROoms");
          console.log(rooms);
          this.$scope.classRooms = [];
          this.$scope.roomIdRoomMap={};
          for(var i=0;i<rooms.length;i++){
             this.$scope.classRooms.push(rooms[i]);
-            this.$scope.roomIdRoomMap[rooms[i].roomNumber] = rooms[i];
+            this.$scope.roomIdRoomMap[rooms[i].roomNo] = rooms[i];
          }
        });
-      }
+
     }
 
     private closeAlertDialog():void{
@@ -122,17 +131,26 @@
     private programTypeChanged(){
       this.$scope.programTypeRequired=false;
       this.getExamRoutineInfo();
+      if(this.$scope.semesterId!=null  && this.$scope.programType!=null && this.$scope.programType!=""){
+        this.getClassRooms();
+      }
 
     }
 
     private semesterChanged(){
       this.$scope.semesterIdRequired=false;
       this.getExamRoutineInfo();
+      if(this.$scope.semesterId!=null  && this.$scope.examType!=null && this.$scope.examType!=""){
+        this.getClassRooms();
+      }
     }
 
     private examTypeChanged(){
       this.$scope.examTypeRequired=false;
       this.getExamRoutineInfo();
+      if(this.$scope.semesterId!=null  && this.$scope.examType!=null && this.$scope.examType!=""){
+        this.getClassRooms();
+      }
     }
 
     private showReports():void{
@@ -246,7 +264,7 @@
        this.$scope.showLoader=false;
        });*/
 
-      this.httpClient.get("academic/seatplan/sticker/programType/"+programType+"/semesterId/"+semesterId+"/examType/"+examType+"/examDate/"+examDate,  'application/pdf',
+      this.httpClient.get("academic/seatplan/sticker/programType/"+programType+"/semesterId/"+semesterId+"/examType/"+examType+"/examDate/"+examDate+"/roomId/"+this.$scope.classRoom.id,  'application/pdf',
           (data:any, etag:string) => {
             var file = new Blob([data], {type: 'application/pdf'});
             var fileURL = this.$sce.trustAsResourceUrl(URL.createObjectURL(file));

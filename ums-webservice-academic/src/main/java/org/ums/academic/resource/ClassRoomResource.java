@@ -53,10 +53,10 @@ public class ClassRoomResource extends MutableClassRoomResource {
   }
 
   @GET
-  @Path("/seatplan/semester/{semester-id}/programType/{program-type}")
+  @Path("/seatplan/semester/{semester-id}/examType/{exam-type}")
   public JsonObject getRoomsBasedOnSeatPlan(final @Context Request pRequest,
       final @PathParam("semester-id") int pSemesterId,
-      final @PathParam("program-type") int pProgramType) {
+      final @PathParam("exam-type") int pProgramType) {
     return mResourceHelper.getRoomsBasedOnSeatPlan(pSemesterId, ExamType.get(pProgramType),
         mUriInfo);
   }

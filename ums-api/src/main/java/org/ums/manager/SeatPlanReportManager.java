@@ -18,6 +18,6 @@ public interface SeatPlanReportManager extends
       String pExamDate);
 
   public List<SeatPlanReportDto> getSeatPlanDataForSticker(Integer pSemesterId, Integer pExamType,
-      String pExamDate);
+      String pExamDate, int pRoomId);
 
 }

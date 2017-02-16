@@ -27,7 +27,7 @@ public class SeatPlanReportDaoDecorator extends
 
   @Override
   public List<SeatPlanReportDto> getSeatPlanDataForSticker(Integer pSemesterId, Integer pExamType,
-      String pExamDate) {
-    return getManager().getSeatPlanDataForSticker(pSemesterId, pExamType, pExamDate);
+      String pExamDate, int pRoomId) {
+    return getManager().getSeatPlanDataForSticker(pSemesterId, pExamType, pExamDate, pRoomId);
   }
 }

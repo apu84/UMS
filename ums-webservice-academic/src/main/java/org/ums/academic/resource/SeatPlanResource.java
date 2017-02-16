@@ -98,19 +98,19 @@ public class SeatPlanResource extends MutableSeatPlanResource {
   }
 
   @GET
-  @Path("sticker/programType/{program-type}/semesterId/{semester-id}/examType/{exam-type}/examDate/{exam-date}")
+  @Path("sticker/programType/{program-type}/semesterId/{semester-id}/examType/{exam-type}/examDate/{exam-date}/roomId/{room-id}")
   @Produces("application/pdf")
   public StreamingOutput getSeatStudentStickerReport(final @Context Request pRequest,
       final @PathParam("program-type") Integer pProgramType,
       final @PathParam("semester-id") Integer pSemesterId,
       final @PathParam("exam-type") Integer pExamType,
-      final @PathParam("exam-date") String pExamDate) {
+      final @PathParam("exam-date") String pExamDate, final @PathParam("room-id") int pRoomId) {
     return new StreamingOutput() {
       @Override
       public void write(OutputStream pOutputStream) throws IOException, WebApplicationException {
         try {
           mSeatPlanResourceHelper.getSeatPlanStudentStickerReport(pProgramType, pSemesterId,
-              pExamType, pExamDate, pOutputStream, pRequest, mUriInfo);
+              pExamType, pExamDate, pRoomId, pOutputStream, pRequest, mUriInfo);
         } catch(Exception e) {
           mLogger.error(e.getMessage());
           throw new WebApplicationException(e);

@@ -72,9 +72,9 @@
         <div class="row">
             <div class="col-md-1">Room NO</div>
             <div class="col-md-3">
-                <select class="form-control"  name="selectedRoomId" data-ng-model="selectedRoomNo">
+                <select class="form-control"  name="selectedRoomId" data-ng-model="selectedRoomNo" data-ng-change="roomChanged(selectedRoomNo)">
                     <option value="">Select Room No</option>
-                    <option data-ng-repeat="room in classRooms">{{room.roomNumber}}</option>
+                    <option data-ng-repeat="room in classRooms" value="{{room.roomNo}}">{{room.roomNo}}</option>
                 </select>
             </div>
 

@@ -13,10 +13,8 @@ import org.ums.services.academic.SeatPlanService;
 
 import javax.ws.rs.WebApplicationException;
 import java.io.*;
-import java.sql.Time;
 import java.util.*;
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -1638,7 +1636,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
       while(true) {
         if(seatPlans.size() != 0) {
           SeatPlanReportDto seatPlanReportDto = seatPlans.get(0);
-          if(seatPlanReportDto.getCourseNo().equals(seatPlan.getCourseNo())
+          if(seatPlanReportDto.getCourseNo().equals(seatPlan.getCourseNo()) && seatPlanReportDto.getCurrentYear()==seatPlan.getCurrentYear() && seatPlanReportDto.getCurrentSemester()==seatPlan.getCurrentSemester()
               && seatPlans.size() != 0) {
             Chunk studentId = new Chunk("");
             Paragraph studentIdParagraph = new Paragraph();
@@ -1868,11 +1866,12 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
 
   @Override
   public void createSeatPlanStickerReport(Integer pProgramType, Integer pSemesterId,
-      Integer pExamType, String pExamDate, OutputStream pOutputStream) throws IOException,
-      DocumentException {
+      Integer pExamType, String pExamDate, int pRoomId, OutputStream pOutputStream)
+      throws IOException, DocumentException {
 
     List<SeatPlanReportDto> seatPlans =
-        mSeatPlanReportManager.getSeatPlanDataForSticker(pSemesterId, pExamType, pExamDate);
+        mSeatPlanReportManager
+            .getSeatPlanDataForSticker(pSemesterId, pExamType, pExamDate, pRoomId);
     Semester semester = mSemesterManager.get(pSemesterId);
 
     Document document = new Document();

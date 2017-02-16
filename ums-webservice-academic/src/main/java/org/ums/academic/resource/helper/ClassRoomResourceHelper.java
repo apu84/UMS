@@ -170,6 +170,7 @@ public class ClassRoomResourceHelper extends ResourceHelper<ClassRoom, MutableCl
   }
 
   public JsonObject getRoomsBasedOnSeatPlan(int pSemesterId, ExamType pExamType, UriInfo pUriInfo) {
+    // int examTypeValue = pExamType.getId();
     List<ClassRoom> rooms = getContentManager().getSeatPlanRooms(pSemesterId, pExamType.getId());
     return buildClassRooms(rooms, pUriInfo);
   }
