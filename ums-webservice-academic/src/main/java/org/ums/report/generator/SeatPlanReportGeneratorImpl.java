@@ -1327,6 +1327,8 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
       attendanceSheetTable.addCell(signatureCell);
       String classRoomNo = seatPlanReportDto.getRoomNo();
       String courseNoOfStudent = seatPlanReportDto.getCourseNo();
+      int currYearOfStudent = seatPlanReportDto.getCurrentYear();
+      int currSemesterOfStudent = seatPlanReportDto.getCurrentSemester();
       int counter = 0;
       int studentCounter = 0;
       while(true) {
@@ -1334,7 +1336,9 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
         if(seatPlanReports.size() != 0) {
           seatPlanInner = seatPlanReports.get(0);
           if(seatPlanInner.getRoomNo().equals(classRoomNo)
-              && seatPlanInner.getCourseNo().equals(courseNoOfStudent) && counter != 20
+              && seatPlanInner.getCourseNo().equals(courseNoOfStudent)
+              && seatPlanInner.getCurrentYear() == currYearOfStudent
+              && seatPlanInner.getCurrentSemester() == currSemesterOfStudent && counter != 20
               && seatPlanReports.size() != 0) {
             PdfPCell innerCellOne = new PdfPCell();
             if(seatPlanInner.getStudentType().equals("RA")) {
@@ -1642,7 +1646,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
             for(int i = 0; i < 6; i++) {
               if(seatPlans.size() != 0) {
                 SeatPlanReportDto seatPlanInnerReport = seatPlans.get(0);
-                if(seatPlanInnerReport.getCourseNo().equals(seatPlan.getCourseNo())
+                if(seatPlanInnerReport.getCourseNo().equals(seatPlan.getCourseNo() ) && seatPlanInnerReport.getCurrentYear()==seatPlan.getCurrentYear() && seatPlanInnerReport.getCurrentSemester()==seatPlan.getCurrentSemester()
                     && seatPlans.size() != 0) {
                   /*
                    * String stdIdTmp = ""; stdIdTmp = studentId; studentId = "";

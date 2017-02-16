@@ -11,6 +11,8 @@
     examDate:string;
     classRooms:Array<ClassRoom>;
     classRoom:ClassRoom;
+    roomIdRoomMap:any;
+    selectedRoomNo:string;
 
 
     isShowReportButtonClicked:boolean;
@@ -100,9 +102,15 @@
 
     private getClassRooms():void{
       if(this.$scope.semesterId!=null || this.$scope.programType!=null){
-       this.classRoomService.getClassRoomsBasedOnSeatPlan(+this.$scope.semesterId, +this.$scope.programType).then((rooms)=>{
+       this.classRoomService.getClassRoomsBasedOnSeatPlan(+this.$scope.semesterId, +this.$scope.programType).then((rooms:Array<ClassRoom>)=>{
+         console.log("ROoms");
+         console.log(rooms);
          this.$scope.classRooms = [];
-         this.$scope.classRooms = rooms;
+         this.$scope.roomIdRoomMap={};
+         for(var i=0;i<rooms.length;i++){
+            this.$scope.classRooms.push(rooms[i]);
+            this.$scope.roomIdRoomMap[rooms[i].roomNumber] = rooms[i];
+         }
        });
       }
     }

@@ -82,7 +82,7 @@ public class PersistentSeatPlanReportDao extends SeatPlanReportDaoDecorator {
           + "  STUDENT_RECORD.SEMESTER_ID = seatPlan.SEMESTER_ID AND "
           + "  STUDENT_RECORD.STUDENT_ID = seatPlan.STUDENT_ID "
           + "ORDER BY "
-          + "  seatPlan.ROOM_NO, seatPlan.PROGRAM_ID, examRoutine.EXAM_DATE, examRoutine.COURSE_NO, seatPlan.STUDENT_ID";
+          + "  seatPlan.ROOM_NO, seatPlan.PROGRAM_ID, examRoutine.EXAM_DATE, examRoutine.COURSE_NO, seatPlan.CURR_YEAR, seatPlan.CURR_SEMESTER, to_number(seatPlan.STUDENT_ID)";
 
   String SELECT_ALL_TOP_SHEET =
       "SELECT "
@@ -129,7 +129,8 @@ public class PersistentSeatPlanReportDao extends SeatPlanReportDaoDecorator {
           + "                                                            ORDER BY "
           + "                                                              EXAM_ROUTINE.EXAM_DATE, MST_PROGRAM.PROGRAM_ID, "
           + "                                                              MST_COURSE.COURSE_NO) examRoutine, UG_REGISTRATION_RESULT, "
-          + "  STUDENT_RECORD " + "WHERE seatPlan.PROGRAM_ID = examRoutine.PROGRAM_ID AND "
+          + "  STUDENT_RECORD "
+          + "WHERE seatPlan.PROGRAM_ID = examRoutine.PROGRAM_ID AND "
           + "      seatPlan.CURR_YEAR = examRoutine.YEAR AND "
           + "      seatPlan.CURR_SEMESTER = examRoutine.SEMESTER AND "
           + "      UG_REGISTRATION_RESULT.COURSE_ID = examRoutine.COURSE_ID AND "
@@ -137,8 +138,9 @@ public class PersistentSeatPlanReportDao extends SeatPlanReportDaoDecorator {
           + "      UG_REGISTRATION_RESULT.SEMESTER_ID = seatPlan.SEMESTER_ID AND "
           + "      UG_REGISTRATION_RESULT.EXAM_TYPE = examRoutine.EXAM_TYPE AND "
           + "      STUDENT_RECORD.SEMESTER_ID = seatPlan.SEMESTER_ID AND "
-          + "      STUDENT_RECORD.STUDENT_ID = seatPlan.STUDENT_ID " + "ORDER BY "
-          + "  seatPlan.PROGRAM_ID, examRoutine.COURSE_NO, seatPlan.STUDENT_ID";
+          + "      STUDENT_RECORD.STUDENT_ID = seatPlan.STUDENT_ID "
+          + "ORDER BY "
+          + "  seatPlan.PROGRAM_ID, examRoutine.COURSE_NO,seatPlan.CURR_YEAR, seatPlan.CURR_SEMESTER, to_number(seatPlan.STUDENT_ID)";
 
   String SELECT_ALL_ATTENDENCE_SHEET_EXAM_DATE =
       "SELECT "
@@ -185,7 +187,8 @@ public class PersistentSeatPlanReportDao extends SeatPlanReportDaoDecorator {
           + "                                                            ORDER BY "
           + "                                                              EXAM_ROUTINE.EXAM_DATE, MST_PROGRAM.PROGRAM_ID, "
           + "                                                              MST_COURSE.COURSE_NO) examRoutine, UG_REGISTRATION_RESULT, "
-          + "  STUDENT_RECORD " + "WHERE seatPlan.PROGRAM_ID = examRoutine.PROGRAM_ID AND "
+          + "  STUDENT_RECORD "
+          + "WHERE seatPlan.PROGRAM_ID = examRoutine.PROGRAM_ID AND "
           + "      seatPlan.CURR_YEAR = examRoutine.YEAR AND "
           + "      seatPlan.CURR_SEMESTER = examRoutine.SEMESTER AND "
           + "      UG_REGISTRATION_RESULT.COURSE_ID = examRoutine.COURSE_ID AND "
@@ -193,8 +196,9 @@ public class PersistentSeatPlanReportDao extends SeatPlanReportDaoDecorator {
           + "      UG_REGISTRATION_RESULT.SEMESTER_ID = seatPlan.SEMESTER_ID AND "
           + "      UG_REGISTRATION_RESULT.EXAM_TYPE = examRoutine.EXAM_TYPE AND "
           + "      STUDENT_RECORD.SEMESTER_ID = seatPlan.SEMESTER_ID AND "
-          + "      STUDENT_RECORD.STUDENT_ID = seatPlan.STUDENT_ID " + "ORDER BY "
-          + "  seatPlan.ROOM_NO, seatPlan.PROGRAM_ID, examRoutine.COURSE_NO, seatPlan.STUDENT_ID";
+          + "      STUDENT_RECORD.STUDENT_ID = seatPlan.STUDENT_ID "
+          + "ORDER BY "
+          + "  seatPlan.ROOM_NO, seatPlan.PROGRAM_ID, examRoutine.COURSE_NO, seatPlan.CURR_YEAR, seatPlan.CURR_SEMESTER, to_number(seatPlan.STUDENT_ID)";
 
   String SELECT_ALL_TOP_SHEET_EXAM_DATE =
       "SELECT "
@@ -242,7 +246,8 @@ public class PersistentSeatPlanReportDao extends SeatPlanReportDaoDecorator {
           + "                                                            ORDER BY "
           + "                                                              EXAM_ROUTINE.EXAM_DATE, MST_PROGRAM.PROGRAM_ID, "
           + "                                                              MST_COURSE.COURSE_NO) examRoutine, UG_REGISTRATION_RESULT, "
-          + "  STUDENT_RECORD " + "WHERE seatPlan.PROGRAM_ID = examRoutine.PROGRAM_ID AND "
+          + "  STUDENT_RECORD "
+          + "WHERE seatPlan.PROGRAM_ID = examRoutine.PROGRAM_ID AND "
           + "      seatPlan.CURR_YEAR = examRoutine.YEAR AND "
           + "      seatPlan.CURR_SEMESTER = examRoutine.SEMESTER AND "
           + "      UG_REGISTRATION_RESULT.COURSE_ID = examRoutine.COURSE_ID AND "
@@ -250,8 +255,9 @@ public class PersistentSeatPlanReportDao extends SeatPlanReportDaoDecorator {
           + "      UG_REGISTRATION_RESULT.SEMESTER_ID = seatPlan.SEMESTER_ID AND "
           + "      UG_REGISTRATION_RESULT.EXAM_TYPE = examRoutine.EXAM_TYPE AND "
           + "      STUDENT_RECORD.SEMESTER_ID = seatPlan.SEMESTER_ID AND "
-          + "      STUDENT_RECORD.STUDENT_ID = seatPlan.STUDENT_ID " + "ORDER BY "
-          + "  seatPlan.PROGRAM_ID, examRoutine.COURSE_NO, seatPlan.STUDENT_ID";
+          + "      STUDENT_RECORD.STUDENT_ID = seatPlan.STUDENT_ID "
+          + "ORDER BY "
+          + "  seatPlan.PROGRAM_ID, examRoutine.COURSE_NO,seatPlan.CURR_YEAR, seatPlan.CURR_SEMESTER, to_number(seatPlan.STUDENT_ID)";
 
   String SELECT_ALL_STICKER =
       "select   "
