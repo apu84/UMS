@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.builder.SeatPlanBuilder;
+import org.ums.enums.ExamType;
 import org.ums.report.generator.SeatPlanReportGenerator;
 import org.ums.domain.model.immutable.SeatPlan;
 import org.ums.domain.model.immutable.SubGroup;
@@ -239,6 +240,10 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan, MutableSeat
 
     mSeatPlanReportGenerator.createSeatPlanStickerReport(pProgramType, pSemesterId, pExamType,
         pExamDate, pRoomId, pOutputStream);
+
+  }
+
+  public void getSeatPlanSittingArrangement(int pSemesterId, ExamType pExamType, OutputStream pOutputStream, Request pRequest, UriInfo pUriInfo) throws IOException, DocumentException{
 
   }
 
