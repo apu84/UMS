@@ -2,6 +2,7 @@ package org.ums.academic.resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ums.enums.ExamType;
 import org.ums.manager.ClassRoomManager;
 import org.ums.resource.Resource;
 
@@ -49,6 +50,15 @@ public class ClassRoomResource extends MutableClassRoomResource {
   public JsonObject getRoomsForRoutine(final @Context Request pRequest,
       final @PathParam("semester-id") int pSemesterId) {
     return mResourceHelper.getRoomsBasedOnRoutine(pSemesterId, mUriInfo);
+  }
+
+  @GET
+  @Path("/seatplan/semester/{semester-id}/examType/{exam-type}")
+  public JsonObject getRoomsBasedOnSeatPlan(final @Context Request pRequest,
+      final @PathParam("semester-id") int pSemesterId,
+      final @PathParam("exam-type") int pProgramType) {
+    return mResourceHelper.getRoomsBasedOnSeatPlan(pSemesterId, ExamType.get(pProgramType),
+        mUriInfo);
   }
 
 }

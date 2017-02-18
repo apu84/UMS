@@ -50,6 +50,7 @@ public class PersistentSeatPlanReportDao extends SeatPlanReportDaoDecorator {
           + "  ( "
           + "    SELECT "
           + "      EXAM_ROUTINE.EXAM_DATE, "
+          + "      EXAM_ROUTINE.EXAM_TYPE, "
           + "      MST_PROGRAM.PROGRAM_ID, "
           + "      MST_PROGRAM.PROGRAM_SHORT_NAME, "
           + "      MST_COURSE.COURSE_NO, "
@@ -75,11 +76,13 @@ public class PersistentSeatPlanReportDao extends SeatPlanReportDaoDecorator {
           + "  seatPlan.CURR_YEAR = examRoutine.YEAR AND "
           + "  seatPlan.CURR_SEMESTER = examRoutine.SEMESTER AND "
           + "  UG_REGISTRATION_RESULT.COURSE_ID = examRoutine.COURSE_ID AND "
-          + "  UG_REGISTRATION_RESULT.STUDENT_ID = seatPlan.STUDENT_ID AND  "
-          + "    STUDENT_RECORD.SEMESTER_ID = seatPlan.SEMESTER_ID AND  "
-          + "    STUDENT_RECORD.STUDENT_ID = seatPlan.STUDENT_ID "
+          + "  UG_REGISTRATION_RESULT.STUDENT_ID = seatPlan.STUDENT_ID AND "
+          + "  UG_REGISTRATION_RESULT.SEMESTER_ID = seatPlan.SEMESTER_ID AND "
+          + "  UG_REGISTRATION_RESULT.EXAM_TYPE = examRoutine.EXAM_TYPE AND "
+          + "  STUDENT_RECORD.SEMESTER_ID = seatPlan.SEMESTER_ID AND "
+          + "  STUDENT_RECORD.STUDENT_ID = seatPlan.STUDENT_ID "
           + "ORDER BY "
-          + "  seatPlan.ROOM_NO, seatPlan.PROGRAM_ID, examRoutine.EXAM_DATE, examRoutine.COURSE_NO, seatPlan.STUDENT_ID";
+          + "  seatPlan.ROOM_NO, seatPlan.PROGRAM_ID, examRoutine.EXAM_DATE, examRoutine.COURSE_NO, seatPlan.CURR_YEAR, seatPlan.CURR_SEMESTER, to_number(seatPlan.STUDENT_ID)";
 
   String SELECT_ALL_TOP_SHEET =
       "SELECT "
@@ -110,6 +113,7 @@ public class PersistentSeatPlanReportDao extends SeatPlanReportDaoDecorator {
           + "        ROOM_INFO.ROOM_ID, STUDENTS.STUDENT_ID) seatPlan, ( "
           + "                                                            SELECT "
           + "                                                              EXAM_ROUTINE.EXAM_DATE, "
+          + "                                                              EXAM_ROUTINE.EXAM_TYPE, "
           + "                                                              MST_PROGRAM.PROGRAM_ID, "
           + "                                                              MST_PROGRAM.PROGRAM_LONG_NAME, "
           + "                                                              MST_COURSE.COURSE_NO, "
@@ -124,15 +128,19 @@ public class PersistentSeatPlanReportDao extends SeatPlanReportDaoDecorator {
           + "                                                                  AND MST_PROGRAM.PROGRAM_ID = EXAM_ROUTINE.PROGRAM_ID "
           + "                                                            ORDER BY "
           + "                                                              EXAM_ROUTINE.EXAM_DATE, MST_PROGRAM.PROGRAM_ID, "
-          + "                                                              MST_COURSE.COURSE_NO) examRoutine, UG_REGISTRATION_RESULT, STUDENT_RECORD "
+          + "                                                              MST_COURSE.COURSE_NO) examRoutine, UG_REGISTRATION_RESULT, "
+          + "  STUDENT_RECORD "
           + "WHERE seatPlan.PROGRAM_ID = examRoutine.PROGRAM_ID AND "
           + "      seatPlan.CURR_YEAR = examRoutine.YEAR AND "
           + "      seatPlan.CURR_SEMESTER = examRoutine.SEMESTER AND "
           + "      UG_REGISTRATION_RESULT.COURSE_ID = examRoutine.COURSE_ID AND "
           + "      UG_REGISTRATION_RESULT.STUDENT_ID = seatPlan.STUDENT_ID AND "
+          + "      UG_REGISTRATION_RESULT.SEMESTER_ID = seatPlan.SEMESTER_ID AND "
+          + "      UG_REGISTRATION_RESULT.EXAM_TYPE = examRoutine.EXAM_TYPE AND "
           + "      STUDENT_RECORD.SEMESTER_ID = seatPlan.SEMESTER_ID AND "
-          + "  STUDENT_RECORD.STUDENT_ID = seatPlan.STUDENT_ID " + "ORDER BY "
-          + "  seatPlan.PROGRAM_ID, examRoutine.COURSE_NO, seatPlan.STUDENT_ID";
+          + "      STUDENT_RECORD.STUDENT_ID = seatPlan.STUDENT_ID "
+          + "ORDER BY "
+          + "  seatPlan.PROGRAM_ID, examRoutine.COURSE_NO,seatPlan.CURR_YEAR, seatPlan.CURR_SEMESTER, to_number(seatPlan.STUDENT_ID)";
 
   String SELECT_ALL_ATTENDENCE_SHEET_EXAM_DATE =
       "SELECT "
@@ -162,6 +170,7 @@ public class PersistentSeatPlanReportDao extends SeatPlanReportDaoDecorator {
           + "        ROOM_INFO.ROOM_ID, STUDENTS.STUDENT_ID) seatPlan, ( "
           + "                                                            SELECT "
           + "                                                              EXAM_ROUTINE.EXAM_DATE, "
+          + "                                                              EXAM_ROUTINE.EXAM_TYPE, "
           + "                                                              MST_PROGRAM.PROGRAM_ID, "
           + "                                                              MST_PROGRAM.PROGRAM_SHORT_NAME, "
           + "                                                              MST_COURSE.COURSE_NO, "
@@ -178,14 +187,18 @@ public class PersistentSeatPlanReportDao extends SeatPlanReportDaoDecorator {
           + "                                                            ORDER BY "
           + "                                                              EXAM_ROUTINE.EXAM_DATE, MST_PROGRAM.PROGRAM_ID, "
           + "                                                              MST_COURSE.COURSE_NO) examRoutine, UG_REGISTRATION_RESULT, "
-          + "  STUDENT_RECORD " + "WHERE seatPlan.PROGRAM_ID = examRoutine.PROGRAM_ID AND "
+          + "  STUDENT_RECORD "
+          + "WHERE seatPlan.PROGRAM_ID = examRoutine.PROGRAM_ID AND "
           + "      seatPlan.CURR_YEAR = examRoutine.YEAR AND "
           + "      seatPlan.CURR_SEMESTER = examRoutine.SEMESTER AND "
           + "      UG_REGISTRATION_RESULT.COURSE_ID = examRoutine.COURSE_ID AND "
           + "      UG_REGISTRATION_RESULT.STUDENT_ID = seatPlan.STUDENT_ID AND "
+          + "      UG_REGISTRATION_RESULT.SEMESTER_ID = seatPlan.SEMESTER_ID AND "
+          + "      UG_REGISTRATION_RESULT.EXAM_TYPE = examRoutine.EXAM_TYPE AND "
           + "      STUDENT_RECORD.SEMESTER_ID = seatPlan.SEMESTER_ID AND "
-          + "      STUDENT_RECORD.STUDENT_ID = seatPlan.STUDENT_ID " + "ORDER BY "
-          + "  seatPlan.ROOM_NO, seatPlan.PROGRAM_ID, examRoutine.COURSE_NO, seatPlan.STUDENT_ID";
+          + "      STUDENT_RECORD.STUDENT_ID = seatPlan.STUDENT_ID "
+          + "ORDER BY "
+          + "  seatPlan.ROOM_NO, seatPlan.PROGRAM_ID, examRoutine.COURSE_NO, seatPlan.CURR_YEAR, seatPlan.CURR_SEMESTER, to_number(seatPlan.STUDENT_ID)";
 
   String SELECT_ALL_TOP_SHEET_EXAM_DATE =
       "SELECT "
@@ -216,6 +229,7 @@ public class PersistentSeatPlanReportDao extends SeatPlanReportDaoDecorator {
           + "        ROOM_INFO.ROOM_ID, STUDENTS.STUDENT_ID) seatPlan, ( "
           + "                                                            SELECT "
           + "                                                              EXAM_ROUTINE.EXAM_DATE, "
+          + "                                                              EXAM_ROUTINE.EXAM_TYPE, "
           + "                                                              MST_PROGRAM.PROGRAM_ID, "
           + "                                                              MST_PROGRAM.PROGRAM_LONG_NAME, "
           + "                                                              MST_COURSE.COURSE_NO, "
@@ -232,14 +246,18 @@ public class PersistentSeatPlanReportDao extends SeatPlanReportDaoDecorator {
           + "                                                            ORDER BY "
           + "                                                              EXAM_ROUTINE.EXAM_DATE, MST_PROGRAM.PROGRAM_ID, "
           + "                                                              MST_COURSE.COURSE_NO) examRoutine, UG_REGISTRATION_RESULT, "
-          + "  STUDENT_RECORD " + "WHERE seatPlan.PROGRAM_ID = examRoutine.PROGRAM_ID AND "
+          + "  STUDENT_RECORD "
+          + "WHERE seatPlan.PROGRAM_ID = examRoutine.PROGRAM_ID AND "
           + "      seatPlan.CURR_YEAR = examRoutine.YEAR AND "
           + "      seatPlan.CURR_SEMESTER = examRoutine.SEMESTER AND "
           + "      UG_REGISTRATION_RESULT.COURSE_ID = examRoutine.COURSE_ID AND "
           + "      UG_REGISTRATION_RESULT.STUDENT_ID = seatPlan.STUDENT_ID AND "
+          + "      UG_REGISTRATION_RESULT.SEMESTER_ID = seatPlan.SEMESTER_ID AND "
+          + "      UG_REGISTRATION_RESULT.EXAM_TYPE = examRoutine.EXAM_TYPE AND "
           + "      STUDENT_RECORD.SEMESTER_ID = seatPlan.SEMESTER_ID AND "
-          + "      STUDENT_RECORD.STUDENT_ID = seatPlan.STUDENT_ID " + "ORDER BY "
-          + "  seatPlan.PROGRAM_ID, examRoutine.COURSE_NO, seatPlan.STUDENT_ID";
+          + "      STUDENT_RECORD.STUDENT_ID = seatPlan.STUDENT_ID "
+          + "ORDER BY "
+          + "  seatPlan.PROGRAM_ID, examRoutine.COURSE_NO,seatPlan.CURR_YEAR, seatPlan.CURR_SEMESTER, to_number(seatPlan.STUDENT_ID)";
 
   String SELECT_ALL_STICKER =
       "select   "
@@ -249,7 +267,7 @@ public class PersistentSeatPlanReportDao extends SeatPlanReportDaoDecorator {
           + "             STUDENTS.CURR_SEMESTER,   "
           + "             STUDENTS.STUDENT_ID   "
           + "           from STUDENTS,MST_PROGRAM,(   "
-          + "             select room_no,student_id from SEAT_PLAN,ROOM_INFO where SEMESTER_ID=? and EXAM_TYPE=? and SEAT_PLAN.ROOM_ID=ROOM_INFO.ROOM_ID ORDER BY ROOM_INFO.ROOM_ID "
+          + "             select room_no,student_id from SEAT_PLAN,ROOM_INFO where SEMESTER_ID=? and EXAM_TYPE=? and seat_plan.room_id=? and SEAT_PLAN.ROOM_ID=ROOM_INFO.ROOM_ID ORDER BY ROOM_INFO.ROOM_ID "
           + "                 ) seatPlans    WHERE   "
           + "             seatPlans.STUDENT_ID=STUDENTS.STUDENT_ID AND   "
           + "             MST_PROGRAM.PROGRAM_ID=STUDENTS.PROGRAM_ID    ORDER BY seatPlans.ROOM_NO, "
@@ -297,9 +315,9 @@ public class PersistentSeatPlanReportDao extends SeatPlanReportDaoDecorator {
 
   @Override
   public List<SeatPlanReportDto> getSeatPlanDataForSticker(Integer pSemesterId, Integer pExamType,
-      String pExamDate) {
+      String pExamDate, int pRoomId) {
     String query = SELECT_ALL_STICKER;
-    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pExamType},
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pExamType, pRoomId},
         new SeatPlanRowMapperSticker());
   }
 

@@ -3,6 +3,7 @@ package org.ums.cache;
 import org.ums.domain.model.common.LastModifier;
 import org.ums.domain.model.immutable.SeatPlan;
 import org.ums.domain.model.mutable.MutableSeatPlan;
+import org.ums.enums.ExamType;
 import org.ums.manager.CacheManager;
 import org.ums.manager.SeatPlanManager;
 import org.ums.util.CacheUtil;
@@ -158,6 +159,11 @@ public class SeatPlanCache extends
     StringBuilder builder = new StringBuilder();
     builder.append(pRoomId).append(pSemesterId).append(pGroupNo).append(pExamType);
     return Long.parseLong(builder.toString());
+  }
+
+  @Override
+  public List<SeatPlan> getSittingArrangement(int pSemesterId, ExamType pExamType) {
+    return getManager().getSittingArrangement(pSemesterId, pExamType);
   }
 
   class TemporaryContainer implements LastModifier {

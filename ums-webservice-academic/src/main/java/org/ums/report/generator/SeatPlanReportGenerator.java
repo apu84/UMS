@@ -36,6 +36,7 @@ public interface SeatPlanReportGenerator {
       DocumentException;
 
   void createSeatPlanStickerReport(Integer pProgramType, Integer pSemesterId, Integer pExamType,
-      String pExamDate, OutputStream pOutputStream) throws IOException, DocumentException;
+      String pExamDate, int pRoomId, OutputStream pOutputStream) throws IOException,
+      DocumentException;
 
 }

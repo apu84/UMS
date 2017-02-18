@@ -50,6 +50,33 @@ public class PersistentExamRoutineDao extends ExamRoutineDaoDecorator {
   }
 
   @Override
+  public List<ExamRoutineDto> getExamRoutine(int pSemesterId, int pExamType, String pOfferedBy) {
+    String query =
+        "SELECT"
+            + "  TO_CHAR(EXAM_DATE, 'DD/MM/YYYY') EXAM_DATE,"
+            + "  EXAM_TIME,"
+            + "  MST_PROGRAM.PROGRAM_ID,"
+            + "  PROGRAM_SHORT_NAME,"
+            + "  YEAR,"
+            + "  MST_COURSE.SEMESTER,"
+            + "  COURSE_NO,"
+            + "  COURSE_TITLE,"
+            + "  MST_COURSE.COURSE_ID,"
+            + "  EXAM_GROUP "
+            + " FROM EXAM_ROUTINE, MST_COURSE, MST_SYLLABUS, MST_PROGRAM, COURSE_SYLLABUS_MAP "
+            + " WHERE EXAM_ROUTINE.SEMESTER = ?"
+            + "      AND Exam_Type = ?"
+            + "      AND COURSE_SYLLABUS_MAP.COURSE_ID = MST_COURSE.COURSE_ID"
+            + "      AND EXAM_ROUTINE.COURSE_ID = MST_COURSE.COURSE_ID"
+            + "      AND MST_COURSE.OFFER_BY=?"
+            + "      AND COURSE_SYLLABUS_MAP.SYLLABUS_ID = MST_SYLLABUS.SYLLABUS_ID"
+            + "      AND MST_SYLLABUS.PROGRAM_ID = MST_PROGRAM.PROGRAM_ID"
+            + " ORDER BY to_date(EXAM_DATE, 'DD/MM/YYYY'), Exam_Time, Program_Id, Year, Semester, Course_No";
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pExamType, pOfferedBy},
+        new ExamRoutineRowMapper());
+  }
+
+  @Override
   public List<ExamRoutineDto> getExamRoutineForApplicationCCI(int semesterId, int examType) {
     String query =
         "Select exam_routine.exam_date original_date,to_char(exam_routine.exam_date,'MM-DD-YYYY') exam_date,nvl(total_student,0) total_student From ( "

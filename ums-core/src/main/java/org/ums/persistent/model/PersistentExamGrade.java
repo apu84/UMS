@@ -35,7 +35,9 @@ public class PersistentExamGrade implements MutableExamGrade {
   private String mExamDate;
   private String mProgramShortname;
   private Integer mCourseCreditHour;
-  private Date mLastSubmissionDate;
+  private Date mLastSubmissionDatePrep;
+  private Date mLastSubmissionDateScr;
+  private Date mLastSubmissionDateHead;
   private Integer mTotalStudents;
 
   public PersistentExamGrade() {
@@ -107,8 +109,8 @@ public class PersistentExamGrade implements MutableExamGrade {
   }
 
   @Override
-  public void setLastSubmissionDate(Date pLastSubmissionDate) {
-    mLastSubmissionDate = pLastSubmissionDate;
+  public void setLastSubmissionDatePrep(Date pLastSubmissionDate) {
+    mLastSubmissionDatePrep = pLastSubmissionDate;
   }
 
   @Override
@@ -132,8 +134,28 @@ public class PersistentExamGrade implements MutableExamGrade {
   }
 
   @Override
-  public Date getLastSubmissionDate() {
-    return mLastSubmissionDate;
+  public Date getLastSubmissionDatePrep() {
+    return mLastSubmissionDatePrep;
+  }
+
+  @Override
+  public Date getLastSubmissionDateScr() {
+    return mLastSubmissionDateScr;
+  }
+
+  @Override
+  public Date getLastSubmissionDateHead() {
+    return mLastSubmissionDateHead;
+  }
+
+  @Override
+  public void setLastSubmissionDateScr(Date pLastSubmissionDateScr) {
+    mLastSubmissionDateScr = pLastSubmissionDateScr;
+  }
+
+  @Override
+  public void setLastSubmissionDateHead(Date pLastSubmissionDateHead) {
+    mLastSubmissionDateHead = pLastSubmissionDateHead;
   }
 
   @Override

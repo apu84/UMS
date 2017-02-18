@@ -29,7 +29,11 @@ public interface MarksSubmissionStatus extends Serializable,
 
   Integer getPartBTotal();
 
-  Date getLastSubmissionDate();
+  Date getLastSubmissionDatePrep();
+
+  Date getLastSubmissionDateScr();
+
+  Date getLastSubmissionDateHead();
 
   Integer getYear();
 

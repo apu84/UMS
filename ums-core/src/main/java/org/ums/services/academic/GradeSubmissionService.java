@@ -220,7 +220,7 @@ public class GradeSubmissionService {
     // Deadline && Part Info Validation
     if(actualStatus.getStatus() == CourseMarksSubmissionStatus.NOT_SUBMITTED
         && operation.equals("submit")) {
-      validateGradeSubmissionDeadline(actualStatus.getLastSubmissionDate());
+      validateGradeSubmissionDeadline(actualStatus.getLastSubmissionDatePrep());
       if(actualStatus.getCourse().getCourseType() == CourseType.THEORY)
         validatePartInfo(requestedStatusDTO.getTotal_part(), requestedStatusDTO.getPart_a_total(),
             requestedStatusDTO.getPart_b_total());

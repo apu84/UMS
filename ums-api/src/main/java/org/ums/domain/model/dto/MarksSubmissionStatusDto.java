@@ -43,12 +43,30 @@ public class MarksSubmissionStatusDto {
   private int year;
   private int semester;
   private String offeredTo;
-  private Date lastSubmissionDate;
+  private Date lastSubmissionDatePrep;
+  private Date lastSubmissionDateScr;
+  private Date lastSubmissionDateHead;
   private List<CourseTeacherDto> courseTeacherList;
 
   private boolean isSubmissionDateOver;
 
   private int mId;
+
+  public Date getLastSubmissionDateScr() {
+    return lastSubmissionDateScr;
+  }
+
+  public void setLastSubmissionDateScr(Date pLastSubmissionDateScr) {
+    lastSubmissionDateScr = pLastSubmissionDateScr;
+  }
+
+  public Date getLastSubmissionDateHead() {
+    return lastSubmissionDateHead;
+  }
+
+  public void setLastSubmissionDateHead(Date pLastSubmissionDateHead) {
+    lastSubmissionDateHead = pLastSubmissionDateHead;
+  }
 
   public int getId() {
     return mId;
@@ -90,12 +108,12 @@ public class MarksSubmissionStatusDto {
     examDate = pExamDate;
   }
 
-  public Date getLastSubmissionDate() {
-    return lastSubmissionDate;
+  public Date getLastSubmissionDatePrep() {
+    return lastSubmissionDatePrep;
   }
 
-  public void setLastSubmissionDate(Date pLastSubmissionDate) {
-    lastSubmissionDate = pLastSubmissionDate;
+  public void setLastSubmissionDatePrep(Date pLastSubmissionDatePrep) {
+    lastSubmissionDatePrep = pLastSubmissionDatePrep;
   }
 
   public String getCourseId() {

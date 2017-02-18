@@ -10,6 +10,7 @@ import org.ums.domain.model.immutable.User;
 import org.ums.domain.model.mutable.MutableCourseTeacher;
 import org.ums.enums.CourseCategory;
 import org.ums.manager.AssignedTeacherManager;
+import org.ums.manager.CourseTeacherManager;
 import org.ums.manager.SemesterSyllabusMapManager;
 import org.ums.manager.UserManager;
 import org.ums.resource.Resource;
@@ -27,7 +28,7 @@ import javax.ws.rs.core.Response;
 public class CourseTeacherResource extends Resource {
   @Autowired
   @Qualifier("courseTeacherManager")
-  AssignedTeacherManager<CourseTeacher, MutableCourseTeacher, Integer> mCourseTeacherManager;
+  CourseTeacherManager mCourseTeacherManager;
 
   @Autowired
   CourseTeacherResourceHelper mResourceHelper;

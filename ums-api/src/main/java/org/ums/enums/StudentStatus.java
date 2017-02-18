@@ -10,7 +10,8 @@ import java.util.Map;
 public enum StudentStatus {
   PASSED(0, "Passed"),
   ACTIVE(1, "Active"),
-  MIGRATED(2, "Migrated");
+  MIGRATED(2, "Migrated"),
+  CANCELLED(3, "Cancelled");
 
   private String label;
   private int id;

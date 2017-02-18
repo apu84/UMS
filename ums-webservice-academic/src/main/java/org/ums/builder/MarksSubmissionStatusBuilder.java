@@ -6,7 +6,6 @@ import javax.ws.rs.core.UriInfo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.*;
 import org.ums.domain.model.mutable.MutableMarksSubmissionStatus;
@@ -38,8 +37,8 @@ public class MarksSubmissionStatusBuilder implements
     pBuilder.add("courseTitle", course.getTitle());
     pBuilder.add("year", pReadOnly.getYear());
     pBuilder.add("academicSemester", pReadOnly.getAcademicSemester());
-    if(pReadOnly.getLastSubmissionDate() != null) {
-      pBuilder.add("lastSubmissionDate", mDateFormat.format(pReadOnly.getLastSubmissionDate()));
+    if(pReadOnly.getLastSubmissionDatePrep() != null) {
+      pBuilder.add("lastSubmissionDate", mDateFormat.format(pReadOnly.getLastSubmissionDatePrep()));
     }
     pBuilder.add("statusId", pReadOnly.getStatus().getId());
     pBuilder.add("status", pReadOnly.getStatus().getLabel());

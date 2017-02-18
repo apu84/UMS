@@ -111,8 +111,8 @@ set_env() {
 stop_remote_debug() {
 	for instance in $(echo $APP_SERVER_INSTANCES | sed "s/,/ /g")
 	do
-		let "port=port+1"
-		echo "Stopping remote debug"
+		let "port=$REMOTE_DEBUG_PORT+1"
+		echo "Stopping remote debug: $port"
 		fuser -k $port/tcp
 	done
 }
@@ -128,8 +128,9 @@ stop_tomcat() {
 start_tomcat() {
 	if [ "$ENABLE_REMOTE_DEBUGGING" == "true" ]
 	then
-		let "remote_port=$REMOTE_DEBUG_PORT+$2"
+		let "remote_port=$REMOTE_DEBUG_PORT+1"
 		export CATALINA_OPTS="-agentlib:jdwp=transport=dt_socket,address=$remote_port,server=y,suspend=n"
+		$1/bin/catalina.sh jpda start
   fi	
 	sh $1/bin/startup.sh
 }

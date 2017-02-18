@@ -36,7 +36,9 @@ public class PersistentMarksSubmissionStatus implements MutableMarksSubmissionSt
   private ExamType mExamType;
   private Integer mPartATotal;
   private Integer mPartBTotal;
-  private Date mLastSubmissionDate;
+  private Date mLastSubmissionDatePrep;
+  private Date mLastSubmissionDateScr;
+  private Date mLastSubmissionDateHead;
   private Integer mYear;
   private Integer mAcademicSemester;
   private String mLastModified;
@@ -50,13 +52,35 @@ public class PersistentMarksSubmissionStatus implements MutableMarksSubmissionSt
     setCourseId(pMarksSubmissionStatus.getCourseId());
     setStatus(pMarksSubmissionStatus.getStatus());
     setExamType(pMarksSubmissionStatus.getExamType());
-    setLastSubmissionDate(pMarksSubmissionStatus.getLastSubmissionDate());
+    setLastSubmissionDatePrep(pMarksSubmissionStatus.getLastSubmissionDatePrep());
+    setLastSubmissionDateScr(pMarksSubmissionStatus.getLastSubmissionDateScr());
+    setLastSubmissionDateHead(pMarksSubmissionStatus.getLastSubmissionDateHead());
     setYear(pMarksSubmissionStatus.getYear());
     setAcademicSemester(pMarksSubmissionStatus.getAcademicSemester());
     setPartATotal(pMarksSubmissionStatus.getPartATotal());
     setPartBTotal(pMarksSubmissionStatus.getPartBTotal());
     setLastModified(pMarksSubmissionStatus.getLastModified());
     setTotalPart(pMarksSubmissionStatus.getTotalPart());
+  }
+
+  @Override
+  public Date getLastSubmissionDateScr() {
+    return mLastSubmissionDateScr;
+  }
+
+  @Override
+  public Date getLastSubmissionDateHead() {
+    return mLastSubmissionDateHead;
+  }
+
+  @Override
+  public void setLastSubmissionDateScr(Date pLastSubmissionDateScr) {
+    mLastSubmissionDateScr = pLastSubmissionDateScr;
+  }
+
+  @Override
+  public void setLastSubmissionDateHead(Date pLastSubmissionDateHead) {
+    mLastSubmissionDateHead = pLastSubmissionDateHead;
   }
 
   @Override
@@ -171,13 +195,12 @@ public class PersistentMarksSubmissionStatus implements MutableMarksSubmissionSt
   }
 
   @Override
-  public Date getLastSubmissionDate() {
-    return mLastSubmissionDate;
+  public Date getLastSubmissionDatePrep() {
+    return mLastSubmissionDatePrep;
   }
 
-  @Override
-  public void setLastSubmissionDate(Date pLastSubmissionDate) {
-    mLastSubmissionDate = pLastSubmissionDate;
+  public void setLastSubmissionDatePrep(Date pLastSubmissionDatePrep) {
+    mLastSubmissionDatePrep = pLastSubmissionDatePrep;
   }
 
   @Override

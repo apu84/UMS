@@ -22,7 +22,7 @@ public abstract class AbstractAssignedTeacher implements MutableAssignedTeacher 
     sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
   }
 
-  protected Integer mId;
+  protected Long mId;
   protected Semester mSemester;
   protected Course mCourse;
   protected String mLastModified;
@@ -31,12 +31,12 @@ public abstract class AbstractAssignedTeacher implements MutableAssignedTeacher 
   protected String mCourseId;
 
   @Override
-  public Integer getId() {
+  public Long getId() {
     return mId;
   }
 
   @Override
-  public void setId(Integer pId) {
+  public void setId(Long pId) {
     mId = pId;
   }
 

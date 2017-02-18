@@ -9,6 +9,10 @@
     examRoutineArr:Array<ExamRoutineModel>;
     programType:string;
     examDate:string;
+    classRooms:Array<IRoom>;
+    classRoom:IRoom;
+    roomIdRoomMap:any;
+    selectedRoomNo:string;
 
 
     isShowReportButtonClicked:boolean;
@@ -29,6 +33,7 @@
     getAttendenceSheetReport:Function;
     getTopSheetReport:Function;
     getStickerReport:Function;
+    roomChanged():Function;
 
   }
 
@@ -64,13 +69,14 @@
   }
 
   class SeatPlanReports{
-    public static $inject = ['appConstants','HttpClient','$scope','$q','notify','$sce','$window','semesterService','examRoutineService','seatPlanService'];
+    public static $inject = ['appConstants','HttpClient','$scope','$q','notify','$sce','$window','semesterService','examRoutineService','seatPlanService','classRoomService'];
     constructor(private appConstants: any, private httpClient: HttpClient, private $scope: ISeatPlanReports,
                 private $q:ng.IQService, private notify: Notify,
                 private $sce:ng.ISCEService,private $window:ng.IWindowService,
                 private semesterService:SemesterService,
                 private examRoutineService:ExamRoutineService,
-                private seatPlanService:SeatPlanService
+                private seatPlanService:SeatPlanService,
+                private classRoomService:ClassRoomService
                 ) {
 
       $scope.examDate="";
@@ -90,9 +96,33 @@
       $scope.getAttendenceSheetReport = this.getAttendenceSheetReport.bind(this);
       $scope.getTopSheetReport = this.getTopSheetReport.bind(this);
       $scope.getStickerReport = this.getStickerReport.bind(this);
+      $scope.roomChanged = this.roomChanged.bind(this);
+
+
 
     }
 
+    private roomChanged(rooNo):void{
+      this.$scope.classRoom=this.$scope.roomIdRoomMap[rooNo];
+      console.log(this.$scope.classRoom);
+    }
+
+    private getClassRooms():void{
+      console.log("In get class rooms");
+      console.log(this.$scope.examType);
+      console.log(this.$scope.semesterId);
+       this.classRoomService.getClassRoomsBasedOnSeatPlan(+this.$scope.semesterId, +this.$scope.examType).then((rooms:Array<IRoom>)=>{
+         console.log("ROoms");
+         console.log(rooms);
+         this.$scope.classRooms = [];
+         this.$scope.roomIdRoomMap={};
+         for(var i=0;i<rooms.length;i++){
+            this.$scope.classRooms.push(rooms[i]);
+            this.$scope.roomIdRoomMap[rooms[i].roomNo] = rooms[i];
+         }
+       });
+
+    }
 
     private closeAlertDialog():void{
       this.$scope.isShowAlertFired=false;
@@ -101,17 +131,26 @@
     private programTypeChanged(){
       this.$scope.programTypeRequired=false;
       this.getExamRoutineInfo();
+      if(this.$scope.semesterId!=null  && this.$scope.programType!=null && this.$scope.programType!=""){
+        this.getClassRooms();
+      }
 
     }
 
     private semesterChanged(){
       this.$scope.semesterIdRequired=false;
       this.getExamRoutineInfo();
+      if(this.$scope.semesterId!=null  && this.$scope.examType!=null && this.$scope.examType!=""){
+        this.getClassRooms();
+      }
     }
 
     private examTypeChanged(){
       this.$scope.examTypeRequired=false;
       this.getExamRoutineInfo();
+      if(this.$scope.semesterId!=null  && this.$scope.examType!=null && this.$scope.examType!=""){
+        this.getClassRooms();
+      }
     }
 
     private showReports():void{
@@ -225,7 +264,7 @@
        this.$scope.showLoader=false;
        });*/
 
-      this.httpClient.get("academic/seatplan/sticker/programType/"+programType+"/semesterId/"+semesterId+"/examType/"+examType+"/examDate/"+examDate,  'application/pdf',
+      this.httpClient.get("academic/seatplan/sticker/programType/"+programType+"/semesterId/"+semesterId+"/examType/"+examType+"/examDate/"+examDate+"/roomId/"+this.$scope.classRoom.id,  'application/pdf',
           (data:any, etag:string) => {
             var file = new Blob([data], {type: 'application/pdf'});
             var fileURL = this.$sce.trustAsResourceUrl(URL.createObjectURL(file));

@@ -52,7 +52,7 @@ public class PersistentMarkSubmissionStatusDao extends MarksSubmissionStatusDaoD
   public int update(MutableMarksSubmissionStatus pMutable) {
     String query = UPDATE_ALL + "WHERE ID = ?";
     return mJdbcTemplate.update(query, pMutable.getSemesterId(), pMutable.getCourseId(), pMutable
-        .getStatus().getId(), pMutable.getExamType().getId(), pMutable.getLastSubmissionDate(),
+        .getStatus().getId(), pMutable.getExamType().getId(), pMutable.getLastSubmissionDatePrep(),
         pMutable.getTotalPart(), pMutable.getPartATotal(), pMutable.getPartBTotal(), pMutable
             .getYear(), pMutable.getAcademicSemester(), pMutable.getId());
   }
@@ -72,7 +72,7 @@ public class PersistentMarkSubmissionStatusDao extends MarksSubmissionStatusDaoD
   @Override
   public int create(MutableMarksSubmissionStatus pMutable) {
     return mJdbcTemplate.update(INSERT_ALL, pMutable.getSemesterId(), pMutable.getCourseId(),
-        pMutable.getStatus(), pMutable.getExamType(), pMutable.getLastSubmissionDate(),
+        pMutable.getStatus(), pMutable.getExamType(), pMutable.getLastSubmissionDatePrep(),
         pMutable.getTotalPart(), pMutable.getPartATotal(), pMutable.getPartBTotal(),
         pMutable.getYear(), pMutable.getAcademicSemester());
   }
@@ -98,7 +98,7 @@ public class PersistentMarkSubmissionStatusDao extends MarksSubmissionStatusDaoD
     for(MarksSubmissionStatus pMutable : pMarksSubmissionStatusList) {
       params.add(new Object[] {pMutable.getSemesterId(), pMutable.getCourseId(),
           pMutable.getStatus().getId(), pMutable.getExamType().getId(),
-          pMutable.getLastSubmissionDate(), pMutable.getTotalPart(), pMutable.getPartATotal(),
+          pMutable.getLastSubmissionDatePrep(), pMutable.getTotalPart(), pMutable.getPartATotal(),
           pMutable.getPartBTotal(), pMutable.getYear(), pMutable.getAcademicSemester(),
           pMutable.getId()});
     }
@@ -118,7 +118,7 @@ public class PersistentMarkSubmissionStatusDao extends MarksSubmissionStatusDaoD
       Date date = new Date();
       if(rs.getObject("LAST_SUBMISSION_DATE") != null) {
         date.setTime(rs.getTimestamp("LAST_SUBMISSION_DATE").getTime());
-        marksSubmissionStatus.setLastSubmissionDate(date);
+        marksSubmissionStatus.setLastSubmissionDatePrep(date);
       }
       marksSubmissionStatus.setTotalPart(rs.getInt("TOTAL_PART"));
       marksSubmissionStatus.setPartATotal(rs.getInt("PART_A_TOTAL"));

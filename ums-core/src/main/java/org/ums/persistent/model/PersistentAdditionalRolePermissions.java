@@ -28,7 +28,7 @@ public class PersistentAdditionalRolePermissions implements MutableAdditionalRol
             AdditionalRolePermissionsManager.class);
   }
 
-  private Integer mId;
+  private Long mId;
   private User mUser;
   private Role mRole;
   private Set<String> mPermission;
@@ -136,12 +136,12 @@ public class PersistentAdditionalRolePermissions implements MutableAdditionalRol
   }
 
   @Override
-  public Integer getId() {
+  public Long getId() {
     return mId;
   }
 
   @Override
-  public void setId(Integer pId) {
+  public void setId(Long pId) {
     mId = pId;
   }
 

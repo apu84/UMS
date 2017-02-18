@@ -25,7 +25,11 @@ public interface MutableMarksSubmissionStatus extends MarksSubmissionStatus, Mut
 
   void setExamType(ExamType pExamType);
 
-  void setLastSubmissionDate(Date pLastSubmissionDate);
+  void setLastSubmissionDatePrep(Date pLastSubmissionDatePrep);
+
+  void setLastSubmissionDateScr(Date pLastSubmissionDateScr);
+
+  void setLastSubmissionDateHead(Date pLastSubmissionDateHead);
 
   void setPartATotal(Integer pPartATotal);
 

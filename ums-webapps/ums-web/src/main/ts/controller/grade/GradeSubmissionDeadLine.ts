@@ -33,7 +33,9 @@ module ums {
     courseTitle: string;
     courseCreditHour: string;
     totalStudents: number;
-    lastSubmissionDate: string;
+    lastSubmissionDatePrep: string;
+    lastSubmissionDateScr: string;
+    lastSubmissionDateHead: string;
     changed: boolean;
   }
 
@@ -179,7 +181,9 @@ module ums {
           item['semesterId'] = this.$scope.semesterId;
           item['courseId'] = this.$scope.examGradeStatisticsArr[i].courseId;
           item['examType'] = +this.$scope.examType;
-          item['lastSubmissionDate'] = this.$scope.examGradeStatisticsArr[i].lastSubmissionDate;
+          item['lastSubmissionDatePrep'] = this.$scope.examGradeStatisticsArr[i].lastSubmissionDatePrep;
+          item['lastSubmissionDateScr'] = this.$scope.examGradeStatisticsArr[i].lastSubmissionDateScr;
+          item['lastSubmissionDateHead'] = this.$scope.examGradeStatisticsArr[i].lastSubmissionDateHead;
           jsonObject.push(item);
         }
       }

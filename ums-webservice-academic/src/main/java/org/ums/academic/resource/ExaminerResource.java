@@ -27,7 +27,7 @@ import javax.ws.rs.core.Response;
 public class ExaminerResource extends Resource {
   @Autowired
   @Qualifier("examinerManager")
-  AssignedTeacherManager<Examiner, MutableExaminer, Integer> mExaminerManager;
+  AssignedTeacherManager<Examiner, MutableExaminer, Long> mExaminerManager;
 
   @Autowired
   ExaminerResourceHelper mResourceHelper;

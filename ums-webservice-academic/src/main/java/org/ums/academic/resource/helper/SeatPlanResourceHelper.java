@@ -234,11 +234,11 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan, MutableSeat
   }
 
   public void getSeatPlanStudentStickerReport(Integer pProgramType, Integer pSemesterId,
-      Integer pExamType, String pExamDate, OutputStream pOutputStream, final Request pRequest,
-      final UriInfo mUriInfo) throws IOException, DocumentException {
+      Integer pExamType, String pExamDate, int pRoomId, OutputStream pOutputStream,
+      final Request pRequest, final UriInfo mUriInfo) throws IOException, DocumentException {
 
     mSeatPlanReportGenerator.createSeatPlanStickerReport(pProgramType, pSemesterId, pExamType,
-        pExamDate, pOutputStream);
+        pExamDate, pRoomId, pOutputStream);
 
   }
 

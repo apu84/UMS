@@ -1,5 +1,7 @@
 package org.ums.configuration;
 
+import javax.sql.DataSource;
+
 import org.apache.shiro.authc.credential.PasswordService;
 import org.apache.shiro.mgt.SecurityManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,7 @@ import org.ums.domain.model.immutable.Examiner;
 import org.ums.domain.model.mutable.MutableExaminer;
 import org.ums.fee.*;
 import org.ums.formatter.DateFormat;
+import org.ums.generator.IdGenerator;
 import org.ums.generator.JxlsGenerator;
 import org.ums.generator.XlsGenerator;
 import org.ums.manager.*;
@@ -44,8 +47,6 @@ import org.ums.statistics.JdbcTemplateFactory;
 import org.ums.statistics.QueryLogger;
 import org.ums.statistics.TextLogger;
 import org.ums.util.Constants;
-
-import javax.sql.DataSource;
 
 @Configuration
 @EnableAsync
@@ -84,6 +85,11 @@ public class UMSContext {
   @Autowired
   @Qualifier("backendSecurityManager")
   SecurityManager mSecurityManager;
+
+  @Bean
+  IdGenerator idGenerator() {
+    return new IdGenerator();
+  }
 
   @Bean
   LibraryManager libraryManager() {
@@ -329,15 +335,16 @@ public class UMSContext {
   @Bean
   CourseTeacherManager courseTeacherManager() {
     CourseTeacherCache courseTeacherCache = new CourseTeacherCache(mCacheFactory.getCacheManager());
-    courseTeacherCache
-        .setManager(new PersistentCourseTeacherDao(mTemplateFactory.getJdbcTemplate()));
+    courseTeacherCache.setManager(new PersistentCourseTeacherDao(
+        mTemplateFactory.getJdbcTemplate(), idGenerator()));
     return courseTeacherCache;
   }
 
   @Bean
-  AssignedTeacherManager<Examiner, MutableExaminer, Integer> examinerManager() {
+  AssignedTeacherManager<Examiner, MutableExaminer, Long> examinerManager() {
     ExaminerCache examinerCache = new ExaminerCache(mCacheFactory.getCacheManager());
-    examinerCache.setManager(new PersistentExaminerDao(mTemplateFactory.getJdbcTemplate()));
+    examinerCache.setManager(new PersistentExaminerDao(mTemplateFactory.getJdbcTemplate(),
+        idGenerator()));
     return examinerCache;
   }
 
@@ -378,7 +385,7 @@ public class UMSContext {
     AdditionalRolePermissionsCache additionalRolePermissionsCache =
         new AdditionalRolePermissionsCache(mCacheFactory.getCacheManager());
     additionalRolePermissionsCache.setManager(new AdditionalRolePermissionsDao(mTemplateFactory
-        .getJdbcTemplate()));
+        .getJdbcTemplate(), idGenerator()));
     return additionalRolePermissionsCache;
   }
 

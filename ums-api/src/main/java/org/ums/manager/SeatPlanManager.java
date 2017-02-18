@@ -2,6 +2,7 @@ package org.ums.manager;
 
 import org.ums.domain.model.immutable.SeatPlan;
 import org.ums.domain.model.mutable.MutableSeatPlan;
+import org.ums.enums.ExamType;
 
 import java.util.List;
 
@@ -44,4 +45,6 @@ public interface SeatPlanManager extends ContentManager<SeatPlan, MutableSeatPla
 
   List<SeatPlan> getSeatPlanOrderByExamDateAndCourseAndYearAndSemesterAndStudentId(
       Integer pSemesterId, Integer pExamType);
+
+  List<SeatPlan> getSittingArrangement(final int pSemesterId, final ExamType pExamType);
 }

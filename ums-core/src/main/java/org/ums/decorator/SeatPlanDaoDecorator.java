@@ -2,6 +2,7 @@ package org.ums.decorator;
 
 import org.ums.domain.model.immutable.SeatPlan;
 import org.ums.domain.model.mutable.MutableSeatPlan;
+import org.ums.enums.ExamType;
 import org.ums.manager.SeatPlanManager;
 
 import java.util.List;
@@ -92,5 +93,10 @@ public class SeatPlanDaoDecorator extends
       Integer pSemesterId, Integer pExamType) {
     return getManager().getSeatPlanOrderByExamDateAndCourseAndYearAndSemesterAndStudentId(
         pSemesterId, pExamType);
+  }
+
+  @Override
+  public List<SeatPlan> getSittingArrangement(int pSemesterId, ExamType pExamType) {
+    return getManager().getSittingArrangement(pSemesterId, pExamType);
   }
 }

@@ -1,19 +1,19 @@
 package org.ums.builder;
 
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+import javax.json.JsonValue;
+import javax.ws.rs.core.UriInfo;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.immutable.*;
 import org.ums.domain.model.mutable.MutableCourseTeacher;
 import org.ums.manager.CourseManager;
 import org.ums.manager.SemesterManager;
 import org.ums.manager.TeacherManager;
-
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
-import javax.ws.rs.core.UriInfo;
 
 @Component
 public class CourseTeacherBuilder implements Builder<CourseTeacher, MutableCourseTeacher> {
@@ -26,8 +26,8 @@ public class CourseTeacherBuilder implements Builder<CourseTeacher, MutableCours
 
   @Override
   public void build(JsonObjectBuilder pBuilder, CourseTeacher pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
-    if (pReadOnly.getId() != null) {
-      pBuilder.add("id", pReadOnly.getId());
+    if (pReadOnly.getId() != null && pReadOnly.getId() != 0) {
+      pBuilder.add("id", pReadOnly.getId().toString());
     }
 
     Course course = (Course) pLocalCache.cache(() -> pReadOnly.getCourse(),
@@ -78,12 +78,18 @@ public class CourseTeacherBuilder implements Builder<CourseTeacher, MutableCours
   @Override
   public void build(MutableCourseTeacher pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
     if(pJsonObject.containsKey("id")) {
-      pMutable.setId(pJsonObject.getInt("id"));
+      pMutable.setId(Long.parseLong(pJsonObject.getString("id")));
     }
     pMutable.setCourse(mCourseManager.get(pJsonObject.getString("courseId")));
     pMutable.setTeacher(mTeacherManager.get(pJsonObject.getString("teacherId")));
-    pMutable
-        .setSemester(mSemesterManager.get(Integer.parseInt(pJsonObject.getString("semesterId"))));
+    JsonValue semesterIdObject = pJsonObject.get("semesterId");
+    if(semesterIdObject.getValueType().toString().equalsIgnoreCase("integer")) {
+      pMutable.setSemester(mSemesterManager.get(pJsonObject.getInt("semesterId")));
+    }
+    else if(semesterIdObject.getValueType().toString().equalsIgnoreCase("string")) {
+      pMutable.setSemester(mSemesterManager.get(Integer.parseInt(pJsonObject
+          .getString("semesterId"))));
+    }
     if(pJsonObject.containsKey("section") && !StringUtils.isEmpty(pJsonObject.getString("section"))) {
       pMutable.setSection(pJsonObject.getString("section"));
     }

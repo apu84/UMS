@@ -184,10 +184,16 @@ public class PersistentStudentDao extends StudentDaoDecorator {
             + "  STATUS "
             + "FROM STUDENTS "
             + "WHERE STUDENT_ID IN (SELECT DISTINCT (r.STUDENT_ID) "
-            + "                     FROM UG_REGISTRATION_RESULT r, STUDENTS s, SP_GROUP g "
-            + "                     WHERE g.GROUP_NO = ? AND r.SEMESTER_ID = ? AND r.EXAM_TYPE = ? AND g.TYPE = r.EXAM_TYPE AND "
-            + "                           r.STUDENT_ID = s.STUDENT_ID AND g.PROGRAM_ID = s.PROGRAM_ID AND g.YEAR = s.CURR_YEAR "
-            + "                           AND g.SEMESTER = s.CURR_SEMESTER) "
+            + "                     FROM "
+            + "                       UG_REGISTRATION_RESULT r, "
+            + "                       SP_GROUP g, "
+            + "                       EXAM_ROUTINE e, "
+            + "                       MST_COURSE c "
+            + "                     WHERE g.GROUP_NO = ? AND r.SEMESTER_ID = ? AND r.EXAM_TYPE = ? "
+            + "                           AND e.SEMESTER = r.SEMESTER_ID AND e.EXAM_TYPE = r.EXAM_TYPE "
+            + "                           AND r.COURSE_ID = e.COURSE_ID AND "
+            + "                           c.COURSE_ID = r.COURSE_ID AND g.SEMESTER_ID = r.SEMESTER_ID AND g.TYPE = r.EXAM_TYPE "
+            + "                           AND c.YEAR = g.YEAR AND c.SEMESTER = g.SEMESTER) "
             + "ORDER BY PROGRAM_ID, STUDENT_ID, CURR_YEAR, CURR_SEMESTER";
     return mJdbcTemplate.query(query, new Object[] {pGroupNo, pSemesterId, pExamType},
         new StudentRowMapper());

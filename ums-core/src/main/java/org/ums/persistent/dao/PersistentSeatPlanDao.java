@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.SeatPlanDaoDecorator;
 import org.ums.domain.model.immutable.SeatPlan;
 import org.ums.domain.model.mutable.MutableSeatPlan;
+import org.ums.enums.ExamType;
 import org.ums.persistent.model.PersistentSeatPlan;
 
 import javax.ws.rs.DELETE;
@@ -204,6 +205,29 @@ public class PersistentSeatPlanDao extends SeatPlanDaoDecorator {
             + "         order by row_no,col_no";
     return mJdbcTemplate.query(query, new Object[] {pStudentId, pSemesterid, pExamDate},
         new SeatPlanRowMapper());
+  }
+
+  @Override
+  public List<SeatPlan> getSittingArrangement(int pSemesterId, ExamType pExamType) {
+    String query =
+        "SELECT "
+            + "  SEAT_PLAN.ID, "
+            + "  SEAT_PLAN.ROOM_ID, "
+            + "  SEAT_PLAN.SEMESTER_ID, "
+            + "  SEAT_PLAN.GROUP_NO, "
+            + "  SEAT_PLAN.STUDENT_ID, "
+            + "  SEAT_PLAN.ROW_NO, "
+            + "  SEAT_PLAN.COL_NO, "
+            + "  SEAT_PLAN.EXAM_TYPE, "
+            + "  SEAT_PLAN.LAST_MODIFIED "
+            + "FROM SEAT_PLAN, ROOM_INFO, STUDENTS "
+            + "WHERE SEAT_PLAN.SEMESTER_ID = ? AND EXAM_TYPE = ? AND "
+            + "      SEAT_PLAN.STUDENT_ID = students.STUDENT_ID AND SEAT_PLAN.ROOM_ID=ROOM_INFO.ROOM_ID "
+            + "ORDER BY students.PROGRAM_ID, students.CURR_YEAR, students.CURR_SEMESTER, to_number(students.STUDENT_ID)";
+
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pExamType.getId()},
+        new SeatPlanRowMapper());
+
   }
 
   @Override

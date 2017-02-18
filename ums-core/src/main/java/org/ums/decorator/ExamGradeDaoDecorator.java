@@ -113,15 +113,15 @@ public class ExamGradeDaoDecorator extends
   }
 
   @Override
-  public int insertGradeSubmissionDeadLineInfo(Integer pSemesterId, ExamType pExamType,
-      String pExamDate) {
-    return getManager().insertGradeSubmissionDeadLineInfo(pSemesterId, pExamType, pExamDate);
+  public int createGradeSubmissionStatus(Integer pSemesterId, ExamType pExamType, String pExamDate) {
+    return getManager().createGradeSubmissionStatus(pSemesterId, pExamType, pExamDate);
   }
 
   @Override
   public List<MarksSubmissionStatusDto> getGradeSubmissionDeadLine(Integer pSemesterId,
-      ExamType pExamType, String pExamDate) {
-    return getManager().getGradeSubmissionDeadLine(pSemesterId, pExamType, pExamDate);
+      ExamType pExamType, String pExamDate, String pOfferedDeptId) {
+    return getManager().getGradeSubmissionDeadLine(pSemesterId, pExamType, pExamDate,
+        pOfferedDeptId);
   }
 
   public int getTotalStudentCount(MarksSubmissionStatus actualStatus) {
@@ -149,4 +149,8 @@ public class ExamGradeDaoDecorator extends
         pStatus);
   }
 
+  @Override
+  public int updateDeadline(List<MarksSubmissionStatusDto> pMarksSubmissionStatuses) {
+    return getManager().updateDeadline(pMarksSubmissionStatuses);
+  }
 }
