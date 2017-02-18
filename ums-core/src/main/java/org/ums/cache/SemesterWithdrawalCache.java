@@ -12,17 +12,17 @@ import java.util.List;
  * Created by My Pc on 3/23/2016.
  */
 public class SemesterWithdrawalCache extends
-    ContentCache<SemesterWithdrawal, MutableSemesterWithdrawal, Integer, SemesterWithDrawalManager>
+    ContentCache<SemesterWithdrawal, MutableSemesterWithdrawal, Long, SemesterWithDrawalManager>
     implements SemesterWithDrawalManager {
 
-  CacheManager<SemesterWithdrawal, Integer> mCacheManager;
+  CacheManager<SemesterWithdrawal, Long> mCacheManager;
 
-  public SemesterWithdrawalCache(CacheManager<SemesterWithdrawal, Integer> pCacheManager) {
+  public SemesterWithdrawalCache(CacheManager<SemesterWithdrawal, Long> pCacheManager) {
     mCacheManager = pCacheManager;
   }
 
   @Override
-  protected CacheManager<SemesterWithdrawal, Integer> getCacheManager() {
+  protected CacheManager<SemesterWithdrawal, Long> getCacheManager() {
     return mCacheManager;
   }
 

@@ -186,7 +186,7 @@ public class UMSContext {
     SemesterWithdrawalCache semesterWithdrawalCache =
         new SemesterWithdrawalCache(mCacheFactory.getCacheManager());
     semesterWithdrawalCache.setManager(new PersistentSemesterWithdrawalDao(mTemplateFactory
-        .getJdbcTemplate()));
+        .getJdbcTemplate(), idGenerator()));
     return semesterWithdrawalCache;
   }
 
@@ -195,7 +195,7 @@ public class UMSContext {
     SemesterWithdrawalLogCache semesterWithdrawalLogCache =
         new SemesterWithdrawalLogCache(mCacheFactory.getCacheManager());
     semesterWithdrawalLogCache.setManager(new PersistentSemesterWithdrawalLogDao(mTemplateFactory
-        .getJdbcTemplate()));
+        .getJdbcTemplate(), idGenerator()));
     return semesterWithdrawalLogCache;
   }
 
@@ -405,7 +405,7 @@ public class UMSContext {
     SemesterEnrollmentCache semesterEnrollmentCache =
         new SemesterEnrollmentCache(mCacheFactory.getCacheManager());
     semesterEnrollmentCache.setManager(new PersistentSemesterEnrollmentDao(mTemplateFactory
-        .getJdbcTemplate()));
+        .getJdbcTemplate(), idGenerator()));
     return semesterEnrollmentCache;
   }
 

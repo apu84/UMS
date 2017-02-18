@@ -1,15 +1,16 @@
 package org.ums.persistent.dao;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.SemesterWithdrawalDaoDecorator;
 import org.ums.domain.model.immutable.SemesterWithdrawal;
 import org.ums.domain.model.mutable.MutableSemesterWithdrawal;
+import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.PersistentSemesterWithdrawal;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
 
 public class PersistentSemesterWithdrawalDao extends SemesterWithdrawalDaoDecorator {
 
@@ -19,7 +20,7 @@ public class PersistentSemesterWithdrawalDao extends SemesterWithdrawalDaoDecora
       "SELECT SW.SW_ID,SW.SEMESTER_ID,SW.PROGRAM_ID,SW.STUDENT_ID,SW.YEAR,SW.SEMESTER,SW.CAUSE,SW.STATUS,SW.APP_DATE,SW.COMMENTS,SW.LAST_MODIFIED FROM SEMESTER_WITHDRAW";
 
   String INSERT_ONE =
-      "INSERT INTO SEMESTER_WITHDRAW(SEMESTER_ID,PROGRAM_ID,STUDENT_ID,YEAR,SEMESTER,CAUSE,STATUS,COMMENTS,APP_DATE,LAST_MODIFIED) VALUES(?,?,?,?,?,?,?,?,systimestamp,"
+      "INSERT INTO SEMESTER_WITHDRAW(SW_ID, SEMESTER_ID,PROGRAM_ID,STUDENT_ID,YEAR,SEMESTER,CAUSE,STATUS,COMMENTS,APP_DATE,LAST_MODIFIED) VALUES(?,?,?,?,?,?,?,?,?,systimestamp,"
           + getLastModifiedSql() + ") ";
   String UPDATE_ONE =
       "UPDATE SEMESTER_WITHDRAW SET SEMESTER_ID=?,PROGRAM_ID=?,STUDENT_ID=?,YEAR=?,SEMESTER=?,CAUSE=?,STATUS=?,COMMENTS=?,APP_DATE=systimestamp,LAST_MODIFIED="
@@ -31,9 +32,11 @@ public class PersistentSemesterWithdrawalDao extends SemesterWithdrawalDaoDecora
   String DELETE_ONE = "DELETE FROM SEMESTER_WITHDRAW ";
 
   private JdbcTemplate mJdbcTemplate;
+  private IdGenerator mIdGenerator;
 
-  public PersistentSemesterWithdrawalDao(JdbcTemplate pJdbcTemplate) {
+  public PersistentSemesterWithdrawalDao(JdbcTemplate pJdbcTemplate, IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
+    mIdGenerator = pIdGenerator;
   }
 
   @Override
@@ -74,7 +77,9 @@ public class PersistentSemesterWithdrawalDao extends SemesterWithdrawalDaoDecora
 
     String query =
         SELECT_ALL_For_Employee
-            + "  SW,STUDENTS S,STUDENT_RECORD SR WHERE SW.STUDENT_ID = S.STUDENT_ID AND SW.STUDENT_ID=SR.STUDENT_ID AND S.DEPT_ID=? AND SW.YEAR =SR.YEAR AND SW.SEMESTER=SR.SEMESTER  ";
+            + "  SW,STUDENTS S,STUDENT_RECORD SR WHERE SW.STUDENT_ID = S.STUDENT_ID "
+            + " AND SW.STUDENT_ID=SR.STUDENT_ID AND S.DEPT_ID=? AND SW.YEAR =SR.YEAR "
+            + " AND SW.SEMESTER=SR.SEMESTER  ";
     return mJdbcTemplate.query(query, new Object[] {deptId}, new SemesterWithdrawalRowMapper());
   }
 
@@ -105,7 +110,7 @@ public class PersistentSemesterWithdrawalDao extends SemesterWithdrawalDaoDecora
   }
 
   @Override
-  public SemesterWithdrawal get(Integer pId) {
+  public SemesterWithdrawal get(Long pId) {
     String query = SELECT_ALL + " WHERE SW_ID=?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId},
         new SemesterWithdrawalRowMapper());
@@ -120,17 +125,17 @@ public class PersistentSemesterWithdrawalDao extends SemesterWithdrawalDaoDecora
   @Override
   public int create(MutableSemesterWithdrawal pMutable) {
     String query = INSERT_ONE;
-    return mJdbcTemplate.update(query, pMutable.getSemester().getId(), pMutable.getProgram()
-        .getId(), pMutable.getStudent().getId(), pMutable.getStudent().getCurrentYear(), pMutable
-        .getStudent().getCurrentAcademicSemester(), pMutable.getCause(), pMutable.getStatus(),
-        pMutable.getComment());
+    return mJdbcTemplate.update(query, mIdGenerator.getNumericId(), pMutable.getSemester().getId(),
+        pMutable.getProgram().getId(), pMutable.getStudent().getId(), pMutable.getStudent()
+            .getCurrentYear(), pMutable.getStudent().getCurrentAcademicSemester(), pMutable
+            .getCause(), pMutable.getStatus(), pMutable.getComment());
   }
 
   class SemesterWithdrawalRowMapper implements RowMapper<SemesterWithdrawal> {
     @Override
     public SemesterWithdrawal mapRow(ResultSet pResultSet, int pI) throws SQLException {
       PersistentSemesterWithdrawal persistenceSW = new PersistentSemesterWithdrawal();
-      persistenceSW.setId(pResultSet.getInt("SW_ID"));
+      persistenceSW.setId(pResultSet.getLong("SW_ID"));
       persistenceSW.setSemesterId(pResultSet.getInt("SEMESTER_ID"));
       persistenceSW.setStudentId(pResultSet.getString("STUDENT_ID"));
       persistenceSW.setAcademicYear(pResultSet.getInt("YEAR"));

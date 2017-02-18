@@ -1,17 +1,16 @@
 package org.ums.persistent.dao;
 
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.ums.decorator.SemesterWithdrawalDaoDecorator;
-import org.ums.decorator.SemesterWithdrawalLogDaoDecorator;
-import org.ums.domain.model.immutable.SemesterWithdrawalLog;
-import org.ums.domain.model.mutable.MutableSemesterWithdrawalLog;
-import org.ums.persistent.model.PersistentSemesterWithdrawalLog;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.ums.decorator.SemesterWithdrawalLogDaoDecorator;
+import org.ums.domain.model.immutable.SemesterWithdrawalLog;
+import org.ums.domain.model.mutable.MutableSemesterWithdrawalLog;
+import org.ums.generator.IdGenerator;
+import org.ums.persistent.model.PersistentSemesterWithdrawalLog;
 
 public class PersistentSemesterWithdrawalLogDao extends SemesterWithdrawalLogDaoDecorator {
 
@@ -19,17 +18,19 @@ public class PersistentSemesterWithdrawalLogDao extends SemesterWithdrawalLogDao
       "SELECT SWL_ID,SW_ID,EMPLOYEE_ID,ACTION,EVENT_DATE_TIME,LAST_MODIFIED FROM SEMESTER_WITHDRAW_LOG ";
 
   static String INSERT_ONE =
-      "INSERT INTO SEMESTER_WITHDRAW_LOG (SW_ID,EMPLOYEE_ID,ACTION,EVENT_DATE_TIME,LAST_MODIFIED)"
-          + "VALUES (?,?,?,systimestamp," + getLastModifiedSql() + " )";
+      "INSERT INTO SEMESTER_WITHDRAW_LOG (SWL_ID, SW_ID,EMPLOYEE_ID,ACTION,EVENT_DATE_TIME,LAST_MODIFIED)"
+          + "VALUES (?,?,?,?,systimestamp," + getLastModifiedSql() + " )";
   static String UPDATE_ONE =
       "UPDATE SEMESTER_WITHDRAW_LOG SET SW_ID=?,EMPLOYEE_ID=?,ACTION=?,EVENT_DATE_TIME=systimestamp,LAST_MODIFIED= "
           + getLastModifiedSql() + " ";
   static String DELETE_ONE = "DELETE FROM SEMESTER_WITHDRAW_LOG ";
 
   private JdbcTemplate mJdbcTemplate;
+  private IdGenerator mIdGenerator;
 
-  public PersistentSemesterWithdrawalLogDao(JdbcTemplate pJdbcTemplate) {
+  public PersistentSemesterWithdrawalLogDao(JdbcTemplate pJdbcTemplate, IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
+    mIdGenerator = pIdGenerator;
   }
 
   @Override
@@ -39,7 +40,7 @@ public class PersistentSemesterWithdrawalLogDao extends SemesterWithdrawalLogDao
   }
 
   @Override
-  public SemesterWithdrawalLog get(Integer pId) {
+  public SemesterWithdrawalLog get(Long pId) {
     String query = SELECT_ALL + " WHERE SWL_ID=?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId},
         new SemesterWithdrawalLogRowMapper());
@@ -61,8 +62,8 @@ public class PersistentSemesterWithdrawalLogDao extends SemesterWithdrawalLogDao
   @Override
   public int create(MutableSemesterWithdrawalLog pMutable) {
     String query = INSERT_ONE;
-    return mJdbcTemplate.update(query, pMutable.getSemesterWithdrawal().getId(),
-        pMutable.getEmployeeId(), pMutable.getAction());
+    return mJdbcTemplate.update(query, mIdGenerator.getNumericId(), pMutable
+        .getSemesterWithdrawal().getId(), pMutable.getEmployeeId(), pMutable.getAction());
   }
 
   @Override
@@ -76,8 +77,8 @@ public class PersistentSemesterWithdrawalLogDao extends SemesterWithdrawalLogDao
     @Override
     public SemesterWithdrawalLog mapRow(ResultSet pResultSet, int pI) throws SQLException {
       PersistentSemesterWithdrawalLog pLog = new PersistentSemesterWithdrawalLog();
-      pLog.setId(pResultSet.getInt("SWL_ID"));
-      pLog.setSemesterWithdrawalId(pResultSet.getInt("SW_ID"));
+      pLog.setId(pResultSet.getLong("SWL_ID"));
+      pLog.setSemesterWithdrawalId(pResultSet.getLong("SW_ID"));
       pLog.setEmployeeId(pResultSet.getString("EMPLOYEE_ID"));
       pLog.setAction(pResultSet.getInt("ACTION"));
       pLog.setEventDate(pResultSet.getString("EVENT_DATE_TIME"));

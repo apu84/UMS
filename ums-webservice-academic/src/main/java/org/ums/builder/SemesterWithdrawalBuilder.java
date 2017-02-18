@@ -46,9 +46,11 @@ public class SemesterWithdrawalBuilder implements
   @Override
   public void build(MutableSemesterWithdrawal pMutable, JsonObject pJsonObject,
       LocalCache pLocalCache) {
-    int id = pJsonObject.getInt("id");
-    if(id != 0) {
-      pMutable.setId(id);
+    if(pJsonObject.containsKey("id")) {
+      Long id = Long.parseLong(pJsonObject.getString("id"));
+      if(id != 0) {
+        pMutable.setId(id);
+      }
     }
     int semId = pJsonObject.getInt("semesterId");
     PersistentSemester semester = new PersistentSemester();

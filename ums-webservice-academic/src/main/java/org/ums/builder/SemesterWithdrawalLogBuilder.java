@@ -33,7 +33,7 @@ public class SemesterWithdrawalLogBuilder implements
   public void build(MutableSemesterWithdrawalLog pMutable, JsonObject pJsonObject,
       LocalCache pLocalCache) {
     PersistentSemesterWithdrawal persistentSemesterWithdrawal = new PersistentSemesterWithdrawal();
-    persistentSemesterWithdrawal.setId(pJsonObject.getInt("semesterWithdrawId"));
+    persistentSemesterWithdrawal.setId(Long.parseLong(pJsonObject.getString("semesterWithdrawId")));
     pMutable.setSemesterWithdrawal(persistentSemesterWithdrawal);
     /*
      * PersistentEmployee employee = new PersistentEmployee();

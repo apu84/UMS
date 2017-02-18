@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 public interface SemesterWithdrawal extends Serializable, LastModifier,
-    EditType<MutableSemesterWithdrawal>, Identifier<Integer> {
+    EditType<MutableSemesterWithdrawal>, Identifier<Long> {
   Semester getSemester();
 
   Student getStudent();

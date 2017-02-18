@@ -23,7 +23,7 @@ import java.net.URI;
 
 @Component
 public class SemesterWithdrawalLogResourceHelper extends
-    ResourceHelper<SemesterWithdrawalLog, MutableSemesterWithdrawalLog, Integer> {
+    ResourceHelper<SemesterWithdrawalLog, MutableSemesterWithdrawalLog, Long> {
 
   @Autowired
   private SemesterWithdrawalLogManager mManager;

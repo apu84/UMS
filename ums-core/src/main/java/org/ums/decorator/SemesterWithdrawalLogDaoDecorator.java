@@ -6,7 +6,7 @@ import org.ums.manager.SemesterWithdrawalLogManager;
 
 public class SemesterWithdrawalLogDaoDecorator
     extends
-    ContentDaoDecorator<SemesterWithdrawalLog, MutableSemesterWithdrawalLog, Integer, SemesterWithdrawalLogManager>
+    ContentDaoDecorator<SemesterWithdrawalLog, MutableSemesterWithdrawalLog, Long, SemesterWithdrawalLogManager>
     implements SemesterWithdrawalLogManager {
 
   @Override

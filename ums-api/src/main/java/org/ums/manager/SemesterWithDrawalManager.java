@@ -7,7 +7,7 @@ import javax.ws.rs.core.Context;
 import java.util.List;
 
 public interface SemesterWithDrawalManager extends
-    ContentManager<SemesterWithdrawal, MutableSemesterWithdrawal, Integer> {
+    ContentManager<SemesterWithdrawal, MutableSemesterWithdrawal, Long> {
   public SemesterWithdrawal getStudentsRecord(String studentId, int semesterId, int year,
       int semester);
 

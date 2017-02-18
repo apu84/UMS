@@ -25,7 +25,7 @@ import java.util.List;
 
 @Component
 public class SemesterWithdrawalResourceHelper extends
-    ResourceHelper<SemesterWithdrawal, MutableSemesterWithdrawal, Integer> {
+    ResourceHelper<SemesterWithdrawal, MutableSemesterWithdrawal, Long> {
 
   @Autowired
   SemesterWithDrawalManager mManager;
