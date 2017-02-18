@@ -11,14 +11,15 @@ import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.NotificationDaoDecorator;
 import org.ums.domain.model.immutable.Notification;
 import org.ums.domain.model.mutable.MutableNotification;
+import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.PersistentNotification;
 
 public class PersistentNotificationDao extends NotificationDaoDecorator {
   String SELECT_ALL =
       "SELECT ID, PRODUCER_ID, CONSUMER_ID, NOTIFICATION_TYPE, PAYLOAD, PRODUCED_ON, CONSUMED_ON, LAST_MODIFIED FROM NOTIFICATION ";
   String INSERT_ALL =
-      "INSERT INTO NOTIFICATION (PRODUCER_ID, CONSUMER_ID, NOTIFICATION_TYPE, PAYLOAD, PRODUCED_ON, LAST_MODIFIED) "
-          + "VALUES (?, ?, ?, ?, SYSDATE, " + getLastModifiedSql() + ")";
+      "INSERT INTO NOTIFICATION (ID, PRODUCER_ID, CONSUMER_ID, NOTIFICATION_TYPE, PAYLOAD, PRODUCED_ON, LAST_MODIFIED) "
+          + "VALUES (?, ?, ?, ?, ?, SYSDATE, " + getLastModifiedSql() + ")";
   String UPDATE_ALL =
       "UPDATE NOTIFICATION SET PRODUCER_ID = ?, CONSUMER_ID = ?, NOTIFICATION_TYPE = ?, PAYLOAD = ?,"
           + "CONSUMED_ON = SYSDATE, LAST_MODIFIED = " + getLastModifiedSql() + " ";
@@ -26,9 +27,11 @@ public class PersistentNotificationDao extends NotificationDaoDecorator {
   String DELETE_ALL = "DELETE FROM NOTIFICATION ";
 
   private JdbcTemplate mJdbcTemplate;
+  private IdGenerator mIdGenerator;
 
-  public PersistentNotificationDao(JdbcTemplate pJdbcTemplate) {
+  public PersistentNotificationDao(JdbcTemplate pJdbcTemplate, IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
+    mIdGenerator = pIdGenerator;
   }
 
   @Override
@@ -67,9 +70,9 @@ public class PersistentNotificationDao extends NotificationDaoDecorator {
 
   @Override
   public int create(MutableNotification pNotification) {
-    return mJdbcTemplate.update(INSERT_ALL, pNotification.getProducerId(),
-        pNotification.getConsumerId(), pNotification.getNotificationType(),
-        pNotification.getPayload());
+    return mJdbcTemplate.update(INSERT_ALL, mIdGenerator.getNumericId(),
+        pNotification.getProducerId(), pNotification.getConsumerId(),
+        pNotification.getNotificationType(), pNotification.getPayload());
 
   }
 
@@ -79,7 +82,7 @@ public class PersistentNotificationDao extends NotificationDaoDecorator {
   }
 
   @Override
-  public Notification get(String pId) {
+  public Notification get(Long pId) {
     String query = SELECT_ALL + " WHERE ID = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new NotificationRowMapper());
   }
@@ -104,8 +107,9 @@ public class PersistentNotificationDao extends NotificationDaoDecorator {
   private List<Object[]> getInsertParamArray(List<MutableNotification> pMutableList) {
     List<Object[]> params = new ArrayList<>();
     for(Notification notification : pMutableList) {
-      params.add(new Object[] {notification.getProducerId(), notification.getConsumerId(),
-          notification.getNotificationType(), notification.getPayload()});
+      params.add(new Object[] {mIdGenerator.getNumericId(), notification.getProducerId(),
+          notification.getConsumerId(), notification.getNotificationType(),
+          notification.getPayload()});
     }
     return params;
   }
@@ -122,7 +126,7 @@ public class PersistentNotificationDao extends NotificationDaoDecorator {
     @Override
     public Notification mapRow(ResultSet rs, int rowNum) throws SQLException {
       MutableNotification notification = new PersistentNotification();
-      notification.setId(rs.getString("ID"));
+      notification.setId(rs.getLong("ID"));
       notification.setProducerId(rs.getString("PRODUCER_ID"));
       notification.setConsumerId(rs.getString("CONSUMER_ID"));
       notification.setNotificationType(rs.getString("NOTIFICATION_TYPE"));

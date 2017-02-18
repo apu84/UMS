@@ -23,10 +23,10 @@ public class PersistentResultPublish implements MutableResultPublish {
     sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
     sResultPublishManager =
         applicationContext.getBean("resultPublishManager", ResultPublishManager.class);
-
   }
 
-  private Integer mId, mSemesterId, mProgramId;
+  private Long mId;
+  private Integer mSemesterId, mProgramId;
   private Semester mSemester;
   private Program mProgram;
   private Date mDate;
@@ -65,12 +65,12 @@ public class PersistentResultPublish implements MutableResultPublish {
   }
 
   @Override
-  public Integer getId() {
+  public Long getId() {
     return mId;
   }
 
   @Override
-  public void setId(Integer pId) {
+  public void setId(Long pId) {
     mId = pId;
   }
 

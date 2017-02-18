@@ -20,7 +20,7 @@ public class PersistentPermission implements MutablePermission {
     sPermissionManager = (PermissionManager) applicationContext.getBean("permissionManager");
   }
 
-  private Integer mId;
+  private Long mId;
   private Role mRole;
   private Set<String> mPermissions;
   private String mLastModified;
@@ -75,7 +75,7 @@ public class PersistentPermission implements MutablePermission {
   }
 
   @Override
-  public void setId(Integer pId) {
+  public void setId(Long pId) {
     mId = pId;
   }
 
@@ -100,7 +100,7 @@ public class PersistentPermission implements MutablePermission {
   }
 
   @Override
-  public Integer getId() {
+  public Long getId() {
     return mId;
   }
 

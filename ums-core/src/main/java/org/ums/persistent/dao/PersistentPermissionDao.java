@@ -5,6 +5,7 @@ import com.google.common.collect.Sets;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.util.StringUtils;
+import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.PersistentPermission;
 import org.ums.decorator.PermissionDaoDecorator;
 import org.ums.domain.model.mutable.MutablePermission;
@@ -20,16 +21,18 @@ public class PersistentPermissionDao extends PermissionDaoDecorator {
   static String PERMISSION_SEPARATOR = ",";
   String SELECT_ALL = "SELECT PERMISSION_ID, ROLE_ID, PERMISSIONS, LAST_MODIFIED FROM PERMISSIONS ";
   String INSERT_ALL =
-      "INSERT INTO PERMISSIONS (ROLE_ID, PERMISSIONS, LAST_MODIFIED) VALUES (?, ?, ? "
+      "INSERT INTO PERMISSIONS (PERMISSION_ID, ROLE_ID, PERMISSIONS, LAST_MODIFIED) VALUES (?, ?, ?, ? "
           + getLastModifiedSql() + ") ";
   String UPDATE_ALL = "UPDATE PERMISSIONS SET ROLE_ID = ?, PERMISSIONS = ?, LAST_MODIFIED = "
       + getLastModifiedSql() + " WHERE PERMISSION_ID = ? ";
   String DELETE_ALL = "DELETE FROM PERMISSIONS ";
 
   private JdbcTemplate mJdbcTemplate;
+  private IdGenerator mIdGenerator;
 
-  public PersistentPermissionDao(JdbcTemplate pJdbcTemplate) {
+  public PersistentPermissionDao(JdbcTemplate pJdbcTemplate, IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
+    mIdGenerator = pIdGenerator;
   }
 
   @Override
@@ -44,7 +47,7 @@ public class PersistentPermissionDao extends PermissionDaoDecorator {
   }
 
   @Override
-  public Permission get(Integer pId) {
+  public Permission get(Long pId) {
     String query = SELECT_ALL + "WHERE PERMISSION_ID = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new PermissionRowMapper());
   }
@@ -64,15 +67,16 @@ public class PersistentPermissionDao extends PermissionDaoDecorator {
 
   @Override
   public int create(MutablePermission pMutable) {
-    return mJdbcTemplate.update(INSERT_ALL, pMutable.getRole().getId(),
-        Joiner.on(PERMISSION_SEPARATOR).join(pMutable.getPermissions()));
+    return mJdbcTemplate
+        .update(INSERT_ALL, mIdGenerator.getNumericId(), pMutable.getRole().getId(),
+            Joiner.on(PERMISSION_SEPARATOR).join(pMutable.getPermissions()));
   }
 
   class PermissionRowMapper implements RowMapper<Permission> {
     @Override
     public Permission mapRow(ResultSet resultSet, int i) throws SQLException {
       MutablePermission permission = new PersistentPermission();
-      permission.setId(resultSet.getInt("PERMISSION_ID"));
+      permission.setId(resultSet.getLong("PERMISSION_ID"));
       permission.setRoleId(resultSet.getInt("ROLE_ID"));
 
       String permissions = resultSet.getString("PERMISSIONS");

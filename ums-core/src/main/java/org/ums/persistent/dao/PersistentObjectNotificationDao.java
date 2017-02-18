@@ -21,7 +21,7 @@ public class PersistentObjectNotificationDao extends NotificationDaoDecorator {
   }
 
   @Override
-  public Notification get(String pId) {
+  public Notification get(Long pId) {
     return mMongoOperations.findOne(Query.query(Criteria.where("mId").is(pId)), Notification.class);
   }
 

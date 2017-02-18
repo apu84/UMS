@@ -358,7 +358,8 @@ public class UMSContext {
   @Bean
   PermissionManager permissionManager() {
     PermissionCache permissionCache = new PermissionCache(mCacheFactory.getCacheManager());
-    permissionCache.setManager(new PersistentPermissionDao(mTemplateFactory.getJdbcTemplate()));
+    permissionCache.setManager(new PersistentPermissionDao(mTemplateFactory.getJdbcTemplate(),
+        idGenerator()));
     return permissionCache;
   }
 
@@ -546,13 +547,14 @@ public class UMSContext {
   @Lazy
   NotificationManager notificationManager() {
     return mUMSConfiguration.isEnableObjectDb() ? new PersistentObjectNotificationDao(
-        mMongoOperations) : new PersistentNotificationDao(mTemplateFactory.getJdbcTemplate());
+        mMongoOperations) : new PersistentNotificationDao(mTemplateFactory.getJdbcTemplate(),
+        idGenerator());
   }
 
   @Bean
   @Lazy
   NotificationGenerator notificationGenerator() {
-    return new NotificationGeneratorImpl(notificationManager());
+    return new NotificationGeneratorImpl(notificationManager(), idGenerator());
   }
 
   @Bean
@@ -585,7 +587,8 @@ public class UMSContext {
     ResultPublishValidator validator = new ResultPublishValidator(marksSubmissionStatusManager());
     ResultPublishImpl resultPublish = new ResultPublishImpl();
     validator.setManager(resultPublish);
-    resultPublish.setManager(new ResultPublishDao(mTemplateFactory.getJdbcTemplate()));
+    resultPublish
+        .setManager(new ResultPublishDao(mTemplateFactory.getJdbcTemplate(), idGenerator()));
     return validator;
   }
 

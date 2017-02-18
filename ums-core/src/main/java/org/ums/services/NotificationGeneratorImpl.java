@@ -2,6 +2,7 @@ package org.ums.services;
 
 import org.springframework.scheduling.annotation.Async;
 import org.ums.domain.model.mutable.MutableNotification;
+import org.ums.generator.IdGenerator;
 import org.ums.manager.NotificationManager;
 import org.ums.persistent.model.PersistentNotification;
 
@@ -15,10 +16,13 @@ import java.util.UUID;
 public class NotificationGeneratorImpl implements NotificationGenerator {
   private NotificationManager mNotificationManager;
   private DateFormat dateFormat;
+  private IdGenerator mIdGenerator;
 
-  public NotificationGeneratorImpl(NotificationManager pNotificationManager) {
+  public NotificationGeneratorImpl(NotificationManager pNotificationManager,
+      IdGenerator pIdeIdGenerator) {
     mNotificationManager = pNotificationManager;
     dateFormat = new SimpleDateFormat("YYYYMMDDHHmmss");
+    mIdGenerator = pIdeIdGenerator;
   }
 
   @Async
@@ -32,7 +36,7 @@ public class NotificationGeneratorImpl implements NotificationGenerator {
 
     for(String consumer : consumers) {
       MutableNotification notification = new PersistentNotification();
-      notification.setId(UUID.randomUUID().toString());
+      notification.setId(mIdGenerator.getNumericId());
       notification.setProducerId(producer);
       notification.setConsumerId(consumer);
       notification.setPayload(payload);

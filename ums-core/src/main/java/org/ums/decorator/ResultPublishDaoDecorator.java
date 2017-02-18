@@ -5,8 +5,8 @@ import org.ums.domain.model.mutable.MutableResultPublish;
 import org.ums.manager.ResultPublishManager;
 
 public class ResultPublishDaoDecorator extends
-    ContentDaoDecorator<ResultPublish, MutableResultPublish, Integer, ResultPublishManager>
-    implements ResultPublishManager {
+    ContentDaoDecorator<ResultPublish, MutableResultPublish, Long, ResultPublishManager> implements
+    ResultPublishManager {
   @Override
   public void publishResult(Integer programId, Integer semesterId) {
     getManager().publishResult(programId, semesterId);

@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public interface Notification extends Serializable, EditType<MutableNotification>, LastModifier,
-    Identifier<String> {
+    Identifier<Long> {
   String getProducerId();
 
   String getConsumerId();
