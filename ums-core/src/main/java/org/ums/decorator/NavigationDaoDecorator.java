@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 public class NavigationDaoDecorator extends
-    ContentDaoDecorator<Navigation, MutableNavigation, Integer, NavigationManager> implements
+    ContentDaoDecorator<Navigation, MutableNavigation, Long, NavigationManager> implements
     NavigationManager {
   @Override
   public List<Navigation> getByPermissions(Set<String> pPermissions) {

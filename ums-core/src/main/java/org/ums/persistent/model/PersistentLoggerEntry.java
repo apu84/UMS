@@ -20,7 +20,7 @@ public class PersistentLoggerEntry implements MutableLoggerEntry {
   private String mUserName;
   private long mExecutionTime;
   private Date mTimestamp;
-  private Integer mId;
+  private Long mId;
 
   public PersistentLoggerEntry() {}
 
@@ -78,7 +78,7 @@ public class PersistentLoggerEntry implements MutableLoggerEntry {
   }
 
   @Override
-  public Integer getId() {
+  public Long getId() {
     return mId;
   }
 
@@ -98,7 +98,7 @@ public class PersistentLoggerEntry implements MutableLoggerEntry {
   }
 
   @Override
-  public void setId(Integer pId) {
+  public void setId(Long pId) {
     mId = pId;
   }
 }

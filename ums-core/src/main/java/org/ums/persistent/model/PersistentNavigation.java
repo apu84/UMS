@@ -14,7 +14,7 @@ public class PersistentNavigation implements MutableNavigation {
     sNavigationManager = applicationContext.getBean("navigationManager", NavigationManager.class);
   }
 
-  private Integer mId;
+  private Long mId;
   private String mTitle;
   private String mPermission;
   private Navigation mNavigation;
@@ -24,7 +24,7 @@ public class PersistentNavigation implements MutableNavigation {
   private String mIconColorClass;
   private boolean mActive;
   private String mLastModified;
-  private Integer mParentId;
+  private Long mParentId;
 
   public PersistentNavigation() {}
 
@@ -82,7 +82,7 @@ public class PersistentNavigation implements MutableNavigation {
   }
 
   @Override
-  public void setId(Integer pId) {
+  public void setId(Long pId) {
     mId = pId;
   }
 
@@ -92,17 +92,17 @@ public class PersistentNavigation implements MutableNavigation {
   }
 
   @Override
-  public void setParentId(Integer pParentId) {
+  public void setParentId(Long pParentId) {
     mParentId = pParentId;
   }
 
   @Override
-  public Integer getParentId() {
+  public Long getParentId() {
     return mParentId;
   }
 
   @Override
-  public Integer getId() {
+  public Long getId() {
     return mId;
   }
 

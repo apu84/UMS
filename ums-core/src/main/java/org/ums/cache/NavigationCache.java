@@ -11,17 +11,17 @@ import java.util.List;
 import java.util.Set;
 
 public class NavigationCache extends
-    ContentCache<Navigation, MutableNavigation, Integer, NavigationManager> implements
+    ContentCache<Navigation, MutableNavigation, Long, NavigationManager> implements
     NavigationManager {
 
-  private CacheManager<Navigation, Integer> mCacheManager;
+  private CacheManager<Navigation, Long> mCacheManager;
 
-  public NavigationCache(CacheManager<Navigation, Integer> pCacheManager) {
+  public NavigationCache(CacheManager<Navigation, Long> pCacheManager) {
     mCacheManager = pCacheManager;
   }
 
   @Override
-  protected CacheManager<Navigation, Integer> getCacheManager() {
+  protected CacheManager<Navigation, Long> getCacheManager() {
     return mCacheManager;
   }
 

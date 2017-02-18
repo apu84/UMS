@@ -375,7 +375,8 @@ public class UMSContext {
     NavigationByPermissionResolver navigationByPermissionResolver =
         new NavigationByPermissionResolver(mAuthenticationRealm);
     NavigationCache navigationCache = new NavigationCache(mCacheFactory.getCacheManager());
-    navigationCache.setManager(new PersistentNavigationDao(mTemplateFactory.getJdbcTemplate()));
+    navigationCache.setManager(new PersistentNavigationDao(mTemplateFactory.getJdbcTemplate(),
+        idGenerator()));
     navigationByPermissionResolver.setManager(navigationCache);
     return navigationByPermissionResolver;
   }
@@ -558,8 +559,8 @@ public class UMSContext {
   EquivalentCourseManager equivalentCourseManager() {
     EquivalentCourseCache equivalentCourseCache =
         new EquivalentCourseCache(mCacheFactory.getCacheManager());
-    equivalentCourseCache
-        .setManager(new EquivalentCourseDao(mTemplateFactory.getJdbcTemplate(), idGenerator()));
+    equivalentCourseCache.setManager(new EquivalentCourseDao(mTemplateFactory.getJdbcTemplate(),
+        idGenerator()));
     return equivalentCourseCache;
   }
 

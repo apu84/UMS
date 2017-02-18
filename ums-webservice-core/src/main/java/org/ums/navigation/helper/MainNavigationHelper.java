@@ -22,7 +22,7 @@ import javax.ws.rs.core.UriInfo;
 import java.util.*;
 
 @Component
-public class MainNavigationHelper extends ResourceHelper<Navigation, MutableNavigation, Integer> {
+public class MainNavigationHelper extends ResourceHelper<Navigation, MutableNavigation, Long> {
   @Autowired
   NavigationManager mNavigationManager;
   @Autowired

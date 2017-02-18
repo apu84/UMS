@@ -5,14 +5,14 @@ import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.immutable.Navigation;
 
 public interface MutableNavigation extends Navigation, Mutable, MutableLastModifier,
-    MutableIdentifier<Integer> {
+    MutableIdentifier<Long> {
   void setTitle(final String pTitle);
 
   void setPermission(final String pPermission);
 
   void setParent(final Navigation pNavigation);
 
-  void setParentId(final Integer pParentId);
+  void setParentId(final Long pParentId);
 
   void setViewOrder(final Integer pViewOrder);
 
