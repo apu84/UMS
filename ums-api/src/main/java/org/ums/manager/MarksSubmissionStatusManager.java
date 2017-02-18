@@ -7,7 +7,7 @@ import org.ums.domain.model.mutable.MutableMarksSubmissionStatus;
 import org.ums.enums.ExamType;
 
 public interface MarksSubmissionStatusManager extends
-    ContentManager<MarksSubmissionStatus, MutableMarksSubmissionStatus, Integer> {
+    ContentManager<MarksSubmissionStatus, MutableMarksSubmissionStatus, Long> {
   MarksSubmissionStatus get(Integer pSemesterId, String pCourseId, ExamType pExamType);
 
   List<MarksSubmissionStatus> get(Integer pProgramId, Integer pSemesterId);

@@ -570,8 +570,8 @@ public class UMSContext {
         new MarksSubmissionStatusCache(mCacheFactory.getCacheManager());
     MarksSubmissionStatusAggregator aggregator = new MarksSubmissionStatusAggregator();
     cache.setManager(aggregator);
-    aggregator
-        .setManager(new PersistentMarkSubmissionStatusDao(mTemplateFactory.getJdbcTemplate()));
+    aggregator.setManager(new PersistentMarkSubmissionStatusDao(mTemplateFactory.getJdbcTemplate(),
+        idGenerator()));
     return cache;
   }
 

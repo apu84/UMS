@@ -9,7 +9,7 @@ import org.ums.manager.MarksSubmissionStatusManager;
 
 public class MarksSubmissionStatusDaoDecorator
     extends
-    ContentDaoDecorator<MarksSubmissionStatus, MutableMarksSubmissionStatus, Integer, MarksSubmissionStatusManager>
+    ContentDaoDecorator<MarksSubmissionStatus, MutableMarksSubmissionStatus, Long, MarksSubmissionStatusManager>
     implements MarksSubmissionStatusManager {
   @Override
   public MarksSubmissionStatus get(Integer pSemesterId, String pCourseId, ExamType pExamType) {

@@ -18,7 +18,7 @@ import org.ums.resource.ResourceHelper;
 
 @Component
 public class MarksSubmissionStatusResourceHelper extends
-    ResourceHelper<MarksSubmissionStatus, MutableMarksSubmissionStatus, Integer> {
+    ResourceHelper<MarksSubmissionStatus, MutableMarksSubmissionStatus, Long> {
 
   @Autowired
   MarksSubmissionStatusBuilder mBuilder;
@@ -32,7 +32,7 @@ public class MarksSubmissionStatusResourceHelper extends
   }
 
   @Override
-  protected ContentManager<MarksSubmissionStatus, MutableMarksSubmissionStatus, Integer> getContentManager() {
+  protected ContentManager<MarksSubmissionStatus, MutableMarksSubmissionStatus, Long> getContentManager() {
     return mMarksSubmissionStatusManager;
   }
 

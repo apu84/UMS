@@ -17,8 +17,8 @@ public class PersistentFeeDao extends FeeDaoDecorator {
           + "PROGRAM_CATEGORY = ?, AMOUNT = ?, LAST_MODIFIED = " + getLastModifiedSql() + " ";
   String DELETE_ALL = "DELETE FROM FEE ";
   String INSERT_ALL =
-      "INSERT INTO FEE(FEE_CATEGORY_ID, SEMESTER_ID, FACULTY_ID, PROGRAM_TYPE_ID, PROGRAM_CATEGORY, "
-          + "AMOUNT, LAST_MODIFIED) VALUES (?, ?, ?, ?, ?, ?, " + getLastModifiedSql() + ") ";
+      "INSERT INTO FEE(ID, FEE_CATEGORY_ID, SEMESTER_ID, FACULTY_ID, PROGRAM_TYPE_ID, PROGRAM_CATEGORY, "
+          + "AMOUNT, LAST_MODIFIED) VALUES (?, ?, ?, ?, ?, ?, ?, " + getLastModifiedSql() + ") ";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -32,7 +32,7 @@ public class PersistentFeeDao extends FeeDaoDecorator {
   }
 
   @Override
-  public Fee get(Integer pId) {
+  public Fee get(Long pId) {
     String query = SELECT_ALL + "WHERE ID = ? ";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new FeeRowMapper());
   }
@@ -62,7 +62,7 @@ public class PersistentFeeDao extends FeeDaoDecorator {
     @Override
     public Fee mapRow(ResultSet rs, int rowNum) throws SQLException {
       MutableFee fee = new PersistentFee();
-      fee.setId(rs.getInt("ID"));
+      fee.setId(rs.getLong("ID"));
       fee.setFeeCategoryId(rs.getString("FEE_CATEGORY_ID"));
       fee.setSemesterId(rs.getInt("SEMESTER_ID"));
       fee.setFacultyId(rs.getInt("FACULTY_ID"));

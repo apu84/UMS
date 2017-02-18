@@ -27,7 +27,7 @@ public class PersistentFee implements MutableFee {
     sFacultyManager = applicationContext.getBean("facultyManager", FacultyManager.class);
   }
 
-  private Integer mId;
+  private Long mId;
   private String mFeeCategoryId;
   private FeeCategory mFeeCategory;
   private Integer mSemesterId;
@@ -77,12 +77,12 @@ public class PersistentFee implements MutableFee {
   }
 
   @Override
-  public Integer getId() {
+  public Long getId() {
     return mId;
   }
 
   @Override
-  public void setId(Integer pId) {
+  public void setId(Long pId) {
     mId = pId;
   }
 

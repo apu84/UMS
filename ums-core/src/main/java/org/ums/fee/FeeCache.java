@@ -4,21 +4,20 @@ import org.ums.cache.ContentCache;
 import org.ums.manager.CacheManager;
 import org.ums.util.CacheUtil;
 
-public class FeeCache extends ContentCache<Fee, MutableFee, Integer, FeeManager> implements
-    FeeManager {
-  private CacheManager<Fee, Integer> mCacheManager;
+public class FeeCache extends ContentCache<Fee, MutableFee, Long, FeeManager> implements FeeManager {
+  private CacheManager<Fee, Long> mCacheManager;
 
-  public FeeCache(final CacheManager<Fee, Integer> pCacheManager) {
+  public FeeCache(final CacheManager<Fee, Long> pCacheManager) {
     mCacheManager = pCacheManager;
   }
 
   @Override
-  protected CacheManager<Fee, Integer> getCacheManager() {
+  protected CacheManager<Fee, Long> getCacheManager() {
     return mCacheManager;
   }
 
   @Override
-  protected String getCacheKey(Integer pId) {
+  protected String getCacheKey(Long pId) {
     return CacheUtil.getCacheKey(FeeCategory.class, pId);
   }
 }

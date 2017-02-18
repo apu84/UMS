@@ -12,7 +12,7 @@ import org.ums.domain.model.immutable.Faculty;
 import org.ums.domain.model.immutable.ProgramType;
 import org.ums.domain.model.immutable.Semester;
 
-public interface Fee extends Serializable, EditType<MutableFee>, LastModifier, Identifier<Integer> {
+public interface Fee extends Serializable, EditType<MutableFee>, LastModifier, Identifier<Long> {
   String getFeeCategoryId();
 
   FeeCategory getFeeCategory();

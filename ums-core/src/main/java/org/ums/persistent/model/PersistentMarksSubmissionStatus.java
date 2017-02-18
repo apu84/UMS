@@ -27,7 +27,7 @@ public class PersistentMarksSubmissionStatus implements MutableMarksSubmissionSt
     sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
   }
 
-  private Integer mId;
+  private Long mId;
   private Integer mSemesterId;
   private Semester mSemester;
   private String mCourseId;
@@ -104,12 +104,12 @@ public class PersistentMarksSubmissionStatus implements MutableMarksSubmissionSt
   }
 
   @Override
-  public Integer getId() {
+  public Long getId() {
     return mId;
   }
 
   @Override
-  public void setId(Integer pId) {
+  public void setId(Long pId) {
     mId = pId;
   }
 
