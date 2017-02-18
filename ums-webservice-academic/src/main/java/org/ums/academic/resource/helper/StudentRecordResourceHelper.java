@@ -31,7 +31,7 @@ import java.util.List;
 
 @Component
 public class StudentRecordResourceHelper extends
-    ResourceHelper<StudentRecord, MutableStudentRecord, Integer> {
+    ResourceHelper<StudentRecord, MutableStudentRecord, Long> {
 
   @Autowired
   private StudentRecordManager mManager;

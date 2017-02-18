@@ -17,7 +17,7 @@ public class PersistentAppSetting implements MutableAppSetting {
     sAppSettingManager = applicationContext.getBean("appSettingManager", AppSettingManager.class);
   }
 
-  private Integer mId;
+  private Long mId;
   private String mParameterName;
   private String mParameterValue;
   private String mDescription;
@@ -83,7 +83,7 @@ public class PersistentAppSetting implements MutableAppSetting {
   }
 
   @Override
-  public Integer getId() {
+  public Long getId() {
     return mId;
   }
 
@@ -108,7 +108,7 @@ public class PersistentAppSetting implements MutableAppSetting {
   }
 
   @Override
-  public void setId(Integer pId) {
+  public void setId(Long pId) {
     mId = pId;
   }
 

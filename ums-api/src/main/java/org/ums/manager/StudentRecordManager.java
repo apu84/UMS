@@ -6,7 +6,7 @@ import org.ums.domain.model.immutable.StudentRecord;
 import java.util.List;
 
 public interface StudentRecordManager extends
-    ContentManager<StudentRecord, MutableStudentRecord, Integer> {
+    ContentManager<StudentRecord, MutableStudentRecord, Long> {
   List<StudentRecord> getStudentRecords(final Integer pProgramId, final Integer pSemesterId);
 
   List<StudentRecord> getStudentRecords(final Integer pProgramId, final Integer pSemesterId,

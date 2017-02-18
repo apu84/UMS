@@ -7,8 +7,8 @@ import org.ums.manager.StudentRecordManager;
 import java.util.List;
 
 public class StudentRecordDaoDecorator extends
-    ContentDaoDecorator<StudentRecord, MutableStudentRecord, Integer, StudentRecordManager>
-    implements StudentRecordManager {
+    ContentDaoDecorator<StudentRecord, MutableStudentRecord, Long, StudentRecordManager> implements
+    StudentRecordManager {
   @Override
   public List<StudentRecord> getStudentRecords(Integer pProgramId, Integer pSemesterId) {
     return getManager().getStudentRecords(pProgramId, pSemesterId);

@@ -10,7 +10,7 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
-public interface StudentRecord extends Serializable, Identifier<Integer>, LastModifier,
+public interface StudentRecord extends Serializable, Identifier<Long>, LastModifier,
     EditType<MutableStudentRecord> {
   String getStudentId();
 

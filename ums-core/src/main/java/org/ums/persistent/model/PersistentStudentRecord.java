@@ -27,7 +27,7 @@ public class PersistentStudentRecord implements MutableStudentRecord {
     sProgramManager = applicationContext.getBean("programManager", ProgramManager.class);
   }
 
-  private Integer mId;
+  private Long mId;
   private String mStudentId;
   private Student mStudent;
   private Integer mSemesterId;
@@ -108,7 +108,7 @@ public class PersistentStudentRecord implements MutableStudentRecord {
   }
 
   @Override
-  public Integer getId() {
+  public Long getId() {
     return mId;
   }
 
@@ -128,7 +128,7 @@ public class PersistentStudentRecord implements MutableStudentRecord {
   }
 
   @Override
-  public void setId(Integer pId) {
+  public void setId(Long pId) {
     mId = pId;
   }
 

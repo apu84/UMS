@@ -329,7 +329,8 @@ public class UMSContext {
   @Bean
   AppSettingManager appSettingManager() {
     AppSettingCache appSettingCache = new AppSettingCache(mCacheFactory.getCacheManager());
-    appSettingCache.setManager(new PersistentAppSettingDao(mTemplateFactory.getJdbcTemplate()));
+    appSettingCache.setManager(new PersistentAppSettingDao(mTemplateFactory.getJdbcTemplate(),
+        idGenerator()));
     return appSettingCache;
   }
 
@@ -395,8 +396,8 @@ public class UMSContext {
   @Bean
   StudentRecordManager studentRecordManager() {
     StudentRecordCache studentRecordCache = new StudentRecordCache(mCacheFactory.getCacheManager());
-    studentRecordCache
-        .setManager(new PersistentStudentRecordDao(mTemplateFactory.getJdbcTemplate()));
+    studentRecordCache.setManager(new PersistentStudentRecordDao(
+        mTemplateFactory.getJdbcTemplate(), idGenerator()));
     return studentRecordCache;
   }
 

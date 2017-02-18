@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.StudentRecordDaoDecorator;
 import org.ums.domain.model.immutable.StudentRecord;
 import org.ums.domain.model.mutable.MutableStudentRecord;
+import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.PersistentStudentRecord;
 
 import com.google.common.collect.Lists;
@@ -19,21 +20,23 @@ public class PersistentStudentRecordDao extends StudentRecordDaoDecorator {
   String SELECT_ALL =
       "SELECT STUDENT_ID, SEMESTER_ID, PROGRAM_ID, YEAR, SEMESTER, CGPA, GPA, REGISTRATION_TYPE, RESULT, LAST_MODIFIED, ID FROM STUDENT_RECORD ";
   String INSERT_ALL =
-      "INSERT INTO STUDENT_RECORD(STUDENT_ID, SEMESTER_ID, PROGRAM_ID, YEAR, SEMESTER, REGISTRATION_TYPE, RESULT, LAST_MODIFIED) VALUES("
-          + "?, ?, ?, ?, ?, ?, ?, " + getLastModifiedSql() + ") ";
+      "INSERT INTO STUDENT_RECORD(ID, STUDENT_ID, SEMESTER_ID, PROGRAM_ID, YEAR, SEMESTER, REGISTRATION_TYPE, RESULT, LAST_MODIFIED) VALUES("
+          + "?, ?, ?, ?, ?, ?, ?, ?, " + getLastModifiedSql() + ") ";
   String UPDATE_ALL = "UPDATE STUDENT_RECORD SET STUDENT_ID = ?, " + "SEMESTER_ID = ?, "
       + "YEAR = ?," + "SEMESTER = ?," + "CGPA = ?," + "GPA = ?," + "REGISTRATION_TYPE = ?,"
       + "RESULT = ?," + "LAST_MODIFIED = " + getLastModifiedSql() + " ";
   String DELETE_ALL = "DELETE FROM STUDENT_RECORD ";
 
   private JdbcTemplate mJdbcTemplate;
+  private IdGenerator mIdGenerator;
 
-  public PersistentStudentRecordDao(final JdbcTemplate pJdbcTemplate) {
+  public PersistentStudentRecordDao(final JdbcTemplate pJdbcTemplate, IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
+    mIdGenerator = pIdGenerator;
   }
 
   @Override
-  public StudentRecord get(Integer pId) {
+  public StudentRecord get(Long pId) {
     String query = SELECT_ALL + "WHERE ID=?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new StudentRecordRowMapper());
   }
@@ -137,7 +140,7 @@ public class PersistentStudentRecordDao extends StudentRecordDaoDecorator {
   private List<Object[]> getInsertParamList(List<MutableStudentRecord> pStudentRecords) {
     List<Object[]> params = new ArrayList<>();
     for(StudentRecord studentRecord : pStudentRecords) {
-      params.add(new Object[] {studentRecord.getStudent().getId(),
+      params.add(new Object[] {mIdGenerator.getNumericId(), studentRecord.getStudent().getId(),
           studentRecord.getSemester().getId(), studentRecord.getProgram().getId(),
           studentRecord.getYear(), studentRecord.getAcademicSemester(),
           studentRecord.getType().getValue(), studentRecord.getStatus().getValue(),});
@@ -150,7 +153,7 @@ public class PersistentStudentRecordDao extends StudentRecordDaoDecorator {
     @Override
     public StudentRecord mapRow(ResultSet rs, int rowNum) throws SQLException {
       MutableStudentRecord studentRecord = new PersistentStudentRecord();
-      studentRecord.setId(rs.getInt("ID"));
+      studentRecord.setId(rs.getLong("ID"));
       studentRecord.setStudentId(rs.getString("STUDENT_ID"));
       studentRecord.setSemesterId(rs.getInt("SEMESTER_ID"));
       studentRecord.setYear(rs.getInt("YEAR"));
