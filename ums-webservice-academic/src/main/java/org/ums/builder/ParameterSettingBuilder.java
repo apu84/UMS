@@ -29,14 +29,14 @@ public class ParameterSettingBuilder implements Builder<ParameterSetting, Mutabl
   @Override
   public void build(MutableParameterSetting pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
 
-    if(pJsonObject.getString("id") != null) {
-      pMutable.setId(pJsonObject.getString("id"));
+    if(pJsonObject.containsKey("id")) {
+      pMutable.setId(Long.parseLong(pJsonObject.getString("id")));
     }
     PersistentSemester semester = new PersistentSemester();
     semester.setId(Integer.parseInt(pJsonObject.getString("semesterId")));
     pMutable.setSemester(semester);
     PersistentParameter parameter = new PersistentParameter();
-    parameter.setId(pJsonObject.getString("parameterId"));
+    parameter.setId(Long.parseLong(pJsonObject.getString("parameterId")));
     pMutable.setParameter(parameter);
     pMutable.setStartDate(pJsonObject.getString("startDate"));
     pMutable.setEndDate(pJsonObject.getString("endDate"));

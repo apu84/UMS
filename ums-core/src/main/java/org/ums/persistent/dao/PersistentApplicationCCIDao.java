@@ -11,6 +11,7 @@ import org.ums.decorator.ApplicationCCIDaoDecorator;
 import org.ums.domain.model.immutable.ApplicationCCI;
 import org.ums.domain.model.mutable.MutableApplicationCCI;
 import org.ums.enums.ApplicationType;
+import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.PersistentApplicationCCI;
 
 /**
@@ -22,15 +23,17 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
       "select a.id,a.semester_id,a.student_id,a.course_id,a.application_type,a.applied_on,c.course_no,c.course_title,to_char(exam_routine.exam_date,'DD-MM-YYYY') exam_date from application_cci a, mst_course c,exam_routine where "
           + " a.course_id= c.course_id and a.course_id=exam_routine.course_id and exam_routine.exam_type=2";
   String INSERT_ONE =
-      "Insert into APPLICATION_CCI (SEMESTER_ID,STUDENT_ID,COURSE_ID,APPLICATION_TYPE,APPLIED_ON) values (?,?,?,?,systimestamp)";
+      "Insert into APPLICATION_CCI (ID,SEMESTER_ID,STUDENT_ID,COURSE_ID,APPLICATION_TYPE,APPLIED_ON) values (?,?,?,?,?,systimestamp)";
   String UPDATE_ONE =
       "update application_cci set semester_id=?, student_id=?, course_id=?,application_type=?,applied_on=systimestamp ";
   String DELETE_ONE = "delete from application_cci";
 
   private JdbcTemplate mJdbcTemplate;
+  private IdGenerator mIdGenerator;
 
-  public PersistentApplicationCCIDao(JdbcTemplate pJdbcTemplate) {
+  public PersistentApplicationCCIDao(JdbcTemplate pJdbcTemplate, IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
+    mIdGenerator = pIdGenerator;
   }
 
   @Override
@@ -47,8 +50,8 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
   @Override
   public int create(MutableApplicationCCI pMutable) {
     String query = INSERT_ONE;
-    return mJdbcTemplate.update(query, pMutable.getSemesterId(), pMutable.getStudentId(),
-        pMutable.getCourseId(), pMutable.getApplicationType().getValue());
+    return mJdbcTemplate.update(query, mIdGenerator.getNumericId(), pMutable.getSemesterId(),
+        pMutable.getStudentId(), pMutable.getCourseId(), pMutable.getApplicationType().getValue());
   }
 
   @Override
@@ -149,7 +152,7 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
     @Override
     public ApplicationCCI mapRow(ResultSet pResultSet, int pI) throws SQLException {
       PersistentApplicationCCI application = new PersistentApplicationCCI();
-      application.setId(pResultSet.getInt("id"));
+      application.setId(pResultSet.getLong("id"));
       application.setSemesterId(pResultSet.getInt("SEMESTER_ID"));
       application.setStudentId(pResultSet.getString("student_id"));
       application.setCourseId(pResultSet.getString("course_id"));

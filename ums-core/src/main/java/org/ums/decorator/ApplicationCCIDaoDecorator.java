@@ -10,7 +10,7 @@ import java.util.List;
  * Created by My Pc on 7/11/2016.
  */
 public class ApplicationCCIDaoDecorator extends
-    ContentDaoDecorator<ApplicationCCI, MutableApplicationCCI, Integer, ApplicationCCIManager>
+    ContentDaoDecorator<ApplicationCCI, MutableApplicationCCI, Long, ApplicationCCIManager>
     implements ApplicationCCIManager {
   @Override
   public List<ApplicationCCI> getByStudentIdAndSemesterAndType(String pStudentId, int pSemesterId,

@@ -32,7 +32,7 @@ public class PersistentApplicationCCI implements MutableApplicationCCI {
         applicationContext.getBean("applicationCCIManager", ApplicationCCIManager.class);
   }
 
-  private int mId;
+  private Long mId;
   private Semester mSemester;
   private Integer mSemesterId;
   private Student mStudent;
@@ -269,7 +269,7 @@ public class PersistentApplicationCCI implements MutableApplicationCCI {
   }
 
   @Override
-  public Integer getId() {
+  public Long getId() {
     return mId;
   }
 
@@ -294,7 +294,7 @@ public class PersistentApplicationCCI implements MutableApplicationCCI {
   }
 
   @Override
-  public void setId(Integer pId) {
+  public void setId(Long pId) {
     mId = pId;
   }
 

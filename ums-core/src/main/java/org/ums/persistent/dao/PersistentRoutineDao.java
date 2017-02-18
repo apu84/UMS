@@ -1,17 +1,18 @@
 package org.ums.persistent.dao;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.RoutineDaoDecorator;
 import org.ums.domain.model.immutable.Routine;
 import org.ums.domain.model.immutable.Student;
 import org.ums.domain.model.mutable.MutableRoutine;
+import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.PersistentRoutine;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class PersistentRoutineDao extends RoutineDaoDecorator {
   static String SELECT_ALL =
@@ -21,8 +22,8 @@ public class PersistentRoutineDao extends RoutineDaoDecorator {
           + getLastModifiedSql() + " ";
   static String DELETE_ONE = "DELETE FROM CLASS_ROUTINE ";
   static String INSERT_ONE =
-      "INSERT INTO CLASS_ROUTINE(SEMESTER_ID,PROGRAM_ID,COURSE_ID,DAY,SECTION,YEAR,SEMESTER,START_TIME,END_TIME,DURATION,ROOM_ID,LAST_MODIFIED) "
-          + "VALUES(?,?,?,?,?,?,?,?,?,?,?," + getLastModifiedSql() + ")";
+      "INSERT INTO CLASS_ROUTINE(ROUTINE_ID, SEMESTER_ID,PROGRAM_ID,COURSE_ID,DAY,SECTION,YEAR,SEMESTER,START_TIME,END_TIME,DURATION,ROOM_ID,LAST_MODIFIED) "
+          + "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?," + getLastModifiedSql() + ")";
   static String ORDER_BY = "ORDER BY SEMESTER_ID ";
   static String SELECT_ALL_FOR_TEACHER = "SELECT " + "  CLASS_ROUTINE.ROUTINE_ID, "
       + "  CLASS_ROUTINE.SEMESTER_ID, " + "  CLASS_ROUTINE.COURSE_ID, "
@@ -49,12 +50,14 @@ public class PersistentRoutineDao extends RoutineDaoDecorator {
   static String SELECT_ALL_FOR_EMPLOYEE =
       "SELECT ROUTINE_ID,SEMESTER_ID,PROGRAM_ID,COURSE_ID,DAY,SECTION,YEAR,SEMESTER,START_TIME,END_TIME,DURATION,ROOM_ID,LAST_MODIFIED FROM CLASS_ROUTINE WHERE SEMESTER_ID=? and PROGRAM_ID=? and YEAR=? and SEMESTER=? ";
   private JdbcTemplate mJdbcTemplate;
+  private IdGenerator mIdGenerator;
 
-  public PersistentRoutineDao(JdbcTemplate pJdbcTemplate) {
+  public PersistentRoutineDao(JdbcTemplate pJdbcTemplate, IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
+    mIdGenerator = pIdGenerator;
   }
 
-  public Routine get(final String pId) {
+  public Routine get(final Long pId) {
     String query = SELECT_ALL + " WHERE ROUTINE_ID = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new RoutineRowMapper());
   }
@@ -75,10 +78,10 @@ public class PersistentRoutineDao extends RoutineDaoDecorator {
 
   @Override
   public int create(final MutableRoutine pMutable) {
-    return mJdbcTemplate.update(INSERT_ONE, pMutable.getSemester().getId(), pMutable.getProgram()
-        .getId(), pMutable.getCourseId(), pMutable.getDay(), pMutable.getSection(), pMutable
-        .getAcademicYear(), pMutable.getAcademicSemester(), pMutable.getStartTime(), pMutable
-        .getEndTime(), pMutable.getDuration(), pMutable.getRoomId());
+    return mJdbcTemplate.update(INSERT_ONE, mIdGenerator.getNumericId(), pMutable.getSemester()
+        .getId(), pMutable.getProgram().getId(), pMutable.getCourseId(), pMutable.getDay(),
+        pMutable.getSection(), pMutable.getAcademicYear(), pMutable.getAcademicSemester(), pMutable
+            .getStartTime(), pMutable.getEndTime(), pMutable.getDuration(), pMutable.getRoomId());
   }
 
   @Override
@@ -154,10 +157,12 @@ public class PersistentRoutineDao extends RoutineDaoDecorator {
     List<Object[]> params = new ArrayList<>();
 
     for(Routine routine : pRoutines) {
-      params.add(new Object[] {routine.getSemester().getId(), routine.getProgram().getId(),
-          routine.getCourseId(), routine.getDay(), routine.getSection(), routine.getAcademicYear(),
-          routine.getAcademicSemester(), routine.getStartTime(), routine.getEndTime(),
-          routine.getDuration(), routine.getRoomId()});
+      params
+          .add(new Object[] {mIdGenerator.getNumericId(), routine.getSemester().getId(),
+              routine.getProgram().getId(), routine.getCourseId(), routine.getDay(),
+              routine.getSection(), routine.getAcademicYear(), routine.getAcademicSemester(),
+              routine.getStartTime(), routine.getEndTime(), routine.getDuration(),
+              routine.getRoomId()});
     }
 
     return params;
@@ -190,7 +195,7 @@ public class PersistentRoutineDao extends RoutineDaoDecorator {
     @Override
     public Routine mapRow(ResultSet pResultSet, int pI) throws SQLException {
       PersistentRoutine persistentRoutine = new PersistentRoutine();
-      persistentRoutine.setId(pResultSet.getString("ROUTINE_ID"));
+      persistentRoutine.setId(pResultSet.getLong("ROUTINE_ID"));
       persistentRoutine.setSemesterId(pResultSet.getInt("SEMESTER_ID"));
       persistentRoutine.setProgramId(pResultSet.getInt("PROGRAM_ID"));
       persistentRoutine.setCourseId(pResultSet.getString("COURSE_ID"));
@@ -214,7 +219,7 @@ public class PersistentRoutineDao extends RoutineDaoDecorator {
     @Override
     public Routine mapRow(ResultSet pResultSet, int pI) throws SQLException {
       PersistentRoutine persistentRoutine = new PersistentRoutine();
-      persistentRoutine.setId(pResultSet.getString("ROUTINE_ID"));
+      persistentRoutine.setId(pResultSet.getLong("ROUTINE_ID"));
       persistentRoutine.setSemesterId(pResultSet.getInt("SEMESTER_ID"));
       persistentRoutine.setCourseId(pResultSet.getString("COURSE_ID"));
       persistentRoutine.setSection(pResultSet.getString("SECTION"));

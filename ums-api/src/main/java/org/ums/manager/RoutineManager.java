@@ -6,7 +6,7 @@ import org.ums.domain.model.immutable.Routine;
 
 import java.util.List;
 
-public interface RoutineManager extends ContentManager<Routine, MutableRoutine, String> {
+public interface RoutineManager extends ContentManager<Routine, MutableRoutine, Long> {
   public List<Routine> getTeacherRoutine(String teacherId);
 
   public List<Routine> getStudentRoutine(Student student);

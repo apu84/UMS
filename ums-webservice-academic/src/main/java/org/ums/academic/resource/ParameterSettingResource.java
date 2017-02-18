@@ -36,7 +36,7 @@ public class ParameterSettingResource extends MutableParameterSettingResource {
   @Path(PATH_PARAM_OBJECT_ID)
   public Response get(final @Context Request pRequest,
       final @PathParam("object-id") String pObjectId) throws Exception {
-    return mResourceHelper.get(pObjectId, pRequest, mUriInfo);
+    return mResourceHelper.get(Long.parseLong(pObjectId), pRequest, mUriInfo);
   }
 
   @GET

@@ -13,11 +13,11 @@ import java.util.List;
  * Created by My Pc on 3/15/2016.
  */
 public class ParameterSettingCache extends
-    ContentCache<ParameterSetting, MutableParameterSetting, String, ParameterSettingManager>
+    ContentCache<ParameterSetting, MutableParameterSetting, Long, ParameterSettingManager>
     implements ParameterSettingManager {
-  private CacheManager<ParameterSetting, String> mCacheManager;
+  private CacheManager<ParameterSetting, Long> mCacheManager;
 
-  public ParameterSettingCache(final CacheManager<ParameterSetting, String> pCacheManager) {
+  public ParameterSettingCache(final CacheManager<ParameterSetting, Long> pCacheManager) {
     mCacheManager = pCacheManager;
   }
 
@@ -32,7 +32,7 @@ public class ParameterSettingCache extends
   }
 
   @Override
-  protected CacheManager<ParameterSetting, String> getCacheManager() {
+  protected CacheManager<ParameterSetting, Long> getCacheManager() {
     return mCacheManager;
   }
 

@@ -29,7 +29,7 @@ import java.util.List;
  */
 @Component
 public class ParameterSettingResourceHelper extends
-    ResourceHelper<ParameterSetting, MutableParameterSetting, String> {
+    ResourceHelper<ParameterSetting, MutableParameterSetting, Long> {
 
   @Autowired
   private ParameterSettingManager mManager;

@@ -8,6 +8,6 @@ import org.ums.manager.ParameterManager;
  * Created by My Pc on 3/13/2016.
  */
 public class ParameterDaoDecorator extends
-    ContentDaoDecorator<Parameter, MutableParameter, String, ParameterManager> implements
+    ContentDaoDecorator<Parameter, MutableParameter, Long, ParameterManager> implements
     ParameterManager {
 }

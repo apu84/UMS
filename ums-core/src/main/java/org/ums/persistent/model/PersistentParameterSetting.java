@@ -22,11 +22,11 @@ public class PersistentParameterSetting implements MutableParameterSetting {
         applicationContext.getBean("parameterSettingManager", ParameterSettingManager.class);
   }
 
-  private String mId;
+  private Long mId;
   private Semester mSemester;
   private int mSemesterId;
   private Parameter mParameter;
-  private String mParameterId;
+  private Long mParameterId;
   private String mStartDate;
   private String mEndDate;
   private String mLastModified;
@@ -54,11 +54,11 @@ public class PersistentParameterSetting implements MutableParameterSetting {
     mSemesterId = pSemesterId;
   }
 
-  public String getParameterId() {
+  public Long getParameterId() {
     return mParameterId;
   }
 
-  public void setParameterId(String pParameterId) {
+  public void setParameterId(Long pParameterId) {
     mParameterId = pParameterId;
   }
 
@@ -103,7 +103,7 @@ public class PersistentParameterSetting implements MutableParameterSetting {
   }
 
   @Override
-  public void setId(String pId) {
+  public void setId(Long pId) {
     mId = pId;
   }
 
@@ -140,7 +140,7 @@ public class PersistentParameterSetting implements MutableParameterSetting {
   }
 
   @Override
-  public String getId() {
+  public Long getId() {
     return mId;
   }
 }

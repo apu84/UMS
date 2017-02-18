@@ -10,7 +10,7 @@ import org.ums.domain.model.immutable.Semester;
  * Created by My Pc on 3/5/2016.
  */
 public interface MutableRoutine extends Routine, Mutable, MutableLastModifier,
-    MutableIdentifier<String> {
+    MutableIdentifier<Long> {
   void setSemester(final Semester pSemester);
 
   void setProgram(final Program pProgram);

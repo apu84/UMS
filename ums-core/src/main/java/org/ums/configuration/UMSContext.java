@@ -234,7 +234,7 @@ public class UMSContext {
     ApplicationCCICache applicationCCICache =
         new ApplicationCCICache(mCacheFactory.getCacheManager());
     applicationCCICache.setManager(new PersistentApplicationCCIDao(mTemplateFactory
-        .getJdbcTemplate()));
+        .getJdbcTemplate(), idGenerator()));
     return applicationCCICache;
   }
 
@@ -446,18 +446,17 @@ public class UMSContext {
 
   @Bean
   RoutineManager routineManager() {
-    return new PersistentRoutineDao(mTemplateFactory.getJdbcTemplate());
+    return new PersistentRoutineDao(mTemplateFactory.getJdbcTemplate(), idGenerator());
   }
 
   @Bean
   ParameterManager parameterManager() {
-    return new PersistentParameterDao(mTemplateFactory.getJdbcTemplate());
+    return new PersistentParameterDao(mTemplateFactory.getJdbcTemplate(), idGenerator());
   }
 
   @Bean
   ParameterSettingManager parameterSettingManager() {
-
-    return new PersistentParameterSettingDao(mTemplateFactory.getJdbcTemplate());
+    return new PersistentParameterSettingDao(mTemplateFactory.getJdbcTemplate(), idGenerator());
   }
 
   @Bean

@@ -14,12 +14,12 @@ import java.util.List;
  * Created by My Pc on 7/11/2016.
  */
 public class ApplicationCCICache extends
-    ContentCache<ApplicationCCI, MutableApplicationCCI, Integer, ApplicationCCIManager> implements
+    ContentCache<ApplicationCCI, MutableApplicationCCI, Long, ApplicationCCIManager> implements
     ApplicationCCIManager {
 
-  CacheManager<ApplicationCCI, Integer> mCacheManager;
+  CacheManager<ApplicationCCI, Long> mCacheManager;
 
-  public ApplicationCCICache(CacheManager<ApplicationCCI, Integer> pCacheManager) {
+  public ApplicationCCICache(CacheManager<ApplicationCCI, Long> pCacheManager) {
     mCacheManager = pCacheManager;
   }
 
@@ -56,7 +56,7 @@ public class ApplicationCCICache extends
   }
 
   @Override
-  protected CacheManager<ApplicationCCI, Integer> getCacheManager() {
+  protected CacheManager<ApplicationCCI, Long> getCacheManager() {
     return mCacheManager;
   }
 
