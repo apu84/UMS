@@ -225,7 +225,8 @@ public class UMSContext {
   @Bean
   SeatPlanManager seatPlanManager() {
     SeatPlanCache seatPlanCache = new SeatPlanCache(mCacheFactory.getCacheManager());
-    seatPlanCache.setManager(new PersistentSeatPlanDao(mTemplateFactory.getJdbcTemplate()));
+    seatPlanCache.setManager(new PersistentSeatPlanDao(mTemplateFactory.getJdbcTemplate(),
+        idGenerator()));
     return seatPlanCache;
   }
 

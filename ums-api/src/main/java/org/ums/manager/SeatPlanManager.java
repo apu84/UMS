@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by My Pc on 5/8/2016.
  */
-public interface SeatPlanManager extends ContentManager<SeatPlan, MutableSeatPlan, Integer> {
+public interface SeatPlanManager extends ContentManager<SeatPlan, MutableSeatPlan, Long> {
   int createSeatPlanForCCI(final List<MutableSeatPlan> pSeatPlans);
 
   List<SeatPlan> getBySemesterAndGroupAndExamType(final int pSemesterId, final int pGropNo,

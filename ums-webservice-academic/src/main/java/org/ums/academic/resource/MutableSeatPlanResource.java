@@ -27,13 +27,13 @@ public class MutableSeatPlanResource extends Resource {
   public Response updateSeatPlan(final @Context Request pRequest,
       final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader, final JsonObject pJsonObject)
       throws Exception {
-    return mSeatPlanResourceHelper.put(pJsonObject.getInt("id"), pRequest, pIfMatchHeader,
-        pJsonObject);
+    return mSeatPlanResourceHelper.put(Long.parseLong(pJsonObject.getString("id")), pRequest,
+        pIfMatchHeader, pJsonObject);
   }
 
   @DELETE
   @Path(PATH_PARAM_OBJECT_ID)
-  public Response deleteSeatPlan(final @PathParam("object-id") int objectId) throws Exception {
+  public Response deleteSeatPlan(final @PathParam("object-id") Long objectId) throws Exception {
     return mSeatPlanResourceHelper.delete(objectId);
   }
 }

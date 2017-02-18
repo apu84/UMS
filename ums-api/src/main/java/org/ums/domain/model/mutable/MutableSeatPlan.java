@@ -8,7 +8,7 @@ import org.ums.domain.model.immutable.*;
  * Created by My Pc on 5/8/2016.
  */
 public interface MutableSeatPlan extends SeatPlan, Mutable, MutableLastModifier,
-    MutableIdentifier<Integer> {
+    MutableIdentifier<Long> {
   void setClassRoom(final ClassRoom pClassRoom);
 
   void setStudent(final Student pStudent);

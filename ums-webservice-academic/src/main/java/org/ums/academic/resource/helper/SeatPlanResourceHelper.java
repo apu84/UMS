@@ -38,7 +38,7 @@ import java.util.Map;
  * Created by My Pc on 5/8/2016.
  */
 @Component
-public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan, MutableSeatPlan, Integer> {
+public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan, MutableSeatPlan, Long> {
   private static final Logger mLogger = LoggerFactory.getLogger(SeatPlanResourceHelper.class);
   @Autowired
   private SeatPlanManager mManager;

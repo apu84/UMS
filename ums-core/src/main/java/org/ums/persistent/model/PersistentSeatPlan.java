@@ -29,7 +29,7 @@ public class PersistentSeatPlan implements MutableSeatPlan {
     sSeatPlanManager = applicationContext.getBean("seatPlanManager", SeatPlanManager.class);
   }
 
-  private int mId;
+  private Long mId;
   private ClassRoom mClassRoom;
   private int mClassRoomId;
   private Student mStudent;
@@ -160,7 +160,7 @@ public class PersistentSeatPlan implements MutableSeatPlan {
   }
 
   @Override
-  public void setId(Integer pId) {
+  public void setId(Long pId) {
     mId = pId;
   }
 
@@ -212,7 +212,7 @@ public class PersistentSeatPlan implements MutableSeatPlan {
   }
 
   @Override
-  public Integer getId() {
+  public Long getId() {
     return mId;
   }
 
