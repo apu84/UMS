@@ -243,7 +243,9 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan, MutableSeat
 
   }
 
-  public void getSeatPlanSittingArrangement(int pSemesterId, ExamType pExamType, OutputStream pOutputStream, Request pRequest, UriInfo pUriInfo) throws IOException, DocumentException{
+  public void getSeatPlanSittingArrangement(int pSemesterId, ExamType pExamType,
+      OutputStream pOutputStream, Request pRequest, UriInfo pUriInfo) throws IOException,
+      DocumentException {
 
   }
 

@@ -1,21 +1,22 @@
 package org.ums.persistent.dao;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.EquivalentCourseDaoDecorator;
 import org.ums.domain.model.immutable.EquivalentCourse;
 import org.ums.domain.model.mutable.MutableEquivalentCourse;
+import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.PersistentEquivalentCourse;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
 
 public class EquivalentCourseDao extends EquivalentCourseDaoDecorator {
   String SELECT_ALL =
       "SELECT ID, OLD_COURSE_ID, NEW_COURSE_ID, LAST_MODIFIED FROM EQUIVALENT_COURSE ";
   String INSERT_ALL =
-      "INSERT INTO EQUIVALENT_COURSE(OLD_COURSE_ID, NEW_COURSE_ID, LAST_MODIFIED) VALUES (?, ? , "
+      "INSERT INTO EQUIVALENT_COURSE(ID, OLD_COURSE_ID, NEW_COURSE_ID, LAST_MODIFIED) VALUES (?, ?, ? , "
           + getLastModifiedSql() + ") ";
   String UPDATE_ALL =
       "UPDATE EQUIVALENT_COURSE SET OLD_COURSE_ID = ?, NEW_COURSE_ID = ?, LAST_MODIFIED = "
@@ -24,9 +25,11 @@ public class EquivalentCourseDao extends EquivalentCourseDaoDecorator {
   String EXISTS = "SELECT COUNT(ID) EXIST FROM EQUIVALENT_COURSE ";
 
   private JdbcTemplate mJdbcTemplate;
+  private IdGenerator mIdGenerator;
 
-  public EquivalentCourseDao(JdbcTemplate pJdbcTemplate) {
+  public EquivalentCourseDao(JdbcTemplate pJdbcTemplate, IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
+    mIdGenerator = pIdGenerator;
   }
 
   @Override
@@ -35,7 +38,7 @@ public class EquivalentCourseDao extends EquivalentCourseDaoDecorator {
   }
 
   @Override
-  public EquivalentCourse get(Integer pId) {
+  public EquivalentCourse get(Long pId) {
     String query = SELECT_ALL + "WHERE ID = ? ";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new EquivalentCourseMapper());
   }
@@ -55,11 +58,12 @@ public class EquivalentCourseDao extends EquivalentCourseDaoDecorator {
 
   @Override
   public int create(MutableEquivalentCourse pMutable) {
-    return mJdbcTemplate.update(INSERT_ALL, pMutable.getOldCourseId(), pMutable.getNewCourseId());
+    return mJdbcTemplate.update(INSERT_ALL, mIdGenerator.getNumericId(), pMutable.getOldCourseId(),
+        pMutable.getNewCourseId());
   }
 
   @Override
-  public boolean exists(Integer pId) {
+  public boolean exists(Long pId) {
     String query = EXISTS + "WHERE ID = ?";
     return mJdbcTemplate.queryForObject(query, Boolean.class, pId);
   }
@@ -68,7 +72,7 @@ public class EquivalentCourseDao extends EquivalentCourseDaoDecorator {
     @Override
     public EquivalentCourse mapRow(ResultSet rs, int rowNum) throws SQLException {
       MutableEquivalentCourse equivalentCourse = new PersistentEquivalentCourse();
-      equivalentCourse.setId(rs.getInt("ID"));
+      equivalentCourse.setId(rs.getLong("ID"));
       equivalentCourse.setOldCourseId(rs.getString("OLD_COURSE_ID"));
       equivalentCourse.setNewCourseId(rs.getString("NEW_COURSE_ID"));
       equivalentCourse.setLastModified(rs.getString("LAST_MODIFIED"));

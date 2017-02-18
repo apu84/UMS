@@ -6,7 +6,7 @@ import org.ums.domain.model.immutable.Course;
 import org.ums.domain.model.immutable.EquivalentCourse;
 
 public interface MutableEquivalentCourse extends EquivalentCourse, Mutable, MutableLastModifier,
-    MutableIdentifier<Integer> {
+    MutableIdentifier<Long> {
   void setOldCourseId(final String pOldCourseId);
 
   void setOldCourse(final Course pOldCourse);

@@ -411,7 +411,7 @@ public class UMSContext {
     EnrollmentFromToCache enrollmentFromToCache =
         new EnrollmentFromToCache(mCacheFactory.getCacheManager());
     enrollmentFromToCache.setManager(new PersistentEnrollmentFromToDao(mTemplateFactory
-        .getJdbcTemplate()));
+        .getJdbcTemplate(), idGenerator()));
     return enrollmentFromToCache;
   }
 
@@ -558,7 +558,8 @@ public class UMSContext {
   EquivalentCourseManager equivalentCourseManager() {
     EquivalentCourseCache equivalentCourseCache =
         new EquivalentCourseCache(mCacheFactory.getCacheManager());
-    equivalentCourseCache.setManager(new EquivalentCourseDao(mTemplateFactory.getJdbcTemplate()));
+    equivalentCourseCache
+        .setManager(new EquivalentCourseDao(mTemplateFactory.getJdbcTemplate(), idGenerator()));
     return equivalentCourseCache;
   }
 

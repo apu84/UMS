@@ -2041,7 +2041,6 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
 
   }
 
-
   @Override
   public void createSeatPlanSittingArrangementReport(int pSemesterId, ExamType pExamType, OutputStream pOutputStream) throws IOException, DocumentException {
     Map<String, List<SeatPlan>> seatPlanMap = mSeatPlanManager.getSittingArrangement(pSemesterId, pExamType)
