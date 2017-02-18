@@ -8,6 +8,8 @@ import org.pentaho.reporting.engine.classic.core.modules.misc.datafactory.sql.Dr
 import org.pentaho.reporting.engine.classic.core.modules.misc.datafactory.sql.SQLReportDataFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ums.enums.ExamType;
+import org.ums.enums.ProgramType;
 import org.ums.manager.SeatPlanManager;
 import org.ums.report.generator.AbstractReportGenerator;
 
@@ -38,5 +40,7 @@ public interface SeatPlanReportGenerator {
   void createSeatPlanStickerReport(Integer pProgramType, Integer pSemesterId, Integer pExamType,
       String pExamDate, int pRoomId, OutputStream pOutputStream) throws IOException,
       DocumentException;
+
+  void createSeatPlanSittingArrangementReport(int pSemesterId, ExamType pExamType, OutputStream pOutputStream) throws IOException, DocumentException;
 
 }

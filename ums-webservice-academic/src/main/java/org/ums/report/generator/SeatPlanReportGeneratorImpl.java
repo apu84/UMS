@@ -8,6 +8,8 @@ import org.ums.builder.SeatPlanBuilder;
 import org.ums.domain.model.dto.ExamRoutineDto;
 import org.ums.domain.model.dto.SeatPlanReportDto;
 import org.ums.domain.model.immutable.*;
+import org.ums.enums.*;
+import org.ums.enums.ProgramType;
 import org.ums.manager.*;
 import org.ums.services.academic.SeatPlanService;
 
@@ -2033,6 +2035,37 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
       }
 
     }
+
+    document.close();
+    baos.writeTo(pOutputStream);
+
+  }
+
+
+  @Override
+  public void createSeatPlanSittingArrangementReport(int pSemesterId, ExamType pExamType, OutputStream pOutputStream) throws IOException, DocumentException {
+    Map<String, List<SeatPlan>> seatPlanMap = mSeatPlanManager.getSittingArrangement(pSemesterId, pExamType)
+        .stream()
+        .collect(Collectors.groupingBy(s-> ""+s.getStudent().getProgram().getId()+s.getStudent().getCurrentYear()+s.getStudent().getCurrentAcademicSemester()));
+
+    Document document = new Document();
+    document.addTitle("Seat Plan Attendence Sheet");
+
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    PdfWriter writer = PdfWriter.getInstance(document, baos);
+    document.open();
+    document.setPageSize(PageSize.A4);
+
+    for(int i=1;i<=seatPlanMap.size();i++){
+      document.newPage();
+      for(int j=1;j<=seatPlanMap.get(i-1).size();j++){
+        Paragraph paragraph = new Paragraph("Ahsanullah University of Science and Technology");
+        paragraph.setFont(FontFactory.getFont(FontFactory.TIMES_BOLD));
+        paragraph.setAlignment(Element.ALIGN_CENTER);
+        document.add(paragraph);
+      }
+    }
+
 
     document.close();
     baos.writeTo(pOutputStream);
