@@ -25,7 +25,7 @@ public abstract class AbstractUGBaseRegistration implements MutableUGBaseRegistr
     sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
   }
 
-  private Integer mId;
+  private Long mId;
   private String mCourseId;
   private String mCourseTitle;
   private Course mCourse;
@@ -98,7 +98,7 @@ public abstract class AbstractUGBaseRegistration implements MutableUGBaseRegistr
   }
 
   @Override
-  public Integer getId() {
+  public Long getId() {
     return mId;
   }
 
@@ -112,7 +112,7 @@ public abstract class AbstractUGBaseRegistration implements MutableUGBaseRegistr
   }
 
   @Override
-  public void setId(Integer pId) {
+  public void setId(Long pId) {
     mId = pId;
   }
 

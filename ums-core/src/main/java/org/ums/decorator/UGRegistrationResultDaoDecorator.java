@@ -9,7 +9,7 @@ import java.util.List;
 
 public class UGRegistrationResultDaoDecorator
     extends
-    ContentDaoDecorator<UGRegistrationResult, MutableUGRegistrationResult, Integer, UGRegistrationResultManager>
+    ContentDaoDecorator<UGRegistrationResult, MutableUGRegistrationResult, Long, UGRegistrationResultManager>
     implements UGRegistrationResultManager {
 
   @Override

@@ -494,7 +494,7 @@ public class UMSContext {
     UGRegistrationResultCache registrationResultCache =
         new UGRegistrationResultCache(mCacheFactory.getCacheManager());
     registrationResultCache.setManager(new PersistentUGRegistrationResultDao(mTemplateFactory
-        .getJdbcTemplate()));
+        .getJdbcTemplate(), idGenerator()));
     resultAggregator.setManager(registrationResultCache);
     return resultAggregator;
   }
@@ -506,12 +506,12 @@ public class UMSContext {
 
   @Bean
   UGTheoryMarksManager theoryMarksManager() {
-    return new PersistentUGTheoryMarksDao(mTemplateFactory.getJdbcTemplate());
+    return new PersistentUGTheoryMarksDao(mTemplateFactory.getJdbcTemplate(), idGenerator());
   }
 
   @Bean
   UGSessionalMarksManager sessionalMarksManager() {
-    return new PersistentUGSessionalMarksDao(mTemplateFactory.getJdbcTemplate());
+    return new PersistentUGSessionalMarksDao(mTemplateFactory.getJdbcTemplate(), idGenerator());
   }
 
   @Bean

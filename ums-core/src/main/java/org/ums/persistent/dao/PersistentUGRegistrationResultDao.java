@@ -7,6 +7,7 @@ import org.ums.domain.model.immutable.UGRegistrationResult;
 import org.ums.domain.model.mutable.MutableUGRegistrationResult;
 import org.ums.enums.CourseRegType;
 import org.ums.enums.ExamType;
+import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.PersistentUGRegistrationResult;
 
 import java.sql.ResultSet;
@@ -23,8 +24,8 @@ public class PersistentUGRegistrationResultDao extends UGRegistrationResultDaoDe
       + "FROM UG_REGISTRATION_RESULT ";
 
   String INSERT_ALL =
-      "INSERT INTO UG_REGISTRATION_RESULT(STUDENT_ID, SEMESTER_ID, COURSE_ID, GRADE_LETTER, EXAM_TYPE, TYPE, LAST_MODIFIED)"
-          + " VALUES(?, ?, ?, ?, ?, ?, " + getLastModifiedSql() + ")";
+      "INSERT INTO UG_REGISTRATION_RESULT(ID, STUDENT_ID, SEMESTER_ID, COURSE_ID, GRADE_LETTER, EXAM_TYPE, TYPE, LAST_MODIFIED)"
+          + " VALUES(?, ?, ?, ?, ?, ?, ?, " + getLastModifiedSql() + ")";
   String DELETE_BY_STUDENT_SEMESTER =
       "DELETE FROM UG_REGISTRATION_RESULT WHERE STUDENT_ID = ? AND SEMESTER_ID = ? AND EXAM_TYPE = ? AND STATUS = ?";
 
@@ -47,9 +48,11 @@ public class PersistentUGRegistrationResultDao extends UGRegistrationResultDaoDe
           + " WHERE MST_COURSE.COURSE_ID=CCI.COURSE_ID and cci.course_id=exam_routine.course_id  and exam_routine.exam_type=2 ORDER BY Type,COURSE_NO,EXAM_ROUTINE.EXAM_DATE";
 
   private JdbcTemplate mJdbcTemplate;
+  private IdGenerator mIdGenerator;
 
-  public PersistentUGRegistrationResultDao(JdbcTemplate pJdbcTemplate) {
+  public PersistentUGRegistrationResultDao(JdbcTemplate pJdbcTemplate, IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
+    mIdGenerator = pIdGenerator;
   }
 
   @Override
@@ -115,10 +118,10 @@ public class PersistentUGRegistrationResultDao extends UGRegistrationResultDaoDe
   private List<Object[]> getInsertParamList(List<MutableUGRegistrationResult> pRegistrationResults) {
     List<Object[]> params = new ArrayList<>();
     for(UGRegistrationResult registrationResult : pRegistrationResults) {
-      params.add(new Object[] {registrationResult.getStudent().getId(),
-          registrationResult.getSemester().getId(), registrationResult.getCourse().getId(),
-          registrationResult.getGradeLetter(), registrationResult.getExamType().getId(),
-          registrationResult.getType().getId()});
+      params.add(new Object[] {mIdGenerator.getNumericId(),
+          registrationResult.getStudent().getId(), registrationResult.getSemester().getId(),
+          registrationResult.getCourse().getId(), registrationResult.getGradeLetter(),
+          registrationResult.getExamType().getId(), registrationResult.getType().getId()});
     }
 
     return params;
@@ -176,7 +179,7 @@ public class PersistentUGRegistrationResultDao extends UGRegistrationResultDaoDe
   class UGRegistrationResultRowMapperWithoutResult implements RowMapper<UGRegistrationResult> {
     protected MutableUGRegistrationResult build(ResultSet pResultSet) throws SQLException {
       MutableUGRegistrationResult result = new PersistentUGRegistrationResult();
-      result.setId(pResultSet.getInt("ID"));
+      result.setId(pResultSet.getLong("ID"));
       result.setStudentId(pResultSet.getString("STUDENT_ID"));
       result.setCourseId(pResultSet.getString("COURSE_ID"));
       result.setExamType(ExamType.get(pResultSet.getInt("EXAM_TYPE")));

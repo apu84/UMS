@@ -28,7 +28,7 @@ import java.util.List;
 
 @Component
 public class UGRegistrationResultResourceHelper extends
-    ResourceHelper<UGRegistrationResult, MutableUGRegistrationResult, Integer> {
+    ResourceHelper<UGRegistrationResult, MutableUGRegistrationResult, Long> {
 
   @Autowired
   UGRegistrationResultManager mManager;

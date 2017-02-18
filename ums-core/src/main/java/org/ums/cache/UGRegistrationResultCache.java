@@ -11,17 +11,17 @@ import org.ums.util.CacheUtil;
 
 public class UGRegistrationResultCache
     extends
-    ContentCache<UGRegistrationResult, MutableUGRegistrationResult, Integer, UGRegistrationResultManager>
+    ContentCache<UGRegistrationResult, MutableUGRegistrationResult, Long, UGRegistrationResultManager>
     implements UGRegistrationResultManager {
 
-  CacheManager<UGRegistrationResult, Integer> mCacheManager;
+  CacheManager<UGRegistrationResult, Long> mCacheManager;
 
-  public UGRegistrationResultCache(final CacheManager<UGRegistrationResult, Integer> pCacheManager) {
+  public UGRegistrationResultCache(final CacheManager<UGRegistrationResult, Long> pCacheManager) {
     mCacheManager = pCacheManager;
   }
 
   @Override
-  protected CacheManager<UGRegistrationResult, Integer> getCacheManager() {
+  protected CacheManager<UGRegistrationResult, Long> getCacheManager() {
     return mCacheManager;
   }
 
