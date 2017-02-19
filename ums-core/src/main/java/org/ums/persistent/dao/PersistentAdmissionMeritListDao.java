@@ -14,6 +14,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Created by Monjur-E-Morshed on 10-Dec-16.
@@ -49,9 +51,9 @@ public class PersistentAdmissionMeritListDao extends AdmissionMeritListDaoDecora
   }
 
   @Override
-  public int create(List<MutableAdmissionMeritList> pMutableList) {
-    String query = INSERT_ONE;
-    return mJdbcTemplate.batchUpdate(query, getInsertParamList(pMutableList)).length;
+  public List<Integer> create(List<MutableAdmissionMeritList> pMutableList) {
+    int[] updates = mJdbcTemplate.batchUpdate(INSERT_ONE, getInsertParamList(pMutableList));
+    return IntStream.of(updates).boxed().collect(Collectors.toList());
   }
 
   private List<Object[]> getInsertParamList(List<MutableAdmissionMeritList> pMeritLists) {

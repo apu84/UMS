@@ -7,6 +7,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.ums.generator.IdGenerator;
 
 public class PersistentFeeDao extends FeeDaoDecorator {
   String SELECT_ALL =
@@ -21,9 +22,11 @@ public class PersistentFeeDao extends FeeDaoDecorator {
           + "AMOUNT, LAST_MODIFIED) VALUES (?, ?, ?, ?, ?, ?, ?, " + getLastModifiedSql() + ") ";
 
   private JdbcTemplate mJdbcTemplate;
+  private IdGenerator mIdGenerator;
 
-  public PersistentFeeDao(JdbcTemplate pJdbcTemplate) {
+  public PersistentFeeDao(JdbcTemplate pJdbcTemplate, IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
+    mIdGenerator = pIdGenerator;
   }
 
   @Override
@@ -52,10 +55,12 @@ public class PersistentFeeDao extends FeeDaoDecorator {
   }
 
   @Override
-  public int create(MutableFee pMutable) {
-    return mJdbcTemplate.update(INSERT_ALL, pMutable.getFeeCategoryId(), pMutable.getSemesterId(),
+  public Long create(MutableFee pMutable) {
+    Long id = mIdGenerator.getNumericId();
+    mJdbcTemplate.update(INSERT_ALL, id, pMutable.getFeeCategoryId(), pMutable.getSemesterId(),
         pMutable.getFacultyId(), pMutable.getProgramTypeId(), pMutable.getProgramCategory()
             .getValue(), pMutable.getAmount());
+    return id;
   }
 
   private class FeeRowMapper implements RowMapper<Fee> {

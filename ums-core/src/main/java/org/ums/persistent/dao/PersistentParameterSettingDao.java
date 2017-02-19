@@ -81,10 +81,11 @@ public class PersistentParameterSettingDao extends ParameterSettingDaoDecorator 
   }
 
   @Override
-  public int create(MutableParameterSetting pMutable) {
-    String query = INSERT_ONE;
-    return mJdbcTemplate.update(query, mIdGenerator.getNumericId(), pMutable.getSemester().getId(),
-        pMutable.getParameter().getId(), pMutable.getStartDate(), pMutable.getEndDate());
+  public Long create(MutableParameterSetting pMutable) {
+    Long id = mIdGenerator.getNumericId();
+    mJdbcTemplate.update(INSERT_ONE, id, pMutable.getSemester().getId(), pMutable.getParameter()
+        .getId(), pMutable.getStartDate(), pMutable.getEndDate());
+    return id;
   }
 
   @Override

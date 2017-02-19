@@ -73,11 +73,13 @@ public class PersistentMarkSubmissionStatusDao extends MarksSubmissionStatusDaoD
   }
 
   @Override
-  public int create(MutableMarksSubmissionStatus pMutable) {
-    return mJdbcTemplate.update(INSERT_ALL, mIdGenerator.getNumericId(), pMutable.getSemesterId(),
-        pMutable.getCourseId(), pMutable.getStatus(), pMutable.getExamType(),
-        pMutable.getLastSubmissionDatePrep(), pMutable.getTotalPart(), pMutable.getPartATotal(),
-        pMutable.getPartBTotal(), pMutable.getYear(), pMutable.getAcademicSemester());
+  public Long create(MutableMarksSubmissionStatus pMutable) {
+    Long id = mIdGenerator.getNumericId();
+    mJdbcTemplate.update(INSERT_ALL, id, pMutable.getSemesterId(), pMutable.getCourseId(),
+        pMutable.getStatus(), pMutable.getExamType(), pMutable.getLastSubmissionDatePrep(),
+        pMutable.getTotalPart(), pMutable.getPartATotal(), pMutable.getPartBTotal(),
+        pMutable.getYear(), pMutable.getAcademicSemester());
+    return id;
   }
 
   @Override

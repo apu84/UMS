@@ -31,7 +31,7 @@ public class PersistentSeatPlan implements MutableSeatPlan {
 
   private Long mId;
   private ClassRoom mClassRoom;
-  private int mClassRoomId;
+  private Long mClassRoomId;
   private Student mStudent;
   private String mStudentId;
   private Semester mSemester;
@@ -85,11 +85,11 @@ public class PersistentSeatPlan implements MutableSeatPlan {
     return mExamDate;
   }
 
-  public int getClassRoomId() {
+  public Long getClassRoomId() {
     return mClassRoomId;
   }
 
-  public void setClassRoomId(int pClassRoomId) {
+  public void setClassRoomId(Long pClassRoomId) {
     mClassRoomId = pClassRoomId;
   }
 

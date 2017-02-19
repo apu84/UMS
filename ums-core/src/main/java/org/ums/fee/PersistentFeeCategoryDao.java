@@ -49,9 +49,10 @@ public class PersistentFeeCategoryDao extends FeeCategoryDaoDecorator {
   }
 
   @Override
-  public int create(MutableFeeCategory pMutable) {
-    return mJdbcTemplate.update(INSERT_ALL, pMutable.getName(), pMutable.getDescription(), pMutable
+  public String create(MutableFeeCategory pMutable) {
+    mJdbcTemplate.update(INSERT_ALL, pMutable.getName(), pMutable.getDescription(), pMutable
         .getType().getValue(), pMutable.getId());
+    return pMutable.getId();
   }
 
   private class FeeCategoryRowMapper implements RowMapper<FeeCategory> {

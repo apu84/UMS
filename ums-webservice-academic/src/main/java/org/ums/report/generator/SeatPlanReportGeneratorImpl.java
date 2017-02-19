@@ -112,7 +112,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
 
     }
     java.util.List<Student> students;
-    java.util.List<Integer> roomsOfTheSeatPlan = new ArrayList<>();
+    java.util.List<Long> roomsOfTheSeatPlan = new ArrayList<>();
     // Map<String, Student> studentIdWIthStuddentInfoMap = new HashMap<>();
     Map<String, SeatPlan> roomRowColWithSeatPlanMap = new HashMap<>();
     // Map<Integer, Program> programIdWithProgramInfoMap = new HashMap<>();

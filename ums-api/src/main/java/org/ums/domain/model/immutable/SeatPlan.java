@@ -18,7 +18,7 @@ public interface SeatPlan extends Serializable, LastModifier, EditType<MutableSe
 
   Semester getSemester();
 
-  int getClassRoomId();
+  Long getClassRoomId();
 
   int getRowNo();
 

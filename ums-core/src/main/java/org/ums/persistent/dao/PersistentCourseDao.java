@@ -88,12 +88,13 @@ public class PersistentCourseDao extends CourseDaoDecorator {
     return mJdbcTemplate.update(query, pCourse.getId());
   }
 
-  public int create(final MutableCourse pCourse) {
-    return mJdbcTemplate.update(INSERT_ONE, pCourse.getId(), pCourse.getNo(), pCourse.getTitle(),
-        pCourse.getCrHr(), pCourse.getSyllabusId(), pCourse.getCourseGroupId() > 0 ? pCourse
-            .getCourseGroup(pCourse.getSyllabus().getId()).getId() : null, pCourse.getOfferedBy()
-            .getId(), pCourse.getViewOrder(), pCourse.getYear(), pCourse.getSemester(), pCourse
-            .getCourseType().ordinal(), pCourse.getCourseCategory().ordinal());
+  public String create(final MutableCourse pCourse) {
+    mJdbcTemplate.update(INSERT_ONE, pCourse.getId(), pCourse.getNo(), pCourse.getTitle(), pCourse
+        .getCrHr(), pCourse.getSyllabusId(), pCourse.getCourseGroupId() > 0 ? pCourse
+        .getCourseGroup(pCourse.getSyllabus().getId()).getId() : null, pCourse.getOfferedBy()
+        .getId(), pCourse.getViewOrder(), pCourse.getYear(), pCourse.getSemester(), pCourse
+        .getCourseType().ordinal(), pCourse.getCourseCategory().ordinal());
+    return pCourse.getId();
   }
 
   @Override

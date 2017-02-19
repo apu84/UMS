@@ -48,8 +48,9 @@ public class PersistentRoleDao extends RoleDaoDecorator {
   }
 
   @Override
-  public int create(MutableRole pMutable) {
-    return mJdbcTemplate.update(INSERT_ALL, pMutable.getId(), pMutable.getName());
+  public Integer create(MutableRole pMutable) {
+    mJdbcTemplate.update(INSERT_ALL, pMutable.getId(), pMutable.getName());
+    return pMutable.getId();
   }
 
   class RoleRowMapper implements RowMapper<Role> {

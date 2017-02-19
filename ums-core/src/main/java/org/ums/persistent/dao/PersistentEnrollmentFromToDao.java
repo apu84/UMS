@@ -32,10 +32,11 @@ public class PersistentEnrollmentFromToDao extends EnrollmentFromToDaoDecorator 
   }
 
   @Override
-  public int create(MutableEnrollmentFromTo pMutable) {
-    return mJdbcTemplate.update(INSERT_ALL, mIdGenerator.getNumericId(), pMutable.getProgram()
-        .getId(), pMutable.getFromYear(), pMutable.getFromSemester(), pMutable.getToYear(),
-        pMutable.getToSemester());
+  public Long create(MutableEnrollmentFromTo pMutable) {
+    Long id = mIdGenerator.getNumericId();
+    mJdbcTemplate.update(INSERT_ALL, id, pMutable.getProgram().getId(), pMutable.getFromYear(),
+        pMutable.getFromSemester(), pMutable.getToYear(), pMutable.getToSemester());
+    return id;
   }
 
   @Override

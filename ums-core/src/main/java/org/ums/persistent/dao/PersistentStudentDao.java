@@ -1,6 +1,13 @@
 package org.ums.persistent.dao;
 
-import com.google.common.collect.Lists;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.StudentDaoDecorator;
@@ -11,14 +18,7 @@ import org.ums.persistent.model.PersistentStudent;
 import org.ums.persistent.model.PersistentTeacher;
 import org.ums.util.Constants;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
+import com.google.common.collect.Lists;
 
 public class PersistentStudentDao extends StudentDaoDecorator {
   static String SELECT_ALL = "SELECT" + "  STUDENT_ID," + "  FULL_NAME," + "  DEPT_ID,"
@@ -91,7 +91,7 @@ public class PersistentStudentDao extends StudentDaoDecorator {
   }
 
   @Override
-  public int create(MutableStudent pMutable) {
+  public String create(MutableStudent pMutable) {
     String query =
         "INSERT INTO STUDENTS (STUDENT_ID, FULL_NAME, DEPT_ID, SEMESTER_ID, FATHER_NAME, MOTHER_NAME, BIRTH_DATE, curr_year,curr_semester, curr_enrolled_semester,enrollment_type, program_id,status,gender, last_modified) "
             + " VALUES (?, ?, ?, ?, ?, ?, to_date(?,'dd/mm/yy'),?,?,?,?,?,1,?,"
@@ -100,11 +100,12 @@ public class PersistentStudentDao extends StudentDaoDecorator {
     DateFormat df = new SimpleDateFormat("dd/mm/yy");
 
     String birthDate = df.format(pMutable.getDateOfBirth());
-    return mJdbcTemplate.update(query, pMutable.getId(), pMutable.getFullName(), pMutable
-        .getDepartment().getId(), pMutable.getSemester().getId(), pMutable.getFatherName(),
-        pMutable.getMotherName(), birthDate, pMutable.getCurrentYear(), pMutable
-            .getCurrentAcademicSemester(), pMutable.getCurrentEnrolledSemesterId(), 1, pMutable
-            .getProgram().getId(), pMutable.getGender());
+    mJdbcTemplate.update(query, pMutable.getId(), pMutable.getFullName(), pMutable.getDepartment()
+        .getId(), pMutable.getSemester().getId(), pMutable.getFatherName(), pMutable
+        .getMotherName(), birthDate, pMutable.getCurrentYear(), pMutable
+        .getCurrentAcademicSemester(), pMutable.getCurrentEnrolledSemesterId(), 1, pMutable
+        .getProgram().getId(), pMutable.getGender());
+    return pMutable.getId();
   }
 
   /*

@@ -66,10 +66,11 @@ public class PersistentPermissionDao extends PermissionDaoDecorator {
   }
 
   @Override
-  public int create(MutablePermission pMutable) {
-    return mJdbcTemplate
-        .update(INSERT_ALL, mIdGenerator.getNumericId(), pMutable.getRole().getId(),
-            Joiner.on(PERMISSION_SEPARATOR).join(pMutable.getPermissions()));
+  public Long create(MutablePermission pMutable) {
+    Long id = mIdGenerator.getNumericId();
+    mJdbcTemplate.update(INSERT_ALL, id, pMutable.getRole().getId(), Joiner
+        .on(PERMISSION_SEPARATOR).join(pMutable.getPermissions()));
+    return id;
   }
 
   class PermissionRowMapper implements RowMapper<Permission> {

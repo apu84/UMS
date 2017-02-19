@@ -68,18 +68,11 @@ public class PersistentSemesterDao extends SemesterDaoDecorator {
   }
 
   @Override
-  public int create(final MutableSemester pSemester) {
-
-    try {
-      return mJdbcTemplate.update(INSERT_ONE, pSemester.getId(), pSemester.getName(),
-          pSemester.getStartDate(), pSemester.getEndDate(), pSemester.getProgramType().getId(),
-          pSemester.getStatus().getValue());
-    } catch(DuplicateKeyException exception) {
-      throw exception;
-      // throw new SQLIntegrityConstraintViolationException("Semester already exists.");
-    } catch(Exception ex) {
-      throw ex;
-    }
+  public Integer create(final MutableSemester pSemester) {
+    mJdbcTemplate.update(INSERT_ONE, pSemester.getId(), pSemester.getName(),
+        pSemester.getStartDate(), pSemester.getEndDate(), pSemester.getProgramType().getId(),
+        pSemester.getStatus().getValue());
+    return pSemester.getId();
   }
 
   @Override

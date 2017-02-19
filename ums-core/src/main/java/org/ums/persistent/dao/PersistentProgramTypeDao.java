@@ -44,8 +44,9 @@ public class PersistentProgramTypeDao extends ProgramTypeDaoDecorator {
     return mJdbcTemplate.update(query, pProgramType.getId());
   }
 
-  public int create(final MutableProgramType pProgramType) {
-    return mJdbcTemplate.update(INSERT_ONE, pProgramType.getId(), pProgramType.getName());
+  public Integer create(final MutableProgramType pProgramType) {
+    mJdbcTemplate.update(INSERT_ONE, pProgramType.getId(), pProgramType.getName());
+    return pProgramType.getId();
   }
 
   class ProgramTypeRowMapper implements RowMapper<ProgramType> {

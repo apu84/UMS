@@ -123,12 +123,13 @@ public class PersistentSemesterWithdrawalDao extends SemesterWithdrawalDaoDecora
   }
 
   @Override
-  public int create(MutableSemesterWithdrawal pMutable) {
-    String query = INSERT_ONE;
-    return mJdbcTemplate.update(query, mIdGenerator.getNumericId(), pMutable.getSemester().getId(),
-        pMutable.getProgram().getId(), pMutable.getStudent().getId(), pMutable.getStudent()
-            .getCurrentYear(), pMutable.getStudent().getCurrentAcademicSemester(), pMutable
-            .getCause(), pMutable.getStatus(), pMutable.getComment());
+  public Long create(MutableSemesterWithdrawal pMutable) {
+    Long id = mIdGenerator.getNumericId();
+    mJdbcTemplate.update(INSERT_ONE, id, pMutable.getSemester().getId(), pMutable.getProgram()
+        .getId(), pMutable.getStudent().getId(), pMutable.getStudent().getCurrentYear(), pMutable
+        .getStudent().getCurrentAcademicSemester(), pMutable.getCause(), pMutable.getStatus(),
+        pMutable.getComment());
+    return id;
   }
 
   class SemesterWithdrawalRowMapper implements RowMapper<SemesterWithdrawal> {

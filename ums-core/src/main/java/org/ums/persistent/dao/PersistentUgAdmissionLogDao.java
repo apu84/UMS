@@ -26,7 +26,7 @@ public class PersistentUgAdmissionLogDao extends UgAdmissionLogDaoDecorator {
   }
 
   @Override
-  public int create(MutableUgAdmissionLog pMutable) {
+  public Integer create(MutableUgAdmissionLog pMutable) {
     String query = INSERT_ONE;
     return mJdbcTemplate.update(query, pMutable.getReceiptId(), pMutable.getSemesterId(),
         pMutable.getLogText());

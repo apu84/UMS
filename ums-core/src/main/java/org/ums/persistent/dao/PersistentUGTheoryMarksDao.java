@@ -2,6 +2,7 @@ package org.ums.persistent.dao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.ums.decorator.UGTheoryMarksDaoDecorator;
@@ -25,8 +26,10 @@ public class PersistentUGTheoryMarksDao extends UGTheoryMarksDaoDecorator {
   }
 
   @Override
-  public int create(List<MutableUGTheoryMarks> pMutableList) {
-    return mJdbcTemplate.batchUpdate(INSERT_ALL, getInsertParamList(pMutableList)).length;
+  public List<Long> create(List<MutableUGTheoryMarks> pMutableList) {
+    List<Object[]> params = getInsertParamList(pMutableList);
+    mJdbcTemplate.batchUpdate(INSERT_ALL, params);
+    return params.stream().map(param -> (Long)param[0]).collect(Collectors.toCollection(ArrayList::new));
   }
 
   private List<Object[]> getInsertParamList(List<MutableUGTheoryMarks> pTheoryMarkses) {

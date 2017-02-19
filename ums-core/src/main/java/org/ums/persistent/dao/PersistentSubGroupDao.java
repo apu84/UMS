@@ -12,6 +12,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Created by My Pc on 5/4/2016.
@@ -80,8 +82,9 @@ public class PersistentSubGroupDao extends SubGroupDaoDecorator {
   }
 
   @Override
-  public int create(List<MutableSubGroup> pMutableList) {
-    return mJdbcTemplate.batchUpdate(INSERT_ALL, getInsertParamList(pMutableList)).length;
+  public List<Integer> create(List<MutableSubGroup> pMutableList) {
+    int[] updates = mJdbcTemplate.batchUpdate(INSERT_ALL, getInsertParamList(pMutableList));
+    return IntStream.of(updates).boxed().collect(Collectors.toList());
   }
 
   @Override
@@ -102,7 +105,7 @@ public class PersistentSubGroupDao extends SubGroupDaoDecorator {
   }
 
   @Override
-  public int create(MutableSubGroup pMutable) {
+  public Integer create(MutableSubGroup pMutable) {
     return mJdbcTemplate.update(INSERT_ALL, pMutable.getSemester().getId(), pMutable.getGroup()
         .getGroupNo(), pMutable.subGroupNo(), pMutable.getGroup().getId(), pMutable.getPosition(),
         pMutable.getStudentNumber(), pMutable.getExamType());

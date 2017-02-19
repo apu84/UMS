@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -69,16 +70,20 @@ public class PersistentNotificationDao extends NotificationDaoDecorator {
   }
 
   @Override
-  public int create(MutableNotification pNotification) {
-    return mJdbcTemplate.update(INSERT_ALL, mIdGenerator.getNumericId(),
-        pNotification.getProducerId(), pNotification.getConsumerId(),
-        pNotification.getNotificationType(), pNotification.getPayload());
-
+  public Long create(MutableNotification pNotification) {
+    Long id = mIdGenerator.getNumericId();
+    mJdbcTemplate.update(INSERT_ALL, id, pNotification.getProducerId(),
+        pNotification.getConsumerId(), pNotification.getNotificationType(),
+        pNotification.getPayload());
+    return id;
   }
 
   @Override
-  public int create(List<MutableNotification> pMutableList) {
-    return mJdbcTemplate.batchUpdate(INSERT_ALL, getInsertParamArray(pMutableList)).length;
+  public List<Long> create(List<MutableNotification> pMutableList) {
+    List<Object[]> params = getInsertParamArray(pMutableList);
+    mJdbcTemplate.batchUpdate(INSERT_ALL, params);
+    return params.stream().map(param -> (Long) param[0])
+        .collect(Collectors.toCollection(ArrayList::new));
   }
 
   @Override

@@ -71,10 +71,11 @@ public class PersistentCourseTeacherDao extends
   }
 
   @Override
-  public int create(MutableCourseTeacher pMutable) {
-    return mJdbcTemplate.update(INSERT_ONE, mIdGenerator.getNumericId().toString(), pMutable
-        .getSemester().getId(), pMutable.getTeacher().getId(), pMutable.getCourse().getId(),
-        pMutable.getSection());
+  public Long create(MutableCourseTeacher pMutable) {
+    Long id = mIdGenerator.getNumericId();
+    mJdbcTemplate.update(INSERT_ONE, id, pMutable.getSemester().getId(), pMutable.getTeacher()
+        .getId(), pMutable.getCourse().getId(), pMutable.getSection());
+    return id;
   }
 
   @Override

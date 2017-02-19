@@ -94,7 +94,7 @@ public class ClassRoutineGeneratorImpl implements ClassRoutineGenerator {
           .collect(Collectors.groupingBy(Routine::getRoomId));
     }
 
-    Map<Integer,String> roomIdWithRoomNoMap = mClassRoomManager.getRoomsBasedOnRoutine(pSemesterId,programs.get(0).getId())
+    Map<Long,String> roomIdWithRoomNoMap = mClassRoomManager.getRoomsBasedOnRoutine(pSemesterId,programs.get(0).getId())
         .stream()
         .collect(Collectors.toMap(r->r.getId(),r->r.getRoomNo()));
 
@@ -249,7 +249,7 @@ public class ClassRoutineGeneratorImpl implements ClassRoutineGenerator {
     Font tableDataFont = new Font(Font.FontFamily.TIMES_ROMAN,7);
     Font tableDataFontTime = new Font(Font.FontFamily.TIMES_ROMAN,11);
 
-    Map<Integer,List<ClassRoom>> roomsMap = mClassRoomManager.getAll()
+    Map<Long,List<ClassRoom>> roomsMap = mClassRoomManager.getAll()
         .stream()
         .collect(Collectors.groupingBy(ClassRoom::getId,Collectors.toList()));
 

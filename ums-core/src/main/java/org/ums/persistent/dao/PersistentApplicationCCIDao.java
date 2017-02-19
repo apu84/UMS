@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -43,15 +44,20 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
   }
 
   @Override
-  public int create(List<MutableApplicationCCI> pMutableList) {
-    return mJdbcTemplate.batchUpdate(INSERT_ONE, getInsertParamList(pMutableList)).length;
+  public List<Long> create(List<MutableApplicationCCI> pMutableList) {
+    List<Object[]> parameters = getInsertParamList(pMutableList);
+    mJdbcTemplate.batchUpdate(INSERT_ONE, parameters);
+    return parameters.stream()
+        .map(paramArray -> (Long)paramArray[0])
+        .collect(Collectors.toCollection(ArrayList::new));
   }
 
   @Override
-  public int create(MutableApplicationCCI pMutable) {
-    String query = INSERT_ONE;
-    return mJdbcTemplate.update(query, mIdGenerator.getNumericId(), pMutable.getSemesterId(),
-        pMutable.getStudentId(), pMutable.getCourseId(), pMutable.getApplicationType().getValue());
+  public Long create(MutableApplicationCCI pMutable) {
+    Long id = mIdGenerator.getNumericId();
+    mJdbcTemplate.update(INSERT_ONE, id, pMutable.getSemesterId(), pMutable.getStudentId(),
+        pMutable.getCourseId(), pMutable.getApplicationType().getValue());
+    return id;
   }
 
   @Override
@@ -142,8 +148,8 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
   private List<Object[]> getInsertParamList(List<MutableApplicationCCI> pMutableApplicationCCIs) {
     List<Object[]> params = new ArrayList<>();
     for(ApplicationCCI app : pMutableApplicationCCIs) {
-      params.add(new Object[] {app.getSemesterId(), app.getStudentId(), app.getCourseId(),
-          app.getApplicationType().getValue()});
+      params.add(new Object[] {mIdGenerator.getNumericId(), app.getSemesterId(),
+          app.getStudentId(), app.getCourseId(), app.getApplicationType().getValue()});
     }
     return params;
   }

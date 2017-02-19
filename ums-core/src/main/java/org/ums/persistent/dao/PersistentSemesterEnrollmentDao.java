@@ -60,10 +60,12 @@ public class PersistentSemesterEnrollmentDao extends SemesterEnrollmentDaoDecora
   }
 
   @Override
-  public int create(MutableSemesterEnrollment pMutable) {
-    return mJdbcTemplate.update(INSERT_ALL, mIdGenerator.getNumericId(), pMutable.getSemester()
-        .getId(), pMutable.getProgram().getId(), pMutable.getYear(),
-        pMutable.getAcademicSemester(), pMutable.getType().getValue());
+  public Long create(MutableSemesterEnrollment pMutable) {
+    Long id = mIdGenerator.getNumericId();
+    mJdbcTemplate
+        .update(INSERT_ALL, id, pMutable.getSemester().getId(), pMutable.getProgram().getId(),
+            pMutable.getYear(), pMutable.getAcademicSemester(), pMutable.getType().getValue());
+    return id;
   }
 
   @Override

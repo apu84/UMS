@@ -60,9 +60,11 @@ public class PersistentParameterDao extends ParameterDaoDecorator {
   }
 
   @Override
-  public int create(MutableParameter pMutable) {
-    return mJdbcTemplate.update(INSERT_ONE, mIdGenerator.getNumericId(), pMutable.getParameter(),
-        pMutable.getShortDescription(), pMutable.getLongDescription(), pMutable.getType());
+  public Long create(MutableParameter pMutable) {
+    Long id = mIdGenerator.getNumericId();
+    mJdbcTemplate.update(INSERT_ONE, id, pMutable.getParameter(), pMutable.getShortDescription(),
+        pMutable.getLongDescription(), pMutable.getType());
+    return id;
   }
 
   class ParameterRowMapper implements RowMapper<Parameter> {

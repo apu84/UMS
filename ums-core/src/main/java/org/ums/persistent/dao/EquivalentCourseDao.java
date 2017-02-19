@@ -57,9 +57,10 @@ public class EquivalentCourseDao extends EquivalentCourseDaoDecorator {
   }
 
   @Override
-  public int create(MutableEquivalentCourse pMutable) {
-    return mJdbcTemplate.update(INSERT_ALL, mIdGenerator.getNumericId(), pMutable.getOldCourseId(),
-        pMutable.getNewCourseId());
+  public Long create(MutableEquivalentCourse pMutable) {
+    Long id = mIdGenerator.getNumericId();
+    mJdbcTemplate.update(INSERT_ALL, id, pMutable.getOldCourseId(), pMutable.getNewCourseId());
+    return id;
   }
 
   @Override

@@ -51,8 +51,8 @@ public class PersistentNavigationDao extends NavigationDaoDecorator {
   }
 
   @Override
-  public int create(MutableNavigation pMutable) {
-    return mJdbcTemplate.update(INSERT_ALL);
+  public Long create(MutableNavigation pMutable) {
+    return Long.valueOf(mJdbcTemplate.update(INSERT_ALL));
   }
 
   @Override

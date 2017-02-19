@@ -60,10 +60,11 @@ public class PersistentSemesterWithdrawalLogDao extends SemesterWithdrawalLogDao
   }
 
   @Override
-  public int create(MutableSemesterWithdrawalLog pMutable) {
-    String query = INSERT_ONE;
-    return mJdbcTemplate.update(query, mIdGenerator.getNumericId(), pMutable
-        .getSemesterWithdrawal().getId(), pMutable.getEmployeeId(), pMutable.getAction());
+  public Long create(MutableSemesterWithdrawalLog pMutable) {
+    Long id = mIdGenerator.getNumericId();
+    mJdbcTemplate.update(INSERT_ONE, id, pMutable.getSemesterWithdrawal().getId(),
+        pMutable.getEmployeeId(), pMutable.getAction());
+    return id;
   }
 
   @Override

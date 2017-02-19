@@ -1,5 +1,12 @@
 package org.ums.persistent.dao;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.UGRegistrationResultDaoDecorator;
@@ -9,12 +16,6 @@ import org.ums.enums.CourseRegType;
 import org.ums.enums.ExamType;
 import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.PersistentUGRegistrationResult;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentUGRegistrationResultDao extends UGRegistrationResultDaoDecorator {
   String SELECT_ALL = "SELECT UG_REGISTRATION_RESULT.ID, UG_REGISTRATION_RESULT.STUDENT_ID, "
@@ -111,8 +112,11 @@ public class PersistentUGRegistrationResultDao extends UGRegistrationResultDaoDe
   }
 
   @Override
-  public int create(List<MutableUGRegistrationResult> pMutableList) {
-    return mJdbcTemplate.batchUpdate(INSERT_ALL, getInsertParamList(pMutableList)).length;
+  public List<Long> create(List<MutableUGRegistrationResult> pMutableList) {
+    List<Object[]> params = getInsertParamList(pMutableList);
+    mJdbcTemplate.batchUpdate(INSERT_ALL, params);
+    return params.stream().map(param -> (Long) param[0])
+        .collect(Collectors.toCollection(ArrayList::new));
   }
 
   private List<Object[]> getInsertParamList(List<MutableUGRegistrationResult> pRegistrationResults) {

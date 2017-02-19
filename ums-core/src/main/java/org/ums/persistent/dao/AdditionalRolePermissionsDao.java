@@ -60,12 +60,14 @@ public class AdditionalRolePermissionsDao extends AdditionalRolePermissionsDaoDe
   }
 
   @Override
-  public int create(MutableAdditionalRolePermissions pMutable) {
-    return mJdbcTemplate.update(INSERT_ALL, mIdGenerator.getNumericId(),
-        pMutable.getUser().getId(), pMutable.getRole() == null ? 0 : pMutable.getRole().getId(),
+  public Long create(MutableAdditionalRolePermissions pMutable) {
+    Long id = mIdGenerator.getNumericId();
+    mJdbcTemplate.update(INSERT_ALL, id, pMutable.getUser().getId(), pMutable.getRole() == null ? 0
+        : pMutable.getRole().getId(),
         Joiner.on(PersistentPermissionDao.PERMISSION_SEPARATOR).join(pMutable.getPermission()),
         pMutable.getValidFrom(), pMutable.getValidTo(), pMutable.isActive() ? 1 : 0, pMutable
             .getAssignedBy().getId());
+    return id;
   }
 
   @Override

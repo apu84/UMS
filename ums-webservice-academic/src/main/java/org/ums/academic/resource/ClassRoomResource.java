@@ -35,7 +35,7 @@ public class ClassRoomResource extends MutableClassRoomResource {
   @GET
   @Path("/roomId/{room-id}")
   public JsonObject getByRoomId(final @Context Request pRequest,
-      final @PathParam("room-id") Integer roomId) {
+      final @PathParam("room-id") Long roomId) {
     return mResourceHelper.getByRoomId(roomId, mUriInfo);
   }
 

@@ -1,5 +1,11 @@
 package org.ums.persistent.dao;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -10,11 +16,6 @@ import org.ums.enums.*;
 import org.ums.manager.ProgramManager;
 import org.ums.manager.SemesterManager;
 import org.ums.persistent.model.PersistentAdmissionStudent;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Monjur-E-Morshed on 14-Dec-16.
@@ -95,9 +96,10 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
   }
 
   @Override
-  public int create(List<MutableAdmissionStudent> pMutableList) {
-    String query = INSERT_ONE;
-    return mJdbcTemplate.batchUpdate(query, getAdmissionStudentParams(pMutableList)).length;
+  public List<String> create(List<MutableAdmissionStudent> pMutableList) {
+    mJdbcTemplate.batchUpdate(INSERT_ONE, getAdmissionStudentParams(pMutableList));
+    return pMutableList.stream().map(pMutable -> pMutable.getReceiptId())
+        .collect(Collectors.toList());
   }
 
   @Override

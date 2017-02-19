@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -38,14 +39,18 @@ public class PersistentLoggerEntryDao extends
   }
 
   @Override
-  public int create(List<MutableLoggerEntry> pMutableList) {
-    return mJdbcTemplate.batchUpdate(INSERT_ONE, getInsertParamList(pMutableList)).length;
+  public List<Long> create(List<MutableLoggerEntry> pMutableList) {
+    List<Object[]> params = getInsertParamList(pMutableList);
+    mJdbcTemplate.batchUpdate(INSERT_ONE, params);
+    return params.stream().map(param -> (Long) param[0])
+        .collect(Collectors.toCollection(ArrayList::new));
   }
 
   @Override
-  public int create(MutableLoggerEntry pMutable) {
-    return mJdbcTemplate
-        .update(INSERT_ONE, getInsertParamList(Lists.newArrayList(pMutable)).get(0));
+  public Long create(MutableLoggerEntry pMutable) {
+    List<Object[]> params = getInsertParamList((Lists.newArrayList(pMutable)));
+    mJdbcTemplate.update(INSERT_ONE, params.get(0));
+    return (Long) params.get(0)[0];
   }
 
   @Override

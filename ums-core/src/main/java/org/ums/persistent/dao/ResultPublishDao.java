@@ -59,9 +59,10 @@ public class ResultPublishDao extends ResultPublishDaoDecorator {
   }
 
   @Override
-  public int create(MutableResultPublish pMutable) {
-    return mJdbcTemplate.update(INSERT_ALL, mIdGenerator.getNumericId(), pMutable.getProgramId(),
-        pMutable.getSemesterId());
+  public Long create(MutableResultPublish pMutable) {
+    Long id = mIdGenerator.getNumericId();
+    mJdbcTemplate.update(INSERT_ALL, id, pMutable.getProgramId(), pMutable.getSemesterId());
+    return id;
   }
 
   @Override

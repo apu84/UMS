@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -141,8 +142,11 @@ public class PersistentSeatPlanDao extends SeatPlanDaoDecorator {
   }
 
   @Override
-  public int create(List<MutableSeatPlan> pMutableList) {
-    return mJdbcTemplate.batchUpdate(INSERT_ALL, getInsertParamList(pMutableList)).length;
+  public List<Long> create(List<MutableSeatPlan> pMutableList) {
+    List<Object[]> params = getInsertParamList(pMutableList);
+    mJdbcTemplate.batchUpdate(INSERT_ALL, params);
+    return params.stream().map(param -> (Long) param[0])
+        .collect(Collectors.toCollection(ArrayList::new));
   }
 
   @Override
@@ -232,10 +236,12 @@ public class PersistentSeatPlanDao extends SeatPlanDaoDecorator {
   }
 
   @Override
-  public int create(MutableSeatPlan pMutable) {
-    return mJdbcTemplate.update(INSERT_ALL, mIdGenerator.getNumericId(), pMutable.getClassRoom()
-        .getId(), pMutable.getSemester().getId(), pMutable.getGroupNo(), pMutable.getStudent()
-        .getId(), pMutable.getRowNo(), pMutable.getColumnNo(), pMutable.getExamType());
+  public Long create(MutableSeatPlan pMutable) {
+    Long id = mIdGenerator.getNumericId();
+    mJdbcTemplate.update(INSERT_ALL, mIdGenerator.getNumericId(), pMutable.getClassRoom().getId(),
+        pMutable.getSemester().getId(), pMutable.getGroupNo(), pMutable.getStudent().getId(),
+        pMutable.getRowNo(), pMutable.getColumnNo(), pMutable.getExamType());
+    return id;
   }
 
   private List<Object[]> getInsertParamList(List<MutableSeatPlan> pSeatPlans) {
@@ -265,7 +271,7 @@ public class PersistentSeatPlanDao extends SeatPlanDaoDecorator {
     public SeatPlan mapRow(ResultSet pResultSet, int pI) throws SQLException {
       PersistentSeatPlan mSeatPlan = new PersistentSeatPlan();
       mSeatPlan.setId(pResultSet.getLong("ID"));
-      mSeatPlan.setClassRoomId(pResultSet.getInt("ROOM_ID"));
+      mSeatPlan.setClassRoomId(pResultSet.getLong("ROOM_ID"));
       mSeatPlan.setRowNo(pResultSet.getInt("ROW_NO"));
       mSeatPlan.setColumnNo(pResultSet.getInt("COL_NO"));
       mSeatPlan.setStudentId(pResultSet.getString("STUDENT_ID"));
@@ -282,7 +288,7 @@ public class PersistentSeatPlanDao extends SeatPlanDaoDecorator {
     public SeatPlan mapRow(ResultSet pResultSet, int pI) throws SQLException {
       PersistentSeatPlan mSeatPlan = new PersistentSeatPlan();
       mSeatPlan.setId(pResultSet.getLong("ID"));
-      mSeatPlan.setClassRoomId(pResultSet.getInt("ROOM_ID"));
+      mSeatPlan.setClassRoomId(pResultSet.getLong("ROOM_ID"));
       mSeatPlan.setRowNo(pResultSet.getInt("ROW_NO"));
       mSeatPlan.setColumnNo(pResultSet.getInt("COL_NO"));
       mSeatPlan.setStudentId(pResultSet.getString("STUDENT_ID"));

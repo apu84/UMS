@@ -24,14 +24,14 @@ public class MutableClassRoomResource extends Resource {
   public Response updateSemester(final @Context Request pRequest,
       final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader, final JsonObject pJsonObject)
       throws Exception {
-    return mResourceHelper.put(Integer.parseInt(pJsonObject.getString("id")), pRequest,
+    return mResourceHelper.put(Long.parseLong(pJsonObject.getString("id")), pRequest,
         pIfMatchHeader, pJsonObject);
   }
 
   @DELETE
   @Path(PATH_PARAM_OBJECT_ID)
   public Response deleteSemester(final @PathParam("object-id") String pObjectId) throws Exception {
-    return mResourceHelper.delete(Integer.parseInt(pObjectId));
+    return mResourceHelper.delete(Long.parseLong(pObjectId));
   }
 
 }

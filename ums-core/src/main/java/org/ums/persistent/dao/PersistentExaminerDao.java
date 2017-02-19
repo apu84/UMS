@@ -66,10 +66,11 @@ public class PersistentExaminerDao extends
   }
 
   @Override
-  public int create(MutableExaminer pMutable) {
-    return mJdbcTemplate.update(INSERT_ONE, mIdGenerator.getNumericId(), pMutable.getSemester()
-        .getId(), pMutable.getPreparer().getId(), pMutable.getScrutinizer().getId(), pMutable
-        .getCourse().getId());
+  public Long create(MutableExaminer pMutable) {
+    Long id = mIdGenerator.getNumericId();
+    mJdbcTemplate.update(INSERT_ONE, id, pMutable.getSemester().getId(), pMutable.getPreparer()
+        .getId(), pMutable.getScrutinizer().getId(), pMutable.getCourse().getId());
+    return id;
   }
 
   @Override

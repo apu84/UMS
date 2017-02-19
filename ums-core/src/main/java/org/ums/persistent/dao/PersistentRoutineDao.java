@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -77,11 +78,13 @@ public class PersistentRoutineDao extends RoutineDaoDecorator {
   }
 
   @Override
-  public int create(final MutableRoutine pMutable) {
-    return mJdbcTemplate.update(INSERT_ONE, mIdGenerator.getNumericId(), pMutable.getSemester()
-        .getId(), pMutable.getProgram().getId(), pMutable.getCourseId(), pMutable.getDay(),
-        pMutable.getSection(), pMutable.getAcademicYear(), pMutable.getAcademicSemester(), pMutable
-            .getStartTime(), pMutable.getEndTime(), pMutable.getDuration(), pMutable.getRoomId());
+  public Long create(final MutableRoutine pMutable) {
+    Long id = mIdGenerator.getNumericId();
+    mJdbcTemplate.update(INSERT_ONE, id, pMutable.getSemester().getId(), pMutable.getProgram()
+        .getId(), pMutable.getCourseId(), pMutable.getDay(), pMutable.getSection(), pMutable
+        .getAcademicYear(), pMutable.getAcademicSemester(), pMutable.getStartTime(), pMutable
+        .getEndTime(), pMutable.getDuration(), pMutable.getRoomId());
+    return id;
   }
 
   @Override
@@ -148,9 +151,11 @@ public class PersistentRoutineDao extends RoutineDaoDecorator {
   }
 
   @Override
-  public int create(List<MutableRoutine> pMutableList) {
-    String query = INSERT_ONE;
-    return mJdbcTemplate.batchUpdate(query, getInsertParamList(pMutableList)).length;
+  public List<Long> create(List<MutableRoutine> pMutableList) {
+    List<Object[]> params = getInsertParamList(pMutableList);
+    mJdbcTemplate.batchUpdate(INSERT_ONE, params);
+    return params.stream().map(param -> (Long) param[0])
+        .collect(Collectors.toCollection(ArrayList::new));
   }
 
   private List<Object[]> getInsertParamList(List<MutableRoutine> pRoutines) {

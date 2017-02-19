@@ -418,12 +418,12 @@ public class UMSContext {
   }
 
   ClassRoomManager getPersistentClassRoomDao() {
-    return new PersistentClassRoomDao(mTemplateFactory.getJdbcTemplate());
+    return new PersistentClassRoomDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
   }
 
   @Bean
   ClassRoomManager classRoomManager() {
-    return new PersistentClassRoomDao(mTemplateFactory.getJdbcTemplate());
+    return new PersistentClassRoomDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
   }
 
   @Bean
@@ -612,7 +612,7 @@ public class UMSContext {
 
   FeeManager feeManager() {
     FeeCache feeCache = new FeeCache(mCacheFactory.getCacheManager());
-    feeCache.setManager(new PersistentFeeDao(mTemplateFactory.getJdbcTemplate()));
+    feeCache.setManager(new PersistentFeeDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
     return feeCache;
   }
 

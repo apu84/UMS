@@ -75,26 +75,13 @@ public class ContentDaoDecorator<R, M, I, C extends ContentManager<R, M, I>> imp
   }
 
   @Override
-  public int create(final M pMutable) {
-    int created = getManager().create(pMutable);
-    if(created <= 0) {
-      throw new IllegalArgumentException("No entry has been created");
-    }
-    return created;
+  public I create(final M pMutable) {
+    return getManager().create(pMutable);
   }
 
   @Override
-  public int create(final List<M> pMutableList) {
-    int created = 0;
-    try {
-      created = getManager().create(pMutableList);
-      if(created <= 0) {
-        throw new IllegalArgumentException("No entry has been created");
-      }
-    } catch(Exception ex) {
-      mLogger.error("Exception :" + ex);
-    }
-    return created;
+  public List<I> create(final List<M> pMutableList) {
+    return getManager().create(pMutableList);
   }
 
   @Override

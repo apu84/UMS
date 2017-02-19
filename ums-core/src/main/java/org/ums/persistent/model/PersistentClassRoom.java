@@ -19,7 +19,7 @@ public class PersistentClassRoom implements MutableClassRoom {
     sDepartmentManager = applicationContext.getBean("departmentManager", DepartmentManager.class);
   }
 
-  private int mId;
+  private Long mId;
   private String mRoomNo;
   private String mDescription;
   private int mTotalRow;
@@ -47,12 +47,12 @@ public class PersistentClassRoom implements MutableClassRoom {
   }
 
   @Override
-  public Integer getId() {
+  public Long getId() {
     return mId;
   }
 
   @Override
-  public void setId(Integer pId) {
+  public void setId(Long pId) {
     mId = pId;
   }
 

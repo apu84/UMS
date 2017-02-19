@@ -8,6 +8,7 @@ import org.ums.generator.IdGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PersistentUGSessionalMarksDao extends UGSessionalMarksDaoDecorator {
   String INSERT_ALL =
@@ -25,8 +26,10 @@ public class PersistentUGSessionalMarksDao extends UGSessionalMarksDaoDecorator 
   }
 
   @Override
-  public int create(List<MutableUGSessionalMarks> pMutableList) {
-    return mJdbcTemplate.batchUpdate(INSERT_ALL, getInsertParamList(pMutableList)).length;
+  public List<Long> create(List<MutableUGSessionalMarks> pMutableList) {
+    List<Object[]> params = getInsertParamList(pMutableList);
+    mJdbcTemplate.batchUpdate(INSERT_ALL, params);
+    return params.stream().map(param -> (Long)param[0]).collect(Collectors.toCollection(ArrayList::new));
   }
 
   private List<Object[]> getInsertParamList(List<MutableUGSessionalMarks> pSessionalMarks) {
