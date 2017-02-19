@@ -11,6 +11,8 @@ public interface MutableSeatPlan extends SeatPlan, Mutable, MutableLastModifier,
     MutableIdentifier<Long> {
   void setClassRoom(final ClassRoom pClassRoom);
 
+  void setStudentId(final String pStudentId);
+
   void setStudent(final Student pStudent);
 
   void setSemester(final Semester pSemester);

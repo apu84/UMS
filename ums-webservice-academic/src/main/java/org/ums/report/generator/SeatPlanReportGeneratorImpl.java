@@ -1204,8 +1204,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
        */
 
       Paragraph roomNoParagraph = new Paragraph(roomNo + seatPlanReportDto.getRoomNo());
-      roomNoParagraph.setAlignment(Element.ALIGN_CENTER);
-      roomNoParagraph.setFont(FontFactory.getFont(FontFactory.TIMES_BOLD));
+      getCenterAlignmentAndBoldTimesFont(roomNoParagraph);
       PdfPCell roomCell = new PdfPCell(roomNoParagraph);
       roomCell.setBorder(Rectangle.NO_BORDER);
       /*
@@ -1214,8 +1213,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
       upperCell.addElement(roomNoParagraph);
 
       Paragraph date = new Paragraph("Date: " + seatPlanReportDto.getExamDate());
-      date.setAlignment(Element.ALIGN_CENTER);
-      date.setFont(FontFactory.getFont(FontFactory.TIMES_BOLD));
+      getCenterAlignmentAndBoldTimesFont(date);
       PdfPCell dateCell = new PdfPCell(date);
       dateCell.setBorder(Rectangle.NO_BORDER);
       /*
@@ -2042,32 +2040,240 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
   }
 
   @Override
-  public void createSeatPlanSittingArrangementReport(int pSemesterId, ExamType pExamType, OutputStream pOutputStream) throws IOException, DocumentException {
-    Map<String, List<SeatPlan>> seatPlanMap = mSeatPlanManager.getSittingArrangement(pSemesterId, pExamType)
+  public void createSeatPlanSittingArrangementReport(int pSemesterId, ExamType pExamType,
+      OutputStream pOutputStream) throws IOException, DocumentException {
+    List<SeatPlan> seatPlans = mSeatPlanManager.getSittingArrangement(pSemesterId, pExamType);
+
+    Map<Integer, List<SeatPlan>> seatPlanMapUnordered = seatPlans
         .stream()
-        .collect(Collectors.groupingBy(s-> ""+s.getStudent().getProgram().getId()+s.getStudent().getCurrentYear()+s.getStudent().getCurrentAcademicSemester()));
+        .sorted(Comparator.comparing(s->s.getStudent().getProgram().getId()))
+        .collect(Collectors.groupingBy(s->Integer.parseInt( s.getStudent().getProgram().getId().toString()+s.getStudent().getCurrentYear()+s.getStudent().getCurrentAcademicSemester())));
+
+    Map<Integer, List<SeatPlan>> seatPlanMap = new HashMap<>();
+
+    seatPlanMapUnordered.entrySet()
+        .stream()
+        .sorted(Map.Entry.<Integer, List<SeatPlan>> comparingByKey())
+        .forEachOrdered(x-> seatPlanMap.put(x.getKey(), x.getValue()));
 
     Document document = new Document();
     document.addTitle("Seat Plan Attendence Sheet");
+    Semester semester = mSemesterManager.get(pSemesterId);
+
 
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     PdfWriter writer = PdfWriter.getInstance(document, baos);
     document.open();
+//    SittingArrangement sittingArrangement = new SittingArrangement();
+//    writer.setPageEvent(sittingArrangement);
     document.setPageSize(PageSize.A4);
 
-    for(int i=1;i<=seatPlanMap.size();i++){
-      document.newPage();
-      for(int j=1;j<=seatPlanMap.get(i-1).size();j++){
-        Paragraph paragraph = new Paragraph("Ahsanullah University of Science and Technology");
-        paragraph.setFont(FontFactory.getFont(FontFactory.TIMES_BOLD));
-        paragraph.setAlignment(Element.ALIGN_CENTER);
-        document.add(paragraph);
-      }
-    }
+    Font lightFont = FontFactory.getFont(FontFactory.TIMES, 12);
 
+    Font boldFont = FontFactory.getFont(FontFactory.TIMES_BOLD, 12);
+
+
+    document.newPage();
+
+    for(Integer key : seatPlanMap.keySet()) {
+      //PdfContentByte cb = writer.getDirectContent();
+      List<SeatPlan> seatPlansOfTheMap = seatPlanMap.get(key);
+      /*sittingArrangement.setSittingArrangement(pExamType, semester, seatPlansOfTheMap.get(0).getStudent());*/
+      /*sittingArrangement.setSittingArrangement(pExamType, semester, seatPlansOfTheMap.get(0).getStudent());
+      //writer.setPageEvent(sittingArrangement);
+      //document.open();
+      Paragraph paragraph = new Paragraph("Hello there");
+      document.add(paragraph);
+      *//*Map<String,List<SeatPlan>> seatPlanMapByRoomNo = seatPlansOfTheMap.stream().collect(Collectors.groupingBy(s-> s.getClassRoom().getRoomNo()));
+
+
+      for(String roomKey: seatPlanMapByRoomNo.keySet()){
+
+      }*/
+      PdfPTable headerTable = getSittingArrangementHeader(pExamType, boldFont, seatPlansOfTheMap);
+      document.add(headerTable);
+
+      Map<Long,List<SeatPlan>> seatPlanMapByRoomNoUnordered = seatPlansOfTheMap
+          .stream()
+          .collect(Collectors.groupingBy(s-> s.getClassRoom().getId()));
+
+      Map<Long, List<SeatPlan>> seatPlanMapByRoomNo= new HashMap<>();
+
+      seatPlanMapByRoomNoUnordered.entrySet()
+          .stream()
+          .sorted(Map.Entry.<Long, List<SeatPlan>>comparingByKey())
+          .forEachOrdered(x-> seatPlanMapByRoomNo.put(x.getKey(), x.getValue()));
+
+      float[] tableWidth = new float[] {1, 10, 2};
+
+      PdfPTable sittingArrangementTable = new PdfPTable(3);
+      sittingArrangementTable.setWidths(tableWidth);
+      sittingArrangementTable.setWidthPercentage(100);
+      sittingArrangementTable.setPaddingTop(20);
+      PdfPCell tableHeaderCell = new PdfPCell();
+      Paragraph cellData = new Paragraph("Room No.", boldFont);
+      addHeaderToSittingArrangementDataTable(sittingArrangementTable, tableHeaderCell, cellData);
+
+      cellData = new Paragraph("Student's Id", boldFont);
+      addHeaderToSittingArrangementDataTable(sittingArrangementTable, tableHeaderCell, cellData);
+
+      cellData = new Paragraph("No. of Students", boldFont);
+      addHeaderToSittingArrangementDataTable(sittingArrangementTable, tableHeaderCell, cellData);
+
+      for(Long roomBasedKey: seatPlanMapByRoomNo.keySet()){
+        PdfPCell bodyCell = new PdfPCell();
+        Paragraph bodyParagraph = new Paragraph(seatPlanMapByRoomNo.get(roomBasedKey).get(0).getClassRoom().getRoomNo(), lightFont);
+        bodyCell.addElement(bodyParagraph);
+        bodyCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        sittingArrangementTable.addCell(bodyCell);
+        String[] studentIds = new String[seatPlanMapByRoomNo.get(roomBasedKey).size()];
+        List<SeatPlan> bodySeatPlanList = seatPlanMapByRoomNo.get(roomBasedKey);
+        for(int i=0;i<bodySeatPlanList.size();i++){
+          studentIds[i]=bodySeatPlanList.get(i).getStudent().getId();
+        }
+        bodyCell= new PdfPCell (new Paragraph(String.join(", ",studentIds), lightFont));
+        bodyCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        sittingArrangementTable.addCell(bodyCell);
+
+        bodyCell= new PdfPCell (new Paragraph(bodySeatPlanList.size()+"", lightFont));
+        bodyCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        sittingArrangementTable.addCell(bodyCell);
+      }
+
+      document.add(sittingArrangementTable);
+
+      document.newPage();
+
+
+    }
 
     document.close();
     baos.writeTo(pOutputStream);
 
+  }
+
+  private void addHeaderToSittingArrangementDataTable(PdfPTable pSittingArrangementTable,
+      PdfPCell pTableHeaderCell, Paragraph pCellData) {
+    pCellData.setAlignment(Element.ALIGN_CENTER);
+    pTableHeaderCell = new PdfPCell(pCellData);
+    pTableHeaderCell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+    pTableHeaderCell.setPaddingBottom(5);
+    pTableHeaderCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+    pSittingArrangementTable.addCell(pTableHeaderCell);
+  }
+
+  private PdfPTable getSittingArrangementHeader(ExamType pExamType, Font pBoldFont,
+      List<SeatPlan> pSeatPlansOfTheMap) {
+    PdfPTable headerTable = new PdfPTable(1);
+    PdfPCell headerCell = new PdfPCell();
+    Paragraph headerParagraph =
+        new Paragraph("Ahsanullah University of Science and Technology", pBoldFont);
+    headerParagraph.setAlignment(Element.ALIGN_CENTER);
+    headerCell.addElement(headerParagraph);
+    if(pExamType == ExamType.SEMESTER_FINAL) {
+      headerParagraph =
+          new Paragraph("Semester Final Examination :"
+              + pSeatPlansOfTheMap.get(0).getSemester().getName(), pBoldFont);
+      headerParagraph.setAlignment(Element.ALIGN_CENTER);
+      headerCell.addElement(headerParagraph);
+    }
+    else {
+      headerParagraph =
+          new Paragraph("Carry/Clearance/Improvement Examination :"
+              + pSeatPlansOfTheMap.get(0).getSemester().getName(), pBoldFont);
+      headerParagraph.setAlignment(Element.ALIGN_CENTER);
+      headerCell.addElement(headerParagraph);
+
+    }
+
+    headerParagraph = new Paragraph("Sitting Arrangement", pBoldFont);
+    headerParagraph.setAlignment(Element.ALIGN_CENTER);
+    headerCell.addElement(headerParagraph);
+    headerParagraph =
+        new Paragraph("Program :"
+            + pSeatPlansOfTheMap.get(0).getStudent().getProgram().getShortName()
+                .replace("B.Sc in", ""), pBoldFont);
+    headerParagraph.setAlignment(Element.ALIGN_CENTER);
+    headerCell.addElement(headerParagraph);
+    headerParagraph =
+        new Paragraph("Year :" + pSeatPlansOfTheMap.get(0).getStudent().getCurrentYear()
+            + " Semester:" + pSeatPlansOfTheMap.get(0).getStudent().getCurrentAcademicSemester(),
+            pBoldFont);
+    headerParagraph.setAlignment(Element.ALIGN_CENTER);
+    headerCell.addElement(headerParagraph);
+
+    headerCell.setBorder(PdfPCell.NO_BORDER);
+    headerCell.setPaddingBottom(5.0f);
+    headerTable.addCell(headerCell);
+    return headerTable;
+  }
+
+  private void getCenterAlignmentAndBoldTimesFont(Paragraph pHeaderParagraph) {
+    pHeaderParagraph.setAlignment(Element.ALIGN_CENTER);
+    pHeaderParagraph.setFont(FontFactory.getFont(FontFactory.TIMES_BOLD));
+  }
+
+  public class SittingArrangement extends PdfPageEventHelper {
+    protected PdfPTable header;
+    protected ExamType pExamType;
+    protected int pSemesterId;
+    protected Student student;
+    protected Semester pSemester;
+    protected Font pBoldFont = FontFactory.getFont(FontFactory.TIMES_BOLD, 12);
+
+    public void setSittingArrangement(ExamType pPExamType, Semester pSemester, Student pStudent) {
+      this.pExamType = pPExamType;
+      this.pSemester = pSemester;
+      this.student = pStudent;
+    }
+
+    @Override
+    public void onStartPage(PdfWriter writer, Document document) {
+      PdfContentByte cb = writer.getDirectContent();
+      Paragraph headerParagraph =
+          new Paragraph("Ahsanullah University of Science and Technology", pBoldFont);
+
+      Phrase phrase = new Phrase("Ahsanullah University of Science and Technology");
+      ColumnText.showTextAligned(cb, Element.ALIGN_CENTER, headerParagraph,
+          (document.right() - document.left()) / 2 + document.leftMargin(), document.top() + 10, 0);
+
+      cb = writer.getDirectContent();
+      if(pExamType != ExamType.CLEARANCE_CARRY_IMPROVEMENT) {
+        headerParagraph =
+            new Paragraph("Semester Final Examination: " + pSemester.getName(), pBoldFont);
+        ColumnText.showTextAligned(cb, Element.ALIGN_CENTER, headerParagraph,
+            (document.right() - document.left()) / 2 + document.leftMargin(),
+            document.top() + (-5), 0);
+
+      }
+      else {
+        headerParagraph =
+            new Paragraph("Carry/Clearance/Improvement Examination: " + pSemester.getName(),
+                pBoldFont);
+        ColumnText.showTextAligned(cb, Element.ALIGN_CENTER, headerParagraph,
+            (document.right() - document.left()) / 2 + document.leftMargin(),
+            document.top() + (-5), 0);
+
+      }
+
+      cb = writer.getDirectContent();
+      headerParagraph =
+          new Paragraph("Sitting Arrangement of Program: "
+              + student.getProgram().getShortName().replace("B.Sc in ", ""), pBoldFont);
+      ColumnText.showTextAligned(cb, Element.ALIGN_CENTER, headerParagraph,
+          (document.right() - document.left()) / 2 + document.leftMargin(), document.top() + (-15),
+          0);
+
+      cb = writer.getDirectContent();
+      headerParagraph =
+          new Paragraph(student.getCurrentYear() + " Year" + " "
+              + student.getCurrentAcademicSemester() + " Semester", pBoldFont);
+      ColumnText.showTextAligned(cb, Element.ALIGN_CENTER, headerParagraph,
+          (document.right() - document.left()) / 2 + document.leftMargin(), document.top() + (-25),
+          0);
+
+      // phrase.add(header);
+
+    }
   }
 }

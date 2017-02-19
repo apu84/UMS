@@ -14,6 +14,8 @@ public interface SeatPlan extends Serializable, LastModifier, EditType<MutableSe
     Identifier<Long> {
   ClassRoom getClassRoom();
 
+  String getStudentId();
+
   Student getStudent();
 
   Semester getSemester();

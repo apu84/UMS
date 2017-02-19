@@ -120,6 +120,14 @@ public class UMSContext {
   }
 
   @Bean
+  ClassRoomManager classRoomManager() {
+    ClassRoomCache classRoomCache = new ClassRoomCache(mCacheFactory.getCacheManager());
+    classRoomCache.setManager(new PersistentClassRoomDao(mTemplateFactory.getJdbcTemplate(),
+        mIdGenerator));
+    return classRoomCache;
+  }
+
+  @Bean
   AdmissionStudentManager admissionStudentManager() {
     AdmissionStudentCache admissionStudentCache =
         new AdmissionStudentCache(mCacheFactory.getCacheManager());
@@ -421,10 +429,10 @@ public class UMSContext {
     return new PersistentClassRoomDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
   }
 
-  @Bean
-  ClassRoomManager classRoomManager() {
-    return new PersistentClassRoomDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
-  }
+  /*
+   * @Bean ClassRoomManager classRoomManager() { return new
+   * PersistentClassRoomDao(mTemplateFactory.getJdbcTemplate()); }
+   */
 
   @Bean
   ExamRoutineManager examRoutineManager() {
