@@ -2044,17 +2044,20 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
       OutputStream pOutputStream) throws IOException, DocumentException {
     List<SeatPlan> seatPlans = mSeatPlanManager.getSittingArrangement(pSemesterId, pExamType);
 
-    Map<Integer, List<SeatPlan>> seatPlanMapUnordered = seatPlans
+    Map<String, List<SeatPlan>> seatPlanMapUnordered = seatPlans
         .stream()
         .sorted(Comparator.comparing(s->s.getStudent().getProgram().getId()))
-        .collect(Collectors.groupingBy(s->Integer.parseInt( s.getStudent().getProgram().getId().toString()+s.getStudent().getCurrentYear()+s.getStudent().getCurrentAcademicSemester())));
+        .collect(Collectors.groupingBy(s-> s.getStudent().getProgram().getId().toString()+s.getStudent().getCurrentYear()+s.getStudent().getCurrentAcademicSemester()+""));
 
-    Map<Integer, List<SeatPlan>> seatPlanMap = new HashMap<>();
+    Map<String, List<SeatPlan>> seatPlanMap = new TreeMap<>();
+    seatPlanMap = seatPlanMapUnordered;
+    List sortedSeatPlanMapKeys = new ArrayList(seatPlanMap.keySet());
+    Collections.sort(sortedSeatPlanMapKeys);
 
-    seatPlanMapUnordered.entrySet()
+    /*seatPlanMapUnordered.entrySet()
         .stream()
         .sorted(Map.Entry.<Integer, List<SeatPlan>> comparingByKey())
-        .forEachOrdered(x-> seatPlanMap.put(x.getKey(), x.getValue()));
+        .forEachOrdered(x-> seatPlanMap.put(x.getKey(), x.getValue()));*/
 
     Document document = new Document();
     document.addTitle("Seat Plan Attendence Sheet");
@@ -2075,9 +2078,9 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
 
     document.newPage();
 
-    for(Integer key : seatPlanMap.keySet()) {
+    for(int i=0;i<sortedSeatPlanMapKeys.size();i++) {
       //PdfContentByte cb = writer.getDirectContent();
-      List<SeatPlan> seatPlansOfTheMap = seatPlanMap.get(key);
+      List<SeatPlan> seatPlansOfTheMap = seatPlanMap.get(sortedSeatPlanMapKeys.get(i));
       /*sittingArrangement.setSittingArrangement(pExamType, semester, seatPlansOfTheMap.get(0).getStudent());*/
       /*sittingArrangement.setSittingArrangement(pExamType, semester, seatPlansOfTheMap.get(0).getStudent());
       //writer.setPageEvent(sittingArrangement);
@@ -2097,12 +2100,15 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
           .stream()
           .collect(Collectors.groupingBy(s-> s.getClassRoom().getId()));
 
-      Map<Long, List<SeatPlan>> seatPlanMapByRoomNo= new HashMap<>();
+      Map<Long, List<SeatPlan>> seatPlanMapByRoomNo= new TreeMap<>();
+      seatPlanMapByRoomNo = seatPlanMapByRoomNoUnordered;
+      List seatPlanMapByRoomNoKeys = new ArrayList(seatPlanMapByRoomNo.keySet());
+      Collections.sort(seatPlanMapByRoomNoKeys);
 
-      seatPlanMapByRoomNoUnordered.entrySet()
+      /*seatPlanMapByRoomNoUnordered.entrySet()
           .stream()
           .sorted(Map.Entry.<Long, List<SeatPlan>>comparingByKey())
-          .forEachOrdered(x-> seatPlanMapByRoomNo.put(x.getKey(), x.getValue()));
+          .forEachOrdered(x-> seatPlanMapByRoomNo.put(x.getKey(), x.getValue()));*/
 
       float[] tableWidth = new float[] {1, 10, 2};
 
@@ -2120,19 +2126,21 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
       cellData = new Paragraph("No. of Students", boldFont);
       addHeaderToSittingArrangementDataTable(sittingArrangementTable, tableHeaderCell, cellData);
 
-      for(Long roomBasedKey: seatPlanMapByRoomNo.keySet()){
+      for(int j=0;j<seatPlanMapByRoomNoKeys.size();j++){
         PdfPCell bodyCell = new PdfPCell();
-        Paragraph bodyParagraph = new Paragraph(seatPlanMapByRoomNo.get(roomBasedKey).get(0).getClassRoom().getRoomNo(), lightFont);
+        Paragraph bodyParagraph = new Paragraph(seatPlanMapByRoomNo.get(seatPlanMapByRoomNoKeys.get(j)).get(0).getClassRoom().getRoomNo(), lightFont);
         bodyCell.addElement(bodyParagraph);
         bodyCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        bodyCell.setVerticalAlignment(Element.ALIGN_CENTER);
         sittingArrangementTable.addCell(bodyCell);
-        String[] studentIds = new String[seatPlanMapByRoomNo.get(roomBasedKey).size()];
-        List<SeatPlan> bodySeatPlanList = seatPlanMapByRoomNo.get(roomBasedKey);
-        for(int i=0;i<bodySeatPlanList.size();i++){
-          studentIds[i]=bodySeatPlanList.get(i).getStudent().getId();
+        String[] studentIds = new String[seatPlanMapByRoomNo.get(seatPlanMapByRoomNoKeys.get(j)).size()];
+        List<SeatPlan> bodySeatPlanList = seatPlanMapByRoomNo.get(seatPlanMapByRoomNoKeys.get(j));
+        for(int x=0;x<bodySeatPlanList.size();x++){
+          studentIds[x]=bodySeatPlanList.get(x).getStudent().getId();
         }
         bodyCell= new PdfPCell (new Paragraph(String.join(", ",studentIds), lightFont));
         bodyCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        bodyCell.setVerticalAlignment(Element.ALIGN_CENTER);
         sittingArrangementTable.addCell(bodyCell);
 
         bodyCell= new PdfPCell (new Paragraph(bodySeatPlanList.size()+"", lightFont));
