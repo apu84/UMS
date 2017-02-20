@@ -25,7 +25,7 @@ public class PersistentLibraryDao extends LibraryDaoDecorator {
   }
 
   @Override
-  public int create(MutableLibrary pMutable) {
+  public Integer create(MutableLibrary pMutable) {
     return mJdbcTemplate.update(INSERT_ALL, pMutable.getBookName(), pMutable.getAuthorName());
   }
 

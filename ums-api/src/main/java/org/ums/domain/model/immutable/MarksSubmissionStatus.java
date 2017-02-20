@@ -11,7 +11,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 public interface MarksSubmissionStatus extends Serializable,
-    EditType<MutableMarksSubmissionStatus>, Identifier<Integer>, LastModifier {
+    EditType<MutableMarksSubmissionStatus>, Identifier<Long>, LastModifier {
 
   Integer getSemesterId();
 

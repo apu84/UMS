@@ -9,16 +9,16 @@ import org.ums.util.CacheUtil;
 import java.util.List;
 
 public class EnrollmentFromToCache extends
-    ContentCache<EnrollmentFromTo, MutableEnrollmentFromTo, Integer, EnrollmentFromToManager>
+    ContentCache<EnrollmentFromTo, MutableEnrollmentFromTo, Long, EnrollmentFromToManager>
     implements EnrollmentFromToManager {
-  private CacheManager<EnrollmentFromTo, Integer> mCacheManager;
+  private CacheManager<EnrollmentFromTo, Long> mCacheManager;
 
-  public EnrollmentFromToCache(final CacheManager<EnrollmentFromTo, Integer> pCacheManager) {
+  public EnrollmentFromToCache(final CacheManager<EnrollmentFromTo, Long> pCacheManager) {
     mCacheManager = pCacheManager;
   }
 
   @Override
-  protected CacheManager<EnrollmentFromTo, Integer> getCacheManager() {
+  protected CacheManager<EnrollmentFromTo, Long> getCacheManager() {
     return mCacheManager;
   }
 

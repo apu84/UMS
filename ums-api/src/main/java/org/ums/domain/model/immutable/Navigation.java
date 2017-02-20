@@ -7,7 +7,7 @@ import org.ums.domain.model.mutable.MutableNavigation;
 
 import java.io.Serializable;
 
-public interface Navigation extends Serializable, Identifier<Integer>, LastModifier,
+public interface Navigation extends Serializable, Identifier<Long>, LastModifier,
     EditType<MutableNavigation> {
   String getTitle();
 
@@ -15,7 +15,7 @@ public interface Navigation extends Serializable, Identifier<Integer>, LastModif
 
   Navigation getParent();
 
-  Integer getParentId();
+  Long getParentId();
 
   Integer getViewOrder();
 

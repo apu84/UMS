@@ -7,17 +7,17 @@ import org.ums.manager.EquivalentCourseManager;
 import org.ums.util.CacheUtil;
 
 public class EquivalentCourseCache extends
-    ContentCache<EquivalentCourse, MutableEquivalentCourse, Integer, EquivalentCourseManager>
+    ContentCache<EquivalentCourse, MutableEquivalentCourse, Long, EquivalentCourseManager>
     implements EquivalentCourseManager {
 
-  private CacheManager<EquivalentCourse, Integer> mCacheManager;
+  private CacheManager<EquivalentCourse, Long> mCacheManager;
 
-  public EquivalentCourseCache(final CacheManager<EquivalentCourse, Integer> pCacheManager) {
+  public EquivalentCourseCache(final CacheManager<EquivalentCourse, Long> pCacheManager) {
     mCacheManager = pCacheManager;
   }
 
   @Override
-  protected CacheManager<EquivalentCourse, Integer> getCacheManager() {
+  protected CacheManager<EquivalentCourse, Long> getCacheManager() {
     return mCacheManager;
   }
 }

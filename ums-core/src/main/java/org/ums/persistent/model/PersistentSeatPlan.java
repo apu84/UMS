@@ -29,9 +29,9 @@ public class PersistentSeatPlan implements MutableSeatPlan {
     sSeatPlanManager = applicationContext.getBean("seatPlanManager", SeatPlanManager.class);
   }
 
-  private int mId;
+  private Long mId;
   private ClassRoom mClassRoom;
-  private int mClassRoomId;
+  private Long mClassRoomId;
   private Student mStudent;
   private String mStudentId;
   private Semester mSemester;
@@ -85,11 +85,11 @@ public class PersistentSeatPlan implements MutableSeatPlan {
     return mExamDate;
   }
 
-  public int getClassRoomId() {
+  public Long getClassRoomId() {
     return mClassRoomId;
   }
 
-  public void setClassRoomId(int pClassRoomId) {
+  public void setClassRoomId(Long pClassRoomId) {
     mClassRoomId = pClassRoomId;
   }
 
@@ -160,7 +160,7 @@ public class PersistentSeatPlan implements MutableSeatPlan {
   }
 
   @Override
-  public void setId(Integer pId) {
+  public void setId(Long pId) {
     mId = pId;
   }
 
@@ -212,7 +212,7 @@ public class PersistentSeatPlan implements MutableSeatPlan {
   }
 
   @Override
-  public Integer getId() {
+  public Long getId() {
     return mId;
   }
 

@@ -11,14 +11,16 @@ import java.io.Serializable;
  * Created by My Pc on 5/8/2016.
  */
 public interface SeatPlan extends Serializable, LastModifier, EditType<MutableSeatPlan>,
-    Identifier<Integer> {
+    Identifier<Long> {
   ClassRoom getClassRoom();
+
+  String getStudentId();
 
   Student getStudent();
 
   Semester getSemester();
 
-  int getClassRoomId();
+  Long getClassRoomId();
 
   int getRowNo();
 

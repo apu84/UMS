@@ -8,7 +8,7 @@ import org.ums.manager.PermissionManager;
 import java.util.List;
 
 public class PermissionDaoDecorator extends
-    ContentDaoDecorator<Permission, MutablePermission, Integer, PermissionManager> implements
+    ContentDaoDecorator<Permission, MutablePermission, Long, PermissionManager> implements
     PermissionManager {
   @Override
   public List<Permission> getPermissionByRole(Role pRole) {

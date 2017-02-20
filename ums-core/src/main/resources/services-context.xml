@@ -59,8 +59,11 @@
     <property name="loggingEnabled" value="${enable.query.logging}"/>
   </bean>
 
+  <bean id="idGenerator" class="org.ums.generator.IdGenerator"/>
+
   <bean id="loggerEntryManager" class="org.ums.persistent.dao.PersistentLoggerEntryDao">
     <constructor-arg name="pJdbcTemplate" ref="jdbcTemplate"/>
+    <constructor-arg name="pIdGenerator" ref="idGenerator"/>
   </bean>
 
   <tx:annotation-driven transaction-manager="transactionManager"/>

@@ -12,6 +12,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Created by My Pc on 8/2/2016.
@@ -44,10 +46,11 @@ public class PersistentSeatPlanPublishDao extends SeatPlanPublishDaoDecorator {
   }
 
   @Override
-  public int create(List<MutableSeatPlanPublish> pMutableList) {
+  public List<Integer> create(List<MutableSeatPlanPublish> pMutableList) {
     String query =
         " insert into sp_publish(semester_id,exam_type,exam_date,published) values(?,?,to_date(?,'dd/MM/YYYY'),?)";
-    return mJdbcTemplate.batchUpdate(query, getInsertParamList(pMutableList)).length;
+    int[] updates = mJdbcTemplate.batchUpdate(query, getInsertParamList(pMutableList));
+    return IntStream.of(updates).boxed().collect(Collectors.toList());
   }
 
   @Override

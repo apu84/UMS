@@ -6,7 +6,7 @@ import org.ums.domain.model.immutable.SemesterEnrollment;
 import java.util.List;
 
 public interface SemesterEnrollmentManager extends
-    ContentManager<SemesterEnrollment, MutableSemesterEnrollment, Integer> {
+    ContentManager<SemesterEnrollment, MutableSemesterEnrollment, Long> {
   List<SemesterEnrollment> getEnrollmentStatus(final SemesterEnrollment.Type pType,
       final Integer pProgramId, final Integer pSemesterId);
 

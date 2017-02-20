@@ -6,7 +6,7 @@ import org.ums.domain.model.immutable.LoggerEntry;
 
 import java.util.Date;
 
-public interface MutableLoggerEntry extends LoggerEntry, Mutable, MutableIdentifier<Integer> {
+public interface MutableLoggerEntry extends LoggerEntry, Mutable, MutableIdentifier<Long> {
   void setSql(final String pSql);
 
   void setUserName(final String pUserName);

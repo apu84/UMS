@@ -7,7 +7,7 @@ import org.ums.domain.model.immutable.ProgramType;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.mutable.MutableLastModifier;
 
-public interface MutableFee extends Fee, Mutable, MutableLastModifier, MutableIdentifier<Integer> {
+public interface MutableFee extends Fee, Mutable, MutableLastModifier, MutableIdentifier<Long> {
   void setFeeCategoryId(String pFeeCategoryId);
 
   void setFeeCategory(FeeCategory pFeeCategory);

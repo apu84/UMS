@@ -12,6 +12,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Created by Monjur-E-Morshed on 29-Dec-16.
@@ -30,14 +32,15 @@ public class PersistentAdmissionDeadlineDao extends AdmissionDeadlineDaoDecorato
   }
 
   @Override
-  public int create(MutableAdmissionDeadline pMutable) {
+  public Integer create(MutableAdmissionDeadline pMutable) {
     return super.create(pMutable);
   }
 
   @Override
-  public int create(List<MutableAdmissionDeadline> pMutableList) {
-    String query = INSERT_ONE;
-    return mJdbcTemplate.batchUpdate(query, getAdmissionDeadlineParams(pMutableList)).length;
+  public List<Integer> create(List<MutableAdmissionDeadline> pMutableList) {
+    List<Object[]> params = getAdmissionDeadlineParams(pMutableList);
+    int[] updates = mJdbcTemplate.batchUpdate(INSERT_ONE, params);
+    return IntStream.of(updates).boxed().collect(Collectors.toList());
   }
 
   @Override

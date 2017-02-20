@@ -29,8 +29,9 @@ public class BearerAccessTokenDao extends BearerAccessTokenDaoDecorator {
   }
 
   @Override
-  public int create(MutableBearerAccessToken pMutable) {
-    return mJdbcTemplate.update(INSERT_ALL, pMutable.getId(), pMutable.getUserId());
+  public String create(MutableBearerAccessToken pMutable) {
+    mJdbcTemplate.update(INSERT_ALL, pMutable.getId(), pMutable.getUserId());
+    return pMutable.getId();
   }
 
   @Override

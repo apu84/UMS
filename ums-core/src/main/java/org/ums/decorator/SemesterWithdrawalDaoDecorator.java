@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class SemesterWithdrawalDaoDecorator
     extends
-    ContentDaoDecorator<SemesterWithdrawal, MutableSemesterWithdrawal, Integer, SemesterWithDrawalManager>
+    ContentDaoDecorator<SemesterWithdrawal, MutableSemesterWithdrawal, Long, SemesterWithDrawalManager>
     implements SemesterWithDrawalManager {
 
   @Override

@@ -25,7 +25,7 @@ public class PersistentRoutine implements MutableRoutine {
     sRoutineManager = applicationContext.getBean("routineManager", RoutineManager.class);
   }
 
-  private String mId;
+  private Long mId;
   private Semester mSemester;
   private Program mProgram;
   private String mSection;
@@ -219,7 +219,7 @@ public class PersistentRoutine implements MutableRoutine {
   }
 
   @Override
-  public void setId(String pId) {
+  public void setId(Long pId) {
     mId = pId;
   }
 
@@ -265,7 +265,7 @@ public class PersistentRoutine implements MutableRoutine {
   }
 
   @Override
-  public String getId() {
+  public Long getId() {
     return mId;
   }
 

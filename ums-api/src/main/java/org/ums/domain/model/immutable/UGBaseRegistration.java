@@ -10,7 +10,7 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
-public interface UGBaseRegistration extends Serializable, Identifier<Integer>, LastModifier {
+public interface UGBaseRegistration extends Serializable, Identifier<Long>, LastModifier {
   String getCourseId();
 
   Course getCourse(); // will provide course_id,course_no and course_title for

@@ -10,7 +10,7 @@ import org.ums.domain.model.immutable.Semester;
  * Created by My Pc on 3/14/2016.
  */
 public interface MutableParameterSetting extends ParameterSetting, Mutable, MutableLastModifier,
-    MutableIdentifier<String> {
+    MutableIdentifier<Long> {
   void setSemester(Semester pSemester);
 
   void setParameter(Parameter pParameter);

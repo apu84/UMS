@@ -62,9 +62,10 @@ public class PersistentCourseGroupDao extends CourseGroupDaoDecorator {
   }
 
   @Override
-  public int create(final MutableCourseGroup pCourseGroup) {
-    return mJdbcTemplate.update(INSERT_ONE, pCourseGroup.getSyllabus().getId(),
-        pCourseGroup.getId(), pCourseGroup.getName());
+  public Integer create(final MutableCourseGroup pCourseGroup) {
+    mJdbcTemplate.update(INSERT_ONE, pCourseGroup.getSyllabus().getId(), pCourseGroup.getId(),
+        pCourseGroup.getName());
+    return pCourseGroup.getId();
   }
 
   class CourseGroupRowMapper implements RowMapper<CourseGroup> {

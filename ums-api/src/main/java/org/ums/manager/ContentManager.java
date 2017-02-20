@@ -17,9 +17,9 @@ public interface ContentManager<R, M, I> {
 
   int delete(final List<M> pMutableList);
 
-  int create(final M pMutable);
+  I create(final M pMutable);
 
-  int create(final List<M> pMutableList);
+  List<I> create(final List<M> pMutableList);
 
   boolean exists(final I pId);
 }

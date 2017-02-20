@@ -11,17 +11,17 @@ import org.ums.util.CacheUtil;
 
 public class MarksSubmissionStatusCache
     extends
-    ContentCache<MarksSubmissionStatus, MutableMarksSubmissionStatus, Integer, MarksSubmissionStatusManager>
+    ContentCache<MarksSubmissionStatus, MutableMarksSubmissionStatus, Long, MarksSubmissionStatusManager>
     implements MarksSubmissionStatusManager {
 
-  private CacheManager<MarksSubmissionStatus, Integer> mCacheManager;
+  private CacheManager<MarksSubmissionStatus, Long> mCacheManager;
 
-  public MarksSubmissionStatusCache(CacheManager<MarksSubmissionStatus, Integer> pCacheManager) {
+  public MarksSubmissionStatusCache(CacheManager<MarksSubmissionStatus, Long> pCacheManager) {
     mCacheManager = pCacheManager;
   }
 
   @Override
-  protected CacheManager<MarksSubmissionStatus, Integer> getCacheManager() {
+  protected CacheManager<MarksSubmissionStatus, Long> getCacheManager() {
     return mCacheManager;
   }
 

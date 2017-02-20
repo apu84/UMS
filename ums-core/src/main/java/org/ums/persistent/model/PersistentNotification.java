@@ -19,7 +19,7 @@ public class PersistentNotification implements MutableNotification {
     sNotificationManager =
         applicationContext.getBean("notificationManager", NotificationManager.class);
   }
-  private String mId;
+  private Long mId;
   private String mNotificationType;
   private String mPayload;
   private Date mProducedOn;
@@ -82,7 +82,7 @@ public class PersistentNotification implements MutableNotification {
   }
 
   @Override
-  public void setId(String pId) {
+  public void setId(Long pId) {
     mId = pId;
   }
 
@@ -122,7 +122,7 @@ public class PersistentNotification implements MutableNotification {
   }
 
   @Override
-  public String getId() {
+  public Long getId() {
     return mId;
   }
 

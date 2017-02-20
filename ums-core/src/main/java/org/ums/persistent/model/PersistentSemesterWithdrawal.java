@@ -31,7 +31,7 @@ public class PersistentSemesterWithdrawal implements MutableSemesterWithdrawal {
         applicationContext.getBean("semesterWithdrawalManager", SemesterWithDrawalManager.class);
   }
 
-  private int mId;
+  private Long mId;
   private Semester mSemester;
   private Program mProgram;
   private int mProgramId;
@@ -160,10 +160,6 @@ public class PersistentSemesterWithdrawal implements MutableSemesterWithdrawal {
     mSemesterId = pSemesterId;
   }
 
-  public void setId(int pId) {
-    mId = pId;
-  }
-
   @Override
   public void setSemester(Semester pSemester) {
     mSemester = pSemester;
@@ -191,7 +187,7 @@ public class PersistentSemesterWithdrawal implements MutableSemesterWithdrawal {
   }
 
   @Override
-  public Integer getId() {
+  public Long getId() {
     return mId;
   }
 
@@ -216,7 +212,7 @@ public class PersistentSemesterWithdrawal implements MutableSemesterWithdrawal {
   }
 
   @Override
-  public void setId(Integer pId) {
+  public void setId(Long pId) {
     mId = pId;
   }
 

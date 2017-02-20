@@ -76,11 +76,10 @@ public class RoutineBuilder implements Builder<Routine, MutableRoutine> {
         .collect(Collectors.toList());
 
 
-    pMutable.setId(pJsonObject.getString("id"));
+    pMutable.setId(Long.parseLong(pJsonObject.getString("id")));
     PersistentSemester persistentSemester = new PersistentSemester();
     persistentSemester.setId(pJsonObject.getInt("semesterId"));
     pMutable.setSemester(persistentSemester);
-    PersistentProgram program = new PersistentProgram();
     pMutable.setProgram(programList.get(0));
     pMutable.setCourseId(pJsonObject.getString("courseId"));
     pMutable.setDay(pJsonObject.getInt("day"));

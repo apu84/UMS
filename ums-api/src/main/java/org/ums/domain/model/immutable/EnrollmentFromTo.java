@@ -7,7 +7,7 @@ import org.ums.domain.model.mutable.MutableEnrollmentFromTo;
 
 import java.io.Serializable;
 
-public interface EnrollmentFromTo extends Serializable, LastModifier, Identifier<Integer>,
+public interface EnrollmentFromTo extends Serializable, LastModifier, Identifier<Long>,
     EditType<MutableEnrollmentFromTo> {
   Integer getProgramId();
 

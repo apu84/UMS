@@ -1,7 +1,9 @@
 package org.ums.persistent.dao;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -11,7 +13,8 @@ import org.ums.decorator.NotificationDaoDecorator;
 import org.ums.domain.model.immutable.Notification;
 import org.ums.domain.model.mutable.MutableNotification;
 
-import java.util.List;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 
 public class PersistentObjectNotificationDao extends NotificationDaoDecorator {
   private MongoOperations mMongoOperations;
@@ -21,7 +24,7 @@ public class PersistentObjectNotificationDao extends NotificationDaoDecorator {
   }
 
   @Override
-  public Notification get(String pId) {
+  public Notification get(Long pId) {
     return mMongoOperations.findOne(Query.query(Criteria.where("mId").is(pId)), Notification.class);
   }
 
@@ -42,15 +45,16 @@ public class PersistentObjectNotificationDao extends NotificationDaoDecorator {
   }
 
   @Override
-  public int create(MutableNotification pMutable) {
+  public Long create(MutableNotification pMutable) {
     mMongoOperations.insert(pMutable);
-    return 1;
+    return pMutable.getId();
   }
 
   @Override
-  public int create(List<MutableNotification> pMutableList) {
+  public List<Long> create(List<MutableNotification> pMutableList) {
     mMongoOperations.insert(pMutableList, Notification.class);
-    return pMutableList.size();
+    return pMutableList.stream().map(pMutable -> pMutable.getId())
+        .collect(Collectors.toCollection(ArrayList::new));
   }
 
   @Override

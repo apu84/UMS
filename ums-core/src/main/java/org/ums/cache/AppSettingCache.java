@@ -10,17 +10,17 @@ import org.ums.util.CacheUtil;
  * Created by My Pc on 30-Aug-16.
  */
 public class AppSettingCache extends
-    ContentCache<AppSetting, MutableAppSetting, Integer, AppSettingManager> implements
+    ContentCache<AppSetting, MutableAppSetting, Long, AppSettingManager> implements
     AppSettingManager {
 
-  CacheManager<AppSetting, Integer> mCacheManager;
+  CacheManager<AppSetting, Long> mCacheManager;
 
-  public AppSettingCache(CacheManager<AppSetting, Integer> pAppSettingIntegerCacheManager) {
+  public AppSettingCache(CacheManager<AppSetting, Long> pAppSettingIntegerCacheManager) {
     mCacheManager = pAppSettingIntegerCacheManager;
   }
 
   @Override
-  protected CacheManager<AppSetting, Integer> getCacheManager() {
+  protected CacheManager<AppSetting, Long> getCacheManager() {
     return mCacheManager;
   }
 

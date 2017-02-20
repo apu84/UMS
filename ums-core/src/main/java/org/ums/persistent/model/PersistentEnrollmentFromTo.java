@@ -18,7 +18,7 @@ public class PersistentEnrollmentFromTo implements MutableEnrollmentFromTo {
         applicationContext.getBean("enrollmentFromToManager", EnrollmentFromToManager.class);
   }
 
-  private Integer mId;
+  private Long mId;
   private Integer mProgramId;
   private Program mProgram;
   private Integer mFromYear;
@@ -105,7 +105,7 @@ public class PersistentEnrollmentFromTo implements MutableEnrollmentFromTo {
   }
 
   @Override
-  public Integer getId() {
+  public Long getId() {
     return mId;
   }
 
@@ -115,7 +115,7 @@ public class PersistentEnrollmentFromTo implements MutableEnrollmentFromTo {
   }
 
   @Override
-  public void setId(Integer pId) {
+  public void setId(Long pId) {
     mId = pId;
   }
 

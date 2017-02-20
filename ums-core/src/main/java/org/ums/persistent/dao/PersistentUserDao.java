@@ -81,8 +81,8 @@ public class PersistentUserDao extends UserDaoDecorator {
   }
 
   @Override
-  public int create(MutableUser pMutable) {
-    return mJdbcTemplate.update(
+  public String create(MutableUser pMutable) {
+    mJdbcTemplate.update(
         INSERT_ALL,
         pMutable.getId(),
         pMutable.getPassword() == null ? "" : String.valueOf(pMutable.getPassword()),
@@ -90,6 +90,7 @@ public class PersistentUserDao extends UserDaoDecorator {
         pMutable.isActive(),
         pMutable.getTemporaryPassword() == null ? "" : String.valueOf(pMutable
             .getTemporaryPassword()));
+    return pMutable.getId();
   }
 
   @Override

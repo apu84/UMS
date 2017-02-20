@@ -8,7 +8,7 @@ import java.util.List;
 
 public class SemesterEnrollmentDaoDecorator
     extends
-    ContentDaoDecorator<SemesterEnrollment, MutableSemesterEnrollment, Integer, SemesterEnrollmentManager>
+    ContentDaoDecorator<SemesterEnrollment, MutableSemesterEnrollment, Long, SemesterEnrollmentManager>
     implements SemesterEnrollmentManager {
   @Override
   public List<SemesterEnrollment> getEnrollmentStatus(SemesterEnrollment.Type pType,

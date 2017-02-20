@@ -14,6 +14,7 @@ import org.ums.domain.model.immutable.MarksSubmissionStatus;
 import org.ums.domain.model.mutable.MutableMarksSubmissionStatus;
 import org.ums.enums.CourseMarksSubmissionStatus;
 import org.ums.enums.ExamType;
+import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.PersistentMarksSubmissionStatus;
 
 public class PersistentMarkSubmissionStatusDao extends MarksSubmissionStatusDaoDecorator {
@@ -26,14 +27,16 @@ public class PersistentMarkSubmissionStatusDao extends MarksSubmissionStatusDaoD
           + "YEAR = ?, SEMESTER = ?, LAST_MODIFIED = " + getLastModifiedSql() + " ";
   String DELETE_ALL = "DELETE FROM MARKS_SUBMISSION_STATUS ";
   String INSERT_ALL =
-      "INSERT INTO MST_SEMESTER(SEMESTER_ID, COURSE_ID, STATUS, EXAM_TYPE, LAST_SUBMISSION_DATE, TOTAL_PART, "
+      "INSERT INTO MST_SEMESTER(ID, SEMESTER_ID, COURSE_ID, STATUS, EXAM_TYPE, LAST_SUBMISSION_DATE, TOTAL_PART, "
           + "PART_A_TOTAL, PART_B_TOTAL, YEAR, SEMESTER, LAST_MODIFIED) "
-          + "VALUES(?, ?, ?, ?  ?, ?, ?, ?, ?, " + getLastModifiedSql() + ")";
+          + "VALUES(?, ?, ?, ?, ?  ?, ?, ?, ?, ?, " + getLastModifiedSql() + ")";
 
   private JdbcTemplate mJdbcTemplate;
+  private IdGenerator mIdGenerator;
 
-  public PersistentMarkSubmissionStatusDao(JdbcTemplate pJdbcTemplate) {
+  public PersistentMarkSubmissionStatusDao(JdbcTemplate pJdbcTemplate, IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
+    mIdGenerator = pIdGenerator;
   }
 
   @Override
@@ -42,7 +45,7 @@ public class PersistentMarkSubmissionStatusDao extends MarksSubmissionStatusDaoD
   }
 
   @Override
-  public MarksSubmissionStatus get(Integer pId) {
+  public MarksSubmissionStatus get(Long pId) {
     String query = SELECT_ALL + "WHERE ID = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId},
         new MarksSubmissionStatusRowMapper());
@@ -70,11 +73,13 @@ public class PersistentMarkSubmissionStatusDao extends MarksSubmissionStatusDaoD
   }
 
   @Override
-  public int create(MutableMarksSubmissionStatus pMutable) {
-    return mJdbcTemplate.update(INSERT_ALL, pMutable.getSemesterId(), pMutable.getCourseId(),
+  public Long create(MutableMarksSubmissionStatus pMutable) {
+    Long id = mIdGenerator.getNumericId();
+    mJdbcTemplate.update(INSERT_ALL, id, pMutable.getSemesterId(), pMutable.getCourseId(),
         pMutable.getStatus(), pMutable.getExamType(), pMutable.getLastSubmissionDatePrep(),
         pMutable.getTotalPart(), pMutable.getPartATotal(), pMutable.getPartBTotal(),
         pMutable.getYear(), pMutable.getAcademicSemester());
+    return id;
   }
 
   @Override
@@ -110,7 +115,7 @@ public class PersistentMarkSubmissionStatusDao extends MarksSubmissionStatusDaoD
     @Override
     public MarksSubmissionStatus mapRow(ResultSet rs, int rowNum) throws SQLException {
       MutableMarksSubmissionStatus marksSubmissionStatus = new PersistentMarksSubmissionStatus();
-      marksSubmissionStatus.setId(rs.getInt("ID"));
+      marksSubmissionStatus.setId(rs.getLong("ID"));
       marksSubmissionStatus.setSemesterId(rs.getInt("SEMESTER_ID"));
       marksSubmissionStatus.setCourseId(rs.getString("COURSE_ID"));
       marksSubmissionStatus.setStatus(CourseMarksSubmissionStatus.get(rs.getInt("STATUS")));

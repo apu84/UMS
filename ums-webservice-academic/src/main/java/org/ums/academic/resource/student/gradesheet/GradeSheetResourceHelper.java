@@ -22,7 +22,7 @@ import org.ums.resource.ResourceHelper;
 
 @Component
 public class GradeSheetResourceHelper extends
-    ResourceHelper<UGRegistrationResult, MutableUGRegistrationResult, Integer> {
+    ResourceHelper<UGRegistrationResult, MutableUGRegistrationResult, Long> {
   @Autowired
   UGRegistrationResultManager mUGRegistrationResultManager;
 

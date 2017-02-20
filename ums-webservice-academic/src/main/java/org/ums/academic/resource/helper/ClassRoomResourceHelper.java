@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class ClassRoomResourceHelper extends ResourceHelper<ClassRoom, MutableClassRoom, Integer> {
+public class ClassRoomResourceHelper extends ResourceHelper<ClassRoom, MutableClassRoom, Long> {
 
   @Autowired
   private ClassRoomManager mManager;
@@ -187,7 +187,7 @@ public class ClassRoomResourceHelper extends ResourceHelper<ClassRoom, MutableCl
     return object.build();
   }
 
-  public JsonObject getByRoomId(final Integer pRoomId, final UriInfo pUriInfo) {
+  public JsonObject getByRoomId(final Long pRoomId, final UriInfo pUriInfo) {
     ClassRoom room = getContentManager().get(pRoomId);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();

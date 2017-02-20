@@ -9,7 +9,7 @@ import org.ums.domain.model.immutable.Semester;
 import java.util.Date;
 
 public interface MutableResultPublish extends ResultPublish, Mutable, MutableLastModifier,
-    MutableIdentifier<Integer> {
+    MutableIdentifier<Long> {
 
   void setSemesterId(Integer pSemesterId);
 

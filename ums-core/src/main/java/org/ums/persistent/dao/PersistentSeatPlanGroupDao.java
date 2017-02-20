@@ -11,6 +11,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class PersistentSeatPlanGroupDao extends SeatPlanGroupDaoDecorator {
 
@@ -191,7 +193,7 @@ public class PersistentSeatPlanGroupDao extends SeatPlanGroupDaoDecorator {
   }
 
   @Override
-  public int create(MutableSeatPlanGroup pMutable) {
+  public Integer create(MutableSeatPlanGroup pMutable) {
     String query = INSERT_ONE;
     return mJdbcTemplate.update(query, pMutable.getSemester().getId(), pMutable.getProgram()
         .getId(), pMutable.getAcademicYear(), pMutable.getAcademicSemester(),
@@ -199,8 +201,9 @@ public class PersistentSeatPlanGroupDao extends SeatPlanGroupDaoDecorator {
   }
 
   @Override
-  public int create(List<MutableSeatPlanGroup> pMutableList) {
-    return mJdbcTemplate.batchUpdate(INSERT_ONE, getInsertParamList(pMutableList)).length;
+  public List<Integer> create(List<MutableSeatPlanGroup> pMutableList) {
+    int[] updates = mJdbcTemplate.batchUpdate(INSERT_ONE, getInsertParamList(pMutableList));
+    return IntStream.of(updates).boxed().collect(Collectors.toList());
   }
 
   private List<Object[]> getInsertParamList(List<MutableSeatPlanGroup> pSeatPlanGroups) {

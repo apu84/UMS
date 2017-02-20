@@ -11,27 +11,30 @@ import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.SemesterEnrollmentDaoDecorator;
 import org.ums.domain.model.immutable.SemesterEnrollment;
 import org.ums.domain.model.mutable.MutableSemesterEnrollment;
+import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.PersistentSemesterEnrollment;
 
 public class PersistentSemesterEnrollmentDao extends SemesterEnrollmentDaoDecorator {
   private String SELECT_ALL =
       "SELECT SEMESTER_ID, PROGRAM_ID, STUDENT_YEAR, STUDENT_SEMESTER, ENROLL_DATE, ENROLL_TYPE, LAST_MODIFIED, ID FROM SEMESTER_ENROLLMENT ";
   private String INSERT_ALL =
-      "INSERT INTO SEMESTER_ENROLLMENT(SEMESTER_ID, PROGRAM_ID, STUDENT_YEAR, STUDENT_SEMESTER, ENROLL_DATE, ENROLL_TYPE, LAST_MODIFIED) VALUES"
-          + "(?, ?, ?, ?, SYSDATE, ?, " + getLastModifiedSql() + ") ";
+      "INSERT INTO SEMESTER_ENROLLMENT(ID, SEMESTER_ID, PROGRAM_ID, STUDENT_YEAR, STUDENT_SEMESTER, ENROLL_DATE, ENROLL_TYPE, LAST_MODIFIED) VALUES"
+          + "(?, ?, ?, ?, ?, SYSDATE, ?, " + getLastModifiedSql() + ") ";
   private String UPDATE_ALL = "UPDATE SEMESTER_ENROLLMENT SET " + "SEMESTER_ID = ?,"
       + "PROGRAM_ID = ?," + "STUDENT_YEAR = ?," + "STUDENT_SEMESTER = ?," + "ENROLL_DATE = ?,"
       + "ENROLL_TYPE = ?," + "LAST_MODIFIED = " + getLastModifiedSql() + " ";
   private String DELETE_ALL = "DELETE FROM SEMESTER_ENROLLMENT ";
 
   private JdbcTemplate mJdbcTemplate;
+  private IdGenerator mIdGenerator;
 
-  public PersistentSemesterEnrollmentDao(JdbcTemplate pJdbcTemplate) {
+  public PersistentSemesterEnrollmentDao(JdbcTemplate pJdbcTemplate, IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
+    mIdGenerator = pIdGenerator;
   }
 
   @Override
-  public SemesterEnrollment get(Integer pId) {
+  public SemesterEnrollment get(Long pId) {
     String query = SELECT_ALL + "WHERE ID = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId},
         new SemesterEnrollmentRowMapper());
@@ -57,10 +60,12 @@ public class PersistentSemesterEnrollmentDao extends SemesterEnrollmentDaoDecora
   }
 
   @Override
-  public int create(MutableSemesterEnrollment pMutable) {
-    return mJdbcTemplate
-        .update(INSERT_ALL, pMutable.getSemester().getId(), pMutable.getProgram().getId(),
+  public Long create(MutableSemesterEnrollment pMutable) {
+    Long id = mIdGenerator.getNumericId();
+    mJdbcTemplate
+        .update(INSERT_ALL, id, pMutable.getSemester().getId(), pMutable.getProgram().getId(),
             pMutable.getYear(), pMutable.getAcademicSemester(), pMutable.getType().getValue());
+    return id;
   }
 
   @Override
@@ -109,7 +114,7 @@ public class PersistentSemesterEnrollmentDao extends SemesterEnrollmentDaoDecora
     @Override
     public SemesterEnrollment mapRow(ResultSet rs, int rowNum) throws SQLException {
       MutableSemesterEnrollment enrollment = new PersistentSemesterEnrollment();
-      enrollment.setId(rs.getInt("ID"));
+      enrollment.setId(rs.getLong("ID"));
       enrollment.setSemesterId(rs.getInt("SEMESTER_ID"));
       enrollment.setProgramId(rs.getInt("PROGRAM_ID"));
       enrollment.setYear(rs.getInt("STUDENT_YEAR"));

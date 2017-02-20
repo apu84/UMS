@@ -8,7 +8,7 @@ import org.ums.domain.model.immutable.AppSetting;
  * Created by My Pc on 30-Aug-16.
  */
 public interface MutableAppSetting extends AppSetting, Mutable, MutableLastModifier,
-    MutableIdentifier<Integer> {
+    MutableIdentifier<Long> {
   void setParameterName(final String pParameterName);
 
   void setParameterValue(final String pParameterValue);

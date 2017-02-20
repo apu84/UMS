@@ -4,6 +4,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.AppSettingDaoDecorator;
 import org.ums.domain.model.immutable.AppSetting;
+import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.PersistentAppSetting;
 
 import java.sql.ResultSet;
@@ -18,17 +19,19 @@ public class PersistentAppSettingDao extends AppSettingDaoDecorator {
   static String SELECT_ALL =
       "SELECT ID,PARAMETER_NAME,PARAMETER_VALUE,DESCRIPTION,DATA_TYPE,LAST_MODIFIED FROM APP_SETTING ";
   static String INSERT_ONE =
-      "INSERT INTO APP_SETTING (PARAMETER_NAME,PARAMETER_VALUE,DESCRIPTION,DATA_TYPE,LAST_MODIFIED) "
-          + " VALUES (?,?,?,?," + getLastModifiedSql() + ")";
+      "INSERT INTO APP_SETTING (ID,PARAMETER_NAME,PARAMETER_VALUE,DESCRIPTION,DATA_TYPE,LAST_MODIFIED) "
+          + " VALUES (?,?,?,?,?," + getLastModifiedSql() + ")";
   static String DELETE_ALL = "DELETE FROM APP_SETTING ";
   static String UPDATE_ONE =
       "UPDATE APP_SETTING SET PARAMETER_NAME=?,PARAMETER_VALUE=?,DESCRIPTION=?,DATA_TYPE=?, LAST_MODIFIED= "
           + getLastModifiedSql() + " ";
 
   private JdbcTemplate mJdbcTemplate;
+  private IdGenerator mIdGenerator;
 
-  public PersistentAppSettingDao(final JdbcTemplate pJdbcTemplate) {
+  public PersistentAppSettingDao(final JdbcTemplate pJdbcTemplate, IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
+    mIdGenerator = pIdGenerator;
   }
 
   @Override
@@ -38,7 +41,7 @@ public class PersistentAppSettingDao extends AppSettingDaoDecorator {
   }
 
   @Override
-  public AppSetting get(Integer pId) {
+  public AppSetting get(Long pId) {
     String query = SELECT_ALL + " where id=?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new AppSettingRowMapper());
   }
@@ -47,7 +50,7 @@ public class PersistentAppSettingDao extends AppSettingDaoDecorator {
     @Override
     public AppSetting mapRow(ResultSet pResultSet, int pI) throws SQLException {
       PersistentAppSetting appSetting = new PersistentAppSetting();
-      appSetting.setId(pResultSet.getInt("ID"));
+      appSetting.setId(pResultSet.getLong("ID"));
       appSetting.setParameterName(pResultSet.getString("PARAMETER_NAME"));
       appSetting.setParameterValue(pResultSet.getString("PARAMETER_VALUE"));
       appSetting.setParameterDescription(pResultSet.getString("DESCRIPTION"));

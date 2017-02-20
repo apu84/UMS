@@ -1,17 +1,18 @@
 package org.ums.persistent.dao;
 
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.ums.persistent.model.PersistentClassRoom;
-import org.ums.decorator.ClassRoomDaoDecorator;
-import org.ums.domain.model.mutable.*;
-import org.ums.domain.model.immutable.ClassRoom;
-import org.ums.enums.ClassRoomType;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.ums.decorator.ClassRoomDaoDecorator;
+import org.ums.domain.model.immutable.ClassRoom;
+import org.ums.domain.model.mutable.MutableClassRoom;
+import org.ums.enums.ClassRoomType;
+import org.ums.generator.IdGenerator;
+import org.ums.persistent.model.PersistentClassRoom;
 
 public class PersistentClassRoomDao extends ClassRoomDaoDecorator {
   static String SELECT_ALL =
@@ -22,16 +23,18 @@ public class PersistentClassRoomDao extends ClassRoomDaoDecorator {
   static String DELETE_ONE = "DELETE FROM ROOM_INFO ";
   static String INSERT_ONE =
       "INSERT INTO ROOM_INFO(ROOM_ID,ROOM_NO,DESCRIPTION,TOTAL_ROW,TOTAL_COLUMN,CAPACITY,ROOM_TYPE,DEPT_ID,EXAM_SEAT_PLAN,LAST_MODIFIED) "
-          + "VALUES(SQN_CLASS_ROOM.NEXTVAL, ?, ?, ?, ?, ?, ?, ?, ?, " + getLastModifiedSql() + ")";
+          + "VALUES(? , ?, ?, ?, ?, ?, ?, ?, ?, " + getLastModifiedSql() + ")";
 
   private JdbcTemplate mJdbcTemplate;
+  private IdGenerator mIdGenerator;
 
-  public PersistentClassRoomDao(final JdbcTemplate pJdbcTemplate) {
+  public PersistentClassRoomDao(final JdbcTemplate pJdbcTemplate, IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
+    mIdGenerator = pIdGenerator;
   }
 
   @Override
-  public ClassRoom get(final Integer pId) {
+  public ClassRoom get(final Long pId) {
     String query = SELECT_ALL + " WHERE ROOM_ID = ?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new ClassRoomRowMapper());
   }
@@ -84,10 +87,12 @@ public class PersistentClassRoomDao extends ClassRoomDaoDecorator {
         new ClassRoomRowMapper());
   }
 
-  public int create(final MutableClassRoom pClassRoom) {
-    return mJdbcTemplate.update(INSERT_ONE, pClassRoom.getRoomNo(), pClassRoom.getDescription(),
+  public Long create(final MutableClassRoom pClassRoom) {
+    Long id = mIdGenerator.getNumericId();
+    mJdbcTemplate.update(INSERT_ONE, id, pClassRoom.getRoomNo(), pClassRoom.getDescription(),
         pClassRoom.getTotalRow(), pClassRoom.getTotalColumn(), pClassRoom.getCapacity(), pClassRoom
             .getRoomType().getValue(), pClassRoom.getDeptId(), pClassRoom.isExamSeatPlan());
+    return id;
   }
 
   /*
@@ -102,7 +107,7 @@ public class PersistentClassRoomDao extends ClassRoomDaoDecorator {
     @Override
     public ClassRoom mapRow(ResultSet resultSet, int i) throws SQLException {
       PersistentClassRoom classRoom = new PersistentClassRoom();
-      classRoom.setId(resultSet.getInt("ROOM_ID"));
+      classRoom.setId(resultSet.getLong("ROOM_ID"));
       classRoom.setRoomNo(resultSet.getString("ROOM_NO"));
       classRoom.setDescription(resultSet.getString("DESCRIPTION"));
       classRoom.setTotalRow(resultSet.getInt("TOTAL_ROW"));

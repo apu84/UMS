@@ -6,6 +6,6 @@ import org.ums.domain.model.immutable.Role;
 
 import java.util.List;
 
-public interface PermissionManager extends ContentManager<Permission, MutablePermission, Integer> {
+public interface PermissionManager extends ContentManager<Permission, MutablePermission, Long> {
   List<Permission> getPermissionByRole(final Role pRole);
 }

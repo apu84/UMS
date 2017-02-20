@@ -13,8 +13,8 @@ import java.util.List;
 /**
  * Created by My Pc on 5/8/2016.
  */
-public class SeatPlanCache extends
-    ContentCache<SeatPlan, MutableSeatPlan, Integer, SeatPlanManager> implements SeatPlanManager {
+public class SeatPlanCache extends ContentCache<SeatPlan, MutableSeatPlan, Long, SeatPlanManager>
+    implements SeatPlanManager {
 
   private CacheManager mCacheManager;
 
@@ -23,7 +23,7 @@ public class SeatPlanCache extends
   }
 
   @Override
-  protected CacheManager<SeatPlan, Integer> getCacheManager() {
+  protected CacheManager<SeatPlan, Long> getCacheManager() {
     return mCacheManager;
   }
 

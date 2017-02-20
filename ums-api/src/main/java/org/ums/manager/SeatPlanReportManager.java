@@ -3,6 +3,7 @@ package org.ums.manager;
 import org.ums.domain.model.dto.SeatPlanReportDto;
 import org.ums.domain.model.immutable.SeatPlanReport;
 import org.ums.domain.model.mutable.MutableSeatPlanReport;
+import org.ums.enums.ExamType;
 
 import java.util.List;
 
@@ -19,5 +20,8 @@ public interface SeatPlanReportManager extends
 
   public List<SeatPlanReportDto> getSeatPlanDataForSticker(Integer pSemesterId, Integer pExamType,
       String pExamDate, int pRoomId);
+
+  public List<SeatPlanReport> getSeatPlanDataForSittingArrangement(int pSemesterId,
+      ExamType pExamType);
 
 }

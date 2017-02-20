@@ -24,14 +24,14 @@ public class MutableRoutineResource extends Resource {
   public Response updateRoutine(final @Context Request pRequest,
       final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader, final JsonObject pJsonObject)
       throws Exception {
-    return mRoutineResourceHelper.put(pJsonObject.getString("id"), pRequest, pIfMatchHeader,
-        pJsonObject);
+    return mRoutineResourceHelper.put(Long.parseLong(pJsonObject.getString("id")), pRequest,
+        pIfMatchHeader, pJsonObject);
   }
 
   @DELETE
   @Path(PATH_PARAM_OBJECT_ID)
   public Response deleteRoutine(final @PathParam("object-id") String objectId) throws Exception {
-    return mRoutineResourceHelper.delete(objectId);
+    return mRoutineResourceHelper.delete(Long.parseLong(objectId));
   }
 
 }

@@ -52,13 +52,10 @@ public class PersistentTaskStatusDao extends TaskStatusDaoDecorator {
   }
 
   @Override
-  public int create(MutableTaskStatus pMutable) {
-    return mJdbcTemplate.update(
-        INSERT_ALL,
-        pMutable.getId(),
-        pMutable.getStatus().getId(),
-        StringUtils.isEmpty(pMutable.getProgressDescription()) ? "" : pMutable
-            .getProgressDescription());
+  public String create(MutableTaskStatus pMutable) {
+    mJdbcTemplate.update(INSERT_ALL, pMutable.getId(), pMutable.getStatus().getId(), StringUtils
+        .isEmpty(pMutable.getProgressDescription()) ? "" : pMutable.getProgressDescription());
+    return pMutable.getId();
   }
 
   @Override

@@ -10,7 +10,7 @@ import java.util.List;
  * Created by My Pc on 7/11/2016.
  */
 public interface ApplicationCCIManager extends
-    ContentManager<ApplicationCCI, MutableApplicationCCI, Integer> {
+    ContentManager<ApplicationCCI, MutableApplicationCCI, Long> {
   List<ApplicationCCI> getByStudentIdAndSemesterAndType(final String pStudentId,
       final int pSemesterId, final int pExamType);
 

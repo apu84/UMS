@@ -22,7 +22,7 @@ public class MutableSemesterWithdrawalLogResource extends Resource {
 
   @PUT
   @Path(PATH_PARAM_OBJECT_ID)
-  public Response updateSemesterWithdrawalLog(final @PathParam("object-id") int pObjectId,
+  public Response updateSemesterWithdrawalLog(final @PathParam("object-id") Long pObjectId,
       final @Context Request pRequest, final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader,
       final JsonObject pJsonObject) throws Exception {
 
@@ -31,7 +31,7 @@ public class MutableSemesterWithdrawalLogResource extends Resource {
 
   @DELETE
   @Path(PATH_PARAM_OBJECT_ID)
-  public Response deleteSemesterWithdrawalLog(final @PathParam("object-id") int objectId)
+  public Response deleteSemesterWithdrawalLog(final @PathParam("object-id") Long objectId)
       throws Exception {
     return mHelper.delete(objectId);
   }

@@ -41,6 +41,7 @@ public interface SeatPlanReportGenerator {
       String pExamDate, int pRoomId, OutputStream pOutputStream) throws IOException,
       DocumentException;
 
-  void createSeatPlanSittingArrangementReport(int pSemesterId, ExamType pExamType, OutputStream pOutputStream) throws IOException, DocumentException;
+  void createSeatPlanSittingArrangementReport(int pSemesterId, ExamType pExamType,
+      OutputStream pOutputStream) throws IOException, DocumentException;
 
 }

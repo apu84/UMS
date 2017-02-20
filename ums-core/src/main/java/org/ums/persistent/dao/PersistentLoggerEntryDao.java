@@ -5,19 +5,21 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.ContentDaoDecorator;
 import org.ums.domain.model.immutable.LoggerEntry;
 import org.ums.domain.model.mutable.MutableLoggerEntry;
+import org.ums.generator.IdGenerator;
 import org.ums.manager.LoggerEntryManager;
 import org.ums.persistent.model.PersistentLoggerEntry;
 
 import com.google.common.collect.Lists;
 
 public class PersistentLoggerEntryDao extends
-    ContentDaoDecorator<LoggerEntry, MutableLoggerEntry, Integer, LoggerEntryManager> implements
+    ContentDaoDecorator<LoggerEntry, MutableLoggerEntry, Long, LoggerEntryManager> implements
     LoggerEntryManager {
   static String SELECT_ALL =
       "SELECT ID, SQL, USER_NAME, EXECUTION_TIME, EXECUTION_TIME_STAMP FROM DB_LOGGER ";
@@ -25,24 +27,30 @@ public class PersistentLoggerEntryDao extends
       "UPDATE DB_LOGGER SET SQL = ?, USER_NAME = ?, EXECUTION_TIME = ?, EXECUTION_TIME_STAMP = ? ";
   static String DELETE_ONE = "DELETE FROM DB_LOGGER ";
   static String INSERT_ONE =
-      "INSERT INTO DB_LOGGER(SQL, USER_NAME, EXECUTION_TIME, EXECUTION_TIME_STAMP) "
-          + "VALUES(?, ?, ?, ?)";
+      "INSERT INTO DB_LOGGER(ID, SQL, USER_NAME, EXECUTION_TIME, EXECUTION_TIME_STAMP) "
+          + "VALUES(?, ?, ?, ?, ?)";
 
   private JdbcTemplate mJdbcTemplate;
+  private IdGenerator mIdGenerator;
 
-  public PersistentLoggerEntryDao(JdbcTemplate pJdbcTemplate) {
+  public PersistentLoggerEntryDao(JdbcTemplate pJdbcTemplate, IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
+    mIdGenerator = pIdGenerator;
   }
 
   @Override
-  public int create(List<MutableLoggerEntry> pMutableList) {
-    return mJdbcTemplate.batchUpdate(INSERT_ONE, getInsertParamList(pMutableList)).length;
+  public List<Long> create(List<MutableLoggerEntry> pMutableList) {
+    List<Object[]> params = getInsertParamList(pMutableList);
+    mJdbcTemplate.batchUpdate(INSERT_ONE, params);
+    return params.stream().map(param -> (Long) param[0])
+        .collect(Collectors.toCollection(ArrayList::new));
   }
 
   @Override
-  public int create(MutableLoggerEntry pMutable) {
-    return mJdbcTemplate
-        .update(INSERT_ONE, getInsertParamList(Lists.newArrayList(pMutable)).get(0));
+  public Long create(MutableLoggerEntry pMutable) {
+    List<Object[]> params = getInsertParamList((Lists.newArrayList(pMutable)));
+    mJdbcTemplate.update(INSERT_ONE, params.get(0));
+    return (Long) params.get(0)[0];
   }
 
   @Override
@@ -59,7 +67,7 @@ public class PersistentLoggerEntryDao extends
   }
 
   @Override
-  public LoggerEntry get(Integer pId) {
+  public LoggerEntry get(Long pId) {
     String query = SELECT_ALL + "WHERE ID = ? ";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new LoggerEntryRowMapper());
   }
@@ -73,10 +81,9 @@ public class PersistentLoggerEntryDao extends
   private List<Object[]> getInsertParamList(List<MutableLoggerEntry> pMutableLoggerEntries) {
     List<Object[]> params = new ArrayList<>();
     for(LoggerEntry entry : pMutableLoggerEntries) {
-      params.add(new Object[] {entry.getSql(), entry.getUserName(), entry.getExecutionTime(),
-          entry.getTimestamp()});
+      params.add(new Object[] {mIdGenerator.getNumericId(), entry.getSql(), entry.getUserName(),
+          entry.getExecutionTime(), entry.getTimestamp()});
     }
-
     return params;
   }
 
@@ -84,7 +91,7 @@ public class PersistentLoggerEntryDao extends
     @Override
     public LoggerEntry mapRow(ResultSet rs, int rowNum) throws SQLException {
       MutableLoggerEntry loggerEntry = new PersistentLoggerEntry();
-      loggerEntry.setId(rs.getInt("ID"));
+      loggerEntry.setId(rs.getLong("ID"));
       loggerEntry.setSql(rs.getString("SQL"));
       loggerEntry.setUserName(rs.getString("USER_NAME"));
       loggerEntry.setExecutionTime(rs.getLong("EXECUTION_TIME"));

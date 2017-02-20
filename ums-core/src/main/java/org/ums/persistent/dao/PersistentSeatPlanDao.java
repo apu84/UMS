@@ -1,19 +1,19 @@
 package org.ums.persistent.dao;
 
-import org.springframework.cache.annotation.Cacheable;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.SeatPlanDaoDecorator;
 import org.ums.domain.model.immutable.SeatPlan;
 import org.ums.domain.model.mutable.MutableSeatPlan;
 import org.ums.enums.ExamType;
+import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.PersistentSeatPlan;
-
-import javax.ws.rs.DELETE;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by My Pc on 5/8/2016.
@@ -24,8 +24,8 @@ public class PersistentSeatPlanDao extends SeatPlanDaoDecorator {
   String SELECT_ALL_CCI =
       "SELECT ID,ROOM_ID,SEMESTER_ID,GROUP_NO,STUDENT_ID,ROW_NO,COL_NO,EXAM_TYPE,EXAM_DATE,application_type,LAST_MODIFIED FROM SEAT_PLAN ";
   String INSERT_ALL =
-      "INSERT INTO SEAT_PLAN(ROOM_ID,SEMESTER_ID,GROUP_NO,STUDENT_ID,ROW_NO,COL_NO,EXAM_TYPE,LAST_MODIFIED) VALUES"
-          + " (?,?,?,?,?,?,?," + getLastModifiedSql() + " )";
+      "INSERT INTO SEAT_PLAN(ID, ROOM_ID,SEMESTER_ID,GROUP_NO,STUDENT_ID,ROW_NO,COL_NO,EXAM_TYPE,LAST_MODIFIED) VALUES"
+          + " (?,?,?,?,?,?,?,?," + getLastModifiedSql() + " )";
   String INSERT_ALL_CCI =
       "INSERT INTO SEAT_PLAN(ROOM_ID,SEMESTER_ID,GROUP_NO,STUDENT_ID,ROW_NO,COL_NO,EXAM_TYPE,EXAM_DATE,APPLICATION_TYPE,LAST_MODIFIED) VALUES"
           + " (?,?,?,?,?,?,?,to_date(?,'MM-DD-YYYY'),?," + getLastModifiedSql() + " )";
@@ -35,9 +35,11 @@ public class PersistentSeatPlanDao extends SeatPlanDaoDecorator {
   String DELETE_ALL = "DELETE FROM SEAT_PLAN ";
 
   private JdbcTemplate mJdbcTemplate;
+  private IdGenerator mIdGenerator;
 
-  public PersistentSeatPlanDao(JdbcTemplate pJdbcTemplate) {
+  public PersistentSeatPlanDao(JdbcTemplate pJdbcTemplate, IdGenerator pIdGenerator) {
     mJdbcTemplate = pJdbcTemplate;
+    mIdGenerator = pIdGenerator;
   }
 
   @Override
@@ -107,7 +109,7 @@ public class PersistentSeatPlanDao extends SeatPlanDaoDecorator {
   }
 
   @Override
-  public SeatPlan get(Integer pId) {
+  public SeatPlan get(Long pId) {
     String query = SELECT_ALL + " WHERE ID=?";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new SeatPlanRowMapper());
   }
@@ -140,8 +142,11 @@ public class PersistentSeatPlanDao extends SeatPlanDaoDecorator {
   }
 
   @Override
-  public int create(List<MutableSeatPlan> pMutableList) {
-    return mJdbcTemplate.batchUpdate(INSERT_ALL, getInsertParamList(pMutableList)).length;
+  public List<Long> create(List<MutableSeatPlan> pMutableList) {
+    List<Object[]> params = getInsertParamList(pMutableList);
+    mJdbcTemplate.batchUpdate(INSERT_ALL, params);
+    return params.stream().map(param -> (Long) param[0])
+        .collect(Collectors.toCollection(ArrayList::new));
   }
 
   @Override
@@ -231,19 +236,21 @@ public class PersistentSeatPlanDao extends SeatPlanDaoDecorator {
   }
 
   @Override
-  public int create(MutableSeatPlan pMutable) {
-    return mJdbcTemplate.update(INSERT_ALL, pMutable.getClassRoom().getId(), pMutable.getSemester()
-        .getId(), pMutable.getGroupNo(), pMutable.getStudent().getId(), pMutable.getRowNo(),
-        pMutable.getColumnNo(), pMutable.getExamType());
+  public Long create(MutableSeatPlan pMutable) {
+    Long id = mIdGenerator.getNumericId();
+    mJdbcTemplate.update(INSERT_ALL, mIdGenerator.getNumericId(), pMutable.getClassRoom().getId(),
+        pMutable.getSemester().getId(), pMutable.getGroupNo(), pMutable.getStudent().getId(),
+        pMutable.getRowNo(), pMutable.getColumnNo(), pMutable.getExamType());
+    return id;
   }
 
   private List<Object[]> getInsertParamList(List<MutableSeatPlan> pSeatPlans) {
     List<Object[]> params = new ArrayList<>();
 
     for(SeatPlan seatPlan : pSeatPlans) {
-      params.add(new Object[] {seatPlan.getClassRoom().getId(), seatPlan.getSemester().getId(),
-          seatPlan.getGroupNo(), seatPlan.getStudent().getId(), seatPlan.getRowNo(),
-          seatPlan.getColumnNo(), seatPlan.getExamType()});
+      params.add(new Object[] {mIdGenerator.getNumericId(), seatPlan.getClassRoom().getId(),
+          seatPlan.getSemester().getId(), seatPlan.getGroupNo(), seatPlan.getStudent().getId(),
+          seatPlan.getRowNo(), seatPlan.getColumnNo(), seatPlan.getExamType()});
     }
     return params;
   }
@@ -263,8 +270,8 @@ public class PersistentSeatPlanDao extends SeatPlanDaoDecorator {
     @Override
     public SeatPlan mapRow(ResultSet pResultSet, int pI) throws SQLException {
       PersistentSeatPlan mSeatPlan = new PersistentSeatPlan();
-      mSeatPlan.setId(pResultSet.getInt("ID"));
-      mSeatPlan.setClassRoomId(pResultSet.getInt("ROOM_ID"));
+      mSeatPlan.setId(pResultSet.getLong("ID"));
+      mSeatPlan.setClassRoomId(pResultSet.getLong("ROOM_ID"));
       mSeatPlan.setRowNo(pResultSet.getInt("ROW_NO"));
       mSeatPlan.setColumnNo(pResultSet.getInt("COL_NO"));
       mSeatPlan.setStudentId(pResultSet.getString("STUDENT_ID"));
@@ -280,8 +287,8 @@ public class PersistentSeatPlanDao extends SeatPlanDaoDecorator {
     @Override
     public SeatPlan mapRow(ResultSet pResultSet, int pI) throws SQLException {
       PersistentSeatPlan mSeatPlan = new PersistentSeatPlan();
-      mSeatPlan.setId(pResultSet.getInt("ID"));
-      mSeatPlan.setClassRoomId(pResultSet.getInt("ROOM_ID"));
+      mSeatPlan.setId(pResultSet.getLong("ID"));
+      mSeatPlan.setClassRoomId(pResultSet.getLong("ROOM_ID"));
       mSeatPlan.setRowNo(pResultSet.getInt("ROW_NO"));
       mSeatPlan.setColumnNo(pResultSet.getInt("COL_NO"));
       mSeatPlan.setStudentId(pResultSet.getString("STUDENT_ID"));

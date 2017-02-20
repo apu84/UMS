@@ -9,7 +9,7 @@ import org.ums.domain.model.immutable.SemesterEnrollment;
 import java.util.Date;
 
 public interface MutableSemesterEnrollment extends SemesterEnrollment, Mutable,
-    MutableIdentifier<Integer>, MutableLastModifier {
+    MutableIdentifier<Long>, MutableLastModifier {
   void setSemesterId(final Integer pSemesterId);
 
   void setSemester(final Semester pSemester);

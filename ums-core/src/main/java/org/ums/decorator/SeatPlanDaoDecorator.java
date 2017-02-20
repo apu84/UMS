@@ -11,7 +11,7 @@ import java.util.List;
  * Created by My Pc on 5/8/2016.
  */
 public class SeatPlanDaoDecorator extends
-    ContentDaoDecorator<SeatPlan, MutableSeatPlan, Integer, SeatPlanManager> implements
+    ContentDaoDecorator<SeatPlan, MutableSeatPlan, Long, SeatPlanManager> implements
     SeatPlanManager {
 
   @Override

@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ums.enums.ExamType;
 import org.ums.manager.SeatPlanManager;
 
 import javax.json.JsonObject;
@@ -111,6 +112,26 @@ public class SeatPlanResource extends MutableSeatPlanResource {
         try {
           mSeatPlanResourceHelper.getSeatPlanStudentStickerReport(pProgramType, pSemesterId,
               pExamType, pExamDate, pRoomId, pOutputStream, pRequest, mUriInfo);
+        } catch(Exception e) {
+          mLogger.error(e.getMessage());
+          throw new WebApplicationException(e);
+        }
+      }
+    };
+  }
+
+  @GET
+  @Path("sittingArrangement/semesterId/{semester-id}/examType/{exam-type}")
+  @Produces("application/pdf")
+  public StreamingOutput getSeatPlanSittingArrangement(final @Context Request pRequest,
+      final @PathParam("semester-id") Integer pSemesterId,
+      final @PathParam("exam-type") Integer pExamType) {
+    return new StreamingOutput() {
+      @Override
+      public void write(OutputStream pOutputStream) throws IOException, WebApplicationException {
+        try {
+          mSeatPlanResourceHelper.getSeatPlanSittingArrangement(pSemesterId,
+              ExamType.get(pExamType), pOutputStream, pRequest, mUriInfo);
         } catch(Exception e) {
           mLogger.error(e.getMessage());
           throw new WebApplicationException(e);

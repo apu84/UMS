@@ -33,7 +33,7 @@ import java.util.List;
  */
 @Component
 public class ApplicationCCIResourceHelper extends
-    ResourceHelper<ApplicationCCI, MutableApplicationCCI, Integer> {
+    ResourceHelper<ApplicationCCI, MutableApplicationCCI, Long> {
 
   @Autowired
   ApplicationCCIManager mManager;

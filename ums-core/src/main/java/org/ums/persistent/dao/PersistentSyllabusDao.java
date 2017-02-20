@@ -58,9 +58,10 @@ public class PersistentSyllabusDao extends SyllabusDaoDecorator {
     return mJdbcTemplate.update(query, pSyllabus.getId());
   }
 
-  public int create(final MutableSyllabus pSyllabus) {
-    return mJdbcTemplate.update(INSERT_ONE, pSyllabus.getId(), pSyllabus.getSemester().getId(),
-        pSyllabus.getProgram().getId());
+  public String create(final MutableSyllabus pSyllabus) {
+    mJdbcTemplate.update(INSERT_ONE, pSyllabus.getId(), pSyllabus.getSemester().getId(), pSyllabus
+        .getProgram().getId());
+    return pSyllabus.getId();
   }
 
   class SyllabusRowMapper implements RowMapper<Syllabus> {

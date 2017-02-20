@@ -7,7 +7,7 @@ import org.ums.domain.model.immutable.User;
 
 import java.util.Date;
 
-public interface MutableNotification extends Notification, Mutable, MutableIdentifier<String>,
+public interface MutableNotification extends Notification, Mutable, MutableIdentifier<Long>,
     MutableLastModifier {
   void setProducerId(String pProducerId);
 

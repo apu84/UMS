@@ -38,7 +38,7 @@ import java.util.Map;
  * Created by My Pc on 5/8/2016.
  */
 @Component
-public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan, MutableSeatPlan, Integer> {
+public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan, MutableSeatPlan, Long> {
   private static final Logger mLogger = LoggerFactory.getLogger(SeatPlanResourceHelper.class);
   @Autowired
   private SeatPlanManager mManager;
@@ -243,8 +243,11 @@ public class SeatPlanResourceHelper extends ResourceHelper<SeatPlan, MutableSeat
 
   }
 
-  public void getSeatPlanSittingArrangement(int pSemesterId, ExamType pExamType, OutputStream pOutputStream, Request pRequest, UriInfo pUriInfo) throws IOException, DocumentException{
-
+  public void getSeatPlanSittingArrangement(int pSemesterId, ExamType pExamType,
+      OutputStream pOutputStream, Request pRequest, UriInfo pUriInfo) throws IOException,
+      DocumentException {
+    mSeatPlanReportGenerator.createSeatPlanSittingArrangementReport(pSemesterId, pExamType,
+        pOutputStream);
   }
 
   @Override

@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by Ifti on 13-Feb-16.
  */
-public interface ClassRoomManager extends ContentManager<ClassRoom, MutableClassRoom, Integer> {
+public interface ClassRoomManager extends ContentManager<ClassRoom, MutableClassRoom, Long> {
   public List<ClassRoom> getRoomList();
 
   public ClassRoom getByRoomNo(String pRoomNo);

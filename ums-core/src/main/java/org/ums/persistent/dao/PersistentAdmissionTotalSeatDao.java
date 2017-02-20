@@ -15,6 +15,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Created by Monjur-E-Morshed on 03-Jan-17.
@@ -43,9 +45,10 @@ public class PersistentAdmissionTotalSeatDao extends AdmissionTotalSeatDaoDecora
   }
 
   @Override
-  public int create(List<MutableAdmissionTotalSeat> pMutableList) {
-    String query = INSERT_ONE;
-    return mJdbcTemplate.batchUpdate(query, getAdmissionTotalSeatParams(pMutableList)).length;
+  public List<Integer> create(List<MutableAdmissionTotalSeat> pMutableList) {
+    int[] updates =
+        mJdbcTemplate.batchUpdate(INSERT_ONE, getAdmissionTotalSeatParams(pMutableList));
+    return IntStream.of(updates).boxed().collect(Collectors.toList());
   }
 
   @Override

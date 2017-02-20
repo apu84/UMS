@@ -12,6 +12,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class PersistentSubGroupCCIDao extends SubGroupCCIDaoDecorator {
 
@@ -62,11 +64,12 @@ public class PersistentSubGroupCCIDao extends SubGroupCCIDaoDecorator {
   }
 
   @Override
-  public int create(List<MutableSubGroupCCI> pMutableList) {
+  public List<Integer> create(List<MutableSubGroupCCI> pMutableList) {
     String query =
         "INSERT INTO SP_SUB_GROUP_CCI (SEMESTER_ID,SUB_GROUP_NO,TOTAL_STUDENT,COURSE_ID,EXAM_DATE,LAST_MODIFIED)"
             + " VALUES (?,?,?,?,to_date(?,'MM-DD-YYYY')," + getLastModifiedSql() + ")";
-    return mJdbcTemplate.batchUpdate(query, getInsertParamList(pMutableList)).length;
+    int[] updates = mJdbcTemplate.batchUpdate(query, getInsertParamList(pMutableList));
+    return IntStream.of(updates).boxed().collect(Collectors.toList());
   }
 
   @Override

@@ -7,7 +7,7 @@ import org.ums.enums.CourseRegType;
 import java.util.List;
 
 public interface UGRegistrationResultManager extends
-    ContentManager<UGRegistrationResult, MutableUGRegistrationResult, Integer> {
+    ContentManager<UGRegistrationResult, MutableUGRegistrationResult, Long> {
   List<UGRegistrationResult> getBySemesterAndExamTYpeAndGrade(int pSemesterId, int pExamType,
       String pGrade);
 

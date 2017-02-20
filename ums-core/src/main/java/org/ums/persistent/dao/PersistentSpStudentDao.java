@@ -1,16 +1,15 @@
 package org.ums.persistent.dao;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.SpStudentDaoDecorator;
 import org.ums.domain.model.immutable.SpStudent;
 import org.ums.domain.model.mutable.MutableSpStudent;
 import org.ums.persistent.model.PersistentSpStudent;
-
-import javax.ws.rs.DELETE;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
 
 /**
  * Created by My Pc on 4/28/2016.
@@ -53,11 +52,11 @@ public class PersistentSpStudentDao extends SpStudentDaoDecorator {
   }
 
   @Override
-  public int create(MutableSpStudent pMutable) {
-    String query = INSERT_ONE;
-    return mJdbcTemplate.update(query, pMutable.getId(), pMutable.getProgram().getId(), pMutable
+  public String create(MutableSpStudent pMutable) {
+    mJdbcTemplate.update(INSERT_ONE, pMutable.getId(), pMutable.getProgram().getId(), pMutable
         .getSemester().getId(), pMutable.getAcademicYear(), pMutable.getAcademicSemester(),
         pMutable.getStatus());
+    return pMutable.getId();
   }
 
   @Override

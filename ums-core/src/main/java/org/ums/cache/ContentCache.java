@@ -30,15 +30,15 @@ public abstract class ContentCache<R extends Identifier<I> & LastModifier, M ext
   }
 
   @Override
-  public int create(M pMutable) {
-    int created = super.create(pMutable);
+  public I create(M pMutable) {
+    I created = super.create(pMutable);
     getCacheManager().invalidateList(getCachedListKey());
     return created;
   }
 
   @Override
-  public int create(List<M> pMutableList) {
-    int created = super.create(pMutableList);
+  public List<I> create(List<M> pMutableList) {
+    List<I> created = super.create(pMutableList);
     getCacheManager().invalidateList(getCachedListKey());
     return created;
   }

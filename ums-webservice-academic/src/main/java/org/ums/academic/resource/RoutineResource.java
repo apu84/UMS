@@ -96,6 +96,6 @@ public class RoutineResource extends MutableRoutineResource {
   @Path(PATH_PARAM_OBJECT_ID)
   public Response get(final @Context Request pRequest,
       final @PathParam("object-id") String pObjectId) throws Exception {
-    return mRoutineResourceHelper.get(pObjectId, pRequest, mUriInfo);
+    return mRoutineResourceHelper.get(Long.parseLong(pObjectId), pRequest, mUriInfo);
   }
 }

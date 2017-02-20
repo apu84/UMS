@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 
 public interface SemesterWithdrawalLog extends Serializable, LastModifier,
-    EditType<MutableSemesterWithdrawalLog>, Identifier<Integer> {
+    EditType<MutableSemesterWithdrawalLog>, Identifier<Long> {
   public SemesterWithdrawal getSemesterWithdrawal();
 
   public String getEmployeeId();

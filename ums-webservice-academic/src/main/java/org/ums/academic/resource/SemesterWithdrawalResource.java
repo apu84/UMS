@@ -46,7 +46,7 @@ public class SemesterWithdrawalResource extends MutableSemesterWithdrawalResourc
 
   @GET
   @Path(PATH_PARAM_OBJECT_ID)
-  public Response get(final @Context Request pRequest, final @PathParam("object-id") int pObjectId)
+  public Response get(final @Context Request pRequest, final @PathParam("object-id") long pObjectId)
       throws Exception {
     return mHelper.get(pObjectId, pRequest, mUriInfo);
   }

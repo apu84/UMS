@@ -19,7 +19,7 @@ public class PersistentEquivalentCourse implements MutableEquivalentCourse {
     sCourseManager = applicationContext.getBean("courseManager", CourseManager.class);
   }
 
-  private Integer mId;
+  private Long mId;
   private String mOldCourseId;
   private Course mOldCourse;
   private String mNewCourseId;
@@ -56,12 +56,12 @@ public class PersistentEquivalentCourse implements MutableEquivalentCourse {
   }
 
   @Override
-  public Integer getId() {
+  public Long getId() {
     return mId;
   }
 
   @Override
-  public void setId(Integer pId) {
+  public void setId(Long pId) {
     mId = pId;
   }
 

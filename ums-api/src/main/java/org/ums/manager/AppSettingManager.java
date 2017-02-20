@@ -6,6 +6,6 @@ import org.ums.domain.model.mutable.MutableAppSetting;
 /**
  * Created by My Pc on 30-Aug-16.
  */
-public interface AppSettingManager extends ContentManager<AppSetting, MutableAppSetting, Integer> {
+public interface AppSettingManager extends ContentManager<AppSetting, MutableAppSetting, Long> {
 
 }

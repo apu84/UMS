@@ -9,16 +9,16 @@ import org.ums.manager.StudentRecordManager;
 import org.ums.util.CacheUtil;
 
 public class StudentRecordCache extends
-    ContentCache<StudentRecord, MutableStudentRecord, Integer, StudentRecordManager> implements
+    ContentCache<StudentRecord, MutableStudentRecord, Long, StudentRecordManager> implements
     StudentRecordManager {
-  private CacheManager<StudentRecord, Integer> mCacheManager;
+  private CacheManager<StudentRecord, Long> mCacheManager;
 
-  public StudentRecordCache(final CacheManager<StudentRecord, Integer> pCacheManager) {
+  public StudentRecordCache(final CacheManager<StudentRecord, Long> pCacheManager) {
     mCacheManager = pCacheManager;
   }
 
   @Override
-  protected CacheManager<StudentRecord, Integer> getCacheManager() {
+  protected CacheManager<StudentRecord, Long> getCacheManager() {
     return mCacheManager;
   }
 

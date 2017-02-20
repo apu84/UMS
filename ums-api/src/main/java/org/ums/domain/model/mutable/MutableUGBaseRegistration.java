@@ -7,7 +7,7 @@ import org.ums.enums.CourseRegType;
 import org.ums.enums.ExamType;
 
 public interface MutableUGBaseRegistration extends UGBaseRegistration, Mutable,
-    MutableIdentifier<Integer>, MutableLastModifier {
+    MutableIdentifier<Long>, MutableLastModifier {
   void setCourseId(final String pCourseId);
 
   void setCourse(final Course pCourse);

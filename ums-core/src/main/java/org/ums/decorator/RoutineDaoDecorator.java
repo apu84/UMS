@@ -11,7 +11,7 @@ import java.util.List;
  * Created by My Pc on 3/5/2016.
  */
 public class RoutineDaoDecorator extends
-    ContentDaoDecorator<Routine, MutableRoutine, String, RoutineManager> implements RoutineManager {
+    ContentDaoDecorator<Routine, MutableRoutine, Long, RoutineManager> implements RoutineManager {
   @Override
   public List<Routine> getTeacherRoutine(String teacherId) {
     return getManager().getTeacherRoutine(teacherId);

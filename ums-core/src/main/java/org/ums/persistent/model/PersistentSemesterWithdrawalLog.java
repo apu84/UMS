@@ -33,9 +33,9 @@ public class PersistentSemesterWithdrawalLog implements MutableSemesterWithdrawa
             SemesterWithdrawalLogManager.class);
   }
 
-  private int mId;
+  private Long mId;
   private SemesterWithdrawal mSemesterWithdrawal;
-  private int mSemesterWithdrawalId;
+  private Long mSemesterWithdrawalId;
   private Employee mEmployee;
   private String mEmployeeId;
   private String mEventDateTime;
@@ -75,16 +75,12 @@ public class PersistentSemesterWithdrawalLog implements MutableSemesterWithdrawa
     mEmployeeId = pEmployeeId;
   }
 
-  public int getSemesterWithdrawalId() {
+  public Long getSemesterWithdrawalId() {
     return mSemesterWithdrawalId;
   }
 
-  public void setSemesterWithdrawalId(int pSemesterWithdrawalId) {
+  public void setSemesterWithdrawalId(Long pSemesterWithdrawalId) {
     mSemesterWithdrawalId = pSemesterWithdrawalId;
-  }
-
-  public void setId(int pId) {
-    mId = pId;
   }
 
   @Override
@@ -119,7 +115,7 @@ public class PersistentSemesterWithdrawalLog implements MutableSemesterWithdrawa
   }
 
   @Override
-  public void setId(Integer pId) {
+  public void setId(Long pId) {
     mId = pId;
   }
 
@@ -149,7 +145,7 @@ public class PersistentSemesterWithdrawalLog implements MutableSemesterWithdrawa
   }
 
   @Override
-  public Integer getId() {
+  public Long getId() {
     return mId;
   }
 

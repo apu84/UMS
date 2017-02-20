@@ -25,7 +25,7 @@ public class PersistentSemesterEnrollment implements MutableSemesterEnrollment {
         applicationContext.getBean("semesterEnrollmentManager", SemesterEnrollmentManager.class);
   }
 
-  private Integer mId;
+  private Long mId;
   private Integer mSemesterId;
   private Semester mSemester;
   private Integer mProgramId;
@@ -105,7 +105,7 @@ public class PersistentSemesterEnrollment implements MutableSemesterEnrollment {
   }
 
   @Override
-  public void setId(Integer pId) {
+  public void setId(Long pId) {
     mId = pId;
   }
 
@@ -161,7 +161,7 @@ public class PersistentSemesterEnrollment implements MutableSemesterEnrollment {
   }
 
   @Override
-  public Integer getId() {
+  public Long getId() {
     return mId;
   }
 

@@ -33,7 +33,8 @@
     getAttendenceSheetReport:Function;
     getTopSheetReport:Function;
     getStickerReport:Function;
-    roomChanged():Function;
+    roomChanged:Function;
+    getSittingArrangement:Function;
 
   }
 
@@ -97,6 +98,7 @@
       $scope.getTopSheetReport = this.getTopSheetReport.bind(this);
       $scope.getStickerReport = this.getStickerReport.bind(this);
       $scope.roomChanged = this.roomChanged.bind(this);
+      $scope.getSittingArrangement = this.getSittingArrangement.bind(this);
 
 
 
@@ -275,6 +277,22 @@
             console.error(response);
           },'arraybuffer');
     }
+
+
+    private getSittingArrangement():void{
+      this.$scope.showLoader = true;
+      this.httpClient.get("academic/seatplan/sittingArrangement/semesterId/"+(+this.$scope.semesterId)+"/examType/"+(+this.$scope.examType),  'application/pdf',
+          (data:any, etag:string) => {
+            var file = new Blob([data], {type: 'application/pdf'});
+            var fileURL = this.$sce.trustAsResourceUrl(URL.createObjectURL(file));
+            this.$window.open(fileURL);
+            this.$scope.showLoader=false;
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>) => {
+            console.error(response);
+          },'arraybuffer');
+    }
+
 
     private getProgramInfo():ng.IPromise<any>{
       var defer = this.$q.defer();

@@ -33,7 +33,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
-public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutine, String> {
+public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutine, Long> {
 
   private static final Logger mLogger = LoggerFactory.getLogger(RoutineResourceHelper.class);
   @Autowired

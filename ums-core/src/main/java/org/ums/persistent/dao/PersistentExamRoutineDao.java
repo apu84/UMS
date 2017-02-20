@@ -158,9 +158,9 @@ public class PersistentExamRoutineDao extends ExamRoutineDaoDecorator {
     return 0;
   }
 
-  public int create(final MutableExamRoutine pExamRoutine) {
+  public Long create(final MutableExamRoutine pExamRoutine) {
     insertBatch(pExamRoutine);
-    return 1;
+    return 1L;
   }
 
   public void insertBatch(final MutableExamRoutine pExamRoutine) {

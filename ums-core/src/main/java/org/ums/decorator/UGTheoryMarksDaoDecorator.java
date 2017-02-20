@@ -5,6 +5,6 @@ import org.ums.domain.model.mutable.MutableUGTheoryMarks;
 import org.ums.manager.UGTheoryMarksManager;
 
 public class UGTheoryMarksDaoDecorator extends
-    ContentDaoDecorator<UGTheoryMarks, MutableUGTheoryMarks, Integer, UGTheoryMarksManager>
-    implements UGTheoryMarksManager {
+    ContentDaoDecorator<UGTheoryMarks, MutableUGTheoryMarks, Long, UGTheoryMarksManager> implements
+    UGTheoryMarksManager {
 }

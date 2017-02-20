@@ -11,7 +11,7 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
-public interface SemesterEnrollment extends Serializable, LastModifier, Identifier<Integer>,
+public interface SemesterEnrollment extends Serializable, LastModifier, Identifier<Long>,
     EditType<MutableSemesterEnrollment> {
   Integer getSemesterId();
 

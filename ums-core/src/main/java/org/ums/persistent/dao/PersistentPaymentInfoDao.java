@@ -31,7 +31,7 @@ public class PersistentPaymentInfoDao extends PaymentInfoDaoDecorator {
   }
 
   @Override
-  public int create(MutablePaymentInfo pMutable) {
+  public Integer create(MutablePaymentInfo pMutable) {
     String query = INSERT_ONE;
     return mJdbcTemplate.update(query, pMutable.getReferenceId(), pMutable.getSemester().getId(),
         pMutable.getPaymentType().getId(), pMutable.getAmount(), pMutable.getPaymentMode().getId());
