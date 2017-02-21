@@ -71,8 +71,8 @@ public class BasicGenerator {
             String referenceName = WordUtils.capitalize(referenceObject.get("name").toString());
 
             if(referenceObject.containsKey("package")) {
-              immutable.addImport(
-                  String.format("%s.%s", referenceObject.get("package").toString(), referenceName));
+              immutable.addImport(String.format("%s.%s", referenceObject.get("package").toString(),
+                  referenceName));
             }
 
             immutable.addMethod().setName(String.format("get%s", referenceName))
@@ -128,17 +128,18 @@ public class BasicGenerator {
             String referenceName = WordUtils.capitalize(referenceObject.get("name").toString());
 
             if(referenceObject.containsKey("package")) {
-              mutable.addImport(
-                  String.format("%s.%s", referenceObject.get("package").toString(), referenceName));
+              mutable.addImport(String.format("%s.%s", referenceObject.get("package").toString(),
+                  referenceName));
             }
 
             mutable.addMethod().setName(String.format("set%s", referenceName)).setReturnTypeVoid()
                 .addParameter(referenceName, String.format("p%s", referenceName));
 
-            if(fieldValue.containsKey("type") && fieldValue.get("type").toString().equalsIgnoreCase("Ref")) {
-              mutable.addMethod().setName(String.format("set%sId", referenceName)).setReturnTypeVoid()
-                  .addParameter(String.class, String.format("p%sId", referenceName));
-              ;
+            if(fieldValue.containsKey("type")
+                && fieldValue.get("type").toString().equalsIgnoreCase("Ref")) {
+              mutable.addMethod().setName(String.format("set%sId", referenceName))
+                  .setReturnTypeVoid()
+                  .addParameter(String.class, String.format("p%sId", referenceName));;
             }
           }
         }
@@ -189,8 +190,8 @@ public class BasicGenerator {
             String referenceName = WordUtils.capitalize(referenceObject.get("name").toString());
 
             if(referenceObject.containsKey("package")) {
-              model.addImport(
-                  String.format("%s.%s", referenceObject.get("package").toString(), referenceName));
+              model.addImport(String.format("%s.%s", referenceObject.get("package").toString(),
+                  referenceName));
             }
 
             if(referenceObject.containsKey("manager")) {
@@ -282,14 +283,17 @@ public class BasicGenerator {
               model.addField().setName(String.format("m%sId", WordUtils.capitalize(fieldName)))
                   .setType("String").setPrivate();
 
-              getMethodSource = model.addMethod()
-                  .setBody(String.format("return m%sId;", WordUtils.capitalize(fieldName)))
-                  .setName(String.format("get%sId", WordUtils.capitalize(fieldName)))
-                  .setReturnType("String").setPublic();
+              getMethodSource =
+                  model.addMethod()
+                      .setBody(String.format("return m%sId;", WordUtils.capitalize(fieldName)))
+                      .setName(String.format("get%sId", WordUtils.capitalize(fieldName)))
+                      .setReturnType("String").setPublic();
               getMethodSource.addAnnotation().setName("Override");
 
-              setMethodSource = model.addMethod()
-                  .setName(String.format("set%sId", WordUtils.capitalize(fieldName))).setPublic();
+              setMethodSource =
+                  model.addMethod()
+                      .setName(String.format("set%sId", WordUtils.capitalize(fieldName)))
+                      .setPublic();
               setMethodSource.addParameter("String",
                   String.format("p%sId", WordUtils.capitalize(fieldName)));
               setMethodSource.setBody(String.format("this.m%sId = p%s;",
@@ -313,8 +317,8 @@ public class BasicGenerator {
                     .setPublic();
             setMethodSource.addParameter(fieldValue.get("type").toString(),
                 String.format("p%s", WordUtils.capitalize(fieldName)));
-            setMethodSource.setBody(String.format("this.m%s = p%s;", WordUtils.capitalize(fieldName),
-                WordUtils.capitalize(fieldName)));
+            setMethodSource.setBody(String.format("this.m%s = p%s;",
+                WordUtils.capitalize(fieldName), WordUtils.capitalize(fieldName)));
             setMethodSource.addAnnotation().setName("Override");
           }
         }

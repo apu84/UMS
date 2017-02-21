@@ -659,7 +659,7 @@ public class UMSContext {
   RecordManager recordManager() {
     RecordCache recordCache = new RecordCache(mCacheFactory.getCacheManager());
     recordCache.setManager(new PersistentRecordDao(mTemplateFactory.getLmsJdbcTemplate(),
-        idGenerator()));
+        mIdGenerator));
     return recordCache;
   }
 

@@ -66,7 +66,8 @@ public class RecordResourceHelper extends ResourceHelper<Record, MutableRecord, 
     mutableRecord.commit(false);
 
     URI contextURI =
-        pUriInfo.getBaseUriBuilder().path(RecordResource.class).path(RecordResource.class, "get").build(mutableRecord.getId());
+        pUriInfo.getBaseUriBuilder().path(RecordResource.class).path(RecordResource.class, "get")
+            .build(mutableRecord.getId());
     Response.ResponseBuilder builder = Response.created(contextURI);
     builder.status(Response.Status.CREATED);
     return builder.build();

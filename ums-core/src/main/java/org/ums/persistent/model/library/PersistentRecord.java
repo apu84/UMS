@@ -72,8 +72,7 @@ public class PersistentRecord implements MutableRecord {
     sRecordManager = applicationContext.getBean("recordManager", RecordManager.class);
   }
 
-  public PersistentRecord() {
-  }
+  public PersistentRecord() {}
 
   public PersistentRecord(final PersistentRecord pPersistentRecord) {
     mId = pPersistentRecord.getId();
@@ -118,9 +117,10 @@ public class PersistentRecord implements MutableRecord {
 
   @Override
   public void commit(boolean update) {
-    if (update) {
+    if(update) {
       sRecordManager.update(this);
-    } else {
+    }
+    else {
       sRecordManager.create(this);
     }
   }
