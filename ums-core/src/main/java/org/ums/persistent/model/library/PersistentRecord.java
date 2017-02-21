@@ -379,7 +379,7 @@ public class PersistentRecord implements MutableRecord {
 
   @Override
   public List<MaterialContributor> getContributorList() {
-    return getContributorList();
+    return mContributorList;
   }
 
   @Override

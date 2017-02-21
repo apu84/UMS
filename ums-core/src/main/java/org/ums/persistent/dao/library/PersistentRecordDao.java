@@ -8,6 +8,7 @@ import org.ums.domain.model.dto.library.ImprintDto;
 import org.ums.domain.model.immutable.library.Contributor;
 import org.ums.domain.model.immutable.library.Record;
 import org.ums.domain.model.mutable.MutableCourse;
+import org.ums.domain.model.mutable.MutableSemester;
 import org.ums.domain.model.mutable.library.MutableRecord;
 import org.ums.enums.common.Language;
 import org.ums.enums.library.*;
@@ -26,20 +27,28 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public class PersistentRecordDao extends RecordDaoDecorator {
   static String SELECT_ALL =
-      "Select MFN, LANGUAGE, TITLE,    SUB_TITLE, GMD, SERAIL_TITLE, VOLUME_NO, VOLUME_TITLE, SERIAL_ISSUE_NO,  "
+      "Select MFN, LANGUAGE, TITLE,    SUB_TITLE, GMD, SERIES_TITLE, VOLUME_NO, VOLUME_TITLE, SERIAL_ISSUE_NO,  "
           + "   SERIAL_NUMBER, SERIAL_SPECIAL, LIBRARY_LACKS, CHANGED_TITLE, ISBN, ISSN,  "
           + "   CORP_AUTH_MAIN, CORP_SUB_BODY, CORP_CITY_COUNTRY, EDITION, TRANS_TITLE_EDITION, FREQUENCY,  "
           + "   CALL_NO, CLASS_NO, CALL_DATE, AUTHOR_MARK, PUBLISHER, PLACE_OF_PUBLICATION,  "
-          + "   YEAR_OF_PUBLICATION, COPY_RIGHT_DATE, MATERIAL_TYPE, STATUS, BINDING_TYPE, ACQUISITION_TYPE,  "
+          + "   DATE_YEAR_OF_PUBLICATION, COPY_RIGHT_DATE, MATERIAL_TYPE, STATUS, BINDING_TYPE, ACQUISITION_TYPE,  "
           + "   KEYWORDS, DOCUMENTALIST, ENTRY_DATE, LAST_UPDATED_ON, LAST_UPDATED_BY,  CONTRIBUTORS, SUBJECTS, NOTES, LAST_MODIFIED "
           + "FROM MATERIALS ";
+
+  static String UPDATE_ONE =
+      "UPDATE MATERIALS SET LANGUAGE = ?, TITLE=?,  SUB_TITLE=?, GMD=?, SERIES_TITLE=?, VOLUME_NO=?, VOLUME_TITLE=?, SERIAL_ISSUE_NO=?, SERIAL_NUMBER=?, "
+          + "   SERIAL_SPECIAL=?, LIBRARY_LACKS=?, CHANGED_TITLE=?, ISBN=?, ISSN=?, CORP_AUTH_MAIN=?, CORP_SUB_BODY=?, CORP_CITY_COUNTRY=?, EDITION=?, TRANS_TITLE_EDITION=?, "
+          + "   FREQUENCY=?, CALL_NO=?, CLASS_NO=?, CALL_DATE=to_date(?,'dd-MM-YYYY'),  AUTHOR_MARK=?, PUBLISHER=?, PLACE_OF_PUBLICATION=?,DATE_YEAR_OF_PUBLICATION=?, "
+          + "  COPY_RIGHT_DATE=to_date(?,'dd-MM-YYYY'), MATERIAL_TYPE=?, "
+          + "  STATUS=?, BINDING_TYPE=?, ACQUISITION_TYPE=?,  KEYWORDS=?, CONTRIBUTORS=?, SUBJECTS=?, NOTES=?, LAST_UPDATED_ON=sysdate,  "
+          + "  LAST_UPDATED_BY=?, LAST_MODIFIED=" + getLastModifiedSql();
 
   static String INSERT_ONE =
       "INSERT INTO MATERIALS(MFN, LANGUAGE, TITLE, SUB_TITLE, GMD, SERIES_TITLE,  VOLUME_NO, VOLUME_TITLE, SERIAL_ISSUE_NO,SERIAL_NUMBER, "
           + "   SERIAL_SPECIAL, LIBRARY_LACKS, CHANGED_TITLE, ISBN, ISSN, CORP_AUTH_MAIN, CORP_SUB_BODY, CORP_CITY_COUNTRY, EDITION, TRANS_TITLE_EDITION, "
           + "   FREQUENCY, CALL_NO, CLASS_NO, CALL_DATE,  AUTHOR_MARK, PUBLISHER, PLACE_OF_PUBLICATION,DATE_YEAR_OF_PUBLICATION, COPY_RIGHT_DATE, MATERIAL_TYPE, "
           + "    STATUS, BINDING_TYPE, ACQUISITION_TYPE,  KEYWORDS, DOCUMENTALIST,CONTRIBUTORS, SUBJECTS, NOTES,  ENTRY_DATE, LAST_UPDATED_ON, LAST_UPDATED_BY, LAST_MODIFIED)  "
-          + "  VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?,"
+          + "  VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,"
           + " ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "
           + " ?, ?, to_date(?,'dd-MM-YYYY'), ?, ?, ?, ?, to_date(?,'dd-MM-YYYY'), ?, ?, "
           + " ?, ?, ?, ?, ?, ?, ?, " + " sysdate, sysdate, ?, " + getLastModifiedSql() + ")";
@@ -59,6 +68,26 @@ public class PersistentRecordDao extends RecordDaoDecorator {
         new PersistentRecordDao.RecordRowMapper());
   }
 
+  @Override
+  public int update(final MutableRecord pRecord) {
+    String query = UPDATE_ONE + "   Where MFN= ? ";
+    return mJdbcTemplate.update(query, pRecord.getLanguage().getId(), pRecord.getTitle(), pRecord
+        .getSubTitle(), pRecord.getGmd(), pRecord.getSeriesTitle(), pRecord.getVolumeNo(), pRecord
+        .getVolumeTitle(), pRecord.getSerialIssueNo(), pRecord.getSerialNumber(), pRecord
+        .getSerialSpecial(), pRecord.getLibraryLacks(), pRecord.getChangedTitle(), pRecord
+        .getIsbn(), pRecord.getIssn(), pRecord.getCorpAuthorMain(), pRecord.getCorpSubBody(),
+        pRecord.getCorpCityCountry(), pRecord.getEdition(), pRecord.getTranslateTitleEdition(),
+        pRecord.getFrequency() == null ? Types.NULL : pRecord.getFrequency().getId(), pRecord
+            .getCallNo(), pRecord.getClassNo(), pRecord.getCallDate(), pRecord.getAuthorMark(),
+        pRecord.getImprint().getPublisher().getId(), pRecord.getImprint().getPlaceOfPublication(),
+        pRecord.getImprint().getDateOfPublication(), pRecord.getImprint().getCopyRightDate(),
+        pRecord.getMaterialType().getId(), pRecord.getRecordStatus().getId(), pRecord
+            .getBookBindingType().getId(), pRecord.getAcquisitionType().getId(), pRecord
+            .getKeyWords(), pRecord.getContributorJsonString(), pRecord.getSubjectJsonString(),
+        pRecord.getNoteJsonString(), pRecord.getLastUpdatedBy(), pRecord.getMfn());
+  }
+
+  @Override
   public Long create(final MutableRecord pRecord) {
     Long id = mIdGenerator.getNumericId();
     pRecord.setMfn(id);
@@ -142,7 +171,7 @@ public class PersistentRecordDao extends RecordDaoDecorator {
       record.setSubjectJsonString(resultSet.getString("SUBJECTS"));
       record.setNoteJsonString(resultSet.getString("NOTES"));
 
-      AtomicReference<Record> atomicReference = new AtomicReference<>(null);
+      AtomicReference<Record> atomicReference = new AtomicReference<>(record);
       return atomicReference.get();
     }
   }

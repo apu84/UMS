@@ -7,7 +7,9 @@ import org.ums.domain.model.mutable.library.MutablePublisher;
 import org.ums.domain.model.mutable.library.MutableRecord;
 
 import javax.json.JsonObject;
-import javax.ws.rs.POST;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 
 /**
@@ -16,6 +18,14 @@ import javax.ws.rs.core.Response;
 public class MutableRecordResource extends Resource {
   @Autowired
   ResourceHelper<Record, MutableRecord, Long> mResourceHelper;
+
+  @PUT
+  @Path(PATH_PARAM_OBJECT_ID)
+  public Response updateRecord(final @PathParam("object-id") Long pObjectId,
+      final @Context Request pRequest, final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader,
+      final JsonObject pJsonObject) throws Exception {
+    return mResourceHelper.put(pObjectId, pRequest, pIfMatchHeader, pJsonObject);
+  }
 
   @POST
   public Response createRecord(final JsonObject pJsonObject) throws Exception {

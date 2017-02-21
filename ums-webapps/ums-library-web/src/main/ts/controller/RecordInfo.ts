@@ -17,7 +17,6 @@ module ums{
     addNewItems:Function;
     showHideItemsTable:Function;
     setMaterialTypeName:Function;
-    submit:Function;
     record:IRecord;
     saveRecord:Function;
 
@@ -124,7 +123,6 @@ export interface IItem{
       $scope.addNewItems = this.addNewItems.bind(this);
       $scope.showHideItemsTable = this.showHideItemsTable.bind(this);
       $scope.setMaterialTypeName = this.setMaterialTypeName.bind(this);
-      $scope.submit = this.submit.bind(this);
       $scope.saveRecord = this.saveRecord.bind(this);
 
 
@@ -494,33 +492,48 @@ export interface IItem{
       }, 200);
     }
 
-
-    private submit(): void {
-
-    }
-
     private saveRecord(): void {
+      console.log("this.$scope.record.mfnNo : "+this.$scope.record.mfnNo);
+      var url = "record";
+      var that=this;
 
       this.$scope.record.contributorJsonString = JSON.stringify(this.$scope.record.contributorList);
       this.$scope.record.noteJsonString = JSON.stringify(this.$scope.record.noteList);
       this.$scope.record.subjectJsonString = JSON.stringify(this.$scope.record.subjectList);
 
-      var url = "record";
-      this.httpClient.post(url,this.$scope.record,'application/json')
-          .success(()=>{
-            this.notify.success("Data Saved Successfully");
-          }).error((data)=>{
-            this.notify.error(data);
+
+      if(this.$scope.record.mfnNo != undefined){
+        console.log("This time i need a put request");
+        this.httpClient.put(url+'/'+this.$scope.record.mfnNo,this.$scope.record,'application/json')
+            .success(() => {
+              that.notify.success("Data Saved Updated");
+            }).error((data) => {
+        });
+        return;
+      }
+
+
+      this.httpClient.post(url,this.$scope.record,'application/json').then(function successCallback(response) {
+        that.notify.success("Data Saved Successfully");
+        var Id=that.getIdFromUrl(response.headers('Location'));
+        that.$scope.record.mfnNo= Id;
+      }, function errorCallback(response) {
+        console.error(response);
       });
+
     }
     private fillSampleData() {
-
+      this.$scope.record.mfnNo = undefined;
       this.$scope.record.language= 1;
       console.log( this.$scope.record.language);
-
     }
 
-
+    private getIdFromUrl(url:string):number{
+      var resourceUrl=url;
+      var startIndex=url.lastIndexOf('/')+1;
+      var lastIndex=resourceUrl.length;
+      return Number(url.substring(startIndex,lastIndex));
+    }
 
 
   }
