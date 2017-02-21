@@ -383,8 +383,8 @@ public class BasicGenerator {
     decorator.addImport("org.ums.decorator.ContentDaoDecorator");
     decorator.addImport(String.format("org.ums.domain.model.immutable.%s", pImmutable));
     decorator.addImport(String.format("org.ums.domain.model.mutable.%s", pMutable));
-    decorator.setSuperType(String.format("ContentDaoDecorator<%s, %s, %s>", pImmutable,
-        pMutable, idType));
+    decorator.setSuperType(String.format("ContentDaoDecorator<%s, %s, %s, %sManager>", pImmutable,
+        pMutable, idType, pImmutable));
     decorator.addInterface(String.format("%sManager", pImmutable));
 
     print(decorator.toString());
