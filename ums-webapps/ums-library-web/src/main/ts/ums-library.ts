@@ -58,10 +58,10 @@ module ums {
             }]
           }
         })
-        .state('cataloging.newBook', {
-          url: "/newBook",
-          controller: 'BookInfo',
-          templateUrl: 'views/admin/cataloging/catalog-new-book.html',
+        .state('cataloging.record', {
+          url: "/record",
+          controller: 'RecordInfo',
+          templateUrl: 'views/admin/cataloging/catalog.html',
           resolve: {
             loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
               return $ocLazyLoad.load({
@@ -69,7 +69,10 @@ module ums {
                   'https://sliptree.github.io/bootstrap-tokenfield/dist/css/bootstrap-tokenfield.css',
                   'https://sliptree.github.io/bootstrap-tokenfield/dist/bootstrap-tokenfield.js',
                   'vendors/select2/select2-madmin.css',
-                  'vendors/select2/select2.min.js'
+                  'vendors/select2/select2.min.js',
+                  'vendors/bootstrap-datepicker/css/datepicker.css',
+                  'vendors/bootstrap-datepicker/js/bootstrap-datepicker.js'
+
                 ]
               });
             }]
@@ -103,7 +106,6 @@ module ums {
           url: "/patrons",
           templateUrl: 'views/admin/patron/patron-home.html',
           controller: 'PatronHome'
-
         })
         .state('circulation.checkOut', {
           url: "/checkOut",

@@ -17,6 +17,7 @@ import org.ums.cache.*;
 import org.ums.cache.common.CountryCache;
 import org.ums.cache.library.AuthorCache;
 import org.ums.cache.library.PublisherCache;
+import org.ums.cache.library.RecordCache;
 import org.ums.cache.library.SupplierCache;
 import org.ums.cachewarmer.AutoCacheWarmer;
 import org.ums.cachewarmer.CacheWarmerManagerImpl;
@@ -31,12 +32,14 @@ import org.ums.manager.*;
 import org.ums.manager.common.CountryManager;
 import org.ums.manager.library.AuthorManager;
 import org.ums.manager.library.PublisherManager;
+import org.ums.manager.library.RecordManager;
 import org.ums.manager.library.SupplierManager;
 import org.ums.message.MessageResource;
 import org.ums.persistent.dao.*;
 import org.ums.persistent.dao.common.PersistentCountryDao;
 import org.ums.persistent.dao.library.PersistentAuthorDao;
 import org.ums.persistent.dao.library.PersistentPublisherDao;
+import org.ums.persistent.dao.library.PersistentRecordDao;
 import org.ums.persistent.dao.library.PersistentSupplierDao;
 import org.ums.security.authentication.UMSAuthenticationRealm;
 import org.ums.services.LoginService;
@@ -650,6 +653,14 @@ public class UMSContext {
     PublisherCache publisherCache = new PublisherCache(mCacheFactory.getCacheManager());
     publisherCache.setManager(new PersistentPublisherDao(mTemplateFactory.getLmsJdbcTemplate()));
     return publisherCache;
+  }
+
+  @Bean
+  RecordManager recordManager() {
+    RecordCache recordCache = new RecordCache(mCacheFactory.getCacheManager());
+    recordCache.setManager(new PersistentRecordDao(mTemplateFactory.getLmsJdbcTemplate(),
+        idGenerator()));
+    return recordCache;
   }
 
   @Bean
