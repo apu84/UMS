@@ -18,15 +18,21 @@ module ums {
     public link = ($scope: any, element: JQuery, attributes: any, ngModelCtrl: ng.INgModelController) => {
 
       if (attributes['select'] == 'select2') {
-console.log(attributes['page']);
-        var placeHolder = attributes['placeholder'];
-        if(placeHolder=="") placeHolder =  "Select an option";
+        if (element.hasClass('select2-hidden-accessible'))
+        {
+          element.select2('destroy');
+        }
+
+       var pHolder = attributes['placeholder'];
+       if(pHolder=="") pHolder =  "Select an option";
         if(attributes['page']=="true")
         {
           var dataSet= $scope.dataSet;
           this.$timeout(() => {
             element.select2({
-              placeholder: placeHolder,
+              allowClear:true,
+              placeholder: pHolder,
+
               minimumInputLength: 2,
               query: function (options) {
                 var pageSize = 50;
@@ -35,7 +41,6 @@ console.log(attributes['page']);
                 var filteredData =dataSet;
                 var obj="";
                 if (options.term && options.term.length > 0) {
-                  console.log(options.context);
                   if (!options.context) {
                     var term = options.term.toLowerCase();
                     options.context = dataSet.filter(function (metric:any) {
