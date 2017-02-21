@@ -576,31 +576,70 @@ module ums {
     static  LibConstant(): any {
       return {
         languages: [
-          {id: '1', name: 'English'},
-          {id: '2', name: 'Bangla'}
+          {id: 101101, name : 'Select a Language'},
+          {id: 1, name: 'English'},
+          {id: 2, name: 'Bangla'}
         ],
         bindingTypes: [
-          {id: '1', name: 'Saddle Stitched'},
-          {id: '2', name: 'Loop Stitched'},
-          {id: '3', name: 'Stab Stitched or Side Stitched'},
-          {id: '4', name: 'Sewn Bound'},
-          {id: '5', name: 'Perfect Bound'},
-          {id: '6', name: 'Tape Bound'},
-          {id: '7', name: 'Screw Bound'},
-          {id: '8', name: 'Hardcover or Case Bound'},
-          {id: '9', name: 'Plastic Grip'},
-          {id: '10', name: 'Comb Bound or Plastic Bound'},
-          {id: '11', name: 'Spiral Bound or Coil Bound'},
-          {id: '12', name: 'Wire-O Bound or Wire Bound'}
+          {id: 101101, name : 'Select Binding Type'},
+          {id: 1, name: 'Saddle Stitched'},
+          {id: 2, name: 'Loop Stitched'},
+          {id: 3, name: 'Stab Stitched or Side Stitched'},
+          {id: 4, name: 'Sewn Bound'},
+          {id: 5, name: 'Perfect Bound'},
+          {id: 6, name: 'Tape Bound'},
+          {id: 7, name: 'Screw Bound'},
+          {id: 8, name: 'Hardcover or Case Bound'},
+          {id: 9, name: 'Plastic Grip'},
+          {id: 10, name: 'Comb Bound or Plastic Bound'},
+          {id: 11, name: 'Spiral Bound or Coil Bound'},
+          {id: 12, name: 'Wire-O Bound or Wire Bound'}
         ],
         acquisitionTypes: [
-          {id: '1', name: 'Purchase'},
-          {id: '2', name: 'Donation'}
+          {id: 101101, name : 'Select Acquisition Type'},
+          {id: 1, name: 'Purchase'},
+          {id: 2, name: 'Donation'}
         ],
         libContributorRoles: [
-          {id: '1', name: 'Author'},
-          {id: '2', name: 'Co-Author'},
-          {id: '3', name: 'Editor'}
+          {id: 101101, name : 'Select a Role'},
+          {id: 1, name: 'Author'},
+          {id: 2, name: 'Co-Author'},
+          {id: 3, name: 'Editor'}
+        ],
+        recordStatus: [
+          {id: 101101, name : 'Select Status'},
+
+          {id: 0, name: 'Entry Mode'},
+          {id: 2, name: 'Available'}
+        ],
+        itemStatus: [
+          {id: 101101, name : 'Select a Language'},
+          {id: 0, name: 'Entry Mode'},
+          {id: 2, name: 'Available'},
+          {id: 3, name: 'On Hold'},
+          {id: 4, name: 'Rented'}
+        ],
+        materialTypes: [
+          {id: 101101, name : 'Select Material Type'},
+          {id: 1, name: 'Books'},
+          {id: 2, name: 'Journals'},
+          {id: 3, name: 'Thesis/Project'}
+        ],/*
+        materialTypes: [
+          {id: '1', name: 'Books'},
+          {id: '2', name: 'Journals'},
+          {id: '3', name: 'Thesis/Project '},
+          {id: '4', name: 'Manuscripts'},
+          {id: '5', name: 'CD-DVD'},
+          {id: '6', name: 'Cartographic'},
+          {id: '7', name: 'Graphic'},
+        ],*/
+        journalFrequency: [
+          {id: 101101, name : 'Select Frequency'},
+          {id: 1, name: 'Weekly'},
+          {id: 15, name: 'Bi-Weekly'},
+          {id: 30, name: 'Monthly '},
+          {id: 360, name: 'Yearly'}
         ]
       }
     }
