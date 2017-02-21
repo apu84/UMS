@@ -3,6 +3,12 @@
     "name": "Course",
     "fields": [
       {
+        "id": {
+          "type": "Long",
+          "idType": true
+        }
+      },
+      {
         "no": "String"
       },
       {
