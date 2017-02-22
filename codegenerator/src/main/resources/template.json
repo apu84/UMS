@@ -1,6 +1,6 @@
 {
   "model": {
-    "name": "Course",
+    "name": "IndexConsumer",
     "fields": [
       {
         "id": {
@@ -9,47 +9,16 @@
         }
       },
       {
-        "no": "String"
+        "host": "String"
       },
       {
-        "title": "String"
+        "instance": "String"
       },
       {
-        "crhr": "Float"
+        "head": "Long"
       },
       {
-        "department": {
-          "type": "Ref",
-          "reference": {
-            "name": "Department",
-            "package": "org.ums.domain.model.immutable",
-            "manager": {
-              "name": "DepartmentManager",
-              "package": "org.ums.manager"
-            }
-          }
-        }
-      },
-      {
-        "syllabus": {
-          "type": "Ref",
-          "reference": {
-            "name": "Syllabus",
-            "package": "org.ums.domain.model.immutable",
-            "manager": {
-              "name": "SyllabusManager",
-              "package": "org.ums.manager"
-            }
-          }
-        }
-      },
-      {
-        "courseType": {
-          "reference": {
-            "name": "CourseType",
-            "package": "org.ums.enums"
-          }
-        }
+        "lastChecked": "Date"
       }
     ]
   }

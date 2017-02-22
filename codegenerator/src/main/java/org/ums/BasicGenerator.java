@@ -95,7 +95,7 @@ public class BasicGenerator {
     JavaInterfaceSource mutable = Roaster.create(JavaInterfaceSource.class);
     mutable.setPackage("org.ums.domain.model.mutable").setName(
         String.format("Mutable%s", pImmutable));
-    mutable.addImport("org.ums.domain.model.common.Mutable");
+    mutable.addImport("org.ums.domain.model.common.Editable");
     mutable.addImport("org.ums.domain.model.common.MutableIdentifier");
     mutable.addImport("org.ums.domain.model.mutable.MutableLastModifier");
     mutable.addImport(String.format("org.ums.domain.model.immutable.%s", pImmutable));
@@ -103,7 +103,8 @@ public class BasicGenerator {
       mutable.addImport("java.util.Date");
     }
 
-    mutable.addInterface(pImmutable).addInterface("Mutable")
+    mutable.addInterface(pImmutable)
+        .addInterface(String.format("Editable<%s>", getIdType(pFields)))
         .addInterface(String.format("MutableIdentifier<%s>", getIdType(pFields)))
         .addInterface("MutableLastModifier");
 
@@ -344,13 +345,16 @@ public class BasicGenerator {
         WordUtils.capitalize(lastModified)));
     setMethodSource.addAnnotation().setName("Override");
 
-    MethodSource methodSource = model.addMethod().setName("commit");
+    MethodSource methodSource = model.addMethod().setName("create");
+    methodSource.setReturnType(getIdType(pFields));
+    methodSource.setPublic();
+    methodSource.setBody(String.format("return %s.create(this);", modelManagerInstance));
+    methodSource.addAnnotation().setName("Override");
+
+    methodSource = model.addMethod().setName("update");
     methodSource.setReturnTypeVoid();
     methodSource.setPublic();
-    methodSource.addParameter("boolean", "update");
-    methodSource.setBody(String.format("if(update) {\n" + "      %s.update(this);\n" + "    }\n"
-        + "    else {\n" + "      %s.create(this);\n" + "    }", modelManagerInstance,
-        modelManagerInstance));
+    methodSource.setBody(String.format("%s.update(this);", modelManagerInstance));
     methodSource.addAnnotation().setName("Override");
 
     methodSource = model.addMethod().setName("edit");

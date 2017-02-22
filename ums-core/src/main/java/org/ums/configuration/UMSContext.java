@@ -28,6 +28,10 @@ import org.ums.formatter.DateFormat;
 import org.ums.generator.IdGenerator;
 import org.ums.generator.JxlsGenerator;
 import org.ums.generator.XlsGenerator;
+import org.ums.indexer.IndexConsumerDao;
+import org.ums.indexer.IndexDao;
+import org.ums.indexer.manager.IndexConsumerManager;
+import org.ums.indexer.manager.IndexManager;
 import org.ums.manager.*;
 import org.ums.manager.common.CountryManager;
 import org.ums.manager.library.AuthorManager;
@@ -661,6 +665,16 @@ public class UMSContext {
     recordCache.setManager(new PersistentRecordDao(mTemplateFactory.getLmsJdbcTemplate(),
         mIdGenerator));
     return recordCache;
+  }
+
+  @Bean
+  IndexManager indexManager() {
+    return new IndexDao(mTemplateFactory.getJdbcTemplate());
+  }
+
+  @Bean
+  IndexConsumerManager indexConsumerManager() {
+    return new IndexConsumerDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
   }
 
   @Bean
