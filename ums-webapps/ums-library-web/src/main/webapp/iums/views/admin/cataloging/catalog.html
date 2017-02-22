@@ -1,0 +1,172 @@
+<style>
+    input[type=text].dottedInput{
+        border:none;
+        border-bottom:thin dashed black;
+        padding-bottom:0;
+        outline:none;
+    }
+    .control-label{
+        padding-top: 7px;
+        color: #17202A;
+    }
+    .form-group{
+        clear: both;
+    }
+    .form-control.dottedInput{
+        height: 26px;
+        padding: 0px;
+        padding-top: 5px;
+        padding-left: 5px;
+    }
+    fieldset { border:1px solid #BFC9CA;
+        padding-right: 5px;
+        padding-left: 5px;
+        padding-bottom: 10px;
+    }
+
+    legend {
+        padding: 0.2em 0.5em;
+        border:1px solid grey;
+        /*color:#4d4b4b;*/
+        color:white;
+        font-size:90%;
+        text-align:left;
+        width: 150px;
+        padding-right: 11px;
+        margin-bottom: 10px;
+        font-weight: bold;
+        background-color: #839192;
+    }
+    @media (min-width: 992px) {
+        .col-md-1 {
+            width: 10.333333% !important;
+        }
+    }
+    @media (min-width: 992px) {
+        .col-md-1s {
+            width: 7.333333% !important;
+        }
+    }
+    .col-md-1s {
+        float: left;
+        position: relative;
+        min-height: 1px;
+        padding-right: 15px;
+        padding-left: 15px;
+    }
+
+    @media (min-width: 992px) {
+        .col-md-3 {
+            width: 23% !important;
+        }
+    }
+    .col-md-1{
+        padding-right: 5px !important;
+    }
+    @media (min-width: 992px){
+        .col-md-11 {
+            width: 89.666667% !important;
+        }
+    }
+    .alignLeft {
+        float: left;
+    }
+    .alignRight {
+        float: right;
+    }
+    select {
+        width: 100%;
+        height: 26px;
+    }
+    .tokenfield.form-control{
+    border:none;
+    border-bottom:1px dashed black;
+    }
+    .select2-container .select2-choice{
+    height:28px !important;
+    line-height:27px !important;
+    }
+
+    .fa.fa-wpforms.fa-lg{
+    margin-top:6px;
+    }
+    .fa.fa-times.fa-lg{
+    margin-top:7px;
+    }
+    #add_multiple_copies_span{
+        margin: 1em 1em 1em 0;
+        padding: 1em;
+        background-color: #f4f8f9;
+        border: 2px solid #b9d8d9;
+        border-radius: 5px;
+    }
+</style>
+<div>
+    <p class="alignLeft" id="pageTitle" style="padding-left: 3%;font-size: 18px;font-weight: bold;"><span>{{data.headerTitle}}</span></p>
+    <p class="alignRight">
+
+<!--
+    <div class="btn-group" style="padding-right: 20px;">
+        <button type="button" class="btn btn-default"><i class="fa fa-plus" aria-hidden="true"></i>  New Material</button>
+
+        <button type="button" data-toggle="dropdown"
+                class="btn btn-default dropdown-toggle"><span class="caret"></span><span
+                class="sr-only">Toggle Dropdown</span></button>
+        <ul role="menu" class="dropdown-menu">
+            <li><a href="#"><i class="fa fa-book" aria-hidden="true"></i> Book</a></li>
+            <li><a href="#"><i class="fa fa-newspaper-o" aria-hidden="true"></i> Journal</a></li>
+            <li><a href="#"><i class="fa fa-gitlab" aria-hidden="true"></i> Thesis/Project</a></li>
+            <li class="divider"></li>
+            <li><a href="#"><i class="fa fa-list-alt" aria-hidden="true"></i> Manuscripts</a></li>
+            <li><a href="#"><i class="fa fa-floppy-o" aria-hidden="true"></i> CD/DVD/Audio/Video</a></li>
+            <li><a href="#"><i class="fa fa-tencent-weibo" aria-hidden="true"></i> Cartographic Materials</a></li>
+            <li><a href="#"><i class="fa fa-map" aria-hidden="true"></i> Graphic Materials</a></li>
+        </ul>
+    </div>
+    -->
+
+        <a href="javascript:;" class="btn btn-xs btn-default bookAnchor"
+           data-ng-click="showBookUI()" style="background-color: black;">
+            <i class="fa fa-book bookIcon" style="color: white;" aria-hidden="true"></i>
+        </a>
+        <a href="javascript:;" class="btn btn-xs btn-default recordAnchor"
+           data-ng-click="showAccessionUI()" style="background-color: #ffffff;">
+            <i class="fa fa-files-o recordIcon" style="color: black;" aria-hidden="true"></i>
+        </a>
+
+    </p>
+</div>
+
+<hr style="clear: both;"/>
+
+<div class="form-body pal" style="margin-top: -25px;" data-ng-show="bookInfo"
+     data-ng-include="'views/admin/cataloging/catalog-record.html'">
+</div>
+
+<div style="margin-top: -25px;" data-ng-show="accessionInfo"
+     data-ng-include="'views/admin/cataloging/catalog-item.html'">
+</div>
+
+<div data-ng-include="'views/admin/cataloging/supporting-panels/contributor-panel.html'"></div>
+<script>
+    setTimeout(function(){
+        $('[data-toggle="tooltip"]').tooltip(
+            {
+                container: 'body'
+            });
+    }, 1000);
+
+    function showList(){
+
+        $("#body2").hide('slide', {direction: 'left'}, 400);
+        $("#body1").show('slide', {direction: 'right'}, 400);
+
+
+    }
+    function showNew(){
+        $("#body2").show('slide', {direction: 'left'}, 400);
+        $("#body1").hide('slide', {direction: 'right'}, 400);
+    }
+
+$("#abcd").tokenfield();
+</script>

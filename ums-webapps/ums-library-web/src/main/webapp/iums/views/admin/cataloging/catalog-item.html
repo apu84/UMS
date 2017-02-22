@@ -1,0 +1,153 @@
+<div class="row">
+    <div class="col-md-12" >
+
+        <div style="float:left;margin-left:10px;" ng-if="data.collapsedItemTable">
+            <span style='font-size:25px;'>[</span> <i class="fa fa-angle-double-right fa-cx" style='color:green;cursor:pointer;' ng-click="showHideItemsTable('show')"></i> <span style='font-size:25px;'>]</span>
+        </div>
+        <div style="float:left;margin-left:10px;" ng-if="!data.collapsedItemTable">
+            <span style='font-size:25px;'>[</span> <i class="fa fa-angle-double-left fa-cx" style='color:green;cursor:pointer;' ng-click="showHideItemsTable('hide')"></i> <span style='font-size:25px;'>]</span>
+        </div>
+        <div style='float:left;margin-top:10px;margin-left:5px;font-weight:bold;' ng-if="data.collapsedItemTable">
+            Show Items Table
+        </div>
+        <div style='float:left;margin-top:10px;margin-left:5px;font-weight:bold;' ng-if="!data.collapsedItemTable">
+            Hide Items Table
+        </div>
+    </div>
+</div>
+<div class="row" id="itemsDiv">
+    <div class="col-md-12"  style="padding-top: 10px;">
+        <hot-table hot-id="bookCopyHandsOnTable"
+                   settings="data.settings"
+                   datarows="data.items"
+                   columns="data.columns">
+        </hot-table>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <p class="alignLeft" id="newItemTitle" style="padding-left: 2%;font-size: 18px;font-weight: bold;">
+            <span ng-if="!data.multipleItemAdd">Add Item</span>
+            <span ng-if="data.multipleItemAdd">Add Items</span>
+        </p>
+
+        <!--Edit Item # 3 / Barcode 3 -->
+        <hr style="clear: both;"/>
+    </div>
+</div>
+
+<div class="form-body pal" style="margin-top: -25px;" ng-show="!data.multipleItemAdd">
+    <div class="form-group">
+        <label class="col-md-1 control-label">Copy Number</label>
+        <div class="col-md-3">
+            <input
+                    type="text" class="form-control dottedInput"/>
+        </div>
+
+        <label class="col-md-1 control-label">Accession #</label>
+        <div class="col-md-3">
+            <input
+                    id="inputName" type="text" placeholder="" class="form-control dottedInput"/>
+
+        </div>
+
+        <label for="inputName" class="col-md-1 control-label">Access. Date</label>
+
+        <div class="col-md-3">
+            <input type="text" data-date-format="dd-mm-yyyy" placeholder="DD-MM-YYYY" class="datepicker-default form-control dottedInput" />
+
+
+        </div>
+
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-1 control-label">Barcode</label>
+        <div class="col-md-3">
+            <input    type="text" class="form-control dottedInput"/>
+        </div>
+
+
+        <label class="col-md-1 control-label">Price</label>
+        <div class="col-md-3">
+            <input type="text" placeholder="" class="form-control dottedInput"/>
+
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label class="col-md-1 control-label">Internal Note</label>
+        <div class="col-md-11">
+            <input    type="text" class="form-control dottedInput"/>
+        </div>
+    </div>
+
+    <div class="form-group">
+
+        <label class="col-md-1 control-label">Supplier</label>
+        <div class="col-md-3">
+            <input type="text" class="form-control" style="width: 98%"  data-select="select2"  page="true"
+                   data-ng-model="abc"   datas="contributors"  placeholder="Select a Name"/>
+
+        </div>
+
+        <label class="col-md-1 control-label">Status</label>
+        <div class="col-md-3">
+            <select style="width: 98%">
+                <option value="">Select a Status</option>
+                <option data-ng-repeat="item in data.itemOptions" value="{{item.id}}">{{item.name}}</option>
+            </select>
+        </div>
+
+
+    </div>
+
+</div>
+
+<div ng-show="data.multipleItemAdd">
+    <table class="table table-bordered table-striped table-condensed cf">
+        <thead class="cf">
+        <tr>
+            <th width="5%">Copy#</th>
+            <th width="10%">Accession #</th>
+            <th width="10%">Accession Date</th>
+            <th width="10%">Barcode</th>
+            <th width="8%">Price</th>
+            <th width="15%">Supplier</th>
+            <th width="8%">Status</th>
+            <th width="10%">Note</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="item in newItemList">
+            <td><input type='text' style='width:40px;' /></td>
+            <td><input type='text' style='width:150px;' /></td>
+            <td><input type='text' style='width:80px;' /></td>
+            <td><input type='text' style='width:150px;' /></td>
+            <td><input type='text' style='width:100px;' /></td>
+            <td></td>
+            <td></td>
+            <td><input type='text' style='width:150px;' /></td>
+
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+
+<div class="row" data-ng-show="data.showItemMainButtonPanel">
+    <div class="col-md-12"  style="padding-top: 45px;padding-left: 4%;padding-bottom: 10px;">
+        <button type="button" class="btn btn-default">Add Item</button>&nbsp;&nbsp;&nbsp;
+        <button type="button" class="btn btn-default">Add & Duplicate</button>&nbsp;&nbsp;&nbsp;
+        <button type="button" class="btn btn-dark" ng-click="data.showItemMainButtonPanel=false;">Add Multiple copies of this item</button>
+    </div>
+</div>
+<fieldset id="add_multiple_copies_span" data-ng-show="!data.showItemMainButtonPanel">
+    <label for="number_of_copies">Number of copies of this item to add: </label>
+    <input type="text" id="number_of_copies" name="number_of_copies" value="" size="2" style="text-align:center;border:1px solid grey;" ng-model="data.bulkAddCount">
+    <input type="button" id="add_multiple_copies_submit" name="add_multiple_copies_submit" value="Add" ng-click="addNewItems()">
+    <a href="#" id="cancel_add_multiple" class="cancel" ng-click="data.showItemMainButtonPanel=true;data.multipleItemAdd=false;showHideItemsTable('show');">Cancel</a>
+    <div class="hint"><p>The barcode you enter will be incremented for each additional item.</p></div>
+</fieldset>
