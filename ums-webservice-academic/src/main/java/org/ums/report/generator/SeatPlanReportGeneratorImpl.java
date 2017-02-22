@@ -1390,11 +1390,10 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
       tableTwo.addCell(attendenceCellTable);
 
       /*
-      *  Paragraph numberOfExamineeParagraph =
-          new Paragraph(numberOfTheExamineesRegistered + studentCounter);
-          */
-      Paragraph numberOfPrewsent =
-          new Paragraph(numberofTheExamineesPresent);
+       * Paragraph numberOfExamineeParagraph = new Paragraph(numberOfTheExamineesRegistered +
+       * studentCounter);
+       */
+      Paragraph numberOfPrewsent = new Paragraph(numberofTheExamineesPresent);
       Paragraph numberOfAbsentParagraph = new Paragraph(numberOfTheExamineesAbsent);
       PdfPCell studentInfoCell = new PdfPCell();
       studentInfoCell.addElement(numberOfPrewsent);
@@ -1404,8 +1403,9 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
       tableOne.addCell(studentInfoCell);
       tableTwo.addCell(studentInfoCell);
 
-      /*Paragraph numberOfPresent = new Paragraph(numberofTheExamineesPresent);*/
-      Paragraph numberOfExamineeParagraph = new Paragraph(numberOfTheExamineesRegistered + studentCounter);
+      /* Paragraph numberOfPresent = new Paragraph(numberofTheExamineesPresent); */
+      Paragraph numberOfExamineeParagraph =
+          new Paragraph(numberOfTheExamineesRegistered + studentCounter);
       PdfPCell presentCell = new PdfPCell();
       presentCell.setPaddingTop(-3);
       presentCell.setPaddingBottom(4);
