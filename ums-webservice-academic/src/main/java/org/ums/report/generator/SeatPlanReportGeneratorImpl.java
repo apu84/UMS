@@ -1114,7 +1114,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
     String attendenceSheet = new String("ATTENDANCE SHEET");
     String original = new String("ORIGINAL");
     String duplicate = new String("DUPLICATE");
-    String roomNo = new String("ROOM NO...");
+    String roomNo = new String("ROOM NO: ");
     String year = new String("Year: ");
     String semester = new String("Semester: ");
     String courseNo = new String("Course No: ");
@@ -1389,22 +1389,27 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
       tableOne.addCell(attendenceCellTable);
       tableTwo.addCell(attendenceCellTable);
 
-      Paragraph numberOfExamineeParagraph =
+      /*
+      *  Paragraph numberOfExamineeParagraph =
           new Paragraph(numberOfTheExamineesRegistered + studentCounter);
+          */
+      Paragraph numberOfPrewsent =
+          new Paragraph(numberofTheExamineesPresent);
       Paragraph numberOfAbsentParagraph = new Paragraph(numberOfTheExamineesAbsent);
       PdfPCell studentInfoCell = new PdfPCell();
-      studentInfoCell.addElement(numberOfExamineeParagraph);
+      studentInfoCell.addElement(numberOfPrewsent);
       studentInfoCell.addElement(numberOfAbsentParagraph);
       studentInfoCell.setPaddingTop(-3);
       studentInfoCell.setPaddingBottom(4);
       tableOne.addCell(studentInfoCell);
       tableTwo.addCell(studentInfoCell);
 
-      Paragraph numberOfPresent = new Paragraph(numberofTheExamineesPresent);
+      /*Paragraph numberOfPresent = new Paragraph(numberofTheExamineesPresent);*/
+      Paragraph numberOfExamineeParagraph = new Paragraph(numberOfTheExamineesRegistered + studentCounter);
       PdfPCell presentCell = new PdfPCell();
       presentCell.setPaddingTop(-3);
       presentCell.setPaddingBottom(4);
-      presentCell.addElement(numberOfPresent);
+      presentCell.addElement(numberOfExamineeParagraph);
       tableOne.addCell(presentCell);
       tableTwo.addCell(presentCell);
 
