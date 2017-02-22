@@ -2110,25 +2110,50 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
           .sorted(Map.Entry.<Long, List<SeatPlan>>comparingByKey())
           .forEachOrdered(x-> seatPlanMapByRoomNo.put(x.getKey(), x.getValue()));*/
 
-      float[] tableWidth = new float[] {1, 10, 2};
+      float[] tableWidth = new float[] {2, 10, 2};
+      Font lightFontInner= new Font();
+      lightFontInner = FontFactory.getFont(FontFactory.TIMES, 12);
+
+      Font boldFontInner = new Font();
+      boldFontInner = FontFactory.getFont(FontFactory.TIMES_BOLD, 12);
+
+      Integer seatPlanKeySize = new Integer(seatPlanMapByRoomNo.size());
+      if(seatPlanKeySize<=6){
+        lightFontInner = FontFactory.getFont(FontFactory.TIMES, 18);
+
+        boldFontInner = FontFactory.getFont(FontFactory.TIMES_BOLD, 18);
+      }
+      else if(seatPlanKeySize>6 && seatPlanKeySize<=10){
+        lightFontInner = FontFactory.getFont(FontFactory.TIMES, 15);
+
+        boldFontInner = FontFactory.getFont(FontFactory.TIMES_BOLD, 15);
+      }else if(seatPlanKeySize>10 && seatPlanKeySize<=16){
+        lightFontInner = FontFactory.getFont(FontFactory.TIMES, 12);
+
+        boldFontInner = FontFactory.getFont(FontFactory.TIMES_BOLD, 12);
+      }else{
+        lightFontInner = FontFactory.getFont(FontFactory.TIMES, 10);
+
+        boldFontInner = FontFactory.getFont(FontFactory.TIMES_BOLD, 10);
+      }
 
       PdfPTable sittingArrangementTable = new PdfPTable(3);
       sittingArrangementTable.setWidths(tableWidth);
       sittingArrangementTable.setWidthPercentage(100);
       sittingArrangementTable.setPaddingTop(20);
       PdfPCell tableHeaderCell = new PdfPCell();
-      Paragraph cellData = new Paragraph("Room No.", boldFont);
+      Paragraph cellData = new Paragraph("Room No.", boldFontInner);
       addHeaderToSittingArrangementDataTable(sittingArrangementTable, tableHeaderCell, cellData);
 
-      cellData = new Paragraph("Student's Id", boldFont);
+      cellData = new Paragraph("Student's Id", boldFontInner);
       addHeaderToSittingArrangementDataTable(sittingArrangementTable, tableHeaderCell, cellData);
 
-      cellData = new Paragraph("No. of Students", boldFont);
+      cellData = new Paragraph("No. of Students", boldFontInner);
       addHeaderToSittingArrangementDataTable(sittingArrangementTable, tableHeaderCell, cellData);
 
       for(int j=0;j<seatPlanMapByRoomNoKeys.size();j++){
         PdfPCell bodyCell = new PdfPCell();
-        Paragraph bodyParagraph = new Paragraph(seatPlanMapByRoomNo.get(seatPlanMapByRoomNoKeys.get(j)).get(0).getClassRoom().getRoomNo(), lightFont);
+        Paragraph bodyParagraph = new Paragraph(seatPlanMapByRoomNo.get(seatPlanMapByRoomNoKeys.get(j)).get(0).getClassRoom().getRoomNo(), lightFontInner);
         bodyCell.addElement(bodyParagraph);
         bodyCell.setHorizontalAlignment(Element.ALIGN_CENTER);
         bodyCell.setVerticalAlignment(Element.ALIGN_CENTER);
@@ -2138,12 +2163,12 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
         for(int x=0;x<bodySeatPlanList.size();x++){
           studentIds[x]=bodySeatPlanList.get(x).getStudent().getId();
         }
-        bodyCell= new PdfPCell (new Paragraph(String.join(", ",studentIds), lightFont));
+        bodyCell= new PdfPCell (new Paragraph(String.join(", ",studentIds), lightFontInner));
         bodyCell.setHorizontalAlignment(Element.ALIGN_LEFT);
         bodyCell.setVerticalAlignment(Element.ALIGN_CENTER);
         sittingArrangementTable.addCell(bodyCell);
 
-        bodyCell= new PdfPCell (new Paragraph(bodySeatPlanList.size()+"", lightFont));
+        bodyCell= new PdfPCell (new Paragraph(bodySeatPlanList.size()+"", lightFontInner));
         bodyCell.setHorizontalAlignment(Element.ALIGN_CENTER);
         sittingArrangementTable.addCell(bodyCell);
       }
@@ -2178,11 +2203,20 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
         new Paragraph("Ahsanullah University of Science and Technology", pBoldFont);
     headerParagraph.setAlignment(Element.ALIGN_CENTER);
     headerCell.addElement(headerParagraph);
+
+    headerParagraph = new Paragraph("Office of the Controller of Examinations", pBoldFont);
+    headerParagraph.setAlignment(Element.ALIGN_CENTER);
+    headerParagraph.setPaddingTop(-5f);
+    headerParagraph.setSpacingBefore(-5f);
+    headerCell.addElement(headerParagraph);
+
     if(pExamType == ExamType.SEMESTER_FINAL) {
       headerParagraph =
           new Paragraph("Semester Final Examination :"
               + pSeatPlansOfTheMap.get(0).getSemester().getName(), pBoldFont);
       headerParagraph.setAlignment(Element.ALIGN_CENTER);
+      headerParagraph.setPaddingTop(-5f);
+      headerParagraph.setSpacingBefore(-5f);
       headerCell.addElement(headerParagraph);
     }
     else {
@@ -2190,28 +2224,37 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
           new Paragraph("Carry/Clearance/Improvement Examination :"
               + pSeatPlansOfTheMap.get(0).getSemester().getName(), pBoldFont);
       headerParagraph.setAlignment(Element.ALIGN_CENTER);
+      headerParagraph.setPaddingTop(-5f);
+      headerParagraph.setSpacingBefore(-5f);
       headerCell.addElement(headerParagraph);
 
     }
 
-    headerParagraph = new Paragraph("Sitting Arrangement", pBoldFont);
-    headerParagraph.setAlignment(Element.ALIGN_CENTER);
-    headerCell.addElement(headerParagraph);
     headerParagraph =
-        new Paragraph("Program :"
+        new Paragraph("Sitting Arrangement ,"
+            + " Program :"
             + pSeatPlansOfTheMap.get(0).getStudent().getProgram().getShortName()
-                .replace("B.Sc in", ""), pBoldFont);
+                .replace("B.Sc in", "") + ", Year :"
+            + pSeatPlansOfTheMap.get(0).getStudent().getCurrentYear() + " Semester:"
+            + pSeatPlansOfTheMap.get(0).getStudent().getCurrentAcademicSemester(), pBoldFont);
     headerParagraph.setAlignment(Element.ALIGN_CENTER);
+    headerParagraph.setPaddingTop(-5f);
     headerCell.addElement(headerParagraph);
-    headerParagraph =
-        new Paragraph("Year :" + pSeatPlansOfTheMap.get(0).getStudent().getCurrentYear()
-            + " Semester:" + pSeatPlansOfTheMap.get(0).getStudent().getCurrentAcademicSemester(),
-            pBoldFont);
-    headerParagraph.setAlignment(Element.ALIGN_CENTER);
-    headerCell.addElement(headerParagraph);
+    /*
+     * headerParagraph = new Paragraph("Program :" +
+     * pSeatPlansOfTheMap.get(0).getStudent().getProgram().getShortName() .replace("B.Sc in", ""),
+     * pBoldFont); headerParagraph.setAlignment(Element.ALIGN_CENTER);
+     * headerCell.addElement(headerParagraph); headerParagraph = new Paragraph("Year :" +
+     * pSeatPlansOfTheMap.get(0).getStudent().getCurrentYear() + " Semester:" +
+     * pSeatPlansOfTheMap.get(0).getStudent().getCurrentAcademicSemester(), pBoldFont);
+     * headerParagraph.setAlignment(Element.ALIGN_CENTER); headerCell.addElement(headerParagraph);
+     */
 
     headerCell.setBorder(PdfPCell.NO_BORDER);
+    headerCell.setPaddingTop(-20);
     headerCell.setPaddingBottom(5.0f);
+    headerCell.setSpaceCharRatio(-5);
+    headerCell.setExtraParagraphSpace(-5);
     headerTable.addCell(headerCell);
     return headerTable;
   }
