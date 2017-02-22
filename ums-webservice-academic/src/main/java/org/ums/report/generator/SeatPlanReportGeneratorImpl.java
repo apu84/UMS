@@ -2129,9 +2129,9 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
         boldFontInner = FontFactory.getFont(FontFactory.TIMES_BOLD, 18);
       }
       else if(seatPlanKeySize>6 && seatPlanKeySize<=10){
-        lightFontInner = FontFactory.getFont(FontFactory.TIMES, 15);
+        lightFontInner = FontFactory.getFont(FontFactory.TIMES, 14);
 
-        boldFontInner = FontFactory.getFont(FontFactory.TIMES_BOLD, 15);
+        boldFontInner = FontFactory.getFont(FontFactory.TIMES_BOLD, 14);
       }else if(seatPlanKeySize>10 && seatPlanKeySize<=16){
         lightFontInner = FontFactory.getFont(FontFactory.TIMES, 12);
 
