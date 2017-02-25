@@ -1349,6 +1349,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
             }
             innerCellOne.setPaddingTop(-4);
             PdfPCell innerCellTwo = new PdfPCell(new Paragraph("  "));
+            innerCellOne.setPaddingBottom(4f);
             attendanceSheetTable.addCell(innerCellOne);
             attendanceSheetTable.addCell(innerCellTwo);
             seatPlanReports.remove(0);
