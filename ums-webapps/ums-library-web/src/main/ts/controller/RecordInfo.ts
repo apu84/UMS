@@ -175,8 +175,6 @@ export interface IItem{
       this.$scope.contributors.push(contributor);
 
 
-      console.log("------");
-      console.log(libConstants.recordStatus);
       $scope.data = {
         languageOptions: libConstants.languages,
         bindingTypeOptions: libConstants.bindingTypes,
@@ -186,6 +184,7 @@ export interface IItem{
         itemOptions: libConstants.itemStatus,
         materialTypeOptions: libConstants.materialTypes,
         journalFrequencyOptions: libConstants.journalFrequency,
+        readOnlyMode: false,
         showItemMainButtonPanel: true,
         multipleItemAdd: false,
         bulkAddCount: 0,
@@ -294,9 +293,11 @@ export interface IItem{
       }, true);
 
       jQuery.validator.addMethod("cRequired", function (value, element) {
+        /*
         console.log("Status :" + $("#recordStatus").val());
         console.log("Value :" + value);
         console.log($(element).attr('id')  );
+        */
 
        if($(element).attr('id')=="recordStatus" &&  value  == 101101)
          return false;
@@ -342,8 +343,8 @@ export interface IItem{
         callDate: "",
         authorMark: "",
         contributorList: new Array <IContributorEntry>(),  //done
-        imprint: undefined,
-        physicalDescription: undefined,
+        imprint: {"publisher":0, "publisherName":"","placeOfPublication":"","yearDateOfPublication":"","copyRightDate":""},
+        physicalDescription: {"pagination":"","illustrations":"","accompanyingMaterials":"","dimensions":"","paperQuality":""},
         subjectList: new Array<ISubjectEntry>(), //done
         keywords:"",
         noteList: new Array <INoteEntry>(),
@@ -493,6 +494,9 @@ export interface IItem{
     }
 
     private saveRecord(): void {
+
+      var action = $("button[type=button][clicked=true]").val();
+
       console.log("this.$scope.record.mfnNo : "+this.$scope.record.mfnNo);
       var url = "record";
       var that=this;
@@ -502,30 +506,93 @@ export interface IItem{
       this.$scope.record.subjectJsonString = JSON.stringify(this.$scope.record.subjectList);
 
 
-      if(this.$scope.record.mfnNo != undefined){
+      if(this.$scope.record.mfnNo != undefined) {
         console.log("This time i need a put request");
         this.httpClient.put(url+'/'+this.$scope.record.mfnNo,this.$scope.record,'application/json')
             .success(() => {
               that.notify.success("Data Saved Updated");
             }).error((data) => {
         });
-        return;
       }
+      else {
+        this.httpClient.post(url, this.$scope.record, 'application/json').then(function successCallback(response) {
+          that.notify.success("Data Saved Successfully");
+          var Id = that.getIdFromUrl(response.headers('Location'));
+          that.$scope.record.mfnNo = Id;
+        }, function errorCallback(response) {
+          console.error(response);
+        });
+      }
+      if(action == "save_edit_items"){
 
-
-      this.httpClient.post(url,this.$scope.record,'application/json').then(function successCallback(response) {
-        that.notify.success("Data Saved Successfully");
-        var Id=that.getIdFromUrl(response.headers('Location'));
-        that.$scope.record.mfnNo= Id;
-      }, function errorCallback(response) {
-        console.error(response);
-      });
-
+      }
+      else if(action =="save_view"){
+        this.$scope.data.readOnlyMode=true;
+      }
     }
     private fillSampleData() {
+      this.$scope.data.readOnlyMode=false;
       this.$scope.record.mfnNo = undefined;
       this.$scope.record.language= 1;
-      console.log( this.$scope.record.language);
+      this.$scope.record.status= 0;
+      this.$scope.record.bindingType= 1;
+      this.$scope.record.acqType= 1;
+      this.$scope.record.language= 1;
+      var offSet= (new Date).getMilliseconds();
+      this.$scope.record.title= "Material Title "+offSet;
+      this.$scope.record.subTitle= "Sub Title "+offSet;
+
+      if($("#gmd"))
+          this.$scope.record.gmd= "General Material Description "+offSet;
+      if($("#seriesTitle"))
+        this.$scope.record.seriesTitle= "Series "+offSet;
+      if($("#volumeNo"))
+        this.$scope.record.volumeNo= "Volume No "+offSet;
+      if($("#volumeTitle"))
+        this.$scope.record.volumeTitle= "Volume Title "+offSet;
+      if($("#serialIssueNo"))
+        this.$scope.record.serialIssueNo= "Serial Issue No "+offSet;
+      if($("#serialNumber"))
+        this.$scope.record.serialNumber= "Serial No "+offSet;
+      if($("#serialSpecial"))
+        this.$scope.record.serialSpecial= "Serial Special "+offSet;
+      if($("#libraryLacks"))
+        this.$scope.record.libraryLacks= "Library Lacks "+offSet;
+      if($("#changedTitle"))
+        this.$scope.record.changedTitle= "Changed Title "+offSet;
+      if($("#isbn"))
+        this.$scope.record.isbn= "ISBN "+offSet;
+      if($("#corpAuthorMain"))
+        this.$scope.record.corpAuthorMain= "Corporate Author Main "+offSet;
+      if($("#corpSubBody"))
+        this.$scope.record.corpSubBody= "Corporate Sub Body "+offSet;
+      if($("#corpCityCountry"))
+        this.$scope.record.corpCityCountry= "City, Country "+offSet;
+      if($("#edition"))
+        this.$scope.record.edition= "Edition "+offSet;
+      if($("#corpSubBody"))
+        this.$scope.record.translateTitleEdition= "Translate Title Edition "+offSet;
+      if($("#issn"))
+        this.$scope.record.issn= "ISSN "+offSet;
+      if($("#callNo"))
+        this.$scope.record.callNo= "Call No "+offSet;
+      if($("#classNo"))
+        this.$scope.record.classNo= "Class No "+offSet;
+      if($("#callDate"))
+        this.$scope.record.callDate= "11-11-2017";
+      if($("#authorMark"))
+        this.$scope.record.authorMark= "Author Mark "+offSet;
+
+      this.$scope.record.imprint.placeOfPublication= "Publication Place "+offSet;
+      this.$scope.record.imprint.yearDateOfPublication= "Year of Publication "+offSet;
+      this.$scope.record.imprint.copyRightDate= "09-09-2016";
+
+      this.$scope.record.physicalDescription.pagination= "Pagination "+offSet;
+      this.$scope.record.physicalDescription.illustrations= "Illustrations "+offSet;
+      this.$scope.record.physicalDescription.accompanyingMaterials= "Materials "+offSet;
+      this.$scope.record.physicalDescription.dimensions= "Dimensions "+offSet;
+      this.$scope.record.physicalDescription.paperQuality= "Paper Quality "+offSet;
+
     }
 
     private getIdFromUrl(url:string):number{
