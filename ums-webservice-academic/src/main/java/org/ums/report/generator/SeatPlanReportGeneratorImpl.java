@@ -2252,6 +2252,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
     headerParagraph = new Paragraph("Total number allocated rooms: " + seatPlanMapByRoomNo.size(), pBoldFont);
     headerParagraph.setAlignment(Element.ALIGN_CENTER);
     headerParagraph.setPaddingTop(-5f);
+    headerParagraph.setSpacingBefore(-5f);
     headerCell.addElement(headerParagraph);
     /*
      * headerParagraph = new Paragraph("Program :" +
