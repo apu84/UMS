@@ -63,7 +63,6 @@ module ums {
             if(tempCount != this.scope.numOfUnreadNotification) {
               this.scope.numOfUnreadNotification = tempCount;
             }
-            console.log(response.entries);
             this.scope.notifications = response.entries;
           },
           (response: ng.IHttpPromiseCallbackArg<any>) => {
