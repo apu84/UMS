@@ -196,7 +196,7 @@ module ums {
               savedCourseTeacher.entries.push({
                 id: selectedSections[i].uniqueId,
                 courseId: courseId,
-                semesterId: this.$scope.teacherSearchParamModel.programSelector.semesterId,
+                semesterId: this.$scope.teacherSearchParamModel.programSelector.semesterId+'',
                 teacherId: teacherId,
                 updateType: 'delete'
               });
@@ -212,7 +212,7 @@ module ums {
                 savedCourseTeacher.entries.push({
                   id: selectedSections[i].uniqueId,
                   courseId: courseId,
-                  semesterId: this.$scope.teacherSearchParamModel.programSelector.semesterId,
+                  semesterId: this.$scope.teacherSearchParamModel.programSelector.semesterId+'',
                   teacherId: teacherId,
                   updateType: 'delete'
                 });
@@ -230,7 +230,7 @@ module ums {
                 savedCourseTeacher.entries.push({
                   id: savedTeacher.selectedSections[i].uniqueId,
                   courseId: courseId,
-                  semesterId: this.$scope.teacherSearchParamModel.programSelector.semesterId,
+                  semesterId: this.$scope.teacherSearchParamModel.programSelector.semesterId+'',
                   teacherId: teacherId,
                   section: '',
                   updateType: 'delete'
@@ -248,7 +248,7 @@ module ums {
             for (var i = 0; i < modifiedSelectedSections.length; i++) {
               savedCourseTeacher.entries.push({
                 courseId: courseId,
-                semesterId: this.$scope.teacherSearchParamModel.programSelector.semesterId,
+                semesterId: this.$scope.teacherSearchParamModel.programSelector.semesterId+'',
                 teacherId: modified.selectedTeachers[teacherId].id,
                 updateType: 'insert',
                 section: modifiedSelectedSections[i]
@@ -264,7 +264,7 @@ module ums {
               for (var i = 0; i < modifiedSelectedSections.length; i++) {
                 savedCourseTeacher.entries.push({
                   courseId: courseId,
-                  semesterId: this.$scope.teacherSearchParamModel.programSelector.semesterId,
+                  semesterId: this.$scope.teacherSearchParamModel.programSelector.semesterId+'',
                   teacherId: modifiedTeacher.id,
                   updateType: 'insert',
                   section: modifiedSelectedSections[i]
@@ -282,7 +282,7 @@ module ums {
               if (!sectionFound) {
                 savedCourseTeacher.entries.push({
                   courseId: courseId,
-                  semesterId: this.$scope.teacherSearchParamModel.programSelector.semesterId,
+                  semesterId: this.$scope.teacherSearchParamModel.programSelector.semesterId+'',
                   teacherId: teacherId,
                   section: modifiedTeacher.sections[i],
                   updateType: 'insert'

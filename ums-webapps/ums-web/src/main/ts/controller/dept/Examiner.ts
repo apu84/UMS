@@ -147,7 +147,7 @@ module ums {
             id: saved.id,
             courseId: courseId,
             programId: this.$scope.teacherSearchParamModel.programSelector.programId,
-            semesterId: this.$scope.teacherSearchParamModel.programSelector.semesterId,
+            semesterId: this.$scope.teacherSearchParamModel.programSelector.semesterId+'',
             preparerId: modified.preparerId,
             scrutinizerId: modified.scrutinizerId,
             updateType: updateType
@@ -156,7 +156,7 @@ module ums {
           savedExaminer.entries.push({
             courseId: courseId,
             programId: this.$scope.teacherSearchParamModel.programSelector.programId,
-            semesterId: this.$scope.teacherSearchParamModel.programSelector.semesterId,
+            semesterId: this.$scope.teacherSearchParamModel.programSelector.semesterId+'',
             preparerId: modified.preparerId,
             scrutinizerId: modified.scrutinizerId,
             updateType: 'insert'
