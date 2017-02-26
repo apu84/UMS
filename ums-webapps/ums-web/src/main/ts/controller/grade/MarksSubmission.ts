@@ -45,6 +45,8 @@ module ums {
     calculateTotalAndGradeLetter:Function;
     fetchMarksSubmissionLog:Function;
     fetchMarksLog:Function;
+    getSubmissionColorCodeStyle:Function;
+
 
     recheckAll:Function;
     approveAll:Function;
@@ -117,6 +119,7 @@ module ums {
     semester:string;
     section:string;
     offeredTo:string;
+    submissionColorCode:string;
   }
   interface ICourseInfo{
     course_id:string;
@@ -171,8 +174,14 @@ module ums {
         markSubmissionStatus:appConstants.marksSubmissionStatus,
         yearSemester:appConstants.yearSemester,
         searchBox:String,
-        searchStudentId:String
+        searchStudentId:String,
+        colorMap :{
+          TIMEOVER: "timeOverClass",
+          SUBMITTED: "submittedClass",
+          NONE: "noneClass",
+        }
       };
+
 
       $scope.modalSettings = {};
       this.$scope.modalSettings.header = "Confirmation";
@@ -193,6 +202,7 @@ module ums {
       $scope.calculateTotalAndGradeLetter = this.calculateTotalAndGradeLetter.bind(this);
       $scope.fetchMarksSubmissionLog = this.fetchMarksSubmissionLog.bind(this);
       $scope.fetchMarksLog = this.fetchMarksLog.bind(this);
+      $scope.getSubmissionColorCodeStyle = this.getSubmissionColorCodeStyle.bind(this);
 
 
       $scope.recheckAll=this.recheckAll.bind(this);
@@ -251,7 +261,10 @@ module ums {
 
 
     }
-
+    private getSubmissionColorCodeStyle(statusType:string) : string{
+      console.log(this.$scope.data.colorMap[statusType]);
+    return this.$scope.data.colorMap[statusType];
+  };
 
     private initChart():void{
       this.$scope.amChartOptions = {

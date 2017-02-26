@@ -12,8 +12,14 @@
         border: 1px solid #efefef;
     }
     .scrollableContainer { height: inherit; }
-    .timeOver{
+    .timeOverClass{
         background-color: #FDEDEC;
+    }
+    .submittedClass{
+        background-color: green;
+    }
+    .noneClass{
+        background-color: transparent;
     }
     .redColor{
         color: #ff0000;
@@ -133,8 +139,8 @@
 
                     </thead>
                     <tbody>
-
-                    <tr ng-repeat="marksSubmission in allMarksSubmissionStatus" data-ng-class="{'timeOver':marksSubmission.isSubmissionDateOver}" >
+                    <!--data-ng-class="{'timeOver':marksSubmission.isSubmissionDateOver}"  -->
+                    <tr ng-repeat="marksSubmission in allMarksSubmissionStatus" ng-class="getSubmissionColorCodeStyle(marksSubmission.submissionColorCode)">
                         <td>
                             <a href="javascript:void(0)" data-ng-click="fetchGradeSheet(marksSubmission.courseId,marksSubmission.semesterId,marksSubmission.examTypeId)" style="color: blue;">
                                 {{marksSubmission.courseNo}}
@@ -152,8 +158,11 @@
                         <td>{{marksSubmission.preparerName}} <span class="badge badge-warning">P</span> <br/>
                             {{marksSubmission.scrutinizerName}} <span class="badge badge-info">S</span></td>
                         <td>{{marksSubmission.statusName}}</td>
-                        <td data-ng-class="{'redColor':marksSubmission.isSubmissionDateOver}" >
-                            {{marksSubmission.lastSubmissionDate}}
+                        <td>
+                            <!--data-ng-class="{'redColor':marksSubmission.isSubmissionDateOver}"-->
+                            {{marksSubmission.lastSubmissionDatePrep}} <span class="badge badge-warning">P</span><br/>
+                            {{marksSubmission.lastSubmissionDateScr}} <span class="badge badge-info">S</span><br/>
+                            {{marksSubmission.lastSubmissionDateHead}} <span class="badge badge-grey">H</span>
                         </td>
                     </tr>
                     </tbody>

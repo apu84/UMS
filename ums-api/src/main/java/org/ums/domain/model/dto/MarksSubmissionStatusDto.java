@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import org.ums.enums.CourseMarksSubmissionStatus;
 import org.ums.enums.CourseType;
 import org.ums.enums.ExamType;
+import org.ums.enums.academic.GradeSubmissionColorCode;
 
 import java.util.Date;
 import java.util.List;
@@ -49,6 +50,7 @@ public class MarksSubmissionStatusDto {
   private List<CourseTeacherDto> courseTeacherList;
 
   private boolean isSubmissionDateOver;
+  private GradeSubmissionColorCode submissionColorCode;
 
   private int mId;
 
@@ -346,6 +348,14 @@ public class MarksSubmissionStatusDto {
 
   public void setSubmissionDateOver(boolean isSubmissionDateOver) {
     this.isSubmissionDateOver = isSubmissionDateOver;
+  }
+
+  public GradeSubmissionColorCode getSubmissionColorCode() {
+    return submissionColorCode;
+  }
+
+  public void setSubmissionColorCode(GradeSubmissionColorCode submissionColorCode) {
+    this.submissionColorCode = submissionColorCode;
   }
 
   public String toString() {

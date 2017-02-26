@@ -15,6 +15,7 @@ import org.ums.domain.model.mutable.MutableMarksSubmissionStatus;
 import org.ums.enums.CourseMarksSubmissionStatus;
 import org.ums.enums.CourseType;
 import org.ums.enums.ExamType;
+import org.ums.enums.academic.GradeSubmissionColorCode;
 import org.ums.manager.*;
 import org.ums.persistent.model.PersistentExamGrade;
 import org.ums.resource.ResourceHelper;
@@ -25,10 +26,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.io.StringReader;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -128,6 +126,7 @@ public class GradeSubmissionResourceHelper extends
     JsonObject jsonObject;
 
     for(MarksSubmissionStatusDto statusDto : examGradeStatusList) {
+      setSubmissionColorCode(pUserRole, user.getEmployeeId(), statusDto);
       jsonReader = Json.createReader(new StringReader(statusDto.toString()));
       jsonObject = jsonReader.readObject();
       jsonReader.close();
@@ -135,6 +134,84 @@ public class GradeSubmissionResourceHelper extends
     }
     object.add("entries", children);
     return object.build();
+  }
+
+  private void setSubmissionColorCode(String pUserRole, String pUserId,
+      MarksSubmissionStatusDto pStatus) {
+    Date currentDate = new Date();
+    if(pUserRole.equals("T")) {
+      if(pUserId.equals(pStatus.getPreparerId())) {
+        if(pStatus.getLastSubmissionDatePrep() != null) {
+          if(currentDate.after(pStatus.getLastSubmissionDatePrep())) {
+            if(pStatus.getStatus() == CourseMarksSubmissionStatus.NOT_SUBMITTED
+                || pStatus.getStatus() == CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_SCRUTINIZER
+                || pStatus.getStatus() == CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_HEAD
+                || pStatus.getStatus() == CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_COE) {
+              pStatus.setSubmissionColorCode(GradeSubmissionColorCode.TIMEOVER);
+            }
+            else {
+              pStatus.setSubmissionColorCode(GradeSubmissionColorCode.SUBMITTED);
+            }
+
+          }
+          else {
+            pStatus.setSubmissionColorCode(GradeSubmissionColorCode.NONE);
+          }
+        }
+        else {
+          pStatus.setSubmissionColorCode(GradeSubmissionColorCode.NONE);
+        }
+      }
+
+      if(pUserId.equals(pStatus.getScrutinizerId())) {
+        if(pStatus.getLastSubmissionDateScr() != null) {
+          if(currentDate.after(pStatus.getLastSubmissionDateScr())) {
+            if(pStatus.getStatus() == CourseMarksSubmissionStatus.NOT_SUBMITTED
+                || pStatus.getStatus() == CourseMarksSubmissionStatus.WAITING_FOR_SCRUTINY
+                || pStatus.getStatus() == CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_SCRUTINIZER
+                || pStatus.getStatus() == CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_HEAD
+                || pStatus.getStatus() == CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_COE) {
+              pStatus.setSubmissionColorCode(GradeSubmissionColorCode.TIMEOVER);
+            }
+            else {
+              pStatus.setSubmissionColorCode(GradeSubmissionColorCode.SUBMITTED);
+            }
+
+          }
+          else {
+            pStatus.setSubmissionColorCode(GradeSubmissionColorCode.NONE);
+          }
+        }
+        else {
+          pStatus.setSubmissionColorCode(GradeSubmissionColorCode.NONE);
+        }
+      }
+    }
+    if(pUserRole.equals("H")) {
+      if(pStatus.getLastSubmissionDateHead() != null) {
+        if(currentDate.after(pStatus.getLastSubmissionDateHead())) {
+          if(pStatus.getStatus() == CourseMarksSubmissionStatus.NOT_SUBMITTED
+              || pStatus.getStatus() == CourseMarksSubmissionStatus.WAITING_FOR_SCRUTINY
+              || pStatus.getStatus() == CourseMarksSubmissionStatus.WAITING_FOR_HEAD_APPROVAL
+              || pStatus.getStatus() == CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_SCRUTINIZER
+              || pStatus.getStatus() == CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_HEAD
+              || pStatus.getStatus() == CourseMarksSubmissionStatus.REQUESTED_FOR_RECHECK_BY_COE) {
+            pStatus.setSubmissionColorCode(GradeSubmissionColorCode.TIMEOVER);
+          }
+          else {
+            pStatus.setSubmissionColorCode(GradeSubmissionColorCode.SUBMITTED);
+          }
+
+        }
+        else {
+          pStatus.setSubmissionColorCode(GradeSubmissionColorCode.NONE);
+        }
+      }
+      else {
+        pStatus.setSubmissionColorCode(GradeSubmissionColorCode.NONE);
+      }
+    }
+
   }
 
   // This method will only be used by Grade Sheet Preparer during saving or submitting grades.
