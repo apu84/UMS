@@ -2099,8 +2099,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
       for(String roomKey: seatPlanMapByRoomNo.keySet()){
 
       }*/
-      PdfPTable headerTable = getSittingArrangementHeader(pExamType, boldFont, seatPlansOfTheMap);
-      document.add(headerTable);
+
 
       Map<Long,List<SeatPlan>> seatPlanMapByRoomNoUnordered = seatPlansOfTheMap
           .stream()
@@ -2109,7 +2108,10 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
       Map<Long, List<SeatPlan>> seatPlanMapByRoomNo= new TreeMap<>();
       seatPlanMapByRoomNo = seatPlanMapByRoomNoUnordered;
       List seatPlanMapByRoomNoKeys = new ArrayList(seatPlanMapByRoomNo.keySet());
+      PdfPTable headerTable = getSittingArrangementHeader(pExamType, boldFont, seatPlansOfTheMap, seatPlanMapByRoomNo);
+      document.add(headerTable);
       Collections.sort(seatPlanMapByRoomNoKeys);
+
 
       /*seatPlanMapByRoomNoUnordered.entrySet()
           .stream()
@@ -2202,7 +2204,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
   }
 
   private PdfPTable getSittingArrangementHeader(ExamType pExamType, Font pBoldFont,
-      List<SeatPlan> pSeatPlansOfTheMap) {
+      List<SeatPlan> pSeatPlansOfTheMap, Map<Long, List<SeatPlan>> seatPlanMapByRoomNo) {
     PdfPTable headerTable = new PdfPTable(1);
     PdfPCell headerCell = new PdfPCell();
     Paragraph headerParagraph =
@@ -2243,6 +2245,11 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                 .replace("B.Sc in", "") + ", Year :"
             + pSeatPlansOfTheMap.get(0).getStudent().getCurrentYear() + " Semester:"
             + pSeatPlansOfTheMap.get(0).getStudent().getCurrentAcademicSemester(), pBoldFont);
+    headerParagraph.setAlignment(Element.ALIGN_CENTER);
+    headerParagraph.setPaddingTop(-5f);
+    headerCell.addElement(headerParagraph);
+
+    headerParagraph = new Paragraph("Total number allocated rooms: " + seatPlanMapByRoomNo.size(), pBoldFont);
     headerParagraph.setAlignment(Element.ALIGN_CENTER);
     headerParagraph.setPaddingTop(-5f);
     headerCell.addElement(headerParagraph);
