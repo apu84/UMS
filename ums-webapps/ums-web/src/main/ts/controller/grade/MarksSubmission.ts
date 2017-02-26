@@ -178,7 +178,7 @@ module ums {
         colorMap :{
           TIMEOVER: "timeOverClass",
           SUBMITTED: "submittedClass",
-          NONE: "noneClass",
+          NONE: "noneClass"
         }
       };
 
