@@ -11,6 +11,16 @@ public class EmployeeDaoDecorator extends
     EmployeeManager {
 
   @Override
+  public Employee getByEmail(final String pEmailAddress) {
+    return getManager().getByEmail(pEmailAddress);
+  }
+
+  @Override
+  public boolean existenceByEmail(final String pEmailAddress) {
+    return getManager().existenceByEmail(pEmailAddress);
+  }
+
+  @Override
   public List<Employee> getByDesignation(String pDesignationId) {
     return getManager().getByDesignation(pDesignationId);
   }

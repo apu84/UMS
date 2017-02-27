@@ -26,7 +26,8 @@ public class ForgotPassword extends Resource {
   @PUT
   public GenericResponse<Map> passwordResetEmailRequest(final @Context Request pRequest,
       final JsonObject pJsonObject) {
-    return mLoginService.checkAndSendPasswordResetEmailToUser(pJsonObject.getString("userId"));
+    return mLoginService.checkAndSendPasswordResetEmailToUser(pJsonObject.getString("userId"),
+        pJsonObject.getString("emailAddress"), pJsonObject.getString("recoverBy"));
   }
 
   @PUT

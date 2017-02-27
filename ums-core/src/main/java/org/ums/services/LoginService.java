@@ -43,18 +43,32 @@ public class LoginService {
   @Autowired
   private String dummyEmail;
 
-  public GenericResponse<Map> checkAndSendPasswordResetEmailToUser(final String pUserId) {
+  public GenericResponse<Map> checkAndSendPasswordResetEmailToUser(final String pUserId,
+      final String pEmailAddress, final String pRecoverBy) {
     String token = UUID.randomUUID().toString();
     Date now = new Date();
     Date tokenInvalidDate = null;
     Date tokenEmailInvalidDate = null;
 
-    if(!mUserManager.exists(pUserId)) {
+    if(pRecoverBy.equals("byUserId") && !mUserManager.exists(pUserId)) {
       return new GenericMessageResponse(GenericResponse.ResponseType.ERROR,
           mMessageResource.getMessage("user.not.exists"));
     }
+    else if(pRecoverBy.equals("byEmailAddress")
+        && (!mEmployeeManager.existenceByEmail(pEmailAddress))) {
+      return new GenericMessageResponse(GenericResponse.ResponseType.ERROR,
+          mMessageResource.getMessage("email.not.exists"));
+    }
 
-    User user = mUserManager.get(pUserId);
+    User user = null;
+
+    if(pRecoverBy.equals("byEmailAddress")) {
+      Employee employee = mEmployeeManager.getByEmail(pEmailAddress);
+      user = mUserManager.getByEmployeeId(employee.getId());
+    }
+    else {
+      user = mUserManager.get(pUserId);
+    }
 
     if(user.getPasswordTokenGenerateDateTime() != null) {
       tokenInvalidDate =

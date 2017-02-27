@@ -48,6 +48,12 @@ public class PersistentUserDao extends UserDaoDecorator {
   }
 
   @Override
+  public User getByEmployeeId(String pEmployeeId) {
+    String query = SELECT_ALL + "WHERE EMPLOYEE_ID = ?";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pEmployeeId}, new UserRowMapper());
+  }
+
+  @Override
   public int update(MutableUser pMutable) {
     String query = UPDATE_ALL + "WHERE USER_ID = ?";
     return mJdbcTemplate.update(query,

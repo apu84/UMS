@@ -8,6 +8,11 @@ import java.util.List;
 
 public class UserDaoDecorator extends ContentDaoDecorator<User, MutableUser, String, UserManager>
     implements UserManager {
+
+  public User getByEmployeeId(final String pEmployeeId) {
+    return getManager().getByEmployeeId(pEmployeeId);
+  }
+
   @Override
   public int setPasswordResetToken(String pToken, String pUserId) {
     int modified = getManager().setPasswordResetToken(pToken, pUserId);
