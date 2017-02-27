@@ -297,7 +297,7 @@ public class UGExamRoutineGenerator {
     footerTable.addCell(cell);
     pdfPCell =
         new PdfPCell(new Paragraph(
-            "Dr. Md. Ismail Chowdhury\nController of Examinations(In-charge)", tableFont));
+            "Prof. Md. Amirul Alam Khan", tableFont));
     pdfPCell.setHorizontalAlignment(Element.ALIGN_CENTER);
     pdfPCell.setVerticalAlignment(Element.ALIGN_TOP);
     pdfPCell.setBorder(0);
