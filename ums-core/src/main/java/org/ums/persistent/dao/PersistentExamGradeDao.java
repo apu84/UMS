@@ -821,6 +821,7 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
       submissionStatusDto.setLastSubmissionDateScr(pResultSet.getDate("LAST_SUBMISSION_DATE_SCR"));
       submissionStatusDto
           .setLastSubmissionDateHead(pResultSet.getDate("LAST_SUBMISSION_DATE_HEAD"));
+      submissionStatusDto.setId(pResultSet.getInt("id"));
       return submissionStatusDto;
     }
   }
