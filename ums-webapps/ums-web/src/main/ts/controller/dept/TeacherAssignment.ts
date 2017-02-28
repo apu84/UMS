@@ -114,6 +114,7 @@ module ums {
 
       this.$scope.loadingVisibility = true;
       this.$scope.contentVisibility = false;
+      delete this.$scope.entries;
 
       if (UmsUtil.isEmptyString(this.$scope.teacherSearchParamModel.courseId)) {
         this.renderHeader();
