@@ -27,6 +27,7 @@ module ums{
     programMap:any;
     departmentSelectionStatus:number;
 
+    showReportSection:boolean;
     showStudentPortion:boolean;
     showSearch:boolean;
     disableSaveButton:boolean;
@@ -39,6 +40,8 @@ module ums{
     searchByReceiptId:Function;
     assignDeadline:Function;
     checkForSameSelectedPrograms:Function;
+    enableReportSection:Function;
+    enableDepartmentSelectionSection:Function;
   }
 
   interface  IProgramType{
@@ -72,6 +75,7 @@ module ums{
       $scope.showStudentPortion=false;
       $scope.showSearch = true;
       $scope.disableSaveButton=false;
+      $scope.showReportSection = false;
 
       $scope.getSemesters= this.getSemesters.bind(this);
       $scope.getAllStudents = this.getAllStudents.bind(this);
@@ -81,6 +85,8 @@ module ums{
       $scope.assignDeadline = this.assignDeadline.bind(this);
       $scope.checkForSameSelectedPrograms = this.checkForSameSelectedPrograms.bind(this);
       $scope.saveOnly = this.saveOnly.bind(this);
+      $scope.enableReportSection = this.enableReportSection.bind(this);
+      $scope.enableDepartmentSelectionSection = this.enableDepartmentSelectionSection.bind(this);
       $scope.receiptId="";
 
       this.getFaculties();
@@ -88,6 +94,14 @@ module ums{
       this.getMeritListTypes();
 
 
+    }
+
+    private enableReportSection(){
+        this.$scope.showReportSection=true;
+    }
+
+    private enableDepartmentSelectionSection(){
+        this.$scope.showReportSection=false;
     }
 
     private assignDeadline(deadLine:string){
