@@ -50,7 +50,7 @@ public class LoginService {
     Date tokenInvalidDate = null;
     Date tokenEmailInvalidDate = null;
 
-    //ToDo: Need to add code for students password recovery from email address as well.
+    // ToDo: Need to add code for students password recovery from email address as well.
 
     if(pRecoverBy.equals("byUserId") && !mUserManager.exists(pUserId)) {
       return new GenericMessageResponse(GenericResponse.ResponseType.ERROR,

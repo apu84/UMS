@@ -192,7 +192,14 @@ public class AdmissionStudentResourceHelper extends
                                                              final UriInfo pUriInfo){
 
     List<AdmissionTotalSeat> totalSeats = mAdmissionTotalSeatManager.getAdmissionTotalSeat(pSemesterId, pProgramType, pQuotaType);
-    List<AdmissionStudent> students = getContentManager().getMeritList(pSemesterId,pQuotaType, pUnit,pProgramType);
+    List<AdmissionStudent> students = new ArrayList<>();
+
+    if(pQuotaType.equals(QuotaType.GENERAL)){
+      students= getContentManager().getMeritList(pSemesterId,QuotaType.COMBINED, pUnit,pProgramType);
+    }else{
+      students= getContentManager().getMeritList(pSemesterId,pQuotaType, pUnit,pProgramType);
+    }
+
     Map<Integer, List<AdmissionStudent>> allocatedProgramMapStudents = students
         .parallelStream()
         .collect(Collectors.groupingBy(AdmissionStudent::getProgramIdByMerit));
@@ -213,7 +220,7 @@ public class AdmissionStudentResourceHelper extends
     for(AdmissionTotalSeat seat : pTotalSeats) {
       JsonObjectBuilder jsonObject = Json.createObjectBuilder();
       jsonObject.add("programId", seat.getProgram().getId());
-      jsonObject.add("programName", seat.getProgram().getShortName().replaceAll("BSc in ", ""));
+      jsonObject.add("programName", seat.getProgram().getShortName().replaceAll("B.Sc in ", ""));
       jsonObject.add("allocatedSeat", seat.getTotalSeat());
       int selected = 0;
       int waiting = 0;

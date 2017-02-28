@@ -188,9 +188,6 @@ module ums{
         for(var i=0;i<students.length;i++){
           this.$scope.statistics.push(students[i]);
           this.$scope.statisticsMap[students[i].programId]=students[i];
-          if(this.$scope.statistics[i].remaining==0 || this.$scope.statistics[i].remaining<0){
-            /*this.removeProgramsFromSelectionList(this.$scope.statistics[i].programIdByMerit);*/
-          }
         }
         defer.resolve(this.$scope.statistics);
       });

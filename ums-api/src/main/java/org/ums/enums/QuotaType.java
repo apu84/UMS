@@ -12,7 +12,7 @@ public enum QuotaType {
   FREEDOM_FIGHTER(2, "Freedom Fighter"),
   REMOTE_AREA(3, "Remote Area"),
   ENGLISH_MEDIUM(4, "English Medium Students"),
-  COMBINED(0, "GA+FF+RA");
+  COMBINED(0, "GA+FF+RA+GCE");
 
   private String label;
   private int id;
