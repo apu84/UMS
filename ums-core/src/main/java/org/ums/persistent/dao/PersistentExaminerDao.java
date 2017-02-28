@@ -36,7 +36,7 @@ public class PersistentExaminerDao extends
       + "                    AND T2.OFFER_BY = ? " + "           ORDER BY t3.syllabus_id,\n"
       + "                    t2.year,\n" + "                    t2.semester) t3\n"
       + "       LEFT JOIN\n" + "          PREPARER_SCRUTINIZER t4\n"
-      + "       ON t3.course_id = t4.course_id " + "%s"
+      + "       ON t3.course_id = t4.course_id and t3.semester_id = t4.semester_id " + "%s"
       + "ORDER BY t3.COURSE_ID, t4.PREPARER, t4.SCRUTINIZER";
 
   public PersistentExaminerDao(JdbcTemplate pJdbcTemplate, IdGenerator pIdGenerator) {

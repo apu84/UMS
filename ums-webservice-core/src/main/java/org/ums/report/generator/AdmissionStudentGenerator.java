@@ -1,6 +1,8 @@
 package org.ums.report.generator;
 
 import org.springframework.stereotype.Component;
+import org.ums.enums.ProgramType;
+import org.ums.enums.QuotaType;
 
 import java.io.OutputStream;
 
@@ -15,4 +17,7 @@ public interface AdmissionStudentGenerator {
       throws Exception;
 
   void createBlankMigrationListUploadFormatFile(OutputStream pOutputStream) throws Exception;
+
+  void createMeritListXlsFile(final int pSemesterId, final ProgramType pProgramType,
+      final QuotaType pQuotaType, String pUnit, OutputStream pOutputStream) throws Exception;
 }
