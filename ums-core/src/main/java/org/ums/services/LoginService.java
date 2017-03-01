@@ -72,6 +72,8 @@ public class LoginService {
       user = mUserManager.get(pUserId);
     }
 
+
+
     if(user.getPasswordTokenGenerateDateTime() != null) {
       tokenInvalidDate =
           new Date(user.getPasswordTokenGenerateDateTime().getTime()
@@ -85,8 +87,8 @@ public class LoginService {
         || (tokenInvalidDate != null && tokenInvalidDate.after(now))
         || user.getPasswordTokenGenerateDateTime() == null) {
       mUserManager.setPasswordResetToken(mPasswordService.encryptPassword(token)
-          .replaceAll("=", ""), pUserId);
-      user = mUserManager.get(pUserId);
+          .replaceAll("=", ""), user.getId());
+      user = mUserManager.get(user.getId());
     }
 
     if(user.getPasswordTokenGenerateDateTime() != null && tokenEmailInvalidDate != null
