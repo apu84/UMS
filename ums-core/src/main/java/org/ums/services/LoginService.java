@@ -72,8 +72,6 @@ public class LoginService {
       user = mUserManager.get(pUserId);
     }
 
-
-
     if(user.getPasswordTokenGenerateDateTime() != null) {
       tokenInvalidDate =
           new Date(user.getPasswordTokenGenerateDateTime().getTime()

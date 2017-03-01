@@ -89,7 +89,14 @@
       -webkit-box-shadow: none;
       box-shadow: none;
     }
-
+    .blink_me {
+      animation: blinker 2s linear infinite;
+      color: red;
+      font-weight: bold;
+    }
+    @keyframes blinker {
+      50% { opacity: 0; }
+    }
   </style>
 </head>
 <body>
@@ -163,11 +170,11 @@
         <div class="login-forgotpassword"><a href="javascript:void(0)" onclick="manageDivs('login')">Go to login</a></div>
       </div>
       <br/><br/>
-
+      <a href="../resources/doc/Password Recovery Instructions for IUMS Account.pdf" target="_blank"><span class="blink_me">Download Password Recovery Instructions</span></a>
+      <br/>
       <div class="contact-wrap">
         <div class="error-msm" id="errorDiv" style="clear: both;display:block;background-color: #D4EFDF;text-align: left;padding-left: 10px;color: #000000;">
-          <b>Contact Information - </b><br/><br/>
-
+          <b>Contact Information - </b><br/>
           <b>Email:</b> contact.iums@gmail.com <br/>
           <b>Ext:</b> 724
 
