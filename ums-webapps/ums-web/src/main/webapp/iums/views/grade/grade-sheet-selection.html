@@ -129,12 +129,12 @@
                     <tr>
                         <th width="8%">Course No</th>
                         <th width="20%">Course Title</th>
-                        <th width="5%" style="text-align: center;">Y-S</th>
+                        <th width="4%" style="text-align: center;">Y-S</th>
                         <th width="8%" style="text-align: center;">Program.</th>
                         <th width="20%">Course Teacher</th>
                         <th width="18%">Preparer-Scrutinizer</th>
-                        <th width="12%">Status</th>
-                        <th width="8%">Deadline</th>
+                        <th width="11%">Status</th>
+                        <th width="9%">Deadline</th>
                     </tr>
 
                     </thead>
@@ -245,7 +245,7 @@
                         <td data-ng-if="courseType=='THEORY'"><b>Total Part <span data-ng-if="(gradeSubmissionStatus !='0')">({{data.total_part}})</span> :</b></td>
                         <td data-ng-if="courseType=='THEORY'">
                             <select id="total_part" data-ng-model="data.total_part" data-ng-change="onTotalPartChange()"
-                                    style="float: left;margin-right:5px;border:1px solid grey;text-align: center;height: 22px;"
+                                    style="float: left;margin-right:5px;border:1px solid grey;text-align: center;height: 23px;"
                                     data-ng-if="(gradeSubmissionStatus =='0' && currentActor=='preparer')" data-convert-to-number>
                                 <option value="1">&nbsp;1&nbsp;</option>
                                 <option value="2">&nbsp;2&nbsp;</option>
@@ -254,12 +254,12 @@
 
                             <div style="float: left;" id="partDiv" data-ng-show="courseType=='THEORY'">
                                 Part-A
-                                <input type="text" style="width: 50px;border:1px solid grey;text-align: center;" data-ng-model="data.part_a_total"  data-ng-if="(gradeSubmissionStatus =='0' && currentActor=='preparer')" >
+                                <input type="text" style="width: 50px;border:1px solid grey;text-align: center;height: 23px;" data-ng-model="data.part_a_total"  data-ng-if="(gradeSubmissionStatus =='0' && currentActor=='preparer')" >
                                 <img  class='img_tooltip'  id="tooltip_partA_"/>
 
                                 <span data-ng-if="(gradeSubmissionStatus !='0' || currentActor!='preparer')">{{data.part_a_total}}</span>&nbsp;&nbsp;
                                 <span data-ng-if="(data.total_part=='2')">
-                            Part-B  <input type="text" style="width: 50px;border:1px solid grey;text-align: center;" data-ng-model="data.part_b_total" data-ng-if="(gradeSubmissionStatus =='0' && currentActor=='preparer')"/>
+                            Part-B  <input type="text" style="width: 50px;border:1px solid grey;text-align: center;height: 23px;" data-ng-model="data.part_b_total" data-ng-if="(gradeSubmissionStatus =='0' && currentActor=='preparer')"/>
                                 <img  class='img_tooltip'  id="tooltip_partB_"/>
                                     <span data-ng-if="(gradeSubmissionStatus !='0' || currentActor!='preparer')">{{data.part_b_total}}</span>
                             </span>
@@ -270,11 +270,16 @@
                     <tr>
                         <td><b>Total Students :</b></td>
                         <td style="font-size: 18px;font-weight: bold;">
+                            <span ng-if="gradeSubmissionStatus =='0'">
+                                {{noneSubmittedGrades.length}}
+                            </span>
+                            <span ng-if="gradeSubmissionStatus !='0'">
                             {{chartData[0].total+chartData[1].total+chartData[2].total+chartData[3].total+chartData[4].total+chartData[5].total+chartData[6].total+chartData[7].total+chartData[8].total+chartData[9].total}}
+                            </span>
                         </td>
                         <td><b>Search :</b></td>
                         <td>
-                            <input type="text" data-ng-model="data.searchBox" style="width:100px;border: 1px solid grey;padding-left: 5px;">
+                            <input type="text" data-ng-model="data.searchBox" style="width:100px;border: 1px solid grey;padding-left: 5px;height: 23px;">
                             <a href="javascript:;" class="btn btn-xs btn-default btn-round"
                                data-ng-click="searchStudent()" style="border-radius: 15px;" >
                                 <i class="fa fa-search" style="color: blue;" aria-hidden="true"></i>
