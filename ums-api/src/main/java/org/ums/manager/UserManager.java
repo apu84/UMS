@@ -6,6 +6,9 @@ import org.ums.domain.model.immutable.User;
 import java.util.List;
 
 public interface UserManager extends ContentManager<User, MutableUser, String> {
+
+  User getByEmployeeId(final String pEmployeeId);
+
   int setPasswordResetToken(final String pToken, final String pUserId);
 
   int updatePassword(final String pUserId, final String pPassword);

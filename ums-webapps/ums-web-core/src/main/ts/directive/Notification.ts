@@ -9,6 +9,7 @@ module ums {
     producedOn: string;
     consumedOn: string;
     isRead: boolean;
+    id : string;
   }
   export interface NotificationEntries {
     entries: Array<INotification>;
@@ -29,7 +30,7 @@ module ums {
     public link = ($scope: NotificationScope, element: JQuery, attributes: any) => {
       this.scope = $scope;
       this.scope.numOfUnreadNotification = 0;
-      
+
       this.settings.getSettings().then((appSettings: {[key: string]: any}) => {
         if (appSettings['notification.enabled']) {
           this.getNotification();
@@ -72,11 +73,18 @@ module ums {
     }
 
     private setReadStatus(): void {
-      delete this.scope.numOfUnreadNotification;
+      //ToDo: Fix Me.
+      //Caused a problem inside NotificationResourceHelper [Long.parseLong(notificationObject.getString("id"))]
+      //During the conversion.  This is the Quick Fix for that Exception.
+      for(var i=0;i<this.scope.notifications.length;i++){
+        this.scope.notifications[i].id=this.scope.notifications[i].id+'';
+      }
+
       this.httpClient.post('notification/read', this.scope.notifications, 'application/json')
           .success((data) => {
+            delete this.scope.numOfUnreadNotification;
           }).error((data) => {
-          });
+      });
     }
   }
   UMS.directive("notification",
@@ -86,5 +94,5 @@ module ums {
         'Settings',
         (httpClient, $q, $interval, settings: Settings)=> {
           return new Notification(httpClient, $q, $interval, settings);
-  }]);
+        }]);
 }

@@ -18,19 +18,86 @@
   <script type="text/javascript" src="../resources/js/endpoint.js"></script>
   <script type="text/javascript" src="../resources/js/login.js"></script>
   <script type="text/javascript">
-    function authenticate() {
-      var authenticationHelper = new Authentication(endpointUrl);
-      authenticationHelper.authenticate();
-      console.debug(authenticationHelper);
-    }
-    /*    $('#loginForm').submit(function (event) { console.debug("submit");
-     alert( "Handler for .submit() called." );
-     event.preventDefault();
-     });*/
-    $('#forgotPasswordForm').submit(function (event) {
-      event.preventDefault();
-    });
+      function authenticate() {
+          var authenticationHelper = new Authentication(endpointUrl);
+          authenticationHelper.authenticate();
+          console.debug(authenticationHelper);
+      }
+      /*    $('#loginForm').submit(function (event) { console.debug("submit");
+       alert( "Handler for .submit() called." );
+       event.preventDefault();
+       });*/
+      $('#forgotPasswordForm').submit(function (event) {
+          event.preventDefault();
+      });
   </script>
+  <style>
+
+    label.btn span {
+      font-size: 1.5em ;
+    }
+
+    label input[type="radio"] ~ i.fa.fa-circle-o{
+      color: #c8c8c8;    display: inline;
+    }
+    label input[type="radio"] ~ i.fa.fa-dot-circle-o{
+      display: none;
+    }
+    label input[type="radio"]:checked ~ i.fa.fa-circle-o{
+      display: none;
+    }
+    label input[type="radio"]:checked ~ i.fa.fa-dot-circle-o{
+      color: #7AA3CC;    display: inline;
+    }
+    label:hover input[type="radio"] ~ i.fa {
+      color: #7AA3CC;
+    }
+
+
+    div[data-toggle="buttons"] label.active{
+      color: #7AA3CC;
+    }
+
+    div[data-toggle="buttons"] label {
+      display: inline-block;
+      padding: 6px 12px;
+      margin-bottom: 0;
+      font-size: 14px;
+      font-weight: normal;
+      line-height: 2em;
+      text-align: left;
+      white-space: nowrap;
+      vertical-align: top;
+      cursor: pointer;
+      background-color: none;
+      border: 0px solid
+      #c8c8c8;
+      border-radius: 3px;
+      color: #c8c8c8;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      -o-user-select: none;
+      user-select: none;
+    }
+
+    div[data-toggle="buttons"] label:hover {
+      color: #7AA3CC;
+    }
+
+    div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active {
+      -webkit-box-shadow: none;
+      box-shadow: none;
+    }
+    .blink_me {
+      animation: blinker 2s linear infinite;
+      color: red;
+      font-weight: bold;
+    }
+    @keyframes blinker {
+      50% { opacity: 0; }
+    }
+  </style>
 </head>
 <body>
 <div class="container login-wrapper">
@@ -71,14 +138,27 @@
       </div>
       <div class="fPasswordDiv" style="display:none;">
         <div class="IUMS-sub-head">Forgot your username or password?</div>
-        <p>Please enter your IUMS UserId and we’ll send you instructions to reset your password.</p>
+        <p>Please enter your <span style="text-decoration: underline;font-weight: bold; color: green;">IUMS User ID</span> /
+          <span style="text-decoration: underline;font-weight: bold; color: blue;"> Email Address</span> and we’ll send you instructions to reset your password.</p>
         <form id='forgotPasswordForm' action='' method='post'>
           <div class="contact-wrap">
             <div class="error-msm" id="messages" style="display:none"></div>
+
             <div class="form-group">
-              <label for="userId_forgotPassword" class="contact-label">User ID</label>
+              <input type="radio" checked onclick="recoverBy('userIdDiv')" name="recoverByRadio" value="byUserId" />&nbsp;&nbsp;<b>Recover Using IUMS User ID</b>
+            </div>
+            <div class="form-group" id="userIdDiv">
               <input name="userId_forgotPassword" type="text" class="form-control" id="userId_forgotPassword" placeholder="Enter your User ID"/>
             </div>
+
+            <div class="form-group">
+              <input type="radio" onclick="recoverBy('emailAddressDiv')" name="recoverByRadio" value="byEmailAddress" />&nbsp;&nbsp;<b>Recover Using the Email Address on your account</b>
+            </div>
+
+            <div class="form-group" id="emailAddressDiv" style="display: none;">
+              <input name="userId_forgotPassword" type="text" class="form-control" id="emailAddress_forgotPassword" placeholder="Enter your Email Address"/>
+            </div>
+
             <div class="text-center">
               <button type="button" class="btn" id="btn_forgotPassword" onclick="forgotPassword()"><span>Submit</span></button>
               <div class="btn loaderDiv">
@@ -90,11 +170,11 @@
         <div class="login-forgotpassword"><a href="javascript:void(0)" onclick="manageDivs('login')">Go to login</a></div>
       </div>
       <br/><br/>
-
+      <a href="../resources/doc/Password Recovery Instructions for IUMS Account.pdf" target="_blank"><span class="blink_me">Download Password Recovery Instructions</span></a>
+      <br/>
       <div class="contact-wrap">
         <div class="error-msm" id="errorDiv" style="clear: both;display:block;background-color: #D4EFDF;text-align: left;padding-left: 10px;color: #000000;">
-          <b>Contact Information - </b><br/><br/>
-
+          <b>Contact Information - </b><br/>
           <b>Email:</b> contact.iums@gmail.com <br/>
           <b>Ext:</b> 724
 
@@ -113,27 +193,33 @@
   </div>
 </div>
 <script type="text/javascript">
-  function manageDivs(div_name){
-    if(div_name=="fPassword"){
-      $(".fPasswordDiv").show();
-      $(".signInDiv").hide();
+    function manageDivs(div_name){
+        if(div_name=="fPassword"){
+            $(".fPasswordDiv").show();
+            $(".signInDiv").hide();
+        }
+        else{
+            $(".fPasswordDiv").hide();
+            $(".signInDiv").show();
+        }
+        $(".successdDiv").hide();
+        $("#errorDiv").hide();
+        $("#login_msg").hide();
+
+
     }
-    else{
-      $(".fPasswordDiv").hide();
-      $(".signInDiv").show();
+
+    function forgotPassword(){
+        $(".signInDiv").hide();
+        var authenticationHelper = new Authentication();
+        authenticationHelper.forgotPassword();
     }
-    $(".successdDiv").hide();
-    $("#errorDiv").hide();
-    $("#login_msg").hide();
 
-
-  }
-
-  function forgotPassword(){
-    $(".signInDiv").hide();
-    var authenticationHelper = new Authentication();
-    authenticationHelper.forgotPassword();
-  }
+    function recoverBy(divId){
+        $("#userIdDiv").hide();
+        $("#emailAddressDiv").hide();
+        $("#"+divId).show();
+    }
 </script>
 </body>
 </html>

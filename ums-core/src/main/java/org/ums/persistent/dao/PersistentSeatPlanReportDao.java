@@ -260,18 +260,24 @@ public class PersistentSeatPlanReportDao extends SeatPlanReportDaoDecorator {
           + "  seatPlan.PROGRAM_ID, examRoutine.COURSE_NO,seatPlan.CURR_YEAR, seatPlan.CURR_SEMESTER, to_number(seatPlan.STUDENT_ID)";
 
   String SELECT_ALL_STICKER =
-      "select   "
-          + "             seatPlans.ROOM_NO,   "
-          + "             MST_PROGRAM.PROGRAM_SHORT_NAME,   "
-          + "             STUDENTS.CURR_YEAR,   "
-          + "             STUDENTS.CURR_SEMESTER,   "
-          + "             STUDENTS.STUDENT_ID   "
-          + "           from STUDENTS,MST_PROGRAM,(   "
-          + "             select room_no,student_id from SEAT_PLAN,ROOM_INFO where SEMESTER_ID=? and EXAM_TYPE=? and seat_plan.room_id=? and SEAT_PLAN.ROOM_ID=ROOM_INFO.ROOM_ID ORDER BY ROOM_INFO.ROOM_ID "
-          + "                 ) seatPlans    WHERE   "
-          + "             seatPlans.STUDENT_ID=STUDENTS.STUDENT_ID AND   "
-          + "             MST_PROGRAM.PROGRAM_ID=STUDENTS.PROGRAM_ID    ORDER BY seatPlans.ROOM_NO, "
-          + "             MST_PROGRAM.PROGRAM_ID,curr_year,CURR_SEMESTER";
+      "SELECT "
+          + "  seatPlans.ROOM_NO, "
+          + "  MST_PROGRAM.PROGRAM_SHORT_NAME, "
+          + "  STUDENTS.CURR_YEAR, "
+          + "  STUDENTS.CURR_SEMESTER, "
+          + "  STUDENTS.STUDENT_ID "
+          + "FROM STUDENTS, MST_PROGRAM, ( "
+          + "                              SELECT "
+          + "                                room_no, "
+          + "                                student_id "
+          + "                              FROM SEAT_PLAN, ROOM_INFO "
+          + "                              WHERE SEMESTER_ID = ? AND EXAM_TYPE = ? AND seat_plan.room_id = ? AND "
+          + "                                    SEAT_PLAN.ROOM_ID = ROOM_INFO.ROOM_ID "
+          + "                              ORDER BY ROOM_INFO.ROOM_ID "
+          + "                            ) seatPlans " + "WHERE "
+          + "  seatPlans.STUDENT_ID = STUDENTS.STUDENT_ID AND "
+          + "  MST_PROGRAM.PROGRAM_ID = STUDENTS.PROGRAM_ID " + "ORDER BY seatPlans.ROOM_NO, "
+          + "  MST_PROGRAM.PROGRAM_ID, curr_year, CURR_SEMESTER, to_number(seatPlans.STUDENT_ID)";
 
   public JdbcTemplate mJdbcTemplate;
 

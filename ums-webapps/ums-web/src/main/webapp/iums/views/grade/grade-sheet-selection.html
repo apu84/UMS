@@ -12,8 +12,14 @@
         border: 1px solid #efefef;
     }
     .scrollableContainer { height: inherit; }
-    .timeOver{
+    .timeOverClass{
         background-color: #FDEDEC;
+    }
+    .submittedClass{
+        background-color: green;
+    }
+    .noneClass{
+        background-color: transparent;
     }
     .redColor{
         color: #ff0000;
@@ -123,18 +129,18 @@
                     <tr>
                         <th width="8%">Course No</th>
                         <th width="20%">Course Title</th>
-                        <th width="5%" style="text-align: center;">Y-S</th>
+                        <th width="4%" style="text-align: center;">Y-S</th>
                         <th width="8%" style="text-align: center;">Program.</th>
                         <th width="20%">Course Teacher</th>
                         <th width="18%">Preparer-Scrutinizer</th>
-                        <th width="12%">Status</th>
-                        <th width="8%">Deadline</th>
+                        <th width="11%">Status</th>
+                        <th width="9%">Deadline</th>
                     </tr>
 
                     </thead>
                     <tbody>
-
-                    <tr ng-repeat="marksSubmission in allMarksSubmissionStatus" data-ng-class="{'timeOver':marksSubmission.isSubmissionDateOver}" >
+                    <!--data-ng-class="{'timeOver':marksSubmission.isSubmissionDateOver}"  -->
+                    <tr ng-repeat="marksSubmission in allMarksSubmissionStatus" ng-class="getSubmissionColorCodeStyle(marksSubmission.submissionColorCode)">
                         <td>
                             <a href="javascript:void(0)" data-ng-click="fetchGradeSheet(marksSubmission.courseId,marksSubmission.semesterId,marksSubmission.examTypeId)" style="color: blue;">
                                 {{marksSubmission.courseNo}}
@@ -152,8 +158,11 @@
                         <td>{{marksSubmission.preparerName}} <span class="badge badge-warning">P</span> <br/>
                             {{marksSubmission.scrutinizerName}} <span class="badge badge-info">S</span></td>
                         <td>{{marksSubmission.statusName}}</td>
-                        <td data-ng-class="{'redColor':marksSubmission.isSubmissionDateOver}" >
-                            {{marksSubmission.lastSubmissionDate}}
+                        <td>
+                            <!--data-ng-class="{'redColor':marksSubmission.isSubmissionDateOver}"-->
+                            {{marksSubmission.lastSubmissionDatePrep}} <span class="badge badge-warning">P</span><br/>
+                            {{marksSubmission.lastSubmissionDateScr}} <span class="badge badge-info">S</span><br/>
+                            {{marksSubmission.lastSubmissionDateHead}} <span class="badge badge-grey">H</span>
                         </td>
                     </tr>
                     </tbody>
@@ -236,7 +245,7 @@
                         <td data-ng-if="courseType=='THEORY'"><b>Total Part <span data-ng-if="(gradeSubmissionStatus !='0')">({{data.total_part}})</span> :</b></td>
                         <td data-ng-if="courseType=='THEORY'">
                             <select id="total_part" data-ng-model="data.total_part" data-ng-change="onTotalPartChange()"
-                                    style="float: left;margin-right:5px;border:1px solid grey;text-align: center;height: 22px;"
+                                    style="float: left;margin-right:5px;border:1px solid grey;text-align: center;height: 23px;"
                                     data-ng-if="(gradeSubmissionStatus =='0' && currentActor=='preparer')" data-convert-to-number>
                                 <option value="1">&nbsp;1&nbsp;</option>
                                 <option value="2">&nbsp;2&nbsp;</option>
@@ -245,12 +254,12 @@
 
                             <div style="float: left;" id="partDiv" data-ng-show="courseType=='THEORY'">
                                 Part-A
-                                <input type="text" style="width: 50px;border:1px solid grey;text-align: center;" data-ng-model="data.part_a_total"  data-ng-if="(gradeSubmissionStatus =='0' && currentActor=='preparer')" >
+                                <input type="text" style="width: 50px;border:1px solid grey;text-align: center;height: 23px;" data-ng-model="data.part_a_total"  data-ng-if="(gradeSubmissionStatus =='0' && currentActor=='preparer')" >
                                 <img  class='img_tooltip'  id="tooltip_partA_"/>
 
                                 <span data-ng-if="(gradeSubmissionStatus !='0' || currentActor!='preparer')">{{data.part_a_total}}</span>&nbsp;&nbsp;
                                 <span data-ng-if="(data.total_part=='2')">
-                            Part-B  <input type="text" style="width: 50px;border:1px solid grey;text-align: center;" data-ng-model="data.part_b_total" data-ng-if="(gradeSubmissionStatus =='0' && currentActor=='preparer')"/>
+                            Part-B  <input type="text" style="width: 50px;border:1px solid grey;text-align: center;height: 23px;" data-ng-model="data.part_b_total" data-ng-if="(gradeSubmissionStatus =='0' && currentActor=='preparer')"/>
                                 <img  class='img_tooltip'  id="tooltip_partB_"/>
                                     <span data-ng-if="(gradeSubmissionStatus !='0' || currentActor!='preparer')">{{data.part_b_total}}</span>
                             </span>
@@ -261,11 +270,16 @@
                     <tr>
                         <td><b>Total Students :</b></td>
                         <td style="font-size: 18px;font-weight: bold;">
+                            <span ng-if="gradeSubmissionStatus =='0'">
+                                {{noneSubmittedGrades.length}}
+                            </span>
+                            <span ng-if="gradeSubmissionStatus !='0'">
                             {{chartData[0].total+chartData[1].total+chartData[2].total+chartData[3].total+chartData[4].total+chartData[5].total+chartData[6].total+chartData[7].total+chartData[8].total+chartData[9].total}}
+                            </span>
                         </td>
                         <td><b>Search :</b></td>
                         <td>
-                            <input type="text" data-ng-model="data.searchBox" style="width:100px;border: 1px solid grey;padding-left: 5px;">
+                            <input type="text" data-ng-model="data.searchBox" style="width:100px;border: 1px solid grey;padding-left: 5px;height: 23px;">
                             <a href="javascript:;" class="btn btn-xs btn-default btn-round"
                                data-ng-click="searchStudent()" style="border-radius: 15px;" >
                                 <i class="fa fa-search" style="color: blue;" aria-hidden="true"></i>
@@ -306,27 +320,27 @@
                                 <td id="td_sname_{{response.studentId}}">{{ response.studentName }}</td>
                                 <td id="td_quiz_{{response.studentId}}" data-ng-show="courseType=='THEORY'" style="text-align: center;">
                                     <input type="text"  style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="quiz_{{response.studentId}}"
-                                           value="{{response.quiz}}" onchange="calculateTotalAndGradeLetter(this.id)" maxlength="5"/>
+                                           value="{{response.quiz}}" onchange="calculateTotalAndGradeLetter(this.id)" onkeydown="handleKeyPress(event,this.id)" maxlength="5" tabindex="{{$index+1}}0"/>
                                     <img  class='img_tooltip'  id="tooltip_quiz_{{response.studentId}}"/>
                                 </td>
                                 <td id="td_cperf_{{response.studentId}}" data-ng-show="courseType=='THEORY'" style="text-align: center;">
                                     <input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="class_perf_{{response.studentId}}"
-                                           value="{{response.classPerformance}}"  onchange="calculateTotalAndGradeLetter(this.id)" maxlength="5"/>
+                                           value="{{response.classPerformance}}"  onchange="calculateTotalAndGradeLetter(this.id)" onkeydown="handleKeyPress(event,this.id)" maxlength="5" tabindex="{{$index+1}}1"/>
                                     <img  class='img_tooltip'  id="tooltip_class_perf_{{response.studentId}}"/>
                                 </td>
                                 <td id="td_parta_{{response.studentId}}" data-ng-show="courseType=='THEORY'" style="text-align: center;">
                                     <input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="part_a_{{response.studentId}}"
-                                           value="{{response.partA}}" onchange="calculateTotalAndGradeLetter(this.id)" maxlength="5"/>
+                                           value="{{response.partA}}" onchange="calculateTotalAndGradeLetter(this.id)" onkeydown="handleKeyPress(event,this.id)" maxlength="5" tabindex="{{$index+1}}2"/>
                                     <img  class='img_tooltip'  id="tooltip_part_a_{{response.studentId}}"/>
                                 </td>
                                 <td id="td_partb_{{response.studentId}}" ng-show="toggleColumn && courseType=='THEORY'" style="text-align: center;">
                                     <input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" id="part_b_{{response.studentId}}"
-                                           value="{{response.partB}}" onchange="calculateTotalAndGradeLetter(this.id)" maxlength="5"/>
+                                           value="{{response.partB}}" onchange="calculateTotalAndGradeLetter(this.id)" onkeydown="handleKeyPress(event,this.id)" maxlength="5" tabindex="{{$index+1}}3"/>
                                     <img  class='img_tooltip'  id="tooltip_part_b_{{response.studentId}}"/>
                                 </td>
                                 <td id="td_total_{{response.studentId}}" style="text-align: center;">
                                     <input type="text" style="width: 80px;border: 1px solid grey;text-align: right;padding-right: 20px;" data-ng-disabled="courseType=='THEORY'"
-                                           id="total_{{response.studentId}}" value="{{response.total}}" onchange="calculateTotalAndGradeLetter(this.id)" maxlength="5"/>
+                                           id="total_{{response.studentId}}" value="{{response.total}}" onchange="calculateTotalAndGradeLetter(this.id)" onkeydown="handleKeyPress(event,this.id)" maxlength="5" tabindex="{{$index+1}}4"/>
                                     <img  class='img_tooltip'  id="tooltip_total_{{response.studentId}}"/>
                                 </td>
                                 <td id="td_grade_letter_{{response.studentId}}" style="text-align: center;">

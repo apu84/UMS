@@ -59,11 +59,11 @@ module.exports = function (grunt) {
             }
         }
     });
-
     grunt.loadNpmTasks("grunt-ts");
     grunt.loadNpmTasks("grunt-concurrent");
     grunt.loadNpmTasks('grunt-este-watch');
     grunt.loadNpmTasks('grunt-sync');
+
 
     grunt.registerTask("default", ["sync", "ts", "concurrent"]);
 };

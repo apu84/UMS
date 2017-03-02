@@ -195,15 +195,36 @@ public class GradeSubmissionService {
     }
   }
 
-  private void validateGradeSubmissionDeadline(Date lastDateOfSubmission)
-      throws ValidationException {
-    if(lastDateOfSubmission == null) {
-      return;
-    }
+  private void validateGradeSubmissionDeadline(String pRole, Date pLastDateForPreparer,
+      Date pLastDateForScrutinizer, Date pLastDateForHead) throws ValidationException {
     Date currentDate = new Date();
-    if(currentDate.after(lastDateOfSubmission)) {
-      throw new ValidationException("Grade Submission Deadline is Over.");
+    switch(pRole) {
+      case Constants.GRADE_PREPARER:
+        if(pLastDateForPreparer == null) {
+          return;
+        }
+        if(currentDate.after(pLastDateForPreparer)) {
+          throw new ValidationException("Grade Submission Deadline is Over.");
+        }
+        break;
+      case Constants.GRADE_SCRUTINIZER:
+        if(pLastDateForScrutinizer == null) {
+          return;
+        }
+        if(currentDate.after(pLastDateForScrutinizer)) {
+          throw new ValidationException("Grade Submission Deadline is Over.");
+        }
+        break;
+      case Constants.HEAD:
+        if(pLastDateForHead == null) {
+          return;
+        }
+        if(currentDate.after(pLastDateForHead)) {
+          throw new ValidationException("Grade Submission Deadline is Over.");
+        }
+        break;
     }
+
   }
 
   public void validateGradeSubmission(String actingRoleForCurrentUser,
@@ -220,7 +241,8 @@ public class GradeSubmissionService {
     // Deadline && Part Info Validation
     if(actualStatus.getStatus() == CourseMarksSubmissionStatus.NOT_SUBMITTED
         && operation.equals("submit")) {
-      validateGradeSubmissionDeadline(actualStatus.getLastSubmissionDatePrep());
+      validateGradeSubmissionDeadline(actualActingRole, actualStatus.getLastSubmissionDatePrep(),
+          actualStatus.getLastSubmissionDateScr(), actualStatus.getLastSubmissionDateHead());
       if(actualStatus.getCourse().getCourseType() == CourseType.THEORY)
         validatePartInfo(requestedStatusDTO.getTotal_part(), requestedStatusDTO.getPart_a_total(),
             requestedStatusDTO.getPart_b_total());

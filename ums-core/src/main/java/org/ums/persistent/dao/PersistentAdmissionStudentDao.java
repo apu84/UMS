@@ -304,7 +304,7 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
 
   private String getQuotaSql(QuotaType pQuotaType, String pQuery) {
     if(pQuotaType.getId() == 0) {
-      pQuery = pQuery + "  quota='FF' or quota='GL' or quota='RA'";
+      pQuery = pQuery + "  quota='FF' or quota='GL' or quota='RA' or quota='GCE' ";
     }
     else if(pQuotaType.getId() == 1) {
       pQuery = pQuery + " quota='GL'";
@@ -316,7 +316,7 @@ public class PersistentAdmissionStudentDao extends AdmissionStudentDaoDecorator 
       pQuery = pQuery + " quota='RA'";
     }
     else {
-      pQuery = pQuery + " quota='EM'";
+      pQuery = pQuery + " quota='GCE'";
     }
     return pQuery;
   }

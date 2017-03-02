@@ -19,15 +19,15 @@ import org.ums.persistent.model.PersistentMarksSubmissionStatus;
 
 public class PersistentMarkSubmissionStatusDao extends MarksSubmissionStatusDaoDecorator {
   String SELECT_ALL =
-      "SELECT ID, SEMESTER_ID, COURSE_ID, STATUS, EXAM_TYPE, LAST_SUBMISSION_DATE, TOTAL_PART, PART_A_TOTAL, "
+      "SELECT ID, SEMESTER_ID, COURSE_ID, STATUS, EXAM_TYPE, LAST_SUBMISSION_DATE_PREP, TOTAL_PART, PART_A_TOTAL, "
           + "PART_B_TOTAL, YEAR, SEMESTER, LAST_MODIFIED FROM MARKS_SUBMISSION_STATUS ";
   String UPDATE_ALL =
       "UPDATE MARKS_SUBMISSION_STATUS SET SEMESTER_ID = ?, COURSE_ID = ?, STATUS = ?, EXAM_TYPE = ?, "
-          + "LAST_SUBMISSION_DATE = ?, TOTAL_PART = ?, PART_A_TOTAL = ?, PART_B_TOTAL = ?, "
+          + "LAST_SUBMISSION_DATE_PREP = ?, TOTAL_PART = ?, PART_A_TOTAL = ?, PART_B_TOTAL = ?, "
           + "YEAR = ?, SEMESTER = ?, LAST_MODIFIED = " + getLastModifiedSql() + " ";
   String DELETE_ALL = "DELETE FROM MARKS_SUBMISSION_STATUS ";
   String INSERT_ALL =
-      "INSERT INTO MST_SEMESTER(ID, SEMESTER_ID, COURSE_ID, STATUS, EXAM_TYPE, LAST_SUBMISSION_DATE, TOTAL_PART, "
+      "INSERT INTO MST_SEMESTER(ID, SEMESTER_ID, COURSE_ID, STATUS, EXAM_TYPE, LAST_SUBMISSION_DATE_PREP, TOTAL_PART, "
           + "PART_A_TOTAL, PART_B_TOTAL, YEAR, SEMESTER, LAST_MODIFIED) "
           + "VALUES(?, ?, ?, ?, ?  ?, ?, ?, ?, ?, " + getLastModifiedSql() + ")";
 
@@ -121,8 +121,8 @@ public class PersistentMarkSubmissionStatusDao extends MarksSubmissionStatusDaoD
       marksSubmissionStatus.setStatus(CourseMarksSubmissionStatus.get(rs.getInt("STATUS")));
       marksSubmissionStatus.setExamType(ExamType.get(rs.getInt("EXAM_TYPE")));
       Date date = new Date();
-      if(rs.getObject("LAST_SUBMISSION_DATE") != null) {
-        date.setTime(rs.getTimestamp("LAST_SUBMISSION_DATE").getTime());
+      if(rs.getObject("LAST_SUBMISSION_DATE_PREP") != null) {
+        date.setTime(rs.getTimestamp("LAST_SUBMISSION_DATE_PREP").getTime());
         marksSubmissionStatus.setLastSubmissionDatePrep(date);
       }
       marksSubmissionStatus.setTotalPart(rs.getInt("TOTAL_PART"));

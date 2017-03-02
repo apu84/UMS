@@ -33,6 +33,8 @@ public class PersistentEmployeeDao extends EmployeeDaoDecorator {
 
   static String DELETE_ONE = "DELETE FROM EMPLOYEES ";
 
+  String EXIST_EMAIL = "SELECT COUNT(EMPLOYEE_ID) EXIST FROM EMPLOYEES ";
+
   private JdbcTemplate mJdbcTemplate;
 
   public PersistentEmployeeDao(JdbcTemplate pJdbcTemplate) {
@@ -40,9 +42,22 @@ public class PersistentEmployeeDao extends EmployeeDaoDecorator {
   }
 
   @Override
+  public boolean existenceByEmail(String pEmailAddress) {
+    String query = EXIST_EMAIL + " WHERE EMAIL_ADDRESS = ?";
+    return mJdbcTemplate.queryForObject(query, Boolean.class, pEmailAddress);
+  }
+
+  @Override
   public Employee get(String pId) {
     String query = SELECT_ALL + " WHERE EMPLOYEE_ID = ? ";
     return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new EmployeeRowmapper());
+  }
+
+  @Override
+  public Employee getByEmail(String pEmailAddress) {
+    String query = SELECT_ALL + " WHERE EMAIL_ADDRESS = ? ";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pEmailAddress},
+        new EmployeeRowmapper());
   }
 
   @Override

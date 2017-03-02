@@ -5,10 +5,18 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ums.domain.model.immutable.AdmissionStudent;
+import org.ums.enums.ProgramType;
+import org.ums.enums.QuotaType;
+import org.ums.manager.AdmissionStudentManager;
+import org.ums.manager.ProgramManager;
+import org.ums.manager.SemesterManager;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
+import java.util.List;
 
 /**
  * Created by Monjur-E-Morshed on 20-Dec-16.
@@ -16,6 +24,15 @@ import java.io.OutputStream;
 
 @Component
 public class AdmissionStudentGeneratorImpl implements AdmissionStudentGenerator {
+
+  @Autowired
+  private SemesterManager mSemesterManager;
+
+  @Autowired
+  private AdmissionStudentManager mAdmissionStudentManager;
+
+  @Autowired
+  private ProgramManager mProgramManager;
 
   @Override
   public void createABlankTaletalkDataFormatFile(OutputStream pOutputStream, int pSemesterId)
@@ -77,6 +94,57 @@ public class AdmissionStudentGeneratorImpl implements AdmissionStudentGenerator 
     Sheet sheet = wb.createSheet("Migration List Upload");
     Row row = sheet.createRow((short) 0);
     row.createCell(0).setCellValue("receipt_id");
+
+    wb.write(pOutputStream);
+
+    baos.writeTo(pOutputStream);
+  }
+
+  @Override
+  public void createMeritListXlsFile(int pSemesterId, ProgramType pProgramType,
+      QuotaType pQuotaType, String pUnit, OutputStream pOutputStream) throws Exception {
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    Workbook wb = new HSSFWorkbook();
+
+    Sheet sheet =
+        wb.createSheet("Admission Merit List " + mSemesterManager.get(pSemesterId).getName());
+    Row row = sheet.createRow((short) 0);
+    row.createCell(0).setCellValue("Merit Sl No.");
+    row.createCell(1).setCellValue("Receipt Id");
+    row.createCell(2).setCellValue("Candidate's Name");
+    row.createCell(3).setCellValue("Selected Program");
+    row.createCell(4).setCellValue("Waiting Program");
+    row.createCell(5).setCellValue("Allocated Program");
+
+    List<AdmissionStudent> students =
+        mAdmissionStudentManager.getMeritList(pSemesterId, pQuotaType, pUnit, pProgramType);
+
+    for(int i = 1; i <= students.size(); i++) {
+      AdmissionStudent student = students.get(i - 1);
+      Row stdRow = sheet.createRow((short) i);
+      stdRow.createCell(0).setCellValue(student.getMeritSerialNo().toString());
+      stdRow.createCell(1).setCellValue(student.getReceiptId());
+      stdRow.createCell(2).setCellValue(student.getStudentName());
+      if(student.getProgramIdByTransfer() != null) {
+        stdRow.createCell(3).setCellValue(student.getProgramByMerit().getShortName());
+      }
+      else {
+        stdRow.createCell(3).setCellValue(" ");
+      }
+      if(student.getProgramIdByTransfer() != null) {
+        stdRow.createCell(4).setCellValue(student.getProgramByTransfer().getShortName());
+      }
+      else {
+        stdRow.createCell(4).setCellValue(" ");
+
+      }
+      if(student.getAllocatedProgramId() != null) {
+        row.createCell(5).setCellValue(student.getAllocatedProgram().getShortName());
+      }
+      else {
+        stdRow.createCell(5).setCellValue(" ");
+      }
+    }
 
     wb.write(pOutputStream);
 

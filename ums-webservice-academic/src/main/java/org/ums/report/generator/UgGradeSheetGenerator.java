@@ -51,7 +51,7 @@ public class UgGradeSheetGenerator {
     // Check
     // step 1
     Document document = new Document();
-    document.setMargins(10, 10, 30, 72);
+    document.setMargins(60, 10, 30, 72);
     // step 2
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     PdfWriter writer = PdfWriter.getInstance(document, baos); // FileOutputStream(RESULT)
@@ -68,13 +68,13 @@ public class UgGradeSheetGenerator {
         examGradeManager.getAllGrades(semesterId, courseId, examType, course.getCourseType());
 
     document.open();
-    double totalPage = Math.ceil(Float.valueOf(gradeList.size()) / 90);
-    for(int i = 0; i < totalPage || (gradeList.size() < 90 && i == 0); i++) {
+    double totalPage = Math.ceil(Float.valueOf(gradeList.size()) / 80);
+    for(int i = 0; i < totalPage || (gradeList.size() < 80 && i == 0); i++) {
       if(i != 0)
         document.newPage();
 
       PdfPTable secondColumnGradeTable =
-          getGradeTable(gradeList, i * 90 + 46, 45, course.getCourseType(), examType);
+          getGradeTable(gradeList, i * 80 + 40, 40, course.getCourseType(), examType);
 
       PdfPTable mainTable = getMainTable(secondColumnGradeTable == null ? 1 : 3);
       PdfPCell cell = new PdfPCell(getSubTableHeader(course, gradeList.size(), semester.getName()));
@@ -92,7 +92,7 @@ public class UgGradeSheetGenerator {
       }
 
       cell = new PdfPCell();
-      cell.addElement(getGradeTable(gradeList, i * 90, 45, course.getCourseType(), examType));
+      cell.addElement(getGradeTable(gradeList, i * 80, 40, course.getCourseType(), examType));
       cell.setPadding(0);
       cell.setBorder(Rectangle.NO_BORDER);
       mainTable.addCell(cell);
@@ -124,7 +124,7 @@ public class UgGradeSheetGenerator {
     // a table with three columns
     PdfPTable table = new PdfPTable(totalGradeColumn);
     if(totalGradeColumn == 3) {
-      table.setWidths(new int[] {9, 2, 9});
+      table.setWidths(new int[] {9, 1, 9});
       table.setWidthPercentage(100);
     }
     else {
@@ -155,7 +155,7 @@ public class UgGradeSheetGenerator {
 
     if(courseType == CourseType.THEORY) {
       table = new PdfPTable(6);
-      table.setWidths(new int[] {2, 1, 1, 1, 1, 1});
+      table.setWidths(new float[] {new Float(1.5), 1, 1, 1, 1, 1});
     }
     else if(courseType == CourseType.SESSIONAL) {
       table = new PdfPTable(3);
@@ -196,7 +196,8 @@ public class UgGradeSheetGenerator {
     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
     table.addCell(cell);
 
-    for(int i = startIndex; i < startIndex + total + 1; i++) {
+    int endIndex = startIndex + total;
+    for(int i = startIndex; i < endIndex; i++) {
       if(i >= studentList.size())
         break;
 
@@ -217,7 +218,7 @@ public class UgGradeSheetGenerator {
 
       p = new Paragraph(studentList.get(i).getStudentId(), nbFont);
       cell = new PdfPCell(p);
-      cell.setFixedHeight(12);
+      cell.setFixedHeight(new Float(13.5));
       cell.setHorizontalAlignment(Element.ALIGN_LEFT);
       table.addCell(cell);
       if(courseType == CourseType.THEORY) {
@@ -234,15 +235,21 @@ public class UgGradeSheetGenerator {
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);
 
-        p =
-            new Paragraph(String.valueOf(student.getPartA()
-                + (student.getPartB() == null ? 0 : student.getPartB())), nFont);
+        Double tmpTotal = null;
+        if(student.getPartA() != null && student.getPartB() != null) {
+          tmpTotal =
+              (student.getPartA() == null ? 0 : student.getPartA())
+                  + (student.getPartB() == null ? 0 : student.getPartB());
+        }
+        p = new Paragraph(String.valueOf(tmpTotal == null ? "" : tmpTotal), nFont);
         cell = new PdfPCell(p);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);
       }
 
-      p = new Paragraph(String.valueOf(Math.round(student.getTotal())), nFont);
+      p =
+          new Paragraph(student.getTotal() == null ? "" : String.valueOf(Math.round(student
+              .getTotal())), nFont);
       cell = new PdfPCell(p);
       cell.setHorizontalAlignment(Element.ALIGN_CENTER);
       table.addCell(cell);
@@ -264,7 +271,7 @@ public class UgGradeSheetGenerator {
     Font nuFont = new Font(Font.FontFamily.HELVETICA, 8, Font.UNDERLINE);
 
     PdfPTable table = new PdfPTable(3);
-    table.setWidths(new int[] {7, 5, 8});
+    table.setWidths(new int[] {7, 3, 7});
     table.setWidthPercentage(100);
 
     PdfPCell pCell = new PdfPCell();
@@ -419,8 +426,8 @@ public class UgGradeSheetGenerator {
         table.setTotalWidth(523);
 
         Paragraph p =
-            new Paragraph("_________________\n\nSignature of the\nScrutinizer\n\nDate ___________",
-                nFont);
+            new Paragraph(
+                "___________________\n\nSignature of the\nScrutinizer\n\nDate ___________", nFont);
         PdfPCell pCell = new PdfPCell(p);
         pCell.setBorder(Rectangle.NO_BORDER);
         pCell.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -429,7 +436,7 @@ public class UgGradeSheetGenerator {
 
         p =
             new Paragraph(
-                "_________________\n\nSignature of the \nHead of the Dept./School\n\nDate ___________",
+                "___________________\n\nSignature of the \nHead of the Dept./School\n\nDate ___________",
                 nFont);
         pCell = new PdfPCell(p);
         pCell.setBorder(Rectangle.NO_BORDER);
@@ -438,7 +445,7 @@ public class UgGradeSheetGenerator {
         table.addCell(pCell);
 
         p =
-            new Paragraph("_________________\n\nSignature of the \nExaminer\n\nDate ___________",
+            new Paragraph("___________________\n\nSignature of the \nExaminer\n\nDate ___________",
                 nFont);
         pCell = new PdfPCell(p);
         pCell.setBorder(Rectangle.NO_BORDER);
@@ -446,7 +453,7 @@ public class UgGradeSheetGenerator {
         pCell.setPaddingLeft(80);
         table.addCell(pCell);
 
-        table.writeSelectedRows(0, -1, 36, 64, writer.getDirectContent());
+        table.writeSelectedRows(0, -1, 36, 65, writer.getDirectContent());
 
       } catch(Exception ex) {
         ex.printStackTrace();

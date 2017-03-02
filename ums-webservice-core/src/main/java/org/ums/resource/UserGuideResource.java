@@ -46,16 +46,14 @@ public class UserGuideResource extends Resource {
   public StreamingOutput getUserGuidePdf(final @Context Request pRequest,
       final @PathParam("navigationId") String pNavigationId) {
     // To Do: User wise manual access validation need to be done
-    return new StreamingOutput() {
-      public void write(OutputStream output) throws IOException, WebApplicationException {
-        File toBeCopied = new File("F:\\IUMS-Manual\\" + pNavigationId + ".pdf");
-        try {
-          java.nio.file.Path path = toBeCopied.toPath();
-          Files.copy(path, output);
-          output.flush();
-        } catch(Exception e) {
-          throw new WebApplicationException(e);
-        }
+    return output -> {
+      File toBeCopied = new File("F:\\IUMS-Manual\\" + pNavigationId + ".pdf");
+      try {
+        java.nio.file.Path path = toBeCopied.toPath();
+        Files.copy(path, output);
+        output.flush();
+      } catch(Exception e) {
+        throw new WebApplicationException(e);
       }
     };
   }

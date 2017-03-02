@@ -4,7 +4,6 @@ import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.mutable.MutableEmployee;
 import org.ums.manager.CacheManager;
 import org.ums.manager.EmployeeManager;
-import org.ums.util.CacheUtil;
 
 import java.util.List;
 
@@ -20,6 +19,16 @@ public class EmployeeCache extends ContentCache<Employee, MutableEmployee, Strin
   @Override
   protected CacheManager<Employee, String> getCacheManager() {
     return mCacheManager;
+  }
+
+  @Override
+  public boolean existenceByEmail(final String pEmailAddress) {
+    return getManager().existenceByEmail(pEmailAddress);
+  }
+
+  @Override
+  public Employee getByEmail(final String pEmailAddress) {
+    return getManager().getByEmail(pEmailAddress);
   }
 
   @Override

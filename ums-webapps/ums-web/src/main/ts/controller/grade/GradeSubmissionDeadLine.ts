@@ -90,13 +90,18 @@ module ums {
         this.examGradeService.updateGradeSubmissionDeadLine(json).then((message: any)=> {
           this.notify.success(message);
           this.$scope.showButton = false;
+        
         });
       });
     }
 
     private dateChanged(examGrade: IExamGrade) {
-      this.$scope.showButton = true;
+      if(examGrade.lastSubmissionDatePrep!=null && examGrade.lastSubmissionDateScr!=null && examGrade.lastSubmissionDateHead!=null){
+        this.$scope.showButton = true;
       examGrade.changed = true;
+      }
+      // this.$scope.showButton = true;
+      // examGrade.changed = true;
     }
 
     private cancel() {
