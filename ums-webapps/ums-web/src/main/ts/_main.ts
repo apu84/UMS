@@ -109,7 +109,6 @@
 /// <reference path='service/EmployeeService.ts'/>
 /// <reference path='service/StudentService.ts'/>
 /// <reference path='service/TeacherService.ts'/>
-/// <reference path='service/AdmissionCertificateVerificationService.ts'/>
 
 /// <reference path='controller/student/NewStudent.ts'/>
 
@@ -165,6 +164,10 @@
 /// <reference path='controller/syllabus/GridSyllabus.ts'/>
 /// <reference path='controller/semester/SemesterEnrollment.ts'/>
 /// <reference path='controller/student/StudentProfile.ts'/>
+
+
+/// <reference path='controller/registrar-office/employee-information-management/employeeInformation.ts'/>
+
 
 
 /// <reference path='dummy/DummyController.ts'/>
