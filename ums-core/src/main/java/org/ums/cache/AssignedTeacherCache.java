@@ -25,11 +25,6 @@ public class AssignedTeacherCache<R extends Identifier<I> & LastModifier, M exte
   }
 
   @Override
-  protected String getCacheKey(I pId) {
-    return CacheUtil.getCacheKey(CourseTeacher.class, pId);
-  }
-
-  @Override
   public List<R> getAssignedTeachers(Integer pProgramId, Integer pSemesterId, String pOfferedBy) {
     return getManager().getAssignedTeachers(pProgramId, pSemesterId, pOfferedBy);
   }

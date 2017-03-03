@@ -9,10 +9,11 @@ import org.springframework.jdbc.core.RowMapper;
 import org.ums.domain.model.immutable.Examiner;
 import org.ums.domain.model.mutable.MutableExaminer;
 import org.ums.generator.IdGenerator;
+import org.ums.manager.ExaminerManager;
 import org.ums.persistent.model.PersistentExaminer;
 
 public class PersistentExaminerDao extends
-    AbstractAssignedTeacherDao<Examiner, MutableExaminer, Long> {
+    AbstractAssignedTeacherDao<Examiner, MutableExaminer, Long> implements ExaminerManager {
   static String SELECT_ALL =
       "SELECT SEMESTER_ID, PREPARER, SCRUTINIZER, COURSE_ID, LAST_MODIFIED, ID FROM PREPARER_SCRUTINIZER ";
   static String UPDATE_ALL =

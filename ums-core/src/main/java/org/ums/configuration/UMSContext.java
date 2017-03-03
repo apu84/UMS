@@ -356,7 +356,7 @@ public class UMSContext {
   }
 
   @Bean
-  AssignedTeacherManager<Examiner, MutableExaminer, Long> examinerManager() {
+  ExaminerManager examinerManager() {
     ExaminerCache examinerCache = new ExaminerCache(mCacheFactory.getCacheManager());
     examinerCache.setManager(new PersistentExaminerDao(mTemplateFactory.getJdbcTemplate(),
         mIdGenerator));
