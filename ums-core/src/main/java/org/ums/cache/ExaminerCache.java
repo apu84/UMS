@@ -17,7 +17,7 @@ public class ExaminerCache extends
 
   @Override
   protected String getCacheKey(Long pId) {
-    return CacheUtil.getCacheKey(CourseTeacher.class, pId);
+    return CacheUtil.getCacheKey(Examiner.class, pId);
   }
 
 }
