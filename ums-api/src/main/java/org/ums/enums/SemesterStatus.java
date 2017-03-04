@@ -6,7 +6,9 @@ package org.ums.enums;
 public enum SemesterStatus {
   INACTIVE(0, "Inactive"),
   ACTIVE(1, "Active"),
-  NEWLY_CREATED(2, "Newly Created");
+  NEWLY_CREATED(2, "Newly Created"),
+  FETCH_ALL(3, "Fetch All Semesters"),
+  FETCH_ALL_WITH_NEWLY_CREATED(4, "Fetch All Semesters along with Newly created semester");
 
   private String label;
   private int id;
