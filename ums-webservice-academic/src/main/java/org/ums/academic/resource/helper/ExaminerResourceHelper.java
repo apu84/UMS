@@ -12,6 +12,7 @@ import org.ums.domain.model.immutable.User;
 import org.ums.domain.model.mutable.MutableExaminer;
 import org.ums.exceptions.ValidationException;
 import org.ums.manager.AssignedTeacherManager;
+import org.ums.manager.ExaminerManager;
 import org.ums.manager.UserManager;
 import org.ums.message.MessageResource;
 import org.ums.persistent.model.PersistentExaminer;
@@ -28,7 +29,7 @@ public class ExaminerResourceHelper
     AbstractAssignedTeacherResourceHelper<Examiner, MutableExaminer, Long, AssignedTeacherManager<Examiner, MutableExaminer, Long>> {
   @Autowired
   @Qualifier("examinerManager")
-  AssignedTeacherManager<Examiner, MutableExaminer, Long> mExaminerManager;
+  private ExaminerManager mExaminerManager;
 
   @Autowired
   private ExaminerBuilder mBuilder;
