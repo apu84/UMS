@@ -220,8 +220,6 @@ public abstract class ContentCache<R extends Identifier<I> & LastModifier, M ext
     }
     String idCacheKey = getCacheKey(readonly.getId());
     getCacheManager().put(idCacheKey, readonly);
-    mLogger.error("pCacheKey : "+pCacheKey);
-    mLogger.error("idCacheKey : "+idCacheKey);
     getCacheManager().putReferrerKey(pCacheKey, idCacheKey);
     return readonly;
   }
