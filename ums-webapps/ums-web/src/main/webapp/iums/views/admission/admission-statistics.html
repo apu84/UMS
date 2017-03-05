@@ -203,6 +203,28 @@
                             </tbody>
                         </table>
                     </div>
+                    <div class="col-md-6">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                                <td>Program</td>
+                                <td>Allocated Seat</td>
+                                <td>Selected</td>
+                                <td>Remaining<br>Vacancy</td>
+                                <td>Waiting</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr data-ng-repeat="s in gceStatistics">
+                                <td>{{s.programName}}</td>
+                                <td align="center">{{s.allocatedSeat}}</td>
+                                <td align="center">{{s.selected}}</td>
+                                <td align="center">{{s.remaining}}</td>
+                                <td align="center">{{s.waiting}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="cell" align="right">
@@ -312,7 +334,7 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <tr data-ng-repeat="s in raStatistics">
+                                            <tr data-ng-repeat="s in gceStatistics">
                                                 <td>{{s.programName}}</td>
                                                 <td align="center">{{s.allocatedSeat}}</td>
                                                 <td align="center">{{s.selected}}</td>
