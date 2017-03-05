@@ -82,7 +82,7 @@ public class LoginService {
     }
 
     if(StringUtils.isBlank(user.getPasswordResetToken())
-        || (tokenInvalidDate != null && tokenInvalidDate.after(now))
+        || (tokenInvalidDate != null && now.after(tokenInvalidDate))
         || user.getPasswordTokenGenerateDateTime() == null) {
       mUserManager.setPasswordResetToken(mPasswordService.encryptPassword(token)
           .replaceAll("=", ""), user.getId());
