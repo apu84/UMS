@@ -8,11 +8,14 @@ module ums{
                 private $sce:ng.ISCEService,private $window:ng.IWindowService) {
 
     }
-    public fetchSemesters(programType:number,limit?:number):ng.IPromise<any> {
+    public fetchSemesters(programType:number,limit?:number,status?:number):ng.IPromise<any> {
       if(!limit){
         limit=Utils.DEFAULT_SEMESTER_COUNT;
       }
-      var url="academic/semester/program-type/"+programType+"/limit/"+limit;
+      if(!status){
+        status = Utils.SEMESTER_FETCH_ALL;
+      }
+      var url="academic/semester/program-type/"+programType+"/limit/"+limit+"/status/"+status;
       var defer = this.$q.defer();
       this.httpClient.get(url, this.appConstants.mimeTypeJson,
           (json:any, etag:string) => {

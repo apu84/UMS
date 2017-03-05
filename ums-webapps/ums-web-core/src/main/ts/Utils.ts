@@ -36,6 +36,8 @@ module ums {
     static SEMESTER_STATUS_INACTIVE: number=0;
     static SEMESTER_STATUS_ACTIVE: number=1;
     static SEMESTER_STATUS_NEWLY_CREATED: number=2;
+    static SEMESTER_FETCH_ALL: number=3;
+    static SEMESTER_FETCH_WITH_NEWLY_CREATED: number=4;
 
     /*
     * Present status during department selection

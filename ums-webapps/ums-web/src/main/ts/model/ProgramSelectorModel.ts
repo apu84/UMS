@@ -213,7 +213,7 @@ module ums {
 
     public loadSemester(): void {
       if (this.programTypeId && this.programTypeId !== this.getAppConstants().Empty) {
-        this.getHttpClient().get('academic/semester/program-type/' + this.programTypeId + "/limit/10",
+        this.getHttpClient().get('academic/semester/program-type/' + this.programTypeId + "/limit/10/status/"+Utils.SEMESTER_FETCH_ALL,
             HttpClient.MIME_TYPE_JSON,
             (json: any, etag: string) => {
               this.setSemesters(json.entries);
