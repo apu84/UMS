@@ -1382,7 +1382,7 @@ module ums {
 
     private loadSemesters(): void {
       this.semesterService.fetchSemesters(this.$scope.inputParams.program_type).then((semesters: Array<IOption>) => {
-
+        
         if (semesters.length == 0) {
           semesters.splice(0, 0, this.appConstants.initSemester[0]);
         }
