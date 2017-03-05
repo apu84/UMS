@@ -244,7 +244,7 @@ public class UndertakenFormGeneratorImpl implements UndertakenFormGenerator {
     Chunk report_footer4 = new Chunk();
     report_footer4.append("\nAdmission Committee");
     Chunk report_footer5 = new Chunk();
-    report_footer5.append("\nFall 2016 Semester");
+    report_footer5.append("\nSpring 2017 Semester");
     Chunk report_footer6 = new Chunk();
     report_footer6.append("                                                      ");
     report_footer6.setUnderline(0.5f, -2f);

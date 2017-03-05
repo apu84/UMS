@@ -22,7 +22,6 @@ module ums{
 
       $scope.personal = true;
       $scope.changeNav = this.changeNav.bind(this);
-
     }
 
     private changeNav(navTitle: number){
