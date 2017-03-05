@@ -105,26 +105,6 @@
     <p class="alignLeft" id="pageTitle" style="padding-left: 3%;font-size: 18px;font-weight: bold;"><span>{{data.headerTitle}}</span></p>
     <p class="alignRight">
 
-<!--
-    <div class="btn-group" style="padding-right: 20px;">
-        <button type="button" class="btn btn-default"><i class="fa fa-plus" aria-hidden="true"></i>  New Material</button>
-
-        <button type="button" data-toggle="dropdown"
-                class="btn btn-default dropdown-toggle"><span class="caret"></span><span
-                class="sr-only">Toggle Dropdown</span></button>
-        <ul role="menu" class="dropdown-menu">
-            <li><a href="#"><i class="fa fa-book" aria-hidden="true"></i> Book</a></li>
-            <li><a href="#"><i class="fa fa-newspaper-o" aria-hidden="true"></i> Journal</a></li>
-            <li><a href="#"><i class="fa fa-gitlab" aria-hidden="true"></i> Thesis/Project</a></li>
-            <li class="divider"></li>
-            <li><a href="#"><i class="fa fa-list-alt" aria-hidden="true"></i> Manuscripts</a></li>
-            <li><a href="#"><i class="fa fa-floppy-o" aria-hidden="true"></i> CD/DVD/Audio/Video</a></li>
-            <li><a href="#"><i class="fa fa-tencent-weibo" aria-hidden="true"></i> Cartographic Materials</a></li>
-            <li><a href="#"><i class="fa fa-map" aria-hidden="true"></i> Graphic Materials</a></li>
-        </ul>
-    </div>
-    -->
-
         <a href="javascript:;" class="btn btn-xs btn-default bookAnchor"
            data-ng-click="showBookUI()" style="background-color: black;">
             <i class="fa fa-book bookIcon" style="color: white;" aria-hidden="true"></i>
@@ -140,11 +120,11 @@
 <hr style="clear: both;"/>
 
 <div class="form-body pal" style="margin-top: -25px;" data-ng-show="bookInfo"
-     data-ng-include="'views/admin/cataloging/catalog-record.html'">
+     data-ng-include="'views/admin/cataloging/catalog-item.html'">
 </div>
 
 <div style="margin-top: -25px;" data-ng-show="accessionInfo"
-     data-ng-include="'views/admin/cataloging/catalog-item.html'">
+     data-ng-include="'views/admin/cataloging/catalog-record.html'">
 </div>
 
 <div data-ng-include="'views/admin/cataloging/supporting-panels/contributor-panel.html'"></div>

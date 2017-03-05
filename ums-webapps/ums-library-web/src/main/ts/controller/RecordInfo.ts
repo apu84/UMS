@@ -1,109 +1,132 @@
-module ums{
+module ums {
   export interface IMaterialScope extends ng.IScope {
     data: any;
-    bulkAssignmentOptionSelected:boolean;
-    showBookUI:Function;
-    showAccessionUI:Function;
-    fillSampleData:Function;
-    bookInfo:boolean;
-    accessionInfo:boolean;
-    colWidthArray:any;
-    addNewRow:Function;
-    deleteRow:Function;
-    roleDropDown:string;
-    contributorNameDropDown:string;
-    contributors:Array<IContributorDD>;
-    newItemList:Array<IItem>;
-    addNewItems:Function;
-    showHideItemsTable:Function;
-    setMaterialTypeName:Function;
-    record:IRecord;
-    saveRecord:Function;
-
+    bulkAssignmentOptionSelected: boolean;
+    showBookUI: Function;
+    showAccessionUI: Function;
+    fillSampleData: Function;
+    bookInfo: boolean;
+    accessionInfo: boolean;
+    colWidthArray: any;
+    addNewRow: Function;
+    deleteRow: Function;
+    roleDropDown: string;
+    contributorNameDropDown: string;
+    contributors: Array<IContributorDD>;
+    bulkItemList: Array<IItem>;
+    addNewItems: Function;
+    showHideItemsTable: Function;
+    setMaterialTypeName: Function;
+    record: IRecord;
+    item: IItem;
+    saveRecord: Function;
+    saveItem: Function;
+    saveBulkItems:Function;
+    bulk: any;
+    setBulkItemsValue: Function;
   }
-export interface IItem{
-    id:number;
-    copyNo:string;
-}
-  export interface IContributorEntry{
-    viewOrder:number;
-    role:number;
-    id:string,
-    name:string;
+  export interface IContributorEntry {
+    viewOrder: number;
+    role: number;
+    id: string,
+    name: string;
   }
-  export interface IContributorDD{
-    id:string;
-    text:string;
+  export interface IContributorDD {
+    id: string;
+    text: string;
   }
-  export interface INoteEntry{
-    viewOrder:number;
-    note:string;
+  export interface INoteEntry {
+    viewOrder: number;
+    note: string;
   }
-  export interface ISubjectEntry{
-    viewOrder:number;
-    subject:string;
-  }
-
-  export interface IImprint{
-    publisher:number;
-    publisherName:string;
-    placeOfPublication:string;
-    yearDateOfPublication:string;
-    copyRightDate:string;
-  }
-  export interface IPhysicalDescription{
-    pagination:string;
-    illustrations:string;
-    accompanyingMaterials:string;
-    dimensions:string;
-    paperQuality:string;
+  export interface ISubjectEntry {
+    viewOrder: number;
+    subject: string;
   }
 
-  export interface IRecord{
-    mfnNo:number;
-    language:number;
-    languageName:string;
-    materialType:number;
-    materialTypeName:string;
-    status:number;
-    statusName:string;
-    bindingType:number;
-    bindingTypeName:string;
-    acqType:number;
-    acqTypeName:string;
-    title:string;
-    subTitle:string;
-    gmd:string;
-    seriesTitle:string;
-    volumeNo:string;
-    volumeTitle:string;
-    serialIssueNo:string;
-    serialNumber:string;
-    serialSpecial:string;
-    libraryLacks:string;
-    changedTitle:string;
-    isbn:string;
-    issn:string;
-    corpAuthorMain:string;
-    corpSubBody:string;
-    corpCityCountry:string;
-    edition:string;
-    translateTitleEdition:string;
-    frequency:number;
-    callNo:string;
-    classNo:string;
-    callDate:string;
-    authorMark:string;
-    contributorList:Array<IContributorEntry>; //need separate channel
-    imprint:IImprint;
-    physicalDescription:IPhysicalDescription;
-    subjectList:Array<ISubjectEntry>;
-    noteList:Array<INoteEntry>;
-    keywords:string;
-    contributorJsonString:string;
-    noteJsonString:string;
-    subjectJsonString:string;
+  export interface IImprint {
+    publisher: number;
+    publisherName: string;
+    placeOfPublication: string;
+    yearDateOfPublication: string;
+    copyRightDate: string;
   }
+  export interface IPhysicalDescription {
+    pagination: string;
+    illustrations: string;
+    accompanyingMaterials: string;
+    dimensions: string;
+    paperQuality: string;
+  }
+
+  export interface IRecord {
+    mfnNo: string;
+    language: number;
+    languageName: string;
+    materialType: number;
+    materialTypeName: string;
+    status: number;
+    statusName: string;
+    bindingType: number;
+    bindingTypeName: string;
+    acqType: number;
+    acqTypeName: string;
+    title: string;
+    subTitle: string;
+    gmd: string;
+    seriesTitle: string;
+    volumeNo: string;
+    volumeTitle: string;
+    serialIssueNo: string;
+    serialNumber: string;
+    serialSpecial: string;
+    libraryLacks: string;
+    changedTitle: string;
+    isbn: string;
+    issn: string;
+    corpAuthorMain: string;
+    corpSubBody: string;
+    corpCityCountry: string;
+    edition: string;
+    translateTitleEdition: string;
+    frequency: number;
+    callNo: string;
+    classNo: string;
+    callDate: string;
+    authorMark: string;
+    contributorList: Array<IContributorEntry>; //need separate channel
+    imprint: IImprint;
+    physicalDescription: IPhysicalDescription;
+    subjectList: Array<ISubjectEntry>;
+    noteList: Array<INoteEntry>;
+    keywords: string;
+    contributorJsonString: string;
+    noteJsonString: string;
+    subjectJsonString: string;
+  }
+
+  export interface IItem {
+    mfnNo: string;
+    itemId: string;
+    copyNumber: number;
+    accessionNumber: string;
+    accessionDate: string;
+    barcode: string;
+    price: number;
+    internalNote: string;
+    supplier: ISupplier;
+    status: number;
+    statusName: string;
+  }
+  export interface ISupplier {
+    id: number;
+    name: string;
+    address: string,
+    contactPerson: string;
+    contactNumber: string;
+  }
+
+
   export class RecordInfo {
     private anchorPrefix = ".btn.btn-xs.btn-default.";
     private columnHeader;
@@ -113,9 +136,8 @@ export interface IItem{
                 private $q: ng.IQService, private notify: Notify, private libConstants: any) {
 
 
-
       $scope.bulkAssignmentOptionSelected = false;
-      $scope.fillSampleData=this.fillSampleData.bind(this);
+      $scope.fillSampleData = this.fillSampleData.bind(this);
       $scope.showBookUI = this.showBookUI.bind(this);
       $scope.showAccessionUI = this.showAccessionUI.bind(this);
       $scope.addNewRow = this.addNewRow.bind(this);
@@ -124,7 +146,9 @@ export interface IItem{
       $scope.showHideItemsTable = this.showHideItemsTable.bind(this);
       $scope.setMaterialTypeName = this.setMaterialTypeName.bind(this);
       $scope.saveRecord = this.saveRecord.bind(this);
-
+      $scope.saveItem = this.saveItem.bind(this);
+      $scope.saveBulkItems = this.saveBulkItems.bind(this);
+      $scope.setBulkItemsValue = this.setBulkItemsValue.bind(this);
 
       this.$scope.bookInfo = true;
       this.$scope.accessionInfo = false;
@@ -134,12 +158,11 @@ export interface IItem{
       var that = this;
 
       $scope.contributors = new Array<IContributorDD>();
-      $scope.newItemList = new Array<IItem>();
-//asdfasasdf
-      //adsasfasdfasf
+      $scope.bulkItemList = new Array<IItem>();
+
       var contributor = {id: "", text: ""};
       this.$scope.contributors.push(contributor);
-      contributor = {id: "2", text: "Jami"};
+      contributor = {id: "2", text: "Jami1111"};
       this.$scope.contributors.push(contributor);
       contributor = {id: "3", text: "Hasan"};
       this.$scope.contributors.push(contributor);
@@ -187,7 +210,8 @@ export interface IItem{
         readOnlyMode: false,
         showItemMainButtonPanel: true,
         multipleItemAdd: false,
-        bulkAddCount: 0,
+        bulkAddCount: 4,
+
         collapsedItemTable: false,
         headerTitle: "Add New - Book Record",
         settings: {
@@ -294,20 +318,20 @@ export interface IItem{
 
       jQuery.validator.addMethod("cRequired", function (value, element) {
         /*
-        console.log("Status :" + $("#recordStatus").val());
-        console.log("Value :" + value);
-        console.log($(element).attr('id')  );
-        */
+         console.log("Status :" + $("#recordStatus").val());
+         console.log("Value :" + value);
+         console.log($(element).attr('id')  );
+         */
 
-       if($(element).attr('id')=="recordStatus" &&  value  == 101101)
-         return false;
-       else if ($("#recordStatus").val() == 0)
+        if ($(element).attr('id') == "recordStatus" && value == 101101)
+          return false;
+        else if ($("#recordStatus").val() == 0)
           return true;
-        else if ($("#recordStatus").val() == 2 && (value == "" || value  == 101101)) return false;
+        else if ($("#recordStatus").val() == 2 && (value == "" || value == 101101)) return false;
         else return true;
       }, "This field is required");
 
-        $scope.record = {
+      $scope.record = {
         mfnNo: undefined,
         language: 1,
         languageName: "",
@@ -343,14 +367,45 @@ export interface IItem{
         callDate: "",
         authorMark: "",
         contributorList: new Array <IContributorEntry>(),  //done
-        imprint: {"publisher":0, "publisherName":"","placeOfPublication":"","yearDateOfPublication":"","copyRightDate":""},
-        physicalDescription: {"pagination":"","illustrations":"","accompanyingMaterials":"","dimensions":"","paperQuality":""},
+        imprint: {
+          "publisher": 0,
+          "publisherName": "",
+          "placeOfPublication": "",
+          "yearDateOfPublication": "",
+          "copyRightDate": ""
+        },
+        physicalDescription: {
+          "pagination": "",
+          "illustrations": "",
+          "accompanyingMaterials": "",
+          "dimensions": "",
+          "paperQuality": ""
+        },
         subjectList: new Array<ISubjectEntry>(), //done
-        keywords:"",
+        keywords: "",
         noteList: new Array <INoteEntry>(),
-        contributorJsonString:"[[{'viewOrder':1,'role':1,'contributor':1},{'viewOrder':2,'role':'2','contributor':2}]]",
-        noteJsonString:"[{'viewOrder':1,'note':'note1'},{'viewOrder':2,'note':'note2'}]",
-        subjectJsonString:"[{'viewOrder':1,'subject':'subject1'},{'viewOrder':2,'subject':'subject2'}]"
+        contributorJsonString: "[[{'viewOrder':1,'role':1,'contributor':1},{'viewOrder':2,'role':'2','contributor':2}]]",
+        noteJsonString: "[{'viewOrder':1,'note':'note1'},{'viewOrder':2,'note':'note2'}]",
+        subjectJsonString: "[{'viewOrder':1,'subject':'subject1'},{'viewOrder':2,'subject':'subject2'}]"
+      }
+
+
+      $scope.item = {
+        mfnNo: "123",
+        itemId: undefined,
+        copyNumber: 3,
+        accessionNumber: "1234",
+        accessionDate: "",
+        barcode: "1",
+        price: 1,
+        internalNote: "",
+        supplier: undefined,
+        status: 101101,
+        statusName: ""
+      }
+
+      $scope.bulk = {
+        config: {}
       }
 
       this.addNewRow("");
@@ -445,11 +500,32 @@ export interface IItem{
     private addNewItems() {
       this.$scope.data.multipleItemAdd = true;
       this.showHideItemsTable("hide");
-      this.$scope.newItemList = new Array<IItem>();
+      this.$scope.bulkItemList = new Array<IItem>();
       for (var i = 0; i < this.$scope.data.bulkAddCount; i++) {
         var item: IItem;
-        item = {id: 0, copyNo: ""};
-        this.$scope.newItemList.push(item);
+
+        item = {
+          mfnNo: "1",
+          itemId: "1",
+          copyNumber: 1,
+          accessionNumber: "",
+          accessionDate: "",
+          barcode: "",
+          price: 1,
+          internalNote: "",
+          supplier: {
+            "id": 1,
+            "name": "",
+            "address": "",
+            "contactPerson": "",
+            "contactNumber": ""
+          },
+          status: 1,
+          statusName: ""
+        };
+
+
+        this.$scope.bulkItemList.push(item);
       }
 
     }
@@ -497,20 +573,21 @@ export interface IItem{
 
       var action = $("button[type=button][clicked=true]").val();
 
-      console.log("this.$scope.record.mfnNo : "+this.$scope.record.mfnNo);
+      console.log("this.$scope.record.mfnNo : " + this.$scope.record.mfnNo);
       var url = "record";
-      var that=this;
+      var that = this;
 
       this.$scope.record.contributorJsonString = JSON.stringify(this.$scope.record.contributorList);
       this.$scope.record.noteJsonString = JSON.stringify(this.$scope.record.noteList);
       this.$scope.record.subjectJsonString = JSON.stringify(this.$scope.record.subjectList);
 
 
-      if(this.$scope.record.mfnNo != undefined) {
+      if (this.$scope.record.mfnNo != undefined) {
         console.log("This time i need a put request");
-        this.httpClient.put(url+'/'+this.$scope.record.mfnNo,this.$scope.record,'application/json')
+        this.httpClient.put(url + '/' + this.$scope.record.mfnNo, this.$scope.record, 'application/json')
             .success(() => {
               that.notify.success("Data Saved Updated");
+              // this.$scope.item.mfnNo= this.$scope.record.mfnNo;
             }).error((data) => {
         });
       }
@@ -519,91 +596,193 @@ export interface IItem{
           that.notify.success("Data Saved Successfully");
           var Id = that.getIdFromUrl(response.headers('Location'));
           that.$scope.record.mfnNo = Id;
+          that.$scope.item.mfnNo = Id;
         }, function errorCallback(response) {
           console.error(response);
         });
       }
-      if(action == "save_edit_items"){
+
+      console.log("action :" + action);
+
+      if (action == "save_edit_items") {
+        this.showAccessionUI();
 
       }
-      else if(action =="save_view"){
-        this.$scope.data.readOnlyMode=true;
+      else if (action == "save_view") {
+        this.$scope.data.readOnlyMode = true;
       }
     }
+
+    private saveItem(): void {
+      console.log("Inside saveItem()");
+      var url = "item";
+      var that = this;
+
+      if (this.$scope.item.itemId != undefined) {
+        console.log("This time i need a put request");
+        this.httpClient.put(url + '/' + this.$scope.item.itemId, this.$scope.item, 'application/json')
+            .success(() => {
+              that.notify.success("Data Saved Updated");
+
+            }).error((data) => {
+        });
+      }
+      else {
+        console.log(this.$scope.item);
+        this.httpClient.post(url, this.$scope.item, 'application/json').then(function successCallback(response) {
+          that.notify.success("Data Saved Successfully");
+          var Id = that.getIdFromUrl(response.headers('Location'));
+          alert(Id);
+
+          that.$scope.item.itemId = Id;
+        }, function errorCallback(response) {
+          console.error(response);
+        });
+      }
+    }
+
+    private saveBulkItems():void{
+      console.log("Inside saveBulkItems");
+      var complete_json = {};
+      complete_json["items"] = this.$scope.bulkItemList;
+      var url = "item/batch";
+      var that = this;
+      console.log(this.$scope.item);
+      this.httpClient.post(url, complete_json, 'application/json').then(function successCallback(response) {
+        that.notify.success("Data Saved Successfully");
+      }, function errorCallback(response) {
+        console.error(response);
+
+      });
+    }
+
+    private setBulkItemsValue(): void {
+      console.log(this.$scope.bulk.config);
+      var bulkItemList = this.$scope.bulkItemList;
+      var copyStartFrom: number = 0;
+      var incrementSegment;
+      for (var i: number = 0; i < bulkItemList.length; i++) {
+        var item: IItem = bulkItemList[i];
+
+        if (this.$scope.bulk.config.copyStartFrom != "") {
+          if (i == 0) {
+            copyStartFrom = this.$scope.bulk.config.copyStartFrom;
+          }
+          item.copyNumber = Number(copyStartFrom) + i;
+        }
+
+        if (this.$scope.bulk.config.internalNote != "") {
+          item.internalNote = this.$scope.bulk.config.internalNote;
+        }
+
+        item.status = this.$scope.bulk.config.status;
+
+        item.price = Number(this.$scope.bulk.config.price);
+        item.accessionDate = this.$scope.bulk.config.accessionDate;
+        item.barcode = this.$scope.bulk.config.barcode;
+
+        if(this.$scope.bulk.config.firstAccession != "" &&  this.$scope.bulk.config.incrementSegment != "") {
+          var firstAccession = this.$scope.bulk.config.firstAccession;
+           incrementSegment = this.$scope.bulk.config.incrementSegment;
+        }
+
+        var is = Number(incrementSegment)+i;
+        item.accessionNumber = firstAccession.replace(incrementSegment,is);
+
+
+      }
+
+
+      var data = $("#configSupplierName").select2("data");
+      var searchTerm = data.text;
+
+      $('#bulkItemContainer').find('.select2-input').each(function (index) {
+
+        var inputElement: any = $(this)[0];
+        var inputElementId = inputElement.id;
+
+        $("#bulkContributorName" + index).select2("search", searchTerm);
+        var e = jQuery.Event("keydown");
+        e.which = 13;
+        $("#" + inputElementId).trigger(e);
+
+      });
+
+    }
+
     private fillSampleData() {
-      this.$scope.data.readOnlyMode=false;
+      this.$scope.data.readOnlyMode = false;
       this.$scope.record.mfnNo = undefined;
-      this.$scope.record.language= 1;
-      this.$scope.record.status= 0;
-      this.$scope.record.bindingType= 1;
-      this.$scope.record.acqType= 1;
-      this.$scope.record.language= 1;
-      var offSet= (new Date).getMilliseconds();
-      this.$scope.record.title= "Material Title "+offSet;
-      this.$scope.record.subTitle= "Sub Title "+offSet;
+      this.$scope.record.language = 1;
+      this.$scope.record.status = 0;
+      this.$scope.record.bindingType = 1;
+      this.$scope.record.acqType = 1;
+      this.$scope.record.language = 1;
+      var offSet = (new Date).getMilliseconds();
+      this.$scope.record.title = "Material Title " + offSet;
+      this.$scope.record.subTitle = "Sub Title " + offSet;
 
-      if($("#gmd"))
-          this.$scope.record.gmd= "General Material Description "+offSet;
-      if($("#seriesTitle"))
-        this.$scope.record.seriesTitle= "Series "+offSet;
-      if($("#volumeNo"))
-        this.$scope.record.volumeNo= "Volume No "+offSet;
-      if($("#volumeTitle"))
-        this.$scope.record.volumeTitle= "Volume Title "+offSet;
-      if($("#serialIssueNo"))
-        this.$scope.record.serialIssueNo= "Serial Issue No "+offSet;
-      if($("#serialNumber"))
-        this.$scope.record.serialNumber= "Serial No "+offSet;
-      if($("#serialSpecial"))
-        this.$scope.record.serialSpecial= "Serial Special "+offSet;
-      if($("#libraryLacks"))
-        this.$scope.record.libraryLacks= "Library Lacks "+offSet;
-      if($("#changedTitle"))
-        this.$scope.record.changedTitle= "Changed Title "+offSet;
-      if($("#isbn"))
-        this.$scope.record.isbn= "ISBN "+offSet;
-      if($("#corpAuthorMain"))
-        this.$scope.record.corpAuthorMain= "Corporate Author Main "+offSet;
-      if($("#corpSubBody"))
-        this.$scope.record.corpSubBody= "Corporate Sub Body "+offSet;
-      if($("#corpCityCountry"))
-        this.$scope.record.corpCityCountry= "City, Country "+offSet;
-      if($("#edition"))
-        this.$scope.record.edition= "Edition "+offSet;
-      if($("#corpSubBody"))
-        this.$scope.record.translateTitleEdition= "Translate Title Edition "+offSet;
-      if($("#issn"))
-        this.$scope.record.issn= "ISSN "+offSet;
-      if($("#callNo"))
-        this.$scope.record.callNo= "Call No "+offSet;
-      if($("#classNo"))
-        this.$scope.record.classNo= "Class No "+offSet;
-      if($("#callDate"))
-        this.$scope.record.callDate= "11-11-2017";
-      if($("#authorMark"))
-        this.$scope.record.authorMark= "Author Mark "+offSet;
+      if ($("#gmd"))
+        this.$scope.record.gmd = "General Material Description " + offSet;
+      if ($("#seriesTitle"))
+        this.$scope.record.seriesTitle = "Series " + offSet;
+      if ($("#volumeNo"))
+        this.$scope.record.volumeNo = "Volume No " + offSet;
+      if ($("#volumeTitle"))
+        this.$scope.record.volumeTitle = "Volume Title " + offSet;
+      if ($("#serialIssueNo"))
+        this.$scope.record.serialIssueNo = "Serial Issue No " + offSet;
+      if ($("#serialNumber"))
+        this.$scope.record.serialNumber = "Serial No " + offSet;
+      if ($("#serialSpecial"))
+        this.$scope.record.serialSpecial = "Serial Special " + offSet;
+      if ($("#libraryLacks"))
+        this.$scope.record.libraryLacks = "Library Lacks " + offSet;
+      if ($("#changedTitle"))
+        this.$scope.record.changedTitle = "Changed Title " + offSet;
+      if ($("#isbn"))
+        this.$scope.record.isbn = "ISBN " + offSet;
+      if ($("#corpAuthorMain"))
+        this.$scope.record.corpAuthorMain = "Corporate Author Main " + offSet;
+      if ($("#corpSubBody"))
+        this.$scope.record.corpSubBody = "Corporate Sub Body " + offSet;
+      if ($("#corpCityCountry"))
+        this.$scope.record.corpCityCountry = "City, Country " + offSet;
+      if ($("#edition"))
+        this.$scope.record.edition = "Edition " + offSet;
+      if ($("#corpSubBody"))
+        this.$scope.record.translateTitleEdition = "Translate Title Edition " + offSet;
+      if ($("#issn"))
+        this.$scope.record.issn = "ISSN " + offSet;
+      if ($("#callNo"))
+        this.$scope.record.callNo = "Call No " + offSet;
+      if ($("#classNo"))
+        this.$scope.record.classNo = "Class No " + offSet;
+      if ($("#callDate"))
+        this.$scope.record.callDate = "11-11-2017";
+      if ($("#authorMark"))
+        this.$scope.record.authorMark = "Author Mark " + offSet;
 
-      this.$scope.record.imprint.placeOfPublication= "Publication Place "+offSet;
-      this.$scope.record.imprint.yearDateOfPublication= "Year of Publication "+offSet;
-      this.$scope.record.imprint.copyRightDate= "09-09-2016";
+      this.$scope.record.imprint.placeOfPublication = "Publication Place " + offSet;
+      this.$scope.record.imprint.yearDateOfPublication = "Year of Publication " + offSet;
+      this.$scope.record.imprint.copyRightDate = "09-09-2016";
 
-      this.$scope.record.physicalDescription.pagination= "Pagination "+offSet;
-      this.$scope.record.physicalDescription.illustrations= "Illustrations "+offSet;
-      this.$scope.record.physicalDescription.accompanyingMaterials= "Materials "+offSet;
-      this.$scope.record.physicalDescription.dimensions= "Dimensions "+offSet;
-      this.$scope.record.physicalDescription.paperQuality= "Paper Quality "+offSet;
+      this.$scope.record.physicalDescription.pagination = "Pagination " + offSet;
+      this.$scope.record.physicalDescription.illustrations = "Illustrations " + offSet;
+      this.$scope.record.physicalDescription.accompanyingMaterials = "Materials " + offSet;
+      this.$scope.record.physicalDescription.dimensions = "Dimensions " + offSet;
+      this.$scope.record.physicalDescription.paperQuality = "Paper Quality " + offSet;
 
     }
 
-    private getIdFromUrl(url:string):number{
-      var resourceUrl=url;
-      var startIndex=url.lastIndexOf('/')+1;
-      var lastIndex=resourceUrl.length;
-      return Number(url.substring(startIndex,lastIndex));
+    private getIdFromUrl(url: string): string {
+      var resourceUrl = url;
+      var startIndex = url.lastIndexOf('/') + 1;
+      var lastIndex = resourceUrl.length;
+      return url.substring(startIndex, lastIndex);
     }
-
 
   }
 
-  UMS.controller("RecordInfo",RecordInfo);
+  UMS.controller("RecordInfo", RecordInfo);
 }
