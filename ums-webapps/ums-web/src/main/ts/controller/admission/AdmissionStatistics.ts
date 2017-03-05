@@ -15,6 +15,7 @@ module ums{
     glStatistics:Array<IStatistics>;
     raStatistics:Array<IStatistics>;
     ffStatistics:Array<IStatistics>;
+    gceStatistics:Array<IStatistics>;
     columnSize:string;
 
     showGA:boolean;
@@ -62,7 +63,7 @@ module ums{
       $scope.programType = $scope.programTypes[0];
       $scope.glStatistics=[];
       $scope.raStatistics=[];
-      //$scope.gceStatistics=[];
+      $scope.gceStatistics=[];
       $scope.ffStatistics=[];
       $scope.fontSize=10;
       $scope.showGA = true;
@@ -176,13 +177,14 @@ module ums{
       console.log(this.$interval);
       this.$interval(()=>{
         this.getStatistics();
-      },1000);
+      },15000);
     }
 
     private getStatistics(){
       this.getGLStatistics();
       this.getFFStatistics();
       this.getRAStatistics();
+      this.getGCEStatistics();
     }
 
     private initializeQuota(){
@@ -190,6 +192,7 @@ module ums{
       this.$scope.quota.push("RA");
       this.$scope.quota.push("GL");
       this.$scope.quota.push("FF");
+      this.$scope.quota.push("GCE");
     }
 
     private getFFStatistics(){
@@ -234,6 +237,21 @@ module ums{
             glStatistics.push(data[i]);
           }else{
             glStatistics[i]=data[i];
+          }
+        }
+      });
+
+    }
+
+    private getGCEStatistics(){
+      var gceStatistics = this.$scope.gceStatistics;
+
+      this.admissionStudentService.fetchStatistics(this.$scope.semester.id, +this.$scope.programType.id,Utils.ENGLISH_MEDIUM, this.$scope.faculty.shortName).then((data)=>{
+        for(var i=0;i<data.length;i++){
+          if(!gceStatistics[i]){
+            gceStatistics.push(data[i]);
+          }else{
+            gceStatistics[i]=data[i];
           }
         }
       });
