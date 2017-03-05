@@ -72,7 +72,7 @@ var Authentication = (function () {
                     $(".loaderDiv").hide();
                     $("#btn_forgotPassword").show();
                 }
-                else if (response.responseType != "SUCCESS") {
+                else {
                     $("#errorDiv").show().html("<b>Sorry</b>, " + response.message);
                     $(".loaderDiv").hide();
                     $("#btn_forgotPassword").show();
@@ -113,7 +113,7 @@ var Authentication = (function () {
                 if (response.responseType == "SUCCESS") {
                     _this.authenticate(userId, newPassword);
                 }
-                else if (response.responseType != "SUCCESS") {
+                else {
                     $(".loaderDiv").hide();
                     $("#btn_change_password").show();
                     $("#errorDiv").show().html("<b>Sorry</b>, " + response.message);
