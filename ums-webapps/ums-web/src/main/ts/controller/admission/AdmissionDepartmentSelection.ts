@@ -301,7 +301,7 @@ module ums{
 
 
     private getSemesters():void{
-      this.semesterService.fetchSemesters(+this.$scope.programType.id,5).then((semesters:Array<Semester>)=>{
+      this.semesterService.fetchSemesters(+this.$scope.programType.id,5, Utils.SEMESTER_FETCH_WITH_NEWLY_CREATED).then((semesters:Array<Semester>)=>{
         this.$scope.semesters=semesters;
         for(var i=0;i<semesters.length;i++){
           if(semesters[i].status==2){
