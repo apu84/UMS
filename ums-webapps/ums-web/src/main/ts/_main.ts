@@ -109,6 +109,7 @@
 /// <reference path='service/EmployeeService.ts'/>
 /// <reference path='service/StudentService.ts'/>
 /// <reference path='service/TeacherService.ts'/>
+/// <reference path='service/AdmissionCertificateVerificationService.ts'/>
 
 /// <reference path='controller/student/NewStudent.ts'/>
 

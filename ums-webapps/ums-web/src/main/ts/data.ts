@@ -48,6 +48,8 @@
     '/composeMail': {title: 'MailBox - Compose Mail', 'breadcrumb': ['MailBox','Compose']},
     '/viewMail': {title: 'MailBox - View Mail', 'breadcrumb': ['MailBox','View']},
     '/uploadTaletalkData': {title: 'Upload Taletalk Data', 'breadcrumb': ['Admission Taletalk Student List']},
+    '/certificateVerification': {title: 'Certificate Verification', 'breadcrumb': ['Admission Certificate Verification']},
+    '/empInfo': {title: 'Employee Information', 'breadcrumb': ['Employee Information']},
     '/admissionTotalSeat': {title: 'Assign program-wise total seat', 'breadcrumb': ['Admission Total Seat Assignment']},
     '/admissionStudentId': {title: 'Admitted Student Id', 'breadcrumb': ['Admitted Student Information']}
   };

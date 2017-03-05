@@ -1,4 +1,3 @@
-
 <style>
     fieldset {
         border:1px solid grey;
@@ -19,7 +18,7 @@
 </style>
 <div class="row" >
     <div onclick="resetCommonCollapsibleDivs()" id="arrowDiv">
-        <i class="fa fa-angle-double-right fa-cx"></i></i>
+        <i class="fa fa-angle-double-right fa-cx"></i>
     </div>
     <div class="panel panel-green" id="leftDiv">
         <div class="panel-heading">
@@ -138,8 +137,8 @@
                                             <span>
                                                 <input
                                                         type="checkbox"
-                                                        ng-checked="isChecked(gLCertificates)"
-                                                        ng-click="toggleAll(gLCertificates)"
+                                                        data-ng-checked="isChecked(gLCertificates)"
+                                                        data-ng-click="toggleAll(gLCertificates)"
                                                         data-ng-show="disableCheckAllCheckbox==true"
                                                 >
                                             </span>
@@ -150,9 +149,9 @@
                                                 <input
                                                         type="checkbox"
                                                         value="{{gl}}"
-                                                        ng-checked="exists(gl)"
-                                                        ng-click="toggleSelection(gl)"
-                                                        ng-disabled="{{gl.disableChecked}}"
+                                                        data-ng-checked="exists(gl)"
+                                                        data-ng-click="toggleSelection(gl)"
+                                                        data-ng-disabled="{{gl.disableChecked}}"
                                                 >&nbsp; {{gl.name}} &nbsp;
                                                 <br />
                                             </span>
@@ -168,21 +167,21 @@
                                             <span>
                                                 <input
                                                         type="checkbox"
-                                                        ng-checked="isChecked(gCECertificates)"
-                                                        ng-click="toggleAll(gCECertificates)"
+                                                        data-ng-checked="isChecked(gCECertificates)"
+                                                        data-ng-click="toggleAll(gCECertificates)"
                                                         data-ng-show="disableCheckAllCheckbox==true"
                                                 >
                                             </span>
                                         </legend>
                                         <div>
-                                            <span ng-repeat="gce in gCECertificates">
+                                            <span data-ng-repeat="gce in gCECertificates">
 
                                                 <input
                                                         type="checkbox"
                                                         value="{{gce}}"
-                                                        ng-checked="exists(gce, 1)"
-                                                        ng-click="toggleSelection(gce)"
-                                                        ng-disabled="{{gce.disableChecked}}"
+                                                        data-ng-checked="exists(gce, 1)"
+                                                        data-ng-click="toggleSelection(gce)"
+                                                        data-ng-disabled="{{gce.disableChecked}}"
                                                 >&nbsp; {{gce.name}} &nbsp;
                                                 <br />
                                             </span>
@@ -198,21 +197,21 @@
                                             <span>
                                                 <input
                                                         type="checkbox"
-                                                        ng-checked="isChecked(nationalCertificates)"
-                                                        ng-click="toggleAll(nationalCertificates)"
+                                                        data-ng-checked="isChecked(nationalCertificates)"
+                                                        data-ng-click="toggleAll(nationalCertificates)"
                                                         data-ng-show="disableCheckAllCheckbox==true"
                                                 >
                                             </span>
                                         </legend>
                                         <div>
-                                            <span ng-repeat="n in nationalCertificates">
+                                            <span data-ng-repeat="n in nationalCertificates">
 
                                                 <input
                                                         type="checkbox"
                                                         value="{{n}}"
-                                                        ng-checked="exists(n, 1)"
-                                                        ng-click="toggleSelection(n)"
-                                                        ng-disabled="{{n.disableChecked}}"
+                                                        data-ng-checked="exists(n, 1)"
+                                                        data-ng-click="toggleSelection(n)"
+                                                        data-ng-disabled="{{n.disableChecked}}"
                                                 >&nbsp; {{n.name}} &nbsp;
                                                 <br />
                                             </span>
@@ -228,21 +227,21 @@
                                             <span>
                                                 <input
                                                         type="checkbox"
-                                                        ng-checked="isChecked(quotaCertificates)"
-                                                        ng-click="toggleAll(quotaCertificates)"
+                                                        data-ng-checked="isChecked(quotaCertificates)"
+                                                        data-ng-click="toggleAll(quotaCertificates)"
                                                         data-ng-show="disableCheckAllCheckbox==true"
                                                 >
                                             </span>
                                         </legend>
                                         <div>
-                                            <span ng-repeat="q in quotaCertificates">
+                                            <span data-ng-repeat="q in quotaCertificates">
 
                                                 <input
                                                         type="checkbox"
                                                         value="{{q}}"
-                                                        ng-checked="exists(q, 1)"
-                                                        ng-click="toggleSelection(q)"
-                                                        ng-disabled="{{q.disableChecked}}"
+                                                        data-ng-checked="exists(q, 1)"
+                                                        data-ng-click="toggleSelection(q)"
+                                                        data-ng-disabled="{{q.disableChecked}}"
                                                 >&nbsp; {{q.name}} &nbsp;
                                                 <br />
                                             </span>
@@ -255,7 +254,7 @@
                             <div class="col-md-10">
                                 <br />
                                 <label>Comment:</label><br />
-                                <textarea class="form-control" rows="3" data-ng-model="data.userComment" ng-disabled="disableCommentBox"></textarea>
+                                <textarea class="form-control" rows="3" data-ng-model="data.userComment" data-ng-disabled="disableCommentBox"></textarea>
                                 <span data-ng-repeat="comments in previousComments">
                                     <textarea class="form-control" rows="1" disabled>{{comments.comment}}     {{comments.commentedOn}}</textarea>
                                 </span>
@@ -267,15 +266,15 @@
                             <div class="col-md-3">
                                 <div class="input-icon right" >
                                     <i class="fa fa-calendar"></i>
-                                    <input  type="text" data-ng-model="data.deadLine" data-ng-change="UnderTakenDeadline(data.deadLine)" data-date-format="dd/mm/yyyy" placeholder="DD/MM/YYYY" class="datepicker-default form-control" autocomplete="off" ng-disabled="disableDateField"/>
+                                    <input  type="text" data-ng-model="data.deadLine" data-ng-change="UnderTakenDeadline(data.deadLine)" data-date-format="dd/mm/yyyy" placeholder="DD/MM/YYYY" class="datepicker-default form-control" autocomplete="off" data-ng-disabled="disableDateField"/>
                                 </div>
                             </div>
                             <div class="col-md-3" align="left">
-                                <button type="submit" class="btn btn-warning" data-ng-click="underTaken()" ng-disabled="disableUndertakenButton">Print Undertaken Form</button>
+                                <button type="submit" class="btn btn-warning" data-ng-click="underTaken()" data-ng-disabled="disableUndertakenButton">Print Undertaken Form</button>
                             </div>
                             <div class="col-md-6" align="right">
-                                <button type="submit" class="btn btn-danger" data-ng-click="rejected()" ng-disabled="disableRejectedButton">Rejected</button>
-                                <button type="submit" class="btn btn-success" data-ng-click="Approved()" ng-disabled="disableApprovedButton">Approved</button>
+                                <button type="submit" class="btn btn-danger" data-ng-click="rejected()" data-ng-disabled="disableRejectedButton">Rejected</button>
+                                <button type="submit" class="btn btn-success" data-ng-click="Approved()" data-ng-disabled="disableApprovedButton">Approved</button>
                             </div>
                         </div>
                     </div>

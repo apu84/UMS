@@ -1,237 +1,603 @@
 <div class="row">
     <div class="col-lg-12">
-        <div class="panel panel-pink">
-            <div class="panel-heading">Employee Information</div>
+        <div class="panel panel-white">
             <div class="panel-body pan">
-                <div class="page-content">
-                    <div id="form-layouts" class="row">
-                        <div class="col-lg-12"></div>
-                        <div class="col-lg-12">
-                            <ul class="nav ul-edit nav-tabs responsive">
-                                <li class="active"><a href="#personal" data-toggle="tab">Personal</a></li>
-                                <li><a href="#acadmic" data-toggle="tab">Academic</a></li>
-                                <li><a href="" data-toggle="tab">Publication</a></li>
-                                <li><a href="" data-toggle="tab">Training</a></li>
-                                <li><a href="" data-toggle="tab">Honor/Award</a></li>
-                            </ul>
-                            <form action="#" class="form-horizontal">
-                                <div id="personal">
-                                    <div class="form-body pal">
-                                        <h3>General</h3>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <ul class="nav ul-edit nav-tabs responsive">
+                            <li class="active"><a data-ng-click="changeNav(1)" data-toggle="tab">Personal</a></li>
+                            <li><a data-ng-click="changeNav(2)" data-toggle="tab">Academic</a></li>
+                            <li><a data-ng-click="changeNav(3)" data-toggle="tab">Publication</a></li>
+                            <li><a data-ng-click="changeNav(4)" data-toggle="tab">Training</a></li>
+                            <li><a data-ng-click="changeNav(5)" data-toggle="tab">Honor/Award</a></li>
+                            <li><a data-ng-click="changeNav(6)" data-toggle="tab">Experience</a></li>
+                        </ul>
+                        <form action="#">
+                            <div data-ng-show="personal">
+                                <div class="form-body pal">
+                                    <h3>General</h3>
 
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group"><label for="inputFirstName"
-                                                                               class="col-md-3 control-label">First
-                                                    Name <span class='require'>*</span></label>
-
-                                                    <div class="col-md-9"><input id="inputFirstName"
-                                                                                 type="text"
-                                                                                 placeholder="First Name"
-                                                                                 class="form-control"/>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group"><label for="inputLastName"
-                                                                               class="col-md-3 control-label">Last
-                                                    Name <span class='require'>*</span></label>
-
-                                                    <div class="col-md-9"><input id="inputLastName"
-                                                                                 type="text"
-                                                                                 placeholder="Last Name"
-                                                                                 class="form-control"/>
-                                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div>
+                                                <label class="col-md-3 control-label">First Name<span class='require'>*</span></label>
+                                                <div class="col-md-9"><input id="inputFirstName"
+                                                                             type="text"
+                                                                             placeholder="First Name"
+                                                                             class="form-control"/>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group"><label for="inputFather'sName"
-                                                                               class="col-md-3 control-label">Father's
-                                                    Name <span class='require'>*</span></label>
-
-                                                    <div class="col-md-9"><input id="inputFather'sName"
-                                                                                 type="text"
-                                                                                 placeholder="Father's Name"
-                                                                                 class="form-control"/>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group"><label for="inputMother'sName"
-                                                                               class="col-md-3 control-label">Mother's
-                                                    Name <span class='require'>*</span></label>
-
-                                                    <div class="col-md-9"><input id="inputMother'sName"
-                                                                                 type="text"
-                                                                                 placeholder="Mother's Name"
-                                                                                 class="form-control"/>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group"><label for="selGender"
-                                                                               class="col-md-3 control-label">Gender
-                                                    <span class='require'>*</span></label>
-
-                                                    <div class="col-md-9"><select id="selGender"
-                                                                                  class="form-control">
-                                                        <option value="">Male</option>
-                                                        <option value="">Female</option>
-                                                    </select></div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group"><label for="inputBirthday"
-                                                                               class="col-md-3 control-label">Birthday <span class='require'>*</span></label>
-
-                                                    <div class="col-md-9"><input id="inputBirthday"
-                                                                                 type="text"
-                                                                                 placeholder="dd/mm/yyyy"
-                                                                                 class="form-control"/>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group"><label for="MaritalStatus"
-                                                                               class="col-md-3 control-label">Marital Status <span class='require'>*</span></label>
-
-                                                    <div class="col-md-9"><select id="MaritalStatus"
-                                                                                  class="form-control">
-                                                        <option value="">Single</option>
-                                                        <option value="">Married</option>
-                                                        <option value="">Divorced</option>
-                                                        <option value="">Widowed</option>
-                                                    </select></div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group"><label for="inputSpouse'sName"
-                                                                               class="col-md-3 control-label">Spouse's Name</label>
-
-                                                    <div class="col-md-9"><input id="inputSpouse'sName"
-                                                                                 type="text"
-                                                                                 placeholder="Spouse's Name"
-                                                                                 class="form-control"/>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group"><label for="inputSpouse'sName"
-                                                                               class="col-md-3 control-label">National Id Card No.<span class="require">*</span></label>
-
-                                                    <div class="col-md-9"><input id="inputNationalIdNo"
-                                                                                 type="text"
-                                                                                 placeholder="National Id Card Number"
-                                                                                 class="form-control"/>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-
-                                            </div>
-                                        </div>
-
-
-                                        <h3>Contact</h3>
-
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group"><label
-                                                        class="col-md-3 control-label">Email
-                                                    <span class='require'>*</span></label>
-
-                                                    <div class="col-md-9">
-                                                        <div class="input-icon"><i
-                                                                class="fa fa-envelope"></i><input
-                                                                type="text" placeholder="Email Address"
-                                                                class="form-control"/></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group"><label for="inputPhone"
-                                                                               class="col-md-3 control-label">Phone <span class='require'>*</span></label></label>
-
-                                                    <div class="col-md-9"><input id="inputPhone"
-                                                                                 type="text"
-                                                                                 placeholder="Phone"
-                                                                                 class="form-control"/>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group"><label for="inputPresentAddress"
-                                                                               class="col-md-3 control-label">Present Address
-                                                    <span class='require'>*</span></label>
-
-                                                    <div class="col-md-9"><input id="inputPresentAddress"
-                                                                                 type="text"
-                                                                                 placeholder="Present Address"
-                                                                                 class="form-control"/>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group"><label for="inputPermanentAddress"
-                                                                               class="col-md-3 control-label">Permanent Address<span class='require'>*</span></label>
-
-                                                    <div class="col-md-9"><input id="inputPermanentAddress"
-                                                                                 type="text"
-                                                                                 placeholder="Permanent Address"
-                                                                                 class="form-control"/>
-                                                    </div>
+                                        <div class="col-md-6">
+                                            <div>
+                                                <label class="col-md-3 control-label">Last Name<span class='require'>*</span></label>
+                                                <div class="col-md-9"><input id="inputLastName"
+                                                                             type="text"
+                                                                             placeholder="Last Name"
+                                                                             class="form-control"/>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-
-
-                                <div id="academic">
-                                    <div class="form-body pal">
-                                        <h3>General</h3>
-
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group"><label for="inputDegreeName"
-                                                                               class="col-md-3 control-label">Degree Name<span class='require'>*</span></label>
-
-                                                    <div class="col-md-9"><input id="inputDegreeName"
-                                                                                 type="text"
-                                                                                 placeholder="First Name"
-                                                                                 class="form-control"/>
-                                                    </div>
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div>
+                                                <label class="col-md-3 control-label">Father's Name<span class='require'>*</span></label>
+                                                <div class="col-md-9"><input id="inputFather'sName"
+                                                                             type="text"
+                                                                             placeholder="Father's Name"
+                                                                             class="form-control"/>
                                                 </div>
                                             </div>
-                                            <div class="col-md-6">
-
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div>
+                                                <label class="col-md-3 control-label">Mother's Name<span class='require'>*</span></label>
+                                                <div class="col-md-9"><input id="inputMother'sName"
+                                                                             type="text"
+                                                                             placeholder="Mother's Name"
+                                                                             class="form-control"/>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div>
+                                                <label class="col-md-3 control-label">Gender<span class='require'>*</span></label>
+
+                                                <div class="col-md-9"><select id="selGender"
+                                                                              class="form-control">
+                                                    <option value="">Male</option>
+                                                    <option value="">Female</option>
+                                                </select></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div>
+                                                <label class="col-md-3 control-label">Birthday<span class='require'>*</span></label>
+                                                <div class="col-md-9"><input id="inputBirthday"
+                                                                             type="text"
+                                                                             placeholder="dd/mm/yyyy"
+                                                                             class="form-control"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div>
+                                                <label class="col-md-3 control-label">Marital Status<span class='require'>*</span></label>
+
+                                                <div class="col-md-9"><select id="MaritalStatus"
+                                                                              class="form-control">
+                                                    <option value="">Single</option>
+                                                    <option value="">Married</option>
+                                                    <option value="">Divorced</option>
+                                                    <option value="">Widowed</option>
+                                                </select></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div>
+                                                <label class="col-md-3 control-label">Spouse's Name</label>
+
+                                                <div class="col-md-9"><input id="inputSpouse'sName"
+                                                                             type="text"
+                                                                             placeholder="Spouse's Name"
+                                                                             class="form-control"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div>
+                                                <label class="col-md-3 control-label">National Id Card No.<span class="require">*</span></label>
+
+                                                <div class="col-md-9"><input id="inputNationalIdNo"
+                                                                             type="text"
+                                                                             placeholder="National Id Card Number"
+                                                                             class="form-control"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6"></div>
+                                    </div>
+                                    <br />
 
 
-                                <div class="form-actions text-right pal">
-                                    <button type="submit" class="btn btn-primary">Submit</button>
-                                    &nbsp;
-                                    <button type="button" class="btn btn-green">Cancel</button>
+                                    <h3>Contact</h3>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div>
+                                                <label class="col-md-3 control-label">Email<span class='require'>*</span></label>
+                                                <div class="col-md-9">
+                                                    <div class="input-icon"><i
+                                                            class="fa fa-envelope"></i><input
+                                                            type="text" placeholder="Email Address"
+                                                            class="form-control"/></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div>
+                                                <label class="col-md-3 control-label">Phone<span class='require'>*</span></label>
+
+                                                <div class="col-md-9"><input id="inputPhone"
+                                                                             type="text"
+                                                                             placeholder="Phone"
+                                                                             class="form-control"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div><label class="col-md-3 control-label">Present Address<span class='require'>*</span></label>
+
+                                                <div class="col-md-9"><input id="inputPresentAddress"
+                                                                             type="text"
+                                                                             placeholder="Present Address"
+                                                                             class="form-control"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div>
+                                                <label class="col-md-3 control-label">Permanent Address<span class='require'>*</span></label>
+
+                                                <div class="col-md-9"><input id="inputPermanentAddress"
+                                                                             type="text"
+                                                                             placeholder="Permanent Address"
+                                                                             class="form-control"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br />
                                 </div>
-                            </form>
                             </div>
+
+
+
+
+
+                            <div data-ng-show="academic">
+                                <div class="form-body pal">
+                                    <h3>Academic</h3>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div>
+                                                <label class="col-md-3 control-label">SSC Institution<span class='require'>*</span></label>
+                                                <div class="col-md-9"><input id="inputSSCInstitution"
+                                                                             type="text"
+                                                                             placeholder="Institution"
+                                                                             class="form-control"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div>
+                                                <label class="col-md-3 control-label">SSC GPA/Division<span class='require'>*</span></label>
+                                                <div class="col-md-9"><input id="inputSSCGPA"
+                                                                             type="text"
+                                                                             placeholder="GPA/Division"
+                                                                             class="form-control"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div>
+                                                <label class="col-md-3 control-label">SSC Passing year<span class='require'>*</span></label>
+                                                <div class="col-md-9"><input id="inputSSCPassingYear"
+                                                                             type="text"
+                                                                             placeholder="Year"
+                                                                             class="form-control"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                        </div>
+                                    </div>
+                                    <br /><br />
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div>
+                                                <label class="col-md-3 control-label">HSC Institution<span class='require'>*</span></label>
+                                                <div class="col-md-9"><input id="inputHSCInstitution"
+                                                                             type="text"
+                                                                             placeholder="Institution"
+                                                                             class="form-control"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div>
+                                                <label class="col-md-3 control-label">HSC GPA/Division<span class='require'>*</span></label>
+                                                <div class="col-md-9"><input id="inputHSCGPA"
+                                                                             type="text"
+                                                                             placeholder="GPA/Division"
+                                                                             class="form-control"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div>
+                                                <label class="col-md-3 control-label">HSC Passing year<span class='require'>*</span></label>
+                                                <div class="col-md-9"><input id="inputHSCPassingYear"
+                                                                             type="text"
+                                                                             placeholder="Year"
+                                                                             class="form-control"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                        </div>
+                                    </div>
+                                    <br /><br />
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div>
+                                                <label class="col-md-3 control-label">Bachelor Institution<span class='require'>*</span></label>
+                                                <div class="col-md-9"><input id="inputBachelorInstitution"
+                                                                             type="text"
+                                                                             placeholder="Institution"
+                                                                             class="form-control"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div>
+                                                <label class="col-md-3 control-label">Bachelor GPA/Division<span class='require'>*</span></label>
+                                                <div class="col-md-9"><input id="inputBachelorGPA"
+                                                                             type="text"
+                                                                             placeholder="GPA/Division"
+                                                                             class="form-control"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div>
+                                                <label class="col-md-3 control-label">Bachelor Passing year<span class='require'>*</span></label>
+                                                <div class="col-md-9"><input id="inputBachelorPassingYear"
+                                                                             type="text"
+                                                                             placeholder="Year"
+                                                                             class="form-control"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                        </div>
+                                    </div>
+                                    <br /><br />
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div>
+                                                <label class="col-md-3 control-label">Master's Institution<span class='require'>*</span></label>
+                                                <div class="col-md-9"><input id="inputMastersInstitution"
+                                                                             type="text"
+                                                                             placeholder="Institution"
+                                                                             class="form-control"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div>
+                                                <label class="col-md-3 control-label">Master's GPA/Division<span class='require'>*</span></label>
+                                                <div class="col-md-9"><input id="inputMastersGPA"
+                                                                             type="text"
+                                                                             placeholder="GPA/Division"
+                                                                             class="form-control"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div>
+                                                <label class="col-md-3 control-label">Master's Passing year<span class='require'>*</span></label>
+                                                <div class="col-md-9"><input id="inputMastersPassingYear"
+                                                                             type="text"
+                                                                             placeholder="Year"
+                                                                             class="form-control"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                        </div>
+                                    </div>
+                                    <br /><br />
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div>
+                                                <label class="col-md-3 control-label">Ph.D Institution<span class='require'>*</span></label>
+                                                <div class="col-md-9"><input id="inputPhDInstitution"
+                                                                             type="text"
+                                                                             placeholder="Institution"
+                                                                             class="form-control"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div>
+                                                <label class="col-md-3 control-label">Ph.D Specializtion<span class='require'>*</span></label>
+                                                <div class="col-md-9"><input id="inputPhDSpecializtion"
+                                                                             type="text"
+                                                                             placeholder="GPA/Division"
+                                                                             class="form-control"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br />
+
+                                </div>
+                            </div>
+
+
+
+
+
+
+
+                            <div data-ng-show="publication">
+                                <div class="form-body pal">
+                                    <h3>Publication</h3>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div>
+                                                <label class="col-md-3 control-label">Publication Title<span class='require'>*</span></label>
+                                                <div class="col-md-9"><input id="inputPublicationTitle"
+                                                                             type="text"
+                                                                             placeholder="Publication Title"
+                                                                             class="form-control"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div>
+                                                <label class="col-md-3 control-label">Publication Type<span class='require'>*</span></label>
+                                                <div class="col-md-9"><input id="inputPublicationType"
+                                                                             type="text"
+                                                                             placeholder="Publication Type"
+                                                                             class="form-control"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br />
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div>
+                                                <label class="col-md-3 control-label">Publication Year<span class='require'>*</span></label>
+                                                <div class="col-md-9"><input id="inputPublicationYear"
+                                                                             type="text"
+                                                                             placeholder="Publication Year"
+                                                                             class="form-control"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div>
+                                                <label class="col-md-3 control-label">Publication Place<span class='require'>*</span></label>
+                                                <div class="col-md-9"><input id="inputPublicationPlace"
+                                                                             type="text"
+                                                                             placeholder="Publication Place"
+                                                                             class="form-control"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br />
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div>
+                                                <label class="col-md-3 control-label">Web Reference<span class='require'>*</span></label>
+                                                <div class="col-md-9"><input id="inputWebReference"
+                                                                             type="text"
+                                                                             placeholder="Web Reference"
+                                                                             class="form-control"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br />
+
+                                </div>
+                            </div>
+
+
+
+
+
+
+
+                            <div data-ng-show="training">
+                                <div class="form-body pal">
+                                    <h3>Training</h3>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div>
+                                                <label class="col-md-3 control-label">Training Name<span class='require'>*</span></label>
+                                                <div class="col-md-9"><input id="inputTrainingName"
+                                                                             type="text"
+                                                                             placeholder="Training Name"
+                                                                             class="form-control"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div>
+                                                <label class="col-md-3 control-label">Training Institution<span class='require'>*</span></label>
+                                                <div class="col-md-9"><input id="inputTrainingInstitution"
+                                                                             type="text"
+                                                                             placeholder="Training Institution"
+                                                                             class="form-control"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br />
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div>
+                                                <label class="col-md-3 control-label">Training Start Date<span class='require'>*</span></label>
+                                                <div class="col-md-9"><input id="inputTrainingStartDate"
+                                                                             type="text"
+                                                                             placeholder="Training Start Date"
+                                                                             class="form-control"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div>
+                                                <label class="col-md-3 control-label">Training End Date<span class='require'>*</span></label>
+                                                <div class="col-md-9"><input id="inputTrainingEndDate"
+                                                                             type="text"
+                                                                             placeholder="Training End Date"
+                                                                             class="form-control"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br />
+                                </div>
+                            </div>
+
+
+
+
+
+
+
+                            <div data-ng-show="award">
+                                <div class="form-body pal">
+                                    <h3>Honor/Award</h3>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div>
+                                                <label class="col-md-3 control-label">Award/Honor Name<span class='require'>*</span></label>
+                                                <div class="col-md-9"><input id="inputAwardName"
+                                                                             type="text"
+                                                                             placeholder="Award/Honor Name"
+                                                                             class="form-control"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div>
+                                                <label class="col-md-3 control-label">Purpose Of The Award<span class='require'>*</span></label>
+                                                <div class="col-md-9"><input id="inputPurpose"
+                                                                             type="text"
+                                                                             placeholder="Purpose Of The Award"
+                                                                             class="form-control"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br />
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div>
+                                                <label class="col-md-3 control-label">Year Of Recognition<span class='require'>*</span></label>
+                                                <div class="col-md-9"><input id="inputYearOfRecognition"
+                                                                             type="text"
+                                                                             placeholder="Short Description"
+                                                                             class="form-control"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div>
+                                                <label class="col-md-3 control-label">Short Description<span class='require'>*</span></label>
+                                                <div class="col-md-9"><input id="inputDescription"
+                                                                             type="text"
+                                                                             placeholder="Short Description"
+                                                                             class="form-control"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br />
+                                </div>
+                            </div>
+
+
+
+
+
+
+
+                            <div data-ng-show="experience">
+                                <div class="form-body pal">
+                                    <h3>Experience</h3>
+
+                                    <fieldset>
+
+                                    </fieldset>
+
+                                </div>
+                            </div>
+
+
+
+                        </form>
+                        <div class="form-actions text-right pal">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                            &nbsp;
+                            <button type="button" class="btn btn-green">Cancel</button>
+                        </div>
                     </div>
                 </div>
-                </form>
             </div>
         </div>
     </div>
