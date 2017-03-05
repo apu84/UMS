@@ -71,6 +71,10 @@ public class LoginService {
     else {
       user = mUserManager.get(pUserId);
     }
+    if(user == null) {
+      return new GenericMessageResponse(GenericResponse.ResponseType.ERROR,
+          mMessageResource.getMessage("Invalid User ID or Email Address."));
+    }
 
     if(user.getPasswordTokenGenerateDateTime() != null) {
       tokenInvalidDate =
@@ -90,8 +94,9 @@ public class LoginService {
     }
 
     if(user.getPasswordTokenGenerateDateTime() != null && tokenEmailInvalidDate != null
-        && tokenEmailInvalidDate.before(now)) {
-      mLogger.info("Token already email. please try again after 5 minutes");
+        && now.before(tokenEmailInvalidDate)) {
+      return new GenericMessageResponse(GenericResponse.ResponseType.INFO,
+          mMessageResource.getMessage("token.already.send"));
     }
     else {
       mLogger.info("Send an password token email again.");

@@ -66,8 +66,7 @@ public class EmailService {
 
           ResetPasswordEmailDto others = new ResetPasswordEmailDto();
           others.setUmsRootUrl("http://172.16.25.254/ums-web/login");
-          others
-              .setUmsForgotPasswordUrl("http://172.16.25.254/ums-web/login/?forgot-password.ums");
+          others.setUmsForgotPasswordUrl("http://172.16.25.254/ums-web/login/?forgot-password.ums");
           String abc =
               "http://172.16.25.254/ums-web/login/reset-password.html?pr_token=$$TOKEN$$&uid=$$USER_ID$$";
           abc = abc.replace("$$TOKEN$$", user.getPasswordResetToken());

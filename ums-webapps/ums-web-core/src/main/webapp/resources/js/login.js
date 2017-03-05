@@ -72,7 +72,7 @@ var Authentication = (function () {
                     $(".loaderDiv").hide();
                     $("#btn_forgotPassword").show();
                 }
-                else if (response.responseType == "ERROR") {
+                else if (response.responseType != "ERROR") {
                     $("#errorDiv").show().html("<b>Sorry</b>, " + response.message);
                     $(".loaderDiv").hide();
                     $("#btn_forgotPassword").show();
