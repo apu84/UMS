@@ -21,7 +21,7 @@
                                         <div class="col-md-6">
                                             <div>
                                                 <label class="col-md-3 control-label">First Name<span class='require'>*</span></label>
-                                                <div class="col-md-9"><input id="inputFirstName"
+                                                <div class="col-md-9"><input data-ng-model="firstName"
                                                                              type="text"
                                                                              placeholder="First Name"
                                                                              class="form-control"/>
@@ -31,7 +31,7 @@
                                         <div class="col-md-6">
                                             <div>
                                                 <label class="col-md-3 control-label">Last Name<span class='require'>*</span></label>
-                                                <div class="col-md-9"><input id="inputLastName"
+                                                <div class="col-md-9"><input data-ng-model="lastName"
                                                                              type="text"
                                                                              placeholder="Last Name"
                                                                              class="form-control"/>
@@ -44,7 +44,7 @@
                                         <div class="col-md-6">
                                             <div>
                                                 <label class="col-md-3 control-label">Father's Name<span class='require'>*</span></label>
-                                                <div class="col-md-9"><input id="inputFather'sName"
+                                                <div class="col-md-9"><input data-ng-model="fatherName"
                                                                              type="text"
                                                                              placeholder="Father's Name"
                                                                              class="form-control"/>
@@ -54,7 +54,7 @@
                                         <div class="col-md-6">
                                             <div>
                                                 <label class="col-md-3 control-label">Mother's Name<span class='require'>*</span></label>
-                                                <div class="col-md-9"><input id="inputMother'sName"
+                                                <div class="col-md-9"><input data-ng-model="motherName"
                                                                              type="text"
                                                                              placeholder="Mother's Name"
                                                                              class="form-control"/>
@@ -68,17 +68,18 @@
                                             <div>
                                                 <label class="col-md-3 control-label">Gender<span class='require'>*</span></label>
 
-                                                <div class="col-md-9"><select id="selGender"
+                                                <div class="col-md-9"><select data-ng-model="gender"
                                                                               class="form-control">
-                                                    <option value="">Male</option>
-                                                    <option value="">Female</option>
+                                                    <option value="" disabled>Select Gender</option>
+                                                    <option value="male">Male</option>
+                                                    <option value="female">Female</option>
                                                 </select></div>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div>
                                                 <label class="col-md-3 control-label">Birthday<span class='require'>*</span></label>
-                                                <div class="col-md-9"><input id="inputBirthday"
+                                                <div class="col-md-9"><input data-ng-model="birthday"
                                                                              type="text"
                                                                              placeholder="dd/mm/yyyy"
                                                                              class="form-control"/>
@@ -92,12 +93,13 @@
                                             <div>
                                                 <label class="col-md-3 control-label">Marital Status<span class='require'>*</span></label>
 
-                                                <div class="col-md-9"><select id="MaritalStatus"
+                                                <div class="col-md-9"><select data-ng-model="maritalStatus"
                                                                               class="form-control">
-                                                    <option value="">Single</option>
-                                                    <option value="">Married</option>
-                                                    <option value="">Divorced</option>
-                                                    <option value="">Widowed</option>
+                                                    <option value="" disabled>Select Marital Status</option>
+                                                    <option value="single">Single</option>
+                                                    <option value="married">Married</option>
+                                                    <option value="divorced">Divorced</option>
+                                                    <option value="widowed">Widowed</option>
                                                 </select></div>
                                             </div>
                                         </div>
@@ -105,7 +107,7 @@
                                             <div>
                                                 <label class="col-md-3 control-label">Spouse's Name</label>
 
-                                                <div class="col-md-9"><input id="inputSpouse'sName"
+                                                <div class="col-md-9"><input data-ng-model="spouseName"
                                                                              type="text"
                                                                              placeholder="Spouse's Name"
                                                                              class="form-control"/>
@@ -119,7 +121,7 @@
                                             <div>
                                                 <label class="col-md-3 control-label">National Id Card No.<span class="require">*</span></label>
 
-                                                <div class="col-md-9"><input id="inputNationalIdNo"
+                                                <div class="col-md-9"><input data-ng-model="nationalIdNo"
                                                                              type="text"
                                                                              placeholder="National Id Card Number"
                                                                              class="form-control"/>
@@ -138,10 +140,12 @@
                                             <div>
                                                 <label class="col-md-3 control-label">Email<span class='require'>*</span></label>
                                                 <div class="col-md-9">
-                                                    <div class="input-icon"><i
-                                                            class="fa fa-envelope"></i><input
-                                                            type="text" placeholder="Email Address"
-                                                            class="form-control"/></div>
+                                                    <div class="input-icon">
+                                                        <i class="fa fa-envelope"></i>
+                                                        <input data-ng-model="email"
+                                                               type="text"
+                                                               placeholder="Email Address"
+                                                               class="form-control"/></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -149,7 +153,7 @@
                                             <div>
                                                 <label class="col-md-3 control-label">Phone<span class='require'>*</span></label>
 
-                                                <div class="col-md-9"><input id="inputPhone"
+                                                <div class="col-md-9"><input data-ng-model="phone"
                                                                              type="text"
                                                                              placeholder="Phone"
                                                                              class="form-control"/>
@@ -162,7 +166,7 @@
                                         <div class="col-md-6">
                                             <div><label class="col-md-3 control-label">Present Address<span class='require'>*</span></label>
 
-                                                <div class="col-md-9"><input id="inputPresentAddress"
+                                                <div class="col-md-9"><input data-ng-model="presentAddress"
                                                                              type="text"
                                                                              placeholder="Present Address"
                                                                              class="form-control"/>
@@ -173,7 +177,7 @@
                                             <div>
                                                 <label class="col-md-3 control-label">Permanent Address<span class='require'>*</span></label>
 
-                                                <div class="col-md-9"><input id="inputPermanentAddress"
+                                                <div class="col-md-9"><input data-ng-model="permanentAddress"
                                                                              type="text"
                                                                              placeholder="Permanent Address"
                                                                              class="form-control"/>
@@ -209,106 +213,111 @@
 
                                         <div class="row">
                                             <div class="col-md-2">
-                                                <select class="form-control">
-                                                    <option value="" selected>SSC</option>
-                                                    <option value="">HSC</option>
-                                                    <option value="">Bachelor</option>
-                                                    <option value="">Master's</option>
-                                                    <option value="">Ph.D</option>>
+                                                <select class="form-control" data-ng-model="sscSelected">
+                                                    <option value="" disabled>Select Degree</option>
+                                                    <option value="ssc" selected>SSC</option>
+                                                    <option value="hsc">HSC</option>
+                                                    <option value="bachelor">Bachelor</option>
+                                                    <option value="masters">Master's</option>
+                                                    <option value="phd">Ph.D</option>>
                                                 </select>
                                             </div>
                                             <div class="col-md-6">
-                                                <input type="text" class="form-control" placeholder="Institution">
+                                                <input type="text" data-ng-model="sscInstitution" class="form-control" placeholder="Institution">
                                             </div>
                                             <div class="col-md-2">
-                                                <input type="text" class="form-control" placeholder="Cgpa/Gpa/Division">
+                                                <input type="text" data-ng-model="sscGPA" class="form-control" placeholder="Cgpa/Gpa/Division">
                                             </div>
                                             <div class="col-md-2">
-                                                <input type="text" class="form-control" placeholder="Passing Year">
+                                                <input type="text" data-ng-model="sscPassingYear" class="form-control" placeholder="Passing Year">
                                             </div>
                                         </div>
                                         <br />
                                         <div class="row">
                                             <div class="col-md-2">
-                                                <select class="form-control">
-                                                    <option value="">SSC</option>
-                                                    <option value="" selected>HSC</option>
-                                                    <option value="">Bachelor</option>
-                                                    <option value="">Master's</option>
-                                                    <option value="">Ph.D</option>>
+                                                <select class="form-control" data-ng-model="hscSelected">
+                                                    <option value="" disabled>Select Degree</option>
+                                                    <option value="ssc">SSC</option>
+                                                    <option value="hsc" selected>HSC</option>
+                                                    <option value="bachelor">Bachelor</option>
+                                                    <option value="masters">Master's</option>
+                                                    <option value="phd">Ph.D</option>>
                                                 </select>
                                             </div>
                                             <div class="col-md-6">
-                                                <input type="text" class="form-control" placeholder="Institution">
+                                                <input type="text" data-ng-model="hscInstitution" class="form-control" placeholder="Institution">
                                             </div>
                                             <div class="col-md-2">
-                                                <input type="text" class="form-control" placeholder="Cgpa/Gpa/Division">
+                                                <input type="text" data-ng-model="hscGPA" class="form-control" placeholder="Cgpa/Gpa/Division">
                                             </div>
                                             <div class="col-md-2">
-                                                <input type="text" class="form-control" placeholder="Passing Year">
+                                                <input type="text" data-ng-model="hscPassingYear"  class="form-control" placeholder="Passing Year">
                                             </div>
                                         </div>
                                         <br />
                                         <div class="row">
                                             <div class="col-md-2">
-                                                <select class="form-control">
-                                                    <option value="">SSC</option>
-                                                    <option value="">HSC</option>
-                                                    <option value="" selected>Bachelor</option>
-                                                    <option value="">Master's</option>
-                                                    <option value="">Ph.D</option>>
+                                                <select class="form-control" data-ng-model="bachelorSelected">
+                                                    <option value="" disabled>Select Degree</option>
+                                                    <option value="ssc">SSC</option>
+                                                    <option value="hsc">HSC</option>
+                                                    <option value="bachelor" selected>Bachelor</option>
+                                                    <option value="masters">Master's</option>
+                                                    <option value="phd">Ph.D</option>>
                                                 </select>
                                             </div>
                                             <div class="col-md-6">
-                                                <input type="text" class="form-control" placeholder="Institution">
+                                                <input type="text" data-ng-model="bachelorInstitution" class="form-control" placeholder="Institution">
                                             </div>
                                             <div class="col-md-2">
-                                                <input type="text" class="form-control" placeholder="Cgpa/Gpa/Division">
+                                                <input type="text" data-ng-model="bachelorCGPA" class="form-control" placeholder="Cgpa/Gpa/Division">
                                             </div>
                                             <div class="col-md-2">
-                                                <input type="text" class="form-control" placeholder="Passing Year">
+                                                <input type="text" data-ng-model="bachelorPassingYear" class="form-control" placeholder="Passing Year">
                                             </div>
                                         </div>
                                         <br />
                                         <div class="row">
                                             <div class="col-md-2">
-                                                <select class="form-control">
-                                                    <option value="">SSC</option>
-                                                    <option value="">HSC</option>
-                                                    <option value="">Bachelor</option>
-                                                    <option value="" selected>Master's</option>
-                                                    <option value="">Ph.D</option>>
+                                                <select class="form-control" data-ng-model="mastersSelected">
+                                                    <option value="" disabled>Select Degree</option>
+                                                    <option value="ssc">SSC</option>
+                                                    <option value="hsc">HSC</option>
+                                                    <option value="bachelor">Bachelor</option>
+                                                    <option value="masters" selected>Master's</option>
+                                                    <option value="phd">Ph.D</option>>
                                                 </select>
                                             </div>
                                             <div class="col-md-6">
-                                                <input type="text" class="form-control" placeholder="Institution">
+                                                <input type="text" data-ng-model="mastersInstitution" class="form-control" placeholder="Institution">
                                             </div>
                                             <div class="col-md-2">
-                                                <input type="text" class="form-control" placeholder="Cgpa/Gpa/Division">
+                                                <input type="text" data-ng-model="mastersCGPA" class="form-control" placeholder="Cgpa/Gpa/Division">
                                             </div>
                                             <div class="col-md-2">
-                                                <input type="text" class="form-control" placeholder="Passing Year">
+                                                <input type="text" data-ng-model="mastersPassingYear" class="form-control" placeholder="Passing Year">
                                             </div>
                                         </div>
                                         <br />
                                         <div class="row">
                                             <div class="col-md-2">
-                                                <select class="form-control">
-                                                    <option value="">SSC</option>
-                                                    <option value="">HSC</option>
-                                                    <option value="">Bachelor</option>
-                                                    <option value="">Master's</option>
-                                                    <option value="" selected>Ph.D</option>
+                                                <select class="form-control" data-ng-model="phdSelected">
+                                                    <option value="" disabled>Select Degree</option>
+                                                    <option value="ssc">SSC</option>
+                                                    <option value="hsc">HSC</option>
+                                                    <option value="bachelor">Bachelor</option>
+                                                    <option value="masters">Master's</option>
+                                                    <option value="phd" selected>Ph.D</option>
                                                 </select>
                                             </div>
                                             <div class="col-md-6">
-                                                <input type="text" class="form-control" placeholder="Institution">
+                                                <input type="text" data-ng-model="phdInstitution" class="form-control" placeholder="Institution">
                                             </div>
                                             <div class="col-md-2">
-                                                <input type="text" class="form-control" placeholder="Cgpa/Gpa/Division">
+                                                <input type="text" data-ng-model="phdCGPA" class="form-control" placeholder="Cgpa/Gpa/Division">
                                             </div>
                                             <div class="col-md-2">
-                                                <input type="text" class="form-control" placeholder="Passing Year">
+                                                <input type="text" data-ng-model="phdPassingYear" class="form-control" placeholder="Passing Year">
                                             </div>
                                         </div>
                                         <br/>
@@ -335,7 +344,7 @@
                                             <div class="col-md-6">
                                                 <div>
                                                     <label class="col-md-3 control-label">Publication Title<span class='require'>*</span></label>
-                                                    <div class="col-md-9"><input id="inputPublicationTitle"
+                                                    <div class="col-md-9"><input data-ng-model="publicationTitle"
                                                                                  type="text"
                                                                                  placeholder="Publication Title"
                                                                                  class="form-control"/>
@@ -345,7 +354,7 @@
                                             <div class="col-md-6">
                                                 <div>
                                                     <label class="col-md-3 control-label">Publication Type<span class='require'>*</span></label>
-                                                    <div class="col-md-9"><input id="inputPublicationType"
+                                                    <div class="col-md-9"><input data-ng-model="publicationType"
                                                                                  type="text"
                                                                                  placeholder="Publication Type"
                                                                                  class="form-control"/>
@@ -359,7 +368,7 @@
                                             <div class="col-md-6">
                                                 <div>
                                                     <label class="col-md-3 control-label">Publication Year<span class='require'>*</span></label>
-                                                    <div class="col-md-9"><input id="inputPublicationYear"
+                                                    <div class="col-md-9"><input data-ng-model="publicationYear"
                                                                                  type="text"
                                                                                  placeholder="Publication Year"
                                                                                  class="form-control"/>
@@ -369,7 +378,7 @@
                                             <div class="col-md-6">
                                                 <div>
                                                     <label class="col-md-3 control-label">Publication Place<span class='require'>*</span></label>
-                                                    <div class="col-md-9"><input id="inputPublicationPlace"
+                                                    <div class="col-md-9"><input data-ng-model="publicationPlace"
                                                                                  type="text"
                                                                                  placeholder="Publication Place"
                                                                                  class="form-control"/>
@@ -383,7 +392,7 @@
                                             <div class="col-md-6">
                                                 <div>
                                                     <label class="col-md-3 control-label">Web Reference<span class='require'>*</span></label>
-                                                    <div class="col-md-9"><input id="inputWebReference"
+                                                    <div class="col-md-9"><input data-ng-model="webReference"
                                                                                  type="text"
                                                                                  placeholder="Web Reference"
                                                                                  class="form-control"/>
@@ -419,7 +428,7 @@
                                                 <h5>Training Institution/Organization Name</h5>
                                             </div>
                                             <div class="col-md-3">
-                                                <h5>Duration</h5>
+                                                <h5>Duration(In Months)</h5>
                                             </div>
                                             <div class="col-md-2">
                                                 <h5>Accredited Year</h5>
@@ -428,16 +437,16 @@
 
                                         <div class="row">
                                             <div class="col-md-3">
-                                                <input type="text" class="form-control" placeholder="Training Name">
+                                                <input type="text" data-ng-model="trainingName" class="form-control" placeholder="Training Name">
                                             </div>
                                             <div class="col-md-4">
-                                                <input type="text" class="form-control" placeholder="Training Institution/Organization Name">
+                                                <input type="text" data-ng-model="trainingInstitution" class="form-control" placeholder="Training Institution/Organization Name">
                                             </div>
                                             <div class="col-md-3">
-                                                <input type="text" class="form-control" placeholder="Duration">
+                                                <input type="text" data-ng-model="trainingDuration" class="form-control" placeholder="Duration">
                                             </div>
                                             <div class="col-md-2">
-                                                <input type="text" class="form-control" placeholder="Accredited Year">
+                                                <input type="text" data-ng-model="trainingAccreditedYear" class="form-control" placeholder="Accredited Year">
                                             </div>
                                         </div>
                                         <br/>
@@ -460,7 +469,7 @@
                                         <div class="col-md-6">
                                             <div>
                                                 <label class="col-md-3 control-label">Award/Honor Name<span class='require'>*</span></label>
-                                                <div class="col-md-9"><input id="inputAwardName"
+                                                <div class="col-md-9"><input data-ng-model="awardName"
                                                                              type="text"
                                                                              placeholder="Award/Honor Name"
                                                                              class="form-control"/>
@@ -470,7 +479,7 @@
                                         <div class="col-md-6">
                                             <div>
                                                 <label class="col-md-3 control-label">Purpose Of The Award<span class='require'>*</span></label>
-                                                <div class="col-md-9"><input id="inputPurpose"
+                                                <div class="col-md-9"><input data-ng-model="purpose"
                                                                              type="text"
                                                                              placeholder="Purpose Of The Award"
                                                                              class="form-control"/>
@@ -484,7 +493,7 @@
                                         <div class="col-md-6">
                                             <div>
                                                 <label class="col-md-3 control-label">Year Of Recognition<span class='require'>*</span></label>
-                                                <div class="col-md-9"><input id="inputYearOfRecognition"
+                                                <div class="col-md-9"><input data-ng-model="yearOfRecognition"
                                                                              type="text"
                                                                              placeholder="Short Description"
                                                                              class="form-control"/>
@@ -494,7 +503,7 @@
                                         <div class="col-md-6">
                                             <div>
                                                 <label class="col-md-3 control-label">Short Description<span class='require'>*</span></label>
-                                                <div class="col-md-9"><input id="inputDescription"
+                                                <div class="col-md-9"><input data-ng-model="description"
                                                                              type="text"
                                                                              placeholder="Short Description"
                                                                              class="form-control"/>
@@ -562,22 +571,22 @@
 
                                         <div class="row">
                                             <div class="col-md-4">
-                                                <input type="text" class="form-control" placeholder="Institution/Organization">
+                                                <input type="text" data-ng-model="experienceInstitution" class="form-control" placeholder="Institution/Organization">
                                             </div>
                                             <div class="col-md-2">
-                                                <input type="text" class="form-control" placeholder="Designation">
+                                                <input type="text" data-ng-model="experienceDesignation" class="form-control" placeholder="Designation">
                                             </div>
                                             <div class="col-md-1">
-                                                <input type="text" class="form-control" placeholder="Month">
+                                                <input type="text" data-ng-model="experienceFromMonth" class="form-control" placeholder="Month">
                                             </div>
                                             <div class="col-md-2">
-                                                <input type="text" class="form-control" placeholder="Year">
+                                                <input type="text" data-ng-model="experienceFromYear" class="form-control" placeholder="Year">
                                             </div>
                                             <div class="col-md-1">
-                                                <input type="text" class="form-control" placeholder="Month">
+                                                <input type="text" data-ng-model="experienceToMonth" class="form-control" placeholder="Month">
                                             </div>
                                             <div class="col-md-2">
-                                                <input type="text" class="form-control" placeholder="Year">
+                                                <input type="text" data-ng-model="experienceToYear" class="form-control" placeholder="Year">
                                             </div>
                                         </div>
                                         <br />
@@ -595,9 +604,9 @@
 
                         </form>
                         <div class="form-actions text-right pal">
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                            &nbsp;
-                            <button type="button" class="btn btn-green">Cancel</button>
+                            <button type="submit" class="btn btn-pink" data-ng-click="testData()">Test Data</button>
+                            <button type="button" class="btn btn-primary">Cancel</button>
+                            <button type="submit" class="btn btn-green">Submit</button>
                         </div>
                     </div>
                 </div>
