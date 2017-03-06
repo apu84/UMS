@@ -62,7 +62,7 @@ public interface ExamGradeManager extends ContentManager<ExamGrade, MutableExamG
   public int createGradeSubmissionStatus(Integer pSemesterId, ExamType pExamType, String pExamDate);
 
   public List<MarksSubmissionStatusDto> getGradeSubmissionDeadLine(Integer pSemesterId,
-      ExamType pExamType, String pExamDate, String pOfferedDeptId);
+      ExamType pExamType, String pExamDate, String pOfferedDeptId, CourseType pCourseType);
 
   public int updateDeadline(List<MarksSubmissionStatusDto> pMarksSubmissionStatuses);
 

@@ -145,6 +145,7 @@ module ums{
         for(var i=0;i<students.length;i++){
           this.$scope.admissionStudentMap[students[i].receiptId] = students[i];
         }
+        console.log(students);
 
       });
     }
@@ -179,8 +180,12 @@ module ums{
 
     private fillUpMeritStudents(modalData:any):ng.IPromise<any>{
       var defer = this.$q.defer();
-
+      console.log("In the modal data section");
+      console.log("modal data");
+      console.log(modalData);
       var rows = modalData.split("\n");
+      console.log("Modal data after split");
+      console.log(rows);
       var counter:number=0;
       for(var r in rows){
         var cells = rows[r].split('\t');
@@ -189,6 +194,8 @@ module ums{
           break;
         }else{
           if(+r!=0){
+            console.log("Cells");
+            console.log(cells);
             this.insertDataIntoAdmissionStudents(cells);
           }
         }
@@ -201,6 +208,8 @@ module ums{
     }
 
     private insertDataIntoAdmissionStudents(cellData:Array<string>){
+      console.log("Cell data");
+      console.log(cellData);
       var receiptId:string =cellData[1];
 
       var student:AdmissionStudent= <AdmissionStudent>{};

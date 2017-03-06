@@ -30,6 +30,10 @@ module ums {
      */
     static EXAM_TYPE_REGULAR:number = 1;
     static EXAM_TYPE_CCI: number =2;
+    /*
+    * Course Type*/
+    static COURSE_TYPE_THEORY:number=1;
+    static COURSE_TYPE_SESSIONAL:number=2;
     /**
      * Semester Status
      */

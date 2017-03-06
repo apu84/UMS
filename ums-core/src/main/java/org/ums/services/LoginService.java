@@ -85,14 +85,6 @@ public class LoginService {
               + (Constants.PASSWORD_RESET_TOKEN_EMAIL_LIFE * Constants.ONE_MINUTE_IN_MILLIS));
     }
 
-    if(StringUtils.isBlank(user.getPasswordResetToken())
-        || (tokenInvalidDate != null && now.after(tokenInvalidDate))
-        || user.getPasswordTokenGenerateDateTime() == null) {
-      mUserManager.setPasswordResetToken(mPasswordService.encryptPassword(token)
-          .replaceAll("=", ""), user.getId());
-      user = mUserManager.get(user.getId());
-    }
-
     if(user.getPasswordTokenGenerateDateTime() != null && tokenEmailInvalidDate != null
         && now.before(tokenEmailInvalidDate)) {
       return new GenericMessageResponse(GenericResponse.ResponseType.INFO,
@@ -101,6 +93,16 @@ public class LoginService {
     else {
       mLogger.info("Send an password token email again.");
     }
+
+    // I think we don't need this checking.....
+    // if(StringUtils.isBlank(user.getPasswordResetToken())
+    // || (tokenInvalidDate != null && now.after(tokenInvalidDate))
+    // || user.getPasswordTokenGenerateDateTime() == null) {
+    mUserManager.setPasswordResetToken(mPasswordService.encryptPassword(token).replaceAll("=", ""),
+        user.getId());
+    user = mUserManager.get(user.getId());
+    // }
+
     // ToDo: Need to check whether the user has an email address in the database
     // Here for the time being we only considered employee email address, But later on we will
     // consider student's email address as well....

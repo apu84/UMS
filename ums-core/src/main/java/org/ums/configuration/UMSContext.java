@@ -15,10 +15,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.ums.cache.*;
 import org.ums.cache.common.CountryCache;
-import org.ums.cache.library.AuthorCache;
-import org.ums.cache.library.PublisherCache;
-import org.ums.cache.library.RecordCache;
-import org.ums.cache.library.SupplierCache;
+import org.ums.cache.library.*;
 import org.ums.cachewarmer.AutoCacheWarmer;
 import org.ums.cachewarmer.CacheWarmerManagerImpl;
 import org.ums.domain.model.immutable.Examiner;
@@ -34,17 +31,11 @@ import org.ums.indexer.manager.IndexConsumerManager;
 import org.ums.indexer.manager.IndexManager;
 import org.ums.manager.*;
 import org.ums.manager.common.CountryManager;
-import org.ums.manager.library.AuthorManager;
-import org.ums.manager.library.PublisherManager;
-import org.ums.manager.library.RecordManager;
-import org.ums.manager.library.SupplierManager;
+import org.ums.manager.library.*;
 import org.ums.message.MessageResource;
 import org.ums.persistent.dao.*;
 import org.ums.persistent.dao.common.PersistentCountryDao;
-import org.ums.persistent.dao.library.PersistentAuthorDao;
-import org.ums.persistent.dao.library.PersistentPublisherDao;
-import org.ums.persistent.dao.library.PersistentRecordDao;
-import org.ums.persistent.dao.library.PersistentSupplierDao;
+import org.ums.persistent.dao.library.*;
 import org.ums.security.authentication.UMSAuthenticationRealm;
 import org.ums.services.LoginService;
 import org.ums.services.NotificationGenerator;
@@ -668,6 +659,14 @@ public class UMSContext {
   }
 
   @Bean
+  ItemManager itemManager() {
+    ItemCache itemCache = new ItemCache(mCacheFactory.getCacheManager());
+    itemCache
+        .setManager(new PersistentItemDao(mTemplateFactory.getLmsJdbcTemplate(), mIdGenerator));
+    return itemCache;
+  }
+
+  @Bean
   IndexManager indexManager() {
     return new IndexDao(mTemplateFactory.getJdbcTemplate());
   }
@@ -685,8 +684,7 @@ public class UMSContext {
         programTypeManager(), programManager(), semesterManager(), syllabusManager(),
         courseGroupManager(), equivalentCourseManager(), teacherManager(), courseTeacherManager(),
         examinerManager(), studentManager(), studentRecordManager(), classRoomManager(),
-        courseManager(), marksSubmissionStatusManager(), userManager(), feeCategoryManager(),
-        feeManager());
+        courseManager(), marksSubmissionStatusManager(), userManager());
   }
 
   @Bean

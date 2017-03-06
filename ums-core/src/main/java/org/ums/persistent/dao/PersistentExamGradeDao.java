@@ -113,6 +113,7 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
   String UPDATE_STATUS_SAVE_RECHECK =
       "Update %s Set RECHECK_STATUS=?  Where SEMESTER_ID=? And COURSE_ID=? And EXAM_TYPE=? And STUDENT_ID=? and "
           + " Status in (select regexp_substr(?,'[^,]+', 1, level) from dual connect by regexp_substr(?, '[^,]+', 1, level) is not null)";
+
   String UPDATE_STATUS_SAVE_APPROVE =
       "Update %s Set RECHECK_STATUS=?,STATUS=?  Where SEMESTER_ID=? And COURSE_ID=? And EXAM_TYPE=? And STUDENT_ID=? and "
           + " Status in  (select regexp_substr(?,'[^,]+', 1, level) from dual connect by regexp_substr(?, '[^,]+', 1, level) is not null)";
@@ -177,7 +178,7 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
           + "Select 'F' Grade_Letter, 0 Total, '#2A0CD0' Color From Dual  "
           + ")Tmp Group by Grade_Letter Order by Decode(Grade_Letter,'A+',1,'A',2,'A-',3,'B+',4,'B',5,'B-',6,'C+',7,'C',8,'D',9,'F',10)  ";
 
-  String SELECT_EXAM_GRADE_DEAD_LINE =
+  String SELECT_EXAM_GRADE_DEAD_LINE_THEORY_BY_DATE =
       " SELECT  "
           + "  to_char(EXAM_ROUTINE.EXAM_DATE, 'dd-mm-yyyy') Exam_date,  "
           + "  MST_PROGRAM.PROGRAM_SHORT_NAME,  "
@@ -211,6 +212,72 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
           + "  exam_routine.SEMESTER = ? AND exam_routine.exam_type = ? AND  "
           + "  marksSubmissionStatus.SEMESTER_ID = EXAM_ROUTINE.SEMESTER AND  "
           + "  marksSubmissionStatus.COURSE_ID = EXAM_ROUTINE.COURSE_ID";
+
+  String SELECT_EXAM_GRADE_DEAD_LINE_THEORY_ALL =
+      "SELECT  "
+          + "  to_char(EXAM_ROUTINE.EXAM_DATE, 'dd-mm-yyyy') Exam_date,  "
+          + "  MST_PROGRAM.PROGRAM_SHORT_NAME,  "
+          + "  MST_COURSE.COURSE_ID,  "
+          + "  MST_COURSE.COURSE_NO,  "
+          + "  MST_COURSE.COURSE_TITLE,  "
+          + "  MST_COURSE.CRHR,  "
+          + "  ugRegistrationResult.total_students,  "
+          + "  marksSubmissionStatus.ID,  "
+          + "  last_submission_date_prep,  "
+          + "  LAST_SUBMISSION_DATE_SCR,  "
+          + "  LAST_SUBMISSION_DATE_HEAD  "
+          + "FROM EXAM_ROUTINE, MST_PROGRAM,  "
+          + "  MST_COURSE, (SELECT  "
+          + "                 COURSE_ID,  "
+          + "                 count(COURSE_ID) total_students  "
+          + "               FROM UG_REGISTRATION_RESULT  "
+          + "               WHERE SEMESTER_ID = ?  "
+          + "               GROUP BY COURSE_ID) ugRegistrationResult, (SELECT  "
+          + "                                                            ID,  "
+          + "                                                            SEMESTER_ID,  "
+          + "                                                            COURSE_ID,  "
+          + "                                                            last_submission_date_prep,  "
+          + "                                                            LAST_SUBMISSION_DATE_SCR,  "
+          + "                                                            LAST_SUBMISSION_DATE_HEAD  "
+          + "                                                          FROM MARKS_SUBMISSION_STATUS) marksSubmissionStatus  "
+          + "WHERE  " + "  MST_PROGRAM.PROGRAM_ID = EXAM_ROUTINE.PROGRAM_ID AND  "
+          + "  MST_COURSE.COURSE_ID = EXAM_ROUTINE.COURSE_ID AND MST_COURSE.OFFER_BY = ? AND  "
+          + "  EXAM_ROUTINE.COURSE_ID = ugRegistrationResult.COURSE_ID AND  "
+          + "  exam_routine.SEMESTER = ? AND exam_routine.exam_type = ? AND  "
+          + "  marksSubmissionStatus.SEMESTER_ID = EXAM_ROUTINE.SEMESTER AND  "
+          + "  marksSubmissionStatus.COURSE_ID = EXAM_ROUTINE.COURSE_ID  "
+          + "ORDER BY EXAM_ROUTINE.EXAM_DATE";
+
+  String SELECT_ALL_EXAMGRADE_DEADLINE_SESSIONAL =
+      ""
+          + "SELECT "
+          + "  MST_PROGRAM.PROGRAM_SHORT_NAME, "
+          + "  MST_COURSE.COURSE_ID, "
+          + "  MST_COURSE.COURSE_NO, "
+          + "  MST_COURSE.COURSE_TITLE, "
+          + "  MST_COURSE.CRHR, "
+          + "  ugRegistrationResult.COURSE_ID, "
+          + "  ugRegistrationResult.total_students, "
+          + "  MARKS_SUBMISSION_STATUS.ID, "
+          + "  MARKS_SUBMISSION_STATUS.LAST_SUBMISSION_DATE_prep, "
+          + "  MARKS_SUBMISSION_STATUS.LAST_SUBMISSION_DATE_scr, "
+          + "  MARKS_SUBMISSION_STATUS.LAST_SUBMISSION_DATE_head "
+          + "FROM "
+          + "  (SELECT "
+          + "     UG_REGISTRATION_RESULT.COURSE_ID, "
+          + "     count(UG_REGISTRATION_RESULT.COURSE_ID) total_students, "
+          + "     EXAM_TYPE, "
+          + "     SEMESTER_ID "
+          + "   FROM UG_REGISTRATION_RESULT, MST_COURSE "
+          + "   WHERE UG_REGISTRATION_RESULT.SEMESTER_ID = ? AND EXAM_TYPE = ? AND "
+          + "         UG_REGISTRATION_RESULT.COURSE_ID = MST_COURSE.COURSE_ID AND MST_COURSE.OFFER_BY = ? AND "
+          + "         MST_COURSE.COURSE_TYPE = 2 "
+          + "   GROUP BY UG_REGISTRATION_RESULT.COURSE_ID, EXAM_TYPE, SEMESTER_ID) ugRegistrationResult, MARKS_SUBMISSION_STATUS, "
+          + "  MST_COURSE, MST_PROGRAM "
+          + "WHERE ugRegistrationResult.SEMESTER_ID = MARKS_SUBMISSION_STATUS.SEMESTER_ID "
+          + "      AND ugRegistrationResult.COURSE_ID = MARKS_SUBMISSION_STATUS.COURSE_ID AND "
+          + "      MST_COURSE.COURSE_ID = ugRegistrationResult.COURSE_ID AND MST_PROGRAM.DEPT_ID = MST_COURSE.OFFER_BY "
+          + "ORDER BY MST_COURSE.YEAR, MST_COURSE.SEMESTER";
 
   String INSERT_THEORY_LOG =
       "Insert InTo UG_THEORY_MARKS_LOG(USER_ID,ROLE, SEMESTER_ID,COURSE_ID, STUDENT_ID, EXAM_TYPE, QUIZ, CLASS_PERFORMANCE, "
@@ -324,10 +391,28 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
 
   @Override
   public List<MarksSubmissionStatusDto> getGradeSubmissionDeadLine(Integer pSemesterId,
-      ExamType pExamType, String pExamDate, String pOfferedDeptId) {
-    String query = SELECT_EXAM_GRADE_DEAD_LINE;
-    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pExamDate, pOfferedDeptId,
-        pSemesterId, pExamType.getId()}, new GradeSubmissionDeadlineRowMapper());
+      ExamType pExamType, String pExamDate, String pOfferedDeptId, CourseType pCourseType) {
+
+    String query = "";
+
+    if(pCourseType == CourseType.SESSIONAL) {
+      query = SELECT_ALL_EXAMGRADE_DEADLINE_SESSIONAL;
+      return mJdbcTemplate.query(query, new Object[] {pSemesterId, pExamType.getId(),
+          pOfferedDeptId}, new GradeSubmissionDeadlineRowMapperSessional());
+    }
+    else {
+      if(pExamDate.equals("null")) {
+        query = SELECT_EXAM_GRADE_DEAD_LINE_THEORY_ALL;
+        return mJdbcTemplate.query(query, new Object[] {pSemesterId, pOfferedDeptId, pSemesterId,
+            pExamType.getId()}, new GradeSubmissionDeadlineRowMapperTheory());
+      }
+      else {
+        query = SELECT_EXAM_GRADE_DEAD_LINE_THEORY_BY_DATE;
+        return mJdbcTemplate.query(query, new Object[] {pSemesterId, pExamDate, pOfferedDeptId,
+            pSemesterId, pExamType.getId()}, new GradeSubmissionDeadlineRowMapperTheory());
+
+      }
+    }
   }
 
   @Override
@@ -804,27 +889,40 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
     return params;
   }
 
-  class GradeSubmissionDeadlineRowMapper implements RowMapper<MarksSubmissionStatusDto> {
+  class GradeSubmissionDeadlineRowMapperSessional implements RowMapper<MarksSubmissionStatusDto> {
+    @Override
+    public MarksSubmissionStatusDto mapRow(ResultSet pResultSet, int pI) throws SQLException {
+      MarksSubmissionStatusDto submissionStatusDto = new MarksSubmissionStatusDto();
+      rowMapperSetter(pResultSet, submissionStatusDto);
+      return submissionStatusDto;
+    }
+  }
+
+  class GradeSubmissionDeadlineRowMapperTheory implements RowMapper<MarksSubmissionStatusDto> {
     @Override
     public MarksSubmissionStatusDto mapRow(ResultSet pResultSet, int pI) throws SQLException {
       MarksSubmissionStatusDto submissionStatusDto = new MarksSubmissionStatusDto();
 
       submissionStatusDto.setExamDate(pResultSet.getString("exam_date"));
-      submissionStatusDto.setProgramShortname(pResultSet.getString("program_short_name"));
-      submissionStatusDto.setCourseId(pResultSet.getString("course_id"));
-      submissionStatusDto.setCourseNo(pResultSet.getString("course_no"));
-      submissionStatusDto.setCourseTitle(pResultSet.getString("course_title"));
-      submissionStatusDto.setCourseCreditHour(pResultSet.getInt("crhr"));
-      submissionStatusDto.setTotalStudents(pResultSet.getInt("total_students"));
-      submissionStatusDto
-          .setLastSubmissionDatePrep(pResultSet.getDate("LAST_SUBMISSION_DATE_PREP"));
-      submissionStatusDto.setLastSubmissionDateScr(pResultSet.getDate("LAST_SUBMISSION_DATE_SCR"));
-      submissionStatusDto
-          .setLastSubmissionDateHead(pResultSet.getDate("LAST_SUBMISSION_DATE_HEAD"));
-      submissionStatusDto.setId(pResultSet.getInt("id"));
+      rowMapperSetter(pResultSet, submissionStatusDto);
       return submissionStatusDto;
     }
   }
+
+  private void rowMapperSetter(ResultSet pResultSet, MarksSubmissionStatusDto pSubmissionStatusDto)
+      throws SQLException {
+    pSubmissionStatusDto.setProgramShortname(pResultSet.getString("program_short_name"));
+    pSubmissionStatusDto.setCourseId(pResultSet.getString("course_id"));
+    pSubmissionStatusDto.setCourseNo(pResultSet.getString("course_no"));
+    pSubmissionStatusDto.setCourseTitle(pResultSet.getString("course_title"));
+    pSubmissionStatusDto.setCourseCreditHour(pResultSet.getInt("crhr"));
+    pSubmissionStatusDto.setTotalStudents(pResultSet.getInt("total_students"));
+    pSubmissionStatusDto.setLastSubmissionDatePrep(pResultSet.getDate("LAST_SUBMISSION_DATE_PREP"));
+    pSubmissionStatusDto.setLastSubmissionDateScr(pResultSet.getDate("LAST_SUBMISSION_DATE_SCR"));
+    pSubmissionStatusDto.setLastSubmissionDateHead(pResultSet.getDate("LAST_SUBMISSION_DATE_HEAD"));
+    pSubmissionStatusDto.setId(pResultSet.getInt("id"));
+  }
+
   class MarksSubmissionStatusRowMapper implements RowMapper<MarksSubmissionStatusDto> {
     @Override
     public MarksSubmissionStatusDto mapRow(ResultSet resultSet, int i) throws SQLException {

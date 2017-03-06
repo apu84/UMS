@@ -613,7 +613,7 @@ module ums {
           {id: 2, name: 'Available'}
         ],
         itemStatus: [
-          {id: 101101, name : 'Select a Language'},
+          {id: 101101, name : 'Select a Status'},
           {id: 0, name: 'Entry Mode'},
           {id: 2, name: 'Available'},
           {id: 3, name: 'On Hold'},

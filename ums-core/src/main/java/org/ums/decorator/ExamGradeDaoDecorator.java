@@ -119,9 +119,9 @@ public class ExamGradeDaoDecorator extends
 
   @Override
   public List<MarksSubmissionStatusDto> getGradeSubmissionDeadLine(Integer pSemesterId,
-      ExamType pExamType, String pExamDate, String pOfferedDeptId) {
+      ExamType pExamType, String pExamDate, String pOfferedDeptId, CourseType pCourseType) {
     return getManager().getGradeSubmissionDeadLine(pSemesterId, pExamType, pExamDate,
-        pOfferedDeptId);
+        pOfferedDeptId, pCourseType);
   }
 
   public int getTotalStudentCount(MarksSubmissionStatus actualStatus) {

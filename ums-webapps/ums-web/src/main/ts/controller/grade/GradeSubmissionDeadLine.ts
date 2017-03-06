@@ -3,6 +3,7 @@ module ums {
     semesterList: Array<Semester>;
     semesterId: number;
     examType: any;
+    courseType:string;
     examRoutineArr: any;
     examGradeStatisticsArr: Array<IExamGrade>;
     examGradeStatisticsArrTemp: Array<IExamGrade>;
@@ -54,6 +55,7 @@ module ums {
       $scope.showTable = false;
       $scope.showButton = false;
       $scope.editable = false;
+      $scope.courseType="1";
       $scope.getSemesters = this.getSemesters.bind(this);
       $scope.getExamDates = this.getExamDates.bind(this);
       $scope.fetchDeadlineInformation = this.fetchDeadlineInformation.bind(this);
@@ -122,21 +124,27 @@ module ums {
     }
 
     private getExamDates(): void {
-      var semester = this.$scope.semesterList[Utils.findIndex(this.$scope.semesterList, this.$scope.semesterId + "")];
-      this.$scope.editable = (semester.status == Utils.SEMESTER_STATUS_ACTIVE);
 
-      var examType = +this.$scope.examType;
-      this.$scope.examDate = null;
-      console.log(examType);
-      console.log(this.$scope.semesterId);
-      if (this.$scope.semesterId != null && this.$scope.examType != "") {
-        this.examRoutineService.getExamRoutineDates(this.$scope.semesterId, examType).then((examDateArr: any)=> {
+      if(+this.$scope.courseType==Utils.COURSE_TYPE_THEORY){
+          var semester = this.$scope.semesterList[Utils.findIndex(this.$scope.semesterList, this.$scope.semesterId + "")];
+          this.$scope.editable = (semester.status == Utils.SEMESTER_STATUS_ACTIVE);
 
-          this.$scope.examRoutineArr = {};
-          console.log(examDateArr);
-          this.$scope.examRoutineArr = examDateArr;
-        });
+          var examType = +this.$scope.examType;
+          this.$scope.examDate = null;
+          console.log(examType);
+          console.log(this.$scope.semesterId);
+          if (this.$scope.semesterId != null && this.$scope.examType != "") {
+              this.examRoutineService.getExamRoutineDates(this.$scope.semesterId, examType).then((examDateArr: any)=> {
+
+                  this.$scope.examRoutineArr = {};
+                  console.log(examDateArr);
+                  this.$scope.examRoutineArr = examDateArr;
+              });
+          }
+      }else{
+        this.$scope.examDate="";
       }
+
 
     }
 
@@ -147,9 +155,11 @@ module ums {
       this.$scope.examGradeStatisticsArr = [];
       this.$scope.examGradeStatisticsArrTemp = [];
       var examType = +this.$scope.examType;
+      console.log("Exam date");
+      console.log(this.$scope.examDate);
 
       this.$scope.showLoader = true;
-      this.examGradeService.getGradeSubmissionDeadLine(this.$scope.semesterId, examType, this.$scope.examDate)
+      this.examGradeService.getGradeSubmissionDeadLine(this.$scope.semesterId, examType, this.$scope.examDate, this.$scope.courseType)
           .then((outputArr: Array<IExamGrade>)=> {
         if (outputArr.length == 0) {
           this.$scope.showLoader = false;
