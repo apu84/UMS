@@ -27,16 +27,25 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label">Exam Type</label>
                         <div class="col-md-8">
-                            <select class="form-control required" name="examType" data-ng-model="examType" data-ng-change="getExamDates()"  data-convert-to-number>
+                            <select class="form-control required" name="examType" data-ng-model="examType"   data-convert-to-number>
                                 <option value="1">Semester Final</option>
                                 <option value="2">Carry/Clearance/Improvement</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
+                        <label class="col-md-4 control-label">Course Type</label>
+                        <div class="col-md-8">
+                            <select class="form-control required" name="courseType" data-ng-model="courseType" data-ng-change="getExamDates()"  data-convert-to-number>
+                                <option value="1">Theory</option>
+                                <option value="2">Sessional</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group" data-ng-show="courseType==1">
                         <label class="col-md-4 control-label">Exam Date</label>
                         <div class="col-md-8">
-                            <select class="form-control required" name="examDate" data-ng-model="examDate">
+                            <select class="form-control" name="examDate" data-ng-model="examDate">
                                 <option value="">Select an Exam Date</option>
                                 <option data-ng-repeat="examRoutine in examRoutineArr">{{examRoutine.examDate}}</option>
                             </select>
