@@ -684,8 +684,7 @@ public class UMSContext {
         programTypeManager(), programManager(), semesterManager(), syllabusManager(),
         courseGroupManager(), equivalentCourseManager(), teacherManager(), courseTeacherManager(),
         examinerManager(), studentManager(), studentRecordManager(), classRoomManager(),
-        courseManager(), marksSubmissionStatusManager(), userManager(), feeCategoryManager(),
-        feeManager());
+        courseManager(), marksSubmissionStatusManager(), userManager());
   }
 
   @Bean
