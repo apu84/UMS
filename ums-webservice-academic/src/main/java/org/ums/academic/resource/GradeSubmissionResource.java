@@ -1,6 +1,7 @@
 package org.ums.academic.resource;
 
 import org.springframework.stereotype.Component;
+import org.ums.enums.CourseType;
 import org.ums.enums.ExamType;
 import org.ums.resource.Resource;
 
@@ -55,13 +56,14 @@ public class GradeSubmissionResource extends MutableGradeSubmissionResource {
   }
 
   @GET
-  @Path("/deadline/semester/{semester-id}/examType/{exam-type}/examDate/{exam-date}")
+  @Path("/deadline/semester/{semester-id}/examType/{exam-type}/courseType/{course-type}/examDate/{exam-date}")
   public JsonObject getGradeSubmissionDeadLine(final @Context Request pRequest,
       final @PathParam("semester-id") Integer pSemesterId,
       final @PathParam("exam-type") Integer pExamType,
+      final @PathParam("course-type") int pCourseType,
       final @PathParam("exam-date") String pExamDate) {
     return mResourceHelper.getGradeSubmissionDeadline(pSemesterId, ExamType.get(pExamType),
-        pExamDate, mUriInfo);
+        pExamDate, CourseType.get(pCourseType), mUriInfo);
   }
 
   @GET

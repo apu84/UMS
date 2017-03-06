@@ -8,11 +8,15 @@ module ums{
 
     }
 
-    public getGradeSubmissionDeadLine(semesterId:number,examType:number,examDate:string):ng.IPromise<any>{
+    public getGradeSubmissionDeadLine(semesterId:number,examType:number,examDate:string, courseType:any):ng.IPromise<any>{
       var defer = this.$q.defer();
       var gradeSubmissionStatisticsArr:any={};
 
-      this.httpClient.get(`academic/gradeSubmission/deadline/semester/${semesterId}/examType/${examType}/examDate/${examDate}`,
+      if(courseType == Utils.COURSE_TYPE_SESSIONAL){
+        examDate='09-09-99';
+      }
+
+      this.httpClient.get(`academic/gradeSubmission/deadline/semester/${semesterId}/examType/${examType}/courseType/${courseType}/examDate/${examDate}`,
           HttpClient.MIME_TYPE_JSON,
           (json:any,etag:string)=>{
             gradeSubmissionStatisticsArr = json.entries;
