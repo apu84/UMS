@@ -43,7 +43,7 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
     }
 
     if(pReadOnly.getProgramShortName() != null) {
-      pBuilder.add("programShortName", pReadOnly.getProgramShortName().replace("B.Sc in ",""));
+      pBuilder.add("programShortName", pReadOnly.getProgramShortName().replace("B.Sc in ", ""));
     }
 
     if(pReadOnly.getCourseId() != null) {

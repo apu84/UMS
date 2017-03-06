@@ -397,8 +397,8 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
 
     if(pCourseType == CourseType.SESSIONAL) {
       query = SELECT_ALL_EXAMGRADE_DEADLINE_SESSIONAL;
-      return mJdbcTemplate.query(query, new Object[] {pSemesterId,
-          pExamType.getId(), pOfferedDeptId}, new GradeSubmissionDeadlineRowMapperSessional());
+      return mJdbcTemplate.query(query, new Object[] {pSemesterId, pExamType.getId(),
+          pOfferedDeptId}, new GradeSubmissionDeadlineRowMapperSessional());
     }
     else {
       if(pExamDate.equals("null")) {

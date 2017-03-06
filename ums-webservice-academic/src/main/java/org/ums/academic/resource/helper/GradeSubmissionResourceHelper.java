@@ -453,19 +453,16 @@ public class GradeSubmissionResourceHelper extends
     User user = mUserManager.get(userId);
     Employee employee = mEmployeeManager.get(user.getEmployeeId());
     List<MarksSubmissionStatusDto> marksSubmissionStatusDtoList = new ArrayList<>();
-   /* int size = getContentManager().checkSize(pSemesterId, pExamType, pExamDate);
-
-    if(size == 0) {
-      getContentManager().createGradeSubmissionStatus(pSemesterId, pExamType, pExamDate);
-      marksSubmissionStatusDtoList =
-          getContentManager().getGradeSubmissionDeadLine(pSemesterId, pExamType, pExamDate,
-              employee.getDepartment().getId(), pCourseType);
-    }
-    else {
-      marksSubmissionStatusDtoList =
-          mManager.getGradeSubmissionDeadLine(pSemesterId, pExamType, pExamDate, employee
-              .getDepartment().getId(), pCourseType);
-    }*/
+    /*
+     * int size = getContentManager().checkSize(pSemesterId, pExamType, pExamDate);
+     * 
+     * if(size == 0) { getContentManager().createGradeSubmissionStatus(pSemesterId, pExamType,
+     * pExamDate); marksSubmissionStatusDtoList =
+     * getContentManager().getGradeSubmissionDeadLine(pSemesterId, pExamType, pExamDate,
+     * employee.getDepartment().getId(), pCourseType); } else { marksSubmissionStatusDtoList =
+     * mManager.getGradeSubmissionDeadLine(pSemesterId, pExamType, pExamDate, employee
+     * .getDepartment().getId(), pCourseType); }
+     */
 
     marksSubmissionStatusDtoList =
         mManager.getGradeSubmissionDeadLine(pSemesterId, pExamType, pExamDate, employee
