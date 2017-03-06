@@ -32,16 +32,16 @@ public class ItemBuilder implements Builder<Item, MutableItem> {
   @Override
   public void build(final JsonObjectBuilder pBuilder, final Item pReadOnly, UriInfo pUriInfo,
       final LocalCache pLocalCache) {
-     pBuilder.add("mfnNo", pReadOnly.getMfn());
-     pBuilder.add("itemId", pReadOnly.getId());
-     pBuilder.add("copyNumber", pReadOnly.getCopyNumber());
-     pBuilder.add("accessionNumber", pReadOnly.getAccessionNumber());
-     pBuilder.add("accessionDate", pReadOnly.getAccessionDate());
-     pBuilder.add("barcode", pReadOnly.getBarcode());
-     pBuilder.add("price", pReadOnly.getPrice());
-     pBuilder.add("internalNote", pReadOnly.getInternalNote());
+    pBuilder.add("mfnNo", pReadOnly.getMfn());
+    pBuilder.add("itemId", pReadOnly.getId());
+    pBuilder.add("copyNumber", pReadOnly.getCopyNumber());
+    pBuilder.add("accessionNumber", pReadOnly.getAccessionNumber());
+    pBuilder.add("accessionDate", pReadOnly.getAccessionDate());
+    pBuilder.add("barcode", pReadOnly.getBarcode());
+    pBuilder.add("price", pReadOnly.getPrice());
+    pBuilder.add("internalNote", pReadOnly.getInternalNote());
 
-    pBuilder.add("status",pReadOnly.getStatus() .getId());
+    pBuilder.add("status", pReadOnly.getStatus().getId());
     pBuilder.add("statusName", pReadOnly.getStatus().getLabel());
     pBuilder.add("insertedBy", pReadOnly.getInsertedBy());
     pBuilder.add("insertedOn", pReadOnly.getInsertedOn());
