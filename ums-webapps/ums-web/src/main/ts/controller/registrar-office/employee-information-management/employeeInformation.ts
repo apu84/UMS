@@ -143,6 +143,7 @@ module ums{
 
     changeNav: Function;
     submit: Function;
+    cancel: Function;
 
     //test Data Function
     testData: Function;
@@ -231,7 +232,9 @@ module ums{
       $scope.changeNav = this.changeNav.bind(this);
       $scope.testData = this.testData.bind(this);
       $scope.submit = this.submit.bind(this);
+      $scope.cancel = this.cancel.bind(this);
     }
+
 
     private changeNav(navTitle: number){
 
@@ -277,7 +280,7 @@ module ums{
       this.$scope.gender = "Male";
       this.$scope.birthday = "20/10/1995";
       this.$scope.maritalStatus = "Single";
-      this.$scope.spouseName = ""
+      this.$scope.spouseName = "";
       this.$scope.nationalIdNo = 19952641478954758;
       this.$scope.email = "kawsur.iums@aust.edu";
       this.$scope.phone = "+8801672494863";
@@ -287,19 +290,19 @@ module ums{
       this.$scope.sscSelected = "SSC";
       this.$scope.sscInstitution = "Birsrestha Munshi Abdur Rouf Public College";
       this.$scope.sscGPA = 5.00;
-      this.$scope.sscPassingYear = "2010"
+      this.$scope.sscPassingYear = "2010";
       this.$scope.hscSelected = "HSC";
       this.$scope.hscInstitution = "Birsrestha Munshi Abdur Rouf Public College";
       this.$scope.hscGPA = 5.00;
-      this.$scope.hscPassingYear = "2012"
+      this.$scope.hscPassingYear = "2012";
       this.$scope.bachelorSelected = "Bachelor";
       this.$scope.bachelorInstitution = "American International University-Bangladesh";
       this.$scope.bachelorCGPA = 3.79;
-      this.$scope.bachelorPassingYear = "2016"
+      this.$scope.bachelorPassingYear = "2016";
       this.$scope.mastersSelected = "Masters";
       this.$scope.mastersInstitution = "American International University-Bangladesh";
       this.$scope.mastersCGPA = 4.00;
-      this.$scope.mastersPassingYear = "2018"
+      this.$scope.mastersPassingYear = "2018";
       this.$scope.phdSelected = "Phd";
       this.$scope.phdInstitution = "Massachusetts Institute Of Technology";
       this.$scope.phdCGPA = 4.00;
@@ -327,9 +330,6 @@ module ums{
       this.$scope.experienceFromYear = "2016";
       this.$scope.experienceToMonth = "10";
       this.$scope.experienceToYear = "2016";
-
-
-
     }
 
 
@@ -401,6 +401,142 @@ module ums{
       this.$scope.showInputPhdPassingYearDiv = false;
       this.$scope.showLabelPhdPassingYearDiv = true;
 
+
+      this.notify.success("Data Saved");
+
+    }
+
+    private cancel(){
+      this.$scope.firstName = "";
+      this.$scope.lastName = "";
+      this.$scope.fatherName = "";
+      this.$scope.motherName = "";
+      this.$scope.gender = "";
+      this.$scope.birthday = "";
+      this.$scope.maritalStatus = "";
+      this.$scope.spouseName = "";
+      this.$scope.nationalIdNo = null;
+      this.$scope.email = "";
+      this.$scope.phone = "";
+      this.$scope.presentAddress = "";
+      this.$scope.permanentAddress = "";
+
+      this.$scope.sscSelected = "";
+      this.$scope.sscInstitution = "";
+      this.$scope.sscGPA = null;
+      this.$scope.sscPassingYear = "";
+      this.$scope.hscSelected = "";
+      this.$scope.hscInstitution = "";
+      this.$scope.hscGPA = null;
+      this.$scope.hscPassingYear = "";
+      this.$scope.bachelorSelected = "";
+      this.$scope.bachelorInstitution = "";
+      this.$scope.bachelorCGPA = null;
+      this.$scope.bachelorPassingYear = "";
+      this.$scope.mastersSelected = "";
+      this.$scope.mastersInstitution = "";
+      this.$scope.mastersCGPA = null;
+      this.$scope.mastersPassingYear = "";
+      this.$scope.phdSelected = "";
+      this.$scope.phdCGPA = null;
+      this.$scope.phdPassingYear = "";
+
+      this.$scope.publicationTitle = "";
+      this.$scope.publicationType = "";
+      this.$scope.publicationYear = "";
+      this.$scope.publicationPlace = "";
+      this.$scope.webReference = "";
+
+      this.$scope.trainingName = "";
+      this.$scope.trainingInstitution = "";
+      this.$scope.trainingDuration = "";
+      this.$scope.trainingAccreditedYear = "";
+
+      this.$scope.awardName = "";
+      this.$scope.purpose = "";
+      this.$scope.yearOfRecognition = "";
+      this.$scope.description = "";
+
+      this.$scope.experienceInstitution = "";
+      this.$scope.experienceDesignation = "";
+      this.$scope.experienceFromMonth = "";
+      this.$scope.experienceFromYear = "";
+      this.$scope.experienceToMonth = "";
+      this.$scope.experienceToYear = "";
+
+
+
+
+
+
+
+
+      this.$scope.showInputFirstNameDiv = true;
+      this.$scope.showLabelFirstNameDiv = false;
+      this.$scope.showInputLastNameDiv = true;
+      this.$scope.showLabelLastNameDiv = false;
+      this.$scope.showInputFatherNameDiv = true;
+      this.$scope.showLabelFatherNameDiv = false;
+      this.$scope.showInputMotherNameDiv = true;
+      this.$scope.showLabelMotherNameDiv = false;
+      this.$scope.showInputGenderDiv = true;
+      this.$scope.showLabelGenderDiv = false;
+      this.$scope.showInputBirthdayDiv = true;
+      this.$scope.showLabelBirthdayDiv = false;
+      this.$scope.showInputMaritalStatusDiv = true;
+      this.$scope.showLabelMaritalStatusDiv = false;
+      this.$scope.showInputSpouseNameDiv = true;
+      this.$scope.showLabelSpouseNameDiv = false;
+      this.$scope.showInputNationalIdNoDiv = true;
+      this.$scope.showLabelNationalIdNoDiv = false;
+      this.$scope.showInputEmailDiv = true;
+      this.$scope.showLabelEmailDiv = false;
+      this.$scope.showInputPhoneDiv = true;
+      this.$scope.showLabelPhoneDiv = false;
+      this.$scope.showInputPresentAddressDiv = true;
+      this.$scope.showLabelPresentAddressDiv = false;
+      this.$scope.showInputPermanentAddressDiv = true;
+      this.$scope.showLabelPermanentAddressDiv = false;
+      this.$scope.showInputSSCSelectedDiv = true;
+      this.$scope.showLabelSSCSelectedDiv = false;
+      this.$scope.showInputSSCInstitutionDiv = true;
+      this.$scope.showLabelSSCInstitutionDiv = false;
+      this.$scope.showInputSSCGpaDiv = true;
+      this.$scope.showLabelSSCGpaDiv = false;
+      this.$scope.showInputSSCPassingYearDiv = true;
+      this.$scope.showLabelSSCPassingYearDiv = false;
+      this.$scope.showInputHSCSelectedDiv = true;
+      this.$scope.showLabelHSCSelectedDiv = false;
+      this.$scope.showInputHSCInstitutionDiv = true;
+      this.$scope.showLabelHSCInstitutionDiv = false;
+      this.$scope.showInputHSCGpaDiv = true;
+      this.$scope.showLabelHSCGpaDiv = false;
+      this.$scope.showInputHSCPassingYearDiv = true;
+      this.$scope.showLabelHSCPassingYearDiv = false;
+      this.$scope.showInputBachelorSelectedDiv = true;
+      this.$scope.showLabelBachelorSelectedDiv = false;
+      this.$scope.showInputBachelorInstitutionDiv = true;
+      this.$scope.showLabelBachelorInstitutionDiv = false;
+      this.$scope.showInputBachelorCGpaDiv = true;
+      this.$scope.showLabelBachelorCGpaDiv = false;
+      this.$scope.showInputBachelorPassingYearDiv = true;
+      this.$scope.showLabelBachelorPassingYearDiv = false;
+      this.$scope.showInputMastersSelectedDiv = true;
+      this.$scope.showLabelMastersSelectedDiv = false;
+      this.$scope.showInputMastersInstitutionDiv = true;
+      this.$scope.showLabelMastersInstitutionDiv = false;
+      this.$scope.showInputMastersCGpaDiv = true;
+      this.$scope.showLabelMastersCGpaDiv = false;
+      this.$scope.showInputMastersPassingYearDiv = true;
+      this.$scope.showLabelMastersPassingYearDiv = false;
+      this.$scope.showInputPhdSelectedDiv = true;
+      this.$scope.showLabelPhdSelectedDiv = false;
+      this.$scope.showInputPhdInstitutionDiv = true;
+      this.$scope.showLabelPhdInstitutionDiv = false;
+      this.$scope.showInputPhdCGpaDiv = true;
+      this.$scope.showLabelPhdCGpaDiv = false;
+      this.$scope.showInputPhdPassingYearDiv = true;
+      this.$scope.showLabelPhdPassingYearDiv = false;
     }
   }
 
