@@ -21,21 +21,24 @@
                                         <div class="col-md-6">
                                             <div>
                                                 <label class="col-md-3 control-label">First Name<span class='require'>*</span></label>
-                                                <div class="col-md-9"><input data-ng-model="firstName"
+                                                <div class="col-md-9"  data-ng-show="showInputFirstNameDiv"><input data-ng-model="firstName"
                                                                              type="text"
                                                                              placeholder="First Name"
                                                                              class="form-control"/>
+                                                </div>
+                                                <div class="col-md-9"  style="border-bottom: 1px dashed; " data-ng-show="showLabelFirstNameDiv"><label> {{firstName}} </label>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div>
                                                 <label class="col-md-3 control-label">Last Name<span class='require'>*</span></label>
-                                                <div class="col-md-9"><input data-ng-model="lastName"
+                                                <div class="col-md-9" data-ng-show="showInputLastNameDiv"><input data-ng-model="lastName"
                                                                              type="text"
                                                                              placeholder="Last Name"
                                                                              class="form-control"/>
                                                 </div>
+                                                <div class="col-md-9"  style="border-bottom: 1px dashed; " data-ng-show="showLabelLastNameDiv"><label> {{lastName}} </label></div>
                                             </div>
                                         </div>
                                     </div>
@@ -44,21 +47,23 @@
                                         <div class="col-md-6">
                                             <div>
                                                 <label class="col-md-3 control-label">Father's Name<span class='require'>*</span></label>
-                                                <div class="col-md-9"><input data-ng-model="fatherName"
+                                                <div class="col-md-9" data-ng-show="showInputFatherNameDiv"><input data-ng-model="fatherName"
                                                                              type="text"
                                                                              placeholder="Father's Name"
                                                                              class="form-control"/>
                                                 </div>
+                                                <div class="col-md-9"  style="border-bottom: 1px dashed; " data-ng-show="showLabelFatherNameDiv"><label> {{fatherName}} </label></div>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div>
                                                 <label class="col-md-3 control-label">Mother's Name<span class='require'>*</span></label>
-                                                <div class="col-md-9"><input data-ng-model="motherName"
+                                                <div class="col-md-9" data-ng-show="showInputMotherNameDiv"><input data-ng-model="motherName"
                                                                              type="text"
                                                                              placeholder="Mother's Name"
                                                                              class="form-control"/>
                                                 </div>
+                                                <div class="col-md-9"  style="border-bottom: 1px dashed; " data-ng-show="showLabelMotherNameDiv"><label> {{motherName}} </label></div>
                                             </div>
                                         </div>
                                     </div>
@@ -68,22 +73,24 @@
                                             <div>
                                                 <label class="col-md-3 control-label">Gender<span class='require'>*</span></label>
 
-                                                <div class="col-md-9"><select data-ng-model="gender"
+                                                <div class="col-md-9" data-ng-show="showInputGenderDiv"><select data-ng-model="gender"
                                                                               class="form-control">
                                                     <option value="" disabled>Select Gender</option>
-                                                    <option value="male">Male</option>
-                                                    <option value="female">Female</option>
+                                                    <option value="Male">Male</option>
+                                                    <option value="Female">Female</option>
                                                 </select></div>
                                             </div>
+                                            <div class="col-md-9"  style="border-bottom: 1px dashed; " data-ng-show="showLabelGenderDiv"><label> {{gender}} </label></div>
                                         </div>
                                         <div class="col-md-6">
                                             <div>
                                                 <label class="col-md-3 control-label">Birthday<span class='require'>*</span></label>
-                                                <div class="col-md-9"><input data-ng-model="birthday"
+                                                <div class="col-md-9" data-ng-show="showInputBirthdayDiv"><input data-ng-model="birthday"
                                                                              type="text"
                                                                              placeholder="dd/mm/yyyy"
                                                                              class="form-control"/>
                                                 </div>
+                                                <div class="col-md-9"  style="border-bottom: 1px dashed; " data-ng-show="showLabelBirthdayDiv"><label> {{birthday}} </label></div>
                                             </div>
                                         </div>
                                     </div>
@@ -93,25 +100,28 @@
                                             <div>
                                                 <label class="col-md-3 control-label">Marital Status<span class='require'>*</span></label>
 
-                                                <div class="col-md-9"><select data-ng-model="maritalStatus"
+                                                <div class="col-md-9" data-ng-show="showInputMaritalStatusDiv"><select data-ng-model="maritalStatus"
                                                                               class="form-control">
                                                     <option value="" disabled>Select Marital Status</option>
-                                                    <option value="single">Single</option>
-                                                    <option value="married">Married</option>
-                                                    <option value="divorced">Divorced</option>
-                                                    <option value="widowed">Widowed</option>
+                                                    <option value="Single">Single</option>
+                                                    <option value="Married">Married</option>
+                                                    <option value="Divorced">Divorced</option>
+                                                    <option value="Widowed">Widowed</option>
                                                 </select></div>
+                                                <div class="col-md-9"  style="border-bottom: 1px dashed; " data-ng-show="showLabelMaritalStatusDiv"><label> {{maritalStatus}} </label></div>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div>
                                                 <label class="col-md-3 control-label">Spouse's Name</label>
 
-                                                <div class="col-md-9"><input data-ng-model="spouseName"
+                                                <div class="col-md-9" data-ng-show="showInputSpouseNameDiv"><input data-ng-model="spouseName"
                                                                              type="text"
                                                                              placeholder="Spouse's Name"
                                                                              class="form-control"/>
                                                 </div>
+
+                                                <div class="col-md-9"  style="border-bottom: 1px dashed; " data-ng-show="showLabelSpouseNameDiv"><label> {{spouseName}} </label></div>
                                             </div>
                                         </div>
                                     </div>
@@ -121,11 +131,12 @@
                                             <div>
                                                 <label class="col-md-3 control-label">National Id Card No.<span class="require">*</span></label>
 
-                                                <div class="col-md-9"><input data-ng-model="nationalIdNo"
+                                                <div class="col-md-9" data-ng-show="showInputNationalIdNoDiv"><input data-ng-model="nationalIdNo"
                                                                              type="text"
                                                                              placeholder="National Id Card Number"
                                                                              class="form-control"/>
                                                 </div>
+                                                <div class="col-md-9"  style="border-bottom: 1px dashed; " data-ng-show="showLabelNationalIdNoDiv"><label> {{nationalIdNo}} </label></div>
                                             </div>
                                         </div>
                                         <div class="col-md-6"></div>
@@ -139,7 +150,7 @@
                                         <div class="col-md-6">
                                             <div>
                                                 <label class="col-md-3 control-label">Email<span class='require'>*</span></label>
-                                                <div class="col-md-9">
+                                                <div class="col-md-9" data-ng-show="showInputEmailDiv">
                                                     <div class="input-icon">
                                                         <i class="fa fa-envelope"></i>
                                                         <input data-ng-model="email"
@@ -147,17 +158,19 @@
                                                                placeholder="Email Address"
                                                                class="form-control"/></div>
                                                 </div>
+                                                <div class="col-md-9"  style="border-bottom: 1px dashed; " data-ng-show="showLabelEmailDiv"><label> {{email}} </label></div>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div>
                                                 <label class="col-md-3 control-label">Phone<span class='require'>*</span></label>
 
-                                                <div class="col-md-9"><input data-ng-model="phone"
+                                                <div class="col-md-9" data-ng-show="showInputPhoneDiv"><input data-ng-model="phone"
                                                                              type="text"
                                                                              placeholder="Phone"
                                                                              class="form-control"/>
                                                 </div>
+                                                <div class="col-md-9"  style="border-bottom: 1px dashed; " data-ng-show="showLabelPhoneDiv"><label> {{phone}} </label></div>
                                             </div>
                                         </div>
                                     </div>
@@ -166,22 +179,24 @@
                                         <div class="col-md-6">
                                             <div><label class="col-md-3 control-label">Present Address<span class='require'>*</span></label>
 
-                                                <div class="col-md-9"><input data-ng-model="presentAddress"
+                                                <div class="col-md-9" data-ng-show="showInputPresentAddressDiv"><input data-ng-model="presentAddress"
                                                                              type="text"
                                                                              placeholder="Present Address"
                                                                              class="form-control"/>
                                                 </div>
+                                                <div class="col-md-9"  style="border-bottom: 1px dashed; " data-ng-show="showLabelPresentAddressDiv"><label> {{presentAddress}} </label></div>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div>
                                                 <label class="col-md-3 control-label">Permanent Address<span class='require'>*</span></label>
 
-                                                <div class="col-md-9"><input data-ng-model="permanentAddress"
+                                                <div class="col-md-9" data-ng-show="showInputPermanentAddressDiv"><input data-ng-model="permanentAddress"
                                                                              type="text"
                                                                              placeholder="Permanent Address"
                                                                              class="form-control"/>
                                                 </div>
+                                                <div class="col-md-9"  style="border-bottom: 1px dashed; " data-ng-show="showLabelPermanentAddressDiv"><label> {{permanentAddress}} </label></div>
                                             </div>
                                         </div>
                                     </div>
@@ -212,113 +227,133 @@
                                         </div>
 
                                         <div class="row">
-                                            <div class="col-md-2">
+                                            <div class="col-md-2" data-ng-show="showInputSSCSelectedDiv">
                                                 <select class="form-control" data-ng-model="sscSelected">
                                                     <option value="" disabled>Select Degree</option>
-                                                    <option value="ssc" selected>SSC</option>
-                                                    <option value="hsc">HSC</option>
-                                                    <option value="bachelor">Bachelor</option>
-                                                    <option value="masters">Master's</option>
-                                                    <option value="phd">Ph.D</option>>
+                                                    <option value="SSC" selected>SSC</option>
+                                                    <option value="HSC">HSC</option>
+                                                    <option value="Bachelor">Bachelor</option>
+                                                    <option value="Masters">Master's</option>
+                                                    <option value="Phd">Ph.D</option>
                                                 </select>
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-2"  style="border-bottom: 1px dashed;" data-ng-show="showLabelSSCSelectedDiv"><label> {{sscSelected}} </label></div>
+                                            <div class="col-md-6" data-ng-show="showInputSSCInstitutionDiv">
                                                 <input type="text" data-ng-model="sscInstitution" class="form-control" placeholder="Institution">
                                             </div>
-                                            <div class="col-md-2">
+                                            <div class="col-md-6"  style="border-bottom: 1px dashed; " data-ng-show="showLabelSSCInstitutionDiv"><label> {{sscInstitution}} </label></div>
+                                            <div class="col-md-2" data-ng-show="showInputSSCGpaDiv">
                                                 <input type="text" data-ng-model="sscGPA" class="form-control" placeholder="Cgpa/Gpa/Division">
                                             </div>
-                                            <div class="col-md-2">
+                                            <div class="col-md-2"  style="border-bottom: 1px dashed; " data-ng-show="showLabelSSCGpaDiv"><label> {{sscGPA}} </label></div>
+                                            <div class="col-md-2" data-ng-show="showInputSSCPassingYearDiv">
                                                 <input type="text" data-ng-model="sscPassingYear" class="form-control" placeholder="Passing Year">
                                             </div>
+                                            <div class="col-md-2"  style="border-bottom: 1px dashed; " data-ng-show="showLabelSSCPassingYearDiv"><label> {{sscPassingYear}} </label></div>
                                         </div>
                                         <br />
                                         <div class="row">
-                                            <div class="col-md-2">
+                                            <div class="col-md-2" data-ng-show="showInputHSCSelectedDiv">
                                                 <select class="form-control" data-ng-model="hscSelected">
                                                     <option value="" disabled>Select Degree</option>
-                                                    <option value="ssc">SSC</option>
-                                                    <option value="hsc" selected>HSC</option>
-                                                    <option value="bachelor">Bachelor</option>
-                                                    <option value="masters">Master's</option>
-                                                    <option value="phd">Ph.D</option>>
+                                                    <option value="SSC">SSC</option>
+                                                    <option value="HSC" selected>HSC</option>
+                                                    <option value="Bachelor">Bachelor</option>
+                                                    <option value="Masters">Master's</option>
+                                                    <option value="Phd">Ph.D</option>
                                                 </select>
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-2"  style="border-bottom: 1px dashed;" data-ng-show="showLabelHSCSelectedDiv"><label> {{hscSelected}} </label></div>
+                                            <div class="col-md-6" data-ng-show="showInputHSCInstitutionDiv">
                                                 <input type="text" data-ng-model="hscInstitution" class="form-control" placeholder="Institution">
                                             </div>
-                                            <div class="col-md-2">
+                                            <div class="col-md-6"  style="border-bottom: 1px dashed;" data-ng-show="showLabelHSCInstitutionDiv"><label> {{hscInstitution}} </label></div>
+                                            <div class="col-md-2" data-ng-show="showInputHSCGpaDiv">
                                                 <input type="text" data-ng-model="hscGPA" class="form-control" placeholder="Cgpa/Gpa/Division">
                                             </div>
-                                            <div class="col-md-2">
+                                            <div class="col-md-2"  style="border-bottom: 1px dashed;" data-ng-show="showLabelHSCGpaDiv"><label> {{hscGPA}} </label></div>
+                                            <div class="col-md-2" data-ng-show="showInputHSCPassingYearDiv">
                                                 <input type="text" data-ng-model="hscPassingYear"  class="form-control" placeholder="Passing Year">
                                             </div>
+                                            <div class="col-md-2"  style="border-bottom: 1px dashed;" data-ng-show="showLabelHSCPassingYearDiv"><label> {{hscPassingYear}} </label></div>
                                         </div>
                                         <br />
                                         <div class="row">
-                                            <div class="col-md-2">
+                                            <div class="col-md-2" data-ng-show="showInputBachelorSelectedDiv">
                                                 <select class="form-control" data-ng-model="bachelorSelected">
                                                     <option value="" disabled>Select Degree</option>
-                                                    <option value="ssc">SSC</option>
-                                                    <option value="hsc">HSC</option>
-                                                    <option value="bachelor" selected>Bachelor</option>
-                                                    <option value="masters">Master's</option>
-                                                    <option value="phd">Ph.D</option>>
+                                                    <option value="SSC">SSC</option>
+                                                    <option value="HSC">HSC</option>
+                                                    <option value="Bachelor" selected>Bachelor</option>
+                                                    <option value="Masters">Master's</option>
+                                                    <option value="Phd">Ph.D</option>
                                                 </select>
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-2"  style="border-bottom: 1px dashed;" data-ng-show="showLabelBachelorSelectedDiv"><label> {{bachelorSelected}} </label></div>
+                                            <div class="col-md-6" data-ng-show="showInputBachelorInstitutionDiv">
                                                 <input type="text" data-ng-model="bachelorInstitution" class="form-control" placeholder="Institution">
                                             </div>
-                                            <div class="col-md-2">
+                                            <div class="col-md-6"  style="border-bottom: 1px dashed;" data-ng-show="showLabelBachelorInstitutionDiv"><label> {{bachelorInstitution}} </label></div>
+                                            <div class="col-md-2" data-ng-show="showInputBachelorCGpaDiv">
                                                 <input type="text" data-ng-model="bachelorCGPA" class="form-control" placeholder="Cgpa/Gpa/Division">
                                             </div>
-                                            <div class="col-md-2">
+                                            <div class="col-md-2"  style="border-bottom: 1px dashed;" data-ng-show="showLabelBachelorCGpaDiv"><label> {{bachelorCGPA}} </label></div>
+                                            <div class="col-md-2" data-ng-show="showInputBachelorPassingYearDiv">
                                                 <input type="text" data-ng-model="bachelorPassingYear" class="form-control" placeholder="Passing Year">
                                             </div>
+                                            <div class="col-md-2"  style="border-bottom: 1px dashed;" data-ng-show="showLabelBachelorPassingYearDiv"><label> {{bachelorPassingYear}} </label></div>
                                         </div>
                                         <br />
                                         <div class="row">
-                                            <div class="col-md-2">
+                                            <div class="col-md-2" data-ng-show="showInputMastersSelectedDiv">
                                                 <select class="form-control" data-ng-model="mastersSelected">
                                                     <option value="" disabled>Select Degree</option>
-                                                    <option value="ssc">SSC</option>
-                                                    <option value="hsc">HSC</option>
-                                                    <option value="bachelor">Bachelor</option>
-                                                    <option value="masters" selected>Master's</option>
-                                                    <option value="phd">Ph.D</option>>
+                                                    <option value="SSC">SSC</option>
+                                                    <option value="HSC">HSC</option>
+                                                    <option value="Bachelor">Bachelor</option>
+                                                    <option value="Masters" selected>Master's</option>
+                                                    <option value="Phd">Ph.D</option>>
                                                 </select>
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-2"  style="border-bottom: 1px dashed;" data-ng-show="showLabelMastersSelectedDiv"><label> {{mastersSelected}} </label></div>
+                                            <div class="col-md-6" data-ng-show="showInputMastersInstitutionDiv">
                                                 <input type="text" data-ng-model="mastersInstitution" class="form-control" placeholder="Institution">
                                             </div>
-                                            <div class="col-md-2">
+                                            <div class="col-md-6"  style="border-bottom: 1px dashed;" data-ng-show="showLabelMastersInstitutionDiv"><label> {{mastersInstitution}} </label></div>
+                                            <div class="col-md-2" data-ng-show="showInputMastersCGpaDiv">
                                                 <input type="text" data-ng-model="mastersCGPA" class="form-control" placeholder="Cgpa/Gpa/Division">
                                             </div>
-                                            <div class="col-md-2">
+                                            <div class="col-md-2"  style="border-bottom: 1px dashed;" data-ng-show="showLabelMastersCGpaDiv"><label> {{mastersCGPA}} </label></div>
+                                            <div class="col-md-2" data-ng-show="showInputMastersPassingYearDiv">
                                                 <input type="text" data-ng-model="mastersPassingYear" class="form-control" placeholder="Passing Year">
                                             </div>
+                                            <div class="col-md-2"  style="border-bottom: 1px dashed;" data-ng-show="showLabelMastersPassingYearDiv"><label> {{mastersPassingYear}} </label></div>
                                         </div>
                                         <br />
                                         <div class="row">
-                                            <div class="col-md-2">
+                                            <div class="col-md-2" data-ng-show="showInputPhdSelectedDiv">
                                                 <select class="form-control" data-ng-model="phdSelected">
                                                     <option value="" disabled>Select Degree</option>
-                                                    <option value="ssc">SSC</option>
-                                                    <option value="hsc">HSC</option>
-                                                    <option value="bachelor">Bachelor</option>
-                                                    <option value="masters">Master's</option>
-                                                    <option value="phd" selected>Ph.D</option>
+                                                    <option value="SSC">SSC</option>
+                                                    <option value="HSC">HSC</option>
+                                                    <option value="Bachelor">Bachelor</option>
+                                                    <option value="Masters">Master's</option>
+                                                    <option value="Phd" selected>Ph.D</option>
                                                 </select>
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-2"  style="border-bottom: 1px dashed;" data-ng-show="showLabelPhdSelectedDiv"><label> {{phdSelected}} </label></div>
+                                            <div class="col-md-6" data-ng-show="showInputPhdInstitutionDiv">
                                                 <input type="text" data-ng-model="phdInstitution" class="form-control" placeholder="Institution">
                                             </div>
-                                            <div class="col-md-2">
+                                            <div class="col-md-6"  style="border-bottom: 1px dashed;" data-ng-show="showLabelPhdInstitutionDiv"><label> {{phdInstitution}} </label></div>
+                                            <div class="col-md-2" data-ng-show="showInputPhdCGpaDiv">
                                                 <input type="text" data-ng-model="phdCGPA" class="form-control" placeholder="Cgpa/Gpa/Division">
                                             </div>
-                                            <div class="col-md-2">
+                                            <div class="col-md-2"  style="border-bottom: 1px dashed;" data-ng-show="showLabelPhdCGpaDiv"><label> {{phdCGPA}} </label></div>
+                                            <div class="col-md-2" data-ng-show="showInputPhdPassingYearDiv">
                                                 <input type="text" data-ng-model="phdPassingYear" class="form-control" placeholder="Passing Year">
                                             </div>
+                                            <div class="col-md-2"  style="border-bottom: 1px dashed;" data-ng-show="showLabelPhdPassingYearDiv"><label> {{phdPassingYear}} </label></div>
                                         </div>
                                         <br/>
 
@@ -606,7 +641,7 @@
                         <div class="form-actions text-right pal">
                             <button type="submit" class="btn btn-pink" data-ng-click="testData()">Test Data</button>
                             <button type="button" class="btn btn-primary">Cancel</button>
-                            <button type="submit" class="btn btn-green">Submit</button>
+                            <button type="submit" class="btn btn-green" data-ng-click="submit()">Submit</button>
                         </div>
                     </div>
                 </div>
