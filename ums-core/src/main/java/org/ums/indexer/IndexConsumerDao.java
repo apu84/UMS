@@ -2,7 +2,6 @@ package org.ums.indexer;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -14,10 +13,11 @@ import org.ums.indexer.model.MutableIndexConsumer;
 public class IndexConsumerDao extends IndexConsumerDaoDecorator {
   private String INSERT_ALL =
       "INSERT INTO INDEX_CONSUMER(ID, HOST, INSTANCE, HEAD, LAST_CHECKED, LAST_MODIFIED) "
-          + "VALUES (?, ?, ?, ?, ?, " + getLastModifiedSql() + ")";
+          + "VALUES (?, ?, ?, ?, sysdate, " + getLastModifiedSql() + ")";
   private String SELECT_ALL =
       "SELECT ID, HOST, INSTANCE, HEAD, LAST_CHECKED, LAST_MODIFIED FROM INDEX_CONSUMER ";
   private String DELETE_ALL = "DELETE FROM INDEX_CONSUMER ";
+  private String EXISTS = "SELECT COUNT(ID) FROM INDEX_CONSUMER ";
 
   private JdbcTemplate mJdbcTemplate;
   private IdGenerator mIdGenerator;
@@ -34,16 +34,17 @@ public class IndexConsumerDao extends IndexConsumerDaoDecorator {
   }
 
   @Override
-  public List<IndexConsumer> get(String pHost) {
-    String query = SELECT_ALL + "WHERE HOST = ?";
-    return mJdbcTemplate.query(query, new Object[] {pHost}, new IndexConsumerRowMapper());
+  public IndexConsumer get(String pHost, String pPort) {
+    String query = SELECT_ALL + "WHERE HOST = ? AND INSTANCE = ? ";
+    return mJdbcTemplate.queryForObject(query, new Object[] {pHost, pPort},
+        new IndexConsumerRowMapper());
   }
 
   @Override
   public Long create(MutableIndexConsumer pMutable) {
     Long id = mIdGenerator.getNumericId();
     mJdbcTemplate.update(INSERT_ALL, id, pMutable.getHost(), pMutable.getInstance(),
-        pMutable.getHead(), pMutable.getLastChecked());
+        pMutable.getHead());
     return id;
   }
 
@@ -51,6 +52,12 @@ public class IndexConsumerDao extends IndexConsumerDaoDecorator {
   public int delete(MutableIndexConsumer pMutable) {
     String query = DELETE_ALL + "WHERE ID = ?";
     return mJdbcTemplate.update(query, pMutable.getId());
+  }
+
+  @Override
+  public boolean exists(String pHost, String pPort) {
+    String query = EXISTS + "WHERE HOST = ? AND INSTANCE = ? ";
+    return mJdbcTemplate.queryForObject(query, Boolean.class, new Object[] {pHost, pPort});
   }
 
   class IndexConsumerRowMapper implements RowMapper<IndexConsumer> {

@@ -29,6 +29,8 @@ import org.ums.indexer.IndexConsumerDao;
 import org.ums.indexer.IndexDao;
 import org.ums.indexer.manager.IndexConsumerManager;
 import org.ums.indexer.manager.IndexManager;
+import org.ums.lock.LockDao;
+import org.ums.lock.LockManager;
 import org.ums.manager.*;
 import org.ums.manager.common.CountryManager;
 import org.ums.manager.library.*;
@@ -674,6 +676,11 @@ public class UMSContext {
   @Bean
   IndexConsumerManager indexConsumerManager() {
     return new IndexConsumerDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
+  }
+
+  @Bean
+  LockManager lockManager() {
+    return new LockDao(mTemplateFactory.getJdbcTemplate());
   }
 
   @Bean
