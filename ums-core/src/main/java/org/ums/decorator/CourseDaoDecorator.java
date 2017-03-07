@@ -11,13 +11,13 @@ public class CourseDaoDecorator extends
 
   @Override
   public List<Course> getAllForPagination(final Integer pItemPerPage, final Integer pPage,
-      final String pOrder) {
+                                          final String pOrder) {
     return getManager().getAllForPagination(pItemPerPage, pPage, pOrder);
   }
 
   @Override
   public List<Course> getByYearSemester(String pSemesterId, String pProgramId, int year,
-      int semester) {
+                                        int semester) {
     return getManager().getByYearSemester(pSemesterId, pProgramId, year, semester);
   }
 
@@ -37,44 +37,44 @@ public class CourseDaoDecorator extends
 
   @Override
   public List<Course> getOfferedCourseList(Integer pSemesterId, Integer pProgramId, Integer pYear,
-      Integer pSemester) {
+                                           Integer pSemester) {
     return getManager().getOfferedCourseList(pSemesterId, pProgramId, pYear, pSemester);
   }
 
   @Override
   public List<Course> getCallForApplicationCourseList(Integer pSemesterId, Integer pProgramId,
-      Integer pYear, Integer pSemester) {
+                                                      Integer pYear, Integer pSemester) {
     return getManager().getCallForApplicationCourseList(pSemesterId, pProgramId, pYear, pSemester);
   }
 
   @Override
   public List<Course> getApprovedCourseList(Integer pSemesterId, Integer pProgramId, Integer pYear,
-      Integer pSemester) {
+                                            Integer pSemester) {
     return getManager().getApprovedCourseList(pSemesterId, pProgramId, pYear, pSemester);
   }
 
   @Override
   public List<Course> getApprovedCallForApplicationCourseList(Integer pSemesterId,
-      Integer pProgramId, Integer pYear, Integer pSemester) {
+                                                              Integer pProgramId, Integer pYear, Integer pSemester) {
     return getManager().getApprovedCallForApplicationCourseList(pSemesterId, pProgramId, pYear,
         pSemester);
   }
 
   @Override
   public List<Course> getMandatoryCourses(String pSyllabusId, final Integer pYear,
-      final Integer pSemester) {
+                                          final Integer pSemester) {
     return getManager().getMandatoryCourses(pSyllabusId, pYear, pSemester);
   }
 
   @Override
   public List<Course> getMandatoryTheoryCourses(String pSyllabusId, final Integer pYear,
-      final Integer pSemester) {
+                                                final Integer pSemester) {
     return getManager().getMandatoryTheoryCourses(pSyllabusId, pYear, pSemester);
   }
 
   @Override
   public List<Course> getMandatorySesssionalCourses(String pSyllabusId, final Integer pYear,
-      final Integer pSemester) {
+                                                    final Integer pSemester) {
     return getManager().getMandatorySesssionalCourses(pSyllabusId, pYear, pSemester);
   }
 
@@ -87,4 +87,10 @@ public class CourseDaoDecorator extends
   public List<Course> getByTeacher(String pTeacherId) {
     return getManager().getByTeacher(pTeacherId);
   }
+
+  @Override
+  public String getOfferedToDept(Integer pSemesterId, String pCourseId) {
+    return getManager().getOfferedToDept(pSemesterId, pCourseId);
+  }
+
 }
