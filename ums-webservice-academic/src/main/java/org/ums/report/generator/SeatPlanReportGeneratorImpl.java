@@ -1158,6 +1158,8 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
     while(true) {
       SeatPlanReportDto seatPlanReportDto = seatPlanReports.get(0);
 
+
+
       routineCounter += 1;
       PdfPTable table = new PdfPTable(2);
       table.setWidthPercentage(110);
@@ -1325,16 +1327,19 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
       attendanceSheetTable.addCell(signatureCell);
       String classRoomNo = seatPlanReportDto.getRoomNo();
       String courseNoOfStudent = seatPlanReportDto.getCourseNo();
+      String programOfStudent = seatPlanReportDto.getProgramName();
       int currYearOfStudent = seatPlanReportDto.getCurrentYear();
       int currSemesterOfStudent = seatPlanReportDto.getCurrentSemester();
       int counter = 0;
       int studentCounter = 0;
       while(true) {
         SeatPlanReportDto seatPlanInner = new SeatPlanReportDto();
+
         if(seatPlanReports.size() != 0) {
           seatPlanInner = seatPlanReports.get(0);
           if(seatPlanInner.getRoomNo().equals(classRoomNo)
               && seatPlanInner.getCourseNo().equals(courseNoOfStudent)
+              && seatPlanInner.getProgramName().equals(programOfStudent)
               && seatPlanInner.getCurrentYear() == currYearOfStudent
               && seatPlanInner.getCurrentSemester() == currSemesterOfStudent && counter != 20
               && seatPlanReports.size() != 0) {
