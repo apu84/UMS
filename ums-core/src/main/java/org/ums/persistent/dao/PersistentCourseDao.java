@@ -1,10 +1,5 @@
 package org.ums.persistent.dao;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
-
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.CourseDaoDecorator;
@@ -13,6 +8,11 @@ import org.ums.domain.model.mutable.MutableCourse;
 import org.ums.enums.CourseCategory;
 import org.ums.enums.CourseType;
 import org.ums.persistent.model.PersistentCourse;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentCourseDao extends CourseDaoDecorator {
   static String SELECT_ALL =
@@ -54,6 +54,16 @@ public class PersistentCourseDao extends CourseDaoDecorator {
           + "And Semester_Id=? and Program_Id=? and OPT_COURSE_OFFER.Year=? and OPT_COURSE_OFFER.Semester=? "
           + "And MST_COURSE.course_id=OPT_COURSE_OFFER.course_id ";
 
+  static String SELECT_OFFERED_TO_DEPT = "Select Dept_Id From ( " +
+      "Select syllabus_id from COURSE_SYLLABUS_MAP " +
+      "Where Course_id = ? and syllabus_id in  " +
+      "( " +
+      "Select distinct syllabus_id from SEMESTER_SYLLABUS_MAP Where Semester_Id=? " +
+      ") " +
+      ")tmp1, MST_SYLLABUS, MST_PROGRAM " +
+      "Where Tmp1.Syllabus_Id = MST_SYLLABUS. Syllabus_Id " +
+      "And MST_SYLLABUS.Program_Id = MST_PROGRAM.Program_Id ";
+
   private JdbcTemplate mJdbcTemplate;
 
   public PersistentCourseDao(final JdbcTemplate pJdbcTemplate) {
@@ -64,7 +74,7 @@ public class PersistentCourseDao extends CourseDaoDecorator {
     String query =
         SELECT_ALL
             + "WHERE MST_COURSE.COURSE_ID = ? And MST_COURSE.COURSE_ID=COURSE_SYLLABUS_MAP.COURSE_ID";
-    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new CourseRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[]{pId}, new CourseRowMapper());
   }
 
   public List<Course> getAll() {
@@ -99,7 +109,7 @@ public class PersistentCourseDao extends CourseDaoDecorator {
 
   @Override
   public List<Course> getAllForPagination(final Integer pItemPerPage, final Integer pPage,
-      final String pOrder) {
+                                          final String pOrder) {
 
     // int totalRecord= getAll().size();
     int startIndex = pItemPerPage * pPage;
@@ -108,7 +118,7 @@ public class PersistentCourseDao extends CourseDaoDecorator {
         "Select tmp2.*,ind  From (Select ROWNUM ind, tmp1.* From (" + SELECT_ALL
             + " Where MST_COURSE.COURSE_ID=COURSE_SYLLABUS_MAP.COURSE_ID " + pOrder
             + ")tmp1 ) tmp2" + " WHERE ind >=? and ind<=?  ";
-    return mJdbcTemplate.query(query, new Object[] {startIndex, endIndex}, new CourseRowMapper());
+    return mJdbcTemplate.query(query, new Object[]{startIndex, endIndex}, new CourseRowMapper());
   }
 
   @Override
@@ -117,7 +127,7 @@ public class PersistentCourseDao extends CourseDaoDecorator {
         SELECT_ALL
             + "WHERE SYLLABUS_ID = ?  And COURSE_SYLLABUS_MAP.Course_Id=MST_COURSE.Course_Id "
             + ORDER_BY;
-    return mJdbcTemplate.query(query, new Object[] {pSyllabusId}, new CourseRowMapper());
+    return mJdbcTemplate.query(query, new Object[]{pSyllabusId}, new CourseRowMapper());
   }
 
   @Override
@@ -127,17 +137,17 @@ public class PersistentCourseDao extends CourseDaoDecorator {
             + "Where MST_COURSE.Course_id=COURSE_SYLLABUS_MAP.Course_Id And Syllabus_Id In (Select Syllabus_Id from SEMESTER_SYLLABUS_MAP Where Semester_Id=? And Program_Id=? ) "
             + ORDER_BY;
     return mJdbcTemplate
-        .query(query, new Object[] {pSemesterId, pProgramId}, new CourseRowMapper());
+        .query(query, new Object[]{pSemesterId, pProgramId}, new CourseRowMapper());
   }
 
   public List<Course> getByYearSemester(String pSemesterId, String pProgramId, int year,
-      int semester) {
+                                        int semester) {
     String query =
         SELECT_ALL
             + "Where YEAR = ? and SEMESTER =? And MST_COURSE.COURSE_ID=COURSE_SYLLABUS_MAP.COURSE_ID and Syllabus_Id "
             + " In (Select Syllabus_Id from SEMESTER_SYLLABUS_MAP Where Semester_Id=? And Program_Id=? AND YEAR=? AND SEMESTER=?) "
             + ORDER_BY;
-    return mJdbcTemplate.query(query, new Object[] {year, semester, pSemesterId, pProgramId, year,
+    return mJdbcTemplate.query(query, new Object[]{year, semester, pSemesterId, pProgramId, year,
         semester}, new CourseRowMapper());
   }
 
@@ -147,78 +157,78 @@ public class PersistentCourseDao extends CourseDaoDecorator {
         SELECT_ALL + "Where Syllabus_Id=? And Course_Category="
             + CourseCategory.OPTIONAL.getValue() + " And Year=? and Semester=? "
             + " Order By OPT_GROUP_ID,Course_No ";
-    return mJdbcTemplate.query(query, new Object[] {pSyllabusId, pYear, pSemester},
+    return mJdbcTemplate.query(query, new Object[]{pSyllabusId, pYear, pSemester},
         new CourseRowMapper());
   }
 
   @Override
   public List<Course> getOfferedCourseList(Integer pSemesterId, Integer pProgramId, Integer pYear,
-      Integer pSemester) {
+                                           Integer pSemester) {
     String query = SELECT_OFFERED_COURSES;
-    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pProgramId, pYear, pSemester},
+    return mJdbcTemplate.query(query, new Object[]{pSemesterId, pProgramId, pYear, pSemester},
         new CourseRowMapper());
   }
 
   @Override
   public List<Course> getCallForApplicationCourseList(Integer pSemesterId, Integer pProgramId,
-      Integer pYear, Integer pSemester) {
+                                                      Integer pYear, Integer pSemester) {
     String query = SELECT_CALL_FOR_APPLICATION_COURSES;
-    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pProgramId, pYear, pSemester},
+    return mJdbcTemplate.query(query, new Object[]{pSemesterId, pProgramId, pYear, pSemester},
         new CourseRowMapper());
   }
 
   @Override
   public List<Course> getApprovedCourseList(Integer pSemesterId, Integer pProgramId, Integer pYear,
-      Integer pSemester) {
+                                            Integer pSemester) {
     String query = SELECT_APPROVED_COURSES;
-    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pProgramId, pYear, pSemester},
+    return mJdbcTemplate.query(query, new Object[]{pSemesterId, pProgramId, pYear, pSemester},
         new CourseRowMapper());
   }
 
   @Override
   public List<Course> getApprovedCallForApplicationCourseList(Integer pSemesterId,
-      Integer pProgramId, Integer pYear, Integer pSemester) {
+                                                              Integer pProgramId, Integer pYear, Integer pSemester) {
     String query = SELECT_APPROVED_CALL_FOR_APPLICATION_COURSES;
-    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pProgramId, pYear, pSemester},
+    return mJdbcTemplate.query(query, new Object[]{pSemesterId, pProgramId, pYear, pSemester},
         new CourseRowMapper());
   }
 
   @Override
   public List<Course> getMandatoryCourses(String pSyllabusId, final Integer pYear,
-      final Integer pSemester) {
+                                          final Integer pSemester) {
     String query =
         SELECT_ALL + "Where Syllabus_Id=? And Course_Category="
             + CourseCategory.MANDATORY.getValue()
             + " AND YEAR = ? AND SEMESTER = ? Order By Course_No ";
-    return mJdbcTemplate.query(query, new Object[] {pSyllabusId, pYear, pSemester},
+    return mJdbcTemplate.query(query, new Object[]{pSyllabusId, pYear, pSemester},
         new CourseRowMapper());
   }
 
   @Override
   public List<Course> getMandatoryTheoryCourses(String pSyllabusId, final Integer pYear,
-      final Integer pSemester) {
+                                                final Integer pSemester) {
     String query =
         SELECT_ALL + "Where Syllabus_Id=? And Course_Type=" + CourseType.THEORY.getId()
             + " AND YEAR = ? AND SEMESTER = ? Order By Course_No ";
-    return mJdbcTemplate.query(query, new Object[] {pSyllabusId, pYear, pSemester},
+    return mJdbcTemplate.query(query, new Object[]{pSyllabusId, pYear, pSemester},
         new CourseRowMapper());
   }
 
   @Override
   public List<Course> getMandatorySesssionalCourses(String pSyllabusId, final Integer pYear,
-      final Integer pSemester) {
+                                                    final Integer pSemester) {
     String query =
         SELECT_ALL + "Where Syllabus_Id=? And" + " (COURSE_TYPE = "
             + CourseType.THESIS_PROJECT.getId() + " OR Course_Type=" + CourseType.SESSIONAL.getId()
             + ") AND YEAR = ? AND SEMESTER = ? Order By Course_No ";
-    return mJdbcTemplate.query(query, new Object[] {pSyllabusId, pYear, pSemester},
+    return mJdbcTemplate.query(query, new Object[]{pSyllabusId, pYear, pSemester},
         new CourseRowMapper());
   }
 
   @Override
   public Course getByCourseNo(String pCourseName, String pSyllabusId) {
     String query = SELECT_ALL + " WHERE COURSE_NO = ? AND SYLLABUS_ID = ?";
-    return mJdbcTemplate.queryForObject(query, new Object[] {pCourseName, pSyllabusId},
+    return mJdbcTemplate.queryForObject(query, new Object[]{pCourseName, pSyllabusId},
         new CourseRowMapper());
   }
 
@@ -247,7 +257,12 @@ public class PersistentCourseDao extends CourseDaoDecorator {
             + "                               FROM COURSE_TEACHER C, MST_SEMESTER S "
             + "                               WHERE s.STATUS = 1 AND s.SEMESTER_ID = c.SEMESTER_ID AND TEACHER_ID = ?) "
             + "and MST_COURSE.COURSE_ID=COURSE_SYLLABUS_MAP.COURSE_ID";
-    return mJdbcTemplate.query(query, new Object[] {pTeacherId}, new CourseRowMapper());
+    return mJdbcTemplate.query(query, new Object[]{pTeacherId}, new CourseRowMapper());
+  }
+
+  @Override
+  public String getOfferedToDept(final Integer pSemesterId, final String pCourseId) {
+    return mJdbcTemplate.queryForObject(SELECT_OFFERED_TO_DEPT, new Object[]{pCourseId, pSemesterId}, String.class);
   }
 
   class CourseRowMapper implements RowMapper<Course> {
@@ -260,20 +275,20 @@ public class PersistentCourseDao extends CourseDaoDecorator {
       course.setCrHr(resultSet.getFloat("CRHR"));
       course.setSyllabusId(resultSet.getString("SYLLABUS_ID"));
       course.setCourseGroupId(resultSet.getInt("OPT_GROUP_ID"));
-      if(resultSet.getObject("OFFER_BY") != null) {
+      if (resultSet.getObject("OFFER_BY") != null) {
         course.setOfferedDepartmentId(resultSet.getString("OFFER_BY"));
       }
       course.setViewOrder(resultSet.getInt("VIEW_ORDER"));
       course.setYear(resultSet.getInt("YEAR"));
       course.setSemester(resultSet.getInt("SEMESTER"));
       course.setCourseType(CourseType.get(resultSet.getInt("COURSE_TYPE")));
-      if(resultSet.getObject("COURSE_CATEGORY") != null) {
+      if (resultSet.getObject("COURSE_CATEGORY") != null) {
         course.setCourseCategory(CourseCategory.get(resultSet.getInt("COURSE_CATEGORY")));
       }
       course.setPairCourseId(resultSet.getString("PAIR_COURSE_ID"));
       course.setLastModified(resultSet.getString("LAST_MODIFIED"));
 
-      if(resultSet.getObject("TOTAL_APPLIED") != null) {
+      if (resultSet.getObject("TOTAL_APPLIED") != null) {
         course.setTotalApplied(resultSet.getInt("TOTAL_APPLIED"));
       }
       course.setPairCourseId(resultSet.getString("PAIR_COURSE_ID"));
