@@ -137,6 +137,47 @@ module ums{
     showLabelPhdCGpaDiv: boolean;
     showInputPhdPassingYearDiv: boolean;
     showLabelPhdPassingYearDiv: boolean;
+    showInputPublicationTitleDiv: boolean;
+    showLabelPublicationTitleDiv: boolean;
+    showInputPublicationTypeDiv: boolean;
+    showLabelPublicationTypeDiv: boolean;
+    showInputPublicationYearDiv: boolean;
+    showLabelPublicationYearDiv: boolean;
+    showInputPublicationPlaceDiv: boolean;
+    showLabelPublicationPlaceDiv: boolean;
+    showInputWebReferenceDiv: boolean;
+    showLabelWebReferenceDiv: boolean;
+    showInputTrainingNameDiv: boolean;
+    showLabelTrainingNameDiv: boolean;
+    showInputTrainingInstitutionDiv: boolean;
+    showLabelTrainingInstitutionDiv: boolean;
+    showInputTrainingDurationDiv: boolean;
+    showLabelTrainingDurationDiv: boolean;
+    showInputTrainingAccreditedYearDiv: boolean;
+    showLabelTrainingAccreditedYearDiv: boolean;
+    showInputAwardNameDiv: boolean;
+    showLabelAwardNameDiv: boolean;
+    showInputPurposeDiv: boolean;
+    showLabelPurposeDiv: boolean;
+    showInputYearOfRecognitionDiv: boolean;
+    showLabelYearOfRecognitionDiv: boolean;
+    showInputDescriptionDiv: boolean;
+    showLabelDescriptionDiv: boolean;
+    showInputExperienceInstitutionDiv: boolean;
+    showLabelExperienceInstitutionDiv: boolean;
+    showInputExperienceDesignationDiv: boolean;
+    showLabelExperienceDesignationDiv: boolean;
+    showInputExperienceFromMonthDiv: boolean;
+    showLabelExperienceFromMonthDiv: boolean;
+    showInputExperienceFromYearDiv: boolean;
+    showLabelExperienceFromYearDiv: boolean;
+    showInputExperienceToMonthDiv: boolean;
+    showLabelExperienceToMonthDiv: boolean;
+    showInputExperienceToYearDiv: boolean;
+    showLabelExperienceToYearDiv: boolean;
+
+
+
 
 
 
@@ -227,6 +268,44 @@ module ums{
       $scope.showLabelPhdCGpaDiv = false;
       $scope.showInputPhdPassingYearDiv = true;
       $scope.showLabelPhdPassingYearDiv = false;
+      $scope.showInputPublicationTitleDiv = true;
+      $scope.showLabelPublicationTitleDiv = false;
+      $scope.showInputPublicationTypeDiv = true;
+      $scope.showLabelPublicationTypeDiv = false;
+      $scope.showInputPublicationYearDiv = true;
+      $scope.showLabelPublicationYearDiv = false;
+      $scope.showInputPublicationPlaceDiv = true;
+      $scope.showLabelPublicationPlaceDiv = false;
+      $scope.showInputWebReferenceDiv = true;
+      $scope.showLabelWebReferenceDiv = false;
+      $scope.showInputTrainingNameDiv = true;
+      $scope.showLabelTrainingNameDiv = false;
+      $scope.showInputTrainingInstitutionDiv = true;
+      $scope.showLabelTrainingInstitutionDiv = false;
+      $scope.showInputTrainingDurationDiv = true;
+      $scope.showLabelTrainingDurationDiv = false;
+      $scope.showInputTrainingAccreditedYearDiv = true;
+      $scope.showLabelTrainingAccreditedYearDiv = false;
+      $scope.showInputAwardNameDiv = true;
+      $scope.showLabelAwardNameDiv = false;
+      $scope.showInputPurposeDiv = true;
+      $scope.showLabelPurposeDiv = false;
+      $scope.showInputYearOfRecognitionDiv = true;
+      $scope.showLabelYearOfRecognitionDiv = false;
+      $scope.showInputDescriptionDiv = true;
+      $scope.showLabelDescriptionDiv = false;
+      $scope.showInputExperienceInstitutionDiv = true;
+      $scope.showLabelExperienceInstitutionDiv = false;
+      $scope.showInputExperienceDesignationDiv = true;
+      $scope.showLabelExperienceDesignationDiv = false;
+      $scope.showInputExperienceFromMonthDiv = true;
+      $scope.showLabelExperienceFromMonthDiv = false;
+      $scope.showInputExperienceFromYearDiv = true;
+      $scope.showLabelExperienceFromYearDiv = false;
+      $scope.showInputExperienceToMonthDiv = true;
+      $scope.showLabelExperienceToMonthDiv = false;
+      $scope.showInputExperienceToYearDiv = true;
+      $scope.showLabelExperienceToYearDiv = false;
 
 
       $scope.changeNav = this.changeNav.bind(this);
@@ -400,6 +479,44 @@ module ums{
       this.$scope.showLabelPhdCGpaDiv = true;
       this.$scope.showInputPhdPassingYearDiv = false;
       this.$scope.showLabelPhdPassingYearDiv = true;
+      this.$scope.showInputPublicationTitleDiv = false;
+      this.$scope.showLabelPublicationTitleDiv = true;
+      this.$scope.showInputPublicationTypeDiv = false;
+      this.$scope.showLabelPublicationTypeDiv = true;
+      this.$scope.showInputPublicationYearDiv = false;
+      this.$scope.showLabelPublicationYearDiv = true;
+      this.$scope.showInputPublicationPlaceDiv = false;
+      this.$scope.showLabelPublicationPlaceDiv = true;
+      this.$scope.showInputWebReferenceDiv = false;
+      this.$scope.showLabelWebReferenceDiv = true;
+      this.$scope.showInputTrainingNameDiv = false;
+      this.$scope.showLabelTrainingNameDiv = true;
+      this.$scope.showInputTrainingInstitutionDiv = false;
+      this.$scope.showLabelTrainingInstitutionDiv = true;
+      this.$scope.showInputTrainingDurationDiv = false;
+      this.$scope.showLabelTrainingDurationDiv = true;
+      this.$scope.showInputTrainingAccreditedYearDiv = false;
+      this.$scope.showLabelTrainingAccreditedYearDiv = true;
+      this.$scope.showInputAwardNameDiv = false;
+      this.$scope.showLabelAwardNameDiv = true;
+      this.$scope.showInputPurposeDiv = false;
+      this.$scope.showLabelPurposeDiv = true;
+      this.$scope.showInputYearOfRecognitionDiv = false;
+      this.$scope.showLabelYearOfRecognitionDiv = true;
+      this.$scope.showInputDescriptionDiv = false;
+      this.$scope.showLabelDescriptionDiv = true;
+      this.$scope.showInputExperienceInstitutionDiv = false;
+      this.$scope.showLabelExperienceInstitutionDiv = true;
+      this.$scope.showInputExperienceDesignationDiv = false;
+      this.$scope.showLabelExperienceDesignationDiv = true;
+      this.$scope.showInputExperienceFromMonthDiv = false;
+      this.$scope.showLabelExperienceFromMonthDiv = true;
+      this.$scope.showInputExperienceFromYearDiv = false;
+      this.$scope.showLabelExperienceFromYearDiv = true;
+      this.$scope.showInputExperienceToMonthDiv = false;
+      this.$scope.showLabelExperienceToMonthDiv = true;
+      this.$scope.showInputExperienceToYearDiv = false;
+      this.$scope.showLabelExperienceToYearDiv = true;
 
 
       this.notify.success("Data Saved");
@@ -463,11 +580,6 @@ module ums{
       this.$scope.experienceFromYear = "";
       this.$scope.experienceToMonth = "";
       this.$scope.experienceToYear = "";
-
-
-
-
-
 
 
 
@@ -537,6 +649,44 @@ module ums{
       this.$scope.showLabelPhdCGpaDiv = false;
       this.$scope.showInputPhdPassingYearDiv = true;
       this.$scope.showLabelPhdPassingYearDiv = false;
+      this.$scope.showInputPublicationTitleDiv = true;
+      this.$scope.showLabelPublicationTitleDiv = false;
+      this.$scope.showInputPublicationTypeDiv = true;
+      this.$scope.showLabelPublicationTypeDiv = false;
+      this.$scope.showInputPublicationYearDiv = true;
+      this.$scope.showLabelPublicationYearDiv = false;
+      this.$scope.showInputPublicationPlaceDiv = true;
+      this.$scope.showLabelPublicationPlaceDiv = false;
+      this.$scope.showInputWebReferenceDiv = true;
+      this.$scope.showLabelWebReferenceDiv = false;
+      this.$scope.showInputTrainingNameDiv = true;
+      this.$scope.showLabelTrainingNameDiv = false;
+      this.$scope.showInputTrainingInstitutionDiv = true;
+      this.$scope.showLabelTrainingInstitutionDiv = false;
+      this.$scope.showInputTrainingDurationDiv = true;
+      this.$scope.showLabelTrainingDurationDiv = false;
+      this.$scope.showInputTrainingAccreditedYearDiv = true;
+      this.$scope.showLabelTrainingAccreditedYearDiv = false;
+      this.$scope.showInputAwardNameDiv = true;
+      this.$scope.showLabelAwardNameDiv = false;
+      this.$scope.showInputPurposeDiv = true;
+      this.$scope.showLabelPurposeDiv = false;
+      this.$scope.showInputYearOfRecognitionDiv = true;
+      this.$scope.showLabelYearOfRecognitionDiv = false;
+      this.$scope.showInputDescriptionDiv = true;
+      this.$scope.showLabelDescriptionDiv = false;
+      this.$scope.showInputExperienceInstitutionDiv = true;
+      this.$scope.showLabelExperienceInstitutionDiv = false;
+      this.$scope.showInputExperienceDesignationDiv = true;
+      this.$scope.showLabelExperienceDesignationDiv = false;
+      this.$scope.showInputExperienceFromMonthDiv = true;
+      this.$scope.showLabelExperienceFromMonthDiv = false;
+      this.$scope.showInputExperienceFromYearDiv = true;
+      this.$scope.showLabelExperienceFromYearDiv = false;
+      this.$scope.showInputExperienceToMonthDiv = true;
+      this.$scope.showLabelExperienceToMonthDiv = false;
+      this.$scope.showInputExperienceToYearDiv = true;
+      this.$scope.showLabelExperienceToYearDiv = false;
     }
   }
 
