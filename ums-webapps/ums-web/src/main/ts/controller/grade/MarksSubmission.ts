@@ -361,18 +361,22 @@ module ums {
     }
 
 
-    private downloadPdf(): void {
-      this.httpClient.get("gradeReport/pdf/semester/" + this.$scope.current_semesterId + "/courseid/" + this.$scope.current_courseId + "/examtype/" + this.$scope.current_examTypeId + "/role/" + this.$scope.currentActor, 'application/pdf',
+    private downloadPdf():any{
+      var contentType:string=UmsUtil.getFileContentType("pdf");
+      var fileName= this.$scope.data.course_no+"-"+this.$scope.data.semester_name;
 
+      this.httpClient.get("gradeReport/pdf/semester/" + this.$scope.current_semesterId + "/courseid/" + this.$scope.current_courseId + "/examtype/" + this.$scope.current_examTypeId + "/role/" + this.$scope.currentActor, contentType,
           (data: any, etag: string) => {
-            var file = new Blob([data], {type: 'application/pdf'});
-            var fileURL = this.$sce.trustAsResourceUrl(URL.createObjectURL(file));
-            this.$window.open(fileURL);
+            UmsUtil.writeFileContent(data,contentType,fileName);
           },
           (response: ng.IHttpPromiseCallbackArg<any>) => {
             console.error(response);
           }, 'arraybuffer');
+
     }
+
+
+
 
     private fetchGradeSubmissionTable(): void {
 
