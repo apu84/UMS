@@ -96,10 +96,16 @@ module ums{
     }
 
     public getUndertakenForm(programType: number, semesterId: number, receiptId: string): void {
+      var contentType: string = UmsUtil.getFileContentType("pdf");
+      var fileName = "UnderTaken Form " + receiptId;
+
       this.httpClient.get("academic/students/certificateHistory/underTaken/programType/"+ programType +"/semesterId/"+semesterId+"/receiptId/"+receiptId, 'application/pdf', (data: any, etag: string) => {
-            var file = new Blob([data], {type: 'application/pdf'});
-            var fileURL = this.$sce.trustAsResourceUrl(URL.createObjectURL(file));
-            this.$window.open(fileURL);
+
+            // var file = new Blob([data], {type: 'application/pdf'});
+            // var fileURL = this.$sce.trustAsResourceUrl(URL.createObjectURL(file));
+            // this.$window.open(fileURL);
+
+            UmsUtil.writeFileContent(data, contentType ,fileName);
           },
           (response: ng.IHttpPromiseCallbackArg<any>) => {
             console.error(response);

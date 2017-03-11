@@ -8,11 +8,10 @@ import org.springframework.stereotype.Component;
 import org.ums.domain.model.immutable.AdmissionAllTypesOfCertificate;
 import org.ums.domain.model.immutable.AdmissionCertificatesOfStudent;
 import org.ums.domain.model.immutable.AdmissionStudent;
+import org.ums.domain.model.immutable.Semester;
 import org.ums.enums.ProgramType;
-import org.ums.manager.AdmissionAllTypesOfCertificateManager;
-import org.ums.manager.AdmissionCertificatesOfStudentManager;
-import org.ums.manager.AdmissionStudentManager;
-import org.ums.manager.ProgramManager;
+import org.ums.enums.SemesterStatus;
+import org.ums.manager.*;
 
 import java.io.*;
 import java.util.*;
@@ -33,11 +32,17 @@ public class UndertakenFormGeneratorImpl implements UndertakenFormGenerator {
   @Autowired
   ProgramManager mProgramManager;
 
+  @Autowired
+  SemesterManager mSemesterManager;
+
   public static final String DEST = "UndertakenForm.pdf";
 
   @Override
   public void createUndertakenForm(ProgramType pProgramType, int pSemesterId, String pReceiptId,
       OutputStream pOutputStream) throws IOException, DocumentException {
+
+    Semester semester =
+        mSemesterManager.getSemesterByStatus(ProgramType.UG, SemesterStatus.NEWLY_CREATED);
 
     AdmissionStudent admissionStudent =
         mAdmissionStudentManager.getAdmissionStudent(pSemesterId, pProgramType, pReceiptId);
@@ -157,7 +162,7 @@ public class UndertakenFormGeneratorImpl implements UndertakenFormGenerator {
     bodyText1.add(bodyChunk9);
     bodyText1.add(bodyChunk10);
     bodyText1.add(bodyChunk11);
-    bodyText1.setAlignment(Element.ALIGN_LEFT);
+    bodyText1.setAlignment(Element.ALIGN_JUSTIFIED);
     emptyLine(bodyText1, 2);
     document.add(bodyText1);
 
@@ -230,7 +235,7 @@ public class UndertakenFormGeneratorImpl implements UndertakenFormGenerator {
         }
       }
     }
-    bodyText2.setAlignment(Element.ALIGN_LEFT);
+    bodyText2.setAlignment(Element.ALIGN_JUSTIFIED);
     emptyLine(bodyText2, 1);
     document.add(bodyText2);
 
@@ -244,7 +249,7 @@ public class UndertakenFormGeneratorImpl implements UndertakenFormGenerator {
     Chunk report_footer4 = new Chunk();
     report_footer4.append("\nAdmission Committee");
     Chunk report_footer5 = new Chunk();
-    report_footer5.append("\nSpring 2017 Semester");
+    report_footer5.append("\n" + semester.getName());
     Chunk report_footer6 = new Chunk();
     report_footer6.append("                                                      ");
     report_footer6.setUnderline(0.5f, -2f);
@@ -264,7 +269,7 @@ public class UndertakenFormGeneratorImpl implements UndertakenFormGenerator {
     rfooter1.add(report_footer3);
     rfooter1.add(report_footer4);
     rfooter1.add(report_footer5);
-    rfooter1.setAlignment(Element.ALIGN_LEFT);
+    rfooter1.setAlignment(Element.ALIGN_JUSTIFIED);
     document.add(rfooter1);
 
     Paragraph rfooter2 = new Paragraph();
@@ -289,7 +294,7 @@ public class UndertakenFormGeneratorImpl implements UndertakenFormGenerator {
   void createCheckbox(Paragraph p, int i, String certificateName) throws DocumentException {
 
     PdfPTable table = new PdfPTable(2);
-    table.setHorizontalAlignment(Element.ALIGN_LEFT);
+    table.setHorizontalAlignment(Element.ALIGN_JUSTIFIED);
     PdfPCell cell;
     table.setWidths(new float[] {0.4f, 5.0f});
     cell = new PdfPCell();
