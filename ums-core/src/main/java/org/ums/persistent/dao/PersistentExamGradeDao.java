@@ -84,7 +84,7 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
   String SELECT_GRADE_SUBMISSION_TABLE_HEAD =
       "Select LAST_SUBMISSION_DATE_PREP,LAST_SUBMISSION_DATE_SCR,LAST_SUBMISSION_DATE_HEAD, Ms_Status.Semester_Id,Exam_Type,Mst_Course.Course_Id,Course_No,Course_Title ,CrHr,Course_Type,Course_Category,Offer_By,Ms_Status.Year,Ms_Status.Semester,COURSE_SYLLABUS_MAP.Syllabus_Id, "
           + "getCourseTeacher(Ms_Status.semester_id,Mst_Course.course_id) Course_Teachers, "
-          + "MST_PROGRAM.PROGRAM_SHORT_NAME,getPreparerScrutinizer(Ms_Status.Semester_Id,Mst_Course.Course_Id,'P') PREPARER_NAME, "
+          + "MST_PROGRAM.PROGRAM_SHORT_NAME,getPreparerScrutinizer(Ms_Status.Semester_Id,Mst_Course.Course_Id,'P') PREPARER_NAME,0 preparer_id,0 scrutinizer_id, "
           + "getPreparerScrutinizer(Ms_Status.Semester_Id,Mst_Course.Course_Id,'S') SCRUTINIZER_NAME,STATUS  "
           + "From MARKS_SUBMISSION_STATUS Ms_Status,Mst_Course,COURSE_SYLLABUS_MAP,MST_SYLLABUS,MST_PROGRAM "
           + "Where Ms_Status.Semester_Id=? And Exam_Type=? "
