@@ -43,7 +43,7 @@ public interface AdmissionStudentManager extends
   int updateAdmissionMigrationStatus(List<MutableAdmissionStudent> pStudents);
 
   AdmissionStudent getNextStudentForDepartmentSelection(final int pSemesterId,
-      final ProgramType pProgramType, final String pUnit, final String pQuota);
+      final ProgramType pProgramType, final String pUnit, final String pQuota, int pMeritSerialNo);
 
   // kawsurilu
 

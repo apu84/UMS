@@ -101,9 +101,9 @@ public class AdmissionStudentCache extends
 
   @Override
   public AdmissionStudent getNextStudentForDepartmentSelection(int pSemesterId,
-      ProgramType pProgramType, String pUnit, String pQuota) {
+      ProgramType pProgramType, String pUnit, String pQuota, int pMeritSerialNo) {
     return getManager().getNextStudentForDepartmentSelection(pSemesterId, pProgramType, pUnit,
-        pQuota);
+        pQuota, pMeritSerialNo);
   }
 
   @Override
