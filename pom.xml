@@ -11,7 +11,7 @@
   <properties>
     <project.version>trunk-SNAPSHOT</project.version>
     <spring.version>4.2.3.RELEASE</spring.version>
-    <jersey.version>2.21.1</jersey.version>
+    <jersey.version>2.25</jersey.version>
     <!-- Adapt this to a version found on http://repo.maven.apache.org/maven2/org/eclipse/jetty/jetty-maven-plugin/ -->
     <jetty.maven.plugin.version>9.2.6.v20141205</jetty.maven.plugin.version>
     <logback.version>1.1.7</logback.version>
@@ -26,6 +26,7 @@
     <jxls-poi-version>1.0.9</jxls-poi-version>
     <apache-poi-version>3.15</apache-poi-version>
     <spring-data-mongodb-version>1.9.2.RELEASE</spring-data-mongodb-version>
+    <spring-data-solr>2.0.6.RELEASE</spring-data-solr>
     <main.basedir>${project.basedir}</main.basedir>
   </properties>
 
@@ -476,8 +477,12 @@
       <version>${spring-data-mongodb-version}</version>
       <scope>provided</scope>
     </dependency>
-
-
+    <dependency>
+      <groupId>org.springframework.data</groupId>
+      <artifactId>spring-data-solr</artifactId>
+      <version>${spring-data-solr}</version>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
 
   <build>

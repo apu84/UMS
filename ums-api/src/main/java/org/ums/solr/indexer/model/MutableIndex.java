@@ -1,4 +1,4 @@
-package org.ums.indexer.model;
+package org.ums.solr.indexer.model;
 
 import org.ums.domain.model.common.Mutable;
 import org.ums.domain.model.common.MutableIdentifier;

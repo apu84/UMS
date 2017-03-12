@@ -1,4 +1,4 @@
-package org.ums.indexer.model;
+package org.ums.solr.indexer.model;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -12,7 +12,7 @@ public interface Index extends Serializable, EditType<MutableIndex>, LastModifie
 
   String getEntityType();
 
-  Boolean getIsDeleted();
+  Boolean isDeleted();
 
   Date getModified();
 }

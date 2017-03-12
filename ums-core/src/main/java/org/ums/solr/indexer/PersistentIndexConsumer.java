@@ -1,19 +1,26 @@
-package org.ums.indexer;
+package org.ums.solr.indexer;
 
 import java.util.Date;
 
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
-import org.ums.indexer.manager.IndexConsumerManager;
-import org.ums.indexer.model.MutableIndexConsumer;
+import org.ums.solr.indexer.manager.IndexConsumerManager;
+import org.ums.solr.indexer.model.MutableIndexConsumer;
 
 class PersistentIndexConsumer implements MutableIndexConsumer {
 
   private static IndexConsumerManager sIndexConsumerManager;
+
+  static {
+    ApplicationContext applicationContext = AppContext.getApplicationContext();
+    sIndexConsumerManager =
+        applicationContext.getBean("indexConsumerManager", IndexConsumerManager.class);
+  }
+
   private Long mId;
   private String mHost;
   private String mInstance;
-  private Long mHead;
+  private Date mHead;
   private Date mLastChecked;
   private String mLastModified;
 
@@ -48,12 +55,12 @@ class PersistentIndexConsumer implements MutableIndexConsumer {
   }
 
   @Override
-  public Long getHead() {
+  public Date getHead() {
     return mHead;
   }
 
   @Override
-  public void setHead(Long pHead) {
+  public void setHead(Date pHead) {
     this.mHead = pHead;
   }
 
@@ -106,11 +113,5 @@ class PersistentIndexConsumer implements MutableIndexConsumer {
     setHead(pIndexConsumer.getHead());
     setLastChecked(pIndexConsumer.getLastChecked());
     setLastModified(pIndexConsumer.getLastModified());
-  }
-
-  static {
-    ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sIndexConsumerManager =
-        applicationContext.getBean("indexConsumerManager", IndexConsumerManager.class);
   }
 }

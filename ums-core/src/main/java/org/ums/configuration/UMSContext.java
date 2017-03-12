@@ -4,12 +4,18 @@ import javax.sql.DataSource;
 
 import org.apache.shiro.authc.credential.PasswordService;
 import org.apache.shiro.mgt.SecurityManager;
+import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.core.env.Environment;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.solr.core.SolrTemplate;
+import org.springframework.data.solr.core.convert.SolrJConverter;
+import org.springframework.data.solr.repository.config.EnableSolrRepositories;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -18,17 +24,19 @@ import org.ums.cache.common.CountryCache;
 import org.ums.cache.library.*;
 import org.ums.cachewarmer.AutoCacheWarmer;
 import org.ums.cachewarmer.CacheWarmerManagerImpl;
-import org.ums.domain.model.immutable.Examiner;
-import org.ums.domain.model.mutable.MutableExaminer;
 import org.ums.fee.*;
 import org.ums.formatter.DateFormat;
 import org.ums.generator.IdGenerator;
 import org.ums.generator.JxlsGenerator;
 import org.ums.generator.XlsGenerator;
-import org.ums.indexer.IndexConsumerDao;
-import org.ums.indexer.IndexDao;
-import org.ums.indexer.manager.IndexConsumerManager;
-import org.ums.indexer.manager.IndexManager;
+import org.ums.solr.indexer.ConsumeIndex;
+import org.ums.solr.indexer.ConsumeIndexJobImpl;
+import org.ums.solr.indexer.IndexConsumerDao;
+import org.ums.solr.indexer.IndexDao;
+import org.ums.solr.indexer.manager.IndexConsumerManager;
+import org.ums.solr.indexer.manager.IndexManager;
+import org.ums.solr.indexer.resolver.EntityResolverFactory;
+import org.ums.solr.indexer.resolver.EntityResolverFactoryImpl;
 import org.ums.lock.LockDao;
 import org.ums.lock.LockManager;
 import org.ums.manager.*;
@@ -42,6 +50,8 @@ import org.ums.security.authentication.UMSAuthenticationRealm;
 import org.ums.services.LoginService;
 import org.ums.services.NotificationGenerator;
 import org.ums.services.NotificationGeneratorImpl;
+import org.ums.solr.repository.EmployeeRepository;
+import org.ums.solr.repository.transaction.EmployeeTransaction;
 import org.ums.statistics.DBLogger;
 import org.ums.statistics.JdbcTemplateFactory;
 import org.ums.statistics.QueryLogger;
@@ -51,6 +61,7 @@ import org.ums.util.Constants;
 @Configuration
 @EnableAsync
 @EnableScheduling
+@EnableSolrRepositories(basePackages = "org.ums.solr.repository", multicoreSupport = true)
 public class UMSContext {
   @Autowired
   DataSource mDataSource;
@@ -88,6 +99,13 @@ public class UMSContext {
 
   @Autowired
   IdGenerator mIdGenerator;
+
+  @Autowired
+  @Lazy
+  EmployeeRepository mEmployeeRepository;
+
+  @Autowired
+  Environment mEnvironment;
 
   @Bean
   LibraryManager libraryManager() {
@@ -181,9 +199,14 @@ public class UMSContext {
   }
 
   @Bean
+  @Lazy
   EmployeeManager employeeManager() {
+    EmployeeTransaction employeeTransaction = new EmployeeTransaction();
+    PersistentEmployeeDao persistentEmployeeDao =
+        new PersistentEmployeeDao(mTemplateFactory.getJdbcTemplate());
+    employeeTransaction.setManager(persistentEmployeeDao);
     EmployeeCache employeeCache = new EmployeeCache(mCacheFactory.getCacheManager());
-    employeeCache.setManager(new PersistentEmployeeDao(mTemplateFactory.getJdbcTemplate()));
+    employeeCache.setManager(employeeTransaction);
     return employeeCache;
   }
 
@@ -612,16 +635,30 @@ public class UMSContext {
     return userGuideCache;
   }
 
+  @Bean
   FeeCategoryManager feeCategoryManager() {
     FeeCategoryCache feeCategoryCache = new FeeCategoryCache(mCacheFactory.getCacheManager());
     feeCategoryCache.setManager(new PersistentFeeCategoryDao(mTemplateFactory.getJdbcTemplate()));
     return feeCategoryCache;
   }
 
+  @Bean
   FeeManager feeManager() {
     FeeCache feeCache = new FeeCache(mCacheFactory.getCacheManager());
     feeCache.setManager(new PersistentFeeDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator));
     return feeCache;
+  }
+
+  @Bean
+  public SolrClient solrClient() {
+    return new HttpSolrClient("http://localhost:8983/solr/");
+  }
+
+  @Bean
+  public SolrTemplate solrTemplate(SolrClient client) throws Exception {
+    SolrTemplate template = new SolrTemplate(client);
+    template.setSolrConverter(new SolrJConverter());
+    return template;
   }
 
   @Bean
@@ -670,7 +707,7 @@ public class UMSContext {
 
   @Bean
   IndexManager indexManager() {
-    return new IndexDao(mTemplateFactory.getJdbcTemplate());
+    return new IndexDao(mTemplateFactory.getJdbcTemplate(), mIdGenerator);
   }
 
   @Bean
@@ -681,6 +718,17 @@ public class UMSContext {
   @Bean
   LockManager lockManager() {
     return new LockDao(mTemplateFactory.getJdbcTemplate());
+  }
+
+  @Bean
+  EntityResolverFactory entityResolverFactory() {
+    return new EntityResolverFactoryImpl(employeeManager(), mEmployeeRepository);
+  }
+
+  @Bean
+  ConsumeIndex consumeIndex() {
+    return new ConsumeIndexJobImpl(indexManager(), indexConsumerManager(), mEnvironment,
+        entityResolverFactory(), lockManager());
   }
 
   @Bean

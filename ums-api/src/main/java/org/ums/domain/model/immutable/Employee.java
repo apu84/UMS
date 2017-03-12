@@ -6,6 +6,7 @@ import org.ums.domain.model.common.LastModifier;
 import org.ums.domain.model.mutable.MutableEmployee;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public interface Employee extends Serializable, LastModifier, EditType<MutableEmployee>,
     Identifier<String> {
@@ -21,9 +22,9 @@ public interface Employee extends Serializable, LastModifier, EditType<MutableEm
 
   String getMotherName();
 
-  String getBirthDate();
+  Date getBirthDate();
 
-  char getGender();
+  String getGender();
 
   String getBloodGroup();
 
@@ -37,9 +38,11 @@ public interface Employee extends Serializable, LastModifier, EditType<MutableEm
 
   String getEmailAddress();
 
-  String getJoiningDate();
+  Date getJoiningDate();
 
-  String getJobPermanentDate();
+  Date getJobPermanentDate();
 
   int getStatus();
+
+  String getShortName();
 }
