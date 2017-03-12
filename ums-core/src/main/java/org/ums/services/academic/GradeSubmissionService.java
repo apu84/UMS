@@ -198,6 +198,8 @@ public class GradeSubmissionService {
   private void validateGradeSubmissionDeadline(String pRole, Date pLastDateForPreparer,
       Date pLastDateForScrutinizer, Date pLastDateForHead) throws ValidationException {
     Date currentDate = new Date();
+    currentDate = UmsUtils.modifyTimeToZeroSecondOfTheClock(currentDate);
+
     switch(pRole) {
       case Constants.GRADE_PREPARER:
         if(pLastDateForPreparer == null) {

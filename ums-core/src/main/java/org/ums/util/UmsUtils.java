@@ -1,10 +1,7 @@
 package org.ums.util;
 
 import java.text.SimpleDateFormat;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class UmsUtils {
   public static int FIRST = 1;
@@ -74,6 +71,46 @@ public class UmsUtils {
 
     }
     return fDate;
+  }
+
+  /**
+   * Modify the time portion of a given date
+   * 
+   * @param inputDate Date for which the time need to be modified
+   * @param hour New hour
+   * @param minute New minute
+   * @param second new Second
+   * @return Modified Date-Time info for the given inputDate
+   */
+  public static Date updateTimeInfoOfDate(Date inputDate, int hour, int minute, int second,
+      int milliSecond) {
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTime(inputDate);
+    calendar.set(Calendar.HOUR_OF_DAY, hour);
+    calendar.set(Calendar.MINUTE, minute);
+    calendar.set(Calendar.SECOND, second);
+    calendar.set(Calendar.MILLISECOND, milliSecond);
+    return calendar.getTime();
+  }
+
+  /**
+   * Update time of a given date so that it holds 23:59:59 as its date.
+   * 
+   * @param inputDate Date for which the time need to be modified
+   * @return modified date with updated time information
+   */
+  public static Date modifyTimeToLastSecondOfTheClock(Date inputDate) {
+    return updateTimeInfoOfDate(inputDate, 23, 59, 59, 59);
+  }
+
+  /**
+   * Update time of a given date so that it holds 0:0:0 as its date.
+   * 
+   * @param inputDate Date for which the time need to be modified
+   * @return modified date with updated time information
+   */
+  public static Date modifyTimeToZeroSecondOfTheClock(Date inputDate) {
+    return updateTimeInfoOfDate(inputDate, 0, 0, 0, 0);
   }
 
 }
