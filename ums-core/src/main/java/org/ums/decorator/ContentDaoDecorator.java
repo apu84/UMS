@@ -1,11 +1,11 @@
 package org.ums.decorator;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.ums.generator.IdGenerator;
 import org.ums.manager.ContentManager;
-
-import java.util.List;
 
 public class ContentDaoDecorator<R, M, I, C extends ContentManager<R, M, I>> implements
     ContentManager<R, M, I> {
@@ -88,5 +88,13 @@ public class ContentDaoDecorator<R, M, I, C extends ContentManager<R, M, I>> imp
   @Override
   public boolean exists(I pId) {
     return getManager().exists(pId);
+  }
+
+  protected List<I> getIdList(final List<Object[]> paramsList) {
+    List<I> ids = new ArrayList<I>();
+    for(Object[] params : paramsList) {
+      ids.add((I) params[0]);
+    }
+    return ids;
   }
 }

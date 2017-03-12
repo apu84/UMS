@@ -1,15 +1,15 @@
 package org.ums.academic.resource;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.ums.manager.EmployeeManager;
-import org.ums.resource.Resource;
-
 import javax.json.JsonObject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.ums.manager.EmployeeManager;
+import org.ums.resource.Resource;
 
 @Component
 @Path("academic/employee")
@@ -49,5 +49,12 @@ public class EmployeeResource extends MutableEmployeeResource {
   public Response get(final @Context Request pRequest,
       final @PathParam("object-id") String pObjectId) throws Exception {
     return mEmployeeResourceHelper.get(pObjectId, pRequest, mUriInfo);
+  }
+
+  @GET
+  @Path("/search")
+  public JsonObject searchUser(@QueryParam("term") String pTerm, @QueryParam("page") int pPage)
+      throws Exception {
+    return mEmployeeResourceHelper.searchUserByName(pTerm, pPage, mUriInfo);
   }
 }

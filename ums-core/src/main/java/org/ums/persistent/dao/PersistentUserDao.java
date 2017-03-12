@@ -1,32 +1,38 @@
 package org.ums.persistent.dao;
 
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.ums.decorator.UserDaoDecorator;
-import org.ums.domain.model.immutable.User;
-import org.ums.domain.model.mutable.MutableUser;
-import org.ums.persistent.model.PersistentUser;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
+import org.ums.decorator.UserDaoDecorator;
+import org.ums.domain.model.immutable.User;
+import org.ums.domain.model.mutable.MutableUser;
+import org.ums.persistent.model.PersistentUser;
+
 public class PersistentUserDao extends UserDaoDecorator {
   static String SELECT_ALL =
-      "SELECT USER_ID, PASSWORD, ROLE_ID,EMPLOYEE_ID, STATUS, TEMP_PASSWORD,PR_TOKEN,TOKEN_GENERATED_ON FROM USERS ";
+      "SELECT USER_ID, PASSWORD, ROLE_ID,EMPLOYEE_ID, STATUS, TEMP_PASSWORD,PR_TOKEN,TOKEN_GENERATED_ON, LAST_MODIFIED FROM USERS ";
   static String UPDATE_ALL =
-      "UPDATE USERS SET PASSWORD = ?, ROLE_ID = ?, STATUS = ?, TEMP_PASSWORD = ? ";
-  static String UPDATE_PASSWORD = "UPDATE USERS SET PASSWORD=? ";
+      "UPDATE USERS SET PASSWORD = ?, ROLE_ID = ?, STATUS = ?, TEMP_PASSWORD = ?, LAST_MODIFIED = "
+          + getLastModifiedSql() + " ";
+  static String UPDATE_PASSWORD = "UPDATE USERS SET PASSWORD=?, LAST_MODIFIED = "
+      + getLastModifiedSql() + " ";
   static String CLEAR_PASSWORD_RESET_TOKEN =
-      "UPDATE USERS SET PR_TOKEN=NULL,TOKEN_GENERATED_ON=NULL  ";
+      "UPDATE USERS SET PR_TOKEN=NULL, TOKEN_GENERATED_ON=NULL, LAST_MODIFIED = "
+          + getLastModifiedSql() + " ";
   static String DELETE_ALL = "DELETE FROM USERS ";
   static String INSERT_ALL =
-      "INSERT INTO USERS(USER_ID, PASSWORD, ROLE_ID, STATUS, TEMP_PASSWORD) VALUES "
-          + "(?, ?, ?, ?, ?)";
+      "INSERT INTO USERS(USER_ID, PASSWORD, ROLE_ID, STATUS, TEMP_PASSWORD, LAST_MODIFIED) VALUES "
+          + "(?, ?, ?, ?, ?, " + getLastModifiedSql() + ")";
   static String UPDATE_PASSWORD_RESET_TOKEN =
-      "Update USERS Set PR_TOKEN=?,TOKEN_GENERATED_ON=SYSDATE Where User_Id=? ";
+      "Update USERS Set PR_TOKEN=?, TOKEN_GENERATED_ON=SYSDATE, LAST_MODIFIED = "
+          + getLastModifiedSql() + " Where User_Id=? ";
   String EXISTS = "SELECT COUNT(USER_ID) EXIST FROM USERS ";
 
   private JdbcTemplate mJdbcTemplate;
@@ -125,9 +131,10 @@ public class PersistentUserDao extends UserDaoDecorator {
       user.setPasswordResetToken(rs.getString("PR_TOKEN"));
       user.setEmployeeId(rs.getString("EMPLOYEE_ID") == null ? "" : rs.getString("EMPLOYEE_ID"));
       Timestamp timestamp = rs.getTimestamp("TOKEN_GENERATED_ON");
-      if(timestamp != null)
+      if(timestamp != null) {
         user.setPasswordTokenGenerateDateTime(new java.util.Date(timestamp.getTime()));
-
+      }
+      user.setLastModified(rs.getString("LAST_MODIFIED"));
       AtomicReference<User> atomicReference = new AtomicReference<>(user);
       return atomicReference.get();
     }

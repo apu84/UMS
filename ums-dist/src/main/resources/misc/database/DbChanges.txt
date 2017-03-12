@@ -269,6 +269,12 @@ BEGIN
 END;
 
 
+ALTER TABLE DB_IUMS.USERS
+ADD (LAST_MODIFIED VARCHAR2(18 BYTE));
+
+ALTER TABLE DB_IUMS.MST_ROLE
+ADD (LAST_MODIFIED VARCHAR2(18 BYTE));
+
 ****************************** admission ******************************************************
 DROP TABLE DB_IUMS.ADMISSION_STUDENTS CASCADE CONSTRAINTS;
 
@@ -900,3 +906,67 @@ add last_submission_date_scr DATE;
 
 alter table MARKS_SUBMISSION_STATUS
 add last_submission_date_head DATE;
+
+/********************************* For solr index *******************************/
+CREATE TABLE DB_IUMS.INDEX_CONSUMER
+(
+  ID             NUMBER,
+  HOST           VARCHAR2(100 BYTE),
+  INSTANCE       VARCHAR2(50 BYTE),
+  HEAD           DATE,
+  LAST_CHECKED   DATE,
+  LAST_MODIFIED  VARCHAR2(18 BYTE)
+)
+
+CREATE TABLE DB_IUMS.INDEXER
+(
+  ENTITY_ID      VARCHAR2(20 BYTE),
+  ENTITY_TYPE    VARCHAR2(50 BYTE),
+  IS_DELETED     INTEGER,
+  MODIFIED       DATE,
+  ID             NUMBER,
+  LAST_MODIFIED  VARCHAR2(18 BYTE)
+)
+
+CREATE TABLE DB_IUMS.RESOURCE_LOCK
+(
+  ID             VARCHAR2(50 BYTE),
+  LAST_MODIFIED  VARCHAR2(18 BYTE)
+)
+
+CREATE UNIQUE INDEX DB_IUMS.RESOURCE_LOCK_PK ON DB_IUMS.RESOURCE_LOCK
+(ID)
+LOGGING
+TABLESPACE SYSTEM
+PCTFREE    10
+INITRANS   2
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            FREELISTS        1
+            FREELIST GROUPS  1
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+NOPARALLEL;
+
+
+ALTER TABLE DB_IUMS.RESOURCE_LOCK ADD (
+  CONSTRAINT RESOURCE_LOCK_PK
+  PRIMARY KEY
+  (ID)
+  USING INDEX DB_IUMS.RESOURCE_LOCK_PK
+  ENABLE VALIDATE);
+
+
+ALTER TABLE DB_IUMS.MST_ROLE
+ADD (LAST_MODIFIED VARCHAR2(18 BYTE));
+
+ALTER TABLE DB_IUMS.USERS
+ADD (LAST_MODIFIED VARCHAR2(18 BYTE));
+/********************************* For solr index *******************************/

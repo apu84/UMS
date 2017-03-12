@@ -5,9 +5,8 @@ import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.immutable.Department;
 import org.ums.domain.model.immutable.Employee;
 
-/**
- * Created by My Pc on 3/30/2016.
- */
+import java.util.Date;
+
 public interface MutableEmployee extends Employee, Mutable, MutableLastModifier,
     MutableIdentifier<String> {
 
@@ -23,9 +22,9 @@ public interface MutableEmployee extends Employee, Mutable, MutableLastModifier,
 
   void setMotherName(final String pMotherName);
 
-  void setBirthDate(final String pBirthDate);
+  void setBirthDate(final Date pBirthDate);
 
-  void setGender(final char pGender);
+  void setGender(final String pGender);
 
   void setBloodGroup(final String pBloodGroup);
 
@@ -39,10 +38,11 @@ public interface MutableEmployee extends Employee, Mutable, MutableLastModifier,
 
   void setEmailAddress(final String pEmailAddress);
 
-  void setJoiningDate(final String pJoiningDate);
+  void setJoiningDate(final Date pJoiningDate);
 
-  void setJobParmanentDate(final String pJobParmanentDate);
+  void setJobParmanentDate(final Date pJobParmanentDate);
 
   void setStatus(final int pStatus);
 
+  void setShortName(final String pShortName);
 }

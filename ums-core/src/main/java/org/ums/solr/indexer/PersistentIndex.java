@@ -1,21 +1,25 @@
-package org.ums.indexer;
+package org.ums.solr.indexer;
 
 import java.util.Date;
 
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
-import org.ums.indexer.manager.IndexManager;
-import org.ums.indexer.model.MutableIndex;
+import org.ums.solr.indexer.manager.IndexManager;
+import org.ums.solr.indexer.model.MutableIndex;
 
 public class PersistentIndex implements MutableIndex {
+  static {
+    ApplicationContext applicationContext = AppContext.getApplicationContext();
+    sIndexManager = applicationContext.getBean("indexManager", IndexManager.class);
+  }
 
   private static IndexManager sIndexManager;
-  private Long mId;
   private String mEntityId;
   private String mEntityType;
   private Boolean mIsDeleted;
   private Date mModified;
   private String mLastModified;
+  private Long mId;
 
   @Override
   public Long getId() {
@@ -48,7 +52,7 @@ public class PersistentIndex implements MutableIndex {
   }
 
   @Override
-  public Boolean getIsDeleted() {
+  public Boolean isDeleted() {
     return mIsDeleted;
   }
 
@@ -103,13 +107,8 @@ public class PersistentIndex implements MutableIndex {
     setId(pIndexer.getId());
     setEntityId(pIndexer.getEntityId());
     setEntityType(pIndexer.getEntityType());
-    setIsDeleted(pIndexer.getIsDeleted());
+    setIsDeleted(pIndexer.isDeleted());
     setModified(pIndexer.getModified());
     setLastModified(pIndexer.getLastModified());
-  }
-
-  static {
-    ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sIndexManager = applicationContext.getBean("indexerManager", IndexManager.class);
   }
 }

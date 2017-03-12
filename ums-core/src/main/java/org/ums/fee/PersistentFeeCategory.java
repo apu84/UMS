@@ -16,7 +16,7 @@ public class PersistentFeeCategory implements MutableFeeCategory {
   private String mDescription;
   private String mLastModified;
 
-  PersistentFeeCategory() {}
+  public PersistentFeeCategory() {}
 
   PersistentFeeCategory(final PersistentFeeCategory persistentFeeCategory) {
     setId(persistentFeeCategory.getId());

@@ -55,7 +55,7 @@ public class PersistentFeeCategoryDao extends FeeCategoryDaoDecorator {
     return pMutable.getId();
   }
 
-  private class FeeCategoryRowMapper implements RowMapper<FeeCategory> {
+  class FeeCategoryRowMapper implements RowMapper<FeeCategory> {
     @Override
     public FeeCategory mapRow(ResultSet rs, int rowNum) throws SQLException {
       MutableFeeCategory feeCategory = new PersistentFeeCategory();
