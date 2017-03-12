@@ -159,7 +159,8 @@ public class AdmissionStudentResourceHelper extends
     getContentManager().updateDepartmentSelection(student, pDepartmentSelectionType);
     AdmissionStudent nextStudent =
         getContentManager().getNextStudentForDepartmentSelection(student.getSemester().getId(),
-            student.getProgramType(), student.getUnit(), student.getQuota());
+            student.getProgramType(), student.getUnit(), student.getQuota(),
+            student.getMeritSerialNo());
 
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();

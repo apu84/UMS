@@ -376,10 +376,17 @@ module ums{
             this.$scope.selectedStudent = data[0];
             this.$scope.receiptId="";
             this.$scope.receiptId = this.$scope.selectedStudent.receiptId;
-            $("#searchByReceiptId").val(this.$scope.receiptId).trigger("change");
+            this.$scope.meritSerialNo = this.$scope.selectedStudent.meritSlNo.toString();
+            if(this.$scope.selectedStudent.programIdByMerit==null){
+              this.$scope.selectedProgram=this.$scope.programs[0];
+            }
+            if(this.$scope.selectedStudent.programIdByTransfer==null){
+              this.$scope.waitingProgram = this.$scope.programs[0];
+            }
+            //$("#searchByReceiptId").val(this.$scope.receiptId).trigger("change");
             this.getStatistics();
             this.$scope.showSearch=false;
-            this.initializeSelect2("searchByReceiptId",this.$scope.admissionStudents,"");
+            //this.initializeSelect2("searchByReceiptId",this.$scope.admissionStudents,"");
           });
         });
       }
