@@ -4,9 +4,7 @@ import org.ums.domain.model.immutable.Course;
 import org.ums.domain.model.mutable.MutableCourse;
 import org.ums.manager.CacheManager;
 import org.ums.manager.CourseManager;
-import org.ums.util.CacheUtil;
 
-import javax.ws.rs.core.UriInfo;
 import java.util.List;
 
 public class CourseCache extends ContentCache<Course, MutableCourse, String, CourseManager>
@@ -101,4 +99,10 @@ public class CourseCache extends ContentCache<Course, MutableCourse, String, Cou
   public List<Course> getByTeacher(String pTeacherId) {
     return getManager().getByTeacher(pTeacherId);
   }
+
+  @Override
+  public String getOfferedToDept(Integer pSemesterId, String pCourseId) {
+    return getManager().getOfferedToDept(pSemesterId, pCourseId);
+  }
+
 }

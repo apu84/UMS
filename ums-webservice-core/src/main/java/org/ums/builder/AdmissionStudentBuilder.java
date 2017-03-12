@@ -292,13 +292,17 @@ public class AdmissionStudentBuilder implements Builder<AdmissionStudent, Mutabl
       pMutable.setProgramIdByMerit(pJsonObject.getInt("programIdByMerit"));
       pMutable.setProgramIdByTransfer(pJsonObject.getInt("programIdByTransfer"));
       pMutable.setDeadline(pJsonObject.getString("deadline"));
+      pMutable.setMeritSerialNo(pJsonObject.getInt("meritSlNo"));
     }
     else if(DepartmentSelectionType.MERIT_PROGRAM_SELECTED == pType) {
       pMutable.setProgramIdByMerit(pJsonObject.getInt("programIdByMerit"));
       pMutable.setDeadline(pJsonObject.getString("deadline"));
+      pMutable.setMeritSerialNo(pJsonObject.getInt("meritSlNo"));
+
     }
     else if(DepartmentSelectionType.WAITING_PROGRAM_SELECTED == pType) {
       pMutable.setProgramIdByTransfer(pJsonObject.getInt("programIdByTransfer"));
+      pMutable.setMeritSerialNo(pJsonObject.getInt("meritSlNo"));
     }
     else {
       // do nothing

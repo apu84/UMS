@@ -87,4 +87,10 @@ public class CourseDaoDecorator extends
   public List<Course> getByTeacher(String pTeacherId) {
     return getManager().getByTeacher(pTeacherId);
   }
+
+  @Override
+  public String getOfferedToDept(Integer pSemesterId, String pCourseId) {
+    return getManager().getOfferedToDept(pSemesterId, pCourseId);
+  }
+
 }

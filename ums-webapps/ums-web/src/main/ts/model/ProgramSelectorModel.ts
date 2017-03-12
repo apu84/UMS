@@ -151,6 +151,9 @@ module ums {
       this.enableSemester(enable);
     }
 
+
+
+
     public loadDepartments(): void {
       if (this.programTypeId === this.getAppConstants().programTypeEnum.UG) {
         this.setDepartments(this.getAppConstants().ugDept);

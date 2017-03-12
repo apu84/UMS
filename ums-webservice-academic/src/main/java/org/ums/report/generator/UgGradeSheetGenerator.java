@@ -9,11 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ums.domain.model.dto.StudentGradeDto;
 import org.ums.domain.model.immutable.Course;
+import org.ums.domain.model.immutable.Department;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.enums.CourseRegType;
 import org.ums.enums.CourseType;
 import org.ums.enums.ExamType;
 import org.ums.manager.CourseManager;
+import org.ums.manager.DepartmentManager;
 import org.ums.manager.ExamGradeManager;
 import org.ums.manager.SemesterManager;
 
@@ -35,6 +37,8 @@ public class UgGradeSheetGenerator {
   private CourseManager courseManager;
   @Autowired
   private SemesterManager semesterManager;
+  @Autowired
+  private DepartmentManager deptManager;
 
   private CourseRegType prevCourseRegType = CourseRegType.REGULAR;
 
@@ -64,6 +68,9 @@ public class UgGradeSheetGenerator {
 
     Course course = courseManager.get(courseId);
     Semester semester = semesterManager.get(semesterId);
+    String offeredToDeptId = courseManager.getOfferedToDept(semesterId, courseId);
+    Department offeredToDept = deptManager.get(offeredToDeptId);
+    String offeredToDeptName = offeredToDept.getShortName();
     List<StudentGradeDto> gradeList =
         examGradeManager.getAllGrades(semesterId, courseId, examType, course.getCourseType());
 
@@ -77,7 +84,9 @@ public class UgGradeSheetGenerator {
           getGradeTable(gradeList, i * 80 + 40, 40, course.getCourseType(), examType);
 
       PdfPTable mainTable = getMainTable(secondColumnGradeTable == null ? 1 : 3);
-      PdfPCell cell = new PdfPCell(getSubTableHeader(course, gradeList.size(), semester.getName()));
+      PdfPCell cell =
+          new PdfPCell(getSubTableHeader(course, gradeList.size(), semester.getName(),
+              offeredToDeptName));
       cell.setPadding(0);
       mainTable.addCell(cell);
 
@@ -86,7 +95,9 @@ public class UgGradeSheetGenerator {
       mainTable.addCell(cell);
 
       if(secondColumnGradeTable != null) {
-        cell = new PdfPCell(getSubTableHeader(course, gradeList.size(), semester.getName()));
+        cell =
+            new PdfPCell(getSubTableHeader(course, gradeList.size(), semester.getName(),
+                offeredToDeptName));
         cell.setPadding(0);
         mainTable.addCell(cell);
       }
@@ -241,6 +252,9 @@ public class UgGradeSheetGenerator {
               (student.getPartA() == null ? 0 : student.getPartA())
                   + (student.getPartB() == null ? 0 : student.getPartB());
         }
+        else {
+          tmpTotal = student.getPartA();
+        }
         p = new Paragraph(String.valueOf(tmpTotal == null ? "" : tmpTotal), nFont);
         cell = new PdfPCell(p);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -262,8 +276,8 @@ public class UgGradeSheetGenerator {
     return table;
   }
 
-  public PdfPTable getSubTableHeader(Course course, int totalStudents, String semesterName)
-      throws DocumentException {
+  public PdfPTable getSubTableHeader(Course course, int totalStudents, String semesterName,
+      String offeredToDept) throws DocumentException {
     // a table with three columns
     Font fontAUST = new Font(Font.FontFamily.HELVETICA, 7, Font.NORMAL);
     Font gradeSheetHeader = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD);
@@ -313,8 +327,8 @@ public class UgGradeSheetGenerator {
     table.addCell(cell);
 
     Paragraph parag1 = new Paragraph("Department : ", nFont);// This gonna be bold font
-    Paragraph parag2 = new Paragraph(course.getOfferedBy().getShortName(), nuFont); // This gonna be
-                                                                                    // normal font
+    Paragraph parag2 = new Paragraph(offeredToDept, nuFont); // This gonna be
+    // normal font
     Paragraph comb = new Paragraph();
     comb.add(parag1);
     comb.add(parag2);

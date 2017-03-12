@@ -1,10 +1,5 @@
 package org.ums.persistent.dao;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
-
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.ums.decorator.CourseDaoDecorator;
@@ -13,6 +8,11 @@ import org.ums.domain.model.mutable.MutableCourse;
 import org.ums.enums.CourseCategory;
 import org.ums.enums.CourseType;
 import org.ums.persistent.model.PersistentCourse;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentCourseDao extends CourseDaoDecorator {
   static String SELECT_ALL =
@@ -53,6 +53,12 @@ public class PersistentCourseDao extends CourseDaoDecorator {
           + "MST_COURSE  Where Call_For_Application='Y' and Approved='Y' "
           + "And Semester_Id=? and Program_Id=? and OPT_COURSE_OFFER.Year=? and OPT_COURSE_OFFER.Semester=? "
           + "And MST_COURSE.course_id=OPT_COURSE_OFFER.course_id ";
+
+  static String SELECT_OFFERED_TO_DEPT = "Select Dept_Id From ( "
+      + "Select syllabus_id from COURSE_SYLLABUS_MAP " + "Where Course_id = ? and syllabus_id in  "
+      + "( " + "Select distinct syllabus_id from SEMESTER_SYLLABUS_MAP Where Semester_Id=? " + ") "
+      + ")tmp1, MST_SYLLABUS, MST_PROGRAM " + "Where Tmp1.Syllabus_Id = MST_SYLLABUS. Syllabus_Id "
+      + "And MST_SYLLABUS.Program_Id = MST_PROGRAM.Program_Id ";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -248,6 +254,12 @@ public class PersistentCourseDao extends CourseDaoDecorator {
             + "                               WHERE s.STATUS = 1 AND s.SEMESTER_ID = c.SEMESTER_ID AND TEACHER_ID = ?) "
             + "and MST_COURSE.COURSE_ID=COURSE_SYLLABUS_MAP.COURSE_ID";
     return mJdbcTemplate.query(query, new Object[] {pTeacherId}, new CourseRowMapper());
+  }
+
+  @Override
+  public String getOfferedToDept(final Integer pSemesterId, final String pCourseId) {
+    return mJdbcTemplate.queryForObject(SELECT_OFFERED_TO_DEPT, new Object[] {pCourseId,
+        pSemesterId}, String.class);
   }
 
   class CourseRowMapper implements RowMapper<Course> {

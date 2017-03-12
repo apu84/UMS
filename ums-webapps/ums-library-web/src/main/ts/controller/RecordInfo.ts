@@ -24,6 +24,7 @@ module ums {
     saveBulkItems:Function;
     bulk: any;
     setBulkItemsValue: Function;
+    itemList : Array<IItem>;
   }
   export interface IContributorEntry {
     viewOrder: number;
@@ -211,105 +212,8 @@ module ums {
         showItemMainButtonPanel: true,
         multipleItemAdd: false,
         bulkAddCount: 4,
-
         collapsedItemTable: false,
-        headerTitle: "Add New - Book Record",
-        settings: {
-          colWidths: this.$scope.colWidthArray,
-          colHeaders: true,
-          rowHeaders: true,
-          width: 1000,
-          height: 200,
-          currentRowClassName: 'currentRow',
-          columnSorting: true,
-          currentColClassName: 'currentCol',
-          fillHandle: false
-        },
-        items: [
-          {
-            "copyNumber": "1",
-            "accessionNo": "11131221",
-            "accessionDate": "11-11-2016",
-            "price": "12321",
-            "supplier": "The rainbow",
-            "status": "Available"
-          },
-          {
-            "copyNumber": "2",
-            "accessionNo": "11131221",
-            "accessionDate": "11-11-2016",
-            "price": "12321",
-            "supplier": "The rainbow",
-            "status": "Available"
-          },
-          {
-            "copyNumber": "3",
-            "accessionNo": "11131221",
-            "accessionDate": "11-11-2016",
-            "price": "12321",
-            "supplier": "The rainbow",
-            "status": "Available"
-          },
-          {
-            "copyNumber": "4",
-            "accessionNo": "11131221",
-            "accessionDate": "11-11-2016",
-            "price": "12321",
-            "supplier": "The rainbow",
-            "status": "Available"
-          },
-          {
-            "copyNumber": "5",
-            "accessionNo": "11131221",
-            "accessionDate": "11-11-2016",
-            "price": "12321",
-            "supplier": "The rainbow",
-            "status": "Available"
-          },
-          {
-            "copyNumber": "6",
-            "accessionNo": "11131221",
-            "accessionDate": "11-11-2016",
-            "price": "12321",
-            "supplier": "The rainbow",
-            "status": "Available"
-          }
-        ],
-        columns: [
-          {
-            "data": "copyNumber",
-            "title": "Copy Number",
-            "readOnly": true,
-            className: "htCenter"
-          },
-          {
-            "data": "accessionNo",
-            "title": "Accession #",
-            "readOnly": true
-          },
-          {
-            "data": "accessionDate",
-            "title": "Accession Date",
-            "readOnly": true,
-            className: "htCenter"
-          },
-          {
-            "data": "price",
-            "title": "Purchase Price",
-            "readOnly": true,
-            className: "htRight"
-          },
-          {
-            "data": "supplier",
-            "title": "Supplier",
-            "readOnly": true
-          },
-          {
-            "data": "status",
-            "title": "Status",
-            "readOnly": true
-          }
-        ]
+        headerTitle: "Add New - Book Record"
       };
       setTimeout(this.$scope.showBookUI(), 1000);
       $scope.$watch('selectedMaterialId', function (NewValue, OldValue) {
@@ -317,11 +221,6 @@ module ums {
       }, true);
 
       jQuery.validator.addMethod("cRequired", function (value, element) {
-        /*
-         console.log("Status :" + $("#recordStatus").val());
-         console.log("Value :" + value);
-         console.log($(element).attr('id')  );
-         */
 
         if ($(element).attr('id') == "recordStatus" && value == 101101)
           return false;
@@ -413,6 +312,20 @@ module ums {
       this.addNewRow("note");
       this.addNewRow("subject");
       this.initializeDatePickers();
+
+      this.fetchItems();
+    }
+
+    private fetchItems() {
+      this.httpClient.get('item/mfn/1', 'application/json',
+
+          (json:any, etag:string) => {
+            console.log(json.entries);
+            this.$scope.itemList = json.entries;
+          },
+          (response:ng.IHttpPromiseCallbackArg<any>) => {
+            console.error(response);
+          });
     }
 
     public setMaterialTypeName(id) {
@@ -661,6 +574,7 @@ module ums {
       var bulkItemList = this.$scope.bulkItemList;
       var copyStartFrom: number = 0;
       var incrementSegment;
+      var firstAccession;
       for (var i: number = 0; i < bulkItemList.length; i++) {
         var item: IItem = bulkItemList[i];
 
@@ -682,7 +596,7 @@ module ums {
         item.barcode = this.$scope.bulk.config.barcode;
 
         if(this.$scope.bulk.config.firstAccession != "" &&  this.$scope.bulk.config.incrementSegment != "") {
-          var firstAccession = this.$scope.bulk.config.firstAccession;
+          firstAccession = this.$scope.bulk.config.firstAccession;
            incrementSegment = this.$scope.bulk.config.incrementSegment;
         }
 

@@ -3,6 +3,7 @@
  */
 
 module ums{
+  import IPromise = ng.IPromise;
   interface IAdmissionDepartmentSelection extends ng.IScope{
     deadLine:string;
     semesters:Array<Semester>;
@@ -16,7 +17,9 @@ module ums{
     admissionStudents:Array<AdmissionStudent>;
     admissionStudent:AdmissionStudent;
     receiptId:string;
+    meritSerialNo:string;
     receiptIdMap:any;
+    meritMap:any;
     selectedStudent:AdmissionStudent;
     statistics:Array<AdmissionStudent>;
     statisticsMap:any;
@@ -37,7 +40,7 @@ module ums{
     saveOnly:Function;
     getSemesters:Function;
     getAllStudents:Function;
-    searchByReceiptId:Function;
+    searchByMeritSerialNo:Function;
     assignDeadline:Function;
     checkForSameSelectedPrograms:Function;
     enableReportSection:Function;
@@ -70,6 +73,7 @@ module ums{
                 private programService:ProgramService) {
 
       $scope.deadLine="";
+      $scope.meritSerialNo="";
       $scope.programTypes=appConstants.programType;
       $scope.programType = $scope.programTypes[0];
       $scope.showStudentPortion=false;
@@ -79,7 +83,7 @@ module ums{
 
       $scope.getSemesters= this.getSemesters.bind(this);
       $scope.getAllStudents = this.getAllStudents.bind(this);
-      $scope.searchByReceiptId  = this.searchByReceiptId.bind(this);
+      $scope.searchByMeritSerialNo= this.searchByMeritSerialNo.bind(this);
       $scope.saveAndRetrieveNext = this.saveAndRetrieveNext.bind(this);
       $scope.showSearchBar = this.showSearchBar.bind(this);
       $scope.assignDeadline = this.assignDeadline.bind(this);
@@ -127,21 +131,33 @@ module ums{
           unit)
           .then((students:Array<AdmissionStudent>)=>{
 
-        this.$scope.admissionStudents=[];
-        for(var i=0;i<students.length;i++){
-          this.$scope.admissionStudents.push(students[i]);
-          this.$scope.receiptIdMap[students[i].receiptId] = students[i];
-        }
-
-        console.log(students[1]);
-        this.initializeSelect2("searchByReceiptId", this.$scope.admissionStudents,"Insert a Receipt ID");
-        this.addDate();
+            this.assignStudentsToMaps(students).then((students)=>{
+              console.log("***********");
+              console.log(students);
+              this.initializeSelect2("searchByReceiptId", students,"Insert a Merit Serial No.");
+              this.addDate();
+            });
 
       });
 
       this.getStatistics().then((statistics:any)=>{
         this.getPrograms();
       });
+    }
+
+    private assignStudentsToMaps(students: Array<ums.AdmissionStudent>):IPromise<any> {
+      var defer = this.$q.defer();
+      this.$scope.admissionStudents = [];
+      this.$scope.receiptIdMap = {};
+      this.$scope.meritMap = {};
+      for (var i = 0; i < students.length; i++) {
+        students[i].text = students[i].meritSlNo.toString();
+        this.$scope.admissionStudents.push(students[i]);
+        this.$scope.receiptIdMap[students[i].receiptId] = students[i];
+        this.$scope.meritMap[students[i].meritSlNo] = students[i];
+      }
+      defer.resolve(students);
+      return defer.promise;
     }
 
     private getPrograms():void{
@@ -205,11 +221,12 @@ module ums{
       }
     }
 
-    private searchByReceiptId(receiptId:any){
+    private searchByMeritSerialNo(meritSerialNo:any){
       console.log("Deadline");
       console.log(this.$scope.deadLine);
-
-      this.admissionStudentService.fetchAdmissionStudentByReceiptId(this.$scope.semester.id,+this.$scope.programType.id, receiptId).then((student:AdmissionStudent)=>{
+      console.log("Selected merit Serial No: "+meritSerialNo);
+      var studentByMeritSerialNo:AdmissionStudent = this.$scope.meritMap[+meritSerialNo];
+      this.admissionStudentService.fetchAdmissionStudentByReceiptId(this.$scope.semester.id,+this.$scope.programType.id, studentByMeritSerialNo.receiptId).then((student:AdmissionStudent)=>{
         console.log("Receipt id student");
         console.log(student);
         this.$scope.selectedStudent=<AdmissionStudent>{};
@@ -359,10 +376,17 @@ module ums{
             this.$scope.selectedStudent = data[0];
             this.$scope.receiptId="";
             this.$scope.receiptId = this.$scope.selectedStudent.receiptId;
-            $("#searchByReceiptId").val(this.$scope.receiptId).trigger("change");
+            this.$scope.meritSerialNo = this.$scope.selectedStudent.meritSlNo.toString();
+            if(this.$scope.selectedStudent.programIdByMerit==null){
+              this.$scope.selectedProgram=this.$scope.programs[0];
+            }
+            if(this.$scope.selectedStudent.programIdByTransfer==null){
+              this.$scope.waitingProgram = this.$scope.programs[0];
+            }
+            //$("#searchByReceiptId").val(this.$scope.receiptId).trigger("change");
             this.getStatistics();
             this.$scope.showSearch=false;
-            this.initializeSelect2("searchByReceiptId",this.$scope.admissionStudents,"");
+            //this.initializeSelect2("searchByReceiptId",this.$scope.admissionStudents,"");
           });
         });
       }
@@ -377,7 +401,7 @@ module ums{
         this.convertToJson().then((json)=>{
 
           this.admissionStudentService.saveAndFetchNextStudentForDepartmentSelection(this.$scope.departmentSelectionStatus, json).then((data)=>{
-            this.searchByReceiptId(this.$scope.receiptId);
+            this.searchByMeritSerialNo(this.$scope.meritSerialNo);
             this.getStatistics();
             this.$scope.showSearch=false;
             this.initializeSelect2("searchByReceiptId",this.$scope.admissionStudents,"");
