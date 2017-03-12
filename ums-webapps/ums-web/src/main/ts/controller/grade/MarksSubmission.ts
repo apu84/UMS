@@ -375,9 +375,6 @@ module ums {
 
     }
 
-
-
-
     private fetchGradeSubmissionTable(): void {
 
       var status = 0;
