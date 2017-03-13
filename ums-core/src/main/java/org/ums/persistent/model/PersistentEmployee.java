@@ -3,10 +3,11 @@ package org.ums.persistent.model;
 import org.springframework.context.ApplicationContext;
 import org.ums.context.AppContext;
 import org.ums.domain.model.immutable.Department;
-import org.ums.domain.model.immutable.Employee;
 import org.ums.domain.model.mutable.MutableEmployee;
 import org.ums.manager.DepartmentManager;
 import org.ums.manager.EmployeeManager;
+
+import java.util.Date;
 
 public class PersistentEmployee implements MutableEmployee {
 
@@ -27,17 +28,18 @@ public class PersistentEmployee implements MutableEmployee {
   private String mDepartmentId;
   private String mFatherName;
   private String mMotherName;
-  private String mBirthDate;
-  private char mGender;
+  private Date mBirthDate;
+  private String mGender;
   private String mBloodGroup;
   private String mPresentAddress;
   private String mPermanentAddress;
   private String mMobileNumber;
   private String mPhoneNumber;
   private String mEmailAddress;
-  private String mJoiningDate;
-  private String mJobParmanentDate;
+  private Date mJoiningDate;
+  private Date mJobParmanentDate;
   private int mStatus;
+  private String mShortName;
   private String mLastModified;
 
   public PersistentEmployee() {
@@ -64,6 +66,7 @@ public class PersistentEmployee implements MutableEmployee {
     mJoiningDate = pPersistentEmployee.getJoiningDate();
     mJobParmanentDate = pPersistentEmployee.getJobPermanentDate();
     mStatus = pPersistentEmployee.getStatus();
+    mLastModified = pPersistentEmployee.getLastModified();
   }
 
   public String getDepartmentId() {
@@ -105,12 +108,12 @@ public class PersistentEmployee implements MutableEmployee {
   }
 
   @Override
-  public void setBirthDate(String pBirthDate) {
+  public void setBirthDate(Date pBirthDate) {
     mBirthDate = pBirthDate;
   }
 
   @Override
-  public void setGender(char pGender) {
+  public void setGender(String pGender) {
     mGender = pGender;
   }
 
@@ -145,12 +148,12 @@ public class PersistentEmployee implements MutableEmployee {
   }
 
   @Override
-  public void setJoiningDate(String pJoiningDate) {
+  public void setJoiningDate(Date pJoiningDate) {
     mJoiningDate = pJoiningDate;
   }
 
   @Override
-  public void setJobParmanentDate(String pJobParmanentDate) {
+  public void setJobParmanentDate(Date pJobParmanentDate) {
     mJobParmanentDate = pJobParmanentDate;
   }
 
@@ -191,12 +194,12 @@ public class PersistentEmployee implements MutableEmployee {
   }
 
   @Override
-  public String getBirthDate() {
+  public Date getBirthDate() {
     return mBirthDate;
   }
 
   @Override
-  public char getGender() {
+  public String getGender() {
     return mGender;
   }
 
@@ -231,12 +234,12 @@ public class PersistentEmployee implements MutableEmployee {
   }
 
   @Override
-  public String getJoiningDate() {
+  public Date getJoiningDate() {
     return mJoiningDate;
   }
 
   @Override
-  public String getJobPermanentDate() {
+  public Date getJobPermanentDate() {
     return mJobParmanentDate;
   }
 
@@ -279,6 +282,16 @@ public class PersistentEmployee implements MutableEmployee {
   @Override
   public void setId(String pId) {
     mId = pId;
+  }
+
+  @Override
+  public String getShortName() {
+    return mShortName;
+  }
+
+  @Override
+  public void setShortName(String pShortName) {
+    mShortName = pShortName;
   }
 
   @Override

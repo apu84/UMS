@@ -62,6 +62,7 @@ public class PersistentUser implements MutableUser {
     mTemporaryPassword = pPersistentUser.getTemporaryPassword();
     mPasswordResetToken = pPersistentUser.getPasswordResetToken();
     mPasswordTokenGenerateDateTime = pPersistentUser.getPasswordTokenGenerateDateTime();
+    mLastModified = pPersistentUser.getLastModified();
 
   }
 

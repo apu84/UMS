@@ -2,6 +2,8 @@ package org.ums.academic.resource.helper;
 
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import org.ums.academic.resource.EmployeeResource;
 import org.ums.builder.Builder;
@@ -14,6 +16,8 @@ import org.ums.manager.EmployeeManager;
 import org.ums.manager.UserManager;
 import org.ums.persistent.model.PersistentEmployee;
 import org.ums.resource.ResourceHelper;
+import org.ums.solr.repository.EmployeeRepository;
+import org.ums.solr.repository.document.EmployeeDocument;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
@@ -23,6 +27,7 @@ import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -36,6 +41,9 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
 
   @Autowired
   private UserManager mUserManager;
+
+  @Autowired
+  EmployeeRepository mEmployeeRepository;
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) {
@@ -97,6 +105,16 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
     object.add("entries", children);
     localCache.invalidate();
     return object.build();
+  }
+
+  public JsonObject searchUserByName(String pQuery, int page, final UriInfo pUriInfo) {
+    Page<EmployeeDocument> userDocuments =
+        mEmployeeRepository.findByCustomQuery(pQuery, new PageRequest(page, 10));
+    List<Employee> users = new ArrayList<>();
+    for(EmployeeDocument document : userDocuments) {
+      users.add(mEmployeeManager.get(document.getId()));
+    }
+    return convertToJson(users, pUriInfo);
   }
 
   @Override

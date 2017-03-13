@@ -3,10 +3,10 @@ package org.ums.lock;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 public class LockDao extends LockDaoDecorator {
-  private String INSERT_ALL = "INSERT INTO LOCK(ID, LAST_MODIFIED) VALUES(?, "
+  private String INSERT_ALL = "INSERT INTO RESOURCE_LOCK(ID, LAST_MODIFIED) VALUES(?, "
       + getLastModifiedSql() + ") ";
-  private String SELECT_ALL = "SELECT ID, LAST_MODIFIED FROM LOCK ";
-  private String DELETE_ALL = "DELETE FROM LOCK ";
+  private String SELECT_ALL = "SELECT ID, LAST_MODIFIED FROM RESOURCE_LOCK ";
+  private String DELETE_ALL = "DELETE FROM RESOURCE_LOCK ";
 
   private JdbcTemplate mJdbcTemplate;
 

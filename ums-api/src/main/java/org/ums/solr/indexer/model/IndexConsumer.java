@@ -1,4 +1,4 @@
-package org.ums.indexer.model;
+package org.ums.solr.indexer.model;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -14,7 +14,7 @@ public interface IndexConsumer extends Serializable, EditType<MutableIndexConsum
 
   String getInstance();
 
-  Long getHead();
+  Date getHead();
 
   Date getLastChecked();
 }

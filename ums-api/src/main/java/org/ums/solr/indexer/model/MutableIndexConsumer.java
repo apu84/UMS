@@ -1,4 +1,4 @@
-package org.ums.indexer.model;
+package org.ums.solr.indexer.model;
 
 import java.util.Date;
 
@@ -13,7 +13,7 @@ public interface MutableIndexConsumer extends IndexConsumer, Editable<Long>,
 
   void setInstance(String pInstance);
 
-  void setHead(Long pHead);
+  void setHead(Date pHead);
 
   void setLastChecked(Date pLastChecked);
 }
