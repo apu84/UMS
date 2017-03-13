@@ -35,8 +35,6 @@ public class UndertakenFormGeneratorImpl implements UndertakenFormGenerator {
   @Autowired
   SemesterManager mSemesterManager;
 
-  public static final String DEST = "UndertakenForm.pdf";
-
   @Override
   public void createUndertakenForm(ProgramType pProgramType, int pSemesterId, String pReceiptId,
       OutputStream pOutputStream) throws IOException, DocumentException {
@@ -136,7 +134,7 @@ public class UndertakenFormGeneratorImpl implements UndertakenFormGenerator {
     bodyChunk6.append("   " + admissionStudent.getReceiptId() + "   ");
     bodyChunk6.setUnderline(0.5f, -2.3f);
     Chunk bodyChunk7 = new Chunk();
-    bodyChunk7.append(" selected Department ");
+    bodyChunk7.append(" selected department ");
     Chunk bodyChunk8 = new Chunk();
     bodyChunk8.append("   " + department + "   ");
     bodyChunk8.setUnderline(0.5f, -2.3f);

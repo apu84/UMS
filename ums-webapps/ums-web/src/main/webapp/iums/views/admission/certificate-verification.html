@@ -256,7 +256,7 @@
                                 <label>Comment:</label><br />
                                 <textarea class="form-control" rows="3" data-ng-model="data.userComment" data-ng-disabled="disableCommentBox"></textarea>
                                 <span data-ng-repeat="comments in previousComments">
-                                    <textarea class="form-control" rows="1" disabled>{{comments.comment}}     {{comments.commentedOn}}</textarea>
+                                    <textarea class="form-control" rows="1" disabled>{{comments.comment}}    {{comments.commentedOn}}</textarea>
                                 </span>
                                 <br />
                             </div>
@@ -270,7 +270,7 @@
                                 </div>
                             </div>
                             <div class="col-md-3" align="left">
-                                <button type="submit" class="btn btn-warning" data-ng-click="underTaken()" data-ng-disabled="disableUndertakenButton">Print Undertaken Form</button>
+                                <button type="submit" class="btn" data-ng-click="underTaken()" data-ng-disabled="disableUndertakenButton">Print Undertaken Form</button>
                             </div>
                             <div class="col-md-6" align="right">
                                 <button type="submit" class="btn btn-danger" data-ng-click="rejected()" data-ng-disabled="disableRejectedButton">Rejected</button>

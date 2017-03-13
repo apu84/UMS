@@ -555,6 +555,7 @@ module ums{
       this.$scope.mastersCGPA = null;
       this.$scope.mastersPassingYear = "";
       this.$scope.phdSelected = "";
+      this.$scope.phdInstitution = "";
       this.$scope.phdCGPA = null;
       this.$scope.phdPassingYear = "";
 
