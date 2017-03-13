@@ -79,7 +79,7 @@
         </div>
     </div>
     <div id="rightDiv">
-        <div class="panel">
+        <div class="panel" hotkey="{'shift+s': focusOnSearchBar, 'shift+m': focusOnMeritProgramSelection, 'shift+w': focusOnWaitingProgramSelection}">
             <div class="panel-heading">Program Type <b>{{programType.name}}</b>, Semester <b>{{semester.name}}</b>, Faculty <b>{{faculty.shortName}}</b>, Merit Type <b>{{meritType.name}}</b><span
                     class="subtitle"></span></div>
             <div class="panel-body shadowPanel"   style="min-height: 490px;">
@@ -110,6 +110,10 @@
                         <div class="col-md-12" align="center">
                             <i class="fa fa-angle-down" aria-hidden="true" style="cursor: pointer;" data-ng-click="enableReportSection()"></i>
                         </div>
+                        <div class="col-md-12" align="right">
+                            <i class="fa fa-window-maximize"  aria-hidden="true" style="cursor: pointer;" data-ng-click="saveWithChecking()" title="Save data with confirmation"></i>
+                            <i class="fa fa-window-close-o"  aria-hidden="true" style="cursor: pointer;" data-ng-click="saveWithoutChecking()" title="Save data without confirmation"></i>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-md-2"></div>
@@ -125,9 +129,9 @@
                     <br>
                     <div class="row">
                         <div class="col-md-2"></div>
-                        <div class="col-md-4" align="right" >Merit Serial No.</div>
+                        <div class="col-md-4" align="right"  id="meritSerialNoLabel">Merit Serial No.</div>
                         <div class="col-md-3" >
-                            <input type="text"  class="form-control" data-ng-model="meritSerialNo" data-ng-change="searchByMeritSerialNo(meritSerialNo)">
+                            <input type="text" id="searchBar"  class="form-control" data-ng-model="meritSerialNo" data-ng-change="searchByMeritSerialNo(meritSerialNo)">
                         </div>
                         <!--<div class="col-md-4" align="right" data-ng-show="showSearch==false"></div>
                         <div class="col-md-3" data-ng-show="showSearch==false">
@@ -168,34 +172,32 @@
                             </table>
                             <br>
                             <div class="form-group">
-                                <label class="col-md-4 control-label">Selected Program</label>
+                                <label class="col-md-4 control-label" id="selectedProgramLabel">Selected Program</label>
                                 <div class="col-md-8">
                                     <select
                                             class="form-control"
                                             name="selectedProgram"
-                                            id="selectedProgram"
                                             data-ng-options="program.shortName for program in programs track by program.id"
                                             data-ng-model="selectedProgram"
-                                            data-ng-change="checkForSameSelectedPrograms()"
+                                            id="selectedProgram"
+                                            data-ng-change="checkForSameSelectedPrograms()" autofocus
                                     >
-
                                     </select>
                                 </div>
                             </div>
                             <br>
                             <br>
                             <div class="form-group">
-                                <label class="col-md-4 control-label">Waiting Program</label>
+                                <label class="col-md-4 control-label" id="waitingProgramLabel">Waiting Program</label>
                                 <div class="col-md-8">
                                     <select
                                             class="form-control waitingProgram"
                                             name="waitingProgram"
-                                            id="waitingProgram"
                                             data-ng-options="program.shortName for program in programs track by program.id"
                                             data-ng-model="waitingProgram"
+                                            id="waitingProgram"
                                             data-ng-change="checkForSameSelectedPrograms()"
                                     >
-
                                     </select>
                                 </div>
                             </div>
@@ -229,7 +231,10 @@
                         <div class="col-md-12">
                             <div class="well" align="right">
                                 <!--<button class="btn btn-info">Edit</button>-->
-                                <button data-ng-disabled="disableSaveButton==true" class="btn btn-success" data-toggle="modal" data-target="#summaryModal" >Save</button>
+                                <button data-ng-disabled="disableSaveButton==true" data-ng-if="showModal" class="btn btn-success" data-toggle="modal" data-target="#summaryModal" >Save</button>
+                                <button data-ng-if="showModal==false" class="btn btn-info" data-ng-click="saveOnly()" >Save</button>
+                                <button data-ng-if="showModal==false" class="btn btn-danger"  data-ng-click="saveAndRetrieveNext()" >Save & fetch next</button>
+
                             </div>
                         </div>
                     </div>

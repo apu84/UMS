@@ -30,10 +30,14 @@ module ums{
     programMap:any;
     departmentSelectionStatus:number;
 
+    showModal:boolean;
     showReportSection:boolean;
     showStudentPortion:boolean;
     showSearch:boolean;
     disableSaveButton:boolean;
+    focusSearch:boolean;
+    focusMeritProgramSelection:boolean;
+    focusWaitingProgramSelection:boolean;
 
     showSearchBar:Function;
     saveAndRetrieveNext:Function;
@@ -45,6 +49,11 @@ module ums{
     checkForSameSelectedPrograms:Function;
     enableReportSection:Function;
     enableDepartmentSelectionSection:Function;
+    focusOnSearchBar:Function;
+    focusOnMeritProgramSelection:Function;
+    focusOnWaitingProgramSelection:Function;
+    saveWithChecking:Function;
+    saveWithoutChecking: Function;
   }
 
   interface  IProgramType{
@@ -59,7 +68,7 @@ module ums{
 
   class AdmissionDepartmentSelection{
 
-    public static $inject = ['appConstants','HttpClient','$scope','$q','notify','$sce','$window','semesterService','facultyService', 'admissionStudentService','programService'];
+    public static $inject = ['appConstants','HttpClient','$scope','$q','notify','$sce','$window','semesterService','facultyService', 'admissionStudentService','programService','$timeout'];
     constructor(private appConstants: any,
                 private httpClient: HttpClient,
                 private $scope: IAdmissionDepartmentSelection,
@@ -70,8 +79,10 @@ module ums{
                 private semesterService: SemesterService,
                 private facultyService: FacultyService,
                 private admissionStudentService:AdmissionStudentService,
-                private programService:ProgramService) {
+                private programService:ProgramService,
+                private $timeout: ng.ITimeoutService) {
 
+      $scope.showModal=true;
       $scope.deadLine="";
       $scope.meritSerialNo="";
       $scope.programTypes=appConstants.programType;
@@ -80,6 +91,9 @@ module ums{
       $scope.showSearch = true;
       $scope.disableSaveButton=false;
       $scope.showReportSection = false;
+      $scope.focusSearch=false;
+      $scope.focusMeritProgramSelection=false;
+      $scope.focusWaitingProgramSelection=false;
 
       $scope.getSemesters= this.getSemesters.bind(this);
       $scope.getAllStudents = this.getAllStudents.bind(this);
@@ -91,6 +105,11 @@ module ums{
       $scope.saveOnly = this.saveOnly.bind(this);
       $scope.enableReportSection = this.enableReportSection.bind(this);
       $scope.enableDepartmentSelectionSection = this.enableDepartmentSelectionSection.bind(this);
+      $scope.focusOnSearchBar = this.focusOnSearchBar.bind(this);
+      $scope.focusOnMeritProgramSelection =  this.focusOnMeritProgramSelection.bind(this);
+      $scope.focusOnWaitingProgramSelection = this.focusOnWaitingProgramSelection.bind(this);
+      $scope.saveWithChecking= this.saveWithChecking.bind(this);
+      $scope.saveWithoutChecking = this.saveWithoutChecking.bind(this);
       $scope.receiptId="";
 
       this.getFaculties();
@@ -100,12 +119,64 @@ module ums{
 
     }
 
+
+
+    private focusOnSearchBar(){
+      /*this.$scope.focusSearch=true;
+      this.$scope.focusMeritProgramSelection=false;
+      this.$scope.focusWaitingProgramSelection=false;*/
+      this.$timeout(()=>{
+        $("#searchBar").focus();
+        $("#meritSerialNumberLabel").css("color","blue");
+        $("#waitingProgramLabel").css("color","black");
+        $("#selectedProgramLabel").css("color","black");
+      },100);
+
+    }
+
+    private focusOnMeritProgramSelection(){
+      this.$scope.focusSearch=false;
+      this.$scope.focusMeritProgramSelection=true;
+      this.$scope.focusWaitingProgramSelection=false;
+      this.$timeout(()=>{
+        $("#selectedProgram").focus();
+        $("#meritSerialNumberLabel").css("color","black");
+        $("#waitingProgramLabel").css("color","black");
+        $("#selectedProgramLabel").css("color","blue");
+
+        console.log("IN the merit program");
+      },100);
+
+      console.log("In the merit program outer");
+
+    }
+
+    private focusOnWaitingProgramSelection(){
+      this.$timeout(()=>{
+        $("#waitingProgram").focus();
+        $("#meritSerialNumberLabel").css("color","black");
+        $("#waitingProgramLabel").css("color","blue");
+        $("#selectedProgramLabel").css("color","black");
+        console.log("In the waiting program");
+      },100);
+      console.log("In the waiting program outer");
+
+    }
+
     private enableReportSection(){
         this.$scope.showReportSection=true;
     }
 
     private enableDepartmentSelectionSection(){
         this.$scope.showReportSection=false;
+    }
+
+    private saveWithChecking(){
+        this.$scope.showModal = true;
+    }
+
+    private saveWithoutChecking(){
+      this.$scope.showModal = false;
     }
 
     private assignDeadline(deadLine:string){
@@ -143,6 +214,9 @@ module ums{
       this.getStatistics().then((statistics:any)=>{
         this.getPrograms();
       });
+
+
+
     }
 
     private assignStudentsToMaps(students: Array<ums.AdmissionStudent>):IPromise<any> {
