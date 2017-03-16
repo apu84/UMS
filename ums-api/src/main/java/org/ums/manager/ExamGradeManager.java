@@ -64,8 +64,6 @@ public interface ExamGradeManager extends ContentManager<ExamGrade, MutableExamG
   public List<MarksSubmissionStatusDto> getGradeSubmissionDeadLine(Integer pSemesterId,
       ExamType pExamType, String pExamDate, String pOfferedDeptId, CourseType pCourseType);
 
-  public int updateDeadline(List<MarksSubmissionStatusDto> pMarksSubmissionStatuses);
-
   public int getTotalStudentCount(MarksSubmissionStatus actualStatus);
 
   public List<MarksSubmissionStatusLogDto> getMarksSubmissionLogs(Integer pSemesterId,

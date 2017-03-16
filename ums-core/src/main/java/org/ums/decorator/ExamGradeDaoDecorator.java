@@ -149,8 +149,4 @@ public class ExamGradeDaoDecorator extends
         pStatus);
   }
 
-  @Override
-  public int updateDeadline(List<MarksSubmissionStatusDto> pMarksSubmissionStatuses) {
-    return getManager().updateDeadline(pMarksSubmissionStatuses);
-  }
 }

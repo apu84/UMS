@@ -1,13 +1,23 @@
 package org.ums.academic.resource.helper;
 
+import java.io.StringReader;
+import java.net.URI;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import javax.json.*;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
+
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-import org.ums.cache.LocalCache;
 import org.ums.builder.ExamGradeBuilder;
+import org.ums.cache.LocalCache;
 import org.ums.domain.model.dto.*;
 import org.ums.domain.model.immutable.*;
 import org.ums.domain.model.mutable.MutableExamGrade;
@@ -20,15 +30,6 @@ import org.ums.manager.*;
 import org.ums.persistent.model.PersistentExamGrade;
 import org.ums.resource.ResourceHelper;
 import org.ums.services.academic.GradeSubmissionService;
-
-import javax.json.*;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
-import java.io.StringReader;
-import java.net.URI;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Component
 public class GradeSubmissionResourceHelper extends
@@ -515,7 +516,7 @@ public class GradeSubmissionResourceHelper extends
 
     JsonArray entries = pJsonObject.getJsonArray("entries");
     // List<MutableMarksSubmissionStatus> deadlineList = new ArrayList<>();
-    List<MarksSubmissionStatusDto> deadlineListDto = new ArrayList<>();
+    List<MutableMarksSubmissionStatus> deadlineList = new ArrayList<>();
     boolean isSemesterValid = true;
     for(int i = 0; i < entries.size(); i++) {
       JsonObject jsonObject = entries.getJsonObject(i);
@@ -530,19 +531,17 @@ public class GradeSubmissionResourceHelper extends
           break;
         }
       }
-
-      MarksSubmissionStatusDto deadline = new MarksSubmissionStatusDto();
-      deadline.setSemesterId(examGrade.getSemesterId());
-      deadline.setCourseId(examGrade.getCourseId());
-      deadline.setExamType(examGrade.getExamType());
-      deadline.setLastSubmissionDatePrep(examGrade.getLastSubmissionDatePrep());
-      deadline.setLastSubmissionDateHead(examGrade.getLastSubmissionDateHead());
-      deadline.setLastSubmissionDateScr(examGrade.getLastSubmissionDateScr());
-      deadlineListDto.add(deadline);
+      MutableMarksSubmissionStatus marksSubmissionStatus =
+          mMarksSubmissionStatusManager.get(examGrade.getSemesterId(), examGrade.getCourseId(),
+              examGrade.getExamType()).edit();
+      marksSubmissionStatus.setLastSubmissionDateHead(examGrade.getLastSubmissionDateHead());
+      marksSubmissionStatus.setLastSubmissionDatePrep(examGrade.getLastSubmissionDatePrep());
+      marksSubmissionStatus.setLastSubmissionDateScr(examGrade.getLastSubmissionDateScr());
+      deadlineList.add(marksSubmissionStatus);
     }
 
     if(isSemesterValid) {
-      mExamGradeManager.updateDeadline(deadlineListDto);
+      mMarksSubmissionStatusManager.update(deadlineList);
     }
 
     URI contextURI = null;

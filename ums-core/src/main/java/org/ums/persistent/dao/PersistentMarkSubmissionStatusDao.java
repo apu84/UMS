@@ -19,15 +19,18 @@ import org.ums.persistent.model.PersistentMarksSubmissionStatus;
 
 public class PersistentMarkSubmissionStatusDao extends MarksSubmissionStatusDaoDecorator {
   String SELECT_ALL =
-      "SELECT ID, SEMESTER_ID, COURSE_ID, STATUS, EXAM_TYPE, LAST_SUBMISSION_DATE_PREP, TOTAL_PART, PART_A_TOTAL, "
+      "SELECT ID, SEMESTER_ID, COURSE_ID, STATUS, EXAM_TYPE, LAST_SUBMISSION_DATE_PREP, "
+          + "LAST_SUBMISSION_DATE_HEAD, LAST_SUBMISSION_DATE_SCR, TOTAL_PART, PART_A_TOTAL, "
           + "PART_B_TOTAL, YEAR, SEMESTER, LAST_MODIFIED FROM MARKS_SUBMISSION_STATUS ";
   String UPDATE_ALL =
       "UPDATE MARKS_SUBMISSION_STATUS SET SEMESTER_ID = ?, COURSE_ID = ?, STATUS = ?, EXAM_TYPE = ?, "
-          + "LAST_SUBMISSION_DATE_PREP = ?, TOTAL_PART = ?, PART_A_TOTAL = ?, PART_B_TOTAL = ?, "
+          + "LAST_SUBMISSION_DATE_PREP = ?, LAST_SUBMISSION_DATE_HEAD = ?, LAST_SUBMISSION_DATE_SCR = ?, "
+          + "TOTAL_PART = ?, PART_A_TOTAL = ?, PART_B_TOTAL = ?, "
           + "YEAR = ?, SEMESTER = ?, LAST_MODIFIED = " + getLastModifiedSql() + " ";
   String DELETE_ALL = "DELETE FROM MARKS_SUBMISSION_STATUS ";
   String INSERT_ALL =
-      "INSERT INTO MST_SEMESTER(ID, SEMESTER_ID, COURSE_ID, STATUS, EXAM_TYPE, LAST_SUBMISSION_DATE_PREP, TOTAL_PART, "
+      "INSERT INTO MST_SEMESTER(ID, SEMESTER_ID, COURSE_ID, STATUS, EXAM_TYPE, LAST_SUBMISSION_DATE_PREP, "
+          + "LAST_SUBMISSION_DATE_HEAD, LAST_SUBMISSION_DATE_SCR, TOTAL_PART, "
           + "PART_A_TOTAL, PART_B_TOTAL, YEAR, SEMESTER, LAST_MODIFIED) "
           + "VALUES(?, ?, ?, ?, ?  ?, ?, ?, ?, ?, " + getLastModifiedSql() + ")";
 
@@ -56,8 +59,9 @@ public class PersistentMarkSubmissionStatusDao extends MarksSubmissionStatusDaoD
     String query = UPDATE_ALL + "WHERE ID = ?";
     return mJdbcTemplate.update(query, pMutable.getSemesterId(), pMutable.getCourseId(), pMutable
         .getStatus().getId(), pMutable.getExamType().getId(), pMutable.getLastSubmissionDatePrep(),
-        pMutable.getTotalPart(), pMutable.getPartATotal(), pMutable.getPartBTotal(), pMutable
-            .getYear(), pMutable.getAcademicSemester(), pMutable.getId());
+        pMutable.getLastSubmissionDateHead(), pMutable.getLastSubmissionDateScr(), pMutable
+            .getTotalPart(), pMutable.getPartATotal(), pMutable.getPartBTotal(),
+        pMutable.getYear(), pMutable.getAcademicSemester(), pMutable.getId());
   }
 
   @Override
@@ -77,6 +81,7 @@ public class PersistentMarkSubmissionStatusDao extends MarksSubmissionStatusDaoD
     Long id = mIdGenerator.getNumericId();
     mJdbcTemplate.update(INSERT_ALL, id, pMutable.getSemesterId(), pMutable.getCourseId(),
         pMutable.getStatus(), pMutable.getExamType(), pMutable.getLastSubmissionDatePrep(),
+        pMutable.getLastSubmissionDateHead(), pMutable.getLastSubmissionDateScr(),
         pMutable.getTotalPart(), pMutable.getPartATotal(), pMutable.getPartBTotal(),
         pMutable.getYear(), pMutable.getAcademicSemester());
     return id;
@@ -103,7 +108,8 @@ public class PersistentMarkSubmissionStatusDao extends MarksSubmissionStatusDaoD
     for(MarksSubmissionStatus pMutable : pMarksSubmissionStatusList) {
       params.add(new Object[] {pMutable.getSemesterId(), pMutable.getCourseId(),
           pMutable.getStatus().getId(), pMutable.getExamType().getId(),
-          pMutable.getLastSubmissionDatePrep(), pMutable.getTotalPart(), pMutable.getPartATotal(),
+          pMutable.getLastSubmissionDatePrep(), pMutable.getLastSubmissionDateHead(),
+          pMutable.getLastSubmissionDateScr(), pMutable.getTotalPart(), pMutable.getPartATotal(),
           pMutable.getPartBTotal(), pMutable.getYear(), pMutable.getAcademicSemester(),
           pMutable.getId()});
     }
@@ -120,10 +126,16 @@ public class PersistentMarkSubmissionStatusDao extends MarksSubmissionStatusDaoD
       marksSubmissionStatus.setCourseId(rs.getString("COURSE_ID"));
       marksSubmissionStatus.setStatus(CourseMarksSubmissionStatus.get(rs.getInt("STATUS")));
       marksSubmissionStatus.setExamType(ExamType.get(rs.getInt("EXAM_TYPE")));
-      Date date = new Date();
       if(rs.getObject("LAST_SUBMISSION_DATE_PREP") != null) {
-        date.setTime(rs.getTimestamp("LAST_SUBMISSION_DATE_PREP").getTime());
-        marksSubmissionStatus.setLastSubmissionDatePrep(date);
+        marksSubmissionStatus.setLastSubmissionDatePrep(rs
+            .getTimestamp("LAST_SUBMISSION_DATE_PREP"));
+      }
+      if(rs.getObject("LAST_SUBMISSION_DATE_HEAD") != null) {
+        marksSubmissionStatus.setLastSubmissionDateHead(rs
+            .getTimestamp("LAST_SUBMISSION_DATE_HEAD"));
+      }
+      if(rs.getObject("LAST_SUBMISSION_DATE_SCR") != null) {
+        marksSubmissionStatus.setLastSubmissionDateScr(rs.getTimestamp("LAST_SUBMISSION_DATE_SCR"));
       }
       marksSubmissionStatus.setTotalPart(rs.getInt("TOTAL_PART"));
       marksSubmissionStatus.setPartATotal(rs.getInt("PART_A_TOTAL"));

@@ -416,14 +416,6 @@ public class PersistentExamGradeDao extends ExamGradeDaoDecorator {
   }
 
   @Override
-  public int updateDeadline(List<MarksSubmissionStatusDto> pMarksSubmissionStatuses) {
-    String query =
-        "update MARKS_SUBMISSION_STATUS set LAST_SUBMISSION_DATE_PREP=?, LAST_SUBMISSION_DATE_SCR=?, LAST_SUBMISSION_DATE_HEAD=? where SEMESTER_ID=? and  COURSE_ID=? and EXAM_TYPE=?";
-    return mJdbcTemplate
-        .batchUpdate(query, getParamListForDeadlineUpdate(pMarksSubmissionStatuses)).length;
-  }
-
-  @Override
   public List<StudentGradeDto> getAllGrades(int pSemesterId, String pCourseId, ExamType pExamType,
       CourseType courseType) {
 
