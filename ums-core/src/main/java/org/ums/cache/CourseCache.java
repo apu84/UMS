@@ -101,8 +101,8 @@ public class CourseCache extends ContentCache<Course, MutableCourse, String, Cou
   }
 
   @Override
-  public String getOfferedToDept(Integer pSemesterId, String pCourseId) {
-    return getManager().getOfferedToDept(pSemesterId, pCourseId);
+  public Integer getOfferedToProgram(Integer pSemesterId, String pCourseId) {
+    return getManager().getOfferedToProgram(pSemesterId, pCourseId);
   }
 
 }

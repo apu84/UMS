@@ -89,8 +89,8 @@ public class CourseDaoDecorator extends
   }
 
   @Override
-  public String getOfferedToDept(Integer pSemesterId, String pCourseId) {
-    return getManager().getOfferedToDept(pSemesterId, pCourseId);
+  public Integer getOfferedToProgram(Integer pSemesterId, String pCourseId) {
+    return getManager().getOfferedToProgram(pSemesterId, pCourseId);
   }
 
 }

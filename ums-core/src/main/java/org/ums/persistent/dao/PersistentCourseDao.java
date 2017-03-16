@@ -54,7 +54,7 @@ public class PersistentCourseDao extends CourseDaoDecorator {
           + "And Semester_Id=? and Program_Id=? and OPT_COURSE_OFFER.Year=? and OPT_COURSE_OFFER.Semester=? "
           + "And MST_COURSE.course_id=OPT_COURSE_OFFER.course_id ";
 
-  static String SELECT_OFFERED_TO_DEPT = "Select Dept_Id From ( "
+  static String SELECT_OFFERED_TO_PROGRAM = "Select MST_PROGRAM.PROGRAM_ID From ( "
       + "Select syllabus_id from COURSE_SYLLABUS_MAP " + "Where Course_id = ? and syllabus_id in  "
       + "( " + "Select distinct syllabus_id from SEMESTER_SYLLABUS_MAP Where Semester_Id=? " + ") "
       + ")tmp1, MST_SYLLABUS, MST_PROGRAM " + "Where Tmp1.Syllabus_Id = MST_SYLLABUS. Syllabus_Id "
@@ -257,9 +257,9 @@ public class PersistentCourseDao extends CourseDaoDecorator {
   }
 
   @Override
-  public String getOfferedToDept(final Integer pSemesterId, final String pCourseId) {
-    return mJdbcTemplate.queryForObject(SELECT_OFFERED_TO_DEPT, new Object[] {pCourseId,
-        pSemesterId}, String.class);
+  public Integer getOfferedToProgram(final Integer pSemesterId, final String pCourseId) {
+    return mJdbcTemplate.queryForObject(SELECT_OFFERED_TO_PROGRAM, new Object[] {pCourseId,
+        pSemesterId}, Integer.class);
   }
 
   class CourseRowMapper implements RowMapper<Course> {

@@ -44,6 +44,6 @@ public interface CourseManager extends ContentManager<Course, MutableCourse, Str
 
   public List<Course> getByTeacher(final String pTeacherId);
 
-  String getOfferedToDept(final Integer pSemesterId, final String pCourseId);
+  Integer getOfferedToProgram(final Integer pSemesterId, final String pCourseId);
 
 }
