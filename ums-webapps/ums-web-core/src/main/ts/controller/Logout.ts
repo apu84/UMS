@@ -12,7 +12,7 @@ module ums {
 
     private logout(): void {
       this.$window.sessionStorage.clear();
-      window.location.href = UrlUtil.getBaseAppUrl() + 'login/';
+      window.location.href = UrlUtil.getBaseAppUrl() + 'login';
     }
   }
 

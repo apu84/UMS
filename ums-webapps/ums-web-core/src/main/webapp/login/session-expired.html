@@ -86,7 +86,7 @@
 <div class="container login-wrapper">
     <div class="row">
         <div class="session-wrapper text-center">
-            <h4 class="title">Your Session Has Expired. <a href="">Click here</a> to login again. </h4>
+            <h4 class="title">Your Session Has Expired. <a href="javascript:void()" onclick="login()">Click here</a> to login again. </h4>
             <p class="session-con">You will be redirected back to the login page in <span>(5)</span> seconds.</p>
             <div class="logo"> <img src="../resources/images/clock-01.png" title="IUMS" alt="IUMS" height=""> </div>
             <div class="session-copy-right">&copy; <span class="newYear"></span> IUMS Terms of use  Privacy &amp; Cookies</div>
@@ -97,4 +97,12 @@
 </html>
 <script type="text/javascript">
     $(".newYear").text((new Date).getFullYear());
+    setTimeout(function () {
+        login();
+    }, 5000);
+
+    function login() {
+        var baseUri = window.location.pathname.substring(0, window.location.pathname.indexOf('/', 1) + 1);
+        window.location.href = baseUri + 'login';
+    }
 </script>

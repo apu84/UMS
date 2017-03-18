@@ -325,13 +325,9 @@ public class UgGradeSheetGenerator {
     table.addCell(cell);
 
     Paragraph parag1 = new Paragraph("Department : ", nFont);// This gonna be bold font
-    Paragraph parag2 =
-        new Paragraph(program.getDepartment().getShortName() ,
-            nuFont);
+    Paragraph parag2 = new Paragraph(program.getDepartment().getShortName(), nuFont);
     Paragraph parag3 = new Paragraph(",  Program : ", nFont);// This gonna be bold font
-    Paragraph parag4 =
-        new Paragraph(program.getShortName() ,
-            nuFont);
+    Paragraph parag4 = new Paragraph(program.getShortName(), nuFont);
 
     Paragraph comb = new Paragraph();
     comb.add(parag1);
