@@ -30,10 +30,20 @@ module ums {
           ]
         },
         {
+          name: 'amCharts',
+          files : [
+            'vendors/amcharts/amcharts.js'
+          ]
+        },
+        {
+          name: 'serial',
+          files : [
+            'vendors/amcharts/serial.js'
+          ]
+        },
+        {
           name: 'amChartsDirective',
           files: [
-            'vendors/amcharts/serial.js',
-            'vendors/amcharts/amcharts.js',
             'js/lib/amChartsDirective.js'
           ]
         }]
@@ -745,7 +755,7 @@ module ums {
           controller: 'MarksSubmission',
           resolve: {
             loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-              return $ocLazyLoad.load(['amChartsDirective']);
+              return $ocLazyLoad.load(['amCharts', 'serial', 'amChartsDirective'], {serie: true});
             }]
           }
         })
@@ -755,7 +765,7 @@ module ums {
           controller: 'MarksSubmission',
           resolve: {
             loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-              return $ocLazyLoad.load(['amChartsDirective']);
+              return $ocLazyLoad.load(['amCharts', 'serial', 'amChartsDirective'], {serie: true});
             }]
           }
         })
@@ -766,7 +776,7 @@ module ums {
           controller: 'MarksSubmission',
           resolve: {
             loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-              return $ocLazyLoad.load(['amChartsDirective']);
+              return $ocLazyLoad.load(['amCharts', 'serial', 'amChartsDirective'], {serie: true});
             }]
           }
         })
@@ -776,7 +786,7 @@ module ums {
           controller: 'MarksSubmission',
           resolve: {
             loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-              return $ocLazyLoad.load(['amChartsDirective']);
+              return $ocLazyLoad.load(['amCharts', 'serial', 'amChartsDirective'], {serie: true});
             }]
           }
         })
