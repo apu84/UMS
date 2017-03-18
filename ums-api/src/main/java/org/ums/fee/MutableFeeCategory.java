@@ -6,6 +6,8 @@ import org.ums.domain.model.mutable.MutableLastModifier;
 
 public interface MutableFeeCategory extends FeeCategory, Mutable, MutableLastModifier,
     MutableIdentifier<String> {
+  void setFeeId(String pId);
+
   void setType(FeeCategory.Type pType);
 
   void setName(String pName);

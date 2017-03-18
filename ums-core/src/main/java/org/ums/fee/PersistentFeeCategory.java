@@ -11,6 +11,7 @@ public class PersistentFeeCategory implements MutableFeeCategory {
         applicationContext.getBean("feeCategoryManager", FeeCategoryManager.class);
   }
   private String mId;
+  private String mFeeId;
   private FeeCategory.Type mType;
   private String mName;
   private String mDescription;
@@ -93,5 +94,15 @@ public class PersistentFeeCategory implements MutableFeeCategory {
   @Override
   public String getDescription() {
     return mDescription;
+  }
+
+  @Override
+  public void setFeeId(String pId) {
+    mFeeId = pId;
+  }
+
+  @Override
+  public String getFeeId() {
+    return mFeeId;
   }
 }

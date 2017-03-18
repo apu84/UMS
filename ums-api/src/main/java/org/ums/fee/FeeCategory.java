@@ -12,6 +12,8 @@ import org.ums.domain.model.common.LastModifier;
 public interface FeeCategory extends Serializable, EditType<MutableFeeCategory>, LastModifier,
     Identifier<String> {
 
+  String getFeeId();
+
   FeeCategory.Type getType();
 
   String getName();
