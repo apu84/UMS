@@ -131,7 +131,12 @@ public class PersistentExamRoutine implements MutableExamRoutine {
   }
 
   @Override
-  public void commit(boolean update) {}
+  public Integer create() {
+    return null;
+  }
+
+  @Override
+  public void update() {}
 
   @Override
   public MutableExamRoutine edit() {

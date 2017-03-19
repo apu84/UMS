@@ -82,13 +82,13 @@ public class PersistentIndex implements MutableIndex {
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sIndexManager.update(this);
-    }
-    else {
-      sIndexManager.create(this);
-    }
+  public Long create() {
+    return sIndexManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sIndexManager.update(this);
   }
 
   @Override

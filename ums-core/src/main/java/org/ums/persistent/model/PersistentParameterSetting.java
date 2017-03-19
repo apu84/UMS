@@ -88,13 +88,13 @@ public class PersistentParameterSetting implements MutableParameterSetting {
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sParameterSettingManager.update(this);
-    }
-    else {
-      sParameterSettingManager.create(this);
-    }
+  public Long create() {
+    return sParameterSettingManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sParameterSettingManager.update(this);
   }
 
   @Override

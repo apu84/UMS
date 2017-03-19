@@ -100,13 +100,13 @@ public class PersistentSemesterWithdrawalLog implements MutableSemesterWithdrawa
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sSemesterWithdrawalLogManager.update(this);
-    }
-    else {
-      sSemesterWithdrawalLogManager.create(this);
-    }
+  public Long create() {
+    return sSemesterWithdrawalLogManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sSemesterWithdrawalLogManager.update(this);
   }
 
   @Override

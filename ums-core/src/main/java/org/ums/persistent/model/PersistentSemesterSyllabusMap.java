@@ -93,13 +93,14 @@ public class PersistentSemesterSyllabusMap implements MutableSemesterSyllabusMap
     sSemesterSyllabusMapManager.delete(this);
   }
 
-  public void commit(final boolean update) {
-    if(update) {
-      sSemesterSyllabusMapManager.update(this);
-    }
-    else {
-      sSemesterSyllabusMapManager.create(this);
-    }
+  @Override
+  public Integer create() {
+    return sSemesterSyllabusMapManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sSemesterSyllabusMapManager.update(this);
   }
 
   public MutableSemesterSyllabusMap edit() {

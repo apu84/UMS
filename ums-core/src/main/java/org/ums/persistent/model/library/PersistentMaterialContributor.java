@@ -39,13 +39,18 @@ public class PersistentMaterialContributor implements MutableMaterialContributor
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sMaterialContributorManager.update(this);
-    }
-    else {
-      sMaterialContributorManager.create(this);
-    }
+  public Integer create() {
+    return sMaterialContributorManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sMaterialContributorManager.update(this);
+  }
+
+  @Override
+  public void delete() {
+    sMaterialContributorManager.delete(this);
   }
 
   @Override
@@ -71,11 +76,6 @@ public class PersistentMaterialContributor implements MutableMaterialContributor
   @Override
   public void setLastModified(String pLastModified) {
     mLastModified = pLastModified;
-  }
-
-  @Override
-  public void delete() {
-    sMaterialContributorManager.delete(this);
   }
 
   @Override

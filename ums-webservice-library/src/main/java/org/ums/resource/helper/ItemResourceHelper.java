@@ -75,7 +75,7 @@ public class ItemResourceHelper extends ResourceHelper<Item, MutableItem, Long>
 
     mutableItem.setLastUpdatedBy(user.getId());
     getBuilder().build(mutableItem, pJsonObject, localCache);
-    mutableItem.commit(false);
+    mutableItem.create();
 
     URI contextURI =
         pUriInfo.getBaseUriBuilder().path(ItemResource.class).path(ItemResource.class, "get")

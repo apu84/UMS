@@ -1,16 +1,16 @@
 package org.ums.domain.model.mutable;
 
-import org.ums.domain.model.common.Mutable;
+import org.ums.domain.model.common.Editable;
 import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.immutable.Department;
 import org.ums.domain.model.immutable.Role;
 import org.ums.domain.model.immutable.User;
 
+import java.util.Date;
 import java.util.List;
 
-import java.util.Date;
-
-public interface MutableUser extends User, Mutable, MutableIdentifier<String>, MutableLastModifier {
+public interface MutableUser extends User, Editable<String>, MutableIdentifier<String>,
+    MutableLastModifier {
   void setPassword(final char[] pPassword);
 
   void setEmployeeId(final String pEmployeeId);

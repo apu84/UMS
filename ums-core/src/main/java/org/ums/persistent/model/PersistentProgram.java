@@ -1,11 +1,11 @@
 package org.ums.persistent.model;
 
 import org.springframework.context.ApplicationContext;
-import org.ums.domain.model.immutable.Faculty;
-import org.ums.domain.model.mutable.MutableProgram;
-import org.ums.domain.model.immutable.Department;
-import org.ums.domain.model.immutable.ProgramType;
 import org.ums.context.AppContext;
+import org.ums.domain.model.immutable.Department;
+import org.ums.domain.model.immutable.Faculty;
+import org.ums.domain.model.immutable.ProgramType;
+import org.ums.domain.model.mutable.MutableProgram;
 import org.ums.manager.DepartmentManager;
 import org.ums.manager.ProgramManager;
 import org.ums.manager.ProgramTypeManager;
@@ -138,13 +138,14 @@ public class PersistentProgram implements MutableProgram {
     sProgramManager.delete(this);
   }
 
-  public void commit(final boolean update) {
-    if(update) {
-      sProgramManager.update(this);
-    }
-    else {
-      sProgramManager.create(this);
-    }
+  @Override
+  public Integer create() {
+    return sProgramManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sProgramManager.update(this);
   }
 
   public MutableProgram edit() {

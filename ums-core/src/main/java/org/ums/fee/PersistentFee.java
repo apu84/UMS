@@ -57,13 +57,13 @@ public class PersistentFee implements MutableFee {
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sFeeManager.update(this);
-    }
-    else {
-      sFeeManager.create(this);
-    }
+  public Long create() {
+    return sFeeManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sFeeManager.update(this);
   }
 
   @Override

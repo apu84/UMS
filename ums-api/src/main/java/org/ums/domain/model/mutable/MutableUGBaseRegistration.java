@@ -1,12 +1,15 @@
 package org.ums.domain.model.mutable;
 
-import org.ums.domain.model.common.Mutable;
+import org.ums.domain.model.common.Editable;
 import org.ums.domain.model.common.MutableIdentifier;
-import org.ums.domain.model.immutable.*;
+import org.ums.domain.model.immutable.Course;
+import org.ums.domain.model.immutable.Semester;
+import org.ums.domain.model.immutable.Student;
+import org.ums.domain.model.immutable.UGBaseRegistration;
 import org.ums.enums.CourseRegType;
 import org.ums.enums.ExamType;
 
-public interface MutableUGBaseRegistration extends UGBaseRegistration, Mutable,
+public interface MutableUGBaseRegistration extends UGBaseRegistration, Editable<Long>,
     MutableIdentifier<Long>, MutableLastModifier {
   void setCourseId(final String pCourseId);
 

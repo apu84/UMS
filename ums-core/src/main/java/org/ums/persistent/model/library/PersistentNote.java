@@ -33,13 +33,13 @@ public class PersistentNote implements MutableNote {
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sNoteManager.update(this);
-    }
-    else {
-      sNoteManager.create(this);
-    }
+  public Integer create() {
+    return sNoteManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sNoteManager.update(this);
   }
 
   @Override

@@ -125,13 +125,13 @@ public class PersistentEnrollmentFromTo implements MutableEnrollmentFromTo {
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sEnrollmentFromToManager.update(this);
-    }
-    else {
-      sEnrollmentFromToManager.create(this);
-    }
+  public Long create() {
+    return sEnrollmentFromToManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sEnrollmentFromToManager.update(this);
   }
 
   @Override

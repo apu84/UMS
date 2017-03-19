@@ -1,5 +1,6 @@
 package org.ums.domain.model.mutable;
 
+import org.ums.domain.model.common.Editable;
 import org.ums.domain.model.common.Mutable;
 import org.ums.domain.model.immutable.ClassRoom;
 import org.ums.domain.model.immutable.Department;
@@ -9,7 +10,7 @@ import org.ums.enums.ClassRoomType;
 /**
  * Created by Ifti on 13-Feb-16.
  */
-public interface MutableClassRoom extends ClassRoom, Mutable, MutableLastModifier,
+public interface MutableClassRoom extends ClassRoom, Editable<Long>, MutableLastModifier,
     MutableIdentifier<Long> {
 
   void setRoomNo(final String pRoomNo);

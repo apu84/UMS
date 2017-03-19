@@ -50,7 +50,7 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
     MutableEmployee mutableEmployee = new PersistentEmployee();
     LocalCache localCache = new LocalCache();
     getBuilder().build(mutableEmployee, pJsonObject, localCache);
-    mutableEmployee.commit(false);
+    mutableEmployee.create();
     URI contextURI =
         pUriInfo.getBaseUriBuilder().path(EmployeeResource.class)
             .path(EmployeeResource.class, "get").build(mutableEmployee.getId());

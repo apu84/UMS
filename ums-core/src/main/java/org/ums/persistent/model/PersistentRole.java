@@ -65,13 +65,13 @@ public class PersistentRole implements MutableRole {
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sRoleManager.update(this);
-    }
-    else {
-      sRoleManager.create(this);
-    }
+  public Integer create() {
+    return sRoleManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sRoleManager.update(this);
   }
 
   @Override

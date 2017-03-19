@@ -1,6 +1,6 @@
 package org.ums.domain.model.mutable;
 
-import org.ums.domain.model.common.Mutable;
+import org.ums.domain.model.common.Editable;
 import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.immutable.AdditionalRolePermissions;
 import org.ums.domain.model.immutable.Role;
@@ -9,8 +9,8 @@ import org.ums.domain.model.immutable.User;
 import java.util.Date;
 import java.util.Set;
 
-public interface MutableAdditionalRolePermissions extends AdditionalRolePermissions, Mutable,
-    MutableLastModifier, MutableIdentifier<Long> {
+public interface MutableAdditionalRolePermissions extends AdditionalRolePermissions,
+    Editable<Long>, MutableLastModifier, MutableIdentifier<Long> {
   void setUser(final User pUser);
 
   void setUserId(final String pUserId);

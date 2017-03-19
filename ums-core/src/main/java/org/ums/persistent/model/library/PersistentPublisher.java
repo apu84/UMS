@@ -88,13 +88,13 @@ public class PersistentPublisher implements MutablePublisher {
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sSupplierManager.update(this);
-    }
-    else {
-      sSupplierManager.create(this);
-    }
+  public Integer create() {
+    return sSupplierManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sSupplierManager.update(this);
   }
 
   @Override

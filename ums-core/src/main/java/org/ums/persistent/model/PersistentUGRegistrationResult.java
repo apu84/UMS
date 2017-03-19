@@ -23,13 +23,13 @@ public class PersistentUGRegistrationResult extends AbstractUGBaseRegistration i
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sRegistrationResultManager.update(this);
-    }
-    else {
-      sRegistrationResultManager.create(this);
-    }
+  public Long create() {
+    return sRegistrationResultManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sRegistrationResultManager.update(this);
   }
 
   @Override

@@ -111,13 +111,13 @@ public class PersistentSubGroupCCI implements MutableSubGroupCCI {
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sSubGroupCCIManager.update(this);
-    }
-    else {
-      sSubGroupCCIManager.create(this);
-    }
+  public Integer create() {
+    return sSubGroupCCIManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sSubGroupCCIManager.update(this);
   }
 
   @Override

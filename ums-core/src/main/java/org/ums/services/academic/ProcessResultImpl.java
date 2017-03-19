@@ -70,7 +70,7 @@ public class ProcessResultImpl implements ProcessResult {
     MutableTaskStatus processResultStatus = new PersistentTaskStatus();
     processResultStatus.setId(mTaskStatusManager.buildTaskId(pProgramId, pSemesterId, PROCESS_GPA_CGPA_PROMOTION));
     processResultStatus.setStatus(TaskStatus.Status.INPROGRESS);
-    processResultStatus.commit(false);
+    processResultStatus.create();
 
     processResult(pProgramId, pSemesterId,
         resultList.stream().collect(Collectors.groupingBy(UGRegistrationResult::getStudentId)));
@@ -110,14 +110,14 @@ public class ProcessResultImpl implements ProcessResult {
         TaskStatus taskStatus = mTaskStatusManager.get(processCGPA);
         MutableTaskStatus mutableTaskStatus = taskStatus.edit();
         mutableTaskStatus.setProgressDescription(UmsUtils.getPercentageString(i, totalStudents));
-        mutableTaskStatus.commit(true);
+        mutableTaskStatus.update();
       }
     }
     TaskStatus taskStatus = mTaskStatusManager.get(processCGPA);
     MutableTaskStatus mutableTaskStatus = taskStatus.edit();
     mutableTaskStatus.setProgressDescription("100");
     mutableTaskStatus.setStatus(TaskStatus.Status.COMPLETED);
-    mutableTaskStatus.commit(true);
+    mutableTaskStatus.update();
   }
 
   private Double calculateCGPA(List<UGRegistrationResult> pResults) {
@@ -196,13 +196,13 @@ public class ProcessResultImpl implements ProcessResult {
     MutableTaskStatus taskStatus = new PersistentTaskStatus();
     taskStatus.setId(publishResult);
     taskStatus.setStatus(TaskStatus.Status.INPROGRESS);
-    taskStatus.commit(false);
+    taskStatus.create();
 
     mResultPublishManager.publishResult(pProgramId, pSemesterId);
 
     TaskStatus status = mTaskStatusManager.get(publishResult);
     MutableTaskStatus mutableTaskStatus = status.edit();
     mutableTaskStatus.setStatus(TaskStatus.Status.COMPLETED);
-    mutableTaskStatus.commit(true);
+    mutableTaskStatus.update();
   }
 }

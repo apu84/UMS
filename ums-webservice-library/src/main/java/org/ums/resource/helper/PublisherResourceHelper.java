@@ -46,7 +46,7 @@ public class PublisherResourceHelper extends ResourceHelper<Publisher, MutablePu
     MutablePublisher mutablePublisher = new PersistentPublisher();
     LocalCache localCache = new LocalCache();
     getBuilder().build(mutablePublisher, pJsonObject, localCache);
-    mutablePublisher.commit(false);
+    mutablePublisher.create();
 
     URI contextURI =
         pUriInfo.getBaseUriBuilder().path(SemesterResource.class)

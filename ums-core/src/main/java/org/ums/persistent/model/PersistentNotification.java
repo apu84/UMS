@@ -72,13 +72,13 @@ public class PersistentNotification implements MutableNotification {
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sNotificationManager.update(this);
-    }
-    else {
-      sNotificationManager.create(this);
-    }
+  public Long create() {
+    return sNotificationManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sNotificationManager.update(this);
   }
 
   @Override

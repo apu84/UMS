@@ -1,6 +1,6 @@
 package org.ums.domain.model.mutable;
 
-import org.ums.domain.model.common.Mutable;
+import org.ums.domain.model.common.Editable;
 import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.immutable.Program;
 import org.ums.domain.model.immutable.Semester;
@@ -10,7 +10,7 @@ import org.ums.domain.model.immutable.Student;
 /**
  * Created by My Pc on 3/22/2016.
  */
-public interface MutableSemesterWithdrawal extends SemesterWithdrawal, Mutable,
+public interface MutableSemesterWithdrawal extends SemesterWithdrawal, Editable<Long>,
     MutableLastModifier, MutableIdentifier<Long> {
   void setSemester(final Semester pSemester);
 

@@ -8,7 +8,7 @@ import org.ums.domain.model.mutable.MutableExaminer;
 import org.ums.manager.AssignedTeacherManager;
 
 public class PersistentExaminer extends AbstractAssignedTeacher implements MutableExaminer {
-  private static AssignedTeacherManager<Examiner, MutableExaminer, Integer> sExaminerManager;
+  private static AssignedTeacherManager<Examiner, MutableExaminer, Long> sExaminerManager;
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
@@ -82,12 +82,13 @@ public class PersistentExaminer extends AbstractAssignedTeacher implements Mutab
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sExaminerManager.update(this);
-    }
-    else {
-      sExaminerManager.create(this);
-    }
+  public Long create() {
+    return sExaminerManager.create(this);
   }
+
+  @Override
+  public void update() {
+    sExaminerManager.update(this);
+  }
+
 }

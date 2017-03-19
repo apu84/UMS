@@ -36,13 +36,13 @@ public class PersistentEquivalentCourse implements MutableEquivalentCourse {
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sEquivalentCourseManager.update(this);
-    }
-    else {
-      sEquivalentCourseManager.create(this);
-    }
+  public Long create() {
+    return sEquivalentCourseManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sEquivalentCourseManager.update(this);
   }
 
   @Override

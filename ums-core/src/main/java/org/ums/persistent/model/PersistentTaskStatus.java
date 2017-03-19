@@ -31,13 +31,13 @@ public class PersistentTaskStatus implements MutableTaskStatus {
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sTaskStatusManager.update(this);
-    }
-    else {
-      sTaskStatusManager.create(this);
-    }
+  public String create() {
+    return sTaskStatusManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sTaskStatusManager.update(this);
   }
 
   @Override

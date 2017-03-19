@@ -48,7 +48,7 @@ public class SpStudentResourceHelper extends ResourceHelper<SpStudent, MutableSp
     MutableSpStudent spStudent = new PersistentSpStudent();
     LocalCache localCache = new LocalCache();
     getBuilder().build(spStudent, pJsonObject, localCache);
-    spStudent.commit(false);
+    spStudent.create();
     URI contextURI =
         pUriInfo.getBaseUriBuilder().path(SpStudentResource.class)
             .path(SpStudentResource.class, "get").build(spStudent.getId());

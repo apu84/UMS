@@ -3,7 +3,7 @@ package org.ums.resource;
 import org.ums.builder.Builder;
 import org.ums.cache.LocalCache;
 import org.ums.domain.model.common.EditType;
-import org.ums.domain.model.common.Mutable;
+import org.ums.domain.model.common.Editable;
 import org.ums.manager.ContentManager;
 
 import javax.json.Json;
@@ -16,7 +16,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.List;
 
-public abstract class ResourceHelper<R extends EditType<M>, M extends Mutable, I> {
+public abstract class ResourceHelper<R extends EditType<M>, M extends Editable, I> {
 
   public R load(final I pObjectId) {
     return getContentManager().get(pObjectId);
@@ -102,7 +102,7 @@ public abstract class ResourceHelper<R extends EditType<M>, M extends Mutable, I
     M mutable = readOnly.edit();
     LocalCache localCache = new LocalCache();
     getBuilder().build(mutable, pJsonObject, localCache);
-    mutable.commit(true);
+    mutable.update();
     localCache.invalidate();
 
     return Response.noContent().build();

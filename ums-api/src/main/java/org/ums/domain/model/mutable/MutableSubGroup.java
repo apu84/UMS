@@ -1,6 +1,6 @@
 package org.ums.domain.model.mutable;
 
-import org.ums.domain.model.common.Mutable;
+import org.ums.domain.model.common.Editable;
 import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.immutable.SeatPlanGroup;
 import org.ums.domain.model.immutable.Semester;
@@ -9,7 +9,7 @@ import org.ums.domain.model.immutable.SubGroup;
 /**
  * Created by My Pc on 5/4/2016.
  */
-public interface MutableSubGroup extends SubGroup, Mutable, MutableLastModifier,
+public interface MutableSubGroup extends SubGroup, Editable<Integer>, MutableLastModifier,
     MutableIdentifier<Integer> {
   void setSemester(final Semester pSemester);
 

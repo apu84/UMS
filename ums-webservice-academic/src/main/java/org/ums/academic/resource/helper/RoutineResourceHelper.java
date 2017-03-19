@@ -136,7 +136,7 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
     LocalCache localCache = new LocalCache();
     getBuilder().build(mutableRoutine, pJsonObject, localCache);
 
-    mutableRoutine.commit(false);
+    mutableRoutine.create();
     URI contextURI =
         pUriInfo.getBaseUriBuilder().path(RoutineResource.class).path(RoutineResource.class, "get")
             .build(mutableRoutine.getId());

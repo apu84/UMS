@@ -43,7 +43,7 @@ public class AuthorResourceHelper extends ResourceHelper<Author, MutableAuthor, 
     MutableAuthor mutableAuthor = new PersistentAuthor();
     LocalCache localCache = new LocalCache();
     getBuilder().build(mutableAuthor, pJsonObject, localCache);
-    mutableAuthor.commit(false);
+    mutableAuthor.create();
 
     URI contextURI =
         pUriInfo.getBaseUriBuilder().path(SemesterResource.class)

@@ -1,14 +1,14 @@
 package org.ums.domain.model.mutable;
 
-import org.ums.domain.model.common.Mutable;
+import org.ums.domain.model.common.Editable;
 import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.immutable.Program;
 import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.Student;
 import org.ums.domain.model.immutable.StudentRecord;
 
-public interface MutableStudentRecord extends StudentRecord, Mutable, MutableIdentifier<Long>,
-    MutableLastModifier {
+public interface MutableStudentRecord extends StudentRecord, Editable<Long>,
+    MutableIdentifier<Long>, MutableLastModifier {
   void setStudentId(final String pStudentId);
 
   void setStudent(final Student pStudent);

@@ -114,13 +114,14 @@ public class PersistentSemester implements MutableSemester {
     sSemesterManager.delete(this);
   }
 
-  public void commit(final boolean update) {
-    if(update) {
-      sSemesterManager.update(this);
-    }
-    else {
-      sSemesterManager.create(this);
-    }
+  @Override
+  public Integer create() {
+    return sSemesterManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sSemesterManager.update(this);
   }
 
   public MutableSemester edit() {

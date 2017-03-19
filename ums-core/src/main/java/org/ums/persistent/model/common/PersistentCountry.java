@@ -73,13 +73,13 @@ public class PersistentCountry implements MutableCountry {
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sCountryManager.update(this);
-    }
-    else {
-      sCountryManager.create(this);
-    }
+  public Integer create() {
+    return sCountryManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sCountryManager.update(this);
   }
 
   @Override

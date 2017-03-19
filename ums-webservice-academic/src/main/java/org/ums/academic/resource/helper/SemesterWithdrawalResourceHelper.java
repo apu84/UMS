@@ -38,7 +38,7 @@ public class SemesterWithdrawalResourceHelper extends
     MutableSemesterWithdrawal mutableSemesterWithdrawal = new PersistentSemesterWithdrawal();
     LocalCache localCache = new LocalCache();
     getBuilder().build(mutableSemesterWithdrawal, pJsonObject, localCache);
-    mutableSemesterWithdrawal.commit(false);
+    mutableSemesterWithdrawal.create();
     URI contextURI =
         pUriInfo.getBaseUriBuilder().path(SemesterWithdrawalResource.class)
             .path(SemesterWithdrawalResource.class, "get").build("0");

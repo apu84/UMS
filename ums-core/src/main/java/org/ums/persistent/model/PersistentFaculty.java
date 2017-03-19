@@ -32,13 +32,13 @@ public class PersistentFaculty implements MutableFaculty {
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sFacultyManager.update(this);
-    }
-    else {
-      sFacultyManager.create(this);
-    }
+  public Integer create() {
+    return sFacultyManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sFacultyManager.update(this);
   }
 
   @Override

@@ -45,13 +45,13 @@ public class PersistentResultPublish implements MutableResultPublish {
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sResultPublishManager.update(this);
-    }
-    else {
-      sResultPublishManager.create(this);
-    }
+  public Long create() {
+    return sResultPublishManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sResultPublishManager.update(this);
   }
 
   @Override

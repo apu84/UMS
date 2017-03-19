@@ -34,13 +34,13 @@ public class PersistentLibrary implements MutableLibrary {
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sLibraryManager.update(this);
-    }
-    else {
-      sLibraryManager.create(this);
-    }
+  public Integer create() {
+    return sLibraryManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sLibraryManager.update(this);
   }
 
   @Override

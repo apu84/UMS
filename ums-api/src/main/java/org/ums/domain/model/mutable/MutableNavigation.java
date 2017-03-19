@@ -1,10 +1,10 @@
 package org.ums.domain.model.mutable;
 
-import org.ums.domain.model.common.Mutable;
+import org.ums.domain.model.common.Editable;
 import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.immutable.Navigation;
 
-public interface MutableNavigation extends Navigation, Mutable, MutableLastModifier,
+public interface MutableNavigation extends Navigation, Editable<Long>, MutableLastModifier,
     MutableIdentifier<Long> {
   void setTitle(final String pTitle);
 

@@ -9,7 +9,7 @@ import org.ums.manager.AssignedTeacherManager;
 
 public class PersistentCourseTeacher extends AbstractAssignedTeacher implements
     MutableCourseTeacher {
-  private static AssignedTeacherManager<CourseTeacher, MutableCourseTeacher, Integer> sCourseTeacherManager;
+  private static AssignedTeacherManager<CourseTeacher, MutableCourseTeacher, Long> sCourseTeacherManager;
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
@@ -73,12 +73,13 @@ public class PersistentCourseTeacher extends AbstractAssignedTeacher implements
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sCourseTeacherManager.update(this);
-    }
-    else {
-      sCourseTeacherManager.create(this);
-    }
+  public Long create() {
+    return sCourseTeacherManager.create(this);
   }
+
+  @Override
+  public void update() {
+    sCourseTeacherManager.update(this);
+  }
+
 }

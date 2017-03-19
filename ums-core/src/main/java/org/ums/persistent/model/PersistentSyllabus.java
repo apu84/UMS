@@ -40,13 +40,13 @@ public class PersistentSyllabus implements MutableSyllabus {
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sSyllabusManager.update(this);
-    }
-    else {
-      sSyllabusManager.create(this);
-    }
+  public String create() {
+    return sSyllabusManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sSyllabusManager.update(this);
   }
 
   @Override

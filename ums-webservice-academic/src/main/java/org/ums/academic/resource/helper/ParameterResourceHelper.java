@@ -35,7 +35,7 @@ public class ParameterResourceHelper extends ResourceHelper<Parameter, MutablePa
     MutableParameter mutableParameter = new PersistentParameter();
     LocalCache localCache = new LocalCache();
     getBuilder().build(mutableParameter, pJsonObject, localCache);
-    mutableParameter.commit(false);
+    mutableParameter.create();
     URI contextURI =
         pUriInfo.getBaseUriBuilder().path(ParameterResource.class, "get")
             .build(mutableParameter.getId());

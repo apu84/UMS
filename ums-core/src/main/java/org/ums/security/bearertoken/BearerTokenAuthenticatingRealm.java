@@ -132,7 +132,7 @@ public class BearerTokenAuthenticatingRealm extends AuthorizingRealm {
       if(diffMinutes >= sessionTimeoutInterval && diffMinutes <= sessionTimeout) {
         try {
           MutableBearerAccessToken mutableBearerAccessToken = dbToken.edit();
-          mutableBearerAccessToken.commit(true);
+          mutableBearerAccessToken.update();
         } catch(Exception e) {
           throw new AuthenticationException("Failed to update token", e);
         }

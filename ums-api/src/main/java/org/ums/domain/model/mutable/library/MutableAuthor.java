@@ -1,22 +1,16 @@
 package org.ums.domain.model.mutable.library;
 
-import org.ums.domain.model.common.Mutable;
+import org.ums.domain.model.common.Editable;
 import org.ums.domain.model.common.MutableIdentifier;
-import org.ums.domain.model.immutable.Course;
-import org.ums.domain.model.immutable.CourseGroup;
-import org.ums.domain.model.immutable.Department;
-import org.ums.domain.model.immutable.Syllabus;
 import org.ums.domain.model.immutable.common.Country;
 import org.ums.domain.model.immutable.library.Author;
 import org.ums.domain.model.mutable.MutableLastModifier;
-import org.ums.enums.CourseCategory;
-import org.ums.enums.CourseType;
 
 /**
  * Created by Ifti on 30-Jan-17.
  */
 
-public interface MutableAuthor extends Author, Mutable, MutableLastModifier,
+public interface MutableAuthor extends Author, Editable<Integer>, MutableLastModifier,
     MutableIdentifier<Integer> {
   void setFirstName(final String pFirstName);
 

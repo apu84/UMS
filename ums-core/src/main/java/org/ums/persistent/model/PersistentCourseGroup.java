@@ -80,13 +80,13 @@ public class PersistentCourseGroup implements MutableCourseGroup {
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sCourseGroupManager.update(this);
-    }
-    else {
-      sCourseGroupManager.create(this);
-    }
+  public Integer create() {
+    return sCourseGroupManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sCourseGroupManager.update(this);
   }
 
   @Override

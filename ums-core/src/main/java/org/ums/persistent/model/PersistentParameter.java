@@ -92,13 +92,13 @@ public class PersistentParameter implements MutableParameter {
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sParameterManager.update(this);
-    }
-    else {
-      sParameterManager.create(this);
-    }
+  public Long create() {
+    return sParameterManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sParameterManager.update(this);
   }
 
   @Override

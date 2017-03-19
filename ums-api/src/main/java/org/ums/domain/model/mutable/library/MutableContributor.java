@@ -1,6 +1,6 @@
 package org.ums.domain.model.mutable.library;
 
-import org.ums.domain.model.common.Mutable;
+import org.ums.domain.model.common.Editable;
 import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.immutable.common.Country;
 import org.ums.domain.model.immutable.library.Contributor;
@@ -11,7 +11,7 @@ import org.ums.enums.library.ContributorCategory;
 /**
  * Created by Ifti on 16-Feb-17.
  */
-public interface MutableContributor extends Contributor, Mutable, MutableLastModifier,
+public interface MutableContributor extends Contributor, Editable<Integer>, MutableLastModifier,
     MutableIdentifier<Integer> {
 
   void setFirstName(final String pFirstName);

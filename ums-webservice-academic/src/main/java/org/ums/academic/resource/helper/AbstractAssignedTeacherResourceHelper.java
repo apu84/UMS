@@ -1,21 +1,17 @@
 package org.ums.academic.resource.helper;
 
-import org.ums.cache.LocalCache;
 import org.ums.domain.model.common.EditType;
-import org.ums.domain.model.common.Mutable;
+import org.ums.domain.model.common.Editable;
 import org.ums.enums.CourseCategory;
 import org.ums.manager.AssignedTeacherManager;
 import org.ums.resource.ResourceHelper;
 
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.List;
 
-public abstract class AbstractAssignedTeacherResourceHelper<R extends EditType<M>, M extends Mutable, I, C extends AssignedTeacherManager<R, M, I>>
+public abstract class AbstractAssignedTeacherResourceHelper<R extends EditType<M>, M extends Editable<I>, I, C extends AssignedTeacherManager<R, M, I>>
     extends ResourceHelper<R, M, I> {
 
   protected abstract void modifyContent(JsonObject pJsonObject);

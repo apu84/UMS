@@ -72,7 +72,7 @@ public class LoginHelper {
     MutableUser mutableUser = pCurrentUser.edit();
     mutableUser.setPassword(mPasswordService.encryptPassword(pNewPassword).toCharArray());
     mutableUser.setTemporaryPassword(null);
-    mutableUser.commit(true);
+    mutableUser.update();
 
     // delete any pre-existing token
     try {
@@ -87,7 +87,7 @@ public class LoginHelper {
     MutableBearerAccessToken accessToken = new PersistentBearerAccessToken();
     accessToken.setUserId(pCurrentUser.getId());
     accessToken.setId(newToken);
-    accessToken.commit(false);
+    accessToken.create();
 
     return newToken;
   }

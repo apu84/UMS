@@ -49,13 +49,13 @@ public class PersistentContributor implements MutableContributor {
   private String mLastModified;
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sContributorManager.update(this);
-    }
-    else {
-      sContributorManager.create(this);
-    }
+  public Integer create() {
+    return sContributorManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sContributorManager.update(this);
   }
 
   @Override

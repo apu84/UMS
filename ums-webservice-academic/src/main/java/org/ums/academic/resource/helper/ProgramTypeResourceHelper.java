@@ -39,7 +39,7 @@ public class ProgramTypeResourceHelper extends
     MutableProgramType mutableProgramType = new PersistentProgramType();
     LocalCache localCache = new LocalCache();
     getBuilder().build(mutableProgramType, pJsonObject, localCache);
-    mutableProgramType.commit(false);
+    mutableProgramType.create();
 
     URI contextURI =
         pUriInfo.getBaseUriBuilder().path(ProgramTypeResource.class)

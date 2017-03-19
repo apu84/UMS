@@ -43,7 +43,7 @@ public class SemesterResourceHelper extends ResourceHelper<Semester, MutableSeme
     MutableSemester mutableSemester = new PersistentSemester();
     LocalCache localCache = new LocalCache();
     getBuilder().build(mutableSemester, pJsonObject, localCache);
-    mutableSemester.commit(false);
+    mutableSemester.create();
 
     URI contextURI =
         pUriInfo.getBaseUriBuilder().path(SemesterResource.class)

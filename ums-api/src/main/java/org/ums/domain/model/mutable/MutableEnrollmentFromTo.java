@@ -1,12 +1,12 @@
 package org.ums.domain.model.mutable;
 
-import org.ums.domain.model.common.Mutable;
+import org.ums.domain.model.common.Editable;
 import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.immutable.EnrollmentFromTo;
 import org.ums.domain.model.immutable.Program;
 
 public interface MutableEnrollmentFromTo extends EnrollmentFromTo, MutableLastModifier,
-    MutableIdentifier<Long>, Mutable {
+    MutableIdentifier<Long>, Editable<Long> {
   void setProgramId(final Integer pProgramId);
 
   void setProgram(final Program pProgram);

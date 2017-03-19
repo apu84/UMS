@@ -1,6 +1,6 @@
 package org.ums.domain.model.mutable;
 
-import org.ums.domain.model.common.Mutable;
+import org.ums.domain.model.common.Editable;
 import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.immutable.AdmissionStudent;
 import org.ums.domain.model.immutable.Program;
@@ -12,7 +12,7 @@ import org.ums.enums.ProgramType;
 /**
  * Created by Monjur-E-Morshed on 12-Dec-16.
  */
-public interface MutableAdmissionStudent extends AdmissionStudent, Mutable,
+public interface MutableAdmissionStudent extends AdmissionStudent, Editable<String>,
     MutableIdentifier<String>, MutableLastModifier {
   void setSemester(final Semester pSemester);
 

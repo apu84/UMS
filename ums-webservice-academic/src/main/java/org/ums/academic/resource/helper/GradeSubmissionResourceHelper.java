@@ -240,7 +240,7 @@ public class GradeSubmissionResourceHelper extends
       mutable.setTotalPart(requestedStatusDTO.getTotal_part());
       mutable.setPartATotal(requestedStatusDTO.getPart_a_total());
       mutable.setPartBTotal(requestedStatusDTO.getPart_b_total());
-      mutable.commit(true);
+      mutable.update();
 
       marksSubmissionStatus =
           mMarksSubmissionStatusManager.get(requestedStatusDTO.getSemesterId(),
@@ -253,7 +253,7 @@ public class GradeSubmissionResourceHelper extends
 
       MutableMarksSubmissionStatus mutable = marksSubmissionStatus.edit();
       mutable.setStatus(CourseMarksSubmissionStatus.WAITING_FOR_SCRUTINY);
-      mutable.commit(true);
+      mutable.update();
 
       /*
        * marksSubmissionStatus =
@@ -331,7 +331,7 @@ public class GradeSubmissionResourceHelper extends
 
       MutableMarksSubmissionStatus mutable = marksSubmissionStatus.edit();
       mutable.setStatus(nextStatus);
-      mutable.commit(true);
+      mutable.update();
 
       if (recheckList != null) recheckList.stream().forEach(g -> {
         g.setRecheckStatusId(1);
@@ -401,7 +401,7 @@ public class GradeSubmissionResourceHelper extends
 
     MutableMarksSubmissionStatus mutable = marksSubmissionStatus.edit();
     mutable.setStatus(nextStatus);
-    mutable.commit(true);
+    mutable.update();
 
     // marksSubmissionStatus =
     // mMarksSubmissionStatusManager.get(requestedStatusDTO.getSemesterId(),

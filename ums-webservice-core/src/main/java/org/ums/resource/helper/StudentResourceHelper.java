@@ -71,7 +71,7 @@ public class StudentResourceHelper extends ResourceHelper<Student, MutableStuden
     mutableStudent.setCurrentYear(UmsUtils.FIRST);
     mutableStudent.setCurrentAcademicSemester(UmsUtils.FIRST);
     mutableStudent.setEnrollmentType(Student.EnrollmentType.TEMPORARY);
-    mutableStudent.commit(false);
+    mutableStudent.create();
 
     MutableStudentRecord mutableStudentRecord = new PersistentStudentRecord();
     mutableStudentRecord.setStudentId(mutableStudent.getId());
@@ -81,7 +81,7 @@ public class StudentResourceHelper extends ResourceHelper<Student, MutableStuden
     mutableStudentRecord.setAcademicSemester(UmsUtils.FIRST);
     mutableStudentRecord.setType(StudentRecord.Type.TEMPORARY);
     mutableStudentRecord.setStatus(StudentRecord.Status.UNKNOWN);
-    mutableStudentRecord.commit(false);
+    mutableStudentRecord.create();
 
     MutableUser studentUser = new PersistentUser();
     studentUser.setId(pJsonObject.getString("id"));
@@ -91,7 +91,7 @@ public class StudentResourceHelper extends ResourceHelper<Student, MutableStuden
     // TODO: Use role name to fetch a particular role, say for Student it should be "student"
     studentUser.setPrimaryRole(mRoleManager.get(11));
     studentUser.setActive(true);
-    studentUser.commit(false);
+    studentUser.create();
 
     String encodingPrefix = "base64,", data = pJsonObject.getString("imageData");
     int contentStartIndex = data.indexOf(encodingPrefix) + encodingPrefix.length();

@@ -279,13 +279,13 @@ public class PersistentApplicationCCI implements MutableApplicationCCI {
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sApplicationCCIManager.update(this);
-    }
-    else {
-      sApplicationCCIManager.create(this);
-    }
+  public Long create() {
+    return sApplicationCCIManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sApplicationCCIManager.update(this);
   }
 
   @Override

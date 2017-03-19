@@ -197,13 +197,13 @@ public class PersistentSemesterWithdrawal implements MutableSemesterWithdrawal {
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sSemesterWithDrawalManager.update(this);
-    }
-    else {
-      sSemesterWithDrawalManager.create(this);
-    }
+  public Long create() {
+    return sSemesterWithDrawalManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sSemesterWithDrawalManager.update(this);
   }
 
   @Override

@@ -74,13 +74,13 @@ public class PersistentAdmissionTotalSeat implements MutableAdmissionTotalSeat {
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sAdmissionTotalSeatManager.update(this);
-    }
-    else {
-      sAdmissionTotalSeatManager.create(this);
-    }
+  public Integer create() {
+    return sAdmissionTotalSeatManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sAdmissionTotalSeatManager.update(this);
   }
 
   @Override

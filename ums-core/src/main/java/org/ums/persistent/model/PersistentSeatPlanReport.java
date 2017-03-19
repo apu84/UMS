@@ -71,14 +71,15 @@ public class PersistentSeatPlanReport implements MutableSeatPlanReport {
   }
 
   @Override
-  public void commit(boolean update) {
-
+  public Integer create() {
+    return null;
   }
 
   @Override
-  public void delete() {
+  public void update() {}
 
-  }
+  @Override
+  public void delete() {}
 
   @Override
   public String getRoomNo() {

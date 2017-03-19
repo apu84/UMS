@@ -139,7 +139,7 @@ public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecor
     MutableTaskStatus taskStatus = new PersistentTaskStatus();
     taskStatus.setId(taskId);
     taskStatus.setStatus(TaskStatus.Status.INPROGRESS);
-    taskStatus.commit(false);
+    taskStatus.create();
   }
 
   private void updateTaskStatus(String taskId, TaskStatus.Status pStatus) {
@@ -154,7 +154,7 @@ public class UGRegistrationResultAggregator extends UGRegistrationResultDaoDecor
     if(!StringUtils.isEmpty(pProgress)) {
       mutableTaskStatus.setProgressDescription(pProgress);
     }
-    mutableTaskStatus.commit(true);
+    mutableTaskStatus.update();
   }
 
   private List<UGRegistrationResult> resultsWithCarryCourses(List<UGRegistrationResult> pResults,

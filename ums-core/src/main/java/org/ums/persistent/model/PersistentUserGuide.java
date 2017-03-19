@@ -38,7 +38,14 @@ public class PersistentUserGuide implements MutableUserGuide {
   }
 
   @Override
-  public void commit(boolean update) {}
+  public Integer create() {
+    return sUserGuide.create(this);
+  }
+
+  @Override
+  public void update() {
+    sUserGuide.update(this);
+  }
 
   @Override
   public void delete() {

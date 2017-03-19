@@ -1,6 +1,6 @@
 package org.ums.domain.model.mutable;
 
-import org.ums.domain.model.common.Mutable;
+import org.ums.domain.model.common.Editable;
 import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.immutable.ApplicationCCI;
 import org.ums.domain.model.immutable.Course;
@@ -11,7 +11,7 @@ import org.ums.enums.ApplicationType;
 /**
  * Created by My Pc on 7/11/2016.
  */
-public interface MutableApplicationCCI extends ApplicationCCI, Mutable, MutableLastModifier,
+public interface MutableApplicationCCI extends ApplicationCCI, Editable<Long>, MutableLastModifier,
     MutableIdentifier<Long> {
   void setSemester(final Semester pSemester);
 

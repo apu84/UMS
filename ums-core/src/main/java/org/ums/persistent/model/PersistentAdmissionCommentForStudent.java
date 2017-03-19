@@ -38,13 +38,13 @@ public class PersistentAdmissionCommentForStudent implements MutableAdmissionCom
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sAdmissionCommentForStudentManager.update(this);
-    }
-    else {
-      sAdmissionCommentForStudentManager.create(this);
-    }
+  public Integer create() {
+    return sAdmissionCommentForStudentManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sAdmissionCommentForStudentManager.update(this);
   }
 
   @Override

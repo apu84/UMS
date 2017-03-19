@@ -145,13 +145,13 @@ public class PersistentAuthor implements MutableAuthor {
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sAuthorManager.update(this);
-    }
-    else {
-      sAuthorManager.create(this);
-    }
+  public Integer create() {
+    return sAuthorManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sAuthorManager.update(this);
   }
 
   @Override

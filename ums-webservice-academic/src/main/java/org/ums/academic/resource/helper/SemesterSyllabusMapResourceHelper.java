@@ -68,7 +68,7 @@ public class SemesterSyllabusMapResourceHelper extends
     SemesterSyllabusMap readOnly = load(mutable.getId());
     System.out.println(readOnly.getAcademicSemester().getStatus());
 
-    mutable.commit(true);
+    mutable.update();
     return Response.noContent().build();
   }
 

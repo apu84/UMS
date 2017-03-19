@@ -280,13 +280,13 @@ public class PersistentAdmissionStudent implements MutableAdmissionStudent {
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sAdmissionStudentManager.update(this);
-    }
-    else {
-      sAdmissionStudentManager.create(this);
-    }
+  public String create() {
+    return sAdmissionStudentManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sAdmissionStudentManager.update(this);
   }
 
   @Override

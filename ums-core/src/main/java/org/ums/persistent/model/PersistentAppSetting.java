@@ -93,13 +93,13 @@ public class PersistentAppSetting implements MutableAppSetting {
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sAppSettingManager.update(this);
-    }
-    else {
-      sAppSettingManager.create(this);
-    }
+  public Long create() {
+    return sAppSettingManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sAppSettingManager.update(this);
   }
 
   @Override

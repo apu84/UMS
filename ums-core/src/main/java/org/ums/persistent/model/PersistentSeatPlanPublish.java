@@ -81,13 +81,13 @@ public class PersistentSeatPlanPublish implements MutableSeatPlanPublish {
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sSeatPlanPublishManager.update(this);
-    }
-    else {
-      sSeatPlanPublishManager.create(this);
-    }
+  public Integer create() {
+    return sSeatPlanPublishManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sSeatPlanPublishManager.update(this);
   }
 
   @Override

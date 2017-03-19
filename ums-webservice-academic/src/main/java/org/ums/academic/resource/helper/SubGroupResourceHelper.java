@@ -44,7 +44,7 @@ public class SubGroupResourceHelper extends ResourceHelper<SubGroup, MutableSubG
     MutableSubGroup mutableSubGroup = new PersistentSubGroup();
     LocalCache localCache = new LocalCache();
     getBuilder().build(mutableSubGroup, pJsonObject, localCache);
-    mutableSubGroup.commit(false);
+    mutableSubGroup.create();
     URI contextURI =
         pUriInfo.getBaseUriBuilder().path(SubGroupResource.class)
             .path(SubGroupResource.class, "get").build(mutableSubGroup.getId());

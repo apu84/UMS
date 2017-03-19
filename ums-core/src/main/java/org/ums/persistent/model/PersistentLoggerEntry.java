@@ -83,13 +83,13 @@ public class PersistentLoggerEntry implements MutableLoggerEntry {
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sLoggerEntryManager.update(this);
-    }
-    else {
-      sLoggerEntryManager.delete(this);
-    }
+  public Long create() {
+    return sLoggerEntryManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sLoggerEntryManager.update(this);
   }
 
   @Override

@@ -119,7 +119,7 @@ public class ClassRoomResourceHelper extends ResourceHelper<ClassRoom, MutableCl
     MutableClassRoom mutableClassRoom = new PersistentClassRoom();
     LocalCache localCache = new LocalCache();
     getBuilder().build(mutableClassRoom, pJsonObject, localCache);
-    mutableClassRoom.commit(false);
+    mutableClassRoom.create();
 
     URI contextURI =
         pUriInfo.getBaseUriBuilder().path(SemesterResource.class)

@@ -90,13 +90,13 @@ public class PersistentSemesterEnrollment implements MutableSemesterEnrollment {
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sSemesterEnrollmentManager.update(this);
-    }
-    else {
-      sSemesterEnrollmentManager.create(this);
-    }
+  public Long create() {
+    return sSemesterEnrollmentManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sSemesterEnrollmentManager.update(this);
   }
 
   @Override

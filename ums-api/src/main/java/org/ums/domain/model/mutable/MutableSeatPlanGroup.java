@@ -1,16 +1,16 @@
 package org.ums.domain.model.mutable;
 
-import org.ums.domain.model.common.Mutable;
+import org.ums.domain.model.common.Editable;
 import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.immutable.Program;
-import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.SeatPlanGroup;
+import org.ums.domain.model.immutable.Semester;
 
 /**
  * Created by My Pc on 4/20/2016.
  */
-public interface MutableSeatPlanGroup extends SeatPlanGroup, Mutable, MutableLastModifier,
-    MutableIdentifier<Integer> {
+public interface MutableSeatPlanGroup extends SeatPlanGroup, Editable<Integer>,
+    MutableLastModifier, MutableIdentifier<Integer> {
   void setSemester(final Semester pSemester);
 
   void setProgram(final Program pProgram);

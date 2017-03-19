@@ -40,13 +40,13 @@ public class PersistentAdmissionCertificatesOfStudent implements
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sAdmissionStudentsCertificateHistory.update(this);
-    }
-    else {
-      sAdmissionStudentsCertificateHistory.create(this);
-    }
+  public Integer create() {
+    return sAdmissionStudentsCertificateHistory.create(this);
+  }
+
+  @Override
+  public void update() {
+    sAdmissionStudentsCertificateHistory.update(this);
   }
 
   @Override

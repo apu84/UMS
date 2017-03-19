@@ -45,7 +45,7 @@ public class ParameterSettingResourceHelper extends
     MutableParameterSetting mutableParameterSetting = new PersistentParameterSetting();
     LocalCache localCache = new LocalCache();
     getBuilder().build(mutableParameterSetting, pJsonObject, localCache);
-    mutableParameterSetting.commit(false);
+    mutableParameterSetting.create();
 
     URI contextURI =
         pUriInfo.getBaseUriBuilder().path(ParameterSettingResource.class)

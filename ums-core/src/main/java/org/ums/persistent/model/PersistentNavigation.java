@@ -148,13 +148,13 @@ public class PersistentNavigation implements MutableNavigation {
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sNavigationManager.update(this);
-    }
-    else {
-      sNavigationManager.create(this);
-    }
+  public Long create() {
+    return sNavigationManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sNavigationManager.update(this);
   }
 
   @Override

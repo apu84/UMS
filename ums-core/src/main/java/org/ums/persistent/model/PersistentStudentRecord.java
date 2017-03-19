@@ -113,13 +113,13 @@ public class PersistentStudentRecord implements MutableStudentRecord {
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sStudentRecordManager.update(this);
-    }
-    else {
-      sStudentRecordManager.create(this);
-    }
+  public Long create() {
+    return sStudentRecordManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sStudentRecordManager.update(this);
   }
 
   @Override

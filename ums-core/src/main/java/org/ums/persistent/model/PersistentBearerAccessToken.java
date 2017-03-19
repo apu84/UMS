@@ -65,13 +65,13 @@ public class PersistentBearerAccessToken implements MutableBearerAccessToken {
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sBearerAccessTokenManager.update(this);
-    }
-    else {
-      sBearerAccessTokenManager.create(this);
-    }
+  public String create() {
+    return sBearerAccessTokenManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sBearerAccessTokenManager.update(this);
   }
 
   @Override

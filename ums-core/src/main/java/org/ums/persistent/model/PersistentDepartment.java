@@ -31,13 +31,13 @@ public class PersistentDepartment implements MutableDepartment {
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sDepartmentManager.update(this);
-    }
-    else {
-      sDepartmentManager.create(this);
-    }
+  public String create() {
+    return sDepartmentManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sDepartmentManager.update(this);
   }
 
   @Override

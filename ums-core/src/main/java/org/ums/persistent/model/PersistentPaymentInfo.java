@@ -55,13 +55,13 @@ public class PersistentPaymentInfo implements MutablePaymentInfo {
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sPaymentInfoManager.update(this);
-    }
-    else {
-      sPaymentInfoManager.create(this);
-    }
+  public Integer create() {
+    return sPaymentInfoManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sPaymentInfoManager.update(this);
   }
 
   @Override

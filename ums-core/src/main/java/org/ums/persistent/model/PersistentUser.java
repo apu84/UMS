@@ -67,13 +67,13 @@ public class PersistentUser implements MutableUser {
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sUserManager.update(this);
-    }
-    else {
-      sUserManager.create(this);
-    }
+  public String create() {
+    return sUserManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sUserManager.update(this);
   }
 
   @Override

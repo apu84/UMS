@@ -59,7 +59,12 @@ public class PersistentTeacher implements MutableTeacher {
   }
 
   @Override
-  public void commit(boolean update) {
+  public String create() {
+    return null;
+  }
+
+  @Override
+  public void update() {
 
   }
 

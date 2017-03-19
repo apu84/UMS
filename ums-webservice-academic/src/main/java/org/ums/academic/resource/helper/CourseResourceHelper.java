@@ -58,7 +58,7 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
     MutableCourse mutableCourse = new PersistentCourse();
     LocalCache localCache = new LocalCache();
     getBuilder().build(mutableCourse, pJsonObject, localCache);
-    mutableCourse.commit(false);
+    mutableCourse.create();
 
     URI contextURI =
         pUriInfo.getBaseUriBuilder().path(SemesterResource.class)

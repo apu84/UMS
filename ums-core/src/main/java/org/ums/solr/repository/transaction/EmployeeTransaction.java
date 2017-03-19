@@ -33,6 +33,6 @@ public class EmployeeTransaction extends EmployeeDaoDecorator {
     index.setEntityId(pId);
     index.setEntityType("employee");
     index.setIsDeleted(isDeleted);
-    index.commit(false);
+    index.create();
   }
 }

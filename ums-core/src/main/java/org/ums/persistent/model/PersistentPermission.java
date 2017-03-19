@@ -60,13 +60,13 @@ public class PersistentPermission implements MutablePermission {
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sPermissionManager.update(this);
-    }
-    else {
-      sPermissionManager.create(this);
-    }
+  public Long create() {
+    return sPermissionManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sPermissionManager.update(this);
   }
 
   @Override

@@ -119,13 +119,13 @@ public class PersistentSupplier implements MutableSupplier {
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sSupplierManager.update(this);
-    }
-    else {
-      sSupplierManager.create(this);
-    }
+  public Long create() {
+    return sSupplierManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sSupplierManager.update(this);
   }
 
   @Override

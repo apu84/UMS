@@ -1,6 +1,6 @@
 package org.ums.domain.model.mutable.library;
 
-import org.ums.domain.model.common.Mutable;
+import org.ums.domain.model.common.Editable;
 import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.immutable.library.Item;
 import org.ums.domain.model.immutable.library.Supplier;
@@ -10,7 +10,8 @@ import org.ums.enums.library.ItemStatus;
 /**
  * Created by Ifti on 04-Mar-17.
  */
-public interface MutableItem extends Item, Mutable, MutableLastModifier, MutableIdentifier<Long> {
+public interface MutableItem extends Item, Editable<Long>, MutableLastModifier,
+    MutableIdentifier<Long> {
 
   void setMfn(Long pMfn);
 

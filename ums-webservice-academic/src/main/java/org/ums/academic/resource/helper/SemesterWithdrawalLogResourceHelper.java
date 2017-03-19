@@ -36,7 +36,7 @@ public class SemesterWithdrawalLogResourceHelper extends
     MutableSemesterWithdrawalLog mutableLog = new PersistentSemesterWithdrawalLog();
     LocalCache localCache = new LocalCache();
     getBuilder().build(mutableLog, pJsonObject, localCache);
-    mutableLog.commit(false);
+    mutableLog.create();
     URI contextURI =
         pUriInfo.getBaseUriBuilder().path(SemesterWithdrawalLogResource.class)
             .path(SemesterWithdrawalLogResource.class, "get").build(mutableLog.getId());

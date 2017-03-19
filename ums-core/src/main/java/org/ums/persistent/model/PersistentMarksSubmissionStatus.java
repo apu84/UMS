@@ -84,13 +84,13 @@ public class PersistentMarksSubmissionStatus implements MutableMarksSubmissionSt
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sMarksSubmissionStatusManager.update(this);
-    }
-    else {
-      sMarksSubmissionStatusManager.create(this);
-    }
+  public Long create() {
+    return sMarksSubmissionStatusManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sMarksSubmissionStatusManager.update(this);
   }
 
   @Override

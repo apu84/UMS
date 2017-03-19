@@ -145,13 +145,13 @@ public class PersistentSeatPlan implements MutableSeatPlan {
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sSeatPlanManager.update(this);
-    }
-    else {
-      sSeatPlanManager.create(this);
-    }
+  public Long create() {
+    return sSeatPlanManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sSeatPlanManager.update(this);
   }
 
   @Override

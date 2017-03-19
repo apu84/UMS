@@ -58,13 +58,13 @@ public class PersistentItem implements MutableItem {
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sItemManager.update(this);
-    }
-    else {
-      sItemManager.create(this);
-    }
+  public Long create() {
+    return sItemManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sItemManager.update(this);
   }
 
   @Override

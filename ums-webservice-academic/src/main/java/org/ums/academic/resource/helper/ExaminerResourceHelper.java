@@ -98,7 +98,7 @@ public class ExaminerResourceHelper
             throw new ValidationException(mMessageResource.getMessage("examiner.already.assigned",
                 mutableExaminer.getCourse().getNo()));
           }
-          mutableExaminer.commit(false);
+          mutableExaminer.create();
           break;
         case "update":
           Examiner Examiner = mExaminerManager.get(mutableExaminer.getId());
@@ -107,7 +107,7 @@ public class ExaminerResourceHelper
           updateExaminer.setScrutinizer(mutableExaminer.getScrutinizer());
           updateExaminer.setSemester(mutableExaminer.getSemester());
           updateExaminer.setCourse(mutableExaminer.getCourse());
-          updateExaminer.commit(true);
+          updateExaminer.update();
           break;
         case "delete":
           Examiner teacher = mExaminerManager.get(mutableExaminer.getId());

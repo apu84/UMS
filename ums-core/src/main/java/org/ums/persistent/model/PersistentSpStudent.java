@@ -123,13 +123,13 @@ public class PersistentSpStudent implements MutableSpStudent {
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sSpStudentManager.update(this);
-    }
-    else {
-      sSpStudentManager.create(this);
-    }
+  public String create() {
+    return sSpStudentManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sSpStudentManager.update(this);
   }
 
   @Override

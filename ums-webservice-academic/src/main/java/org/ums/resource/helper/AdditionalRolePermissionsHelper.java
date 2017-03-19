@@ -42,7 +42,7 @@ public class AdditionalRolePermissionsHelper extends
     mAdditionalRolePermissionsManager.removeExistingAdditionalRolePermissions(
         mutableAdditionalRolePermissions.getUserId(),
         mutableAdditionalRolePermissions.getAssignedByUserId());
-    mutableAdditionalRolePermissions.commit(false);
+    mutableAdditionalRolePermissions.create();
 
     Response.ResponseBuilder builder = Response.ok();
     return builder.build();

@@ -63,7 +63,7 @@ public class RecordResourceHelper extends ResourceHelper<Record, MutableRecord, 
     mutableRecord.setDocumentalist(user.getId());
     mutableRecord.setLastUpdatedBy(user.getId());
     getBuilder().build(mutableRecord, pJsonObject, localCache);
-    mutableRecord.commit(false);
+    mutableRecord.create();
 
     URI contextURI =
         pUriInfo.getBaseUriBuilder().path(RecordResource.class).path(RecordResource.class, "get")

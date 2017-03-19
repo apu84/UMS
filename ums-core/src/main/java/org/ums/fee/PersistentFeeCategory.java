@@ -27,13 +27,13 @@ public class PersistentFeeCategory implements MutableFeeCategory {
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sFeeCategoryManager.update(this);
-    }
-    else {
-      sFeeCategoryManager.create(this);
-    }
+  public String create() {
+    return sFeeCategoryManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sFeeCategoryManager.update(this);
   }
 
   @Override

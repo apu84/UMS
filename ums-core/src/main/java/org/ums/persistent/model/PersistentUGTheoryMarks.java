@@ -28,13 +28,13 @@ public class PersistentUGTheoryMarks extends AbstractUGBaseRegistration implemen
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sTheoryMarksManager.update(this);
-    }
-    else {
-      sTheoryMarksManager.create(this);
-    }
+  public Long create() {
+    return sTheoryMarksManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sTheoryMarksManager.update(this);
   }
 
   @Override

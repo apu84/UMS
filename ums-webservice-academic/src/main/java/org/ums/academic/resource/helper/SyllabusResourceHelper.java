@@ -42,7 +42,7 @@ public class SyllabusResourceHelper extends ResourceHelper<Syllabus, MutableSyll
     MutableSyllabus mutableSyllabus = new PersistentSyllabus();
     LocalCache localCache = new LocalCache();
     getBuilder().build(mutableSyllabus, pJsonObject, localCache);
-    mutableSyllabus.commit(false);
+    mutableSyllabus.create();
 
     URI contextURI =
         pUriInfo.getBaseUriBuilder().path(SyllabusResource.class)

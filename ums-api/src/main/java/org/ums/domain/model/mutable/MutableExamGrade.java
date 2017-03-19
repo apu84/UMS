@@ -1,6 +1,6 @@
 package org.ums.domain.model.mutable;
 
-import org.ums.domain.model.common.Mutable;
+import org.ums.domain.model.common.Editable;
 import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.dto.StudentGradeDto;
 import org.ums.domain.model.immutable.ExamGrade;
@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by ikh on 4/29/2016.
  */
-public interface MutableExamGrade extends ExamGrade, Mutable, MutableIdentifier<Integer> {
+public interface MutableExamGrade extends ExamGrade, Editable<Integer>, MutableIdentifier<Integer> {
 
   void setGradeList(List<StudentGradeDto> pGradeList);
 

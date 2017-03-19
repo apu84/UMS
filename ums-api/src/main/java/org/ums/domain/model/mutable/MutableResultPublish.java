@@ -1,6 +1,6 @@
 package org.ums.domain.model.mutable;
 
-import org.ums.domain.model.common.Mutable;
+import org.ums.domain.model.common.Editable;
 import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.immutable.Program;
 import org.ums.domain.model.immutable.ResultPublish;
@@ -8,7 +8,7 @@ import org.ums.domain.model.immutable.Semester;
 
 import java.util.Date;
 
-public interface MutableResultPublish extends ResultPublish, Mutable, MutableLastModifier,
+public interface MutableResultPublish extends ResultPublish, Editable<Long>, MutableLastModifier,
     MutableIdentifier<Long> {
 
   void setSemesterId(Integer pSemesterId);

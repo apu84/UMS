@@ -1,10 +1,13 @@
 package org.ums.domain.model.mutable.library;
 
-import org.ums.domain.model.common.Mutable;
+import org.ums.domain.model.common.Editable;
 import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.dto.library.ImprintDto;
 import org.ums.domain.model.dto.library.PhysicalDescriptionDto;
-import org.ums.domain.model.immutable.library.*;
+import org.ums.domain.model.immutable.library.MaterialContributor;
+import org.ums.domain.model.immutable.library.Note;
+import org.ums.domain.model.immutable.library.Record;
+import org.ums.domain.model.immutable.library.Subject;
 import org.ums.domain.model.mutable.MutableLastModifier;
 import org.ums.enums.common.Language;
 import org.ums.enums.library.*;
@@ -14,7 +17,7 @@ import java.util.List;
 /**
  * Created by Ifti on 16-Feb-17.
  */
-public interface MutableRecord extends Record, Mutable, MutableLastModifier,
+public interface MutableRecord extends Record, Editable<Long>, MutableLastModifier,
     MutableIdentifier<Long> {
 
   void setMfn(Long pMfn);

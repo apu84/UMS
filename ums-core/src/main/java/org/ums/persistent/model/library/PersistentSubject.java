@@ -34,13 +34,13 @@ public class PersistentSubject implements MutableSubject {
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      mSubjectManager.update(this);
-    }
-    else {
-      mSubjectManager.create(this);
-    }
+  public Integer create() {
+    return mSubjectManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    mSubjectManager.update(this);
   }
 
   @Override

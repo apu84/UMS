@@ -139,13 +139,13 @@ public class PersistentStudent implements MutableStudent {
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sStudentManager.update(this);
-    }
-    else {
-      sStudentManager.create(this);
-    }
+  public String create() {
+    return sStudentManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sStudentManager.update(this);
   }
 
   @Override

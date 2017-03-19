@@ -10,6 +10,6 @@ public class ResultPublishImpl extends ResultPublishDaoDecorator {
     MutableResultPublish resultPublish = new PersistentResultPublish();
     resultPublish.setProgramId(programId);
     resultPublish.setSemesterId(semesterId);
-    resultPublish.commit(false);
+    resultPublish.create();
   }
 }

@@ -46,13 +46,13 @@ public class PersistentAdmissionDeadline implements MutableAdmissionDeadline {
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sAdmissionDeadlineManager.update(this);
-    }
-    else {
-      sAdmissionDeadlineManager.create(this);
-    }
+  public Integer create() {
+    return sAdmissionDeadlineManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sAdmissionDeadlineManager.update(this);
   }
 
   @Override

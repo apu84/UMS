@@ -61,7 +61,7 @@ public class CourseTeacherResourceHelper
 
       switch(updateType) {
         case "insert":
-          mutableCourseTeacher.commit(false);
+          mutableCourseTeacher.create();
           break;
         case "update":
           CourseTeacher courseTeacher = mCourseTeacherManager.get(mutableCourseTeacher.getId());
@@ -70,7 +70,7 @@ public class CourseTeacherResourceHelper
           updateCourseTeacher.setSemester(mutableCourseTeacher.getSemester());
           updateCourseTeacher.setSection(mutableCourseTeacher.getSection());
           updateCourseTeacher.setCourse(mutableCourseTeacher.getCourse());
-          updateCourseTeacher.commit(true);
+          updateCourseTeacher.update();
           break;
         case "delete":
           CourseTeacher teacher = mCourseTeacherManager.get(mutableCourseTeacher.getId());

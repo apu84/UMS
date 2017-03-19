@@ -1,6 +1,6 @@
 package org.ums.domain.model.mutable;
 
-import org.ums.domain.model.common.Mutable;
+import org.ums.domain.model.common.Editable;
 import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.immutable.Course;
 import org.ums.domain.model.immutable.MarksSubmissionStatus;
@@ -10,7 +10,7 @@ import org.ums.enums.ExamType;
 
 import java.util.Date;
 
-public interface MutableMarksSubmissionStatus extends MarksSubmissionStatus, Mutable,
+public interface MutableMarksSubmissionStatus extends MarksSubmissionStatus, Editable<Long>,
     MutableIdentifier<Long>, MutableLastModifier {
 
   void setSemesterId(Integer pSemesterId);

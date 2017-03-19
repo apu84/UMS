@@ -151,13 +151,13 @@ public class PersistentSubGroup implements MutableSubGroup {
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sSubGroupManager.update(this);
-    }
-    else {
-      sSubGroupManager.create(this);
-    }
+  public Integer create() {
+    return sSubGroupManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sSubGroupManager.update(this);
   }
 
   @Override

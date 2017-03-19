@@ -186,13 +186,13 @@ public class PersistentAdditionalRolePermissions implements MutableAdditionalRol
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sAdditionalRolePermissionsManager.update(this);
-    }
-    else {
-      sAdditionalRolePermissionsManager.create(this);
-    }
+  public Long create() {
+    return sAdditionalRolePermissionsManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sAdditionalRolePermissionsManager.update(this);
   }
 
   @Override

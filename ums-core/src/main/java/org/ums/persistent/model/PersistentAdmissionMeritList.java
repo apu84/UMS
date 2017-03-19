@@ -73,13 +73,13 @@ public class PersistentAdmissionMeritList implements MutableAdmissionMeritList {
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sAdmissionMeritListManager.update(this);
-    }
-    else {
-      sAdmissionMeritListManager.create(this);
-    }
+  public Integer create() {
+    return sAdmissionMeritListManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sAdmissionMeritListManager.update(this);
   }
 
   @Override

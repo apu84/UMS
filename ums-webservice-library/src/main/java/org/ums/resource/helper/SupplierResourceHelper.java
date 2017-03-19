@@ -52,7 +52,7 @@ public class SupplierResourceHelper extends ResourceHelper<Supplier, MutableSupp
     MutableSupplier mutableSupplier = new PersistentSupplier();
     LocalCache localCache = new LocalCache();
     getBuilder().build(mutableSupplier, pJsonObject, localCache);
-    mutableSupplier.commit(false);
+    mutableSupplier.create();
 
     URI contextURI =
         pUriInfo.getBaseUriBuilder().path(SemesterResource.class)

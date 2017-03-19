@@ -34,13 +34,13 @@ public class PersistentAdmissionAllTypesOfCertificate implements
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sAdmissionAllTypesOfCertificateManager.update(this);
-    }
-    else {
-      sAdmissionAllTypesOfCertificateManager.create(this);
-    }
+  public Integer create() {
+    return sAdmissionAllTypesOfCertificateManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sAdmissionAllTypesOfCertificateManager.update(this);
   }
 
   @Override

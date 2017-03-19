@@ -51,13 +51,13 @@ public class PersistentUgAdmissionLog implements MutableUgAdmissionLog {
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sUgAdmissionLogManager.update(this);
-    }
-    else {
-      sUgAdmissionLogManager.create(this);
-    }
+  public Integer create() {
+    return sUgAdmissionLogManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sUgAdmissionLogManager.update(this);
   }
 
   @Override

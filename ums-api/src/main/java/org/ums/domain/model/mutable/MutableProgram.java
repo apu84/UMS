@@ -1,5 +1,6 @@
 package org.ums.domain.model.mutable;
 
+import org.ums.domain.model.common.Editable;
 import org.ums.domain.model.immutable.Department;
 import org.ums.domain.model.immutable.Faculty;
 import org.ums.domain.model.immutable.Program;
@@ -7,7 +8,7 @@ import org.ums.domain.model.immutable.ProgramType;
 import org.ums.domain.model.common.Mutable;
 import org.ums.domain.model.common.MutableIdentifier;
 
-public interface MutableProgram extends Program, Mutable, MutableLastModifier,
+public interface MutableProgram extends Program, Editable<Integer>, MutableLastModifier,
     MutableIdentifier<Integer> {
 
   void setShortName(final String pShortName);

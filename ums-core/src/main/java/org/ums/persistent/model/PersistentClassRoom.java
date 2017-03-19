@@ -160,13 +160,14 @@ public class PersistentClassRoom implements MutableClassRoom {
     sClassRoomManager.delete(this);
   }
 
-  public void commit(final boolean update) {
-    if(update) {
-      sClassRoomManager.update(this);
-    }
-    else {
-      sClassRoomManager.create(this);
-    }
+  @Override
+  public Long create() {
+    return sClassRoomManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sClassRoomManager.update(this);
   }
 
   public MutableClassRoom edit() {

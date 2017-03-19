@@ -258,13 +258,13 @@ public class PersistentCourse implements MutableCourse {
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sCourseManager.update(this);
-    }
-    else {
-      sCourseManager.create(this);
-    }
+  public String create() {
+    return sCourseManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sCourseManager.update(this);
   }
 
   @Override

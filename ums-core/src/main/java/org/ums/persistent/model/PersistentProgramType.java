@@ -47,13 +47,14 @@ public class PersistentProgramType implements MutableProgramType {
     sManager.delete(this);
   }
 
-  public void commit(final boolean pUpdate) {
-    if(pUpdate) {
-      sManager.update(this);
-    }
-    else {
-      sManager.create(this);
-    }
+  @Override
+  public Integer create() {
+    return sManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sManager.update(this);
   }
 
   public MutableProgramType edit() {

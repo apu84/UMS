@@ -264,14 +264,13 @@ public class PersistentEmployee implements MutableEmployee {
   }
 
   @Override
-  public void commit(boolean update) {
+  public String create() {
+    return sEmployeeManager.create(this);
+  }
 
-    if(update) {
-      sEmployeeManager.update(this);
-    }
-    else {
-      sEmployeeManager.create(this);
-    }
+  @Override
+  public void update() {
+    sEmployeeManager.update(this);
   }
 
   @Override

@@ -1,10 +1,10 @@
 package org.ums.fee;
 
-import org.ums.domain.model.common.Mutable;
+import org.ums.domain.model.common.Editable;
 import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.mutable.MutableLastModifier;
 
-public interface MutableFeeCategory extends FeeCategory, Mutable, MutableLastModifier,
+public interface MutableFeeCategory extends FeeCategory, Editable<String>, MutableLastModifier,
     MutableIdentifier<String> {
   void setFeeId(String pId);
 

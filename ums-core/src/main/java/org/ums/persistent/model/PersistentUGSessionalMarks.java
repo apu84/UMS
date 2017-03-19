@@ -28,13 +28,13 @@ public class PersistentUGSessionalMarks extends AbstractUGBaseRegistration imple
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sSessionalMarksManager.update(this);
-    }
-    else {
-      sSessionalMarksManager.create(this);
-    }
+  public Long create() {
+    return sSessionalMarksManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sSessionalMarksManager.update(this);
   }
 
   @Override

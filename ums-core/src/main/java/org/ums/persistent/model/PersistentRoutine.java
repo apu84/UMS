@@ -204,13 +204,13 @@ public class PersistentRoutine implements MutableRoutine {
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sRoutineManager.update(this);
-    }
-    else {
-      sRoutineManager.create(this);
-    }
+  public Long create() {
+    return sRoutineManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sRoutineManager.update(this);
   }
 
   @Override

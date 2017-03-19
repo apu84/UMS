@@ -116,13 +116,13 @@ public class PersistentRecord implements MutableRecord {
   }
 
   @Override
-  public void commit(boolean update) {
-    if(update) {
-      sRecordManager.update(this);
-    }
-    else {
-      sRecordManager.create(this);
-    }
+  public Long create() {
+    return sRecordManager.create(this);
+  }
+
+  @Override
+  public void update() {
+    sRecordManager.update(this);
   }
 
   @Override

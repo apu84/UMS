@@ -1,15 +1,11 @@
 package org.ums.domain.model.mutable;
 
-import org.ums.domain.model.common.Mutable;
+import org.ums.domain.model.common.Editable;
 import org.ums.domain.model.common.MutableIdentifier;
-import org.ums.domain.model.immutable.Employee;
-import org.ums.domain.model.immutable.Semester;
 import org.ums.domain.model.immutable.SemesterWithdrawal;
 import org.ums.domain.model.immutable.SemesterWithdrawalLog;
 
-import java.sql.Timestamp;
-
-public interface MutableSemesterWithdrawalLog extends SemesterWithdrawalLog, Mutable,
+public interface MutableSemesterWithdrawalLog extends SemesterWithdrawalLog, Editable<Long>,
     MutableLastModifier, MutableIdentifier<Long> {
   void setSemesterWithdrawal(final SemesterWithdrawal pSemesterWithdrawal);
 

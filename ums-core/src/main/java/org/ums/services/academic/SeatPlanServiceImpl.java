@@ -485,7 +485,7 @@ public class SeatPlanServiceImpl implements SeatPlanService {
 
     seatPlanGroup.setExamType(pExamType);
 
-    seatPlanGroup.commit(false);
+    seatPlanGroup.create();
 
     return seatPlanGroup;
   }

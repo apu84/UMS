@@ -76,12 +76,18 @@ public class PersistentExamGrade implements MutableExamGrade {
 
   @Override
   public void delete() {
-    // sExamRoutineManager.delete(this);
 
   }
 
   @Override
-  public void commit(boolean update) {}
+  public Integer create() {
+    return null;
+  }
+
+  @Override
+  public void update() {
+
+  }
 
   @Override
   public MutableExamGrade edit() {

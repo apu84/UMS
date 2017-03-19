@@ -123,7 +123,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         semesterEnrollment.setYear(pToYear);
         semesterEnrollment.setAcademicSemester(pToAcademicSemester);
         semesterEnrollment.setSemesterId(pNewSemesterId);
-        semesterEnrollment.commit(false);
+        semesterEnrollment.create();
 
         List<StudentRecord> studentRecords =
             mStudentRecordManager.getStudentRecords(pProgramId, previousSemester.getId(),
@@ -192,7 +192,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
         MutableSemesterEnrollment mutableSemesterEnrollment = semesterEnrollment.edit();
         mutableSemesterEnrollment.setType(SemesterEnrollment.Type.PERMANENT);
-        mutableSemesterEnrollment.commit(true);
+        mutableSemesterEnrollment.update();
 
         List<StudentRecord> temporaryEnrolledStudentRecords =
             mStudentRecordManager.getStudentRecords(pProgramId, pNewSemesterId, pToYear,
