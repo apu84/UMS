@@ -17,11 +17,13 @@ public class PersistentSupplier implements MutableSupplier {
     sSupplierManager = applicationContext.getBean("supplierManager", SupplierManager.class);
   }
 
-  private Integer mId;
+  private Long mId;
   private String mName;
-  private String mAddress;
+  private String mEmail;
   private String mContactPerson;
   private String mContactNumber;
+  private String mAddress;
+  private String mNote;
   private String mLastModified;
 
   public PersistentSupplier() {}
@@ -29,9 +31,11 @@ public class PersistentSupplier implements MutableSupplier {
   public PersistentSupplier(final PersistentSupplier pPersistentSupplier) {
     mId = pPersistentSupplier.getId();
     mName = pPersistentSupplier.getName();
-    mAddress = pPersistentSupplier.getAddress();
+    mEmail = pPersistentSupplier.getEmail();
     mContactPerson = pPersistentSupplier.getContactPerson();
     mContactNumber = pPersistentSupplier.getContactNumber();
+    mAddress = pPersistentSupplier.getAddress();
+    mNote = pPersistentSupplier.getNote();
   }
 
   @Override
@@ -40,12 +44,12 @@ public class PersistentSupplier implements MutableSupplier {
   }
 
   @Override
-  public Integer getId() {
+  public Long getId() {
     return mId;
   }
 
   @Override
-  public void setId(Integer pId) {
+  public void setId(Long pId) {
     mId = pId;
   }
 
@@ -60,13 +64,28 @@ public class PersistentSupplier implements MutableSupplier {
   }
 
   @Override
+  public String getEmail() {
+    return mEmail;
+  }
+
+  @Override
   public String getAddress() {
     return mAddress;
   }
 
   @Override
+  public String getNote() {
+    return mNote;
+  }
+
+  @Override
   public void setName(String pName) {
     mName = pName;
+  }
+
+  @Override
+  public void setEmail(String pEmail) {
+    mEmail = pEmail;
   }
 
   @Override
@@ -77,6 +96,11 @@ public class PersistentSupplier implements MutableSupplier {
   @Override
   public void setAddress(String pAddress) {
     mAddress = pAddress;
+  }
+
+  @Override
+  public void setNote(String pNote) {
+    mNote = pNote;
   }
 
   @Override
@@ -114,4 +138,5 @@ public class PersistentSupplier implements MutableSupplier {
 
     sSupplierManager.delete(this);
   }
+
 }

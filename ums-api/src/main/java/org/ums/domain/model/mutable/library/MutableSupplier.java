@@ -2,8 +2,6 @@ package org.ums.domain.model.mutable.library;
 
 import org.ums.domain.model.common.Mutable;
 import org.ums.domain.model.common.MutableIdentifier;
-import org.ums.domain.model.immutable.common.Country;
-import org.ums.domain.model.immutable.library.Author;
 import org.ums.domain.model.immutable.library.Supplier;
 import org.ums.domain.model.mutable.MutableLastModifier;
 
@@ -12,14 +10,16 @@ import org.ums.domain.model.mutable.MutableLastModifier;
  */
 
 public interface MutableSupplier extends Supplier, Mutable, MutableLastModifier,
-    MutableIdentifier<Integer> {
-
+    MutableIdentifier<Long> {
   void setName(final String pName);
 
-  void setAddress(final String pAddress);
+  void setEmail(final String pEmail);
 
   void setContactPerson(final String pContactPerson);
 
   void setContactNumber(final String pContactNumber);
 
+  void setAddress(final String pAddress);
+
+  void setNote(final String pNote);
 }

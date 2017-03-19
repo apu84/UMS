@@ -1,25 +1,39 @@
 package org.ums.cache.library;
 
 import org.ums.cache.ContentCache;
+import org.ums.domain.model.immutable.Course;
 import org.ums.domain.model.immutable.library.Supplier;
 import org.ums.domain.model.mutable.library.MutableSupplier;
 import org.ums.manager.CacheManager;
 import org.ums.manager.library.SupplierManager;
 
+import java.util.List;
+
 /**
  * Created by Ifti on 04-Feb-17.
  */
-public class SupplierCache extends
-    ContentCache<Supplier, MutableSupplier, Integer, SupplierManager> implements SupplierManager {
+public class SupplierCache extends ContentCache<Supplier, MutableSupplier, Long, SupplierManager>
+    implements SupplierManager {
 
-  CacheManager<Supplier, Integer> mCacheManager;
+  CacheManager<Supplier, Long> mCacheManager;
 
-  public SupplierCache(CacheManager<Supplier, Integer> pCacheManager) {
+  public SupplierCache(CacheManager<Supplier, Long> pCacheManager) {
     mCacheManager = pCacheManager;
   }
 
   @Override
-  protected CacheManager<Supplier, Integer> getCacheManager() {
+  public List<Supplier> getAllForPagination(final Integer pItemPerPage, final Integer pPage,
+      final String pOrder) {
+    return getManager().getAllForPagination(pItemPerPage, pPage, pOrder);
+  }
+
+  @Override
+  public int getTotalForPagination() {
+    return getManager().getTotalForPagination();
+  }
+
+  @Override
+  protected CacheManager<Supplier, Long> getCacheManager() {
     return mCacheManager;
   }
 }

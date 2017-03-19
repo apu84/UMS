@@ -16,36 +16,27 @@ module ums{
       $scope.pagination = {
         current: 1
       };
-
-      // var that=this;
-      // $scope.$watch('orderBy', function() {
-      //   console.log("orderBy value changed.....");
-      //   this.pageChanged(1);
-      // });
-
     }
 
+    // common......
     private sort(field: string):any {
-      // var that=this;
+      console.log("=========>>111");
       return (order:string) => {
-        console.log(field, order);
-
+        console.log("#############3");
         this.$scope.orderBy=" Order by "+field+" " +order;
-        console.log(this);
         this.$scope.pageChanged(1);
-
       }
     }
 
 
+    // common
     private pageChanged (pageNumber) {
       this.getResultsPage(pageNumber);
     }
 
 
     private getResultsPage(pageNumber) {
-      this.getCourseData(pageNumber).then((courseData:any)=> {
-console.log(courseData.entries);
+        this.getCourseData(pageNumber).then((courseData:any)=> {
         this.$scope.courses = courseData.entries;
         this.$scope.totalCourses = 100;
       });

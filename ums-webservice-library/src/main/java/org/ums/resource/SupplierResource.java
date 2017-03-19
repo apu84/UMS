@@ -30,8 +30,16 @@ public class SupplierResource extends MutableSupplierResource {
 
   @GET
   @Path(PATH_PARAM_OBJECT_ID)
-  public Response get(final @Context Request pRequest,
-      final @PathParam("object-id") Integer pObjectId) throws Exception {
+  public Response get(final @Context Request pRequest, final @PathParam("object-id") Long pObjectId)
+      throws Exception {
     return mResourceHelper.get(pObjectId, pRequest, mUriInfo);
+  }
+
+  @GET
+  @Path("/all/ipp/{item-per-page}/page/{page}/order/{order}")
+  public JsonObject getAllForPagination(final @Context Request pRequest,
+      final @PathParam("item-per-page") int pItemPerPage, final @PathParam("page") int pPage,
+      final @PathParam("order") String pOrder) throws Exception {
+    return mResourceHelper.getAllForPagination(pItemPerPage, pPage, pOrder, mUriInfo);
   }
 }

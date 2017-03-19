@@ -37,11 +37,15 @@ public class SupplierBuilder implements Builder<Supplier, MutableSupplier> {
   public void build(final MutableSupplier pMutable, final JsonObject pJsonObject,
       final LocalCache pLocalCache) {
 
-    pMutable.setId(pJsonObject.getInt("id"));
+    if(pJsonObject.containsKey("id"))
+      pMutable.setId(Long.valueOf(pJsonObject.getJsonNumber("id").toString()));
+
     pMutable.setName(pJsonObject.getString("name"));
     pMutable.setAddress(pJsonObject.getString("address"));
+    pMutable.setNote(pJsonObject.getString("note"));
+    pMutable.setEmail(pJsonObject.getString("email"));
     pMutable.setContactPerson(pJsonObject.getString("contactPerson"));
     pMutable.setContactNumber(pJsonObject.getString("contactNumber"));
-    pMutable.setLastModified(pJsonObject.getString("lastModified"));
+    // pMutable.setLastModified(pJsonObject.getString("lastModified"));
   }
 }

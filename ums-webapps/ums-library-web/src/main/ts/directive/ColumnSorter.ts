@@ -16,8 +16,10 @@ module ums {
     public columnSorter: Function;
 
     constructor($element: ng.IAugmentedJQuery,attrs:any) {
-      console.log(this.columnSorter);
+
       $element.on('click', () => {
+
+        console.log("inside onclick of columnSorter");
         if (this.sort === 'asc') {
           this.sort = 'desc';
           $element.removeClass('headerSortDown');
@@ -27,6 +29,10 @@ module ums {
           $element.removeClass('headerSortUp');
           $element.addClass('headerSortDown');
         }
+        console.log("inside onclick of columnSorter"+ this.sort+"-------");
+        console.log(this);
+        console.log(this.columnSorter);
+        // console.log(this.columnSorter());
         this.columnSorter()(this.sort);
       });
     }
@@ -34,3 +40,4 @@ module ums {
 
   UMS.directive("columnSorter", () => new ColumnSorter());
 }
+

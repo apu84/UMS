@@ -100,6 +100,12 @@
         border: 2px solid #b9d8d9;
         border-radius: 5px;
     }
+    .input-icon input{
+        color: #555 !important;
+    }
+    .input-icon.state-error{
+        text-align: left;
+    }
 </style>
 <div>
     <p class="alignLeft" id="pageTitle" style="padding-left: 3%;font-size: 18px;font-weight: bold;"><span>{{data.headerTitle}}</span></p>
@@ -128,24 +134,34 @@
 </div>
 
 <div data-ng-include="'views/admin/cataloging/supporting-panels/contributor-panel.html'"></div>
+<div data-ng-include="'views/admin/cataloging/supporting-panels/supplier-panel.html'"></div>
 <script>
     setTimeout(function(){
         $('[data-toggle="tooltip"]').tooltip(
-            {
-                container: 'body'
-            });
+            {container: 'body'});
     }, 1000);
 
-    function showList(){
+    function showSearchPanel(panelType){
+        $("#searchPanel_"+panelType).show('slide', {direction: 'left'}, 400);
+        $("#listPanel_"+panelType).hide('slide', {direction: 'right'}, 400);
+        $("#entryPanel_"+panelType).hide('slide', {direction: 'right'}, 400);
 
-        $("#body2").hide('slide', {direction: 'left'}, 400);
-        $("#body1").show('slide', {direction: 'right'}, 400);
-
+        $("#pageTitle_"+panelType).html("Search "+panelType);
+//        $("#footer_"+panelType).show();
 
     }
-    function showNew(){
-        $("#body2").show('slide', {direction: 'left'}, 400);
-        $("#body1").hide('slide', {direction: 'right'}, 400);
+    function showResultPanel(panelType){
+        $("#searchPanel_"+panelType).hide('slide', {direction: 'left'}, 400);
+        $("#listPanel_"+panelType).show('slide', {direction: 'right'}, 400);
+        $("#entryPanel_"+panelType).hide('slide', {direction: 'right'});
+    }
+    function showEntryPanel(panelType){
+        $("#searchPanel_"+panelType).hide('slide', {direction: 'left'}, 400);
+        $("#listPanel_"+panelType).hide('slide', {direction: 'right'}, 400);
+        $("#entryPanel_"+panelType).show('slide', {direction: 'right'}, 400);
+        $("#pageTitle_"+panelType).html("New "+panelType);
+
+//        $("#footer_"+panelType).hide();
     }
 
 $("#abcd").tokenfield();

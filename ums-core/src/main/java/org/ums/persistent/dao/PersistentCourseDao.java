@@ -108,7 +108,7 @@ public class PersistentCourseDao extends CourseDaoDecorator {
       final String pOrder) {
 
     // int totalRecord= getAll().size();
-    int startIndex = pItemPerPage * pPage;
+    int startIndex = pItemPerPage * pPage - pItemPerPage + 1;
     int endIndex = startIndex + pItemPerPage;
     String query =
         "Select tmp2.*,ind  From (Select ROWNUM ind, tmp1.* From (" + SELECT_ALL

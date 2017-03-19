@@ -19,12 +19,19 @@ module ums {
     setMaterialTypeName: Function;
     record: IRecord;
     item: IItem;
+    supplier: ISupplier;
     saveRecord: Function;
     saveItem: Function;
-    saveBulkItems:Function;
+    saveBulkItems: Function;
     bulk: any;
     setBulkItemsValue: Function;
-    itemList : Array<IItem>;
+    itemList: Array<IItem>;
+    saveSupplier: Function;
+    ptable: any;
+    getSupplierData:any;
+    testField:any;
+    //sort:any;
+
   }
   export interface IContributorEntry {
     viewOrder: number;
@@ -122,9 +129,11 @@ module ums {
   export interface ISupplier {
     id: number;
     name: string;
-    address: string,
+    email: string;
     contactPerson: string;
     contactNumber: string;
+    address: string,
+    note: string;
   }
 
 
@@ -135,7 +144,6 @@ module ums {
 
     constructor(private httpClient: HttpClient, private $scope: IMaterialScope,
                 private $q: ng.IQService, private notify: Notify, private libConstants: any) {
-
 
       $scope.bulkAssignmentOptionSelected = false;
       $scope.fillSampleData = this.fillSampleData.bind(this);
@@ -150,6 +158,10 @@ module ums {
       $scope.saveItem = this.saveItem.bind(this);
       $scope.saveBulkItems = this.saveBulkItems.bind(this);
       $scope.setBulkItemsValue = this.setBulkItemsValue.bind(this);
+      $scope.saveSupplier = this.saveSupplier.bind(this);
+      $scope.getSupplierData= this.getSupplierData.bind(this);
+
+      // $scope.sort = this.sort.bind(this);
 
       this.$scope.bookInfo = true;
       this.$scope.accessionInfo = false;
@@ -198,7 +210,6 @@ module ums {
       contributor = {id: "18", text: "Hasan10"};
       this.$scope.contributors.push(contributor);
 
-
       $scope.data = {
         languageOptions: libConstants.languages,
         bindingTypeOptions: libConstants.bindingTypes,
@@ -213,7 +224,9 @@ module ums {
         multipleItemAdd: false,
         bulkAddCount: 4,
         collapsedItemTable: false,
-        headerTitle: "Add New - Book Record"
+        headerTitle: "Add New - Book Record",
+        testField : 1
+
       };
       setTimeout(this.$scope.showBookUI(), 1000);
       $scope.$watch('selectedMaterialId', function (NewValue, OldValue) {
@@ -289,19 +302,24 @@ module ums {
       }
 
 
-      $scope.item = {
-        mfnNo: "123",
-        itemId: undefined,
-        copyNumber: 3,
-        accessionNumber: "1234",
-        accessionDate: "",
-        barcode: "1",
-        price: 1,
-        internalNote: "",
-        supplier: undefined,
-        status: 101101,
-        statusName: ""
-      }
+      $scope.item = <IItem> {};
+      /*
+       $scope.item = {
+       mfnNo: "123",
+       itemId: undefined,
+       copyNumber: 3,
+       accessionNumber: "1234",
+       accessionDate: "",
+       barcode: "1",
+       price: 1,
+       internalNote: "",
+       supplier: undefined,
+       status: 101101,
+       statusName: ""
+       } */
+
+      $scope.supplier = <ISupplier> {};
+
 
       $scope.bulk = {
         config: {}
@@ -312,18 +330,30 @@ module ums {
       this.addNewRow("note");
       this.addNewRow("subject");
       this.initializeDatePickers();
-
       this.fetchItems();
+
+      /*** supplier pagination data **/
+/*
+      $scope.ptable.supplier.records = [];
+      $scope.ptable.supplier.totalRecords = 0;
+      $scope.ptable.supplier.orderBy = " Order by course_no asc";
+      $scope.ptable.supplier.itemPerPage = 5;
+      $scope.ptable.supplier.currentPage = 1;
+*/
+      // $scope.pageChanged = this.pageChanged.bind(this);
+      // $scope.sort = this.sort.bind(this);
+
+      /** pagination end*/
     }
 
     private fetchItems() {
       this.httpClient.get('item/mfn/1', 'application/json',
 
-          (json:any, etag:string) => {
+          (json: any, etag: string) => {
             console.log(json.entries);
             this.$scope.itemList = json.entries;
           },
-          (response:ng.IHttpPromiseCallbackArg<any>) => {
+          (response: ng.IHttpPromiseCallbackArg<any>) => {
             console.error(response);
           });
     }
@@ -429,7 +459,9 @@ module ums {
           supplier: {
             "id": 1,
             "name": "",
+            "email": "",
             "address": "",
+            "note": "",
             "contactPerson": "",
             "contactNumber": ""
           },
@@ -554,7 +586,7 @@ module ums {
       }
     }
 
-    private saveBulkItems():void{
+    private saveBulkItems(): void {
       console.log("Inside saveBulkItems");
       var complete_json = {};
       complete_json["items"] = this.$scope.bulkItemList;
@@ -595,13 +627,13 @@ module ums {
         item.accessionDate = this.$scope.bulk.config.accessionDate;
         item.barcode = this.$scope.bulk.config.barcode;
 
-        if(this.$scope.bulk.config.firstAccession != "" &&  this.$scope.bulk.config.incrementSegment != "") {
+        if (this.$scope.bulk.config.firstAccession != "" && this.$scope.bulk.config.incrementSegment != "") {
           firstAccession = this.$scope.bulk.config.firstAccession;
-           incrementSegment = this.$scope.bulk.config.incrementSegment;
+          incrementSegment = this.$scope.bulk.config.incrementSegment;
         }
 
-        var is = Number(incrementSegment)+i;
-        item.accessionNumber = firstAccession.replace(incrementSegment,is);
+        var is = Number(incrementSegment) + i;
+        item.accessionNumber = firstAccession.replace(incrementSegment, is);
 
 
       }
@@ -695,6 +727,42 @@ module ums {
       var lastIndex = resourceUrl.length;
       return url.substring(startIndex, lastIndex);
     }
+
+    private saveSupplier() {
+      var url = "supplier";
+      var that = this;
+      this.httpClient.post(url, this.$scope.supplier, 'application/json').then(function successCallback(response) {
+        that.notify.success("Data Saved Successfully");
+      }, function errorCallback(response) {
+        console.error(response);
+      });
+    }
+
+    /** Supplier Search Start**/
+
+
+
+    private getSupplierData(): Function {
+      return (pageNumber:number, orderBy:string, itemPerPage: number): ng.IPromise<any>  => {
+
+        console.log(orderBy);
+        var bbc= orderBy;
+        if(bbc === undefined || !bbc)
+          bbc = " order by name asc";
+
+        var url = "https://localhost//ums-webservice-library/supplier/all/ipp/" +itemPerPage + "/page/" + pageNumber + "/order/" + bbc;
+        var defer = this.$q.defer();
+        this.httpClient.get(url, HttpClient.MIME_TYPE_JSON,
+            (json: any, etag: string) => {
+              defer.resolve(json);
+            },
+            (response: ng.IHttpPromiseCallbackArg<any>) => {
+              console.error(response);
+            });
+        return defer.promise;
+      };
+    }
+    /** Supplier Search End **/
 
   }
 
