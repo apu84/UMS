@@ -29,8 +29,11 @@
         width: 80px;
         border: 1px solid grey;
         padding: 0px;
-        height: 24px !important;
+        height: 22px !important;
         background-color: rgb(235, 235, 228);
+    }
+    .table select{
+        padding : 3px 10px !important;
     }
     .badge-total{
         background-color: white;color: black;font-weight: bold;
@@ -214,6 +217,7 @@
                     </li>
                 </ul>
             </div>
+
             <div class="panel-body shadowPanel" style="min-height: 400px;line-height: 100px;font-size: 20px;text-align: center;color: maroon;"  data-ng-if="gradeSubmissionStatus =='0' && currentActor!='preparer'">
                 Marks not yet been submitted. Please check again later. <br/>
                 <button type="button" class="btn btn-default btn-square" onclick='goBack()'>Back to Grade Sheet Selection</button>
@@ -227,15 +231,15 @@
                 <table width="90%" align="center" style="margin-bottom: 10px;">
                     <tr>
                         <td colspan="4" align="center" style="height: 30px;">
-                            <h4>Marks/Grade Sheet ({{data.semester_name}})</h4>
-                            <h4>Department/School : {{data.dept_name}}</h4>
+                            <h4>Marks/Grade Sheet <b>({{data.semester_name}})</b>, Program </h4>
+                            <h4>Department/School :<b> {{data.dept_name}}</b></h4>
                         </td>
                     </tr>
                     <tr>
                         <td width="15%"><b>Course Title :</b></td>
-                        <td width="40%">{{data.course_title}}</td>
+                        <td width="40%" style="font-weight: bold;color: blue;font-size: 14px;">{{data.course_title}}</td>
                         <td width="20%"><b>Course Number :</b></td>
-                        <td width="25%">{{data.course_no}}</td>
+                        <td width="25%"  style="font-weight: bold;color: blue;font-size: 14px;">{{data.course_no}}</td>
                     </tr>
                     <tr>
                         <td  style="height: 30px;"><b>Credit Hour :</b></td>
@@ -1164,9 +1168,30 @@
     </div>
 </div>
 
+<!--Modal for feature info-->
+<div id="modal-feature-info" tabindex="-1" role="dialog" aria-labelledby="modal-default-label"
+     aria-hidden="true" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" data-dismiss="modal" aria-hidden="true"
+                        class="close" style="opacity: 1;margin-top: 0px;">&times;</button>
+                <h4 id="modal-feature-info-title" class="modal-title">New Feature Information</h4></div>
+            <div class="modal-body" id="modal-feature-info-body">Modal body goes here</div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <link rel="stylesheet" href="vendors/pieMenu/css/piemenu.css">
 <script src="vendors/pieMenu/js/jquery.menu.js"></script>
+
+<style>
+    ul.b {list-style-type: square;}
+    ul.b li{line-height: 35px;}
+</style>
 <script type="text/javascript">
     $('#outer_container').PieMenu({
         'starting_angel':180,
@@ -1221,4 +1246,13 @@
         });
     }
 
+    /*Temporary Modal Setup */
+    var contents = "<ul class='b'> "+
+        "<li>You can now put <b>'Absent'</b> and <b>'Reported'</b> information in online grade sheet.</li>"+
+        "<li><b>'Absent'</b> and <b>'Reported'</b> are allowed only for  <b>'Theory'</b> Grade Sheet.</li>"+
+        "<li>Provide 'Abs' for Absent and 'Rep' for Reported Students.</li>"+
+        "<li>You can put <font color='#A569BD' style='font-size: 15px;font-weight: bold;'>\"Abs\"</font> or <font color='#E74C3C' style='font-size: 15px;font-weight: bold;'>\"Rep\"</font> only for Part-A and Part-B column..</li>"+
+    "</ul>";
+    $("#").html("Newly Added Features");
+    $("#modal-feature-info-body").html(contents);
 </script>

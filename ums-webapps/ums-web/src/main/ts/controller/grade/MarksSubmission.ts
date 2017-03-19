@@ -90,8 +90,10 @@ module ums {
     studentName: string;
     quiz: number;
     classPerformance: number;
-    partA: number;
-    partB: number;
+    partA: string;
+    partAAddiInfo: string;
+    partB: string;
+    partBAddiInfo: string;
     partTotal: number;
     total: number;
     gradeLetter: string;
@@ -179,7 +181,9 @@ module ums {
           TIMEOVER: "timeOverClass",
           SUBMITTED: "submittedClass",
           NONE: "noneClass"
-        }
+        },
+        addiInfoArr : Array<String>(),
+        totalInfoView:Number
       };
 
 
@@ -253,12 +257,11 @@ module ums {
               $("#loading_panel").hide();
             }
             , 400);
-
       });
 
       Utils.setValidationOptions("form-horizontal");
-
-
+      $scope.data.totalInfoView = 0;
+      $scope.data.addiInfoArr = ["Abs","Rep"];
     }
 
     private getSubmissionColorCodeStyle(statusType: string): string {
@@ -486,7 +489,13 @@ module ums {
       //$("#btn_stat").focus();
       $(window).scrollTop($('#panel_top').offset().top - 56);
 
+      //To show new features for a certain time
+      if(this. $scope.data.totalInfoView  == 0) {
+        $("#modal-feature-info").modal('show');
+      }
 
+
+      this. $scope.data.totalInfoView++;
     }
 
     private calculateTotalAndGradeLetter(student_id: string): void {
@@ -508,7 +517,7 @@ module ums {
         $("#total_" + student_id).val(String(total));
         var grade_letter: string = this.commonService.getGradeLetter(total, regType);
         $("#grade_letter_" + student_id).val(grade_letter);
-        this.validateGrade(false, student_id, String(quiz), String(class_perf), String(part_a), String(part_b), String(total), grade_letter, regType);
+        this.validateGrade(false, student_id, String(quiz), String(class_perf), $("#part_a_" + student_id).val(), $("#part_b_" + student_id).val(), String(total), grade_letter, regType);
       }
       else {
         total = $("#total_" + student_id).val();
@@ -557,6 +566,8 @@ module ums {
       var rowError = false;
       var partBMarks = 0;
       var total = 0;
+      var totalInExcel:string = "";
+      var gradeInExcel = "";
       for (var y = 0; y < rows.length; y++) {
         partBMarks = 0;
         total = 0;
@@ -569,7 +580,6 @@ module ums {
           }
           continue;
         }
-
         studentId = row[0];
         regType = $("#reg_type_" + studentId).val();
         rowError = false;
@@ -577,30 +587,37 @@ module ums {
           this.setFieldValue("quiz_" + studentId, row[2]);
           this.setFieldValue("class_perf_" + studentId, row[3]);
           this.setFieldValue("part_a_" + studentId, row[4]);
+
           if (this.$scope.data.total_part == 2) {
             this.setFieldValue("part_b_" + studentId, row[5]);
-            partBMarks = Number(row[5]);
+            partBMarks = row[5];
+            totalInExcel =  row[6];
+            gradeInExcel =  row[7];
+          } else if (this.$scope.data.total_part == 1) {
+            totalInExcel =  row[5];
+            gradeInExcel =  row[6];
           }
-          if (row[6] == "") {
+
+          if (totalInExcel == "") {
             try {
-              total = Number(row[2]) + Number(row[3]) + Number(row[4]) + partBMarks;
+              total = Number(row[2]) + Number(row[3]) + Number(row[4]) + Number(partBMarks);
               total = Math.round(total);
               this.setFieldValue("total_" + studentId, total);
             } catch (Exception) {
             }
           }
           else {
-            this.setFieldValue("total_" + studentId, row[6]);
-            total = Number(row[6]);
+            this.setFieldValue("total_" + studentId, totalInExcel);
+            total = Number(totalInExcel);
           }
 
-          if (row[7] != "")
-            this.setFieldValue("grade_letter_" + studentId, row[7]);
+          if (gradeInExcel != "")
+            this.setFieldValue("grade_letter_" + studentId, gradeInExcel);
           else
             this.setFieldValue("grade_letter_" + studentId, this.commonService.getGradeLetter(total, regType));
 
 
-          this.validateGrade(false, studentId, row[2], row[3], row[4], row[5], total.toString(), $("#grade_letter_" + studentId).val(), regType);
+          this.validateGrade(false, studentId, row[2], row[3], row[4], partBMarks+'', total+'', $("#grade_letter_" + studentId).val(), regType);
         }
         else {
           this.setFieldValue("total_" + studentId, row[2]);
@@ -682,6 +699,7 @@ module ums {
       var border_error: any = {"border": "2px solid red"};
       var border_ok: any = {"border": "1px solid grey"};
       var message: String = "";
+
       if (this.$scope.courseType == "THEORY") {
         //Quiz
         if (quiz != "" || force_validate) {
@@ -704,6 +722,7 @@ module ums {
         }
 
         //Class Performance
+        message = "";
         if (class_performance != "" || force_validate) {
           if ((this.checkNumber(class_performance) == false || Number(class_performance) > 10) && reg_type == 1) {
             $("#class_perf_" + student_id).css(border_error);
@@ -724,51 +743,109 @@ module ums {
         }
 
         //Part A
+        message = "";
         if (part_a != "" || force_validate) {
-          if (this.$scope.data.part_a_total != null && (this.checkNumber(part_a) == false || Number(part_a) > this.$scope.data.part_a_total)) {
-            $("#part_a_" + student_id).css(border_error);
-            row_error = true;
 
-            if (part_a == "")
-              message = "Provide marks.";
-            else if (this.checkNumber(part_a) == false)
-              message = "Not a valid Number.";
-            else if (Number(part_a) > this.$scope.data.part_a_total)
-              message = "Maximum marks can be " + this.$scope.data.part_a_total + ".";
-            this.showErrorTooltip("part_a", student_id, message);
+          if (this.$scope.data.part_a_total != null) {
 
-          }
-          else {
-            $("#part_a_" + student_id).css(border_ok);
-            this.destroyErrorTooltip("part_a", student_id);
+            if ((this.checkNumber(part_a) && Number(part_a) > this.$scope.data.part_a_total) ||
+                (!this.checkNumber(part_a) && !this.$scope.data.addiInfoArr.includes(part_a))) {
+
+              $("#part_a_" + student_id).css(border_error);
+              row_error = true;
+
+              if(student_id == "120205071"){
+                console.log("--------A");
+                console.log(this.$scope.data.addiInfoArr);
+                console.log(part_a);
+                console.log(this.$scope.data.addiInfoArr.includes(part_a));
+              }
+
+              if (part_a == "")
+                message = "Provide marks.";
+              else if (!this.checkNumber(part_a) && !this.$scope.data.addiInfoArr.includes(part_a))
+                  message = "Not a valid Number. Number, 'Abs' and 'Rep' are allowed values";
+              else if (Number(part_a) > this.$scope.data.part_a_total)
+                message = "Maximum marks can be " + this.$scope.data.part_a_total + ".";
+              this.showErrorTooltip("part_a", student_id, message);
+
+            }
+            else {
+              $("#part_a_" + student_id).css(border_ok);
+              this.destroyErrorTooltip("part_a", student_id);
+            }
           }
         }
-
         //Part B
+        message = "";
         if (part_b != "" || force_validate) {
-          if (this.$scope.data.total_part == 2 && this.$scope.data.part_b_total != null && (this.checkNumber(part_b) == false || Number(part_b) > this.$scope.data.part_b_total)) {
-            $("#part_b_" + student_id).css(border_error);
-            row_error = true;
+            if (this.$scope.data.total_part == 2 && this.$scope.data.part_b_total != null) {
+              if ((this.checkNumber(part_b) && Number(part_b) > this.$scope.data.part_b_total) ||
+                  (!this.checkNumber(part_b) && !this.$scope.data.addiInfoArr.includes(part_b))) {
 
-            if (part_a == "")
-              message = "Provide marks.";
-            else if (this.checkNumber(part_b) == false)
-              message = "Not a valid Number.";
-            else if (Number(part_b) > this.$scope.data.part_b_total)
-              message = "Maximum marks can be " + this.$scope.data.part_b_total + ".";
-            this.showErrorTooltip("part_b", student_id, message);
-          }
-          else {
-            $("#part_b_" + student_id).css(border_ok);
-            this.destroyErrorTooltip("part_b", student_id);
-          }
+                $("#part_b_" + student_id).css(border_error);
+                row_error = true;
+
+                if(student_id == "120205071"){
+                  console.log("--------B");
+                  console.log(this.$scope.data.addiInfoArr);
+                  console.log(part_b);
+                  console.log(this.$scope.data.addiInfoArr.includes(part_b));
+                }
+
+
+                if (part_b == "")
+                  message = "Provide marks.";
+                else if (!this.checkNumber(part_b) && !this.$scope.data.addiInfoArr.includes(part_b))
+                  message = "Not a valid Number. Number, 'Abs' and 'Rep' are allowed values";
+                else if (Number(part_b) > this.$scope.data.part_b_total)
+                  message = "Maximum marks can be " + this.$scope.data.part_b_total + ".";
+                this.showErrorTooltip("part_b", student_id, message);
+              }
+              else {
+                $("#part_b_" + student_id).css(border_ok);
+                this.destroyErrorTooltip("part_b", student_id);
+              }
+            }
+
         }
 
+        // This validation has only been added in client side.
+        //If Part-A holds 'Abs' or 'Rep' then Part-B should hold the same information.
+        message ="";
+        if(this.$scope.data.total_part== 2 ) {
+          if (part_a == "Abs" || part_a == "Rep" || part_b == "Abs" || part_b == "Rep" ) {
+            if (part_a != part_b) {
+              message = "Both part should hold same information ('Abs' or 'Rep')";
+              $("#part_a_" + student_id).css(border_error);
+              $("#part_b_" + student_id).css(border_error);
+              this.showErrorTooltip("part_a_", student_id, message);
+              this.showErrorTooltip("part_b", student_id, message);
+              row_error = true;
+            }
+            else {
+              $("#part_a_" + student_id).css(border_ok);
+              this.destroyErrorTooltip("part_a_", student_id);
+              $("#part_b_" + student_id).css(border_ok);
+              this.destroyErrorTooltip("part_b_", student_id);
+            }
+          }
+        }
         //Total
+        message = "";
         if (total != "" || force_validate) {
-          if (this.checkNumber(total) == false || Number(total) > 100 || Number(total) != Math.round(Number(quiz) + Number(class_performance) + Number(part_a) + Number(part_b))) {
+          var lPartA =part_a;
+          var lPartB = part_b;
+          if(part_a == "Abs" || part_a == "Rep")
+            lPartA= "0";
+          if(part_b == "Abs" || part_b == "Rep")
+            lPartB= "0";
+
+
+          if (this.checkNumber(total) == false || Number(total) > 100 || Number(total) != Math.round(Number(quiz) + Number(class_performance) + Number(lPartA) + Number(lPartB))) {
             $("#total_" + student_id).css(border_error);
             row_error = true;
+
 
             if (total == "")
               message = "Provide marks.";
@@ -776,7 +853,7 @@ module ums {
               message = "Not a valid Number.";
             else if (Number(total) > 100)
               message = "Maximum can be 100.";
-            else if (Number(total) != Number(quiz) + Number(class_performance) + Number(part_a) + Number(part_b))
+            else if (Number(total) != Number(quiz) + Number(class_performance) + Number(lPartA) + Number(lPartB))
               message = "Wrong total value.";
             this.showErrorTooltip("total", student_id, message);
 
@@ -842,7 +919,11 @@ module ums {
 
     private validateExcelSheetHeader(cells: any): boolean {
       if (this.$scope.courseType == "THEORY") {
-        if (cells[0] != "Student Id" || cells[1] != "Student Name" || cells[2] != "Quiz" || cells[3] != "Class Perf." || cells[4] != "Part-A" || cells[5] != "Part-B" || cells[6] != "Total" || cells[7] != "Grade Letter") {
+        if (this.$scope.data.total_part ==1 && (cells[0] != "Student Id" || cells[1] != "Student Name" || cells[2] != "Quiz" || cells[3] != "Class Perf." || cells[4] != "Final Exam" || cells[5] != "Total" || cells[6] != "Grade Letter")) {
+          this.$scope.excel_copy_paste_error_div = true;
+          return false;
+        }
+        else if (this.$scope.data.total_part ==2 && (cells[0] != "Student Id" || cells[1] != "Student Name" || cells[2] != "Quiz" || cells[3] != "Class Perf." || cells[4] != "Part-A" || cells[5] != "Part-B" || cells[6] != "Total" || cells[7] != "Grade Letter")) {
           this.$scope.excel_copy_paste_error_div = true;
           return false;
         }
@@ -902,8 +983,21 @@ module ums {
             studentMark.quiz = $("#quiz_" + studentId).val();
             studentMark.classPerformance = $("#class_perf_" + studentId).val();
 
-            studentMark.partA = $("#part_a_" + studentId).val();
-            studentMark.partB = $("#part_b_" + studentId).val();
+            if($("#part_a_" + studentId).val() == "Abs" || $("#part_a_" + studentId).val() == "Rep"){
+              studentMark.partA = "0";
+              studentMark.partAAddiInfo = $("#part_a_" + studentId).val();
+            } else {
+              studentMark.partA = $("#part_a_" + studentId).val();
+              studentMark.partAAddiInfo = "";
+            }
+
+            if($("#part_b_" + studentId).val() == "Abs" || $("#part_b_" + studentId).val() == "Rep"){
+              studentMark.partB = "0";
+              studentMark.partBAddiInfo = $("#part_b_" + studentId).val();
+            } else {
+              studentMark.partB = $("#part_b_" + studentId).val();
+              studentMark.partBAddiInfo = "";
+            }
           }
           studentMark.total = $("#total_" + studentId).val();
           studentMark.gradeLetter = $("#grade_letter_" + studentId).val();
@@ -924,12 +1018,13 @@ module ums {
       return gradeList;
     }
 
+
     private saveAndSendToScrutinizer(): void {
       var gradeList: Array<IStudentMarks> = this.getTargetGradeList(this.appConstants.marksStatusEnum.SUBMITTED);
       var validate: boolean = true;
       if (this.$scope.courseType == "THEORY") {
         if (this.validatePartAPartB(true) == true) {
-          $("#alertMessage").html("Please provide Part Information Correctly.<br/></br>Check <font color='red'>'Total Part'</font> Section of the Gradesheet Header.");
+          $("#alertMessage").html("Please provide Part Information Correctly.<br/></br>Check <font color='red'>'Total Part'</font> Section of the Grade Sheet Header.");
           setTimeout(function () {
             $("#modal-alert").modal('show');
           }, 200);
@@ -1442,7 +1537,7 @@ module ums {
     //Download GradeSheet in Excel Format
     private generateXls(): void {
       var contentType = UmsUtil.getFileContentType("xls");
-      this.httpClient.get("gradeReport/xls/semester/" + this.$scope.current_semesterId + "/courseid/" + this.$scope.current_courseId + "/examtype/" + this.$scope.current_examTypeId + "/coursetype/" + (this.$scope.courseType == "THEORY" ? "1" : "2") + "/role/" + this.$scope.currentActor, contentType,
+      this.httpClient.get("gradeReport/xls/semester/" + this.$scope.current_semesterId + "/courseid/" + this.$scope.current_courseId + "/examtype/" + this.$scope.current_examTypeId + "/coursetype/" + (this.$scope.courseType == "THEORY" ? "1" : "2") + "/role/" + this.$scope.currentActor+"/totalpart/"+ this.$scope.data.total_part, contentType,
           (data: any, etag: string) => {
             var file = new Blob([data], {type: contentType});
             var reader = new FileReader();
