@@ -7,8 +7,7 @@ import org.ums.domain.model.common.MutableIdentifier;
 
 import java.util.Date;
 
-public interface MutableSemester extends Semester, Mutable, MutableLastModifier,
-    MutableIdentifier<Integer> {
+public interface MutableSemester extends Semester, Mutable, MutableLastModifier, MutableIdentifier<Integer> {
 
   void setName(final String pName);
 

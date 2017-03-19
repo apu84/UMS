@@ -18,8 +18,7 @@ public class PersistentParameterSetting implements MutableParameterSetting {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
     sParameterManager = applicationContext.getBean("parameterManager", ParameterManager.class);
-    sParameterSettingManager =
-        applicationContext.getBean("parameterSettingManager", ParameterSettingManager.class);
+    sParameterSettingManager = applicationContext.getBean("parameterSettingManager", ParameterSettingManager.class);
   }
 
   private Long mId;
@@ -114,14 +113,12 @@ public class PersistentParameterSetting implements MutableParameterSetting {
 
   @Override
   public Semester getSemester() {
-    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
-        .validate(mSemester);
+    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager.validate(mSemester);
   }
 
   @Override
   public Parameter getParameter() {
-    return mParameter == null ? sParameterManager.get(mParameterId) : sParameterManager
-        .validate(mParameter);
+    return mParameter == null ? sParameterManager.get(mParameterId) : sParameterManager.validate(mParameter);
   }
 
   @Override

@@ -7,8 +7,7 @@ import org.ums.domain.model.immutable.ProgramType;
 import org.ums.domain.model.common.Mutable;
 import org.ums.domain.model.common.MutableIdentifier;
 
-public interface MutableProgram extends Program, Mutable, MutableLastModifier,
-    MutableIdentifier<Integer> {
+public interface MutableProgram extends Program, Mutable, MutableLastModifier, MutableIdentifier<Integer> {
 
   void setShortName(final String pShortName);
 

@@ -69,9 +69,8 @@ public class EnrollmentServiceImpl implements EnrollmentService {
    * @throws Exception
    */
   @Transactional
-  public GenericResponse<Map> saveEnrollment(final SemesterEnrollment.Type pType,
-      final Integer pNewSemesterId, final Integer pProgramId, final Integer pToYear,
-      final Integer pToAcademicSemester) {
+  public GenericResponse<Map> saveEnrollment(final SemesterEnrollment.Type pType, final Integer pNewSemesterId,
+      final Integer pProgramId, final Integer pToYear, final Integer pToAcademicSemester) {
 
     GenericResponse<Map> enrollmentStatus =
         enrollmentStatus(pType, pNewSemesterId, pProgramId, pToYear, pToAcademicSemester);
@@ -80,16 +79,13 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     }
 
     Program program = mProgramManager.get(pProgramId);
-    Semester previousSemester =
-        mSemesterManager.getPreviousSemester(pNewSemesterId, program.getProgramType().getId());
+    Semester previousSemester = mSemesterManager.getPreviousSemester(pNewSemesterId, program.getProgramType().getId());
 
-    List<EnrollmentFromTo> enrollmentFromToList =
-        mEnrollmentFromToManager.getEnrollmentFromTo(pProgramId);
+    List<EnrollmentFromTo> enrollmentFromToList = mEnrollmentFromToManager.getEnrollmentFromTo(pProgramId);
 
     EnrollmentFromTo currentEnrollmentFromTo = null;
     for(EnrollmentFromTo enrollment : enrollmentFromToList) {
-      if(enrollment.getToYear().intValue() == pToYear
-          && enrollment.getToSemester().intValue() == pToAcademicSemester) {
+      if(enrollment.getToYear().intValue() == pToYear && enrollment.getToSemester().intValue() == pToAcademicSemester) {
         currentEnrollmentFromTo = enrollment;
         break;
       }
@@ -100,19 +96,14 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     if(currentEnrollmentFromTo != null) {
 
       Syllabus syllabus =
-          mSemesterSyllabusMapManager.getSyllabusForSemester(pNewSemesterId, pProgramId, pToYear,
-              pToAcademicSemester);
-      List<Course> mandatoryCourseList = null, mandatoryTheoryCourse = null, mandatorySessionalCourse =
-          null;
+          mSemesterSyllabusMapManager.getSyllabusForSemester(pNewSemesterId, pProgramId, pToYear, pToAcademicSemester);
+      List<Course> mandatoryCourseList = null, mandatoryTheoryCourse = null, mandatorySessionalCourse = null;
       if(syllabus != null) {
-        mandatoryCourseList =
-            mCourseManager.getMandatoryCourses(syllabus.getId(), pToYear, pToAcademicSemester);
+        mandatoryCourseList = mCourseManager.getMandatoryCourses(syllabus.getId(), pToYear, pToAcademicSemester);
         mandatoryTheoryCourse =
-            mCourseManager
-                .getMandatoryTheoryCourses(syllabus.getId(), pToYear, pToAcademicSemester);
+            mCourseManager.getMandatoryTheoryCourses(syllabus.getId(), pToYear, pToAcademicSemester);
         mandatorySessionalCourse =
-            mCourseManager.getMandatorySesssionalCourses(syllabus.getId(), pToYear,
-                pToAcademicSemester);
+            mCourseManager.getMandatorySesssionalCourses(syllabus.getId(), pToYear, pToAcademicSemester);
       }
 
       if(pType == SemesterEnrollment.Type.TEMPORARY) {
@@ -147,23 +138,20 @@ public class EnrollmentServiceImpl implements EnrollmentService {
             mutableStudentRecord.setStatus(StudentRecord.Status.UNKNOWN);
             mutableStudentRecords.add(mutableStudentRecord);
 
-            MutableStudent mutableStudent =
-                mStudentManager.get(studentRecord.getStudentId()).edit();
+            MutableStudent mutableStudent = mStudentManager.get(studentRecord.getStudentId()).edit();
             mutableStudent.setEnrollmentType(Student.EnrollmentType.TEMPORARY);
             mutableStudent.setCurrentYear(currentEnrollmentFromTo.getToYear());
             mutableStudent.setCurrentAcademicSemester(currentEnrollmentFromTo.getToSemester());
             mutableStudents.add(mutableStudent);
 
-            insertRegistrationResult(mandatoryCourseList, pNewSemesterId,
-                studentRecord.getStudentId(), ExamType.SEMESTER_FINAL, CourseRegType.REGULAR,
-                registrationResults);
+            insertRegistrationResult(mandatoryCourseList, pNewSemesterId, studentRecord.getStudentId(),
+                ExamType.SEMESTER_FINAL, CourseRegType.REGULAR, registrationResults);
 
             insertTheoryMarks(mandatoryTheoryCourse, pNewSemesterId, studentRecord.getStudentId(),
                 ExamType.SEMESTER_FINAL, CourseRegType.REGULAR, ugTheoryMarks);
 
-            insertSessionalMarks(mandatorySessionalCourse, pNewSemesterId,
-                studentRecord.getStudentId(), ExamType.SEMESTER_FINAL, CourseRegType.REGULAR,
-                ugSessionalMarks);
+            insertSessionalMarks(mandatorySessionalCourse, pNewSemesterId, studentRecord.getStudentId(),
+                ExamType.SEMESTER_FINAL, CourseRegType.REGULAR, ugSessionalMarks);
 
             totalEnrolledStudent++;
           }
@@ -187,16 +175,16 @@ public class EnrollmentServiceImpl implements EnrollmentService {
          * semester from previous semester
          */
         SemesterEnrollment semesterEnrollment =
-            mSemesterEnrollmentManager.getEnrollmentStatus(SemesterEnrollment.Type.TEMPORARY,
-                pProgramId, pNewSemesterId, pToYear, pToAcademicSemester);
+            mSemesterEnrollmentManager.getEnrollmentStatus(SemesterEnrollment.Type.TEMPORARY, pProgramId,
+                pNewSemesterId, pToYear, pToAcademicSemester);
 
         MutableSemesterEnrollment mutableSemesterEnrollment = semesterEnrollment.edit();
         mutableSemesterEnrollment.setType(SemesterEnrollment.Type.PERMANENT);
         mutableSemesterEnrollment.commit(true);
 
         List<StudentRecord> temporaryEnrolledStudentRecords =
-            mStudentRecordManager.getStudentRecords(pProgramId, pNewSemesterId, pToYear,
-                pToAcademicSemester, StudentRecord.Type.TEMPORARY);
+            mStudentRecordManager.getStudentRecords(pProgramId, pNewSemesterId, pToYear, pToAcademicSemester,
+                StudentRecord.Type.TEMPORARY);
 
         if(pToYear == UmsUtils.FIRST && pToAcademicSemester == UmsUtils.FIRST
             && temporaryEnrolledStudentRecords.size() > 0) {
@@ -224,8 +212,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
               MutableStudent mutableStudent = student.edit();
 
               MutableStudentRecord mutableStudentRecord = studentRecord.edit();
-              StudentRecord previousSemesterRecord =
-                  studentRecordMap.get(studentRecord.getStudentId());
+              StudentRecord previousSemesterRecord = studentRecordMap.get(studentRecord.getStudentId());
 
               if(previousSemesterRecord.getStatus() == StudentRecord.Status.PASSED) {
                 mutableStudentRecord.setType(StudentRecord.Type.REGULAR);
@@ -234,17 +221,14 @@ public class EnrollmentServiceImpl implements EnrollmentService {
               else if(previousSemesterRecord.getStatus() == StudentRecord.Status.FAILED) {
                 mutableStudentRecord.setType(StudentRecord.Type.READMISSION_REQUIRED);
                 mutableStudentRecord.setYear(previousSemesterRecord.getYear());
-                mutableStudentRecord.setAcademicSemester(previousSemesterRecord
-                    .getAcademicSemester());
+                mutableStudentRecord.setAcademicSemester(previousSemesterRecord.getAcademicSemester());
 
                 mutableStudent.setEnrollmentType(Student.EnrollmentType.ACTUAL);
                 mutableStudent.setCurrentYear(previousSemesterRecord.getYear());
-                mutableStudent.setCurrentAcademicSemester(previousSemesterRecord
-                    .getAcademicSemester());
+                mutableStudent.setCurrentAcademicSemester(previousSemesterRecord.getAcademicSemester());
 
                 // remove from ug_registration_result, ug_theory_marks, ug_sessional_marks
-                MutableUGRegistrationResult registrationResult =
-                    new PersistentUGRegistrationResult();
+                MutableUGRegistrationResult registrationResult = new PersistentUGRegistrationResult();
                 registrationResult.setStudentId(studentRecord.getStudentId());
                 registrationResult.setSemesterId(pNewSemesterId);
                 registrationResult.setExamType(ExamType.SEMESTER_FINAL);
@@ -283,21 +267,18 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         }
       }
     }
-    return new GenericMessageResponse(GenericResponse.ResponseType.SUCCESS,
-        mMessageResource.getMessage("enrollment.successful", UmsUtils.getNumberWithSuffix(pToYear),
-            UmsUtils.getNumberWithSuffix(pToAcademicSemester), totalEnrolledStudent));
+    return new GenericMessageResponse(GenericResponse.ResponseType.SUCCESS, mMessageResource.getMessage(
+        "enrollment.successful", UmsUtils.getNumberWithSuffix(pToYear),
+        UmsUtils.getNumberWithSuffix(pToAcademicSemester), totalEnrolledStudent));
   }
 
   @Override
   @Transactional
-  public GenericResponse<Map> saveEnrollment(SemesterEnrollment.Type pType, Integer pNewSemesterId,
-      Integer pProgramId) {
-    List<EnrollmentFromTo> enrollmentFromToList =
-        mEnrollmentFromToManager.getEnrollmentFromTo(pProgramId);
+  public GenericResponse<Map> saveEnrollment(SemesterEnrollment.Type pType, Integer pNewSemesterId, Integer pProgramId) {
+    List<EnrollmentFromTo> enrollmentFromToList = mEnrollmentFromToManager.getEnrollmentFromTo(pProgramId);
     for(EnrollmentFromTo enrollment : enrollmentFromToList) {
       GenericResponse<Map> response =
-          saveEnrollment(pType, pNewSemesterId, pProgramId, enrollment.getToYear(),
-              enrollment.getToSemester());
+          saveEnrollment(pType, pNewSemesterId, pProgramId, enrollment.getToYear(), enrollment.getToSemester());
       if(response.getResponseType() == GenericResponse.ResponseType.ERROR) {
         return response;
       }
@@ -314,49 +295,45 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     return studentRecordMap;
   }
 
-  private GenericResponse<Map> enrollmentStatus(final SemesterEnrollment.Type pType,
-      final Integer pNewSemesterId, final Integer pProgramId, final Integer pToYear,
-      final Integer pToAcademicSemester) {
+  private GenericResponse<Map> enrollmentStatus(final SemesterEnrollment.Type pType, final Integer pNewSemesterId,
+      final Integer pProgramId, final Integer pToYear, final Integer pToAcademicSemester) {
     // if temporary enrollment, then check whether enrollment is already done. if permanent
     // enrollment then check whether
     // temporary is done first.
     SemesterEnrollment semesterEnrollmentStatus =
-        mSemesterEnrollmentManager.getEnrollmentStatus(pType, pProgramId, pNewSemesterId, pToYear,
-            pToAcademicSemester);
+        mSemesterEnrollmentManager.getEnrollmentStatus(pType, pProgramId, pNewSemesterId, pToYear, pToAcademicSemester);
 
     if(semesterEnrollmentStatus != null) {
 
-      return new GenericMessageResponse(GenericResponse.ResponseType.ERROR,
-          mMessageResource.getMessage("semester.enrollment.already.done", StringUtils
-              .capitalize(pType.toString().toLowerCase()), UmsUtils.getNumberWithSuffix(pToYear),
-              UmsUtils.getNumberWithSuffix(pToAcademicSemester), semesterEnrollmentStatus
-                  .getSemester().getName()));
+      return new GenericMessageResponse(GenericResponse.ResponseType.ERROR, mMessageResource.getMessage(
+          "semester.enrollment.already.done", StringUtils.capitalize(pType.toString().toLowerCase()),
+          UmsUtils.getNumberWithSuffix(pToYear), UmsUtils.getNumberWithSuffix(pToAcademicSemester),
+          semesterEnrollmentStatus.getSemester().getName()));
 
     }
     else if(pType == SemesterEnrollment.Type.TEMPORARY) {
 
       SemesterEnrollment permanentEnrollmentStatus =
-          mSemesterEnrollmentManager.getEnrollmentStatus(SemesterEnrollment.Type.PERMANENT,
-              pProgramId, pNewSemesterId, pToYear, pToAcademicSemester);
+          mSemesterEnrollmentManager.getEnrollmentStatus(SemesterEnrollment.Type.PERMANENT, pProgramId, pNewSemesterId,
+              pToYear, pToAcademicSemester);
 
       if(permanentEnrollmentStatus != null) {
-        return new GenericMessageResponse(GenericResponse.ResponseType.ERROR,
-            mMessageResource.getMessage("semester.enrollment.already.done", StringUtils
-                .capitalize(SemesterEnrollment.Type.PERMANENT.toString().toLowerCase()), UmsUtils
-                .getNumberWithSuffix(pToYear), UmsUtils.getNumberWithSuffix(pToAcademicSemester),
-                permanentEnrollmentStatus.getSemester().getName()));
+        return new GenericMessageResponse(GenericResponse.ResponseType.ERROR, mMessageResource.getMessage(
+            "semester.enrollment.already.done",
+            StringUtils.capitalize(SemesterEnrollment.Type.PERMANENT.toString().toLowerCase()),
+            UmsUtils.getNumberWithSuffix(pToYear), UmsUtils.getNumberWithSuffix(pToAcademicSemester),
+            permanentEnrollmentStatus.getSemester().getName()));
       }
     }
     else if(pType == SemesterEnrollment.Type.PERMANENT) {
       SemesterEnrollment temporaryEnrollmentStatus =
-          mSemesterEnrollmentManager.getEnrollmentStatus(SemesterEnrollment.Type.TEMPORARY,
-              pProgramId, pNewSemesterId, pToYear, pToAcademicSemester);
+          mSemesterEnrollmentManager.getEnrollmentStatus(SemesterEnrollment.Type.TEMPORARY, pProgramId, pNewSemesterId,
+              pToYear, pToAcademicSemester);
 
       if(temporaryEnrollmentStatus == null) {
-        return new GenericMessageResponse(GenericResponse.ResponseType.ERROR,
-            mMessageResource.getMessage("semester.temporary.enrollment.required",
-                UmsUtils.getNumberWithSuffix(pToYear),
-                UmsUtils.getNumberWithSuffix(pToAcademicSemester)));
+        return new GenericMessageResponse(GenericResponse.ResponseType.ERROR, mMessageResource.getMessage(
+            "semester.temporary.enrollment.required", UmsUtils.getNumberWithSuffix(pToYear),
+            UmsUtils.getNumberWithSuffix(pToAcademicSemester)));
       }
     }
 
@@ -386,9 +363,8 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     mStudentManager.update(mutableStudents);
   }
 
-  private void insertRegistrationResult(List<Course> pCourses, Integer pSemesterId,
-      String pStudentId, ExamType pExamType, CourseRegType pCourseRegType,
-      List<MutableUGRegistrationResult> pRegistrationResults) {
+  private void insertRegistrationResult(List<Course> pCourses, Integer pSemesterId, String pStudentId,
+      ExamType pExamType, CourseRegType pCourseRegType, List<MutableUGRegistrationResult> pRegistrationResults) {
     for(Course course : pCourses) {
       MutableUGRegistrationResult registrationResult = new PersistentUGRegistrationResult();
       registrationResult.setStudentId(pStudentId);
@@ -400,9 +376,8 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     }
   }
 
-  private void insertTheoryMarks(List<Course> pCourses, Integer pSemesterId, String pStudentId,
-      ExamType pExamType, CourseRegType pCourseRegType,
-      List<MutableUGTheoryMarks> pRegistrationResults) {
+  private void insertTheoryMarks(List<Course> pCourses, Integer pSemesterId, String pStudentId, ExamType pExamType,
+      CourseRegType pCourseRegType, List<MutableUGTheoryMarks> pRegistrationResults) {
     for(Course course : pCourses) {
       MutableUGTheoryMarks registrationResult = new PersistentUGTheoryMarks();
       registrationResult.setStudentId(pStudentId);
@@ -414,9 +389,8 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     }
   }
 
-  private void insertSessionalMarks(List<Course> pCourses, Integer pSemesterId, String pStudentId,
-      ExamType pExamType, CourseRegType pCourseRegType,
-      List<MutableUGSessionalMarks> pRegistrationResults) {
+  private void insertSessionalMarks(List<Course> pCourses, Integer pSemesterId, String pStudentId, ExamType pExamType,
+      CourseRegType pCourseRegType, List<MutableUGSessionalMarks> pRegistrationResults) {
     for(Course course : pCourses) {
       MutableUGSessionalMarks registrationResult = new PersistentUGSessionalMarks();
       registrationResult.setStudentId(pStudentId);

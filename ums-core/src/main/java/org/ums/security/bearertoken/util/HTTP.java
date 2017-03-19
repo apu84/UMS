@@ -43,8 +43,7 @@ public final class HTTP {
     private JSON() {}
 
     static JsonObject fromArgs(Object... args) {
-      Preconditions.checkArgument(args.length % 2 == 0,
-          "There must be an even number of argument strings");
+      Preconditions.checkArgument(args.length % 2 == 0, "There must be an even number of argument strings");
       try {
         JsonObject obj = new JsonObject();
         for(int i = 0; i < args.length; i += 2) {
@@ -58,13 +57,13 @@ public final class HTTP {
 
   }
 
-  public static void write(ServletResponse response, String mimeType, Status returnCode,
-      String output) throws IOException {
+  public static void write(ServletResponse response, String mimeType, Status returnCode, String output)
+      throws IOException {
     write(WebUtils.toHttp(response), mimeType, returnCode, output);
   }
 
-  public static void write(HttpServletResponse response, String mimeType, Status returnCode,
-      String output) throws IOException {
+  public static void write(HttpServletResponse response, String mimeType, Status returnCode, String output)
+      throws IOException {
     response.setContentType(mimeType);
     response.setStatus(returnCode.toInt());
     response.getWriter().println(output);

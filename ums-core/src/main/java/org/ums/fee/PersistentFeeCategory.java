@@ -7,8 +7,7 @@ public class PersistentFeeCategory implements MutableFeeCategory {
   private static FeeCategoryManager sFeeCategoryManager;
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sFeeCategoryManager =
-        applicationContext.getBean("feeCategoryManager", FeeCategoryManager.class);
+    sFeeCategoryManager = applicationContext.getBean("feeCategoryManager", FeeCategoryManager.class);
   }
   private String mId;
   private String mFeeId;

@@ -35,13 +35,11 @@ public class AdditionalRolePermissionsHelper extends
   @Override
   @Transactional
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) {
-    MutableAdditionalRolePermissions mutableAdditionalRolePermissions =
-        new PersistentAdditionalRolePermissions();
+    MutableAdditionalRolePermissions mutableAdditionalRolePermissions = new PersistentAdditionalRolePermissions();
     LocalCache localCache = new LocalCache();
     getBuilder().build(mutableAdditionalRolePermissions, pJsonObject, localCache);
     mAdditionalRolePermissionsManager.removeExistingAdditionalRolePermissions(
-        mutableAdditionalRolePermissions.getUserId(),
-        mutableAdditionalRolePermissions.getAssignedByUserId());
+        mutableAdditionalRolePermissions.getUserId(), mutableAdditionalRolePermissions.getAssignedByUserId());
     mutableAdditionalRolePermissions.commit(false);
 
     Response.ResponseBuilder builder = Response.ok();
@@ -63,8 +61,8 @@ public class AdditionalRolePermissionsHelper extends
     return pReadonly.getLastModified();
   }
 
-  public JsonObject getUserAdditionalRolePermissionsByAssignedBy(final String pUserId,
-      final String pAssignedBy, final UriInfo pUriInfo) {
+  public JsonObject getUserAdditionalRolePermissionsByAssignedBy(final String pUserId, final String pAssignedBy,
+      final UriInfo pUriInfo) {
     List<AdditionalRolePermissions> additionalRolePermissions =
         mAdditionalRolePermissionsManager.getUserPermissionsByAssignedUser(pUserId, pAssignedBy);
 

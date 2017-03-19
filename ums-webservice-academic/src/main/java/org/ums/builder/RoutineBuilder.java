@@ -35,8 +35,7 @@ public class RoutineBuilder implements Builder<Routine, MutableRoutine> {
   ProgramManager mProgramManager;
 
   @Override
-  public void build(JsonObjectBuilder pBuilder, Routine pReadOnly, UriInfo pUriInfo,
-      LocalCache pLocalCache) {
+  public void build(JsonObjectBuilder pBuilder, Routine pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
     if(pReadOnly.getId() != null)
       pBuilder.add("id", pReadOnly.getId());
     if(pReadOnly.getSemester().getId() != null)

@@ -33,8 +33,7 @@ public abstract class AbstractValidator implements Validator {
   private void aggregateValidations() throws ValidationException {
     mValidationRoot.add("fieldValidation", mFieldValidationMap.build());
     JsonObject validationRoot = mValidationRoot.build();
-    if(validationRoot.containsKey("rootCause")
-        || validationRoot.getJsonObject("fieldValidation").size() > 0) {
+    if(validationRoot.containsKey("rootCause") || validationRoot.getJsonObject("fieldValidation").size() > 0) {
       throw new ValidationException(validationRoot.toString());
     }
   }

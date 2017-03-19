@@ -74,9 +74,8 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
   public static final String DEST = "seat_plan_report.pdf";
 
   @Override
-  public void createPdf(String dest, boolean noSeatPlanInfo, int pSemesterId, int groupNo,
-      int type, String examDate, OutputStream pOutputStream) throws IOException, DocumentException,
-      WebApplicationException {
+  public void createPdf(String dest, boolean noSeatPlanInfo, int pSemesterId, int groupNo, int type, String examDate,
+      OutputStream pOutputStream) throws IOException, DocumentException, WebApplicationException {
 
     Document document = new Document();
     document.addTitle("Seat Plan");
@@ -99,13 +98,10 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
     String examDates = "Date: ";
     java.util.List<SeatPlanGroup> seatPlanGroup =
         mSeatPlanGroupManager.getBySemesterGroupAndType(pSemesterId, groupNo, type);
-    java.util.List<ExamRoutineDto> examRoutines =
-        mExamRoutineManager.getExamRoutine(pSemesterId, type);
+    java.util.List<ExamRoutineDto> examRoutines = mExamRoutineManager.getExamRoutine(pSemesterId, type);
     java.util.List<SeatPlan> seatPlans;
     if(groupNo == 0) {
-      seatPlans =
-          mSeatPlanManager.getBySemesterAndGroupAndExamTypeAndExamDate(pSemesterId, groupNo, type,
-              examDate);
+      seatPlans = mSeatPlanManager.getBySemesterAndGroupAndExamTypeAndExamDate(pSemesterId, groupNo, type, examDate);
     }
     else {
       seatPlans = mSeatPlanManager.getBySemesterAndGroupAndExamType(pSemesterId, groupNo, type);
@@ -138,8 +134,8 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
        * .getRowNo()).append(seatPlan.getColumnNo());
        */
       /* String roomRowCol =sb.toString(); */
-      roomRowColWithSeatPlanMap.put(seatPlan.getClassRoomId() + "" + seatPlan.getRowNo() + ""
-          + seatPlan.getColumnNo(), seatPlan);
+      roomRowColWithSeatPlanMap.put(seatPlan.getClassRoomId() + "" + seatPlan.getRowNo() + "" + seatPlan.getColumnNo(),
+          seatPlan);
     }
     long endTime = System.currentTimeMillis();
     long totalTime = endTime - startTime;
@@ -157,8 +153,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
       for(ExamRoutineDto routine : examRoutines) {
         SeatPlanGroup group = seatPlanGroup.get(0);
 
-        if(routine.getProgramId() == group.getProgramId()
-            && routine.getCourseYear() == group.getAcademicYear()
+        if(routine.getProgramId() == group.getProgramId() && routine.getCourseYear() == group.getAcademicYear()
             && routine.getCourseSemester() == group.getAcademicSemester()) {
 
           if(routineCounter == examRoutines.size()) {
@@ -187,9 +182,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
 
     if(noSeatPlanInfo) {
       Chunk c =
-          new Chunk(
-              "No SubGroup and No Seat Plan Information in the database, create one and then come back again!",
-              f);
+          new Chunk("No SubGroup and No Seat Plan Information in the database, create one and then come back again!", f);
       c.setBackground(BaseColor.WHITE);
       Paragraph p = new Paragraph(c);
       p.setAlignment(Element.ALIGN_CENTER);
@@ -209,28 +202,24 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
         if(checkIfRoomExistsInSeatPlan && room.getId() != 284) {
           long startTimeInRoom = System.currentTimeMillis();
           String roomHeader = "Room No: " + room.getRoomNo();
-          Paragraph pRoomHeader =
-              new Paragraph(roomHeader, FontFactory.getFont(FontFactory.TIMES_BOLD, 12));
+          Paragraph pRoomHeader = new Paragraph(roomHeader, FontFactory.getFont(FontFactory.TIMES_BOLD, 12));
           pRoomHeader.setAlignment(Element.ALIGN_CENTER);
           document.add(pRoomHeader);
           String semesterInfo = "";
           if(type == 1) {
             semesterInfo =
-                "Semester Final Examination " + semesterName + ". Capacity: "
-                    + (room.getCapacity() + 2) + ".";
+                "Semester Final Examination " + semesterName + ". Capacity: " + (room.getCapacity() + 2) + ".";
           }
           if(type == 2) {
             semesterInfo =
                 "Clearance/Improvement/Carryover Examination " + semesterName + ". Capacity: "
                     + (room.getCapacity() + 2) + ".";
           }
-          Paragraph pSemesterInfo =
-              new Paragraph(semesterInfo, FontFactory.getFont(FontFactory.TIMES_BOLD, 12));
+          Paragraph pSemesterInfo = new Paragraph(semesterInfo, FontFactory.getFont(FontFactory.TIMES_BOLD, 12));
           pSemesterInfo.setAlignment(Element.ALIGN_CENTER);
           document.add(pSemesterInfo);
 
-          Paragraph pExamDates =
-              new Paragraph(examDates, FontFactory.getFont(FontFactory.TIMES_BOLD, 10));
+          Paragraph pExamDates = new Paragraph(examDates, FontFactory.getFont(FontFactory.TIMES_BOLD, 10));
           pExamDates.setAlignment(Element.ALIGN_CENTER);
           pExamDates.setSpacingAfter(6f);
           document.add(pExamDates);
@@ -249,8 +238,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                * if(j<room.getTotalColumn()-2){ if(i==1) i=2; }
                */
 
-              SeatPlan seatPlanOfTheRowAndCol =
-                  roomRowColWithSeatPlanMap.get(room.getId() + "" + i + "" + j);
+              SeatPlan seatPlanOfTheRowAndCol = roomRowColWithSeatPlanMap.get(room.getId() + "" + i + "" + j);
               int ifSeatPlanExist;
               /*
                * if(groupNo == 0) { ifSeatPlanExist =
@@ -277,13 +265,12 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                 else {
                   program = student.getProgram();
                   dept =
-                      program.getShortName().replace("B.Sc in ", "") + " "
-                          + student.getCurrentYear() + "/" + student.getCurrentAcademicSemester();
+                      program.getShortName().replace("B.Sc in ", "") + " " + student.getCurrentYear() + "/"
+                          + student.getCurrentAcademicSemester();
                   deptName = program.getShortName().replace("B.Sc in ", "");
 
                 }
-                String yearSemester =
-                    student.getCurrentYear() + "/" + student.getCurrentAcademicSemester();
+                String yearSemester = student.getCurrentYear() + "/" + student.getCurrentAcademicSemester();
                 if(deptList.size() == 0) {
                   deptList.add(dept);
                   java.util.List<String> studentList = new ArrayList<>();
@@ -394,8 +381,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
           summaryTable.setWidthPercentage(100);
           summaryTable.setWidths(columnWiths);
           PdfPCell deptLabelCell = new PdfPCell();
-          Paragraph deptLabel =
-              new Paragraph("DEPT", FontFactory.getFont(FontFactory.TIMES_BOLD, summaryFontSize));
+          Paragraph deptLabel = new Paragraph("DEPT", FontFactory.getFont(FontFactory.TIMES_BOLD, summaryFontSize));
           deptLabelCell.addElement(deptLabel);
           deptLabelCell.setPaddingRight(-0.5f);
           deptLabelCell.setColspan(1);
@@ -413,16 +399,14 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
 
           PdfPCell studentLabelCell = new PdfPCell();
           Paragraph studentLabel =
-              new Paragraph("STUDENT ID", FontFactory.getFont(FontFactory.TIMES_BOLD,
-                  summaryFontSize));
+              new Paragraph("STUDENT ID", FontFactory.getFont(FontFactory.TIMES_BOLD, summaryFontSize));
           studentLabel.setAlignment(Element.ALIGN_CENTER);
           studentLabelCell.addElement(studentLabel);
           studentLabelCell.setPaddingTop(-2f);
           summaryTable.addCell(studentLabelCell);
 
           PdfPCell totalCellLabel = new PdfPCell();
-          Paragraph totalLabel =
-              new Paragraph("TOTAL", FontFactory.getFont(FontFactory.TIMES_BOLD, summaryFontSize));
+          Paragraph totalLabel = new Paragraph("TOTAL", FontFactory.getFont(FontFactory.TIMES_BOLD, summaryFontSize));
           totalCellLabel.addElement(totalLabel);
           totalCellLabel.setPaddingTop(-2f);
           summaryTable.addCell(totalCellLabel);
@@ -431,15 +415,15 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
           for(String deptOfTheList : deptList) {
             PdfPCell deptCell = new PdfPCell();
             Paragraph deptParagraph =
-                new Paragraph(deptWithDeptNameMap.get(deptOfTheList), FontFactory.getFont(
-                    FontFactory.TIMES_ROMAN, summaryFontSize));
+                new Paragraph(deptWithDeptNameMap.get(deptOfTheList), FontFactory.getFont(FontFactory.TIMES_ROMAN,
+                    summaryFontSize));
             deptCell.addElement(deptParagraph);
             deptCell.setPaddingTop(-2f);
             summaryTable.addCell(deptCell);
             PdfPCell yearSemesterCell = new PdfPCell();
             Paragraph yearSemesterCellParagraph =
-                new Paragraph(deptWithYearSemesterMap.get(deptOfTheList), FontFactory.getFont(
-                    FontFactory.TIMES_ROMAN, summaryFontSize));
+                new Paragraph(deptWithYearSemesterMap.get(deptOfTheList), FontFactory.getFont(FontFactory.TIMES_ROMAN,
+                    summaryFontSize));
             yearSemesterCell.addElement(yearSemesterCellParagraph);
             yearSemesterCell.setPaddingTop(-2f);
             summaryTable.addCell(yearSemesterCell);
@@ -475,8 +459,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
             }
 
             Paragraph studentCellParagraph =
-                new Paragraph(studentListInString, FontFactory.getFont(FontFactory.TIMES_ROMAN,
-                    summaryFontSize));
+                new Paragraph(studentListInString, FontFactory.getFont(FontFactory.TIMES_ROMAN, summaryFontSize));
             studentCell.addElement(studentCellParagraph);
             studentCell.setPaddingTop(-2f);
             summaryTable.addCell(studentCell);
@@ -484,8 +467,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
             if(deptListCounter == deptList.size()) {
               PdfPCell totalCell = new PdfPCell();
               Paragraph totalLabels =
-                  new Paragraph("" + totalStudent, FontFactory.getFont(FontFactory.TIMES_BOLD,
-                      summaryFontSize));
+                  new Paragraph("" + totalStudent, FontFactory.getFont(FontFactory.TIMES_BOLD, summaryFontSize));
               totalLabels.setAlignment(Element.ALIGN_CENTER);
               totalCell.addElement(totalLabels);
               totalCell.setPaddingTop(-2f);
@@ -547,8 +529,8 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                 PdfPCell lowerCell = new PdfPCell();
 
                 String upperPart =
-                    program.getShortName().replace("B.Sc in ", "") + " " + student.getCurrentYear()
-                        + "/" + student.getCurrentAcademicSemester();
+                    program.getShortName().replace("B.Sc in ", "") + " " + student.getCurrentYear() + "/"
+                        + student.getCurrentAcademicSemester();
                 Paragraph upperParagraph =
                     new Paragraph(upperPart, FontFactory.getFont(FontFactory.TIMES_ROMAN, fontSize));
                 upperParagraph.setPaddingTop(-5f);
@@ -591,8 +573,8 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
                 PdfPCell lowerCell = new PdfPCell();
                 lowerCell.setColspan(10);
                 String upperPart =
-                    program2.getShortName().replace("B.Sc in ", "") + " "
-                        + student2.getCurrentYear() + "/" + student2.getCurrentAcademicSemester();
+                    program2.getShortName().replace("B.Sc in ", "") + " " + student2.getCurrentYear() + "/"
+                        + student2.getCurrentAcademicSemester();
                 Paragraph upperParagraph =
                     new Paragraph(upperPart, FontFactory.getFont(FontFactory.TIMES_ROMAN, fontSize));
                 upperParagraph.setPaddingTop(-5f);
@@ -630,10 +612,10 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
           }
 
           PdfPCell dateAndPreparedByCell = new PdfPCell();
-          dateAndPreparedByCell.addElement(new Phrase("Date:", FontFactory.getFont(
-              FontFactory.TIMES_BOLD, footerFontSize)));
-          dateAndPreparedByCell.addElement(new Phrase("Prepared By", FontFactory.getFont(
-              FontFactory.TIMES_BOLD, footerFontSize)));
+          dateAndPreparedByCell.addElement(new Phrase("Date:", FontFactory.getFont(FontFactory.TIMES_BOLD,
+              footerFontSize)));
+          dateAndPreparedByCell.addElement(new Phrase("Prepared By", FontFactory.getFont(FontFactory.TIMES_BOLD,
+              footerFontSize)));
           dateAndPreparedByCell.setBorder(Rectangle.NO_BORDER);
           footer.addCell(dateAndPreparedByCell);
           // todo: remove border
@@ -643,16 +625,14 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
           spaceCell.setBorder(PdfPCell.NO_BORDER);
           PdfPCell checkedByCell = new PdfPCell();
           Paragraph pCheckedBy =
-              new Paragraph("Checked By", FontFactory.getFont(FontFactory.TIMES_BOLD,
-                  footerFontSize));
+              new Paragraph("Checked By", FontFactory.getFont(FontFactory.TIMES_BOLD, footerFontSize));
           checkedByCell.addElement(spaceParagraph);
           checkedByCell.addElement(pCheckedBy);
           checkedByCell.setBorder(PdfPCell.NO_BORDER);
           footer.addCell(checkedByCell);
           PdfPCell controllerCell = new PdfPCell();
           Paragraph pController =
-              new Paragraph("Controller of Examinations", FontFactory.getFont(
-                  FontFactory.TIMES_BOLD, footerFontSize));
+              new Paragraph("Controller of Examinations", FontFactory.getFont(FontFactory.TIMES_BOLD, footerFontSize));
           controllerCell.addElement(spaceParagraph);
           controllerCell.addElement(pController);
           controllerCell.setBorder(PdfPCell.NO_BORDER);
@@ -697,19 +677,14 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
     public void onEndPage(PdfWriter writer, Document document) {
       PdfContentByte cb = writer.getDirectContent();
       Paragraph pDate = new Paragraph("Date:", FontFactory.getFont(FontFactory.TIMES_BOLD, 12));
-      Paragraph pPreparedBy =
-          new Paragraph("Prepared by:", FontFactory.getFont(FontFactory.TIMES_BOLD, 12));
-      Paragraph pCheckedBy =
-          new Paragraph("Checked by:", FontFactory.getFont(FontFactory.TIMES_BOLD, 12));
+      Paragraph pPreparedBy = new Paragraph("Prepared by:", FontFactory.getFont(FontFactory.TIMES_BOLD, 12));
+      Paragraph pCheckedBy = new Paragraph("Checked by:", FontFactory.getFont(FontFactory.TIMES_BOLD, 12));
       Paragraph pController =
-          new Paragraph("Controller of Examinations", FontFactory.getFont(FontFactory.TIMES_BOLD,
-              12));
+          new Paragraph("Controller of Examinations", FontFactory.getFont(FontFactory.TIMES_BOLD, 12));
 
       PdfPCell dateAndPreparedByCell = new PdfPCell();
-      dateAndPreparedByCell.addElement(new Phrase("Date:", FontFactory.getFont(
-          FontFactory.TIMES_BOLD, 12)));
-      dateAndPreparedByCell.addElement(new Phrase("Prepared By", FontFactory.getFont(
-          FontFactory.TIMES_BOLD, 12)));
+      dateAndPreparedByCell.addElement(new Phrase("Date:", FontFactory.getFont(FontFactory.TIMES_BOLD, 12)));
+      dateAndPreparedByCell.addElement(new Phrase("Prepared By", FontFactory.getFont(FontFactory.TIMES_BOLD, 12)));
       dateAndPreparedByCell.setBorder(Rectangle.NO_BORDER);
       Phrase leftPhrase = new Phrase();
       leftPhrase.add(pDate);
@@ -722,25 +697,23 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
       Phrase rightPhraseButtom = new Phrase();
       rightPhraseButtom.add(pController);
 
-      ColumnText.showTextAligned(cb, Element.ALIGN_LEFT, leftPhrase, (document.left()) / 3,
-          document.bottom() - 1, 0);
+      ColumnText.showTextAligned(cb, Element.ALIGN_LEFT, leftPhrase, (document.left()) / 3, document.bottom() - 1, 0);
 
       ColumnText.showTextAligned(cb, Element.ALIGN_LEFT, leftPhraseBottom, (document.left()) / 3,
           document.bottom() - 20, 0);
 
-      ColumnText.showTextAligned(cb, Element.ALIGN_LEFT, middlePhraseBottom,
-          (document.right()) / 2, document.bottom() - 20, 0);
+      ColumnText.showTextAligned(cb, Element.ALIGN_LEFT, middlePhraseBottom, (document.right()) / 2,
+          document.bottom() - 20, 0);
 
-      ColumnText.showTextAligned(cb, Element.ALIGN_RIGHT, rightPhraseButtom,
-          (document.right()) / 1, document.bottom() - 20, 0);
+      ColumnText.showTextAligned(cb, Element.ALIGN_RIGHT, rightPhraseButtom, (document.right()) / 1,
+          document.bottom() - 20, 0);
 
     }
   }
 
   @Override
-  public void createSeatPlanAttendenceReport(Integer pProgramType, Integer pSemesterId,
-      Integer pExamType, String pExamDate, OutputStream pOutputStream) throws IOException,
-      DocumentException {
+  public void createSeatPlanAttendenceReport(Integer pProgramType, Integer pSemesterId, Integer pExamType,
+      String pExamDate, OutputStream pOutputStream) throws IOException, DocumentException {
     /*
      * java.util.List<ExamRoutineDto> examRoutines = new ArrayList<>(); List<SeatPlan> seatPlans =
      * new ArrayList<>(); String universityName = new
@@ -1105,9 +1078,8 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
   }
 
   @Override
-  public void createSeatPlanAttendencePdfReport(Integer pProgramType, Integer pSemesterId,
-      Integer pExamType, String pExamDate, OutputStream pOutputStream) throws IOException,
-      DocumentException {
+  public void createSeatPlanAttendencePdfReport(Integer pProgramType, Integer pSemesterId, Integer pExamType,
+      String pExamDate, OutputStream pOutputStream) throws IOException, DocumentException {
 
     java.util.List<SeatPlanReportDto> seatPlanReports = new ArrayList<>();
     String universityName = new String("Ahsanullah University of Science and Technology");
@@ -1138,8 +1110,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
      * String tr="<tr>"; String trEnd="</tr>"; String td="<td>"; String tdEnd="</td>";
      */
 
-    seatPlanReports =
-        mSeatPlanReportManager.getSeatPlanDataForAttendenceSheet(pSemesterId, pExamType, pExamDate);
+    seatPlanReports = mSeatPlanReportManager.getSeatPlanDataForAttendenceSheet(pSemesterId, pExamType, pExamDate);
 
     Document document = new Document();
     document.addTitle("Seat Plan Attendence Sheet");
@@ -1242,10 +1213,8 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
 
       Paragraph yearP = new Paragraph(year, lightFont);
       Paragraph yearB = new Paragraph(seatPlanReportDto.getCurrentYear().toString(), boldFont);
-      Paragraph semesterP =
-          new Paragraph("            " + "              " + "     " + semester + "  ", lightFont);
-      Paragraph semesterB =
-          new Paragraph(seatPlanReportDto.getCurrentSemester().toString(), boldFont);
+      Paragraph semesterP = new Paragraph("            " + "              " + "     " + semester + "  ", lightFont);
+      Paragraph semesterB = new Paragraph(seatPlanReportDto.getCurrentSemester().toString(), boldFont);
       /*
        * Paragraph yearSemesterParagraph = new Paragraph();
        * yearSemesterParagraph.add(yearP+" "+yearB);
@@ -1267,8 +1236,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
       upperCell.addElement(yearSemesterPhrase);
 
       Paragraph departmentP = new Paragraph("Department: ", lightFont);
-      Paragraph departmentParagraph =
-          new Paragraph(" " + seatPlanReportDto.getProgramName(), boldFont);
+      Paragraph departmentParagraph = new Paragraph(" " + seatPlanReportDto.getProgramName(), boldFont);
       // departmentParagraph.setFont(FontFactory.getFont(FontFactory.TIMES_BOLD,12));
       PdfPCell departmentCell = new PdfPCell(departmentParagraph);
       /*
@@ -1292,8 +1260,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
       upperCell.addElement(courseNoPhrase);
 
       Paragraph courseTitleP = new Paragraph(courseTitle, lightFont);
-      Paragraph courseTitleParagrah =
-          new Paragraph("" + seatPlanReportDto.getCourseTitle(), boldFont);
+      Paragraph courseTitleParagrah = new Paragraph("" + seatPlanReportDto.getCourseTitle(), boldFont);
       Phrase courseTitlePhrase = new Phrase();
       courseTitlePhrase.add(courseTitleP);
       courseTitlePhrase.add(courseTitleParagrah);
@@ -1311,15 +1278,13 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
       float[] attendenceSheetColSpan = {4, 7};
       PdfPTable attendanceSheetTable = new PdfPTable(attendenceSheetColSpan);
       attendanceSheetTable.setWidthPercentage(100);
-      PdfPCell sttudentNoCell =
-          new PdfPCell(new Paragraph(studentNo, FontFactory.getFont(FontFactory.TIMES_BOLD, 12)));
+      PdfPCell sttudentNoCell = new PdfPCell(new Paragraph(studentNo, FontFactory.getFont(FontFactory.TIMES_BOLD, 12)));
       sttudentNoCell.setHorizontalAlignment(Element.ALIGN_CENTER);
       Paragraph studentsSignutureSection = new Paragraph("Signature of the examinee");
       studentsSignutureSection.setAlignment(Element.ALIGN_CENTER);
       studentsSignutureSection.setFont(FontFactory.getFont(FontFactory.TIMES_BOLD, 12));
       PdfPCell signatureCell =
-          new PdfPCell(new Paragraph(signatureOfTheStudents, FontFactory.getFont(
-              FontFactory.TIMES_BOLD, 12)));
+          new PdfPCell(new Paragraph(signatureOfTheStudents, FontFactory.getFont(FontFactory.TIMES_BOLD, 12)));
       signatureCell.setHorizontalAlignment(Element.ALIGN_CENTER);
       attendanceSheetTable.addCell(sttudentNoCell);
       attendanceSheetTable.addCell(signatureCell);
@@ -1335,8 +1300,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
 
         if(seatPlanReports.size() != 0) {
           seatPlanInner = seatPlanReports.get(0);
-          if(seatPlanInner.getRoomNo().equals(classRoomNo)
-              && seatPlanInner.getCourseNo().equals(courseNoOfStudent)
+          if(seatPlanInner.getRoomNo().equals(classRoomNo) && seatPlanInner.getCourseNo().equals(courseNoOfStudent)
               && seatPlanInner.getProgramName().equals(programOfStudent)
               && seatPlanInner.getCurrentYear() == currYearOfStudent
               && seatPlanInner.getCurrentSemester() == currSemesterOfStudent && counter != 20
@@ -1408,8 +1372,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
       tableTwo.addCell(studentInfoCell);
 
       /* Paragraph numberOfPresent = new Paragraph(numberofTheExamineesPresent); */
-      Paragraph numberOfExamineeParagraph =
-          new Paragraph(numberOfTheExamineesRegistered + studentCounter);
+      Paragraph numberOfExamineeParagraph = new Paragraph(numberOfTheExamineesRegistered + studentCounter);
       PdfPCell presentCell = new PdfPCell();
       presentCell.setPaddingTop(-3);
       presentCell.setPaddingBottom(4);
@@ -1874,13 +1837,11 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
   }
 
   @Override
-  public void createSeatPlanStickerReport(Integer pProgramType, Integer pSemesterId,
-      Integer pExamType, String pExamDate, int pRoomId, OutputStream pOutputStream)
-      throws IOException, DocumentException {
+  public void createSeatPlanStickerReport(Integer pProgramType, Integer pSemesterId, Integer pExamType,
+      String pExamDate, int pRoomId, OutputStream pOutputStream) throws IOException, DocumentException {
 
     List<SeatPlanReportDto> seatPlans =
-        mSeatPlanReportManager
-            .getSeatPlanDataForSticker(pSemesterId, pExamType, pExamDate, pRoomId);
+        mSeatPlanReportManager.getSeatPlanDataForSticker(pSemesterId, pExamType, pExamDate, pRoomId);
     Semester semester = mSemesterManager.get(pSemesterId);
 
     Document document = new Document();
@@ -1967,8 +1928,8 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
           }
 
           String yearSemester =
-              "  Year :" + seatPlanReportDto.getCurrentYear() + "           "
-                  + "            Semester: " + seatPlanReportDto.getCurrentSemester();
+              "  Year :" + seatPlanReportDto.getCurrentYear() + "           " + "            Semester: "
+                  + seatPlanReportDto.getCurrentSemester();
           paragraph = new Paragraph(yearSemester, boldFont);
           if(i == 1) {
             leftCell.addElement(paragraph);
@@ -2347,8 +2308,8 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
     baos.writeTo(pOutputStream);
   }
 
-  private void addHeaderToSittingArrangementDataTable(PdfPTable pSittingArrangementTable,
-      PdfPCell pTableHeaderCell, Paragraph pCellData) {
+  private void addHeaderToSittingArrangementDataTable(PdfPTable pSittingArrangementTable, PdfPCell pTableHeaderCell,
+      Paragraph pCellData) {
     pCellData.setAlignment(Element.ALIGN_CENTER);
     pTableHeaderCell = new PdfPCell(pCellData);
     pTableHeaderCell.setBackgroundColor(BaseColor.LIGHT_GRAY);
@@ -2357,12 +2318,11 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
     pSittingArrangementTable.addCell(pTableHeaderCell);
   }
 
-  private PdfPTable getSittingArrangementHeader(ExamType pExamType, Font pBoldFont,
-      List<SeatPlan> pSeatPlansOfTheMap, Map<Long, List<SeatPlan>> seatPlanMapByRoomNo) {
+  private PdfPTable getSittingArrangementHeader(ExamType pExamType, Font pBoldFont, List<SeatPlan> pSeatPlansOfTheMap,
+      Map<Long, List<SeatPlan>> seatPlanMapByRoomNo) {
     PdfPTable headerTable = new PdfPTable(1);
     PdfPCell headerCell = new PdfPCell();
-    Paragraph headerParagraph =
-        new Paragraph("Ahsanullah University of Science and Technology", pBoldFont);
+    Paragraph headerParagraph = new Paragraph("Ahsanullah University of Science and Technology", pBoldFont);
     headerParagraph.setAlignment(Element.ALIGN_CENTER);
     headerCell.addElement(headerParagraph);
 
@@ -2374,8 +2334,7 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
 
     if(pExamType == ExamType.SEMESTER_FINAL) {
       headerParagraph =
-          new Paragraph("Semester Final Examination :"
-              + pSeatPlansOfTheMap.get(0).getSemester().getName(), pBoldFont);
+          new Paragraph("Semester Final Examination :" + pSeatPlansOfTheMap.get(0).getSemester().getName(), pBoldFont);
       headerParagraph.setAlignment(Element.ALIGN_CENTER);
       headerParagraph.setPaddingTop(-5f);
       headerParagraph.setSpacingBefore(-5f);
@@ -2383,8 +2342,9 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
     }
     else {
       headerParagraph =
-          new Paragraph("Carry/Clearance/Improvement Examination :"
-              + pSeatPlansOfTheMap.get(0).getSemester().getName(), pBoldFont);
+          new Paragraph(
+              "Carry/Clearance/Improvement Examination :" + pSeatPlansOfTheMap.get(0).getSemester().getName(),
+              pBoldFont);
       headerParagraph.setAlignment(Element.ALIGN_CENTER);
       headerParagraph.setPaddingTop(-5f);
       headerParagraph.setSpacingBefore(-5f);
@@ -2393,18 +2353,15 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
     }
 
     headerParagraph =
-        new Paragraph("Sitting Arrangement ,"
-            + " Program :"
-            + pSeatPlansOfTheMap.get(0).getStudent().getProgram().getShortName()
-                .replace("B.Sc in", "") + ", Year :"
+        new Paragraph("Sitting Arrangement ," + " Program :"
+            + pSeatPlansOfTheMap.get(0).getStudent().getProgram().getShortName().replace("B.Sc in", "") + ", Year :"
             + pSeatPlansOfTheMap.get(0).getStudent().getCurrentYear() + " Semester:"
             + pSeatPlansOfTheMap.get(0).getStudent().getCurrentAcademicSemester(), pBoldFont);
     headerParagraph.setAlignment(Element.ALIGN_CENTER);
     headerParagraph.setPaddingTop(-5f);
     headerCell.addElement(headerParagraph);
 
-    headerParagraph =
-        new Paragraph("Total number allocated rooms: " + seatPlanMapByRoomNo.size(), pBoldFont);
+    headerParagraph = new Paragraph("Total number allocated rooms: " + seatPlanMapByRoomNo.size(), pBoldFont);
     headerParagraph.setAlignment(Element.ALIGN_CENTER);
     headerParagraph.setPaddingTop(-5f);
     headerParagraph.setSpacingBefore(-5f);
@@ -2450,29 +2407,23 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
     @Override
     public void onStartPage(PdfWriter writer, Document document) {
       PdfContentByte cb = writer.getDirectContent();
-      Paragraph headerParagraph =
-          new Paragraph("Ahsanullah University of Science and Technology", pBoldFont);
+      Paragraph headerParagraph = new Paragraph("Ahsanullah University of Science and Technology", pBoldFont);
 
       Phrase phrase = new Phrase("Ahsanullah University of Science and Technology");
-      ColumnText.showTextAligned(cb, Element.ALIGN_CENTER, headerParagraph,
-          (document.right() - document.left()) / 2 + document.leftMargin(), document.top() + 10, 0);
+      ColumnText.showTextAligned(cb, Element.ALIGN_CENTER, headerParagraph, (document.right() - document.left()) / 2
+          + document.leftMargin(), document.top() + 10, 0);
 
       cb = writer.getDirectContent();
       if(pExamType != ExamType.CLEARANCE_CARRY_IMPROVEMENT) {
-        headerParagraph =
-            new Paragraph("Semester Final Examination: " + pSemester.getName(), pBoldFont);
-        ColumnText.showTextAligned(cb, Element.ALIGN_CENTER, headerParagraph,
-            (document.right() - document.left()) / 2 + document.leftMargin(),
-            document.top() + (-5), 0);
+        headerParagraph = new Paragraph("Semester Final Examination: " + pSemester.getName(), pBoldFont);
+        ColumnText.showTextAligned(cb, Element.ALIGN_CENTER, headerParagraph, (document.right() - document.left()) / 2
+            + document.leftMargin(), document.top() + (-5), 0);
 
       }
       else {
-        headerParagraph =
-            new Paragraph("Carry/Clearance/Improvement Examination: " + pSemester.getName(),
-                pBoldFont);
-        ColumnText.showTextAligned(cb, Element.ALIGN_CENTER, headerParagraph,
-            (document.right() - document.left()) / 2 + document.leftMargin(),
-            document.top() + (-5), 0);
+        headerParagraph = new Paragraph("Carry/Clearance/Improvement Examination: " + pSemester.getName(), pBoldFont);
+        ColumnText.showTextAligned(cb, Element.ALIGN_CENTER, headerParagraph, (document.right() - document.left()) / 2
+            + document.leftMargin(), document.top() + (-5), 0);
 
       }
 
@@ -2480,17 +2431,15 @@ public class SeatPlanReportGeneratorImpl implements SeatPlanReportGenerator {
       headerParagraph =
           new Paragraph("Sitting Arrangement of Program: "
               + student.getProgram().getShortName().replace("B.Sc in ", ""), pBoldFont);
-      ColumnText.showTextAligned(cb, Element.ALIGN_CENTER, headerParagraph,
-          (document.right() - document.left()) / 2 + document.leftMargin(), document.top() + (-15),
-          0);
+      ColumnText.showTextAligned(cb, Element.ALIGN_CENTER, headerParagraph, (document.right() - document.left()) / 2
+          + document.leftMargin(), document.top() + (-15), 0);
 
       cb = writer.getDirectContent();
       headerParagraph =
-          new Paragraph(student.getCurrentYear() + " Year" + " "
-              + student.getCurrentAcademicSemester() + " Semester", pBoldFont);
-      ColumnText.showTextAligned(cb, Element.ALIGN_CENTER, headerParagraph,
-          (document.right() - document.left()) / 2 + document.leftMargin(), document.top() + (-25),
-          0);
+          new Paragraph(student.getCurrentYear() + " Year" + " " + student.getCurrentAcademicSemester() + " Semester",
+              pBoldFont);
+      ColumnText.showTextAligned(cb, Element.ALIGN_CENTER, headerParagraph, (document.right() - document.left()) / 2
+          + document.leftMargin(), document.top() + (-25), 0);
 
       // phrase.add(header);
 

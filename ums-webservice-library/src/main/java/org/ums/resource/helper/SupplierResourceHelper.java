@@ -55,8 +55,8 @@ public class SupplierResourceHelper extends ResourceHelper<Supplier, MutableSupp
     mutableSupplier.commit(false);
 
     URI contextURI =
-        pUriInfo.getBaseUriBuilder().path(SemesterResource.class)
-            .path(SemesterResource.class, "get").build(mutableSupplier.getId());
+        pUriInfo.getBaseUriBuilder().path(SemesterResource.class).path(SemesterResource.class, "get")
+            .build(mutableSupplier.getId());
     Response.ResponseBuilder builder = Response.created(contextURI);
     builder.status(Response.Status.CREATED);
     return builder.build();

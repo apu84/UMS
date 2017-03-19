@@ -13,8 +13,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class BearerAccessTokenDao extends BearerAccessTokenDaoDecorator {
-  String SELECT_ALL =
-      "SELECT TOKEN, USER_ID, LAST_ACCESS_TIME, LAST_MODIFIED FROM BEARER_ACCESS_TOKEN ";
+  String SELECT_ALL = "SELECT TOKEN, USER_ID, LAST_ACCESS_TIME, LAST_MODIFIED FROM BEARER_ACCESS_TOKEN ";
   String INSERT_ALL =
       "INSERT INTO BEARER_ACCESS_TOKEN(TOKEN, USER_ID, LAST_ACCESS_TIME, LAST_MODIFIED) VALUES (?, ? ,SYSDATE, "
           + getLastModifiedSql() + ") ";
@@ -49,8 +48,7 @@ public class BearerAccessTokenDao extends BearerAccessTokenDaoDecorator {
   @Override
   public BearerAccessToken get(String pId) {
     String query = SELECT_ALL + "WHERE TOKEN = ?";
-    return mJdbcTemplate
-        .queryForObject(query, new Object[] {pId}, new BearerAccessTokenRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new BearerAccessTokenRowMapper());
   }
 
   @Override
@@ -61,8 +59,7 @@ public class BearerAccessTokenDao extends BearerAccessTokenDaoDecorator {
   @Override
   public BearerAccessToken getByUser(String userId) {
     String query = SELECT_ALL + "WHERE USER_ID = ?";
-    return mJdbcTemplate.queryForObject(query, new Object[] {userId},
-        new BearerAccessTokenRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[] {userId}, new BearerAccessTokenRowMapper());
   }
 
   class BearerAccessTokenRowMapper implements RowMapper<BearerAccessToken> {

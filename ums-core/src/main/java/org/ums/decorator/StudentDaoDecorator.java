@@ -7,16 +7,15 @@ import org.ums.manager.StudentManager;
 
 import java.util.List;
 
-public class StudentDaoDecorator extends
-    ContentDaoDecorator<Student, MutableStudent, String, StudentManager> implements StudentManager {
+public class StudentDaoDecorator extends ContentDaoDecorator<Student, MutableStudent, String, StudentManager> implements
+    StudentManager {
   @Override
   public List<Student> getStudentListFromStudentsString(String pStudents) {
     return getManager().getStudentListFromStudentsString(pStudents);
   }
 
   @Override
-  public List<Student> getStudentByCourseIdAndSemesterIdForSeatPlanForCCI(String pCourseId,
-      int pSemesterId) {
+  public List<Student> getStudentByCourseIdAndSemesterIdForSeatPlanForCCI(String pCourseId, int pSemesterId) {
     return getManager().getStudentByCourseIdAndSemesterIdForSeatPlanForCCI(pCourseId, pSemesterId);
   }
 

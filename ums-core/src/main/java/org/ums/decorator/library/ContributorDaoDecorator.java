@@ -10,7 +10,6 @@ import org.ums.manager.library.ContributorManager;
  * Created by Ifti on 17-Feb-17.
  */
 public class ContributorDaoDecorator extends
-    ContentDaoDecorator<Contributor, MutableContributor, Integer, ContributorManager> implements
-    ContributorManager {
+    ContentDaoDecorator<Contributor, MutableContributor, Integer, ContributorManager> implements ContributorManager {
 
 }

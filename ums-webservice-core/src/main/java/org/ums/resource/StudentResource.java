@@ -45,14 +45,12 @@ public class StudentResource extends MutableStudentResource {
 
   @GET
   @Path(PATH_PARAM_OBJECT_ID)
-  public Response get(final @Context Request pRequest,
-      final @PathParam("object-id") String pObjectId) throws Exception {
+  public Response get(final @Context Request pRequest, final @PathParam("object-id") String pObjectId) throws Exception {
     return mResourceHelper.get(pObjectId, pRequest, mUriInfo);
   }
 
   @GET
   public Response get(final @Context Request pRequest) throws Exception {
-    return mResourceHelper.get(SecurityUtils.getSubject().getPrincipal().toString(), pRequest,
-        mUriInfo);
+    return mResourceHelper.get(SecurityUtils.getSubject().getPrincipal().toString(), pRequest, mUriInfo);
   }
 }

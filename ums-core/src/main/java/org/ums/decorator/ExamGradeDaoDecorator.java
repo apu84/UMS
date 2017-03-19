@@ -12,34 +12,30 @@ import org.ums.manager.ExamGradeManager;
 import java.util.List;
 import java.util.Map;
 
-public class ExamGradeDaoDecorator extends
-    ContentDaoDecorator<ExamGrade, MutableExamGrade, Object, ExamGradeManager> implements
-    ExamGradeManager {
+public class ExamGradeDaoDecorator extends ContentDaoDecorator<ExamGrade, MutableExamGrade, Object, ExamGradeManager>
+    implements ExamGradeManager {
 
   @Override
-  public List<StudentGradeDto> getAllGrades(int semesterId, String courseId, ExamType examType,
-      CourseType courseType) {
+  public List<StudentGradeDto> getAllGrades(int semesterId, String courseId, ExamType examType, CourseType courseType) {
     return getManager().getAllGrades(semesterId, courseId, examType, courseType);
   }
 
   @Override
-  public List<GradeChartDataDto> getChartData(int semesterId, String courseId, ExamType examType,
-      CourseType courseType) {
+  public List<GradeChartDataDto> getChartData(int semesterId, String courseId, ExamType examType, CourseType courseType) {
     return getManager().getChartData(semesterId, courseId, examType, courseType);
   }
 
   @Override
-  public MarksSubmissionStatusDto getMarksSubmissionStatus(int semesterId, String courseId,
-      ExamType examType) {
+  public MarksSubmissionStatusDto getMarksSubmissionStatus(int semesterId, String courseId, ExamType examType) {
     return getManager().getMarksSubmissionStatus(semesterId, courseId, examType);
   }
 
   @Override
-  public List<MarksSubmissionStatusDto> getMarksSubmissionStatus(Integer pSemesterId,
-      Integer pExamType, Integer pProgramId, Integer year, Integer semester, String teacherId,
-      String deptId, String userRole, Integer status) {
-    return getManager().getMarksSubmissionStatus(pSemesterId, pExamType, pProgramId, year,
-        semester, teacherId, deptId, userRole, status);
+  public List<MarksSubmissionStatusDto> getMarksSubmissionStatus(Integer pSemesterId, Integer pExamType,
+      Integer pProgramId, Integer year, Integer semester, String teacherId, String deptId, String userRole,
+      Integer status) {
+    return getManager().getMarksSubmissionStatus(pSemesterId, pExamType, pProgramId, year, semester, teacherId, deptId,
+        userRole, status);
   }
 
   @Override
@@ -54,26 +50,26 @@ public class ExamGradeDaoDecorator extends
   }
 
   @Override
-  public int insertMarksSubmissionStatusLog(String userId, String userRole,
-      MarksSubmissionStatus actualStatus, CourseMarksSubmissionStatus status) {
+  public int insertMarksSubmissionStatusLog(String userId, String userRole, MarksSubmissionStatus actualStatus,
+      CourseMarksSubmissionStatus status) {
     return getManager().insertMarksSubmissionStatusLog(userId, userRole, actualStatus, status);
   }
 
   @Override
-  public boolean updateGradeStatus_Save(MarksSubmissionStatus actualStatus,
-      List<StudentGradeDto> recheckList, List<StudentGradeDto> approveList) {
+  public boolean updateGradeStatus_Save(MarksSubmissionStatus actualStatus, List<StudentGradeDto> recheckList,
+      List<StudentGradeDto> approveList) {
     return getManager().updateGradeStatus_Save(actualStatus, recheckList, approveList);
   }
 
   @Override
-  public boolean updateGradeStatus_Recheck(MarksSubmissionStatus actualStatus,
-      List<StudentGradeDto> recheckList, List<StudentGradeDto> approveList) {
+  public boolean updateGradeStatus_Recheck(MarksSubmissionStatus actualStatus, List<StudentGradeDto> recheckList,
+      List<StudentGradeDto> approveList) {
     return getManager().updateGradeStatus_Recheck(actualStatus, recheckList, approveList);
   }
 
   @Override
-  public boolean updateGradeStatus_Approve(MarksSubmissionStatus actualStatus,
-      List<StudentGradeDto> recheckList, List<StudentGradeDto> approveList) {
+  public boolean updateGradeStatus_Approve(MarksSubmissionStatus actualStatus, List<StudentGradeDto> recheckList,
+      List<StudentGradeDto> approveList) {
     return getManager().updateGradeStatus_Approve(actualStatus, recheckList, approveList);
   }
 
@@ -118,23 +114,22 @@ public class ExamGradeDaoDecorator extends
   }
 
   @Override
-  public List<MarksSubmissionStatusDto> getGradeSubmissionDeadLine(Integer pSemesterId,
-      ExamType pExamType, String pExamDate, String pOfferedDeptId, CourseType pCourseType) {
-    return getManager().getGradeSubmissionDeadLine(pSemesterId, pExamType, pExamDate,
-        pOfferedDeptId, pCourseType);
+  public List<MarksSubmissionStatusDto> getGradeSubmissionDeadLine(Integer pSemesterId, ExamType pExamType,
+      String pExamDate, String pOfferedDeptId, CourseType pCourseType) {
+    return getManager().getGradeSubmissionDeadLine(pSemesterId, pExamType, pExamDate, pOfferedDeptId, pCourseType);
   }
 
   public int getTotalStudentCount(MarksSubmissionStatus actualStatus) {
     return getManager().getTotalStudentCount(actualStatus);
   }
 
-  public List<MarksSubmissionStatusLogDto> getMarksSubmissionLogs(Integer pSemesterId,
-      String pCourseId, Integer pExamType) {
+  public List<MarksSubmissionStatusLogDto> getMarksSubmissionLogs(Integer pSemesterId, String pCourseId,
+      Integer pExamType) {
     return getManager().getMarksSubmissionLogs(pSemesterId, pCourseId, pExamType);
   }
 
-  public List<MarksLogDto> getMarksLogs(Integer pSemesterId, String pCourseId, ExamType pExamType,
-      String pStudentId, CourseType pCourseType) {
+  public List<MarksLogDto> getMarksLogs(Integer pSemesterId, String pCourseId, ExamType pExamType, String pStudentId,
+      CourseType pCourseType) {
     return getManager().getMarksLogs(pSemesterId, pCourseId, pExamType, pStudentId, pCourseType);
   }
 
@@ -143,10 +138,9 @@ public class ExamGradeDaoDecorator extends
   }
 
   @Override
-  public List<MarksSubmissionStatDto> getMarksSubmissionStat(Integer pProgramType,
-      Integer pSemesterId, String pDeptId, Integer pExamType, String pStatus) throws Exception {
-    return getManager().getMarksSubmissionStat(pProgramType, pSemesterId, pDeptId, pExamType,
-        pStatus);
+  public List<MarksSubmissionStatDto> getMarksSubmissionStat(Integer pProgramType, Integer pSemesterId, String pDeptId,
+      Integer pExamType, String pStatus) throws Exception {
+    return getManager().getMarksSubmissionStat(pProgramType, pSemesterId, pDeptId, pExamType, pStatus);
   }
 
 }

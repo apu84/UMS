@@ -40,16 +40,14 @@ public class SemesterSyllabusMapResourceHelper extends
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) {
-    MutableSemesterSyllabusMapDto mutableSemesterSyllabusMap =
-        new org.ums.domain.model.dto.SemesterSyllabusMap();
+    MutableSemesterSyllabusMapDto mutableSemesterSyllabusMap = new org.ums.domain.model.dto.SemesterSyllabusMap();
     LocalCache localCache = new LocalCache();
     mMapBuilder.build(mutableSemesterSyllabusMap, pJsonObject, localCache);
 
     mManager.copySyllabus(mutableSemesterSyllabusMap);
 
     URI contextURI =
-        pUriInfo.getBaseUriBuilder().path(SemesterResource.class)
-            .path(SemesterResource.class, "get")
+        pUriInfo.getBaseUriBuilder().path(SemesterResource.class).path(SemesterResource.class, "get")
             .build(mutableSemesterSyllabusMap.getAcademicSemester().getId());
     Response.ResponseBuilder builder = Response.created(contextURI);
     builder.status(Response.Status.CREATED);

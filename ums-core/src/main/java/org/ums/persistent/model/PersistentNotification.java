@@ -16,8 +16,7 @@ public class PersistentNotification implements MutableNotification {
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sNotificationManager =
-        applicationContext.getBean("notificationManager", NotificationManager.class);
+    sNotificationManager = applicationContext.getBean("notificationManager", NotificationManager.class);
   }
   private Long mId;
   private String mNotificationType;
@@ -143,8 +142,8 @@ public class PersistentNotification implements MutableNotification {
 
   @Override
   public String toString() {
-    return "Notification [id=" + mId + ", notificationType=" + mNotificationType + ", payload="
-        + mPayload + "," + " producedOn=" + mDateFormat.format(mProducedOn) + ", consumedOn="
-        + mDateFormat.format(mConsumedOn) + ", lastModified=" + mLastModified + "]";
+    return "Notification [id=" + mId + ", notificationType=" + mNotificationType + ", payload=" + mPayload + ","
+        + " producedOn=" + mDateFormat.format(mProducedOn) + ", consumedOn=" + mDateFormat.format(mConsumedOn)
+        + ", lastModified=" + mLastModified + "]";
   }
 }

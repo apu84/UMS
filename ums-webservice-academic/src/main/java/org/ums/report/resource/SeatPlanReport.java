@@ -23,8 +23,8 @@ public class SeatPlanReport extends Resource {
   @GET
   @Path("/semesterId/{semesterId}/groupNo/{groupNo}/type/{type}")
   public StreamingOutput getSeatPlan(final @Context Request pRequest,
-      final @PathParam("semesterId") String pSemesterId,
-      final @PathParam("groupNo") String groupNo, final @PathParam("type") String type) {
+      final @PathParam("semesterId") String pSemesterId, final @PathParam("groupNo") String groupNo,
+      final @PathParam("type") String type) {
 
     return null;
   }

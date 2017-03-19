@@ -11,8 +11,7 @@ import java.io.Serializable;
 /**
  * Created by Ifti on 13-Feb-16.
  */
-public interface ClassRoom extends Serializable, LastModifier, EditType<MutableClassRoom>,
-    Identifier<Long> {
+public interface ClassRoom extends Serializable, LastModifier, EditType<MutableClassRoom>, Identifier<Long> {
   String getRoomNo();
 
   String getDescription();

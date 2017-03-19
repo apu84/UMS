@@ -93,10 +93,10 @@ public class ExaminerResourceHelper
               mExaminerManager.getAssignedTeachers(programId, mutableExaminer.getSemesterId(),
                   mutableExaminer.getCourseId(), user.getDepartment().getId());
           if(examiners.size() > 0
-              && (!StringUtils.isEmpty(examiners.get(0).getPreparerId()) || !StringUtils
-                  .isEmpty(examiners.get(0).getScrutinizerId()))) {
-            throw new ValidationException(mMessageResource.getMessage("examiner.already.assigned",
-                mutableExaminer.getCourse().getNo()));
+              && (!StringUtils.isEmpty(examiners.get(0).getPreparerId()) || !StringUtils.isEmpty(examiners.get(0)
+                  .getScrutinizerId()))) {
+            throw new ValidationException(mMessageResource.getMessage("examiner.already.assigned", mutableExaminer
+                .getCourse().getNo()));
           }
           mutableExaminer.commit(false);
           break;

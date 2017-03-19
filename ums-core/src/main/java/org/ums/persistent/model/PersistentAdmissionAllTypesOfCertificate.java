@@ -6,16 +6,14 @@ import org.ums.domain.model.immutable.AdmissionAllTypesOfCertificate;
 import org.ums.domain.model.mutable.MutableAdmissionAllTypesOfCertificate;
 import org.ums.manager.AdmissionAllTypesOfCertificateManager;
 
-public class PersistentAdmissionAllTypesOfCertificate implements
-    MutableAdmissionAllTypesOfCertificate {
+public class PersistentAdmissionAllTypesOfCertificate implements MutableAdmissionAllTypesOfCertificate {
 
   private static AdmissionAllTypesOfCertificateManager sAdmissionAllTypesOfCertificateManager;
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sAdmissionAllTypesOfCertificateManager =
-        applicationContext.getBean("admissionStudentCertificateManager",
-            AdmissionAllTypesOfCertificateManager.class);
+        applicationContext.getBean("admissionStudentCertificateManager", AdmissionAllTypesOfCertificateManager.class);
   }
 
   private int mCertificateId;
@@ -25,8 +23,7 @@ public class PersistentAdmissionAllTypesOfCertificate implements
 
   public PersistentAdmissionAllTypesOfCertificate() {}
 
-  public PersistentAdmissionAllTypesOfCertificate(
-      AdmissionAllTypesOfCertificate pAdmissionAllTypesOfCertificate) {
+  public PersistentAdmissionAllTypesOfCertificate(AdmissionAllTypesOfCertificate pAdmissionAllTypesOfCertificate) {
     mCertificateId = pAdmissionAllTypesOfCertificate.getCertificateId();
     mCertificateTitle = pAdmissionAllTypesOfCertificate.getCertificateTitle();
     mCertificateType = pAdmissionAllTypesOfCertificate.getCertificateType();

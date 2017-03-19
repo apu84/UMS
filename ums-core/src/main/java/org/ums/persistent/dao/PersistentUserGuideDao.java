@@ -51,10 +51,8 @@ public class PersistentUserGuideDao extends UserGuideDaoDecorator {
           + "                    (Select role_id From ADDITIONAL_ROLE_PERMISSIONS Where User_Id=? and Valid_From>=sysdate and Valid_To<=sysdate) "
           + "                    Union "
           + "                    SELECT permissions str from ADDITIONAL_ROLE_PERMISSIONS where  User_Id=? and Valid_From>=sysdate and Valid_To<=sysdate "
-          + "                  ) "
-          + "                SELECT trim(regexp_substr(str, '[^,]+', 1, LEVEL)) str "
-          + "                FROM DATA "
-          + "                CONNECT BY instr(str, ',', 1, LEVEL - 1) > 0 "
+          + "                  ) " + "                SELECT trim(regexp_substr(str, '[^,]+', 1, LEVEL)) str "
+          + "                FROM DATA " + "                CONNECT BY instr(str, ',', 1, LEVEL - 1) > 0 "
           + "                ) where str  like '%:*%' " + "    ) " + ") ";
 
   private JdbcTemplate mJdbcTemplate;
@@ -66,15 +64,13 @@ public class PersistentUserGuideDao extends UserGuideDaoDecorator {
   @Override
   public List<UserGuide> getUserGuideList(Integer pRoleId, String pUserId) {
     String query = SELECT_ALL;
-    return mJdbcTemplate.query(query, new Object[] {pRoleId, pRoleId, pUserId, pUserId},
-        new UserGuideRowMapper());
+    return mJdbcTemplate.query(query, new Object[] {pRoleId, pRoleId, pUserId, pUserId}, new UserGuideRowMapper());
   }
 
   @Override
   public UserGuide getUserGuide(Integer pNavigationId) {
     String query = "Select * From User_Guide Where Navigation_Id=?";
-    return mJdbcTemplate.queryForObject(query, new Object[] {pNavigationId},
-        new UserGuideRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[] {pNavigationId}, new UserGuideRowMapper());
   }
 
   private class UserGuideRowMapper implements RowMapper<UserGuide> {

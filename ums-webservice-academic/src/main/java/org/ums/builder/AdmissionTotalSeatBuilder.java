@@ -18,15 +18,13 @@ import javax.ws.rs.core.UriInfo;
  * Created by Monjur-E-Morshed on 03-Jan-17.
  */
 @Component
-public class AdmissionTotalSeatBuilder implements
-    Builder<AdmissionTotalSeat, MutableAdmissionTotalSeat> {
+public class AdmissionTotalSeatBuilder implements Builder<AdmissionTotalSeat, MutableAdmissionTotalSeat> {
 
   @Autowired
   ProgramManager mProgramManager;
 
   @Override
-  public void build(JsonObjectBuilder pBuilder, AdmissionTotalSeat pReadOnly, UriInfo pUriInfo,
-      LocalCache pLocalCache) {
+  public void build(JsonObjectBuilder pBuilder, AdmissionTotalSeat pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("semesterId", pReadOnly.getSemesterId());
     pBuilder.add("programId", pReadOnly.getProgramId());
@@ -36,15 +34,13 @@ public class AdmissionTotalSeatBuilder implements
   }
 
   @Override
-  public void build(MutableAdmissionTotalSeat pMutable, JsonObject pJsonObject,
-      LocalCache pLocalCache) {
+  public void build(MutableAdmissionTotalSeat pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
     pMutable.setSemesterId(pJsonObject.getInt("semesterID"));
     pMutable.setProgramId(pJsonObject.getInt("programId"));
     pMutable.setTotalSeat(pJsonObject.getInt("totalSeat"));
   }
 
-  public void build(MutableAdmissionTotalSeat pMutable, JsonObject pJsonObject,
-      LocalCache pLocalCache, String pType) {
+  public void build(MutableAdmissionTotalSeat pMutable, JsonObject pJsonObject, LocalCache pLocalCache, String pType) {
     if(pType.equals("update")) {
       pMutable.setId(pJsonObject.getInt("id"));
     }

@@ -9,8 +9,7 @@ import org.ums.domain.model.immutable.UgAdmissionLog;
 /**
  * Created by Monjur-E-Morshed on 01-Jan-17.
  */
-public interface MutableUgAdmissionLog extends UgAdmissionLog, Mutable, MutableLastModifier,
-    MutableIdentifier<Integer> {
+public interface MutableUgAdmissionLog extends UgAdmissionLog, Mutable, MutableLastModifier, MutableIdentifier<Integer> {
 
   void setReceiptId(final String pReceiptId);
 

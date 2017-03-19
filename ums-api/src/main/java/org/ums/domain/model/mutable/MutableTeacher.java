@@ -5,8 +5,7 @@ import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.immutable.Department;
 import org.ums.domain.model.immutable.Teacher;
 
-public interface MutableTeacher extends Teacher, Mutable, MutableLastModifier,
-    MutableIdentifier<String> {
+public interface MutableTeacher extends Teacher, Mutable, MutableLastModifier, MutableIdentifier<String> {
   void setName(final String pName);
 
   void setDesignationId(final String pDesignationId);

@@ -7,14 +7,12 @@ import org.ums.domain.model.immutable.Teacher;
 import org.ums.domain.model.mutable.MutableCourseTeacher;
 import org.ums.manager.AssignedTeacherManager;
 
-public class PersistentCourseTeacher extends AbstractAssignedTeacher implements
-    MutableCourseTeacher {
+public class PersistentCourseTeacher extends AbstractAssignedTeacher implements MutableCourseTeacher {
   private static AssignedTeacherManager<CourseTeacher, MutableCourseTeacher, Integer> sCourseTeacherManager;
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sCourseTeacherManager =
-        applicationContext.getBean("courseTeacherManager", AssignedTeacherManager.class);
+    sCourseTeacherManager = applicationContext.getBean("courseTeacherManager", AssignedTeacherManager.class);
   }
 
   private String mSection;

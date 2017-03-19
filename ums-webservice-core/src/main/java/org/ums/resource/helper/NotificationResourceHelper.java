@@ -20,8 +20,7 @@ import java.util.Date;
 import java.util.List;
 
 @Component
-public class NotificationResourceHelper extends
-    ResourceHelper<Notification, MutableNotification, Long> {
+public class NotificationResourceHelper extends ResourceHelper<Notification, MutableNotification, Long> {
   @Autowired
   NotificationManager mNotificationManager;
 
@@ -49,8 +48,7 @@ public class NotificationResourceHelper extends
   }
 
   public JsonObject getNotifications(String pConsumerId, String pNotificationType, UriInfo pUriInfo) {
-    List<Notification> notifications =
-        mNotificationManager.getNotifications(pConsumerId, pNotificationType);
+    List<Notification> notifications = mNotificationManager.getNotifications(pConsumerId, pNotificationType);
 
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
@@ -63,10 +61,8 @@ public class NotificationResourceHelper extends
     return object.build();
   }
 
-  public JsonObject getNotifications(String pConsumerId, Integer pNumOfLatestNotification,
-      UriInfo pUriInfo) {
-    List<Notification> notifications =
-        mNotificationManager.getNotifications(pConsumerId, pNumOfLatestNotification);
+  public JsonObject getNotifications(String pConsumerId, Integer pNumOfLatestNotification, UriInfo pUriInfo) {
+    List<Notification> notifications = mNotificationManager.getNotifications(pConsumerId, pNumOfLatestNotification);
 
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
@@ -83,8 +79,7 @@ public class NotificationResourceHelper extends
     List<MutableNotification> notifications = new ArrayList<>();
     for(int i = 0; i < pJsonArray.size(); i++) {
       JsonObject notificationObject = pJsonArray.getJsonObject(i);
-      Notification notification =
-          mNotificationManager.get(Long.parseLong(notificationObject.getString("id")));
+      Notification notification = mNotificationManager.get(Long.parseLong(notificationObject.getString("id")));
       MutableNotification mutableNotification = notification.edit();
       mutableNotification.setConsumedOn(new Date());
       notifications.add(mutableNotification);

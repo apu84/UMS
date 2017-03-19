@@ -33,8 +33,7 @@ public class PublisherBuilder implements Builder<Publisher, MutablePublisher> {
   }
 
   @Override
-  public void build(final MutablePublisher pMutable, final JsonObject pJsonObject,
-      final LocalCache pLocalCache) {
+  public void build(final MutablePublisher pMutable, final JsonObject pJsonObject, final LocalCache pLocalCache) {
 
     pMutable.setId(pJsonObject.getInt("id"));
     pMutable.setName(pJsonObject.getString("name"));

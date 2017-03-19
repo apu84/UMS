@@ -67,26 +67,23 @@ public abstract class BinaryContentDecorator implements BinaryContentManager<byt
   }
 
   @Override
-  public Object list(String pPath, Map<String, String> pAdditionalParams, Domain pDomain,
-      String... pRootPath) {
+  public Object list(String pPath, Map<String, String> pAdditionalParams, Domain pDomain, String... pRootPath) {
     return getManager().list(pPath, pAdditionalParams, pDomain, pRootPath);
   }
 
   @Override
-  public Map<String, Object> rename(String pOldPath, String pNewPath, Domain pDomain,
-      String... pRootPath) {
+  public Map<String, Object> rename(String pOldPath, String pNewPath, Domain pDomain, String... pRootPath) {
     return getManager().rename(pOldPath, pNewPath, pDomain, pRootPath);
   }
 
   @Override
-  public Map<String, Object> move(List<String> pItems, String pNewPath, Domain pDomain,
-      String... pRootPath) {
+  public Map<String, Object> move(List<String> pItems, String pNewPath, Domain pDomain, String... pRootPath) {
     return getManager().move(pItems, pNewPath, pDomain, pRootPath);
   }
 
   @Override
-  public Map<String, Object> copy(List<String> pItems, String pNewPath, String pNewFileName,
-      Domain pDomain, String... pRootPath) {
+  public Map<String, Object> copy(List<String> pItems, String pNewPath, String pNewFileName, Domain pDomain,
+      String... pRootPath) {
     return getManager().copy(pItems, pNewPath, pNewFileName, pDomain, pRootPath);
   }
 
@@ -101,46 +98,43 @@ public abstract class BinaryContentDecorator implements BinaryContentManager<byt
   }
 
   @Override
-  public Map<String, Object> createFolder(String pNewPath, Map<String, String> pAdditionalParams,
-      Domain pDomain, String... pRootPath) {
+  public Map<String, Object> createFolder(String pNewPath, Map<String, String> pAdditionalParams, Domain pDomain,
+      String... pRootPath) {
     return getManager().createFolder(pNewPath, pAdditionalParams, pDomain, pRootPath);
   }
 
   @Override
-  public Map<String, Object> compress(List<String> pItems, String pNewPath, String pNewFileName,
-      Domain pDomain, String... pRootPath) {
+  public Map<String, Object> compress(List<String> pItems, String pNewPath, String pNewFileName, Domain pDomain,
+      String... pRootPath) {
     return getManager().compress(pItems, pNewPath, pNewFileName, pDomain, pRootPath);
   }
 
   @Override
-  public Map<String, Object> extract(String pZippedItem, String pDestination, Domain pDomain,
-      String... pRootPath) {
+  public Map<String, Object> extract(String pZippedItem, String pDestination, Domain pDomain, String... pRootPath) {
     return getManager().extract(pZippedItem, pDestination, pDomain, pRootPath);
   }
 
   @Override
-  public Map<String, Object> upload(Map<String, InputStream> pFileContent, String pPath,
-      Domain pDomain, String... pRootPath) {
+  public Map<String, Object> upload(Map<String, InputStream> pFileContent, String pPath, Domain pDomain,
+      String... pRootPath) {
     return getManager().upload(pFileContent, pPath, pDomain, pRootPath);
   }
 
   @Override
-  public Map<String, Object> download(String pPath, String pToken, Domain pDomain,
-      String... pRootPath) {
+  public Map<String, Object> download(String pPath, String pToken, Domain pDomain, String... pRootPath) {
     return getManager().download(pPath, pToken, pDomain, pRootPath);
   }
 
   @Override
-  public Map<String, Object> downloadAsZip(List<String> pItems, String pNewFileName, String pToken,
-      Domain pDomain, String... pRootPath) {
+  public Map<String, Object> downloadAsZip(List<String> pItems, String pNewFileName, String pToken, Domain pDomain,
+      String... pRootPath) {
     return getManager().downloadAsZip(pItems, pNewFileName, pToken, pDomain, pRootPath);
   }
 
   @Override
-  public Map<String, Object> createAssignmentFolder(String pNewPath, Date pStartDate,
-      Date pEndDate, Map<String, String> pAdditionalParams, Domain pDomain, String... pRootPath) {
-    return getManager().createAssignmentFolder(pNewPath, pStartDate, pEndDate, pAdditionalParams,
-        pDomain, pRootPath);
+  public Map<String, Object> createAssignmentFolder(String pNewPath, Date pStartDate, Date pEndDate,
+      Map<String, String> pAdditionalParams, Domain pDomain, String... pRootPath) {
+    return getManager().createAssignmentFolder(pNewPath, pStartDate, pEndDate, pAdditionalParams, pDomain, pRootPath);
   }
 
   protected Map<String, Object> success() {
@@ -157,11 +151,10 @@ public abstract class BinaryContentDecorator implements BinaryContentManager<byt
     return error;
   }
 
-  protected void addUserDefinedProperty(final String pPropertyName, final String pPropertyValue,
-      final Path pTargetPath) throws IOException {
+  protected void addUserDefinedProperty(final String pPropertyName, final String pPropertyValue, final Path pTargetPath)
+      throws IOException {
     if(isUserDefinedAttributeSupported(pTargetPath)) {
-      UserDefinedFileAttributeView view =
-          Files.getFileAttributeView(pTargetPath, UserDefinedFileAttributeView.class);
+      UserDefinedFileAttributeView view = Files.getFileAttributeView(pTargetPath, UserDefinedFileAttributeView.class);
 
       view.write(pPropertyName, Charset.defaultCharset().encode(pPropertyValue));
     }
@@ -170,8 +163,7 @@ public abstract class BinaryContentDecorator implements BinaryContentManager<byt
   protected String getUserDefinedProperty(final String pPropertyName, final Path pTargetPath) {
     try {
       if(isUserDefinedAttributeSupported(pTargetPath)) {
-        UserDefinedFileAttributeView view =
-            Files.getFileAttributeView(pTargetPath, UserDefinedFileAttributeView.class);
+        UserDefinedFileAttributeView view = Files.getFileAttributeView(pTargetPath, UserDefinedFileAttributeView.class);
 
         int size = view.size(pPropertyName);
         ByteBuffer buf = ByteBuffer.allocateDirect(size);
@@ -185,12 +177,11 @@ public abstract class BinaryContentDecorator implements BinaryContentManager<byt
     return null;
   }
 
-  protected String getUserDefinedProperty(final String pPropertyName, final Path pTargetPath,
-      final Path pParentPath) {
+  protected String getUserDefinedProperty(final String pPropertyName, final Path pTargetPath, final Path pParentPath) {
     try {
       String propertyValue = getUserDefinedProperty(pPropertyName, pTargetPath);
-      return propertyValue == null ? (Files.isSameFile(pParentPath, pTargetPath) ? null
-          : getUserDefinedProperty(pPropertyName, pTargetPath.getParent())) : propertyValue;
+      return propertyValue == null ? (Files.isSameFile(pParentPath, pTargetPath) ? null : getUserDefinedProperty(
+          pPropertyName, pTargetPath.getParent())) : propertyValue;
     } catch(Exception e) {
       mLogger.error("Can not find user defined property named " + pPropertyName, e);
     }
@@ -201,8 +192,7 @@ public abstract class BinaryContentDecorator implements BinaryContentManager<byt
     try {
       FileStore store = Files.getFileStore(pPath);
       if(!store.supportsFileAttributeView(UserDefinedFileAttributeView.class)) {
-        throw new Exception(String.format("UserDefinedFileAttributeView not supported on %s\n",
-            store));
+        throw new Exception(String.format("UserDefinedFileAttributeView not supported on %s\n", store));
       }
     } catch(Exception e) {
       mLogger.error("UserDefinedFileAttributeView not supported", e);

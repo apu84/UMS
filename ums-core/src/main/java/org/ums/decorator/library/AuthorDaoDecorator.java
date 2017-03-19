@@ -11,7 +11,7 @@ import org.ums.manager.library.AuthorManager;
 /**
  * Created by Ifti on 30-Jan-17.
  */
-public class AuthorDaoDecorator extends
-    ContentDaoDecorator<Author, MutableAuthor, Integer, AuthorManager> implements AuthorManager {
+public class AuthorDaoDecorator extends ContentDaoDecorator<Author, MutableAuthor, Integer, AuthorManager> implements
+    AuthorManager {
 
 }

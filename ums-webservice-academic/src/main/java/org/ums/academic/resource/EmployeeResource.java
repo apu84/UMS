@@ -46,15 +46,13 @@ public class EmployeeResource extends MutableEmployeeResource {
 
   @GET
   @Path(PATH_PARAM_OBJECT_ID)
-  public Response get(final @Context Request pRequest,
-      final @PathParam("object-id") String pObjectId) throws Exception {
+  public Response get(final @Context Request pRequest, final @PathParam("object-id") String pObjectId) throws Exception {
     return mEmployeeResourceHelper.get(pObjectId, pRequest, mUriInfo);
   }
 
   @GET
   @Path("/search")
-  public JsonObject searchUser(@QueryParam("term") String pTerm, @QueryParam("page") int pPage)
-      throws Exception {
+  public JsonObject searchUser(@QueryParam("term") String pTerm, @QueryParam("page") int pPage) throws Exception {
     return mEmployeeResourceHelper.searchUserByName(pTerm, pPage, mUriInfo);
   }
 }

@@ -29,8 +29,7 @@ public class PersistentSemesterWithdrawalLog implements MutableSemesterWithdrawa
         applicationContext.getBean("semesterWithdrawalManager", SemesterWithDrawalManager.class);
     sEmployeeManager = applicationContext.getBean("employeeManager", EmployeeManager.class);
     sSemesterWithdrawalLogManager =
-        applicationContext.getBean("semesterWithdrawalLogManager",
-            SemesterWithdrawalLogManager.class);
+        applicationContext.getBean("semesterWithdrawalLogManager", SemesterWithdrawalLogManager.class);
   }
 
   private Long mId;
@@ -46,8 +45,7 @@ public class PersistentSemesterWithdrawalLog implements MutableSemesterWithdrawa
 
   }
 
-  public PersistentSemesterWithdrawalLog(
-      final PersistentSemesterWithdrawalLog pPersistentSemesterWithdrawalLog) {
+  public PersistentSemesterWithdrawalLog(final PersistentSemesterWithdrawalLog pPersistentSemesterWithdrawalLog) {
     mId = pPersistentSemesterWithdrawalLog.getId();
 
     mSemesterWithdrawal = pPersistentSemesterWithdrawalLog.getSemesterWithdrawal();

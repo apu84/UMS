@@ -10,8 +10,7 @@ import java.io.Serializable;
 /**
  * Created by Munna on 4/20/2016.
  */
-public interface SeatPlanGroup extends Serializable, LastModifier, EditType<MutableSeatPlanGroup>,
-    Identifier<Integer> {
+public interface SeatPlanGroup extends Serializable, LastModifier, EditType<MutableSeatPlanGroup>, Identifier<Integer> {
   Semester getSemester();
 
   Program getProgram();

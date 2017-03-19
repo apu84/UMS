@@ -6,9 +6,8 @@ import org.ums.manager.CacheManager;
 import org.ums.manager.ProgramTypeManager;
 import org.ums.util.CacheUtil;
 
-public class ProgramTypeCache extends
-    ContentCache<ProgramType, MutableProgramType, Integer, ProgramTypeManager> implements
-    ProgramTypeManager {
+public class ProgramTypeCache extends ContentCache<ProgramType, MutableProgramType, Integer, ProgramTypeManager>
+    implements ProgramTypeManager {
   private CacheManager<ProgramType, Integer> mCacheManager;
 
   public ProgramTypeCache(final CacheManager<ProgramType, Integer> pCacheManager) {

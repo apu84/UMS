@@ -19,9 +19,8 @@ public class PersistentEnrollmentFromToDao extends EnrollmentFromToDaoDecorator 
   private String INSERT_ALL =
       "INSERT INTO ENROLLMENT_FROM_TO(ID, PROGRAM_ID, FROM_YEAR, FROM_SEMESTER, TO_YEAR, TO_SEMESTER, LAST_MODIFIED) VALUES"
           + "(?, ?, ?, ?, ?, ?, " + getLastModifiedSql() + ")";
-  private String UPDATE_ALL = "UPDATE ENROLLMENT_FROM_TO SET " + "PROGRAM_ID = ?,"
-      + "FROM_YEAR = ?," + "FROM_SEMESTER = ?," + "TO_YEAR = ?," + "TO_SEMESTER = ?,"
-      + "LAST_MODIFIED = " + getLastModifiedSql() + " ";
+  private String UPDATE_ALL = "UPDATE ENROLLMENT_FROM_TO SET " + "PROGRAM_ID = ?," + "FROM_YEAR = ?,"
+      + "FROM_SEMESTER = ?," + "TO_YEAR = ?," + "TO_SEMESTER = ?," + "LAST_MODIFIED = " + getLastModifiedSql() + " ";
   private String DELETE_ALL = "DELETE FROM ENROLLMENT_FROM_TO ";
   private JdbcTemplate mJdbcTemplate;
   private IdGenerator mIdGenerator;
@@ -49,8 +48,7 @@ public class PersistentEnrollmentFromToDao extends EnrollmentFromToDaoDecorator 
   public int update(MutableEnrollmentFromTo pMutable) {
     String query = UPDATE_ALL + "WHERE ID = ?";
     return mJdbcTemplate.update(query, pMutable.getProgram().getId(), pMutable.getFromYear(),
-        pMutable.getFromSemester(), pMutable.getToYear(), pMutable.getToSemester(),
-        pMutable.getId());
+        pMutable.getFromSemester(), pMutable.getToYear(), pMutable.getToSemester(), pMutable.getId());
   }
 
   @Override

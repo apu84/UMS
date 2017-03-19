@@ -20,42 +20,35 @@ public class ExamRoutineResource extends MutableExamRoutineResource {
   @GET
   @Path("/semester/{semester-id}/examtype/{exam-type}")
   public JsonObject getExamRoutine(final @Context Request pRequest,
-      final @PathParam("semester-id") Integer pSemesterId,
-      final @PathParam("exam-type") Integer pExamTypeId) {
+      final @PathParam("semester-id") Integer pSemesterId, final @PathParam("exam-type") Integer pExamTypeId) {
     return mResourceHelper.getExamRoutine(pSemesterId, pExamTypeId);
   }
 
   @GET
   @Path("deptWise/semester/{semester-id}/examtype/{exam-type}")
   public JsonObject getExamRoutineForEmployee(final @Context Request pRequest,
-      final @PathParam("semester-id") Integer pSemesterId,
-      final @PathParam("exam-type") Integer pExamTypeId) {
+      final @PathParam("semester-id") Integer pSemesterId, final @PathParam("exam-type") Integer pExamTypeId) {
     return mResourceHelper.getExamRoutineByDept(pSemesterId, pExamTypeId, mUriInfo);
   }
 
   @GET
   @Path("/simplified/semester/{semester-id}/examtype/{exam-type}")
   public JsonObject getExamRoutineSimplified(final @Context Request pRequest,
-      final @PathParam("semester-id") Integer pSemesterId,
-      final @PathParam("exam-type") Integer pExamTypeId) {
-    return mResourceHelper.getExamRoutineWithSemesterAndExamType(pSemesterId, pExamTypeId,
-        pRequest, mUriInfo);
+      final @PathParam("semester-id") Integer pSemesterId, final @PathParam("exam-type") Integer pExamTypeId) {
+    return mResourceHelper.getExamRoutineWithSemesterAndExamType(pSemesterId, pExamTypeId, pRequest, mUriInfo);
   }
 
   @GET
   @Path("/examdates/semester/{semester-id}/examtype/{exam-type}")
-  public JsonObject getExamDates(final @Context Request pRequest,
-      final @PathParam("semester-id") Integer pSemesterId,
+  public JsonObject getExamDates(final @Context Request pRequest, final @PathParam("semester-id") Integer pSemesterId,
       final @PathParam("exam-type") Integer pExamTypeId) {
-    return mResourceHelper.getExamDateBySemesterAndExamType(pSemesterId, pExamTypeId, pRequest,
-        mUriInfo);
+    return mResourceHelper.getExamDateBySemesterAndExamType(pSemesterId, pExamTypeId, pRequest, mUriInfo);
   }
 
   @GET
   @Path("/exam_routine_cci/semester/{semester-id}/examtype/{exam-type}")
   public JsonObject getExamRoutineForCCI(final @Context Request pRequest,
-      final @PathParam("semester-id") Integer pSemesterId,
-      final @PathParam("exam-type") Integer pExamTypeId) {
+      final @PathParam("semester-id") Integer pSemesterId, final @PathParam("exam-type") Integer pExamTypeId) {
     return mResourceHelper.getExamRoutineForCCI(pSemesterId, pExamTypeId, pRequest, mUriInfo);
   }
 

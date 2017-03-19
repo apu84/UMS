@@ -13,15 +13,12 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class PersistentSyllabusDao extends SyllabusDaoDecorator {
-  static String SELECT_ALL =
-      "SELECT SYLLABUS_ID, SEMESTER_ID, PROGRAM_ID, LAST_MODIFIED FROM MST_SYLLABUS ";
-  static String UPDATE_ONE =
-      "UPDATE MST_SYLLABUS SET SEMESTER_ID = ?, PROGRAM_ID = ?, LAST_MODIFIED = "
-          + getLastModifiedSql() + " ";
+  static String SELECT_ALL = "SELECT SYLLABUS_ID, SEMESTER_ID, PROGRAM_ID, LAST_MODIFIED FROM MST_SYLLABUS ";
+  static String UPDATE_ONE = "UPDATE MST_SYLLABUS SET SEMESTER_ID = ?, PROGRAM_ID = ?, LAST_MODIFIED = "
+      + getLastModifiedSql() + " ";
   static String DELETE_ONE = "DELETE FROM MST_SYLLABUS ";
-  static String INSERT_ONE =
-      "INSERT INTO MST_SYLLABUS(SYLLABUS_ID, SEMESTER_ID, PROGRAM_ID, LAST_MODIFIED) "
-          + "VALUES(?, ?, ?, " + getLastModifiedSql() + ")";
+  static String INSERT_ONE = "INSERT INTO MST_SYLLABUS(SYLLABUS_ID, SEMESTER_ID, PROGRAM_ID, LAST_MODIFIED) "
+      + "VALUES(?, ?, ?, " + getLastModifiedSql() + ")";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -49,8 +46,8 @@ public class PersistentSyllabusDao extends SyllabusDaoDecorator {
   @Override
   public int update(final MutableSyllabus pSyllabus) {
     String query = UPDATE_ONE + "WHERE SYLLABUS_ID = ?";
-    return mJdbcTemplate.update(query, pSyllabus.getSemester().getId(), pSyllabus.getProgram()
-        .getId(), pSyllabus.getId());
+    return mJdbcTemplate.update(query, pSyllabus.getSemester().getId(), pSyllabus.getProgram().getId(),
+        pSyllabus.getId());
   }
 
   public int delete(final MutableSyllabus pSyllabus) {
@@ -59,8 +56,8 @@ public class PersistentSyllabusDao extends SyllabusDaoDecorator {
   }
 
   public String create(final MutableSyllabus pSyllabus) {
-    mJdbcTemplate.update(INSERT_ONE, pSyllabus.getId(), pSyllabus.getSemester().getId(), pSyllabus
-        .getProgram().getId());
+    mJdbcTemplate
+        .update(INSERT_ONE, pSyllabus.getId(), pSyllabus.getSemester().getId(), pSyllabus.getProgram().getId());
     return pSyllabus.getId();
   }
 

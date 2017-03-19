@@ -14,8 +14,7 @@ import javax.ws.rs.core.UriInfo;
 @Component
 public class ApplicationCCIBuilder implements Builder<ApplicationCCI, MutableApplicationCCI> {
   @Override
-  public void build(JsonObjectBuilder pBuilder, ApplicationCCI pReadOnly, UriInfo pUriInfo,
-      LocalCache pLocalCache) {
+  public void build(JsonObjectBuilder pBuilder, ApplicationCCI pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
     if(pReadOnly.getId() != null)
       pBuilder.add("id", pReadOnly.getId());
     if(pReadOnly.getSemesterId() != null)

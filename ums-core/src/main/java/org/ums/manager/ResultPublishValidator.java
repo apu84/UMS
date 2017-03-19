@@ -16,8 +16,7 @@ public class ResultPublishValidator extends ResultPublishDaoDecorator {
   @Override
   public void publishResult(Integer programId, Integer semesterId) {
     if(!super.isResultPublished(programId, semesterId)) {
-      List<MarksSubmissionStatus> marksSubmissionStatuses =
-          mMarksSubmissionStatusManager.get(programId, semesterId);
+      List<MarksSubmissionStatus> marksSubmissionStatuses = mMarksSubmissionStatusManager.get(programId, semesterId);
       for(MarksSubmissionStatus status : marksSubmissionStatuses) {
         if(status.getStatus() != CourseMarksSubmissionStatus.ACCEPTED_BY_COE) {
           throw new IllegalArgumentException("Marks for course " + status.getCourse().getNo()

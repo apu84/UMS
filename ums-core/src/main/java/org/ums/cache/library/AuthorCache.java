@@ -9,8 +9,7 @@ import org.ums.manager.library.AuthorManager;
 /**
  * Created by Ifti on 30-Jan-17.
  */
-public class AuthorCache extends ContentCache<Author, MutableAuthor, Integer, AuthorManager>
-    implements AuthorManager {
+public class AuthorCache extends ContentCache<Author, MutableAuthor, Integer, AuthorManager> implements AuthorManager {
 
   CacheManager<Author, Integer> mCacheManager;
 

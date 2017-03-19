@@ -21,18 +21,16 @@ public class PersistentUserDao extends UserDaoDecorator {
   static String UPDATE_ALL =
       "UPDATE USERS SET PASSWORD = ?, ROLE_ID = ?, STATUS = ?, TEMP_PASSWORD = ?, LAST_MODIFIED = "
           + getLastModifiedSql() + " ";
-  static String UPDATE_PASSWORD = "UPDATE USERS SET PASSWORD=?, LAST_MODIFIED = "
-      + getLastModifiedSql() + " ";
+  static String UPDATE_PASSWORD = "UPDATE USERS SET PASSWORD=?, LAST_MODIFIED = " + getLastModifiedSql() + " ";
   static String CLEAR_PASSWORD_RESET_TOKEN =
-      "UPDATE USERS SET PR_TOKEN=NULL, TOKEN_GENERATED_ON=NULL, LAST_MODIFIED = "
-          + getLastModifiedSql() + " ";
+      "UPDATE USERS SET PR_TOKEN=NULL, TOKEN_GENERATED_ON=NULL, LAST_MODIFIED = " + getLastModifiedSql() + " ";
   static String DELETE_ALL = "DELETE FROM USERS ";
   static String INSERT_ALL =
       "INSERT INTO USERS(USER_ID, PASSWORD, ROLE_ID, STATUS, TEMP_PASSWORD, LAST_MODIFIED) VALUES "
           + "(?, ?, ?, ?, ?, " + getLastModifiedSql() + ")";
   static String UPDATE_PASSWORD_RESET_TOKEN =
-      "Update USERS Set PR_TOKEN=?, TOKEN_GENERATED_ON=SYSDATE, LAST_MODIFIED = "
-          + getLastModifiedSql() + " Where User_Id=? ";
+      "Update USERS Set PR_TOKEN=?, TOKEN_GENERATED_ON=SYSDATE, LAST_MODIFIED = " + getLastModifiedSql()
+          + " Where User_Id=? ";
   String EXISTS = "SELECT COUNT(USER_ID) EXIST FROM USERS ";
 
   private JdbcTemplate mJdbcTemplate;
@@ -62,11 +60,9 @@ public class PersistentUserDao extends UserDaoDecorator {
   @Override
   public int update(MutableUser pMutable) {
     String query = UPDATE_ALL + "WHERE USER_ID = ?";
-    return mJdbcTemplate.update(query,
-        pMutable.getPassword() == null ? "" : String.valueOf(pMutable.getPassword()), pMutable
-            .getPrimaryRole().getId(), pMutable.isActive(),
-        pMutable.getTemporaryPassword() == null ? "" : String.valueOf(pMutable.getPassword()),
-        pMutable.getId());
+    return mJdbcTemplate.update(query, pMutable.getPassword() == null ? "" : String.valueOf(pMutable.getPassword()),
+        pMutable.getPrimaryRole().getId(), pMutable.isActive(),
+        pMutable.getTemporaryPassword() == null ? "" : String.valueOf(pMutable.getPassword()), pMutable.getId());
   }
 
   @Override
@@ -94,14 +90,10 @@ public class PersistentUserDao extends UserDaoDecorator {
 
   @Override
   public String create(MutableUser pMutable) {
-    mJdbcTemplate.update(
-        INSERT_ALL,
-        pMutable.getId(),
+    mJdbcTemplate.update(INSERT_ALL, pMutable.getId(),
         pMutable.getPassword() == null ? "" : String.valueOf(pMutable.getPassword()),
-        pMutable.getPrimaryRole().getId(),
-        pMutable.isActive(),
-        pMutable.getTemporaryPassword() == null ? "" : String.valueOf(pMutable
-            .getTemporaryPassword()));
+        pMutable.getPrimaryRole().getId(), pMutable.isActive(),
+        pMutable.getTemporaryPassword() == null ? "" : String.valueOf(pMutable.getTemporaryPassword()));
     return pMutable.getId();
   }
 
@@ -122,12 +114,11 @@ public class PersistentUserDao extends UserDaoDecorator {
     public User mapRow(ResultSet rs, int rowNum) throws SQLException {
       MutableUser user = new PersistentUser();
       user.setId(rs.getString("USER_ID"));
-      user.setPassword(rs.getString("PASSWORD") == null ? null : rs.getString("PASSWORD")
-          .toCharArray());
+      user.setPassword(rs.getString("PASSWORD") == null ? null : rs.getString("PASSWORD").toCharArray());
       user.setPrimaryRoleId(rs.getInt("ROLE_ID"));
       user.setActive(rs.getBoolean("STATUS"));
-      user.setTemporaryPassword((rs.getString("TEMP_PASSWORD") == null ? null : rs.getString(
-          "TEMP_PASSWORD").toCharArray()));
+      user.setTemporaryPassword((rs.getString("TEMP_PASSWORD") == null ? null : rs.getString("TEMP_PASSWORD")
+          .toCharArray()));
       user.setPasswordResetToken(rs.getString("PR_TOKEN"));
       user.setEmployeeId(rs.getString("EMPLOYEE_ID") == null ? "" : rs.getString("EMPLOYEE_ID"));
       Timestamp timestamp = rs.getTimestamp("TOKEN_GENERATED_ON");

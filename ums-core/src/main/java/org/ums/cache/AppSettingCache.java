@@ -9,8 +9,7 @@ import org.ums.util.CacheUtil;
 /**
  * Created by My Pc on 30-Aug-16.
  */
-public class AppSettingCache extends
-    ContentCache<AppSetting, MutableAppSetting, Long, AppSettingManager> implements
+public class AppSettingCache extends ContentCache<AppSetting, MutableAppSetting, Long, AppSettingManager> implements
     AppSettingManager {
 
   CacheManager<AppSetting, Long> mCacheManager;

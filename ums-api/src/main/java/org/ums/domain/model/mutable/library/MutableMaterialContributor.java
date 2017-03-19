@@ -10,8 +10,8 @@ import org.ums.enums.library.ContributorRole;
 /**
  * Created by Ifti on 16-Feb-17.
  */
-public interface MutableMaterialContributor extends MaterialContributor, Mutable,
-    MutableLastModifier, MutableIdentifier<Integer> {
+public interface MutableMaterialContributor extends MaterialContributor, Mutable, MutableLastModifier,
+    MutableIdentifier<Integer> {
 
   void setMfn(final String pMfn);
 

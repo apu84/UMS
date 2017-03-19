@@ -28,16 +28,15 @@ public class AdditionalRolePermissionsBuilder implements
   DateFormat mDateFormat;
 
   @Override
-  public void build(JsonObjectBuilder pBuilder, AdditionalRolePermissions pReadOnly,
-      UriInfo pUriInfo, LocalCache pLocalCache) {
+  public void build(JsonObjectBuilder pBuilder, AdditionalRolePermissions pReadOnly, UriInfo pUriInfo,
+      LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId().toString());
     pBuilder.add("userId", pReadOnly.getUserId());
 
     JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
     JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
 
-    List<Navigation> navigationList =
-        mNavigationManager.getByPermissions(pReadOnly.getPermission());
+    List<Navigation> navigationList = mNavigationManager.getByPermissions(pReadOnly.getPermission());
     for(Navigation navigation : navigationList) {
       jsonArrayBuilder.add(navigation.getId());
     }
@@ -48,8 +47,7 @@ public class AdditionalRolePermissionsBuilder implements
   }
 
   @Override
-  public void build(MutableAdditionalRolePermissions pMutable, JsonObject pJsonObject,
-      LocalCache pLocalCache) {
+  public void build(MutableAdditionalRolePermissions pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
     pMutable.setUserId(pJsonObject.getString("user"));
     pMutable.setAssignedByUserId(SecurityUtils.getSubject().getPrincipal().toString());
     if(pJsonObject.containsKey("start") && !StringUtils.isEmpty(pJsonObject.getString("start"))) {

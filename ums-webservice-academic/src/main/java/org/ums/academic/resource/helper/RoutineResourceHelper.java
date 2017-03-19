@@ -122,8 +122,8 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
     return builder.build();
   }
 
-  public Response post(final int semesterId, final int programId, final int academicYear,
-      final int academicSemester, JsonObject pJsonObject, UriInfo pUriInfo) {
+  public Response post(final int semesterId, final int programId, final int academicYear, final int academicSemester,
+      JsonObject pJsonObject, UriInfo pUriInfo) {
     MutableRoutine mutableRoutine = new PersistentRoutine();
     MutableSemester semester = new PersistentSemester();
     semester.setId(semesterId);
@@ -175,9 +175,8 @@ public class RoutineResourceHelper extends ResourceHelper<Routine, MutableRoutin
     return object.build();
   }
 
-  public void getRoomBasedRoutineReport(final OutputStream pOutputStream, final int pSemesterId,
-      final int pRoomid, final Request pRequest, final UriInfo pUriInfo) throws DocumentException,
-      IOException {
+  public void getRoomBasedRoutineReport(final OutputStream pOutputStream, final int pSemesterId, final int pRoomid,
+      final Request pRequest, final UriInfo pUriInfo) throws DocumentException, IOException {
     mRoutineGenerator.createRoomBasedClassRoutineReport(pOutputStream, pSemesterId, pRoomid);
   }
 

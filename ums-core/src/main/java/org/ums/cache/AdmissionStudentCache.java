@@ -12,8 +12,8 @@ import org.ums.manager.CacheManager;
 import java.util.List;
 
 public class AdmissionStudentCache extends
-    ContentCache<AdmissionStudent, MutableAdmissionStudent, String, AdmissionStudentManager>
-    implements AdmissionStudentManager {
+    ContentCache<AdmissionStudent, MutableAdmissionStudent, String, AdmissionStudentManager> implements
+    AdmissionStudentManager {
 
   private CacheManager<AdmissionStudent, String> mCacheManager;
 
@@ -88,8 +88,7 @@ public class AdmissionStudentCache extends
   //
 
   @Override
-  public AdmissionStudent getAdmissionStudent(int pSemesterId, ProgramType pProgramType,
-      String pReceiptId) {
+  public AdmissionStudent getAdmissionStudent(int pSemesterId, ProgramType pProgramType, String pReceiptId) {
     return getManager().getAdmissionStudent(pSemesterId, pProgramType, pReceiptId);
   }
 
@@ -100,10 +99,9 @@ public class AdmissionStudentCache extends
   }
 
   @Override
-  public AdmissionStudent getNextStudentForDepartmentSelection(int pSemesterId,
-      ProgramType pProgramType, String pUnit, String pQuota, int pMeritSerialNo) {
-    return getManager().getNextStudentForDepartmentSelection(pSemesterId, pProgramType, pUnit,
-        pQuota, pMeritSerialNo);
+  public AdmissionStudent getNextStudentForDepartmentSelection(int pSemesterId, ProgramType pProgramType, String pUnit,
+      String pQuota, int pMeritSerialNo) {
+    return getManager().getNextStudentForDepartmentSelection(pSemesterId, pProgramType, pUnit, pQuota, pMeritSerialNo);
   }
 
   @Override
@@ -112,14 +110,12 @@ public class AdmissionStudentCache extends
   }
 
   @Override
-  public int updateStudentsAllocatedProgram(AdmissionStudent pAdmissionStudent,
-      MigrationStatus pMigrationStatus) {
+  public int updateStudentsAllocatedProgram(AdmissionStudent pAdmissionStudent, MigrationStatus pMigrationStatus) {
     return getManager().updateStudentsAllocatedProgram(pAdmissionStudent, pMigrationStatus);
   }
 
   @Override
-  public List<AdmissionStudent> getAdmissionStudent(int pSemesterId,
-      MigrationStatus pMigrationStatus) {
+  public List<AdmissionStudent> getAdmissionStudent(int pSemesterId, MigrationStatus pMigrationStatus) {
     return getManager().getAdmissionStudent(pSemesterId, pMigrationStatus);
   }
 

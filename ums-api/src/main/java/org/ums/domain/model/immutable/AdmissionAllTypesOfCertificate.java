@@ -6,8 +6,8 @@ import org.ums.domain.model.common.LastModifier;
 import java.io.Serializable;
 import org.ums.domain.model.mutable.MutableAdmissionAllTypesOfCertificate;
 
-public interface AdmissionAllTypesOfCertificate extends Serializable,
-    EditType<MutableAdmissionAllTypesOfCertificate>, Identifier<Integer>, LastModifier {
+public interface AdmissionAllTypesOfCertificate extends Serializable, EditType<MutableAdmissionAllTypesOfCertificate>,
+    Identifier<Integer>, LastModifier {
 
   int getCertificateId();
 

@@ -24,8 +24,7 @@ public class PersistentAdditionalRolePermissions implements MutableAdditionalRol
     sUserManager = applicationContext.getBean("userManager", UserManager.class);
     sRoleManager = applicationContext.getBean("roleManager", RoleManager.class);
     sAdditionalRolePermissionsManager =
-        applicationContext.getBean("additionalRolePermissionsManager",
-            AdditionalRolePermissionsManager.class);
+        applicationContext.getBean("additionalRolePermissionsManager", AdditionalRolePermissionsManager.class);
   }
 
   private Long mId;
@@ -99,8 +98,8 @@ public class PersistentAdditionalRolePermissions implements MutableAdditionalRol
 
   @Override
   public Role getRole() {
-    return mRole == null ? (StringUtils.isEmpty(mRoleId) ? null : sRoleManager.get(mRoleId))
-        : sRoleManager.validate(mRole);
+    return mRole == null ? (StringUtils.isEmpty(mRoleId) ? null : sRoleManager.get(mRoleId)) : sRoleManager
+        .validate(mRole);
   }
 
   @Override
@@ -167,8 +166,7 @@ public class PersistentAdditionalRolePermissions implements MutableAdditionalRol
 
   @Override
   public User getAssignedBy() {
-    return mAssignedBy == null ? sUserManager.get(mAssignedByUserId) : sUserManager
-        .validate(mAssignedBy);
+    return mAssignedBy == null ? sUserManager.get(mAssignedByUserId) : sUserManager.validate(mAssignedBy);
   }
 
   @Override

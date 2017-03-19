@@ -11,8 +11,7 @@ import org.ums.enums.ApplicationType;
 /**
  * Created by My Pc on 7/11/2016.
  */
-public interface MutableApplicationCCI extends ApplicationCCI, Mutable, MutableLastModifier,
-    MutableIdentifier<Long> {
+public interface MutableApplicationCCI extends ApplicationCCI, Mutable, MutableLastModifier, MutableIdentifier<Long> {
   void setSemester(final Semester pSemester);
 
   void setSemesterId(final Integer pSemesterId);

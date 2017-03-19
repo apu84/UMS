@@ -7,8 +7,7 @@ import org.ums.domain.model.immutable.Faculty;
 /**
  * Created by Monjur-E-Morshed on 06-Dec-16.
  */
-public interface MutableFaculty extends Faculty, Mutable, MutableLastModifier,
-    MutableIdentifier<Integer> {
+public interface MutableFaculty extends Faculty, Mutable, MutableLastModifier, MutableIdentifier<Integer> {
   void setLongName(final String pLongName);
 
   void setShortName(final String pShortName);

@@ -15,8 +15,7 @@ import javax.ws.rs.core.Request;
 @Path("academic/admission/certificate")
 @Produces(Resource.MIME_TYPE_JSON)
 @Consumes(Resource.MIME_TYPE_JSON)
-public class AdmissionAllTypesOfCertificateResource extends
-    MutableAdmissionAllTypesOfCertificateResource {
+public class AdmissionAllTypesOfCertificateResource extends MutableAdmissionAllTypesOfCertificateResource {
 
   @GET
   @Path("/certificateLists")

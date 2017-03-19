@@ -6,8 +6,8 @@ import org.ums.domain.model.common.Editable;
 import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.mutable.MutableLastModifier;
 
-public interface MutableIndexConsumer extends IndexConsumer, Editable<Long>,
-    MutableIdentifier<Long>, MutableLastModifier {
+public interface MutableIndexConsumer extends IndexConsumer, Editable<Long>, MutableIdentifier<Long>,
+    MutableLastModifier {
 
   void setHost(String pHost);
 

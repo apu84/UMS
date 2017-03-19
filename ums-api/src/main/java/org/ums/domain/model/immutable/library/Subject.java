@@ -10,8 +10,7 @@ import java.io.Serializable;
 /**
  * Created by Ifti on 17-Feb-17.
  */
-public interface Subject extends Serializable, LastModifier, EditType<MutableSubject>,
-    Identifier<Integer> {
+public interface Subject extends Serializable, LastModifier, EditType<MutableSubject>, Identifier<Integer> {
 
   String getMfn();
 

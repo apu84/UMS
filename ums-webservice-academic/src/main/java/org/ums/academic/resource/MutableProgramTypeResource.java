@@ -24,9 +24,8 @@ public class MutableProgramTypeResource extends Resource {
 
   @PUT
   @Path(PATH_PARAM_OBJECT_ID)
-  public Response updateProgramType(final @PathParam("object-id") int pObjectId,
-      final @Context Request pRequest, final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader,
-      final JsonObject pJsonObject) throws Exception {
+  public Response updateProgramType(final @PathParam("object-id") int pObjectId, final @Context Request pRequest,
+      final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader, final JsonObject pJsonObject) throws Exception {
 
     return mResourceHelper.put(pObjectId, pRequest, pIfMatchHeader, pJsonObject);
   }

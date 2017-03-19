@@ -10,7 +10,6 @@ import java.util.Map;
 public interface XlsGenerator {
   void build(List collection, OutputStream out, InputStream templateLocation) throws IOException;
 
-  void build(Map<String, Collection> map, OutputStream out, InputStream templateLocation)
-      throws IOException;
+  void build(Map<String, Collection> map, OutputStream out, InputStream templateLocation) throws IOException;
 
 }

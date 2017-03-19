@@ -53,14 +53,12 @@ public class PersistentSubGroupDao extends SubGroupDaoDecorator {
 
   @Override
   public int checkBySemesterGroupNoAndType(int pSemesterId, int pGroupNo, int pType) {
-    String query =
-        "SELECT COUNT(*) FROM SP_SUB_GROUP WHERE SEMESTER_ID=? AND GROUP_NO=? AND EXAM_TYPE=?";
+    String query = "SELECT COUNT(*) FROM SP_SUB_GROUP WHERE SEMESTER_ID=? AND GROUP_NO=? AND EXAM_TYPE=?";
     return mJdbcTemplate.queryForObject(query, Integer.class, pSemesterId, pGroupNo, pType);
   }
 
   @Override
-  public int checkForHalfFinishedSubGroupsBySemesterGroupNoAndType(int pSemesterId, int pGroupNo,
-      int pType) {
+  public int checkForHalfFinishedSubGroupsBySemesterGroupNoAndType(int pSemesterId, int pGroupNo, int pType) {
     String query =
         "SELECT COUNT(*) FROM SP_SUB_GROUP WHERE SEMESTER_ID=? AND GROUP_NO=? AND EXAM_TYPE=? and sub_group_no=0";
     return mJdbcTemplate.queryForObject(query, Integer.class, pSemesterId, pGroupNo, pType);
@@ -69,10 +67,8 @@ public class PersistentSubGroupDao extends SubGroupDaoDecorator {
   @Override
   public List<SubGroup> getBySemesterGroupNoAndType(int pSemesterId, int pGroupNo, int pType) {
     String query =
-        SELECT_ALL
-            + " and  s.SEMESTER_ID=? AND s.GROUP_NO=? AND s.EXAM_TYPE=? ORDER BY s.SUB_GROUP_NO ASC, s.ID ASC ";
-    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pGroupNo, pType},
-        new SubGroupRowMapper());
+        SELECT_ALL + " and  s.SEMESTER_ID=? AND s.GROUP_NO=? AND s.EXAM_TYPE=? ORDER BY s.SUB_GROUP_NO ASC, s.ID ASC ";
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pGroupNo, pType}, new SubGroupRowMapper());
   }
 
   @Override
@@ -95,20 +91,18 @@ public class PersistentSubGroupDao extends SubGroupDaoDecorator {
   }
 
   @Override
-  public List<SubGroup> getSubGroupMembers(int pSemesterId, int pExamTYpe, int pGroupNo,
-      int pSubGroupNo) {
+  public List<SubGroup> getSubGroupMembers(int pSemesterId, int pExamTYpe, int pGroupNo, int pSubGroupNo) {
     String query =
-        SELECT_ALL
-            + " and  s.SEMESTER_ID=? AND s.EXAM_TYPE=? AND s.GROUP_NO=? AND s.SUB_GROUP_NO=? ORDER BY ID ASC";
+        SELECT_ALL + " and  s.SEMESTER_ID=? AND s.EXAM_TYPE=? AND s.GROUP_NO=? AND s.SUB_GROUP_NO=? ORDER BY ID ASC";
     return mJdbcTemplate.query(query, new Object[] {pSemesterId, pExamTYpe, pGroupNo, pSubGroupNo},
         new SubGroupRowMapper());
   }
 
   @Override
   public Integer create(MutableSubGroup pMutable) {
-    return mJdbcTemplate.update(INSERT_ALL, pMutable.getSemester().getId(), pMutable.getGroup()
-        .getGroupNo(), pMutable.subGroupNo(), pMutable.getGroup().getId(), pMutable.getPosition(),
-        pMutable.getStudentNumber(), pMutable.getExamType());
+    return mJdbcTemplate.update(INSERT_ALL, pMutable.getSemester().getId(), pMutable.getGroup().getGroupNo(),
+        pMutable.subGroupNo(), pMutable.getGroup().getId(), pMutable.getPosition(), pMutable.getStudentNumber(),
+        pMutable.getExamType());
   }
 
   @Override
@@ -139,9 +133,8 @@ public class PersistentSubGroupDao extends SubGroupDaoDecorator {
     List<Object[]> params = new ArrayList<>();
 
     for(SubGroup subGroup : pSubGroups) {
-      params.add(new Object[] {subGroup.getSemester().getId(), subGroup.getGroupNo(),
-          subGroup.subGroupNo(), subGroup.getGroupId(), subGroup.getPosition(),
-          subGroup.getStudentNumber(), subGroup.getExamType()});
+      params.add(new Object[] {subGroup.getSemester().getId(), subGroup.getGroupNo(), subGroup.subGroupNo(),
+          subGroup.getGroupId(), subGroup.getPosition(), subGroup.getStudentNumber(), subGroup.getExamType()});
     }
 
     return params;

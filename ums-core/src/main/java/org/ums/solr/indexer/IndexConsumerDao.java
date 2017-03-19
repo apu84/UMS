@@ -11,11 +11,9 @@ import org.ums.solr.indexer.model.IndexConsumer;
 import org.ums.solr.indexer.model.MutableIndexConsumer;
 
 public class IndexConsumerDao extends IndexConsumerDaoDecorator {
-  private String INSERT_ALL =
-      "INSERT INTO INDEX_CONSUMER(ID, HOST, INSTANCE, HEAD, LAST_CHECKED, LAST_MODIFIED) "
-          + "VALUES (?, ?, ?, ?, SYSDATE, " + getLastModifiedSql() + ")";
-  private String SELECT_ALL =
-      "SELECT ID, HOST, INSTANCE, HEAD, LAST_CHECKED, LAST_MODIFIED FROM INDEX_CONSUMER ";
+  private String INSERT_ALL = "INSERT INTO INDEX_CONSUMER(ID, HOST, INSTANCE, HEAD, LAST_CHECKED, LAST_MODIFIED) "
+      + "VALUES (?, ?, ?, ?, SYSDATE, " + getLastModifiedSql() + ")";
+  private String SELECT_ALL = "SELECT ID, HOST, INSTANCE, HEAD, LAST_CHECKED, LAST_MODIFIED FROM INDEX_CONSUMER ";
   private String DELETE_ALL = "DELETE FROM INDEX_CONSUMER ";
   private String EXISTS = "SELECT COUNT(ID) FROM INDEX_CONSUMER ";
   private String UPDATE_ALL = "UPDATE INDEX_CONSUMER SET HOST = ?, INSTANCE = ?, HEAD = ?, "
@@ -37,23 +35,21 @@ public class IndexConsumerDao extends IndexConsumerDaoDecorator {
   @Override
   public IndexConsumer get(String pHost, String pPort) {
     String query = SELECT_ALL + "WHERE HOST = ? AND INSTANCE = ? ";
-    return mJdbcTemplate.queryForObject(query, new Object[] {pHost, pPort},
-        new IndexConsumerRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[] {pHost, pPort}, new IndexConsumerRowMapper());
   }
 
   @Override
   public Long create(MutableIndexConsumer pMutable) {
     Long id = mIdGenerator.getNumericId();
-    mJdbcTemplate.update(INSERT_ALL, id, pMutable.getHost(), pMutable.getInstance(),
-        pMutable.getHead());
+    mJdbcTemplate.update(INSERT_ALL, id, pMutable.getHost(), pMutable.getInstance(), pMutable.getHead());
     return id;
   }
 
   @Override
   public int update(MutableIndexConsumer pMutable) {
     String query = UPDATE_ALL + "WHERE ID = ?";
-    return mJdbcTemplate.update(query, pMutable.getHost(), pMutable.getInstance(),
-        pMutable.getHead(), pMutable.getId());
+    return mJdbcTemplate
+        .update(query, pMutable.getHost(), pMutable.getInstance(), pMutable.getHead(), pMutable.getId());
   }
 
   @Override

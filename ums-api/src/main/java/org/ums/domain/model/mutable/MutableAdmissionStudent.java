@@ -12,8 +12,8 @@ import org.ums.enums.ProgramType;
 /**
  * Created by Monjur-E-Morshed on 12-Dec-16.
  */
-public interface MutableAdmissionStudent extends AdmissionStudent, Mutable,
-    MutableIdentifier<String>, MutableLastModifier {
+public interface MutableAdmissionStudent extends AdmissionStudent, Mutable, MutableIdentifier<String>,
+    MutableLastModifier {
   void setSemester(final Semester pSemester);
 
   void setSemesterId(final int pSemesterId);

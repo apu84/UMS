@@ -10,8 +10,7 @@ import java.io.Serializable;
 /**
  * Created by My Pc on 7/23/2016.
  */
-public interface SubGroupCCI extends Serializable, LastModifier, EditType<MutableSubGroupCCI>,
-    Identifier<Integer> {
+public interface SubGroupCCI extends Serializable, LastModifier, EditType<MutableSubGroupCCI>, Identifier<Integer> {
   Semester getSemester();
 
   Integer getSemesterId();

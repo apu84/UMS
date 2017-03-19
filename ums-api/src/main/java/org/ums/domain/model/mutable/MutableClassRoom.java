@@ -9,8 +9,7 @@ import org.ums.enums.ClassRoomType;
 /**
  * Created by Ifti on 13-Feb-16.
  */
-public interface MutableClassRoom extends ClassRoom, Mutable, MutableLastModifier,
-    MutableIdentifier<Long> {
+public interface MutableClassRoom extends ClassRoom, Mutable, MutableLastModifier, MutableIdentifier<Long> {
 
   void setRoomNo(final String pRoomNo);
 

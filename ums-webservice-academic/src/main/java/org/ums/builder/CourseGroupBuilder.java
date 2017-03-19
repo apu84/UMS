@@ -33,8 +33,7 @@ public class CourseGroupBuilder implements Builder<CourseGroup, MutableCourseGro
   }
 
   @Override
-  public void build(MutableCourseGroup pMutable, JsonObject pJsonObject,
-      final LocalCache pLocalCache) {
+  public void build(MutableCourseGroup pMutable, JsonObject pJsonObject, final LocalCache pLocalCache) {
     pMutable.setId(pJsonObject.getInt("id"));
     pMutable.setName(pJsonObject.getString("name"));
     pMutable.setSyllabus(mSemesterManager.get(pJsonObject.getString("syllabus")));

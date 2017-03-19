@@ -44,18 +44,15 @@ public class PersistentSpStudentDao extends SpStudentDaoDecorator {
   }
 
   @Override
-  public List<SpStudent> getStudentByProgramYearSemesterStatus(int pProgramId, int pYear,
-      int pSemester, int pStatus) {
+  public List<SpStudent> getStudentByProgramYearSemesterStatus(int pProgramId, int pYear, int pSemester, int pStatus) {
     String query = SELECT_ALL + " WHERE PROGRAM_ID=? AND YEAR=? AND SEMESTER=? AND ACTIVE=?";
-    return mJdbcTemplate.query(query, new Object[] {pProgramId, pYear, pSemester, pStatus},
-        new SpStudentRowMapper());
+    return mJdbcTemplate.query(query, new Object[] {pProgramId, pYear, pSemester, pStatus}, new SpStudentRowMapper());
   }
 
   @Override
   public String create(MutableSpStudent pMutable) {
-    mJdbcTemplate.update(INSERT_ONE, pMutable.getId(), pMutable.getProgram().getId(), pMutable
-        .getSemester().getId(), pMutable.getAcademicYear(), pMutable.getAcademicSemester(),
-        pMutable.getStatus());
+    mJdbcTemplate.update(INSERT_ONE, pMutable.getId(), pMutable.getProgram().getId(), pMutable.getSemester().getId(),
+        pMutable.getAcademicYear(), pMutable.getAcademicSemester(), pMutable.getStatus());
     return pMutable.getId();
   }
 
@@ -72,8 +69,7 @@ public class PersistentSpStudentDao extends SpStudentDaoDecorator {
   }
 
   @Override
-  public List<SpStudent> getStudentByCourseIdAndSemesterIdForSeatPlanForCCI(String pCourseId,
-      Integer pSemesterId) {
+  public List<SpStudent> getStudentByCourseIdAndSemesterIdForSeatPlanForCCI(String pCourseId, Integer pSemesterId) {
     String query =
         "select distinct(s.student_id),p.program_short_name,s.year,s.semester,a.application_type from sp_student s,mst_program p, "
             + "(select distinct(student_id),application_type from application_cci where course_id=? and semester_id=? )a  "
@@ -85,13 +81,11 @@ public class PersistentSpStudentDao extends SpStudentDaoDecorator {
             + "(select distinct(course_id),student_id,application_type from application_cci where semester_id=? ) a    "
             + "where exam_type=2 and a.course_id=? and r.course_id=c.course_id and a.course_id=c.course_id order by c.course_no,a.student_id) a  "
             + "where a.student_id=s.student_id and s.program_id=p.program_id";
-    return mJdbcTemplate.query(query2, new Object[] {pSemesterId, pCourseId},
-        new SpStudentRowMapperForCCI());
+    return mJdbcTemplate.query(query2, new Object[] {pSemesterId, pCourseId}, new SpStudentRowMapperForCCI());
   }
 
   @Override
-  public List<SpStudent> getStudentBySemesterIdAndExamDateForCCI(Integer pSemesterId,
-      String pExamDate) {
+  public List<SpStudent> getStudentBySemesterIdAndExamDateForCCI(Integer pSemesterId, String pExamDate) {
     String query =
         "select distinct(s.student_id),p.program_short_name,s.year,s.semester,a.application_type,p.program_id from sp_student s,mst_program p, "
             + "(select distinct(application_cci.course_id),student_id,application_type,exam_date from application_cci,exam_routine where application_cci.course_id=exam_routine.course_id and exam_routine.exam_type=2 and exam_date=to_date(?,'MM-DD-YYYY') and semester_id=? )a  "
@@ -104,8 +98,7 @@ public class PersistentSpStudentDao extends SpStudentDaoDecorator {
             + "where exam_type=2 and exam_date = to_date(?,'MM-DD-YYYY') and r.course_id=c.course_id and a.course_id=c.course_id order by c.course_no,a.student_id) a  "
             + "where a.student_id=s.student_id and s.program_id=p.program_id";
 
-    return mJdbcTemplate.query(query2, new Object[] {pSemesterId, pExamDate},
-        new SpStudentRowMapperForCCI2());
+    return mJdbcTemplate.query(query2, new Object[] {pSemesterId, pExamDate}, new SpStudentRowMapperForCCI2());
 
   }
 

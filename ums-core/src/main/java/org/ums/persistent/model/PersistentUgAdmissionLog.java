@@ -22,8 +22,7 @@ public class PersistentUgAdmissionLog implements MutableUgAdmissionLog {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
     sEmployeeManager = applicationContext.getBean("employeeManager", EmployeeManager.class);
-    sUgAdmissionLogManager =
-        applicationContext.getBean("ugAdmissionLogManager", UgAdmissionLogManager.class);
+    sUgAdmissionLogManager = applicationContext.getBean("ugAdmissionLogManager", UgAdmissionLogManager.class);
   }
 
   private int mId;
@@ -122,8 +121,7 @@ public class PersistentUgAdmissionLog implements MutableUgAdmissionLog {
 
   @Override
   public Semester getSemester() {
-    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
-        .validate(mSemester);
+    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager.validate(mSemester);
   }
 
   @Override

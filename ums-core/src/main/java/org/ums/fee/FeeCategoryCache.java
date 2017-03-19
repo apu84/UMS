@@ -4,9 +4,8 @@ import org.ums.cache.ContentCache;
 import org.ums.manager.CacheManager;
 import org.ums.util.CacheUtil;
 
-public class FeeCategoryCache extends
-    ContentCache<FeeCategory, MutableFeeCategory, String, FeeCategoryManager> implements
-    FeeCategoryManager {
+public class FeeCategoryCache extends ContentCache<FeeCategory, MutableFeeCategory, String, FeeCategoryManager>
+    implements FeeCategoryManager {
 
   private CacheManager<FeeCategory, String> mCacheManager;
 

@@ -14,8 +14,7 @@ import java.util.Date;
 /**
  * Created by Ifti on 17-Dec-16.
  */
-public interface UserGuide extends Serializable, EditType<MutableUserGuide>, Identifier<Integer>,
-    LastModifier {
+public interface UserGuide extends Serializable, EditType<MutableUserGuide>, Identifier<Integer>, LastModifier {
 
   Integer getGuideId();
 

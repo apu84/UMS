@@ -30,8 +30,7 @@ import java.util.Map;
  * Created by Monjur-E-Morshed on 4/21/2016.
  */
 @Component
-public class SeatPlanGroupResourceHelper extends
-    ResourceHelper<SeatPlanGroup, MutableSeatPlanGroup, Integer> {
+public class SeatPlanGroupResourceHelper extends ResourceHelper<SeatPlanGroup, MutableSeatPlanGroup, Integer> {
 
   @Autowired
   SeatPlanGroupManager mSeatPlanGroupManager;
@@ -86,8 +85,7 @@ public class SeatPlanGroupResourceHelper extends
 
       // seatPlanGroupForSemester = mSeatPlanGroupManager.getGroupBySemester(pSemesterId,type);
 
-      seatPlanGroupForSemester =
-          mSeatPlanGroupManager.getGroupBySemesterTypeFromDb(pSemesterId, type);
+      seatPlanGroupForSemester = mSeatPlanGroupManager.getGroupBySemesterTypeFromDb(pSemesterId, type);
       for(SeatPlanGroup seatPlanGroup : seatPlanGroupForSemester) {
 
         children.add(toJson(seatPlanGroup, pUriInfo, localCache));
@@ -129,8 +127,7 @@ public class SeatPlanGroupResourceHelper extends
 
       mSeatPlanGroupManager.createSeatPlanGroup(pSemesterId, type);
 
-      seatPlanGroupForSemester =
-          mSeatPlanGroupManager.getGroupBySemesterTypeFromDb(pSemesterId, type);
+      seatPlanGroupForSemester = mSeatPlanGroupManager.getGroupBySemesterTypeFromDb(pSemesterId, type);
       for(SeatPlanGroup seatPlanGroup : seatPlanGroupForSemester) {
 
         children.add(toJson(seatPlanGroup, pUriInfo, localCache));

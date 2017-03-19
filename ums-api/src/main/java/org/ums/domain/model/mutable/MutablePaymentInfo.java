@@ -9,8 +9,7 @@ import org.ums.enums.PaymentType;
 /**
  * Created by Monjur-E-Morshed on 23-Jan-17.
  */
-public interface MutablePaymentInfo extends PaymentInfo, Mutable, MutableLastModifier,
-    MutableIdentifier<Integer> {
+public interface MutablePaymentInfo extends PaymentInfo, Mutable, MutableLastModifier, MutableIdentifier<Integer> {
 
   void setReferenceId(final String pReceiptId);
 

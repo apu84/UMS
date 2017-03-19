@@ -13,14 +13,12 @@ import org.ums.generator.IdGenerator;
 import org.ums.persistent.model.PersistentEquivalentCourse;
 
 public class EquivalentCourseDao extends EquivalentCourseDaoDecorator {
-  String SELECT_ALL =
-      "SELECT ID, OLD_COURSE_ID, NEW_COURSE_ID, LAST_MODIFIED FROM EQUIVALENT_COURSE ";
+  String SELECT_ALL = "SELECT ID, OLD_COURSE_ID, NEW_COURSE_ID, LAST_MODIFIED FROM EQUIVALENT_COURSE ";
   String INSERT_ALL =
       "INSERT INTO EQUIVALENT_COURSE(ID, OLD_COURSE_ID, NEW_COURSE_ID, LAST_MODIFIED) VALUES (?, ?, ? , "
           + getLastModifiedSql() + ") ";
-  String UPDATE_ALL =
-      "UPDATE EQUIVALENT_COURSE SET OLD_COURSE_ID = ?, NEW_COURSE_ID = ?, LAST_MODIFIED = "
-          + getLastModifiedSql() + " ";
+  String UPDATE_ALL = "UPDATE EQUIVALENT_COURSE SET OLD_COURSE_ID = ?, NEW_COURSE_ID = ?, LAST_MODIFIED = "
+      + getLastModifiedSql() + " ";
   String DELETE_ALL = "DELETE FROM EQUIVALENT_COURSE ";
   String EXISTS = "SELECT COUNT(ID) EXIST FROM EQUIVALENT_COURSE ";
 
@@ -46,8 +44,7 @@ public class EquivalentCourseDao extends EquivalentCourseDaoDecorator {
   @Override
   public int update(MutableEquivalentCourse pMutable) {
     String query = UPDATE_ALL + " WHERE ID = ? ";
-    return mJdbcTemplate.update(query, pMutable.getOldCourseId(), pMutable.getNewCourseId(),
-        pMutable.getId());
+    return mJdbcTemplate.update(query, pMutable.getOldCourseId(), pMutable.getNewCourseId(), pMutable.getId());
   }
 
   @Override

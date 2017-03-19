@@ -25,10 +25,8 @@ public class MutableSubGroupResource extends Resource {
 
   @PUT
   public Response updateSubGroup(final @Context Request pRequest,
-      final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader, final JsonObject pJsonObject)
-      throws Exception {
-    return mSubGroupResourceHelper.put(pJsonObject.getInt("id"), pRequest, pIfMatchHeader,
-        pJsonObject);
+      final @HeaderParam(HEADER_IF_MATCH) String pIfMatchHeader, final JsonObject pJsonObject) throws Exception {
+    return mSubGroupResourceHelper.put(pJsonObject.getInt("id"), pRequest, pIfMatchHeader, pJsonObject);
   }
 
   @DELETE
@@ -40,8 +38,7 @@ public class MutableSubGroupResource extends Resource {
   @PUT
   @Path("/save/semester/{semesterId}/groupNo/{groupNo}/type/{type}")
   public Response saveAllSubGroupInfo(final @PathParam("semesterId") String pSemesterId,
-      final @PathParam("groupNo") String pGroupNo, final @PathParam("type") String pType,
-      final JsonObject pJsonObject) {
+      final @PathParam("groupNo") String pGroupNo, final @PathParam("type") String pType, final JsonObject pJsonObject) {
     return mSubGroupResourceHelper.save(Integer.parseInt(pSemesterId), Integer.parseInt(pGroupNo),
         Integer.parseInt(pType), pJsonObject);
   }

@@ -19,16 +19,13 @@ import org.ums.persistent.model.PersistentLoggerEntry;
 import com.google.common.collect.Lists;
 
 public class PersistentLoggerEntryDao extends
-    ContentDaoDecorator<LoggerEntry, MutableLoggerEntry, Long, LoggerEntryManager> implements
-    LoggerEntryManager {
-  static String SELECT_ALL =
-      "SELECT ID, SQL, USER_NAME, EXECUTION_TIME, EXECUTION_TIME_STAMP FROM DB_LOGGER ";
+    ContentDaoDecorator<LoggerEntry, MutableLoggerEntry, Long, LoggerEntryManager> implements LoggerEntryManager {
+  static String SELECT_ALL = "SELECT ID, SQL, USER_NAME, EXECUTION_TIME, EXECUTION_TIME_STAMP FROM DB_LOGGER ";
   static String UPDATE_ONE =
       "UPDATE DB_LOGGER SET SQL = ?, USER_NAME = ?, EXECUTION_TIME = ?, EXECUTION_TIME_STAMP = ? ";
   static String DELETE_ONE = "DELETE FROM DB_LOGGER ";
-  static String INSERT_ONE =
-      "INSERT INTO DB_LOGGER(ID, SQL, USER_NAME, EXECUTION_TIME, EXECUTION_TIME_STAMP) "
-          + "VALUES(?, ?, ?, ?, ?)";
+  static String INSERT_ONE = "INSERT INTO DB_LOGGER(ID, SQL, USER_NAME, EXECUTION_TIME, EXECUTION_TIME_STAMP) "
+      + "VALUES(?, ?, ?, ?, ?)";
 
   private JdbcTemplate mJdbcTemplate;
   private IdGenerator mIdGenerator;
@@ -62,8 +59,8 @@ public class PersistentLoggerEntryDao extends
   @Override
   public int update(MutableLoggerEntry pMutable) {
     String query = UPDATE_ONE + "WHERE ID = ?";
-    return mJdbcTemplate.update(query, pMutable.getSql(), pMutable.getUserName(),
-        pMutable.getExecutionTime(), pMutable.getTimestamp(), pMutable.getId());
+    return mJdbcTemplate.update(query, pMutable.getSql(), pMutable.getUserName(), pMutable.getExecutionTime(),
+        pMutable.getTimestamp(), pMutable.getId());
   }
 
   @Override

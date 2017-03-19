@@ -7,8 +7,7 @@ import org.ums.domain.model.mutable.MutableDepartment;
 
 import java.io.Serializable;
 
-public interface Department extends Serializable, EditType<MutableDepartment>, LastModifier,
-    Identifier<String> {
+public interface Department extends Serializable, EditType<MutableDepartment>, LastModifier, Identifier<String> {
   String getShortName();
 
   String getLongName();

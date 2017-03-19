@@ -10,8 +10,8 @@ import org.ums.enums.QuotaType;
 /**
  * Created by Monjur-E-Morshed on 10-Dec-16.
  */
-public interface MutableAdmissionMeritList extends AdmissionMeritList, Mutable,
-    MutableLastModifier, MutableIdentifier<Integer> {
+public interface MutableAdmissionMeritList extends AdmissionMeritList, Mutable, MutableLastModifier,
+    MutableIdentifier<Integer> {
   void setSemester(final Semester pSemester);
 
   void setMeritListSerialNo(final int pMeritListSerialNo);

@@ -8,8 +8,7 @@ import org.ums.domain.model.mutable.MutableCourseGroup;
 import java.io.Serializable;
 
 // Course Group for Optional Courses
-public interface CourseGroup extends Serializable, EditType<MutableCourseGroup>, LastModifier,
-    Identifier<Integer> {
+public interface CourseGroup extends Serializable, EditType<MutableCourseGroup>, LastModifier, Identifier<Integer> {
   String getName();
 
   Syllabus getSyllabus();

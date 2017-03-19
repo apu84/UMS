@@ -70,8 +70,8 @@ public class PersistentSeatPlanPublishDao extends SeatPlanPublishDaoDecorator {
   public List<Object[]> getInsertParamList(List<MutableSeatPlanPublish> pMutableSeatPlanPublishs) {
     List<Object[]> params = new ArrayList<>();
     for(SeatPlanPublish publish : pMutableSeatPlanPublishs) {
-      params.add(new Object[] {publish.getSemesterId(), publish.getExamType().getId(),
-          publish.getExamDate(), publish.getPublishStatus(),});
+      params.add(new Object[] {publish.getSemesterId(), publish.getExamType().getId(), publish.getExamDate(),
+          publish.getPublishStatus(),});
     }
     return params;
   }

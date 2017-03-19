@@ -5,8 +5,7 @@ import org.ums.context.AppContext;
 import org.ums.domain.model.mutable.MutableAdmissionCertificatesOfStudent;
 import org.ums.manager.AdmissionCertificatesOfStudentManager;
 
-public class PersistentAdmissionCertificatesOfStudent implements
-    MutableAdmissionCertificatesOfStudent {
+public class PersistentAdmissionCertificatesOfStudent implements MutableAdmissionCertificatesOfStudent {
 
   private static AdmissionCertificatesOfStudentManager sAdmissionStudentsCertificateHistory;
 

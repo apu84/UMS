@@ -10,8 +10,8 @@ import org.ums.util.CacheUtil;
 
 import java.util.List;
 
-public class SemesterCache extends
-    ContentCache<Semester, MutableSemester, Integer, SemesterManager> implements SemesterManager {
+public class SemesterCache extends ContentCache<Semester, MutableSemester, Integer, SemesterManager> implements
+    SemesterManager {
   private CacheManager<Semester, Integer> mCacheManager;
 
   public SemesterCache(final CacheManager<Semester, Integer> pCacheManager) {

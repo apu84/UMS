@@ -17,8 +17,7 @@ public class CourseTeacherCache extends
   }
 
   @Override
-  public List<CourseTeacher> getAssignedSections(Integer pSemesterId, String pCourseId,
-      String pTeacherId) {
+  public List<CourseTeacher> getAssignedSections(Integer pSemesterId, String pCourseId, String pTeacherId) {
     return getManager().getAssignedSections(pSemesterId, pCourseId, pTeacherId);
   }
 

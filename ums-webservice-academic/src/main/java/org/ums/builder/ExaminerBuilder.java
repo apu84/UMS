@@ -89,8 +89,7 @@ public class ExaminerBuilder implements Builder<Examiner, MutableExaminer> {
     if(!pJsonObject.getString("scrutinizerId").equalsIgnoreCase("-1")) {
       pMutable.setScrutinizer(mTeacherManager.get(pJsonObject.getString("scrutinizerId")));
     }
-    pMutable
-        .setSemester(mSemesterManager.get(Integer.parseInt(pJsonObject.getString("semesterId"))));
+    pMutable.setSemester(mSemesterManager.get(Integer.parseInt(pJsonObject.getString("semesterId"))));
     pMutable.setSemesterId(Integer.parseInt(pJsonObject.getString("semesterId")));
   }
 }

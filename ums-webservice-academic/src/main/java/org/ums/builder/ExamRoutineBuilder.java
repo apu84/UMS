@@ -18,8 +18,7 @@ import java.util.List;
 public class ExamRoutineBuilder implements Builder<ExamRoutine, MutableExamRoutine> {
 
   @Override
-  public void build(JsonObjectBuilder pBuilder, ExamRoutine pReadOnly, UriInfo pUriInfo,
-      final LocalCache pLocalCache) {
+  public void build(JsonObjectBuilder pBuilder, ExamRoutine pReadOnly, UriInfo pUriInfo, final LocalCache pLocalCache) {
 
     // please check if the object is null or not as required.
     if(pReadOnly.getSemesterId() != null) {
@@ -70,8 +69,7 @@ public class ExamRoutineBuilder implements Builder<ExamRoutine, MutableExamRouti
   }
 
   @Override
-  public void build(MutableExamRoutine pMutable, JsonObject pJsonObject,
-      final LocalCache pLocalCache) {
+  public void build(MutableExamRoutine pMutable, JsonObject pJsonObject, final LocalCache pLocalCache) {
     pMutable.setSemesterId(pJsonObject.getInt("semesterId"));
     pMutable.setExamTypeId(pJsonObject.getInt("examType"));
     pMutable.setInsertType(pJsonObject.getString("insertType"));

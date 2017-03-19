@@ -8,9 +8,8 @@ import org.ums.manager.CacheManager;
 import org.ums.manager.StudentRecordManager;
 import org.ums.util.CacheUtil;
 
-public class StudentRecordCache extends
-    ContentCache<StudentRecord, MutableStudentRecord, Long, StudentRecordManager> implements
-    StudentRecordManager {
+public class StudentRecordCache extends ContentCache<StudentRecord, MutableStudentRecord, Long, StudentRecordManager>
+    implements StudentRecordManager {
   private CacheManager<StudentRecord, Long> mCacheManager;
 
   public StudentRecordCache(final CacheManager<StudentRecord, Long> pCacheManager) {
@@ -32,8 +31,7 @@ public class StudentRecordCache extends
   }
 
   @Override
-  public List<StudentRecord> getStudentRecords(Integer pProgramId, Integer pSemesterId,
-      StudentRecord.Type pType) {
+  public List<StudentRecord> getStudentRecords(Integer pProgramId, Integer pSemesterId, StudentRecord.Type pType) {
     List<StudentRecord> readOnlys = getManager().getStudentRecords(pProgramId, pSemesterId, pType);
     for(StudentRecord readOnly : readOnlys) {
       getCacheManager().put(getCacheKey(readOnly.getId()), readOnly);
@@ -42,10 +40,9 @@ public class StudentRecordCache extends
   }
 
   @Override
-  public List<StudentRecord> getStudentRecords(Integer pProgramId, Integer pSemesterId,
-      Integer pYear, Integer pAcademicSemester) {
-    List<StudentRecord> readOnlys =
-        getManager().getStudentRecords(pProgramId, pSemesterId, pYear, pAcademicSemester);
+  public List<StudentRecord> getStudentRecords(Integer pProgramId, Integer pSemesterId, Integer pYear,
+      Integer pAcademicSemester) {
+    List<StudentRecord> readOnlys = getManager().getStudentRecords(pProgramId, pSemesterId, pYear, pAcademicSemester);
     for(StudentRecord readOnly : readOnlys) {
       getCacheManager().put(getCacheKey(readOnly.getId()), readOnly);
     }
@@ -53,8 +50,8 @@ public class StudentRecordCache extends
   }
 
   @Override
-  public List<StudentRecord> getStudentRecords(Integer pProgramId, Integer pSemesterId,
-      Integer pYear, Integer pAcademicSemester, StudentRecord.Type pType) {
+  public List<StudentRecord> getStudentRecords(Integer pProgramId, Integer pSemesterId, Integer pYear,
+      Integer pAcademicSemester, StudentRecord.Type pType) {
     List<StudentRecord> readOnlys =
         getManager().getStudentRecords(pProgramId, pSemesterId, pYear, pAcademicSemester, pType);
     for(StudentRecord readOnly : readOnlys) {
@@ -64,10 +61,9 @@ public class StudentRecordCache extends
   }
 
   @Override
-  public List<StudentRecord> getStudentRecords(String pStudentId, Integer pSemesterId,
-      Integer pYear, Integer pAcademicSemester) {
-    List<StudentRecord> readOnlys =
-        getManager().getStudentRecords(pStudentId, pSemesterId, pYear, pAcademicSemester);
+  public List<StudentRecord> getStudentRecords(String pStudentId, Integer pSemesterId, Integer pYear,
+      Integer pAcademicSemester) {
+    List<StudentRecord> readOnlys = getManager().getStudentRecords(pStudentId, pSemesterId, pYear, pAcademicSemester);
     for(StudentRecord readOnly : readOnlys) {
       getCacheManager().put(getCacheKey(readOnly.getId()), readOnly);
     }

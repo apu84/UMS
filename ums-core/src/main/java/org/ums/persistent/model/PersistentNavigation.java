@@ -118,8 +118,8 @@ public class PersistentNavigation implements MutableNavigation {
 
   @Override
   public Navigation getParent() {
-    return mNavigation == null ? mParentId > 0 ? sNavigationManager.get(mParentId) : null
-        : sNavigationManager.validate(mNavigation);
+    return mNavigation == null ? mParentId > 0 ? sNavigationManager.get(mParentId) : null : sNavigationManager
+        .validate(mNavigation);
   }
 
   @Override

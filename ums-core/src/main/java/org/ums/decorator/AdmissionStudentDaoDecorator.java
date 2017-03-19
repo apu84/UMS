@@ -11,8 +11,8 @@ import org.ums.manager.AdmissionStudentManager;
 import java.util.List;
 
 public class AdmissionStudentDaoDecorator extends
-    ContentDaoDecorator<AdmissionStudent, MutableAdmissionStudent, String, AdmissionStudentManager>
-    implements AdmissionStudentManager {
+    ContentDaoDecorator<AdmissionStudent, MutableAdmissionStudent, String, AdmissionStudentManager> implements
+    AdmissionStudentManager {
 
   @Override
   public List<AdmissionStudent> getTaletalkData(int pSemesterId, ProgramType pProgramType) {
@@ -47,8 +47,7 @@ public class AdmissionStudentDaoDecorator extends
   }
 
   @Override
-  public AdmissionStudent getAdmissionStudent(int pSemesterId, ProgramType pProgramType,
-      String pReceiptId) {
+  public AdmissionStudent getAdmissionStudent(int pSemesterId, ProgramType pProgramType, String pReceiptId) {
     return getManager().getAdmissionStudent(pSemesterId, pProgramType, pReceiptId);
   }
 
@@ -64,10 +63,9 @@ public class AdmissionStudentDaoDecorator extends
   }
 
   @Override
-  public AdmissionStudent getNextStudentForDepartmentSelection(int pSemesterId,
-      ProgramType pProgramType, String pUnit, String pQuota, int pMeritSerialNo) {
-    return getNextStudentForDepartmentSelection(pSemesterId, pProgramType, pUnit, pQuota,
-        pMeritSerialNo);
+  public AdmissionStudent getNextStudentForDepartmentSelection(int pSemesterId, ProgramType pProgramType, String pUnit,
+      String pQuota, int pMeritSerialNo) {
+    return getNextStudentForDepartmentSelection(pSemesterId, pProgramType, pUnit, pQuota, pMeritSerialNo);
   }
 
   // kawsurilu
@@ -83,8 +81,7 @@ public class AdmissionStudentDaoDecorator extends
   }
 
   @Override
-  public int updateStudentsAllocatedProgram(AdmissionStudent pAdmissionStudent,
-      MigrationStatus pMigrationStatus) {
+  public int updateStudentsAllocatedProgram(AdmissionStudent pAdmissionStudent, MigrationStatus pMigrationStatus) {
     return getManager().updateStudentsAllocatedProgram(pAdmissionStudent, pMigrationStatus);
   }
 
@@ -94,8 +91,7 @@ public class AdmissionStudentDaoDecorator extends
   }
 
   @Override
-  public List<AdmissionStudent> getAdmissionStudent(int pSemesterId,
-      MigrationStatus pMigrationStatus) {
+  public List<AdmissionStudent> getAdmissionStudent(int pSemesterId, MigrationStatus pMigrationStatus) {
     return getManager().getAdmissionStudent(pSemesterId, pMigrationStatus);
   }
 

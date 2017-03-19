@@ -171,8 +171,7 @@ public class PersistentSeatPlan implements MutableSeatPlan {
 
   @Override
   public ClassRoom getClassRoom() {
-    return mClassRoom == null ? sClassRoomManager.get(mClassRoomId) : sClassRoomManager
-        .validate(mClassRoom);
+    return mClassRoom == null ? sClassRoomManager.get(mClassRoomId) : sClassRoomManager.validate(mClassRoom);
   }
 
   @Override
@@ -182,8 +181,7 @@ public class PersistentSeatPlan implements MutableSeatPlan {
 
   @Override
   public Semester getSemester() {
-    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
-        .validate(mSemester);
+    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager.validate(mSemester);
   }
 
   @Override

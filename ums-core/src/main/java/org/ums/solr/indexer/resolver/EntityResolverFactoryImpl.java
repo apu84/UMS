@@ -11,8 +11,7 @@ public class EntityResolverFactoryImpl implements EntityResolverFactory {
   private EmployeeManager mEmployeeManager;
   private EmployeeRepository mEmployeeRepository;
 
-  public EntityResolverFactoryImpl(EmployeeManager pEmployeeManager,
-      EmployeeRepository pEmployeeRepository) {
+  public EntityResolverFactoryImpl(EmployeeManager pEmployeeManager, EmployeeRepository pEmployeeRepository) {
     this.mEmployeeManager = pEmployeeManager;
     this.mEmployeeRepository = pEmployeeRepository;
   }

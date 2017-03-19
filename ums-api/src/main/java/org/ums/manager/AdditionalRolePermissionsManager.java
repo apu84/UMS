@@ -13,11 +13,9 @@ public interface AdditionalRolePermissionsManager extends
     ContentManager<AdditionalRolePermissions, MutableAdditionalRolePermissions, Long> {
   List<AdditionalRolePermissions> getPermissionsByUser(final String pUserId);
 
-  List<AdditionalRolePermissions> getUserPermissionsByAssignedUser(final String pUserId,
-      final String pAssignedBy);
+  List<AdditionalRolePermissions> getUserPermissionsByAssignedUser(final String pUserId, final String pAssignedBy);
 
-  int addRole(final String pUserId, final Role pRole, final User pAssignedBy, final Date pFromDate,
-      final Date pToDate);
+  int addRole(final String pUserId, final Role pRole, final User pAssignedBy, final Date pFromDate, final Date pToDate);
 
   int addPermissions(final String pUserId, final Set<String> pPermissions, final User pAssignedBy,
       final Date pFromDate, final Date pToDate);

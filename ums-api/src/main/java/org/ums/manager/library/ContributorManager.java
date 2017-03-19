@@ -7,7 +7,6 @@ import org.ums.manager.ContentManager;
 /**
  * Created by Ifti on 17-Feb-17.
  */
-public interface ContributorManager extends
-    ContentManager<Contributor, MutableContributor, Integer> {
+public interface ContributorManager extends ContentManager<Contributor, MutableContributor, Integer> {
 
 }

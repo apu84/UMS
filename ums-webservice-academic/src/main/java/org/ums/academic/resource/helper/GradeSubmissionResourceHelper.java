@@ -32,8 +32,7 @@ import org.ums.resource.ResourceHelper;
 import org.ums.services.academic.GradeSubmissionService;
 
 @Component
-public class GradeSubmissionResourceHelper extends
-    ResourceHelper<ExamGrade, MutableExamGrade, Object> {
+public class GradeSubmissionResourceHelper extends ResourceHelper<ExamGrade, MutableExamGrade, Object> {
 
   @Autowired
   private ExamGradeManager mManager;
@@ -61,8 +60,7 @@ public class GradeSubmissionResourceHelper extends
 
   @Override
   public Response post(JsonObject pJsonObject, UriInfo pUriInfo) {
-    throw new NotImplementedException(
-        "Post method is not implemented for GradeSubmissionResourceHelper");
+    throw new NotImplementedException("Post method is not implemented for GradeSubmissionResourceHelper");
   }
 
   @Override
@@ -80,17 +78,16 @@ public class GradeSubmissionResourceHelper extends
     return null;
   }
 
-  public JsonObject getGradeList(final String pRequestedRoleId, final Integer pSemesterId,
-      final String pCourseId, final ExamType pExamType) {
+  public JsonObject getGradeList(final String pRequestedRoleId, final Integer pSemesterId, final String pCourseId,
+      final ExamType pExamType) {
 
     MarksSubmissionStatusDto marksSubmissionStatusDto =
         getContentManager().getMarksSubmissionStatus(pSemesterId, pCourseId, pExamType);
     String currentActor =
-        gradeSubmissionService.getActorForCurrentUser(SecurityUtils.getSubject().getPrincipal()
-            .toString(), pRequestedRoleId, pSemesterId, pCourseId);
+        gradeSubmissionService.getActorForCurrentUser(SecurityUtils.getSubject().getPrincipal().toString(),
+            pRequestedRoleId, pSemesterId, pCourseId);
 
-    JsonReader jsonReader =
-        Json.createReader(new StringReader(marksSubmissionStatusDto.toString()));
+    JsonReader jsonReader = Json.createReader(new StringReader(marksSubmissionStatusDto.toString()));
     JsonObject jsonObject = jsonReader.readObject();
     JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
     jsonReader.close();
@@ -98,18 +95,16 @@ public class GradeSubmissionResourceHelper extends
     objectBuilder.add("current_actor", currentActor);
     objectBuilder.add("current_course_status", marksSubmissionStatusDto.getStatusId());
 
-    gradeSubmissionService.prepareGradeGroups(
-        objectBuilder,
-        getContentManager().getAllGrades(pSemesterId, pCourseId, pExamType,
-            marksSubmissionStatusDto.getCourseType()),
+    gradeSubmissionService.prepareGradeGroups(objectBuilder,
+        getContentManager().getAllGrades(pSemesterId, pCourseId, pExamType, marksSubmissionStatusDto.getCourseType()),
         CourseMarksSubmissionStatus.values()[marksSubmissionStatusDto.getStatusId()], currentActor);
 
     return objectBuilder.build();
   }
 
   public JsonObject getGradeSubmissionStatus(final Integer pSemesterId, final Integer pExamType,
-      final Integer pProgramId, final Integer pYearSemester, final String deptId,
-      final String pUserRole, final int pStatus) {
+      final Integer pProgramId, final Integer pYearSemester, final String deptId, final String pUserRole,
+      final int pStatus) {
     User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
     Integer year = 0;
     Integer semester = 0;
@@ -119,8 +114,8 @@ public class GradeSubmissionResourceHelper extends
       semester = Integer.valueOf((pYearSemester.toString()).charAt(1) + "");
     }
     List<MarksSubmissionStatusDto> examGradeStatusList =
-        getContentManager().getMarksSubmissionStatus(pSemesterId, pExamType, pProgramId, year,
-            semester, user.getEmployeeId(), deptId, pUserRole, pStatus);
+        getContentManager().getMarksSubmissionStatus(pSemesterId, pExamType, pProgramId, year, semester,
+            user.getEmployeeId(), deptId, pUserRole, pStatus);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     JsonReader jsonReader;
@@ -137,8 +132,7 @@ public class GradeSubmissionResourceHelper extends
     return object.build();
   }
 
-  private void setSubmissionColorCode(String pUserRole, String pUserId,
-      MarksSubmissionStatusDto pStatus) {
+  private void setSubmissionColorCode(String pUserRole, String pUserId, MarksSubmissionStatusDto pStatus) {
     Date currentDate = new Date();
     if(pUserRole.equals("T")) {
       if(pUserId.equals(pStatus.getPreparerId())) {
@@ -227,12 +221,12 @@ public class GradeSubmissionResourceHelper extends
     String userId = SecurityUtils.getSubject().getPrincipal().toString();
 
     MarksSubmissionStatus marksSubmissionStatus =
-        mMarksSubmissionStatusManager.get(requestedStatusDTO.getSemesterId(),
-            requestedStatusDTO.getCourseId(), requestedStatusDTO.getExamType());
+        mMarksSubmissionStatusManager.get(requestedStatusDTO.getSemesterId(), requestedStatusDTO.getCourseId(),
+            requestedStatusDTO.getExamType());
 
     String actingRoleForCurrentUser =
-        gradeSubmissionService.getActorForCurrentUser(userId, userRole,
-            marksSubmissionStatus.getSemesterId(), marksSubmissionStatus.getCourseId());
+        gradeSubmissionService.getActorForCurrentUser(userId, userRole, marksSubmissionStatus.getSemesterId(),
+            marksSubmissionStatus.getCourseId());
 
     if((marksSubmissionStatus.getCourse().getCourseType() == CourseType.THEORY)
         && (marksSubmissionStatus.getStatus() == CourseMarksSubmissionStatus.NOT_SUBMITTED)) {
@@ -243,8 +237,8 @@ public class GradeSubmissionResourceHelper extends
       mutable.commit(true);
 
       marksSubmissionStatus =
-          mMarksSubmissionStatusManager.get(requestedStatusDTO.getSemesterId(),
-              requestedStatusDTO.getCourseId(), requestedStatusDTO.getExamType());
+          mMarksSubmissionStatusManager.get(requestedStatusDTO.getSemesterId(), requestedStatusDTO.getCourseId(),
+              requestedStatusDTO.getExamType());
     }
 
     if(action.equalsIgnoreCase("submit")) {
@@ -264,17 +258,14 @@ public class GradeSubmissionResourceHelper extends
       getContentManager().insertGradeLog(userId, actingRoleForCurrentUser, marksSubmissionStatus,
           CourseMarksSubmissionStatus.WAITING_FOR_SCRUTINY, gradeList);
 
-      getContentManager().insertMarksSubmissionStatusLog(userId, actingRoleForCurrentUser,
-          marksSubmissionStatus, CourseMarksSubmissionStatus.WAITING_FOR_SCRUTINY);
+      getContentManager().insertMarksSubmissionStatusLog(userId, actingRoleForCurrentUser, marksSubmissionStatus,
+          CourseMarksSubmissionStatus.WAITING_FOR_SCRUTINY);
 
       String notificationConsumer =
-          gradeSubmissionService
-              .getUserIdForNotification(marksSubmissionStatus.getSemesterId(),
-                  marksSubmissionStatus.getCourseId(),
-                  CourseMarksSubmissionStatus.WAITING_FOR_SCRUTINY);
+          gradeSubmissionService.getUserIdForNotification(marksSubmissionStatus.getSemesterId(),
+              marksSubmissionStatus.getCourseId(), CourseMarksSubmissionStatus.WAITING_FOR_SCRUTINY);
 
-      gradeSubmissionService.sendNotification(notificationConsumer, marksSubmissionStatus
-          .getCourse().getNo());
+      gradeSubmissionService.sendNotification(notificationConsumer, marksSubmissionStatus.getCourse().getNo());
     }
 
     getContentManager().saveGradeSheet(marksSubmissionStatus, gradeList);
@@ -377,12 +368,12 @@ public class GradeSubmissionResourceHelper extends
     getBuilder().build(requestedStatusDTO, pJsonObject);
 
     MarksSubmissionStatus marksSubmissionStatus =
-        mMarksSubmissionStatusManager.get(requestedStatusDTO.getSemesterId(),
-            requestedStatusDTO.getCourseId(), requestedStatusDTO.getExamType());
+        mMarksSubmissionStatusManager.get(requestedStatusDTO.getSemesterId(), requestedStatusDTO.getCourseId(),
+            requestedStatusDTO.getExamType());
 
     String actingRoleForCurrentUser =
-        gradeSubmissionService.getActorForCurrentUser(userId, userRole,
-            marksSubmissionStatus.getSemesterId(), marksSubmissionStatus.getCourseId());
+        gradeSubmissionService.getActorForCurrentUser(userId, userRole, marksSubmissionStatus.getSemesterId(),
+            marksSubmissionStatus.getCourseId());
 
     CourseMarksSubmissionStatus nextStatus =
         gradeSubmissionService.getCourseMarksSubmissionNextStatus(actingRoleForCurrentUser, action,
@@ -413,8 +404,7 @@ public class GradeSubmissionResourceHelper extends
             marksSubmissionStatus.getCourseId(), nextStatus);
 
     if(!userId.equals("")) {
-      gradeSubmissionService.sendNotification(notificationConsumer, marksSubmissionStatus
-          .getCourse().getNo());
+      gradeSubmissionService.sendNotification(notificationConsumer, marksSubmissionStatus.getCourse().getNo());
     }
 
     Response.ResponseBuilder builder = Response.created(null);
@@ -423,13 +413,12 @@ public class GradeSubmissionResourceHelper extends
     return builder.build();
   }
 
-  public JsonObject getChartData(final Integer pSemesterId, final String pCourseId,
-      final Integer pExamType, final Integer courseType) {
+  public JsonObject getChartData(final Integer pSemesterId, final String pCourseId, final Integer pExamType,
+      final Integer courseType) {
 
     User user = mUserManager.get(SecurityUtils.getSubject().getPrincipal().toString());
     List<GradeChartDataDto> examGradeStatusList =
-        getContentManager().getChartData(pSemesterId, pCourseId, ExamType.get(pExamType),
-            CourseType.get(courseType));
+        getContentManager().getChartData(pSemesterId, pCourseId, ExamType.get(pExamType), CourseType.get(courseType));
 
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
@@ -466,8 +455,8 @@ public class GradeSubmissionResourceHelper extends
      */
 
     marksSubmissionStatusDtoList =
-        mManager.getGradeSubmissionDeadLine(pSemesterId, pExamType, pExamDate, employee
-            .getDepartment().getId(), pCourseType);
+        mManager.getGradeSubmissionDeadLine(pSemesterId, pExamType, pExamDate, employee.getDepartment().getId(),
+            pCourseType);
 
     Collections.sort(marksSubmissionStatusDtoList, new Comparator<MarksSubmissionStatusDto>() {
 
@@ -532,8 +521,8 @@ public class GradeSubmissionResourceHelper extends
         }
       }
       MutableMarksSubmissionStatus marksSubmissionStatus =
-          mMarksSubmissionStatusManager.get(examGrade.getSemesterId(), examGrade.getCourseId(),
-              examGrade.getExamType()).edit();
+          mMarksSubmissionStatusManager
+              .get(examGrade.getSemesterId(), examGrade.getCourseId(), examGrade.getExamType()).edit();
       marksSubmissionStatus.setLastSubmissionDateHead(examGrade.getLastSubmissionDateHead());
       marksSubmissionStatus.setLastSubmissionDatePrep(examGrade.getLastSubmissionDatePrep());
       marksSubmissionStatus.setLastSubmissionDateScr(examGrade.getLastSubmissionDateScr());
@@ -551,8 +540,7 @@ public class GradeSubmissionResourceHelper extends
   }
 
   // Get Course-wise marks submission status log
-  public JsonObject getMarksSubmissionLogs(final Integer pSemesterId, final String pCourseId,
-      final Integer pExamType) {
+  public JsonObject getMarksSubmissionLogs(final Integer pSemesterId, final String pCourseId, final Integer pExamType) {
 
     List<MarksSubmissionStatusLogDto> logList =
         getContentManager().getMarksSubmissionLogs(pSemesterId, pCourseId, pExamType);
@@ -572,10 +560,9 @@ public class GradeSubmissionResourceHelper extends
   }
 
   // Get Student-wise log for Grade Submission
-  public JsonObject getMarksLogs(final Integer pSemesterId, final String pCourseId,
-      final ExamType pExamType, final String pStudentId) {
-    MarksSubmissionStatus marksSubmissionStatus =
-        mMarksSubmissionStatusManager.get(pSemesterId, pCourseId, pExamType);
+  public JsonObject getMarksLogs(final Integer pSemesterId, final String pCourseId, final ExamType pExamType,
+      final String pStudentId) {
+    MarksSubmissionStatus marksSubmissionStatus = mMarksSubmissionStatusManager.get(pSemesterId, pCourseId, pExamType);
 
     List<MarksLogDto> logList =
         getContentManager().getMarksLogs(pSemesterId, pCourseId, pExamType, pStudentId,
@@ -596,11 +583,10 @@ public class GradeSubmissionResourceHelper extends
   }
 
   // Marks Submission Statistics
-  public JsonObject getMarksSubmissionStat(Integer pProgramType, Integer pSemesterId,
-      String pDeptId, Integer pExamType, String pStatus) throws Exception {
+  public JsonObject getMarksSubmissionStat(Integer pProgramType, Integer pSemesterId, String pDeptId,
+      Integer pExamType, String pStatus) throws Exception {
     List<MarksSubmissionStatDto> examGradeStatusList =
-        getContentManager().getMarksSubmissionStat(pProgramType, pSemesterId, pDeptId, pExamType,
-            pStatus);
+        getContentManager().getMarksSubmissionStat(pProgramType, pSemesterId, pDeptId, pExamType, pStatus);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
 

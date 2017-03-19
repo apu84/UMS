@@ -8,8 +8,8 @@ import org.ums.util.CacheUtil;
 
 import java.util.List;
 
-public class SyllabusCache extends ContentCache<Syllabus, MutableSyllabus, String, SyllabusManager>
-    implements SyllabusManager {
+public class SyllabusCache extends ContentCache<Syllabus, MutableSyllabus, String, SyllabusManager> implements
+    SyllabusManager {
   private CacheManager<Syllabus, String> mCacheManager;
 
   public SyllabusCache(final CacheManager<Syllabus, String> pCacheManager) {

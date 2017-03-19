@@ -15,8 +15,7 @@ import org.ums.domain.model.mutable.MutableUGRegistrationResult;
 import org.ums.util.UmsUtils;
 
 @Component
-public class GradeSheetBuilder implements
-    Builder<UGRegistrationResult, MutableUGRegistrationResult> {
+public class GradeSheetBuilder implements Builder<UGRegistrationResult, MutableUGRegistrationResult> {
 
   private final Map<String, Double> GPA_MAP = UmsUtils.getGPAMap();
 
@@ -37,8 +36,7 @@ public class GradeSheetBuilder implements
   }
 
   @Override
-  public void build(MutableUGRegistrationResult pMutable, JsonObject pJsonObject,
-      LocalCache pLocalCache) {
+  public void build(MutableUGRegistrationResult pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
 
   }
 }

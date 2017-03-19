@@ -36,8 +36,7 @@ public class AuthorBuilder implements Builder<Author, MutableAuthor> {
   }
 
   @Override
-  public void build(final MutableAuthor pMutable, final JsonObject pJsonObject,
-      final LocalCache pLocalCache) {
+  public void build(final MutableAuthor pMutable, final JsonObject pJsonObject, final LocalCache pLocalCache) {
 
     pMutable.setId(pJsonObject.getInt("Id"));
     pMutable.setFirstName(pJsonObject.getString("firstName"));

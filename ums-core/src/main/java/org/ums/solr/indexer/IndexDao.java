@@ -17,11 +17,9 @@ import org.ums.solr.indexer.model.MutableIndex;
 import com.google.common.collect.Lists;
 
 public class IndexDao extends IndexDaoDecorator {
-  private String INSERT_ALL =
-      "INSERT INTO INDEXER(ID, ENTITY_ID, ENTITY_TYPE, IS_DELETED, MODIFIED, LAST_MODIFIED) "
-          + "VALUES(?, ?, ?, ?, SYSDATE, " + getLastModifiedSql() + ") ";
-  private String SELECT_ALL =
-      "SELECT ID, ENTITY_ID, ENTITY_TYPE, IS_DELETED, MODIFIED, LAST_MODIFIED FROM INDEXER ";
+  private String INSERT_ALL = "INSERT INTO INDEXER(ID, ENTITY_ID, ENTITY_TYPE, IS_DELETED, MODIFIED, LAST_MODIFIED) "
+      + "VALUES(?, ?, ?, ?, SYSDATE, " + getLastModifiedSql() + ") ";
+  private String SELECT_ALL = "SELECT ID, ENTITY_ID, ENTITY_TYPE, IS_DELETED, MODIFIED, LAST_MODIFIED FROM INDEXER ";
 
   private JdbcTemplate mJdbcTemplate;
   private IdGenerator mIdGenerator;
@@ -59,8 +57,8 @@ public class IndexDao extends IndexDaoDecorator {
   private List<Object[]> getInsertParamList(List<MutableIndex> pMutableIndexerList) {
     List<Object[]> params = new ArrayList<>();
     for(Index index : pMutableIndexerList) {
-      params.add(new Object[] {mIdGenerator.getNumericId(), index.getEntityId(),
-          index.getEntityType(), index.isDeleted() ? 1 : 0});
+      params.add(new Object[] {mIdGenerator.getNumericId(), index.getEntityId(), index.getEntityType(),
+          index.isDeleted() ? 1 : 0});
     }
     return params;
   }

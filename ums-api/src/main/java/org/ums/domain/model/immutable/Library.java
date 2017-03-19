@@ -11,8 +11,7 @@ import org.ums.domain.model.mutable.MutableLibrary;
 
 import java.io.Serializable;
 
-public interface Library extends Serializable, EditType<MutableLibrary>, Identifier<Integer>,
-    LastModifier {
+public interface Library extends Serializable, EditType<MutableLibrary>, Identifier<Integer>, LastModifier {
 
   String getBookName();
 

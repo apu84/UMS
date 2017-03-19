@@ -9,8 +9,7 @@ import org.ums.util.CacheUtil;
 
 import java.util.List;
 
-public class UserGuideCache extends
-    ContentCache<UserGuide, MutableUserGuide, Integer, UserGuideManager> implements
+public class UserGuideCache extends ContentCache<UserGuide, MutableUserGuide, Integer, UserGuideManager> implements
     UserGuideManager {
 
   private CacheManager<UserGuide, Integer> mCacheManager;

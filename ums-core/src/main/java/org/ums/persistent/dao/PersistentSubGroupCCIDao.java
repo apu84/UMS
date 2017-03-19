@@ -37,14 +37,12 @@ public class PersistentSubGroupCCIDao extends SubGroupCCIDaoDecorator {
   @Override
   public List<SubGroupCCI> getBySemesterAndExamDate(Integer pSemesterId, String pExamDate) {
     String query = SELECT_ALL_SUB_GROUP;
-    return mJdbcTemplate.query(query, new Object[] {pExamDate, pSemesterId},
-        new SubGroupCCIRowMapperForSeatPlan());
+    return mJdbcTemplate.query(query, new Object[] {pExamDate, pSemesterId}, new SubGroupCCIRowMapperForSeatPlan());
   }
 
   @Override
   public Integer checkOccuranceBySemesterAndExamDate(Integer pSemesterId, String pExamDate) {
-    String query =
-        "select count(*) from sp_sub_group_cci where exam_date=to_date(?,'MM-DD-YYYY') and semester_id=?";
+    String query = "select count(*) from sp_sub_group_cci where exam_date=to_date(?,'MM-DD-YYYY') and semester_id=?";
     return mJdbcTemplate.queryForObject(query, Integer.class, pExamDate, pSemesterId);
   }
 
@@ -80,16 +78,15 @@ public class PersistentSubGroupCCIDao extends SubGroupCCIDaoDecorator {
 
   @Override
   public Integer deleteBySemesterAndExamDate(Integer pSemesterId, String pExamDate) {
-    String query =
-        "delete from sp_sub_group_cci where exam_date=to_date(?,'MM-DD-YYYY') and semester_id=?";
+    String query = "delete from sp_sub_group_cci where exam_date=to_date(?,'MM-DD-YYYY') and semester_id=?";
     return mJdbcTemplate.update(query, pExamDate, pSemesterId);
   }
 
   private List<Object[]> getInsertParamList(List<MutableSubGroupCCI> pMutableSubGroupCCIs) {
     List<Object[]> params = new ArrayList<>();
     for(SubGroupCCI subGroup : pMutableSubGroupCCIs) {
-      params.add(new Object[] {subGroup.getSemesterId(), subGroup.getSubGroupNo(),
-          subGroup.getTotalStudent(), subGroup.getCourseId(), subGroup.getExamDate()});
+      params.add(new Object[] {subGroup.getSemesterId(), subGroup.getSubGroupNo(), subGroup.getTotalStudent(),
+          subGroup.getCourseId(), subGroup.getExamDate()});
     }
     return params;
   }

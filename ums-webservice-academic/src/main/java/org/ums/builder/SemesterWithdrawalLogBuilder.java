@@ -12,8 +12,7 @@ import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
 
 @Component
-public class SemesterWithdrawalLogBuilder implements
-    Builder<SemesterWithdrawalLog, MutableSemesterWithdrawalLog> {
+public class SemesterWithdrawalLogBuilder implements Builder<SemesterWithdrawalLog, MutableSemesterWithdrawalLog> {
 
   @Override
   public void build(JsonObjectBuilder pBuilder, SemesterWithdrawalLog pReadOnly, UriInfo pUriInfo,
@@ -24,14 +23,14 @@ public class SemesterWithdrawalLogBuilder implements
     pBuilder.add("action", pReadOnly.getAction());
     pBuilder.add("eventDateTime", pReadOnly.getEventDateTime());
     pBuilder.add("lastModified", pReadOnly.getLastModified());
-    pBuilder.add("self", pUriInfo.getBaseUriBuilder().path("academic").path("semesterWithdrawLog")
-        .path(pReadOnly.getId().toString()).build().toString());
+    pBuilder.add("self",
+        pUriInfo.getBaseUriBuilder().path("academic").path("semesterWithdrawLog").path(pReadOnly.getId().toString())
+            .build().toString());
 
   }
 
   @Override
-  public void build(MutableSemesterWithdrawalLog pMutable, JsonObject pJsonObject,
-      LocalCache pLocalCache) {
+  public void build(MutableSemesterWithdrawalLog pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
     PersistentSemesterWithdrawal persistentSemesterWithdrawal = new PersistentSemesterWithdrawal();
     persistentSemesterWithdrawal.setId(Long.parseLong(pJsonObject.getString("semesterWithdrawId")));
     pMutable.setSemesterWithdrawal(persistentSemesterWithdrawal);

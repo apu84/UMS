@@ -21,8 +21,7 @@ public class PersistentSubGroup implements MutableSubGroup {
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
-    sSeatPlanGroupManager =
-        applicationContext.getBean("seatPlanGroupManager", SeatPlanGroupManager.class);
+    sSeatPlanGroupManager = applicationContext.getBean("seatPlanGroupManager", SeatPlanGroupManager.class);
     sSubGroupManager = applicationContext.getBean("subGroupManager", SubGroupManager.class);
   }
 
@@ -131,8 +130,7 @@ public class PersistentSubGroup implements MutableSubGroup {
 
   @Override
   public Semester getSemester() {
-    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
-        .validate(mSemester);
+    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager.validate(mSemester);
   }
 
   @Override

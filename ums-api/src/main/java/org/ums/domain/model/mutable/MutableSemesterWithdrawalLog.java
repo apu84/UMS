@@ -9,8 +9,8 @@ import org.ums.domain.model.immutable.SemesterWithdrawalLog;
 
 import java.sql.Timestamp;
 
-public interface MutableSemesterWithdrawalLog extends SemesterWithdrawalLog, Mutable,
-    MutableLastModifier, MutableIdentifier<Long> {
+public interface MutableSemesterWithdrawalLog extends SemesterWithdrawalLog, Mutable, MutableLastModifier,
+    MutableIdentifier<Long> {
   void setSemesterWithdrawal(final SemesterWithdrawal pSemesterWithdrawal);
 
   void setEmployeeId(final String pEmployeeId);

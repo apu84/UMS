@@ -14,8 +14,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * Created by Ifti on 17-Feb-17.
  */
 public class PersistentContributorDao extends ContributorDaoDecorator {
-  static String SELECT_ALL =
-      " SELECT  ID, MFN, ROLE,  CONTRIBUTOR_ID, VIEW_ORDER, LAST_MODIFIED FROM  CONTRIBUTOR";
+  static String SELECT_ALL = " SELECT  ID, MFN, ROLE,  CONTRIBUTOR_ID, VIEW_ORDER, LAST_MODIFIED FROM  CONTRIBUTOR";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -26,8 +25,7 @@ public class PersistentContributorDao extends ContributorDaoDecorator {
   @Override
   public Contributor get(final Integer pId) {
     String query = SELECT_ALL + " Where Id = ?";
-    return mJdbcTemplate.queryForObject(query, new Object[] {pId},
-        new PersistentContributorDao.ContributorRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new PersistentContributorDao.ContributorRowMapper());
   }
 
   @Override

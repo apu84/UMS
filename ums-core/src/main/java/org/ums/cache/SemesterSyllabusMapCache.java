@@ -10,10 +10,9 @@ import org.ums.util.CacheUtil;
 
 import java.util.List;
 
-public class SemesterSyllabusMapCache
-    extends
-    ContentCache<SemesterSyllabusMap, MutableSemesterSyllabusMap, Integer, SemesterSyllabusMapManager>
-    implements SemesterSyllabusMapManager {
+public class SemesterSyllabusMapCache extends
+    ContentCache<SemesterSyllabusMap, MutableSemesterSyllabusMap, Integer, SemesterSyllabusMapManager> implements
+    SemesterSyllabusMapManager {
   private CacheManager<SemesterSyllabusMap, Integer> mCacheManager;
 
   public SemesterSyllabusMapCache(final CacheManager<SemesterSyllabusMap, Integer> pCacheManager) {
@@ -41,8 +40,7 @@ public class SemesterSyllabusMapCache
   }
 
   @Override
-  public Syllabus getSyllabusForSemester(Integer pProgramId, Integer pSemesterId, Integer pYear,
-      Integer pSemester) {
+  public Syllabus getSyllabusForSemester(Integer pProgramId, Integer pSemesterId, Integer pYear, Integer pSemester) {
     return getManager().getSyllabusForSemester(pProgramId, pSemesterId, pYear, pSemester);
   }
 }

@@ -12,11 +12,10 @@ import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
 
 @Component
-public class SemesterSyllabusMapBuilder implements
-    Builder<SemesterSyllabusMap, MutableSemesterSyllabusMap> {
+public class SemesterSyllabusMapBuilder implements Builder<SemesterSyllabusMap, MutableSemesterSyllabusMap> {
 
-  public void build(final JsonObjectBuilder pBuilder, final SemesterSyllabusMap pSSMap,
-      final UriInfo pUriInfo, final LocalCache pLocalCache) {
+  public void build(final JsonObjectBuilder pBuilder, final SemesterSyllabusMap pSSMap, final UriInfo pUriInfo,
+      final LocalCache pLocalCache) {
     pBuilder.add("id", pSSMap.getId());
     pBuilder.add("year", pSSMap.getYear());
     pBuilder.add("semester", pSSMap.getSemester());

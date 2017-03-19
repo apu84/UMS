@@ -9,8 +9,7 @@ import org.ums.domain.model.common.EditType;
 import org.ums.domain.model.common.Identifier;
 import org.ums.domain.model.common.LastModifier;
 
-public interface FeeCategory extends Serializable, EditType<MutableFeeCategory>, LastModifier,
-    Identifier<String> {
+public interface FeeCategory extends Serializable, EditType<MutableFeeCategory>, LastModifier, Identifier<String> {
 
   String getFeeId();
 

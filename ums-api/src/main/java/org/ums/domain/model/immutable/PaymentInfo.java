@@ -12,8 +12,7 @@ import java.io.Serializable;
 /**
  * Created by Monjur-E-Morshed on 23-Jan-17.
  */
-public interface PaymentInfo extends Serializable, EditType<MutablePaymentInfo>, LastModifier,
-    Identifier<Integer> {
+public interface PaymentInfo extends Serializable, EditType<MutablePaymentInfo>, LastModifier, Identifier<Integer> {
 
   String getReferenceId();
 

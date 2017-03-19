@@ -5,7 +5,6 @@ import org.ums.domain.model.mutable.MutableTaskStatus;
 import org.ums.manager.TaskStatusManager;
 
 public class TaskStatusDaoDecorator extends
-    ContentDaoDecorator<TaskStatus, MutableTaskStatus, String, TaskStatusManager> implements
-    TaskStatusManager {
+    ContentDaoDecorator<TaskStatus, MutableTaskStatus, String, TaskStatusManager> implements TaskStatusManager {
 
 }

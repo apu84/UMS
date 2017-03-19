@@ -13,8 +13,7 @@ import javax.ws.rs.core.UriInfo;
 @Component
 public class ParameterBuilder implements Builder<Parameter, MutableParameter> {
   @Override
-  public void build(JsonObjectBuilder pBuilder, Parameter pReadOnly, UriInfo pUriInfo,
-      LocalCache pLocalCache) {
+  public void build(JsonObjectBuilder pBuilder, Parameter pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("parameter", pReadOnly.getParameter());
     pBuilder.add("shortDescription", pReadOnly.getShortDescription());

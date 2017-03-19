@@ -28,17 +28,15 @@ public class SemesterWithdrawalResource extends MutableSemesterWithdrawalResourc
 
   @GET
   @Path("/studentInfo/semester/{semesterId}/year/{year}/academicSemester/{semester}")
-  public JsonObject getStudentRecord(final @Context Request pRequest,
-      final @PathParam("semesterId") String semesterId, final @PathParam("year") String year,
-      final @PathParam("semester") String semester) {
-    return mHelper.getStudentRecord(Integer.parseInt(semesterId), Integer.parseInt(year),
-        Integer.parseInt(semester), pRequest, mUriInfo);
+  public JsonObject getStudentRecord(final @Context Request pRequest, final @PathParam("semesterId") String semesterId,
+      final @PathParam("year") String year, final @PathParam("semester") String semester) {
+    return mHelper.getStudentRecord(Integer.parseInt(semesterId), Integer.parseInt(year), Integer.parseInt(semester),
+        pRequest, mUriInfo);
   }
 
   @GET
   @Path("/deptId/{deptId}")
-  public JsonObject getByDeptForEmployee(final @Context Request pRequest,
-      final @PathParam("deptId") String deptId) {
+  public JsonObject getByDeptForEmployee(final @Context Request pRequest, final @PathParam("deptId") String deptId) {
 
     String dId = "05";
     return mHelper.getRoutineByDeptForEmployee(dId, pRequest, mUriInfo);
@@ -46,8 +44,7 @@ public class SemesterWithdrawalResource extends MutableSemesterWithdrawalResourc
 
   @GET
   @Path(PATH_PARAM_OBJECT_ID)
-  public Response get(final @Context Request pRequest, final @PathParam("object-id") long pObjectId)
-      throws Exception {
+  public Response get(final @Context Request pRequest, final @PathParam("object-id") long pObjectId) throws Exception {
     return mHelper.get(pObjectId, pRequest, mUriInfo);
   }
 }

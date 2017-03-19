@@ -23,8 +23,7 @@ public class PersistentCourse implements MutableCourse {
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sSyllabusManager = applicationContext.getBean("syllabusManager", SyllabusManager.class);
-    sCourseGroupManager =
-        applicationContext.getBean("courseGroupManager", CourseGroupManager.class);
+    sCourseGroupManager = applicationContext.getBean("courseGroupManager", CourseGroupManager.class);
     sDepartmentManager = applicationContext.getBean("departmentManager", DepartmentManager.class);
     sCourseManager = applicationContext.getBean("courseManager", CourseManager.class);
   }
@@ -110,14 +109,14 @@ public class PersistentCourse implements MutableCourse {
 
   @Override
   public Department getOfferedBy() {
-    return mOfferedBy == null && !StringUtils.isEmpty(mDepartmentId) ? sDepartmentManager
-        .get(mDepartmentId) : mOfferedBy;
+    return mOfferedBy == null && !StringUtils.isEmpty(mDepartmentId) ? sDepartmentManager.get(mDepartmentId)
+        : mOfferedBy;
   }
 
   @Override
   public Department getOfferedTo() {
-    return mOfferedTo == null && !StringUtils.isEmpty(mSyllabusId) ? sSyllabusManager
-        .get(mSyllabusId).getProgram().getDepartment() : mOfferedTo;
+    return mOfferedTo == null && !StringUtils.isEmpty(mSyllabusId) ? sSyllabusManager.get(mSyllabusId).getProgram()
+        .getDepartment() : mOfferedTo;
   }
 
   @Override
@@ -162,8 +161,8 @@ public class PersistentCourse implements MutableCourse {
 
   @Override
   public CourseGroup getCourseGroup(final String pSyllabusId) {
-    return mCourseGroup == null && mCourseGroupId > 0 ? sCourseGroupManager.getBySyllabus(
-        mCourseGroupId, pSyllabusId) : sCourseGroupManager.validate(mCourseGroup);
+    return mCourseGroup == null && mCourseGroupId > 0 ? sCourseGroupManager.getBySyllabus(mCourseGroupId, pSyllabusId)
+        : sCourseGroupManager.validate(mCourseGroup);
   }
 
   @Override
@@ -173,8 +172,7 @@ public class PersistentCourse implements MutableCourse {
 
   @Override
   public Syllabus getSyllabus() {
-    return mSyllabus == null ? sSyllabusManager.get(mSyllabusId) : sSyllabusManager
-        .validate(mSyllabus);
+    return mSyllabus == null ? sSyllabusManager.get(mSyllabusId) : sSyllabusManager.validate(mSyllabus);
   }
 
   @Override

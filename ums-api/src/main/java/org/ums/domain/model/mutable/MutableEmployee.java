@@ -7,8 +7,7 @@ import org.ums.domain.model.immutable.Employee;
 
 import java.util.Date;
 
-public interface MutableEmployee extends Employee, Mutable, MutableLastModifier,
-    MutableIdentifier<String> {
+public interface MutableEmployee extends Employee, Mutable, MutableLastModifier, MutableIdentifier<String> {
 
   void setEmployeeName(final String pEmployeeName);
 

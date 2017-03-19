@@ -9,8 +9,7 @@ import org.ums.domain.model.mutable.MutableLastModifier;
 /**
  * Created by Ifti on 17-Feb-17.
  */
-public interface MutableSubject extends Subject, Mutable, MutableLastModifier,
-    MutableIdentifier<Integer> {
+public interface MutableSubject extends Subject, Mutable, MutableLastModifier, MutableIdentifier<Integer> {
 
   void setMfn(String pMfn);
 

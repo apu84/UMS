@@ -7,8 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.ums.manager.ContentManager;
 
-public class ContentDaoDecorator<R, M, I, C extends ContentManager<R, M, I>> implements
-    ContentManager<R, M, I> {
+public class ContentDaoDecorator<R, M, I, C extends ContentManager<R, M, I>> implements ContentManager<R, M, I> {
   private C mManager;
   private static final Logger mLogger = LoggerFactory.getLogger(ContentDaoDecorator.class);
 

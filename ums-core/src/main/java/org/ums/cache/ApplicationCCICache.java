@@ -14,8 +14,7 @@ import java.util.List;
  * Created by My Pc on 7/11/2016.
  */
 public class ApplicationCCICache extends
-    ContentCache<ApplicationCCI, MutableApplicationCCI, Long, ApplicationCCIManager> implements
-    ApplicationCCIManager {
+    ContentCache<ApplicationCCI, MutableApplicationCCI, Long, ApplicationCCIManager> implements ApplicationCCIManager {
 
   CacheManager<ApplicationCCI, Long> mCacheManager;
 
@@ -24,8 +23,7 @@ public class ApplicationCCICache extends
   }
 
   @Override
-  public List<ApplicationCCI> getByStudentIdAndSemesterAndType(String pStudentId, int pSemesterId,
-      int pExamType) {
+  public List<ApplicationCCI> getByStudentIdAndSemesterAndType(String pStudentId, int pSemesterId, int pExamType) {
     return getManager().getByStudentIdAndSemesterAndType(pStudentId, pSemesterId, pExamType);
   }
 
@@ -35,8 +33,7 @@ public class ApplicationCCICache extends
   }
 
   @Override
-  public List<ApplicationCCI> getByProgramAndSemesterAndType(int pProgramId, int pSemesterId,
-      int pExamType) {
+  public List<ApplicationCCI> getByProgramAndSemesterAndType(int pProgramId, int pSemesterId, int pExamType) {
     return getManager().getByProgramAndSemesterAndType(pProgramId, pSemesterId, pExamType);
   }
 
@@ -61,8 +58,7 @@ public class ApplicationCCICache extends
   }
 
   @Override
-  public List<ApplicationCCI> getByStudentIdAndSemesterForSeatPlanView(String pStudentId,
-      Integer pSemesterId) {
+  public List<ApplicationCCI> getByStudentIdAndSemesterForSeatPlanView(String pStudentId, Integer pSemesterId) {
     return getManager().getByStudentIdAndSemesterForSeatPlanView(pStudentId, pSemesterId);
   }
 }

@@ -8,8 +8,8 @@ import org.ums.domain.model.immutable.Semester;
 /**
  * Created by Monjur-E-Morshed on 28-Dec-16.
  */
-public interface MutableAdmissionDeadline extends AdmissionDeadline, Mutable,
-    MutableIdentifier<Integer>, MutableLastModifier {
+public interface MutableAdmissionDeadline extends AdmissionDeadline, Mutable, MutableIdentifier<Integer>,
+    MutableLastModifier {
   void setSemester(final Semester pSemester);
 
   void setSemesterId(final int pSemesterId);

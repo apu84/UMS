@@ -14,12 +14,10 @@ import org.ums.persistent.model.PersistentRole;
 
 public class PersistentRoleDao extends RoleDaoDecorator {
   static String SELECT_ALL = "SELECT ROLE_ID, ROLE_NAME, LAST_MODIFIED FROM MST_ROLE ";
-  static String UPDATE_ALL = "UPDATE MST_ROLE set ROLE_NAME=?, LAST_MODIFIED = "
-      + getLastModifiedSql();
+  static String UPDATE_ALL = "UPDATE MST_ROLE set ROLE_NAME=?, LAST_MODIFIED = " + getLastModifiedSql();
   static String DELETE_ALL = "DELETE FROM MST_ROLE ";
-  static String INSERT_ALL =
-      "INSERT INTO MST_ROLE(ROLE_ID, ROLE_NAME, LAST_MODIFIED) VALUES(? , ?, "
-          + getLastModifiedSql() + ") ";
+  static String INSERT_ALL = "INSERT INTO MST_ROLE(ROLE_ID, ROLE_NAME, LAST_MODIFIED) VALUES(? , ?, "
+      + getLastModifiedSql() + ") ";
   private JdbcTemplate mJdbcTemplate;
 
   public PersistentRoleDao(final JdbcTemplate pJdbcTemplate) {

@@ -27,8 +27,8 @@ public class MutableSemesterSyllabusMapResource extends Resource {
 
   @PUT
   @Path(PATH_PARAM_OBJECT_ID)
-  public Response updateMap(final @PathParam("object-id") int pObjectId,
-      final @Context Request pRequest, final JsonObject pJsonObject) {
+  public Response updateMap(final @PathParam("object-id") int pObjectId, final @Context Request pRequest,
+      final JsonObject pJsonObject) {
 
     return mResourceHelper.put(pJsonObject);
   }

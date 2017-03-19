@@ -13,7 +13,7 @@ import java.util.List;
 public interface AdmissionTotalSeatManager extends
     ContentManager<AdmissionTotalSeat, MutableAdmissionTotalSeat, Integer> {
 
-  List<AdmissionTotalSeat> getAdmissionTotalSeat(final int pSemesterId,
-      final ProgramType pProgramType, QuotaType pQuotaType);
+  List<AdmissionTotalSeat> getAdmissionTotalSeat(final int pSemesterId, final ProgramType pProgramType,
+      QuotaType pQuotaType);
 
 }

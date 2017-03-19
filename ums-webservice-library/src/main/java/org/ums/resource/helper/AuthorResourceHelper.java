@@ -46,8 +46,8 @@ public class AuthorResourceHelper extends ResourceHelper<Author, MutableAuthor, 
     mutableAuthor.commit(false);
 
     URI contextURI =
-        pUriInfo.getBaseUriBuilder().path(SemesterResource.class)
-            .path(SemesterResource.class, "get").build(mutableAuthor.getId());
+        pUriInfo.getBaseUriBuilder().path(SemesterResource.class).path(SemesterResource.class, "get")
+            .build(mutableAuthor.getId());
     Response.ResponseBuilder builder = Response.created(contextURI);
     builder.status(Response.Status.CREATED);
     return builder.build();

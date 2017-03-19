@@ -40,38 +40,34 @@ public interface BinaryContentManager<T> {
     }
   }
 
-  Object list(String pPath, Map<String, String> pAdditionalParams, Domain pDomain,
-      String... pRootPath);
+  Object list(String pPath, Map<String, String> pAdditionalParams, Domain pDomain, String... pRootPath);
 
   Map<String, Object> rename(String pOldPath, String pNewPath, Domain pDomain, String... pRootPath);
 
-  Map<String, Object> move(List<String> pItems, String pNewPath, Domain pDomain,
-      String... pRootPath);
+  Map<String, Object> move(List<String> pItems, String pNewPath, Domain pDomain, String... pRootPath);
 
-  Map<String, Object> copy(List<String> pItems, String pNewPath, String pNewFileName,
-      Domain pDomain, String... pRootPath);
+  Map<String, Object> copy(List<String> pItems, String pNewPath, String pNewFileName, Domain pDomain,
+      String... pRootPath);
 
   Map<String, Object> remove(List<String> pItems, Domain pDomain, String... pRootPath);
 
   Map<String, byte[]> content(String pPath, Domain pDomain, String... pRootPath);
 
-  Map<String, Object> createFolder(String pNewPath, Map<String, String> pAdditionalParams,
-      Domain pDomain, String... pRootPath);
+  Map<String, Object> createFolder(String pNewPath, Map<String, String> pAdditionalParams, Domain pDomain,
+      String... pRootPath);
 
   Map<String, Object> createAssignmentFolder(String pNewPath, Date pStartDate, Date pEndDate,
       Map<String, String> pAdditionalParams, Domain pDomain, String... pRootPath);
 
-  Map<String, Object> compress(List<String> pItems, String pNewPath, String pNewFileName,
-      Domain pDomain, String... pRootPath);
-
-  Map<String, Object> extract(String pZippedItem, String pDestination, Domain pDomain,
+  Map<String, Object> compress(List<String> pItems, String pNewPath, String pNewFileName, Domain pDomain,
       String... pRootPath);
 
-  Map<String, Object> upload(Map<String, InputStream> pFileContent, String pPath, Domain pDomain,
-      String... pRootPath);
+  Map<String, Object> extract(String pZippedItem, String pDestination, Domain pDomain, String... pRootPath);
+
+  Map<String, Object> upload(Map<String, InputStream> pFileContent, String pPath, Domain pDomain, String... pRootPath);
 
   Map<String, Object> download(String pPath, String pToken, Domain pDomain, String... pRootPath);
 
-  Map<String, Object> downloadAsZip(List<String> pItems, String pNewFileName, String pToken,
-      Domain pDomain, String... pRootPath);
+  Map<String, Object> downloadAsZip(List<String> pItems, String pNewFileName, String pToken, Domain pDomain,
+      String... pRootPath);
 }

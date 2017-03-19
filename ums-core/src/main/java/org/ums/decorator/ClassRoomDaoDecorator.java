@@ -9,9 +9,8 @@ import java.util.List;
 /**
  * Created by Ifti on 13-Feb-16.
  */
-public class ClassRoomDaoDecorator extends
-    ContentDaoDecorator<ClassRoom, MutableClassRoom, Long, ClassRoomManager> implements
-    ClassRoomManager {
+public class ClassRoomDaoDecorator extends ContentDaoDecorator<ClassRoom, MutableClassRoom, Long, ClassRoomManager>
+    implements ClassRoomManager {
   @Override
   public List<ClassRoom> getRoomList() {
     return getManager().getRoomList();

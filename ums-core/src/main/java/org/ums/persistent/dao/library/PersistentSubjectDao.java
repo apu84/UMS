@@ -27,8 +27,7 @@ public class PersistentSubjectDao extends SubjectDaoDecorator {
   @Override
   public Subject get(final Integer pId) {
     String query = SELECT_ALL + " Where Id = ?";
-    return mJdbcTemplate.queryForObject(query, new Object[] {pId},
-        new PersistentSubjectDao.SubjectRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new PersistentSubjectDao.SubjectRowMapper());
   }
 
   @Override

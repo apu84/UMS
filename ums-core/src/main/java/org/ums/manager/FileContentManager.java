@@ -84,8 +84,7 @@ public class FileContentManager extends BinaryContentDecorator {
   }
 
   @Override
-  public Object list(String pPath, Map<String, String> pAdditionalParams, Domain pDomain,
-      String... pRootPath) {
+  public Object list(String pPath, Map<String, String> pAdditionalParams, Domain pDomain, String... pRootPath) {
     try {
       /*
        * This is to make sure course material gets into folder structure like
@@ -93,8 +92,7 @@ public class FileContentManager extends BinaryContentDecorator {
        */
       if(pPath.equalsIgnoreCase("/")) {
         createIfNotExist(pDomain, buildPath(pPath, pRootPath));
-        addAdditionalParams(getQualifiedPath(pDomain, buildPath(pPath, pRootPath)),
-            pAdditionalParams);
+        addAdditionalParams(getQualifiedPath(pDomain, buildPath(pPath, pRootPath)), pAdditionalParams);
       }
 
     } catch(Exception e) {
@@ -133,16 +131,14 @@ public class FileContentManager extends BinaryContentDecorator {
 
   private String getPermissions(Path path) throws IOException {
     // http://www.programcreek.com/java-api-examples/index.php?api=java.nio.file.attribute.PosixFileAttributes
-    PosixFileAttributeView fileAttributeView =
-        Files.getFileAttributeView(path, PosixFileAttributeView.class);
+    PosixFileAttributeView fileAttributeView = Files.getFileAttributeView(path, PosixFileAttributeView.class);
     PosixFileAttributes readAttributes = fileAttributeView.readAttributes();
     Set<PosixFilePermission> permissions = readAttributes.permissions();
     return PosixFilePermissions.toString(permissions);
   }
 
   @Override
-  public Map<String, Object> rename(String pOldPath, String pNewPath, Domain pDomain,
-      String... pRootPath) {
+  public Map<String, Object> rename(String pOldPath, String pNewPath, Domain pDomain, String... pRootPath) {
     Path oldPath = getQualifiedPath(pDomain, buildPath(pOldPath, pRootPath));
     Path newPath = getQualifiedPath(pDomain, buildPath(pNewPath, pRootPath));
     try {
@@ -154,8 +150,7 @@ public class FileContentManager extends BinaryContentDecorator {
   }
 
   @Override
-  public Map<String, Object> move(List<String> pItems, String pNewPath, Domain pDomain,
-      String... pRootPath) {
+  public Map<String, Object> move(List<String> pItems, String pNewPath, Domain pDomain, String... pRootPath) {
 
     for(String oldPathString : pItems) {
       Path oldPath = getQualifiedPath(pDomain, buildPath(oldPathString, pRootPath));
@@ -179,12 +174,11 @@ public class FileContentManager extends BinaryContentDecorator {
   }
 
   @Override
-  public Map<String, Object> copy(List<String> pItems, String pNewPath, String pNewFileName,
-      Domain pDomain, String... pRootPath) {
+  public Map<String, Object> copy(List<String> pItems, String pNewPath, String pNewFileName, Domain pDomain,
+      String... pRootPath) {
     for(String oldPathString : pItems) {
       Path oldPath = getQualifiedPath(pDomain, buildPath(oldPathString, pRootPath));
-      Path newPath =
-          getQualifiedPath(pDomain, buildPath(buildPath(pNewFileName, pNewPath), pRootPath));
+      Path newPath = getQualifiedPath(pDomain, buildPath(buildPath(pNewFileName, pNewPath), pRootPath));
       File srcFile = oldPath.toFile();
       File destinationFile = newPath.toFile();
 
@@ -233,13 +227,12 @@ public class FileContentManager extends BinaryContentDecorator {
   }
 
   @Override
-  public Map<String, Object> createFolder(String pNewPath, Map<String, String> pAdditionalParams,
-      Domain pDomain, String... pRootPath) {
+  public Map<String, Object> createFolder(String pNewPath, Map<String, String> pAdditionalParams, Domain pDomain,
+      String... pRootPath) {
     try {
       createIfNotExist(pDomain, buildPath(pNewPath, pRootPath));
       Path targetDirectory = getQualifiedPath(pDomain, buildPath(pNewPath, pRootPath));
-      addUserDefinedProperty(OWNER, SecurityUtils.getSubject().getPrincipal().toString(),
-          targetDirectory);
+      addUserDefinedProperty(OWNER, SecurityUtils.getSubject().getPrincipal().toString(), targetDirectory);
       addAdditionalParams(targetDirectory, pAdditionalParams);
     } catch(Exception e) {
       return error(mMessageResource.getMessage("folder.creation.failed", pNewPath));
@@ -248,8 +241,8 @@ public class FileContentManager extends BinaryContentDecorator {
   }
 
   @Override
-  public Map<String, Object> compress(List<String> pItems, String pNewPath, String pNewFileName,
-      Domain pDomain, String... pRootPath) {
+  public Map<String, Object> compress(List<String> pItems, String pNewPath, String pNewFileName, Domain pDomain,
+      String... pRootPath) {
     try {
       Path zipFile = getQualifiedPath(pDomain, buildPath(pNewPath + "/" + pNewFileName, pRootPath));
 
@@ -270,8 +263,7 @@ public class FileContentManager extends BinaryContentDecorator {
             // for directories, walk the file tree
             Files.walkFileTree(externalFile, new SimpleFileVisitor<Path>() {
               @Override
-              public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
-                  throws IOException {
+              public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
                 final Path dest =
                     zipfs.getPath(pathInZipfile.toString(),
                         file.toString().replace(externalFile.getParent().toString(), ""));
@@ -280,10 +272,8 @@ public class FileContentManager extends BinaryContentDecorator {
               }
 
               @Override
-              public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs)
-                  throws IOException {
-                String targetDirectory =
-                    dir.toString().replace(externalFile.getParent().toString(), "");
+              public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                String targetDirectory = dir.toString().replace(externalFile.getParent().toString(), "");
                 final Path dirToCreate = zipfs.getPath(pathInZipfile.toString(), targetDirectory);
                 if(Files.notExists(dirToCreate)) {
                   Files.createDirectories(dirToCreate);
@@ -309,14 +299,13 @@ public class FileContentManager extends BinaryContentDecorator {
   }
 
   @Override
-  public Map<String, Object> extract(String pZippedItem, String pDestination, Domain pDomain,
-      String... pRootPath) {
+  public Map<String, Object> extract(String pZippedItem, String pDestination, Domain pDomain, String... pRootPath) {
     return null;
   }
 
   @Override
-  public Map<String, Object> upload(Map<String, InputStream> pFileContent, String pPath,
-      Domain pDomain, String... pRootPath) {
+  public Map<String, Object> upload(Map<String, InputStream> pFileContent, String pPath, Domain pDomain,
+      String... pRootPath) {
     if(pFileContent.size() == 0) {
       return error("file size  = 0");
     }
@@ -327,8 +316,7 @@ public class FileContentManager extends BinaryContentDecorator {
         Path filePath = Paths.get(path.toString(), fileEntry.getKey());
         try {
           Files.copy(fileEntry.getValue(), filePath, StandardCopyOption.REPLACE_EXISTING);
-          addUserDefinedProperty(OWNER, SecurityUtils.getSubject().getPrincipal().toString(),
-              filePath);
+          addUserDefinedProperty(OWNER, SecurityUtils.getSubject().getPrincipal().toString(), filePath);
         } catch(Exception e) {
           error("Failed to upload file");
         }
@@ -338,8 +326,7 @@ public class FileContentManager extends BinaryContentDecorator {
   }
 
   @Override
-  public Map<String, Object> download(String pPath, String pToken, Domain pDomain,
-      String... pRootPath) {
+  public Map<String, Object> download(String pPath, String pToken, Domain pDomain, String... pRootPath) {
     Map<String, Object> response = new HashMap<>();
     try {
       Path path = getQualifiedPath(pDomain, buildPath(pPath, pRootPath));
@@ -356,8 +343,8 @@ public class FileContentManager extends BinaryContentDecorator {
   }
 
   @Override
-  public Map<String, Object> downloadAsZip(List<String> pItems, String pNewFileName, String pToken,
-      Domain pDomain, String... pRootPath) {
+  public Map<String, Object> downloadAsZip(List<String> pItems, String pNewFileName, String pToken, Domain pDomain,
+      String... pRootPath) {
     Map<String, Object> response = new HashMap<>();
     try {
 
@@ -382,8 +369,7 @@ public class FileContentManager extends BinaryContentDecorator {
       response.put("Content-Type", Files.probeContentType(zipFile));
       response.put("Content-Type", "application/zip, application/octet-stream");
       response.put("Content-Length", String.valueOf(zipFile.toFile().length()));
-      response
-          .put("Content-Disposition", "inline; filename=\"" + zipFile.toFile().getName() + "\"");
+      response.put("Content-Disposition", "inline; filename=\"" + zipFile.toFile().getName() + "\"");
       response.put("Content", Files.newInputStream(zipFile));
       return response;
     } catch(Exception e) {
@@ -393,8 +379,8 @@ public class FileContentManager extends BinaryContentDecorator {
   }
 
   @Override
-  public Map<String, Object> createAssignmentFolder(String pNewPath, Date pStartDate,
-      Date pEndDate, Map<String, String> pAdditionalParams, Domain pDomain, String... pRootPath) {
+  public Map<String, Object> createAssignmentFolder(String pNewPath, Date pStartDate, Date pEndDate,
+      Map<String, String> pAdditionalParams, Domain pDomain, String... pRootPath) {
     Map<String, Object> createFolderResponse;
 
     if(pStartDate != null && pEndDate != null && pStartDate.before(pEndDate)) {
@@ -402,8 +388,7 @@ public class FileContentManager extends BinaryContentDecorator {
       createFolderResponse = createFolder(pNewPath, null, pDomain, pRootPath);
       Path assignmentFolder = getQualifiedPath(pDomain, buildPath(pNewPath, pRootPath));
       try {
-        addUserDefinedProperty(OWNER, SecurityUtils.getSubject().getPrincipal().toString(),
-            assignmentFolder);
+        addUserDefinedProperty(OWNER, SecurityUtils.getSubject().getPrincipal().toString(), assignmentFolder);
         addUserDefinedProperty(START_DATE, mDateFormat.format(pStartDate), assignmentFolder);
         addUserDefinedProperty(END_DATE, mDateFormat.format(pEndDate), assignmentFolder);
         addUserDefinedProperty(FOLDER_TYPE, "assignment", assignmentFolder);
@@ -418,8 +403,8 @@ public class FileContentManager extends BinaryContentDecorator {
     return createFolderResponse;
   }
 
-  private void addAdditionalParams(final Path pTargetDirectory,
-      final Map<String, String> pAdditionalParams) throws IOException {
+  private void addAdditionalParams(final Path pTargetDirectory, final Map<String, String> pAdditionalParams)
+      throws IOException {
     if(pAdditionalParams != null) {
       for(String key : pAdditionalParams.keySet()) {
         addUserDefinedProperty(key, pAdditionalParams.get(key), pTargetDirectory);

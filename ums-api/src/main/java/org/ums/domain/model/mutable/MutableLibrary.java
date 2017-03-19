@@ -8,8 +8,7 @@ import org.ums.domain.model.common.Mutable;
 import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.immutable.Library;
 
-public interface MutableLibrary extends Mutable, MutableIdentifier<Integer>, MutableLastModifier,
-    Library {
+public interface MutableLibrary extends Mutable, MutableIdentifier<Integer>, MutableLastModifier, Library {
 
   void setBookName(final String bookName);
 

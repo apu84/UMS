@@ -50,19 +50,17 @@ public class SpStudentResourceHelper extends ResourceHelper<SpStudent, MutableSp
     getBuilder().build(spStudent, pJsonObject, localCache);
     spStudent.commit(false);
     URI contextURI =
-        pUriInfo.getBaseUriBuilder().path(SpStudentResource.class)
-            .path(SpStudentResource.class, "get").build(spStudent.getId());
+        pUriInfo.getBaseUriBuilder().path(SpStudentResource.class).path(SpStudentResource.class, "get")
+            .build(spStudent.getId());
     Response.ResponseBuilder builder = Response.created(contextURI);
     builder.status(Response.Status.CREATED);
     return builder.build();
   }
 
-  public JsonObject getStudentByProgramYearSemesterStatus(final int programId,
-      final int academicYear, final int academicSemester, final int status, final Request pRequest,
-      final UriInfo pUriInfo) {
+  public JsonObject getStudentByProgramYearSemesterStatus(final int programId, final int academicYear,
+      final int academicSemester, final int status, final Request pRequest, final UriInfo pUriInfo) {
     List<SpStudent> spStudents =
-        getContentManager().getStudentByProgramYearSemesterStatus(programId, academicYear,
-            academicSemester, status);
+        getContentManager().getStudentByProgramYearSemesterStatus(programId, academicYear, academicSemester, status);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();

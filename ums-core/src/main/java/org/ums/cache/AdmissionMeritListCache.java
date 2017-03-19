@@ -15,8 +15,8 @@ import java.util.List;
  * Created by Monjur-E-Morshed on 10-Dec-16.
  */
 public class AdmissionMeritListCache extends
-    ContentCache<AdmissionMeritList, MutableAdmissionMeritList, Integer, AdmissionMeritListManager>
-    implements AdmissionMeritListManager {
+    ContentCache<AdmissionMeritList, MutableAdmissionMeritList, Integer, AdmissionMeritListManager> implements
+    AdmissionMeritListManager {
 
   private CacheManager<AdmissionMeritList, Integer> mCacheManager;
 
@@ -25,8 +25,7 @@ public class AdmissionMeritListCache extends
   }
 
   @Override
-  public List<AdmissionMeritList> getMeritList(Semester pSemester, Faculty pFaculty,
-      QuotaType pAdmissionGroup) {
+  public List<AdmissionMeritList> getMeritList(Semester pSemester, Faculty pFaculty, QuotaType pAdmissionGroup) {
     return getManager().getMeritList(pSemester, pFaculty, pAdmissionGroup);
   }
 

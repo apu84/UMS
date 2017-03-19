@@ -10,8 +10,7 @@ import java.util.List;
  * Created by My Pc on 7/23/2016.
  */
 public class SubGroupCCIDaoDecorator extends
-    ContentDaoDecorator<SubGroupCCI, MutableSubGroupCCI, Integer, SubGroupCCIManager> implements
-    SubGroupCCIManager {
+    ContentDaoDecorator<SubGroupCCI, MutableSubGroupCCI, Integer, SubGroupCCIManager> implements SubGroupCCIManager {
 
   @Override
   public List<SubGroupCCI> getBySemesterAndExamDate(Integer pSemesterId, String pExamDate) {

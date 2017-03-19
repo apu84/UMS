@@ -11,6 +11,6 @@ import java.util.Map;
 public interface SeatPlanService {
   GenericResponse<Map> generateGroup(final int pNewSemesterId, final int pExamType);
 
-  GenericResponse<Map> generateSeatPlan(final int pSemesterId, final int pGroupNo,
-      final int pExamType, final String pExamDate);
+  GenericResponse<Map> generateSeatPlan(final int pSemesterId, final int pGroupNo, final int pExamType,
+      final String pExamDate);
 }

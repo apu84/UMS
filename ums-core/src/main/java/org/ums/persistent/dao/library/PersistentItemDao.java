@@ -55,14 +55,12 @@ public class PersistentItemDao extends ItemDaoDecorator {
   @Override
   public Item get(final Long pId) {
     String query = SELECT_ALL + " Where ID = ?";
-    return mJdbcTemplate.queryForObject(query, new Object[] {pId},
-        new PersistentItemDao.ItemRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new PersistentItemDao.ItemRowMapper());
   }
 
   public Item getByAccessionNumber(final Long pAccessionNumber) {
     String query = SELECT_ALL + " Where ACCESSION_NUMBER = ?";
-    return mJdbcTemplate.queryForObject(query, new Object[] {pAccessionNumber},
-        new PersistentItemDao.ItemRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[] {pAccessionNumber}, new PersistentItemDao.ItemRowMapper());
   }
 
   public List<Item> getByMfn(final Long pMfn) {
@@ -73,19 +71,18 @@ public class PersistentItemDao extends ItemDaoDecorator {
   @Override
   public int update(final MutableItem pItem) {
     String query = UPDATE_ONE + "   Where ID= ? ";
-    return mJdbcTemplate.update(query, pItem.getCopyNumber(), pItem.getAccessionNumber(),
-        pItem.getAccessionDate(), pItem.getBarcode(), pItem.getPrice(), 4, pItem.getInternalNote(),
-        pItem.getStatus().getId(), "", "", pItem.getId());
+    return mJdbcTemplate.update(query, pItem.getCopyNumber(), pItem.getAccessionNumber(), pItem.getAccessionDate(),
+        pItem.getBarcode(), pItem.getPrice(), 4, pItem.getInternalNote(), pItem.getStatus().getId(), "", "",
+        pItem.getId());
   }
 
   @Override
   public Long create(final MutableItem pItem) {
     Long id = mIdGenerator.getNumericId();
     pItem.setId(id);
-    mJdbcTemplate.update(INSERT_ONE, pItem.getId(), pItem.getMfn(), pItem.getCopyNumber(),
-        pItem.getAccessionNumber(), pItem.getAccessionDate(), pItem.getBarcode(), pItem.getPrice(),
-        pItem.getSupplier() == null ? null : pItem.getSupplier().getId(), pItem.getInternalNote(),
-        pItem.getStatus().getId(), "inset", "update");
+    mJdbcTemplate.update(INSERT_ONE, pItem.getId(), pItem.getMfn(), pItem.getCopyNumber(), pItem.getAccessionNumber(),
+        pItem.getAccessionDate(), pItem.getBarcode(), pItem.getPrice(), pItem.getSupplier() == null ? null : pItem
+            .getSupplier().getId(), pItem.getInternalNote(), pItem.getStatus().getId(), "inset", "update");
 
     return id;
   }

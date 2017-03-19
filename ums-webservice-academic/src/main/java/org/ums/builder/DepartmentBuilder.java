@@ -13,16 +13,14 @@ import javax.ws.rs.core.UriInfo;
 @Component
 public class DepartmentBuilder implements Builder<Department, MutableDepartment> {
   @Override
-  public void build(JsonObjectBuilder pBuilder, Department pReadOnly, UriInfo pUriInfo,
-      final LocalCache pLocalCache) {
+  public void build(JsonObjectBuilder pBuilder, Department pReadOnly, UriInfo pUriInfo, final LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("shortName", pReadOnly.getShortName());
     pBuilder.add("longName", pReadOnly.getLongName());
     pBuilder.add("type", pReadOnly.getType());
-    pBuilder.add(
-        "self",
-        pUriInfo.getBaseUriBuilder().path("academic").path("department")
-            .path(String.valueOf(pReadOnly.getId())).build().toString());
+    pBuilder.add("self",
+        pUriInfo.getBaseUriBuilder().path("academic").path("department").path(String.valueOf(pReadOnly.getId()))
+            .build().toString());
   }
 
   @Override

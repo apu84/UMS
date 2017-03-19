@@ -8,8 +8,8 @@ import org.ums.domain.model.mutable.MutableBearerAccessToken;
 import java.io.Serializable;
 import java.util.Date;
 
-public interface BearerAccessToken extends Serializable, Identifier<String>,
-    EditType<MutableBearerAccessToken>, LastModifier {
+public interface BearerAccessToken extends Serializable, Identifier<String>, EditType<MutableBearerAccessToken>,
+    LastModifier {
   String getUserId();
 
   Date getLastAccessTime();

@@ -17,15 +17,13 @@ import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
 
 @Component
-public class SemesterWithdrawalBuilder implements
-    Builder<SemesterWithdrawal, MutableSemesterWithdrawal> {
+public class SemesterWithdrawalBuilder implements Builder<SemesterWithdrawal, MutableSemesterWithdrawal> {
 
   @Autowired
   StudentManager mStudentManager;
 
   @Override
-  public void build(JsonObjectBuilder pBuilder, SemesterWithdrawal pReadOnly, UriInfo pUriInfo,
-      LocalCache pLocalCache) {
+  public void build(JsonObjectBuilder pBuilder, SemesterWithdrawal pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("semesterId", pReadOnly.getSemester().getId());
     pBuilder.add("programId", pReadOnly.getProgram().getId());
@@ -38,14 +36,14 @@ public class SemesterWithdrawalBuilder implements
     pBuilder.add("appDate", pReadOnly.getAppDate());
     pBuilder.add("status", pReadOnly.getStatus());
     pBuilder.add("comments", pReadOnly.getComment());
-    pBuilder.add("self", pUriInfo.getBaseUriBuilder().path("academic").path("semesterWithdraw")
-        .path(pReadOnly.getId().toString()).build().toString());
+    pBuilder.add("self",
+        pUriInfo.getBaseUriBuilder().path("academic").path("semesterWithdraw").path(pReadOnly.getId().toString())
+            .build().toString());
 
   }
 
   @Override
-  public void build(MutableSemesterWithdrawal pMutable, JsonObject pJsonObject,
-      LocalCache pLocalCache) {
+  public void build(MutableSemesterWithdrawal pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
     if(pJsonObject.containsKey("id")) {
       Long id = Long.parseLong(pJsonObject.getString("id"));
       if(id != 0) {

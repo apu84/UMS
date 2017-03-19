@@ -8,8 +8,8 @@ import org.ums.domain.model.mutable.MutableSemesterWithdrawalLog;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-public interface SemesterWithdrawalLog extends Serializable, LastModifier,
-    EditType<MutableSemesterWithdrawalLog>, Identifier<Long> {
+public interface SemesterWithdrawalLog extends Serializable, LastModifier, EditType<MutableSemesterWithdrawalLog>,
+    Identifier<Long> {
   public SemesterWithdrawal getSemesterWithdrawal();
 
   public String getEmployeeId();

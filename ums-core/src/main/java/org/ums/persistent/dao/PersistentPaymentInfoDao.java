@@ -33,15 +33,14 @@ public class PersistentPaymentInfoDao extends PaymentInfoDaoDecorator {
   @Override
   public Integer create(MutablePaymentInfo pMutable) {
     String query = INSERT_ONE;
-    return mJdbcTemplate.update(query, pMutable.getReferenceId(), pMutable.getSemester().getId(),
-        pMutable.getPaymentType().getId(), pMutable.getAmount(), pMutable.getPaymentMode().getId());
+    return mJdbcTemplate.update(query, pMutable.getReferenceId(), pMutable.getSemester().getId(), pMutable
+        .getPaymentType().getId(), pMutable.getAmount(), pMutable.getPaymentMode().getId());
   }
 
   @Override
   public List<PaymentInfo> getPaymentInfo(String pReferenceId, int pSemesterId) {
     String query = SELECT_ALL + " WHERE REFERENCE_ID=? AND SEMESTER_ID=?";
-    return mJdbcTemplate.query(query, new Object[] {pReferenceId, pSemesterId},
-        new PaymentInfoRowMapper());
+    return mJdbcTemplate.query(query, new Object[] {pReferenceId, pSemesterId}, new PaymentInfoRowMapper());
   }
 
   class PaymentInfoRowMapper implements RowMapper<PaymentInfo> {

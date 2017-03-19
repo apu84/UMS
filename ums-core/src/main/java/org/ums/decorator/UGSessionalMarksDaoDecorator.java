@@ -5,6 +5,6 @@ import org.ums.domain.model.mutable.MutableUGSessionalMarks;
 import org.ums.manager.UGSessionalMarksManager;
 
 public class UGSessionalMarksDaoDecorator extends
-    ContentDaoDecorator<UGSessionalMarks, MutableUGSessionalMarks, Long, UGSessionalMarksManager>
-    implements UGSessionalMarksManager {
+    ContentDaoDecorator<UGSessionalMarks, MutableUGSessionalMarks, Long, UGSessionalMarksManager> implements
+    UGSessionalMarksManager {
 }

@@ -11,8 +11,7 @@ import org.ums.enums.library.ContributorCategory;
 /**
  * Created by Ifti on 16-Feb-17.
  */
-public interface MutableContributor extends Contributor, Mutable, MutableLastModifier,
-    MutableIdentifier<Integer> {
+public interface MutableContributor extends Contributor, Mutable, MutableLastModifier, MutableIdentifier<Integer> {
 
   void setFirstName(final String pFirstName);
 

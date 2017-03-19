@@ -52,8 +52,8 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
     getBuilder().build(mutableEmployee, pJsonObject, localCache);
     mutableEmployee.commit(false);
     URI contextURI =
-        pUriInfo.getBaseUriBuilder().path(EmployeeResource.class)
-            .path(EmployeeResource.class, "get").build(mutableEmployee.getId());
+        pUriInfo.getBaseUriBuilder().path(EmployeeResource.class).path(EmployeeResource.class, "get")
+            .build(mutableEmployee.getId());
     Response.ResponseBuilder builder = Response.created(contextURI);
     builder.status(Response.Status.CREATED);
     return builder.build();
@@ -74,14 +74,12 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
 
   public JsonObject getActiveTeachersByDept(final UriInfo pUriInfo) {
     Employee employee = getSignedEmployeeInfo();
-    List<Employee> employees =
-        getContentManager().getActiveTeachersOfDept(employee.getDepartment().getId());
+    List<Employee> employees = getContentManager().getActiveTeachersOfDept(employee.getDepartment().getId());
 
     return convertToJson(employees, pUriInfo);
   }
 
-  public JsonObject getByDesignation(final String designationId, final Request pRequest,
-      final UriInfo pUriInfo) {
+  public JsonObject getByDesignation(final String designationId, final Request pRequest, final UriInfo pUriInfo) {
     List<Employee> employees = getContentManager().getByDesignation(designationId);
     return convertToJson(employees, pUriInfo);
   }
@@ -108,8 +106,7 @@ public class EmployeeResourceHelper extends ResourceHelper<Employee, MutableEmpl
   }
 
   public JsonObject searchUserByName(String pQuery, int page, final UriInfo pUriInfo) {
-    Page<EmployeeDocument> userDocuments =
-        mEmployeeRepository.findByCustomQuery(pQuery, new PageRequest(page, 10));
+    Page<EmployeeDocument> userDocuments = mEmployeeRepository.findByCustomQuery(pQuery, new PageRequest(page, 10));
     List<Employee> users = new ArrayList<>();
     for(EmployeeDocument document : userDocuments) {
       users.add(mEmployeeManager.get(document.getId()));

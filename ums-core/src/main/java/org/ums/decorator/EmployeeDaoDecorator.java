@@ -6,9 +6,8 @@ import org.ums.manager.EmployeeManager;
 
 import java.util.List;
 
-public class EmployeeDaoDecorator extends
-    ContentDaoDecorator<Employee, MutableEmployee, String, EmployeeManager> implements
-    EmployeeManager {
+public class EmployeeDaoDecorator extends ContentDaoDecorator<Employee, MutableEmployee, String, EmployeeManager>
+    implements EmployeeManager {
 
   @Override
   public Employee getByEmail(final String pEmailAddress) {

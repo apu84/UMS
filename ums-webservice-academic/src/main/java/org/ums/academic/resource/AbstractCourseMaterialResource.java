@@ -42,9 +42,8 @@ public abstract class AbstractCourseMaterialResource extends Resource {
   @Produces(Resource.MIME_TYPE_JSON)
   @Path("/semester/{semester-name}/course/{course-no}")
   public Object getBySemesterCourse(final @Context Request pRequest,
-      final @PathParam("semester-name") String pSemesterName,
-      final @PathParam("course-no") String pCourseNo, final JsonObject pJsonObject)
-      throws Exception {
+      final @PathParam("semester-name") String pSemesterName, final @PathParam("course-no") String pCourseNo,
+      final JsonObject pJsonObject) throws Exception {
     Map<String, Object> result = new HashMap<>();
     if(pJsonObject != null && pJsonObject.containsKey("action")) {
       switch(pJsonObject.getString("action")) {
@@ -60,8 +59,7 @@ public abstract class AbstractCourseMaterialResource extends Resource {
         case "rename":
           result.put(
               "result",
-              getBinaryContentManager().rename(pJsonObject.getString("item"),
-                  pJsonObject.getString("newItemPath"),
+              getBinaryContentManager().rename(pJsonObject.getString("item"), pJsonObject.getString("newItemPath"),
                   BinaryContentManager.Domain.COURSE_MATERIAL, pSemesterName, pCourseNo));
           break;
 
@@ -77,9 +75,8 @@ public abstract class AbstractCourseMaterialResource extends Resource {
           Map<String, String> additionalParams = buildAdditionalParams(pJsonObject);
           result.put(
               "result",
-              getBinaryContentManager().createFolder(pJsonObject.getString("newPath"),
-                  additionalParams, BinaryContentManager.Domain.COURSE_MATERIAL, pSemesterName,
-                  pCourseNo));
+              getBinaryContentManager().createFolder(pJsonObject.getString("newPath"), additionalParams,
+                  BinaryContentManager.Domain.COURSE_MATERIAL, pSemesterName, pCourseNo));
           break;
 
         case "createAssignmentFolder":
@@ -89,9 +86,8 @@ public abstract class AbstractCourseMaterialResource extends Resource {
                 "result",
                 getBinaryContentManager().createAssignmentFolder(pJsonObject.getString("newPath"),
                     mDateFormat.parse(pJsonObject.getString("startDate")),
-                    mDateFormat.parse(pJsonObject.getString("endDate")),
-                    additionalAssignmentParams, BinaryContentManager.Domain.COURSE_MATERIAL,
-                    pSemesterName, pCourseNo));
+                    mDateFormat.parse(pJsonObject.getString("endDate")), additionalAssignmentParams,
+                    BinaryContentManager.Domain.COURSE_MATERIAL, pSemesterName, pCourseNo));
           } catch(ParseException pe) {
             throw new RuntimeException(pe);
           }
@@ -101,17 +97,15 @@ public abstract class AbstractCourseMaterialResource extends Resource {
           JsonArray deletedItems = pJsonObject.getJsonArray("items");
           result.put(
               "result",
-              getBinaryContentManager().remove(actionItems(deletedItems),
-                  BinaryContentManager.Domain.COURSE_MATERIAL, pSemesterName, pCourseNo));
+              getBinaryContentManager().remove(actionItems(deletedItems), BinaryContentManager.Domain.COURSE_MATERIAL,
+                  pSemesterName, pCourseNo));
           break;
 
         case "copy":
           JsonArray copiedItems = pJsonObject.getJsonArray("items");
           List<String> copiedFiles = actionItems(copiedItems);
           String newPath = pJsonObject.getString("newPath");
-          String singleFile =
-              pJsonObject.containsKey("singleFileName") ? pJsonObject.getString("singleFilename")
-                  : "";
+          String singleFile = pJsonObject.containsKey("singleFileName") ? pJsonObject.getString("singleFilename") : "";
 
           result.put(
               "result",
@@ -138,8 +132,7 @@ public abstract class AbstractCourseMaterialResource extends Resource {
   @Consumes({MediaType.MULTIPART_FORM_DATA})
   @Path("/semester/{semester-name}/course/{course-no}/upload")
   public Object uploadBySemesterCourse(final @Context HttpServletRequest httpRequest,
-      final @PathParam("semester-name") String pSemesterName,
-      final @PathParam("course-no") String pCourseNo) {
+      final @PathParam("semester-name") String pSemesterName, final @PathParam("course-no") String pCourseNo) {
     Map<String, Object> result = new HashMap<>();
     if(ServletFileUpload.isMultipartContent(httpRequest)) {
       result.put("result", uploadFile(httpRequest, pSemesterName, pCourseNo));
@@ -152,8 +145,7 @@ public abstract class AbstractCourseMaterialResource extends Resource {
   @Consumes({MediaType.MULTIPART_FORM_DATA})
   @Path("/download/semester/{semester-name}/course/{course-no}")
   public Response getBySemesterCourse(final @Context HttpServletRequest httpRequest,
-      final @Context HttpServletResponse httpResponse,
-      final @PathParam("semester-name") String pSemesterName,
+      final @Context HttpServletResponse httpResponse, final @PathParam("semester-name") String pSemesterName,
       final @PathParam("course-no") String pCourseNo) throws Exception {
     String action = "", token = "", toFileName = "";
     List<String> downloadFiles = null;
@@ -166,8 +158,8 @@ public abstract class AbstractCourseMaterialResource extends Resource {
           String filePath = httpRequest.getParameter("path");
           if(!StringUtils.isEmpty(filePath)) {
             Map<String, Object> response =
-                getBinaryContentManager().download(filePath, token,
-                    BinaryContentManager.Domain.COURSE_MATERIAL, pSemesterName, pCourseNo);
+                getBinaryContentManager().download(filePath, token, BinaryContentManager.Domain.COURSE_MATERIAL,
+                    pSemesterName, pCourseNo);
             if(response != null) {
               writeToResponse(response, httpResponse);
             }
@@ -202,8 +194,8 @@ public abstract class AbstractCourseMaterialResource extends Resource {
     return responseBuilder.build();
   }
 
-  protected void writeToResponse(final Map<String, Object> pResponse,
-      final HttpServletResponse pHttpServletResponse) throws IOException {
+  protected void writeToResponse(final Map<String, Object> pResponse, final HttpServletResponse pHttpServletResponse)
+      throws IOException {
     InputStream fileStream = (InputStream) pResponse.get("Content");
     for(String key : pResponse.keySet()) {
       if(!key.equalsIgnoreCase("Content")) {
@@ -236,8 +228,7 @@ public abstract class AbstractCourseMaterialResource extends Resource {
       throw new RuntimeException(ie);
     }
 
-    return getBinaryContentManager().upload(files, destination,
-        BinaryContentManager.Domain.COURSE_MATERIAL, pRootPath);
+    return getBinaryContentManager().upload(files, destination, BinaryContentManager.Domain.COURSE_MATERIAL, pRootPath);
   }
 
   protected List<String> actionItems(final JsonArray pItems) {
@@ -262,8 +253,7 @@ public abstract class AbstractCourseMaterialResource extends Resource {
   private Map<String, String> buildAdditionalParams(JsonObject pJsonObject) throws IOException {
     if(pJsonObject.containsKey("additionalParams")) {
       pJsonObject.getJsonObject("additionalParams");
-      return new ObjectMapper().readValue(pJsonObject.getJsonObject("additionalParams").toString(),
-          HashMap.class);
+      return new ObjectMapper().readValue(pJsonObject.getJsonObject("additionalParams").toString(), HashMap.class);
     }
     return null;
   }

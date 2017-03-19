@@ -10,8 +10,8 @@ import org.ums.domain.model.immutable.Syllabus;
 /**
  * Created by Ifti on 08-Jan-16.
  */
-public interface MutableSemesterSyllabusMap extends SemesterSyllabusMap, Mutable,
-    MutableIdentifier<Integer>, MutableLastModifier {
+public interface MutableSemesterSyllabusMap extends SemesterSyllabusMap, Mutable, MutableIdentifier<Integer>,
+    MutableLastModifier {
 
   void setAcademicSemester(Semester semester);
 

@@ -61,8 +61,8 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
     mutableCourse.commit(false);
 
     URI contextURI =
-        pUriInfo.getBaseUriBuilder().path(SemesterResource.class)
-            .path(SemesterResource.class, "get").build(mutableCourse.getId());
+        pUriInfo.getBaseUriBuilder().path(SemesterResource.class).path(SemesterResource.class, "get")
+            .build(mutableCourse.getId());
     Response.ResponseBuilder builder = Response.created(contextURI);
     builder.status(Response.Status.CREATED);
 
@@ -82,8 +82,8 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
    * children); localCache.invalidate(); return object.build(); }
    */
 
-  public JsonObject getAllForPagination(final Integer pItemPerPage, final Integer pPage,
-      final String pOrder, final UriInfo pUriInfo) {
+  public JsonObject getAllForPagination(final Integer pItemPerPage, final Integer pPage, final String pOrder,
+      final UriInfo pUriInfo) {
     List<Course> courses = getContentManager().getAllForPagination(pItemPerPage, pPage, pOrder);
 
     JsonObjectBuilder object = Json.createObjectBuilder();
@@ -98,8 +98,7 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
     return object.build();
   }
 
-  public JsonObject getBySyllabus(final String pSyllabusId, final Request pRequest,
-      final UriInfo pUriInfo) {
+  public JsonObject getBySyllabus(final String pSyllabusId, final Request pRequest, final UriInfo pUriInfo) {
     List<Course> courses = getContentManager().getBySyllabus(pSyllabusId);
 
     JsonObjectBuilder object = Json.createObjectBuilder();
@@ -114,8 +113,8 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
     return object.build();
   }
 
-  public JsonObject getBySemesterProgram(final String pSemesterId, final String pProgramId,
-      final Request pRequest, final UriInfo pUriInfo) {
+  public JsonObject getBySemesterProgram(final String pSemesterId, final String pProgramId, final Request pRequest,
+      final UriInfo pUriInfo) {
     List<Course> courses = getContentManager().getBySemesterProgram(pSemesterId, pProgramId);
 
     return buildCourse(courses, pUriInfo);
@@ -171,59 +170,51 @@ public class CourseResourceHelper extends ResourceHelper<Course, MutableCourse, 
     return buildCourse(courses, pUriInfo);
   }
 
-  public JsonObject getByYearSemester(final String pSemesterId, final String pProgramId,
-      final int year, final int semester, final Request pRequest, final UriInfo pUriInfo) {
-    List<Course> courses =
-        getContentManager().getByYearSemester(pSemesterId, pProgramId, year, semester);
+  public JsonObject getByYearSemester(final String pSemesterId, final String pProgramId, final int year,
+      final int semester, final Request pRequest, final UriInfo pUriInfo) {
+    List<Course> courses = getContentManager().getByYearSemester(pSemesterId, pProgramId, year, semester);
 
     return buildCourse(courses, pUriInfo);
   }
 
-  public JsonObject getOptionalCourses(final Integer pSemesterId, final Integer pProgramId,
-      final Integer pYear, final Integer pSemester, final Request pRequest, final UriInfo pUriInfo) {
-    Syllabus syllabus =
-        mSemesterSyllabusMapManager.getSyllabusForSemester(pSemesterId, pProgramId, pYear,
-            pSemester);
-    List<Course> courses =
-        getContentManager().getOptionalCourseList(syllabus.getId(), pYear, pSemester);
+  public JsonObject getOptionalCourses(final Integer pSemesterId, final Integer pProgramId, final Integer pYear,
+      final Integer pSemester, final Request pRequest, final UriInfo pUriInfo) {
+    Syllabus syllabus = mSemesterSyllabusMapManager.getSyllabusForSemester(pSemesterId, pProgramId, pYear, pSemester);
+    List<Course> courses = getContentManager().getOptionalCourseList(syllabus.getId(), pYear, pSemester);
 
     return buildCourse(courses, pUriInfo);
   }
 
-  public JsonObject getOfferedCourses(final Integer pSemesterId, final Integer pProgramId,
+  public JsonObject getOfferedCourses(final Integer pSemesterId, final Integer pProgramId, final Integer pYear,
+      final Integer pSemester, final UriInfo pUriInfo) {
+
+    List<Course> courses = getContentManager().getOfferedCourseList(pSemesterId, pProgramId, pYear, pSemester);
+
+    return buildCourse(courses, pUriInfo);
+  }
+
+  public JsonObject getCallForApplicationCourses(final Integer pSemesterId, final Integer pProgramId,
       final Integer pYear, final Integer pSemester, final UriInfo pUriInfo) {
 
     List<Course> courses =
-        getContentManager().getOfferedCourseList(pSemesterId, pProgramId, pYear, pSemester);
+        getContentManager().getCallForApplicationCourseList(pSemesterId, pProgramId, pYear, pSemester);
 
     return buildCourse(courses, pUriInfo);
   }
 
-  public JsonObject getCallForApplicationCourses(final Integer pSemesterId,
-      final Integer pProgramId, final Integer pYear, final Integer pSemester, final UriInfo pUriInfo) {
+  public JsonObject getApprovedCourses(final Integer pSemesterId, final Integer pProgramId, final Integer pYear,
+      final Integer pSemester, final UriInfo pUriInfo) {
 
-    List<Course> courses =
-        getContentManager().getCallForApplicationCourseList(pSemesterId, pProgramId, pYear,
-            pSemester);
+    List<Course> courses = getContentManager().getApprovedCourseList(pSemesterId, pProgramId, pYear, pSemester);
 
     return buildCourse(courses, pUriInfo);
   }
 
-  public JsonObject getApprovedCourses(final Integer pSemesterId, final Integer pProgramId,
+  public JsonObject getApprovedCallForApplicationCourseList(final Integer pSemesterId, final Integer pProgramId,
       final Integer pYear, final Integer pSemester, final UriInfo pUriInfo) {
 
     List<Course> courses =
-        getContentManager().getApprovedCourseList(pSemesterId, pProgramId, pYear, pSemester);
-
-    return buildCourse(courses, pUriInfo);
-  }
-
-  public JsonObject getApprovedCallForApplicationCourseList(final Integer pSemesterId,
-      final Integer pProgramId, final Integer pYear, final Integer pSemester, final UriInfo pUriInfo) {
-
-    List<Course> courses =
-        getContentManager().getApprovedCallForApplicationCourseList(pSemesterId, pProgramId, pYear,
-            pSemester);
+        getContentManager().getApprovedCallForApplicationCourseList(pSemesterId, pProgramId, pYear, pSemester);
 
     return buildCourse(courses, pUriInfo);
   }

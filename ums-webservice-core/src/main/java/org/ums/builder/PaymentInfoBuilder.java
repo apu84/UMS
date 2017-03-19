@@ -36,21 +36,19 @@ public class PaymentInfoBuilder implements Builder<PaymentInfo, MutablePaymentIn
   SemesterManager mSemesterManager;
 
   @Override
-  public void build(JsonObjectBuilder pBuilder, PaymentInfo pReadOnly, UriInfo pUriInfo,
-      LocalCache pLocalCache) {
+  public void build(JsonObjectBuilder pBuilder, PaymentInfo pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
 
   }
 
-  public void build(JsonObjectBuilder pBuilder, PaymentInfo pReadOnly, UriInfo pUriInfo,
-      LocalCache pLocalCache, PaymentType pPaymentType) {
+  public void build(JsonObjectBuilder pBuilder, PaymentInfo pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache,
+      PaymentType pPaymentType) {
     pBuilder.add("id", pReadOnly.getId());
 
     JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
     if(pPaymentType == PaymentType.ADMISSION_FEE || pPaymentType == PaymentType.MIGRATION_FEE) {
       AdmissionStudent admissionStudent =
           mAdmissionStudentManager.getAdmissionStudent(pReadOnly.getSemesterId(),
-              ProgramType.get(pReadOnly.getSemester().getProgramTypeId()),
-              pReadOnly.getReferenceId());
+              ProgramType.get(pReadOnly.getSemester().getProgramTypeId()), pReadOnly.getReferenceId());
       pBuilder.add("receiptId", admissionStudent.getReceiptId());
       pBuilder.add("studentName", admissionStudent.getStudentName());
       pBuilder.add("unit", admissionStudent.getUnit());

@@ -12,13 +12,11 @@ import java.util.List;
 /**
  * Created by Monjur-E-Morshed on 10-Dec-16.
  */
-public class AdmissionMeritListDaoDecorator
-    extends
-    ContentDaoDecorator<AdmissionMeritList, MutableAdmissionMeritList, Integer, AdmissionMeritListManager>
-    implements AdmissionMeritListManager {
+public class AdmissionMeritListDaoDecorator extends
+    ContentDaoDecorator<AdmissionMeritList, MutableAdmissionMeritList, Integer, AdmissionMeritListManager> implements
+    AdmissionMeritListManager {
   @Override
-  public List<AdmissionMeritList> getMeritList(Semester pSemester, Faculty pFaculty,
-      QuotaType pAdmissionGroup) {
+  public List<AdmissionMeritList> getMeritList(Semester pSemester, Faculty pFaculty, QuotaType pAdmissionGroup) {
     return getManager().getMeritList(pSemester, pFaculty, pAdmissionGroup);
   }
 }

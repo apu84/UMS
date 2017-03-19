@@ -14,22 +14,19 @@ import javax.ws.rs.core.UriInfo;
 @Component
 public class ClassRoomBuilder implements Builder<ClassRoom, MutableClassRoom> {
   @Override
-  public void build(JsonObjectBuilder pBuilder, ClassRoom pReadOnly, UriInfo pUriInfo,
-      final LocalCache pLocalCache) {
+  public void build(JsonObjectBuilder pBuilder, ClassRoom pReadOnly, UriInfo pUriInfo, final LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("roomNo", pReadOnly.getRoomNo());
-    pBuilder.add("description",
-        pReadOnly.getDescription() == null ? "" : pReadOnly.getDescription());
+    pBuilder.add("description", pReadOnly.getDescription() == null ? "" : pReadOnly.getDescription());
     pBuilder.add("totalRow", pReadOnly.getTotalRow());
     pBuilder.add("totalColumn", pReadOnly.getTotalColumn());
     pBuilder.add("capacity", pReadOnly.getCapacity());
     pBuilder.add("examSeatPlan", pReadOnly.isExamSeatPlan());
     pBuilder.add("roomType", pReadOnly.getRoomType().getValue());
     pBuilder.add("dept_id", pReadOnly.getDeptId());
-    pBuilder.add(
-        "self",
-        pUriInfo.getBaseUriBuilder().path("academic").path("classroom")
-            .path(pReadOnly.getId().toString()).build().toString());
+    pBuilder.add("self",
+        pUriInfo.getBaseUriBuilder().path("academic").path("classroom").path(pReadOnly.getId().toString()).build()
+            .toString());
   }
 
   @Override
@@ -39,8 +36,7 @@ public class ClassRoomBuilder implements Builder<ClassRoom, MutableClassRoom> {
     pMutable.setTotalRow((Integer.parseInt(pJsonObject.getString("totalRow"))));
     pMutable.setTotalColumn((Integer.parseInt(pJsonObject.getString("totalColumn"))));
     pMutable.setCapacity((Integer.parseInt(pJsonObject.getString("capacity"))));
-    pMutable
-        .setRoomType(ClassRoomType.values()[Integer.parseInt(pJsonObject.getString("roomType"))]);
+    pMutable.setRoomType(ClassRoomType.values()[Integer.parseInt(pJsonObject.getString("roomType"))]);
     pMutable.setExamSeatPlan(true);
     pMutable.setDeptId(pJsonObject.getString("dept_id"));
   }

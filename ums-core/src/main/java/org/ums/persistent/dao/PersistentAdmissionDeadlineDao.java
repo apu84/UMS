@@ -22,8 +22,7 @@ public class PersistentAdmissionDeadlineDao extends AdmissionDeadlineDaoDecorato
 
   String INSERT_ONE =
       "INSERT INTO ADMISSION_DEADLINE (SEMESTER_ID, MERIT_START_RANGE, MERIT_LIMIT_RANGE, START_DATE, END_DATE, LAST_MODIFIED) "
-          + "VALUES (?, ?, ?, TO_DATE(?, 'DD/MM/YYYY'), TO_DATE(?,'DD/MM/YYYY'),"
-          + getLastModifiedSql() + ")";
+          + "VALUES (?, ?, ?, TO_DATE(?, 'DD/MM/YYYY'), TO_DATE(?,'DD/MM/YYYY')," + getLastModifiedSql() + ")";
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -61,8 +60,8 @@ public class PersistentAdmissionDeadlineDao extends AdmissionDeadlineDaoDecorato
     List<Object[]> params = new ArrayList<>();
 
     for(AdmissionDeadline deadline : pDeadlines) {
-      params.add(new Object[] {deadline.getSemesterId(), deadline.getMeritListStartNo(),
-          deadline.getMeritListEndNo(), deadline.getStartDate(), deadline.getEndDate()});
+      params.add(new Object[] {deadline.getSemesterId(), deadline.getMeritListStartNo(), deadline.getMeritListEndNo(),
+          deadline.getStartDate(), deadline.getEndDate()});
     }
     return params;
   }
@@ -71,9 +70,8 @@ public class PersistentAdmissionDeadlineDao extends AdmissionDeadlineDaoDecorato
     List<Object[]> params = new ArrayList<>();
 
     for(AdmissionDeadline deadline : pDeadlines) {
-      params.add(new Object[] {deadline.getSemesterId(), deadline.getMeritListStartNo(),
-          deadline.getMeritListEndNo(), deadline.getStartDate(), deadline.getEndDate(),
-          deadline.getId()});
+      params.add(new Object[] {deadline.getSemesterId(), deadline.getMeritListStartNo(), deadline.getMeritListEndNo(),
+          deadline.getStartDate(), deadline.getEndDate(), deadline.getId()});
     }
     return params;
   }

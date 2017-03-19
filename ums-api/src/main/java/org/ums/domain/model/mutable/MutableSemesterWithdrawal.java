@@ -10,8 +10,8 @@ import org.ums.domain.model.immutable.Student;
 /**
  * Created by My Pc on 3/22/2016.
  */
-public interface MutableSemesterWithdrawal extends SemesterWithdrawal, Mutable,
-    MutableLastModifier, MutableIdentifier<Long> {
+public interface MutableSemesterWithdrawal extends SemesterWithdrawal, Mutable, MutableLastModifier,
+    MutableIdentifier<Long> {
   void setSemester(final Semester pSemester);
 
   void setStudent(final Student pStudent);

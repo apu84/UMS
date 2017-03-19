@@ -31,8 +31,7 @@ public class MutableSemesterWithdrawalLogResource extends Resource {
 
   @DELETE
   @Path(PATH_PARAM_OBJECT_ID)
-  public Response deleteSemesterWithdrawalLog(final @PathParam("object-id") Long objectId)
-      throws Exception {
+  public Response deleteSemesterWithdrawalLog(final @PathParam("object-id") Long objectId) throws Exception {
     return mHelper.delete(objectId);
   }
 }

@@ -12,8 +12,7 @@ import org.ums.domain.model.mutable.MutableMarksSubmissionStatus;
 import org.ums.formatter.DateFormat;
 
 @Component
-public class MarksSubmissionStatusBuilder implements
-    Builder<MarksSubmissionStatus, MutableMarksSubmissionStatus> {
+public class MarksSubmissionStatusBuilder implements Builder<MarksSubmissionStatus, MutableMarksSubmissionStatus> {
   @Autowired
   private DateFormat mDateFormat;
 
@@ -45,8 +44,7 @@ public class MarksSubmissionStatusBuilder implements
   }
 
   @Override
-  public void build(MutableMarksSubmissionStatus pMutable, JsonObject pJsonObject,
-      LocalCache pLocalCache) {
+  public void build(MutableMarksSubmissionStatus pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
 
   }
 }

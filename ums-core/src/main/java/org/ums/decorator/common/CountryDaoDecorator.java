@@ -11,7 +11,7 @@ import org.ums.manager.library.AuthorManager;
 /**
  * Created by Ifti on 31-Jan-17.
  */
-public class CountryDaoDecorator extends
-    ContentDaoDecorator<Country, MutableCountry, Integer, CountryManager> implements CountryManager {
+public class CountryDaoDecorator extends ContentDaoDecorator<Country, MutableCountry, Integer, CountryManager>
+    implements CountryManager {
 
 }

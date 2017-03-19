@@ -11,14 +11,12 @@ public class AdmissionCertificatesOfStudentDaoDecorator
     ContentDaoDecorator<AdmissionCertificatesOfStudent, MutableAdmissionCertificatesOfStudent, Integer, AdmissionCertificatesOfStudentManager>
     implements AdmissionCertificatesOfStudentManager {
   @Override
-  public int saveAdmissionStudentsCertificates(
-      List<MutableAdmissionCertificatesOfStudent> pCertificateHistorys) {
+  public int saveAdmissionStudentsCertificates(List<MutableAdmissionCertificatesOfStudent> pCertificateHistorys) {
     return getManager().saveAdmissionStudentsCertificates(pCertificateHistorys);
   }
 
   @Override
-  public List<AdmissionCertificatesOfStudent> getStudentsSavedCertificateLists(int pSemesterId,
-      String pReceiptId) {
+  public List<AdmissionCertificatesOfStudent> getStudentsSavedCertificateLists(int pSemesterId, String pReceiptId) {
     return getManager().getStudentsSavedCertificateLists(pSemesterId, pReceiptId);
   }
 }

@@ -97,8 +97,7 @@ public class StudentResourceHelper extends ResourceHelper<Student, MutableStuden
     int contentStartIndex = data.indexOf(encodingPrefix) + encodingPrefix.length();
     byte[] imageData = Base64.getDecoder().decode(data.substring(contentStartIndex));
     try {
-      mBinaryContentManager.create(imageData, pJsonObject.getString("id"),
-          BinaryContentManager.Domain.PICTURE);
+      mBinaryContentManager.create(imageData, pJsonObject.getString("id"), BinaryContentManager.Domain.PICTURE);
     } catch(IOException ie) {
       throw new UncheckedIOException(ie);
     }

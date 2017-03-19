@@ -12,8 +12,7 @@ public class PersistentLoggerEntry implements MutableLoggerEntry {
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sLoggerEntryManager =
-        applicationContext.getBean("loggerEntryManager", LoggerEntryManager.class);
+    sLoggerEntryManager = applicationContext.getBean("loggerEntryManager", LoggerEntryManager.class);
   }
 
   private String mSql;

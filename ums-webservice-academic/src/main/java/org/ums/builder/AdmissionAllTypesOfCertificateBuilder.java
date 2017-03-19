@@ -13,8 +13,8 @@ import javax.ws.rs.core.UriInfo;
 public class AdmissionAllTypesOfCertificateBuilder implements
     Builder<AdmissionAllTypesOfCertificate, MutableAdmissionAllTypesOfCertificate> {
   @Override
-  public void build(JsonObjectBuilder pBuilder, AdmissionAllTypesOfCertificate pReadOnly,
-      UriInfo pUriInfo, LocalCache pLocalCache) {
+  public void build(JsonObjectBuilder pBuilder, AdmissionAllTypesOfCertificate pReadOnly, UriInfo pUriInfo,
+      LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getCertificateId());
     pBuilder.add("name", pReadOnly.getCertificateTitle());
     pBuilder.add("type", pReadOnly.getCertificateType());
@@ -22,8 +22,7 @@ public class AdmissionAllTypesOfCertificateBuilder implements
   }
 
   @Override
-  public void build(MutableAdmissionAllTypesOfCertificate pMutable, JsonObject pJsonObject,
-      LocalCache pLocalCache) {
+  public void build(MutableAdmissionAllTypesOfCertificate pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
     pMutable.setCertificateId(pJsonObject.getInt("id"));
     pMutable.setCertificateTitle(pJsonObject.getString("name"));
     pMutable.setCertificateType(pJsonObject.getString("type"));

@@ -46,17 +46,13 @@ public class MarksSubmissionStatusResourceHelper extends
     return pReadonly.getLastModified();
   }
 
-  public JsonObject getMarksSubmissionStatus(int pProgramTypeId, int pSemesterId,
-      final UriInfo pUriInfo) {
-    List<MarksSubmissionStatus> statuses =
-        mMarksSubmissionStatusManager.getByProgramType(pProgramTypeId, pSemesterId);
+  public JsonObject getMarksSubmissionStatus(int pProgramTypeId, int pSemesterId, final UriInfo pUriInfo) {
+    List<MarksSubmissionStatus> statuses = mMarksSubmissionStatusManager.getByProgramType(pProgramTypeId, pSemesterId);
     return buildJsonResponse(statuses, pUriInfo);
   }
 
-  public JsonObject getMarksSubmissionStatusByProgram(int pProgramId, int pSemesterId,
-      final UriInfo pUriInfo) {
-    List<MarksSubmissionStatus> statuses =
-        mMarksSubmissionStatusManager.get(pProgramId, pSemesterId);
+  public JsonObject getMarksSubmissionStatusByProgram(int pProgramId, int pSemesterId, final UriInfo pUriInfo) {
+    List<MarksSubmissionStatus> statuses = mMarksSubmissionStatusManager.get(pProgramId, pSemesterId);
     return buildJsonResponse(statuses, pUriInfo);
   }
 }

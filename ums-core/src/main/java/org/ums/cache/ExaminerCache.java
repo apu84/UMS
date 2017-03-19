@@ -6,8 +6,7 @@ import org.ums.manager.CacheManager;
 import org.ums.manager.ExaminerManager;
 import org.ums.util.CacheUtil;
 
-public class ExaminerCache extends
-    AssignedTeacherCache<Examiner, MutableExaminer, Long, ExaminerManager> implements
+public class ExaminerCache extends AssignedTeacherCache<Examiner, MutableExaminer, Long, ExaminerManager> implements
     ExaminerManager {
   public ExaminerCache(final CacheManager<Examiner, Long> pCacheManager) {
     super(pCacheManager);

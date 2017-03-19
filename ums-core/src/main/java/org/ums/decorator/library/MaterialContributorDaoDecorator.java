@@ -11,9 +11,8 @@ import org.ums.manager.library.MaterialContributorManager;
 /**
  * Created by Ifti on 17-Feb-17.
  */
-public class MaterialContributorDaoDecorator
-    extends
-    ContentDaoDecorator<MaterialContributor, MutableMaterialContributor, Integer, MaterialContributorManager>
-    implements MaterialContributorManager {
+public class MaterialContributorDaoDecorator extends
+    ContentDaoDecorator<MaterialContributor, MutableMaterialContributor, Integer, MaterialContributorManager> implements
+    MaterialContributorManager {
 
 }

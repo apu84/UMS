@@ -28,15 +28,13 @@ public class ItemResource extends MutableItemResource {
 
   @GET
   @Path(PATH_PARAM_OBJECT_ID)
-  public Response get(final @Context Request pRequest, final @PathParam("object-id") Long pObjectId)
-      throws Exception {
+  public Response get(final @Context Request pRequest, final @PathParam("object-id") Long pObjectId) throws Exception {
     return mResourceHelper.get(pObjectId, pRequest, mUriInfo);
   }
 
   @GET
   @Path("/mfn/{mfn-no}")
-  public JsonObject getByMfn(final @Context Request pRequest, final @PathParam("mfn-no") Long pMfn)
-      throws Exception {
+  public JsonObject getByMfn(final @Context Request pRequest, final @PathParam("mfn-no") Long pMfn) throws Exception {
     return mResourceHelper.getByMfn(pMfn, mUriInfo);
   }
 

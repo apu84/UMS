@@ -29,13 +29,11 @@ public class PasswordReportGenerator extends AbstractReportGenerator {
   public MasterReport getReportDefinition() throws Exception {
     // Using the classloader, get the URL to the reportDefinition file
     final ClassLoader classloader = this.getClass().getClassLoader();
-    final URL reportDefinitionURL =
-        classloader.getResource("report/password/generatedPassword.prpt");
+    final URL reportDefinitionURL = classloader.getResource("report/password/generatedPassword.prpt");
 
     // Parse the report file
     final ResourceManager resourceManager = new ResourceManager();
-    final Resource directly =
-        resourceManager.createDirectly(reportDefinitionURL, MasterReport.class);
+    final Resource directly = resourceManager.createDirectly(reportDefinitionURL, MasterReport.class);
     return (MasterReport) directly.getResource();
   }
 
@@ -47,8 +45,7 @@ public class PasswordReportGenerator extends AbstractReportGenerator {
     sampleDriverConnectionProvider.setProperty("user", "DB_IUMS");
     sampleDriverConnectionProvider.setProperty("password", "ig100");
 
-    final SQLReportDataFactory dataFactory =
-        new SQLReportDataFactory(sampleDriverConnectionProvider);
+    final SQLReportDataFactory dataFactory = new SQLReportDataFactory(sampleDriverConnectionProvider);
     dataFactory.setQuery(QUERY_NAME, reportQuery);
 
     return dataFactory;

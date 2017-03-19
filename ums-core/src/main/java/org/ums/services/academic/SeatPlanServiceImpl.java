@@ -61,15 +61,13 @@ public class SeatPlanServiceImpl implements SeatPlanService {
 
   @Override
   @Transactional
-  public GenericResponse<Map> generateSeatPlan(int pSemesterId, int pGroupNo, int pExamType,
-      String pExamDate) {
+  public GenericResponse<Map> generateSeatPlan(int pSemesterId, int pGroupNo, int pExamType, String pExamDate) {
     int numberOfSubGroups;
     if(pGroupNo == 0) {
       numberOfSubGroups = mSubGroupCCIManager.checkSubGroupNumber(pSemesterId, pExamDate);
     }
     else {
-      numberOfSubGroups =
-          mSubGroupManager.getSubGroupNumberOfAGroup(pSemesterId, pExamType, pGroupNo);
+      numberOfSubGroups = mSubGroupManager.getSubGroupNumberOfAGroup(pSemesterId, pExamType, pGroupNo);
 
     }
 
@@ -82,8 +80,7 @@ public class SeatPlanServiceImpl implements SeatPlanService {
     }
     else {
       Integer numberOfSubGroupsWithZeroSubGroupNumber =
-          mSubGroupManager.checkForHalfFinishedSubGroupsBySemesterGroupNoAndType(pSemesterId,
-              pGroupNo, 1);
+          mSubGroupManager.checkForHalfFinishedSubGroupsBySemesterGroupNoAndType(pSemesterId, pGroupNo, 1);
       if(numberOfSubGroupsWithZeroSubGroupNumber > 0) {
         numberOfSubGroups -= 1;
       }
@@ -110,17 +107,15 @@ public class SeatPlanServiceImpl implements SeatPlanService {
     Map<Integer, List<Student>> tempSubGroupWithStudents = new HashMap<>();
 
     if(pGroupNo == 0) {
-      studentsByProgramYearSemesterStatusList =
-          initiateStudentsForCCIBasedOnExamDate(pSemesterId, pExamDate);
-      studentsByProgramYearSemesterStatusList2 =
-          initiateStudentsForCCIBasedOnExamDate(pSemesterId, pExamDate);
+      studentsByProgramYearSemesterStatusList = initiateStudentsForCCIBasedOnExamDate(pSemesterId, pExamDate);
+      studentsByProgramYearSemesterStatusList2 = initiateStudentsForCCIBasedOnExamDate(pSemesterId, pExamDate);
 
       subGroupWithStudents =
-          getStudentsOfTheSubGroupsCCI(pSemesterId, pGroupNo, pExamType, pExamDate,
-              numberOfSubGroups, studentsByProgramYearSemesterStatusList);
+          getStudentsOfTheSubGroupsCCI(pSemesterId, pGroupNo, pExamType, pExamDate, numberOfSubGroups,
+              studentsByProgramYearSemesterStatusList);
       tempSubGroupWithStudents =
-          getStudentsOfTheSubGroupsCCI(pSemesterId, pGroupNo, pExamType, pExamDate,
-              numberOfSubGroups, studentsByProgramYearSemesterStatusList2);
+          getStudentsOfTheSubGroupsCCI(pSemesterId, pGroupNo, pExamType, pExamDate, numberOfSubGroups,
+              studentsByProgramYearSemesterStatusList2);
     }
     else {
       studentsByProgramYearSemesterStatusList =
@@ -360,8 +355,7 @@ public class SeatPlanServiceImpl implements SeatPlanService {
   @Override
   @Transactional
   public GenericResponse<Map> generateGroup(int pSemesterId, int pExamType) {
-    List<ExamRoutineDto> mExamRoutineList =
-        mExamRoutineManager.getExamRoutine(pSemesterId, pExamType);
+    List<ExamRoutineDto> mExamRoutineList = mExamRoutineManager.getExamRoutine(pSemesterId, pExamType);
 
     Map<Integer, List<SeatPlanGroup>> groupWithProgramAndCourse = new HashMap<>();
 
@@ -375,11 +369,9 @@ public class SeatPlanServiceImpl implements SeatPlanService {
       if(group == 0) {
         group += 1;
 
-        MutableSeatPlanGroup seatPlanGroup =
-            storeCourseInfo(examRoutineDto, pSemesterId, pExamType, group);
+        MutableSeatPlanGroup seatPlanGroup = storeCourseInfo(examRoutineDto, pSemesterId, pExamType, group);
 
-        groupWithProgramAndCourse =
-            setGroupAndProgramMap(seatPlanGroup, group, groupWithProgramAndCourse);
+        groupWithProgramAndCourse = setGroupAndProgramMap(seatPlanGroup, group, groupWithProgramAndCourse);
 
         dateIndicatorForIteration = examRoutineDto.getExamDate();
 
@@ -392,8 +384,7 @@ public class SeatPlanServiceImpl implements SeatPlanService {
           boolean foundOccurrenceWithSameDateTwice = false;
 
           for(SeatPlanGroup iterate : secondaryGroupAndProgramMap.get(group)) {
-            if(iterate.getProgram().getId() == syllabus.getProgramId()
-                && iterate.getAcademicYear() == course.getYear()
+            if(iterate.getProgram().getId() == syllabus.getProgramId() && iterate.getAcademicYear() == course.getYear()
                 && iterate.getAcademicSemester() == course.getSemester()) {
               foundOccurrenceWithSameDateTwice = true;
               break;
@@ -401,8 +392,7 @@ public class SeatPlanServiceImpl implements SeatPlanService {
           }
 
           if(foundOccurrenceWithSameDateTwice == false) {
-            MutableSeatPlanGroup seatPlanGroup =
-                storeCourseInfo(examRoutineDto, pSemesterId, pExamType, group);
+            MutableSeatPlanGroup seatPlanGroup = storeCourseInfo(examRoutineDto, pSemesterId, pExamType, group);
 
             List<SeatPlanGroup> seatPlanGroupList = groupWithProgramAndCourse.get(group);
             seatPlanGroupList.add(seatPlanGroup);
@@ -425,11 +415,9 @@ public class SeatPlanServiceImpl implements SeatPlanService {
 
             for(SeatPlanGroup seatPlanGroupForIterationForFinding : seatPlanGroupListForFindingIfTheGroupIsPresent) {
 
-              if(seatPlanGroupForIterationForFinding.getProgram().getId() == syllabus
-                  .getProgramId()
+              if(seatPlanGroupForIterationForFinding.getProgram().getId() == syllabus.getProgramId()
                   && seatPlanGroupForIterationForFinding.getAcademicYear() == course.getYear()
-                  && seatPlanGroupForIterationForFinding.getAcademicSemester() == course
-                      .getSemester()) {
+                  && seatPlanGroupForIterationForFinding.getAcademicSemester() == course.getSemester()) {
 
                 foundMatch = true;
                 group = seatPlanGroupForIterationForFinding.getGroupNo();
@@ -448,11 +436,9 @@ public class SeatPlanServiceImpl implements SeatPlanService {
           }
           else {
             group = groupWithProgramAndCourse.size() + 1;
-            MutableSeatPlanGroup seatPlanGroup =
-                storeCourseInfo(examRoutineDto, pSemesterId, pExamType, group);
+            MutableSeatPlanGroup seatPlanGroup = storeCourseInfo(examRoutineDto, pSemesterId, pExamType, group);
 
-            groupWithProgramAndCourse =
-                setGroupAndProgramMap(seatPlanGroup, group, groupWithProgramAndCourse);
+            groupWithProgramAndCourse = setGroupAndProgramMap(seatPlanGroup, group, groupWithProgramAndCourse);
 
             dateIndicatorForIteration = examRoutineDto.getExamDate();
           }
@@ -464,8 +450,7 @@ public class SeatPlanServiceImpl implements SeatPlanService {
     return new GenericMessageResponse(GenericResponse.ResponseType.SUCCESS);
   }
 
-  MutableSeatPlanGroup storeCourseInfo(ExamRoutineDto examRoutineDto, int pSemesterId,
-      int pExamType, int group) {
+  MutableSeatPlanGroup storeCourseInfo(ExamRoutineDto examRoutineDto, int pSemesterId, int pExamType, int group) {
 
     Course course = mCourseManager.get(examRoutineDto.getCourseId());
 
@@ -509,9 +494,8 @@ public class SeatPlanServiceImpl implements SeatPlanService {
     return groupWithProgramAndCourse;
   }
 
-  Map<Integer, List<Student>> getStudentsOfTheSubGroups(int pSemesterId, int pGroupNo,
-      int pExamType, String examDate, int numberOfSubGroups,
-      Map<String, List<Student>> studentsByProgramYearSemesterStatusList) {
+  Map<Integer, List<Student>> getStudentsOfTheSubGroups(int pSemesterId, int pGroupNo, int pExamType, String examDate,
+      int numberOfSubGroups, Map<String, List<Student>> studentsByProgramYearSemesterStatusList) {
 
     Map<Integer, List<Student>> subGroupMap = new HashMap<>();
 
@@ -519,15 +503,12 @@ public class SeatPlanServiceImpl implements SeatPlanService {
       List<Student> studentsOfTheSubGroup = new LinkedList<>();
       if(examDate.equals("null")) {
         List<SubGroup> subGroupMembers =
-            mSubGroupManager.getSubGroupMembers(pSemesterId, pExamType, pGroupNo,
-                subGroupNumberIterator);
+            mSubGroupManager.getSubGroupMembers(pSemesterId, pExamType, pGroupNo, subGroupNumberIterator);
 
         int counter = 0;
         for(SubGroup member : subGroupMembers) {
           SeatPlanGroup group = mSeatPlanGroupManager.get(member.getGroupId());
-          String key =
-              group.getProgram().getId() + "" + group.getAcademicYear() + ""
-                  + group.getAcademicSemester();
+          String key = group.getProgram().getId() + "" + group.getAcademicYear() + "" + group.getAcademicSemester();
           List<Student> studentsOfTheGroup = new ArrayList<>();
           List<Student> existingStudents = studentsByProgramYearSemesterStatusList.get(key);
 
@@ -558,16 +539,14 @@ public class SeatPlanServiceImpl implements SeatPlanService {
       }
       else {
 
-        List<SubGroupCCI> subGroupMembers =
-            mSubGroupCCIManager.getBySemesterAndExamDate(pSemesterId, examDate);
+        List<SubGroupCCI> subGroupMembers = mSubGroupCCIManager.getBySemesterAndExamDate(pSemesterId, examDate);
 
         int counter = 0;
         for(SubGroupCCI member : subGroupMembers) {
 
           // String key = member.getId()+member.getCourseId();
           List<Student> studentsOfTheGroup = new ArrayList<>();
-          List<Student> existingStudents =
-              studentsByProgramYearSemesterStatusList.get(member.getCourseId());
+          List<Student> existingStudents = studentsByProgramYearSemesterStatusList.get(member.getCourseId());
 
           int studentCounter = 0;
           int totalExistingStudentSize = existingStudents.size();
@@ -598,14 +577,11 @@ public class SeatPlanServiceImpl implements SeatPlanService {
     return subGroupMap;
   }
 
-  Map<Integer, List<Student>> getStudentsOfTheSubGroupsCCI(int pSemesterId, int pGroupNo,
-      int pExamType, String examDate, int numberOfSubGroups,
-      Map<String, List<Student>> studentsByProgramYearSemesterStatusList) {
-    List<SubGroupCCI> subGroupMembers =
-        mSubGroupCCIManager.getBySemesterAndExamDate(pSemesterId, examDate);
+  Map<Integer, List<Student>> getStudentsOfTheSubGroupsCCI(int pSemesterId, int pGroupNo, int pExamType,
+      String examDate, int numberOfSubGroups, Map<String, List<Student>> studentsByProgramYearSemesterStatusList) {
+    List<SubGroupCCI> subGroupMembers = mSubGroupCCIManager.getBySemesterAndExamDate(pSemesterId, examDate);
     Map<Integer, List<Student>> subGroupNumberWithStudentsMap = new HashMap<>();
-    Integer numberOfZeroValuedSubGroups =
-        mSubGroupCCIManager.checkForHalfFinishedSubGroup(pSemesterId, examDate);
+    Integer numberOfZeroValuedSubGroups = mSubGroupCCIManager.checkForHalfFinishedSubGroup(pSemesterId, examDate);
 
     /*
      * TO do: the employee or the user can see partial exam seat plan, that means, he/she can save
@@ -651,30 +627,26 @@ public class SeatPlanServiceImpl implements SeatPlanService {
 
   Map<String, List<Student>> initiateStudentsForCCIBasedOnExamDate(int pSemester, String pExamDate) {
     Map<String, List<Student>> studentMap = new HashMap<>();
-    List<ApplicationCCI> applicationCCIs =
-        mApplicationCCIManager.getBySemesterAndExamDate(pSemester, pExamDate);
+    List<ApplicationCCI> applicationCCIs = mApplicationCCIManager.getBySemesterAndExamDate(pSemester, pExamDate);
     for(ApplicationCCI app : applicationCCIs) {
       List<Student> students =
-          mStudentManager.getStudentByCourseIdAndSemesterIdForSeatPlanForCCI(app.getCourseId(),
-              pSemester);
+          mStudentManager.getStudentByCourseIdAndSemesterIdForSeatPlanForCCI(app.getCourseId(), pSemester);
       studentMap.put(app.getCourseId(), students);
     }
 
     return studentMap;
   }
 
-  Map<String, List<Student>> initiateStudentsBasedOnProgramYearSemesterStatus(int pGroupNo,
-      int pSemesterId, int pExamType) {
+  Map<String, List<Student>> initiateStudentsBasedOnProgramYearSemesterStatus(int pGroupNo, int pSemesterId,
+      int pExamType) {
 
     Map<String, List<Student>> studentInfoMap = new HashMap<>();
 
-    List<Student> allStudents =
-        mStudentManager.getRegisteredStudents(pGroupNo, pSemesterId, pExamType);
+    List<Student> allStudents = mStudentManager.getRegisteredStudents(pGroupNo, pSemesterId, pExamType);
 
     for(Student student : allStudents) {
       String keyWithProgramYearSemesterStatus =
-          student.getProgram().getId() + "" + student.getCurrentYear() + ""
-              + student.getCurrentAcademicSemester();
+          student.getProgram().getId() + "" + student.getCurrentYear() + "" + student.getCurrentAcademicSemester();
       if(studentInfoMap.size() == 0 || studentInfoMap.get(keyWithProgramYearSemesterStatus) == null) {
         List<Student> studentList = new ArrayList<>();
 

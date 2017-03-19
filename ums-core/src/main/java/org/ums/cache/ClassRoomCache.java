@@ -10,8 +10,8 @@ import java.util.List;
 /**
  * Created by Monjur-E-Morshed on 19-Feb-17.
  */
-public class ClassRoomCache extends
-    ContentCache<ClassRoom, MutableClassRoom, Long, ClassRoomManager> implements ClassRoomManager {
+public class ClassRoomCache extends ContentCache<ClassRoom, MutableClassRoom, Long, ClassRoomManager> implements
+    ClassRoomManager {
   private CacheManager<ClassRoom, Long> mCacheManager;
 
   public ClassRoomCache(CacheManager<ClassRoom, Long> pCacheManager) {

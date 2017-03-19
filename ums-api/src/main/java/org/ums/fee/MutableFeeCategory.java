@@ -4,8 +4,7 @@ import org.ums.domain.model.common.Mutable;
 import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.mutable.MutableLastModifier;
 
-public interface MutableFeeCategory extends FeeCategory, Mutable, MutableLastModifier,
-    MutableIdentifier<String> {
+public interface MutableFeeCategory extends FeeCategory, Mutable, MutableLastModifier, MutableIdentifier<String> {
   void setFeeId(String pId);
 
   void setType(FeeCategory.Type pType);

@@ -11,8 +11,7 @@ import org.ums.manager.library.SupplierManager;
 /**
  * Created by Ifti on 04-Feb-17.
  */
-public class PublisherDaoDecorator extends
-    ContentDaoDecorator<Publisher, MutablePublisher, Integer, PublisherManager> implements
-    PublisherManager {
+public class PublisherDaoDecorator extends ContentDaoDecorator<Publisher, MutablePublisher, Integer, PublisherManager>
+    implements PublisherManager {
 
 }

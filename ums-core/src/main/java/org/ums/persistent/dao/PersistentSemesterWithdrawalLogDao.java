@@ -42,15 +42,14 @@ public class PersistentSemesterWithdrawalLogDao extends SemesterWithdrawalLogDao
   @Override
   public SemesterWithdrawalLog get(Long pId) {
     String query = SELECT_ALL + " WHERE SWL_ID=?";
-    return mJdbcTemplate.queryForObject(query, new Object[] {pId},
-        new SemesterWithdrawalLogRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new SemesterWithdrawalLogRowMapper());
   }
 
   @Override
   public int update(MutableSemesterWithdrawalLog pMutable) {
     String query = UPDATE_ONE + " WHERE SWL_ID=?";
-    return mJdbcTemplate.update(query, pMutable.getSemesterWithdrawal().getId(),
-        pMutable.getEmployeeId(), pMutable.getAction(), pMutable.getId());
+    return mJdbcTemplate.update(query, pMutable.getSemesterWithdrawal().getId(), pMutable.getEmployeeId(),
+        pMutable.getAction(), pMutable.getId());
   }
 
   @Override
@@ -62,8 +61,8 @@ public class PersistentSemesterWithdrawalLogDao extends SemesterWithdrawalLogDao
   @Override
   public Long create(MutableSemesterWithdrawalLog pMutable) {
     Long id = mIdGenerator.getNumericId();
-    mJdbcTemplate.update(INSERT_ONE, id, pMutable.getSemesterWithdrawal().getId(),
-        pMutable.getEmployeeId(), pMutable.getAction());
+    mJdbcTemplate.update(INSERT_ONE, id, pMutable.getSemesterWithdrawal().getId(), pMutable.getEmployeeId(),
+        pMutable.getAction());
     return id;
   }
 

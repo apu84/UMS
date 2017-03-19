@@ -27,11 +27,9 @@ public class StudentFileContentPermission extends AbstractSectionPermission {
   private UGRegistrationResultManager mUGRegistrationResultManager;
 
   public StudentFileContentPermission(final UserManager pUserManager,
-      final BearerAccessTokenManager pBearerAccessTokenManager,
-      final UMSConfiguration pUMSConfiguration, final MessageResource pMessageResource,
-      final StudentManager pStudentManager,
-      final UGRegistrationResultManager pRegistrationResultManager,
-      final CourseTeacherManager pCourseTeacherManager) {
+      final BearerAccessTokenManager pBearerAccessTokenManager, final UMSConfiguration pUMSConfiguration,
+      final MessageResource pMessageResource, final StudentManager pStudentManager,
+      final UGRegistrationResultManager pRegistrationResultManager, final CourseTeacherManager pCourseTeacherManager) {
     super(pBearerAccessTokenManager, pUserManager, pMessageResource, pCourseTeacherManager);
     mUMSConfiguration = pUMSConfiguration;
     mMessageResource = pMessageResource;
@@ -45,8 +43,7 @@ public class StudentFileContentPermission extends AbstractSectionPermission {
   }
 
   @Override
-  public Object list(String pPath, Map<String, String> pAdditionalParams, Domain pDomain,
-      String... pRootPath) {
+  public Object list(String pPath, Map<String, String> pAdditionalParams, Domain pDomain, String... pRootPath) {
     // Student should only able to see course material of course he/she has registered
     String semesterName = pRootPath[0];
     String courseName = pRootPath[1];
@@ -58,15 +55,13 @@ public class StudentFileContentPermission extends AbstractSectionPermission {
       Path targetDirectory = getQualifiedPath(pDomain, buildPath(pPath, pRootPath));
       String semesterIdString =
           getUserDefinedProperty(SEMESTER_ID, targetDirectory, getQualifiedPath(pDomain, pRootPath));
-      String courseIdString =
-          getUserDefinedProperty(COURSE_ID, targetDirectory, getQualifiedPath(pDomain, pRootPath));
+      String courseIdString = getUserDefinedProperty(COURSE_ID, targetDirectory, getQualifiedPath(pDomain, pRootPath));
       if(StringUtils.isEmpty(semesterIdString) || StringUtils.isEmpty(courseIdString)) {
         throw new Exception("Can not find semesterId and courseId for directory " + pPath);
       }
       Integer semesterId = Integer.parseInt(semesterIdString);
       List<UGRegistrationResult> registeredCourses =
-          mUGRegistrationResultManager.getRegisteredCourseByStudent(semesterId, student.getId(),
-              CourseRegType.REGULAR);
+          mUGRegistrationResultManager.getRegisteredCourseByStudent(semesterId, student.getId(), CourseRegType.REGULAR);
 
       boolean courseFound = false;
       Course course = null;
@@ -105,14 +100,13 @@ public class StudentFileContentPermission extends AbstractSectionPermission {
   }
 
   @Override
-  public Map<String, Object> move(List<String> pItems, String pNewPath, Domain pDomain,
-      String... pRootPath) {
+  public Map<String, Object> move(List<String> pItems, String pNewPath, Domain pDomain, String... pRootPath) {
     return error(mMessageResource.getMessage("folder.move.not.allowed"));
   }
 
   @Override
-  public Map<String, Object> copy(List<String> pItems, String pNewPath, String pNewFileName,
-      Domain pDomain, String... pRootPath) {
+  public Map<String, Object> copy(List<String> pItems, String pNewPath, String pNewFileName, Domain pDomain,
+      String... pRootPath) {
     return error(mMessageResource.getMessage("folder.copy.not.allowed"));
   }
 
@@ -122,20 +116,19 @@ public class StudentFileContentPermission extends AbstractSectionPermission {
   }
 
   @Override
-  public Map<String, Object> rename(String pOldPath, String pNewPath, Domain pDomain,
-      String... pRootPath) {
+  public Map<String, Object> rename(String pOldPath, String pNewPath, Domain pDomain, String... pRootPath) {
     return error(mMessageResource.getMessage("folder.rename.not.allowed"));
   }
 
   @Override
-  public Map<String, Object> createFolder(String pNewPath, Map<String, String> pAdditionalParams,
-      Domain pDomain, String... pRootPath) {
+  public Map<String, Object> createFolder(String pNewPath, Map<String, String> pAdditionalParams, Domain pDomain,
+      String... pRootPath) {
     return error(mMessageResource.getMessage("folder.creation.not.allowed"));
   }
 
   @Override
-  public Map<String, Object> upload(Map<String, InputStream> pFileContent, String pPath,
-      Domain pDomain, String... pRootPath) {
+  public Map<String, Object> upload(Map<String, InputStream> pFileContent, String pPath, Domain pDomain,
+      String... pRootPath) {
     Path uploadPath = getQualifiedPath(pDomain, buildPath(pPath, pRootPath));
     String folderType = getUserDefinedProperty(FOLDER_TYPE, uploadPath);
 
@@ -165,8 +158,7 @@ public class StudentFileContentPermission extends AbstractSectionPermission {
 
           }
           else {
-            return error(mMessageResource.getMessage("assignment.upload.time.limit.exceed",
-                startDate, endDate));
+            return error(mMessageResource.getMessage("assignment.upload.time.limit.exceed", startDate, endDate));
           }
         } catch(Exception e) {
           return error(mMessageResource.getMessage("file.upload.not.allowed", pPath));
@@ -177,22 +169,21 @@ public class StudentFileContentPermission extends AbstractSectionPermission {
   }
 
   @Override
-  public Map<String, Object> download(String pPath, String pToken, Domain pDomain,
-      String... pRootPath) {
+  public Map<String, Object> download(String pPath, String pToken, Domain pDomain, String... pRootPath) {
     // TODO: Check if student has permission
     return super.download(pPath, pToken, pDomain, pRootPath);
   }
 
   @Override
-  public Map<String, Object> downloadAsZip(List<String> pItems, String pNewFileName, String pToken,
-      Domain pDomain, String... pRootPath) {
+  public Map<String, Object> downloadAsZip(List<String> pItems, String pNewFileName, String pToken, Domain pDomain,
+      String... pRootPath) {
     // TODO: Check if student has permission
     return super.downloadAsZip(pItems, pNewFileName, pToken, pDomain, pRootPath);
   }
 
   @Override
-  public Map<String, Object> compress(List<String> pItems, String pNewPath, String pNewFileName,
-      Domain pDomain, String... pRootPath) {
+  public Map<String, Object> compress(List<String> pItems, String pNewPath, String pNewFileName, Domain pDomain,
+      String... pRootPath) {
     return error(mMessageResource.getMessage("compress.not.allowed"));
   }
 

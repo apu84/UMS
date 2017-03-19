@@ -11,8 +11,7 @@ import java.io.Serializable;
 /**
  * Created by Monjur-E-Morshed on 06-Dec-16.
  */
-public interface Faculty extends Serializable, EditType<MutableFaculty>, LastModifier,
-    Identifier<Integer> {
+public interface Faculty extends Serializable, EditType<MutableFaculty>, LastModifier, Identifier<Integer> {
   String getLongName();
 
   String getShortName();

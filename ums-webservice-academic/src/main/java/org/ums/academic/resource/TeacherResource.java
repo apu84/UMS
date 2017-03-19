@@ -20,8 +20,7 @@ public class TeacherResource extends Resource {
 
   @GET
   @Path("/department" + PATH_PARAM_OBJECT_ID)
-  public JsonObject getSyllabusList(final @Context Request pRequest,
-      final @PathParam("object-id") String pDepartmentId) {
+  public JsonObject getSyllabusList(final @Context Request pRequest, final @PathParam("object-id") String pDepartmentId) {
     return mResourceHelper.getByDepartment(pDepartmentId, mUriInfo);
   }
 }

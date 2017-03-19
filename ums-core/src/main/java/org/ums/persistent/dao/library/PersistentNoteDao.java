@@ -27,8 +27,7 @@ public class PersistentNoteDao extends NoteDaoDecorator {
   @Override
   public Note get(final Integer pId) {
     String query = SELECT_ALL + " Where Id = ?";
-    return mJdbcTemplate.queryForObject(query, new Object[] {pId},
-        new PersistentNoteDao.NoteRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new PersistentNoteDao.NoteRowMapper());
   }
 
   @Override

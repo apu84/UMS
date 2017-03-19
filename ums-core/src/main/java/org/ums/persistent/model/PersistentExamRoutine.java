@@ -14,8 +14,7 @@ public class PersistentExamRoutine implements MutableExamRoutine {
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sExamRoutineManager =
-        applicationContext.getBean("examRoutineManager", ExamRoutineManager.class);
+    sExamRoutineManager = applicationContext.getBean("examRoutineManager", ExamRoutineManager.class);
   }
 
   private List<ExamRoutineDto> mExamRoutine;

@@ -8,9 +8,7 @@ import java.util.List;
 public interface AdmissionCertificatesOfStudentManager extends
     ContentManager<AdmissionCertificatesOfStudent, MutableAdmissionCertificatesOfStudent, Integer> {
 
-  int saveAdmissionStudentsCertificates(
-      final List<MutableAdmissionCertificatesOfStudent> pCertificateHistorys);
+  int saveAdmissionStudentsCertificates(final List<MutableAdmissionCertificatesOfStudent> pCertificateHistorys);
 
-  List<AdmissionCertificatesOfStudent> getStudentsSavedCertificateLists(final int pSemesterId,
-      final String pReceiptId);
+  List<AdmissionCertificatesOfStudent> getStudentsSavedCertificateLists(final int pSemesterId, final String pReceiptId);
 }

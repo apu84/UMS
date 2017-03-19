@@ -19,8 +19,7 @@ import javax.ws.rs.core.UriInfo;
 @Component
 public class SpStudentBuilder implements Builder<SpStudent, MutableSpStudent> {
   @Override
-  public void build(JsonObjectBuilder pBuilder, SpStudent pReadOnly, UriInfo pUriInfo,
-      LocalCache pLocalCache) {
+  public void build(JsonObjectBuilder pBuilder, SpStudent pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("programId", pReadOnly.getProgram().getId());
     pBuilder.add("semesterId", pReadOnly.getSemester().getId());

@@ -98,7 +98,7 @@ public class PersistentDepartment implements MutableDepartment {
 
   @Override
   public String toString() {
-    return String.format("%s [id=%s, shortName=%s, longName=%s]", getClass().getSimpleName(), mId,
-        mShortName, mLongName);
+    return String.format("%s [id=%s, shortName=%s, longName=%s]", getClass().getSimpleName(), mId, mShortName,
+        mLongName);
   }
 }

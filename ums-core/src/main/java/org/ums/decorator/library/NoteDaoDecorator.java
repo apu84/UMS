@@ -11,7 +11,7 @@ import org.ums.manager.library.NoteManager;
 /**
  * Created by Ifti on 17-Feb-17.
  */
-public class NoteDaoDecorator extends ContentDaoDecorator<Note, MutableNote, Integer, NoteManager>
-    implements NoteManager {
+public class NoteDaoDecorator extends ContentDaoDecorator<Note, MutableNote, Integer, NoteManager> implements
+    NoteManager {
 
 }

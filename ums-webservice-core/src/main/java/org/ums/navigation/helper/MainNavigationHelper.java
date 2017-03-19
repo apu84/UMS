@@ -77,8 +77,7 @@ public class MainNavigationHelper extends ResourceHelper<Navigation, MutableNavi
       for(AdditionalRolePermissions additionalRolePermission : additionalRolePermissions) {
         // if there is any additional role
         if(additionalRolePermission.getRoleId() != null) {
-          children.add(getRoleWisePermission(additionalRolePermission.getRole(), pUriInfo,
-              "additionalRole"));
+          children.add(getRoleWisePermission(additionalRolePermission.getRole(), pUriInfo, "additionalRole"));
         }
         else {
           permissions.addAll(additionalRolePermission.getPermission());
@@ -178,8 +177,7 @@ public class MainNavigationHelper extends ResourceHelper<Navigation, MutableNavi
     return job;
   }
 
-  private JsonObjectBuilder getRoleWisePermission(final Role pRole, final UriInfo pUriInfo,
-      final String pRoleType) {
+  private JsonObjectBuilder getRoleWisePermission(final Role pRole, final UriInfo pUriInfo, final String pRoleType) {
     JsonObjectBuilder typedItems = Json.createObjectBuilder();
     List<Permission> rolePermissions = mPermissionManager.getPermissionByRole(pRole);
     Set<String> permissions = new HashSet<>();

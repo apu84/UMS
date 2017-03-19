@@ -58,19 +58,18 @@ public class PersistentClassRoomDao extends ClassRoomDaoDecorator {
             + "  ROOM_INFO.TOTAL_ROW, " + "  ROOM_INFO.TOTAL_COLUMN, " + "  ROOM_INFO.CAPACITY, "
             + "  ROOM_INFO.ROOM_TYPE, " + "  ROOM_INFO.DEPT_ID, " + "  ROOM_INFO.EXAM_SEAT_PLAN, "
             + "  ROOM_INFO.LAST_MODIFIED " + "from ROOM_INFO, " + "  ( " + "    SELECT "
-            + "  DISTINCT (ROOM_ID) Room_id " + "from SEAT_PLAN " + "WHERE "
-            + "  SEMESTER_ID=? AND " + "  EXAM_TYPE=? " + "  ) seatPlan " + "WHERE "
-            + "  seatPlan.Room_id=ROOM_INFO.ROOM_ID " + "ORDER BY room_info.ROOM_ID";
-    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pExamType},
-        new ClassRoomRowMapper());
+            + "  DISTINCT (ROOM_ID) Room_id " + "from SEAT_PLAN " + "WHERE " + "  SEMESTER_ID=? AND "
+            + "  EXAM_TYPE=? " + "  ) seatPlan " + "WHERE " + "  seatPlan.Room_id=ROOM_INFO.ROOM_ID "
+            + "ORDER BY room_info.ROOM_ID";
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pExamType}, new ClassRoomRowMapper());
   }
 
   @Override
   public int update(final MutableClassRoom pRoom) {
     String query = UPDATE_ONE + "WHERE ROOM_ID = ?";
-    return mJdbcTemplate.update(query, pRoom.getRoomNo(), pRoom.getDescription(), pRoom
-        .getTotalRow(), pRoom.getTotalColumn(), pRoom.getCapacity(),
-        pRoom.getRoomType().getValue(), pRoom.getDeptId(), pRoom.isExamSeatPlan(), pRoom.getId());
+    return mJdbcTemplate.update(query, pRoom.getRoomNo(), pRoom.getDescription(), pRoom.getTotalRow(),
+        pRoom.getTotalColumn(), pRoom.getCapacity(), pRoom.getRoomType().getValue(), pRoom.getDeptId(),
+        pRoom.isExamSeatPlan(), pRoom.getId());
   }
 
   public int delete(final MutableClassRoom pClassRoom) {
@@ -83,15 +82,14 @@ public class PersistentClassRoomDao extends ClassRoomDaoDecorator {
     String query =
         SELECT_ALL
             + " where ROOM_ID  in (select distinct(room_id) from class_routine where semester_id=? and program_id=?)";
-    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pProgramId},
-        new ClassRoomRowMapper());
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pProgramId}, new ClassRoomRowMapper());
   }
 
   public Long create(final MutableClassRoom pClassRoom) {
     Long id = mIdGenerator.getNumericId();
-    mJdbcTemplate.update(INSERT_ONE, id, pClassRoom.getRoomNo(), pClassRoom.getDescription(),
-        pClassRoom.getTotalRow(), pClassRoom.getTotalColumn(), pClassRoom.getCapacity(), pClassRoom
-            .getRoomType().getValue(), pClassRoom.getDeptId(), pClassRoom.isExamSeatPlan());
+    mJdbcTemplate.update(INSERT_ONE, id, pClassRoom.getRoomNo(), pClassRoom.getDescription(), pClassRoom.getTotalRow(),
+        pClassRoom.getTotalColumn(), pClassRoom.getCapacity(), pClassRoom.getRoomType().getValue(),
+        pClassRoom.getDeptId(), pClassRoom.isExamSeatPlan());
     return id;
   }
 
@@ -112,8 +110,7 @@ public class PersistentClassRoomDao extends ClassRoomDaoDecorator {
       classRoom.setDescription(resultSet.getString("DESCRIPTION"));
       classRoom.setTotalRow(resultSet.getInt("TOTAL_ROW"));
       classRoom.setTotalColumn(resultSet.getInt("TOTAL_COLUMN"));
-      classRoom.setDeptId(resultSet.getString("DEPT_ID") == null ? "" : resultSet
-          .getString("DEPT_ID"));
+      classRoom.setDeptId(resultSet.getString("DEPT_ID") == null ? "" : resultSet.getString("DEPT_ID"));
       classRoom.setExamSeatPlan(resultSet.getBoolean("EXAM_SEAT_PLAN"));
       classRoom.setRoomType(ClassRoomType.get(resultSet.getInt("ROOM_TYPE")));
 

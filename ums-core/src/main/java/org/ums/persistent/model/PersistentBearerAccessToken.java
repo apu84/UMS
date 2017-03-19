@@ -12,8 +12,7 @@ public class PersistentBearerAccessToken implements MutableBearerAccessToken {
 
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
-    sBearerAccessTokenManager =
-        applicationContext.getBean("bearerAccessTokenManager", BearerAccessTokenManager.class);
+    sBearerAccessTokenManager = applicationContext.getBean("bearerAccessTokenManager", BearerAccessTokenManager.class);
   }
 
   private String mId;

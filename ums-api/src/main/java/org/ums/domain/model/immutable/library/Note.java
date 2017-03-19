@@ -11,8 +11,7 @@ import java.io.Serializable;
 /**
  * Created by Ifti on 17-Feb-17.
  */
-public interface Note extends Serializable, LastModifier, EditType<MutableNote>,
-    Identifier<Integer> {
+public interface Note extends Serializable, LastModifier, EditType<MutableNote>, Identifier<Integer> {
 
   String getMfn();
 

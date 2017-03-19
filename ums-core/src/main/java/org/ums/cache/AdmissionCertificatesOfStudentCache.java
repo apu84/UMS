@@ -15,20 +15,17 @@ public class AdmissionCertificatesOfStudentCache
 
   private CacheManager<AdmissionCertificatesOfStudent, Integer> mCacheManager;
 
-  public AdmissionCertificatesOfStudentCache(
-      CacheManager<AdmissionCertificatesOfStudent, Integer> pCacheManager) {
+  public AdmissionCertificatesOfStudentCache(CacheManager<AdmissionCertificatesOfStudent, Integer> pCacheManager) {
     mCacheManager = pCacheManager;
   }
 
   @Override
-  public int saveAdmissionStudentsCertificates(
-      List<MutableAdmissionCertificatesOfStudent> pCertificateHistorys) {
+  public int saveAdmissionStudentsCertificates(List<MutableAdmissionCertificatesOfStudent> pCertificateHistorys) {
     return getManager().saveAdmissionStudentsCertificates(pCertificateHistorys);
   }
 
   @Override
-  public List<AdmissionCertificatesOfStudent> getStudentsSavedCertificateLists(int pSemesterId,
-      String pReceiptId) {
+  public List<AdmissionCertificatesOfStudent> getStudentsSavedCertificateLists(int pSemesterId, String pReceiptId) {
     return getManager().getStudentsSavedCertificateLists(pSemesterId, pReceiptId);
   }
 

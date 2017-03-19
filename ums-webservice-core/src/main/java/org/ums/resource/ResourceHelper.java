@@ -22,8 +22,7 @@ public abstract class ResourceHelper<R extends EditType<M>, M extends Mutable, I
     return getContentManager().get(pObjectId);
   }
 
-  public Response get(final I pObjectId, final Request pRequest, final UriInfo pUriInfo)
-      throws Exception {
+  public Response get(final I pObjectId, final Request pRequest, final UriInfo pUriInfo) throws Exception {
     R readOnly = load(pObjectId);
     Response.ResponseBuilder builder = null;
     // Calculate the ETag on last modified date of user resource
@@ -84,11 +83,10 @@ public abstract class ResourceHelper<R extends EditType<M>, M extends Mutable, I
     return Response.noContent().build();
   }
 
-  public Response put(final I pObjectId, final Request pRequest, final String pIfMatch,
-      final JsonObject pJsonObject) throws Exception {
+  public Response put(final I pObjectId, final Request pRequest, final String pIfMatch, final JsonObject pJsonObject)
+      throws Exception {
     if(pIfMatch == null) {
-      return Response.status(Response.Status.BAD_REQUEST).entity("No If-Match header found.")
-          .build();
+      return Response.status(Response.Status.BAD_REQUEST).entity("No If-Match header found.").build();
     }
     R readOnly = load(pObjectId);
     EntityTag eTag = new EntityTag(getETag(readOnly));
@@ -108,8 +106,7 @@ public abstract class ResourceHelper<R extends EditType<M>, M extends Mutable, I
     return Response.noContent().build();
   }
 
-  public abstract Response post(final JsonObject pJsonObject, final UriInfo pUriInfo)
-      throws Exception;
+  public abstract Response post(final JsonObject pJsonObject, final UriInfo pUriInfo) throws Exception;
 
   protected abstract ContentManager<R, M, I> getContentManager();
 

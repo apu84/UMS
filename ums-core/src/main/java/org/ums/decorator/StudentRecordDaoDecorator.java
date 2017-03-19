@@ -15,26 +15,25 @@ public class StudentRecordDaoDecorator extends
   }
 
   @Override
-  public List<StudentRecord> getStudentRecords(Integer pProgramId, Integer pSemesterId,
-      Integer pYear, Integer pAcademicSemester) {
+  public List<StudentRecord> getStudentRecords(Integer pProgramId, Integer pSemesterId, Integer pYear,
+      Integer pAcademicSemester) {
     return getManager().getStudentRecords(pProgramId, pSemesterId, pYear, pAcademicSemester);
   }
 
   @Override
-  public List<StudentRecord> getStudentRecords(Integer pProgramId, Integer pSemesterId,
-      StudentRecord.Type pType) {
+  public List<StudentRecord> getStudentRecords(Integer pProgramId, Integer pSemesterId, StudentRecord.Type pType) {
     return getManager().getStudentRecords(pProgramId, pSemesterId, pType);
   }
 
   @Override
-  public List<StudentRecord> getStudentRecords(Integer pProgramId, Integer pSemesterId,
-      Integer pYear, Integer pAcademicSemester, StudentRecord.Type pType) {
+  public List<StudentRecord> getStudentRecords(Integer pProgramId, Integer pSemesterId, Integer pYear,
+      Integer pAcademicSemester, StudentRecord.Type pType) {
     return getManager().getStudentRecords(pProgramId, pSemesterId, pYear, pAcademicSemester, pType);
   }
 
   @Override
-  public List<StudentRecord> getStudentRecords(String pStudentId, Integer pSemesterId,
-      Integer pYear, Integer pAcademicSemester) {
+  public List<StudentRecord> getStudentRecords(String pStudentId, Integer pSemesterId, Integer pYear,
+      Integer pAcademicSemester) {
     return getManager().getStudentRecords(pStudentId, pSemesterId, pYear, pAcademicSemester);
   }
 

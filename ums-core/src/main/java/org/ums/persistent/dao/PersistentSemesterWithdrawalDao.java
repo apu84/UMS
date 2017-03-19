@@ -40,11 +40,10 @@ public class PersistentSemesterWithdrawalDao extends SemesterWithdrawalDaoDecora
   }
 
   @Override
-  public SemesterWithdrawal getStudentsRecord(String studentId, int semesterId, int year,
-      int semester) {
+  public SemesterWithdrawal getStudentsRecord(String studentId, int semesterId, int year, int semester) {
     String query = SELECT_ALL + " WHERE STUDENT_ID=? AND SEMESTER_ID=? AND YEAR=? AND SEMESTER=?";
-    return mJdbcTemplate.queryForObject(query,
-        new Object[] {studentId, semesterId, year, semester}, new SemesterWithdrawalRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[] {studentId, semesterId, year, semester},
+        new SemesterWithdrawalRowMapper());
   }
 
   @Override
@@ -76,8 +75,7 @@ public class PersistentSemesterWithdrawalDao extends SemesterWithdrawalDaoDecora
   public List<SemesterWithdrawal> getByDeptForEmployee(String deptId) {
 
     String query =
-        SELECT_ALL_For_Employee
-            + "  SW,STUDENTS S,STUDENT_RECORD SR WHERE SW.STUDENT_ID = S.STUDENT_ID "
+        SELECT_ALL_For_Employee + "  SW,STUDENTS S,STUDENT_RECORD SR WHERE SW.STUDENT_ID = S.STUDENT_ID "
             + " AND SW.STUDENT_ID=SR.STUDENT_ID AND S.DEPT_ID=? AND SW.YEAR =SR.YEAR "
             + " AND SW.SEMESTER=SR.SEMESTER  ";
     return mJdbcTemplate.query(query, new Object[] {deptId}, new SemesterWithdrawalRowMapper());
@@ -87,18 +85,18 @@ public class PersistentSemesterWithdrawalDao extends SemesterWithdrawalDaoDecora
   public int update(MutableSemesterWithdrawal pMutable) {
     if(pMutable.getStatus() < 2) {
       String query = UPDATE_ONE + " WHERE SW_ID=?";
-      return mJdbcTemplate.update(query, pMutable.getSemester().getId(), pMutable.getProgram()
-          .getId(), pMutable.getStudent().getId(), pMutable.getStudent().getCurrentYear(), pMutable
-          .getStudent().getCurrentAcademicSemester(), pMutable.getCause(), pMutable.getStatus(),
-          pMutable.getComment(), pMutable.getId());
+      return mJdbcTemplate.update(query, pMutable.getSemester().getId(), pMutable.getProgram().getId(), pMutable
+          .getStudent().getId(), pMutable.getStudent().getCurrentYear(), pMutable.getStudent()
+          .getCurrentAcademicSemester(), pMutable.getCause(), pMutable.getStatus(), pMutable.getComment(), pMutable
+          .getId());
     }
     else {
 
       String query = UPDATE_ONE_ALTERNATE + " WHERE SW_ID=?";
-      return mJdbcTemplate.update(query, pMutable.getSemester().getId(), pMutable.getProgram()
-          .getId(), pMutable.getStudent().getId(), pMutable.getStudent().getCurrentYear(), pMutable
-          .getStudent().getCurrentAcademicSemester(), pMutable.getCause(), pMutable.getStatus(),
-          pMutable.getAppDate(), pMutable.getComment(), pMutable.getId());
+      return mJdbcTemplate.update(query, pMutable.getSemester().getId(), pMutable.getProgram().getId(), pMutable
+          .getStudent().getId(), pMutable.getStudent().getCurrentYear(), pMutable.getStudent()
+          .getCurrentAcademicSemester(), pMutable.getCause(), pMutable.getStatus(), pMutable.getAppDate(), pMutable
+          .getComment(), pMutable.getId());
     }
 
   }
@@ -112,8 +110,7 @@ public class PersistentSemesterWithdrawalDao extends SemesterWithdrawalDaoDecora
   @Override
   public SemesterWithdrawal get(Long pId) {
     String query = SELECT_ALL + " WHERE SW_ID=?";
-    return mJdbcTemplate.queryForObject(query, new Object[] {pId},
-        new SemesterWithdrawalRowMapper());
+    return mJdbcTemplate.queryForObject(query, new Object[] {pId}, new SemesterWithdrawalRowMapper());
   }
 
   @Override
@@ -125,10 +122,9 @@ public class PersistentSemesterWithdrawalDao extends SemesterWithdrawalDaoDecora
   @Override
   public Long create(MutableSemesterWithdrawal pMutable) {
     Long id = mIdGenerator.getNumericId();
-    mJdbcTemplate.update(INSERT_ONE, id, pMutable.getSemester().getId(), pMutable.getProgram()
-        .getId(), pMutable.getStudent().getId(), pMutable.getStudent().getCurrentYear(), pMutable
-        .getStudent().getCurrentAcademicSemester(), pMutable.getCause(), pMutable.getStatus(),
-        pMutable.getComment());
+    mJdbcTemplate.update(INSERT_ONE, id, pMutable.getSemester().getId(), pMutable.getProgram().getId(), pMutable
+        .getStudent().getId(), pMutable.getStudent().getCurrentYear(), pMutable.getStudent()
+        .getCurrentAcademicSemester(), pMutable.getCause(), pMutable.getStatus(), pMutable.getComment());
     return id;
   }
 

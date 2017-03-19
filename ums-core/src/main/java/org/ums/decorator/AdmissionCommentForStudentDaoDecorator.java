@@ -16,8 +16,7 @@ public class AdmissionCommentForStudentDaoDecorator
   }
 
   @Override
-  public int saveComment(
-      MutableAdmissionCommentForStudent pMutableAdmissionStudentsCertificateComment) {
+  public int saveComment(MutableAdmissionCommentForStudent pMutableAdmissionStudentsCertificateComment) {
     return getManager().saveComment(pMutableAdmissionStudentsCertificateComment);
   }
 }

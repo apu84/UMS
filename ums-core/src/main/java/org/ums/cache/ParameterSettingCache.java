@@ -13,8 +13,8 @@ import java.util.List;
  * Created by My Pc on 3/15/2016.
  */
 public class ParameterSettingCache extends
-    ContentCache<ParameterSetting, MutableParameterSetting, Long, ParameterSettingManager>
-    implements ParameterSettingManager {
+    ContentCache<ParameterSetting, MutableParameterSetting, Long, ParameterSettingManager> implements
+    ParameterSettingManager {
   private CacheManager<ParameterSetting, Long> mCacheManager;
 
   public ParameterSettingCache(final CacheManager<ParameterSetting, Long> pCacheManager) {

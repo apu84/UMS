@@ -7,8 +7,7 @@ import org.ums.domain.model.mutable.MutableProgram;
 
 import java.io.Serializable;
 
-public interface Program extends Serializable, EditType<MutableProgram>, LastModifier,
-    Identifier<Integer> {
+public interface Program extends Serializable, EditType<MutableProgram>, LastModifier, Identifier<Integer> {
 
   ProgramType getProgramType();
 

@@ -8,6 +8,6 @@ import java.io.OutputStream;
 
 public interface UndertakenFormGenerator {
 
-  void createUndertakenForm(ProgramType pProgramType, int pSemesterId, String pReceiptId,
-      OutputStream pOutputStream) throws IOException, DocumentException;
+  void createUndertakenForm(ProgramType pProgramType, int pSemesterId, String pReceiptId, OutputStream pOutputStream)
+      throws IOException, DocumentException;
 }

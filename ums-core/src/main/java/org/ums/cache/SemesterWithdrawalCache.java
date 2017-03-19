@@ -12,8 +12,8 @@ import java.util.List;
  * Created by My Pc on 3/23/2016.
  */
 public class SemesterWithdrawalCache extends
-    ContentCache<SemesterWithdrawal, MutableSemesterWithdrawal, Long, SemesterWithDrawalManager>
-    implements SemesterWithDrawalManager {
+    ContentCache<SemesterWithdrawal, MutableSemesterWithdrawal, Long, SemesterWithDrawalManager> implements
+    SemesterWithDrawalManager {
 
   CacheManager<SemesterWithdrawal, Long> mCacheManager;
 
@@ -32,8 +32,7 @@ public class SemesterWithdrawalCache extends
   }
 
   @Override
-  public SemesterWithdrawal getStudentsRecord(String studentId, int semesterId, int year,
-      int semester) {
+  public SemesterWithdrawal getStudentsRecord(String studentId, int semesterId, int year, int semester) {
     return getManager().getStudentsRecord(studentId, semesterId, year, semester);
   }
 

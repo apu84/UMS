@@ -24,8 +24,7 @@ public class ProcessResultResource extends Resource {
   @GET
   @Path("/processResult/status/program/{program-id}/semester/{semester-id}/")
   public GenericResponse<TaskStatus> getResultProcessStatus(final @Context Request pRequest,
-      final @PathParam("program-id") Integer pProgramId,
-      final @PathParam("semester-id") Integer pSemesterId) {
+      final @PathParam("program-id") Integer pProgramId, final @PathParam("semester-id") Integer pSemesterId) {
     return mProcessResult.status(pProgramId, pSemesterId);
   }
 

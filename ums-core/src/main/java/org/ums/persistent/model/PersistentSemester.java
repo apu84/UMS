@@ -17,8 +17,7 @@ public class PersistentSemester implements MutableSemester {
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
-    sProgramTypeManager =
-        applicationContext.getBean("programTypeManager", ProgramTypeManager.class);
+    sProgramTypeManager = applicationContext.getBean("programTypeManager", ProgramTypeManager.class);
   }
 
   private int mId;
@@ -83,8 +82,7 @@ public class PersistentSemester implements MutableSemester {
   }
 
   public ProgramType getProgramType() {
-    return mProgramType != null ? sProgramTypeManager.validate(mProgramType) : sProgramTypeManager
-        .get(mProgramTypeId);
+    return mProgramType != null ? sProgramTypeManager.validate(mProgramType) : sProgramTypeManager.get(mProgramTypeId);
   }
 
   public void setProgramType(final ProgramType pProgram) {

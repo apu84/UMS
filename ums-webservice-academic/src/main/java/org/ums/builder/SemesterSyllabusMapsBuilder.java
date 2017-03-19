@@ -15,8 +15,7 @@ import javax.json.JsonObjectBuilder;
 import javax.ws.rs.core.UriInfo;
 
 @Component
-public class SemesterSyllabusMapsBuilder implements
-    Builder<SemesterSyllabusMapDto, MutableSemesterSyllabusMapDto> {
+public class SemesterSyllabusMapsBuilder implements Builder<SemesterSyllabusMapDto, MutableSemesterSyllabusMapDto> {
   @Override
   public void build(JsonObjectBuilder pBuilder, SemesterSyllabusMapDto pReadOnly, UriInfo pUriInfo,
       LocalCache pLocalCache) {
@@ -24,8 +23,7 @@ public class SemesterSyllabusMapsBuilder implements
   }
 
   @Override
-  public void build(MutableSemesterSyllabusMapDto pMutable, JsonObject pJsonObject,
-      LocalCache pLocalCache) {
+  public void build(MutableSemesterSyllabusMapDto pMutable, JsonObject pJsonObject, LocalCache pLocalCache) {
     MutableSemester semester = new PersistentSemester();
     semester.setId(pJsonObject.getInt("semesterId"));
     pMutable.setAcademicSemester(semester);

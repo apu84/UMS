@@ -10,8 +10,8 @@ import java.io.Serializable;
 /**
  * Created by My Pc on 3/14/2016.
  */
-public interface ParameterSetting extends Serializable, LastModifier,
-    EditType<MutableParameterSetting>, Identifier<Long> {
+public interface ParameterSetting extends Serializable, LastModifier, EditType<MutableParameterSetting>,
+    Identifier<Long> {
   Semester getSemester();
 
   Parameter getParameter();

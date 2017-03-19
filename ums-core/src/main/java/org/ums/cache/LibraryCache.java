@@ -8,8 +8,8 @@ import org.ums.util.CacheUtil;
 
 import java.util.List;
 
-public class LibraryCache extends ContentCache<Library, MutableLibrary, Integer, LibraryManager>
-    implements LibraryManager {
+public class LibraryCache extends ContentCache<Library, MutableLibrary, Integer, LibraryManager> implements
+    LibraryManager {
   private CacheManager<Library, Integer> mCacheManager;
 
   public LibraryCache(final CacheManager<Library, Integer> pCacheManager) {

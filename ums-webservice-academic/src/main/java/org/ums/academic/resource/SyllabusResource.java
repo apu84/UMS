@@ -27,15 +27,13 @@ public class SyllabusResource extends MutableSyllabusResource {
 
   @GET
   @Path("/program-id/{program-id}")
-  public JsonObject getSyllabusList(final @Context Request pRequest,
-      final @PathParam("program-id") int pProgramId) {
+  public JsonObject getSyllabusList(final @Context Request pRequest, final @PathParam("program-id") int pProgramId) {
     return mResourceHelper.buildSyllabuses(mManager.getSyllabusList(pProgramId), mUriInfo);
   }
 
   @GET
   @Path(PATH_PARAM_OBJECT_ID)
-  public Response get(final @Context Request pRequest,
-      final @PathParam("object-id") String pObjectId) throws Exception {
+  public Response get(final @Context Request pRequest, final @PathParam("object-id") String pObjectId) throws Exception {
     return mResourceHelper.get(pObjectId, pRequest, mUriInfo);
   }
 }

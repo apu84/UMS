@@ -44,14 +44,12 @@ public class UGRegistrationResultResourceHelper extends
     return null;
   }
 
-  public JsonObject getResultForCarryClearanceAndImprovement(final Request pRequest,
-      final UriInfo pUriInfo) {
+  public JsonObject getResultForCarryClearanceAndImprovement(final Request pRequest, final UriInfo pUriInfo) {
 
     String mStudentId = SecurityUtils.getSubject().getPrincipal().toString();
     Student student = mStudentManager.get(mStudentId);
     List<UGRegistrationResult> results =
-        mManager.getCarryClearanceImprovementCoursesByStudent(student.getSemesterId(),
-            student.getId());
+        mManager.getCarryClearanceImprovementCoursesByStudent(student.getSemesterId(), student.getId());
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
@@ -67,8 +65,8 @@ public class UGRegistrationResultResourceHelper extends
     return object.build();
   }
 
-  public JsonObject getResultForApplicationCCIOfCarryClearanceAndImprovement(
-      List<UGRegistrationResult> results, final UriInfo pUriInfo) {
+  public JsonObject getResultForApplicationCCIOfCarryClearanceAndImprovement(List<UGRegistrationResult> results,
+      final UriInfo pUriInfo) {
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();

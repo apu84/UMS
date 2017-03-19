@@ -21,8 +21,7 @@ public class PersistentMarksSubmissionStatus implements MutableMarksSubmissionSt
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sMarksSubmissionStatusManager =
-        applicationContext.getBean("marksSubmissionStatusManager",
-            MarksSubmissionStatusManager.class);
+        applicationContext.getBean("marksSubmissionStatusManager", MarksSubmissionStatusManager.class);
     sCourseManager = applicationContext.getBean("courseManager", CourseManager.class);
     sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
   }
@@ -135,8 +134,7 @@ public class PersistentMarksSubmissionStatus implements MutableMarksSubmissionSt
 
   @Override
   public Semester getSemester() {
-    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
-        .validate(mSemester);
+    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager.validate(mSemester);
   }
 
   @Override

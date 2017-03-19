@@ -21,8 +21,7 @@ import org.ums.manager.UGRegistrationResultManager;
 import org.ums.resource.ResourceHelper;
 
 @Component
-public class GradeSheetResourceHelper extends
-    ResourceHelper<UGRegistrationResult, MutableUGRegistrationResult, Long> {
+public class GradeSheetResourceHelper extends ResourceHelper<UGRegistrationResult, MutableUGRegistrationResult, Long> {
   @Autowired
   UGRegistrationResultManager mUGRegistrationResultManager;
 
@@ -60,8 +59,7 @@ public class GradeSheetResourceHelper extends
     LocalCache localCache = new LocalCache();
     for(UGRegistrationResult result : results) {
       JsonObject jsonObject = toJson(result, pUriInfo, localCache);
-      if(result.getSemesterId().intValue() != pSemesterId
-          || (result.getType() == CourseRegType.CARRY)) {
+      if(result.getSemesterId().intValue() != pSemesterId || (result.getType() == CourseRegType.CARRY)) {
         jsonObject = jsonObjectToBuilder(jsonObject).add("carryOver", true).build();
       }
       children.add(jsonObject);
@@ -83,8 +81,7 @@ public class GradeSheetResourceHelper extends
     return job;
   }
 
-  private String getRemarks(List<UGRegistrationResult> pResults, StudentRecord pStudentRecord,
-      Integer pSemesterId) {
+  private String getRemarks(List<UGRegistrationResult> pResults, StudentRecord pStudentRecord, Integer pSemesterId) {
     String passFailStatus = null, carryOverText = null;
     if(pStudentRecord.getStatus() == StudentRecord.Status.FAILED) {
       passFailStatus = "Failed";
@@ -94,8 +91,8 @@ public class GradeSheetResourceHelper extends
       passFailStatus = "Passed";
       carryOverText = getCarryOverText(pResults, pSemesterId, true);
     }
-    return String.format("%s %s %s", passFailStatus, StringUtils.isEmpty(carryOverText) ? ""
-        : "with carry over in", carryOverText);
+    return String.format("%s %s %s", passFailStatus, StringUtils.isEmpty(carryOverText) ? "" : "with carry over in",
+        carryOverText);
   }
 
   private String getCarryOverText(List<UGRegistrationResult> pResults, final Integer pSemesterId,
@@ -124,16 +121,15 @@ public class GradeSheetResourceHelper extends
     pStringBuilder.append(pResult.getCourse().getNo());
   }
 
-  private boolean isPassed(final UGRegistrationResult pResult,
-      final List<UGRegistrationResult> pResults, final Integer pSemesterId) {
+  private boolean isPassed(final UGRegistrationResult pResult, final List<UGRegistrationResult> pResults,
+      final Integer pSemesterId) {
     if(!pResult.getGradeLetter().equalsIgnoreCase("F")) {
       return true;
     }
     else {
       for(UGRegistrationResult result : pResults) {
         if(result.getCourseId().equalsIgnoreCase(pResult.getCourseId())
-            && result.getSemesterId().intValue() == pSemesterId
-            && !result.getGradeLetter().equalsIgnoreCase("F")) {
+            && result.getSemesterId().intValue() == pSemesterId && !result.getGradeLetter().equalsIgnoreCase("F")) {
           return true;
         }
       }

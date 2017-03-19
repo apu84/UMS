@@ -10,8 +10,8 @@ import org.ums.util.CacheUtil;
  * Created by Monjur-E-Morshed on 29-Dec-16.
  */
 public class AdmissionDeadlineCache extends
-    ContentCache<AdmissionDeadline, MutableAdmissionDeadline, Integer, AdmissionDeadlineManager>
-    implements AdmissionDeadlineManager {
+    ContentCache<AdmissionDeadline, MutableAdmissionDeadline, Integer, AdmissionDeadlineManager> implements
+    AdmissionDeadlineManager {
 
   private CacheManager<AdmissionDeadline, Integer> mCacheManager;
 

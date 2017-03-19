@@ -24,8 +24,7 @@ import java.util.List;
  * Created by My Pc on 7/23/2016.
  */
 @Component
-public class SubGroupCCIResourceHelper extends
-    ResourceHelper<SubGroupCCI, MutableSubGroupCCI, Integer> {
+public class SubGroupCCIResourceHelper extends ResourceHelper<SubGroupCCI, MutableSubGroupCCI, Integer> {
 
   @Autowired
   SubGroupCCIManager mManager;
@@ -42,10 +41,8 @@ public class SubGroupCCIResourceHelper extends
     return null;
   }
 
-  public Response saveData(Integer pSemesterId, String pExamDate, JsonObject pJsonObject,
-      UriInfo pUriInfo) {
-    int checkIfThereIsAnyRecord =
-        getContentManager().checkOccuranceBySemesterAndExamDate(pSemesterId, pExamDate);
+  public Response saveData(Integer pSemesterId, String pExamDate, JsonObject pJsonObject, UriInfo pUriInfo) {
+    int checkIfThereIsAnyRecord = getContentManager().checkOccuranceBySemesterAndExamDate(pSemesterId, pExamDate);
     if(checkIfThereIsAnyRecord > 0) {
       getContentManager().deleteBySemesterAndExamDate(pSemesterId, pExamDate);
       mSeatPlanManager.deleteBySemesterGroupExamTypeAndExamDate(pSemesterId, 0, 2, pExamDate);
@@ -76,10 +73,9 @@ public class SubGroupCCIResourceHelper extends
     return Response.noContent().build();
   }
 
-  public JsonObject getBySemesterAndExamDate(Integer pSemesterId, String pExamDate,
-      final Request pRequest, final UriInfo pUriInfo) {
-    List<SubGroupCCI> subGroupCCIs =
-        getContentManager().getBySemesterAndExamDate(pSemesterId, pExamDate);
+  public JsonObject getBySemesterAndExamDate(Integer pSemesterId, String pExamDate, final Request pRequest,
+      final UriInfo pUriInfo) {
+    List<SubGroupCCI> subGroupCCIs = getContentManager().getBySemesterAndExamDate(pSemesterId, pExamDate);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();

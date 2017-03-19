@@ -21,18 +21,15 @@ import org.ums.util.Constants;
 import com.google.common.collect.Lists;
 
 public class PersistentStudentDao extends StudentDaoDecorator {
-  static String SELECT_ALL = "SELECT" + "  STUDENT_ID," + "  FULL_NAME," + "  DEPT_ID,"
-      + "  SEMESTER_ID," + "  FATHER_NAME," + "  MOTHER_NAME," + "  BIRTH_DATE," + "  GENDER,"
-      + "  PRESENT_ADDRESS," + "  PERMANENT_ADDRESS," + "  MOBILE_NUMBER," + "  PHONE_NUMBER,"
-      + "  BLOOD_GROUP," + "  EMAIL_ADDRESS," + "  GUARDIAN_NAME," + "  GUARDIAN_MOBILE,"
-      + "  GUARDIAN_PHONE," + "  GUARDIAN_EMAIL," + "  PROGRAM_ID," + "  LAST_MODIFIED,"
-      + "  ENROLLMENT_TYPE," + "  CURR_YEAR," + "  CURR_SEMESTER," + "  CURR_ENROLLED_SEMESTER,"
-      + "  THEORY_SECTION," + "  SESSIONAL_SECTION," + "  ADVISER," + "  STATUS"
-      + "  FROM STUDENTS ";
+  static String SELECT_ALL = "SELECT" + "  STUDENT_ID," + "  FULL_NAME," + "  DEPT_ID," + "  SEMESTER_ID,"
+      + "  FATHER_NAME," + "  MOTHER_NAME," + "  BIRTH_DATE," + "  GENDER," + "  PRESENT_ADDRESS,"
+      + "  PERMANENT_ADDRESS," + "  MOBILE_NUMBER," + "  PHONE_NUMBER," + "  BLOOD_GROUP," + "  EMAIL_ADDRESS,"
+      + "  GUARDIAN_NAME," + "  GUARDIAN_MOBILE," + "  GUARDIAN_PHONE," + "  GUARDIAN_EMAIL," + "  PROGRAM_ID,"
+      + "  LAST_MODIFIED," + "  ENROLLMENT_TYPE," + "  CURR_YEAR," + "  CURR_SEMESTER," + "  CURR_ENROLLED_SEMESTER,"
+      + "  THEORY_SECTION," + "  SESSIONAL_SECTION," + "  ADVISER," + "  STATUS" + "  FROM STUDENTS ";
 
-  static String UPDATE_ALL = "UPDATE STUDENTS SET" + "  FULL_NAME = ?," + "  DEPT_ID = ?,"
-      + "  SEMESTER_ID = ?," + "  FATHER_NAME = ?," + "  MOTHER_NAME = ?,"
-      + "  BIRTH_DATE = TO_DATE(?, '"
+  static String UPDATE_ALL = "UPDATE STUDENTS SET" + "  FULL_NAME = ?," + "  DEPT_ID = ?," + "  SEMESTER_ID = ?,"
+      + "  FATHER_NAME = ?," + "  MOTHER_NAME = ?," + "  BIRTH_DATE = TO_DATE(?, '"
       + Constants.DATE_FORMAT
       + "'),"
       + "  GENDER = ?,"
@@ -51,19 +48,15 @@ public class PersistentStudentDao extends StudentDaoDecorator {
       + ","
       + "  ENROLLMENT_TYPE = ?,"
       + "  CURR_YEAR = ?,"
-      + "  CURR_SEMESTER = ?, "
-      + "  CURR_ENROLLED_SEMESTER = ?"
-      + "  THEORY_SECTION = ?," + "  SESSIONAL_SECTION = ?";
+      + "  CURR_SEMESTER = ?, " + "  CURR_ENROLLED_SEMESTER = ?" + "  THEORY_SECTION = ?," + "  SESSIONAL_SECTION = ?";
 
   static String DELETE_ALL = "DELETE FROM STUDENTS";
-  static String CREATE_ALL = "INSERT INTO STUDENTS(" + "  STUDENT_ID," + "  FULL_NAME,"
-      + "  DEPT_ID," + "  SEMESTER_ID," + "  FATHER_NAME," + "  MOTHER_NAME," + "  BIRTH_DATE,"
-      + "  GENDER," + "  PRESENT_ADDRESS," + "  PERMANENT_ADDRESS," + "  MOBILE_NUMBER,"
-      + "  PHONE_NUMBER," + "  BLOOD_GROUP," + "  EMAIL_ADDRESS," + "  GUARDIAN_NAME,"
-      + "  GUARDIAN_MOBILE," + "  GUARDIAN_PHONE," + "  GUARDIAN_EMAIL," + "  PROGRAM_ID,"
-      + "  LAST_MODIFIED," + "  ENROLLMENT_TYPE," + "  CURR_YEAR, " + "  CURR_SEMESTER,"
-      + "  CURR_ENROLLED_SEMESTER" + "  THEORY_SECTION," + "  SESSIONAL_SECTION"
-      + ") VALUES (?,?,?,?,?,?,TO_DATE(?, '" + Constants.DATE_FORMAT
+  static String CREATE_ALL = "INSERT INTO STUDENTS(" + "  STUDENT_ID," + "  FULL_NAME," + "  DEPT_ID,"
+      + "  SEMESTER_ID," + "  FATHER_NAME," + "  MOTHER_NAME," + "  BIRTH_DATE," + "  GENDER," + "  PRESENT_ADDRESS,"
+      + "  PERMANENT_ADDRESS," + "  MOBILE_NUMBER," + "  PHONE_NUMBER," + "  BLOOD_GROUP," + "  EMAIL_ADDRESS,"
+      + "  GUARDIAN_NAME," + "  GUARDIAN_MOBILE," + "  GUARDIAN_PHONE," + "  GUARDIAN_EMAIL," + "  PROGRAM_ID,"
+      + "  LAST_MODIFIED," + "  ENROLLMENT_TYPE," + "  CURR_YEAR, " + "  CURR_SEMESTER," + "  CURR_ENROLLED_SEMESTER"
+      + "  THEORY_SECTION," + "  SESSIONAL_SECTION" + ") VALUES (?,?,?,?,?,?,TO_DATE(?, '" + Constants.DATE_FORMAT
       + "'),?,?,?,?,?,?,?,?,?,?,?,?," + getLastModifiedSql() + ",?, ?, ?, ?, ?,?)";
 
   private JdbcTemplate mJdbcTemplate;
@@ -94,16 +87,14 @@ public class PersistentStudentDao extends StudentDaoDecorator {
   public String create(MutableStudent pMutable) {
     String query =
         "INSERT INTO STUDENTS (STUDENT_ID, FULL_NAME, DEPT_ID, SEMESTER_ID, FATHER_NAME, MOTHER_NAME, BIRTH_DATE, curr_year,curr_semester, curr_enrolled_semester,enrollment_type, program_id,status,gender, last_modified) "
-            + " VALUES (?, ?, ?, ?, ?, ?, to_date(?,'dd/mm/yy'),?,?,?,?,?,1,?,"
-            + getLastModifiedSql() + ")";
+            + " VALUES (?, ?, ?, ?, ?, ?, to_date(?,'dd/mm/yy'),?,?,?,?,?,1,?," + getLastModifiedSql() + ")";
 
     DateFormat df = new SimpleDateFormat("dd/mm/yy");
 
     String birthDate = df.format(pMutable.getDateOfBirth());
-    mJdbcTemplate.update(query, pMutable.getId(), pMutable.getFullName(), pMutable.getDepartment()
-        .getId(), pMutable.getSemester().getId(), pMutable.getFatherName(), pMutable
-        .getMotherName(), birthDate, pMutable.getCurrentYear(), pMutable
-        .getCurrentAcademicSemester(), pMutable.getCurrentEnrolledSemesterId(), 1, pMutable
+    mJdbcTemplate.update(query, pMutable.getId(), pMutable.getFullName(), pMutable.getDepartment().getId(), pMutable
+        .getSemester().getId(), pMutable.getFatherName(), pMutable.getMotherName(), birthDate, pMutable
+        .getCurrentYear(), pMutable.getCurrentAcademicSemester(), pMutable.getCurrentEnrolledSemesterId(), 1, pMutable
         .getProgram().getId(), pMutable.getGender());
     return pMutable.getId();
   }
@@ -135,20 +126,17 @@ public class PersistentStudentDao extends StudentDaoDecorator {
   @Override
   public List<Student> getRegisteredStudents(int pSemesterId, int pExamType) {
     String query =
-        "SELECT " + "  STUDENTS.STUDENT_ID, " + "  FULL_NAME, " + "  DEPT_ID, "
-            + "  STUDENTS.SEMESTER_ID, " + "  FATHER_NAME, " + "  MOTHER_NAME, " + "  BIRTH_DATE, "
-            + "  GENDER, " + "  PRESENT_ADDRESS, " + "  PERMANENT_ADDRESS, " + "  MOBILE_NUMBER, "
-            + "  PHONE_NUMBER, " + "  BLOOD_GROUP, " + "  EMAIL_ADDRESS, " + "  GUARDIAN_NAME, "
-            + "  GUARDIAN_MOBILE, " + "  GUARDIAN_PHONE, " + "  GUARDIAN_EMAIL, "
-            + "  STUDENTS.PROGRAM_ID, " + "  STUDENTS.LAST_MODIFIED, " + "  ENROLLMENT_TYPE, "
-            + "  CURR_YEAR, " + "  CURR_SEMESTER, " + "  CURR_ENROLLED_SEMESTER, "
-            + "  THEORY_SECTION, " + "  SESSIONAL_SECTION, " + "  ADVISER, " + "  STATUS "
-            + "FROM STUDENTS " + "WHERE STUDENT_ID IN (SELECT DISTINCT STUDENT_ID "
-            + "                     FROM UG_REGISTRATION_RESULT "
+        "SELECT " + "  STUDENTS.STUDENT_ID, " + "  FULL_NAME, " + "  DEPT_ID, " + "  STUDENTS.SEMESTER_ID, "
+            + "  FATHER_NAME, " + "  MOTHER_NAME, " + "  BIRTH_DATE, " + "  GENDER, " + "  PRESENT_ADDRESS, "
+            + "  PERMANENT_ADDRESS, " + "  MOBILE_NUMBER, " + "  PHONE_NUMBER, " + "  BLOOD_GROUP, "
+            + "  EMAIL_ADDRESS, " + "  GUARDIAN_NAME, " + "  GUARDIAN_MOBILE, " + "  GUARDIAN_PHONE, "
+            + "  GUARDIAN_EMAIL, " + "  STUDENTS.PROGRAM_ID, " + "  STUDENTS.LAST_MODIFIED, " + "  ENROLLMENT_TYPE, "
+            + "  CURR_YEAR, " + "  CURR_SEMESTER, " + "  CURR_ENROLLED_SEMESTER, " + "  THEORY_SECTION, "
+            + "  SESSIONAL_SECTION, " + "  ADVISER, " + "  STATUS " + "FROM STUDENTS "
+            + "WHERE STUDENT_ID IN (SELECT DISTINCT STUDENT_ID " + "                     FROM UG_REGISTRATION_RESULT "
             + "                     WHERE STUDENTS.SEMESTER_ID = ? AND EXAM_TYPE = ?) "
             + "ORDER BY PROGRAM_ID, STUDENT_ID, CURR_YEAR, CURR_SEMESTER";
-    return mJdbcTemplate
-        .query(query, new Object[] {pSemesterId, pExamType}, new StudentRowMapper());
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pExamType}, new StudentRowMapper());
   }
 
   @Override
@@ -196,8 +184,7 @@ public class PersistentStudentDao extends StudentDaoDecorator {
             + "                           c.COURSE_ID = r.COURSE_ID AND g.SEMESTER_ID = r.SEMESTER_ID AND g.TYPE = r.EXAM_TYPE "
             + "                           AND c.YEAR = g.YEAR AND c.SEMESTER = g.SEMESTER) "
             + "ORDER BY PROGRAM_ID, STUDENT_ID, CURR_YEAR, CURR_SEMESTER";
-    return mJdbcTemplate.query(query, new Object[] {pGroupNo, pSemesterId, pExamType},
-        new StudentRowMapper());
+    return mJdbcTemplate.query(query, new Object[] {pGroupNo, pSemesterId, pExamType}, new StudentRowMapper());
   }
 
   @Override
@@ -226,14 +213,12 @@ public class PersistentStudentDao extends StudentDaoDecorator {
   private List<Object[]> getUpdateParamArray(List<MutableStudent> pStudents) {
     List<Object[]> params = new ArrayList<>();
     for(Student student : pStudents) {
-      params.add(new Object[] {student.getFullName(), student.getDepartmentId(),
-          student.getSemesterId(), student.getFatherName(), student.getMotherName(),
-          student.getDateOfBirth(), student.getGender(), student.getPresentAddress(),
-          student.getPermanentAddress(), student.getMobileNo(), student.getPhoneNo(),
-          student.getBloodGroup(), student.getEmail(), student.getGuardianName(),
-          student.getGuardianMobileNo(), student.getGuardianPhoneNo(), student.getGuardianEmail(),
-          student.getEnrollmentType().getValue(), student.getCurrentYear(),
-          student.getCurrentAcademicSemester(), student.getCurrentEnrolledSemester().getId(),
+      params.add(new Object[] {student.getFullName(), student.getDepartmentId(), student.getSemesterId(),
+          student.getFatherName(), student.getMotherName(), student.getDateOfBirth(), student.getGender(),
+          student.getPresentAddress(), student.getPermanentAddress(), student.getMobileNo(), student.getPhoneNo(),
+          student.getBloodGroup(), student.getEmail(), student.getGuardianName(), student.getGuardianMobileNo(),
+          student.getGuardianPhoneNo(), student.getGuardianEmail(), student.getEnrollmentType().getValue(),
+          student.getCurrentYear(), student.getCurrentAcademicSemester(), student.getCurrentEnrolledSemester().getId(),
           student.getTheorySection(), student.getSessionalSection(), student.getId()});
     }
 
@@ -243,9 +228,8 @@ public class PersistentStudentDao extends StudentDaoDecorator {
   @Override
   public List<Student> getStudentListFromStudentsString(String pStudents) {
     String query =
-        "Select * From Students where Student_Id in ( "
-            + "select regexp_substr(?,'[^,]+', 1, level)  " + "from dual  " + "connect by  "
-            + "regexp_substr(?, '[^,]+', 1, level)  " + "is not null  " + ") ";
+        "Select * From Students where Student_Id in ( " + "select regexp_substr(?,'[^,]+', 1, level)  " + "from dual  "
+            + "connect by  " + "regexp_substr(?, '[^,]+', 1, level)  " + "is not null  " + ") ";
     return mJdbcTemplate.query(query, new Object[] {pStudents, pStudents}, new StudentRowMapper());
   }
 
@@ -256,16 +240,14 @@ public class PersistentStudentDao extends StudentDaoDecorator {
   }
 
   @Override
-  public List<Student> getStudentByCourseIdAndSemesterIdForSeatPlanForCCI(String pCourseId,
-      int pSemesterId) {
+  public List<Student> getStudentByCourseIdAndSemesterIdForSeatPlanForCCI(String pCourseId, int pSemesterId) {
     String query2 =
         " select s.student_id,p.program_short_name,s.year,s.semester,application_type,s.program_id from STUDENTS s,mst_program p,(  "
             + "         select course_no,student_id,application_type from exam_routine r,mst_course c,        "
             + "         (select distinct(course_id),student_id,application_type from application_cci where semester_id=? ) a          "
             + "         where exam_type=2 and exam_date = to_date(?,'MM-DD-YYYY') and r.course_id=c.course_id and a.course_id=c.course_id order by c.course_no,a.student_id) a        "
             + "         where a.student_id=s.student_id and s.program_id=p.program_id";
-    return mJdbcTemplate.query(query2, new Object[] {pSemesterId, pCourseId},
-        new SpStudentRowMapperForCCI());
+    return mJdbcTemplate.query(query2, new Object[] {pSemesterId, pCourseId}, new SpStudentRowMapperForCCI());
   }
 
   @Override
@@ -282,8 +264,7 @@ public class PersistentStudentDao extends StudentDaoDecorator {
             + "         where exam_type=2 and exam_date = to_date(?,'MM-DD-YYYY') and r.course_id=c.course_id and a.course_id=c.course_id order by c.course_no,a.student_id) a       "
             + "         where a.student_id=s.student_id and s.program_id=p.program_id";
 
-    return mJdbcTemplate.query(query2, new Object[] {pSemesterId, pExamDate},
-        new SpStudentRowMapperForCCI2());
+    return mJdbcTemplate.query(query2, new Object[] {pSemesterId, pExamDate}, new SpStudentRowMapperForCCI2());
 
   }
 

@@ -22,8 +22,7 @@ public class PasswordReport extends Resource {
 
   @GET
   @Path("/single" + PATH_PARAM_OBJECT_ID)
-  public StreamingOutput get(final @Context Request pRequest,
-      final @PathParam("object-id") String pObjectId) {
+  public StreamingOutput get(final @Context Request pRequest, final @PathParam("object-id") String pObjectId) {
     return new StreamingOutput() {
       public void write(OutputStream output) throws IOException, WebApplicationException {
         try {
@@ -35,8 +34,7 @@ public class PasswordReport extends Resource {
                   + "And USERS.USER_ID=STUDENTS.STUDENT_ID "
                   + "And MST_PROGRAM.PROGRAM_ID=STUDENTS.PROGRAM_ID "
                   + "And MST_PROGRAM.DEPT_ID=MST_DEPT_OFFICE.DEPT_ID ";
-          mPasswordReportGenerator.generateReport(AbstractReportGenerator.OutputType.PDF, output,
-              query);
+          mPasswordReportGenerator.generateReport(AbstractReportGenerator.OutputType.PDF, output, query);
         } catch(Exception e) {
           throw new WebApplicationException(e);
         }
@@ -46,8 +44,7 @@ public class PasswordReport extends Resource {
 
   @GET
   @Path("/bulk" + PATH_PARAM_OBJECT_ID)
-  public StreamingOutput getBulk(final @Context Request pRequest,
-      final @PathParam("object-id") String pObjectId) {
+  public StreamingOutput getBulk(final @Context Request pRequest, final @PathParam("object-id") String pObjectId) {
     return new StreamingOutput() {
       public void write(OutputStream output) throws IOException, WebApplicationException {
         try {
@@ -59,8 +56,7 @@ public class PasswordReport extends Resource {
                   + "And USERS.USER_ID=STUDENTS.STUDENT_ID "
                   + "And MST_PROGRAM.PROGRAM_ID=STUDENTS.PROGRAM_ID "
                   + "And MST_PROGRAM.DEPT_ID=MST_DEPT_OFFICE.DEPT_ID ";
-          mPasswordReportGenerator.generateReport(AbstractReportGenerator.OutputType.PDF, output,
-              query);
+          mPasswordReportGenerator.generateReport(AbstractReportGenerator.OutputType.PDF, output, query);
         } catch(Exception e) {
           throw new WebApplicationException(e);
         }

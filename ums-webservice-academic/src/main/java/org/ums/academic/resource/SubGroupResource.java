@@ -35,14 +35,13 @@ public class SubGroupResource extends MutableSubGroupResource {
   public JsonObject getBySemesterAndGroupNo(final @Context Request pRequest,
       final @PathParam("semesterId") int pSemesterId, final @PathParam("groupNo") int pGroupNo,
       final @PathParam("type") String type) {
-    return mSubGroupResourceHelper.getBySemesterAndGroupNO(pSemesterId, pGroupNo,
-        Integer.parseInt(type), pRequest, mUriInfo);
+    return mSubGroupResourceHelper.getBySemesterAndGroupNO(pSemesterId, pGroupNo, Integer.parseInt(type), pRequest,
+        mUriInfo);
   }
 
   @GET
   @Path(PATH_PARAM_OBJECT_ID)
-  public Response get(final @Context Request pRequest, final @PathParam("object-id") int pObjectId)
-      throws Exception {
+  public Response get(final @Context Request pRequest, final @PathParam("object-id") int pObjectId) throws Exception {
     return mSubGroupResourceHelper.get(pObjectId, pRequest, mUriInfo);
   }
 }

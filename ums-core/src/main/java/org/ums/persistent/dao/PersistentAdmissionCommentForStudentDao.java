@@ -23,8 +23,7 @@ public class PersistentAdmissionCommentForStudentDao extends AdmissionCommentFor
   String INSERT_ONE =
       "INSERT INTO ug_adm_ver_comments (SEMESTER_ID, RECEIPT_ID, COMMENTS, COMMENTED_ON) VALUES (? ,? ,?, sysdate)";
 
-  String GET_COMMENTS =
-      "SELECT SEMESTER_ID, RECEIPT_ID, COMMENTS, COMMENTED_ON FROM ug_adm_ver_comments ";
+  String GET_COMMENTS = "SELECT SEMESTER_ID, RECEIPT_ID, COMMENTS, COMMENTED_ON FROM ug_adm_ver_comments ";
 
   public List<AdmissionCommentForStudent> getComments(final int pSemesterId, final String pReceiptId) {
 
@@ -33,8 +32,7 @@ public class PersistentAdmissionCommentForStudentDao extends AdmissionCommentFor
   }
 
   @Override
-  public int saveComment(
-      MutableAdmissionCommentForStudent pMutableAdmissionStudentsCertificateComment) {
+  public int saveComment(MutableAdmissionCommentForStudent pMutableAdmissionStudentsCertificateComment) {
     String query = INSERT_ONE;
     return mJdbcTemplate.update(query, pMutableAdmissionStudentsCertificateComment.getSemesterId(),
         pMutableAdmissionStudentsCertificateComment.getReceiptId(),
@@ -45,8 +43,7 @@ public class PersistentAdmissionCommentForStudentDao extends AdmissionCommentFor
 
     @Override
     public AdmissionCommentForStudent mapRow(ResultSet resultSet, int i) throws SQLException {
-      MutableAdmissionCommentForStudent studentsCertificate =
-          new PersistentAdmissionCommentForStudent();
+      MutableAdmissionCommentForStudent studentsCertificate = new PersistentAdmissionCommentForStudent();
       studentsCertificate.setSemesterId(resultSet.getInt("semester_id"));
       studentsCertificate.setReceiptId(resultSet.getString("receipt_id"));
       studentsCertificate.setComment(resultSet.getString("comments"));

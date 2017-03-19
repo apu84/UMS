@@ -30,13 +30,12 @@ public class AdmissionStudentBuilder implements Builder<AdmissionStudent, Mutabl
   ProgramManager mProgramManager;
 
   @Override
-  public void build(JsonObjectBuilder pBuilder, AdmissionStudent pReadOnly, UriInfo pUriInfo,
-      LocalCache pLocalCache) {
+  public void build(JsonObjectBuilder pBuilder, AdmissionStudent pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
 
   }
 
-  public void admissionStudentBuilder(JsonObjectBuilder pBuilder, AdmissionStudent pReadOnly,
-      UriInfo pUriInfo, LocalCache pLocalCache, String type) throws Exception {
+  public void admissionStudentBuilder(JsonObjectBuilder pBuilder, AdmissionStudent pReadOnly, UriInfo pUriInfo,
+      LocalCache pLocalCache, String type) throws Exception {
 
     pBuilder.add("id", pReadOnly.getReceiptId());
     pBuilder.add("text", pReadOnly.getReceiptId());
@@ -129,8 +128,8 @@ public class AdmissionStudentBuilder implements Builder<AdmissionStudent, Mutabl
 
   // kawsurilu
 
-  public void getAdmissionStudentBuilder(JsonObjectBuilder pBuilder, AdmissionStudent pReadOnly,
-      UriInfo pUriInfo, LocalCache pLocalCache) throws Exception {
+  public void getAdmissionStudentBuilder(JsonObjectBuilder pBuilder, AdmissionStudent pReadOnly, UriInfo pUriInfo,
+      LocalCache pLocalCache) throws Exception {
     pBuilder.add("id", pReadOnly.getReceiptId());
     pBuilder.add("text", pReadOnly.getReceiptId());
     pBuilder.add("semesterId", pReadOnly.getSemester().getId());
@@ -209,14 +208,13 @@ public class AdmissionStudentBuilder implements Builder<AdmissionStudent, Mutabl
     }
   }
 
-  public void setVerificationStatusAndUndertakenDateBuilder(MutableAdmissionStudent pMutable,
-      JsonObject pJsonObject, LocalCache pLocalCache) {
+  public void setVerificationStatusAndUndertakenDateBuilder(MutableAdmissionStudent pMutable, JsonObject pJsonObject,
+      LocalCache pLocalCache) {
     pMutable.setId(pJsonObject.getString("receiptId"));
     pMutable.setSemester(mSemesterManager.get(pJsonObject.getInt("semesterId")));
     pMutable.setProgramType(ProgramType.get(pJsonObject.getInt("programType")));
     pMutable.setVerificationStatus(pJsonObject.getInt("status"));
-    if(pJsonObject.getString("undertakeDeadLine").equals(null)
-        || pJsonObject.getString("undertakeDeadLine").equals("")
+    if(pJsonObject.getString("undertakeDeadLine").equals(null) || pJsonObject.getString("undertakeDeadLine").equals("")
         || pJsonObject.getInt("status") == 1 || pJsonObject.getInt("status") == 3) {
     }
     else {
@@ -264,8 +262,7 @@ public class AdmissionStudentBuilder implements Builder<AdmissionStudent, Mutabl
     pMutable.setProgramType(ProgramType.get(pJsonObject.getInt("programType")));
   }
 
-  public void build(MutableAdmissionStudent pMutable, JsonObject pJsonObject, String pType,
-      LocalCache pLocalCache) {
+  public void build(MutableAdmissionStudent pMutable, JsonObject pJsonObject, String pType, LocalCache pLocalCache) {
     pMutable.setId(pJsonObject.getString("receiptId"));
     pMutable.setSemester(mSemesterManager.get(pJsonObject.getInt("semesterId")));
 
@@ -280,8 +277,8 @@ public class AdmissionStudentBuilder implements Builder<AdmissionStudent, Mutabl
 
   }
 
-  public void build(MutableAdmissionStudent pMutable, JsonObject pJsonObject,
-      DepartmentSelectionType pType, LocalCache pLocalCache) {
+  public void build(MutableAdmissionStudent pMutable, JsonObject pJsonObject, DepartmentSelectionType pType,
+      LocalCache pLocalCache) {
     pMutable.setId(pJsonObject.getString("receiptId"));
     pMutable.setSemester(mSemesterManager.get(pJsonObject.getInt("semesterId")));
     pMutable.setProgramType(ProgramType.get(pJsonObject.getInt("programType")));

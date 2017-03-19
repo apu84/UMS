@@ -29,8 +29,7 @@ public class NewUserFilter extends AuthorizationFilter {
   protected PatternMatcher mPathMatcher = new AntPathMatcher();
 
   @Override
-  protected boolean isAccessAllowed(ServletRequest request, ServletResponse response,
-      Object mappedValue) {
+  protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
     if(isLoginRequest(request, response) || isPassThrough(request)) {
       return true;
     }

@@ -34,8 +34,7 @@ import java.io.OutputStream;
 import java.util.List;
 
 @Component
-public class ExamRoutineResourceHelper extends
-    ResourceHelper<ExamRoutine, MutableExamRoutine, Object> {
+public class ExamRoutineResourceHelper extends ResourceHelper<ExamRoutine, MutableExamRoutine, Object> {
 
   @Autowired
   private ExamRoutineManager mManager;
@@ -83,21 +82,18 @@ public class ExamRoutineResourceHelper extends
     return buildJsonResponse(pSemesterId, pExamType, examRoutine);
   }
 
-  public JsonObject getExamRoutineByDept(final Integer pSemesterId, final Integer pExamType,
-      UriInfo pUriInfo) {
+  public JsonObject getExamRoutineByDept(final Integer pSemesterId, final Integer pExamType, UriInfo pUriInfo) {
     String userId = SecurityUtils.getSubject().getPrincipal().toString();
     User user = mUserManager.get(userId);
     Employee employee = mEmployeeManager.get(user.getEmployeeId());
     List<ExamRoutineDto> examRoutine =
-        getContentManager()
-            .getExamRoutine(pSemesterId, pExamType, employee.getDepartment().getId());
+        getContentManager().getExamRoutine(pSemesterId, pExamType, employee.getDepartment().getId());
     return getJsonObject(pUriInfo, examRoutine);
   }
 
-  public JsonObject getExamRoutineForCCI(Integer pSemesterId, Integer pExamType,
-      final Request pRequest, final UriInfo pUriInfo) {
-    List<ExamRoutineDto> examRoutine =
-        getContentManager().getExamRoutineForApplicationCCI(pSemesterId, pExamType);
+  public JsonObject getExamRoutineForCCI(Integer pSemesterId, Integer pExamType, final Request pRequest,
+      final UriInfo pUriInfo) {
+    List<ExamRoutineDto> examRoutine = getContentManager().getExamRoutineForApplicationCCI(pSemesterId, pExamType);
     return getJsonObject(pUriInfo, examRoutine);
   }
 
@@ -120,10 +116,8 @@ public class ExamRoutineResourceHelper extends
     return object.build();
   }
 
-  public JsonObject getExamRoutineInfoForCivil(Integer pSemesterId, final Request pRequest,
-      final UriInfo pUriInfo) {
-    ExamRoutineDto examRoutineDto =
-        getContentManager().getExamRoutineForCivilExamBySemester(pSemesterId);
+  public JsonObject getExamRoutineInfoForCivil(Integer pSemesterId, final Request pRequest, final UriInfo pUriInfo) {
+    ExamRoutineDto examRoutineDto = getContentManager().getExamRoutineForCivilExamBySemester(pSemesterId);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
@@ -139,8 +133,8 @@ public class ExamRoutineResourceHelper extends
     return object.build();
   }
 
-  public JsonObject getExamRoutineForCCIForSeatPlanPublish(Integer pSemesterId,
-      final Request pRequest, final UriInfo pUriInfo) {
+  public JsonObject getExamRoutineForCCIForSeatPlanPublish(Integer pSemesterId, final Request pRequest,
+      final UriInfo pUriInfo) {
     List<ExamRoutineDto> examRoutine = getContentManager().getCCIExamRoutinesBySemeste(pSemesterId);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
@@ -181,10 +175,9 @@ public class ExamRoutineResourceHelper extends
     return object.build();
   }
 
-  public JsonObject getExamDateBySemesterAndExamType(Integer pSemesterId, Integer pExamType,
-      final Request pRequest, final UriInfo pUriInfo) {
-    List<ExamRoutineDto> examRoutine =
-        getContentManager().getExamDatesBySemesterAndType(pSemesterId, pExamType);
+  public JsonObject getExamDateBySemesterAndExamType(Integer pSemesterId, Integer pExamType, final Request pRequest,
+      final UriInfo pUriInfo) {
+    List<ExamRoutineDto> examRoutine = getContentManager().getExamDatesBySemesterAndType(pSemesterId, pExamType);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
@@ -220,10 +213,10 @@ public class ExamRoutineResourceHelper extends
       if(prevDateTime.equalsIgnoreCase(currDateTime) && counter != 0) {
         if(prevProgram == currProgram && counter != 0) {
           courseString +=
-              "{\"index\":" + courseCounter + ",\"id\":\"" + routineDto.getCourseId()
-                  + "\",\"no\":\"" + routineDto.getCourseNumber() + "\",\"title\":\""
-                  + routineDto.getCourseTitle() + "\",\"year\":" + routineDto.getCourseYear()
-                  + ",\"semester\":\"" + routineDto.getCourseSemester() + "\",\"readOnly\":true},";
+              "{\"index\":" + courseCounter + ",\"id\":\"" + routineDto.getCourseId() + "\",\"no\":\""
+                  + routineDto.getCourseNumber() + "\",\"title\":\"" + routineDto.getCourseTitle() + "\",\"year\":"
+                  + routineDto.getCourseYear() + ",\"semester\":\"" + routineDto.getCourseSemester()
+                  + "\",\"readOnly\":true},";
           courseCounter++;
         }
         else {
@@ -237,13 +230,13 @@ public class ExamRoutineResourceHelper extends
           dateTimeString = "";
           courseCounter = 0;
           programString =
-              "{\"index\":" + programCounter + ",\"programId\":" + routineDto.getProgramId()
-                  + ",\"programName\":\"" + routineDto.getProgramName() + "\",\"readOnly\":true";
+              "{\"index\":" + programCounter + ",\"programId\":" + routineDto.getProgramId() + ",\"programName\":\""
+                  + routineDto.getProgramName() + "\",\"readOnly\":true";
           courseString =
-              ",\"courses\":[{\"index\":" + courseCounter + ",\"id\":\"" + routineDto.getCourseId()
-                  + "\",\"no\":\"" + routineDto.getCourseNumber() + "\",\"title\":\""
-                  + routineDto.getCourseTitle() + "\",\"year\":" + routineDto.getCourseYear()
-                  + ",\"semester\":\"" + routineDto.getCourseSemester() + "\",\"readOnly\":true},";
+              ",\"courses\":[{\"index\":" + courseCounter + ",\"id\":\"" + routineDto.getCourseId() + "\",\"no\":\""
+                  + routineDto.getCourseNumber() + "\",\"title\":\"" + routineDto.getCourseTitle() + "\",\"year\":"
+                  + routineDto.getCourseYear() + ",\"semester\":\"" + routineDto.getCourseSemester()
+                  + "\",\"readOnly\":true},";
           programCounter++;
           courseCounter++;
 
@@ -274,18 +267,16 @@ public class ExamRoutineResourceHelper extends
         programCounter = 0;
         courseCounter = 0;
         dateTimeString =
-            "{\"index\":" + dateTimeCounter + ",\"examDate\":\"" + routineDto.getExamDate()
-                + "\",\"examTime\":\"" + routineDto.getExamTime() + "\",\"examGroup\":"
-                + routineDto.getExamGroup() + ",\"readOnly\":true,";
+            "{\"index\":" + dateTimeCounter + ",\"examDate\":\"" + routineDto.getExamDate() + "\",\"examTime\":\""
+                + routineDto.getExamTime() + "\",\"examGroup\":" + routineDto.getExamGroup() + ",\"readOnly\":true,";
         programString =
-            "\"programs\":[{\"index\":" + programCounter + ",\"programId\":"
-                + routineDto.getProgramId() + ",\"programName\":\"" + routineDto.getProgramName()
-                + "\",\"readOnly\":true";
+            "\"programs\":[{\"index\":" + programCounter + ",\"programId\":" + routineDto.getProgramId()
+                + ",\"programName\":\"" + routineDto.getProgramName() + "\",\"readOnly\":true";
         courseString =
-            ",\"courses\":[{\"index\":" + courseCounter + ",\"id\":\"" + routineDto.getCourseId()
-                + "\",\"no\":\"" + routineDto.getCourseNumber() + "\",\"title\":\""
-                + routineDto.getCourseTitle() + "\",\"year\":" + routineDto.getCourseYear()
-                + ",\"semester\":\"" + routineDto.getCourseSemester() + "\",\"readOnly\":true},";
+            ",\"courses\":[{\"index\":" + courseCounter + ",\"id\":\"" + routineDto.getCourseId() + "\",\"no\":\""
+                + routineDto.getCourseNumber() + "\",\"title\":\"" + routineDto.getCourseTitle() + "\",\"year\":"
+                + routineDto.getCourseYear() + ",\"semester\":\"" + routineDto.getCourseSemester()
+                + "\",\"readOnly\":true},";
         programCounter++;
         courseCounter++;
       }
@@ -331,8 +322,8 @@ public class ExamRoutineResourceHelper extends
     return Response.noContent().build();
   }
 
-  public void getExamRoutineReport(final OutputStream pOutputStream, final int pSemesterId,
-      final Integer pExamType) throws DocumentException, IOException {
+  public void getExamRoutineReport(final OutputStream pOutputStream, final int pSemesterId, final Integer pExamType)
+      throws DocumentException, IOException {
     mExamRoutineGenerator.createExamRoutineReport(pOutputStream, pSemesterId, pExamType);
   }
 

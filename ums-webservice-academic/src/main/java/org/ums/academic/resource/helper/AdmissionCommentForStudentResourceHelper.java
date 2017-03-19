@@ -22,8 +22,7 @@ import java.util.List;
 public class AdmissionCommentForStudentResourceHelper extends
     ResourceHelper<AdmissionCommentForStudent, MutableAdmissionCommentForStudent, Integer> {
 
-  private static final Logger mLoger = LoggerFactory
-      .getLogger(AdmissionCertificatesOfStudentResourceHelper.class);
+  private static final Logger mLoger = LoggerFactory.getLogger(AdmissionCertificatesOfStudentResourceHelper.class);
 
   @Autowired
   AdmissionCommentForStudentManager mManager;
@@ -31,16 +30,14 @@ public class AdmissionCommentForStudentResourceHelper extends
   @Autowired
   AdmissionCommentForStudentBuilder mBuilder;
 
-  public JsonObject getStudentsSavedComments(final int pSemesterId, final String pReceiptId,
-      final UriInfo pUriInfo) {
+  public JsonObject getStudentsSavedComments(final int pSemesterId, final String pReceiptId, final UriInfo pUriInfo) {
     List<AdmissionCommentForStudent> pStudentsCertificateComment =
         getContentManager().getComments(pSemesterId, pReceiptId);
     return jsonCreator(pStudentsCertificateComment, pUriInfo);
 
   }
 
-  private JsonObject jsonCreator(List<AdmissionCommentForStudent> pStudentsCertificateComment,
-      UriInfo pUriInfo) {
+  private JsonObject jsonCreator(List<AdmissionCommentForStudent> pStudentsCertificateComment, UriInfo pUriInfo) {
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();

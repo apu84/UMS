@@ -20,8 +20,7 @@ public abstract class AbstractSectionPermission extends BaseFileContentPermissio
     mCourseTeacherManager = pCourseTeacherManager;
   }
 
-  protected boolean hasPermission(final Path pTargetPath, final List<String> pSections,
-      final Student pStudent) {
+  protected boolean hasPermission(final Path pTargetPath, final List<String> pSections, final Student pStudent) {
     String type = getUserDefinedProperty(FOLDER_TYPE, pTargetPath);
 
     if(!StringUtils.isEmpty(type)) {
@@ -32,8 +31,8 @@ public abstract class AbstractSectionPermission extends BaseFileContentPermissio
             // need to check optional courses section as well
             if((!StringUtils.isEmpty(pStudent.getTheorySection()) && !StringUtils.isEmpty(pStudent
                 .getSessionalSection()))
-                && (section.equalsIgnoreCase(pStudent.getTheorySection()) || section
-                    .equalsIgnoreCase(pStudent.getSessionalSection()))) {
+                && (section.equalsIgnoreCase(pStudent.getTheorySection()) || section.equalsIgnoreCase(pStudent
+                    .getSessionalSection()))) {
               hasSectionPermission = true;
             }
           }
@@ -46,8 +45,7 @@ public abstract class AbstractSectionPermission extends BaseFileContentPermissio
     return true;
   }
 
-  protected List<String> permittedSections(final String pOwner, final Integer pSemesterId,
-      final String pCourseId) {
+  protected List<String> permittedSections(final String pOwner, final Integer pSemesterId, final String pCourseId) {
     User creator = mUserManager.get(pOwner);
     List<CourseTeacher> courseTeacherSections =
         mCourseTeacherManager.getAssignedSections(pSemesterId, pCourseId, creator.getEmployeeId());

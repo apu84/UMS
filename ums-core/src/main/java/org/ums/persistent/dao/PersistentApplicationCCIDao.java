@@ -55,8 +55,8 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
   @Override
   public Long create(MutableApplicationCCI pMutable) {
     Long id = mIdGenerator.getNumericId();
-    mJdbcTemplate.update(INSERT_ONE, id, pMutable.getSemesterId(), pMutable.getStudentId(),
-        pMutable.getCourseId(), pMutable.getApplicationType().getValue());
+    mJdbcTemplate.update(INSERT_ONE, id, pMutable.getSemesterId(), pMutable.getStudentId(), pMutable.getCourseId(),
+        pMutable.getApplicationType().getValue());
     return id;
   }
 
@@ -83,16 +83,13 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
   }
 
   @Override
-  public List<ApplicationCCI> getByStudentIdAndSemesterAndType(String pStudentId, int pSemesterId,
-      int pExamType) {
+  public List<ApplicationCCI> getByStudentIdAndSemesterAndType(String pStudentId, int pSemesterId, int pExamType) {
     String query = SELECT_ALL + " STUDENT_ID=? AND SEMESTER_ID=? AND APPLICATION_TYPE=? ";
-    return mJdbcTemplate.query(query, new Object[] {pStudentId, pSemesterId, pExamType},
-        new ApplicationCCIRowMapper());
+    return mJdbcTemplate.query(query, new Object[] {pStudentId, pSemesterId, pExamType}, new ApplicationCCIRowMapper());
   }
 
   @Override
-  public List<ApplicationCCI> getByStudentIdAndSemesterForSeatPlanView(String pStudentId,
-      Integer pSemesterId) {
+  public List<ApplicationCCI> getByStudentIdAndSemesterForSeatPlanView(String pStudentId, Integer pSemesterId) {
     String query =
         "select to_char( e.EXAM_DATE,'DD-MM-YYYY') EXAM_DATE,c.COURSE_NO,a.APPLICATION_TYPE,r.ROOM_NO,r.ROOM_ID from EXAM_ROUTINE e,MST_COURSE c,APPLICATION_CCI a,ROOM_INFO r,SEAT_PLAN s  "
             + "where a.STUDENT_ID=? and a.SEMESTER_ID=? and a.COURSE_ID=c.COURSE_ID and  e.SEMESTER=a.SEMESTER_ID and e.COURSE_ID=a.COURSE_ID and e.EXAM_TYPE=2 and a.STUDENT_ID= s.STUDENT_ID  "
@@ -123,8 +120,7 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
             + "(select distinct(course_id),student_id,application_type from application_cci where semester_id=? ) a    "
             + "where exam_type=2 and exam_date = to_date(?,'MM-DD-YYYY') and r.course_id=c.course_id and a.course_id=c.course_id order by c.course_no,a.student_id) a  "
             + "where a.student_id=s.student_id and s.program_id=p.program_id;";
-    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pExamDate},
-        new ApplicationCCIRowMapperForSeatPlan());
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pExamDate}, new ApplicationCCIRowMapperForSeatPlan());
   }
 
   @Override
@@ -133,23 +129,21 @@ public class PersistentApplicationCCIDao extends ApplicationCCIDaoDecorator {
   }
 
   @Override
-  public List<ApplicationCCI> getByProgramAndSemesterAndType(int pProgramId, int pSemesterId,
-      int pExamType) {
+  public List<ApplicationCCI> getByProgramAndSemesterAndType(int pProgramId, int pSemesterId, int pExamType) {
     return super.getByProgramAndSemesterAndType(pProgramId, pSemesterId, pExamType);
   }
 
   @Override
   public List<ApplicationCCI> getByStudentIdAndSemester(String pStudentId, int pSemesterId) {
     String query = SELECT_ALL + " and  a.student_id=? and a.semester_id=?";
-    return mJdbcTemplate.query(query, new Object[] {pStudentId, pSemesterId},
-        new ApplicationCCIRowMapper());
+    return mJdbcTemplate.query(query, new Object[] {pStudentId, pSemesterId}, new ApplicationCCIRowMapper());
   }
 
   private List<Object[]> getInsertParamList(List<MutableApplicationCCI> pMutableApplicationCCIs) {
     List<Object[]> params = new ArrayList<>();
     for(ApplicationCCI app : pMutableApplicationCCIs) {
-      params.add(new Object[] {mIdGenerator.getNumericId(), app.getSemesterId(),
-          app.getStudentId(), app.getCourseId(), app.getApplicationType().getValue()});
+      params.add(new Object[] {mIdGenerator.getNumericId(), app.getSemesterId(), app.getStudentId(), app.getCourseId(),
+          app.getApplicationType().getValue()});
     }
     return params;
   }

@@ -25,8 +25,7 @@ public class PersistentAdmissionStudent implements MutableAdmissionStudent {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
     sProgramManager = applicationContext.getBean("programManager", ProgramManager.class);
-    sAdmissionStudentManager =
-        applicationContext.getBean("admissionStudentManager", AdmissionStudentManager.class);
+    sAdmissionStudentManager = applicationContext.getBean("admissionStudentManager", AdmissionStudentManager.class);
   }
 
   private String mId;
@@ -173,8 +172,7 @@ public class PersistentAdmissionStudent implements MutableAdmissionStudent {
 
   @Override
   public Program getProgramByMerit() {
-    return mProgramByMerit == null ? sProgramManager.get(mProgramIdByMerit) : sProgramManager
-        .validate(mProgramByMerit);
+    return mProgramByMerit == null ? sProgramManager.get(mProgramIdByMerit) : sProgramManager.validate(mProgramByMerit);
   }
 
   @Override
@@ -326,8 +324,7 @@ public class PersistentAdmissionStudent implements MutableAdmissionStudent {
 
   @Override
   public Semester getSemester() {
-    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
-        .validate(mSemester);
+    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager.validate(mSemester);
   }
 
   @Override

@@ -32,8 +32,7 @@ import java.util.List;
  * Created by My Pc on 7/14/2016.
  */
 @Component
-public class ApplicationCCIResourceHelper extends
-    ResourceHelper<ApplicationCCI, MutableApplicationCCI, Long> {
+public class ApplicationCCIResourceHelper extends ResourceHelper<ApplicationCCI, MutableApplicationCCI, Long> {
 
   @Autowired
   ApplicationCCIManager mManager;
@@ -103,8 +102,7 @@ public class ApplicationCCIResourceHelper extends
     JsonArray entries = pJsonObject.getJsonArray("entries");
 
     List<UGRegistrationResult> results =
-        mResultManager.getCarryClearanceImprovementCoursesByStudent(student.getSemesterId(),
-            studentId);
+        mResultManager.getCarryClearanceImprovementCoursesByStudent(student.getSemesterId(), studentId);
 
     for(int i = 0; i < entries.size(); i++) {
       LocalCache localCache = new LocalCache();
@@ -158,16 +156,15 @@ public class ApplicationCCIResourceHelper extends
 
     object.add("entries", children);
     localCache.invalidate();
-    return mResultHelper.getResultForApplicationCCIOfCarryClearanceAndImprovement(
-        resultForWorkingAsResponse, pUriInfo);
+    return mResultHelper.getResultForApplicationCCIOfCarryClearanceAndImprovement(resultForWorkingAsResponse, pUriInfo);
   }
 
   public Response deleteByStudentId(UriInfo pUriInfo) {
     String studentId = SecurityUtils.getSubject().getPrincipal().toString();
     getContentManager().deleteByStudentId(studentId);
     URI contextURI =
-        pUriInfo.getBaseUriBuilder().path(ApplicationCCIResource.class)
-            .path(ApplicationCCIResource.class, "get").build();
+        pUriInfo.getBaseUriBuilder().path(ApplicationCCIResource.class).path(ApplicationCCIResource.class, "get")
+            .build();
     Response.ResponseBuilder builder = Response.created(contextURI);
     builder.status(Response.Status.CREATED);
     return builder.build();
@@ -204,8 +201,7 @@ public class ApplicationCCIResourceHelper extends
     String studentId = SecurityUtils.getSubject().getPrincipal().toString();
     Student student = mStudentManager.get(studentId);
     List<ApplicationCCI> applications =
-        getContentManager().getByStudentIdAndSemesterForSeatPlanView(studentId,
-            student.getCurrentEnrolledSemesterId());
+        getContentManager().getByStudentIdAndSemesterForSeatPlanView(studentId, student.getCurrentEnrolledSemesterId());
 
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
@@ -224,8 +220,7 @@ public class ApplicationCCIResourceHelper extends
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
-    List<ApplicationCCI> applications =
-        getContentManager().getBySemesterAndExamDate(pSemesterId, pExamDate);
+    List<ApplicationCCI> applications = getContentManager().getBySemesterAndExamDate(pSemesterId, pExamDate);
 
     for(ApplicationCCI app : applications) {
       children.add(toJson(app, pUriInfo, localCache));

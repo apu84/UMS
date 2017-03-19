@@ -40,17 +40,16 @@ public class RecordBuilder implements Builder<Record, MutableRecord> {
   }
 
   @Override
-  public void build(final MutableRecord pMutable, final JsonObject pJsonObject,
-      final LocalCache pLocalCache) {
+  public void build(final MutableRecord pMutable, final JsonObject pJsonObject, final LocalCache pLocalCache) {
 
     try {
 
-      pMutable.setBookBindingType(pJsonObject.getInt("bindingType") == 101101 ? null
-          : BookBindingType.get(pJsonObject.getInt("bindingType")));
-      pMutable.setAcquisitionType(pJsonObject.getInt("acqType") == 101101 ? null : AcquisitionType
-          .get(pJsonObject.getInt("acqType")));
-      pMutable.setFrequency(pJsonObject.getInt("frequency") == 101101 ? null : JournalFrequency
-          .get(pJsonObject.getInt("frequency")));
+      pMutable.setBookBindingType(pJsonObject.getInt("bindingType") == 101101 ? null : BookBindingType.get(pJsonObject
+          .getInt("bindingType")));
+      pMutable.setAcquisitionType(pJsonObject.getInt("acqType") == 101101 ? null : AcquisitionType.get(pJsonObject
+          .getInt("acqType")));
+      pMutable.setFrequency(pJsonObject.getInt("frequency") == 101101 ? null : JournalFrequency.get(pJsonObject
+          .getInt("frequency")));
       pJsonObject.getInt("mfn");
     } catch(Exception ex) {
       pMutable.setFrequency(null);

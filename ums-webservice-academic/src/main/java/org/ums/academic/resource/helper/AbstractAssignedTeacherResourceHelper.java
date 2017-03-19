@@ -27,64 +27,54 @@ public abstract class AbstractAssignedTeacherResourceHelper<R extends EditType<M
     return builder.build();
   }
 
-  public JsonObject getAssignedTeachers(final Integer pProgramId, final Integer pSemesterId,
+  public JsonObject getAssignedTeachers(final Integer pProgramId, final Integer pSemesterId, final String pOfferedBy,
+      final UriInfo pUriInfo) {
+
+    List<R> assignedTeachers = getContentManager().getAssignedTeachers(pProgramId, pSemesterId, pOfferedBy);
+    return buildJsonResponse(assignedTeachers, pUriInfo);
+  }
+
+  public JsonObject getAssignedTeachers(final Integer pProgramId, final Integer pSemesterId, final Integer pYear,
       final String pOfferedBy, final UriInfo pUriInfo) {
-
-    List<R> assignedTeachers =
-        getContentManager().getAssignedTeachers(pProgramId, pSemesterId, pOfferedBy);
+    List<R> assignedTeachers = getContentManager().getAssignedTeachers(pProgramId, pSemesterId, pYear, pOfferedBy);
     return buildJsonResponse(assignedTeachers, pUriInfo);
   }
 
-  public JsonObject getAssignedTeachers(final Integer pProgramId, final Integer pSemesterId,
-      final Integer pYear, final String pOfferedBy, final UriInfo pUriInfo) {
+  public JsonObject getAssignedTeachers(final Integer pProgramId, final Integer pSemesterId, final Integer pYear,
+      final Integer pSemester, final String pOfferedBy, final UriInfo pUriInfo) {
     List<R> assignedTeachers =
-        getContentManager().getAssignedTeachers(pProgramId, pSemesterId, pYear, pOfferedBy);
-    return buildJsonResponse(assignedTeachers, pUriInfo);
-  }
-
-  public JsonObject getAssignedTeachers(final Integer pProgramId, final Integer pSemesterId,
-      final Integer pYear, final Integer pSemester, final String pOfferedBy, final UriInfo pUriInfo) {
-    List<R> assignedTeachers =
-        getContentManager().getAssignedTeachers(pProgramId, pSemesterId, pYear, pSemester,
-            pOfferedBy);
+        getContentManager().getAssignedTeachers(pProgramId, pSemesterId, pYear, pSemester, pOfferedBy);
     return buildJsonResponse(assignedTeachers, pUriInfo);
   }
 
   public JsonObject getAssignedTeachers(final Integer pProgramId, final Integer pSemesterId,
       final CourseCategory pCourseCategory, final String pOfferedBy, final UriInfo pUriInfo) {
     List<R> assignedTeachers =
-        getContentManager().getAssignedTeachers(pProgramId, pSemesterId, pCourseCategory,
-            pOfferedBy);
+        getContentManager().getAssignedTeachers(pProgramId, pSemesterId, pCourseCategory, pOfferedBy);
     return buildJsonResponse(assignedTeachers, pUriInfo);
   }
 
-  public JsonObject getAssignedTeachers(final Integer pProgramId, final Integer pSemesterId,
-      final String pCourseId, final String pOfferedBy, final UriInfo pUriInfo) {
-    List<R> assignedTeachers =
-        getContentManager().getAssignedTeachers(pProgramId, pSemesterId, pCourseId, pOfferedBy);
-    return buildJsonResponse(assignedTeachers, pUriInfo);
-  }
-
-  public JsonObject getAssignedTeachers(final Integer pProgramId, final Integer pSemesterId,
-      final Integer pYear, final CourseCategory pCourseCategory, final String pOfferedBy,
-      final UriInfo pUriInfo) {
-    List<R> assignedTeachers =
-        getContentManager().getAssignedTeachers(pProgramId, pSemesterId, pYear, pCourseCategory,
-            pOfferedBy);
-    return buildJsonResponse(assignedTeachers, pUriInfo);
-  }
-
-  public JsonObject getAssignedTeachers(final Integer pProgramId, final Integer pSemesterId,
-      final Integer pYear, final Integer pSemester, final CourseCategory pCourseCategory,
+  public JsonObject getAssignedTeachers(final Integer pProgramId, final Integer pSemesterId, final String pCourseId,
       final String pOfferedBy, final UriInfo pUriInfo) {
-    List<R> assignedTeachers =
-        getContentManager().getAssignedTeachers(pProgramId, pSemesterId, pYear, pSemester,
-            pCourseCategory, pOfferedBy);
+    List<R> assignedTeachers = getContentManager().getAssignedTeachers(pProgramId, pSemesterId, pCourseId, pOfferedBy);
     return buildJsonResponse(assignedTeachers, pUriInfo);
   }
 
-  public JsonObject getAssignedCourses(final Integer pSemesterId, final String pTeacherId,
-      final UriInfo pUriInfo) {
+  public JsonObject getAssignedTeachers(final Integer pProgramId, final Integer pSemesterId, final Integer pYear,
+      final CourseCategory pCourseCategory, final String pOfferedBy, final UriInfo pUriInfo) {
+    List<R> assignedTeachers =
+        getContentManager().getAssignedTeachers(pProgramId, pSemesterId, pYear, pCourseCategory, pOfferedBy);
+    return buildJsonResponse(assignedTeachers, pUriInfo);
+  }
+
+  public JsonObject getAssignedTeachers(final Integer pProgramId, final Integer pSemesterId, final Integer pYear,
+      final Integer pSemester, final CourseCategory pCourseCategory, final String pOfferedBy, final UriInfo pUriInfo) {
+    List<R> assignedTeachers =
+        getContentManager().getAssignedTeachers(pProgramId, pSemesterId, pYear, pSemester, pCourseCategory, pOfferedBy);
+    return buildJsonResponse(assignedTeachers, pUriInfo);
+  }
+
+  public JsonObject getAssignedCourses(final Integer pSemesterId, final String pTeacherId, final UriInfo pUriInfo) {
     List<R> assignedTeachers = getContentManager().getAssignedCourses(pSemesterId, pTeacherId);
     return buildJsonResponse(assignedTeachers, pUriInfo);
   }

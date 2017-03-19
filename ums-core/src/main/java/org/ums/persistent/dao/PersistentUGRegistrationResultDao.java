@@ -21,8 +21,7 @@ public class PersistentUGRegistrationResultDao extends UGRegistrationResultDaoDe
   String SELECT_ALL = "SELECT UG_REGISTRATION_RESULT.ID, UG_REGISTRATION_RESULT.STUDENT_ID, "
       + "UG_REGISTRATION_RESULT.SEMESTER_ID, " + "UG_REGISTRATION_RESULT.COURSE_ID, "
       + "UG_REGISTRATION_RESULT.GRADE_LETTER, " + "UG_REGISTRATION_RESULT.EXAM_TYPE, "
-      + "UG_REGISTRATION_RESULT.REG_TYPE, " + "UG_REGISTRATION_RESULT.LAST_MODIFIED "
-      + "FROM UG_REGISTRATION_RESULT ";
+      + "UG_REGISTRATION_RESULT.REG_TYPE, " + "UG_REGISTRATION_RESULT.LAST_MODIFIED " + "FROM UG_REGISTRATION_RESULT ";
 
   String INSERT_ALL =
       "INSERT INTO UG_REGISTRATION_RESULT(ID, STUDENT_ID, SEMESTER_ID, COURSE_ID, GRADE_LETTER, EXAM_TYPE, TYPE, LAST_MODIFIED)"
@@ -57,52 +56,44 @@ public class PersistentUGRegistrationResultDao extends UGRegistrationResultDaoDe
   }
 
   @Override
-  public List<UGRegistrationResult> getBySemesterAndExamTYpeAndGrade(int pSemesterId,
-      int pExamType, String pGrade) {
+  public List<UGRegistrationResult> getBySemesterAndExamTYpeAndGrade(int pSemesterId, int pExamType, String pGrade) {
     return super.getBySemesterAndExamTYpeAndGrade(pSemesterId, pExamType, pGrade);
   }
 
   @Override
-  public List<UGRegistrationResult> getBySemesterAndExamTypeAndGradeAndStudent(int pSemesterId,
-      int pExamType, String pGrade, String pStudentId) {
-    return super.getBySemesterAndExamTypeAndGradeAndStudent(pSemesterId, pExamType, pGrade,
-        pStudentId);
+  public List<UGRegistrationResult> getBySemesterAndExamTypeAndGradeAndStudent(int pSemesterId, int pExamType,
+      String pGrade, String pStudentId) {
+    return super.getBySemesterAndExamTypeAndGradeAndStudent(pSemesterId, pExamType, pGrade, pStudentId);
   }
 
   @Override
-  public List<UGRegistrationResult> getImprovementCoursesBySemesterAndStudent(int pSemesterId,
-      String pStudentId) {
+  public List<UGRegistrationResult> getImprovementCoursesBySemesterAndStudent(int pSemesterId, String pStudentId) {
     return super.getImprovementCoursesBySemesterAndStudent(pSemesterId, pStudentId);
   }
 
   @Override
-  public List<UGRegistrationResult> getCarryCoursesBySemesterAndStudent(int pSemesterId,
-      String pStudentId) {
+  public List<UGRegistrationResult> getCarryCoursesBySemesterAndStudent(int pSemesterId, String pStudentId) {
     return super.getCarryCoursesBySemesterAndStudent(pSemesterId, pStudentId);
   }
 
   @Override
-  public List<UGRegistrationResult> getCarryClearanceImprovementCoursesByStudent(int pSemesterId,
-      String pStudentId) {
+  public List<UGRegistrationResult> getCarryClearanceImprovementCoursesByStudent(int pSemesterId, String pStudentId) {
     String query = SELECT_ALL_CCI;
-    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pStudentId, pSemesterId,
-        pStudentId, pStudentId, pSemesterId, pStudentId}, new UGRegistrationResultCCIRowMapper());
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pStudentId, pSemesterId, pStudentId, pStudentId,
+        pSemesterId, pStudentId}, new UGRegistrationResultCCIRowMapper());
   }
 
   @Override
-  public List<UGRegistrationResult> getByCourseSemester(int pSemesterId, String pCourseId,
-      CourseRegType pCourseRegType) {
+  public List<UGRegistrationResult> getByCourseSemester(int pSemesterId, String pCourseId, CourseRegType pCourseRegType) {
     String query = SELECT_ALL + " WHERE COURSE_ID = ? AND SEMESTER_ID = ? AND EXAM_TYPE = ?";
-    return mJdbcTemplate.query(query,
-        new Object[] {pCourseId, pSemesterId, pCourseRegType.getId()},
+    return mJdbcTemplate.query(query, new Object[] {pCourseId, pSemesterId, pCourseRegType.getId()},
         new UGRegistrationResultRowMapperWithoutResult());
   }
 
   @Override
   public List<UGRegistrationResult> getResults(Integer pProgramId, Integer pSemesterId) {
     String query =
-        SELECT_ALL
-            + ", STUDENT_RECORD, STUDENTS WHERE STUDENT_RECORD.STUDENT_ID = UG_REGISTRATION_RESULT.STUDENT_ID "
+        SELECT_ALL + ", STUDENT_RECORD, STUDENTS WHERE STUDENT_RECORD.STUDENT_ID = UG_REGISTRATION_RESULT.STUDENT_ID "
             + "AND STUDENT_RECORD.STUDENT_ID = STUDENTS.STUDENT_ID "
             + "AND STUDENT_RECORD.REGISTRATION_TYPE != 'D' AND STUDENT_RECORD.REGISTRATION_TYPE != 'W' "
             + "AND STUDENT_RECORD.SEMESTER_ID = ? " + "AND STUDENTS.PROGRAM_ID = ? "
@@ -122,10 +113,10 @@ public class PersistentUGRegistrationResultDao extends UGRegistrationResultDaoDe
   private List<Object[]> getInsertParamList(List<MutableUGRegistrationResult> pRegistrationResults) {
     List<Object[]> params = new ArrayList<>();
     for(UGRegistrationResult registrationResult : pRegistrationResults) {
-      params.add(new Object[] {mIdGenerator.getNumericId(),
-          registrationResult.getStudent().getId(), registrationResult.getSemester().getId(),
-          registrationResult.getCourse().getId(), registrationResult.getGradeLetter(),
-          registrationResult.getExamType().getId(), registrationResult.getType().getId()});
+      params.add(new Object[] {mIdGenerator.getNumericId(), registrationResult.getStudent().getId(),
+          registrationResult.getSemester().getId(), registrationResult.getCourse().getId(),
+          registrationResult.getGradeLetter(), registrationResult.getExamType().getId(),
+          registrationResult.getType().getId()});
     }
 
     return params;
@@ -139,28 +130,25 @@ public class PersistentUGRegistrationResultDao extends UGRegistrationResultDaoDe
   private List<Object[]> getDeleteParamList(List<MutableUGRegistrationResult> pRegistrationResults) {
     List<Object[]> params = new ArrayList<>();
     for(UGRegistrationResult registrationResult : pRegistrationResults) {
-      params.add(new Object[] {registrationResult.getStudent().getId(),
-          registrationResult.getSemester().getId(), registrationResult.getExamType().getId(),
-          registrationResult.getType().getId()});
+      params.add(new Object[] {registrationResult.getStudent().getId(), registrationResult.getSemester().getId(),
+          registrationResult.getExamType().getId(), registrationResult.getType().getId()});
     }
 
     return params;
   }
 
   @Override
-  public List<UGRegistrationResult> getRegisteredCourseByStudent(int pSemesterId,
-      String pStudentId, CourseRegType pCourseRegType) {
+  public List<UGRegistrationResult> getRegisteredCourseByStudent(int pSemesterId, String pStudentId,
+      CourseRegType pCourseRegType) {
     String query = SELECT_ALL + " WHERE SEMESTER_ID = ?  AND STUDENT_ID = ? AND REG_TYPE = ?";
-    return mJdbcTemplate.query(query,
-        new Object[] {pSemesterId, pStudentId, pCourseRegType.getId()},
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pStudentId, pCourseRegType.getId()},
         new UGRegistrationResultRowMapperWithoutResult());
   }
 
   @Override
   public List<UGRegistrationResult> getResults(String pStudentId, Integer pSemesterId) {
     String query = SELECT_ALL + " WHERE STUDENT_ID = ?";
-    return mJdbcTemplate.query(query, new Object[] {pStudentId},
-        new UGRegistrationResultRowMapperWithResult());
+    return mJdbcTemplate.query(query, new Object[] {pStudentId}, new UGRegistrationResultRowMapperWithResult());
   }
 
   // this will only work with Carry, Clearance and Improvement applications.
@@ -195,8 +183,7 @@ public class PersistentUGRegistrationResultDao extends UGRegistrationResultDaoDe
 
     @Override
     public UGRegistrationResult mapRow(ResultSet pResultSet, int pI) throws SQLException {
-      AtomicReference<UGRegistrationResult> registrationResult =
-          new AtomicReference<>(build(pResultSet));
+      AtomicReference<UGRegistrationResult> registrationResult = new AtomicReference<>(build(pResultSet));
       return registrationResult.get();
     }
   }

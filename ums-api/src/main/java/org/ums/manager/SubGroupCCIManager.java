@@ -10,8 +10,7 @@ import java.util.List;
 /**
  * Created by My Pc on 7/23/2016.
  */
-public interface SubGroupCCIManager extends
-    ContentManager<SubGroupCCI, MutableSubGroupCCI, Integer> {
+public interface SubGroupCCIManager extends ContentManager<SubGroupCCI, MutableSubGroupCCI, Integer> {
   List<SubGroupCCI> getBySemesterAndExamDate(Integer pSemesterId, String pExamDate);
 
   Integer checkOccuranceBySemesterAndExamDate(Integer pSemesterId, String pExamDate);

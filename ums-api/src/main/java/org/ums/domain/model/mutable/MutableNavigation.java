@@ -4,8 +4,7 @@ import org.ums.domain.model.common.Mutable;
 import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.domain.model.immutable.Navigation;
 
-public interface MutableNavigation extends Navigation, Mutable, MutableLastModifier,
-    MutableIdentifier<Long> {
+public interface MutableNavigation extends Navigation, Mutable, MutableLastModifier, MutableIdentifier<Long> {
   void setTitle(final String pTitle);
 
   void setPermission(final String pPermission);

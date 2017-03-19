@@ -16,8 +16,7 @@ import org.ums.enums.CourseType;
  * Created by Ifti on 30-Jan-17.
  */
 
-public interface MutableAuthor extends Author, Mutable, MutableLastModifier,
-    MutableIdentifier<Integer> {
+public interface MutableAuthor extends Author, Mutable, MutableLastModifier, MutableIdentifier<Integer> {
   void setFirstName(final String pFirstName);
 
   void setMiddleName(final String pMiddleName);

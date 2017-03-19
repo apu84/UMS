@@ -15,8 +15,7 @@ public class DummyRealm extends JdbcRealm {
   UserDao userDao;
 
   @Override
-  protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token)
-      throws AuthenticationException {
+  protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
     // identify account to log to
     UsernamePasswordToken userPassToken = (UsernamePasswordToken) token;
     final String username = userPassToken.getUsername();

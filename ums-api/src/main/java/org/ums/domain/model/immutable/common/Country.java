@@ -11,8 +11,7 @@ import java.io.Serializable;
 /**
  * Created by Ifti on 30-Jan-17.
  */
-public interface Country extends Serializable, LastModifier, EditType<MutableCountry>,
-    Identifier<Integer> {
+public interface Country extends Serializable, LastModifier, EditType<MutableCountry>, Identifier<Integer> {
 
   String getCode();
 

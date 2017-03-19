@@ -24,8 +24,7 @@ public class PersistentSubGroupCCI implements MutableSubGroupCCI {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
     sCourseManager = applicationContext.getBean("courseManager", CourseManager.class);
-    sSubGroupCCIManager =
-        applicationContext.getBean("subGroupCCIManager", SubGroupCCIManager.class);
+    sSubGroupCCIManager = applicationContext.getBean("subGroupCCIManager", SubGroupCCIManager.class);
   }
 
   private int mId;
@@ -137,8 +136,7 @@ public class PersistentSubGroupCCI implements MutableSubGroupCCI {
 
   @Override
   public Semester getSemester() {
-    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
-        .validate(mSemester);
+    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager.validate(mSemester);
   }
 
   @Override

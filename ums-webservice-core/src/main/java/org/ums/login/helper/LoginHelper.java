@@ -55,8 +55,7 @@ public class LoginHelper {
         return Response.ok(builder.build()).build();
       }
     }
-    else if(mPasswordService.passwordsMatch(currentPassword,
-        String.valueOf(currentUser.getPassword()))) {
+    else if(mPasswordService.passwordsMatch(currentPassword, String.valueOf(currentUser.getPassword()))) {
       String newToken = changePassword(currentUser, newPassword);
       // mAuthenticationRealm.getAuthenticationCache().remove(SecurityUtils.getSubject().getPrincipal());
       JsonObjectBuilder builder = Json.createObjectBuilder();
@@ -76,8 +75,7 @@ public class LoginHelper {
 
     // delete any pre-existing token
     try {
-      BearerAccessToken bearerAccessToken =
-          mBearerAccessTokenManager.getByUser(pCurrentUser.getId());
+      BearerAccessToken bearerAccessToken = mBearerAccessTokenManager.getByUser(pCurrentUser.getId());
       mBearerAccessTokenManager.delete(bearerAccessToken.edit());
     } catch(Exception e) {
       mLogger.info("No pre existing token for: " + pCurrentUser.getId(), e);

@@ -12,8 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PersistentAdmissionCertificatesOfStudentDao extends
-    AdmissionCertificatesOfStudentDaoDecorator {
+public class PersistentAdmissionCertificatesOfStudentDao extends AdmissionCertificatesOfStudentDaoDecorator {
 
   private JdbcTemplate mJdbcTemplate;
 
@@ -36,29 +35,24 @@ public class PersistentAdmissionCertificatesOfStudentDao extends
     List<Object[]> params = new ArrayList<>();
 
     for(AdmissionCertificatesOfStudent studentsCertificateHistory : pMutableAdmissionStudentsCertificateHistory) {
-      params
-          .add(new Object[] {studentsCertificateHistory.getSemesterId(),
-              studentsCertificateHistory.getReceiptId(),
-              studentsCertificateHistory.getCertificateId()});
+      params.add(new Object[] {studentsCertificateHistory.getSemesterId(), studentsCertificateHistory.getReceiptId(),
+          studentsCertificateHistory.getCertificateId()});
 
     }
     return params;
   }
 
-  public List<AdmissionCertificatesOfStudent> getStudentsSavedCertificateLists(int pSemesterId,
-      String pReceiptId) {
+  public List<AdmissionCertificatesOfStudent> getStudentsSavedCertificateLists(int pSemesterId, String pReceiptId) {
     String query =
         "select c.semester_id, c.receipt_id, c.certificate_id, a.certificate_name, a.certificate_type from ug_adm_certificates a, ug_adm_ver_certificates c where a.id = c.certificate_id and SEMESTER_ID=? and RECEIPT_ID=?";
-    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pReceiptId},
-        new CustomRoleRowMapper());
+    return mJdbcTemplate.query(query, new Object[] {pSemesterId, pReceiptId}, new CustomRoleRowMapper());
   }
 
   class RoleRowMapper implements RowMapper<AdmissionCertificatesOfStudent> {
 
     @Override
     public AdmissionCertificatesOfStudent mapRow(ResultSet resultSet, int i) throws SQLException {
-      MutableAdmissionCertificatesOfStudent studentsCertificate =
-          new PersistentAdmissionCertificatesOfStudent();
+      MutableAdmissionCertificatesOfStudent studentsCertificate = new PersistentAdmissionCertificatesOfStudent();
       studentsCertificate.setSemesterId(resultSet.getInt("semester_id"));
       studentsCertificate.setReceiptId(resultSet.getString("receipt_id"));
       studentsCertificate.setCertificateId(resultSet.getInt("certificate_id"));
@@ -70,8 +64,7 @@ public class PersistentAdmissionCertificatesOfStudentDao extends
 
     @Override
     public AdmissionCertificatesOfStudent mapRow(ResultSet resultSet, int i) throws SQLException {
-      MutableAdmissionCertificatesOfStudent studentsCertificate =
-          new PersistentAdmissionCertificatesOfStudent();
+      MutableAdmissionCertificatesOfStudent studentsCertificate = new PersistentAdmissionCertificatesOfStudent();
       studentsCertificate.setSemesterId(resultSet.getInt("semester_id"));
       studentsCertificate.setReceiptId(resultSet.getString("receipt_id"));
       studentsCertificate.setCertificateId(resultSet.getInt("certificate_id"));

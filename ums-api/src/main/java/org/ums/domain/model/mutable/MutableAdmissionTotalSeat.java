@@ -11,8 +11,8 @@ import org.ums.enums.QuotaType;
 /**
  * Created by Monjur-E-Morshed on 02-Jan-17.
  */
-public interface MutableAdmissionTotalSeat extends AdmissionTotalSeat, Mutable,
-    MutableLastModifier, MutableIdentifier<Integer> {
+public interface MutableAdmissionTotalSeat extends AdmissionTotalSeat, Mutable, MutableLastModifier,
+    MutableIdentifier<Integer> {
   void setSemesterId(final int pSemesterId);
 
   void setSemester(final Semester pSemester);

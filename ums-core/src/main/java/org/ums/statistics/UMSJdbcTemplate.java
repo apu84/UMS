@@ -15,15 +15,14 @@ public class UMSJdbcTemplate extends JdbcTemplate {
   LoggerFactory mQueryLoggerFactory;
 
   @Override
-  public <T> List<T> query(String sql, Object[] args, RowMapper<T> rowMapper)
-      throws DataAccessException {
+  public <T> List<T> query(String sql, Object[] args, RowMapper<T> rowMapper) throws DataAccessException {
     // Do some logging
     long currentTime = System.currentTimeMillis();
     List<T> returned = super.query(sql, args, rowMapper);
     long afterTime = System.currentTimeMillis();
     String userName =
-        SecurityUtils.getSubject().getPrincipal() == null ? "Login Request" : SecurityUtils
-            .getSubject().getPrincipal().toString();
+        SecurityUtils.getSubject().getPrincipal() == null ? "Login Request" : SecurityUtils.getSubject().getPrincipal()
+            .toString();
     mQueryLoggerFactory.getQueryLogger().log(sql, args, userName, (afterTime - currentTime));
     return returned;
   }
@@ -34,21 +33,20 @@ public class UMSJdbcTemplate extends JdbcTemplate {
     List<T> returned = super.query(sql, rowMapper);
     long afterTime = System.currentTimeMillis();
     String userName =
-        SecurityUtils.getSubject().getPrincipal() == null ? "Login Request" : SecurityUtils
-            .getSubject().getPrincipal().toString();
+        SecurityUtils.getSubject().getPrincipal() == null ? "Login Request" : SecurityUtils.getSubject().getPrincipal()
+            .toString();
     mQueryLoggerFactory.getQueryLogger().log(sql, userName, (afterTime - currentTime));
     return returned;
   }
 
   @Override
-  public <T> T queryForObject(String sql, Object[] args, RowMapper<T> rowMapper)
-      throws DataAccessException {
+  public <T> T queryForObject(String sql, Object[] args, RowMapper<T> rowMapper) throws DataAccessException {
     long currentTime = System.currentTimeMillis();
     T returned = super.queryForObject(sql, args, rowMapper);
     long afterTime = System.currentTimeMillis();
     String userName =
-        SecurityUtils.getSubject().getPrincipal() == null ? "Login Request" : SecurityUtils
-            .getSubject().getPrincipal().toString();
+        SecurityUtils.getSubject().getPrincipal() == null ? "Login Request" : SecurityUtils.getSubject().getPrincipal()
+            .toString();
     mQueryLoggerFactory.getQueryLogger().log(sql, args, userName, (afterTime - currentTime));
     return returned;
   }
@@ -59,8 +57,8 @@ public class UMSJdbcTemplate extends JdbcTemplate {
     T returned = super.queryForObject(sql, rowMapper);
     long afterTime = System.currentTimeMillis();
     String userName =
-        SecurityUtils.getSubject().getPrincipal() == null ? "Login Request" : SecurityUtils
-            .getSubject().getPrincipal().toString();
+        SecurityUtils.getSubject().getPrincipal() == null ? "Login Request" : SecurityUtils.getSubject().getPrincipal()
+            .toString();
     mQueryLoggerFactory.getQueryLogger().log(sql, userName, (afterTime - currentTime));
     return returned;
   }
@@ -71,8 +69,8 @@ public class UMSJdbcTemplate extends JdbcTemplate {
     int updated = super.update(sql, args);
     long afterTime = System.currentTimeMillis();
     String userName =
-        SecurityUtils.getSubject().getPrincipal() == null ? "Login Request" : SecurityUtils
-            .getSubject().getPrincipal().toString();
+        SecurityUtils.getSubject().getPrincipal() == null ? "Login Request" : SecurityUtils.getSubject().getPrincipal()
+            .toString();
     mQueryLoggerFactory.getQueryLogger().log(sql, args, userName, (afterTime - currentTime));
     return updated;
   }
@@ -83,8 +81,8 @@ public class UMSJdbcTemplate extends JdbcTemplate {
     int updated = super.update(sql);
     long afterTime = System.currentTimeMillis();
     String userName =
-        SecurityUtils.getSubject().getPrincipal() == null ? "Login Request" : SecurityUtils
-            .getSubject().getPrincipal().toString();
+        SecurityUtils.getSubject().getPrincipal() == null ? "Login Request" : SecurityUtils.getSubject().getPrincipal()
+            .toString();
     mQueryLoggerFactory.getQueryLogger().log(sql, userName, (afterTime - currentTime));
     return updated;
   }
@@ -95,8 +93,8 @@ public class UMSJdbcTemplate extends JdbcTemplate {
     int[] updated = super.batchUpdate(sql, batchArgs);
     long afterTime = System.currentTimeMillis();
     String userName =
-        SecurityUtils.getSubject().getPrincipal() == null ? "Login Request" : SecurityUtils
-            .getSubject().getPrincipal().toString();
+        SecurityUtils.getSubject().getPrincipal() == null ? "Login Request" : SecurityUtils.getSubject().getPrincipal()
+            .toString();
     mQueryLoggerFactory.getQueryLogger().log(sql, batchArgs, userName, (afterTime - currentTime));
     return updated;
   }

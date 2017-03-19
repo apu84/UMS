@@ -63,8 +63,7 @@ public class UMSAuthenticationRealm extends JdbcRealm implements ProfileRealm {
   }
 
   @Override
-  protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token)
-      throws AuthenticationException {
+  protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
 
     SimpleAuthenticationInfo info;
 
@@ -127,8 +126,7 @@ public class UMSAuthenticationRealm extends JdbcRealm implements ProfileRealm {
   }
 
   @Override
-  protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals)
-      throws AuthorizationException {
+  protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) throws AuthorizationException {
     // null usernames are invalid
     if(principals == null) {
       throw new AuthorizationException("PrincipalCollection method argument cannot be null.");
@@ -138,8 +136,7 @@ public class UMSAuthenticationRealm extends JdbcRealm implements ProfileRealm {
     try {
       User user = mUserManager.get(username);
       info = new SimpleAuthorizationInfo(Sets.newHashSet(user.getPrimaryRole().getName()));
-      List<Permission> rolePermissions =
-          mPermissionManager.getPermissionByRole(user.getPrimaryRole());
+      List<Permission> rolePermissions = mPermissionManager.getPermissionByRole(user.getPrimaryRole());
 
       Set<String> permissions = new HashSet<>();
 

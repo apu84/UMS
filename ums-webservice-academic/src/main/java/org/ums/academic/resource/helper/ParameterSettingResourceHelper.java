@@ -28,8 +28,7 @@ import java.util.List;
  * Created by My Pc on 3/15/2016.
  */
 @Component
-public class ParameterSettingResourceHelper extends
-    ResourceHelper<ParameterSetting, MutableParameterSetting, Long> {
+public class ParameterSettingResourceHelper extends ResourceHelper<ParameterSetting, MutableParameterSetting, Long> {
 
   @Autowired
   private ParameterSettingManager mManager;
@@ -48,15 +47,14 @@ public class ParameterSettingResourceHelper extends
     mutableParameterSetting.commit(false);
 
     URI contextURI =
-        pUriInfo.getBaseUriBuilder().path(ParameterSettingResource.class)
-            .path(ParameterSettingResource.class, "get").build("0");
+        pUriInfo.getBaseUriBuilder().path(ParameterSettingResource.class).path(ParameterSettingResource.class, "get")
+            .build("0");
     Response.ResponseBuilder builder = Response.created(contextURI);
     builder.status(Response.Status.CREATED);
     return builder.build();
   }
 
-  public JsonObject getBySemester(final int pSemesterId, final Request pRequest,
-      final UriInfo pUriInfo) {
+  public JsonObject getBySemester(final int pSemesterId, final Request pRequest, final UriInfo pUriInfo) {
     List<ParameterSetting> parameterSettings = getContentManager().getBySemester(pSemesterId);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
@@ -73,8 +71,7 @@ public class ParameterSettingResourceHelper extends
 
   public JsonObject getByParameterIdAndSemesterId(final int pParameterId, final int pSemesterId,
       final Request pRequest, final UriInfo pUriInfo) {
-    ParameterSetting parameterSettings =
-        getContentManager().getBySemesterAndParameterId(pParameterId, pSemesterId);
+    ParameterSetting parameterSettings = getContentManager().getBySemesterAndParameterId(pParameterId, pSemesterId);
     JsonObjectBuilder object = Json.createObjectBuilder();
     JsonArrayBuilder children = Json.createArrayBuilder();
     LocalCache localCache = new LocalCache();
@@ -87,8 +84,7 @@ public class ParameterSettingResourceHelper extends
     return object.build();
   }
 
-  public JsonObject getByParameterAndSemesterId(final String parameter, final Request pRequest,
-      final UriInfo pUriInfo) {
+  public JsonObject getByParameterAndSemesterId(final String parameter, final Request pRequest, final UriInfo pUriInfo) {
     String mStudentId = SecurityUtils.getSubject().getPrincipal().toString();
     Student student = mStudentManager.get(mStudentId);
     ParameterSetting parameterSettings =

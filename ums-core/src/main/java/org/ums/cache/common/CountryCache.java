@@ -9,8 +9,8 @@ import org.ums.manager.common.CountryManager;
 /**
  * Created by Ifti on 31-Jan-17.
  */
-public class CountryCache extends ContentCache<Country, MutableCountry, Integer, CountryManager>
-    implements CountryManager {
+public class CountryCache extends ContentCache<Country, MutableCountry, Integer, CountryManager> implements
+    CountryManager {
 
   CacheManager<Country, Integer> mCacheManager;
 

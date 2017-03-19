@@ -9,8 +9,7 @@ import org.ums.domain.model.immutable.SeatPlanGroup;
 /**
  * Created by My Pc on 4/20/2016.
  */
-public interface MutableSeatPlanGroup extends SeatPlanGroup, Mutable, MutableLastModifier,
-    MutableIdentifier<Integer> {
+public interface MutableSeatPlanGroup extends SeatPlanGroup, Mutable, MutableLastModifier, MutableIdentifier<Integer> {
   void setSemester(final Semester pSemester);
 
   void setProgram(final Program pProgram);

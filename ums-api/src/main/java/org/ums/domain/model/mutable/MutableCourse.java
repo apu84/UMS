@@ -9,8 +9,7 @@ import org.ums.domain.model.common.MutableIdentifier;
 import org.ums.enums.CourseCategory;
 import org.ums.enums.CourseType;
 
-public interface MutableCourse extends Course, Mutable, MutableLastModifier,
-    MutableIdentifier<String> {
+public interface MutableCourse extends Course, Mutable, MutableLastModifier, MutableIdentifier<String> {
 
   void setNo(final String pName);
 

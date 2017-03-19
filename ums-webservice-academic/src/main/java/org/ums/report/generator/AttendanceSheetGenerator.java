@@ -45,20 +45,18 @@ public class AttendanceSheetGenerator {
   private ClassAttendanceManager mClassAttendanceManager;
 
   public void createAttendanceSheetReport(OutputStream pOutputStream, final Integer pSemesterId,
-      final String pCourseId, final String pSection, final String pStudentCategory)
-      throws IOException, DocumentException {
+      final String pCourseId, final String pSection, final String pStudentCategory) throws IOException,
+      DocumentException {
     Employee employee = getEmployeeInfo();
     Course course = mCourseManager.get(pCourseId);
     String check = "E://check11.png";
     String cross = "E://cross11.png";
 
-    List<ClassAttendanceDto> dates =
-        mClassAttendanceManager.getDateList(pSemesterId, pCourseId, pSection);
+    List<ClassAttendanceDto> dates = mClassAttendanceManager.getDateList(pSemesterId, pCourseId, pSection);
     List<ClassAttendanceDto> studentList =
-        mClassAttendanceManager.getStudentList(pSemesterId, pCourseId, course.getCourseType(),
-            pSection, pStudentCategory);
-    Map<String, String> attendance =
-        mClassAttendanceManager.getAttendance(pSemesterId, pCourseId, pSection);
+        mClassAttendanceManager.getStudentList(pSemesterId, pCourseId, course.getCourseType(), pSection,
+            pStudentCategory);
+    Map<String, String> attendance = mClassAttendanceManager.getAttendance(pSemesterId, pCourseId, pSection);
 
     Font universityNameFont = new Font(Font.FontFamily.TIMES_ROMAN, 13, Font.BOLD);
     Font infoFont = new Font(Font.FontFamily.TIMES_ROMAN, 10);
@@ -225,8 +223,7 @@ public class AttendanceSheetGenerator {
         for(int i = 1; i <= 45; i++) {
           if(dateTmp.size() != 0) {
             ClassAttendanceDto tmpDate = dateTmp.get(0);
-            String key =
-                tmpDate.getClassDateFormat1() + tmpDate.getSerial() + attendanceDto.getStudentId();
+            String key = tmpDate.getClassDateFormat1() + tmpDate.getSerial() + attendanceDto.getStudentId();
             headerCell = new PdfPCell();
 
             dateTmp.remove(0);
@@ -313,8 +310,7 @@ public class AttendanceSheetGenerator {
       PdfContentByte cb = writer.getDirectContent();
       Phrase footer = new Phrase(String.format("page %d", writer.getPageNumber()), ffont);
 
-      ColumnText.showTextAligned(cb, Element.ALIGN_RIGHT, footer, document.right(),
-          document.bottom() - 2, 0);
+      ColumnText.showTextAligned(cb, Element.ALIGN_RIGHT, footer, document.right(), document.bottom() - 2, 0);
     }
   }
 

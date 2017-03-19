@@ -20,12 +20,10 @@ public class NavigationBuilder implements Builder<Navigation, MutableNavigation>
   VelocityEngine mVelocityEngine;
 
   @Override
-  public void build(JsonObjectBuilder pBuilder, Navigation pReadOnly, UriInfo pUriInfo,
-      LocalCache pLocalCache) {
+  public void build(JsonObjectBuilder pBuilder, Navigation pReadOnly, UriInfo pUriInfo, LocalCache pLocalCache) {
     pBuilder.add("id", pReadOnly.getId());
     pBuilder.add("title", pReadOnly.getTitle());
-    pBuilder.add("parentMenu",
-        pReadOnly.getParent() == null ? "" : String.valueOf(pReadOnly.getParent().getId()));
+    pBuilder.add("parentMenu", pReadOnly.getParent() == null ? "" : String.valueOf(pReadOnly.getParent().getId()));
     pBuilder.add("viewOrder", pReadOnly.getViewOrder());
     String location = pReadOnly.getLocation().replaceAll("#", "");
     if(location.length() > 0 && location.charAt(0) == '/') {
@@ -41,8 +39,7 @@ public class NavigationBuilder implements Builder<Navigation, MutableNavigation>
         if(i > 1) {
           locationBuilder.append(",");
         }
-        locationBuilder.append("'").append(i).append("'").append(":").append("'")
-            .append(urlParams[i]).append("'");
+        locationBuilder.append("'").append(i).append("'").append(":").append("'").append(urlParams[i]).append("'");
       }
       locationBuilder.append("})");
       location = locationBuilder.toString();
@@ -59,19 +56,14 @@ public class NavigationBuilder implements Builder<Navigation, MutableNavigation>
     menu.put("sref", a);
 
     String iconContentParent =
-        VelocityEngineUtils.mergeTemplateIntoString(mVelocityEngine,
-            "html-templates/parent-menu.vm", "UTF-8", menu);
+        VelocityEngineUtils.mergeTemplateIntoString(mVelocityEngine, "html-templates/parent-menu.vm", "UTF-8", menu);
     String iconContentChild =
-        VelocityEngineUtils.mergeTemplateIntoString(mVelocityEngine,
-            "html-templates/child-menu.vm", "UTF-8", menu);
+        VelocityEngineUtils.mergeTemplateIntoString(mVelocityEngine, "html-templates/child-menu.vm", "UTF-8", menu);
     String singleContent =
-        VelocityEngineUtils.mergeTemplateIntoString(mVelocityEngine,
-            "html-templates/single-menu.vm", "UTF-8", menu);
+        VelocityEngineUtils.mergeTemplateIntoString(mVelocityEngine, "html-templates/single-menu.vm", "UTF-8", menu);
 
-    pBuilder
-        .add("iconContent",
-            pReadOnly.getParent() == null ? (a.equalsIgnoreCase("") ? iconContentParent
-                : singleContent) : iconContentChild);
+    pBuilder.add("iconContent", pReadOnly.getParent() == null ? (a.equalsIgnoreCase("") ? iconContentParent
+        : singleContent) : iconContentChild);
 
     pBuilder.add("status", pReadOnly.isActive());
   }

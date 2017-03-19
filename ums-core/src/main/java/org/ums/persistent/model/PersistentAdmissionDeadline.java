@@ -20,8 +20,7 @@ public class PersistentAdmissionDeadline implements MutableAdmissionDeadline {
   static {
     ApplicationContext applicationContext = AppContext.getApplicationContext();
     sSemesterManager = applicationContext.getBean("semesterManager", SemesterManager.class);
-    sAdmissionDeadlineManager =
-        applicationContext.getBean("admissionDeadlineManager", AdmissionDeadlineManager.class);
+    sAdmissionDeadlineManager = applicationContext.getBean("admissionDeadlineManager", AdmissionDeadlineManager.class);
   }
 
   private int mId;
@@ -102,8 +101,7 @@ public class PersistentAdmissionDeadline implements MutableAdmissionDeadline {
 
   @Override
   public Semester getSemester() {
-    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager
-        .validate(mSemester);
+    return mSemester == null ? sSemesterManager.get(mSemesterId) : sSemesterManager.validate(mSemester);
   }
 
   @Override
