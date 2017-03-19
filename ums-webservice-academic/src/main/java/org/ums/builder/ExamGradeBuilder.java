@@ -154,9 +154,12 @@ public class ExamGradeBuilder implements Builder<ExamGrade, MutableExamGrade> {
             .parseDouble(jsonObject.getString("classPerformance")));
         grade.setPartA((jsonObject.getString("partA") == null || jsonObject.getString("partA")
             .equalsIgnoreCase("")) ? -1 : Double.parseDouble(jsonObject.getString("partA")));
-        if(courseInfo.getInt("total_part") == 2)
+        grade.setPartAAddiInfo(jsonObject.getString("partAAddiInfo"));
+        if(courseInfo.getInt("total_part") == 2) {
           grade.setPartB((jsonObject.getString("partB") == null || jsonObject.getString("partB")
               .equalsIgnoreCase("")) ? -1 : Double.parseDouble(jsonObject.getString("partB")));
+          grade.setPartBAddiInfo(jsonObject.getString("partBAddiInfo"));
+        }
       }
       grade.setTotal((jsonObject.getString("total") == null || jsonObject.getString("total")
           .equalsIgnoreCase("")) ? -1 : Double.parseDouble(jsonObject.getString("total")));

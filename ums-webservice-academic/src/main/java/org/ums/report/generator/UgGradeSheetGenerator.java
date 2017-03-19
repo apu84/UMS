@@ -20,6 +20,10 @@ import org.ums.manager.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.List;
 
 /**
@@ -148,6 +152,8 @@ public class UgGradeSheetGenerator {
 
   public PdfPTable getGradeTable(java.util.List<StudentGradeDto> studentList, int startIndex,
       int total, CourseType courseType, ExamType examType) throws DocumentException {
+
+    NumberFormat nf = new DecimalFormat("##.#");
     // a table with three columns
     if(startIndex > studentList.size())
       return null;
@@ -232,28 +238,48 @@ public class UgGradeSheetGenerator {
       table.addCell(cell);
       if(courseType == CourseType.THEORY) {
         p =
-            new Paragraph(student.getQuiz() == null ? "" : String.valueOf(student.getQuiz()), nFont);
+            new Paragraph(student.getQuiz() == null ? "" : String.valueOf(nf.format(student
+                .getQuiz())), nFont);
         cell = new PdfPCell(p);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);
 
         p =
-            new Paragraph(student.getClassPerformance() == null ? "" : String.valueOf(student
-                .getClassPerformance()), nFont);
+            new Paragraph(student.getClassPerformance() == null ? "" : String.valueOf(nf
+                .format(student.getClassPerformance())), nFont);
         cell = new PdfPCell(p);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);
 
-        Double tmpTotal = null;
+        BigDecimal tmpTotal = null;
+
         if(student.getPartA() != null && student.getPartB() != null) {
           tmpTotal =
-              (student.getPartA() == null ? 0 : student.getPartA())
-                  + (student.getPartB() == null ? 0 : student.getPartB());
+              (student.getPartA() == null ? new BigDecimal(0) : BigDecimal.valueOf(
+                  student.getPartA()).setScale(1, RoundingMode.HALF_UP))
+                  .add(student.getPartB() == null ? new BigDecimal(0) : BigDecimal.valueOf(
+                      student.getPartB()).setScale(1, RoundingMode.HALF_UP));
         }
         else {
-          tmpTotal = student.getPartA();
+          tmpTotal =
+              student.getPartA() == null ? new BigDecimal(0) : BigDecimal.valueOf(
+                  student.getPartA()).setScale(1, RoundingMode.HALF_UP);
         }
-        p = new Paragraph(String.valueOf(tmpTotal == null ? "" : tmpTotal), nFont);
+
+        String finalTotalMarks = "";
+
+        if((student.getPartAAddiInfo() != null && (student.getPartAAddiInfo().equals("Abs") || student
+            .getPartAAddiInfo().equals("Rep")))
+            || (student.getPartBAddiInfo() != null && (student.getPartBAddiInfo().equals("Abs") || student
+                .getPartBAddiInfo().equals("Rep")))) {
+          finalTotalMarks = student.getPartAAddiInfo();
+        }
+        else {
+          finalTotalMarks =
+              String.valueOf(tmpTotal == null ? "" : String.valueOf(nf.format(tmpTotal)));
+        }
+
+        p = new Paragraph(finalTotalMarks, nFont);
         cell = new PdfPCell(p);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);
@@ -325,13 +351,9 @@ public class UgGradeSheetGenerator {
     table.addCell(cell);
 
     Paragraph parag1 = new Paragraph("Department : ", nFont);// This gonna be bold font
-    Paragraph parag2 =
-        new Paragraph(program.getDepartment().getShortName() ,
-            nuFont);
+    Paragraph parag2 = new Paragraph(program.getDepartment().getShortName(), nuFont);
     Paragraph parag3 = new Paragraph(",  Program : ", nFont);// This gonna be bold font
-    Paragraph parag4 =
-        new Paragraph(program.getShortName() ,
-            nuFont);
+    Paragraph parag4 = new Paragraph(program.getShortName(), nuFont);
 
     Paragraph comb = new Paragraph();
     comb.add(parag1);

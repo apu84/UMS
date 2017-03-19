@@ -33,13 +33,14 @@ public class UgGradeSheetXls extends Resource {
   XlsGenerator xlsGenerator;
 
   @GET
-  @Path("/semester/{semester-id}/courseid/{course-id}/examtype/{exam-type}/coursetype/{course-type}/role/{role}")
+  @Path("/semester/{semester-id}/courseid/{course-id}/examtype/{exam-type}/coursetype/{course-type}/role/{role}/totalpart/{total-part}")
   public StreamingOutput get(final @Context Request pRequest,
       final @PathParam("semester-id") Integer pSemesterId,
       final @PathParam("course-id") String pCourseId,
       final @PathParam("exam-type") Integer pExamTypeId,
       final @PathParam("course-type") Integer pCourseType,
-      final @PathParam("role") String pRequestedRole) {
+      final @PathParam("role") String pRequestedRole,
+      final @PathParam("total-part") String pTotalPart) {
     List<StudentGradeDto> gradeList =
         mExamGradeManager.getAllGrades(pSemesterId, pCourseId, ExamType.get(pExamTypeId),
             CourseType.get(pCourseType));
@@ -48,7 +49,7 @@ public class UgGradeSheetXls extends Resource {
         try {
           InputStream a =
               UgGradeSheetXls.class.getResourceAsStream("/report/xls/template/"
-                  + CourseType.get(pCourseType).getLabel() + ".xls");
+                  + CourseType.get(pCourseType).getLabel() + "_" + pTotalPart + "Part.xls");
           xlsGenerator.build(gradeList, output, a);
         } catch(Exception e) {
           throw new WebApplicationException(e);

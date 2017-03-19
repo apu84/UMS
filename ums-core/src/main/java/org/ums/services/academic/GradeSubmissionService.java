@@ -41,6 +41,14 @@ public class GradeSubmissionService {
   @Autowired
   private NotificationGenerator mNotificationGenerator;
 
+  public JsonObject enrich(JsonObject source, String key, String value) {
+    JsonObjectBuilder builder = Json.createObjectBuilder();
+    source.entrySet().
+        forEach(e -> builder.add(e.getKey(), e.getValue()));
+    builder.add(key, value);
+    return builder.build();
+  }
+
   public void prepareGradeGroups(JsonObjectBuilder objectBuilder,
       List<StudentGradeDto> examGradeList, CourseMarksSubmissionStatus courseStatus,
       String currentActor) {
@@ -63,6 +71,18 @@ public class GradeSubmissionService {
     for(StudentGradeDto gradeDto : examGradeList) {
       jsonReader = Json.createReader(new StringReader(gradeDto.toString()));
       jsonObject = jsonReader.readObject();
+
+      if(jsonObject.get("partAAddiInfo") != null
+          && (jsonObject.getString("partAAddiInfo").equals("Abs") || jsonObject.getString(
+              "partAAddiInfo").equals("Rep"))) {
+        jsonObject = enrich(jsonObject, "partA", jsonObject.getString("partAAddiInfo"));
+      }
+      if(jsonObject.get("partBAddiInfo") != null
+          && (jsonObject.getString("partBAddiInfo").equals("Abs") || jsonObject.getString(
+              "partBAddiInfo").equals("Rep"))) {
+        jsonObject = enrich(jsonObject, "partB", jsonObject.getString("partBAddiInfo"));
+      }
+
       jsonReader.close();
       gradeStatus = gradeDto.getStatus();
 

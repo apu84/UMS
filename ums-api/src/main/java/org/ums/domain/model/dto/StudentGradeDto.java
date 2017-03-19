@@ -14,8 +14,9 @@ public class StudentGradeDto {
   private Double quiz;
   private Double classPerformance;
   private Double partA;
+  private String partAAddiInfo;
   private Double partB;
-  private Double partTotal;
+  private String partBAddiInfo;
   private Double total;
   private String gradeLetter;
   private Double gradePoint;
@@ -77,14 +78,6 @@ public class StudentGradeDto {
 
   public void setPartB(Double partB) {
     this.partB = partB;
-  }
-
-  public Double getPartTotal() {
-    return partTotal;
-  }
-
-  public void setPartTotal(Double partTotal) {
-    this.partTotal = partTotal;
   }
 
   public Double getTotal() {
@@ -165,6 +158,22 @@ public class StudentGradeDto {
 
   public void setRecheckStatusId(int recheckStatusId) {
     this.recheckStatusId = recheckStatusId;
+  }
+
+  public String getPartAAddiInfo() {
+    return partAAddiInfo;
+  }
+
+  public void setPartAAddiInfo(String partAAddiInfo) {
+    this.partAAddiInfo = partAAddiInfo;
+  }
+
+  public String getPartBAddiInfo() {
+    return partBAddiInfo;
+  }
+
+  public void setPartBAddiInfo(String partBAddiInfo) {
+    this.partBAddiInfo = partBAddiInfo;
   }
 
   public String toString() {
